@@ -1691,7 +1691,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @return Returns a map of available rows vs. available columns.
 	 * @throws DAOException
 	 */
-	public Map getAvailablePositionMap(StorageContainer container) throws DAOException
+	public Map getAvailablePositionMapold(StorageContainer container) throws DAOException
 	{
 		Map map = new TreeMap();
 		boolean[][] availablePosistions = getAvailablePositions(container);
@@ -1718,7 +1718,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return map;
 	}
 
-	public Map getAvailablePositionMap1(StorageContainer container) throws DAOException
+	public Map getAvailablePositionMap(StorageContainer container) throws DAOException
 	{
 		Map map = new TreeMap();
 		boolean[][] availablePosistions = getAvailablePositions(container);
@@ -1770,7 +1770,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-	public Map getAvailablePositionMap1(String containerId) throws DAOException
+	/*public Map getAvailablePositionMap1(String containerId) throws DAOException
 	{
 		List list = retrieve(StorageContainer.class.getName(), Constants.SYSTEM_IDENTIFIER,
 				new Long(containerId));
@@ -1778,13 +1778,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		if (list != null)
 		{
 			StorageContainer container = (StorageContainer) list.get(0);
-			return getAvailablePositionMap1(container);
+			return getAvailablePositionMap(container);
 		}
 		else
 		{
 			return new TreeMap();
 		}
-	}
+	}*/
 	/**
 	 * This functions returns a map of allocated containers vs. their respective free locations.
 	 * @return Returns a map of allocated containers vs. their respective free locations.
@@ -1796,41 +1796,23 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		 A code snippet inside the commented block should actually be replaced by the
 		 code to get the allocated containers of specific collection protocol
 		 */
-		String[] selectedColumns = {Constants.SYSTEM_IDENTIFIER};
-		List list = retrieve(StorageContainer.class.getName(), selectedColumns);
-		String[] containerIdArray = new String[list.size()];
 		
-		/* extra code
-		String [] selectedColumns1 = {"name"};
-		List list1 = retrieve(StorageContainer.class.getName(), selectedColumns1);
-		String[] containerNameArray = new String[list1.size()];
-		
-		/**/
-		for (int i = 0; i < containerIdArray.length; i++)
+		List list = retrieve(StorageContainer.class.getName());
+ 		Map containerMap = new TreeMap();
+ 		Logger.out.info("===================== list size:"+list.size());
+		Iterator itr=list.iterator();
+		while(itr.hasNext())
 		{
-			Object object = (Object) list.get(i);
-			containerIdArray[i] = object.toString();
-		}
-		/* extra code 
-		for (int i = 0; i < containerNameArray.length; i++)
-		{
-			Object object = (Object) list1.get(i);
-			containerNameArray[i] = object.toString();
-		}
-		/**/
-		/********************************************************************/
-
-		Map containerMap = new TreeMap();
-
-		for (int i = 0; i < containerIdArray.length; i++)
-		{
-			Map positionMap = getAvailablePositionMap(containerIdArray[i]);
+			StorageContainer container=(StorageContainer)itr.next();
+			Logger.out.info("+++++++++++++++++++++++++++:"+container.getName()+"++++++++++:"+container.getSystemIdentifier());
+			Map positionMap = getAvailablePositionMap(container.getSystemIdentifier().toString());
 
 			if (!positionMap.isEmpty())
 			{
-				Integer id = new Integer(containerIdArray[i]);
-				containerMap.put(id, positionMap);
-				//containerMap.put(containerNameArray[i],positionMap);
+				Logger.out.info("---------"+container.getName()+"------"+container.getSystemIdentifier());
+				NameValueBean nvb=new NameValueBean(container.getName(),container.getSystemIdentifier());
+				containerMap.put(nvb, positionMap);
+				
 			}
 		}
 
@@ -1879,11 +1861,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				StorageType type=(StorageType)itr1.next();
 				if(type.getSystemIdentifier().longValue()==type_id|| type.getSystemIdentifier().longValue()==1)
 				{
-					Map positionMap = getAvailablePositionMap1(container.getSystemIdentifier().toString());
+					Map positionMap = getAvailablePositionMap(container.getSystemIdentifier().toString());
 
 					if (!positionMap.isEmpty())
 					{
-						//Integer id = new Integer(container.getSystemIdentifier().intValue());
 						NameValueBean nvb=new NameValueBean(container.getName(),container.getSystemIdentifier());
 						containerMap.put(nvb, positionMap);
 						break;
