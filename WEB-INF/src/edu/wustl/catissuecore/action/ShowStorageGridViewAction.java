@@ -34,7 +34,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
-
+import edu.wustl.common.util.logger.Logger;
 /**
  * ShowStorageGridViewAction shows the grid view of the map according to the
  * storage container selected from the tree view.
@@ -189,9 +189,10 @@ public class ShowStorageGridViewAction  extends BaseAction
         if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
         {
         	String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
+        	Logger.out.info("SystemIdentifier-----------------"+systemIdentifier);
+        	Logger.out.info("storageContainerType:"+storageContainerType);
             int startNumber = bizLogic.getNextContainerNumber(Long.parseLong(systemIdentifier),
                     Long.parseLong(storageContainerType),false);
-            
             request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);
             request.setAttribute(Constants.START_NUMBER,new Integer(startNumber));
         }

@@ -44,6 +44,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 */
 	protected Collection collectionProtocolEventCollection = new HashSet();
 	
+	//protected Collection storageContainerCollection=new HashSet();
 	/**
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
 	 * */
@@ -123,6 +124,27 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 		this.collectionProtocolEventCollection = collectionProtocolEventCollection;
 	}
 	
+	/*
+	 * Returns the collection of Containers for this Protocol.
+	 * @hibernate.set name="storageContainerCollection" table="CATISSUE_CONTAINER_CP_REL" 
+	 * cascade="none" inverse="false" lazy="false"
+	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageContainer" column="STORAGE_CONTAINER_ID"
+	 * @return The collection of Storage Containers for this Protocol.*/
+	 /*
+	public Collection getStorageContainerCollection()
+	{
+		return storageContainerCollection;
+	}
+*/
+	/*
+	 * @param storageContainerCollection The storageContainerCollection to set.
+	 */
+	/*public void setStorageContainerCollection(Collection storageContainerCollection)
+	{
+		this.storageContainerCollection = storageContainerCollection;
+	}*/
+
 	   /**
      * This function Copies the data from an CollectionProtocolForm object to a CollectionProtocol object.
      * @param CollectionProtocol An CollectionProtocolForm object containing the information about the CollectionProtocol.  

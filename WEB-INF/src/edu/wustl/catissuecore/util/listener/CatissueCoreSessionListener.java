@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSessionListener;
 
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -42,7 +43,7 @@ public class CatissueCoreSessionListener implements HttpSessionListener{
 		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
 		try
 		{
-			JDBCDAO jdbcDao = new JDBCDAO();
+			JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 			jdbcDao.openSession(sessionData);
 			jdbcDao.delete(tempTableName);
 			jdbcDao.closeSession();

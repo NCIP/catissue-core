@@ -119,15 +119,6 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
-		function onNameClick(element)
-		{
-			if(element.value=="")
-			{
-				var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
-				document.forms[0].action = action;
-				document.forms[0].submit();
-			}	
-		}
 	
 //  function to insert a row in the inner block
 
@@ -276,6 +267,16 @@ function validate(action,formField)
 		}
 	}	
 }
+function onParentContainerChange(element)
+{
+
+	if(document.forms[0].containerName.value=="")
+	{
+		var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
+		document.forms[0].action = action;
+		document.forms[0].submit();
+	}
+}
 	</script>
 </head>
 
@@ -409,14 +410,15 @@ function validate(action,formField)
 							String styClass = "formFieldSized5";
 							String tdStyleClass = "customFormField";
 							boolean disabled = true;
-							String onChange = "onCustomListBoxChange(this)";
+							String onChange = "onCustomListBoxChange(this),onParentContainerChange(this)";
 							//String onChange = "onCustomListBoxChange(this);onParentContainerChange(this)";
 							boolean buttonDisabled = true;
 							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
 							String buttonOnClicked = "StorageMapWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2&amp;storageType=','name','810','320','yes');return false";
 							String noOfEmptyCombos = "3";
 							
-							String buttonId = "Map_1";							
+							String buttonId = "Map_1";		
+
 						%>
 					
 					<%=ScriptGenerator.getJSForOutermostDataTable()%>
@@ -478,7 +480,7 @@ function validate(action,formField)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="startNumber" property="containerName" onclick="onNameClick(this)"/>
+							<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="startNumber" property="containerName"/>
 							&nbsp;
 							<html:link href="#" styleId="newSite" onclick="ReserName()">
 								<bean:message key="StorageContainer.resetName" />

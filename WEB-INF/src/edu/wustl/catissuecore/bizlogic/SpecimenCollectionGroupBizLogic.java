@@ -418,7 +418,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	{
 		String sourceObjectName = "CATISSUE_SPECIMEN_COLL_GROUP";
 		String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
-		AbstractDAO dao = DAOFactory.getDAO(Constants.JDBC_DAO);
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 
 		dao.openSession(null);
 

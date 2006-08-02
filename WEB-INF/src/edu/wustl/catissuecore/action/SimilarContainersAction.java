@@ -211,7 +211,7 @@ public class SimilarContainersAction extends SecureAction {
 		long maxId = bizLogic.getNextContainerNumber();
 		request.setAttribute(Constants.MAX_IDENTIFIER,Long.toString(maxId));
 		
-		Map containerMap = bizLogic.getAllocatedContainerMap();
+		Map containerMap = bizLogic.getAllocatedContaienrMapForContainer(new Long(request.getParameter("typeId")).longValue());
 		
 		String contName = similarContainersForm.getContainerName();
 		String barcode = similarContainersForm.getBarcode();
@@ -409,34 +409,37 @@ public class SimilarContainersAction extends SecureAction {
 	private Vector getInitalValues(String[] startingPoint, Map dMap, int noOfContainers)
 	{
 		//System.out.println("dmAp "+dMap+" noOfCont "+noOfContainers);
+		Logger.out.info("Starting point 1:"+startingPoint[0]);
+		Logger.out.info("Starting point 2:"+startingPoint[1]);
+		Logger.out.info("Starting point 3:"+startingPoint[2]);
 		Vector returner = new Vector();
 		String[] initValues = new String[3];
 		Iterator dMapIter = dMap.keySet().iterator();
-		Object dMapKey;
-		Object xMapKey;
-		Object yListKey;
+		NameValueBean dMapKey;
+		NameValueBean xMapKey;
+		NameValueBean yListKey;
 		do{
-			dMapKey = dMapIter.next();
-		}while(! (dMapKey.toString().equals(startingPoint[0])) );
+			dMapKey = (NameValueBean)dMapIter.next();
+		}while(! (dMapKey.getValue().equals(startingPoint[0])) );
 		Map xMap = (Map)dMap.get(dMapKey);
 		//System.out.println("dMpaKey "+dMapKey.toString()+" xMap "+xMap);
 		
 		Iterator xMapIter = xMap.keySet().iterator(); 
 		
 		do{
-			xMapKey = xMapIter.next();
-		}while(! (xMapKey.toString().equals(startingPoint[1])));
+			xMapKey = (NameValueBean)xMapIter.next();
+		}while(! (xMapKey.getValue().equals(startingPoint[1])));
 		List yList = (List)xMap.get(xMapKey);
 		//System.out.println("xMapKey "+xMapKey.toString()+" yList "+yList);
 		
 		Iterator yListIter = yList.iterator();
 		do{
-			yListKey = yListIter.next(); 
-		}while(! yListKey.toString().equals(startingPoint[2]));
+			yListKey = (NameValueBean)yListIter.next(); 
+		}while(! yListKey.getValue().equals(startingPoint[2]));
 		
-		initValues[0] = dMapKey.toString();
-		initValues[1] = xMapKey.toString();
-		initValues[2] = yListKey.toString();
+		initValues[0] = dMapKey.getValue();
+		initValues[1] = xMapKey.getValue();
+		initValues[2] = yListKey.getValue();
 		
 		returner.add(initValues);
 		
@@ -446,38 +449,38 @@ public class SimilarContainersAction extends SecureAction {
 			
 			if(yListIter.hasNext())
 			{
-				yListKey = yListIter.next();
-				initValues[0] = dMapKey.toString();
-				initValues[1] = xMapKey.toString();
-				initValues[2] =  yListKey.toString();
+				yListKey = (NameValueBean)yListIter.next();
+				initValues[0] = dMapKey.getValue();
+				initValues[1] = xMapKey.getValue();
+				initValues[2] =  yListKey.getValue();
 			}else
 			{
 				if(xMapIter.hasNext())
 				{
-					xMapKey = xMapIter.next(); 
+					xMapKey = (NameValueBean)xMapIter.next(); 
 					yList = (List) xMap.get(xMapKey);
 					yListIter = yList.iterator();
-					yListKey = yListIter.next();
+					yListKey = (NameValueBean)yListIter.next();
 					
-					initValues[0] = dMapKey.toString();
-					initValues[1] = xMapKey.toString();
-					initValues[2] = yListKey.toString();
+					initValues[0] = dMapKey.getValue();
+					initValues[1] = xMapKey.getValue();
+					initValues[2] = yListKey.getValue();
 					
 				}else
 				{
 					if(dMapIter.hasNext())
 					{
-						dMapKey = dMapIter.next();
+						dMapKey = (NameValueBean)dMapIter.next();
 						xMap = (Map) dMap.get(dMapKey);
 						xMapIter = xMap.keySet().iterator();
-						xMapKey = xMapIter.next();
+						xMapKey = (NameValueBean)xMapIter.next();
 						yList = (List) xMap.get(xMapKey);
 						yListIter = yList.iterator();
-						yListKey = yListIter.next();
+						yListKey = (NameValueBean)yListIter.next();
 						
-						initValues[0] = dMapKey.toString();
-						initValues[1] = xMapKey.toString();
-						initValues[2] = yListKey.toString();
+						initValues[0] = dMapKey.getValue();
+						initValues[1] = xMapKey.getValue();
+						initValues[2] = yListKey.getValue();
 						
 					}
 				}

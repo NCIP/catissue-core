@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -80,24 +81,37 @@ public class StorageContainerAction  extends SecureAction
         
     	StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
     	//    	 ---- chetan 15-06-06 ----
-        Map containerMap;
+        Map containerMap=new HashMap();
         if(operation.equals(Constants.ADD))
         {
-        	containerMap = bizLogic.getAllocatedContainerMap();
-        } else
+        	//containerMap = bizLogic.getAllocatedContainerMap();
+        	containerMap = bizLogic.getAllocatedContaienrMapForContainer(storageContainerForm.getTypeId());
+        } 
+        else
         {
         	containerMap = new TreeMap();
         	Integer id = new Integer((int)storageContainerForm.getParentContainerId());
+        	String parentContainerName="";
+        	String valueField = "systemIdentifier";
+        	List list = bizLogic.retrieve(StorageContainer.class.getName(),valueField,new Long(storageContainerForm.getParentContainerId()));
+			if(!list.isEmpty())
+			{
+				StorageContainer container = (StorageContainer)list.get(0);
+				parentContainerName=container.getName();
+				            		
+			}
+        	
         	Integer pos1 = new Integer(storageContainerForm.getPositionDimensionOne());        	
         	Integer pos2 = new Integer(storageContainerForm.getPositionDimensionTwo());
         	
         	List pos2List = new ArrayList();
-        	pos2List.add(pos2);
+        	pos2List.add(new NameValueBean(pos2,pos2));
         	
         	Map pos1Map = new TreeMap();
-        	pos1Map.put(pos1,pos2List);
-        	containerMap.put(id,pos1Map);
+        	pos1Map.put(new NameValueBean(pos1,pos1),pos2List);
+        	containerMap.put(new NameValueBean(parentContainerName,id),pos1Map);
         }
+        Logger.out.info("contaienrMap:"+containerMap);
         request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
         // -------------------------
     	
@@ -276,6 +290,9 @@ public class StorageContainerAction  extends SecureAction
 		{
 			request.setAttribute(Constants.REQ_PATH, reqPath);
 		}
+		
+		bizLogic.getStorageContainersAccToCPAndClass();
+		
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
 		

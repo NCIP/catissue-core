@@ -32,6 +32,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.LookupLogic;
@@ -306,7 +307,7 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 		List displayList=new ArrayList();
 		 try
 		    {
-			    JDBCDAO jdbcDao = new JDBCDAO();
+			    JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		        jdbcDao.openSession(null);
 		        String sql="SELECT  columnData.COLUMN_NAME,displayData.DISPLAY_NAME FROM "+
 		        			"CATISSUE_INTERFACE_COLUMN_DATA columnData,CATISSUE_TABLE_RELATION relationData,"+

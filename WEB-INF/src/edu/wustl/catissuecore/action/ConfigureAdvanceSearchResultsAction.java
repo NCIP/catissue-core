@@ -62,7 +62,7 @@ public class ConfigureAdvanceSearchResultsAction extends BaseAction
 		SessionDataBean sessionData = getSessionData(request);
 		//temporary table name
 		String tableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
-        JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getDAO(Constants.JDBC_DAO);
+        JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
         jdbcDAO.openSession(sessionData);
         String [] selectColumnNames = selectColumns;
         Logger.out.debug(" Selected Columns:"+selectColumns);

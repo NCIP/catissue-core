@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.query.AdvancedConditionsNode;
 import edu.wustl.common.query.Condition;
@@ -46,7 +47,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
  		String sql = "Create table "+tempTableName+" as "+"("+searchQuery+" AND 1!=1)";
 		//String sql = "Create table "+tempTableName+" as "+"("+searchQuery+")";
  		Logger.out.debug("sql for create table"+sql);
- 		JDBCDAO jdbcDao = new JDBCDAO();
+ 		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
         jdbcDao.openSession(sessionData);
 
         //Delete if there is any tbale existing with same name
@@ -73,7 +74,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	public Vector getTreeViewData(SessionDataBean sessionData,Map columnIdsMap,List disableSpecimenIdsList) throws DAOException,ClassNotFoundException
 	{
 		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
-		JDBCDAO jdbcDao = new JDBCDAO();
+		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
         jdbcDao.openSession(sessionData);
         Logger.out.debug("Temp table in adv bizlogic:"+tempTableName);
         
@@ -404,7 +405,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	{
 		List specimenIdsList = new ArrayList();
 		List specimenIdsListInOrder = new ArrayList();
-		JDBCDAO jdbcDao = new JDBCDAO();
+		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
         jdbcDao.openSession(null);
 		Long whereColumnValue=new Long(specimenId);
 		String sql =new String(); 
@@ -441,7 +442,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	{
 		List parentSpecimenIdsList = new ArrayList();
 		
-		JDBCDAO jdbcDao = new JDBCDAO();
+		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
         jdbcDao.openSession(null);
 		String sql = "Select "+specimenColumnId+" from "+tempTable;
 		List dataList =  jdbcDao.executeQuery(sql,null,false,null);

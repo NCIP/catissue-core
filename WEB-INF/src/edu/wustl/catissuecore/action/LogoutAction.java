@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 
 /**
@@ -35,7 +36,7 @@ public class LogoutAction  extends BaseAction  {
 	 	//Advance Query table name with userID attached
 		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
 
- 		JDBCDAO jdbcDao = new JDBCDAO();
+ 		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
         jdbcDao.openSession(sessionData);
        	jdbcDao.delete(tempTableName);
         jdbcDao.closeSession();
