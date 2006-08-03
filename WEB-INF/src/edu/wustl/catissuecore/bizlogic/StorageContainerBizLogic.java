@@ -1725,7 +1725,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		for (int x = 1; x < availablePosistions.length; x++)
 		{
-			Logger.out.info("x positions  for container:"+container.getName()+":"+x);
+			//Logger.out.info("x positions  for container:"+container.getName()+":"+x);
 			List list = new ArrayList();
 
 			for (int y = 1; y < availablePosistions[x].length; y++)
@@ -1740,12 +1740,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				Integer xObj = new Integer(x);
 				NameValueBean nvb=new NameValueBean(xObj,xObj);
-				Logger.out.info("xobj:"+xObj);
+				//Logger.out.info("xobj:"+xObj);
 				map.put(nvb,list);
-				Logger.out.info("Map inside:"+xObj+":-----"+map);
+				//Logger.out.info("Map inside:"+xObj+":-----"+map);
 			}
 		}
-		Logger.out.info("Map :"+map);
+		//Logger.out.info("Map :"+map);
 		return map;
 	}
 	/**
@@ -1799,17 +1799,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		
 		List list = retrieve(StorageContainer.class.getName());
  		Map containerMap = new TreeMap();
- 		Logger.out.info("===================== list size:"+list.size());
+ 		//Logger.out.info("===================== list size:"+list.size());
 		Iterator itr=list.iterator();
 		while(itr.hasNext())
 		{
 			StorageContainer container=(StorageContainer)itr.next();
-			Logger.out.info("+++++++++++++++++++++++++++:"+container.getName()+"++++++++++:"+container.getSystemIdentifier());
+			//Logger.out.info("+++++++++++++++++++++++++++:"+container.getName()+"++++++++++:"+container.getSystemIdentifier());
 			Map positionMap = getAvailablePositionMap(container.getSystemIdentifier().toString());
 
 			if (!positionMap.isEmpty())
 			{
-				Logger.out.info("---------"+container.getName()+"------"+container.getSystemIdentifier());
+				//Logger.out.info("---------"+container.getName()+"------"+container.getSystemIdentifier());
 				NameValueBean nvb=new NameValueBean(container.getName(),container.getSystemIdentifier());
 				containerMap.put(nvb, positionMap);
 				
