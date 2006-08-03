@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -288,15 +289,27 @@ public class NewSpecimenAction  extends SecureAction
         {
         	containerMap = new TreeMap();
         	Integer id = new Integer(specimenForm.getStorageContainer());
+        	String parentContainerName="";
+        	String valueField1 = "systemIdentifier";
+        	List list = bizLogic.retrieve(StorageContainer.class.getName(),valueField1,new Long(specimenForm.getStorageContainer()));
+			if(!list.isEmpty())
+			{
+				StorageContainer container = (StorageContainer)list.get(0);
+				parentContainerName=container.getName();
+				            		
+			}
         	Integer pos1 = new Integer(specimenForm.getPositionDimensionOne());        	
         	Integer pos2 = new Integer(specimenForm.getPositionDimensionTwo());
         	
         	List pos2List = new ArrayList();
-        	pos2List.add(pos2);
+        	pos2List.add(new NameValueBean(pos2,pos2));
         	
         	Map pos1Map = new TreeMap();
-        	pos1Map.put(pos1,pos2List);
-        	containerMap.put(id,pos1Map);
+        	pos1Map.put(new NameValueBean(pos1,pos1),pos2List);
+        	containerMap.put(new NameValueBean(parentContainerName,id),pos1Map);
+        	
+        		
+        	
         }
         request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
         // -------------------------
