@@ -45,7 +45,12 @@ alter table CATISSUE_STORAGE_CONTAINER drop column CONTAINER_NAME;
 alter table CATISSUE_STORAGE_CONTAINER add column CONTAINER_NAME varchar (50) unique;
 
 #--------Give values same as identifier to container_name for previouly added containers.
-update CATISSUE_STORAGE_CONTAINER set CONTAINER_NAME=IDENTIFIER where CONTAINER_NAME='';
+#-----update CATISSUE_STORAGE_CONTAINER set CONTAINER_NAME=IDENTIFIER where CONTAINER_NAME='';
+update CATISSUE_STORAGE_CONTAINER set CONTAINER_NAME=IDENTIFIER where CONTAINER_NAME='' or CONTAINER_NAME is null;
+
+ 
+
+
 
 #--------drop the container_number column
 alter table CATISSUE_STORAGE_CONTAINER drop column CONTAINER_NUMBER;
