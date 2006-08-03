@@ -3,13 +3,10 @@ package edu.wustl.catissuecore.bizlogic.test;
 import com.mockobjects.constraint.Constraint;
 import com.mockobjects.constraint.IsAnything;
 import com.mockobjects.constraint.IsInstanceOf;
-import com.mockobjects.constraint.IsNot;
 import com.mockobjects.dynamic.FullConstraintMatcher;
 import com.mockobjects.dynamic.Mock;
 
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
-import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.test.MockDAOFactory;
 import edu.wustl.common.beans.SessionDataBean;
@@ -21,7 +18,7 @@ import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.test.BaseTestCase;
 
 
-public class StorageContainerBizLogicTest extends BaseTestCase
+public class StorageTypeBizLogicTest extends BaseTestCase
 {
 	
 	Mock hibDAO;
@@ -31,7 +28,7 @@ public class StorageContainerBizLogicTest extends BaseTestCase
 	 * Constructor for ParticipantLookupLogicTest.
 	 * @param arg0 Name of the test case
 	 */
-	public StorageContainerBizLogicTest(String name)
+	public StorageTypeBizLogicTest(String name)
 	{
 		super(name);
 
@@ -60,7 +57,7 @@ public class StorageContainerBizLogicTest extends BaseTestCase
 	}
 	
 	
-	public void testNullSessionDataBeanInInsert()
+	public void testInsert()
 	{
 		StorageTypeBizLogic storageTypeBizLogic = new StorageTypeBizLogic();
 		
@@ -69,37 +66,31 @@ public class StorageContainerBizLogicTest extends BaseTestCase
 		hibDAO.expect("commit");
 		FullConstraintMatcher fullConstraintMatcher = new FullConstraintMatcher(constraints);
 		hibDAO.expect("openSession",fullConstraintMatcher);
-//		hibDAO.expect("closeSession");
-//		hibDAO.expect("openSession");
 		Constraint[] insertConstraints = {new IsAnything(),new IsAnything(),new IsAnything(),new IsAnything()};
 		FullConstraintMatcher insertConstraintMatcher = new FullConstraintMatcher(insertConstraints);
 		hibDAO.expect("insert",insertConstraintMatcher);
 		hibDAO.expect("insert",insertConstraintMatcher);
 		hibDAO.expect("closeSession");
 		
-		
-//		Constraint[] closeConstraints = {};
-//		FullConstraintMatcher closeConstraintMatcher = new FullConstraintMatcher(closeConstraints);
-//		hibDAO.expect("closeSession",closeConstraintMatcher);
-	
 		try
 		{
 			storageTypeBizLogic.insert(new StorageType(),sessionDataBean,edu.wustl.common.util.global.Constants.HIBERNATE_DAO);
-//			fail(" Session data is null therefore insert should fail");
+			assertTrue("Storage Type inserted successfully",true);
+			
 		}
 		catch (NullPointerException e) {
-				assertTrue("SessionData bean is null",true);
 				e.printStackTrace();
+				fail("Null Pointer Exception");
 		}
 		catch (BizLogicException e)
 		{
-			fail(" Exception occured");
 			e.printStackTrace();
+			fail(" Exception occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail(" Exception occured");
 		}
 	}
 
