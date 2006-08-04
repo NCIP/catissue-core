@@ -11,7 +11,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.logging.Log;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
@@ -462,7 +461,7 @@ public class SimilarContainersForm extends AbstractActionForm {
 		Validator validator = new Validator();
 		
 		try{
-			if (this.storageContainerType == null || storageContainerType.equals(""))
+			if (this.typeId == -1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.type")));
@@ -613,5 +612,7 @@ public class SimilarContainersForm extends AbstractActionForm {
 	public void setContainerName(String containerName) {
 		this.containerName = containerName;
 	}
+	
+	
 	
 }

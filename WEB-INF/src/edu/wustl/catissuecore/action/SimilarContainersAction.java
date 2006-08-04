@@ -7,10 +7,10 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,8 +22,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-
-import com.sun.msv.datatype.xsd.regex.REUtil;
 
 import edu.wustl.catissuecore.actionForm.SimilarContainersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -101,7 +99,8 @@ public class SimilarContainersAction extends SecureAction {
     	List list = ibizLogic.getList(Site.class.getName(),siteDisplayField, valueField, true);
     	request.setAttribute(Constants.SITELIST,list);
 		
-    	long[] collectionProtocolIds = similarContainersForm.getCollectionIds();
+    	
+    	/*long[] collectionProtocolIds = similarContainersForm.getCollectionIds();
     	List collecProList = new ArrayList();
     	//System.out.println("collectionProtocolIds $$$*** "+collectionProtocolIds.length);
     	for(int i = 0 ;i < collectionProtocolIds.length; i++)
@@ -117,7 +116,13 @@ public class SimilarContainersAction extends SecureAction {
         	}
     	}
     	request.setAttribute(Constants.PROTOCOL_LIST,collecProList);    	
-    	
+    	*/
+//    	populating collection protocol list.
+    	List list1=ibizLogic.retrieve(CollectionProtocol.class.getName());
+    	List collectionProtocolList=getCollectionProtocolList(list1);
+    	request.setAttribute(Constants.PROTOCOL_LIST, collectionProtocolList);
+	  	
+    	/*
     	long[] holdsIds = similarContainersForm.getHoldsStorageTypeIds();		
     	List holdsList = new ArrayList();
     	//System.out.println("holdsIds $$$*** "+holdsIds.length);
@@ -135,7 +140,17 @@ public class SimilarContainersAction extends SecureAction {
         	}
     	}
     	request.setAttribute(Constants.HOLDS_LIST1,holdsList);
+    	*/
+        //Gets the Storage Type List and sets it in request 
+        List list2=ibizLogic.retrieve(StorageType.class.getName());
+    	List storageTypeListWithAny=getStorageTypeList(list2,true);
+    	request.setAttribute(Constants.HOLDS_LIST1, storageTypeListWithAny);
+
+    	List StorageTypeListWithoutAny=getStorageTypeList(list2,false);
+    	request.setAttribute(Constants.STORAGETYPELIST, StorageTypeListWithoutAny);
     	
+    	
+    	/*
     	long[] holdsSpecimenIds = similarContainersForm.getHoldsSpecimenClassTypeIds();		
     	List holdsSpecimenList = new ArrayList();
     	//System.out.println("holdsSpecimenIds $$$*** "+holdsSpecimenIds.length);
@@ -153,7 +168,11 @@ public class SimilarContainersAction extends SecureAction {
         	}
     	}    	
     	request.setAttribute(Constants.HOLDS_LIST2,holdsSpecimenList);
-    	
+    	*/
+//    	Gets the Specimen Class Type List and sets it in request
+    	List list3=ibizLogic.retrieve(SpecimenClass.class.getName());
+        List specimenClassTypeList = getSpecimenClassTypeList(list3);
+        request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
     	//System.out.println("collectionProtocolIds "+collecProList+"  holdsIds "+holdsList+" holdsSpecimenList "+holdsSpecimenList);
 		
 		int siteOrParentCont = similarContainersForm.getCheckedButton();
@@ -491,6 +510,85 @@ public class SimilarContainersAction extends SecureAction {
 		
 		return returner;
 	}
+	/* This function gets the list of all collection protocols as argument and  
+     * create a list in which nameValueBean is stored with Title and Identifier of Collection Protocol.
+     * and returns this list
+     */ 
+    private List getCollectionProtocolList(List list)
+    {
+    	List collectionProtocolList=new ArrayList();
+    	
+    	
+    	Iterator cpItr=list.iterator();
+    	while(cpItr.hasNext())
+    	{
+    		CollectionProtocol cp=(CollectionProtocol)cpItr.next();
+    		collectionProtocolList.add(new NameValueBean(cp.getTitle(),cp.getSystemIdentifier()));
+    	}
+    	Collections.sort(collectionProtocolList);
+    	collectionProtocolList.add(0,new NameValueBean(Constants.HOLDS_ANY,"-1"));
+    	return collectionProtocolList;
+    }
+    /* this Function gets the list of all storage types as argument and  
+     * create a list in which nameValueBean is stored with Type and Identifier of storage type.
+     * and returns this list
+     */ 
+    private List getStorageTypeList(List list,boolean includeAny)
+    {
+    	NameValueBean typeAny=null;
+    	List storageTypeList=new ArrayList();
+    	Iterator typeItr=list.iterator();
+    	while(typeItr.hasNext())
+    	{
+    		StorageType type=(StorageType)typeItr.next();
+    		if(type.getSystemIdentifier().longValue()==1)
+    		{
+    			typeAny=new NameValueBean(Constants.HOLDS_ANY,type.getSystemIdentifier());
+    		}
+    		else
+    		{
+    			storageTypeList.add(new NameValueBean(type.getType(),type.getSystemIdentifier()));
+    		}
+    	}
+    	Collections.sort(storageTypeList);
+    	if(includeAny)
+    	{
+    		storageTypeList.add(0,typeAny);
+    	}
+    	else
+    	{
+    		storageTypeList.add(0,new NameValueBean(Constants.SELECT_OPTION,"-1"));
+    	}
+    	return storageTypeList;
+    	
+    }
+    /* this Function gets the list of all Specimen Class Types as argument and  
+     * create a list in which nameValueBean is stored with Name and Identifier of specimen Class Type.
+     * and returns this list
+     */
+    private List getSpecimenClassTypeList(List list)
+    {
+    	List specimenClassTypeList=new ArrayList();
+    	NameValueBean specimenClassAny=null;
+    	
+    	Iterator specimentypeItr=list.iterator();
+    	while(specimentypeItr.hasNext())
+    	{
+    		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
+    		if(specimenClass.getSystemIdentifier().longValue()==1)
+    		{
+    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getSystemIdentifier());
+    		}
+    		else
+    		{
+    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
+    		}
+    	}
+    	Collections.sort(specimenClassTypeList);
+    	specimenClassTypeList.add(0,specimenClassAny);
+    	return specimenClassTypeList;
+    	
+    }
 	
 	
 }

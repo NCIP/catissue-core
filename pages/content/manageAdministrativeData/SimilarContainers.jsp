@@ -254,7 +254,10 @@
 			</label>
 		</td>
 		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="storageContainerType" property="storageContainerType" readonly="true"/>
+			<%--<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="storageContainerType" property="storageContainerType" readonly="true"/>--%>
+			<html:select property="typeId" styleClass="formFieldSized" styleId="storageContainerType" size="1">
+								<html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/>
+							</html:select>
 		</td>
 	  </tr>
 	  
