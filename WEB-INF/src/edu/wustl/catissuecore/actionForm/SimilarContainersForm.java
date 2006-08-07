@@ -82,12 +82,12 @@ public class SimilarContainersForm extends AbstractActionForm {
 	/**
 	 * holdStorageTypeIds contains Ids of Storage Types that this container can hold
 	 */
-	protected long holdsStorageTypeIds[] = new long[] {-1};
+	protected long holdsStorageTypeIds[];
 	
 	/**
 	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold
 	 */
-	protected long holdsSpecimenClassTypeIds[] = new long[] {-1};
+	protected long holdsSpecimenClassTypeIds[];
 	
 	/**
 	 * Tells whether this container is full or not.
