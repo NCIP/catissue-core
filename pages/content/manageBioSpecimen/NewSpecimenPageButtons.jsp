@@ -2,7 +2,7 @@
 							<table cellpadding="4" cellspacing="0" border="0">
 								<tr>
 									<td>
-									<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+									
 										<table>
 											<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
 												<% 
@@ -20,6 +20,7 @@
 						  				     	    
 											     	</html:button>
 												</td>
+												<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 												<td nowrap class="formFieldNoBorders">
 													<html:button styleClass="actionButton"  
 															property="submitPage"
@@ -29,11 +30,12 @@
 															onclick="<%=deriveNewSubmit%>">
 						  				     	    
 											     	</html:button>
-												</td>		
+												</td>	
+												</logic:notEqual>
 <!-- Commented as per bug 2115. Mandar. 10-July-06
 											</tr>
 											<tr>							
-
+											<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 												<td class="formFieldNoBorders" nowrap>
 													<html:button styleClass="actionButton"  
 															property="submitPage"
@@ -54,10 +56,11 @@
 															onclick="<%=addMoreSubmit%>">
 						  				     	   
 											     	</html:button>
-												</td>								
+												</td>		
+												</logic:notEqual>
 											</tr>
 										</table>
-									</logic:notEqual>
+									
 									</td>					
 						   			
 									

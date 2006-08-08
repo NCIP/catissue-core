@@ -1,7 +1,7 @@
 <!-- action buttons begins -->
 							<table cellpadding="4" cellspacing="0" border="0">
 								<tr>
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+								
 									<td>
 										<table>
 											<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
@@ -18,7 +18,7 @@
 						  				     	    
 											     	</html:button>
 												</td>
-												
+												<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 												<td nowrap class="formFieldNoBorders">
 													<html:button styleClass="actionButton"  
 															property="submitPage" 
@@ -27,11 +27,12 @@
 															onclick="<%=forwardToSubmit%>">
 						  				     	    
 											     	</html:button>
-												</td>		
+												</td>
+												</logic:notEqual>		
 											</tr>
 										</table>
 									</td>					
-									</logic:notEqual>						   			
+													   			
 									
 									<%-- td>
 										<html:reset styleClass="actionButton" >

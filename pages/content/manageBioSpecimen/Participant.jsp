@@ -748,7 +748,7 @@ tr#hiddenCombo
 																
 								<!-- PUT YOUR COMMENT HERE -->
 
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+								
 								<td nowrap class="formFieldNoBorders">
 								<html:button styleClass="actionButton"
 										property="submitPage" 
@@ -757,7 +757,7 @@ tr#hiddenCombo
 										onclick="<%=normalSubmit%>"> 
 								</html:button>
 								</td>
-								</logic:notEqual>	
+									
 								
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 								<td nowrap class="formFieldNoBorders">									
