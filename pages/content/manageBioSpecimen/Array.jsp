@@ -24,6 +24,18 @@
 				</td>
 			</tr>
 			
+             <TR>
+					<TD class=formRequiredNotice width=5>*</TD>
+					<TD class=formRequiredLabel><LABEL 
+					  for=createdBy>Array Type</LABEL></TD>
+					<TD class=formField colSpan=3><SELECT 
+					  class=formFieldSized id=state size=1 
+					  name=createdBy><OPTION value=-1>-- 
+						Select --</OPTION>
+					  <OPTION value=0 selected> Array type 1</OPTION>
+					  <OPTION value=1 > Array type 2</OPTION>
+					  <OPTION value=2 > Array type 3</OPTION>
+					  </SELECT></TD></TR>
 			<tr>
 				<td class="formRequiredNotice" width="5">*</td>
 				<td class="formRequiredLabel">
@@ -37,18 +49,28 @@
 					</html:select>
 				</td>
 			</tr>
-			
+			<TR>
+				<TD class=formRequiredNotice width=5> * </TD>
+				<TD class=formRequiredLabel width=140><LABEL 
+				  for=comments>Enter Specimen By</LABEL></TD>
+				<TD class=formField colSpan=3>
+					<b>Barcode</b> <input type="radio" name="specimenEntryType" value="Barcode" checked="checked" /> &nbsp;&nbsp;
+					<b>Label</b> <input type="radio" name="specimenEntryType" value="Label"/>
+				</TD></TR>
+
 			<tr>
 				<td class="formRequiredNotice" width="5">&nbsp;</td>
 				<td class="formLabel">
 					<label for="specimenClass">
-						<bean:message key="array.specimenClass" />
+						<bean:message key="arrayType.specimenClass" />
 					</label>
 				</td>
 				<td class="formField" colspan="3">
-					<html:select property="specimenClass" styleClass="formFieldSized" styleId="state" size="1">
+				<!--<html:select property="specimenClass" styleClass="formFieldSized" styleId="state" size="1" >
 						<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
+					-->
+					<html:text styleClass="formFieldSized"  maxlength="50"  size="30" styleId="state" property="specimenClass" disabled="true" value="Specimen Class 1" />
 				</td>
 			</tr>
 			
@@ -56,40 +78,17 @@
 				<td class="formRequiredNotice" width="5">&nbsp;</td>
 				<td class="formLabel">
 					<label for="specimenType">
-						<bean:message key="array.specimenType" />
+						<bean:message key="arrayType.specimenType" />
 					</label>
 				</td>
 				<td class="formField" colspan="3">
-					<html:select property="specimenType" styleClass="formFieldSized" styleId="state" size="1">
+					<!-- <html:select property="specimenType" styleClass="formFieldSized" styleId="state" size="1">
 						<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
+					-->
+					<html:text styleClass="formFieldSized"  maxlength="50"  size="30" styleId="state" property="specimenType" disabled="true" value="Specimen Type 1"/>
 				</td>
 			</tr>
-			
-			<tr>
-				<td class="formRequiredNotice" width="5">&nbsp;</td>
-				<td class="formLabel">
-					<label for="concentration">
-						<bean:message key="array.concentration"/> 
-					</label>
-				</td>
-				<td class="formField" colspan="3">
-					<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="concentration" property="concentration"/>
-				</td>
-			</tr>
-			
-			<tr>
-				<td class="formRequiredNotice" width="5">&nbsp;</td>
-				<td class="formLabel">
-					<label for="quantity">
-						<bean:message key="array.quantity"/> 
-					</label>
-				</td>
-				<td class="formField" colspan="3">
-					<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="quantity" property="quantity"/>
-				</td>
-			</tr>
-			
 			<tr>
 				<td class="formRequiredNotice" width="5">&nbsp;</td>
 				<td class="formLabel">
@@ -130,7 +129,7 @@
 				<td class="formRequiredNotice" width="5">&nbsp;</td>
 				<td class="formLabel" width="140">
 					<label for="comments">
-						<bean:message key="array.comments"/>
+						<bean:message key="arrayType.comments"/>
 					</label>
 				</td>
 				<td class="formField" colspan="3">
@@ -141,7 +140,7 @@
 			<tr>
 				<td class="formTitle" colspan="5">
 					<label for="capacity">
-						<bean:message key="array.capacity" />
+						<bean:message key="arrayType.capacity" />
 					</label>
 				</td>
 			</tr>
@@ -150,11 +149,11 @@
 				<td class="formRequiredNotice" width="5">&nbsp;</td>
 				<td class="formLabel">
 					<label for="oneDimensionCapacity">
-						<bean:message key="array.oneDimensionCapacity" />
+						<bean:message key="arrayType.oneDimensionCapacity" />
 					</label>
 				</td>
 				<td class="formField" colspan="3">
-					<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity"/>
+					<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity" disabled="true" value="4"/>
 				</td>
 			</tr>
 			
@@ -162,14 +161,33 @@
 				<td class="formRequiredNotice" width="5">&nbsp;</td>
 				<td class="formLabel">
 					<label for="twoDimensionCapacity">
-						<bean:message key="array.twoDimensionCapacity" />
+						<bean:message key="arrayType.twoDimensionCapacity" />
 					</label>
 				</td>
 				<td class="formField" colspan="3">
-					<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
+					<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity" disabled="true" value="3"/>
 				</td>
 			</tr>
-			
+		</table>
+	</td>
+</tr>
+<tr>
+			<tr>
+				<td align="right" colspan="5"> &nbsp; </td></tr>
+	<td>
+			<table summary="" cellpadding="3" cellspacing="0" border="1" width="600">
+			<tr>
+				<td class="formTitle" height="20" colspan="5">
+					<label for="addspecimens">
+						<bean:message key="array.addspecimens" />
+					</label>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="5"><jsp:include page="grid.jsp" flush="true"/></td></tr>
+			</table>
+		</td></tr>
+
 			<tr>
 				<td align="right" colspan="5">
 				<!-- action buttons begins -->
@@ -178,6 +196,7 @@
 							<td>
 								<html:submit styleClass="actionButton">
 									<bean:message  key="buttons.submit" />
+						
 								</html:submit>
 							</td>
 						</tr>
@@ -185,8 +204,5 @@
 				<!-- action buttons end -->
 				</td>
 			</tr>
-		</table>
-	</td>
-</tr>	
 </table>
 </html:form>
