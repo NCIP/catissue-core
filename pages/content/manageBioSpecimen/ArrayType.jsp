@@ -125,6 +125,6 @@
 			</tr>
 		</table>
 	</td>
-</tr>	
+</tr>
 </table>
 </html:form>
