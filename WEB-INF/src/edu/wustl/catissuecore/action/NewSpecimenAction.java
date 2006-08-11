@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +32,6 @@ import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -43,8 +41,6 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
-
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 
 /**
  * NewSpecimenAction initializes the fields in the New Specimen page.
@@ -279,7 +275,7 @@ public class NewSpecimenAction  extends SecureAction
     	
     	
 //    	 ---- chetan 15-06-06 ----
-        Map containerMap;
+        /*Map containerMap;
         if(operation.equals(Constants.ADD))
         {
         	StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
@@ -313,7 +309,7 @@ public class NewSpecimenAction  extends SecureAction
         }
         request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
         // -------------------------
-        
+        */
     	return mapping.findForward(pageOf);
     }
 

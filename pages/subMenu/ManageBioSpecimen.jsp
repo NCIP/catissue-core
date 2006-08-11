@@ -85,9 +85,9 @@
 				<bean:message key="app.createSpecimen" />	</a> 
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="Aliquots.do?pageOf=pageOfAliquot&menuSelected=15">
+			<%--<a class="subMenuPrimary" href="Aliquots.do?pageOf=pageOfAliquot&menuSelected=15">--%>
 				<bean:message key="app.aliquots" />
-			</a> | 
+			<%--</a>  --%>|
 			<a class="subMenuPrimary" href="QuickEvents.do?operation=add&menuSelected=15">
 				<bean:message key="quickEvents.link" />
 			</a>

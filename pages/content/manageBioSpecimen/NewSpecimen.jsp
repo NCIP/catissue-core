@@ -690,8 +690,25 @@
 						if(operation.equals(Constants.ADD))
 							readOnly=false;
 					%>
+					<td class="formField">
+					 	&nbsp;<bean:message key="storageContainer.parentID" />	
+		     			<html:text styleClass="formFieldSized3" styleId="storageContainer" maxlength="10"  property="storageContainer"  readonly="<%=readOnly%>" />
+		     			&nbsp;<bean:message key="storageContainer.positionOne" />
+		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" maxlength="10"  property="positionDimensionOne" readonly="<%=readOnly%>" />
+		     			&nbsp;<bean:message key="storageContainer.positionTwo" />
+		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" maxlength="10"  property="positionDimensionTwo" readonly="<%=readOnly%>" />
+						&nbsp;
+					</td>
 					
-				<%-- n-combo-box start --%>
+					<td class="formField" colspan="2">
+						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+							<html:button property="mapButton" styleClass="actionButton" styleId="Map"
+								onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
+								<bean:message key="buttons.map"/>
+							</html:button>
+						</logic:notEqual>&nbsp;
+					</td>	
+				<%-- n-combo-box start 
 				<%
 					Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 										
@@ -735,7 +752,7 @@
 											formLabelStyle="formLabelBorderless"
 											buttonStyleClass="actionButton" />				
 				</td>
-				<%-- n-combo-box end --%>
+				n-combo-box end --%>
 				 </tr>
 				 
 				 <tr>

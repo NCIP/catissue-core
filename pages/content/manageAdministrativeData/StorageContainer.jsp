@@ -100,24 +100,37 @@
 		
 		function onTypeChange(element)
 		{
-			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true&typeChange=true";
+			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&typeChange=true";
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
 		function ReserName()
 		{
-			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true&isNameChange=true";
+			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer";
 			document.forms[0].action = action;
 			document.forms[0].containerName.value="";
 			document.forms[0].submit();
 		}
 		function onSiteChange(element)
 		{
-			var list = document.getElementById('typeId');
-			var type = list.options[list.selectedIndex].value;
-			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
-			document.forms[0].action = action;
-			document.forms[0].submit();
+			if(document.forms[0].containerName.value=="")
+			{
+				var list = document.getElementById('typeId');
+				var type = list.options[list.selectedIndex].value;
+				var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&siteOrParentContainerChange=true";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}
+		}
+		function onParentContainerChange(element)
+		{
+
+			if(document.forms[0].containerName.value=="")
+			{
+				var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&siteOrParentContainerChange=true";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}
 		}
 	
 //  function to insert a row in the inner block
@@ -276,16 +289,7 @@ function validate(action,formField)
 		}
 	}	
 }
-function onParentContainerChange(element)
-{
 
-	if(document.forms[0].containerName.value=="")
-	{
-		var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isOnChange=true";
-		document.forms[0].action = action;
-		document.forms[0].submit();
-	}
-}
 	</script>
 </head>
 
@@ -298,11 +302,11 @@ function onParentContainerChange(element)
 
 <html:form action="<%=formName%>" method="post">	
 
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="750">
 	<!-- NEW STORAGE CONTAINER REGISTRATION BEGINS-->
 		<tr>
 		<td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="510">
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="660">
 				<tr>
 					<td>
 						<html:hidden property="operation" value="<%=operation%>" />
@@ -311,10 +315,14 @@ function onParentContainerChange(element)
 					</td>
 				</tr>
 				<tr>
-					<td><html:hidden property="systemIdentifier" /></td>
+					<td><html:hidden property="systemIdentifier" />
+						<html:hidden property="typeName"/>
+						<html:hidden property="siteName"/>
+					</td>
 				</tr>
 				<tr>
-					<td><html:hidden property="positionInParentContainer" /></td>
+					<td><html:hidden property="positionInParentContainer" />
+					</td>
 				</tr>
 				<tr>
 					<td><html:hidden property="onSubmit" />

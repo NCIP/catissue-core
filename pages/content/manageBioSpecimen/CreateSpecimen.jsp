@@ -312,7 +312,7 @@
 					   </label>
 					</td>
 					
-					<%-- n-combo-box start --%>
+					<%-- n-combo-box start 
 					<%
 						Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 							
@@ -357,7 +357,21 @@
 											formLabelStyle="formLabelBorderless"
 											buttonStyleClass="actionButton" />
 					</td>	
-					<%-- n-combo-box end --%>
+ n-combo-box end --%>
+<td class="formField">
+				 	&nbsp;<bean:message key="storageContainer.parentID" />
+		     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="storageContainer" property="storageContainer" />
+		     			&nbsp;<bean:message key="storageContainer.positionOne" />
+		     			<html:text styleClass="formFieldSized3"  maxlength="10" styleId="positionDimensionOne" property="positionDimensionOne" />
+		     			&nbsp;<bean:message key="storageContainer.positionTwo" />
+		     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" />
+					</td>
+					<td class="formField">
+						<html:button property="mapButton" styleClass="actionButton" styleId="Map"
+							onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
+							<bean:message key="buttons.map"/>
+						</html:button>
+					</td>
 				 </tr>
 	
 				 <tr>

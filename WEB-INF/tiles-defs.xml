@@ -813,6 +813,10 @@
 		<put name="content" value="/pages/content/manageAdministrativeData/SimilarContainers.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.similarContainersList" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/SimilarContainersList.jsp" />
+	</definition>
+	
 	<definition name=".catissuecore.arrayDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Array.jsp" />
 	</definition>

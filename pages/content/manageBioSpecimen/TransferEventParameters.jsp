@@ -183,7 +183,7 @@
 					<bean:message key="transfereventparameters.toposition"/> 
 				</label>
 			</td>
-		<%--	<td class="formField">
+			<td class="formField">
 			<%
 				boolean isReadOnly = true ;
 					if(operation.equals("add"))
@@ -213,9 +213,9 @@
 					}
 				%>				
 				&nbsp;
-			</td>  --%>
+			</td>  
 		
-			<%-- n-combo-box start --%>
+			<%-- n-combo-box start 
 			<%
 				Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 									
@@ -261,7 +261,7 @@
 											formLabelStyle="formLabelBorderless"
 											buttonOnClick = "<%=buttonOnClicked%>" />			
 			</td>
-			<%-- n-combo-box end --%>
+		 n-combo-box end --%>
 					
 		</tr>
 

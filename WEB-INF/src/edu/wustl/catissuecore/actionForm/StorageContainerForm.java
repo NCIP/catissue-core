@@ -48,6 +48,11 @@ public class StorageContainerForm extends AbstractActionForm
 	private long typeId = -1;
 
 	/**
+	 * An name which refers to the type of the storage.
+	 */
+	private String typeName;
+
+	/**
 	 * An id which refers to Parent Container of this container.
 	 */
 	private long parentContainerId;
@@ -61,6 +66,10 @@ public class StorageContainerForm extends AbstractActionForm
 	 * An id which refers to the site of the container if it is parent container.
 	 */
 	private long siteId;
+	/**
+	 * An name which refers to the site of the container if it is parent container.
+	 */
+	private String siteName;
 
 	/**
 	 * A default temperature of the storage container.
@@ -139,7 +148,7 @@ public class StorageContainerForm extends AbstractActionForm
 	/**
 	 * collectionIds contains Ids of collection Protocols that this container can hold
 	 */
-	protected long collectionIds[]=new long[] {-1};
+	protected long collectionIds[] = new long[]{-1};
 
 	/**
 	 * holdStorageTypeIds contains Ids of Storage Types that this container can hold
@@ -150,6 +159,11 @@ public class StorageContainerForm extends AbstractActionForm
 	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold
 	 */
 	protected long holdsSpecimenClassTypeIds[];
+
+	/**
+	 * A map that contains distinguished fields (container name,barcode,parent location) per container.
+	 */
+	private Map similarContainersMap = new HashMap();
 
 	/**
 	 * No argument constructor for StorageTypeForm class 
@@ -165,7 +179,7 @@ public class StorageContainerForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		Logger.out.info("----------------------1---------------------");
+
 		StorageContainer container = (StorageContainer) abstractDomain;
 
 		this.systemIdentifier = container.getId().longValue();
@@ -217,7 +231,7 @@ public class StorageContainerForm extends AbstractActionForm
 		//Populating the collection protocol id array
 		Collection collectionProtocolCollection = container.getCollectionProtocolCollection();
 
-		if (collectionProtocolCollection != null && collectionProtocolCollection.size()>0)
+		if (collectionProtocolCollection != null && collectionProtocolCollection.size() > 0)
 		{
 			this.collectionIds = new long[collectionProtocolCollection.size()];
 			int i = 0;
@@ -229,9 +243,8 @@ public class StorageContainerForm extends AbstractActionForm
 				this.collectionIds[i] = cp.getSystemIdentifier().longValue();
 				i++;
 			}
-			
-		}
 
+		}
 
 		//Populating the storage type-id array
 		Collection storageTypeCollection = container.getStorageTypeCollection();
@@ -262,12 +275,11 @@ public class StorageContainerForm extends AbstractActionForm
 			while (it.hasNext())
 			{
 				SpecimenClass specimenClass = (SpecimenClass) it.next();
-				this.holdsSpecimenClassTypeIds[i] = specimenClass.getSystemIdentifier()
-						.longValue();
+				this.holdsSpecimenClassTypeIds[i] = specimenClass.getSystemIdentifier().longValue();
 				i++;
 			}
 		}
-
+		
 	}
 
 	public void setAllVal(Object obj)
@@ -397,7 +409,28 @@ public class StorageContainerForm extends AbstractActionForm
 		this.typeId = typeId;
 	}
 
+
 	/**
+	 * Sets an name which refers to the type of the storage.
+	 * @param typeName An id which refers to the type of the storage.
+	 * @see #getTypeName()
+	 */
+	public void setTypeName(String typeName)
+	{
+		this.typeName = typeName;
+	}
+	
+	/**
+	 * Returns an name which refers to the type of the storage.
+	 * @return An name which refers to the type of the storage.
+	 * @see #setTypeName(String)
+	 */
+	public String getTypeName()
+	{
+		return this.typeName;
+	}
+
+		/**
 	 * Returns the default temperature of the storage container.
 	 * @return double the default temperature of the storage container to be set.
 	 * @see #setDefaultTemperature(double)
@@ -552,6 +585,28 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		this.siteId = siteId;
 	}
+
+
+	/**
+	 * Returns an name which refers to the site of the container if it is parent container.
+	 * @return String An name which refers to the site of the container if it is parent container.
+	 * @see #setSiteName(String)
+	 */
+	public String getSiteName()
+	{
+		return siteName;
+	}
+
+	/**
+	 * Sets an name which refers to the site of the container if it is parent container.
+	 * @param siteName An name which refers to the site of the container if it is parent container.
+	 * @see #getSiteName()
+	 */
+	public void setSiteName(String siteName)
+	{
+		this.siteName = siteName;
+	}
+
 
 	/**
 	 * Returns the id assigned to form bean
@@ -818,6 +873,50 @@ public class StorageContainerForm extends AbstractActionForm
 	}
 
 	/**
+	 * Returns the map that contains distinguished fields per aliquots.
+	 * @return The map that contains distinguished fields per aliquots.
+	 * @see #setAliquotMap(Map)
+	 */
+	public Map getSimilarContainersMap()
+	{
+		//System.out.println("AliquotForm : getAliquotMap "+similarContainersMap);
+		return similarContainersMap;
+	}
+
+	/**
+	 * Sets the map of distinguished fields of aliquots.
+	 * @param aliquotMap A map of distinguished fields of aliquots.
+	 * @see #getAliquotMap()
+	 */
+	public void setSimilarContainersMap(Map similarContainersMap)
+	{
+		//System.out.println("AliquotForm : setAliquotMap "+similarContainersMap);
+		this.similarContainersMap = similarContainersMap;
+	}
+
+	/**
+	 * Associates the specified object with the specified key in the map.
+	 * @param key the key to which the object is mapped.
+	 * @param value the object which is to be mapped.
+	 */
+	public void setSimilarContainerMapValue(String key, Object value)
+	{
+		//System.out.println("simCont: setValue -> "+key+" "+value);
+		similarContainersMap.put(key, value);
+	}
+
+	/**
+	 * Returns the object to which this map maps the specified key.
+	 * @param key the required key.
+	 * @return the object to which this map maps the specified key.
+	 */
+	public Object getSimilarContainerMapValue(String key)
+	{
+		//System.out.println("simCont: getValue <- "+key+" "+similarContainersMap.get(key));
+		return similarContainersMap.get(key);
+	}
+
+	/**
 	 * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
 	 * @param formBeanId - FormBean ID of the object inserted
 	 *  @param addObjectIdentifier - Identifier of the Object inserted 
@@ -844,23 +943,26 @@ public class StorageContainerForm extends AbstractActionForm
 
 		try
 		{
+			Logger.out.info("No of containers---------in validate::" + this.noOfContainers);
+			//if (this.noOfContainers == 1)
+			//{
 			if (this.typeId == -1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.type")));
 			}
-			if (!validator.isValidOption(isFull))
+			if (!validator.isValidOption(isFull) && this.noOfContainers == 1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
 						ApplicationProperties.getValue("storageContainer.isContainerFull")));
 			}
 
-			if (checkedButton == 1 && siteId == -1)
+			if (checkedButton == 1 && siteId == -1 && this.noOfContainers == 1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.site")));
 			}
-			else if (checkedButton == 2)
+			else if (checkedButton == 2 && this.noOfContainers == 1)
 			{
 				if (!validator.isNumeric(String.valueOf(positionDimensionOne), 1)
 						|| !validator.isNumeric(String.valueOf(positionDimensionTwo), 1)
@@ -871,35 +973,39 @@ public class StorageContainerForm extends AbstractActionForm
 				}
 			}
 
-			checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
-					errors, validator);
-			
+			if (this.noOfContainers == 1)
+			{
+				checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
+						errors, validator);
+			}
 			//validations for Container name
-			if (validator.isEmpty(containerName))
+			if (validator.isEmpty(containerName) && this.noOfContainers == 1)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 						ApplicationProperties.getValue("storageContainer.name")));
 			}
-	
+
 			//validation for collection protocol
-			if(collectionIds.length>1)
+			if (collectionIds.length > 1)
 			{
-				for(int i=0;i<collectionIds.length;i++)
+				for (int i = 0; i < collectionIds.length; i++)
 				{
-					if(collectionIds[i]==-1)
+					if (collectionIds[i] == -1)
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
-								ApplicationProperties.getValue("storageContainer.collectionProtocolTitle")));
+								ApplicationProperties
+										.getValue("storageContainer.collectionProtocolTitle")));
 					}
-					
+
 				}
 			}
-			
+
 			//validation for holds storage type
-			checkValidSelectionForAny(holdsStorageTypeIds,"storageContainer.containerType",errors);
+			checkValidSelectionForAny(holdsStorageTypeIds, "storageContainer.containerType", errors);
 			//validation for holds specimen class
-			checkValidSelectionForAny(holdsSpecimenClassTypeIds,"storageContainer.specimenType",errors);
-			
+			checkValidSelectionForAny(holdsSpecimenClassTypeIds, "storageContainer.specimenType",
+					errors);
+
 			if (operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
@@ -936,6 +1042,52 @@ public class StorageContainerForm extends AbstractActionForm
 						ApplicationProperties.getValue("storageContainer.twoDimension")));
 			}
 
+			if (this.noOfContainers > 1 && this.getSimilarContainersMap().size()>0)
+			{
+				for (int i = 1; i <= this.noOfContainers; i++)
+				{
+					String iBarcode = (String) this.getSimilarContainerMapValue("simCont:" + i + "_barcode"); //simCont:1_barcode
+					if (iBarcode != null && iBarcode.equals("")) // this is done because barcode is empty string set by struts
+					{ // but barcode in DB is unique but can be null.
+						this.setSimilarContainerMapValue("simCont:" + i + "_barcode", null);
+					}
+					Logger.out.info("Similar Container Map in SImilarCOntainerForm:"+similarContainersMap);
+					Logger.out.info("Checked button:"+getSimilarContainerMapValue("checkedButton"));
+					int checkedButtonStatus = Integer.parseInt((String) getSimilarContainerMapValue("checkedButton"));
+					String siteId = (String) getSimilarContainerMapValue("simCont:" + i + "_siteId");
+					if (checkedButtonStatus == 2 || siteId == null)
+					{
+						String parentContId = (String) getSimilarContainerMapValue("simCont:" + i
+								+ "_parentContainerId");
+						String positionDimensionOne = (String) getSimilarContainerMapValue("simCont:" + i
+								+ "_positionDimensionOne");
+						String positionDimensionTwo = (String) getSimilarContainerMapValue("simCont:" + i
+								+ "_positionDimensionTwo");
+						Logger.out.debug(i + " parentContId " + parentContId
+								+ " positionDimensionOne " + positionDimensionOne
+								+ " positionDimensionTwo " + positionDimensionOne);
+						if (parentContId.equals("-1") || positionDimensionOne.equals("-1")
+								|| positionDimensionTwo.equals("-1"))
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+									"errors.item.required", ApplicationProperties
+											.getValue("similarcontainers.location")));
+							this.setSimilarContainerMapValue("checkedButton", "2");
+						}
+					}
+					else
+					{
+						if (siteId.equals("-1"))
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+									"errors.item.required", ApplicationProperties
+											.getValue("storageContainer.site")));
+						}
+					}
+				}
+			}
+			//}
+
 		}
 		catch (Exception excp)
 		{
@@ -946,13 +1098,13 @@ public class StorageContainerForm extends AbstractActionForm
 	}
 
 	//This function if 'any' option is selected then no other option should be selected */
-	void checkValidSelectionForAny(long[] Ids,String message,ActionErrors errors)
+	void checkValidSelectionForAny(long[] Ids, String message, ActionErrors errors)
 	{
-		if(Ids!=null && Ids.length>1)
+		if (Ids != null && Ids.length > 1)
 		{
-			for(int i=0;i<Ids.length;i++)
+			for (int i = 0; i < Ids.length; i++)
 			{
-				if(Ids[i]==1)
+				if (Ids[i] == 1)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue(message)));
@@ -961,6 +1113,5 @@ public class StorageContainerForm extends AbstractActionForm
 			}
 		}
 	}
-	
 
 }

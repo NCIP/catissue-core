@@ -55,6 +55,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDataInterface
 {
+
 	/**
 	 * Saves the storageContainer object in the database.
 	 * @param obj The storageType object to be saved.
@@ -71,209 +72,227 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		int posOneCapacity = 1, posTwoCapacity = 1;
 		int positionDimensionOne = Constants.STORAGE_CONTAINER_FIRST_ROW, positionDimensionTwo = Constants.STORAGE_CONTAINER_FIRST_COLUMN;
 		boolean fullStatus[][] = null;
-		
-	if(container.getSimilarContainerMap() == null)
-	{		
-		int noOfContainers = container.getNoOfContainers().intValue();
 
-		if (container.getParentContainer() != null)
+		if (container.getSimilarContainerMap() == null)
 		{
-			List list = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier",
-					container.getParentContainer().getSystemIdentifier());
+			int noOfContainers = container.getNoOfContainers().intValue();
 
-			if (list.size() != 0)
+			if (container.getParentContainer() != null)
 			{
-				StorageContainer pc = (StorageContainer) list.get(0);
+				List list = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier",
+						container.getParentContainer().getSystemIdentifier());
 
-				// check for closed ParentContainer
-				checkStatus(dao, pc, "Parent Container");
-
-				int totalCapacity = pc.getStorageContainerCapacity().getOneDimensionCapacity()
-						.intValue()
-						* pc.getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
-				if ((noOfContainers + pc.getChildrenContainerCollection().size()) > totalCapacity)
+				if (list.size() != 0)
 				{
-					throw new DAOException(ApplicationProperties
-							.getValue("errors.storageContainer.overflow"));
+					StorageContainer pc = (StorageContainer) list.get(0);
+
+					// check for closed ParentContainer
+					checkStatus(dao, pc, "Parent Container");
+
+					int totalCapacity = pc.getStorageContainerCapacity().getOneDimensionCapacity()
+							.intValue()
+							* pc.getStorageContainerCapacity().getTwoDimensionCapacity().intValue();
+					if ((noOfContainers + pc.getChildrenContainerCollection().size()) > totalCapacity)
+					{
+						throw new DAOException(ApplicationProperties
+								.getValue("errors.storageContainer.overflow"));
+					}
+					else
+					{
+
+						//Check if position specified is within the parent
+						// container's
+						//capacity  
+						if (false == validatePosition(pc, container))
+						{
+							throw new DAOException(ApplicationProperties
+									.getValue("errors.storageContainer.dimensionOverflow"));
+						}
+
+						// check for availability of position
+						boolean canUse = isContainerAvailable(dao, container);
+
+						if (!canUse)
+						{
+							throw new DAOException(ApplicationProperties
+									.getValue("errors.storageContainer.inUse"));
+						}
+
+						container.setParentContainer(pc);
+
+						// check for closed ParentSite
+						checkStatus(dao, pc.getSite(), "Parent Site");
+
+						container.setSite(pc.getSite());
+
+						posOneCapacity = pc.getStorageContainerCapacity().getOneDimensionCapacity()
+								.intValue();
+						posTwoCapacity = pc.getStorageContainerCapacity().getTwoDimensionCapacity()
+								.intValue();
+
+						fullStatus = getStorageContainerFullStatus(dao, container
+								.getParentContainer().getSystemIdentifier());
+						positionDimensionOne = container.getPositionDimensionOne().intValue();
+						positionDimensionTwo = container.getPositionDimensionTwo().intValue();
+					}
 				}
 				else
 				{
-
-					//Check if position specified is within the parent
-					// container's
-					//capacity  
-					if (false == validatePosition(pc, container))
-					{
-						throw new DAOException(ApplicationProperties
-								.getValue("errors.storageContainer.dimensionOverflow"));
-					}
-
-					// check for availability of position
-					boolean canUse = isContainerAvailable(dao, container);
-
-					if (!canUse)
-					{
-						throw new DAOException(ApplicationProperties
-								.getValue("errors.storageContainer.inUse"));
-					}
-
-					container.setParentContainer(pc);
-
-					// check for closed ParentSite
-					checkStatus(dao, pc.getSite(), "Parent Site");
-
-					container.setSite(pc.getSite());
-
-					posOneCapacity = pc.getStorageContainerCapacity().getOneDimensionCapacity()
-							.intValue();
-					posTwoCapacity = pc.getStorageContainerCapacity().getTwoDimensionCapacity()
-							.intValue();
-
-					fullStatus = getStorageContainerFullStatus(dao, container.getParentContainer()
-							.getSystemIdentifier());
-					positionDimensionOne = container.getPositionDimensionOne().intValue();
-					positionDimensionTwo = container.getPositionDimensionTwo().intValue();
+					throw new DAOException(ApplicationProperties
+							.getValue("errors.storageContainerExist"));
 				}
 			}
 			else
 			{
-				throw new DAOException(ApplicationProperties
-						.getValue("errors.storageContainerExist"));
-			}
-		}
-		else
-		{
-			loadSite(dao, container);
-		}
-
-		loadStorageType(dao, container);
-		for (int i = 0; i < noOfContainers; i++)
-		{
-			StorageContainer cont = new StorageContainer(container);
-			if (cont.getParentContainer() != null)
-			{
-				cont.setPositionDimensionOne(new Integer(positionDimensionOne));
-				cont.setPositionDimensionTwo(new Integer(positionDimensionTwo));
+				loadSite(dao, container);
 			}
 
-			
-			Logger.out.debug("Collection protocol size:" + container.getCollectionProtocolCollection().size());
+			loadStorageType(dao, container);
 
-			dao.insert(cont.getStorageContainerCapacity(), sessionDataBean, true, true);
-			dao.insert(cont, sessionDataBean, true, true);
-
-			//Used for showing the success message after insert and using it
-			// for edit.
-			container.setSystemIdentifier(cont.getSystemIdentifier());
-
-			if (container.getParentContainer() != null)
+			for (int i = 0; i < noOfContainers; i++)
 			{
-				Logger.out.debug("In if: ");
-				do
+				StorageContainer cont = new StorageContainer(container);
+				if (cont.getParentContainer() != null)
 				{
-					if (positionDimensionTwo == posTwoCapacity)
-					{
-						if (positionDimensionOne == posOneCapacity)
-							positionDimensionOne = Constants.STORAGE_CONTAINER_FIRST_ROW;
-						else
-							positionDimensionOne = (positionDimensionOne + 1)
-									% (posOneCapacity + 1);
-
-						positionDimensionTwo = Constants.STORAGE_CONTAINER_FIRST_COLUMN;
-					}
-					else
-					{
-						positionDimensionTwo = positionDimensionTwo + 1;
-					}
-
-					Logger.out.debug("positionDimensionTwo: " + positionDimensionTwo);
-					Logger.out.debug("positionDimensionOne: " + positionDimensionOne);
+					cont.setPositionDimensionOne(new Integer(positionDimensionOne));
+					cont.setPositionDimensionTwo(new Integer(positionDimensionTwo));
 				}
-				while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
-			}
 
-			//Inserting authorization data
-			Set protectionObjects = new HashSet();
-			protectionObjects.add(cont);
-			try
-			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
-						protectionObjects, getDynamicGroups(cont));
-			}
-			catch (SMException e)
-			{
-				throw handleSMException(e);
-			}
-		}
-	 }else // if similarContainerMap is not null
-     {
-     	int noOfContainers = container.getNoOfContainers().intValue();
-     	Map simMap = container.getSimilarContainerMap();
-     	// --- common values for all similar containers ---
-     	loadStorageType(dao, container);
-     	Logger.out.debug("cont.getCollectionProtocolCollection().size()  "+container.getCollectionProtocolCollection().size());
-     	Logger.out.debug("container.getParentContainer() site id -->>()<<-- "+container.getParentContainer()); //.getSite().getSystemIdentifier()
-     	Logger.out.debug("Container siteId "+container.getSite());
-     	int checkButton = Integer.parseInt((String)simMap.get("checkedButton"));
-     	for(int i = 1; i <= noOfContainers; i++)
-     	{
-     		String simContPrefix = "simCont:"+i+"_";
-     		String contName = (String) simMap.get(simContPrefix+"name");
-     		String barcode = (String)  simMap.get(simContPrefix+"barcode");
-     		StorageContainer cont = new StorageContainer(container);
-     		if(checkButton == 1)  // site
-     		{
-     			String  siteId = (String)simMap.get(simContPrefix+"siteId");
-     			Site site = new Site();
-     			site.setSystemIdentifier(new Long(siteId));
-     			cont.setSite(site);
-     			loadSite(dao, cont);    // <<----
-     			
-     		}else  // parentContainer
-     		{
-     			String parentId = (String) simMap.get(simContPrefix+"parentContainerId");
-     			String posOne = (String) simMap.get(simContPrefix+"positionDimensionOne");
-     			String posTwo = (String) simMap.get(simContPrefix+"positionDimensionTwo");
-     			
-     			
-     			StorageContainer parentContainer = new StorageContainer();
- 				parentContainer.setSystemIdentifier(new Long(parentId));
- 				parentContainer.setPositionDimensionOne(new Integer(posOne));
- 				parentContainer.setPositionDimensionTwo(new Integer(posTwo));
-     			cont.setParentContainer(parentContainer);  // <<----
-     			// Have to set Site object for parentContainer
-     			loadSite(dao,parentContainer);                         // 17-07-2006
-     			loadSiteFromContainerId(dao,parentContainer);
-     			cont.setPositionDimensionOne(new Integer(posOne));
-     			cont.setPositionDimensionTwo(new Integer(posTwo));
-     			cont.setSite(parentContainer.getSite());             // 16-07-2006 chetan
-     			Logger.out.debug("^^>> "+parentContainer.getSite());
-     		}
-     		//StorageContainer cont = new StorageContainer();
-     		cont.setName(contName);     // <<----
-     		cont.setBarcode(barcode);   // <<----     		
-     		
-     		Logger.out.debug(cont.getParentContainer()+" <<<<---- parentContainer");
-     		Logger.out.debug("cont.getCollectionProtocol().size() "+cont.getCollectionProtocolCollection().size());
-     		dao.insert(cont.getStorageContainerCapacity(), sessionDataBean, true, true);
-     		dao.insert(cont, sessionDataBean, true, true);
-     		
-     		container.setSystemIdentifier(cont.getSystemIdentifier());
-     		
-     		//        		Inserting authorization data
-        	 	Set protectionObjects = new HashSet();
-        	 	protectionObjects.add(cont);
-        	 	try
-        	 	{
-        	 		SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
-						protectionObjects, getDynamicGroups(cont));
-        	 	}
+				Logger.out.debug("Collection protocol size:"
+						+ container.getCollectionProtocolCollection().size());
+
+				dao.insert(cont.getStorageContainerCapacity(), sessionDataBean, true, true);
+				dao.insert(cont, sessionDataBean, true, true);
+
+				//Used for showing the success message after insert and using it
+				// for edit.
+				container.setSystemIdentifier(cont.getSystemIdentifier());
+
+				if (container.getParentContainer() != null)
+				{
+					Logger.out.debug("In if: ");
+					do
+					{
+						if (positionDimensionTwo == posTwoCapacity)
+						{
+							if (positionDimensionOne == posOneCapacity)
+								positionDimensionOne = Constants.STORAGE_CONTAINER_FIRST_ROW;
+							else
+								positionDimensionOne = (positionDimensionOne + 1)
+										% (posOneCapacity + 1);
+
+							positionDimensionTwo = Constants.STORAGE_CONTAINER_FIRST_COLUMN;
+						}
+						else
+						{
+							positionDimensionTwo = positionDimensionTwo + 1;
+						}
+
+						Logger.out.debug("positionDimensionTwo: " + positionDimensionTwo);
+						Logger.out.debug("positionDimensionOne: " + positionDimensionOne);
+					}
+					while (fullStatus[positionDimensionOne][positionDimensionTwo] != false);
+				}
+
+				//Inserting authorization data
+				Set protectionObjects = new HashSet();
+				protectionObjects.add(cont);
+				try
+				{
+					SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
+							protectionObjects, getDynamicGroups(cont));
+				}
 				catch (SMException e)
 				{
 					throw handleSMException(e);
 				}
-     	}     	
-     }
+			}
+		}
+		else
+		// if similarContainerMap is not null
+		{
+			int noOfContainers = container.getNoOfContainers().intValue();
+			Map simMap = container.getSimilarContainerMap();
+			// --- common values for all similar containers ---
+			loadStorageType(dao, container);
+			Logger.out.debug("cont.getCollectionProtocolCollection().size()  "
+					+ container.getCollectionProtocolCollection().size());
+			Logger.out.debug("container.getParentContainer() site id -->>()<<-- "
+					+ container.getParentContainer()); //.getSite().getSystemIdentifier()
+			Logger.out.debug("Container siteId " + container.getSite());
+			Logger.out.info(simMap);
+			int checkButton = Integer.parseInt((String) simMap.get("checkedButton"));
+			//int checkButton = 1;
+			
+
+			for (int i = 1; i <= noOfContainers; i++)
+			{
+				String simContPrefix = "simCont:" + i + "_";
+				String contName = (String) simMap.get(simContPrefix + "name");
+				String barcode = (String) simMap.get(simContPrefix + "barcode");
+				if (barcode != null && barcode.equals("")) // this is done because barcode is empty string set by struts
+				{ // but barcode in DB is unique but can be null.
+					barcode = null;
+				}
+				StorageContainer cont = new StorageContainer(container);
+				if (checkButton == 1) // site
+				{
+					String siteId = (String) simMap.get(simContPrefix + "siteId");
+					Site site = new Site();
+					site.setSystemIdentifier(new Long(siteId));
+					cont.setSite(site);
+					loadSite(dao, cont); // <<----
+
+				}
+				else
+				// parentContainer
+				{
+					String parentId = (String) simMap.get(simContPrefix + "parentContainerId");
+					String posOne = (String) simMap.get(simContPrefix + "positionDimensionOne");
+					String posTwo = (String) simMap.get(simContPrefix + "positionDimensionTwo");
+
+					StorageContainer parentContainer = new StorageContainer();
+					parentContainer.setSystemIdentifier(new Long(parentId));
+					parentContainer.setPositionDimensionOne(new Integer(posOne));
+					parentContainer.setPositionDimensionTwo(new Integer(posTwo));
+					cont.setParentContainer(parentContainer); // <<----
+					// Have to set Site object for parentContainer
+					loadSite(dao, parentContainer); // 17-07-2006
+					loadSiteFromContainerId(dao, parentContainer);
+					cont.setPositionDimensionOne(new Integer(posOne));
+					cont.setPositionDimensionTwo(new Integer(posTwo));
+					cont.setSite(parentContainer.getSite()); // 16-07-2006 chetan
+					Logger.out.debug("^^>> " + parentContainer.getSite());
+				}
+				//StorageContainer cont = new StorageContainer();
+				cont.setName(contName); // <<----
+				cont.setBarcode(barcode); // <<----     		
+
+				Logger.out.debug(cont.getParentContainer() + " <<<<---- parentContainer");
+				Logger.out.debug("cont.getCollectionProtocol().size() "
+						+ cont.getCollectionProtocolCollection().size());
+
+				dao.insert(cont.getStorageContainerCapacity(), sessionDataBean, true, true);
+				dao.insert(cont, sessionDataBean, true, true);
+
+				container.setSystemIdentifier(cont.getSystemIdentifier());
+				
+				//        		Inserting authorization data
+				Set protectionObjects = new HashSet();
+				protectionObjects.add(cont);
+				try
+				{
+					SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
+							protectionObjects, getDynamicGroups(cont));
+				}
+				catch (SMException e)
+				{
+					throw handleSMException(e);
+				}
+			}
+			
+			
+		}
 	}
 
 	//	public Set getProtectionObjects(AbstractDomainObject obj)
@@ -808,18 +827,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return 1;
 	}
 
-	
-	public String getContainerName(String siteName,String typeName) throws DAOException
+	public String getContainerName(String siteName, String typeName) throws DAOException
 	{
-		String containerName="";
-		if(!typeName.equals("")&& !siteName.equals(""))
+		String containerName = "";
+		if (typeName!=null && siteName!=null && !typeName.equals("") && !siteName.equals(""))
 		{
-			containerName=siteName+"_"+typeName+"_"+String.valueOf(getNextContainerNumber());
-			
+			containerName = siteName + "_" + typeName + "_"
+					+ String.valueOf(getNextContainerNumber());
+
 		}
 		return containerName;
 	}
-	
+
 	public int getNextContainerNumber(long parentID, long typeID, boolean isInSite)
 			throws DAOException
 	{
@@ -1732,22 +1751,23 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				if (availablePosistions[x][y])
 				{
-					list.add(new NameValueBean(new Integer(y),new Integer(y)));
+					list.add(new NameValueBean(new Integer(y), new Integer(y)));
 				}
 			}
 
 			if (!list.isEmpty())
 			{
 				Integer xObj = new Integer(x);
-				NameValueBean nvb=new NameValueBean(xObj,xObj);
+				NameValueBean nvb = new NameValueBean(xObj, xObj);
 				//Logger.out.info("xobj:"+xObj);
-				map.put(nvb,list);
+				map.put(nvb, list);
 				//Logger.out.info("Map inside:"+xObj+":-----"+map);
 			}
 		}
 		//Logger.out.info("Map :"+map);
 		return map;
 	}
+
 	/**
 	 * This functions returns a map of available rows vs. available columns.
 	 * @param containerId The container identifier.
@@ -1771,20 +1791,20 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	}
 
 	/*public Map getAvailablePositionMap1(String containerId) throws DAOException
-	{
-		List list = retrieve(StorageContainer.class.getName(), Constants.SYSTEM_IDENTIFIER,
-				new Long(containerId));
+	 {
+	 List list = retrieve(StorageContainer.class.getName(), Constants.SYSTEM_IDENTIFIER,
+	 new Long(containerId));
 
-		if (list != null)
-		{
-			StorageContainer container = (StorageContainer) list.get(0);
-			return getAvailablePositionMap(container);
-		}
-		else
-		{
-			return new TreeMap();
-		}
-	}*/
+	 if (list != null)
+	 {
+	 StorageContainer container = (StorageContainer) list.get(0);
+	 return getAvailablePositionMap(container);
+	 }
+	 else
+	 {
+	 return new TreeMap();
+	 }
+	 }*/
 	/**
 	 * This functions returns a map of allocated containers vs. their respective free locations.
 	 * @return Returns a map of allocated containers vs. their respective free locations.
@@ -1796,23 +1816,24 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		 A code snippet inside the commented block should actually be replaced by the
 		 code to get the allocated containers of specific collection protocol
 		 */
-		
+
 		List list = retrieve(StorageContainer.class.getName());
- 		Map containerMap = new TreeMap();
- 		//Logger.out.info("===================== list size:"+list.size());
-		Iterator itr=list.iterator();
-		while(itr.hasNext())
+		Map containerMap = new TreeMap();
+		//Logger.out.info("===================== list size:"+list.size());
+		Iterator itr = list.iterator();
+		while (itr.hasNext())
 		{
-			StorageContainer container=(StorageContainer)itr.next();
+			StorageContainer container = (StorageContainer) itr.next();
 			//Logger.out.info("+++++++++++++++++++++++++++:"+container.getName()+"++++++++++:"+container.getSystemIdentifier());
 			Map positionMap = getAvailablePositionMap(container.getSystemIdentifier().toString());
 
 			if (!positionMap.isEmpty())
 			{
 				//Logger.out.info("---------"+container.getName()+"------"+container.getSystemIdentifier());
-				NameValueBean nvb=new NameValueBean(container.getName(),container.getSystemIdentifier());
+				NameValueBean nvb = new NameValueBean(container.getName(), container
+						.getSystemIdentifier());
 				containerMap.put(nvb, positionMap);
-				
+
 			}
 		}
 
@@ -1821,56 +1842,47 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	private void loadSiteFromContainerId(DAO dao, StorageContainer container) throws DAOException
 	{
-		if(container != null)
+		if (container != null)
 		{
 			Long sysId = container.getSystemIdentifier();
-			List siteIdList = dao.retrieve(StorageContainer.class.getName(),Constants.SYSTEM_IDENTIFIER,sysId);
-			System.out.println("siteIdList "+siteIdList);
-			StorageContainer sc = (StorageContainer)siteIdList.get(0);
-			System.out.println("siteId "+sc.getSite().getSystemIdentifier());
+			List siteIdList = dao.retrieve(StorageContainer.class.getName(),
+					Constants.SYSTEM_IDENTIFIER, sysId);
+			System.out.println("siteIdList " + siteIdList);
+			StorageContainer sc = (StorageContainer) siteIdList.get(0);
+			System.out.println("siteId " + sc.getSite().getSystemIdentifier());
 			container.setSite(sc.getSite());
 		}
 	}
-	
 
 	
-	/* temp function */
-	public void getStorageContainersAccToCPAndClass() throws DAOException
-	{
-		List list = retrieve(StorageContainer.class.getName());
-		Iterator itr=list.iterator();
-		while(itr.hasNext())
-		{
-			StorageContainer container =(StorageContainer)itr.next();
-			Logger.out.info("Size of collection protocol :"+container.getCollectionProtocolCollection().size());
-			Logger.out.info("Size of specimen class :"+container.getSpecimenClassCollection().size());
-		}
-		
-	}
+
 	public Map getAllocatedContaienrMapForContainer(long type_id) throws DAOException
 	{
 		List list = retrieve(StorageContainer.class.getName());
 		Map containerMap = new TreeMap();
-		Iterator itr=list.iterator();
-		while(itr.hasNext())
+		Iterator itr = list.iterator();
+		while (itr.hasNext())
 		{
-			StorageContainer container=(StorageContainer)itr.next();
-			Iterator itr1=container.getStorageTypeCollection().iterator();
-			while(itr1.hasNext())
+			StorageContainer container = (StorageContainer) itr.next();
+			Iterator itr1 = container.getStorageTypeCollection().iterator();
+			while (itr1.hasNext())
 			{
-				StorageType type=(StorageType)itr1.next();
-				if(type.getSystemIdentifier().longValue()==type_id|| type.getSystemIdentifier().longValue()==1)
+				StorageType type = (StorageType) itr1.next();
+				if (type.getSystemIdentifier().longValue() == type_id
+						|| type.getSystemIdentifier().longValue() == 1)
 				{
-					Map positionMap = getAvailablePositionMap(container.getSystemIdentifier().toString());
+					Map positionMap = getAvailablePositionMap(container.getSystemIdentifier()
+							.toString());
 
 					if (!positionMap.isEmpty())
 					{
-						NameValueBean nvb=new NameValueBean(container.getName(),container.getSystemIdentifier());
+						NameValueBean nvb = new NameValueBean(container.getName(), container
+								.getSystemIdentifier());
 						containerMap.put(nvb, positionMap);
 						break;
-					
+
 					}
-					
+
 				}
 			}
 		}

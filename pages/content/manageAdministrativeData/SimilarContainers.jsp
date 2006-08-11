@@ -10,7 +10,7 @@
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility" %>
-<%@ page import="edu.wustl.catissuecore.actionForm.SimilarContainersForm" %>
+<%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.lang.Integer" %>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
@@ -23,13 +23,13 @@
 		String label1 = null;
 		String label2 = null;
 		
-		SimilarContainersForm form;
-		if(obj != null && obj instanceof SimilarContainersForm)
+		StorageContainerForm form;
+		if(obj != null && obj instanceof StorageContainerForm)
 		{
-			form = (SimilarContainersForm)obj;
+			form = (StorageContainerForm)obj;
 			
-			//label1 = form.getOneDimensionLabel();
-			//label2 = form.getTwoDimensionLabel();
+			label1 = form.getOneDimensionLabel();
+			label2 = form.getTwoDimensionLabel();
 
 			if(label1 == null)
 			{
@@ -38,15 +38,9 @@
 			}
 		}else
 		{
-			form = (SimilarContainersForm)request.getAttribute("storageContainerForm");
+			form = (StorageContainerForm)request.getAttribute("storageContainerForm");
 		}
-		if(label1 == null)
-		{
-				label1 = "Dimension One";
-				label2 = "Dimension Two";
-		}		
 %>
-
 <head>
 	<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -139,10 +133,10 @@
 
 <html:form action="<%=Constants.SIMILAR_CONTAINERS_ADD_ACTION%>">
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="750">
 <tr>
 <td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="660">
 	<tr>
 		<td class="formMessage" colspan="4">
 			* indicates a required field
@@ -182,16 +176,16 @@
 </tr>
 
 <%
-	SimilarContainersForm simForm = (SimilarContainersForm)request.getAttribute("similarContainersForm");
+	StorageContainerForm simForm = (StorageContainerForm)request.getAttribute("storageContainerForm");
 	
-	String sType = simForm.getStorageContainerType();
-	String siteName = simForm.getSiteName();
-	//System.out.println("sTyep ----<>----- "+sType);
-	//System.out.println("sName ----<>----- "+siteName);
+	String sType = (String)request.getAttribute("typeName");
+	String siteName = (String)request.getAttribute("siteName");
+	System.out.println("sTyep ----<>----- "+sType);
+	System.out.println("sName ----<>----- "+siteName);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	String checkButtonStatus = Integer.toString(simForm.getCheckedButton());
 	
-	String noOfContainers = simForm.getNoOfContainers();
+	String noOfContainers = Integer.toString(simForm.getNoOfContainers());
 	int maxIdentifier = Integer.parseInt((String)request.getAttribute(Constants.MAX_IDENTIFIER));
 	//maxIdentifier++;
 	if(!Constants.PAGEOF_SIMILAR_CONTAINERS.equals(pageOf))
@@ -205,13 +199,10 @@
    
     <tr>
 	  <%
-	  	String typeId = ((Long)request.getAttribute("typeId")).toString();
 	  	String siteId = ((Long)request.getAttribute("siteId")).toString();
 	  	
 	  %>
-	  	<td>
-	  		<html:hidden property="typeId" value="<%=typeId%>"/>
-	  	</td>
+	  	
     </tr>
     <tr>
 		<td>
@@ -232,7 +223,7 @@
   	
   	<tr>
 		<td>
-			<html:hidden property="value(checkedButton)" value="<%=checkButtonStatus%>"/>
+			<html:hidden property="similarContainerMapValue(checkedButton)" value="<%=checkButtonStatus%>"/>
 		</td>
     </tr>
   	
@@ -262,8 +253,8 @@
 	  </tr>
 	  
 	  <tr>
-		<td class="formRequiredNotice" width="5">*</td>
-		<td class="formRequiredLabel">
+		<td class="formRequiredNotice" width="5">&nbsp;</td>
+		<td class="formLabel">
 			<label for="temperature">
 				<bean:message key="storageContainer.temperature"/> 
 			</label>
@@ -274,8 +265,8 @@
 	  </tr>
 	  
 	  <tr>
-		<td class="formRequiredNotice" width="5">*</td>
-		<td class="formRequiredLabel">
+		<td class="formRequiredNotice" width="5">&nbsp;</td>
+		<td class="formLabel">
 			<label for="collectionProtocolTitle">
 				<bean:message key="storageContainer.collectionProtocolTitle"/> 
 			</label>
@@ -294,8 +285,8 @@
 	  
 	  <tr>
 	  <tr>
-		<td class="formRequiredNotice" width="5">*</td>
-		<td class="formRequiredLabel">
+		<td class="formRequiredNotice" width="5">&nbsp;</td>
+		<td class="formLabel">
 			<label for="holds">
 				<bean:message key="storageContainer.holds"/> 
 			</label>
@@ -407,7 +398,7 @@
 		
 		if(form != null)
 		{
-			counter = Integer.parseInt(form.getNoOfContainers());
+			counter = (int)form.getNoOfContainers();
 		}
 		
 		//System.out.println("counter  <<-->> "+counter);
@@ -417,9 +408,9 @@
 		
 		for(int i=1;i<=counter;i++)
 		{
-			String containerNameKey = "value(simCont:" + i + "_name)";
-			String barcodeKey = "value(simCont:" + i + "_barcode)";
-			String siteKey = "value(simCont:" + i + "_siteId)";
+			String containerNameKey = "similarContainerMapValue(simCont:" + i + "_name)";
+			String barcodeKey = "similarContainerMapValue(simCont:" + i + "_barcode)";
+			String siteKey = "similarContainerMapValue(simCont:" + i + "_siteId)";
 			//String checkButtonKey = "value(simCont:" + i + "_checkButton)";
 			
 			String contNameSId = "containerName_"+i;
@@ -431,9 +422,9 @@
 			String buttonId = "Map_"+i;
 			//String onSiteChange = "onSiteChange(this,"+i+")";
 			
-			attrNames[0] = "value(simCont:"+i+"_parentContainerId)";
-			attrNames[1] = "value(simCont:"+i+"_positionDimensionOne)";
-			attrNames[2] = "value(simCont:"+i+"_positionDimensionTwo)";
+			attrNames[0] = "similarContainerMapValue(simCont:"+i+"_parentContainerId)";
+			attrNames[1] = "similarContainerMapValue(simCont:"+i+"_positionDimensionOne)";
+			attrNames[2] = "similarContainerMapValue(simCont:"+i+"_positionDimensionTwo)";
 			if(initValuesList != null)
 			{
 				initValues = (String[])initValuesList.get(i-1);

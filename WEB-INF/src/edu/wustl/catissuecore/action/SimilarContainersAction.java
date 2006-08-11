@@ -23,7 +23,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.SimilarContainersForm;
+import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -35,8 +35,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -55,43 +53,96 @@ public class SimilarContainersAction extends SecureAction {
 			throws Exception {
 		Logger.out.debug("SimilarContainersAction : executeSecureAction() form: type "+form.getClass());
 		
-		SimilarContainersForm similarContainersForm = (SimilarContainersForm) form;
+		StorageContainerForm similarContainersForm = (StorageContainerForm) form;
 		
 		IBizLogic ibizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		
-		long typeId = similarContainersForm.getTypeId();		
-		request.setAttribute("typeId",new Long(typeId));
-		List containerTypeList = ibizLogic.retrieve(StorageType.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(typeId));
+		/*long typeId = similarContainersForm.getTypeId();		
+		request.setAttribute("typeId",new Long(typeId));*/
+		
+		List containerTypeList = ibizLogic.retrieve(StorageType.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(similarContainersForm.getTypeId()));
 		Iterator iter = containerTypeList.iterator();
 		while(iter.hasNext())
 		{
-			String containerType = ((StorageType)iter.next()).getType();			
-			similarContainersForm.setStorageContainerType(containerType);
+			StorageType storageType=(StorageType)iter.next();
+			String containerType = storageType.getType();			
+			request.setAttribute("typeName",containerType);
+			similarContainersForm.setOneDimensionLabel(storageType.getOneDimensionLabel());
+			similarContainersForm.setTwoDimensionLabel(storageType.getTwoDimensionLabel());
+			
 		}		
 		
-		long siteId = similarContainersForm.getSiteId();	
-		request.setAttribute("siteId",new Long(siteId));
+		long siteId = similarContainersForm.getSiteId();
+		String siteName="";
+		String valueField1 = "systemIdentifier";
+		/* new code */
+		if(similarContainersForm.getCheckedButton() == 1)
+		{
+			Logger.out.debug("similarContainerForm.getSiteId()......................."+similarContainersForm.getSiteId());
+			Logger.out.debug("similarContainerForm.getTypeId()......................."+similarContainersForm.getTypeId());
+			List list = ibizLogic.retrieve(Site.class.getName(),valueField1,new Long(similarContainersForm.getSiteId()));
+			if(!list.isEmpty())
+			{
+				Site site = (Site)list.get(0);
+				similarContainersForm.setSiteName(site.getName());
+				siteName=site.getName();
+				siteId=site.getSystemIdentifier().longValue();
+				//site_name=site.getName();
+				Logger.out.debug("Site Name :"+similarContainersForm.getSiteName());
+    		}	
+		}
+		else
+		{
+			Logger.out.debug("Long.parseLong(request.getParameter(parentContainerId)......................."+request.getParameter("parentContainerId"));
+			Logger.out.debug("similarContainerForm.getTypeId()......................."+similarContainersForm.getTypeId());
+			String parentContId = request.getParameter("parentContainerId");
+			if(parentContId != null)
+			{
+				List list = ibizLogic.retrieve(StorageContainer.class.getName(),valueField1,new Long(parentContId));
+				if(!list.isEmpty())
+				{
+					StorageContainer container = (StorageContainer)list.get(0);
+					//site_name=container.getSite().getName();
+					similarContainersForm.setSiteName(container.getSite().getName());
+					siteName=container.getSite().getName();
+					siteId=container.getSite().getSystemIdentifier().longValue();
+					Logger.out.debug("Site Name :"+similarContainersForm.getSiteName());            		
+				}
+			}
+		}
+		/* new code finish */
+		/*Logger.out.info("site Id form form:--------------"+siteId);
+		//request.setAttribute("siteId",new Long(siteId));
 		//System.out.println("SimilarContainersAction :: siteId "+siteId);
 		
 		if(siteId == -1)  // get site id from parent container id 
 		{
 			long parenContId = similarContainersForm.getParentContainerId();
+			Logger.out.info("Parent cont id:----------------------------------:"+parenContId);
 			List pcList = ibizLogic.retrieve(StorageContainer.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(parenContId));
 			if(pcList.size() > 0)
 			{
 				StorageContainer pc = (StorageContainer)pcList.get(0);
 				siteId = pc.getSite().getSystemIdentifier().longValue();
-				request.setAttribute("siteId",new Long(siteId));
+				Logger.out.info("site Id in loop:--------------"+siteId);
+//				request.setAttribute("siteId",new Long(siteId));
 				//System.out.println("SimilarContainersAction :: siteId : got "+siteId);
 			}
 		}
+		request.setAttribute("siteId",new Long(siteId));
+		Logger.out.info("Site ID:----------------------"+siteId);
 		List siteList = ibizLogic.retrieve(Site.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(siteId));
 		Iterator siteIter = siteList.iterator();
 		while(siteIter.hasNext())
 		{			
-			String site = ((Site)siteIter.next()).getName();			
-			similarContainersForm.setSiteName(site);
+			Site site=(Site)siteIter.next();
+			String siteName = site.getName();			
+			request.setAttribute("siteName",siteName);
+				
 		}
+		*/
+		request.setAttribute("siteName",siteName);
+		request.setAttribute("siteId",new Long(siteId));
 		
 		//		Populating the Site Array
     	String []siteDisplayField = {"name"};
@@ -100,48 +151,12 @@ public class SimilarContainersAction extends SecureAction {
     	request.setAttribute(Constants.SITELIST,list);
 		
     	
-    	/*long[] collectionProtocolIds = similarContainersForm.getCollectionIds();
-    	List collecProList = new ArrayList();
-    	//System.out.println("collectionProtocolIds $$$*** "+collectionProtocolIds.length);
-    	for(int i = 0 ;i < collectionProtocolIds.length; i++)
-    	{
-    		List cpList = ibizLogic.retrieve(CollectionProtocol.class.getName(),valueField,new Long(collectionProtocolIds[i]));
-        	Iterator cpIter = cpList.iterator();
-        	while(cpIter.hasNext())
-        	{
-        		String cpName = ((CollectionProtocol) cpIter.next()).getTitle();
-        		NameValueBean nvb = new NameValueBean(cpName,new Long(collectionProtocolIds[i]));
-        		//collecProList.add(cpName);
-        		collecProList.add(nvb);
-        	}
-    	}
-    	request.setAttribute(Constants.PROTOCOL_LIST,collecProList);    	
-    	*/
 //    	populating collection protocol list.
     	List list1=ibizLogic.retrieve(CollectionProtocol.class.getName());
     	List collectionProtocolList=getCollectionProtocolList(list1);
     	request.setAttribute(Constants.PROTOCOL_LIST, collectionProtocolList);
 	  	
-    	/*
-    	long[] holdsIds = similarContainersForm.getHoldsStorageTypeIds();		
-    	List holdsList = new ArrayList();
-    	//System.out.println("holdsIds $$$*** "+holdsIds.length);
-    	for(int i = 0 ;i < holdsIds.length; i++)
-    	{
-    		List hList = ibizLogic.retrieve(StorageType.class.getName(),valueField,new Long(holdsIds[i]));
-        	Iterator hIter = hList.iterator();
-        	while(hIter.hasNext())
-        	{
-        		String cpName = ((StorageType) hIter.next()).getType();
-        		NameValueBean nvb = new NameValueBean(cpName,new Long(holdsIds[i]));
-        		
-        		//holdsList.add(cpName);
-        		holdsList.add(nvb);
-        	}
-    	}
-    	request.setAttribute(Constants.HOLDS_LIST1,holdsList);
-    	*/
-        //Gets the Storage Type List and sets it in request 
+    	//Gets the Storage Type List and sets it in request 
         List list2=ibizLogic.retrieve(StorageType.class.getName());
     	List storageTypeListWithAny=getStorageTypeList(list2,true);
     	request.setAttribute(Constants.HOLDS_LIST1, storageTypeListWithAny);
@@ -150,25 +165,7 @@ public class SimilarContainersAction extends SecureAction {
     	request.setAttribute(Constants.STORAGETYPELIST, StorageTypeListWithoutAny);
     	
     	
-    	/*
-    	long[] holdsSpecimenIds = similarContainersForm.getHoldsSpecimenClassTypeIds();		
-    	List holdsSpecimenList = new ArrayList();
-    	//System.out.println("holdsSpecimenIds $$$*** "+holdsSpecimenIds.length);
-    	for(int i = 0 ;i < holdsSpecimenIds.length; i++)
-    	{
-    		List hsList = ibizLogic.retrieve(SpecimenClass.class.getName(),valueField,new Long(holdsSpecimenIds[i]));
-        	Iterator hsIter = hsList.iterator();
-        	while(hsIter.hasNext())
-        	{
-        		String cpName = ((SpecimenClass) hsIter.next()).getName();
-        		NameValueBean nvb = new NameValueBean(cpName,new Long(holdsSpecimenIds[i]));
-        		
-        		//holdsList.add(cpName);
-        		holdsSpecimenList.add(nvb);
-        	}
-    	}    	
-    	request.setAttribute(Constants.HOLDS_LIST2,holdsSpecimenList);
-    	*/
+    	
 //    	Gets the Specimen Class Type List and sets it in request
     	List list3=ibizLogic.retrieve(SpecimenClass.class.getName());
         List specimenClassTypeList = getSpecimenClassTypeList(list3);
@@ -176,21 +173,27 @@ public class SimilarContainersAction extends SecureAction {
     	//System.out.println("collectionProtocolIds "+collecProList+"  holdsIds "+holdsList+" holdsSpecimenList "+holdsSpecimenList);
 		
 		int siteOrParentCont = similarContainersForm.getCheckedButton();
-		Logger.out.debug("similarContainersForm.getValue(checkedButton) "+similarContainersForm.getValue("checkedButton") );
+		Logger.out.debug("similarContainersForm.getSimilarContainerMapValue(checkedButton) "+similarContainersForm.getSimilarContainerMapValue("checkedButton") );
 		Logger.out.debug("siteOrParentCont "+siteOrParentCont);
-		if(similarContainersForm.getValue("checkedButton") != null)
+		similarContainersForm.setSimilarContainerMapValue("checkedButton",Integer.toString(siteOrParentCont));
+		
+		if(similarContainersForm.getSimilarContainerMapValue("checkedButton") != null)
 		{
-			request.setAttribute("value(checkedButton)",similarContainersForm.getValue("checkedButton"));
+			Logger.out.info("Checkbutton value:"+similarContainersForm.getSimilarContainerMapValue("checkedButton"));
+			request.setAttribute("value(checkedButton)",similarContainersForm.getSimilarContainerMapValue("checkedButton"));
+			similarContainersForm.setSimilarContainerMapValue("checkedButton",Integer.toString(siteOrParentCont));
 			
 		}else
 		{
+			Logger.out.info("------------------------------+---------:"+siteOrParentCont);
 			request.setAttribute("value(checkedButton)",new Integer(siteOrParentCont));
-			similarContainersForm.setValue("checkedButton",Integer.toString(siteOrParentCont));
+			similarContainersForm.setSimilarContainerMapValue("checkedButton",Integer.toString(siteOrParentCont));
+			
 		}		
     	
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
     	
-    	String storageContainerId = null;		
+    	/*String storageContainerId = null;		
 		if(request.getAttribute(Constants.SYSTEM_IDENTIFIER) != null)
 		{
 			storageContainerId = String.valueOf(request.getAttribute(Constants.SYSTEM_IDENTIFIER));
@@ -203,17 +206,19 @@ public class SimilarContainersAction extends SecureAction {
 		
 		if(storageContainerId != null)
 		{
-			similarContainersForm.setStorageContainerId(storageContainerId);
+			//similarContainersForm.setStorageContainerId(storageContainerId);
 			
-			similarContainersForm.setNoOfContainers(request.getParameter("noOfContainers"));
+			similarContainersForm.setNoOfContainers(new Integer(request.getParameter("noOfContainers")).intValue());
 			similarContainersForm.setTypeId(Long.parseLong(request.getParameter("typeId")));
 			similarContainersForm.setDefaultTemperature(request.getParameter("defaultTemperature"));
 		}else
 		{
 			similarContainersForm.setDefaultTemperature(request.getParameter("defaultTemperature"));
 		}
-		
+		*/
 		int noOfContainers = Integer.parseInt((String)request.getParameter("noOfContainers"));
+		//int siteOrParentCont = similarContainersForm.getCheckedButton();
+		//long siteId = similarContainersForm.getSiteId();
 		if(siteOrParentCont == 1)
     	{			
     		for(int i = 1; i <= noOfContainers; i++)
@@ -236,8 +241,8 @@ public class SimilarContainersAction extends SecureAction {
 		String barcode = similarContainersForm.getBarcode();
 		
 		Logger.out.debug("contName "+contName+" barcode "+barcode +" <<<<---");
-		similarContainersForm.setValue("simCont:1_name",contName);
-		similarContainersForm.setValue("simCont:1_barcode",barcode);
+		similarContainersForm.setSimilarContainerMapValue("simCont:1_name",contName);
+		similarContainersForm.setSimilarContainerMapValue("simCont:1_barcode",barcode);
 		
 		String[] startingPoints = new String[3];
 		startingPoints[0] = Long.toString(similarContainersForm.getParentContainerId());
@@ -250,10 +255,10 @@ public class SimilarContainersAction extends SecureAction {
     		request.setAttribute("initValues",initialValues);
     	}
 		
-        	if(request.getAttribute("validated") == null)
-        	{
-        		pageOf = validate(request,similarContainersForm);
-        		request.setAttribute("validated","");
+        //	if(request.getAttribute("validated") == null)
+        	//{
+     //   		pageOf = validate(request,similarContainersForm);
+       // 		request.setAttribute("validated","");
         		if(similarContainersForm.getCheckedButton() == 2 &&  ! (checkAvailability(containerMap,noOfContainers)))
         	    {
         			ActionErrors errors = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
@@ -266,7 +271,7 @@ public class SimilarContainersAction extends SecureAction {
         			pageOf = Constants.PAGEOF_STORAGE_CONTAINER;
         			saveErrors(request,errors);
         	    }
-        	}
+        	//}
         	
        for(int i = 1; i <= noOfContainers; i++)
        {
@@ -300,7 +305,7 @@ public class SimilarContainersAction extends SecureAction {
 		return true;
 	}
 	
-	private String validate(HttpServletRequest request, SimilarContainersForm form)
+	/*private String validate(HttpServletRequest request, SimilarContainersForm form)
 	{
         Validator validator = new Validator();
 		ActionErrors errors = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
@@ -377,9 +382,10 @@ public class SimilarContainersAction extends SecureAction {
 		}        
         
         saveErrors(request,errors);
+        Logger.out.info("pageOf from similarcontainers:"+pageOf);
         return pageOf;
 	}
-	
+	*/
 //	public static void main(String args[])
 //	{
 //		Map dMap = new TreeMap();
