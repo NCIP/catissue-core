@@ -2,149 +2,172 @@
 
 <!--Ant Script for create Build for caTISSUE Core-->
 <project name="caTissue Core" default="compile">
-	
-	<!--define require dir and Properties -->	
-	<property file="caTissueInstall.properties"/>
-	
-	<property name="base.dir" value="."/>
-    <property name="src.dir" value="${base.dir}/WEB-INF/src"/>
-    <property name="target.dir" value="${base.dir}/WEB-INF/classes"/>
-    <property name="lib.dir" value="${base.dir}/WEB-INF/lib"/>
-    <property name="applet.dir" value="${base.dir}/Applet"/>
-	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm"/>
-	<property name="extra_lib.dir" value="${base.dir}/extra_lib"/>
-	<property name="generateforce" value="true"/>
-	<property name="application.version" value="1.1"/>
-		
+
+	<!--define require dir and Properties -->
+	<property file="caTissueInstall.properties" />
+
+	<property name="base.dir" value="." />
+	<property name="src.dir" value="${base.dir}/WEB-INF/src" />
+	<property name="target.dir" value="${base.dir}/WEB-INF/classes" />
+	<property name="lib.dir" value="${base.dir}/WEB-INF/lib" />
+	<property name="applet.dir" value="${base.dir}/Applet" />
+	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm" />
+	<property name="extra_lib.dir" value="${base.dir}/extra_lib" />
+	<property name="generateforce" value="true" />
+	<property name="application.version" value="1.1" />
+	<property name="junit.jar" value="${lib.dir}/junit-3.8.1.jar" />
+	<property name="cobertura.dir" value="${target.dir}/reports/coverage" />
+	<property name="report.dir" value="${base.dir}/WEB-INF" />
+
+
+
 	<path id="app.classpath">
 		<fileset dir="${lib.dir}">
-			<include name="*.jar"/>
+			<include name="*.jar" />
 		</fileset>
 	</path>
-	
+
 	<path id="xdoclet.classpath">
-		<path refid="app.classpath"/>
-        <pathelement location="${extra_lib.dir}/commons-net-1.2.2.jar"/>
-		<pathelement location="${extra_lib.dir}/hibernate-tools.jar"/>
-		<pathelement location="${extra_lib.dir}/servlet-api.jar"/>
-		<pathelement location="${extra_lib.dir}/xdoclet-1.2.jar"/>
-		<pathelement location="${extra_lib.dir}/xdoclet-hibernate-module-1.2.jar"/>
-		<pathelement location="${extra_lib.dir}/xdoclet-xdoclet-module-1.2.jar"/>
-		<pathelement location="${extra_lib.dir}/xerces.jar"/>
-		<pathelement location="${extra_lib.dir}/xjavadoc-1.0.2.jar"/>
-		<pathelement location="${extra_lib.dir}/xsdlib.jar"/>
+		<path refid="app.classpath" />
+		<pathelement location="${extra_lib.dir}/commons-net-1.2.2.jar" />
+		<pathelement location="${extra_lib.dir}/hibernate-tools.jar" />
+		<pathelement location="${extra_lib.dir}/servlet-api.jar" />
+		<pathelement location="${extra_lib.dir}/xdoclet-1.2.jar" />
+		<pathelement location="${extra_lib.dir}/xdoclet-hibernate-module-1.2.jar" />
+		<pathelement location="${extra_lib.dir}/xdoclet-xdoclet-module-1.2.jar" />
+		<pathelement location="${extra_lib.dir}/xerces.jar" />
+		<pathelement location="${extra_lib.dir}/xjavadoc-1.0.2.jar" />
+		<pathelement location="${extra_lib.dir}/xsdlib.jar" />
 	</path>
-	
-	<!-- sub tasks -->    
+
+	<path id="junit.classpath">
+		<pathelement location="${junit.jar}" />
+		<pathelement location="${target.dir}" />
+		<pathelement location="${lib.dir}/cobertura/cobertura.jar" />
+		<fileset dir="${lib.dir}/cobertura/lib">
+			<include name="*.jar" />
+		</fileset>
+		<path refid="app.classpath" />
+	</path>
+
+	<!-- sub tasks -->
 	<target name="init" description="initialize">
-    	<!-- Create the time stamp -->
-	    <tstamp/>
-    	<!-- Create the build directory structure used by compile -->
-	    <mkdir dir="${target.dir}"/>
-  	</target>
-	
+		<!-- Create the time stamp -->
+		<tstamp />
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${target.dir}" />
+	</target>
+
 	<target name="clean" description="clean up">
+		<delete includeemptydirs="true">
+			<fileset dir="${target.dir}">
+				<include name="**/*" />
+				<exclude name="CVS" />
+			</fileset>
+		</delete>
+
+
 	</target>
 
 	<!-- Compile all files, generated and hand-written -->
-    <target name="compile" depends="init">
-        <javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false">
-            <src path="${src.dir}"/>
-            <classpath>
-              <fileset dir="${lib.dir}">
-                  <include name="*.jar"/>
-              </fileset>
-            </classpath>       
-        </javac>
-    	<copy todir="${target.dir}">
-    		<fileset dir="${src.dir}">
-    			<include name="**/*.properties"/>
-    			<include name="**/*.xml"/>
-    			<include name="**/*.hbm.xml"/>
-    			<include name="**/*.ser"/>
-	    	</fileset>
-    	</copy>
-    	
-    </target>
-  	
+	<target name="compile" depends="init">
+		<javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false" debug="yes">
+			<src path="${src.dir}" />
+			<classpath>
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+		<copy todir="${target.dir}">
+			<fileset dir="${src.dir}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+				<include name="**/*.hbm.xml" />
+				<include name="**/*.ser" />
+			</fileset>
+		</copy>
+
+	</target>
+
 	<!-- Create the Applet JAR Begins-->
-    <target name="build_applet_jar" depends="compile" >
-    	<delete>
-            <fileset dir="${applet.dir}">
-	            <exclude name="**/CVS*"/>
-	            <exclude name="**/java.policy.applet*"/>
-            </fileset>
-        </delete>
-        
-        <copy todir="${applet.dir}">
-        	<fileset dir="${target.dir}">
-            	<include name="**/QueryTree.class"/>
-				<include name="**/NodeSelectionListener.class"/>
-				<include name="**/StorageLocationViewListener.class"/>
-				<include name="**/TissueSiteTreeNodeListener.class"/>
-        	</fileset>
-        </copy>
-        <copy todir="${applet.dir}/edu/wustl/catissuecore/query">
-        	<fileset dir="${target.dir}/edu/wustl/catissuecore/query">
-	    	    <include name="**/QueryTreeNodeMap.class"/>
-	    	    <include name="**/TreeNodeData.class"/>
-    		</fileset>
-    	</copy>
-        <copy todir="${applet.dir}/edu/wustl/catissuecore/storage">	
-    		<fileset dir="${target.dir}/edu/wustl/catissuecore/storage">
-	    	    <include name="**/GenerateTree.class"/>
-	    	    <include name="**/StorageContainerGridObject.class"/>
-	    	    <include name="**/StorageContainerTreeNode.class"/>
-    		</fileset>
-    	</copy>
-        <copy todir="${applet.dir}/edu/wustl/catissuecore/tissuesite">	
-    		<fileset dir="${target.dir}/edu/wustl/catissuecore/tissuesite">
-	    	    <include name="**/TissueSiteTreeNode.class"/>
-    		</fileset>
-    	</copy>
-        <copy todir="${applet.dir}/edu/wustl/catissuecore/util/global">	
-    		<fileset dir="${target.dir}/edu/wustl/catissuecore/util/global">
-	    	    <include name="**/Constants.class"/>
-    		</fileset>
-    	</copy>
-    	<copy todir="${applet.dir}/edu/wustl/catissuecore/vo">	
-    		<fileset dir="${target.dir}/edu/wustl/catissuecore/vo">
-	    	    <include name="**/TreeNode.class"/>
-	    	    <include name="**/TreeNodeFactory.class"/>
-    		</fileset>
-    	</copy>
-    	
-        <jar taskname="buildJar" jarfile="${applet.dir}/QueryTree.jar">
-            <fileset dir="${applet.dir}">
-	            <exclude name="**/CVS*"/>
-	            <exclude name="**/java.policy.applet*"/>
-            </fileset>
-        </jar>
-    </target>
+	<target name="build_applet_jar" depends="compile">
+		<delete>
+			<fileset dir="${applet.dir}">
+				<exclude name="**/CVS*" />
+				<exclude name="**/java.policy.applet*" />
+			</fileset>
+		</delete>
+
+		<copy todir="${applet.dir}">
+			<fileset dir="${target.dir}">
+				<include name="**/QueryTree.class" />
+				<include name="**/NodeSelectionListener.class" />
+				<include name="**/StorageLocationViewListener.class" />
+				<include name="**/TissueSiteTreeNodeListener.class" />
+			</fileset>
+		</copy>
+		<copy todir="${applet.dir}/edu/wustl/catissuecore/query">
+			<fileset dir="${target.dir}/edu/wustl/catissuecore/query">
+				<include name="**/QueryTreeNodeMap.class" />
+				<include name="**/TreeNodeData.class" />
+			</fileset>
+		</copy>
+		<copy todir="${applet.dir}/edu/wustl/catissuecore/storage">
+			<fileset dir="${target.dir}/edu/wustl/catissuecore/storage">
+				<include name="**/GenerateTree.class" />
+				<include name="**/StorageContainerGridObject.class" />
+				<include name="**/StorageContainerTreeNode.class" />
+			</fileset>
+		</copy>
+		<copy todir="${applet.dir}/edu/wustl/catissuecore/tissuesite">
+			<fileset dir="${target.dir}/edu/wustl/catissuecore/tissuesite">
+				<include name="**/TissueSiteTreeNode.class" />
+			</fileset>
+		</copy>
+		<copy todir="${applet.dir}/edu/wustl/catissuecore/util/global">
+			<fileset dir="${target.dir}/edu/wustl/catissuecore/util/global">
+				<include name="**/Constants.class" />
+			</fileset>
+		</copy>
+		<copy todir="${applet.dir}/edu/wustl/catissuecore/vo">
+			<fileset dir="${target.dir}/edu/wustl/catissuecore/vo">
+				<include name="**/TreeNode.class" />
+				<include name="**/TreeNodeFactory.class" />
+			</fileset>
+		</copy>
+
+		<jar taskname="buildJar" jarfile="${applet.dir}/QueryTree.jar">
+			<fileset dir="${applet.dir}">
+				<exclude name="**/CVS*" />
+				<exclude name="**/java.policy.applet*" />
+			</fileset>
+		</jar>
+	</target>
 	<!-- Create the Applet JAR Ends-->
-	
+
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
 	<target name="build_war" depends="init, compile">
-		<delete file="catissuecore.war"/>
+		<delete file="catissuecore.war" />
 		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml">
 			<fileset dir="${base.dir}">
-				<include name="Applet/**"/>
-				<include name="css/**"/>
-				<include name="images/**"/>
-				<include name="jss/**"/>
-				<include name="pages/**"/>
-				<include name="runtime/**"/>
-				<include name="WEB-INF/**"/>
-				<include name="CDEConfig.xml"/>
-				<include name="CDEConfig.xsd"/>
-				<include name="ApplicationVersionInfo.txt"/>
-				
-				<exclude name="**/WEB-INF/src*/**"/>
-				<exclude name="**/*servlet.jar*"/>
-				<exclude name="**/*log4j-1.2.9.jar*"/>
-				<exclude name="**/*hibernate2.jar*"/>
-				<exclude name="**/*jta.jar*"/>
-				<exclude name="**/CVS*"/>
+				<include name="Applet/**" />
+				<include name="css/**" />
+				<include name="images/**" />
+				<include name="jss/**" />
+				<include name="pages/**" />
+				<include name="runtime/**" />
+				<include name="WEB-INF/**" />
+				<include name="CDEConfig.xml" />
+				<include name="CDEConfig.xsd" />
+				<include name="ApplicationVersionInfo.txt" />
+
+				<exclude name="**/WEB-INF/src*/**" />
+				<exclude name="**/*servlet.jar*" />
+				<exclude name="**/*log4j-1.2.9.jar*" />
+				<exclude name="**/*hibernate2.jar*" />
+				<exclude name="**/*jta.jar*" />
+				<exclude name="**/CVS*" />
 				<!--exclude name="**/*build*"/>
 				<exclude name="**/*WEB-INF*"/>
 				<exclude name="**/.*"/>
@@ -159,103 +182,194 @@
 	</target>
 
 	<!--Deploys the application war file at JBOSS server by coping it to deploy directory of application server-->
-	<target name="deploy" >
-		<antcall target="build_war"/>
-		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war"/>
-		<copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy"/>
-		<sleep seconds="2"/>
+	<target name="deploy">
+		<antcall target="build_war" />
+		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war" />
+		<copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" />
+		<sleep seconds="2" />
 	</target>
-    
+
 	<!-- 
 		Generates the Hibernate mapping (HBM) files which are used in mapping 
 		the domain objects to database schema of the application. 
 		This generates the HBM files from the XDoclet tags written in the domain object classes. 
 	-->
-    <target name="generate_hbm" description="Generates Hibernate class descriptor files.">
-    	<!-- Define the hibernatedoclet task -->    	
-    	<taskdef name="hibernatedoclet" classname="xdoclet.modules.hibernate.HibernateDocletTask">
-    		<classpath refid="xdoclet.classpath"/>
-		</taskdef>    
-		
-		<!-- Execute the hibernatedoclet task -->		
+	<target name="generate_hbm" description="Generates Hibernate class descriptor files.">
+		<!-- Define the hibernatedoclet task -->
+		<taskdef name="hibernatedoclet" classname="xdoclet.modules.hibernate.HibernateDocletTask">
+			<classpath refid="xdoclet.classpath" />
+		</taskdef>
+
+		<!-- Execute the hibernatedoclet task -->
 		<hibernatedoclet destdir="${src.dir}" excludedtags="@version,@author,@todo"
 					     force="${generateforce}" mergedir="${src.dir}" verbose="false">
 			<fileset dir="${src.dir}">
-				<include name="**/domain/*.java"/>
-				<include name="**/cde/*.java"/>
+				<include name="**/domain/*.java" />
+				<include name="**/cde/*.java" />
 			</fileset>
-    		<hibernate version="2.0"/>
-		</hibernatedoclet>	
-		
+			<hibernate version="2.0" />
+		</hibernatedoclet>
+
 		<!-- Upgrade grammar from Hibernate1 to Hibernate2 -->
-	    <replace dir="${src.dir}">
-	    	<include name="**/domain/*.hbm.xml"/>
-	        <include name="**/cde/*.hbm.xml"/>
-	        <replacefilter token="readonly=" value="inverse="/>
-	        <replacefilter token="role=" value="name="/>
-	        <replacefilter token="hibernate-mapping.dtd" value="hibernate-mapping-2.0.dtd"/>
-	    </replace>
-	    
-	    <copy todir="${hbm.dir}">
-	    	<fileset dir="${src.dir}/edu/wustl/catissuecore/domain">
-	    		<include name="*.hbm.xml"/>
-    		</fileset>
-	    	<fileset dir="${src.dir}/edu/wustl/common/cde">
-	    		<include name="*.hbm.xml"/>
-	       	</fileset>
-	    </copy>
-    	
-    	<delete>
-            <fileset dir="${src.dir}/edu/wustl/catissuecore/domain" includes="*.hbm.xml"/>
-    		<fileset dir="${src.dir}/edu/wustl/common/cde" includes="*.hbm.xml"/>
-        </delete>
-    </target>
+		<replace dir="${src.dir}">
+			<include name="**/domain/*.hbm.xml" />
+			<include name="**/cde/*.hbm.xml" />
+			<replacefilter token="readonly=" value="inverse=" />
+			<replacefilter token="role=" value="name=" />
+			<replacefilter token="hibernate-mapping.dtd" value="hibernate-mapping-2.0.dtd" />
+		</replace>
+
+		<copy todir="${hbm.dir}">
+			<fileset dir="${src.dir}/edu/wustl/catissuecore/domain">
+				<include name="*.hbm.xml" />
+			</fileset>
+			<fileset dir="${src.dir}/edu/wustl/common/cde">
+				<include name="*.hbm.xml" />
+			</fileset>
+		</copy>
+
+		<delete>
+			<fileset dir="${src.dir}/edu/wustl/catissuecore/domain" includes="*.hbm.xml" />
+			<fileset dir="${src.dir}/edu/wustl/common/cde" includes="*.hbm.xml" />
+		</delete>
+	</target>
 
 	<target name="create_zip" depends="build_war">
-		<property name="zip.dir" value="${base.dir}/caTISSUE_Core_Installable_v${application.version}"/>
-		<property name="zip.file" value="${base.dir}/caTissue_Core_Installable_v${application.version}.zip"/>
-		
-		<delete file="${zip.file}"/>
-		<delete dir="${zip.dir}"/>
-		
-		<mkdir dir="${zip.dir}"/>
-		
-		<copy file="catissuecore.war" todir="${zip.dir}" overwrite="true"/>
-		<copy file="catissuecorecsm.war" todir="${zip.dir}" overwrite="true"/>
-		<copy file="catissuecore-ds.xml" todir="${zip.dir}" overwrite="true"/>
-		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true"/>
-		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true"/>
-		
+		<property name="zip.dir" value="${base.dir}/caTISSUE_Core_Installable_v${application.version}" />
+		<property name="zip.file" value="${base.dir}/caTissue_Core_Installable_v${application.version}.zip" />
+
+		<delete file="${zip.file}" />
+		<delete dir="${zip.dir}" />
+
+		<mkdir dir="${zip.dir}" />
+
+		<copy file="catissuecore.war" todir="${zip.dir}" overwrite="true" />
+		<copy file="catissuecorecsm.war" todir="${zip.dir}" overwrite="true" />
+		<copy file="catissuecore-ds.xml" todir="${zip.dir}" overwrite="true" />
+		<copy file="caTissueInstall.properties" todir="${zip.dir}" overwrite="true" />
+		<copy file="deploy.xml" todir="${zip.dir}" overwrite="true" />
+
 		<copy todir="${zip.dir}/catissuecore-properties" overwrite="true">
-			<fileset dir="${base.dir}/catissuecore-properties"/>
+			<fileset dir="${base.dir}/catissuecore-properties" />
 		</copy>
-		
+
 		<copy todir="${zip.dir}/lib" overwrite="true">
-			<fileset file="${base.dir}/extra_lib/ant-contrib.jar"/>
-			<fileset file="${base.dir}/WEB-INF/lib/mysql-connector-java-3.0.16-ga-bin.jar"/>
-			<fileset file="${base.dir}/WEB-INF/lib/oracleDriver.jar"/>
+			<fileset file="${base.dir}/extra_lib/ant-contrib.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/mysql-connector-java-3.0.16-ga-bin.jar" />
+			<fileset file="${base.dir}/WEB-INF/lib/oracleDriver.jar" />
 		</copy>
-		
+
 		<copy todir="${zip.dir}/SQL" overwrite="true">
-			<fileset dir="${base.dir}/SQL"/>
+			<fileset dir="${base.dir}/SQL" />
 		</copy>
-		<delete dir="${zip.dir}/SQL/DBUpgrade"/>
-		
-		<copy file="MySql_DB_Creation.sql" todir="${zip.dir}" overwrite="true"/>
-		<copy file="Oracle_DB_Creation.sql" todir="${zip.dir}" overwrite="true"/>
-		<copy file="Sample-log4j.xml" todir="${zip.dir}" overwrite="true"/>
-		<copy file="Sample-login-config.xml" todir="${zip.dir}" overwrite="true"/>
-		<copy file="Sample-properties-service.xml" todir="${zip.dir}" overwrite="true"/>
-	
+		<delete dir="${zip.dir}/SQL/DBUpgrade" />
+
+		<copy file="MySql_DB_Creation.sql" todir="${zip.dir}" overwrite="true" />
+		<copy file="Oracle_DB_Creation.sql" todir="${zip.dir}" overwrite="true" />
+		<copy file="Sample-log4j.xml" todir="${zip.dir}" overwrite="true" />
+		<copy file="Sample-login-config.xml" todir="${zip.dir}" overwrite="true" />
+		<copy file="Sample-properties-service.xml" todir="${zip.dir}" overwrite="true" />
+
 		<copy todir="${zip.dir}/images" overwrite="true">
-			<fileset file="${base.dir}/images/InstitutionLogo.gif"/>
+			<fileset file="${base.dir}/images/InstitutionLogo.gif" />
 		</copy>
-		
+
 		<copy todir="${zip.dir}/caTissueCore_caCORE_Client" overwrite="true">
-			<fileset dir="${base.dir}/caTissueCore_caCORE_Client"/>
+			<fileset dir="${base.dir}/caTissueCore_caCORE_Client" />
 		</copy>
+
+		<zip destfile="${zip.file}" basedir="${zip.dir}" />
+		<delete dir="${zip.dir}" />
+	</target>
+
+	
+  <!-- =================================================================== -->
+  <!-- Junit test case execution report                                    -->
+  <!-- =================================================================== -->
+	<target name="run_junit_testcases">
+		<mkdir dir="${target.dir}/reports" />
+		<mkdir dir="${target.dir}/reports/junit" />
+
+		<junit printsummary="yes" fork="yes" haltonfailure="no">
+			<formatter type="xml" />
+
+			<!--
+					Specify the name of the coverage data file to use.
+					The value specified below is the default.
+ 	     -->
+			<sysproperty key="net.sourceforge.cobertura.datafile" file="${cobertura.dir}/coverage.ser" />
+
+
+			<classpath>
+				<pathelement path="${cobertura.dir}" />
+				<pathelement path="${target.dir}" />
+			</classpath>
+
+			<classpath refid="junit.classpath" />
+
+			<batchtest todir="${target.dir}/reports/junit">
+				<fileset dir="${src.dir}">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+
+		</junit>
+	</target>
+	
+
+	<target name="gen_report_junit_testcases">
+		<antcall target="clean" />
+		<antcall target="compile" />
+		<antcall target="run_junit_testcases" />
+		<mkdir dir="${report.dir}/reports/junit" />
 		
-		<zip destfile="${zip.file}" basedir="${zip.dir}"/>
-		<delete dir="${zip.dir}"/>
+		<junitreport todir="${report.dir}/reports/junit">
+			<fileset dir="${target.dir}/reports/junit">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report todir="${report.dir}/reports/junit" />
+		</junitreport>
+	</target>
+	
+
+  <!-- =================================================================== -->
+  <!-- Cobertura code coverage report                                      -->
+  <!-- =================================================================== -->
+
+	<taskdef classpathref="junit.classpath" resource="tasks.properties" />
+
+	<target name="instrument">
+
+		<mkdir dir="${cobertura.dir}" />
+		<!--
+	       Instrument the application classes, writing the
+	       instrumented classes into ${build.instrumented.dir}.
+	    -->
+		<cobertura-instrument datafile="${cobertura.dir}/coverage.ser" todir="${cobertura.dir}">
+			<!--
+	         The following line causes instrument to ignore any
+	         source line containing a reference to log4j, for the
+	         purposes of coverage reporting.
+	      -->
+			<ignore regex="org.apache.log4j.*" />
+
+			<fileset dir="${target.dir}">
+				<include name="**/*.class" />
+				<exclude name="**/*Test.class" />
+				<exclude name="**/Mock*.class" />
+			</fileset>
+		</cobertura-instrument>
+	</target>
+
+
+	<target name="gen_report_cobertura">
+		<antcall target="clean" />
+		<antcall target="compile" />
+		<antcall target="instrument" />
+		<antcall target="run_junit_testcases" />
+
+		<cobertura-report datafile="${cobertura.dir}/coverage.ser" srcdir="${src.dir}" destdir="${report.dir}/reports/coverage" />
+
+		<delete file="${cobertura.dir}/coverage.ser" />
 	</target>
 </project>
