@@ -11,14 +11,13 @@ import org.apache.struts.action.ActionForm;
 
 /**
  * @author gautam_shetty
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * @author ashwin_gupta 
  */
 public class ArrayForm extends ActionForm
 {
+	private static final long serialVersionUID = 1L;
 
-    String createdBy;
+	String createdBy;
 
     String specimenClass;
 
