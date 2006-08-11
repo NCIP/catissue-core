@@ -94,6 +94,23 @@
 		</div>
 	</td>
 </tr>
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 20, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
+<tr>
+		<%=strMouseOut%>
+		<div>
+			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
+				<b><bean:message key="app.newSpecimenArray" /> </b>
+		</div>
+		<div>
+			<a class="subMenuPrimary" href="Array.do?operation=add&menuSelected=20">
+				<bean:message key="app.add" />
+			</a> |
+				<bean:message key="app.edit"/>
+		</div>
+	</td>
+</tr>
 
 <!-- menu id : 16 -->
 <%
