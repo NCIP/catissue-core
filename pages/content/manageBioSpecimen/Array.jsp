@@ -119,7 +119,7 @@
 				</td>
 				<td class="formField" colspan="2">
 					<html:button property="mapButton" styleClass="actionButton" styleId="Map"
-						onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
+						onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" disabled="true">
 						<bean:message key="buttons.map"/>
 					</html:button>
 				</td>
@@ -194,8 +194,8 @@
 					<table cellpadding="4" cellspacing="0" border="0">
 						<tr>
 							<td>
-								<html:submit styleClass="actionButton">
-									<bean:message  key="buttons.submit" />
+								<html:submit styleClass="actionButton" disabled="true">
+									<bean:message  key="buttons.submit"/>
 						
 								</html:submit>
 							</td>
