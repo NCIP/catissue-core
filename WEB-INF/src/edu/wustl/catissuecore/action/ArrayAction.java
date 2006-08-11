@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -44,6 +45,13 @@ public class ArrayAction extends Action
         //Setting the specimen class list
         List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
     	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
+    	
+		String strMenu = request.getParameter(Constants.MENU_SELECTED);
+		if(strMenu != null )
+		{
+			request.setAttribute(Constants.MENU_SELECTED ,strMenu);
+			Logger.out.debug(Constants.MENU_SELECTED + " " +strMenu +" set successfully");
+		}
     	
     	//Setting the specimen type list
     	List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
