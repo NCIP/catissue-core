@@ -73,7 +73,8 @@ tr#hiddenCombo
 	String participantIdentifier="0";
 	List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-	
+
+		
 	String title = "ParticipantList";
 
 	boolean isSpecimenData = false;
@@ -92,14 +93,14 @@ tr#hiddenCombo
   		//Bug 700: changed the variable name for the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
 		String chkName = "value1(CHK_" + xx + ")";
 	%>
-		["<INPUT TYPE='RADIO' NAME='chkName' onclick='onParticipantClick(<%=row.get(0)%>)' id='<%=xx%>'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"],<%}%>
+		["<INPUT TYPE='RADIO' NAME='chkName' onclick='onParticipantClick(<%=row.get(9)%>)' id='<%=xx%>'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"],<%}%>
 	<%
 		List row = (List)dataList.get(xx);
   		int j;
   		//Bug 700: changed the variable name for the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
 		String chkName = "value1(CHK_" + xx + ")";
 	%>
-		["<INPUT TYPE='RADIO' NAME='chkName' onclick='onParticipantClick(<%=row.get(0)%>)' id='<%=xx%>'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"]
+		["<INPUT TYPE='RADIO' NAME='chkName' onclick='onParticipantClick(<%=row.get(9)%>)' id='<%=xx%>'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"]
 		];
 		
 		var columns = ["",<%int k;%><%for (k=0;k < (columnList.size()-1);k++){if (columnList.get(k).toString().trim().equals("ID")){IDCount++;}%>"<%=columnList.get(k)%>",<%}if (columnList.get(k).toString().trim().equals("ID")){IDCount++;}%>"<%=columnList.get(k)%>"];
@@ -194,6 +195,7 @@ tr#hiddenCombo
 		//this function is called when participant clicks on radiao button 
 		function onParticipantClick(participant_id)
 		{
+			alert(participant_id);
 			document.forms[0].participantId.value=participant_id;
 			document.forms[0].systemIdentifier.value=participant_id;
 			document.forms[0].submitPage.disabled=true;
@@ -481,10 +483,16 @@ tr#hiddenCombo
 				     </td>
 				     <td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
+						<%--
 				     	<html:select property="vitalStatus" styleClass="formFieldSized" styleId="vitalStatus" size="1" disabled="<%=readOnlyForAll%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.VITAL_STATUS_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
+						</html:select>--%>
+						<logic:iterate id="nvb" name="<%=Constants.VITAL_STATUS_LIST%>">
+						<%	NameValueBean nameValueBean=(NameValueBean)nvb;%>
+						<html:radio property="vitalStatus" value="<%=nameValueBean.getValue()%>"><%=nameValueBean.getName()%> </html:radio>
+						</logic:iterate>
+						
 		        	  </td>
 				 </tr>
 				 
@@ -495,10 +503,15 @@ tr#hiddenCombo
 				     </td>
 				     <td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>"
+				     	<%--<html:select property="gender" styleClass="formFieldSized" styleId="gender" size="1" disabled="<%=readOnlyForAll%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.GENDER_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
+						</html:select>--%>
+						<logic:iterate id="nvb" name="<%=Constants.GENDER_LIST%>">
+						<%	NameValueBean nameValueBean=(NameValueBean)nvb;%>
+						<html:radio property="gender" value="<%=nameValueBean.getValue()%>"><%=nameValueBean.getName()%> </html:radio>
+						</logic:iterate>
+						
 		        	  </td>
 				 </tr>
 				 <tr>
@@ -657,25 +670,16 @@ tr#hiddenCombo
 				  
 				  <!---Following is the code for Data Grid. Participant Lookup Data is displayed-->
 				<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
-<!--				 <tr><td colspan="4"><table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">-->
+				<tr><td colspan="4"><table summary="" cellpadding="0" cellspacing="0" border="0" width="600">
+				
 				<tr>
-				     <td class="formTitle" height="20" colspan="4">
+				     <td class="formTitle" height="25">
 				     	<bean:message key="participant.lookup"/>
 				     </td>
-<!--				     <td class="formButtonField">
-						<html:button styleClass="actionButton"  property="useSelectedParticipant" onclick="UseSelectedParticipant();">
-						<bean:message key="buttons.useSelectedParticipant"/> 
-						</html:button>
-					 </td>
-				    <td class="formTitle" align="Right">
-						<html:button styleClass="actionButton" property="addParticipant" onclick="AddParticipant();">
-								<bean:message key="buttons.addParticipant"/> 
-						</html:button>
-					</td>-->
-				  </tr>				
-	  			  <tr height=110 valign=top>
-					<td colspan=4 valign=top>
-						<div STYLE="overflow: auto; width:100%; height:100%; padding:0px; margin: 0px; border: 1px solid">
+       		    </tr>				
+	  			<tr height=110 valign=top>
+					<td valign=top class="formFieldAllBorders">
+						<div STYLE="overflow: auto; width:100%; height:100%; padding:px; margin: 1px; border: 0px solid">
 						<script>
 						//	create ActiveWidgets Grid javascript object.
 						var obj = new Active.Controls.Grid;
@@ -695,11 +699,11 @@ tr#hiddenCombo
 					    //double click events
 					    var row = new Active.Templates.Row;
 						row.setEvent("ondblclick", function(){this.action("myAction")}); 
-			
+
 						obj.setTemplate("row", row);
 		   				obj.setAction("myAction", 
-						function(src){window.location.href = 'ParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+myData[this.getSelectionProperty("index")][1]}); 
-		
+						function(src){window.location.href = 'ParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+myData[this.getSelectionProperty("index")][10]}); 
+
 						//	write grid html to the page.
 						document.write(obj);
 						</script>
@@ -707,12 +711,12 @@ tr#hiddenCombo
 					</td>
 				  </tr>
 				  <tr>
-				 	<td align="center"valign="top" colspan="4">
+				 	<td align="center" colspan="4" class="formFieldWithNoTopBorder">
 						<INPUT TYPE='RADIO' NAME='chkName' value="Add" onclick="CreateNewClick()"><font size="2">Ignore matches and create new participant </font></INPUT>&nbsp;&nbsp;
 						<INPUT TYPE='RADIO' NAME='chkName' value="Lookup" onclick="LookupAgain()" checked=true><font size="2">Lookup again </font></INPUT>
 					</td>
 				</tr>		
-<!--				</table></td></tr>-->
+				</table></td></tr>
 				<%}%>
 				<!--Participant Lookup end-->				
 								 <!-----action buttons-->
@@ -768,11 +772,11 @@ tr#hiddenCombo
 									</html:button>
 								</td>
 								</logic:notEqual>
-								<td>
+								<%--<td>
 									<html:submit styleClass="actionButton" disabled="true">
 							   		<bean:message key="buttons.getClinicalData"/>
 									</html:submit>
-								</td>	
+								</td>	--%>
 							</tr>
 						</table>
 							<!-- action buttons end -->

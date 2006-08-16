@@ -173,3 +173,10 @@ alter table CATISSUE_SPECIMEN_COLL_GROUP change column NAME NAME varchar(55);
 # ------ Select Max(<Indetifier>) from <corresponding-table>. It is assumed that "17" is the Identifier for PROTECTION_GROUP "Adminstrative".
 INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (9999,'edu.wustl.catissuecore.action.SimilarContainersAction','edu.wustl.catissuecore.action.SimilarContainersAction','edu.wustl.catissuecore.action.SimilarContainersAction',NULL,NULL,1,'2006-07-04');
 INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (10001,17,9999,'0000-00-00');
+
+
+
+#--------------- bug 2058 need Male  and Female values instead of Male gender and Female gender
+update catissue_permissible_value set value='Male' where identifier=59;
+update catissue_permissible_value set value='Female' where identifier=61;
+#-------- finish

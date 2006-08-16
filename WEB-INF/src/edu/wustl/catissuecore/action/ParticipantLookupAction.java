@@ -65,6 +65,7 @@ public class ParticipantLookupAction extends BaseAction
 			return mapping.findForward("participantSelect");
 		}
 		List participantList=bizlogic.getParticipantLookupData(participant);
+		
 		Logger.out.debug("Participant List Size:"+participantList.size());
 		//if any matching participants are there then show the participants otherwise add the participant
 		if (participantList.size() > 0)
@@ -78,6 +79,7 @@ public class ParticipantLookupAction extends BaseAction
 			//Getitng the Participant List in Data Grid Format
 			List participantDisplayList=getParticipantDisplayList(participantList);
 			request.setAttribute(Constants.SPREADSHEET_DATA_LIST, participantDisplayList);
+			
 			target=Constants.PARTICIPANT_LOOKUP_SUCCESS;
 		}
 		//	if no participant match found then add the participant in system
@@ -112,7 +114,7 @@ public class ParticipantLookupAction extends BaseAction
 	private List getColumnHeadingList(ParticipantBizLogic bizlogic) throws Exception
 	{
 		//Creating the column list which is used in Data grid to display column headings
-		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_SYSTEM_IDENTIFIER, Constants.PARTICIPANT_LAST_NAME,Constants.PARTICIPANT_FIRST_NAME,Constants.PARTICIPANT_MIDDLE_NAME,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_DEATH_DATE,Constants.PARTICIPANT_VITAL_STATUS,Constants.PARTICIPANT_GENDER,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER};
+		String[] columnHeaderList = new String[]{Constants.PARTICIPANT_LAST_NAME,Constants.PARTICIPANT_FIRST_NAME,Constants.PARTICIPANT_MIDDLE_NAME,Constants.PARTICIPANT_BIRTH_DATE,Constants.PARTICIPANT_DEATH_DATE,Constants.PARTICIPANT_VITAL_STATUS,Constants.PARTICIPANT_GENDER,Constants.PARTICIPANT_SOCIAL_SECURITY_NUMBER};
 		List columnList = new ArrayList();
 		Logger.out.info("column List header size ;"+columnHeaderList.length);	
 		for (int i = 0; i < columnHeaderList.length; i++)
@@ -121,7 +123,7 @@ public class ParticipantLookupAction extends BaseAction
 		}
 		Logger.out.info("column List size ;"+columnList.size());
 		List displayList=bizlogic.getColumnList(columnList);
-		displayList.add(Constants.PARTICIPANT_PROBABLITY_MATCH);
+		displayList.add(0,Constants.PARTICIPANT_PROBABLITY_MATCH);
 		return displayList;
 	}
 	
@@ -140,7 +142,8 @@ public class ParticipantLookupAction extends BaseAction
 			Participant participant=(Participant)result.getObject();
 			
 			List participantInfo=new ArrayList();
-			participantInfo.add(participant.getSystemIdentifier());
+			participantInfo.add(result.getProbablity().toString()+" %");
+			
 			
 			participantInfo.add(Utility.toString(participant.getLastName()));
 			participantInfo.add(Utility.toString(participant.getFirstName()));
@@ -177,7 +180,7 @@ public class ParticipantLookupAction extends BaseAction
 			}
 			*/
 			participantInfo.add(Utility.toString(participant.getSocialSecurityNumber()));
-			participantInfo.add(result.getProbablity().toString()+" %");
+			participantInfo.add(participant.getSystemIdentifier());
 			participantDisplayList.add(participantInfo);
 			
 		}

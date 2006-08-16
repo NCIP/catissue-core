@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
@@ -77,8 +79,20 @@ public class ParticipantAction extends BaseAction
         
         //Sets the genderList attribute to be used in the Add/Edit Participant Page.
         List genderList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENDER,null);
+        genderList.remove(0);
         request.setAttribute(Constants.GENDER_LIST, genderList);
-        
+        if(participantForm.getGender()==null ||participantForm.getGender().equals(""))
+        {
+        	Iterator itr=genderList.iterator();
+        	while(itr.hasNext())
+        	{
+        		NameValueBean nvb=(NameValueBean)itr.next();
+           		participantForm.setGender(nvb.getValue());
+        		break;
+        	}
+               	
+        }
+
         //Sets the genotypeList attribute to be used in the Add/Edit Participant Page.
         //NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
         List genotypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENOTYPE,null);
@@ -94,8 +108,19 @@ public class ParticipantAction extends BaseAction
         
         //Sets the vitalStatus attribute to be used in the Add/Edit Participant Page.
         List vitalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_VITAL_STATUS,null);
+        vitalStatusList.remove(0);
         request.setAttribute(Constants.VITAL_STATUS_LIST,vitalStatusList);
-        
+        if(participantForm.getVitalStatus()==null ||participantForm.getVitalStatus().equals(""))
+        {
+        	Iterator itr=vitalStatusList.iterator();
+        	while(itr.hasNext())
+        	{
+        		NameValueBean nvb=(NameValueBean)itr.next();
+           		participantForm.setVitalStatus(nvb.getValue());
+        		break;
+        	}
+               	
+        }
         //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
         
