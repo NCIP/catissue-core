@@ -33,7 +33,7 @@ tr#hiddenCombo
 
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);		
 		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);		
-
+		boolean isRegisterButton = false;
 		boolean isAddNew = false;
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
@@ -195,10 +195,10 @@ tr#hiddenCombo
 		//this function is called when participant clicks on radiao button 
 		function onParticipantClick(participant_id)
 		{
-			alert(participant_id);
 			document.forms[0].participantId.value=participant_id;
 			document.forms[0].systemIdentifier.value=participant_id;
 			document.forms[0].submitPage.disabled=true;
+			document.forms[0].registratioPage.disabled=false;
 		
 		
 		}
@@ -230,6 +230,7 @@ tr#hiddenCombo
 		function CreateNewClick()
 		{
 			document.forms[0].submitPage.disabled=false;
+			document.forms[0].registratioPage.disabled=false;
 			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
 				document.forms[0].submitPage.disabled=true;
 			<%}%>
@@ -243,8 +244,10 @@ tr#hiddenCombo
 		{
 			
 			document.forms[0].submitPage.disabled=false;
+			document.forms[0].registratioPage.disabled=true;
 			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
 				document.forms[0].submitPage.disabled=true;
+				document.forms[0].registratioPage.disabled=false;
 			<%}%>
 			document.forms[0].radioValue.value="Lookup";
 		}
@@ -669,7 +672,11 @@ tr#hiddenCombo
 				  <tr><td colspan=4>&nbsp;</td></tr>
 				  
 				  <!---Following is the code for Data Grid. Participant Lookup Data is displayed-->
-				<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){%>	
+				<%if(request.getAttribute(Constants.SPREADSHEET_DATA_LIST)!=null && dataList.size()>0){
+					isRegisterButton=true;
+					if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){
+						isRegisterButton=false;
+					}%>	
 				<tr><td colspan="4"><table summary="" cellpadding="0" cellspacing="0" border="0" width="600">
 				
 				<tr>
@@ -768,6 +775,7 @@ tr#hiddenCombo
 									<html:button styleClass="actionButton"  
 											property="registratioPage" 
 											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>" 
+											disabled="<%=isRegisterButton%>"
 					  						onclick="<%=forwardToSubmit%>">
 									</html:button>
 								</td>
