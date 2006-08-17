@@ -25,7 +25,8 @@ import edu.wustl.common.exception.AssignDataException;
  */
 public abstract class SpecimenRequirement  extends AbstractDomainObject implements java.io.Serializable
 {
-	private static final long serialVersionUID = 1234567890L;
+	
+    private static final long serialVersionUID = 1234567890L;
 	
 	/**
 	 * System generated unique systemIdentifier.
@@ -56,6 +57,10 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 	 * Collection of studies associated with the CollectionProtocol.
 	 */
 	protected Collection collectionProtocolEventCollection = new HashSet();
+	
+	protected Quantity quantity = new Quantity();
+	
+	protected String specimenClass; 
 	
 	/**
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
@@ -174,6 +179,7 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 	{
 		return collectionProtocolEventCollection;
 	}
+	
 	/**
 	 * @param collectionProtocolCollection The collectionProtocolCollection to set.
 	 */
@@ -182,6 +188,41 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 		this.collectionProtocolEventCollection = collectionProtocolEventCollection;
 	}
 	
+    /**
+     * @return Returns the quantity.
+     * @hibernate.many-to-one column="QUANTITY_ID" class="edu.wustl.catissuecore.domain.Quantity"
+     * constrained="true"
+     */
+    public Quantity getQuantity()
+    {
+        return quantity;
+    }
+    
+    /**
+     * @param quantity The quantity to set.
+     */
+    public void setQuantity(Quantity quantity)
+    {
+        this.quantity = quantity;
+    }
+    
+    /**
+     * @return Returns the specimenClass.
+     * @hibernate.property name="specimenClass" type="string" column="SPECIMEN_CLASS" length="50"
+     */
+    public String getSpecimenClass()
+    {
+        return specimenClass;
+    }
+    
+    /**
+     * @param specimenClass The specimenClass to set.
+     */
+    public void setSpecimenClass(String specimenClass)
+    {
+        this.specimenClass = specimenClass;
+    }
+    
 	public String toString()
 	{
 		return "SR "+this.getClass().getName()+" : "+specimenType+" | "+ tissueSite;
