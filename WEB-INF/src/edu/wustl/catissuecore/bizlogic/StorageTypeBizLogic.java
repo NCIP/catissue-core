@@ -32,7 +32,7 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException  
 	{
 		StorageType type = (StorageType)obj;
-		dao.insert(type.getDefaultStorageCapacity(),sessionDataBean, true, true);
+		dao.insert(type.getCapacity(),sessionDataBean, true, true);
 	    dao.insert(type,sessionDataBean, true, true);
 	}
 	/**
@@ -45,12 +45,12 @@ public class StorageTypeBizLogic extends DefaultBizLogic
     {
 		StorageType type = (StorageType)obj;
 
-		dao.update(type.getDefaultStorageCapacity(), sessionDataBean, true, true, false);
+		dao.update(type.getCapacity(), sessionDataBean, true, true, false);
 	    dao.update(type, sessionDataBean, true, true, false);
 	    
 	    //Audit of update.
 	    StorageType oldStorageType = (StorageType) oldObj;
-	    dao.audit(type.getDefaultStorageCapacity(), oldStorageType.getDefaultStorageCapacity(), sessionDataBean, true);
+	    dao.audit(type.getCapacity(), oldStorageType.getCapacity(), sessionDataBean, true);
 	    dao.audit(obj, oldObj, sessionDataBean, true);
     }
 	
