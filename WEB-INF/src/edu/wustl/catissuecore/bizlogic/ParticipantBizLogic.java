@@ -198,11 +198,11 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 			throw new DAOException(ApplicationProperties.getValue("participant.genotype.errMsg"));
 		}
         
-        List raceList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RACE,null);
-        if(!Validator.isEnumeratedOrNullValue(raceList,participant.getRace()))
-		{
-			throw new DAOException(ApplicationProperties.getValue("participant.race.errMsg"));
-		}
+//        List raceList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RACE,null);
+//        if(!Validator.isEnumeratedOrNullValue(raceList,participant.getRace()))
+//		{
+//			throw new DAOException(ApplicationProperties.getValue("participant.race.errMsg"));
+//		}
 
         List ethnicityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_ETHNICITY,null);
         if(!Validator.isEnumeratedOrNullValue(ethnicityList,participant.getEthnicity()))
