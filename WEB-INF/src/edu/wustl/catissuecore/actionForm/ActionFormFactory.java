@@ -69,7 +69,7 @@ public class ActionFormFactory extends AbstractActionFormFactory
 		    LoginForm loginForm = new LoginForm();
 		    edu.wustl.catissuecore.domain.User user = (edu.wustl.catissuecore.domain.User) object;
 		    loginForm.setLoginName(user.getLoginName());
-		    loginForm.setPassword(user.getPassword());
+//		    loginForm.setPassword(user.getPassword());
 		    return loginForm;
 		}
 		else if (operation.equals(Constants.LOGOUT))
