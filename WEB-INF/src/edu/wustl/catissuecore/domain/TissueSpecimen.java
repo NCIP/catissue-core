@@ -29,12 +29,12 @@ public class TissueSpecimen extends Specimen implements Serializable
      * Initial amount of specimen either directly collected from participant 
      * or created from another specimen.
      */
-    protected Double quantityInGram;
+//    protected Double quantityInGram;
 
     /**
      * Current available quantity of the specimen.
      */
-    protected Double availableQuantityInGram;
+//    protected Double availableQuantityInGram;
 
     public TissueSpecimen()
     {
@@ -48,7 +48,7 @@ public class TissueSpecimen extends Specimen implements Serializable
     	setAllValues(form);
     }
     
-    /**
+    /*
      * Returns the initial amount of specimen either directly collected from participant 
      * or created from another specimen.
      * @hibernate.property name="quantityInGram" type="double" 
@@ -57,10 +57,10 @@ public class TissueSpecimen extends Specimen implements Serializable
      * or created from another specimen.
      * @see #setQuantityInGram(Double)
      */
-    public Double getQuantityInGram()
-    {
-        return quantityInGram;
-    }
+//    public Double getQuantityInGram()
+//    {
+//        return quantityInGram;
+//    }
 
     /**
      * Sets the initial amount of specimen either directly collected from participant 
@@ -69,32 +69,32 @@ public class TissueSpecimen extends Specimen implements Serializable
      * collected from participant or created from another specimen.
      * @see #getQuantityInGram()
      */
-    public void setQuantityInGram(Double quantityInGram)
-    {
-        this.quantityInGram = quantityInGram;
-    }
+//    public void setQuantityInGram(Double quantityInGram)
+//    {
+//        this.quantityInGram = quantityInGram;
+//    }
 
-    /**
+    /*
      * Returns the current available quantity of the specimen.
      * @hibernate.property name="availableQuantityInGram" type="double" 
      * column="AVAILABLE_QUANTITY" length="50"
      * @return the current available quantity of the specimen.
      * @see #setAvailableQuantityInGram(Double)
      */
-    public Double getAvailableQuantityInGram()
-    {
-        return availableQuantityInGram;
-    }
+//    public Double getAvailableQuantityInGram()
+//    {
+//        return availableQuantityInGram;
+//    }
 
     /**
      * Sets the current available quantity of the specimen. 
      * @param availableQuantityInGram the current available quantity of the specimen.
      * @see #getAvailableQuantityInGram()
      */
-    public void setAvailableQuantityInGram(Double availableQuantityInGram)
-    {
-        this.availableQuantityInGram = availableQuantityInGram;
-    }
+//    public void setAvailableQuantityInGram(Double availableQuantityInGram)
+//    {
+//        this.availableQuantityInGram = availableQuantityInGram;
+//    }
     
     /**
      * This function Copies the data from an NewSpecimenForm object to a TissueSpecimen object.
@@ -106,17 +106,16 @@ public class TissueSpecimen extends Specimen implements Serializable
         {
         	super.setAllValues(abstractForm);
         	SpecimenForm form = (SpecimenForm) abstractForm;
-        	
-        	this.quantityInGram = new Double(form.getQuantity());
-        	
-        	if(form.isAddOperation())
-        	{
-        		this.availableQuantityInGram = quantityInGram;
-        	}
-        	else
-        	{
-        		this.availableQuantityInGram = new Double(form.getAvailableQuantity());
-        	}
+//        	this.quantityInGram = new Double(form.getQuantity());
+//        	
+//        	if(form.isAddOperation())
+//        	{
+//        		this.availableQuantityInGram = quantityInGram;
+//        	}
+//        	else
+//        	{
+//        		this.availableQuantityInGram = new Double(form.getAvailableQuantity());
+//        	}
         }
         catch (Exception excp)
         {
