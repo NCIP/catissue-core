@@ -28,10 +28,6 @@
             </generator>
         </id>
 
-        <discriminator
-            column="SPECIMEN_CLASS"
-        />
-
         <property
             name="specimenType"
             type="string"
@@ -121,93 +117,6 @@
             column="SPECIMEN_CLASS"
             length="50"
         />
-
-        <!--
-            To add non XDoclet property mappings, create a file named
-                hibernate-properties-SpecimenRequirement.xml
-            containing the additional properties and place it in your merge dir.
-        -->
-        <subclass
-            name="edu.wustl.catissuecore.domain.FluidSpecimenRequirement"
-            discriminator-value="Fluid"
-        >
-        <property
-            name="quantityInMilliliter"
-            type="double"
-            update="true"
-            insert="true"
-            column="QUANTITY"
-            length="50"
-        />
-
-	    <!--
-            	To add non XDoclet property mappings, create a file named
-                hibernate-properties-FluidSpecimenRequirement.xml
-		containing the additional properties and place it in your merge dir.
-	    -->
-
-        </subclass>
-        <subclass
-            name="edu.wustl.catissuecore.domain.MolecularSpecimenRequirement"
-            discriminator-value="Molecular"
-        >
-        <property
-            name="quantityInMicrogram"
-            type="double"
-            update="true"
-            insert="true"
-            column="QUANTITY"
-            length="50"
-        />
-
-	    <!--
-            	To add non XDoclet property mappings, create a file named
-                hibernate-properties-MolecularSpecimenRequirement.xml
-		containing the additional properties and place it in your merge dir.
-	    -->
-
-        </subclass>
-        <subclass
-            name="edu.wustl.catissuecore.domain.CellSpecimenRequirement"
-            discriminator-value="Cell"
-        >
-        <property
-            name="quantityInCellCount"
-            type="int"
-            update="true"
-            insert="true"
-            column="QUANTITY"
-            length="50"
-        />
-
-	    <!--
-            	To add non XDoclet property mappings, create a file named
-                hibernate-properties-CellSpecimenRequirement.xml
-		containing the additional properties and place it in your merge dir.
-	    -->
-
-        </subclass>
-        <subclass
-            name="edu.wustl.catissuecore.domain.TissueSpecimenRequirement"
-            discriminator-value="Tissue"
-        >
-        <property
-            name="quantityInGram"
-            type="double"
-            update="true"
-            insert="true"
-            column="QUANTITY"
-            length="50"
-        />
-
-	    <!--
-            	To add non XDoclet property mappings, create a file named
-                hibernate-properties-TissueSpecimenRequirement.xml
-		containing the additional properties and place it in your merge dir.
-	    -->
-
-        </subclass>
-
     </class>
 
 </hibernate-mapping>

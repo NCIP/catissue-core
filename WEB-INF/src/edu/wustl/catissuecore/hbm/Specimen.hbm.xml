@@ -227,7 +227,7 @@
             type="double"
             update="true"
             insert="true"
-            column="QUANTITY"
+            column="AVAILABLE_QUANTITY"
             length="50"
         />
 
