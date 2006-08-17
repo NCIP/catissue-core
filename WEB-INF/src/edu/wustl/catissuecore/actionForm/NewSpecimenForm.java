@@ -301,7 +301,7 @@ public class NewSpecimenForm extends SpecimenForm
     	}
     	
         SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
-        this.pathologicalStatus = characteristic.getPathologicalStatus();
+//        this.pathologicalStatus = characteristic.getPathologicalStatus();
         this.tissueSide = characteristic.getTissueSide();
         this.tissueSite = characteristic.getTissueSite();
         
