@@ -110,7 +110,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 				values.put(key4,unit);
 				values.put(key5,specimen.getSpecimenCharacteristics().getTissueSite());
 				values.put(key6,specimen.getSpecimenCharacteristics().getTissueSide());
-				values.put(key7,specimen.getSpecimenCharacteristics().getPathologicalStatus());
+//				values.put(key7,specimen.getSpecimenCharacteristics().getPathologicalStatus());
 				values.put(key8,specimen.getClassName());
 				values.put(key9,getAvailableQty(specimen));
 				values.put(key10,quantity);
@@ -482,32 +482,34 @@ public class DistributionForm extends SpecimenEventParametersForm
 	
 	public Object getAvailableQty(Specimen specimen)
 	{
-		//Retrieve the Available quantity for the particular specimen
-		if(specimen instanceof TissueSpecimen)
-		{
-			
-			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
-			Logger.out.debug("tissueSpecimenAvailableQuantityInGram "+tissueSpecimen.getAvailableQuantityInGram());
-			return tissueSpecimen.getAvailableQuantityInGram();
-			
-		}
-		else if(specimen instanceof CellSpecimen)
-		{
-			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
-			return cellSpecimen.getAvailableQuantityInCellCount();
-			
-		}
-		else if(specimen instanceof MolecularSpecimen)
-		{
-			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
-			return molecularSpecimen.getAvailableQuantityInMicrogram();
-			
-		}
-		else if(specimen instanceof FluidSpecimen)
-		{
-			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
-			return fluidSpecimen.getAvailableQuantityInMilliliter();
-		}
+	    
+	    //TODO : Aniruddha
+//		//Retrieve the Available quantity for the particular specimen
+//		if(specimen instanceof TissueSpecimen)
+//		{
+//			
+//			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
+//			Logger.out.debug("tissueSpecimenAvailableQuantityInGram "+tissueSpecimen.getAvailableQuantityInGram());
+//			return tissueSpecimen.getAvailableQuantityInGram();
+//			
+//		}
+//		else if(specimen instanceof CellSpecimen)
+//		{
+//			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
+//			return cellSpecimen.getAvailableQuantityInCellCount();
+//			
+//		}
+//		else if(specimen instanceof MolecularSpecimen)
+//		{
+//			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
+//			return molecularSpecimen.getAvailableQuantityInMicrogram();
+//			
+//		}
+//		else if(specimen instanceof FluidSpecimen)
+//		{
+//			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
+//			return fluidSpecimen.getAvailableQuantityInMilliliter();
+//		}
 		return null;
 	}
 	
