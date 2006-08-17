@@ -23,7 +23,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.SpecimenClass;
+//import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -185,19 +185,19 @@ public class StorageContainerForm extends AbstractActionForm
 		this.systemIdentifier = container.getId().longValue();
 		this.activityStatus = Utility.toString(container.getActivityStatus());
 		this.containerName = container.getName();
-		isFull = Utility.initCap(Utility.toString(container.getIsFull()));
+		isFull = Utility.initCap(Utility.toString(container.isFull()));
 		Logger.out.debug("isFULL />/>/> " + isFull);
 
 		this.typeId = container.getStorageType().getSystemIdentifier().longValue();
 
-		if (container.getParentContainer() != null)
+		if (container.getParent() != null)
 		{
-			this.parentContainerId = container.getParentContainer().getId().longValue();
+			this.parentContainerId = container.getParent().getId().longValue();
 			this.checkedButton = 2;
-			this.positionInParentContainer = container.getParentContainer().getStorageType()
-					.getType()
+			StorageContainer parentContainer = (StorageContainer)container.getParent(); 
+			this.positionInParentContainer = parentContainer.getStorageType().getName()
 					+ " : "
-					+ container.getParentContainer().getId()
+					+ container.getParent().getId()
 					+ " Pos("
 					+ container.getPositionDimensionOne()
 					+ ","
@@ -212,9 +212,9 @@ public class StorageContainerForm extends AbstractActionForm
 			this.siteId = container.getSite().getId().longValue();
 
 		this.defaultTemperature = Utility.toString(container.getTempratureInCentigrade());
-		this.oneDimensionCapacity = container.getStorageContainerCapacity()
+		this.oneDimensionCapacity = container.getCapacity()
 				.getOneDimensionCapacity().intValue();
-		this.twoDimensionCapacity = container.getStorageContainerCapacity()
+		this.twoDimensionCapacity = container.getCapacity()
 				.getTwoDimensionCapacity().intValue();
 		this.oneDimensionLabel = container.getStorageType().getOneDimensionLabel();
 		this.twoDimensionLabel = Utility
@@ -247,7 +247,7 @@ public class StorageContainerForm extends AbstractActionForm
 		}
 
 		//Populating the storage type-id array
-		Collection storageTypeCollection = container.getStorageTypeCollection();
+		Collection storageTypeCollection = container.getHoldsStorageTypeCollection();
 
 		if (storageTypeCollection != null)
 		{
@@ -264,7 +264,7 @@ public class StorageContainerForm extends AbstractActionForm
 		}
 
 		//Populating the specimen class type-id array
-		Collection specimenClassCollection = container.getSpecimenClassCollection();
+		Collection specimenClassCollection = container.getHoldsSpecimenClassCollection();
 
 		if (specimenClassCollection != null)
 		{
@@ -274,9 +274,10 @@ public class StorageContainerForm extends AbstractActionForm
 			Iterator it = specimenClassCollection.iterator();
 			while (it.hasNext())
 			{
-				SpecimenClass specimenClass = (SpecimenClass) it.next();
-				this.holdsSpecimenClassTypeIds[i] = specimenClass.getSystemIdentifier().longValue();
-				i++;
+			    //TODO : Vaishali
+//				SpecimenClass specimenClass = (SpecimenClass) it.next();
+//				this.holdsSpecimenClassTypeIds[i] = specimenClass.getSystemIdentifier().longValue();
+//				i++;
 			}
 		}
 		

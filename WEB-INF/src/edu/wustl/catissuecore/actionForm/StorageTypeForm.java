@@ -20,7 +20,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.domain.SpecimenClass;
+//import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -92,16 +92,16 @@ public class StorageTypeForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
         StorageType storageType = (StorageType) abstractDomain;
-        Logger.out.info("in storege type form :"+storageType.getSpecimenClassCollection().size());
+        Logger.out.info("in storege type form :"+storageType.getHoldsSpecimenClassCollection().size());
         this.systemIdentifier = storageType.getId().longValue();
-        this.type = storageType.getType();
+        this.type = storageType.getName();
         this.defaultTemperature = Utility.toString( storageType.getDefaultTempratureInCentigrade());
-        this.oneDimensionCapacity = storageType.getDefaultStorageCapacity().getOneDimensionCapacity().intValue();
-        this.twoDimensionCapacity = storageType.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue();
+        this.oneDimensionCapacity = storageType.getCapacity().getOneDimensionCapacity().intValue();
+        this.twoDimensionCapacity = storageType.getCapacity().getTwoDimensionCapacity().intValue();
         this.oneDimensionLabel = storageType.getOneDimensionLabel();
         this.twoDimensionLabel = storageType.getTwoDimensionLabel();
 //      Populating the storage type-id array
-		Collection storageTypeCollection = storageType.getStorageTypeCollection();
+		Collection storageTypeCollection = storageType.getHoldsStorageTypeCollection();
 		
 		if(storageTypeCollection != null)
 		{
@@ -117,7 +117,7 @@ public class StorageTypeForm extends AbstractActionForm
 			}
 		}
 //      Populating the specimen class type-id array
-		Collection specimenClassTypeCollection = storageType.getSpecimenClassCollection();
+		Collection specimenClassTypeCollection = storageType.getHoldsSpecimenClassCollection();
 		
 		if(specimenClassTypeCollection != null)
 		{
@@ -127,9 +127,10 @@ public class StorageTypeForm extends AbstractActionForm
 			Iterator it = specimenClassTypeCollection.iterator();
 			while(it.hasNext())
 			{
-				SpecimenClass specimenClass = (SpecimenClass)it.next();
-				holdsSpecimenClassTypeIds[i] = specimenClass.getSystemIdentifier().longValue();
-				i++;
+			    //TODO : Vaishali
+//				SpecimenClass specimenClass = (SpecimenClass)it.next();
+//				holdsSpecimenClassTypeIds[i] = specimenClass.getSystemIdentifier().longValue();
+//				i++;
 			}
 		}
     }
