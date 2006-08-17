@@ -60,7 +60,7 @@ public class CaTissueHTTPClient
 		{
 		    User user = new User();
 			user.setLoginName(userName);
-			user.setPassword(password);
+//			user.setPassword(password);
 			HTTPWrapperObject wrapperObject = new HTTPWrapperObject(user,Constants.LOGIN);
 			HTTPMessage httpMessage=(HTTPMessage)sendData(wrapperObject, servletURL+"LoginHTTP.do");
 			Logger.out.debug("httpMeassage Login Response:"+httpMessage.getResponseStatus());
