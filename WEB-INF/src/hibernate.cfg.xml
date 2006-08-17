@@ -42,7 +42,6 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/Password.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/User.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Distribution.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenClass.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/Quantity.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SpecimenArrayContent.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ContainerType.hbm.xml"/>
