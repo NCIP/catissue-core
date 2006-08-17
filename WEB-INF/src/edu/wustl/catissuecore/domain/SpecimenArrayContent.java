@@ -1,0 +1,186 @@
+package edu.wustl.catissuecore.domain;
+
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
+
+/**
+ * @author gautam_shetty
+ * @author Ashwin Gupta 
+ * @hibernate.class table="CATISSUE_SPECIMEN_ARRAY_CONTENT"
+ */
+public class SpecimenArrayContent extends AbstractDomainObject 
+{
+    
+    protected Long systemIdentifier;
+    
+	protected Double concentrationInMicrogramPerMicroliter;
+	
+	protected Integer positionDimensionOne;
+	
+	protected Integer positionDimensionTwo;
+	
+	protected Quantity initialQuantity;
+	
+	protected SpecimenArray specimenArray = new SpecimenArray();
+	
+	protected Specimen specimen = new Specimen();
+	
+	public SpecimenArrayContent()
+	{
+	}
+	
+	/**
+     * (non-Javadoc)
+     * @see edu.wustl.common.domain.AbstractDomainObject#setSystemIdentifier(java.lang.Long)
+     */
+    public void setSystemIdentifier(Long systemIdentifier)
+    {
+        this.systemIdentifier = systemIdentifier;
+    }
+    
+    /**
+     * (non-Javadoc)
+     * @see edu.wustl.common.domain.AbstractDomainObject#getSystemIdentifier()
+     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * unsaved-value="null" generator-class="native" 
+     * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_ARRAY_CONTENT_SEQ"
+     */
+    public Long getSystemIdentifier()
+    {
+        return this.systemIdentifier;
+    }
+	
+	/**
+     * @return Returns the id.
+     */
+    public Long getId()
+    {
+        return systemIdentifier;
+    }
+    
+    /**
+     * @param id The id to set.
+     */
+    public void setId(Long id)
+    {
+        this.systemIdentifier = id;
+    }
+	
+    /**
+     * @return Returns the concentrationInMicrogramPerMicroliter.
+     * @hibernate.property name="concentrationInMicrogramPerMicroliter" type="double" 
+	 * column="CONC_IN_MICROGM_PER_MICROLTR" length="50"
+     */
+    public Double getConcentrationInMicrogramPerMicroliter()
+    {
+        return concentrationInMicrogramPerMicroliter;
+    }
+    
+    /**
+     * @param concentrationInMicrogramPerMicroliter The concentrationInMicrogramPerMicroliter to set.
+     */
+    public void setConcentrationInMicrogramPerMicroliter(Double concentration)
+    {
+        this.concentrationInMicrogramPerMicroliter = concentration;
+    }
+    
+    /**
+     * @return Returns the initialQuantity.
+     * @hibernate.many-to-one column="INITIAL_QUANTITY_ID" class="edu.wustl.catissuecore.domain.Quantity"
+     * constrained="true"
+     */
+    public Quantity getInitialQuantity()
+    {
+        return initialQuantity;
+    }
+    
+    /**
+     * @param initialQuantity The initialQuantity to set.
+     */
+    public void setInitialQuantity(Quantity initialQuantity)
+    {
+        this.initialQuantity = initialQuantity;
+    }
+    
+    /**
+     * @return Returns the positionDimensionOne.
+     * @hibernate.property name="positionDimensionOne" type="int" column="POSITION_DIMENSION_ONE" length="30"
+     */
+    public Integer getPositionDimensionOne()
+    {
+        return positionDimensionOne;
+    }
+    
+    /**
+     * @param positionDimensionOne The positionDimensionOne to set.
+     */
+    public void setPositionDimensionOne(Integer positionDimensionOne)
+    {
+        this.positionDimensionOne = positionDimensionOne;
+    }
+    
+    /**
+     * @return Returns the positionDimensionTwo.
+     * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="30"
+     */
+    public Integer getPositionDimensionTwo()
+    {
+        return positionDimensionTwo;
+    }
+    
+    /**
+     * @param positionDimensionTwo The positionDimensionTwo to set.
+     */
+    public void setPositionDimensionTwo(Integer positionDimensionTwo)
+    {
+        this.positionDimensionTwo = positionDimensionTwo;
+    }
+    
+    /**
+     * @return Returns the specimen.
+     * @hibernate.many-to-one column="SPECIMEN_ID" class="edu.wustl.catissuecore.domain.Specimen"
+     * constrained="true"
+     */
+    public Specimen getSpecimen()
+    {
+        return specimen;
+    }
+    
+    /**
+     * @param specimen The specimen to set.
+     */
+    public void setSpecimen(Specimen specimen)
+    {
+        this.specimen = specimen;
+    }
+    
+    /**
+     * @return Returns the specimenArray.
+     * @hibernate.many-to-one column="SPECIMEN_ARRAY_ID" class="edu.wustl.catissuecore.domain.SpecimenArray"
+     * constrained="true"
+     */
+    public SpecimenArray getSpecimenArray()
+    {
+        return specimenArray;
+    }
+    
+    /**
+     * @param specimenArray The specimenArray to set.
+     */
+    public void setSpecimenArray(SpecimenArray specimenArray)
+    {
+        this.specimenArray = specimenArray;
+    }
+    
+    
+    /**
+     * (non-Javadoc)
+     * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
+     */
+    public void setAllValues(AbstractActionForm arg0)
+            throws AssignDataException
+    {
+        
+    }
+}
