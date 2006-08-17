@@ -209,10 +209,10 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			this.positionDimensionTwo = transferEventParametersObject.getToPositionDimensionTwo().toString();
 			this.fromStorageContainerId = transferEventParametersObject.getFromStorageContainer().getSystemIdentifier().longValue();
 			this.storageContainer = transferEventParametersObject.getToStorageContainer().getSystemIdentifier().toString() ;  
-			this.positionInStorageContainer = transferEventParametersObject.getToStorageContainer().getStorageType().getType() + " : " 
+			this.positionInStorageContainer = transferEventParametersObject.getToStorageContainer().getStorageType().getName() + " : " 
 				+ this.storageContainer + " Pos(" + this.positionDimensionOne + ","
 				+ this.positionDimensionTwo + ")";
-			this.fromPosition = transferEventParametersObject.getFromStorageContainer().getStorageType().getType() + " : " 
+			this.fromPosition = transferEventParametersObject.getFromStorageContainer().getStorageType().getName() + " : " 
 			+ this.fromStorageContainerId + " Pos(" + this.fromPositionDimensionOne + ","
 			+ this.fromPositionDimensionTwo + ")";
 			
@@ -238,7 +238,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	    		
 	    		StorageContainer container = specimen.getStorageContainer();
 	    		storContId = container.getSystemIdentifier().toString();
-	    		fromPositionData = container.getStorageType().getType() + " : " 
+	    		fromPositionData = container.getStorageType().getName() + " : " 
 				+ storContId + " Pos(" + posOne + "," + posTwo + ")";
 	    		
 	            Logger.out.debug("\t\t************************************");
@@ -374,7 +374,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	    		
 	    		StorageContainer container = specimen.getStorageContainer();
 	    		storContId = container.getSystemIdentifier().toString();
-	    		fromPositionData = container.getStorageType().getType() + " : " 
+	    		fromPositionData = container.getStorageType().getName() + " : " 
 				+ storContId + " Pos(" + posOne + "," + posTwo + ")";
 	    	}
 		}
