@@ -18,7 +18,6 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.action.DomainObjectListAction;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
@@ -109,7 +108,7 @@ public class UserBizLogic extends DefaultBizLogic
                 }
                 
                 user.setCsmUserId(csmUser.getUserId());
-                user.setPassword(csmUser.getPassword());
+//                user.setPassword(csmUser.getPassword());
             }
             
             // Create address and the user in catissue tables.
@@ -132,7 +131,7 @@ public class UserBizLogic extends DefaultBizLogic
             {
                 SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
                 		getAuthorizationData(user), protectionObjects, null);
-
+                
                 emailHandler.sendApprovalEmail(user);
             }
         }
@@ -238,7 +237,7 @@ public class UserBizLogic extends DefaultBizLogic
             }
             
             gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager
-                				.getInstance(DomainObjectListAction.class).getUserById(csmUserId);
+                				.getInstance(UserBizLogic.class).getUserById(csmUserId);
             
             // If the page is of change password, 
             // update the password of the user in csm and catissue tables. 
@@ -249,8 +248,8 @@ public class UserBizLogic extends DefaultBizLogic
                     throw new DAOException(ApplicationProperties.getValue("errors.oldPassword.wrong"));
                 }
                 
-                csmUser.setPassword(PasswordManager.encode(user.getPassword()));
-                user.setPassword(csmUser.getPassword());
+//                csmUser.setPassword(PasswordManager.encode(user.getPassword()));
+//                user.setPassword(csmUser.getPassword());
             }
             else
             {
@@ -410,21 +409,24 @@ public class UserBizLogic extends DefaultBizLogic
     public List retrieve(String className, String colName, Object colValue) throws DAOException
     {
         List userList = null;
+        Logger.out.debug("In user biz logic retrieve........................");
         try
         {
             // Get the caTISSUE user.
             userList = super.retrieve(className, colName, colValue);
-
-            edu.wustl.catissuecore.domain.User appUser = null;
+            
+            User appUser = null;
             if (!userList.isEmpty())
             {
-                appUser = (edu.wustl.catissuecore.domain.User) userList.get(0);
+                appUser = (User) userList.get(0);
                 
                 if (appUser.getCsmUserId() != null)
                 {
                     //Get the role of the user.
                     Role role = SecurityManager.getInstance(UserBizLogic.class)
                     					.getUserRole(appUser.getCsmUserId().longValue());
+                    Logger.out.debug("In USer biz logic.............role........id......."+role.getId().toString());
+                    
                     if (role != null)
                     {
                         appUser.setRoleId(role.getId().toString());
