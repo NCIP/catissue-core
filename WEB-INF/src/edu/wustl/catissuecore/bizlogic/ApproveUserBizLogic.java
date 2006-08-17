@@ -77,7 +77,7 @@ public class ApproveUserBizLogic extends DefaultBizLogic
                 }
                 
                 user.setCsmUserId(csmUser.getUserId());
-                user.setPassword(csmUser.getPassword());
+//                user.setPassword(csmUser.getPassword());
             }
             
             //Update the user record in catissue table.
