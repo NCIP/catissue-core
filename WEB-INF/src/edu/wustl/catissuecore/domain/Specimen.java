@@ -19,9 +19,12 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
+import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
+import edu.wustl.catissuecore.actionForm.SpecimenForm;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.MapDataParser;
@@ -118,8 +121,46 @@ public class Specimen extends AbstractDomainObject implements Serializable
      * The combined anatomic state and pathological disease classification of a specimen.
      */
     protected SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+    
+    /**
+     * A boolean variable which contains a true value if this specimen object is an aliquot 
+     * else it contains false value.
+     */
+//    protected Boolean isAliquot = Boolean.FALSE;
+    
+    /**
+     * Histoathological character of specimen.
+     * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
+     */
+    protected String pathologicalStatus;
+    
+    /**
+     * A historical information about the specimen i.e. whether the specimen is a new specimen
+     * or a derived specimen or an aliquot.
+     */
+    protected String lineage;
+    
+    /**
+     * A label name of this specimen.
+     */
+    protected String label;
+    
+    /**
+     * The quantity of a specimen.
+     */
+    protected Quantity quantity = new Quantity();
+    
+    /**
+     * The available quantity of a specimen.
+     */
+    protected Quantity availableQuantity = new Quantity();
 
     protected transient boolean isParentChanged = false;
+    
+    private transient int noOfAliquots;	
+    
+	private transient Map aliqoutMap = new HashMap();
+    
     public Specimen()
     {    	
     }
@@ -137,7 +178,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
      * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_SEQ"
      * @return the system generated unique systemIdentifier.
      * @see #setSystemIdentifier(Long)
-     * */
+     */
     public Long getSystemIdentifier()
     {
         return systemIdentifier;
@@ -509,106 +550,140 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	{
 		this.isParentChanged = isParentChanged;
 	}
+	
     /**
      * This function Copies the data from an NewSpecimenForm object to a Specimen object.
-     * @param siteForm An SiteForm object containing the information about the site.  
+     * @param specimenForm A formbean object containing the information about the Specimen.  
      * */
     public void setAllValues(AbstractActionForm abstractForm)
     {
-        try
-        {
-        	Validator validator = new Validator();
-        	if(abstractForm instanceof NewSpecimenForm)
-            {
-	        	NewSpecimenForm form = (NewSpecimenForm) abstractForm;
-	            
-	            this.activityStatus = form.getActivityStatus();
-	            
-	            if(!validator.isEmpty(form.getBarcode()))
-	            	this.barcode = form.getBarcode();
-	            else
-	            	this.barcode = null; 
-	            
-	            this.comments = form.getComments();
-	            this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-	            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
-	            this.type = form.getType();
-	            
-	            if(form.isAddOperation())
+    	if(abstractForm instanceof AliquotForm)
+    	{
+    		AliquotForm form = (AliquotForm)abstractForm;
+	    	Validator validator = new Validator();
+	    	
+	    	this.aliqoutMap = form.getAliquotMap();
+	    	this.noOfAliquots = Integer.parseInt(form.getNoOfAliquots());
+	    	this.parentSpecimen = new Specimen();
+	    	
+	    	if(validator.isValidOption(form.getSpecimenId()))
+	    	{
+	    		parentSpecimen.setSystemIdentifier(new Long(form.getSpecimenId()));
+	    	}
+	    	else
+	    	{
+	    		parentSpecimen.setBarcode(form.getBarcode());
+	    	}
+    	}
+    	else
+    	{
+	    	this.quantity = new Quantity(((SpecimenForm)abstractForm).getQuantity());
+	    	//TODO
+//	    	this.label = ((SpecimenForm)abstractForm).getLabel();
+	    	
+	    	if(abstractForm.isAddOperation())
+	    	{
+	    		this.availableQuantity = new Quantity(this.quantity);
+	    	}
+	    	else
+	    	{
+	    		this.availableQuantity = new Quantity(((SpecimenForm)abstractForm).getAvailableQuantity());
+	    	}
+	    	
+	        try
+	        {
+	        	Validator validator = new Validator();
+	        	if(abstractForm instanceof NewSpecimenForm)
 	            {
-	            	this.available = new Boolean(true);
-	            }
-	            else
-	            {
-	            	this.available = new Boolean(form.isAvailable());
-	            }
-	            
-	            //in case of edit
-	        	if(!form.isAddOperation())
-	        	{
-	        		//specimen is a new specimen  
-	        		if(parentSpecimen==null)
-	        		{
-	        			String parentSpecimenId = form.getParentSpecimenId();
-	        			// specimen created from another specimen
-	        			if(parentSpecimenId!=null && !parentSpecimenId.trim().equals("") && Long.parseLong(parentSpecimenId)>0)
-	        			{
-	        				isParentChanged = true;
-	        			}
-	        		}
-	        		else//specimen created from another specimen
-	        		{
-	        			if(parentSpecimen.getSystemIdentifier().longValue()!=Long.parseLong(form.getParentSpecimenId()))
-	        			{
-	        				isParentChanged = true;
-	        			}
-	        		}
-	        	}
-		        
-	            Logger.out.debug("isParentChanged "+isParentChanged);
-		        if(form.isParentPresent())
-				{
-		            parentSpecimen = new CellSpecimen();
-					parentSpecimen.setSystemIdentifier(new Long(form.getParentSpecimenId()));
-					
-	        		this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
-	        		this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
-				}
-		        else
-		        {
-		        	parentSpecimen = null;
-		        	specimenCollectionGroup = new SpecimenCollectionGroup();
-		        	this.specimenCollectionGroup.setSystemIdentifier(new Long(form.getSpecimenCollectionGroupId()));
-		        }
-	            
-	            this.storageContainer.setSystemIdentifier(new Long(form.getStorageContainer()));
-	            
-	            //Setting the SpecimenCharacteristics
-	            specimenCharacteristics.pathologicalStatus = form.getPathologicalStatus();
-	            specimenCharacteristics.tissueSide = form.getTissueSide();
-	            specimenCharacteristics.tissueSite = form.getTissueSite();
-	            
-	            //Getting the Map of External Identifiers
-	            Map extMap = form.getExternalIdentifier();
-		        
-		        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-		        
-		        Collection extCollection = parser.generateData(extMap);
-		        this.externalIdentifierCollection = extCollection;
-		        
-		        Map bioMap = form.getBiohazard();
-		        Logger.out.debug("PRE FIX MAP "+bioMap);
-		        bioMap = fixMap(bioMap);
-		        Logger.out.debug("POST FIX MAP "+bioMap);
-		        
-		        //Getting the Map of Biohazards
-		        parser = new MapDataParser("edu.wustl.catissuecore.domain");
-		        Collection bioCollection = parser.generateData(bioMap);
-		        Logger.out.debug("BIO-COL : " + bioCollection );
-
-		        this.biohazardCollection = bioCollection;
-		        
-		        //Mandar : autoevents 14-july-06 start
+		        	NewSpecimenForm form = (NewSpecimenForm) abstractForm;
+		            
+		            this.activityStatus = form.getActivityStatus();
+		            
+		            if(!validator.isEmpty(form.getBarcode()))
+		            	this.barcode = form.getBarcode();
+		            else
+		            	this.barcode = null; 
+		            
+		            this.comments = form.getComments();
+		            this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+		            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+		            this.type = form.getType();
+		            
+		            if(form.isAddOperation())
+		            {
+		            	this.available = new Boolean(true);
+		            }
+		            else
+		            {
+		            	this.available = new Boolean(form.isAvailable());
+		            }
+		            
+		            //in case of edit
+		        	if(!form.isAddOperation())
+		        	{
+		        		//specimen is a new specimen  
+		        		if(parentSpecimen==null)
+		        		{
+		        			String parentSpecimenId = form.getParentSpecimenId();
+		        			// specimen created from another specimen
+		        			if(parentSpecimenId!=null && !parentSpecimenId.trim().equals("") && Long.parseLong(parentSpecimenId)>0)
+		        			{
+		        				isParentChanged = true;
+		        			}
+		        		}
+		        		else//specimen created from another specimen
+		        		{
+		        			if(parentSpecimen.getSystemIdentifier().longValue()!=Long.parseLong(form.getParentSpecimenId()))
+		        			{
+		        				isParentChanged = true;
+		        			}
+		        		}
+		        	}
+			        
+		            Logger.out.debug("isParentChanged "+isParentChanged);
+			        if(form.isParentPresent())
+					{
+			            parentSpecimen = new CellSpecimen();
+						parentSpecimen.setSystemIdentifier(new Long(form.getParentSpecimenId()));
+						
+		        		this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
+		        		this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
+					}
+			        else
+			        {
+			        	parentSpecimen = null;
+			        	specimenCollectionGroup = new SpecimenCollectionGroup();
+			        	this.specimenCollectionGroup.setSystemIdentifier(new Long(form.getSpecimenCollectionGroupId()));
+			        }
+		            
+		            this.storageContainer.setSystemIdentifier(new Long(form.getStorageContainer()));
+		            
+		            //Setting the SpecimenCharacteristics
+		            this.pathologicalStatus = form.getPathologicalStatus();
+		            specimenCharacteristics.tissueSide = form.getTissueSide();
+		            specimenCharacteristics.tissueSite = form.getTissueSite();
+		            
+		            //Getting the Map of External Identifiers
+		            Map extMap = form.getExternalIdentifier();
+			        
+			        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+			        
+			        Collection extCollection = parser.generateData(extMap);
+			        this.externalIdentifierCollection = extCollection;
+			        
+			        Map bioMap = form.getBiohazard();
+			        Logger.out.debug("PRE FIX MAP "+bioMap);
+			        bioMap = fixMap(bioMap);
+			        Logger.out.debug("POST FIX MAP "+bioMap);
+			        
+			        //Getting the Map of Biohazards
+			        parser = new MapDataParser("edu.wustl.catissuecore.domain");
+			        Collection bioCollection = parser.generateData(bioMap);
+			        Logger.out.debug("BIO-COL : " + bioCollection );
+	
+			        this.biohazardCollection = bioCollection;
+			        
+			        	        //Mandar : autoevents 14-july-06 start
 		        
 		        if(form.isAddOperation())
 		        {
@@ -659,51 +734,50 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		        }
 
 		        //Mandar : autoevents 14-july-06 end
-		        
-		        
-            }
-            else if(abstractForm instanceof CreateSpecimenForm)
-            {
-            	CreateSpecimenForm form = (CreateSpecimenForm)abstractForm;
-            	
-            	this.activityStatus = form.getActivityStatus();
-            	
-            	if(!validator.isEmpty(form.getBarcode()))
-	            	this.barcode = form.getBarcode();
-	            else
-	            	this.barcode = null; 
-            	
-            	this.comments = form.getComments();
-            	this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-	            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
-            	this.type = form.getType();
-            	
-            	if(form.isAddOperation())
-	            {
-	            	this.available = new Boolean(true);
 	            }
-	            else
+	            else if(abstractForm instanceof CreateSpecimenForm)
 	            {
-	            	this.available = new Boolean(form.isAvailable());
+	            	CreateSpecimenForm form = (CreateSpecimenForm)abstractForm;
+	            	
+	            	this.activityStatus = form.getActivityStatus();
+	            	
+	            	if(!validator.isEmpty(form.getBarcode()))
+		            	this.barcode = form.getBarcode();
+		            else
+		            	this.barcode = null; 
+	            	
+	            	this.comments = form.getComments();
+	            	this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+		            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+	            	this.type = form.getType();
+	            	
+	            	if(form.isAddOperation())
+		            {
+		            	this.available = new Boolean(true);
+		            }
+		            else
+		            {
+		            	this.available = new Boolean(form.isAvailable());
+		            }
+	            	
+	            	this.storageContainer.setSystemIdentifier(new Long(form.getStorageContainer()));
+	            	this.parentSpecimen = new CellSpecimen();
+	            	
+	            	this.parentSpecimen.setSystemIdentifier(new Long(form.getParentSpecimenId()));
+	            	//Getting the Map of External Identifiers
+		            Map extMap = form.getExternalIdentifier();
+			        
+			        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+			        
+			        Collection extCollection = parser.generateData(extMap);
+			        this.externalIdentifierCollection = extCollection;
 	            }
-            	
-            	this.storageContainer.setSystemIdentifier(new Long(form.getStorageContainer()));
-            	this.parentSpecimen = new CellSpecimen();
-            	
-            	this.parentSpecimen.setSystemIdentifier(new Long(form.getParentSpecimenId()));
-            	//Getting the Map of External Identifiers
-	            Map extMap = form.getExternalIdentifier();
-		        
-		        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-		        
-		        Collection extCollection = parser.generateData(extMap);
-		        this.externalIdentifierCollection = extCollection;
-            }
-        }
-        catch (Exception excp)
-        {
-            Logger.out.error(excp.getMessage(),excp);
-        }
+	        }
+	        catch (Exception excp)
+	        {
+	            Logger.out.error(excp.getMessage(),excp);
+	        }
+    	}
     }
     
     protected Map fixMap(Map orgMap)
@@ -735,19 +809,19 @@ public class Specimen extends AbstractDomainObject implements Serializable
     	
     	if(this instanceof CellSpecimen)
     	{
-    		className = "Cell";
+    		className = Constants.CELL;
     	}
     	else if(this instanceof MolecularSpecimen)
     	{
-    		className = "Molecular";
+    		className = Constants.MOLECULAR;
     	}
     	else if(this instanceof FluidSpecimen)
     	{
-    		className = "Fluid";
+    		className = Constants.FLUID;
     	}
     	else if(this instanceof TissueSpecimen)
     	{
-    		className = "Tissue";
+    		className = Constants.TISSUE;
     	}
     	
     	return className;
@@ -757,5 +831,176 @@ public class Specimen extends AbstractDomainObject implements Serializable
     {
 		Logger.out.debug(this.getClass().getName()+" is an instance of Specimen class");
 		return Specimen.class.getName() + "_" + this.getSystemIdentifier();
+	}
+    
+    /**
+	 * Returns the available quantity of a specimen.
+	 * @return The available quantity of a specimen.
+	 * @hibernate.component class="edu.wustl.catissuecore.domain.Quantity"
+	 * @see #setAvailableQuantity(Quantity)
+	 */
+	public Quantity getAvailableQuantity()
+	{
+		return availableQuantity;
+	}
+	
+	/**
+     * Sets the available quantity of a specimen.
+     * @param availableQuantity the available quantity of a specimen.
+     * @see #getAvailableQuantity()
+     */
+	public void setAvailableQuantity(Quantity availableQuantity)
+	{
+		this.availableQuantity = availableQuantity;
+	}
+	
+	/**
+	 * Returns the quantity of a specimen.
+	 * @return The quantity of a specimen.
+	 * @hibernate.component class="edu.wustl.catissuecore.domain.Quantity"
+	 * @see #setQuantity(Quantity)
+	 */
+	public Quantity getQuantity()
+	{
+		return quantity;
+	}
+	
+	/**
+     * Sets the quantity of a specimen.
+     * @param quantity The quantity of a specimen.
+     * @see #getQuantity()
+     */
+	public void setQuantity(Quantity quantity)
+	{
+		this.quantity = quantity;
+	}
+	
+	/**
+     * Returns the Histoathological character of specimen.
+     * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
+     * @hibernate.property name="pathologicalStatus" type="string" 
+     * column="PATHOLOGICAL_STATUS" length="50"
+     * @return the Histoathological character of specimen.
+     * @see #setPathologicalStatus(String)
+     */
+    public String getPathologicalStatus()
+    {
+        return pathologicalStatus;
+    }
+
+    /**
+     * Sets the Histoathological character of specimen.
+     * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
+     * @param pathologicalStatus the Histoathological character of specimen.
+     * @see #getPathologicalStatus()
+     */
+    public void setPathologicalStatus(String pathologicalStatus)
+    {
+        this.pathologicalStatus = pathologicalStatus;
+    }
+    
+    /*
+     * Returns true if this specimen object is an aliquot else false.
+     * @hibernate.property name="isAliquot" type="boolean" column="IS_ALIQUOT"
+     * @return the Histoathological character of specimen.
+     * @see #setIsAliquot(Boolean)
+     
+	public Boolean getIsAliquot()
+	{
+		return isAliquot;
+	}*/
+	
+	/*
+     * Sets true if this specimen object is an aliquot else false.
+     * @param isAliquot true if this specimen object is an aliquot else false.
+     * @see #getIsAliquot()
+     
+	public void setIsAliquot(Boolean isAliquot)
+	{
+		this.isAliquot = isAliquot;
+	}*/
+	
+	/**
+	 * Returns the map that contains distinguished fields per aliquots.
+	 * @return The map that contains distinguished fields per aliquots.
+	 * @see #setAliquotMap(Map)
+	 */
+	public Map getAliqoutMap()
+	{
+		return aliqoutMap;
+	}
+	
+	/**
+     * Sets the map of distinguished fields of aliquots.
+     * @param aliquotMap A map of distinguished fields of aliquots.
+     * @see #getAliquotMap()
+     */
+	public void setAliqoutMap(Map aliqoutMap)
+	{
+		this.aliqoutMap = aliqoutMap;
+	}
+	
+	/**
+	 * Returns the no. of aliquots to be created.
+	 * @return The no. of aliquots to be created.
+	 * @see #setNoOfAliquots(int)
+	 */
+	public int getNoOfAliquots()
+	{
+		return noOfAliquots;
+	}
+	
+	/**
+     * Sets the no. of aliquots to be created.
+     * @param noOfAliquots The no. of aliquots to be created.
+     * @see #getNoOfAliquots()
+     */
+	public void setNoOfAliquots(int noOfAliquots)
+	{
+		this.noOfAliquots = noOfAliquots;
+	}
+	
+	/**
+     * Returns the label name of specimen.
+     * @hibernate.property name="label" type="string" 
+     * column="LABEL" length="50"
+     * @return the label name of specimen.
+     * @see #setLabel(String)
+     */
+	public String getLabel()
+	{
+		return label;
+	}
+	
+	/**
+     * Sets the label name of specimen.
+     * @param label The label name of specimen.
+     * @see #getLabel()
+     */
+	public void setLabel(String label)
+	{
+		this.label = label;
+	}
+	
+	/**
+	 * Returns the historical information about the specimen.
+     * @hibernate.property name="lineage" type="string" 
+     * column="LINEAGE" length="50"
+	 * @return The historical information about the specimen.
+	 * @see #setLineage(String)
+	 */
+	public String getLineage()
+	{
+		return lineage;
+	}
+	
+	/**
+     * Sets the historical information about the specimen.
+     * @param label The historical information about the specimen.
+     * @see #getLineage()
+     */
+	public void setLineage(String lineage)
+	{
+		this.lineage = lineage;
 	}
 }
