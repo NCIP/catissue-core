@@ -25,7 +25,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
-import edu.wustl.catissuecore.domain.SpecimenClass;
+//import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -58,11 +58,12 @@ public class StorageTypeAction  extends SecureAction
     	//Collections.sort(storageTypeList);
     	request.setAttribute(Constants.HOLDS_LIST1, storageTypeList);
     	
-    	//Gets the Specimen Class Type List and sets it in request
-    	List list2=bizLogic.retrieve(SpecimenClass.class.getName());
-        List specimenClassTypeList = getSpecimenClassTypeList(list2);
-        //Collections.sort(specimenClassTypeList);
-	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
+    	//TODO : Vaishali
+//    	//Gets the Specimen Class Type List and sets it in request
+//    	List list2=bizLogic.retrieve(SpecimenClass.class.getName());
+//        List specimenClassTypeList = getSpecimenClassTypeList(list2);
+//        //Collections.sort(specimenClassTypeList);
+//	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
         
 	  	if(operation.equals(Constants.ADD))
 	  	{
@@ -100,7 +101,7 @@ public class StorageTypeAction  extends SecureAction
     		}
     		else
     		{
-    			storageTypeList.add(new NameValueBean(type.getType(),type.getSystemIdentifier()));
+    			storageTypeList.add(new NameValueBean(type.getName(),type.getSystemIdentifier()));
     		}
     	}
     	Collections.sort(storageTypeList);
@@ -120,15 +121,16 @@ public class StorageTypeAction  extends SecureAction
     	Iterator specimentypeItr=list.iterator();
     	while(specimentypeItr.hasNext())
     	{
-    		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
-    		if(specimenClass.getSystemIdentifier().longValue()==1)
-    		{
-    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getSystemIdentifier());
-    		}
-    		else
-    		{
-    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
-    		}
+    	    //TODO : Vaishali
+//    		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
+//    		if(specimenClass.getSystemIdentifier().longValue()==1)
+//    		{
+//    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getSystemIdentifier());
+//    		}
+//    		else
+//    		{
+//    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
+//    		}
     	}
     	Collections.sort(specimenClassTypeList);
     	specimenClassTypeList.add(0,specimenClassAny);

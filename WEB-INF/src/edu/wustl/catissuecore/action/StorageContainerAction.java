@@ -31,7 +31,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.SpecimenClass;
+//import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -134,11 +134,12 @@ public class StorageContainerAction  extends SecureAction
     	List StorageTypeListWithoutAny=getStorageTypeList(list2,false);
     	request.setAttribute(Constants.STORAGETYPELIST, StorageTypeListWithoutAny);
     
+    	//TODO : Vaishali
     	//Gets the Specimen Class Type List and sets it in request
-    	List list3=bizLogic.retrieve(SpecimenClass.class.getName());
-        List specimenClassTypeList = getSpecimenClassTypeList(list3);
-        //Collections.sort(specimenClassTypeList);
-	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
+//    	List list3=bizLogic.retrieve(SpecimenClass.class.getName());
+//        List specimenClassTypeList = getSpecimenClassTypeList(list3);
+//        //Collections.sort(specimenClassTypeList);
+//	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
 	  	
     	boolean isOnChange = false;
     	boolean isTypeChange=false;
@@ -208,11 +209,11 @@ public class StorageContainerAction  extends SecureAction
             			if(type.getDefaultTempratureInCentigrade()!= null)
             				storageContainerForm.setDefaultTemperature(type.getDefaultTempratureInCentigrade().toString() );
             		
-            			storageContainerForm.setOneDimensionCapacity(type.getDefaultStorageCapacity().getOneDimensionCapacity().intValue());
-            			storageContainerForm.setTwoDimensionCapacity(type.getDefaultStorageCapacity().getTwoDimensionCapacity().intValue());
+            			storageContainerForm.setOneDimensionCapacity(type.getCapacity().getOneDimensionCapacity().intValue());
+            			storageContainerForm.setTwoDimensionCapacity(type.getCapacity().getTwoDimensionCapacity().intValue());
             			storageContainerForm.setOneDimensionLabel(type.getOneDimensionLabel());
             			storageContainerForm.setTwoDimensionLabel(Utility.toString(type.getTwoDimensionLabel()));
-            			storageContainerForm.setTypeName(type.getType());
+            			storageContainerForm.setTypeName(type.getName());
             			//type_name=type.getType();
             		
             		Logger.out.debug("Type Name:"+storageContainerForm.getTypeName());
@@ -343,7 +344,7 @@ public class StorageContainerAction  extends SecureAction
     		}
     		else
     		{
-    			storageTypeList.add(new NameValueBean(type.getType(),type.getSystemIdentifier()));
+    			storageTypeList.add(new NameValueBean(type.getName(),type.getSystemIdentifier()));
     		}
     	}
     	Collections.sort(storageTypeList);
@@ -370,15 +371,16 @@ public class StorageContainerAction  extends SecureAction
     	Iterator specimentypeItr=list.iterator();
     	while(specimentypeItr.hasNext())
     	{
-    		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
-    		if(specimenClass.getSystemIdentifier().longValue()==1)
-    		{
-    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getSystemIdentifier());
-    		}
-    		else
-    		{
-    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
-    		}
+    	    //TODO : Vaishali
+//    		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
+//    		if(specimenClass.getSystemIdentifier().longValue()==1)
+//    		{
+//    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getSystemIdentifier());
+//    		}
+//    		else
+//    		{
+//    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
+//    		}
     	}
     	Collections.sort(specimenClassTypeList);
     	specimenClassTypeList.add(0,specimenClassAny);
@@ -393,8 +395,8 @@ public class StorageContainerAction  extends SecureAction
     {
     	//Populating the storage type-id array
     	
-		Logger.out.info("Storage type size:"+type.getStorageTypeCollection().size());
-		Collection storageTypeCollection = type.getStorageTypeCollection();
+		Logger.out.info("Storage type size:"+type.getHoldsStorageTypeCollection().size());
+		Collection storageTypeCollection = type.getHoldsStorageTypeCollection();
 		
 		if(storageTypeCollection != null)
 		{
@@ -418,8 +420,8 @@ public class StorageContainerAction  extends SecureAction
     private long[] getDefaultHoldsSpecimenClasstypeList(StorageType type)
     {
     	//Populating the specimen class type-id array
-		Logger.out.info("Specimen class type size:"+type.getSpecimenClassCollection().size());
-		Collection specimenClassTypeCollection = type.getSpecimenClassCollection();
+		Logger.out.info("Specimen class type size:"+type.getHoldsSpecimenClassCollection().size());
+		Collection specimenClassTypeCollection = type.getHoldsSpecimenClassCollection();
 		
 		if(specimenClassTypeCollection != null)
 		{
@@ -429,9 +431,10 @@ public class StorageContainerAction  extends SecureAction
 			Iterator it = specimenClassTypeCollection.iterator();
 			while(it.hasNext())
 			{
-				SpecimenClass specimenClass = (SpecimenClass)it.next();
-				holdsSpecimenClassList[i] = specimenClass.getSystemIdentifier().longValue();
-				i++;
+			    //TODO : Vaishali
+//				SpecimenClass specimenClass = (SpecimenClass)it.next();
+//				holdsSpecimenClassList[i] = specimenClass.getSystemIdentifier().longValue();
+//				i++;
 			}
 			return holdsSpecimenClassList;
 			
