@@ -54,6 +54,12 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	 * Defines whether this SpecimenProtocol record can be queried (Active) or not queried (Inactive) by any actor.
 	 */
 	protected String activityStatus;
+	
+	/**
+	 * Collection of specimen Array in this distribution.
+	 * @see SpecimenArray
+	 */
+	protected Collection specimenArrayCollection = new HashSet(); 
 
 	//Default Constructor
 	public Distribution()
@@ -223,6 +229,25 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 		return newMap;
 		
 	}
-	
-	
+
+	/**
+	 * Returns a collection of specimen array.
+	 * @hibernate.set name="specimenArrayCollection"
+	 *                table="CATISSUE_SPECIMEN_ARRAY" cascade="none"
+	 *                inverse="false" lazy="false"
+	 * @hibernate.collection-key column="DISTRIBUTION_ID"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenArray"
+	 * @return specimenArrayCollection a collection of specimen array.
+	 */
+	public Collection getSpecimenArrayCollection() {
+		return specimenArrayCollection;
+	}
+
+	/**
+	 * Sets the collection of specimen Array.
+	 * @param specimenArrayCollection set of specimen array
+	 */
+	public void setSpecimenArrayCollection(Collection specimenArrayCollection) {
+		this.specimenArrayCollection = specimenArrayCollection;
+	}
 }
