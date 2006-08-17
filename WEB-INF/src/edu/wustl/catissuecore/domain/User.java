@@ -62,10 +62,10 @@ public class User extends AbstractDomainObject implements Serializable
      */
     protected String oldPassword;
     
-    /**
-     * EmailAddress Address of the user.
-     */
-    protected String password;
+//    /**
+//     * EmailAddress Address of the user.
+//     */
+//    protected String password;
 
     /**
      * Date of user registration.
@@ -91,8 +91,8 @@ public class User extends AbstractDomainObject implements Serializable
      * Cancer Research Group to which the user belongs.
      */
     protected CancerResearchGroup cancerResearchGroup = new CancerResearchGroup();
-
-    /**
+    
+       /**
      * Activity Status of user, it could be CLOSED, ACTIVE, DISABLED.
      */
     protected String activityStatus;
@@ -112,6 +112,7 @@ public class User extends AbstractDomainObject implements Serializable
      */
     protected Collection collectionProtocolCollection = new HashSet();
     
+      
     protected String pageOf;
     
     /**
@@ -123,6 +124,12 @@ public class User extends AbstractDomainObject implements Serializable
      * Initialize a new User instance.
      * Note: Hibernate invokes this constructor through reflection API.  
      */
+    
+    /**
+     * Set of passwod collection for the user.
+     */
+    protected Collection passwordCollection = new HashSet();
+    
     public User()
     {
     }
@@ -191,23 +198,23 @@ public class User extends AbstractDomainObject implements Serializable
         this.oldPassword = oldPassword;
     }
     
-    /**
-	 * Returns the password assigned to user.
-	 * @hibernate.property name="password" type="string" column="PASSWORD" length="50"
-	 * @return Returns the password.
-	 */
-    public String getPassword()
-    {
-        return password;
-    }
-    
-    /**
-     * @param password The password to set.
-     */
-    public void setPassword(String password)
-    {
-        this.password = password;
-    }
+//    /**
+//	 * Returns the password assigned to user.
+//	 * @hibernate.property name="password" type="string" column="PASSWORD" length="50"
+//	 * @return Returns the password.
+//	 */
+//    public String getPassword()
+//    {
+//        return password;
+//    }
+//    
+//    /**
+//     * @param password The password to set.
+//     */
+//    public void setPassword(String password)
+//    {
+//        this.password = password;
+//    }
     
     /**
 	 * Returns the firstname assigned to user.
@@ -367,15 +374,15 @@ public class User extends AbstractDomainObject implements Serializable
     {
         return address;
     }
-
-    /**
+    
+	/**
      * @param address The address to set.
      */
     public void setAddress(Address address)
     {
         this.address = address;
     }
-
+    
     /**
      * @return Returns the collectionProtocolCollection.
      * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_COLL_COORDINATORS" 
@@ -504,7 +511,26 @@ public class User extends AbstractDomainObject implements Serializable
     {
         this.roleId = roleId;
     }
-
+    
+    /**
+     * @hibernate.set name="passwordCollection" table="CATISSUE_PASSWORD"
+     * cascade="save-update" inverse="true" lazy="true"
+     * @hibernate.collection-key column="USER_ID"
+     * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Password"
+     */
+    public Collection getPasswordCollection()
+    {
+		return passwordCollection;
+	}
+    
+    /**
+     * @return Returns the passwordCollection.
+     */
+	public void setPasswordCollection(Collection passwordCollection) 
+	{
+		this.passwordCollection = passwordCollection;
+	}
+    
     /**
      * This function Copies the data from an UserForm object to a User object.
      * @param user An UserForm object containing the information about the user.  
@@ -518,7 +544,7 @@ public class User extends AbstractDomainObject implements Serializable
             
             if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
             {
-                this.password = uform.getNewPassword();
+//                this.password = uform.getNewPassword();
                 this.oldPassword = uform.getOldPassword();
             }
             else
