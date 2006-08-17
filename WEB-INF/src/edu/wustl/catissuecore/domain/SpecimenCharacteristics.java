@@ -43,7 +43,7 @@ public class SpecimenCharacteristics extends AbstractDomainObject implements jav
      * Histoathological character of specimen.
      * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
      */
-    protected String pathologicalStatus;
+//    protected String pathologicalStatus;
 
     /**
      * Returns the system generated unique systemIdentifier.
@@ -120,10 +120,10 @@ public class SpecimenCharacteristics extends AbstractDomainObject implements jav
      * @return the Histoathological character of specimen.
      * @see #setPathologicalStatus(String)
      */
-    public String getPathologicalStatus()
-    {
-        return pathologicalStatus;
-    }
+//    public String getPathologicalStatus()
+//    {
+//        return pathologicalStatus;
+//    }
 
     /**
      * Sets the Histoathological character of specimen.
@@ -131,10 +131,10 @@ public class SpecimenCharacteristics extends AbstractDomainObject implements jav
      * @param pathologicalStatus the Histoathological character of specimen.
      * @see #getPathologicalStatus()
      */
-    public void setPathologicalStatus(String pathologicalStatus)
-    {
-        this.pathologicalStatus = pathologicalStatus;
-    }
+//    public void setPathologicalStatus(String pathologicalStatus)
+//    {
+//        this.pathologicalStatus = pathologicalStatus;
+//    }
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
