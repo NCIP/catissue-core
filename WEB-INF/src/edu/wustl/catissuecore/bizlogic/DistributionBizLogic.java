@@ -209,56 +209,57 @@ public class DistributionBizLogic extends DefaultBizLogic
     }
 	private boolean checkAvailableQty(Specimen specimen, double quantity)
 	{
-		if(specimen instanceof TissueSpecimen)
-		{
-			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
-			double availabeQty = tissueSpecimen.getAvailableQuantityInGram().doubleValue();
-			Logger.out.debug("TissueAvailabeQty"+availabeQty);
-			if(quantity > availabeQty)
-				return false;
-			else
-			{
-				availabeQty = availabeQty - quantity;
-				Logger.out.debug("TissueAvailabeQty after deduction"+availabeQty);
-				tissueSpecimen.setAvailableQuantityInGram(new Double(availabeQty));
-			}
-		}
-		else if(specimen instanceof CellSpecimen)
-		{
-			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
-			int availabeQty = cellSpecimen.getAvailableQuantityInCellCount().intValue();
-			if(quantity > availabeQty)
-				return false;
-			else
-			{
-				availabeQty = availabeQty - (int)quantity;
-				cellSpecimen.setAvailableQuantityInCellCount(new Integer(availabeQty));
-			}
-		}
-		else if(specimen instanceof MolecularSpecimen)
-		{
-			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
-			double availabeQty = molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
-			if(quantity > availabeQty)
-				return false;
-			else
-			{
-				availabeQty = availabeQty - quantity;
-				molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
-			}
-		}
-		else if(specimen instanceof FluidSpecimen)
-		{
-			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
-			double availabeQty = fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
-			if(quantity > availabeQty)
-				return false;
-			else
-			{
-				availabeQty = availabeQty - quantity;
-				fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
-			}
-		}
+	//TODO : Aniruddha
+//		if(specimen instanceof TissueSpecimen)
+//		{
+//			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
+//			double availabeQty = tissueSpecimen.getAvailableQuantityInGram().doubleValue();
+//			Logger.out.debug("TissueAvailabeQty"+availabeQty);
+//			if(quantity > availabeQty)
+//				return false;
+//			else
+//			{
+//				availabeQty = availabeQty - quantity;
+//				Logger.out.debug("TissueAvailabeQty after deduction"+availabeQty);
+//				tissueSpecimen.setAvailableQuantityInGram(new Double(availabeQty));
+//			}
+//		}
+//		else if(specimen instanceof CellSpecimen)
+//		{
+//			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
+//			int availabeQty = cellSpecimen.getAvailableQuantityInCellCount().intValue();
+//			if(quantity > availabeQty)
+//				return false;
+//			else
+//			{
+//				availabeQty = availabeQty - (int)quantity;
+//				cellSpecimen.setAvailableQuantityInCellCount(new Integer(availabeQty));
+//			}
+//		}
+//		else if(specimen instanceof MolecularSpecimen)
+//		{
+//			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
+//			double availabeQty = molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
+//			if(quantity > availabeQty)
+//				return false;
+//			else
+//			{
+//				availabeQty = availabeQty - quantity;
+//				molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
+//			}
+//		}
+//		else if(specimen instanceof FluidSpecimen)
+//		{
+//			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
+//			double availabeQty = fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
+//			if(quantity > availabeQty)
+//				return false;
+//			else
+//			{
+//				availabeQty = availabeQty - quantity;
+//				fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
+//			}
+//		}
 		return true;
 		
 	}
@@ -358,36 +359,37 @@ public class DistributionBizLogic extends DefaultBizLogic
     //this method updates the specimen available qty by adding the previously subtracted(during distribution) qty.
     private void updateAvailableQty(Specimen specimen, double quantity)
 	{
-		if(specimen instanceof TissueSpecimen)
-		{
-			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
-			double availabeQty = tissueSpecimen.getAvailableQuantityInGram().doubleValue();
-			Logger.out.debug("TissueAvailabeQty"+availabeQty);
-				availabeQty = availabeQty + quantity;
-				Logger.out.debug("TissueAvailabeQty after addition"+availabeQty);
-				tissueSpecimen.setAvailableQuantityInGram(new Double(availabeQty));
-		}
-		else if(specimen instanceof CellSpecimen)
-		{
-			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
-			int availabeQty = cellSpecimen.getAvailableQuantityInCellCount().intValue();
-			availabeQty = availabeQty + (int)quantity;
-			cellSpecimen.setAvailableQuantityInCellCount(new Integer(availabeQty));
-		}
-		else if(specimen instanceof MolecularSpecimen)
-		{
-			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
-			double availabeQty = molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
-			availabeQty = availabeQty + quantity;
-			molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
-		}
-		else if(specimen instanceof FluidSpecimen)
-		{
-			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
-			double availabeQty = fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
-			availabeQty = availabeQty + quantity;
-			fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
-		}
+	//TODO : Aniruddha
+//		if(specimen instanceof TissueSpecimen)
+//		{
+//			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
+//			double availabeQty = tissueSpecimen.getAvailableQuantityInGram().doubleValue();
+//			Logger.out.debug("TissueAvailabeQty"+availabeQty);
+//				availabeQty = availabeQty + quantity;
+//				Logger.out.debug("TissueAvailabeQty after addition"+availabeQty);
+//				tissueSpecimen.setAvailableQuantityInGram(new Double(availabeQty));
+//		}
+//		else if(specimen instanceof CellSpecimen)
+//		{
+//			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
+//			int availabeQty = cellSpecimen.getAvailableQuantityInCellCount().intValue();
+//			availabeQty = availabeQty + (int)quantity;
+//			cellSpecimen.setAvailableQuantityInCellCount(new Integer(availabeQty));
+//		}
+//		else if(specimen instanceof MolecularSpecimen)
+//		{
+//			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
+//			double availabeQty = molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
+//			availabeQty = availabeQty + quantity;
+//			molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
+//		}
+//		else if(specimen instanceof FluidSpecimen)
+//		{
+//			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
+//			double availabeQty = fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
+//			availabeQty = availabeQty + quantity;
+//			fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
+//		}
 		
 	}
     //Mandar : 04-Apr-06 : end
