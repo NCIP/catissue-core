@@ -1,15 +1,14 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
     "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping
+>
     <class
         name="edu.wustl.catissuecore.domain.SpecimenEventParameters"
         table="CATISSUE_SPECIMEN_EVENT_PARAM"
-        dynamic-update="false"
-        dynamic-insert="false"
     >
 
         <id
@@ -21,6 +20,11 @@
         >
             <generator class="native">
                 <param name="sequence">CATISSUE_SPEC_EVENT_PARAM_SEQ</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-SpecimenEventParameters.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
             </generator>
         </id>
 
@@ -70,12 +74,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.FixedEventParameters"
             table="CATISSUE_FIXED_EVENT_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="fixationType"
             type="string"
@@ -99,12 +101,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.FrozenEventParameters"
             table="CATISSUE_FROZEN_EVENT_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="method"
             type="string"
@@ -118,12 +118,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter"
             table="CATISSUE_IN_OUT_EVENT_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="storageStatus"
             type="string"
@@ -138,12 +136,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.ProcedureEventParameters"
             table="CATISSUE_PROCEDURE_EVENT_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="url"
             type="string"
@@ -168,12 +164,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.SpunEventParameters"
             table="CATISSUE_SPUN_EVENT_PARAMETERS"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="GForce"
             type="double"
@@ -196,12 +190,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.TransferEventParameters"
             table="CATISSUE_TRANSFER_EVENT_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="fromPositionDimensionOne"
             type="int"
@@ -262,12 +254,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.CollectionEventParameters"
             table="CATISSUE_COLL_EVENT_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="collectionProcedure"
             type="string"
@@ -290,12 +280,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.ReceivedEventParameters"
             table="CATISSUE_RECEIVED_EVENT_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="receivedQuality"
             type="string"
@@ -308,12 +296,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.EmbeddedEventParameters"
             table="CATISSUE_EMBEDDED_EVENT_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="embeddingMedium"
             type="string"
@@ -327,33 +313,27 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.ThawEventParameters"
             table="CATISSUE_THAW_EVENT_PARAMETERS"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
 
         </joined-subclass>
         <joined-subclass
             name="edu.wustl.catissuecore.domain.ReviewEventParameters"
             table="CATISSUE_EVENT_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
 
         <joined-subclass
             name="edu.wustl.catissuecore.domain.CellSpecimenReviewParameters"
             table="CATISSUE_CELL_SPE_REVIEW_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="neoplasticCellularityPercentage"
             type="double"
@@ -376,12 +356,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters"
             table="CATISSUE_TIS_SPE_EVENT_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="neoplasticCellularityPercentage"
             type="double"
@@ -431,12 +409,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters"
             table="CATISSUE_FLUID_SPE_EVENT_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="cellCount"
             type="double"
@@ -450,12 +426,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters"
             table="CATISSUE_MOL_SPE_REVIEW_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="gelImageURL"
             type="string"
@@ -525,12 +499,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.DisposalEventParameters"
             table="CATISSUE_DISPOSAL_EVENT_PARAM"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
         <property
             name="reason"
             type="string"

@@ -1,15 +1,14 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
     "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping
+>
     <class
         name="edu.wustl.catissuecore.domain.SpecimenProtocol"
         table="CATISSUE_SPECIMEN_PROTOCOL"
-        dynamic-update="false"
-        dynamic-insert="false"
     >
 
         <id
@@ -21,6 +20,11 @@
         >
             <generator class="native">
                 <param name="sequence">CATISSUE_SPECIMEN_PROTOCOL_SEQ</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-SpecimenProtocol.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
             </generator>
         </id>
 
@@ -117,12 +121,10 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.CollectionProtocol"
             table="CATISSUE_COLLECTION_PROTOCOL"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
 
         <set
             name="distributionProtocolCollection"
@@ -133,15 +135,16 @@
             sort="unsorted"
         >
 
-              <key
-                  column="COLLECTION_PROTOCOL_ID"
-              />
+            <key
+                column="COLLECTION_PROTOCOL_ID"
+            >
+            </key>
 
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.DistributionProtocol"
-                  column="DISTRIBUTION_PROTOCOL_ID"
-                  outer-join="auto"
-              />
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.DistributionProtocol"
+                column="DISTRIBUTION_PROTOCOL_ID"
+                outer-join="auto"
+             />
 
         </set>
 
@@ -154,15 +157,16 @@
             sort="unsorted"
         >
 
-              <key
-                  column="COLLECTION_PROTOCOL_ID"
-              />
+            <key
+                column="COLLECTION_PROTOCOL_ID"
+            >
+            </key>
 
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.User"
-                  column="USER_ID"
-                  outer-join="auto"
-              />
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.User"
+                column="USER_ID"
+                outer-join="auto"
+             />
 
         </set>
 
@@ -175,25 +179,25 @@
             sort="unsorted"
         >
 
-              <key
-                  column="COLLECTION_PROTOCOL_ID"
-              />
+            <key
+                column="COLLECTION_PROTOCOL_ID"
+            >
+            </key>
 
-              <one-to-many
+            <one-to-many
                   class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
-              />
+            />
+
         </set>
 
         </joined-subclass>
         <joined-subclass
             name="edu.wustl.catissuecore.domain.DistributionProtocol"
             table="CATISSUE_DISTRIBUTION_PROTOCOL"
-            dynamic-update="false"
-            dynamic-insert="false"
         >
-        <key
-            column="IDENTIFIER"
-        />
+            <key
+                column="IDENTIFIER"
+            />
 
         <set
             name="specimenRequirementCollection"
@@ -204,15 +208,16 @@
             sort="unsorted"
         >
 
-              <key
-                  column="DISTRIBUTION_PROTOCOL_ID"
-              />
+            <key
+                column="DISTRIBUTION_PROTOCOL_ID"
+            >
+            </key>
 
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.SpecimenRequirement"
-                  column="SPECIMEN_REQUIREMENT_ID"
-                  outer-join="auto"
-              />
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.SpecimenRequirement"
+                column="SPECIMEN_REQUIREMENT_ID"
+                outer-join="auto"
+             />
 
         </set>
 
@@ -225,15 +230,16 @@
             sort="unsorted"
         >
 
-              <key
-                  column="DISTRIBUTION_PROTOCOL_ID"
-              />
+            <key
+                column="DISTRIBUTION_PROTOCOL_ID"
+            >
+            </key>
 
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.CollectionProtocol"
-                  column="COLLECTION_PROTOCOL_ID"
-                  outer-join="auto"
-              />
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.CollectionProtocol"
+                column="COLLECTION_PROTOCOL_ID"
+                outer-join="auto"
+             />
 
         </set>
 

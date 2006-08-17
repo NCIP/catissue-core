@@ -1,15 +1,14 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
     "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping
+>
     <class
         name="edu.wustl.catissuecore.domain.User"
         table="CATISSUE_USER"
-        dynamic-update="false"
-        dynamic-insert="false"
     >
 
         <id
@@ -21,6 +20,11 @@
         >
             <generator class="native">
                 <param name="sequence">CATISSUE_USER_SEQ</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-User.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
             </generator>
         </id>
 
@@ -31,15 +35,6 @@
             insert="true"
             column="EMAIL_ADDRESS"
             length="100"
-        />
-
-        <property
-            name="password"
-            type="string"
-            update="true"
-            insert="true"
-            column="PASSWORD"
-            length="50"
         />
 
         <property
@@ -137,15 +132,16 @@
             sort="unsorted"
         >
 
-              <key
-                  column="USER_ID"
-              />
+            <key
+                column="USER_ID"
+            >
+            </key>
 
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.CollectionProtocol"
-                  column="COLLECTION_PROTOCOL_ID"
-                  outer-join="auto"
-              />
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.CollectionProtocol"
+                column="COLLECTION_PROTOCOL_ID"
+                outer-join="auto"
+             />
 
         </set>
 
@@ -166,6 +162,26 @@
             column="STATUS_COMMENT"
             length="2000"
         />
+
+        <set
+            name="passwordCollection"
+            table="CATISSUE_PASSWORD"
+            lazy="true"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+            <key
+                column="USER_ID"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.wustl.catissuecore.domain.Password"
+            />
+
+        </set>
 
         <!--
             To add non XDoclet property mappings, create a file named

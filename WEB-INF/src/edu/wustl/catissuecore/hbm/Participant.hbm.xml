@@ -77,14 +77,21 @@
             length="50"
         />
 
-        <property
-            name="race"
-            type="string"
-            update="true"
-            insert="true"
-            column="RACE"
-            length="50"
-        />
+        <set
+            name="raceCollection"
+            table="CATISSUE_RACE"
+            lazy="false"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="PARTICIPANT_ID"
+              />
+		
+			<element column="RACE_NAME" type="string" length="50"/>
+        </set>
 
         <property
             name="ethnicity"

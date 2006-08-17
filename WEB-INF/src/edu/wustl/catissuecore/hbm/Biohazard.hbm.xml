@@ -1,15 +1,14 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
     "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping
+>
     <class
         name="edu.wustl.catissuecore.domain.Biohazard"
         table="CATISSUE_BIOHAZARD"
-        dynamic-update="false"
-        dynamic-insert="false"
     >
 
         <id
@@ -21,6 +20,11 @@
         >
             <generator class="native">
                 <param name="sequence">CATISSUE_BIOHAZARD_SEQ</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-Biohazard.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
             </generator>
         </id>
 
@@ -62,15 +66,16 @@
             sort="unsorted"
         >
 
-              <key
-                  column="BIOHAZARD_ID"
-              />
+            <key
+                column="BIOHAZARD_ID"
+            >
+            </key>
 
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.Specimen"
-                  column="SPECIMEN_ID"
-                  outer-join="auto"
-              />
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.Specimen"
+                column="SPECIMEN_ID"
+                outer-join="auto"
+             />
 
         </set>
 

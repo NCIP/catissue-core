@@ -1,15 +1,14 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
     "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping
+>
     <class
         name="edu.wustl.catissuecore.domain.Specimen"
         table="CATISSUE_SPECIMEN"
-        dynamic-update="false"
-        dynamic-insert="false"
     >
 
         <id
@@ -21,12 +20,16 @@
         >
             <generator class="native">
                 <param name="sequence">CATISSUE_SPECIMEN_SEQ</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-Specimen.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
             </generator>
         </id>
 
         <discriminator
             column="SPECIMEN_CLASS"
-            type="string"
         />
 
         <property
@@ -111,15 +114,16 @@
             sort="unsorted"
         >
 
-              <key
-                  column="SPECIMEN_ID"
-              />
+            <key
+                column="SPECIMEN_ID"
+            >
+            </key>
 
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.Biohazard"
-                  column="BIOHAZARD_ID"
-                  outer-join="auto"
-              />
+            <many-to-many
+                class="edu.wustl.catissuecore.domain.Biohazard"
+                column="BIOHAZARD_ID"
+                outer-join="auto"
+             />
 
         </set>
 
@@ -132,13 +136,15 @@
             sort="unsorted"
         >
 
-              <key
-                  column="SPECIMEN_ID"
-              />
+            <key
+                column="SPECIMEN_ID"
+            >
+            </key>
 
-              <one-to-many
+            <one-to-many
                   class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
-              />
+            />
+
         </set>
 
         <set
@@ -150,13 +156,15 @@
             sort="unsorted"
         >
 
-              <key
-                  column="PARENT_SPECIMEN_ID"
-              />
+            <key
+                column="PARENT_SPECIMEN_ID"
+            >
+            </key>
 
-              <one-to-many
+            <one-to-many
                   class="edu.wustl.catissuecore.domain.Specimen"
-              />
+            />
+
         </set>
 
         <many-to-one
@@ -178,13 +186,15 @@
             sort="unsorted"
         >
 
-              <key
-                  column="SPECIMEN_ID"
-              />
+            <key
+                column="SPECIMEN_ID"
+            >
+            </key>
 
-              <one-to-many
+            <one-to-many
                   class="edu.wustl.catissuecore.domain.ExternalIdentifier"
-              />
+            />
+
         </set>
 
         <many-to-one
@@ -207,19 +217,13 @@
             column="SPECIMEN_CHARACTERISTICS_ID"
         />
 
-        <!--
-            To add non XDoclet property mappings, create a file named
-                hibernate-properties-Specimen.xml
-            containing the additional properties and place it in your merge dir.
-        -->
-        <subclass
-            name="edu.wustl.catissuecore.domain.FluidSpecimen"
-            dynamic-update="false"
-            dynamic-insert="false"
-            discriminator-value="Fluid"
+        <component
+            name="availableQuantity"
+            class="edu.wustl.catissuecore.domain.Quantity"
         >
+
         <property
-            name="quantityInMilliliter"
+            name="value"
             type="double"
             update="true"
             insert="true"
@@ -227,14 +231,60 @@
             length="50"
         />
 
+        </component>
+
+        <component
+            name="quantity"
+            class="edu.wustl.catissuecore.domain.Quantity"
+        >
+
         <property
-            name="availableQuantityInMilliliter"
+            name="value"
             type="double"
             update="true"
             insert="true"
-            column="AVAILABLE_QUANTITY"
+            column="QUANTITY"
             length="50"
         />
+
+        </component>
+
+        <property
+            name="pathologicalStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="PATHOLOGICAL_STATUS"
+            length="50"
+        />
+
+        <property
+            name="label"
+            type="string"
+            update="true"
+            insert="true"
+            column="LABEL"
+            length="50"
+        />
+
+        <property
+            name="lineage"
+            type="string"
+            update="true"
+            insert="true"
+            column="LINEAGE"
+            length="50"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-Specimen.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+        <subclass
+            name="edu.wustl.catissuecore.domain.FluidSpecimen"
+            discriminator-value="Fluid"
+        >
 
 	    <!--
             	To add non XDoclet property mappings, create a file named
@@ -245,27 +295,8 @@
         </subclass>
         <subclass
             name="edu.wustl.catissuecore.domain.CellSpecimen"
-            dynamic-update="false"
-            dynamic-insert="false"
             discriminator-value="Cell"
         >
-        <property
-            name="quantityInCellCount"
-            type="int"
-            update="true"
-            insert="true"
-            column="QUANTITY"
-            length="50"
-        />
-
-        <property
-            name="availableQuantityInCellCount"
-            type="int"
-            update="true"
-            insert="true"
-            column="AVAILABLE_QUANTITY"
-            length="50"
-        />
 
 	    <!--
             	To add non XDoclet property mappings, create a file named
@@ -276,8 +307,6 @@
         </subclass>
         <subclass
             name="edu.wustl.catissuecore.domain.MolecularSpecimen"
-            dynamic-update="false"
-            dynamic-insert="false"
             discriminator-value="Molecular"
         >
         <property
@@ -286,24 +315,6 @@
             update="true"
             insert="true"
             column="CONCENTRATION"
-            length="50"
-        />
-
-        <property
-            name="quantityInMicrogram"
-            type="double"
-            update="true"
-            insert="true"
-            column="QUANTITY"
-            length="50"
-        />
-
-        <property
-            name="availableQuantityInMicrogram"
-            type="double"
-            update="true"
-            insert="true"
-            column="AVAILABLE_QUANTITY"
             length="50"
         />
 
@@ -316,27 +327,8 @@
         </subclass>
         <subclass
             name="edu.wustl.catissuecore.domain.TissueSpecimen"
-            dynamic-update="false"
-            dynamic-insert="false"
             discriminator-value="Tissue"
         >
-        <property
-            name="quantityInGram"
-            type="double"
-            update="true"
-            insert="true"
-            column="QUANTITY"
-            length="50"
-        />
-
-        <property
-            name="availableQuantityInGram"
-            type="double"
-            update="true"
-            insert="true"
-            column="AVAILABLE_QUANTITY"
-            length="50"
-        />
 
 	    <!--
             	To add non XDoclet property mappings, create a file named

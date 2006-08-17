@@ -1,15 +1,14 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
     "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping
+>
     <class
-        name="edu.wustl.catissuecore.domain.StorageContainerCapacity"
-        table="CATISSUE_STORAGE_CONT_CAPACITY"
-        dynamic-update="false"
-        dynamic-insert="false"
+        name="edu.wustl.catissuecore.domain.Capacity"
+        table="CATISSUE_CAPACITY"
     >
 
         <id
@@ -20,7 +19,12 @@
             unsaved-value="null"
         >
             <generator class="native">
-                <param name="sequence">CATISSUE_STRG_CONT_CAPA_SEQ</param>
+                <param name="sequence">CATISSUE_CAPACITY_SEQ</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-Capacity.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
             </generator>
         </id>
 
@@ -44,7 +48,7 @@
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-StorageContainerCapacity.xml
+                hibernate-properties-Capacity.xml
             containing the additional properties and place it in your merge dir.
         -->
 

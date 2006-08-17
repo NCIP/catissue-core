@@ -7,8 +7,8 @@
 <hibernate-mapping
 >
     <class
-        name="edu.wustl.catissuecore.domain.Address"
-        table="CATISSUE_ADDRESS"
+        name="edu.wustl.catissuecore.domain.SpecimenArrayContent"
+        table="CATISSUE_SPECIMEN_ARRAY_CONTENT"
     >
 
         <id
@@ -19,81 +19,75 @@
             unsaved-value="null"
         >
             <generator class="native">
-                <param name="sequence">CATISSUE_ADDRESS_SEQ</param>
+                <param name="sequence">CATISSUE_SPECIMEN_ARRAY_CONTENT_SEQ</param>
               <!--  
                   To add non XDoclet generator parameters, create a file named 
-                  hibernate-generator-params-Address.xml 
+                  hibernate-generator-params-SpecimenArrayContent.xml 
                   containing the additional parameters and place it in your merge dir. 
               --> 
             </generator>
         </id>
 
         <property
-            name="street"
-            type="string"
+            name="concentrationInMicrogramPerMicroliter"
+            type="double"
             update="true"
             insert="true"
-            column="STREET"
+            column="CONC_IN_MICROGM_PER_MICROLTR"
             length="50"
         />
 
-        <property
-            name="city"
-            type="string"
+        <many-to-one
+            name="initialQuantity"
+            class="edu.wustl.catissuecore.domain.Quantity"
+            cascade="none"
+            outer-join="auto"
             update="true"
             insert="true"
-            column="CITY"
-            length="50"
+            column="INITIAL_QUANTITY_ID"
         />
 
         <property
-            name="state"
-            type="string"
+            name="positionDimensionOne"
+            type="int"
             update="true"
             insert="true"
-            column="STATE"
-            length="50"
-        />
-
-        <property
-            name="country"
-            type="string"
-            update="true"
-            insert="true"
-            column="COUNTRY"
-            length="50"
-        />
-
-        <property
-            name="zipCode"
-            type="string"
-            update="true"
-            insert="true"
-            column="ZIPCODE"
+            column="POSITION_DIMENSION_ONE"
             length="30"
         />
 
         <property
-            name="phoneNumber"
-            type="string"
+            name="positionDimensionTwo"
+            type="int"
             update="true"
             insert="true"
-            column="PHONE_NUMBER"
-            length="50"
+            column="POSITION_DIMENSION_TWO"
+            length="30"
         />
 
-        <property
-            name="faxNumber"
-            type="string"
+        <many-to-one
+            name="specimen"
+            class="edu.wustl.catissuecore.domain.Specimen"
+            cascade="none"
+            outer-join="auto"
             update="true"
             insert="true"
-            column="FAX_NUMBER"
-            length="50"
+            column="SPECIMEN_ID"
+        />
+
+        <many-to-one
+            name="specimenArray"
+            class="edu.wustl.catissuecore.domain.SpecimenArray"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_ARRAY_ID"
         />
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-Address.xml
+                hibernate-properties-SpecimenArrayContent.xml
             containing the additional properties and place it in your merge dir.
         -->
 

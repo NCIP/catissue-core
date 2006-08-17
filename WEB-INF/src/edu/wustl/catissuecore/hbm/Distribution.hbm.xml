@@ -1,15 +1,14 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
     "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 
-<hibernate-mapping>
+<hibernate-mapping
+>
     <class
         name="edu.wustl.catissuecore.domain.Distribution"
         table="CATISSUE_DISTRIBUTION"
-        dynamic-update="false"
-        dynamic-insert="false"
     >
 
         <id
@@ -22,6 +21,11 @@
             <generator class="native">
                 <param name="sequence">CATISSUE_DISTRIBUTION_SEQ</param>
                 <param name="sequence">CATISSUE_SPEC_EVENT_PARAM_SEQ</param>
+              <!--  
+                  To add non XDoclet generator parameters, create a file named 
+                  hibernate-generator-params-Distribution.xml 
+                  containing the additional parameters and place it in your merge dir. 
+              --> 
             </generator>
         </id>
 
@@ -54,13 +58,15 @@
             sort="unsorted"
         >
 
-              <key
-                  column="DISTRIBUTION_ID"
-              />
+            <key
+                column="DISTRIBUTION_ID"
+            >
+            </key>
 
-              <one-to-many
+            <one-to-many
                   class="edu.wustl.catissuecore.domain.DistributedItem"
-              />
+            />
+
         </set>
 
         <property
@@ -71,6 +77,26 @@
             column="ACTIVITY_STATUS"
             length="50"
         />
+
+        <set
+            name="specimenArrayCollection"
+            table="CATISSUE_SPECIMEN_ARRAY"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+            <key
+                column="DISTRIBUTION_ID"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenArray"
+            />
+
+        </set>
 
         <many-to-one
             name="specimen"
