@@ -32,13 +32,13 @@ public class MolecularSpecimen extends Specimen implements Serializable
     /**
      * Initial amount of specimen created from another specimen.
      */
-    protected Double quantityInMicrogram;
+//    protected Double quantityInMicrogram;
 
     /**
      * Current available quantity of the specimen. 
      * Available mass of the molecular specimen in tissue bank.
      */
-    protected Double availableQuantityInMicrogram;
+//    protected Double availableQuantityInMicrogram;
 
     public MolecularSpecimen()
 	{
@@ -78,29 +78,29 @@ public class MolecularSpecimen extends Specimen implements Serializable
         this.concentrationInMicrogramPerMicroliter = concentrationInMicrogramPerMicroliter;
     }
 
-    /**
+    /*
      * Returns the initial amount of specimen created from another specimen.
      * @hibernate.property name="quantityInMicrogram" type="double" 
      * column="QUANTITY" length="50"
      * @return the initial amount of specimen created from another specimen.
      * @see #setQuantityInMicroGram(Double)
      */
-    public Double getQuantityInMicrogram()
-    {
-        return quantityInMicrogram;
-    }
+//    public Double getQuantityInMicrogram()
+//    {
+//        return quantityInMicrogram;
+//    }
 
     /**
      * Sets the initial amount of specimen created from another specimen.
      * @param quantityInMicroGram the initial amount of specimen created from another specimen.
      * @see #getQuantityInMicroGram()
      */
-    public void setQuantityInMicrogram(Double quantityInMicrogram)
-    {
-        this.quantityInMicrogram = quantityInMicrogram;
-    }
+//    public void setQuantityInMicrogram(Double quantityInMicrogram)
+//    {
+//        this.quantityInMicrogram = quantityInMicrogram;
+//    }
 
-    /**
+    /*
      * Returns the current available quantity of the specimen. 
      * Available mass of the molecular specimen in tissue bank.
      * @hibernate.property name="availableQuantityInMicrogram" type="double" 
@@ -108,10 +108,10 @@ public class MolecularSpecimen extends Specimen implements Serializable
      * @return the current available quantity of the specimen.
      * @see #setAvailableQuantityInMicroGram(Double)
      */
-    public Double getAvailableQuantityInMicrogram()
-    {
-        return availableQuantityInMicrogram;
-    }
+//    public Double getAvailableQuantityInMicrogram()
+//    {
+//        return availableQuantityInMicrogram;
+//    }
 
     /**
      * Sets the current available quantity of the specimen. 
@@ -120,10 +120,10 @@ public class MolecularSpecimen extends Specimen implements Serializable
      * mass of the molecular specimen in tissue bank. 
      * @see #getAvailableQuantityInMicroGram()
      */
-    public void setAvailableQuantityInMicrogram(Double availableQuantityInMicrogram)
-    {
-        this.availableQuantityInMicrogram = availableQuantityInMicrogram;
-    }
+//    public void setAvailableQuantityInMicrogram(Double availableQuantityInMicrogram)
+//    {
+//        this.availableQuantityInMicrogram = availableQuantityInMicrogram;
+//    }
     
     /**
      * This function Copies the data from an NewSpecimenForm object to a MolecularSpecimen object.
@@ -136,8 +136,8 @@ public class MolecularSpecimen extends Specimen implements Serializable
         	super.setAllValues(abstractForm);
         	SpecimenForm form = (SpecimenForm) abstractForm;
         	
-        	this.quantityInMicrogram = new Double(form.getQuantity());
-        	Logger.out.debug("Qty: " + this.quantityInMicrogram);
+//        	this.quantityInMicrogram = new Double(form.getQuantity());
+//        	Logger.out.debug("Qty: " + this.quantityInMicrogram);
         	Logger.out.debug("Concentration is "+form.getConcentration());
         	if(!form.getConcentration().equals(""))
         	{
@@ -150,12 +150,12 @@ public class MolecularSpecimen extends Specimen implements Serializable
         	
         	if(form.isAddOperation())
         	{
-        		this.availableQuantityInMicrogram = quantityInMicrogram;
-        		Logger.out.debug("Avail Qty: " + this.availableQuantityInMicrogram);
+//        		this.availableQuantityInMicrogram = quantityInMicrogram;
+//        		Logger.out.debug("Avail Qty: " + this.availableQuantityInMicrogram);
         	}
         	else
         	{
-            	this.availableQuantityInMicrogram = new Double(form.getAvailableQuantity());
+//            	this.availableQuantityInMicrogram = new Double(form.getAvailableQuantity());
         	}
         }
         catch (Exception excp)
