@@ -69,10 +69,15 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
      */
 	protected String sexGenotype;
 
+//	/**
+//     * Participant's racial origination.
+//     */
+//	protected String race;
+	
 	/**
-     * Participant's racial origination.
-     */
-	protected String race;
+	 * Participant's race origination.
+	 */
+	protected Collection raceCollection = new HashSet();
 	
 	/**
      * Participant's ethnicity status.
@@ -274,28 +279,48 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 		this.sexGenotype = sexGenotype;
 	}
 
-	/**
-     * Returns the race of the Participant.
-     * @return String representing the race of the Participant.
-     * @see #setRace(String)
-     * @hibernate.property name="race" type="string" 
-     * column="RACE" length="50"
-     */
-	public String getRace()
-	{
-		return race;
-	}
+//	/**
+//     * Returns the race of the Participant.
+//     * @return String representing the race of the Participant.
+//     * @see #setRace(String)
+//     * @hibernate.property name="race" type="string" 
+//     * column="RACE" length="50"
+//     */
+//	public String getRace()
+//	{
+//		return race;
+//	}
+//
+//	/**
+//     * Sets the race of the Participant.
+//     * @param race String representing the race of the Participant.
+//     * @see #getRace()
+//     */
+//	public void setRace(String race)
+//	{
+//		this.race = race;
+//	}
 
-	/**
-     * Sets the race of the Participant.
-     * @param race String representing the race of the Participant.
-     * @see #getRace()
+    /**
+     * @return Returns the raceCollection.
+     * @hibernate.set name="raceCollection" table="CATISSUE_RACE"
+	 * cascade="save-update" inverse="false" lazy="false"
+	 * @hibernate.collection-key column="PARTICIPANT_ID"
+	 * @hibernate.element type="string" column="NAME" length="30"
      */
-	public void setRace(String race)
-	{
-		this.race = race;
-	}
-
+    public Collection getRaceCollection()
+    {
+        return raceCollection;
+    }
+    
+    /**
+     * @param raceCollection The raceCollection to set.
+     */
+    public void setRaceCollection(Collection raceCollection)
+    {
+        this.raceCollection = raceCollection;
+    }
+    
 	/**
      * Returns the ethnicity of the Participant.
      * @return Ethnicity of the Participant.
@@ -481,10 +506,10 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	       	else
 	       		this.ethnicity = null;
 	        
-	        if(validator.isValidOption(form.getRace()) )
-	        	this.race = form.getRace();
-	        else
-	        	this.race = null;
+//	        if(validator.isValidOption(form.getRace()) )
+//	        	this.race = form.getRace();
+//	        else
+//	        	this.race = null;
 	        
 	        String socialSecurityNumberTemp = form.getSocialSecurityNumberPartA()+"-"+form.getSocialSecurityNumberPartB()+"-"+form.getSocialSecurityNumberPartC();
 	        
