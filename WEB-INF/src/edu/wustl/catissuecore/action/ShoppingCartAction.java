@@ -245,7 +245,7 @@ public class ShoppingCartAction  extends BaseAction
 					
 					rowData.add(specimen.getSpecimenCharacteristics().getTissueSite());
 					rowData.add(specimen.getSpecimenCharacteristics().getTissueSide());
-					rowData.add(specimen.getSpecimenCharacteristics().getPathologicalStatus());
+//					rowData.add(specimen.getSpecimenCharacteristics().getPathologicalStatus());
 					rowData.add("1");
 							
 					gridData.add(rowData);

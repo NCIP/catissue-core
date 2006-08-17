@@ -247,7 +247,7 @@ public class AliquotAction extends BaseAction //SecureAction
 		SpecimenCharacteristics chars = specimen.getSpecimenCharacteristics();
 		form.setTissueSite(chars.getTissueSite());
 		form.setTissueSide(chars.getTissueSide());
-		form.setPathologicalStatus(chars.getPathologicalStatus());
+//		form.setPathologicalStatus(chars.getPathologicalStatus());
 		form.setInitialAvailableQuantity(getAvailableQuantity(specimen));
 		form.setAvailableQuantity(getAvailableQuantity(specimen));
 		
@@ -263,22 +263,23 @@ public class AliquotAction extends BaseAction //SecureAction
 	{
 		String availableQuantity = "";
 		
-		if(specimen instanceof CellSpecimen)
-		{
-			availableQuantity = String.valueOf(((CellSpecimen)specimen).getAvailableQuantityInCellCount());
-		}
-		else if(specimen instanceof FluidSpecimen)
-		{
-			availableQuantity = String.valueOf(((FluidSpecimen)specimen).getAvailableQuantityInMilliliter());
-		}
-		else if(specimen instanceof MolecularSpecimen)
-		{
-			availableQuantity = String.valueOf(((MolecularSpecimen)specimen).getAvailableQuantityInMicrogram());
-		}
-		else if(specimen instanceof TissueSpecimen)
-		{
-			availableQuantity = String.valueOf(((TissueSpecimen)specimen).getAvailableQuantityInGram());
-		}
+		//TODO : Aniruddha
+//		if(specimen instanceof CellSpecimen)
+//		{
+//			availableQuantity = String.valueOf(((CellSpecimen)specimen).getAvailableQuantityInCellCount());
+//		}
+//		else if(specimen instanceof FluidSpecimen)
+//		{
+//			availableQuantity = String.valueOf(((FluidSpecimen)specimen).getAvailableQuantityInMilliliter());
+//		}
+//		else if(specimen instanceof MolecularSpecimen)
+//		{
+//			availableQuantity = String.valueOf(((MolecularSpecimen)specimen).getAvailableQuantityInMicrogram());
+//		}
+//		else if(specimen instanceof TissueSpecimen)
+//		{
+//			availableQuantity = String.valueOf(((TissueSpecimen)specimen).getAvailableQuantityInGram());
+//		}
 		
 		return availableQuantity;
 	}	

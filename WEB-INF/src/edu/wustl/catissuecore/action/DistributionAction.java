@@ -142,14 +142,14 @@ public class  DistributionAction extends SpecimenEventParametersAction
 				List list = dao.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,specimenId);
 				Specimen specimen =(Specimen)list.get(0);
 				SpecimenCharacteristics specimenCharacteristics = specimen.getSpecimenCharacteristics();
-				Logger.out.debug("SpecimenCharacteristics: "+specimenCharacteristics.getTissueSite()+","+
-						specimenCharacteristics.getTissueSide()+","+specimenCharacteristics.getPathologicalStatus());
+//				Logger.out.debug("SpecimenCharacteristics: "+specimenCharacteristics.getTissueSite()+","+
+//						specimenCharacteristics.getTissueSide()+","+specimenCharacteristics.getPathologicalStatus());
 				// Set the values retrieved in the form to populate in the jsp.
 				dForm.setValue("DistributedItem:"+rowNo+"_Specimen_className",specimen.getClassName());
 				dForm.setValue("DistributedItem:"+rowNo+"_Specimen_type",specimen.getType());
 				dForm.setValue("DistributedItem:"+rowNo+"_tissueSite",specimenCharacteristics.getTissueSite());
 				dForm.setValue("DistributedItem:"+rowNo+"_tissueSide",specimenCharacteristics.getTissueSide());
-				dForm.setValue("DistributedItem:"+rowNo+"_pathologicalStatus",specimenCharacteristics.getPathologicalStatus());
+//				dForm.setValue("DistributedItem:"+rowNo+"_pathologicalStatus",specimenCharacteristics.getPathologicalStatus());
 				dForm.setValue("DistributedItem:"+rowNo+"_availableQty",dForm.getAvailableQty(specimen));
 				
 			}
