@@ -56,7 +56,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 	    		
 	    		StorageContainer container = specimen.getStorageContainer();
 	    		String storageContainerID = container.getSystemIdentifier().toString();
-	    		String fromPositionData = container.getStorageType().getType() + " : " 
+	    		String fromPositionData = container.getStorageType().getName() + " : " 
 				+ storageContainerID + " Pos(" + positionOne + "," + positionTwo + ")";
 	    		
 				 //The fromPositionData(storageContainer Info) of specimen of this event.

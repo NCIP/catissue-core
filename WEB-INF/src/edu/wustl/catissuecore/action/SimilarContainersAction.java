@@ -28,7 +28,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
-import edu.wustl.catissuecore.domain.SpecimenClass;
+//import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -65,7 +65,7 @@ public class SimilarContainersAction extends SecureAction {
 		while(iter.hasNext())
 		{
 			StorageType storageType=(StorageType)iter.next();
-			String containerType = storageType.getType();			
+			String containerType = storageType.getName();			
 			request.setAttribute("typeName",containerType);
 			similarContainersForm.setOneDimensionLabel(storageType.getOneDimensionLabel());
 			similarContainersForm.setTwoDimensionLabel(storageType.getTwoDimensionLabel());
@@ -167,9 +167,13 @@ public class SimilarContainersAction extends SecureAction {
     	
     	
 //    	Gets the Specimen Class Type List and sets it in request
-    	List list3=ibizLogic.retrieve(SpecimenClass.class.getName());
-        List specimenClassTypeList = getSpecimenClassTypeList(list3);
-        request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
+    	
+    	//TODO : Vaishali
+//    	List list3=ibizLogic.retrieve(SpecimenClass.class.getName());
+//        List specimenClassTypeList = getSpecimenClassTypeList(list3);
+//        request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
+    	
+    	
     	//System.out.println("collectionProtocolIds "+collecProList+"  holdsIds "+holdsList+" holdsSpecimenList "+holdsSpecimenList);
 		
 		int siteOrParentCont = similarContainersForm.getCheckedButton();
@@ -553,7 +557,7 @@ public class SimilarContainersAction extends SecureAction {
     		}
     		else
     		{
-    			storageTypeList.add(new NameValueBean(type.getType(),type.getSystemIdentifier()));
+    			storageTypeList.add(new NameValueBean(type.getName(),type.getSystemIdentifier()));
     		}
     	}
     	Collections.sort(storageTypeList);
@@ -580,15 +584,16 @@ public class SimilarContainersAction extends SecureAction {
     	Iterator specimentypeItr=list.iterator();
     	while(specimentypeItr.hasNext())
     	{
-    		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
-    		if(specimenClass.getSystemIdentifier().longValue()==1)
-    		{
-    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getSystemIdentifier());
-    		}
-    		else
-    		{
-    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
-    		}
+    	    //TODO : Vaishali
+//    		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
+//    		if(specimenClass.getSystemIdentifier().longValue()==1)
+//    		{
+//    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getSystemIdentifier());
+//    		}
+//    		else
+//    		{
+//    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
+//    		}
     	}
     	Collections.sort(specimenClassTypeList);
     	specimenClassTypeList.add(0,specimenClassAny);
