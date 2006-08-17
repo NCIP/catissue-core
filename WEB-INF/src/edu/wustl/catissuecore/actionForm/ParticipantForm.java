@@ -157,7 +157,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.gender = participant.getGender();
         this.genotype = participant.getSexGenotype();
         setSSN(participant.getSocialSecurityNumber());
-        this.race = participant.getRace();
+//        this.race = participant.getRace();
         this.activityStatus = participant.getActivityStatus();
         this.ethnicity = participant.getEthnicity();
         
