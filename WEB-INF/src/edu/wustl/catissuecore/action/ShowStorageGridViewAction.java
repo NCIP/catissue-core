@@ -119,24 +119,24 @@ public class ShowStorageGridViewAction  extends BaseAction
             request.setAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL ,twoDimLabel );
             
             storageContainerGridObject.setSystemIdentifier(storageContainer.getSystemIdentifier().longValue());
-            storageContainerGridObject.setType(storageContainer.getStorageType().getType());
+            storageContainerGridObject.setType(storageContainer.getStorageType().getName());
             
             Integer oneDimensionCapacity = storageContainer
-            				.getStorageContainerCapacity().getOneDimensionCapacity();
+            				.getCapacity().getOneDimensionCapacity();
             Integer twoDimensionCapacity = storageContainer
- 							.getStorageContainerCapacity().getTwoDimensionCapacity();
+ 							.getCapacity().getTwoDimensionCapacity();
             
             childContainerSystemIdentifiers = new int[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
             storageContainerGridObject.setOneDimensionCapacity(oneDimensionCapacity);
             storageContainerGridObject.setTwoDimensionCapacity(storageContainer
-                    		.getStorageContainerCapacity().getTwoDimensionCapacity());
+                    		.getCapacity().getTwoDimensionCapacity());
             
             fullStatus = new int[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
             childContainerType = new String[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
             
-            if (storageContainer.getChildrenContainerCollection() != null)
+            if (storageContainer.getChildren() != null)
             {
-                Iterator iterator = storageContainer.getChildrenContainerCollection().iterator();
+                Iterator iterator = storageContainer.getChildren().iterator();
                 while(iterator.hasNext())
                 {
                     StorageContainer childStorageContainer = (StorageContainer)iterator.next();
@@ -146,7 +146,7 @@ public class ShowStorageGridViewAction  extends BaseAction
                     childContainerSystemIdentifiers[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
                                                    = childStorageContainer.getSystemIdentifier().intValue();
                     childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
-                                                   = childStorageContainer.getStorageType().getType();
+                                                   = childStorageContainer.getStorageType().getName();
                                                   
                 }
             }          
