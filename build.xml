@@ -43,10 +43,10 @@
 	<path id="junit.classpath">
 		<pathelement location="${junit.jar}" />
 		<pathelement location="${target.dir}" />
-		<pathelement location="${lib.dir}/cobertura/cobertura.jar" />
-		<fileset dir="${lib.dir}/cobertura/lib">
-			<include name="*.jar" />
-		</fileset>
+		<pathelement location="${base.dir}/cobertura/cobertura.jar" />
+		<pathelement location="${base.dir}/cobertura/lib/jakarta-oro-2.0.8.jar" />
+		<pathelement location="${base.dir}/cobertura/lib/asm-2.2.1.jar" />
+
 		<path refid="app.classpath" />
 	</path>
 
@@ -77,6 +77,7 @@
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
+				<pathelement location="C:\apache-ant-1.6.5\lib\ant.jar"/>
 			</classpath>
 		</javac>
 		<copy todir="${target.dir}">
