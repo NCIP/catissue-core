@@ -63,7 +63,7 @@ PUBLIC
 		<form-bean name="similarContainersForm" type="edu.wustl.catissuecore.actionForm.SimilarContainersForm" />
 		
 		<form-bean name="arrayForm" type="edu.wustl.catissuecore.actionForm.ArrayForm"/>
-		<form-bean name="arrayTypeForm" type="edu.wustl.catissuecore.actionForm.ArrayTypeForm"/>
+		<form-bean name="arrayTypeForm" type="edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -2522,15 +2522,15 @@ PUBLIC
 	</action>
 	
 	<!-- Array Type Action start -->
-	<action path="/ArrayType"
-		type="edu.wustl.catissuecore.action.ArrayTypeAction"
+	<action path="/SpecimenArrayType"
+		type="edu.wustl.catissuecore.action.SpecimenArrayTypeAction"
 		scope="request">
 		<forward name="success" path=".catissuecore.arrayTypeDef" />
 		<forward name="failure" path=".catissuecore.arrayTypeDef" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
 	
-	<action path="/ArrayTypeAdd"
+	<action path="/SpecimenArrayTypeAdd"
 		type="edu.wustl.common.action.CommonAddEditAction"
 		name="arrayTypeForm"
 		validate="true"
