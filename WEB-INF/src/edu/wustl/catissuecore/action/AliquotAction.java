@@ -23,19 +23,19 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
-import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
-import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -54,16 +54,51 @@ public class AliquotAction extends BaseAction //SecureAction
             HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		AliquotForm aliquotForm = (AliquotForm)form;
+		String specimenId = aliquotForm.getSpecimenId();
 		
-		String specimenId = null;
+		//Extracting the values of the operation & pageOf parameters.
+        String operation = request.getParameter(Constants.OPERATION);
+        String pageOf = request.getParameter(Constants.PAGEOF);
+        
+        if(Constants.PAGEOF_ALIQUOT_SUMMARY.equals(pageOf))
+        {
+        	Map map = (Map)request.getAttribute("forwardToHashMap");
+        	
+        	if(map != null)
+        	{
+        		aliquotForm.setSpecimenClass(Utility.toString(map.get(Constants.CDE_NAME_SPECIMEN_CLASS)));
+        		aliquotForm.setType(Utility.toString(map.get(Constants.CDE_NAME_SPECIMEN_TYPE)));
+        		aliquotForm.setTissueSite(Utility.toString(map.get(Constants.CDE_NAME_TISSUE_SITE)));
+        		aliquotForm.setTissueSide(Utility.toString(map.get(Constants.CDE_NAME_TISSUE_SIDE)));
+        		aliquotForm.setPathologicalStatus(Utility.toString(map.get(Constants.CDE_NAME_PATHOLOGICAL_STATUS)));
+        		aliquotForm.setAvailableQuantity(Utility.toString(map.get(Constants.SPECIMEN_TYPE_QUANTITY)));
+				aliquotForm.setConcentration(Utility.toString(map.get("concentration")));
+				
+        		aliquotForm.setAliquotMap(map);
+        	}
+        	
+        	ActionErrors errors = getActionErrors(request);
+        	
+        	if(errors == null || errors.size() == 0)
+        	{
+        		ActionMessages messages = new ActionMessages();
+        		messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("aliquots.success"));
+        		saveMessages(request,messages);
+        	}
+        	
+        	return mapping.findForward(pageOf);
+        }
 		
-		if(request.getAttribute(Constants.SYSTEM_IDENTIFIER) != null)
+		if(specimenId == null)
 		{
-			specimenId = String.valueOf(request.getAttribute(Constants.SYSTEM_IDENTIFIER));
-		}
-		else
-		{
-			specimenId = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+			if(request.getAttribute(Constants.SYSTEM_IDENTIFIER) != null)
+			{
+				specimenId = String.valueOf(request.getAttribute(Constants.SYSTEM_IDENTIFIER));
+			}
+			else
+			{
+				specimenId = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+			}
 		}
 		
 		if(specimenId != null)
@@ -74,10 +109,6 @@ public class AliquotAction extends BaseAction //SecureAction
 			aliquotForm.setQuantityPerAliquot(request.getParameter("quantityPerAliquot"));
 		}
 		
-		//Extracting the values of the operation & pageOf parameters.
-        String operation = request.getParameter(Constants.OPERATION);
-        String pageOf = request.getParameter(Constants.PAGEOF);
-        
         StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
         Map containerMap = bizLogic.getAllocatedContainerMap();
         
@@ -134,12 +165,7 @@ public class AliquotAction extends BaseAction //SecureAction
 		
 		if(specimenList.isEmpty())
 		{
-			ActionErrors errors = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
-			
-			if(errors == null)
-			{
-				errors = new ActionErrors();
-			}
+			ActionErrors errors = getActionErrors(request);
 			
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("aliquots.specimen.notExists",errorString));
 	        saveErrors(request,errors);
@@ -159,12 +185,7 @@ public class AliquotAction extends BaseAction //SecureAction
 				
 				if(!distributeAvailableQuantity(form,isDouble))
 				{
-					ActionErrors errors = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
-					
-					if(errors == null)
-					{
-						errors = new ActionErrors();
-					}
+					ActionErrors errors = getActionErrors(request);
 					
 					errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.qtyInsufficient"));
 			        saveErrors(request,errors);
@@ -198,7 +219,7 @@ public class AliquotAction extends BaseAction //SecureAction
 			
 			for(int i=0;i<containerId.length;i++)
 			{
-				Map xDimMap = (Map)containerMap.get(Integer.valueOf(containerId[i].toString()));
+				Map xDimMap = (Map)containerMap.get(containerId[i]);
 				
 				if(!xDimMap.isEmpty())
 				{
@@ -206,7 +227,7 @@ public class AliquotAction extends BaseAction //SecureAction
 					
 					for(int j=0;j<xDim.length;j++)
 					{
-						List yDimList = (List)xDimMap.get(Integer.valueOf(xDim[j].toString()));
+						List yDimList = (List)xDimMap.get(xDim[j]);
 						counter = counter + yDimList.size();
 						
 						if(counter >= aliquotCount)
@@ -225,12 +246,7 @@ public class AliquotAction extends BaseAction //SecureAction
 		}
 		else
 		{
-			ActionErrors errors = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
-			
-			if(errors == null)
-			{
-				errors = new ActionErrors();
-			}
+			ActionErrors errors = getActionErrors(request);
 			
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.locations.notSufficient"));
 	        saveErrors(request,errors);
@@ -247,7 +263,7 @@ public class AliquotAction extends BaseAction //SecureAction
 		SpecimenCharacteristics chars = specimen.getSpecimenCharacteristics();
 		form.setTissueSite(chars.getTissueSite());
 		form.setTissueSide(chars.getTissueSide());
-//		form.setPathologicalStatus(chars.getPathologicalStatus());
+		form.setPathologicalStatus(specimen.getPathologicalStatus());
 		form.setInitialAvailableQuantity(getAvailableQuantity(specimen));
 		form.setAvailableQuantity(getAvailableQuantity(specimen));
 		
@@ -255,33 +271,35 @@ public class AliquotAction extends BaseAction //SecureAction
 		{
 			String concentration = Utility.toString(((MolecularSpecimen)specimen).getConcentrationInMicrogramPerMicroliter());
 			form.setConcentration(concentration);
-		}		
+		}
 	}
 	
 	//This method returns the available quantity as per the specimen type
 	private String getAvailableQuantity(Specimen specimen)
 	{
+		/* Aniruddha : 17/06/2006 TO BE DELETED LATER
 		String availableQuantity = "";
 		
-		//TODO : Aniruddha
-//		if(specimen instanceof CellSpecimen)
-//		{
-//			availableQuantity = String.valueOf(((CellSpecimen)specimen).getAvailableQuantityInCellCount());
-//		}
-//		else if(specimen instanceof FluidSpecimen)
-//		{
-//			availableQuantity = String.valueOf(((FluidSpecimen)specimen).getAvailableQuantityInMilliliter());
-//		}
-//		else if(specimen instanceof MolecularSpecimen)
-//		{
-//			availableQuantity = String.valueOf(((MolecularSpecimen)specimen).getAvailableQuantityInMicrogram());
-//		}
-//		else if(specimen instanceof TissueSpecimen)
-//		{
-//			availableQuantity = String.valueOf(((TissueSpecimen)specimen).getAvailableQuantityInGram());
-//		}
+		if(specimen instanceof CellSpecimen)
+		{
+			availableQuantity = String.valueOf(((CellSpecimen)specimen).getAvailableQuantityInCellCount());
+		}
+		else if(specimen instanceof FluidSpecimen)
+		{
+			availableQuantity = String.valueOf(((FluidSpecimen)specimen).getAvailableQuantityInMilliliter());
+		}
+		else if(specimen instanceof MolecularSpecimen)
+		{
+			availableQuantity = String.valueOf(((MolecularSpecimen)specimen).getAvailableQuantityInMicrogram());
+		}
+		else if(specimen instanceof TissueSpecimen)
+		{
+			availableQuantity = String.valueOf(((TissueSpecimen)specimen).getAvailableQuantityInGram());
+		}
 		
 		return availableQuantity;
+		*/
+		return specimen.getAvailableQuantity().toString();
 	}	
 	
 	/*This method distributes the available quantity among the aliquots. On successful
@@ -366,7 +384,7 @@ public class AliquotAction extends BaseAction //SecureAction
 			
 			for(int i=0;i<containerId.length;i++)
 			{
-				Map xDimMap = (Map)containerMap.get(Integer.valueOf(containerId[i].toString()));
+				Map xDimMap = (Map)containerMap.get(containerId[i]);
 				
 				if(!xDimMap.isEmpty())
 				{
@@ -374,7 +392,7 @@ public class AliquotAction extends BaseAction //SecureAction
 					
 					for(int j=0;j<xDim.length;j++)
 					{
-						List yDimList = (List)xDimMap.get(Integer.valueOf(xDim[j].toString()));
+						List yDimList = (List)xDimMap.get(xDim[j]);
 						
 						for(int k=0;k<yDimList.size();k++)
 						{
@@ -384,9 +402,9 @@ public class AliquotAction extends BaseAction //SecureAction
 								String pos1Key = "Specimen:" + counter + "_positionDimensionOne";
 								String pos2Key = "Specimen:" + counter + "_positionDimensionTwo";
 								
-								aliquotMap.put(containerKey,String.valueOf(containerId[i]));
-								aliquotMap.put(pos1Key,String.valueOf(xDim[j]));
-								aliquotMap.put(pos2Key,String.valueOf(yDimList.get(k)));
+								aliquotMap.put(containerKey,((NameValueBean) containerId[i]).getValue());
+								aliquotMap.put(pos1Key,((NameValueBean)xDim[j]).getValue());
+								aliquotMap.put(pos2Key,((NameValueBean)yDimList.get(k)).getValue());
 								
 								counter++;
 							}
@@ -410,12 +428,7 @@ public class AliquotAction extends BaseAction //SecureAction
 	{
         Validator validator = new Validator();
 		String quantityPerAliquot = form.getQuantityPerAliquot();
-		ActionErrors errors = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
-		
-		if(errors == null)
-		{
-			errors = new ActionErrors();
-		}
+		ActionErrors errors = getActionErrors(request);
 		
 		if(quantityPerAliquot != null && quantityPerAliquot.trim().length() != 0)
         {
@@ -446,15 +459,10 @@ public class AliquotAction extends BaseAction //SecureAction
 	private String validate(HttpServletRequest request, AliquotForm form)
 	{
         Validator validator = new Validator();
-		ActionErrors errors = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
+		ActionErrors errors = getActionErrors(request);
 		
 		String pageOf = Constants.PAGEOF_CREATE_ALIQUOT;
-		
-		if(errors == null)
-		{
-			errors = new ActionErrors();
-		}
-                 
+		                 
         if(form.getCheckedButton().equals("1"))
         {
         	if(!validator.isValidOption(form.getSpecimenId()))
@@ -480,5 +488,20 @@ public class AliquotAction extends BaseAction //SecureAction
         
         saveErrors(request,errors);
         return pageOf;
+	}
+	
+	/* This method returns the ActionErrors object present in the request scope.
+	 * If it is absent method creates & returns new ActionErrors object.
+	 */
+	private ActionErrors getActionErrors(HttpServletRequest request)
+	{
+		ActionErrors errors = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
+		
+		if(errors == null)
+		{
+			errors = new ActionErrors();
+		}
+		
+		return errors;
 	}
 }
