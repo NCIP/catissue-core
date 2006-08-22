@@ -11,11 +11,21 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 
 
 /**
@@ -90,7 +100,7 @@ public class AliquotForm extends AbstractActionForm
     private String barcode;
     
     /**
-	 * Radio button to choose site/parentContainer.
+	 * Radio button to choose barcode/specimen identifier
 	 */
 	private String checkedButton = "1";
     
@@ -361,39 +371,60 @@ public class AliquotForm extends AbstractActionForm
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-    	
     }
     
     /**
      * Overrides the validate method of ActionForm.
      */
-     /*public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
          ActionErrors errors = new ActionErrors();
-         Validator validator = new Validator();
-                  
-         if(checkedButton.equals("1"))
+         
+         if(Constants.PAGEOF_ALIQUOT_SUMMARY.equals(request.getParameter(Constants.PAGEOF)))
          {
-         	if(!validator.isValidOption(specimenId))
+         	Iterator keyIterator = aliquotMap.keySet().iterator();
+         	
+         	while(keyIterator.hasNext())
          	{
-         		errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parent")));
-         	}
-         }
-         else
-         {
-         	if(barcode == null || barcode.trim().length() == 0)
-         	{
-         		errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.barcode")));
+         		Validator validator = new Validator();
+         		String key = (String)keyIterator.next();
+         		
+         		if(key.endsWith("_quantity"))
+         		{
+         			String value = (String)aliquotMap.get(key);
+         			
+         			if(Utility.isQuantityDouble(specimenClass,type))
+        			{
+        		        if(!validator.isDouble(value))
+        		        {
+        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+        		        	break;
+        		        }
+        			}
+        			else
+        			{
+        				if(!validator.isNumeric(value))
+        		        {
+        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+        		        	break;
+        		        }
+        			}
+         		}
+         		else if(key.endsWith("_label"))
+         		{
+         			String value = (String)aliquotMap.get(key);
+         			
+         			if(validator.isEmpty(value))
+         			{
+         				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.label")));
+         			}
+         		}
          	}
          }
          
-         if(!validator.isNumeric(noOfAliquots))
-         {
-         	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("aliquots.noOfAliquots")));
-         }
                   
          return errors;
-     }*/
+     }
      
      /**
  	 * Returns the initial quantity per aliquot.
