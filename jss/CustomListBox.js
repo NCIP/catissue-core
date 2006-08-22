@@ -19,7 +19,6 @@ function onCustomListBoxChange(element)
 
 	//Retrieve the serial number of the list box
 	var serialNo = elementId.substring(lastIndex+1);
-	//alert(serialNo+" !@#$% serialNo");
 	
 	//Retrieve the list box name till the last underscore
 	var customListBoxName = elementId.substring(0,lastIndex+1);
