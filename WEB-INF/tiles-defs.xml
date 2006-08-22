@@ -822,6 +822,6 @@
 	</definition>
 	
 	<definition name=".catissuecore.arrayTypeDef" extends=".catissuecore.manageBioSpecimenHomeDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/ArrayType.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenArrayType.jsp" />
 	</definition>
 </tiles-definitions>
