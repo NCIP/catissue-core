@@ -578,8 +578,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
     	else
     	{
 	    	this.quantity = new Quantity(((SpecimenForm)abstractForm).getQuantity());
-	    	//TODO
-//	    	this.label = ((SpecimenForm)abstractForm).getLabel();
+	    	this.label = ((SpecimenForm)abstractForm).getLabel();
 	    	
 	    	if(abstractForm.isAddOperation())
 	    	{
