@@ -7,121 +7,39 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.AliquotForm"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="java.util.*"%>
+<%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 
 <%
-	/* Retrieving a map of available containers */
-	Map containerMap = (Map)request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
-	Object [] containerId = containerMap.keySet().toArray();
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String buttonKey = "";
+
+	if(Constants.PAGEOF_ALIQUOT.equals(pageOf))
+	{
+		buttonKey = "buttons.submit";
+	}
+	else if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
+	{
+		buttonKey = "buttons.resubmit";
+	}
 %>
 
 <head>
 	<script src="jss/Hashtable.js" type="text/javascript"></script>
-	
-	<script language="JavaScript">
-		//Converting container map in JavaScript hashtable
-		var availableContainerTable = new Hashtable();
-		var availableDimX;
-		var availableDimY;
-		<%
-			for(int i=0;i<containerId.length;i++)
-			{
-				Map dimXMap = (Map)containerMap.get(Integer.valueOf(containerId[i].toString()));
-				Object [] dimX = dimXMap.keySet().toArray();
-		%>
-		
-			//Recreating a hashtable of available X dimensions (Rows) vs. Y dimensions (Columns) in each iteration
-			availableDimX = new Hashtable();
-			
-		<%
-				for(int j=0;j<dimX.length;j++)
-				{
-					List dimYList = (List)dimXMap.get(Integer.valueOf(dimX[j].toString()));
-		%>
-					//Recreating an array of available Y dimensions (Columns)
-					availableDimY = new Array();
-		<%
-					for(int k=0;k<dimYList.size();k++)
-					{
-						Integer iObj = (Integer)dimYList.get(k);
-		%>
-						availableDimY[<%=k%>] = "<%=String.valueOf(iObj)%>";
-		<%
-					} //For Loop K
-		%>
-					availableDimX.put("<%=dimX[j].toString()%>",availableDimY);
-		<%
-				} //For Loop J
-		%>
-				availableContainerTable.put("<%=containerId[i].toString()%>",availableDimX);
-		<%
-			} //For Loop I
-		%>
-		
-		//This function populates the combo box for dimension X
-		function onChangeContainerId(containerId,styleIdX,styleIdY)
-		{
-			var xCombo = document.getElementById(styleIdX);
-			var yCombo = document.getElementById(styleIdY);
-			
-			//To clear the combo box of dimension X
-			xCombo.options.length = 0;
-			xCombo.options[0] = new Option("<%=Constants.SELECT_OPTION%>","-1");
-			
-			//To clear the combo box of dimension Y
-			yCombo.options.length = 0;
-			yCombo.options[0] = new Option("<%=Constants.SELECT_OPTION%>","-1");
-			
-			var identifier = containerId.options[containerId.selectedIndex].value;
-			
-			if(identifier != -1)
-			{
-				var xTable = availableContainerTable.get(identifier);
-				var xTableKey = xTable.keys();
-				
-				for(var i=0;i<xTableKey.length;i++)
-				{
-					xCombo.options[i+1] = new Option(xTableKey[i],xTableKey[i]);
-				}
-			}
-		}
-		
-		//This function populates the combo box for dimension Y
-		function onChangeXDimension(containerStyleId,xDimList,styleIdY)
-		{
-			var yDimList = document.getElementById(styleIdY);
-			
-			//To clear the combo box of dimension Y
-			yDimList.options.length = 0;
-			yDimList.options[0] = new Option("<%=Constants.SELECT_OPTION%>","-1");
-			
-			
-			var containerIdList = document.getElementById(containerStyleId);
-			var containerId = containerIdList.options[containerIdList.selectedIndex].value;
-			var xDim = xDimList.options[xDimList.selectedIndex].value;
-			
-			if(containerId != -1 && xDim != -1)
-			{
-				//Retrieving table of X-Y dimensions for given containerId
-				var xTable = availableContainerTable.get(containerId);
-				var yDimArray = xTable.get(xDim);
-				
-				for(var i=0;i<yDimArray.length;i++)
-				{
-					yDimList.options[i+1] = new Option(yDimArray[i],yDimArray[i]);
-				}
-			}
-		}
-	</script>
-	
+	<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+
 	<script language="JavaScript">
 		function onCreate()
 		{
 			var action = '<%=Constants.CREATE_ALIQUOT_ACTION%>';
-			action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&menuSelected=15";
+			action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15";
 			
 			document.forms[0].action = action;
 			document.forms[0].submit();
@@ -140,6 +58,13 @@
 				document.forms[0].specimenId.disabled = true;
 			}
 		}
+		
+		function onSubmit()
+		{
+			document.forms[0].submittedFor.value = "ForwardTo";
+			document.forms[0].action = "AliquotAdd.do?pageOf=pageOfAliquotSummary&operation=add&menuSelected=15";
+			document.forms[0].submit();
+		}
 	</script>
 </head>
 
@@ -151,10 +76,10 @@
 
 <html:form action="<%=Constants.ALIQUOT_ACTION%>">
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="660">
 <tr>
 <td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="660">
 	<tr>
 		<td class="formMessage" colspan="3">* indicates a required field</td>
 	</tr>
@@ -232,7 +157,7 @@
 		</td>
 		<td align="right">
 			<html:button styleClass="actionButton" property="submitPage" onclick="onCreate()">
-				<bean:message key="buttons.create"/>
+				<bean:message key="<%=buttonKey%>"/>
 			</html:button>
 		</td>
 	</tr>
@@ -241,6 +166,7 @@
 </tr>
 
 <%
+	String operation = Utility.toString(Constants.OPERATION);
 	AliquotForm form = (AliquotForm)request.getAttribute("aliquotForm");
 	String unit = "";
 
@@ -249,18 +175,18 @@
 		unit = Utility.getUnit(form.getSpecimenClass(),form.getType());
 	}
 
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-
 	if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 	{
 %>
 
 <tr>
 <td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="660">
 	<tr>
 		<td>
-			<%--html:hidden property="systemIdentifier" /--%>
+			<html:hidden property="systemIdentifier"/>
+			<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
+			<html:hidden property="submittedFor"/>
 		</td>
 	</tr>
 	
@@ -392,15 +318,20 @@
 	     	#
 	    </td>
 	    <td class="formRightSubTableTitle">*
-			<bean:message key="specimen.quantity"/>
+			<bean:message key="specimen.label"/>
 		</td>
 		<td class="formRightSubTableTitle">*
+			<bean:message key="specimen.quantity"/>
+		</td>
+		<td class="formRightSubTableTitle">&nbsp;
 			<bean:message key="specimen.barcode"/>
 		</td>
 		<td class="formRightSubTableTitle">*
 			<bean:message key="aliquots.location"/>
 		</td>
 	</tr>
+	
+	<%=ScriptGenerator.getJSForOutermostDataTable()%>
 	
 	<%
 		Map aliquotMap = new HashMap();
@@ -412,43 +343,49 @@
 			aliquotMap = form.getAliquotMap();
 		}
 
+		/* Retrieving a map of available containers */
+		Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+		String[] labelNames = Constants.STORAGE_CONTAINER_LABEL;
+
+
 		for(int i=1;i<=counter;i++)
 		{
-			Integer containerSelected = Integer.valueOf((aliquotMap.get("Specimen:" + i + "_StorageContainer_systemIdentifier")).toString());
-			Integer xDimSelected = Integer.valueOf((aliquotMap.get("Specimen:" + i + "_positionDimensionOne")).toString());
-			Map xMap = (Map)containerMap.get(containerSelected);
-			Object [] xDimId = new Object[0];
-			Object [] yDimId = new Object[0];
-
-			if(!xMap.isEmpty())
-			{
-				xDimId = xMap.keySet().toArray();
-				List yDimList = (List)xMap.get(xDimSelected);
-
-				if(!yDimList.isEmpty())
-				{
-					yDimId = yDimList.toArray();
-				}
-			}
-
+			String labelKey = "value(Specimen:" + i + "_label)";
 			String qtyKey = "value(Specimen:" + i + "_quantity)";
 			String barKey = "value(Specimen:" + i + "_barcode)";
 			String containerKey = "value(Specimen:" + i + "_StorageContainer_systemIdentifier)";
 			String pos1Key = "value(Specimen:" + i + "_positionDimensionOne)";
 			String pos2Key = "value(Specimen:" + i + "_positionDimensionTwo)";
 
-			String containerStyleId = "containerStyleId" + i;
-			String pos1StyleId = "pos1StyleId" + i;
-			String pos2StyleId = "pos2StyleId" + i;
+			//Preparing data for custom tag
+			String[] attrNames = {containerKey, pos1Key, pos2Key};
 
-			String onChangeContainerId = "onChangeContainerId(this,'" + pos1StyleId + "','" + pos2StyleId + "')";
-			String onChangeXDimension = "onChangeXDimension('" + containerStyleId + "',this,'" + pos2StyleId + "')";
+			String[] initValues = new String[3];
+			initValues[0] = (String)aliquotMap.get("Specimen:" + i + "_StorageContainer_systemIdentifier");
+			initValues[1] = (String)aliquotMap.get("Specimen:" + i + "_positionDimensionOne");
+			initValues[2] = (String)aliquotMap.get("Specimen:" + i + "_positionDimensionTwo");
+
+			String rowNumber = String.valueOf(i);
+			String noOfEmptyCombos = "3";
+			String styClass = "formFieldSized5";
+			String tdStyleClass = "customFormField";
+			String onChange = "onCustomListBoxChange(this)";
+
+			String containerStyleId = "customListBox_" + rowNumber + "_0";
+			String pos1StyleId = "customListBox_" + rowNumber + "_1";
+			String pos2StyleId = "customListBox_" + rowNumber + "_2";
+
+			String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=" + containerStyleId + "&amp;xDimStyleId=" + pos1StyleId + "&amp;yDimStyleId=" + pos2StyleId + "','name','810','320','yes');return false";
 	%>
+	<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 		<tr>
 			<td class="formSerialNumberField" width="5">
 		     	<%=i%>.
 		    </td>
 		    <td class="formField" nowrap>
+				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="label" property="<%=labelKey%>" disabled="false"/>
+			</td>
+			<td class="formField" nowrap>
 				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="quantity" property="<%=qtyKey%>" disabled="false"/>
 				&nbsp; <%=unit%>
 			</td>
@@ -456,47 +393,23 @@
 				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcodes" property="<%=barKey%>" disabled="false"/>
 			</td>
 			<td class="formField" nowrap>
-				<html:select property="<%=containerKey%>" styleClass="formFieldSized5" styleId="<%=containerStyleId%>" size="1" onchange="<%=onChangeContainerId%>">
-					<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
-					<%
-						//Populating the container identifiers before loading the page
-						for(int count=0;count<containerId.length;count++)
-						{
-					%>
-							<html:option value="<%=containerId[count].toString()%>"><%=containerId[count].toString()%></html:option>
-					<%
-						}
-					%>
-				</html:select>
-					&nbsp;
-				<html:select property="<%=pos1Key%>" styleClass="formFieldSized5" styleId="<%=pos1StyleId%>" size="1" onchange="<%=onChangeXDimension%>">
-					<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
-				<%
-					for(int count=0;count<xDimId.length;count++)
-					{
-				%>
-						<html:option value="<%=xDimId[count].toString()%>"><%=xDimId[count].toString()%></html:option>
-				<%
-					}
-				%>
-				</html:select>
-					&nbsp;
-				<html:select property="<%=pos2Key%>" styleClass="formFieldSized5" styleId="<%=pos2StyleId%>" size="1">
-					<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
-				<%
-					for(int count=0;count<yDimId.length;count++)
-					{
-				%>
-						<html:option value="<%=yDimId[count].toString()%>"><%=yDimId[count].toString()%></html:option>
-				<%
-					}
-				%>
-				</html:select>
-					&nbsp;
-				<html:button styleClass="actionButton" property="mapButton" onclick="">
-					<bean:message key="buttons.map"/>
-				</html:button>
+				<ncombo:containermap dataMap="<%=dataMap%>" 
+											attributeNames="<%=attrNames%>" 
+											initialValues="<%=initValues%>"  
+											styleClass = "<%=styClass%>" 
+											tdStyleClass = "<%=tdStyleClass%>" 
+											labelNames="<%=labelNames%>" 
+											rowNumber="<%=rowNumber%>" 
+											onChange = "<%=onChange%>"
+											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
+											
+											buttonName="mapButton" 
+											value="Map"
+											buttonOnClick = "<%=buttonOnClicked%>"
+											formLabelStyle="formLabelBorderless"
+											buttonStyleClass="actionButton" />
 			</td>
+			
 		</tr>
 	<%
 		} //For
@@ -515,9 +428,9 @@
 	<table cellpadding="4" cellspacing="0" border="0">
 	<tr>
 		<td>
-			<html:submit styleClass="actionButton" >
-				<bean:message key="buttons.submit"/>
-			</html:submit>
+			<html:button styleClass="actionButton" property="submitButton" onclick="onSubmit()">
+				<bean:message key="buttons.create"/>
+			</html:button>
 		</td>
 		<%--td>
 			<html:reset styleClass="actionButton">
