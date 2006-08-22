@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.AbstractForwardToProcessor;
@@ -51,6 +52,12 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
         }
         else if (domainObject instanceof Specimen)
         {
+        	 //Aniruddha:17/07/06 :: Added for aliquot result page
+        	if(Constants.ALIQUOT.equals(((Specimen)domainObject).getLineage()))
+        	{
+        		forwardToHashMap = (HashMap)((Specimen)domainObject).getAliqoutMap();
+            	return forwardToHashMap;
+        	}
             //Derive New from This Specimen
             if(actionForm.getForwardTo().equals("createNew"))
             {
