@@ -258,4 +258,32 @@ public class Utility extends edu.wustl.common.util.Utility
 		
 		return "";
 	}
+	
+	//Aniruddha : Added for enhancement - Specimen Aliquoting
+	/**
+	 * Returns the particular specimen object as per the specimen class.
+	 * @param className Name of specimen class
+	 * @return the particular specimen object as per the specimen class.
+	 */
+	public static Specimen getSpecimen(Specimen specimen)
+	{
+		if(specimen instanceof CellSpecimen)
+		{
+			return new CellSpecimen();
+		}
+		else if(specimen instanceof FluidSpecimen)
+		{
+			return new FluidSpecimen();
+		}
+		else if(specimen instanceof MolecularSpecimen)
+		{
+			return new MolecularSpecimen();
+		}
+		else if(specimen instanceof TissueSpecimen)
+		{
+			return new TissueSpecimen();
+		}
+		
+		return new Specimen();
+	}
 }
