@@ -9,34 +9,64 @@
 
 package edu.wustl.catissuecore.domain;
 
-///**
-// * @author gautam_shetty
-// * @hibernate.joined-subclass table="CATISSUE_QUANTITY_IN_COUNT"
-// * @hibernate.joined-subclass-key column="IDENTIFIER"
-// */
-public class QuantityInCount extends Quantity 
-{
-	protected Integer value;
-	
-	public QuantityInCount(){
+import java.io.Serializable;
 
+/*
+ * @hibernate.subclass name="QuantityInCount"
+ */
+public class QuantityInCount extends Quantity implements Serializable
+{
+	private static final long serialVersionUID = 1234567890L;
+	
+	/**
+	 * Quantity in count.
+	 */
+//	protected Integer value;
+	
+	/**
+	 * Default Constructor
+	 */
+	public QuantityInCount()
+	{
 	}
 	
-//    /**
-//     * @return Returns the value.
-//     * @hibernate.property name="value" type="int" 
-//     * column="VALUE" length="30"
+	/**
+	 * Parameterized Constructor
+	 */
+	public QuantityInCount(int value)
+	{
+//		this.quantity = new Integer(quantity);
+		this.value = new Double(value);
+	}
+	
+//	/**
+//     * Returns the quantity in count.
+//     * @hibernate.property name="quantity" type="int" 
+//     * column="QUANTITY" length="50"
+//     * @return the quantity in count.
+//     * @see #setQuantity(Integer)
 //     */
-//    public Integer getValue()
+//    public Integer getQuantity()
 //    {
-//        return value;
+//        return quantity;
 //    }
-//    
+//
 //    /**
-//     * @param value The value to set.
+//     * Sets the quantity in count.
+//     * @param quantity the quantity in count.
+//     * @see #getQuantity()
 //     */
-//    public void setValue(Integer value)
+//    public void setQuantity(Integer quantity)
 //    {
-//        this.value = value;
+//        this.quantity = quantity;
 //    }
+    
+    /**
+     * Overriding toString() method of object class.
+     */
+    public String toString()
+    {
+    	int qty = (int)value.doubleValue();
+    	return String.valueOf(qty);
+    }
 }
