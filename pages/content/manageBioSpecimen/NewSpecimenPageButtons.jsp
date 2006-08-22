@@ -16,7 +16,7 @@
 															property="submitPage" 
 															title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
 															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>" 
-															onclick="<%=normalSubmit%>">
+															onclick="onNormalSubmit()">
 						  				     	    
 											     	</html:button>
 												</td>
@@ -27,7 +27,7 @@
 															title="<%=Constants.SPECIMEN_BUTTON_TIPS[1]%>"
 															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>" 
 															disabled="<%=isAddNew%>" 
-															onclick="<%=deriveNewSubmit%>">
+															onclick="<%=deriveNewSubmit%>" styleId="deriveButton">
 						  				     	    
 											     	</html:button>
 												</td>	
@@ -53,7 +53,7 @@
 															title="<%=Constants.SPECIMEN_BUTTON_TIPS[3]%>"
 															value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>" 
 															disabled="<%=isAddNew%>" 
-															onclick="<%=addMoreSubmit%>">
+															onclick="<%=addMoreSubmit%>" styleId="scgButton">
 						  				     	   
 											     	</html:button>
 												</td>		
