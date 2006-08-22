@@ -156,6 +156,10 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
             case Constants.SIMILAR_CONTAINERS_FORM_ID:
             	className = StorageContainer.class.getName();
             	break;
+            case Constants.ALIQUOT_FORM_ID:
+                className = Specimen.class.getName();//AliquotSpecimen.class.getName();
+            	break;
+     
         }
         return className;
     }
@@ -236,6 +240,11 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
             case Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID:
             	abstractDomain = new TissueSpecimenReviewEventParameters (form);            	
             	break;
+            
+            case Constants.ALIQUOT_FORM_ID:
+            	abstractDomain = new Specimen(form);//new AliquotSpecimen(form);
+            	break;
+            	
             case Constants.NEW_SPECIMEN_FORM_ID:
             	NewSpecimenForm newForm = (NewSpecimenForm) form;
             	String type = newForm.getClassName();
