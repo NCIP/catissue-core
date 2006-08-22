@@ -62,6 +62,8 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			specimen.setParentSpecimen(parentSpecimen);
 			specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
+			
+			specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
 		}
 		try
 		{
@@ -86,6 +88,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			}
 			
 			specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			specimen.setLineage(Constants.DERIVED_SPECIMEN);
 			dao.insert(specimen,sessionDataBean, true,true);
 			protectionObjects.add(specimen);
 			
