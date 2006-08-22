@@ -180,7 +180,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 			SpecimenArrayType arrayType = (SpecimenArrayType) domainObject;
 	        this.systemIdentifier = arrayType.getId().longValue();
 	        this.name = arrayType.getName();
-	        this.specimenClass = arrayType.getSpecimenClass().getName();
+	        //this.specimenClass = arrayType.getSpecimenClass().getName();
 	        this.oneDimensionCapacity = arrayType.getCapacity().getOneDimensionCapacity().toString();
 	        this.twoDimensionCapacity = arrayType.getCapacity().getTwoDimensionCapacity().toString();
 	        this.comments = arrayType.getComment();
