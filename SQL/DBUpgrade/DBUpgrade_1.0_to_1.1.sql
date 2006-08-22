@@ -180,3 +180,10 @@ INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID
 update catissue_permissible_value set value='Male' where identifier=59;
 update catissue_permissible_value set value='Female' where identifier=61;
 #-------- finish
+
+#------- Aniruddha : Changes for specimen aliquoting
+ALTER TABLE CATISSUE_SPECIMEN ADD COLUMN LABEL varchar(50);
+ALTER TABLE CATISSUE_SPECIMEN ADD COLUMN LINEAGE varchar(50);
+ALTER TABLE CATISSUE_SPECIMEN ADD COLUMN PATHOLOGICAL_STATUS varchar(50);
+
+ALTER TABLE CATISSUE_SPECIMEN_CHAR drop column PATHOLOGICAL_STATUS;
