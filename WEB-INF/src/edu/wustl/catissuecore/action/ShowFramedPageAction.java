@@ -35,6 +35,12 @@ public class ShowFramedPageAction extends Action
         //Sets the pageOf attribute (for Add,Edit or Query Interface)
         String pageOf  = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageOf);
+        HttpSession session = request.getSession();
+        
+        //Aniruddha : For removing hardcoded names of html component
+        session.setAttribute(Constants.CONTAINER_STYLEID,request.getParameter(Constants.CONTAINER_STYLEID));
+        session.setAttribute(Constants.XDIM_STYLEID,request.getParameter(Constants.XDIM_STYLEID));
+        session.setAttribute(Constants.YDIM_STYLEID,request.getParameter(Constants.YDIM_STYLEID));
         
         if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
         {
@@ -51,7 +57,6 @@ public class ShowFramedPageAction extends Action
             request.setAttribute(Constants.PROPERTY_NAME,propertyName);
             
             String cdeName = request.getParameter(Constants.CDE_NAME);
-            HttpSession session = request.getSession();
             session.setAttribute(Constants.CDE_NAME, cdeName);
         }
         
