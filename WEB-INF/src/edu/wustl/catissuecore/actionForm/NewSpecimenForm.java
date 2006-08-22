@@ -101,6 +101,17 @@ public class NewSpecimenForm extends SpecimenForm
 	 *
 	 */    	
 	private boolean checkedButton;
+	
+	/**
+     * If true then this specimen is an aliquot else false.
+     */
+	//private boolean aliquot;
+	
+	/**
+     * A historical information about the specimen i.e. whether the specimen is a new specimen
+     * or a derived specimen or an aliquot.
+     */
+    private String lineage;
 
 //	-------------Mandar AutoEvents CollectionEvent parameters start
 	private long collectionEventSystemIdentifier;																											// Mandar : CollectionEvent 10-July-06
@@ -300,10 +311,13 @@ public class NewSpecimenForm extends SpecimenForm
     		this.parentPresent = true;
     	}
     	
+//    	this.aliquot = specimen.getIsAliquot().booleanValue();
+    	
         SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
-//        this.pathologicalStatus = characteristic.getPathologicalStatus();
+        this.pathologicalStatus = specimen.getPathologicalStatus();
         this.tissueSide = characteristic.getTissueSide();
         this.tissueSite = characteristic.getTissueSite();
+        this.lineage = specimen.getLineage();
         
         Collection biohazardCollection = specimen.getBiohazardCollection();
         bhCounter = 1;
@@ -334,6 +348,12 @@ public class NewSpecimenForm extends SpecimenForm
         	
         	bhCounter = biohazardCollection.size();
         }
+//        
+//        if(abstractDomain instanceof AliquotSpecimen)
+//        {
+//        	AliquotSpecimen aliquotSpecimen = (AliquotSpecimen)abstractDomain;
+//        	
+//        }
     }
     
     public void setAllVal(Object obj)
@@ -941,7 +961,23 @@ public class NewSpecimenForm extends SpecimenForm
 	}
 	//Mandar : 11-july-06 AutoEvents : ReceivedEvent end
 	
+	/**
+	 * Returns the historical information about the specimen.
+	 * @return The historical information about the specimen.
+	 * @see #setLineage(String)
+	 */
+	public String getLineage()
+	{
+		return lineage;
+	}
 	
-
-
+	/**
+     * Sets the historical information about the specimen.
+     * @param label The historical information about the specimen.
+     * @see #getLineage()
+     */
+	public void setLineage(String lineage)
+	{
+		this.lineage = lineage;
+	}
 }

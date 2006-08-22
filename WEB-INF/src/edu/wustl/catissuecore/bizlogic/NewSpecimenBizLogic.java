@@ -31,6 +31,10 @@ import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.QuantityInCount;
+import edu.wustl.catissuecore.domain.QuantityInGram;
+import edu.wustl.catissuecore.domain.QuantityInMicroGram;
+import edu.wustl.catissuecore.domain.QuantityInMiliLiter;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -74,6 +78,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			setSpecimenAttributes(dao,specimen,sessionDataBean);
 			specimen.getStorageContainer();		
 			dao.insert(specimen.getSpecimenCharacteristics(),sessionDataBean, true, true);
+			specimen.setLineage(Constants.NEW_SPECIMEN);
 			dao.insert(specimen,sessionDataBean, true, true);
 			protectionObjects.add(specimen);
 			
@@ -207,131 +212,127 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		if(obj instanceof TissueSpecimen)
 		{
-		//TODO : Aniruddha
-//			Logger.out.debug("In TissueSpecimen");
-//			TissueSpecimen tissueSpecimenObj = (TissueSpecimen)obj;
-//			TissueSpecimen tissueSpecimenOldObj = (TissueSpecimen)oldObj;
-//			// get new qunatity modifed by user
-//			double newQty = tissueSpecimenObj.getQuantityInGram().doubleValue();
-//			// get old qunatity from database
-//			double oldQty = tissueSpecimenOldObj.getQuantityInGram().doubleValue();
-//			Logger.out.debug("New Qty: " +newQty+" Old Qty: " +oldQty);
-//			// get Available qty
-//			double oldAvailableQty = tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
-//			
-//			double distQty = 0;
-//			double newAvailableQty=0;
-//			// Distributed Qty = Old_Qty - Old_Available_Qty
-//			distQty = oldQty - oldAvailableQty;
-//			
-//			// New_Available_Qty = New_Qty - Distributed_Qty
-//			newAvailableQty = newQty - distQty;
-//			Logger.out.debug("Dist Qty: " +distQty+" New Available Qty: " +newAvailableQty);
-//			if(newAvailableQty<0)
-//			{
-//				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
-//			}
-//			else
-//			{
-//				// set new available quantity
-//				tissueSpecimenObj.setAvailableQuantityInGram(new Double(newAvailableQty));
-//			}
+			Logger.out.debug("In TissueSpecimen");
+			TissueSpecimen tissueSpecimenObj = (TissueSpecimen)obj;
+			TissueSpecimen tissueSpecimenOldObj = (TissueSpecimen)oldObj;
+			// get new qunatity modifed by user
+			double newQty = Double.parseDouble(tissueSpecimenObj.getQuantity().toString());//tissueSpecimenObj.getQuantityInGram().doubleValue();
+			// get old qunatity from database
+			double oldQty = Double.parseDouble(tissueSpecimenOldObj.getQuantity().toString());//tissueSpecimenOldObj.getQuantityInGram().doubleValue();
+			Logger.out.debug("New Qty: " +newQty+" Old Qty: " +oldQty);
+			// get Available qty
+			double oldAvailableQty = Double.parseDouble(tissueSpecimenOldObj.getAvailableQuantity().toString());//tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
+			
+			double distQty = 0;
+			double newAvailableQty=0;
+			// Distributed Qty = Old_Qty - Old_Available_Qty
+			distQty = oldQty - oldAvailableQty;
+			
+			// New_Available_Qty = New_Qty - Distributed_Qty
+			newAvailableQty = newQty - distQty;
+			Logger.out.debug("Dist Qty: " +distQty+" New Available Qty: " +newAvailableQty);
+			if(newAvailableQty<0)
+			{
+				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
+			}
+			else
+			{
+				// set new available quantity
+				tissueSpecimenObj.setAvailableQuantity(new QuantityInGram(newAvailableQty));//tissueSpecimenObj.setAvailableQuantityInGram(new Double(newAvailableQty));
+			}
 			
 		}
 		else if(obj instanceof MolecularSpecimen)
 		{
-		//TODO : Aniruddha
-//			Logger.out.debug("In MolecularSpecimen");
-//			MolecularSpecimen molecularSpecimenObj = (MolecularSpecimen)obj;
-//			MolecularSpecimen molecularSpecimenOldObj = (MolecularSpecimen)oldObj;
-//			// get new qunatity modifed by user
-//			double newQty = molecularSpecimenObj.getQuantityInMicrogram().doubleValue();
-//			// get old qunatity from database
-//			double oldQty = molecularSpecimenOldObj.getQuantityInMicrogram().doubleValue();
-//			Logger.out.debug("New Qty: " +newQty+" Old Qty: " +oldQty);
-//			// get Available qty
-//			double oldAvailableQty = molecularSpecimenOldObj.getAvailableQuantityInMicrogram().doubleValue();
-//			
-//			double distQty = 0;
-//			double newAvailableQty=0;
-//			// Distributed Qty = Old_Qty - Old_Available_Qty
-//			distQty = oldQty - oldAvailableQty;
-//			
-//			// New_Available_Qty = New_Qty - Distributed_Qty
-//			newAvailableQty = newQty - distQty;
-//			Logger.out.debug("Dist Qty: " +distQty+" New Available Qty: " +newAvailableQty);
-//			if(newAvailableQty<0)
-//			{
-//				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
-//			}
-//			else
-//			{
-//				// set new available quantity
-//				molecularSpecimenObj.setAvailableQuantityInMicrogram(new Double(newAvailableQty));
-//			}
+			Logger.out.debug("In MolecularSpecimen");
+			MolecularSpecimen molecularSpecimenObj = (MolecularSpecimen)obj;
+			MolecularSpecimen molecularSpecimenOldObj = (MolecularSpecimen)oldObj;
+			// get new qunatity modifed by user
+			double newQty = Double.parseDouble(molecularSpecimenObj.getQuantity().toString());//molecularSpecimenObj.getQuantityInMicrogram().doubleValue();
+			// get old qunatity from database
+			double oldQty = Double.parseDouble(molecularSpecimenOldObj.getQuantity().toString());//molecularSpecimenOldObj.getQuantityInMicrogram().doubleValue();
+			Logger.out.debug("New Qty: " +newQty+" Old Qty: " +oldQty);
+			// get Available qty
+			double oldAvailableQty = Double.parseDouble(molecularSpecimenOldObj.getAvailableQuantity().toString());//molecularSpecimenOldObj.getAvailableQuantityInMicrogram().doubleValue();
+			
+			double distQty = 0;
+			double newAvailableQty=0;
+			// Distributed Qty = Old_Qty - Old_Available_Qty
+			distQty = oldQty - oldAvailableQty;
+			
+			// New_Available_Qty = New_Qty - Distributed_Qty
+			newAvailableQty = newQty - distQty;
+			Logger.out.debug("Dist Qty: " +distQty+" New Available Qty: " +newAvailableQty);
+			if(newAvailableQty<0)
+			{
+				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
+			}
+			else
+			{
+				// set new available quantity
+				molecularSpecimenObj.setAvailableQuantity(new QuantityInMicroGram(newAvailableQty));//molecularSpecimenObj.setAvailableQuantityInMicrogram(new Double(newAvailableQty));
+			}
 		}
 		else if(obj instanceof CellSpecimen)
 		{
-		//TODO : Aniruddha
-//			Logger.out.debug("In CellSpecimen");
-//			CellSpecimen cellSpecimenObj = (CellSpecimen)obj;
-//			CellSpecimen cellSpecimenOldObj = (CellSpecimen)oldObj;
-//			// get new qunatity modifed by user
-//			int newQty = cellSpecimenObj.getQuantityInCellCount().intValue();
-//			// get old qunatity from database
-//			int  oldQty = cellSpecimenOldObj.getQuantityInCellCount().intValue();
-//			Logger.out.debug("New Qty: " +newQty+" Old Qty: " +oldQty);
-//			// get Available qty
-//			int oldAvailableQty = cellSpecimenOldObj.getAvailableQuantityInCellCount().intValue();
-//			
-//			int  distQty = 0;
-//			int  newAvailableQty=0;
-//			// Distributed Qty = Old_Qty - Old_Available_Qty
-//			distQty = oldQty - oldAvailableQty;
-//			
-//			// New_Available_Qty = New_Qty - Distributed_Qty
-//			newAvailableQty = newQty - distQty;
-//			Logger.out.debug("Dist Qty: " +distQty+" New Available Qty: " +newAvailableQty);
-//			if(newAvailableQty<0)
-//			{
-//				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
-//			}
-//			else
-//			{
-//				// set new available quantity
-//				cellSpecimenObj.setAvailableQuantityInCellCount(new Integer(newAvailableQty));
-//			}
+			Logger.out.debug("In CellSpecimen");
+			CellSpecimen cellSpecimenObj = (CellSpecimen)obj;
+			CellSpecimen cellSpecimenOldObj = (CellSpecimen)oldObj;
+			// get new qunatity modifed by user
+			int newQty = (int)Double.parseDouble(cellSpecimenObj.getQuantity().toString());//cellSpecimenObj.getQuantityInCellCount().intValue();
+			// get old qunatity from database
+			int  oldQty = (int)Double.parseDouble(cellSpecimenOldObj.getQuantity().toString());//cellSpecimenOldObj.getQuantityInCellCount().intValue();
+			Logger.out.debug("New Qty: " +newQty+" Old Qty: " +oldQty);
+			// get Available qty
+			int oldAvailableQty = (int)Double.parseDouble(cellSpecimenOldObj.getAvailableQuantity().toString());//cellSpecimenOldObj.getAvailableQuantityInCellCount().intValue();
+			
+			int  distQty = 0;
+			int  newAvailableQty=0;
+			// Distributed Qty = Old_Qty - Old_Available_Qty
+			distQty = oldQty - oldAvailableQty;
+			
+			// New_Available_Qty = New_Qty - Distributed_Qty
+			newAvailableQty = newQty - distQty;
+			Logger.out.debug("Dist Qty: " +distQty+" New Available Qty: " +newAvailableQty);
+			if(newAvailableQty<0)
+			{
+				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
+			}
+			else
+			{
+				// set new available quantity
+				cellSpecimenObj.setAvailableQuantity(new QuantityInCount(newAvailableQty));//cellSpecimenObj.setAvailableQuantityInCellCount(new Integer(newAvailableQty));
+			}
 		}
 		else if(obj instanceof FluidSpecimen)
 		{
-		//TODO : Aniruddha
-//			Logger.out.debug("In FluidSpecimen");
-//			FluidSpecimen fluidSpecimenObj = (FluidSpecimen)obj;
-//			FluidSpecimen fluidSpecimenOldObj = (FluidSpecimen)oldObj;
-//			// get new qunatity modifed by user
-//			double newQty = fluidSpecimenObj.getQuantityInMilliliter().doubleValue();
-//			// get old qunatity from database
-//			double  oldQty = fluidSpecimenOldObj.getQuantityInMilliliter().doubleValue();
-//			Logger.out.debug("New Qty: " +newQty+" Old Qty: " +oldQty);
-//			// get Available qty
-//			double oldAvailableQty = fluidSpecimenOldObj.getAvailableQuantityInMilliliter().doubleValue();
-//			
-//			double  distQty = 0;
-//			double  newAvailableQty=0;
-//			// Distributed Qty = Old_Qty - Old_Available_Qty
-//			distQty = oldQty - oldAvailableQty;
-//			
-//			// New_Available_Qty = New_Qty - Distributed_Qty
-//			newAvailableQty = newQty - distQty;
-//			Logger.out.debug("Dist Qty: " +distQty+" New Available Qty: " +newAvailableQty);
-//			if(newAvailableQty<0)
-//			{
-//				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
-//			}
-//			else
-//			{
-//				fluidSpecimenObj.setAvailableQuantityInMilliliter(new Double(newAvailableQty));
-//			}
+			Logger.out.debug("In FluidSpecimen");
+			FluidSpecimen fluidSpecimenObj = (FluidSpecimen)obj;
+			FluidSpecimen fluidSpecimenOldObj = (FluidSpecimen)oldObj;
+			// get new qunatity modifed by user
+			double newQty = Double.parseDouble(fluidSpecimenObj.getQuantity().toString());//fluidSpecimenObj.getQuantityInMilliliter().doubleValue();
+			// get old qunatity from database
+			double  oldQty = Double.parseDouble(fluidSpecimenOldObj.getQuantity().toString());//fluidSpecimenOldObj.getQuantityInMilliliter().doubleValue();
+			Logger.out.debug("New Qty: " +newQty+" Old Qty: " +oldQty);
+			// get Available qty
+			double oldAvailableQty = Double.parseDouble(fluidSpecimenOldObj.getAvailableQuantity().toString());//fluidSpecimenOldObj.getAvailableQuantityInMilliliter().doubleValue();
+			
+			double  distQty = 0;
+			double  newAvailableQty=0;
+			// Distributed Qty = Old_Qty - Old_Available_Qty
+			distQty = oldQty - oldAvailableQty;
+			
+			// New_Available_Qty = New_Qty - Distributed_Qty
+			newAvailableQty = newQty - distQty;
+			Logger.out.debug("Dist Qty: " +distQty+" New Available Qty: " +newAvailableQty);
+			if(newAvailableQty<0)
+			{
+				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty + "'");
+			}
+			else
+			{
+				fluidSpecimenObj.setAvailableQuantity(new QuantityInMiliLiter(newAvailableQty));//fluidSpecimenObj.setAvailableQuantityInMilliliter(new Double(newAvailableQty));
+			}
 		}
 	}
 	/**
@@ -345,22 +346,14 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
     {
     	Specimen specimen = (Specimen)obj;
     	Specimen specimenOld = (Specimen)oldObj;
-    	Logger.out.debug("Specimen Type: " +obj+" ----- "+oldObj);
-    	
+
     	if(isStoragePositionChanged(specimenOld,specimen))
     	{
     		throw new DAOException("Storage Position should not be changed while updating the specimen");
     	}
-    	
-//    	try
-//    	{
-    		setAvailableQuantity(specimen,specimenOld);
-//    	}
-//    	catch(BizLogicException e)
-//    	{
-//    		Logger.out.error(e.getMessage(),e);
-//    		throw new DAOException(e.getMessage(),e); 
-//    	}
+	
+    	setAvailableQuantity(specimen,specimenOld);
+    		
     	if(specimen.isParentChanged())
         {
         	//Check whether continer is moved to one of its sub container.
@@ -377,8 +370,11 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
         	
         	specimen.setSpecimenCollectionGroup(scg);
         	SpecimenCharacteristics sc= loadSpecimenCharacteristics(specimen.getParentSpecimen().getSystemIdentifier(), dao);
-        	specimen.setSpecimenCharacteristics(sc);
-        	 
+        	
+        	if(!Constants.ALIQUOT.equals(specimen.getLineage()))//specimen instanceof OriginalSpecimen)
+        	{
+        		specimen.setSpecimenCharacteristics(sc);
+        	}        	 
         }
     	//check for closed Specimen Collection Group
     	if(!specimen.getSpecimenCollectionGroup().getSystemIdentifier().equals(specimenOld.getSpecimenCollectionGroup().getSystemIdentifier()))
@@ -386,9 +382,12 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		
     	setSpecimenGroupForSubSpecimen(specimen,specimen.getSpecimenCollectionGroup(),specimen.getSpecimenCharacteristics());
     	
-		dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
+    	if(!Constants.ALIQUOT.equals(specimen.getLineage()))//specimen instanceof OriginalSpecimen)
+    	{
+    		dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
+    	}
 		
-    	dao.update(specimen, sessionDataBean, true, true, false);
+    	dao.update(specimen, sessionDataBean, true, false, false);//dao.update(specimen, sessionDataBean, true, true, false);
 		
 		//Audit of Specimen.
 		dao.audit(obj, oldObj, sessionDataBean, true);
@@ -426,7 +425,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			disableSubSpecimens(dao,specimenIDArr);
 		}
     }
-    
+        
     private boolean isUnderSubSpecimen(Specimen specimen, Long parentSpecimenID)
     {
     	if (specimen != null)
@@ -457,7 +456,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
             {
             	Specimen childSpecimen = (Specimen) iterator.next();
             	childSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
-            	childSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
+            	//((OriginalSpecimen)childSpecimen).setSpecimenCharacteristics(specimenCharacteristics);
+            	
             	setSpecimenGroupForSubSpecimen(childSpecimen, specimenCollectionGroup, specimenCharacteristics);
             }
         }
@@ -665,12 +665,17 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
      */
     protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
     {
-		Specimen specimen = (Specimen)obj;
+    	Specimen specimen = (Specimen)obj;
+    	
+    	if(Constants.ALIQUOT.equals(specimen.getLineage()))
+    	{
+    		return true;
+    	}
 		
 		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
 		String specimenClass = Utility.getSpecimenClassName(specimen);
     	
-    	if(!Validator.isEnumeratedValue(specimenClassList,specimenClass))
+		if(!Validator.isEnumeratedValue(specimenClassList,specimenClass))
 		{
 			throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
 		}
@@ -708,10 +713,10 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				
 				List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
 				
-//				if(!Validator.isEnumeratedValue(pathologicalStatusList,characters.getPathologicalStatus()))
-//				{
-//					throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
-//				}
+				if(!Validator.isEnumeratedValue(pathologicalStatusList,specimen.getPathologicalStatus()))
+				{
+					throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+				}
 			}
 		}
 		
@@ -848,7 +853,6 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		    stmt.close();
 		    
 		    connection.close();
-		    
 	    }
 	    catch(Exception e)
 	    {

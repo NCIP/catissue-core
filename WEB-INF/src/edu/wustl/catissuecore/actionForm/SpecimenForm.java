@@ -21,10 +21,14 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -101,6 +105,11 @@ public class SpecimenForm extends AbstractActionForm
      * Comments on specimen.
      */
     protected String comments = "";
+    
+    /**
+     * A label name of this specimen.
+     */
+    protected String label;
 
     /**
      * Number of external identifier rows.
@@ -445,44 +454,69 @@ public class SpecimenForm extends AbstractActionForm
         }
         
         this.barcode = specimen.getBarcode();
+        this.label = specimen.getLabel();
         
-        //TODO : Aniruddha
-//        if (specimen instanceof CellSpecimen)
-//        {
-//            this.className = "Cell";
-//            this.quantity = String.valueOf(((CellSpecimen) specimen)
-//                    .getQuantityInCellCount());
-//            this.availableQuantity = String.valueOf(((CellSpecimen) specimen).getAvailableQuantityInCellCount());
-//        }
-//        else if (specimen instanceof FluidSpecimen)
-//        {
-//            this.className = "Fluid";
-//            this.quantity = String.valueOf(((FluidSpecimen) specimen)
-//                    .getQuantityInMilliliter());
-//            this.availableQuantity = String.valueOf(((FluidSpecimen) specimen).getAvailableQuantityInMilliliter());
-//        }
-//        else if (specimen instanceof MolecularSpecimen)
-//        {
-//            this.className = "Molecular";
-//            this.quantity = String.valueOf(((MolecularSpecimen) specimen)
-//                    .getQuantityInMicrogram());
-//            this.availableQuantity = String.valueOf(((MolecularSpecimen) specimen).getAvailableQuantityInMicrogram());
-//            if (((MolecularSpecimen) specimen)
-//                    .getConcentrationInMicrogramPerMicroliter() != null)
-//                this.concentration = String
-//                        .valueOf(((MolecularSpecimen) specimen)
-//                                .getConcentrationInMicrogramPerMicroliter());
-//        }
-//        else if (specimen instanceof TissueSpecimen)
-//        {
-//            this.className = "Tissue";
-//            this.quantity = String.valueOf(((TissueSpecimen) specimen)
-//                    .getQuantityInGram());
-//            this.availableQuantity = String.valueOf(((TissueSpecimen) specimen).getAvailableQuantityInGram());
-//        }
-                    
-        SpecimenCharacteristics characteristic = specimen
-                .getSpecimenCharacteristics();
+        /* ********* Aniruddha :16/06/06 TO BE DELETED LATER ***********
+         * if (specimen instanceof CellSpecimen)
+        {
+            this.className = "Cell";
+            this.quantity = String.valueOf(((CellSpecimen) specimen)
+                    .getQuantityInCellCount());
+            this.availableQuantity = String.valueOf(((CellSpecimen) specimen).getAvailableQuantityInCellCount());
+        }
+        else if (specimen instanceof FluidSpecimen)
+        {
+            this.className = "Fluid";
+            this.quantity = String.valueOf(((FluidSpecimen) specimen)
+                    .getQuantityInMilliliter());
+            this.availableQuantity = String.valueOf(((FluidSpecimen) specimen).getAvailableQuantityInMilliliter());
+        }
+        else if (specimen instanceof MolecularSpecimen)
+        {
+            this.className = "Molecular";
+            this.quantity = String.valueOf(((MolecularSpecimen) specimen)
+                    .getQuantityInMicrogram());
+            this.availableQuantity = String.valueOf(((MolecularSpecimen) specimen).getAvailableQuantityInMicrogram());
+            if (((MolecularSpecimen) specimen)
+                    .getConcentrationInMicrogramPerMicroliter() != null)
+                this.concentration = String
+                        .valueOf(((MolecularSpecimen) specimen)
+                                .getConcentrationInMicrogramPerMicroliter());
+        }
+        else if (specimen instanceof TissueSpecimen)
+        {
+            this.className = "Tissue";
+            this.quantity = String.valueOf(((TissueSpecimen) specimen)
+                    .getQuantityInGram());
+            this.availableQuantity = String.valueOf(((TissueSpecimen) specimen).getAvailableQuantityInGram());
+        }*/
+        
+        this.quantity = specimen.getQuantity().toString();
+        this.availableQuantity = specimen.getAvailableQuantity().toString();
+        
+        if (specimen instanceof CellSpecimen)
+        {
+            this.className = Constants.CELL;
+        }
+        else if (specimen instanceof FluidSpecimen)
+        {
+            this.className = Constants.FLUID;
+        }
+        else if (specimen instanceof MolecularSpecimen)
+        {
+            this.className = Constants.MOLECULAR;
+            this.concentration = String.valueOf(((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter());
+        }
+        else if (specimen instanceof TissueSpecimen)
+        {
+            this.className = Constants.TISSUE;
+        }
+        else
+        {
+        	this.className = specimen.getParentSpecimen().getClassName();
+        }
+        
+        SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
 
         Collection externalIdentifierCollection = specimen
                 .getExternalIdentifierCollection();
@@ -603,8 +637,7 @@ public class SpecimenForm extends AbstractActionForm
             {
                 String key1 = "ExternalIdentifier:" + i + "_name";
                 String key2 = "ExternalIdentifier:" + i + "_value";
-                String key3 = "ExternalIdentifier:" + i
-                        + "_systemIdentifier";
+                String key3 = "ExternalIdentifier:" + i + "_systemIdentifier";
 
                 edu.wustl.catissuecore.domainobject.ExternalIdentifier externalId = 
                 		(edu.wustl.catissuecore.domainobject.ExternalIdentifier) it.next();
@@ -637,7 +670,12 @@ public class SpecimenForm extends AbstractActionForm
         {
             if (operation.equals(Constants.ADD)
                     || operation.equals(Constants.EDIT))
-            {
+            {	
+             	if(validator.isEmpty(label))
+             	{
+             		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.label")));
+             	}
+             	
                 if (!validator.isValidOption(className))
                 {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -808,4 +846,22 @@ public class SpecimenForm extends AbstractActionForm
 		this.parentContainerId = parentContainerId;
 	}
 	
+	/**
+     * Returns the label name of specimen.
+     * @return the label name of specimen.
+     * @see #setLabel(String)
+     */
+	public String getLabel()
+	{
+		return label;
+	}
+	
+	/**
+     * Sets the label name of specimen.
+     * @see #getLabel()
+     */
+	public void setLabel(String label)
+	{
+		this.label = label;
+	}
 }

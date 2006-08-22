@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +33,7 @@ import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -41,6 +43,8 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
+
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 
 /**
  * NewSpecimenAction initializes the fields in the New Specimen page.
@@ -188,47 +192,42 @@ public class NewSpecimenAction  extends SecureAction
 
 		List specimenList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenList);
-		
-		// -- set ForwardTo list
-//		List forwardToList = getForwardToList(Constants.SPECIMEN_FORWARD_TO_LIST);
-//		request.setAttribute(Constants.FORWARDLIST,forwardToList); 
-        
-        //Setting the specimen class list
+				
+		//Setting the specimen class list
         List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
     	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
     	
-    	//Setting the specimen type list
-    	List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
-    	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-        
-    	//Setting tissue site list
-//    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-    	List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE,null);
-    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
-
-    	//Setting tissue side list
-//    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-    	List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE,null);
-    	request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
-        
-    	//Setting pathological status list
-    	List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
-    	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
-        
-    	//Setting biohazard list
-    	biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD,null);
-    	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
-    	
-    	Logger.out.debug("1");
-    	// get the Specimen class and type from the cde
+		if(Constants.ALIQUOT.equals(specimenForm.getLineage()))
+		{
+			populateListBoxes(specimenForm,request);
+		}
+		else
+		{
+			//Setting the specimen type list
+	    	List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
+	    	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+	        
+	    	//Setting tissue site list
+	    	List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE,null);
+	    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
+	
+	    	//Setting tissue side list
+	    	List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE,null);
+	    	request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
+	        
+	    	//Setting pathological status list
+	    	List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);
+	    	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
+		}
+		
+		//get the Specimen class and type from the cde
     	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
     	Set setPV = specimenClassCDE.getPermissibleValues();
-    	Logger.out.debug("2");
     	Iterator itr = setPV.iterator();
     
     	specimenClassList =  new ArrayList();
     	Map subTypeMap = new HashMap();
-    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
+    	
     	specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
     	
     	while(itr.hasNext())
@@ -262,8 +261,11 @@ public class NewSpecimenAction  extends SecureAction
 
     	// set the map to subtype
     	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
-    	Logger.out.debug("************************************\n\n\nDone**********\n");
-
+        
+    	//Setting biohazard list
+    	biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD,null);
+    	request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
+    	
     	//Mandar : 10-July-06 AutoEvents : CollectionEvent
     	setCollectionEventRequestParameters(request);
 
@@ -273,9 +275,8 @@ public class NewSpecimenAction  extends SecureAction
     	//Mandar : set default date and time too event fields
     	setDateParameters(specimenForm);
     	
-    	
-//    	 ---- chetan 15-06-06 ----
-        /*Map containerMap;
+    	//    	 ---- chetan 15-06-06 ----
+        Map containerMap;
         if(operation.equals(Constants.ADD))
         {
         	StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
@@ -309,8 +310,38 @@ public class NewSpecimenAction  extends SecureAction
         }
         request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
         // -------------------------
-        */
+        
     	return mapping.findForward(pageOf);
+    }
+    
+    /* This method populates the list boxes for type, tissue site, tissue side
+     * and pathological status if this specimen is an aliquot.
+     */
+    private void populateListBoxes(NewSpecimenForm specimenForm,HttpServletRequest request)
+    {
+    	//Setting the specimen type list
+    	NameValueBean bean = new NameValueBean(specimenForm.getType(),specimenForm.getType());
+    	List specimenTypeList = new ArrayList();
+    	specimenTypeList.add(bean);
+    	request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+    	
+    	//Setting tissue site list
+    	bean = new NameValueBean(specimenForm.getTissueSite(),specimenForm.getTissueSite());
+    	List tissueSiteList = new ArrayList();
+    	tissueSiteList.add(bean);
+    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
+    	
+    	//Setting tissue side list
+    	bean = new NameValueBean(specimenForm.getTissueSide(),specimenForm.getTissueSide());
+    	List tissueSideList = new ArrayList();
+    	tissueSideList.add(bean);
+    	request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
+    	
+    	//Setting pathological status list
+    	bean = new NameValueBean(specimenForm.getPathologicalStatus(),specimenForm.getPathologicalStatus());
+    	List pathologicalStatusList = new ArrayList();
+    	pathologicalStatusList.add(bean);
+    	request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
     }
 
     // Mandar AutoEvents CollectionEvent start

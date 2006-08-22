@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -69,7 +70,6 @@ public class DistributionForm extends SpecimenEventParametersForm
 		Logger.out.debug("setAllValues of DistributionForm"); 
 		Distribution distributionObject = (Distribution)abstractDomain ;
 		this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getId());
-		//this.fromSite = String.valueOf(distributionObject.getFromSite().getId());
 		this.toSite = String.valueOf(distributionObject.getToSite().getId());
 		this.activityStatus = Utility.toString(distributionObject.getActivityStatus());
 		Logger.out.debug("this.activityStatus "+this.activityStatus);
@@ -84,7 +84,6 @@ public class DistributionForm extends SpecimenEventParametersForm
 			
 			while(it.hasNext())
 			{
-				
 				String key1 = "DistributedItem:"+i+"_systemIdentifier";
 				String key2 = "DistributedItem:"+i+"_Specimen_systemIdentifier";
 				String key3 = "DistributedItem:"+i+"_quantity";
@@ -98,7 +97,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 				String key11 = "DistributedItem:"+i+"_Specimen_type";
 				
 				DistributedItem dItem = (DistributedItem)it.next();
-				Specimen specimen =dItem.getSpecimen();
+				Specimen specimen = dItem.getSpecimen();
 				String unit= getUnitSpan(specimen);
 				
 				Double quantity = dItem.getQuantity();
@@ -110,7 +109,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 				values.put(key4,unit);
 				values.put(key5,specimen.getSpecimenCharacteristics().getTissueSite());
 				values.put(key6,specimen.getSpecimenCharacteristics().getTissueSide());
-//				values.put(key7,specimen.getSpecimenCharacteristics().getPathologicalStatus());
+				values.put(key7,specimen.getPathologicalStatus());
 				values.put(key8,specimen.getClassName());
 				values.put(key9,getAvailableQty(specimen));
 				values.put(key10,quantity);
@@ -482,35 +481,38 @@ public class DistributionForm extends SpecimenEventParametersForm
 	
 	public Object getAvailableQty(Specimen specimen)
 	{
-	    
-	    //TODO : Aniruddha
-//		//Retrieve the Available quantity for the particular specimen
-//		if(specimen instanceof TissueSpecimen)
-//		{
-//			
-//			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
-//			Logger.out.debug("tissueSpecimenAvailableQuantityInGram "+tissueSpecimen.getAvailableQuantityInGram());
-//			return tissueSpecimen.getAvailableQuantityInGram();
-//			
-//		}
-//		else if(specimen instanceof CellSpecimen)
-//		{
-//			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
-//			return cellSpecimen.getAvailableQuantityInCellCount();
-//			
-//		}
-//		else if(specimen instanceof MolecularSpecimen)
-//		{
-//			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
-//			return molecularSpecimen.getAvailableQuantityInMicrogram();
-//			
-//		}
-//		else if(specimen instanceof FluidSpecimen)
-//		{
-//			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
-//			return fluidSpecimen.getAvailableQuantityInMilliliter();
-//		}
-		return null;
+		//Retrieve the Available quantity for the particular specimen
+		/* Aniruddha : 16/06/2006 -- TO BE DELETED --
+		 * if(specimen instanceof TissueSpecimen)
+		{
+			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
+			Logger.out.debug("tissueSpecimenAvailableQuantityInGram "+tissueSpecimen.getAvailableQuantityInGram());
+			return tissueSpecimen.getAvailableQuantityInGram();
+			
+		}
+		else if(specimen instanceof CellSpecimen)
+		{
+			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
+			return cellSpecimen.getAvailableQuantityInCellCount();
+			
+		}
+		else if(specimen instanceof MolecularSpecimen)
+		{
+			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
+			return molecularSpecimen.getAvailableQuantityInMicrogram();
+			
+		}
+		else if(specimen instanceof FluidSpecimen)
+		{
+			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
+			return fluidSpecimen.getAvailableQuantityInMilliliter();
+		}*/
+		
+		//Aniruddha : NEEDS TO TAKE CARE OFF CALLING METHOD
+		Quantity availableQuantity = specimen.getAvailableQuantity();
+		return availableQuantity;
+		
+		//return null;
 	}
 	
 	/**
