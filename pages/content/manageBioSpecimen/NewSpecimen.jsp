@@ -230,7 +230,7 @@
 				qtyPerAliquotTextBox.disabled = false;
 				
 				document.forms[0].deriveButton.disabled = true;
-				document.forms[0].eventButton.disabled = true;
+				//document.forms[0].eventButton.disabled = true;
 				document.forms[0].scgButton.disabled = true;
 			}
 			else
@@ -239,7 +239,7 @@
 				qtyPerAliquotTextBox.disabled = true;
 				
 				document.forms[0].deriveButton.disabled = false;
-				document.forms[0].eventButton.disabled = false;
+				//document.forms[0].eventButton.disabled = false;
 				document.forms[0].scgButton.disabled = false;
 			}
 		}
@@ -489,6 +489,22 @@
 		        	</logic:equal>
 		        	
 				 </tr>
+				 
+				 <tr>
+			     	<td class="formRequiredNotice" width="5">
+				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+				    </td>
+				    <td class="formRequiredLabel">
+						<label for="label">
+							<bean:message key="specimen.label"/>
+						</label>
+					</td>
+				    <td class="formField" colspan="4">
+				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
+				    </td>
+				 </tr>
+				 
 				 <tr>
 				 	<td class="formRequiredNotice" width="5">*</td>
 				    <td class="formRequiredLabel">
@@ -535,6 +551,13 @@
 									specimenTypeList = new ArrayList();
 									specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 								}
+								
+								if(Constants.ALIQUOT.equals(form.getLineage()))
+								{
+									specimenTypeList = new ArrayList();
+									specimenTypeList.add(new NameValueBean(form.getType(),form.getType()));
+								}
+								
 								pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 								
 								String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')"; 
@@ -623,7 +646,7 @@
 					<%
 						boolean concentrationDisabled = true;
 						
-						if(form.getClassName().equals("Molecular"))
+						if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
 							concentrationDisabled = false;
 					%>
 			     		<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="concentration" property="concentration" 
@@ -690,25 +713,8 @@
 						if(operation.equals(Constants.ADD))
 							readOnly=false;
 					%>
-					<td class="formField">
-					 	&nbsp;<bean:message key="storageContainer.parentID" />	
-		     			<html:text styleClass="formFieldSized3" styleId="storageContainer" maxlength="10"  property="storageContainer"  readonly="<%=readOnly%>" />
-		     			&nbsp;<bean:message key="storageContainer.positionOne" />
-		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionOne" maxlength="10"  property="positionDimensionOne" readonly="<%=readOnly%>" />
-		     			&nbsp;<bean:message key="storageContainer.positionTwo" />
-		     			<html:text styleClass="formFieldSized3" styleId="positionDimensionTwo" maxlength="10"  property="positionDimensionTwo" readonly="<%=readOnly%>" />
-						&nbsp;
-					</td>
 					
-					<td class="formField" colspan="2">
-						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-							<html:button property="mapButton" styleClass="actionButton" styleId="Map"
-								onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
-								<bean:message key="buttons.map"/>
-							</html:button>
-						</logic:notEqual>&nbsp;
-					</td>	
-				<%-- n-combo-box start 
+				<%-- n-combo-box start --%>
 				<%
 					Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 										
@@ -726,7 +732,7 @@
 					String tdStyleClass = "customFormField";
 					String onChange = "onCustomListBoxChange(this)";
 					
-					String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
+					String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2','name','810','320','yes');return false";
 					String noOfEmptyCombos = "3";
 				%>
 				
@@ -752,7 +758,7 @@
 											formLabelStyle="formLabelBorderless"
 											buttonStyleClass="actionButton" />				
 				</td>
-				n-combo-box end --%>
+				<%-- n-combo-box end --%>
 				 </tr>
 				 
 				 <tr>
