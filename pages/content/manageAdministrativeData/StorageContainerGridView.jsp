@@ -5,9 +5,9 @@
 
 <script>
 function setParentWindowValue(elementName,elementValue)
-{ 
+{
 	for (var i=0;i < top.opener.document.forms[0].elements.length;i++)
-    {
+    {	
     	if (top.opener.document.forms[0].elements[i].name == elementName)
 		{
 			top.opener.document.forms[0].elements[i].value = elementValue;
@@ -15,6 +15,20 @@ function setParentWindowValue(elementName,elementValue)
     }
 }
 
+function setCustomListBoxValue(elementId,elementValue)
+{
+	var id = parent.opener.document.getElementById(elementId);
+	
+	if(elementId.match("_2"))
+	{
+		id.value = elementValue;
+	}
+	else
+	{
+		id.value = elementValue;
+		parent.opener.onCustomListBoxChange(id);
+	}
+}
 
 function closeFramedWindow()
 {
@@ -66,12 +80,13 @@ function closeFramedWindow()
         
     } 
     
-    
-    
-    
 	int rowSpanValue = storageContainerGridObject.getOneDimensionCapacity().intValue();
 	int colSpanValue = storageContainerGridObject.getTwoDimensionCapacity().intValue();
-	System.out.println("rowSpanValue : "+ rowSpanValue + " || colSpanValue : " + colSpanValue);  
+	System.out.println("rowSpanValue : "+ rowSpanValue + " || colSpanValue : " + colSpanValue);
+	
+	String containerStyleId = (String)session.getAttribute(Constants.CONTAINER_STYLEID);
+	String xDimStyleId = (String)session.getAttribute(Constants.XDIM_STYLEID);
+	String yDimStyleId = (String)session.getAttribute(Constants.YDIM_STYLEID);
 %>
 
 <html:errors/>
@@ -196,14 +211,14 @@ function closeFramedWindow()
 							<%}%>
 						<%}
 						else
-						{ 
+						{
 							String setParentWindowContainer = null;
 							if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
 							{
-								setParentWindowContainer = "javascript:setParentWindowValue('positionDimensionOne','"+
-															  + i + "');"+"javascript:setParentWindowValue('positionDimensionTwo','"+
-															  + j + "');"+"javascript:setParentWindowValue('storageContainer','"+
-															  + storageContainerGridObject.getSystemIdentifier() + "');"+
+								setParentWindowContainer = "javascript:setCustomListBoxValue('" + containerStyleId + "','"+
+															  + storageContainerGridObject.getSystemIdentifier() + "');"+"javascript:setCustomListBoxValue('" + xDimStyleId + "','"+
+															  + i + "');"+"javascript:setCustomListBoxValue('" + yDimStyleId + "','"+
+															  + j + "');"+
 																"javascript:setParentWindowValue('positionInStorageContainer','"
 															  + storageContainerGridObject.getType() + " : " 
 															  + storageContainerGridObject.getSystemIdentifier()
@@ -212,16 +227,16 @@ function closeFramedWindow()
 							else
 							{
 								setParentWindowContainer = "javascript:setParentWindowValue('positionInParentContainer','"
-															  + storageContainerGridObject.getType() + " : " 
-															  + storageContainerGridObject.getSystemIdentifier()
-															  + " Pos (" + i + "," + j + ")');"
-															  + "javascript:setParentWindowValue('positionDimensionOne','"+
-															  + i + "');"+"javascript:setParentWindowValue('positionDimensionTwo','"+
-															  + j + "');"
-															  + "javascript:setParentWindowValue('parentContainerId','"+
-															  + storageContainerGridObject.getSystemIdentifier() + "');"
-															  + "javascript:setParentWindowValue('startNumber','"+
-															  + startNumber.intValue() + "');closeFramedWindow()";
+															+ storageContainerGridObject.getType() + " : " 
+															+ storageContainerGridObject.getSystemIdentifier()
+															+ " Pos (" + i + "," + j + ")');"
+															+ "javascript:setCustomListBoxValue('" + containerStyleId + "','"+
+															+ storageContainerGridObject.getSystemIdentifier() + "');"+"javascript:setCustomListBoxValue('" + xDimStyleId + "','"+
+															+ i + "');"
+															+ "javascript:setCustomListBoxValue('" + yDimStyleId + "','"+
+															+ j + "');"
+															+ "javascript:setParentWindowValue('startNumber','"+
+															+ startNumber.intValue() + "');closeFramedWindow()";
 							}
 						%>
 						<td class="mapTdred" noWrap="true">
