@@ -146,10 +146,14 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     			bizLogic = new BiohazardBizLogic();
     			break;
     		
+    		case Constants.ALIQUOT_FORM_ID:
+    			bizLogic = new AliquotBizLogic();
+    			break;
+    			
     		case Constants.SIMILAR_CONTAINERS_FORM_ID :
     			bizLogic = new StorageContainerBizLogic();
     			break;
-    			
+    		
     		case Constants.DEFAULT_BIZ_LOGIC:
             default:
             	bizLogic = new DefaultBizLogic();
@@ -204,6 +208,10 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	else if(className.equals("edu.wustl.catissuecore.domain.DistributionProtocol"))
     	{
     		bizLogic = new DistributionProtocolBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.AliquotSpecimen"))
+    	{
+    		bizLogic = new AliquotBizLogic();
     	}
     	else if(className.equals("edu.wustl.catissuecore.domain.Specimen"))
     	{
