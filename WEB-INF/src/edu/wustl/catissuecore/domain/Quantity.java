@@ -14,7 +14,7 @@ import java.io.Serializable;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 
-/**
+/*
  * @hibernate.class table="CATISSUE_QUANTITY"
  */
 public class Quantity extends AbstractDomainObject implements Serializable
@@ -45,7 +45,7 @@ public class Quantity extends AbstractDomainObject implements Serializable
 		this.value = new Double(quantity.getValue().doubleValue());
 	}
 	
-    /**
+    /*
      * Returns the system generated unique systemIdentifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30" 
      * unsaved-value="null" generator-class="native"
