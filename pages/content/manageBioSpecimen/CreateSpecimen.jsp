@@ -207,6 +207,21 @@
 				 </tr>
 				 
 				 <tr>
+			     	<td class="formRequiredNotice" width="5">
+				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+				    </td>
+				    <td class="formRequiredLabel">
+						<label for="label">
+							<bean:message key="specimen.label"/>
+						</label>
+					</td>
+				    <td class="formField" colspan="4">
+				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
+				    </td>
+				 </tr>
+				 
+				 <tr>
 				 	<td class="formRequiredNotice" width="5">*</td>
 				    <td class="formRequiredLabel">
 				     	<label for="className">
@@ -331,7 +346,7 @@
 						String onChange = "onCustomListBoxChange(this)";
 						
 						//String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
-						String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2&amp;storageType=','name','810','320','yes');return false";
+						String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2&amp;storageType=','name','810','320','yes');return false";
 						String noOfEmptyCombos = "3";
 					%>
 				
