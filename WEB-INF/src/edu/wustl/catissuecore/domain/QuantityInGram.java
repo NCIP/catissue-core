@@ -9,36 +9,53 @@
 
 package edu.wustl.catissuecore.domain;
 
+import java.io.Serializable;
 
-///**
-// * @author gautam_shetty
-// * @hibernate.joined-subclass table="CATISSUE_QUANTITY_IN_GRAM"
-// * @hibernate.joined-subclass-key column="IDENTIFIER"
-// */
-public class QuantityInGram extends Quantity 
+
+public class QuantityInGram extends Quantity implements Serializable
 {
-    
-	protected Double value;
+	private static final long serialVersionUID = 1234567890L;
 	
+	/**
+	 * Quantity in grams.
+	 */
+//	protected Double value;
+	
+	/**
+	 * Default Constructor
+	 */
 	public QuantityInGram()
 	{
 	}
 	
-//    /**
-//     * @return Returns the value.
-//     * @hibernate.property name="value" type="double" column="VALUE" length="50"
+	/**
+	 * Parameterized Constructor
+	 */
+	public QuantityInGram(double value)
+	{
+		this.value = new Double(value);
+	}
+	
+//	/**
+//     * Returns the quantity in grams.
+//     * @hibernate.property name="quantity" type="double" 
+//	 * column="QUANTITY" length="50"
+//     * @return the quantity in grams.
+//     * @see #setQuantity(Double)
 //     */
-//    public Double getValue()
+//    public Double getQuantity()
 //    {
-//        return value;
+//        return quantity;
 //    }
-//    
+//
 //    /**
-//     * @param value The value to set.
+//     * Sets the quantity in grams.
+//     * @param quantity the quantity in grams.
+//     * @see #getQuantity()
 //     */
-//    public void setValue(Double value)
+//    public void setQuantity(Double quantity)
 //    {
-//        this.value = value;
+//        this.quantity = quantity;
 //    }
     
     /**
