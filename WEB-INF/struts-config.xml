@@ -2464,6 +2464,7 @@ PUBLIC
 		validate="false"
 		scope="request">
 		<forward name="pageOfAliquot" path=".catissuecore.aliquotDef" />
+		<forward name="pageOfAliquotSummary" path=".catissuecore.aliquotSummaryDef" />
 		<forward name="failure" path=".catissuecore.aliquotDef" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
@@ -2477,6 +2478,16 @@ PUBLIC
 		<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15"/>
 		<forward name="failure" path=".catissuecore.aliquotDef" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	
+	<action path="/AliquotAdd"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="aliquotForm"
+		validate="true"
+		input="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15"
+		scope="request">
+		<forward name="success" path="/Aliquots.do?pageOf=pageOfAliquotSummary&amp;menuSelected=15" />
+		<forward name="failure" path="/Aliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15" />
 	</action>
 	<!-- Aliquots Action -->
 
