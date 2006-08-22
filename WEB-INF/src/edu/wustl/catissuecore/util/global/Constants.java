@@ -360,6 +360,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Constants related to Aliquots functionality
 	public static final String PAGEOF_ALIQUOT = "pageOfAliquot";
 	public static final String PAGEOF_CREATE_ALIQUOT = "pageOfCreateAliquot";
+	public static final String PAGEOF_ALIQUOT_SUMMARY = "pageOfAliquotSummary";
 	public static final String AVAILABLE_CONTAINER_MAP = "availableContainerMap";
 
 	//Constants related to QuickEvents functionality
@@ -1009,10 +1010,16 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Constants for Specimen Collection Group name- new field 
 	public static final String RESET_NAME ="resetName";
 	
-// Labels for Storage Containers
+	// Labels for Storage Containers
 	public static final String[] STORAGE_CONTAINER_LABEL = {" Name"," Pos1"," Pos2"};
 	//Constans for Any field
 	public static final String HOLDS_ANY = "--All--";
+	
+	//Constants : Specimen -> lineage
+	public static final String NEW_SPECIMEN = "New";
+	public static final String DERIVED_SPECIMEN = "Derived";
+	public static final String ALIQUOT = "Aliquot";
+	
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{
 //	    if(identifier == null)
