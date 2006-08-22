@@ -311,7 +311,7 @@ create table CATISSUE_FLUID_SPE_EVENT_PARAM (
 create table CATISSUE_SPECIMEN_PROTOCOL (
    IDENTIFIER number(19,0) not null,
    PRINCIPAL_INVESTIGATOR_ID number(19,0),
-   TITLE varchar2(50) not null unique,
+   TITLE varchar2(150) not null unique,
    SHORT_TITLE varchar2(50),
    IRB_IDENTIFIER varchar2(50),
    START_DATE date,
@@ -400,7 +400,6 @@ create table CATISSUE_SPECIMEN_CHAR (
    IDENTIFIER number(19,0) not null,
    TISSUE_SITE varchar2(150),
    TISSUE_SIDE varchar2(50),
-   PATHOLOGICAL_STATUS varchar2(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_EVENT_PARAM (
@@ -537,6 +536,9 @@ create table CATISSUE_SPECIMEN (
    IDENTIFIER number(19,0) not null,
    SPECIMEN_CLASS varchar2(255) not null,
    TYPE varchar2(50),
+   PATHOLOGICAL_STATUS varchar2(50),
+   LABEL varchar(50),
+   LINEAGE varchar(50),
    AVAILABLE number(1,0),
    POSITION_DIMENSION_ONE number(10,0),
    POSITION_DIMENSION_TWO number(10,0),
@@ -692,5 +694,6 @@ create sequence CATISSUE_CLINICAL_REPORT_SEQ;
 create sequence CATISSUE_SPECIMEN_COLL_GRP_SEQ;
 create sequence CATISSUE_SPECIMEN_SEQ;
 create sequence CATISSUE_PERMISSIBLE_VALUE_SEQ;
+create sequence CATISSUE_QUANTITY_SEQ;
 ALTER TABLE CATISSUE_COLL_SPECIMEN_REQ ADD(IDENTIFIER number(20));
 ALTER TABLE CATISSUE_DISTRIBUTION_SPE_REQ ADD(IDENTIFIER number(20));
