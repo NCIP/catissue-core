@@ -42,7 +42,7 @@ drop table if exists CATISSUE_SPECIMEN_CLASS;
 alter table CATISSUE_STORAGE_CONTAINER drop column CONTAINER_NAME;
 
 #--------Adding container_name in storage_container table
-alter table CATISSUE_STORAGE_CONTAINER add column CONTAINER_NAME varchar (50) unique;
+alter table CATISSUE_STORAGE_CONTAINER add column CONTAINER_NAME varchar (50) NOT NULL unique;
 
 #--------Give values same as identifier to container_name for previouly added containers.
 #-----update CATISSUE_STORAGE_CONTAINER set CONTAINER_NAME=IDENTIFIER where CONTAINER_NAME='';
