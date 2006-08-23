@@ -590,9 +590,6 @@ create table CATISSUE_SPECIMEN (
    SPECIMEN_CHARACTERISTICS_ID bigint,
    AVAILABLE_QUANTITY double precision,
    QUANTITY double precision,
-   PATHOLOGICAL_STATUS varchar(50),
-   LABEL varchar(50),
-   LINEAGE varchar(50),
    CONCENTRATION double precision,
    primary key (IDENTIFIER)
 );
