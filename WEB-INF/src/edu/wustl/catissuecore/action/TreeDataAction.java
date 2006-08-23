@@ -51,12 +51,11 @@ public class TreeDataAction extends BaseAction
             throws Exception
     {
         ObjectOutputStream out = null;
-        SessionDataBean sessionData = getSessionData(request);
         Map columnIdsMap = new HashMap();
         
         try
         {
-            String pageOf = URLDecoder.decode(request.getParameter(Constants.PAGEOF),"UTF-8");
+            String pageOf = URLDecoder.decode(request.getParameter(Constants.PAGEOF));
             TreeDataInterface bizLogic = new StorageContainerBizLogic();
             Vector dataList =  new Vector();
             List disableSpecimenIdsList = new ArrayList();
@@ -73,6 +72,7 @@ public class TreeDataAction extends BaseAction
                 bizLogic = new AdvanceQueryBizlogic();
                 HttpSession session = request.getSession();
                 columnIdsMap = (Map)session.getAttribute(Constants.COLUMN_ID_MAP);
+                SessionDataBean sessionData = getSessionData(request);
             	dataList = bizLogic.getTreeViewData(sessionData,columnIdsMap, disableSpecimenIdsList);
             }
             else if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_SPECIMEN))
