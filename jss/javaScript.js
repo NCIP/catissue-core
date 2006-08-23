@@ -192,3 +192,13 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 			}
 			
 		}	
+		
+		function moveToNext(element,value,nextID )
+		{
+		if (value.length==element.maxLength)
+			{
+				document.getElementById(nextID).focus();
+			}
+		}
+		
+		
