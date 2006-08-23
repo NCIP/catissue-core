@@ -1240,3 +1240,13 @@ textarea.formFieldSized20{ /* Used by Mandar for the comments used in autoevents
   color:#F4F4F5; /* constant: light gray */
   border-bottom:1px solid #F4F4F5; /* constant: dark gray */
  }
+.formLeftSubTableTitleEvents{ /* for subtitles in the events table */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  font-weight:bold;
+  background-color:#CCCCCC; /* constant: medium gray */
+  color:#000000; /* constant: black */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
