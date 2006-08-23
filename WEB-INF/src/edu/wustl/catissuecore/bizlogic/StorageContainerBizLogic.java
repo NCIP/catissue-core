@@ -272,7 +272,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				Logger.out.debug(cont.getParent() + " <<<<---- parentContainer");
 				Logger.out.debug("cont.getCollectionProtocol().size() "
 						+ cont.getCollectionProtocolCollection().size());
-
+				cont.setActivityStatus("Active");	
 				dao.insert(cont.getCapacity(), sessionDataBean, true, true);
 				dao.insert(cont, sessionDataBean, true, true);
 
@@ -851,17 +851,27 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return 1;
 	}
 
-	public String getContainerName(String siteName, String typeName) throws DAOException
+	public String getContainerName(String siteName, String typeName, String operation, long Id) throws DAOException
 	{
 		String containerName = "";
 		if (typeName!=null && siteName!=null && !typeName.equals("") && !siteName.equals(""))
 		{
-			containerName = siteName + "_" + typeName + "_"
+			if(operation.equals(Constants.ADD))
+			{
+				containerName = siteName + "_" + typeName + "_"
 					+ String.valueOf(getNextContainerNumber());
+			}
+			else
+			{
+				containerName = siteName + "_" + typeName + "_"
+				+ String.valueOf(Id);
+			}
+				
 
 		}
 		return containerName;
 	}
+	
 
 	public int getNextContainerNumber(long parentID, long typeID, boolean isInSite)
 			throws DAOException

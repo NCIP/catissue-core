@@ -95,7 +95,7 @@
 		{
 			var elementCP = document.getElementById("collectionIds");
 			var elementHolds = document.getElementById("holdsStorageTypeIds");
-			var elementSpecimenHolds = document.getElementById("holdsSpecimenClassTypeIds");
+			var elementSpecimenHolds = document.getElementById("holdsSpecimenClassTypes");
 			//alert("elementCP "+elementCP+"  elementholds "+elementHolds);
 			elementCP.disabled = false;
 			elementHolds.disabled = false;
@@ -121,6 +121,15 @@
 			var suffix = value.substring(index+1);
 			//alert("suffix "+suffix+" selected_text "+selected_text);
 			containerNameElement.value = selected_text+"_"+suffix;
+		}
+		
+		
+		function resetName(i)
+		{
+			var action = '<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>'+"?pageOf="+"<%=Constants.PAGEOF_CREATE_SIMILAR_CONTAINERS%>"+"&operation=add&ResetName="+i+"&menuSelected=7";			
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		 	
 		}
 	</script>
 </head>
@@ -178,10 +187,11 @@
 <%
 	StorageContainerForm simForm = (StorageContainerForm)request.getAttribute("storageContainerForm");
 	
-	String sType = (String)request.getAttribute("typeName");
-	String siteName = (String)request.getAttribute("siteName");
+	String sType = simForm.getTypeName();
+	String siteName = simForm.getSiteName();
 	System.out.println("sTyep ----<>----- "+sType);
 	System.out.println("sName ----<>----- "+siteName);
+	String siteId = Long.toString(simForm.getSiteId());
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	String checkButtonStatus = Integer.toString(simForm.getCheckedButton());
 	
@@ -198,10 +208,6 @@
     </tr>
    
     <tr>
-	  <%
-	  	String siteId = ((Long)request.getAttribute("siteId")).toString();
-	  	
-	  %>
 	  	
     </tr>
     <tr>
@@ -224,6 +230,7 @@
   	<tr>
 		<td>
 			<html:hidden property="similarContainerMapValue(checkedButton)" value="<%=checkButtonStatus%>"/>
+			<html:hidden property="checkedButton"/>
 		</td>
     </tr>
   	
@@ -297,7 +304,7 @@
 					<html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/>
 				</html:select>
 				&nbsp;
-				<html:select property="holdsSpecimenClassTypeIds" styleClass="formFieldVerySmallSized" styleId="typeId" size="4" multiple="true"
+				<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="typeId" size="4" multiple="true"
 					 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
 					<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
 				</html:select>
@@ -355,7 +362,12 @@
 			<bean:message key="storageContainer.barcode"/>
 		</td>
 		<td class="formRightSubTableTitle">*
+			<logic:equal name="storageContainerForm" property="checkedButton" value="1">
+			<bean:message key="storageContainer.site"/>
+			</logic:equal>
+			<logic:equal name="storageContainerForm" property="checkedButton" value="2">
 			<bean:message key="storageContainer.parentContainer"/>
+			</logic:equal>
 		</td>
 	  </tr>
 	  
@@ -422,6 +434,7 @@
 			String buttonId = "Map_"+i;
 			//String onSiteChange = "onSiteChange(this,"+i+")";
 			
+			String resetNameFunction = "resetName('"+ i+"')";
 			attrNames[0] = "similarContainerMapValue(simCont:"+i+"_parentContainerId)";
 			attrNames[1] = "similarContainerMapValue(simCont:"+i+"_positionDimensionOne)";
 			attrNames[2] = "similarContainerMapValue(simCont:"+i+"_positionDimensionTwo)";
@@ -449,12 +462,21 @@
 		    %>
 		    <td class="formField" nowrap>
 				<html:text styleClass="formFieldSized10"  maxlength="50"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>" />
+				&nbsp;
+				<html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>">
+					<bean:message key="StorageContainer.resetName" />
+				</html:link>
+				
 			</td>
 			<% 
 		    	}else{
 		    %>
 			<td class="formField" nowrap>
-				<html:text styleClass="formFieldSized10"  maxlength="50"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>" value="<%=(contName+maxIdentifier)%>" />
+				<html:text styleClass="formFieldSized10"  maxlength="50"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>"/>
+				&nbsp;
+				<html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>">
+					<bean:message key="StorageContainer.resetName" />
+				</html:link>
 			</td>
 			
 			<% 
@@ -468,8 +490,8 @@
 				<table summary="" cellpadding="3" cellspacing="0" border="0">
 					<tr>
 						<td class="formFieldBottom">
-							<logic:equal name="value(checkedButton)" value="1">
-								<html:select property="<%=siteKey%>" styleClass="formField" styleId="<%=siteSId%>" size="1" value="<%=siteId%>"> <%-- onchange="<%=onSiteChange%>" --%>
+							<logic:equal name="storageContainerForm" property="checkedButton" value="1">
+								<html:select property="<%=siteKey%>" styleClass="formField" styleId="<%=siteSId%>" size="1"> <%-- onchange="<%=onSiteChange%>" --%>
 									<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 								</html:select>
 							</logic:equal>
@@ -477,7 +499,7 @@
 					</tr>
 					<tr>
 						<td class="formFieldNoBorders">
-							<logic:equal name="value(checkedButton)" value="2">
+							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
 								<ncombo:containermap dataMap="<%=dataMap%>" 
 											attributeNames="<%=attrNames%>" 
 											initialValues="<%=initValues%>"  
@@ -500,11 +522,22 @@
 				</table>
 			</td>
 	   </tr>
-	   
+	  
+	   	
 	  <%
 		  	maxIdentifier++;
 		} //For
 	  %>
+	  <tr>
+		<td colspan="4">&nbsp;</td>
+	   </tr>
+	   <tr>
+	   	<td align="right" colspan="4">
+	   		<html:submit styleClass="actionButton" onclick="onClick(this)">
+				<bean:message key="buttons.submit"/>
+			</html:submit>
+		</td>
+	  </tr>		
 	</table>
 	</td>
 	</tr>
@@ -512,27 +545,7 @@
 		<td colspan="4">&nbsp;</td>
 	</tr>
 	
-	<tr>
-  		<td align="right" colspan="3">
-		<!-- action buttons begins -->
-		<table cellpadding="4" cellspacing="0" border="0">
-		<tr>
-			<td>
-			<html:submit styleClass="actionButton" onclick="onClick(this)">
-				<bean:message key="buttons.submit"/>
-			</html:submit>
-			</td>
-		<%--td>
-			<html:reset styleClass="actionButton">
-				<bean:message key="buttons.reset"/>
-			</html:reset>
-		</td--%> 
-		</tr>
-		</table>
-		<!-- action buttons end -->
-		</td>
-	</tr>
-	
+		
 <%
 		
 	} //If pageOf != PAGEOF_SIMILAR_CONTAINERS

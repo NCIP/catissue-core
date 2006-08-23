@@ -1,8 +1,5 @@
 package edu.wustl.catissuecore.bizlogic.test;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import com.mockobjects.constraint.Constraint;
 import com.mockobjects.constraint.IsAnything;
 import com.mockobjects.constraint.IsInstanceOf;
@@ -10,7 +7,6 @@ import com.mockobjects.dynamic.FullConstraintMatcher;
 import com.mockobjects.dynamic.Mock;
 
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
-import edu.wustl.catissuecore.domain.StorageContainerCapacity;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.test.MockDAOFactory;
 import edu.wustl.common.beans.SessionDataBean;
@@ -226,7 +222,7 @@ public class StorageTypeBizLogicTest extends BaseTestCase
 	private StorageType setStorageType()
 	{
 		StorageType storageType=new StorageType();
-		storageType.setActivityStatus("Active");
+/*		storageType.setActivityStatus("Active");
 		
 		StorageContainerCapacity storageContCapacity=new StorageContainerCapacity();
 		storageContCapacity.setOneDimensionCapacity(new Integer("1"));
@@ -243,7 +239,7 @@ public class StorageTypeBizLogicTest extends BaseTestCase
 		Collection storageTypeCollection=new HashSet();
 		storageType.setStorageTypeCollection(storageTypeCollection);
 		
-		storageType.setType("Freeze");
+		storageType.setType("Freeze");*/
 		return storageType;
 	}
 	

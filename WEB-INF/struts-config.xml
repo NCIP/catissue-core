@@ -2555,7 +2555,7 @@ PUBLIC
 	<!-- QuickEvents Action end -->
 	
 	<!-- Similar Containers Action -->
-	<action path="/SimilarContainers" type="edu.wustl.catissuecore.action.SimilarContainersAction" name="similarContainersForm" validate="false" scope="request">
+	<action path="/SimilarContainers" type="edu.wustl.catissuecore.action.SimilarContainersAction" name="storageContainerForm" validate="false" scope="request">
 			<forward name="pageOfSimilarContainers" path=".catissuecore.similarContainersDef" />
 			<forward name="failure" path=".catissuecore.similarContainersDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
@@ -2572,12 +2572,12 @@ PUBLIC
 	<action path="/SimilarContainersAdd" type="edu.wustl.catissuecore.action.SimilarContainerAddAction" name="storageContainerForm" validate="true" input="/SimilarContainerError.do?pageOf=pageOfCreateSimilarContainers&amp;menuSelected=7" scope="request">
 		<!--forward name="success" path="/StorageContainer.do?operation=edit&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" /--> 
 		<forward name="success" path=".catissuecore.similarContainersList" />
-		<forward name="failure" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" />
+		<forward name="failure" path="/SimilarContainerError.do?operation=add&amp;pageOf=pageOfCreateSimilarContainers&amp;menuSelected=7" />
 	</action>
 	
 	<action path="/SimilarContainerError" type="edu.wustl.catissuecore.action.SimilarContainersAction" name="storageContainerForm" validate="false">
 		<forward name="pageOfCreateSimilarContainers" path=".catissuecore.similarContainersDef" />
-		<forward name="pageOfSimilarContainers" path="/SimilarContainers.do?pageOf=pageOfSimilarContainers&amp;menuSelected=7" />
+		<forward name="pageOfSimilarContainers" path=".catissuecore.similarContainersDef" />
 		<forward name="pageOfStorageContainer" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer&amp;menuSelected=7" />
 		<forward name="failure" path=".catissuecore.similarContainersDef" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />

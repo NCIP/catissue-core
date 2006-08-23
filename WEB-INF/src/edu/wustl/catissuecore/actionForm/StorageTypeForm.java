@@ -75,7 +75,7 @@ public class StorageTypeForm extends AbstractActionForm
     /**
      * List of Specimen Types that Storage Type can hold
      */
-    private long holdsSpecimenClassTypeIds[];
+    private String holdsSpecimenClassTypes[];
     
     /**
      * No argument constructor for StorageTypeForm class 
@@ -121,7 +121,7 @@ public class StorageTypeForm extends AbstractActionForm
 		
 		if(specimenClassTypeCollection != null)
 		{
-			holdsSpecimenClassTypeIds = new long[specimenClassTypeCollection.size()];
+			holdsSpecimenClassTypes = new String[specimenClassTypeCollection.size()];
 			int i=0;
 
 			Iterator it = specimenClassTypeCollection.iterator();
@@ -131,6 +131,9 @@ public class StorageTypeForm extends AbstractActionForm
 //				SpecimenClass specimenClass = (SpecimenClass)it.next();
 //				holdsSpecimenClassTypeIds[i] = specimenClass.getSystemIdentifier().longValue();
 //				i++;
+				String specimenClass=(String)it.next();
+				holdsSpecimenClassTypes[i]=specimenClass;
+				i++;
 			}
 		}
     }
@@ -303,9 +306,9 @@ public class StorageTypeForm extends AbstractActionForm
      * @return long[] the list of specimen class type Ids.
      * @see #getHoldsSpecimenClassList(long[])
      */
-    public long[] getHoldsSpecimenClassTypeIds()
+    public String[] getHoldsSpecimenClassTypes()
 	{
-		return holdsSpecimenClassTypeIds;
+		return holdsSpecimenClassTypes;
 	}
 
     /**
@@ -313,9 +316,9 @@ public class StorageTypeForm extends AbstractActionForm
      * @param holdSpecimenClassTypeList the list of specimen class type Ids to be set.
      * @see #getHoldsSpecimenClassList()
      */
-	public void setHoldsSpecimenClassTypeIds(long[] holdsSpecimenClassTypeIds)
+	public void setHoldsSpecimenClassTypes(String[] holdsSpecimenClassTypes)
 	{
-		this.holdsSpecimenClassTypeIds = holdsSpecimenClassTypeIds;
+		this.holdsSpecimenClassTypes = holdsSpecimenClassTypes;
 	}
 
 	/**
@@ -383,7 +386,7 @@ public class StorageTypeForm extends AbstractActionForm
             }
 
             checkValidSelectionForAny(holdsStorageTypeIds,"storageType.holdsStorageType",errors);
-            checkValidSelectionForAny(holdsSpecimenClassTypeIds,"storageType.holdsSpecimenClass",errors);
+            //checkValidSelectionForAny(holdsSpecimenClassTypeIds,"storageType.holdsSpecimenClass",errors);
             if (validator.isEmpty(String.valueOf(twoDimensionCapacity)))
             {
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("storageType.twoDimensionCapacity")));

@@ -41,7 +41,7 @@
 
 	//	if(validateAny(document.forms[0].holdsStorageTypeIds,"Please select Proper Storage Types")=="true")
 		//{
-			//if(validateAny(document.forms[0].holdsSpecimenClassTypeIds,"Please select Proper Specimen Classes")=="true")	
+			//if(validateAny(document.forms[0].holdsSpecimenClassTypes,"Please select Proper Specimen Classes")=="true")	
 			//{
 			//	document.forms[0].submit();
 			//	return true;
@@ -57,7 +57,7 @@
 		}
 		else
 		{
-			if(validateAny(document.forms[0].holdsSpecimenClassTypeIds)==false)
+			if(validateAny(document.forms[0].holdsSpecimenClassTypes)==false)
 			{
 				alert("Selecting other options with 'Any' option is not allowed");
 			}
@@ -192,7 +192,7 @@
 				</html:select>
 				</td>
 				<td class="formField" nowrap align="center">
-				<html:select property="holdsSpecimenClassTypeIds" styleClass="formFieldVerySmallSized" styleId="holdSpecimenClassTypeIds" size="4" multiple="true"
+				<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="holdSpecimenClassTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
 				</html:select>

@@ -158,7 +158,7 @@ public class StorageContainerForm extends AbstractActionForm
 	/**
 	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold
 	 */
-	protected long holdsSpecimenClassTypeIds[];
+	protected String holdsSpecimenClassTypes[];
 
 	/**
 	 * A map that contains distinguished fields (container name,barcode,parent location) per container.
@@ -189,6 +189,8 @@ public class StorageContainerForm extends AbstractActionForm
 		Logger.out.debug("isFULL />/>/> " + isFull);
 
 		this.typeId = container.getStorageType().getSystemIdentifier().longValue();
+		this.typeName = container.getStorageType().getName();
+		
 
 		if (container.getParent() != null)
 		{
@@ -206,10 +208,15 @@ public class StorageContainerForm extends AbstractActionForm
 			//Sri: Fix for bug #
 			this.positionDimensionOne = container.getPositionDimensionOne().intValue();
 			this.positionDimensionTwo = container.getPositionDimensionTwo().intValue();
+			
+			this.siteName = ((StorageContainer)container.getParent()).getSite().getName();
 		}
 
 		if (container.getSite() != null)
+		{
 			this.siteId = container.getSite().getId().longValue();
+			this.siteName = container.getSite().getName();
+		}
 
 		this.defaultTemperature = Utility.toString(container.getTempratureInCentigrade());
 		this.oneDimensionCapacity = container.getCapacity()
@@ -268,7 +275,7 @@ public class StorageContainerForm extends AbstractActionForm
 
 		if (specimenClassCollection != null)
 		{
-			this.holdsSpecimenClassTypeIds = new long[specimenClassCollection.size()];
+			this.holdsSpecimenClassTypes = new String[specimenClassCollection.size()];
 			int i = 0;
 
 			Iterator it = specimenClassCollection.iterator();
@@ -278,6 +285,9 @@ public class StorageContainerForm extends AbstractActionForm
 //				SpecimenClass specimenClass = (SpecimenClass) it.next();
 //				this.holdsSpecimenClassTypeIds[i] = specimenClass.getSystemIdentifier().longValue();
 //				i++;
+				String specimenClass=(String)it.next();
+				this.holdsSpecimenClassTypes[i]=specimenClass;
+				i++;
 			}
 		}
 		
@@ -841,18 +851,18 @@ public class StorageContainerForm extends AbstractActionForm
 	 * getting Specimen class Type Ids that this container can hold 
 	 * @return specimenClassType Id's array
 	 */
-	public long[] getHoldsSpecimenClassTypeIds()
+	public String[] getHoldsSpecimenClassTypes()
 	{
-		return holdsSpecimenClassTypeIds;
+		return holdsSpecimenClassTypes;
 	}
 
 	/**
 	 * setitng the SpecimenClassType Id array
 	 * @param holdsSpecimenClassTypeIds - array of SpecimenClassType Id's to set
 	 */
-	public void setHoldsSpecimenClassTypeIds(long[] holdsSpecimenClassTypeIds)
+	public void setHoldsSpecimenClassTypes(String[] holdsSpecimenClassTypes)
 	{
-		this.holdsSpecimenClassTypeIds = holdsSpecimenClassTypeIds;
+		this.holdsSpecimenClassTypes = holdsSpecimenClassTypes;
 	}
 
 	/**
@@ -1004,8 +1014,8 @@ public class StorageContainerForm extends AbstractActionForm
 			//validation for holds storage type
 			checkValidSelectionForAny(holdsStorageTypeIds, "storageContainer.containerType", errors);
 			//validation for holds specimen class
-			checkValidSelectionForAny(holdsSpecimenClassTypeIds, "storageContainer.specimenType",
-					errors);
+			/*new chnage checkValidSelectionForAny(holdsSpecimenClassTypeIds, "storageContainer.specimenType",
+					errors);*/
 
 			if (operation.equals(Constants.EDIT) && !validator.isValidOption(activityStatus))
 			{

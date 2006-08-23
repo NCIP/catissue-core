@@ -160,19 +160,20 @@ public class StorageType extends ContainerType
 
         	
         	holdsSpecimenClassCollection.clear();
-        	long [] specimenClassTypeArr = storageTypeForm.getHoldsSpecimenClassTypeIds();
+        	String [] specimenClassTypeArr = storageTypeForm.getHoldsSpecimenClassTypes();
         	if(specimenClassTypeArr!=null)
         	{
 	        	for (int i = 0; i < specimenClassTypeArr.length; i++)
 				{
 	        		Logger.out.debug("type Id :"+specimenClassTypeArr[i]);
-	        		if(specimenClassTypeArr[i]!=-1)
-	        		{
+	        		//if(specimenClassTypeArr[i]!=-1)
+	        		//{
 	        		    //TODO : Vaishali
 //		        		SpecimenClass specimenClass = new SpecimenClass();
 //		        		specimenClass.setSystemIdentifier(new Long(specimenClassTypeArr[i]));
 //		        		holdsSpecimenClassCollection.add(specimenClass);
-	        		}
+	        			holdsSpecimenClassCollection.add(specimenClassTypeArr[i]);
+	        		//}
 				}
         	}
 

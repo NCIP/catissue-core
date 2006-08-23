@@ -106,20 +106,14 @@
 		}
 		function ReserName()
 		{
-			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer";
-			document.forms[0].action = action;
-			document.forms[0].containerName.value="";
-			document.forms[0].submit();
+		 		document.forms[0].containerName.value="";
+				change();
 		}
 		function onSiteChange(element)
 		{
 			if(document.forms[0].containerName.value=="")
 			{
-				var list = document.getElementById('typeId');
-				var type = list.options[list.selectedIndex].value;
-				var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&siteOrParentContainerChange=true";
-				document.forms[0].action = action;
-				document.forms[0].submit();
+				change();
 			}
 		}
 		function onParentContainerChange(element)
@@ -127,12 +121,17 @@
 
 			if(document.forms[0].containerName.value=="")
 			{
-				var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&siteOrParentContainerChange=true";
-				document.forms[0].action = action;
-				document.forms[0].submit();
+				change();	
 			}
 		}
-	
+		
+		function change()
+		{
+			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&siteOrParentContainerChange=true";
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		}		
+			
 //  function to insert a row in the inner block
 
 function insRow(subdivtag)
@@ -278,7 +277,7 @@ function validate(action,formField)
 		}
 		else
 		{	
-			if(validateAny(document.forms[0].holdsSpecimenClassTypeIds)==false)
+			if(validateAny(document.forms[0].holdsSpecimenClassTypes)==false)
 			{
 				alert("please select Proper Specimen Classes");
 			}
@@ -558,10 +557,11 @@ function validate(action,formField)
 						</td>
 						<td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
-							<html:select property="isFull" styleClass="formFieldSized10" styleId="isFull" size="1" 
+							<%--<html:select property="isFull" styleClass="formFieldSized10" styleId="isFull" size="1" 
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="<%=Constants.IS_CONTAINER_FULL_LIST%>" labelName="<%=Constants.IS_CONTAINER_FULL_LIST%>" />
-							</html:select>
+							</html:select>--%>
+							<html:checkbox property="isFull" value="true"/>
 						</td>
 					</tr>
 					</logic:equal>
@@ -630,7 +630,7 @@ function validate(action,formField)
 							</html:select>
 						</td>
 						<td class="formField" align="center">
-							<html:select property="holdsSpecimenClassTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true"
+							<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
 							</html:select>

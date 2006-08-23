@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +39,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.cde.CDE;
+import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -76,7 +80,8 @@ public class StorageContainerAction  extends SecureAction
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
         //Sets the isContainerFullList attribute to be used in the StorageContainer Add/Edit Page.
-        request.setAttribute(Constants.IS_CONTAINER_FULL_LIST, Constants.IS_CONTAINER_FULL_VALUES );
+        
+        //request.setAttribute(Constants.IS_CONTAINER_FULL_LIST, Constants.IS_CONTAINER_FULL_VALUES );
 
         
     	StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
@@ -139,14 +144,48 @@ public class StorageContainerAction  extends SecureAction
 //    	List list3=bizLogic.retrieve(SpecimenClass.class.getName());
 //        List specimenClassTypeList = getSpecimenClassTypeList(list3);
 //        //Collections.sort(specimenClassTypeList);
+    	
 //	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
 	  	
+    	Logger.out.debug("1");
+    	// get the Specimen class and type from the cde
+    	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
+    	Set setPV = specimenClassCDE.getPermissibleValues();
+    	Logger.out.debug("2");
+    	Iterator itr = setPV.iterator();
+    
+    	List specimenClassTypeList =  new ArrayList();
+    	Map subTypeMap = new HashMap();
+    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
+    	specimenClassTypeList.add(new NameValueBean("--All--","-1"));
+    	
+    	while(itr.hasNext())
+    	{
+    		//List innerList =  new ArrayList();
+    		Object obj = itr.next();
+    		PermissibleValue pv = (PermissibleValue)obj;
+    		String tmpStr = pv.getValue();
+    		Logger.out.debug(tmpStr);
+    		specimenClassTypeList.add(new NameValueBean( tmpStr,tmpStr));
+    					
+    	} // class and values set
+    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
+    	
+    	// sets the Class list
+    	//request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassTypeList);
+
+    	
+    	
+	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
+
+    	
+    	
     	boolean isOnChange = false;
     	boolean isTypeChange=false;
-    	boolean isNameChange=false;
+    	
     	boolean isSiteOrParentContainerChange=false;
-    	String type_name="";
-    	String site_name="";
+    	
+    	
     	String str = request.getParameter("isOnChange");
 		
 		if(str!=null && str.equals("true"))
@@ -156,10 +195,7 @@ public class StorageContainerAction  extends SecureAction
 	
 		str = request.getParameter("isNameChange");
 		
-		if(str!=null && str.equals("true"))
-		{
-			isNameChange = true; 
-		}
+		
 		
 		str = request.getParameter("typeChange");
 		if(str!=null && str.equals("true"))
@@ -227,10 +263,10 @@ public class StorageContainerAction  extends SecureAction
             				storageContainerForm.setHoldsStorageTypeIds(defHoldsStorageTypeList);
             			}
             			
-            			long[] defHoldsSpecimenClassTypeList=getDefaultHoldsSpecimenClasstypeList(type);
+            			String[] defHoldsSpecimenClassTypeList=getDefaultHoldsSpecimenClasstypeList(type);
             			if(defHoldsSpecimenClassTypeList!=null)
             			{
-            	      		storageContainerForm.setHoldsSpecimenClassTypeIds(defHoldsSpecimenClassTypeList);
+            	      		storageContainerForm.setHoldsSpecimenClassTypes(defHoldsSpecimenClassTypeList);
             			}
 
             		}
@@ -290,7 +326,8 @@ public class StorageContainerAction  extends SecureAction
     	Logger.out.info("type:"+storageContainerForm.getTypeName());
     	if(storageContainerForm.getContainerName().equals(""))
 		{
-    		storageContainerForm.setContainerName(bizLogic.getContainerName(storageContainerForm.getSiteName(),storageContainerForm.getTypeName()));
+    		storageContainerForm.setContainerName(bizLogic.getContainerName(storageContainerForm.getSiteName(),storageContainerForm.getTypeName(),operation, storageContainerForm.getSystemIdentifier()));
+    		
 		}
     	
         // ---------- Add new
@@ -350,7 +387,10 @@ public class StorageContainerAction  extends SecureAction
     	Collections.sort(storageTypeList);
     	if(includeAny)
     	{
-    		storageTypeList.add(0,typeAny);
+    		if(typeAny!=null)
+    		{
+    			storageTypeList.add(0,typeAny);
+    		}	
     	}
     	else
     	{
@@ -417,7 +457,7 @@ public class StorageContainerAction  extends SecureAction
     /* this function finds out the specimen class holds list for a storage type given 
      * and sets the container's specimen class holds list
      * */
-    private long[] getDefaultHoldsSpecimenClasstypeList(StorageType type)
+    private String[] getDefaultHoldsSpecimenClasstypeList(StorageType type)
     {
     	//Populating the specimen class type-id array
 		Logger.out.info("Specimen class type size:"+type.getHoldsSpecimenClassCollection().size());
@@ -425,7 +465,7 @@ public class StorageContainerAction  extends SecureAction
 		
 		if(specimenClassTypeCollection != null)
 		{
-			long holdsSpecimenClassList[] = new long[specimenClassTypeCollection.size()];
+			String holdsSpecimenClassList[] = new String[specimenClassTypeCollection.size()];
 			int i=0;
 
 			Iterator it = specimenClassTypeCollection.iterator();
@@ -435,6 +475,8 @@ public class StorageContainerAction  extends SecureAction
 //				SpecimenClass specimenClass = (SpecimenClass)it.next();
 //				holdsSpecimenClassList[i] = specimenClass.getSystemIdentifier().longValue();
 //				i++;
+				String specimenClassType=(String)it.next();
+				holdsSpecimenClassList[i]=specimenClassType;
 			}
 			return holdsSpecimenClassList;
 			

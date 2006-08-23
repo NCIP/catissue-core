@@ -12,8 +12,11 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +34,9 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.cde.CDE;
+import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.logger.Logger;
 
 public class StorageTypeAction  extends SecureAction
@@ -52,23 +58,58 @@ public class StorageTypeAction  extends SecureAction
         //Sets the operation attribute to be used in the Add/Edit Institute Page. 
         request.setAttribute(Constants.OPERATION, operation);
  
-        //Gets the Storage Type List and sets it in request 
+        //Gets the Storage Type List and sets it in request
         List list1=bizLogic.retrieve(StorageType.class.getName());
     	List storageTypeList=getStorageTypeList(list1);
     	//Collections.sort(storageTypeList);
     	request.setAttribute(Constants.HOLDS_LIST1, storageTypeList);
+    	
     	
     	//TODO : Vaishali
 //    	//Gets the Specimen Class Type List and sets it in request
 //    	List list2=bizLogic.retrieve(SpecimenClass.class.getName());
 //        List specimenClassTypeList = getSpecimenClassTypeList(list2);
 //        //Collections.sort(specimenClassTypeList);
-//	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
+    	/*List specimenClassTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
+    	specimenClassTypeList.remove(0);*/
+    	
+    	Logger.out.debug("1");
+    	// get the Specimen class and type from the cde
+    	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
+    	Set setPV = specimenClassCDE.getPermissibleValues();
+    	Logger.out.debug("2");
+    	Iterator itr = setPV.iterator();
+    
+    	List specimenClassTypeList =  new ArrayList();
+    	Map subTypeMap = new HashMap();
+    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
+    	specimenClassTypeList.add(new NameValueBean("--All--","-1"));
+    	
+    	while(itr.hasNext())
+    	{
+    		//List innerList =  new ArrayList();
+    		Object obj = itr.next();
+    		PermissibleValue pv = (PermissibleValue)obj;
+    		String tmpStr = pv.getValue();
+    		Logger.out.debug(tmpStr);
+    		specimenClassTypeList.add(new NameValueBean( tmpStr,tmpStr));
+    					
+    	} // class and values set
+    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
+    	
+    	// sets the Class list
+    	//request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassTypeList);
+
+    	
+    	
+	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
         
 	  	if(operation.equals(Constants.ADD))
 	  	{
-	  		storageTypeForm.setHoldsSpecimenClassTypeIds(new long[]{1});
+	  		// new model storageTypeForm.setHoldsSpecimenClassTypeIds(new long[]{1});
 	  		storageTypeForm.setHoldsStorageTypeIds(new long[]{1});
+	  		storageTypeForm.setOneDimensionCapacity(0);
+	  		storageTypeForm.setTwoDimensionCapacity(0);
 	  	}
 	    // ------------- add new
         String reqPath = request.getParameter(Constants.REQ_PATH);
@@ -92,6 +133,7 @@ public class StorageTypeAction  extends SecureAction
     	NameValueBean typeAny=null;
     	List storageTypeList=new ArrayList();
     	Iterator typeItr=list.iterator();
+    	
     	while(typeItr.hasNext())
     	{
     		StorageType type=(StorageType)typeItr.next();
@@ -105,7 +147,10 @@ public class StorageTypeAction  extends SecureAction
     		}
     	}
     	Collections.sort(storageTypeList);
-    	storageTypeList.add(0,typeAny);
+    	if(typeAny!=null)
+    	{
+    		storageTypeList.add(0,typeAny);
+    	}	
     	return storageTypeList;
     	
     }

@@ -183,9 +183,8 @@ function validateAny(element)
 {
 
 	var len = element.length;
-
 	var anySelected=false;
-	if(element[0].selected)
+	if(len>0 && element[0].selected)
 	{
 		anySelected=true;
 
