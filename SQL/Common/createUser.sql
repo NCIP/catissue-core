@@ -14,7 +14,7 @@ UPDATE catissue_user SET EMAIL_ADDRESS='@@first.admin.emailAddress@@',
 							DEPARTMENT_ID=1,
 							INSTITUTION_ID=1,
 							CANCER_RESEARCH_GROUP_ID=1,
-							ADDRESS_ID=1,
+							ADDRESS_ID=1
 						WHERE 
 							IDENTIFIER = 1;
 
