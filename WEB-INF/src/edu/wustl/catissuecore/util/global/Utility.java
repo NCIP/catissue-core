@@ -9,7 +9,10 @@
 
 package edu.wustl.catissuecore.util.global;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +42,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * Utility Class contain general methods used through out the application.
@@ -285,5 +289,108 @@ public class Utility extends edu.wustl.common.util.Utility
 		}
 		
 		return new Specimen();
+	}
+	
+	private static String pattern="MM-dd-yyyy";
+	/**
+	 * @param date String representation of date.
+	 * @param pattern Date pattern to be used.
+	 * @return Month of the given date.
+	 * @author mandar_deshmukh 
+	 */
+	public static int getMonth(String date,String pattern)
+	{
+		int month=0;
+		month = getCalendar(date, pattern).get(Calendar.MONTH   );
+		month=month+1;
+		return month;
+	}
+
+	public static int getMonth(String date)
+	{
+		int month=0;
+		
+		month = getCalendar(date, pattern).get(Calendar.MONTH   );
+		month=month+1;
+		return month;
+	}
+
+	/**
+	 * @param date String representation of date.
+	 * @param pattern Date pattern to be used.
+	 * @return Day of the given date.
+	 * @author mandar_deshmukh 
+	 */
+	public static int getDay(String date,String pattern)
+	{
+		int day=0;
+		day = getCalendar(date, pattern).get(Calendar.DAY_OF_MONTH  );
+		return day;
+	}
+
+	public static int getDay(String date)
+	{
+		int day=0;
+		day = getCalendar(date, pattern).get(Calendar.DAY_OF_MONTH  );
+		return day;
+	}
+	
+	/**
+	 * @param date String representation of date.
+	 * @param pattern Date pattern to be used.
+	 * @return Year of the given date.
+	 * @author mandar_deshmukh 
+	 */
+	public static int getYear(String date,String pattern)
+	{
+		int year=0;
+		year =  getCalendar(date, pattern).get(Calendar.YEAR  );
+		return year;
+	}
+
+	public static int getYear(String date)
+	{
+		int year=0;
+		year =  getCalendar(date, pattern).get(Calendar.YEAR  );
+		return year;
+	}
+	
+	// Method to validate the date given by the user and return a calendar object for the date instance.
+	private static Calendar getCalendar(String date,String pattern)
+	{
+		try
+		{
+			SimpleDateFormat dateformat = new SimpleDateFormat(pattern);
+			Date givenDate = dateformat.parse(date);
+			Calendar calendar =Calendar.getInstance();
+			calendar.setTime(givenDate);
+			return calendar; 
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e );
+			return null;
+		}
+	}
+	
+	public static void main(String[] args)
+	{
+//		Utility u = new Utility();
+		String dt="18-10-06";
+		String pt="dd-MM-yy";
+
+		System.out.println( Utility.getMonth(dt,pt )+"/"+ Utility.getDay(dt,pt)+"/"+ Utility.getYear(dt,pt ));
+
+		dt="28-11-06";
+		pt="dd-MM-yy";
+		System.out.println( Utility.getMonth(dt,pt )+"/"+ Utility.getDay(dt,pt)+"/"+ Utility.getYear(dt,pt ));
+
+		dt="18-21-06";
+		pt="MM-dd-yy";
+		System.out.println( Utility.getMonth(dt,pt )+"/"+ Utility.getDay(dt,pt)+"/"+ Utility.getYear(dt,pt ));
+
+		dt="18-asa-06";
+		pt="dd-MM-yy";
+		System.out.println( Utility.getMonth(dt,pt )+"/"+ Utility.getDay(dt,pt)+"/"+ Utility.getYear(dt,pt ));
 	}
 }
