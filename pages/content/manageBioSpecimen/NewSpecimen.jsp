@@ -26,6 +26,9 @@
 	String operation = (String)request.getAttribute(Constants.OPERATION);
 	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 	String appendingPath = "/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
+
+	String currentReceivedDate = "";
+	String currentCollectionDate = "";
 	if (reqPath != null)
 		appendingPath = reqPath + "|/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
 	
@@ -35,6 +38,14 @@
 	   		{
 		   		appendingPath = "/NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&systemIdentifier="+form.getSystemIdentifier() ;
 		   		//System.out.println("---------- NSP JSP -------- : "+ appendingPath);
+				currentReceivedDate = form.getReceivedEventDateOfEvent();
+				if(currentReceivedDate == null)
+					currentReceivedDate = "";
+
+				currentCollectionDate = form.getCollectionEventdateOfEvent();
+				if(currentCollectionDate == null)
+					currentCollectionDate = "";
+
 		   	}
 	   	}
 	
@@ -806,10 +817,7 @@
 <!-- Mandar AutoEvents start -->		
  <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 	<tr>
-		<td colspan="5" class="formRequiredNoticeLBRBorders" width="100%">
-			<table border="0" width="100%"  cellpadding="3" cellspacing="0" >
-				<tr>
-					<td colspan="6" width="500" class="formTitle">Events</td>
+					<td colspan="5" width="500" class="formTitle">Events</td>
 				</tr>
 				
 				<tr>
@@ -856,27 +864,37 @@
 	
 	<!-- date -->
 				<td class="formField" nowrap>
-					 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						<html:text styleClass="formFieldSized10" maxlength="10"  size="15" styleId="receivedEventDateOfEvent" property="receivedEventDateOfEvent" />
-						&nbsp;<a href="javascript:show_calendar('newSpecimenForm.receivedEventDateOfEvent',null,null,'MM-DD-YYYY');"><img src="images\calendar.gif" width=24 height=22 border=0></a><br>
-	<!-- hours & minutes -->	
-	<!-- Mandar : 434 : for tooltip -->
-					<html:select property="receivedEventTimeInHours" styleClass="formFieldSized5" styleId="receivedEventTimeInHours" size="1"
-					 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-						<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
-					</html:select>&nbsp;
-					<label for="eventparameters.timeinhours">
-						<bean:message key="eventparameters.timeinhours"/>&nbsp; 
-					</label>
-	<!-- Mandar : 434 : for tooltip -->
-					<html:select property="receivedEventTimeInMinutes" styleClass="formFieldSized5" styleId="receivedEventTimeInMinutes" size="1"
-					 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-						<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
-					</html:select>
-					<label for="eventparameters.timeinhours">
-						&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
-					</label>
-				</td>
+<%
+if(currentReceivedDate.trim().length() > 0)
+{
+	Integer receivedYear = new Integer(Utility.getYear(currentReceivedDate ));
+	Integer receivedMonth = new Integer(Utility.getMonth(currentReceivedDate ));
+	Integer receivedDay = new Integer(Utility.getDay(currentReceivedDate ));
+%>
+<ncombo:DateTimeComponent name="receivedEventDateOfEvent"
+			  id="receivedEventDateOfEvent"
+			  formName="newSpecimenForm"
+			  month= "<%= receivedMonth %>"
+			  year= "<%= receivedYear %>"
+			  day= "<%= receivedDay %>"
+			  value="<%=currentReceivedDate %>"
+			  styleClass="formDateSized10"
+					/>
+<% 
+	}
+	else
+	{  
+ %>
+<ncombo:DateTimeComponent name="receivedEventDateOfEvent"
+			  id="receivedEventDateOfEvent"
+			  formName="newSpecimenForm"
+			  styleClass="formDateSized10"
+					/>
+<% 
+	} 
+%> 
+
+			</td>
 	
 	<!-- receivedeventparameters.receivedquality -->
 				<td class="formField">
@@ -920,12 +938,7 @@
 							<bean:message key="collectioneventparameters.collectionprocedure"/> 
 						</label>
 					</td>
-<!-- 					<td class="formLeftSubTableTitle">
-						<label for="type">
-							<bean:message key="collectioneventparameters.container"/> 
-						</label>
-					</td>
--->					<td class="formLeftSubTableTitle">
+					<td class="formLeftSubTableTitle">
 						<label for="comments">
 							<bean:message key="eventparameters.comments"/> 
 						</label>
@@ -947,26 +960,36 @@
 
 <!-- date -->
 					<td class="formField">
-						 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-							<html:text styleClass="formFieldSized10" maxlength="10"  size="15" styleId="collectionEventdateOfEvent" property="collectionEventdateOfEvent" />
-							&nbsp;<a href="javascript:show_calendar('newSpecimenForm.collectionEventdateOfEvent',null,null,'MM-DD-YYYY');"><img src="images\calendar.gif" width=24 height=22 border=0></a><br>
-			<!-- time -->
-			<!-- Mandar : 434 : for tooltip -->
-						<html:select property="collectionEventTimeInHours" styleClass="formFieldSized5" styleId="collectionEventTimeInHours" size="1"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
-						</html:select>&nbsp;
-						<label for="eventparameters.timeinhours">
-							<bean:message key="eventparameters.timeinhours"/>&nbsp; 
-						</label>
-		<!-- Mandar : 434 : for tooltip -->
-						<html:select property="collectionEventTimeInMinutes" styleClass="formFieldSized5" styleId="collectionEventTimeInMinutes" size="1"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
-						</html:select>
-						<label for="eventparameters.timeinhours">
-							&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
-						</label>
+<%
+if(currentCollectionDate.trim().length() > 0)
+{
+	Integer collectionYear = new Integer(Utility.getYear(currentCollectionDate ));
+	Integer collectionMonth = new Integer(Utility.getMonth(currentCollectionDate ));
+	Integer collectionDay = new Integer(Utility.getDay(currentCollectionDate ));
+%>
+<ncombo:DateTimeComponent name="collectionEventdateOfEvent"
+			  id="collectionEventdateOfEvent"
+			  formName="newSpecimenForm"
+			  month= "<%= collectionMonth %>"
+			  year= "<%= collectionYear %>"
+			  day= "<%= collectionDay %>"
+			  value="<%=currentCollectionDate %>"
+			  styleClass="formDateSized10"
+					/>
+<% 
+	}
+	else
+	{  
+ %>
+<ncombo:DateTimeComponent name="collectionEventdateOfEvent"
+			  id="collectionEventdateOfEvent"
+			  formName="newSpecimenForm"
+			  styleClass="formDateSized10"
+					/>
+<% 
+	} 
+%> 
+
 					</td>
 
 <!-- collection procedure -->
@@ -995,9 +1018,6 @@
 						<html:textarea styleClass="formFieldSized20"  styleId="collectionEventComments" property="collectionEventComments" />
 					</td>
 
-				 </tr>
-				</table>
-		</td>
 	</tr>
 
 </logic:equal>
