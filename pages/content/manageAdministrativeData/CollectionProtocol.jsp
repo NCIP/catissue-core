@@ -1,6 +1,8 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
@@ -27,6 +29,7 @@
 		if (reqPath != null)
 			appendingPath = reqPath + "|/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
 	
+		String currentCollectionProtocolDate="";
 	   	if(!operation.equals("add") )
 	   	{
 	   		Object obj = request.getAttribute("collectionProtocolForm");
@@ -34,9 +37,12 @@
 			{
 				CollectionProtocolForm form = (CollectionProtocolForm)obj;
 		   		appendingPath = "/CollectionProtocolSearch.do?operation=search&pageOf=pageOfCollectionProtocol&systemIdentifier="+form.getSystemIdentifier() ;
+
+				currentCollectionProtocolDate = form.getStartDate();
+				if(currentCollectionProtocolDate == null)
+					currentCollectionProtocolDate = "";
 		   	}
 	   	}
-		System.out.println("CP JSP : ----- " + appendingPath);
 		
     boolean readOnlyValue, readOnlyForAll=false;
     if (operation.equals(Constants.EDIT))
@@ -403,11 +409,37 @@ function insRow(subdivtag,iCounter,blockCounter)
 						</td>
 			
 						<td class="formField" colspan=2>
-							<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-						 	<html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="startDate" property="startDate" />
-						 	&nbsp;<bean:message key="page.dateFormat" />&nbsp;
-							<a href="javascript:show_calendar('collectionProtocolForm.startDate',null,null,'MM-DD-YYYY');">
-								<img src="images\calendar.gif" width=24 height=22 border=0></a>
+				<%
+				if(currentCollectionProtocolDate.trim().length() > 0)
+				{
+					Integer collectionProtocolYear = new Integer(Utility.getYear(currentCollectionProtocolDate ));
+					Integer collectionProtocolMonth = new Integer(Utility.getMonth(currentCollectionProtocolDate ));
+					Integer collectionProtocolDay = new Integer(Utility.getDay(currentCollectionProtocolDate ));
+				%>
+				<ncombo:DateTimeComponent name="startDate"
+							  id="startDate"
+							  formName="collectionProtocolForm"
+							  month= "<%= collectionProtocolMonth %>"
+							  year= "<%= collectionProtocolYear %>"
+							  day= "<%= collectionProtocolDay %>"
+							  value="<%=currentCollectionProtocolDate %>"
+							  styleClass="formDateSized10"
+									/>
+				<% 
+					}
+					else
+					{  
+				 %>
+				<ncombo:DateTimeComponent name="startDate"
+							  id="startDate"
+							  formName="collectionProtocolForm"
+							  styleClass="formDateSized10"
+									/>
+				<% 
+					} 
+				%> 
+				<bean:message key="page.dateFormat" />&nbsp;
+				
 						</td>
 					</tr>
 
@@ -423,11 +455,12 @@ function insRow(subdivtag,iCounter,blockCounter)
 						</td>
 			
 						 <td class="formField" colspan=2>
-						 <div id="enddateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+  						 <div id="enddateDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 						 <html:text styleClass="formDateSized15" maxlength="10"  size="35" styleId="endDate" property="endDate" readonly="true" />
 						 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
 							<!-- a href="javascript:show_calendar('collectionProtocolForm.endDate',null,null,'MM-DD-YYYY');">
 								<img src="images\calendar.gif" width=24 height=22 border=0></a -->
+
 						 </td>
 					</tr>
 				</logic:equal>

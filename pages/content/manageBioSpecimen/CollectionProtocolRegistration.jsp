@@ -1,19 +1,26 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
 <%
 	   		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
 			CollectionProtocolRegistrationForm form =null;
-	
+			String currentRegistrationDate = "";
 			if(obj != null && obj instanceof CollectionProtocolRegistrationForm)
 			{
 				form = (CollectionProtocolRegistrationForm)obj;
+				currentRegistrationDate = form.getRegistrationDate();  
+				
+				if(currentRegistrationDate == null)
+					currentRegistrationDate = "";
 			}
+
 				String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 				boolean isAddNew = false;
 
@@ -233,11 +240,43 @@
 						</label>
 					</td>
 					<td class="formField">
-				           <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<!-- 				           <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 				           <html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="registrationDate" property="registrationDate" />
 				           &nbsp;<bean:message key="page.dateFormat" />&nbsp;
 					       <a href="javascript:show_calendar('collectionProtocolRegistrationForm.registrationDate',null,null,'MM-DD-YYYY');">
 						         <img src="images\calendar.gif" width=24 height=22 border=0></a>
+-->
+<%
+	 if(currentRegistrationDate.trim().length() > 0)
+	{
+			Integer registrationYear = new Integer(Utility.getYear(currentRegistrationDate ));
+			Integer registrationMonth = new Integer(Utility.getMonth(currentRegistrationDate ));
+			Integer registrationDay = new Integer(Utility.getDay(currentRegistrationDate ));
+%>
+			<ncombo:DateTimeComponent name="registrationDate"
+									  id="registrationDate"
+ 									  formName="collectionProtocolRegistrationForm"	
+									  month= "<%=registrationMonth %>"
+									  year= "<%=registrationYear %>"
+									  day= "<%= registrationDay %>" 
+									  value="<%=currentRegistrationDate %>"
+									  styleClass="formDateSized10"
+											 />		
+<% 
+	}
+	else
+	{  
+ %>
+			<ncombo:DateTimeComponent name="registrationDate"
+									  id="registrationDate"
+ 									  formName="collectionProtocolRegistrationForm"	
+									  styleClass="formDateSized10" 
+											 />		
+<%
+	}
+%>
+<bean:message key="page.dateFormat" />&nbsp;
+
 				 	</td>
 				</tr>
 	

@@ -1,6 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.DistributionForm"%>
 <%@ page import="java.util.List,java.util.Iterator"%>
@@ -186,7 +187,7 @@
 
 <%
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-	
+		String currentDistributionDate = "";
 		Object obj = request.getAttribute("distributionForm");
 		int noOfRows=1;
 		Map map =null;
@@ -196,7 +197,12 @@
 			DistributionForm form = (DistributionForm)obj;
 			noOfRows = form.getCounter();
 			map = form.getValues();
+			currentDistributionDate = form.getDateOfEvent(); 
+
+			if(currentDistributionDate == null)
+				currentDistributionDate = "";
 		}
+
 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 		String appendingPath = "/Distribution.do?operation=add&pageOf=pageOfDistribution";
 		if (reqPath != null)
@@ -308,36 +314,48 @@
 				</label>
 			</td>
 			<td class="formField">
-				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<!-- 				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 				<html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="dateOfEvent" property="dateOfEvent" />
 				&nbsp;<bean:message key="page.dateFormat" />&nbsp;
 				<a href="javascript:show_calendar('distributionForm.dateOfEvent',null,null,'MM-DD-YYYY');">
 					<img src="images\calendar.gif" width=24 height=22 border=0></a>
+-->
+<!-- Date Component BY Mandar: 18-Aug-06 -->
+<%
+if(currentDistributionDate.trim().length() > 0)
+{
+	Integer distributionYear = new Integer(Utility.getYear(currentDistributionDate ));
+	Integer distributionMonth = new Integer(Utility.getMonth(currentDistributionDate ));
+	Integer distributionDay = new Integer(Utility.getDay(currentDistributionDate ));
+%>
+<ncombo:DateTimeComponent name="dateOfEvent"
+			  id="dateOfEvent"
+			  formName="distributionForm"
+			  month= "<%= distributionMonth %>"
+			  year= "<%= distributionYear %>"
+			  day= "<%= distributionDay %>"
+			  value="<%=currentDistributionDate %>"
+			  styleClass="formDateSized10"
+					/>
+<% 
+	}
+	else
+	{  
+ %>
+<ncombo:DateTimeComponent name="dateOfEvent"
+			  id="dateOfEvent"
+			  formName="distributionForm"
+			  styleClass="formDateSized10"
+					/>
+<% 
+	} 
+%> 
+<bean:message key="page.dateFormat" />&nbsp;
+
 			</td>
 		</tr>
 
-<!-- hours & minutes -->		
-		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formLabel">
-				<label for="type">
-					<bean:message key="eventparameters.time"/>&nbsp; 
-					
-				</label>
-			</td>
-			<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
-				</html:select>&nbsp;<bean:message key="eventparameters.timeinhours"/>&nbsp;
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
-				</html:select>&nbsp;<bean:message key="eventparameters.timeinminutes"/>
-			</td>
-		</tr>
+<!-- Commented By Mandar for date component -->
 		
 <%-- fromSite
 		<tr>

@@ -1,11 +1,20 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.DisposalEventParametersForm"%>
+
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
 <head>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<!-- Mandar 21-Aug-06 : For calendar changes -->
+<script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<!-- Mandar 21-Aug-06 : calendar changes end -->
 
 	<script language="javascript">
 		
@@ -29,6 +38,17 @@
             readOnlyValue = false;
         }
 		
+			Object obj = request.getAttribute("disposalEventParametersForm");
+			String currentEventParametersDate = ""; 
+			if(obj != null && obj instanceof DisposalEventParametersForm)
+			{
+				DisposalEventParametersForm form = (DisposalEventParametersForm)obj;
+			currentEventParametersDate = form.getDateOfEvent();
+			if(currentEventParametersDate == null)
+				currentEventParametersDate = "";
+			}
+
+
 %>	
 			
 <html:errors/>
@@ -98,42 +118,41 @@
 				</label>
 			</td>
 			<td class="formField">
-				 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-					<html:text styleClass="formDateSized15" maxlength="10"  size="15" styleId="dateOfEvent" property="dateOfEvent" />
-					&nbsp;<bean:message key="page.dateFormat" />&nbsp;
-						<a href="javascript:show_calendar('disposalEventParametersForm.dateOfEvent',null,null,'MM-DD-YYYY');">
-							<img src="images\calendar.gif" width=24 height=22 border=0>
-						</a>
+				<%
+				if(currentEventParametersDate.trim().length() > 0)
+				{
+					Integer eventParametersYear = new Integer(Utility.getYear(currentEventParametersDate ));
+					Integer eventParametersMonth = new Integer(Utility.getMonth(currentEventParametersDate ));
+					Integer eventParametersDay = new Integer(Utility.getDay(currentEventParametersDate ));
+				%>
+				<ncombo:DateTimeComponent name="dateOfEvent"
+							  id="dateOfEvent"
+							  formName="disposalEventParametersForm"
+							  month= "<%= eventParametersMonth %>"
+							  year= "<%= eventParametersYear %>"
+							  day= "<%= eventParametersDay %>"
+							  value="<%=currentEventParametersDate %>"
+							  styleClass="formDateSized10"
+									/>
+				<% 
+					}
+					else
+					{  
+				 %>
+				<ncombo:DateTimeComponent name="dateOfEvent"
+							  id="dateOfEvent"
+							  formName="disposalEventParametersForm"
+							  styleClass="formDateSized10"
+									/>
+				<% 
+					} 
+				%> 
+				<bean:message key="page.dateFormat" />&nbsp;
+				
+
 			</td>
 		</tr>
 
-<!-- hours & minutes -->		
-		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
-			<td class="formRequiredLabel">
-				<label for="eventparameters.time">
-					<bean:message key="eventparameters.time"/>
-				</label>
-			</td>
-			<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
-				</html:select>&nbsp;
-				<label for="eventparameters.timeinhours">
-					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
-				</label>
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
-				</html:select>
-				<label for="eventparameters.timeinhours">
-					&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
-				</label>
-			</td>
-		</tr>
 		
 <!-- Reason -->		
 		<tr>

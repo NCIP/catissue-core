@@ -1,6 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 
 <%@ page import="java.util.List,java.util.Iterator"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
@@ -57,12 +58,15 @@ tr#hiddenCombo
 		Object obj = request.getAttribute("participantForm");
 		int noOfRows=0;
 		Map map = null;
-
+		String currentBirthDate = "";
+		String currentDeathDate = "";
 		if(obj != null && obj instanceof ParticipantForm)
 		{
 			ParticipantForm form = (ParticipantForm)obj;
 			map = form.getValues();
 			noOfRows = form.getCounter();
+			currentBirthDate = form.getBirthDate(); 
+			currentDeathDate = form.getDeathDate(); 
 		}
 %>
 
@@ -452,11 +456,36 @@ tr#hiddenCombo
 					</td>
 					 
 					 <td class="formField" colspan="2">
-					 <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-					 <html:text styleClass="formDateSized10" maxlength="10"  size="10" styleId="birthDate" property="birthDate" disabled="<%=readOnlyForAll%>"/>
-					 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
-						<a href="javascript:show_calendar('participantForm.birthDate',null,null,'MM-DD-YYYY');">
-							<img src="images\calendar.gif" width=24 height=22 border=0></a>
+<%
+	 if(currentBirthDate.trim().length() > 0)
+	{
+			Integer birthYear = new Integer(Utility.getYear(currentBirthDate ));
+			Integer birthMonth = new Integer(Utility.getMonth(currentBirthDate ));
+			Integer birthDay = new Integer(Utility.getDay(currentBirthDate ));
+%>
+			<ncombo:DateTimeComponent name="birthDate"
+									  id="birthDate"
+ 									  formName="participantForm"	
+									  month= "<%=birthMonth %>"
+									  year= "<%=birthYear %>"
+									  day= "<%= birthDay %>" 
+									  value="<%=currentBirthDate %>"
+									  styleClass="formDateSized10"
+											 />		
+<% 
+	}
+	else
+	{  
+ %>
+			<ncombo:DateTimeComponent name="birthDate"
+									  id="birthDate"
+ 									  formName="participantForm"	
+									  styleClass="formDateSized10" 
+											 />		
+<%
+	}
+%>
+<bean:message key="page.dateFormat" />&nbsp;
 					 </td>
 				 </tr>
 				 <%-- added by chetan for death date --%>
@@ -469,11 +498,36 @@ tr#hiddenCombo
 					</td>
 					 
 					 <td class="formField" colspan="2">
-					 <div id="overDiv1" style="position:absolute; visibility:hidden; z-index:1000;"></div>
-					 <html:text styleClass="formDateSized10" maxlength="10"  size="10" styleId="deathDate" property="deathDate" disabled="<%=readOnlyForAll%>"/>
-					 &nbsp;<bean:message key="page.dateFormat" />&nbsp;
-						<a href="javascript:show_calendar('participantForm.deathDate',null,null,'MM-DD-YYYY');">
-							<img src="images\calendar.gif" width=24 height=22 border=0></a>
+<%
+	 if(currentDeathDate.trim().length() > 0)
+	{
+			Integer deathYear = new Integer(Utility.getYear(currentDeathDate ));
+			Integer deathMonth = new Integer(Utility.getMonth(currentDeathDate ));
+			Integer deathDay = new Integer(Utility.getDay(currentDeathDate ));
+%>
+			<ncombo:DateTimeComponent name="deathDate"
+									  id="deathDate"
+ 									  formName="participantForm"	
+									  month= "<%=deathMonth %>"
+									  year= "<%=deathYear %>"
+									  day= "<%= deathDay %>" 
+									  value="<%=currentDeathDate %>"
+									  styleClass="formDateSized10"
+											 />		
+<% 
+	}
+	else
+	{  
+ %>
+			<ncombo:DateTimeComponent name="deathDate"
+									  id="deathDate"
+ 									  formName="participantForm"	
+									  styleClass="formDateSized10" 
+											 />		
+<%
+	}
+%>
+<bean:message key="page.dateFormat" />&nbsp;
 					 </td>
 				 </tr> 			 
 				 
@@ -566,9 +620,9 @@ tr#hiddenCombo
 				     	</label>
 				     </td>
 				     <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized2" maxlength="3" styleId="socialSecurityNumberPartA" property="socialSecurityNumberPartA" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);"/>
+				     	<html:text styleClass="formFieldSized2" maxlength="3" styleId="socialSecurityNumberPartA" property="socialSecurityNumberPartA" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartB');"/>
 				     	-
-				     	<html:text styleClass="formFieldSized1" maxlength="2" styleId="socialSecurityNumberPartB" property="socialSecurityNumberPartB" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);"/>
+				     	<html:text styleClass="formFieldSized1" maxlength="2" styleId="socialSecurityNumberPartB" property="socialSecurityNumberPartB" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);moveToNext(this,this.value,'socialSecurityNumberPartC');"/>
 				     	-
 				     	<html:text styleClass="formFieldSized3" maxlength="4" styleId="socialSecurityNumberPartC" property="socialSecurityNumberPartC" readonly="<%=readOnlyForAll%>" onkeypress="intOnly(this);" onchange="intOnly(this);" onkeyup="intOnly(this);"/>
 				     </td>

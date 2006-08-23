@@ -1,6 +1,9 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+
 <%@ page import="edu.wustl.common.vo.SearchFieldData"%>
 <%@ page import="edu.wustl.common.vo.AdvanceSearchUI"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
@@ -36,6 +39,12 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script src="jss/script.js" type="text/javascript"></script>
 	<script src="jss/AdvancedSearchScripts.js" type="text/javascript"></script>
+<!-- Mandar 21-Aug-06 : For calendar changes -->
+<script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<!-- Mandar 21-Aug-06 : calendar changes end -->
+
 </head>
 
 <html:errors />
@@ -116,7 +125,7 @@
 			 
 		%>
 			<td class="formField" nowrap>
-				<div id="<%=overDiv%>" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+<!--  			<div id="<%=overDiv%>" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 				<html:text styleClass="formDateSized10" size="10" styleId="<%=searchFieldData[i].getValueField().getId() + 1%>" property="<%=searchFieldData[i].getValueField().getName()%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/>
 							 &nbsp;
 				<a href="javascript:onDate('<%=searchFieldData[i].getOprationField().getId() %>','<%=(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 1)%>',false);">
@@ -126,6 +135,27 @@
 				<a href="javascript:onDate('<%=searchFieldData[i].getOprationField().getId()%>','<%=(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 2)%>',true);">
 					<img src="images\calendar.gif" width=24 height=22 border=0>
 				</a>
+-->
+<%
+	String dateField1Click = "onDate('"+searchFieldData[i].getOprationField().getId()+"','"+(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 1)+"',false,event);";
+	String dateField2Click = "onDate('"+searchFieldData[i].getOprationField().getId()+"','"+(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 2)+"',true,event);";
+	Boolean isDisabled = new Boolean("true");
+ %>
+			<ncombo:DateTimeComponent name="<%=searchFieldData[i].getValueField().getName()%>"
+									  id="<%=searchFieldData[i].getValueField().getId() + 1%>"
+ 									  formName="<%=advSearch.getFormName()%>"	
+									  styleClass="formDateSized10" 
+									  disabled="<%= isDisabled %>"
+									  onClickImage="<%=dateField1Click %>"
+											 />	
+			&nbsp;Thru&nbsp;
+			<ncombo:DateTimeComponent name="<%=hlimitName%>"
+									  id="<%=searchFieldData[i].getValueField().getId() + 2%>"
+ 									  formName="<%=advSearch.getFormName()%>"	
+									  styleClass="formDateSized10" 
+									  disabled="<%= isDisabled %>"
+									  onClickImage="<%=dateField2Click %>"
+											 />	
 			</td>
 		<%
 			//For different id of div tag
