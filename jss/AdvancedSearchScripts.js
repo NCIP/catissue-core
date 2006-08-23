@@ -3,21 +3,25 @@
   formNameAndDateFieldId : A string that contains the form name & date field's id
   isSecondDateField : A boolean variable that tells whether the date field is first or second
 */
-function onDate(operatorListId,formNameAndDateFieldId,isSecondDateField)
+function onDate(operatorListId,formNameAndDateFieldId,isSecondDateField,event)
 {
 	var dateCombo = document.getElementById(operatorListId);
-	
+	var fnm = formNameAndDateFieldId.substring(0,formNameAndDateFieldId.indexOf("."));
+	var id = formNameAndDateFieldId.substring(formNameAndDateFieldId.indexOf(".")+1);
 	if(dateCombo.options[dateCombo.selectedIndex].value != "Any")
 	{
 		if(!isSecondDateField)
 		{
-			show_calendar(formNameAndDateFieldId,null,null,'MM-DD-YYYY')
+//			show_calendar(formNameAndDateFieldId,null,null,'MM-DD-YYYY')
+			showCalendar(2006,8,21,'MM-dd-yyyy',fnm,id,event,1900,2020);
 		}
 		else
 		{
 			if(dateCombo.options[dateCombo.selectedIndex].value == "Between" || dateCombo.options[dateCombo.selectedIndex].value == "Not Between")
 			{
-				show_calendar(formNameAndDateFieldId,null,null,'MM-DD-YYYY');
+//				show_calendar(formNameAndDateFieldId,null,null,'MM-DD-YYYY');
+				showCalendar(2006,8,21,'MM-dd-yyyy',fnm,id,event,1900,2020);
+
 			}
 		}
 	}
