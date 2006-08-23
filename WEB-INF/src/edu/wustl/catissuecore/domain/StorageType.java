@@ -98,12 +98,14 @@ public class StorageType extends ContainerType
         this.activityStatus = activityStatus;
     }
     
+       
     /**
      * @return Returns the holdsStorageTypeCollection.
-     * @hibernate.set name="holdsStorageTypeCollection" table="CATISSUE_STORAGE_TYPE"
-     * cascade="none" inverse="false" lazy="false"
-     * @hibernate.collection-key column="HOLDS_STORAGE_TYPE_ID"
-     * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.StorageType"
+     * Returns the collection of storage types associated with type 
+     * @hibernate.set name="holdsStorageTypeCollection" table="CATISSUE_STOR_TYPE_HOLDS_TYPE"
+     * cascade="save-update" inverse="false" lazy="false"
+	 * @hibernate.collection-key column="STORAGE_TYPE_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageType" column="HOLDS_STORAGE_TYPE_ID"
      */
     public Collection getHoldsStorageTypeCollection()
     {

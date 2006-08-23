@@ -106,8 +106,7 @@
               <key
                   column="SPECIMEN_ARRAY_TYPE_ID"
               />
-		
-		<element column="SPECIMEN_TYPE" type="string" length="50"/>
+
         </set>
 
         </joined-subclass>
@@ -141,8 +140,7 @@
               <key
                   column="STORAGE_TYPE_ID"
               />
-			
-			<element column="SPECIMEN_CLASS" type="string" length="50"/>
+
         </set>
 
         <property
@@ -156,20 +154,23 @@
 
         <set
             name="holdsStorageTypeCollection"
-            table="CATISSUE_STORAGE_TYPE"
+            table="CATISSUE_STOR_TYPE_HOLDS_TYPE"
             lazy="false"
             inverse="false"
-            cascade="none"
+            cascade="save-update"
             sort="unsorted"
         >
 
               <key
-                  column="HOLDS_STORAGE_TYPE_ID"
+                  column="STORAGE_TYPE_ID"
               />
 
-              <one-to-many
+              <many-to-many
                   class="edu.wustl.catissuecore.domain.StorageType"
+                  column="HOLDS_STORAGE_TYPE_ID"
+                  outer-join="auto"
               />
+
         </set>
 
         </joined-subclass>
