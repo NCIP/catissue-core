@@ -4,17 +4,27 @@
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-
+<%@ page import="edu.wustl.common.util.global.Variables"%>
 <tiles:importAttribute />
 
 <html>
 <head>
+<%
+	int timeOut = request.getSession().getMaxInactiveInterval() ; 
+	String content = timeOut+";url="+Variables.catissueURL;
+ %>
+<meta http-equiv="refresh" content="<%=content %>">
 <title><tiles:getAsString name="title" ignore="true" /></title>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <script src="jss/script.js" type="text/javascript"></script>
 <script src="jss/overlib_mini.js" type="text/javascript"></script>
 <script src="jss/calender.js" type="text/javascript"></script>
 
+<!-- Mandar 11-Aug-06 : For calendar changes -->
+<script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<!-- Mandar 11-Aug-06 : calendar changes end -->
 </head>
 <body>
 <table summary="" cellpadding="0" cellspacing="0" border="0"
