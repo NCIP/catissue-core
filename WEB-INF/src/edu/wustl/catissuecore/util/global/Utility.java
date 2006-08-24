@@ -355,7 +355,9 @@ public class Utility extends edu.wustl.common.util.Utility
 		return year;
 	}
 	
-	// Method to validate the date given by the user and return a calendar object for the date instance.
+	/* Method to validate the date given by the user and return a calendar object for the date instance.
+	 * It returns a calendar object based on the date provided. If invalid date is provided it returns the current calendar instance.
+	 */
 	private static Calendar getCalendar(String date,String pattern)
 	{
 		try
@@ -369,7 +371,8 @@ public class Utility extends edu.wustl.common.util.Utility
 		catch(Exception e)
 		{
 			Logger.out.error(e );
-			return null;
+			Calendar calendar =Calendar.getInstance();
+			return calendar;
 		}
 	}
 	
