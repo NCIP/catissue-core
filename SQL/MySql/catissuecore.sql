@@ -323,7 +323,6 @@ create table CATISSUE_SPECIMEN_REQUIREMENT (
    TISSUE_SITE varchar(150),
    PATHOLOGY_STATUS varchar(50),
    QUANTITY_ID bigint,
-   QUANTITY double precision,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_INSTITUTION (
