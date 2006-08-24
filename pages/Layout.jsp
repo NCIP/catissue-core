@@ -11,6 +11,7 @@
 <head>
 <%
 	int timeOut = request.getSession().getMaxInactiveInterval() ; 
+	timeOut =timeOut + 5;
 	String content = timeOut+";url="+Variables.catissueURL;
  %>
 <meta http-equiv="refresh" content="<%=content %>">
