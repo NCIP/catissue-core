@@ -21,9 +21,8 @@ import edu.wustl.common.exception.AssignDataException;
  * @author mandar_deshmukh
  * Required generic attributes for a Specimen associated with a Collection or Distribution Protocol.
  * @hibernate.class table="CATISSUE_SPECIMEN_REQUIREMENT"
- * @hibernate.discriminator column="SPECIMEN_CLASS" 
  */
-public abstract class SpecimenRequirement  extends AbstractDomainObject implements java.io.Serializable
+public class SpecimenRequirement  extends AbstractDomainObject implements java.io.Serializable
 {
 	
     private static final long serialVersionUID = 1234567890L;
@@ -67,6 +66,7 @@ public abstract class SpecimenRequirement  extends AbstractDomainObject implemen
 	 **/
 	public SpecimenRequirement()
 	{
+		super();
 	}
 	
 	/**
