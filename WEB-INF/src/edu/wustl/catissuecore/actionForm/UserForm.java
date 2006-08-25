@@ -38,6 +38,11 @@ public class UserForm extends AbstractActionForm
 {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 9121703882368803846L;
+
+	/**
      * Last Name of the user.
      */
     private String lastName;
@@ -801,6 +806,10 @@ public class UserForm extends AbstractActionForm
                                         .getValue("user.oldPassword")));
                     }
                     
+                    Logger.out.debug("newPassword "+newPassword);
+                    Logger.out.debug("confirmNewPassword "+confirmNewPassword);
+                    Logger.out.debug("oldPassword "+oldPassword);
+                    
                     if (validator.isEmpty(newPassword))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -825,24 +834,22 @@ public class UserForm extends AbstractActionForm
                     /*
                      * begin: Added for Password validation
                      */          			
-        			Logger.out.debug("before if of Validate password " + newPassword + " " + oldPassword);
-        			if (!validator.isEmpty(newPassword) && !validator.isEmpty(oldPassword))
-                    {
-                    	int result=-1;
-            			// Call static method PasswordManager.validate() where params are
-            			// new password,old password,user name
-            			// returns int value.
-            			result=PasswordManager.validate(newPassword,oldPassword,request.getSession());
-            			Logger.out.debug("return from Password validate " + result);
-            			// if validate method returns value greater than zero then validation fails  
-            			if(result!=PasswordManager.SUCCESS)  
-            			{
-            				// get error message of validation failure where param is result of validate() method
-            				String errorMessage=PasswordManager.getErrorMessage(result);
-            				Logger.out.debug("error from Password validate " + errorMessage);
-            				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",errorMessage));
-            			}
-                    }
+//        			Logger.out.debug("before if of Validate password " + newPassword + " " + oldPassword);
+//        			if (!validator.isEmpty(newPassword) && !validator.isEmpty(oldPassword))
+//                    {
+//            			// Call static method PasswordManager.validate() where params are
+//            			// new password,old password,user name
+//                    	int result=PasswordManager.validate(newPassword,oldPassword,request.getSession());
+//            			Logger.out.debug("return from Password validate " + result);
+//            			// if validate method returns value greater than zero then validation fails  
+//            			if(result!=PasswordManager.SUCCESS)  
+//            			{
+//            				// get error message of validation failure where param is result of validate() method
+//            				String errorMessage=PasswordManager.getErrorMessage(result);
+//            				Logger.out.debug("error from Password validate " + errorMessage);
+//            				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item",errorMessage));
+//            			}
+//                    }
             		
                     
                     Logger.out.debug("after call to Validate password");
