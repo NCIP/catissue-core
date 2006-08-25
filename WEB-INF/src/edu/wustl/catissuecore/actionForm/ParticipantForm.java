@@ -86,7 +86,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     /**
      * The race to which the Participant belongs.
      */
-    protected String race = "";
+    protected String[] raceTypes={"-1"};
     
     /**
      * Participant's ethnicity status.
@@ -157,6 +157,23 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.gender = participant.getGender();
         this.genotype = participant.getSexGenotype();
         setSSN(participant.getSocialSecurityNumber());
+        
+        Collection raceCollection=participant.getRaceCollection();
+        if (raceCollection != null)
+		{
+			this.raceTypes = new String[raceCollection.size()];
+			int i = 0;
+
+			Iterator it = raceCollection.iterator();
+			while (it.hasNext())
+			{
+			    String race=(String)it.next();
+				this.raceTypes[i]=race;
+				i++;
+			}
+		}
+        
+        
 //        this.race = participant.getRace();
         this.activityStatus = participant.getActivityStatus();
         this.ethnicity = participant.getEthnicity();
@@ -218,7 +235,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         this.gender = toStringEnumValue(participant.getGender());
         this.genotype = toStringEnumValue(participant.getSexGenotype());
         setSSN(participant.getSocialSecurityNumber());
-        this.race = toStringEnumValue(participant.getRace());
+        //this.race = toStringEnumValue(participant.getRace());
         this.activityStatus = toStringEnumValue(participant.getActivityStatus());
         this.ethnicity = toStringEnumValue(participant.getEthnicity());
         
@@ -404,9 +421,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      * @return String the race of the Participant.
      * @see #setRace(String)
      */
-    public String getRace()
+    public String[] getRaceTypes()
     {
-        return race;
+        return raceTypes;
     }
 
     /**
@@ -414,9 +431,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      * @param birthDate String the race of the Participant.
      * @see #getRace()
      */
-    public void setRace(String race)
+    public void setRaceTypes(String[] raceTypes)
     {
-        this.race = race;
+        this.raceTypes = raceTypes;
     }
 
     
@@ -517,7 +534,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
          	}
 			
          	//Validation for Blank Participant 
-         	if(validator.isEmpty(lastName) && validator.isEmpty(firstName) && validator.isEmpty(middleName) && validator.isEmpty(birthDate) && (validator.isEmpty(deathDate))&& !validator.isValidOption(gender) && !validator.isValidOption(vitalStatus) && !validator.isValidOption(genotype)&& !validator.isValidOption(race) && ethnicity.equals("-1") && validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC))
+         	if(validator.isEmpty(lastName) && validator.isEmpty(firstName) && validator.isEmpty(middleName) && validator.isEmpty(birthDate) && (validator.isEmpty(deathDate))&& !validator.isValidOption(gender) && !validator.isValidOption(vitalStatus) && !validator.isValidOption(genotype) && ethnicity.equals("-1") && validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC))
          	{
          	   errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.atLeastOneFieldRequired"));
          	}

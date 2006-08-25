@@ -510,6 +510,17 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 //	        	this.race = form.getRace();
 //	        else
 //	        	this.race = null;
+	        raceCollection.clear();
+        	String [] raceTypes = form.getRaceTypes();
+        	if(raceTypes!=null)
+        	{
+	        	for (int i = 0; i < raceTypes.length; i++)
+				{
+	        		if(!raceTypes[i].equals("-1"))
+	        			raceCollection.add(raceTypes[i]);
+	        		
+				}
+        	}
 	        
 	        String socialSecurityNumberTemp = form.getSocialSecurityNumberPartA()+"-"+form.getSocialSecurityNumberPartB()+"-"+form.getSocialSecurityNumberPartC();
 	        

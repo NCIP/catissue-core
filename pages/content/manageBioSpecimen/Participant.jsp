@@ -591,7 +591,7 @@ tr#hiddenCombo
 				     </td>
 				     <td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="race" styleClass="formFieldSized" styleId="race" size="1" disabled="<%=readOnlyForAll%>"
+				     	<html:select property="raceTypes" styleClass="formFieldSized" styleId="race" size="4" multiple="true" disabled="<%=readOnlyForAll%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.RACELIST%>" labelProperty="name" property="value"/>
 						</html:select>
