@@ -65,6 +65,15 @@
 		<name>proxy.password</name>
 		<value></value>
 	</property>
+	<property>
+		<name>password.not_same_as_last_n</name>
+		<value>5</value>
+	</property>
+	
+	<property>
+		<name>password.expire_after_n_days</name>
+		<value>10</value>
+	</property>
 
 	<property>
 		<name>app.disclaimer.file</name>

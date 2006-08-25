@@ -11,7 +11,9 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
@@ -21,9 +23,9 @@ import java.util.Vector;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EmailHandler;
-import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
@@ -36,8 +38,10 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
@@ -48,7 +52,11 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
  */
 public class UserBizLogic extends DefaultBizLogic
 {
-
+	public static final int FAIL_SAME_AS_LAST_N = 8;
+	public static final int FAIL_FIRST_LOGIN = 9;
+	public static final int FAIL_EXPIRE = 10;
+	public static final int FAIL_SAME_DAY = 11;
+	public static final int SUCCESS = 0;
     /**
      * Saves the user object in the database.
      * @param obj The user object to be saved.
@@ -109,7 +117,19 @@ public class UserBizLogic extends DefaultBizLogic
                 
                 user.setCsmUserId(csmUser.getUserId());
 //                user.setPassword(csmUser.getPassword());
-            }
+				//Add password of user in password table.Updated by Supriya Dankh		 
+				 Password password = new Password();
+				  
+				 password.setUser(user);
+				 password.setPassword(csmUser.getPassword());
+				 password.setUpdateDate(new Date());
+				 
+				 user.getPasswordCollection().add(password);
+				 
+				 Logger.out.debug("password stored in passwore table");
+				 
+				// user.setPassword(csmUser.getPassword());            
+			}
             
             // Create address and the user in catissue tables.
             dao.insert(user.getAddress(), sessionDataBean, true, false);
@@ -213,6 +233,7 @@ public class UserBizLogic extends DefaultBizLogic
     protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
             throws DAOException, UserNotAuthorizedException
     {
+        Logger.out.debug("dao "+dao);
         User user = (User) obj;
         User oldUser = (User) oldObj;
         
@@ -221,9 +242,10 @@ public class UserBizLogic extends DefaultBizLogic
         {
             throw new DAOException(ApplicationProperties.getValue("errors.editRejectedUser"));
         }
-        else if (Constants.ACTIVITY_STATUS_NEW.equals(oldUser.getActivityStatus())
-                 || Constants.ACTIVITY_STATUS_PENDING.equals(oldUser.getActivityStatus()))
-        {//If the user is not approved yet, its record cannot be updated.
+        else if (Constants.ACTIVITY_STATUS_NEW.equals(oldUser.getActivityStatus()) || 
+                 Constants.ACTIVITY_STATUS_PENDING.equals(oldUser.getActivityStatus()))
+        {	
+            //If the user is not approved yet, its record cannot be updated.
             throw new DAOException(ApplicationProperties.getValue("errors.editNewPendingUser"));
         }
         
@@ -248,8 +270,29 @@ public class UserBizLogic extends DefaultBizLogic
                     throw new DAOException(ApplicationProperties.getValue("errors.oldPassword.wrong"));
                 }
                 
-//                csmUser.setPassword(PasswordManager.encode(user.getPassword()));
-//                user.setPassword(csmUser.getPassword());
+                //Added for Password validation by Supriya Dankh.
+				Validator validator = new Validator();
+				if (!validator.isEmpty(user.getNewPassword()) && !validator.isEmpty(user.getOldPassword()))
+				{
+				    int result = validatePassword(oldUser.getPasswordCollection(), user.getNewPassword(), user.getOldPassword(), sessionDataBean);
+				    
+				    Logger.out.debug("return from Password validate " + result);
+				    
+				 	//if validatePassword method returns value greater than zero then validation fails
+				  	if (result != SUCCESS)
+				  	{
+						// get error message of validation failure 
+					 	String errorMessage = getPasswordErrorMsg(result);
+				     
+					 	Logger.out.debug("Error Message from method" +errorMessage);
+					 	throw new DAOException(errorMessage);
+				  	}
+			 	}
+				csmUser.setPassword(PasswordManager.encode(user.getNewPassword()));
+
+				// Set values in password domain object and adds changed password in Password Collection
+				Password password = new Password(csmUser.getPassword(),user);
+				user.getPasswordCollection().add(password);
             }
             else
             {
@@ -567,6 +610,108 @@ public class UserBizLogic extends DefaultBizLogic
         return roleNameValueBeanList;
     }
     
+
+	// Added by Supriya Dankh.
+	/**
+     * @param oldPasswordCollection old Password Collection Object
+     * @param newPassword New Password value
+     * @param validator VAlidator object
+     * @param oldPassword Old Password value
+     * @param sessionData SessionDataBean Object
+     * @return SUCCESS (constant int 0) if all condition passed 
+     *   else return respective error code (constant int) value  
+     */
+
+	private int validatePassword(Collection oldPasswordCollection,String newPassword, String oldPassword,SessionDataBean sessionData) 
+	{
+	    List oldPwdList = new ArrayList(oldPasswordCollection);
+		Collections.sort(oldPwdList);
+	    
+		if (oldPwdList != null && !oldPwdList.isEmpty()) 
+		{
+			//Check new password is equal to last n password if value
+			if(checkPwdNotSameAsLastN(newPassword,oldPwdList))
+			{
+				Logger.out.debug("Password is not valid returning FAIL_SAME_AS_LAST_N");
+				return FAIL_SAME_AS_LAST_N;
+			}
+
+			//Get the last updated date of the password
+			Date lastestUpdateDate = ((Password) oldPwdList.get(0)).getUpdateDate();
+			if (checkPwdUpdatedOnSameDay(lastestUpdateDate))
+			{
+				Logger.out.debug("Password is not valid returning FAIL_SAME_DAY");
+				return FAIL_SAME_DAY;
+			}
+		}
+		return SUCCESS;
+	}
+	
+	private boolean checkPwdNotSameAsLastN(String newPassword, List oldPwdList)
+	{
+	    int noOfPwdNotSameAsLastN = 0;
+		String pwdNotSameAsLastN = XMLPropertyHandler.getValue("password.not_same_as_last_n");
+		if ( pwdNotSameAsLastN != null && !pwdNotSameAsLastN.equals(""))
+		{
+		    noOfPwdNotSameAsLastN = Integer.parseInt(pwdNotSameAsLastN);
+		    noOfPwdNotSameAsLastN = Math.max(0, noOfPwdNotSameAsLastN);
+		}
+		
+	    boolean isSameFound = false;
+		int loopCount = Math.min(oldPwdList.size(),noOfPwdNotSameAsLastN);
+		for (int i = 0; i<loopCount; i++) 
+		{
+		    Password pasword = (Password) oldPwdList.get(i);
+			if (newPassword.equals(PasswordManager.decode(pasword.getPassword())))
+			{
+			    isSameFound = true;
+			    break;
+			}
+		}
+		return isSameFound;
+	}
+	
+	private boolean checkPwdUpdatedOnSameDay(Date lastUpdateDate)
+	{
+	    Validator validator = new Validator();
+	    //Get difference in days between last password update date and current date.
+	    long dayDiff = validator.getDateDiff(lastUpdateDate,new Date());
+		if (dayDiff == 0)
+		{
+			Logger.out.debug("Password is not valid returning FAIL_SAME_DAY");
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * @param errorCode int value return by validatePassword() method
+	 * @return String error message with respect to error code 
+	 */
+	private String getPasswordErrorMsg(int errorCode) 
+	{
+		String errMsg = "";
+		switch (errorCode) 
+		{
+			case FAIL_SAME_AS_LAST_N:
+				errMsg = ApplicationProperties.getValue("errors.newPassword.sameAsLastn");
+				break;
+			case FAIL_FIRST_LOGIN:
+				errMsg = ApplicationProperties.getValue("errors.changePassword.changeFirstLogin");
+				break;
+			case FAIL_EXPIRE:
+				errMsg = ApplicationProperties.getValue("errors.changePassword.expire");
+				break;
+			case FAIL_SAME_DAY:
+				errMsg = ApplicationProperties.getValue("errors.changePassword.sameDay");
+				break;
+			default:
+				errMsg = PasswordManager.getErrorMessage(errorCode);
+				break;
+		}
+		return errMsg;
+	}
+
 //    //method to return a comma seperated list of emails of administrators of a particular institute
 //    
 //    private String getInstitutionAdmins(Long instID) throws DAOException,SMException 

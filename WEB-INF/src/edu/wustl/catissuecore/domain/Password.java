@@ -11,7 +11,7 @@ import edu.wustl.common.exception.AssignDataException;
  * Set of attributes which defines updated information related to password of the user.
  * @hibernate.class table="CATISSUE_PASSWORD"
  */
-public class Password extends AbstractDomainObject implements Serializable 
+public class Password extends AbstractDomainObject implements Serializable, Comparable
 {
 	private static final long serialVersionUID = 2084916630660576930L;
 	
@@ -32,7 +32,19 @@ public class Password extends AbstractDomainObject implements Serializable
 	
 	protected User user = new User();
 	
-	 /**
+	public Password()
+	{
+	    
+	}
+	
+	public Password(String password, User user)
+	{
+	    this.password = password;
+	    this.user = user;
+	    updateDate = new Date();
+	}
+	
+	/**
      * Returns the systemIdentifier assigned to password.
      * @return Returns the systemIdentifier.
      * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
@@ -105,8 +117,13 @@ public class Password extends AbstractDomainObject implements Serializable
         this.user = user;
     }
     
-	public void setAllValues(AbstractActionForm abstractForm)
-			throws AssignDataException 
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException 
 	{
     }
+	
+	public int compareTo(Object obj)
+	{
+	    Password pwd = (Password)obj;
+	    return this.updateDate.compareTo(pwd.getUpdateDate());
+	}
 }

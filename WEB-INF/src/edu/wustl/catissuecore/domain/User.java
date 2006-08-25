@@ -62,10 +62,10 @@ public class User extends AbstractDomainObject implements Serializable
      */
     protected String oldPassword;
     
-//    /**
-//     * EmailAddress Address of the user.
-//     */
-//    protected String password;
+    /**
+     * EmailAddress Address of the user.
+     */
+    protected String newPassword;
 
     /**
      * Date of user registration.
@@ -198,23 +198,23 @@ public class User extends AbstractDomainObject implements Serializable
         this.oldPassword = oldPassword;
     }
     
-//    /**
-//	 * Returns the password assigned to user.
-//	 * @hibernate.property name="password" type="string" column="PASSWORD" length="50"
-//	 * @return Returns the password.
-//	 */
-//    public String getPassword()
-//    {
-//        return password;
-//    }
-//    
-//    /**
-//     * @param password The password to set.
-//     */
-//    public void setPassword(String password)
-//    {
-//        this.password = password;
-//    }
+    //@hibernate.property name="password" type="string" column="PASSWORD" length="50"
+    /**
+	 * Returns the newPassword assigned to user.
+	 * @return Returns the newPassword.
+	 */
+    public String getNewPassword()
+    {
+        return newPassword;
+    }
+    
+    /**
+     * @param newPassword The new Password to set.
+     */
+    public void setNewPassword(String newPassword)
+    {
+        this.newPassword = newPassword;
+    }
     
     /**
 	 * Returns the firstname assigned to user.
@@ -544,7 +544,7 @@ public class User extends AbstractDomainObject implements Serializable
             
             if (pageOf.equals(Constants.PAGEOF_CHANGE_PASSWORD))
             {
-//                this.password = uform.getNewPassword();
+                this.newPassword = uform.getNewPassword();
                 this.oldPassword = uform.getOldPassword();
             }
             else

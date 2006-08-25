@@ -166,7 +166,7 @@
         <set
             name="passwordCollection"
             table="CATISSUE_PASSWORD"
-            lazy="true"
+            lazy="false"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
