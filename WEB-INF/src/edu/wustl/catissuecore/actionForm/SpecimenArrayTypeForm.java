@@ -1,14 +1,17 @@
 /*
- * <p>Title: SpecimenArrayTypeForm</p>
+ * <p>Title: SpecimenArrayTypeForm Class </p>
  * <p>Description:This class initializes the fields of ArrayType form which is associated with Array Type Action
  *  & asociated request parameters with form. </p>
  * Copyright: Copyright (c) year 2006
  * Company: Washington University, School of Medicine, St. Louis.
  * @version 1.1
- * Created on July 14,2006
+ * Created on July 24,2006
  */
 
 package edu.wustl.catissuecore.actionForm;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -52,22 +55,22 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
     /**
      * Specimen type to which array type be associated 
      */
-	protected String[] specimenType;
+	protected String[] specimenTypes;
 
     /**
      * one dimension capacity for array type 
      */
-	protected String oneDimensionCapacity;
+	protected int oneDimensionCapacity;
 
     /**
      * two dimension capacity for array type 
      */
-	protected String twoDimensionCapacity;
+	protected int twoDimensionCapacity;
 
     /**
      * comments to be put for array type 
      */
-	protected String comments;
+	protected String comment;
 
     /**
      * @return Returns the name.
@@ -88,7 +91,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
     /**
      * @return Returns the oneDimensionCapacity.
      */
-    public String getOneDimensionCapacity()
+    public int getOneDimensionCapacity()
     {
         return oneDimensionCapacity;
     }
@@ -96,7 +99,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
     /**
      * @param oneDimensionCapacity The oneDimensionCapacity to set.
      */
-    public void setOneDimensionCapacity(String oneDimensionCapacity)
+    public void setOneDimensionCapacity(int oneDimensionCapacity)
     {
         this.oneDimensionCapacity = oneDimensionCapacity;
     }
@@ -118,25 +121,25 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
     }
 
     /**
-     * @return Returns the specimenType.
+     * @return Returns the specimenTypes.
      */
-    public String[] getSpecimenType()
+    public String[] getSpecimenTypes()
     {
-        return specimenType;
+        return specimenTypes;
     }
 
     /**
-     * @param specimenType The specimenType to set.
+     * @param specimenTypes The specimenTypes to set.
      */
-    public void setSpecimenType(String specimenType[])
+    public void setSpecimenTypes(String specimenType[])
     {
-        this.specimenType = specimenType;
+        this.specimenTypes = specimenType;
     }
 
     /**
      * @return Returns the twoDimensionCapacity.
      */
-    public String getTwoDimensionCapacity()
+    public int getTwoDimensionCapacity()
     {
         return twoDimensionCapacity;
     }
@@ -144,32 +147,32 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
     /**
      * @param twoDimensionCapacity The twoDimensionCapacity to set.
      */
-    public void setTwoDimensionCapacity(String twoDimensionCapacity)
+    public void setTwoDimensionCapacity(int twoDimensionCapacity)
     {
         this.twoDimensionCapacity = twoDimensionCapacity;
     }
 
     /**
-     * @return Returns the comments.
+     * @return Returns the comment.
      */
-    public String getComments()
+    public String getComment()
     {
-        return comments;
+        return comment;
     }
 
     /**
-     * @param comments The comments to set.
+     * @param comment The comments to set.
      */
-    public void setComments(String comments)
+    public void setComment(String comment)
     {
-        this.comments = comments;
+        this.comment = comment;
     }
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
 	 */
 	public int getFormId() {
-		return 0;
+		return Constants.SPECIMEN_ARRAY_TYPE_FORM_ID;
 	}
 
 	/* (non-Javadoc)
@@ -180,12 +183,46 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 			SpecimenArrayType arrayType = (SpecimenArrayType) domainObject;
 	        this.id = arrayType.getId().longValue();
 	        this.name = arrayType.getName();
-	        //this.specimenClass = arrayType.getSpecimenClass().getName();
-	        this.oneDimensionCapacity = arrayType.getCapacity().getOneDimensionCapacity().toString();
-	        this.twoDimensionCapacity = arrayType.getCapacity().getTwoDimensionCapacity().toString();
-	        this.comments = arrayType.getComment();
-	        // To Do code for specimen array type page
+	        this.specimenClass = arrayType.getSpecimenClass();
+	        this.oneDimensionCapacity = arrayType.getCapacity().getOneDimensionCapacity().intValue();
+	        this.twoDimensionCapacity = arrayType.getCapacity().getTwoDimensionCapacity().intValue();
+	        this.comment = arrayType.getComment();
+	        Collection specimenTypeCollection = arrayType.getSpecimenTypeCollection();
+	        
+	        if ((specimenTypeCollection != null) && (!specimenTypeCollection.isEmpty())) {
+	        	this.specimenTypes = new String[specimenTypeCollection.size()];
+	        	String specimenTypeStr = null;
+	        	int i = 0;
+	        	for (Iterator iter = specimenTypeCollection.iterator(); iter.hasNext();i++) {
+					specimenTypeStr = (String) iter.next();
+					specimenTypes[i] = specimenTypeStr;
+				}
+	        }
 		}
+	}
+	
+	/**
+	 * @param domainObject domain object
+	 */
+	private void setAllVa(Object domainObject) {
+		SpecimenArrayType arrayType = (SpecimenArrayType) domainObject;
+        this.systemIdentifier = arrayType.getId().longValue();
+        this.name = arrayType.getName();
+        this.specimenClass = arrayType.getSpecimenClass();
+        this.oneDimensionCapacity = arrayType.getCapacity().getOneDimensionCapacity().intValue();
+        this.twoDimensionCapacity = arrayType.getCapacity().getTwoDimensionCapacity().intValue();
+        this.comment = arrayType.getComment();
+        Collection specimenTypeCollection = arrayType.getSpecimenTypeCollection();
+        
+        if ((specimenTypeCollection != null) && (!specimenTypeCollection.isEmpty())) {
+        	this.specimenTypes = new String[specimenTypeCollection.size()];
+        	String specimenTypeStr = null;
+        	int i = 0;
+        	for (Iterator iter = specimenTypeCollection.iterator(); iter.hasNext();i++) {
+				specimenTypeStr = (String) iter.next();
+				specimenTypes[i] = specimenTypeStr;
+			}
+        }
 	}
 
 	/* (non-Javadoc)
@@ -219,21 +256,34 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
                             "errors.item.required", ApplicationProperties
                                     .getValue("arrayType.specimenClass")));
                 }
-//              validate specimen type of array type
-                if (!validator.isValidOption(specimenType[0]))
-                {
+//              validate specimen type in array type
+    	        if ((specimenTypes != null) && (specimenTypes.length > 0)) {
+    	        	for (int i = 0; i < specimenTypes.length; i++) {
+    	        		if (specimenTypes[i] != null) {
+    	                    if (!validator.isValidOption(specimenTypes[i]))
+    	                    {
+    	                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+    	                                "errors.item.selected", ApplicationProperties
+    	                                        .getValue("arrayType.specimenType")));
+    	                        break;
+    	                    }
+    	        		}
+    				}
+    	        } else {
                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                             "errors.item.required", ApplicationProperties
                                     .getValue("arrayType.specimenType")));
-                }
+    	        }
                 
 //              validate one dimension capacity of array type is empty or not numeric
-                if(validator.isEmpty(oneDimensionCapacity))
+/*                if(validator.isEmpty(oneDimensionCapacity))
                 {
 	                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 	                  "errors.item.required", ApplicationProperties
 	                          .getValue("arrayType.oneDimensionCapacity")));
-                } else if(!validator.isNumeric(oneDimensionCapacity,1) || !validator.isNumeric(twoDimensionCapacity,1)) {
+                } else
+*/                
+                if(!validator.isNumeric(String.valueOf(oneDimensionCapacity),1) || !validator.isNumeric(String.valueOf(twoDimensionCapacity),1)) {
 	                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 	                  "errors.item.format", ApplicationProperties
 	                          .getValue("arrayType.capacity")));
