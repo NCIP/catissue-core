@@ -2535,6 +2535,8 @@ PUBLIC
 	<!-- Array Type Action start -->
 	<action path="/SpecimenArrayType"
 		type="edu.wustl.catissuecore.action.SpecimenArrayTypeAction"
+		name="arrayTypeForm"
+		validate="false"
 		scope="request">
 		<forward name="success" path=".catissuecore.arrayTypeDef" />
 		<forward name="failure" path=".catissuecore.arrayTypeDef" />
@@ -2545,10 +2547,31 @@ PUBLIC
 		type="edu.wustl.common.action.CommonAddEditAction"
 		name="arrayTypeForm"
 		validate="true"
-		input="/Array.do?operation=add"
+		input="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21"
+		scope="request">
+		<forward name="success" path="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21" />
+		<forward name="failure" path="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+
+	<action path="/SpecimenArrayTypeSearch"
+		    type="edu.wustl.common.action.CommonSearchAction"
+			name="arrayTypeForm"
+			validate="false"
+			input="/SpecimenArrayType.do?operation=edit&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21"
+			scope="request">
+			<forward name="pageOfSpecimenArrayType" path="/SpecimenArrayType.do?operation=edit&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21"/>
+			<forward name="failure" path="/SpecimenArrayType.do?operation=edit&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21"/>
+	</action>
+
+	<action path="/SpecimenArrayTypeEdit"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="arrayTypeForm"
+		validate="true"
+		input="/SpecimenArrayType.do?operation=edit&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21"
 		scope="request">
 		<forward name="success" path=".catissuecore.arrayTypeDef" />
-		<forward name="failure" path=".catissuecore.arrayTypeDef" />
+		<forward name="failure" path="/SpecimenArrayType.do?operation=edit&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
 	
