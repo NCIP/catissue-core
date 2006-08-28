@@ -57,7 +57,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		request.setAttribute(Constants.OPERATION, operation);
         if(operation.equalsIgnoreCase(Constants.ADD ) )
         {
-        	((CollectionProtocolRegistrationForm)form).setSystemIdentifier(0);
+        	((CollectionProtocolRegistrationForm)form).setId(0);
         }
 
 		//Sets the pageOf attribute

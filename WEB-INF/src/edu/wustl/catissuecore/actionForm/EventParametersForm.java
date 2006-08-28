@@ -192,7 +192,7 @@ public abstract class EventParametersForm extends AbstractActionForm
  	{
  	   EventParameters eventParametersObject = (EventParameters)abstractDomain;
  	   this.comments  = Utility.toString(eventParametersObject.getComments());
- 	   this.systemIdentifier = eventParametersObject.getId().longValue() ;
+ 	   this.id = eventParametersObject.getId().longValue() ;
 		
  	   Calendar calender = Calendar.getInstance();
  	   calender.setTime(eventParametersObject.getTimestamp());
@@ -201,7 +201,7 @@ public abstract class EventParametersForm extends AbstractActionForm
  	   this.userId = eventParametersObject.getUser().getId().longValue() ;
  	   this.dateOfEvent = Utility.parseDateToString(eventParametersObject.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
  	   //this.dateOfEvent = (calender.get(Calendar.MONTH)+1)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
- 	   Logger.out.debug("systemIdentifier:"+systemIdentifier+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
+ 	   Logger.out.debug("id:"+id+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
  	}
  	
  	public void setAllVal(Object obj)
@@ -209,7 +209,7 @@ public abstract class EventParametersForm extends AbstractActionForm
  	    edu.wustl.catissuecore.domainobject.EventParameters eventParametersObject=(edu.wustl.catissuecore.domainobject.EventParameters) obj;
  		
  	    this.comments  = Utility.toString(eventParametersObject.getComments());
-		this.systemIdentifier = eventParametersObject.getId().longValue() ;
+		this.id = eventParametersObject.getId().longValue() ;
 		
 		Calendar calender = Calendar.getInstance();
 		
@@ -232,6 +232,6 @@ public abstract class EventParametersForm extends AbstractActionForm
 		}
 
 		//this.dateOfEvent = (calender.get(Calendar.MONTH)+1)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
-		Logger.out.debug("systemIdentifier:"+systemIdentifier+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
+		Logger.out.debug("id:"+id+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
     }
 }

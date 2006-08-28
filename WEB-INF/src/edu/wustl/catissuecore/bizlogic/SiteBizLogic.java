@@ -77,7 +77,7 @@ public class SiteBizLogic extends DefaultBizLogic
 		Site site = (Site)obj;
 		Site siteOld = (Site)oldObj;
 		
-		if(!site.getCoordinator().getSystemIdentifier().equals(siteOld.getCoordinator().getSystemIdentifier()))
+		if(!site.getCoordinator().getId().equals(siteOld.getCoordinator().getId()))
 			checkStatus(dao, site.getCoordinator(), "Coordinator");
 		
 		setCordinator(dao,site);
@@ -94,7 +94,7 @@ public class SiteBizLogic extends DefaultBizLogic
 	// This method sets the cordinator for a particular site.
 	private void setCordinator(DAO dao,Site site) throws DAOException
 	{
-		List list = dao.retrieve(User.class.getName(), "systemIdentifier", site.getCoordinator().getSystemIdentifier());
+		List list = dao.retrieve(User.class.getName(), "id", site.getCoordinator().getId());
 		
 		if (list.size() != 0)
 		{

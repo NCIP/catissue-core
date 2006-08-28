@@ -52,14 +52,14 @@ public class InstitutionForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
         Institution institute = (Institution) abstractDomain;
-        this.systemIdentifier = institute.getId().longValue();
+        this.id = institute.getId().longValue();
         this.name = institute.getName();
     }
 
     public void setAllVal(Object obj)
     {
         edu.wustl.catissuecore.domainobject.Institution institute=(edu.wustl.catissuecore.domainobject.Institution) obj;
-        this.systemIdentifier = institute.getId().longValue();
+        this.id = institute.getId().longValue();
         this.name = institute.getName();
     }
     

@@ -152,7 +152,7 @@ function insRow(subdivtag)
 	var spreqno=x.insertCell(0);
 	spreqno.className="formSerialNumberField";
 	sname=(q+1);
-	var identifier = "value(StorageContainerDetails:" + (q+1) +"_systemIdentifier)";
+	var identifier = "value(StorageContainerDetails:" + (q+1) +"_id)";
 	sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 	spreqno.innerHTML="" + sname;
 
@@ -314,7 +314,7 @@ function validate(action,formField)
 					</td>
 				</tr>
 				<tr>
-					<td><html:hidden property="systemIdentifier" />
+					<td><html:hidden property="id" />
 						<html:hidden property="typeName"/>
 						<html:hidden property="siteName"/>
 					</td>
@@ -340,7 +340,7 @@ function validate(action,formField)
 								<bean:message key="storageContainer.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="storageContainer.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="storageContainerForm" property="systemIdentifier" />
+								<bean:message key="storageContainer.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="storageContainerForm" property="id" />
 							</logic:equal>
 						</td>
 					</tr>

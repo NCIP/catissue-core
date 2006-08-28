@@ -31,17 +31,20 @@ public class ConfigureResultViewForm extends ActionForm
     private boolean reportAction=true;
     
 	/**
-	 * @return Returns the systemIdentifier.
+	 * @return Returns the id.
 	 */
-	public Long getDistributionId() {
+	public Long getDistributionId() 
+	{
 		return distributionId;
 	}
 	/**
-	 * @param systemIdentifier The systemIdentifier to set.
+	 * @param id The id to set.
 	 */
-	public void setDistributionId(Long distributionId) {
+	public void setDistributionId(Long distributionId) 
+	{
 		this.distributionId = distributionId;
 	}
+	
 	/**
 	 * @return Returns the columnNames.
 	 */

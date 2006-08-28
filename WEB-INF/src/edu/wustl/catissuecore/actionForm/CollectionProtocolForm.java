@@ -25,13 +25,9 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.FluidSpecimenRequirement;
-import edu.wustl.catissuecore.domain.MolecularSpecimenRequirement;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
-import edu.wustl.catissuecore.domain.TissueSpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -174,12 +170,12 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				
 				String keyClinicalStatus = "CollectionProtocolEvent:" + i + "_clinicalStatus";
 				String keyStudyCalendarEventPoint = "CollectionProtocolEvent:" + i + "_studyCalendarEventPoint";
-				String keyCPESystemIdentifier = "CollectionProtocolEvent:" + i + "_systemIdentifier";
+				String keyCPEId = "CollectionProtocolEvent:" + i + "_id";
 				
 				values.put(keyClinicalStatus,Utility.toString(cpEvent.getClinicalStatus()));
 				values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent.getStudyCalendarEventPoint()));
-				values.put(keyCPESystemIdentifier,Utility.toString(cpEvent.getSystemIdentifier()));
-				Logger.out.debug("In Form keyCPESystemIdentifier..............."+values.get(keyCPESystemIdentifier));
+				values.put(keyCPEId,Utility.toString(cpEvent.getId()));
+				Logger.out.debug("In Form keyCPEId..............."+values.get(keyCPEId));
 				Collection specimenRequirementCollection = cpEvent.getSpecimenRequirementCollection();
 				
 				populateSpecimenRequirement(specimenRequirementCollection, i);
@@ -206,7 +202,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			while(it.hasNext())
 			{
 				User user = (User)it.next();
-				protocolCoordinatorIds[i] = user.getSystemIdentifier().longValue();
+				protocolCoordinatorIds[i] = user.getId().longValue();
 				i++;
 			}
 		}
@@ -232,7 +228,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			{
 				String keyClinicalStatus = "CollectionProtocolEvent:" + i + "_clinicalStatus";
 				String keyStudyCalendarEventPoint = "CollectionProtocolEvent:" + i + "_studyCalendarEventPoint";
-				String keyCPESystemIdentifier = "CollectionProtocolEvent:" + i + "_systemIdentifier";
+				String keyCPEId = "CollectionProtocolEvent:" + i + "_id";
 				
 				edu.wustl.catissuecore.domainobject.CollectionProtocolEvent cpEvent = 
 			        (edu.wustl.catissuecore.domainobject.CollectionProtocolEvent)it.next();
@@ -241,8 +237,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			    {
 					values.put(keyClinicalStatus,Utility.toString(cpEvent.getClinicalStatus()));
 					values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent.getStudyCalendarEventPoint()));
-					values.put(keyCPESystemIdentifier,Utility.toString(cpEvent.getId()));
-					Logger.out.debug("In Form keyCPESystemIdentifier..............."+values.get(keyCPESystemIdentifier));
+					values.put(keyCPEId,Utility.toString(cpEvent.getId()));
+					Logger.out.debug("In Form keyCPEId..............."+values.get(keyCPEId));
 					
 					Collection specimenRequirementCollection = cpEvent.getSpecimenRequirementCollection();
 					populateDomainObjectSpecimenRequirement(specimenRequirementCollection, i);
@@ -288,60 +284,24 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		int innerCounter = 0;
 		if(specimenRequirementCollection != null)
 		{
-			int j = 1;
+			int i = 1;
 
 			Iterator iterator = specimenRequirementCollection.iterator();
 			while(iterator.hasNext())
 			{
-			    SpecimenRequirement requirement = (SpecimenRequirement)iterator.next();
-				
-				String key1 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenClass";
-				String key3 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenType";
-				String key4 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_tissueSite";
-				String key5 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_pathologyStatus";
-				String key6 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_quantityIn";
-				String key7 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_systemIdentifier";
-				String key2 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_unitspan";
-				
-				values.put(key3,requirement.getSpecimenType());
-				values.put(key4,requirement.getTissueSite());
-				values.put(key5,requirement.getPathologyStatus());
-				values.put(key7,Utility.toString(requirement.getId()));
-				
-				if(requirement instanceof TissueSpecimenRequirement)
-				{
-					values.put(key1,"Tissue");
-					values.put(key2,Constants.UNIT_GM);
-					String tissueType = requirement.getSpecimenType();
-					if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)  || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE))
-					{
-						values.put(key6,Utility.toString(new Integer(((TissueSpecimenRequirement) requirement).getQuantityInGram().intValue())));
-					}
-					else
-						values.put(key6,Utility.toString(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
-				}
-				else if(requirement instanceof CellSpecimenRequirement)
-				{
-					values.put(key1,"Cell");
-					values.put(key2,Constants.UNIT_CC);
-					values.put(key6,Utility.toString(((CellSpecimenRequirement)requirement).getQuantityInCellCount()));
-				}
-				else if(requirement instanceof MolecularSpecimenRequirement)
-				{
-					values.put(key1,"Molecular");
-					values.put(key2,Constants.UNIT_MG);
-					values.put(key6,Utility.toString(((MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
-				}
-				else if(requirement instanceof FluidSpecimenRequirement)
-				{
-					values.put(key1,"Fluid");
-					values.put(key2,Constants.UNIT_ML);
-					values.put(key6,Utility.toString(((FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
-				}
-				
-				j++;
+			    SpecimenRequirement specimenRequirement = (SpecimenRequirement)iterator.next();
+				String key[] = {
+					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_specimenClass",
+					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_unitspan",
+					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_specimenType",
+					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_tissueSite",
+					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_pathologyStatus",
+					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_quantity_value",
+					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_id"
+				        };
+				setSpecimenRequirement(key,specimenRequirement);
+				i++;
 			}
-			
 			innerCounter = specimenRequirementCollection.size();
 		}
 		
@@ -376,8 +336,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					String key3 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenType";
 					String key4 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_tissueSite";
 					String key5 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_pathologyStatus";
-					String key6 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_quantityIn";
-					String key7 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_systemIdentifier";
+					String key6 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_quantity_value";
+					String key7 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_id";
 					String key2 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_unitspan";
 					
 					values.put(key3,specimeRequirement.getSpecimenType());

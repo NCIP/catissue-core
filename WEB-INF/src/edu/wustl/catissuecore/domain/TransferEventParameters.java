@@ -210,11 +210,11 @@ public class TransferEventParameters extends SpecimenEventParameters implements 
         	this.toPositionDimensionTwo = new Integer(form.getPositionDimensionTwo());
         	
 			StorageContainer fromObj = new StorageContainer(); 
-        	fromObj.setSystemIdentifier(new Long(form.getFromStorageContainerId()));
+        	fromObj.setId(new Long(form.getFromStorageContainerId()));
         	this.fromStorageContainer = fromObj;
 
 			StorageContainer toObj = new StorageContainer(); 
-        	toObj.setSystemIdentifier(new Long(form.getStorageContainer()));
+        	toObj.setId(new Long(form.getStorageContainer()));
         	this.toStorageContainer = toObj;
         	
         	super.setAllValues(form);

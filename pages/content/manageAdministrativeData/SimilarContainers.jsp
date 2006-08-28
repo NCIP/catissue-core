@@ -212,7 +212,7 @@
     </tr>
     <tr>
 		<td>
-			<html:hidden property="systemIdentifier" />
+			<html:hidden property="id" />
 		</td>
     </tr>
     <tr>

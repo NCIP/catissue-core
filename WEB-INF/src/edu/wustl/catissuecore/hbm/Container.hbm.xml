@@ -13,7 +13,7 @@
     >
 
         <id
-            name="systemIdentifier"
+            name="id"
             column="IDENTIFIER"
             type="long"
             length="30"

@@ -50,7 +50,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		
 		
 		//Load & set the Parent Specimen of this specimen
-		Object specimenObj = dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getSystemIdentifier());
+		Object specimenObj = dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getId());
 		if(specimenObj!=null)
 		{
 			//Setting the Biohazard Collection
@@ -69,7 +69,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		{
 			
 			//Load & set Storage Container
-			Object storageContainerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getSystemIdentifier());
+			Object storageContainerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getId());
 			if(storageContainerObj!=null)
 			{
 				StorageContainer container = (StorageContainer)storageContainerObj;
@@ -81,7 +81,7 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 				= (StorageContainerBizLogic)BizLogicFactory
 				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID); 
 				// --- check for all validations on the storage container.
-				storageContainerBizLogic.checkContainer(dao,container.getSystemIdentifier().toString(),
+				storageContainerBizLogic.checkContainer(dao,container.getId().toString(),
 						specimen.getPositionDimensionOne().toString(),specimen.getPositionDimensionTwo().toString(),sessionDataBean);
 				
 				specimen.setStorageContainer(container);

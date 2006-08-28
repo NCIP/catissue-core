@@ -31,9 +31,9 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
     private static final long serialVersionUID = 1234567890L;
 
      /**
-     * System generated unique systemIdentifier.
+     * System generated unique id.
      */
-    protected Long systemIdentifier;
+    protected Long id;
     
     /**
      * name assigned to Specimen Collection Group
@@ -96,24 +96,25 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	}
 
 	/**
-	 * Returns the system generated unique systemIdentifier.
-	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+	 * Returns the system generated unique id.
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_COLL_GRP_SEQ"
-	 * @return the system generated unique systemIdentifier.
-	 * @see #setSystemIdentifier(Long)
+	 * @return the system generated unique id.
+	 * @see #setId(Long)
 	 */
-	public Long getSystemIdentifier() 
+	public Long getId() 
 	{
-		return systemIdentifier;
+		return id;
 	}
 
 
 	/**
-	 * @param systemIdentifier
+	 * @param id
 	 */
-	public void setSystemIdentifier(Long systemIdentifier) {
-		this.systemIdentifier = systemIdentifier;
+	public void setId(Long id) 
+	{
+		this.id = id;
 	}
 	/**
 	 * Returns the system generated unique Specimen Collection Group name.
@@ -345,10 +346,10 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	        this.setActivityStatus(form.getActivityStatus());
 			this.setName(form.getName());
 			site = new Site();
-			site.setSystemIdentifier(new Long(form.getSiteId()));
+			site.setId(new Long(form.getSiteId()));
 			
 			collectionProtocolEvent= new CollectionProtocolEvent();
-			collectionProtocolEvent.setSystemIdentifier(new Long(form.getCollectionProtocolEventId()));
+			collectionProtocolEvent.setId(new Long(form.getCollectionProtocolEventId()));
 
 			Logger.out.debug("form.getParticipantsMedicalIdentifierId() "+form.getParticipantsMedicalIdentifierId());
 			
@@ -362,12 +363,12 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			{    
 				//value of radio button is 2 when participant name is selected
 				Participant participant = new Participant();
-				participant.setSystemIdentifier(new Long(form.getParticipantId()));
+				participant.setId(new Long(form.getParticipantId()));
 				collectionProtocolRegistration.setParticipant(participant);
 				collectionProtocolRegistration.setProtocolParticipantIdentifier(null);
 				
 				ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
-				participantMedicalIdentifier.setSystemIdentifier(new Long(form.getParticipantsMedicalIdentifierId()));
+				participantMedicalIdentifier.setId(new Long(form.getParticipantsMedicalIdentifierId()));
 				
 				if(form.getParticipantsMedicalIdentifierId()!=-1)
 					clinicalReport.setParticipantMedicalIdentifier(participantMedicalIdentifier);
@@ -381,7 +382,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			}
 			
 			CollectionProtocol collectionProtocol = new CollectionProtocol();
-			collectionProtocol.setSystemIdentifier(new Long(form.getCollectionProtocolId()));
+			collectionProtocol.setId(new Long(form.getCollectionProtocolId()));
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 		}
 		catch(Exception e)

@@ -21,12 +21,8 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
-import edu.wustl.catissuecore.domain.FluidSpecimenRequirement;
-import edu.wustl.catissuecore.domain.MolecularSpecimenRequirement;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
-import edu.wustl.catissuecore.domain.TissueSpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -91,60 +87,24 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		if(spcimenProtocolCollection != null)
 		{
 			values = new HashMap();
-			
-			Iterator it = spcimenProtocolCollection.iterator();
-			int i=1;
 			counter=0;
 			
+			int i=1;
+			Iterator it = spcimenProtocolCollection.iterator();
 			while(it.hasNext())
 			{
-				String key1 = "SpecimenRequirement:" + i +"_specimenClass";
-				String key2 = "SpecimenRequirement:" + i +"_unitspan";
-				String key3 = "SpecimenRequirement:" + i +"_specimenType";
-				String key4 = "SpecimenRequirement:" + i +"_tissueSite";
-				String key5 = "SpecimenRequirement:" + i +"_pathologyStatus";
-				String key6 = "SpecimenRequirement:" + i +"_quantityIn";
-				String key7 = "SpecimenRequirement:" + i +"_systemIdentifier";
-				
-				SpecimenRequirement requirement = (SpecimenRequirement)it.next();
-				values.put(key3,requirement.getSpecimenType());
-				values.put(key4,requirement.getTissueSite());
-				values.put(key5,requirement.getPathologyStatus());
-				values.put(key7,requirement.getSystemIdentifier());
-				
-				if(requirement instanceof TissueSpecimenRequirement)
-				{
-					values.put(key1,"Tissue");
-					values.put(key2,Constants.UNIT_GM);
-					
-					String tissueType = requirement.getSpecimenType();
-					if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK)
-					 || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK) )
-					{
-						values.put(key6,Utility.toString(new Integer(((TissueSpecimenRequirement) requirement).getQuantityInGram().intValue())));
-					}
-					else
-						values.put(key6,String.valueOf(((TissueSpecimenRequirement)requirement).getQuantityInGram()));
-				}
-				else if(requirement instanceof CellSpecimenRequirement)
-				{
-					values.put(key1,"Cell");
-					values.put(key2,Constants.UNIT_CC);
-					values.put(key6,String.valueOf(((CellSpecimenRequirement)requirement).getQuantityInCellCount()));
-				}
-				else if(requirement instanceof MolecularSpecimenRequirement)
-				{
-					values.put(key1,"Molecular");
-					values.put(key2,Constants.UNIT_MG);
-					values.put(key6,String.valueOf(((MolecularSpecimenRequirement)requirement).getQuantityInMicrogram()));
-				}
-				else if(requirement instanceof FluidSpecimenRequirement)
-				{
-					values.put(key1,"Fluid");
-					values.put(key2,Constants.UNIT_ML);
-					values.put(key6,String.valueOf(((FluidSpecimenRequirement)requirement).getQuantityInMilliliter()));
-				}
-				
+				SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
+
+				String key[] = {
+				        "SpecimenRequirement:" + i +"_specimenClass",
+				        "SpecimenRequirement:" + i +"_unitspan",
+				        "SpecimenRequirement:" + i +"_specimenType",
+				        "SpecimenRequirement:" + i +"_tissueSite",
+				        "SpecimenRequirement:" + i +"_pathologyStatus",
+				        "SpecimenRequirement:" + i +"_quantity_value",
+				        "SpecimenRequirement:" + i +"_id"
+					};
+				setSpecimenRequirement(key , specimenRequirement);
 				i++;
 				counter++;
 			}
@@ -179,7 +139,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 				String key4 = "SpecimenRequirement:" + i +"_tissueSite";
 				String key5 = "SpecimenRequirement:" + i +"_pathologyStatus";
 				String key6 = "SpecimenRequirement:" + i +"_quantityIn";
-				String key7 = "SpecimenRequirement:" + i +"_systemIdentifier";
+				String key7 = "SpecimenRequirement:" + i +"_id";
 				
 				edu.wustl.catissuecore.domainobject.SpecimenRequirement specimenRequirement = (edu.wustl.catissuecore.domainobject.SpecimenRequirement)it.next();
 				

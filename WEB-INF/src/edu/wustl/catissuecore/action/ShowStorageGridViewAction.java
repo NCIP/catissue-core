@@ -51,12 +51,12 @@ public class ShowStorageGridViewAction  extends BaseAction
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
-        String systemIdentifier = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+        String id = request.getParameter(Constants.SYSTEM_IDENTIFIER);
         
         // Aarti: Check whether user has use permission on the storage container
 		// or not
         if(!SecurityManager.getInstance(this.getClass()).isAuthorized(getUserLoginName(request)
-        		,StorageContainer.class.getName()+"_"+systemIdentifier,Permissions.USE))
+        		,StorageContainer.class.getName()+"_"+id,Permissions.USE))
 		{
         	ActionErrors errors = new ActionErrors();
          	ActionError error = new ActionError("access.use.object.denied"
@@ -97,10 +97,10 @@ public class ShowStorageGridViewAction  extends BaseAction
         .getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
         
         List list = bizLogic.retrieve(StorageContainer.class.getName(),
-                "systemIdentifier", systemIdentifier);
+                "id", id);
         StorageContainerGridObject storageContainerGridObject = null;
         int [][]fullStatus = null;
-        int [][] childContainerSystemIdentifiers = null;
+        int [][] childContainerIds = null;
         String [][] childContainerType = null;
         
         if ((list != null) && (list.size() > 0))
@@ -118,7 +118,7 @@ public class ShowStorageGridViewAction  extends BaseAction
             request.setAttribute(Constants.STORAGE_CONTAINER_DIM_ONE_LABEL ,oneDimLabel );
             request.setAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL ,twoDimLabel );
             
-            storageContainerGridObject.setSystemIdentifier(storageContainer.getSystemIdentifier().longValue());
+            storageContainerGridObject.setId(storageContainer.getId().longValue());
             storageContainerGridObject.setType(storageContainer.getStorageType().getName());
             
             Integer oneDimensionCapacity = storageContainer
@@ -126,7 +126,7 @@ public class ShowStorageGridViewAction  extends BaseAction
             Integer twoDimensionCapacity = storageContainer
  							.getCapacity().getTwoDimensionCapacity();
             
-            childContainerSystemIdentifiers = new int[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
+            childContainerIds = new int[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
             storageContainerGridObject.setOneDimensionCapacity(oneDimensionCapacity);
             storageContainerGridObject.setTwoDimensionCapacity(storageContainer
                     		.getCapacity().getTwoDimensionCapacity());
@@ -143,8 +143,8 @@ public class ShowStorageGridViewAction  extends BaseAction
                     Integer positionDimensionOne = childStorageContainer.getPositionDimensionOne();
                     Integer positionDimensionTwo = childStorageContainer.getPositionDimensionTwo();
                     fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 1;
-                    childContainerSystemIdentifiers[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
-                                                   = childStorageContainer.getSystemIdentifier().intValue();
+                    childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
+                                                   = childStorageContainer.getId().intValue();
                     childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
                                                    = childStorageContainer.getStorageType().getName();
                                                   
@@ -154,10 +154,10 @@ public class ShowStorageGridViewAction  extends BaseAction
             IBizLogic specimenBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
             
             String sourceObjectName = Specimen.class.getName();
-			String[] selectColumnName = {"systemIdentifier","positionDimensionOne", "positionDimensionTwo","type"};
-			String[] whereColumnName = {"storageContainer.systemIdentifier"};
+			String[] selectColumnName = {"id","positionDimensionOne", "positionDimensionTwo","type"};
+			String[] whereColumnName = {"storageContainer.id"};
             String[] whereColumnCondition = {"="};
-			Object[] whereColumnValue = {systemIdentifier};
+			Object[] whereColumnValue = {id};
             String joinCondition = Constants.AND_JOIN_CONDITION;
 			
             list = specimenBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
@@ -178,7 +178,7 @@ public class ShowStorageGridViewAction  extends BaseAction
                     String specimenType = (String)obj[3];
                     
                     fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
-                    childContainerSystemIdentifiers[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
+                    childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
                                                    = specimenID.intValue();
                     childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
                                                                         = specimenType;
@@ -189,16 +189,16 @@ public class ShowStorageGridViewAction  extends BaseAction
         if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION))
         {
         	String storageContainerType = request.getParameter(Constants.STORAGE_CONTAINER_TYPE);
-        	Logger.out.info("SystemIdentifier-----------------"+systemIdentifier);
+        	Logger.out.info("Id-----------------"+id);
         	Logger.out.info("storageContainerType:"+storageContainerType);
-            int startNumber = bizLogic.getNextContainerNumber(Long.parseLong(systemIdentifier),
+            int startNumber = bizLogic.getNextContainerNumber(Long.parseLong(id),
                     Long.parseLong(storageContainerType),false);
             request.setAttribute(Constants.STORAGE_CONTAINER_TYPE,storageContainerType);
             request.setAttribute(Constants.START_NUMBER,new Integer(startNumber));
         }
          
         request.setAttribute(Constants.PAGEOF, pageOf);
-        request.setAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS, childContainerSystemIdentifiers);
+        request.setAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS, childContainerIds);
         request.setAttribute(Constants.CHILD_CONTAINER_TYPE, childContainerType);
         request.setAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS,fullStatus);
         request.setAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT,
@@ -209,10 +209,10 @@ public class ShowStorageGridViewAction  extends BaseAction
 
     /**
 	 * @param fullStatus
-	 * @param childContainerSystemIdentifiers
+	 * @param childContainerIds
 	 * @param storageContainer
 	 */
-    private void setStorageContainerStatus(boolean[][] fullStatus, int[][] childContainerSystemIdentifiers, Collection collection)
+    private void setStorageContainerStatus(boolean[][] fullStatus, int[][] childContainerIds, Collection collection)
     {
         Iterator iterator = collection.iterator();
         while(iterator.hasNext())
@@ -221,8 +221,8 @@ public class ShowStorageGridViewAction  extends BaseAction
             Integer positionDimensionOne = childStorageContainer.getPositionDimensionOne();
             Integer positionDimensionTwo = childStorageContainer.getPositionDimensionTwo();
             fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = true;
-            childContainerSystemIdentifiers[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
-                                           = childStorageContainer.getSystemIdentifier().intValue();
+            childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
+                                           = childStorageContainer.getId().intValue();
         }
     }
 

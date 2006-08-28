@@ -398,7 +398,7 @@ public class AliquotAction extends BaseAction //SecureAction
 						{
 							if(counter <= Integer.parseInt(form.getNoOfAliquots()))
 							{
-								String containerKey = "Specimen:" + counter + "_StorageContainer_systemIdentifier";
+								String containerKey = "Specimen:" + counter + "_StorageContainer_id";
 								String pos1Key = "Specimen:" + counter + "_positionDimensionOne";
 								String pos2Key = "Specimen:" + counter + "_positionDimensionTwo";
 								

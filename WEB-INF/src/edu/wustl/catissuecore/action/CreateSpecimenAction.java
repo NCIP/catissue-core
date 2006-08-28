@@ -82,7 +82,7 @@ public class CreateSpecimenAction extends SecureAction
         CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
         
         
-        String [] fields = {"systemIdentifier"};
+        String [] fields = {"id"};
             
         // Setting the parent specimen list
         List parentSpecimenList = dao.getList(Specimen.class.getName(), fields, fields[0], true); 	 	

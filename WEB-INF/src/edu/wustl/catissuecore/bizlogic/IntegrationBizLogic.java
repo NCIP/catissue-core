@@ -22,7 +22,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
  */
 public class IntegrationBizLogic extends DefaultBizLogic implements Integrator
 {
-    public List getLinkedAppData(Long systemIdentifier, String applicationName)
+    public List getLinkedAppData(Long id, String applicationName)
     {
         return new ArrayList();
     }

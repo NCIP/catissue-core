@@ -28,9 +28,9 @@ public class SpecimenRequirement  extends AbstractDomainObject implements java.i
     private static final long serialVersionUID = 1234567890L;
 	
 	/**
-	 * System generated unique systemIdentifier.
+	 * System generated unique id.
 	 */
-	protected Long systemIdentifier;
+	protected Long id;
 	
 	/**
 	 * Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
@@ -70,23 +70,23 @@ public class SpecimenRequirement  extends AbstractDomainObject implements java.i
 	}
 	
 	/**
-	 * Returns the systemIdentifier.
-	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+	 * Returns the id.
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_REQ_SEQ"
-	 * @return Returns the systemIdentifier.
+	 * @return Returns the id.
 	 */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 	
 	/**
-	 * @param systemIdentifier The systemIdentifier to set.
+	 * @param id The id to set.
 	 */
-	public void setSystemIdentifier(Long systemIdentifier)
+	public void setId(Long id)
 	{
-		this.systemIdentifier = systemIdentifier;
+		this.id = id;
 	}
 	
 	/**

@@ -20,11 +20,11 @@ import edu.wustl.catissuecore.actionForm.LoginForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -75,7 +75,7 @@ public class LoginAction extends Action
 	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 	                HttpSession session = request.getSession(true);
 	                
-	                Long userId = validUser.getSystemIdentifier();
+	                Long userId = validUser.getId();
 	                String ipAddress = request.getRemoteAddr();
 	                
 	                SessionDataBean sessionData = new SessionDataBean();

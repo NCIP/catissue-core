@@ -166,7 +166,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	        		if(coordinatorsArr[i]!=-1)
 	        		{
 		        		User coordinator = new User();
-		        		coordinator.setSystemIdentifier(new Long(coordinatorsArr[i]));
+		        		coordinator.setId(new Long(coordinatorsArr[i]));
 		        		userCollection.add(coordinator);
 	        		}
 				}
@@ -174,7 +174,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	
 	        Map map = cpForm.getValues();
 	        Logger.out.debug("PRE FIX MAP "+map);
-	        map = fixMap(map);
+	        //map = fixMap(map);
 	        Logger.out.debug("POST FIX MAP "+map);
 	        
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");

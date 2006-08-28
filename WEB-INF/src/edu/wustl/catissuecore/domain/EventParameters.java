@@ -13,10 +13,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -30,9 +30,9 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 	private static final long serialVersionUID = 1234567890L;
 	
 	/**
-     * System generated unique systemIdentifier.
+     * System generated unique id.
      */
-	protected Long systemIdentifier;
+	protected Long id;
 	
 	/**
      * Date and time of the event.
@@ -50,23 +50,23 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 	protected String comments;
 	
 	/**
-     * Returns System generated unique systemIdentifier.
-     * @return System generated unique systemIdentifier.
-     * @see #setSystemIdentifier(Integer)
+     * Returns System generated unique id.
+     * @return System generated unique id.
+     * @see #setId(Integer)
      */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 
 	/**
-     * Sets unique systemIdentifier.
-     * @param systemIdentifier Identifier to be set.
-     * @see #getSystemIdentifier()
+     * Sets unique id.
+     * @param id Identifier to be set.
+     * @see #getId()
      */
-	public void setSystemIdentifier(Long systemIdentifier)
+	public void setId(Long id)
 	{
-		this.systemIdentifier = systemIdentifier;
+		this.id = id;
 	}
 
 	/**
@@ -147,7 +147,7 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 			
 			
 			
-			user.setSystemIdentifier(new Long(form.getUserId()));
+			user.setId(new Long(form.getUserId()));
 
 			if (form.getDateOfEvent() != null && form.getDateOfEvent().trim().length()!=0  )
 			{

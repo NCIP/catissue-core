@@ -42,7 +42,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		Map aliquotMap = aliquot.getAliqoutMap();
 		
 		//Retrieving the parent specimen of the aliquot
-		Specimen parentSpecimen = (Specimen)dao.retrieve(Specimen.class.getName(), aliquot.getParentSpecimen().getSystemIdentifier());
+		Specimen parentSpecimen = (Specimen)dao.retrieve(Specimen.class.getName(), aliquot.getParentSpecimen().getId());
 		double dQuantity = 0;
 		
 		for(int i=1;i<=aliquot.getNoOfAliquots();i++)
@@ -50,10 +50,10 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			//Preparing the map keys
 			String quantityKey = specimenKey + i + "_quantity";
 			String barcodeKey = specimenKey + i + "_barcode";
-			String containerIdKey = specimenKey + i + "_StorageContainer_systemIdentifier";
+			String containerIdKey = specimenKey + i + "_StorageContainer_id";
 			String posDim1Key = specimenKey + i + "_positionDimensionOne";
 			String posDim2Key = specimenKey + i + "_positionDimensionTwo";
-			String idKey = specimenKey + i + "_systemIdentifier";
+			String idKey = specimenKey + i + "_id";
 			String labelKey = specimenKey + i + "_label";
 			
 			//Retrieving the quantity, barcode & location values for each aliquot
@@ -145,10 +145,10 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			dao.insert(aliquotSpecimen,sessionDataBean, true,false);//NEEDS TO BE FIXED FOR SECURE INSERT
 			
 			//Setting the identifier values in the map
-			aliquotMap.put(idKey,String.valueOf(aliquotSpecimen.getSystemIdentifier()));
+			aliquotMap.put(idKey,String.valueOf(aliquotSpecimen.getId()));
 			
 			//TO BE DELETED LATER
-			aliquot.setSystemIdentifier(aliquotSpecimen.getSystemIdentifier());
+			aliquot.setId(aliquotSpecimen.getId());
 			
 			//Adding dummy entry of external identifier for Query Module to fulfil the join condition
 			Collection externalIdentifierCollection = new HashSet();

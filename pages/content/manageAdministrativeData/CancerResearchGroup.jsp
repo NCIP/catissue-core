@@ -41,7 +41,7 @@
 				
 				<tr>
 					<td>
-						<html:hidden property="systemIdentifier" />
+						<html:hidden property="id" />
 					</td>
 				</tr>
 
@@ -55,7 +55,7 @@
 								<bean:message key="cancerResearchGroup.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="cancerResearchGroup.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="cancerResearchGroupForm" property="systemIdentifier" />
+								<bean:message key="cancerResearchGroup.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="cancerResearchGroupForm" property="id" />
 							</logic:equal>
 						</td>
 					</tr>

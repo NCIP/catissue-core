@@ -70,7 +70,7 @@
 							<tr class="dataRowLight">
 								<%
         								ReportedProblem reportedProblem = (ReportedProblem) problem;
-										String identifier = reportedProblem.getSystemIdentifier().toString();
+										String identifier = reportedProblem.getId().toString();
 										String problemDetailsLink = Constants.PROBLEM_DETAILS_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;				
         						%>
         						<td class="dataCellText">

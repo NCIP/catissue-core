@@ -105,17 +105,17 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
     	CollectionProtocol collectionProtocol = (CollectionProtocol)obj;
     	CollectionProtocol collectionProtocolOld = (CollectionProtocol)oldObj;
     	Logger.out.debug("PI OB*****************8"+collectionProtocol.getPrincipalInvestigator());
-    	Logger.out.debug("PI Identifier................."+collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
+    	Logger.out.debug("PI Identifier................."+collectionProtocol.getPrincipalInvestigator().getId());
     	Logger.out.debug("Email Address*****************8"+collectionProtocol.getPrincipalInvestigator().getEmailAddress());
 		Logger.out.debug("Principal Investigator*****************8"+collectionProtocol.getPrincipalInvestigator().getCsmUserId());
-    	if(!collectionProtocol.getPrincipalInvestigator().getSystemIdentifier().equals(collectionProtocolOld.getPrincipalInvestigator().getSystemIdentifier()))
+    	if(!collectionProtocol.getPrincipalInvestigator().getId().equals(collectionProtocolOld.getPrincipalInvestigator().getId()))
 			checkStatus(dao, collectionProtocol.getPrincipalInvestigator(), "Principal Investigator");
     	
     	Iterator it = collectionProtocol.getUserCollection().iterator();
 		while(it.hasNext())
 		{
 			User coordinator  = (User)it.next();
-			if(!coordinator.getSystemIdentifier().equals(collectionProtocol.getPrincipalInvestigator().getSystemIdentifier()))
+			if(!coordinator.getId().equals(collectionProtocol.getPrincipalInvestigator().getId()))
 			{
 				if(!hasCoordinator(coordinator, collectionProtocolOld))
 					checkStatus(dao, coordinator, "Coordinator");
@@ -139,14 +139,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		while(it.hasNext())
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)it.next();
-			Logger.out.debug("CollectionProtocolEvent Id ............... : "+collectionProtocolEvent.getSystemIdentifier());
+			Logger.out.debug("CollectionProtocolEvent Id ............... : "+collectionProtocolEvent.getId());
 			collectionProtocolEvent.setCollectionProtocol(collectionProtocol);
 			dao.update(collectionProtocolEvent, sessionDataBean, true, true, false);
 			
 			//Audit of collectionProtocolEvent
 			CollectionProtocolEvent oldCollectionProtocolEvent 
 						= (CollectionProtocolEvent)getCorrespondingOldObject(oldCollectionProtocolEventCollection, 
-						        collectionProtocolEvent.getSystemIdentifier());
+						        collectionProtocolEvent.getId());
 			dao.audit(collectionProtocolEvent, oldCollectionProtocolEvent, sessionDataBean, true);
 			
 			Iterator srIt = collectionProtocolEvent.getSpecimenRequirementCollection().iterator();
@@ -166,7 +166,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		if(collectionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
 			Logger.out.debug("collectionProtocol.getActivityStatus() "+collectionProtocol.getActivityStatus());
-			Long collectionProtocolIDArr[] = {collectionProtocol.getSystemIdentifier()};
+			Long collectionProtocolIDArr[] = {collectionProtocol.getId()};
 			
 			CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 			bizLogic.disableRelatedObjectsForCollectionProtocol(dao,collectionProtocolIDArr);
@@ -194,7 +194,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
     {
         Long principalInvestigatorId = collectionProtocol.getPrincipalInvestigator().getCsmUserId();
         Logger.out.debug("principalInvestigatorId.........................."+principalInvestigatorId);
-        String userGroupName = Constants.getCollectionProtocolPIGroupName(collectionProtocol.getSystemIdentifier());
+        String userGroupName = Constants.getCollectionProtocolPIGroupName(collectionProtocol.getId());
         Logger.out.debug("userGroupName.........................."+userGroupName);
         if (operation)
         {
@@ -205,7 +205,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
             SecurityManager.getInstance(CollectionProtocolBizLogic.class).assignUserToGroup(userGroupName,principalInvestigatorId.toString());
         }
         
-        userGroupName = Constants.getCollectionProtocolCoordinatorGroupName(collectionProtocol.getSystemIdentifier());
+        userGroupName = Constants.getCollectionProtocolCoordinatorGroupName(collectionProtocol.getId());
             
         UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
         Iterator iterator = collectionProtocol.getUserCollection().iterator();
@@ -238,7 +238,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
         String [] selectColumnNames = {Constants.CSM_USER_ID};
         String [] whereColumnNames = {Constants.SYSTEM_IDENTIFIER};
         String [] whereColumnCondition = {"="};
-        String [] whereColumnValues = {user.getSystemIdentifier().toString()};
+        String [] whereColumnValues = {user.getId().toString()};
         List csmUserIdList = dao.retrieve(User.class.getName(),selectColumnNames,whereColumnNames,
                 				whereColumnCondition,whereColumnValues,Constants.AND_JOIN_CONDITION);
         Logger.out.debug("csmUserIdList##########################Size........."+csmUserIdList.size());
@@ -275,11 +275,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
         group.add(user);
         
         // Protection group of PI
-        String protectionGroupName = new String(Constants.getCollectionProtocolPGName(collectionProtocol.getSystemIdentifier()));
+        String protectionGroupName = new String(Constants.getCollectionProtocolPGName(collectionProtocol.getId()));
         SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(PI);
-        userGroupRoleProtectionGroupBean.setGroupName(Constants.getCollectionProtocolPIGroupName(collectionProtocol.getSystemIdentifier()));
+        userGroupRoleProtectionGroupBean.setGroupName(Constants.getCollectionProtocolPIGroupName(collectionProtocol.getId()));
         userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
         userGroupRoleProtectionGroupBean.setGroup(group);
         authorizationData.add(userGroupRoleProtectionGroupBean);
@@ -297,11 +297,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
             group.add(user);
         }
             
-        protectionGroupName = new String(Constants.getCollectionProtocolPGName(collectionProtocol.getSystemIdentifier()));
+        protectionGroupName = new String(Constants.getCollectionProtocolPGName(collectionProtocol.getId()));
         userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(READ_ONLY);
-        userGroupRoleProtectionGroupBean.setGroupName(Constants.getCollectionProtocolCoordinatorGroupName(collectionProtocol.getSystemIdentifier()));
+        userGroupRoleProtectionGroupBean.setGroupName(Constants.getCollectionProtocolCoordinatorGroupName(collectionProtocol.getId()));
         userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
         userGroupRoleProtectionGroupBean.setGroup(group);
         authorizationData.add(userGroupRoleProtectionGroupBean);
@@ -348,9 +348,9 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
     //This method sets the Principal Investigator.
 	private void setPrincipalInvestigator(DAO dao,CollectionProtocol collectionProtocol) throws DAOException
 	{
-		//List list = dao.retrieve(User.class.getName(), "systemIdentifier", collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
+		//List list = dao.retrieve(User.class.getName(), "id", collectionProtocol.getPrincipalInvestigator().getId());
 		//if (list.size() != 0)
-		Object obj = dao.retrieve(User.class.getName(),  collectionProtocol.getPrincipalInvestigator().getSystemIdentifier());
+		Object obj = dao.retrieve(User.class.getName(),  collectionProtocol.getPrincipalInvestigator().getId());
 		if (obj != null)
 		{
 			User pi = (User) obj;//list.get(0);
@@ -361,7 +361,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	//This method sets the User Collection.
 	private void setCoordinatorCollection(DAO dao,CollectionProtocol collectionProtocol) throws DAOException
 	{
-		Long piID = collectionProtocol.getPrincipalInvestigator().getSystemIdentifier();
+		Long piID = collectionProtocol.getPrincipalInvestigator().getId();
 		Logger.out.debug("Coordinator Size "+collectionProtocol.getUserCollection().size());
 		Collection coordinatorColl = new HashSet();
 		
@@ -369,10 +369,10 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		while(it.hasNext())
 		{
 			User aUser  =(User)it.next();
-			if(!aUser.getSystemIdentifier().equals(piID))
+			if(!aUser.getId().equals(piID))
 			{
-				Logger.out.debug("Coordinator ID :"+aUser.getSystemIdentifier());
-				Object obj = dao.retrieve(User.class.getName(),  aUser.getSystemIdentifier());
+				Logger.out.debug("Coordinator ID :"+aUser.getId());
+				Object obj = dao.retrieve(User.class.getName(),  aUser.getId());
 				if (obj != null)
 				{
 					User coordinator = (User) obj;//list.get(0);
@@ -401,7 +401,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		while(it.hasNext())
 		{
 			User coordinatorOld  = (User)it.next();
-			if(coordinator.getSystemIdentifier().equals(coordinatorOld.getSystemIdentifier()))
+			if(coordinator.getId().equals(coordinatorOld.getId()))
 			{
 				return true;
 			}
@@ -460,7 +460,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 							}
 							else
 							{
-								String specimenClass = Utility.getSpecimenClassName(requirement);
+								String specimenClass = requirement.getSpecimenClass();
 								
 								if(!Validator.isEnumeratedValue(specimenClassList,specimenClass))
 								{

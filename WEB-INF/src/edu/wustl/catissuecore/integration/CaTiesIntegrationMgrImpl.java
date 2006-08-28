@@ -46,19 +46,19 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
     
     private static final String privateServerName = XMLPropertyHandler.getValue(Constants.CATIES_PRIVATE_SERVER_NAME);
     
-    public List getLinkedAppData(Object linkedObj, Long systemIdentifier)
+    public List getLinkedAppData(Object linkedObj, Long id)
     {
         Logger.out.debug("Class of object received in getLinkedAppData of CaTiesIntegrationMgrImpl===>"+ linkedObj.getClass());
         
         if(linkedObj instanceof SpecimenCollectionGroup || linkedObj instanceof Specimen)
         {
             Logger.out.debug("Linked object is SpecimenCollectionGroup or Specimen");
-            return findIdentifiedPathologyReport(systemIdentifier);
+            return findIdentifiedPathologyReport(id);
         }
         else if(linkedObj instanceof Participant)
         {
             Logger.out.debug("Linked object is Participant");
-            return findReportsForPatient(systemIdentifier);
+            return findReportsForPatient(id);
         }
         
         return new ArrayList();
@@ -196,7 +196,7 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
     	return pathologyReportList;
     }
     
-    private List findIdentifiedPathologyReport(Long systemIdentifier)
+    private List findIdentifiedPathologyReport(Long id)
     {
         List pathologyReportList= new ArrayList();
         
@@ -205,7 +205,7 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
     		this.appService = ApplicationService.getRemoteInstance(privateServerName);
     	    IdentifiedPathologyReport pathologyReport = new IdentifiedPathologyReportImpl();
 //    	    pathologyReport.setId(new Long(32833537));
-    	    pathologyReport.setId(systemIdentifier);
+    	    pathologyReport.setId(id);
     	   
     	    List resultList = appService.search(IdentifiedPathologyReport.class, pathologyReport);
     	    if (resultList == null)

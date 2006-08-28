@@ -12,7 +12,7 @@
     >
 
         <id
-            name="systemIdentifier"
+            name="id"
             column="IDENTIFIER"
             type="long"
             length="30"
@@ -102,7 +102,7 @@
         <many-to-one
             name="quantity"
             class="edu.wustl.catissuecore.domain.Quantity"
-            cascade="none"
+            cascade="save-update"
             outer-join="auto"
             update="true"
             insert="true"

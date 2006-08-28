@@ -127,7 +127,7 @@
 		</tr>
 		
 		<tr>
-			<td><html:hidden property="systemIdentifier" />
+			<td><html:hidden property="id" />
 				<html:hidden property="<%=Constants.REQ_PATH%>" value="<%=reqPath%>" />
 			</td>
 		</tr>
@@ -142,7 +142,7 @@
 					<bean:message key="storageType.title"/>
 				</logic:equal>
 				<logic:equal name="operation" value="<%=Constants.EDIT%>">
-					<bean:message key="storageType.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="storageTypeForm" property="systemIdentifier" />
+					<bean:message key="storageType.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="storageTypeForm" property="id" />
 				</logic:equal>
 			 </td>
 		</tr>

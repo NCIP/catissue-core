@@ -28,9 +28,9 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 	private static final long serialVersionUID = 1234567890L;
 	
 	/**
-	 * System generated unique systemIdentifier.
+	 * System generated unique id.
 	 */
-	protected Long systemIdentifier;
+	protected Long id;
 	
 	/**
 	 * Defines the required clinical status of the participant at the time of specimen collection. e.g. Pre-Op, Post-op, Pre-RX etc.
@@ -53,23 +53,23 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 	protected CollectionProtocol collectionProtocol;
 
 	/**
-	 * Returns the systemIdentifier.
-	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+	 * Returns the id.
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_COLL_PROT_EVENT_SEQ"
-	 * @return Returns the systemIdentifier.
+	 * @return Returns the id.
 	 */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 
 	/**
-	 * @param systemIdentifier The systemIdentifier to set.
+	 * @param id The id to set.
 	 */
-	public void setSystemIdentifier(Long systemIdentifier)
+	public void setId(Long id)
 	{
-		this.systemIdentifier = systemIdentifier;
+		this.id = id;
 	}
 
 	/**

@@ -52,7 +52,7 @@ public class DepartmentForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
         Department department = (Department)abstractDomain;
-        this.systemIdentifier = department.getId().longValue();
+        this.id = department.getId().longValue();
         this.name = department.getName();
     }
     
@@ -60,7 +60,7 @@ public class DepartmentForm extends AbstractActionForm
     public void setAllVal(Object obj)
     {
         edu.wustl.catissuecore.domainobject.Department department = (edu.wustl.catissuecore.domainobject.Department)obj;
-        this.systemIdentifier = department.getId().longValue();
+        this.id = department.getId().longValue();
         this.name = department.getName();
     }
 

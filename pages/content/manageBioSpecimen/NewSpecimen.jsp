@@ -36,7 +36,7 @@
 	   	{
 	   		if(form != null)
 	   		{
-		   		appendingPath = "/NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&systemIdentifier="+form.getSystemIdentifier() ;
+		   		appendingPath = "/NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&id="+form.getId() ;
 		   		//System.out.println("---------- NSP JSP -------- : "+ appendingPath);
 				currentReceivedDate = form.getReceivedEventDateOfEvent();
 				if(currentReceivedDate == null)
@@ -124,7 +124,7 @@
 			var spreqno=x.insertCell(0);
 			spreqno.className="formSerialNumberField";
 			sname=(q+1);
-			var identifier = "externalIdentifierValue(ExternalIdentifier:" + (q+1) +"_systemIdentifier)";
+			var identifier = "externalIdentifierValue(ExternalIdentifier:" + (q+1) +"_id)";
 			var hiddenTag = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 			spreqno.innerHTML="" + rowno + "." + hiddenTag;
 		
@@ -180,7 +180,7 @@
 			var spreqno=x.insertCell(0);
 			spreqno.className="formSerialNumberField";
 			sname=(q+1);
-			//var identifier = "biohazardValue(Biohazard:" + (q+1) +"_systemIdentifier)";
+			//var identifier = "biohazardValue(Biohazard:" + (q+1) +"_id)";
 			//var hiddenTag = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 			spreqno.innerHTML= "" + sname;
 
@@ -212,7 +212,7 @@
 			spreqsubtype.colSpan=2;
 			sname="";
 
-			name = "biohazardValue(Biohazard:" + (q+1) + "_systemIdentifier)";
+			name = "biohazardValue(Biohazard:" + (q+1) + "_id)";
 			sname= "";
 	//Mandar : 434 : for tooltip 		
 			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='bhId" + (q+1) + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
@@ -372,7 +372,7 @@
 					<bean:message key="tab.specimen.details"/>
 				</td>
 				<%
-					String eventLinkAction = "'ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&menuSelected=15&specimenId="+form.getSystemIdentifier()+"'" ;
+					String eventLinkAction = "'ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&menuSelected=15&specimenId="+form.getId()+"'" ;
 				%>
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="<%=addEventsSubmit%>">
 					<bean:message key="tab.specimen.eventparameters"/>
@@ -428,7 +428,7 @@
 					</td>
 					<td><html:hidden property="onSubmit"/></td>
 					<td>
-						<html:hidden property="systemIdentifier"/>
+						<html:hidden property="id"/>
 						<html:hidden property="positionInStorageContainer" />
 						<html:hidden property="parentPresent" />
 					</td>
@@ -445,7 +445,7 @@
 							if(pageView.equals(Constants.EDIT))
 							{
 						%>
-						     &nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="newSpecimenForm" property="systemIdentifier" />
+						     &nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="newSpecimenForm" property="id" />
 						<%
 							}
 						%>
@@ -822,7 +822,7 @@
 				
 				<tr>
 					<td rowspan="2" class="formSubTitle">Received
-						<html:hidden property="receivedEventSystemIdentifier" />
+						<html:hidden property="receivedEventId" />
 						<html:hidden property="receivedEventSpecimenId" />
 					</td>
 					<td class="formLeftSubTableTitle">* 
@@ -916,7 +916,7 @@ if(currentReceivedDate.trim().length() > 0)
 			<tr>
  					<td rowspan="2" class="formLeftSubTableTitle">*
 						<html:hidden property="operation" value="<%=operation%>"/>
-						<html:hidden property="collectionEventSystemIdentifier" />
+						<html:hidden property="collectionEventId" />
 						<html:hidden property="collectionEventSpecimenId" />
 						 Collected:
 					</td>
@@ -1111,7 +1111,7 @@ if(currentCollectionDate.trim().length() > 0)
 				  	{
 						String exName = "externalIdentifierValue(ExternalIdentifier:" + i + "_name)";
 						String exValue = "externalIdentifierValue(ExternalIdentifier:" + i + "_value)";
-						String exIdentifier = "externalIdentifierValue(ExternalIdentifier:" + i +"_systemIdentifier)";
+						String exIdentifier = "externalIdentifierValue(ExternalIdentifier:" + i +"_id)";
 						String check = "chk_ex_"+i;
 				  %>
 					<tr>
@@ -1125,7 +1125,7 @@ if(currentCollectionDate.trim().length() > 0)
 				     		<html:text styleClass="formFieldSized15" maxlength="50"  styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
 				    	</td>
 				    	<%
-							String exKey = "ExternalIdentifier:" + i +"_systemIdentifier";
+							String exKey = "ExternalIdentifier:" + i +"_id";
 							boolean exBool = Utility.isPersistedValue(map,exKey);
 							String exCondition = "";
 							if(exBool)
@@ -1180,7 +1180,7 @@ if(currentCollectionDate.trim().length() > 0)
 				  	{
 						String bhType = "biohazardValue(Biohazard:" + i + "_type)";
 						String bhTypeKey = "Biohazard:" + i + "_type";
-						String bhId	  = "biohazardValue(Biohazard:" + i + "_systemIdentifier)";
+						String bhId	  = "biohazardValue(Biohazard:" + i + "_id)";
 						String biohzId = "biohazardValue(Biohazard:" + i + "_persisted)";
 						String check = "chk_bio_"+i;
 				  %>

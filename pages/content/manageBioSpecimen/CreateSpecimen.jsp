@@ -451,7 +451,7 @@
 				  	{
 						String exName = "externalIdentifierValue(ExternalIdentifier:" + i + "_name)";
 						String exValue = "externalIdentifierValue(ExternalIdentifier:" + i + "_value)";
-						String exIdentifier = "externalIdentifierValue(ExternalIdentifier:" + i +"_systemIdentifier)";
+						String exIdentifier = "externalIdentifierValue(ExternalIdentifier:" + i +"_id)";
 						String check = "chk_"+i;
 				  %>
 					<tr>

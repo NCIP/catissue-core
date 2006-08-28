@@ -39,7 +39,7 @@
 		//	if(obj != null && obj instanceof SiteForm)
 		//	{
 		//		SiteForm form = (SiteForm)obj;
-		//  		appendingPath = "/SiteSearch.do?operation=search&pageOf=pageOfSite&systemIdentifier="+form.getSystemIdentifier() ;
+		//  		appendingPath = "/SiteSearch.do?operation=search&pageOf=pageOfSite&id="+form.getId() ;
 		//   		System.out.println("---------- Site JSP appendingPath -------- : "+ appendingPath);
 		//   	}
 	   	//}
@@ -77,7 +77,7 @@
 				</tr>
 				
 				<tr>
-					<td><html:hidden property="systemIdentifier" /></td>
+					<td><html:hidden property="id" /></td>
 					<td><html:hidden property="onSubmit"/></td>
 				</tr>
 
@@ -95,7 +95,7 @@
 								<bean:message key="site.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="site.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="siteForm" property="systemIdentifier" />
+								<bean:message key="site.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="siteForm" property="id" />
 							</logic:equal>
 						</td>
 					</tr>

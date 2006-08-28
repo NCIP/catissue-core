@@ -22,7 +22,7 @@ public interface Integrator
     /**
      * Method to fetch linked data from integrated applications 
      */
-    public List getLinkedAppData(Long systemIdentifier, String applicationName);
+    public List getLinkedAppData(Long id, String applicationName);
     
     /**
      * Method to fetch mathich objects from integrated application 

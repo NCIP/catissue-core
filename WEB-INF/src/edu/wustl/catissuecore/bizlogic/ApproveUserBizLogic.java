@@ -174,11 +174,11 @@ public class ApproveUserBizLogic extends DefaultBizLogic
         group.add(user);
         
         // Protection group of PI
-        protectionGroupName = Constants.getUserPGName(aUser.getSystemIdentifier());
+        protectionGroupName = Constants.getUserPGName(aUser.getId());
         userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(Roles.UPDATE_ONLY);
-        userGroupRoleProtectionGroupBean.setGroupName(Constants.getUserGroupName(aUser.getSystemIdentifier()));
+        userGroupRoleProtectionGroupBean.setGroupName(Constants.getUserGroupName(aUser.getId()));
         userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
         userGroupRoleProtectionGroupBean.setGroup(group);
         authorizationData.add(userGroupRoleProtectionGroupBean);

@@ -30,11 +30,11 @@ import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.QuantityInCount;
 import edu.wustl.catissuecore.domain.QuantityInGram;
 import edu.wustl.catissuecore.domain.QuantityInMicroGram;
 import edu.wustl.catissuecore.domain.QuantityInMiliLiter;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -180,7 +180,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	  	{
 	  		Long specimenCollectionGroupId  = (Long)list.get(0);
 	  		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
-	  		specimenCollectionGroup.setSystemIdentifier(specimenCollectionGroupId);
+	  		specimenCollectionGroup.setId(specimenCollectionGroupId);
 	  		return specimenCollectionGroup;
 	  	}
 	  	return null;
@@ -201,7 +201,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	  	{
 	  		Long specimenCharacteristicsId  = (Long)list.get(0);
 	  		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-	  		specimenCharacteristics.setSystemIdentifier(specimenCharacteristicsId);
+	  		specimenCharacteristics.setId(specimenCharacteristicsId);
 	  		return specimenCharacteristics;
 
 	  		//return (SpecimenCharacteristics)list.get(0);
@@ -357,19 +357,19 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
     	if(specimen.isParentChanged())
         {
         	//Check whether continer is moved to one of its sub container.
-        	if(isUnderSubSpecimen(specimen,specimen.getParentSpecimen().getSystemIdentifier()))
+        	if(isUnderSubSpecimen(specimen,specimen.getParentSpecimen().getId()))
         	{
         		throw new DAOException(ApplicationProperties.getValue("errors.specimen.under.subspecimen"));  
         	}
-        	Logger.out.debug("Loading ParentSpecimen: "+specimen.getParentSpecimen().getSystemIdentifier());
+        	Logger.out.debug("Loading ParentSpecimen: "+specimen.getParentSpecimen().getId());
 
 			// check for closed ParentSpecimen
 			checkStatus(dao, specimen.getParentSpecimen(), "Parent Specimen" );
 			
-        	SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen().getSystemIdentifier(), dao);
+        	SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen().getId(), dao);
         	
         	specimen.setSpecimenCollectionGroup(scg);
-        	SpecimenCharacteristics sc= loadSpecimenCharacteristics(specimen.getParentSpecimen().getSystemIdentifier(), dao);
+        	SpecimenCharacteristics sc= loadSpecimenCharacteristics(specimen.getParentSpecimen().getId(), dao);
         	
         	if(!Constants.ALIQUOT.equals(specimen.getLineage()))//specimen instanceof OriginalSpecimen)
         	{
@@ -377,7 +377,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
         	}        	 
         }
     	//check for closed Specimen Collection Group
-    	if(!specimen.getSpecimenCollectionGroup().getSystemIdentifier().equals(specimenOld.getSpecimenCollectionGroup().getSystemIdentifier()))
+    	if(!specimen.getSpecimenCollectionGroup().getId().equals(specimenOld.getSpecimenCollectionGroup().getId()))
     		checkStatus(dao,specimen.getSpecimenCollectionGroup(), "Specimen Collection Group" );
 		
     	setSpecimenGroupForSubSpecimen(specimen,specimen.getSpecimenCollectionGroup(),specimen.getSpecimenCharacteristics());
@@ -408,7 +408,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				dao.update(exId, sessionDataBean, true, true, false);
 				
 				ExternalIdentifier oldExId = (ExternalIdentifier)
-					getCorrespondingOldObject(oldExternalIdentifierCollection, exId.getSystemIdentifier());
+					getCorrespondingOldObject(oldExternalIdentifierCollection, exId.getId());
 				dao.audit(exId, oldExId, sessionDataBean, true);
 			}
 		}
@@ -420,7 +420,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			setDisableToSubSpecimen(specimen);
 			Logger.out.debug("specimen.getActivityStatus() "+specimen.getActivityStatus());
 			Long specimenIDArr[] = new Long[1];
-			specimenIDArr[0] = specimen.getSystemIdentifier();
+			specimenIDArr[0] = specimen.getId();
 			
 			disableSubSpecimens(dao,specimenIDArr);
 		}
@@ -434,8 +434,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
             while (iterator.hasNext())
             {
             	Specimen childSpecimen = (Specimen) iterator.next();
-                //Logger.out.debug("SUB CONTINER container "+parentContainerID.longValue()+" "+container.getSystemIdentifier().longValue()+"  "+(parentContainerID.longValue()==container.getSystemIdentifier().longValue()));
-                if(parentSpecimenID.longValue()==childSpecimen.getSystemIdentifier().longValue())
+                //Logger.out.debug("SUB CONTINER container "+parentContainerID.longValue()+" "+container.getId().longValue()+"  "+(parentContainerID.longValue()==container.getId().longValue()));
+                if(parentSpecimenID.longValue()==childSpecimen.getId().longValue())
                 	return true;
                 if(isUnderSubSpecimen(childSpecimen,parentSpecimenID))
                 	return true;
@@ -448,7 +448,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
     {
         if (specimen != null)
         {
-        	Logger.out.debug("specimen() "+specimen.getSystemIdentifier());
+        	Logger.out.debug("specimen() "+specimen.getId());
         	Logger.out.debug("specimen.getChildrenContainerCollection() "+specimen.getChildrenSpecimen().size());
             
         	Iterator iterator = specimen.getChildrenSpecimen().iterator();
@@ -483,7 +483,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
     	//Load & set Specimen Collection Group if present
 		if(specimen.getSpecimenCollectionGroup() != null)
 		{
-	    	Object specimenCollectionGroupObj = dao.retrieve(SpecimenCollectionGroup.class.getName(), specimen.getSpecimenCollectionGroup().getSystemIdentifier());
+	    	Object specimenCollectionGroupObj = dao.retrieve(SpecimenCollectionGroup.class.getName(), specimen.getSpecimenCollectionGroup().getId());
 			if(specimenCollectionGroupObj!=null )
 			{
 				SpecimenCollectionGroup spg = (SpecimenCollectionGroup)specimenCollectionGroupObj;
@@ -497,7 +497,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		//Load & set Parent Specimen if present
 		if(specimen.getParentSpecimen() != null)
 		{
-			Object parentSpecimenObj = dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getSystemIdentifier());
+			Object parentSpecimenObj = dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getId());
 			if(parentSpecimenObj!=null)
 			{
 				Specimen parentSpecimen = (Specimen)parentSpecimenObj;
@@ -510,7 +510,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		}
 		
 		//Load & set Storage Container
-		Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getSystemIdentifier());
+		Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getId());
 		if(containerObj != null)
 		{
 			StorageContainer container = (StorageContainer)containerObj;
@@ -522,7 +522,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 									.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 			
 			// --- check for all validations on the storage container.
-			storageContainerBizLogic.checkContainer(dao,container.getSystemIdentifier().toString(),
+			storageContainerBizLogic.checkContainer(dao,container.getId().toString(),
 					specimen.getPositionDimensionOne().toString(),specimen.getPositionDimensionTwo().toString(),sessionDataBean);
 			
 			specimen.setStorageContainer(container);
@@ -537,8 +537,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			while(it.hasNext())
 			{
 				Biohazard hazard = (Biohazard)it.next();
-				Logger.out.debug("hazard.getSystemIdentifier() "+hazard.getSystemIdentifier());
-				Object bioObj = dao.retrieve(Biohazard.class.getName(), hazard.getSystemIdentifier());
+				Logger.out.debug("hazard.getId() "+hazard.getId());
+				Object bioObj = dao.retrieve(Biohazard.class.getName(), hazard.getId());
 				if(bioObj!=null)
 				{
 					Biohazard hazardObj = (Biohazard)bioObj;
@@ -651,8 +651,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
      */
     public void assignPrivilegeToRelatedObjectsForDistributedItem(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser, boolean assignOperation)throws SMException, DAOException
     {
-        String [] selectColumnNames = {"specimen.systemIdentifier"};
-        String [] whereColumnNames = {"systemIdentifier"};
+        String [] selectColumnNames = {"specimen.id"};
+        String [] whereColumnNames = {"id"};
         List listOfSubElement = super.getRelatedObjects(dao, DistributedItem.class, selectColumnNames, whereColumnNames, objectIds);
     	if(!listOfSubElement.isEmpty())
     	{
@@ -751,7 +751,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
     	StorageContainer oldContainer = oldSpecimen.getStorageContainer();
 		StorageContainer newContainer = newSpecimen.getStorageContainer();
 		
-    	if(oldContainer.getSystemIdentifier().longValue() == newContainer.getSystemIdentifier().longValue())
+    	if(oldContainer.getId().longValue() == newContainer.getId().longValue())
     	{
     		if(oldSpecimen.getPositionDimensionOne().intValue() == newSpecimen.getPositionDimensionOne().intValue())
     		{
@@ -778,7 +778,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
     /**
      * This method fetches linked data from integrated application i.e. CAE/caTies.
      */
-    public List getLinkedAppData(Long systemIdentifier, String applicationID)
+    public List getLinkedAppData(Long id, String applicationID)
 	{
 	    Logger.out.debug("In getIntegrationData() of SpecimenBizLogic ");
 	    
@@ -795,7 +795,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		    
 		    Statement stmt= connection.createStatement();
 		    
-		    String specimenCollectionGroupQuery = "select SPECIMEN_COLLECTION_GROUP_ID from CATISSUE_SPECIMEN where IDENTIFIER="+systemIdentifier;
+		    String specimenCollectionGroupQuery = "select SPECIMEN_COLLECTION_GROUP_ID from CATISSUE_SPECIMEN where IDENTIFIER="+id;
 		    
 		    ResultSet specimenCollectionGroupResultSet = stmt.executeQuery(specimenCollectionGroupQuery);
 		    

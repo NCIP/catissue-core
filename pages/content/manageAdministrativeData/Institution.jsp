@@ -43,7 +43,7 @@
 		</tr>
 		
 		<tr>
-			<td><html:hidden property="systemIdentifier" /></td>
+			<td><html:hidden property="id" /></td>
 		</tr>
 
 		<tr>
@@ -56,7 +56,7 @@
 					<bean:message key="institution.title"/>
 				</logic:equal>
 				<logic:equal name="operation" value="<%=Constants.EDIT%>">
-					<bean:message key="institution.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="institutionForm" property="systemIdentifier" />
+					<bean:message key="institution.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="institutionForm" property="id" />
 				</logic:equal>
 			 </td>
 		</tr>

@@ -67,16 +67,16 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	}
 	
 	/**
-     * Returns System generated unique systemIdentifier.
-     * @return System generated unique systemIdentifier.
-     * @see #setSystemIdentifier(Integer)
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * Returns System generated unique id.
+     * @return System generated unique id.
+     * @see #setId(Integer)
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_DISTRIBUTION_SEQ" 
      */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 	public Distribution(AbstractActionForm form)
 	{
@@ -193,9 +193,9 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	    	super.setAllValues(abstractForm);
 	    	super.specimen = null;
 	    	DistributionForm form = (DistributionForm) abstractForm;
-	        toSite.setSystemIdentifier(new Long(form.getToSite()));
-	        //fromSite.setSystemIdentifier(new Long(form.getFromSite()));
-	        distributionProtocol.setSystemIdentifier(new Long(form.getDistributionProtocolId()));
+	        toSite.setId(new Long(form.getToSite()));
+	        //fromSite.setId(new Long(form.getFromSite()));
+	        distributionProtocol.setId(new Long(form.getDistributionProtocolId()));
 	        this.activityStatus = form.getActivityStatus();
 	        
 	        Map map = form.getValues();
@@ -221,7 +221,7 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 		{
 			String key = (String)it.next();
 			String value = (String)orgMap.get(key);
-			if(key.endsWith("_systemIdentifier") || key.endsWith("uantity"))
+			if(key.endsWith("_id") || key.endsWith("uantity"))
 			{
 				newMap.put(key,value);
 			}

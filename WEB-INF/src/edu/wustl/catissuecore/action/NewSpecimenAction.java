@@ -29,6 +29,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -43,8 +44,6 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
-
-import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 
 /**
  * NewSpecimenAction initializes the fields in the New Specimen page.
@@ -68,7 +67,7 @@ public class NewSpecimenAction  extends SecureAction
         
         if(operation != null && operation.equalsIgnoreCase(Constants.ADD ) )
         {
-        	specimenForm.setSystemIdentifier(0);
+        	specimenForm.setId(0);
         }
 
         
@@ -89,7 +88,7 @@ public class NewSpecimenAction  extends SecureAction
         	else {
         		List key = new ArrayList();
         		key.add("Biohazard:i_type");
-        		key.add("Biohazard:i_systemIdentifier");
+        		key.add("Biohazard:i_id");
     	
         		//Gets the map from ActionForm
         		map = specimenForm.getBiohazard();
@@ -130,7 +129,7 @@ public class NewSpecimenAction  extends SecureAction
         // - set the specimen id
 //       	String specimenID = (String)request.getAttribute(Constants.SPECIMEN_ID);
 //       	if(specimenID !=null)
-//       		specimenForm.setSystemIdentifier(Long.parseLong(specimenID  )); 
+//       		specimenForm.setId(Long.parseLong(specimenID  )); 
 //    	
 //    	Logger.out.debug("SpecimenID in NewSpecimenAction : " + specimenID  );
     	
@@ -287,7 +286,7 @@ public class NewSpecimenAction  extends SecureAction
         	containerMap = new TreeMap();
         	Integer id = new Integer(specimenForm.getStorageContainer());
         	String parentContainerName="";
-        	String valueField1 = "systemIdentifier";
+        	String valueField1 = "id";
         	List list = bizLogic.retrieve(StorageContainer.class.getName(),valueField1,new Long(specimenForm.getStorageContainer()));
 			if(!list.isEmpty())
 			{

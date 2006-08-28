@@ -33,9 +33,9 @@ public class User extends AbstractDomainObject implements Serializable
 {
 
     /**
-     * System generated unique systemIdentifier.
+     * System generated unique id.
      */
-    protected Long systemIdentifier;
+    protected Long id;
 
     /**
      * A string containing the Last Name of the user.
@@ -145,23 +145,23 @@ public class User extends AbstractDomainObject implements Serializable
     }
 
     /**
-     * Returns the systemIdentifier assigned to user.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * Returns the id assigned to user.
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_USER_SEQ"
-     * @return Returns the systemIdentifier.
+     * @return Returns the id.
      */
-    public Long getSystemIdentifier()
+    public Long getId()
     {
-        return systemIdentifier;
+        return id;
     }
 
     /**
-     * @param systemIdentifier The systemIdentifier to set.
+     * @param id The id to set.
      */
-    public void setSystemIdentifier(Long systemIdentifier)
+    public void setId(Long id)
     {
-        this.systemIdentifier = systemIdentifier;
+        this.id = id;
     }
 
     /**
@@ -549,17 +549,17 @@ public class User extends AbstractDomainObject implements Serializable
             }
             else
             {
-                this.systemIdentifier = new Long(uform.getSystemIdentifier());
+                this.id = new Long(uform.getId());
                 this.setLoginName(uform.getEmailAddress());
                 this.setLastName(uform.getLastName());
                 this.setFirstName(uform.getFirstName());
                 this.setEmailAddress(uform.getEmailAddress());
-                this.institution.setSystemIdentifier(new Long(uform
+                this.institution.setId(new Long(uform
                         .getInstitutionId()));
 
-                this.department.setSystemIdentifier(new Long(uform
+                this.department.setId(new Long(uform
                         .getDepartmentId()));
-                this.cancerResearchGroup.setSystemIdentifier(new Long(uform
+                this.cancerResearchGroup.setId(new Long(uform
                         .getCancerResearchGroupId()));
                 if (Constants.PAGEOF_USER_PROFILE.equals(pageOf) == false)
                 {

@@ -63,7 +63,7 @@
 			if(obj1 != null && obj instanceof DistributionProtocolForm)
 			{
 				DistributionProtocolForm form1 = (DistributionProtocolForm)obj1;
-		   		appendingPath = "/DistributionProtocolSearch.do?operation=search&pageOf=pageOfDistributionProtocol&systemIdentifier="+form1.getSystemIdentifier() ;
+		   		appendingPath = "/DistributionProtocolSearch.do?operation=search&pageOf=pageOfDistributionProtocol&id="+form1.getId() ;
 		   		System.out.println("---------- DP JSP appendingPath -------- : "+ appendingPath);
 		   	}
 	   	}
@@ -102,7 +102,7 @@ function insRow(subdivtag)
 	var spreqno=x.insertCell(0)
 	spreqno.className="tabrightmostcell";
 	var rowno=(q);
-	var identifier = "value(SpecimenRequirement:" + rowno +"_systemIdentifier)";
+	var identifier = "value(SpecimenRequirement:" + rowno +"_id)";
 	var cell1 = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 	spreqno.innerHTML="" + rowno+"." + cell1;
 	
@@ -112,7 +112,7 @@ function insRow(subdivtag)
 	sname="";
 	objname = "value(SpecimenRequirement:" + rowno + "_specimenClass)";
 	var specimenClassName = objname;
-//value(SpecimenRequirement:`_quantityIn)	
+//value(SpecimenRequirement:`_quantity_value)	
 	
 	var objunit = "value(SpecimenRequirement:"+rowno+"_unitspan)";
 	var subtypename =  "value(SpecimenRequirement:"+rowno+"_specimenType)";
@@ -180,7 +180,7 @@ function insRow(subdivtag)
 	var spreqqty=x.insertCell(5)
 	spreqqty.className="formField";
 	sname="";
-	objname = "value(SpecimenRequirement:"+rowno+"_quantityIn)";
+	objname = "value(SpecimenRequirement:"+rowno+"_quantity_value)";
 
 	sname="<input type='text' name='" + objname + "' value=''  maxlength='10'  class='formFieldSized5' id='" + objname + "'>"        	
 	sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
@@ -236,7 +236,7 @@ function insRow(subdivtag)
 				</tr>
 				
 				<tr>
-					<td><html:hidden property="systemIdentifier" /></td>
+					<td><html:hidden property="id" /></td>
 					<td><html:hidden property="onSubmit"/></td>
 					
 				</tr>
@@ -251,7 +251,7 @@ function insRow(subdivtag)
 								<bean:message key="distributionprotocol.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="distributionprotocol.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="distributionProtocolForm" property="systemIdentifier" />
+								<bean:message key="distributionprotocol.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="distributionProtocolForm" property="id" />
 							</logic:equal>
 						</td>
 					</tr>
@@ -505,9 +505,9 @@ function insRow(subdivtag)
 					
 					String objunit = "value(SpecimenRequirement:"+ counter +"_unitspan)";
 					String objsubTypeName = "value(SpecimenRequirement:" + counter + "_specimenType)";
-					String identifier = "value(SpecimenRequirement:"+ counter +"_systemIdentifier)";
+					String identifier = "value(SpecimenRequirement:"+ counter +"_id)";
 					String check = "chk_"+counter;
-					String mapIdKey = "SpecimenRequirement:" + counter + "_systemIdentifier";
+					String mapIdKey = "SpecimenRequirement:" + counter + "_id";
 
 					String idValue = String.valueOf((map.get(mapIdKey)));
 					int sysId = 0;
@@ -613,40 +613,34 @@ function insRow(subdivtag)
 			    <td class="formField">
 			    	<%
 						objname="";
-						objname = "value(SpecimenRequirement:"+ counter +"_quantityIn)";
+						objname = "value(SpecimenRequirement:"+ counter +"_quantity_value)";
 						String typeclassValue = (String)form.getValue(srSubTypeKeyName);
-								 String strHiddenUnitValue = "" + changeUnit(classValue,typeclassValue);
-								 
-						%>
-
-		        		
+						String strHiddenUnitValue = "" + changeUnit(classValue,typeclassValue);
+					%>
 			    
 					<html:text styleClass="formFieldSized5" 
-								styleId="<%=objname%>"  maxlength="10" 
-								property="<%=objname%>"
-								readonly="<%=readOnlyValue%>" />
-						&nbsp;
-						<span id=' <%= objunit %>'>
-							<%=strHiddenUnitValue%>
-						</span>
+							styleId="<%=objname%>"  maxlength="10" 
+							property="<%=objname%>"
+							readonly="<%=readOnlyValue%>" />
+					&nbsp;
+					<span id=' <%= objunit %>'>
+						<%=strHiddenUnitValue%>
+					</span>
 		        </td>
 		        <%
-							String key = "SpecimenRequirement:"+ counter +"_systemIdentifier";
-							boolean bool = Utility.isPersistedValue(map,key);
-							String condition = "";
-							if(bool)
-								condition = "disabled='disabled'";
-
-						%>
-						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')">		
-						</td>
+					String key = "SpecimenRequirement:"+ counter +"_id";
+					boolean bool = Utility.isPersistedValue(map,key);
+					String condition = "";
+					if(bool)
+						condition = "disabled='disabled'";
+				%>
+				<td class="formField" width="5">
+					<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')">		
+				</td>
 			</tr>	
-							
 			<%
 				} // for 
-			%>
-			
+			%>			
 			</tbody>
 			<!-- SUB TITLES END -->		 
 		</table>

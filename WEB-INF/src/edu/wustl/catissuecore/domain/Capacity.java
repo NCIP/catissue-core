@@ -21,7 +21,7 @@ import edu.wustl.common.exception.AssignDataException;
 public class Capacity extends AbstractDomainObject
 {
     
-	protected Long systemIdentifier;
+	protected Long id;
 	
 	protected Integer oneDimensionCapacity;
 	
@@ -39,23 +39,23 @@ public class Capacity extends AbstractDomainObject
 	}
 	
 	/**
-     * @see edu.wustl.common.domain.AbstractDomainObject#getSystemIdentifier()
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * @see edu.wustl.common.domain.AbstractDomainObject#getId()
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_CAPACITY_SEQ"
      */
-    public Long getSystemIdentifier()
+    public Long getId()
     {
-        return this.systemIdentifier;
+        return this.id;
     }
 	
 	/**
      * (non-Javadoc)
-     * @see edu.wustl.common.domain.AbstractDomainObject#setSystemIdentifier(java.lang.Long)
+     * @see edu.wustl.common.domain.AbstractDomainObject#setId(java.lang.Long)
      */
-    public void setSystemIdentifier(Long systemIdentifier)
+    public void setId(Long id)
     {
-        this.systemIdentifier = systemIdentifier;
+        this.id = id;
     }
 	
     /**
@@ -75,23 +75,7 @@ public class Capacity extends AbstractDomainObject
     {
         this.oneDimensionCapacity = oneDimensionCapacity;
     }
-    
-    /**
-     * @return Returns the systemIdentifier.
-     */
-    public Long getId()
-    {
-        return systemIdentifier;
-    }
-    
-    /**
-     * @param systemIdentifier The systemIdentifier to set.
-     */
-    public void setId(Long id)
-    {
-        this.systemIdentifier = id;
-    }
-    
+
     /**
      * @return Returns the twoDimensionCapacity.
      * @hibernate.property name="twoDimensionCapacity" type="int" 

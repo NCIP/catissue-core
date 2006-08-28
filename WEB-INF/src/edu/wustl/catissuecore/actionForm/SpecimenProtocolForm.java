@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -259,7 +260,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	{
 	    SpecimenProtocol protocol = (SpecimenProtocol)abstractDomain;
 		
-		this.systemIdentifier = protocol.getId().longValue();
+		this.id = protocol.getId().longValue();
 		this.principalInvestigatorId = protocol.getPrincipalInvestigator()
 				.getId().longValue();
 		this.title = Utility.toString(protocol.getTitle());
@@ -276,7 +277,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	public void setAllVal(Object obj)
     {
 	    edu.wustl.catissuecore.domainobject.SpecimenProtocol protocol=(edu.wustl.catissuecore.domainobject.SpecimenProtocol) obj;
-		this.systemIdentifier = protocol.getId().longValue();
+		this.id = protocol.getId().longValue();
 		
 		if(protocol.getPrincipalInvestigator() != null && protocol.getPrincipalInvestigator().getId() != null)
 		{
@@ -395,4 +396,26 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		return errors;
 	}
 	
+	protected void setSpecimenRequirement(String [] key, SpecimenRequirement requirement)
+	{
+	    values.put(key[0] , requirement.getSpecimenClass());
+		values.put(key[1] , Utility.getUnit(requirement.getSpecimenClass() , requirement.getSpecimenType()));
+		values.put(key[2] , requirement.getSpecimenType());
+		values.put(key[3] , requirement.getTissueSite());
+		values.put(key[4] , requirement.getPathologyStatus());
+		values.put(key[5] , Utility.toString(requirement.getQuantity().getValue()));
+		values.put(key[6] , Utility.toString(requirement.getId()));
+		
+		if(requirement.getSpecimenClass().equals(Constants.TISSUE))
+		{
+			String tissueType = requirement.getSpecimenType();
+			if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || 
+			        tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK) || 
+			        tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)  || 
+			        tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE))
+			{
+				values.put(key[5] , Utility.toString(new Integer(requirement.getQuantity().getValue().intValue())));
+			}
+		}
+	}
 }

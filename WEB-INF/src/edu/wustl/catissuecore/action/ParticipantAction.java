@@ -53,12 +53,12 @@ public class ParticipantAction extends BaseAction
     		participantForm=(ParticipantForm)request.getAttribute("participantForm1");
     		request.setAttribute("participantForm",participantForm);
     	}
-    	Logger.out.info("-----------Participant ID:"+participantForm.getSystemIdentifier());
+    	Logger.out.info("-----------Participant ID:"+participantForm.getId());
     	Logger.out.info("-----------Last Name:"+participantForm.getLastName());
     	
     	//List of keys used in map of ActionForm
 		List key = new ArrayList();
-    	key.add("ParticipantMedicalIdentifier:i_Site_systemIdentifier");
+    	key.add("ParticipantMedicalIdentifier:i_Site_id");
     	key.add("ParticipantMedicalIdentifier:i_medicalRecordNumber");
     	
     	//Gets the map from ActionForm

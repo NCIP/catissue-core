@@ -80,8 +80,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 			if (container.getParent() != null)
 			{
-				List list = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier",
-						container.getParent().getSystemIdentifier());
+				List list = dao.retrieve(StorageContainer.class.getName(), "id",
+						container.getParent().getId());
 
 				if (list.size() != 0)
 				{
@@ -132,7 +132,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 								.intValue();
 
 						fullStatus = getStorageContainerFullStatus(dao, container
-								.getParent().getSystemIdentifier());
+								.getParent().getId());
 						positionDimensionOne = container.getPositionDimensionOne().intValue();
 						positionDimensionTwo = container.getPositionDimensionTwo().intValue();
 					}
@@ -167,7 +167,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 				//Used for showing the success message after insert and using it
 				// for edit.
-				container.setSystemIdentifier(cont.getSystemIdentifier());
+				container.setId(cont.getId());
 
 				if (container.getParent() != null)
 				{
@@ -219,7 +219,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			Logger.out.debug("cont.getCollectionProtocolCollection().size()  "
 					+ container.getCollectionProtocolCollection().size());
 			Logger.out.debug("container.getParentContainer() site id -->>()<<-- "
-					+ container.getParent()); //.getSite().getSystemIdentifier()
+					+ container.getParent()); //.getSite().getId()
 			Logger.out.debug("Container siteId " + container.getSite());
 			Logger.out.info(simMap);
 			int checkButton = Integer.parseInt((String) simMap.get("checkedButton"));
@@ -240,7 +240,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				{
 					String siteId = (String) simMap.get(simContPrefix + "siteId");
 					Site site = new Site();
-					site.setSystemIdentifier(new Long(siteId));
+					site.setId(new Long(siteId));
 					cont.setSite(site);
 					loadSite(dao, cont); // <<----
 
@@ -253,7 +253,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					String posTwo = (String) simMap.get(simContPrefix + "positionDimensionTwo");
 
 					StorageContainer parentContainer = new StorageContainer();
-					parentContainer.setSystemIdentifier(new Long(parentId));
+					parentContainer.setId(new Long(parentId));
 					parentContainer.setPositionDimensionOne(new Integer(posOne));
 					parentContainer.setPositionDimensionTwo(new Integer(posTwo));
 					cont.setParent(parentContainer); // <<----
@@ -276,7 +276,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				dao.insert(cont.getCapacity(), sessionDataBean, true, true);
 				dao.insert(cont, sessionDataBean, true, true);
 
-				container.setSystemIdentifier(cont.getSystemIdentifier());
+				container.setId(cont.getId());
 				
 				//        		Inserting authorization data
 				Set protectionObjects = new HashSet();
@@ -324,9 +324,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 			StorageType storageType = (StorageType) it.next();
 
-			Logger.out.debug("storage Type ID :" + storageType.getSystemIdentifier());
+			Logger.out.debug("storage Type ID :" + storageType.getId());
 			Object obj = dao.retrieve(StorageType.class.getName(), storageType
-					.getSystemIdentifier());
+					.getId());
 			if (obj != null)
 			{
 				StorageType storageTypeHold = (StorageType) obj;
@@ -377,16 +377,16 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				//Check whether continer is moved to one of its sub container.
 				if (isUnderSubContainer(container, container.getParent()
-						.getSystemIdentifier()))
+						.getId()))
 				{
 					throw new DAOException(ApplicationProperties
 							.getValue("errors.container.under.subcontainer"));
 				}
 				Logger.out.debug("Loading ParentContainer: "
-						+ container.getParent().getSystemIdentifier());
+						+ container.getParent().getId());
 
 				StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class
-						.getName(), container.getParent().getSystemIdentifier());
+						.getName(), container.getParent().getId());
 
 				/* Check if position specified is within the parent container's capacity*/
 				if (false == validatePosition(pc, container))
@@ -423,10 +423,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				// -----------------
 				String sourceObjectName = StorageContainer.class.getName();
-				String[] selectColumnName = {"systemIdentifier","capacity.oneDimensionCapacity","capacity.twoDimensionCapacity"};
-				String[] whereColumnName = {"systemIdentifier"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+				String[] selectColumnName = {"id","capacity.oneDimensionCapacity","capacity.twoDimensionCapacity"};
+				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 				String[] whereColumnCondition = {"="};
-				Object[] whereColumnValue = {container.getParent().getSystemIdentifier()};
+				Object[] whereColumnValue = {container.getParent().getId()};
 				String joinCondition = null;
 
 				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName,
@@ -455,7 +455,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 				}
 				// -----------------
-				//            	StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), container.getParentContainer().getSystemIdentifier());
+				//            	StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), container.getParentContainer().getId());
 
 				//        		if(!validatePosition(container.getParentContainer().getStorageContainerCapacity().getOneDimensionCapacity().intValue(),
 				//          			container.getParentContainer().getStorageContainerCapacity().getTwoDimensionCapacity().intValue(),
@@ -471,12 +471,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				 *  check for availability of position
 				 */
 				Logger.out
-						.debug("oldContainer.getParentContainer().getSystemIdentifier().longValue() : "
-								+ oldContainer.getParent().getSystemIdentifier()
+						.debug("oldContainer.getParentContainer().getId().longValue() : "
+								+ oldContainer.getParent().getId()
 										.longValue());
 				Logger.out
-						.debug("container.getParentContainer().getSystemIdentifier().longValue() : "
-								+ container.getParent().getSystemIdentifier().longValue());
+						.debug("container.getParentContainer().getId().longValue() : "
+								+ container.getParent().getId().longValue());
 				Logger.out.debug("oldContainer.getPositionDimensionOne().intValue() : "
 						+ oldContainer.getPositionDimensionOne().intValue());
 				Logger.out.debug("container.getPositionDimensionOne().intValue() : "
@@ -529,11 +529,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		//Check for closed Site
 		if ((container.getSite() != null) && (oldContainer.getSite() != null))
 		{
-			if ((container.getSite().getSystemIdentifier() != null)
-					&& (oldContainer.getSite().getSystemIdentifier() != null))
+			if ((container.getSite().getId() != null)
+					&& (oldContainer.getSite().getId() != null))
 			{
-				if ((!container.getSite().getSystemIdentifier().equals(
-						oldContainer.getSite().getSystemIdentifier())))
+				if ((!container.getSite().getId().equals(
+						oldContainer.getSite().getId())))
 				{
 					checkStatus(dao, container.getSite(), "Site");
 				}
@@ -563,7 +563,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		 false);
 		 StorageContainerDetails oldStorageContainerDetails = (StorageContainerDetails) getCorrespondingOldObject(
 		 oldStorageContainerDetailsCollection,
-		 storageContainerDetails.getSystemIdentifier());
+		 storageContainerDetails.getId());
 
 		 dao.audit(storageContainerDetails, oldStorageContainerDetails,
 		 sessionDataBean, true);
@@ -574,7 +574,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 			setDisableToSubContainer(container);
 			Logger.out.debug("container.getActivityStatus() " + container.getActivityStatus());
-			Long containerIDArr[] = {container.getSystemIdentifier()};
+			Long containerIDArr[] = {container.getId()};
 
 			disableSubStorageContainer(dao, containerIDArr);
 		}
@@ -615,8 +615,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	private void isDeAssignable(DAO dao, String privilegeName, Long[] objectIds, Long userId,
 			String roleId, boolean assignToUser) throws DAOException, SMException
 	{
-		String[] selectColumnNames = {"parentContainer.systemIdentifier", "site.systemIdentifier"};
-		String[] whereColumnNames = {"systemIdentifier"};
+		String[] selectColumnNames = {"parentContainer.id", "site.id"};
+		String[] whereColumnNames = {"id"};
 		List listOfSubElement = super.getRelatedObjects(dao, StorageContainer.class,
 				selectColumnNames, whereColumnNames, objectIds);
 
@@ -742,7 +742,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		if (container.getSite() != null)
 		{
 			Object siteObj = dao.retrieve(Site.class.getName(), container.getSite()
-					.getSystemIdentifier());
+					.getId());
 			if (siteObj != null)
 			{
 				Site site = (Site) siteObj;
@@ -760,7 +760,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		//Setting the Storage Type
 		Object storageTypeObj = dao.retrieve(StorageType.class.getName(), container
-				.getStorageType().getSystemIdentifier());
+				.getStorageType().getId());
 		if (storageTypeObj != null)
 		{
 			StorageType type = (StorageType) storageTypeObj;
@@ -772,7 +772,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		if (storageContainer != null)
 		{
-			Logger.out.debug("site() " + site.getSystemIdentifier());
+			Logger.out.debug("site() " + site.getId());
 			Logger.out.debug("storageContainer.getChildrenContainerCollection() "
 					+ storageContainer.getChildren().size());
 
@@ -796,9 +796,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				StorageContainer container = (StorageContainer) iterator.next();
 				//Logger.out.debug("SUB CONTINER container
 				// "+parentContainerID.longValue()+"
-				// "+container.getSystemIdentifier().longValue()+"
-				// "+(parentContainerID.longValue()==container.getSystemIdentifier().longValue()));
-				if (parentContainerID.longValue() == container.getSystemIdentifier().longValue())
+				// "+container.getId().longValue()+"
+				// "+(parentContainerID.longValue()==container.getId().longValue()));
+				if (parentContainerID.longValue() == container.getId().longValue())
 					return true;
 				if (isUnderSubContainer(container, parentContainerID))
 					return true;
@@ -944,7 +944,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	//                treeNode.setStorageContainerName((String) rowList.get(6));
 	//                treeNode.setStorageContainerType((String) rowList.get(5));
 	//                
-	//                treeNode.setSiteSystemIdentifier(Long.valueOf((String) rowList.get(2)));
+	//                treeNode.setSiteId(Long.valueOf((String) rowList.get(2)));
 	//                treeNode.setSiteName((String) rowList.get(3));
 	//                treeNode.setSiteType((String) rowList.get(4));
 	//                
@@ -1226,11 +1226,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return siteTreeNode;
 	}
 
-	public boolean[][] getStorageContainerFullStatus(DAO dao, Long systemIdentifier)
+	public boolean[][] getStorageContainerFullStatus(DAO dao, Long id)
 			throws DAOException
 	{
-		List list = dao.retrieve(StorageContainer.class.getName(), "systemIdentifier",
-				systemIdentifier);
+		List list = dao.retrieve(StorageContainer.class.getName(), "id", id);
 		boolean[][] fullStatus = null;
 
 		if (!list.isEmpty())
@@ -1352,7 +1351,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		try
 		{
 			String sourceObjectName = StorageContainer.class.getName();
-			String[] selectColumnName = {"systemIdentifier"};
+			String[] selectColumnName = {"id"};
 			String[] whereColumnName = {"positionDimensionOne", "positionDimensionTwo",
 					"parent"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 			String[] whereColumnCondition = {"=", "=", "="};
@@ -1374,11 +1373,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				sourceObjectName = Specimen.class.getName();
 				String[] whereColumnName1 = {"positionDimensionOne", "positionDimensionTwo",
-						"storageContainer.systemIdentifier"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+						"storageContainer.id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 				String[] whereColumnCondition1 = {"=", "=", "="};
 				Object[] whereColumnValue1 = {current.getPositionDimensionOne(),
 						current.getPositionDimensionTwo(),
-						current.getParent().getSystemIdentifier()};
+						current.getParent().getId()};
 
 				list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName1,
 						whereColumnCondition1, whereColumnValue1, joinCondition);
@@ -1440,17 +1439,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		try
 		{
 			String sourceObjectName = Specimen.class.getName();
-			String[] selectColumnName = {"systemIdentifier"};
+			String[] selectColumnName = {"id"};
 			String[] whereColumnName = {"positionDimensionOne", "positionDimensionTwo",
-					"storageContainer.systemIdentifier"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+					"storageContainer.id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 			String[] whereColumnCondition = {"=", "=", "="};
-			Object[] whereColumnValue = {posOne, posTwo, storageContainer.getSystemIdentifier()};
+			Object[] whereColumnValue = {posOne, posTwo, storageContainer.getId()};
 			String joinCondition = Constants.AND_JOIN_CONDITION;
 
 			List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName,
 					whereColumnCondition, whereColumnValue, joinCondition);
-			Logger.out.debug("storageContainer.getSystemIdentifier() :"
-					+ storageContainer.getSystemIdentifier());
+			Logger.out.debug("storageContainer.getId() :"
+					+ storageContainer.getId());
 			// check if Specimen exists with the given storageContainer information
 			if (list.size() != 0)
 			{
@@ -1471,12 +1470,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 						"parentContainer"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 				String[] whereColumnCondition1 = {"=", "=", "="};
 				Object[] whereColumnValue1 = {posOne, posTwo,
-						storageContainer.getSystemIdentifier()};
+						storageContainer.getId()};
 
 				list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName1,
 						whereColumnCondition1, whereColumnValue1, joinCondition);
-				Logger.out.debug("storageContainer.getSystemIdentifier() :"
-						+ storageContainer.getSystemIdentifier());
+				Logger.out.debug("storageContainer.getId() :"
+						+ storageContainer.getId());
 				// check if Specimen exists with the given storageContainer information
 				if (list.size() != 0)
 				{
@@ -1500,7 +1499,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			String positionTwo, SessionDataBean sessionDataBean) throws DAOException, SMException
 	{
 		//        List list = dao.retrieve(StorageContainer.class.getName(),
-		//                "systemIdentifier",storageContainerID  );
+		//                "id",storageContainerID  );
 
 		String sourceObjectName = StorageContainer.class.getName();
 		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER,
@@ -1525,7 +1524,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			Logger.out.debug((Integer) obj[2]);
 
 			StorageContainer pc = new StorageContainer();
-			pc.setSystemIdentifier((Long) obj[0]);
+			pc.setId((Long) obj[0]);
 
 			if (obj[1] != null)
 				pc.setPositionDimensionOne((Integer) obj[1]);
@@ -1672,7 +1671,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		String[] selectColumnName = {"positionDimensionOne", "positionDimensionTwo"};
 		String[] whereColumnName = {"parent"};
 		String[] whereColumnCondition = {"="};
-		Object[] whereColumnValue = {container.getSystemIdentifier()};
+		Object[] whereColumnValue = {container.getId()};
 
 		List list = retrieve(sourceObjectName, selectColumnName, whereColumnName,
 				whereColumnCondition, whereColumnValue, null);
@@ -1858,14 +1857,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		while (itr.hasNext())
 		{
 			StorageContainer container = (StorageContainer) itr.next();
-			//Logger.out.info("+++++++++++++++++++++++++++:"+container.getName()+"++++++++++:"+container.getSystemIdentifier());
-			Map positionMap = getAvailablePositionMap(container.getSystemIdentifier().toString());
+			//Logger.out.info("+++++++++++++++++++++++++++:"+container.getName()+"++++++++++:"+container.getId());
+			Map positionMap = getAvailablePositionMap(container.getId().toString());
 
 			if (!positionMap.isEmpty())
 			{
-				//Logger.out.info("---------"+container.getName()+"------"+container.getSystemIdentifier());
+				//Logger.out.info("---------"+container.getName()+"------"+container.getId());
 				NameValueBean nvb = new NameValueBean(container.getName(), container
-						.getSystemIdentifier());
+						.getId());
 				containerMap.put(nvb, positionMap);
 
 			}
@@ -1878,12 +1877,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		if (container != null)
 		{
-			Long sysId = container.getSystemIdentifier();
+			Long sysId = container.getId();
 			List siteIdList = dao.retrieve(StorageContainer.class.getName(),
 					Constants.SYSTEM_IDENTIFIER, sysId);
 			System.out.println("siteIdList " + siteIdList);
 			StorageContainer sc = (StorageContainer) siteIdList.get(0);
-			System.out.println("siteId " + sc.getSite().getSystemIdentifier());
+			System.out.println("siteId " + sc.getSite().getId());
 			container.setSite(sc.getSite());
 		}
 	}
@@ -1902,16 +1901,16 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			while (itr1.hasNext())
 			{
 				StorageType type = (StorageType) itr1.next();
-				if (type.getSystemIdentifier().longValue() == type_id
-						|| type.getSystemIdentifier().longValue() == 1)
+				if (type.getId().longValue() == type_id
+						|| type.getId().longValue() == 1)
 				{
-					Map positionMap = getAvailablePositionMap(container.getSystemIdentifier()
+					Map positionMap = getAvailablePositionMap(container.getId()
 							.toString());
 
 					if (!positionMap.isEmpty())
 					{
 						NameValueBean nvb = new NameValueBean(container.getName(), container
-								.getSystemIdentifier());
+								.getId());
 						containerMap.put(nvb, positionMap);
 						break;
 

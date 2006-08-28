@@ -63,30 +63,43 @@ public class UserBizLogic extends DefaultBizLogic
      * @param session The session in which the object is saved.
      * @throws DAOException
      */
-    protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
-            throws DAOException, UserNotAuthorizedException
+    protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
+//	    if(true)
+//	    {
+//	        try
+//	        {
+//	            String s = null;
+//	            s.charAt(2);
+//	        }
+//	        catch(Exception e)
+//	        {
+//	            Logger.out.error("Error Messgae ", e);
+//	        }
+//	        Logger.out.debug("User insert Test exception");
+//	        throw new DAOException("Test exception");
+//	    }
         User user = (User) obj;
         gov.nih.nci.security.authorization.domainobjects.User csmUser = 
             				new gov.nih.nci.security.authorization.domainobjects.User();
         
         try
         {
-            List list = dao.retrieve(Department.class.getName(),Constants.SYSTEM_IDENTIFIER, user.getDepartment().getSystemIdentifier());
+            List list = dao.retrieve(Department.class.getName(),Constants.SYSTEM_IDENTIFIER, user.getDepartment().getId());
             Department department = null;
             if (list.size() != 0)
             {
                 department = (Department) list.get(0);
             }
             
-            list = dao.retrieve(Institution.class.getName(),Constants.SYSTEM_IDENTIFIER, user.getInstitution().getSystemIdentifier());
+            list = dao.retrieve(Institution.class.getName(),Constants.SYSTEM_IDENTIFIER, user.getInstitution().getId());
             Institution institution = null;
             if (list.size() != 0)
             {
                 institution = (Institution) list.get(0);
             }
             
-            list = dao.retrieve(CancerResearchGroup.class.getName(),Constants.SYSTEM_IDENTIFIER, user.getCancerResearchGroup().getSystemIdentifier());
+            list = dao.retrieve(CancerResearchGroup.class.getName(),Constants.SYSTEM_IDENTIFIER, user.getCancerResearchGroup().getId());
             CancerResearchGroup cancerResearchGroup = null;
             if (list.size() != 0)
             {
@@ -211,11 +224,11 @@ public class UserBizLogic extends DefaultBizLogic
         group.add(user);
         
         // Protection group of User
-        String protectionGroupName = Constants.getUserPGName(aUser.getSystemIdentifier());
+        String protectionGroupName = Constants.getUserPGName(aUser.getId());
         SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(Roles.UPDATE_ONLY);
-        userGroupRoleProtectionGroupBean.setGroupName(Constants.getUserGroupName(aUser.getSystemIdentifier()));
+        userGroupRoleProtectionGroupBean.setGroupName(Constants.getUserGroupName(aUser.getId()));
         userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
         userGroupRoleProtectionGroupBean.setGroup(group);
         authorizationData.add(userGroupRoleProtectionGroupBean);
@@ -233,7 +246,10 @@ public class UserBizLogic extends DefaultBizLogic
     protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
             throws DAOException, UserNotAuthorizedException
     {
-        Logger.out.debug("dao "+dao);
+	    if(true)
+	        throw new DAOException("Test exception");
+
+	    Logger.out.debug("dao "+dao);
         User user = (User) obj;
         User oldUser = (User) oldObj;
         
@@ -397,7 +413,7 @@ public class UserBizLogic extends DefaultBizLogic
                 nameValueBean.setName(user.getLastName() + ", "
                         + user.getFirstName());
                 nameValueBean.setValue(String.valueOf(user
-                        .getSystemIdentifier()));
+                        .getId()));
                 Logger.out.debug(nameValueBean.toString() + " : " + user.getActivityStatus() );
                 nameValuePairs.add(nameValueBean);
             }

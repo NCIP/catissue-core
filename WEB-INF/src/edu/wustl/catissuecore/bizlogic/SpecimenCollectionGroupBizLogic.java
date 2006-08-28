@@ -60,7 +60,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 		
-		Object siteObj = dao.retrieve(Site.class.getName(), specimenCollectionGroup.getSite().getSystemIdentifier());
+		Object siteObj = dao.retrieve(Site.class.getName(), specimenCollectionGroup.getSite().getId());
 		if (siteObj != null)
 		{
 			// check for closed Site
@@ -69,7 +69,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			specimenCollectionGroup.setSite((Site)siteObj);
 		}
 		
-		Object  collectionProtocolEventObj =  dao.retrieve(CollectionProtocolEvent.class.getName(), specimenCollectionGroup.getCollectionProtocolEvent().getSystemIdentifier());
+		Object  collectionProtocolEventObj =  dao.retrieve(CollectionProtocolEvent.class.getName(), specimenCollectionGroup.getCollectionProtocolEvent().getId());
 		if(collectionProtocolEventObj!=null)
 		{
 			CollectionProtocolEvent cpe = (CollectionProtocolEvent)collectionProtocolEventObj;
@@ -134,19 +134,19 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		SpecimenCollectionGroup oldspecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
 		
 		// Check for different closed site
-		if(!specimenCollectionGroup.getSite().getSystemIdentifier().equals( oldspecimenCollectionGroup.getSite().getSystemIdentifier()))
+		if(!specimenCollectionGroup.getSite().getId().equals( oldspecimenCollectionGroup.getSite().getId()))
 		{
 			checkStatus(dao,specimenCollectionGroup.getSite(), "Site" );
 		}
 		//site check complete
 		
 		// -- check for closed CollectionProtocol
-		List list  =  dao.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup.getCollectionProtocolEvent().getSystemIdentifier());
+		List list  =  dao.retrieve(CollectionProtocolEvent.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenCollectionGroup.getCollectionProtocolEvent().getId());
 		if(!list.isEmpty())
 		{
 			// check for closed CollectionProtocol
 			CollectionProtocolEvent cpe = (CollectionProtocolEvent)list.get(0);
-			if(!cpe.getCollectionProtocol().getSystemIdentifier().equals(oldspecimenCollectionGroup.getCollectionProtocolEvent().getCollectionProtocol().getSystemIdentifier()))
+			if(!cpe.getCollectionProtocol().getId().equals(oldspecimenCollectionGroup.getCollectionProtocolEvent().getCollectionProtocol().getId()))
 				checkStatus(dao,cpe.getCollectionProtocol(), "Collection Protocol" );
 			
 			specimenCollectionGroup.setCollectionProtocolEvent((CollectionProtocolEvent)list.get(0));
@@ -170,7 +170,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		if(specimenCollectionGroup.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
 			Logger.out.debug("specimenCollectionGroup.getActivityStatus() "+specimenCollectionGroup.getActivityStatus());
-			Long specimenCollectionGroupIDArr[] = {specimenCollectionGroup.getSystemIdentifier()};
+			Long specimenCollectionGroupIDArr[] = {specimenCollectionGroup.getId()};
 			
 			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 			bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao,specimenCollectionGroupIDArr);
@@ -187,7 +187,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 			
 		whereColumnName[0]="collectionProtocol."+Constants.SYSTEM_IDENTIFIER;
-		whereColumnValue[0]=specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getSystemIdentifier();
+		whereColumnValue[0]=specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId();
 		
 		if(specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant()!=null)
 		{
@@ -197,14 +197,14 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			if(oldSpecimenCollectionGroup!=null)
 			{
 				Participant participantObjectOld =oldSpecimenCollectionGroup.getCollectionProtocolRegistration().getParticipant();
-				if(!participantObject.getSystemIdentifier().equals(participantObjectOld.getSystemIdentifier()))
+				if(!participantObject.getId().equals(participantObjectOld.getId()))
 					checkStatus(dao,participantObject, "Participant" );
 			}
 			else
 				checkStatus(dao,participantObject, "Participant" );
 
 			whereColumnName[1]="participant."+Constants.SYSTEM_IDENTIFIER;
-			whereColumnValue[1]=specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant().getSystemIdentifier();
+			whereColumnValue[1]=specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant().getId();
 		}
 		else
 		{
@@ -224,7 +224,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			if(oldSpecimenCollectionGroup!=null)
 			{
 				CollectionProtocolRegistration collectionProtocolRegistrationOld =oldSpecimenCollectionGroup.getCollectionProtocolRegistration();
-				if(!collectionProtocolRegistration.getSystemIdentifier().equals(collectionProtocolRegistrationOld.getSystemIdentifier()))
+				if(!collectionProtocolRegistration.getId().equals(collectionProtocolRegistrationOld.getId()))
 					checkStatus(dao,collectionProtocolRegistration, "Collection Protocol Registration" );
 			}
 			else
@@ -240,7 +240,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		ParticipantMedicalIdentifier participantMedicalIdentifier = clinicalReport.getParticipantMedicalIdentifier();
 		if(participantMedicalIdentifier!=null)
 		{
-			List list  =  dao.retrieve(ParticipantMedicalIdentifier.class.getName(), Constants.SYSTEM_IDENTIFIER, participantMedicalIdentifier.getSystemIdentifier());
+			List list  =  dao.retrieve(ParticipantMedicalIdentifier.class.getName(), Constants.SYSTEM_IDENTIFIER, participantMedicalIdentifier.getId());
 			if(!list.isEmpty())
 			{
 			   specimenCollectionGroup.getClinicalReport().setParticipantMedicalIdentifier((ParticipantMedicalIdentifier)list.get(0));
@@ -333,7 +333,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	/**
      * This method fetches linked data from integrated application i.e. CAE/caTies.
      */
-	public List getLinkedAppData(Long systemIdentifier, String applicationID)
+	public List getLinkedAppData(Long id, String applicationID)
 	{
 	    Logger.out.debug("In getIntegrationData() of SCGBizLogic ");
 	    
@@ -350,7 +350,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		    
 		    Statement stmt= connection.createStatement();
 		    
-		    String clinicalReportQuery = "select CLINICAL_REPORT_ID from CATISSUE_SPECIMEN_COLL_GROUP where IDENTIFIER="+systemIdentifier;
+		    String clinicalReportQuery = "select CLINICAL_REPORT_ID from CATISSUE_SPECIMEN_COLL_GROUP where IDENTIFIER="+id;
 		    
 		    ResultSet clinicalReportResultSet = stmt.executeQuery(clinicalReportQuery);
 		    

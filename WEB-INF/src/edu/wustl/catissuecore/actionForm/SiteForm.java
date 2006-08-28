@@ -103,7 +103,7 @@ public class SiteForm extends AbstractActionForm
     {
         Site site = (Site)abstractDomain;
         
-        this.systemIdentifier = site.getId().longValue();
+        this.id = site.getId().longValue();
         this.name 			= site.getName();
         this.type			= site.getType();
         this.emailAddress 	= site.getEmailAddress();
@@ -122,7 +122,7 @@ public class SiteForm extends AbstractActionForm
     {
         edu.wustl.catissuecore.domainobject.Site site=(edu.wustl.catissuecore.domainobject.Site) obj;
         
-        this.systemIdentifier = site.getId().longValue();
+        this.id = site.getId().longValue();
         this.name 			= site.getName();
         this.type			= site.getType();
         this.emailAddress 	= site.getEmailAddress();

@@ -35,7 +35,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
         
         if(domainObject instanceof Participant)
         {
-            forwardToHashMap.put("participantId", domainObject.getSystemIdentifier());
+            forwardToHashMap.put("participantId", domainObject.getId());
         }
         else if (domainObject instanceof CollectionProtocolRegistration)
         {
@@ -47,7 +47,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
         }
         else if (domainObject instanceof SpecimenCollectionGroup)
         {
-            forwardToHashMap.put("specimenCollectionGroupId", domainObject.getSystemIdentifier().toString());
+            forwardToHashMap.put("specimenCollectionGroupId", domainObject.getId().toString());
             
         }
         else if (domainObject instanceof Specimen)
@@ -61,7 +61,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
             //Derive New from This Specimen
             if(actionForm.getForwardTo().equals("createNew"))
             {
-                forwardToHashMap.put("parentSpecimenId", domainObject.getSystemIdentifier());
+                forwardToHashMap.put("parentSpecimenId", domainObject.getId());
             }
             //Add To Same Collection Group
             else if(actionForm.getForwardTo().equals("sameCollectionGroup"))
@@ -73,7 +73,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
             //Add Events
             else if(actionForm.getForwardTo().equals("eventParameters"))
             {
-                forwardToHashMap.put("specimenId", domainObject.getSystemIdentifier().toString());
+                forwardToHashMap.put("specimenId", domainObject.getId().toString());
             }
         }
         

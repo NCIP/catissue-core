@@ -115,8 +115,8 @@ public class ListSpecimenEventParametersAction  extends SecureAction
 		    	    SpecimenEventParameters specimenEventParameters=(SpecimenEventParameters)specimenEventList.get(0);
 		    	    
 		    	    //getting SpecimenId of SpecimenEventParameters
-		    	    specimenId=(specimenEventParameters.getSpecimen()).getSystemIdentifier().toString();
-		    	    Logger.out.debug("Specimen of Event Added====>"+(specimenEventParameters.getSpecimen()).getSystemIdentifier());
+		    	    specimenId=(specimenEventParameters.getSpecimen()).getId().toString();
+		    	    Logger.out.debug("Specimen of Event Added====>"+(specimenEventParameters.getSpecimen()).getId());
 		    	}
 	    	}
 	    	
@@ -145,7 +145,7 @@ public class ListSpecimenEventParametersAction  extends SecureAction
 	            		if(eventParameters != null)
 	            		{
 	            			String [] events = getEvent(eventParameters);
-	            			rowData.add(String.valueOf(eventParameters.getSystemIdentifier()));
+	            			rowData.add(String.valueOf(eventParameters.getId()));
 	            			rowData.add(events[0]);//Event Name
 	            			            			
 	            			User user = eventParameters.getUser();

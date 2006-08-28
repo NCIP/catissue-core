@@ -46,7 +46,7 @@
 		</tr>
 
 		<tr>
-			<td><html:hidden property="systemIdentifier" /></td>
+			<td><html:hidden property="id" /></td>
 		</tr>
 		
 		<logic:notEqual name="operation" value="<%=Constants.SEARCH%>">
@@ -60,7 +60,7 @@
 					<bean:message key="biohazard.title"/>
 				</logic:equal>
 				<logic:equal name="operation" value="<%=Constants.EDIT%>">
-					<bean:message key="biohazard.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="biohazardForm" property="systemIdentifier" />
+					<bean:message key="biohazard.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="biohazardForm" property="id" />
 				</logic:equal>
 			 </td>
 		</tr>

@@ -80,7 +80,7 @@
 			spreqno.className="formSerialNumberField";
 			var rowno=(q+1);
 			//spreqno.innerHTML="" + sname;
-			var identifier = "value(DistributedItem:" + rowno +"_systemIdentifier)";
+			var identifier = "value(DistributedItem:" + rowno +"_id)";
 			var cell1 = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 			
 			spreqno.innerHTML="" + rowno+"." + cell1 ;
@@ -90,7 +90,7 @@
 			spreqidentifier.className="formField";
 			sname="";
 
-			var name = "value(DistributedItem:" + rowno + "_Specimen_systemIdentifier)";
+			var name = "value(DistributedItem:" + rowno + "_Specimen_id)";
 // Mandar : 434 : for tooltip 
 			sname="<select name='" + name + "' size='1' class='formField' id='" + name + "' onchange='onSpecimenIdChange(this)' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 			
@@ -214,7 +214,7 @@
 			if(obj1 != null && obj1 instanceof DistributionForm)
 			{
 				DistributionForm form1 = (DistributionForm)obj1;
-		   		appendingPath = "/DistributionSearch.do?operation=search&pageOf=pageOfDistribution&systemIdentifier="+form1.getSystemIdentifier() ;
+		   		appendingPath = "/DistributionSearch.do?operation=search&pageOf=pageOfDistribution&id="+form1.getId() ;
 		   	}
 	   	}
 	   	String reportFormName = new String();
@@ -241,7 +241,7 @@
 				<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 			</td>
 			<td><html:hidden property="counter"/></td>
-			<td><html:hidden property="systemIdentifier" /></td>
+			<td><html:hidden property="id" /></td>
 			<td><html:hidden property="idChange"/></td>
 			<td><html:hidden property="onSubmit"/></td>
 			
@@ -257,7 +257,7 @@
 					<bean:message key="distribution.addTitle"/>
 				</logic:equal>
 				<logic:equal name="operation" value="<%=Constants.EDIT%>">
-					<bean:message key="distribution.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="distributionForm" property="systemIdentifier" />
+					<bean:message key="distribution.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="distributionForm" property="id" />
 				</logic:equal>
 			 </td>
 		</tr>
@@ -500,8 +500,8 @@ if(currentDistributionDate.trim().length() > 0)
 				<%
 				for(int i=1;i<=noOfRows;i++)
 				{
-					String dIdentifier = "value(DistributedItem:"+i+"_systemIdentifier)";
-					String itemName = "value(DistributedItem:"+i+"_Specimen_systemIdentifier)";
+					String dIdentifier = "value(DistributedItem:"+i+"_id)";
+					String itemName = "value(DistributedItem:"+i+"_Specimen_id)";
 					String quantity = "value(DistributedItem:"+i+"_quantity)";
 					String availableQuantity = "value(DistributedItem:"+i+"_availableQty)";
 					String tissueSite = "value(DistributedItem:"+i+"_tissueSite)";
@@ -515,7 +515,7 @@ if(currentDistributionDate.trim().length() > 0)
 					//String unitKey = "DistributedItem:" + i + "_unit";
 					//String unitProperty = "value(DistributedItem:"+i+"_unit)";
 					//String fName = "onSpecimenTypeChange(this,'" + unitSpan + "','" + itemName + "','" + unitProperty + "')";
-					String srKeyName = "DistributedItem:"+i+"_Specimen_systemIdentifier";
+					String srKeyName = "DistributedItem:"+i+"_Specimen_id";
 					//String idValue=(String)formBean.getValue(srKeyName);
 					//String strUnitValue = ""+(String)formBean.getValue(unitProperty);
 					String classValue = (String)formBean.getValue(key);
@@ -564,7 +564,7 @@ if(currentDistributionDate.trim().length() > 0)
 				     	<span id="<%=unitSpan%>">&nbsp;<%=strUnitValue%></span>
 				    </td>
 				    <%
-							String keyid = "DistributedItem:"+i+"_systemIdentifier";
+							String keyid = "DistributedItem:"+i+"_id";
 							boolean bool = Utility.isPersistedValue(map,keyid);
 							String condition = "";
 							if(bool)
@@ -593,7 +593,7 @@ if(currentDistributionDate.trim().length() > 0)
 				<%
 					if (operation.equals(Constants.EDIT))
         			{
-						reportFormName = Constants.DISTRIBUTION_REPORT_ACTION+"?systemIdentifier="+formBean.getSystemIdentifier();
+						reportFormName = Constants.DISTRIBUTION_REPORT_ACTION+"?id="+formBean.getId();
 						reportChangeAction = "setFormAction('" + reportFormName + "');";
 						
         		%>

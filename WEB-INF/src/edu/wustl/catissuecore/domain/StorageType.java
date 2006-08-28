@@ -131,7 +131,7 @@ public class StorageType extends ContainerType
 	    {
 	        StorageTypeForm storageTypeForm = (StorageTypeForm) abstractForm;
 	        
-	        this.systemIdentifier = new Long(storageTypeForm.getSystemIdentifier());
+	        this.id = new Long(storageTypeForm.getId());
 	        this.name = storageTypeForm.getType().trim() ;
 	        
 	        if(storageTypeForm.getDefaultTemperature()!=null && storageTypeForm.getDefaultTemperature().trim().length() >0 )
@@ -154,7 +154,7 @@ public class StorageType extends ContainerType
 	        		if(storageTypeArr[i]!=-1)
 	        		{
 		        		StorageType storageType = new StorageType();
-		        		storageType.setSystemIdentifier(new Long(storageTypeArr[i]));
+		        		storageType.setId(new Long(storageTypeArr[i]));
 		        		holdsStorageTypeCollection.add(storageType);
 	        		}
 				}
@@ -172,7 +172,7 @@ public class StorageType extends ContainerType
 	        		//{
 	        		    //TODO : Vaishali
 //		        		SpecimenClass specimenClass = new SpecimenClass();
-//		        		specimenClass.setSystemIdentifier(new Long(specimenClassTypeArr[i]));
+//		        		specimenClass.setId(new Long(specimenClassTypeArr[i]));
 //		        		holdsSpecimenClassCollection.add(specimenClass);
 	        			holdsSpecimenClassCollection.add(specimenClassTypeArr[i]);
 	        		//}

@@ -23,7 +23,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
-//import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -182,13 +181,13 @@ public class StorageContainerForm extends AbstractActionForm
 
 		StorageContainer container = (StorageContainer) abstractDomain;
 
-		this.systemIdentifier = container.getId().longValue();
+		this.id = container.getId().longValue();
 		this.activityStatus = Utility.toString(container.getActivityStatus());
 		this.containerName = container.getName();
 		isFull = Utility.initCap(Utility.toString(container.isFull()));
 		Logger.out.debug("isFULL />/>/> " + isFull);
 
-		this.typeId = container.getStorageType().getSystemIdentifier().longValue();
+		this.typeId = container.getStorageType().getId().longValue();
 		this.typeName = container.getStorageType().getName();
 		
 
@@ -247,7 +246,7 @@ public class StorageContainerForm extends AbstractActionForm
 			while (it.hasNext())
 			{
 				CollectionProtocol cp = (CollectionProtocol) it.next();
-				this.collectionIds[i] = cp.getSystemIdentifier().longValue();
+				this.collectionIds[i] = cp.getId().longValue();
 				i++;
 			}
 
@@ -265,7 +264,7 @@ public class StorageContainerForm extends AbstractActionForm
 			while (it.hasNext())
 			{
 				StorageType storageType = (StorageType) it.next();
-				this.holdsStorageTypeIds[i] = storageType.getSystemIdentifier().longValue();
+				this.holdsStorageTypeIds[i] = storageType.getId().longValue();
 				i++;
 			}
 		}
@@ -283,7 +282,7 @@ public class StorageContainerForm extends AbstractActionForm
 			{
 			    //TODO : Vaishali
 //				SpecimenClass specimenClass = (SpecimenClass) it.next();
-//				this.holdsSpecimenClassTypeIds[i] = specimenClass.getSystemIdentifier().longValue();
+//				this.holdsSpecimenClassTypeIds[i] = specimenClass.getId().longValue();
 //				i++;
 				String specimenClass=(String)it.next();
 				this.holdsSpecimenClassTypes[i]=specimenClass;
@@ -297,7 +296,7 @@ public class StorageContainerForm extends AbstractActionForm
 	{
 		edu.wustl.catissuecore.domainobject.StorageContainer container = (edu.wustl.catissuecore.domainobject.StorageContainer) obj;
 
-		this.systemIdentifier = container.getId().longValue();
+		this.id = container.getId().longValue();
 		this.activityStatus = Utility.toString(container.getActivityStatus());
 		this.startNumber = Utility.toString(container.getNumber());
 

@@ -15,9 +15,9 @@ import java.util.Hashtable;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.common.query.ShoppingCart;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.query.ShoppingCart;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -32,7 +32,7 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 		{
 			for(int i=0;i<obj.length;i++)
 			{
-				List list = retrieve(Specimen.class.getName(),"systemIdentifier",obj[i].toString());
+				List list = retrieve(Specimen.class.getName(),"id",obj[i].toString());
 				
 				if (list!=null && list.size()!= 0)
 				{
@@ -105,7 +105,7 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 		        	String key = str.substring(index);
 					Specimen specimen = (Specimen)table.get(key);
 					
-					rowList.add(String.valueOf(specimen.getSystemIdentifier()));
+					rowList.add(String.valueOf(specimen.getId()));
 					rowList.add(specimen.getClassName());
 					
 					if(specimen.getType() != null)

@@ -95,7 +95,7 @@ public class NewSpecimenEventParametersAction  extends SecureAction
 	            		if(eventParameters != null)
 	            		{
 	            			String [] events = getEvent(eventParameters);
-	            			rowData.add(String.valueOf(eventParameters.getSystemIdentifier()));
+	            			rowData.add(String.valueOf(eventParameters.getId()));
 	            			rowData.add(events[0]);//Event Name
 	            			            			
 	            			User user = eventParameters.getUser();

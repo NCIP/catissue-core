@@ -80,7 +80,7 @@ public class SimilarContainersAction extends SecureAction
 
 		//		Populating the Site Array
 		String[] siteDisplayField = {"name"};
-		String valueField = "systemIdentifier";
+		String valueField = "id";
 		List list = ibizLogic.getList(Site.class.getName(), siteDisplayField, valueField, true);
 		request.setAttribute(Constants.SITELIST, list);
 
@@ -121,7 +121,7 @@ public class SimilarContainersAction extends SecureAction
 		}
 
 		long siteId = similarContainersForm.getSiteId();
-		String valueField1 = "systemIdentifier";
+		String valueField1 = "id";
 		if (similarContainersForm.getCheckedButton() == 1)
 		{
 			List siteList = ibizLogic.retrieve(Site.class.getName(), valueField1, new Long(
@@ -131,7 +131,7 @@ public class SimilarContainersAction extends SecureAction
 				Site site = (Site) siteList.get(0);
 				similarContainersForm.setSiteName(site.getName());
 				siteName = site.getName();
-				siteId = site.getSystemIdentifier().longValue();
+				siteId = site.getId().longValue();
 			}
 		}
 		else
@@ -151,7 +151,7 @@ public class SimilarContainersAction extends SecureAction
 					StorageContainer container = (StorageContainer) containerList.get(0);
 					similarContainersForm.setSiteName(container.getSite().getName());
 					siteName = container.getSite().getName();
-					siteId = container.getSite().getSystemIdentifier().longValue();
+					siteId = container.getSite().getId().longValue();
 					Logger.out.debug("Site Name :" + similarContainersForm.getSiteName());
 				}
 			}
@@ -267,7 +267,7 @@ public class SimilarContainersAction extends SecureAction
 					Site site = (Site) siteList.get(0);
 					similarContainersForm.setSiteName(site.getName());
 					siteName = site.getName();
-					siteId = site.getSystemIdentifier().longValue();
+					siteId = site.getId().longValue();
 				}
 			}
 
@@ -453,7 +453,7 @@ public class SimilarContainersAction extends SecureAction
 		while (cpItr.hasNext())
 		{
 			CollectionProtocol cp = (CollectionProtocol) cpItr.next();
-			collectionProtocolList.add(new NameValueBean(cp.getTitle(), cp.getSystemIdentifier()));
+			collectionProtocolList.add(new NameValueBean(cp.getTitle(), cp.getId()));
 		}
 		Collections.sort(collectionProtocolList);
 		collectionProtocolList.add(0, new NameValueBean(Constants.HOLDS_ANY, "-1"));
@@ -472,13 +472,13 @@ public class SimilarContainersAction extends SecureAction
 		while (typeItr.hasNext())
 		{
 			StorageType type = (StorageType) typeItr.next();
-			if (type.getSystemIdentifier().longValue() == 1)
+			if (type.getId().longValue() == 1)
 			{
-				typeAny = new NameValueBean(Constants.HOLDS_ANY, type.getSystemIdentifier());
+				typeAny = new NameValueBean(Constants.HOLDS_ANY, type.getId());
 			}
 			else
 			{
-				storageTypeList.add(new NameValueBean(type.getName(), type.getSystemIdentifier()));
+				storageTypeList.add(new NameValueBean(type.getName(), type.getId()));
 			}
 		}
 		Collections.sort(storageTypeList);

@@ -184,7 +184,7 @@
 	<table summary="" cellpadding="3" cellspacing="0" border="0" width="660">
 	<tr>
 		<td>
-			<html:hidden property="systemIdentifier"/>
+			<html:hidden property="id"/>
 			<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 			<html:hidden property="submittedFor"/>
 		</td>
@@ -353,7 +353,7 @@
 			String labelKey = "value(Specimen:" + i + "_label)";
 			String qtyKey = "value(Specimen:" + i + "_quantity)";
 			String barKey = "value(Specimen:" + i + "_barcode)";
-			String containerKey = "value(Specimen:" + i + "_StorageContainer_systemIdentifier)";
+			String containerKey = "value(Specimen:" + i + "_StorageContainer_id)";
 			String pos1Key = "value(Specimen:" + i + "_positionDimensionOne)";
 			String pos2Key = "value(Specimen:" + i + "_positionDimensionTwo)";
 
@@ -361,7 +361,7 @@
 			String[] attrNames = {containerKey, pos1Key, pos2Key};
 
 			String[] initValues = new String[3];
-			initValues[0] = (String)aliquotMap.get("Specimen:" + i + "_StorageContainer_systemIdentifier");
+			initValues[0] = (String)aliquotMap.get("Specimen:" + i + "_StorageContainer_id");
 			initValues[1] = (String)aliquotMap.get("Specimen:" + i + "_positionDimensionOne");
 			initValues[2] = (String)aliquotMap.get("Specimen:" + i + "_positionDimensionTwo");
 

@@ -32,7 +32,6 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
-//import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -98,7 +97,7 @@ public class StorageContainerAction  extends SecureAction
         	containerMap = new TreeMap();
         	Integer id = new Integer((int)storageContainerForm.getParentContainerId());
         	String parentContainerName="";
-        	String valueField = "systemIdentifier";
+        	String valueField = "id";
         	List containerList = bizLogic.retrieve(StorageContainer.class.getName(),valueField,new Long(storageContainerForm.getParentContainerId()));
 			if(!containerList.isEmpty())
 			{
@@ -122,7 +121,7 @@ public class StorageContainerAction  extends SecureAction
     	
     	//Populating the Site Array
     	String []siteDisplayField = {"name"};
-    	String valueField = "systemIdentifier";
+    	String valueField = "id";
     	List list = bizLogic.getList(Site.class.getName(),siteDisplayField, valueField, true);
     	request.setAttribute(Constants.SITELIST,list);
     	
@@ -326,7 +325,7 @@ public class StorageContainerAction  extends SecureAction
     	Logger.out.info("type:"+storageContainerForm.getTypeName());
     	if(storageContainerForm.getContainerName().equals(""))
 		{
-    		storageContainerForm.setContainerName(bizLogic.getContainerName(storageContainerForm.getSiteName(),storageContainerForm.getTypeName(),operation, storageContainerForm.getSystemIdentifier()));
+    		storageContainerForm.setContainerName(bizLogic.getContainerName(storageContainerForm.getSiteName(),storageContainerForm.getTypeName(),operation, storageContainerForm.getId()));
     		
 		}
     	
@@ -357,7 +356,7 @@ public class StorageContainerAction  extends SecureAction
     	while(cpItr.hasNext())
     	{
     		CollectionProtocol cp=(CollectionProtocol)cpItr.next();
-    		collectionProtocolList.add(new NameValueBean(cp.getTitle(),cp.getSystemIdentifier()));
+    		collectionProtocolList.add(new NameValueBean(cp.getTitle(),cp.getId()));
     	}
     	Collections.sort(collectionProtocolList);
     	collectionProtocolList.add(0,new NameValueBean(Constants.HOLDS_ANY,"-1"));
@@ -375,13 +374,13 @@ public class StorageContainerAction  extends SecureAction
     	while(typeItr.hasNext())
     	{
     		StorageType type=(StorageType)typeItr.next();
-    		if(type.getSystemIdentifier().longValue()==1)
+    		if(type.getId().longValue()==1)
     		{
-    			typeAny=new NameValueBean(Constants.HOLDS_ANY,type.getSystemIdentifier());
+    			typeAny=new NameValueBean(Constants.HOLDS_ANY,type.getId());
     		}
     		else
     		{
-    			storageTypeList.add(new NameValueBean(type.getName(),type.getSystemIdentifier()));
+    			storageTypeList.add(new NameValueBean(type.getName(),type.getId()));
     		}
     	}
     	Collections.sort(storageTypeList);
@@ -413,13 +412,13 @@ public class StorageContainerAction  extends SecureAction
     	{
     	    //TODO : Vaishali
 //    		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
-//    		if(specimenClass.getSystemIdentifier().longValue()==1)
+//    		if(specimenClass.getId().longValue()==1)
 //    		{
-//    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getSystemIdentifier());
+//    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getId());
 //    		}
 //    		else
 //    		{
-//    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
+//    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getId()));
 //    		}
     	}
     	Collections.sort(specimenClassTypeList);
@@ -446,7 +445,7 @@ public class StorageContainerAction  extends SecureAction
 			while(it.hasNext())
 			{
 				StorageType holdStorageType = (StorageType)it.next();
-				holdsStorageTypeList[i] = holdStorageType.getSystemIdentifier().longValue();
+				holdsStorageTypeList[i] = holdStorageType.getId().longValue();
 				i++;
 			}
 			return holdsStorageTypeList;
@@ -473,7 +472,7 @@ public class StorageContainerAction  extends SecureAction
 			{
 			    //TODO : Vaishali
 //				SpecimenClass specimenClass = (SpecimenClass)it.next();
-//				holdsSpecimenClassList[i] = specimenClass.getSystemIdentifier().longValue();
+//				holdsSpecimenClassList[i] = specimenClass.getId().longValue();
 //				i++;
 				String specimenClassType=(String)it.next();
 				holdsSpecimenClassList[i]=specimenClassType;

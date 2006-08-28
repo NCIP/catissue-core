@@ -18,8 +18,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.AliquotForm;
+import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
@@ -42,9 +42,9 @@ public class Specimen extends AbstractDomainObject implements Serializable
     private static final long serialVersionUID = 1234567890L;
 
     /**
-     * System generated unique systemIdentifier.
+     * System generated unique id.
      */
-    protected Long systemIdentifier;
+    protected Long id;
 
     /**
      * Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
@@ -108,7 +108,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
     protected Collection childrenSpecimen = new HashSet();
 
     /**
-     * Collection of a pre-existing, externally defined systemIdentifier associated with a specimen.
+     * Collection of a pre-existing, externally defined id associated with a specimen.
      */
     protected Collection externalIdentifierCollection = new HashSet();
 
@@ -172,26 +172,26 @@ public class Specimen extends AbstractDomainObject implements Serializable
     }
     
     /**
-     * Returns the system generated unique systemIdentifier.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30" 
+     * Returns the system generated unique id.
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30" 
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_SEQ"
-     * @return the system generated unique systemIdentifier.
-     * @see #setSystemIdentifier(Long)
+     * @return the system generated unique id.
+     * @see #setId(Long)
      */
-    public Long getSystemIdentifier()
+    public Long getId()
     {
-        return systemIdentifier;
+        return id;
     }
 
     /**
-     * Sets the system generated unique systemIdentifier.
-     * @param systemIdentifier the system generated unique systemIdentifier.
-     * @see #getSystemIdentifier()
+     * Sets the system generated unique id.
+     * @param id the system generated unique id.
+     * @see #getId()
      * */
-    public void setSystemIdentifier(Long systemIdentifier)
+    public void setId(Long id)
     {
-        this.systemIdentifier = systemIdentifier;
+        this.id = id;
     }
 
     /**
@@ -470,12 +470,12 @@ public class Specimen extends AbstractDomainObject implements Serializable
     }
 
     /**
-     * Returns the collection of a pre-existing, externally defined systemIdentifier associated with a specimen.
+     * Returns the collection of a pre-existing, externally defined id associated with a specimen.
      * @hibernate.set name="externalIdentifierCollection" table="CATISSUE_EXTERNAL_IDENTIFIER"
      * cascade="save-update" inverse="true" lazy="false"
      * @hibernate.collection-key column="SPECIMEN_ID"
      * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ExternalIdentifier"
-     * @return the collection of a pre-existing, externally defined systemIdentifier associated with a specimen.
+     * @return the collection of a pre-existing, externally defined id associated with a specimen.
      * @see #setExternalIdentifierCollection(Set)
      */
     public Collection getExternalIdentifierCollection()
@@ -484,10 +484,10 @@ public class Specimen extends AbstractDomainObject implements Serializable
     }
 
     /**
-     * Sets the collection of a pre-existing, externally defined systemIdentifier 
+     * Sets the collection of a pre-existing, externally defined id 
      * associated with a specimen.
      * @param externalIdentifierCollection the collection of a pre-existing, 
-     * externally defined systemIdentifier associated with a specimen.
+     * externally defined id associated with a specimen.
      * @see #getExternalIdentifierCollection()
      */
     public void setExternalIdentifierCollection(Collection externalIdentifierCollection)
@@ -568,7 +568,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	    	
 	    	if(validator.isValidOption(form.getSpecimenId()))
 	    	{
-	    		parentSpecimen.setSystemIdentifier(new Long(form.getSpecimenId()));
+	    		parentSpecimen.setId(new Long(form.getSpecimenId()));
 	    	}
 	    	else
 	    	{
@@ -632,7 +632,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		        		}
 		        		else//specimen created from another specimen
 		        		{
-		        			if(parentSpecimen.getSystemIdentifier().longValue()!=Long.parseLong(form.getParentSpecimenId()))
+		        			if(parentSpecimen.getId().longValue()!=Long.parseLong(form.getParentSpecimenId()))
 		        			{
 		        				isParentChanged = true;
 		        			}
@@ -643,7 +643,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 			        if(form.isParentPresent())
 					{
 			            parentSpecimen = new CellSpecimen();
-						parentSpecimen.setSystemIdentifier(new Long(form.getParentSpecimenId()));
+						parentSpecimen.setId(new Long(form.getParentSpecimenId()));
 						
 		        		this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
 		        		this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
@@ -652,10 +652,10 @@ public class Specimen extends AbstractDomainObject implements Serializable
 			        {
 			        	parentSpecimen = null;
 			        	specimenCollectionGroup = new SpecimenCollectionGroup();
-			        	this.specimenCollectionGroup.setSystemIdentifier(new Long(form.getSpecimenCollectionGroupId()));
+			        	this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
 			        }
 		            
-		            this.storageContainer.setSystemIdentifier(new Long(form.getStorageContainer()));
+		            this.storageContainer.setId(new Long(form.getStorageContainer()));
 		            
 		            //Setting the SpecimenCharacteristics
 		            this.pathologicalStatus = form.getPathologicalStatus();
@@ -759,10 +759,10 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		            	this.available = new Boolean(form.isAvailable());
 		            }
 	            	
-	            	this.storageContainer.setSystemIdentifier(new Long(form.getStorageContainer()));
+	            	this.storageContainer.setId(new Long(form.getStorageContainer()));
 	            	this.parentSpecimen = new CellSpecimen();
 	            	
-	            	this.parentSpecimen.setSystemIdentifier(new Long(form.getParentSpecimenId()));
+	            	this.parentSpecimen.setId(new Long(form.getParentSpecimenId()));
 	            	//Getting the Map of External Identifiers
 		            Map extMap = form.getExternalIdentifier();
 			        
@@ -829,7 +829,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
     public String getObjectId() 
     {
 		Logger.out.debug(this.getClass().getName()+" is an instance of Specimen class");
-		return Specimen.class.getName() + "_" + this.getSystemIdentifier();
+		return Specimen.class.getName() + "_" + this.getId();
 	}
     
     /**

@@ -14,7 +14,7 @@
 <script src="jss/script.js" type="text/javascript"></script>
 
 <% 
-	String systemIdentifier = (String)request.getAttribute(Constants.SYSTEM_IDENTIFIER);
+	String id = (String)request.getAttribute(Constants.SYSTEM_IDENTIFIER);
 
 	String editTabLink = (String)request.getAttribute(Constants.EDIT_TAB_LINK);
 
@@ -83,7 +83,7 @@
 					<tr>
 						<td>
 							<html:hidden property="<%=Constants.OPERATION%>" value="edit"/>
-							<html:hidden property="systemIdentifier" value="<%=systemIdentifier%>" />
+							<html:hidden property="id" value="<%=id%>" />
 						</td>
 					 </tr>
 					<!-- VIEW SURGICAL PATHOLOGY REPORT BEGINS-->
@@ -94,7 +94,7 @@
 							 </tr>
 			
 							<tr>
-							 	<td class="formTitle" height="20" colspan="4"> Surgical Pathology Report(s) for Participant: <%=systemIdentifier%></td>
+							 	<td class="formTitle" height="20" colspan="4"> Surgical Pathology Report(s) for Participant: <%=id%></td>
 							</tr>
 
 							<tr>

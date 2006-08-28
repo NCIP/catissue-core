@@ -17,7 +17,7 @@ package edu.wustl.catissuecore.storage;
 public class StorageContainerGridObject
 {
 
-    private long systemIdentifier;
+    private long id;
     
     private String type;
 
@@ -58,19 +58,19 @@ public class StorageContainerGridObject
     }
 
     /**
-     * @return Returns the systemIdentifier.
+     * @return Returns the id.
      */
-    public long getSystemIdentifier()
+    public long getId()
     {
-        return systemIdentifier;
+        return id;
     }
 
     /**
-     * @param systemIdentifier The systemIdentifier to set.
+     * @param id The id to set.
      */
-    public void setSystemIdentifier(long systemIdentifier)
+    public void setId(long id)
     {
-        this.systemIdentifier = systemIdentifier;
+        this.id = id;
     }
     /**
      * @return Returns the type.

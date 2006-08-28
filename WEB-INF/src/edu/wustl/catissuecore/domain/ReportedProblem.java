@@ -26,9 +26,9 @@ import edu.wustl.common.domain.AbstractDomainObject;
 public class ReportedProblem extends AbstractDomainObject implements Serializable
 {
     /**
-     * systemIdentifier is a unique id assigned to each reported problem.
+     * id is a unique id assigned to each reported problem.
      * */
-    private Long systemIdentifier;
+    private Long id;
     
     /**
      * The subject of the reported problem.
@@ -134,7 +134,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
     public void setAllValues(AbstractActionForm abstractActionForm)
     {
         ReportedProblemForm reportedProblemForm = (ReportedProblemForm)abstractActionForm;
-        this.systemIdentifier = new Long(reportedProblemForm.getSystemIdentifier());
+        this.id = new Long(reportedProblemForm.getId());
         this.subject = reportedProblemForm.getSubject();
         this.from  = reportedProblemForm.getFrom();
         this.messageBody = reportedProblemForm.getMessageBody();
@@ -145,26 +145,26 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
     }
     
     /**
-     * Returns the systemIdentifier assigned to the reported problem.
-     * @return the systemIdentifier assigned to the reported problem.
-	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * Returns the id assigned to the reported problem.
+     * @return the id assigned to the reported problem.
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_REPORTED_PROBLEM_SEQ"
      * @see #setIdentifier(Long)
      */
-    public Long getSystemIdentifier()
+    public Long getId()
     {
-        return systemIdentifier;
+        return id;
     }
     
     /**
-     * Sets the systemIdentifier to the reported problem.
-     * @param systemIdentifier The systemIdentifier to set.
+     * Sets the id to the reported problem.
+     * @param id The id to set.
      * @see #getIdentifier()
      */
-    public void setSystemIdentifier(Long systemIdentifier)
+    public void setId(Long id)
     {
-        this.systemIdentifier = systemIdentifier;
+        this.id = id;
     }
     
     /**

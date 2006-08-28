@@ -101,9 +101,9 @@ public class ParticipantSelectAction extends BaseAction
     	            String forwardTo = addNewSessionDataBean.getForwardTo();
     	            Logger.out.debug("forwardTo in ParticipantSelectAction--------->"+forwardTo);
     	            
-    	            Logger.out.info("SystemIdentifier-----------------"+abstractDomain.getSystemIdentifier());
+    	            Logger.out.info("Id-----------------"+abstractDomain.getId());
     	            //Setting Identifier of new object into the FormBean to populate it on the JSP page 
-    	            sessionFormBean.setAddNewObjectIdentifier(addNewSessionDataBean.getAddNewFor(), abstractDomain.getSystemIdentifier());
+    	            sessionFormBean.setAddNewObjectIdentifier(addNewSessionDataBean.getAddNewFor(), abstractDomain.getId());
     	            
     	            sessionFormBean.setMutable(false);
     	            
@@ -142,7 +142,7 @@ public class ParticipantSelectAction extends BaseAction
     	            //Changing operation attribute in parth specified in ForwardTo mapping, If AddNew activity started from Edit page
     	            if( (sessionFormBean.getOperation().equals("edit") ) )
     	            {
-    	                Logger.out.debug("Edit object Identifier while AddNew is from Edit operation==>"+sessionFormBean.getSystemIdentifier());
+    	                Logger.out.debug("Edit object Identifier while AddNew is from Edit operation==>"+sessionFormBean.getId());
     	                ActionForward editForward = new ActionForward();
     	                
     	                String addPath = (mapping.findForward(forwardTo)).getPath();

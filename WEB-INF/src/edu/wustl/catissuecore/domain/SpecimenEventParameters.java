@@ -20,25 +20,23 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.class table="CATISSUE_SPECIMEN_EVENT_PARAM"
  * @author aniruddha_phadnis
  */
-public abstract class SpecimenEventParameters extends EventParameters
-		implements
-			java.io.Serializable
+public abstract class SpecimenEventParameters extends EventParameters implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
 	
-	protected Specimen specimen ;
+	protected Specimen specimen;
 	
 	/**
-     * Returns System generated unique systemIdentifier.
-     * @return System generated unique systemIdentifier.
-     * @see #setSystemIdentifier(Integer)
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * Returns System generated unique id.
+     * @return System generated unique id.
+     * @see #setId(Integer)
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_SPEC_EVENT_PARAM_SEQ" 
      */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 	/**
      * @hibernate.many-to-one column="SPECIMEN_ID"  class="edu.wustl.catissuecore.domain.Specimen" constrained="true"
@@ -72,6 +70,6 @@ public abstract class SpecimenEventParameters extends EventParameters
 		SpecimenEventParametersForm specimenEventParametersForm = (SpecimenEventParametersForm) abstractForm;
 		Logger.out.debug("specimenEventParametersForm.getSpecimenId()............................."+specimenEventParametersForm.getSpecimenId());
 		if(specimen!=null)
-			specimen.setSystemIdentifier(new Long(specimenEventParametersForm.getSpecimenId()));
+			specimen.setId(new Long(specimenEventParametersForm.getSpecimenId()));
 	}
 }

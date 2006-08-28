@@ -192,7 +192,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) abstractDomain;
 			
-		systemIdentifier = specimenCollectionGroup.getId().longValue();
+		id = specimenCollectionGroup.getId().longValue();
 		name =  specimenCollectionGroup.getName();    
 		Logger.out.debug("specimenCollectionGroup.getClinicalDiagnosis() "+specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
@@ -258,7 +258,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
     {
 	    edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup specimenCollectionGroup = (edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup) obj;
 			
-		systemIdentifier = specimenCollectionGroup.getId().longValue();
+		id = specimenCollectionGroup.getId().longValue();
 		//groupName =  specimenCollectionGroup.get();        
 		Logger.out.debug("specimenCollectionGroup.getClinicalDiagnosis() "+specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());

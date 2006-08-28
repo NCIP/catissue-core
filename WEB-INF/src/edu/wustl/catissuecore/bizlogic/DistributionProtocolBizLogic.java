@@ -91,7 +91,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		DistributionProtocol distributionProtocol = (DistributionProtocol)obj;
 		DistributionProtocol distributionProtocolOld = (DistributionProtocol)oldObj;
     	
-    	if(!distributionProtocol.getPrincipalInvestigator().getSystemIdentifier().equals(distributionProtocolOld.getPrincipalInvestigator().getSystemIdentifier()))
+    	if(!distributionProtocol.getPrincipalInvestigator().getId().equals(distributionProtocolOld.getPrincipalInvestigator().getId()))
 			checkStatus(dao, distributionProtocol.getPrincipalInvestigator(), "Principal Investigator");
     	
 		setPrincipalInvestigator(dao,distributionProtocol);
@@ -108,13 +108,13 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		while(it.hasNext())
 		{
 			SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
-			Logger.out.debug("SpecimenRequirement Id ............... : "+specimenRequirement.getSystemIdentifier());
+			Logger.out.debug("SpecimenRequirement Id ............... : "+specimenRequirement.getId());
 			specimenRequirement.getDistributionProtocolCollection().add(distributionProtocol);
 			dao.update(specimenRequirement, sessionDataBean, true, true, false);
 			
 			SpecimenRequirement oldSpecimenRequirement 
 				= (SpecimenRequirement)getCorrespondingOldObject(oldSpecimenRequirementCollection, 
-				        specimenRequirement.getSystemIdentifier());
+				        specimenRequirement.getId());
 			
 			dao.audit(specimenRequirement, oldSpecimenRequirement, sessionDataBean, true);
 		}
@@ -123,7 +123,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		if(distributionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
 			Logger.out.debug("distributionProtocol.getActivityStatus() "+distributionProtocol.getActivityStatus());
-			Long distributionProtocolIDArr[] = {distributionProtocol.getSystemIdentifier()};
+			Long distributionProtocolIDArr[] = {distributionProtocol.getId()};
 			
 			DistributionBizLogic bizLogic = (DistributionBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 			bizLogic.disableRelatedObjects(dao, distributionProtocolIDArr);
@@ -133,7 +133,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 	//This method sets the Principal Investigator
 	private void setPrincipalInvestigator(DAO dao,DistributionProtocol distributionProtocol) throws DAOException
 	{
-		Object userObj = dao.retrieve(User.class.getName() , distributionProtocol.getPrincipalInvestigator().getSystemIdentifier());
+		Object userObj = dao.retrieve(User.class.getName() , distributionProtocol.getPrincipalInvestigator().getId());
 		if (userObj != null)
 		{
 			User pi = (User) userObj;
@@ -171,11 +171,11 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
         group.add(csmUser);
         
         // Protection group of PI
-        String protectionGroupName = new String(Constants.getDistributionProtocolPGName(distributionProtocol.getSystemIdentifier()));
+        String protectionGroupName = new String(Constants.getDistributionProtocolPGName(distributionProtocol.getId()));
         SecurityDataBean userGroupRoleProtectionGroupBean = new SecurityDataBean();
         userGroupRoleProtectionGroupBean.setUser(userId);
         userGroupRoleProtectionGroupBean.setRoleName(PI);
-        userGroupRoleProtectionGroupBean.setGroupName(Constants.getDistributionProtocolPIGroupName(distributionProtocol.getSystemIdentifier()));
+        userGroupRoleProtectionGroupBean.setGroupName(Constants.getDistributionProtocolPIGroupName(distributionProtocol.getId()));
         userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
         userGroupRoleProtectionGroupBean.setGroup(group);
         authorizationData.add(userGroupRoleProtectionGroupBean);
@@ -213,7 +213,7 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 				}
 				else
 				{
-					String specimenClass = Utility.getSpecimenClassName(requirement);
+					String specimenClass = requirement.getSpecimenClass();
 					
 					if(!Validator.isEnumeratedValue(specimenClassList,specimenClass))
 					{

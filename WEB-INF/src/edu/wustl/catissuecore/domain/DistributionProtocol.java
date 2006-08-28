@@ -106,7 +106,7 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 	    	DistributionProtocolForm dpForm = (DistributionProtocolForm) abstractForm;
 	    	
 	    	Map map = dpForm.getValues();
-	        map = fixMap(map);
+	        //map = fixMap(map);
 	        Logger.out.debug("MAP "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        this.specimenRequirementCollection = new HashSet(parser.generateData(map));

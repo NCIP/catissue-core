@@ -175,10 +175,10 @@
 		{
 			String qtyKey = "value(Specimen:" + i + "_quantity)";
 			String barKey = "value(Specimen:" + i + "_barcode)";
-			String containerKey = "value(Specimen:" + i + "_StorageContainer_systemIdentifier)";
+			String containerKey = "value(Specimen:" + i + "_StorageContainer_id)";
 			String pos1Key = "value(Specimen:" + i + "_positionDimensionOne)";
 			String pos2Key = "value(Specimen:" + i + "_positionDimensionTwo)";
-			String idKey = "Specimen:" + i + "_systemIdentifier";
+			String idKey = "Specimen:" + i + "_id";
 			
 			String id = Utility.toString(aliquotMap.get(idKey));
 	%>

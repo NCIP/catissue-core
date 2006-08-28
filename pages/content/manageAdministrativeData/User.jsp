@@ -146,7 +146,7 @@ function handleStatus(status)
 				
 				<tr>
 					<td>
-						<html:hidden property="systemIdentifier" />
+						<html:hidden property="id" />
 						<html:hidden property="csmUserId" />
 						<html:hidden property="<%=Constants.REQ_PATH%>" value="<%=reqPath%>" />
 					</td>
@@ -169,7 +169,7 @@ function handleStatus(status)
 								<bean:message key="user.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="user.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="userForm" property="systemIdentifier" />
+								<bean:message key="user.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="userForm" property="id" />
 							</logic:equal>
 						</td>
 					</tr>

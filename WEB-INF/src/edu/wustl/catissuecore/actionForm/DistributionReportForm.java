@@ -21,7 +21,7 @@ public class DistributionReportForm extends ActionForm
 	/**
      * System generated unique identifier.
      * */
-	private long systemIdentifier;
+	private long id;
     
     /**
      * Time in hours for the Event Parameter.
@@ -69,11 +69,11 @@ public class DistributionReportForm extends ActionForm
  		this.timeInHours = Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY)));
  		this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
  		this.dateOfEvent = Utility.parseDateToString(distribution.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
- 		this.systemIdentifier = distribution.getSystemIdentifier().longValue() ;
+ 		this.id = distribution.getId().longValue() ;
 		//this.fromSite = String.valueOf(distribution.getFromSite().getName());
 		this.toSite = String.valueOf(distribution.getToSite().getName());
 		this.comments  = Utility.toString(distribution.getComments());
-		distributionId = distribution.getSystemIdentifier();
+		distributionId = distribution.getId();
 		
 	}
 	
@@ -193,14 +193,14 @@ public class DistributionReportForm extends ActionForm
 		this.userName = userName;
 	}    
 	
-	public long getSystemIdentifier()
+	public long getId()
 	{
-		return this.systemIdentifier ;
+		return this.id ;
 	}
 
-	public void setSystemIdentifier(long systemIdentifier)
+	public void setId(long id)
 	{
-		this.systemIdentifier = systemIdentifier ; 
+		this.id = id ; 
 	}
 	/**
 	 * @return Returns the distributionId.

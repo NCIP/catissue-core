@@ -1,7 +1,7 @@
 /**
  * <p>Title: ExternalIdentifier Class>
  * <p>Description: A pre-existing, externally defined 
- * systemIdentifier associated with a specimen.</p>
+ * id associated with a specimen.</p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
  * @author Gautam Shetty
@@ -16,7 +16,7 @@ import edu.wustl.common.exception.AssignDataException;
 
 /**
  * A pre-existing, externally defined 
- * systemIdentifier associated with a specimen.
+ * id associated with a specimen.
  * @hibernate.class table="CATISSUE_EXTERNAL_IDENTIFIER"
  * @author gautam_shetty
  */
@@ -25,50 +25,50 @@ public class ExternalIdentifier extends AbstractDomainObject implements java.io.
     private static final long serialVersionUID = 1234567890L;
 
     /**
-     * System generated unique systemIdentifier.
+     * System generated unique id.
      */
-    protected Long systemIdentifier;
+    protected Long id;
 
     /**
-     * Name of the legacy systemIdentifier.
+     * Name of the legacy id.
      */
     protected String name;
 
     /**
-     * Value of the legacy systemIdentifier.
+     * Value of the legacy id.
      */
     protected String value;
     
     protected Specimen specimen;
 	
     /**
-     * Returns the system generated unique systemIdentifier.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * Returns the system generated unique id.
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_EXTERNAL_ID_SEQ"
-     * @return the system generated unique systemIdentifier.
-     * @see #setSystemIdentifier(Long)
+     * @return the system generated unique id.
+     * @see #setId(Long)
      * */
-    public Long getSystemIdentifier()
+    public Long getId()
     {
-        return systemIdentifier;
+        return id;
     }
 
     /**
-     * Sets the system generated unique systemIdentifier.
-     * @param systemIdentifier the system generated unique systemIdentifier.
-     * @see #getSystemIdentifier()
+     * Sets the system generated unique id.
+     * @param id the system generated unique id.
+     * @see #getId()
      * */
-    public void setSystemIdentifier(Long systemIdentifier)
+    public void setId(Long id)
     {
-        this.systemIdentifier = systemIdentifier;
+        this.id = id;
     }
 
     /**
-     * Returns the name of the legacy systemIdentifier.
+     * Returns the name of the legacy id.
      * @hibernate.property name="name" type="string" 
      * column="NAME" length="50"
-     * @return the name of the legacy systemIdentifier.
+     * @return the name of the legacy id.
      * @see #setName(String)
      */
     public String getName()
@@ -77,8 +77,8 @@ public class ExternalIdentifier extends AbstractDomainObject implements java.io.
     }
 
     /**
-     * Sets the name of the legacy systemIdentifier.
-     * @param name the name of the legacy systemIdentifier.
+     * Sets the name of the legacy id.
+     * @param name the name of the legacy id.
      * @see #getName()
      */
     public void setName(String name)
@@ -87,10 +87,10 @@ public class ExternalIdentifier extends AbstractDomainObject implements java.io.
     }
 
     /**
-     * Returns the value of the legacy systemIdentifier.
+     * Returns the value of the legacy id.
      * @hibernate.property name="value" type="string" 
      * column="VALUE" length="50"
-     * @return the value of the legacy systemIdentifier.
+     * @return the value of the legacy id.
      * @see #setValue(String)
      */
     public String getValue()
@@ -99,8 +99,8 @@ public class ExternalIdentifier extends AbstractDomainObject implements java.io.
     }
 
     /**
-     * Sets the value of the legacy systemIdentifier.
-     * @param value the value of the legacy systemIdentifier.
+     * Sets the value of the legacy id.
+     * @param value the value of the legacy id.
      * @see #getValue()
      */
     public void setValue(String value)

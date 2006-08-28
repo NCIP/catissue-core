@@ -28,7 +28,7 @@ public class Container extends AbstractDomainObject implements Serializable
     
     protected static final long serialVersionUID = 1234567890L;
     
-	protected Long systemIdentifier;
+	protected Long id;
 	
 	protected Boolean full;
 	
@@ -55,38 +55,22 @@ public class Container extends AbstractDomainObject implements Serializable
 	}
 	
 	/**
-     * Set the id.
+     * @return Returns the id.
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+     * unsaved-value="null" generator-class="native" 
+     * @hibernate.generator-param name="sequence" value="CATISSUE_CONTAINER_SEQ"
      */
-    public void setId(Long id)
+    public Long getId()
     {
-        this.systemIdentifier = id;
+        return id;
     }
     
     /**
      * @param id The id to set.
      */
-    public Long getId()
+    public void setId(Long id)
     {
-        return this.systemIdentifier;
-    }
-	
-	/**
-     * @return Returns the id.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native" 
-     * @hibernate.generator-param name="sequence" value="CATISSUE_CONTAINER_SEQ"
-     */
-    public Long getSystemIdentifier()
-    {
-        return systemIdentifier;
-    }
-    
-    /**
-     * @param systemIdentifier The id to set.
-     */
-    public void setSystemIdentifier(Long systemIdentifier)
-    {
-        this.systemIdentifier = systemIdentifier;
+        this.id = id;
     }
 	
     /**

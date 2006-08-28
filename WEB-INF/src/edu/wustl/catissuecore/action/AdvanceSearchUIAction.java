@@ -25,8 +25,8 @@ import edu.wustl.common.query.DataElement;
 import edu.wustl.common.query.Operator;
 import edu.wustl.common.query.Query;
 import edu.wustl.common.util.global.Constants;
-import edu.wustl.common.vo.SearchFieldData;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.vo.SearchFieldData;
 
 public abstract class AdvanceSearchUIAction extends BaseAction 
 {

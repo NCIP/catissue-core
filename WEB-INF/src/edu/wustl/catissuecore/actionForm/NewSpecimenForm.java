@@ -114,7 +114,7 @@ public class NewSpecimenForm extends SpecimenForm
     private String lineage;
 
 //	-------------Mandar AutoEvents CollectionEvent parameters start
-	private long collectionEventSystemIdentifier;																											// Mandar : CollectionEvent 10-July-06
+	private long collectionEventId;																											// Mandar : CollectionEvent 10-July-06
 	private long collectionEventSpecimenId;
 	private long collectionEventUserId;
 	private String collectionEventdateOfEvent;
@@ -127,7 +127,7 @@ public class NewSpecimenForm extends SpecimenForm
 	//-------------Mandar AutoEvents CollectionEvent parameters end
 	
 //	-------------Mandar AutoEvents ReceivedEvent parameters start
-	private long receivedEventSystemIdentifier;
+	private long receivedEventId;
 	private long receivedEventSpecimenId;
 	private long receivedEventUserId;
 	private String receivedEventDateOfEvent;
@@ -332,7 +332,7 @@ public class NewSpecimenForm extends SpecimenForm
         	while(it.hasNext())
         	{
         		String key1 = "Biohazard:" + i + "_type";
-				String key2 = "Biohazard:" + i + "_systemIdentifier";
+				String key2 = "Biohazard:" + i + "_id";
 				String key3 = "Biohazard:" + i + "_persisted";
 				
 				Biohazard hazard = (Biohazard)it.next();
@@ -413,7 +413,7 @@ public class NewSpecimenForm extends SpecimenForm
         	while(it.hasNext())
         	{
         		String key1 = "Biohazard:" + i + "_type";
-				String key2 = "Biohazard:" + i + "_systemIdentifier";
+				String key2 = "Biohazard:" + i + "_id";
 				String key3 = "Biohazard:" + i + "_persisted";
 				
 				edu.wustl.catissuecore.domainobject.Biohazard hazard = (edu.wustl.catissuecore.domainobject.Biohazard)it.next();
@@ -767,17 +767,18 @@ public class NewSpecimenForm extends SpecimenForm
 				this.collectionEventSpecimenId = collectionEventSpecimenId;
 			}
 		/**
-		 * @return Returns the collectionEventSystemIdentifier.
+		 * @return Returns the collectionEventId.
 		 */
-		public long getCollectionEventSystemIdentifier() {
-			return collectionEventSystemIdentifier;
+		public long getCollectionEventId() 
+		{
+			return collectionEventId;
 		}
 		/**
-		 * @param collectionEventSystemIdentifier The collectionEventSystemIdentifier to set.
+		 * @param collectionEventId The collectionEventId to set.
 		 */
-		public void setCollectionEventSystemIdentifier(
-				long collectionEventSystemIdentifier) {
-			this.collectionEventSystemIdentifier = collectionEventSystemIdentifier;
+		public void setCollectionEventId(long collectionEventId) 
+		{
+			this.collectionEventId = collectionEventId;
 		}
 			/**
 			 * @return Returns the collectionEventTimeInHours.
@@ -890,17 +891,18 @@ public class NewSpecimenForm extends SpecimenForm
 		this.receivedEventSpecimenId = receivedEventSpecimenId;
 	}
 	/**
-	 * @return Returns the receivedEventSystemIdentifier.
+	 * @return Returns the receivedEventId.
 	 */
-	public long getReceivedEventSystemIdentifier() {
-		return receivedEventSystemIdentifier;
+	public long getReceivedEventId() 
+	{
+		return receivedEventId;
 	}
 	/**
-	 * @param receivedEventSystemIdentifier The receivedEventSystemIdentifier to set.
+	 * @param receivedEventId The receivedEventId to set.
 	 */
-	public void setReceivedEventSystemIdentifier(
-			long receivedEventSystemIdentifier) {
-		this.receivedEventSystemIdentifier = receivedEventSystemIdentifier;
+	public void setReceivedEventId(long receivedEventId) 
+	{
+		this.receivedEventId = receivedEventId;
 	}
 	/**
 	 * @return Returns the receivedEventTimeInHours.

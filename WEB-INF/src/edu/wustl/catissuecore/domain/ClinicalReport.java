@@ -26,9 +26,9 @@ public class ClinicalReport extends AbstractDomainObject implements java.io.Seri
     private static final long serialVersionUID = 1234567890L;
 
     /**
-     * System generated unique systemIdentifier.
+     * System generated unique id.
      */
-    protected Long systemIdentifier;
+    protected Long id;
 
     /**
      * Hospital surgical pathology number associated with the current specimen collection group.
@@ -41,26 +41,26 @@ public class ClinicalReport extends AbstractDomainObject implements java.io.Seri
     protected ParticipantMedicalIdentifier participantMedicalIdentifier;
 
     /**
-     * Returns the system generated unique systemIdentifier.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * Returns the system generated unique id.
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_CLINICAL_REPORT_SEQ"
-     * @return the system generated unique systemIdentifier.
-     * @see #setSystemIdentifier(Long)
+     * @return the system generated unique id.
+     * @see #setId(Long)
      * */
-    public Long getSystemIdentifier()
+    public Long getId()
     {
-        return systemIdentifier;
+        return id;
     }
 
     /**
-     * Sets the system generated unique systemIdentifier.
-     * @param systemIdentifier the system generated unique systemIdentifier.
-     * @see #getSystemIdentifier()
+     * Sets the system generated unique id.
+     * @param id the system generated unique id.
+     * @see #getId()
      * */
-    public void setSystemIdentifier(Long systemIdentifier)
+    public void setId(Long id)
     {
-        this.systemIdentifier = systemIdentifier;
+        this.id = id;
     }
 
     /**

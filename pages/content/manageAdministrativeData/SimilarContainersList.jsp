@@ -36,7 +36,7 @@
 		 <tr>
 			<logic:iterate id="nvb" name="similarContainerList">
 			<%	NameValueBean nameValueBean=(NameValueBean)nvb;
-			String hrefString="StorageContainerSearch.do?pageOf=pageOfStorageContainer&systemIdentifier="+nameValueBean.getValue();
+			String hrefString="StorageContainerSearch.do?pageOf=pageOfStorageContainer&id="+nameValueBean.getValue();
 			%>
 	
 			<td class="formFieldNoBorders">

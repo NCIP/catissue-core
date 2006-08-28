@@ -21,7 +21,7 @@ public abstract class IntegrationManager
     /**
      * Abstract method to fetch linked data from integrated applications 
      */
-    public abstract List getLinkedAppData(Object linkedObj, Long systemIdentifier);
+    public abstract List getLinkedAppData(Object linkedObj, Long id);
     
     /**
      * Abstract method to fetch mathich objects from integrated application 

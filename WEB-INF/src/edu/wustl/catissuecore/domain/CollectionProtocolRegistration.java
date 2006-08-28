@@ -13,10 +13,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -29,9 +29,9 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-	 * System generated unique systemIdentifier.
+	 * System generated unique id.
 	 */
-	protected Long systemIdentifier;
+	protected Long id;
 
 	/**
 	 * A unique number given by a User to a Participant 
@@ -75,26 +75,26 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	}
 
 	/**
-	 * Returns the system generated unique systemIdentifier.
-	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+	 * Returns the system generated unique id.
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_COLL_PROT_REG_SEQ"
-	 * @return the system generated unique systemIdentifier.
-	 * @see #setSystemIdentifier(Long)
+	 * @return the system generated unique id.
+	 * @see #setId(Long)
 	 * */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 
 	/**
-	 * Sets the system generated unique systemIdentifier.
-	 * @param systemIdentifier the system generated unique systemIdentifier.
-	 * @see #getSystemIdentifier()
+	 * Sets the system generated unique id.
+	 * @param id the system generated unique id.
+	 * @see #getId()
 	 * */
-	public void setSystemIdentifier(Long systemIdentifier)
+	public void setId(Long id)
 	{
-		this.systemIdentifier = systemIdentifier;
+		this.id = id;
 	}
 
 	/**
@@ -229,12 +229,12 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		{
 			this.activityStatus		 = form.getActivityStatus();
 			
-			this.collectionProtocol.setSystemIdentifier(new Long(form.getCollectionProtocolID()));
+			this.collectionProtocol.setId(new Long(form.getCollectionProtocolID()));
 			
 			if(form.isCheckedButton())
 			{
 				this.participant = new Participant();
-				this.participant.setSystemIdentifier(new Long(form.getParticipantID()));
+				this.participant.setId(new Long(form.getParticipantID()));
 			}
 			else
 				this.participant = null;

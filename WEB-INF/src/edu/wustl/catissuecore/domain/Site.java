@@ -25,7 +25,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
 	/**
      * System generated unique identifier
      */
-	protected Long systemIdentifier;
+	protected Long id;
 	
 	/**
      * Name of the physical location.
@@ -70,25 +70,25 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
 	
 	/**
      * Returns the system generated unique identifier.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_SITE_SEQ"
      * @return the system generated unique identifier.
-     * @see #setSystemIdentifier(Long)
+     * @see #setId(Long)
      */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 
 	/**
      * Sets a unique system identifier.
-     * @param systemIdentifier identifier to be set.
-     * @see #getSystemIdentifier()
+     * @param id identifier to be set.
+     * @see #getId()
      */
-	public void setSystemIdentifier(Long systemIdentifier)
+	public void setId(Long id)
 	{
-		this.systemIdentifier = systemIdentifier;
+		this.id = id;
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
         try
         {
             SiteForm form 	= (SiteForm) abstractForm;
-            this.systemIdentifier = new Long(form.getSystemIdentifier());
+            this.id = new Long(form.getId());
             this.name 		= form.getName().trim() ;
             this.type 		= form.getType();
             
@@ -238,7 +238,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
             
             this.activityStatus = form.getActivityStatus();
             Logger.out.debug("form.getCoordinatorId() "+form.getCoordinatorId());
-            coordinator.setSystemIdentifier(new Long(form.getCoordinatorId()));
+            coordinator.setId(new Long(form.getCoordinatorId()));
             
             address.setStreet(form.getStreet());
             address.setCity(form.getCity());

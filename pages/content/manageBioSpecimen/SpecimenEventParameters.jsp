@@ -42,7 +42,7 @@
 
 		String iframeSrc="";
 		String formAction = Constants.SPECIMEN_ADD_ACTION;
-		String specimenPath ="'NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&systemIdentifier="+specimenIdentifier+"'" ;
+		String specimenPath ="'NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
 		if(eventSelected != null)	
 		{
 			iframeSrc = getEventAction(eventSelected, specimenIdentifier);
@@ -222,7 +222,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					
 					obj.setTemplate("row", row);
 			   		obj.setAction("myAction", 
-						function(src){var frame = document.getElementById("newEventFrame"); frame.src = 'SearchObject.do?pageOf=' + myData[this.getSelectionProperty("index")][<%=columnList.length-1%>] + '&operation=search&systemIdentifier=' + myData[this.getSelectionProperty("index")][0]}); 
+						function(src){var frame = document.getElementById("newEventFrame"); frame.src = 'SearchObject.do?pageOf=' + myData[this.getSelectionProperty("index")][<%=columnList.length-1%>] + '&operation=search&id=' + myData[this.getSelectionProperty("index")][0]}); 
 			
 					//	write grid html to the page.
 					document.write(obj);

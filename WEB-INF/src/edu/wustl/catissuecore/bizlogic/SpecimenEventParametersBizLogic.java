@@ -48,7 +48,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	{
 		SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters)obj;
 
-		List list = dao.retrieve(User.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenEventParametersObject.getUser().getSystemIdentifier());
+		List list = dao.retrieve(User.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenEventParametersObject.getUser().getId());
 		if (!list.isEmpty())
 		{
 		    User user = (User) list.get(0);
@@ -58,7 +58,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 		    specimenEventParametersObject.setUser(user);
 		}
-		Specimen specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getSystemIdentifier());
+		Specimen specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
 		
 		// check for closed Specimen
 		checkStatus(dao, specimen, "Specimen" );
@@ -73,7 +73,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			    specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
 			    specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
 			    
-			    StorageContainer storageContainer = (StorageContainer)dao.retrieve(StorageContainer.class.getName(), transferEventParameters.getToStorageContainer().getSystemIdentifier());
+			    StorageContainer storageContainer = (StorageContainer)dao.retrieve(StorageContainer.class.getName(), transferEventParameters.getToStorageContainer().getId());
 			    
 				// check for closed StorageContainer
 				checkStatus(dao, storageContainer, "Storage Container" );
@@ -104,7 +104,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		//checkStatus(dao, specimenEventParameters.getSpecimen(), "Specimen" );
 
 		// Check for different User
-		if(!specimenEventParameters.getUser().getSystemIdentifier().equals( oldSpecimenEventParameters.getUser().getSystemIdentifier()))
+		if(!specimenEventParameters.getUser().getId().equals( oldSpecimenEventParameters.getUser().getId()))
 		{
 			checkStatus(dao,specimenEventParameters.getUser(), "User" );
 		}
@@ -122,7 +122,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 //				    Logger.out.debug("StorageContainer match : " + storageContainer.equals(oldstorageContainer ) );
 //				    
 //				    // check for closed StorageContainer
-//				    if(!storageContainer.getSystemIdentifier().equals(oldstorageContainer.getSystemIdentifier()) )
+//				    if(!storageContainer.getId().equals(oldstorageContainer.getId()) )
 //				    	checkStatus(dao, storageContainer, "Storage Container" );
 //			    }
 //			}
@@ -226,13 +226,13 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	{
 		TransferEventParameters parameter = (TransferEventParameters)eventParameter;
 		List list = (List)retrieve(TransferEventParameters.class.getName(),
-							Constants.SYSTEM_IDENTIFIER,parameter.getSystemIdentifier());
+							Constants.SYSTEM_IDENTIFIER,parameter.getId());
 		if(list.size() != 0)
 		{
 			TransferEventParameters parameterCopy = (TransferEventParameters)list.get(0);
 			String positionDimensionOne = parameterCopy.getToPositionDimensionOne().toString();
 			String positionDimensionTwo = parameterCopy.getToPositionDimensionTwo().toString();
-			String storageContainer = parameterCopy.getToStorageContainer().getSystemIdentifier().toString();
+			String storageContainer = parameterCopy.getToStorageContainer().getId().toString();
 			
 			if(!positionDimensionOne.equals(parameter.getToPositionDimensionOne().toString())
 					|| !positionDimensionTwo.equals(parameter.getToPositionDimensionTwo().toString())

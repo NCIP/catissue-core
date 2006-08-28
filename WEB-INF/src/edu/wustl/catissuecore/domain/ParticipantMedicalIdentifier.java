@@ -22,9 +22,9 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject implement
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-	 * System generated unique systemIdentifier
+	 * System generated unique id
      */
-	protected Long systemIdentifier;
+	protected Long id;
 
 	/**
      * Participant's medical record number used in their medical treatment.
@@ -43,25 +43,25 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject implement
 
 	/**
      * Returns System generated unique identifier.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_PART_MEDICAL_ID_SEQ"
-     * @return System generated unique systemIdentifier.
-     * @see #setSystemIdentifier(Long)
+     * @return System generated unique id.
+     * @see #setId(Long)
      */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 
 	/**
-     * Sets a system systemIdentifier for a particular medical record.
-     * @param systemIdentifier systemIdentifier for a particular medical record.
-     * @see #getSystemIdentifier()
+     * Sets a system id for a particular medical record.
+     * @param id id for a particular medical record.
+     * @see #getId()
      * */
-	public void setSystemIdentifier(Long systemIdentifier)
+	public void setId(Long id)
 	{
-		this.systemIdentifier = systemIdentifier;
+		this.id = id;
 	}
 
 	/**
@@ -134,6 +134,6 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject implement
 	
 	public String toString()
 	{
-		return "ParticipantMedicalIdentifier: "+systemIdentifier+", "+medicalRecordNumber+", "+site;
+		return "ParticipantMedicalIdentifier: "+id+", "+medicalRecordNumber+", "+site;
 	}
 }

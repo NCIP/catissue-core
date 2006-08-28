@@ -52,14 +52,14 @@ public class CancerResearchGroupForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
         CancerResearchGroup cancerResearchGroup = (CancerResearchGroup)abstractDomain;
-        this.systemIdentifier = cancerResearchGroup.getId().longValue();
+        this.id = cancerResearchGroup.getId().longValue();
         this.name = cancerResearchGroup.getName();
     }
 
     public void setAllVal(Object obj)
     {
         edu.wustl.catissuecore.domainobject.CancerResearchGroup cancerResearchGroup=(edu.wustl.catissuecore.domainobject.CancerResearchGroup) obj;
-        this.systemIdentifier = cancerResearchGroup.getId().longValue();
+        this.id = cancerResearchGroup.getId().longValue();
         this.name = cancerResearchGroup.getName();
     }
     

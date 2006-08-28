@@ -23,9 +23,9 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-     * System generated unique systemIdentifier.
+     * System generated unique id.
      */
-	protected Long systemIdentifier;
+	protected Long id;
 	/**
      * Amount distributed.
      */
@@ -45,26 +45,26 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	transient private Double previousQuantity;
 
 	/**
-     * Returns the system generated unique systemIdentifier.
-     * @return Long System generated unique systemIdentifier.
-     * @see #setSystemIdentifier(Long)
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * Returns the system generated unique id.
+     * @return Long System generated unique id.
+     * @see #setId(Long)
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
      * @hibernate.generator-param name="sequence" value="CATISSUE_DISTRIBUTED_ITEM_SEQ"
      */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 
 	/**
-     * Sets the system generated unique systemIdentifier.
-     * @param systemIdentifier the system generated unique systemIdentifier.
-     * @see #getSystemIdentifier()
+     * Sets the system generated unique id.
+     * @param id the system generated unique id.
+     * @see #getId()
      */
-	public void setSystemIdentifier(Long systemIdentifier)
+	public void setId(Long id)
 	{
-		this.systemIdentifier = systemIdentifier;
+		this.id = id;
 	}
 
 	/**
@@ -143,7 +143,7 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	
 	public String toString()
 	{
-		return systemIdentifier+" "+quantity+" "+specimen.getSystemIdentifier();		
+		return id+" "+quantity+" "+specimen.getId();		
 	}
 	
 	/**

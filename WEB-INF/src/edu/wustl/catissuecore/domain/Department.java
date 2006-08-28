@@ -21,9 +21,9 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-	 * System generated unique systemIdentifier.
+	 * System generated unique id.
 	 */
-	protected Long systemIdentifier;
+	protected Long id;
 
 	/**
 	 * Name of the department.
@@ -44,26 +44,24 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	}
 
 	/**
-	 * Returns the systemIdentifier assigned to department.
-	 * 
-	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long"
+	 * Returns the id assigned to department.
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long"
 	 * length="30" unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_DEPARTMENT_SEQ"
-	 * @return a unique systemIdentifier assigned to the department.
+	 * @return a unique id assigned to the department.
 	 */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 
 	/**
-	 * Sets an systemIdentifier for the department.
-	 * 
-	 * @param systemIdentifier Unique systemIdentifier to be assigned to the department.
+	 * Sets an id for the department.
+	 * @param id Unique id to be assigned to the department.
 	 */
-	public void setSystemIdentifier(Long systemIdentifier)
+	public void setId(Long id)
 	{
-		this.systemIdentifier = systemIdentifier;
+		this.id = id;
 	}
 
 	/**

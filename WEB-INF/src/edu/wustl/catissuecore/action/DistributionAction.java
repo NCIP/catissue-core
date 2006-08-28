@@ -81,7 +81,7 @@ public class  DistributionAction extends SpecimenEventParametersAction
     	//List of keys used in map of ActionForm
 		List key = new ArrayList();
     	key.add("DistributedItem:i_Specimen_className");
-    	key.add("DistributedItem:i_Specimen_systemIdentifier");
+    	key.add("DistributedItem:i_Specimen_id");
     	key.add("DistributedItem:i_quantity");
     	key.add("DistributedItem:i_tissueSite");
     	key.add("DistributedItem:i_tissueSide");
@@ -119,13 +119,13 @@ public class  DistributionAction extends SpecimenEventParametersAction
 			DistributionBizLogic dao = (DistributionBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 			
 			String specimenIdKey = request.getParameter("specimenIdKey");
-			//Parse key to get row number. Key is in the format DistributedItem:rowNo_Specimen_systemIdentifier
+			//Parse key to get row number. Key is in the format DistributedItem:rowNo_Specimen_id
 			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.Distribution");
 			int rowNo = parser.parseKeyAndGetRowNo(specimenIdKey);
 			
 			//int a = Integer.parseInt()
 			Logger.out.debug("row number of the dist item: "+rowNo);
-			String specimenId = (String)dForm.getValue("DistributedItem:"+rowNo+"_Specimen_systemIdentifier");
+			String specimenId = (String)dForm.getValue("DistributedItem:"+rowNo+"_Specimen_id");
 			//if '--Select--' is selected in the drop down of Specimen Id, empty the row values for that distributed item
 			if(specimenId.equals("-1"))
 			{

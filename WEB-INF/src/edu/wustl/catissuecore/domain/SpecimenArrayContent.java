@@ -12,7 +12,7 @@ import edu.wustl.common.exception.AssignDataException;
 public class SpecimenArrayContent extends AbstractDomainObject 
 {
     
-    protected Long systemIdentifier;
+    protected Long id;
     
 	protected Double concentrationInMicrogramPerMicroliter;
 	
@@ -32,39 +32,23 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	
 	/**
      * (non-Javadoc)
-     * @see edu.wustl.common.domain.AbstractDomainObject#setSystemIdentifier(java.lang.Long)
+     * @see edu.wustl.common.domain.AbstractDomainObject#setId(java.lang.Long)
      */
-    public void setSystemIdentifier(Long systemIdentifier)
+    public void setId(Long id)
     {
-        this.systemIdentifier = systemIdentifier;
+        this.id = id;
     }
     
     /**
      * (non-Javadoc)
-     * @see edu.wustl.common.domain.AbstractDomainObject#getSystemIdentifier()
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * @see edu.wustl.common.domain.AbstractDomainObject#getId()
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
      * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_ARRAY_CONTENT_SEQ"
      */
-    public Long getSystemIdentifier()
-    {
-        return this.systemIdentifier;
-    }
-	
-	/**
-     * @return Returns the id.
-     */
     public Long getId()
     {
-        return systemIdentifier;
-    }
-    
-    /**
-     * @param id The id to set.
-     */
-    public void setId(Long id)
-    {
-        this.systemIdentifier = id;
+        return this.id;
     }
 	
     /**

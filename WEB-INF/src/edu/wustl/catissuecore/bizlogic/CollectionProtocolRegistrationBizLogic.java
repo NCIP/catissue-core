@@ -84,7 +84,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		CollectionProtocolRegistration oldCollectionProtocolRegistration = (CollectionProtocolRegistration) oldObj;
 		
 		// Check for different Collection Protocol
-		if(!collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier().equals( oldCollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier()))
+		if(!collectionProtocolRegistration.getCollectionProtocol().getId().equals( oldCollectionProtocolRegistration.getCollectionProtocol().getId()))
 		{
 			checkStatus(dao,collectionProtocolRegistration.getCollectionProtocol(), "Collection Protocol" );
 		}
@@ -93,10 +93,10 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		// old and new values are not null
 		if(collectionProtocolRegistration.getParticipant() != null  && 
 				oldCollectionProtocolRegistration.getParticipant() != null &&
-				collectionProtocolRegistration.getParticipant().getSystemIdentifier() != null  && 
-				oldCollectionProtocolRegistration.getParticipant().getSystemIdentifier()  != null)
+				collectionProtocolRegistration.getParticipant().getId() != null  && 
+				oldCollectionProtocolRegistration.getParticipant().getId()  != null)
 		{
-			if(!collectionProtocolRegistration.getParticipant().getSystemIdentifier().equals( oldCollectionProtocolRegistration.getParticipant().getSystemIdentifier()))
+			if(!collectionProtocolRegistration.getParticipant().getId().equals( oldCollectionProtocolRegistration.getParticipant().getId()))
 			{					
 				checkStatus(dao,collectionProtocolRegistration.getParticipant(), "Participant" );
 			}		
@@ -105,7 +105,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		//when old participant is null and new is not null
 		if(collectionProtocolRegistration.getParticipant() != null  && oldCollectionProtocolRegistration.getParticipant() == null)
 		{
-			if(collectionProtocolRegistration.getParticipant().getSystemIdentifier()  != null )
+			if(collectionProtocolRegistration.getParticipant().getId()!= null )
 			{
 				checkStatus(dao, collectionProtocolRegistration.getParticipant(), "Participant" );
 			}
@@ -152,7 +152,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		if(collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
 			Logger.out.debug("collectionProtocolRegistration.getActivityStatus() "+collectionProtocolRegistration.getActivityStatus());
-			Long collectionProtocolRegistrationIDArr[] = {collectionProtocolRegistration.getSystemIdentifier()};
+			Long collectionProtocolRegistrationIDArr[] = {collectionProtocolRegistration.getId()};
 			
 			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 			bizLogic.disableRelatedObjects(dao,collectionProtocolRegistrationIDArr);
@@ -182,7 +182,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
         String[] dynamicGroups=null;
         CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
         dynamicGroups = new String[1];
-        dynamicGroups[0] = Constants.getCollectionProtocolPGName(collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
+        dynamicGroups[0] = Constants.getCollectionProtocolPGName(collectionProtocolRegistration.getCollectionProtocol().getId());
         return dynamicGroups;
     }
     
@@ -194,7 +194,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
     	
 		if(collectionProtocolRegistration.getParticipant()!=null)
 		{
-			Object participantObj = dao.retrieve(Participant.class.getName(), collectionProtocolRegistration.getParticipant().getSystemIdentifier());
+			Object participantObj = dao.retrieve(Participant.class.getName(), collectionProtocolRegistration.getParticipant().getId());
 			
 			if (participantObj != null )
 			{
@@ -208,7 +208,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		
 		collectionProtocolRegistration.setParticipant(participant);
 
-		Object collectionProtocolObj = dao.retrieve(CollectionProtocol.class.getName(),  collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier());
+		Object collectionProtocolObj = dao.retrieve(CollectionProtocol.class.getName(),  collectionProtocolRegistration.getCollectionProtocol().getId());
 		if (collectionProtocolObj != null)
 		{
 			CollectionProtocol collectionProtocol = (CollectionProtocol)collectionProtocolObj;
@@ -373,11 +373,11 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	    	{
 	    		if(collectionProtocolRegistration.getParticipant()!=null&&oldcollectionProtocolRegistration.getParticipant()!=null)
 	    		{
-		    		if(collectionProtocolRegistration.getParticipant().getSystemIdentifier().equals(oldcollectionProtocolRegistration.getParticipant().getSystemIdentifier()))
+		    		if(collectionProtocolRegistration.getParticipant().getId().equals(oldcollectionProtocolRegistration.getParticipant().getId()))
 		    		{
 		    			count++;
 		    		}
-		    		if(collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier().equals(oldcollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier()))
+		    		if(collectionProtocolRegistration.getCollectionProtocol().getId().equals(oldcollectionProtocolRegistration.getCollectionProtocol().getId()))
 		    		{
 		    			count++;
 		    		}
@@ -388,7 +388,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	    			{
 	    				count++;
 	    			}
-	    			if(collectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier().equals(oldcollectionProtocolRegistration.getCollectionProtocol().getSystemIdentifier()))
+	    			if(collectionProtocolRegistration.getCollectionProtocol().getId().equals(oldcollectionProtocolRegistration.getCollectionProtocol().getId()))
 		    		{
 		    			count++;
 		    		}
@@ -401,17 +401,17 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	    	{
 	    		// build query for collectionProtocol_id AND participant_id
 	    		Participant objParticipant = collectionProtocolRegistration.getParticipant();
-	    		selectColumns = new String[]{"collectionProtocol.systemIdentifier","participant.systemIdentifier"};
-	    		whereColumnName = new String[]{"collectionProtocol.systemIdentifier","participant.systemIdentifier"};
-	    		whereColumnValue = new Object[]{objCollectionProtocol.getSystemIdentifier(),objParticipant.getSystemIdentifier()};
+	    		selectColumns = new String[]{"collectionProtocol.id","participant.id"};
+	    		whereColumnName = new String[]{"collectionProtocol.id","participant.id"};
+	    		whereColumnValue = new Object[]{objCollectionProtocol.getId(),objParticipant.getId()};
 	    		arguments = new String[]{"Collection Protocol Registration ","COLLECTION_PROTOCOL_ID,PARTICIPANT_ID"};
 	    	}
 	    	else
 	    	{
 //	    		 build query for collectionProtocol_id AND protocol_participant_id
-	    		selectColumns = new String[]{"collectionProtocol.systemIdentifier","protocolParticipantIdentifier"};
-	    		whereColumnName = new String[]{"collectionProtocol.systemIdentifier","protocolParticipantIdentifier"};
-	    		whereColumnValue = new Object[]{objCollectionProtocol.getSystemIdentifier(),collectionProtocolRegistration.getProtocolParticipantIdentifier()};
+	    		selectColumns = new String[]{"collectionProtocol.id","protocolParticipantIdentifier"};
+	    		whereColumnName = new String[]{"collectionProtocol.id","protocolParticipantIdentifier"};
+	    		whereColumnValue = new Object[]{objCollectionProtocol.getId(),collectionProtocolRegistration.getProtocolParticipantIdentifier()};
 	    		arguments = new String[]{"Collection Protocol Registration ","COLLECTION_PROTOCOL_ID,PROTOCOL_PARTICIPANT_ID"};
 	    	}
 	    	List l = dao.retrieve(sourceObjectName,selectColumns,whereColumnName,whereColumnCondition,whereColumnValue,Constants.AND_JOIN_CONDITION);

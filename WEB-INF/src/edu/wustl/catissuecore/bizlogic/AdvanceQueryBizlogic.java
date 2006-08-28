@@ -26,10 +26,10 @@ import edu.wustl.common.query.AdvancedConditionsNode;
 import edu.wustl.common.query.Condition;
 import edu.wustl.common.query.Operator;
 import edu.wustl.common.query.Table;
-import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.tree.QueryTreeNodeData;
-import edu.wustl.common.tree.TreeNodeImpl;
+import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.tree.TreeNode;
+import edu.wustl.common.tree.TreeNodeImpl;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 

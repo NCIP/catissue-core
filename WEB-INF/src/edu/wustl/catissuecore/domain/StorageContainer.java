@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
-import edu.wustl.catissuecore.actionForm.SimilarContainersForm;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -29,7 +28,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StorageContainer extends Container
 {
-
 	protected Double tempratureInCentigrade;
 
 	protected StorageType storageType;
@@ -65,7 +63,7 @@ public class StorageContainer extends Container
 
 	public StorageContainer(StorageContainer oldContainer)
 	{
-		this.setSystemIdentifier(oldContainer.getSystemIdentifier());
+		this.setId(oldContainer.getId());
 		this.setActivityStatus(oldContainer.getActivityStatus());
 		this.setParent(oldContainer.getParent());
 		//this.setNumber(oldContainer.getNumber());
@@ -312,7 +310,7 @@ public class StorageContainer extends Container
 			this.noOfContainers = new Integer(form.getNoOfContainers());
 
 			storageType = new StorageType();
-			storageType.setSystemIdentifier(new Long(form.getTypeId()));
+			storageType.setId(new Long(form.getTypeId()));
 			storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 			storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
 			capacity.setOneDimensionCapacity(new Integer(form.getOneDimensionCapacity()));
@@ -333,7 +331,7 @@ public class StorageContainer extends Container
 				else
 				//in another container
 				{
-					if (parent.getSystemIdentifier().longValue() != form.getParentContainerId())
+					if (parent.getId().longValue() != form.getParentContainerId())
 					{
 						isParentChanged = true;
 					}
@@ -354,7 +352,7 @@ public class StorageContainer extends Container
 			if (form.getCheckedButton() == Constants.CONTAINER_IN_ANOTHER_CONTAINER)
 			{
 				parent = new StorageContainer();
-				parent.setSystemIdentifier(new Long(form.getParentContainerId()));
+				parent.setId(new Long(form.getParentContainerId()));
 				this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
 				this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
 			}
@@ -364,7 +362,7 @@ public class StorageContainer extends Container
 				this.setPositionDimensionOne(null);
 				this.setPositionDimensionTwo(null);
 				site = new Site();
-				site.setSystemIdentifier(new Long(form.getSiteId()));
+				site.setId(new Long(form.getSiteId()));
 			}
 
 			collectionProtocolCollection.clear();
@@ -377,7 +375,7 @@ public class StorageContainer extends Container
 					if (collectionProtocolArr[i] != -1)
 					{
 						CollectionProtocol collectionProtocol = new CollectionProtocol();
-						collectionProtocol.setSystemIdentifier(new Long(collectionProtocolArr[i]));
+						collectionProtocol.setId(new Long(collectionProtocolArr[i]));
 						collectionProtocolCollection.add(collectionProtocol);
 					}
 				}
@@ -392,7 +390,7 @@ public class StorageContainer extends Container
 					if (storageTypeArr[i] != -1)
 					{
 						StorageType storageType = new StorageType();
-						storageType.setSystemIdentifier(new Long(storageTypeArr[i]));
+						storageType.setId(new Long(storageTypeArr[i]));
 						holdsStorageTypeCollection.add(storageType);
 					}
 				}
@@ -409,7 +407,7 @@ public class StorageContainer extends Container
 					//{
 					//TODO : Vaishali
 					//		        		SpecimenClass specimenClass = new SpecimenClass();
-					//		        		specimenClass.setSystemIdentifier(new Long(specimenClassArr[i]));
+					//		        		specimenClass.setId(new Long(specimenClassArr[i]));
 					//		        		holdsSpecimenClassCollection.add(specimenClass);
 					//String specimenClassType=specimenClassArr[i];
 					holdsSpecimenClassCollection.add(specimenClassArr[i]);

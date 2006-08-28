@@ -20,22 +20,17 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.CellSpecimenRequirement;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
-import edu.wustl.catissuecore.domain.FluidSpecimenRequirement;
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.MolecularSpecimenRequirement;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
-import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
-import edu.wustl.catissuecore.domain.TissueSpecimenRequirement;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.common.beans.NameValueBean;
@@ -93,28 +88,6 @@ public class Utility extends edu.wustl.common.util.Utility
 		List typeList = (List)specimenTypeMap.get(specimenClass);
 		
 		return typeList;
-	}
-	
-	public static String getSpecimenClassName(SpecimenRequirement requirement)
-	{
-		if(requirement instanceof CellSpecimenRequirement)
-		{
-			return Constants.CELL;
-		}
-		else if(requirement instanceof MolecularSpecimenRequirement)
-		{
-			return Constants.MOLECULAR;
-		}
-		else if(requirement instanceof FluidSpecimenRequirement)
-		{
-			return Constants.FLUID;
-		}
-		else if(requirement instanceof TissueSpecimenRequirement)
-		{
-			return Constants.TISSUE;
-		}
-		
-		return null;
 	}
 	
 	public static String getSpecimenClassName(Specimen specimen)
@@ -216,50 +189,42 @@ public class Utility extends edu.wustl.common.util.Utility
 	 * @param type Type of specimen
 	 * @return the unit of specimen quantity.
 	 */
-	public static String getUnit(String className,String type)
+	public static String getUnit(String className, String type)
 	{
-		if(className == null || type == null)
+		if(className == null || type == null || className.equals("-1"))
 		{
 			return "";
 		}
 		
-		if(className.equals("-1"))
+		if(Constants.CELL.equals(className))
 		{
-			return "";
+			return Constants.UNIT_CC;
 		}
-		else
+		else if(Constants.FLUID.equals(className))
 		{
-			if(Constants.CELL.equals(className))
+			return Constants.UNIT_ML;
+		}
+		else if(Constants.MOLECULAR.equals(className))
+		{
+			return Constants.UNIT_MG;
+		}
+		else if(Constants.TISSUE.equals(className))
+		{
+			if(Constants.FIXED_TISSUE_BLOCK.equals(type) || Constants.FROZEN_TISSUE_BLOCK.equals(type)
+					|| Constants.FIXED_TISSUE_SLIDE.equals(type) || Constants.FROZEN_TISSUE_SLIDE.equals(type)
+					|| Constants.NOT_SPECIFIED.equals(type))
 			{
-				return Constants.UNIT_CC;
+				return Constants.UNIT_CN;
 			}
-			else if(Constants.FLUID.equals(className))
+			else if(Constants.MICRODISSECTED.equals(type))
 			{
-				return Constants.UNIT_ML;
+				return Constants.UNIT_CL;
 			}
-			else if(Constants.MOLECULAR.equals(className))
+			else
 			{
-				return Constants.UNIT_MG;
-			}
-			else if(Constants.TISSUE.equals(className))
-			{
-				if(Constants.FIXED_TISSUE_BLOCK.equals(type) || Constants.FROZEN_TISSUE_BLOCK.equals(type)
-						|| Constants.FIXED_TISSUE_SLIDE.equals(type) || Constants.FROZEN_TISSUE_SLIDE.equals(type)
-						|| Constants.NOT_SPECIFIED.equals(type))
-				{
-					return Constants.UNIT_CN;
-				}
-				else if(Constants.MICRODISSECTED.equals(type))
-				{
-					return Constants.UNIT_CL;
-				}
-				else
-				{
-					return Constants.UNIT_GM;
-				}
+				return Constants.UNIT_GM;
 			}
 		}
-		
 		return "";
 	}
 	

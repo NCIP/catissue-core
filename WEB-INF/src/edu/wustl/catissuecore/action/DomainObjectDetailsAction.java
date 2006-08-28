@@ -52,17 +52,17 @@ public class DomainObjectDetailsAction extends SecureAction
         while (iterator.hasNext())
         {
             currentDomainObject = (AbstractDomainObject)iterator.next();
-            if (identifier == currentDomainObject.getSystemIdentifier().longValue())
+            if (identifier == currentDomainObject.getId().longValue())
             {
                 break;
             }
-            prevIdentifier = currentDomainObject.getSystemIdentifier();
+            prevIdentifier = currentDomainObject.getId();
         }
         
         if (iterator.hasNext())
         {
             AbstractDomainObject nextDomainObject = (AbstractDomainObject)iterator.next();
-            nextIdentifier = nextDomainObject.getSystemIdentifier();
+            nextIdentifier = nextDomainObject.getId();
         }
         
         AbstractActionForm abstractActionForm = (AbstractActionForm)form;

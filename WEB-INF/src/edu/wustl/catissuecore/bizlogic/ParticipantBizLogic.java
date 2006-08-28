@@ -127,7 +127,7 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 			//Audit of ParticipantMedicalIdentifier.
 			ParticipantMedicalIdentifier oldPmIdentifier 
 					= (ParticipantMedicalIdentifier)getCorrespondingOldObject(oldParticipantMedicalIdentifierCollection, 
-					        pmIdentifier.getSystemIdentifier());
+					        pmIdentifier.getId());
 			
 			dao.audit(pmIdentifier, oldPmIdentifier, sessionDataBean, true);
 		}
@@ -137,7 +137,7 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 		if(participant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
 			Logger.out.debug("participant.getActivityStatus() "+participant.getActivityStatus());
-			Long participantIDArr[] = {participant.getSystemIdentifier()};
+			Long participantIDArr[] = {participant.getId()};
 			
 			CollectionProtocolRegistrationBizLogic bizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 			bizLogic.disableRelatedObjectsForParticipant(dao,participantIDArr);
@@ -231,7 +231,7 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 	/**
      * This method fetches linked data from integrated application i.e. CAE/caTies.
      */
-	public List getLinkedAppData(Long systemIdentifier, String applicationID)
+	public List getLinkedAppData(Long id, String applicationID)
 	{
 	    Logger.out.debug("In getIntegrationData() of ParticipantBizLogic ");
 	    
@@ -248,7 +248,7 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 		    
 		    Statement stmt= connection.createStatement();
 		    
-		    String identifiedPatientIdQuery = "select IDENTIFIER from CATISSUE_IDENTIFIED_PATIENT where PARTICIPANT_ID="+systemIdentifier;
+		    String identifiedPatientIdQuery = "select IDENTIFIER from CATISSUE_IDENTIFIED_PATIENT where PARTICIPANT_ID="+id;
 		    
 		    ResultSet identifiedPatientResultSet=stmt.executeQuery(identifiedPatientIdQuery);
 		    

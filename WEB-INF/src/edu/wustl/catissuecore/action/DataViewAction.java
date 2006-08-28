@@ -28,12 +28,12 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.common.bizlogic.QueryBizLogic;
-import edu.wustl.common.query.Query;
-import edu.wustl.common.query.ResultData;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.query.Query;
+import edu.wustl.common.query.ResultData;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;

@@ -427,7 +427,7 @@ public class SpecimenForm extends AbstractActionForm
     {
         Specimen specimen = (Specimen) abstractDomain;
 
-        this.systemIdentifier = specimen.getId().longValue();
+        this.id = specimen.getId().longValue();
         this.type = specimen.getType();
         this.concentration = "";
         this.comments = specimen.getComments();
@@ -441,14 +441,14 @@ public class SpecimenForm extends AbstractActionForm
         if (container != null)
         {
             this.storageContainer = String.valueOf(container
-                    .getSystemIdentifier());
+                    .getId());
             this.positionDimensionOne = String.valueOf(specimen
                     .getPositionDimensionOne());
             this.positionDimensionTwo = String.valueOf(specimen
                     .getPositionDimensionTwo());
             
             this.positionInStorageContainer = container.getStorageType().getName() + " : " 
-			+ container.getSystemIdentifier() + " Pos(" + this.positionDimensionOne + ","
+			+ container.getId() + " Pos(" + this.positionDimensionOne + ","
 			+ this.positionDimensionTwo + ")";
             
         }
@@ -535,7 +535,7 @@ public class SpecimenForm extends AbstractActionForm
                 String key1 = "ExternalIdentifier:" + i + "_name";
                 String key2 = "ExternalIdentifier:" + i + "_value";
                 String key3 = "ExternalIdentifier:" + i
-                        + "_systemIdentifier";
+                        + "_id";
 
                 ExternalIdentifier externalId = (ExternalIdentifier) it
                         .next();
@@ -556,7 +556,7 @@ public class SpecimenForm extends AbstractActionForm
     {
         edu.wustl.catissuecore.domainobject.Specimen specimen = (edu.wustl.catissuecore.domainobject.Specimen) obj;
 
-        this.systemIdentifier = specimen.getId().longValue();
+        this.id = specimen.getId().longValue();
         this.type = specimen.getType();
         this.concentration = "";
         this.comments = specimen.getComments();
@@ -637,7 +637,7 @@ public class SpecimenForm extends AbstractActionForm
             {
                 String key1 = "ExternalIdentifier:" + i + "_name";
                 String key2 = "ExternalIdentifier:" + i + "_value";
-                String key3 = "ExternalIdentifier:" + i + "_systemIdentifier";
+                String key3 = "ExternalIdentifier:" + i + "_id";
 
                 edu.wustl.catissuecore.domainobject.ExternalIdentifier externalId = 
                 		(edu.wustl.catissuecore.domainobject.ExternalIdentifier) it.next();

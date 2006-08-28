@@ -1,7 +1,5 @@
 package edu.wustl.catissuecore.test;
 
-import java.util.List;
-
 import junit.framework.TestCase;
 import edu.wustl.catissuecore.bizlogic.ParticipantLookupLogic;
 import edu.wustl.catissuecore.domain.Participant;

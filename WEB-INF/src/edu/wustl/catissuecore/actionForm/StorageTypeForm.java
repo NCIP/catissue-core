@@ -20,7 +20,6 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-//import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -93,7 +92,7 @@ public class StorageTypeForm extends AbstractActionForm
     {
         StorageType storageType = (StorageType) abstractDomain;
         Logger.out.info("in storege type form :"+storageType.getHoldsSpecimenClassCollection().size());
-        this.systemIdentifier = storageType.getId().longValue();
+        this.id = storageType.getId().longValue();
         this.type = storageType.getName();
         this.defaultTemperature = Utility.toString( storageType.getDefaultTempratureInCentigrade());
         this.oneDimensionCapacity = storageType.getCapacity().getOneDimensionCapacity().intValue();
@@ -112,7 +111,7 @@ public class StorageTypeForm extends AbstractActionForm
 			while(it.hasNext())
 			{
 				StorageType holdStorageType = (StorageType)it.next();
-				holdsStorageTypeIds[i] = holdStorageType.getSystemIdentifier().longValue();
+				holdsStorageTypeIds[i] = holdStorageType.getId().longValue();
 				i++;
 			}
 		}
@@ -129,7 +128,7 @@ public class StorageTypeForm extends AbstractActionForm
 			{
 			    //TODO : Vaishali
 //				SpecimenClass specimenClass = (SpecimenClass)it.next();
-//				holdsSpecimenClassTypeIds[i] = specimenClass.getSystemIdentifier().longValue();
+//				holdsSpecimenClassTypeIds[i] = specimenClass.getId().longValue();
 //				i++;
 				String specimenClass=(String)it.next();
 				holdsSpecimenClassTypes[i]=specimenClass;
@@ -141,7 +140,7 @@ public class StorageTypeForm extends AbstractActionForm
     public void setAllVal(Object obj)
     {
         edu.wustl.catissuecore.domainobject.StorageType storageType=(edu.wustl.catissuecore.domainobject.StorageType) obj;
-        this.systemIdentifier = storageType.getId().longValue();
+        this.id = storageType.getId().longValue();
         this.type = storageType.getType();
         this.defaultTemperature = Utility.toString( storageType.getDefaultTempratureInCentigrade());
         

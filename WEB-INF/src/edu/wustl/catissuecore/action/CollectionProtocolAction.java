@@ -57,33 +57,36 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form; 
     	
     	//Name of delete button clicked
-         String button = request.getParameter("button");
+        String button = request.getParameter("button");
          
-         //Row number of outerblock
-         String outer = request.getParameter("blockCounter");
+        //Row number of outerblock
+        String outer = request.getParameter("blockCounter");
          
-//       Gets the map from ActionForm
-         Map map = collectionProtocolForm.getValues();
+//      Gets the map from ActionForm
+        Map map = collectionProtocolForm.getValues();
          
 //       List of keys used in map of ActionForm
-         List key = new ArrayList();
-  		 key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenClass");
-  		 key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenType");
-  		 key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_tissueSite");
-  		 key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_pathologyStatus");
-  		 key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_quantityIn");
+	    List key = new ArrayList();
+		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenClass");
+		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_specimenType");
+		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_tissueSite");
+		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_pathologyStatus");
+		key.add("CollectionProtocolEvent:outer_SpecimenRequirement:inner_quantity_value");
         
-         if(button != null){
+        if(button != null)
+        {
          	if(button.equals("deleteSpecimenReq"))
-         	   MapDataParser.deleteRow(key,map,request.getParameter("status"),outer);
-         	
-         	else {
+         	{
+         	    MapDataParser.deleteRow(key,map,request.getParameter("status"),outer);
+         	}
+         	else 
+         	{
          		//keys of outer block
          		key.add("CollectionProtocolEvent:outer_clinicalStatus");
          		key.add("CollectionProtocolEvent:outer_studyCalendarEventPoint");
          		MapDataParser.deleteRow(key,map,request.getParameter("status"));
          	}
-         }
+        }
     	
 //    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
     	List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS,null);

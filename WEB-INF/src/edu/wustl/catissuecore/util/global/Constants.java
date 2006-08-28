@@ -132,7 +132,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String STORAGE_CONTAINER_GRID_OBJECT = "storageContainerGridObject";
 	public static final String STORAGE_CONTAINER_CHILDREN_STATUS = "storageContainerChildrenStatus";
 	public static final String START_NUMBER = "startNumber";
-	public static final String CHILD_CONTAINER_SYSTEM_IDENTIFIERS = "childContainerSystemIdentifiers";
+	public static final String CHILD_CONTAINER_SYSTEM_IDENTIFIERS = "childContainerIds";
 	public static final int STORAGE_CONTAINER_FIRST_ROW = 1;
 	public static final int STORAGE_CONTAINER_FIRST_COLUMN = 1;
 	
@@ -386,15 +386,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Spreadsheet view Constants in DataViewAction.
 	public static final String PARTICIPANT = "Participant";
 	public static final String ACCESSION = "Accession";
-	public static final String QUERY_PARTICIPANT_SEARCH_ACTION = "QueryParticipantSearch.do?systemIdentifier=";
+	public static final String QUERY_PARTICIPANT_SEARCH_ACTION = "QueryParticipantSearch.do?id=";
 	public static final String QUERY_PARTICIPANT_EDIT_ACTION = "QueryParticipantEdit.do";
-	public static final String QUERY_COLLECTION_PROTOCOL_SEARCH_ACTION = "QueryCollectionProtocolSearch.do?systemIdentifier=";
+	public static final String QUERY_COLLECTION_PROTOCOL_SEARCH_ACTION = "QueryCollectionProtocolSearch.do?id=";
 	public static final String QUERY_COLLECTION_PROTOCOL_EDIT_ACTION = "QueryCollectionProtocolEdit.do";
-	public static final String QUERY_SPECIMEN_COLLECTION_GROUP_SEARCH_ACTION = "QuerySpecimenCollectionGroupSearch.do?systemIdentifier=";
+	public static final String QUERY_SPECIMEN_COLLECTION_GROUP_SEARCH_ACTION = "QuerySpecimenCollectionGroupSearch.do?id=";
 	public static final String QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION = "QuerySpecimenCollectionGroupEdit.do";
-	public static final String QUERY_SPECIMEN_SEARCH_ACTION = "QuerySpecimenSearch.do?systemIdentifier=";
+	public static final String QUERY_SPECIMEN_SEARCH_ACTION = "QuerySpecimenSearch.do?id=";
 	public static final String QUERY_SPECIMEN_EDIT_ACTION = "QuerySpecimenEdit.do";
-	//public static final String QUERY_ACCESSION_SEARCH_ACTION = "QueryAccessionSearch.do?systemIdentifier=";
+	//public static final String QUERY_ACCESSION_SEARCH_ACTION = "QueryAccessionSearch.do?id=";
 	
 	public static final String SPECIMEN = "Specimen";
 	public static final String SEGMENT = "Segment";
@@ -754,7 +754,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ASSIGN_PRIVILEGES_ACTION = "AssignPrivileges.do";
 	public static final int CONTAINER_IN_ANOTHER_CONTAINER = 2;
 	    /**
-     * @param systemIdentifier
+     * @param id
      * @return
      */
     public static String getUserPGName(Long identifier)
@@ -767,7 +767,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
     }
 
     /**
-     * @param systemIdentifier
+     * @param id
      * @return
      */
     public static String getUserGroupName(Long identifier)

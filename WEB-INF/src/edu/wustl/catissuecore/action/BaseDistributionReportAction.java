@@ -100,8 +100,8 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		DistributedItem item = (DistributedItem)itr.next();
     		Specimen specimen = item.getSpecimen();
     		Logger.out.debug("Specimen "+specimen);
-    		Logger.out.debug("Specimen "+specimen.getSystemIdentifier());
-    		specimenIds[i] = specimen.getSystemIdentifier().toString();
+    		Logger.out.debug("Specimen "+specimen.getId());
+    		specimenIds[i] = specimen.getId().toString();
     		i++;
     	}
     	String action = configForm.getNextAction();
@@ -127,7 +127,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		simpleConditionsNode1.getCondition().getDataElement().setField("Distribution_Id");
     		simpleConditionsNode1.getCondition().getDataElement().setFieldType(Constants.FIELD_TYPE_BIGINT);
     		simpleConditionsNode1.getCondition().getOperator().setOperator(Operator.EQUAL);
-    		simpleConditionsNode1.getCondition().setValue(dist.getSystemIdentifier().toString());
+    		simpleConditionsNode1.getCondition().setValue(dist.getId().toString());
     		simpleConditionsNode1.setOperator(new Operator(Constants.AND_JOIN_CONDITION));
     		
     		simpleConditionNodeCollection.add(simpleConditionsNode1);

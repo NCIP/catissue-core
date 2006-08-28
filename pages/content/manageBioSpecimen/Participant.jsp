@@ -129,7 +129,7 @@ tr#hiddenCombo
 			var spreqno=x.insertCell(0);
 			spreqno.className="formSerialNumberField";
 			sname=(q+1);
-			var identifier = "value(ParticipantMedicalIdentifier:" + (q+1) +"_systemIdentifier)";
+			var identifier = "value(ParticipantMedicalIdentifier:" + (q+1) +"_id)";
 			sname = sname + "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
 			spreqno.innerHTML="" + sname;
 
@@ -138,7 +138,7 @@ tr#hiddenCombo
 			spreqtype.className="formField";
 			sname="";
 
-			var name = "value(ParticipantMedicalIdentifier:" + (q+1) + "_Site_systemIdentifier)";
+			var name = "value(ParticipantMedicalIdentifier:" + (q+1) + "_Site_id)";
 // Mandar : 434 : for tooltip 
 			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
 			<%
@@ -200,7 +200,7 @@ tr#hiddenCombo
 		function onParticipantClick(participant_id)
 		{
 			document.forms[0].participantId.value=participant_id;
-			document.forms[0].systemIdentifier.value=participant_id;
+			document.forms[0].id.value=participant_id;
 			document.forms[0].submitPage.disabled=true;
 			document.forms[0].registratioPage.disabled=false;
 		
@@ -222,7 +222,7 @@ tr#hiddenCombo
 			}
 			else
 			{
-				document.forms[0].action="ParticipantSelect.do?operation=add&systemIdentifier="+document.forms[0].participantId.value;
+				document.forms[0].action="ParticipantSelect.do?operation=add&id="+document.forms[0].participantId.value;
 				alert("3");
 				alert(document.forms[0].action);
 				document.forms[0].submit();
@@ -381,7 +381,7 @@ tr#hiddenCombo
 					</td>
 					<td><html:hidden property="counter"/></td>
 					<td><html:hidden property="onSubmit"/></td>
-					<td><html:hidden property="systemIdentifier" /><html:hidden property="redirectTo"/></td>
+					<td><html:hidden property="id" /><html:hidden property="redirectTo"/></td>
 					<td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
 				 </tr>
 				 
@@ -398,7 +398,7 @@ tr#hiddenCombo
 						if(pageView.equals("edit"))
 						{
 					%>
-				     &nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="participantForm" property="systemIdentifier" />
+				     &nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="participantForm" property="id" />
 					<%
 						}
 					%>
@@ -410,7 +410,7 @@ tr#hiddenCombo
 						<bean:message key="participant.add.title"/>
 					</logic:equal>
 					<logic:equal name="operation" value="<%=Constants.EDIT%>">
-						<bean:message key="participant.edit.title"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="participantForm" property="systemIdentifier" />
+						<bean:message key="participant.edit.title"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="participantForm" property="id" />
 					</logic:equal>
 					</td>
 				</tr>	
@@ -684,9 +684,9 @@ tr#hiddenCombo
 				<%
 				for(int i=1;i<=noOfRows;i++)
 				{
-					String siteName = "value(ParticipantMedicalIdentifier:"+i+"_Site_systemIdentifier)";
+					String siteName = "value(ParticipantMedicalIdentifier:"+i+"_Site_id)";
 					String medicalRecordNumber = "value(ParticipantMedicalIdentifier:"+i+"_medicalRecordNumber)";
-					String identifier = "value(ParticipantMedicalIdentifier:" + i +"_systemIdentifier)";
+					String identifier = "value(ParticipantMedicalIdentifier:" + i +"_id)";
 					String check = "chk_"+i;
 				%>
 				 <tr>
@@ -704,7 +704,7 @@ tr#hiddenCombo
 				     	<html:text styleClass="formFieldSized15" maxlength="50" size="30" styleId="<%=medicalRecordNumber%>" property="<%=medicalRecordNumber%>" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				    <%
-							String key = "ParticipantMedicalIdentifier:" + i +"_systemIdentifier";
+							String key = "ParticipantMedicalIdentifier:" + i +"_id";
 							boolean bool = Utility.isPersistedValue(map,key);
 							String condition = "";
 							if(bool)

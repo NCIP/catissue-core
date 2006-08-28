@@ -66,7 +66,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
 		CollectionProtocolRegistration registration = (CollectionProtocolRegistration)abstractDomain;
-		this.systemIdentifier = registration.getSystemIdentifier().longValue();
+		this.id = registration.getId().longValue();
 		this.activityStatus = registration.getActivityStatus();
 		this.collectionProtocolID = registration.getCollectionProtocol().getId().longValue();
 		String firstName = Utility.toString(registration.getParticipant().getFirstName());;
@@ -98,7 +98,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 			this.collectionProtocolID = -1;
 		}
 		
-		this.systemIdentifier = registration.getId().longValue();
+		this.id = registration.getId().longValue();
 		
 		if((registration.getParticipant() != null) && registration.getParticipant().getId() != null)
 	  	{
@@ -260,7 +260,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 //	   this.participantID = 0;
 //	   this.participantProtocolID = null;
 //	   this.registrationDate = null;
-//	   this.systemIdentifier = 0;
+//	   this.id = 0;
 //	   this.operation = null;
    }
 

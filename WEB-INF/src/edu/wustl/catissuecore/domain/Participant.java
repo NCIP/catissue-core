@@ -17,10 +17,10 @@ import java.util.HashSet;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -35,9 +35,9 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	private static final long serialVersionUID = 1234567890L;
 	
 	/**
-     * System generated unique systemIdentifier.
+     * System generated unique id.
      * */
-	protected Long systemIdentifier;
+	protected Long id;
 	
 	/**
      * Last name of the participant.
@@ -126,26 +126,26 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	}
 	
 	/**
-     * Returns System generated unique systemIdentifier.
-     * @return Long System generated unique systemIdentifier.
-     * @see #setSystemIdentifier(Long)
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * Returns System generated unique id.
+     * @return Long System generated unique id.
+     * @see #setId(Long)
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
      * @hibernate.generator-param name="sequence" value="CATISSUE_PARTICIPANT_SEQ"
      */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 
 	/**
-     * Sets system generated unique systemIdentifier.
-     * @param systemIdentifier System generated unique systemIdentifier.
-     * @see #getSystemIdentifier()
+     * Sets system generated unique id.
+     * @param id System generated unique id.
+     * @see #getId()
      * */
-	public void setSystemIdentifier(Long systemIdentifier)
+	public void setId(Long id)
 	{
-		this.systemIdentifier = systemIdentifier;
+		this.id = id;
 	}
 
 	/**

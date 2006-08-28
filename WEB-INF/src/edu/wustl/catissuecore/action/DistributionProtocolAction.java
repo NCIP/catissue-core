@@ -50,7 +50,7 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
     	key.add("SpecimenRequirement:i_specimenType");
     	key.add("SpecimenRequirement:i_tissueSite");
     	key.add("SpecimenRequirement:i_pathologyStatus");
-    	key.add("SpecimenRequirement:i_quantityIn");
+    	key.add("SpecimenRequirement:i_quantity_value");
     	
     	//Gets the map from ActionForm
     	Map map = distributionProtocolForm.getValues();

@@ -17,7 +17,6 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.QueryBizLogic;
-
 import edu.wustl.common.query.AdvancedConditionsNode;
 import edu.wustl.common.query.Condition;
 import edu.wustl.common.query.DataElement;

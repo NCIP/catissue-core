@@ -36,7 +36,7 @@
 			if(obj != null && obj instanceof CollectionProtocolForm)
 			{
 				CollectionProtocolForm form = (CollectionProtocolForm)obj;
-		   		appendingPath = "/CollectionProtocolSearch.do?operation=search&pageOf=pageOfCollectionProtocol&systemIdentifier="+form.getSystemIdentifier() ;
+		   		appendingPath = "/CollectionProtocolSearch.do?operation=search&pageOf=pageOfCollectionProtocol&id="+form.getId() ;
 
 				currentCollectionProtocolDate = form.getStartDate();
 				if(currentCollectionProtocolDate == null)
@@ -142,7 +142,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	var spreqno=x.insertCell(0)
 	spreqno.className="tabrightmostcellAddMore";
 	var rowno=(q);
-	var srIdentifier = subdivname + "_SpecimenRequirement:" + rowno + "_systemIdentifier)";
+	var srIdentifier = subdivname + "_SpecimenRequirement:" + rowno + "_id)";
 	var cell1 = "<input type='hidden' name='" + srIdentifier + "' value='' id='" + srIdentifier + "'>";
 	spreqno.innerHTML="" + rowno+"." + cell1;
 	
@@ -221,7 +221,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	var spreqqty=x.insertCell(5)
 	spreqqty.className="formFieldAddMore";
 	sname="";
-	objname = subdivname + "_SpecimenRequirement:"+rowno+"_quantityIn)";
+	objname = subdivname + "_SpecimenRequirement:"+rowno+"_quantity_value)";
 
 	sname="<input type='text' name='" + objname + "' value=''  maxlength='10' class='formFieldSized5' id='" + objname + "'>"        	
 	sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
@@ -284,7 +284,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 				</tr>
 				
 				<tr>
-					<td><html:hidden property="systemIdentifier" />
+					<td><html:hidden property="id" />
 					<html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
 				</tr>
 
@@ -300,7 +300,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 							if(pageView.equals("edit"))
 							{
 								%>
-									&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="collectionProtocolForm" property="systemIdentifier" />
+									&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="collectionProtocolForm" property="id" />
 							    <%
 							}
 							%>
@@ -424,7 +424,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 							  day= "<%= collectionProtocolDay %>"
 							  value="<%=currentCollectionProtocolDate %>"
 							  styleClass="formDateSized10"
-									/>
+				/>
 				<% 
 					}
 					else
@@ -567,7 +567,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 			String commonName = "CollectionProtocolEvent:" + counter;
 			String cid = "ivl(" + counter + ")";
 			String functionName = "insRow('" + commonLabel + "','" + cid +"'," + counter+ ")";
-			String cpeIdentifier= commonLabel + "_systemIdentifier)";
+			String cpeIdentifier= commonLabel + "_id)";
 			String check = "chk_proto_"+ counter;
 			String tableId = "table_" + counter;
 		
@@ -642,7 +642,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 			        	<bean:message key="collectionprotocol.studycalendarcomment"/>
 					</td>
 					<%
-							String outerKey = "CollectionProtocolEvent:" + counter + "_systemIdentifier";
+							String outerKey = "CollectionProtocolEvent:" + counter + "_id";
 							boolean outerBool = Utility.isPersistedValue(map,outerKey);
 							//boolean bool = false;
 							String outerCondition = "";
@@ -731,14 +731,14 @@ function insRow(subdivtag,iCounter,blockCounter)
 						String srFname = srCommonName + "_specimenClass";
 						String srSubTypeKeyName = srCommonName + "_specimenType";
 						String sName = cName + "_unitspan)";
-						String srIdentifier = cName + "_systemIdentifier)";
+						String srIdentifier = cName + "_id)";
 						String tmpSubTypeName = cName + "_specimenType)";
 						
 						String innerCheck = "chk_spec_" + counter + "_"+ iCnt;
 						
 						String specimenClassKey = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + innerCounter + "_specimenClass";
 						String specimenClassValue = (String)map.get(specimenClassKey);
-						String identifierKey = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + innerCounter + "_systemIdentifier";
+						String identifierKey = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + innerCounter + "_id";
 						String idValue = String.valueOf(map.get(identifierKey));
 
 						int sysId = 0;
@@ -844,7 +844,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 			        <td class="formFieldAddMore">
 						<%
 								fName="";
-								 fName = cName + "_quantityIn)";
+								 fName = cName + "_quantity_value)";
 								 
 								 String typeclassValue = (String)colForm.getValue(srSubTypeKeyName);
 								 String strHiddenUnitValue = "" + changeUnit(classValue,typeclassValue);
@@ -861,7 +861,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 						</span>
 					</td>
 					<%
-							String innerKey = "CollectionProtocolEvent:"+counter+"_SpecimenRequirement:"+iCnt+"_systemIdentifier";
+							String innerKey = "CollectionProtocolEvent:"+counter+"_SpecimenRequirement:"+iCnt+"_id";
 							boolean innerBool = Utility.isPersistedValue(map,innerKey);
 							String innerCondition = "";
 							if(innerBool)
@@ -947,7 +947,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
 					<td class="formRequiredNoticeAddMore" width="5">*
-						<html:hidden property="value(CollectionProtocolEvent:`_systemIdentifier)" />
+						<html:hidden property="value(CollectionProtocolEvent:`_id)" />
 					</td>
 					<td class="formRequiredLabelAddMore" width="32%">
 						<label for="value(CollectionProtocolEvent:`_clinicalStatus)">
@@ -1043,7 +1043,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 				
 				<TR>	<!-- SPECIMEN REQ DATA -->
 			        <td class="tabrightmostcellAddMore">1.
-			        	<html:hidden property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_systemIdentifier)" />
+			        	<html:hidden property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_id)" />
 			        </td>
 			        <td class="formFieldAddMore">		
 			        	<html:select property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_specimenClass)" 
@@ -1094,8 +1094,8 @@ function insRow(subdivtag,iCounter,blockCounter)
 			        
 			        <td class="formFieldAddMore">
 			        	<html:text styleClass="formFieldSized5" size="30"  maxlength="10" 
-			        			styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_quantityIn)" 
-			        			property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_quantityIn)" 
+			        			styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_quantity_value)" 
+			        			property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_quantity_value)" 
 			        			readonly="<%=readOnlyValue%>" />
 			        	<span id="value(CollectionProtocolEvent:`_SpecimenRequirement:1_unitspan)">
 			        		&nbsp;

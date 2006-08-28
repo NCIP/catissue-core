@@ -55,7 +55,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 			{
 		SpecimenCollectionGroupForm  specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;
-		Logger.out.debug("SCGA : " + specimenCollectionGroupForm.getSystemIdentifier() );
+		Logger.out.debug("SCGA : " + specimenCollectionGroupForm.getId() );
 		
 		//	set the menu selection 
 		request.setAttribute(Constants.MENU_SELECTED, "14"  ); 
@@ -70,8 +70,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		request.setAttribute(Constants.OPERATION,operation);
 		if(operation.equalsIgnoreCase(Constants.ADD ) )
 		{
-			specimenCollectionGroupForm.setSystemIdentifier(0);
-			Logger.out.debug("SCGA : set to 0 "+ specimenCollectionGroupForm.getSystemIdentifier() );
+			specimenCollectionGroupForm.setId(0);
+			Logger.out.debug("SCGA : set to 0 "+ specimenCollectionGroupForm.getId() );
 		}
 		
 		boolean isOnChange = false; 
@@ -154,8 +154,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 					Object  obj = collectionProtocolRegistrationList.get(0 ); 
 					CollectionProtocolRegistration cpr = (CollectionProtocolRegistration)obj;
 					
-					long cpID = cpr.getCollectionProtocol().getSystemIdentifier().longValue();
-					long pID = cpr.getParticipant().getSystemIdentifier().longValue();
+					long cpID = cpr.getCollectionProtocol().getId().longValue();
+					long pID = cpr.getParticipant().getId().longValue();
 					String ppID = cpr.getProtocolParticipantIdentifier();
 					
 					Logger.out.debug("cpID : "+ cpID + "   ||  pID : " + pID + "    || ppID : " + ppID );
@@ -288,19 +288,19 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 						specimenCollectionGroupForm.setName(collectionProtocolTitle+"_"+protocolParticipantId+"_"+groupNumber);
 					}
 				}
-				//During edit operation the id to set in the default name using the systemIdentifier
+				//During edit operation the id to set in the default name using the id
 				else if(operation.equals(Constants.EDIT) && (resetName!=null && resetName.equals("Yes")))
 				{
 					if(groupParticipantId>0) 
 					{
 						specimenCollectionGroupForm.setName(collectionProtocolTitle+"_"+groupParticipantId+"_"+
-											specimenCollectionGroupForm.getSystemIdentifier());
+											specimenCollectionGroupForm.getId());
 						
 					}
 					else
 					{
 						specimenCollectionGroupForm.setName(collectionProtocolTitle+"_"+protocolParticipantId+"_"+
-								specimenCollectionGroupForm.getSystemIdentifier());
+								specimenCollectionGroupForm.getId());
 					}
 				}
 			}
@@ -315,9 +315,9 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	{
 		//get list of Participant's names
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
-		String [] displayParticipantFields = {"participant.systemIdentifier"};
+		String [] displayParticipantFields = {"participant.id"};
 		String valueField = "participant."+Constants.SYSTEM_IDENTIFIER;
-		String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER,"participant.systemIdentifier"};
+		String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER,"participant.id"};
 		String whereColumnCondition[];
 		Object[] whereColumnValue; 
 		if(Variables.databaseName.equals(Constants.MYSQL_DATABASE))
@@ -442,7 +442,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 	{
 		String sourceObjectName = CollectionProtocolEvent.class.getName();
 		String displayEventFields[] = {"studyCalendarEventPoint"};
-		String valueField = "systemIdentifier";
+		String valueField = "id";
 		String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER};
 		String whereColumnCondition[] = {"="};
 		Object[] whereColumnValue = {new Long(protocolID)};

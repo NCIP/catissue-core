@@ -149,7 +149,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
     	Participant participant = (Participant) abstractDomain;
-        this.systemIdentifier = participant.getId().longValue();
+        this.id = participant.getId().longValue();
         this.lastName = Utility.toString( participant.getLastName());
         this.firstName =  Utility.toString( participant.getFirstName());
         this.middleName = Utility.toString( participant.getMiddleName());
@@ -194,15 +194,15 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         	{
         		ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)it.next();
         		
-        		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_systemIdentifier";
+        		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_id";
 				String key2 = "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
-				String key3 = "ParticipantMedicalIdentifier:" + i +"_systemIdentifier";
+				String key3 = "ParticipantMedicalIdentifier:" + i +"_id";
 
 				Site site = participantMedicalIdentifier.getSite();
 				
 				if(site!=null)
 				{
-					values.put(key1,Utility.toString(site.getSystemIdentifier()));
+					values.put(key1,Utility.toString(site.getId()));
 				}
 				else
 				{
@@ -210,7 +210,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				}
 				
 				values.put(key2,Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
-				values.put(key3,Utility.toString(participantMedicalIdentifier.getSystemIdentifier()));
+				values.put(key3,Utility.toString(participantMedicalIdentifier.getId()));
 				
 				i++;
         	}
@@ -225,7 +225,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     public void setAllVal(Object obj)
     {
         edu.wustl.catissuecore.domainobject.Participant participant = (edu.wustl.catissuecore.domainobject.Participant) obj;
-        this.systemIdentifier = participant.getId().longValue();
+        this.id = participant.getId().longValue();
         this.lastName = Utility.toString( participant.getLastName());
         this.firstName =  Utility.toString( participant.getFirstName());
         this.middleName = Utility.toString( participant.getMiddleName());
@@ -252,9 +252,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         	{
         		edu.wustl.catissuecore.domainobject.ParticipantMedicalIdentifier participantMedicalIdentifier = (edu.wustl.catissuecore.domainobject.ParticipantMedicalIdentifier)it.next();
         		
-        		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_systemIdentifier";
+        		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_id";
 				String key2 = "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
-				String key3 = "ParticipantMedicalIdentifier:" + i +"_systemIdentifier";
+				String key3 = "ParticipantMedicalIdentifier:" + i +"_id";
 
 				edu.wustl.catissuecore.domainobject.Site site = participantMedicalIdentifier.getSite();
 				
@@ -472,7 +472,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      */
     protected void reset()
     {
-//        this.systemIdentifier = -1;
+//        this.id = -1;
 //        this.lastName = null;
 //        this.firstName = null;
 //        this.middleName = null;

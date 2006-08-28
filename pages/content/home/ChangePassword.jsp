@@ -33,7 +33,7 @@
 				
 				<tr>
 					<td>
-						<html:hidden property="systemIdentifier" value="<%=userId%>" />
+						<html:hidden property="id" value="<%=userId%>" />
 					</td>
 				</tr>
 

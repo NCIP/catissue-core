@@ -27,7 +27,7 @@
 				</tr>
 				<tr>
 					<td>
-						<html:hidden property="systemIdentifier" />
+						<html:hidden property="id" />
 					</td>
 				</tr>
 				
@@ -80,7 +80,7 @@
 							<tr class="dataRowLight">
 								<%
         								User user = (User) currentUser;
-										String identifier = user.getSystemIdentifier().toString();
+										String identifier = user.getId().toString();
 										String userDetailsLink = Constants.USER_DETAILS_SHOW_ACTION+"?"+Constants.SYSTEM_IDENTIFIER+"="+identifier;
         						%>
 								<td class="dataCellText">

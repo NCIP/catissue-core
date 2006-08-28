@@ -123,7 +123,7 @@
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value=""/>
 					</td>
-					<td><html:hidden property="systemIdentifier"/>
+					<td><html:hidden property="id"/>
 					<td><html:hidden property="onSubmit"/></td>
 					<html:hidden property="redirectTo" value="<%=reqPath%>"/>
 					
@@ -140,7 +140,7 @@
 							if(operation.equals(Constants.EDIT))
 							{
 						%>
-						&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="collectionProtocolRegistrationForm" property="systemIdentifier" />
+						&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="collectionProtocolRegistrationForm" property="id" />
 						<%
 							}
 						%>

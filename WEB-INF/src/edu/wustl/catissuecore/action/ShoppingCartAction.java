@@ -31,11 +31,11 @@ import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.query.ShoppingCart;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.exception.BizLogicException;
+import edu.wustl.common.query.ShoppingCart;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.logger.Logger;
@@ -234,8 +234,8 @@ public class ShoppingCartAction  extends BaseAction
 					List rowData = new ArrayList();
 					
 					//Adding checkbox as a first column of the grid
-					rowData.add("<input type='checkbox' name='value(CB_" + specimen.getSystemIdentifier() + ")' id='" + id + "' onClick='changeData(this)'>");
-					rowData.add(String.valueOf(specimen.getSystemIdentifier()));
+					rowData.add("<input type='checkbox' name='value(CB_" + specimen.getId() + ")' id='" + id + "' onClick='changeData(this)'>");
+					rowData.add(String.valueOf(specimen.getId()));
 					rowData.add(specimen.getClassName());
 					
 					if(specimen.getType() != null)

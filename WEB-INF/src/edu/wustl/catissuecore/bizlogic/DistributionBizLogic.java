@@ -61,7 +61,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		Distribution dist = (Distribution)obj;
 		
 		//Load & set the User
-		Object userObj = dao.retrieve(User.class.getName(), dist.getUser().getSystemIdentifier());
+		Object userObj = dao.retrieve(User.class.getName(), dist.getUser().getId());
 		if(userObj!=null)
 		{
 			User user = (User)userObj;
@@ -69,7 +69,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		}
 		
 		//Load & set From Site
-//		Object siteObj = dao.retrieve(Site.class.getName(), dist.getFromSite().getSystemIdentifier());
+//		Object siteObj = dao.retrieve(Site.class.getName(), dist.getFromSite().getId());
 //		if(siteObj!=null)
 //		{
 //			Site site = (Site)siteObj;
@@ -77,7 +77,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 //		}
 
 		//Load & set the To Site
-		Object siteObj = dao.retrieve(Site.class.getName(), dist.getToSite().getSystemIdentifier());
+		Object siteObj = dao.retrieve(Site.class.getName(), dist.getToSite().getId());
 		if(siteObj!=null )
 		{
 			Site site = (Site)siteObj;
@@ -91,7 +91,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		{
 			DistributedItem item = (DistributedItem)it.next();
 			//update the available quantity
-			Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getSystemIdentifier());
+			Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getId());
 			double quantity = item.getQuantity().doubleValue();
 			boolean availability = checkAvailableQty((Specimen)specimenObj,quantity);
 			if (!availability)
@@ -139,7 +139,7 @@ public class DistributionBizLogic extends DefaultBizLogic
         Distribution distribution = (Distribution) obj;
         String[] dynamicGroups = new String[1];
         dynamicGroups[0] = Constants.getDistributionProtocolPGName(
-        		distribution.getDistributionProtocol().getSystemIdentifier());
+        		distribution.getDistributionProtocol().getId());
         
         return dynamicGroups;
     }
@@ -170,9 +170,9 @@ public class DistributionBizLogic extends DefaultBizLogic
 			
 			DistributedItem oldItem 
 				= (DistributedItem)getCorrespondingOldObject(oldDistributedItemCollection, 
-				        item.getSystemIdentifier());
+				        item.getId());
 			//update the available quantity
-			Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getSystemIdentifier());
+			Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getId());
 	        Double previousQuantity = (Double)item.getPreviousQuantity();
 	        double quantity = item.getQuantity().doubleValue();
 	        if(previousQuantity!=null)
@@ -192,7 +192,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 				//If a new specimen is distributed.
 				if(oldItem==null)
 				{
-					Object specimenObjPrev = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getSystemIdentifier());
+					Object specimenObjPrev = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getId());
 					dao.audit(specimenObj, specimenObjPrev, sessionDataBean, Constants.IS_AUDITABLE_TRUE);
 				}
 				//if a distributed specimen is updated  
@@ -349,7 +349,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			Logger.out.debug("Old Object in New Collection : "+ isPresentInNew  );
 			if(!isPresentInNew )
 			{
-				Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getSystemIdentifier());
+				Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getId());
 				double quantity = item.getQuantity().doubleValue();
 				updateAvailableQty((Specimen)specimenObj,quantity);
 				dao.update(specimenObj,sessionDataBean,Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE, Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);

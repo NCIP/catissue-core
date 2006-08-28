@@ -49,7 +49,7 @@ public class ViewLinkedDataAction extends Action
 	    
 	    List integrationDataList=new ArrayList();
 	    
-	    Logger.out.debug("FormBean Identifier===>"+abstractActionForm.getSystemIdentifier());
+	    Logger.out.debug("FormBean Identifier===>"+abstractActionForm.getId());
 	    
 	    Logger.out.debug("FormBean ID===>"+abstractActionForm.getFormId());
 	    
@@ -112,7 +112,7 @@ public class ViewLinkedDataAction extends Action
 		    request.setAttribute(Constants.LINKED_DATA,integrationData);
 	    }
 	    
-	    //Storing SystemIdentifier into Request
+	    //Storing id into Request
 	    request.setAttribute(Constants.SYSTEM_IDENTIFIER,request.getParameter(Constants.SYSTEM_IDENTIFIER));
 	    
 	    //Storing link of Edit Tab into Request

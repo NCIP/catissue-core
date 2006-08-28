@@ -11,14 +11,11 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -32,9 +29,9 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
-	 * System generated unique systemIdentifier.
+	 * System generated unique id.
 	 */
-	protected Long systemIdentifier = null;
+	protected Long id = null;
 	
 	/**
 	 * The current principal investigator of the protocol.
@@ -90,23 +87,23 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	}
 	
 	/**
-	 * Returns the systemidentifier of the protocol.
-	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+	 * Returns the id of the protocol.
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
 	 * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_PROTOCOL_SEQ"
-	 * @return Returns the systemIdentifier.
+	 * @return Returns the id.
 	 */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 
 	/**
-	 * @param systemIdentifier The systemIdentifier to set.
+	 * @param id The id to set.
 	 */
-	public void setSystemIdentifier(Long systemIdentifier)
+	public void setId(Long id)
 	{
-		this.systemIdentifier = systemIdentifier;
+		this.id = id;
 	}
 
 	/**
@@ -167,7 +164,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	}
 
 	/**
-	 * Returns the irb systemIdentifier of the protocol.
+	 * Returns the irb id of the protocol.
 	 * @hibernate.property name="irbIdentifier" type="string" column="IRB_IDENTIFIER" length="50"
 	 * @return Returns the irbIdentifier.
 	 */
@@ -295,81 +292,12 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
         	this.activityStatus = spForm.getActivityStatus();
         	
         	principalInvestigator  = new User();
-        	this.principalInvestigator.setSystemIdentifier(new Long(spForm.getPrincipalInvestigatorId()));
+        	this.principalInvestigator.setId(new Long(spForm.getPrincipalInvestigatorId()));
         }
         catch (Exception excp)
         {
 	    	// use of logger as per bug 79
 	    	Logger.out.error(excp.getMessage(),excp); 
         }
-	}
-	
-	//SpecimenRequirement#FluidSpecimenRequirement:1.specimenType", "Blood");
-	protected Map fixMap(Map orgMap)
-	{
-		Map replaceMap = new HashMap();
-		Map unitMap = new HashMap();
-		unitMap.put("Cell","CellCount");
-		unitMap.put("Fluid","Milliliter");
-		unitMap.put("Tissue","Gram");
-		unitMap.put("Molecular","Microgram");
-		
-		Iterator it = orgMap.keySet().iterator();
-		while(it.hasNext())
-		{
-			String key = (String)it.next();
-			Logger.out.debug("Key************************"+key);
-			if(key.indexOf("specimenClass")!=-1)
-			{
-				String value = (String)orgMap.get(key);
-				Logger.out.debug("Value..........................."+value); 
-				String replaceWith = "SpecimenRequirement"+"#"+value+"SpecimenRequirement";
-				
-				key = key.substring(0,key.lastIndexOf("_"));
-				Logger.out.debug("Second Key***********************"+key);
-				String newKey = key.replaceFirst("SpecimenRequirement",replaceWith);
-				Logger.out.debug("New Key................"+newKey);
-				replaceMap.put(key,newKey);
-			}
-		}
-		
-		Map newMap = new HashMap();
-		it = orgMap.keySet().iterator();
-		while(it.hasNext())
-		{
-			String key = (String)it.next();
-			String value = (String)orgMap.get(key);
-			Logger.out.debug("key "+key);
-			
-			if(key.indexOf("SpecimenRequirement")==-1)
-			{
-				newMap.put(key,value);
-			}
-			else
-			{
-				if(key.indexOf("specimenClass")==-1 && key.indexOf("unitspan")==-1)
-				{
-					String keyPart, newKeyPart;
-					if(key.indexOf("quantityIn")!=-1)
-					{
-						keyPart = "quantityIn";
-						
-						String searchKey = key.substring(0,key.lastIndexOf("_"))+"_specimenClass";
-						String specimenClass = (String)orgMap.get(searchKey);
-						String unit = (String)unitMap.get(specimenClass);
-						newKeyPart = keyPart + unit;
-						
-						key = key.replaceFirst(keyPart,newKeyPart);
-					}
-					
-					//Replace # and class name and FIX for abstract class
-					keyPart = key.substring(0,key.lastIndexOf("_"));
-					newKeyPart = (String)replaceMap.get(keyPart);
-					key = key.replaceFirst(keyPart,newKeyPart);
-					newMap.put(key,value);
-				}
-			}
-		}		
-		return newMap;
 	}
 }

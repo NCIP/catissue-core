@@ -84,8 +84,8 @@ public class DistributionForm extends SpecimenEventParametersForm
 			
 			while(it.hasNext())
 			{
-				String key1 = "DistributedItem:"+i+"_systemIdentifier";
-				String key2 = "DistributedItem:"+i+"_Specimen_systemIdentifier";
+				String key1 = "DistributedItem:"+i+"_id";
+				String key2 = "DistributedItem:"+i+"_Specimen_id";
 				String key3 = "DistributedItem:"+i+"_quantity";
 				String key4 = "DistributedItem:"+i+"_unitSpan";
 				String key5 = "DistributedItem:"+i+"_tissueSite";
@@ -103,8 +103,8 @@ public class DistributionForm extends SpecimenEventParametersForm
 				Double quantity = dItem.getQuantity();
 				//dItem.setPreviousQty(quantity);
 				
-				values.put(key1,Utility.toString(dItem.getSystemIdentifier()));
-				values.put(key2,Utility.toString(specimen.getSystemIdentifier()));
+				values.put(key1,Utility.toString(dItem.getId()));
+				values.put(key2,Utility.toString(specimen.getId()));
 				values.put(key3,quantity);
 				values.put(key4,unit);
 				values.put(key5,specimen.getSpecimenCharacteristics().getTissueSite());
@@ -169,8 +169,8 @@ public class DistributionForm extends SpecimenEventParametersForm
 			while(it.hasNext())
 			{
 				
-				String key1 = "DistributedItem:"+i+"_systemIdentifier";
-				String key2 = "DistributedItem:"+i+"_Specimen_systemIdentifier";
+				String key1 = "DistributedItem:"+i+"_id";
+				String key2 = "DistributedItem:"+i+"_Specimen_id";
 				String key3 = "DistributedItem:"+i+"_quantity";
 				String key4 = "DistributedItem:"+i+"_unitSpan";
 				String key5 = "DistributedItem:"+i+"_tissueSite";
@@ -277,7 +277,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 			String key = (String)it.next();
 			String value = (String)values.get(key);
 			
-			if(key.indexOf("Specimen_systemIdentifier")!=-1 && !validator.isValidOption( value))
+			if(key.indexOf("Specimen_id")!=-1 && !validator.isValidOption( value))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("itemrecord.specimenId")));
 			}

@@ -207,8 +207,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			this.fromPositionDimensionTwo = transferEventParametersObject.getFromPositionDimensionTwo().intValue();
 			this.positionDimensionOne = transferEventParametersObject.getToPositionDimensionOne().toString();
 			this.positionDimensionTwo = transferEventParametersObject.getToPositionDimensionTwo().toString();
-			this.fromStorageContainerId = transferEventParametersObject.getFromStorageContainer().getSystemIdentifier().longValue();
-			this.storageContainer = transferEventParametersObject.getToStorageContainer().getSystemIdentifier().toString() ;  
+			this.fromStorageContainerId = transferEventParametersObject.getFromStorageContainer().getId().longValue();
+			this.storageContainer = transferEventParametersObject.getToStorageContainer().getId().toString() ;  
 			this.positionInStorageContainer = transferEventParametersObject.getToStorageContainer().getStorageType().getName() + " : " 
 				+ this.storageContainer + " Pos(" + this.positionDimensionOne + ","
 				+ this.positionDimensionTwo + ")";
@@ -217,7 +217,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			+ this.fromPositionDimensionTwo + ")";
 			
 //			// ---------------------------------------------
-//			String specimenId = transferEventParametersObject.getSpecimen().getSystemIdentifier().toString(); 
+//			String specimenId = transferEventParametersObject.getSpecimen().getId().toString(); 
 //			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 //	    	
 //	    	String identifier = specimenId ;
@@ -236,7 +236,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 //	    		posTwo = specimen.getPositionDimensionTwo().toString();
 //	    		
 //	    		StorageContainer container = specimen.getStorageContainer();
-//	    		storContId = container.getSystemIdentifier().toString();
+//	    		storContId = container.getId().toString();
 //	    		fromPositionData = container.getStorageType().getName() + " : " 
 //				+ storContId + " Pos(" + posOne + "," + posTwo + ")";
 //	    		
@@ -372,7 +372,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	    		posTwo = specimen.getPositionDimensionTwo().toString();
 	    		
 	    		StorageContainer container = specimen.getStorageContainer();
-	    		storContId = container.getSystemIdentifier().toString();
+	    		storContId = container.getId().toString();
 	    		fromPositionData = container.getStorageType().getName() + " : " 
 				+ storContId + " Pos(" + posOne + "," + posTwo + ")";
 	    	}

@@ -25,7 +25,7 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	/**
 	 * System generated unique identifier.
 	 */
-	protected Long systemIdentifier;
+	protected Long id;
 
 	/**
 	 * Multi-Line Street Address.
@@ -65,22 +65,22 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
 	/**
 	 * Returns the identifier assigned to Address.
 	 * 
-	 * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_ADDRESS_SEQ" 
-	 * @return a unique systemIdentifier assigned to the address.
+	 * @return a unique id assigned to the address.
 	 */
-	public Long getSystemIdentifier()
+	public Long getId()
 	{
-		return systemIdentifier;
+		return id;
 	}
 
 	/**
-	 * @param systemIdentifier Unique identifier to be assigned to the address.
+	 * @param id Unique identifier to be assigned to the address.
 	 */
-	public void setSystemIdentifier(Long systemIdentifier)
+	public void setId(Long id)
 	{
-		this.systemIdentifier = systemIdentifier;
+		this.id = id;
 	}
 
 	/**

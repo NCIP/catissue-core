@@ -28,7 +28,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
-//import edu.wustl.catissuecore.domain.SpecimenClass;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -137,13 +136,13 @@ public class StorageTypeAction  extends SecureAction
     	while(typeItr.hasNext())
     	{
     		StorageType type=(StorageType)typeItr.next();
-    		if(type.getSystemIdentifier().longValue()==1)
+    		if(type.getId().longValue()==1)
     		{
-    			typeAny=new NameValueBean(Constants.HOLDS_ANY,type.getSystemIdentifier());
+    			typeAny=new NameValueBean(Constants.HOLDS_ANY,type.getId());
     		}
     		else
     		{
-    			storageTypeList.add(new NameValueBean(type.getName(),type.getSystemIdentifier()));
+    			storageTypeList.add(new NameValueBean(type.getName(),type.getId()));
     		}
     	}
     	Collections.sort(storageTypeList);
@@ -168,13 +167,13 @@ public class StorageTypeAction  extends SecureAction
     	{
     	    //TODO : Vaishali
 //    		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
-//    		if(specimenClass.getSystemIdentifier().longValue()==1)
+//    		if(specimenClass.getId().longValue()==1)
 //    		{
-//    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getSystemIdentifier());
+//    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getId());
 //    		}
 //    		else
 //    		{
-//    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getSystemIdentifier()));
+//    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getId()));
 //    		}
     	}
     	Collections.sort(specimenClassTypeList);

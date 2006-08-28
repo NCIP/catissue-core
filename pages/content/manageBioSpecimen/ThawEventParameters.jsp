@@ -66,7 +66,7 @@
 		</tr>
 		
 		<tr>
-			<td><html:hidden property="systemIdentifier" /></td>
+			<td><html:hidden property="id" /></td>
 		</tr>
 
 		<tr>

@@ -129,7 +129,7 @@ public class SpecimenProtocolAction  extends SecureAction
    			{
 	    		//Mandar: 25-july-06 bizlogic call updated.
 	    		SpecimenProtocolBizLogic bizLogic = (SpecimenProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(spForm.getFormId());	
-	    		String tmpEndDate = bizLogic.getEndDate( spForm.getSystemIdentifier() );
+	    		String tmpEndDate = bizLogic.getEndDate( spForm.getId() );
 	    		Logger.out.debug("tmpendDate : " + tmpEndDate);
 	    		spForm.setEndDate(tmpEndDate );
    			}

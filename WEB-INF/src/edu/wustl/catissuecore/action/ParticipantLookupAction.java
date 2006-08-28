@@ -180,7 +180,7 @@ public class ParticipantLookupAction extends BaseAction
 			}
 			*/
 			participantInfo.add(Utility.toString(participant.getSocialSecurityNumber()));
-			participantInfo.add(participant.getSystemIdentifier());
+			participantInfo.add(participant.getId());
 			participantDisplayList.add(participantInfo);
 			
 		}

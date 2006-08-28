@@ -60,7 +60,7 @@ public class BiohazardForm extends AbstractActionForm
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
         Biohazard hazard=(Biohazard)abstractDomain;
-        this.systemIdentifier = hazard.getId().longValue();
+        this.id = hazard.getId().longValue();
         this.name = hazard.getName();
         this.type = hazard.getType();
         this.comments = hazard.getComments();
@@ -69,7 +69,7 @@ public class BiohazardForm extends AbstractActionForm
     public void setAllVal(Object obj)
     {
         edu.wustl.catissuecore.domainobject.Biohazard hazard=(edu.wustl.catissuecore.domainobject.Biohazard)obj;
-        this.systemIdentifier = hazard.getId().longValue();
+        this.id = hazard.getId().longValue();
         this.name = hazard.getName();
         this.type = hazard.getType();
         this.comments = hazard.getComments();

@@ -34,7 +34,7 @@
 			if(obj != null && obj instanceof SpecimenCollectionGroupForm)
 			{
 				form = (SpecimenCollectionGroupForm)obj;
-		   		appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf=pageOfSpecimenCollectionGroup&systemIdentifier="+form.getSystemIdentifier() ;
+		   		appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf=pageOfSpecimenCollectionGroup&id="+form.getId() ;
 		   		int checkedButton1 = form.getCheckedButton();
 		   	}
 	   	}
@@ -154,7 +154,7 @@
 				 </tr>
 				 
 				 <tr>
-					<td><html:hidden property="systemIdentifier"/></td>
+					<td><html:hidden property="id"/></td>
 					<td><html:hidden property="onSubmit"/></td>
 					<td><html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
 				 </tr>
@@ -170,7 +170,7 @@
 						if(pageView.equals("edit"))
 						{
 							%>
-								&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="specimenCollectionGroupForm" property="systemIdentifier" />
+								&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="specimenCollectionGroupForm" property="id" />
 						    <%
 						}
 						%>

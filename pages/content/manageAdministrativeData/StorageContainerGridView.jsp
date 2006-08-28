@@ -40,7 +40,7 @@ function closeFramedWindow()
 	StorageContainerGridObject storageContainerGridObject 
 			= (StorageContainerGridObject)request.getAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT);
 	int [][]fullStatus = (int [][])request.getAttribute(Constants.STORAGE_CONTAINER_CHILDREN_STATUS);
-	int [][] childContainerSystemIdentifiers = (int [][])request.getAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS);
+	int [][] childContainerIds = (int [][])request.getAttribute(Constants.CHILD_CONTAINER_SYSTEM_IDENTIFIERS);
     String [][] childContainerType = (String [][])request.getAttribute(Constants.CHILD_CONTAINER_TYPE);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	
@@ -186,13 +186,13 @@ function closeFramedWindow()
 							if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
 							{
 								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
+                    			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerIds[i][j]
                     			+ "&" + Constants.PAGEOF + "=" + pageOf;
 							}
 							else
 							{
 								openStorageContainer = Constants.SHOW_STORAGE_CONTAINER_GRID_VIEW_ACTION
-                    			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerSystemIdentifiers[i][j]
+                    			+ "?" + Constants.SYSTEM_IDENTIFIER + "=" + childContainerIds[i][j]
                     			+ "&" + Constants.STORAGE_CONTAINER_TYPE + "=" + storageContainerType
 								+ "&" + Constants.PAGEOF + "=" + pageOf;
 							}
@@ -200,13 +200,13 @@ function closeFramedWindow()
 							{%>
 							<td class="mapTdred" noWrap="true">
 								<a href="<%=openStorageContainer%>"> 
-								 <%=childContainerType[i][j]%> : <%=childContainerSystemIdentifiers[i][j]%>
+								 <%=childContainerType[i][j]%> : <%=childContainerIds[i][j]%>
 								</a>
  							</td>
 					   	  <%}
 							else{%>
 							<td class="mapTdspe" noWrap="true">
-							<%=childContainerType[i][j]%> : <%=childContainerSystemIdentifiers[i][j]%>
+							<%=childContainerType[i][j]%> : <%=childContainerIds[i][j]%>
 							</td>
 							<%}%>
 						<%}
@@ -216,22 +216,22 @@ function closeFramedWindow()
 							if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
 							{
 								setParentWindowContainer = "javascript:setCustomListBoxValue('" + containerStyleId + "','"+
-															  + storageContainerGridObject.getSystemIdentifier() + "');"+"javascript:setCustomListBoxValue('" + xDimStyleId + "','"+
+															  + storageContainerGridObject.getId() + "');"+"javascript:setCustomListBoxValue('" + xDimStyleId + "','"+
 															  + i + "');"+"javascript:setCustomListBoxValue('" + yDimStyleId + "','"+
 															  + j + "');"+
 																"javascript:setParentWindowValue('positionInStorageContainer','"
 															  + storageContainerGridObject.getType() + " : " 
-															  + storageContainerGridObject.getSystemIdentifier()
+															  + storageContainerGridObject.getId()
 															  + " Pos (" + i + "," + j + ")');"+"closeFramedWindow()";
 							}
 							else
 							{
 								setParentWindowContainer = "javascript:setParentWindowValue('positionInParentContainer','"
 															+ storageContainerGridObject.getType() + " : " 
-															+ storageContainerGridObject.getSystemIdentifier()
+															+ storageContainerGridObject.getId()
 															+ " Pos (" + i + "," + j + ")');"
 															+ "javascript:setCustomListBoxValue('" + containerStyleId + "','"+
-															+ storageContainerGridObject.getSystemIdentifier() + "');"+"javascript:setCustomListBoxValue('" + xDimStyleId + "','"+
+															+ storageContainerGridObject.getId() + "');"+"javascript:setCustomListBoxValue('" + xDimStyleId + "','"+
 															+ i + "');"
 															+ "javascript:setCustomListBoxValue('" + yDimStyleId + "','"+
 															+ j + "');"

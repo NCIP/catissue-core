@@ -16,9 +16,9 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
 	private static final long serialVersionUID = 2084916630660576930L;
 	
 	/**
-	 * System generated unique systemIdentifier.
+	 * System generated unique id.
 	 */
-	protected Long systemIdentifier;
+	protected Long id;
 	
 	/**
 	 * A string containing the password of the user.
@@ -45,24 +45,24 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
 	}
 	
 	/**
-     * Returns the systemIdentifier assigned to password.
-     * @return Returns the systemIdentifier.
-     * @hibernate.id name="systemIdentifier" column="IDENTIFIER" type="long" length="30"
+     * Returns the id assigned to password.
+     * @return Returns the id.
+     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
      * @hibernate.generator-param name="sequence" value="CATISSUE_PASSWORD_SEQ"
      */
-	public Long getSystemIdentifier() 
+	public Long getId() 
 	{
-		return systemIdentifier;
+		return id;
 	}
 	
 	/**
-	 * Sets an systemIdentifier for the password.
-	 * @param systemIdentifier Unique systemIdentifier to be assigned to the password.
+	 * Sets an id for the password.
+	 * @param id Unique id to be assigned to the password.
 	 */
-	public void setSystemIdentifier(Long systemIdentifier) 
+	public void setId(Long id) 
 	{
-	    this.systemIdentifier = systemIdentifier;
+	    this.id = id;
     }
 	
 	/**
