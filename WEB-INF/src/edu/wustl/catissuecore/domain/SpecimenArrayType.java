@@ -2,7 +2,13 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+
+import edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.exception.AssignDataException;
 
 /**
  * @author gautam_shetty
@@ -20,6 +26,16 @@ public class SpecimenArrayType extends ContainerType
     public SpecimenArrayType()
     {
     }
+    
+    /**
+     * Constructor with action form.
+     * @param actionForm abstract action form
+     * @throws AssignDataException 
+     */
+    public SpecimenArrayType(AbstractActionForm actionForm) throws AssignDataException {
+    	setAllValues(actionForm);
+    }
+    
     
     /**
      * @return Returns the specimenClass.
@@ -96,4 +112,29 @@ public class SpecimenArrayType extends ContainerType
     {
         this.specimenTypeCollection = specimenTypeCollection;
     }
+    
+    /**
+     * Sets values from actionform to domain object.
+     * @param actionForm action form to be used.  
+     * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
+     */
+    public void setAllValues(AbstractActionForm actionForm) throws AssignDataException {
+    		SpecimenArrayTypeForm specimenArrayTypeForm = (SpecimenArrayTypeForm) actionForm;
+    		
+    		this.id = new Long(specimenArrayTypeForm.getId());
+	        this.name = specimenArrayTypeForm.getName();
+	        capacity.setOneDimensionCapacity(new Integer(specimenArrayTypeForm.getOneDimensionCapacity()));
+	        capacity.setTwoDimensionCapacity(new Integer(specimenArrayTypeForm.getTwoDimensionCapacity()));
+	        this.comment = specimenArrayTypeForm.getComment();
+	        
+	        this.specimenClass = specimenArrayTypeForm.getSpecimenClass();
+	        String[] specimenTypes = specimenArrayTypeForm.getSpecimenTypes();
+	        if ((specimenTypes != null) && (specimenTypes.length > 0)) {
+	        	for (int i = 0; i < specimenTypes.length; i++) {
+	        		if (specimenTypes[i] != null) {
+	        			specimenTypeCollection.add(specimenTypes[i]);
+	        		}
+				}
+	        }
+	}
 }
