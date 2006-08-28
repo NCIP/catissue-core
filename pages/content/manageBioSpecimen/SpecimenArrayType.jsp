@@ -1,15 +1,93 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm"%>
+<%@ page import="java.util.List,java.util.ArrayList"%>
+<%@ page import="edu.wustl.common.beans.NameValueBean"%>
+<%@ page import="java.util.HashMap"%>
 
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
-
 <html:errors/>
+<script type="text/javascript">
 
-<html:form action="SpecimenArrayTypeAdd.do">
+<%
+	List specimenClassList = (List) request.getAttribute(Constants.SPECIMEN_CLASS_LIST);
+	HashMap specimenTypeMap = (HashMap) request.getAttribute(Constants.SPECIMEN_TYPE_MAP);
+	SpecimenArrayTypeForm form = (SpecimenArrayTypeForm)request.getAttribute("arrayTypeForm");
+	String operation = (String)request.getAttribute(Constants.OPERATION);
+	System.out.println(" Form ::  " + form);
+%>
+
+<%
+	int classCount=0;
+	for(classCount=1;classCount<specimenClassList.size();classCount++)
+	{
+		String keyObj = (String)((NameValueBean)specimenClassList.get(classCount)).getName() ;
+		List subList = (List)specimenTypeMap.get(keyObj);
+		String arrayData = "";
+		for(int listSize=0;listSize<subList.size();listSize++ )
+		{
+			if(listSize == subList.size()-1 )
+				arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\"";
+			else
+    			arrayData = arrayData + "\"" + ((NameValueBean)subList.get(listSize)).getName() + "\",";   
+		}
+%>
+		var <%=keyObj%>Array = new Array(<%=arrayData%>);
+<%	    		
+	}
+%>
+
+		function typeChange(specArrayTypeArr)
+		{ 
+			var specimenTypeCombo = "type";
+			ele = document.getElementById(specimenTypeCombo);
+			//To Clear the Combo Box
+			ele.options.length = 0;
+
+		    if (specArrayTypeArr != null) {
+				specArrayTypeArr.sort();
+				//ele.options[0] = new Option('-- Select --','-1');
+				var j=0;
+				//Populating the corresponding Combo Box
+				for(i=0;i<specArrayTypeArr.length;i++)
+				{
+						ele.options[j++] = new Option(specArrayTypeArr[i],specArrayTypeArr[i]);
+				}
+		    } else {
+				ele.options[0] = new Option('-- Select --','-1');
+			}
+		}
+			
+		function onClassChange(element)
+		{
+			
+			if(element.value == "Tissue")
+			{
+				typeChange(TissueArray);
+			}
+			else if(element.value == "Fluid")
+			{
+				typeChange(FluidArray);
+			}
+			else if(element.value == "Cell")
+			{
+				typeChange(CellArray);
+			}
+			else if(element.value == "Molecular")
+			{
+				typeChange(MolecularArray);
+			} else {
+				typeChange(null);	
+			}
+		}
+		
+		
+</script>
+
+<html:form action="SpecimenArrayTypeAdd.do?operation=add">
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 <tr>
 	<td>
@@ -44,11 +122,35 @@
 					</label>
 				</td>
 				<td class="formField" colspan="3">
-					<html:select property="specimenClass" styleClass="formFieldSized" styleId="state" size="1">
-						<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
+					<html:select property="specimenClass" styleClass="formFieldSized" styleId="className" size="1" onchange="onClassChange(this)">
+				     	<%
+							String classValue = form.getSpecimenClass();
+							if((operation != null) && (operation.equals(Constants.EDIT)))
+							{
+						%>
+								<html:option value="<%=classValue%>"><%=classValue%></html:option>
+						<%
+							}else{
+						%>
+								<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
+						<%
+							}
+						%>
 					</html:select>
 				</td>
 			</tr>
+			
+				    <%
+								String classValue = (String)form.getSpecimenClass();
+								List specimenTypeList = (List)specimenTypeMap.get(classValue);
+								
+								if(specimenTypeList == null)
+								{
+									specimenTypeList = new ArrayList();
+									specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+								}
+								pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+					%>
 			
 			<tr>
 				<td class="formRequiredNotice" width="5">*</td>
@@ -58,7 +160,7 @@
 					</label>
 				</td>
 				<td class="formField" colspan="3">
-					<html:select property="specimenType" styleClass="formFieldSized" styleId="state" size="1" multiple="true">
+					<html:select property="specimenTypes" styleClass="formFieldSized" styleId="type" size="4" multiple="true">
 						<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 				</td>
@@ -72,7 +174,7 @@
 					</label>
 				</td>
 				<td class="formField" colspan="3">
-					<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments"/>
+					<html:textarea styleClass="formFieldSized" rows="3" styleId="comment" property="comment"/>
 				</td>
 			</tr>
 			
@@ -114,7 +216,7 @@
 					<table cellpadding="4" cellspacing="0" border="0">
 						<tr>
 							<td>
-								<html:submit styleClass="actionButton" disabled="true">
+								<html:submit styleClass="actionButton">
 									<bean:message  key="buttons.submit" />
 								</html:submit>
 							</td>
