@@ -14,6 +14,7 @@ package edu.wustl.catissuecore.actionForm;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domainobject.Biohazard;
 import edu.wustl.catissuecore.domainobject.CancerResearchGroup;
 import edu.wustl.catissuecore.domainobject.CellSpecimenReviewParameters;
@@ -228,8 +229,11 @@ public class ActionFormFactory extends AbstractActionFormFactory
 		else if(object instanceof TissueSpecimenReviewEventParameters)
 		{
 			form = new TissueSpecimenReviewEventParametersForm();
-		}
-		else
+		} 
+		else if (object instanceof SpecimenArrayType)
+		{
+			form = new SpecimenArrayTypeForm();
+		} else
 		{
 		    throw new Exception("Invalid Object for Add/Edit Operation");
 		}
