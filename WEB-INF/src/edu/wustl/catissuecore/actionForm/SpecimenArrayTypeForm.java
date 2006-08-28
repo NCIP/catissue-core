@@ -206,7 +206,7 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	 */
 	private void setAllVa(Object domainObject) {
 		SpecimenArrayType arrayType = (SpecimenArrayType) domainObject;
-        this.systemIdentifier = arrayType.getId().longValue();
+        this.id = arrayType.getId().longValue();
         this.name = arrayType.getName();
         this.specimenClass = arrayType.getSpecimenClass();
         this.oneDimensionCapacity = arrayType.getCapacity().getOneDimensionCapacity().intValue();
