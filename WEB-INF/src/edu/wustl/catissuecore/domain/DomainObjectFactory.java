@@ -334,8 +334,12 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 			 case Constants.SIMILAR_CONTAINERS_FORM_ID :
 				 abstractDomain = new StorageContainer(form);
 				 break;
+			
+			 case Constants.SPECIMEN_ARRAY_TYPE_FORM_ID :
+				 abstractDomain = new SpecimenArrayType(form);
+				 break;
 			//added as per bug 79
-            	default:
+             default:
             		abstractDomain = null;
             		Logger.out.error("Incompatible object ID");
             		break;
