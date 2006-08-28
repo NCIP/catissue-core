@@ -153,7 +153,10 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     		case Constants.SIMILAR_CONTAINERS_FORM_ID :
     			bizLogic = new StorageContainerBizLogic();
     			break;
-    		
+    			
+    		case Constants.SPECIMEN_ARRAY_TYPE_FORM_ID :
+    			bizLogic = new SpecimenArrayTypeBizLogic();
+    			break;
     		case Constants.DEFAULT_BIZ_LOGIC:
             default:
             	bizLogic = new DefaultBizLogic();
