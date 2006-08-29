@@ -459,7 +459,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int QUICKEVENTS_FORM_ID = 45;
 	public static final int LIST_SPECIMEN_EVENT_PARAMETERS_FORM_ID = 46;
 	public static final int SIMILAR_CONTAINERS_FORM_ID = 47;                  // chetan (13-07-2006)
-	public static final int ARRAY_DISTRIBUTION_FORM_ID = 48;
+	public static final int SPECIMEN_ARRAY_TYPE_FORM_ID = 48;                  // chetan (13-07-2006)
+	public static final int ARRAY_DISTRIBUTION_FORM_ID = 49;
 	
 	
 	//Misc
