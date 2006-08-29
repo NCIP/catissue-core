@@ -204,7 +204,7 @@
             table="CATISSUE_STORAGE_CONT_COLL_PROT_REL"
             lazy="false"
             inverse="false"
-            cascade="save-update"
+            cascade="none"
             sort="unsorted"
         >
 
