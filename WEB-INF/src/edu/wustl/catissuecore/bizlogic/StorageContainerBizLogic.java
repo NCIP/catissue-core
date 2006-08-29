@@ -1467,7 +1467,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				sourceObjectName = StorageContainer.class.getName();
 				String[] whereColumnName1 = {"positionDimensionOne", "positionDimensionTwo",
-						"parentContainer"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+						"parent"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 				String[] whereColumnCondition1 = {"=", "=", "="};
 				Object[] whereColumnValue1 = {posOne, posTwo,
 						storageContainer.getId()};
