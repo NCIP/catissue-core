@@ -138,8 +138,7 @@
 			String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
 			String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
 	%>
-	<%@ include file="SpecimenCollectionGroupPageButtons.jsp" %>
-	
+		
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
 		
