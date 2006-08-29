@@ -244,8 +244,7 @@ public class ReportedProblemForm extends AbstractActionForm
                         {
                             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                     "errors.item.format", ApplicationProperties
-                                            .getValue("user.emailAddress")
-                                            + " in From Field"));
+                                            .getValue("user.emailAddress")));
                         }
                     }
                  	// Mandar 10-apr-06 : bugid :353 
