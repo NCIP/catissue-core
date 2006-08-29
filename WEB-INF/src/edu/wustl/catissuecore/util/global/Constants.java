@@ -350,6 +350,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DISTRIBUTION_ADD_ACTION = "DistributionAdd.do";
 	public static final String DISTRIBUTION_EDIT_ACTION = "DistributionEdit.do";
 	
+	public static final String ARRAY_DISTRIBUTION_ADD_ACTION = "ArrayDistributionAdd.do";
+	
+	
 	//Spreadsheet Export Action
 	public static final String SPREADSHEET_EXPORT_ACTION = "SpreadsheetExport.do";
 	
@@ -456,7 +459,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int QUICKEVENTS_FORM_ID = 45;
 	public static final int LIST_SPECIMEN_EVENT_PARAMETERS_FORM_ID = 46;
 	public static final int SIMILAR_CONTAINERS_FORM_ID = 47;                  // chetan (13-07-2006)
-	public static final int SPECIMEN_ARRAY_TYPE_FORM_ID = 48;                  // chetan (13-07-2006)
+	public static final int ARRAY_DISTRIBUTION_FORM_ID = 48;
+	
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
@@ -852,13 +856,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			{"Submit",				"success"},
 			{"Derive",			"createNew"},
 			{"Add Events",				"eventParameters"},
-			{"More",	"sameCollectionGroup"}
+			{"More",	"sameCollectionGroup"},
+			{"Submit and Distribute", "distribution" }
 	};
 	public static final String [] SPECIMEN_BUTTON_TIPS = {
 		"Submit only",
 		"Submit and derive",
 		"Submit and add events",
-		"Submit and add more to same group"
+		"Submit and add more to same group",
+		"Submit and distribute"
 	};
 
 	public static final String [][] SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST = {

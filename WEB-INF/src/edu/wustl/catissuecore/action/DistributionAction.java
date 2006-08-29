@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -109,9 +110,44 @@ public class  DistributionAction extends SpecimenEventParametersAction
 		{
 			setSpecimenCharateristics(dForm,request);
 		}
+		
+		/* If forwarded from speciman page**/
+        HashMap forwardToHashMap=(HashMap)request.getAttribute("forwardToHashMap");
+        if(forwardToHashMap != null) {
+        	
+        	Object specimenObjectOrList = forwardToHashMap.get("specimenObjectKey");
+        	
+        	if (specimenObjectOrList instanceof Specimen) {
+        		addDistributionSample((DistributionForm)form,1,(Specimen) specimenObjectOrList);
+        	} else {
+        		List specimenIdList = (List) specimenObjectOrList;        		
+    			DistributionBizLogic dao = (DistributionBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+				
+    			for (int i=0; i < specimenIdList.size(); i++) {
+					Long specimenId = Long.getLong((String) specimenIdList.get(i));
+					List list = dao.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,specimenId);
+					Specimen specimen =(Specimen)list.get(0);
+	        		addDistributionSample((DistributionForm)form,i+1,(Specimen) specimen);
+    			}
+        	}
+        }
+
 		Logger.out.debug("executeSecureAction");
 		return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
+	
+	private void addDistributionSample(DistributionForm dForm,int itemNo,Specimen specimen) {
+		String keyPrefix = "DistributedItem:" + itemNo + "_";
+		
+		dForm.setValue( keyPrefix + "Specimen_className" , specimen.getClassName());
+		dForm.setValue( keyPrefix + "Specimen_id" , specimen.getId());
+		//dForm.setValue( keyPrefix + "quantity" , specimen.getQuantity());
+		dForm.setValue( keyPrefix + "tissueSite" , specimen.getSpecimenCharacteristics().getTissueSite());
+		dForm.setValue( keyPrefix + "tissueSide" , specimen.getSpecimenCharacteristics().getTissueSide());
+		dForm.setValue( keyPrefix + "pathologicalStatus" , specimen.getPathologicalStatus());
+		dForm.setValue( keyPrefix + "availableQty" , specimen.getAvailableQuantity());
+		dForm.setValue( keyPrefix + "Specimen_type" , specimen.getType());
+	}
 	
 	private void setSpecimenCharateristics(DistributionForm dForm,HttpServletRequest request) throws DAOException
 	{

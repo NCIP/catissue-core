@@ -74,6 +74,8 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
             else if(actionForm.getForwardTo().equals("eventParameters"))
             {
                 forwardToHashMap.put("specimenId", domainObject.getId().toString());
+            } else if( actionForm.getForwardTo().equals("distribution")) {
+            	forwardToHashMap.put("specimenObjectKey", domainObject);
             }
         }
         

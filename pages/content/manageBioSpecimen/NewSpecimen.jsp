@@ -359,7 +359,8 @@
 				String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
 				String deriveNewSubmit = deriveNewSubmitFunctionName + ","+confirmDisableFuncName;
 				String addEventsSubmit = addEventsSubmitFunctionName + ","+confirmDisableFuncName;
-				String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;												
+				String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;		
+				String submitAndDistribute = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
 	%>
 
 	<%
@@ -410,7 +411,7 @@
 							<%=messageKey%>
 						</html:messages>
 					</td></tr>
-					<tr><td>
+					<tr><td colspan="6">
 						<%@ include file="NewSpecimenPageButtons.jsp" %>
 					</td></tr>
 			 	 
@@ -834,7 +835,7 @@
 						<label for="date">
 							<bean:message key="eventparameters.dateofevent"/> 
 						</label>
-						&nbsp;<small><bean:message key="page.dateFormat" /></small>
+						<BR><small><bean:message key="page.dateFormat" /></small>
 					</td>
 					<td class="formLeftSubTableTitle">* 
 						<label for="quality">
@@ -894,7 +895,7 @@ if(currentReceivedDate.trim().length() > 0)
 	} 
 %> 
 
-			</td>
+				</td>
 	
 	<!-- receivedeventparameters.receivedquality -->
 				<td class="formField">
@@ -931,7 +932,7 @@ if(currentReceivedDate.trim().length() > 0)
 						<label for="date">
 							<bean:message key="eventparameters.dateofevent"/> 
 						</label>
-						&nbsp;<small><bean:message key="page.dateFormat" /></small>
+						<BR><small><bean:message key="page.dateFormat" /></small>
 					</td>
 					<td class="formLeftSubTableTitle">* 
 						<label for="quality">
@@ -1018,7 +1019,7 @@ if(currentCollectionDate.trim().length() > 0)
 						<html:textarea styleClass="formFieldSized20"  styleId="collectionEventComments" property="collectionEventComments" />
 					</td>
 
-	</tr>
+				 </tr>
 
 </logic:equal>
 <!-- Mandar: 11-July-06 AutoEvents end  -->
@@ -1231,7 +1232,7 @@ if(currentCollectionDate.trim().length() > 0)
 				 </tbody>
 				 <!-- Bio-hazards End here -->	
 			   	 	<tr>
-				  		<td align="right" colspan="4">
+				  		<td align="left" colspan="6">
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
 				 			%>
