@@ -297,7 +297,7 @@ tr#hiddenCombo
 			<tr>
 				<td height="20" class="tabMenuItemSelected" onclick="document.location.href='ManageAdministrativeData.do'">Edit</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction('ViewParticipantSPR.do?applicationId=caTies&editTabLink=ParticipantSearch.do?pageOf=pageOfParticipant')">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" >
 					View Surgical Pathology Report
 				</td>
 								
