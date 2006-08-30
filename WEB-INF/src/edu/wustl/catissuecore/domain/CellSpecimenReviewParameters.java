@@ -77,7 +77,7 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters	implemen
 		this.viableCellPercentage = viableCellPercentage;
 	}
 	
-	CellSpecimenReviewParameters()
+	public CellSpecimenReviewParameters()
 	{
 		
 	}

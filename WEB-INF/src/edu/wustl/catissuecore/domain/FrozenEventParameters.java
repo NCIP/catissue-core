@@ -50,7 +50,7 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
 		this.method = method;
 	}
 
-	FrozenEventParameters()
+	public FrozenEventParameters()
 	{
 		
 	}

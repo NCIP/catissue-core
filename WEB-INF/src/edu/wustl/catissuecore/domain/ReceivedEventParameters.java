@@ -47,7 +47,7 @@ public class ReceivedEventParameters extends SpecimenEventParameters
 		this.receivedQuality = receivedQuality;
 	}
 	
-	ReceivedEventParameters()
+	public ReceivedEventParameters()
 	{
 		
 	}

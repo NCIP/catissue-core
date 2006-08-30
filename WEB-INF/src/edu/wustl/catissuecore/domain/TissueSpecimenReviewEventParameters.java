@@ -162,7 +162,7 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 		this.histologicalQuality = histologicalQuality;
 	}
 	
-	TissueSpecimenReviewEventParameters()
+	public TissueSpecimenReviewEventParameters()
 	{
 		
 	}
