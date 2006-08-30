@@ -278,6 +278,15 @@ public class ReportedProblemForm extends AbstractActionForm
                                 "errors.item.required", ApplicationProperties
                                         .getValue("fields.message")));
                     }
+                    
+                    //to fix bug:1678
+                    if (messageBody == null || messageBody.trim().length() >= Constants.messageLength)
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                                "reportedProblem.error.message",ApplicationProperties
+                                .getValue("fields.message"),new Integer(Constants.messageLength)));
+                    }
+                    
                 }
                 
                 if (operation.equals(Constants.EDIT))
