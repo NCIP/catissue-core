@@ -1348,3 +1348,11 @@ INSERT INTO CATISSUE_RELATED_TABLES_MAP(FIRST_TABLE_ID,SECOND_TABLE_ID,FIRST_TAB
 
 commit;
 #-------- finish
+
+
+#------Start:- Jitendra: Bug-1678 -------
+
+alter table catissue_reported_problem modify MESSAGE_BODY varchar(500) NOT NULL
+alter table CATISSUE_AUDIT_EVENT_DETAILS modify CURRENT_VALUE varchar(500) NOT NULL
+
+#------End: Jitendra: Bug-1678 -------
