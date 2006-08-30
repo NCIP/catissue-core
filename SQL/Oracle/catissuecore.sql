@@ -366,7 +366,7 @@ create table CATISSUE_REPORTED_PROBLEM (
    AFFILIATION varchar2(200) not null,
    NAME_OF_REPORTER varchar2(200) not null,
    REPORTERS_EMAIL_ID varchar2(50) not null,
-   MESSAGE_BODY varchar2(200) not null,
+   MESSAGE_BODY varchar2(500) not null,
    SUBJECT varchar2(100),
    REPORTED_DATE date,
    ACTIVITY_STATUS varchar2(100),
@@ -482,7 +482,7 @@ create table CATISSUE_AUDIT_EVENT_DETAILS (
    IDENTIFIER number(19,0) not null,
    ELEMENT_NAME varchar2(150),
    PREVIOUS_VALUE varchar2(150),
-   CURRENT_VALUE varchar2(150),
+   CURRENT_VALUE varchar2(200),
    AUDIT_EVENT_LOG_ID number(19,0),
    primary key (IDENTIFIER)
 );

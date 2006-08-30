@@ -196,7 +196,7 @@ create table CATISSUE_AUDIT_EVENT_DETAILS (
    IDENTIFIER bigint not null auto_increment,
    ELEMENT_NAME varchar(150),
    PREVIOUS_VALUE varchar(150),
-   CURRENT_VALUE varchar(150),
+   CURRENT_VALUE varchar(500),
    AUDIT_EVENT_LOG_ID bigint,
    primary key (IDENTIFIER)
 );
@@ -423,7 +423,7 @@ create table CATISSUE_REPORTED_PROBLEM (
    AFFILIATION varchar(200) not null,
    NAME_OF_REPORTER varchar(200) not null,
    REPORTERS_EMAIL_ID varchar(50) not null,
-   MESSAGE_BODY varchar(200) not null,
+   MESSAGE_BODY varchar(500) not null,
    SUBJECT varchar(100),
    REPORTED_DATE date,
    ACTIVITY_STATUS varchar(100),
