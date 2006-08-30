@@ -1028,6 +1028,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DERIVED_SPECIMEN = "Derived";
 	public static final String ALIQUOT = "Aliquot";
 	
+	//Constant for length of messageBody in Reported problem page  
+	public static final int messageLength= 500;
+	
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{
 //	    if(identifier == null)
