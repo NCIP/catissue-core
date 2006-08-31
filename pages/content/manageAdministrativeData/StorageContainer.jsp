@@ -125,9 +125,10 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
-		function ReserName()
+		function ResetName()
 		{
-	 		document.forms[0].containerName.value="";
+			var containerNameElement = document.getElementById("containerName");
+			containerNameElement.value = "";	
 			if(document.forms[0].checkedButton[0].checked==true)
 			{
 				onSiteChange();
@@ -142,7 +143,7 @@
 			var typeElement = document.getElementById("typeId");
 			var siteElement = document.getElementById("siteId");
 			var containerNameElement = document.getElementById("containerName");
-			if(typeElement.value != "-1" && siteElement.value != "-1" && containerName.value == "")
+			if(typeElement.value != "-1" && siteElement.value != "-1" && containerNameElement.value == "")
 			{
 				nameChange(siteElement.options[siteElement.selectedIndex].text,typeElement.options[typeElement.selectedIndex].text,<%=containerNumber%>);
 			}
@@ -552,7 +553,7 @@ function validate(action,formField)
 						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="containerName" property="containerName"/>
 							&nbsp;
-							<html:link href="#" styleId="newSite" onclick="ReserName()">
+							<html:link href="#" styleId="newSite" onclick="ResetName()">
 								<bean:message key="StorageContainer.resetName" />
 							</html:link>
 						</td>

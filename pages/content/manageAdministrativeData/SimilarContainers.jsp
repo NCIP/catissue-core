@@ -392,7 +392,7 @@
 					</td>
 				  </tr>
 		 		  <tr>	
-					<td colspan=6>
+					<td colspan="6">
 						<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
 						  <tr>
 							<td class="formLeftSubTableTitle" width="5">
