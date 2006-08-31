@@ -120,19 +120,23 @@ public class StorageTypeForm extends AbstractActionForm
 		
 		if(specimenClassTypeCollection != null)
 		{
-			holdsSpecimenClassTypes = new String[specimenClassTypeCollection.size()];
-			int i=0;
-
-			Iterator it = specimenClassTypeCollection.iterator();
-			while(it.hasNext())
+			if(specimenClassTypeCollection.size() == Utility.getSpecimenClassTypes().size())
 			{
-			    //TODO : Vaishali
-//				SpecimenClass specimenClass = (SpecimenClass)it.next();
-//				holdsSpecimenClassTypeIds[i] = specimenClass.getId().longValue();
-//				i++;
-				String specimenClass=(String)it.next();
-				holdsSpecimenClassTypes[i]=specimenClass;
-				i++;
+				holdsSpecimenClassTypes = new String[1];
+				holdsSpecimenClassTypes[0] = "-1";
+			}
+			else
+			{
+				holdsSpecimenClassTypes = new String[specimenClassTypeCollection.size()];
+				int i=0;
+
+				Iterator it = specimenClassTypeCollection.iterator();
+				while(it.hasNext())
+				{
+					String specimenClass=(String)it.next();
+					holdsSpecimenClassTypes[i]=specimenClass;
+					i++;
+				}
 			}
 		}
     }

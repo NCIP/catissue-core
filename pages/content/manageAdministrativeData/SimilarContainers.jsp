@@ -11,13 +11,15 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility" %>
 <%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm" %>
+<%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="java.util.*" %>
 <%@ page import="java.lang.Integer" %>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 
 <%
         //String operation = (String) request.getAttribute(Constants.OPERATION);
-	
+		String containerNumber=(String)request.getAttribute("ContainerNumber");
+		List siteForParent = (List)request.getAttribute("siteForParentList");
 		Object obj = request.getAttribute("storageContainerForm");
 		
 		String label1 = null;
@@ -47,6 +49,22 @@
 	
 	
 	<script language="JavaScript">
+	
+			var parentIdArray = new Array();
+		var siteNameArray = new Array();
+		<%
+			if(siteForParent != null) 
+			{
+			for(int i=0; i<siteForParent.size();i++)
+    		{
+    			NameValueBean nvb = (NameValueBean) siteForParent.get(i);
+		%>
+				parentIdArray[<%=i%>] = "<%=nvb.getValue()%>";
+				siteNameArray[<%=i%>] = "<%=nvb.getName()%>";
+    	<%	}}%>
+		
+	
+	
 		function onCreate()
 		{
 			var action = '<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>';			
@@ -109,7 +127,7 @@
 			document.forms[0].submit;			
 		}
 		
-		function onSiteChange(element, row)
+		function onSiteChange1(element, row)
 		{
 			var containerNameElement = document.getElementById("containerName_"+row);
 						
@@ -123,13 +141,76 @@
 			containerNameElement.value = selected_text+"_"+suffix;
 		}
 		
+		function onSiteChange(i)
+		{
+
+			var containerNameElement = document.getElementById("containerName_"+i);
+			if(containerNameElement.value == "")
+			{
+				<% long tempContainerNumber = new Long(containerNumber).longValue();%>
+				var tempContainerNumber1 = <%=tempContainerNumber%>;
+				for(var j=1;j<i;j++)
+				{
+					tempContainerNumber1++;
+				}
+				
+				var typeElement = document.getElementById("storageContainerType");
+				var siteElement = document.getElementById("siteId_"+i);
+				if(typeElement.value != "-1" && siteElement.value != "-1" && containerNameElement.value == "")
+				{
+					containerNameElement.value=siteElement.options[siteElement.selectedIndex].text+"_"+typeElement.value+"_"+tempContainerNumber1;
+				}	
+			}
+
+		}
 		
+		function onParentContainerChange(i)
+		{
+			var containerNameElement = document.getElementById("containerName_"+i);
+			if(containerNameElement.value == "")
+			{
+				var tempContainerNumber1 = <%=tempContainerNumber%>;
+				for(var j=1;j<i;j++)
+				{
+					tempContainerNumber1++;
+				}
+				var parentContainerId = document.getElementById("customListBox_"+i+"_0");
+
+				getSiteName(parentContainerId.options[parentContainerId.selectedIndex].value);
+
+				var typeElement = document.getElementById("storageContainerType");
+				if(typeElement.value != "" && parentContainerId.value != "-1" && containerNameElement.value == "")
+				{
+					containerNameElement.value = document.forms[0].siteForParentContainer.value + "_"+typeElement.value+"_"+tempContainerNumber1;
+				}
+			}
+			
+		}
+		function getSiteName(id)
+		{
+
+			for(var i=0; i<parentIdArray.length; i++)
+			{
+				if(id == parentIdArray[i])
+				{
+					document.forms[0].siteForParentContainer.value = siteNameArray[i];
+					break;
+				}
+			}		
+		}	
 		function resetName(i)
 		{
-			var action = '<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>'+"?pageOf="+"<%=Constants.PAGEOF_CREATE_SIMILAR_CONTAINERS%>"+"&operation=add&ResetName="+i+"&menuSelected=7";			
-			document.forms[0].action = action;
-			document.forms[0].submit();
-		 	
+			var containerNameElement = document.getElementById("containerName_"+i);
+			containerNameElement.value = "";
+			if(document.forms[0].checkedButton.value == "1")
+			{
+				onSiteChange(i)
+			}
+			else
+			{
+				onParentContainerChange(i);
+			}	
+				
 		}
 	</script>
 </head>
@@ -143,64 +224,33 @@
 <html:form action="<%=Constants.SIMILAR_CONTAINERS_ADD_ACTION%>">
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="750">
-<tr>
-<td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="660">
 	<tr>
-		<td class="formMessage" colspan="4">
-			* indicates a required field
+		<td>
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="660">
+				<tr>
+					<td class="formMessage" colspan="4">
+						* indicates a required field
+					</td>
+				</tr>
+			</table>
 		</td>
 	</tr>
-	
-		
-	<%-- <tr>
-		<td class="formTitle" height="20" colspan="4">
-			<bean:message key="similarcontainers.createTitle"/>
-		</td>
-	</tr>
-	
-	<tr>
-		<td class="formRequiredNotice" width="5">*</td>
-		<td class="formRequiredLabel" >
-			<bean:message key="similarcontainers.noOfContainers"/>
-		</td>
-		<td class="formField" >
-			<html:text styleClass="formFieldSized5"  maxlength="50"  size="30" styleId="noOfContainers" property="noOfContainers"/>
-		</td>
-	</tr>
-	
-	<tr>
-		<td colspan="2">
-			&nbsp;
-		</td>
-		<td colspan="2" align="right">
-			<html:button styleClass="actionButton" property="submitPage" onclick="onCreate()" >
-				<bean:message key="buttons.create"/>
-			</html:button>
-		</td>
-	</tr> --%>
-	
-	</table>
-</td>
-</tr>
 
-<%
-	StorageContainerForm simForm = (StorageContainerForm)request.getAttribute("storageContainerForm");
+	<%
+		StorageContainerForm simForm = (StorageContainerForm)request.getAttribute("storageContainerForm");
 	
-	String sType = simForm.getTypeName();
-	String siteName = simForm.getSiteName();
-	System.out.println("sTyep ----<>----- "+sType);
-	System.out.println("sName ----<>----- "+siteName);
-	String siteId = Long.toString(simForm.getSiteId());
-	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-	String checkButtonStatus = Integer.toString(simForm.getCheckedButton());
+		String sType = simForm.getTypeName();
+		String siteName = simForm.getSiteName();
+		String siteId = Long.toString(simForm.getSiteId());
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+		String checkButtonStatus = Integer.toString(simForm.getCheckedButton());
 	
-	String noOfContainers = Integer.toString(simForm.getNoOfContainers());
-	int maxIdentifier = Integer.parseInt((String)request.getAttribute(Constants.MAX_IDENTIFIER));
+		String noOfContainers = Integer.toString(simForm.getNoOfContainers());
+		int maxIdentifier = Integer.parseInt((String)request.getAttribute(Constants.MAX_IDENTIFIER));
 	//maxIdentifier++;
-	if(!Constants.PAGEOF_SIMILAR_CONTAINERS.equals(pageOf))
-	{
-%>
+		if(!Constants.PAGEOF_SIMILAR_CONTAINERS.equals(pageOf))
+		{
+		%>
     <tr>	
 	   <td colspan="4">
 			&nbsp;
@@ -213,17 +263,20 @@
     <tr>
 		<td>
 			<html:hidden property="id" />
+			<html:hidden property="operation" value="add"/>
 		</td>
     </tr>
     <tr>
 		<td>
 			<html:hidden property="siteId" value="<%=siteId%>"/>
+			<html:hidden property="siteForParentContainer"/>	
 		</td>
     </tr>
     
   	<tr>
 		<td>
 			<html:hidden property="noOfContainers" value="<%=noOfContainers%>" />
+			<html:hidden property="typeId"/>
 		</td>
 	</tr>
   	
@@ -235,147 +288,137 @@
     </tr>
   	
     <tr>
-    <td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
+	    <td>
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
+	  	    	<tr>
+					<td class="formTitle" height="20" colspan="6">
+						<bean:message key="similarcontainers.title"/>
+					</td>
+				  </tr>
 	  
-	  <tr>
-		<td class="formTitle" height="20" colspan="6">
-			<bean:message key="similarcontainers.title"/>
-		</td>
-	  </tr>
-	  
-	  <tr>
-		<td class="formRequiredNotice" width="5">*</td>
-		<td class="formRequiredLabel">
-			<label for="type">
-				<bean:message key="storageContainer.type"/> 
-			</label>
-		</td>
-		<td class="formField">
-			<%--<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="storageContainerType" property="storageContainerType" readonly="true"/>--%>
-			<html:select property="typeId" styleClass="formFieldSized" styleId="storageContainerType" size="1">
+				  <tr>
+					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredLabel">
+						<label for="type">
+						<bean:message key="storageContainer.type"/> 
+						</label>
+					</td>
+					<td class="formField">
+						<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="storageContainerType" property="typeName" readonly="true"/>
+		<%--			<html:select property="typeId" styleClass="formFieldSized" styleId="storageContainerType" size="1">
 								<html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/>
-							</html:select>
-		</td>
-	  </tr>
+							</html:select>--%>
+					</td>
+				  </tr>
 	  
-	  <tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formLabel">
-			<label for="temperature">
-				<bean:message key="storageContainer.temperature"/> 
-			</label>
-		</td>
-		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="defaultTemperature" property="defaultTemperature" />
-		</td>
-	  </tr>
+				  <tr>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
+						<label for="temperature">
+						<bean:message key="storageContainer.temperature"/> 
+						</label>
+					</td>
+					<td class="formField">
+						<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="defaultTemperature" property="defaultTemperature" />
+					</td>
+				  </tr>
 	  
-	  <tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formLabel">
-			<label for="collectionProtocolTitle">
-				<bean:message key="storageContainer.collectionProtocolTitle"/> 
-			</label>
-		</td>
+				  <tr>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
+						<label for="collectionProtocolTitle">
+						<bean:message key="storageContainer.collectionProtocolTitle"/> 
+						</label>
+					</td>
 		
-		<td class="formField" >
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="collectionIds" styleClass="formFieldSized" styleId="collectionIds" size="4"
-					 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" multiple="true" >
-					<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
-				</html:select>
-				&nbsp;							
-		</td>
+					<td class="formField" >
+						<!-- Mandar : 434 : for tooltip -->
+						<html:select property="collectionIds" styleClass="formFieldSized" styleId="collectionIds" size="4"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" multiple="true" >
+						<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
+						</html:select>
+						&nbsp;							
+					</td>
 		
-	  </tr>
+				  </tr>
 	  
-	  <tr>
-	  <tr>
-		<td class="formRequiredNotice" width="5">&nbsp;</td>
-		<td class="formLabel">
-			<label for="holds">
-				<bean:message key="storageContainer.holds"/> 
-			</label>
-		</td>
-		<td class="formField" >
-				<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsStorageTypeIds" size="4" multiple="true"
-					onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
-					<html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/>
-				</html:select>
-				&nbsp;
-				<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="typeId" size="4" multiple="true"
-					 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
-					<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
-				</html:select>
-				&nbsp;
-		</td>
-	  </tr>
+			<%--	  <tr>--%>
+				  <tr>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
+						<label for="holds">
+						<bean:message key="storageContainer.holds"/> 
+						</label>
+					</td>
+					<td class="formField" >
+						<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsStorageTypeIds" size="4" multiple="true"
+						onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
+						<html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/>
+						</html:select>
+						&nbsp;
+						<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="typeId" size="4" multiple="true"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
+						<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
+						</html:select>
+						&nbsp;
+					</td>
+				  </tr>
 	  
-	  <tr>
-		<td class="formRequiredNotice" width="5">*</td>
-		<td class="formRequiredLabel">			
-				&nbsp;<%=label1%>
-		</td>
-		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity" />
-		</td>
-	  </tr>
+				  <tr>
+					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredLabel">			
+						&nbsp;<%=label1%>
+					</td>
+					<td class="formField">
+						<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity" />
+					</td>
+				  </tr>
 	  
-	  <tr>
-		<td class="formRequiredNotice" width="5">*</td>
-		<td class="formRequiredLabel">
-			&nbsp;
-			<%
-				if(label2 != null || ( label2 != null && !(label2.equals("")) ) )
-				{
-			%>
-			<%=label2%>
-			<%
-				}
-			%>
-		</td>
-		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity" />
-		</td>
-	  </tr>
+				  <tr>
+					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredLabel">
+						&nbsp;
+						<%
+							if(label2 != null || ( label2 != null && !(label2.equals("")) ) )
+							{
+						%>
+						<%=label2%>
+						<%
+							}
+						%>
+					</td>
+					<td class="formField">
+						<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity" />
+					</td>
+				  </tr>
+		 		  <tr>	
+					<td colspan=6>
+						<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
+						  <tr>
+							<td class="formLeftSubTableTitle" width="5">
+				    		 	#
+						    </td>
+				    		<td class="formRightSubTableTitle">*
+								<bean:message key="storageContainer.containerName"/>
+							</td>
+							<td class="formRightSubTableTitle">
+								<bean:message key="storageContainer.barcode"/>
+							</td>
+							<td class="formRightSubTableTitle">*
+								<logic:equal name="storageContainerForm" property="checkedButton" value="1">
+								<bean:message key="storageContainer.site"/>
+								</logic:equal>
+								<logic:equal name="storageContainerForm" property="checkedButton" value="2">
+								<bean:message key="storageContainer.parentContainer"/>
+								</logic:equal>
+							</td>
+						  </tr>
 	  
-	  </table>
-	<%-- </table> --%>
-	<%-- 
-	<tr>
-	<td colspan="4"> --%>
-		</td>
-	</tr>
-	
-	<tr>
-	<td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
-	  <tr>
-		<td class="formLeftSubTableTitle" width="5">
-	     	#
-	    </td>
-	    <td class="formRightSubTableTitle">*
-			<bean:message key="storageContainer.containerName"/>
-		</td>
-		<td class="formRightSubTableTitle">
-			<bean:message key="storageContainer.barcode"/>
-		</td>
-		<td class="formRightSubTableTitle">*
-			<logic:equal name="storageContainerForm" property="checkedButton" value="1">
-			<bean:message key="storageContainer.site"/>
-			</logic:equal>
-			<logic:equal name="storageContainerForm" property="checkedButton" value="2">
-			<bean:message key="storageContainer.parentContainer"/>
-			</logic:equal>
-		</td>
-	  </tr>
-	  
-	  <%-- n-combo-box start --%>
+						  <%-- n-combo-box start --%>
 	  
 						<%
-							Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
-							//System.out.println("dataMap -> "+dataMap.size());
+						Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+						//System.out.println("dataMap -> "+dataMap.size());
 							session.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,dataMap);							
 							
 							String[] labelNames = {"ID","Pos1","Pos2"};
@@ -392,7 +435,7 @@
 							String styClass = "formFieldSized5";
 							String tdStyleClass = "customFormField";
 							//boolean disabled = true;
-							String onChange = "onCustomListBoxChange(this)";
+
 							//String onChange = "onCustomListBoxChange(this);onParentContainerChange(this)";
 							//boolean buttonDisabled = true;
 							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
@@ -404,103 +447,104 @@
 				<%=ScriptGenerator.getJSForOutermostDataTable()%>
 				<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 	  
-	  <%
-		form = simForm;
-		int counter=0;
+			  <%
+				form = simForm;
+				int counter=0;
 		
-		if(form != null)
-		{
-			counter = (int)form.getNoOfContainers();
-		}
+				if(form != null)
+				{
+					counter = (int)form.getNoOfContainers();
+				}
 		
-		//System.out.println("counter  <<-->> "+counter);
-		String contName = siteName+"_"+sType+"_";
+				//System.out.println("counter  <<-->> "+counter);
+				String contName = siteName+"_"+sType+"_";
 		
-		List initValuesList = (List)request.getAttribute("initValues");
+				List initValuesList = (List)request.getAttribute("initValues");
 		
-		for(int i=1;i<=counter;i++)
-		{
-			String containerNameKey = "similarContainerMapValue(simCont:" + i + "_name)";
-			String barcodeKey = "similarContainerMapValue(simCont:" + i + "_barcode)";
-			String siteKey = "similarContainerMapValue(simCont:" + i + "_siteId)";
-			//String checkButtonKey = "value(simCont:" + i + "_checkButton)";
+				for(int i=1;i<=counter;i++)
+				{
+					String onChange = "onCustomListBoxChange(this),onParentContainerChange('"+ i+"')";
+					String containerNameKey = "similarContainerMapValue(simCont:" + i + "_name)";
+					String barcodeKey = "similarContainerMapValue(simCont:" + i + "_barcode)";
+					String siteKey = "similarContainerMapValue(simCont:" + i + "_siteId)";
+					//String checkButtonKey = "value(simCont:" + i + "_checkButton)";
 			
-			String contNameSId = "containerName_"+i;
-			String barSId = "barcode_"+i;
-			//String checkButtSId = "checkedButton_"+i;
-			String siteSId = "siteId_"+i;
-			//String onClick = "onRadioButtonClick(this,"+i+")";  // For radio button
-			String rowNumber = ""+i;
-			String buttonId = "Map_"+i;
-			//String onSiteChange = "onSiteChange(this,"+i+")";
+					String contNameSId = "containerName_"+i;
+					String barSId = "barcode_"+i;
+					//String checkButtSId = "checkedButton_"+i;
+					String siteSId = "siteId_"+i;
+					//String onClick = "onRadioButtonClick(this,"+i+")";  // For radio button
+					String rowNumber = ""+i;
+					String buttonId = "Map_"+i;
+					String onSiteChange = "onSiteChange('"+ i+"')";
 			
-			String resetNameFunction = "resetName('"+ i+"')";
-			attrNames[0] = "similarContainerMapValue(simCont:"+i+"_parentContainerId)";
-			attrNames[1] = "similarContainerMapValue(simCont:"+i+"_positionDimensionOne)";
-			attrNames[2] = "similarContainerMapValue(simCont:"+i+"_positionDimensionTwo)";
-			if(initValuesList != null)
-			{
-				initValues = (String[])initValuesList.get(i-1);
-			}
+					String resetNameFunction = "resetName('"+ i+"')";
+					attrNames[0] = "similarContainerMapValue(simCont:"+i+"_parentContainerId)";
+					attrNames[1] = "similarContainerMapValue(simCont:"+i+"_positionDimensionOne)";
+					attrNames[2] = "similarContainerMapValue(simCont:"+i+"_positionDimensionTwo)";
+					if(initValuesList != null)
+					{
+						initValues = (String[])initValuesList.get(i-1);
+					}
 			
-	   		if(checkButtonStatus.equals("2"))
-	   		{
-	   %>
+			   		if(checkButtonStatus.equals("2"))
+	   				{
+				   %>	
 	   				<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
-	   <% 
-	   		}
-	   %>
+				   <% 
+	   				}
+				   %>
 	   
-	    <tr>
+						<tr>
 	   		
-			<td class="formSerialNumberField" width="5">
-		     	<%=i%>.
-		    </td>
-		    <% 
-		    	if(i == 1 && (simForm.getContainerName() != null) && !(simForm.getContainerName().equals("")) )
-		    	{
-		    %>
-		    <td class="formField" nowrap>
-				<html:text styleClass="formFieldSized10"  maxlength="50"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>" />
-				&nbsp;
-				<html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>">
-					<bean:message key="StorageContainer.resetName" />
-				</html:link>
+						  	<td class="formSerialNumberField" width="5">
+						     	<%=i%>.
+						    </td>
+		    				<% 
+				    		if(i == 1 && (simForm.getContainerName() != null) && !(simForm.getContainerName().equals("")) )
+					    	{
+			    			%>
+						    <td class="formField" nowrap>
+								<html:text styleClass="formFieldSized10"  maxlength="50"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>" />
+								&nbsp;
+								<html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>">
+								<bean:message key="StorageContainer.resetName" />
+								</html:link>
 				
-			</td>
-			<% 
-		    	}else{
-		    %>
-			<td class="formField" nowrap>
-				<html:text styleClass="formFieldSized10"  maxlength="50"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>"/>
-				&nbsp;
-				<html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>">
-					<bean:message key="StorageContainer.resetName" />
-				</html:link>
-			</td>
+							</td>
+								<% 
+		    					}else{
+							    %>
+							<td class="formField" nowrap>
+								<html:text styleClass="formFieldSized10"  maxlength="50"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>"/>
+								&nbsp;
+								<html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>">
+								<bean:message key="StorageContainer.resetName" />
+								</html:link>
+							</td>
 			
-			<% 
-		    	}
-		    %>
-		    <td class="formField">
-				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="<%=barSId%>" property="<%=barcodeKey%>" />
-			</td>
+								<% 
+		    					}
+							    %>
+						    <td class="formField">
+							<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="<%=barSId%>" property="<%=barcodeKey%>" />
+							</td>
 			
-			<td class="formField">
-				<table summary="" cellpadding="3" cellspacing="0" border="0">
-					<tr>
-						<td class="formFieldBottom">
-							<logic:equal name="storageContainerForm" property="checkedButton" value="1">
-								<html:select property="<%=siteKey%>" styleClass="formField" styleId="<%=siteSId%>" size="1"> <%-- onchange="<%=onSiteChange%>" --%>
-									<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
-								</html:select>
-							</logic:equal>
-						</td>
-					</tr>
-					<tr>
-						<td class="formFieldNoBorders">
-							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
-								<ncombo:containermap dataMap="<%=dataMap%>" 
+							<td class="formField">
+								<table summary="" cellpadding="3" cellspacing="0" border="0">
+									<tr>
+										<td class="formFieldBottom">
+										<logic:equal name="storageContainerForm" property="checkedButton" value="1">
+										<html:select property="<%=siteKey%>" styleClass="formField" styleId="<%=siteSId%>" size="1" onchange="<%=onSiteChange%>">
+										<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
+										</html:select>
+										</logic:equal>
+										</td>
+									</tr>
+									<tr>
+										<td class="formFieldNoBorders">
+											<logic:equal name="storageContainerForm" property="checkedButton" value="2">
+											<ncombo:containermap dataMap="<%=dataMap%>" 
 											attributeNames="<%=attrNames%>" 
 											initialValues="<%=initValues%>"  
 											styleClass = "<%=styClass%>" 
@@ -516,34 +560,35 @@
 											id="<%=buttonId%>"
 											formLabelStyle="formLabelBorderless"
 											buttonOnClick = "<%=buttonOnClicked%>" />
-							</logic:equal>
-						</td>
-					</tr>
-				</table>
-			</td>
-	   </tr>
-	  
+											</logic:equal>
+										</td>
+									</tr>
+								</table>
+							</td>
+					   </tr>
+	  			
 	   	
-	  <%
-		  	maxIdentifier++;
-		} //For
-	  %>
-	  <tr>
-		<td colspan="4">&nbsp;</td>
-	   </tr>
-	   <tr>
-	   	<td align="right" colspan="4">
-	   		<html:submit styleClass="actionButton" onclick="onClick(this)">
-				<bean:message key="buttons.submit"/>
-			</html:submit>
+					  <%
+					  	maxIdentifier++;
+						} //For
+					  %>
+					  <tr>
+					  	
+					  
+					</table>
+					
+				</td>
+			</tr>	
+			<tr>
+			   	<td align="right" colspan="6">
+	   			<html:submit styleClass="actionButton" onclick="onClick(this)">
+					<bean:message key="buttons.submit"/>
+				</html:submit>
+				</td>
+	    	 </tr>	
+			</table>
 		</td>
-	  </tr>		
-	</table>
-	</td>
-	</tr>
-	<tr>
-		<td colspan="4">&nbsp;</td>
-	</tr>
+	</tr>	
 	
 		
 <%

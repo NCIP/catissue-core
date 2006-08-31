@@ -325,8 +325,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			StorageType storageType = (StorageType) it.next();
 
 			Logger.out.debug("storage Type ID :" + storageType.getId());
-			Object obj = dao.retrieve(StorageType.class.getName(), storageType
-					.getId());
+			Object obj = dao.retrieve(StorageType.class.getName(), storageType.getId());
 			if (obj != null)
 			{
 				StorageType storageTypeHold = (StorageType) obj;
@@ -1889,10 +1888,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	
 
-	public Map getAllocatedContaienrMapForContainer(long type_id) throws DAOException
+	public List getAllocatedContaienrMapForContainerHib(long type_id) throws DAOException
 	{
+		List mapSiteList = new ArrayList();
 		List list = retrieve(StorageContainer.class.getName());
 		Map containerMap = new TreeMap();
+		List siteList = new ArrayList();
+		siteList.add(new NameValueBean("---","---"));
 		Iterator itr = list.iterator();
 		while (itr.hasNext())
 		{
@@ -1912,6 +1914,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 						NameValueBean nvb = new NameValueBean(container.getName(), container
 								.getId());
 						containerMap.put(nvb, positionMap);
+						siteList.add(new NameValueBean(container.getSite().getName(),container.getId()));
+						Logger.out.info("--------------------container:"+container.getName()+"----------------site:"+container.getSite().getName());
 						break;
 
 					}
@@ -1919,8 +1923,126 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				}
 			}
 		}
-		return containerMap;
+		
+		mapSiteList.add(containerMap);
+		mapSiteList.add(siteList);
+		return mapSiteList;
 
 	}
 	/* temp function end */
+
+	
+	public List getAllocatedContaienrMapForContainer(long type_id) throws DAOException
+	{
+		List mapSiteList = new ArrayList();
+//		List list = retrieve(StorageContainer.class.getName());
+		Map containerMap = new TreeMap();
+		List siteList = new ArrayList();
+		siteList.add(new NameValueBean("---","---"));
+		
+		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		dao.openSession(null);
+
+		String queryStr ="SELECT t1.IDENTIFIER, t1.NAME, t2.NAME FROM CATISSUE_CONTAINER t1, CATISSUE_SITE t2 ,CATISSUE_STORAGE_CONTAINER t3 WHERE "+ 
+						"t1.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_STOR_TYPE_REL t4 "+ 
+						"WHERE t4.STORAGE_TYPE_ID = '"+type_id+"' OR t4.STORAGE_TYPE_ID='1') and t1.IDENTIFIER = t3.IDENTIFIER and t2.IDENTIFIER=t3.SITE_ID";
+
+
+
+		Logger.out.debug("Storage Container query......................" + queryStr);
+		List list = new ArrayList();
+
+		try
+		{
+			list = dao.executeQuery(queryStr, null, false, null);
+		}
+		catch (Exception ex)
+		{
+			throw new DAOException(ex.getMessage());
+		}
+
+		dao.closeSession();
+		Logger.out.info("Size of list:"+list.size());
+
+
+		Iterator itr = list.iterator();
+		while (itr.hasNext())
+		{
+			List list1 = (List)itr.next();
+			String Id = (String)list1.get(0);
+			String Name = (String)list1.get(1);
+			String siteName = (String)list1.get(2);
+			Map positionMap = getAvailablePositionMap(Id);
+			if (!positionMap.isEmpty())
+			{
+				NameValueBean nvb = new NameValueBean(Name,Id);
+				containerMap.put(nvb, positionMap);
+				siteList.add(new NameValueBean(siteName,Id));
+			}
+		}
+		
+		mapSiteList.add(containerMap);
+		mapSiteList.add(siteList);
+		return mapSiteList;
+
+	}
+	/* temp function end */
+
+	public Map getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass) throws DAOException
+	{
+		Map containerMap = new TreeMap();
+		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		dao.openSession(null);
+
+		String queryStr ="(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1 WHERE "+ 
+							"t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID FROM CATISSUE_STORAGE_CONT_COLL_PROT_REL t2 "+ 
+						"WHERE t2.COLLECTION_PROTOCOL_ID = '"+cpId+"') and t1.IDENTIFIER IN "+
+						"(SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3 WHERE "+ 
+						"t3.SPECIMEN_CLASS = '"+specimenClass+"')) UNION "+
+						"(SELECT t4.IDENTIFIER, t4.NAME FROM CATISSUE_CONTAINER t4 WHERE "+ 
+						"t4.IDENTIFIER NOT IN (SELECT t5.STORAGE_CONTAINER_ID FROM CATISSUE_STORAGE_CONT_COLL_PROT_REL t5) "+
+						" and t4.IDENTIFIER IN "+
+						"(SELECT t6.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t6 WHERE "+ 
+						"t6.SPECIMEN_CLASS = '"+specimenClass+"'))";
+
+		/*String queryStr = "SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1 WHERE " +
+						  "t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID FROM CATISSUE_STORAGE_CONT_COLL_PROT_REL t2 "+
+						  "WHERE t2.COLLECTION_PROTOCOL_ID = '"+ cpId +"') and t1.IDENTIFIER IN " +
+						  "(SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3 WHERE "+
+						  "t3.SPECIMEN_CLASS = '"+specimenClass+"')";
+
+	*/
+		Logger.out.debug("Storage Container query......................" + queryStr);
+		List list = new ArrayList();
+
+		try
+		{
+			list = dao.executeQuery(queryStr, null, false, null);
+		}
+		catch (Exception ex)
+		{
+			throw new DAOException(ex.getMessage());
+		}
+
+		dao.closeSession();
+		Logger.out.info("Size of list:"+list.size());
+		Iterator itr = list.iterator();
+		while(itr.hasNext())
+		{
+			List list1 = (List)itr.next();
+			String Id = (String)list1.get(0);
+			String Name = (String)list1.get(1);
+			Map positionMap = getAvailablePositionMap(Id);
+			if (!positionMap.isEmpty())
+			{
+				NameValueBean nvb = new NameValueBean(Name, Id);
+				containerMap.put(nvb, positionMap);
+				
+			}	
+		}
+		Logger.out.info("Size of containerMap:"+containerMap.size());
+		return containerMap;
+		
+	}
+
 }

@@ -145,6 +145,10 @@ public class StorageContainerForm extends AbstractActionForm
 	private int positionDimensionTwo;
 
 	/**
+	 * site name for particular parent container
+	 */
+	private String siteForParentContainer;
+	/**
 	 * collectionIds contains Ids of collection Protocols that this container can hold
 	 */
 	protected long collectionIds[] = new long[]{-1};
@@ -274,19 +278,23 @@ public class StorageContainerForm extends AbstractActionForm
 
 		if (specimenClassCollection != null)
 		{
-			this.holdsSpecimenClassTypes = new String[specimenClassCollection.size()];
-			int i = 0;
-
-			Iterator it = specimenClassCollection.iterator();
-			while (it.hasNext())
+			if(specimenClassCollection.size() == Utility.getSpecimenClassTypes().size())
 			{
-			    //TODO : Vaishali
-//				SpecimenClass specimenClass = (SpecimenClass) it.next();
-//				this.holdsSpecimenClassTypeIds[i] = specimenClass.getId().longValue();
-//				i++;
-				String specimenClass=(String)it.next();
-				this.holdsSpecimenClassTypes[i]=specimenClass;
-				i++;
+				holdsSpecimenClassTypes = new String[1];
+				holdsSpecimenClassTypes[0] = "-1";
+			}
+			else
+			{
+				this.holdsSpecimenClassTypes = new String[specimenClassCollection.size()];
+				int i = 0;
+
+				Iterator it = specimenClassCollection.iterator();
+				while (it.hasNext())
+				{
+					String specimenClass=(String)it.next();
+					this.holdsSpecimenClassTypes[i]=specimenClass;
+					i++;
+				}
 			}
 		}
 		
@@ -1122,6 +1130,18 @@ public class StorageContainerForm extends AbstractActionForm
 				}
 			}
 		}
+	}
+
+	
+	public String getSiteForParentContainer()
+	{
+		return siteForParentContainer;
+	}
+
+	
+	public void setSiteForParentContainer(String siteForParentContainer)
+	{
+		this.siteForParentContainer = siteForParentContainer;
 	}
 
 }

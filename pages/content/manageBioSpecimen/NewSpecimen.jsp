@@ -287,6 +287,18 @@
 				}
 			}
 		}
+		function onCollOrClassChange()
+		{
+			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupId");
+			var classNameElement = document.getElementById("className");
+			if(specimenCollGroupElement.value != "-1" && classNameElement.value != "-1")
+			{
+		
+				var action = "NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen&Change=true";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}	
+		}
 	</script>
 </head>
 
@@ -466,7 +478,7 @@
 <!-- Mandar : 434 : for tooltip -->
 				     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
 				     				styleId="specimenCollectionGroupId" size="1" 
-									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onCollOrClassChange()">
 								<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
 									labelProperty="name" property="value"/>		
 							</html:select>
@@ -526,7 +538,7 @@
 				    </td>
 				    <td class="formField" colspan="4">
 <!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);onCollOrClassChange()" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				     	<%
 							String classValue = form.getClassName();
 							if(operation.equals(Constants.EDIT))

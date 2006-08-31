@@ -6,6 +6,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.StorageContainerForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 
@@ -14,10 +15,11 @@
 		//StorageContainerForm form = (StorageContainerForm)request.getAttribute("storageContainerForm");
 		
         String operation = (String) request.getAttribute(Constants.OPERATION);
+		String containerNumber=(String)request.getAttribute("ContainerNumber");
         String formName;
-		
+		List siteForParent = (List)request.getAttribute("siteForParentList");
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-		
+
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
         {
@@ -58,9 +60,28 @@
 %>
 
 <head>
+<style>
+	.hidden
+	{
+	 display:none;
+	}
+
+</style>
 	<script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript">
+		var parentIdArray = new Array();
+		var siteNameArray = new Array();
+		<%
+			if(siteForParent != null) 
+			{
+			for(int i=0; i<siteForParent.size();i++)
+    		{
+    			NameValueBean nvb = (NameValueBean) siteForParent.get(i);
+		%>
+				parentIdArray[<%=i%>] = "<%=nvb.getValue()%>";
+				siteNameArray[<%=i%>] = "<%=nvb.getName()%>";
+    	<%	}}%>
 		
 		function checkNoOfContainers(action,formField)
 		{
@@ -106,31 +127,61 @@
 		}
 		function ReserName()
 		{
-		 		document.forms[0].containerName.value="";
-				change();
-		}
-		function onSiteChange(element)
-		{
-			if(document.forms[0].containerName.value=="")
+	 		document.forms[0].containerName.value="";
+			if(document.forms[0].checkedButton[0].checked==true)
 			{
-				change();
+				onSiteChange();
+			}
+			else
+			{
+				onParentContainerChange();
+			}	
+		}
+		function onSiteChange()
+		{
+			var typeElement = document.getElementById("typeId");
+			var siteElement = document.getElementById("siteId");
+			var containerNameElement = document.getElementById("containerName");
+			if(typeElement.value != "-1" && siteElement.value != "-1" && containerName.value == "")
+			{
+				nameChange(siteElement.options[siteElement.selectedIndex].text,typeElement.options[typeElement.selectedIndex].text,<%=containerNumber%>);
 			}
 		}
-		function onParentContainerChange(element)
+		function onParentContainerChange()
 		{
-
-			if(document.forms[0].containerName.value=="")
+			var typeElement = document.getElementById("typeId");
+			var containerName = document.getElementById("containerName");
+			var parentContainer = document.getElementById("customListBox_1_0");
+		
+			if(typeElement.value != "-1" && parentContainer.value != "-1" && containerName.value == "")
 			{
-				change();	
-			}
+				getSiteName(parentContainer.value);
+				var siteName = document.forms[0].siteForParentContainer.value;
+				nameChange(siteName,typeElement.options[typeElement.selectedIndex].text,<%=containerNumber%>);
+			}	
 		}
 		
-		function change()
+		
+		function nameChange(siteName,typeName,Id)
 		{
-			var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&siteOrParentContainerChange=true";
-			document.forms[0].action = action;
-			document.forms[0].submit();
-		}		
+			if(siteName!="-1" && typeName!="-1")
+			{
+				document.forms[0].containerName.value=siteName+"_"+typeName+"_"+Id;
+			}
+		}	
+		function getSiteName(id)
+		{
+
+			for(var i=0; i<parentIdArray.length; i++)
+			{
+				if(id == parentIdArray[i])
+				{
+					document.forms[0].siteForParentContainer.value = siteNameArray[i];
+					break;
+				}
+			}		
+					
+		}	
 			
 //  function to insert a row in the inner block
 
@@ -321,6 +372,8 @@ function validate(action,formField)
 				</tr>
 				<tr>
 					<td><html:hidden property="positionInParentContainer" />
+						<html:hidden property="siteForParentContainer"/>
+
 					</td>
 				</tr>
 				<tr>
@@ -378,14 +431,14 @@ function validate(action,formField)
 						<td class="formField" colspan="2">
 							<logic:equal name="storageContainerForm" property="checkedButton" value="1">
 <!-- Mandar : 434 : for tooltip -->
-							<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" onchange="onSiteChange(this)"
+							<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" onchange="onSiteChange()"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 							</html:select>
 							</logic:equal>
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
 <!-- Mandar : 434 : for tooltip -->
-							<html:select property="siteId" styleClass="formFieldSized15" styleId="siteId" size="1" onchange="onSiteChange(this)" disabled="true"
+							<html:select property="siteId" styleClass="formFieldSized15" styleId="siteId" size="1" onchange="onSiteChange()" disabled="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 							</html:select>
@@ -427,8 +480,8 @@ function validate(action,formField)
 							String styClass = "formFieldSized5";
 							String tdStyleClass = "customFormField";
 							boolean disabled = true;
-							String onChange = "onCustomListBoxChange(this),onParentContainerChange(this)";
-							//String onChange = "onCustomListBoxChange(this);onParentContainerChange(this)";
+							String onChange = "onCustomListBoxChange(this),onParentContainerChange()";
+							//String onChange = "onCustomListBoxChange(this);onParentContainerChange()";
 							boolean buttonDisabled = true;
 							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
 							String buttonOnClicked = "StorageMapWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2&amp;storageType=','name','810','320','yes');return false";
@@ -497,7 +550,7 @@ function validate(action,formField)
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="startNumber" property="containerName"/>
+							<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="containerName" property="containerName"/>
 							&nbsp;
 							<html:link href="#" styleId="newSite" onclick="ReserName()">
 								<bean:message key="StorageContainer.resetName" />
@@ -675,31 +728,19 @@ function validate(action,formField)
 							<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity"/>
 						</td>
 					</tr>
-				</table>
-				
-				<table summary="" cellpadding="3" cellspacing="0" border="0" width="500">	
 					<tr>
-						<td align="right">
-						<!-- action buttons begins -->
-						<table cellpadding="4" cellspacing="0" border="0">
-							<tr>
-								<td>
+						<td colspan="5" align="right">
 								<%
 						   			String action = "validate('" + formName +"',document.forms[0].activityStatus)";
 						   		%>
 						   			<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
 						   				<bean:message key="buttons.submit"/>
 						   			</html:button>
-						   		</td>
-								
-							</tr>
-						</table>
-						<!-- action buttons end -->
-						</td>
+				   		</td>
+						
 					</tr>
-					
-			</table>
-
+				</table>
+				
 			<!-- /td-->
 		</tr>
 

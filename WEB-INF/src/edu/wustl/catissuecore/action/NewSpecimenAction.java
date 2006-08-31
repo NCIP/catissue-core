@@ -275,13 +275,26 @@ public class NewSpecimenAction  extends SecureAction
     	setDateParameters(specimenForm);
     	
     	//    	 ---- chetan 15-06-06 ----
-        Map containerMap;
+    	StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+        Map containerMap = new HashMap();
         if(operation.equals(Constants.ADD))
         {
-        	StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-        	containerMap = scbizLogic.getAllocatedContainerMap();
-        	//containerMap = scbizLogic.getAllocatedContaienrMapForContainer(2);
-        } else
+        	if(request.getParameter("Change")!=null)
+        	{
+        		List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(specimenForm.getSpecimenCollectionGroupId()));
+            	
+    			if(!spCollGroupList.isEmpty())
+    			{
+    				SpecimenCollectionGroup spCollGroup = (SpecimenCollectionGroup)spCollGroupList.get(0);
+    				long cpId = spCollGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
+    				String spClass = specimenForm.getClassName();
+    				Logger.out.info("cpId :"+cpId +"spClass:"+spClass);
+    				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,spClass);
+    			}
+           		
+        	}
+        } 
+        else
         {
         	containerMap = new TreeMap();
         	Integer id = new Integer(specimenForm.getStorageContainer());

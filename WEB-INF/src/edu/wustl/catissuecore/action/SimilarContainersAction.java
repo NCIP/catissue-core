@@ -7,12 +7,9 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,12 +30,10 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.cde.CDE;
-import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -67,15 +62,15 @@ public class SimilarContainersAction extends SecureAction
 
 		//    	populating collection protocol list.
 		List list1 = ibizLogic.retrieve(CollectionProtocol.class.getName());
-		List collectionProtocolList = getCollectionProtocolList(list1);
+		List collectionProtocolList = Utility.getCollectionProtocolList(list1);
 		request.setAttribute(Constants.PROTOCOL_LIST, collectionProtocolList);
 
 		//Gets the Storage Type List and sets it in request 
 		List list2 = ibizLogic.retrieve(StorageType.class.getName());
-		List storageTypeListWithAny = getStorageTypeList(list2, true);
+		List storageTypeListWithAny = Utility.getStorageTypeList(list2, true);
 		request.setAttribute(Constants.HOLDS_LIST1, storageTypeListWithAny);
 
-		List StorageTypeListWithoutAny = getStorageTypeList(list2, false);
+		List StorageTypeListWithoutAny = Utility.getStorageTypeList(list2, false);
 		request.setAttribute(Constants.STORAGETYPELIST, StorageTypeListWithoutAny);
 
 		//		Populating the Site Array
@@ -85,23 +80,8 @@ public class SimilarContainersAction extends SecureAction
 		request.setAttribute(Constants.SITELIST, list);
 
 		// get the Specimen class and type from the cde
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-		Set setPV = specimenClassCDE.getPermissibleValues();
-		Iterator itr = setPV.iterator();
-		List specimenClassTypeList = new ArrayList();
-		specimenClassTypeList.add(new NameValueBean("--All--", "-1"));
-		while (itr.hasNext())
-		{
-			//List innerList =  new ArrayList();
-			Object obj = itr.next();
-			PermissibleValue pv = (PermissibleValue) obj;
-			String tmpStr = pv.getValue();
-			Logger.out.debug(tmpStr);
-			specimenClassTypeList.add(new NameValueBean(tmpStr, tmpStr));
-
-		} // class and values set
-
-		request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
+    	List specimenClassTypeList=Utility.getSpecimenClassTypeListWithAny();
+	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
 
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
@@ -170,10 +150,15 @@ public class SimilarContainersAction extends SecureAction
 		// used for suffixing Unique numbers to auto-generated container name
 		long maxId = bizLogic.getNextContainerNumber();
 		request.setAttribute(Constants.MAX_IDENTIFIER, Long.toString(maxId));
-		
-		Map containerMap1 = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
+		request.setAttribute("ContainerNumber",new Long(maxId).toString());
+		List mapSiteList1 = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
 				.getParameter("typeId")).longValue());
+		Map containerMap1 = (Map)mapSiteList1.get(0);
+		List siteList1 = (List)mapSiteList1.get(1);
+		/*Map containerMap1 = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
+				.getParameter("typeId")).longValue());*/
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap1);
+		request.setAttribute("siteForParentList",siteList1);
 		
 
 		if (similarContainersForm.getSimilarContainersMap().size() == 0)
@@ -192,9 +177,12 @@ public class SimilarContainersAction extends SecureAction
 			if (siteOrParentCont == 2)
 			{
 
-				Map containerMap = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
+				List mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
 						.getParameter("typeId")).longValue());
+				Map containerMap = (Map)mapSiteList.get(0);
+				List siteNameList = (List)mapSiteList.get(1);
 				request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+				request.setAttribute("siteForParentList",siteNameList);
 				String[] startingPoints = new String[3];
 				startingPoints[0] = Long.toString(similarContainersForm.getParentContainerId());
 				startingPoints[1] = Integer.toString(similarContainersForm
@@ -441,58 +429,5 @@ public class SimilarContainersAction extends SecureAction
 		return returner;
 	}
 
-	/* This function gets the list of all collection protocols as argument and  
-	 * create a list in which nameValueBean is stored with Title and Identifier of Collection Protocol.
-	 * and returns this list
-	 */
-	private List getCollectionProtocolList(List list)
-	{
-		List collectionProtocolList = new ArrayList();
-
-		Iterator cpItr = list.iterator();
-		while (cpItr.hasNext())
-		{
-			CollectionProtocol cp = (CollectionProtocol) cpItr.next();
-			collectionProtocolList.add(new NameValueBean(cp.getTitle(), cp.getId()));
-		}
-		Collections.sort(collectionProtocolList);
-		collectionProtocolList.add(0, new NameValueBean(Constants.HOLDS_ANY, "-1"));
-		return collectionProtocolList;
-	}
-
-	/* this Function gets the list of all storage types as argument and  
-	 * create a list in which nameValueBean is stored with Type and Identifier of storage type.
-	 * and returns this list
-	 */
-	private List getStorageTypeList(List list, boolean includeAny)
-	{
-		NameValueBean typeAny = null;
-		List storageTypeList = new ArrayList();
-		Iterator typeItr = list.iterator();
-		while (typeItr.hasNext())
-		{
-			StorageType type = (StorageType) typeItr.next();
-			if (type.getId().longValue() == 1)
-			{
-				typeAny = new NameValueBean(Constants.HOLDS_ANY, type.getId());
-			}
-			else
-			{
-				storageTypeList.add(new NameValueBean(type.getName(), type.getId()));
-			}
-		}
-		Collections.sort(storageTypeList);
-		if (includeAny)
-		{
-			if (typeAny != null)
-				storageTypeList.add(0, typeAny);
-		}
-		else
-		{
-			storageTypeList.add(0, new NameValueBean(Constants.SELECT_OPTION, "-1"));
-		}
-		return storageTypeList;
-
-	}
 
 }

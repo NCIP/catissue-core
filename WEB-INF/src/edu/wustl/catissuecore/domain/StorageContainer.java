@@ -402,18 +402,19 @@ public class StorageContainer extends Container
 			{
 				for (int i = 0; i < specimenClassArr.length; i++)
 				{
-					Logger.out.debug("Specimen class Id :" + specimenClassArr[i]);
-					//if(!specimenClassArr[i].equals("-1"))
-					//{
-					//TODO : Vaishali
-					//		        		SpecimenClass specimenClass = new SpecimenClass();
-					//		        		specimenClass.setId(new Long(specimenClassArr[i]));
-					//		        		holdsSpecimenClassCollection.add(specimenClass);
-					//String specimenClassType=specimenClassArr[i];
-					holdsSpecimenClassCollection.add(specimenClassArr[i]);
-					//}
+	        		Logger.out.debug("class Id :"+specimenClassArr[i]);
+	        		if(specimenClassArr[i].equals("-1"))
+	        		{
+	        			holdsSpecimenClassCollection.addAll(Utility.getSpecimenClassTypes());
+	        			break;
+	        		}
+	        		else
+	        		{
+	        			holdsSpecimenClassCollection.add(specimenClassArr[i]);
+	        		}
 				}
 			}
+			
 			if (this.noOfContainers.intValue() > 1)
 			{
 				Logger.out.info("--------------------------:" + form.getSimilarContainersMap());

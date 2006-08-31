@@ -12,10 +12,8 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +28,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
@@ -59,48 +58,13 @@ public class StorageTypeAction  extends SecureAction
  
         //Gets the Storage Type List and sets it in request
         List list1=bizLogic.retrieve(StorageType.class.getName());
-    	List storageTypeList=getStorageTypeList(list1);
+    	List storageTypeList=Utility.getStorageTypeList(list1);
     	//Collections.sort(storageTypeList);
     	request.setAttribute(Constants.HOLDS_LIST1, storageTypeList);
     	
-    	
-    	//TODO : Vaishali
-//    	//Gets the Specimen Class Type List and sets it in request
-//    	List list2=bizLogic.retrieve(SpecimenClass.class.getName());
-//        List specimenClassTypeList = getSpecimenClassTypeList(list2);
-//        //Collections.sort(specimenClassTypeList);
-    	/*List specimenClassTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
-    	specimenClassTypeList.remove(0);*/
-    	
-    	Logger.out.debug("1");
+       	
     	// get the Specimen class and type from the cde
-    	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-    	Set setPV = specimenClassCDE.getPermissibleValues();
-    	Logger.out.debug("2");
-    	Iterator itr = setPV.iterator();
-    
-    	List specimenClassTypeList =  new ArrayList();
-    	Map subTypeMap = new HashMap();
-    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
-    	specimenClassTypeList.add(new NameValueBean("--All--","-1"));
-    	
-    	while(itr.hasNext())
-    	{
-    		//List innerList =  new ArrayList();
-    		Object obj = itr.next();
-    		PermissibleValue pv = (PermissibleValue)obj;
-    		String tmpStr = pv.getValue();
-    		Logger.out.debug(tmpStr);
-    		specimenClassTypeList.add(new NameValueBean( tmpStr,tmpStr));
-    					
-    	} // class and values set
-    	Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
-    	
-    	// sets the Class list
-    	//request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassTypeList);
-
-    	
-    	
+    	List specimenClassTypeList=Utility.getSpecimenClassTypeListWithAny();
 	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
         
 	  	if(operation.equals(Constants.ADD))
@@ -157,28 +121,29 @@ public class StorageTypeAction  extends SecureAction
      * create a list in which nameValueBean is stored with Name and Identifier of specimen Class Type.
      * and returns this list
      */
-    private List getSpecimenClassTypeList(List list)
+    
+    private List getSpecimenClassTypeListWithAny()
     {
-    	List specimenClassTypeList=new ArrayList();
-    	NameValueBean specimenClassAny=null;
+    	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
+    	Set setPV = specimenClassCDE.getPermissibleValues();
+    	Iterator itr = setPV.iterator();
+    
+    	List specimenClassTypeList =  new ArrayList();
+    	specimenClassTypeList.add(new NameValueBean("--All--","-1"));
     	
-    	Iterator specimentypeItr=list.iterator();
-    	while(specimentypeItr.hasNext())
+    	while(itr.hasNext())
     	{
-    	    //TODO : Vaishali
-//    		SpecimenClass specimenClass=(SpecimenClass)specimentypeItr.next();
-//    		if(specimenClass.getId().longValue()==1)
-//    		{
-//    			specimenClassAny=new NameValueBean(Constants.HOLDS_ANY,specimenClass.getId());
-//    		}
-//    		else
-//    		{
-//    			specimenClassTypeList.add(new NameValueBean(specimenClass.getName(),specimenClass.getId()));
-//    		}
-    	}
-    	Collections.sort(specimenClassTypeList);
-    	specimenClassTypeList.add(0,specimenClassAny);
+    		//List innerList =  new ArrayList();
+    		Object obj = itr.next();
+    		PermissibleValue pv = (PermissibleValue)obj;
+    		String tmpStr = pv.getValue();
+    		Logger.out.info("specimen class:"+tmpStr);
+    		specimenClassTypeList.add(new NameValueBean( tmpStr,tmpStr));
+    					
+    	} // class and values set
+    	
     	return specimenClassTypeList;
+
     	
     }
 }

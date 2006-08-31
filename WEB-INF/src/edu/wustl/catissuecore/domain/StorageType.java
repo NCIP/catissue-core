@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
@@ -165,17 +166,19 @@ public class StorageType extends ContainerType
         	String [] specimenClassTypeArr = storageTypeForm.getHoldsSpecimenClassTypes();
         	if(specimenClassTypeArr!=null)
         	{
+        		
 	        	for (int i = 0; i < specimenClassTypeArr.length; i++)
 				{
 	        		Logger.out.debug("type Id :"+specimenClassTypeArr[i]);
-	        		//if(specimenClassTypeArr[i]!=-1)
-	        		//{
-	        		    //TODO : Vaishali
-//		        		SpecimenClass specimenClass = new SpecimenClass();
-//		        		specimenClass.setId(new Long(specimenClassTypeArr[i]));
-//		        		holdsSpecimenClassCollection.add(specimenClass);
+	        		if(specimenClassTypeArr[i].equals("-1"))
+	        		{
+	        			holdsSpecimenClassCollection.addAll(Utility.getSpecimenClassTypes());
+	        			break;
+	        		}
+	        		else
+	        		{
 	        			holdsSpecimenClassCollection.add(specimenClassTypeArr[i]);
-	        		//}
+	        		}
 				}
         	}
 
@@ -186,4 +189,6 @@ public class StorageType extends ContainerType
 	    	Logger.out.error(excp.getMessage());
 	    }
     }
+    
+   
 }

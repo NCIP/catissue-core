@@ -33,6 +33,8 @@ public class ParticipantLookupLogic implements LookupLogic
 		participantParams.getObject();
 		Double cutoff=participantParams.getCutoff();
 		
+		//ParticipantBizLogic bizLogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String sourceObjectName = Participant.class.getName();
   	
@@ -67,42 +69,44 @@ public class ParticipantLookupLogic implements LookupLogic
 		{
 			count=0;
 			Participant destParticipant=(Participant)itr.next();
+			if(destParticipant.getActivityStatus() != null && destParticipant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+			{	
+				if(srcParticipant.getFirstName()!=null && !srcParticipant.getFirstName().trim().equals("")&& destParticipant.getFirstName().startsWith(srcParticipant.getFirstName()))
+				{
+					count++;
+				}
+				if(srcParticipant.getMiddleName()!=null && !srcParticipant.getMiddleName().trim().equals("")&&destParticipant.getMiddleName().startsWith(srcParticipant.getMiddleName()))
+				{
+					count++;
+				}
+				if(srcParticipant.getLastName()!=null && !srcParticipant.getLastName().trim().equals("") && destParticipant.getLastName().startsWith(srcParticipant.getLastName()))
+				{
+					count++;
+				}
+				if(srcParticipant.getBirthDate()!=null  && destParticipant.getBirthDate()!=null&& srcParticipant.getBirthDate().compareTo(destParticipant.getBirthDate())==0)
+				{
+					count++;
+				}
+				if(srcParticipant.getDeathDate()!=null  && destParticipant.getDeathDate()!=null && srcParticipant.getDeathDate().compareTo(destParticipant.getDeathDate())==0)
+				{
+					count++;
+				}
+				if(srcParticipant.getSocialSecurityNumber()!=null &&!srcParticipant.getSocialSecurityNumber().trim().equals("")&& srcParticipant.getSocialSecurityNumber().equals(destParticipant.getSocialSecurityNumber()))
+				{
+					count++;
+				}
 			
-			if(srcParticipant.getFirstName()!=null && !srcParticipant.getFirstName().trim().equals("")&& destParticipant.getFirstName().startsWith(srcParticipant.getFirstName()))
-			{
-				count++;
+				//	Finding the probablity.
+				Double probablity=new Double((100*count)/6);
+				if(probablity.doubleValue()>=cutoff.doubleValue())
+				{
+					DefaultLookupResult result=new DefaultLookupResult();
+					result.setObject(destParticipant);
+					result.setProbablity(probablity);
+					participants.add(result);
+				}
 			}
-			if(srcParticipant.getMiddleName()!=null && !srcParticipant.getMiddleName().trim().equals("")&&destParticipant.getMiddleName().startsWith(srcParticipant.getMiddleName()))
-			{
-				count++;
-			}
-			if(srcParticipant.getLastName()!=null && !srcParticipant.getLastName().trim().equals("") && destParticipant.getLastName().startsWith(srcParticipant.getLastName()))
-			{
-				count++;
-			}
-			if(srcParticipant.getBirthDate()!=null  && destParticipant.getBirthDate()!=null&& srcParticipant.getBirthDate().compareTo(destParticipant.getBirthDate())==0)
-			{
-				count++;
-			}
-			if(srcParticipant.getDeathDate()!=null  && destParticipant.getDeathDate()!=null && srcParticipant.getDeathDate().compareTo(destParticipant.getDeathDate())==0)
-			{
-				count++;
-			}
-			if(srcParticipant.getSocialSecurityNumber()!=null &&!srcParticipant.getSocialSecurityNumber().trim().equals("")&& srcParticipant.getSocialSecurityNumber().equals(destParticipant.getSocialSecurityNumber()))
-			{
-				count++;
-			}
-			
-			//Finding the probablity.
-			Double probablity=new Double((100*count)/6);
-			if(probablity.doubleValue()>=cutoff.doubleValue())
-			{
-				DefaultLookupResult result=new DefaultLookupResult();
-				result.setObject(destParticipant);
-				result.setProbablity(probablity);
-				participants.add(result);
-			}
-		}
+		}	
 		return participants;
 	}
  
