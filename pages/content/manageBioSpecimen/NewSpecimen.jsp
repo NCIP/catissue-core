@@ -415,7 +415,7 @@
 			   	
 			  <!-- NEW SPECIMEN REGISTRATION BEGINS-->
 	    	  <tr>
-			    <td>
+			    <td width = "100%">
 			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
 					<tr><td colspan="6">
 						<html:errors />
@@ -426,32 +426,22 @@
 					<tr><td colspan="6">
 						<%@ include file="NewSpecimenPageButtons.jsp" %>
 					</td></tr>
-			 	 
+	
 				 <tr>
-				 	<td>
-						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
-						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
-						<html:hidden property="forwardTo" value=""/>
-					</td>
-					<td>
-						<html:hidden property="exIdCounter"/>
-					</td>
-					<td>
-						<html:hidden property="bhCounter"/>
-					</td>
-					<td><html:hidden property="onSubmit"/></td>
-					<td>
-						<html:hidden property="id"/>
-						<html:hidden property="positionInStorageContainer" />
-						<html:hidden property="parentPresent" />
-					</td>
+					<td class="formMessage" colspan="6">* indicates a required field</td>
 				 </tr>
-
+		 
+				 
+				 </table>
+				</td>
+				</tr>
+				
+				<tr>
+				<td>
+				 <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+				 
 				 <tr>
-					<td class="formMessage" colspan="3">* indicates a required field</td>
-				 </tr>
-				 <tr>
-				     <td class="formTitle" height="20" colspan="6">
+				     <td class="formTitle" height="20" width="100%" colspan="6">
 				     <%String title = "specimen."+pageView+".title";%>
 				     	<bean:message key="<%=title%>"/>
 				    	<%
@@ -465,8 +455,9 @@
 				     	
 				     </td>
 				 </tr>
-				 <tr>
-			     	<td class="formRequiredNotice" width="5">*</td>
+
+					<tr>
+					<td class="formRequiredNotice" >*</td>
 				    
 					<logic:equal name="newSpecimenForm" property="parentPresent" value="false">
 						<td class="formRequiredLabel">
@@ -474,7 +465,7 @@
 								<bean:message key="specimenCollectionGroup.groupName"/>
 							</label>
 						</td>
-						<td class="formField" colspan="4">
+						<td class="formField" >
 <!-- Mandar : 434 : for tooltip -->
 				     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
 				     				styleId="specimenCollectionGroupId" size="1" 
@@ -496,13 +487,13 @@
 		        	</logic:equal>
 		        	
 		        	<logic:equal name="newSpecimenForm" property="parentPresent" value="true">
-			        	<td class="formRequiredLabel">
+			        	<td class="formRequiredLabel" >
 							<label for="parentSpecimenId">
 								<bean:message key="createSpecimen.parent"/>
 							</label>
 						</td>
 						
-			        	<td class="formField" colspan="4">
+			        	<td class="formField" >
 			        		<html:hidden property="specimenCollectionGroupId"/>
 <!-- Mandar : 434 : for tooltip -->
 				     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>"
@@ -512,22 +503,21 @@
 			        	</td>
 		        	</logic:equal>
 		        	
-				 </tr>
-				 
-				 <tr>
-			     	<td class="formRequiredNotice" width="5">
+				
+			     	<td class="formRequiredNotice" >
 				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
 				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 				    </td>
-				    <td class="formRequiredLabel">
+				    <td class="formRequiredLabel" >
 						<label for="label">
 							<bean:message key="specimen.label"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="4">
+				    <td class="formField" >
 				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
 				    </td>
-				 </tr>
+				</tr>
+				
 				 
 				 <tr>
 				 	<td class="formRequiredNotice" width="5">*</td>
@@ -536,7 +526,7 @@
 				     		<bean:message key="specimen.type"/>
 				     	</label>
 				    </td>
-				    <td class="formField" colspan="4">
+				    <td class="formField">
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);onCollOrClassChange()" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				     	<%
@@ -554,15 +544,14 @@
 						%>
 						</html:select>
 		        	</td>
-				 </tr>
-				 <tr>
+				 
 				    <td class="formRequiredNotice" width="5">*</td>
 				    <td class="formRequiredLabel">
 				     	<label for="type">
 				     		<bean:message key="specimen.subType"/>
 				     	</label>
 				    </td>				    
-				    <td class="formField" colspan="4">
+				    <td class="formField" >
 				    <!-- --------------------------------------- -->
 				    <%
 								String classValue = (String)form.getClassName();
@@ -596,6 +585,8 @@
 						</html:select>
 		        	</td>
 				 </tr>
+				 
+				 
 				 <tr>
 				     <td class="formRequiredNotice" width="5">
 				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
@@ -606,7 +597,7 @@
 							<bean:message key="specimen.tissueSite"/>
 						</label>
 					</td>
-				     <td class="formField" colspan="4">
+				     <td class="formField" >
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -619,8 +610,7 @@
 							<img src="images\Tree.gif" border="0" width="24" height="18" title='Tissue Site Selector'>
 						</a>
 		        	  </td>
-				 </tr>
-				 <tr>
+				
 				     <td class="formRequiredNotice" width="5">
 				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
 				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
@@ -630,7 +620,7 @@
 							<bean:message key="specimen.tissueSide"/>
 						</label>
 					</td>
-				     <td class="formField" colspan="4">
+				     <td class="formField" >
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="tissueSide" styleClass="formFieldSized15" styleId="tissueSide" size="1" disabled="<%=readOnlyForAll%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -638,6 +628,8 @@
 						</html:select>
 		        	  </td>
 				 </tr>
+				 
+				 
 				 <tr>
 				    <td class="formRequiredNotice" width="5">
 				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
@@ -648,7 +640,7 @@
 							<bean:message key="specimen.pathologicalStatus"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="4">
+				    <td class="formField" >
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="pathologicalStatus" styleClass="formFieldSized15" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -656,7 +648,21 @@
 							<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
+			
+			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
+				    <td class="formLabel">
+					
+				    	<label for="barcode">
+							<bean:message key="specimen.barcode"/>
+						</label>
+						
+					</td>
+				    <td class="formField" >
+						<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
+		        	</td>
 				 </tr>
+				 
+				 
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">
 				     	&nbsp;
@@ -666,7 +672,7 @@
 							<bean:message key="specimen.concentration"/>
 						</label>
 					</td>
-					<td class="formField" colspan="4">
+					<td class="formField" >
 					<%
 						boolean concentrationDisabled = true;
 						
@@ -677,8 +683,7 @@
 			     		readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>"/>
 						&nbsp;<bean:message key="specimen.concentrationUnit"/>
 					</td>
-				 </tr>
-				 <tr>
+				
 			     	<td class="formRequiredNotice" width="5">
 				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
 				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
@@ -688,7 +693,7 @@
 							<bean:message key="specimen.quantity"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="4">
+				    <td class="formField" >
 				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
 				     	<span id="unitSpan"><%=unitSpecimen%></span>
 				     	<html:hidden property="unit"/>
@@ -785,18 +790,7 @@
 				<%-- n-combo-box end --%>
 				 </tr>
 				 
-				 <tr>
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
-				    	<label for="barcode">
-							<bean:message key="specimen.barcode"/>
-						</label>
-					</td>
-				    <td class="formField" colspan="4">
-						<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
-		        	</td>
-				 </tr>
-				 
+				 				 
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formLabel">
@@ -808,7 +802,10 @@
 				    	<html:textarea styleClass="formFieldSized"  rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
-					
+				</table>	
+				
+				
+				 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 				<!-- activitystatus -->
 				<tr>
@@ -1048,14 +1045,14 @@ if(currentCollectionDate.trim().length() > 0)
 				    </td>
 				</tr>
 				 
-				 <tr>
+				 				 <tr>
 			     	<td class="formRequiredNotice" width="5">*</td>
 				    <td class="formRequiredLabel">
 				    	<label for="noOfAliquots">
 							<bean:message key="aliquots.noOfAliquots"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="4">
+				    <td class="formField" >
 					    <logic:equal name="newSpecimenForm" property="checkedButton" value="true">
 							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="noOfAliquots" property="noOfAliquots"/>
 						</logic:equal>
@@ -1064,16 +1061,13 @@ if(currentCollectionDate.trim().length() > 0)
 							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="noOfAliquots" property="noOfAliquots" disabled="true"/>
 						</logic:equal>
 		        	</td>
-				 </tr>
-				 
-				 <tr>
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
+				
+			        <td class="formLabel">
 				    	<label for="quantityPerAliquot">
 							<bean:message key="aliquots.qtyPerAliquot"/>
 						</label>
 					</td>
-				    <td class="formField" colspan="4">
+				    <td class="formField" >
 				    	<logic:equal name="newSpecimenForm" property="checkedButton" value="true">
 							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="quantityPerAliquot" property="quantityPerAliquot"/>
 						</logic:equal>
@@ -1083,6 +1077,7 @@ if(currentCollectionDate.trim().length() > 0)
 						</logic:equal>
 		        	</td>
 				 </tr>
+
 				 
 				 </logic:notEqual>
  
