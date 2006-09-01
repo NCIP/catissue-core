@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.action;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -110,8 +111,8 @@ public class AliquotAction extends BaseAction //SecureAction
 		}
 		
         StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-        Map containerMap = bizLogic.getAllocatedContainerMap();
-        
+        //Map containerMap = bizLogic.getAllocatedContainerMap();
+        Map containerMap = new HashMap();
         if(Constants.PAGEOF_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGEOF)))
         {
         	pageOf = validate(request,aliquotForm);
