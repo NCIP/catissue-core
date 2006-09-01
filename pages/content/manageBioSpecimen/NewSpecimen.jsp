@@ -427,7 +427,29 @@
 						<%@ include file="NewSpecimenPageButtons.jsp" %>
 					</td></tr>
 	
+				
+				 
 				 <tr>
+				 	<td>
+						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
+						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+						<html:hidden property="forwardTo" value=""/>
+					</td>
+					<td>
+						<html:hidden property="exIdCounter"/>
+					</td>
+					<td>
+						<html:hidden property="bhCounter"/>
+					</td>
+					<td><html:hidden property="onSubmit"/></td>
+					<td>
+						<html:hidden property="id"/>
+						<html:hidden property="positionInStorageContainer" />
+						<html:hidden property="parentPresent" />
+					</td>
+				 </tr>
+				 
+				  <tr>
 					<td class="formMessage" colspan="6">* indicates a required field</td>
 				 </tr>
 		 
