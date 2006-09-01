@@ -134,15 +134,13 @@
 					
 				<tr>
 					<td class="formTitle" height="20" colspan="3">
-						<bean:message key="collectionProtocolReg.title" />
-						<%
-							if(operation.equals(Constants.EDIT))
-							{
-						%>
-						&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="collectionProtocolRegistrationForm" property="id" />
-						<%
-							}
-						%>
+						<logic:equal name="operation" value="<%=Constants.ADD%>">
+							<bean:message key="collectionProtocolReg.add.title"/>
+						</logic:equal>
+						<logic:equal name="operation" value="<%=Constants.EDIT%>">
+							<bean:message key="collectionProtocolReg.edit.title"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="collectionProtocolRegistrationForm" property="id" />
+						</logic:equal>
+
 					</td>
 				</tr>
 					
