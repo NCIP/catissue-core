@@ -614,7 +614,10 @@
 		<put name="content" value="/pages/content/search/DataView.jsp" />
 	</definition>
 	
-
+	<definition name=".catissuecore.editSpecimenArrayTypeSearchPageDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/search/DataView.jsp" />
+	</definition>
+	
 	<!-- BioSpecimen tab pages definitions end -->
 
 	<!-- Search tab pages definitions start -->
@@ -642,6 +645,10 @@
 		
 	<definition name=".catissuecore.simpleQueryInterfaceDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/SimpleQueryInterface.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.simpleSearchSpecimenArrayTypeDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenArrayType.jsp" />
 	</definition>
 	
 	<definition name=".catissuecore.advanceQueryDef" extends=".catissuecore.queryDataViewDef">
