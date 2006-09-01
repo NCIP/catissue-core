@@ -1,4 +1,3 @@
-<?xml version ="1.0"?>
 
 <!--Ant Script for create Build for caTISSUE Core-->
 
@@ -364,6 +363,7 @@
 			<transaction  src="${common.sql.dir}/CDE_DummyData_Common.sql"/>
 			<transaction  src="${mysql.sql.dir}/csm_catissuecore.sql"/>
 			<transaction  src="${common.sql.dir}/createUser.sql"/>
+			<transaction  src="${common.sql.dir}/insert_default_data.sql"/>
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -390,6 +390,7 @@
 		  <transaction  src="${common.sql.dir}/CDE_DummyData_Common.sql"/>
 		  <transaction  src="${oracle.sql.dir}/CSM_Create_Oracle.sql"/>
 		  <transaction  src="${common.sql.dir}/createUser.sql"/>
+	      <transaction  src="${common.sql.dir}/insert_default_data.sql"/>	
 		  <transaction>commit;</transaction>	
     	  <classpath>
             <fileset dir="${lib.dir}">
