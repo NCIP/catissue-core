@@ -350,6 +350,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DISTRIBUTION_ADD_ACTION = "DistributionAdd.do";
 	public static final String DISTRIBUTION_EDIT_ACTION = "DistributionEdit.do";
 	
+	public static final String SPECIMENARRAYTYPE_ADD_ACTION = "SpecimenArrayTypeAdd.do?operation=add";
+	public static final String SPECIMENARRAYTYPE_EDIT_ACTION = "SpecimenArrayTypeEdit.do?operation=edit";
 	public static final String ARRAY_DISTRIBUTION_ADD_ACTION = "ArrayDistributionAdd.do";
 	
 	
@@ -459,9 +461,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int QUICKEVENTS_FORM_ID = 45;
 	public static final int LIST_SPECIMEN_EVENT_PARAMETERS_FORM_ID = 46;
 	public static final int SIMILAR_CONTAINERS_FORM_ID = 47;                  // chetan (13-07-2006)
-	public static final int SPECIMEN_ARRAY_TYPE_FORM_ID = 48;                  // chetan (13-07-2006)
+	public static final int SPECIMEN_ARRAY_TYPE_FORM_ID = 48;
 	public static final int ARRAY_DISTRIBUTION_FORM_ID = 49;
-	
+	public static final int SPECIMEN_ARRAY_FORM_ID = 50;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
