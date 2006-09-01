@@ -201,10 +201,11 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 		}
 	}
 	
+	
 	/**
 	 * @param domainObject domain object
 	 */
-	private void setAllVa(Object domainObject) {
+	public void setAllVal(Object domainObject) {
 		SpecimenArrayType arrayType = (SpecimenArrayType) domainObject;
         this.id = arrayType.getId().longValue();
         this.name = arrayType.getName();
