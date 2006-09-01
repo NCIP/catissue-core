@@ -5,6 +5,8 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.common.util.global.Variables"%>
+<%@ page import="edu.wustl.common.util.global.ApplicationProperties"%>
+
 <tiles:importAttribute />
 
 <html>
@@ -21,18 +23,18 @@
 	<%
 		int timeOut = request.getSession().getMaxInactiveInterval() ;		
 		timeOut = timeOut*1000;
-		System.out.println("" + new Integer(timeOut));
+		System.out.println("Session timeout in milliseconds is " + new Integer(timeOut));		
 	%>
 	timeOut = "<%= timeOut%>";	
 	function sendToHomePage()
 	{			
 			<% 
-			   Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
-			   System.out.println("______________________ji "+obj); 			
+			   Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);			  			
 			   if(obj != null) 
 			   {
-			%>		  
-			   alert("Your online caTissue Core session has been timed out.");
+			%>			
+			   var timeoutMessage = "<%= ApplicationProperties.getValue("app.session.timeout") %>"
+			   alert(timeoutMessage);
 			   window.location.href("" + "<%= Variables.catissueURL %>");				
 			
 			<%
