@@ -6,6 +6,23 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="java.util.HashMap"%>
 
+<%
+        String operation = (String) request.getAttribute(Constants.OPERATION);
+        String formName;
+//		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+
+//        boolean readOnlyValue;
+        if (operation.equals(Constants.EDIT))
+        {
+            formName = Constants.SPECIMENARRAYTYPE_EDIT_ACTION;
+//            readOnlyValue = false;
+        }
+        else
+        {
+            formName = Constants.SPECIMENARRAYTYPE_ADD_ACTION;
+//            readOnlyValue = false;
+        }
+        %>
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
@@ -16,7 +33,7 @@
 	List specimenClassList = (List) request.getAttribute(Constants.SPECIMEN_CLASS_LIST);
 	HashMap specimenTypeMap = (HashMap) request.getAttribute(Constants.SPECIMEN_TYPE_MAP);
 	SpecimenArrayTypeForm form = (SpecimenArrayTypeForm)request.getAttribute("arrayTypeForm");
-	String operation = (String)request.getAttribute(Constants.OPERATION);
+//	String operation = (String)request.getAttribute(Constants.OPERATION);
 	System.out.println(" Form ::  " + form);
 %>
 
@@ -87,7 +104,9 @@
 		
 </script>
 
-<html:form action="SpecimenArrayTypeAdd.do?operation=add">
+<html:form action="<%=formName%>">
+<html:hidden property="operation" value="<%=operation%>" />
+<html:hidden property="id" />
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 <tr>
 	<td>
