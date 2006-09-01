@@ -47,7 +47,7 @@ public class AliquotForm extends AbstractActionForm
     /**
      * An identifier of Specimen Collection Group.
      */
-//    private long spCollectionGroupId;
+    private long spCollectionGroupId;
     
     /**
      * A class of the specimen. e.g. Tissue, Molecular, Cell, Fluid
@@ -234,20 +234,20 @@ public class AliquotForm extends AbstractActionForm
 	 * @return The specimen collection group identifier of parent specimen.
 	 * @see #setSpCollectionGroupId(long)
 	 */
-//	public long getSpCollectionGroupId()
-//	{
-//		return spCollectionGroupId;
-//	}
+	public long getSpCollectionGroupId()
+	{
+		return spCollectionGroupId;
+	}
 	
 	/**
      * Sets the specimen collection group identifier of parent specimen.
      * @param spCollectionGroupId The specimen collection group identifier of parent specimen.
      * @see #getSpCollectionGroupId()
      */
-//	public void setSpCollectionGroupId(long spCollectionGroupId)
-//	{
-//		this.spCollectionGroupId = spCollectionGroupId;
-//	}
+	public void setSpCollectionGroupId(long spCollectionGroupId)
+	{
+		this.spCollectionGroupId = spCollectionGroupId;
+	}
 	
 	/**
 	 * Returns the specimen class of parent specimen.

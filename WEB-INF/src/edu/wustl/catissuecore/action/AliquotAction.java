@@ -123,6 +123,7 @@ public class AliquotAction extends BaseAction //SecureAction
 	        	if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
 	        	{	
 	        		int aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
+	        		containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(),aliquotForm.getSpecimenClass());
 	        		pageOf = checkForSufficientAvailablePositions(request,containerMap,aliquotCount);
 	        		
 	        		if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
@@ -266,7 +267,7 @@ public class AliquotAction extends BaseAction //SecureAction
 		form.setPathologicalStatus(specimen.getPathologicalStatus());
 		form.setInitialAvailableQuantity(getAvailableQuantity(specimen));
 		form.setAvailableQuantity(getAvailableQuantity(specimen));
-		
+		form.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getId().longValue());
 		if(specimen instanceof MolecularSpecimen)
 		{
 			String concentration = Utility.toString(((MolecularSpecimen)specimen).getConcentrationInMicrogramPerMicroliter());
