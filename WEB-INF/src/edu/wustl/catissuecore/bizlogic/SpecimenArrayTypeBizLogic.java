@@ -28,7 +28,7 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic {
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException {
 		SpecimenArrayType arrayType = (SpecimenArrayType) obj;
-		dao.insert(arrayType.getCapacity(),sessionDataBean, true, false);
-		dao.insert(arrayType,sessionDataBean, true, false);
+		dao.insert(arrayType.getCapacity(),sessionDataBean, true, true);
+		dao.insert(arrayType,sessionDataBean, true, true);
 	}
 }
