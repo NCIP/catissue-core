@@ -159,7 +159,9 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
             case Constants.ALIQUOT_FORM_ID:
                 className = Specimen.class.getName();//AliquotSpecimen.class.getName();
             	break;
-     
+            case Constants.SPECIMEN_ARRAY_TYPE_FORM_ID:
+            	className = SpecimenArrayType.class.getName();
+            	break;
         }
         return className;
     }
