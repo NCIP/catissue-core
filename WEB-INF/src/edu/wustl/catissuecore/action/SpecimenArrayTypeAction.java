@@ -19,13 +19,13 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
@@ -36,7 +36,7 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * @author Ashwin Gupta
  */
-public class SpecimenArrayTypeAction extends Action
+public class SpecimenArrayTypeAction extends SecureAction
 {
 
 	/**
@@ -51,7 +51,6 @@ public class SpecimenArrayTypeAction extends Action
 	
 	/** 
 	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-	 */
 	public ActionForward execute(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) throws Exception {
         String operation = request.getParameter(Constants.OPERATION);
         request.setAttribute(Constants.OPERATION, operation);
@@ -75,12 +74,13 @@ public class SpecimenArrayTypeAction extends Action
 		}
     	return mapping.findForward(Constants.SUCCESS);
 	}
+	*/
 
     /**
      * It will be called when action will be placed like secure action. 
      */
     protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    	SpecimenArrayTypeForm specimenArrayTypeForm = (SpecimenArrayTypeForm) actionForm;
+//    	SpecimenArrayTypeForm specimenArrayTypeForm = (SpecimenArrayTypeForm) actionForm;
     	
         String operation = request.getParameter(Constants.OPERATION);
         request.setAttribute(Constants.OPERATION, operation);
@@ -97,19 +97,24 @@ public class SpecimenArrayTypeAction extends Action
     	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, (List) specimen_Type_Class_Map.get(specimenClassKey));
     	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, (Map) specimen_Type_Class_Map.get(specimenTypeKey));
     	
-	  	if(operation.equals(Constants.ADD))
+/*	  	if(operation.equals(Constants.ADD))
 	  	{
 	  		specimenArrayTypeForm.setOneDimensionCapacity(0);
 	  		specimenArrayTypeForm.setTwoDimensionCapacity(0);
 	  	}
-	  	
+*/	  	
 /*		String strMenu = request.getParameter(Constants.MENU_SELECTED);
 		if(strMenu != null) {
 			request.setAttribute(Constants.MENU_SELECTED ,strMenu);
 			Logger.out.debug(Constants.MENU_SELECTED + " " +strMenu +" set successfully");
 		}
 */		
-    	return mapping.findForward(Constants.SUCCESS);
+    	String pageOf = (String)request.getParameter(Constants.PAGEOF);
+    	
+    	if (pageOf == null) {
+    		pageOf = Constants.SUCCESS;
+    	}
+    	return mapping.findForward(pageOf);
     }
     
     /**
