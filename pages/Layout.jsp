@@ -9,17 +9,39 @@
 
 <html>
 <head>
-<%
-	int timeOut = request.getSession().getMaxInactiveInterval() ; 
-	timeOut =timeOut + 5;
-	String content = timeOut+";url="+Variables.catissueURL;
- %>
-<meta http-equiv="refresh" content="<%=content %>">
 <title><tiles:getAsString name="title" ignore="true" /></title>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <script src="jss/script.js" type="text/javascript"></script>
 <script src="jss/overlib_mini.js" type="text/javascript"></script>
 <script src="jss/calender.js" type="text/javascript"></script>
+
+<!--Jitendra -->
+<script language="JavaScript">
+	var timeOut;
+	<%
+		int timeOut = request.getSession().getMaxInactiveInterval() ;		
+		timeOut = timeOut*1000;
+		System.out.println("" + new Integer(timeOut));
+	%>
+	timeOut = "<%= timeOut%>";	
+	function sendToHomePage()
+	{			
+			<% 
+			   Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+			   System.out.println("______________________ji "+obj); 			
+			   if(obj != null) 
+			   {
+			%>		  
+			   alert("Your online caTissue Core session has been timed out.");
+			   window.location.href("" + "<%= Variables.catissueURL %>");				
+			
+			<%
+			   }
+			%>		  
+	}	
+	setTimeout('sendToHomePage()', timeOut); //if session timeout, then redirect to Home page
+</script>
+<!--Jitendra -->
 
 <!-- Mandar 11-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
