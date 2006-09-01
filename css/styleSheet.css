@@ -303,7 +303,7 @@ FORM BEGINS
   color:#000000; /* constant: black */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
-	text-align:right;
+	text-align:left;
 }
 .formRequiredLabelLeft{ /* for the required form labels */
   font-family:arial,helvetica,verdana,sans-serif;
@@ -452,7 +452,7 @@ td.formSerialNumberField{ /* for the cell that contains the Serial Number */
   color:#000000; /* constant: black */
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
-  text-align:right;
+  text-align:left;
 }
 
 .formLabelBorderless{ /* for the non-required form labels */
@@ -830,6 +830,16 @@ td.onlyBottomBorder{ /* for the cell that contains the form elements */
   text-align:right;
 }
 
+.formRequiredLabelLeftBorder{ /* for the required form labels */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  font-weight:bold;
+  background-color:#F4F4F5; /* constant: light gray */
+  color:#000000; /* constant: black */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
+
 .formRequiredNoticeNoBottom{ /* for the asterisk cell */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:1em;
@@ -878,7 +888,7 @@ input.formDateSized15{ /* for the form elements themselves and with a constant w
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   border-top:1px solid #5C5C5C; /* constant: dark gray */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
-	text-align:right;
+	text-align:left;
 }
 
 .formLabelAddMore{ /* for the non-required form labels */

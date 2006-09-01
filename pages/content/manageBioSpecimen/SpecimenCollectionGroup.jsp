@@ -228,7 +228,7 @@
 							</label>
 				     	</html:radio>
  				    </td>
- 				    <td class="formRequiredLabelRightBorder"  width="186">
+ 				    <td class="formRequiredLabelLeftBorder" width="186">
  				    	<label for="participantId">
 					        <bean:message key="specimenCollectionGroup.collectedByParticipant" />
 						</label>

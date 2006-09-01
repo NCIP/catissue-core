@@ -422,7 +422,7 @@ function validate(action,formField)
 <!-- New row 1 -->
 					<tr>
 						<td class="formRequiredNoticeNoBottom" width="5">*</td>
-						<td class="formRequiredLabelRightBorder" colspan=2>
+						<td class="formRequiredLabelLeftBorder" colspan=2>
 							<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
 								<label for="siteId">
 									<bean:message key="storageContainer.site" />
