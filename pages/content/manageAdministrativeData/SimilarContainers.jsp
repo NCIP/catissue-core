@@ -391,8 +391,13 @@
 						<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity" />
 					</td>
 				  </tr>
+				  <tr>
+					  <td colspan="6">
+						&nbsp;<%--aa--%>
+						</td>
+				   </tr>	  						  	
 		 		  <tr>	
-					<td colspan="6">
+					<td colspan="6" width="600">
 						<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
 						  <tr>
 							<td class="formLeftSubTableTitle" width="5">
