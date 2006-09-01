@@ -2,9 +2,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
