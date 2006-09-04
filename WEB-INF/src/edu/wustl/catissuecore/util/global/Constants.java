@@ -135,6 +135,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CHILD_CONTAINER_SYSTEM_IDENTIFIERS = "childContainerIds";
 	public static final int STORAGE_CONTAINER_FIRST_ROW = 1;
 	public static final int STORAGE_CONTAINER_FIRST_COLUMN = 1;
+	public static final String MAP_COLLECTION_PROTOCOL_LIST = "collectionProtocolList";
+	public static final String MAP_SPECIMEN_CLASS_LIST = "specimenClassList";
 	
 	//event parameters lists
 	public static final String METHOD_LIST = "methodList";
@@ -1077,5 +1079,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
 //	    }
 //	    return "DISTRIBUTION_PROTOCOL_"+identifier;
 //	}
-	
+	public static final String ALL = "All";
 }
