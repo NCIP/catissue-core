@@ -974,28 +974,55 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		dao.openSession(null);
 
-		String queryStr = " SELECT t8.IDENTIFIER, t8.CONTAINER_NAME, t5.TYPE, t8.SITE_ID, "
-				+ " t4.TYPE, t8.PARENT_IDENTIFIER, "
-				+ " t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE "
-				+ " FROM (SELECT t7.IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, "
-				+ " t7.STORAGE_TYPE_ID, t7.PARENT_IDENTIFIER, "
-				+ " t7.PARENT_CONTAINER_NAME, t6.TYPE AS PARENT_CONTAINER_TYPE FROM "
-				+ " (select t1.IDENTIFIER AS IDENTIFIER, t1.CONTAINER_NAME AS CONTAINER_NAME, "
-				+ " t1.SITE_ID AS SITE_ID, t1.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, "
-				+ " t2.IDENTIFIER AS PARENT_IDENTIFIER, t2.CONTAINER_NAME AS PARENT_CONTAINER_NAME, "
-				+ " t2.STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID "
-				+ " from CATISSUE_STORAGE_CONTAINER t1 LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER t2 "
-				+ " on t1.PARENT_CONTAINER_ID = t2.IDENTIFIER) AS t7 LEFT OUTER JOIN CATISSUE_STORAGE_TYPE t6 "
-				+ " on t7.PARENT_STORAGE_TYPE_ID = t6.IDENTIFIER) AS t8, "
-				+ " CATISSUE_SITE t4, CATISSUE_STORAGE_TYPE t5 "
-				+ " WHERE t8.SITE_ID = t4.IDENTIFIER " + " AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
+//		String queryStr = " SELECT t8.IDENTIFIER, t8.CONTAINER_NAME, t5.TYPE, t8.SITE_ID, "
+//				+ " t4.TYPE, t8.PARENT_IDENTIFIER, "
+//				+ " t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE "
+//				+ " FROM (SELECT t7.IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, "
+//				+ " t7.STORAGE_TYPE_ID, t7.PARENT_IDENTIFIER, "
+//				+ " t7.PARENT_CONTAINER_NAME, t6.TYPE AS PARENT_CONTAINER_TYPE FROM "
+//				+ " (select t1.IDENTIFIER AS IDENTIFIER, t1.CONTAINER_NAME AS CONTAINER_NAME, "
+//				+ " t1.SITE_ID AS SITE_ID, t1.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, "
+//				+ " t2.IDENTIFIER AS PARENT_IDENTIFIER, t2.CONTAINER_NAME AS PARENT_CONTAINER_NAME, "
+//				+ " t2.STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID "
+//				+ " from CATISSUE_STORAGE_CONTAINER t1 LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER t2 "
+//				+ " on t1.PARENT_CONTAINER_ID = t2.IDENTIFIER) AS t7 LEFT OUTER JOIN CATISSUE_STORAGE_TYPE t6 "
+//				+ " on t7.PARENT_STORAGE_TYPE_ID = t6.IDENTIFIER) AS t8, "
+//				+ " CATISSUE_SITE t4, CATISSUE_STORAGE_TYPE t5 "
+//				+ " WHERE t8.SITE_ID = t4.IDENTIFIER " + " AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
 
+		String queryStr = "SELECT " 
+			   + " t8.IDENTIFIER, t8.CONTAINER_NAME, t5.NAME, t8.SITE_ID, t4.TYPE, t8.PARENT_IDENTIFIER, "
+			   + " t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE " 
+			   + " FROM ( "
+			   + " 	SELECT " 
+			   + " 	  t7.IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, t7.STORAGE_TYPE_ID, t7.PARENT_IDENTIFIER, " 
+			   + " 	  t7.PARENT_CONTAINER_NAME, t6.NAME AS PARENT_CONTAINER_TYPE " 
+			   + " 	  FROM " 
+			   + " 	  ( "
+			   + " 	  select " 
+			   + " 	  t1.IDENTIFIER AS IDENTIFIER, t1.NAME AS CONTAINER_NAME, t11.SITE_ID AS SITE_ID, " 
+			   + " 	  t11.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, t2.IDENTIFIER AS PARENT_IDENTIFIER, " 
+			   + " 	  t2.NAME AS PARENT_CONTAINER_NAME, t22.STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID" 
+			   + " 	  from " 
+			   + " 	      CATISSUE_STORAGE_CONTAINER t11, CATISSUE_STORAGE_CONTAINER t22, " 
+			   + " 	      CATISSUE_CONTAINER t1 LEFT OUTER JOIN CATISSUE_CONTAINER t2 " 
+			   + " 	      on t1.PARENT_CONTAINER_ID = t2.IDENTIFIER "
+			   + " 	      where "
+			   + " 		t1.identifier = t11.identifier and  t2.identifier = t22.identifier "
+			   + " 	  ) "
+			   + " 	  AS t7 LEFT OUTER JOIN CATISSUE_CONTAINER_TYPE t6 on " 
+			   + " 	  t7.PARENT_STORAGE_TYPE_ID = t6.IDENTIFIER "
+			   + " ) " 
+			   + " AS t8, CATISSUE_SITE t4, CATISSUE_CONTAINER_TYPE t5 WHERE t8.SITE_ID = t4.IDENTIFIER "
+			   + " AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER " ; 
+		
 		Logger.out.debug("Storage Container query......................" + queryStr);
 		List list = null;
 
 		try
 		{
 			list = dao.executeQuery(queryStr, null, false, null);
+			printRecords(list);
 		}
 		catch (Exception ex)
 		{
@@ -1045,10 +1072,13 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					childIds.add(Long.valueOf((String) rowList.get(0)));
 					containerRelationMap.put(Long.valueOf((String) rowList.get(5)), childIds);
 
+					//Mandar : code for tooltip for the container
+					String toolTip = getToolTipData((String) rowList.get(0));
+					
 					// Create the tree node for the child node.
 					TreeNode treeNodeImpl = new StorageContainerTreeNode(Long
 							.valueOf((String) rowList.get(0)), (String) rowList.get(1),
-							(String) rowList.get(2));
+							(String) rowList.get(1),toolTip);
 
 					// Add the tree node in the Vector if it is not present.
 					if (treeNodeVector.contains(treeNodeImpl) == false)
@@ -1057,15 +1087,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					}
 
 					// Create the tree node for the parent node and add it in the vector if not present.
+					toolTip = getToolTipData((String) rowList.get(5));
 					treeNodeImpl = new StorageContainerTreeNode(Long.valueOf((String) rowList
-							.get(5)), (String) rowList.get(6), (String) rowList.get(7));
+							.get(5)), (String) rowList.get(6), (String) rowList.get(6), toolTip );
 					if (treeNodeVector.contains(treeNodeImpl) == false)
 					{
 						treeNodeVector.add(treeNodeImpl);
 					}
 				}
 			}
-
+			printVectorMap(treeNodeVector,containerRelationMap);
+		
 			finalNodeVector = createHierarchy(containerRelationMap, treeNodeVector);
 		}
 
@@ -1117,18 +1149,23 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		//and get its site tree node and set it as its child.
 		Vector parentNodeVector = new Vector();
 		iterator = treeNodeVector.iterator();
+		System.out.println("\nNodes without Parent\n");
 		while (iterator.hasNext())
 		{
 			StorageContainerTreeNode treeNodeImpl = (StorageContainerTreeNode) iterator.next();
+			
 			if (treeNodeImpl.getParentNode() == null)
 			{
+				System.out.print("\n"+treeNodeImpl);
 				TreeNodeImpl siteNode = getSiteTreeNode(treeNodeImpl.getIdentifier());
+				System.out.print("\tSiteNodecreated: "+siteNode);
 				if (parentNodeVector.contains(siteNode))
 				{
 					siteNode = (TreeNodeImpl) parentNodeVector.get(parentNodeVector
 							.indexOf(siteNode));
+					System.out.print("SiteNode Found");
 				}
-
+				System.out.print("\tSiteNodeSet: "+siteNode);
 				treeNodeImpl.setParentNode(siteNode);
 				siteNode.getChildNodes().add(treeNodeImpl);
 				parentNodeVector.add(siteNode);
@@ -1145,11 +1182,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	private Vector getContainersUnderSite() throws DAOException
 	{
-		String sql = " SELECT sc.IDENTIFIER, sc.CONTAINER_NAME, scType.TYPE, site.IDENTIFIER, site.NAME, site.TYPE "
-				+ " from catissue_storage_container sc, catissue_site site, catissue_storage_type scType "
-				+ " where sc.SITE_ID = site.IDENTIFIER AND sc.STORAGE_TYPE_ID = scType.IDENTIFIER "
-				+ " and sc.PARENT_CONTAINER_ID is NULL";
+//		String sql = " SELECT sc.IDENTIFIER, sc.CONTAINER_NAME, scType.TYPE, site.IDENTIFIER, site.NAME, site.TYPE "
+//				+ " from catissue_storage_container sc, catissue_site site, catissue_storage_type scType "
+//				+ " where sc.SITE_ID = site.IDENTIFIER AND sc.STORAGE_TYPE_ID = scType.IDENTIFIER "
+//				+ " and sc.PARENT_CONTAINER_ID is NULL";
 
+		String sql = " SELECT sc.IDENTIFIER, cn.NAME, scType.NAME, site.IDENTIFIER, site.NAME, site.TYPE " 
+			 + " from catissue_storage_container sc, catissue_site site, catissue_container_type scType, "  
+			 + " catissue_container cn  "
+			 + " where sc.SITE_ID = site.IDENTIFIER AND sc.STORAGE_TYPE_ID = scType.IDENTIFIER " 
+			 + " and sc.IDENTIFIER = cn.IDENTIFIER "
+			 + " and cn.PARENT_CONTAINER_ID is NULL ";	
+		
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		List resultList = new ArrayList();
 		Vector containerNodeVector = new Vector();
@@ -1159,6 +1203,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			dao.openSession(null);
 			resultList = dao.executeQuery(sql, null, false, null);
 			dao.closeSession();
+			System.out.println("\nIn getContainersUnderSite()\n ");
+			printRecords(resultList);
 		}
 		catch (Exception daoExp)
 		{
@@ -1171,10 +1217,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			List rowList = (List) iterator.next();
 			StorageContainerTreeNode containerNode = new StorageContainerTreeNode(Long
 					.valueOf((String) rowList.get(0)), (String) rowList.get(1), (String) rowList
-					.get(2));
+					.get(1));
 			StorageContainerTreeNode siteNode = new StorageContainerTreeNode(Long
 					.valueOf((String) rowList.get(3)), (String) rowList.get(4), (String) rowList
-					.get(5));
+					.get(4));
 
 			containerNode.setParentNode(siteNode);
 			siteNode.getChildNodes().add(containerNode);
@@ -1219,7 +1265,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 			List siteRecord = (List) resultList.get(0);
 			siteTreeNode = new StorageContainerTreeNode(Long.valueOf((String) siteRecord.get(0)),
-					(String) siteRecord.get(1), (String) siteRecord.get(2));
+					(String) siteRecord.get(1), (String) siteRecord.get(1));
 		}
 
 		return siteTreeNode;
@@ -2045,4 +2091,171 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		
 	}
 
+//--------------Code for Map Mandar: 04-Sep-06 start
+	//Mandar : 29Aug06 : for StorageContainerMap
+	/**
+	 * @param id Identifier of the StorageContainer related to which the collectionProtocol titles are to be retrieved. 
+	 * @return List of collectionProtocol title.
+	 * @throws DAOException
+	 */
+	public List getCollectionProtocolList(String id) throws DAOException
+	{
+		
+		// Query to return titles of collection protocol related to given storagecontainer. 29-Aug-06 Mandar.
+		String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_SPECIMEN_PROTOCOL SP, CATISSUE_STORAGE_CONT_COLL_PROT_REL SC "
+			+ " WHERE SP.IDENTIFIER = SC.COLLECTION_PROTOCOL_ID AND SC.STORAGE_CONTAINER_ID = "+id;
+		
+		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		List resultList = new ArrayList();
+		try
+		{
+			dao.openSession(null);
+			resultList = dao.executeQuery(sql, null, false, null);
+			dao.closeSession();
+		}
+		catch (Exception daoExp)
+		{
+			throw new DAOException(daoExp.getMessage(), daoExp);
+		}
+
+		Iterator iterator = resultList.iterator();
+		System.out.println("\nCollectionProtocol :");
+		List returnList =  new ArrayList();
+		while (iterator.hasNext())
+		{
+			List list = (List)iterator.next();
+			String data = (String)list.get(0);
+			returnList.add(data ); 
+			System.out.println(data);
+		}
+		
+		if(returnList.isEmpty() )
+		{
+			returnList.add(new String(Constants.ALL ) );
+		}
+		return returnList;
+	}
+
+	/**
+	 * @param id Identifier of the StorageContainer related to which the collectionProtocol titles are to be retrieved. 
+	 * @return List of collectionProtocol title.
+	 * @throws DAOException
+	 */
+	public List getSpecimenClassList(String id) throws DAOException
+	{
+		
+		// Query to return specimen classes related to given storagecontainer. 29-Aug-06 Mandar.
+		String sql = " SELECT SP.SPECIMEN_CLASS CLASS FROM CATISSUE_STOR_CONT_SPEC_CLASS SP " +
+				"WHERE SP.STORAGE_CONTAINER_ID = "+id;
+		
+		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		List resultList = new ArrayList();
+		try
+		{
+			dao.openSession(null);
+			resultList = dao.executeQuery(sql, null, false, null);
+			dao.closeSession();
+		}
+		catch (Exception daoExp)
+		{
+			throw new DAOException(daoExp.getMessage(), daoExp);
+		}
+
+		Iterator iterator = resultList.iterator();
+		System.out.println("\nSpecimenClass :");
+		List returnList =  new ArrayList();
+		while (iterator.hasNext())
+		{
+			List list = (List)iterator.next();
+			for(int cnt=0;cnt<list.size(); cnt++ )
+			{
+				String data = (String)list.get(cnt);
+				returnList.add(data ); 
+				System.out.println(data);
+			}
+		}
+		if(returnList.isEmpty() )
+		{
+			returnList.add(new String(Constants.ALL ) );
+		}
+		return returnList;
+	}
+
+	//prints results returned from DAO executeQuery  To comment after debug 
+	private void printRecords(List list)
+	{
+		if(list!= null)
+		{
+			if(!list.isEmpty() )
+			{
+				System.out.println("OuterList Size : "+list.size());
+				for(int i=0; i<list.size();i++)
+				{
+					List innerList = (List)list.get(i);
+					System.out.println("\nInnerList Size : "+innerList.size()+"\n");
+					String s = ""; 
+					for(int j=0; j<innerList.size();j++)
+					{
+						String s1 = (String)innerList.get(j);
+						s = s + " | " + s1;
+					}
+					System.out.print(s);
+				}
+			}
+		}
+	}
+
+	// Method to print the relationMap and treeNode vector. To delete after debug
+	private void printVectorMap(Vector v, Map m)
+	{
+		System.out.println("\n");
+		System.out.println("\nVector Data\n");
+		Iterator itr = v.iterator();
+		while(itr.hasNext() )
+		{
+			TreeNodeImpl obj = (TreeNodeImpl)itr.next();
+			System.out.println(obj);
+		}
+		System.out.println("\n-------------------\n");
+		System.out.println("\nMap\n");
+		Iterator key = m.keySet().iterator();
+		while(key.hasNext() )
+		{
+			Long k = (Long)key.next();
+			Object val = m.get(k );
+			System.out.println(k + " : "+ val.toString() );
+		}
+	}
+	
+	//Method to fetch ToolTipData for a given Container
+	private String getToolTipData(String containerID) throws DAOException
+	{
+		String toolTipData = "";
+		
+		List specimenClassList = getSpecimenClassList(containerID);
+		
+		String classData = "SpecimenClass";
+		for(int counter=0; counter<specimenClassList.size();counter++)
+		{
+			String data  = (String)specimenClassList.get(counter);
+			classData = classData + " | " + data;
+		}
+
+		List collectionProtocolList = getCollectionProtocolList(containerID);
+		
+		String protocolData = "CollectionProtocol";
+		for(int cnt=0; cnt<collectionProtocolList.size();cnt++)
+		{
+			String data  = (String)collectionProtocolList.get(cnt);
+			protocolData = protocolData + " | " + data;
+		}
+		
+		toolTipData = protocolData + "\n" + classData;
+		System.out.println(toolTipData);
+		
+		return toolTipData; 
+	}
+
+//--------------Code for Map Mandar: 04-Sep-06 end	
+	
 }
