@@ -74,6 +74,11 @@
 				}
 			}
 		}
+		
+		if (pageOf.equals(Constants.PAGEOF_USER_PROFILE))
+		{
+				roleStatus = true;
+		}
 %>
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar : 434 : for tooltip -->
@@ -391,6 +396,25 @@ function handleStatus(status)
 							</logic:notEqual>
 						</td>
 					</tr>
+					
+					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_PROFILE%>">
+					<tr>
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formRequiredLabel" width="140">
+							<label for="role">
+								<bean:message key="user.role" />
+							</label>
+						</td>
+						<td class="formField">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="role" styleClass="formFieldSized" styleId="role" size="1" disabled="<%=roleStatus%>"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="roleList" labelProperty="name" property="value"/>
+							</html:select>
+						</td>
+					</tr>
+						
+					</logic:equal>
 					</logic:notEqual>
 					</table>
 				</td>
