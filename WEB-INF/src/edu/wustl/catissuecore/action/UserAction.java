@@ -101,7 +101,8 @@ public class UserAction extends SecureAction
         }
         
         //Populate the role dropdown if the page is of approve user or (Add/Edit) user page of adminitraive tab. 
-        if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) || pageOf.equals(Constants.PAGEOF_USER_ADMIN))
+        if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) || pageOf.equals(Constants.PAGEOF_USER_ADMIN) ||
+        		pageOf.equals(Constants.PAGEOF_USER_PROFILE ))
         {
             List roleNameValueBeanList = getRoles();
             
