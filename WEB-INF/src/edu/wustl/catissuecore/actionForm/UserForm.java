@@ -11,12 +11,16 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.ListIterator;
+import java.util.Vector;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.action.UserAction;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domainobject.Address;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -664,6 +668,11 @@ public class UserForm extends AbstractActionForm
             if (Constants.PAGEOF_USER_ADMIN.equals(pageOf))
             {
                 this.setCsmUserId(user.getCsmUserId());
+            }
+            
+            if (Constants.PAGEOF_USER_PROFILE.equals(pageOf))
+            {            	
+            	this.role = user.getRoleId();            	
             }
         }
         
