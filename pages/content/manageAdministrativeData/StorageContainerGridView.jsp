@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject"%>
+<%@ page import="java.util.*"%>
 
 <script>
 function setParentWindowValue(elementName,elementValue)
@@ -87,6 +88,10 @@ function closeFramedWindow()
 	String containerStyleId = (String)session.getAttribute(Constants.CONTAINER_STYLEID);
 	String xDimStyleId = (String)session.getAttribute(Constants.XDIM_STYLEID);
 	String yDimStyleId = (String)session.getAttribute(Constants.YDIM_STYLEID);
+
+	//Mandar: 29Aug06 : For container details
+	List collectionProtocolList = (List)request.getAttribute(Constants.MAP_COLLECTION_PROTOCOL_LIST );
+	List specimenClassList = (List)request.getAttribute(Constants.MAP_SPECIMEN_CLASS_LIST );
 %>
 
 <html:errors/>
@@ -94,6 +99,74 @@ function closeFramedWindow()
 </br>
 <!-- target of anchor to skip menus -->
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+<!-- ROW FOR CONTAINER DETAILS -->
+<TR>
+	<TD>
+<%
+	//System.out.println("CP No. : " +collectionProtocolList.size());
+	//System.out.println("SC No. : " +specimenClassList.size());
+	int rowSpan =(int)((collectionProtocolList.size()%3)== 0 ? collectionProtocolList.size()/3 : (collectionProtocolList.size()/3)+1 );
+%>
+		<TABLE border=1 class="borderForMap">
+			<TR>
+				<TD ROWSPAN=<%=rowSpan %> class="formLabelNoBackGround"><b><bean:message key="map.collectionprotocol"/></b></TD>
+<%	
+			for(int colcnt=0;colcnt<collectionProtocolList.size();colcnt++)
+			{
+				String data =(String) collectionProtocolList.get(colcnt );
+				if(colcnt != 0)
+				{
+					if((colcnt)%3 == 0)
+					{
+%>
+					</TR>
+					<tr>
+<%
+					}
+				}
+ %> 				
+					<td class="formLabelNoBackGround"><%=data %></td>
+<%
+			}
+			int colSpan = (int)(3-(collectionProtocolList.size()%3));
+ %>
+				<td colspan="<%=colSpan %>" class="formLabelNoBackGround">&nbsp;</td>
+			</tr>
+<!-- Specimen class -->
+<%
+ 	rowSpan =(int)((specimenClassList.size()%3)== 0 ? specimenClassList.size()/3 : (specimenClassList.size()/3)+1 );
+%>
+
+			<TR>
+				<TD ROWSPAN=<%=rowSpan %> class="formLabelNoBackGround"><b><bean:message key="map.specimenclass"/></b></TD>
+<%	
+			for(int colcnt=0;colcnt<specimenClassList.size();colcnt++)
+			{
+				String data =(String) specimenClassList.get(colcnt );
+				if(colcnt != 0)
+				{
+					if((colcnt)%3 == 0)
+					{
+%>
+					</TR>
+					<tr>
+<%
+					}
+				}
+ %> 				
+					<td class="formLabelNoBackGround"><%=data %></td>
+<%
+			}
+			colSpan = (int)(3-(specimenClassList.size()%3));
+ %>
+				<td colspan="<%=colSpan %>" class="formLabelNoBackGround">&nbsp;</td>
+			</tr>
+
+		</TABLE>
+	</TD>
+</TR>
+<!-- CONTAINER DETAILS END -->
+
 	<tr>
 		<td>
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="borderForMap">

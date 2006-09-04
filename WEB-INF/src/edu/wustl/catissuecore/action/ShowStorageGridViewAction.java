@@ -204,6 +204,14 @@ public class ShowStorageGridViewAction  extends BaseAction
         request.setAttribute(Constants.STORAGE_CONTAINER_GRID_OBJECT,
                 storageContainerGridObject);
         
+        //Mandar : 29aug06 : to set collectionprotocol titles
+        List collectionProtocolList = bizLogic.getCollectionProtocolList(id);
+        request.setAttribute(Constants.MAP_COLLECTION_PROTOCOL_LIST, collectionProtocolList);
+
+        //Mandar : 29aug06 : to set specimenclass 
+        List specimenClassList = bizLogic.getSpecimenClassList(id);
+        request.setAttribute(Constants.MAP_SPECIMEN_CLASS_LIST, specimenClassList);
+
         return mapping.findForward(Constants.SUCCESS);
     }
 
