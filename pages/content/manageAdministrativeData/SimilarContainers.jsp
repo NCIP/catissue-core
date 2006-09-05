@@ -351,16 +351,39 @@
 						</label>
 					</td>
 					<td class="formField" >
-						<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsStorageTypeIds" size="4" multiple="true"
-						onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
-						<html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/>
-						</html:select>
-						&nbsp;
-						<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="typeId" size="4" multiple="true"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
-						<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
-						</html:select>
-						&nbsp;
+					<table>
+							<tr><td class="standardText" align="center">
+									<bean:message key="storageContainer.containerType"/>
+							</td>
+							<td class="standardText" align="center">		
+									<bean:message key="storageContainer.specimenType"/>
+							</td>
+							<td class="standardText" align="center">		
+									<bean:message key="storageContainer.specimenArrayType"/>
+							</td>
+							</tr>
+							<tr>
+							<td class="formField" align="center">		
+							<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsStorageTypeIds" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.HOLDS_LIST1%>" labelProperty="name" property="value"/>
+							</html:select>
+						</td>
+						<td class="formField" align="center">
+							<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
+							</html:select>
+						</td>
+						<td class="formField" align="center">
+							<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds " size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/>
+							</html:select>
+						</td>
+						</tr></table>
+						
+
 					</td>
 				  </tr>
 	  

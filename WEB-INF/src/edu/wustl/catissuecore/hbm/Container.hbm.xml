@@ -256,6 +256,27 @@
               />
 
         </set>
+        <set
+            name="holdsSpArrayTypeCollection"
+            table="CATISSUE_CONT_HOLDS_SPARRTYPE"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="STORAGE_CONTAINER_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenArrayType"
+                  column="SPECIMEN_ARRAY_TYPE_ID"
+                  outer-join="auto"
+              />
+        </set>
+        
+
 
         <many-to-one
             name="site"

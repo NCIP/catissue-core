@@ -675,7 +675,11 @@ function validate(action,formField)
 							</td>
 							<td class="standardText" align="center">		
 									<bean:message key="storageContainer.specimenType"/>
-							</td></tr>
+							</td>
+							<td class="standardText" align="center">		
+									<bean:message key="storageContainer.specimenArrayType"/>
+							</td>
+							</tr>
 							<tr>
 							<td class="formField" align="center">		
 							<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsStorageTypeIds" size="4" multiple="true"
@@ -688,7 +692,14 @@ function validate(action,formField)
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
 							</html:select>
-						</td></tr></table>
+						</td>
+						<td class="formField" align="center">
+							<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds " size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/>
+							</html:select>
+						</td>
+						</tr></table>
 						
 						</td>
 					</tr>

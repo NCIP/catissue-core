@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -82,6 +83,12 @@ public class SimilarContainersAction extends SecureAction
 		// get the Specimen class and type from the cde
     	List specimenClassTypeList=Utility.getSpecimenClassTypeListWithAny();
 	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
+	  	
+	  	//Gets the Specimen array Type List and sets it in request
+        List list3=ibizLogic.retrieve(SpecimenArrayType.class.getName());
+    	List spArrayTypeList=Utility.getSpecimenArrayTypeList(list3);
+    	request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
+
 
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 

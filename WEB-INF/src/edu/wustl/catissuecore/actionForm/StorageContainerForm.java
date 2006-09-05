@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -158,6 +159,7 @@ public class StorageContainerForm extends AbstractActionForm
 	 */
 	protected long holdsStorageTypeIds[];
 
+	private long holdsSpecimenArrTypeIds[];
 	/**
 	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold
 	 */
@@ -297,6 +299,23 @@ public class StorageContainerForm extends AbstractActionForm
 				}
 			}
 		}
+//      Populating the specimen array type-id array
+		Collection specimenArrayTypeCollection = container.getHoldsSpArrayTypeCollection();
+		
+		if(specimenArrayTypeCollection != null)
+		{
+			holdsSpecimenArrTypeIds = new long[specimenArrayTypeCollection.size()];
+			int i=0;
+
+			Iterator it = specimenArrayTypeCollection.iterator();
+			while(it.hasNext())
+			{
+				SpecimenArrayType holdSpArrayType = (SpecimenArrayType)it.next();
+				holdsSpecimenArrTypeIds[i] = holdSpArrayType.getId().longValue();
+				i++;
+			}
+		}
+
 		
 	}
 
@@ -890,6 +909,26 @@ public class StorageContainerForm extends AbstractActionForm
 		this.holdsStorageTypeIds = holdsStorageTypeIds;
 	}
 
+	
+	/**
+     * Sets the Specimen Array Type Holds List.
+     * @param holdsSpecimenArrTypeIds the list of specimen array type Ids to be set.
+     * @see #getHoldsSpecimenArrTypeIds()
+     */
+	public void setHoldsSpecimenArrTypeIds(long[] holdsSpecimenArrTypeIds)
+	{
+		this.holdsSpecimenArrTypeIds = holdsSpecimenArrTypeIds;
+	}
+
+	 /**
+     * Returns the list of specimen array type Ids that this Storage Type can hold.
+     * @return long[] the list of specimen array type Ids.
+     * @see #setHoldsSpecimenArrTypeIds(long[])
+     */
+    public long[] getHoldsSpecimenArrTypeIds()
+	{
+		return holdsSpecimenArrTypeIds;
+	}
 	/**
 	 * Returns the map that contains distinguished fields per aliquots.
 	 * @return The map that contains distinguished fields per aliquots.

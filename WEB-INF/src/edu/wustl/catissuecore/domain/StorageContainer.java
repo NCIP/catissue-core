@@ -39,6 +39,8 @@ public class StorageContainer extends Container
 	protected Collection holdsStorageTypeCollection = new HashSet();
 
 	protected Collection holdsSpecimenClassCollection = new HashSet();
+	
+	protected Collection holdsSpArrayTypeCollection = new HashSet();
 
 	/**
 	 * Number of containers
@@ -81,6 +83,7 @@ public class StorageContainer extends Container
 		this.setCollectionProtocolCollection(oldContainer.getCollectionProtocolCollection());
 		this.setHoldsStorageTypeCollection(oldContainer.getHoldsStorageTypeCollection());
 		this.setHoldsSpecimenClassCollection(oldContainer.getHoldsSpecimenClassCollection());
+		this.setHoldsSpArrayTypeCollection(oldContainer.getHoldsSpArrayTypeCollection());
 	}
 
 	public StorageContainer(AbstractActionForm abstractActionForm) throws AssignDataException
@@ -227,6 +230,27 @@ public class StorageContainer extends Container
 	{
 		this.holdsStorageTypeCollection = holdsStorageTypeCollection;
 	}
+	
+	/**
+     * @return Returns the holdsSpArrayTypeCollection.
+     * Returns the collection of specimen array types associated with container 
+     * @hibernate.set name="holdsSpArrayTypeCollection" table="CATISSUE_CONT_HOLDS_SPARRTYPE"
+     * cascade="save-update" inverse="false" lazy="false"
+	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenArrayType" column="SPECIMEN_ARRAY_TYPE_ID"
+     */
+    public Collection getHoldsSpArrayTypeCollection()
+    {
+        return holdsSpArrayTypeCollection;
+    }
+
+    /**
+     * @param holdsSpArratTypeCollection The holdsSpArrayTypeCollection to set.
+     */
+    public void setHoldsSpArrayTypeCollection(Collection holdsSpArrayTypeCollection)
+    {
+        this.holdsSpArrayTypeCollection = holdsSpArrayTypeCollection;
+    }
 
 	/**
 	 * @return Returns the site.
@@ -415,6 +439,22 @@ public class StorageContainer extends Container
 				}
 			}
 			
+			holdsSpArrayTypeCollection.clear();
+        	long [] specimenArrayTypeArr = form.getHoldsSpecimenArrTypeIds();
+        	if(specimenArrayTypeArr!=null)
+        	{
+	        	for (int i = 0; i < specimenArrayTypeArr.length; i++)
+				{
+	        		Logger.out.debug("specimen array type Id :"+specimenArrayTypeArr[i]);
+	        		if(specimenArrayTypeArr[i]!=-1)
+	        		{
+		        		SpecimenArrayType spArrayType = new SpecimenArrayType();
+		        		spArrayType.setId(new Long(specimenArrayTypeArr[i]));
+		        		holdsSpArrayTypeCollection.add(spArrayType);
+	        		}
+				}
+        	}
+        	
 			if (this.noOfContainers.intValue() > 1)
 			{
 				Logger.out.info("--------------------------:" + form.getSimilarContainersMap());

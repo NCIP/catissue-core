@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -144,6 +145,12 @@ public class StorageContainerAction  extends SecureAction
     	// get the Specimen class and type from the cde
     	List specimenClassTypeList=Utility.getSpecimenClassTypeListWithAny();
 	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
+	  	
+	  	//Gets the Specimen array Type List and sets it in request
+        List list3=bizLogic.retrieve(SpecimenArrayType.class.getName());
+    	List spArrayTypeList=Utility.getSpecimenArrayTypeList(list3);
+    	request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
+
 
     	
     	
@@ -238,6 +245,11 @@ public class StorageContainerAction  extends SecureAction
             			for(int i=0;i<storageContainerForm.getHoldsSpecimenClassTypes().length;i++)
             			{
             				Logger.out.info("Specimen class in form:"+storageContainerForm.getHoldsSpecimenClassTypes()[i]);
+            			}
+            			long[] defHoldsSpecimenArrayTypeList=getDefaultHoldSpecimenArrayTypeList(type);
+            			if(defHoldsSpecimenArrayTypeList!=null)
+            			{
+            				storageContainerForm.setHoldsSpecimenArrTypeIds(defHoldsSpecimenArrayTypeList);
             			}
             		}
             	}
@@ -373,6 +385,32 @@ public class StorageContainerAction  extends SecureAction
 			}	
 			return holdsSpecimenClassList;
 			
+		}
+    	return null;
+    }
+    
+    /* this function finds out the specimen array type holds list for a storage type given 
+     * and sets the container's storage type holds list
+     * */
+    private long[] getDefaultHoldSpecimenArrayTypeList(StorageType type)
+    {
+    	//Populating the storage type-id array
+    	
+		Logger.out.info("Storage type size:"+type.getHoldsSpArrayTypeCollection().size());
+		Collection spcimenArrayTypeCollection = type.getHoldsSpArrayTypeCollection();
+		
+		if(spcimenArrayTypeCollection != null)
+		{
+			long holdsSpecimenArrayTypeList[] = new long[spcimenArrayTypeCollection.size()];
+			int i=0;
+			Iterator it = spcimenArrayTypeCollection.iterator();
+			while(it.hasNext())
+			{
+				SpecimenArrayType holdSpArrayType = (SpecimenArrayType)it.next();
+				holdsSpecimenArrayTypeList[i] = holdSpArrayType.getId().longValue();
+				i++;
+			}
+			return holdsSpecimenArrayTypeList;
 		}
     	return null;
     }

@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
@@ -401,6 +402,37 @@ public class Utility extends edu.wustl.common.util.Utility
     	Collections.sort(collectionProtocolList);
     	collectionProtocolList.add(0,new NameValueBean(Constants.HOLDS_ANY,"-1"));
     	return collectionProtocolList;
+    }
+    
+    /* this Function gets the list of all specimen Array types as argument and  
+     * create a list in which nameValueBean is stored with specimen array and Identifier of specimen Array type.
+     * and returns this list
+     */ 
+    public static List getSpecimenArrayTypeList(List list)
+    {
+    	NameValueBean typeAny=null;
+    	List spArrayTypeList=new ArrayList();
+    	Iterator typeItr=list.iterator();
+    	
+    	while(typeItr.hasNext())
+    	{
+    		SpecimenArrayType type=(SpecimenArrayType)typeItr.next();
+    		if(type.getId().longValue()==2)
+    		{
+    			typeAny=new NameValueBean(Constants.HOLDS_ANY,type.getId());
+    		}
+    		else
+    		{
+    			spArrayTypeList.add(new NameValueBean(type.getName(),type.getId()));
+    		}
+    	}
+    	Collections.sort(spArrayTypeList);
+    	if(typeAny!=null)
+    	{
+    		spArrayTypeList.add(0,typeAny);
+    	}	
+    	return spArrayTypeList;
+    	
     }
 
 	private static String pattern = "MM-dd-yyyy";

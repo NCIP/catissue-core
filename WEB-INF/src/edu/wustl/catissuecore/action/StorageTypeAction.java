@@ -10,11 +10,7 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,15 +22,12 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.cde.CDE;
-import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.logger.Logger;
 
 public class StorageTypeAction  extends SecureAction
@@ -67,6 +60,12 @@ public class StorageTypeAction  extends SecureAction
     	List specimenClassTypeList=Utility.getSpecimenClassTypeListWithAny();
 	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
         
+	  	//Gets the Specimen array Type List and sets it in request
+        List list2=bizLogic.retrieve(SpecimenArrayType.class.getName());
+    	List spArrayTypeList=Utility.getSpecimenArrayTypeList(list2);
+    	request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
+    	
+	  	
 	  	if(operation.equals(Constants.ADD))
 	  	{
 	  		// new model storageTypeForm.setHoldsSpecimenClassTypeIds(new long[]{1});
@@ -86,64 +85,5 @@ public class StorageTypeAction  extends SecureAction
         
         return mapping.findForward((String)request.getParameter(Constants.PAGEOF));
     }
-    
-    /* this Function gets the list of all storage types as argument and  
-     * create a list in which nameValueBean is stored with Type and Identifier of storage type.
-     * and returns this list
-     */ 
-    private List getStorageTypeList(List list)
-    {
-    	NameValueBean typeAny=null;
-    	List storageTypeList=new ArrayList();
-    	Iterator typeItr=list.iterator();
-    	
-    	while(typeItr.hasNext())
-    	{
-    		StorageType type=(StorageType)typeItr.next();
-    		if(type.getId().longValue()==1)
-    		{
-    			typeAny=new NameValueBean(Constants.HOLDS_ANY,type.getId());
-    		}
-    		else
-    		{
-    			storageTypeList.add(new NameValueBean(type.getName(),type.getId()));
-    		}
-    	}
-    	Collections.sort(storageTypeList);
-    	if(typeAny!=null)
-    	{
-    		storageTypeList.add(0,typeAny);
-    	}	
-    	return storageTypeList;
-    	
-    }
-    /* this Function gets the list of all Specimen Class Types as argument and  
-     * create a list in which nameValueBean is stored with Name and Identifier of specimen Class Type.
-     * and returns this list
-     */
-    
-    private List getSpecimenClassTypeListWithAny()
-    {
-    	CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-    	Set setPV = specimenClassCDE.getPermissibleValues();
-    	Iterator itr = setPV.iterator();
-    
-    	List specimenClassTypeList =  new ArrayList();
-    	specimenClassTypeList.add(new NameValueBean("--All--","-1"));
-    	
-    	while(itr.hasNext())
-    	{
-    		//List innerList =  new ArrayList();
-    		Object obj = itr.next();
-    		PermissibleValue pv = (PermissibleValue)obj;
-    		String tmpStr = pv.getValue();
-    		Logger.out.info("specimen class:"+tmpStr);
-    		specimenClassTypeList.add(new NameValueBean( tmpStr,tmpStr));
-    					
-    	} // class and values set
-    	
-    	return specimenClassTypeList;
-
-    	
-    }
+   
 }

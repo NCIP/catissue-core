@@ -69,6 +69,15 @@
             column="COMMENT"
             length="2000"
         />
+        
+         <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="30"
+        />
 
         <!--
             To add non XDoclet property mappings, create a file named
@@ -145,14 +154,7 @@
 			<element column="SPECIMEN_CLASS" type="string" length="50"/>
         </set>
 
-        <property
-            name="activityStatus"
-            type="string"
-            update="true"
-            insert="true"
-            column="ACTIVITY_STATUS"
-            length="30"
-        />
+       
 
         <set
             name="holdsStorageTypeCollection"
@@ -173,6 +175,26 @@
                   outer-join="auto"
               />
         </set>
+        <set
+            name="holdsSpArrayTypeCollection"
+            table="CATISSUE_STORTY_HOLDS_SPARRTY"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="STORAGE_TYPE_ID"
+              />
+
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenArrayType"
+                  column="SPECIMEN_ARRAY_TYPE_ID"
+                  outer-join="auto"
+              />
+        </set>
+        
 
         </joined-subclass>
 

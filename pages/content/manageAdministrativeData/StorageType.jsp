@@ -111,7 +111,7 @@
 	<%=messageKey%>
 </html:messages>
     
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="720">
 
 <html:form action="<%=formName%>" method="post">	
 <!-- NEW Institute REGISTRATION BEGINS-->
@@ -183,7 +183,12 @@
 			</td>
 			<td class="formField" nowrap>
 				<table>
-				<tr><td class="standardText" align="center">Storage Type</td><td class="standardText" align="center">Specimen Type</td></tr>
+				<tr>
+					<td class="standardText" align="center">Storage Type</td>
+					<td class="standardText" align="center">Specimen Type</td>
+					<td class="standardText" align="center">Specimen Array Type</td>
+					
+				</tr>
 				<tr>
 				<td class="formField" nowrap align="center">
 				<html:select property="holdsStorageTypeIds" styleClass="formFieldVerySmallSized" styleId="holdStorageTypeIds" size="4" multiple="true"
@@ -197,7 +202,28 @@
 				<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
 				</html:select>
 				</td>
-				</tr></table>
+				<td class="formField" nowrap align="center">
+				<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+				<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/>
+				</html:select>
+				</td>
+				
+				</tr>
+				<%--<tr>
+				<td class="standardText" align="center" colspan="2">Specimen Array Type</td>
+				</tr>
+				<tr>
+				<td class="formField" nowrap align="center" colspan="2">
+				<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+				<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/>
+				</html:select>
+				</td>
+				</tr>
+				--%>
+				
+				</table>
 							
 			</td>
 		</tr>

@@ -24,6 +24,8 @@ public class ContainerType extends AbstractDomainObject
     protected Capacity capacity = new Capacity();
     
     protected String comment;
+    
+    protected String activityStatus;
 
     public ContainerType()
     {
@@ -137,6 +139,24 @@ public class ContainerType extends AbstractDomainObject
     public void setComment(String comment)
     {
         this.comment = comment;
+    }
+    
+    
+    /**
+     * @return Returns the activityStatus.
+     * @hibernate.property name="activityStatus" type="string" column="ACTIVITY_STATUS" length="30"
+     */
+    public String getActivityStatus()
+    {
+        return activityStatus;
+    }
+    
+    /**
+     * @param activityStatus The activityStatus to set.
+     */
+    public void setActivityStatus(String activityStatus)
+    {
+        this.activityStatus = activityStatus;
     }
     
     /* (non-Javadoc)

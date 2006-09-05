@@ -201,6 +201,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String HOLDS_LIST1 = "HoldsList1";
 	public static final String HOLDS_LIST2 = "HoldsList2";
+	public static final String HOLDS_LIST3 = "HoldsList3";
 	//Constants required in Site.jsp Page
 	public static final String SITE_SEARCH_ACTION = "SiteSearch.do";
 	public static final String SITE_ADD_ACTION = "SiteAdd.do";

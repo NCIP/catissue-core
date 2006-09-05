@@ -32,8 +32,8 @@ public class StorageType extends ContainerType
 
     protected Collection holdsSpecimenClassCollection = new HashSet();
     
-    protected String activityStatus;
-
+    protected Collection holdsSpArrayTypeCollection = new HashSet();
+        
     public StorageType()
     {
     }
@@ -81,24 +81,7 @@ public class StorageType extends ContainerType
     {
         this.holdsSpecimenClassCollection = holdsSpecimenClassCollection;
     }
-    
-    /**
-     * @return Returns the activityStatus.
-     * @hibernate.property name="activityStatus" type="string" column="ACTIVITY_STATUS" length="30"
-     */
-    public String getActivityStatus()
-    {
-        return activityStatus;
-    }
-    
-    /**
-     * @param activityStatus The activityStatus to set.
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        this.activityStatus = activityStatus;
-    }
-    
+     
        
     /**
      * @return Returns the holdsStorageTypeCollection.
@@ -121,7 +104,28 @@ public class StorageType extends ContainerType
         this.holdsStorageTypeCollection = holdsStorageTypeCollection;
     }
     
-    
+ 
+    /**
+     * @return Returns the holdsSpArrayTypeCollection.
+     * Returns the collection of specimen array types associated with type 
+     * @hibernate.set name="holdsSpArrayTypeCollection" table="CATISSUE_STORTY_HOLDS_SPARRTY"
+     * cascade="save-update" inverse="false" lazy="false"
+	 * @hibernate.collection-key column="STORAGE_TYPE_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenArrayType" column="SPECIMEN_ARRAY_TYPE_ID"
+     */
+    public Collection getHoldsSpArrayTypeCollection()
+    {
+        return holdsSpArrayTypeCollection;
+    }
+
+    /**
+     * @param holdsSpArratTypeCollection The holdsSpArrayTypeCollection to set.
+     */
+    public void setHoldsSpArrayTypeCollection(Collection holdsSpArrayTypeCollection)
+    {
+        this.holdsSpArrayTypeCollection = holdsSpArrayTypeCollection;
+    }
+ 
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.domain.ContainerType#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
      */
@@ -181,7 +185,23 @@ public class StorageType extends ContainerType
 	        		}
 				}
         	}
-
+        	
+        	holdsSpArrayTypeCollection.clear();
+        	long [] specimenArrayTypeArr = storageTypeForm.getHoldsSpecimenArrTypeIds();
+        	if(specimenArrayTypeArr!=null)
+        	{
+	        	for (int i = 0; i < specimenArrayTypeArr.length; i++)
+				{
+	        		Logger.out.debug("specimen array type Id :"+specimenArrayTypeArr[i]);
+	        		if(specimenArrayTypeArr[i]!=-1)
+	        		{
+		        		SpecimenArrayType spArrayType = new SpecimenArrayType();
+		        		spArrayType.setId(new Long(specimenArrayTypeArr[i]));
+		        		holdsSpArrayTypeCollection.add(spArrayType);
+	        		}
+				}
+        	}
+        	
         	this.activityStatus="Active";
 	    }
 	    catch(Exception excp)

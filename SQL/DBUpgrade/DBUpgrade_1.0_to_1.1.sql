@@ -13,6 +13,21 @@ insert into CATISSUE_RELATED_TABLES_MAP values ( 38 , 19 , 'DISTRIBUTION_PROTOCO
 ALTER TABLE catissue_participant ADD COLUMN DEATH_DATE DATE;
 ALTER TABLE catissue_participant ADD COLUMN VITAL_STATUS varchar(50);
 
+#-- Participant related data model changes
+#--alter table CATISSUE_RACE drop foreign key FKB0242ECD87E5ADC7;
+#--drop table if exists CATISSUE_RACE;
+create table CATISSUE_RACE (
+   PARTICIPANT_ID bigint not null,
+   RACE_NAME varchar(50)
+);
+#--alter table catissue_participant Engine = INNODB;
+alter table CATISSUE_RACE add index FKB0242ECD87E5ADC7 (PARTICIPANT_ID), add constraint FKB0242ECD87E5ADC7 foreign key (PARTICIPANT_ID) references CATISSUE_PARTICIPANT (IDENTIFIER);
+
+insert into catissue_race(participant_id,race_name) (select identifier,race from catissue_participant);
+
+alter table catissue_participant drop column race;
+
+
 # ------ For simple search on Participant 'Death date' and 'Vital status' ---------
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 303, 31, 'DEATH_DATE', 'date');
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 304, 31, 'VITAL_STATUS', 'varchar');
@@ -29,104 +44,47 @@ INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME)
 
 
 
+#-- user paasword changes 
+#--alter table CATISSUE_PASSWORD drop foreign key FKDE1F38972206F20F;
+#--drop table if exists CATISSUE_PASSWORD;
+
+create table CATISSUE_PASSWORD (
+  IDENTIFIER bigint not null auto_increment,
+   PASSWORD varchar(50),
+   UPDATE_DATE date,
+   USER_ID bigint,
+   primary key (IDENTIFIER)
+);
+#--alter table catissue_user Engine = INNODB;
+
+alter table CATISSUE_PASSWORD add index FKDE1F38972206F20F (USER_ID), add constraint FKDE1F38972206F20F foreign key (USER_ID) references CATISSUE_USER (IDENTIFIER);
+
+insert into catissue_password (IDENTIFIER,PASSWORD,UPDATE_DATE,USER_ID) (select identifier, password,null,identifier from catissue_user);
+
+alter table catissue_user drop column password;
+
+
+#-- user  password chnages finish
+
 #--------- changes in database for new model of Storage Container
-drop table if exists CATISSUE_CONTAINER_SPECIMENCL_REL;
-drop table if exists CATISSUE_STORAGETYPE_HOLDS_REL;
-drop table if exists CATISSUE_CONTAINER_TYPE_REL;
-drop table if exists CATISSUE_CONTAINER_CP_REL;
-drop table if exists CATISSUE_CONT_SPECIMENCL_REL;
-drop table if exists CATISSUE_TYPE_SPECIMENCL_REL;
-drop table if exists CATISSUE_SPECIMEN_CLASS;
-
-#--------dropping Container_name in Storage_container table if exists
-alter table CATISSUE_STORAGE_CONTAINER drop column CONTAINER_NAME;
-
+#--drop table if exists CATISSUE_STOR_TYPE_SPEC_CLASS;
+#--drop table if exists CATISSUE_STOR_TYPE_HOLDS_TYPE;
+#--drop table if exists CATISSUE_STORAGE_CONT_COLL_PROT_REL;
+#--drop table if exists CATISSUE_STOR_CONT_SPEC_CLASS;
+#--drop table if exists CATISSUE_STOR_CONT_STOR_TYPE_REL;
+drop table if exists CATISSUE_STORAGE_CONT_DETAILS;
+alter table CATISSUE_STORAGE_CONTAINER add column CONTAINER_NAME varchar(100) not null;
 #--------Adding container_name in storage_container table
-alter table CATISSUE_STORAGE_CONTAINER add column CONTAINER_NAME varchar (50) NOT NULL unique;
+#--alter table CATISSUE_CONTAINER add column CONTAINER_NAME varchar (100) NOT NULL;
 
 #--------Give values same as identifier to container_name for previouly added containers.
-#-----update CATISSUE_STORAGE_CONTAINER set CONTAINER_NAME=IDENTIFIER where CONTAINER_NAME='';
-update CATISSUE_STORAGE_CONTAINER set CONTAINER_NAME=IDENTIFIER where CONTAINER_NAME='' or CONTAINER_NAME is null;
-
- 
-
-
 
 #--------drop the container_number column
 alter table CATISSUE_STORAGE_CONTAINER drop column CONTAINER_NUMBER;
 
-#--------Adding Activity Status column in Storage_type table
 alter table CATISSUE_STORAGE_TYPE add column ACTIVITY_STATUS varchar(30) default NULL;
 #-------- set default Activity status to 'Active ' for all storage types
-update CATISSUE_STORAGE_TYPE set ACTIVITY_STATUS='Active';
-
-#-------- updating container Number to container Name
-update CATISSUE_INTERFACE_COLUMN_DATA set column_name='CONTAINER_NAME' where IDENTIFIER='240' and TABLE_ID='21';
-update CATISSUE_SEARCH_DISPLAY_DATA set display_name='Container Name' where relationship_id='8' and col_id='240';
-
-#-------Creating Catissue_specimen_class table for storing all classes of specimens.
-create table CATISSUE_SPECIMEN_CLASS (
-   IDENTIFIER BIGINT NOT NULL AUTO_INCREMENT,
-   NAME VARCHAR(50),
-   ACTIVITY_STATUS VARCHAR(30) default NULL,
-   primary key (IDENTIFIER)
-);
-#-------inserting values in catissye_specimen_class table
-insert into CATISSUE_SPECIMEN_CLASS values (1,"Any","Disabled");
-insert into CATISSUE_SPECIMEN_CLASS values (2,"Fluid","Active");
-insert into CATISSUE_SPECIMEN_CLASS values (3,"Tissue","Active");
-insert into CATISSUE_SPECIMEN_CLASS values (4,"Cell","Active");
-insert into CATISSUE_SPECIMEN_CLASS values (5,"Molecular","Active");
-
-
-create table CATISSUE_TYPE_SPECIMENCL_REL (
-   STORAGE_TYPE_ID BIGINT not null,
-   SPECIMEN_CLASS_ID BIGINT not null,
-   primary key (STORAGE_TYPE_ID, SPECIMEN_CLASS_ID)
-);
-alter table CATISSUE_TYPE_SPECIMENCL_REL add index (SPECIMEN_CLASS_ID), add constraint FK79BC0CD43AF944B9 foreign key (SPECIMEN_CLASS_ID) references CATISSUE_SPECIMEN_CLASS (IDENTIFIER);
-alter table CATISSUE_TYPE_SPECIMENCL_REL add index (STORAGE_TYPE_ID), add constraint FK79BC0CD459A3CE5C foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
-
-create table CATISSUE_STORAGETYPE_HOLDS_REL (
-   STORAGE_TYPE_ID BIGINT not null,
-   STORAGE_TYPE_HOLD_ID BIGINT not null,
-   primary key (STORAGE_TYPE_ID, STORAGE_TYPE_HOLD_ID)
-);
-alter table CATISSUE_STORAGETYPE_HOLDS_REL add index (STORAGE_TYPE_ID), add constraint FK3239D0859A3CE5C foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
-alter table CATISSUE_STORAGETYPE_HOLDS_REL add index (STORAGE_TYPE_HOLD_ID), add constraint FK3239D0839B92FFA foreign key (STORAGE_TYPE_HOLD_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
-
-create table CATISSUE_CONTAINER_TYPE_REL (
-   STORAGE_CONTAINER_ID BIGINT not null,
-   STORAGE_TYPE_ID BIGINT not null,
-   primary key (STORAGE_TYPE_ID, STORAGE_CONTAINER_ID)
-);
-alter table CATISSUE_CONTAINER_TYPE_REL add index (STORAGE_CONTAINER_ID), add constraint FKFE943B0EB3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
-alter table CATISSUE_CONTAINER_TYPE_REL add index (STORAGE_TYPE_ID), add constraint FKFE943B0E59A3CE5C foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
-
-create table CATISSUE_CONTAINER_CP_REL (
-   COLLECTION_PROTOCOL_ID BIGINT not null,
-   STORAGE_CONTAINER_ID BIGINT not null,
-   primary key (STORAGE_CONTAINER_ID, COLLECTION_PROTOCOL_ID)
-);
-alter table CATISSUE_CONTAINER_CP_REL add index (STORAGE_CONTAINER_ID), add constraint FKB1816941B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
-alter table CATISSUE_CONTAINER_CP_REL add index (COLLECTION_PROTOCOL_ID), add constraint FKB181694148304401 foreign key (COLLECTION_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
-
-create table CATISSUE_CONT_SPECIMENCL_REL (
-   SPECIMEN_CLASS_ID BIGINT not null,
-   STORAGE_CONTAINER_ID BIGINT not null,
-   primary key (STORAGE_CONTAINER_ID, SPECIMEN_CLASS_ID)
-);
-alter table CATISSUE_CONT_SPECIMENCL_REL add index (STORAGE_CONTAINER_ID), add constraint FKB9F0FDDCB3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
-alter table CATISSUE_CONT_SPECIMENCL_REL add index (SPECIMEN_CLASS_ID), add constraint FKB9F0FDDC3AF944B9 foreign key (SPECIMEN_CLASS_ID) references CATISSUE_SPECIMEN_CLASS (IDENTIFIER);
-
-delete from CATISSUE_QUERY_TABLE_DATA where TABLE_ID='22';
-delete from CATISSUE_RELATED_TABLES_MAP where FIRST_TABLE_ID='22';
-delete from CATISSUE_INTERFACE_COLUMN_DATA where TABLE_ID='22';
-delete from CATISSUE_TABLE_RELATION where CHILD_TABLE_ID='22';
-delete from CATISSUE_SEARCH_DISPLAY_DATA where RELATIONSHIP_ID='39';
-drop table CATISSUE_STORAGE_CONT_DETAILS;
-delete from csm_protection_element where PROTECTION_ELEMENT_ID='43';
-
+update CATISSUE_STORAGE_TYPE set ACTIVITY_STATUS='Active' where type!='Any';
 
 #-------- copying first row of storage types to temp table and addind "Any" entry and adding first row to the last identifier
 drop table if exists catissue_temp_type;
@@ -153,6 +111,139 @@ insert into catissue_storage_type (type,activity_status,identifier) values ('Any
 drop table catissue_temp_type;
 #----------Chnages finish
 
+
+
+rename table catissue_storage_cont_capacity to CATISSUE_CAPACITY;
+
+
+#--alter table CATISSUE_CONTAINER_TYPE drop foreign key FKCBBC9954DAC76C0;
+#--drop table if exists CATISSUE_CONTAINER_TYPE;
+
+#-- Creating table catissue_container_type
+create table CATISSUE_CONTAINER_TYPE (
+   IDENTIFIER bigint not null auto_increment,
+   CAPACITY_ID bigint ,
+   NAME varchar(100),
+   ONE_DIMENSION_LABEL varchar(100),
+   TWO_DIMENSION_LABEL varchar(100),
+   COMMENT text,
+   primary key (IDENTIFIER)
+   );
+
+#-- altering table catissue_storage_type
+#--alter table catissue_capacity Engine = INNODB;
+alter table CATISSUE_CONTAINER_TYPE add index FKCBBC9954DAC76C0 (CAPACITY_ID);
+alter table CATISSUE_CONTAINER_TYPE add constraint FKCBBC9954DAC76C0 foreign key (CAPACITY_ID) references CATISSUE_CAPACITY (IDENTIFIER);
+
+insert into catissue_container_type(Identifier,capacity_id,name,one_dimension_label,two_dimension_label) (select identifier,storage_container_capacity_id,type,one_dimension_label,two_dimension_label from catissue_storage_type);
+
+alter table CATISSUE_STORAGE_TYPE drop foreign key FKE9A0629A5F7CB0FE ;
+alter table catissue_storage_type drop column type;
+alter table catissue_storage_type drop column one_dimension_label;
+alter table catissue_storage_type drop column two_dimension_label;
+alter table catissue_storage_type drop column storage_container_capacity_id;
+alter table catissue_storage_type change DEFAULT_TEMP_IN_CENTIGRADE DEFAULT_TEMPERATURE double null; 
+
+
+#--create rel table for type and speicmen class entries
+create table CATISSUE_STOR_TYPE_SPEC_CLASS (
+   STORAGE_TYPE_ID bigint not null,
+   SPECIMEN_CLASS varchar(50),
+   SPECIMEN_CLASS_ID bigint	
+);
+
+#-- create rel table for type and type relation
+create table CATISSUE_STOR_TYPE_HOLDS_TYPE (
+   STORAGE_TYPE_ID BIGINT not null,
+   HOLDS_STORAGE_TYPE_ID BIGINT not null,
+   primary key (STORAGE_TYPE_ID, HOLDS_STORAGE_TYPE_ID)
+);
+
+#-- adding foreign key constraints
+#--alter table catissue_storage_type Engine = INNODB;
+alter table CATISSUE_STOR_TYPE_HOLDS_TYPE add index (STORAGE_TYPE_ID), add constraint FK185C50B59A3CE5C foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
+alter table CATISSUE_STOR_TYPE_HOLDS_TYPE add index (HOLDS_STORAGE_TYPE_ID), add constraint FK185C50B81236791 foreign key (HOLDS_STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
+alter table CATISSUE_STOR_TYPE_SPEC_CLASS add index FK1BCF33BA59A3CE5C (STORAGE_TYPE_ID), add constraint FK1BCF33BA59A3CE5C foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
+
+update `csm_protection_element` set `PROTECTION_ELEMENT_ID`='44',`PROTECTION_ELEMENT_NAME`='Capacity',`PROTECTION_ELEMENT_DESCRIPTION`='Capacity Class',`OBJECT_ID`='edu.wustl.catissuecore.domain.Capacity',`ATTRIBUTE`=NULL,`PROTECTION_ELEMENT_TYPE_ID`=NULL,`APPLICATION_ID`='1',`UPDATE_DATE`='0000-00-00' where `PROTECTION_ELEMENT_ID`='44';
+
+ 
+
+#--alter table CATISSUE_CONTAINER drop foreign key FK49B8DE5DB097B2E;
+#--alter table CATISSUE_CONTAINER drop foreign key FK49B8DE5DAC76C0;
+drop table if exists CATISSUE_CONTAINER;;
+create table CATISSUE_CONTAINER (
+   IDENTIFIER bigint not null auto_increment,
+   ACTIVITY_STATUS varchar(20),
+   BARCODE varchar(100),
+   CAPACITY_ID bigint,
+   PARENT_CONTAINER_ID bigint,
+   COMMENT text,
+   FULL bit,
+   NAME varchar(100),
+   POSITION_DIMENSION_ONE integer,
+   POSITION_DIMENSION_TWO integer,
+   primary key (IDENTIFIER)
+);
+
+#--update catissue_storage_container set container_name = identifier;
+insert into CATISSUE_CONTAINER(IDENTIFIER,ACTIVITY_STATUS,BARCODE,CAPACITY_ID,PARENT_CONTAINER_ID,FULL,NAME,POSITION_DIMENSION_ONE,POSITION_DIMENSION_TWO) (SELECT IDENTIFIER,ACTIVITY_STATUS,BARCODE,STORAGE_CONTAINER_CAPACITY_ID,PARENT_CONTAINER_ID,IS_CONTAINER_FULL,CONTAINER_NAME,POSITION_DIMENSION_ONE,POSITION_DIMENSION_TWO FROM CATISSUE_STORAGE_CONTAINER);
+
+alter table CATISSUE_CONTAINER add index FK49B8DE5DB097B2E (PARENT_CONTAINER_ID), add constraint FK49B8DE5DB097B2E foreign key (PARENT_CONTAINER_ID) references CATISSUE_CONTAINER (IDENTIFIER);
+alter table CATISSUE_CONTAINER add index FK49B8DE5DAC76C0 (CAPACITY_ID), add constraint FK49B8DE5DAC76C0 foreign key (CAPACITY_ID) references CATISSUE_CAPACITY (IDENTIFIER);
+
+
+#--insert into catissue_container (IDENTIFIER,ACTIVITY_STATUS,CAPACITY_ID,FULL,NAME)values(1,'Active',2,0,'aa');
+ALTER TABLE CATISSUE_STORAGE_CONTAINER DROP foreign key FK28429D015F7CB0FE;
+ALTER TABLE CATISSUE_STORAGE_CONTAINER DROP foreign key FK28429D01DB097B2E;
+
+ALTER TABLE CATISSUE_STORAGE_CONTAINER DROP COLUMN IS_CONTAINER_FULL;
+ALTER TABLE CATISSUE_STORAGE_CONTAINER DROP COLUMN ACTIVITY_STATUS;
+ALTER TABLE CATISSUE_STORAGE_CONTAINER DROP COLUMN BARCODE;
+ALTER TABLE CATISSUE_STORAGE_CONTAINER DROP COLUMN PARENT_CONTAINER_ID;
+ALTER TABLE CATISSUE_STORAGE_CONTAINER DROP COLUMN STORAGE_CONTAINER_CAPACITY_ID;
+ALTER TABLE CATISSUE_STORAGE_CONTAINER DROP COLUMN POSITION_DIMENSION_ONE;
+ALTER TABLE CATISSUE_STORAGE_CONTAINER DROP COLUMN POSITION_DIMENSION_TWO;
+ALTER TABLE CATISSUE_STORAGE_CONTAINER DROP COLUMN CONTAINER_NAME;
+ALTER TABLE CATISSUE_STORAGE_CONTAINER add index FK28429D01BC7298A9 (IDENTIFIER), add constraint FK28429D01BC7298A9 foreign key (IDENTIFIER) references CATISSUE_CONTAINER (IDENTIFIER);
+
+
+create table CATISSUE_STORAGE_CONT_COLL_PROT_REL (
+   STORAGE_CONTAINER_ID bigint not null,
+   COLLECTION_PROTOCOL_ID bigint not null,
+   primary key (STORAGE_CONTAINER_ID, COLLECTION_PROTOCOL_ID)
+);
+#--alter table CATISSUE_STORAGE_CONTAINER Engine = INNODB;
+#--alter table CATISSUE_COLLECTION_PROTOCOL Engine = INNODB;
+alter table CATISSUE_STORAGE_CONT_COLL_PROT_REL add index FK3AE9FCA7B3DFB11D (STORAGE_CONTAINER_ID), add constraint FK3AE9FCA7B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
+alter table CATISSUE_STORAGE_CONT_COLL_PROT_REL add index FK3AE9FCA748304401 (COLLECTION_PROTOCOL_ID), add constraint FK3AE9FCA748304401 foreign key (COLLECTION_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
+
+create table CATISSUE_STOR_CONT_SPEC_CLASS (
+   STORAGE_CONTAINER_ID bigint not null,
+   SPECIMEN_CLASS varchar(50),
+   SPECIMEN_CLASS_ID bigint	
+);
+
+alter table CATISSUE_STOR_CONT_SPEC_CLASS add index FKE7F5E8C2B3DFB11D (STORAGE_CONTAINER_ID), add constraint FKE7F5E8C2B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
+
+create table CATISSUE_STOR_CONT_STOR_TYPE_REL (
+   STORAGE_CONTAINER_ID bigint not null,
+   STORAGE_TYPE_ID bigint not null,
+   primary key (STORAGE_CONTAINER_ID, STORAGE_TYPE_ID)
+);
+alter table CATISSUE_STOR_CONT_STOR_TYPE_REL add index FK703B902159A3CE5C (STORAGE_TYPE_ID), add constraint FK703B902159A3CE5C foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
+alter table CATISSUE_STOR_CONT_STOR_TYPE_REL add index FK703B9021B3DFB11D (STORAGE_CONTAINER_ID), add constraint FK703B9021B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
+
+update `csm_protection_element` set `PROTECTION_ELEMENT_ID`='184',`PROTECTION_ELEMENT_NAME`='Capacity_systemIdentifier',`PROTECTION_ELEMENT_DESCRIPTION`='Capacity systemIdentifier attribute',`OBJECT_ID`='edu.wustl.catissuecore.domain.Capacity',`ATTRIBUTE`='systemIdentifier',`PROTECTION_ELEMENT_TYPE_ID`=NULL,`APPLICATION_ID`='1',`UPDATE_DATE`='0000-00-00' where `PROTECTION_ELEMENT_ID`='184'
+update `csm_protection_element` set `PROTECTION_ELEMENT_ID`='185',`PROTECTION_ELEMENT_NAME`='Capacity_oneDimensionCapacity',`PROTECTION_ELEMENT_DESCRIPTION`='Capacity oneDimensionCapacity attribute',`OBJECT_ID`='edu.wustl.catissuecore.domain.Capacity',`ATTRIBUTE`='oneDimensionCapacity',`PROTECTION_ELEMENT_TYPE_ID`=NULL,`APPLICATION_ID`='1',`UPDATE_DATE`='0000-00-00' where `PROTECTION_ELEMENT_ID`='185'
+update `csm_protection_element` set `PROTECTION_ELEMENT_ID`='186',`PROTECTION_ELEMENT_NAME`='Capacity_twoDimensionCapacity',`PROTECTION_ELEMENT_DESCRIPTION`='Capacity twoDimensionCapacity attribute',`OBJECT_ID`='edu.wustl.catissuecore.domain.Capacity',`ATTRIBUTE`='twoDimensionCapacity',`PROTECTION_ELEMENT_TYPE_ID`=NULL,`APPLICATION_ID`='1',`UPDATE_DATE`='0000-00-00' where `PROTECTION_ELEMENT_ID`='186'
+
+
+
+#-- changes finish for storage type and storage container
+
+
+
 #-----Start---Bug 2088: changes done on:19\07\2006--------
 
 #--------Adding Specimen Collection Group Name in CATISSUE_SPECIMEN_COLL_GROUP table
@@ -166,6 +257,72 @@ INSERT INTO CATISSUE_INTERFACE_COLUMN_DATA (IDENTIFIER,TABLE_ID,COLUMN_NAME,ATTR
 INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME) VALUES (30, 305 , 'Specimen Collection Group Name');
 alter table CATISSUE_SPECIMEN_COLL_GROUP change column NAME NAME varchar(55);
 #-----End---Bug 2088: changes done on:19\07\2006--------
+
+#-- poornima's file
+#--Changes in Specimen Requirement table 
+create table CATISSUE_QUANTITY (
+   IDENTIFIER bigint not null auto_increment,
+   QUANTITY double precision,
+   primary key (IDENTIFIER)
+);
+
+insert into catissue_quantity(identifier,quantity) (select identifier,quantity from catissue_specimen_requirement);
+
+alter table catissue_specimen_requirement drop column QUANTITY,add column QUANTITY_ID bigint (20);   
+
+alter table catissue_specimen_requirement add foreign key (QUANTITY_ID) references catissue_quantity (IDENTIFIER) on delete cascade on update cascade ;
+
+insert into catissue_specimen_requirement(quantity_id) (select identifier from catissue_quantity);
+
+#-- Changes for Specimen Array functionality
+create table CATISSUE_SPECIMEN_ARRAY (
+   IDENTIFIER bigint not null,
+   CREATED_BY_ID bigint,
+   SPECIMEN_ARRAY_TYPE_ID bigint,
+   STORAGE_CONTAINER_ID bigint,
+   DISTRIBUTION_ID bigint,
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_SPECIMEN_ARRAY_TYPE (
+   IDENTIFIER bigint not null,
+   SPECIMEN_CLASS varchar(50),
+   primary key (IDENTIFIER)
+);
+
+create table CATISSUE_SPECIMEN_ARRAY_CONTENT (
+   IDENTIFIER bigint not null auto_increment,
+   CONC_IN_MICROGM_PER_MICROLTR double precision,
+   INITIAL_QUANTITY_ID bigint,
+   POSITION_DIMENSION_ONE integer,
+   POSITION_DIMENSION_TWO integer,
+   SPECIMEN_ID bigint,
+   SPECIMEN_ARRAY_ID bigint,
+   primary key (IDENTIFIER)
+);
+
+
+create table CATISSUE_SPECIMEN_TYPE (
+   SPECIMEN_ARRAY_TYPE_ID bigint not null,
+   SPECIMEN_TYPE varchar(50)
+);
+
+
+
+alter table CATISSUE_SPECIMEN_ARRAY_CONTENT add index FKBEA9D458C4A3C438 (SPECIMEN_ARRAY_ID), add constraint FKBEA9D458C4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY (IDENTIFIER);
+#--alter table CATISSUE_SPECIMEN Engine = INNODB;
+alter table CATISSUE_SPECIMEN_ARRAY_CONTENT add index FKBEA9D45860773DB2 (SPECIMEN_ID), add constraint FKBEA9D45860773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
+alter table CATISSUE_SPECIMEN_ARRAY_CONTENT add index FKBEA9D45892AB74B4 (INITIAL_QUANTITY_ID), add constraint FKBEA9D45892AB74B4 foreign key (INITIAL_QUANTITY_ID) references CATISSUE_QUANTITY (IDENTIFIER);
+alter table CATISSUE_SPECIMEN_ARRAY add index FKECBF8B3E64B129CC (CREATED_BY_ID), add constraint FKECBF8B3E64B129CC foreign key (CREATED_BY_ID) references CATISSUE_USER (IDENTIFIER);
+#--alter table CATISSUE_DISTRIBUTION Engine = INNODB;
+alter table CATISSUE_SPECIMEN_ARRAY add index FKECBF8B3EF8278B6 (DISTRIBUTION_ID), add constraint FKECBF8B3EF8278B6 foreign key (DISTRIBUTION_ID) references CATISSUE_DISTRIBUTION (IDENTIFIER);
+alter table CATISSUE_SPECIMEN_ARRAY add index FKECBF8B3EBC7298A9 (IDENTIFIER), add constraint FKECBF8B3EBC7298A9 foreign key (IDENTIFIER) references CATISSUE_CONTAINER (IDENTIFIER);
+alter table CATISSUE_SPECIMEN_ARRAY add index FKECBF8B3EB3DFB11D (STORAGE_CONTAINER_ID), add constraint FKECBF8B3EB3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
+alter table CATISSUE_SPECIMEN_ARRAY add index FKECBF8B3EECE89343 (SPECIMEN_ARRAY_TYPE_ID), add constraint FKECBF8B3EECE89343 foreign key (SPECIMEN_ARRAY_TYPE_ID) references CATISSUE_SPECIMEN_ARRAY_TYPE (IDENTIFIER);
+alter table CATISSUE_SPECIMEN_ARRAY_TYPE add index FKD36E0B9BBC7298A9 (IDENTIFIER), add constraint FKD36E0B9BBC7298A9 foreign key (IDENTIFIER) references CATISSUE_CONTAINER_TYPE (IDENTIFIER);
+alter table CATISSUE_SPECIMEN_TYPE add index FKFF69C195ECE89343 (SPECIMEN_ARRAY_TYPE_ID), add constraint FKFF69C195ECE89343 foreign key (SPECIMEN_ARRAY_TYPE_ID) references CATISSUE_SPECIMEN_ARRAY_TYPE (IDENTIFIER);
+#-- poornima's file end
+
+
 
 # ------ CSM update for Similar Containers Action --------
 # ------ chetan 04-07-2006 ---------
@@ -1352,7 +1509,28 @@ commit;
 
 #------Start:- Jitendra: Bug-1678 -------
 
-alter table catissue_reported_problem modify MESSAGE_BODY varchar(500) NOT NULL
-alter table CATISSUE_AUDIT_EVENT_DETAILS modify CURRENT_VALUE varchar(500) NOT NULL
+alter table catissue_reported_problem modify MESSAGE_BODY varchar(500) NOT NULL;
+alter table CATISSUE_AUDIT_EVENT_DETAILS modify CURRENT_VALUE varchar(500) NOT NULL;
+
 
 #------End: Jitendra: Bug-1678 -------
+
+alter table catissue_container_type add column activity_status varchar(30);
+update catissue_container_type a set activity_status = (select activity_status from catissue_storage_type b where a.identifier = b.identifier);
+alter table catissue_storage_type drop column activity_status;
+
+create table CATISSUE_STORTY_HOLDS_SPARRTY (
+   STORAGE_TYPE_ID BIGINT not null,
+   SPECIMEN_ARRAY_TYPE_ID BIGINT not null,
+   primary key (STORAGE_TYPE_ID, SPECIMEN_ARRAY_TYPE_ID)
+);
+alter table CATISSUE_STORTY_HOLDS_SPARRTY add index (STORAGE_TYPE_ID), add constraint FK70F57E4459A3CE5C foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
+alter table CATISSUE_STORTY_HOLDS_SPARRTY add index (SPECIMEN_ARRAY_TYPE_ID), add constraint FK70F57E44ECE89343 foreign key (SPECIMEN_ARRAY_TYPE_ID) references CATISSUE_SPECIMEN_ARRAY_TYPE (IDENTIFIER);
+
+create table CATISSUE_CONT_HOLDS_SPARRTYPE (
+   STORAGE_CONTAINER_ID BIGINT not null,
+   SPECIMEN_ARRAY_TYPE_ID BIGINT not null,
+   primary key (STORAGE_CONTAINER_ID, SPECIMEN_ARRAY_TYPE_ID)
+);
+alter table CATISSUE_CONT_HOLDS_SPARRTYPE add index (SPECIMEN_ARRAY_TYPE_ID), add constraint FKDC7E31E2ECE89343 foreign key (SPECIMEN_ARRAY_TYPE_ID) references CATISSUE_SPECIMEN_ARRAY_TYPE (IDENTIFIER);
+alter table CATISSUE_CONT_HOLDS_SPARRTYPE add index (STORAGE_CONTAINER_ID), add constraint FKDC7E31E2B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);

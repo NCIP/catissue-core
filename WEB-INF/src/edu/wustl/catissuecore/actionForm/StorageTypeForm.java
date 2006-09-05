@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -76,6 +77,7 @@ public class StorageTypeForm extends AbstractActionForm
      */
     private String holdsSpecimenClassTypes[];
     
+    private long holdsSpecimenArrTypeIds[];
     /**
      * No argument constructor for StorageTypeForm class 
      */
@@ -137,6 +139,22 @@ public class StorageTypeForm extends AbstractActionForm
 					holdsSpecimenClassTypes[i]=specimenClass;
 					i++;
 				}
+			}
+		}
+//      Populating the specimen array type-id array
+		Collection specimenArrayTypeCollection = storageType.getHoldsSpArrayTypeCollection();
+		
+		if(specimenArrayTypeCollection != null)
+		{
+			holdsSpecimenArrTypeIds = new long[specimenArrayTypeCollection.size()];
+			int i=0;
+
+			Iterator it = specimenArrayTypeCollection.iterator();
+			while(it.hasNext())
+			{
+				SpecimenArrayType holdSpArrayType = (SpecimenArrayType)it.next();
+				holdsSpecimenArrTypeIds[i] = holdSpArrayType.getId().longValue();
+				i++;
 			}
 		}
     }
@@ -315,6 +333,26 @@ public class StorageTypeForm extends AbstractActionForm
 	}
 
     /**
+     * Sets the Specimen Array Type Holds List.
+     * @param holdsSpecimenArrTypeIds the list of specimen array type Ids to be set.
+     * @see #getHoldsSpecimenArrTypeIds()
+     */
+	public void setHoldsSpecimenArrTypeIds(long[] holdsSpecimenArrTypeIds)
+	{
+		this.holdsSpecimenArrTypeIds = holdsSpecimenArrTypeIds;
+	}
+
+	 /**
+     * Returns the list of specimen array type Ids that this Storage Type can hold.
+     * @return long[] the list of specimen array type Ids.
+     * @see #setHoldsSpecimenArrTypeIds(long[])
+     */
+    public long[] getHoldsSpecimenArrTypeIds()
+	{
+		return holdsSpecimenArrTypeIds;
+	}
+
+    /**
      * Sets the Specimen Class torage Type Holds List.
      * @param holdSpecimenClassTypeList the list of specimen class type Ids to be set.
      * @see #getHoldsSpecimenClassList()
@@ -323,7 +361,6 @@ public class StorageTypeForm extends AbstractActionForm
 	{
 		this.holdsSpecimenClassTypes = holdsSpecimenClassTypes;
 	}
-
 	/**
      * Returns the id assigned to form bean
      */
