@@ -83,6 +83,25 @@ public class StorageContainerAction  extends SecureAction
     	long container_number=bizLogic.getNextContainerNumber();
     	request.setAttribute("ContainerNumber",new Long(container_number).toString());
     	
+    	//*************Start Bug:1938  ForwardTo implementation *************
+    	HashMap forwardToHashMap=(HashMap)request.getAttribute("forwardToHashMap");
+        if(forwardToHashMap !=null)
+        {        	
+            Long storageTypeId=(Long)forwardToHashMap.get("storageTypeId");
+            Logger.out.debug("storageTypeId found in forwardToHashMap========>>>>>>"+storageTypeId);            
+            storageContainerForm.setTypeId(storageTypeId.longValue());                        
+        }
+        else
+        {        	
+        	if(request.getParameter("storageTypeId")!=null)
+        	{        		
+        		Long storageTypeId=new Long(request.getParameter("storageTypeId"));
+        		storageContainerForm.setTypeId(storageTypeId.longValue());
+        	}
+        }        
+        //*************End Bug:1938 ForwardTo implementation *************
+        
+    	
     	//    	 ---- chetan 15-06-06 ----
         
     	Map containerMap=new HashMap();
