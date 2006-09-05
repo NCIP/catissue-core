@@ -888,6 +888,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			{"Submit and Register to Protocol",	"createParticipantRegistration"}
 	};
 	
+	public static final String [][] STORAGE_TYPE_FORWARD_TO_LIST = {
+			{"Submit Only",					"success"},
+			{"Submit and Add Container",	"storageContainer"}
+	};
+	
 	//Constants Required for Advance Search
 	//Tree related
 	//public static final String PARTICIPANT ='Participant';
