@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -36,6 +37,10 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
         if(domainObject instanceof Participant)
         {
             forwardToHashMap.put("participantId", domainObject.getId());
+        }
+        else if(domainObject instanceof StorageType) //Added this if condition to resolve Bug: 1938
+        {
+            forwardToHashMap.put("storageTypeId", domainObject.getId());
         }
         else if (domainObject instanceof CollectionProtocolRegistration)
         {
