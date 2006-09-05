@@ -35,7 +35,7 @@
 			%>			
 			   var timeoutMessage = "<%= ApplicationProperties.getValue("app.session.timeout") %>"
 			   alert(timeoutMessage);
-			   window.location.href("" + "<%= Variables.catissueURL %>");				
+			   window.location.href = "<%= Variables.catissueURL %>";				
 			
 			<%
 			   }
