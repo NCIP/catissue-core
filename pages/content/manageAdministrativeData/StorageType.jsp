@@ -49,8 +49,11 @@
 		//}
 	//}
 	
-	function validate()
-	{
+	function validate(submittedFor,forwardTo)
+	{		
+		document.forms[0].submittedFor.value = submittedFor;
+		document.forms[0].forwardTo.value    = forwardTo;
+		
 		if(validateAny(document.forms[0].holdsStorageTypeIds)==false)
 		{
 			alert("Selecting other options with 'Any' option is not allowed");
@@ -76,6 +79,7 @@
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String reqPath = (String)request.getAttribute(Constants.REQ_PATH);  
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
+		String forwardTo=(String)request.getAttribute(Constants.FORWARD_TO);
         String formName;
 
         boolean readOnlyValue;
@@ -123,6 +127,7 @@
 			<td>
 				<html:hidden property="operation" value="<%=operation%>"/>
 				<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+				<html:hidden property="forwardTo" value="<%=forwardTo%>"/>
 			</td>
 		</tr>
 		
@@ -298,10 +303,25 @@
 			<!-- action buttons begins -->
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
-					<td>
-						<html:button styleClass="actionButton" property="submitPage" onclick="validate()">
-							<bean:message  key="buttons.submit" />
-						</html:button>
+					<%
+						String normalSubmit = "validate('" + submittedFor+ "','" + Constants.STORAGE_TYPE_FORWARD_TO_LIST[0][1]+"')";
+						String forwardToSubmit = "validate('ForwardTo','" + Constants.STORAGE_TYPE_FORWARD_TO_LIST[1][1]+"')";																				
+						System.out.println("-------normal submit" + normalSubmit);
+						System.out.println("-------forwardTo Submit" + forwardToSubmit);
+					%>				
+					<td nowrap class="formFieldNoBorders">
+								<html:button styleClass="actionButton"
+										property="submitPage" 
+										value="<%=Constants.STORAGE_TYPE_FORWARD_TO_LIST[0][0]%>"										
+										onclick="<%=normalSubmit%>"> 
+								</html:button>
+					</td>
+					<td nowrap class="formFieldNoBorders">									
+									<html:button styleClass="actionButton"  
+											property="storageContainerPage" 
+											value="<%=Constants.STORAGE_TYPE_FORWARD_TO_LIST[1][0]%>" 											
+					  						onclick="<%=forwardToSubmit%>">
+									</html:button>
 					</td>
 				</tr>
 			</table>
