@@ -346,7 +346,16 @@
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.CLINICAL_DIAGNOSIS_LIST%>" labelProperty="name" property="value"/>				     					     					     	
 						</html:select>
+						<%
+						String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";			
+						%>
+						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
+							<img src="images\Tree.gif" border="0" width="26" height="22" title='CLinical Diagnosis Selector'>
+					</a>
 		        	 </td>
+					
+					
+					
 				 </tr>
 				 
 				 <tr>
