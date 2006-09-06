@@ -10,7 +10,7 @@
 	  </classpath>
 	</taskdef>
 
-	<property file="caTissueInstall.properties"/>
+	<property file="caTISSUEInstall.properties"/>
 	
 	<property name="base.dir" value="."/>
 	<property name="temp.dir" value="./tempCatissuecore"/>
@@ -294,7 +294,66 @@
 			</fileset>
 		</copy>	
   	</target>
+	<!--Changes for v 1.0.1 - Start-->
+	<target name="config_jboss_files">
+		<copy todir="${jboss.home.dir}/server/default/conf" overwrite="true">
+  			<fileset dir="${temp.dir}">
+  				<include name="login-config.xml"/>
+  				<include name="log4j.xml"/>
+   			</fileset>
+  		</copy>
+
+		<replace dir="${temp.dir}"> 
+	  		<include name="properties-service.xml"/>
+			<replacefilter token="@@app-security-file@@" 
+				  	value="${jboss.home.dir}/server/default/catissuecore-properties/ApplicationSecurityConfig.xml"/>
+		</replace>
+
+		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
+  			<fileset dir="${temp.dir}">
+  				<include name="properties-service.xml"/>
+   			</fileset>
+  		</copy>
+		<delete file="${jboss.home.dir}/server/default/lib/hibernate2.jar"/>
+	</target>
+		<target name="deploy_war">
+		<antcall target="assert"/>
+		<delete dir="${temp.dir}"/>
+		<antcall target="init"/>
+		<antcall target="ConfigureWar"/>
+		<antcall target="AdopterConfiguration"/>
+		<if>
+			<equals arg1="mysql" arg2="${database.type}"/>		
+			<then>
+				<antcall target="mysqlConfig"/>
+			</then>
+			<elseif>	
+				<equals arg1="oracle" arg2="${database.type}"/>		
+				<then>
+					<antcall target="oracleConfig"/>
+				</then>
+			</elseif>
+		</if>
+		<antcall target="BuildWar"/>
+		<antcall target="CopyFiles"/>
+		<antcall target="SendMail"/>
+	</target>
+
+	<!--Target for Deployment -->
+	<target name="deploy_app" >
+		<antcall target="deploy_war"/>
+		<delete dir="${temp.dir}"/>
+	</target>
 	
+	<!--Target for Deployment with jboss config-->
+	<target name="deploy_app_with_config" >
+		<antcall target="deploy_war"/>
+		<antcall target="config_jboss_files"/>
+		<delete dir="${temp.dir}"/>
+	</target>
+
+
+	<!--Changes for v 1.0.1 - End-->
 	<!--Target for Deployment -->
 	<target name="deploy" >
 		<antcall target="assert"/>
