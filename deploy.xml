@@ -1,7 +1,7 @@
-
+<?xml version ="1.0"?>
 <!--Ant Script for create Build for caTISSUE Core-->
 
-<project name="caTissue Core Installation" default="deploy">
+<project name="caTissue Core Installation" default="deploy_app">
 	
 	<!--define require dir and Properties -->	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
@@ -121,6 +121,10 @@
 		<copy file="catissuecore-ds.xml" todir="${temp.dir}" overwrite="true"/>
 		
 		<copy file="${csm.dir}/WEB-INF/classes/DAOConfig.xml" todir="${temp.dir}"/>
+		<!--Kapil V 1.0.1 Changes-->
+		<copy file="login-config.xml" todir="${temp.dir}" overwrite="true"/>
+		<copy file="properties-service.xml" todir="${temp.dir}" overwrite="true"/>
+		<copy file="log4j.xml" todir="${temp.dir}" overwrite="true"/>
  	</target>
 	
 	<!--Modify Configuration such as Session Timeout, Admin details and JBoss server port-->
@@ -160,6 +164,7 @@
 		
 		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
 			<include name="catissuecore-ds.xml"/>
+			<include name="login-config.xml"/>
 			<replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
 			<replacefilter token="@@username@@" value="${database.username}"/>
 			<replacefilter token="@@pasword@@" value="${database.password}"/>
@@ -204,6 +209,7 @@
 		<!-- Configuring Data Source File-->
 		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
 			<include name="catissuecore-ds.xml"/>
+			<include name="login-config.xml"/>
 			<replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
 			<replacefilter token="@@username@@" value="${database.username}"/>
 			<replacefilter token="@@pasword@@" value="${database.password}"/>
@@ -307,7 +313,11 @@
 	  		<include name="properties-service.xml"/>
 			<replacefilter token="@@app-security-file@@" 
 				  	value="${jboss.home.dir}/server/default/catissuecore-properties/ApplicationSecurityConfig.xml"/>
+		<replacefilter token="@@app-properties-file@@" 
+				  	value="${jboss.home.dir}/server/default/catissuecore-properties/caTissueCore_Properties.xml"/>
+
 		</replace>
+
 
 		<copy todir="${jboss.home.dir}/server/default/deploy" overwrite="true">
   			<fileset dir="${temp.dir}">
@@ -316,46 +326,7 @@
   		</copy>
 		<delete file="${jboss.home.dir}/server/default/lib/hibernate2.jar"/>
 	</target>
-		<target name="deploy_war">
-		<antcall target="assert"/>
-		<delete dir="${temp.dir}"/>
-		<antcall target="init"/>
-		<antcall target="ConfigureWar"/>
-		<antcall target="AdopterConfiguration"/>
-		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>		
-			<then>
-				<antcall target="mysqlConfig"/>
-			</then>
-			<elseif>	
-				<equals arg1="oracle" arg2="${database.type}"/>		
-				<then>
-					<antcall target="oracleConfig"/>
-				</then>
-			</elseif>
-		</if>
-		<antcall target="BuildWar"/>
-		<antcall target="CopyFiles"/>
-		<antcall target="SendMail"/>
-	</target>
-
-	<!--Target for Deployment -->
-	<target name="deploy_app" >
-		<antcall target="deploy_war"/>
-		<delete dir="${temp.dir}"/>
-	</target>
-	
-	<!--Target for Deployment with jboss config-->
-	<target name="deploy_app_with_config" >
-		<antcall target="deploy_war"/>
-		<antcall target="config_jboss_files"/>
-		<delete dir="${temp.dir}"/>
-	</target>
-
-
-	<!--Changes for v 1.0.1 - End-->
-	<!--Target for Deployment -->
-	<target name="deploy" >
+		<target name="deploy_app">
 		<antcall target="assert"/>
 		<delete dir="${temp.dir}"/>
 		<antcall target="init"/>
@@ -376,10 +347,22 @@
 		<antcall target="build_war"/>
 		<antcall target="copy_files"/>
 		<antcall target="send_mail"/>
+	</target>
+
+	
+	<!--Target for Deployment with jboss config-->
+	<target name="deploy_app_with_config" >
+		<antcall target="deploy_app"/>
+		<antcall target="config_jboss_files"/>
 		<delete dir="${temp.dir}"/>
 	</target>
-	
-	<!--Target for Database Creation-->
+
+	<!--Target call for both Deployment and Database Creation-->
+	<target name="deploy_all_with_config">
+		<antcall target="deploy_app_with_config"/>
+		<antcall target="db_initialize"/>
+	</target>
+		<!--Target for Database Creation-->
 	<target name="db_initialize">
 		<antcall target="firstUser"/>
 		
@@ -399,10 +382,11 @@
 			</else>
 		</if>
 	</target>
+	<!--Changes for v 1.0.1 - End-->
 
 	<!--Target call for both Deployment and Database Creation-->
-	<target name="deploy-all">
-		<antcall target="deploy"/>
+	<target name="deploy_all">
+		<antcall target="deploy_app"/>
 		<antcall target="db_initialize"/>
 	</target>
 
