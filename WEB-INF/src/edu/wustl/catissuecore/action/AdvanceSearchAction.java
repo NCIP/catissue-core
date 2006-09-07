@@ -77,6 +77,11 @@ public class AdvanceSearchAction extends BaseAction//DispatchAction
         {
         	selectedNode = temp;
         }
+        
+        if (selectedNode.equals("-1"))
+        {
+        	selectedNode = "";
+        }
         //ItemNode Id represents id of checked checbox used in Edit operation
         String editStr = advanceSearchForm.getItemNodeId();
         Integer nodeId = null;

@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -121,25 +122,26 @@ public class ConditionMapParser
 		if(nodeId == null)
 		{
 			AdvancedConditionsNode advancedConditionsNode = new AdvancedConditionsNode(objectName);
-			session.setAttribute("tempAdvConditionNode",advancedConditionsNode);
 			advancedConditionsNode.setObjectConditions(objectConditions);
 		
-		DefaultMutableTreeNode child = new DefaultMutableTreeNode(advancedConditionsNode);
-		
+			DefaultMutableTreeNode child = createDefaultMutableTreeNode(objectName, objectConditions);
+			session.setAttribute("tempAdvConditionNode",child.getUserObject());//setting AdvancedConditionsNode of the child node in session
 
-		if(root.getChildCount()==0)
-		{
-			root.add(child);
+	
+			if(root.getChildCount()==0)
+			{
+				child = createHeirarchy(child, Constants.ROOT);
+				root.add(child);
+			}
+			else
+			{
+				int nodeCount=0;
+				//addNode1(root,selectedNodeArray,nodeCount,child,objectName);
+				addNode(selectedNodeArray,child,advancedConditionNodesMap);
+				Logger.out.debug("root size"+root.getDepth());
+				
+			}
 		}
-		else
-		{
-			int nodeCount=0;
-			//addNode1(root,selectedNodeArray,nodeCount,child,objectName);
-			addNode(selectedNodeArray,child,advancedConditionNodesMap);
-			Logger.out.debug("root size"+root.getDepth());
-			
-		}
-	}
 		//Else edit operation
 		else
 		{
@@ -148,6 +150,49 @@ public class ConditionMapParser
 			advancedConditionsNode.setObjectConditions(objectConditions);
 		}
 		return root;
+	}
+	/**
+	 * To create the intermediate node heirarchy. 
+	 * @param node The Current node to be added.
+	 * @param parentNodeObjectName The parent Node till which the heirarchy tobe created.
+	 * @return The parent/grand parent of the child node to be added in the condition node tree.
+	 */
+	private DefaultMutableTreeNode createHeirarchy(DefaultMutableTreeNode node, String parentNodeObjectName)
+	{
+		AdvancedConditionsNode advancedConditionNode = (AdvancedConditionsNode) node.getUserObject();
+		String objectName = advancedConditionNode.getObjectName();
+		List objectNames = Arrays.asList(Constants.ADVANCE_QUERY_TREE_HEIRARCHY);
+		
+		int index = objectNames.indexOf(objectName); // Index of object to be added.
+		int parentIndex = objectNames.indexOf(parentNodeObjectName); // Index of parent object
+		
+		DefaultMutableTreeNode childNode = node;
+		DefaultMutableTreeNode tempChildNode;
+		
+		//creating heirarchy in reverse order i.e. specimen, specimen Colletcion Group, Collection protocol etc.
+		for (int i=index-1 ; i > parentIndex ; i--)
+		{
+			tempChildNode = childNode;
+			childNode = createDefaultMutableTreeNode(Constants.ADVANCE_QUERY_TREE_HEIRARCHY[i], null);
+			childNode.add(tempChildNode);
+			
+		}
+		return childNode; //returning actual node to be added in the hierarchy.
+	}
+	
+	/**
+	 * To create An empty condition node for given objectName
+	 * @param objectName The String representing AdvancedConditionsNode name.
+	 * @param objectConditions The Vector of Condition objects.
+	 * @return The DefaultMutableTreeNode reference to newly created node.
+	 */
+	private DefaultMutableTreeNode createDefaultMutableTreeNode(String objectName, Vector objectConditions)
+	{
+		AdvancedConditionsNode advancedConditionsNode = new AdvancedConditionsNode(objectName);
+		if (objectConditions!=null)
+			advancedConditionsNode.setObjectConditions(objectConditions);
+		DefaultMutableTreeNode node = new DefaultMutableTreeNode(advancedConditionsNode);
+		return node;
 	}
 	
 	public void deleteSelectedNode(String selectedNode,Map advancedConditionNodesMap)
@@ -258,13 +303,18 @@ public class ConditionMapParser
 	//Add advancedConditionNode
 	private void addNode(Integer []selectedNode,DefaultMutableTreeNode presentNode,Map advancedConditionNodesMap)
 	{
-		DefaultMutableTreeNode child = new DefaultMutableTreeNode();
-		DefaultMutableTreeNode parent = new DefaultMutableTreeNode();
+//		DefaultMutableTreeNode child = new DefaultMutableTreeNode();
+//		DefaultMutableTreeNode parent = new DefaultMutableTreeNode();
 		DefaultMutableTreeNode selectedAdvNode;
 		boolean anyConditionExists = false;
 		if(selectedNode.length==0)
 		{
 			selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(new Integer(0));
+			AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)presentNode.getUserObject();
+			if (!advConditionNode.getObjectName().equals(Constants.PARTICIPANT))
+			{
+				presentNode = createHeirarchy(presentNode, Constants.ROOT);
+			}
 			selectedAdvNode.add(presentNode);
 		}
 		else
@@ -273,16 +323,21 @@ public class ConditionMapParser
 			for(int i=0;i<selectedNode.length;i++)
 			{
 				AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)presentNode.getUserObject();
+				String parentNodeName;
 				if(advConditionNode.getObjectName().equals(Constants.PARTICIPANT))
 				{
 					selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(new Integer(0));
+					parentNodeName = Constants.ROOT;
 				}
 				else
 				{
 					Logger.out.debug("selectedNode[i]-->"+selectedNode[i]);
 					selectedAdvNode = (DefaultMutableTreeNode) advancedConditionNodesMap.get(selectedNode[i]);
+					parentNodeName = ((AdvancedConditionsNode)selectedAdvNode.getUserObject()).getObjectName();
 				}
 				Logger.out.debug("AdvanceQueryMap for: "+selectedNode[i]+":"+advancedConditionNodesMap.get(selectedNode[i]));
+				presentNode = createHeirarchy(presentNode, parentNodeName);
+				
 				selectedAdvNode.add(presentNode);
 				//DefaultMutableTreeNode selectedTreeNode =(DefaultMutableTreeNode) selectedAdvNode;
 				//traverseTree(selectedTreeNode);

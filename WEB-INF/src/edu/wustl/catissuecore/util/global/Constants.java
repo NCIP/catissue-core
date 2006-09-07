@@ -896,6 +896,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Constants Required for Advance Search
 	//Tree related
 	//public static final String PARTICIPANT ='Participant';
+	public static final String[] ADVANCE_QUERY_TREE_HEIRARCHY={ //Represents the Advance Query tree Heirarchy.
+			Constants.PARTICIPANT,
+			Constants.COLLECTION_PROTOCOL,
+			Constants.SPECIMEN_COLLECTION_GROUP,
+			Constants.SPECIMEN
+			};
 	public static final String MENU_COLLECTION_PROTOCOL ="Collection Protocol";
 	public static final String MENU_SPECIMEN_COLLECTION_GROUP ="Specimen Collection Group";
 	public static final String MENU_DISTRIBUTION_PROTOCOL = "Distribution Protocol";

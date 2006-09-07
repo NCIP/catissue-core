@@ -188,7 +188,10 @@
 		
 		//var sum = participantCount + cProtocolCount + DProtocolCount + sCGroupCount + distributionCount + specimenCount;
 		var sum = participantCount + cProtocolCount +  sCGroupCount +  specimenCount;
-		
+		if (selectedNode=="")
+		{
+			selectedNode="-1";
+		}
 		if( (participantCount == sum) && (participantCount == 1) ) 
 		{
 			/*var PItem = document.getElementById('<%=Constants.P%>');
@@ -196,11 +199,8 @@
 			var link = "<%=SearchUtil.getLink("Participant")%>"+ selectedNode;
 			PItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";*/
 			
-			var cpItem = document.getElementById('<%=Constants.CP%>');
-			cpItem.className="linkChange";
-			var link = "<%=SearchUtil.getLink("CollectionProtocol")%>"+ selectedNode;
-			cpItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.MENU_COLLECTION_PROTOCOL%></a>";
-		
+			showAddLinks("Participant",selectedNode);
+
 			/*DPItem = document.getElementById('<%=Constants.DP%>');
 			DPItem.className="linkChange";
 			//var link = "<%=SearchUtil.getLink("DistributionProtocol")%>"+ selectedNode;
@@ -218,11 +218,13 @@
 			var link = "<%=SearchUtil.getLink("CollectionProtocol")%>"+ selectedNode;
 			CPItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.MENU_COLLECTION_PROTOCOL%></a>";*/
 			
-			var scGItem = document.getElementById('<%=Constants.SCG%>');
+			/*var scGItem = document.getElementById('<%=Constants.SCG%>');
 			scGItem.className="linkChange";
 			var link = "<%=SearchUtil.getLink("SpecimenCollectionGroup")%>"+ selectedNode;
-			scGItem.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='SpecimenCollectionGroup' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.MENU_SPECIMEN_COLLECTION_GROUP%></a>";
+			scGItem.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='SpecimenCollectionGroup' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.MENU_SPECIMEN_COLLECTION_GROUP%></a>";*/
 			
+			showAddLinks("CollectionProtocol",selectedNode);
+						
 			var linkName = "<%=SearchUtil.getLink("CollectionProtocol")%>";
 			enableCommonItems(selectedNode,itemId,linkName);
 		}
@@ -233,17 +235,19 @@
 			var link = "<%=SearchUtil.getLink("Specimen")%>"+ selectedNode;
 			sItem.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
 			
+			showAddLinks("SpecimenCollectionGroup",selectedNode);
+			
 			var linkName = "<%=SearchUtil.getLink("SpecimenCollectionGroup")%>";
 			enableCommonItems(selectedNode,itemId,linkName);
 		}
 		else if( (specimenCount == sum) && (specimenCount == 1))
 		{
 		
-			var sItem = document.getElementById('<%=Constants.S%>');
+			/*var sItem = document.getElementById('<%=Constants.S%>');
             sItem.className="linkChange";
             var link = "<%=SearchUtil.getLink("Specimen")%>"+ selectedNode;
-            sItem.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
-			
+            sItem.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";*/
+			showAddLinks("Specimen",selectedNode);
 			var linkName = "<%=SearchUtil.getLink("Specimen")%>";
 			enableCommonItems(selectedNode,itemId,linkName);
 		}
@@ -253,10 +257,11 @@
 		if(sum == 0)
 		{
 			disableAll();
-			var pItem = document.getElementById('<%=Constants.P%>');
+			/*var pItem = document.getElementById('<%=Constants.P%>');
 			pItem.className="linkChange";
 			var link = "<%=SearchUtil.getLink("Participant")%>"+ selectedNode;
-			pItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
+			pItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";*/
+			showAddLinks("None",selectedNode);
 		}
 		else if(sum>0)
 		{
@@ -267,6 +272,39 @@
 		}
 		
 	}	
+	
+	//To activate or deactivate links depending upon the objectName of the node selected.
+	function showAddLinks(objectName, selectedNode)
+	{
+		var link;
+		switch (objectName)
+		{
+		case "None":
+			var pItem = document.getElementById('<%=Constants.P%>');
+			pItem.className="linkChange";
+			var link = "<%=SearchUtil.getLink("Participant")%>"+ selectedNode;
+			pItem.innerHTML ="&nbsp;<img src='images/Participant.GIF' alt='Participant' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.PARTICIPANT%></a>";
+		
+		case "Participant" :
+			var cpItem = document.getElementById('<%=Constants.CP%>');
+			cpItem.className="linkChange";
+			link = "<%=SearchUtil.getLink("CollectionProtocol")%>"+ selectedNode;
+			cpItem.innerHTML ="&nbsp;<img src='images/CollectionProtocol.GIF' alt='CollectionProtocol' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.MENU_COLLECTION_PROTOCOL%></a>";
+			
+		case "CollectionProtocol":
+			var scGItem = document.getElementById('<%=Constants.SCG%>');
+			scGItem.className="linkChange";
+			var link = "<%=SearchUtil.getLink("SpecimenCollectionGroup")%>"+ selectedNode;
+			scGItem.innerHTML ="&nbsp;<img src='images/SpecimenCollectionGroup.GIF' alt='SpecimenCollectionGroup' />  &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.MENU_SPECIMEN_COLLECTION_GROUP%></a>";
+			
+		case "SpecimenCollectionGroup":
+		case "Specimen":
+			var sItem = document.getElementById('<%=Constants.S%>');
+			sItem.className="linkChange";
+			var link = "<%=SearchUtil.getLink("Specimen")%>"+ selectedNode;
+			sItem.innerHTML ="&nbsp;<img src='images/Specimen.GIF' alt='Specimen' /> &nbsp;<a HREF='"+link+"' target='searchPageFrame'><%=Constants.SPECIMEN%></a>";
+		}
+	}
 	
 	function changeClass(element,styleName)
 	{
