@@ -1544,3 +1544,29 @@ create table CATISSUE_CONT_HOLDS_SPARRTYPE (
 );
 alter table CATISSUE_CONT_HOLDS_SPARRTYPE add index (SPECIMEN_ARRAY_TYPE_ID), add constraint FKDC7E31E2ECE89343 foreign key (SPECIMEN_ARRAY_TYPE_ID) references CATISSUE_SPECIMEN_ARRAY_TYPE (IDENTIFIER);
 alter table CATISSUE_CONT_HOLDS_SPARRTYPE add index (STORAGE_CONTAINER_ID), add constraint FKDC7E31E2B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
+
+/* adding default entry for specimen array type */
+drop table if exists catissue_temp_type;
+
+
+CREATE TABLE catissue_temp_type (                                                                                                      
+                         `IDENTIFIER` bigint(20),                                                                                          
+                         `CAPACITY_ID` bigint(20),                                                                                                   
+                         `NAME` varchar(100),                                                                                         
+                         `ONE_DIMENSION_LABEL` varchar(100),                                                                                           
+                         `TWO_DIMENSION_LABEL` varchar(100),                                                                                           
+                          `COMMENT` text(20),                                                                                  
+                         `ACTIVITY_STATUS` varchar(20)
+                       );
+
+                                                                                               
+insert into catissue_temp_type (select * from catissue_container_type where identifier=2 and name!='Any');
+update catissue_temp_type set identifier=(select max(identifier)+1 from catissue_container_type);
+update catissue_container_type set name='Any',activity_status='Disabled' where identifier=2;
+insert into catissue_container_type (select * from catissue_temp_type);
+update catissue_storage_type set identifier=(select identifier from catissue_temp_type) where identifier=2;
+
+insert into catissue_container_type (name,activity_status,identifier) values ('Any','Disabled',2);
+insert into catissue_specimen_array_type (IDENTIFIER) values ( '2');
+drop table catissue_temp_type;
+/* changes finish */
