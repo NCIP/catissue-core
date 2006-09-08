@@ -134,5 +134,6 @@ public class SpecimenArrayType extends ContainerType
 	        		}
 				}
 	        }
+	        this.activityStatus="Active";
 	}
 }
