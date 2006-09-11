@@ -745,6 +745,10 @@
 		<put name="content" value="/pages/content/search/AdvanceSearchUI.jsp" />
 	</definition>
 
+	<definition name=".catissuecore.defaultSearchDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/AdvanceQueryInterfaceDefaultPage.jsp" />
+	</definition>
+
 	<definition name=".catissuecore.advanceQueryViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/AdvanceQueryView.jsp" />
 	</definition>

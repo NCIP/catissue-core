@@ -2213,6 +2213,13 @@ PUBLIC
 			<forward name="access_denied" path="/Home.do" />
 		</action>
 		
+		<action path="/AdvanceQueryInterfaceDefaultPage" 
+			type="edu.wustl.catissuecore.action.AdvanceQueryInterfaceDefaultPageAction"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.defaultSearchDef" />
+		</action>
+					
 		<action path="/ParticipantAdvanceSearch"
 			type="edu.wustl.catissuecore.action.ParticipantSearchAction"
 			name="advanceSearchForm"

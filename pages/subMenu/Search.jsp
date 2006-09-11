@@ -24,7 +24,7 @@
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSimpleQueryInterface&menuSelected=17">
 				<bean:message key="app.simpleSearch" />
 			</a> |  
-			<a class="subMenuPrimary" href="AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface&menuSelected=17">
+			<a class="subMenuPrimary" href="AdvanceQueryInterfaceDefaultPage.do?pageOf=pageOfAdvanceQueryInterface&menuSelected=17">
 					<bean:message key="app.advancedSearch" />
 			</a>			
 		</div>
