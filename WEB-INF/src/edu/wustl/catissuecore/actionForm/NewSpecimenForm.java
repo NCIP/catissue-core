@@ -510,7 +510,7 @@ public class NewSpecimenForm extends SpecimenForm
             		validateReceivedEvent(errors, validator);
              	}
  
-             	if(checkedButton)
+             	/*if(checkedButton)
              	{
              		if(!validator.isNumeric(noOfAliquots))
                     {
@@ -534,7 +534,7 @@ public class NewSpecimenForm extends SpecimenForm
             		        }
             			}
                     }
-             	}
+             	}*/
 
              	//Validations for Biohazard Add-More Block
                 String className = "Biohazard:";
