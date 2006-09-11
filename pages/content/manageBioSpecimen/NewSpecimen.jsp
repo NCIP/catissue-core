@@ -232,26 +232,24 @@
 		
 		function onCheckboxButtonClick(chkBox)
 		{
-			var aliquotCountTextBox  = document.getElementById("noOfAliquots");
-			var qtyPerAliquotTextBox = document.getElementById("quantityPerAliquot");
+			//var aliquotCountTextBox  = document.getElementById("noOfAliquots");
+			//var qtyPerAliquotTextBox = document.getElementById("quantityPerAliquot");
 			
 			if(chkBox.checked)
 			{
-				aliquotCountTextBox.disabled = false;
-				qtyPerAliquotTextBox.disabled = false;
-				
-				document.forms[0].deriveButton.disabled = true;
-				//document.forms[0].eventButton.disabled = true;
-				document.forms[0].scgButton.disabled = true;
+				//aliquotCountTextBox.disabled = false;
+				//qtyPerAliquotTextBox.disabled = false;				
+				document.forms[0].deriveButton.disabled=true;
+				document.forms[0].moreButton.disabled=true;
+				document.forms[0].submitAndDistributeButton.disabled=true;
 			}
 			else
 			{
-				aliquotCountTextBox.disabled = true;
-				qtyPerAliquotTextBox.disabled = true;
-				
-				document.forms[0].deriveButton.disabled = false;
-				//document.forms[0].eventButton.disabled = false;
-				document.forms[0].scgButton.disabled = false;
+				//aliquotCountTextBox.disabled = true;
+				//qtyPerAliquotTextBox.disabled = true;				
+				document.forms[0].deriveButton.disabled=false;
+				document.forms[0].moreButton.disabled=false;
+				document.forms[0].submitAndDistributeButton.disabled=false;
 			}
 		}
 		
@@ -262,20 +260,20 @@
 			
 			if(checked)
 			{
-				if(operation == "Add")
+				if(operation == "add")
 				{
-					setSubmittedFor('null','pageOfCreateAliquot');
+					setSubmittedFor('null','pageOfAliquot');
 					confirmDisable('NewSpecimenAdd.do',document.forms[0].activityStatus);
 				}
 				else
 				{
-					setSubmittedFor('null','pageOfCreateAliquot');
+					setSubmittedFor('null','pageOfAliquot');
 					confirmDisable('NewSpecimenEdit.do',document.forms[0].activityStatus);
 				}
 			}
 			else
 			{
-				if(operation == "Add")
+				if(operation == "add")
 				{
 					setSubmittedFor('null','success');
 					confirmDisable('NewSpecimenAdd.do',document.forms[0].activityStatus);
@@ -392,11 +390,11 @@
 				</td>
 
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
-					<%=Constants.SURGICAL_PATHOLOGY_REPORT %>
+					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
-					<%=Constants.CLINICAL_ANNOTATIONS %>
+					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
 
 				<td width="450" class="tabMenuSeparator" colspan="2">&nbsp;</td>
@@ -414,696 +412,667 @@
 			<!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
 			   	
 			  <!-- NEW SPECIMEN REGISTRATION BEGINS-->
-	    	  <tr>
+	    	<tr>
 			    <td width = "100%">
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
-					<tr><td colspan="6">
-						<html:errors />
-						<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-							<%=messageKey%>
-						</html:messages>
-					</td></tr>
-					<tr><td colspan="6">
-						<%@ include file="NewSpecimenPageButtons.jsp" %>
-					</td></tr>
-	
-				
-				 
-				 <tr>
-				 	<td>
-						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
-						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
-						<html:hidden property="forwardTo" value=""/>
-					</td>
-					<td>
-						<html:hidden property="exIdCounter"/>
-					</td>
-					<td>
-						<html:hidden property="bhCounter"/>
-					</td>
-					<td><html:hidden property="onSubmit"/></td>
-					<td>
-						<html:hidden property="id"/>
-						<html:hidden property="positionInStorageContainer" />
-						<html:hidden property="parentPresent" />
-					</td>
-				 </tr>
-				 
-				  <tr>
-					<td class="formMessage" colspan="6">* indicates a required field</td>
-				 </tr>
-		 
-				 
-				 </table>
+					<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+						<tr>
+							<td colspan="6">
+								<html:errors />
+								<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+									<%=messageKey%>
+								</html:messages>
+							</td>
+						</tr>		
+						<tr>
+							<td>
+								<html:hidden property="operation" value="<%=operation%>"/>
+								<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+								<html:hidden property="forwardTo" value=""/>
+							</td>
+							<td>
+								<html:hidden property="exIdCounter"/>
+							</td>
+							<td>
+								<html:hidden property="bhCounter"/>
+							</td>
+							<td>
+								<html:hidden property="onSubmit"/>
+							</td>
+							<td>
+								<html:hidden property="id"/>
+								<html:hidden property="positionInStorageContainer" />
+								<html:hidden property="parentPresent" />
+							</td>
+						</tr>				 
+						<tr>
+							<td class="formMessage" colspan="6">
+								<bean:message key="requiredfield.message"/>  
+							</td>
+						</tr>				 
+					</table>
 				</td>
-				</tr>
+			</tr>
 				
-				<tr>
+			<tr>
 				<td>
-				 <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+					<table summary="" cellpadding="3" cellspacing="0" border="0" width="700">
 				 
-				 <tr>
-				     <td class="formTitle" height="20" width="100%" colspan="6">
-				     <%String title = "specimen."+pageView+".title";%>
-				     	<bean:message key="<%=title%>"/>
-				    	<%
-							if(pageView.equals(Constants.EDIT))
-							{
-						%>
-						     &nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="newSpecimenForm" property="id" />
-						<%
-							}
-						%>
-				     	
-				     </td>
-				 </tr>
+						<tr>
+							<td class="formTitle" height="20" width="100%" colspan="6">
+								<%String title = "specimen."+pageView+".title";%>
+								<bean:message key="<%=title%>"/>    
+							</td>
+						</tr>
 
-					<tr>
-					<td class="formRequiredNotice" >*</td>
-				    
-					<logic:equal name="newSpecimenForm" property="parentPresent" value="false">
-						<td class="formRequiredLabel">
-							<label for="specimenCollectionGroupName">
-								<bean:message key="specimenCollectionGroup.groupName"/>
-							</label>
-						</td>
-						<td class="formField" >
-<!-- Mandar : 434 : for tooltip -->
-				     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
-				     				styleId="specimenCollectionGroupId" size="1" 
-									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onCollOrClassChange()">
-								<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
-									labelProperty="name" property="value"/>		
-							</html:select>
-							&nbsp;
-							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-							<html:link href="#" styleId="newUser" onclick="addNewAction('NewSpecimenAddNew.do?addNewForwardTo=specimenCollectionGroup&forwardTo=createNewSpecimen&addNewFor=specimenCollectionGroupId')">
-								<bean:message key="buttons.addNew" />
-							</html:link>					   
-	   						</logic:notEqual>
-			     <!--   		<a href="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup">
-	      						<bean:message key="app.addNew" />
-	   						</a> 
-	   			-->			
-			        	</td>
-		        	</logic:equal>
-		        	
-		        	<logic:equal name="newSpecimenForm" property="parentPresent" value="true">
-			        	<td class="formRequiredLabel" >
-							<label for="parentSpecimenId">
-								<bean:message key="createSpecimen.parent"/>
-							</label>
-						</td>
-						
-			        	<td class="formField" >
-			        		<html:hidden property="specimenCollectionGroupId"/>
-<!-- Mandar : 434 : for tooltip -->
-				     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
-							</html:select>
-			        	</td>
-		        	</logic:equal>
-		        	
-				
-			     	<td class="formRequiredNotice" >
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel" >
-						<label for="label">
-							<bean:message key="specimen.label"/>
-						</label>
-					</td>
-				    <td class="formField" >
-				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
-				    </td>
-				</tr>
-				
-				 
-				 <tr>
-				 	<td class="formRequiredNotice" width="5">*</td>
-				    <td class="formRequiredLabel">
-				     	<label for="className">
-				     		<bean:message key="specimen.type"/>
-				     	</label>
-				    </td>
-				    <td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);onCollOrClassChange()" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-				     	<%
-							String classValue = form.getClassName();
-							if(operation.equals(Constants.EDIT))
-							{
-						%>
-								<html:option value="<%=classValue%>"><%=classValue%></html:option>
-						<%
-							}else{
-						%>
-								<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
-						<%
-							}
-						%>
-						</html:select>
-		        	</td>
-				 
-				    <td class="formRequiredNotice" width="5">*</td>
-				    <td class="formRequiredLabel">
-				     	<label for="type">
-				     		<bean:message key="specimen.subType"/>
-				     	</label>
-				    </td>				    
-				    <td class="formField" >
-				    <!-- --------------------------------------- -->
-				    <%
-								String classValue = (String)form.getClassName();
-								specimenTypeList = (List)specimenTypeMap.get(classValue);
-								
-								boolean subListEnabled = false;
-						
-								if(specimenTypeList == null)
+						<tr>
+							<td class="formRequiredNotice" >*</td>
+							<%
+								String specimenColSpan;
+								if(operation.equals(Constants.EDIT))
 								{
-									specimenTypeList = new ArrayList();
-									specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+									specimenColSpan="1";
 								}
-								
-								if(Constants.ALIQUOT.equals(form.getLineage()))
+								else
 								{
-									specimenTypeList = new ArrayList();
-									specimenTypeList.add(new NameValueBean(form.getType(),form.getType()));
+									specimenColSpan="4";
 								}
-								
-								pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-								
-								String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')"; 
-					%>
-				    <!-- --------------------------------------- -->
-   <!-- Mandar : 434 : for tooltip --> 
-				     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1"
-				     	  disabled="<%=subListEnabled%>"
-				     	  onchange="<%=subTypeFunctionName%>" 
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
-		        	</td>
-				 </tr>
-				 
-				 
-				 <tr>
-				     <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				     </td>
-				     <td class="formRequiredLabel">
-						<label for="tissueSite">
-							<bean:message key="specimen.tissueSite"/>
-						</label>
-					</td>
-				     <td class="formField" >
-<!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
-						<%
-							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
-						%>
-						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
-							<img src="images\Tree.gif" border="0" width="24" height="18" title='Tissue Site Selector'>
-						</a>
-		        	  </td>
-				
-				     <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				     </td>
-				     <td class="formRequiredLabel">
-						<label for="tissueSide">
-							<bean:message key="specimen.tissueSide"/>
-						</label>
-					</td>
-				     <td class="formField" >
-<!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="tissueSide" styleClass="formFieldSized15" styleId="tissueSide" size="1" disabled="<%=readOnlyForAll%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%=Constants.TISSUE_SIDE_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
-		        	  </td>
-				 </tr>
-				 
-				 
-				 <tr>
-				    <td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
-						<label for="pathologicalStatus">
-							<bean:message key="specimen.pathologicalStatus"/>
-						</label>
-					</td>
-				    <td class="formField" >
-<!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="pathologicalStatus" styleClass="formFieldSized15" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<%--html:options name="pathologicalStatusList" labelName="pathologicalStatusList"/--%>
-							<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
-		        	</td>
-			
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
-					
-				    	<label for="barcode">
-							<bean:message key="specimen.barcode"/>
-						</label>
+							%>
+							<logic:equal name="newSpecimenForm" property="parentPresent" value="false">
+							<td class="formRequiredLabel">
+								<label for="specimenCollectionGroupName">
+									<bean:message key="specimenCollectionGroup.groupName"/>
+								</label>
+							</td>							
+							<td class="formField" colspan="<%=specimenColSpan%>">
+								<!-- Mandar : 434 : for tooltip -->
+					     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
+					     				styleId="specimenCollectionGroupId" size="1" 
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onCollOrClassChange()">
+									<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
+										labelProperty="name" property="value"/>		
+								</html:select>
+								&nbsp;
+								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+								<html:link href="#" styleId="newUser" onclick="addNewAction('NewSpecimenAddNew.do?addNewForwardTo=specimenCollectionGroup&forwardTo=createNewSpecimen&addNewFor=specimenCollectionGroupId')">
+									<bean:message key="buttons.addNew" />
+								</html:link>					   
+		   						</logic:notEqual>
+								 <!-- <a href="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup">
+									<bean:message key="app.addNew" />
+									</a> 
+								-->			
+				        	</td>							
+							</logic:equal>
+		        	
+							<logic:equal name="newSpecimenForm" property="parentPresent" value="true">
+				        	<td class="formRequiredLabel" >
+								<label for="parentSpecimenId">
+									<bean:message key="createSpecimen.parent"/>
+								</label>
+							</td>
+							
+				        	<td class="formField" colspan="<%=specimenColSpan%>">
+				        		<html:hidden property="specimenCollectionGroupId"/>
+								<!-- Mandar : 434 : for tooltip -->
+					     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>"
+								 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+									<html:options collection="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
+								</html:select>
+				        	</td>
+							</logic:equal>	
+							
+							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+							<td class="formRequiredNotice">*</td>
+							<td class="formRequiredLabel">
+								<label for="lineage">
+									<bean:message key="specimen.lineage"/>
+								</label>
+							</td>
+							<td class="formField" >
+								<!-- Mandar : 434 : for tooltip -->
+						     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>"
+									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+									<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
+								</html:select>
+							</td>
+							</logic:equal>
+							
+						</tr>
 						
-					</td>
-				    <td class="formField" >
-						<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
-		        	</td>
-				 </tr>
+						<tr>
+							<td class="formRequiredNotice" >
+						     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+						     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+						    </td>
+						    <td class="formRequiredLabel" >
+								<label for="label">
+									<bean:message key="specimen.label"/>
+								</label>
+							</td>
+						    <td class="formField" >
+						     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
+						    </td>							
+							<td class="formRequiredNotice" width="5">&nbsp;</td>
+						    <td class="formLabel">							
+						    	<label for="barcode">
+									<bean:message key="specimen.barcode"/>
+								</label>								
+							</td>
+						    <td class="formField" >
+								<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
+				        	</td>
+						</tr>
 				 
-				 
-				 <tr>
-			     	<td class="formRequiredNotice" width="5">
-				     	&nbsp;
-				    </td>
-				    <td class="formLabel">
-						<label for="concentration">
-							<bean:message key="specimen.concentration"/>
-						</label>
-					</td>
-					<td class="formField" >
-					<%
-						boolean concentrationDisabled = true;
-						
-						if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
-							concentrationDisabled = false;
-					%>
-			     		<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="concentration" property="concentration" 
-			     		readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>"/>
-						&nbsp;<bean:message key="specimen.concentrationUnit"/>
-					</td>
-				
-			     	<td class="formRequiredNotice" width="5">
-				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
-				     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
-				    </td>
-				    <td class="formRequiredLabel">
-						<label for="quantity">
-							<bean:message key="specimen.quantity"/>
-						</label>
-					</td>
-				    <td class="formField" >
-				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
-				     	<span id="unitSpan"><%=unitSpecimen%></span>
-				     	<html:hidden property="unit"/>
-				    </td>
-				 </tr>
-				 
-				 <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-				<!-- Available -->
-				<tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">
-						<label for="available">
-							<bean:message key="specimen.available" />
-						</label>
-					</td>
-					<td class="formField" colspan="3">
-						<html:checkbox property="available">
-						</html:checkbox>
-					</td>
-				</tr>
-				
-				<!-- Available Quantity -->
-				<tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel" >
-						<label for="availableQuantity">
-							<bean:message key="specimen.availableQuantity" />
-						</label>
-					</td>
-					<td class="formField" colspan="3">
-						<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="availableQuantity" property="availableQuantity" readonly="true" />
-						<span id="unitSpan1"><%=unitSpecimen%></span>
-					</td>
-				</tr>
-				</logic:equal>
-				 
-				 <tr>
-				 	<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel">
-					   <label for="className">
-					   		<bean:message key="specimen.positionInStorageContainer"/>
-					   </label>
-					</td>
-					<%
-						boolean readOnly=true;
-						if(operation.equals(Constants.ADD))
-							readOnly=false;
-					%>
-					
-				<%-- n-combo-box start --%>
-				<%
-					Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+						<tr>
+						 	<td class="formRequiredNotice" width="5">*</td>
+						    <td class="formRequiredLabel">
+						     	<label for="className">
+						     		<bean:message key="specimen.type"/>
+						     	</label>
+						    </td>
+						    <td class="formField">
+<!-- Mandar : 434 : for tooltip -->
+						     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);onCollOrClassChange()" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						     	<%
+									String classValue = form.getClassName();
+									if(operation.equals(Constants.EDIT))
+									{
+								%>
+										<html:option value="<%=classValue%>"><%=classValue%></html:option>
+								<%
+									}else{
+								%>
+										<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
+								<%
+									}
+								%>
+								</html:select>
+				        	</td>
+						 
+						    <td class="formRequiredNotice" width="5">*</td>
+						    <td class="formRequiredLabel">
+						     	<label for="type">
+						     		<bean:message key="specimen.subType"/>
+						     	</label>
+						    </td>				    
+						    <td class="formField" >
+						    <!-- --------------------------------------- -->
+						    <%
+										String classValue = (String)form.getClassName();
+										specimenTypeList = (List)specimenTypeMap.get(classValue);
 										
-					String[] labelNames = {"ID","Pos1","Pos2"};
-					labelNames = Constants.STORAGE_CONTAINER_LABEL;
-					String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
-					
-					String[] initValues = new String[3];
-					initValues[0] = form.getStorageContainer();
-					initValues[1] = form.getPositionDimensionOne();
-					initValues[2] = form.getPositionDimensionTwo();
-					//System.out.println("NewSpecimen :: "+initValues[0]+"<>"+initValues[1]+"<>"+initValues[2]);			
-					String rowNumber = "1";
-					String styClass = "formFieldSized5";
-					String tdStyleClass = "customFormField";
-					String onChange = "onCustomListBoxChange(this)";
-					
-					String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2','name','810','320','yes');return false";
-					String noOfEmptyCombos = "3";
-				%>
-				
-				<%=ScriptGenerator.getJSForOutermostDataTable()%>
-				<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
-				
-				<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-				
-				<td class="formField" colSpan="4">
-						<ncombo:containermap dataMap="<%=dataMap%>" 
-											attributeNames="<%=attrNames%>" 
-											initialValues="<%=initValues%>"  
-											styleClass = "<%=styClass%>" 
-											tdStyleClass = "<%=tdStyleClass%>" 
-											labelNames="<%=labelNames%>" 
-											rowNumber="<%=rowNumber%>" 
-											onChange="<%=onChange%>" 
-											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-											
-											buttonName="mapButton" 
-											value="Map"
-											buttonOnClick = "<%=buttonOnClicked%>"
-											formLabelStyle="formLabelBorderless"
-											buttonStyleClass="actionButton" />				
-				</td>
-				<%-- n-combo-box end --%>
-				 </tr>
+										boolean subListEnabled = false;
+								
+										if(specimenTypeList == null)
+										{
+											specimenTypeList = new ArrayList();
+											specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+										}
+										
+										if(Constants.ALIQUOT.equals(form.getLineage()))
+										{
+											specimenTypeList = new ArrayList();
+											specimenTypeList.add(new NameValueBean(form.getType(),form.getType()));
+										}
+										
+										pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+										
+										String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')"; 
+							%>
+						    <!-- --------------------------------------- -->
+		   <!-- Mandar : 434 : for tooltip --> 
+						     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1"
+						     	  disabled="<%=subListEnabled%>"
+						     	  onchange="<%=subTypeFunctionName%>" 
+								 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+									<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
+								</html:select>
+				        	</td>
+						</tr>
+				 
+				 
+						<tr>
+						     <td class="formRequiredNotice" width="5">
+						     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+						     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+						     </td>
+						     <td class="formRequiredLabel">
+								<label for="tissueSite">
+									<bean:message key="specimen.tissueSite"/>
+								</label>
+							</td>
+						     <td class="formField" >
+<!-- Mandar : 434 : for tooltip -->
+						     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>"
+									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+									<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
+								</html:select>
+								<%
+									String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
+								%>
+								<a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
+									<img src="images\Tree.gif" border="0" width="24" height="18" title='Tissue Site Selector'>
+								</a>
+				        	  </td>
+						
+						     <td class="formRequiredNotice" width="5">
+						     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+						     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+						     </td>
+						     <td class="formRequiredLabel">
+								<label for="tissueSide">
+									<bean:message key="specimen.tissueSide"/>
+								</label>
+							</td>
+						     <td class="formField" >
+<!-- Mandar : 434 : for tooltip -->
+						     	<html:select property="tissueSide" styleClass="formFieldSized15" styleId="tissueSide" size="1" disabled="<%=readOnlyForAll%>"
+								 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+									<html:options collection="<%=Constants.TISSUE_SIDE_LIST%>" labelProperty="name" property="value"/>
+								</html:select>
+				        	  </td>
+						</tr>
+				 
+				 
+						<tr>
+						    <td class="formRequiredNotice" width="5">
+						     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+						     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+						    </td>
+						    <td class="formRequiredLabel">
+								<label for="pathologicalStatus">
+									<bean:message key="specimen.pathologicalStatus"/>
+								</label>
+							</td>
+							<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+						    <td colspan="4" class="formField" >
+							<!-- Mandar : 434 : for tooltip -->
+						     	<html:select property="pathologicalStatus" styleClass="formFieldSized15" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>"
+								 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+									<%--html:options name="pathologicalStatusList" labelName="pathologicalStatusList"/--%>
+									<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
+								</html:select>
+				        	</td>
+							</logic:notEqual>
+					     	
+							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+							<td class="formField" >
+							<!-- Mandar : 434 : for tooltip -->
+						     	<html:select property="pathologicalStatus" styleClass="formFieldSized15" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>"
+								 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+									<%--html:options name="pathologicalStatusList" labelName="pathologicalStatusList"/--%>
+									<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
+								</html:select>
+				        	</td>	
+							<!-- activitystatus -->
+							<td class="formRequiredNotice" width="5">*</td>
+							<td class="formRequiredLabel" >
+								<label for="activityStatus">
+									<bean:message key="participant.activityStatus" />
+								</label>
+							</td>
+							<td class="formField">
+							<!-- Mandar : 434 : for tooltip -->
+								<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
+								 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+									<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
+								</html:select>
+							</td>					
+							</logic:equal>
+						</tr>
+						
+						<tr>					
+					     	<td class="formRequiredNotice" width="5">
+						     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
+						     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
+						    </td>
+						    <td class="formRequiredLabel">
+								<label for="quantity">
+									<bean:message key="specimen.quantity"/>
+								</label>
+							</td>
+						    <td class="formField" >
+						     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="quantity" property="quantity" readonly="<%=readOnlyForAll%>"/>
+						     	<span id="unitSpan"><%=unitSpecimen%></span>
+						     	<html:hidden property="unit"/>
+						    </td>
+							<td class="formRequiredNotice" width="5">
+						     	&nbsp;
+						    </td>
+						    <td class="formLabel">
+								<label for="concentration">
+									<bean:message key="specimen.concentration"/>
+								</label>
+							</td>
+							<td class="formField" >
+							<%
+								boolean concentrationDisabled = true;
+								
+								if(form.getClassName().equals("Molecular") && !Constants.ALIQUOT.equals(form.getLineage()))
+									concentrationDisabled = false;
+							%>
+					     		<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="concentration" property="concentration" 
+					     		readonly="<%=readOnlyForAll%>" disabled="<%=concentrationDisabled%>"/>
+								&nbsp;<bean:message key="specimen.concentrationUnit"/>
+							</td>
+						</tr>
+				 
+						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+						
+						<tr>
+							<!-- Available -->
+							<td class="formRequiredNotice" width="5">&nbsp;</td>
+							<td class="formLabel">
+								<label for="available">
+									<bean:message key="specimen.available" />
+								</label>
+							</td>
+							<td class="formField">
+								<html:checkbox property="available">
+								</html:checkbox>
+							</td>	
+							<!-- Available Quantity -->							
+							<td class="formRequiredNotice" width="5">&nbsp;</td>
+							<td class="formLabel" >
+								<label for="availableQuantity">
+									<bean:message key="specimen.availableQuantity" />
+								</label>
+							</td>
+							<td class="formField">
+								<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="availableQuantity" property="availableQuantity" readonly="true" />
+								<span id="unitSpan1"><%=unitSpecimen%></span>
+							</td>
+						</tr>
+						</logic:equal>						 
+						<tr>
+						 	<td class="formRequiredNotice" width="5">*</td>
+							<td class="formRequiredLabel">
+							   <label for="className">
+							   		<bean:message key="specimen.positionInStorageContainer"/>
+							   </label>
+							</td>
+							<%
+								boolean readOnly=true;
+								if(operation.equals(Constants.ADD))
+									readOnly=false;
+							%>
+							
+							<%-- n-combo-box start --%>
+							<%
+								Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+													
+								String[] labelNames = {"ID","Pos1","Pos2"};
+								labelNames = Constants.STORAGE_CONTAINER_LABEL;
+								String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
+								
+								String[] initValues = new String[3];
+								initValues[0] = form.getStorageContainer();
+								initValues[1] = form.getPositionDimensionOne();
+								initValues[2] = form.getPositionDimensionTwo();
+								//System.out.println("NewSpecimen :: "+initValues[0]+"<>"+initValues[1]+"<>"+initValues[2]);			
+								String rowNumber = "1";
+								String styClass = "formFieldSized5";
+								String tdStyleClass = "customFormField";
+								String onChange = "onCustomListBoxChange(this)";
+								
+								String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2','name','810','320','yes');return false";
+								String noOfEmptyCombos = "3";
+							%>
+						
+							<%=ScriptGenerator.getJSForOutermostDataTable()%>
+							<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
+							
+							<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+							
+							<td class="formField" colSpan="4">
+									<ncombo:containermap dataMap="<%=dataMap%>" 
+														attributeNames="<%=attrNames%>" 
+														initialValues="<%=initValues%>"  
+														styleClass = "<%=styClass%>" 
+														tdStyleClass = "<%=tdStyleClass%>" 
+														labelNames="<%=labelNames%>" 
+														rowNumber="<%=rowNumber%>" 
+														onChange="<%=onChange%>" 
+														noOfEmptyCombos = "<%=noOfEmptyCombos%>"
+														
+														buttonName="mapButton" 
+														value="Map"
+														buttonOnClick = "<%=buttonOnClicked%>"
+														formLabelStyle="formLabelBorderless"
+														buttonStyleClass="actionButton" />				
+							</td>
+							<%-- n-combo-box end --%>
+						</tr>
 				 
 				 				 
-				 <tr>
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
-				    <td class="formLabel">
-						<label for="comments">
-							<bean:message key="specimen.comments"/>
-						</label>
-					</td>
-				    <td class="formField" colspan="4">
-				    	<html:textarea styleClass="formFieldSized"  rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
-				    </td>
-				 </tr>
+						<tr>
+					     	<td class="formRequiredNotice" width="5">&nbsp;</td>
+						    <td class="formLabel">
+								<label for="comments">
+									<bean:message key="specimen.comments"/>
+								</label>
+							</td>
+						    <td class="formField" colspan="4">
+						    	<html:textarea styleClass="formFieldSized"  rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
+						    </td>
+						</tr>
 				</table>	
 				
 				
-				 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
-				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
-				<!-- activitystatus -->
-				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel" >
-						<label for="activityStatus">
-							<bean:message key="participant.activityStatus" />
-						</label>
-					</td>
-					<td class="formField" colspan="3">
-<!-- Mandar : 434 : for tooltip -->
-						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
-						</html:select>
-					</td>
-				</tr>
-				</logic:equal>
-<!-- Mandar AutoEvents start -->		
- <logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-	<tr>
-					<td colspan="5" width="500" class="formTitle">Events</td>
-				</tr>
-				
-				<tr>
-					<td rowspan="2" class="formSubTitle">Received
+				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">					
+					<!-- Mandar AutoEvents start -->		
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+					<tr>
+						<td colspan="3" width="500" class="formTitle">
+							<bean:message key="specimen.receivedevents.title"/>						
+						</td>
+						<td colspan="3" width="500" class="formTitle">
+							<bean:message key="specimen.collectedevents.title"/>	
+						</td>
+					</tr>
+					<!-- User -->
+					<tr>
+						<!-- RecievedEvent fields -->
 						<html:hidden property="receivedEventId" />
 						<html:hidden property="receivedEventSpecimenId" />
-					</td>
-					<td class="formLeftSubTableTitle">* 
-						<label for="type">
-							<bean:message key="eventparameters.user"/> 
-						</label>
-					</td>
-					<td class="formLeftSubTableTitle" nowrap>* 
-						<label for="date">
-							<bean:message key="eventparameters.dateofevent"/> 
-						</label>
-						<BR><small><bean:message key="page.dateFormat" /></small>
-					</td>
-					<td class="formLeftSubTableTitle">* 
-						<label for="quality">
-							<bean:message key="receivedeventparameters.receivedquality"/> 
-						</label>
-					</td>
-					<td class="formLeftSubTableTitle">
-						<label for="comments">
-							<bean:message key="eventparameters.comments"/> 
-						</label>
-					</td>
-			 	</tr>
-
-<!-- ReceivedEvent Fields -->
-				 <tr>
-	<!-- 1st column empty -->
-<!-- 					<td class="formField">&nbsp;</td>
--->	
-	<!-- User -->
-				<td class="formField">
-	<!-- Mandar : 434 : for tooltip -->
-					<html:select property="receivedEventUserId" styleClass="formFieldSized15" styleId="receivedEventUserId" size="1"
-					 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-						<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
-					</html:select>
-				</td>
-	
-	<!-- date -->
-				<td class="formField" nowrap>
-<%
-if(currentReceivedDate.trim().length() > 0)
-{
-	Integer receivedYear = new Integer(Utility.getYear(currentReceivedDate ));
-	Integer receivedMonth = new Integer(Utility.getMonth(currentReceivedDate ));
-	Integer receivedDay = new Integer(Utility.getDay(currentReceivedDate ));
-%>
-<ncombo:DateTimeComponent name="receivedEventDateOfEvent"
-			  id="receivedEventDateOfEvent"
-			  formName="newSpecimenForm"
-			  month= "<%= receivedMonth %>"
-			  year= "<%= receivedYear %>"
-			  day= "<%= receivedDay %>"
-			  value="<%=currentReceivedDate %>"
-			  styleClass="formDateSized10"
-					/>
-<% 
-	}
-	else
-	{  
- %>
-<ncombo:DateTimeComponent name="receivedEventDateOfEvent"
-			  id="receivedEventDateOfEvent"
-			  formName="newSpecimenForm"
-			  styleClass="formDateSized10"
-					/>
-<% 
-	} 
-%> 
-
-				</td>
-	
-	<!-- receivedeventparameters.receivedquality -->
-				<td class="formField">
-	<!-- Mandar : 434 : for tooltip -->
-					<html:select property="receivedEventReceivedQuality" styleClass="formFieldSized15" styleId="receivedEventReceivedQuality" size="1"
-					 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-						<html:options collection="<%=Constants.RECEIVED_QUALITY_LIST%>" labelProperty="name" property="value"/>
-					</html:select>
-				</td>
-	
-	<!-- comments -->
-				<td class="formField">
-					<html:textarea styleClass="formFieldSized20"  styleId="receivedEventComments" property="receivedEventComments" />
-				</td>
-			 </tr>
-
-<!-- CollectionEvent fields -->				 
-
-			<tr>
- 					<td rowspan="2" class="formLeftSubTableTitle">*
-						<html:hidden property="operation" value="<%=operation%>"/>
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
+							<label for="type">
+								<bean:message key="specimen.receivedevents.username"/> 
+							</label>
+						</td>
+						<td class="formField">
+							<!-- Mandar : 434 : for tooltip -->
+							<html:select property="receivedEventUserId" styleClass="formFieldSized15" styleId="receivedEventUserId" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
+							</html:select>
+						</td>
+						
+						<!-- CollectionEvent fields -->	
+						
 						<html:hidden property="collectionEventId" />
 						<html:hidden property="collectionEventSpecimenId" />
-						 Collected:
-					</td>
-	
-					<td class="formLeftSubTableTitle">* 
-						<label for="user">
-							<bean:message key="eventparameters.user"/> 
-						</label>
-					</td>
-	
-					<td class="formLeftSubTableTitle" nowrap>* 
-						<label for="date">
-							<bean:message key="eventparameters.dateofevent"/> 
-						</label>
-						<BR><small><bean:message key="page.dateFormat" /></small>
-					</td>
-					<td class="formLeftSubTableTitle">* 
-						<label for="quality">
-							<bean:message key="collectioneventparameters.collectionprocedure"/> 
-						</label>
-					</td>
-					<td class="formLeftSubTableTitle">
-						<label for="comments">
-							<bean:message key="eventparameters.comments"/> 
-						</label>
-					</td>
-				 </tr>
-
-				 <tr>
-<!-- 1st col empty -->
-<!-- 					<td class="formField">
--->
-<!-- User -->
-					<td class="formField">
-		<!-- Mandar : 434 : for tooltip -->
-						<html:select property="collectionEventUserId" styleClass="formFieldSized15" styleId="collectionEventUserId" size="1"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
-						</html:select>
-					</td>
-
-<!-- date -->
-					<td class="formField">
-<%
-if(currentCollectionDate.trim().length() > 0)
-{
-	Integer collectionYear = new Integer(Utility.getYear(currentCollectionDate ));
-	Integer collectionMonth = new Integer(Utility.getMonth(currentCollectionDate ));
-	Integer collectionDay = new Integer(Utility.getDay(currentCollectionDate ));
-%>
-<ncombo:DateTimeComponent name="collectionEventdateOfEvent"
-			  id="collectionEventdateOfEvent"
-			  formName="newSpecimenForm"
-			  month= "<%= collectionMonth %>"
-			  year= "<%= collectionYear %>"
-			  day= "<%= collectionDay %>"
-			  value="<%=currentCollectionDate %>"
-			  styleClass="formDateSized10"
-					/>
-<% 
-	}
-	else
-	{  
- %>
-<ncombo:DateTimeComponent name="collectionEventdateOfEvent"
-			  id="collectionEventdateOfEvent"
-			  formName="newSpecimenForm"
-			  styleClass="formDateSized10"
-					/>
-<% 
-	} 
-%> 
-
-					</td>
-
-<!-- collection procedure -->
-					<td class="formField">
-		<!-- Mandar : 434 : for tooltip -->
-						<html:select property="collectionEventCollectionProcedure" styleClass="formFieldSized15" styleId="collectionEventCollectionProcedure" size="1"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<%--html:options name="<%=Constants.PROCEDURE_LIST%>" labelName="<%=Constants.PROCEDURE_LIST%>" /--%>
-							<html:options collection="<%=Constants.PROCEDURE_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
-						<br>
-<!-- container -->
-						<label for="type"><b>
-							<bean:message key="collectioneventparameters.container"/></b> 
-						</label><br>
-						<html:select property="collectionEventContainer" styleClass="formFieldSized15" styleId="collectionEventContainer" size="1"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<%--html:options name="<%=Constants.CONTAINER_LIST%>" labelName="<%=Constants.CONTAINER_LIST%>" /--%>
-							<html:options collection="<%=Constants.CONTAINER_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
-
-					</td>
-		
-		<!-- comments -->
-					<td class="formField">
-						<html:textarea styleClass="formFieldSized20"  styleId="collectionEventComments" property="collectionEventComments" />
-					</td>
-
-				 </tr>
-
-</logic:equal>
-<!-- Mandar: 11-July-06 AutoEvents end  -->
-
-
-
-				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+						<td class="formRequiredNotice" width="5">*</td>
+	 					<td class="formRequiredLabel"> 
+							<label for="user">
+								<bean:message key="specimen.collectedevents.username"/> 
+							</label>
+						</td>						
+						<td class="formField">
+							<!-- Mandar : 434 : for tooltip -->
+							<html:select property="collectionEventUserId" styleClass="formFieldSized15" styleId="collectionEventUserId" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
+							</html:select>
+						</td>						
+					</tr>
+					
+					<!-- date -->
+					<tr>
+						<!-- RecievedEvent fields -->
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel" nowrap>
+							<label for="date">
+								<bean:message key="eventparameters.dateofevent"/> 
+							</label>
+							<!-- <BR><small><bean:message key="scecimen.dateformat" /></small> -->
+						</td>						
+						<td class="formField">
+								<%
+								if(currentReceivedDate.trim().length() > 0)
+								{
+									Integer receivedYear = new Integer(Utility.getYear(currentReceivedDate ));
+									Integer receivedMonth = new Integer(Utility.getMonth(currentReceivedDate ));
+									Integer receivedDay = new Integer(Utility.getDay(currentReceivedDate ));
+								%>
+								<ncombo:DateTimeComponent name="receivedEventDateOfEvent"
+											  id="receivedEventDateOfEvent"
+											  formName="newSpecimenForm"
+											  month= "<%= receivedMonth %>"
+											  year= "<%= receivedYear %>"
+											  day= "<%= receivedDay %>"
+											  value="<%=currentReceivedDate %>"
+											  styleClass="formDateSized10"
+													/>
+								<% 
+									}
+									else
+									{  
+								 %>
+								<ncombo:DateTimeComponent name="receivedEventDateOfEvent"
+											  id="receivedEventDateOfEvent"
+											  formName="newSpecimenForm"
+											  styleClass="formDateSized10"
+													/>
+								<% 
+									} 
+								%> 
+								<small><bean:message key="scecimen.dateformat" /></small>	
+						</td>	
+						
+						<!-- CollectionEvent fields -->	
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel" nowrap> 
+							<label for="date">
+								<bean:message key="eventparameters.dateofevent"/>															
+							</label>
+							<!-- <BR><small><bean:message key="page.dateFormat" /></small>  -->
+						</td>
+						
+						<td class="formField">
+							<%
+							if(currentCollectionDate.trim().length() > 0)
+							{
+								Integer collectionYear = new Integer(Utility.getYear(currentCollectionDate ));
+								Integer collectionMonth = new Integer(Utility.getMonth(currentCollectionDate ));
+								Integer collectionDay = new Integer(Utility.getDay(currentCollectionDate ));
+							%>
+							<ncombo:DateTimeComponent name="collectionEventdateOfEvent"
+										  id="collectionEventdateOfEvent"
+										  formName="newSpecimenForm"
+										  month= "<%= collectionMonth %>"
+										  year= "<%= collectionYear %>"
+										  day= "<%= collectionDay %>"
+										  value="<%=currentCollectionDate %>"
+										  styleClass="formDateSized10"
+												/>
+							<% 
+								}
+								else
+								{  
+							 %>
+							<ncombo:DateTimeComponent name="collectionEventdateOfEvent"
+										  id="collectionEventdateOfEvent"
+										  formName="newSpecimenForm"
+										  styleClass="formDateSized10"
+												/>
+							<% 
+								} 
+							%>
+							<small><bean:message key="scecimen.dateformat" /></small>	
+						</td>						
+					</tr>	
+					
+					<tr>		
+						<!-- RecievedEvent fields -->
+						<td class="formRequiredNotice" width="5"rowspan="2">*</td>
+						<td class="formRequiredLabel"rowspan="2"> 
+							<label for="quality">
+								<bean:message key="receivedeventparameters.receivedquality"/> 
+							</label>
+						</td>						
+						<!-- receivedeventparameters.receivedquality -->
+						<td class="formField"rowspan="2">
+							<!-- Mandar : 434 : for tooltip -->
+							<html:select property="receivedEventReceivedQuality" styleClass="formFieldSized15" styleId="receivedEventReceivedQuality" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.RECEIVED_QUALITY_LIST%>" labelProperty="name" property="value"/>
+							</html:select>
+						</td>
+						
+						<!-- CollectionEvent fields -->	
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
+							<label for="collectionprocedure">
+								<bean:message key="collectioneventparameters.collectionprocedure"/> 
+							</label>
+						</td>
+						<td class="formField">
+								<!-- Mandar : 434 : for tooltip -->
+								<html:select property="collectionEventCollectionProcedure" styleClass="formFieldSized15" styleId="collectionEventCollectionProcedure" size="1"
+									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+									<%--html:options name="<%=Constants.PROCEDURE_LIST%>" labelName="<%=Constants.PROCEDURE_LIST%>" /--%>
+									<html:options collection="<%=Constants.PROCEDURE_LIST%>" labelProperty="name" property="value"/>
+								</html:select>							
+						</td>
+						<tr>							
+							<td class="formRequiredNotice" width="5">*</td>
+							<td class="formRequiredLabel">
+								<label for="container">
+									<bean:message key="collectioneventparameters.container"/> 
+								</label>
+							</td>
+							<td class="formField">
+								<html:select property="collectionEventContainer" styleClass="formFieldSized15" styleId="collectionEventContainer" size="1"
+									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+										<%--html:options name="<%=Constants.CONTAINER_LIST%>" labelName="<%=Constants.CONTAINER_LIST%>" /--%>
+										<html:options collection="<%=Constants.CONTAINER_LIST%>" labelProperty="name" property="value"/>
+								</html:select>
+							</td>
+						</tr>										
+					</tr>	
+					
+					<!-- comments -->
+					<tr>	
+						<!-- RecievedEvent fields -->
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
+							<label for="comments">
+								<bean:message key="eventparameters.comments"/> 
+							</label>
+						</td>						
+						<td class="formField">
+							<html:textarea styleClass="formFieldSized20"  styleId="receivedEventComments" property="receivedEventComments" />
+						</td>						
+						<!-- CollectionEvent fields -->	
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
+							<label for="comments">
+								<bean:message key="eventparameters.comments"/> 
+							</label>
+						</td>
+						<td class="formField">
+							<html:textarea styleClass="formFieldSized20"  styleId="collectionEventComments" property="collectionEventComments" />
+						</td>						
+				 	</tr>
+					</logic:equal>
+					
+				<!-- Mandar: 11-July-06 AutoEvents end  -->
+				</table>	
 				
+				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
-					<td class="formTitle" height="20" colspan="6">
-						<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
-							&nbsp; <bean:message key="aliquots.createTitle"/>
-						</html:checkbox>
-				    </td>
-				</tr>
-				 
-				 				 <tr>
-			     	<td class="formRequiredNotice" width="5">*</td>
-				    <td class="formRequiredLabel">
-				    	<label for="noOfAliquots">
-							<bean:message key="aliquots.noOfAliquots"/>
-						</label>
-					</td>
-				    <td class="formField" >
-					    <logic:equal name="newSpecimenForm" property="checkedButton" value="true">
-							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="noOfAliquots" property="noOfAliquots"/>
-						</logic:equal>
-						
-						<logic:equal name="newSpecimenForm" property="checkedButton" value="false">
-							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="noOfAliquots" property="noOfAliquots" disabled="true"/>
-						</logic:equal>
-		        	</td>
-				
-			        <td class="formLabel">
-				    	<label for="quantityPerAliquot">
-							<bean:message key="aliquots.qtyPerAliquot"/>
-						</label>
-					</td>
-				    <td class="formField" >
-				    	<logic:equal name="newSpecimenForm" property="checkedButton" value="true">
-							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="quantityPerAliquot" property="quantityPerAliquot"/>
-						</logic:equal>
-						
-						<logic:equal name="newSpecimenForm" property="checkedButton" value="false">
-							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="quantityPerAliquot" property="quantityPerAliquot" disabled="true"/>
-						</logic:equal>
-		        	</td>
-				 </tr>
-
-				 
-				 </logic:notEqual>
- 
-				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.externalIdentifier"/>
 				     </td>
@@ -1259,6 +1228,17 @@ if(currentCollectionDate.trim().length() > 0)
 					 </tr>
 				  <% } %>
 				 </tbody>
+				 
+				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
+				<tr>					
+					<td class="formFieldNoBordersBold" height="20" colspan="5">
+						<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
+							&nbsp; <bean:message key="specimen.aliquot.message"/>
+						</html:checkbox>
+				    </td>
+				</tr>								
+				</logic:notEqual>
+				 
 				 <!-- Bio-hazards End here -->	
 			   	 	<tr>
 				  		<td align="left" colspan="6">

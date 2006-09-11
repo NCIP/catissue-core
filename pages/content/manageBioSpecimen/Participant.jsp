@@ -297,13 +297,13 @@ tr#hiddenCombo
 			<tr>
 				<td height="20" class="tabMenuItemSelected" onclick="document.location.href='ManageAdministrativeData.do'">Edit</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" >
-					View Surgical Pathology Report
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 								
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
-					View Clinical Annotations
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
 
 				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
@@ -410,7 +410,7 @@ tr#hiddenCombo
 						<bean:message key="participant.add.title"/>
 					</logic:equal>
 					<logic:equal name="operation" value="<%=Constants.EDIT%>">
-						<bean:message key="participant.edit.title"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="participantForm" property="id" />
+						<bean:message key="participant.edit.title"/>
 					</logic:equal>
 					</td>
 				</tr>	

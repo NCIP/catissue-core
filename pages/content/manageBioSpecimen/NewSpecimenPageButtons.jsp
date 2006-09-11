@@ -8,24 +8,26 @@
 
 	<tr>
 
-		<td nowrap class="formFieldNoBorders"><html:button
-			styleClass="actionButton" property="submitPage"
-			title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
-			value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>"
-			onclick="onNormalSubmit()">
-
-		</html:button></td>
+		<td nowrap class="formFieldNoBorders">
+			<html:button
+				styleClass="actionButton" property="submitButton"
+				title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
+				value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>"
+				onclick="onNormalSubmit()">
+			</html:button>
+		</td>
 		
 		<logic:notEqual name="<%=Constants.PAGEOF%>"
 			value="<%=Constants.QUERY%>">
-			<td nowrap class="formFieldNoBorders"><html:button
-				styleClass="actionButton" property="submitPage"
-				title="<%=Constants.SPECIMEN_BUTTON_TIPS[1]%>"
-				value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>"
-				disabled="<%=isAddNew%>" onclick="<%=deriveNewSubmit%>"
-				styleId="deriveButton">
-
-			</html:button></td>
+			<td nowrap class="formFieldNoBorders">
+				<html:button
+					styleClass="actionButton" property="deriveButton"
+					title="<%=Constants.SPECIMEN_BUTTON_TIPS[1]%>"
+					value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[1][0]%>"
+					disabled="<%=isAddNew%>" onclick="<%=deriveNewSubmit%>"
+					>
+				</html:button>
+			</td>
 		</logic:notEqual>
 		<!-- Commented as per bug 2115. Mandar. 10-July-06
 											</tr>
@@ -42,22 +44,24 @@
 											     	</html:button>
 												</td>
 -->
-		<td class="formFieldNoBorders" nowrap><html:button
-			styleClass="actionButton" property="submitPage"
-			title="<%=Constants.SPECIMEN_BUTTON_TIPS[3]%>"
-			value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>"
-			disabled="<%=isAddNew%>" onclick="<%=addMoreSubmit%>"
-			styleId="scgButton">
+		<td class="formFieldNoBorders" nowrap>
+			<html:button
+				styleClass="actionButton" property="moreButton"
+				title="<%=Constants.SPECIMEN_BUTTON_TIPS[3]%>"
+				value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>"
+				disabled="<%=isAddNew%>" onclick="<%=addMoreSubmit%>"
+			>
+			</html:button>
+		</td>
 
-		</html:button></td>
-
-		<td class="formFieldNoBorders" nowrap><html:button
-			styleClass="actionButton" property="submitPage"
-			title="<%=Constants.SPECIMEN_BUTTON_TIPS[4]%>"
-			value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[4][0]%>"
-			onclick="<%=submitAndDistribute%>">
-
-		</html:button></td>
+		<td class="formFieldNoBorders" nowrap>
+			<html:button
+				styleClass="actionButton" property="submitAndDistributeButton"
+				title="<%=Constants.SPECIMEN_BUTTON_TIPS[4]%>"
+				value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[4][0]%>"
+				onclick="<%=submitAndDistribute%>">
+			</html:button>
+		</td>
 		</logic:notEqual>
 	</tr>
 </table>

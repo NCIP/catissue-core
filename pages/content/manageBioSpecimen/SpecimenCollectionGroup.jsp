@@ -113,13 +113,13 @@
 			<tr>
 				<td height="20" class="tabMenuItemSelected" onclick="document.location.href='ManageAdministrativeData.do'">Edit</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction('ViewSpecimenCollectionGroupSPR.do?applicationId=caTies&editTabLink=SpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroup')">
-					View Surgical Pathology Report
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 								
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()">
-					View Clinical Annotations
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
 
 				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
@@ -164,15 +164,7 @@
 				<tr>
 					<td class="formTitle" height="20" colspan="4">
 						<%String title = "specimenCollectionGroup."+pageView+".title";%>
-							<bean:message key="<%=title%>"/>
-						<%
-						if(pageView.equals("edit"))
-						{
-							%>
-								&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="specimenCollectionGroupForm" property="id" />
-						    <%
-						}
-						%>
+							<bean:message key="<%=title%>"/>						
 					</td>
 				</tr>
 
@@ -346,16 +338,7 @@
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.CLINICAL_DIAGNOSIS_LIST%>" labelProperty="name" property="value"/>				     					     					     	
 						</html:select>
-						<%
-						String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";			
-						%>
-						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
-							<img src="images\Tree.gif" border="0" width="26" height="22" title='CLinical Diagnosis Selector'>
-					</a>
 		        	 </td>
-					
-					
-					
 				 </tr>
 				 
 				 <tr>

@@ -138,7 +138,7 @@
 							<bean:message key="collectionProtocolReg.add.title"/>
 						</logic:equal>
 						<logic:equal name="operation" value="<%=Constants.EDIT%>">
-							<bean:message key="collectionProtocolReg.edit.title"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="collectionProtocolRegistrationForm" property="id" />
+							<bean:message key="collectionProtocolReg.edit.title"/>
 						</logic:equal>
 
 					</td>
