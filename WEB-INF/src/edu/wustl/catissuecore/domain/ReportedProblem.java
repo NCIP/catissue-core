@@ -297,13 +297,6 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
     {
         this.comments = comments;
     }
-    
-    /**
-     * Returns message label to display on success add or edit
-     * @return String
-     */
-	public String getMessageLabel() {		
-		return null;
-	}
+   
 }
 

@@ -118,11 +118,4 @@ public class ClinicalReport extends AbstractDomainObject implements java.io.Seri
 		
 	}
 	
-	/**
-     * Returns message label to display on success add or edit
-     * @return String
-     */
-	public String getMessageLabel() {		
-		return null;
-	}
 }

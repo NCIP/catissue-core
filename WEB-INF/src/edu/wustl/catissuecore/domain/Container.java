@@ -256,12 +256,4 @@ public class Container extends AbstractDomainObject implements Serializable
     {
         // TODO Auto-generated method stub
     }
-    
-    /**
-     * Returns message label to display on success add or edit
-     * @return String
-     */
-	public String getMessageLabel() {		
-		return null;
-	}
 }

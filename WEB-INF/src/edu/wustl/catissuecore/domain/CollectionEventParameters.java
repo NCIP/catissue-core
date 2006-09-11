@@ -118,13 +118,5 @@ public class CollectionEventParameters extends SpecimenEventParameters
             Logger.out.error(excp.getMessage());
         }
     }
-	
-    /**
-     * Returns message label to display on success add or edit
-     * @return String
-     */
-	public String getMessageLabel() {		
-		return null;
-	}
-	
+   
 }

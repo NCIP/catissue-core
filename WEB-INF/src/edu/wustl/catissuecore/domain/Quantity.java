@@ -106,11 +106,4 @@ public class Quantity extends AbstractDomainObject implements Serializable
     	return String.valueOf(value);
     }
     
-    /**
-     * Returns message label to display on success add or edit
-     * @return String
-     */
-	public String getMessageLabel() {		
-		return null;
-	}
 }

@@ -144,11 +144,4 @@ public class SpecimenCharacteristics extends AbstractDomainObject implements jav
 		
 	}
 	
-	/**
-     * Returns message label to display on success add or edit
-     * @return String
-     */
-	public String getMessageLabel() {		
-		return null;
-	}
 }

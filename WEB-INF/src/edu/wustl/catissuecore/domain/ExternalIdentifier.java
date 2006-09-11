@@ -134,11 +134,4 @@ public class ExternalIdentifier extends AbstractDomainObject implements java.io.
 		
 	}
 	
-	/**
-     * Returns message label to display on success add or edit
-     * @return String
-     */
-	public String getMessageLabel() {		
-		return null;
-	}
 }

@@ -127,11 +127,4 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
 	    return this.updateDate.compareTo(pwd.getUpdateDate());
 	}
 	
-	/**
-     * Returns message label to display on success add or edit
-     * @return String
-     */
-	public String getMessageLabel() {		
-		return null;
-	}
 }
