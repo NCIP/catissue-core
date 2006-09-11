@@ -550,4 +550,25 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	    	Logger.out.error(excp.getMessage(),excp); 
 	    }
 	}
+	
+	 /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		
+		if (this.lastName!= null && !this.lastName.equals("") && this.firstName != null && !this.firstName.equals("")) 
+		{
+			return this.lastName + "," + this.firstName;
+		} 
+		else if(this.lastName!= null && !this.lastName.equals(""))
+		{
+			return this.lastName;
+		}
+		else if(this.firstName!= null && !this.firstName.equals(""))
+		{
+			return this.firstName;
+		}		
+		return null; 
+	}
 }

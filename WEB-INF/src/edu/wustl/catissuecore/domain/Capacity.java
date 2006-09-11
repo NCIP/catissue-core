@@ -101,4 +101,12 @@ public class Capacity extends AbstractDomainObject
             throws AssignDataException
     {
     }
+    
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return null;
+	}
 }

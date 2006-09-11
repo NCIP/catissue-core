@@ -251,4 +251,32 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			throw new AssignDataException();
 		}
 	}
+	
+	 /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		
+		String message = this.collectionProtocol.title + " ";
+		if (this.participant != null) {
+			if (this.participant.lastName!= null && !this.participant.lastName.equals("") && this.participant.firstName != null && !this.participant.firstName.equals("")) 
+			{
+				message = message + this.participant.lastName + "," + this.participant.firstName;
+			} 
+			else if(this.participant.lastName!= null && !this.participant.lastName.equals(""))
+			{
+				message = message + this.participant.lastName;
+			}
+			else if(this.participant.firstName!= null && !this.participant.firstName.equals(""))
+			{
+				message = message + this.participant.firstName;
+			}		
+		} 		
+		else if (this.protocolParticipantIdentifier != null)
+		{
+			message = message + this.protocolParticipantIdentifier;
+		}			
+		return message;
+	}
 }

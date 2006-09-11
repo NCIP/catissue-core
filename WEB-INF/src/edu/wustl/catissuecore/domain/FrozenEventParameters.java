@@ -78,6 +78,13 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
         }
     }
 	
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return null;
+	}
 	
 } //class
 

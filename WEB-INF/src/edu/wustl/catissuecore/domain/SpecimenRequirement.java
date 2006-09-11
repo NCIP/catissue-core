@@ -234,4 +234,12 @@ public class SpecimenRequirement  extends AbstractDomainObject implements java.i
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
 	{
 	}
+	
+	/**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return null;
+	}
 }

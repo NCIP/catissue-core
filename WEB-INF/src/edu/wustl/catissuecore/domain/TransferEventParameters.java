@@ -225,7 +225,13 @@ public class TransferEventParameters extends SpecimenEventParameters implements 
         }
     }
 	
-		
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return null;
+	}	
 	
 	
 }

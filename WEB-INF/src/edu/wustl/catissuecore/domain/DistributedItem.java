@@ -158,4 +158,12 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	public void setPreviousQuantity(Double previousQuantity) {
 		this.previousQuantity = previousQuantity;
 	}
+	
+	/**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return null;
+	}
 }

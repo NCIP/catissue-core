@@ -391,4 +391,12 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			throw new AssignDataException();
 		}
 	}
+	
+	 /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return this.name;
+	}
 }

@@ -94,4 +94,12 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
     	CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm)abstractForm;
 		this.name = cancerResearchGroupForm.getName().trim();
     }
+    
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return this.name;
+	}
 }

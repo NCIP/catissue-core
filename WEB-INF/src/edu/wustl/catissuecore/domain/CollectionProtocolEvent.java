@@ -179,4 +179,12 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 		}
 		return 0;
 	}
+    
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return null;
+	}
 }

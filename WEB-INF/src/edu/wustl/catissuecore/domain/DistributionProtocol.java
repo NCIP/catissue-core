@@ -122,4 +122,12 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
     {
     	return title+" "+specimenRequirementCollection ;
     }
+    
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return this.title;
+	}
 }

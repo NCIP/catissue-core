@@ -250,4 +250,31 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	public void setSpecimenArrayCollection(Collection specimenArrayCollection) {
 		this.specimenArrayCollection = specimenArrayCollection;
 	}
+	
+	/**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		String message = this.distributionProtocol.title + " ";
+		if (this.user != null) {
+			if (this.user.lastName!= null && !this.user.lastName.equals("") && this.user.firstName != null && !this.user.firstName.equals("")) 
+			{
+				message = message + this.user.lastName + "," + this.user.firstName;
+			} 
+			else if(this.user.lastName!= null && !this.user.lastName.equals(""))
+			{
+				message = message + this.user.lastName;
+			}
+			else if(this.user.firstName!= null && !this.user.firstName.equals(""))
+			{
+				message = message + this.user.firstName;
+			}		
+		} 		
+		else if (this.user != null)
+		{
+			message = message + this.user;
+		}			
+		return message;
+	}
 }

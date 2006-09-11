@@ -187,4 +187,12 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	    	Logger.out.error(excp.getMessage(),excp); 
         }
     }
+    
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return this.title;
+	}
 }

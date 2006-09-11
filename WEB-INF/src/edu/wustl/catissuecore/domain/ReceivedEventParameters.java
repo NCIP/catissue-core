@@ -78,6 +78,12 @@ public class ReceivedEventParameters extends SpecimenEventParameters
         }
     }
 	
-	
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return null;
+	}
 	
 }

@@ -223,4 +223,12 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
     {
 
     }
+    
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return null;
+	}
 }

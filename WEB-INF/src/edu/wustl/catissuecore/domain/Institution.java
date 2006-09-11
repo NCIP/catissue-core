@@ -101,4 +101,12 @@ public class Institution extends AbstractDomainObject implements Serializable
 		
 		this.name = instituteForm.getName().trim() ;
     }
+    
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return this.name;
+	}
 }

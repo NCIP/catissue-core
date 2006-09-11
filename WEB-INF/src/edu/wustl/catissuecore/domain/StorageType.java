@@ -208,7 +208,6 @@ public class StorageType extends ContainerType
 	    {
 	    	Logger.out.error(excp.getMessage());
 	    }
-    }
-    
+    }    
    
 }

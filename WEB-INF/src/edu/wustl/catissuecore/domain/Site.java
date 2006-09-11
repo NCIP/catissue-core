@@ -253,4 +253,12 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
             Logger.out.error(excp.getMessage());
         }
     }
+    
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return this.name;
+	}
 }

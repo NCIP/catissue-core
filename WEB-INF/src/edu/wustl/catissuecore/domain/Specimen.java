@@ -1002,4 +1002,12 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	{
 		this.lineage = lineage;
 	}
+	
+	 /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return this.label;
+	}
 }

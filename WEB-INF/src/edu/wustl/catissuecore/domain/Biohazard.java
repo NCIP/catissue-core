@@ -208,4 +208,12 @@ public class Biohazard extends AbstractDomainObject implements Serializable
 	public void setPersisted(Boolean persisted) {
 		this.persisted = persisted;
 	}
+	
+	 /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel() {		
+		return this.name;
+	}
 }
