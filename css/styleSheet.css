@@ -1260,3 +1260,11 @@ textarea.formFieldSized20{ /* Used by Mandar for the comments used in autoevents
   border-right:1px solid #5C5C5C; /* constant: dark gray */
   text-align:left;
 }
+
+/* *********Used by Jitendra in Specimen page*************  */
+.formFieldNoBordersBold{
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+  font-weight:bold;
+}
