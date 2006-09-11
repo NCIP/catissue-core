@@ -147,7 +147,7 @@
 					<bean:message key="storageType.title"/>
 				</logic:equal>
 				<logic:equal name="operation" value="<%=Constants.EDIT%>">
-					<bean:message key="storageType.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="storageTypeForm" property="id" />
+					<bean:message key="storageType.editTitle"/>
 				</logic:equal>
 			 </td>
 		</tr>

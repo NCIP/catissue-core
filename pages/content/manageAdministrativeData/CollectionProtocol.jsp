@@ -295,15 +295,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 					<tr>
 						<td class="formTitle" height="20" colspan="4">
 							<%String title = "collectionprotocol."+pageView+".title";%>
-								<bean:message key="<%=title%>"/>
-							<%
-							if(pageView.equals("edit"))
-							{
-								%>
-									&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="collectionProtocolForm" property="id" />
-							    <%
-							}
-							%>
+								<bean:message key="<%=title%>"/>							
 						</td>
 					</tr>
 

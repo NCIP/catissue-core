@@ -60,7 +60,7 @@
 					<bean:message key="biohazard.title"/>
 				</logic:equal>
 				<logic:equal name="operation" value="<%=Constants.EDIT%>">
-					<bean:message key="biohazard.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="biohazardForm" property="id" />
+					<bean:message key="biohazard.editTitle"/>
 				</logic:equal>
 			 </td>
 		</tr>

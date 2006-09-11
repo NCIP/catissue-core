@@ -174,7 +174,7 @@ function handleStatus(status)
 								<bean:message key="user.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="user.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="userForm" property="id" />
+								<bean:message key="user.editTitle"/>
 							</logic:equal>
 						</td>
 					</tr>

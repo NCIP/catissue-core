@@ -394,7 +394,7 @@ function validate(action,formField)
 								<bean:message key="storageContainer.title"/>
 							</logic:equal>
 							<logic:equal name="operation" value="<%=Constants.EDIT%>">
-								<bean:message key="storageContainer.editTitle"/>&nbsp;<bean:message key="for.identifier"/>&nbsp;<bean:write name="storageContainerForm" property="id" />
+								<bean:message key="storageContainer.editTitle"/>
 							</logic:equal>
 						</td>
 					</tr>
