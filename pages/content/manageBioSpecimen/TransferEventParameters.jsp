@@ -195,7 +195,7 @@ if(currentEventParametersDate.trim().length() > 0)
 					<bean:message key="transfereventparameters.toposition"/> 
 				</label>
 			</td>
-			<td class="formField">
+<%--			<td class="formField">
 			<%
 				boolean isReadOnly = true ;
 					if(operation.equals("add"))
@@ -225,20 +225,21 @@ if(currentEventParametersDate.trim().length() > 0)
 					}
 				%>				
 				&nbsp;
-			</td>  
+			</td>  --%>
 		
-			<%-- n-combo-box start 
+			<%-- n-combo-box start --%>
 			<%
 				Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 									
 				String[] labelNames = {"ID","Pos1","Pos2"};
 				labelNames = Constants.STORAGE_CONTAINER_LABEL;
 				String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
-				
 				String[] initValues = new String[3];
-				initValues[0] = form.getStorageContainer();
-				initValues[1] = form.getPositionDimensionOne();
-				initValues[2] = form.getPositionDimensionTwo();
+				List initValuesList = (List)request.getAttribute("initValues");
+				if(initValuesList != null)
+				{
+					initValues = (String[])initValuesList.get(0);
+				}
 									
 				String rowNumber = "1";
 				String styClass = "formFieldSized5";
@@ -273,7 +274,7 @@ if(currentEventParametersDate.trim().length() > 0)
 											formLabelStyle="formLabelBorderless"
 											buttonOnClick = "<%=buttonOnClicked%>" />			
 			</td>
-		 n-combo-box end --%>
+<%--		 n-combo-box end --%>
 					
 		</tr>
 

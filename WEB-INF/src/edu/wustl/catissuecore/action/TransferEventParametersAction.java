@@ -10,14 +10,24 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.logger.Logger;
 
@@ -30,7 +40,12 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
+		TransferEventParametersForm form = (TransferEventParametersForm)request.getAttribute("transferEventParametersForm");
 		String operation = request.getParameter(Constants.OPERATION);
+		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		Map containerMap = new TreeMap();
+		Vector initialValues = null;
+//    	
 		if(operation.equals(Constants.ADD) )
 		{
 			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
@@ -41,13 +56,10 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 	    	Logger.out.debug("\t\t*******************************SpecimenID : "+identifier );
 	    	List specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,identifier);
 	    	
-	    	/*
-//	    	 ---- chetan 15-06-06 ----
-	        StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-	        Map containerMap = scbizLogic.getAllocatedContainerMap();
-	        request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
+	    //	 ---- chetan 15-06-06 ----
+	        
 	        // -------------------------
-	    	*/
+	    	
 	    	if(specimenList!=null && specimenList.size() != 0)
 	    	{
 	    		Specimen specimen = (Specimen)specimenList.get(0);
@@ -70,8 +82,99 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 		        //storagecontainer info
 		        request.setAttribute(Constants.STORAGE_CONTAINER_ID, storageContainerID);
+		        Logger.out.info("COllection Protocol Id :"+specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue());
+		        Logger.out.info("Spcimen Class:"+specimen.getClassName());
+		        containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue(),specimen.getClassName());
+		        initialValues = checkForInitialValues(containerMap);
+		        
+		        
+		        
 	    	}
 		} // operation=add
+		else
+		{
+			
+        	Integer id = new Integer(form.getStorageContainer());
+        	String parentContainerName="";
+        	String valueField1 = "id";
+        	List list = scbizLogic.retrieve(StorageContainer.class.getName(),valueField1,new Long(form.getStorageContainer()));
+			if(!list.isEmpty())
+			{
+				StorageContainer container = (StorageContainer)list.get(0);
+				parentContainerName=container.getName();
+				            		
+			}
+        	Integer pos1 = new Integer(form.getPositionDimensionOne());        	
+        	Integer pos2 = new Integer(form.getPositionDimensionTwo());
+        	
+        	List pos2List = new ArrayList();
+        	pos2List.add(new NameValueBean(pos2,pos2));
+        	
+        	Map pos1Map = new TreeMap();
+        	pos1Map.put(new NameValueBean(pos1,pos1),pos2List);
+        	containerMap.put(new NameValueBean(parentContainerName,id),pos1Map);
+        	
+        	String[] startingPoints = new String[]{"-1", "-1", "-1"};
+			if (form.getStorageContainer() != null && !form.getStorageContainer().equals("-1"))
+			{
+				startingPoints[0] = form.getStorageContainer();
+
+			}
+			if (form.getPositionDimensionOne() != null && !form.getPositionDimensionOne().equals("-1"))
+			{
+				startingPoints[1] = form.getPositionDimensionOne();
+			}
+			if (form.getPositionDimensionTwo() != null && !form.getPositionDimensionTwo().equals("-1"))
+			{
+				startingPoints[2] = form.getPositionDimensionTwo();
+			}
+			initialValues = new Vector();
+			Logger.out.info("Starting points[0]" + startingPoints[0]);
+			Logger.out.info("Starting points[1]" + startingPoints[1]);
+			Logger.out.info("Starting points[2]" + startingPoints[2]);
+			initialValues.add(startingPoints);
+
+
+        	
+		}
+		request.setAttribute("initValues", initialValues);
+		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
 	}
+
 	
+	Vector checkForInitialValues(Map containerMap)
+	{
+		Vector initialValues = null;
+
+		if (containerMap.size() > 0)
+		{
+			String[] startingPoints = new String[3];
+
+			Set keySet = containerMap.keySet();
+			Iterator itr = keySet.iterator();
+			NameValueBean nvb = (NameValueBean) itr.next();
+			startingPoints[0] = nvb.getValue();
+
+			Map map1 = (Map) containerMap.get(nvb);
+			keySet = map1.keySet();
+			itr = keySet.iterator();
+			nvb = (NameValueBean) itr.next();
+			startingPoints[1] = nvb.getValue();
+
+			List list = (List) map1.get(nvb);
+			nvb = (NameValueBean) list.get(0);
+			startingPoints[2] = nvb.getValue();
+
+			Logger.out.info("Starting points[0]" + startingPoints[0]);
+			Logger.out.info("Starting points[1]" + startingPoints[1]);
+			Logger.out.info("Starting points[2]" + startingPoints[2]);
+			initialValues = new Vector();
+			initialValues.add(startingPoints);
+
+		}
+		return initialValues;
+
+		//request.setAttribute("initValues", initialValues);
+	}
+
 }
