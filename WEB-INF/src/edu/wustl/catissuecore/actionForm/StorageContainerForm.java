@@ -170,6 +170,7 @@ public class StorageContainerForm extends AbstractActionForm
 	 */
 	private Map similarContainersMap = new HashMap();
 
+	private String specimenOrArrayType;
 	/**
 	 * No argument constructor for StorageTypeForm class 
 	 */
@@ -284,6 +285,7 @@ public class StorageContainerForm extends AbstractActionForm
 			{
 				holdsSpecimenClassTypes = new String[1];
 				holdsSpecimenClassTypes[0] = "-1";
+				this.specimenOrArrayType = "Specimen";
 			}
 			else
 			{
@@ -296,6 +298,7 @@ public class StorageContainerForm extends AbstractActionForm
 					String specimenClass=(String)it.next();
 					this.holdsSpecimenClassTypes[i]=specimenClass;
 					i++;
+					this.specimenOrArrayType = "Specimen";
 				}
 			}
 		}
@@ -313,6 +316,7 @@ public class StorageContainerForm extends AbstractActionForm
 				SpecimenArrayType holdSpArrayType = (SpecimenArrayType)it.next();
 				holdsSpecimenArrTypeIds[i] = holdSpArrayType.getId().longValue();
 				i++;
+				this.specimenOrArrayType = "SpecimenArray";
 			}
 		}
 
@@ -1181,6 +1185,18 @@ public class StorageContainerForm extends AbstractActionForm
 	public void setSiteForParentContainer(String siteForParentContainer)
 	{
 		this.siteForParentContainer = siteForParentContainer;
+	}
+
+	
+	public String getSpecimenOrArrayType()
+	{
+		return specimenOrArrayType;
+	}
+
+	
+	public void setSpecimenOrArrayType(String specimenOrArrayType)
+	{
+		this.specimenOrArrayType = specimenOrArrayType;
 	}
 
 }

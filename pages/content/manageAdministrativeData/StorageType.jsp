@@ -71,6 +71,36 @@
 		}
 		
 	}
+	
+	
+	function onRadioButtonClick(element)
+	{
+		var specimenClass = document.getElementById("holdSpecimenClassTypeIds");
+		var specimenArray = document.getElementById("holdsSpecimenArrTypeIds");
+		
+		if(element == "Specimen")
+		{
+			specimenClass.disabled = false;
+			specimenArray.disabled = true;
+			var len = specimenArray.length;
+			for (var i = 0; i < len; i++) 
+			{
+				specimenArray.options[i].selected = false;
+			}
+		}
+		if(element == "SpecimenArray")
+		{
+			specimenClass.disabled = true;
+			specimenArray.disabled = false;
+			var len = specimenClass.length;
+			for (var i = 0; i < len; i++) 
+			{
+				specimenClass.options[i].selected = false;
+			}
+			
+		}
+		
+	}
 	</script>
 
 </head>
@@ -190,8 +220,8 @@
 				<table>
 				<tr>
 					<td class="standardText" align="center">Storage Type</td>
-					<td class="standardText" align="center">Specimen Type</td>
-					<td class="standardText" align="center">Specimen Array Type</td>
+					<td class="standardText" align="center"><html:radio property="specimenOrArrayType" value="Specimen" onclick="onRadioButtonClick('Specimen')"/> Specimen Type</td>
+					<td class="standardText" align="center"><html:radio property="specimenOrArrayType" value="SpecimenArray" onclick="onRadioButtonClick('SpecimenArray')"/>Specimen Array Type</td>
 					
 				</tr>
 				<tr>
@@ -202,16 +232,33 @@
 				</html:select>
 				</td>
 				<td class="formField" nowrap align="center">
+				<logic:equal name="storageTypeForm" property="specimenOrArrayType" value="Specimen">
 				<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="holdSpecimenClassTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
 				</html:select>
+				</logic:equal>
+				
+				<logic:equal name="storageTypeForm" property="specimenOrArrayType" value="SpecimenArray">
+				<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="holdSpecimenClassTypeIds" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true">
+				<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
+				</html:select>
+				</logic:equal>
 				</td>
 				<td class="formField" nowrap align="center">
+				<logic:equal name="storageTypeForm" property="specimenOrArrayType" value="SpecimenArray">
 				<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 				<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/>
 				</html:select>
+				</logic:equal>
+				<logic:equal name="storageTypeForm" property="specimenOrArrayType" value="Specimen">
+				<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true">
+				<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/>
+				</html:select>
+				</logic:equal>
 				</td>
 				
 				</tr>

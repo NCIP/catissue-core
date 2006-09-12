@@ -115,6 +115,8 @@
 				document.forms[0].customListBox_1_2.disabled = false;
 				document.forms[0].Map_1.disabled = false;
 				document.forms[0].siteId.disabled = true;
+
+				onParentContainerChange(element)
 				//window.location.reload();
 			}
 		}
@@ -125,7 +127,7 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
-		function ResetName()
+		function ResetName(elment)
 		{
 			var containerNameElement = document.getElementById("containerName");
 			containerNameElement.value = "";	
@@ -135,7 +137,7 @@
 			}
 			else
 			{
-				onParentContainerChange();
+				onParentContainerChange(element);
 			}	
 		}
 		function onSiteChange()
@@ -148,7 +150,7 @@
 				nameChange(siteElement.options[siteElement.selectedIndex].text,typeElement.options[typeElement.selectedIndex].text,<%=containerNumber%>);
 			}
 		}
-		function onParentContainerChange()
+		function onParentContainerChange(element)
 		{
 			var typeElement = document.getElementById("typeId");
 			var containerName = document.getElementById("containerName");
@@ -160,6 +162,14 @@
 				var siteName = document.forms[0].siteForParentContainer.value;
 				nameChange(siteName,typeElement.options[typeElement.selectedIndex].text,<%=containerNumber%>);
 			}	
+			
+			if(element.name == "parentContainerId")
+			{
+				var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isSiteOrParentContainerChange=true";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}	
+			
 		}
 		
 		
@@ -341,6 +351,49 @@ function validate(action,formField)
 	}	
 }
 
+function onRadioButtonClickOfSpecimen(element)
+{
+	var specimenClass = document.getElementById("holdsSpecimenClassTypeIds");
+	var specimenArray = document.getElementById("holdsSpecimenArrTypeIds");
+	
+	if(element == "Specimen")
+	{
+		specimenClass.disabled = false;
+		specimenArray.disabled = true;
+		var len = specimenArray.length;
+		for (var i = 0; i < len; i++) 
+		{
+			specimenArray.options[i].selected = false;
+		}
+		
+	}
+	if(element == "SpecimenArray")
+	{
+		specimenClass.disabled = true;
+		specimenArray.disabled = false;
+		var len = specimenClass.length;
+		for (var i = 0; i < len; i++) 
+		{
+			specimenClass.options[i].selected = false;
+		}
+	}
+		
+}
+
+function onEditChange()
+{
+
+	var ele0 = document.getElementById("customListBox_1_0");
+	var ele1 = document.getElementById("customListBox_1_1");
+	var ele2 = document.getElementById("customListBox_1_2");
+	var operation = "<%=operation%>";
+	if(operation == "edit" && document.forms[0].checkedButton[1].checked==true)
+	{
+		ele0.remove(0);
+		ele1.remove(0);
+		ele2.remove(0);
+	}
+}
 	</script>
 </head>
 
@@ -466,22 +519,30 @@ function validate(action,formField)
 							Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 							
 							session.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,dataMap);							
-							
+
+							String[] initValues = new String[3];
+							List initValuesList = (List)request.getAttribute("initValues");
+							if(initValuesList != null)
+							{
+								initValues = (String[])initValuesList.get(0);
+							}
+
 							// labelNames = {"Name","Pos1","Pos2"};
 							String[] labelNames = Constants.STORAGE_CONTAINER_LABEL;
 							String[] attrNames = { "parentContainerId", "positionDimensionOne", "positionDimensionTwo"};
 							
-							String[] initValues = new String[3];
-							initValues[0] = Integer.toString((int)form.getParentContainerId());
+							//String[] initValues = new String[3];
+							//initValues[0] = Integer.toString((int)form.getParentContainerId());
 							//initValues[0] = form.getPositionInParentContainer();
-							initValues[1] = Integer.toString(form.getPositionDimensionOne());
-							initValues[2] = Integer.toString(form.getPositionDimensionTwo());
+							//initValues[1] = Integer.toString(form.getPositionDimensionOne());
+							//initValues[2] = Integer.toString(form.getPositionDimensionTwo());
 							
 							String rowNumber = "1";
 							String styClass = "formFieldSized5";
 							String tdStyleClass = "customFormField";
 							boolean disabled = true;
-							String onChange = "onCustomListBoxChange(this),onParentContainerChange()";
+							String onChange = "";
+							onChange = "onCustomListBoxChange(this),onParentContainerChange(this)";
 							//String onChange = "onCustomListBoxChange(this);onParentContainerChange()";
 							boolean buttonDisabled = true;
 							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
@@ -496,7 +557,7 @@ function validate(action,formField)
 					<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 					
 					<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-						
+					
 						
 	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">								
 								<td class="formField" colSpan="2">
@@ -543,6 +604,7 @@ function validate(action,formField)
 							</logic:equal>						
 						
 					</tr>
+
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel" colspan="2">
@@ -553,13 +615,14 @@ function validate(action,formField)
 						<td class="formField" colspan="2">
 							<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="containerName" property="containerName"/>
 							&nbsp;
-							<html:link href="#" styleId="newSite" onclick="ResetName()">
+							<html:link href="#" styleId="newSite" onclick="ResetName(this)">
 								<bean:message key="StorageContainer.resetName" />
 							</html:link>
 						</td>
 					</tr>
 					
 					<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+					
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel" colspan="2">
@@ -674,10 +737,10 @@ function validate(action,formField)
 									<bean:message key="storageContainer.containerType"/>
 							</td>
 							<td class="standardText" align="center">		
-									<bean:message key="storageContainer.specimenType"/>
+									<html:radio property="specimenOrArrayType" value="Specimen" onclick="onRadioButtonClickOfSpecimen('Specimen')"/> <bean:message key="storageContainer.specimenType"/>
 							</td>
 							<td class="standardText" align="center">		
-									<bean:message key="storageContainer.specimenArrayType"/>
+									<html:radio property="specimenOrArrayType" value="SpecimenArray" onclick="onRadioButtonClickOfSpecimen('SpecimenArray')"/> <bean:message key="storageContainer.specimenArrayType"/>
 							</td>
 							</tr>
 							<tr>
@@ -688,16 +751,33 @@ function validate(action,formField)
 							</html:select>
 						</td>
 						<td class="formField" align="center">
+							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="Specimen">
 							<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
 							</html:select>
+							</logic:equal>
+							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="SpecimenArray">
+							<html:select property="holdsSpecimenClassTypes" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenClassTypeIds" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true">
+								<html:options collection="<%=Constants.HOLDS_LIST2%>" labelProperty="name" property="value"/>
+							</html:select>
+							</logic:equal>
 						</td>
 						<td class="formField" align="center">
-							<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds " size="4" multiple="true"
+							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="SpecimenArray">
+							<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds" size="4" multiple="true"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/>
 							</html:select>
+							</logic:equal>
+							<logic:equal name="storageContainerForm" property="specimenOrArrayType" value="Specimen">
+							<html:select property="holdsSpecimenArrTypeIds" styleClass="formFieldVerySmallSized" styleId="holdsSpecimenArrTypeIds" size="4" multiple="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="true">
+								<html:options collection="<%=Constants.HOLDS_LIST3%>" labelProperty="name" property="value"/>
+							</html:select>
+							</logic:equal>
+							
 						</td>
 						</tr></table>
 						

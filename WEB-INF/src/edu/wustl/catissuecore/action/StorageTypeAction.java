@@ -42,6 +42,11 @@ public class StorageTypeAction  extends SecureAction
     {
     	StorageTypeForm storageTypeForm=(StorageTypeForm)form;
     	
+    	Logger.out.info("SpecimenArray/specimen:"+storageTypeForm.getSpecimenOrArrayType());
+    	if(storageTypeForm.getSpecimenOrArrayType() == null)
+    	{
+    		storageTypeForm.setSpecimenOrArrayType("Specimen");
+    	}
     	StorageTypeBizLogic bizLogic = (StorageTypeBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
         //Gets the value of the operation parameter.
         String operation = request.getParameter(Constants.OPERATION);
@@ -69,7 +74,7 @@ public class StorageTypeAction  extends SecureAction
 	  	if(operation.equals(Constants.ADD))
 	  	{
 	  		// new model storageTypeForm.setHoldsSpecimenClassTypeIds(new long[]{1});
-	  		storageTypeForm.setHoldsStorageTypeIds(new long[]{1});
+	  		//storageTypeForm.setHoldsStorageTypeIds(new long[]{1});
 	  		storageTypeForm.setOneDimensionCapacity(0);
 	  		storageTypeForm.setTwoDimensionCapacity(0);
 	  	}
