@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on Apr 7, 2005
  */
+
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
@@ -31,111 +32,124 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
+
 /**
  * This class initializes the fields in the Participant Add/Edit webpage.
  * @author gautam_shetty
  */
 public class ParticipantAction extends BaseAction
 {
-    /**
-     * Overrides the execute method of Action class.
-     * Sets the various fields in Participant Add/Edit webpage.
-     * */
-    protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) throws Exception
-    {
-    	ParticipantForm participantForm = (ParticipantForm) form;
-    	//This if condition is for participant lookup. When participant is selected from the list then 
-    	//that participant gets stored in request as participantform1.
-    	//After that we have to show the slected participant in o/p
-    	if(request.getAttribute("participantSelect")!=null)
-    	{
-    		participantForm=(ParticipantForm)request.getAttribute("participantForm1");
-    		request.setAttribute("participantForm",participantForm);
-    	}
-    	Logger.out.info("-----------Participant ID:"+participantForm.getId());
-    	Logger.out.info("-----------Last Name:"+participantForm.getLastName());
-    	
-    	//List of keys used in map of ActionForm
-		List key = new ArrayList();
-    	key.add("ParticipantMedicalIdentifier:i_Site_id");
-    	key.add("ParticipantMedicalIdentifier:i_medicalRecordNumber");
-    	
-    	//Gets the map from ActionForm
-    	Map map = participantForm.getValues();
-    	
-    	//Calling DeleteRow of BaseAction class
-    	MapDataParser.deleteRow(key,map,request.getParameter("status"));
-    	//Gets the value of the operation parameter.
-    	String operation = request.getParameter(Constants.OPERATION);
-        
-        //Sets the operation attribute to be used in the Add/Edit Participant Page. 
-        request.setAttribute(Constants.OPERATION,operation);
-        
-        //Sets the pageOf attribute (for Add,Edit or Query Interface)
-        String pageOf  = request.getParameter(Constants.PAGEOF);
-        
-        request.setAttribute(Constants.PAGEOF,pageOf);
-        
-        //Sets the genderList attribute to be used in the Add/Edit Participant Page.
-        List genderList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENDER,null);
-        genderList.remove(0);
-        request.setAttribute(Constants.GENDER_LIST, genderList);
-        if(participantForm.getGender()==null ||participantForm.getGender().equals(""))
-        {
-        	Iterator itr=genderList.iterator();
-        	while(itr.hasNext())
-        	{
-        		NameValueBean nvb=(NameValueBean)itr.next();
-           		participantForm.setGender(nvb.getValue());
-        		break;
-        	}
-               	
-        }
 
-        //Sets the genotypeList attribute to be used in the Add/Edit Participant Page.
-        //NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-        List genotypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENOTYPE,null);
-        request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);
-        
-        //Sets the ethnicityList attribute to be used in the Add/Edit Participant Page.
-        List ethnicityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_ETHNICITY,null);
-        request.setAttribute(Constants.ETHNICITY_LIST, ethnicityList);
-  
-        //Sets the raceList attribute to be used in the Add/Edit Participant Page.
-        List raceList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RACE,null);
-        request.setAttribute(Constants.RACELIST, raceList);
-        
-        //Sets the vitalStatus attribute to be used in the Add/Edit Participant Page.
-        List vitalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_VITAL_STATUS,null);
-        vitalStatusList.remove(0);
-        request.setAttribute(Constants.VITAL_STATUS_LIST,vitalStatusList);
-        if(participantForm.getVitalStatus()==null ||participantForm.getVitalStatus().equals(""))
-        {
-        	Iterator itr=vitalStatusList.iterator();
-        	while(itr.hasNext())
-        	{
-        		NameValueBean nvb=(NameValueBean)itr.next();
-           		participantForm.setVitalStatus(nvb.getValue());
-        		break;
-        	}
-               	
-        }
-        //Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
-        request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
-        
-    	ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
-         
-    	//Sets the Site list of corresponding type.
-        String sourceObjectName = Site.class.getName();
-        String[] displayNameFields = {"name"};
-        String valueField = Constants.SYSTEM_IDENTIFIER;
-		
-        List siteList = bizlogic.getList(sourceObjectName, displayNameFields, valueField, true);
-        
-        request.setAttribute(Constants.SITELIST, siteList);
-        Logger.out.debug("pageOf :---------- "+ pageOf );
-        
-        return mapping.findForward(pageOf);
-    }
+	/**
+	 * Overrides the execute method of Action class.
+	 * Sets the various fields in Participant Add/Edit webpage.
+	 * */
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		ParticipantForm participantForm = (ParticipantForm) form;
+		//This if condition is for participant lookup. When participant is selected from the list then 
+		//that participant gets stored in request as participantform1.
+		//After that we have to show the slected participant in o/p
+		if (request.getAttribute("participantSelect") != null)
+		{
+			participantForm = (ParticipantForm) request.getAttribute("participantForm1");
+			request.setAttribute("participantForm", participantForm);
+		}
+		if (participantForm.getGender() == null)
+		{
+			participantForm.setGender(Constants.UNSPECIFIED);
+		}
+		if (participantForm.getVitalStatus() == null)
+		{
+			participantForm.setVitalStatus(Constants.UNKNOWN);
+		}
+		//List of keys used in map of ActionForm
+		List key = new ArrayList();
+		key.add("ParticipantMedicalIdentifier:i_Site_id");
+		key.add("ParticipantMedicalIdentifier:i_medicalRecordNumber");
+
+		//Gets the map from ActionForm
+		Map map = participantForm.getValues();
+
+		//Calling DeleteRow of BaseAction class
+		MapDataParser.deleteRow(key, map, request.getParameter("status"));
+		//Gets the value of the operation parameter.
+		String operation = request.getParameter(Constants.OPERATION);
+
+		//Sets the operation attribute to be used in the Add/Edit Participant Page. 
+		request.setAttribute(Constants.OPERATION, operation);
+
+		//Sets the pageOf attribute (for Add,Edit or Query Interface)
+		String pageOf = request.getParameter(Constants.PAGEOF);
+
+		request.setAttribute(Constants.PAGEOF, pageOf);
+
+		//Sets the genderList attribute to be used in the Add/Edit Participant Page.
+		List genderList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_GENDER, null);
+		genderList.remove(0);
+		request.setAttribute(Constants.GENDER_LIST, genderList);
+		if (participantForm.getGender() == null || participantForm.getGender().equals(""))
+		{
+			Iterator itr = genderList.iterator();
+			while (itr.hasNext())
+			{
+				NameValueBean nvb = (NameValueBean) itr.next();
+				participantForm.setGender(nvb.getValue());
+				break;
+			}
+
+		}
+
+		//Sets the genotypeList attribute to be used in the Add/Edit Participant Page.
+		//NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
+		List genotypeList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_GENOTYPE, null);
+		request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);
+
+		//Sets the ethnicityList attribute to be used in the Add/Edit Participant Page.
+		List ethnicityList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_ETHNICITY, null);
+		request.setAttribute(Constants.ETHNICITY_LIST, ethnicityList);
+
+		//Sets the raceList attribute to be used in the Add/Edit Participant Page.
+		List raceList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RACE,
+				null);
+		request.setAttribute(Constants.RACELIST, raceList);
+
+		//Sets the vitalStatus attribute to be used in the Add/Edit Participant Page.
+		List vitalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_VITAL_STATUS, null);
+		vitalStatusList.remove(0);
+		request.setAttribute(Constants.VITAL_STATUS_LIST, vitalStatusList);
+		if (participantForm.getVitalStatus() == null || participantForm.getVitalStatus().equals(""))
+		{
+			Iterator itr = vitalStatusList.iterator();
+			while (itr.hasNext())
+			{
+				NameValueBean nvb = (NameValueBean) itr.next();
+				participantForm.setVitalStatus(nvb.getValue());
+				break;
+			}
+
+		}
+		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
+		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
+
+		ParticipantBizLogic bizlogic = (ParticipantBizLogic) BizLogicFactory.getInstance()
+				.getBizLogic(Constants.PARTICIPANT_FORM_ID);
+
+		//Sets the Site list of corresponding type.
+		String sourceObjectName = Site.class.getName();
+		String[] displayNameFields = {"name"};
+		String valueField = Constants.SYSTEM_IDENTIFIER;
+
+		List siteList = bizlogic.getList(sourceObjectName, displayNameFields, valueField, true);
+
+		request.setAttribute(Constants.SITELIST, siteList);
+		Logger.out.debug("pageOf :---------- " + pageOf);
+
+		return mapping.findForward(pageOf);
+	}
 }
