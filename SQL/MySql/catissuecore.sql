@@ -272,12 +272,12 @@ create table CATISSUE_STORAGE_TYPE (
 create table CATISSUE_CONTAINER (
    IDENTIFIER bigint not null auto_increment,
    ACTIVITY_STATUS varchar(20),
-   BARCODE varchar(100),
+   BARCODE varchar(100) unique,
    CAPACITY_ID bigint,
    PARENT_CONTAINER_ID bigint,
    COMMENT text,
    FULL bit,
-   NAME varchar(100),
+   NAME varchar(100) unique not null,
    POSITION_DIMENSION_ONE integer,
    POSITION_DIMENSION_TWO integer,
    primary key (IDENTIFIER)
