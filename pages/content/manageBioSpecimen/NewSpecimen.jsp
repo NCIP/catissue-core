@@ -528,12 +528,9 @@
 									<bean:message key="specimen.lineage"/>
 								</label>
 							</td>
-							<td class="formField" >
-								<!-- Mandar : 434 : for tooltip -->
-						     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>"
-									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-									<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
-								</html:select>
+							<td class="formField" >								
+					     		<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="lineage" property="lineage" 
+					     		disabled="true"/>														     	
 							</td>
 							</logic:equal>
 							
