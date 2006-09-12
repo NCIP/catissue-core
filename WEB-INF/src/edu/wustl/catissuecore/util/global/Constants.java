@@ -840,6 +840,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String UNDEFINED = "Undefined";
 	public static final String UNKNOWN = "Unknown";
+	public static final String UNSPECIFIED = "UnSpecified";
 	public static final String SEARCH_RESULT = "SearchResult.csv";
 	
 //	Mandar : LightYellow and Green colors for CollectionProtocol SpecimenRequirements. Bug id: 587 
