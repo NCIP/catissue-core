@@ -1724,9 +1724,21 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.distributionDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
+
+		<action path="/DistributionSubmit"
+			type="edu.wustl.catissuecore.action.DistributionSubmitAction"
+			name="distributionForm"
+			validate="true"
+			input="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16"
+			scope="request">
+			<forward name="addSuccess" path="/DistributionAdd.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
+			<forward name="editSuccess" path="/DistributionAdd.do?operation=edit&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
+			<forward name="failure" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
+		</action>
+		
 		
 		<action path="/DistributionAdd"
-			type="edu.wustl.common.action.CommonAddEditAction"
+			type="edu.wustl.catissuecore.action.DistributionSubmitAction"
 			name="distributionForm"
 			validate="true"
 			input="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16"
@@ -1737,7 +1749,7 @@ PUBLIC
 		</action>
 		
 		<action path="/DistributionEdit"
-			type="edu.wustl.common.action.CommonAddEditAction"
+			type="edu.wustl.catissuecore.action.DistributionSubmitAction"
 			name="distributionForm"
 			validate="true"
 			input="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution&amp;menuSelected=16"
@@ -1756,7 +1768,18 @@ PUBLIC
 			<forward name="pageOfSimpleQueryInterface" path="/Distribution.do?operation=edit&amp;pageOf=pageOfSimpleQueryInterface&amp;menuSelected=16"/>
 			<forward name="failure" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution&amp;menuSelected=16"/>
 		</action>    
-		
+
+		<action path="/DistributionSearchFromMenu"
+		    type="edu.wustl.common.action.CommonSearchAction"
+			name="distributionForm"
+			validate="false"
+			input="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution&amp;menuSelected=16"
+			scope="request">
+			<forward name="pageOfDistribution" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution&amp;menuSelected=16&amp;distributionBasedOnOption=unknown"/>
+			<forward name="pageOfSimpleQueryInterface" path="/Distribution.do?operation=edit&amp;pageOf=pageOfSimpleQueryInterface&amp;menuSelected=16"/>
+			<forward name="failure" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution&amp;menuSelected=16"/>
+		</action>    
+
 		<action path="/DistributionReport"
 			type="edu.wustl.catissuecore.action.DistributionReportAction"
 			name="configureResultViewForm"
@@ -1764,6 +1787,15 @@ PUBLIC
 			scope="request">
 			<forward name="Success" path=".catissuecore.distributionReportSuccessDef" />
 		</action>
+
+		<action path="/ArrayDistributionReport"
+			type="edu.wustl.catissuecore.action.ArrayDistributionReportAction"
+			name="configureResultViewForm"
+			validate="false"
+			scope="request">
+			<forward name="Success" path=".catissuecore.distributionReportSuccessDef" />
+		</action>
+
 		
 		<!-- Configure Result View Actions -->		
 		<action path="/ConfigureDistribution"
@@ -2024,7 +2056,7 @@ PUBLIC
 			<forward name="pageOfThawEventParameters" path="/ThawEventParametersSearch.do"/>
 			<forward name="pageOfTissueSpecimenReviewParameters" path="/TissueSpecimenReviewEventParametersSearch.do"/>
 			<forward name="pageOfTransferEventParameters" path="/TransferEventParametersSearch.do"/>
-			<forward name="pageOfDistribution" path="/DistributionSearch.do"/>
+			<forward name="pageOfDistribution" path="/DistributionSearchFromMenu.do"/>
 			<forward name="pageOfSpecimenArrayType" path="/SpecimenArrayTypeSearch.do"/>
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
