@@ -7,6 +7,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +58,10 @@ public class SimilarContainersAction extends SecureAction
 
 		StorageContainerForm similarContainersForm = (StorageContainerForm) form;
 
+		if(similarContainersForm.getSpecimenOrArrayType() == null)
+		{
+			similarContainersForm.setSpecimenOrArrayType("Specimen");
+		}
 		Logger.out.info(" Map:---------------" + similarContainersForm.getSimilarContainersMap());
 		IBizLogic ibizLogic = BizLogicFactory.getInstance()
 				.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
@@ -71,8 +76,10 @@ public class SimilarContainersAction extends SecureAction
 		List storageTypeListWithAny = Utility.getStorageTypeList(list2, true);
 		request.setAttribute(Constants.HOLDS_LIST1, storageTypeListWithAny);
 
-		List StorageTypeListWithoutAny = Utility.getStorageTypeList(list2, false);
-		request.setAttribute(Constants.STORAGETYPELIST, StorageTypeListWithoutAny);
+		List storagetypeList = new ArrayList();
+		NameValueBean nvb = new NameValueBean(similarContainersForm.getTypeName(),new Long(similarContainersForm.getTypeId()));
+		storagetypeList.add(nvb);
+		request.setAttribute(Constants.STORAGETYPELIST, storagetypeList);
 
 		//		Populating the Site Array
 		String[] siteDisplayField = {"name"};
