@@ -253,7 +253,7 @@ public class DataViewAction extends BaseAction
 
     	//Bug#2113: Default view consists of all attributes from Participant to Specimen
     	//Thus removing all columns except the ones corresponding to the type of object selected
-    	if(aliasName.equals(Query.PARTICIPANT) || aliasName.equals(Constants.ROOT))
+    	if( aliasName.equals(Constants.ROOT))
 		{
     		columns.addAll(participantColumns);
     		
@@ -262,17 +262,26 @@ public class DataViewAction extends BaseAction
 //    		columns.addAll(specimenCollGrpColumns);
 //    		columns.addAll(specimenColumns);
 		}
+    	if(aliasName.equals(Query.PARTICIPANT))
+		{
+//    		columns.addAll(participantColumns);
+    		
+    		columns.addAll(collectionProtocolColumns);
+    		columns.addAll(collProtRegColumns);
+//    		columns.addAll(specimenCollGrpColumns);
+//    		columns.addAll(specimenColumns);
+		}
     	else if(aliasName.equals(Query.COLLECTION_PROTOCOL))
 		{
-    		columns.addAll(collectionProtocolColumns);
+//    		columns.addAll(collectionProtocolColumns);
 //    		columns.addAll(collProtRegColumns);
-//    		columns.addAll(specimenCollGrpColumns);
+    		columns.addAll(specimenCollGrpColumns);
 //    		columns.addAll(specimenColumns);
 		}
 		else if(aliasName.equals(Query.SPECIMEN_COLLECTION_GROUP))
 		{
-    		columns.addAll(specimenCollGrpColumns);
-//    		columns.addAll(specimenColumns);
+//    		columns.addAll(specimenCollGrpColumns);
+    		columns.addAll(specimenColumns);
 		}
 		else if(aliasName.equals(Query.SPECIMEN))
 		{
