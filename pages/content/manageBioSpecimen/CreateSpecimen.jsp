@@ -72,6 +72,18 @@
 			checkb.innerHTML=""+sname;
 		}
 		
+		function onSpecimenOrClassChange()
+		{
+			var specimenId = document.getElementById("parentSpecimenId");
+			var classNameElement = document.getElementById("className");
+			if(specimenId.value != "-1" && classNameElement.value != "-1")
+			{
+		
+				var action = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&Change=true";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}	
+		}
 	</script>
 </head>
 
@@ -200,7 +212,7 @@
 					<td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
 			     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onSpecimenOrClassChange()">
 							<html:options collection="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -231,7 +243,7 @@
 				    <td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onSpecimenOrClassChange()">
 							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -327,66 +339,58 @@
 					   </label>
 					</td>
 					
-					<%-- n-combo-box start 
-					<%
-						Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
-							
-						String[] labelNames = {"ID", "Pos1", "Pos2"};
-						labelNames = Constants.STORAGE_CONTAINER_LABEL;
-						String[] attrNames = {"storageContainer", "positionDimensionOne", "positionDimensionTwo"};
-						
-						String[] initValues = new String[3];
-						initValues[0] = form.getStorageContainer();
-						initValues[1] = form.getPositionDimensionOne();
-						initValues[2] = form.getPositionDimensionTwo();
-						
-						String rowNumber = "1";
-						String styClass = "formFieldSized5";
-						String tdStyleClass = "customFormField";
-						String onChange = "onCustomListBoxChange(this)";
-						
-						//String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
-						String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2&amp;storageType=','name','810','320','yes');return false";
-						String noOfEmptyCombos = "3";
-					%>
-				
-					<%=ScriptGenerator.getJSForOutermostDataTable()%>
-					<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
+					<%-- n-combo-box start --%>
+				<%
+					Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+										
+					String[] labelNames = {"ID","Pos1","Pos2"};
+					labelNames = Constants.STORAGE_CONTAINER_LABEL;
+					String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
 					
-					<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-									
-					<td class="formField" colSpan="2">
-									<ncombo:containermap dataMap="<%=dataMap%>" 
+					//String[] initValues = new String[3];
+					//initValues[0] = form.getStorageContainer();
+					//initValues[1] = form.getPositionDimensionOne();
+					//initValues[2] = form.getPositionDimensionTwo();
+					String[] initValues = new String[3];
+							List initValuesList = (List)request.getAttribute("initValues");
+							if(initValuesList != null)
+							{
+								initValues = (String[])initValuesList.get(0);
+							}
+					//System.out.println("NewSpecimen :: "+initValues[0]+"<>"+initValues[1]+"<>"+initValues[2]);			
+					String rowNumber = "1";
+					String styClass = "formFieldSized5";
+					String tdStyleClass = "customFormField";
+					String onChange = "onCustomListBoxChange(this)";
+					
+					String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2','name','810','320','yes');return false";
+					String noOfEmptyCombos = "3";
+				%>
+				
+				<%=ScriptGenerator.getJSForOutermostDataTable()%>
+				<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
+				
+				<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+				
+				<td class="formField" colSpan="4">
+						<ncombo:containermap dataMap="<%=dataMap%>" 
 											attributeNames="<%=attrNames%>" 
 											initialValues="<%=initValues%>"  
 											styleClass = "<%=styClass%>" 
 											tdStyleClass = "<%=tdStyleClass%>" 
 											labelNames="<%=labelNames%>" 
 											rowNumber="<%=rowNumber%>" 
-											onChange = "<%=onChange%>"
+											onChange="<%=onChange%>" 
 											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
 											
 											buttonName="mapButton" 
 											value="Map"
 											buttonOnClick = "<%=buttonOnClicked%>"
 											formLabelStyle="formLabelBorderless"
-											buttonStyleClass="actionButton" />
-					</td>	
- n-combo-box end --%>
-<td class="formField">
-				 	&nbsp;<bean:message key="storageContainer.parentID" />
-		     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="storageContainer" property="storageContainer" />
-		     			&nbsp;<bean:message key="storageContainer.positionOne" />
-		     			<html:text styleClass="formFieldSized3"  maxlength="10" styleId="positionDimensionOne" property="positionDimensionOne" />
-		     			&nbsp;<bean:message key="storageContainer.positionTwo" />
-		     			<html:text styleClass="formFieldSized3" maxlength="10"  styleId="positionDimensionTwo" property="positionDimensionTwo" />
-					</td>
-					<td class="formField">
-						<html:button property="mapButton" styleClass="actionButton" styleId="Map"
-							onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
-							<bean:message key="buttons.map"/>
-						</html:button>
-					</td>
+											buttonStyleClass="actionButton" />				
+				</td>
+				<%-- n-combo-box end --%>
+				
 				 </tr>
 	
 				 <tr>

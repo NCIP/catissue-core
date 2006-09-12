@@ -804,44 +804,50 @@
 								String[] labelNames = {"ID","Pos1","Pos2"};
 								labelNames = Constants.STORAGE_CONTAINER_LABEL;
 								String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
-								
+					
+								//String[] initValues = new String[3];
+								//initValues[0] = form.getStorageContainer();
+								//initValues[1] = form.getPositionDimensionOne();
+								//initValues[2] = form.getPositionDimensionTwo();
 								String[] initValues = new String[3];
-								initValues[0] = form.getStorageContainer();
-								initValues[1] = form.getPositionDimensionOne();
-								initValues[2] = form.getPositionDimensionTwo();
+								List initValuesList = (List)request.getAttribute("initValues");
+								if(initValuesList != null)
+								{
+									initValues = (String[])initValuesList.get(0);
+								}
 								//System.out.println("NewSpecimen :: "+initValues[0]+"<>"+initValues[1]+"<>"+initValues[2]);			
 								String rowNumber = "1";
 								String styClass = "formFieldSized5";
 								String tdStyleClass = "customFormField";
 								String onChange = "onCustomListBoxChange(this)";
-								
+					
 								String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2','name','810','320','yes');return false";
 								String noOfEmptyCombos = "3";
 							%>
-						
+				
 							<%=ScriptGenerator.getJSForOutermostDataTable()%>
 							<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
-							
+				
 							<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-							
+				
 							<td class="formField" colSpan="4">
 									<ncombo:containermap dataMap="<%=dataMap%>" 
-														attributeNames="<%=attrNames%>" 
-														initialValues="<%=initValues%>"  
-														styleClass = "<%=styClass%>" 
-														tdStyleClass = "<%=tdStyleClass%>" 
-														labelNames="<%=labelNames%>" 
-														rowNumber="<%=rowNumber%>" 
-														onChange="<%=onChange%>" 
-														noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-														
-														buttonName="mapButton" 
-														value="Map"
-														buttonOnClick = "<%=buttonOnClicked%>"
-														formLabelStyle="formLabelBorderless"
-														buttonStyleClass="actionButton" />				
+											attributeNames="<%=attrNames%>" 
+											initialValues="<%=initValues%>"  
+											styleClass = "<%=styClass%>" 
+											tdStyleClass = "<%=tdStyleClass%>" 
+											labelNames="<%=labelNames%>" 
+											rowNumber="<%=rowNumber%>" 
+											onChange="<%=onChange%>" 
+											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
+											
+											buttonName="mapButton" 
+											value="Map"
+											buttonOnClick = "<%=buttonOnClicked%>"
+											formLabelStyle="formLabelBorderless"
+											buttonStyleClass="actionButton" />				
 							</td>
-							<%-- n-combo-box end --%>
+				<%-- n-combo-box end --%>
 						</tr>
 				 
 				 				 
