@@ -128,6 +128,9 @@
 			<a class="subMenuPrimary" href="Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16"><bean:message key="app.add" /></a> | 
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution&menuSelected=16">
 				<bean:message key="app.edit" />
+			</a> | 
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution_array&menuSelected=16">
+				<bean:message key="app.array.edit" />
 			</a>
 		</div>
 	</td>

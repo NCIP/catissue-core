@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.domain.QuantityInMicrogram;
 import edu.wustl.catissuecore.domain.QuantityInMiliLiter;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -35,6 +36,8 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -86,7 +89,50 @@ public class DistributionBizLogic extends DefaultBizLogic
 		
 		dao.insert(dist,sessionDataBean, Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE);
 		Collection distributedItemCollection = dist.getDistributedItemCollection();		
+		
+		if (distributedItemCollection.size() != 0) {
+			insertDistributedItem(dist,dao,sessionDataBean,distributedItemCollection);
+		} 
+		
+		try
+        {
+            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
+            			null, getProtectionObjects(dist), getDynamicGroups(dist));
+        }
+		catch (SMException e)
+        {
+			throw handleSMException(e);
+        }
+	}
+
+
+	public boolean isSpecimenArrayDistributed(Long specimenArrayId) throws DAOException  {
+		boolean distributed = true;
+		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		List list = null;
+		String queryStr = "select array.distribution_id from catissue_specimen_array array where array.identifier =" + specimenArrayId ; 
+
+		try
+		{
+			dao.openSession(null);
+			list = dao.executeQuery(queryStr, null, false, null);
+			String distributionId = (String) ((List) list.get(0)).get(0);
+			if(distributionId.equals("")) {
+				distributed = false;
+			}
+			dao.closeSession();
+		}
+		catch (Exception ex)
+		{
+			throw new DAOException(ex.getMessage());
+		}
+		return distributed;
+	}
+ 
+	private void insertDistributedItem(Distribution dist,DAO dao, SessionDataBean sessionDataBean,Collection distributedItemCollection) throws DAOException,UserNotAuthorizedException {
+		
 		Iterator it = distributedItemCollection.iterator();
+		
 		while(it.hasNext())
 		{
 			DistributedItem item = (DistributedItem)it.next();
@@ -105,16 +151,6 @@ public class DistributionBizLogic extends DefaultBizLogic
 			item.setDistribution(dist);
 			dao.insert(item,sessionDataBean, Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE);
 		}
-		
-		try
-        {
-            SecurityManager.getInstance(this.getClass()).insertAuthorizationData(
-            			null, getProtectionObjects(dist), getDynamicGroups(dist));
-        }
-		catch (SMException e)
-        {
-			throw handleSMException(e);
-        }
 	}
 	
 	private Set getProtectionObjects(AbstractDomainObject obj)
@@ -395,4 +431,55 @@ public class DistributionBizLogic extends DefaultBizLogic
 		
 	}
     //Mandar : 04-Apr-06 : end
+    
+	public Long getSpecimenId(String barcodeLabel, Integer distributionBasedOn) throws DAOException {
+		String className = Specimen.class.getName();
+		String[] selectColumnName = null;
+		String[] whereColumnName = {"barcode"};
+		String[] whereColumnCondition = {"="};
+		String[] value = {barcodeLabel};
+		Object[] whereColumnValue =  new Object[] {value};
+
+		
+		if(distributionBasedOn.intValue() == Constants.LABEL_BASED_DISTRIBUTION) {
+			whereColumnName = new String[] {"label"};
+		}
+
+		Specimen specimen = null;
+	    List specimenList = retrieve(className, selectColumnName, whereColumnName,
+			        whereColumnCondition, value, null);
+
+       if(specimenList == null || specimenList.isEmpty()) {
+		   	throw new DAOException("errors.distribution.specimenNotFound");
+		}
+		specimen =(Specimen) specimenList.get(0);
+
+		return specimen.getId();
+	}
+	
+	public Long getSpecimenArrayId(String barcodeLabel, Integer distributionBasedOn) throws DAOException {
+		
+		
+		String className = SpecimenArray.class.getName();
+		String[] selectColumnName = null;
+		String[] whereColumnName = {"barcode"};
+		String[] whereColumnCondition = {"="};
+		String[] value = {barcodeLabel};
+		Object[] whereColumnValue =  new Object[] {value};
+
+		
+		if(distributionBasedOn.intValue() == Constants.LABEL_BASED_DISTRIBUTION) {
+			whereColumnName = new String[] {"label"};
+		}
+
+		SpecimenArray specimenArray = null;
+		    List specimenList = retrieve(className, selectColumnName, whereColumnName,
+			        whereColumnCondition, value, null);
+			
+       if(specimenList == null || specimenList.isEmpty()) {
+			   	throw new DAOException("errors.distribution.specimenArrayNotFound");
+       }
+       specimenArray =(SpecimenArray) specimenList.get(0);
+       return specimenArray.getId();
+	}
 }

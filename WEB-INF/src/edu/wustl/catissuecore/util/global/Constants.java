@@ -815,13 +815,19 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DISTRIBUTION_ID = "distributionId";
 	public static final String CONFIGURE_DISTRIBUTION_ACTION = "ConfigureDistribution.do";
 	public static final String DISTRIBUTION_REPORT_ACTION = "DistributionReport.do";
+	public static final String ARRAY_DISTRIBUTION_REPORT_ACTION = "ArrayDistributionReport.do";
+	
 	public static final String DISTRIBUTION_REPORT_SAVE_ACTION="DistributionReportSave.do";
 	public static final String SELECTED_COLUMNS[] = {"Specimen.IDENTIFIER.Identifier : Specimen",
 													"Specimen.TYPE.Type : Specimen",
 													"SpecimenCharacteristics.TISSUE_SITE.Tissue Site : Specimen",
 													"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side : Specimen",
-													"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
+													//"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
 													"DistributedItem.QUANTITY.Quantity : Distribution"};
+	public static final String ARRAY_SELECTED_COLUMNS[] = {"SpecimenArray.IDENTIFIER.Identifier : SpecimenArray",
+		"SpecimenArray.barcode.Barcode : SpecimenArray",
+    };
+
 	public static final String SPECIMEN_ID_LIST = "specimenIdList";
 	public static final String DISTRIBUTION_ACTION = "Distribution.do?pageOf=pageOfDistribution";
 	public static final String DISTRIBUTION_REPORT_NAME = "Distribution Report.csv";
@@ -1093,4 +1099,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 //	    return "DISTRIBUTION_PROTOCOL_"+identifier;
 //	}
 	public static final String ALL = "All";
+	
+	public static final int SPECIMEN_DISTRIBUTION_TYPE = 1;
+	public static final int SPECIMEN_ARRAY_DISTRIBUTION_TYPE = 2;
+
+	public static final int BARCODE_BASED_DISTRIBUTION = 1;
+	public static final int LABEL_BASED_DISTRIBUTION = 2;
+	public static final String DISTRIBUTION_TYPE_LIST = "DISTRIBUTION_TYPE_LIST";
+	public static final String DISTRIBUTION_BASED_ON = "DISTRIBUTION_BASED_ON";
 }

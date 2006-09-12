@@ -1,5 +1,8 @@
 
 package edu.wustl.catissuecore.action;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,16 +15,17 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.domain.Distribution;
+import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 
 /**
  * This is the action class for displaying the Distribution report
- * @author Poornima Govindrao
+ * @author Rahul Ner
  *  
  */
 
-public class DistributionReportAction extends BaseDistributionReportAction
+public class ArrayDistributionReportAction extends BaseDistributionReportAction
 {
 	protected ActionForward executeAction(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 															HttpServletResponse response) throws Exception
@@ -52,11 +56,11 @@ public class DistributionReportAction extends BaseDistributionReportAction
     	//Retrieve the distributed items data
     	DistributionReportForm distributionReportForm = getDistributionReportForm(dist);
     	SessionDataBean sessionData = getSessionData(request);
-    	List listOfData = getListOfData(dist, configForm,sessionData) ;
+    	List listOfData = getListOfArrayData(dist, configForm,sessionData) ;
     	
     	//Set the columns for Distribution report
 		String action = configForm.getNextAction();
-		String selectedColumns[] = getSelectedColumns(action,configForm,false);
+		String selectedColumns[] = getSelectedColumns(action,configForm,true);
 		String []columnNames = getColumnNames(selectedColumns);
     	
 		//Set the request attributes for the Distribution report data
@@ -65,5 +69,28 @@ public class DistributionReportAction extends BaseDistributionReportAction
     	request.setAttribute(Constants.DISTRIBUTED_ITEMS_DATA, listOfData);
     	setSelectedMenuRequestAttribute(request);
 		return (mapping.findForward("Success"));
+	}
+
+	private List getListOfArrayData(Distribution dist, ConfigureResultViewForm configForm, SessionDataBean sessionData) {
+    	//Get the list of data for Distributed items data for the report.
+    	List listOfData = new ArrayList();
+    	Collection specimenArrayCollection = dist.getSpecimenArrayCollection();		
+    	//Specimen Ids which are getting distributed.
+    	String []specimenArrayIds = new String[specimenArrayCollection.size()];
+    	int i=0;
+    	Iterator itr = specimenArrayCollection.iterator();
+    	
+    	while(itr.hasNext())
+    	{
+    		SpecimenArray array = (SpecimenArray) itr.next();
+    		List tempList = new ArrayList();
+    		tempList.add(array.getId().toString());
+    		tempList.add(array.getBarcode().toString());
+    		i++;
+    		List tempList1 = new ArrayList();
+    		tempList1.add(tempList);
+    		listOfData.add(tempList1);
+    	}
+    	return listOfData;		
 	}
 }

@@ -45,7 +45,7 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
     	
     	//Set the columns for Distribution report
     	String action = configForm.getNextAction();
-		String selectedColumns[] = getSelectedColumns(action,configForm);
+		String selectedColumns[] = getSelectedColumns(action,configForm,false);
 		String []columnNames = getColumnNames(selectedColumns);
 		
 		setSelectedMenuRequestAttribute(request);

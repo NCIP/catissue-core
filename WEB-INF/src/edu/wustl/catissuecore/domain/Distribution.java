@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.DistributionForm;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
@@ -203,7 +204,13 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	        map = fixMap(map);
 	        Logger.out.debug("fixedMap "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-	        distributedItemCollection = parser.generateData(map);
+	        Collection itemCollectionMap = parser.generateData(map);
+	        
+	        if (form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE ) {
+		        distributedItemCollection = itemCollectionMap;
+	        } else {
+	        	specimenArrayCollection = itemCollectionMap;
+	        }
 	        Logger.out.debug("distributedItemCollection "+distributedItemCollection);
 	    }
 	    catch(Exception excp)

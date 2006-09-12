@@ -107,7 +107,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	String action = configForm.getNextAction();
     	
     	Logger.out.debug("Configure/Default action "+action);
-    	String selectedColumns[] = getSelectedColumns(action,configForm);
+    	String selectedColumns[] = getSelectedColumns(action,configForm,false);
     	Logger.out.debug("Selected columns length"+selectedColumns.length);
     	for(int j=0;j<specimenIds.length;j++)
     	{
@@ -201,7 +201,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	return listOfData;
     }
     
-    protected String [] getSelectedColumns(String action,ConfigureResultViewForm form)
+    protected String [] getSelectedColumns(String action,ConfigureResultViewForm form,boolean specimenArrayDistribution)
     {
     	//Set the columns according action(Default/Configured report)
     	if(("configure").equals(action))
@@ -210,11 +210,16 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		Logger.out.debug("Selected columns length"+selectedColumns.length);
     		return selectedColumns;
     	}
-    	else 
-    	{
-    		form.setSelectedColumnNames(Constants.SELECTED_COLUMNS);
-    		return Constants.SELECTED_COLUMNS;
-    	}
+    	else {
+			if (specimenArrayDistribution) {
+				form.setSelectedColumnNames(Constants.ARRAY_SELECTED_COLUMNS);
+				return Constants.ARRAY_SELECTED_COLUMNS;
+			} else {
+				form.setSelectedColumnNames(Constants.SELECTED_COLUMNS);
+				return Constants.SELECTED_COLUMNS;
+
+			}
+		}
     	
     }
     protected abstract ActionForward executeAction(ActionMapping mapping,

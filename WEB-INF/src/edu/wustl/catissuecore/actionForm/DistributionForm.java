@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -47,12 +48,14 @@ public class DistributionForm extends SpecimenEventParametersForm
 	//private String fromSite;
 	private String toSite;
 	
-	private int counter=1;
+	private int counter=0;
 	private String distributionProtocolId;
 	private boolean idChange = false;
 	private int rowNo=0;
 	
-	
+	private Integer distributionType = new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE);
+
+	private Integer distributionBasedOn = new Integer(Constants.BARCODE_BASED_DISTRIBUTION);
 	
 	/**
 	 * Map to handle values of all Events
@@ -73,8 +76,50 @@ public class DistributionForm extends SpecimenEventParametersForm
 		this.toSite = String.valueOf(distributionObject.getToSite().getId());
 		this.activityStatus = Utility.toString(distributionObject.getActivityStatus());
 		Logger.out.debug("this.activityStatus "+this.activityStatus);
-		Collection distributedItemCollection = distributionObject.getDistributedItemCollection();
 		
+		if (distributionObject.getDistributedItemCollection().size() != 0) {
+			this.distributionType = new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE);
+			populateMapForSpecimen(distributionObject.getDistributedItemCollection());
+		} else {
+			this.distributionType = new Integer(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE);
+			populateMapForArray(distributionObject.getSpecimenArrayCollection());
+		}
+
+		Logger.out.debug("Display Map Values"+values); 
+		
+		
+		//At least one row should be displayed in ADD MORE therefore
+/*		if(counter == 0)
+			counter = 1;
+*/	}
+	
+	private void populateMapForArray(Collection specimenArrayCollection) {
+		if(specimenArrayCollection != null) 
+		{
+			values = new HashMap();
+			Iterator it = specimenArrayCollection.iterator();
+			int i=1;
+			while(it.hasNext())
+			{
+				
+				String key1 = "SpecimenArray:"+i+"_id";
+				String key2 = "DistributedItem:"+i+"_Specimen_barcode";
+				String key3 = "DistributedItem:"+i+"_Specimen_label";
+				
+				String key4 = "DistributedItem:"+i+"_quantity";
+				
+				SpecimenArray array = (SpecimenArray) it.next();
+				values.put(key1,array.getId().toString());
+				values.put(key2,array.getBarcode());
+				values.put(key3,array.getName());
+				values.put(key4,"1");
+				i++;
+			}
+			counter = specimenArrayCollection.size();
+		}
+	}
+
+	private void populateMapForSpecimen(Collection distributedItemCollection) {
 		if(distributedItemCollection != null)
 		{
 			values = new HashMap();
@@ -87,18 +132,14 @@ public class DistributionForm extends SpecimenEventParametersForm
 				String key1 = "DistributedItem:"+i+"_id";
 				String key2 = "DistributedItem:"+i+"_Specimen_id";
 				String key3 = "DistributedItem:"+i+"_quantity";
-				String key4 = "DistributedItem:"+i+"_unitSpan";
-				String key5 = "DistributedItem:"+i+"_tissueSite";
-				String key6 = "DistributedItem:"+i+"_tissueSide";
-				String key7 = "DistributedItem:"+i+"_pathologicalStatus";
-				String key8 = "DistributedItem:"+i+"_Specimen_className";	
 				String key9 = "DistributedItem:"+i+"_availableQty";
 				String key10 = "DistributedItem:"+i+"_previousQuantity";
-				String key11 = "DistributedItem:"+i+"_Specimen_type";
+				String key12 = "DistributedItem:"+i+"_Specimen_barcode";
+				String key13 = "DistributedItem:"+i+"_Specimen_label";
+				
 				
 				DistributedItem dItem = (DistributedItem)it.next();
 				Specimen specimen = dItem.getSpecimen();
-				String unit= getUnitSpan(specimen);
 				
 				Double quantity = dItem.getQuantity();
 				//dItem.setPreviousQty(quantity);
@@ -106,26 +147,16 @@ public class DistributionForm extends SpecimenEventParametersForm
 				values.put(key1,Utility.toString(dItem.getId()));
 				values.put(key2,Utility.toString(specimen.getId()));
 				values.put(key3,quantity);
-				values.put(key4,unit);
-				values.put(key5,specimen.getSpecimenCharacteristics().getTissueSite());
-				values.put(key6,specimen.getSpecimenCharacteristics().getTissueSide());
-				values.put(key7,specimen.getPathologicalStatus());
-				values.put(key8,specimen.getClassName());
 				values.put(key9,getAvailableQty(specimen));
 				values.put(key10,quantity);
-				values.put(key11,specimen.getType());
-				
+				values.put(key12,specimen.getBarcode());
+				values.put(key13,specimen.getLabel());
 				i++;
-			}
-			Logger.out.debug("Display Map Values"+values); 
+			}	
 			counter = distributedItemCollection.size();
 		}
-		
-		//At least one row should be displayed in ADD MORE therefore
-		if(counter == 0)
-			counter = 1;
 	}
-	
+
 	public void setAllVal(Object obj)
     {
 	    edu.wustl.catissuecore.domainobject.Distribution distributionObject = (edu.wustl.catissuecore.domainobject.Distribution)obj;
@@ -596,4 +627,20 @@ public class DistributionForm extends SpecimenEventParametersForm
             setToSite(addObjectIdentifier.toString());
         }
     }
+
+	public Integer getDistributionBasedOn() {
+		return distributionBasedOn;
+	}
+
+	public void setDistributionBasedOn(Integer distributionBasedOn) {
+		this.distributionBasedOn = distributionBasedOn;
+	}
+
+	public Integer getDistributionType() {
+		return distributionType;
+	}
+
+	public void setDistributionType(Integer distributionType) {
+		this.distributionType = distributionType;
+	}
 }
