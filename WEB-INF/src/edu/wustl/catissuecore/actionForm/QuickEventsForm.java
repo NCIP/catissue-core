@@ -36,9 +36,9 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class QuickEventsForm extends AbstractActionForm {
 	/**
-	 * Identifier of Specimen to search.
+	 * Label of Specimen to search.
 	 */
-	private String specimenID;
+	private String specimenLabel;
 	/**
 	 * Barcode of Specimen to search.
 	 */
@@ -120,16 +120,16 @@ public class QuickEventsForm extends AbstractActionForm {
 		this.specimenEventParameter = eventName;
 	}
 	/**
-	 * @return Returns the specimenID.
+	 * @return Returns the specimenLabel.
 	 */
-	public String getSpecimenID() {
-		return specimenID;
+	public String getSpecimenLabel() {
+		return specimenLabel;
 	}
 	/**
-	 * @param specimenID The specimenID to set.
+	 * @param specimenLabel The specimenLabel to set.
 	 */
-	public void setSpecimenID(String specimenID) {
-		this.specimenID = specimenID;
+	public void setSpecimenLabel(String specimenID) {
+		this.specimenLabel = specimenID;
 	}
 	
 	/**
@@ -158,9 +158,9 @@ public class QuickEventsForm extends AbstractActionForm {
             {
             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("quickEvents.eventparameters")));
             }
-            if(checkedButton.equals("1" ) && !validator.isValidOption(specimenID) )
+            if(checkedButton.equals("1" ) && !validator.isValidOption(specimenLabel) )
             {
-            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("quickEvents.specimenID")));
+            	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("quickEvents.specimenLabel")));
             }
             if(checkedButton.equals("2" ) && validator.isEmpty(barCode) )
             {
