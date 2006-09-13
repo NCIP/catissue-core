@@ -9,8 +9,6 @@
  */
 package edu.wustl.catissuecore.action;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,7 +17,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -45,8 +42,8 @@ public class QuickEventsAction extends BaseAction {
 //		DefaultBizLogic bizLogic = BizLogicFactory.getDefaultBizLogic();
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
    		String [] fields = {Constants.SYSTEM_IDENTIFIER};
-        List specimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true); 	 	
-  	 	request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenList);
+     /*   List specimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true); 	 	
+  	 	request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenList); */
   	 	
   	 	request.setAttribute(Constants.EVENT_PARAMETERS_LIST,Constants.EVENT_PARAMETERS);
   	 	
