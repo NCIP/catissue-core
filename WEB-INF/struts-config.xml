@@ -878,6 +878,16 @@ PUBLIC
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
+		<!--Create Specimen Actions Begin-->
+		<action path="/AddSpecimen"
+			type="edu.wustl.catissuecore.action.AddSpecimenAction"
+			name="createSpecimenForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/CreateSpecimenAdd.do" />
+			<forward name="failure" path="/CreateSpecimen.do" />
+		</action>
+		
 		<action path="/CreateSpecimenAdd"
 			type="edu.wustl.common.action.CommonAddEditAction"
 			name="createSpecimenForm"
