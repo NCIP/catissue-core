@@ -1125,4 +1125,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int LABEL_BASED_DISTRIBUTION = 2;
 	public static final String DISTRIBUTION_TYPE_LIST = "DISTRIBUTION_TYPE_LIST";
 	public static final String DISTRIBUTION_BASED_ON = "DISTRIBUTION_BASED_ON";
+	public static final String SYSTEM_LABEL = "label";
+	public static final String SYSTEM_BARCODE = "barcode";
+	
 }
