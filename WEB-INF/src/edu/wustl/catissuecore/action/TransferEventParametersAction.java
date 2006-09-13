@@ -40,91 +40,106 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
-		TransferEventParametersForm form = (TransferEventParametersForm)request.getAttribute("transferEventParametersForm");
+		TransferEventParametersForm form = (TransferEventParametersForm) request
+				.getAttribute("transferEventParametersForm");
 		String operation = request.getParameter(Constants.OPERATION);
-		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
+				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		Map containerMap = new TreeMap();
 		Vector initialValues = null;
-//    	
-		if(operation.equals(Constants.ADD) )
+		//    	
+		if (operation.equals(Constants.ADD))
 		{
-			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-	    	String identifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
-	    	if(identifier == null)
-	    		identifier = (String)request.getParameter(Constants.SPECIMEN_ID);
-	    	
-	    	Logger.out.debug("\t\t*******************************SpecimenID : "+identifier );
-	    	List specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,identifier);
-	    	
-	    //	 ---- chetan 15-06-06 ----
-	        
-	        // -------------------------
-	    	
-	    	if(specimenList!=null && specimenList.size() != 0)
-	    	{
-	    		Specimen specimen = (Specimen)specimenList.get(0);
-	    		String positionOne = specimen.getPositionDimensionOne().toString();
-	    		String positionTwo = specimen.getPositionDimensionTwo().toString();
-	    		
-	    		StorageContainer container = specimen.getStorageContainer();
-	    		String storageContainerID = container.getId().toString();
-	    		String fromPositionData = container.getStorageType().getName() + " : " 
-				+ storageContainerID + " Pos(" + positionOne + "," + positionTwo + ")";
-	    		
-				 //The fromPositionData(storageContainer Info) of specimen of this event.
-		        request.setAttribute(Constants.FROM_POSITION_DATA, fromPositionData);
-		        
-		        //POSITION 1
-		        request.setAttribute(Constants.POS_ONE, positionOne);
-		        
-		        //POSITION 2
-		        request.setAttribute(Constants.POS_TWO, positionTwo);
+			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
+					Constants.DEFAULT_BIZ_LOGIC);
+			String identifier = (String) request.getAttribute(Constants.SPECIMEN_ID);
+			if (identifier == null)
+				identifier = (String) request.getParameter(Constants.SPECIMEN_ID);
 
-		        //storagecontainer info
-		        request.setAttribute(Constants.STORAGE_CONTAINER_ID, storageContainerID);
-		        Logger.out.info("COllection Protocol Id :"+specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue());
-		        Logger.out.info("Spcimen Class:"+specimen.getClassName());
-		        containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue(),specimen.getClassName());
-		        initialValues = checkForInitialValues(containerMap);
-		        
-		        
-		        
-	    	}
+			Logger.out.debug("\t\t*******************************SpecimenID : " + identifier);
+			List specimenList = bizLogic.retrieve(Specimen.class.getName(),
+					Constants.SYSTEM_IDENTIFIER, identifier);
+
+			//	 ---- chetan 15-06-06 ----
+
+			// -------------------------
+
+			if (specimenList != null && specimenList.size() != 0)
+			{
+				Specimen specimen = (Specimen) specimenList.get(0);
+
+				String positionOne = null;
+				String positionTwo = null;
+				String storageContainerID = null;
+				String 	fromPositionData = "virtual Location";
+				if (specimen.getStorageContainer() != null)
+				{
+					positionOne = specimen.getPositionDimensionOne().toString();
+					positionTwo = specimen.getPositionDimensionTwo().toString();
+					StorageContainer container = specimen.getStorageContainer();
+					storageContainerID = container.getId().toString();
+					fromPositionData = container.getStorageType().getName() + " : "
+							+ storageContainerID + " Pos(" + positionOne + "," + positionTwo + ")";
+				}
+				//The fromPositionData(storageContainer Info) of specimen of this event.
+				request.setAttribute(Constants.FROM_POSITION_DATA, fromPositionData);
+
+				//POSITION 1
+				request.setAttribute(Constants.POS_ONE, positionOne);
+
+				//POSITION 2
+				request.setAttribute(Constants.POS_TWO, positionTwo);
+
+				//storagecontainer info
+				request.setAttribute(Constants.STORAGE_CONTAINER_ID, storageContainerID);
+				Logger.out.info("COllection Protocol Id :"
+						+ specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+								.getCollectionProtocol().getId().longValue());
+				Logger.out.info("Spcimen Class:" + specimen.getClassName());
+				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(specimen
+						.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+						.getCollectionProtocol().getId().longValue(), specimen.getClassName());
+				initialValues = checkForInitialValues(containerMap);
+
+			}
 		} // operation=add
 		else
 		{
-			
-        	Integer id = new Integer(form.getStorageContainer());
-        	String parentContainerName="";
-        	String valueField1 = "id";
-        	List list = scbizLogic.retrieve(StorageContainer.class.getName(),valueField1,new Long(form.getStorageContainer()));
-			if(!list.isEmpty())
+
+			Integer id = new Integer(form.getStorageContainer());
+			String parentContainerName = "";
+			String valueField1 = "id";
+			List list = scbizLogic.retrieve(StorageContainer.class.getName(), valueField1,
+					new Long(form.getStorageContainer()));
+			if (!list.isEmpty())
 			{
-				StorageContainer container = (StorageContainer)list.get(0);
-				parentContainerName=container.getName();
-				            		
+				StorageContainer container = (StorageContainer) list.get(0);
+				parentContainerName = container.getName();
+
 			}
-        	Integer pos1 = new Integer(form.getPositionDimensionOne());        	
-        	Integer pos2 = new Integer(form.getPositionDimensionTwo());
-        	
-        	List pos2List = new ArrayList();
-        	pos2List.add(new NameValueBean(pos2,pos2));
-        	
-        	Map pos1Map = new TreeMap();
-        	pos1Map.put(new NameValueBean(pos1,pos1),pos2List);
-        	containerMap.put(new NameValueBean(parentContainerName,id),pos1Map);
-        	
-        	String[] startingPoints = new String[]{"-1", "-1", "-1"};
+			Integer pos1 = new Integer(form.getPositionDimensionOne());
+			Integer pos2 = new Integer(form.getPositionDimensionTwo());
+
+			List pos2List = new ArrayList();
+			pos2List.add(new NameValueBean(pos2, pos2));
+
+			Map pos1Map = new TreeMap();
+			pos1Map.put(new NameValueBean(pos1, pos1), pos2List);
+			containerMap.put(new NameValueBean(parentContainerName, id), pos1Map);
+
+			String[] startingPoints = new String[]{"-1", "-1", "-1"};
 			if (form.getStorageContainer() != null && !form.getStorageContainer().equals("-1"))
 			{
 				startingPoints[0] = form.getStorageContainer();
 
 			}
-			if (form.getPositionDimensionOne() != null && !form.getPositionDimensionOne().equals("-1"))
+			if (form.getPositionDimensionOne() != null
+					&& !form.getPositionDimensionOne().equals("-1"))
 			{
 				startingPoints[1] = form.getPositionDimensionOne();
 			}
-			if (form.getPositionDimensionTwo() != null && !form.getPositionDimensionTwo().equals("-1"))
+			if (form.getPositionDimensionTwo() != null
+					&& !form.getPositionDimensionTwo().equals("-1"))
 			{
 				startingPoints[2] = form.getPositionDimensionTwo();
 			}
@@ -134,14 +149,11 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 			Logger.out.info("Starting points[2]" + startingPoints[2]);
 			initialValues.add(startingPoints);
 
-
-        	
 		}
 		request.setAttribute("initValues", initialValues);
-		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
+		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 	}
 
-	
 	Vector checkForInitialValues(Map containerMap)
 	{
 		Vector initialValues = null;

@@ -38,6 +38,7 @@ import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -83,7 +84,7 @@ public class CreateSpecimenAction extends SecureAction
 		 */
 
 		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance()
-		.getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
+				.getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
 
 		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
 				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
@@ -93,24 +94,8 @@ public class CreateSpecimenAction extends SecureAction
 		{
 			if (request.getParameter("Change") != null)
 			{
-				
-				List spList = dao.retrieve(Specimen.class.getName(),
-						Constants.SYSTEM_IDENTIFIER, new Long(createForm
-								.getParentSpecimenId()));
-
-				if (!spList.isEmpty())
-				{
-					Specimen sp = (Specimen) spList
-							.get(0);
-					long cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-							.getCollectionProtocol().getId().longValue();
-					String spClass = createForm.getClassName();
-					Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
-					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass);
-					initialValues = checkForInitialValues(containerMap);
-
-				}
-
+				containerMap  = getContainerMap(createForm.getParentSpecimenId(),createForm.getClassName(),dao, scbizLogic)	;
+				initialValues = checkForInitialValues(containerMap);
 			}
 		}
 		else
@@ -161,11 +146,9 @@ public class CreateSpecimenAction extends SecureAction
 			initialValues.add(startingPoints);
 
 		}
-		request.setAttribute("initValues", initialValues);
-		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+
 		// -------------------------
 
-	
 		String[] fields = {"id"};
 
 		// Setting the parent specimen list
@@ -249,17 +232,40 @@ public class CreateSpecimenAction extends SecureAction
 				createForm.setPositionDimensionOne("");
 				createForm.setPositionDimensionTwo("");
 				createForm.setStorageContainer("");
+				createForm.setBarcode(null);
 				map.clear();
 				createForm.setExternalIdentifier(map);
 				createForm.setExIdCounter(1);
+				createForm.setVirtuallyLocated(false);	
+				containerMap  = getContainerMap(createForm.getParentSpecimenId(),createForm.getClassName(),dao, scbizLogic)	;
+				initialValues = checkForInitialValues(containerMap);
 			}
 		}
 		//*************  ForwardTo implementation *************
-
+		request.setAttribute("initValues", initialValues);
+		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		return mapping.findForward(Constants.SUCCESS);
 	}
-	
-	
+
+	Map getContainerMap(String specimenId, String className , CreateSpecimenBizLogic dao, StorageContainerBizLogic scbizLogic) throws DAOException
+	{
+		Map containerMap = new HashMap();
+		
+		List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER,
+				new Long(specimenId));
+
+		if (!spList.isEmpty())
+		{
+			Specimen sp = (Specimen) spList.get(0);
+			long cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+					.getCollectionProtocol().getId().longValue();
+			String spClass = className;
+			Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
+			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass);
+		}
+		
+		return containerMap;
+	}
 	Vector checkForInitialValues(Map containerMap)
 	{
 		Vector initialValues = null;

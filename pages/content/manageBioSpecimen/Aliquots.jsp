@@ -65,6 +65,39 @@
 			document.forms[0].action = "AliquotAdd.do?pageOf=pageOfAliquotSummary&operation=add&menuSelected=15";
 			document.forms[0].submit();
 		}
+		
+		function setVirtuallyLocated(element)
+		{
+			var elementId = element.id;
+			var index = elementId.indexOf("_");
+			var len = elementId.length;
+			var substr = elementId.substring(index+1,len);
+			
+			var customListBox1 = "customListBox_"+substr+"_0";
+			var customListBox2 = "customListBox_"+substr+"_1";
+			var customListBox3 = "customListBox_"+substr+"_2";
+
+			var containerName = document.getElementById(customListBox1);
+			var pos1 = document.getElementById(customListBox2);
+			var pos2 = document.getElementById(customListBox3);
+
+			if(element.checked)
+			{
+				containerName.disabled = true;
+				pos1.disabled = true;
+				pos2.disabled = true;
+				document.forms[0].mapButton[substr-1].disabled = true;
+			}
+			else
+			{
+				containerName.disabled = false;
+				pos1.disabled = false;
+				pos2.disabled = false;
+				document.forms[0].mapButton[substr-1].disabled = false;
+				
+			} 
+		}
+		
 	</script>
 </head>
 
@@ -349,10 +382,12 @@
 			String labelKey = "value(Specimen:" + i + "_label)";
 			String qtyKey = "value(Specimen:" + i + "_quantity)";
 			String barKey = "value(Specimen:" + i + "_barcode)";
+			String virtuallyLocatedKey = "value(Specimen:" + i + "_virtuallyLocated)";
 			String containerKey = "value(Specimen:" + i + "_StorageContainer_id)";
 			String pos1Key = "value(Specimen:" + i + "_positionDimensionOne)";
 			String pos2Key = "value(Specimen:" + i + "_positionDimensionTwo)";
-
+			
+			String virtuallyLocatedStyleId = "chkBox_"+ i;
 			//Preparing data for custom tag
 			String[] attrNames = {containerKey, pos1Key, pos2Key};
 
@@ -389,6 +424,7 @@
 				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcodes" property="<%=barKey%>" disabled="false"/>
 			</td>
 			<td class="formField" nowrap>
+				<html:checkbox property="<%=virtuallyLocatedKey%>" onclick="setVirtuallyLocated(this)" value="true" styleId="<%=virtuallyLocatedStyleId%>"/><bean:message key="specimen.virtuallyLocated" />
 				<ncombo:containermap dataMap="<%=dataMap%>" 
 											attributeNames="<%=attrNames%>" 
 											initialValues="<%=initValues%>"  
@@ -398,7 +434,6 @@
 											rowNumber="<%=rowNumber%>" 
 											onChange = "<%=onChange%>"
 											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-											
 											buttonName="mapButton" 
 											value="Map"
 											buttonOnClick = "<%=buttonOnClicked%>"

@@ -39,802 +39,839 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class Specimen extends AbstractDomainObject implements Serializable
 {
-    private static final long serialVersionUID = 1234567890L;
 
-    /**
-     * System generated unique id.
-     */
-    protected Long id;
+	private static final long serialVersionUID = 1234567890L;
 
-    /**
-     * Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
-     */
-    protected String type;
+	/**
+	 * System generated unique id.
+	 */
+	protected Long id;
 
-    /**
-     * Is this specimen still physically available in the tissue bank?
-     */
-    protected Boolean available;
+	/**
+	 * Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
+	 */
+	protected String type;
 
-    /**
-     * Reference to dimensional position one of the specimen in Storage Container.
-     */
-    protected Integer positionDimensionOne;
+	/**
+	 * Is this specimen still physically available in the tissue bank?
+	 */
+	protected Boolean available;
 
-    /**
-     * Reference to dimensional position two of the specimen in Storage Container.
-     */
-    protected Integer positionDimensionTwo;
+	/**
+	 * Reference to dimensional position one of the specimen in Storage Container.
+	 */
+	protected Integer positionDimensionOne;
 
-    /**
-     * Barcode assigned to the specimen.
-     */
-    protected String barcode;
+	/**
+	 * Reference to dimensional position two of the specimen in Storage Container.
+	 */
+	protected Integer positionDimensionTwo;
 
-    /**
-     * Comments on specimen.
-     */
-    protected String comments;
+	/**
+	 * Barcode assigned to the specimen.
+	 */
+	protected String barcode;
 
-    /**
-     * Defines whether this Specimen record can be queried (Active) 
-     * or not queried (Inactive) by any actor.
-     */
-    protected String activityStatus;
+	/**
+	 * Comments on specimen.
+	 */
+	protected String comments;
 
-    /**
-     * Parent specimen from which this specimen is derived. 
-     */
-    protected Specimen parentSpecimen;
+	/**
+	 * Defines whether this Specimen record can be queried (Active) 
+	 * or not queried (Inactive) by any actor.
+	 */
+	protected String activityStatus;
 
-    /**
-     * Collection of attributes of a Specimen that renders it potentially harmful to a User.
-     */
-    protected Collection biohazardCollection = new HashSet();
+	/**
+	 * Parent specimen from which this specimen is derived. 
+	 */
+	protected Specimen parentSpecimen;
 
-    /**
-     * A physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
-     */
-    protected StorageContainer storageContainer = new StorageContainer();
+	/**
+	 * Collection of attributes of a Specimen that renders it potentially harmful to a User.
+	 */
+	protected Collection biohazardCollection = new HashSet();
 
-    /**
-     * Collection of Specimen Event Parameters associated with this specimen. 
-     */
-    protected Collection specimenEventCollection = new HashSet();
+	/**
+	 * A physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
+	 */
+	protected StorageContainer storageContainer = new StorageContainer();
 
-    /**
-     * Collection of children specimens derived from this specimen. 
-     */
-    protected Collection childrenSpecimen = new HashSet();
+	/**
+	 * Collection of Specimen Event Parameters associated with this specimen. 
+	 */
+	protected Collection specimenEventCollection = new HashSet();
 
-    /**
-     * Collection of a pre-existing, externally defined id associated with a specimen.
-     */
-    protected Collection externalIdentifierCollection = new HashSet();
+	/**
+	 * Collection of children specimens derived from this specimen. 
+	 */
+	protected Collection childrenSpecimen = new HashSet();
 
-    /**
-     * An event that results in the collection of one or more specimen from a participant.
-     */
-    protected SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+	/**
+	 * Collection of a pre-existing, externally defined id associated with a specimen.
+	 */
+	protected Collection externalIdentifierCollection = new HashSet();
 
-    /**
-     * The combined anatomic state and pathological disease classification of a specimen.
-     */
-    protected SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-    
-    /**
-     * A boolean variable which contains a true value if this specimen object is an aliquot 
-     * else it contains false value.
-     */
-//    protected Boolean isAliquot = Boolean.FALSE;
-    
-    /**
-     * Histoathological character of specimen.
-     * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
-     */
-    protected String pathologicalStatus;
-    
-    /**
-     * A historical information about the specimen i.e. whether the specimen is a new specimen
-     * or a derived specimen or an aliquot.
-     */
-    protected String lineage;
-    
-    /**
-     * A label name of this specimen.
-     */
-    protected String label;
-    
-    /**
-     * The quantity of a specimen.
-     */
-    protected Quantity quantity = new Quantity();
-    
-    /**
-     * The available quantity of a specimen.
-     */
-    protected Quantity availableQuantity = new Quantity();
+	/**
+	 * An event that results in the collection of one or more specimen from a participant.
+	 */
+	protected SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
 
-    protected transient boolean isParentChanged = false;
-    
-    private transient int noOfAliquots;	
-    
+	/**
+	 * The combined anatomic state and pathological disease classification of a specimen.
+	 */
+	protected SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+
+	/**
+	 * A boolean variable which contains a true value if this specimen object is an aliquot 
+	 * else it contains false value.
+	 */
+	//    protected Boolean isAliquot = Boolean.FALSE;
+	/**
+	 * Histoathological character of specimen.
+	 * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
+	 */
+	protected String pathologicalStatus;
+
+	/**
+	 * A historical information about the specimen i.e. whether the specimen is a new specimen
+	 * or a derived specimen or an aliquot.
+	 */
+	protected String lineage;
+
+	/**
+	 * A label name of this specimen.
+	 */
+	protected String label;
+
+	/**
+	 * The quantity of a specimen.
+	 */
+	protected Quantity quantity = new Quantity();
+
+	/**
+	 * The available quantity of a specimen.
+	 */
+	protected Quantity availableQuantity = new Quantity();
+
+	protected transient boolean isParentChanged = false;
+
+	private transient int noOfAliquots;
+
 	private transient Map aliqoutMap = new HashMap();
-    
-    public Specimen()
-    {    	
-    }
-    
-    //Constructor
-    public Specimen(AbstractActionForm form)
-    {
-    	setAllValues(form);
-    }
-    
-    /**
-     * Returns the system generated unique id.
-     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30" 
-     * unsaved-value="null" generator-class="native"
-     * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_SEQ"
-     * @return the system generated unique id.
-     * @see #setId(Long)
-     */
-    public Long getId()
-    {
-        return id;
-    }
 
-    /**
-     * Sets the system generated unique id.
-     * @param id the system generated unique id.
-     * @see #getId()
-     * */
-    public void setId(Long id)
-    {
-        this.id = id;
-    }
+	public Specimen()
+	{
+	}
 
-    /**
-     * Returns the type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
-     * @hibernate.property name="type" type="string" column="TYPE" length="50"
-     * @return The type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
-     * @see #setType(String)
-     */
-    public String getType()
-    {
-        return type;
-    }
+	//Constructor
+	public Specimen(AbstractActionForm form)
+	{
+		setAllValues(form);
+	}
 
-    /**
-     * Sets the type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
-     * @param type The type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
-     * @see #getType()
-     */
-    public void setType(String type)
-    {
-        this.type = type;
-    }
+	/**
+	 * Returns the system generated unique id.
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30" 
+	 * unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_SEQ"
+	 * @return the system generated unique id.
+	 * @see #setId(Long)
+	 */
+	public Long getId()
+	{
+		return id;
+	}
 
-    /**
-     * Returns true if this specimen still physically available 
-     * in the tissue bank else returns false.
-     * @hibernate.property name="available" type="boolean" column="AVAILABLE"
-     * @return true if this specimen still physically available 
-     * in the tissue bank else returns false.
-     * @see #setAvailable(Boolean)
-     */
-    public Boolean getAvailable()
-    {
-        return available;
-    }
+	/**
+	 * Sets the system generated unique id.
+	 * @param id the system generated unique id.
+	 * @see #getId()
+	 * */
+	public void setId(Long id)
+	{
+		this.id = id;
+	}
 
-    /**
-     * Sets true if this specimen still physically available 
-     * in the tissue bank else returns false.
-     * @param available true if this specimen still physically available else false.
-     * @see #getAvailable()
-     */
-    public void setAvailable(Boolean available)
-    {
-        this.available = available;
-    }
+	/**
+	 * Returns the type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
+	 * @hibernate.property name="type" type="string" column="TYPE" length="50"
+	 * @return The type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
+	 * @see #setType(String)
+	 */
+	public String getType()
+	{
+		return type;
+	}
 
-    /**
-     * Returns the reference to dimensional position one of the specimen in Storage Container.
-     * @hibernate.property name="positionDimensionOne" type="int" column="POSITION_DIMENSION_ONE" length="30"  
-     * @return the reference to dimensional position one of the specimen in Storage Container.
-     * @see #setPositionDimensionOne(Integer)
-     */
-    public Integer getPositionDimensionOne()
-    {
-        return positionDimensionOne;
-    }
+	/**
+	 * Sets the type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
+	 * @param type The type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
+	 * @see #getType()
+	 */
+	public void setType(String type)
+	{
+		this.type = type;
+	}
 
-    /**
-     * Sets the reference to dimensional position one of the specimen in Storage Container.
-     * @param positionDimensionOne the reference to dimensional position one of the specimen 
-     * in Storage Container.
-     * @see #getPositionDimensionOne()
-     */
-    public void setPositionDimensionOne(Integer positionDimensionOne)
-    {
-        this.positionDimensionOne = positionDimensionOne;
-    }
+	/**
+	 * Returns true if this specimen still physically available 
+	 * in the tissue bank else returns false.
+	 * @hibernate.property name="available" type="boolean" column="AVAILABLE"
+	 * @return true if this specimen still physically available 
+	 * in the tissue bank else returns false.
+	 * @see #setAvailable(Boolean)
+	 */
+	public Boolean getAvailable()
+	{
+		return available;
+	}
 
-    /**
-     * Returns the reference to dimensional position two of the specimen in Storage Container.
-     * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="50"  
-     * @return the reference to dimensional position two of the specimen in Storage Container.
-     * @see #setPositionDimensionOne(Integer)
-     */
-    public Integer getPositionDimensionTwo()
-    {
-        return positionDimensionTwo;
-    }
+	/**
+	 * Sets true if this specimen still physically available 
+	 * in the tissue bank else returns false.
+	 * @param available true if this specimen still physically available else false.
+	 * @see #getAvailable()
+	 */
+	public void setAvailable(Boolean available)
+	{
+		this.available = available;
+	}
 
-    /**
-     * Sets the reference to dimensional position two of the specimen in Storage Container.
-     * @param positionDimensionTwo the reference to dimensional position two of the specimen 
-     * in Storage Container.
-     * @see #getPositionDimensionTwo()
-     */
-    public void setPositionDimensionTwo(Integer positionDimensionTwo)
-    {
-        this.positionDimensionTwo = positionDimensionTwo;
-    }
+	/**
+	 * Returns the reference to dimensional position one of the specimen in Storage Container.
+	 * @hibernate.property name="positionDimensionOne" type="int" column="POSITION_DIMENSION_ONE" length="30"  
+	 * @return the reference to dimensional position one of the specimen in Storage Container.
+	 * @see #setPositionDimensionOne(Integer)
+	 */
+	public Integer getPositionDimensionOne()
+	{
+		return positionDimensionOne;
+	}
 
-    /**
-     * Returns the barcode assigned to the specimen.
-     * @hibernate.property name="barcode" type="string" column="BARCODE" length="50" unique="true"
-     * @return the barcode assigned to the specimen.
-     * @see #setBarcode(String)
-     */
-    public String getBarcode()
-    {
-        return barcode;
-    }
+	/**
+	 * Sets the reference to dimensional position one of the specimen in Storage Container.
+	 * @param positionDimensionOne the reference to dimensional position one of the specimen 
+	 * in Storage Container.
+	 * @see #getPositionDimensionOne()
+	 */
+	public void setPositionDimensionOne(Integer positionDimensionOne)
+	{
+		this.positionDimensionOne = positionDimensionOne;
+	}
 
-    /**
-     * Sets the barcode assigned to the specimen.
-     * @param barCode the barcode assigned to the specimen.
-     * @see #getBarcode()
-     */
-    public void setBarcode(String barcode)
-    {
-        this.barcode = barcode;
-    }
+	/**
+	 * Returns the reference to dimensional position two of the specimen in Storage Container.
+	 * @hibernate.property name="positionDimensionTwo" type="int" column="POSITION_DIMENSION_TWO" length="50"  
+	 * @return the reference to dimensional position two of the specimen in Storage Container.
+	 * @see #setPositionDimensionOne(Integer)
+	 */
+	public Integer getPositionDimensionTwo()
+	{
+		return positionDimensionTwo;
+	}
 
-    /**
-     * Returns the comments on the specimen.
-     * @hibernate.property name="comments" type="string" column="COMMENTS" length="200"
-     * @return the comments on the specimen.
-     * @see #setComments(String)
-     */
-    public String getComments()
-    {
-        return comments;
-    }
+	/**
+	 * Sets the reference to dimensional position two of the specimen in Storage Container.
+	 * @param positionDimensionTwo the reference to dimensional position two of the specimen 
+	 * in Storage Container.
+	 * @see #getPositionDimensionTwo()
+	 */
+	public void setPositionDimensionTwo(Integer positionDimensionTwo)
+	{
+		this.positionDimensionTwo = positionDimensionTwo;
+	}
 
-    /**
-     * Sets the comments on the specimen.
-     * @param comments The comments to set.
-     * @see #getComments()
-     */
-    public void setComments(String comments)
-    {
-        this.comments = comments;
-    }
+	/**
+	 * Returns the barcode assigned to the specimen.
+	 * @hibernate.property name="barcode" type="string" column="BARCODE" length="50" unique="true"
+	 * @return the barcode assigned to the specimen.
+	 * @see #setBarcode(String)
+	 */
+	public String getBarcode()
+	{
+		return barcode;
+	}
 
-    /**
-     * Returns whether this Specimen record can be queried (Active) or not queried (Inactive) by any actor.
-     * @hibernate.property name="activityStatus" type="string" column="ACTIVITY_STATUS" length="50"
-     * @return "Active" if this Specimen record can be queried or "Inactive" if cannot be queried.
-     * @see #setActivityStatus(String)
-     */
-    public String getActivityStatus()
-    {
-        return activityStatus;
-    }
+	/**
+	 * Sets the barcode assigned to the specimen.
+	 * @param barCode the barcode assigned to the specimen.
+	 * @see #getBarcode()
+	 */
+	public void setBarcode(String barcode)
+	{
+		this.barcode = barcode;
+	}
 
-    /**
-     * Sets whether this Specimen record can be queried (Active) or not queried (Inactive) by any actor.
-     * @param activityStatus "Active" if this Specimen record can be queried else "Inactive".
-     * @see #getActivityStatus()
-     */
-    public void setActivityStatus(String activityStatus)
-    {
-        this.activityStatus = activityStatus;
-    }
+	/**
+	 * Returns the comments on the specimen.
+	 * @hibernate.property name="comments" type="string" column="COMMENTS" length="200"
+	 * @return the comments on the specimen.
+	 * @see #setComments(String)
+	 */
+	public String getComments()
+	{
+		return comments;
+	}
 
-    /**
-     * Returns the parent specimen from which this specimen is derived.
-     * @hibernate.many-to-one column="PARENT_SPECIMEN_ID"
-     * class="edu.wustl.catissuecore.domain.Specimen" constrained="true"
-     * @return the parent specimen from which this specimen is derived.
-     * @see #setParentSpecimen(SpecimenNew)
-     */
-    public Specimen getParentSpecimen()
-    {
-        return parentSpecimen;
-    }
+	/**
+	 * Sets the comments on the specimen.
+	 * @param comments The comments to set.
+	 * @see #getComments()
+	 */
+	public void setComments(String comments)
+	{
+		this.comments = comments;
+	}
 
-    /**
-     * Sets the parent specimen from which this specimen is derived.
-     * @param parentSpecimen the parent specimen from which this specimen is derived.
-     * @see #getParentSpecimen()
-     */
-    public void setParentSpecimen(Specimen parentSpecimen)
-    {
-        this.parentSpecimen = parentSpecimen;
-    }
+	/**
+	 * Returns whether this Specimen record can be queried (Active) or not queried (Inactive) by any actor.
+	 * @hibernate.property name="activityStatus" type="string" column="ACTIVITY_STATUS" length="50"
+	 * @return "Active" if this Specimen record can be queried or "Inactive" if cannot be queried.
+	 * @see #setActivityStatus(String)
+	 */
+	public String getActivityStatus()
+	{
+		return activityStatus;
+	}
 
-    /**
-     * Returns the collection of attributes of a Specimen 
-     * that renders it potentially harmful to a User.
-     * @hibernate.set name="biohazardCollection" table="CATISSUE_SPECIMEN_BIOHZ_REL"
-     * cascade="none" inverse="false" lazy="false"
-     * @hibernate.collection-key column="SPECIMEN_ID"
-     * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Biohazard" column="BIOHAZARD_ID"
-     * @return the collection of attributes of a Specimen 
-     * that renders it potentially harmful to a User.
-     * @see #setBiohazardCollection(Set)
-     */
-    public Collection getBiohazardCollection()
-    {
-        return biohazardCollection;
-    }
+	/**
+	 * Sets whether this Specimen record can be queried (Active) or not queried (Inactive) by any actor.
+	 * @param activityStatus "Active" if this Specimen record can be queried else "Inactive".
+	 * @see #getActivityStatus()
+	 */
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
+	}
 
-    /**
-     * Sets the collection of attributes of a Specimen 
-     * that renders it potentially harmful to a User.
-     * @param biohazardCollection the collection of attributes of a Specimen 
-     * that renders it potentially harmful to a User.
-     * @see #getBiohazardCollection()
-     */
-    public void setBiohazardCollection(Collection biohazardCollection)
-    {
-        this.biohazardCollection = biohazardCollection;
-    }
+	/**
+	 * Returns the parent specimen from which this specimen is derived.
+	 * @hibernate.many-to-one column="PARENT_SPECIMEN_ID"
+	 * class="edu.wustl.catissuecore.domain.Specimen" constrained="true"
+	 * @return the parent specimen from which this specimen is derived.
+	 * @see #setParentSpecimen(SpecimenNew)
+	 */
+	public Specimen getParentSpecimen()
+	{
+		return parentSpecimen;
+	}
 
-    /**
-     * Returns the collection of Specimen Event Parameters associated with this specimen.  
-     * @hibernate.set name="specimenEventCollection" table="CATISSUE_SPECIMEN_EVENT"
-     * cascade="save-update" inverse="true" lazy="false"
-     * @hibernate.collection-key column="SPECIMEN_ID"
-     * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
-     * @return the collection of Specimen Event Parameters associated with this specimen.
-     * @see #setSpecimenEventCollection(Set)
-     */
-    public Collection getSpecimenEventCollection()
-    {
-        return specimenEventCollection;
-    }
+	/**
+	 * Sets the parent specimen from which this specimen is derived.
+	 * @param parentSpecimen the parent specimen from which this specimen is derived.
+	 * @see #getParentSpecimen()
+	 */
+	public void setParentSpecimen(Specimen parentSpecimen)
+	{
+		this.parentSpecimen = parentSpecimen;
+	}
 
-    /**
-     * Sets the collection of Specimen Event Parameters associated with this specimen.
-     * @param specimenEventCollection the collection of Specimen Event Parameters 
-     * associated with this specimen.
-     * @see #getSpecimenEventCollection()
-     */
-    public void setSpecimenEventCollection(Collection specimenEventCollection)
-    {
-        this.specimenEventCollection = specimenEventCollection;
-    }
+	/**
+	 * Returns the collection of attributes of a Specimen 
+	 * that renders it potentially harmful to a User.
+	 * @hibernate.set name="biohazardCollection" table="CATISSUE_SPECIMEN_BIOHZ_REL"
+	 * cascade="none" inverse="false" lazy="false"
+	 * @hibernate.collection-key column="SPECIMEN_ID"
+	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Biohazard" column="BIOHAZARD_ID"
+	 * @return the collection of attributes of a Specimen 
+	 * that renders it potentially harmful to a User.
+	 * @see #setBiohazardCollection(Set)
+	 */
+	public Collection getBiohazardCollection()
+	{
+		return biohazardCollection;
+	}
 
-    /**
-     * Returns the collection of children specimens derived from this specimen.
-     * @hibernate.set name="childrenSpecimen" table="CATISSUE_SPECIMEN"
-     * cascade="save-update" inverse="true" lazy="false"
-     * @hibernate.collection-key column="PARENT_SPECIMEN_ID"
-     * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Specimen"
-     * @return the collection of children specimens derived from this specimen.
-     * @see #setChildrenSpecimen(Set)
-     */
-    public Collection getChildrenSpecimen()
-    {
-        return childrenSpecimen;
-    }
+	/**
+	 * Sets the collection of attributes of a Specimen 
+	 * that renders it potentially harmful to a User.
+	 * @param biohazardCollection the collection of attributes of a Specimen 
+	 * that renders it potentially harmful to a User.
+	 * @see #getBiohazardCollection()
+	 */
+	public void setBiohazardCollection(Collection biohazardCollection)
+	{
+		this.biohazardCollection = biohazardCollection;
+	}
 
-    /**
-     * Sets the collection of children specimens derived from this specimen.
-     * @param childrenSpecimen the collection of children specimens 
-     * derived from this specimen.
-     * @see #getChildrenSpecimen()
-     */
-    public void setChildrenSpecimen(Collection childrenSpecimen)
-    {
-        this.childrenSpecimen = childrenSpecimen;
-    }
+	/**
+	 * Returns the collection of Specimen Event Parameters associated with this specimen.  
+	 * @hibernate.set name="specimenEventCollection" table="CATISSUE_SPECIMEN_EVENT"
+	 * cascade="save-update" inverse="true" lazy="false"
+	 * @hibernate.collection-key column="SPECIMEN_ID"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
+	 * @return the collection of Specimen Event Parameters associated with this specimen.
+	 * @see #setSpecimenEventCollection(Set)
+	 */
+	public Collection getSpecimenEventCollection()
+	{
+		return specimenEventCollection;
+	}
 
-    /**
-     * Returns the physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
-     * @hibernate.many-to-one column="STORAGE_CONTAINER_IDENTIFIER" 
-     * class="edu.wustl.catissuecore.domain.StorageContainer" constrained="true"
-     * @return the physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
-     * @see #setStorageContainer(StorageContainer)
-     */
-    public StorageContainer getStorageContainer()
-    {
-        return storageContainer;
-    }
+	/**
+	 * Sets the collection of Specimen Event Parameters associated with this specimen.
+	 * @param specimenEventCollection the collection of Specimen Event Parameters 
+	 * associated with this specimen.
+	 * @see #getSpecimenEventCollection()
+	 */
+	public void setSpecimenEventCollection(Collection specimenEventCollection)
+	{
+		this.specimenEventCollection = specimenEventCollection;
+	}
 
-    /**
-     * Sets the physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
-     * @param storageContainer the physically discreet container that is used to store a specimen  
-     * e.g. Box, Freezer etc.
-     * @see #getStorageContainer()
-     */
-    public void setStorageContainer(StorageContainer storageContainer)
-    {
-        this.storageContainer = storageContainer;
-    }
+	/**
+	 * Returns the collection of children specimens derived from this specimen.
+	 * @hibernate.set name="childrenSpecimen" table="CATISSUE_SPECIMEN"
+	 * cascade="save-update" inverse="true" lazy="false"
+	 * @hibernate.collection-key column="PARENT_SPECIMEN_ID"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Specimen"
+	 * @return the collection of children specimens derived from this specimen.
+	 * @see #setChildrenSpecimen(Set)
+	 */
+	public Collection getChildrenSpecimen()
+	{
+		return childrenSpecimen;
+	}
 
-    /**
-     * Returns the collection of a pre-existing, externally defined id associated with a specimen.
-     * @hibernate.set name="externalIdentifierCollection" table="CATISSUE_EXTERNAL_IDENTIFIER"
-     * cascade="save-update" inverse="true" lazy="false"
-     * @hibernate.collection-key column="SPECIMEN_ID"
-     * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ExternalIdentifier"
-     * @return the collection of a pre-existing, externally defined id associated with a specimen.
-     * @see #setExternalIdentifierCollection(Set)
-     */
-    public Collection getExternalIdentifierCollection()
-    {
-        return externalIdentifierCollection;
-    }
+	/**
+	 * Sets the collection of children specimens derived from this specimen.
+	 * @param childrenSpecimen the collection of children specimens 
+	 * derived from this specimen.
+	 * @see #getChildrenSpecimen()
+	 */
+	public void setChildrenSpecimen(Collection childrenSpecimen)
+	{
+		this.childrenSpecimen = childrenSpecimen;
+	}
 
-    /**
-     * Sets the collection of a pre-existing, externally defined id 
-     * associated with a specimen.
-     * @param externalIdentifierCollection the collection of a pre-existing, 
-     * externally defined id associated with a specimen.
-     * @see #getExternalIdentifierCollection()
-     */
-    public void setExternalIdentifierCollection(Collection externalIdentifierCollection)
-    {
-        this.externalIdentifierCollection = externalIdentifierCollection;
-    }
+	/**
+	 * Returns the physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
+	 * @hibernate.many-to-one column="STORAGE_CONTAINER_IDENTIFIER" 
+	 * class="edu.wustl.catissuecore.domain.StorageContainer" constrained="true"
+	 * @return the physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
+	 * @see #setStorageContainer(StorageContainer)
+	 */
+	public StorageContainer getStorageContainer()
+	{
+		return storageContainer;
+	}
 
-    /**
-     * Returns the event that results in the collection of one or more specimen from a participant.
-     * @hibernate.many-to-one column="SPECIMEN_COLLECTION_GROUP_ID"
+	/**
+	 * Sets the physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
+	 * @param storageContainer the physically discreet container that is used to store a specimen  
+	 * e.g. Box, Freezer etc.
+	 * @see #getStorageContainer()
+	 */
+	public void setStorageContainer(StorageContainer storageContainer)
+	{
+		this.storageContainer = storageContainer;
+	}
+
+	/**
+	 * Returns the collection of a pre-existing, externally defined id associated with a specimen.
+	 * @hibernate.set name="externalIdentifierCollection" table="CATISSUE_EXTERNAL_IDENTIFIER"
+	 * cascade="save-update" inverse="true" lazy="false"
+	 * @hibernate.collection-key column="SPECIMEN_ID"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ExternalIdentifier"
+	 * @return the collection of a pre-existing, externally defined id associated with a specimen.
+	 * @see #setExternalIdentifierCollection(Set)
+	 */
+	public Collection getExternalIdentifierCollection()
+	{
+		return externalIdentifierCollection;
+	}
+
+	/**
+	 * Sets the collection of a pre-existing, externally defined id 
+	 * associated with a specimen.
+	 * @param externalIdentifierCollection the collection of a pre-existing, 
+	 * externally defined id associated with a specimen.
+	 * @see #getExternalIdentifierCollection()
+	 */
+	public void setExternalIdentifierCollection(Collection externalIdentifierCollection)
+	{
+		this.externalIdentifierCollection = externalIdentifierCollection;
+	}
+
+	/**
+	 * Returns the event that results in the collection of one or more specimen from a participant.
+	 * @hibernate.many-to-one column="SPECIMEN_COLLECTION_GROUP_ID"
 	 * class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup" constrained="true"
-     * @return the event that results in the collection of one or more specimen from a participant.
-     * @see #setSpecimenCollectionGroup(SpecimenCollectionGroup)
-     */
-    public SpecimenCollectionGroup getSpecimenCollectionGroup()
-    {
-        return specimenCollectionGroup;
-    }
+	 * @return the event that results in the collection of one or more specimen from a participant.
+	 * @see #setSpecimenCollectionGroup(SpecimenCollectionGroup)
+	 */
+	public SpecimenCollectionGroup getSpecimenCollectionGroup()
+	{
+		return specimenCollectionGroup;
+	}
 
-    /**
-     * Sets the event that results in the collection of one or more specimen from a participant.
-     * @param specimenCollectionGroup the event that results in the collection of one or more 
-     * specimen from a participant.
-     * @see #getSpecimenCollectionGroup()
-     */
-    public void setSpecimenCollectionGroup(
-            SpecimenCollectionGroup specimenCollectionGroup)
-    {
-        this.specimenCollectionGroup = specimenCollectionGroup;
-    }
+	/**
+	 * Sets the event that results in the collection of one or more specimen from a participant.
+	 * @param specimenCollectionGroup the event that results in the collection of one or more 
+	 * specimen from a participant.
+	 * @see #getSpecimenCollectionGroup()
+	 */
+	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
+	{
+		this.specimenCollectionGroup = specimenCollectionGroup;
+	}
 
-    /**
-     * Returns the combined anatomic state and pathological disease classification of a specimen.
-     * @hibernate.many-to-one column="SPECIMEN_CHARACTERISTICS_ID" 
-     * class="edu.wustl.catissuecore.domain.SpecimenCharacteristics" constrained="true"
-     * @return the combined anatomic state and pathological disease classification of a specimen.
-     * @see #setSpecimenCharacteristics(SpecimenCharacteristics)
-     */
-    public SpecimenCharacteristics getSpecimenCharacteristics()
-    {
-        return specimenCharacteristics;
-    }
+	/**
+	 * Returns the combined anatomic state and pathological disease classification of a specimen.
+	 * @hibernate.many-to-one column="SPECIMEN_CHARACTERISTICS_ID" 
+	 * class="edu.wustl.catissuecore.domain.SpecimenCharacteristics" constrained="true"
+	 * @return the combined anatomic state and pathological disease classification of a specimen.
+	 * @see #setSpecimenCharacteristics(SpecimenCharacteristics)
+	 */
+	public SpecimenCharacteristics getSpecimenCharacteristics()
+	{
+		return specimenCharacteristics;
+	}
 
-    /**
-     * Sets the combined anatomic state and pathological disease classification of a specimen.
-     * @param specimenCharacteristics the combined anatomic state and pathological disease 
-     * classification of a specimen.
-     * @see #getSpecimenCharacteristics()
-     */
-    public void setSpecimenCharacteristics(SpecimenCharacteristics specimenCharacteristics)
-    {
-        this.specimenCharacteristics = specimenCharacteristics;
-    }
-    
-    public boolean isParentChanged()
+	/**
+	 * Sets the combined anatomic state and pathological disease classification of a specimen.
+	 * @param specimenCharacteristics the combined anatomic state and pathological disease 
+	 * classification of a specimen.
+	 * @see #getSpecimenCharacteristics()
+	 */
+	public void setSpecimenCharacteristics(SpecimenCharacteristics specimenCharacteristics)
+	{
+		this.specimenCharacteristics = specimenCharacteristics;
+	}
+
+	public boolean isParentChanged()
 	{
 		return isParentChanged;
 	}
+
 	public void setParentChanged(boolean isParentChanged)
 	{
 		this.isParentChanged = isParentChanged;
 	}
-	
-    /**
-     * This function Copies the data from an NewSpecimenForm object to a Specimen object.
-     * @param specimenForm A formbean object containing the information about the Specimen.  
-     * */
-    public void setAllValues(AbstractActionForm abstractForm)
-    {
-    	if(abstractForm instanceof AliquotForm)
-    	{
-    		AliquotForm form = (AliquotForm)abstractForm;
-	    	Validator validator = new Validator();
-	    	
-	    	this.aliqoutMap = form.getAliquotMap();
-	    	this.noOfAliquots = Integer.parseInt(form.getNoOfAliquots());
-	    	this.parentSpecimen = new Specimen();
-	    	
-	    	if(!validator.isEmpty(form.getSpecimenLabel()))   // TODO
-	    	{
-	    		parentSpecimen.setLabel(form.getSpecimenLabel());
-	    		parentSpecimen.setId(new Long(form.getSpecimenID()));
-	    	}
-	    	else if(!validator.isEmpty(form.getBarcode()))
-	    	{   
-	    		parentSpecimen.setId(new Long(form.getSpecimenID()));
-	    		parentSpecimen.setBarcode(form.getBarcode());
-	    	}
-    	}
-    	else
-    	{
-	    	this.quantity = new Quantity(((SpecimenForm)abstractForm).getQuantity());
-	    	this.label = ((SpecimenForm)abstractForm).getLabel();
-	    	
-	    	if(abstractForm.isAddOperation())
-	    	{
-	    		this.availableQuantity = new Quantity(this.quantity);
-	    	}
-	    	else
-	    	{
-	    		this.availableQuantity = new Quantity(((SpecimenForm)abstractForm).getAvailableQuantity());
-	    	}
-	    	
-	        try
-	        {
-	        	Validator validator = new Validator();
-	        	if(abstractForm instanceof NewSpecimenForm)
-	            {
-		        	NewSpecimenForm form = (NewSpecimenForm) abstractForm;
-		            
-		            this.activityStatus = form.getActivityStatus();
-		            
-		            if(!validator.isEmpty(form.getBarcode()))
-		            	this.barcode = form.getBarcode();
-		            else
-		            	this.barcode = null; 
-		            
-		            this.comments = form.getComments();
-		            this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-		            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
-		            this.type = form.getType();
-		            
-		            if(form.isAddOperation())
-		            {
-		            	this.available = new Boolean(true);
-		            }
-		            else
-		            {
-		            	this.available = new Boolean(form.isAvailable());
-		            }
-		            
-		            //in case of edit
-		        	if(!form.isAddOperation())
-		        	{
-		        		//specimen is a new specimen  
-		        		if(parentSpecimen==null)
-		        		{
-		        			String parentSpecimenId = form.getParentSpecimenId();
-		        			// specimen created from another specimen
-		        			if(parentSpecimenId!=null && !parentSpecimenId.trim().equals("") && Long.parseLong(parentSpecimenId)>0)
-		        			{
-		        				isParentChanged = true;
-		        			}
-		        		}
-		        		else//specimen created from another specimen
-		        		{
-		        			if(parentSpecimen.getId().longValue()!=Long.parseLong(form.getParentSpecimenId()))
-		        			{
-		        				isParentChanged = true;
-		        			}
-		        		}
-		        	}
-			        
-		            Logger.out.debug("isParentChanged "+isParentChanged);
-			        if(form.isParentPresent())
-					{
-			            parentSpecimen = new CellSpecimen();
-						parentSpecimen.setId(new Long(form.getParentSpecimenId()));
-						
-		        		this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
-		        		this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
-					}
-			        else
-			        {
-			        	parentSpecimen = null;
-			        	specimenCollectionGroup = new SpecimenCollectionGroup();
-			        	this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
-			        }
-		            
-		            this.storageContainer.setId(new Long(form.getStorageContainer()));
-		            
-		            //Setting the SpecimenCharacteristics
-		            this.pathologicalStatus = form.getPathologicalStatus();
-		            specimenCharacteristics.tissueSide = form.getTissueSide();
-		            specimenCharacteristics.tissueSite = form.getTissueSite();
-		            
-		            //Getting the Map of External Identifiers
-		            Map extMap = form.getExternalIdentifier();
-			        
-			        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-			        
-			        Collection extCollection = parser.generateData(extMap);
-			        this.externalIdentifierCollection = extCollection;
-			        
-			        Map bioMap = form.getBiohazard();
-			        Logger.out.debug("PRE FIX MAP "+bioMap);
-			        bioMap = fixMap(bioMap);
-			        Logger.out.debug("POST FIX MAP "+bioMap);
-			        
-			        //Getting the Map of Biohazards
-			        parser = new MapDataParser("edu.wustl.catissuecore.domain");
-			        Collection bioCollection = parser.generateData(bioMap);
-			        Logger.out.debug("BIO-COL : " + bioCollection );
-	
-			        this.biohazardCollection = bioCollection;
-			        
-			        	        //Mandar : autoevents 14-july-06 start
-		        
-		        if(form.isAddOperation())
-		        {
-		        	Logger.out.debug("Setting Collection event in specimen domain object" );
-		        	//seting collection event values
-		        	CollectionEventParametersForm collectionEvent = new CollectionEventParametersForm();
-		        	collectionEvent.setCollectionProcedure(form.getCollectionEventCollectionProcedure()  );
-		        	collectionEvent.setComments(form.getCollectionEventComments()  );
-		        	collectionEvent.setContainer(form.getCollectionEventContainer()  );
-		        	collectionEvent.setTimeInHours(form.getCollectionEventTimeInHours()  );
-		        	collectionEvent.setTimeInMinutes(form.getCollectionEventTimeInMinutes()  );
-		        	collectionEvent.setDateOfEvent(form.getCollectionEventdateOfEvent()  );
-		        	collectionEvent.setUserId(form.getCollectionEventUserId()  );
-		        	collectionEvent.setOperation(form.getOperation()  );
-		        	
-		        	
-		        	CollectionEventParameters collectionEventParameters = new CollectionEventParameters( );
-		        	collectionEventParameters.setAllValues(collectionEvent );
-		        	
-		        	collectionEventParameters.setSpecimen(this);
-		        	Logger.out.debug("Before specimenEventCollection.size(): "+ specimenEventCollection.size()); 
-		        	specimenEventCollection.add(collectionEventParameters );
-		        	Logger.out.debug("After specimenEventCollection.size(): "+ specimenEventCollection.size()); 
-		        	
-		        	Logger.out.debug("...14-July-06... : CollectionEvent set");
-		        	
-		        	Logger.out.debug("Setting Received event in specimen domain object" );
-		        	//setting received event values
-		        	ReceivedEventParametersForm receivedEvent = new ReceivedEventParametersForm();
-		        	receivedEvent.setComments(form.getReceivedEventComments()  );
-		        	receivedEvent.setDateOfEvent(form.getReceivedEventDateOfEvent()  );
-		        	receivedEvent.setReceivedQuality( form.getReceivedEventReceivedQuality() );
-		        	receivedEvent.setUserId(form.getReceivedEventUserId()  );
-		        	receivedEvent.setTimeInMinutes(form.getReceivedEventTimeInMinutes()  );
-		        	receivedEvent.setTimeInHours(form.getReceivedEventTimeInHours()  );
-		        	receivedEvent.setOperation( form.getOperation() );
-		        	
-		        	ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
-		        	receivedEventParameters.setAllValues(receivedEvent  ); 
-		        	receivedEventParameters.setSpecimen( this);
-		        	
-		        	Logger.out.debug("Before specimenEventCollection.size(): "+ specimenEventCollection.size()); 
-		        	specimenEventCollection.add(receivedEventParameters );
-		        	Logger.out.debug("After specimenEventCollection.size(): "+ specimenEventCollection.size()); 
-		        	
-		        	Logger.out.debug("...14-July-06... : ReceivedEvent set");
-		        	
-		        }
 
-		        //Mandar : autoevents 14-july-06 end
-	            }
-	            else if(abstractForm instanceof CreateSpecimenForm)
-	            {
-	            	CreateSpecimenForm form = (CreateSpecimenForm)abstractForm;
-	            	
-	            	this.activityStatus = form.getActivityStatus();
-	            	
-	            	if(!validator.isEmpty(form.getBarcode()))
-		            	this.barcode = form.getBarcode();
-		            else
-		            	this.barcode = null; 
-	            	
-	            	this.comments = form.getComments();
-	            	this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-		            this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
-	            	this.type = form.getType();
-	            	
-	            	if(form.isAddOperation())
-		            {
-		            	this.available = new Boolean(true);
-		            }
-		            else
-		            {
-		            	this.available = new Boolean(form.isAvailable());
-		            }
-	            	
-	            	this.storageContainer.setId(new Long(form.getStorageContainer()));
-	            	this.parentSpecimen = new CellSpecimen();
-	            	
-	            	this.parentSpecimen.setId(new Long(form.getParentSpecimenId()));
-	            	//Getting the Map of External Identifiers
-		            Map extMap = form.getExternalIdentifier();
-			        
-			        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-			        
-			        Collection extCollection = parser.generateData(extMap);
-			        this.externalIdentifierCollection = extCollection;
-	            }
-	        }
-	        catch (Exception excp)
-	        {
-	            Logger.out.error(excp.getMessage(),excp);
-	        }
-    	}
-    }
-    
-    protected Map fixMap(Map orgMap)
+	/**
+	 * This function Copies the data from an NewSpecimenForm object to a Specimen object.
+	 * @param specimenForm A formbean object containing the information about the Specimen.  
+	 * */
+	public void setAllValues(AbstractActionForm abstractForm)
+	{
+		if (abstractForm instanceof AliquotForm)
+		{
+			AliquotForm form = (AliquotForm) abstractForm;
+			Validator validator = new Validator();
+
+			this.aliqoutMap = form.getAliquotMap();
+			this.noOfAliquots = Integer.parseInt(form.getNoOfAliquots());
+			this.parentSpecimen = new Specimen();
+
+			if (!validator.isEmpty(form.getSpecimenLabel())) // TODO
+			{
+				parentSpecimen.setLabel(form.getSpecimenLabel());
+				parentSpecimen.setId(new Long(form.getSpecimenID()));
+			}
+			else if (!validator.isEmpty(form.getBarcode()))
+			{
+				parentSpecimen.setId(new Long(form.getSpecimenID()));
+				parentSpecimen.setBarcode(form.getBarcode());
+			}
+		}
+		else
+		{
+			this.quantity = new Quantity(((SpecimenForm) abstractForm).getQuantity());
+			this.label = ((SpecimenForm) abstractForm).getLabel();
+
+			if (abstractForm.isAddOperation())
+			{
+				this.availableQuantity = new Quantity(this.quantity);
+			}
+			else
+			{
+				this.availableQuantity = new Quantity(((SpecimenForm) abstractForm)
+						.getAvailableQuantity());
+			}
+
+			try
+			{
+				Validator validator = new Validator();
+				if (abstractForm instanceof NewSpecimenForm)
+				{
+					NewSpecimenForm form = (NewSpecimenForm) abstractForm;
+
+					this.activityStatus = form.getActivityStatus();
+
+					if (!validator.isEmpty(form.getBarcode()))
+						this.barcode = form.getBarcode();
+					else
+						this.barcode = null;
+
+					this.comments = form.getComments();
+					this.type = form.getType();
+
+					if (form.isAddOperation())
+					{
+						this.available = new Boolean(true);
+					}
+					else
+					{
+						this.available = new Boolean(form.isAvailable());
+					}
+
+					//in case of edit
+					if (!form.isAddOperation())
+					{
+						//specimen is a new specimen  
+						if (parentSpecimen == null)
+						{
+							String parentSpecimenId = form.getParentSpecimenId();
+							// specimen created from another specimen
+							if (parentSpecimenId != null && !parentSpecimenId.trim().equals("")
+									&& Long.parseLong(parentSpecimenId) > 0)
+							{
+								isParentChanged = true;
+							}
+						}
+						else
+						//specimen created from another specimen
+						{
+							if (parentSpecimen.getId().longValue() != Long.parseLong(form
+									.getParentSpecimenId()))
+							{
+								isParentChanged = true;
+							}
+						}
+					}
+
+					Logger.out.debug("isParentChanged " + isParentChanged);
+					if (form.isParentPresent())
+					{
+						parentSpecimen = new CellSpecimen();
+						parentSpecimen.setId(new Long(form.getParentSpecimenId()));
+
+						this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
+						this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
+					}
+					else
+					{
+						parentSpecimen = null;
+						specimenCollectionGroup = new SpecimenCollectionGroup();
+						this.specimenCollectionGroup.setId(new Long(form
+								.getSpecimenCollectionGroupId()));
+					}
+
+					//Setting the SpecimenCharacteristics
+					this.pathologicalStatus = form.getPathologicalStatus();
+					specimenCharacteristics.tissueSide = form.getTissueSide();
+					specimenCharacteristics.tissueSite = form.getTissueSite();
+
+					//Getting the Map of External Identifiers
+					Map extMap = form.getExternalIdentifier();
+
+					MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+
+					Collection extCollection = parser.generateData(extMap);
+					this.externalIdentifierCollection = extCollection;
+
+					Map bioMap = form.getBiohazard();
+					Logger.out.debug("PRE FIX MAP " + bioMap);
+					bioMap = fixMap(bioMap);
+					Logger.out.debug("POST FIX MAP " + bioMap);
+
+					//Getting the Map of Biohazards
+					parser = new MapDataParser("edu.wustl.catissuecore.domain");
+					Collection bioCollection = parser.generateData(bioMap);
+					Logger.out.debug("BIO-COL : " + bioCollection);
+
+					this.biohazardCollection = bioCollection;
+
+					//Mandar : autoevents 14-july-06 start
+
+					if (form.isAddOperation())
+					{
+						Logger.out.debug("Setting Collection event in specimen domain object");
+						//seting collection event values
+						CollectionEventParametersForm collectionEvent = new CollectionEventParametersForm();
+						collectionEvent.setCollectionProcedure(form
+								.getCollectionEventCollectionProcedure());
+						collectionEvent.setComments(form.getCollectionEventComments());
+						collectionEvent.setContainer(form.getCollectionEventContainer());
+						collectionEvent.setTimeInHours(form.getCollectionEventTimeInHours());
+						collectionEvent.setTimeInMinutes(form.getCollectionEventTimeInMinutes());
+						collectionEvent.setDateOfEvent(form.getCollectionEventdateOfEvent());
+						collectionEvent.setUserId(form.getCollectionEventUserId());
+						collectionEvent.setOperation(form.getOperation());
+
+						CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+						collectionEventParameters.setAllValues(collectionEvent);
+
+						collectionEventParameters.setSpecimen(this);
+						Logger.out.debug("Before specimenEventCollection.size(): "
+								+ specimenEventCollection.size());
+						specimenEventCollection.add(collectionEventParameters);
+						Logger.out.debug("After specimenEventCollection.size(): "
+								+ specimenEventCollection.size());
+
+						Logger.out.debug("...14-July-06... : CollectionEvent set");
+
+						Logger.out.debug("Setting Received event in specimen domain object");
+						//setting received event values
+						ReceivedEventParametersForm receivedEvent = new ReceivedEventParametersForm();
+						receivedEvent.setComments(form.getReceivedEventComments());
+						receivedEvent.setDateOfEvent(form.getReceivedEventDateOfEvent());
+						receivedEvent.setReceivedQuality(form.getReceivedEventReceivedQuality());
+						receivedEvent.setUserId(form.getReceivedEventUserId());
+						receivedEvent.setTimeInMinutes(form.getReceivedEventTimeInMinutes());
+						receivedEvent.setTimeInHours(form.getReceivedEventTimeInHours());
+						receivedEvent.setOperation(form.getOperation());
+
+						ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+						receivedEventParameters.setAllValues(receivedEvent);
+						receivedEventParameters.setSpecimen(this);
+
+						Logger.out.debug("Before specimenEventCollection.size(): "
+								+ specimenEventCollection.size());
+						specimenEventCollection.add(receivedEventParameters);
+						Logger.out.debug("After specimenEventCollection.size(): "
+								+ specimenEventCollection.size());
+
+						Logger.out.debug("...14-July-06... : ReceivedEvent set");
+
+					}
+
+					//Mandar : autoevents 14-july-06 end
+
+					if (form.isVirtuallyLocated())
+					{
+						Logger.out.info("------------------Virtually located--------------");
+						this.storageContainer = null;
+						this.positionDimensionOne = null;
+						this.positionDimensionTwo = null;
+					}
+					else
+					{
+						this.storageContainer.setId(new Long(form.getStorageContainer()));
+						this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+						this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+
+					}
+				}
+				else if (abstractForm instanceof CreateSpecimenForm)
+				{
+					CreateSpecimenForm form = (CreateSpecimenForm) abstractForm;
+
+					this.activityStatus = form.getActivityStatus();
+
+					if (!validator.isEmpty(form.getBarcode()))
+						this.barcode = form.getBarcode();
+					else
+						this.barcode = null;
+
+					this.comments = form.getComments();
+					//this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+					//this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+					this.type = form.getType();
+
+					if (form.isAddOperation())
+					{
+						this.available = new Boolean(true);
+					}
+					else
+					{
+						this.available = new Boolean(form.isAvailable());
+					}
+
+					//this.storageContainer.setId(new Long(form.getStorageContainer()));
+					this.parentSpecimen = new CellSpecimen();
+
+					this.parentSpecimen.setId(new Long(form.getParentSpecimenId()));
+					//Getting the Map of External Identifiers
+					Map extMap = form.getExternalIdentifier();
+
+					MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+
+					Collection extCollection = parser.generateData(extMap);
+					this.externalIdentifierCollection = extCollection;
+
+					if (form.isVirtuallyLocated())
+					{
+						Logger.out.info("------------------Virtually located--------------");
+						this.storageContainer = null;
+						this.positionDimensionOne = null;
+						this.positionDimensionTwo = null;
+					}
+					else
+					{
+						this.storageContainer.setId(new Long(form.getStorageContainer()));
+						this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+						this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+
+					}
+
+				}
+			}
+
+			catch (Exception excp)
+			{
+				Logger.out.error(excp.getMessage(), excp);
+			}
+		}
+
+	}
+
+	protected Map fixMap(Map orgMap)
 	{
 		Map newMap = new HashMap();
 		Iterator it = orgMap.keySet().iterator();
-		while(it.hasNext())
+		while (it.hasNext())
 		{
-			String key = (String)it.next();
+			String key = (String) it.next();
 			//Logger.out.debug("key "+key);
-			
-			if(key.indexOf("persisted")==-1)
+
+			if (key.indexOf("persisted") == -1)
 			{
 				String value = String.valueOf(orgMap.get(key));
-				newMap.put(key,value);
+				newMap.put(key, value);
 			}
-		}		
+		}
 		return newMap;
 	}
-    
-    
-    /**
-     * This function returns the actual type of the specimen i.e Cell / Fluid / Molecular / Tissue.
-     */
-    
-    public final String getClassName()
-    {
-    	String className = null;
-    	
-    	if(this instanceof CellSpecimen)
-    	{
-    		className = Constants.CELL;
-    	}
-    	else if(this instanceof MolecularSpecimen)
-    	{
-    		className = Constants.MOLECULAR;
-    	}
-    	else if(this instanceof FluidSpecimen)
-    	{
-    		className = Constants.FLUID;
-    	}
-    	else if(this instanceof TissueSpecimen)
-    	{
-    		className = Constants.TISSUE;
-    	}
-    	
-    	return className;
-    }
-    
-    public String getObjectId() 
-    {
-		Logger.out.debug(this.getClass().getName()+" is an instance of Specimen class");
+
+	/**
+	 * This function returns the actual type of the specimen i.e Cell / Fluid / Molecular / Tissue.
+	 */
+
+	public final String getClassName()
+	{
+		String className = null;
+
+		if (this instanceof CellSpecimen)
+		{
+			className = Constants.CELL;
+		}
+		else if (this instanceof MolecularSpecimen)
+		{
+			className = Constants.MOLECULAR;
+		}
+		else if (this instanceof FluidSpecimen)
+		{
+			className = Constants.FLUID;
+		}
+		else if (this instanceof TissueSpecimen)
+		{
+			className = Constants.TISSUE;
+		}
+
+		return className;
+	}
+
+	public String getObjectId()
+	{
+		Logger.out.debug(this.getClass().getName() + " is an instance of Specimen class");
 		return Specimen.class.getName() + "_" + this.getId();
 	}
-    
-    /**
+
+	/**
 	 * Returns the available quantity of a specimen.
 	 * @return The available quantity of a specimen.
 	 * @hibernate.component class="edu.wustl.catissuecore.domain.Quantity"
@@ -844,17 +881,17 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	{
 		return availableQuantity;
 	}
-	
+
 	/**
-     * Sets the available quantity of a specimen.
-     * @param availableQuantity the available quantity of a specimen.
-     * @see #getAvailableQuantity()
-     */
+	 * Sets the available quantity of a specimen.
+	 * @param availableQuantity the available quantity of a specimen.
+	 * @see #getAvailableQuantity()
+	 */
 	public void setAvailableQuantity(Quantity availableQuantity)
 	{
 		this.availableQuantity = availableQuantity;
 	}
-	
+
 	/**
 	 * Returns the quantity of a specimen.
 	 * @return The quantity of a specimen.
@@ -865,62 +902,62 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	{
 		return quantity;
 	}
-	
+
 	/**
-     * Sets the quantity of a specimen.
-     * @param quantity The quantity of a specimen.
-     * @see #getQuantity()
-     */
+	 * Sets the quantity of a specimen.
+	 * @param quantity The quantity of a specimen.
+	 * @see #getQuantity()
+	 */
 	public void setQuantity(Quantity quantity)
 	{
 		this.quantity = quantity;
 	}
-	
-	/**
-     * Returns the Histoathological character of specimen.
-     * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
-     * @hibernate.property name="pathologicalStatus" type="string" 
-     * column="PATHOLOGICAL_STATUS" length="50"
-     * @return the Histoathological character of specimen.
-     * @see #setPathologicalStatus(String)
-     */
-    public String getPathologicalStatus()
-    {
-        return pathologicalStatus;
-    }
 
-    /**
-     * Sets the Histoathological character of specimen.
-     * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
-     * @param pathologicalStatus the Histoathological character of specimen.
-     * @see #getPathologicalStatus()
-     */
-    public void setPathologicalStatus(String pathologicalStatus)
-    {
-        this.pathologicalStatus = pathologicalStatus;
-    }
-    
-    /*
-     * Returns true if this specimen object is an aliquot else false.
-     * @hibernate.property name="isAliquot" type="boolean" column="IS_ALIQUOT"
-     * @return the Histoathological character of specimen.
-     * @see #setIsAliquot(Boolean)
-     
-	public Boolean getIsAliquot()
+	/**
+	 * Returns the Histoathological character of specimen.
+	 * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
+	 * @hibernate.property name="pathologicalStatus" type="string" 
+	 * column="PATHOLOGICAL_STATUS" length="50"
+	 * @return the Histoathological character of specimen.
+	 * @see #setPathologicalStatus(String)
+	 */
+	public String getPathologicalStatus()
 	{
-		return isAliquot;
-	}*/
-	
+		return pathologicalStatus;
+	}
+
+	/**
+	 * Sets the Histoathological character of specimen.
+	 * e.g. Non-Malignant, Malignant, Non-Malignant Diseased, Pre-Malignant.
+	 * @param pathologicalStatus the Histoathological character of specimen.
+	 * @see #getPathologicalStatus()
+	 */
+	public void setPathologicalStatus(String pathologicalStatus)
+	{
+		this.pathologicalStatus = pathologicalStatus;
+	}
+
 	/*
-     * Sets true if this specimen object is an aliquot else false.
-     * @param isAliquot true if this specimen object is an aliquot else false.
-     * @see #getIsAliquot()
-     
-	public void setIsAliquot(Boolean isAliquot)
-	{
-		this.isAliquot = isAliquot;
-	}*/
-	
+	 * Returns true if this specimen object is an aliquot else false.
+	 * @hibernate.property name="isAliquot" type="boolean" column="IS_ALIQUOT"
+	 * @return the Histoathological character of specimen.
+	 * @see #setIsAliquot(Boolean)
+	 
+	 public Boolean getIsAliquot()
+	 {
+	 return isAliquot;
+	 }*/
+
+	/*
+	 * Sets true if this specimen object is an aliquot else false.
+	 * @param isAliquot true if this specimen object is an aliquot else false.
+	 * @see #getIsAliquot()
+	 
+	 public void setIsAliquot(Boolean isAliquot)
+	 {
+	 this.isAliquot = isAliquot;
+	 }*/
+
 	/**
 	 * Returns the map that contains distinguished fields per aliquots.
 	 * @return The map that contains distinguished fields per aliquots.
@@ -930,17 +967,17 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	{
 		return aliqoutMap;
 	}
-	
+
 	/**
-     * Sets the map of distinguished fields of aliquots.
-     * @param aliquotMap A map of distinguished fields of aliquots.
-     * @see #getAliquotMap()
-     */
+	 * Sets the map of distinguished fields of aliquots.
+	 * @param aliquotMap A map of distinguished fields of aliquots.
+	 * @see #getAliquotMap()
+	 */
 	public void setAliqoutMap(Map aliqoutMap)
 	{
 		this.aliqoutMap = aliqoutMap;
 	}
-	
+
 	/**
 	 * Returns the no. of aliquots to be created.
 	 * @return The no. of aliquots to be created.
@@ -950,43 +987,43 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	{
 		return noOfAliquots;
 	}
-	
+
 	/**
-     * Sets the no. of aliquots to be created.
-     * @param noOfAliquots The no. of aliquots to be created.
-     * @see #getNoOfAliquots()
-     */
+	 * Sets the no. of aliquots to be created.
+	 * @param noOfAliquots The no. of aliquots to be created.
+	 * @see #getNoOfAliquots()
+	 */
 	public void setNoOfAliquots(int noOfAliquots)
 	{
 		this.noOfAliquots = noOfAliquots;
 	}
-	
+
 	/**
-     * Returns the label name of specimen.
-     * @hibernate.property name="label" type="string" 
-     * column="LABEL" length="50"
-     * @return the label name of specimen.
-     * @see #setLabel(String)
-     */
+	 * Returns the label name of specimen.
+	 * @hibernate.property name="label" type="string" 
+	 * column="LABEL" length="50"
+	 * @return the label name of specimen.
+	 * @see #setLabel(String)
+	 */
 	public String getLabel()
 	{
 		return label;
 	}
-	
+
 	/**
-     * Sets the label name of specimen.
-     * @param label The label name of specimen.
-     * @see #getLabel()
-     */
+	 * Sets the label name of specimen.
+	 * @param label The label name of specimen.
+	 * @see #getLabel()
+	 */
 	public void setLabel(String label)
 	{
 		this.label = label;
 	}
-	
+
 	/**
 	 * Returns the historical information about the specimen.
-     * @hibernate.property name="lineage" type="string" 
-     * column="LINEAGE" length="50"
+	 * @hibernate.property name="lineage" type="string" 
+	 * column="LINEAGE" length="50"
 	 * @return The historical information about the specimen.
 	 * @see #setLineage(String)
 	 */
@@ -994,22 +1031,23 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	{
 		return lineage;
 	}
-	
+
 	/**
-     * Sets the historical information about the specimen.
-     * @param label The historical information about the specimen.
-     * @see #getLineage()
-     */
+	 * Sets the historical information about the specimen.
+	 * @param label The historical information about the specimen.
+	 * @see #getLineage()
+	 */
 	public void setLineage(String lineage)
 	{
 		this.lineage = lineage;
 	}
-	
-	 /**
-     * Returns message label to display on success add or edit
-     * @return String
-     */
-	public String getMessageLabel() {		
+
+	/**
+	 * Returns message label to display on success add or edit
+	 * @return String
+	 */
+	public String getMessageLabel()
+	{
 		return this.label;
 	}
 }

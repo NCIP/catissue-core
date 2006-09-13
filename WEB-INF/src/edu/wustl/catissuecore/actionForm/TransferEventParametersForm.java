@@ -8,6 +8,7 @@
  * @version 1.00
  * Created on July 28th, 2005
  */
+
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.List;
@@ -29,7 +30,6 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
-
 /**
  * @author mandar_deshmukh
  *
@@ -37,6 +37,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TransferEventParametersForm extends SpecimenEventParametersForm
 {
+
 	/**
 	 * Reference to dimensional position one of the specimen in previous storage container before transfer.
 	 */
@@ -66,12 +67,12 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	 * Storage Container from which the transfer is made.
 	 */
 	protected long fromStorageContainerId;
-	
+
 	/*
 	 * Used for getting the TO and FROM Positions from the JSP 
 	 */
 	protected String fromPosition;
-	
+
 	protected String positionInStorageContainer;
 
 	/**
@@ -188,7 +189,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		this.fromStorageContainerId = fromStorageContainerId;
 	}
 
-//	 ----- SUPERCLASS METHODS
+	//	 ----- SUPERCLASS METHODS
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 */
@@ -199,70 +200,103 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-	    try
-        {
+		try
+		{
 			super.setAllValues(abstractDomain);
-			TransferEventParameters transferEventParametersObject = (TransferEventParameters)abstractDomain ;
-			this.fromPositionDimensionOne = transferEventParametersObject.getFromPositionDimensionOne().intValue();
-			this.fromPositionDimensionTwo = transferEventParametersObject.getFromPositionDimensionTwo().intValue();
-			this.positionDimensionOne = transferEventParametersObject.getToPositionDimensionOne().toString();
-			this.positionDimensionTwo = transferEventParametersObject.getToPositionDimensionTwo().toString();
-			this.fromStorageContainerId = transferEventParametersObject.getFromStorageContainer().getId().longValue();
-			this.storageContainer = transferEventParametersObject.getToStorageContainer().getId().toString() ;  
-			this.positionInStorageContainer = transferEventParametersObject.getToStorageContainer().getStorageType().getName() + " : " 
-				+ this.storageContainer + " Pos(" + this.positionDimensionOne + ","
-				+ this.positionDimensionTwo + ")";
-			this.fromPosition = transferEventParametersObject.getFromStorageContainer().getStorageType().getName() + " : " 
-			+ this.fromStorageContainerId + " Pos(" + this.fromPositionDimensionOne + ","
-			+ this.fromPositionDimensionTwo + ")";
-			
-//			// ---------------------------------------------
-//			String specimenId = transferEventParametersObject.getSpecimen().getId().toString(); 
-//			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-//	    	
-//	    	String identifier = specimenId ;
-//	    	
-//	    	Logger.out.debug("\t\t*****************Form**************SpecimenID : "+identifier );
-//	    	List specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,identifier);
-//	    	
-//	    	String posOne = null;
-//	    	String posTwo = null;
-//	    	String storContId = null;
-//	    	String fromPositionData = null;
-//	    	if(specimenList!=null && specimenList.size() != 0)
-//	    	{
-//	    		Specimen specimen = (Specimen)specimenList.get(0);
-//	    		posOne = specimen.getPositionDimensionOne().toString();
-//	    		posTwo = specimen.getPositionDimensionTwo().toString();
-//	    		
-//	    		StorageContainer container = specimen.getStorageContainer();
-//	    		storContId = container.getId().toString();
-//	    		fromPositionData = container.getStorageType().getName() + " : " 
-//				+ storContId + " Pos(" + posOne + "," + posTwo + ")";
-//	    		
-//	            Logger.out.debug("\t\t************************************");
-//	            Logger.out.debug("\t\t*******************************SPID : "+specimenId );
-//	            Logger.out.debug("\t\t*******************************fromPosData : "+fromPositionData );
-//	            Logger.out.debug("\t\t*******************************Pos 1 : " + posOne );
-//	            Logger.out.debug("\t\t*******************************Pos 2 : " + posTwo );
-//	    	}	
-//			// ---------------------------------------------
-			
-	    }
-	    catch(Exception excp)
-	    {
-	        Logger.out.error(excp.getMessage());
-	    }
+			TransferEventParameters transferEventParametersObject = (TransferEventParameters) abstractDomain;
+			if (transferEventParametersObject.getFromStorageContainer() != null)
+			{
+				this.fromStorageContainerId = transferEventParametersObject
+						.getFromStorageContainer().getId().longValue();
+				this.fromPositionDimensionOne = transferEventParametersObject
+						.getFromPositionDimensionOne().intValue();
+				this.fromPositionDimensionTwo = transferEventParametersObject
+						.getFromPositionDimensionTwo().intValue();
+				this.fromPosition = transferEventParametersObject.getFromStorageContainer()
+				.getStorageType().getName()
+				+ " : "
+				+ this.fromStorageContainerId
+				+ " Pos("
+				+ this.fromPositionDimensionOne
+				+ "," + this.fromPositionDimensionTwo + ")";
+
+			}
+			else
+			{
+				this.fromStorageContainerId = 0;
+				this.fromPositionDimensionOne = 0;
+				this.fromPositionDimensionTwo = 0;
+				this.fromPosition = "Virtual Location";
+			}
+			this.positionDimensionOne = transferEventParametersObject.getToPositionDimensionOne()
+					.toString();
+			this.positionDimensionTwo = transferEventParametersObject.getToPositionDimensionTwo()
+					.toString();
+
+			this.storageContainer = transferEventParametersObject.getToStorageContainer().getId()
+					.toString();
+			this.positionInStorageContainer = transferEventParametersObject.getToStorageContainer()
+					.getStorageType().getName()
+					+ " : "
+					+ this.storageContainer
+					+ " Pos("
+					+ this.positionDimensionOne
+					+ ","
+					+ this.positionDimensionTwo + ")";
+			this.fromPosition = transferEventParametersObject.getFromStorageContainer()
+					.getStorageType().getName()
+					+ " : "
+					+ this.fromStorageContainerId
+					+ " Pos("
+					+ this.fromPositionDimensionOne
+					+ "," + this.fromPositionDimensionTwo + ")";
+
+			//			// ---------------------------------------------
+			//			String specimenId = transferEventParametersObject.getSpecimen().getId().toString(); 
+			//			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+			//	    	
+			//	    	String identifier = specimenId ;
+			//	    	
+			//	    	Logger.out.debug("\t\t*****************Form**************SpecimenID : "+identifier );
+			//	    	List specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,identifier);
+			//	    	
+			//	    	String posOne = null;
+			//	    	String posTwo = null;
+			//	    	String storContId = null;
+			//	    	String fromPositionData = null;
+			//	    	if(specimenList!=null && specimenList.size() != 0)
+			//	    	{
+			//	    		Specimen specimen = (Specimen)specimenList.get(0);
+			//	    		posOne = specimen.getPositionDimensionOne().toString();
+			//	    		posTwo = specimen.getPositionDimensionTwo().toString();
+			//	    		
+			//	    		StorageContainer container = specimen.getStorageContainer();
+			//	    		storContId = container.getId().toString();
+			//	    		fromPositionData = container.getStorageType().getName() + " : " 
+			//				+ storContId + " Pos(" + posOne + "," + posTwo + ")";
+			//	    		
+			//	            Logger.out.debug("\t\t************************************");
+			//	            Logger.out.debug("\t\t*******************************SPID : "+specimenId );
+			//	            Logger.out.debug("\t\t*******************************fromPosData : "+fromPositionData );
+			//	            Logger.out.debug("\t\t*******************************Pos 1 : " + posOne );
+			//	            Logger.out.debug("\t\t*******************************Pos 2 : " + posTwo );
+			//	    	}	
+			//			// ---------------------------------------------
+
+		}
+		catch (Exception excp)
+		{
+			Logger.out.error(excp.getMessage());
+		}
 	}
-	
+
 	public void setAllVal(Object object)
 	{
 		super.setAllVal(object);
-		edu.wustl.catissuecore.domainobject.TransferEventParameters parameter
-				= (edu.wustl.catissuecore.domainobject.TransferEventParameters)object;
-		
+		edu.wustl.catissuecore.domainobject.TransferEventParameters parameter = (edu.wustl.catissuecore.domainobject.TransferEventParameters) object;
+
 		//Aniruddha : Fix for bug - 1613
-		if(parameter.getFromPositionDimensionOne() != null)
+		if (parameter.getFromPositionDimensionOne() != null)
 		{
 			this.fromPositionDimensionOne = parameter.getFromPositionDimensionOne().intValue();
 		}
@@ -270,8 +304,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		{
 			this.fromPositionDimensionOne = 0;
 		}
-		
-		if(parameter.getFromPositionDimensionTwo() != null)
+
+		if (parameter.getFromPositionDimensionTwo() != null)
 		{
 			this.fromPositionDimensionTwo = parameter.getFromPositionDimensionTwo().intValue();
 		}
@@ -279,8 +313,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		{
 			this.fromPositionDimensionTwo = 0;
 		}
-		
-		if(parameter.getToPositionDimensionOne() != null)
+
+		if (parameter.getToPositionDimensionOne() != null)
 		{
 			this.positionDimensionOne = parameter.getToPositionDimensionOne().toString();
 		}
@@ -288,8 +322,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		{
 			this.positionDimensionOne = "0";
 		}
-		
-		if(parameter.getToPositionDimensionTwo() != null)
+
+		if (parameter.getToPositionDimensionTwo() != null)
 		{
 			this.positionDimensionTwo = parameter.getToPositionDimensionTwo().toString();
 		}
@@ -297,8 +331,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		{
 			this.positionDimensionTwo = "0";
 		}
-		
-		if(parameter.getFromStorageContainer() != null 
+
+		if (parameter.getFromStorageContainer() != null
 				&& parameter.getFromStorageContainer().getId() != null)
 		{
 			this.fromStorageContainerId = parameter.getFromStorageContainer().getId().longValue();
@@ -307,9 +341,8 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		{
 			this.fromStorageContainerId = 0L;
 		}
-		
-		
-		if(parameter.getToStorageContainer() != null 
+
+		if (parameter.getToStorageContainer() != null
 				&& parameter.getToStorageContainer().getId() != null)
 		{
 			this.storageContainer = parameter.getToStorageContainer().getId().toString();
@@ -318,34 +351,32 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		{
 			this.storageContainer = "0";
 		}
-		
+
 		String toStorageType = "";
-		
-		if(parameter.getToStorageContainer().getStorageType() != null
+
+		if (parameter.getToStorageContainer().getStorageType() != null
 				&& parameter.getToStorageContainer().getStorageType().getType() != null)
 		{
 			toStorageType = parameter.getToStorageContainer().getStorageType().getType();
 		}
-		
-		this.positionInStorageContainer = toStorageType + " : " 
-			+ this.storageContainer + " Pos(" + this.positionDimensionOne + ","
-			+ this.positionDimensionTwo + ")";
-		
+
+		this.positionInStorageContainer = toStorageType + " : " + this.storageContainer + " Pos("
+				+ this.positionDimensionOne + "," + this.positionDimensionTwo + ")";
+
 		String fromStorageType = "";
-		
-		if(parameter.getFromStorageContainer().getStorageType() != null 
+
+		if (parameter.getFromStorageContainer().getStorageType() != null
 				&& parameter.getFromStorageContainer().getStorageType().getType() != null)
 		{
 			fromStorageType = parameter.getFromStorageContainer().getStorageType().getType();
 		}
-		
-		this.fromPosition = fromStorageType + " : " 
-		+ this.fromStorageContainerId + " Pos(" + this.fromPositionDimensionOne + ","
-		+ this.fromPositionDimensionTwo + ")";
-		
+
+		this.fromPosition = fromStorageType + " : " + this.fromStorageContainerId + " Pos("
+				+ this.fromPositionDimensionOne + "," + this.fromPositionDimensionTwo + ")";
+
 		String specimenId = "";
-		
-		if(parameter.getSpecimen() != null && parameter.getSpecimen().getId() != null)
+
+		if (parameter.getSpecimen() != null && parameter.getSpecimen().getId() != null)
 		{
 			specimenId = parameter.getSpecimen().getId().toString();
 		}
@@ -353,114 +384,122 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		{
 			specimenId = "0";
 		}
-      	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-    	
-    	String identifier = specimenId ;
-    	
-    	try
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+
+		String identifier = specimenId;
+
+		try
 		{
-	    	List specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,identifier);
-	    	
-	    	String posOne = null;
-	    	String posTwo = null;
-	    	String storContId = null;
-	    	String fromPositionData = null;
-	    	if(specimenList!=null && specimenList.size() != 0)
-	    	{
-	    		Specimen specimen = (Specimen)specimenList.get(0);
-	    		posOne = specimen.getPositionDimensionOne().toString();
-	    		posTwo = specimen.getPositionDimensionTwo().toString();
-	    		
-	    		StorageContainer container = specimen.getStorageContainer();
-	    		storContId = container.getId().toString();
-	    		fromPositionData = container.getStorageType().getName() + " : " 
-				+ storContId + " Pos(" + posOne + "," + posTwo + ")";
-	    	}
+			List specimenList = bizLogic.retrieve(Specimen.class.getName(),
+					Constants.SYSTEM_IDENTIFIER, identifier);
+
+			String posOne = null;
+			String posTwo = null;
+			String storContId = null;
+			String fromPositionData = null;
+			if (specimenList != null && specimenList.size() != 0)
+			{
+				Specimen specimen = (Specimen) specimenList.get(0);
+				posOne = specimen.getPositionDimensionOne().toString();
+				posTwo = specimen.getPositionDimensionTwo().toString();
+
+				StorageContainer container = specimen.getStorageContainer();
+				storContId = container.getId().toString();
+				fromPositionData = container.getStorageType().getName() + " : " + storContId
+						+ " Pos(" + posOne + "," + posTwo + ")";
+			}
 		}
-    	catch(Exception e)
+		catch (Exception e)
 		{
-    		Logger.out.debug(e.getMessage(),e);
+			Logger.out.debug(e.getMessage(), e);
 		}
 	}
-	
-	/**
-     * Overrides the validate method of ActionForm.
-     * */
-     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
-     {
-     	ActionErrors errors = super.validate(mapping, request);
-         Validator validator = new Validator();
-         
-         try
-         {
-         	// check the FROM Position
-         	if (validator.isEmpty(String.valueOf(fromPosition)))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("transfereventparameters.fromposition")));
-            }
-    
-            if(validator.isEmpty(positionDimensionOne) || validator.isEmpty(positionDimensionTwo) || validator.isEmpty(storageContainer ))
-            {
-                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                  "errors.item.required", ApplicationProperties
-                          .getValue("transfereventparameters.toposition")));
-            }
-            else
-            {
-                if(!validator.isNumeric(positionDimensionOne,1) || !validator.isNumeric(positionDimensionTwo,1) || !validator.isNumeric(storageContainer ,1))
-                {
-	                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-	                  "errors.item.format", ApplicationProperties
-	                          .getValue("transfereventparameters.toposition")));
-                }
-            	
-            }
-         }
-         catch(Exception excp)
-         {
-             Logger.out.error(excp.getMessage());
-         }
-         return errors;
-      }
-	
 
-     
+	/**
+	 * Overrides the validate method of ActionForm.
+	 * */
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
+		ActionErrors errors = super.validate(mapping, request);
+		Validator validator = new Validator();
+
+		try
+		{
+			// check the FROM Position
+			if (validator.isEmpty(String.valueOf(fromPosition)))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("transfereventparameters.fromposition")));
+			}
+
+			if (validator.isEmpty(positionDimensionOne) || validator.isEmpty(positionDimensionTwo)
+					|| validator.isEmpty(storageContainer))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+						ApplicationProperties.getValue("transfereventparameters.toposition")));
+			}
+			else
+			{
+				if (!validator.isNumeric(positionDimensionOne, 1)
+						|| !validator.isNumeric(positionDimensionTwo, 1)
+						|| !validator.isNumeric(storageContainer, 1))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+							ApplicationProperties.getValue("transfereventparameters.toposition")));
+				}
+
+			}
+		}
+		catch (Exception excp)
+		{
+			Logger.out.error(excp.getMessage());
+		}
+		return errors;
+	}
+
 	protected void reset()
 	{
-//        super.reset();
-//        this.fromPositionDimensionOne = 0;
-//        this.fromPositionDimensionTwo = 0;
-//        this.positionDimensionOne = 0;
-//        this.positionDimensionTwo = 0;
-//        this.fromStorageContainerId = -1;
-//        this.storageContainer = -1;
-//        this.fromPosition = null;
-//        this.positionInStorageContainer = null;
-		
+		//        super.reset();
+		//        this.fromPositionDimensionOne = 0;
+		//        this.fromPositionDimensionTwo = 0;
+		//        this.positionDimensionOne = 0;
+		//        this.positionDimensionTwo = 0;
+		//        this.fromStorageContainerId = -1;
+		//        this.storageContainer = -1;
+		//        this.fromPosition = null;
+		//        this.positionInStorageContainer = null;
+
 	}
-	
+
 	/**
 	 * @return Returns the fromPosition.
 	 */
-	public String getFromPosition() {
+	public String getFromPosition()
+	{
 		return fromPosition;
 	}
+
 	/**
 	 * @param fromPosition The fromPosition to set.
 	 */
-	public void setFromPosition(String fromPosition) {
+	public void setFromPosition(String fromPosition)
+	{
 		this.fromPosition = fromPosition;
 	}
+
 	/**
 	 * @return Returns the toPosition.
 	 */
-	public String getPositionInStorageContainer() {
+	public String getPositionInStorageContainer()
+	{
 		return positionInStorageContainer;
 	}
+
 	/**
 	 * @param toPosition The toPosition to set.
 	 */
-	public void setPositionInStorageContainer(String toPosition) {
+	public void setPositionInStorageContainer(String toPosition)
+	{
 		this.positionInStorageContainer = toPosition;
 	}
 }

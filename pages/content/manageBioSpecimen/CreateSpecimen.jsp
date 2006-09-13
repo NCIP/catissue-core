@@ -84,6 +84,28 @@
 				document.forms[0].submit();
 			}	
 		}
+		
+		function setVirtuallyLocated(element)
+		{
+			var containerName = document.getElementById("customListBox_1_0");
+			var pos1 = document.getElementById("customListBox_1_1");
+			var pos2 = document.getElementById("customListBox_1_2");
+			if(element.checked)
+			{
+				containerName.disabled = true;
+				pos1.disabled = true;
+				pos2.disabled = true;
+				document.forms[0].mapButton.disabled = true;
+			}
+			else
+			{
+				containerName.disabled = false;
+				pos1.disabled = false;;
+				pos2.disabled = false;;
+				document.forms[0].mapButton.disabled = false;
+				
+			}
+		}
 	</script>
 </head>
 
@@ -365,6 +387,12 @@
 					
 					String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2','name','810','320','yes');return false";
 					String noOfEmptyCombos = "3";
+					boolean disabled = false;
+					if(request.getAttribute("disabled") != null && request.getAttribute("disabled").equals("true"))
+					{
+						disabled = true;
+					}	
+
 				%>
 				
 				<%=ScriptGenerator.getJSForOutermostDataTable()%>
@@ -373,6 +401,20 @@
 				<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 				
 				<td class="formField" colSpan="4">
+						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+							<html:checkbox property="virtuallyLocated" onclick="setVirtuallyLocated(this)"/>
+							<bean:message key="specimen.virtuallyLocated" />
+						</logic:equal>	
+						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+							<html:checkbox property="virtuallyLocated" styleClass="hidden"/>
+							<%
+								CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) request.getAttribute("createSpecimenForm");
+								if(createSpecimenForm != null && createSpecimenForm.isVirtuallyLocated())
+								{%>Specimen is virtually Located <%}
+							
+							%>
+						</logic:notEqual>	
+								
 						<ncombo:containermap dataMap="<%=dataMap%>" 
 											attributeNames="<%=attrNames%>" 
 											initialValues="<%=initValues%>"  
@@ -382,7 +424,6 @@
 											rowNumber="<%=rowNumber%>" 
 											onChange="<%=onChange%>" 
 											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-											
 											buttonName="mapButton" 
 											value="Map"
 											buttonOnClick = "<%=buttonOnClicked%>"

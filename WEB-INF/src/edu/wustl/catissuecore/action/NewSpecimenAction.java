@@ -317,40 +317,50 @@ public class NewSpecimenAction extends SecureAction
 		else
 		{
 			containerMap = new TreeMap();
-			Integer id = new Integer(specimenForm.getStorageContainer());
-			String parentContainerName = "";
-			String valueField1 = "id";
-			List list = bizLogic.retrieve(StorageContainer.class.getName(), valueField1, new Long(
-					specimenForm.getStorageContainer()));
-			if (!list.isEmpty())
-			{
-				StorageContainer container = (StorageContainer) list.get(0);
-				parentContainerName = container.getName();
-
-			}
-			Integer pos1 = new Integer(specimenForm.getPositionDimensionOne());
-			Integer pos2 = new Integer(specimenForm.getPositionDimensionTwo());
-
-			List pos2List = new ArrayList();
-			pos2List.add(new NameValueBean(pos2, pos2));
-
-			Map pos1Map = new TreeMap();
-			pos1Map.put(new NameValueBean(pos1, pos1), pos2List);
-			containerMap.put(new NameValueBean(parentContainerName, id), pos1Map);
-
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
-			if (specimenForm.getStorageContainer() != null && !specimenForm.getStorageContainer().equals("-1"))
+			Logger.out.info("--------------container:"+specimenForm.getStorageContainer());
+			Logger.out.info("--------------pos1:"+specimenForm.getPositionDimensionOne());
+			Logger.out.info("--------------pos2:"+specimenForm.getPositionDimensionTwo());
+			if (specimenForm.getStorageContainer() != null
+					&& !specimenForm.getStorageContainer().equals(""))
 			{
-				startingPoints[0] = specimenForm.getStorageContainer();
+				Integer id = new Integer(specimenForm.getStorageContainer());
+				String parentContainerName = "";
+				String valueField1 = "id";
+				List list = bizLogic.retrieve(StorageContainer.class.getName(), valueField1,
+						new Long(specimenForm.getStorageContainer()));
+				if (!list.isEmpty())
+				{
+					StorageContainer container = (StorageContainer) list.get(0);
+					parentContainerName = container.getName();
 
-			}
-			if (specimenForm.getPositionDimensionOne() != null && !specimenForm.getPositionDimensionOne().equals("-1"))
-			{
-				startingPoints[1] = specimenForm.getPositionDimensionOne();
-			}
-			if (specimenForm.getPositionDimensionTwo() != null && !specimenForm.getPositionDimensionTwo().equals("-1"))
-			{
-				startingPoints[2] = specimenForm.getPositionDimensionTwo();
+				}
+				Integer pos1 = new Integer(specimenForm.getPositionDimensionOne());
+				Integer pos2 = new Integer(specimenForm.getPositionDimensionTwo());
+
+				List pos2List = new ArrayList();
+				pos2List.add(new NameValueBean(pos2, pos2));
+
+				Map pos1Map = new TreeMap();
+				pos1Map.put(new NameValueBean(pos1, pos1), pos2List);
+				containerMap.put(new NameValueBean(parentContainerName, id), pos1Map);
+
+				if (specimenForm.getStorageContainer() != null
+						&& !specimenForm.getStorageContainer().equals("-1"))
+				{
+					startingPoints[0] = specimenForm.getStorageContainer();
+
+				}
+				if (specimenForm.getPositionDimensionOne() != null
+						&& !specimenForm.getPositionDimensionOne().equals("-1"))
+				{
+					startingPoints[1] = specimenForm.getPositionDimensionOne();
+				}
+				if (specimenForm.getPositionDimensionTwo() != null
+						&& !specimenForm.getPositionDimensionTwo().equals("-1"))
+				{
+					startingPoints[2] = specimenForm.getPositionDimensionTwo();
+				}
 			}
 			initialValues = new Vector();
 			Logger.out.info("Starting points[0]" + startingPoints[0]);
@@ -363,6 +373,10 @@ public class NewSpecimenAction extends SecureAction
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		// -------------------------
 
+		if (specimenForm.isVirtuallyLocated())
+		{
+			request.setAttribute("disabled", "true");
+		}
 		return mapping.findForward(pageOf);
 	}
 

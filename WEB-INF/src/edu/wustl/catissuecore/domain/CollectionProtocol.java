@@ -25,7 +25,7 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Mandar Deshmukh
  */
-public class CollectionProtocol extends SpecimenProtocol implements java.io.Serializable
+public class CollectionProtocol extends SpecimenProtocol implements java.io.Serializable,Comparable
 {
 	private static final long serialVersionUID = 1234567890L;
 	
@@ -194,5 +194,39 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
      */
 	public String getMessageLabel() {		
 		return this.title;
+	}
+	
+	public boolean equals(Object object)
+    {
+    	
+    	Logger.out.info("this class---------:"+this.getClass().getName());
+    	Logger.out.info("object class---------:"+object.getClass().getName());
+    	
+    	if(this.getClass().getName().equals(object.getClass().getName()))
+    	{
+    		CollectionProtocol collectionProtocol = (CollectionProtocol)object;
+    		Logger.out.info("this class id ---------:"+this.getId().longValue());
+        	Logger.out.info("object class id ---------:"+collectionProtocol.getId().longValue());
+        	
+    		if(this.getId().longValue() == collectionProtocol.getId().longValue())
+    			return true;
+    	}
+    	return false;
+    }
+	public int compareTo(Object object)
+	{
+		
+		Logger.out.info("this class---------:"+this.getClass().getName());
+    	Logger.out.info("object class---------:"+object.getClass().getName());
+    	
+    	if(this.getClass().getName().equals(object.getClass().getName()))
+    	{
+    		CollectionProtocol collectionProtocol = (CollectionProtocol)object;
+    		Logger.out.info("this class id ---------:"+this.getId().longValue());
+        	Logger.out.info("object class id ---------:"+collectionProtocol.getId().longValue());
+        
+        	return this.getId().compareTo(collectionProtocol.getId());
+    	}
+    	return 0;
 	}
 }
