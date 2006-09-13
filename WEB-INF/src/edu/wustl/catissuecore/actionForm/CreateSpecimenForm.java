@@ -34,6 +34,28 @@ public class CreateSpecimenForm extends SpecimenForm
      * Identifier of the Parent Speciemen.
      * */
     private String parentSpecimenId;
+    
+    /**
+	 * label of Parent Specimen
+	 */
+	private String parentSpecimenLabel = "";
+	
+	 /**
+	 * barcode of Parent Specimen
+	 */
+	private String parentSpecimenBarcode = "";
+	
+	 /**
+	 * Radio button to choose barcode/specimen identifier
+	 */
+	private String checkedButton = "1";
+	
+	/**
+	 *  Decides the calling of reset
+	 */
+	private boolean reset = true;
+	
+	
        
     /**
      * Returns an identifier of the Parent Speciemen.
@@ -56,11 +78,13 @@ public class CreateSpecimenForm extends SpecimenForm
     }
         
  
-   
     protected void reset()
     {
-    	super.reset();
-    	this.parentSpecimenId=null;
+    	if (reset == true) 
+	    {
+        super.reset();
+     	this.parentSpecimenId=null;
+	    }
     }
     
     /**
@@ -109,10 +133,20 @@ public class CreateSpecimenForm extends SpecimenForm
          {
              if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
              {
-             	if (!validator.isValidOption(parentSpecimenId))
-                {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parent")));
-                }
+             	if(this.getCheckedButton().equals("1")) 
+             	{
+             	 	if (validator.isEmpty(parentSpecimenLabel))
+                 {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parentLabel")));
+                 }
+             	} else
+             	{
+             		if (validator.isEmpty(parentSpecimenBarcode))
+                    {
+                       errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parentBarcode")));
+                    }
+             	}
+             	
              }
          }
          catch(Exception excp)
@@ -121,4 +155,60 @@ public class CreateSpecimenForm extends SpecimenForm
          }
          return errors;
       }
+	/**
+	 * @return Returns the checkedButton.
+	 */
+	public String getCheckedButton()
+	{
+		return checkedButton;
+	}
+	/**
+	 * @param checkedButton The checkedButton to set.
+	 */
+	public void setCheckedButton(String checkedButton)
+	{
+		this.checkedButton = checkedButton;
+	}
+	/**
+	 * @return Returns the parentSpecimenBarcode.
+	 */
+	public String getParentSpecimenBarcode()
+	{
+		return parentSpecimenBarcode;
+	}
+	/**
+	 * @param parentSpecimenBarcode The parentSpecimenBarcode to set.
+	 */
+	public void setParentSpecimenBarcode(String parentSpecimenBarcode)
+	{
+		this.parentSpecimenBarcode = parentSpecimenBarcode;
+	}
+	/**
+	 * @return Returns the parentSpecimenLabel.
+	 */
+	public String getParentSpecimenLabel()
+	{
+		return parentSpecimenLabel;
+	}
+	/**
+	 * @param parentSpecimenLabel The parentSpecimenLabel to set.
+	 */
+	public void setParentSpecimenLabel(String parentSpecimenLabel)
+	{
+		this.parentSpecimenLabel = parentSpecimenLabel;
+	}
+	/**
+	 * @return Returns the reset.
+	 */
+	public boolean getReset()
+	{
+		return reset;
+	}
+	/**
+	 * @param reset The reset to set.
+	 */
+	public void setReset(boolean reset)
+	{
+		this.reset = reset;
+	}
 }
