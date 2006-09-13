@@ -49,13 +49,13 @@
 		{
 			if(element.value == 1)
 			{
-				document.forms[0].specimenId.disabled = false;
+				document.forms[0].specimenLabel.disabled = false;
 				document.forms[0].barcode.disabled = true;
 			}
 			else
 			{
 				document.forms[0].barcode.disabled = false;
-				document.forms[0].specimenId.disabled = true;
+				document.forms[0].specimenLabel.disabled = true;
 			}
 		}
 		
@@ -96,22 +96,18 @@
 				&nbsp;
 			</html:radio>
 		</td>
-		<td class="formRequiredLabelRightBorder" width="120" nowrap>
+		<td class="formRequiredLabelLeftBorder" width="160" nowrap>
 				<label for="parentId">
-					<bean:message key="createSpecimen.parent"/>
+					<bean:message key="createSpecimen.parentLabel"/>
 				</label>
 		</td>
 		<td class="formField">
 			<logic:equal name="aliquotForm" property="checkedButton" value="1">
-				<html:select property="specimenId" styleClass="formField" styleId="specimenId" size="1">
-					<html:options collection="<%=Constants.SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
-				</html:select>
+				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="specimenLabel" property="specimenLabel" disabled="false"/>
 			</logic:equal>
 			
 			<logic:equal name="aliquotForm" property="checkedButton" value="2">
-				<html:select property="specimenId" styleClass="formField" styleId="specimenId" size="1" disabled="true">
-					<html:options collection="<%=Constants.SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
-				</html:select>
+				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="specimenLabel" property="specimenLabel" disabled="true"/>
 			</logic:equal>
 		</td>
 		<td class="formRequiredLabelBoth" width="5">*</td>
@@ -446,4 +442,5 @@
 	} //If pageOf != "Aliquot Page"
 %>
 </table>
+<html:hidden property="specimenID"/>
 </html:form>

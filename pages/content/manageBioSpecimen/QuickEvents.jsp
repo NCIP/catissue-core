@@ -18,15 +18,16 @@
 	<script language="JavaScript">
 		function onRadioButtonClick(element)
 		{
+	
 			if(element.value == 1)
 			{
-				document.forms[0].specimenID.disabled = false;
+				document.forms[0].specimenLabel.disabled = false;
 				document.forms[0].barCode.disabled = true;
 			}
 			else
 			{
 				document.forms[0].barCode.disabled = false;
-				document.forms[0].specimenID.disabled = true;
+				document.forms[0].specimenLabel.disabled = true;
 			}
 		}
 	</script>
@@ -43,7 +44,7 @@
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 <tr>
 <td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
 	<tr>
 		<td class="formMessage" colspan="3">* indicates a required field</td>
 	</tr>
@@ -61,22 +62,18 @@
 				&nbsp;
 			</html:radio>
 		</td>
-		<TD class="formRequiredLabelRightBorder" width="73">
+		<TD class="formRequiredLabelLeftBorder" width="120">
 			<label for="parentId">
-				<bean:message key="quickEvents.specimenID"/>
+				<bean:message key="quickEvents.specimenLabel"/>
 			</label>
 		</TD>
 		<td class="formField">
 			<logic:equal name="quickEventsForm" property="checkedButton" value="1">
-				<html:select property="specimenID" styleClass="formField" styleId="specimenID" size="1">
-					<html:options collection="<%=Constants.SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
-				</html:select>
+					<html:text styleClass="formFieldSized10"  maxlength="50"  size="30"  styleId="specimenLabel" property="specimenLabel" disabled="false"/>
 			</logic:equal>
 			
 			<logic:equal name="quickEventsForm" property="checkedButton" value="2">
-				<html:select property="specimenID" styleClass="formField" styleId="specimenID" size="1" disabled="true">
-					<html:options collection="<%=Constants.SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
-				</html:select>
+				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30"  styleId="specimenLabel" property="specimenLabel" disabled="true"/>
 			</logic:equal>
 		</td>
 		<td class="formRequiredLabelBoth" width="5">*</td>
