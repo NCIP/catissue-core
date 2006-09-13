@@ -566,12 +566,14 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	    	this.noOfAliquots = Integer.parseInt(form.getNoOfAliquots());
 	    	this.parentSpecimen = new Specimen();
 	    	
-	    	if(validator.isValidOption(form.getSpecimenId()))
+	    	if(!validator.isEmpty(form.getSpecimenLabel()))   // TODO
 	    	{
-	    		parentSpecimen.setId(new Long(form.getSpecimenId()));
+	    		parentSpecimen.setLabel(form.getSpecimenLabel());
+	    		parentSpecimen.setId(new Long(form.getSpecimenID()));
 	    	}
-	    	else
-	    	{
+	    	else if(!validator.isEmpty(form.getBarcode()))
+	    	{   
+	    		parentSpecimen.setId(new Long(form.getSpecimenID()));
 	    		parentSpecimen.setBarcode(form.getBarcode());
 	    	}
     	}
