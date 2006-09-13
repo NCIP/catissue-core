@@ -32,7 +32,7 @@ import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.QuantityInCount;
 import edu.wustl.catissuecore.domain.QuantityInGram;
-import edu.wustl.catissuecore.domain.QuantityInMicrogram;
+import edu.wustl.catissuecore.domain.QuantityInMicroGram;
 import edu.wustl.catissuecore.domain.QuantityInMiliLiter;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -270,7 +270,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			else
 			{
 				// set new available quantity
-				molecularSpecimenObj.setAvailableQuantity(new QuantityInMicrogram(newAvailableQty));//molecularSpecimenObj.setAvailableQuantityInMicrogram(new Double(newAvailableQty));
+				molecularSpecimenObj.setAvailableQuantity(new QuantityInMicroGram(newAvailableQty));//molecularSpecimenObj.setAvailableQuantityInMicrogram(new Double(newAvailableQty));
 			}
 		}
 		else if(obj instanceof CellSpecimen)
