@@ -262,7 +262,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_EVENT_PARAMETERS_ACTION = "ListSpecimenEventParameters.do";
 	
 	//Create Specimen Data Actions.
-	public static final String CREATE_SPECIMEN_ADD_ACTION = "CreateSpecimenAdd.do";
+	public static final String CREATE_SPECIMEN_ADD_ACTION = "AddSpecimen.do";
 	public static final String CREATE_SPECIMEN_EDIT_ACTION = "CreateSpecimenEdit.do";
 	public static final String CREATE_SPECIMEN_SEARCH_ACTION = "CreateSpecimenSearch.do";
 	
@@ -1015,6 +1015,24 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT_ETHINICITY="ETHINICITY";
 	public static final String PARTICIPANT_SOCIAL_SECURITY_NUMBER="SOCIAL_SECURITY_NUMBER";
 	public static final String PARTICIPANT_PROBABLITY_MATCH="Probability";
+	
+	public static final String PARTICIPANT_SSN_EXACT="SSNExact";
+	public static final String PARTICIPANT_SSN_PARTIAL="SSNPartial";
+	public static final String PARTICIPANT_DOB_EXACT="DOBExact";
+	public static final String PARTICIPANT_DOB_PARTIAL="DOBPartial";
+	public static final String PARTICIPANT_LASTNAME_EXACT="LastNameExact";
+	public static final String PARTICIPANT_LASTNAME_PARTIAL="LastNamePartial";
+	public static final String PARTICIPANT_NAME_EXACT="NameExact";
+	public static final String PARTICIPANT_NAME_PARTIAL="NamePartial";
+	public static final String PARTICIPANT_MIDDLE_NAME_EXACT="MiddleNameExact";
+	public static final String PARTICIPANT_MIDDLE_NAME_PARTIAL="MiddleNamePartial";
+	public static final String PARTICIPANT_GENDER_EXACT="GenderExact";
+	public static final String PARTICIPANT_RACE_EXACT="RaceExact";
+	public static final String PARTICIPANT_RACE_PARTIAL="RacePartial";
+	public static final String PARTICIPANT_BONUS="Bonus";
+	public static final String PARTICIPANT_TOTAL_POINTS="TotalPoints";
+	public static final String PARTICIPANT_MATCH_CHARACTERS_FOR_LAST_NAME="MatchCharactersForLastName";
+	
 	
 	//Constants for integration of caTies and CAE with caTissue Core
 	public static final String LINKED_DATA = "linkedData";
