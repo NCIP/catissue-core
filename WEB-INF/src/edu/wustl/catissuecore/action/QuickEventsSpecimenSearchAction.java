@@ -67,16 +67,16 @@ public class QuickEventsSpecimenSearchAction extends BaseAction {
   	 		String errorString="";
   	        if(qEForm.getCheckedButton().equals("1" ))
   	        {
-  	        	String specimenID = qEForm.getSpecimenID();
-  	        	specimenFound = isExistingSpecimen(Constants.SYSTEM_IDENTIFIER,specimenID ,bizLogic  );
-  	        	errorString ="quickEvents.specimenID";
+  	        	String specimenLabel = qEForm.getSpecimenLabel();
+  	        	specimenFound = isExistingSpecimen(Constants.SYSTEM_LABEL,specimenLabel ,bizLogic  );
+  	      	    errorString = ApplicationProperties.getValue("quickEvents.specimenLabel");
   	        }
   	        else if(qEForm.getCheckedButton().equals("2" ) )
   	        {
   	        	String barCode = qEForm.getBarCode();
-  	        	specimenFound = isExistingSpecimen("barcode",barCode ,bizLogic  );
-  	        	errorString = "quickEvents.barcode";
-  	        }
+  	        	specimenFound = isExistingSpecimen(Constants.SYSTEM_BARCODE,barCode ,bizLogic  );
+  	      	    errorString = ApplicationProperties.getValue("quickEvents.barcode");
+ 	        }
   	        
   	        if(!specimenFound.equalsIgnoreCase("0" ))
   	        {
@@ -124,9 +124,9 @@ public class QuickEventsSpecimenSearchAction extends BaseAction {
         	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("quickEvents.eventparameters")));
         	pageOf = Constants.FAILURE;  
         }
-        if(form.getCheckedButton().equals("1" ) && !validator.isValidOption(form.getSpecimenID()) )
+        if(form.getCheckedButton().equals("1" ) && !validator.isValidOption(form.getSpecimenLabel()) )
         {
-        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("quickEvents.specimenID")));
+        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("quickEvents.specimenLabel")));
         	pageOf = Constants.FAILURE;  
         }
         if(form.getCheckedButton().equals("2" ) && validator.isEmpty(form.getBarCode()) )
