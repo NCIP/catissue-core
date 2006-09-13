@@ -24,8 +24,8 @@ import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.QuantityInCount;
 import edu.wustl.catissuecore.domain.QuantityInGram;
-import edu.wustl.catissuecore.domain.QuantityInMicroGram;
-import edu.wustl.catissuecore.domain.QuantityInMiliLiter;
+import edu.wustl.catissuecore.domain.QuantityInMicrogram;
+import edu.wustl.catissuecore.domain.QuantityInMilliliter;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -284,7 +284,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			else
 			{
 				availabeQty = availabeQty - quantity;
-				molecularSpecimen.setAvailableQuantity(new QuantityInMicroGram(availabeQty));//molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
+				molecularSpecimen.setAvailableQuantity(new QuantityInMicrogram(availabeQty));//molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
 			}
 		}
 		else if(specimen instanceof FluidSpecimen)
@@ -296,7 +296,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			else
 			{
 				availabeQty = availabeQty - quantity;
-				fluidSpecimen.setAvailableQuantity(new QuantityInMiliLiter(availabeQty));//fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
+				fluidSpecimen.setAvailableQuantity(new QuantityInMilliliter(availabeQty));//fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
 			}
 		}
 		return true;
@@ -419,14 +419,14 @@ public class DistributionBizLogic extends DefaultBizLogic
 			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
 			double availabeQty = Double.parseDouble(molecularSpecimen.getAvailableQuantity().toString());//molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
 			availabeQty = availabeQty + quantity;
-			molecularSpecimen.setAvailableQuantity(new QuantityInMicroGram(availabeQty));//molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
+			molecularSpecimen.setAvailableQuantity(new QuantityInMicrogram(availabeQty));//molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
 		}
 		else if(specimen instanceof FluidSpecimen)
 		{
 			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
 			double availabeQty = Double.parseDouble(fluidSpecimen.getAvailableQuantity().toString());//fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
 			availabeQty = availabeQty + quantity;
-			fluidSpecimen.setAvailableQuantity(new QuantityInMiliLiter(availabeQty));//fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
+			fluidSpecimen.setAvailableQuantity(new QuantityInMilliliter(availabeQty));//fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
 		}
 		
 	}

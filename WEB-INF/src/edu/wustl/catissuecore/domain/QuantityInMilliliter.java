@@ -17,9 +17,16 @@ package edu.wustl.catissuecore.domain;
 public class QuantityInMilliliter extends Quantity 
 {
     
-	protected Double value;
+	//protected Double value;
 	
 	public QuantityInMilliliter(){
+
+	}
+	/**
+	 * Parameterized Constructor
+	 */
+	public QuantityInMilliliter(double value){
+		this.value = new Double(value);
 
 	}
 	
