@@ -53,22 +53,22 @@
 					<td class="formField">
 						<table>
 							<tr>
-								<td>
+								<td class="standardText">
 									<input value="1" checked="checked" onclick="onRadioButtonClick(this)" class="" name="checkedButton" id="checkedButton" type="radio"/><%=Constants.PARTICIPANT%>
 								</td>
 							</tr>
 							<tr>
-								<td>
+								<td class="standardText">
 									<input value="2" onclick="onRadioButtonClick(this)" class="" name="checkedButton" id="checkedButton" type="radio"/><%=Constants.MENU_COLLECTION_PROTOCOL%>
 								</td>
 							</tr>
 							<tr>
-								<td>
+								<td class="standardText">
 									<input value="3" onclick="onRadioButtonClick(this)" class="" name="checkedButton" id="checkedButton" type="radio"/><%=Constants.MENU_SPECIMEN_COLLECTION_GROUP%>
 								</td>
 							</tr>
 							<tr>
-								<td>
+								<td class="standardText">
 									<input value="4" onclick="onRadioButtonClick(this)" class="" name="checkedButton" id="checkedButton" type="radio"/><%=Constants.SPECIMEN%>
 								</td>
 							</tr>
