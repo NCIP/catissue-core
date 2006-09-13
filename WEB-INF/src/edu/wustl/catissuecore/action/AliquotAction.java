@@ -55,7 +55,7 @@ public class AliquotAction extends BaseAction //SecureAction
             HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		AliquotForm aliquotForm = (AliquotForm)form;
-		String specimenId = aliquotForm.getSpecimenId();
+		String specimenLabel = aliquotForm.getSpecimenLabel();
 		
 		//Extracting the values of the operation & pageOf parameters.
         String operation = request.getParameter(Constants.OPERATION);
@@ -90,21 +90,21 @@ public class AliquotAction extends BaseAction //SecureAction
         	return mapping.findForward(pageOf);
         }
 		
-		if(specimenId == null)
+		if(specimenLabel == null)
 		{
-			if(request.getAttribute(Constants.SYSTEM_IDENTIFIER) != null)
+			if(request.getAttribute(Constants.SYSTEM_LABEL) != null)
 			{
-				specimenId = String.valueOf(request.getAttribute(Constants.SYSTEM_IDENTIFIER));
+				specimenLabel = String.valueOf(request.getAttribute(Constants.SYSTEM_LABEL));
 			}
 			else
 			{
-				specimenId = request.getParameter(Constants.SYSTEM_IDENTIFIER);
+				specimenLabel = request.getParameter(Constants.SYSTEM_LABEL);
 			}
 		}
 		
-		if(specimenId != null)
+		if(specimenLabel != null)
 		{
-			aliquotForm.setSpecimenId(specimenId);
+			aliquotForm.setSpecimenLabel(specimenLabel);
 			aliquotForm.setCheckedButton("1");
 			aliquotForm.setNoOfAliquots(request.getParameter("noOfAliquots"));
 			aliquotForm.setQuantityPerAliquot(request.getParameter("quantityPerAliquot"));
@@ -138,25 +138,25 @@ public class AliquotAction extends BaseAction //SecureAction
         request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
         request.setAttribute(Constants.PAGEOF,pageOf);
         
-        String [] displayNameField = {Constants.SYSTEM_IDENTIFIER};
+      /*  String [] displayNameField = {Constants.SYSTEM_IDENTIFIER};
 		List specimenIdList = bizLogic.getList(Specimen.class.getName(), displayNameField, Constants.SYSTEM_IDENTIFIER, true);
-		request.setAttribute(Constants.SPECIMEN_ID_LIST,specimenIdList);
+		request.setAttribute(Constants.SPECIMEN_ID_LIST,specimenIdList); */
 		
         return mapping.findForward(pageOf);
 	}
 	
-	//This method checks whether the specimen with given identifier exists or not.
+	//This method checks whether the specimen with given label exists or not.
 	private String checkForSpecimen(HttpServletRequest request, AliquotForm form) throws Exception
 	{
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		String specimenId = form.getSpecimenId();
+		String specimenLabel = form.getSpecimenLabel();
 		List specimenList = new ArrayList();
 		String errorString = "";
 		
 		if(form.getCheckedButton().equals("1"))
 		{
-			specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,new Long(specimenId));
-			errorString = Constants.SYSTEM_IDENTIFIER;
+			specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_LABEL,specimenLabel);
+			errorString = Constants.SYSTEM_LABEL;
 		}
 		else
 		{
@@ -177,8 +177,11 @@ public class AliquotAction extends BaseAction //SecureAction
 		else
 		{
 			Specimen specimen = (Specimen)specimenList.get(0);
-			populateParentSpecimenData(form,specimen);
-			
+		    populateParentSpecimenData(form,specimen);
+		    
+		    form.setSpecimenID(""+specimen.getId());
+		//	request.setAttribute(Constants.SPECIMEN_ID,specimen.getId());
+								
 			String pageOf = checkQuantityPerAliquot(request,form);
 			
 			if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
@@ -467,9 +470,9 @@ public class AliquotAction extends BaseAction //SecureAction
 		                 
         if(form.getCheckedButton().equals("1"))
         {
-        	if(!validator.isValidOption(form.getSpecimenId()))
+        	if(validator.isEmpty(form.getSpecimenLabel()))
         	{
-        		errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parent")));
+        		errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parentLabel")));
         		pageOf = Constants.PAGEOF_ALIQUOT;
         	}
         }
