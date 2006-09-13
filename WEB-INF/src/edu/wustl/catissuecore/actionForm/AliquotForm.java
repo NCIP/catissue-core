@@ -35,9 +35,14 @@ import edu.wustl.common.util.global.Validator;
 public class AliquotForm extends AbstractActionForm
 {
 	/**
-     * An identifier of a specimen.
+     * An label of a specimen.
      */
-	private String specimenId;
+	private String specimenLabel;
+	
+	/**
+     * An label of a specimen.
+     */
+	private String specimenID;
     
     /**
      * A number that tells how many aliquots to be created.
@@ -270,23 +275,23 @@ public class AliquotForm extends AbstractActionForm
 	}
 	
 	/**
-	 * Returns the specimen identifier of parent specimen.
-	 * @return The specimen identifier of parent specimen.
-	 * @see #setSpecimenId(String)
+	 * Returns the specimen label of parent specimen.
+	 * @return The specimen label of parent specimen.
+	 * @see #setSpecimenLabel(String)
 	 */
-	public String getSpecimenId()
+	public String getSpecimenLabel()
 	{
-		return specimenId;
+		return specimenLabel;
 	}
 	
 	/**
-     * Sets the specimen identifier of parent specimen.
-     * @param specimenId The specimen identifier of parent specimen.
-     * @see #getSpecimenId()
+     * Sets the specimen label of parent specimen.
+     * @param specimenLabel The specimen label of parent specimen.
+     * @see #getSpecimenLabel()
      */
-	public void setSpecimenId(String specimenId)
+	public void setSpecimenLabel(String specimenLabel)
 	{
-		this.specimenId = specimenId;
+		this.specimenLabel = specimenLabel;
 	}
 	
 	/**
@@ -504,5 +509,19 @@ public class AliquotForm extends AbstractActionForm
 	public void setCheckedButton(String checkedButton)
 	{
 		this.checkedButton = checkedButton;
+	}
+	/**
+	 * @return Returns the specimenID.
+	 */
+	public String getSpecimenID()
+	{
+		return specimenID;
+	}
+	/**
+	 * @param specimenID The specimenID to set.
+	 */
+	public void setSpecimenID(String specimenID)
+	{
+		this.specimenID = specimenID;
 	}
 }
