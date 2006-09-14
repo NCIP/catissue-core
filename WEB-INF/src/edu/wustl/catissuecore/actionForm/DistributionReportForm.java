@@ -52,10 +52,17 @@ public class DistributionReportForm extends ActionForm
 	private String toSite;
 	private String distributionProtocolTitle;
 	private Long distributionId;
+	
+	private Integer distributionType = new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE);
+	
+	public Integer getDistributionType() {
+		return distributionType;
+	}
 
-	
- 	
-	
+	public void setDistributionType(Integer distributionType) {
+		this.distributionType = distributionType;
+	}
+
 	public void setAllValues(Distribution distribution) throws Exception
 	{
 		this.distributionProtocolTitle = String.valueOf(distribution.getDistributionProtocol().getTitle());
