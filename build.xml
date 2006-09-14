@@ -181,13 +181,28 @@
 			</fileset>
 		</war>
 	</target>
-
+	
 	<!--Deploys the application war file at JBOSS server by coping it to deploy directory of application server-->
 	<target name="deploy">
-		<antcall target="build_war" />
+			<antcall target="clean" />
+			<antcall target="build_war" />
+			<antcall target="cleanserver" />
+			<copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" />
+			<sleep seconds="2" />
+	</target>				
+	
+	<target name="cleanserver" description="deletes the WAR file and cache from server ">		
 		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war" />
-		<copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" />
-		<sleep seconds="2" />
+		<delete includeemptydirs="true">
+			<fileset dir="${jboss.home.dir}/server/default/work">
+				<include name="**/*" />					
+			</fileset>
+		</delete>
+		<delete includeemptydirs="true">
+			<fileset dir="${jboss.home.dir}/server/default/tmp">
+				<include name="**/*" />					
+			</fileset>
+		</delete>
 	</target>
 
 	<!-- 
