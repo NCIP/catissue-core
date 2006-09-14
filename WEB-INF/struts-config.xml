@@ -1868,8 +1868,12 @@ PUBLIC
 			<forward name="pageOfNewSpecimen" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+
+			<forward name="pageOfSpecimenArrayType" path=".catissuecore.editSearchPageDef"/>
+
 			<forward name="pageOfArrayDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="pageOfSpecimenArrayType" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+
 			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
 			<forward name="access_denied_admin" path="/ManageAdministrativeData.do" />
 			<forward name="access_denied_biospecimen" path="/ManageBioSpecimen.do" />
@@ -2582,9 +2586,11 @@ PUBLIC
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
 	
-	<!-- Array Action start -->
+	<!-- Array Action start
 	<action path="/Array"
 		type="edu.wustl.catissuecore.action.ArrayAction"
+		name="arrayForm"
+		validate="false"
 		scope="request">
 		<forward name="success" path=".catissuecore.arrayDef" />
 		<forward name="failure" path=".catissuecore.arrayDef" />
@@ -2595,13 +2601,14 @@ PUBLIC
 		type="edu.wustl.common.action.CommonAddEditAction"
 		name="arrayForm"
 		validate="true"
-		input="/Array.do?operation=add"
+		input="/Array.do?operation=add&amp;menuSelected=20"
 		scope="request">
-		<forward name="success" path=".catissuecore.arrayDef" />
+		<forward name="success" path="/Array.do?operation=Added&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20" />
 		<forward name="failure" path=".catissuecore.arrayDef" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
-	
+	 -->
+	 
 	<!-- Array Type Action start -->
 	<action path="/SpecimenArrayType"
 		type="edu.wustl.catissuecore.action.SpecimenArrayTypeAction"
@@ -2612,7 +2619,7 @@ PUBLIC
 		<forward name="pageOfSpecimenArrayType" path=".catissuecore.arrayTypeDef" />
 		<forward name="success" path=".catissuecore.arrayTypeDef" />
 		<forward name="failure" path=".catissuecore.arrayTypeDef" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/ManageAdministrativeData.do" />
 	</action>
 	
 	<action path="/SpecimenArrayTypeAdd"
@@ -2621,9 +2628,9 @@ PUBLIC
 		validate="true"
 		input="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21"
 		scope="request">
-		<forward name="success" path="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21" />
+		<forward name="success" path="/SpecimenArrayTypeSearch.do?pageOf=pageOfSpecimenArrayType&amp;menuSelected=21" />
 		<forward name="failure" path="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/ManageAdministrativeData.do" />
 	</action>
 
 	<action path="/SpecimenArrayTypeSearch"
@@ -2645,7 +2652,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path="/SpecimenArrayType.do?operation=edit&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21"/>
 		<forward name="failure" path="/SpecimenArrayType.do?operation=edit&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/ManageAdministrativeData.do" />
 	</action>
 	
 	<!-- QuickEvents Action end -->
