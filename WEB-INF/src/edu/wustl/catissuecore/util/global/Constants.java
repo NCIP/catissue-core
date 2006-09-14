@@ -812,6 +812,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CONFIGURE_RESULT_VIEW_ACTION = "ConfigureResultView.do";
 	public static final String TABLE_NAMES_LIST = "tableNamesList";
 	public static final String COLUMN_NAMES_LIST = "columnNamesList";
+	public static final String SPECIMEN_COLUMN_NAMES_LIST = "specimenColumnNamesList";	
 	public static final String DISTRIBUTION_ID = "distributionId";
 	public static final String CONFIGURE_DISTRIBUTION_ACTION = "ConfigureDistribution.do";
 	public static final String DISTRIBUTION_REPORT_ACTION = "DistributionReport.do";
