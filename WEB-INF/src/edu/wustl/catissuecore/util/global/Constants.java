@@ -489,6 +489,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int ZERO = 0;
 	public static final int START_PAGE = 1;
 	public static final int NUMBER_RESULTS_PER_PAGE = 5;
+	public static final int NUMBER_RESULTS_PER_PAGE_SEARCH = 15;
 	public static final String PAGE_NUMBER = "pageNum";
 	public static final String RESULTS_PER_PAGE = "numResultsPerPage"; 
 	public static final String TOTAL_RESULTS = "totalResults";
@@ -1141,6 +1142,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 //	}
 	public static final String ALL = "All";
 	
+	//constant for pagination data list
+	public static final String PAGINATION_DATA_LIST = "paginationDataList";
+
+	
 	public static final int SPECIMEN_DISTRIBUTION_TYPE = 1;
 	public static final int SPECIMEN_ARRAY_DISTRIBUTION_TYPE = 2;
 
@@ -1149,6 +1154,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DISTRIBUTION_TYPE_LIST = "DISTRIBUTION_TYPE_LIST";
 	public static final String DISTRIBUTION_BASED_ON = "DISTRIBUTION_BASED_ON";
 	public static final String SYSTEM_LABEL = "label";
-	public static final String SYSTEM_BARCODE = "barcode";
-	
+	public static final String SYSTEM_BARCODE = "barcode";	
+
 }
