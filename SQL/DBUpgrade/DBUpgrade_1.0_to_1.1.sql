@@ -68,7 +68,7 @@ alter table catissue_user drop column password;
 #--------- changes in database for new model of Storage Container
 #--drop table if exists CATISSUE_STOR_TYPE_SPEC_CLASS;
 #--drop table if exists CATISSUE_STOR_TYPE_HOLDS_TYPE;
-#--drop table if exists CATISSUE_STORAGE_CONT_COLL_PROT_REL;
+#--drop table if exists CATISSUE_ST_CONT_COLL_PROT_REL;
 #--drop table if exists CATISSUE_STOR_CONT_SPEC_CLASS;
 #--drop table if exists CATISSUE_STOR_CONT_STOR_TYPE_REL;
 drop table if exists CATISSUE_STORAGE_CONT_DETAILS;
@@ -212,6 +212,8 @@ create table CATISSUE_STORAGE_CONT_COLL_PROT_REL (
    COLLECTION_PROTOCOL_ID bigint not null,
    primary key (STORAGE_CONTAINER_ID, COLLECTION_PROTOCOL_ID)
 );
+rename table CATISSUE_ST_CONT_COLL_PROT_REL to CATISSUE_STORAGE_CONT_COLL_PROT_REL;
+
 #--alter table CATISSUE_STORAGE_CONTAINER Engine = INNODB;
 #--alter table CATISSUE_COLLECTION_PROTOCOL Engine = INNODB;
 alter table CATISSUE_STORAGE_CONT_COLL_PROT_REL add index FK3AE9FCA7B3DFB11D (STORAGE_CONTAINER_ID), add constraint FK3AE9FCA7B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
