@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.vo;
 
+import java.util.List;
+
 
 /**
  * @author rahul_ner
@@ -7,51 +9,51 @@ package edu.wustl.catissuecore.vo;
  */
 public class ArrayDistributionReportEntry {
 	
-	String[] arrayInfo;
+	List arrayInfo;
 	
-	String[][] specimenEntries;
+	List specimenEntries;
 	
-	String[][] gridInfo;
+	List gridInfo;
 
 	/**
 	 * @return Returns the arrayInfo.
 	 */
-	public String[] getArrayInfo() {
+	public List getArrayInfo() {
 		return arrayInfo;
 	}
 
 	/**
 	 * @param arrayInfo The arrayInfo to set.
 	 */
-	public void setArrayInfo(String[] arrayInfo) {
+	public void setArrayInfo(List arrayInfo) {
 		this.arrayInfo = arrayInfo;
 	}
 
 	/**
 	 * @return Returns the gridInfo.
 	 */
-	public String[][] getGridInfo() {
+	public List getGridInfo() {
 		return gridInfo;
 	}
 
 	/**
 	 * @param gridInfo The gridInfo to set.
 	 */
-	public void setGridInfo(String[][] gridInfo) {
+	public void setGridInfo(List gridInfo) {
 		this.gridInfo = gridInfo;
 	}
 
 	/**
 	 * @return Returns the specimenEntries.
 	 */
-	public String[][] getSpecimenEntries() {
+	public List getSpecimenEntries() {
 		return specimenEntries;
 	}
 
 	/**
 	 * @param specimenEntries The specimenEntries to set.
 	 */
-	public void setSpecimenEntries(String[][] specimenEntries) {
+	public void setSpecimenEntries(List specimenEntries) {
 		this.specimenEntries = specimenEntries;
 	}
 }
