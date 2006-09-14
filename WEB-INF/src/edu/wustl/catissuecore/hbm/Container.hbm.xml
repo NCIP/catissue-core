@@ -201,7 +201,7 @@
 
         <set
             name="collectionProtocolCollection"
-            table="CATISSUE_STORAGE_CONT_COLL_PROT_REL"
+            table="CATISSUE_ST_CONT_COLL_PROT_REL"
             lazy="false"
             inverse="false"
             cascade="none"

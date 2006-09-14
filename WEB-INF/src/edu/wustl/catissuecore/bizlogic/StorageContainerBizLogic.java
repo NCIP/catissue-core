@@ -112,7 +112,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 						}
 
 						// check for availability of position
-						boolean canUse = isContainerAvailable(dao, container);
+						boolean canUse = isContainerAvailableForPositions(dao, container);
 
 						if (!canUse)
 						{
@@ -312,7 +312,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	//    }
 
 	// This method sets the collection Storage Types.
-		private String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
+	private String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
 	{
 		String[] dynamicGroups = null;
 		StorageContainer storageContainer = (StorageContainer) obj;
@@ -367,7 +367,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				}
 
 				// Mandar : code added for validation bug id 666. 24-11-2005  start
-				boolean canUse = isContainerAvailable(dao, container);
+				boolean canUse = isContainerAvailableForPositions(dao, container);
 				Logger.out.debug("canUse : " + canUse);
 				if (!canUse)
 				{
@@ -460,7 +460,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 						|| oldContainer.getPositionDimensionTwo().intValue() != container
 								.getPositionDimensionTwo().intValue())
 				{
-					boolean canUse = isContainerAvailable(dao, container);
+					boolean canUse = isContainerAvailableForPositions(dao, container);
 					Logger.out.debug("canUse : " + canUse);
 					if (!canUse)
 					{
@@ -504,11 +504,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 		setSiteForSubContainers(container, container.getSite());
 
-		boolean restrictionsCanChange = isContainerAvailable(dao, container);
+		boolean restrictionsCanChange = isContainerEmpty(dao, container);
 		Logger.out.info("--------------container Available :" + restrictionsCanChange);
 		if (!restrictionsCanChange)
 		{
-			
+
 			boolean restrictionsChanged = checkForRestrictionsChanged(container, oldContainer);
 			Logger.out.info("---------------restriction changed -:" + restrictionsChanged);
 			if (restrictionsChanged)
@@ -518,7 +518,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 
 		}
-		//checkForRestrictionsChanged();
 
 		dao.update(container, sessionDataBean, true, true, false);
 
@@ -558,7 +557,25 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-		private boolean checkForRestrictionsChanged(StorageContainer newContainer,
+	public boolean isContainerEmpty(String containerId) throws DAOException
+	{
+		boolean availablePositions[][] = getAvailablePositions(containerId);
+
+		final int dimX = availablePositions.length;
+		for (int x = 0; x < dimX; x++)
+		{
+			final int dimY = availablePositions[x].length;
+			for (int y = 0; y < dimY; y++)
+			{
+				if (availablePositions[x][y] == false)
+					return false;
+			}
+		}
+		return true;
+
+	}
+
+	private boolean checkForRestrictionsChanged(StorageContainer newContainer,
 			StorageContainer oldContainer)
 	{
 		int flag = 0;
@@ -1041,6 +1058,58 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return 1;
 	}
 
+	private boolean isContainerEmpty(DAO dao, StorageContainer container) throws DAOException
+	{
+
+		//Retrieving all the occupied positions by child containers
+		String sourceObjectName = StorageContainer.class.getName();
+		String[] selectColumnName = {"positionDimensionOne", "positionDimensionTwo"};
+		String[] whereColumnName = {"parent"};
+		String[] whereColumnCondition = {"="};
+		Object[] whereColumnValue = {container.getId()};
+
+		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName,
+				whereColumnCondition, whereColumnValue, null);
+
+		if (!list.isEmpty())
+		{
+			return false;
+		}
+		else
+		{
+			//			Retrieving all the occupied positions by specimens
+			sourceObjectName = Specimen.class.getName();
+			whereColumnName[0] = "storageContainer";
+
+			list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName,
+					whereColumnCondition, whereColumnValue, null);
+
+			if (!list.isEmpty())
+			{
+				return false;
+			}
+			else
+			{
+				//				Retrieving all the occupied positions by specimens array type
+				sourceObjectName = SpecimenArray.class.getName();
+				whereColumnName[0] = "storageContainer";
+
+				list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName,
+						whereColumnCondition, whereColumnValue, null);
+
+				if (!list.isEmpty())
+				{
+					return false;
+				}
+
+			}
+
+		}
+
+		return true;
+
+	}
+
 	//    private Map createMap(List resultSet, Map containerMap)
 	//    {
 	//        Map containerRelationMap = new HashMap();
@@ -1428,8 +1497,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 
 		List listOfSubStorageContainerId = super.disableObjects(dao, StorageContainer.class,
-				"parentContainer", "CATISSUE_STORAGE_CONTAINER", "PARENT_CONTAINER_ID",
-				storageContainerIDArr);
+				"parent", "CATISSUE_CONTAINER", "PARENT_CONTAINER_ID", storageContainerIDArr);
 
 		if (listOfSubStorageContainerId.isEmpty())
 			return;
@@ -1499,7 +1567,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	}
 
 	// -- to check if storageContainer is available or used
-	private boolean isContainerAvailable(DAO dao, StorageContainer current)
+	private boolean isContainerAvailableForPositions(DAO dao, StorageContainer current)
 	{
 		try
 		{
@@ -1877,7 +1945,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 		}
 
-		
 		return positions;
 	}
 
@@ -1910,7 +1977,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @return Returns a map of available rows vs. available columns.
 	 * @throws DAOException
 	 */
-	
+
 	public Map getAvailablePositionMap(StorageContainer container) throws DAOException
 	{
 		Map map = new TreeMap();
@@ -1918,7 +1985,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		for (int x = 1; x < availablePosistions.length; x++)
 		{
-			//Logger.out.info("x positions  for container:"+container.getName()+":"+x);
+
 			List list = new ArrayList();
 
 			for (int y = 1; y < availablePosistions[x].length; y++)
@@ -1933,9 +2000,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				Integer xObj = new Integer(x);
 				NameValueBean nvb = new NameValueBean(xObj, xObj);
-				//Logger.out.info("xobj:"+xObj);
 				map.put(nvb, list);
-				//Logger.out.info("Map inside:"+xObj+":-----"+map);
+
 			}
 		}
 		//Logger.out.info("Map :"+map);
@@ -1964,7 +2030,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-		/**
+	/**
 	 * This functions returns a map of allocated containers vs. their respective free locations.
 	 * @return Returns a map of allocated containers vs. their respective free locations.
 	 * @throws DAOException
@@ -2012,7 +2078,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-	
 	public List getAllocatedContaienrMapForContainer(long type_id) throws DAOException
 	{
 		List mapSiteList = new ArrayList();
@@ -2124,7 +2189,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	}
 
-	
 	//--------------Code for Map Mandar: 04-Sep-06 start
 	//Mandar : 29Aug06 : for StorageContainerMap
 	/**

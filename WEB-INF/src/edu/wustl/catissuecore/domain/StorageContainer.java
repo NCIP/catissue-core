@@ -94,7 +94,7 @@ public class StorageContainer extends Container
 
 	/**
 	 * @return Returns the collectionProtocolCollection.
-	 * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_STORAGE_CONT_COLL_PROT_REL" 
+	 * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_ST_CONT_COLL_PROT_REL" 
 	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"

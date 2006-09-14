@@ -67,6 +67,7 @@ public class StorageContainerAction extends SecureAction
 		key.add("StorageContainerDetails:i_parameterName");
 		key.add("StorageContainerDetails:i_parameterValue");
 
+		
 		//Gets the map from ActionForm
 		Map map = storageContainerForm.getValues();
 		//Calling DeleteRow of BaseAction class
@@ -115,9 +116,12 @@ public class StorageContainerAction extends SecureAction
 
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory
 				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		
 		long container_number = bizLogic.getNextContainerNumber();
 		request.setAttribute("ContainerNumber", new Long(container_number).toString());
 
+		Logger.out.info("is container full:"+storageContainerForm.getIsFull());
+		
 		//*************Start Bug:1938  ForwardTo implementation *************
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 		if (forwardToHashMap != null)
@@ -288,6 +292,12 @@ public class StorageContainerAction extends SecureAction
 		}
 		else
 		{
+			if(!bizLogic.isContainerEmpty(new Long(storageContainerForm.getId()).toString()))
+			{
+				storageContainerForm.setIsFull("true");
+			}
+				
+			
 			List storagetypeList = new ArrayList();
 			NameValueBean nvb = new NameValueBean(storageContainerForm.getTypeName(),new Long(storageContainerForm.getTypeId()));
 			storagetypeList.add(nvb);
