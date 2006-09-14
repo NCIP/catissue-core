@@ -1831,6 +1831,15 @@ PUBLIC
 			scope="request">
 			<forward name="Success" path="/DistributionReport.do&amp;menuSelected=16" />
 		</action>
+
+		<action path="/ArrayDistributionReportSave"
+			type="edu.wustl.catissuecore.action.ArrayDistributionReportSaveAction"
+			name="configureResultViewForm"
+			validate="false"
+			scope="request">
+			<forward name="Success" path="/DistributionReport.do&amp;menuSelected=16" />
+		</action>
+		
 		<!-- Distribution Actions Ends -->
 		
 		<!--Simple Query Interface Actions Begin-->		

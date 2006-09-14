@@ -232,7 +232,7 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	request.setAttribute(Constants.MENU_SELECTED,new String("16") );
     }
     
-	private List createList(String key,String value,List list)
+	protected List createList(String key,String value,List list)
 	{
 		List newList = new ArrayList();
 		newList.add(ApplicationProperties.getValue(key));

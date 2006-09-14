@@ -13,6 +13,13 @@
         DistributionReportForm distForm = (DistributionReportForm)request.getAttribute(Constants.DISTRIBUTION_REPORT_FORM);
 		ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
 		String []selectedColumns=form.getSelectedColumnNames();
+		String reportSaveAction = "";
+		
+		if(distForm.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) {
+			reportSaveAction = Constants.DISTRIBUTION_REPORT_SAVE_ACTION;
+		} else {
+			reportSaveAction = Constants.ARRAY_DISTRIBUTION_REPORT_SAVE_ACTION;
+		}
 		
 %> 
 <script language="JavaScript">
@@ -20,7 +27,7 @@
 	{
 		document.forms[0].reportAction.value="false";
 		selectOptions(document.forms[0].selectedColumnNames);
-		setFormAction("<%=Constants.DISTRIBUTION_REPORT_SAVE_ACTION%>");
+		setFormAction("<%=reportSaveAction%>");
 		//document.forms[0].action = "<%=Constants.DISTRIBUTION_REPORT_ACTION%>";
 		//document.forms[0].submit();
 	}

@@ -117,12 +117,4 @@ public class DistributionReportSaveAction extends BaseDistributionReportAction
     	
 		report.closeFile();
 	}
-	private List createList(String key,String value,List list)
-	{
-		List newList = new ArrayList();
-		newList.add(ApplicationProperties.getValue(key));
-		newList.add(value);
-		list.add(newList);
-		return list;
-	}
 }

@@ -818,14 +818,36 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ARRAY_DISTRIBUTION_REPORT_ACTION = "ArrayDistributionReport.do";
 	
 	public static final String DISTRIBUTION_REPORT_SAVE_ACTION="DistributionReportSave.do";
+	public static final String ARRAY_DISTRIBUTION_REPORT_SAVE_ACTION="ArrayDistributionReportSave.do";
+	
 	public static final String SELECTED_COLUMNS[] = {"Specimen.IDENTIFIER.Identifier : Specimen",
 													"Specimen.TYPE.Type : Specimen",
 													"SpecimenCharacteristics.TISSUE_SITE.Tissue Site : Specimen",
 													"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side : Specimen",
 													//"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
 													"DistributedItem.QUANTITY.Quantity : Distribution"};
-	public static final String ARRAY_SELECTED_COLUMNS[] = {"SpecimenArray.IDENTIFIER.Identifier : SpecimenArray",
-		"SpecimenArray.barcode.Barcode : SpecimenArray",
+	public static final String SPECIMEN_IN_ARRAY_SELECTED_COLUMNS[] = {
+		"Specimen.LABEL.Label : Specimen",
+		"Specimen.BARCODE.barcode : Specimen",
+		"SpecimenArrayContent.PositionDimensionOne.PositionDimensionOne : Specimen",
+		"SpecimenArrayContent.PositionDimensionTwo.PositionDimensionTwo : Specimen",
+		"Specimen.CLASS.CLASS : Specimen",
+		"Specimen.TYPE.Type : Specimen",
+		"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side : Specimen",
+		"SpecimenCharacteristics.TISSUE_SITE.Tissue Site : Specimen",
+	};
+
+	public static final String ARRAY_SELECTED_COLUMNS[] = {
+		"SpecimenArray.Name.Name : SpecimenArray",
+		"Container.barcode.Barcode : SpecimenArray",
+		"ContainerType.name.ArrayType : ContainerType",
+		"Container.PositionDimensionOne.Position One: Container",
+		"Container.PositionDimensionTwo.Position Two: Container",
+		"Container.CapacityOne.Dimension One: Container",
+		"Container.CapacityTwo.Dimension Two: Container",
+		"ContainerType.SpecimenClass.specimen class : ContainerType",
+		"ContainerType.SpecimenTypes.specimen Types : ContainerType",
+		"Container.Comment.comment: Container",
     };
 
 	public static final String SPECIMEN_ID_LIST = "specimenIdList";
