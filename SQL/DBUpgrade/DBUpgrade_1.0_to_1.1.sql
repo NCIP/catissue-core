@@ -1698,3 +1698,7 @@ insert into catissue_container_type (name,activity_status,identifier) values ('A
 insert into catissue_specimen_array_type (IDENTIFIER) values ( '2');
 drop table catissue_temp_type;
 
+#--- Start: update by Ashwin
+alter table CATISSUE_COLLECTION_PROTOCOL add column ALIQUOT_IN_SAME_CONTAINER bit;
+alter table CATISSUE_SPECIMEN_ARRAY add column AVAILABLE bit;
+#--- End
