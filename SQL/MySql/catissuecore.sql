@@ -214,6 +214,7 @@ create table CATISSUE_CANCER_RESEARCH_GROUP (
 );
 create table CATISSUE_COLLECTION_PROTOCOL (
    IDENTIFIER bigint not null,
+   ALIQUOT_IN_SAME_CONTAINER bit,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_EVENT_PARAM (
@@ -449,6 +450,7 @@ create table CATISSUE_SPECIMEN_ARRAY (
    SPECIMEN_ARRAY_TYPE_ID bigint,
    STORAGE_CONTAINER_ID bigint,
    DISTRIBUTION_ID bigint,
+   AVAILABLE bit,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_ARRAY_TYPE (
