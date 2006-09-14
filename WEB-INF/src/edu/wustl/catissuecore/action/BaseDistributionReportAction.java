@@ -36,6 +36,7 @@ import edu.wustl.common.query.Query;
 import edu.wustl.common.query.QueryFactory;
 import edu.wustl.common.query.SimpleConditionsNode;
 import edu.wustl.common.query.SimpleQuery;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -231,4 +232,12 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	request.setAttribute(Constants.MENU_SELECTED,new String("16") );
     }
     
+	private List createList(String key,String value,List list)
+	{
+		List newList = new ArrayList();
+		newList.add(ApplicationProperties.getValue(key));
+		newList.add(value);
+		list.add(newList);
+		return list;
+	}
 }
