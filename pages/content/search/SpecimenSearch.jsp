@@ -21,6 +21,10 @@
 	String concentration2 = "value(Specimen:CONCENTRATION:HLIMIT)";
 	String quantity1 = "value(Specimen:QUANTITY)";
 	String quantity2 = "value(Specimen:QUANTITY:HLIMIT)";
+	/* Aarti: Bug#1496- To allow query on initial quantity as well as available quantity */
+	String availableQuantity1 = "value(Specimen:AVAILABLE_QUANTITY)";
+	String availableQuantity2 = "value(Specimen:AVAILABLE_QUANTITY:HLIMIT)";
+	/* END Bug#1496 */
 	String biohazardType = "value(Biohazard:TYPE)";
 	String biohazardName = "value(Biohazard:NAME)";
 
@@ -31,6 +35,9 @@
 	String opPathologicalStatus = "value(Operator:SpecimenCharacteristics:PATHOLOGICAL_STATUS)";
 	String opConcentration = "value(Operator:Specimen:CONCENTRATION)";
 	String opQuantity = "value(Operator:Specimen:QUANTITY)";
+	/* Aarti: Bug#1496- To allow query on initial quantity as well as available quantity */
+	String opAvailableQuantity = "value(Operator:Specimen:AVAILABLE_QUANTITY)";
+	/* END Bug#1496 */
 	String opBarcode = "value(Operator:Specimen:BARCODE)";
 	String opBiohazardType = "value(Operator:Biohazard:TYPE)";
 	String opBiohazardName = "value(Operator:Biohazard:NAME)";
@@ -663,7 +670,53 @@
 	</td>
 </tr>
 
-<!-- SEVENTH ROW -->
+<!-- SEVENTH ROW FIRST-->
+<tr>
+	<td class="formSerialNumberField" nowrap>
+ 		<label for="quantity">
+ 			<b><bean:message key="specimen.availableQuantity"/>
+ 		</label>
+	</td>
+	<td class="formField">
+<!-- Mandar : 434 : for tooltip -->
+		<html:select property="<%=opAvailableQuantity%>" styleClass="formFieldSized10" styleId="opAvailableQuantity" size="1" onchange="onDateOperatorChange(this,'availableQuantity1','availableQuantity2')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>
+	</td>
+	
+	<%
+		opValue = (String)specimenDataMap.get("Operator:Specimen:AVAILABLE_QUANTITY");
+		if(opValue == null || opValue.equals(Constants.ANY))
+		{
+			disabled = true;
+			disabled2= true;
+		}
+		else if(opValue.equals(Operator.BETWEEN) || opValue.equals(Operator.NOT_BETWEEN))
+		{
+			disabled = false;
+			disabled2= false;
+		}
+		else
+		{
+			disabled = false;
+			disabled2= true;
+		}
+	%>
+	
+	<td class="formField" nowrap>
+		<html:text styleClass="formFieldSized10" styleId="availableQuantity1" property="<%=availableQuantity1%>" disabled="<%=disabled%>"/>
+						&nbsp;To&nbsp;
+		<html:text styleClass="formFieldSized10" styleId="availableQuantity2" property="<%=availableQuantity2%>" disabled="<%=disabled2%>"/>
+		<span id="unitSpan"><%=unitSpecimen%></span>
+     	<%--html:hidden property="value(Specimen:unit)"/--%>
+     	<input type="hidden" name="unit">
+	</td>
+</tr>
+
+<!-- Aarti: Bug#1496- To allow query on initial quantity as well as available quantity -->
+<!-- Added row for search on available quantity -->
+<!-- SEVENTH ROW SECOND -->
 <tr>
 	<td class="formSerialNumberField" nowrap>
  		<label for="quantity">
@@ -706,6 +759,7 @@
      	<input type="hidden" name="unit">
 	</td>
 </tr>
+<!-- END Bug# 1496 -->
 
 <!-- EIGHTH ROW -->
 <tr>

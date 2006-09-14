@@ -299,7 +299,8 @@ public class AdvanceSearchForm extends ActionForm
         					}
         					else if(SearchUtil.NUMERIC.equals(bean.getValue())) //IF the datatype is NUMERIC
         					{
-        						if(!validator.isDouble(value)) //IF the numeric value is improper
+        						/* Aarti: Bug#1496 - '0' value should be allowed for search on fields that are double */
+        						if(!validator.isDouble(value,true)) //IF the numeric value is improper
         						{
         							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(labelName)));
         						}

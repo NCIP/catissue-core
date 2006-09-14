@@ -255,16 +255,20 @@ public class SearchUtil
 				break;
 				
 			case Constants.NEW_SPECIMEN_FORM_ID :
-				searchFieldData = new SearchFieldData[9];
+			    /* Aarti: Bug#1496- To allow query on initial quantity as well as available quantity 
+			     * Added field data for available quantity*/
+				searchFieldData = new SearchFieldData[10];
 				searchFieldData[0] = initSearchUIData(SearchUtil.STRING, "specimen.type","Specimen","SPECIMEN_CLASS","className",Constants.ENUMERATED_OPERATORS,Constants.SPECIMEN_CLASS_LIST,"");
 				searchFieldData[1] = initSearchUIData(SearchUtil.STRING,"specimen.subType","Specimen","TYPE","type",Constants.ENUMERATED_OPERATORS,Constants.SPECIMEN_TYPE_LIST,"");
 				searchFieldData[2] = initSearchUIData(SearchUtil.STRING, "specimen.tissueSite","SpecimenCharacteristics","TISSUE_SITE","tissueSite",Constants.ENUMERATED_OPERATORS,Constants.TISSUE_SITE_LIST,"");
 				searchFieldData[3] = initSearchUIData(SearchUtil.STRING,"specimen.tissueSide","SpecimenCharacteristics","TISSUE_SIDE","tissueSide",Constants.ENUMERATED_OPERATORS,Constants.TISSUE_SIDE_LIST,"");
 				searchFieldData[4] = initSearchUIData(SearchUtil.STRING, "specimen.pathologicalStatus","SpecimenCharacteristics","PATHOLOGICAL_STATUS","pathologicalStatus",Constants.ENUMERATED_OPERATORS,Constants.PATHOLOGICAL_STATUS_LIST,"");
 				searchFieldData[5] = initSearchUIData(SearchUtil.NUMERIC, "specimen.concentration","Specimen","CONCENTRATION","concentration",Constants.DATE_NUMERIC_OPERATORS,"","");
-				searchFieldData[6] = initSearchUIData(SearchUtil.NUMERIC, "specimen.quantity","Specimen","QUANTITY","quantity",Constants.DATE_NUMERIC_OPERATORS,"","");
-				searchFieldData[7] = initSearchUIData(SearchUtil.STRING, "specimen.biohazardType","Biohazard","TYPE","biohazardType",Constants.ENUMERATED_OPERATORS,Constants.BIOHAZARD_TYPE_LIST,"");
-				searchFieldData[8] = initSearchUIData(SearchUtil.STRING, "specimen.biohazardName","Biohazard","NAME","biohazardName",Constants.STRING_OPERATORS,"","");
+				searchFieldData[6] = initSearchUIData(SearchUtil.NUMERIC, "specimen.availableQuantity","Specimen","AVAILABLE_QUANTITY","availableQuantity",Constants.DATE_NUMERIC_OPERATORS,"","");
+				searchFieldData[7] = initSearchUIData(SearchUtil.NUMERIC, "specimen.quantity","Specimen","QUANTITY","quantity",Constants.DATE_NUMERIC_OPERATORS,"","");
+				searchFieldData[8] = initSearchUIData(SearchUtil.STRING, "specimen.biohazardType","Biohazard","TYPE","biohazardType",Constants.ENUMERATED_OPERATORS,Constants.BIOHAZARD_TYPE_LIST,"");
+				searchFieldData[9] = initSearchUIData(SearchUtil.STRING, "specimen.biohazardName","Biohazard","NAME","biohazardName",Constants.STRING_OPERATORS,"","");
+				/* END Bug#1496 */
 		}
 		
 		return searchFieldData;
