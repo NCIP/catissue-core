@@ -125,12 +125,12 @@
 				<b><bean:message key="app.distribution" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16"><bean:message key="app.add" /></a> | Report&nbsp; 
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution&menuSelected=16">
-				<bean:message key="app.edit" />
-			</a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution_array&menuSelected=16">
-				<bean:message key="app.array.edit" />
+				<bean:message key="app.specimen.report" />
+			</a> &nbsp;
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfArrayDistribution&aliasName=Distribution_array&menuSelected=16">
+				<bean:message key="app.array.report" />
 			</a>
 		</div>
 	</td>

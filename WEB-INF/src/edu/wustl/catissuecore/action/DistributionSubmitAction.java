@@ -108,6 +108,13 @@ public class DistributionSubmitAction extends CommonAddEditAction {
 			dform.setValues(tempMap);
 		}
 
-		return super.execute(mapping, form, request, response);
+		ActionForward forward = super.execute(mapping, form, request, response);
+		if( forward.getName().equals(Constants.SUCCESS)) {
+			if (dform.getDistributionType().intValue() != Constants.SPECIMEN_DISTRIBUTION_TYPE) {
+				forward = mapping.findForward("arraySuccess");
+			}
+		}
+		
+		return forward;
 	}
 }

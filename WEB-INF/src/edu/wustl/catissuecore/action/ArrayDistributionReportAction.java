@@ -43,6 +43,14 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		if(distributionId==null)
     		distributionId = configForm.getDistributionId();
 		
+		/*Retrieve from request attribute if it null. 
+		 */ 
+		if(distributionId==null)
+		{
+			distributionId = (Long) request.getAttribute(Constants.SYSTEM_IDENTIFIER);
+		}
+
+		
 		/*Retrieve from request parameter if it null. This request parameter is set in Distribution page incase the Report button 
 		 *is clicked from Distribution Edit page
 		 */ 

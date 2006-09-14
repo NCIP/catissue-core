@@ -1754,9 +1754,11 @@ PUBLIC
 			validate="true"
 			input="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16"
 			scope="request">
-			<!-- forward name="success" path="/DistributionReport.do" /-->
-			<forward name="success" path="/DistributionSearch.do?pageOf=pageOfDistribution" />
+			<forward name="success" path="/DistributionReport.do" />
+			<forward name="arraySuccess" path="/ArrayDistributionReport.do" />
 			<forward name="failure" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
+			
+<!--			<forward name="success" path="/DistributionSearch.do?pageOf=pageOfDistribution" /> -->
 		</action>
 		
 		<action path="/DistributionEdit"
@@ -1786,7 +1788,8 @@ PUBLIC
 			validate="false"
 			input="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution&amp;menuSelected=16"
 			scope="request">
-			<forward name="pageOfDistribution" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution&amp;menuSelected=16&amp;distributionBasedOnOption=unknown"/>
+			<forward name="pageOfDistribution" path="/DistributionReport.do"/>
+			<forward name="pageOfArrayDistribution" path="/ArrayDistributionReport.do"/>
 			<forward name="pageOfSimpleQueryInterface" path="/Distribution.do?operation=edit&amp;pageOf=pageOfSimpleQueryInterface&amp;menuSelected=16"/>
 			<forward name="failure" path="/Distribution.do?operation=edit&amp;pageOf=pageOfDistribution&amp;menuSelected=16"/>
 		</action>    
@@ -1865,6 +1868,7 @@ PUBLIC
 			<forward name="pageOfNewSpecimen" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfArrayDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="pageOfSpecimenArrayType" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
 			<forward name="access_denied_admin" path="/ManageAdministrativeData.do" />
@@ -1894,6 +1898,7 @@ PUBLIC
 			<forward name="pageOfNewSpecimen" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>
+			<forward name="pageOfArrayDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>
 			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
 			<forward name="access_denied_admin" path="/ManageAdministrativeData.do" />
 			<forward name="access_denied_biospecimen" path="/ManageBioSpecimen.do" />
@@ -1968,6 +1973,7 @@ PUBLIC
 			<forward name="pageOfNewSpecimen" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
 			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
 			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
+			<forward name="pageOfArrayDistribution" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
 			<forward name="pageOfSpecimenArrayType" path=".catissuecore.editSpecimenArrayTypeSearchPageDef"/>
 			<forward name="failure" path=".catissuecore.simpleSearchResultsDef" />
 		</action>
@@ -2077,6 +2083,7 @@ PUBLIC
 			<forward name="pageOfTissueSpecimenReviewParameters" path="/TissueSpecimenReviewEventParametersSearch.do"/>
 			<forward name="pageOfTransferEventParameters" path="/TransferEventParametersSearch.do"/>
 			<forward name="pageOfDistribution" path="/DistributionSearchFromMenu.do"/>
+			<forward name="pageOfArrayDistribution" path="/DistributionSearchFromMenu.do"/>
 			<forward name="pageOfSpecimenArrayType" path="/SpecimenArrayTypeSearch.do"/>
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
