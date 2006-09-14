@@ -215,7 +215,7 @@ tr#hiddenCombo
 			 </td>
 		</tr>	
 		
-		<tr height="5">
+		<tr height="5%">
 			<td class="dataPagingSection">					
 				<custom:test name="Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>" />
 				<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>"/>
