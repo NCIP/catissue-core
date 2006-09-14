@@ -185,6 +185,7 @@ create table CATISSUE_CANCER_RESEARCH_GROUP (
 );
 create table CATISSUE_COLLECTION_PROTOCOL (
    IDENTIFIER number(19,0) not null,
+   ALIQUOT_IN_SAME_CONTAINER number(1,0),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_EVENT_PARAM (
