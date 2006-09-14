@@ -184,9 +184,9 @@
 	
 	<!--Deploys the application war file at JBOSS server by coping it to deploy directory of application server-->
 	<target name="deploy">
-			<antcall target="clean" />
+			<!--antcall target="clean" /-->
 			<antcall target="build_war" />
-			<antcall target="cleanserver" />
+			<!--antcall target="cleanserver" /-->
 			<copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" />
 			<sleep seconds="2" />
 	</target>				
