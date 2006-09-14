@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
@@ -30,33 +31,97 @@ import edu.wustl.common.util.logger.Logger;
 public class SpreadsheetViewAction extends Action
 {
     
-    /* (non-Javadoc)
-     * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+    /**
+     * This method get call for simple search as well as advanced search.
+     * This method also get call when user clicks on page no of Pagination tag 
+     * from simple search result page as well as advanced search result page.
+     * Each time it calculates the paginationList to be displayed by grid control
+     * by getting pageNum from request object.
+     *    
      */
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
-    {
-        List list = (List)request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-        List columnNames = (List)request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-        String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-        Logger.out.debug("Pageof in spreadsheetviewaction.........:"+pageOf);
-        HttpSession session = request.getSession();
-
-        if (Constants.PAGEOF_SIMPLE_QUERY_INTERFACE.equals(pageOf) || 
-        						(Constants.PAGEOF_QUERY_RESULTS.equals(pageOf)))
-        {
-            //Putting the results view column names and data in session.
-            //Required for Export functionality in simple query interface and Advanced Search.
+    {        
+    	HttpSession session = request.getSession();
+    	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+    	if (pageOf == null)
+    	{
+    		pageOf = (String)request.getParameter(Constants.PAGEOF);
+    	}
+    	if (request.getAttribute(Constants.IDENTIFIER_FIELD_INDEX) == null) {
+    		String identifierFieldIndex = request.getParameter(Constants.IDENTIFIER_FIELD_INDEX);
+    		if(identifierFieldIndex != null && !identifierFieldIndex.equals("")) 
+    		{
+    			request.setAttribute(Constants.IDENTIFIER_FIELD_INDEX, new Integer(identifierFieldIndex));
+    		}    		
+    	}
+        Logger.out.debug("Pageof in spreadsheetviewaction.........:"+pageOf); 
+        
+        
+        if (request.getParameter("isPaging") == null) {
+        	
+        	List list = (List)request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+            List columnNames = (List)request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);                  
+            
+            //Set the SPREADSHEET_DATA_LIST and SPREADSHEET_COLUMN_LIST in the session.
+            //Next time when user clicks on pages of pagination Tag, it get the same list from the session
+            //and based on current page no, it will calculate paginationDataList to be displayed by grid control.
             session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnNames);
-            session.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
+            session.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);	
+            
+            AdvanceSearchForm advanceSearchForm = (AdvanceSearchForm)request.getAttribute("advanceSearchForm");
+            if (advanceSearchForm != null)
+            {
+            	session.setAttribute("advanceSearchForm",advanceSearchForm);	
+            }
+        }        	
+    	
+        int pageNum = Constants.START_PAGE;
+        List paginationDataList = null, dataList = null, columnList = null;
+        
+        //Get the SPREADSHEET_DATA_LIST and SPREADSHEET_COLUMN_LIST from the session.
+        dataList = (List) session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+        columnList = (List) session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+        
+        if(request.getParameter(Constants.PAGE_NUMBER) != null) 
+    	{
+        	pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));       
+    	}
+        
+        if (dataList != null) 
+        {
+        	//Set the start index of the list.
+            int startIndex = (pageNum-1) * Constants.NUMBER_RESULTS_PER_PAGE_SEARCH;            
+            //Set the end index of the list.
+            int endIndex = startIndex + Constants.NUMBER_RESULTS_PER_PAGE_SEARCH;
+	        if (endIndex > dataList.size())
+	        {
+	            endIndex = dataList.size();
+	        }   	
+	        //Get the paginationDataList from startIndex to endIndex of the dataList.
+	        paginationDataList = dataList.subList(startIndex,endIndex);   
+	        
+	        //Set the total no of records in the request object to be used by pagination tag.
+	        request.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(dataList.size()));	        
         }
         else
         {
-            //In case of edit functionality putting it in request.
-            request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnNames);
-            request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
+        	//Set the total no of records in the request object to be used by pagination tag.
+        	request.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(0));
         }
         
+        //Set the paginationDataList in the request to be shown by grid control.
+        request.setAttribute(Constants.PAGINATION_DATA_LIST,paginationDataList); 
+        
+        //Set the columnList in the request to be shown by grid control.
+        request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnList); 
+        
+        //Set the current pageNum in the request to be uesd by pagination Tag.
+        request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
+        
+        //Set the result per page attribute in the request to be uesd by pagination Tag.
+        request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(Constants.NUMBER_RESULTS_PER_PAGE_SEARCH));
+       
         request.setAttribute(Constants.PAGEOF, pageOf);
         return mapping.findForward(pageOf);
     }
