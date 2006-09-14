@@ -871,8 +871,14 @@
 									<bean:message key="specimen.virtuallyLocated" />
 								</logic:equal>	
 								<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-								<% 	buttonDisabled = true; %>
+								
+								<% 	buttonDisabled = true; 
+									disabled = true;
+								%>
 								<html:checkbox property="virtuallyLocated" styleClass="hidden"/>
+								<html:hidden property="storageContainer"/>
+								<html:hidden property="positionDimensionOne"/>
+								<html:hidden property="positionDimensionTwo"/>
 								<%
 									
 									NewSpecimenForm newSpecimenForm = (NewSpecimenForm) request.getAttribute("newSpecimenForm");

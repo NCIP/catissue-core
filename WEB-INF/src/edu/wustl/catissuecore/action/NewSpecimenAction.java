@@ -318,9 +318,11 @@ public class NewSpecimenAction extends SecureAction
 		{
 			containerMap = new TreeMap();
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
-			Logger.out.info("--------------container:"+specimenForm.getStorageContainer());
-			Logger.out.info("--------------pos1:"+specimenForm.getPositionDimensionOne());
-			Logger.out.info("--------------pos2:"+specimenForm.getPositionDimensionTwo());
+			
+			Logger.out.info("--------------container:" + specimenForm.getStorageContainer());
+			Logger.out.info("--------------pos1:" + specimenForm.getPositionDimensionOne());
+			Logger.out.info("--------------pos2:" + specimenForm.getPositionDimensionTwo());
+
 			if (specimenForm.getStorageContainer() != null
 					&& !specimenForm.getStorageContainer().equals(""))
 			{
