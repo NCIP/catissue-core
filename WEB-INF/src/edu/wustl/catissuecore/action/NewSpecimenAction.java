@@ -293,7 +293,8 @@ public class NewSpecimenAction extends SecureAction
 		Vector initialValues = null;
 		if (operation.equals(Constants.ADD))
 		{
-			if (request.getParameter("Change") != null)
+			if (specimenForm.getSpecimenCollectionGroupId() != null && !specimenForm.getSpecimenCollectionGroupId().equals("") && 
+					specimenForm.getClassName()!=null && !specimenForm.getClassName().equals(""))
 			{
 				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(),
 						Constants.SYSTEM_IDENTIFIER, new Long(specimenForm

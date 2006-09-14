@@ -92,7 +92,8 @@ public class CreateSpecimenAction extends SecureAction
 		Vector initialValues = null;
 		if (operation.equals(Constants.ADD))
 		{
-			if (request.getParameter("Change") != null)
+			if (createForm.getParentSpecimenId() != null && !createForm.getParentSpecimenId().equals("") &&
+					createForm.getClassName() != null && !createForm.getClassName().equals(""))
 			{
 				containerMap  = getContainerMap(createForm.getParentSpecimenId(),createForm.getClassName(),dao, scbizLogic)	;
 				initialValues = checkForInitialValues(containerMap);
