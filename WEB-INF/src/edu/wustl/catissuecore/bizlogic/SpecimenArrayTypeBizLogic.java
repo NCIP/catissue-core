@@ -31,4 +31,23 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic {
 		dao.insert(arrayType.getCapacity(),sessionDataBean, true, true);
 		dao.insert(arrayType,sessionDataBean, true, true);
 	}
+	
+	/**
+     * Updates the persistent object in the database.
+	 * @param obj The object to be updated.
+	 * @param session The session in which the object is saved.
+	 * @throws DAOException 
+     */
+	protected void update(Object obj,Object oldObj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException 
+    {
+		SpecimenArrayType arrayType = (SpecimenArrayType) obj;
+		dao.update(arrayType.getCapacity(),sessionDataBean, true, true,false);
+		dao.update(arrayType,sessionDataBean, true, true,false);
+		
+	    //Audit of update.
+		SpecimenArrayType oldArrayType = (SpecimenArrayType) oldObj;
+	    dao.audit(arrayType.getCapacity(), oldArrayType.getCapacity(), sessionDataBean, true);
+	    dao.audit(obj, oldObj, sessionDataBean, true);
+    }
+	
 }
