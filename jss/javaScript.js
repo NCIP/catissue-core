@@ -208,18 +208,23 @@ function rearrangeIdsForDistribution() {
 			for(var i=0;i<tableRows.length;i++) {
 			    var row  = tableRows[i];
 
-			    var childNodeCollection = row.all;
+			   // var childNodeCollection = row.all;
+			    var childNodeCollection = row.cells;
 
 				for(var j=0;j<childNodeCollection.length;j++) {
-						var idName = childNodeCollection[j].id;
+					   
+					   if( childNodeCollection[j].firstChild.nodeType == "3" )
+						    continue;
+
+						var idName = childNodeCollection[j].firstChild.id;
  
 						if(idName == null || idName == "" ) {
-                              idName =  childNodeCollection[j].name;
+                              idName =  childNodeCollection[j].firstChild.name;
 						} 
 
                         var newId = getNewId(idName,i+1);
-						childNodeCollection[j].name =  newId;
-						childNodeCollection[j].id =  newId;
+						childNodeCollection[j].firstChild.name =  newId;
+						childNodeCollection[j].firstChild.id =  newId;
 				}
 			}
 		}
@@ -230,6 +235,7 @@ function getNewId(oldId,newRowNo) {
 	 return oldId;
 	}
 
+
 if( oldId.indexOf(":") == -1) {
     newId =  oldId.substr(0,oldId.indexOf("_")+1) + newRowNo ;
 
@@ -239,6 +245,7 @@ if( oldId.indexOf(":") == -1) {
 	newId = firstPart + ":"+ newRowNo  + thirdPart ;
 }
 
+//alert(oldId + "====>" + newId );
 
 /*	var firstPart = oldId.split(":")[0];
 	var thirdPart = oldId.split("_")[1];
@@ -249,10 +256,11 @@ if( oldId.indexOf(":") == -1) {
 }
 
 function disableDistributeOptions() {
-	  var distributionForm =  document.forms[0];
 
-	   if (  parseInt(document.getElementById("counter").value) == 0)
+	  var distributionForm =  document.forms[0];
+	   if (  parseInt(document.forms[0].counter.value) == 0)
 	   {
+		         
 	   			  distributionForm.distributionBasedOn[0].disabled=false
 				  distributionForm.distributionBasedOn[1].disabled=false;
 				  distributionForm.distributionType[0].disabled = false;

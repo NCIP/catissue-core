@@ -78,13 +78,13 @@
 			var labelDisabled = "";
 			var quantityDisabled = "";
 
-		   if (document.forms[0].distributionBasedOn[0].checked == true)  {
-					 labelDisabled = "disabled";
+           if (document.forms[0].distributionBasedOn[0].checked == true)  {
+		             labelDisabled = "disabled";
 		   }
 
-		   if (document.forms[0].distributionBasedOn[1].checked == true)  {
-					 barcodeDisabled = "disabled";
-		   }		   
+             if (document.forms[0].distributionBasedOn[1].checked == true)  {
+		             barcodeDisabled = "disabled";
+		   }
 		   if (document.forms[0].distributionType[1].checked == true) {
 				quantityDisabled="disabled";
 			}
@@ -115,8 +115,12 @@
 
 			}
 
-			var cell1 = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-			spreqno.innerHTML="" + rowno+ cell1 ;
+    		var cell1 = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
+
+
+			
+			spreqno.innerHTML="" + cell1+  rowno ;
+
 
 			//Second Cell
 			var spreqidentifier=x.insertCell(1);
@@ -146,7 +150,7 @@
 			sname="";
 		
 			name = "value(DistributedItem:" + rowno + "_quantity)";
-			sname= "";				
+			sname= "";
 			sname="<input type='text' " + quantityDisabled + " name='" + name + "' size='30' maxlength='10' class='formFieldSmallSized3' id='" + name + "' value=" + quantVal + ">";
 			
 			var previousQuantity = "value(DistributedItem:"+rowno+"_previousQuantity)";
@@ -438,7 +442,7 @@
 				<tr>
 					<td class="formLeftSubTitle" width="5">#</td>
 
-					<td class="formLeftSubTitle" >* <bean:message
+					<td class="formLeftSubTitle"  >* <bean:message
 						key="distribution.distributionBasedOn.barcode" /></td>
 					<td class="formLeftSubTitle" >* <bean:message
 						key="distribution.distributionBasedOn.label" /></td>
@@ -472,6 +476,7 @@
 						} else {
 							dIdentifier = "value(SpecimenArray:" + i + "_id)";
 							keyid = "SpecimenArray:" + i + "_id";
+							readOnlyForAll = true;
 						}
 						
 					
@@ -517,23 +522,19 @@
 
 					%>
 					<tr>
-						<td class="formSerialNumberField" width="5%"><%=i%>
-						<html:hidden 
-							property="<%=dIdentifier%>" /></td>
-						<td class="formField" ><html:text styleClass="formField"
+					     <td class="formSerialNumberField" width="5%"><html:hidden  property="<%=dIdentifier%>" /><%=i%></td>
+							<td class="formField" ><html:text styleClass="formField"
 							styleId="<%=barcodeKey%>" property="<%=barcodeKey%>" disabled="<%=disableBarcode%>"
 							/></td>
 						<td class="formField" ><html:text styleClass="formField"
 							styleId="<%=labelKey%>" property="<%=labelKey%>"
 							disabled="<%=disableLabel%>"/></td>
-						<td class="formField" nowrap >
-							<html:text
-								styleClass="formFieldSmallSized3" maxlength="10" size="30"
-								styleId="<%=quantity%>" property="<%=quantity%>"
-								disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>" />
-								</span>
-							<html:hidden property="<%=previousQuantity%>" />
-						</td>
+						<td class="formField" nowrap ><html:text
+							styleClass="formFieldSmallSized3" maxlength="10" size="30"
+							styleId="<%=quantity%>" property="<%=quantity%>"
+							disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>" />
+						    </span><html:hidden
+							property="<%=previousQuantity%>" /></td>
 						<%
 					boolean bool = Utility.isPersistedValue(map, keyid);
 					String condition = "";
