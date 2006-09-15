@@ -1706,6 +1706,7 @@ drop table catissue_temp_type;
 
 
 update catissue_container_type set activity_status='Active' where name != 'Any';
+update catissue_container_type set activity_status='Disabled' where name = 'Any';
 #--- Start: update by Ashwin
 alter table CATISSUE_COLLECTION_PROTOCOL add column ALIQUOT_IN_SAME_CONTAINER bit;
 alter table CATISSUE_SPECIMEN_ARRAY add column AVAILABLE bit;
