@@ -1,5 +1,5 @@
 /*
- * $Name: 1.37 $
+ * $Name: 1.38 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -141,12 +141,12 @@ public class CatissueCoreServletContextListener implements ServletContextListene
         String fileName = Variables.applicationHome + System.getProperty("file.separator")+ ApplicationProperties.getValue("application.version.file");
         CVSTagReader cvsTagReader = new CVSTagReader();
         String cvsTag = cvsTagReader.readTag(fileName);
-        
+        Variables.applicationCvsTag = cvsTag;
         Logger.out.info("========================================================");
         Logger.out.info("Application Information");
         Logger.out.info("Name: "+Variables.applicationName);
         Logger.out.info("Version: "+Variables.applicationVersion);
-        Logger.out.info("CVS TAG: "+cvsTag);
+        Logger.out.info("CVS TAG: "+Variables.applicationCvsTag);
         Logger.out.info("Path: "+ Variables.applicationHome);
         Logger.out.info("Database Name: "+Variables.databaseName);
         Logger.out.info("========================================================");                
