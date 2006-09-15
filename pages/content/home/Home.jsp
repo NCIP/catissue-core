@@ -1,7 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
-<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.global.ApplicationProperties,edu.wustl.common.beans.SessionDataBean;"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.global.ApplicationProperties,edu.wustl.catissuecore.util.global.Variables,edu.wustl.common.beans.SessionDataBean;"%>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
     <tr>
@@ -16,7 +16,7 @@
                 <tr>
                 	<td class="welcomeTitle" height="20">
                 		<bean:message key="app.welcomeNote" arg0="<%=ApplicationProperties.getValue("app.name")%>"
-															arg1="<%=ApplicationProperties.getValue("app.version")%>"/>
+															arg1="<%=Variables.applicationCvsTag%>"/>
 					</td>
                 </tr>
                 <tr>
@@ -119,7 +119,7 @@
 							         Dear <%=sessionData.getLastName()%>, &nbsp;<%=sessionData.getFirstName()%><br>
 									 <%}%>			
 										<bean:message key="app.welcomeNote.login" arg0="<%=ApplicationProperties.getValue("app.name")%>"
-																			arg1="<%=ApplicationProperties.getValue("app.version")%>"/>
+																				  arg1="<%=Variables.applicationCvsTag%>"/>
 								</TD>
 							</tr>			
 						</logic:notEmpty>
