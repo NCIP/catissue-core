@@ -188,6 +188,14 @@
             column="STORAGE_CONTAINER_ID"
         />
 
+        <property
+            name="available"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="AVAILABLE"
+        />
+        
         </joined-subclass>
         <joined-subclass
             name="edu.wustl.catissuecore.domain.StorageContainer"
