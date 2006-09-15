@@ -25,6 +25,8 @@ public class SpecimenArray extends Container
     protected StorageContainer storageContainer;
 
     protected Collection specimenArrayContentCollection = new HashSet();
+    
+    protected Boolean available;
 
     public SpecimenArray()
     {
@@ -103,4 +105,19 @@ public class SpecimenArray extends Container
     {
         this.storageContainer = storageContainer;
     }
+
+	/**
+	 * @return Returns the available.
+	 * @hibernate.property name="available" type="boolean" column="AVAILABLE"
+	 */
+	public Boolean getAvailable() {
+		return available;
+	}
+
+	/**
+	 * @param available The available to set.
+	 */
+	public void setAvailable(Boolean available) {
+		this.available = available;
+	}
 }
