@@ -292,7 +292,7 @@ public class StorageContainerAction extends SecureAction
 		}
 		else
 		{
-			if(!bizLogic.isContainerEmpty(new Long(storageContainerForm.getId()).toString()))
+			if(bizLogic.isContainerFull(new Long(storageContainerForm.getId()).toString()))
 			{
 				storageContainerForm.setIsFull("true");
 			}
