@@ -44,6 +44,11 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 */
 	protected Collection collectionProtocolEventCollection = new HashSet();
 	
+	/**
+	 * whether Aliquote in same container
+	 */
+	protected Boolean aliqoutInSameContainer;
+	
 	//protected Collection storageContainerCollection=new HashSet();
 	/**
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
@@ -228,5 +233,20 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	return this.getId().compareTo(collectionProtocol.getId());
     	}
     	return 0;
+	}
+
+	/**
+	 * @return Returns the aliqoutInSameContainer.
+	 * @hibernate.property name="aliqoutInSameContainer" type="boolean" column="ALIQUOT_IN_SAME_CONTAINER"
+	 */
+	public Boolean getAliqoutInSameContainer() {
+		return aliqoutInSameContainer;
+	}
+
+	/**
+	 * @param aliqoutInSameContainer The aliqoutInSameContainer to set.
+	 */
+	public void setAliqoutInSameContainer(Boolean aliqoutInSameContainer) {
+		this.aliqoutInSameContainer = aliqoutInSameContainer;
 	}
 }
