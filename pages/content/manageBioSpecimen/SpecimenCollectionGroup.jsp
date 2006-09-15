@@ -389,14 +389,17 @@
 						<label for="surgicalPathologyNumber">
 							<bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/>
 						</label>
-					</td>
+					</td>					
 				    <td class="formField" noWrap="true">
 				     	<html:text styleClass="formFieldSized" size="30"  maxlength="50"  styleId="surgicalPathologyNumber" property="surgicalPathologyNumber" readonly="<%=readOnlyForAll%>"/>
-					     	&nbsp;
+					     	<!-- This feature will be implemented in next release
+							&nbsp;
 							<html:submit styleClass="actionButton" disabled="true">
 								<bean:message key="buttons.getPathologyReport"/>
 							</html:submit>
+							-->
 				    </td>
+				
 				 </tr>
 
 				<!-- activitystatus -->	
