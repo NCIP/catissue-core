@@ -76,14 +76,18 @@
 			var sname = "";
 		    var barcodeDisabled = "";
 			var labelDisabled = "";
+			var quantityDisabled = "";
 
-           if (document.forms[0].distributionBasedOn[0].checked == true)  {
-		             labelDisabled = "disabled";
+		   if (document.forms[0].distributionBasedOn[0].checked == true)  {
+					 labelDisabled = "disabled";
 		   }
 
-             if (document.forms[0].distributionBasedOn[1].checked == true)  {
-		             barcodeDisabled = "disabled";
-		   }
+		   if (document.forms[0].distributionBasedOn[1].checked == true)  {
+					 barcodeDisabled = "disabled";
+		   }		   
+		   if (document.forms[0].distributionType[1].checked == true) {
+				quantityDisabled="disabled";
+			}
 
 
 			
@@ -91,7 +95,8 @@
 			r = document.getElementById(subdivtag).rows;
 			var q = r.length;
 			var x=document.getElementById(subdivtag).insertRow(q);
-			var quantVal = ""
+			var quantVal = "";
+			
 
 
             
@@ -141,8 +146,9 @@
 			sname="";
 		
 			name = "value(DistributedItem:" + rowno + "_quantity)";
-			sname= "";
-			sname="<input type='text' name='" + name + "' size='30' maxlength='10' class='formFieldSmallSized3' id='" + name + "'  value=" + quantVal + ">";
+			sname= "";				
+			sname="<input type='text' " + quantityDisabled + " name='" + name + "' size='30' maxlength='10' class='formFieldSmallSized3' id='" + name + "' value=" + quantVal + ">";
+			
 			var previousQuantity = "value(DistributedItem:"+rowno+"_previousQuantity)";
 			sname = sname + "<input type='hidden' name='" + previousQuantity + "' value='' id='" + previousQuantity + "'>";
 			spreqquantity.innerHTML="" + sname;
@@ -239,16 +245,21 @@
 				<!-- Speciemen/specimen array -->
 				<tr>
 					<td class="formRequiredNotice" width="5">*</td>
-					<td class="formRequiredLabel"><label for="type"> <bean:message
-						key="distribution.distributionType" /> </label></td>
-					<td class="formField"><logic:iterate id="nvb"
+					<td class="formRequiredLabel">
+						<label for="type"> <bean:message
+							key="distribution.distributionType" /> 
+						</label>
+					</td>
+					<td class="formField">
+						<logic:iterate id="nvb"
 						name="<%=Constants.DISTRIBUTION_TYPE_LIST%>">
 						<%NameValueBean distributionType = (NameValueBean) nvb;%>
 						<html:radio property="distributionType"
 							value="<%=distributionType.getValue()%>">
 							<%=distributionType.getName()%>
 						</html:radio>
-					</logic:iterate></td>
+					</logic:iterate>
+					</td>
 				</tr>
 
 				<!-- Name of the distribution -->
@@ -515,12 +526,14 @@
 						<td class="formField" ><html:text styleClass="formField"
 							styleId="<%=labelKey%>" property="<%=labelKey%>"
 							disabled="<%=disableLabel%>"/></td>
-						<td class="formField" nowrap ><html:text
-							styleClass="formFieldSmallSized3" maxlength="10" size="30"
-							styleId="<%=quantity%>" property="<%=quantity%>"
-							disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>" />
-						    </span><html:hidden
-							property="<%=previousQuantity%>" /></td>
+						<td class="formField" nowrap >
+							<html:text
+								styleClass="formFieldSmallSized3" maxlength="10" size="30"
+								styleId="<%=quantity%>" property="<%=quantity%>"
+								disabled="<%=readOnlyForAll%>" readonly="<%=readOnlyForAll%>" />
+								</span>
+							<html:hidden property="<%=previousQuantity%>" />
+						</td>
 						<%
 					boolean bool = Utility.isPersistedValue(map, keyid);
 					String condition = "";
