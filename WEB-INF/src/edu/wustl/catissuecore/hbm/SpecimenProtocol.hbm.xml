@@ -190,6 +190,14 @@
 
         </set>
 
+		<property
+            name="aliqoutInSameContainer"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="ALIQUOT_IN_SAME_CONTAINER"
+        />
+
         </joined-subclass>
         <joined-subclass
             name="edu.wustl.catissuecore.domain.DistributionProtocol"
