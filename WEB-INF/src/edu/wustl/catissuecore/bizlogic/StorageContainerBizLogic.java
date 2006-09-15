@@ -557,17 +557,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-	public boolean isContainerEmpty(String containerId) throws DAOException
+	public boolean isContainerFull(String containerId) throws DAOException
 	{
 		boolean availablePositions[][] = getAvailablePositions(containerId);
 
-		final int dimX = availablePositions.length;
-		for (int x = 0; x < dimX; x++)
+		int dimX = availablePositions.length;
+		for (int x = 1; x < dimX; x++)
 		{
-			final int dimY = availablePositions[x].length;
-			for (int y = 0; y < dimY; y++)
+			int dimY = availablePositions[x].length;
+			for (int y = 1; y < dimY; y++)
 			{
-				if (availablePositions[x][y] == false)
+				if (availablePositions[x][y] == true)
 					return false;
 			}
 		}
@@ -1981,27 +1981,30 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	public Map getAvailablePositionMap(StorageContainer container) throws DAOException
 	{
 		Map map = new TreeMap();
-		boolean[][] availablePosistions = getAvailablePositions(container);
-
-		for (int x = 1; x < availablePosistions.length; x++)
+		if (!container.isFull().booleanValue())
 		{
+			boolean[][] availablePosistions = getAvailablePositions(container);
 
-			List list = new ArrayList();
-
-			for (int y = 1; y < availablePosistions[x].length; y++)
+			for (int x = 1; x < availablePosistions.length; x++)
 			{
-				if (availablePosistions[x][y])
+
+				List list = new ArrayList();
+
+				for (int y = 1; y < availablePosistions[x].length; y++)
 				{
-					list.add(new NameValueBean(new Integer(y), new Integer(y)));
+					if (availablePosistions[x][y])
+					{
+						list.add(new NameValueBean(new Integer(y), new Integer(y)));
+					}
 				}
-			}
 
-			if (!list.isEmpty())
-			{
-				Integer xObj = new Integer(x);
-				NameValueBean nvb = new NameValueBean(xObj, xObj);
-				map.put(nvb, list);
+				if (!list.isEmpty())
+				{
+					Integer xObj = new Integer(x);
+					NameValueBean nvb = new NameValueBean(xObj, xObj);
+					map.put(nvb, list);
 
+				}
 			}
 		}
 		//Logger.out.info("Map :"+map);
@@ -2142,7 +2145,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		dao.openSession(null);
 
 		String queryStr = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1 WHERE "
-				+ "t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID FROM CATISSUE_STORAGE_CONT_COLL_PROT_REL t2 "
+				+ "t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 "
 				+ "WHERE t2.COLLECTION_PROTOCOL_ID = '"
 				+ cpId
 				+ "') and t1.IDENTIFIER IN "
@@ -2151,7 +2154,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				+ specimenClass
 				+ "')) UNION "
 				+ "(SELECT t4.IDENTIFIER, t4.NAME FROM CATISSUE_CONTAINER t4 WHERE "
-				+ "t4.IDENTIFIER NOT IN (SELECT t5.STORAGE_CONTAINER_ID FROM CATISSUE_STORAGE_CONT_COLL_PROT_REL t5) "
+				+ "t4.IDENTIFIER NOT IN (SELECT t5.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t5) "
 				+ " and t4.IDENTIFIER IN "
 				+ "(SELECT t6.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t6 WHERE "
 				+ "t6.SPECIMEN_CLASS = '" + specimenClass + "'))";
@@ -2200,7 +2203,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 
 		// Query to return titles of collection protocol related to given storagecontainer. 29-Aug-06 Mandar.
-		String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_SPECIMEN_PROTOCOL SP, CATISSUE_STORAGE_CONT_COLL_PROT_REL SC "
+		String sql = " SELECT SP.TITLE TITLE FROM CATISSUE_SPECIMEN_PROTOCOL SP, CATISSUE_ST_CONT_COLL_PROT_REL SC "
 				+ " WHERE SP.IDENTIFIER = SC.COLLECTION_PROTOCOL_ID AND SC.STORAGE_CONTAINER_ID = "
 				+ id;
 
