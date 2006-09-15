@@ -678,7 +678,11 @@ function onEditChange()
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options name="<%=Constants.IS_CONTAINER_FULL_LIST%>" labelName="<%=Constants.IS_CONTAINER_FULL_LIST%>" />
 							</html:select>--%>
-							<html:checkbox property="isFull" value="true"/>
+							<% boolean disabledChkBox = false;%>
+							<logic:equal property="isFull" name="storageContainerForm" value="true">
+							<% disabledChkBox = true;%>
+							</logic:equal>
+							<html:checkbox property="isFull" value="true" disabled="<%=disabledChkBox%>"/>
 						</td>
 					</tr>
 					</logic:equal>
