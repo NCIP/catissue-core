@@ -433,6 +433,7 @@
 		  <transaction  src="${common.sql.dir}/CDE_DummyData_Common.sql"/>
 		  <transaction  src="${oracle.sql.dir}/CSM_Create_Oracle.sql"/>
 		  <transaction  src="${oracle.sql.dir}/CSM_AddConstraints_Oracle.sql"/>
+		  <transaction  src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql"/>
 		  <transaction  src="${oracle.sql.dir}/CSM_InsertData_Oracle.sql"/>
 		  <transaction  src="${oracle.sql.dir}/createUser.sql"/>
 	      <transaction  src="${common.sql.dir}/insert_default_data.sql"/>	
