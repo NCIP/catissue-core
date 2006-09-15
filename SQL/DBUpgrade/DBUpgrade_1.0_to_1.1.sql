@@ -212,7 +212,7 @@ create table CATISSUE_STORAGE_CONT_COLL_PROT_REL (
    COLLECTION_PROTOCOL_ID bigint not null,
    primary key (STORAGE_CONTAINER_ID, COLLECTION_PROTOCOL_ID)
 );
-rename table CATISSUE_ST_CONT_COLL_PROT_REL to CATISSUE_STORAGE_CONT_COLL_PROT_REL;
+rename table CATISSUE_STORAGE_CONT_COLL_PROT_REL to CATISSUE_ST_CONT_COLL_PROT_REL;
 
 #--alter table CATISSUE_STORAGE_CONTAINER Engine = INNODB;
 #--alter table CATISSUE_COLLECTION_PROTOCOL Engine = INNODB;
@@ -235,9 +235,9 @@ create table CATISSUE_STOR_CONT_STOR_TYPE_REL (
 alter table CATISSUE_STOR_CONT_STOR_TYPE_REL add index FK703B902159A3CE5C (STORAGE_TYPE_ID), add constraint FK703B902159A3CE5C foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
 alter table CATISSUE_STOR_CONT_STOR_TYPE_REL add index FK703B9021B3DFB11D (STORAGE_CONTAINER_ID), add constraint FK703B9021B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
 
-update `csm_protection_element` set `PROTECTION_ELEMENT_ID`='184',`PROTECTION_ELEMENT_NAME`='Capacity_systemIdentifier',`PROTECTION_ELEMENT_DESCRIPTION`='Capacity systemIdentifier attribute',`OBJECT_ID`='edu.wustl.catissuecore.domain.Capacity',`ATTRIBUTE`='systemIdentifier',`PROTECTION_ELEMENT_TYPE_ID`=NULL,`APPLICATION_ID`='1',`UPDATE_DATE`='0000-00-00' where `PROTECTION_ELEMENT_ID`='184'
-update `csm_protection_element` set `PROTECTION_ELEMENT_ID`='185',`PROTECTION_ELEMENT_NAME`='Capacity_oneDimensionCapacity',`PROTECTION_ELEMENT_DESCRIPTION`='Capacity oneDimensionCapacity attribute',`OBJECT_ID`='edu.wustl.catissuecore.domain.Capacity',`ATTRIBUTE`='oneDimensionCapacity',`PROTECTION_ELEMENT_TYPE_ID`=NULL,`APPLICATION_ID`='1',`UPDATE_DATE`='0000-00-00' where `PROTECTION_ELEMENT_ID`='185'
-update `csm_protection_element` set `PROTECTION_ELEMENT_ID`='186',`PROTECTION_ELEMENT_NAME`='Capacity_twoDimensionCapacity',`PROTECTION_ELEMENT_DESCRIPTION`='Capacity twoDimensionCapacity attribute',`OBJECT_ID`='edu.wustl.catissuecore.domain.Capacity',`ATTRIBUTE`='twoDimensionCapacity',`PROTECTION_ELEMENT_TYPE_ID`=NULL,`APPLICATION_ID`='1',`UPDATE_DATE`='0000-00-00' where `PROTECTION_ELEMENT_ID`='186'
+update `csm_protection_element` set `PROTECTION_ELEMENT_ID`='184',`PROTECTION_ELEMENT_NAME`='Capacity_systemIdentifier',`PROTECTION_ELEMENT_DESCRIPTION`='Capacity systemIdentifier attribute',`OBJECT_ID`='edu.wustl.catissuecore.domain.Capacity',`ATTRIBUTE`='systemIdentifier',`PROTECTION_ELEMENT_TYPE_ID`=NULL,`APPLICATION_ID`='1',`UPDATE_DATE`='0000-00-00' where `PROTECTION_ELEMENT_ID`='184';
+update `csm_protection_element` set `PROTECTION_ELEMENT_ID`='185',`PROTECTION_ELEMENT_NAME`='Capacity_oneDimensionCapacity',`PROTECTION_ELEMENT_DESCRIPTION`='Capacity oneDimensionCapacity attribute',`OBJECT_ID`='edu.wustl.catissuecore.domain.Capacity',`ATTRIBUTE`='oneDimensionCapacity',`PROTECTION_ELEMENT_TYPE_ID`=NULL,`APPLICATION_ID`='1',`UPDATE_DATE`='0000-00-00' where `PROTECTION_ELEMENT_ID`='185';
+update `csm_protection_element` set `PROTECTION_ELEMENT_ID`='186',`PROTECTION_ELEMENT_NAME`='Capacity_twoDimensionCapacity',`PROTECTION_ELEMENT_DESCRIPTION`='Capacity twoDimensionCapacity attribute',`OBJECT_ID`='edu.wustl.catissuecore.domain.Capacity',`ATTRIBUTE`='twoDimensionCapacity',`PROTECTION_ELEMENT_TYPE_ID`=NULL,`APPLICATION_ID`='1',`UPDATE_DATE`='0000-00-00' where `PROTECTION_ELEMENT_ID`='186';
 
 
 
