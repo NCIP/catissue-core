@@ -748,7 +748,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	private void isDeAssignable(DAO dao, String privilegeName, Long[] objectIds, Long userId,
 			String roleId, boolean assignToUser) throws DAOException, SMException
 	{
-		String[] selectColumnNames = {"parentContainer.id", "site.id"};
+		// Aarti: Bug#2364 - Error while assigning privileges since attribute parentContainer changed to parent
+		String[] selectColumnNames = {"parent.id", "site.id"};
 		String[] whereColumnNames = {"id"};
 		List listOfSubElement = super.getRelatedObjects(dao, StorageContainer.class,
 				selectColumnNames, whereColumnNames, objectIds);
@@ -829,9 +830,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			Long[] storageContainerIDArr, Long userId, String roleId, boolean assignToUser,
 			boolean assignOperation) throws SMException, DAOException
 	{
+	    // Aarti: Bug#2364 - Error while assigning privileges since attribute parentContainer changed to parent
 		//Get list of sub container identifiers.
 		List listOfSubStorageContainerId = super.getRelatedObjects(dao, StorageContainer.class,
-				"parentContainer", storageContainerIDArr);
+				"parent", storageContainerIDArr);
 
 		if (listOfSubStorageContainerId.isEmpty())
 			return;
