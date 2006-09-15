@@ -100,7 +100,10 @@ public class AssignPrivilegePageAction extends BaseAction
         				Role role = (Role)roles.get(i);
         				String id = "Role_" + role.getId();
         				String roleName = role.getName();
-        				if(roleName.equals(Constants.TECHNICIAN))
+        				//Aarti: Adding supervisor due to Bug#1854 - To assign or revoke use privilege 
+        				//on storage containers and sites should NOT only apply to technician group users 
+        				//but also to supervisors.
+        				if(roleName.equals(Constants.TECHNICIAN) || roleName.equals(Constants.SUPERVISOR))
         				{
        						usersForUsePrivilege.add(new NameValueBean(roleName,id));
         				}
@@ -121,7 +124,10 @@ public class AssignPrivilegePageAction extends BaseAction
             		{
             			String roleName = role.getName();
             			//Make a list of technicians
-            			if(roleName.equals(Constants.TECHNICIAN))
+            			//Aarti: Adding supervisors due to Bug#1854 - To assign or revoke use privilege 
+        				//on storage containers and sites should NOT only apply to technician group users 
+        				//but also to supervisors.
+            			if(roleName.equals(Constants.TECHNICIAN) || roleName.equals(Constants.SUPERVISOR))
             				usersForUsePrivilege.add(userNameValue);
             			//Make a list of Scientists
             			if(roleName.equals(Constants.SCIENTIST))

@@ -1711,3 +1711,6 @@ update catissue_container_type set activity_status='Disabled' where name = 'Any'
 alter table CATISSUE_COLLECTION_PROTOCOL add column ALIQUOT_IN_SAME_CONTAINER bit;
 alter table CATISSUE_SPECIMEN_ARRAY add column AVAILABLE bit;
 #--- End
+
+/* Aarti: Deleting due to Bug#1854 - To assign or revoke use privilege on storage containers and sites should NOT only apply to technician group users but also to supervisors.*/
+delete from csm_role_privilege where role_privilege_id = 10;
