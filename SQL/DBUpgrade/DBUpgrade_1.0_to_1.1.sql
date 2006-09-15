@@ -1660,7 +1660,7 @@ INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID
 #--- End: update by Ashwin
 
 alter table catissue_container_type add column activity_status varchar(30);
-update catissue_container_type a set activity_status = (select activity_status from catissue_storage_type b where a.identifier = b.identifier);
+#--update catissue_container_type a set activity_status = (select activity_status from catissue_storage_type b where a.identifier = b.identifier);
 alter table catissue_storage_type drop column activity_status;
 
 create table CATISSUE_STORTY_HOLDS_SPARRTY (
@@ -1704,6 +1704,8 @@ insert into catissue_container_type (name,activity_status,identifier) values ('A
 insert into catissue_specimen_array_type (IDENTIFIER) values ( '2');
 drop table catissue_temp_type;
 
+
+update catissue_container_type set activity_status='Active' where name != 'Any';
 #--- Start: update by Ashwin
 alter table CATISSUE_COLLECTION_PROTOCOL add column ALIQUOT_IN_SAME_CONTAINER bit;
 alter table CATISSUE_SPECIMEN_ARRAY add column AVAILABLE bit;
