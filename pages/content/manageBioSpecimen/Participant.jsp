@@ -817,6 +817,7 @@ tr#hiddenCombo
 								<td nowrap class="formFieldNoBorders">
 								<html:button styleClass="actionButton"
 										property="submitPage" 
+										title="Submit Only"
 										value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[0][0]%>" 
 										disabled="<%=isAddNew%>"
 										onclick="<%=normalSubmit%>"> 
@@ -828,6 +829,7 @@ tr#hiddenCombo
 								<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  
 											property="registratioPage" 
+											title="Submit and Register to protocol"
 											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>" 
 											disabled="<%=isRegisterButton%>"
 					  						onclick="<%=forwardToSubmit%>">

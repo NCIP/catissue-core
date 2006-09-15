@@ -9,6 +9,7 @@
 		<td nowrap class="formFieldNoBorders">
 			<html:button styleClass="actionButton" 
 					property="submitPage" 
+					title="Submit Only"
 					value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>" 
 					onclick="<%=normalSubmit%>">				  				     	    
 	     	</html:button>
@@ -17,6 +18,7 @@
 		<td nowrap class="formFieldNoBorders"> 
 			<html:button styleClass="actionButton"  
 					property="submitPage" 
+					title="Submit and Add Specimen collection group"
 					value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[1][0]%>"
 					disabled="<%=isAddNew%>" 
 					onclick="<%=forwardToSubmit%>">

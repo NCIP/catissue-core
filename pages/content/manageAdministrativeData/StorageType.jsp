@@ -359,6 +359,7 @@
 					<td nowrap class="formFieldNoBorders">
 								<html:button styleClass="actionButton"
 										property="submitPage" 
+										title="Submit Only"
 										value="<%=Constants.STORAGE_TYPE_FORWARD_TO_LIST[0][0]%>"										
 										onclick="<%=normalSubmit%>"> 
 								</html:button>
@@ -366,6 +367,7 @@
 					<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  
 											property="storageContainerPage" 
+											title="Submit and Add Container"
 											value="<%=Constants.STORAGE_TYPE_FORWARD_TO_LIST[1][0]%>" 											
 					  						onclick="<%=forwardToSubmit%>">
 									</html:button>

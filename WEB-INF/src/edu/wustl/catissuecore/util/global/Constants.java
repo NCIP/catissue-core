@@ -897,7 +897,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 			{"Derive",			"createNew"},
 			{"Add Events",				"eventParameters"},
 			{"More",	"sameCollectionGroup"},
-			{"Submit and Distribute", "distribution" }
+			{"Distribute", "distribution" }
 	};
 	public static final String [] SPECIMEN_BUTTON_TIPS = {
 		"Submit only",
@@ -918,13 +918,13 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	};
 
 	public static final String [][] PARTICIPANT_FORWARD_TO_LIST = {
-			{"Submit Only",					"success"},
-			{"Submit and Register to Protocol",	"createParticipantRegistration"}
+			{"Submit",					"success"},
+			{"Register to Protocol",	"createParticipantRegistration"}
 	};
 	
 	public static final String [][] STORAGE_TYPE_FORWARD_TO_LIST = {
-			{"Submit Only",					"success"},
-			{"Submit and Add Container",	"storageContainer"}
+			{"Submit",					"success"},
+			{"Add Container",	"storageContainer"}
 	};
 	
 	//Constants Required for Advance Search
