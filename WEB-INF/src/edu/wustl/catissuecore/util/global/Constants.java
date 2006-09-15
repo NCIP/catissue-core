@@ -826,8 +826,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 													"Specimen.TYPE.Type : Specimen",
 													"SpecimenCharacteristics.TISSUE_SITE.Tissue Site : Specimen",
 													"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side : Specimen",
-													//"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
+													"Specimen.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
 													"DistributedItem.QUANTITY.Quantity : Distribution"};
+													//"SpecimenCharacteristics.PATHOLOGICAL_STATUS.Pathological Status : Specimen",
+													
 	public static final String SPECIMEN_IN_ARRAY_SELECTED_COLUMNS[] = {
 		"Specimen.LABEL.Label : Specimen",
 		"Specimen.BARCODE.barcode : Specimen",
@@ -852,6 +854,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 		"Container.Comment.comment: Container",
     };
 
+												
 	public static final String SPECIMEN_ID_LIST = "specimenIdList";
 	public static final String DISTRIBUTION_ACTION = "Distribution.do?pageOf=pageOfDistribution";
 	public static final String DISTRIBUTION_REPORT_NAME = "Distribution Report.csv";
@@ -1095,6 +1098,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//Constant for length of messageBody in Reported problem page  
 	public static final int messageLength= 500;
+	public static final String NEXT_NUMBER="nextNumber";
 	
 //	public static final String getCollectionProtocolPIGroupName(Long identifier)
 //	{
@@ -1144,7 +1148,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//constant for pagination data list
 	public static final String PAGINATION_DATA_LIST = "paginationDataList";
-
 	
 	public static final int SPECIMEN_DISTRIBUTION_TYPE = 1;
 	public static final int SPECIMEN_ARRAY_DISTRIBUTION_TYPE = 2;
@@ -1153,7 +1156,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int LABEL_BASED_DISTRIBUTION = 2;
 	public static final String DISTRIBUTION_TYPE_LIST = "DISTRIBUTION_TYPE_LIST";
 	public static final String DISTRIBUTION_BASED_ON = "DISTRIBUTION_BASED_ON";
-	public static final String SYSTEM_LABEL = "label";
-	public static final String SYSTEM_BARCODE = "barcode";	
-
+		public static final String SYSTEM_LABEL = "label";
+	public static final String SYSTEM_BARCODE = "barcode";
+	
 }
