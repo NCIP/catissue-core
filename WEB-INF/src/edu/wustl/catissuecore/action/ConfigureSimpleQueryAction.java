@@ -94,7 +94,8 @@ public class ConfigureSimpleQueryAction extends BaseAction
 					int i;
 					for(i=0;i<selectedTables.length;i++)
 					{
-						columnNameValueBeans.addAll(bizLogic.setColumnNames(selectedTables[i]));
+						columnNameValueBeans.addAll(bizLogic.getColumnNames(selectedTables[i],true));
+//						columnNameValueBeans.addAll(bizLogic.setColumnNames(selectedTables[i]));
 					}
 					selectedColumns = new String[columnNameValueBeans.size()];
 					Iterator columnNameValueBeansItr = columnNameValueBeans.iterator();

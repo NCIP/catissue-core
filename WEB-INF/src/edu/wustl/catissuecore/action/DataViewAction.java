@@ -242,11 +242,11 @@ public class DataViewAction extends BaseAction
     {
     	List columnDisplayNames=new ArrayList();
     	QueryBizLogic bizLogic = (QueryBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-		List participantColumns=bizLogic.setColumnNames(Query.PARTICIPANT);
-		List collectionProtocolColumns=bizLogic.setColumnNames(Query.COLLECTION_PROTOCOL);
-		List collProtRegColumns=bizLogic.setColumnNames(Query.COLLECTION_PROTOCOL_REGISTRATION);
-		List specimenCollGrpColumns=bizLogic.setColumnNames(Query.SPECIMEN_COLLECTION_GROUP);
-		List specimenColumns=bizLogic.setColumnNames(Query.SPECIMEN);
+		List participantColumns=bizLogic.getColumnNames(Query.PARTICIPANT,true);
+		List collectionProtocolColumns=bizLogic.getColumnNames(Query.COLLECTION_PROTOCOL,true);
+		List collProtRegColumns=bizLogic.getColumnNames(Query.COLLECTION_PROTOCOL_REGISTRATION,true);
+		List specimenCollGrpColumns=bizLogic.getColumnNames(Query.SPECIMEN_COLLECTION_GROUP,true);
+		List specimenColumns=bizLogic.getColumnNames(Query.SPECIMEN,true);
 
     	List columns =new ArrayList();
     	//Filter the data according to the node clicked. Show only the data lower in the heirarchy 

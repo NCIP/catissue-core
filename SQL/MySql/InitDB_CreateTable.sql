@@ -35,7 +35,8 @@ CREATE TABLE CATISSUE_SEARCH_DISPLAY_DATA
 (
       RELATIONSHIP_ID bigint not null,
       COL_ID bigint not null,
-      DISPLAY_NAME varchar(50)
+      DISPLAY_NAME varchar(50),
+      DEFAULT_VIEW_ATTRIBUTE bit DEFAULT 0
 );
 
 drop table if exists CATISSUE_RELATED_TABLES_MAP;
