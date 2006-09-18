@@ -152,7 +152,7 @@
 
         <set
             name="specimenArrayContentCollection"
-            table="CATISSUE_SPECIMEN_ARRAY_CONTENT"
+            table="CATISSUE_SPECI_ARRAY_CONTENT"
             lazy="false"
             inverse="false"
             cascade="none"

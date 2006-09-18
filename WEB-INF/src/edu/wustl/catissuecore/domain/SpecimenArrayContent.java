@@ -7,7 +7,7 @@ import edu.wustl.common.exception.AssignDataException;
 /**
  * @author gautam_shetty
  * @author Ashwin Gupta 
- * @hibernate.class table="CATISSUE_SPECIMEN_ARRAY_CONTENT"
+ * @hibernate.class table="CATISSUE_SPECI_ARRAY_CONTENT"
  */
 public class SpecimenArrayContent extends AbstractDomainObject 
 {

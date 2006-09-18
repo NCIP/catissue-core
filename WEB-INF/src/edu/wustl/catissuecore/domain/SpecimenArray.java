@@ -52,7 +52,7 @@ public class SpecimenArray extends Container
 
     /**
      * @return Returns the specimenArrayContentCollection.
-     * @hibernate.set name="specimenArrayContentCollection" table="CATISSUE_SPECIMEN_ARRAY_CONTENT"
+     * @hibernate.set name="specimenArrayContentCollection" table="CATISSUE_SPECI_ARRAY_CONTENT"
      * cascade="none" inverse="false" lazy="false"
      * @hibernate.collection-key column="SPECIMEN_ARRAY_ID"
      * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenArrayContent"
