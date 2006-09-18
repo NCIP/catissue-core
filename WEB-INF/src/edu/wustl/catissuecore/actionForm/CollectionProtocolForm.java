@@ -55,6 +55,11 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * Counter that contains number of rows in the 'Add More' functionality. inner block
 	 */
 	protected Map innerLoopValues = new HashMap();
+		
+	/**
+	 * whether Aliquote in same container
+	 */
+	protected boolean aliqoutInSameContainer = false;
 	
 	/**
 	 * @return Returns the innerLoopValues.
@@ -206,6 +211,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				i++;
 			}
 		}
+		if(cProtocol.getAliqoutInSameContainer()!= null) {
+		aliqoutInSameContainer = cProtocol.getAliqoutInSameContainer().booleanValue();
+		}
 	}
 	
 	
@@ -277,6 +285,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				i++;
 			}
 		}
+		
     }
 	
 	private void populateSpecimenRequirement(Collection specimenRequirementCollection, int counter)
@@ -636,4 +645,19 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			setProtocolCoordinatorIds(pcoordIDs); 
         } 
     }
+	
+	/**
+	 * @return Returns the aliqoutInSameContainer.
+	 */
+	public boolean isAliqoutInSameContainer()
+	{
+		return aliqoutInSameContainer;
+	}
+	/**
+	 * @param aliqoutInSameContainer The aliqoutInSameContainer to set.
+	 */
+	public void setAliqoutInSameContainer(boolean aliqoutInSameContainer)
+	{
+		this.aliqoutInSameContainer = aliqoutInSameContainer;
+	}
 }

@@ -37,7 +37,7 @@ public class AliquotForm extends AbstractActionForm
 	/**
      * An label of a specimen.
      */
-	private String specimenLabel;
+	private String specimenLabel = "";
 	
 	/**
      * An label of a specimen.
@@ -47,7 +47,7 @@ public class AliquotForm extends AbstractActionForm
     /**
      * A number that tells how many aliquots to be created.
      */
-    private String noOfAliquots;
+    private String noOfAliquots = "";
     
     /**
      * An identifier of Specimen Collection Group.
@@ -97,12 +97,12 @@ public class AliquotForm extends AbstractActionForm
     /**
      * Initial quantity per aliquot.
      */
-    private String quantityPerAliquot;
+    private String quantityPerAliquot = "";
     
     /**
      * Barcode assigned of the parent specimen.
      */
-    private String barcode;
+    private String barcode = "";
     
     /**
 	 * Radio button to choose barcode/specimen identifier
@@ -114,6 +114,15 @@ public class AliquotForm extends AbstractActionForm
      */
     private Map aliquotMap = new HashMap();
     
+    /**
+     * decides whether to store all aliquotes in the same container
+     */
+    private boolean aliqoutInSameContainer = false;
+    
+    /**
+     * identifies the button clicked
+     */
+    private String buttonClicked = "";
     /**
 	 * Returns the map that contains distinguished fields per aliquots.
 	 * @return The map that contains distinguished fields per aliquots.
@@ -523,5 +532,33 @@ public class AliquotForm extends AbstractActionForm
 	public void setSpecimenID(String specimenID)
 	{
 		this.specimenID = specimenID;
+	}
+	/**
+	 * @return Returns the aliqoutInSameContainer.
+	 */
+	public boolean isAliqoutInSameContainer()
+	{
+		return aliqoutInSameContainer;
+	}
+	/**
+	 * @param aliqoutInSameContainer The aliqoutInSameContainer to set.
+	 */
+	public void setAliqoutInSameContainer(boolean aliqoutInSameContainer)
+	{
+		this.aliqoutInSameContainer = aliqoutInSameContainer;
+	}
+	/**
+	 * @return Returns the buttonClicked.
+	 */
+	public String getButtonClicked()
+	{
+		return buttonClicked;
+	}
+	/**
+	 * @param buttonClicked The buttonClicked to set.
+	 */
+	public void setButtonClicked(String buttonClicked)
+	{
+		this.buttonClicked = buttonClicked;
 	}
 }
