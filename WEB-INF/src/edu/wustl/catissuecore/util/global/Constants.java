@@ -370,6 +370,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGEOF_CREATE_ALIQUOT = "pageOfCreateAliquot";
 	public static final String PAGEOF_ALIQUOT_SUMMARY = "pageOfAliquotSummary";
 	public static final String AVAILABLE_CONTAINER_MAP = "availableContainerMap";
+	public static final String COMMON_ADD_EDIT = "commonAddEdit";
 
 	//Constants related to QuickEvents functionality
 	public static final String QUICKEVENTS_ACTION = "QuickEventsSearch.do";	
