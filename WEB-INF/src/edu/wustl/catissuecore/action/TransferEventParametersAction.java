@@ -20,7 +20,6 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
-import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
@@ -98,7 +97,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				Logger.out.info("Spcimen Class:" + specimen.getClassName());
 				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(specimen
 						.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-						.getCollectionProtocol().getId().longValue(), specimen.getClassName());
+						.getCollectionProtocol().getId().longValue(), specimen.getClassName(),0);
 				initialValues = checkForInitialValues(containerMap);
 
 			}
