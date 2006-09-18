@@ -1,4 +1,4 @@
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+							   			  <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
@@ -72,11 +72,42 @@
 			checkb.innerHTML=""+sname;
 		}
 		
-		function onSpecimenOrClassChange()
+		function onRadioButtonClick(element)
 		{
-			var specimenId = document.getElementById("parentSpecimenId");
-			var classNameElement = document.getElementById("className");
-			if(specimenId.value != "-1" && classNameElement.value != "-1")
+		
+			if(element.value == 1)
+			{
+				document.forms[0].parentSpecimenLabel.disabled = false;
+				document.forms[0].parentSpecimenBarcode.disabled = true;
+			}
+			else
+			{
+				document.forms[0].parentSpecimenBarcode.disabled = false;
+				document.forms[0].parentSpecimenLabel.disabled = true;
+			}
+		}		 
+
+
+	   function onClassOrLabelOrBarcodeChange()
+		{
+		
+    var radioArray = document.getElementsByName("checkedButton");
+ 	var flag = "0";
+ 		if (radioArray[0].checked) 
+		{
+		  if(document.getElementById("parentSpecimenLabel").value!= "") 
+		  {
+			   flag = "1";
+		  }
+		} 
+     else {
+			if (document.getElementById("parentSpecimenBarcode").value != "") 
+			{
+	     	     flag = "1";
+			}
+		}
+ 	    	var classNameElement = document.getElementById("className");
+			if(flag=="1" && classNameElement.value != "-1")
 			{
 		
 				var action = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&Change=true";
@@ -147,12 +178,12 @@
 			if(form.getUnit() != null)
 				unitSpecimen = form.getUnit();
 		}
-		System.out.println("SPID :--- : " +(String)request.getAttribute("parentSpecimenId"));
+	
 %>
 
 	<html:errors />
    <html:form action="<%=Constants.CREATE_SPECIMEN_ADD_ACTION%>">
-		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="550">
 		   
 		   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 		   	<tr>
@@ -189,7 +220,7 @@
 			  <!-- NEW SPECIMEN REGISTRATION BEGINS-->
 	    	  <tr>
 			    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="500">
+			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="550">
 				 <tr>
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
@@ -225,18 +256,48 @@
 				     </td>
 				 </tr>
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">*</td>
-				    <td class="formRequiredLabel" width="175">
+			     	<td class="formRequiredNoticeNoBottom" width="5">*</td>
+				    <td class="formRequiredLabelLeftBorder" width="175">
+					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
+				    &nbsp;
+			        </html:radio>
 						<label for="specimenCollectionGroupId">
-							<bean:message key="createSpecimen.parent"/>
+							<bean:message key="createSpecimen.parentLabel"/>
 						</label>
 					</td>
 					<td class="formField" colspan="2">
-<!-- Mandar : 434 : for tooltip -->
-			     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onSpecimenOrClassChange()">
-							<html:options collection="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
+					
+					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
+				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" onblur="onClassOrLabelOrBarcodeChange()"/>
+			        </logic:equal>
+			
+			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
+			 	     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="true" />
+			        </logic:equal>
+					
+		        	</td>
+				 </tr>
+				 
+				 <tr>
+			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
+				    <td class="formRequiredLabel" width="175">
+					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
+				    &nbsp;
+			        </html:radio>
+						<label for="specimenCollectionGroupId">
+							<bean:message key="createSpecimen.parentBarcode"/>
+						</label>
+					</td>
+					<td class="formField" colspan="2">
+					
+					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
+				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="true" onblur="onClassOrLabelOrBarcodeChange()"/>
+			        </logic:equal>
+			
+			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
+				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" onblur="onClassOrLabelOrBarcodeChange()"/>
+			        </logic:equal>
+										
 		        	</td>
 				 </tr>
 				 
@@ -251,7 +312,7 @@
 						</label>
 					</td>
 				    <td class="formField" colspan="4">
-				     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized15" size="30" maxlength="50"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
 				 
@@ -265,7 +326,7 @@
 				    <td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onSpecimenOrClassChange()">
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onClassOrLabelOrBarcodeChange()">
 							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -362,44 +423,44 @@
 					</td>
 					
 					<%-- n-combo-box start --%>
-				<%
-					Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
-										
-					String[] labelNames = {"ID","Pos1","Pos2"};
-					labelNames = Constants.STORAGE_CONTAINER_LABEL;
-					String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
-					
+					<%
+						Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
+							
+						String[] labelNames = {"ID", "Pos1", "Pos2"};
+						labelNames = Constants.STORAGE_CONTAINER_LABEL;
+						String[] attrNames = {"storageContainer", "positionDimensionOne", "positionDimensionTwo"};
+						
 					//String[] initValues = new String[3];
 					//initValues[0] = form.getStorageContainer();
 					//initValues[1] = form.getPositionDimensionOne();
 					//initValues[2] = form.getPositionDimensionTwo();
-					String[] initValues = new String[3];
+						String[] initValues = new String[3];
 							List initValuesList = (List)request.getAttribute("initValues");
 							if(initValuesList != null)
 							{
 								initValues = (String[])initValuesList.get(0);
 							}
 					//System.out.println("NewSpecimen :: "+initValues[0]+"<>"+initValues[1]+"<>"+initValues[2]);			
-					String rowNumber = "1";
-					String styClass = "formFieldSized5";
-					String tdStyleClass = "customFormField";
-					String onChange = "onCustomListBoxChange(this)";
-					
+						String rowNumber = "1";
+						String styClass = "formFieldSized5";
+						String tdStyleClass = "customFormField";
+						String onChange = "onCustomListBoxChange(this)";
+						
 					String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2','name','810','320','yes');return false";
-					String noOfEmptyCombos = "3";
+						String noOfEmptyCombos = "3";
 					boolean disabled = false;
 					if(request.getAttribute("disabled") != null && request.getAttribute("disabled").equals("true"))
 					{
 						disabled = true;
 					}	
 
-				%>
+					%>
 				
-				<%=ScriptGenerator.getJSForOutermostDataTable()%>
-				<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
-				
-				<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-				
+					<%=ScriptGenerator.getJSForOutermostDataTable()%>
+					<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
+					
+					<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+									
 				<td class="formField" colSpan="4">
 						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 							<html:checkbox property="virtuallyLocated" onclick="setVirtuallyLocated(this)"/>
@@ -415,21 +476,22 @@
 							%>
 						</logic:notEqual>	
 								
-						<ncombo:containermap dataMap="<%=dataMap%>" 
+									<ncombo:containermap dataMap="<%=dataMap%>" 
 											attributeNames="<%=attrNames%>" 
 											initialValues="<%=initValues%>"  
 											styleClass = "<%=styClass%>" 
 											tdStyleClass = "<%=tdStyleClass%>" 
 											labelNames="<%=labelNames%>" 
 											rowNumber="<%=rowNumber%>" 
-											onChange="<%=onChange%>" 
+											onChange = "<%=onChange%>"
 											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
+											
 											buttonName="mapButton" 
 											value="Map"
 											buttonOnClick = "<%=buttonOnClicked%>"
 											formLabelStyle="formLabelBorderless"
-											buttonStyleClass="actionButton" />				
-				</td>
+											buttonStyleClass="actionButton" />
+					</td>	
 				<%-- n-combo-box end --%>
 				
 				 </tr>
@@ -561,5 +623,7 @@
 			 
 			 <!-- NEW SPECIMEN REGISTRATION ends-->
 	</table>
+
+	
  </html:form>
 	
