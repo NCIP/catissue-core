@@ -58,14 +58,14 @@ public class AddSpecimenAction extends Action
 		if (createForm.getCheckedButton().equals("1"))
 		{
 			whereColumnName[0] = Constants.SYSTEM_LABEL;
-			whereColumnValue[0] = createForm.getParentSpecimenLabel();
+			whereColumnValue[0] = createForm.getParentSpecimenLabel().trim();
 			errorString = ApplicationProperties.getValue("quickEvents.specimenLabel");
 
 		}
 		else
 		{
 			whereColumnName[0] = Constants.SYSTEM_BARCODE;
-			whereColumnValue[0] = createForm.getParentSpecimenBarcode();
+			whereColumnValue[0] = createForm.getParentSpecimenBarcode().trim();
 			errorString = ApplicationProperties.getValue("quickEvents.barcode");
 		}
 
