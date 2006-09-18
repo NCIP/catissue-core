@@ -125,10 +125,10 @@ create table CATISSUE_CONTAINER_TYPE (
    NAME varchar(100),
    ONE_DIMENSION_LABEL varchar(100),
    TWO_DIMENSION_LABEL varchar(100),
-   COMMENTS text,
+   COMMENT text,
    primary key (IDENTIFIER)
    );
-alter table CATISSUE_CONTAINER_TYPE change column COMMENT COMMENTS text;
+
 #-- altering table catissue_storage_type
 #--alter table catissue_capacity Engine = INNODB;
 alter table CATISSUE_CONTAINER_TYPE add index FKCBBC9954DAC76C0 (CAPACITY_ID);
@@ -177,14 +177,14 @@ create table CATISSUE_CONTAINER (
    BARCODE varchar(100),
    CAPACITY_ID bigint,
    PARENT_CONTAINER_ID bigint,
-   COMMENTS text,
+   COMMENT text,
    FULL bit,
    NAME varchar(100),
    POSITION_DIMENSION_ONE integer,
    POSITION_DIMENSION_TWO integer,
    primary key (IDENTIFIER)
 );
-alter table CATISSUE_CONTAINER change column COMMENT COMMENTS text;
+
 #--update catissue_storage_container set container_name = identifier;
 insert into CATISSUE_CONTAINER(IDENTIFIER,ACTIVITY_STATUS,BARCODE,CAPACITY_ID,PARENT_CONTAINER_ID,FULL,NAME,POSITION_DIMENSION_ONE,POSITION_DIMENSION_TWO) (SELECT IDENTIFIER,ACTIVITY_STATUS,BARCODE,STORAGE_CONTAINER_CAPACITY_ID,PARENT_CONTAINER_ID,IS_CONTAINER_FULL,CONTAINER_NAME,POSITION_DIMENSION_ONE,POSITION_DIMENSION_TWO FROM CATISSUE_STORAGE_CONTAINER);
 
@@ -238,6 +238,9 @@ create table CATISSUE_STOR_CONT_STOR_TYPE_REL (
 );
 alter table CATISSUE_STOR_CONT_STOR_TYPE_REL add index FK703B902159A3CE5C (STORAGE_TYPE_ID), add constraint FK703B902159A3CE5C foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE (IDENTIFIER);
 alter table CATISSUE_STOR_CONT_STOR_TYPE_REL add index FK703B9021B3DFB11D (STORAGE_CONTAINER_ID), add constraint FK703B9021B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER (IDENTIFIER);
+
+rename table CATISSUE_STOR_CONT_STOR_TYPE_REL to CATISSUE_ST_CONT_ST_TYPE_REL;
+drop table if exists CATISSUE_STOR_CONT_STOR_TYPE_REL;
 
 update `csm_protection_element` set `PROTECTION_ELEMENT_ID`='184',`PROTECTION_ELEMENT_NAME`='Capacity_systemIdentifier',`PROTECTION_ELEMENT_DESCRIPTION`='Capacity systemIdentifier attribute',`OBJECT_ID`='edu.wustl.catissuecore.domain.Capacity',`ATTRIBUTE`='systemIdentifier',`PROTECTION_ELEMENT_TYPE_ID`=NULL,`APPLICATION_ID`='1',`UPDATE_DATE`='0000-00-00' where `PROTECTION_ELEMENT_ID`='184';
 update `csm_protection_element` set `PROTECTION_ELEMENT_ID`='185',`PROTECTION_ELEMENT_NAME`='Capacity_oneDimensionCapacity',`PROTECTION_ELEMENT_DESCRIPTION`='Capacity oneDimensionCapacity attribute',`OBJECT_ID`='edu.wustl.catissuecore.domain.Capacity',`ATTRIBUTE`='oneDimensionCapacity',`PROTECTION_ELEMENT_TYPE_ID`=NULL,`APPLICATION_ID`='1',`UPDATE_DATE`='0000-00-00' where `PROTECTION_ELEMENT_ID`='185';
@@ -773,7 +776,7 @@ insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME ,
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 248, 70, 'CAPACITY_ID', 'bigint');
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 249, 70, 'POSITION_DIMENSION_ONE', 'integer');
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 250, 70, 'POSITION_DIMENSION_TWO', 'integer');
-insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 310, 70, 'COMMENTS', 'varchar');
+insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 310, 70, 'COMMENT', 'varchar');
 
 insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID) values ( 2, 'CATISSUE_CAPACITY', 'Storage Container Capacity', 'StorageContainerCapacity',2);
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 251, 2, 'IDENTIFIER', 'bigint');
@@ -798,7 +801,7 @@ insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME ,
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 261, 69, 'ONE_DIMENSION_LABEL', 'varchar');
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 262, 69, 'TWO_DIMENSION_LABEL', 'varchar');
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 263, 69, 'CAPACITY_ID', 'bigint');
-insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 308, 69, 'COMMENTS', 'varchar');
+insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 308, 69, 'COMMENT', 'varchar');
 
 
 insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID) values ( 65, 'CATISSUE_TABLE_RELATION', 'Table Relation', 'TableRelation',0);
@@ -1687,7 +1690,7 @@ CREATE TABLE catissue_temp_type (
                          `NAME` varchar(100),                                                                                         
                          `ONE_DIMENSION_LABEL` varchar(100),                                                                                           
                          `TWO_DIMENSION_LABEL` varchar(100),                                                                                           
-                          `COMMENTS` text(20),                                                                                  
+                          `COMMENT` text(20),                                                                                  
                          `ACTIVITY_STATUS` varchar(20)
                        );
 
