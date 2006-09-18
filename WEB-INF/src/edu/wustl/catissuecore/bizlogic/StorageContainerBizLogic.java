@@ -1980,9 +1980,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @throws DAOException
 	 */
 
-	public Map getAvailablePositionMap(StorageContainer container) throws DAOException
+	public Map getAvailablePositionMap(StorageContainer container,int aliquotCount) throws DAOException
 	{
 		Map map = new TreeMap();
+		int count = 0;
 		if (!container.isFull().booleanValue())
 		{
 			boolean[][] availablePosistions = getAvailablePositions(container);
@@ -1997,6 +1998,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					if (availablePosistions[x][y])
 					{
 						list.add(new NameValueBean(new Integer(y), new Integer(y)));
+						count++;
 					}
 				}
 
@@ -2010,6 +2012,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 		}
 		//Logger.out.info("Map :"+map);
+		if(count<aliquotCount) {
+			return new TreeMap();
+		}
 		return map;
 	}
 
@@ -2019,7 +2024,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @return Returns a map of available rows vs. available columns.
 	 * @throws DAOException
 	 */
-	public Map getAvailablePositionMap(String containerId) throws DAOException
+	public Map getAvailablePositionMap(String containerId,int aliquotCount) throws DAOException
 	{
 		List list = retrieve(StorageContainer.class.getName(), Constants.SYSTEM_IDENTIFIER,
 				new Long(containerId));
@@ -2027,7 +2032,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		if (list != null)
 		{
 			StorageContainer container = (StorageContainer) list.get(0);
-			return getAvailablePositionMap(container);
+			return getAvailablePositionMap(container,aliquotCount);
 		}
 		else
 		{
@@ -2055,7 +2060,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 			StorageContainer container = (StorageContainer) itr.next();
 			//Logger.out.info("+++++++++++++++++++++++++++:"+container.getName()+"++++++++++:"+container.getId());
-			Map positionMap = getAvailablePositionMap(container.getId().toString());
+			Map positionMap = getAvailablePositionMap(container.getId().toString(),0);
 
 			if (!positionMap.isEmpty())
 			{
@@ -2122,7 +2127,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			String Id = (String) list1.get(0);
 			String Name = (String) list1.get(1);
 			String siteName = (String) list1.get(2);
-			Map positionMap = getAvailablePositionMap(Id);
+			Map positionMap = getAvailablePositionMap(Id,0);
 			if (!positionMap.isEmpty())
 			{
 				NameValueBean nvb = new NameValueBean(Name, Id);
@@ -2139,7 +2144,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	/* temp function end */
 
-	public Map getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass)
+	public Map getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass,int aliquotCount)
 			throws DAOException
 	{
 		Map containerMap = new TreeMap();
@@ -2181,7 +2186,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			List list1 = (List) itr.next();
 			String Id = (String) list1.get(0);
 			String Name = (String) list1.get(1);
-			Map positionMap = getAvailablePositionMap(Id);
+			Map positionMap = getAvailablePositionMap(Id,aliquotCount);
 			if (!positionMap.isEmpty())
 			{
 				NameValueBean nvb = new NameValueBean(Name, Id);
