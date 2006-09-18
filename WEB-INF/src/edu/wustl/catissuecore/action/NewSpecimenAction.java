@@ -308,7 +308,7 @@ public class NewSpecimenAction extends SecureAction
 							.getCollectionProtocol().getId().longValue();
 					String spClass = specimenForm.getClassName();
 					Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
-					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass);
+					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass,0);
 					initialValues = checkForInitialValues(containerMap);
 
 				}
