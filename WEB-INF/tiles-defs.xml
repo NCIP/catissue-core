@@ -147,6 +147,10 @@
 		<put name="content" value="/pages/content/manageAdministrativeData/StorageContainer.jsp" />
 	</definition>
 
+	<definition name=".catissuecore.arrayTypeDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/SpecimenArrayType.jsp" />
+	</definition>
+
 	<definition name=".catissuecore.storageContainerAddSuccessDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
@@ -614,7 +618,7 @@
 		<put name="content" value="/pages/content/search/DataView.jsp" />
 	</definition>
 	
-	<definition name=".catissuecore.editSpecimenArrayTypeSearchPageDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+	<definition name=".catissuecore.editSpecimenArrayTypeSearchPageDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/search/DataView.jsp" />
 	</definition>
 	
@@ -648,7 +652,7 @@
 	</definition>
 
 	<definition name=".catissuecore.simpleSearchSpecimenArrayTypeDef" extends=".catissuecore.searchHomeDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenArrayType.jsp" />
+		<put name="content" value="/pages/content/manageAdministrativeData/SpecimenArrayType.jsp" />
 	</definition>
 	
 	<definition name=".catissuecore.advanceQueryDef" extends=".catissuecore.queryDataViewDef">
@@ -835,9 +839,5 @@
 	
 	<definition name=".catissuecore.arrayDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Array.jsp" />
-	</definition>
-	
-	<definition name=".catissuecore.arrayTypeDef" extends=".catissuecore.manageBioSpecimenHomeDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenArrayType.jsp" />
 	</definition>
 </tiles-definitions>
