@@ -21,6 +21,9 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -38,6 +41,7 @@ import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -51,8 +55,8 @@ public class CreateSpecimenAction extends SecureAction
 	/**
 	 * Overrides the execute method of Action class.
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
 		CreateSpecimenForm createForm = (CreateSpecimenForm) form;
 
@@ -83,20 +87,56 @@ public class CreateSpecimenAction extends SecureAction
 		 request.setAttribute(Constants.PAGEOF,pageOf);
 		 */
 
-		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance()
-				.getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
+		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
 
-		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
-				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				Constants.STORAGE_CONTAINER_FORM_ID);
 		Map containerMap = new HashMap();
 		Vector initialValues = null;
 		if (operation.equals(Constants.ADD))
 		{
-			if (createForm.getParentSpecimenId() != null && !createForm.getParentSpecimenId().equals("") &&
-					createForm.getClassName() != null && !createForm.getClassName().equals(""))
+			if (request.getParameter("Change") != null)
 			{
-				containerMap  = getContainerMap(createForm.getParentSpecimenId(),createForm.getClassName(),dao, scbizLogic)	;
-				initialValues = checkForInitialValues(containerMap);
+				String errorString = null;
+				String columnName = null;
+				Object columnValue = null;
+
+				// checks whether label or barcode is selected
+				if (createForm.getCheckedButton().equals("1"))
+				{
+					columnName = Constants.SYSTEM_LABEL;
+					columnValue = createForm.getParentSpecimenLabel().trim();
+					errorString = ApplicationProperties.getValue("quickEvents.specimenLabel");
+				}
+				else
+				{
+					columnName = Constants.SYSTEM_BARCODE;
+					columnValue = createForm.getParentSpecimenBarcode().trim();
+					errorString = ApplicationProperties.getValue("quickEvents.barcode");
+				}
+
+				List spList = dao.retrieve(Specimen.class.getName(), columnName, columnValue);
+
+				if (spList != null && !spList.isEmpty())
+				{
+					Specimen sp = (Specimen) spList.get(0);
+					long cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
+					String spClass = createForm.getClassName();
+					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0);
+					initialValues = checkForInitialValues(containerMap);
+
+				}
+				else
+				{
+					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+					if (errors == null)
+					{
+						errors = new ActionErrors();
+					}
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("quickEvents.specimen.notExists", errorString));
+					saveErrors(request, errors);
+				}
+
 			}
 		}
 		else
@@ -105,8 +145,7 @@ public class CreateSpecimenAction extends SecureAction
 			Integer id = new Integer(createForm.getStorageContainer());
 			String parentContainerName = "";
 			String valueField1 = "id";
-			List list = dao.retrieve(StorageContainer.class.getName(), valueField1, new Long(
-					createForm.getStorageContainer()));
+			List list = dao.retrieve(StorageContainer.class.getName(), valueField1, new Long(createForm.getStorageContainer()));
 			if (!list.isEmpty())
 			{
 				StorageContainer container = (StorageContainer) list.get(0);
@@ -124,63 +163,52 @@ public class CreateSpecimenAction extends SecureAction
 			containerMap.put(new NameValueBean(parentContainerName, id), pos1Map);
 
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
-			if (createForm.getStorageContainer() != null
-					&& !createForm.getStorageContainer().equals("-1"))
+			if (createForm.getStorageContainer() != null && !createForm.getStorageContainer().equals("-1"))
 			{
 				startingPoints[0] = createForm.getStorageContainer();
 
 			}
-			if (createForm.getPositionDimensionOne() != null
-					&& !createForm.getPositionDimensionOne().equals("-1"))
+			if (createForm.getPositionDimensionOne() != null && !createForm.getPositionDimensionOne().equals("-1"))
 			{
 				startingPoints[1] = createForm.getPositionDimensionOne();
 			}
-			if (createForm.getPositionDimensionTwo() != null
-					&& !createForm.getPositionDimensionTwo().equals("-1"))
+			if (createForm.getPositionDimensionTwo() != null && !createForm.getPositionDimensionTwo().equals("-1"))
 			{
 				startingPoints[2] = createForm.getPositionDimensionTwo();
 			}
 			initialValues = new Vector();
-			Logger.out.info("Starting points[0]" + startingPoints[0]);
-			Logger.out.info("Starting points[1]" + startingPoints[1]);
-			Logger.out.info("Starting points[2]" + startingPoints[2]);
 			initialValues.add(startingPoints);
 
 		}
-
+		request.setAttribute("initValues", initialValues);
+		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		// -------------------------
 
 		String[] fields = {"id"};
 
 		// Setting the parent specimen list
-		List parentSpecimenList = dao.getList(Specimen.class.getName(), fields, fields[0], true);
-		request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);
+		/*List parentSpecimenList = dao.getList(Specimen.class.getName(), fields, fields[0], true);
+		 request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);*/
 
 		//Setting the specimen class list
-		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_SPECIMEN_CLASS, null);
+		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
 		//Setting the specimen type list
-		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_SPECIMEN_TYPE, null);
+		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE, null);
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
 		//Setting biohazard list
-		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_BIOHAZARD, null);
+		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD, null);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
 
-		Logger.out.debug("1");
 		// get the Specimen class and type from the cde
 		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
 		Set setPV = specimenClassCDE.getPermissibleValues();
-		Logger.out.debug("2");
 		Iterator itr = setPV.iterator();
 
 		specimenClassList = new ArrayList();
 		Map subTypeMap = new HashMap();
-		Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
 		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 
 		while (itr.hasNext())
@@ -189,11 +217,9 @@ public class CreateSpecimenAction extends SecureAction
 			Object obj = itr.next();
 			PermissibleValue pv = (PermissibleValue) obj;
 			String tmpStr = pv.getValue();
-			Logger.out.debug(tmpStr);
 			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
 
 			Set list1 = pv.getSubPermissibleValues();
-			Logger.out.debug("list1 " + list1);
 			Iterator itr1 = list1.iterator();
 			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 			while (itr1.hasNext())
@@ -202,19 +228,16 @@ public class CreateSpecimenAction extends SecureAction
 				PermissibleValue pv1 = (PermissibleValue) obj1;
 				// set specimen type
 				String tmpInnerStr = pv1.getValue();
-				Logger.out.debug("\t\t" + tmpInnerStr);
 				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
 			}
 			subTypeMap.put(pv.getValue(), innerList);
 		} // class and values set
-		Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
 
 		// sets the Class list
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
 		// set the map to subtype
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
-		Logger.out.debug("************************************\n\n\nDone**********\n");
 
 		//*************  ForwardTo implementation *************
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
@@ -222,8 +245,6 @@ public class CreateSpecimenAction extends SecureAction
 		if (forwardToHashMap != null)
 		{
 			Long parentSpecimenId = (Long) forwardToHashMap.get("parentSpecimenId");
-			Logger.out.debug("ParentSpecimenID found in forwardToHashMap========>>>>>>"
-					+ parentSpecimenId);
 
 			if (parentSpecimenId != null)
 			{
@@ -237,8 +258,8 @@ public class CreateSpecimenAction extends SecureAction
 				map.clear();
 				createForm.setExternalIdentifier(map);
 				createForm.setExIdCounter(1);
-				createForm.setVirtuallyLocated(false);	
-				containerMap  = getContainerMap(createForm.getParentSpecimenId(),createForm.getClassName(),dao, scbizLogic)	;
+				createForm.setVirtuallyLocated(false);
+				containerMap = getContainerMap(createForm.getParentSpecimenId(), createForm.getClassName(), dao, scbizLogic);
 				initialValues = checkForInitialValues(containerMap);
 			}
 		}
@@ -248,25 +269,24 @@ public class CreateSpecimenAction extends SecureAction
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
-	Map getContainerMap(String specimenId, String className , CreateSpecimenBizLogic dao, StorageContainerBizLogic scbizLogic) throws DAOException
+	Map getContainerMap(String specimenId, String className, CreateSpecimenBizLogic dao, StorageContainerBizLogic scbizLogic) throws DAOException
 	{
 		Map containerMap = new HashMap();
-		
-		List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER,
-				new Long(specimenId));
+
+		List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(specimenId));
 
 		if (!spList.isEmpty())
 		{
 			Specimen sp = (Specimen) spList.get(0);
-			long cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-					.getCollectionProtocol().getId().longValue();
+			long cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
 			String spClass = className;
 			Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
-			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass);
+			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0);
 		}
-		
+
 		return containerMap;
 	}
+
 	Vector checkForInitialValues(Map containerMap)
 	{
 		Vector initialValues = null;
@@ -290,9 +310,6 @@ public class CreateSpecimenAction extends SecureAction
 			nvb = (NameValueBean) list.get(0);
 			startingPoints[2] = nvb.getValue();
 
-			Logger.out.info("Starting points[0]" + startingPoints[0]);
-			Logger.out.info("Starting points[1]" + startingPoints[1]);
-			Logger.out.info("Starting points[2]" + startingPoints[2]);
 			initialValues = new Vector();
 			initialValues.add(startingPoints);
 
