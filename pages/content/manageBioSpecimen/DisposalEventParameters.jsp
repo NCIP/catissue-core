@@ -7,20 +7,6 @@
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
-<head>
-<!-- Mandar : 434 : for tooltip -->
-<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-<!-- Mandar 21-Aug-06 : For calendar changes -->
-<script src="jss/calendarComponent.js"></script>
-<SCRIPT>var imgsrc="images/";</SCRIPT>
-<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-<!-- Mandar 21-Aug-06 : calendar changes end -->
-
-	<script language="javascript">
-		
-	</script>
-</head>
-	
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String formName,specimenId=null;
@@ -50,6 +36,19 @@
 
 
 %>	
+
+<head>
+<!-- Mandar : 434 : for tooltip -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<!-- Mandar 21-Aug-06 : For calendar changes -->
+<script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<!-- Mandar 21-Aug-06 : calendar changes end -->
+
+	
+</head>
+	
 			
 <html:errors/>
     
@@ -192,7 +191,8 @@
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
 					<td>
-						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>" />
+						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>"/>
+						
 					</td>
 					<%-- td><html:reset styleClass="actionButton"/></td --%> 
 				</tr>

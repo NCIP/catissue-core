@@ -246,7 +246,7 @@
 
         <set
             name="holdsStorageTypeCollection"
-            table="CATISSUE_STOR_CONT_STOR_TYPE_REL"
+            table="CATISSUE_ST_CONT_ST_TYPE_REL"
             lazy="false"
             inverse="false"
             cascade="none"

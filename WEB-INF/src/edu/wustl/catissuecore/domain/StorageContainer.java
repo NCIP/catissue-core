@@ -214,7 +214,7 @@ public class StorageContainer extends Container
 
 	/**
 	 * @return Returns the holdsStorageTypeCollection.
-	 * @hibernate.set name="holdsStorageTypeCollection" table="CATISSUE_STOR_CONT_STOR_TYPE_REL" 
+	 * @hibernate.set name="holdsStorageTypeCollection" table="CATISSUE_ST_CONT_ST_TYPE_REL" 
 	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.StorageType" column="STORAGE_TYPE_ID"

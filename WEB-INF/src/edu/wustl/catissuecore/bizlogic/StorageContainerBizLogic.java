@@ -22,6 +22,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -525,35 +526,23 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		dao.audit(container.getCapacity(), oldContainer.getCapacity(), sessionDataBean, true);
 
-		/*Collection storageContainerDetailsCollection = container
-		 .getStorageContainerDetailsCollection();*/
-
-		/*        Collection oldStorageContainerDetailsCollection = oldContainer
-		 .getStorageContainerDetailsCollection();
-		 Iterator it = storageContainerDetailsCollection.iterator();
-		 while (it.hasNext())
-		 {
-		 StorageContainerDetails storageContainerDetails = (StorageContainerDetails) it
-		 .next();
-		 storageContainerDetails.setStorageContainer(container);
-		 dao.update(storageContainerDetails, sessionDataBean, true, true,
-		 false);
-		 StorageContainerDetails oldStorageContainerDetails = (StorageContainerDetails) getCorrespondingOldObject(
-		 oldStorageContainerDetailsCollection,
-		 storageContainerDetails.getId());
-
-		 dao.audit(storageContainerDetails, oldStorageContainerDetails,
-		 sessionDataBean, true);
-		 }*/
-
 		Logger.out.debug("container.getActivityStatus() " + container.getActivityStatus());
 		if (container.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
-			setDisableToSubContainer(container);
-			Logger.out.debug("container.getActivityStatus() " + container.getActivityStatus());
 			Long containerIDArr[] = {container.getId()};
+			if (isContainerAvailableForDisabled(dao, containerIDArr))
+			{
+				setDisableToSubContainer(container);
+				Logger.out.debug("container.getActivityStatus() " + container.getActivityStatus());
+				/*Long containerIDArr[] = {container.getId()};*/
 
-			disableSubStorageContainer(dao, containerIDArr);
+				disableSubStorageContainer(dao, containerIDArr);
+			}
+			else
+			{
+				throw new DAOException(ApplicationProperties
+						.getValue("errors.container.contains.specimen"));	
+			}
 		}
 	}
 
@@ -830,7 +819,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			Long[] storageContainerIDArr, Long userId, String roleId, boolean assignToUser,
 			boolean assignOperation) throws SMException, DAOException
 	{
-	    // Aarti: Bug#2364 - Error while assigning privileges since attribute parentContainer changed to parent
+		// Aarti: Bug#2364 - Error while assigning privileges since attribute parentContainer changed to parent
 		//Get list of sub container identifiers.
 		List listOfSubStorageContainerId = super.getRelatedObjects(dao, StorageContainer.class,
 				"parent", storageContainerIDArr);
@@ -951,6 +940,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				StorageContainer container = (StorageContainer) iterator.next();
 				container.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+				/* whenever container is disabled free it's used positions */
+				container.setParent(null);
+				container.setPositionDimensionOne(null);
+				container.setPositionDimensionTwo(null);
+
 				setDisableToSubContainer(container);
 			}
 		}
@@ -1492,14 +1486,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		List listOfSpecimenIDs = getRelatedObjects(dao, Specimen.class, "storageContainer",
 				storageContainerIDArr);
+		List listOfSubContainer = getRelatedObjects(dao, StorageContainer.class, "parent",
+				storageContainerIDArr);
+
 		if (!listOfSpecimenIDs.isEmpty())
 		{
 			throw new DAOException(ApplicationProperties
 					.getValue("errors.container.contains.specimen"));
 		}
 
-		List listOfSubStorageContainerId = super.disableObjects(dao, StorageContainer.class,
-				"parent", "CATISSUE_CONTAINER", "PARENT_CONTAINER_ID", storageContainerIDArr);
+		List listOfSubStorageContainerId = super.disableObjects(dao, Container.class, "parent",
+				"CATISSUE_CONTAINER", "PARENT_CONTAINER_ID", storageContainerIDArr);
 
 		if (listOfSubStorageContainerId.isEmpty())
 			return;
@@ -1568,6 +1565,69 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return true;
 	}
 
+	private boolean isContainerAvailableForDisabled(DAO dao, Long[] containerIds)
+	{
+		List containerList = new ArrayList();
+		if (containerIds.length != 0)
+		{
+			try
+			{
+				String sourceObjectName = Specimen.class.getName();
+				String[] selectColumnName = {"id"};
+				String[] whereColumnName1 = {"storageContainer.id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+				String[] whereColumnCondition1 = {"in"};
+				Object[] whereColumnValue1 = {containerIds};
+				String joinCondition = Constants.AND_JOIN_CONDITION;
+
+				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName1,
+						whereColumnCondition1, whereColumnValue1, joinCondition);
+				// check if Specimen exists with the given storageContainer information
+				if (list.size() != 0)
+				{
+					Object obj = list.get(0);
+					return false;
+				}
+				else
+				{
+					sourceObjectName = SpecimenArray.class.getName();
+					list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName1,
+							whereColumnCondition1, whereColumnValue1, joinCondition);
+					// check if Specimen exists with the given storageContainer information
+					if (list.size() != 0)
+					{
+						Object obj = list.get(0);
+						return false;
+					}
+					else
+					{
+						sourceObjectName = StorageContainer.class.getName();
+						String[] whereColumnName = {"parent.id"};
+						containerList = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName,
+								whereColumnCondition1, whereColumnValue1, joinCondition);
+						/*if (containerList.size() != 0)
+						{
+							isContainerAvailableForDisabled(dao, Utility.toLongArray(containerList));
+						}*/
+
+					}
+
+				}
+
+			}
+			catch (Exception e)
+			{
+				Logger.out.debug("Error in isContainerAvailable : " + e);
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
+
+		return isContainerAvailableForDisabled(dao, Utility.toLongArray(containerList));
+	}
+
 	// -- to check if storageContainer is available or used
 	private boolean isContainerAvailableForPositions(DAO dao, StorageContainer current)
 	{
@@ -1610,6 +1670,22 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 							.debug("**************IN isPositionAvailable : obj::::::: --------------- "
 									+ obj);
 					return false;
+				}
+				else
+				{
+					sourceObjectName = SpecimenArray.class.getName();
+
+					list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName1,
+							whereColumnCondition1, whereColumnValue1, joinCondition);
+					// check if Specimen exists with the given storageContainer information
+					if (list.size() != 0)
+					{
+						Object obj = list.get(0);
+						Logger.out
+								.debug("**************IN isPositionAvailable : obj::::::: --------------- "
+										+ obj);
+						return false;
+					}
 				}
 
 			}
@@ -2100,10 +2176,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		dao.openSession(null);
 
 		String queryStr = "SELECT t1.IDENTIFIER, t1.NAME, t2.NAME FROM CATISSUE_CONTAINER t1, CATISSUE_SITE t2 ,CATISSUE_STORAGE_CONTAINER t3 WHERE "
-				+ "t1.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_STOR_TYPE_REL t4 "
+				+ "t1.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_ST_TYPE_REL t4 "
 				+ "WHERE t4.STORAGE_TYPE_ID = '"
 				+ type_id
-				+ "' OR t4.STORAGE_TYPE_ID='1') and t1.IDENTIFIER = t3.IDENTIFIER and t2.IDENTIFIER=t3.SITE_ID";
+				+ "' OR t4.STORAGE_TYPE_ID='1') and t1.IDENTIFIER = t3.IDENTIFIER and t2.IDENTIFIER=t3.SITE_ID AND "
+				+ "t1.ACTIVITY_STATUS='ACTIVE'";
 
 		Logger.out.debug("Storage Container query......................" + queryStr);
 		List list = new ArrayList();
@@ -2159,12 +2236,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				+ "(SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3 WHERE "
 				+ "t3.SPECIMEN_CLASS = '"
 				+ specimenClass
-				+ "')) UNION "
+				+ "') AND t1.ACTIVITY_STATUS='Active') UNION "
 				+ "(SELECT t4.IDENTIFIER, t4.NAME FROM CATISSUE_CONTAINER t4 WHERE "
 				+ "t4.IDENTIFIER NOT IN (SELECT t5.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t5) "
 				+ " and t4.IDENTIFIER IN "
 				+ "(SELECT t6.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t6 WHERE "
-				+ "t6.SPECIMEN_CLASS = '" + specimenClass + "'))";
+				+ "t6.SPECIMEN_CLASS = '" + specimenClass + "') AND t4.ACTIVITY_STATUS='Active')";
 
 		Logger.out.debug("Storage Container query......................" + queryStr);
 		List list = new ArrayList();
