@@ -2550,6 +2550,7 @@ PUBLIC
 		scope="request">
 		<forward name="pageOfCreateAliquot" path=".catissuecore.aliquotDef"/>
 		<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15"/>
+	    <forward name="commonAddEdit" path="/AliquotAdd.do?pageOf=pageOfAliquotSummary&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=none"/>
 		<forward name="failure" path=".catissuecore.aliquotDef" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
@@ -2563,6 +2564,7 @@ PUBLIC
 		<forward name="success" path="/Aliquots.do?pageOf=pageOfAliquotSummary&amp;menuSelected=15" />
 		<forward name="failure" path="/Aliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15" />
 	</action>
+
 	<!-- Aliquots Action -->
 
 	<!-- QuickEvents Action start -->
