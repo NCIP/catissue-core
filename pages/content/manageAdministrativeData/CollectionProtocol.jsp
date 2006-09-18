@@ -900,6 +900,18 @@ function insRow(subdivtag,iCounter,blockCounter)
 							</html:submit>
 							</td-->
 							
+						   <td class="formLabelNoBackGround">
+			               <html:checkbox property="aliqoutInSameContainer">
+			               <b>
+		                    <bean:message key="aliquots.storeAllAliquotes" />
+			               </b>
+			                </html:checkbox>
+	 	                   </td>
+						   
+						   <td width="55%">
+						   &nbsp;
+						   </td>
+						
 						<td>
 						<%
 						   	String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
