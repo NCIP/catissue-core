@@ -197,6 +197,9 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 					.doubleValue();
 			availableQuantity = availableQuantity - dQuantity;
 			parentSpecimen.setAvailableQuantity(new Quantity(String.valueOf(availableQuantity)));
+			if(availableQuantity<=0) {
+				parentSpecimen.setAvailable(new Boolean(false));
+			}
 
 			//dao.update(parentSpecimen,sessionDataBean,Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE, Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
 		}
