@@ -36,12 +36,11 @@
 	<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 
 	<script language="JavaScript">
-		function onCreate()
+	
+	   function onSubmit()
 		{
 			var action = '<%=Constants.CREATE_ALIQUOT_ACTION%>';
-			action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15";
-			
-			document.forms[0].action = action;
+			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=submit";;
 			document.forms[0].submit();
 		}
 		
@@ -59,11 +58,20 @@
 			}
 		}
 		
-		function onSubmit()
+		function onCreate()
 		{
+			var action = '<%=Constants.CREATE_ALIQUOT_ACTION%>';
 			document.forms[0].submittedFor.value = "ForwardTo";
-			document.forms[0].action = "AliquotAdd.do?pageOf=pageOfAliquotSummary&operation=add&menuSelected=15";
-			document.forms[0].submit();
+			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=create";
+		    document.forms[0].submit();
+		}
+		
+		function onCheckboxClicked() 
+		{
+		    var action = '<%=Constants.CREATE_ALIQUOT_ACTION%>';
+			document.forms[0].submittedFor.value = "ForwardTo";
+			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=checkbox";
+		    document.forms[0].submit();
 		}
 		
 		function setVirtuallyLocated(element)
@@ -185,7 +193,7 @@
 			&nbsp;
 		</td>
 		<td align="right">
-			<html:button styleClass="actionButton" property="submitPage" onclick="onCreate()">
+			<html:button styleClass="actionButton" property="submitPage" onclick="onSubmit()">
 				<bean:message key="<%=buttonKey%>"/>
 			</html:button>
 		</td>
@@ -208,6 +216,7 @@
 	{
 %>
 
+	
 <tr>
 <td>
 	<table summary="" cellpadding="3" cellspacing="0" border="0" width="660">
@@ -454,15 +463,28 @@
 </tr>
 
 <tr>
-  <td align="right" colspan="3">
+  <td align="left" colspan="2">
 	<!-- action buttons begins -->
 	<table cellpadding="4" cellspacing="0" border="0">
 	<tr>
-		<td>
-			<html:button styleClass="actionButton" property="submitButton" onclick="onSubmit()">
+	
+	    <td colspan="3" class="formLabelNoBackGround" width="40%">
+			<html:checkbox property="aliqoutInSameContainer" onclick="onCheckboxClicked()">
+			<b>
+		    <bean:message key="aliquots.storeAllAliquotes" />
+			</b>
+			</html:checkbox>
+		</td>
+		<td width="50%">
+			&nbsp;
+		</td>
+		<td align="right">
+			<html:button styleClass="actionButton" property="submitButton" onclick="onCreate()">
 				<bean:message key="buttons.create"/>
 			</html:button>
 		</td>
+		
+		
 		<%--td>
 			<html:reset styleClass="actionButton">
 				<bean:message key="buttons.reset"/>
