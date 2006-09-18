@@ -96,14 +96,6 @@
 	</property>
 	
 	<property>
-		<name>ParticipantLookupAlgo</name>
-		<value>edu.wustl.catissuecore.bizlogic.ParticipantLookupLogic</value>
-	</property>
-	<property>
-		<name>lookup.cutoff</name>
-		<value>50</value>
-	</property>
-	<property>
 		<name>CaTiesPublicServerName</name>
 		<value>http://ps0348:8080/caties/server/HTTPServer</value>
 	</property>
@@ -127,4 +119,82 @@
 		<name>email.mailServer</name>
 		<value>mail.persistent.co.in</value>
 	</property>
+	
+	 <!-- Constants for LookUp algo start -->
+	<property>
+		<name>lookup.cutoff</name>
+		<value>65</value>
+	</property>
+	<property>
+		<name>ParticipantLookupAlgo</name>
+		<value>edu.wustl.catissuecore.bizlogic.ParticipantLookupLogic</value>
+	</property>
+	<property>
+		<name>SSNExact</name>
+		<value>30</value>
+	</property>
+	<property>
+		<name>SSNPartial</name>
+		<value>20</value>
+	</property>
+	<property>
+		<name>DOBExact</name>
+		<value>20</value>
+	</property>
+	<property>
+		<name>DOBPartial</name>
+		<value>15</value>
+	</property>
+	<property>
+		<name>LastNameExact</name>
+		<value>20</value>
+	</property>
+	<property>
+		<name>LastNamePartial</name>
+		<value>15</value>
+	</property>
+	<property>
+		<name>NameExact</name>
+		<value>10</value>
+	</property>
+	<property>
+		<name>NamePartial</name>
+		<value>5</value>
+	</property>
+	<property>
+		<name>MiddleNameExact</name>
+		<value>10</value>
+	</property>
+	<property>
+		<name>MiddleNamePartial</name>
+		<value>5</value>
+	</property>
+	<property>
+		<name>GenderExact</name>
+		<value>5</value>
+	</property>
+	<property>
+		<name>RaceExact</name>
+		<value>10</value>
+	</property>
+	<property>
+		<name>RacePartial</name>
+		<value>5</value>
+	</property>
+	<property>
+		<name>Bonus</name>
+		<value>15</value>
+	</property>
+	<property>
+		<name>TotalPoints</name>
+		<value>105</value>
+	</property>
+	<property>
+		<name>MatchCharactersForLastName</name>
+		<value>5</value>
+	</property>
+	
+	 <!-- Constants for LookUp algo end -->
+	
+	
 </properties>
