@@ -146,6 +146,27 @@
 		</div>
 	</td>
 </tr>
+
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 21, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
+<tr>
+		<%=strMouseOut%>
+		<div>
+			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
+				<b><bean:message key="app.newSpecimenArrayType" /> </b>
+		</div>
+		<div>
+			<a class="subMenuPrimary" href="SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21">
+				<bean:message key="app.add" />
+			</a> |
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSpecimenArrayType&amp;aliasName=SpecimenArrayType&amp;menuSelected=21">
+				<bean:message key="app.edit"/>
+			</a>	
+		</div>
+	</td>
+</tr>
+
 <!-- menu id : 8 -->
 <%
 	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 8, normalMenuClass , selectedMenuClass , hoverMenuClass);
