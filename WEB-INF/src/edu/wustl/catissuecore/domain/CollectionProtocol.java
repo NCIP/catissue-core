@@ -176,7 +176,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	        		}
 				}
         	}
-        	
+        	aliqoutInSameContainer = new Boolean(cpForm.isAliqoutInSameContainer());
 	        Map map = cpForm.getValues();
 	        Logger.out.debug("PRE FIX MAP "+map);
 	        //map = fixMap(map);
