@@ -126,7 +126,7 @@ public class ContainerType extends AbstractDomainObject
     
     /**
      * @return Returns the comment.
-     * @hibernate.property name="comment" type="string" column="COMMENT" length="2000"
+     * @hibernate.property name="comment" type="string" column="COMMENTS" length="2000"
      */
     public String getComment()
     {

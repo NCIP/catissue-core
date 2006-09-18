@@ -125,10 +125,10 @@ create table CATISSUE_CONTAINER_TYPE (
    NAME varchar(100),
    ONE_DIMENSION_LABEL varchar(100),
    TWO_DIMENSION_LABEL varchar(100),
-   COMMENT text,
+   COMMENTS text,
    primary key (IDENTIFIER)
    );
-
+alter table CATISSUE_CONTAINER_TYPE change column COMMENT COMMENTS text;
 #-- altering table catissue_storage_type
 #--alter table catissue_capacity Engine = INNODB;
 alter table CATISSUE_CONTAINER_TYPE add index FKCBBC9954DAC76C0 (CAPACITY_ID);
@@ -177,14 +177,14 @@ create table CATISSUE_CONTAINER (
    BARCODE varchar(100),
    CAPACITY_ID bigint,
    PARENT_CONTAINER_ID bigint,
-   COMMENT text,
+   COMMENTS text,
    FULL bit,
    NAME varchar(100),
    POSITION_DIMENSION_ONE integer,
    POSITION_DIMENSION_TWO integer,
    primary key (IDENTIFIER)
 );
-
+alter table CATISSUE_CONTAINER change column COMMENT COMMENTS text;
 #--update catissue_storage_container set container_name = identifier;
 insert into CATISSUE_CONTAINER(IDENTIFIER,ACTIVITY_STATUS,BARCODE,CAPACITY_ID,PARENT_CONTAINER_ID,FULL,NAME,POSITION_DIMENSION_ONE,POSITION_DIMENSION_TWO) (SELECT IDENTIFIER,ACTIVITY_STATUS,BARCODE,STORAGE_CONTAINER_CAPACITY_ID,PARENT_CONTAINER_ID,IS_CONTAINER_FULL,CONTAINER_NAME,POSITION_DIMENSION_ONE,POSITION_DIMENSION_TWO FROM CATISSUE_STORAGE_CONTAINER);
 
@@ -773,7 +773,7 @@ insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME ,
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 248, 70, 'CAPACITY_ID', 'bigint');
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 249, 70, 'POSITION_DIMENSION_ONE', 'integer');
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 250, 70, 'POSITION_DIMENSION_TWO', 'integer');
-insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 310, 70, 'COMMENT', 'varchar');
+insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 310, 70, 'COMMENTS', 'varchar');
 
 insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID) values ( 2, 'CATISSUE_CAPACITY', 'Storage Container Capacity', 'StorageContainerCapacity',2);
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 251, 2, 'IDENTIFIER', 'bigint');
@@ -798,7 +798,7 @@ insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME ,
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 261, 69, 'ONE_DIMENSION_LABEL', 'varchar');
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 262, 69, 'TWO_DIMENSION_LABEL', 'varchar');
 insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 263, 69, 'CAPACITY_ID', 'bigint');
-insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 308, 69, 'COMMENT', 'varchar');
+insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 308, 69, 'COMMENTS', 'varchar');
 
 
 insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID) values ( 65, 'CATISSUE_TABLE_RELATION', 'Table Relation', 'TableRelation',0);
@@ -1687,7 +1687,7 @@ CREATE TABLE catissue_temp_type (
                          `NAME` varchar(100),                                                                                         
                          `ONE_DIMENSION_LABEL` varchar(100),                                                                                           
                          `TWO_DIMENSION_LABEL` varchar(100),                                                                                           
-                          `COMMENT` text(20),                                                                                  
+                          `COMMENTS` text(20),                                                                                  
                          `ACTIVITY_STATUS` varchar(20)
                        );
 

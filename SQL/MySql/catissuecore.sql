@@ -276,7 +276,7 @@ create table CATISSUE_CONTAINER (
    BARCODE varchar(100) unique,
    CAPACITY_ID bigint,
    PARENT_CONTAINER_ID bigint,
-   COMMENT text,
+   COMMENTS text,
    FULL bit,
    NAME varchar(100) unique not null,
    POSITION_DIMENSION_ONE integer,
@@ -511,7 +511,7 @@ create table CATISSUE_CONTAINER_TYPE (
    NAME varchar(100),
    ONE_DIMENSION_LABEL varchar(100),
    TWO_DIMENSION_LABEL varchar(100),
-   COMMENT text,
+   COMMENTS text,
    ACTIVITY_STATUS VARCHAR(20),
    primary key (IDENTIFIER)
 );

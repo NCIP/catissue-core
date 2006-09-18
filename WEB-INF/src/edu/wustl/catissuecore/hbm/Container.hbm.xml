@@ -85,7 +85,7 @@
             type="string"
             update="true"
             insert="true"
-            column="COMMENT"
+            column="COMMENTS"
             length="2000"
         />
 
