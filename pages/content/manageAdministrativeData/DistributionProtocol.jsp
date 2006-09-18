@@ -287,7 +287,7 @@ function insRow(subdivtag)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="150"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
