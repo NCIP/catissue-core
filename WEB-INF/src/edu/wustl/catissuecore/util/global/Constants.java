@@ -1157,7 +1157,53 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int LABEL_BASED_DISTRIBUTION = 2;
 	public static final String DISTRIBUTION_TYPE_LIST = "DISTRIBUTION_TYPE_LIST";
 	public static final String DISTRIBUTION_BASED_ON = "DISTRIBUTION_BASED_ON";
-		public static final String SYSTEM_LABEL = "label";
+	public static final String SYSTEM_LABEL = "label";
 	public static final String SYSTEM_BARCODE = "barcode";
 	
+	//Mandar : 05Sep06 Array for multiple specimen field names
+	public static final String [] MULTIPLE_SPECIMEN_FIELD_NAMES = {
+	        "Collection Group",
+			"Parent ID",
+			"Name",
+			"Barcode",
+			"Class",
+			"Type",
+			"Tissue Site",
+			"Tissue Side",
+			"Pathological Status",
+			"Concentration",
+			"Quantity",
+			"Storage Location",
+			"Comments",
+			"Events",
+			"External Identifier",
+			"Biohazards"
+//			"Derived",
+//			"Aliquots"
+	};
+	
+	public static final String PAGEOF_MULTIPLE_SPECIMEN = "pageOfMultipleSpecimen";
+	public static final String PAGEOF_MULTIPLE_SPECIMEN_MAIN = "pageOfMultipleSpecimenMain";
+	public static final String MULTIPLE_SPECIMEN_ACTION = "MultipleSpecimen.do";
+	
+	public static final String [] MULTIPLE_SPECIMEN_FORM_FIELD_NAMES = {
+	        "CollectionGroup",
+			"ParentID",
+			"Name",
+			"Barcode",
+			"Class",
+			"Type",
+			"TissueSite",
+			"TissueSide",
+			"PathologicalStatus",
+			"Concentration",
+			"Quantity",
+			"StorageLocation",
+			"Comments",
+			"Events",
+			"ExternalIdentifier",
+			"Biohazards"
+//			"Derived",
+//			"Aliquots"
+	};
 }
