@@ -33,4 +33,19 @@ public interface AppletConstants {
 		 * delimiter 
 		 */
 		String delimiter = "_";
+		
+		/**
+		 * key prefix 
+		 */
+		String ARRAY_CONTENT_KEY_PREFIX = "SpecimenArrayContent:";
+		/**
+		 * Arrau specimen prefix
+		 */
+		String ARRAY_CONTENT_SPECIMEN_PREFIX = "Specimen:";
+		
+		/**
+		 * array attributes name
+		 */
+		String[] ARRAY_CONTENT_ATTRIBUTE_NAMES = {ARRAY_CONTENT_SPECIMEN_PREFIX + "label",ARRAY_CONTENT_SPECIMEN_PREFIX + "barcode","quantity","concentration","positionDimensionOne","positionDimenstionTwo","id",ARRAY_CONTENT_SPECIMEN_PREFIX + "id"};
+		
 }
