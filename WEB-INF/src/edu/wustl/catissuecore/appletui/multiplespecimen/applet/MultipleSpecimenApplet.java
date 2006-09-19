@@ -6,7 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
 import edu.wustl.catissuecore.appletui.applet.BaseApplet;
-import edu.wustl.catissuecore.appletui.component.CaTissueJTable;
+import edu.wustl.catissuecore.appletui.component.BaseTable;
 import edu.wustl.catissuecore.appletui.listener.caTissueHandler;
 import edu.wustl.catissuecore.appletui.multiplespecimen.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.appletui.multiplespecimen.model.SpecimenColumnModel;
@@ -27,7 +27,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
  
 		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(3);
         
-		CaTissueJTable table = new CaTissueJTable(model)
+		BaseTable table = new BaseTable(model)
         {
             public Class getColumnClass(int column)
             {

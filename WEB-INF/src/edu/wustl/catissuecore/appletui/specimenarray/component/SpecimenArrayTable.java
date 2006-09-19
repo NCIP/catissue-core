@@ -15,6 +15,7 @@ import javax.swing.table.TableModel;
 
 import edu.wustl.catissuecore.appletui.component.BaseTable;
 
+
 /**
  * <p>This class initializes the fields of SpecimenArrayTable.java</p>
  * @author Ashwin Gupta

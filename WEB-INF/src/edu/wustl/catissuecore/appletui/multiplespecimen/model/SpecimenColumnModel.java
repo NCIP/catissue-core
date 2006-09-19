@@ -19,7 +19,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
-import edu.wustl.catissuecore.appletui.component.CaTissueJTable;
+import edu.wustl.catissuecore.appletui.component.BaseTable;
 
 /**
  * This is column model for multiple specimen page.
@@ -38,7 +38,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	private static final long serialVersionUID = 1L;
 
 
-	CaTissueJTable table;
+	BaseTable table;
 	
 	JPanel panel;
 	ImageIcon icon;
@@ -51,7 +51,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	String[] listItems1 = {"111", "222", "333", "444", "555"};
 	String[] listItems = {"AAA", "BBB", "CCC", "DDD", "EEE"};
 
-	public SpecimenColumnModel(CaTissueJTable table, int column) //, String[] typeList, String[] classList
+	public SpecimenColumnModel(BaseTable table, int column) //, String[] typeList, String[] classList
 	{
 		super();
 		this.table = table;
