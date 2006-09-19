@@ -1268,3 +1268,8 @@ textarea.formFieldSized20{ /* Used by Mandar for the comments used in autoevents
   color:#000000; /* constant: black */
   font-weight:bold;
 }
+
+.hidden
+{
+ display:none;
+}
