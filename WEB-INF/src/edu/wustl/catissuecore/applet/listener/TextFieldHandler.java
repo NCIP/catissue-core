@@ -9,6 +9,7 @@ package edu.wustl.catissuecore.applet.listener;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 /**
  * @author mandar_deshmukh
@@ -21,16 +22,19 @@ public class TextFieldHandler extends BaseActionHandler {
 	 * 
 	 * @see edu.wustl.catissuecore.appletui.listener.caTissueHandler#handleAction(java.awt.event.ActionEvent)
 	 */
-	protected void handleAction(ActionEvent event) {
+	protected void handleAction(ActionEvent event)
+	{
 		super.handleAction(event);
 		System.out.println("Inside TextFieldHandler");
+		Object selectedValue = "";
+		selectedValue = ((JTextField) (event.getSource())).getText();
 	}
 
 	/**
 	 * @param table
 	 */
-	public TextFieldHandler(JTable table) {
+	public TextFieldHandler(JTable table)
+	{
 		super(table);
-		// TODO Auto-generated constructor stub
 	}
 }
