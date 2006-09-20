@@ -26,11 +26,13 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableModel;
 
+import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.applet.component.SpecimenArrayTable;
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.SpecimenArrayTableModel;
-import edu.wustl.catissuecore.applet.AppletServerCommunicator;
+import edu.wustl.catissuecore.applet.util.SpecimenArrayUtil;
 
 /**
  * <p>This class specifies the methods used to render specimen array applet.It is extending
@@ -41,7 +43,6 @@ import edu.wustl.catissuecore.applet.AppletServerCommunicator;
  */
 
 public class SpecimenArrayApplet extends BaseApplet {
-
 	/**
 	 * Default Serial Version ID
 	 */
@@ -86,16 +87,23 @@ public class SpecimenArrayApplet extends BaseApplet {
 		
 		int rowCount = 3;
 		int columnCount = 3;
-		Map tableModelMap = getTableData();
+		//Map tableModelMap = getTableData();
+		Map tableModelMap = new HashMap();
+		String value = "";
 		
-		/*		for (int i=0; i < rowCount ; i++) {
+		for (int i=0; i < rowCount ; i++) {
 		  for (int j=0;j < columnCount; j++) {
 			for(int k=0; k < AppletConstants.ARRAY_CONTENT_ATTRIBUTE_NAMES.length; k++) {
-				tableModelMap.put(SpecimenArrayUtil.getArrayMapKey(i,j,columnCount,k),"");
+				if ((k == 2) || (k == 3)) {
+					value = "20";
+				} else {
+					value = "";
+				}
+				tableModelMap.put(SpecimenArrayUtil.getArrayMapKey(i,j,columnCount,k),value);
 			}
 		  }
 		}
-*/
+
 		JLabel concLabel = new JLabel("Concentration");
 		concLabel.setOpaque(false);
 		JLabel quantityLabel = new JLabel("Quantity");

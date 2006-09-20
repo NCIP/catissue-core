@@ -13,7 +13,7 @@ package edu.wustl.catissuecore.applet.component;
 
 import javax.swing.table.TableModel;
 
-import edu.wustl.catissuecore.applet.listener.TableMouseListener;
+import edu.wustl.catissuecore.applet.listener.SpecimenArrayTableMouseHandler;
 
 
 
@@ -44,6 +44,6 @@ public class SpecimenArrayTable extends BaseTable {
 	 * Init UI 
 	 */
 	private void initUI() {
-		addMouseListener(new TableMouseListener());
+		addMouseListener(new SpecimenArrayTableMouseHandler());
 	}
 }
