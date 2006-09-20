@@ -545,4 +545,52 @@ public class Utility extends edu.wustl.common.util.Utility
 		System.out.println(Utility.getMonth(dt, pt) + "/" + Utility.getDay(dt, pt) + "/"
 				+ Utility.getYear(dt, pt));
 	}
+	
+	/**
+	 * This method returns a list of string values for a given CDE.
+	 * 
+	 * @param cdeName
+	 * @return
+	 */
+	public static List getListForCDE(String cdeName) {
+		CDE cde = CDEManager.getCDEManager().getCDE(cdeName);
+		List valueList = new ArrayList();
+		
+		if(cde!=null)
+		{
+			Iterator iterator = cde.getPermissibleValues().iterator();
+			while(iterator.hasNext())
+			{
+				PermissibleValue permissibleValue = (PermissibleValue)iterator.next();
+				
+				valueList.addAll(loadPermissibleValue(permissibleValue));
+			}
+		}
+		
+		Collections.sort(valueList);
+		return valueList;
+	}
+	
+	/**
+	 * returns list of all subPVs under this PV, recursively.
+	 * 
+	 * @param permissibleValue
+	 * @return
+	 */
+	private static List loadPermissibleValue(PermissibleValue permissibleValue)
+	{
+		List pvList = new ArrayList();
+		String value = permissibleValue.getValue();
+		pvList.add(value);
+		
+		Iterator iterator = permissibleValue.getSubPermissibleValues().iterator();
+		while(iterator.hasNext())
+		{
+			PermissibleValue subPermissibleValue = (PermissibleValue)iterator.next();
+			List subPVList = loadPermissibleValue(subPermissibleValue);
+			pvList.addAll(subPVList);
+		}
+		return pvList;
+	}
+	
 }
