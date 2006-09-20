@@ -32,7 +32,7 @@ import edu.wustl.catissuecore.applet.component.SpecimenArrayTable;
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.SpecimenArrayTableModel;
-import edu.wustl.catissuecore.applet.util.SpecimenArrayUtil;
+import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
 
 /**
  * <p>This class specifies the methods used to render specimen array applet.It is extending
@@ -99,7 +99,7 @@ public class SpecimenArrayApplet extends BaseApplet {
 				} else {
 					value = "";
 				}
-				tableModelMap.put(SpecimenArrayUtil.getArrayMapKey(i,j,columnCount,k),value);
+				tableModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(i,j,columnCount,k),value);
 			}
 		  }
 		}
