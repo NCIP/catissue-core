@@ -13,14 +13,14 @@ function onDate(operatorListId,formNameAndDateFieldId,isSecondDateField,event)
 		if(!isSecondDateField)
 		{
 //			show_calendar(formNameAndDateFieldId,null,null,'MM-DD-YYYY')
-			showCalendar(2006,8,21,'MM-dd-yyyy',fnm,id,event,1900,2020);
+			showCalendar(id,2006,8,21,'MM-dd-yyyy',fnm,id,event,1900,2020);
 		}
 		else
 		{
 			if(dateCombo.options[dateCombo.selectedIndex].value == "Between" || dateCombo.options[dateCombo.selectedIndex].value == "Not Between")
 			{
 //				show_calendar(formNameAndDateFieldId,null,null,'MM-DD-YYYY');
-				showCalendar(2006,8,21,'MM-dd-yyyy',fnm,id,event,1900,2020);
+				showCalendar(id,2006,8,21,'MM-dd-yyyy',fnm,id,event,1900,2020);
 
 			}
 		}

@@ -6,14 +6,19 @@ var calpattern;
 var calweekstart;
 var shouldUseTime = false;
 
-function printCalendar(day, month, year)
-{
-	printCal("Sun","Mon","Tue","Wed","Thu","Fri","Sat",1,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec", day, month, year, 'false');
+/**
+Changes done by Jitendra on 18/09/2006 to fix the bug when more than one DateTimeComponent tag included in the Jsp.<b> 
+Now each function is getting one extra parameter called id which is used to generate unique id for each component.<b> 
+*/
+
+function printCalendar(id,day, month, year)
+{	
+	printCal(id,"Sun","Mon","Tue","Wed","Thu","Fri","Sat",1,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec", day, month, year, 'false');
 }
 
-function printTimeCalendar(day, month, year, time_hh, time_mm )
-{
-	printCal("Sun","Mon","Tue","Wed","Thu","Fri","Sat",1,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec", day, month, year, 'true', 10, 12);
+function printTimeCalendar(id,day, month, year, time_hh, time_mm )
+{	
+	printCal(id,"Sun","Mon","Tue","Wed","Thu","Fri","Sat",1,"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec", day, month, year, 'true', 10, 12);
 }
 /**
  * Static code included one time in the page.
@@ -23,20 +28,20 @@ function printTimeCalendar(day, month, year, time_hh, time_mm )
  *
  * bgColor => #000000, #C9252C, 
  */
-function printCal(day1, day2, day3, day4, day5, day6, day7, first, month1, month2, month3, month4, month5, month6, month7, month8, month9, month10, month11, month12, day, month, year, displayTime, time_hh, time_mm) 
-{
+function printCal(id,day1, day2, day3, day4, day5, day6, day7, first, month1, month2, month3, month4, month5, month6, month7, month8, month9, month10, month11, month12, day, month, year, displayTime, time_hh, time_mm) 
+{		
 	document.write('<div id="caltitre" style="z-index:10;">');	
 	document.write('<table cellpadding="0" cellspacing="0" border="0" width="267">');
 //	document.write('<form>');
 	document.write('<tr><td colspan="15" class="CALENDARBORDER"><img src="' + imgsrc + 'shim.gif" width=1 height=1></td></tr>');
 	document.write('<tr>');
 	document.write('	<td class="CALENDARBORDER" width="1"><img src="' + imgsrc + 'shim.gif" width=1 height=20></td>');
-	document.write('	<td class="CALENDARTITLE"  colspan="3" align="right"><img src="' + imgsrc + 'previous2.gif" onclick="cal_previous_year(' + day + ');"></td>');
-	document.write('	<td class="CALENDARTITLE" colspan="1" align="left" width="40"><img src="' + imgsrc + 'previous.gif" onclick="cal_before(' + day + ');"></td>');
+	document.write('	<td class="CALENDARTITLE"  colspan="3" align="right"><img src="' + imgsrc + 'previous2.gif" onclick="cal_previous_year('+ '\''+id +'\''+ ',' + day + ');"></td>');
+	document.write('	<td class="CALENDARTITLE" colspan="1" align="left" width="40"><img src="' + imgsrc + 'previous.gif" onclick="cal_before('+ '\''+id +'\''+ ',' + day + ');"></td>');
 	document.write('	<td colspan=6 align="right" class="CALENDARTITLE" nowrap>');
 	
 	// month
-	document.write('<select id="calmois" name="calmois" onchange="cal_chg(' + day + ');"><option value=0>...</option>');	
+	document.write('<select id="calmois'+id+'" name="calmois'+id+'" onchange="cal_chg('+ '\''+id +'\''+ ',' + day + ');"><option value=0>...</option>');	
 	
 	// use the good day for week start.
 	// store the day the week start for later.
@@ -79,15 +84,15 @@ function printCal(day1, day2, day3, day4, day5, day6, day7, first, month1, month
 	document.write('</select>');
 	
 	// year
-	document.write('<select id="calyear" name="calyear" onchange="cal_chg('+ day + ');">');	
+	document.write('<select id="calyear'+id+'" name="calyear'+id+'" onchange="cal_chg('+ '\''+id +'\''+ ',' + day + ');">');	
 	document.write("</select>");
 	
 	document.write('	</td>');
 	//KK
-	document.write('	<td class="CALENDARTITLE" align="right"><img src="' + imgsrc + 'next.GIF" onclick="cal_after(' + day + ');"></td>');	
-	document.write('	<td class="CALENDARTITLE" align="left"><img src="' + imgsrc + 'next2.GIF" onclick="cal_after_year(' + day + ');"></td>');
+	document.write('	<td class="CALENDARTITLE" align="right"><img src="' + imgsrc + 'next.GIF" onclick="cal_after('+ '\''+id +'\''+ ',' + day + ');"></td>');	
+	document.write('	<td class="CALENDARTITLE" align="left"><img src="' + imgsrc + 'next2.GIF" onclick="cal_after_year('+ '\''+id +'\''+ ',' + day + ');"></td>');
 
-	document.write('	<td class="CALENDARTITLE" align="right"><img src="' + imgsrc + 'close.gif" onclick="hideCalendar()"></td>');
+	document.write('	<td class="CALENDARTITLE" align="right"><img src="' + imgsrc + 'close.gif" onclick="hideCalendar('+"'"+id+"'"+')"></td>');
 	document.write('	<td class="CALENDARBORDER" width=1><img src="' + imgsrc + 'shim.gif" width="1" height="1"></td>');
 	document.write('</tr>');
 // to display time
@@ -144,58 +149,59 @@ shouldUseTime = displayTime;
 	document.write('</table>');
 	document.write('</div>');
 //	document.write('<div id="caljour" style="position:absolute; left:0px; top:45px; width:253; height:130; z-index:10;"></div>');
-	document.write('<div id="caljour" style="z-index:10;"></div>');	
+	document.write('<div id="caljour'+id+'" style="z-index:10;"></div>');		
 }
 
 /**
  * Show the calendar
  */
-function showCalendar(year, month, day, pattern, formName, formProperty, event, startYear, endYear) {
+function showCalendar(id,year, month, day, pattern, formName, formProperty, event, startYear, endYear) {	
+	var divId ="slcalcod"+id;
+	var calmoisId="calmois"+id;
+	var calyearId="calyear"+id;
 	if (document.forms[formName].elements[formProperty].disabled) {
 			return;
 	}
+	
 	if (startYear!=null) {
-		var calyear = document.getElementById("calyear");
+		var calyear = document.getElementById(calyearId);
 		for (i = startYear; i <= endYear; i++) {			
 			calyear.options[i - startYear] = new Option(i,i);
 		}
 		calyear.options.length = endYear - startYear + 1;
-	}
-
-	
-
+	}	
 	if(document.all) {
 		// IE.
 		var ofy=document.body.scrollTop;
-		var ofx=document.body.scrollLeft;
-		document.all.slcalcod.style.left = event.clientX+ofx+10;
-		document.all.slcalcod.style.top = event.clientY+ofy+10;
-		document.all.slcalcod.style.visibility="visible";
-		document.all.calmois.selectedIndex= month;
-		hideElement("SELECT");
+		var ofx=document.body.scrollLeft;			
+		document.getElementById(divId).style.left = event.clientX+ofx+10;		
+		document.getElementById(divId).style.top = event.clientY+ofy+10;
+		document.getElementById(divId).style.visibility="visible";		
+		document.getElementById(calmoisId).selectedIndex= month;		
+		hideElement("SELECT",id);		
 	} else if(document.layers) {
 		// Netspace 4
-		document.slcalcod.left = e.pageX+10;
-		document.slcalcod.top = e.pageY+10;
-		document.slcalcod.visibility="visible";
-		document.slcalcod.document.caltitre.document.forms[0].calmois.selectedIndex=month;
+		document.elements[divId].left = e.pageX+10;
+		document.elements[divId].top = e.pageY+10;
+		document.elements[divId].visibility="visible";
+		document.elements[divId].document.caltitre.document.forms[0].calmois.selectedIndex=month;
 	} else {
 		// Mozilla
-		var calendrier = document.getElementById("slcalcod");
+		var calendrier = document.getElementById(divId);
 		var ofy=document.body.scrollTop;
 		var ofx=document.body.scrollLeft;
 		calendrier.style.left = event.clientX+ofx+10;
 		calendrier.style.top = event.clientY+ofy+10;
 		calendrier.style.visibility="visible";
-		document.getElementById("calmois").selectedIndex=month;
-	}
+		document.getElementById(calmoisId).selectedIndex=month;
+	}	
 	if (document.forms[formName].elements[formProperty].stlayout) {
 		var lc_day = document.forms[formName].elements[formProperty].stlayout.day;
 		var lc_month = document.forms[formName].elements[formProperty].stlayout.month;
 		var lc_year = parseInt(document.forms[formName].elements[formProperty].stlayout.year);
-		cal_chg(lc_day, lc_month, lc_year);	
+		cal_chg(id,lc_day, lc_month, lc_year);	
 	} else {
-		cal_chg(day, month, year);	
+		cal_chg(id,day, month, year);	
 	}
 	calformname = formName;
 	calformelement = formProperty;
@@ -205,10 +211,11 @@ function showCalendar(year, month, day, pattern, formName, formProperty, event, 
 /**
  * Redraw the calendar for the current date and a selected month
  */
-function cal_chg(day, month, year){
+function cal_chg(id,day, month, year){	
 	var str='',j;	
-	
-	champMonth = document.getElementById("calmois");
+	var calmoisId = "calmois"+id;
+	var calyearId = "calyear"+id;
+	champMonth = document.getElementById(calmoisId);
 	if (month==null) {		
 		month = champMonth.options[champMonth.selectedIndex].value;
 	} else {
@@ -216,7 +223,7 @@ function cal_chg(day, month, year){
 	}
 		
 	
-	champYear = document.getElementById("calyear");
+	champYear = document.getElementById(calyearId);
 	if (year==null) {		
 		year = champYear.options[champYear.selectedIndex].value;
 	} else {
@@ -253,7 +260,7 @@ function cal_chg(day, month, year){
 				}
 				str+='" width="38" align="center">';
 				if ((ldt.getDay()+1-calweekstart+7)%7==i && ldt.getDate()==j) {
-					str+='<a class="CALENDRIER" href="javascript://" class="CALENDRIER" onmousedown="dtemaj(\'' + j + '\',\'' + month + '\',\'' + year +'\');">'+j+'</a>'; 
+					str+='<a class="CALENDRIER" href="javascript://" class="CALENDRIER" onmousedown="dtemaj(\''+ id +'\',\'' + j + '\',\'' + month + '\',\'' + year +'\');">'+j+'</a>'; 
 					j++;
 				} else {
 					str+='&nbsp;';
@@ -268,8 +275,10 @@ function cal_chg(day, month, year){
 	
 	}
 	
-	if(document.all) {
-		document.all.caljour.innerHTML=str;
+	var caljourId = "caljour"+id;
+	
+	if(document.all) {		
+		document.getElementById(caljourId).innerHTML=str;
 	}
 	if(document.layers) {
 		obj=document.calendrier.document.caljour; 
@@ -278,17 +287,19 @@ function cal_chg(day, month, year){
 		obj.document.close();
 	}
 	if (!document.all && document.getElementById) {
-		document.getElementById("caljour").innerHTML = str;
-	}
+		document.getElementById(caljourId).innerHTML = str;
+	}	
 }
 
 /**
  * Display the previous month
  */
-function cal_before(day, month, year) {
+function cal_before(id,day, month, year) {	
 	var champMonth, champYear;
-	champMonth = document.getElementById("calmois");
-	champYear = document.getElementById("calyear");
+	var calmoisId= "calmois"+id;
+	var calyearId ="calyear"+id;
+	champMonth = document.getElementById(calmoisId);
+	champYear = document.getElementById(calyearId);
 			
 	if (champMonth.selectedIndex>1) { 
 		champMonth.selectedIndex--;
@@ -296,17 +307,19 @@ function cal_before(day, month, year) {
 		champYear.selectedIndex--;
 		champMonth.selectedIndex = champMonth.options.length - 1;
 	}
-	cal_chg(day, champMonth.options[champMonth.selectedIndex].value, champYear.options[champYear.selectedIndex].value);
+	cal_chg(id,day, champMonth.options[champMonth.selectedIndex].value, champYear.options[champYear.selectedIndex].value);	
 }
 
 /**
  * Display the previous year
  */
-function cal_previous_year(day, month, year) 
-{
+function cal_previous_year(id,day, month, year) 
+{	
 	var champMonth, champYear;
-	champMonth = document.getElementById("calmois");
-	champYear = document.getElementById("calyear");
+	var calmoisId= "calmois"+id;
+	var calyearId ="calyear"+id;
+	champMonth = document.getElementById(calmoisId);
+	champYear = document.getElementById(calyearId);
 			
 	if (champYear.selectedIndex>=1) 
 	{ 
@@ -316,37 +329,41 @@ function cal_previous_year(day, month, year)
 	{
 		champYear.selectedIndex = champYear.options.length - 1;
 	}
-	cal_chg(day, champMonth.options[champMonth.selectedIndex].value, champYear.options[champYear.selectedIndex].value);
+	cal_chg(id,day, champMonth.options[champMonth.selectedIndex].value, champYear.options[champYear.selectedIndex].value);	
 }
 
 /**
  * Display the next month
  */
-function cal_after(day, month, year) 
-{
+function cal_after(id,day, month, year) 
+{	
 	// get required objects
 	var champMonth, champYear;
-	champMonth = document.getElementById("calmois");
-	champYear = document.getElementById("calyear");
+	var calmoisId ="calmois"+id;
+	var calyearId ="calyear"+id;
+	champMonth = document.getElementById(calmoisId);
+	champYear = document.getElementById(calyearId);
 	if (champMonth.selectedIndex < champMonth.options.length - 1) {
 		champMonth.selectedIndex++;
 	} else if (champYear.selectedIndex < champYear.options.length - 1) {
 		champYear.selectedIndex++;	
 		champMonth.selectedIndex = 1;
 	}
-	cal_chg(day, champMonth.options[champMonth.selectedIndex].value, champYear.options[champYear.selectedIndex].value);
+	cal_chg(id,day, champMonth.options[champMonth.selectedIndex].value, champYear.options[champYear.selectedIndex].value);	
 }
 
 
 /**
  * Display the next month
  */
-function cal_after_year(day, month, year) 
-{
+function cal_after_year(id,day, month, year) 
+{	
 	// get required objects
 	var champMonth, champYear;
-	champMonth = document.getElementById("calmois");
-	champYear = document.getElementById("calyear");
+	var calmoisId = "calmois"+id;	
+	var calyearId = "calyear"+id;	
+	champMonth = document.getElementById(calmoisId);
+	champYear = document.getElementById(calyearId);
 	if (champYear.selectedIndex < champYear.options.length - 1) 
 	{
 		champYear.selectedIndex++;
@@ -355,21 +372,22 @@ function cal_after_year(day, month, year)
 	{
 		champYear.selectedIndex = 0;
 	}
-	cal_chg(day, champMonth.options[champMonth.selectedIndex].value, champYear.options[champYear.selectedIndex].value);
+	cal_chg(id,day, champMonth.options[champMonth.selectedIndex].value, champYear.options[champYear.selectedIndex].value);	
 }
 
 /**
  * Update the date in the input field and hide the calendar.
  * PENDING: find a way to make the format customable.
  */
-function dtemaj(jour, mois, annee){
+function dtemaj(id,jour, mois, annee){		
 	document.forms[calformname].elements[calformelement].value = formatDate(jour, mois, annee);
 	document.forms[calformname].elements[calformelement].stlayout = new Object();
 	document.forms[calformname].elements[calformelement].stlayout.day = jour;
 	document.forms[calformname].elements[calformelement].stlayout.month = mois;
 	document.forms[calformname].elements[calformelement].stlayout.year = annee;
-	hideCalendar();
+	hideCalendar(id);	
 }
+
 
 function formatDate(day, month, year) {
 	var date = "";
@@ -433,31 +451,36 @@ function padNumber(number,length) {
     return str;
 }
 
-function hideCalendar() {
+function hideCalendar(id) {		
+	var divId = "slcalcod"+id;
 	if(document.all) {
 		// IE.
-		document.all.slcalcod.style.visibility="hidden";
+		document.getElementById(divId).style.visibility="hidden";
 		showElement("SELECT");
 	} else if(document.layers) {
 		// Netspace 4
-		document.slcalcod.visibility="hidden";
+		document.getElementById(divId).visibility="hidden";
 	} else {
 		// Mozilla
-		var calendrier = document.getElementById("slcalcod");
+		var calendrier = document.getElementById(divId);
 		calendrier.style.visibility="hidden";
 	}
+	
 }
 
 /**
  * Fix IE bug
  */
-function hideElement(elmID)
-{
+function hideElement(elmID,id)
+{	
+	var divId = "slcalcod"+id;	
+	var calmoisId = "calmois"+id;	
+	var calyearId = "calyear"+id;
 	if (!document.all) {
 		return;
 	}
-	x = parseInt(document.all.slcalcod.style.left);
-	y = parseInt(document.all.slcalcod.style.top);
+	x = parseInt(document.getElementById(divId).style.left);
+	y = parseInt(document.getElementById(divId).style.top);
 	var node = event.srcElement;
     while(node.tagName != "DIV") {
      	node = node.parentNode;
@@ -473,7 +496,7 @@ function hideElement(elmID)
 	for (i = 0; i < document.all.tags(elmID).length; i++)
 	{
 		obj = document.all.tags(elmID)[i];
-		if (! obj || ! obj.offsetParent || obj.id=="calmois" || obj.id=="calyear")
+		if (! obj || ! obj.offsetParent || obj.id==calmoisId || obj.id==calyearId)
 			continue;
 
 		// Find the element's offsetTop and offsetLeft relative to the BODY tag.
@@ -503,14 +526,14 @@ function hideElement(elmID)
              if(obj.statusVisibility != "hidden"){
     	          obj.style.visibility = "hidden";
    	         }
-	}
+	}	
 }
 
 /**
  * Fix IE bug
  */
 function showElement(elmID)
-{
+{	
 	if (!document.all) {
 		return;
 	}
@@ -522,5 +545,5 @@ function showElement(elmID)
 			
 		if(obj.statusVisibility != "hidden")
                   obj.style.visibility = "";
-	}
+	}	
 }
