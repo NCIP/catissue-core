@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -16,7 +17,7 @@ import edu.wustl.catissuecore.util.global.Constants;
  * @version 1.1
  *
  */
-public class MultipleSpecimenTableModel extends BaseTabelModel 
+public class MultipleSpecimenTableModel extends BaseTabelModel
 {
 
 	/**
@@ -27,9 +28,9 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**
 	 * attributes of the specimen for which user can specify the values. 
 	 */
-	static String[] specimenAttribute = {"specimenCollectionGroup", "parentSpecimen", "label",
-			"barcode", "class", "type", "specimenCharacteristics:1_tissueSite",
-			"specimenCharacteristics:1_tissueSide", "pathologicalStatus", "quantity",
+	 String[] specimenAttribute = {"SpecimenCollectionGroup:1_name", "parentSpecimen",
+			"label", "barcode", "class", "type", "SpecimenCharacteristics:1_tissueSite",
+			"SpecimenCharacteristics:1_tissueSide", "pathologicalStatus", "quantity",
 			"concentrationInMicrogramPerMicroliter", "storageContainer", "comments",
 			"specimenEventCollection", "externalIdentifierCollection", "biohazardCollection",
 			"derive"};
@@ -37,7 +38,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**
 	 * Row headers for the attributes. This corrosponds to display value for each of the  specimenAttribute in that order.
 	 */
-	static String[] rowHeaders = {"Specimen Group Name", "Parent", "Label", "Barcode", "Class",
+	 String[] rowHeaders = {"Specimen Group Name", "Parent", "Label", "Barcode", "Class",
 			"Type", "Tissue Site", "Tissue Side", "Pathological Status", "Quantity",
 			"Concentration", "Storage Position", "Comments", "Events", "External Identifier(s)",
 			"Biohazards", "Derive"};
@@ -53,8 +54,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	Map specimenMap;
 
 	int columnCount;
-	
-	
+
 	/** This is a map that holds options to be displayed for various attributes of the specimen
 	 *
 	 * It contains 
@@ -65,7 +65,10 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 * 4. Pathological  List
 	 * */
 	Map specimenAttributeOptions;
-	
+
+	/**
+	 * list  of specimen class
+	 */
 	List SpecimenClassList;
 
 	/**
@@ -80,13 +83,12 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		{
 			setValueAt(rowHeaders[i], i, 0);
 		}
-		
-		specimenAttributeOptions = initDataLists();
-    	Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
-    	SpecimenClassList = new ArrayList(specimenTypeMap.keySet());
-	}
 
-	
+		specimenAttributeOptions = initDataLists();
+		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
+		SpecimenClassList = new ArrayList(specimenTypeMap.keySet());
+
+	}
 
 	/**
 	 * @see javax.swing.table.DefaultTableModel#getValueAt(int, int)
@@ -98,7 +100,8 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			return rowHeaders[row];
 		}
 
-		String specimenKey = "Specimen:" + String.valueOf(column) + "_" + specimenAttribute[row];
+		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_"
+				+ specimenAttribute[row];
 
 		return specimenMap.get(specimenKey);
 	}
@@ -108,7 +111,8 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public void setValueAt(Object value, int row, int column)
 	{
-		String specimenKey = "Specimen:" + String.valueOf(column) + "_" + specimenAttribute[row];
+		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_"
+				+ specimenAttribute[row];
 		specimenMap.put(specimenKey, value);
 	}
 
@@ -172,24 +176,26 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	{
 		return rowHeaders;
 	}
-	
+
 	/**
 	 * This method initialize data lists 
 	 */
 	private Map initDataLists()
 	{
-	    BaseAppletModel appletModel = new BaseAppletModel();
-	    appletModel.setData(new HashMap());
+		BaseAppletModel appletModel = new BaseAppletModel();
+		appletModel.setData(new HashMap());
 		try
 		{
-			appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication("http://localhost:8080/catissuecore/MultipleSpecimenAction.do?method=initData",appletModel);
-			
-/*			Map tempMap = appletModel.getData();
-			System.out.println(tempMap.get(Constants.SPECIMEN_TYPE_MAP));
-			System.out.println(tempMap.get(Constants.TISSUE_SITE_LIST));
-			System.out.println(tempMap.get(Constants.TISSUE_SIDE_LIST));
-			System.out.println(tempMap.get(Constants.PATHOLOGICAL_STATUS_LIST));
-*/			
+			appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(
+					"http://localhost:8080/catissuecore/MultipleSpecimenAction.do?method=initData",
+					appletModel);
+
+			/*			Map tempMap = appletModel.getData();
+			 System.out.println(tempMap.get(Constants.SPECIMEN_TYPE_MAP));
+			 System.out.println(tempMap.get(Constants.TISSUE_SITE_LIST));
+			 System.out.println(tempMap.get(Constants.TISSUE_SIDE_LIST));
+			 System.out.println(tempMap.get(Constants.PATHOLOGICAL_STATUS_LIST));
+			 */
 			return appletModel.getData();
 		}
 		catch (Exception e)
@@ -197,49 +203,104 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			e.printStackTrace();
 			System.out.println("Exception");
 		}
-		
+
 		return null;
 	}
-	
-    
-	/**
-     * returns specimen type list for given specimen class.
-     * 
-     * @param specimenClass
-     * @return
-     */
-    public List getSpecimenTypeList(String specimenClass) {
-    	Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
-    	return (List) specimenTypeMap.get(specimenClass);
-    }
 
-    /**
-     * returns specimen class list
-     * @return
-     * 
-     */
-    public List getSpecimenClassList() {
-    	return SpecimenClassList;
-    }
-    
-    /**
-     * @return tissue site list
-     */
-    public List getTissueSiteList() {
-    	return (List) specimenAttributeOptions.get(Constants.TISSUE_SITE_LIST);
-    }
-    
-    /**
-     * @return tissue side list
-     */
-    public List getTissueSideList() {
-    	return (List) specimenAttributeOptions.get(Constants.TISSUE_SIDE_LIST);
-    }
-    
-    /**
-     * @return PATHOLOGICAL STATUS LIST
-     */
-    public List getPathologicalStatusList() {
-    	return (List) specimenAttributeOptions.get(Constants.PATHOLOGICAL_STATUS_LIST);
-    }
+	/**
+	 * returns specimen type list for given specimen class.
+	 * 
+	 * @param specimenClass
+	 * @return
+	 */
+	public List getSpecimenTypeList(String specimenClass)
+	{
+		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
+		return (List) specimenTypeMap.get(specimenClass);
+	}
+
+	/**
+	 * returns specimen class list
+	 * @return
+	 * 
+	 */
+	public List getSpecimenClassList()
+	{
+		return SpecimenClassList;
+	}
+
+	/**
+	 * @return tissue site list
+	 */
+	public List getTissueSiteList()
+	{
+		return (List) specimenAttributeOptions.get(Constants.TISSUE_SITE_LIST);
+	}
+
+	/**
+	 * @return tissue side list
+	 */
+	public List getTissueSideList()
+	{
+		return (List) specimenAttributeOptions.get(Constants.TISSUE_SIDE_LIST);
+	}
+
+	/**
+	 * @return PATHOLOGICAL STATUS LIST
+	 */
+	public List getPathologicalStatusList()
+	{
+		return (List) specimenAttributeOptions.get(Constants.PATHOLOGICAL_STATUS_LIST);
+	}
+
+	/**
+	 * returns quantity unit for given specimen 
+	 * 
+	 * @param colNo spcimen column no
+	 * @return unit
+	 */
+	public String getQuantityUnit(int colNo)
+	{
+
+		String specimenType = (String) getValueAt(AppletConstants.SPECIMEN_TYPE_ROW_NO, colNo);
+		String subTypeValue = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, colNo);
+		
+		String unit = "";
+
+		if (specimenType.equals("Fluid"))
+		{
+			unit = Constants.UNIT_ML;
+		}
+		else if (specimenType.equals("Cell"))
+		{
+			unit = Constants.UNIT_CC;
+
+		}
+		else if (specimenType.equals("Molecular"))
+		{
+			unit = Constants.UNIT_MG;
+		}
+		else if (specimenType.equals("Tissue"))
+		{
+			if (subTypeValue.equals(Constants.MICRODISSECTED))
+			{
+				unit = Constants.UNIT_CL;
+			}
+			else if (subTypeValue.equals(Constants.FROZEN_TISSUE_SLIDE)
+					|| subTypeValue.equals(Constants.FIXED_TISSUE_BLOCK)
+					|| subTypeValue.equals(Constants.FROZEN_TISSUE_BLOCK)
+					|| subTypeValue.equals(Constants.NOT_SPECIFIED)
+					|| subTypeValue.equals(Constants.FIXED_TISSUE_SLIDE))
+			{
+				unit = Constants.UNIT_CN;
+			}
+			else
+			{
+				unit = Constants.UNIT_GM;
+			}
+		}
+
+		return unit;
+
+	}
 }
