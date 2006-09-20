@@ -105,7 +105,8 @@ function closeFramedWindow()
 <%
 	//System.out.println("CP No. : " +collectionProtocolList.size());
 	//System.out.println("SC No. : " +specimenClassList.size());
-	int rowSpan =(int)((collectionProtocolList.size()%3)== 0 ? collectionProtocolList.size()/3 : (collectionProtocolList.size()/3)+1 );
+	int rowSpan = getRowSpan(collectionProtocolList, 3);
+//int rowSpan = (int)((collectionProtocolList.size()%3)== 0 ? collectionProtocolList.size()/3 : (collectionProtocolList.size()/3)+1 );
 %>
 		<TABLE border=1 class="borderForMap">
 			<TR>
@@ -134,7 +135,8 @@ function closeFramedWindow()
 			</tr>
 <!-- Specimen class -->
 <%
- 	rowSpan =(int)((specimenClassList.size()%3)== 0 ? specimenClassList.size()/3 : (specimenClassList.size()/3)+1 );
+ 	//rowSpan =(int)((specimenClassList.size()%3)== 0 ? specimenClassList.size()/3 : (specimenClassList.size()/3)+1 );
+	rowSpan = getRowSpan(specimenClassList, 3);
 %>
 
 			<TR>
@@ -329,3 +331,14 @@ function closeFramedWindow()
 		</td>
 	</tr>
 </table>
+<%!
+// method to return the rowspan value for the cell.
+private int getRowSpan(List dataList, int columnNumber)
+{
+int rowSpan = 0;
+rowSpan = (int)((dataList.size()%columnNumber)== 0 ? dataList.size()/columnNumber : (dataList.size()/columnNumber)+1 );
+return rowSpan;
+}
+
+
+%>
