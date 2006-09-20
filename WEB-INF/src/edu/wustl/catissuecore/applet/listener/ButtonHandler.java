@@ -1,9 +1,12 @@
-/*
- * Created on Sep 20, 2006
+/**
+ * This class will handle events related to buttons. Common functionality will be handled in this class.
+ * For specific functionality a sub class of this will be used.
+ * 
+ * Created on Sep 20, 2006 
+ * @author mandar_deshmukh
  *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
+
 package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
@@ -11,11 +14,14 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 
 /**
+ * This class will handle events related to buttons. Common functionality will be handled in this class.
+ * For specific functionality a sub class of this will be used.
+ * 
+ * Created on Sep 20, 2006 
  * @author mandar_deshmukh
  *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
+
 public class ButtonHandler extends BaseActionHandler {
 
 	/**
