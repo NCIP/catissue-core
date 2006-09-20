@@ -47,11 +47,54 @@ public interface AppletConstants
 	String SPECIMEN_PREFIX = "Specimen:";
 
 	/**
+	 * Array specimen prefix
+	 */
+	String ARRAY_CONTENT_SPECIMEN_PREFIX = "Specimen:";
+
+	/**
 	 * array attributes name
 	 */
-	String[] ARRAY_CONTENT_ATTRIBUTE_NAMES = {SPECIMEN_PREFIX + "label",
-			SPECIMEN_PREFIX + "barcode", "quantity", "concentration", "positionDimensionOne",
-			"positionDimenstionTwo", "id", SPECIMEN_PREFIX + "id"};
+	String[] ARRAY_CONTENT_ATTRIBUTE_NAMES = {ARRAY_CONTENT_SPECIMEN_PREFIX + "label",ARRAY_CONTENT_SPECIMEN_PREFIX + "barcode","quantity","concentration","positionDimensionOne","positionDimenstionTwo","id",ARRAY_CONTENT_SPECIMEN_PREFIX + "id"};
+	
+	/**
+	 * Specify the ARRAY_CONTENT_ATTR_LABEL_INDEX field 
+	 */
+	int ARRAY_CONTENT_ATTR_LABEL_INDEX = 0;
+	
+	/**
+	 * Specify the ARRAY_CONTENT_ATTR_BARCODE_INDEX field 
+	 */
+	int ARRAY_CONTENT_ATTR_BARCODE_INDEX = 1;
+	
+	/**
+	 * Specify the ARRAY_CONTENT_ATTR_QUANTITY_INDEX field 
+	 */
+	int ARRAY_CONTENT_ATTR_QUANTITY_INDEX = 2;
+
+	/**
+	 * Specify the ARRAY_CONTENT_ATTR_CONC_INDEX field 
+	 */
+	int ARRAY_CONTENT_ATTR_CONC_INDEX = 3;
+
+	/**
+	 * Specify the ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX field 
+	 */
+	int ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX = 4;
+
+	/**
+	 * Specify the ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX field 
+	 */
+	int ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX = 5;
+	
+	/**
+	 * Specify the ARRAY_CONTENT_ATTR_ID_INDEX field 
+	 */
+	int ARRAY_CONTENT_ATTR_ID_INDEX = 6;
+	
+	/**
+	 * Specify the ARRAY_CONTENT_ATTR_SPECIMEN_ID_INDEX field 
+	 */
+	int ARRAY_CONTENT_ATTR_SPECIMEN_ID_INDEX = 7;
 
 	/**
 	 * Specimen Attributes Row Nos
