@@ -1,6 +1,6 @@
 /*
- * <p>Title: SpecimenArrayUtil.java</p>
- * <p>Description:	This class initializes the fields of SpecimenArrayUtil.java</p>
+ * <p>Title: SpecimenArrayAppletUtil.java</p>
+ * <p>Description:	This class initializes the fields of SpecimenArrayAppletUtil.java</p>
  * Copyright: Copyright (c) year 2006
  * Company: Washington University, School of Medicine, St. Louis.
  * @version 1.1
@@ -14,12 +14,12 @@ package edu.wustl.catissuecore.applet.util;
 import edu.wustl.catissuecore.applet.AppletConstants;
 
 /**
- * <p>This class initializes the fields of SpecimenArrayUtil.java</p>
+ * <p>This class initializes the fields of SpecimenArrayAppletUtil.java</p>
  * @author Ashwin Gupta
  * @version 1.1
  */
 
-public final class SpecimenArrayUtil {
+public final class SpecimenArrayAppletUtil {
 
 	/**
 	 * Get Array map key
