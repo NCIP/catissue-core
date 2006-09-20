@@ -824,11 +824,11 @@ public class NewSpecimenForm extends SpecimenForm
 			{
 	           	if ((collectionEventUserId) == -1L)
 	            {
-	           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection user"));
+	           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection Event's user"));
 	            }
 	           	if (!validator.checkDate(collectionEventdateOfEvent) )
 	           	{
-	           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection date"));
+	           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection Event's date"));
 	           	}
 
 	         	// checks the collectionProcedure
@@ -946,11 +946,11 @@ public class NewSpecimenForm extends SpecimenForm
 	{
        	if ((receivedEventUserId) == -1L)
         {
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received user"));
+       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received Event's user"));
         }
        	if (!validator.checkDate(receivedEventDateOfEvent) )
        	{
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received date"));
+       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received Event's date"));
        	}
 
      	// checks the collectionProcedure
