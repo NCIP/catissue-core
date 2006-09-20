@@ -13,7 +13,7 @@ import javax.swing.JTable;
  * 
  *
  */
-public class ComboBoxHandler extends caTissueHandler
+public class ComboBoxHandler extends BaseActionHandler
 {
 
 	public ComboBoxHandler(JTable table)
@@ -22,7 +22,7 @@ public class ComboBoxHandler extends caTissueHandler
 	}
 
 	/**
-	 * @see edu.wustl.catissuecore.appletui.listener.caTissueHandler#handleAction(java.awt.event.ActionEvent)
+	 * @see edu.wustl.catissuecore.appletui.listener.BaseActionHandler#handleAction(java.awt.event.ActionEvent)
 	 */
 	protected void handleAction(ActionEvent event)
 	{

@@ -6,7 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 
 import edu.wustl.catissuecore.applet.component.BaseTable;
-import edu.wustl.catissuecore.applet.listener.caTissueHandler;
+import edu.wustl.catissuecore.applet.listener.BaseActionHandler;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 
@@ -42,7 +42,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
         getContentPane().add( scrollPane );
 		JButton showAll = new JButton("ShowData");
 		
-		showAll.addActionListener(new caTissueHandler(table));
+		showAll.addActionListener(new BaseActionHandler(table));
 
 		getContentPane().add( showAll,BorderLayout.SOUTH );
 

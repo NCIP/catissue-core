@@ -13,14 +13,14 @@ import javax.swing.JTable;
  * @author Rahul Ner
  *
  */
-public class caTissueHandler implements ActionListener
+public class BaseActionHandler implements ActionListener
 {
 	/**
 	 * 
 	 */
 	protected JTable table;
 	
-	public caTissueHandler(JTable table)
+	public BaseActionHandler(JTable table)
 	{
 		this.table = table;
 	}
