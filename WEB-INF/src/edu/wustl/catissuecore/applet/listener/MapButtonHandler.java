@@ -14,7 +14,7 @@ import javax.swing.JTable;
  * 
  * This class will handle all the events of Map button.
  */
-public class MapButtonHamdler extends BaseActionHandler {
+public class MapButtonHandler extends BaseActionHandler {
 
 	protected void handleAction(ActionEvent event) {
 		super.handleAction(event);
@@ -24,7 +24,7 @@ public class MapButtonHamdler extends BaseActionHandler {
 	/**
 	 * @param table
 	 */
-	public MapButtonHamdler(JTable table) {
+	public MapButtonHandler(JTable table) {
 		super(table);
 	}
 
