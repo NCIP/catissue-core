@@ -710,10 +710,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				+ " objectIds:" + edu.wustl.common.util.Utility.getArrayString(objectIds)
 				+ " userId:" + userId + " roleId:" + roleId + " assignToUser:" + assignToUser);
 
-		if (assignOperation == Constants.PRIVILEGE_DEASSIGN)
-		{
-			isDeAssignable(dao, privilegeName, objectIds, userId, roleId, assignToUser);
-		}
+		
+		// Aarti: Bug#1199 - We should be able to deassign 
+		// privilege on child even though user has privilege on the parent.
+		// Thus commenting the check for privileges on parent.
+//		if (assignOperation == Constants.PRIVILEGE_DEASSIGN)
+//		{
+//			isDeAssignable(dao, privilegeName, objectIds, userId, roleId, assignToUser);
+//		}
 
 		super.setPrivilege(dao, privilegeName, objectType, objectIds, userId, roleId, assignToUser,
 				assignOperation);
