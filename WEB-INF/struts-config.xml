@@ -1872,8 +1872,6 @@ PUBLIC
 			<forward name="pageOfSpecimenArrayType" path=".catissuecore.editSearchPageDef"/>
 
 			<forward name="pageOfArrayDistribution" path=".catissuecore.editBioSpecimenSearchPageDef"/>
-			<forward name="pageOfSpecimenArrayType" path=".catissuecore.editBioSpecimenSearchPageDef"/>
-
 			<forward name="failure" path=".catissuecore.simpleQueryInterfaceDef" />
 			<forward name="access_denied_admin" path="/ManageAdministrativeData.do" />
 			<forward name="access_denied_biospecimen" path="/ManageBioSpecimen.do" />
@@ -1978,7 +1976,7 @@ PUBLIC
 			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
 			<forward name="pageOfDistribution" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
 			<forward name="pageOfArrayDistribution" path=".catissuecore.editBioSpecimenSearchResultsDef"/>
-			<forward name="pageOfSpecimenArrayType" path=".catissuecore.editSpecimenArrayTypeSearchPageDef"/>
+			<forward name="pageOfSpecimenArrayType" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="failure" path=".catissuecore.simpleSearchResultsDef" />
 		</action>
 		<!--Simple Query Interface Actions End-->		
@@ -2688,7 +2686,8 @@ PUBLIC
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
 	<!-- Similar Containers Action -->
-	
+	<action path="/SpecimenArrayAppletAction" type="edu.wustl.catissuecore.action.SpecimenArrayAppletAction">
+	</action>
 	<action path="/MultipleSpecimenAction" type="edu.wustl.catissuecore.action.MultipleSpecimenAction" parameter="method">
 	</action>
 	
