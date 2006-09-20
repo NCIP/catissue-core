@@ -10,7 +10,7 @@ package edu.wustl.catissuecore.applet.model;
 
 import java.util.Map;
 
-import edu.wustl.catissuecore.applet.util.SpecimenArrayUtil;
+import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
 
 /**
  * <p>
@@ -111,7 +111,7 @@ public class SpecimenArrayTableModel extends BaseTabelModel {
 	 * @see javax.swing.table.TableModel#getValueAt(int, int)
 	 */
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		return specimenArrayModelMap.get(SpecimenArrayUtil.getArrayMapKey(rowIndex,columnIndex,columnCount,getAttributeIndex()));
+		return specimenArrayModelMap.get(SpecimenArrayAppletUtil.getArrayMapKey(rowIndex,columnIndex,columnCount,getAttributeIndex()));
 		
 /*		if (specimenArrayModelMap != null) {
 			SpecimenArrayGridContent arrayGridContent = ((SpecimenArrayGridContent) specimenArrayModelMap.get(rowIndex + AppletConstants.delimiter + columnIndex));
@@ -139,7 +139,7 @@ public class SpecimenArrayTableModel extends BaseTabelModel {
 	 * @see javax.swing.table.TableModel#setValueAt(java.lang.Object, int, int)
 	 */
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-		specimenArrayModelMap.put(SpecimenArrayUtil.getArrayMapKey(rowIndex,columnIndex,columnCount,getAttributeIndex()),aValue.toString());
+		specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(rowIndex,columnIndex,columnCount,getAttributeIndex()),aValue.toString());
 		
 /*		if (specimenArrayModelMap != null) {
 			System.out.println("set value at Not null");

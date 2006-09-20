@@ -10,7 +10,7 @@ import javax.swing.table.TableModel;
 import edu.wustl.catissuecore.applet.component.SpecimenArrayTable;
 import edu.wustl.catissuecore.applet.model.SpecimenArrayTableModel;
 import edu.wustl.catissuecore.applet.ui.SpecimenArrayApplet;
-import edu.wustl.catissuecore.applet.util.SpecimenArrayUtil;
+import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
 
 /**
  * <p>This class initializes the fields of SpecimenArrayTableMouseHandler.java</p>
@@ -29,8 +29,8 @@ public class SpecimenArrayTableMouseHandler extends MouseAdapter {
 		
 		if (model instanceof SpecimenArrayTableModel) {
 			tableModel = (SpecimenArrayTableModel) model;
-			String concentration = (String) tableModel.getSpecimenArrayModelMap().get(SpecimenArrayUtil.getArrayMapKey(row,column,tableModel.getColumnCount(),3));
-			String quantity = (String) tableModel.getSpecimenArrayModelMap().get(SpecimenArrayUtil.getArrayMapKey(row,column,tableModel.getColumnCount(),2));
+			String concentration = (String) tableModel.getSpecimenArrayModelMap().get(SpecimenArrayAppletUtil.getArrayMapKey(row,column,tableModel.getColumnCount(),3));
+			String quantity = (String) tableModel.getSpecimenArrayModelMap().get(SpecimenArrayAppletUtil.getArrayMapKey(row,column,tableModel.getColumnCount(),2));
 			JApplet applet = getBaseApplet(arrayTable);
 			
 			if (applet instanceof SpecimenArrayApplet) {
