@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -262,6 +263,7 @@ public class NewSpecimenAction extends SecureAction
 				Logger.out.debug("\t\t" + tmpInnerStr);
 				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
 			}
+			Collections.sort(innerList);
 			subTypeMap.put(pv.getValue(), innerList);
 		} // class and values set
 		Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
