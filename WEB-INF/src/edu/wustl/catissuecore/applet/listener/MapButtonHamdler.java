@@ -14,7 +14,7 @@ import javax.swing.JTable;
  * 
  * This class will handle all the events of Map button.
  */
-public class MapButtonHamdler extends caTissueHandler {
+public class MapButtonHamdler extends BaseActionHandler {
 
 	protected void handleAction(ActionEvent event) {
 		super.handleAction(event);

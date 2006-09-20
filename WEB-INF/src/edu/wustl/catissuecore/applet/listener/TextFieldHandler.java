@@ -15,7 +15,7 @@ import javax.swing.JTable;
  * 
  * This class will handle all the events related to TextFields.
  */
-public class TextFieldHandler extends caTissueHandler {
+public class TextFieldHandler extends BaseActionHandler {
 	/*
 	 * (non-Javadoc)
 	 * 
