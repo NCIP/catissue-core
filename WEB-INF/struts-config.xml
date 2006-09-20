@@ -1349,7 +1349,7 @@ PUBLIC
 		
 		<!-- DisposalEventParameters Actions Begins -->
         <action path="/DisposalEventParameters"
-			type="edu.wustl.catissuecore.action.SpecimenEventParametersAction"
+			type="edu.wustl.catissuecore.action.DisposalEventParametersAction"
 			name="disposalEventParametersForm"
 			validate="false"
 			scope="request">

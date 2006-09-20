@@ -7,7 +7,10 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.Iterator;
 import java.util.List;
+
+import com.sun.msv.verifier.jarv.Const;
 
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -32,6 +35,7 @@ import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author mandar_deshmukh</p>
@@ -96,13 +100,18 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			}
 			if (specimenEventParametersObject instanceof DisposalEventParameters)
 			{
-				//DisposalEventParameters disposeEventParameters = (DisposalEventParameters)specimenEventParametersObject;
+				DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
+				if (disposalEventParameters.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+				{
+					disableSubSpecimens(dao, specimen.getId().toString());
+
+				}
 				specimen.setPositionDimensionOne(null);
 				specimen.setPositionDimensionTwo(null);
 				specimen.setStorageContainer(null);
-				
+
 				specimen.setAvailable(new Boolean(false));
-				specimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+				specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
 				dao.update(specimen, sessionDataBean, true, true, false);
 			}
 
@@ -287,4 +296,53 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			}
 		}
 	}
+
+	private void setDisableToSubSpecimen(Specimen specimen)
+	{
+		if (specimen != null)
+		{
+			Iterator iterator = specimen.getChildrenSpecimen().iterator();
+			while (iterator.hasNext())
+			{
+				Specimen childSpecimen = (Specimen) iterator.next();
+				childSpecimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+				setDisableToSubSpecimen(childSpecimen);
+			}
+		}
+	}
+
+	private void disableSubSpecimens(DAO dao, String speID) throws DAOException
+	{
+		String sourceObjectName = Specimen.class.getName();
+		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
+		String[] whereColumnName = {"parentSpecimen" , Constants.ACTIVITY_STATUS,};
+		String[] whereColumnCondition = {"=" , "!="};
+		String[] whereColumnValue = {speID , Constants.ACTIVITY_STATUS_DISABLED};
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+		List listOfSpecimenIDs = dao.retrieve(sourceObjectName,selectColumnName,whereColumnName, whereColumnCondition,whereColumnValue, joinCondition);
+		listOfSpecimenIDs = Utility.removeNull(listOfSpecimenIDs);
+		//getRelatedObjects(dao, Specimen.class, "parentSpecimen", speIDArr);
+
+		if (!listOfSpecimenIDs.isEmpty())
+		{
+			throw new DAOException(ApplicationProperties
+					.getValue("errors.specimen.contains.subspecimen"));
+		}
+		else
+		{
+			return;
+		}
+	}
+		public List getRelatedObjects(DAO dao, Class sourceClass,
+				String[] whereColumnName, String[] whereColumnValue,String[] whereColumnCondition) throws DAOException {
+			String sourceObjectName = sourceClass.getName();
+			String joinCondition = Constants.AND_JOIN_CONDITION;
+			String selectColumnName [] = {Constants.SYSTEM_IDENTIFIER};
+			List list = dao.retrieve(sourceObjectName, selectColumnName,whereColumnName,whereColumnCondition, whereColumnValue,
+					joinCondition);
+			
+			list = Utility.removeNull(list);
+			return list;
+		}
+
 }

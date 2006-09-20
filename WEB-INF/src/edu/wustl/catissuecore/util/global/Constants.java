@@ -589,6 +589,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	        "Pending"
 	};
 
+	public static final String [] DISPOSAL_EVENT_ACTIVITY_STATUS_VALUES = {
+		"Closed",
+		"Disabled"
+	};
+	
 	public static final String TISSUE = "Tissue";
 	public static final String FLUID = "Fluid";
 	public static final String CELL = "Cell";

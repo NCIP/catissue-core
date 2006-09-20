@@ -28,6 +28,7 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	 */
 	protected String reason;
 
+	protected String activityStatus;
 	/**
 	 * Returns the reason of disposal.
 	 * @hibernate.property name="reason" type="string" column="REASON" length="50"
@@ -76,6 +77,7 @@ public class DisposalEventParameters extends SpecimenEventParameters
         {
         	DisposalEventParametersForm form = (DisposalEventParametersForm) abstractForm;
         	this.reason = form.getReason(); 
+        	this.activityStatus = form.getActivityStatus();
         	super.setAllValues(form);
         }
         catch (Exception excp)
@@ -83,5 +85,17 @@ public class DisposalEventParameters extends SpecimenEventParameters
             Logger.out.error(excp.getMessage());
         }
     }
+
+	
+	public String getActivityStatus()
+	{
+		return activityStatus;
+	}
+
+	
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
+	}
    
 }

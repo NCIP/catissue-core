@@ -45,8 +45,38 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <!-- Mandar 21-Aug-06 : calendar changes end -->
+<script language="javascript" >
 
-	
+	function confirmAction(form)
+	{
+		if(form.activityStatus.value == "<%=Constants.ACTIVITY_STATUS_DISABLED%>")
+		{
+			if(confirm("Are you sure you want to disable the specimen ?"))
+			{
+				form.action="<%=formName%>";
+				form.submit();
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			if(confirm("Are you sure you want to close the specimen ?"))
+			{
+				form.action="<%=formName%>";
+				form.submit();
+			}
+			else
+			{
+				return false;
+			}
+		
+		}
+		
+	}
+</script>	
 </head>
 	
 			
@@ -151,6 +181,21 @@
 
 			</td>
 		</tr>
+		<tr>
+			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredLabel">
+				<label for="activityStatus">
+				<bean:message key="participant.activityStatus" />
+				</label>
+			</td>
+			<td class="formField">
+<!-- Mandar : 434 : for tooltip -->
+						<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+							<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
+						</html:select>
+			</td>
+		</tr>				
 
 		
 <!-- Reason -->		
@@ -191,7 +236,8 @@
 			<table cellpadding="4" cellspacing="0" border="0">
 				<tr>
 					<td>
-						<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>"/>
+						<html:button styleClass="actionButton" value="Submit" property="Submit" onclick="return confirmAction(this.form)"/>
+						<!--<html:submit styleClass="actionButton" value="Submit" onclick="<%=changeAction%>"/>-->
 						
 					</td>
 					<%-- td><html:reset styleClass="actionButton"/></td --%> 

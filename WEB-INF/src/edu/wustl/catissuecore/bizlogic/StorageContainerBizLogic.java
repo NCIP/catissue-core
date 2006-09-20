@@ -536,7 +536,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				Logger.out.debug("container.getActivityStatus() " + container.getActivityStatus());
 				/*Long containerIDArr[] = {container.getId()};*/
 
-				disableSubStorageContainer(dao, containerIDArr);
+				disableSubStorageContainer(dao, sessionDataBean, containerIDArr);
+				container.setParent(null);
+				container.setPositionDimensionOne(null);
+				container.setPositionDimensionTwo(null);
+				dao.update(container, sessionDataBean, true, true, false);
 			}
 			else
 			{
@@ -580,9 +584,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Collection spArrayTypeCollNew = newContainer.getHoldsSpArrayTypeCollection();
 		Collection spArrayTypeCollOld = oldContainer.getHoldsSpArrayTypeCollection();
 
-		Logger.out.info("------------cp New size--------::" + cpCollNew.size());
-		Logger.out.info("------------cp Old size--------::" + cpCollOld.size());
-
 		if (cpCollNew.size() != cpCollOld.size())
 			return true;
 
@@ -596,8 +597,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			while (itrOld.hasNext())
 			{
 				CollectionProtocol cpOld = (CollectionProtocol) itrOld.next();
-				Logger.out.info("----------cp new Id:------:" + cpNew.getId().longValue());
-				Logger.out.info("----------cp old Id:------:" + cpOld.getId().longValue());
 				if (cpOld.getId().longValue() == cpNew.getId().longValue())
 				{
 					flag = 1;
@@ -607,9 +606,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			if (flag != 1)
 				return true;
 		}
-
-		Logger.out.info("------------stor type New size--------::" + storTypeCollNew.size());
-		Logger.out.info("------------stor type Old size--------::" + storTypeCollOld.size());
 
 		if (storTypeCollNew.size() != storTypeCollOld.size())
 			return true;
@@ -624,9 +620,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			while (itrOld.hasNext())
 			{
 				StorageType storOld = (StorageType) itrOld.next();
-				Logger.out.info("----------stor type new Id:------:" + storNew.getId().longValue());
-				Logger.out.info("----------stor type old Id:------:" + storOld.getId().longValue());
-
+	
 				if (storNew.getId().longValue() == storOld.getId().longValue())
 				{
 					flag = 1;
@@ -636,9 +630,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					return true;
 			}
 		}
-
-		Logger.out.info("------------specimen class New size--------::" + spClassCollNew.size());
-		Logger.out.info("------------specimen class Old size--------::" + spClassCollOld.size());
 
 		if (spClassCollNew.size() != spClassCollOld.size())
 			return true;
@@ -653,9 +644,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			while (itrOld.hasNext())
 			{
 				String specimenOld = (String) itrOld.next();
-				Logger.out.info("----------specimen class new Id:------:" + specimenNew);
-				Logger.out.info("----------specimen class old Id:------:" + specimenOld);
-
 				if (specimenNew.equals(specimenOld))
 				{
 					flag = 1;
@@ -665,11 +653,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			if (flag != 1)
 				return true;
 		}
-
-		Logger.out
-				.info("------------specimen array New size--------::" + spArrayTypeCollNew.size());
-		Logger.out
-				.info("------------specimen array Old size--------::" + spArrayTypeCollOld.size());
 
 		if (spArrayTypeCollNew.size() != spArrayTypeCollOld.size())
 			return true;
@@ -684,11 +667,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			while (itrOld.hasNext())
 			{
 				SpecimenArrayType spArrayTypeOld = (SpecimenArrayType) itrOld.next();
-				Logger.out.info("----------specimen array new Id:------:"
-						+ spArrayTypeNew.getId().longValue());
-				Logger.out.info("----------specimen array old Id:------:"
-						+ spArrayTypeOld.getId().longValue());
-
+				
 				if (spArrayTypeNew.getId().longValue() == spArrayTypeOld.getId().longValue())
 				{
 					flag = 1;
@@ -1110,43 +1089,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	}
 
-	//    private Map createMap(List resultSet, Map containerMap)
-	//    {
-	//        Map containerRelationMap = new HashMap();
-	//        Map siteContainerRelationMap = new HashMap();
-	//        
-	//        if (resultSet.isEmpty() == false)
-	//        {
-	//            for (int i = 0; i < resultSet.size(); i++)
-	//            {
-	//                List rowList = (List) resultSet.get(i);
-	//                
-	//                StorageContainerTreeNode treeNode = new StorageContainerTreeNode();
-	//                treeNode.setStorageContainerIdentifier(Long.valueOf((String) rowList.get(1)));
-	//                treeNode.setStorageContainerName((String) rowList.get(6));
-	//                treeNode.setStorageContainerType((String) rowList.get(5));
-	//                
-	//                treeNode.setSiteId(Long.valueOf((String) rowList.get(2)));
-	//                treeNode.setSiteName((String) rowList.get(3));
-	//                treeNode.setSiteType((String) rowList.get(4));
-	//                
-	//                if ((String) rowList.get(0) != "") // if parent is null in db
-	//                {
-	//                    treeNode.setParentStorageContainerIdentifier(Long.valueOf((String) rowList.get(0)));
-	//                    siteContainerRelationMap.put(Long.valueOf((String) rowList.get(2)), 
-	//                            					 Long.valueOf((String) rowList.get(1)));
-	//                }
-	//                
-	//                containerRelationMap.put(treeNode.getStorageContainerIdentifier(),
-	//                        				 treeNode.getParentStorageContainerIdentifier());
-	//                containerMap.put(treeNode.getStorageContainerIdentifier(), treeNode);
-	//                
-	//                Logger.out.debug("\n");
-	//            }
-	//        }
-	//        
-	//        return containerRelationMap;
-	//    }
 	/**
 	 * Returns the data for generation of storage container tree view.
 	 * @return the vector of tree nodes for the storage containers. 
@@ -1485,14 +1427,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return fullStatus;
 	}
 
-	private void disableSubStorageContainer(DAO dao, Long storageContainerIDArr[])
-			throws DAOException
+	private void disableSubStorageContainer(DAO dao, SessionDataBean sessionDataBean, Long storageContainerIDArr[])
+			throws DAOException,UserNotAuthorizedException
 	{
 		List listOfSpecimenIDs = getRelatedObjects(dao, Specimen.class, "storageContainer",
 				storageContainerIDArr);
-		List listOfSubContainer = getRelatedObjects(dao, StorageContainer.class, "parent",
-				storageContainerIDArr);
-
+		
 		if (!listOfSpecimenIDs.isEmpty())
 		{
 			throw new DAOException(ApplicationProperties
@@ -1503,9 +1443,33 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				"CATISSUE_CONTAINER", "PARENT_CONTAINER_ID", storageContainerIDArr);
 
 		if (listOfSubStorageContainerId.isEmpty())
+		{
 			return;
+		}
+		else
+		{
+			Iterator itr = listOfSubStorageContainerId.iterator();
+			while(itr.hasNext())
+			{
+				Long contId = (Long)itr.next();
+				String sourceObjectName = StorageContainer.class.getName();
+				String whereColumnName = "id"; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+				Object whereColumnValue = contId;
+				
+				List containerList = retrieve(sourceObjectName,whereColumnName,whereColumnValue);
+				if(!containerList.isEmpty())
+				{
+					StorageContainer cont = (StorageContainer)containerList.get(0);
+					cont.setParent(null);
+					cont.setPositionDimensionOne(null);
+					cont.setPositionDimensionTwo(null);
+					dao.update(cont,sessionDataBean,true,true,false);
+				}
+				
+			}
+		}
 
-		disableSubStorageContainer(dao, Utility.toLongArray(listOfSubStorageContainerId));
+		disableSubStorageContainer(dao, sessionDataBean,Utility.toLongArray(listOfSubStorageContainerId));
 	}
 
 	// Checks for whether the user is trying to use a container without privilege to use it
@@ -1599,7 +1563,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					// check if Specimen exists with the given storageContainer information
 					if (list.size() != 0)
 					{
-						Object obj = list.get(0);
 						return false;
 					}
 					else
@@ -1608,10 +1571,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 						String[] whereColumnName = {"parent.id"};
 						containerList = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName,
 								whereColumnCondition1, whereColumnValue1, joinCondition);
-						/*if (containerList.size() != 0)
-						{
-							isContainerAvailableForDisabled(dao, Utility.toLongArray(containerList));
-						}*/
+						
 
 					}
 

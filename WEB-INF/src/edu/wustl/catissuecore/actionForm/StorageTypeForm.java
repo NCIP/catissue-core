@@ -430,7 +430,7 @@ public class StorageTypeForm extends AbstractActionForm
 			{
 				if (!validator.isNumeric(String.valueOf(oneDimensionCapacity)))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.number",
 							ApplicationProperties.getValue("storageType.oneDimensionCapacity")));
 				}
 			}
@@ -454,7 +454,7 @@ public class StorageTypeForm extends AbstractActionForm
 			{
 				if (!validator.isNumeric(String.valueOf(twoDimensionCapacity)))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.valid.number",
 							ApplicationProperties.getValue("storageType.twoDimensionCapacity")));
 				}
 			}

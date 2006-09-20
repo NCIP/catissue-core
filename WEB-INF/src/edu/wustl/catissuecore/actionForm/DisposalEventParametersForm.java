@@ -36,6 +36,22 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
      * reason for disposal of specimen it.
      */
 	private String reason;
+	
+	/**
+	 * Activity Status of the Specimen
+	 */
+	private String activityStatus;
+	
+	public String getActivityStatus()
+	{
+		return activityStatus;
+	}
+
+	
+	public void setActivityStatus(String activityStatus)
+	{
+		this.activityStatus = activityStatus;
+	}
 
 	/**
 	 * @return Returns the reason applied on specimen for its Disposal.
@@ -69,6 +85,7 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 		super.setAllValues(abstractDomain);
 		DisposalEventParameters disposalEventParametersObject = (DisposalEventParameters)abstractDomain ;
 		this.reason = Utility.toString(disposalEventParametersObject.getReason());
+		this.activityStatus = disposalEventParametersObject.getSpecimen().getActivityStatus(); 
 	}
 	
 	public void setAllVal(Object object)
