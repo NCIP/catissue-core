@@ -602,7 +602,7 @@ create table CATISSUE_SPECIMEN (
    IDENTIFIER bigint not null auto_increment,
    SPECIMEN_CLASS varchar(255) not null,
    TYPE varchar(50),
-   LABEL varchar(50),
+   LABEL varchar(50) unique,
    LINEAGE varchar(50),
    PATHOLOGICAL_STATUS varchar(50),
    AVAILABLE bit,
@@ -652,7 +652,7 @@ create table CATISSUE_ST_CONT_COLL_PROT_REL (
 );
 create table CATISSUE_SPECIMEN_COLL_GROUP (
    IDENTIFIER bigint not null auto_increment,
-   NAME varchar(55),
+   NAME varchar(55) unique,
    CLINICAL_DIAGNOSIS varchar(150),
    CLINICAL_STATUS varchar(50),
    ACTIVITY_STATUS varchar(50),

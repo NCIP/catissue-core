@@ -190,11 +190,11 @@ drop   sequence CATISSUE_SPECIMEN_COLL_GRP_SEQ;
 drop   sequence CATISSUE_SPECIMEN_SEQ;
 drop   sequence CATISSUE_PERMISSIBLE_VALUE_SEQ;
 drop   sequence CATISSUE_QUANTITY_SEQ;
-drop   sequence CATISSUE_AUDIT_EVENT;
-drop   sequence CATISSUE_PASSWORD;
-drop   sequence CATISSUE_CONTAINER;
-drop   sequence CATISSUE_SPECI_ARRAY_CONTENT;
-drop   sequence CATISSUE_DISTRIBUTION;
+drop   sequence CATISSUE_AUDIT_EVENT_SEQ;
+drop   sequence CATISSUE_PASSWORD_SEQ;
+drop   sequence CATISSUE_CONTAINER_SEQ;
+drop   sequence CATISSUE_SPECI_ARRAY_CONTENT_SEQ;
+drop   sequence CATISSUE_DISTRIBUTION_SEQ;
 create table CATISSUE_PERMISSIBLE_VALUE (
    IDENTIFIER number(19,0) not null ,
    CONCEPT_CODE varchar(40),
@@ -248,6 +248,7 @@ create table CATISSUE_CANCER_RESEARCH_GROUP (
 );
 create table CATISSUE_COLLECTION_PROTOCOL (
    IDENTIFIER number(19,0) not null,
+   ALIQUOT_IN_SAME_CONTAINER number(1,0),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_EVENT_PARAM (
@@ -483,6 +484,7 @@ create table CATISSUE_SPECIMEN_ARRAY (
    SPECIMEN_ARRAY_TYPE_ID number(19,0),
    STORAGE_CONTAINER_ID number(19,0),
    DISTRIBUTION_ID number(19,0),
+   AVAILABLE number(1,0),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_ARRAY_TYPE (
@@ -684,7 +686,7 @@ create table CATISSUE_ST_CONT_COLL_PROT_REL (
 );
 create table CATISSUE_SPECIMEN_COLL_GROUP (
    IDENTIFIER number(19,0) not null ,
-   NAME varchar(55),
+   NAME varchar(55) unique,
    CLINICAL_DIAGNOSIS varchar(150),
    CLINICAL_STATUS varchar(50),
    ACTIVITY_STATUS varchar(50),
@@ -826,8 +828,8 @@ create sequence CATISSUE_SPECIMEN_COLL_GRP_SEQ;
 create sequence CATISSUE_SPECIMEN_SEQ;
 create sequence CATISSUE_PERMISSIBLE_VALUE_SEQ;
 create sequence CATISSUE_QUANTITY_SEQ;
-create sequence CATISSUE_AUDIT_EVENT;
-create sequence CATISSUE_PASSWORD;
-create sequence CATISSUE_CONTAINER;
-create sequence CATISSUE_SPECI_ARRAY_CONTENT;
-create sequence CATISSUE_DISTRIBUTION;
+create sequence CATISSUE_AUDIT_EVENT_SEQ;
+create sequence CATISSUE_PASSWORD_SEQ;
+create sequence CATISSUE_CONTAINER_SEQ;
+create sequence CATISSUE_SPECI_ARRAY_CONTENT_SEQ;
+create sequence CATISSUE_DISTRIBUTION_SEQ;
