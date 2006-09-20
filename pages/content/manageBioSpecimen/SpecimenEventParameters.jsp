@@ -209,7 +209,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					
 					//	provide cells and headers text
 					//obj.setDataProperty("text", function(i, j){return formats[j].dataToValue(myData[i][j])});
-					obj.setDataText(function(i, j){return formats[j].dataToText(myData[i][j])});
+					obj.setDataText(function(i, j){return myData[i][j]});
 					obj.setColumnProperty("text", function(i){return columns[i]});
 					obj.sort(3,'descending');
 					
