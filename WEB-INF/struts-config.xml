@@ -2689,6 +2689,8 @@ PUBLIC
 	</action>
 	<!-- Similar Containers Action -->
 	
+	<action path="/MultipleSpecimenAction" type="edu.wustl.catissuecore.action.MultipleSpecimenAction" parameter="method">
+	</action>
 	
 	</action-mappings>
 	

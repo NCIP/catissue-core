@@ -48,4 +48,8 @@ public interface AppletConstants {
 		 */
 		String[] ARRAY_CONTENT_ATTRIBUTE_NAMES = {ARRAY_CONTENT_SPECIMEN_PREFIX + "label",ARRAY_CONTENT_SPECIMEN_PREFIX + "barcode","quantity","concentration","positionDimensionOne","positionDimenstionTwo","id",ARRAY_CONTENT_SPECIMEN_PREFIX + "id"};
 		
+		/**
+		 * Specimen Attributes Row Nos
+		 * */
+		short SPECIMEN_CLASS_ROW_NO = 4;
 }

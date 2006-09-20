@@ -24,7 +24,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	public void doInit()
     {
  
-		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(3);
+		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(4);
         
 		BaseTable table = new BaseTable(model)
         {
