@@ -14,7 +14,7 @@ import javax.swing.JTable;
  * 
  * This class will handle all the events of Map button.
  */
-public class MapButtonHandler extends BaseActionHandler {
+public class MapButtonHandler extends ButtonHandler {
 
 	protected void handleAction(ActionEvent event) {
 		super.handleAction(event);
