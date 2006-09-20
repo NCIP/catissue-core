@@ -9,7 +9,7 @@
 /**
  * 
  */
-package edu.wustl.catissuecore.appletui.component;
+package edu.wustl.catissuecore.applet.component;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;

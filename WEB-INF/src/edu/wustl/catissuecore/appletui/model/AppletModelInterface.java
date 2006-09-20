@@ -6,7 +6,7 @@
  * @version 1.1
  * Created on Sep 18, 2006
  */
-package edu.wustl.catissuecore.appletui.model;
+package edu.wustl.catissuecore.applet.model;
 
 import java.io.Serializable;
 import java.util.Map;

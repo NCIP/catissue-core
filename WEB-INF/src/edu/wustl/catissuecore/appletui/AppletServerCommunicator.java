@@ -6,7 +6,7 @@
  * @version 1.1
  * Created on Sep 15, 2006
  */
-package edu.wustl.catissuecore.appletui;
+package edu.wustl.catissuecore.applet;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import edu.wustl.catissuecore.appletui.model.AppletModelInterface;
+import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 
 public class AppletServerCommunicator implements Serializable {
 

@@ -6,7 +6,7 @@
  * @version 1.1
  * Created on Sep 14, 2006
  */
-package edu.wustl.catissuecore.appletui.model;
+package edu.wustl.catissuecore.applet.model;
 
 import javax.swing.table.AbstractTableModel;
 

@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.appletui.listener;
+package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
 
