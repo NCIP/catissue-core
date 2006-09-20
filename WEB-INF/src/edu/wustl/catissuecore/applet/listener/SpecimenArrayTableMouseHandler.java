@@ -13,11 +13,11 @@ import edu.wustl.catissuecore.applet.ui.SpecimenArrayApplet;
 import edu.wustl.catissuecore.applet.util.SpecimenArrayUtil;
 
 /**
- * <p>This class initializes the fields of TableMouseListener.java</p>
+ * <p>This class initializes the fields of SpecimenArrayTableMouseHandler.java</p>
  * @author Ashwin Gupta
  * @version 1.1
  */
-public class TableMouseListener extends MouseAdapter {
+public class SpecimenArrayTableMouseHandler extends MouseAdapter {
 
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
