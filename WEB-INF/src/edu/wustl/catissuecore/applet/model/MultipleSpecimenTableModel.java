@@ -66,10 +66,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 * */
 	Map specimenAttributeOptions;
 
-	/**
-	 * list  of specimen class
-	 */
-	List SpecimenClassList;
 
 	/**
 	 * set default map. 
@@ -86,8 +82,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 
 		specimenAttributeOptions = initDataLists();
 		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
-		SpecimenClassList = new ArrayList(specimenTypeMap.keySet());
-
 	}
 
 	/**
@@ -190,12 +184,14 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 					"http://localhost:8080/catissuecore/MultipleSpecimenAction.do?method=initData",
 					appletModel);
 
-			/*			Map tempMap = appletModel.getData();
+			 /*Map tempMap = appletModel.getData();
 			 System.out.println(tempMap.get(Constants.SPECIMEN_TYPE_MAP));
+			 System.out.println(tempMap.get(Constants.SPECIMEN_CLASS_LIST));
 			 System.out.println(tempMap.get(Constants.TISSUE_SITE_LIST));
 			 System.out.println(tempMap.get(Constants.TISSUE_SIDE_LIST));
 			 System.out.println(tempMap.get(Constants.PATHOLOGICAL_STATUS_LIST));
 			 */
+			 
 			return appletModel.getData();
 		}
 		catch (Exception e)
@@ -224,33 +220,33 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 * @return
 	 * 
 	 */
-	public List getSpecimenClassList()
+	public Object[] getSpecimenClassValues()
 	{
-		return SpecimenClassList;
+		return (Object[])specimenAttributeOptions.get(Constants.SPECIMEN_CLASS_LIST);
 	}
 
 	/**
 	 * @return tissue site list
 	 */
-	public List getTissueSiteList()
+	public Object[] getTissueSiteValues()
 	{
-		return (List) specimenAttributeOptions.get(Constants.TISSUE_SITE_LIST);
+		return (Object[]) specimenAttributeOptions.get(Constants.TISSUE_SITE_LIST);
 	}
 
 	/**
 	 * @return tissue side list
 	 */
-	public List getTissueSideList()
+	public Object[] getTissueSideValues()
 	{
-		return (List) specimenAttributeOptions.get(Constants.TISSUE_SIDE_LIST);
+		return (Object[]) specimenAttributeOptions.get(Constants.TISSUE_SIDE_LIST);
 	}
 
 	/**
 	 * @return PATHOLOGICAL STATUS LIST
 	 */
-	public List getPathologicalStatusList()
+	public Object[] getPathologicalStatusValues()
 	{
-		return (List) specimenAttributeOptions.get(Constants.PATHOLOGICAL_STATUS_LIST);
+		return (Object[]) specimenAttributeOptions.get(Constants.PATHOLOGICAL_STATUS_LIST);
 	}
 
 	/**

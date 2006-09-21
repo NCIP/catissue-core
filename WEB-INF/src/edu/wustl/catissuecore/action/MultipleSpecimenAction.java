@@ -1,3 +1,4 @@
+
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
@@ -24,7 +25,6 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
 
-
 /**
  * This class handles all the requests related to multiple specimen 
  * 
@@ -37,39 +37,40 @@ public class MultipleSpecimenAction extends BaseAppletAction
 	/**
 	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.ServletRequest, javax.servlet.ServletResponse)
 	 */
-	public ActionForward submitspecimens(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward submitSpecimens(ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		
-		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) request.getAttribute("tableModel");
-		
+
+		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) request
+				.getAttribute("tableModel");
+
 		Map SpecimenCollectionMap = (Map) request.getAttribute("MultipleSpecimenCollectionMap");
-		
-		
+
 		MapDataParser specimenParser = new MapDataParser("edu.wustl.catissuecore.domain");
 		MapDataParser biohazardsParser = new MapDataParser("edu.wustl.catissuecore.domain");
-		
+
 		Collection specimenCollection = specimenParser.generateData(tableModel.getMap());
-		
+
 		Iterator specimenCollectionIterator = specimenCollection.iterator();
-		
+
 		while (specimenCollectionIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) specimenCollectionIterator.next();
 			Long id = specimen.getId();
-			
-			Map biohazardsMap = (Map)SpecimenCollectionMap.get(id.toString() + "_" + "bioHazards");
+
+			Map biohazardsMap = (Map) SpecimenCollectionMap.get(id.toString() + "_" + "bioHazards");
 			specimen.setBiohazardCollection(biohazardsParser.generateData(biohazardsMap));;
 		}
-	
+
 		//validate specimen
-		
+
 		//call bizLogic to save specimenCollection
-		
+
 		//return to report page		
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * This method is called by Multiple specimen data model during initialization to 
 	 * set the list that are displayed in the drop down form.
@@ -87,19 +88,26 @@ public class MultipleSpecimenAction extends BaseAppletAction
 	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward initData(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ActionForward initData(ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
 		Map DataListsMap = new HashMap();
 		CDEManager cDEManager = CDEManager.getCDEManager();
-		
+
 		DataListsMap.put(Constants.SPECIMEN_TYPE_MAP, getSpecimenClassTypeMap());
-		DataListsMap.put(Constants.TISSUE_SITE_LIST, Utility.getListForCDE(Constants.CDE_NAME_TISSUE_SITE));
-		DataListsMap.put(Constants.TISSUE_SIDE_LIST, Utility.getListForCDE(Constants.CDE_NAME_TISSUE_SIDE));
-		DataListsMap.put(Constants.PATHOLOGICAL_STATUS_LIST, Utility.getListForCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS));
-		
-		writeMapToResponse(response,DataListsMap);
+		DataListsMap.put(Constants.SPECIMEN_CLASS_LIST, Utility.getListForCDE(
+				Constants.CDE_NAME_SPECIMEN_CLASS).toArray());
+		DataListsMap.put(Constants.TISSUE_SITE_LIST, Utility.getListForCDE(
+				Constants.CDE_NAME_TISSUE_SITE).toArray());
+		DataListsMap.put(Constants.TISSUE_SIDE_LIST, Utility.getListForCDE(
+				Constants.CDE_NAME_TISSUE_SIDE).toArray());
+		DataListsMap.put(Constants.PATHOLOGICAL_STATUS_LIST, Utility.getListForCDE(
+				Constants.CDE_NAME_PATHOLOGICAL_STATUS).toArray());
+
+		writeMapToResponse(response, DataListsMap);
 		return null;
 	}
-	
+
 	/**
 	 * This method returns a map where
 	 * 
@@ -110,32 +118,34 @@ public class MultipleSpecimenAction extends BaseAppletAction
 	 *     
 	 * @return map
 	 */
-	private Map  getSpecimenClassTypeMap() {
-		
+	private Map getSpecimenClassTypeMap()
+	{
+
 		Map specimenClassTypeMap = new HashMap();
 		List specimentypeSelectOption = new ArrayList();
 		specimentypeSelectOption.add(Constants.SELECT_OPTION);
-		
-		specimenClassTypeMap.put(Constants.SELECT_OPTION,specimentypeSelectOption);
-		
+
+		specimenClassTypeMap.put(Constants.SELECT_OPTION, specimentypeSelectOption);
+
 		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
 		Set setPV = specimenClassCDE.getPermissibleValues();
 		Iterator specimenClassItr = setPV.iterator();
-		
+
 		while (specimenClassItr.hasNext())
 		{
 			PermissibleValue pValue = (PermissibleValue) specimenClassItr.next();
 			Set subPV = pValue.getSubPermissibleValues();
 			Iterator specimenTypeItr = subPV.iterator();
 			List specimenType = new ArrayList();
+			specimenType.add(Constants.SELECT_OPTION);
 			while (specimenTypeItr.hasNext())
 			{
 				PermissibleValue specimenTypePV = (PermissibleValue) specimenTypeItr.next();
 				specimenType.add(specimenTypePV.getValue());
 			}
-			specimenClassTypeMap.put(pValue.getValue(),specimenType);
+			specimenClassTypeMap.put(pValue.getValue(), specimenType.toArray());
 		}
 		return specimenClassTypeMap;
 	}
-	
+
 }

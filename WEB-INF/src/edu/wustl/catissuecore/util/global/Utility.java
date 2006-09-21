@@ -568,6 +568,7 @@ public class Utility extends edu.wustl.common.util.Utility
 		}
 		
 		Collections.sort(valueList);
+		valueList.add(0,Constants.SELECT_OPTION);
 		return valueList;
 	}
 	
