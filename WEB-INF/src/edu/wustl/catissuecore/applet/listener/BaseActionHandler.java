@@ -32,7 +32,7 @@ public class BaseActionHandler implements ActionListener
 	{
 		preActionPerformed();		
 		handleAction(event);
-		postActionPerformed();
+		postActionPerformed(event);
 	}
 
 	/**
@@ -46,14 +46,14 @@ public class BaseActionHandler implements ActionListener
 	/**
 	 * This method provides a hook to specific Listener classes that needs to do some functionality after action executed. 
 	 */
-	protected void postActionPerformed()
+	protected void postActionPerformed(ActionEvent event)
 	{
 		//fireEditingStopped();
-		table.getModel().setValueAt(getSelectedValue(),table.getSelectedRow(),table.getSelectedColumn());
-
+		table.getModel().setValueAt(getSelectedValue(event),table.getSelectedRow(),table.getSelectedColumn());
+		System.out.println(getSelectedValue(event));
 	}
 
-	protected Object getSelectedValue() {
+	protected Object getSelectedValue(ActionEvent event) {
 		return null;
 	}
 	
