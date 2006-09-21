@@ -10,7 +10,9 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -55,6 +57,8 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 */
 	protected CollectionProtocol collectionProtocol = new CollectionProtocol();
 
+	protected Collection specimenCollectionGroupCollection = new HashSet();
+	
 	/**
 	 * Defines whether this CollectionProtocolRegistration record can be queried (Active) or not queried (Inactive) by any actor
 	 * */
@@ -65,6 +69,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 
 	}
 
+	
 	/**
 	 * one argument constructor
 	 * @param CollectionProtocolRegistrationFrom object 
@@ -244,6 +249,8 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 				this.protocolParticipantIdentifier = null;
 			
 			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Utility.datePattern(form.getRegistrationDate()));
+			
+			this.specimenCollectionGroupCollection = new HashSet();
 		}
 		catch (Exception e)
 		{
@@ -278,5 +285,25 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			message = message + this.protocolParticipantIdentifier;
 		}			
 		return message;
+	}
+
+
+	/**
+	 * Returns collection of specimenCollectionGroup .
+	 * @return collection of collection specimenCollectionGroup .
+	 * @hibernate.set name="specimenCollectionGroupCollection" table="CATISSUE_SPECIMEN_COLL_GROUP"
+	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_REG_ID"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+	 * @see setSpecimenCollectionGroupCollection(Collection)
+	 */
+	public Collection getSpecimenCollectionGroupCollection()
+	{
+		return specimenCollectionGroupCollection;
+	}
+
+	
+	public void setSpecimenCollectionGroupCollection(Collection specimenCollectionGroupCollection)
+	{
+		this.specimenCollectionGroupCollection = specimenCollectionGroupCollection;
 	}
 }
