@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 
 
@@ -15,6 +16,7 @@ import javax.swing.JTable;
  */
 public class ComboBoxHandler extends BaseActionHandler
 {
+	
 
 	public ComboBoxHandler(JTable table)
 	{
@@ -28,4 +30,11 @@ public class ComboBoxHandler extends BaseActionHandler
 	{
 		
 	}
+	protected Object getSelectedValue(ActionEvent event)
+	{
+		JComboBox cbx = (JComboBox) event.getSource();
+		return cbx.getSelectedItem();
+		 
+	}
+ 
 }
