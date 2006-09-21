@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.listener.BaseActionHandler;
@@ -38,8 +39,9 @@ public class MultipleSpecimenApplet extends BaseApplet {
 			
 		//table.getColumnModel().setColumnSelectionAllowed(true);
 		table.setColumnSelectionAllowed(true);
-		table.setRowHeight(3,50);
-        
+		//table.setRowHeight(3,50);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		 
 		JScrollPane scrollPane = new JScrollPane( table );
         getContentPane().add( scrollPane );
 		JButton showAll = new JButton("ShowData");
