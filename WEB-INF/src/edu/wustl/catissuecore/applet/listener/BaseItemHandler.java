@@ -8,10 +8,13 @@
 
 package edu.wustl.catissuecore.applet.listener;
 
+import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 /**
  * This is base Handler class for all the Item events on the components in caTissuecore.
@@ -39,14 +42,20 @@ public class BaseItemHandler implements ItemListener {
 	/**
 	 * This method provides a hook to specific Listener classes that needs to do some functionality after action executed. 
 	 */
-	protected void postActionPerformed()
+	protected void postActionPerformed(ItemEvent event)
 	{
 		//fireEditingStopped();
-		table.getModel().setValueAt(getSelectedValue(),table.getSelectedRow(),table.getSelectedColumn());
+		table.getModel().setValueAt(getSelectedValue(event),table.getSelectedRow(),table.getSelectedColumn());
 
 	}
 
-	protected Object getSelectedValue() {
+	/**
+	 * This method returns the value of the source object on which the event occurs.
+	 * This method is to be overridden by the subclasses for specific functionality.
+	 * @param event Event Objcet.
+	 * @return Value of source object on which the event occured. 
+	 */
+	protected Object getSelectedValue(ItemEvent event) {
 		return null;
 	}
 	
@@ -55,7 +64,7 @@ public class BaseItemHandler implements ItemListener {
 	 */
 	protected void handleAction(ItemEvent event)
 	{
-		
+		commonActions(event);
 	}
 
 	/* (non-Javadoc)
@@ -64,8 +73,46 @@ public class BaseItemHandler implements ItemListener {
 	public void itemStateChanged(ItemEvent event) {
 		preActionPerformed();		
 		handleAction(event);
-		postActionPerformed();
+		postActionPerformed(event);
 
+	}
+	
+	/**
+	 * @param event Object of event that occured.
+	 * Performs common actions related to the two radio buttons of ParentSpecimen and Collection Group.
+	 * It enables the respective text field and disables the other.
+	 */
+	protected void commonActions(ItemEvent event)
+	{
+		try
+		{
+			JRadioButton selectedRadio = (JRadioButton ) event.getSource(); 
+			if(selectedRadio!= null)
+			{
+				Component comps[] = selectedRadio.getParent().getComponents();
+				for(int i=0;i < comps.length; i++)
+				{
+					Component comp = comps[i];
+					if (comp instanceof JTextField)
+					{
+						comp.setEnabled(selectedRadio.isSelected());
+					}
+				}
+			}
+		}
+		catch(Exception excp)
+		{
+			System.out.println("Error: "+ excp.getMessage() );
+		}
+		try
+		{
+			table.updateUI();			
+		}
+		catch(Exception excp)
+		{
+			System.out.println("Error in table update: "+ excp.getMessage() );
+		}
+	
 	}
 
 }

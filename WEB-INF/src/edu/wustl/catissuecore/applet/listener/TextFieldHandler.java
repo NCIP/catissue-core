@@ -1,7 +1,7 @@
 /*
  * Created on Sep 19, 2006
  *
- * This class will handle all the events related to TextFields.
+ * This class handles all the events related to TextFields.
  * 
  */
 package edu.wustl.catissuecore.applet.listener;
@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 /**
  * @author mandar_deshmukh
  * 
- * This class will handle all the events related to TextFields.
+ * This class handles all the events related to TextFields.
  */
 public class TextFieldHandler extends BaseActionHandler {
 	/*
@@ -26,8 +26,6 @@ public class TextFieldHandler extends BaseActionHandler {
 	{
 		super.handleAction(event);
 		System.out.println("Inside TextFieldHandler");
-		Object selectedValue = "";
-		selectedValue = ((JTextField) (event.getSource())).getText();
 	}
 
 	/**
@@ -37,4 +35,15 @@ public class TextFieldHandler extends BaseActionHandler {
 	{
 		super(table);
 	}
+	
+	/** 
+	 * This method return the selected value of the combobox.
+	 * @see edu.wustl.catissuecore.applet.listener.BaseActionHandler#getSelectedValue(java.awt.event.ActionEvent)
+	 */
+	protected Object getSelectedValue(ActionEvent event)
+	{
+		JTextField selectedField = (JTextField) event.getSource();
+		return selectedField.getText();
+	}
+
 }

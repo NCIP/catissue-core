@@ -1,8 +1,9 @@
-/*
+/**
+ * @author mandar_deshmukh
  * Created on Sep 20, 2006
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * 
+ * This class handles specimen type specific events.
+ * 
  */
 package edu.wustl.catissuecore.applet.listener;
 
@@ -12,11 +13,11 @@ import javax.swing.JTable;
 
 /**
  * @author mandar_deshmukh
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
- */
-public class TypeComboBoxHandler extends ComboBoxHandler {
+ * Created on Sep 20, 2006
+ * 
+ * This class handles specimen type specific events.
+ * 
+ */public class TypeComboBoxHandler extends ComboBoxHandler {
 
 	/**
 	 * @param table

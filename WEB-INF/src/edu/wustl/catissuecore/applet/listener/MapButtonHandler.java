@@ -1,5 +1,5 @@
 /*
- * This class will handle all the events of Map button.
+ * This class handles all the events of Map button.
  * Created on Sep 19, 2006
  * @author mandar_deshmukh
  */
@@ -12,7 +12,7 @@ import javax.swing.JTable;
 /**
  * @author mandar_deshmukh
  * 
- * This class will handle all the events of Map button.
+ * This class handles all the events of Map button.
  */
 public class MapButtonHandler extends ButtonHandler {
 

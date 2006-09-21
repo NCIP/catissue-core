@@ -28,13 +28,18 @@ public class ComboBoxHandler extends BaseActionHandler
 	 */
 	protected void handleAction(ActionEvent event)
 	{
-		
+		super.handleAction(event);
+		System.out.println("Inside ComboBoxHandler");
 	}
+	
+	/** 
+	 * This method return the selected value of the combobox.
+	 * @see edu.wustl.catissuecore.applet.listener.BaseActionHandler#getSelectedValue(java.awt.event.ActionEvent)
+	 */
 	protected Object getSelectedValue(ActionEvent event)
 	{
-		JComboBox cbx = (JComboBox) event.getSource();
-		return cbx.getSelectedItem();
-		 
+		JComboBox selectedField = (JComboBox) event.getSource();
+		return selectedField.getSelectedItem();
 	}
  
 }

@@ -26,6 +26,9 @@ public class BaseActionHandler implements ActionListener
 	}
 	
 	/**
+	 * This method is of the ActionListener interface.
+	 * We call the three methods from it. These methods provide the ability to perform some tasks after the actual event handling is done.
+	 *  
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	public void actionPerformed(ActionEvent event)
@@ -53,6 +56,12 @@ public class BaseActionHandler implements ActionListener
 		System.out.println(getSelectedValue(event));
 	}
 
+	/**
+	 * This method returns the value of the source object on which the event occurs.
+	 * This method is to be overridden by the subclasses for specific functionality.
+	 * @param event Event Objcet.
+	 * @return Value of source object on which the event occured. 
+	 */
 	protected Object getSelectedValue(ActionEvent event) {
 		return null;
 	}
