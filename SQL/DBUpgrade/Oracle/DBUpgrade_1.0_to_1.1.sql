@@ -170,7 +170,7 @@ update 'csm_protection_element' set 'PROTECTION_ELEMENT_ID'='44','PROTECTION_ELE
 
 #--alter table CATISSUE_CONTAINER drop foreign key FK49B8DE5DB097B2E;
 #--alter table CATISSUE_CONTAINER drop foreign key FK49B8DE5DAC76C0;
-drop table if exists CATISSUE_CONTAINER;;
+#--drop table if exists CATISSUE_CONTAINER;;
 create table CATISSUE_CONTAINER (
    IDENTIFIER number(19,0) not null ,
    ACTIVITY_STATUS varchar(20),
@@ -420,6 +420,7 @@ update catissue_temp_type set identifier=(select max(identifier)+1 from catissue
 update catissue_container_type set name='Any',activity_status='Disabled' where identifier=2;
 insert into catissue_container_type (select * from catissue_temp_type);
 update catissue_storage_type set identifier=(select identifier from catissue_temp_type) where identifier=2;
+update catissue_storage_container set storage_type_id = (select identifier from catissue_temp_type) where storage_type_id = 2 ;
 
 insert into catissue_container_type (name,activity_status,identifier) values ('Any','Disabled',2);
 insert into catissue_specimen_array_type (IDENTIFIER) values ( '2');
