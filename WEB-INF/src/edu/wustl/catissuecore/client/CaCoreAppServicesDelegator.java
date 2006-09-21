@@ -17,17 +17,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domainobject.ClinicalReport;
-import edu.wustl.catissuecore.domainobject.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domainobject.Participant;
-import edu.wustl.catissuecore.domainobject.Specimen;
-import edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domainobject.impl.CollectionProtocolRegistrationImpl;
-import edu.wustl.catissuecore.domainobject.impl.ParticipantImpl;
-import edu.wustl.catissuecore.domainobject.impl.SpecimenCollectionGroupImpl;
-import edu.wustl.catissuecore.domainobject.impl.SpecimenImpl;
+import edu.wustl.catissuecore.domain.ClinicalReport;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -81,56 +80,92 @@ public class CaCoreAppServicesDelegator
 	}
 	
 	/**
-	 * Passes caCore Like domain object to CaTissueHTTPClient to perform Add operation.
-	 * @param obj the caCore Like object to add using HTTP API
-	 * @param sessionKey
+	 * Passes caCore Like domain object to  caTissue Core biz logic to perform Add operation.
+	 * @param domainObject the caCore Like object to add using HTTP API
+	 * @param userName user name
 	 * @return returns the Added caCore Like object/Exception object if exception occurs performing Add operation
 	 * @throws Exception
 	 */
-	public Object delegateAdd(String sessionKey, Object obj) throws Exception
+	public Object delegateAdd(String userName, Object domainObject) throws Exception
 	{
 	    try
 	    {
-	        CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
+				if (domainObject == null) 
+				{
+					throw new Exception("Please enter valid domain object!! Domain object should not be NULL");
+				}
+				
+				IBizLogic bizLogic = getBizLogic(domainObject.getClass().getName());
+				bizLogic.insert(domainObject,getSessionDataBean(userName),Constants.HIBERNATE_DAO);
+				Logger.out.info(" Domain Object has been successfully inserted " + domainObject);
+/*	        CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
 	        return httpClient.add(sessionKey,obj);
+*/	    
 	    }
 	    catch(Exception e)
 	    {
 	        Logger.out.error("Delegate Add-->" + e.getMessage());
 	        throw e;
 	    }
+	    
+	    return domainObject;
 	}
 	
 	/**
-	 * Passes caCore Like domain object to CaTissueHTTPClient to perform Edit operation.
-	 * @param obj the caCore Like object to edit using HTTP API
-	 * @param sessionKey 
+	 * Passes caCore Like domain object to caTissue Core biz logic to perform Edit operation.
+	 * @param domainObject the caCore Like object to edit using HTTP API
+	 * @param userName  user name
 	 * @return returns the Edited caCore Like object/Exception object if exception occurs performing Edit operation
 	 * @throws Exception
 	 */
-	public Object delegateEdit(String sessionKey, Object obj) throws Exception
+	public Object delegateEdit(String userName, Object domainObject) throws Exception
 	{
 		try
 		{
+				if (domainObject == null) 
+				{
+					throw new Exception("Please enter valid domain object!! Domain object should not be NULL");
+				}
+				String objectName = domainObject.getClass().getName();
+				IBizLogic bizLogic = getBizLogic(objectName);
+				AbstractDomainObject abstractDomainObject = (AbstractDomainObject) domainObject;
+				// not null check for Id 
+				if (abstractDomainObject.getId() == null) {
+					throw new Exception("Please enter valid Identifier for domain object !! Identifier should not be NULL");	
+				}
+	            List list = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
+						  abstractDomainObject.getId());
+	            
+				if ((list == null) || (list.isEmpty()))
+				{
+					throw new Exception("No such domain object found for update !! Please enter valid domain object for edit");
+				}
+				AbstractDomainObject abstractDomainOld = (AbstractDomainObject) list.get(0);
+				bizLogic.update(abstractDomainObject, abstractDomainOld, Constants.HIBERNATE_DAO, getSessionDataBean(userName));
+				Logger.out.info(" Domain Object has been successfully updated " + domainObject);
+/*			
 		    CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
-		    return httpClient.edit(sessionKey, obj);
+		    return httpClient.edit(userName, domainObject);
+*/		    
 		}
 		catch(Exception e)
 		{
 		    Logger.out.error("Delegate Edit"+ e.getMessage());
 	        throw e;
 		}
+		return domainObject;
 	}
 	
 	/**
 	 * Returns Exception object as Delete operation is not supported by CaTissue Core Application.
-	 * @param obj the caCore Like object to delete using HTTP API
+	 * @param domainObject the caCore Like object to delete using HTTP API
+	 * @param userName user name
 	 * @return returns Exception object as Delete operation is not supported by CaTissue Core Application.
 	 * @throws Exception
 	 */
-	public Object delegateDelete(Object obj) throws Exception
+	public Object delegateDelete(String userName, Object domainObject) throws Exception
 	{
-		throw new Exception("Does not support delete");
+		throw new Exception("caTissue does not support delete");
 	}
 	
 	public List delegateSearchFilter(String userName,List list) throws Exception
@@ -347,19 +382,19 @@ public class CaCoreAppServicesDelegator
 	{
 	    Class classObject = object.getClass();
 	    Logger.out.debug("Identified Class>>>>>>>>>>>>>>>>>>>>>>"+classObject.getName());
-	    if (classObject.equals(ParticipantImpl.class))
+	    if (classObject.equals(Participant.class))
 	    {
 	        removeParticipantIdentifiedData(object);
 	    }
-	    else if (classObject.equals(SpecimenCollectionGroupImpl.class))
+	    else if (classObject.equals(SpecimenCollectionGroup.class))
 	    {
 	        removeSpecimenCollectionGroupIdentifiedData(object);
 	    }
-	    else if (classObject.getSuperclass().equals(SpecimenImpl.class))
+	    else if (classObject.getSuperclass().equals(Specimen.class))
 	    {
 	        removeSpecimenIdentifiedData(object);
 	    }
-	    else if (classObject.equals(CollectionProtocolRegistrationImpl.class))
+	    else if (classObject.equals(CollectionProtocolRegistration.class))
 	    {
 	        removeCollectionProtocolRegistrationIdentifiedData(object);
 	    }
@@ -468,5 +503,29 @@ public class CaCoreAppServicesDelegator
         }
         
         return childObject;
+	}
+	
+	/**
+	 * Get Biz Logic based on domai object class name.
+	 * @param domainObjectName name of somain object
+	 * @return biz logic
+	 */
+	private IBizLogic getBizLogic(String domainObjectName) 
+	{
+		BizLogicFactory factory = BizLogicFactory.getInstance();
+		IBizLogic bizLogic = factory.getBizLogic(domainObjectName);
+		return bizLogic;
+	}
+	
+	/**
+	 * Get seesion data bean.
+	 * @param userName user name
+	 * @return session data bean
+	 */
+	private SessionDataBean getSessionDataBean(String userName) 
+	{
+		SessionDataBean sessionDataBean = new SessionDataBean();
+		sessionDataBean.setUserName(userName);
+		return sessionDataBean;
 	}
 }
