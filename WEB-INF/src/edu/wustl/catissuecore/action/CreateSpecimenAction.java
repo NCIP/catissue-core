@@ -95,6 +95,10 @@ public class CreateSpecimenAction extends SecureAction
 		Vector initialValues = null;
 		if (operation.equals(Constants.ADD))
 		{
+			
+			createForm.setParentSpecimenLabel(createForm.getLabel());
+			createForm.setLabel("");
+			
 			if (request.getParameter("Change") != null)
 			{
 				String errorString = null;
