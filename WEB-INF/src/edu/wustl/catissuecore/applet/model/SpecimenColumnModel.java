@@ -29,7 +29,7 @@ import edu.wustl.catissuecore.applet.listener.TypeComboBoxHandler;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
- * This is a column model for multiple specimen page.
+ * This Class is a column model for multiple specimen page.
  *  
  * @author mandar_deshmukh
  */
@@ -113,11 +113,17 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	// For holding component value
 	String text="";
 
+	/**
+	 * Constructs the SpecimenColumnModel object based on the parameters.
+	 * @param table Reference of the table.
+	 * @param column Number of column to work on.
+	 */
 	public SpecimenColumnModel(BaseTable table, int column) 
 	{
 		super();
 		this.table = table;
 		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel)table.getModel();
+		// set row height based on contents	
 		for(int rowno = 0; rowno<table.getRowCount();rowno++)
 		{
 			//For combobox
@@ -144,208 +150,52 @@ public class SpecimenColumnModel extends AbstractCellEditor
 			{
 				table.setRowHeight(rowno,30);	
 			}
-			
 		}
 		// ---------------- Object creation --------------------
-		//Specimen Collection Group
-		specimenCollectionGroup = new JTextField(10);
-		rbspecimenGroup = new JRadioButton();
-		collectionGroupPanel = new JPanel();
-		
-		//Parent Specimen 
-		parentSpecimen = new JTextField(10);
-		rbparentSpecimen = new JRadioButton();
-		parentSpecimenPanel = new JPanel();
-		
-		//Group for radiobuttons
-		radioGroup = new ButtonGroup();
-
-		// adding radiobuttons to group
-		radioGroup.add(rbspecimenGroup);
-		radioGroup.add(rbparentSpecimen);
-
-		//Adding components to the panel
-		collectionGroupPanel.add(rbspecimenGroup);
-		collectionGroupPanel.add(specimenCollectionGroup);
-		parentSpecimenPanel.add(rbparentSpecimen);
-		parentSpecimenPanel.add(parentSpecimen);
-				
-		// Label
-		label = new JTextField(10);
-		
-		// Barcode
-		barCode = new JTextField(10);
-
-		//Specimen Class
-		classList = new JComboBox(model.getSpecimenClassValues());
-
-		String type[] = {Constants.SELECT_OPTION};
-		//Specimen Type
-		typeList = new JComboBox(type);
-		
-		
-		//TissueSite
-		tissueSiteList = new JComboBox(model.getTissueSiteValues());
-		
-		//TissueSide
-		tissueSideList = new JComboBox(model.getTissueSideValues());
-
-		//PathologicalStatus 
-		pathologicalStatusList = new JComboBox(model.getPathologicalStatusValues());
-		
-		// Quantity
-		quantity = new JTextField(10);
-		unit = new JLabel();
-		quantityUnitPanel = new JPanel();
-		
-		quantityUnitPanel.add(quantity);
-		quantityUnitPanel.add(unit);
-
-		// Concentration
-		concentration = new JTextField(10);
-		
-		//For Storage Location
-		mapButton = new JButton("Map");
-		location = new JTextField(10);
-		storageLocationPanel = new JPanel();
-		
-		storageLocationPanel.add(location);
-		storageLocationPanel.add(mapButton);
-		
-		//For Comments
-		comments = new JTextField(10);
-		
-		//Events 
-		eventsButton = new JButton("E");
-		
-		//External Identifier
-		externalIdentifierButton = new JButton("EI");
-		
-		//BioHazard
-		bioHazardButton = new JButton("B");
-
-		//Derive
-		deriveButton = new JButton("D");
-
-		// For holding component value
-		text=new String();
-
+		instantiateObjects(model);
 		// --------------- Adding Listeners ---------------------
-		// Listeners
-		TextFieldHandler textHandler = new TextFieldHandler(table); 
-		ParentSpecimenItemHandler parentSpecimenItemHandler = new ParentSpecimenItemHandler(table);
-		CollectionGroupItemHandler collectionGroupItemHandler = new CollectionGroupItemHandler(table);
-		ClassComboBoxHandler classComboBoxHandler = new ClassComboBoxHandler(table);
-		TypeComboBoxHandler typeComboBoxHandler = new TypeComboBoxHandler(table);
-		ComboBoxHandler comboBoxHandler = new ComboBoxHandler(table);
-		MapButtonHandler mapButtonHandler = new MapButtonHandler(table);
-		ButtonHandler buttonHandler = new ButtonHandler(table);
-		
-		//Specimen Collection Group
-		specimenCollectionGroup.addActionListener(textHandler);
-		rbspecimenGroup.addItemListener(collectionGroupItemHandler );
-		
-		//Parent Specimen 
-		parentSpecimen.addActionListener(textHandler);
-		rbparentSpecimen.addItemListener(parentSpecimenItemHandler);
-		
-		// Label
-		label.addActionListener(textHandler);
-		
-		// Barcode
-		barCode.addActionListener(textHandler);
-
-		//Specimen Class
-		classList.addActionListener(classComboBoxHandler);
-
-		//Specimen Type
-		typeList.addActionListener(typeComboBoxHandler);
-		
-		//TissueSite
-		tissueSiteList.addActionListener(comboBoxHandler);
-		
-		//TissueSide
-		tissueSideList.addActionListener(comboBoxHandler);
-
-		//PathologicalStatus 
-		pathologicalStatusList.addActionListener(comboBoxHandler);
-		
-		// Quantity
-		quantity.addActionListener(textHandler);
-
-		// Concentration
-		concentration.addActionListener(textHandler);
-		
-		//For Storage Location
-		mapButton.addActionListener(mapButtonHandler);
-		
-		//For Comments
-		comments.addActionListener(textHandler);
-		
-		//Events 
-		eventsButton.addActionListener(buttonHandler);
-		
-		//External Identifier
-		externalIdentifierButton.addActionListener(buttonHandler);
-		
-		//BioHazard
-		bioHazardButton.addActionListener(buttonHandler);
-
-		//Derive
-		deriveButton.addActionListener(buttonHandler);
+		addListeners();
 		// ------------------------------------
 
 		TableColumnModel columnModel = table.getColumnModel();
 		columnModel.getColumn(column).setCellRenderer(this);
 		columnModel.getColumn(column).setCellEditor(this);
+		columnModel.getColumn(column).setResizable(false );
+		columnModel.getColumn(column).setPreferredWidth(175 );
 	}
 
+	/**
+	 *  This method returns the component used as cell renderer. 
+	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
+	 */
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 			boolean hasFocus, int row, int column)
 	{
 		text = (value == null) ? "" : value.toString();
-
 		Component component = getComponentAt(row, column, hasFocus, isSelected);
-
-/*	if (component instanceof JComboBox)
-			((JComboBox) component).setSelectedItem((value == null) ? "" : value.toString());
-		if (component instanceof JTextField)
-		{
-			System.out.println(((JTextField) component).getText());
-		}
-
-*/		return component;
+		return component;
 	}
 
+	/** 
+	 * This method returns the component used as cell editor.
+	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable, java.lang.Object, boolean, int, int)
+	 */
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
 			int row, int column)
 	{
 		text = (value == null) ? "" : value.toString();
-
 		Component component = getComponentAt(row, column, false, isSelected);
-
-/*		if (component instanceof JComboBox)
-			((JComboBox) component).setSelectedItem((value == null) ? "" : value.toString());
-*/
 		return component;
 	}
 
 	/**
+	 * This method returns the value of the current editor component. 
 	 * @see javax.swing.CellEditor#getCellEditorValue()
 	 */
 	public Object getCellEditorValue()
 	{
 		return text;
 	}
-
-//	public void actionPerformed(ActionEvent e)
-//	{
-//
-//		fireEditingStopped();
-//		table.getModel().setValueAt(selectedValue, table.getSelectedRow(),
-//				table.getSelectedColumn());
-//	}
-	
 
 	/**
 	 * Returns a component at specified co-ordinate and sets appropriate foregroung and background.
@@ -362,8 +212,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 
 		switch (row)
 		{
-		// ------------------
-//		Specimen Collection Group
+		//Specimen Collection Group
 		case AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO :
 			comp = collectionGroupPanel;
 			break;
@@ -434,8 +283,16 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		default :
 			comp = new JTextField(10);
 		}
-		// ------------------
-
+		
+		formatComponent(comp, hasFocus, isSelected);
+		return comp;
+	}
+	
+	/*
+	 * This method formats the component as per the parameters provided.
+	 */
+	private void formatComponent(Component comp, boolean hasFocus, boolean isSelected )
+	{
 		if (hasFocus)
 		{
 			comp.setForeground(table.getForeground());
@@ -451,9 +308,166 @@ public class SpecimenColumnModel extends AbstractCellEditor
 			comp.setForeground(table.getForeground());
 			comp.setBackground(UIManager.getColor("List.background"));
 		}
+		comp.repaint(); 
+	}
+	
+	/*
+	 * This method initialises the components.
+	 */
+	private void instantiateObjects(MultipleSpecimenTableModel model)
+	{
+		//Specimen Collection Group
+		specimenCollectionGroup = new JTextField(10);
+		rbspecimenGroup = new JRadioButton();
+		collectionGroupPanel = new JPanel();
+		rbspecimenGroup.setSelected(true);
+		
+		//Parent Specimen 
+		parentSpecimen = new JTextField(10);
+		rbparentSpecimen = new JRadioButton();
+		parentSpecimenPanel = new JPanel();
+		parentSpecimen.setEnabled(false);
+		
+		//Group for radiobuttons
+		radioGroup = new ButtonGroup();
 
-		//classList.setSelectedItem( (value == null) ? "" : value.toString() );
-		return comp;
+		// adding radiobuttons to group
+		radioGroup.add(rbspecimenGroup);
+		radioGroup.add(rbparentSpecimen);
+
+		//Adding components to the panel
+		collectionGroupPanel.add(rbspecimenGroup);
+		collectionGroupPanel.add(specimenCollectionGroup);
+		parentSpecimenPanel.add(rbparentSpecimen);
+		parentSpecimenPanel.add(parentSpecimen);
+				
+		// Label
+		label = new JTextField(10);
+		
+		// Barcode
+		barCode = new JTextField(10);
+
+		//Specimen Class
+		classList = new JComboBox(model.getSpecimenClassValues());
+
+		String type[] = {Constants.SELECT_OPTION};
+		//Specimen Type
+		typeList = new JComboBox(type);
+		
+		//TissueSite
+		tissueSiteList = new JComboBox(model.getTissueSiteValues());
+		
+		//TissueSide
+		tissueSideList = new JComboBox(model.getTissueSideValues());
+
+		//PathologicalStatus 
+		pathologicalStatusList = new JComboBox(model.getPathologicalStatusValues());
+		
+		// Quantity
+		quantity = new JTextField(10);
+		unit = new JLabel();
+		quantityUnitPanel = new JPanel();
+		
+		quantityUnitPanel.add(quantity);
+		quantityUnitPanel.add(unit);
+
+		// Concentration
+		concentration = new JTextField(10);
+		
+		//For Storage Location
+		mapButton = new JButton("Map");
+		location = new JTextField(10);
+		storageLocationPanel = new JPanel();
+		
+		storageLocationPanel.add(location);
+		storageLocationPanel.add(mapButton);
+		
+		//For Comments
+		comments = new JTextField(10);
+		
+		//Events 
+		eventsButton = new JButton("E");
+		
+		//External Identifier
+		externalIdentifierButton = new JButton("EI");
+		
+		//BioHazard
+		bioHazardButton = new JButton("B");
+
+		//Derive
+		deriveButton = new JButton("D");
+
+		// For holding component value
+		text=new String();
+	}
+
+	/*
+	 * This method adds listeners to the components.
+	 */
+	private void addListeners()
+	{
+		// Listeners
+		TextFieldHandler textHandler = new TextFieldHandler(table); 
+		ParentSpecimenItemHandler parentSpecimenItemHandler = new ParentSpecimenItemHandler(table);
+		CollectionGroupItemHandler collectionGroupItemHandler = new CollectionGroupItemHandler(table);
+		ClassComboBoxHandler classComboBoxHandler = new ClassComboBoxHandler(table);
+		TypeComboBoxHandler typeComboBoxHandler = new TypeComboBoxHandler(table);
+		ComboBoxHandler comboBoxHandler = new ComboBoxHandler(table);
+		MapButtonHandler mapButtonHandler = new MapButtonHandler(table);
+		ButtonHandler buttonHandler = new ButtonHandler(table);
+		
+		//Specimen Collection Group
+		specimenCollectionGroup.addActionListener(textHandler);
+		rbspecimenGroup.addItemListener(collectionGroupItemHandler );
+		
+		//Parent Specimen 
+		parentSpecimen.addActionListener(textHandler);
+		rbparentSpecimen.addItemListener(parentSpecimenItemHandler);
+		
+		// Label
+		label.addActionListener(textHandler);
+		
+		// Barcode
+		barCode.addActionListener(textHandler);
+
+		//Specimen Class
+		classList.addActionListener(classComboBoxHandler);
+
+		//Specimen Type
+		typeList.addActionListener(typeComboBoxHandler);
+		
+		//TissueSite
+		tissueSiteList.addActionListener(comboBoxHandler);
+		
+		//TissueSide
+		tissueSideList.addActionListener(comboBoxHandler);
+
+		//PathologicalStatus 
+		pathologicalStatusList.addActionListener(comboBoxHandler);
+		
+		// Quantity
+		quantity.addActionListener(textHandler);
+
+		// Concentration
+		concentration.addActionListener(textHandler);
+		
+		//For Storage Location
+		mapButton.addActionListener(mapButtonHandler);
+		
+		//For Comments
+		comments.addActionListener(textHandler);
+		
+		//Events 
+		eventsButton.addActionListener(buttonHandler);
+		
+		//External Identifier
+		externalIdentifierButton.addActionListener(buttonHandler);
+		
+		//BioHazard
+		bioHazardButton.addActionListener(buttonHandler);
+
+		//Derive
+		deriveButton.addActionListener(buttonHandler);
 	}
 
 }

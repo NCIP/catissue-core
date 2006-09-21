@@ -16,6 +16,7 @@ import java.util.EventObject;
 import javax.swing.AbstractCellEditor;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.border.LineBorder;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -41,6 +42,7 @@ public class RowHeaderColumnModel extends AbstractCellEditor
 	BaseTable table;
 	JLabel labels[];
 	String text="";
+	
 	public RowHeaderColumnModel(BaseTable table)
 	{
 		super();
@@ -51,15 +53,26 @@ public class RowHeaderColumnModel extends AbstractCellEditor
 		labels = new JLabel[rowHeaders.length ];
 		for(int counter=0; counter<rowHeaders.length; counter++)
 		{
-			labels[counter] = new JLabel((String)rowHeaders[counter]);
-			labels[counter].setBackground(Color.GRAY);
+			LineBorder border = new LineBorder(Color.BLACK ,1,false );
+			labels[counter] = new JLabel(" "+(String)rowHeaders[counter]);
+			labels[counter].setBackground(Color.LIGHT_GRAY );
+			labels[counter].setOpaque(true);
+			//labels[counter].setBorder(border);
+			//labels[counter].setSize(150,25 );
 		}
 		// ----------------------------
 		TableColumnModel columnModel = table.getColumnModel();
 		columnModel.getColumn(column).setCellRenderer(this);
 		columnModel.getColumn(column).setCellEditor(this);
+		columnModel.getColumn(column).setResizable(false );
+		columnModel.getColumn(column).setPreferredWidth(150 );
+		
 	}
 	
+	/**
+	 *  This method returns the component used as cell renderer. 
+	 * @see javax.swing.table.TableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
+	 */
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 			boolean hasFocus, int row, int column)
 	{
@@ -67,7 +80,11 @@ public class RowHeaderColumnModel extends AbstractCellEditor
 		Component component = getComponentAt(row, column, hasFocus, isSelected);
 		return component;
 	}
-
+	
+	/** 
+	 * This method returns the component used as cell editor.
+	 * @see javax.swing.table.TableCellEditor#getTableCellEditorComponent(javax.swing.JTable, java.lang.Object, boolean, int, int)
+	 */
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
 			int row, int column)
 	{
@@ -77,6 +94,7 @@ public class RowHeaderColumnModel extends AbstractCellEditor
 	}
 
 	/**
+	 * This method returns the value of the current editor component. 
 	 * @see javax.swing.CellEditor#getCellEditorValue()
 	 */
 	public Object getCellEditorValue()
@@ -96,41 +114,22 @@ public class RowHeaderColumnModel extends AbstractCellEditor
 	private Component getComponentAt(int row, int col, boolean hasFocus, boolean isSelected)
 	{
 		Component comp = null; 
-
 		comp = labels[row];	
-		// ------------------
-		comp.setBackground(Color.GRAY  );
-
-//		if (hasFocus)
-//		{
-//			comp.setForeground(table.getForeground());
-//			comp.setBackground(UIManager.getColor("List.background"));
-//		}
-//		else if (isSelected)
-//		{
-//			comp.setForeground(table.getSelectionForeground());
-//			comp.setBackground(table.getSelectionBackground());
-//		}
-//		else
-//		{
-//			comp.setForeground(table.getForeground());
-//			comp.setBackground(UIManager.getColor("List.background"));
-//		}
 		return comp;
 	}
 
-	/* (non-Javadoc)
+	/* This method returns false to indicate that the cells are noneditable.
 	 * @see javax.swing.CellEditor#isCellEditable(java.util.EventObject)
 	 */
 	public boolean isCellEditable(EventObject anEvent) {
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/* Overriding the method of superclass. 
 	 * @see javax.swing.CellEditor#shouldSelectCell(java.util.EventObject)
 	 */
 	public boolean shouldSelectCell(EventObject anEvent) {
-		return false;
+		return true;
 	}
 
 
