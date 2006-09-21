@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
@@ -369,10 +370,10 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 		//commented by vaishali - no ore required 
 		/*if (isStoragePositionChanged(specimenOld, specimen))
-		{
-			throw new DAOException(
-					"Storage Position should not be changed while updating the specimen");
-		}*/
+		 {
+		 throw new DAOException(
+		 "Storage Position should not be changed while updating the specimen");
+		 }*/
 
 		setAvailableQuantity(specimen, specimenOld);
 
@@ -401,6 +402,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				specimen.setSpecimenCharacteristics(sc);
 			}
 		}
+
 		//check for closed Specimen Collection Group
 		if (!specimen.getSpecimenCollectionGroup().getId().equals(
 				specimenOld.getSpecimenCollectionGroup().getId()))
@@ -445,6 +447,25 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		Logger.out.debug("specimen.getActivityStatus() " + specimen.getActivityStatus());
 		if (specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
+			//			 check for disabling a specimen 
+			boolean disposalEventPresent = false;
+			Collection eventCollection = specimen.getSpecimenEventCollection();
+			Iterator itr = eventCollection.iterator();
+			while (itr.hasNext())
+			{
+				Object eventObject = itr.next();
+				if (eventObject instanceof DisposalEventParameters)
+				{
+					disposalEventPresent = true;
+					break;
+				}
+			}
+			if (!disposalEventPresent)
+			{
+				throw new DAOException(ApplicationProperties
+						.getValue("errors.specimen.not.disabled.no.disposalevent"));
+			}
+			
 			setDisableToSubSpecimen(specimen);
 			Logger.out.debug("specimen.getActivityStatus() " + specimen.getActivityStatus());
 			Long specimenIDArr[] = new Long[1];
