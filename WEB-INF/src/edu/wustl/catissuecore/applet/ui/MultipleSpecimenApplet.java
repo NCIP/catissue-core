@@ -23,8 +23,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
 
 	public void doInit()
     {
- 
-		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(4);
+		int columnNumber = 4; 
+		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber);
         
 		BaseTable table = new BaseTable(model)
         {
@@ -38,7 +38,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		//table.getColumnModel().setColumnSelectionAllowed(true);
 		table.setColumnSelectionAllowed(true);
 		table.setRowHeight(3,50);
-        JScrollPane scrollPane = new JScrollPane( table );
+        
+		JScrollPane scrollPane = new JScrollPane( table );
         getContentPane().add( scrollPane );
 		JButton showAll = new JButton("ShowData");
 		
@@ -46,10 +47,14 @@ public class MultipleSpecimenApplet extends BaseApplet {
 
 		getContentPane().add( showAll,BorderLayout.SOUTH );
 
-        //  Create custom column
-		SpecimenColumnModel SpecimenFieldColumn1= new SpecimenColumnModel(table, 1);
-		SpecimenColumnModel SpecimenFieldColumn2 = new SpecimenColumnModel(table, 2);
-		SpecimenColumnModel SpecimenFieldColumn3 = new SpecimenColumnModel(table, 3);
+        //  Create custom columns
+		for(int cnt = 1; cnt < columnNumber; cnt++)
+		{
+			new SpecimenColumnModel(table, cnt);
+		}
+//		SpecimenColumnModel SpecimenFieldColumn1= new SpecimenColumnModel(table, 1);
+//		SpecimenColumnModel SpecimenFieldColumn2 = new SpecimenColumnModel(table, 2);
+//		SpecimenColumnModel SpecimenFieldColumn3 = new SpecimenColumnModel(table, 3);
 		
     }
  
