@@ -146,10 +146,10 @@ public class QuickEventsSpecimenSearchAction extends BaseAction {
 	 	
 	 	String sourceObjectName = Specimen.class.getName();
         String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER  };
-        String[] whereColumnName = {sourceObject}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
-        String[] whereColumnCondition = {"="};
-        Object[] whereColumnValue = {value};
-        String joinCondition = null;
+        String[] whereColumnName = {sourceObject , Constants.ACTIVITY_STATUS}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+        String[] whereColumnCondition = {"=","!="};
+        Object[] whereColumnValue = {value, Constants.ACTIVITY_STATUS_DISABLED};
+        String joinCondition = Constants.AND_JOIN_CONDITION;
 
         List list = bizlogic.retrieve(sourceObjectName, selectColumnName,
                 whereColumnName, whereColumnCondition,

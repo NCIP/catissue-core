@@ -315,7 +315,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	{
 		String sourceObjectName = Specimen.class.getName();
 		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnName = {"parentSpecimen" , Constants.ACTIVITY_STATUS,};
+		String[] whereColumnName = {"parentSpecimen" , Constants.ACTIVITY_STATUS};
 		String[] whereColumnCondition = {"=" , "!="};
 		String[] whereColumnValue = {speID , Constants.ACTIVITY_STATUS_DISABLED};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
