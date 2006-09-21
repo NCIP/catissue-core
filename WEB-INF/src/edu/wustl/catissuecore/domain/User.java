@@ -12,10 +12,13 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -642,5 +645,12 @@ public class User extends AbstractDomainObject implements Serializable
 			return this.firstName;
 		}	
 		return null;
+	}
+	
+	public String getLatestPassword() {
+		List pwdList = new ArrayList(this.getPasswordCollection());
+		Collections.sort(pwdList);
+		Password pwd = ((Password) pwdList.get(0));
+		return pwd.getPassword();
 	}
 }
