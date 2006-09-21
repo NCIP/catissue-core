@@ -156,16 +156,14 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	    
         //*************  ForwardTo implementation *************
         HashMap forwardToHashMap=(HashMap)request.getAttribute("forwardToHashMap");
-        Logger.out.info("1");
+        
         if(forwardToHashMap !=null)
         {
-        	Logger.out.info("2");
             Long participantId=(Long)forwardToHashMap.get("participantId");
             Logger.out.debug("ParticipantID found in forwardToHashMap========>>>>>>"+participantId);
-            Logger.out.info("3");
+        
             if((request.getParameter("firstName").trim().length()>0) || (request.getParameter("lastName").trim().length()>0) || (request.getParameter("birthDate").trim().length()>0) ||( (request.getParameter("socialSecurityNumberPartA").trim().length()>0) && (request.getParameter("socialSecurityNumberPartB").trim().length()>0) && (request.getParameter("socialSecurityNumberPartC").trim().length()>0))) 
             {    
-            	Logger.out.info("4");
                 CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
                 cprForm.setParticipantID(participantId.longValue());
                 cprForm.setCheckedButton(true);
@@ -173,17 +171,21 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         }
         else
         {
-        	Logger.out.info("5");
         	if(request.getParameter("participantId")!=null)
         	{
-        		Logger.out.info("6");
+        		try
+        		{
         		Long participantId=new Long(request.getParameter("participantId"));
         		CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
                 cprForm.setParticipantID(participantId.longValue());
                 cprForm.setCheckedButton(true);
+        		}
+        		catch(NumberFormatException e)
+        		{
+        			Logger.out.debug("NumberFormatException Occured :"+e);
+        		}
         	}
         }
-        Logger.out.info("7");
         //*************  ForwardTo implementation *************
         
 		return mapping.findForward(pageOf);
