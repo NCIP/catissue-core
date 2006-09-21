@@ -220,7 +220,7 @@
 				<table>
 				<tr>
 					<td class="standardText" align="center">Storage Type</td>
-					<td class="standardText" align="center"><html:radio property="specimenOrArrayType" value="Specimen" onclick="onRadioButtonClick('Specimen')"/> Specimen Type</td>
+					<td class="standardText" align="center"><html:radio property="specimenOrArrayType" value="Specimen" onclick="onRadioButtonClick('Specimen')"/> Specimen Class</td>
 					<td class="standardText" align="center"><html:radio property="specimenOrArrayType" value="SpecimenArray" onclick="onRadioButtonClick('SpecimenArray')"/>Specimen Array Type</td>
 					
 				</tr>

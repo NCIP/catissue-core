@@ -741,7 +741,7 @@ function onEditChange()
 									<bean:message key="storageContainer.containerType"/>
 							</td>
 							<td class="standardText" align="center">		
-									<html:radio property="specimenOrArrayType" value="Specimen" onclick="onRadioButtonClickOfSpecimen('Specimen')"/> <bean:message key="storageContainer.specimenType"/>
+									<html:radio property="specimenOrArrayType" value="Specimen" onclick="onRadioButtonClickOfSpecimen('Specimen')"/> <bean:message key="storageContainer.specimenClass"/>
 							</td>
 							<td class="standardText" align="center">		
 									<html:radio property="specimenOrArrayType" value="SpecimenArray" onclick="onRadioButtonClickOfSpecimen('SpecimenArray')"/> <bean:message key="storageContainer.specimenArrayType"/>
