@@ -8,6 +8,7 @@ import javax.swing.JScrollPane;
 import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.listener.BaseActionHandler;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
+import edu.wustl.catissuecore.applet.model.RowHeaderColumnModel;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 
 /**
@@ -48,6 +49,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		getContentPane().add( showAll,BorderLayout.SOUTH );
 
         //  Create custom columns
+		new RowHeaderColumnModel(table);		//	for zeroth column
 		for(int cnt = 1; cnt < columnNumber; cnt++)
 		{
 			new SpecimenColumnModel(table, cnt);
