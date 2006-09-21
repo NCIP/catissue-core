@@ -250,7 +250,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			
 			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Utility.datePattern(form.getRegistrationDate()));
 			
-			this.specimenCollectionGroupCollection = new HashSet();
+			
 		}
 		catch (Exception e)
 		{
