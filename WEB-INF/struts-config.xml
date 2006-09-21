@@ -952,6 +952,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType&amp;menuSelected=6" />
 			<forward name="failure" path="/StorageType.do?operation=edit&amp;pageOf=pageOfStorageType&amp;menuSelected=6" />
+			<forward name="storageContainer" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer" />
 		</action>
 		
 		<action path="/StorageTypeSearch"
