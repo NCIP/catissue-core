@@ -30,60 +30,70 @@ import edu.wustl.common.util.AbstractForwardToProcessor;
  */
 public class ForwardToProcessor extends AbstractForwardToProcessor
 {
-    public HashMap populateForwardToData(AbstractActionForm actionForm, AbstractDomainObject domainObject)
-    {
-        HashMap forwardToHashMap=new HashMap();
-        
-        if(domainObject instanceof Participant)
-        {
-            forwardToHashMap.put("participantId", domainObject.getId());
-        }
-        else if(domainObject instanceof StorageType) //Added this if condition to resolve Bug: 1938
-        {
-            forwardToHashMap.put("storageTypeId", domainObject.getId());
-        }
-        else if (domainObject instanceof CollectionProtocolRegistration)
-        {
-            CollectionProtocolRegistrationForm collectionProtocolRegistrationForm= (CollectionProtocolRegistrationForm)actionForm;
-            
-            forwardToHashMap.put("collectionProtocolId", new Long( collectionProtocolRegistrationForm.getCollectionProtocolID()) );
-            forwardToHashMap.put("participantId", new Long(collectionProtocolRegistrationForm.getParticipantID()));
-            forwardToHashMap.put("participantProtocolId", collectionProtocolRegistrationForm.getParticipantProtocolID());
-        }
-        else if (domainObject instanceof SpecimenCollectionGroup)
-        {
-            forwardToHashMap.put("specimenCollectionGroupId", domainObject.getId().toString());
-            
-        }
-        else if (domainObject instanceof Specimen)
-        {
-        	 //Aniruddha:17/07/06 :: Added for aliquot result page
-        	if(Constants.ALIQUOT.equals(((Specimen)domainObject).getLineage()))
-        	{
-        		forwardToHashMap = (HashMap)((Specimen)domainObject).getAliqoutMap();
-            	return forwardToHashMap;
-        	}
-            //Derive New from This Specimen
-            if(actionForm.getForwardTo().equals("createNew"))
-            {
-                forwardToHashMap.put("parentSpecimenId", domainObject.getId());
-            }
-            //Add To Same Collection Group
-            else if(actionForm.getForwardTo().equals("sameCollectionGroup"))
-            {
-                NewSpecimenForm newSpecimenForm= (NewSpecimenForm)actionForm;
-                
-                forwardToHashMap.put("specimenCollectionGroupId", newSpecimenForm.getSpecimenCollectionGroupId());
-            }
-            //Add Events
-            else if(actionForm.getForwardTo().equals("eventParameters"))
-            {
-                forwardToHashMap.put("specimenId", domainObject.getId().toString());
-            } else if( actionForm.getForwardTo().equals("distribution")) {
-            	forwardToHashMap.put("specimenObjectKey", domainObject);
-            }
-        }
-        
-        return forwardToHashMap;
-    }
+
+	public HashMap populateForwardToData(AbstractActionForm actionForm,
+			AbstractDomainObject domainObject)
+	{
+		HashMap forwardToHashMap = new HashMap();
+
+		if (domainObject instanceof Participant)
+		{
+			forwardToHashMap.put("participantId", domainObject.getId());
+		}
+		else if (domainObject instanceof StorageType) //Added this if condition to resolve Bug: 1938
+		{
+			forwardToHashMap.put("storageTypeId", domainObject.getId());
+		}
+		else if (domainObject instanceof CollectionProtocolRegistration)
+		{
+			CollectionProtocolRegistrationForm collectionProtocolRegistrationForm = (CollectionProtocolRegistrationForm) actionForm;
+
+			forwardToHashMap.put("collectionProtocolId", new Long(
+					collectionProtocolRegistrationForm.getCollectionProtocolID()));
+			forwardToHashMap.put("participantId", new Long(collectionProtocolRegistrationForm
+					.getParticipantID()));
+			forwardToHashMap.put("participantProtocolId", collectionProtocolRegistrationForm
+					.getParticipantProtocolID());
+		}
+		else if (domainObject instanceof SpecimenCollectionGroup)
+		{
+			forwardToHashMap.put("specimenCollectionGroupId", domainObject.getId().toString());
+
+		}
+		else if (domainObject instanceof Specimen)
+		{
+			//Derive New from This Specimen
+			if (actionForm.getForwardTo().equals("createNew"))
+			{
+				forwardToHashMap.put("parentSpecimenId", domainObject.getId());
+			}
+			//Add To Same Collection Group
+			else if (actionForm.getForwardTo().equals("sameCollectionGroup"))
+			{
+				NewSpecimenForm newSpecimenForm = (NewSpecimenForm) actionForm;
+
+				forwardToHashMap.put("specimenCollectionGroupId", newSpecimenForm
+						.getSpecimenCollectionGroupId());
+			}
+			//Add Events
+			else if (actionForm.getForwardTo().equals("eventParameters"))
+			{
+				forwardToHashMap.put("specimenId", domainObject.getId().toString());
+			}
+			else if (actionForm.getForwardTo().equals("distribution"))
+			{
+				forwardToHashMap.put("specimenObjectKey", domainObject);
+			}
+
+			//Aniruddha:17/07/06 :: Added for aliquot result page
+			if (Constants.ALIQUOT.equals(((Specimen) domainObject).getLineage()) && actionForm.getOperation().equals(Constants.ADD))
+			{
+				forwardToHashMap = (HashMap) ((Specimen) domainObject).getAliqoutMap();
+				return forwardToHashMap;
+			}
+
+		}
+
+ 		return forwardToHashMap;
+	}
 }
