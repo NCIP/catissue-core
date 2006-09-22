@@ -612,7 +612,6 @@ public class UserBizLogic extends DefaultBizLogic
 	{
 		List oldPwdList = new ArrayList(oldUser.getPasswordCollection());
 		Collections.sort(oldPwdList);
-		Collections.reverse(oldPwdList); // Most recent password will be the first one in the list
 		if (oldPwdList != null && !oldPwdList.isEmpty())
 		{
 			//Check new password is equal to last n password if value
@@ -682,7 +681,6 @@ public class UserBizLogic extends DefaultBizLogic
 		}
 		
 		Collections.sort(passwordList);
-		Collections.reverse(passwordList); // Most recent password will be the first one in the list
 		Password lastPassword = (Password)passwordList.get(0);
 		Date lastUpdateDate = lastPassword.getUpdateDate();
 		
