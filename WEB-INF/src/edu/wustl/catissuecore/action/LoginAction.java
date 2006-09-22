@@ -86,9 +86,21 @@ public class LoginAction extends Action
 	                sessionData.setLastName(validUser.getLastName());
 	                Logger.out.debug("CSM USer ID ....................... : "+validUser.getCsmUserId());
 	                sessionData.setCsmUserId(validUser.getCsmUserId().toString());
-	                
 	                session.setAttribute(Constants.SESSION_DATA,sessionData);
-	                
+	                UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+	             
+	                String result = userBizLogic.checkFirstLoginAndExpiry(validUser);
+													
+					if(!result.equals(Constants.SUCCESS)) 
+					{
+	                	  ActionErrors errors = new ActionErrors();
+	                      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(result));
+	                      saveErrors(request, errors);
+	                      request.setAttribute(Constants.ACCESS,"true");
+	                      request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_CHANGE_PASSWORD);
+	                      return mapping.findForward(Constants.ACCESS_DENIED);
+	                }
+	                         
 	                return mapping.findForward(Constants.SUCCESS);
 	            }
 	            else
