@@ -148,6 +148,7 @@ PUBLIC
 			input=".catissuecore.homePageDef"
 			scope="request">
 			<forward name="success" path="/Home.do" />
+			<forward name="access_denied" path=".catissuecore.changePasswordDef"/>
 			<forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
         
@@ -400,6 +401,8 @@ PUBLIC
 		
 		<action path="/ChangePassword"
 			type="edu.wustl.catissuecore.action.ChangePasswordAction"
+			name="userForm"
+			validate="false"
 			scope="request">
 			<forward name="pageOfChangePassword" path=".catissuecore.changePasswordDef" />
 			<forward name="failure" path=".catissuecore.changePasswordDef" />
@@ -411,6 +414,14 @@ PUBLIC
 			name="userForm"
 			validate="true"
 			input="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword"
+			scope="request">
+			<forward name="success" path="/SetSessionDataForUpdatePassword.do" />
+			<forward name="failure" path="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword" />
+		</action>
+		
+		<action path="/SetSessionDataForUpdatePassword"
+			type="edu.wustl.catissuecore.action.SetSessionDataForUpdatePasswordAction"
+			name="userForm"
 			scope="request">
 			<forward name="success" path=".catissuecore.userProfileSuccessDef" />
 			<forward name="failure" path="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword" />
@@ -2537,6 +2548,7 @@ PUBLIC
 		validate="false"
 		scope="request">
 		<forward name="pageOfAliquot" path=".catissuecore.aliquotDef" />
+		<forward name="pageOfCreateAliquot" path=".catissuecore.aliquotDef"/>
 		<forward name="pageOfAliquotSummary" path=".catissuecore.aliquotSummaryDef" />
 		<forward name="failure" path=".catissuecore.aliquotDef" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
