@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
@@ -33,8 +34,10 @@ public class ChangePasswordAction extends BaseAction
             ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception
     {
-        String pageOf = request.getParameter(Constants.PAGEOF);
+        UserForm userForm = (UserForm) form;
+    	String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF, pageOf);
+        request.setAttribute(Constants.ACCESS, userForm.getAccess());
         return mapping.findForward(pageOf);
     }
 
