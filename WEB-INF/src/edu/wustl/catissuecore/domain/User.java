@@ -650,7 +650,6 @@ public class User extends AbstractDomainObject implements Serializable
 	public String getLatestPassword() {
 		List pwdList = new ArrayList(this.getPasswordCollection());
 		Collections.sort(pwdList);
-		Collections.reverse(pwdList); // Most recent password will be the first one in the list
 		if(!pwdList.isEmpty())
 		{
 			Password pwd = ((Password) pwdList.get(0));
