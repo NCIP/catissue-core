@@ -20,7 +20,9 @@
 			  <!-- link 1 ends -->
 			  
 			  <!-- Links that need to be shown when user is logged in -->
+			  <logic:empty scope="request" name="<%=Constants.ACCESS%>">
 			  <logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">	
+			
 			  <td><img src="images/mainMenuSeparator.gif" width="1" height="16"
 				   alt="" /></td>
 				   
@@ -78,7 +80,9 @@
              <!-- link 6 ends -->
              
              <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
+			
 			 </logic:notEmpty>
+			 </logic:empty>
 			<!-- End of links that need to be shown when user is logged in -->
 		
 			<logic:empty scope="session" name="<%=Constants.SESSION_DATA%>">	
@@ -105,5 +109,32 @@
             
             <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
              </logic:empty> 
+			 
+			 <logic:notEmpty scope="request" name="<%=Constants.ACCESS%>">
+			 
+			 <!-- link 1 ends -->
+			<td><img src="images/mainMenuSeparator.gif" width="1" height="16"
+				alt="" /></td>
+			
+			<!-- link 2 begins -->
+			<td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='Summary.do'">
+                <html:link styleClass="mainMenuLink" page="/Summary.do">
+                	<bean:message key="app.summary" />
+                </html:link>
+              </td>
+              <!-- link 2 ends -->
+			<td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
+			  
+            <!-- link 3 begins -->
+            <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='Help.do'">
+                <html:link styleClass="mainMenuLink" page="/Help.do">
+                	<bean:message key="app.help" />
+                </html:link>
+            </td>
+            <!-- link 3 ends -->
+            
+            <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
+			</logic:notEmpty>
+			
 			</tr>
           </table>

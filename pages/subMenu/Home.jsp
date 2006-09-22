@@ -1,6 +1,9 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 
+
+
+<logic:empty scope="request" name="<%=Constants.ACCESS%>">
 <logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
@@ -46,3 +49,4 @@
 	</td>
 </tr>
 </logic:notEmpty>
+</logic:empty>
