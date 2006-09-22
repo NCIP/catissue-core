@@ -120,11 +120,14 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException 
 	{
     }
-	
+	/**
+	 *  This method will compate two date Objects. When Collections.sort() is called, it will return a list 
+	 *  of dates in which most recent date will be the first one. 
+	 */
 	public int compareTo(Object obj)
 	{
 	    Password pwd = (Password)obj;
-	    return this.updateDate.compareTo(pwd.getUpdateDate());
+	    return pwd.getUpdateDate().compareTo(this.updateDate);
 	}
 	
 }
