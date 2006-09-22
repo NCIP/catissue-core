@@ -2240,6 +2240,63 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	}
 
+	/**
+	 * Gets allocated container map for specimen array.
+	 * @param specimen_array_type_id specimen array type id
+	 * @param noOfAliqoutes No. of aliquotes
+	 * @return container map 
+	 * @throws DAOException -- throws DAO Exception
+	 * @see edu.wustl.common.dao.JDBCDAOImpl
+	 */
+	public Map getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id,int noOfAliqoutes) throws DAOException
+	{
+//		List list = retrieve(StorageContainer.class.getName());
+		Map containerMap = new TreeMap();
+		List siteList = new ArrayList();
+		siteList.add(new NameValueBean("---","---"));
+		
+		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		dao.openSession(null);
+		
+		String queryStr = "select t1.IDENTIFIER,t1.name from CATISSUE_CONTAINER t1,CATISSUE_STORAGE_CONTAINER t2 " +
+						  "where t1.IDENTIFIER IN (select t4.STORAGE_CONTAINER_ID from CATISSUE_CONT_HOLDS_SPARRTYPE t4 " +
+						  "where t4.SPECIMEN_ARRAY_TYPE_ID = '" + specimen_array_type_id + "') and t1.IDENTIFIER = t2.IDENTIFIER;";
+		
+		/*String queryStr ="SELECT t1.IDENTIFIER, t1.NAME, t2.NAME FROM CATISSUE_CONTAINER t1, CATISSUE_SITE t2 ,CATISSUE_STORAGE_CONTAINER t3 WHERE "+ 
+						"t1.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_STOR_TYPE_REL t4 "+ 
+						"WHERE t4.STORAGE_TYPE_ID = '"+type_id+"' OR t4.STORAGE_TYPE_ID='1') and t1.IDENTIFIER = t3.IDENTIFIER and t2.IDENTIFIER=t3.SITE_ID";
+		*/	
+		Logger.out.debug("SPECIMEN ARRAY QUERY ......................" + queryStr);
+		List list = new ArrayList();
+
+		try
+		{
+			list = dao.executeQuery(queryStr, null, false, null);
+		}
+		catch (Exception ex)
+		{
+			throw new DAOException(ex.getMessage());
+		}
+
+		dao.closeSession();
+		Logger.out.info("Size of list:"+list.size());
+
+		Iterator itr = list.iterator();
+		while (itr.hasNext())
+		{
+			List list1 = (List)itr.next();
+			String Id = (String)list1.get(0);
+			String Name = (String)list1.get(1);
+			Map positionMap = getAvailablePositionMap(Id,noOfAliqoutes);
+			if (!positionMap.isEmpty())
+			{
+				NameValueBean nvb = new NameValueBean(Name,Id);
+				containerMap.put(nvb, positionMap);
+			}
+		}
+		return containerMap;
+	}
+	
 	//--------------Code for Map Mandar: 04-Sep-06 start
 	//Mandar : 29Aug06 : for StorageContainerMap
 	/**
