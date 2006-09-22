@@ -1,4 +1,4 @@
-							   			  <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
@@ -251,7 +251,7 @@
 				 	</logic:notEqual>
 				 <tr>
 				     <td class="formTitle" height="20" colspan="6">
-				     <%String title = "createSpecimen."+pageView+".title";%>
+				     <%String title = "createSpecimen.derived.title";%>
 				     	<bean:message key="<%=title%>"/>
 				     </td>
 				 </tr>
