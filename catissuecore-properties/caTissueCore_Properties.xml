@@ -65,16 +65,7 @@
 		<name>proxy.password</name>
 		<value></value>
 	</property>
-	<property>
-		<name>password.not_same_as_last_n</name>
-		<value>5</value>
-	</property>
 	
-	<property>
-		<name>password.expire_after_n_days</name>
-		<value>10</value>
-	</property>
-
 	<property>
 		<name>app.disclaimer.file</name>
 		<value>Disclaimer.txt</value>
@@ -195,6 +186,27 @@
 	</property>
 	
 	 <!-- Constants for LookUp algo end -->
+	 
+	  <!-- Constants for Password validations start -->
+		
+	<property>
+		<name>password.expire_after_n_days</name>
+		<value>10</value>
+	</property>
 	
+	<property>
+		<name>password.not_same_as_last_n</name>
+		<value>6</value>
+	</property>
 	
+	<property>
+		<name>minimumPasswordLength</name>
+		<value>6</value>
+	</property>
+		
+	<property>
+		<name>daysCount</name>
+		<value>0</value>
+	</property>
+	 <!--Constants for Password validations end-->
 </properties>
