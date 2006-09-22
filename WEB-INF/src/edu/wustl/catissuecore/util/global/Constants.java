@@ -40,6 +40,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String NEWUSERFORM = "newUserForm";
 	public static final String REDIRECT_TO_SPECIMEN = "specimenRedirect";
 	public static final String CALLED_FROM = "calledFrom";
+	public static final String ACCESS = "access";
 	
 	//Constants required for Forgot Password
 	public static final String FORGOT_PASSWORD = "forgotpassword";
@@ -1053,10 +1054,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT_SSN_PARTIAL="SSNPartial";
 	public static final String PARTICIPANT_DOB_EXACT="DOBExact";
 	public static final String PARTICIPANT_DOB_PARTIAL="DOBPartial";
-	public static final String PARTICIPANT_LASTNAME_EXACT="LastNameExact";
-	public static final String PARTICIPANT_LASTNAME_PARTIAL="LastNamePartial";
-	public static final String PARTICIPANT_NAME_EXACT="NameExact";
-	public static final String PARTICIPANT_NAME_PARTIAL="NamePartial";
+	public static final String PARTICIPANT_LAST_NAME_EXACT="LastNameExact";
+	public static final String PARTICIPANT_LAST_NAME_PARTIAL="LastNamePartial";
+	public static final String PARTICIPANT_FIRST_NAME_EXACT="NameExact";
+	public static final String PARTICIPANT_FIRST_NAME_PARTIAL="NamePartial";
 	public static final String PARTICIPANT_MIDDLE_NAME_EXACT="MiddleNameExact";
 	public static final String PARTICIPANT_MIDDLE_NAME_PARTIAL="MiddleNamePartial";
 	public static final String PARTICIPANT_GENDER_EXACT="GenderExact";
@@ -1162,7 +1163,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int LABEL_BASED_DISTRIBUTION = 2;
 	public static final String DISTRIBUTION_TYPE_LIST = "DISTRIBUTION_TYPE_LIST";
 	public static final String DISTRIBUTION_BASED_ON = "DISTRIBUTION_BASED_ON";
-	public static final String SYSTEM_LABEL = "label";
+		public static final String SYSTEM_LABEL = "label";
 	public static final String SYSTEM_BARCODE = "barcode";
 	
 	//Mandar : 05Sep06 Array for multiple specimen field names
