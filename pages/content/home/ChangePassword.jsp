@@ -6,6 +6,7 @@
 <%
 	String operation = (String) request.getAttribute(Constants.OPERATION);
 	String pageOf = (String) request.getAttribute(Constants.PAGEOF);
+	String access = (String) request.getAttribute(Constants.ACCESS);
 	SessionDataBean sessionData = (SessionDataBean)session.getAttribute(Constants.SESSION_DATA);
 	String userId = sessionData.getUserId().toString();
 %>
@@ -22,6 +23,7 @@
 				<tr>
 					<td>
 						<html:hidden property="operation" value="<%=operation%>" />
+						<html:hidden property="access" value="<%=access%>" />
 					</td>
 				</tr>
 				
