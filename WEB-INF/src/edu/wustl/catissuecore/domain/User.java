@@ -649,11 +649,14 @@ public class User extends AbstractDomainObject implements Serializable
 	
 	public String getLatestPassword() {
 		List pwdList = new ArrayList(this.getPasswordCollection());
-		Collections.sort(pwdList);
-		if(!pwdList.isEmpty())
+		if(pwdList != null)
 		{
+		  Collections.sort(pwdList);
+		  if(!pwdList.isEmpty())
+		   {
 			Password pwd = ((Password) pwdList.get(0));
 			return pwd.getPassword();
+		   }
 		}
 		return null;
 	}
