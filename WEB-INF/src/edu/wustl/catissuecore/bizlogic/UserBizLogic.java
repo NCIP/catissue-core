@@ -623,10 +623,12 @@ public class UserBizLogic extends DefaultBizLogic
 
 			//Get the last updated date of the password
 			Date lastestUpdateDate = ((Password) oldPwdList.get(0)).getUpdateDate();
+			if(oldPwdList.size() > 1) {
 			if (checkPwdUpdatedOnSameDay(lastestUpdateDate))
 			{
 				Logger.out.debug("Password is not valid returning FAIL_CHANGED_WITHIN_SOME_DAY");
 				return FAIL_CHANGED_WITHIN_SOME_DAY;
+			}
 			}
 
 			/**	
