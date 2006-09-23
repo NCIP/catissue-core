@@ -876,6 +876,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SIMPLE_SEARCH_AFTER_CONFIGURE_ACTION = "SimpleSearchAfterConfigure.do";
 	public static final String PAGEOF_DISTRIBUTION = "pageOfDistribution";
 	public static final String RESULT_VIEW_VECTOR = "resultViewVector";
+	public static final String SPECIMENT_VIEW_ATTRIBUTE = "defaultViewAttribute";
 	//public static final String SIMPLE_QUERY_COUNTER = "simpleQueryCount";
 	
 	public static final String UNDEFINED = "Undefined";

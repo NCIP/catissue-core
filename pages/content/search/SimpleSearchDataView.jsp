@@ -42,7 +42,6 @@ tr#hiddenCombo
 	String title = pageOf + ".searchResultTitle";
 	boolean isSpecimenData = false;	
 	int IDCount = 0;
-	System.out.println("Page of ----"+pageOf);
 	if(dataList != null && dataList.size() != 0)
 	{
 	%>
@@ -173,6 +172,14 @@ tr#hiddenCombo
 			checkUncheck(element);
 		
 		}
+		
+		function setDefaultView(element)
+		{
+			action="DefaultSpecimenView.do?pageOf=pageOfQueryResults&<%=Constants.SPECIMENT_VIEW_ATTRIBUTE%>="+element.checked+"&view=<%=Constants.SPECIMEN%>"+"&isPaging=false";
+			document.forms[0].action = action;
+			document.forms[0].target = "myframe1";
+			document.forms[0].submit();
+		}
 		function callAction(action)
 		{
 			document.forms[0].action = action;
@@ -302,7 +309,19 @@ tr#hiddenCombo
 						<input type='checkbox' name='checkAll2' id='checkAll2' onClick='checkAll(this)'>
 						<span class="formLabelNoBackGround"><bean:message key="buttons.checkAll" /></span>
 					</td>
-					<td width="80%">
+					<%
+						Object obj = session.getAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
+						boolean isDefaultView = (obj!=null);
+					%>
+					<td width="10%" nowrap>
+					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
+						<input type='checkbox' <%if (isDefaultView){%>checked='checked' <%}%>name='checkDefaultSpecimenView' id='checkDefaultSpecimenView' onClick='setDefaultView(this)'>
+						<span class="formLabelNoBackGround"><bean:message key="buttons.defaultSpecimenView" /></span>
+					<%}else{%>
+						&nbsp;
+					<%}%>
+					</td>
+					<td width="70%">
 						&nbsp;
 					</td>
 					

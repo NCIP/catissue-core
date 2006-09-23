@@ -161,7 +161,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 			session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,null);
 			session.setAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES,null);
 			session.setAttribute(Constants.CONFIGURED_COLUMN_NAMES,null);
-			
+			session.removeAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
 			//Remove the spreadsheet column display names from session
 			session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,null);
 			

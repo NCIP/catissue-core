@@ -56,9 +56,17 @@ public class SpreadsheetViewAction extends Action
     		}    		
     	}
         Logger.out.debug("Pageof in spreadsheetviewaction.........:"+pageOf); 
+        Object defaultViewAttribute = request.getAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
+        if (defaultViewAttribute!=null)// When the Default specimen view Check box is checked or unchecked, this will be evaluated.
+        {
+        	List list = (List)request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+            List columnNames = (List)request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);                  
+            session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnNames);
+            session.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);	
+        }
         
-        
-        if (request.getParameter("isPaging") == null) {
+        String pagination = request.getParameter("isPaging");
+        if (pagination == null || pagination.equals("false")) {
         	
         	List list = (List)request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
             List columnNames = (List)request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);                  

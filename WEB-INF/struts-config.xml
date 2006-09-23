@@ -2409,6 +2409,14 @@ PUBLIC
 			<forward name="pageOfQueryResults" path=".catissuecore.advanceConfigurationSuccessDef" />
 		</action>
 		
+		<action path="/DefaultSpecimenView"
+			type="edu.wustl.catissuecore.action.DefaultSpecimenViewAction"
+			name="advanceSearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/DataView.do" />
+		</action>
+		
 		<action path="/ConfigureAdvanceSearchResults"
 			type="edu.wustl.catissuecore.action.ConfigureAdvanceSearchResultsAction"
 			name="advanceSearchForm"
