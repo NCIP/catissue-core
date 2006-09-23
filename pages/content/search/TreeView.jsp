@@ -45,7 +45,7 @@
     CODE = "<%=Constants.QUERY_TREE_APPLET%>"
     ALT = "Tree Applet"
     NAME = "<%=Constants.TREE_APPLET_NAME%>"
-    width="650" height="500" MAYSCRIPT>
+    width="100%" height="100%" MAYSCRIPT>
     <PARAM name="<%=Constants.PROPERTY_NAME%>" value="<%=propertyName%>">
 	<PARAM name="<%=Constants.CDE_NAME%>" value="<%=cdeName%>">
 	<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2">
