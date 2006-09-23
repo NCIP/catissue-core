@@ -576,7 +576,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 %>
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" id="<%=tableId%>">
 <tr><td>
-<table cellpadding=5 class="tbBorders">
+<table cellpadding=5 width="100%" class="tbBorders">
 <tr><td>
 <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" bgColor="<%=tblColor%>"  id="i<%=tableId%>">
 	<tr>
