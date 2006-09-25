@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.JTable;
 
+import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
+
 /**
  * @author mandar_deshmukh
  * Created on Sep 20, 2006
@@ -30,7 +32,6 @@ public class ClassComboBoxHandler extends ComboBoxHandler {
 
 	protected void handleAction(ActionEvent e)
 	{
-		super.handleAction(e);
-		System.out.println("Inside ClassComboBoxHandler");
+		((MultipleSpecimenTableModel) table.getModel()).specimenClassUpdated(table.getSelectedColumn());
 	}
 }

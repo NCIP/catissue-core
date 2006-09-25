@@ -26,5 +26,6 @@
 	<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2">
 	<PARAM name="name" value="<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>">
 	<PARAM name="session_id" value="<%=session.getId()%>">
-	<PARAM name="noOfSpecimen" value="<%=form.getNumberOfSpecimen()%>"
+	<PARAM name="noOfSpecimen" value="<%=form.getNumberOfSpecimen()%>">
+	<PARAM NAME = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" VALUE = "<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">
 </APPLET>
