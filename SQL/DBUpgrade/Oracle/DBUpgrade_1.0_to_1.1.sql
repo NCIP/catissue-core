@@ -441,3 +441,6 @@ delete from csm_role_privilege where role_privilege_id = 10;
 DELETE FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.common.action.SimpleQueryInterfaceAction_Distribution_array';
 INSERT into CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE_ID,APPLICATION_ID,UPDATE_DATE ) VALUES (CSM_PROTECTIO_PROTECTION_E_SEQ.nextval,'edu.wustl.common.action.SimpleQueryInterfaceAction_Distribution_array','edu.wustl.common.action.SimpleQueryInterfaceAction_SpecimenArrayType','edu.wustl.common.action.SimpleQueryInterfaceAction_Distribution_array',NULL,NULL,1,to_date('2006-08-31','yyyy-mm-dd')); 
 INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (CSM_PG_PE_PG_PE_ID_SEQ.nextval,19,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.common.action.SimpleQueryInterfaceAction_Distribution_array'),to_date('0001-01-01','yyyy-mm-dd'));
+
+/*Santosh - Updated first user password table's update_date = current date -Required for new password func*/
+UPDATE catissue_password set UPDATE_DATE=sysdate WHERE IDENTIFIER = 1;
