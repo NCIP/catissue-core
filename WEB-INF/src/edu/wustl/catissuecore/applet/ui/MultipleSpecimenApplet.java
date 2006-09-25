@@ -1,17 +1,21 @@
-
 package edu.wustl.catissuecore.applet.ui;
 
-import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.applet.component.BaseTable;
-import edu.wustl.catissuecore.applet.listener.BaseActionHandler;
+import edu.wustl.catissuecore.applet.listener.TableModelChangeHandler;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.applet.model.RowHeaderColumnModel;
@@ -21,8 +25,7 @@ import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
  * This applet displays main UI for multiple specimen page.
  * @author mandar_deshmukh
  */
-public class MultipleSpecimenApplet extends BaseApplet
-{
+public class MultipleSpecimenApplet extends BaseApplet {
 
 	/**
 	 * Default Serial Version ID
@@ -30,49 +33,135 @@ public class MultipleSpecimenApplet extends BaseApplet
 	private static final long serialVersionUID = 1L;
 
 	public void doInit()
-	{
+    {
+		// Creating Layout
+		setLayout(new FlowLayout());
+
+		JPanel buttonPanel;
+		JPanel linkPanel;
+		JPanel tablePanel;
+		JPanel footerPanel;
+		JPanel outerPanel;
+		
+		buttonPanel = new JPanel();
+		linkPanel = new JPanel();
+		tablePanel = new JPanel();
+		footerPanel = new JPanel();
+		outerPanel = new JPanel();
+		
+		outerPanel.setLayout(new GridLayout(4,1));
+		createButtonPanel(buttonPanel);
+		createLinkPanel(linkPanel);
+		createFooterPanel(footerPanel);
+		
+		//--gblayout
+		GridBagLayout gbl = new GridBagLayout();
+		outerPanel.setLayout(gbl);
+	    
+		// Place a component at cell location (1,1)
+	    GridBagConstraints gbc = new GridBagConstraints();
+	    gbc.gridx = 1;
+	    gbc.gridy = 1;
+	    gbc.fill = GridBagConstraints.NONE;
+	    gbl.setConstraints(buttonPanel, gbc);
+	    outerPanel.add(buttonPanel);
+
+		// Place a component at cell location (2,1)
+	    gbc = new GridBagConstraints();
+	    gbc.gridx = 1;
+	    gbc.gridy = 2;
+	    gbc.fill = GridBagConstraints.NONE;
+	    gbl.setConstraints(linkPanel, gbc);
+	    outerPanel.add(linkPanel);
+
+		// Place a component at cell location (3,1)
+	    gbc = new GridBagConstraints();
+	    gbc.gridx = 1;
+	    gbc.gridy = 3;
+	    gbc.fill = GridBagConstraints.NONE;
+	    gbl.setConstraints(tablePanel, gbc);
+	    outerPanel.add(tablePanel);
+
+		// Place a component at cell location (4,1)
+	    gbc = new GridBagConstraints();
+	    gbc.gridx = 1;
+	    gbc.gridy = 4;
+	    gbc.fill = GridBagConstraints.NONE;
+	    gbl.setConstraints(footerPanel, gbc);
+	    outerPanel.add(footerPanel);
+
+
+		//--- gbl
+//		outerPanel.add(buttonPanel);
+//		outerPanel.add(linkPanel);
+//		outerPanel.add(tablePanel);
+//		outerPanel.add(footerPanel);
+		
+		add(outerPanel);
+		// --------------------
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));
-		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());
-
+		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());		
+	    
 		BaseTable table = new BaseTable(model)
-		{
-
-			public Class getColumnClass(int column)
-			{
-				return getValueAt(0, column).getClass();
-			}
-		};
-
+        {
+            public Class getColumnClass(int column)
+            {
+                return getValueAt(0, column).getClass();
+            }
+        };
+        table.getModel().addTableModelListener(new TableModelChangeHandler(table));
+			
 		//table.getColumnModel().setColumnSelectionAllowed(true);
 		table.setColumnSelectionAllowed(true);
 		//table.setRowHeight(3,50);
-		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		 
+		JScrollPane scrollPane = new JScrollPane( table );
 
-		JScrollPane scrollPane = new JScrollPane(table);
-		getContentPane().add(scrollPane);
-		JButton showAll = new JButton("ShowData");
+//        getContentPane().add( scrollPane );
+//		JButton showAll = new JButton("ShowData");
+		
+//		showAll.addActionListener(new BaseActionHandler(table));
 
-		showAll.addActionListener(new BaseActionHandler(table));
+//		getContentPane().add( showAll,BorderLayout.SOUTH );
 
-		getContentPane().add(showAll, BorderLayout.SOUTH);
-
-		//  Create custom columns
-		new RowHeaderColumnModel(table); //	for zeroth column
-		for (int cnt = 1; cnt < columnNumber; cnt++)
+        //  Create custom columns
+		new RowHeaderColumnModel(table);		//	for zeroth column
+		for(int cnt = 1; cnt < columnNumber; cnt++)
 		{
 			new SpecimenColumnModel(table, cnt);
 		}
-		//		SpecimenColumnModel SpecimenFieldColumn1= new SpecimenColumnModel(table, 1);
-		//		SpecimenColumnModel SpecimenFieldColumn2 = new SpecimenColumnModel(table, 2);
-		//		SpecimenColumnModel SpecimenFieldColumn3 = new SpecimenColumnModel(table, 3);
 
-	}
-
-	public static void main(String[] args)
-	{
-		MultipleSpecimenApplet frame = new MultipleSpecimenApplet();
-	}
-
+		tablePanel.add( scrollPane );
+    }
+ 
+    public static void main(String[] args)
+    {
+    	MultipleSpecimenApplet frame = new MultipleSpecimenApplet();
+    }
+    
+    private void createButtonPanel(JPanel panel)
+    {
+    	JButton copy = new JButton("Copy");
+    	JButton paste = new JButton("Paste");
+    	JLabel placeHolder = new JLabel("     ");
+    	panel.add(copy);panel.add(placeHolder );panel.add(paste );
+    }
+    
+    private void createLinkPanel(JPanel panel)
+    {
+     	JLabel label1 = new JLabel("1 - 10");
+    	JLabel label2 = new JLabel("11 - 20");
+    	JLabel label3 = new JLabel("21 - 30");
+    	panel.add(label1);panel.add(label2);panel.add(label3);
+    }
+    
+    private void createFooterPanel(JPanel panel)
+    {
+    	JButton submit = new JButton("Submit");
+    	JLabel placeHolder = new JLabel("       ");
+    	panel.add(placeHolder );panel.add(submit );
+    }
 	/**
 	 * This method initialize data lists 
 	 */
@@ -95,5 +184,4 @@ public class MultipleSpecimenApplet extends BaseApplet
 		}
 		return null;
 	}
-
 }
