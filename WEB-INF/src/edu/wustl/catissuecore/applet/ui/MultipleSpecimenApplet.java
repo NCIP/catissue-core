@@ -15,6 +15,7 @@ import javax.swing.JTable;
 
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.applet.component.BaseTable;
+import edu.wustl.catissuecore.applet.listener.SpecimenSubmitButtonHandler;
 import edu.wustl.catissuecore.applet.listener.TableModelChangeHandler;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
@@ -31,7 +32,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	 * Default Serial Version ID
 	 */
 	private static final long serialVersionUID = 1L;
-
+	private BaseTable table;
+	
 	public void doInit()
     {
 		// Creating Layout
@@ -100,9 +102,10 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		add(outerPanel);
 		// --------------------
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));
+//		int columnNumber = 4;
 		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());		
 	    
-		BaseTable table = new BaseTable(model)
+		table = new BaseTable(model)
         {
             public Class getColumnClass(int column)
             {
@@ -159,6 +162,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
     private void createFooterPanel(JPanel panel)
     {
     	JButton submit = new JButton("Submit");
+    	submit.addActionListener(new SpecimenSubmitButtonHandler(table));
     	JLabel placeHolder = new JLabel("       ");
     	panel.add(placeHolder );panel.add(submit );
     }
