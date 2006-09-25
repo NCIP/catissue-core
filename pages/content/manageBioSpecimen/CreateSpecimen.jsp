@@ -325,8 +325,8 @@
 				    </td>
 				    <td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this)"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onClassOrLabelOrBarcodeChange()">
+				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onTypeChange(this);onClassOrLabelOrBarcodeChange()">
 							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -381,6 +381,7 @@
 					%>
 				    		<td class="formField" colspan="2">
 				     			<html:text styleClass="formFieldSized15" size="30" styleId="concentration" property="concentration" readonly="<%=readOnlyForAll%>" disabled="false"/>
+								&nbsp;<bean:message key="specimen.concentrationUnit"/>
 				   			</td>
 				    <%
 						}
