@@ -356,7 +356,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 
 		String type[] = {Constants.SELECT_OPTION};
 		//Specimen Type
-		typeList = new JComboBox(model.getSpecimenTypeValues(column));
+		typeList = new JComboBox(model.getSpecimenTypeValues(null));
 		
 		//TissueSite
 		tissueSiteList = new JComboBox(model.getTissueSiteValues());
@@ -481,10 +481,11 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		deriveButton.addActionListener(buttonHandler);
 	}
 
-	public void refreshColumn(String name)
+	public void specimenClassUpdated(String name)
 	{
 		//Specimen Type JComboBox typeList;
 		setTypeListModel(name); 
+		setConcentrationStatus();
 		
 	}
 
@@ -686,10 +687,19 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		System.out.println("IN SCM setTypeListModel b4 tableModel");
 		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel)table.getModel();
 		System.out.println("IN SCM setTypeListModel tableModel retrieved");
-		 Object o[] = model.getSpecimenTypeList(className).toArray();
+		 Object o[] = model.getSpecimenTypeValues(className);
 		DefaultComboBoxModel typeComboModel = new DefaultComboBoxModel(o) ;
 		this.typeList.setModel(typeComboModel);
 		System.out.println("IN SCM setTypeListModel Type set");
+	}
+
+	private void setConcentrationStatus() {
+		System.out.println("IN SCM enableConcentration b4 tableModel");
+		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel)table.getModel();
+		int col = table.getSelectedColumn() ;
+		this.concentration.setEnabled(model.getConcentrationStatus(col) );
+		
+		System.out.println("IN SCM enableConcentration concentration refreshed");
 	}
 
 	
