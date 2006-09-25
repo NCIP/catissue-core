@@ -429,10 +429,10 @@
 		  <transaction  src="${oracle.sql.dir}/catissuecore.sql"/>
 		  <transaction  src="${oracle.sql.dir}/InitDB_CreateTable.sql"/>
 		  <transaction  src="${common.sql.dir}/initDB_Insert_Common.sql"/>
-		  <transaction  src="${common.sql.dir}/AlterTable.sql"/>
+		  <transaction  src="${oracle.sql.dir}/AlterTable.sql"/>
 		  <transaction  src="${common.sql.dir}/CDE_DummyData_Common.sql"/>
 		  <transaction  src="${oracle.sql.dir}/CSM_Create_Oracle.sql"/>
-		  <transaction  src="${common.sql.dir}/createUser.sql"/>
+		  <transaction  src="${oracle.sql.dir}/createUser.sql"/>
 	      <transaction  src="${common.sql.dir}/insert_default_data.sql"/>	
 		  <transaction>commit;</transaction>	
     	  <classpath>
@@ -511,7 +511,21 @@ Thanking You,
 	</target>
 	
 	<!--First User Creation. Mandar : 02-May-2006 -->
-	<target name="firstUser">
+		<target name="firstUser">
+		<if>
+			<equals arg1="mysql" arg2="${database.type}"/>		
+			<then>
+				<antcall target="mysqlFirstUser"/>
+			</then>
+			<elseif>	
+				<equals arg1="oracle" arg2="${database.type}"/>		
+				<then>
+					<antcall target="oracleFirstUser"/>
+				</then>
+			</elseif>
+		</if>
+	</target>
+	<target name="oracleFirstUser">
 		<echo message="Encoding Password..."/>
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 	
@@ -530,7 +544,45 @@ Thanking You,
 			</echo>
 
 		<echo message="Modifying caTISSUECore SQL file for user information..."/>
-		<copy file="${common.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>		
+			<copy file="${oracle.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
+
+			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
+				<include name="createUser.sql"/>
+				<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
+				<replacefilter token="@@first.admin.institution@@" value="${first.admin.institution}"/>
+				<replacefilter token="@@first.admin.cancerresearchgroup@@" value="${first.admin.cancerresearchgroup}"/>
+				<replacefilter token="@@first.admin.emailAddress@@" value="${first.admin.emailAddress}"/>
+				<replacefilter token="@@first.admin.encodedPassword@@" value="${first.admin.encodedPassword}"/>
+			</replace>
+			
+			<copy todir="${oracle.sql.dir}" overwrite="true">
+				<fileset dir="${temp.dir}">
+					<include name="createUser.sql"/>
+				</fileset>
+			</copy>	
+		<delete dir="${temp.dir}"/>
+	</target>
+		<target name="mysqlFirstUser">
+		<echo message="Encoding Password..."/>
+		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+	
+		<java classname="edu.wustl.common.util.global.PasswordManager" fork="true">
+			<classpath>
+				<pathelement path="${temp.dir}/catissuecore/WEB-INF/lib"/>
+				<pathelement location="${temp.dir}/catissuecore/WEB-INF/lib/commonpackage.jar"/>
+			</classpath>
+			<arg value="${base.dir}/catissuetmp.txt"/>
+			<arg value="${first.admin.password}"/>
+		</java>
+		
+		<property file="${base.dir}/catissuetmp.txt"/>
+			<echo>
+					Encoded Password ${first.admin.encodedPassword}
+			</echo>
+
+		<echo message="Modifying caTISSUECore SQL file for user information..."/>
+		<copy file="${common.sql.dir}/createUser.sql" todir="${temp.dir}" overwrite="true"/>
+
 			<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
 				<include name="createUser.sql"/>
 				<replacefilter token="@@first.admin.department@@" value="${first.admin.department}"/>
@@ -547,4 +599,5 @@ Thanking You,
 			</copy>	
 		<delete dir="${temp.dir}"/>
 	</target>
+	
 </project>
