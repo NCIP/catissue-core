@@ -18,6 +18,8 @@
 	<property name="junit.jar" value="${lib.dir}/junit-3.8.1.jar" />
 	<property name="cobertura.dir" value="${target.dir}/reports/coverage" />
 	<property name="report.dir" value="${base.dir}/WEB-INF" />
+	<property name="catissue.applet.dir" value="${base.dir}/Applet/catissue" />
+	
 
 
 
@@ -148,7 +150,7 @@
 	<!-- Create the Applet JAR Ends-->
 
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="build_war" depends="init, compile">
+	<target name="build_war" depends="init, compile, build_catissue_applet_jar">
 		<delete file="catissuecore.war" />
 		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml">
 			<fileset dir="${base.dir}">
@@ -389,4 +391,34 @@
 		<delete file="${cobertura.dir}/coverage.ser" />
 	</target>
 	
+ <!-- Create the Applet JAR Begins-->
+
+    <target name="build_catissue_applet_jar" depends="compile">
+                <mkdir dir="${catissue.applet.dir}"/>
+                <delete>
+                            <fileset dir="${catissue.applet.dir}">
+                                        <exclude name="**/CVS*" />
+                                        <exclude name="**/java.policy.applet*" />
+                            </fileset>
+                </delete>
+                <copy todir="${catissue.applet.dir}">
+                           <fileset dir="${target.dir}">
+                                        <include name="**/edu/wustl/catissuecore/applet/**" />
+                                        <include name="**/edu/wustl/catissuecore/util/global/Constants.class" />
+                                        <include name="**/edu/wustl/common/util/global/Validator.class" />
+                            </fileset>
+                </copy>
+                <jar taskname="buildJar" jarfile="${applet.dir}/CaTissueApplet.jar">
+                            <fileset dir="${catissue.applet.dir}">
+                                        <exclude name="**/CVS*" />
+                                        <exclude name="**/java.policy.applet*" />
+                            </fileset>
+                </jar>
+                <delete includeemptydirs="true">
+                            <fileset dir="${catissue.applet.dir}">
+                                        <include name="**/*" />
+                                        <exclude name="**/CVS*" />                                     
+                            </fileset>
+                </delete>
+    </target>
 </project>
