@@ -100,7 +100,7 @@ public class CreateSpecimenAction extends SecureAction
 				createForm.setParentSpecimenLabel(createForm.getLabel());
 				createForm.setLabel("");		
 			}
-			if (request.getParameter("Change") != null)
+			if ((createForm.getCheckedButton().equals("1")&&createForm.getParentSpecimenLabel() != null) || (createForm.getCheckedButton().equals("2")&& createForm.getParentSpecimenBarcode() != null))
 			{
 				String errorString = null;
 				String columnName = null;
@@ -128,6 +128,16 @@ public class CreateSpecimenAction extends SecureAction
 					long cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
 					String spClass = createForm.getClassName();
 					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0);
+					if(containerMap.isEmpty())
+					{
+						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+						if (errors == null || errors.size() == 0)
+						{
+							errors = new ActionErrors();
+						}
+						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("storageposition.not.available"));
+						saveErrors(request,errors);
+					}
 					initialValues = checkForInitialValues(containerMap);
 
 				}

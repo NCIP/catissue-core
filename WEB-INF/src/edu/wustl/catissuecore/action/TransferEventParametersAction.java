@@ -20,6 +20,10 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+
 import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
@@ -70,7 +74,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				String positionOne = null;
 				String positionTwo = null;
 				String storageContainerID = null;
-				String 	fromPositionData = "virtual Location";
+				String fromPositionData = "virtual Location";
 				if (specimen.getStorageContainer() != null)
 				{
 					positionOne = specimen.getPositionDimensionOne().toString();
@@ -97,7 +101,19 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				Logger.out.info("Spcimen Class:" + specimen.getClassName());
 				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(specimen
 						.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-						.getCollectionProtocol().getId().longValue(), specimen.getClassName(),0);
+						.getCollectionProtocol().getId().longValue(), specimen.getClassName(), 0);
+
+				if (containerMap.isEmpty())
+				{
+					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+					if (errors == null || errors.size() == 0)
+					{
+						errors = new ActionErrors();
+					}
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"storageposition.not.available"));
+					saveErrors(request, errors);
+				}
 				initialValues = checkForInitialValues(containerMap);
 
 			}

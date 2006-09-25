@@ -24,6 +24,9 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -311,6 +314,16 @@ public class NewSpecimenAction extends SecureAction
 					String spClass = specimenForm.getClassName();
 					Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
 					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass,0);
+					if(containerMap.isEmpty())
+					{
+						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+						if (errors == null || errors.size() == 0)
+						{
+							errors = new ActionErrors();
+						}
+						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("storageposition.not.available"));
+						saveErrors(request,errors);
+					}
 					initialValues = checkForInitialValues(containerMap);
 
 				}
