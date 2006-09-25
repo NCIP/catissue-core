@@ -1223,4 +1223,29 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_ATTRIBUTE_KEY =   "specimenAttributeKey";
 	public static final String MULTIPLE_SPECIMEN_APPLET_NAME = "MultipleSpecimenApplet";
 	public static final String INPUT_APPLET_DATA = "inputAppletData";
+	
+	// Start Specimen Array Applet related constants
+	
+	public static final String SPECIMEN_ARRAY_APPLET = "edu/wustl/catissuecore/applet/ui/SpecimenArrayApplet.class";
+	public static final String SPECIMEN_ARRAY_APPLET_NAME = "specimenArrayApplet";
+	
+	public static final String SPECIMEN_ARRAY_CONTENT_KEY = "SpecimenArrayContentKey";
+	
+	public static final String SPECIMEN_LABEL_COLUMN_NAME = "label";
+	public static final String SPECIMEN_BARCODE_COLUMN_NAME = "barcode";
+	public static final String ARRAY_SPECIMEN_DOES_NOT_EXIST_EXCEPTION_MESSAGE = "Please enter valid specimen for specimen array!!specimen does not exist  ";
+	public static final String ARRAY_NO_SPECIMEN__EXCEPTION_MESSAGE = "Specimen Array should contain at least one specimen";
+	public static final String ARRAY_SPEC_NOT_COMPATIBLE_EXCEPTION_MESSAGE = "Please add compatible specimens to specimen array (belong to same specimen class & specimen types of Array)";
+	/**
+	 * Specify the SPECIMEN_ARRAY_LIST as key for specimen array type list 
+	 */
+	public static final String SPECIMEN_ARRAY_TYPE_LIST = "specimenArrayList";
+	public static final String SPECIMEN_ARRAY_CLASSNAME = "edu.wustl.catissuecore.domain.SpecimenArray";
+	public static final String SPECIMEN_ARRAY_TYPE_CLASSNAME = "edu.wustl.catissuecore.domain.SpecimenArrayType";
+	// End
+	
+	// Common Applet Constants
+	public static final String APPLET_SERVER_HTTP_START_STR = "http://";
+	public static final String APPLET_SERVER_URL_PARAM_NAME = "serverURL";
+
 }
