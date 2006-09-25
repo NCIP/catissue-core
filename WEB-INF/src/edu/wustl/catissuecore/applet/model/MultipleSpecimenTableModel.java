@@ -1,12 +1,12 @@
 
 package edu.wustl.catissuecore.applet.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
-import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -202,14 +202,19 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public List getSpecimenTypeList(String specimenClass)
 	{
-		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
-		return (List) specimenTypeMap.get(specimenClass);
+//		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
+//		return (List) specimenTypeMap.get(specimenClass);
+		ArrayList aList = new ArrayList();
+		for(int i=1;i<5;i++)
+			aList.add(specimenClass + "_"+i);
+		
+		return aList;
 	}
 
-	public Object[] getSpecimenTypeValues(int column)
+	public Object[] getSpecimenTypeValues(String specimenClass)
 	{
 		System.out.println("get type values called");
-		String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, column);
+		/*String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, column);*/
 		if (specimenClass == null ) {
 			specimenClass = Constants.SELECT_OPTION; 
 	    }
@@ -321,5 +326,15 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		return specimenKey;
 	}
 
+	public boolean getConcentrationStatus(int column)
+	{
+		String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, column);
+		
+		if(specimenClass.equalsIgnoreCase(Constants.MOLECULAR)) {
+			return true;
+		} 
+		
+		return false;
+	}
 
 }
