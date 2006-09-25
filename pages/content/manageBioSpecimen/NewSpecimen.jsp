@@ -29,6 +29,16 @@
 
 	String currentReceivedDate = "";
 	String currentCollectionDate = "";
+	if (form != null) 
+	{
+		currentReceivedDate = form.getReceivedEventDateOfEvent();
+		if(currentReceivedDate == null)
+				currentReceivedDate = "";
+		currentCollectionDate = form.getCollectionEventdateOfEvent();
+		if(currentCollectionDate == null)
+				currentCollectionDate = "";
+	}
+	
 	if (reqPath != null)
 		appendingPath = reqPath + "|/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
 	
@@ -37,15 +47,7 @@
 	   		if(form != null)
 	   		{
 		   		appendingPath = "/NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&id="+form.getId() ;
-		   		//System.out.println("---------- NSP JSP -------- : "+ appendingPath);
-				currentReceivedDate = form.getReceivedEventDateOfEvent();
-				if(currentReceivedDate == null)
-					currentReceivedDate = "";
-
-				currentCollectionDate = form.getCollectionEventdateOfEvent();
-				if(currentCollectionDate == null)
-					currentCollectionDate = "";
-
+		   		//System.out.println("---------- NSP JSP -------- : "+ appendingPath);				
 		   	}
 	   	}
 	
