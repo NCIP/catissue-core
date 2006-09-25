@@ -37,7 +37,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	public void doInit()
     {
 		// Creating Layout
-		setLayout(new FlowLayout());
+		getContentPane().setLayout(new FlowLayout());
 
 		JPanel buttonPanel;
 		JPanel linkPanel;
@@ -99,7 +99,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 //		outerPanel.add(tablePanel);
 //		outerPanel.add(footerPanel);
 		
-		add(outerPanel);
+	    getContentPane().add(outerPanel);
 		// --------------------
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));
 //		int columnNumber = 4;
