@@ -4,6 +4,7 @@ import java.awt.Component;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -18,6 +19,7 @@ import javax.swing.table.TableColumnModel;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.component.BaseTable;
+import edu.wustl.catissuecore.applet.listener.BaseFocusHandler;
 import edu.wustl.catissuecore.applet.listener.ButtonHandler;
 import edu.wustl.catissuecore.applet.listener.ClassComboBoxHandler;
 import edu.wustl.catissuecore.applet.listener.CollectionGroupItemHandler;
@@ -417,20 +419,25 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		ComboBoxHandler comboBoxHandler = new ComboBoxHandler(table);
 		MapButtonHandler mapButtonHandler = new MapButtonHandler(table);
 		ButtonHandler buttonHandler = new ButtonHandler(table);
+		BaseFocusHandler baseFocusHandler = new BaseFocusHandler(table);
 		
 		//Specimen Collection Group
 		specimenCollectionGroup.addActionListener(textHandler);
 		rbspecimenGroup.addItemListener(collectionGroupItemHandler );
+		specimenCollectionGroup.addFocusListener(baseFocusHandler);
 		
 		//Parent Specimen 
 		parentSpecimen.addActionListener(textHandler);
 		rbparentSpecimen.addItemListener(parentSpecimenItemHandler);
+		parentSpecimen.addFocusListener(baseFocusHandler);
 		
 		// Label
 		label.addActionListener(textHandler);
+		label.addFocusListener(baseFocusHandler);
 		
 		// Barcode
 		barCode.addActionListener(textHandler);
+		barCode.addFocusListener(baseFocusHandler);
 
 		//Specimen Class
 		classList.addActionListener(classComboBoxHandler);
@@ -449,9 +456,11 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		
 		// Quantity
 		quantity.addActionListener(textHandler);
+		quantity.addFocusListener(baseFocusHandler);
 
 		// Concentration
 		concentration.addActionListener(textHandler);
+		concentration.addFocusListener(baseFocusHandler);
 		
 		//For Storage Location
 		mapButton.addActionListener(mapButtonHandler);
@@ -472,4 +481,216 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		deriveButton.addActionListener(buttonHandler);
 	}
 
+	public void refreshColumn(String name)
+	{
+		//Specimen Type JComboBox typeList;
+		setTypeListModel(name); 
+		
+	}
+
+	//--------------- GETTER SETTER ------------------------------------
+	/**
+	 * @return Returns the barCode.
+	 */
+	public String getBarCode() {
+		return barCode.getText();
+	}
+	/**
+	 * @param barCode The barCode to set.
+	 */
+	public void setBarCode(String barCode) {
+		this.barCode.setText(barCode);
+	}
+	/**
+	 * @return Returns the classList.
+	 */
+	public String getClassList() {
+		return classList.getSelectedItem().toString()  ;
+	}
+	/**
+	 * @param classList The classList to set.
+	 */
+	public void setClassList(String className) {
+		this.classList.setSelectedItem(className);
+	}
+	/**
+	 * @return Returns the comments.
+	 */
+	public String getComments() {
+		return comments.getText() ;
+	}
+	/**
+	 * @param comments The comments to set.
+	 */
+	public void setComments(String comments) {
+		this.comments.setText(comments);
+	}
+	/**
+	 * @return Returns the concentration.
+	 */
+	public String getConcentration() {
+		return concentration.getText() ;
+	}
+	/**
+	 * @param concentration The concentration to set.
+	 */
+	public void setConcentration(String concentration) {
+		this.concentration.setText(concentration);
+	}
+	/**
+	 * @return Returns the label.
+	 */
+	public String getLabel() {
+		return label.getText() ;
+	}
+	/**
+	 * @param label The label to set.
+	 */
+	public void setLabel(String label) {
+		this.label.setText(label);
+	}
+	/**
+	 * @return Returns the location.
+	 */
+	public String getLocation() {
+		return location.getText() ;
+	}
+	/**
+	 * @param location The location to set.
+	 */
+	public void setLocation(String location) {
+		this.location.setText(location);
+	}
+	/**
+	 * @return Returns the parentSpecimen.
+	 */
+	public String getParentSpecimen() {
+		return parentSpecimen.getText() ;
+	}
+	/**
+	 * @param parentSpecimen The parentSpecimen to set.
+	 */
+	public void setParentSpecimen(String parentSpecimen) {
+		this.parentSpecimen.setText(parentSpecimen);
+	}
+	/**
+	 * @return Returns the pathologicalStatusList.
+	 */
+	public String getPathologicalStatusList() {
+		return pathologicalStatusList.getSelectedItem().toString()   ;
+	}
+	/**
+	 * @param pathologicalStatusList The pathologicalStatusList to set.
+	 */
+	public void setPathologicalStatusList(String pathologicalStatus) {
+		this.pathologicalStatusList.setSelectedItem(pathologicalStatus);
+	}
+	/**
+	 * @return Returns the quantity.
+	 */
+	public String getQuantity() {
+		return quantity.getText() ;
+	}
+	/**
+	 * @param quantity The quantity to set.
+	 */
+	public void setQuantity(String quantity) {
+		this.quantity.setText(quantity);
+	}
+	/**
+	 * @return Returns the rbparentSpecimen.
+	 */
+	public boolean getRbparentSpecimen() {
+		return rbparentSpecimen.isSelected() ;
+	}
+	/**
+	 * @param rbparentSpecimen The rbparentSpecimen to set.
+	 */
+	public void setRbparentSpecimen(boolean rbparentSpecimen) {
+		this.rbparentSpecimen.setSelected(rbparentSpecimen);
+	}
+	/**
+	 * @return Returns the rbspecimenGroup.
+	 */
+	public boolean getRbspecimenGroup() {
+		return rbspecimenGroup.isSelected() ;
+	}
+	/**
+	 * @param rbspecimenGroup The rbspecimenGroup to set.
+	 */
+	public void setRbspecimenGroup(boolean rbspecimenGroup) {
+		this.rbspecimenGroup.setSelected(rbspecimenGroup);
+	}
+	/**
+	 * @return Returns the specimenCollectionGroup.
+	 */
+	public String getSpecimenCollectionGroup() {
+		return specimenCollectionGroup.getText() ;
+	}
+	/**
+	 * @param specimenCollectionGroup The specimenCollectionGroup to set.
+	 */
+	public void setSpecimenCollectionGroup(String specimenCollectionGroup) {
+		this.specimenCollectionGroup.setText(specimenCollectionGroup);
+	}
+	/**
+	 * @return Returns the tissueSideList.
+	 */
+	public String getTissueSideList() {
+		return tissueSideList.getSelectedItem().toString()  ;
+	}
+	/**
+	 * @param tissueSideList The tissueSideList to set.
+	 */
+	public void setTissueSideList(String tissueSide) {
+		this.tissueSideList.setSelectedItem(tissueSide);
+	}
+	/**
+	 * @return Returns the tissueSiteList.
+	 */
+	public String getTissueSiteList() {
+		return tissueSiteList.getSelectedItem().toString()  ;
+	}
+	/**
+	 * @param tissueSiteList The tissueSiteList to set.
+	 */
+	public void setTissueSiteList(String tissueSite) {
+		this.tissueSiteList.setSelectedItem( tissueSite);
+	}
+	/**
+	 * @return Returns the typeList.
+	 */
+	public String getTypeList() {
+		return typeList.getSelectedItem().toString()  ;
+	}
+	/**
+	 * @param typeList The typeList to set.
+	 */
+	public void setTypeList(String type) {
+		this.typeList.setSelectedItem(type);
+	}
+	/**
+	 * @return Returns the unit.
+	 */
+	public String getUnit() {
+		return unit.getText() ;
+	}
+	/**
+	 * @param unit The unit to set.
+	 */
+	public void setUnit(String unit) {
+		this.unit.setText(unit);
+	}
+
+	private void setTypeListModel(String className) {
+		System.out.println("IN SCM setTypeListModel b4 tableModel");
+		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel)table.getModel();
+		System.out.println("IN SCM setTypeListModel tableModel retrieved");
+		 Object o[] = model.getSpecimenTypeList(className).toArray();
+		DefaultComboBoxModel typeComboModel = new DefaultComboBoxModel(o) ;
+		this.typeList.setModel(typeComboModel);
+		System.out.println("IN SCM setTypeListModel Type set");
+	}
+
+	
 }
