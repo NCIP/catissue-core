@@ -23,26 +23,25 @@
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
     
     String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;;
-
-		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
-		String appendingPath = "/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
-		if (reqPath != null)
-			appendingPath = reqPath + "|/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
-	
-		String currentCollectionProtocolDate="";
-	   	if(!operation.equals("add") )
-	   	{
-	   		Object obj = request.getAttribute("collectionProtocolForm");
-			if(obj != null && obj instanceof CollectionProtocolForm)
-			{
-				CollectionProtocolForm form = (CollectionProtocolForm)obj;
-		   		appendingPath = "/CollectionProtocolSearch.do?operation=search&pageOf=pageOfCollectionProtocol&id="+form.getId() ;
-
-				currentCollectionProtocolDate = form.getStartDate();
-				if(currentCollectionProtocolDate == null)
-					currentCollectionProtocolDate = "";
-		   	}
-	   	}
+	String currentCollectionProtocolDate="";
+	CollectionProtocolForm form = (CollectionProtocolForm) request.getAttribute("collectionProtocolForm");
+	if(form != null)
+	{	
+		currentCollectionProtocolDate = form.getStartDate();
+		if(currentCollectionProtocolDate == null)
+			currentCollectionProtocolDate = "";				
+	}
+	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
+	String appendingPath = "/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";
+	if (reqPath != null)
+		appendingPath = reqPath + "|/CollectionProtocol.do?operation=add&pageOf=pageOfCollectionProtocol";	
+	if(!operation.equals("add"))
+	{
+		if(form != null)
+		{
+			appendingPath = "/CollectionProtocolSearch.do?operation=search&pageOf=pageOfCollectionProtocol&id="+form.getId() ;
+		}
+	}		
 		
     boolean readOnlyValue, readOnlyForAll=false;
     if (operation.equals(Constants.EDIT))
@@ -407,6 +406,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 					Integer collectionProtocolYear = new Integer(Utility.getYear(currentCollectionProtocolDate ));
 					Integer collectionProtocolMonth = new Integer(Utility.getMonth(currentCollectionProtocolDate ));
 					Integer collectionProtocolDay = new Integer(Utility.getDay(currentCollectionProtocolDate ));
+										
 				%>
 				<ncombo:DateTimeComponent name="startDate"
 							  id="startDate"
@@ -533,7 +533,10 @@ function insRow(subdivtag,iCounter,blockCounter)
 
 <!--  outermostdiv start --><!-- outer div tag  for entire block -->
 
-<table><tbody id="outerdiv"><tr><td>
+<table width="100%">
+<tbody id="outerdiv">
+<tr>
+<td>
 
 <%! Map map; %>
 <%
