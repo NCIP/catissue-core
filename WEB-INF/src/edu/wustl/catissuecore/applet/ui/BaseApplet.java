@@ -17,6 +17,8 @@ import javax.swing.JApplet;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import edu.wustl.catissuecore.util.global.Constants;
+
 /**
  * <p> Base Applet class for all applets.It will contain basic functionality
  * common across to other child applets which will be derived from it.   
@@ -32,6 +34,12 @@ public class BaseApplet extends JApplet {
 	 * Default Serial Version ID
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * Specify the serverURL field 
+	 */
+	protected String serverURL;
+	
 
 	/**
 	 * Default Constructor.
@@ -56,6 +64,8 @@ public class BaseApplet extends JApplet {
 	 * Used to perform pre initialization operation 
 	 */
 	protected void preInit() {
+		// set server URL
+		serverURL = getParameter(Constants.APPLET_SERVER_URL_PARAM_NAME);
 		setLookAndFeel();
 	}
 	
