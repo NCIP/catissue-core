@@ -25,7 +25,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 
 	public void doInit()
     {
-		int columnNumber = 4; 
+		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen")); 
 		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber);
         
 		BaseTable table = new BaseTable(model)

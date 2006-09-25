@@ -8,10 +8,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
+import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * This action provides common base to all the action that handles request from an applet.
@@ -50,4 +54,19 @@ public class BaseAppletAction extends DispatchAction
 		AppletModelInterface model = (AppletModelInterface) inputStream.readObject();
 		return model.getData();
 	}
+
+	/**
+	 * This method is overided do save input map before reading anything from request.
+	 * 
+	 * @see org.apache.struts.actions.DispatchAction#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 */
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		Map inputMap = readMapFromRequest(request);
+		request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
+
+		return super.execute(actionMapping, actionForm, request, response);
+	}
+
 }

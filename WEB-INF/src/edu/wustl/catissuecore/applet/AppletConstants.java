@@ -116,4 +116,7 @@ public interface AppletConstants
 	short SPECIMEN_EXTERNAL_IDENTIFIERS_ROW_NO = 14;
 	short SPECIMEN_BIOHAZARDS_ROW_NO = 15;
 	short SPECIMEN_DERIVE_ROW_NO = 16;
+	
+	static final String  NO_OF_SPECIMENS = "NO_OF_SPECIMENS";
+	// this is key to put specimen map in session.
 }

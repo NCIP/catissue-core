@@ -64,6 +64,7 @@ PUBLIC
 		
 		<form-bean name="arrayForm" type="edu.wustl.catissuecore.actionForm.SpecimenArrayForm"/>
 		<form-bean name="arrayTypeForm" type="edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm"/>
+		<form-bean name="multipleSpecimenForm" type="edu.wustl.catissuecore.actionForm.MultipleSpecimenForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -2709,7 +2710,24 @@ PUBLIC
 	<!-- Similar Containers Action -->
 	<action path="/SpecimenArrayAppletAction" type="edu.wustl.catissuecore.action.SpecimenArrayAppletAction">
 	</action>
-	<action path="/MultipleSpecimenAction" type="edu.wustl.catissuecore.action.MultipleSpecimenAction" parameter="method">
+
+	<action path="/MultipleSpecimenAppletAction" type="edu.wustl.catissuecore.action.MultipleSpecimenAppletAction" parameter="method">
+	</action>
+	
+	<action path="/NewMultipleSpecimenAction" type="edu.wustl.catissuecore.action.NewMultipleSpecimenAction" parameter="method" 
+	   name="multipleSpecimenForm"
+	   scope="request" validate="true" input="/InitMultipleSpecimen.do?menuSelected=15">
+		<forward name="comments" path="/pages/content/manageBioSpecimen/comments.jsp" />
+		<forward name="specimen" path=".catissuecore.multipleSpecimenDef" />
+	</action>
+	
+	<action path="/InitMultipleSpecimen"
+		type="edu.wustl.catissuecore.action.InitMultipleSpecimenAction"
+		name="multipleSpecimenForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path=".catissuecore.initMultipleSpecimenDef" />
+		<forward name="failure" path=".catissuecore.initMultipleSpecimenDef" />
 	</action>
 	
 	</action-mappings>

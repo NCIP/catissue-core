@@ -73,12 +73,53 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
+		if (obj instanceof Collection)
+		{
+			insertMultipleSpecimen((Collection) obj, dao, sessionDataBean);
+		}
+		else
+		{
+			insertSingleSpecimen((Specimen) obj, dao, sessionDataBean, false);
+		}
+	}
+
+	/**
+	 * Insert multiple specimen into the data base.
+	 * @param specimenList
+	 * @param dao
+	 * @param sessionDataBean
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	private void insertMultipleSpecimen(Collection specimenList, DAO dao,
+			SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		Iterator specimenIterator = specimenList.iterator();
+		while (specimenIterator.hasNext())
+		{
+			Specimen specimen = (Specimen) specimenIterator.next();
+			insertSingleSpecimen(specimen, dao, sessionDataBean, true);
+		}
+	}
+
+	/**
+	 * Insert single specimen into the data base.
+	 * @param specimen
+	 * @param dao
+	 * @param sessionDataBean
+	 * @param partOfMulipleSpecimen
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 */
+	private void insertSingleSpecimen(Specimen specimen, DAO dao, SessionDataBean sessionDataBean,
+			boolean partOfMulipleSpecimen) throws DAOException, UserNotAuthorizedException
+	{
 		try
 		{
-			Set protectionObjects = new HashSet();
-			Specimen specimen = (Specimen) obj;
 
-			setSpecimenAttributes(dao, specimen, sessionDataBean);
+			Set protectionObjects = new HashSet();
+
+			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
 			specimen.getStorageContainer();
 			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true);
 			specimen.setLineage(Constants.NEW_SPECIMEN);
@@ -154,6 +195,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			throw handleSMException(e);
 		}
+
 	}
 
 	private String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
@@ -465,7 +507,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				throw new DAOException(ApplicationProperties
 						.getValue("errors.specimen.not.disabled.no.disposalevent"));
 			}
-			
+
 			setDisableToSubSpecimen(specimen);
 			Logger.out.debug("specimen.getActivityStatus() " + specimen.getActivityStatus());
 			Long specimenIDArr[] = new Long[1];
@@ -531,14 +573,25 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		}
 	}
 
-	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean)
-			throws DAOException, SMException
+	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean,
+			boolean isCollectionGroupName) throws DAOException, SMException
 	{
 		//Load & set Specimen Collection Group if present
 		if (specimen.getSpecimenCollectionGroup() != null)
 		{
-			Object specimenCollectionGroupObj = dao.retrieve(SpecimenCollectionGroup.class
-					.getName(), specimen.getSpecimenCollectionGroup().getId());
+			Object specimenCollectionGroupObj = null;
+			if (isCollectionGroupName)
+			{
+				List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
+						Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
+				specimenCollectionGroupObj = spgList.get(0);
+			}
+			else
+			{
+				specimenCollectionGroupObj = dao.retrieve(SpecimenCollectionGroup.class.getName(),
+						specimen.getSpecimenCollectionGroup().getId());
+
+			}
 			if (specimenCollectionGroupObj != null)
 			{
 				SpecimenCollectionGroup spg = (SpecimenCollectionGroup) specimenCollectionGroupObj;
@@ -755,8 +808,25 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
-		Specimen specimen = (Specimen) obj;
+		boolean result;
 
+		if (obj instanceof Collection)
+		{
+			result = validateMultipleSpecimen((Collection) obj, dao, operation);
+		}
+		else
+		{
+			result = validateSingleSpecimen((Specimen) obj, dao, operation);
+		}
+		return result;
+	}
+
+	/**
+	 * validates single specimen. 
+	 */
+	private boolean validateSingleSpecimen(Specimen specimen, DAO dao, String operation)
+			throws DAOException
+	{
 		if (Constants.ALIQUOT.equals(specimen.getLineage()))
 		{
 			return true;
@@ -843,6 +913,22 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		}
 
 		return true;
+	}
+
+	/**
+	 * validates multiple specimen. Internally it for each specimen it innvokes validateSingleSpecimen. 
+	 */
+	private boolean validateMultipleSpecimen(Collection specimenList, DAO dao, String operation)
+			throws DAOException
+	{
+		Iterator specimenIterator = specimenList.iterator();
+		boolean result = true;
+		while (specimenIterator.hasNext() && result == true)
+		{
+			Specimen specimen = (Specimen) specimenIterator.next();
+			result = validateSingleSpecimen(specimen, dao, operation);
+		}
+		return result;
 	}
 
 	/* This function checks whether the storage position of a specimen is changed or not 

@@ -27,9 +27,9 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**
 	 * attributes of the specimen for which user can specify the values. 
 	 */
-	 String[] specimenAttribute = {"SpecimenCollectionGroup:1_name", "parentSpecimen",
-			"label", "barcode", "class", "type", "SpecimenCharacteristics:1_tissueSite",
-			"SpecimenCharacteristics:1_tissueSide", "pathologicalStatus", "quantity",
+	String[] specimenAttribute = {"SpecimenCollectionGroup_name", "parentSpecimen", "label",
+			"barcode", "class", "type", "SpecimenCharacteristics_tissueSite",
+			"SpecimenCharacteristics_tissueSide", "pathologicalStatus", "Quantity_value",
 			"concentrationInMicrogramPerMicroliter", "storageContainer", "comments",
 			"specimenEventCollection", "externalIdentifierCollection", "biohazardCollection",
 			"derive"};
@@ -37,10 +37,10 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**
 	 * Row headers for the attributes. This corrosponds to display value for each of the  specimenAttribute in that order.
 	 */
-	 String[] rowHeaders = {"Specimen Group Name", "Parent", "Label", "Barcode", "Class",
-			"Type", "Tissue Site", "Tissue Side", "Pathological Status", "Quantity",
-			"Concentration", "Storage Position", "Comments", "Events", "External Identifier(s)",
-			"Biohazards", "Derive"};
+	String[] rowHeaders = {"Specimen Group Name", "Parent", "Label", "Barcode", "Class", "Type",
+			"Tissue Site", "Tissue Side", "Pathological Status", "Quantity", "Concentration",
+			"Storage Position", "Comments", "Events", "External Identifier(s)", "Biohazards",
+			"Derive"};
 
 	/**
 	 * Data structure maintianed by the model. Its key format is as follows:
@@ -65,7 +65,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 * */
 	Map specimenAttributeOptions;
 
-
 	/**
 	 * set default map. 
 	 */
@@ -74,10 +73,10 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		specimenMap = new HashMap();
 		this.columnCount = initialColumnCount;
 
-		for (int i = 0; i < rowHeaders.length; i++)
+		/*for (int i = 0; i < rowHeaders.length; i++)
 		{
 			setValueAt(rowHeaders[i], i, 0);
-		}
+		}*/
 
 		specimenAttributeOptions = initDataLists();
 		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
@@ -93,10 +92,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			return rowHeaders[row];
 		}
 
-		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_"
-				+ specimenAttribute[row];
-
-		return specimenMap.get(specimenKey);
+		return specimenMap.get(getKey(row,column));
 	}
 
 	/**
@@ -104,9 +100,10 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public void setValueAt(Object value, int row, int column)
 	{
-		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_"
-				+ specimenAttribute[row];
-		specimenMap.put(specimenKey, value);
+		if (column != 0)
+		{
+			specimenMap.put(getKey(row,column), value);
+		}
 	}
 
 	/**
@@ -180,17 +177,16 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		try
 		{
 			appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(
-					"http://localhost:8080/catissuecore/MultipleSpecimenAction.do?method=initData",
-					appletModel);
+					"http://localhost:8080/catissuecore/MultipleSpecimenAppletAction.do?method=initData", appletModel);
 
-			 /*Map tempMap = appletModel.getData();
+			/*Map tempMap = appletModel.getData();
 			 System.out.println(tempMap.get(Constants.SPECIMEN_TYPE_MAP));
 			 System.out.println(tempMap.get(Constants.SPECIMEN_CLASS_LIST));
 			 System.out.println(tempMap.get(Constants.TISSUE_SITE_LIST));
 			 System.out.println(tempMap.get(Constants.TISSUE_SIDE_LIST));
 			 System.out.println(tempMap.get(Constants.PATHOLOGICAL_STATUS_LIST));
 			 */
-			 
+
 			return appletModel.getData();
 		}
 		catch (Exception e)
@@ -214,6 +210,17 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		return (List) specimenTypeMap.get(specimenClass);
 	}
 
+	public Object[] getSpecimenTypeValues(int column)
+	{
+		System.out.println("get type values called");
+		String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, column);
+		if (specimenClass == null ) {
+			specimenClass = Constants.SELECT_OPTION; 
+	    }
+		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
+		return (Object[]) specimenTypeMap.get(specimenClass);
+	} 
+
 	/**
 	 * returns specimen class list
 	 * @return
@@ -221,7 +228,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public Object[] getSpecimenClassValues()
 	{
-		return (Object[])specimenAttributeOptions.get(Constants.SPECIMEN_CLASS_LIST);
+		return (Object[]) specimenAttributeOptions.get(Constants.SPECIMEN_CLASS_LIST);
 	}
 
 	/**
@@ -259,7 +266,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 
 		String specimenType = (String) getValueAt(AppletConstants.SPECIMEN_TYPE_ROW_NO, colNo);
 		String subTypeValue = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, colNo);
-		
+
 		String unit = "";
 
 		if (specimenType.equals("Fluid"))
@@ -298,4 +305,49 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		return unit;
 
 	}
+
+	public void submitSpecimens()
+	{
+		BaseAppletModel appletModel = new BaseAppletModel();
+		appletModel.setData(specimenMap);
+		specimenMap.put(AppletConstants.NO_OF_SPECIMENS,String.valueOf(getColumnCount()-1));
+		try
+		{
+			appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(
+					"http://localhost:8080/catissuecore/MultipleSpecimenAppletAction.do?method=submitSpecimens",
+					appletModel);
+
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Exception");
+		}
+		
+		//URL url = new URL(getDocumentBase(), "http://hostname.com/page.html");
+        
+
+	}
+
+	
+	public void specimenClassUpdated(int columnNo)
+	{
+		//---
+		//this.fireTableStructureChanged() ;
+		//---
+		fireTableCellUpdated(AppletConstants.SPECIMEN_BARCODE_ROW_NO,columnNo);
+		fireTableCellUpdated(AppletConstants.SPECIMEN_TYPE_ROW_NO,columnNo);
+	
+		
+		System.out.println("updating type " + AppletConstants.SPECIMEN_TYPE_ROW_NO +  " "+ columnNo);
+	}
+	
+	public String getKey(int row, int column) {
+		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_"
+		+ specimenAttribute[row];
+		
+		return specimenKey;
+	}
+
+
 }

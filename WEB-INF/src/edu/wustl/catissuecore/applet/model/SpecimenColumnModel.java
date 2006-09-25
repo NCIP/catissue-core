@@ -96,7 +96,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	JPanel storageLocationPanel;
 	
 	//For Comments
-	JTextField comments;
+	JButton comments;
 	
 	//Events 
 	JButton eventsButton;
@@ -152,7 +152,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 			}
 		}
 		// ---------------- Object creation --------------------
-		instantiateObjects(model);
+		instantiateObjects(model,column);
 		// --------------- Adding Listeners ---------------------
 		addListeners();
 		// ------------------------------------
@@ -162,7 +162,9 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		columnModel.getColumn(column).setCellEditor(this);
 		columnModel.getColumn(column).setResizable(false );
 		columnModel.getColumn(column).setPreferredWidth(175 );
+		
 	}
+	
 
 	/**
 	 *  This method returns the component used as cell renderer. 
@@ -314,7 +316,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	/*
 	 * This method initialises the components.
 	 */
-	private void instantiateObjects(MultipleSpecimenTableModel model)
+	private void instantiateObjects(MultipleSpecimenTableModel model, int column)
 	{
 		//Specimen Collection Group
 		specimenCollectionGroup = new JTextField(10);
@@ -352,7 +354,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 
 		String type[] = {Constants.SELECT_OPTION};
 		//Specimen Type
-		typeList = new JComboBox(type);
+		typeList = new JComboBox(model.getSpecimenTypeValues(column));
 		
 		//TissueSite
 		tissueSiteList = new JComboBox(model.getTissueSiteValues());
@@ -383,7 +385,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		storageLocationPanel.add(mapButton);
 		
 		//For Comments
-		comments = new JTextField(10);
+		comments = new JButton("Add");
 		
 		//Events 
 		eventsButton = new JButton("E");
@@ -455,7 +457,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		mapButton.addActionListener(mapButtonHandler);
 		
 		//For Comments
-		comments.addActionListener(textHandler);
+		comments.addActionListener(buttonHandler);
 		
 		//Events 
 		eventsButton.addActionListener(buttonHandler);

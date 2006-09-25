@@ -373,3 +373,16 @@ function  deleteCheckedNoSubmit(subdivtag,action,countElement,checkName,isOuterT
 	
 	return status;
 }
+
+function showCommentsDialog(operation,key) {
+ 		 var url ='NewMultipleSpecimenAction.do?method=showCommentsDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
+		 var properties = "height = 120; width:100px; Top:300; Left:350; center: Yes; resizable: no;status:no;help:no;toolbar :no";
+   		 window.open(url,"caTissuecore", properties);
+}
+
+function submitComments() 
+{
+  var form =  document.forms[0];
+  form.action =  form.action + "?method=submitComments";
+  form.submit();
+}

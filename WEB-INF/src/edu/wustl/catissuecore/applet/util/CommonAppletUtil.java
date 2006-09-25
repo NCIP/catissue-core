@@ -6,11 +6,17 @@
  * @version 1.1
  * Created on Sep 20, 2006
  */
+
 package edu.wustl.catissuecore.applet.util;
 
 import java.awt.Component;
 
 import javax.swing.JApplet;
+
+import netscape.javascript.JSObject;
+
+
+
 
 /**
  * <p> This util class is used to specify common applet level operations.
@@ -18,21 +24,44 @@ import javax.swing.JApplet;
  * @author Ashwin Gupta
  * @version 1.1
  */
-public final class CommonAppletUtil {
+public final class CommonAppletUtil
+{
 
 	/**
 	 * gets the base applet from a given component
 	 * @param component component
 	 * @return applet  
 	 */
-	public static JApplet getBaseApplet(Component component) {
-		while (component != null) {
-			if (component instanceof JApplet) {
+	public static JApplet getBaseApplet(Component component)
+	{
+		while (component != null)
+		{
+			if (component instanceof JApplet)
+			{
 				return ((JApplet) component);
 			}
 			component = component.getParent();
 		}
 		return null;
 	}
-	
+
+	/**
+	 * This method calls given javascript function.
+	 *  
+	 * @param component
+	 * @param functionName
+	 * @param parameters
+	 */
+	public static void callJavaScriptFunction(Component component, String functionName,
+			Object[] parameters)
+	{
+		JApplet applet = getBaseApplet(component);
+
+		if (applet != null)
+		{
+			JSObject jsObject = JSObject.getWindow(applet);
+			jsObject.call(functionName, parameters);
+		}
+	}
+
 }

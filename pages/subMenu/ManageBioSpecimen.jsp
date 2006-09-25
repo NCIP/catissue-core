@@ -92,6 +92,10 @@
 				<bean:message key="quickEvents.link" />
 			</a>
 		</div>
+		<div>
+			<a class="subMenuPrimary" href="InitMultipleSpecimen.do?menuSelected=15">Multiple specimens</a>
+		</div>
+		
 	</td>
 </tr>
 <!-- menu id : 16 -->

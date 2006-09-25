@@ -593,6 +593,17 @@
 		<put name="content" value="/pages/content/search/DistributionReport.jsp" />
 	</definition>
 
+	<definition name=".catissuecore.initMultipleSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/InitMultipleSpecimen.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.multipleSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/MultipleSpecimen.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.multipleSpecimenAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+            <put name="content" value="/pages/content/common/success.jsp" />
+    </definition>
 	
 	<!-- Distribution end -->
 
