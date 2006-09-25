@@ -55,7 +55,7 @@ public class ButtonHandler extends BaseActionHandler
 	/**
 	 * @return JS method name for this button.
 	 */
-	private String getJSMethodName()
+	protected String getJSMethodName()
 	{
 		return "showCommentsDialog";
 	}

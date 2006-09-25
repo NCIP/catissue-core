@@ -67,18 +67,14 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 
 	/**
 	 * set default map. 
+	 * @param specimenAttributeOptions  initialzation map.
 	 */
-	public MultipleSpecimenTableModel(int initialColumnCount)
+	public MultipleSpecimenTableModel(int initialColumnCount, Map specimenAttributeOptions)
 	{
 		specimenMap = new HashMap();
 		this.columnCount = initialColumnCount;
-
-		/*for (int i = 0; i < rowHeaders.length; i++)
-		{
-			setValueAt(rowHeaders[i], i, 0);
-		}*/
-
-		specimenAttributeOptions = initDataLists();
+		this.specimenAttributeOptions = specimenAttributeOptions;
+		
 		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
 	}
 
@@ -170,7 +166,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**
 	 * This method initialize data lists 
 	 */
-	private Map initDataLists()
+/*	private Map initDataLists()
 	{
 		BaseAppletModel appletModel = new BaseAppletModel();
 		appletModel.setData(new HashMap());
@@ -179,13 +175,13 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(
 					"http://localhost:8080/catissuecore/MultipleSpecimenAppletAction.do?method=initData", appletModel);
 
-			/*Map tempMap = appletModel.getData();
+			Map tempMap = appletModel.getData();
 			 System.out.println(tempMap.get(Constants.SPECIMEN_TYPE_MAP));
 			 System.out.println(tempMap.get(Constants.SPECIMEN_CLASS_LIST));
 			 System.out.println(tempMap.get(Constants.TISSUE_SITE_LIST));
 			 System.out.println(tempMap.get(Constants.TISSUE_SIDE_LIST));
 			 System.out.println(tempMap.get(Constants.PATHOLOGICAL_STATUS_LIST));
-			 */
+			 
 
 			return appletModel.getData();
 		}
@@ -198,7 +194,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		return null;
 	}
 
-	/**
+*/	/**
 	 * returns specimen type list for given specimen class.
 	 * 
 	 * @param specimenClass
@@ -305,30 +301,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		return unit;
 
 	}
-
-	public void submitSpecimens()
-	{
-		BaseAppletModel appletModel = new BaseAppletModel();
-		appletModel.setData(specimenMap);
-		specimenMap.put(AppletConstants.NO_OF_SPECIMENS,String.valueOf(getColumnCount()-1));
-		try
-		{
-			appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(
-					"http://localhost:8080/catissuecore/MultipleSpecimenAppletAction.do?method=submitSpecimens",
-					appletModel);
-
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.out.println("Exception");
-		}
-		
-		//URL url = new URL(getDocumentBase(), "http://hostname.com/page.html");
-        
-
-	}
-
 	
 	public void specimenClassUpdated(int columnNo)
 	{

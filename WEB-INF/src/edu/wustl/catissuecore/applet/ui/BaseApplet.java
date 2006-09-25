@@ -98,4 +98,13 @@ public class BaseApplet extends JApplet {
             e.printStackTrace();
         }
     }
+
+	
+	/**
+	 * @return Returns the serverURL.
+	 */
+	public String getServerURL()
+	{
+		return serverURL;
+	}
 }
