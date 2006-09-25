@@ -817,7 +817,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 			        	<%
 							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&cdeName=Tissue%20Site&propertyName="+fName;
 						%>
-				        <a href="#" onclick="javascript:NewWindow('<%=url%>','name','250','330','no');return false">
+				        <a href="#" onclick="javascript:NewWindow('<%=url%>','name','375','330','yes');return false">
 							<img src="images\Tree.gif" border="0" width="26" height="22" title='Tissue Site Selector'>
 						</a>
 					</td>
