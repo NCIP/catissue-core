@@ -22,7 +22,7 @@
     CODE = "edu/wustl/catissuecore/applet/ui/MultipleSpecimenApplet.class"
     ALT = "Mulitple specimen Applet"
     NAME = "<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>"
-    width="650" height="500" MAYSCRIPT>
+    width="750" height="650" MAYSCRIPT>
 	<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2">
 	<PARAM name="name" value="<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>">
 	<PARAM name="session_id" value="<%=session.getId()%>">
