@@ -553,7 +553,7 @@ public class NewSpecimenForm extends SpecimenForm
                 	String value2 = (String)biohazard.get(keyTwo);
                 	String value3 = (String)biohazard.get(keyThree);
                 	
-                	if(value1 == null || value2 == null || value3 == null)
+                	if(value1 == null  && value2 == null && value3 == null)
                 	{
                 		break;
                 	}
