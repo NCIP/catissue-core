@@ -423,6 +423,13 @@ function doUploadSpecimenArray()
 function createSpecimenArrayClicked()
 {
 		var form = document.forms[0];
+		var specimenArrayTypeVal = form.specimenArrayTypeId.value;
+		if (specimenArrayTypeVal == -1)
+		{
+			alert("Please select Valid Specimen Array Type !!");
+			return;
+		}
+		
 		//form.operation.value="CreateSpecimenArray";
 		form.subOperation.value="CreateSpecimenArray";
 		form.action = "SpecimenArray.do?menuSelected=20";
