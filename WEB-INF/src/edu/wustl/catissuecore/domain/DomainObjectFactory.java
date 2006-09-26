@@ -162,6 +162,9 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
             case Constants.SPECIMEN_ARRAY_TYPE_FORM_ID:
             	className = SpecimenArrayType.class.getName();
             	break;
+            case Constants.SPECIMEN_ARRAY_FORM_ID:
+            	className = SpecimenArray.class.getName();
+            	break;
         }
         return className;
     }
@@ -336,9 +339,11 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 			 case Constants.SIMILAR_CONTAINERS_FORM_ID :
 				 abstractDomain = new StorageContainer(form);
 				 break;
-			
 			 case Constants.SPECIMEN_ARRAY_TYPE_FORM_ID :
 				 abstractDomain = new SpecimenArrayType(form);
+				 break;
+			 case Constants.SPECIMEN_ARRAY_FORM_ID :
+				 abstractDomain = new SpecimenArray(form);
 				 break;
 			//added as per bug 79
              default:
