@@ -256,6 +256,19 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					parentContainer.setPositionDimensionOne(new Integer(posOne));
 					parentContainer.setPositionDimensionTwo(new Integer(posTwo));
 					cont.setParent(parentContainer); // <<----
+					
+					
+					//chk for positions 
+					// check for availability of position
+					boolean canUse = isContainerAvailableForPositions(dao, parentContainer);
+
+					if (!canUse)
+					{
+						throw new DAOException(ApplicationProperties
+								.getValue("errors.storageContainer.inUse"));
+					}
+
+
 					// Have to set Site object for parentContainer
 					loadSite(dao, parentContainer); // 17-07-2006
 					loadSiteFromContainerId(dao, parentContainer);
@@ -2144,7 +2157,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				+ "WHERE t4.STORAGE_TYPE_ID = '"
 				+ type_id
 				+ "' OR t4.STORAGE_TYPE_ID='1') and t1.IDENTIFIER = t3.IDENTIFIER and t2.IDENTIFIER=t3.SITE_ID AND "
-				+ "t1.ACTIVITY_STATUS='ACTIVE'";
+				+ "t1.ACTIVITY_STATUS='"+Constants.ACTIVITY_STATUS_ACTIVE+"'";
 
 		Logger.out.debug("Storage Container query......................" + queryStr);
 		List list = new ArrayList();
