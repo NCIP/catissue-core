@@ -13,9 +13,11 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
+import edu.wustl.catissuecore.actionForm.ContainerForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.util.global.Validator;
 
 /**
  * Container class represents the base class of container class.
@@ -251,10 +253,30 @@ public class Container extends AbstractDomainObject implements Serializable
      * (non-Javadoc)
      * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
      */
-    public void setAllValues(AbstractActionForm arg0)
+    public void setAllValues(AbstractActionForm actionForm)
             throws AssignDataException
     {
-        // TODO Auto-generated method stub
+    	if (actionForm instanceof ContainerForm)
+    	{
+	    	ContainerForm containerForm = (ContainerForm) actionForm;
+	    	Validator validator = new Validator();
+	        this.id = new Long(containerForm.getId());
+	        
+	        if(!validator.isEmpty(containerForm.getBarcode()))
+	        	this.barcode = containerForm.getBarcode();
+	        else
+	        	this.barcode = null; 
+	
+	        this.full = new Boolean(containerForm.getIsFull());
+	        this.name = containerForm.getName();
+	        this.activityStatus = containerForm.getActivityStatus();
+	        this.positionDimensionOne = new Integer(containerForm.getPositionDimensionOne());
+	        this.positionDimensionTwo = new Integer(containerForm.getPositionDimensionTwo());
+	        this.comment = containerForm.getComment();
+	        this.capacity.setOneDimensionCapacity(new Integer(containerForm.getOneDimensionCapacity()));
+	        this.capacity.setTwoDimensionCapacity(new Integer(containerForm.getTwoDimensionCapacity()));
+	        ////////////   Remaining:  put code about parent children container relationship //////
+    	}    
     }
     
     /**
