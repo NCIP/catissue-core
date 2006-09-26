@@ -7,48 +7,68 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.lookup.LookupParameters;
+import edu.wustl.common.util.Utility;
+
 /**
  * @author vaishali_khandelwal
  *
  * This class is for finding out the matching participant with respect to given participant
  */
 public class ParticipantLookupLogic implements LookupLogic
-{	
+{
+
 	public List lookup(LookupParameters params) throws Exception
 	{
 		//Kapil: Done for setting-up junit, need to handle with proper exception handling.
-		if(params == null)
+		if (params == null)
 		{
-			throw new Exception("Param can not be null"); 
+			throw new Exception("Param can not be null");
 		}
-		
-		DefaultLookupParameters participantParams=(DefaultLookupParameters)params;
-		
-		Participant participant=(Participant)
-		participantParams.getObject();
-		Double cutoff=participantParams.getCutoff();
-		
+
+		DefaultLookupParameters participantParams = (DefaultLookupParameters) params;
+
+		Participant participant = (Participant) participantParams.getObject();
+		Double cutoff = participantParams.getCutoff();
+
 		//ParticipantBizLogic bizLogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
-		
+
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String sourceObjectName = Participant.class.getName();
-  	
-		String[] whereColumnName = {"firstName","middleName","lastName","birthDate","deathDate","socialSecurityNumber"};
-		String[] whereColumnCondition = {"LIKE","LIKE","LIKE","=","=","="};
-		Object[] whereColumnValue = {participant.getFirstName()+"%",participant.getMiddleName()+"%",participant.getLastName()+"%",participant.getBirthDate(),participant.getDeathDate(),participant.getSocialSecurityNumber()};
-		
+
+		String[] whereColumnName = {"firstName", "middleName", "lastName", "birthDate",
+				"deathDate", "socialSecurityNumber"};
+		String[] whereColumnCondition = {"LIKE", "LIKE", "LIKE", "=", "=", "="};
+		Object[] whereColumnValue = {participant.getFirstName() + "%",
+				participant.getMiddleName() + "%", participant.getLastName() + "%",
+				participant.getBirthDate(), participant.getDeathDate(),
+				participant.getSocialSecurityNumber()};
+
 		String joinCondition = Constants.OR_JOIN_CONDITION;
+
+		if (Variables.databaseName.equals(Constants.ORACLE_DATABASE))
+		{
+			if (participant.getBirthDate() == null)
+			{
+				whereColumnCondition[3] = Constants.IS_NULL;
+			}
+			if (participant.getDeathDate() == null)
+			{
+				whereColumnCondition[4] = Constants.IS_NULL;
+			}
+		}
 		//getting the matching participants from the database whose atleast one parameter matches with the given participqant
-		List listOfParticipants=bizLogic.retrieve(sourceObjectName,whereColumnName,whereColumnCondition,whereColumnValue,joinCondition);
-	
+		List listOfParticipants = bizLogic.retrieve(sourceObjectName, whereColumnName,
+				whereColumnCondition, whereColumnValue, joinCondition);
+
 		//calling the searchMatchingParticipant to filter the participant list according to given cutoff value
-		List participants=searchMatchingParticipant(participant,listOfParticipants,cutoff);
-  	
+		List participants = searchMatchingParticipant(participant, listOfParticipants, cutoff);
+
 		return participants;
 
 	}
@@ -59,56 +79,72 @@ public class ParticipantLookupLogic implements LookupLogic
 	 * @param listOfParticipants List of all participants which has atleast one matching parameter.
 	 * @param cutoff is the value such that the participants above the cutoff values are stored in List.
 	 ** */
-	private List searchMatchingParticipant(Participant srcParticipant, List listOfParticipants,Double cutoff) throws Exception
+	private List searchMatchingParticipant(Participant srcParticipant, List listOfParticipants,
+			Double cutoff) throws Exception
 	{
-		List participants=new ArrayList();
-		int count=0;
-		Iterator itr=listOfParticipants.iterator();
+		List participants = new ArrayList();
+		int count = 0;
+		Iterator itr = listOfParticipants.iterator();
+		
 		/*Iterates through all the Participants from the list */
-		while(itr.hasNext())
+		while (itr.hasNext())
 		{
-			count=0;
-			Participant destParticipant=(Participant)itr.next();
-			if(destParticipant.getActivityStatus() != null && destParticipant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
-			{	
-				if(srcParticipant.getFirstName()!=null && !srcParticipant.getFirstName().trim().equals("")&& destParticipant.getFirstName().startsWith(srcParticipant.getFirstName()))
+			count = 0;
+			Participant destParticipant = (Participant) itr.next();
+			if (destParticipant.getActivityStatus() != null
+					&& destParticipant.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+			{
+				if (srcParticipant.getFirstName() != null && destParticipant.getFirstName() != null
+						&& !srcParticipant.getFirstName().trim().equals("")
+						&& destParticipant.getFirstName().startsWith(srcParticipant.getFirstName()))
 				{
 					count++;
 				}
-				if(srcParticipant.getMiddleName()!=null && !srcParticipant.getMiddleName().trim().equals("")&&destParticipant.getMiddleName().startsWith(srcParticipant.getMiddleName()))
+				if (srcParticipant.getMiddleName() != null && destParticipant.getMiddleName() != null
+						&& !srcParticipant.getMiddleName().trim().equals("")
+						&& destParticipant.getMiddleName().startsWith(
+								srcParticipant.getMiddleName()))
 				{
 					count++;
 				}
-				if(srcParticipant.getLastName()!=null && !srcParticipant.getLastName().trim().equals("") && destParticipant.getLastName().startsWith(srcParticipant.getLastName()))
+				if (srcParticipant.getLastName() != null && destParticipant.getLastName() != null
+						&& !srcParticipant.getLastName().trim().equals("")
+						&& destParticipant.getLastName().startsWith(srcParticipant.getLastName()))
 				{
 					count++;
 				}
-				if(srcParticipant.getBirthDate()!=null  && destParticipant.getBirthDate()!=null&& srcParticipant.getBirthDate().compareTo(destParticipant.getBirthDate())==0)
+				if (srcParticipant.getBirthDate() != null
+						&& destParticipant.getBirthDate() != null
+						&& srcParticipant.getBirthDate().compareTo(destParticipant.getBirthDate()) == 0)
 				{
 					count++;
 				}
-				if(srcParticipant.getDeathDate()!=null  && destParticipant.getDeathDate()!=null && srcParticipant.getDeathDate().compareTo(destParticipant.getDeathDate())==0)
+				if (srcParticipant.getDeathDate() != null
+						&& destParticipant.getDeathDate() != null
+						&& srcParticipant.getDeathDate().compareTo(destParticipant.getDeathDate()) == 0)
 				{
 					count++;
 				}
-				if(srcParticipant.getSocialSecurityNumber()!=null &&!srcParticipant.getSocialSecurityNumber().trim().equals("")&& srcParticipant.getSocialSecurityNumber().equals(destParticipant.getSocialSecurityNumber()))
+				if (srcParticipant.getSocialSecurityNumber() != null && destParticipant.getSocialSecurityNumber() != null
+						&& !srcParticipant.getSocialSecurityNumber().trim().equals("")
+						&& srcParticipant.getSocialSecurityNumber().equals(
+								destParticipant.getSocialSecurityNumber()))
 				{
 					count++;
 				}
-			
+
 				//	Finding the probablity.
-				Double probablity=new Double((100*count)/6);
-				if(probablity.doubleValue()>=cutoff.doubleValue())
+				Double probablity = new Double((100 * count) / 6);
+				if (probablity.doubleValue() >= cutoff.doubleValue())
 				{
-					DefaultLookupResult result=new DefaultLookupResult();
+					DefaultLookupResult result = new DefaultLookupResult();
 					result.setObject(destParticipant);
 					result.setProbablity(probablity);
 					participants.add(result);
 				}
 			}
-		}	
+		}
 		return participants;
 	}
- 
-	
+
 }
