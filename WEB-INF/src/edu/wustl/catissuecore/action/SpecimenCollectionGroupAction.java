@@ -328,8 +328,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		else
 		{
 			// for ORACLE
-			whereColumnCondition = new String[]{"=","is not null"};
-			whereColumnValue=new Object[]{new Long(protocolID)};
+			whereColumnCondition = new String[]{"=",Constants.IS_NOT_NULL};
+			whereColumnValue=new Object[]{new Long(protocolID),""};
 		}
 		
 		
@@ -355,8 +355,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		else
 		{
 			// for ORACLE
-			whereColumnCondition2 = new String[]{"is not null","is not null","is not null","is not null"};
-			whereColumnValue2=new String[]{};
+			whereColumnCondition2 = new String[]{Constants.IS_NOT_NULL,Constants.IS_NOT_NULL,Constants.IS_NOT_NULL,Constants.IS_NOT_NULL};
+			whereColumnValue2=new String[]{"","","",""};
 		}
 		
 		String joinCondition2 = Constants.OR_JOIN_CONDITION;
