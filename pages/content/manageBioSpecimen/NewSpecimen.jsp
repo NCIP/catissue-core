@@ -577,7 +577,7 @@
 								</label>
 							</td>
 						    <td class="formField" >
-						     	<html:text styleClass="formFieldSized15" size="30" maxlength="10"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
+						     	<html:text styleClass="formFieldSized15" size="30" maxlength="50"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
 						    </td>							
 							<td class="formRequiredNotice" width="5">&nbsp;</td>
 						    <td class="formLabel">							
