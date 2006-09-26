@@ -470,9 +470,7 @@
 	
 	    <td colspan="3" class="formLabelNoBackGround" width="40%">
 			<html:checkbox property="aliqoutInSameContainer" onclick="onCheckboxClicked()">
-			<b>
-		    <bean:message key="aliquots.storeAllAliquotes" />
-			</b>
+			<bean:message key="aliquots.storeAllAliquotes" />
 			</html:checkbox>
 		</td>
 		<td width="50%">
