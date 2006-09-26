@@ -49,12 +49,23 @@ public interface AppletConstants
 	/**
 	 * Array specimen prefix
 	 */
-	String ARRAY_CONTENT_SPECIMEN_PREFIX = "Specimen:";
+	String ARRAY_CONTENT_SPECIMEN_PREFIX = "Specimen_";
 
+	/**
+	 * Array specimen prefix
+	 */
+	String ARRAY_CONTENT_QUANTITY_PREFIX = "initialQuantity_value";
+
+	/**
+	 * Array specimen prefix
+	 */
+	String ARRAY_CONTENT_QUANTITY_ID_PREFIX = "initialQuantity_id";
+	
 	/**
 	 * array attributes name
 	 */
-	String[] ARRAY_CONTENT_ATTRIBUTE_NAMES = {ARRAY_CONTENT_SPECIMEN_PREFIX + "label",ARRAY_CONTENT_SPECIMEN_PREFIX + "barcode","quantity","concentration","positionDimensionOne","positionDimenstionTwo","id",ARRAY_CONTENT_SPECIMEN_PREFIX + "id"};
+	String[] ARRAY_CONTENT_ATTRIBUTE_NAMES = {ARRAY_CONTENT_SPECIMEN_PREFIX + "label",ARRAY_CONTENT_SPECIMEN_PREFIX + "barcode",ARRAY_CONTENT_QUANTITY_PREFIX,"concentrationInMicrogramPerMicroliter","positionDimensionOne","positionDimensionTwo","id",ARRAY_CONTENT_QUANTITY_ID_PREFIX};
+	// ,ARRAY_CONTENT_SPECIMEN_PREFIX + "id"
 	
 	/**
 	 * Specify the ARRAY_CONTENT_ATTR_LABEL_INDEX field 
@@ -92,9 +103,9 @@ public interface AppletConstants
 	int ARRAY_CONTENT_ATTR_ID_INDEX = 6;
 	
 	/**
-	 * Specify the ARRAY_CONTENT_ATTR_SPECIMEN_ID_INDEX field 
+	 * Specify the ARRAY_CONTENT_ATTR_QUANTITY_ID_INDEX field 
 	 */
-	int ARRAY_CONTENT_ATTR_SPECIMEN_ID_INDEX = 7;
+	int ARRAY_CONTENT_ATTR_QUANTITY_ID_INDEX = 7;
 
 	/**
 	 * Specimen Attributes Row Nos
