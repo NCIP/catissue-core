@@ -106,6 +106,11 @@ public interface AppletConstants
 	 * Specify the ARRAY_CONTENT_ATTR_QUANTITY_ID_INDEX field 
 	 */
 	int ARRAY_CONTENT_ATTR_QUANTITY_ID_INDEX = 7;
+	
+	/**
+	 * Specify the SPECIMEN_ARRAY_APPLET_ACTION field 
+	 */
+	String SPECIMEN_ARRAY_APPLET_ACTION = "/SpecimenArrayAppletAction.do";
 
 	/**
 	 * Specimen Attributes Row Nos
@@ -128,6 +133,8 @@ public interface AppletConstants
 	short SPECIMEN_BIOHAZARDS_ROW_NO = 15;
 	short SPECIMEN_DERIVE_ROW_NO = 16;
 	
-	static final String  NO_OF_SPECIMENS = "NO_OF_SPECIMENS";
+	String  NO_OF_SPECIMENS = "NO_OF_SPECIMENS";
 	// this is key to put specimen map in session.
+	
+	String APPLET_ACTION_PARAM_NAME = "method";
 }
