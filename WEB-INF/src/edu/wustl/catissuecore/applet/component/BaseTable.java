@@ -74,6 +74,7 @@ public class BaseTable extends JTable {
 	 * Initialize UI for table. 
 	 */
 	private void initUI() {
+		getTableHeader().setReorderingAllowed(false);
 		//this.selectionBackground = AppletConstants.CELL_SELECTION_COLOR;
 	}
 }
