@@ -462,3 +462,6 @@ UPDATE catissue_password set UPDATE_DATE=sysdate WHERE IDENTIFIER = 1;
 update catissue_container_type set name = 'All' where identifier = 1;
 alter table CATISSUE_container_type add constraint NAME unique (NAME);
 
+/*Poornima -26/09/06-Added unspecified value to Vital status and NOT SPECIFIED value in Tissue Site- */
+INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2641,'Unspecified',NULL,'2004001');
+INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2642,'NOT SPECIFIED',NULL,'Tissue_Site_PID');
