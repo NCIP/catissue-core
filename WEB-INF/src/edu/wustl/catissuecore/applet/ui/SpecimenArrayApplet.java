@@ -36,7 +36,6 @@ import edu.wustl.catissuecore.applet.listener.ArrayCopyOptionActionHandler;
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.SpecimenArrayTableModel;
-import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * <p>This class specifies the methods used to render specimen array applet.It is extending
@@ -82,11 +81,11 @@ public class SpecimenArrayApplet extends BaseApplet {
 		super.doInit();
 		session_id = getParameter("session_id");
 		String enterSpecimenBy = "Label";
-		
 		int rowCount = new Integer(getParameter("rowCount")).intValue();
 		int columnCount = new Integer(getParameter("columnCount")).intValue();
 		String specimenClass = getParameter("specimenClass");
 		Map tableModelMap = getTableModelData();
+
 		JLabel concLabel = new JLabel("Concentration");
 		concLabel.setOpaque(false);
 		JLabel quantityLabel = new JLabel("Quantity");
@@ -107,7 +106,7 @@ public class SpecimenArrayApplet extends BaseApplet {
 		quantityTextField.setEnabled(false);
 		Dimension quantityDimension = new Dimension(100,quantityTextField.getPreferredSize().height);
 		quantityTextField.setPreferredSize(quantityDimension);
-		System.out.println(quantityTextField.getPreferredSize());
+		//System.out.println(quantityTextField.getPreferredSize());
 		JPanel quantityPanel = new JPanel();
 		quantityPanel.setOpaque(false);
 		quantityPanel.setLayout(new FlowLayout(FlowLayout.LEFT,5,0));
@@ -159,7 +158,8 @@ public class SpecimenArrayApplet extends BaseApplet {
         JButton copyButton = new JButton("Copy");
         //copyButton.addActionListener(new SpecimenArrayCopyActionHandler(popupMenu));
         //applyPanel.add(copyButton);
-        this.getContentPane().setLayout(new VerticalLayout(0,30));
+        //System.out.println(" decrease gap :: 10");
+        this.getContentPane().setLayout(new VerticalLayout(0,10));
         this.getContentPane().add(applyPanel);
         this.getContentPane().add(scrollPane);
         this.getContentPane().setBackground(Color.WHITE);
