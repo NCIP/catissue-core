@@ -10,6 +10,7 @@ package edu.wustl.catissuecore.applet.model;
 
 import java.util.Map;
 
+import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
 
 /**
@@ -53,6 +54,11 @@ public class SpecimenArrayTableModel extends BaseTabelModel {
 	private String enterSpecimenBy;
 	
 	/**
+	 * Specify the specimenClass field 
+	 */
+	private String specimenClass;
+	
+	/**
 	 * Constructor to initialize array table model.
 	 * @param specimenArrayModelMap map of array model
 	 * @param rowCount row count
@@ -73,9 +79,10 @@ public class SpecimenArrayTableModel extends BaseTabelModel {
 	 * @param columnCount column count
 	 * @param enterSpecimenBy how specimens are entered either by Label/Barcode. 
 	 */
-	public SpecimenArrayTableModel(Map specimenArrayModelMap,int rowCount,int columnCount,String enterSpecimenBy) {
+	public SpecimenArrayTableModel(Map specimenArrayModelMap,int rowCount,int columnCount,String enterSpecimenBy,String specimenClass) {
 		this(specimenArrayModelMap,rowCount,columnCount);
 		this.enterSpecimenBy = enterSpecimenBy;
+		this.specimenClass = specimenClass;
 	}
 	
 	/**
@@ -112,27 +119,6 @@ public class SpecimenArrayTableModel extends BaseTabelModel {
 	 */
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		return specimenArrayModelMap.get(SpecimenArrayAppletUtil.getArrayMapKey(rowIndex,columnIndex,columnCount,getAttributeIndex()));
-		
-/*		if (specimenArrayModelMap != null) {
-			SpecimenArrayGridContent arrayGridContent = ((SpecimenArrayGridContent) specimenArrayModelMap.get(rowIndex + AppletConstants.delimiter + columnIndex));
-			System.out.println("get value at method Not null");
-			System.out.println(arrayGridContent.getSpecimenLabel());
-			if (enterSpecimenBy.equals("Label")) {
-				return arrayGridContent.getSpecimenLabel();
-			} else {
-				return arrayGridContent.getSpecimenBarcode();
-			}
-		}
-*/	/*	
-		System.out.println( "  rowIndex :: " + rowIndex +  "  columnIndex :: "+ columnIndex +" Position " + position);
-		if ( (specimenArrayGridContentList != null) && (!specimenArrayGridContentList.isEmpty()) && specimenArrayGridContentList.size() > position) {
-			if (enterSpecimenBy.equals("Label")) {
-				return ((SpecimenArrayGridContent) specimenArrayGridContentList.get(position)).getSpecimenLabel();
-			} else {
-				return ((SpecimenArrayGridContent) specimenArrayGridContentList.get(position)).getSpecimenBarcode();
-			}
-		}
-	*/
 	}
 
 	/**
@@ -140,34 +126,15 @@ public class SpecimenArrayTableModel extends BaseTabelModel {
 	 */
 	public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
 		specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(rowIndex,columnIndex,columnCount,getAttributeIndex()),aValue.toString());
+		// if one dimension & two dimension position is not set
+		String posOneDimkey = SpecimenArrayAppletUtil.getArrayMapKey(rowIndex,columnIndex,columnCount,AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX);
+		String posTwoDimkey = SpecimenArrayAppletUtil.getArrayMapKey(rowIndex,columnIndex,columnCount,AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX);
 		
-/*		if (specimenArrayModelMap != null) {
-			System.out.println("set value at Not null");
-			SpecimenArrayGridContent arrayGridContent = ((SpecimenArrayGridContent) specimenArrayModelMap.get(rowIndex + AppletConstants.delimiter + columnIndex));
-			System.out.println(arrayGridContent.getSpecimenLabel());
-			
-			if (enterSpecimenBy.equals("Label")) {
-				arrayGridContent.setSpecimenLabel(aValue.toString());
-			} else {
-				arrayGridContent.setSpecimenBarcode(aValue.toString());
-			}
+		if ((specimenArrayModelMap.get(posOneDimkey) == null) || (specimenArrayModelMap.get(posOneDimkey).toString().equals(""))) 
+		{
+			specimenArrayModelMap.put(posOneDimkey,String.valueOf(rowIndex));
+			specimenArrayModelMap.put(posTwoDimkey,String.valueOf(columnIndex));
 		}
-*/		//fireTableCellUpdated(rowIndex,columnIndex);
-		/*
-		if (specimenArrayGridContentList == null) {
-			specimenArrayGridContentList = new ArrayList();
-		}
-		
-		if ((!specimenArrayGridContentList.isEmpty()) && specimenArrayGridContentList.size() > position) {
-			if (enterSpecimenBy.equals("Label")) {
-				((SpecimenArrayGridContent) specimenArrayGridContentList.get(position)).setSpecimenLabel(aValue.toString());
-			} else {
-				((SpecimenArrayGridContent) specimenArrayGridContentList.get(position)).setSpecimenBarcode(aValue.toString());
-			}
-		} else {
-		}
-		*/
-		//fireTableCellUpdated(rowIndex,columnIndex);
 	}
 	
 	/**
@@ -190,9 +157,9 @@ public class SpecimenArrayTableModel extends BaseTabelModel {
 	private int getAttributeIndex() {
 		int attrIndex = 0;
 		if (enterSpecimenBy.equals("Label")) {
-			attrIndex = 0;
+			attrIndex = AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX;
 		} else {
-			attrIndex = 1;
+			attrIndex = AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX;
 		}
 		return attrIndex;
 	}
@@ -204,4 +171,11 @@ public class SpecimenArrayTableModel extends BaseTabelModel {
 		return arrayGridContent;
 	}
 	*/
+
+	/**
+	 * @return Returns the specimenClass.
+	 */
+	public String getSpecimenClass() {
+		return specimenClass;
+	}
 }
