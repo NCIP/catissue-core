@@ -164,7 +164,7 @@
 	<%
 		Map aliquotMap = new HashMap();
 		int counter=0;
-
+        Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 		if(form != null)
 		{
 			counter = Integer.parseInt(form.getNoOfAliquots());
@@ -175,7 +175,7 @@
 		{
 			String qtyKey = "value(Specimen:" + i + "_quantity)";
 			String barKey = "value(Specimen:" + i + "_barcode)";
-			String containerKey = "value(Specimen:" + i + "_StorageContainer_id)";
+			String containerKey = "value(Specimen:" + i + "_StorageContainer_label)";
 			String pos1Key = "value(Specimen:" + i + "_positionDimensionOne)";
 			String pos2Key = "value(Specimen:" + i + "_positionDimensionTwo)";
 			String idKey = "Specimen:" + i + "_id";
@@ -197,7 +197,7 @@
 				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcodes" property="<%=barKey%>" readonly="true"/>
 			</td>
 			<td class="formField" nowrap>
-				<html:text styleClass="formFieldSized5"  maxlength="50"  size="30" property="<%=containerKey%>" readonly="true"/>
+				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" property="<%=containerKey%>" readonly="true"/>
 					&nbsp;
 				<html:text styleClass="formFieldSized5"  maxlength="50"  size="30" property="<%=pos1Key%>" readonly="true"/>
 					&nbsp;

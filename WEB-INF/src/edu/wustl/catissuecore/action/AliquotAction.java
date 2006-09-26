@@ -288,7 +288,40 @@ public class AliquotAction extends BaseAction //SecureAction
 
 				aliquotForm.setAliquotMap(map);
 			}
+			
+			int aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
+			Map containerMap = new HashMap();
+			if (aliquotForm.isAliqoutInSameContainer())
+			{
 
+				containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
+						.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()));
+			}
+			else
+			{
+				containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
+						.getSpecimenClass(), 0);
+			}
+	         String specimenKey = "Specimen:";
+	         Object[] containerId = null;
+	         if (!containerMap.isEmpty())
+	 		{
+	 			containerId = containerMap.keySet().toArray();
+	 		}
+	         /**
+	          *  Populating the map with storage container labels
+	          *  required for bug no. 2420
+	          */
+	         
+	        for (int i = 1; i <=aliquotCount; i++)
+			{
+	 			String containerIdKey = specimenKey + i + "_StorageContainer_id";
+				int container = Integer.parseInt((String)map.get(containerIdKey));
+				String containerLabel = ((NameValueBean) containerId[container-1]).getName();
+				String containerLabelKey = specimenKey + i + "_StorageContainer_label";
+				map.put(containerLabelKey,containerLabel);
+			}
+	      
 			ActionErrors errors = getActionErrors(request);
 
 			if (errors == null || errors.size() == 0)
@@ -612,10 +645,16 @@ public class AliquotAction extends BaseAction //SecureAction
 
 		Map aliquotMap = form.getAliquotMap();
 
+		/**
+		 *  Putting the values of quantity and label in the AliquotMap 
+		 */
 		for (int i = 1; i <= aliquotCount; i++)
 		{
 			String qtyKey = "Specimen:" + i + "_quantity";
 			aliquotMap.put(qtyKey, distributedQuantity);
+			String labelKey = "Specimen:" + i + "_label";
+			String aliquotLabel = form.getSpecimenLabel() + "_" + i;
+			aliquotMap.put(labelKey, aliquotLabel);
 		}
 
 		form.setAliquotMap(aliquotMap);
