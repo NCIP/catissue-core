@@ -4,6 +4,10 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 
+import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.exception.AssignDataException;
+
 /**
  * @author gautam_shetty
  * @author Ashwin Gupta 
@@ -20,18 +24,30 @@ public class SpecimenArray extends Container
 
     protected SpecimenArrayType specimenArrayType = new SpecimenArrayType();
 
-    protected User createdBy;
+    protected User createdBy = new User();
 
     protected StorageContainer storageContainer;
 
     protected Collection specimenArrayContentCollection = new HashSet();
     
-    protected Boolean available;
+    protected Boolean available = new Boolean(true);
 
+    /**
+     * Default Constructor 
+     */
     public SpecimenArray()
     {
     }
 
+    /**
+     * Constructor with action form.
+     * @param actionForm abstract action form
+     * @throws AssignDataException 
+     */
+    public SpecimenArray(AbstractActionForm actionForm) throws AssignDataException {
+    	setAllValues(actionForm);
+    }
+    
     /**
      * @return Returns the createdBy.
      * @hibernate.many-to-one column="CREATED_BY_ID" class="edu.wustl.catissuecore.domain.User" 
@@ -120,4 +136,24 @@ public class SpecimenArray extends Container
 	public void setAvailable(Boolean available) {
 		this.available = available;
 	}
+	
+    /**
+     * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
+     */
+    public void setAllValues(AbstractActionForm actionForm) throws AssignDataException 
+    {
+    	super.setAllValues(actionForm);
+    	SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) actionForm;
+    	specimenArrayType.setId(new Long(specimenArrayForm.getSpecimenArrayTypeId()));
+    	
+    	storageContainer.setId(new Long(specimenArrayForm.getStorageContainer()));
+    	if (createdBy == null) {
+    		createdBy = new User();
+    	}
+    	createdBy.setId(new Long(specimenArrayForm.getCreatedBy()));
+    	capacity.setOneDimensionCapacity(new Integer(specimenArrayForm.getOneDimensionCapacity()));
+    	capacity.setTwoDimensionCapacity(new Integer(specimenArrayForm.getTwoDimensionCapacity()));
+    	specimenArrayContentCollection = specimenArrayForm.getSpecArrayContentCollection();
+    	//SpecimenArrayUtil.getSpecimenContentCollection(specimenArrayForm.getSpecimenArrayGridContentList());
+    }
 }

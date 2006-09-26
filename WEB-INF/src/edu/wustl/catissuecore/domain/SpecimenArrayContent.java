@@ -20,7 +20,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	
 	protected Integer positionDimensionTwo;
 	
-	protected Quantity initialQuantity;
+	protected Quantity initialQuantity = new Quantity();
 	
 	protected SpecimenArray specimenArray = new SpecimenArray();
 	
