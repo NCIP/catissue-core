@@ -58,8 +58,18 @@ public class SpecimenArrayAction extends SecureAction
         SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
         
         List specimenArrayTypeList = specimenArrayBizLogic.getList(SpecimenArrayType.class.getName(),arrayTypeLabelProperty, arrayTypeProperty, false);
-        request.setAttribute(Constants.SPECIMEN_ARRAY_TYPE_LIST, specimenArrayTypeList);
         
+        for (Iterator iter = specimenArrayTypeList.iterator(); iter.hasNext();) {
+			NameValueBean nameValueBean = (NameValueBean) iter.next();
+			// remove ANY entry from array type list
+			if (nameValueBean.getValue().equals(Constants.ARRAY_TYPE_ANY_VALUE) && nameValueBean.getName().equalsIgnoreCase(Constants.ARRAY_TYPE_ANY_NAME))
+			{
+				iter.remove();
+				break;
+			}
+		}
+        
+        request.setAttribute(Constants.SPECIMEN_ARRAY_TYPE_LIST, specimenArrayTypeList);
         //Setting the specimen class list
         List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
     	request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
@@ -74,29 +84,12 @@ public class SpecimenArrayAction extends SecureAction
 		
     	//Setting the specimen type list
     	List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE,null);
-		//List specimenTypeList = null;
     	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
     	Collection userCollection =  userBizLogic.getUsers(operation);
     	request.setAttribute(Constants.USERLIST, userCollection);
     	SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
     	Map containerMap = new TreeMap();
     	String subOperation = specimenArrayForm.getSubOperation();
-//    	}
-
-    	
-/*	    if (operation.equals("CreateSpecimenArray")) {
-	    	int  arrayCapacity = specimenArrayForm.getOneDimensionCapacity() + specimenArrayForm.getTwoDimensionCapacity();
-	    	List specimenArrayGridContentList = new ArrayList();
-	    	SpecimenArrayGridContent arrayGridContent = null;
-	    	
-	    	for (int i=0; i < arrayCapacity; i++) {
-	    		arrayGridContent = new SpecimenArrayGridContent();
-	    		specimenArrayGridContentList.add(arrayGridContent);
-	    	}
-	    	
-	    	specimenArrayForm.setSpecArrayContentCollection(specimenArrayGridContentList);
-	    }
-*/	    
 
     	if (subOperation != null) 
     	{
