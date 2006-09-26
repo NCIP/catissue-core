@@ -1249,4 +1249,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String APPLET_SERVER_HTTP_START_STR = "http://";
 	public static final String APPLET_SERVER_URL_PARAM_NAME = "serverURL";
 
+	//
+	public static final String IS_NOT_NULL = "is not null";
+	public static final String IS_NULL = "is null";
 }
