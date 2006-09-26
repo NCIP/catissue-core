@@ -110,25 +110,26 @@ public class SpreadsheetViewAction extends Action
 	        paginationDataList = dataList.subList(startIndex,endIndex);   
 	        
 	        //Set the total no of records in the request object to be used by pagination tag.
-	        request.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(dataList.size()));	        
+	        session.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(dataList.size()));	        
         }
         else
         {
         	//Set the total no of records in the request object to be used by pagination tag.
-        	request.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(0));
+        	session.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(0));
         }
         
         //Set the paginationDataList in the request to be shown by grid control.
-        request.setAttribute(Constants.PAGINATION_DATA_LIST,paginationDataList); 
+        session.setAttribute(Constants.PAGINATION_DATA_LIST,paginationDataList); 
         
         //Set the columnList in the request to be shown by grid control.
         request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnList); 
         
         //Set the current pageNum in the request to be uesd by pagination Tag.
-        request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
+        session.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
         
         //Set the result per page attribute in the request to be uesd by pagination Tag.
-        request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(Constants.NUMBER_RESULTS_PER_PAGE_SEARCH));
+//      Prafull:Commented this can be retrived directly from constants on jsp, so no need to save it in request.
+//        request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(Constants.NUMBER_RESULTS_PER_PAGE_SEARCH));
        
         request.setAttribute(Constants.PAGEOF, pageOf);
         return mapping.findForward(pageOf);

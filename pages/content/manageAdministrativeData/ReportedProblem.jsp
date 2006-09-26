@@ -7,9 +7,9 @@
 <html:errors/>
 
 <%
-	  int pageNum = Integer.parseInt((String)request.getAttribute(Constants.PAGE_NUMBER));
-	  int totalResults = Integer.parseInt((String)request.getAttribute(Constants.TOTAL_RESULTS));
-	  int numResultsPerPage = Integer.parseInt((String)request.getAttribute(Constants.RESULTS_PER_PAGE));
+	  int pageNum = Integer.parseInt((String)session.getAttribute(Constants.PAGE_NUMBER));
+	  int totalResults = Integer.parseInt((String)session.getAttribute(Constants.TOTAL_RESULTS));
+	  int numResultsPerPage = Constants.NUMBER_RESULTS_PER_PAGE_SEARCH;
 %>
 
 </br>

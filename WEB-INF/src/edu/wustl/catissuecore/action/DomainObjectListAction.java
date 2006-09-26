@@ -113,13 +113,14 @@ public class DomainObjectListAction extends SecureAction
         request.setAttribute(Constants.SHOW_DOMAIN_OBJECT_LIST,showList);
         
         //Saves the page number in the request.
-        request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
+        session.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
         
         //Saves the total number of results in the request. 
-        request.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(list.size()));
+        session.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(list.size()));
         
         //Saves the number of results per page in the request.
-        request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(Constants.NUMBER_RESULTS_PER_PAGE));
+        //Prafull:Commented this can be retrived directly from constants on jsp, so no need to save it in request.
+//        request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(Constants.NUMBER_RESULTS_PER_PAGE));
         
         return mapping.findForward(Constants.SUCCESS);
     }

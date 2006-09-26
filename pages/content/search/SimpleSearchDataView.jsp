@@ -26,9 +26,9 @@ tr#hiddenCombo
 <head>
 <%
 	
-	int pageNum = Integer.parseInt((String)request.getAttribute(Constants.PAGE_NUMBER));
-	int totalResults = Integer.parseInt((String)request.getAttribute(Constants.TOTAL_RESULTS));
-	int numResultsPerPage = Integer.parseInt((String)request.getAttribute(Constants.RESULTS_PER_PAGE));
+	int pageNum = Integer.parseInt((String)session.getAttribute(Constants.PAGE_NUMBER));
+	int totalResults = Integer.parseInt((String)session.getAttribute(Constants.TOTAL_RESULTS));
+	int numResultsPerPage = Constants.NUMBER_RESULTS_PER_PAGE_SEARCH;
 	String pageName = "SpreadsheetView.do";	
 	
 	AdvanceSearchForm form = (AdvanceSearchForm)session.getAttribute("advanceSearchForm");
@@ -36,8 +36,8 @@ tr#hiddenCombo
 	if(columnList==null)
 		columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 	List dataList = (List) session.getAttribute(Constants.PAGINATION_DATA_LIST);
-	if(dataList==null)
-		dataList = (List) request.getAttribute(Constants.PAGINATION_DATA_LIST);
+//	if(dataList==null)
+//		dataList = (List) request.getAttribute(Constants.PAGINATION_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	String title = pageOf + ".searchResultTitle";
 	boolean isSpecimenData = false;	
@@ -203,8 +203,13 @@ tr#hiddenCombo
 	<!-- Mandar : 434 : for tooltip -->
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
-<html:errors />
+
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+<tr>
+	<td>
+		<html:errors /> <!--Prafull:Added errors tag inside the table-->
+	</td>
+</tr>
 <html:form action="<%=Constants.SPREADSHEET_EXPORT_ACTION%>">
 	<%
 		if(dataList == null && pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
