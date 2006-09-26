@@ -127,7 +127,7 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
 		}
-		function ResetName(elment)
+		function ResetName(element)
 		{
 			var containerNameElement = document.getElementById("containerName");
 			containerNameElement.value = "";	
