@@ -26,7 +26,7 @@ public class SpecimenArray extends Container
 
     protected User createdBy = new User();
 
-    protected StorageContainer storageContainer;
+    protected StorageContainer storageContainer = new StorageContainer();
 
     protected Collection specimenArrayContentCollection = new HashSet();
     
