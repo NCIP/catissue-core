@@ -508,7 +508,7 @@ create table CATISSUE_COLL_PROT_EVENT (
 create table CATISSUE_CONTAINER_TYPE (
    IDENTIFIER bigint not null auto_increment,
    CAPACITY_ID bigint,
-   NAME varchar(100),
+   NAME varchar(100) unique,
    ONE_DIMENSION_LABEL varchar(100),
    TWO_DIMENSION_LABEL varchar(100),
    COMMENTS text,

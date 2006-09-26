@@ -542,7 +542,7 @@ create table CATISSUE_COLL_PROT_EVENT (
 create table CATISSUE_CONTAINER_TYPE (
    IDENTIFIER number(19,0) not null ,
    CAPACITY_ID number(19,0),
-   NAME varchar(100),
+   NAME varchar(100) unique,
    ONE_DIMENSION_LABEL varchar(100),
    TWO_DIMENSION_LABEL varchar(100),
    COMMENTS varchar2(500),
