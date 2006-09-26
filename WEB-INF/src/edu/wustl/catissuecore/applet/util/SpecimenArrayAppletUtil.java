@@ -12,6 +12,7 @@
 package edu.wustl.catissuecore.applet.util;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * <p>This class initializes the fields of SpecimenArrayAppletUtil.java</p>
@@ -34,5 +35,19 @@ public final class SpecimenArrayAppletUtil {
 		int position = (row * columnCount) + col;
 		mapKey = new String(AppletConstants.ARRAY_CONTENT_KEY_PREFIX + position + AppletConstants.delimiter + AppletConstants.ARRAY_CONTENT_ATTRIBUTE_NAMES[attributeIndex]);
 		return mapKey;
+	}
+	
+	/**
+	 * check whether a specimen class is type of molecular
+	 * @param specimenClass specimen class
+	 * @return true if molecular specimen
+	 */
+	public static boolean isMolecularSpecimen(String specimenClass) {
+		boolean molecularSpecimen = false;
+		if ((specimenClass != null) && (specimenClass.equalsIgnoreCase(Constants.MOLECULAR)))
+		{
+			molecularSpecimen = true;
+		}
+		return molecularSpecimen;
 	}
 }
