@@ -358,7 +358,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMENARRAYTYPE_EDIT_ACTION = "SpecimenArrayTypeEdit.do?operation=edit";
 	public static final String ARRAY_DISTRIBUTION_ADD_ACTION = "ArrayDistributionAdd.do";
 	
-	
+	public static final String SPECIMENARRAY_ADD_ACTION = "SpecimenArrayAdd.do";
+	public static final String SPECIMENARRAY_EDIT_ACTION = "SpecimenArrayEdit.do";
 	//Spreadsheet Export Action
 	public static final String SPREADSHEET_EXPORT_ACTION = "SpreadsheetExport.do";
 	
