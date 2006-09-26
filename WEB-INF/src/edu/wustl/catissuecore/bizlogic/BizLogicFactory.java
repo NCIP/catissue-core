@@ -157,6 +157,9 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     		case Constants.SPECIMEN_ARRAY_TYPE_FORM_ID :
     			bizLogic = new SpecimenArrayTypeBizLogic();
     			break;
+    		case Constants.SPECIMEN_ARRAY_FORM_ID :
+    			bizLogic = new SpecimenArrayBizLogic();
+    			break;
     		case Constants.DEFAULT_BIZ_LOGIC:
             default:
             	bizLogic = new DefaultBizLogic();
@@ -235,6 +238,14 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	else if(className.equals("edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter"))
     	{
     		bizLogic = new SpecimenEventParametersBizLogic();
+    	}
+    	else if(className.equals(Constants.SPECIMEN_ARRAY_TYPE_CLASSNAME))
+    	{
+    		bizLogic = new SpecimenArrayTypeBizLogic();
+    	}
+    	else if(className.equals(Constants.SPECIMEN_ARRAY_CLASSNAME))
+    	{
+    		bizLogic = new SpecimenArrayBizLogic();
     	}
     	else
     	{
