@@ -36,6 +36,17 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	
 	public void doInit()
     {
+		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));
+//		int columnNumber = 4;
+		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());		
+
+		table = new BaseTable(model)
+        {
+            public Class getColumnClass(int column)
+            {
+                return getValueAt(0, column).getClass();
+            }
+        };
 		// Creating Layout
 		getContentPane().setLayout(new FlowLayout());
 
@@ -101,17 +112,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		
 	    getContentPane().add(outerPanel);
 		// --------------------
-		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));
-//		int columnNumber = 4;
-		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());		
 	    
-		table = new BaseTable(model)
-        {
-            public Class getColumnClass(int column)
-            {
-                return getValueAt(0, column).getClass();
-            }
-        };
+
         table.getModel().addTableModelListener(new TableModelChangeHandler(table));
 			
 		//table.getColumnModel().setColumnSelectionAllowed(true);

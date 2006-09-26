@@ -68,4 +68,14 @@ public class ButtonHandler extends BaseActionHandler
 		return "submit";
 	}
 
+	/** (non-Javadoc)
+	 * @see edu.wustl.catissuecore.applet.listener.BaseActionHandler#preActionPerformed(java.awt.event.ActionEvent)
+	 */
+	protected void preActionPerformed(ActionEvent event)
+	{
+		
+	}
+	
+	
+
 }
