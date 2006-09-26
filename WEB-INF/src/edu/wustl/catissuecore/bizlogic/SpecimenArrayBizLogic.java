@@ -45,60 +45,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 	{
 		SpecimenArray specimenArray = (SpecimenArray) obj;
 		doUpdateSpecimenArrayContents(specimenArray,dao,sessionDataBean,true);
-/*		Collection specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
-		Collection updatedSpecArrayContentCollection = new HashSet();
 		
-		SpecimenArrayContent specimenArrayContent = null;
-		Specimen specimen = null;
-		if (specimenArrayContentCollection != null && !specimenArrayContentCollection.isEmpty()) 
-		{
-			double quantity = 0.0;
-			// fetch array type to check specimen class
-			List arrayTypes = dao.retrieve(SpecimenArrayType.class.getName(),Constants.SYSTEM_IDENTIFIER,specimenArray.getSpecimenArrayType().getId());
-			SpecimenArrayType arrayType = null;
-			
-			if ((arrayTypes != null) && (!arrayTypes.isEmpty())) {
-				arrayType = (SpecimenArrayType) arrayTypes.get(0);
-			}
-			
-			for (Iterator iter = specimenArrayContentCollection.iterator(); iter.hasNext();) 
-			{
-				specimenArrayContent = (SpecimenArrayContent) iter.next();
-				specimen = getSpecimen(dao,specimenArrayContent);
-				if(specimen != null)
-				{
-					 // check whether array & specimen are compatible on the basis of class
-					 if (!isArrayAndSpecimenCompatibile(arrayType,specimen))
-					 {
-						 throw new DAOException(Constants.ARRAY_SPEC_NOT_COMPATIBLE_EXCEPTION_MESSAGE);
-					 }
-					  // if molecular then check available quantity
-					 if (specimen instanceof MolecularSpecimen)
-					 {
-						 	if (specimenArrayContent.getInitialQuantity() != null)
-						 	{	
-							  quantity = specimenArrayContent.getInitialQuantity().getValue().doubleValue();
-							  if (!isAvailableQty(specimen,quantity)) 
-							  {
-								  throw new DAOException(" Quantity '" + quantity + "' should be less than current Distributed Quantity '" + specimen.getAvailableQuantity().getValue().doubleValue() + "' of specimen :: " + specimen.getLabel());				  	
-							  }
-							  dao.insert(specimenArrayContent.getInitialQuantity(),sessionDataBean,true,false);
-						 	}
-						 	System.out.println(" Not Update Specimen");
-						 	//dao.update(specimen,sessionDataBean,Constants.IS_AUDITABLE_TRUE,false,Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
-					 }
-					 specimenArrayContent.setSpecimen(specimen);
-					 updatedSpecArrayContentCollection.add(specimenArrayContent);
-				}
-			}
-			
-			// There should be at least one valid specimen in array
-			if (updatedSpecArrayContentCollection.isEmpty()) {
-				throw new DAOException(Constants.ARRAY_NO_SPECIMEN__EXCEPTION_MESSAGE);
-			}
-			specimenArray.setSpecimenArrayContentCollection(updatedSpecArrayContentCollection);
-		}
-*/
 		dao.insert(specimenArray.getCapacity(),sessionDataBean, true, false);
 		dao.insert(specimenArray,sessionDataBean,true,false);
 		SpecimenArrayContent specimenArrayContent = null;
@@ -143,9 +90,13 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 				dao.update(specimenArrayContent,sessionDataBean,true,false,false);
 			}
 		}
-		//SpecimenArray oldSpecimenArray = (SpecimenArray) oldObj;
 	}
 	
+	/**
+	 * @param specimenArrayContent array contents
+	 * @param oldSpecArrayContents old spec array contents
+	 * @return whether it is new or old
+	 */
 	private boolean isNewSpecimenArrayContent(SpecimenArrayContent specimenArrayContent,Collection oldSpecArrayContents)
 	{
 		boolean isNew = true;
@@ -168,6 +119,14 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 		return isNew;
 	}
 	
+	/**
+	 * @param specimenArray specimen array
+	 * @param dao dao
+	 * @param sessionDataBean session data bean
+	 * @param isInsertOperation is insert operation
+	 * @throws DAOException 
+	 * @throws UserNotAuthorizedException
+	 */
 	private void doUpdateSpecimenArrayContents(SpecimenArray specimenArray,DAO dao,SessionDataBean sessionDataBean,boolean isInsertOperation)
 				 throws DAOException, UserNotAuthorizedException	
 	{
@@ -197,17 +156,26 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 					 {
 						 throw new DAOException(Constants.ARRAY_SPEC_NOT_COMPATIBLE_EXCEPTION_MESSAGE);
 					 }
+					 
+					 // set quantity object to null when there is no value.. [due to Hibernate exception]
+					 if (specimenArrayContent.getInitialQuantity() != null)
+					 {
+						 if (specimenArrayContent.getInitialQuantity().getValue() == null)
+						 {
+							 specimenArrayContent.setInitialQuantity(null);
+						 }
+					 }
+					 
 					  // if molecular then check available quantity
 					 if (specimen instanceof MolecularSpecimen)
 					 {
 						 	if (specimenArrayContent.getInitialQuantity() != null)
 						 	{	
 							  quantity = specimenArrayContent.getInitialQuantity().getValue().doubleValue();
-							  if (!isAvailableQty(specimen,quantity)) 
+							  if (!isAvailableQty(specimen,quantity))
 							  {
-								  throw new DAOException(" Quantity '" + quantity + "' should be less than current Distributed Quantity '" + specimen.getAvailableQuantity().getValue().doubleValue() + "' of specimen :: " + specimen.getLabel());				  	
+									  throw new DAOException(" Quantity '" + quantity + "' should be less than current Distributed Quantity '" + specimen.getAvailableQuantity().getValue().doubleValue() + "' of specimen :: " + specimen.getLabel());				  	
 							  }
-							  
 							  if (specimenArrayContent.getInitialQuantity().getId() == null) 
 							  {
 								dao.insert(specimenArrayContent.getInitialQuantity(),sessionDataBean,true,false);
@@ -215,7 +183,10 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 								dao.update(specimenArrayContent.getInitialQuantity(),sessionDataBean,true,false,false);  
 							  }
 						 	}
-						 	//System.out.println(" Not Update Specimen");
+						 	else
+						 	{
+						 		throw new DAOException(Constants.ARRAY_MOLECULAR_QUAN_EXCEPTION_MESSAGE + specimen.getLabel());						 		
+						 	}
 					 }
 					 specimenArrayContent.setSpecimen(specimen);
 					 updatedSpecArrayContentCollection.add(specimenArrayContent);
@@ -280,11 +251,8 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 				return null;
 			}
 			String sourceObjectName = Specimen.class.getName();
-//			String[] selectedColumn = {"specimen." + Constants.SYSTEM_IDENTIFIER};
 			String whereColumnName = columnName;
-			//String whereColumnCondition[] = {"="};
 			String whereColumnValue = columnValue;
-			//String joinCondition = Constants.AND_JOIN_CONDITION;
 	
 			List list = dao.retrieve(sourceObjectName, whereColumnName,whereColumnValue);
 			if (!list.isEmpty())
