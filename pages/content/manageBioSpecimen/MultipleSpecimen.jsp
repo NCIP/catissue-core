@@ -9,6 +9,9 @@
 <head>
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript"
+	src="jss/script.js"></script>
+	
 
 <%MultipleSpecimenForm form = (MultipleSpecimenForm) request
 					.getAttribute("multipleSpecimenForm");
