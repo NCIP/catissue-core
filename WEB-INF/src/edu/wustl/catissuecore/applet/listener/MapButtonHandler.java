@@ -7,7 +7,13 @@ package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
 
+import javax.swing.JButton;
 import javax.swing.JTable;
+
+import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
+import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
+import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * @author mandar_deshmukh
@@ -16,16 +22,39 @@ import javax.swing.JTable;
  */
 public class MapButtonHandler extends ButtonHandler {
 
-	protected void handleAction(ActionEvent event) {
-		super.handleAction(event);
-		System.out.println("Inside MapButtonHandler");
-	}
 	
+	/** (non-Javadoc)
+	 * @see edu.wustl.catissuecore.applet.listener.ButtonHandler#handleAction(java.awt.event.ActionEvent)
+	 */
+	protected void handleAction(ActionEvent event)
+	{
+		int colNo = table.getSelectedColumn();
+		int rowNo = table.getSelectedRow();
+		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel) table.getModel();
+		
+		String key = model.getKey(rowNo, colNo);           
+	    String collectionGroup = (String) model.getValueAt(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO,colNo);
+	    String specimenClass = (String) model.getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO,colNo);
+		
+	    Object[] parameters = new Object[]{String.valueOf(colNo),collectionGroup,specimenClass}; 
+		
+		CommonAppletUtil.callJavaScriptFunction((JButton) event.getSource(),
+				getJSMethodName(), parameters);
+	}
+
 	/**
 	 * @param table
 	 */
 	public MapButtonHandler(JTable table) {
 		super(table);
+	}
+
+	/**
+	 * @return JS method name for this button.
+	 */
+	protected String getJSMethodName()
+	{
+		return "showStoragePositionMap";
 	}
 
 }

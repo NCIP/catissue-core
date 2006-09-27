@@ -58,6 +58,11 @@ public class ShowFramedPageAction extends Action
             
             String cdeName = request.getParameter(Constants.CDE_NAME);
             session.setAttribute(Constants.CDE_NAME, cdeName);
+        } if (pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN)) {
+            session.setAttribute(Constants.SPECIMEN_CLASS,request.getParameter(Constants.SPECIMEN_CLASS));
+            session.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP,request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP));
+            session.setAttribute(Constants.SPECIMEN_ATTRIBUTE_KEY,request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY));
+            session.setAttribute(Constants.SPECIMEN_CALL_BACK_FUNCTION,request.getParameter(Constants.SPECIMEN_CALL_BACK_FUNCTION));
         }
         
         return mapping.findForward(pageOf);

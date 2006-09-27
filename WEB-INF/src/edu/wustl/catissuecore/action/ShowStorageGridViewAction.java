@@ -120,6 +120,7 @@ public class ShowStorageGridViewAction  extends BaseAction
             
             storageContainerGridObject.setId(storageContainer.getId().longValue());
             storageContainerGridObject.setType(storageContainer.getStorageType().getName());
+            storageContainerGridObject.setName(storageContainer.getName());
             
             Integer oneDimensionCapacity = storageContainer
             				.getCapacity().getOneDimensionCapacity();

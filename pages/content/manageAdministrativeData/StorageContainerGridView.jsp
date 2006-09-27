@@ -4,6 +4,9 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.storage.StorageContainerGridObject"%>
 <%@ page import="java.util.*"%>
 
+<script language="JavaScript" type="text/javascript"
+	src="jss/javaScript.js"></script>
+
 <script>
 function setParentWindowValue(elementName,elementValue)
 {
@@ -92,6 +95,20 @@ function closeFramedWindow()
 	//Mandar: 29Aug06 : For container details
 	List collectionProtocolList = (List)request.getAttribute(Constants.MAP_COLLECTION_PROTOCOL_LIST );
 	List specimenClassList = (List)request.getAttribute(Constants.MAP_SPECIMEN_CLASS_LIST );
+	
+	String specimenClass = null;
+	String collectionGroup = null;
+	String specimenMapKey = null;
+	String specimenCallBackFunction = null;
+	String nodeName = null;
+ 
+   if (pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN)) {
+	   specimenClass = (String) session.getAttribute(Constants.SPECIMEN_CLASS);
+	   collectionGroup = (String) session.getAttribute(Constants.SPECIMEN_COLLECTION_GROUP);
+	   specimenMapKey = (String) session.getAttribute(Constants.SPECIMEN_ATTRIBUTE_KEY);
+	   specimenCallBackFunction =  (String) session.getAttribute(Constants.SPECIMEN_CALL_BACK_FUNCTION);
+   }
+
 %>
 
 <html:errors/>
@@ -288,7 +305,10 @@ function closeFramedWindow()
 						else
 						{
 							String setParentWindowContainer = null;
-							if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
+							if (pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN)) {
+								setParentWindowContainer = "javascript:" + specimenCallBackFunction + "('" + specimenMapKey + "' , '" + storageContainerGridObject.getId() + "' , '" + storageContainerGridObject.getName() + 
+								"' , '" + i + "' , '" + j + "' );closeFramedWindow()" ;
+							} else if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
 							{
 								setParentWindowContainer = "javascript:setCustomListBoxValue('" + containerStyleId + "','"+
 															  + storageContainerGridObject.getId() + "');"+"javascript:setCustomListBoxValue('" + xDimStyleId + "','"+

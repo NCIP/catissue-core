@@ -75,7 +75,7 @@ public class TreeDataAction extends BaseAction
                 SessionDataBean sessionData = getSessionData(request);
             	dataList = bizLogic.getTreeViewData(sessionData,columnIdsMap, disableSpecimenIdsList);
             }
-            else if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_SPECIMEN))
+            else if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN) || pageOf.equals(Constants.PAGEOF_SPECIMEN))
             {
                 dataList = bizLogic.getTreeViewData();
             }
@@ -84,7 +84,7 @@ public class TreeDataAction extends BaseAction
             response.setContentType(contentType);
             out = new ObjectOutputStream(response.getOutputStream());
             
-            if(pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_SPECIMEN) || pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
+            if(pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) ||pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN) || pageOf.equals(Constants.PAGEOF_SPECIMEN) || pageOf.equals(Constants.PAGEOF_TISSUE_SITE))
             {
                 out.writeObject(dataList);
             }
