@@ -413,16 +413,25 @@ function showStoragePositionMap(specimenAttributeKey,collectionGroup,specimenCla
 /* --- Start Specimen Array javascript functions ---*/
 function changeArrayType() 
 {
-		var confirmArrayChange = confirm("Your entered contents will be lost !! do you really want to continue?");
-		
-		if (confirmArrayChange == true) 
+
+		var form = document.forms[0];
+		var specimenArrayTypeVal = form.specimenArrayTypeId.value;
+		if (specimenArrayTypeVal == -1)
 		{
+			alert("Please select Valid Specimen Array Type !!");
+			return;
+		}
+
+//		var confirmArrayChange = confirm("Your entered contents will be lost !! do you really want to continue?");
+		
+//		if (confirmArrayChange == true) 
+//		{
 			var form = document.forms[0];
 			//form.operation.value="CreateSpecimenArray";
 			form.subOperation.value="ChangeArraytype";
 			form.action = "SpecimenArray.do?menuSelected=20";
 			form.submit();
-		}	
+//		}	
 }
 
 function doStoreTableData() 
