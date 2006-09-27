@@ -381,6 +381,11 @@ function showCommentsDialog(operation,key) {
    		 window.open(url,"caTissuecore", properties);
 }
 
+function showExtenalIdentifierDialog(operation,key) {
+	   var url ='NewMultipleSpecimenAction.do?method=showExtenalIdentifierDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
+        NewWindow(url,'name','810','320','yes');
+}
+
 function submitComments() 
 {
   var form =  document.forms[0];

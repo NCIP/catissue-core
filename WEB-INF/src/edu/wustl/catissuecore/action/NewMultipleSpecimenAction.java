@@ -101,4 +101,24 @@ public class NewMultipleSpecimenAction extends DispatchAction
 		
 		return multipleSpecimenMap;
 	}
+	
+	/**
+	 * displays external identifer page populated with previously added information.
+	 * 
+	 */
+	public ActionForward showExtenalIdentifierDialog(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+	throws Exception {
+		request.setAttribute("output","init");
+		
+		Map multipleSpecimenMap = chkForMultipleSpecimenMap(request);
+		String keyInSpecimenMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
+		String comments = (String) multipleSpecimenMap.get(keyInSpecimenMap);
+        
+		
+		
+		((NewSpecimenForm) form).setComments(comments);		
+		return mapping.findForward("externalIdentifier");
+	}
+
 }
