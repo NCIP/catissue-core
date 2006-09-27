@@ -80,7 +80,7 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="formRequiredNotice" width="5">&nbsp;</td>
+				<td class="formRequiredNotice" width="5">*</td>
 				<td class="formRequiredLabelWithoutBorder">
 					<label for="arrayLabel">
 						<bean:message key="array.arrayLabel" />
@@ -102,7 +102,7 @@
 			</tr>
 
 			<tr>
-				<td class="formRequiredNotice" width="5">&nbsp;</td>
+				<td class="formRequiredNotice" width="5">*</td>
 				<td class="formRequiredLabelWithoutBorder">
 					<label for="specimenClass">
 						<bean:message key="arrayType.specimenClass" />
@@ -114,7 +114,7 @@
 					</html:select>
 				</td>
 
-				<td class="formRequiredNoticeWithoutLeftBorder" width="5">&nbsp;</td>
+				<td class="formRequiredNoticeWithoutLeftBorder" width="5">*</td>
 				<td class="formRequiredLabelWithoutBorder">
 					<label for="specimenType">
 						<bean:message key="arrayType.specimenType" />
