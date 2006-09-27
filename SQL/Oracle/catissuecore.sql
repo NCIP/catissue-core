@@ -193,7 +193,7 @@ drop   sequence CATISSUE_QUANTITY_SEQ;
 drop   sequence CATISSUE_AUDIT_EVENT_SEQ;
 drop   sequence CATISSUE_PASSWORD_SEQ;
 drop   sequence CATISSUE_CONTAINER_SEQ;
-drop   sequence CATISSUE_SPECI_ARRAY_CONTENT_SEQ;
+drop   sequence CATISSUE_SPECI_ARRAY_CNTNT_SEQ;
 drop   sequence CATISSUE_DISTRIBUTION_SEQ;
 create table CATISSUE_PERMISSIBLE_VALUE (
    IDENTIFIER number(19,0) not null ,
@@ -832,5 +832,5 @@ create sequence CATISSUE_QUANTITY_SEQ;
 create sequence CATISSUE_AUDIT_EVENT_SEQ;
 create sequence CATISSUE_PASSWORD_SEQ;
 create sequence CATISSUE_CONTAINER_SEQ;
-create sequence CATISSUE_SPECI_ARRAY_CONTENT_SEQ;
+create sequence CATISSUE_SPECI_ARRAY_CNTNT_SEQ;
 create sequence CATISSUE_DISTRIBUTION_SEQ;

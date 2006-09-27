@@ -467,3 +467,6 @@ alter table CATISSUE_container add constraint NAME unique (NAME);
 /*Poornima -26/09/06-Added unspecified value to Vital status and NOT SPECIFIED value in Tissue Site- */
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2641,'Unspecified',NULL,'2004001');
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2642,'NOT SPECIFIED',NULL,'Tissue_Site_PID');
+
+/*changed the sequence name for specimen array content as it was more than 30 chars */
+create sequence CATISSUE_SPECI_ARRAY_CNTNT_SEQ;
