@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="java.util.Map,java.util.*"%>
+<%@ page import="java.util.Map"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenArrayForm"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 
@@ -29,17 +29,6 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
-
-	<script src="runtime/lib/aw.js"></script>
-	<link href="runtime/styles/xp/aw.css" rel="stylesheet"></link>
-	<script src="jss/mygrid.js"></script>
-	<link href="css/mygrid.css" rel="stylesheet"></link>
-
-	<style>
-    .aw-grid-cell {border: 1px solid threedlightshadow;}
-	.aw-grid-row {border-bottom: 1px solid threedlightshadow;}
-    </style>
-
 <html:form action="<%=formAction%>">
 <html:hidden property="id" />
 <html:hidden property="operation" value="<%=operation%>"/>
@@ -318,6 +307,8 @@
 				<!-- action buttons end -->
 				</td>
 			</tr>
-
+		</table>
+	 </td>
+   </tr>
 </table>
 </html:form>
