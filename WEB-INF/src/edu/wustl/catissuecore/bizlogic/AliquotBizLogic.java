@@ -60,7 +60,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			String idKey = specimenKey + i + "_id";
 			String labelKey = specimenKey + i + "_label";
 			String virtuallyLocatedKey = specimenKey + i + "_virtuallyLocated";
-
+			String storageContainerNameKey = specimenKey + i + "_stContainerName";
 			//Retrieving the quantity, barcode & location values for each aliquot
 			String quantity = (String) aliquotMap.get(quantityKey);
 			String barcode = (String) aliquotMap.get(barcodeKey);
@@ -136,15 +136,17 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 								.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
 						//check for all validations on the storage container.
-						storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2,
-								sessionDataBean);
-
+						storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2,sessionDataBean);
+						
 						aliquotSpecimen.setStorageContainer(container);
+						
+						aliquotMap.put(storageContainerNameKey,container.getName());
 					}
 				}
 				else
 				{
 					aliquotSpecimen.setStorageContainer(null);
+					
 				}
 			}
 			catch (SMException sme)
@@ -173,7 +175,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 
 			//Setting the identifier values in the map
 			aliquotMap.put(idKey, String.valueOf(aliquotSpecimen.getId()));
-
+			
 			//TO BE DELETED LATER
 			aliquot.setId(aliquotSpecimen.getId());
 
