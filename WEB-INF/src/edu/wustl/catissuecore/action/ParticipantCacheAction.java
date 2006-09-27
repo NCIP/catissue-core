@@ -55,6 +55,13 @@ public class ParticipantCacheAction extends BaseAction
 		catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS,participantMap);
 		
 		ParticipantForm participantForm = (ParticipantForm) form;
+		 if((participantForm.getActivityStatus() != null) &&
+                (Constants.ACTIVITY_STATUS_DISABLED.equals(participantForm.getActivityStatus())))
+        {
+        	ActionForward reDirectForward = new ActionForward();
+       		reDirectForward.setPath("/ManageBioSpecimen.do");
+       		return reDirectForward;
+        }
 		if(participantForm.isAddOperation())
 		{
 			return mapping.findForward(Constants.ADD);

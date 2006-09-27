@@ -278,6 +278,11 @@ tr#hiddenCombo
 					}
 				}		
 			<%}%>	
+		
+			if(document.forms[0].activityStatus!=null && document.forms[0].activityStatus.value == "Disabled")
+			{
+			  document.forms[0].value="/ParticipantCache.do";
+			}
 			document.forms[0].submit();		
 		}
 	</script>
@@ -380,7 +385,7 @@ tr#hiddenCombo
 						<html:hidden property="forwardTo" value="<%=forwardTo%>"/>
 					</td>
 					<td><html:hidden property="counter"/></td>
-					<td><html:hidden property="onSubmit"/></td>
+					<td><html:hidden property="onSubmit" /></td>
 					<td><html:hidden property="id" /><html:hidden property="redirectTo"/></td>
 					<td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
 				 </tr>
