@@ -37,7 +37,6 @@ public class ChangePasswordAction extends BaseAction
         UserForm userForm = (UserForm) form;
     	String pageOf = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF, pageOf);
-        request.setAttribute(Constants.ACCESS, userForm.getAccess());
         return mapping.findForward(pageOf);
     }
 

@@ -96,7 +96,8 @@ public class LoginAction extends Action
 	                	  ActionErrors errors = new ActionErrors();
 	                      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(result));
 	                      saveErrors(request, errors);
-	                      request.setAttribute(Constants.ACCESS,"true");
+	                      session.setAttribute(Constants.SESSION_DATA,null);
+	                      session.setAttribute(Constants.TEMP_SESSION_DATA,sessionData);
 	                      request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_CHANGE_PASSWORD);
 	                      return mapping.findForward(Constants.ACCESS_DENIED);
 	                }
