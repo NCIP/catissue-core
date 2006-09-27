@@ -1,0 +1,84 @@
+/*
+ * Created on Sep 26, 2006
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+package edu.wustl.catissuecore.applet.ui;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.TableColumnModel;
+
+import edu.wustl.catissuecore.applet.component.BaseTable;
+import edu.wustl.catissuecore.applet.model.RowHeaderColumnModel;
+
+/**
+ * @author mandar_deshmukh
+ *
+ * Class for fixing the RowHeader scroll.
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+public class FixedColumnScrollPane extends JScrollPane {
+	 public FixedColumnScrollPane(JTable main, int fixedColumns)
+	    {
+	        super( main );
+	 
+	        //  Use the table to create a new table sharing
+	        //  the DataModel and ListSelectionModel
+	 
+	        BaseTable fixed = new BaseTable( main.getModel() );
+	        fixed.setFocusable( false );
+	        fixed.setSelectionModel( main.getSelectionModel() );
+	        fixed.getTableHeader().setReorderingAllowed( false );
+//	        fixed.getTableHeader().setResizingAllowed( false );
+	        fixed.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+	        main.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+	 
+	        //  Remove the fixed columns from the main table
+	 
+	        for (int i = 0; i < fixedColumns; i++)
+	        {
+	            TableColumnModel columnModel = main.getColumnModel();
+	            columnModel.removeColumn( columnModel.getColumn( 0 ) );
+	        }
+	 
+	        //  Remove the non-fixed columns from the fixed table
+	 
+	        while (fixed.getColumnCount() > fixedColumns)
+	        {
+	            TableColumnModel columnModel = fixed.getColumnModel();
+	            columnModel.removeColumn( columnModel.getColumn( fixedColumns ) );
+	        }
+	        //setting row height
+	        new RowHeaderColumnModel(fixed);		//	for zeroth column
+	        for(int i=0;i<main.getRowCount();i++ )
+	        {
+	        	fixed.setRowHeight(i,main.getRowHeight(i));
+	        }
+	        TableColumnModel columnModel = fixed.getColumnModel();
+			columnModel.getColumn(0).setResizable(false );
+			columnModel.getColumn(0).setPreferredWidth(175 );
+	        //  Add the fixed table to the scroll pane
+	 
+	        fixed.setPreferredScrollableViewportSize(fixed.getPreferredSize());
+	        setRowHeaderView( fixed );
+	        setCorner(JScrollPane.UPPER_LEFT_CORNER, fixed.getTableHeader());
+	    }
+	 
+	    public static void main(String[] args)
+	    {
+	        //  Build your table normally
+	 
+	        JTable table = new JTable(10, 8);
+	        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+	        JScrollPane scrollPane= new FixedColumnScrollPane(table, 1 );
+	//
+	        JFrame frame = new JFrame("Table Fixed Column Demo");
+	        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+	        frame.getContentPane().add( scrollPane );
+	        frame.setSize(400, 300);
+	        frame.setVisible(true);
+	    }
+}
