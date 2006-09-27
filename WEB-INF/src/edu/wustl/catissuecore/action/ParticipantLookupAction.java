@@ -64,11 +64,10 @@ public class ParticipantLookupAction extends BaseAction
 			Logger.out.info("inside the participant mapping");
 			return mapping.findForward("participantSelect");
 		}
-		List participantList=bizlogic.getParticipantLookupData(participant);
+		List matchingParticipantList = bizlogic.getListOfMatchingParticipants(participant);
 		
-		Logger.out.debug("Participant List Size:"+participantList.size());
 		//if any matching participants are there then show the participants otherwise add the participant
-		if (participantList.size() > 0)
+		if (matchingParticipantList!=null && matchingParticipantList.size() > 0)
 		{
 			messages=new ActionMessages();
 			messages.add(ActionErrors.GLOBAL_MESSAGE,new ActionMessage("participant.lookup.success","Submit was not successful because some matching participants found."));
@@ -77,7 +76,7 @@ public class ParticipantLookupAction extends BaseAction
 			request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnList);
 			
 			//Getitng the Participant List in Data Grid Format
-			List participantDisplayList=getParticipantDisplayList(participantList);
+			List participantDisplayList=getParticipantDisplayList(matchingParticipantList);
 			request.setAttribute(Constants.SPREADSHEET_DATA_LIST, participantDisplayList);
 			
 			target=Constants.PARTICIPANT_LOOKUP_SUCCESS;
