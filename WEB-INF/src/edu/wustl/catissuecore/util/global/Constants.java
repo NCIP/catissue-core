@@ -1261,6 +1261,13 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String ARRAY_TYPE_ANY_VALUE = "2";
 	public static final String ARRAY_TYPE_ANY_NAME = "Any";
-
+	
+	// constants required for caching mechanism of ParticipantBizLogic
+	
+	public static final String MAP_OF_PARTICIPANTS = "listOfParticipants";
+	public static final String EHCACHE_FOR_PARTICIPANT_LOOKUP = "cacheForParticipantLookUp";
+	public static final String ADD = "add";
+	public static final String EDIT = "edit";
+	public static final String ID = "id";
 	 
 }
