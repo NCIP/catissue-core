@@ -374,6 +374,7 @@ function  deleteCheckedNoSubmit(subdivtag,action,countElement,checkName,isOuterT
 	return status;
 }
 
+/* --- Start Multiple Specimen  javascript functions ---*/
 function showCommentsDialog(operation,key) {
  		 var url ='NewMultipleSpecimenAction.do?method=showCommentsDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
 		 var properties = "height = 120; width:100px; Top:300; Left:350; center: Yes; resizable: no;status:no;help:no;toolbar :no";
@@ -385,7 +386,23 @@ function submitComments()
   var form =  document.forms[0];
   form.action =  form.action + "?method=submitComments";
   form.submit();
+}	   
+
+function setStoragePosition(specimenMapKey,storageId,storageType,xPos,yPos) {
+   parent.window.opener.document.applets[0].setStorageDetails(specimenMapKey,storageId,storageType,xPos,yPos);
 }
+
+function showStoragePositionMap(specimenAttributeKey,collectionGroup,specimenClass) {
+	var  url = "ShowFramedPage.do?pageOf=pageOfMultipleSpecimen";
+	url = url + "&amp;specimenAttributeKey=" + specimenAttributeKey;
+	url = url + "&amp;SpecimenCollectionGroup=" + collectionGroup;
+	url = url + "&amp;specimenClass=" + specimenClass;
+	url = url + "&amp;specimenCallBackFunction=" + "setStoragePosition";
+
+    NewWindow(url,'name','810','320','yes');
+}
+
+/* --- End Multiple Specimen  javascript functions ---*/
 
 
 /* --- Start Specimen Array javascript functions ---*/
