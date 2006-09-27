@@ -636,7 +636,7 @@ create table CATISSUE_SPECIMEN (
    IDENTIFIER number(19,0) not null ,
    SPECIMEN_CLASS varchar(255) not null,
    TYPE varchar(50),
-   LABEL varchar(50),
+   LABEL varchar(50) unique,
    LINEAGE varchar(50),
    PATHOLOGICAL_STATUS varchar(50),
    AVAILABLE number(1,0),
