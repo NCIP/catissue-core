@@ -2263,22 +2263,20 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 */
 	public Map getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id,int noOfAliqoutes) throws DAOException
 	{
-//		List list = retrieve(StorageContainer.class.getName());
 		Map containerMap = new TreeMap();
-		List siteList = new ArrayList();
-		siteList.add(new NameValueBean("---","---"));
 		
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		dao.openSession(null);
+		String includeAllIdQueryStr =  " OR t4.SPECIMEN_ARRAY_TYPE_ID = '" + Constants.ARRAY_TYPE_ALL_ID + "'";
 		
+		if (!(new Validator().isValidOption(String.valueOf(specimen_array_type_id))))
+		{
+			includeAllIdQueryStr ="";
+		}
 		String queryStr = "select t1.IDENTIFIER,t1.name from CATISSUE_CONTAINER t1,CATISSUE_STORAGE_CONTAINER t2 " +
 						  "where t1.IDENTIFIER IN (select t4.STORAGE_CONTAINER_ID from CATISSUE_CONT_HOLDS_SPARRTYPE t4 " +
-						  "where t4.SPECIMEN_ARRAY_TYPE_ID = '" + specimen_array_type_id + "') and t1.IDENTIFIER = t2.IDENTIFIER;";
+						  "where t4.SPECIMEN_ARRAY_TYPE_ID = '" + specimen_array_type_id + "'" + includeAllIdQueryStr + ") and t1.IDENTIFIER = t2.IDENTIFIER;";
 		
-		/*String queryStr ="SELECT t1.IDENTIFIER, t1.NAME, t2.NAME FROM CATISSUE_CONTAINER t1, CATISSUE_SITE t2 ,CATISSUE_STORAGE_CONTAINER t3 WHERE "+ 
-						"t1.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_STOR_TYPE_REL t4 "+ 
-						"WHERE t4.STORAGE_TYPE_ID = '"+type_id+"' OR t4.STORAGE_TYPE_ID='1') and t1.IDENTIFIER = t3.IDENTIFIER and t2.IDENTIFIER=t3.SITE_ID";
-		*/	
 		Logger.out.debug("SPECIMEN ARRAY QUERY ......................" + queryStr);
 		List list = new ArrayList();
 
