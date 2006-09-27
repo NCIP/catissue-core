@@ -16,6 +16,7 @@ import javax.swing.JTable;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.applet.component.BaseTable;
+import edu.wustl.catissuecore.applet.listener.AddColumnHandler;
 import edu.wustl.catissuecore.applet.listener.SpecimenSubmitButtonHandler;
 import edu.wustl.catissuecore.applet.listener.TableModelChangeHandler;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
@@ -38,6 +39,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	public void doInit()
     {
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));
+		columnNumber++;
 //		int columnNumber = 4;
 		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());		
 
@@ -48,8 +50,9 @@ public class MultipleSpecimenApplet extends BaseApplet {
                 return getValueAt(0, column).getClass();
             }
         };
+        table.getTableHeader().setReorderingAllowed(false);
 		// Creating Layout
-		getContentPane().setLayout(new FlowLayout());
+		getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT ));
 
 		JPanel buttonPanel;
 		JPanel linkPanel;
@@ -71,10 +74,10 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		//--gblayout
 		GridBagLayout gbl = new GridBagLayout();
 		outerPanel.setLayout(gbl);
-	    
+	    final int GRIDX = 0;
 		// Place a component at cell location (1,1)
 	    GridBagConstraints gbc = new GridBagConstraints();
-	    gbc.gridx = 1;
+	    gbc.gridx = GRIDX;
 	    gbc.gridy = 1;
 	    gbc.fill = GridBagConstraints.NONE;
 	    gbl.setConstraints(buttonPanel, gbc);
@@ -82,7 +85,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 
 		// Place a component at cell location (2,1)
 	    gbc = new GridBagConstraints();
-	    gbc.gridx = 1;
+	    gbc.gridx = GRIDX;
 	    gbc.gridy = 2;
 	    gbc.fill = GridBagConstraints.NONE;
 	    gbl.setConstraints(linkPanel, gbc);
@@ -90,30 +93,25 @@ public class MultipleSpecimenApplet extends BaseApplet {
 
 		// Place a component at cell location (3,1)
 	    gbc = new GridBagConstraints();
-	    gbc.gridx = 1;
+	    gbc.gridx = GRIDX;
 	    gbc.gridy = 3;
-	    gbc.fill = GridBagConstraints.NONE;
+	    gbc.fill = GridBagConstraints.BOTH;   
+//	    gbc.fill = GridBagConstraints.NONE;
 	    gbl.setConstraints(tablePanel, gbc);
 	    outerPanel.add(tablePanel);
 
 		// Place a component at cell location (4,1)
 	    gbc = new GridBagConstraints();
-	    gbc.gridx = 1;
+	    gbc.gridx = GRIDX;
 	    gbc.gridy = 4;
 	    gbc.fill = GridBagConstraints.NONE;
 	    gbl.setConstraints(footerPanel, gbc);
 	    outerPanel.add(footerPanel);
 
-
 		//--- gbl
-//		outerPanel.add(buttonPanel);
-//		outerPanel.add(linkPanel);
-//		outerPanel.add(tablePanel);
-//		outerPanel.add(footerPanel);
 		
 	    getContentPane().add(outerPanel);
 		// --------------------
-	    
 
         table.getModel().addTableModelListener(new TableModelChangeHandler(table));
 			
@@ -122,36 +120,31 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		//table.setRowHeight(3,50);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		 
-		JScrollPane scrollPane = new JScrollPane( table );
-
-//        getContentPane().add( scrollPane );
-//		JButton showAll = new JButton("ShowData");
-		
-//		showAll.addActionListener(new BaseActionHandler(table));
-
-//		getContentPane().add( showAll,BorderLayout.SOUTH );
-
         //  Create custom columns
 		new RowHeaderColumnModel(table);		//	for zeroth column
 		for(int cnt = 1; cnt < columnNumber; cnt++)
 		{
 			new SpecimenColumnModel(table, cnt);
 		}
+		table.setAutoCreateColumnsFromModel(false);
+//		JScrollPane scrollPane = new JScrollPane( table );
+		JScrollPane scrollPane= new FixedColumnScrollPane(table, 1 );
+		scrollPane.setSize(table.getWidth(),table.getHeight()); 
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER  );  
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
 
 		tablePanel.add( scrollPane );
-    }
- 
-    public static void main(String[] args)
-    {
-    	MultipleSpecimenApplet frame = new MultipleSpecimenApplet();
     }
     
     private void createButtonPanel(JPanel panel)
     {
     	JButton copy = new JButton("Copy");
     	JButton paste = new JButton("Paste");
+    	JButton addSpecimen = new JButton("Add Specimen");
+    	addSpecimen.addActionListener(new AddColumnHandler(table) );
     	JLabel placeHolder = new JLabel("     ");
     	panel.add(copy);panel.add(placeHolder );panel.add(paste );
+    	panel.add(placeHolder );panel.add(addSpecimen);
     }
     
     private void createLinkPanel(JPanel panel)
