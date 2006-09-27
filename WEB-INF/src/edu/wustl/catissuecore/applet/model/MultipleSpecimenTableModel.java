@@ -30,7 +30,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	String[] specimenAttribute = {"SpecimenCollectionGroup_name", "parentSpecimen", "label",
 			"barcode", "class", "type", "SpecimenCharacteristics_tissueSite",
 			"SpecimenCharacteristics_tissueSide", "pathologicalStatus", "Quantity_value",
-			"concentrationInMicrogramPerMicroliter", "storageContainer", "comments",
+			"concentrationInMicrogramPerMicroliter", "StorageContainer_temp", "comments",
 			"specimenEventCollection", "externalIdentifierCollection", "biohazardCollection",
 			"derive"};
 
@@ -326,8 +326,15 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		return specimenKey;
 	}
 
+	/**
+	 * Concentration is enabled only in case of Molecular class.
+	 * so this method returns true if Molecular class is selected for the given column.
+	 * 
+	 * @param column
+	 * @return
+	 */
 	public boolean getConcentrationStatus(int column)
-	{
+	{	
 		String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, column);
 		
 		if(specimenClass.equalsIgnoreCase(Constants.MOLECULAR)) {
@@ -335,6 +342,19 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		} 
 		
 		return false;
+	}
+	
+	public void setStorageDetails(String specimenMapKey, String storageId,String storageLabel,String xPos,String yPos) {
+		int colNo = Integer.parseInt(specimenMapKey);
+		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + specimenMapKey + "_" + "StorageContainer_id" ,new Long(storageId));
+		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + specimenMapKey + "_" + "positionDimensionOne", xPos );
+		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + specimenMapKey + "_" + "positionDimensionTwo", yPos );
+		
+		String storageInfo = storageLabel + "," + xPos + "," + yPos;
+		
+		setValueAt(storageInfo, AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO, colNo);
+		
+		System.out.println("setting " + storageInfo + "to " +  AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO + "  " +  colNo);
 	}
 
 }

@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.listener.SpecimenSubmitButtonHandler;
@@ -189,5 +190,16 @@ public class MultipleSpecimenApplet extends BaseApplet {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public void setStorageDetails(String specimenMapKey, String storageId,String storageType,String xPos,String yPos) {
+		int colNo = Integer.parseInt(specimenMapKey);
+		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
+		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(colNo).getCellRenderer();
+		
+		tableModel.setStorageDetails(specimenMapKey, storageId, storageType, xPos, yPos);
+		String storageValue = (String) tableModel.getValueAt(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO,colNo);
+		columnModel.setLocation(storageValue);
+		
 	}
 }
