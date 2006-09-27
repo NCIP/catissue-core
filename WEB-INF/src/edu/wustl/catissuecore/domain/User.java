@@ -122,6 +122,11 @@ public class User extends AbstractDomainObject implements Serializable
      * Identifier of this user in csm user table. 
      */
     protected Long csmUserId;
+    
+    /**
+	 * whether Aliquote in same container
+	 */
+	protected Boolean firstTimeLogin = new Boolean(true);
 
     /**
      * Initialize a new User instance.
@@ -659,5 +664,19 @@ public class User extends AbstractDomainObject implements Serializable
 		   }
 		}
 		return null;
+	}
+	/**
+	 * @return Returns the firstTimeLogin.
+	 */
+	public Boolean getFirstTimeLogin()
+	{
+		return firstTimeLogin;
+	}
+	/**
+	 * @param firstTimeLogin The firstTimeLogin to set.
+	 */
+	public void setFirstTimeLogin(Boolean firstTimeLogin)
+	{
+		this.firstTimeLogin = firstTimeLogin;
 	}
 }
