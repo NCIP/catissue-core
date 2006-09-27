@@ -82,7 +82,15 @@
             column="ACTIVITY_STATUS"
             length="50"
         />
-
+		
+		  <property
+            name="firstTimeLogin"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="FIRST_TIME_LOGIN"
+        />
+	
         <many-to-one
             name="department"
             class="edu.wustl.catissuecore.domain.Department"
