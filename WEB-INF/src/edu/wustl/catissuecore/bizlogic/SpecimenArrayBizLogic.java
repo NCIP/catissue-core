@@ -172,9 +172,13 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 						 	if (specimenArrayContent.getInitialQuantity() != null)
 						 	{	
 							  quantity = specimenArrayContent.getInitialQuantity().getValue().doubleValue();
-							  if (!isAvailableQty(specimen,quantity))
+								 // incase if specimenArray is created from aliquot page, then skip the Available quantity of specimen. 
+							  if(!specimenArray.isAliquot()) 
 							  {
-									  throw new DAOException(" Quantity '" + quantity + "' should be less than current Distributed Quantity '" + specimen.getAvailableQuantity().getValue().doubleValue() + "' of specimen :: " + specimen.getLabel());				  	
+								  if (!isAvailableQty(specimen,quantity))
+								  {
+										  throw new DAOException(" Quantity '" + quantity + "' should be less than current Distributed Quantity '" + specimen.getAvailableQuantity().getValue().doubleValue() + "' of specimen :: " + specimen.getLabel());				  	
+								  }
 							  }
 							  if (specimenArrayContent.getInitialQuantity().getId() == null) 
 							  {
@@ -208,6 +212,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 	 */
 	private boolean isAvailableQty(Specimen specimen, double quantity)
 	{
+		
 		if(specimen instanceof MolecularSpecimen)
 		{
 			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;

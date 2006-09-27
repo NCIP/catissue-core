@@ -373,6 +373,23 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGEOF_ALIQUOT_SUMMARY = "pageOfAliquotSummary";
 	public static final String AVAILABLE_CONTAINER_MAP = "availableContainerMap";
 	public static final String COMMON_ADD_EDIT = "commonAddEdit";
+	
+
+	//Constants related to SpecimenArrayAliquots functionality
+	public static final String STORAGE_TYPE_ID="storageTypeId";
+	public static final String ALIQUOT_SPECIMEN_ARRAY_TYPE="SpecimenArrayType";
+	public static final String ALIQUOT_SPECIMEN_CLASS="SpecimenClass";
+	public static final String ALIQUOT_SPECIMEN_TYPES="SpecimenTypes";
+	public static final String ALIQUOT_ALIQUOT_COUNTS="AliquotCounts";
+	
+	//Specimen Array Aliquots pages
+	public static final String PAGEOF_SPECIMEN_ARRAY_ALIQUOT = "pageOfSpecimenArrayAliquot";
+	public static final String PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT = "pageOfSpecimenArrayCreateAliquot";
+	public static final String PAGEOF_SPECIMEN_ARRAY_ALIQUOT_SUMMARY = "pageOfSpecimenArrayAliquotSummary";	
+		
+	//Specimen Array Aliquots Action
+	public static final String SPECIMEN_ARRAY_ALIQUOT_ACTION = "SpecimenArrayAliquots.do";
+	public static final String SPECIMEN_ARRAY_CREATE_ALIQUOT_ACTION = "SpecimenArrayCreateAliquots.do";
 
 	//Constants related to QuickEvents functionality
 	public static final String QUICKEVENTS_ACTION = "QuickEventsSearch.do";	
@@ -470,6 +487,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int SPECIMEN_ARRAY_TYPE_FORM_ID = 48;
 	public static final int ARRAY_DISTRIBUTION_FORM_ID = 49;
 	public static final int SPECIMEN_ARRAY_FORM_ID = 50;
+	public static final int SPECIMEN_ARRAY_ALIQUOT_FORM_ID = 51;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
@@ -1165,8 +1183,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int LABEL_BASED_DISTRIBUTION = 2;
 	public static final String DISTRIBUTION_TYPE_LIST = "DISTRIBUTION_TYPE_LIST";
 	public static final String DISTRIBUTION_BASED_ON = "DISTRIBUTION_BASED_ON";
-		public static final String SYSTEM_LABEL = "label";
+	public static final String SYSTEM_LABEL = "label";
 	public static final String SYSTEM_BARCODE = "barcode";
+	public static final String SYSTEM_NAME = "name";
 	
 	//Mandar : 05Sep06 Array for multiple specimen field names
 	public static final String [] MULTIPLE_SPECIMEN_FIELD_NAMES = {
@@ -1190,6 +1209,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 //			"Aliquots"
 	};
 	
+	public static final String PAGEOF_MULTIPLE_SPECIMEN = "pageOfMultipleSpecimen";
 	public static final String PAGEOF_MULTIPLE_SPECIMEN_MAIN = "pageOfMultipleSpecimenMain";
 	public static final String MULTIPLE_SPECIMEN_ACTION = "MultipleSpecimen.do";
 	public static final String INIT_MULTIPLE_SPECIMEN_ACTION = "InitMultipleSpecimen.do";

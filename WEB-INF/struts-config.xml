@@ -57,6 +57,8 @@ PUBLIC
 		
 		<form-bean name="aliquotForm" type="edu.wustl.catissuecore.actionForm.AliquotForm"/>
 		
+		<form-bean name="specimenArrayAliquotForm" type="edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm"/>
+		
 		<form-bean name="quickEventsForm" type="edu.wustl.catissuecore.actionForm.QuickEventsForm"/>
 		<form-bean name="listSpecimenEventParametersForm" type="edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm"/>
 		
@@ -2600,6 +2602,45 @@ PUBLIC
 	</action>
 
 	<!-- Aliquots Action -->
+	
+	<!--Start:Specimen Array Aliquots Action -->
+	
+	<action path="/SpecimenArrayAliquots"
+		type="edu.wustl.catissuecore.action.SpecimenArrayAliquotAction"
+		name="specimenArrayAliquotForm"
+		validate="false"
+		scope="request">
+		<forward name="pageOfSpecimenArrayAliquot" path=".catissuecore.specimenArrayAliquotDef" />	
+		<forward name="pageOfSpecimenArrayAliquotSummary" path=".catissuecore.specimenArrayAliquotSummaryDef" />	
+		<forward name="failure" path=".catissuecore.specimenArrayAliquotDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>	
+	
+	<action path="/SpecimenArrayCreateAliquots"
+		type="edu.wustl.catissuecore.action.SpecimenArrayAliquotAction"
+		name="specimenArrayAliquotForm"
+		validate="true"
+		input="/SpecimenArrayAliquots.do?pageOf=pageOfSpecimenArrayAliquot&amp;menuSelected=20"
+		scope="request">
+		<forward name="pageOfSpecimenArrayCreateAliquot" path=".catissuecore.specimenArrayAliquotDef"/>		
+		<forward name="pageOfSpecimenArrayAliquot" path="/SpecimenArrayAliquots.do?pageOf=pageOfSpecimenArrayAliquot&amp;menuSelected=20"/>		
+	    <forward name="commonAddEdit" path="/SpecimenArrayAliquotsAdd.do?pageOf=pageOfSpecimenArrayAliquotSummary&amp;operation=add&amp;menuSelected=20&amp;buttonClicked=none"/>	  
+		<forward name="failure" path=".catissuecore.specimenArrayAliquotDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	
+	<action path="/SpecimenArrayAliquotsAdd"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="specimenArrayAliquotForm"
+		validate="true"
+		input="/SpecimenArrayCreateAliquots.do?pageOf=pageOfSpecimenArrayCreateAliquot&amp;menuSelected=20"
+		scope="request">
+		<forward name="success" path="/SpecimenArrayAliquots.do?pageOf=pageOfSpecimenArrayAliquotSummary&amp;menuSelected=20" />
+		<forward name="failure" path="/SpecimenArrayCreateAliquots.do?pageOf=pageOfSpecimenArrayCreateAliquot&amp;menuSelected=20" />
+	</action>	
+	
+	<!--End:Specimen Array Aliquots Action -->
+	
 
 	<!-- QuickEvents Action start -->
 	<action path="/QuickEvents"

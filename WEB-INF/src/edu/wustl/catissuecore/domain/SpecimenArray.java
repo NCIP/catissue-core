@@ -2,8 +2,11 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
+import edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.exception.AssignDataException;
@@ -31,6 +34,12 @@ public class SpecimenArray extends Container
     protected Collection specimenArrayContentCollection = new HashSet();
     
     protected Boolean available = new Boolean(true);
+    
+    private transient boolean aliquot = false;
+    
+    private transient int aliquotCount;
+
+	private transient Map aliqoutMap = new HashMap();
 
     /**
      * Default Constructor 
@@ -142,18 +151,77 @@ public class SpecimenArray extends Container
      */
     public void setAllValues(AbstractActionForm actionForm) throws AssignDataException 
     {
-    	super.setAllValues(actionForm);
-    	SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) actionForm;
-    	specimenArrayType.setId(new Long(specimenArrayForm.getSpecimenArrayTypeId()));
-    	
-    	storageContainer.setId(new Long(specimenArrayForm.getStorageContainer()));
-    	if (createdBy == null) {
-    		createdBy = new User();
+    	if (actionForm instanceof SpecimenArrayAliquotForm) 
+    	{
+    		SpecimenArrayAliquotForm form = (SpecimenArrayAliquotForm) actionForm;			
+			this.aliqoutMap = form.getSpecimenArrayAliquotMap();
+			this.aliquotCount = Integer.parseInt(form.getAliquotCount());	
+			this.id = new Long(form.getSpecimenArrayId());
     	}
-    	createdBy.setId(new Long(specimenArrayForm.getCreatedBy()));
-    	capacity.setOneDimensionCapacity(new Integer(specimenArrayForm.getOneDimensionCapacity()));
-    	capacity.setTwoDimensionCapacity(new Integer(specimenArrayForm.getTwoDimensionCapacity()));
-    	specimenArrayContentCollection = specimenArrayForm.getSpecArrayContentCollection();
-    	//SpecimenArrayUtil.getSpecimenContentCollection(specimenArrayForm.getSpecimenArrayGridContentList());
+    	else
+    	{
+	    	super.setAllValues(actionForm);
+	    	SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) actionForm;
+	    	specimenArrayType.setId(new Long(specimenArrayForm.getSpecimenArrayTypeId()));
+	    	
+	    	storageContainer.setId(new Long(specimenArrayForm.getStorageContainer()));
+	    	if (createdBy == null) {
+	    		createdBy = new User();
+	    	}
+	    	createdBy.setId(new Long(specimenArrayForm.getCreatedBy()));
+	    	capacity.setOneDimensionCapacity(new Integer(specimenArrayForm.getOneDimensionCapacity()));
+	    	capacity.setTwoDimensionCapacity(new Integer(specimenArrayForm.getTwoDimensionCapacity()));
+	    	specimenArrayContentCollection = specimenArrayForm.getSpecArrayContentCollection();
+	    	//SpecimenArrayUtil.getSpecimenContentCollection(specimenArrayForm.getSpecimenArrayGridContentList());
+    	}
     }
+    
+	/**
+	 * @return Returns the aliqoutMap.
+	 */
+	public Map getAliqoutMap()
+	{
+		return aliqoutMap;
+	}
+	
+	/**
+	 * @param aliqoutMap The aliqoutMap to set.
+	 */
+	public void setAliqoutMap(Map aliqoutMap)
+	{
+		this.aliqoutMap = aliqoutMap;
+	}
+	
+	/**
+	 * @return Returns the aliquotCount.
+	 */
+	public int getAliquotCount()
+	{
+		return aliquotCount;
+	}
+	
+	/**
+	 * @param aliquotCount The aliquotCount to set.
+	 */
+	public void setAliquotCount(int aliquotCount)
+	{
+		this.aliquotCount = aliquotCount;
+	}
+	
+	
+	/**
+	 * @return Returns the aliquot.
+	 */
+	public boolean isAliquot()
+	{
+		return aliquot;
+	}
+	
+	/**
+	 * @param aliquot The aliquot to set.
+	 */
+	public void setAliquot(boolean aliquot)
+	{
+		this.aliquot = aliquot;
+	}
 }

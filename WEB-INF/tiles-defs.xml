@@ -837,6 +837,15 @@
 	<definition name=".catissuecore.aliquotSummaryDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/AliquotSummary.jsp" />
 	</definition>
+	
+	<!-- CREATE SPECIMEN ARRAY ALIQUOTS -->
+	<definition name=".catissuecore.specimenArrayAliquotDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenArrayAliquots.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.specimenArrayAliquotSummaryDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenArrayAliquotsSummary.jsp" />
+	</definition>
 
 	<!--  QuickEvents -->
 	<definition name=".catissuecore.quickEventsDef" extends=".catissuecore.manageBioSpecimenHomeDef">

@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -93,6 +94,11 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			}
 
 		}
+		//added for specimenArrayAliquot Summary page.
+		else if (domainObject instanceof SpecimenArray)
+        {
+        	forwardToHashMap= (HashMap)((SpecimenArray)domainObject).getAliqoutMap();        	
+        }        
 
  		return forwardToHashMap;
 	}

@@ -160,6 +160,11 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     		case Constants.SPECIMEN_ARRAY_FORM_ID :
     			bizLogic = new SpecimenArrayBizLogic();
     			break;
+    			
+    		case Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID:
+    			bizLogic = new SpecimenArrayAliquotsBizLogic();
+    			break;
+    			
     		case Constants.DEFAULT_BIZ_LOGIC:
             default:
             	bizLogic = new DefaultBizLogic();

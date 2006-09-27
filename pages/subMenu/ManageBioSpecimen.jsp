@@ -116,6 +116,11 @@
                                             <bean:message key="app.edit"/>
                                 </a>            
                     </div>
+                    <div>
+						<a class="subMenuPrimary" href="SpecimenArrayAliquots.do?pageOf=pageOfSpecimenArrayAliquot&menuSelected=20">
+							<bean:message key="app.aliquots" />
+						</a>			
+					</div>
         </td>
 
 </tr>
