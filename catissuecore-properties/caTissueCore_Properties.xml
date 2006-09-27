@@ -191,7 +191,7 @@
 		
 	<property>
 		<name>password.expire_after_n_days</name>
-		<value>10</value>
+		<value>60</value>
 	</property>
 	
 	<property>
