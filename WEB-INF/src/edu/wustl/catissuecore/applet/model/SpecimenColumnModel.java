@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.applet.listener.ButtonHandler;
 import edu.wustl.catissuecore.applet.listener.ClassComboBoxHandler;
 import edu.wustl.catissuecore.applet.listener.CollectionGroupItemHandler;
 import edu.wustl.catissuecore.applet.listener.ComboBoxHandler;
+import edu.wustl.catissuecore.applet.listener.ExternalIdentifierButtonHandler;
 import edu.wustl.catissuecore.applet.listener.MapButtonHandler;
 import edu.wustl.catissuecore.applet.listener.ParentSpecimenItemHandler;
 import edu.wustl.catissuecore.applet.listener.TextFieldHandler;
@@ -469,16 +470,16 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		comments.addActionListener(buttonHandler);
 		
 		//Events 
-		eventsButton.addActionListener(buttonHandler);
+		//eventsButton.addActionListener(buttonHandler);
 		
 		//External Identifier
-		externalIdentifierButton.addActionListener(buttonHandler);
+		externalIdentifierButton.addActionListener(new ExternalIdentifierButtonHandler(table));
 		
 		//BioHazard
-		bioHazardButton.addActionListener(buttonHandler);
+		//bioHazardButton.addActionListener(buttonHandler);
 
 		//Derive
-		deriveButton.addActionListener(buttonHandler);
+	//	deriveButton.addActionListener(buttonHandler);
 	}
 
 	public void specimenClassUpdated(String name)
