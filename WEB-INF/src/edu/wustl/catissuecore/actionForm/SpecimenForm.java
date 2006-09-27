@@ -120,6 +120,9 @@ public class SpecimenForm extends AbstractActionForm
 	 * Parent Container Identifier.
 	 */
 	private String parentContainerId;
+	
+	
+	private String buttonClicked = "";
 
 	protected String positionInStorageContainer;
 
@@ -890,5 +893,19 @@ public class SpecimenForm extends AbstractActionForm
 	public void setVirtuallyLocated(boolean virtuallyLocated)
 	{
 		this.virtuallyLocated = virtuallyLocated;
+	}
+	/**
+	 * @return Returns the buttonClicked.
+	 */
+	public String getButtonClicked()
+	{
+		return buttonClicked;
+	}
+	/**
+	 * @param buttonClicked The buttonClicked to set.
+	 */
+	public void setButtonClicked(String buttonClicked)
+	{
+		this.buttonClicked = buttonClicked;
 	}
 }
