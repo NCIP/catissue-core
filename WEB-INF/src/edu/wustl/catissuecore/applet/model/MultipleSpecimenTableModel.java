@@ -356,5 +356,10 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		
 		System.out.println("setting " + storageInfo + "to " +  AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO + "  " +  colNo);
 	}
+	
+	public void addColumn() {
+		columnCount++;
+	}
+
 
 }
