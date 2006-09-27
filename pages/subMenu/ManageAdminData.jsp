@@ -140,7 +140,7 @@
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfStorageContainer&aliasName=StorageContainer&menuSelected=7" >
 				<bean:message key="app.edit" />
 			</a> | 
-			<a class="subMenuPrimary" href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
+			<a class="subMenuPrimary" href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1','name','810','320','yes');return false" >
 				<bean:message key="app.viewmap" />
 			</a>	
 		</div>

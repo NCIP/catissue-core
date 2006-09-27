@@ -138,6 +138,8 @@ public class CreateSpecimenAction extends SecureAction
 						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("storageposition.not.available"));
 						saveErrors(request,errors);
 					}
+					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
+					request.setAttribute(Constants.SPECIMEN_CLASS_NAME,spClass);;
 					initialValues = checkForInitialValues(containerMap);
 
 				}

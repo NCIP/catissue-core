@@ -151,8 +151,10 @@
 					String styClass = "formFieldSized5";
 					String tdStyleClass = "customFormField";
 					String onChange = "onCustomListBoxChange(this)";
-					
-					String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2','name','810','320','yes');return false";
+					String arrayTypeId = form.getSpecimenArrayTypeId()+"";
+					String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2"
+							+ "&" + Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE +"=" + arrayTypeId;
+					String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
 					String noOfEmptyCombos = "3";
 				%>
 				
@@ -275,7 +277,7 @@
 									CODE = "<%=Constants.SPECIMEN_ARRAY_APPLET%>"
 									ALT = "Specimen Array Applet"
 									NAME = "<%=Constants.SPECIMEN_ARRAY_APPLET_NAME%>"
-									width="100%" height="150" MAYSCRIPT>
+									width="100%" height="100%" MAYSCRIPT>
 									<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2"/>
 									<PARAM name="name" value="<%=Constants.SPECIMEN_ARRAY_APPLET_NAME%>"/>
 									<PARAM name="rowCount" value="<%=form.getOneDimensionCapacity()%>"/>

@@ -248,7 +248,13 @@ if(currentEventParametersDate.trim().length() > 0)
 				String onChange = "onCustomListBoxChange(this)";
 				
 				boolean buttonDisabled = true;
-				String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
+				
+				String className = (String) request.getAttribute(Constants.SPECIMEN_CLASS_NAME);
+				String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
+				String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2"
+						+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
+						+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;				
+				String buttonOnClicked  = "javascript:NewWindow('"+url+"','name','810','320','yes');return false";
 				String noOfEmptyCombos = "3";
 			%>
 			

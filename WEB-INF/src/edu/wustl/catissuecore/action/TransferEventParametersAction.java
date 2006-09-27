@@ -95,13 +95,16 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 				//storagecontainer info
 				request.setAttribute(Constants.STORAGE_CONTAINER_ID, storageContainerID);
-				Logger.out.info("COllection Protocol Id :"
-						+ specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-								.getCollectionProtocol().getId().longValue());
-				Logger.out.info("Spcimen Class:" + specimen.getClassName());
-				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(specimen
-						.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-						.getCollectionProtocol().getId().longValue(), specimen.getClassName(), 0);
+				
+				long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+				.getCollectionProtocol().getId().longValue();
+				String className = specimen.getClassName();
+				
+				Logger.out.info("COllection Protocol Id :"+ cpId);
+				request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
+				request.setAttribute(Constants.SPECIMEN_CLASS_NAME,className);
+				Logger.out.info("Spcimen Class:" + className);
+				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0);
 
 				if (containerMap.isEmpty())
 				{

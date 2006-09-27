@@ -1274,4 +1274,14 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ADD = "add";
 	public static final String EDIT = "edit";
 	public static final String ID = "id";
+	
+	public static final String CAN_HOLD_CONTAINER_TYPE = "holdContainerType";
+	public static final String CAN_HOLD_SPECIMEN_CLASS = "holdSpecimenClass";
+	public static final String CAN_HOLD_COLLECTION_PROTOCOL = "holdCollectionProtocol";
+	public static final String CAN_HOLD_SPECIMEN_ARRAY_TYPE = "holdSpecimenArrayType";
+	public static final String COLLECTION_PROTOCOL_ID = "collectionProtocolId";
+	public static final String SPECIMEN_CLASS_NAME = "specimeClassName";
+	public static final String ENABLE_STORAGE_CONTAINER_GRID_PAGE = "enablePage";
+	public static final int ALL_STORAGE_TYPE_ID = 1; //Constant for the "All" storage type, which can hold all container type
+	public static final int ALL_SPECIMEN_ARRAY_TYPE_ID = 2;//Constant for the "All" storage type, which can hold all specimen array type
 }

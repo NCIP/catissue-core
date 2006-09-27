@@ -48,6 +48,10 @@ function closeFramedWindow()
     String [][] childContainerType = (String [][])request.getAttribute(Constants.CHILD_CONTAINER_TYPE);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	
+	String enablePageStr = (String)request.getAttribute(Constants.ENABLE_STORAGE_CONTAINER_GRID_PAGE);
+	boolean enablePage = false;
+	if (enablePageStr!=null && enablePageStr.equals(Constants.TRUE))
+		enablePage = true;
 	String storageContainerType = null;
 	Integer startNumber = null;
 	Long positionOne = (Long)request.getAttribute(Constants.POS_ONE);
@@ -305,10 +309,12 @@ function closeFramedWindow()
 						else
 						{
 							String setParentWindowContainer = null;
-							if (pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN)) {
+							if (pageOf.equals(Constants.PAGEOF_MULTIPLE_SPECIMEN)) 
+							{
 								setParentWindowContainer = "javascript:" + specimenCallBackFunction + "('" + specimenMapKey + "' , '" + storageContainerGridObject.getId() + "' , '" + storageContainerGridObject.getName() + 
 								"' , '" + i + "' , '" + j + "' );closeFramedWindow()" ;
-							} else if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
+							} 
+							else if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
 							{
 								setParentWindowContainer = "javascript:setCustomListBoxValue('" + containerStyleId + "','"+
 															  + storageContainerGridObject.getId() + "');"+"javascript:setCustomListBoxValue('" + xDimStyleId + "','"+
@@ -335,9 +341,13 @@ function closeFramedWindow()
 							}
 						%>
 						<td class="mapTdred" noWrap="true">
+							<%if (enablePage){%>
 						 	<a href="<%=setParentWindowContainer%>">
 						 		<%=Constants.UNUSED%>
 							</a>
+							<%}else{%>
+								<%=Constants.UNUSED%>
+							<%}%>
 						</td>
 					  <%}%>
 					<%}}}%>
