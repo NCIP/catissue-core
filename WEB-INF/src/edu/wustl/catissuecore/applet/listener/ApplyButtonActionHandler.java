@@ -68,7 +68,7 @@ public class ApplyButtonActionHandler implements ActionListener {
 			String quantity = arrayApplet.getQuantityTextField().getText();
 			//Validator validator = new Validator();
 			
-			if ((!CommonAppletUtil.isNumeric(conc)) || (!CommonAppletUtil.isNumeric(quantity))) {
+			if ((!CommonAppletUtil.isDoubleNumeric(conc)) || (!CommonAppletUtil.isDoubleNumeric(quantity))) {
 				JFrame frame = new JFrame();
 				JOptionPane.showMessageDialog(frame,
 	                    "Please enter valid numeric value for concentration & quantity",
