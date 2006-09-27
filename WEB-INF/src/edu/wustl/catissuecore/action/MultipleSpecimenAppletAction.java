@@ -136,8 +136,8 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				specimen.setAvailableQuantity(specimen.getQuantity());
 
 				//process associated objects.
-				specimen.setStorageContainer(null);
-				specimen.setType("Frozen Tissue");
+				//specimen.setStorageContainer(null);
+				//specimen.setType("Frozen Tissue");
 
 				/*				Long id = specimen.getId();
 				 Map biohazardsMap = (Map) SpecimenCollectionMap.get(id.toString() + "_" + "bioHazards");
@@ -186,6 +186,8 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			}
 
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "class");
+			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "StorageContainer_temp");
+			
 		}
 	}
 
