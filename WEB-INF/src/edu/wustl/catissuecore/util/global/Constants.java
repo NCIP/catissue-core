@@ -1259,8 +1259,13 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String IS_NOT_NULL = "is not null";
 	public static final String IS_NULL = "is null";
 	
+	// Used in array action 
 	public static final String ARRAY_TYPE_ANY_VALUE = "2";
 	public static final String ARRAY_TYPE_ANY_NAME = "Any";
+	// end
+	
+	// Array Type All Id in table
+	public static final short ARRAY_TYPE_ALL_ID = 2; 
 	
 	// constants required for caching mechanism of ParticipantBizLogic
 	
@@ -1269,5 +1274,4 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ADD = "add";
 	public static final String EDIT = "edit";
 	public static final String ID = "id";
-	 
 }
