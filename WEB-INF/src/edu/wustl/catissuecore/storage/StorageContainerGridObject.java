@@ -24,6 +24,8 @@ public class StorageContainerGridObject
     private Integer oneDimensionCapacity;
 
     private Integer twoDimensionCapacity;
+    
+    private String name;
 
     /**
      * @return Returns the oneDimensionCapacity.
@@ -86,4 +88,18 @@ public class StorageContainerGridObject
     {
         this.type = type;
     }
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	
+	/**
+	 * @return Returns the name.
+	 */
+	public String getName()
+	{
+		return name;
+	}
 }
