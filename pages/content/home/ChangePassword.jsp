@@ -6,10 +6,32 @@
 <%
 	String operation = (String) request.getAttribute(Constants.OPERATION);
 	String pageOf = (String) request.getAttribute(Constants.PAGEOF);
-	String access = (String) request.getAttribute(Constants.ACCESS);
-	SessionDataBean sessionData = (SessionDataBean)session.getAttribute(Constants.SESSION_DATA);
+	SessionDataBean sessionData = null;
+	if(session.getAttribute(Constants.TEMP_SESSION_DATA) != null) 
+	{
+	sessionData = (SessionDataBean)session.getAttribute(Constants.TEMP_SESSION_DATA);
+	} else 
+	{
+	sessionData = (SessionDataBean)session.getAttribute(Constants.SESSION_DATA);
+	}
 	String userId = sessionData.getUserId().toString();
 %>
+
+<head>
+	<script src="jss/Hashtable.js" type="text/javascript"></script>
+	<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+
+	<script language="JavaScript">
+	
+	   function onSubmitButtonClicked()
+		{
+			var action = '<%=Constants.UPDATE_PASSWORD_ACTION%>?access=denied';
+			document.forms[0].action = action;
+		    document.forms[0].submit();
+		}
+		
+	</script>
+</head>
 
 <html:errors />
 
@@ -23,7 +45,6 @@
 				<tr>
 					<td>
 						<html:hidden property="operation" value="<%=operation%>" />
-						<html:hidden property="access" value="<%=access%>" />
 					</td>
 				</tr>
 				
@@ -91,7 +112,7 @@
 					<table cellpadding="4" cellspacing="0" border="0">
 						<tr>
 							<td>
-								<html:submit styleClass="actionButton">
+								<html:submit styleClass="actionButton" onclick="onSubmitButtonClicked()">
 									<bean:message  key="buttons.submit" />
 								</html:submit>
 							</td>
