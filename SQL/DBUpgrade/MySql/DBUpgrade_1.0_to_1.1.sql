@@ -463,6 +463,7 @@ INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,
 
 /*Santosh - Updated first user password table's update_date = current date -Required for new password func*/
 UPDATE catissue_password set UPDATE_DATE=now() WHERE IDENTIFIER = 1;
+alter table CATISSUE_USER add column FIRST_TIME_LOGIN bit default 1;
 
 /* storage type unique changes */
 update catissue_container_type set name = 'All' where identifier = 1;
