@@ -69,12 +69,12 @@ public final class CommonAppletUtil
      * @param numString The string whose characters are to be checked.
      * @return Returns false if the String contains any alphabet else returns true. 
      * */
-    public static boolean isNumeric(String numString)
+    public static boolean isDoubleNumeric(String numString)
     {
         try
         {
-            long longValue = Long.parseLong(numString);
-            if (longValue <= 0)
+            double doubleValue = Double.parseDouble(numString);
+            if (doubleValue <= 0)
             {
                 return false;
             }
