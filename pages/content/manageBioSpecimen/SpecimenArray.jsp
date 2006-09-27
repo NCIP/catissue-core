@@ -300,9 +300,9 @@
 					<table cellpadding="4" cellspacing="0" border="0">
 						<tr>
 							<td>
-								<html:submit styleClass="actionButton" onclick="doUploadSpecimenArray();" disabled="<%=disabled%>">
+								<html:button property="uploadSpecimenArrayButton" styleClass="actionButton" onclick="doUploadSpecimenArray();" disabled="<%=disabled%>">
 									<bean:message  key="buttons.uploadSpecimenArray" />
-								</html:submit>
+								</html:button>
 							</td>
 						</tr>
 					</table>
