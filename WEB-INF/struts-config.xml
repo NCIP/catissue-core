@@ -197,7 +197,7 @@ PUBLIC
 			input="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12"
 			scope="request">
 			<!-- forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" /-->
-			<forward name="success" path="/ParticipantSearch.do?pageOf=pageOfParticipant" />
+			<forward name="success" path="/ParticipantCache.do?pageOf=pageOfParticipant" />
 			<forward name="pageOfSCGParticipant" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 			<forward name="failure" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
@@ -240,11 +240,20 @@ PUBLIC
 			validate="true"
 			input="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12"
 			scope="request">
-			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
+			<forward name="success" path="/ParticipantCache.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="query" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantQuery&amp;menuSelected=12" />
 			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="redirectTo" path="" />
 			<forward name="createParticipantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
+		</action>
+		
+		<action path="/ParticipantCache"
+			type="edu.wustl.catissuecore.action.ParticipantCacheAction"
+			name="participantForm"
+			validate="false"
+			scope="request">
+			<forward name="add" path="/ParticipantSearch.do?pageOf=pageOfParticipant"/>
+			<forward name="edit" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12"/>
 		</action>
 		
 		<action path="/ParticipantSearch"
