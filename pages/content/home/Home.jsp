@@ -16,7 +16,8 @@
                 <tr>
                 	<td class="welcomeTitle" height="20">
                 		<bean:message key="app.welcomeNote" arg0="<%=ApplicationProperties.getValue("app.name")%>"
-															arg1="<%=Variables.applicationCvsTag%>"/>
+                											arg1="<%=ApplicationProperties.getValue("app.version")%>"
+															arg2="<%=Variables.applicationCvsTag%>"/>
 					</td>
                 </tr>
                 <tr>
@@ -118,8 +119,9 @@
 									
 							         Dear <%=sessionData.getLastName()%>, &nbsp;<%=sessionData.getFirstName()%><br>
 									 <%}%>			
-										<bean:message key="app.welcomeNote.login" arg0="<%=ApplicationProperties.getValue("app.name")%>"
-																				  arg1="<%=Variables.applicationCvsTag%>"/>
+				                		<bean:message key="app.welcomeNote" arg0="<%=ApplicationProperties.getValue("app.name")%>"
+				                											arg1="<%=ApplicationProperties.getValue("app.version")%>"
+																			arg2="<%=Variables.applicationCvsTag%>"/>
 								</TD>
 							</tr>			
 						</logic:notEmpty>
