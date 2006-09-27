@@ -602,7 +602,7 @@
 	</definition>
 	
 	<definition name=".catissuecore.multipleSpecimenAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
-            <put name="content" value="/pages/content/common/success.jsp" />
+            <put name="content" value="/pages/content/manageBioSpecimen/SpecimenReport.jsp" />
     </definition>
 	
 	<!-- Distribution end -->

@@ -15,8 +15,13 @@
 
 <%MultipleSpecimenForm form = (MultipleSpecimenForm) request
 					.getAttribute("multipleSpecimenForm");
-			String action = Constants.NEW_MULTIPLE_SPECIMEN_ACTION;
+			String action = Constants.MULTIPLE_SPECIMEN_APPLET_ACTION;
 %>
+
+<FORM METHOD=POST ACTION="<%=action%>">
+<div id="errorMessages"></div>
+
+</FORM>
 
 
 <APPLET

@@ -407,6 +407,15 @@ function showStoragePositionMap(specimenAttributeKey,collectionGroup,specimenCla
     NewWindow(url,'name','810','320','yes');
 }
 
+function getSpecimenSubmitResult(target) {
+	  document.forms[0].action =    document.forms[0].action + "?method=getResult&multipleSpecimenResult=" + target ;  
+	  document.forms[0].submit(); 
+}
+
+function showSpecimenErrorMessages(errorMsg) {
+     var errorDiv =  document.getElementById("errorMessages");
+     errorDiv.innerHTML = "<LI><font color=red>" +  errorMsg + "</font></LI>";
+}
 /* --- End Multiple Specimen  javascript functions ---*/
 
 

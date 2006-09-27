@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -101,12 +103,17 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.ServletRequest, javax.servlet.ServletResponse)
 	 */
 	public ActionForward submitSpecimens(ActionMapping actionMapping, ActionForm actionForm,
-			HttpServletRequest request, HttpServletResponse response) throws IOException,
-			ServletException
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+
 	{
+		String target;
+		Map resultMap = new HashMap();
+		
 		try
 		{
 			Map specimenMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
+
+			System.out.println("Submitting the specimen : " + specimenMap);
 
 			prepareSpecimanClassMap(specimenMap);
 
@@ -142,21 +149,52 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				/*				Long id = specimen.getId();
 				 Map biohazardsMap = (Map) SpecimenCollectionMap.get(id.toString() + "_" + "bioHazards");
 				 specimen.setBiohazardCollection(biohazardsParser.generateData(biohazardsMap));;
-				 */}
+				 */
+			}
 
 			//validate specimen
 
 			//call bizLogic to save specimenCollection
-
+			
 			insertSpecimens(request, specimenCollection);
+			
+			//clean up activity.
+			multipleSpecimenSessionMap = null;
+			request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION,specimenCollection);
+			target = Constants.SUCCESS;
 
 		}
 		//return to report page		
 		catch (Exception e)
 		{
+			target = Constants.FAILURE;
+			String errorMsg = e.getMessage();
+			resultMap.put(Constants.ERROR_DETAIL,errorMsg);
 			e.printStackTrace();
 		}
+
+		
+		resultMap.put(Constants.MULTIPLE_SPECIMEN_RESULT, target);
+		writeMapToResponse(response, resultMap);
+
 		return null;
+		//		return actionMapping.findForward(target);
+	}
+
+	public ActionForward getResult(ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		String target = (String) request.getParameter(Constants.MULTIPLE_SPECIMEN_RESULT);
+		
+		Collection specimenCollection = (Collection) request.getSession().getAttribute(Constants.SAVED_SPECIMEN_COLLECTION);
+		request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION,null);
+		
+		request.setAttribute(Constants.SAVED_SPECIMEN_COLLECTION,specimenCollection);
+	
+		ActionMessages msgs = new ActionMessages();
+		msgs.add("success",new ActionMessage("multipleSpecimen.add.success",String.valueOf(specimenCollection.size())));
+		saveMessages(request,msgs);
+		return actionMapping.findForward(target);
 	}
 
 	/**
@@ -187,7 +225,6 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "class");
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "StorageContainer_temp");
-			
 		}
 	}
 
@@ -198,30 +235,20 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	 * @param specimenCollection
 	 */
 	private void insertSpecimens(HttpServletRequest request, Collection specimenCollection)
+			throws Exception
 	{
 		IBizLogic bizLogic;
-		try
-		{
-			bizLogic = AbstractBizLogicFactory
-					.getBizLogic(ApplicationProperties.getValue("app.bizLogicFactory"),
-							"getBizLogic", Constants.NEW_SPECIMEN_FORM_ID);
-			SessionDataBean sessionBean = (SessionDataBean) request.getSession().getAttribute(
-					Constants.SESSION_DATA);
-			// need to remove
-			sessionBean = new SessionDataBean();
-			sessionBean.setUserName("admin@admin.com");
 
-			bizLogic.insert(specimenCollection, sessionBean, Constants.HIBERNATE_DAO);
+		bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
+				.getValue("app.bizLogicFactory"), "getBizLogic", Constants.NEW_SPECIMEN_FORM_ID);
+		SessionDataBean sessionBean = (SessionDataBean) request.getSession().getAttribute(
+				Constants.SESSION_DATA);
+		// need to remove
+/*		sessionBean = new SessionDataBean();
+		sessionBean.setUserName("admin@admin.com");
+*/
+		bizLogic.insert(specimenCollection, sessionBean, Constants.HIBERNATE_DAO);
 
-		}
-		catch (BizLogicException e)
-		{
-			e.printStackTrace();
-		}
-		catch (UserNotAuthorizedException e)
-		{
-			e.printStackTrace();
-		}
 	}
 
 	/**

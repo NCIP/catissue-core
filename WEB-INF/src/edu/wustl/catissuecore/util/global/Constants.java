@@ -1193,8 +1193,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGEOF_MULTIPLE_SPECIMEN_MAIN = "pageOfMultipleSpecimenMain";
 	public static final String MULTIPLE_SPECIMEN_ACTION = "MultipleSpecimen.do";
 	public static final String INIT_MULTIPLE_SPECIMEN_ACTION = "InitMultipleSpecimen.do";
-	
+	public static final String MULTIPLE_SPECIMEN_APPLET_ACTION = "MultipleSpecimenAppletAction.do";
 	public static final String NEW_MULTIPLE_SPECIMEN_ACTION = "NewMultipleSpecimenAction.do";
+	public static final String MULTIPLE_SPECIMEN_RESULT = "multipleSpecimenResult";
+	public static final String SAVED_SPECIMEN_COLLECTION = "savedSpecimenCollection";
+	
 	
 
 	

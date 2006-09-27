@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class BaseAppletAction extends DispatchAction
 	 * @return map inside AppletModelInterface
 	 * @throws Exception
 	 */
-	protected Map readMapFromRequest(HttpServletRequest request) throws Exception
+	protected Map readMapFromRequest(HttpServletRequest request) throws IOException,ClassNotFoundException
 	{
 		ObjectInputStream inputStream = new ObjectInputStream(request.getInputStream());
 		AppletModelInterface model = (AppletModelInterface) inputStream.readObject();
@@ -63,8 +64,13 @@ public class BaseAppletAction extends DispatchAction
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		Map inputMap = readMapFromRequest(request);
-		request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
+		try {
+			Map inputMap = readMapFromRequest(request);
+			request.setAttribute(Constants.INPUT_APPLET_DATA, inputMap);
+		} catch (Exception e) {
+			
+			request.setAttribute(Constants.INPUT_APPLET_DATA, null);
+		}
 
 		return super.execute(actionMapping, actionForm, request, response);
 	}

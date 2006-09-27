@@ -2749,6 +2749,7 @@ PUBLIC
 	</action>
 
 	<action path="/MultipleSpecimenAppletAction" type="edu.wustl.catissuecore.action.MultipleSpecimenAppletAction" parameter="method">
+			<forward name="success" path=".catissuecore.multipleSpecimenAddSuccessDef" />
 	</action>
 	
 	<action path="/NewMultipleSpecimenAction" type="edu.wustl.catissuecore.action.NewMultipleSpecimenAction" parameter="method" 
