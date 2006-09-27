@@ -160,14 +160,15 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		addListeners();
 		// ------------------------------------
 
+		System.out.println("SpecimenColumnModel : Col no : "+column);
 		TableColumnModel columnModel = table.getColumnModel();
+		System.out.println("SpecimenColumnModel columnModel.getColumnCount() : " + columnModel.getColumnCount()); 
 		columnModel.getColumn(column).setCellRenderer(this);
 		columnModel.getColumn(column).setCellEditor(this);
 		columnModel.getColumn(column).setResizable(false );
 		columnModel.getColumn(column).setPreferredWidth(175 );
 		
 	}
-	
 
 	/**
 	 *  This method returns the component used as cell renderer. 
