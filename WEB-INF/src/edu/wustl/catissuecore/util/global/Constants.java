@@ -1190,7 +1190,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 //			"Aliquots"
 	};
 	
-	public static final String PAGEOF_MULTIPLE_SPECIMEN = "pageOfMultipleSpecimen";
 	public static final String PAGEOF_MULTIPLE_SPECIMEN_MAIN = "pageOfMultipleSpecimenMain";
 	public static final String MULTIPLE_SPECIMEN_ACTION = "MultipleSpecimen.do";
 	public static final String INIT_MULTIPLE_SPECIMEN_ACTION = "InitMultipleSpecimen.do";
@@ -1222,6 +1221,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 
 	public static final String MULTIPLE_SPECIMEN_MAP_KEY = "MULTIPLE_SPECIMEN_MAP_KEY"; 
 	public static final String SPECIMEN_ATTRIBUTE_KEY =   "specimenAttributeKey";
+	
+	public static final String SPECIMEN_CLASS =   "specimenClass";
+	public static final String SPECIMEN_CALL_BACK_FUNCTION =   "specimenCallBackFunction";
+	
+	
+	
 	public static final String MULTIPLE_SPECIMEN_APPLET_NAME = "MultipleSpecimenApplet";
 	public static final String INPUT_APPLET_DATA = "inputAppletData";
 	
