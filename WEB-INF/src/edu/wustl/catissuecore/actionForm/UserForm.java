@@ -139,11 +139,6 @@ public class UserForm extends AbstractActionForm
 	 * Status of user in the system.
 	 */
 	private String status;
-
-	/**
-	 *  Decides the access
-	 */
-	private String access;
 	
 	private Long csmUserId;
 
@@ -1009,8 +1004,7 @@ public class UserForm extends AbstractActionForm
 		{
 			Logger.out.error(excp.getMessage(), excp);
 		}
-
-		return errors;
+        return errors;
 	}
 
 	/**
@@ -1033,19 +1027,5 @@ public class UserForm extends AbstractActionForm
 			setCancerResearchGroupId(addObjectIdentifier.longValue());
 		}
 	}
-
-	/**
-	 * @return Returns the access.
-	 */
-	public String getAccess()
-	{
-		return access;
-	}
-	/**
-	 * @param access The access to set.
-	 */
-	public void setAccess(String access)
-	{
-		this.access = access;
-	}
+	
 }
