@@ -32,7 +32,9 @@ import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -289,6 +291,7 @@ public class UserBizLogic extends DefaultBizLogic
 				// Set values in password domain object and adds changed password in Password Collection
 				Password password = new Password(csmUser.getPassword(), user);
 				user.getPasswordCollection().add(password);
+							
 			}
 			else
 			{
@@ -303,7 +306,7 @@ public class UserBizLogic extends DefaultBizLogic
 				{
 					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
 				}
-
+			
 				dao.update(user.getAddress(), sessionDataBean, true, false, false);
 
 				// Audit of user address.
@@ -312,7 +315,10 @@ public class UserBizLogic extends DefaultBizLogic
 
 			// Modify the csm user.
 			SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
-
+			if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD)) 
+			{
+			    user.setFirstTimeLogin(new Boolean(false));
+			}
 			dao.update(user, sessionDataBean, true, true, true);
 
 			//Audit of user.
@@ -478,8 +484,11 @@ public class UserBizLogic extends DefaultBizLogic
 	 * @param emailAddress the email address of the user whose password is to be sent.
 	 * @return the error key in case of an error.
 	 * @throws DAOException
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 * @throws UserNotAuthorizedException
 	 */
-	public String sendForgotPassword(String emailAddress) throws DAOException
+	public String sendForgotPassword(String emailAddress,SessionDataBean sessionData) throws DAOException, UserNotAuthorizedException 
 	{
 		String statusMessageKey = null;
 		List list = retrieve(User.class.getName(), "emailAddress", emailAddress);
@@ -489,16 +498,40 @@ public class UserBizLogic extends DefaultBizLogic
 			if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
 			{
 				EmailHandler emailHandler = new EmailHandler();
+				/**
+				 *  Update the field FirstTimeLogin which will ensure user changes his password on login
+				 *  Note --> We can not use CommonAddEditAction to update as the user has not still logged in
+				 *  and user authorisation will fail. So writing saperate code for update. 
+				 */
+				user.setFirstTimeLogin(new Boolean(true));
+				AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+				dao.openSession(sessionData);
+		    	dao.update(user, sessionData, true, true, true);
 
 				//Send the login details email to the user.
-				boolean emailStatus = emailHandler.sendLoginDetailsEmail(user, null);
-
+				boolean emailStatus = false;
+				try
+				{
+					emailStatus = emailHandler.sendLoginDetailsEmail(user, null);
+				}
+				catch (DAOException e)
+				{
+					// If exception comes, rollback the changes
+					dao.rollback();
+			        dao.closeSession();
+					e.printStackTrace();
+				}
 				if (emailStatus)
 				{
+					// if success commit 
+					dao.commit();
+			        dao.closeSession();
 					statusMessageKey = "password.send.success";
 				}
 				else
 				{
+					dao.rollback();
+			        dao.closeSession();
 					statusMessageKey = "password.send.failure";
 				}
 			}
@@ -623,7 +656,13 @@ public class UserBizLogic extends DefaultBizLogic
 
 			//Get the last updated date of the password
 			Date lastestUpdateDate = ((Password) oldPwdList.get(0)).getUpdateDate();
-			if(oldPwdList.size() > 1) {
+			boolean firstTimeLogin = false;
+			if(oldUser.getFirstTimeLogin() != null)
+			{
+				firstTimeLogin = oldUser.getFirstTimeLogin().booleanValue();
+			}
+			if (!firstTimeLogin) 
+			{
 			if (checkPwdUpdatedOnSameDay(lastestUpdateDate))
 			{
 				Logger.out.debug("Password is not valid returning FAIL_CHANGED_WITHIN_SOME_DAY");
@@ -673,13 +712,19 @@ public class UserBizLogic extends DefaultBizLogic
 	 * @param user - user object
 	 * @throws DAOException - throws DAOException
 	 */
-	public String checkFirstLoginAndExpiry(User user) {
-		
+	public String checkFirstLoginAndExpiry(User user) 
+	{
 		List passwordList = new ArrayList(user.getPasswordCollection());
-				
-		if(passwordList.size()==1) 
+		
+		boolean firstTimeLogin = false;
+		if(user.getFirstTimeLogin() != null)
 		{
-			return "errors.changePassword.changeFirstLogin";
+			firstTimeLogin = user.getFirstTimeLogin().booleanValue();
+		}
+		// If user has logged in for the first time, return key of Change password on first login
+		if (firstTimeLogin) 
+		{
+		  	return "errors.changePassword.changeFirstLogin";
 		}
 		
 		Collections.sort(passwordList);
