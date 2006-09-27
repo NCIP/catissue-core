@@ -1,5 +1,5 @@
 /*
- * $Name: 1.38 $
+ * $Name: 1.39 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -11,6 +11,10 @@ import java.util.Map;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import net.sf.ehcache.CacheException;
+
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -27,6 +31,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -210,6 +215,38 @@ public class CatissueCoreServletContextListener implements ServletContextListene
         
         Logger.out.debug("System property : "+System.getProperty("gov.nih.nci.security.configFile"));
         Logger.out.debug("System property : "+System.getProperty("edu.wustl.catissuecore.contactUsFile"));
+        
+        /**
+         *  Following code is added for caching the Map of all participants.
+         *  Get the map of participants from ParticipantBizLogic and add it to cache
+         */
+        
+        Map participantMap = null;
+        ParticipantBizLogic bizlogic = (ParticipantBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
+		try
+		{
+			participantMap = bizlogic.getAllParticipants();
+		}
+		catch (Exception ex)
+		{
+			Logger.out.debug("Exception occured getting List of Participants");
+			ex.printStackTrace();
+		}
+  
+		// getting instance of catissueCoreCacheManager and adding participantMap to cache
+	 
+		try
+		{
+			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS,(HashMap) participantMap);
+		}
+		catch (CacheException e)
+		{
+			Logger.out.debug("Exception occured while creating instance of CatissueCoreCacheManager");
+			e.printStackTrace();
+		}
+		
+		
     }
     
     /* (non-Javadoc)
@@ -217,5 +254,16 @@ public class CatissueCoreServletContextListener implements ServletContextListene
      */
     public void contextDestroyed(ServletContextEvent sce)
     {
-    }
+    	//  shutting down the cacheManager
+		try
+		{
+			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+			catissueCoreCacheManager.shutdown();
+		}
+		catch (CacheException e)
+		{
+			Logger.out.debug("Exception occured while shutting instance of CatissueCoreCacheManager");
+			e.printStackTrace();
+		}
+	 }
 }
