@@ -277,7 +277,7 @@
 									CODE = "<%=Constants.SPECIMEN_ARRAY_APPLET%>"
 									ALT = "Specimen Array Applet"
 									NAME = "<%=Constants.SPECIMEN_ARRAY_APPLET_NAME%>"
-									width="100%" height="100%" MAYSCRIPT>
+									width="100%" height="150" MAYSCRIPT>
 									<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2"/>
 									<PARAM name="name" value="<%=Constants.SPECIMEN_ARRAY_APPLET_NAME%>"/>
 									<PARAM name="rowCount" value="<%=form.getOneDimensionCapacity()%>"/>
