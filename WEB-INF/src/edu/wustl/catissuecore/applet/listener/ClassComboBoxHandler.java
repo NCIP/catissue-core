@@ -44,7 +44,7 @@ public class ClassComboBoxHandler extends ComboBoxHandler {
 		SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(table.getSelectedColumn()).getCellEditor();
 		System.out.println("Editor received....");
 		scm.specimenClassUpdated(((JComboBox)e.getSource()).getSelectedItem().toString());
-		scm.setBarCode("bCode" );
+		//scm.setBarCode("bCode" );
 		System.out.println("Type Set");
 	}
 }
