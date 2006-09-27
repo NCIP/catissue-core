@@ -11,11 +11,20 @@ package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMapping;
+
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.SpecimenArrayUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -31,7 +40,7 @@ public class SpecimenArrayForm extends ContainerForm
 	/**
 	 * Specify the specimenArrayTypeId field 
 	 */
-	private long specimenArrayTypeId;
+	private long specimenArrayTypeId = -1;
 	
 	/**
 	 * Specify the createdBy field
@@ -242,5 +251,54 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public String getCreateSpecimenArray() {
 		return createSpecimenArray;
+	}
+	
+	/**
+	 * validate specimen array form level fields & return appropriate message.
+	 * @see org.apache.struts.action.ActionForm#validate(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
+	 */
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
+        ActionErrors errors = new ActionErrors();
+        Validator validator = new Validator();
+        try {
+            if (operation.equals(Constants.ADD)
+                    || operation.equals(Constants.EDIT))
+            {
+                if (this.specimenArrayTypeId == -1 )
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("array.arrayType")));
+                }            	
+//            	validate name of array
+                if (validator.isEmpty(name))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("array.arrayLabel")));
+                }
+                
+               // validate storage position
+				if (!validator.isNumeric(String.valueOf(positionDimensionOne), 1)
+							|| !validator.isNumeric(String.valueOf(positionDimensionTwo), 1)
+							|| !validator.isNumeric(String.valueOf(storageContainer), 1))
+				{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+								"errors.item.format", ApplicationProperties
+										.getValue("array.positionInStorageContainer")));
+				}
+				
+				// validate user 
+                if (!validator.isValidOption(String.valueOf(createdBy)))
+                {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+                            "errors.item.required", ApplicationProperties
+                                    .getValue("array.user")));
+                }
+            }
+		} catch (Exception e) {
+			Logger.out.error(e.getMessage());
+		}
+		return errors;
 	}
 }
