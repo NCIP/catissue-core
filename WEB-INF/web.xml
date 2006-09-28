@@ -51,13 +51,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
      <servlet-name>ResponseServlet</servlet-name>
      <servlet-class>edu.wustl.common.struts.ResponseServlet</servlet-class>
    </servlet>
-   
+	
  <!-- Standard Action Servlet Mapping -->
   <servlet-mapping>
      <servlet-name>action</servlet-name>
      <url-pattern>*.do</url-pattern>
   </servlet-mapping>
-	
+
 	<servlet-mapping>
      <servlet-name>ResponseServlet</servlet-name>
      <url-pattern>/ResponseServlet</url-pattern>
@@ -95,5 +95,110 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	  <taglib-uri>/WEB-INF/nlevelcombo.tld</taglib-uri>
 	  <taglib-location>/WEB-INF/nlevelcombo.tld</taglib-location>
   </taglib>
+
+<!--  caCore like system entries -->
+	<context-param>
+       	<param-name>cacoreBeans.Properties</param-name>
+		<param-value>cacoreBeans.properties,evsBeans.properties</param-value>
+	</context-param>
+	
+	<context-param>
+	    <param-name>cacoreFormat.xsl</param-name>
+		<param-value>xslt/cacoreFormat.xsl</param-value>
+	</context-param>
+	<context-param>
+	    <param-name>evsFormat.xsl</param-name>
+		<param-value>xslt/evsFormat.xsl</param-value>
+	</context-param>
+	<context-param>
+		<param-name>rowCounter</param-name>
+		<param-value>200</param-value>
+	</context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/applicationContext.xml</param-value>
+	</context-param>
+
+	<servlet>
+		<servlet-name>context</servlet-name>
+		<servlet-class>
+			org.springframework.web.context.ContextLoaderServlet
+		</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>httpinvoker</servlet-name>
+		<servlet-class>
+			org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<load-on-startup>3</load-on-startup>
+	</servlet>	
+    
+    <servlet>
+    	<servlet-name>HTTPServer</servlet-name>
+    	<servlet-class>gov.nih.nci.system.proxy.HTTPServer</servlet-class>
+    	<load-on-startup>1</load-on-startup>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>AxisServlet</servlet-name>
+        <display-name>Apache-Axis Servlet</display-name>
+        <servlet-class>org.apache.axis.transport.http.AxisServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetXML</servlet-name>
+        <servlet-class>gov.nih.nci.system.proxy.HTTPQuery</servlet-class>        	
+    </servlet>
+    <servlet>
+    	<servlet-name>GetHTML</servlet-name>
+    	<servlet-class>gov.nih.nci.system.proxy.HTTPQuery</servlet-class>        	
+    </servlet>
+	<servlet>
+    	<servlet-name>Happy</servlet-name>
+		<jsp-file>/Happy.jsp</jsp-file>     	
+    </servlet>
+    
+	<servlet-mapping>
+		<servlet-name>httpinvoker</servlet-name>
+		<url-pattern>/http/*</url-pattern>
+	</servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>HTTPServer</servlet-name>
+        <url-pattern>/server/HTTPServer</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+        <servlet-name>AxisServlet</servlet-name>
+        <url-pattern>/ws/AxisServlet</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+        <servlet-name>AxisServlet</servlet-name>
+        <url-pattern>*.jws</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>AxisServlet</servlet-name>
+        <url-pattern>/ws/*</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>GetXML</servlet-name>
+    	<url-pattern>/GetXML</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    	<servlet-name>GetHTML</servlet-name>
+      	<url-pattern>/GetHTML</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>Happy</servlet-name>
+      	<url-pattern>/Happy</url-pattern>
+    </servlet-mapping>
+<!--  End caCore like system entries -->
 
 </web-app>
