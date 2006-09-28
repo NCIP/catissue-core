@@ -385,6 +385,10 @@ function showExtenalIdentifierDialog(operation,key) {
 	   var url ='NewMultipleSpecimenAction.do?method=showExtenalIdentifierDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
         NewWindow(url,'name','810','320','yes');
 }
+function showBioHazardDialog(operation,key) {
+	   var url ='NewMultipleSpecimenAction.do?method=showBioHazardDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
+        NewWindow(url,'name','810','320','yes');
+}
 
 function submitComments() 
 {
@@ -416,6 +420,32 @@ function showSpecimenErrorMessages(errorMsg) {
      var errorDiv =  document.getElementById("errorMessages");
      errorDiv.innerHTML = "<LI><font color=red>" +  errorMsg + "</font></LI>";
 }
+
+function submitExternalIdentifiers() 
+{
+  var form =  document.forms[0];
+  form.action =  form.action + "?method=submitExternalIdentifiers";
+  form.submit();
+}	   
+
+function submitBioHazards() 
+{
+  var form =  document.forms[0];
+  form.action =  form.action + "?method=submitBioHazards";
+  form.submit();
+}
+function deleteExternalIdentifiers()
+{
+	deleteChecked('addExternalIdentifier','<%=Constants.NEW_MULTIPLE_SPECIMEN_ACTION%>?method=deleteExternalIdentifiers&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false)
+}
+
+function deleteBioHazards()
+{
+	deleteChecked('addBiohazardRow','<%=Constants.NEW_MULTIPLE_SPECIMEN_ACTION%>?method=deleteBioHazards&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false);
+}
+
+
+
 /* --- End Multiple Specimen  javascript functions ---*/
 
 

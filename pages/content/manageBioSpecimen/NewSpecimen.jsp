@@ -13,9 +13,9 @@
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%
-	String bhIdArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_ID_LIST);
-	String bhNameArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_NAME_LIST);
-	String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYPES_LIST);
+//	String bhIdArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_ID_LIST);
+	//String bhNameArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_NAME_LIST);
+//	String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYPES_LIST);
 	
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
@@ -94,27 +94,7 @@
 <script language="JavaScript">
 
 	
-		var idArray = new Array();
-		var nameArray = new Array();
-		var typeArray = new Array();
-		
-		<%
-			if(bhIdArray != null && bhTypeArray != null && bhNameArray !=null)
-			{
-				for(int i=0;i<bhIdArray.length;i++)
-				{
-		%>
-					idArray[<%=i%>] = "<%=bhIdArray[i]%>";
-					nameArray[<%=i%>] = "<%=bhNameArray[i]%>";
-					typeArray[<%=i%>] = "<%=bhTypeArray[i]%>";
-		<%
-				}
-			}
-		%>
-		
-		
-		
-
+<%--
 		//ADD MORE -------- EXTERNAL IDENTIFIER
 		function insExIdRow(subdivtag)
 		{
@@ -172,7 +152,15 @@
 			checkb.innerHTML=""+sname;
 		}
 		
-		
+	--%>	
+	function deleteExternalIdentifiers()
+	{
+		deleteChecked('addExternalIdentifier','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false);
+	}
+	function deleteBioHazards()
+	{
+		deleteChecked('addBiohazardRow','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false);
+	}
 		//ADD MORE FUNCTIONALITY FOR BIOHAZARDS
 		function insBhRow(subdivtag)
 		{
@@ -460,10 +448,10 @@
 								<html:hidden property="forwardTo" value=""/>
 							</td>
 							<td>
-								<html:hidden property="exIdCounter"/>
+<%--								<html:hidden property="exIdCounter"/>--%>
 							</td>
 							<td>
-								<html:hidden property="bhCounter"/>
+<%--								<html:hidden property="bhCounter"/>--%>
 							</td>
 							<td>
 								<html:hidden property="onSubmit"/>
@@ -1151,8 +1139,8 @@
 				<!-- Mandar: 11-July-06 AutoEvents end  -->
 				</table>	
 				
-				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-				<tr>
+<%--				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">--%>
+			<%--	<tr>
 				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.externalIdentifier"/>
 				     </td>
@@ -1166,9 +1154,9 @@
 								<bean:message key="buttons.delete"/>
 							</html:button>
 					</td>
-				 </tr>
+				 </tr>--%>
 				 
-				 	<tr>
+				 <%--	<tr>
 					 	<td class="formSerialNumberLabel" width="5">
 					     	#
 					    </td>
@@ -1183,8 +1171,8 @@
 								<bean:message key="addMore.delete" />
 							</label>
 						</td>
-					 </tr>
-				  <tbody id="addExternalIdentifier">
+					 </tr>--%>
+<%--				  <tbody id="addExternalIdentifier">
 				  <%
 				  	for(int i=exIdRows;i>=1;i--)
 				  	{
@@ -1216,8 +1204,9 @@
 						</td>
 					 </tr>
 				  <% } %>
-				 </tbody>
-				 
+				 </tbody>--%>
+				<%@ include file="ExternalIdentifiers.jsp" %>
+				<%-- <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
 				     	<bean:message key="specimen.biohazards"/>
@@ -1307,8 +1296,10 @@
 						</td>
 					 </tr>
 				  <% } %>
-				 </tbody>
-				 
+				 </tbody>--%>
+
+ 				<%@ include file="BioHazards.jsp" %>
+ 				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
 				<tr>					
 					<td class="formFieldNoBordersBold" height="20" colspan="5">

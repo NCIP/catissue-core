@@ -20,6 +20,7 @@ import javax.swing.table.TableColumnModel;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.listener.BaseFocusHandler;
+import edu.wustl.catissuecore.applet.listener.BioHazardButtonHandler;
 import edu.wustl.catissuecore.applet.listener.ButtonHandler;
 import edu.wustl.catissuecore.applet.listener.ClassComboBoxHandler;
 import edu.wustl.catissuecore.applet.listener.CollectionGroupItemHandler;
@@ -478,7 +479,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		externalIdentifierButton.addActionListener(new ExternalIdentifierButtonHandler(table));
 		
 		//BioHazard
-		//bioHazardButton.addActionListener(buttonHandler);
+		bioHazardButton.addActionListener(new BioHazardButtonHandler(table));
 
 		//Derive
 	//	deriveButton.addActionListener(buttonHandler);

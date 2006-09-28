@@ -1248,7 +1248,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_CLASS =   "specimenClass";
 	public static final String SPECIMEN_CALL_BACK_FUNCTION =   "specimenCallBackFunction";
 	
-	
+	public static final String APPEND_COUNT = "_count";
+	public static final String EXTERNALIDENTIFIER_TYPE = "ExternalIdentifier";
+	public static final String BIOHAZARD_TYPE = "BioHazard";
 	
 	public static final String MULTIPLE_SPECIMEN_APPLET_NAME = "MultipleSpecimenApplet";
 	public static final String INPUT_APPLET_DATA = "inputAppletData";

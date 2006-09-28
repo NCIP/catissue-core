@@ -2800,6 +2800,7 @@ PUBLIC
 	   scope="request" validate="true" input="/InitMultipleSpecimen.do?menuSelected=15">
 		<forward name="comments" path="/pages/content/manageBioSpecimen/comments.jsp" />
 		<forward name="externalIdentifier" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
+		<forward name="bioHazard" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
 		<forward name="specimen" path=".catissuecore.multipleSpecimenDef" />
 		
 	</action>
