@@ -19,7 +19,7 @@
 	<property name="cobertura.dir" value="${target.dir}/reports/coverage" />
 	<property name="report.dir" value="${base.dir}/WEB-INF" />
 	<property name="catissue.applet.dir" value="${base.dir}/Applet/catissue" />
-	
+	<property name="temp.dir" value="${base.dir}/tempCatissuecore"/>
 
 
 
@@ -58,6 +58,8 @@
 		<tstamp />
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${target.dir}" />
+		<!-- Create the temp directory for caCORE CSM war file-->
+		<mkdir dir="${temp.dir}"/>
 	</target>
 
 	<target name="clean" description="clean up">
@@ -67,8 +69,6 @@
 				<exclude name="CVS" />
 			</fileset>
 		</delete>
-
-
 	</target>
 
 	<!-- Compile all files, generated and hand-written -->
@@ -150,9 +150,11 @@
 	<!-- Create the Applet JAR Ends-->
 
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="build_war" depends="init, compile, build_catissue_applet_jar">
+	<target name="build_war" depends="init, compile, build_catissue_applet_jar, unpack_cacore_war">
 		<delete file="catissuecore.war" />
-		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml">
+		
+		<!-- Here duplicate="preserver" is used skip copying duplicate-->
+		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml" duplicate="preserve">
 			<fileset dir="${base.dir}">
 				<include name="Applet/**" />
 				<include name="css/**" />
@@ -181,15 +183,37 @@
 				<exclude name="**/caTissue_Core_Installable/**"/>
 				<exclude name="**/caTISSUECore caCORE Client/**"/-->
 			</fileset>
+			
+			<!-- change for csm related war -->
+			<fileset dir="${temp.dir}/catissuecorecsm">
+				<include name="**/WEB-INF/**" />
+				<include name="**/images/**" />
+				<include name="**/log/**" />
+				<include name="**/*" />
+				
+				<exclude name="**/WEB-INF/web.xml" />
+				<exclude name="**/WEB-INF/classes/edu/wustl/catissuecore/domain/**" />
+				<exclude name="**/WEB-INF/lib/csmapi.jar" />
+				<exclude name="**/META-INF/**" />
+			</fileset>
 		</war>
+	</target>
+	
+	<target name="clean_temp_dir" description="delete temp directory used for caCORE unpack">
+		<!-- do delete ${temp.dir} -->
+		<delete dir="${temp.dir}" />
 	</target>
 	
 	<!--Deploys the application war file at JBOSS server by coping it to deploy directory of application server-->
 	<target name="deploy">
 			<!--antcall target="clean" /-->
 			<antcall target="build_war" />
+			<!-- delete temp dir -->
+			<antcall target="clean_temp_dir" />
 			<!--antcall target="cleanserver" /-->
-			<copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" />
+			<!-- Not required to copy csm war file -->
+			<!-- <copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" /> -->
+		
 			<sleep seconds="2" />
 	</target>				
 	
@@ -397,31 +421,36 @@
  <!-- Create the Applet JAR Begins-->
 
     <target name="build_catissue_applet_jar" depends="compile">
-                <mkdir dir="${catissue.applet.dir}"/>
-                <delete>
-                            <fileset dir="${catissue.applet.dir}">
-                                        <exclude name="**/CVS*" />
-                                        <exclude name="**/java.policy.applet*" />
-                            </fileset>
-                </delete>
-                <copy todir="${catissue.applet.dir}">
-                           <fileset dir="${target.dir}">
-                                        <include name="**/edu/wustl/catissuecore/applet/**" />
-                                        <include name="**/edu/wustl/catissuecore/util/global/Constants.class" />
-                                        <include name="**/edu/wustl/common/util/global/Validator.class" />
-                            </fileset>
-                </copy>
-                <jar taskname="buildJar" jarfile="${applet.dir}/CaTissueApplet.jar">
-                            <fileset dir="${catissue.applet.dir}">
-                                        <exclude name="**/CVS*" />
-                                        <exclude name="**/java.policy.applet*" />
-                            </fileset>
-                </jar>
-                <delete includeemptydirs="true">
-                            <fileset dir="${catissue.applet.dir}">
-                                        <include name="**/*" />
-                                        <exclude name="**/CVS*" />                                     
-                            </fileset>
-                </delete>
+        <mkdir dir="${catissue.applet.dir}"/>
+        <delete>
+            <fileset dir="${catissue.applet.dir}">
+                <exclude name="**/CVS*" />
+                <exclude name="**/java.policy.applet*" />
+            </fileset>
+        </delete>
+        <copy todir="${catissue.applet.dir}">
+           <fileset dir="${target.dir}">
+                <include name="**/edu/wustl/catissuecore/applet/**" />
+                <include name="**/edu/wustl/catissuecore/util/global/Constants.class" />
+                <include name="**/edu/wustl/common/util/global/Validator.class" />
+            </fileset>
+        </copy>
+        <jar taskname="buildJar" jarfile="${applet.dir}/CaTissueApplet.jar">
+	        <fileset dir="${catissue.applet.dir}">
+                <exclude name="**/CVS*" />
+                <exclude name="**/java.policy.applet*" />
+	        </fileset>
+        </jar>
+        <delete includeemptydirs="true">
+	        <fileset dir="${catissue.applet.dir}">
+                <include name="**/*" />
+                <exclude name="**/CVS*" />                                     
+	        </fileset>
+        </delete>
     </target>
+	
+	<!-- unpack caCORE war into temp folder -->
+	<target name="unpack_cacore_war">
+		<unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/catissuecorecsm"/>
+	</target>
 </project>
