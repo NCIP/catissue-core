@@ -46,13 +46,35 @@
 		
         
 %>
+
+<script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 <script>
+
+    /***  code using ajax :gets the emailAddress of the coordinator without refreshing the whole page  ***/
 	function onCoordinatorChange()
 	{
-		var action = "Site.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfSite&isOnChange=true";
-		document.forms[0].action = action;
-		document.forms[0].submit();
+		var request = newXMLHTTPReq();
+		var handlerFunction = getReadyStateHandler(request,onResponseUpdate,true);
+		
+		//no brackets after the function name and no parameters are passed because we are assigning a reference to the function and not actually calling it
+		request.onreadystatechange = handlerFunction;
+		var action = "operation="+document.forms[0].operation.value+"&pageOf=pageOfSite&isOnChange=true&coordinatorId="+document.getElementById("coordinatorId").value;
+		
+		//Open connection to servlet
+		request.open("POST","Site.do",true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		
+		//send data to ActionServlet
+		request.send(action);
 	}
+
+	function onResponseUpdate(emailAddress) 
+	{
+		document.getElementById("emailAddress").value = emailAddress;
+	}
+
+	/*** code using ajax  ***/
+	
 </script>
 <script language="JavaScript" src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar : 434 : for tooltip -->
