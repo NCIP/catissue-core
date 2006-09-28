@@ -212,7 +212,7 @@
 			<antcall target="clean_temp_dir" />
 			<!--antcall target="cleanserver" /-->
 			<!-- Not required to copy csm war file -->
-			<!-- <copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" /> -->
+			 <copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" />
 		
 			<sleep seconds="2" />
 	</target>				
