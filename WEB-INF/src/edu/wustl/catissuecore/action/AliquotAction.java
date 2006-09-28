@@ -7,7 +7,7 @@
  * @version 1.00
  * Created on May 12, 2006
  */
- 
+
 package edu.wustl.catissuecore.action;
 
 import java.text.DecimalFormat;
@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.AliquotForm;
+import edu.wustl.catissuecore.bizlogic.AliquotBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -259,7 +260,7 @@ public class AliquotAction extends BaseAction //SecureAction
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
 								.getSpecimenClass(), 0);
 					}
-				
+
 					populateAliquotsStorageLocations(aliquotForm, containerMap);
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 					request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_CREATE_ALIQUOT);
@@ -544,7 +545,7 @@ public class AliquotAction extends BaseAction //SecureAction
 
 	/*This method distributes the available quantity among the aliquots. On successful
 	 distribution the function return true else false. */
-	private boolean distributeAvailableQuantity(AliquotForm form, boolean isDouble)
+	private boolean distributeAvailableQuantity(AliquotForm form, boolean isDouble) throws Exception
 	{
 		int aliquotCount = Integer.parseInt(form.getNoOfAliquots());
 		String distributedQuantity;
@@ -611,11 +612,16 @@ public class AliquotAction extends BaseAction //SecureAction
 		}
 
 		Map aliquotMap = form.getAliquotMap();
+		AliquotBizLogic bizLogic = (AliquotBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.ALIQUOT_FORM_ID);
+		long nextAvailablenumber = bizLogic.getNextAvailableNumber("CATISSUE_SPECIMEN");
 
 		for (int i = 1; i <= aliquotCount; i++)
 		{
 			String qtyKey = "Specimen:" + i + "_quantity";
 			aliquotMap.put(qtyKey, distributedQuantity);
+			String labelKey = "Specimen:" + i + "_label";
+			String aliquotLabel = form.getSpecimenLabel() + "_" + (nextAvailablenumber + i - 1);
+			aliquotMap.put(labelKey, aliquotLabel);
 		}
 
 		form.setAliquotMap(aliquotMap);
@@ -757,4 +763,5 @@ public class AliquotAction extends BaseAction //SecureAction
 
 		return errors;
 	}
+
 }
