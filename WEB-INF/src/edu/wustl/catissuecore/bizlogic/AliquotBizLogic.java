@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
@@ -22,7 +23,9 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -251,5 +254,32 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		{
 			aliquotMap.put("concentration", "");
 		}
+	}
+	public long getNextAvailableNumber(String sourceObjectName) throws DAOException
+	{
+		String[] selectColumnName = {"max(IDENTIFIER) as MAX_NAME"};
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+
+		dao.openSession(null);
+
+		List list = dao.retrieve(sourceObjectName, selectColumnName);
+
+		dao.closeSession();
+
+		if (list!=null && !list.isEmpty())
+		{
+			List columnList = (List) list.get(0);
+			if (!columnList.isEmpty())
+			{
+				String str = (String) columnList.get(0);
+				if (!str.equals(""))
+				{
+					long no = Long.parseLong(str);
+					return no + 1;
+				}
+			}
+		}
+
+		return 1;
 	}
 }
