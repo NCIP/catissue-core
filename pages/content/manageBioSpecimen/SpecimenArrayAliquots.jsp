@@ -46,39 +46,8 @@
 			document.forms[0].submittedFor.value = "ForwardTo";
 			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=20&buttonClicked=create";
 		    document.forms[0].submit();
-		}
+		}		
 		
-		function setVirtuallyLocated(element)
-		{
-			var elementId = element.id;
-			var index = elementId.indexOf("_");
-			var len = elementId.length;
-			var substr = elementId.substring(index+1,len);
-			
-			var customListBox1 = "customListBox_"+substr+"_0";
-			var customListBox2 = "customListBox_"+substr+"_1";
-			var customListBox3 = "customListBox_"+substr+"_2";
-
-			var containerName = document.getElementById(customListBox1);
-			var pos1 = document.getElementById(customListBox2);
-			var pos2 = document.getElementById(customListBox3);
-
-			if(element.checked)
-			{
-				containerName.disabled = true;
-				pos1.disabled = true;
-				pos2.disabled = true;
-				document.forms[0].mapButton[substr-1].disabled = true;
-			}
-			else
-			{
-				containerName.disabled = false;
-				pos1.disabled = false;
-				pos2.disabled = false;
-				document.forms[0].mapButton[substr-1].disabled = false;
-				
-			} 
-		}
 	</script>
 </head>
 
@@ -283,9 +252,8 @@
 					for(int i=1;i<=counter;i++)
 					{
 						String labelKey = "value(SpecimenArray:" + i + "_label)";						
-						String barKey = "value(SpecimenArray:" + i + "_barcode)";
-						String virtuallyLocatedKey = "value(SpecimenArray:" + i + "_virtuallyLocated)";
-						String virtuallyLocatedStyleId = "chkBox_"+ i;
+						String barKey = "value(SpecimenArray:" + i + "_barcode)";						
+						
 						String containerKey = "value(SpecimenArray:" + i + "_StorageContainer_id)";
 						String pos1Key = "value(SpecimenArray:" + i + "_positionDimensionOne)";
 						String pos2Key = "value(SpecimenArray:" + i + "_positionDimensionTwo)";						
@@ -322,7 +290,7 @@
 							<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcodes" property="<%=barKey%>" disabled="false"/>
 						</td>
 						<td class="formField" nowrap>
-							<html:checkbox property="<%=virtuallyLocatedKey%>" onclick="setVirtuallyLocated(this)" value="true" styleId="<%=virtuallyLocatedStyleId%>"/><bean:message key="specimen.virtuallyLocated" />
+							
 							<ncombo:containermap dataMap="<%=dataMap%>" 
 												 attributeNames="<%=attrNames%>" 
 												 initialValues="<%=initValues%>"  
