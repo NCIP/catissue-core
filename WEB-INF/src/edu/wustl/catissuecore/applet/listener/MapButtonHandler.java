@@ -13,7 +13,6 @@ import javax.swing.JTable;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * @author mandar_deshmukh
