@@ -199,9 +199,10 @@
 		</war>
 	</target>
 	
-	<target name="clean_temp_dir" description="delete temp directory used for caCORE unpack">
+	<target name="clean_temp_dir_csmwar" description="delete temp directory used for caCORE unpack">
 		<!-- do delete ${temp.dir} -->
 		<delete dir="${temp.dir}" />
+		<delete file="${jboss.home.dir}/server/default/deploy/catissuecorecsm.war" />
 	</target>
 	
 	<!--Deploys the application war file at JBOSS server by coping it to deploy directory of application server-->
@@ -209,12 +210,11 @@
 			<!--antcall target="clean" /-->
 			<antcall target="build_war" />
 			<!-- delete temp dir -->
-			<antcall target="clean_temp_dir" />
+			<antcall target="clean_temp_dir_csmwar" />
 			<!--antcall target="cleanserver" /-->
 			<!-- Not required to copy csm war file -->
 			 <copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" />
-		
-			<sleep seconds="2" />
+			 <sleep seconds="2" />
 	</target>				
 	
 	<target name="cleanserver" description="deletes the WAR file and cache from server ">		
