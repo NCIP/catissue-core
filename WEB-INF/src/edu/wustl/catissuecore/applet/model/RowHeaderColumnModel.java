@@ -47,9 +47,9 @@ public class RowHeaderColumnModel extends AbstractCellEditor
 	{
 		super();
 		this.table = table;
-		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel)table.getModel();
+//		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel)table.getModel();
 		// ----------------------------
-		Object rowHeaders[] = model.getRowHeaders();
+		Object rowHeaders[] = MultipleSpecimenTableModel.getRowHeaders();
 		labels = new JLabel[rowHeaders.length ];
 		for(int counter=0; counter<rowHeaders.length; counter++)
 		{

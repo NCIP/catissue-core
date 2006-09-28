@@ -37,7 +37,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**
 	 * Row headers for the attributes. This corrosponds to display value for each of the  specimenAttribute in that order.
 	 */
-	String[] rowHeaders = {"Specimen Group Name", "Parent", "Label", "Barcode", "Class", "Type",
+	private static final String[]  rowHeaders = {"Specimen Group Name", "Parent", "Label", "Barcode", "Class", "Type",
 			"Tissue Site", "Tissue Side", "Pathological Status", "Quantity", "Concentration",
 			"Storage Position", "Comments", "Events", "External Identifier(s)", "Biohazards",
 			"Derive"};
@@ -83,10 +83,11 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public Object getValueAt(int row, int column)
 	{
-		if (column == 0)
-		{
-			return rowHeaders[row];
-		}
+		 System.out.println("getValueAt " + row + " " + column + ": " + getKey(row,column) + "  " + specimenMap.get(getKey(row,column)));
+//		if (column == 0)
+//		{
+//			return rowHeaders[row];
+//		}
 
 		return specimenMap.get(getKey(row,column));
 	}
@@ -96,7 +97,8 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public void setValueAt(Object value, int row, int column)
 	{
-		if (column != 0)
+		System.out.println("setValueAt " + row + " " + column + ": " + specimenMap.get(getKey(row,column)) + value);
+//		if (column != 0)
 		{
 			specimenMap.put(getKey(row,column), value);
 		}
@@ -158,7 +160,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 * This method return row headers.
 	 * @return 
 	 */
-	public Object[] getRowHeaders()
+	public static  Object[] getRowHeaders()
 	{
 		return rowHeaders;
 	}

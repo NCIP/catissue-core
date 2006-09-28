@@ -162,7 +162,8 @@ public class SpecimenColumnModel extends AbstractCellEditor
 
 		System.out.println("SpecimenColumnModel : Col no : "+column);
 		TableColumnModel columnModel = table.getColumnModel();
-		System.out.println("SpecimenColumnModel columnModel.getColumnCount() : " + columnModel.getColumnCount()); 
+		System.out.println("SpecimenColumnModel columnModel.getColumnCount() : " + columnModel.getColumnCount());
+		System.out.println("SpecimenColumnModel Table.getColumnCount() : " + table.getColumnCount());
 		columnModel.getColumn(column).setCellRenderer(this);
 		columnModel.getColumn(column).setCellEditor(this);
 		columnModel.getColumn(column).setResizable(false );
