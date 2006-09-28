@@ -262,7 +262,7 @@ public class SearchUtil
 				searchFieldData[1] = initSearchUIData(SearchUtil.STRING,"specimen.subType","Specimen","TYPE","type",Constants.ENUMERATED_OPERATORS,Constants.SPECIMEN_TYPE_LIST,"");
 				searchFieldData[2] = initSearchUIData(SearchUtil.STRING, "specimen.tissueSite","SpecimenCharacteristics","TISSUE_SITE","tissueSite",Constants.ENUMERATED_OPERATORS,Constants.TISSUE_SITE_LIST,"");
 				searchFieldData[3] = initSearchUIData(SearchUtil.STRING,"specimen.tissueSide","SpecimenCharacteristics","TISSUE_SIDE","tissueSide",Constants.ENUMERATED_OPERATORS,Constants.TISSUE_SIDE_LIST,"");
-				searchFieldData[4] = initSearchUIData(SearchUtil.STRING, "specimen.pathologicalStatus","SpecimenCharacteristics","PATHOLOGICAL_STATUS","pathologicalStatus",Constants.ENUMERATED_OPERATORS,Constants.PATHOLOGICAL_STATUS_LIST,"");
+				searchFieldData[4] = initSearchUIData(SearchUtil.STRING, "specimen.pathologicalStatus","Specimen","PATHOLOGICAL_STATUS","pathologicalStatus",Constants.ENUMERATED_OPERATORS,Constants.PATHOLOGICAL_STATUS_LIST,"");
 				searchFieldData[5] = initSearchUIData(SearchUtil.NUMERIC, "specimen.concentration","Specimen","CONCENTRATION","concentration",Constants.DATE_NUMERIC_OPERATORS,"","");
 				searchFieldData[6] = initSearchUIData(SearchUtil.NUMERIC, "specimen.availableQuantity","Specimen","AVAILABLE_QUANTITY","availableQuantity",Constants.DATE_NUMERIC_OPERATORS,"","");
 				searchFieldData[7] = initSearchUIData(SearchUtil.NUMERIC, "specimen.quantity","Specimen","QUANTITY","quantity",Constants.DATE_NUMERIC_OPERATORS,"","");

@@ -16,7 +16,7 @@
 	String type = "value(Specimen:TYPE)";
 	String tissueSite = "value(SpecimenCharacteristics:TISSUE_SITE)";
 	String tissueSide = "value(SpecimenCharacteristics:TISSUE_SIDE)";
-	String pathologicalStatus = "value(SpecimenCharacteristics:PATHOLOGICAL_STATUS)";
+	String pathologicalStatus = "value(Specimen:PATHOLOGICAL_STATUS)";
 	String concentration1 = "value(Specimen:CONCENTRATION)";
 	String concentration2 = "value(Specimen:CONCENTRATION:HLIMIT)";
 	String quantity1 = "value(Specimen:QUANTITY)";
@@ -32,7 +32,7 @@
 	String opType = "value(Operator:Specimen:TYPE)";
 	String opTissueSite = "value(Operator:SpecimenCharacteristics:TISSUE_SITE)";
 	String opTissueSide = "value(Operator:SpecimenCharacteristics:TISSUE_SIDE)";
-	String opPathologicalStatus = "value(Operator:SpecimenCharacteristics:PATHOLOGICAL_STATUS)";
+	String opPathologicalStatus = "value(Operator:Specimen:PATHOLOGICAL_STATUS)";
 	String opConcentration = "value(Operator:Specimen:CONCENTRATION)";
 	String opQuantity = "value(Operator:Specimen:QUANTITY)";
 	/* Aarti: Bug#1496- To allow query on initial quantity as well as available quantity */
@@ -604,7 +604,7 @@
 	</td>
 	
 	<%
-		opValue = (String)specimenDataMap.get("Operator:SpecimenCharacteristics:PATHOLOGICAL_STATUS");
+		opValue = (String)specimenDataMap.get("Operator:Specimen:PATHOLOGICAL_STATUS");
 		disabled = (opValue == null || opValue.equals(Constants.ANY));
 	%>
 	
