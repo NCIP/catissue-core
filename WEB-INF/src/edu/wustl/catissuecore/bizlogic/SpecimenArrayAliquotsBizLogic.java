@@ -51,16 +51,13 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			String containerIdKey = specimenKey + i + "_StorageContainer_id";
 			String posDim1Key = specimenKey + i + "_positionDimensionOne";
 			String posDim2Key = specimenKey + i + "_positionDimensionTwo";
-			String virtuallyLocatedKey = specimenKey + i + "_virtuallyLocated";
-						
+									
 			//Retrieving the quantity, barcode & location values for each aliquot
 			String label = (String) aliquotMap.get(labelKey);
 			String barcode = (String) aliquotMap.get(barcodeKey);
 			String containerId = (String) aliquotMap.get(containerIdKey);
 			String posDim1 = (String) aliquotMap.get(posDim1Key);
 			String posDim2 = (String) aliquotMap.get(posDim2Key);			
-			String virtuallyLocated = (String) aliquotMap.get(virtuallyLocatedKey);			
-			
 			
 			//Create an object of Specimen Subclass
 			SpecimenArray aliquotSpecimenArray = new SpecimenArray();			
@@ -72,11 +69,13 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 				aliquotSpecimenArray.setParent(parentSpecimenArray);
 				aliquotSpecimenArray.setSpecimenArrayType(parentSpecimenArray.getSpecimenArrayType());				
 				aliquotSpecimenArray.setCreatedBy(parentSpecimenArray.getCreatedBy());
-				aliquotSpecimenArray.setCapacity(parentSpecimenArray.getCapacity());				
+				aliquotSpecimenArray.setCapacity(parentSpecimenArray.getCapacity());
 				Collection specimenArrayContentCollection = PopulateSpecimenArrayContentCollectionForAliquot(parentSpecimenArray,aliquotSpecimenArray,specimenArray.getAliquotCount());
 				aliquotSpecimenArray.setSpecimenArrayContentCollection(specimenArrayContentCollection);
-				aliquotSpecimenArray.setAliquot(true);
 			}
+			
+			aliquotSpecimenArray.setAliquot(true);
+			aliquotSpecimenArray.setFull(Boolean.valueOf(false));
 			
 			//Explicity set barcode to null if it is empty as its a unique key in the database
 			if (barcode != null && barcode.trim().length() == 0)
@@ -94,7 +93,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 
 			try
 			{
-				if (virtuallyLocated == null && containerId != null)
+				if (containerId != null)
 				{
 					//Setting the storage container of the aliquot
 					StorageContainer container = (StorageContainer) dao.retrieve(
@@ -127,7 +126,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			}
 
 			//Setting the attributes - storage positions, available, acivity status & lineage
-			if (virtuallyLocated == null && containerId != null)
+			if (containerId != null)
 			{
 				aliquotSpecimenArray.setPositionDimensionOne(new Integer(posDim1));
 				aliquotSpecimenArray.setPositionDimensionTwo(new Integer(posDim2));
@@ -141,10 +140,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			aliquotSpecimenArray.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			//aliquotSpecimenArray.setLineage(Constants.ALIQUOT);
 
-			//Inserting an aliquot in the database
-			//TODO NEEDS TO BE FIXED FOR SECURE INSERT
-			
-			
+			//Inserting an aliquot in the database			
 			specimenArrayBizLogic.insert(aliquotSpecimenArray, dao, sessionDataBean);		
 			
 		}
