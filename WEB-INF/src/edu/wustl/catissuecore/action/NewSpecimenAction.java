@@ -44,6 +44,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
@@ -283,7 +284,7 @@ public class NewSpecimenAction extends SecureAction
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
 
 		//Mandar : 10-July-06 AutoEvents : CollectionEvent
-		setCollectionEventRequestParameters(request);
+		setCollectionEventRequestParameters(request,specimenForm);
 
 		//Mandar : 11-July-06 AutoEvents : ReceivedEvent
 		setReceivedEventRequestParameters(request);
@@ -436,7 +437,7 @@ public class NewSpecimenAction extends SecureAction
 	 * @param request HttpServletRequest instance in which the data will be set. 
 	 * @throws Exception Throws Exception. Helps in handling exceptions at one common point.
 	 */
-	private void setCollectionEventRequestParameters(HttpServletRequest request) throws Exception
+	private void setCollectionEventRequestParameters(HttpServletRequest request, NewSpecimenForm specimenForm) throws Exception
 	{
 		//Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
@@ -460,6 +461,15 @@ public class NewSpecimenAction extends SecureAction
 		Collection userCollection = userBizLogic.getUsers(operation);
 
 		request.setAttribute(Constants.USERLIST, userCollection);
+		
+		SessionDataBean sessionData = getSessionData(request);
+		if(sessionData != null)
+		{
+			String user = sessionData.getLastName()+", "+sessionData.getFirstName();
+			long collectionEventUserId = getIdFromCollection(userCollection,user);
+			specimenForm.setCollectionEventUserId(collectionEventUserId);
+			specimenForm.setReceivedEventUserId(collectionEventUserId);			
+		}
 
 		// set the procedure lists
 		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
@@ -582,6 +592,27 @@ public class NewSpecimenAction extends SecureAction
 		return initialValues;
 
 		//request.setAttribute("initValues", initialValues);
+	}
+	
+	/**
+	 * 
+	 * @param userList Collection
+	 * @param userName userName
+	 * @return long
+	 */
+	private long getIdFromCollection(Collection userList, String userName) 
+	{		
+		Iterator itr = userList.iterator();
+		for(int i=0; itr.hasNext(); i++)
+		{
+			NameValueBean nameValueBean = (NameValueBean) itr.next();
+			if(nameValueBean.getName() != null && nameValueBean.getName().trim().equals(userName))
+			{				
+				String id = nameValueBean.getValue();
+				return Long.valueOf(id).longValue();
+			}
+		}
+		return -1;
 	}
 
 }
