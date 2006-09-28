@@ -2295,7 +2295,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 		String queryStr = "select t1.IDENTIFIER,t1.name from CATISSUE_CONTAINER t1,CATISSUE_STORAGE_CONTAINER t2 " +
 						  "where t1.IDENTIFIER IN (select t4.STORAGE_CONTAINER_ID from CATISSUE_CONT_HOLDS_SPARRTYPE t4 " +
-						  "where t4.SPECIMEN_ARRAY_TYPE_ID = '" + specimen_array_type_id + "'" + includeAllIdQueryStr + ") and t1.IDENTIFIER = t2.IDENTIFIER;";
+						  "where t4.SPECIMEN_ARRAY_TYPE_ID = '" + specimen_array_type_id + "'" + includeAllIdQueryStr + ") and t1.IDENTIFIER = t2.IDENTIFIER";
 		
 		Logger.out.debug("SPECIMEN ARRAY QUERY ......................" + queryStr);
 		List list = new ArrayList();
