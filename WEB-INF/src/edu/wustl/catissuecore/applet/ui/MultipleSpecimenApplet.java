@@ -39,7 +39,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	public void doInit()
     {
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));
-		columnNumber++;
+//		columnNumber++;
 //		int columnNumber = 4;
 		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());		
 
@@ -121,14 +121,14 @@ public class MultipleSpecimenApplet extends BaseApplet {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		 
         //  Create custom columns
-		new RowHeaderColumnModel(table);		//	for zeroth column
-		for(int cnt = 1; cnt < columnNumber; cnt++)
+	//	new RowHeaderColumnModel(table);		//	for zeroth column
+		for(int cnt = 0; cnt < columnNumber; cnt++)
 		{
 			new SpecimenColumnModel(table, cnt);
 		}
 		table.setAutoCreateColumnsFromModel(false);
 //		JScrollPane scrollPane = new JScrollPane( table );
-		JScrollPane scrollPane= new FixedColumnScrollPane(table, 1 );
+		JScrollPane scrollPane= new FixedColumnScrollPane(table);
 		scrollPane.setSize(table.getWidth(),table.getHeight()); 
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER  );  
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
