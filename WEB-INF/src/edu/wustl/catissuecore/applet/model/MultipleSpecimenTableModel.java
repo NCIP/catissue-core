@@ -58,10 +58,11 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 *
 	 * It contains 
 	 * 
-	 * 1. MAP - specimen class -> List of specimen Type
-	 * 2. Tissue site List
-	 * 3. Tissue side List
-	 * 4. Pathological  List
+	 * 1. MAP - specimen class ->Array of values for specimen Type
+	 * 1. Array of values for  Specimen class  
+	 * 2. Array of values for Tissue site
+	 * 3. Array of values for Tissue side
+	 * 4. Array of values for Pathological
 	 * */
 	Map specimenAttributeOptions;
 
@@ -74,8 +75,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		specimenMap = new HashMap();
 		this.columnCount = initialColumnCount;
 		this.specimenAttributeOptions = specimenAttributeOptions;
-		
-		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
 	}
 
 	/**
@@ -83,12 +82,12 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public Object getValueAt(int row, int column)
 	{
-		 System.out.println("getValueAt " + row + " " + column + ": " + getKey(row,column) + "  " + specimenMap.get(getKey(row,column)));
-//		if (column == 0)
-//		{
-//			return rowHeaders[row];
-//		}
-
+/*		if (column == 0)
+		{
+			return rowHeaders[row];
+		}
+      System.out.println("getValueAt " + row + " " + column + ": " + getKey(row,column) + "  " + specimenMap.get(getKey(row,column)));
+*/      
 		return specimenMap.get(getKey(row,column));
 	}
 
@@ -97,11 +96,14 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public void setValueAt(Object value, int row, int column)
 	{
-		System.out.println("setValueAt " + row + " " + column + ": " + specimenMap.get(getKey(row,column)) + value);
-//		if (column != 0)
+/*		if (column != 0)
 		{
 			specimenMap.put(getKey(row,column), value);
 		}
+       System.out.println("setValueAt " + row + " " + column + ": " + specimenMap.get(getKey(row,column)) + value);
+*/       
+		specimenMap.put(getKey(row,column), value);
+
 	}
 
 	/**
@@ -130,14 +132,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public String getColumnName(int columnNo)
 	{
-		if (columnNo == 0)
-		{
-			return "Field";
-		}
-		else
-		{
-			return "Specimen " + columnNo;
-		}
+			return "Specimen " + (columnNo+1) ;
 	}
 
 	/**
@@ -314,15 +309,15 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		//---
 		//this.fireTableStructureChanged() ;
 		//---
-		fireTableCellUpdated(AppletConstants.SPECIMEN_BARCODE_ROW_NO,columnNo);
+/*		fireTableCellUpdated(AppletConstants.SPECIMEN_BARCODE_ROW_NO,columnNo);
 		fireTableCellUpdated(AppletConstants.SPECIMEN_TYPE_ROW_NO,columnNo);
 	
 		
 		System.out.println("updating type " + AppletConstants.SPECIMEN_TYPE_ROW_NO +  " "+ columnNo);
-	}
+*/	}
 	
 	public String getKey(int row, int column) {
-		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_"
+		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column+1) + "_"
 		+ specimenAttribute[row];
 		
 		return specimenKey;
@@ -348,9 +343,9 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	
 	public void setStorageDetails(String specimenMapKey, String storageId,String storageLabel,String xPos,String yPos) {
 		int colNo = Integer.parseInt(specimenMapKey);
-		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + specimenMapKey + "_" + "StorageContainer_id" ,new Long(storageId));
-		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + specimenMapKey + "_" + "positionDimensionOne", xPos );
-		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + specimenMapKey + "_" + "positionDimensionTwo", yPos );
+		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo+1) + "_" + "StorageContainer_id" ,new Long(storageId));
+		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo+1) + "_" + "positionDimensionOne", xPos );
+		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo+1) + "_" + "positionDimensionTwo", yPos );
 		
 		String storageInfo = storageLabel + "," + xPos + "," + yPos;
 		

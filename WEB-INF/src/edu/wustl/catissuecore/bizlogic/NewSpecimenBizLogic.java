@@ -21,6 +21,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -584,6 +587,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			{
 				List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
 						Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
+				
 				specimenCollectionGroupObj = spgList.get(0);
 			}
 			else
@@ -596,8 +600,11 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			{
 				SpecimenCollectionGroup spg = (SpecimenCollectionGroup) specimenCollectionGroupObj;
 
-				checkStatus(dao, spg, "Specimen Collection Group");
-
+				if(spg.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
+				{
+					throw new DAOException("Specimen Collection Group "  + ApplicationProperties.getValue("error.object.closed"));
+				}
+				//checkStatus(dao, spg, );
 				specimen.setSpecimenCollectionGroup(spg);
 			}
 		}
@@ -816,7 +823,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		}
 		else
 		{
-			result = validateSingleSpecimen((Specimen) obj, dao, operation);
+			result = validateSingleSpecimen((Specimen) obj, dao, operation,false);
 		}
 		return result;
 	}
@@ -824,7 +831,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	/**
 	 * validates single specimen. 
 	 */
-	private boolean validateSingleSpecimen(Specimen specimen, DAO dao, String operation)
+	private boolean validateSingleSpecimen(Specimen specimen, DAO dao, String operation,boolean partOfMulipleSpecimen)
 			throws DAOException
 	{
 		if (Constants.ALIQUOT.equals(specimen.getLineage()))
@@ -832,6 +839,10 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			return true;
 		}
 
+
+		validateFields(specimen,dao,operation,partOfMulipleSpecimen); 
+		
+			
 		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_SPECIMEN_CLASS, null);
 		String specimenClass = Utility.getSpecimenClassName(specimen);
@@ -915,6 +926,51 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		return true;
 	}
 
+	private void validateFields(Specimen specimen, DAO dao, String operation, boolean partOfMulipleSpecimen) throws DAOException
+	{
+		Validator validator = new Validator();
+
+		
+		
+		if (partOfMulipleSpecimen)
+		{
+			
+			if(specimen.getSpecimenCollectionGroup() == null || validator.isEmpty(specimen.getSpecimenCollectionGroup().getName())) {
+				String quantityString = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required",quantityString));
+			}
+
+			List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
+					Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
+			
+			if (spgList.size() == 0) {
+				throw new DAOException(ApplicationProperties
+						.getValue("errors.item.unknown","Specimen Collection Group " + specimen.getSpecimenCollectionGroup().getName()));
+			}
+		}
+
+		if(validator.isEmpty(specimen.getLabel())) {
+			String labelString = ApplicationProperties.getValue("specimen.label");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",labelString));
+		}
+		
+		if(specimen.getQuantity() == null || specimen.getQuantity().getValue() == null) {
+			String quantityString = ApplicationProperties.getValue("specimen.quantity");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",quantityString));
+		}
+
+		Long storageContainerId = specimen.getStorageContainer().getId();
+		Integer xPos = specimen.getPositionDimensionOne();
+		Integer yPos = specimen.getPositionDimensionTwo();
+		
+		if (storageContainerId == null || xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() <0 )
+		{
+			throw new DAOException(ApplicationProperties
+					.getValue("errors.item.format",ApplicationProperties
+							.getValue("specimen.positionInStorageContainer")));
+		}
+	}
+
 	/**
 	 * validates multiple specimen. Internally it for each specimen it innvokes validateSingleSpecimen. 
 	 */
@@ -926,7 +982,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		while (specimenIterator.hasNext() && result == true)
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
-			result = validateSingleSpecimen(specimen, dao, operation);
+			result = validateSingleSpecimen(specimen, dao, operation,true);
 		}
 		return result;
 	}
