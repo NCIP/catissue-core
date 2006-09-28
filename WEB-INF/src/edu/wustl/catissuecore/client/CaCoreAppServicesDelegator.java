@@ -50,10 +50,7 @@ public class CaCoreAppServicesDelegator
 	 */
     public String delegateLogin(String userName,String password) throws Exception
 	{
-		CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
-		String sessionID = httpClient.connect(userName,password);
-		Logger.out.debug("****************** HTTP LOGIN STATUS: Username:"+ userName + " sessionID" + sessionID);
-		return sessionID;
+    	return "";
 	}
 	
     /**
@@ -63,19 +60,6 @@ public class CaCoreAppServicesDelegator
      */
 	public boolean delegateLogout(String sessionKey)// throws Exception
 	{
-	    try
-		{
-			CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
-		
-			boolean status = httpClient.disConnect(sessionKey);
-		
-			Logger.out.debug("****************** HTTP LOGOUT STATUS : " + status);
-		}
-		catch(Exception e)
-		{
-			
-		}
-		
 		return false;
 	}
 	
@@ -90,24 +74,20 @@ public class CaCoreAppServicesDelegator
 	{
 	    try
 	    {
-				if (domainObject == null) 
-				{
-					throw new Exception("Please enter valid domain object!! Domain object should not be NULL");
-				}
-				
-				IBizLogic bizLogic = getBizLogic(domainObject.getClass().getName());
-				bizLogic.insert(domainObject,getSessionDataBean(userName),Constants.HIBERNATE_DAO);
-				Logger.out.info(" Domain Object has been successfully inserted " + domainObject);
-/*	        CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
-	        return httpClient.add(sessionKey,obj);
-*/	    
+			if (domainObject == null) 
+			{
+				throw new Exception("Please enter valid domain object!! Domain object should not be NULL");
+			}
+			
+			IBizLogic bizLogic = getBizLogic(domainObject.getClass().getName());
+			bizLogic.insert(domainObject,getSessionDataBean(userName),Constants.HIBERNATE_DAO);
+			Logger.out.info(" Domain Object has been successfully inserted " + domainObject);
 	    }
 	    catch(Exception e)
 	    {
 	        Logger.out.error("Delegate Add-->" + e.getMessage());
 	        throw e;
-	    }
-	    
+	    }	    
 	    return domainObject;
 	}
 	
@@ -122,31 +102,27 @@ public class CaCoreAppServicesDelegator
 	{
 		try
 		{
-				if (domainObject == null) 
-				{
-					throw new Exception("Please enter valid domain object!! Domain object should not be NULL");
-				}
-				String objectName = domainObject.getClass().getName();
-				IBizLogic bizLogic = getBizLogic(objectName);
-				AbstractDomainObject abstractDomainObject = (AbstractDomainObject) domainObject;
-				// not null check for Id 
-				if (abstractDomainObject.getId() == null) {
-					throw new Exception("Please enter valid Identifier for domain object !! Identifier should not be NULL");	
-				}
-	            List list = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
-						  abstractDomainObject.getId());
-	            
-				if ((list == null) || (list.isEmpty()))
-				{
-					throw new Exception("No such domain object found for update !! Please enter valid domain object for edit");
-				}
-				AbstractDomainObject abstractDomainOld = (AbstractDomainObject) list.get(0);
-				bizLogic.update(abstractDomainObject, abstractDomainOld, Constants.HIBERNATE_DAO, getSessionDataBean(userName));
-				Logger.out.info(" Domain Object has been successfully updated " + domainObject);
-/*			
-		    CaTissueHTTPClient httpClient = CaTissueHTTPClient.getInstance();
-		    return httpClient.edit(userName, domainObject);
-*/		    
+			if (domainObject == null) 
+			{
+				throw new Exception("Please enter valid domain object!! Domain object should not be NULL");
+			}
+			String objectName = domainObject.getClass().getName();
+			IBizLogic bizLogic = getBizLogic(objectName);
+			AbstractDomainObject abstractDomainObject = (AbstractDomainObject) domainObject;
+			// not null check for Id 
+			if (abstractDomainObject.getId() == null) {
+				throw new Exception("Please enter valid Identifier for domain object !! Identifier should not be NULL");	
+			}
+            List list = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
+					  abstractDomainObject.getId());
+            
+			if ((list == null) || (list.isEmpty()))
+			{
+				throw new Exception("No such domain object found for update !! Please enter valid domain object for edit");
+			}
+			AbstractDomainObject abstractDomainOld = (AbstractDomainObject) list.get(0);
+			bizLogic.update(abstractDomainObject, abstractDomainOld, Constants.HIBERNATE_DAO, getSessionDataBean(userName));
+			Logger.out.info(" Domain Object has been successfully updated " + domainObject);
 		}
 		catch(Exception e)
 		{
