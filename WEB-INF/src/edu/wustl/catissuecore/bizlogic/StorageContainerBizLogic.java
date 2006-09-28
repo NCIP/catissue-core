@@ -1755,6 +1755,26 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 							.debug("**********IN isPositionAvailable : obj::::: --------- " + obj);
 					return false;
 				}
+				else
+				{
+					sourceObjectName = SpecimenArray.class.getName();
+					String[] whereColumnName2 = {"positionDimensionOne", "positionDimensionTwo",
+							"storageContainer.id"}; 
+					String[] whereColumnCondition2 = {"=", "=", "="};
+					Object[] whereColumnValue2 = {posOne, posTwo, storageContainer.getId()};
+
+					list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName2,
+							whereColumnCondition2, whereColumnValue2, joinCondition);
+					Logger.out.debug("storageContainer.getId() :" + storageContainer.getId());
+					// check if Specimen exists with the given storageContainer information
+					if (list.size() != 0)
+					{
+						Object obj = list.get(0);
+						Logger.out
+								.debug("**********IN isPositionAvailable : obj::::: --------- " + obj);
+						return false;
+					}
+				}
 			}
 			return true;
 		}
