@@ -45,24 +45,36 @@ public class ParticipantCacheAction extends BaseAction
 
 		ParticipantBizLogic participantBizLogic = (ParticipantBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.PARTICIPANT_FORM_ID);
 		Participant participant = participantBizLogic.getParticipantById(identifier);
-		
-		
-        // getting instance of catissueCoreCacheManager and getting participantMap from cache
+
+		// getting instance of catissueCoreCacheManager and getting participantMap from cache
 		CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
 		HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
 		participantMap.put(identifier, participant);
 		// adding updated participantMap to cache
-		catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS,participantMap);
-		
+		catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS, participantMap);
+
 		ParticipantForm participantForm = (ParticipantForm) form;
-		 if((participantForm.getActivityStatus() != null) &&
-                (Constants.ACTIVITY_STATUS_DISABLED.equals(participantForm.getActivityStatus())))
-        {
-        	ActionForward reDirectForward = new ActionForward();
-       		reDirectForward.setPath("/ManageBioSpecimen.do");
-       		return reDirectForward;
-        }
-		if(participantForm.isAddOperation())
+		if ((participantForm.getActivityStatus() != null) && (Constants.ACTIVITY_STATUS_DISABLED.equals(participantForm.getActivityStatus())))
+		{
+			ActionForward reDirectForward = new ActionForward();
+			reDirectForward.setPath(Constants.MANAGE_BIO_SPECIMEN_ACTION);
+			return reDirectForward;
+		}
+		if (request.getParameter(Constants.CREATE_PARTICIPANT_REGISTRATION) != null)
+		{
+			if (request.getParameter(Constants.CREATE_PARTICIPANT_REGISTRATION).equals("true"))
+			{
+				if (participantForm.isAddOperation())
+				{
+					return mapping.findForward(Constants.CREATE_PARTICIPANT_REGISTRATION_ADD);
+				}
+				else
+				{
+					return mapping.findForward(Constants.CREATE_PARTICIPANT_REGISTRATION_EDIT);
+				}
+			}
+		}
+		if (participantForm.isAddOperation())
 		{
 			return mapping.findForward(Constants.ADD);
 		}
