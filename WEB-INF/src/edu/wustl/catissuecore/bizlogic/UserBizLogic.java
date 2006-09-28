@@ -498,15 +498,7 @@ public class UserBizLogic extends DefaultBizLogic
 			if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
 			{
 				EmailHandler emailHandler = new EmailHandler();
-				/**
-				 *  Update the field FirstTimeLogin which will ensure user changes his password on login
-				 *  Note --> We can not use CommonAddEditAction to update as the user has not still logged in
-				 *  and user authorisation will fail. So writing saperate code for update. 
-				 */
-				user.setFirstTimeLogin(new Boolean(true));
-				AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-				dao.openSession(sessionData);
-		    	dao.update(user, sessionData, true, true, true);
+				
 
 				//Send the login details email to the user.
 				boolean emailStatus = false;
@@ -516,22 +508,27 @@ public class UserBizLogic extends DefaultBizLogic
 				}
 				catch (DAOException e)
 				{
-					// If exception comes, rollback the changes
-					dao.rollback();
-			        dao.closeSession();
-					e.printStackTrace();
+						e.printStackTrace();
 				}
 				if (emailStatus)
 				{
 					// if success commit 
+					/**
+					 *  Update the field FirstTimeLogin which will ensure user changes his password on login
+					 *  Note --> We can not use CommonAddEditAction to update as the user has not still logged in
+					 *  and user authorisation will fail. So writing saperate code for update. 
+					 */
+					
+					user.setFirstTimeLogin(new Boolean(true));
+					AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+					dao.openSession(sessionData);
+			    	dao.update(user, sessionData, true, true, true);
 					dao.commit();
 			        dao.closeSession();
 					statusMessageKey = "password.send.success";
 				}
 				else
 				{
-					dao.rollback();
-			        dao.closeSession();
 					statusMessageKey = "password.send.failure";
 				}
 			}
