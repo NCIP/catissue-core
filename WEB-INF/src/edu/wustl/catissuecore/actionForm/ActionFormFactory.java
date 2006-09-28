@@ -14,37 +14,38 @@ package edu.wustl.catissuecore.actionForm;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.CellSpecimenReviewParameters;
+import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.DisposalEventParameters;
+import edu.wustl.catissuecore.domain.Distribution;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
+import edu.wustl.catissuecore.domain.FixedEventParameters;
+import edu.wustl.catissuecore.domain.FluidSpecimenReviewEventParameters;
+import edu.wustl.catissuecore.domain.FrozenEventParameters;
+import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.MolecularSpecimenReviewParameters;
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ProcedureEventParameters;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
-import edu.wustl.catissuecore.domainobject.Biohazard;
-import edu.wustl.catissuecore.domainobject.CancerResearchGroup;
-import edu.wustl.catissuecore.domainobject.CellSpecimenReviewParameters;
-import edu.wustl.catissuecore.domainobject.CheckInCheckOutEventParameter;
-import edu.wustl.catissuecore.domainobject.CollectionEventParameters;
-import edu.wustl.catissuecore.domainobject.CollectionProtocol;
-import edu.wustl.catissuecore.domainobject.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domainobject.Department;
-import edu.wustl.catissuecore.domainobject.DisposalEventParameters;
-import edu.wustl.catissuecore.domainobject.Distribution;
-import edu.wustl.catissuecore.domainobject.DistributionProtocol;
-import edu.wustl.catissuecore.domainobject.EmbeddedEventParameters;
-import edu.wustl.catissuecore.domainobject.FixedEventParameters;
-import edu.wustl.catissuecore.domainobject.FluidSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domainobject.FrozenEventParameters;
-import edu.wustl.catissuecore.domainobject.Institution;
-import edu.wustl.catissuecore.domainobject.MolecularSpecimenReviewParameters;
-import edu.wustl.catissuecore.domainobject.Participant;
-import edu.wustl.catissuecore.domainobject.ProcedureEventParameters;
-import edu.wustl.catissuecore.domainobject.ReceivedEventParameters;
-import edu.wustl.catissuecore.domainobject.Site;
-import edu.wustl.catissuecore.domainobject.Specimen;
-import edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domainobject.SpunEventParameters;
-import edu.wustl.catissuecore.domainobject.StorageContainer;
-import edu.wustl.catissuecore.domainobject.StorageType;
-import edu.wustl.catissuecore.domainobject.ThawEventParameters;
-import edu.wustl.catissuecore.domainobject.TissueSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domainobject.TransferEventParameters;
-import edu.wustl.catissuecore.domainobject.User;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpunEventParameters;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.domain.ThawEventParameters;
+import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
+import edu.wustl.catissuecore.domain.TransferEventParameters;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.factory.AbstractActionFormFactory;
@@ -233,14 +234,16 @@ public class ActionFormFactory extends AbstractActionFormFactory
 		else if (object instanceof SpecimenArrayType)
 		{
 			form = new SpecimenArrayTypeForm();
+		}
+		else if (object instanceof SpecimenArray)
+		{
+			form = new SpecimenArrayForm();
 		} else
 		{
 		    throw new Exception("Invalid Object for Add/Edit Operation");
 		}
 		
 		form.setOperation(operation);
-		form.setAllVal(object);
-		
 		return form;
 	}
 	

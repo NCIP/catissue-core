@@ -101,15 +101,6 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 		this.container = Utility.toString(collectionEventParameterObject.getContainer());
 	}
 	
-	public void setAllVal(Object object)
-	{
-		super.setAllVal(object);
-		edu.wustl.catissuecore.domainobject.CollectionEventParameters parameter
-				= (edu.wustl.catissuecore.domainobject.CollectionEventParameters)object;
-		
-		this.collectionProcedure = Utility.toString(parameter.getCollectionProcedure());
-		this.container = parameter.getContainer();
-	}
 	
 	/**
 	 * Overrides the validate method of ActionForm.

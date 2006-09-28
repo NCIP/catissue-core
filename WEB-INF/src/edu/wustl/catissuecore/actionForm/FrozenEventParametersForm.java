@@ -72,15 +72,6 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 		this.method = Utility.toString(frozenEventParametersObject.getMethod());
 	}
 	
-	public void setAllVal(Object object)
-	{
-		super.setAllVal(object);
-		edu.wustl.catissuecore.domainobject.FrozenEventParameters parameter
-				= (edu.wustl.catissuecore.domainobject.FrozenEventParameters)object;
-		
-		this.method = Utility.toString(parameter.getMethod());
-	}
-	
 	/**
      * Overrides the validate method of ActionForm.
      * */

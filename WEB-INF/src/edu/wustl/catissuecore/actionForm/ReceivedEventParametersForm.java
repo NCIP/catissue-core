@@ -74,15 +74,6 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 		this.receivedQuality =  Utility.toString(receivedEventParameterObject.getReceivedQuality()); 
 	}
 	
-	public void setAllVal(Object object)
-	{
-		super.setAllVal(object);
-		edu.wustl.catissuecore.domainobject.ReceivedEventParameters parameter
-				= (edu.wustl.catissuecore.domainobject.ReceivedEventParameters)object;
-		
-		this.receivedQuality = Utility.toString(parameter.getReceivedQuality());
-	}
-	
 	/**
 	 * Overrides the validate method of ActionForm.
      * */

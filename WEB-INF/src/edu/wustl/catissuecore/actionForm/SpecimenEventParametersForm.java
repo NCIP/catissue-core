@@ -67,22 +67,6 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 		     specimenId = specimenEventParameters.getSpecimen().getId().longValue();
  	 }
 	 
-	 public void setAllVal(Object obj)
-	 {
-	     edu.wustl.catissuecore.domainobject.SpecimenEventParameters specimenEventParameters=(edu.wustl.catissuecore.domainobject.SpecimenEventParameters) obj;
-	     super.setAllVal(specimenEventParameters);
-		 
-	     //Aniruddha : Fix for bug - 1613
-		 if(specimenEventParameters.getSpecimen()!=null && specimenEventParameters.getSpecimen().getId() != null)
-		 {
-		     specimenId = specimenEventParameters.getSpecimen().getId().longValue();
-		 }
-		 else
-		 {
-		 	specimenId = -1;
-		 }
-	 }
-	 
  	/**
      * Overrides the validate method of ActionForm.
      */

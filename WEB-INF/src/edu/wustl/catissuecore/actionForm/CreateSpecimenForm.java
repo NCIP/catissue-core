@@ -105,22 +105,6 @@ public class CreateSpecimenForm extends SpecimenForm
         super.setAllValues(specimen);
     }
     
-    public void setAllVal(Object object)
-    {
-    	edu.wustl.catissuecore.domainobject.Specimen specimen=(edu.wustl.catissuecore.domainobject.Specimen) object;
-    	
-    	super.setAllVal(object);
-    	
-    	if(specimen.getParentSpecimen().getId() != null)
-    	{
-    		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
-    	}
-    	else
-    	{
-    		this.parentSpecimenId = "-1";
-    	}
-    }
-    	
 	/**
      * Overrides the validate method of ActionForm.
      * */

@@ -71,11 +71,6 @@ public class QuickEventsForm extends AbstractActionForm {
     }
     
         
-    public void setAllVal(Object obj)
-    {
-    }
-
-
     /**
      * Returns the id assigned to form bean
      */

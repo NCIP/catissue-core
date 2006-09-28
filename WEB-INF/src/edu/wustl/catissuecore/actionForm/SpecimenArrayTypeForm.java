@@ -202,30 +202,6 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	}
 	
 	
-	/**
-	 * @param domainObject domain object
-	 */
-	public void setAllVal(Object domainObject) {
-		SpecimenArrayType arrayType = (SpecimenArrayType) domainObject;
-        this.id = arrayType.getId().longValue();
-        this.name = arrayType.getName();
-        this.specimenClass = arrayType.getSpecimenClass();
-        this.oneDimensionCapacity = arrayType.getCapacity().getOneDimensionCapacity().intValue();
-        this.twoDimensionCapacity = arrayType.getCapacity().getTwoDimensionCapacity().intValue();
-        this.comment = arrayType.getComment();
-        Collection specimenTypeCollection = arrayType.getSpecimenTypeCollection();
-        
-        if ((specimenTypeCollection != null) && (!specimenTypeCollection.isEmpty())) {
-        	this.specimenTypes = new String[specimenTypeCollection.size()];
-        	String specimenTypeStr = null;
-        	int i = 0;
-        	for (Iterator iter = specimenTypeCollection.iterator(); iter.hasNext();i++) {
-				specimenTypeStr = (String) iter.next();
-				specimenTypes[i] = specimenTypeStr;
-			}
-        }
-	}
-
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
 	 */

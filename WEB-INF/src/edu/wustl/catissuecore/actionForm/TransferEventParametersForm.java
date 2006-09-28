@@ -11,20 +11,14 @@
 
 package edu.wustl.catissuecore.actionForm;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -287,131 +281,6 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		catch (Exception excp)
 		{
 			Logger.out.error(excp.getMessage());
-		}
-	}
-
-	public void setAllVal(Object object)
-	{
-		super.setAllVal(object);
-		edu.wustl.catissuecore.domainobject.TransferEventParameters parameter = (edu.wustl.catissuecore.domainobject.TransferEventParameters) object;
-
-		//Aniruddha : Fix for bug - 1613
-		if (parameter.getFromPositionDimensionOne() != null)
-		{
-			this.fromPositionDimensionOne = parameter.getFromPositionDimensionOne().intValue();
-		}
-		else
-		{
-			this.fromPositionDimensionOne = 0;
-		}
-
-		if (parameter.getFromPositionDimensionTwo() != null)
-		{
-			this.fromPositionDimensionTwo = parameter.getFromPositionDimensionTwo().intValue();
-		}
-		else
-		{
-			this.fromPositionDimensionTwo = 0;
-		}
-
-		if (parameter.getToPositionDimensionOne() != null)
-		{
-			this.positionDimensionOne = parameter.getToPositionDimensionOne().toString();
-		}
-		else
-		{
-			this.positionDimensionOne = "0";
-		}
-
-		if (parameter.getToPositionDimensionTwo() != null)
-		{
-			this.positionDimensionTwo = parameter.getToPositionDimensionTwo().toString();
-		}
-		else
-		{
-			this.positionDimensionTwo = "0";
-		}
-
-		if (parameter.getFromStorageContainer() != null
-				&& parameter.getFromStorageContainer().getId() != null)
-		{
-			this.fromStorageContainerId = parameter.getFromStorageContainer().getId().longValue();
-		}
-		else
-		{
-			this.fromStorageContainerId = 0L;
-		}
-
-		if (parameter.getToStorageContainer() != null
-				&& parameter.getToStorageContainer().getId() != null)
-		{
-			this.storageContainer = parameter.getToStorageContainer().getId().toString();
-		}
-		else
-		{
-			this.storageContainer = "0";
-		}
-
-		String toStorageType = "";
-
-		if (parameter.getToStorageContainer().getStorageType() != null
-				&& parameter.getToStorageContainer().getStorageType().getType() != null)
-		{
-			toStorageType = parameter.getToStorageContainer().getStorageType().getType();
-		}
-
-		this.positionInStorageContainer = toStorageType + " : " + this.storageContainer + " Pos("
-				+ this.positionDimensionOne + "," + this.positionDimensionTwo + ")";
-
-		String fromStorageType = "";
-
-		if (parameter.getFromStorageContainer().getStorageType() != null
-				&& parameter.getFromStorageContainer().getStorageType().getType() != null)
-		{
-			fromStorageType = parameter.getFromStorageContainer().getStorageType().getType();
-		}
-
-		this.fromPosition = fromStorageType + " : " + this.fromStorageContainerId + " Pos("
-				+ this.fromPositionDimensionOne + "," + this.fromPositionDimensionTwo + ")";
-
-		String specimenId = "";
-
-		if (parameter.getSpecimen() != null && parameter.getSpecimen().getId() != null)
-		{
-			specimenId = parameter.getSpecimen().getId().toString();
-		}
-		else
-		{
-			specimenId = "0";
-		}
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-
-		String identifier = specimenId;
-
-		try
-		{
-			List specimenList = bizLogic.retrieve(Specimen.class.getName(),
-					Constants.SYSTEM_IDENTIFIER, identifier);
-
-			String posOne = null;
-			String posTwo = null;
-			String storContId = null;
-			String fromPositionData = null;
-			if (specimenList != null && specimenList.size() != 0)
-			{
-				Specimen specimen = (Specimen) specimenList.get(0);
-				posOne = specimen.getPositionDimensionOne().toString();
-				posTwo = specimen.getPositionDimensionTwo().toString();
-
-				StorageContainer container = specimen.getStorageContainer();
-				storContId = container.getId().toString();
-				fromPositionData = container.getStorageType().getName() + " : " + storContId
-						+ " Pos(" + posOne + "," + posTwo + ")";
-			}
-		}
-		catch (Exception e)
-		{
-			Logger.out.debug(e.getMessage(), e);
 		}
 	}
 

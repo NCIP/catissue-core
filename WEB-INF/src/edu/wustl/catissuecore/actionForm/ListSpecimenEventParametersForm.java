@@ -56,10 +56,6 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm {
     {
     }
 
-    public void setAllVal(Object obj)
-    {
-    }
-    
     /**
      * Checks the operation to be performed is add operation.
      * @return Returns true if operation is equal to "add", else it returns false

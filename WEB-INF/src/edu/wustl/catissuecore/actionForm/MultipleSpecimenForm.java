@@ -36,21 +36,6 @@ public class MultipleSpecimenForm extends NewSpecimenForm {
 
 
 	/**
-	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAllVal(java.lang.Object)
-	 */
-	public void setAllVal(Object arg0) {
-//		super.setAllVal(arg0);
-	}
-
-	/**
-	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
-	 */
-	public void setAllValues(AbstractDomainObject arg0) {
-		// TODO Auto-generated method stub
-		//super.setAllValues(arg0);
-	}
-
-	/**
 	 * Overrides the validate method of ActionForm.
 	 */
 	public ActionErrors validate(ActionMapping mapping,

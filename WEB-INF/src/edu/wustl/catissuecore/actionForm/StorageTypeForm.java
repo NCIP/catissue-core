@@ -169,30 +169,6 @@ public class StorageTypeForm extends AbstractActionForm
 		Logger.out.info("in form bean:----------------"+this.specimenOrArrayType);
 	}
 
-	public void setAllVal(Object obj)
-	{
-		edu.wustl.catissuecore.domainobject.StorageType storageType = (edu.wustl.catissuecore.domainobject.StorageType) obj;
-		this.id = storageType.getId().longValue();
-		this.type = storageType.getType();
-		this.defaultTemperature = Utility.toString(storageType.getDefaultTempratureInCentigrade());
-
-		edu.wustl.catissuecore.domainobject.StorageContainerCapacity storageCapacity = storageType
-				.getDefaultStorageCapacity();
-		if (storageCapacity != null)
-		{
-			if (storageCapacity.getOneDimensionCapacity() != null)
-			{
-				this.oneDimensionCapacity = storageCapacity.getOneDimensionCapacity().intValue();
-			}
-			if (storageCapacity.getTwoDimensionCapacity() != null)
-			{
-				this.twoDimensionCapacity = storageCapacity.getTwoDimensionCapacity().intValue();
-			}
-			this.oneDimensionLabel = storageType.getOneDimensionLabel();
-			this.twoDimensionLabel = storageType.getTwoDimensionLabel();
-		}
-	}
-
 	/**
 	 * Returns the type of the storage.
 	 * @return String the type of the storage.

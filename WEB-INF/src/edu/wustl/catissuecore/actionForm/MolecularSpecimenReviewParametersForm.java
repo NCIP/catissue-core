@@ -244,30 +244,6 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 		}
 	}
 	
-	public void setAllVal(Object object)
-	{
-		super.setAllVal(object);
-		edu.wustl.catissuecore.domainobject.MolecularSpecimenReviewParameters parameter
-				= (edu.wustl.catissuecore.domainobject.MolecularSpecimenReviewParameters)object;
-		
-		this.gelImageURL = Utility.toString(parameter.getGelImageURL());
-		this.qualityIndex = Utility.toString(parameter.getQualityIndex());
-		this.laneNumber = Utility.toString(parameter.getLaneNumber());
-		this.gelNumber = Utility.toString(parameter.getGelNumber());
-		this.absorbanceAt260 = Utility.toString(parameter.getAbsorbanceAt260());
-		this.absorbanceAt280 = Utility.toString(parameter.getAbsorbanceAt280());
-		this.ratio28STo18S = Utility.toString(parameter.getRatio28STo18S());
-		
-		if(this.ratio28STo18S.trim().length() > 0)
-		{
-			this.isRNA = "true";
-		}
-		else
-		{
-			this.isRNA = "false";
-		}
-	}
-	
 	/**
      * Overrides the validate method of ActionForm.
      * */

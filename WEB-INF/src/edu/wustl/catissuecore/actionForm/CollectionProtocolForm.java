@@ -217,77 +217,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 	
 	
-	public void setAllVal(Object obj)
-    {
-	    edu.wustl.catissuecore.domainobject.CollectionProtocol cProtocol = (edu.wustl.catissuecore.domainobject.CollectionProtocol)obj;
-	    
-	    super.setAllVal(cProtocol);
-	    
-		Collection protocolEventCollection = cProtocol.getCollectionProtocolEventCollection(); 
-		
-		if(protocolEventCollection != null)
-		{
-			super.values = new HashMap();
-			innerLoopValues = new HashMap();
-			
-			int i = 1;
-			Iterator it = protocolEventCollection.iterator();
-			while(it.hasNext())
-			{
-				String keyClinicalStatus = "CollectionProtocolEvent:" + i + "_clinicalStatus";
-				String keyStudyCalendarEventPoint = "CollectionProtocolEvent:" + i + "_studyCalendarEventPoint";
-				String keyCPEId = "CollectionProtocolEvent:" + i + "_id";
-				
-				edu.wustl.catissuecore.domainobject.CollectionProtocolEvent cpEvent = 
-			        (edu.wustl.catissuecore.domainobject.CollectionProtocolEvent)it.next();
-				
-			    if(cpEvent != null)
-			    {
-					values.put(keyClinicalStatus,Utility.toString(cpEvent.getClinicalStatus()));
-					values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent.getStudyCalendarEventPoint()));
-					values.put(keyCPEId,Utility.toString(cpEvent.getId()));
-					Logger.out.debug("In Form keyCPEId..............."+values.get(keyCPEId));
-					
-					Collection specimenRequirementCollection = cpEvent.getSpecimenRequirementCollection();
-					populateDomainObjectSpecimenRequirement(specimenRequirementCollection, i);
-			    }
-				
-				i++;
-			}
-			
-			outerCounter = protocolEventCollection.size();
-		}
-		
-		//At least one outer row should be displayed in ADD MORE therefore
-		if(outerCounter == 0)
-			outerCounter = 1;
-		
-		//Populating the user-id array
-		Collection userCollection = cProtocol.getUserCollection();
-		
-		if(userCollection != null)
-		{
-			protocolCoordinatorIds = new long[userCollection.size()];
-			int i=0;
-
-			Iterator it = userCollection.iterator();
-			while(it.hasNext())
-			{
-				edu.wustl.catissuecore.domainobject.User user = (edu.wustl.catissuecore.domainobject.User)it.next();
-				if(user != null && user.getId() != null)
-				{
-					protocolCoordinatorIds[i] = user.getId().longValue();
-				}
-				else
-				{
-					protocolCoordinatorIds[i] = 0;
-				}
-				i++;
-			}
-		}
-		
-    }
-	
 	private void populateSpecimenRequirement(Collection specimenRequirementCollection, int counter)
 	{
 		int innerCounter = 0;
@@ -323,8 +252,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 	
 	/**
-	 *This method populates Specimen Requirements objects of edu.wustl.catissuecore.domainobject.SpecimenRequirement
-	 */
+	 *This method populates Specimen Requirements objects of SpecimenRequirement
 	private void populateDomainObjectSpecimenRequirement(Collection specimenRequirementCollection, int counter)
 	{
 	    int innerCounter = 0;
@@ -337,7 +265,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			{
 				//CODE_REVIEW:KAPIL requirement should be naamed as specimenRequirement
 				//CODE_REVIEW:KAPIL requirement check for null
-			    edu.wustl.catissuecore.domainobject.SpecimenRequirement specimeRequirement = (edu.wustl.catissuecore.domainobject.SpecimenRequirement)iterator.next();
+			    SpecimenRequirement specimeRequirement = (SpecimenRequirement)iterator.next();
 			    
 			    if(specimeRequirement != null)
 			    {
@@ -354,7 +282,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					values.put(key5,specimeRequirement.getPathologyStatus());
 					values.put(key7,Utility.toString(specimeRequirement.getId()));
 					
-					if(specimeRequirement instanceof edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)
+					if(specimeRequirement instanceof TissueSpecimenRequirement)
 					{
 						//CODE_REVIEW:KAPIL use some common code for this and populateSpecimenRequirement method 
 						values.put(key1,"Tissue");
@@ -362,28 +290,28 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						String tissueType = specimeRequirement.getSpecimenType();
 						if(tissueType != null && (tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)))
 						{
-							values.put(key6,Utility.toString(new Integer(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement) specimeRequirement).getQuantityInGram().intValue())));
+							values.put(key6,Utility.toString(new Integer(((TissueSpecimenRequirement) specimeRequirement).getQuantityInGram().intValue())));
 						}
 						else
-							values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)specimeRequirement).getQuantityInGram()));
+							values.put(key6,Utility.toString(((TissueSpecimenRequirement)specimeRequirement).getQuantityInGram()));
 					}
-					else if(specimeRequirement instanceof edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)
+					else if(specimeRequirement instanceof CellSpecimenRequirement)
 					{
 						values.put(key1,"Cell");
 						values.put(key2,Constants.UNIT_CC);
-						values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)specimeRequirement).getQuantityInCellCount()));
+						values.put(key6,Utility.toString(((CellSpecimenRequirement)specimeRequirement).getQuantityInCellCount()));
 					}
-					else if(specimeRequirement instanceof edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)
+					else if(specimeRequirement instanceof MolecularSpecimenRequirement)
 					{
 						values.put(key1,"Molecular");
 						values.put(key2,Constants.UNIT_MG);
-						values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)specimeRequirement).getQuantityInMicrogram()));
+						values.put(key6,Utility.toString(((MolecularSpecimenRequirement)specimeRequirement).getQuantityInMicrogram()));
 					}
-					else if(specimeRequirement instanceof edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)
+					else if(specimeRequirement instanceof FluidSpecimenRequirement)
 					{
 						values.put(key1,"Fluid");
 						values.put(key2,Constants.UNIT_ML);
-						values.put(key6,Utility.toString(((edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)specimeRequirement).getQuantityInMilliliter()));
+						values.put(key6,Utility.toString(((FluidSpecimenRequirement)specimeRequirement).getQuantityInMilliliter()));
 					}
 			    }
 				
@@ -400,6 +328,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		String innerCounterKey = String.valueOf(counter);
 		innerLoopValues.put(innerCounterKey,String.valueOf(innerCounter));
 	}
+	*/
 	
 	/**
 	 * Overrides the validate method of ActionForm.

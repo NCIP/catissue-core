@@ -261,23 +261,6 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	    SpecimenProtocol protocol = (SpecimenProtocol)abstractDomain;
 		
 		this.id = protocol.getId().longValue();
-		this.principalInvestigatorId = protocol.getPrincipalInvestigator()
-				.getId().longValue();
-		this.title = Utility.toString(protocol.getTitle());
-		this.shortTitle = Utility.toString(protocol.getShortTitle());
-		this.startDate = Utility.parseDateToString(protocol.getStartDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-		this.endDate = Utility.parseDateToString(protocol.getEndDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-		this.irbID = Utility.toString(protocol.getIrbIdentifier());
-		this.enrollment = Utility.toString(protocol.getEnrollment());
-		this.descriptionURL = Utility.toString(protocol.getDescriptionURL());
-		
-		this.activityStatus = Utility.toString(protocol.getActivityStatus());
-	}
-	
-	public void setAllVal(Object obj)
-    {
-	    edu.wustl.catissuecore.domainobject.SpecimenProtocol protocol=(edu.wustl.catissuecore.domainobject.SpecimenProtocol) obj;
-		this.id = protocol.getId().longValue();
 		
 		if(protocol.getPrincipalInvestigator() != null && protocol.getPrincipalInvestigator().getId() != null)
 		{
@@ -298,9 +281,8 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		this.descriptionURL = Utility.toString(protocol.getDescriptionURL());
 		
 		this.activityStatus = Utility.toString(protocol.getActivityStatus());
-    }
-
-
+	}
+	
 	/**
 	 * Resets the values of all the fields. Is called by the overridden reset
 	 * method defined in ActionForm.

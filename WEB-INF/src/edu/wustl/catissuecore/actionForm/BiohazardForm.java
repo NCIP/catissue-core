@@ -66,15 +66,6 @@ public class BiohazardForm extends AbstractActionForm
         this.comments = hazard.getComments();
     }
     
-    public void setAllVal(Object obj)
-    {
-        edu.wustl.catissuecore.domainobject.Biohazard hazard=(edu.wustl.catissuecore.domainobject.Biohazard)obj;
-        this.id = hazard.getId().longValue();
-        this.name = hazard.getName();
-        this.type = hazard.getType();
-        this.comments = hazard.getComments();
-    }
-
     /**
      * Returns the type of the storage.
      * @return String the type of the storage.

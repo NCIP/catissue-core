@@ -83,42 +83,6 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
     }
     
-    public void setAllVal(Object obj)
-    {
-        edu.wustl.catissuecore.domainobject.CollectionProtocolRegistration registration = 
-        				(edu.wustl.catissuecore.domainobject.CollectionProtocolRegistration)obj;
-		this.activityStatus = registration.getActivityStatus();
-		
-		if(registration.getCollectionProtocol() != null && registration.getCollectionProtocol().getId() != null)
-		{
-			this.collectionProtocolID = registration.getCollectionProtocol().getId().longValue();
-		}
-		else
-		{
-			this.collectionProtocolID = -1;
-		}
-		
-		this.id = registration.getId().longValue();
-		
-		if((registration.getParticipant() != null) && registration.getParticipant().getId() != null)
-	  	{
-			if(registration.getParticipant().getFirstName()==null)
-			{
-				registration.getParticipant().setFirstName("");
-			}
-	  		this.participantID = registration.getParticipant().getId().longValue();
-	  		checkedButton = true;
-	  	}
-		else
-		{
-			this.participantID = -1;
-			checkedButton = true;
-		}
-		
-	  	this.participantProtocolID = Utility.toString(registration.getProtocolParticipantIdentifier());
-	  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
-    }
-	   
 	/**
 	* @return Returns the id assigned to form bean
 	*/

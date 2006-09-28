@@ -157,104 +157,6 @@ public class DistributionForm extends SpecimenEventParametersForm
 		}
 	}
 
-	public void setAllVal(Object obj)
-    {
-	    edu.wustl.catissuecore.domainobject.Distribution distributionObject = (edu.wustl.catissuecore.domainobject.Distribution)obj;
-	    
-	    super.setAllVal(distributionObject);
-	    
-		Logger.out.debug("setAllValues of DistributionForm"); 
-		
-		//Aniruddha : Fix for bug - 1613
-		if(distributionObject.getDistributionProtocol() != null
-				&& distributionObject.getDistributionProtocol().getId() != null)
-		{
-			this.distributionProtocolId = String.valueOf(distributionObject.getDistributionProtocol().getId());
-		}
-		else
-		{
-			this.distributionProtocolId = "-1";
-		}
-		
-		if(distributionObject.getToSite() != null
-				&& distributionObject.getToSite().getId() != null)
-		{
-			this.toSite = String.valueOf(distributionObject.getToSite().getId());
-		}
-		else
-		{
-			this.toSite = "-1";
-		}
-		
-		this.activityStatus = Utility.toString(distributionObject.getActivityStatus());
-		Logger.out.debug("this.activityStatus "+this.activityStatus);
-		Collection distributedItemCollection = distributionObject.getDistributedItemCollection();
-		
-		if(distributedItemCollection != null)
-		{
-			values = new HashMap();
-			
-			Iterator it = distributedItemCollection.iterator();
-			int i=1;
-			
-			while(it.hasNext())
-			{
-				
-				String key1 = "DistributedItem:"+i+"_id";
-				String key2 = "DistributedItem:"+i+"_Specimen_id";
-				String key3 = "DistributedItem:"+i+"_quantity";
-				String key4 = "DistributedItem:"+i+"_unitSpan";
-				String key5 = "DistributedItem:"+i+"_tissueSite";
-				String key6 = "DistributedItem:"+i+"_tissueSide";
-				String key7 = "DistributedItem:"+i+"_pathologicalStatus";
-				String key8 = "DistributedItem:"+i+"_Specimen_className";	
-				String key9 = "DistributedItem:"+i+"_availableQty";
-				String key10 = "DistributedItem:"+i+"_previousQuantity";
-				String key11 = "DistributedItem:"+i+"_Specimen_type";
-				
-				edu.wustl.catissuecore.domainobject.DistributedItem dItem = (edu.wustl.catissuecore.domainobject.DistributedItem)it.next();
-				
-				if(dItem != null)
-				{
-					edu.wustl.catissuecore.domainobject.Specimen specimen =dItem.getSpecimen();
-					String unit= getDomainObjectUnitSpan(specimen);
-					
-					Double quantity = dItem.getQuantity();
-					//dItem.setPreviousQty(quantity);
-					
-					values.put(key1,Utility.toString(dItem.getId()));
-					values.put(key3,Utility.toString(quantity));
-					values.put(key4,Utility.toString(unit));
-					
-					if(specimen != null && specimen.getId() != null)
-					{
-						values.put(key2,Utility.toString(specimen.getId()));
-						values.put(key5,specimen.getSpecimenCharacteristics().getTissueSite());
-						values.put(key6,specimen.getSpecimenCharacteristics().getTissueSide());
-						values.put(key7,specimen.getSpecimenCharacteristics().getPathologicalStatus());
-						values.put(key8,getDomainObjectClassName(specimen));
-						values.put(key9,Utility.toString(getDomainObjectAvailableQty(specimen)));
-						values.put(key11,specimen.getType());
-					}
-					else
-					{
-						values.put(key2,"-1");
-					}
-					
-					values.put(key10,Utility.toString(quantity));
-				}
-				
-				i++;
-			}
-			Logger.out.debug("Display Map Values"+values); 
-			counter = distributedItemCollection.size();
-		}
-		
-		//At least one row should be displayed in ADD MORE therefore
-		if(counter == 0)
-			counter = 1;
-    }
-	
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
 	{
 		//ActionErrors errors = super.validate(mapping, request);
@@ -457,6 +359,10 @@ public class DistributionForm extends SpecimenEventParametersForm
 	public void setRowNo(int rowNo) {
 		this.rowNo = rowNo;
 	}
+	
+	/*
+	 * Unused code so commented ---- Ashwin Gupta
+	 * 
 	private static String getUnitSpan(Specimen specimen)
 	{
 		
@@ -481,35 +387,36 @@ public class DistributionForm extends SpecimenEventParametersForm
 		}
 		return null;
 	}
+	*/
 	
 	/**
-	 * This method returns UnitSpan for edu.wustl.catissuecore.domainobject.Specimen
+	 * This method returns UnitSpan for Specimen
 	 */
-	private static String getDomainObjectUnitSpan(edu.wustl.catissuecore.domainobject.Specimen specimen)
+	/*private static String getDomainObjectUnitSpan(Specimen specimen)
 	{
 		
-		if(specimen instanceof edu.wustl.catissuecore.domainobject.TissueSpecimen)
+		if(specimen instanceof TissueSpecimen)
 		{
 			return Constants.UNIT_GM;
 			
 		}
-		else if(specimen instanceof edu.wustl.catissuecore.domainobject.CellSpecimen)
+		else if(specimen instanceof CellSpecimen)
 		{
 			return Constants.UNIT_CC;
 			
 		}
-		else if(specimen instanceof edu.wustl.catissuecore.domainobject.MolecularSpecimen)
+		else if(specimen instanceof MolecularSpecimen)
 		{
 			return Constants.UNIT_MG;
 			
 		}
-		else if(specimen instanceof edu.wustl.catissuecore.domainobject.FluidSpecimen)
+		else if(specimen instanceof FluidSpecimen)
 		{
 			return Constants.UNIT_ML;
 		}
 		return null;
 	}
-	
+	*/
 	public Object getAvailableQty(Specimen specimen)
 	{
 		//Retrieve the Available quantity for the particular specimen
@@ -547,59 +454,35 @@ public class DistributionForm extends SpecimenEventParametersForm
 	}
 	
 	/**
-	 * This method returns AvailableQunatity for edu.wustl.catissuecore.domainobject.Specimen
+	 * This method returns AvailableQunatity for Specimen
+	 *    
 	 */
-	public Object getDomainObjectAvailableQty(edu.wustl.catissuecore.domainobject.Specimen specimen)
+	public Object getDomainObjectAvailableQty(Specimen specimen)
 	{
-		//Retrieve the Available quantity for the particular specimen
-		if(specimen instanceof edu.wustl.catissuecore.domainobject.TissueSpecimen)
-		{
-			
-		    edu.wustl.catissuecore.domainobject.TissueSpecimen tissueSpecimen = (edu.wustl.catissuecore.domainobject.TissueSpecimen) specimen;
-			Logger.out.debug("tissueSpecimenAvailableQuantityInGram "+tissueSpecimen.getAvailableQuantityInGram());
-			return tissueSpecimen.getAvailableQuantityInGram();
-			
-		}
-		else if(specimen instanceof edu.wustl.catissuecore.domainobject.CellSpecimen)
-		{
-		    edu.wustl.catissuecore.domainobject.CellSpecimen cellSpecimen = (edu.wustl.catissuecore.domainobject.CellSpecimen) specimen;
-			return cellSpecimen.getAvailableQuantityInCellCount();
-			
-		}
-		else if(specimen instanceof edu.wustl.catissuecore.domainobject.MolecularSpecimen)
-		{
-		    edu.wustl.catissuecore.domainobject.MolecularSpecimen molecularSpecimen = (edu.wustl.catissuecore.domainobject.MolecularSpecimen) specimen;
-			return molecularSpecimen.getAvailableQuantityInMicrogram();
-			
-		}
-		else if(specimen instanceof edu.wustl.catissuecore.domainobject.FluidSpecimen)
-		{
-		    edu.wustl.catissuecore.domainobject.FluidSpecimen fluidSpecimen = (edu.wustl.catissuecore.domainobject.FluidSpecimen) specimen;
-			return fluidSpecimen.getAvailableQuantityInMilliliter();
-		}
-		return null;
+		return specimen.getAvailableQuantity().getValue();
 	}
+
 	
 	/**
-	 * This method returns ClassName for edu.wustl.catissuecore.domainobject.Specimen
+	 * This method returns ClassName for Specimen
 	 */
-	public final String getDomainObjectClassName(edu.wustl.catissuecore.domainobject.Specimen specimen)
+	public final String getDomainObjectClassName(Specimen specimen)
 	{
 	    String className = null;
     	
-    	if(specimen instanceof edu.wustl.catissuecore.domainobject.CellSpecimen)
+    	if(specimen instanceof CellSpecimen)
     	{
     		className = "Cell";
     	}
-    	else if(specimen instanceof edu.wustl.catissuecore.domainobject.MolecularSpecimen)
+    	else if(specimen instanceof MolecularSpecimen)
     	{
     		className = "Molecular";
     	}
-    	else if(specimen instanceof edu.wustl.catissuecore.domainobject.FluidSpecimen)
+    	else if(specimen instanceof FluidSpecimen)
     	{
     		className = "Fluid";
     	}
-    	else if(specimen instanceof edu.wustl.catissuecore.domainobject.TissueSpecimen)
+    	else if(specimen instanceof TissueSpecimen)
     	{
     		className = "Tissue";
     	}

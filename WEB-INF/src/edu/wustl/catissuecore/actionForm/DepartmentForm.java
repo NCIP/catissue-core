@@ -57,13 +57,6 @@ public class DepartmentForm extends AbstractActionForm
     }
     
         
-    public void setAllVal(Object obj)
-    {
-        edu.wustl.catissuecore.domainobject.Department department = (edu.wustl.catissuecore.domainobject.Department)obj;
-        this.id = department.getId().longValue();
-        this.name = department.getName();
-    }
-
     /**
      * Returns the name of the Department.
      * @return String representing the name of the Department

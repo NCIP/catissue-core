@@ -65,14 +65,6 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 		this.embeddingMedium = Utility.toString(embeddedEventParametersObject.getEmbeddingMedium());
 	}
 	
-	public void setAllVal(Object object)
-	{
-		super.setAllVal(object);
-		edu.wustl.catissuecore.domainobject.EmbeddedEventParameters parameter
-				= (edu.wustl.catissuecore.domainobject.EmbeddedEventParameters)object;
-		
-		this.embeddingMedium = Utility.toString(parameter.getEmbeddingMedium());
-	}
 	
 	/**
 	 * Overrides the validate method of ActionForm.

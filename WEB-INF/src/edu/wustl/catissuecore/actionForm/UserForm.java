@@ -18,17 +18,13 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.domainobject.Address;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * UserForm Class is used to encapsulate all the request parameters passed 
@@ -675,114 +671,6 @@ public class UserForm extends AbstractActionForm
 		Logger.out.debug("this.csmUserid" + this.csmUserId);
 	}
 
-	public void setAllVal(Object obj)
-	{
-		if (this.operation.equals(Constants.ADD))
-			this.pageOf = Constants.PAGEOF_SIGNUP;
-		else if (this.operation.equals(Constants.EDIT))
-			this.pageOf = Constants.PAGEOF_USER_ADMIN;
-
-		if (Constants.PAGEOF_CHANGE_PASSWORD.equals(pageOf) == false)
-		{
-			edu.wustl.catissuecore.domainobject.User user = (edu.wustl.catissuecore.domainobject.User) obj;
-
-			this.id = user.getId().longValue();
-			this.lastName = user.getLastName();
-			this.firstName = user.getFirstName();
-			this.emailAddress = user.getEmailAddress();
-
-			//Mandar : 24-Apr-06 : bug id 972 : confirmEmailAddress
-			confirmEmailAddress = this.emailAddress;
-
-			//Aniruddha : Fix for bug - 1613
-			if (user.getInstitution() != null && user.getInstitution().getId() != null)
-			{
-				this.institutionId = user.getInstitution().getId().longValue();
-			}
-			else
-			{
-				this.institutionId = -1;
-			}
-
-			if (user.getDepartment() != null && user.getDepartment().getId() != null)
-			{
-				this.departmentId = user.getDepartment().getId().longValue();
-			}
-			else
-			{
-				this.departmentId = -1;
-			}
-
-			if (user.getCancerResearchGroup() != null && user.getCancerResearchGroup().getId() != null)
-			{
-				this.cancerResearchGroupId = user.getCancerResearchGroup().getId().longValue();
-			}
-			else
-			{
-				this.cancerResearchGroupId = -1;
-			}
-
-			Address address = user.getAddress();
-
-			if (address != null)
-			{
-				this.street = address.getStreet();
-				this.city = address.getCity();
-				this.state = address.getState();
-				this.country = address.getCountry();
-				this.zipCode = address.getZipCode();
-				this.phoneNumber = address.getPhoneNumber();
-				this.faxNumber = address.getFaxNumber();
-			}
-
-			//Populate the activity status, comments and role for approve user and user edit.  
-			if ((getFormId() == Constants.APPROVE_USER_FORM_ID) || ((pageOf != null) && (Constants.PAGEOF_USER_ADMIN.equals(pageOf))))
-			{
-				this.activityStatus = user.getActivityStatus();
-				this.comments = user.getComments();
-
-				try
-				{
-					SecurityManager securityManager = SecurityManager.getInstance(this.getClass());
-					Role role = securityManager.getUserRole(user.getCsmUserId().longValue());
-					this.role = Utility.toString(role.getId());
-				}
-				catch (Exception e)
-				{
-					Logger.out.error(e.getMessage(), e);
-				}
-
-				if (getFormId() == Constants.APPROVE_USER_FORM_ID)
-				{
-					this.status = user.getActivityStatus();
-					if (activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
-					{
-						this.status = Constants.APPROVE_USER_APPROVE_STATUS;
-					}
-					else if (activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
-					{
-						this.status = Constants.APPROVE_USER_REJECT_STATUS;
-					}
-					else if (activityStatus.equals(Constants.ACTIVITY_STATUS_NEW))
-					{
-						this.status = Constants.APPROVE_USER_PENDING_STATUS;
-					}
-				}
-			}
-
-			if (Constants.PAGEOF_USER_ADMIN.equals(pageOf))
-			{
-				this.setCsmUserId(user.getCsmUserId());
-			}
-		}
-
-		Logger.out.debug("this.activityStatus............." + this.activityStatus);
-		Logger.out.debug("this.comments" + this.comments);
-		Logger.out.debug("this.role" + this.role);
-		Logger.out.debug("this.status" + this.status);
-		Logger.out.debug("this.csmUserid" + this.csmUserId);
-	}
-
 	/**
 	 * Overrides the validate method of ActionForm.
 	 * */
@@ -827,7 +715,8 @@ public class UserForm extends AbstractActionForm
 					{
 						// Call static method PasswordManager.validatePasswordOnFormBean() where params are
 						// new password,old password,user name
-						int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
+						//int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
+						int result = 0;
 						  
 						if (result != PasswordManager.SUCCESS)
 						{

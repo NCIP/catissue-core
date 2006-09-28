@@ -24,7 +24,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -115,84 +114,6 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		}
 	}
 	
-	 public void setAllVal(Object obj)
-     {
-	     edu.wustl.catissuecore.domainobject.DistributionProtocol dProtocol = (edu.wustl.catissuecore.domainobject.DistributionProtocol)obj;
-	     
-	     super.setAllVal(dProtocol);
-			
-		Collection spcimenProtocolCollection = dProtocol.getSpecimenRequirementCollection();
-		
-		if(spcimenProtocolCollection != null)
-		{
-			values = new HashMap();
-			
-			Iterator it = spcimenProtocolCollection.iterator();
-			int i=1;
-			counter=0;
-			
-			while(it.hasNext())
-			{
-				String key1 = "SpecimenRequirement:" + i +"_specimenClass";
-				String key2 = "SpecimenRequirement:" + i +"_unitspan";
-				String key3 = "SpecimenRequirement:" + i +"_specimenType";
-				String key4 = "SpecimenRequirement:" + i +"_tissueSite";
-				String key5 = "SpecimenRequirement:" + i +"_pathologyStatus";
-				String key6 = "SpecimenRequirement:" + i +"_quantityIn";
-				String key7 = "SpecimenRequirement:" + i +"_id";
-				
-				edu.wustl.catissuecore.domainobject.SpecimenRequirement specimenRequirement = (edu.wustl.catissuecore.domainobject.SpecimenRequirement)it.next();
-				
-				if(specimenRequirement != null)
-				{
-					values.put(key3,specimenRequirement.getSpecimenType());
-					values.put(key4,specimenRequirement.getTissueSite());
-					values.put(key5,specimenRequirement.getPathologyStatus());
-					values.put(key7,Utility.toString(specimenRequirement.getId()));
-					
-					if(specimenRequirement instanceof edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)
-					{
-					    values.put(key1,"Tissue");
-						values.put(key2,Constants.UNIT_GM);
-						
-						String tissueType = specimenRequirement.getSpecimenType();
-						if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK)
-						 || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK) )
-						{
-							values.put(key6,Utility.toString(new Integer(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement) specimenRequirement).getQuantityInGram().intValue())));
-						}
-						else
-							values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement)specimenRequirement).getQuantityInGram()));
-					}
-					else if(specimenRequirement instanceof edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)
-					{
-						values.put(key1,"Cell");
-						values.put(key2,Constants.UNIT_CC);
-						values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.CellSpecimenRequirement)specimenRequirement).getQuantityInCellCount()));
-					}
-					else if(specimenRequirement instanceof edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)
-					{
-						values.put(key1,"Molecular");
-						values.put(key2,Constants.UNIT_MG);
-						values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement)specimenRequirement).getQuantityInMicrogram()));
-					}
-					else if(specimenRequirement instanceof edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)
-					{
-						values.put(key1,"Fluid");
-						values.put(key2,Constants.UNIT_ML);
-						values.put(key6,String.valueOf(((edu.wustl.catissuecore.domainobject.FluidSpecimenRequirement)specimenRequirement).getQuantityInMilliliter()));
-					}
-				}
-				
-				i++;
-				counter++;
-			}
-			
-			//At least one row should be displayed in ADD MORE therefore
-			if(counter == 0)
-				counter = 1;
-		}
-    }
 	 
 	/**
 	 * Overrides the validate method of ActionForm.
