@@ -297,7 +297,7 @@
 						<html:options collection="<%=Constants.USERLIST%>"
 							labelProperty="name" property="value" />
 					</html:select> &nbsp; <html:link href="#" styleId="newUser"
-						onclick="addNewAction('DistributionAddNew.do?addNewForwardTo=distributedBy&forwardTo=distributionDistributionProtocolId&addNewFor=userId')">
+						onclick="addNewAction('DistributionAddNew.do?addNewForwardTo=distributedBy&forwardTo=distribution&addNewFor=userId')">
 						<bean:message key="buttons.addNew" />
 					</html:link></td>
 				</tr>
