@@ -39,7 +39,7 @@
 				</tr>
 				<tr>
 					<td class="formSerialNumberField" width="5">#</td>
-					<td class="formField"><bean:message key="specimen.label" /></td>
+					<td class="formRequiredLabel"><bean:message key="specimen.label" /></td>
 				</tr>
 				<%int i = 0;
 				Iterator specimenItr = specimenCollection.iterator();

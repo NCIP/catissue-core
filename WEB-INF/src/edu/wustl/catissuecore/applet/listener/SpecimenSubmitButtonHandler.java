@@ -34,7 +34,7 @@ public class SpecimenSubmitButtonHandler extends ButtonHandler
 
 		appletModel.setData(model.getMap());
 		model.getMap().put(AppletConstants.NO_OF_SPECIMENS,
-				String.valueOf(model.getColumnCount() - 1));
+				String.valueOf(model.getColumnCount()));
 
 		try
 		{

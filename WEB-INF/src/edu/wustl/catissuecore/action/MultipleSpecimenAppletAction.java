@@ -1,7 +1,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,9 +27,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.ApplicationProperties;
 
@@ -100,6 +96,14 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	/**
 	 * This method saves multiple specimens.
 	 * 
+	 * 1. It preprocess specimen map (map from paplet table model).
+	 * 2. Converts each specimen to specific type of specimen by appending its class name.
+	 * 3. Adds Associates objects which are present in the session to the specimen.
+	 * 4. Parses specimen map to convert it to specimen domain object using map data parser.
+	 * 5. post Processes each specimen to add inital values like acfivity status. TODO: can be clubed into first step.   
+	 * 6. Saves Specimens using bizLogic layer. 
+	 * 7. Send success or failure to the applet. In case of failure, messages are also send to applet.
+	 * 
 	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.ServletRequest, javax.servlet.ServletResponse)
 	 */
 	public ActionForward submitSpecimens(ActionMapping actionMapping, ActionForm actionForm,
@@ -115,7 +119,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 			System.out.println("Submitting the specimen : " + specimenMap);
 
-			prepareSpecimanClassMap(specimenMap);
+			preprocessSpecimanMap(specimenMap);
 
 			Map fixedSpecimenMap = appendClassValue(specimenMap);
 
@@ -128,7 +132,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 			MapDataParser specimenParser = new MapDataParser("edu.wustl.catissuecore.domain");
 
-			MapDataParser biohazardsParser = new MapDataParser("edu.wustl.catissuecore.domain");
+			//MapDataParser biohazardsParser = new MapDataParser("edu.wustl.catissuecore.domain");
 
 			Collection specimenCollection = specimenParser.generateData(fixedSpecimenMap);
 
@@ -138,7 +142,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			{
 				Specimen specimen = (Specimen) specimenCollectionIterator.next();
 
-				specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+				//specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 				specimen.setAvailable(new Boolean(true));
 				specimen.setAvailableQuantity(specimen.getQuantity());
 
@@ -198,13 +202,19 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	}
 
 	/**
-	 *  This method initialize map which contains for each specimen  its selected class.
+	 *  This method processes input specimens map.
+	 *  
+	 *  1. initialize map which contains for each specimen  its selected class.
+	 *  2. If class is not selected for any specimen it throws exception
+	 *  3. It removes unneccessary keys(keys that are no longer required) from the map.
+	 *   
 	 * @param specimenMap inputMap
 	 */
-	private void prepareSpecimanClassMap(Map specimenMap)
+	private void preprocessSpecimanMap(Map specimenMap) throws Exception
 	{
 
 		classMap = new HashMap();
+		
 
 		int noOfSpecimens = Integer.parseInt((String) specimenMap
 				.get(AppletConstants.NO_OF_SPECIMENS));
@@ -215,6 +225,10 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			String classValue = (String) specimenMap.get(AppletConstants.SPECIMEN_PREFIX + i + "_"
 					+ "class");
 
+			if (classValue == null || classValue.trim().length() == 0) {
+				throw new Exception(ApplicationProperties.getValue("protocol.class.errMsg"));
+			}
+			
 			classMap.put(String.valueOf(i), classValue);
 
 			if (!classValue.equals("Molecular"))
@@ -225,6 +239,10 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "class");
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "StorageContainer_temp");
+			
+
+			specimenMap.put(AppletConstants.SPECIMEN_PREFIX + i + "_" + "activityStatus",Constants.ACTIVITY_STATUS_ACTIVE);
+			//specimenMap.put(AppletConstants.SPECIMEN_PREFIX + i + "_" + "available" ,new Boolean(true));
 		}
 	}
 
@@ -243,10 +261,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				.getValue("app.bizLogicFactory"), "getBizLogic", Constants.NEW_SPECIMEN_FORM_ID);
 		SessionDataBean sessionBean = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);
-		// need to remove
-/*		sessionBean = new SessionDataBean();
-		sessionBean.setUserName("admin@admin.com");
-*/
+
 		bizLogic.insert(specimenCollection, sessionBean, Constants.HIBERNATE_DAO);
 
 	}
