@@ -281,7 +281,7 @@ tr#hiddenCombo
 		
 			if(document.forms[0].activityStatus!=null && document.forms[0].activityStatus.value == "Disabled")
 			{
-			  document.forms[0].value="/ParticipantCache.do";
+			  document.forms[0].onSubmit.value="/ParticipantCache.do";
 			}
 			document.forms[0].submit();		
 		}
