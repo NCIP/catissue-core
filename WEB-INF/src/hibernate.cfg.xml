@@ -12,6 +12,7 @@
         <property name="connection.datasource">java:/catissuecore</property>
         <property name="hibernate.transaction.factory_class">net.sf.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="transaction.manager_lookup_class">net.sf.hibernate.transaction.JBossTransactionManagerLookup</property>
+    	<property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
     	
         <!-- List of all Mapping files -->
         <mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>
@@ -48,7 +49,7 @@
 		<mapping resource="edu/wustl/common/hbm/CDEImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/PermissibleValueImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/QueryColumnData.hbm.xml"/>
-		<mapping resource="edu/wustl/common/hbm/QueryTableData.hbm.xml"/> 
+		<mapping resource="edu/wustl/common/hbm/QueryTableData.hbm.xml"/>
     </session-factory>
     
 </hibernate-configuration>
