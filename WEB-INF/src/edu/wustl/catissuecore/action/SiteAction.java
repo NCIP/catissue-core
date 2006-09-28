@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -75,20 +77,17 @@ public class SiteAction  extends SecureAction
     	request.setAttribute(Constants.USERLIST, coll);
     	
     	// ------------------------------------------------------------------
-    	boolean isOnChange = false; 
-		String str = request.getParameter("isOnChange");
-		
-		if(str!=null && str.equals("true"))
-		{
-			isOnChange = true;
-		}
-		
-    	if(siteForm != null && isOnChange)
+    	
+    	/**** code for ajax *****/
+    	
+    	boolean isOnChange = getIsOnChange(request);  
+ 		Long coordinatorId = getCoordinatorId(request);
+	
+ 		if(siteForm != null && isOnChange && coordinatorId!=null)
     	{
     	    String emailAddress ="";
-    	    Logger.out.debug("Id of Coordinator of Site : " + siteForm.getCoordinatorId());
+    	    List userList = userBizLogic.retrieve(User.class.getName(),Constants.SYSTEM_IDENTIFIER , coordinatorId);
     	    
-    	    List userList = userBizLogic.retrieve(User.class.getName(),Constants.SYSTEM_IDENTIFIER , new Long(siteForm.getCoordinatorId()));
     	    if(userList.size()>0)
     	    {
     	    	User user = (User)userList.get(0); 	
@@ -96,39 +95,73 @@ public class SiteAction  extends SecureAction
         		{
         		    emailAddress = user.getEmailAddress() ; 
         		    Logger.out.debug("Email Id of Coordinator of Site : " + emailAddress );
+        		    sendEmailAddress(emailAddress,response);
+        		    
+        		    //set the email id in form bean
+        		    siteForm.setEmailAddress(emailAddress);
         		}
     	    }
-    		siteForm.setEmailAddress(emailAddress); 
-    	}        
-    	// ------------------------------------------------------------------
-   
-    	// ------------- add new
-//		String reqPath = request.getParameter(Constants.REQ_PATH);
-//		
-//		if (reqPath != null)
-//		{
-//			request.setAttribute(Constants.REQ_PATH, reqPath);
-//		}
-//		
-//		Logger.out.debug("SiteAction redirect :---------- "+ reqPath  );
-//		// Mandar : code for Addnew Coordinator data 24-Jan-06
-//		String coordinatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID);
-//		if(coordinatorID != null && coordinatorID.trim().length() > 0 )
-//		{
-//			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in Site : "+ coordinatorID  );
-//			siteForm.setCoordinatorId(Long.parseLong(coordinatorID) ); 
-//		}
-		// -- 24-Jan-06 end
-
-        // ----------------add new end-----
-        
+			//for ajax return null as Actionservlet returns ActionForward object
+			return null;   
+    	}
         String pageOf = (String)request.getParameter(Constants.PAGEOF);
         
         if (pageOf != null)
         {
             request.setAttribute(Constants.PAGEOF, pageOf);
         }
-        
         return mapping.findForward(pageOf);
     }
+
+
+    
+    /**
+     * method for ajax response
+     * @param emailAddress : emailaddress of the coordinator
+     * @param response :object of HttpServletResponse
+     * @throws Exception
+     */
+    private void sendEmailAddress(String emailAddress, HttpServletResponse response) throws Exception 		  
+	{
+		PrintWriter out = response.getWriter();
+		Logger.out.debug("mail"+emailAddress);
+		response.setContentType("text/html");
+		out.write(emailAddress );
+	}
+
+    /**
+	 * method for getting coordinatorId from request
+	 * @param request :object of HttpServletResponse
+	 * @return coordinatorId
+	 */
+	private Long getCoordinatorId(HttpServletRequest request)
+	{
+		Long coordinatorId = null;
+		String coordinatorIdStr = request.getParameter("coordinatorId");
+		Validator validator = new Validator(); 
+		if(!validator.isEmpty(coordinatorIdStr))
+		{
+			coordinatorId = new Long(coordinatorIdStr);
+		}
+		return coordinatorId;
+	}
+	
+	/**
+	 * method for getting isOnChange from request
+	 * @param request:object of HttpServletResponse
+	 * @return isOnChange :boolean 
+	 */
+	private boolean getIsOnChange(HttpServletRequest request)
+	{
+    	boolean isOnChange=false;
+		String str = request.getParameter("isOnChange");
+		if(str!=null && str.equals("true"))
+		{
+			isOnChange = true;
+		}
+		return isOnChange;
+	}
+
+	/**** code for ajax *****/
+
 }
