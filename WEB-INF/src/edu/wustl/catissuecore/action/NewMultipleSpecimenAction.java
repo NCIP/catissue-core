@@ -39,12 +39,13 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	public ActionForward showCommentsDialog(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		//		String comments = (String) request.getSession().getAttribute("Comments");		
 		request.setAttribute("output", "init");
+		request.setAttribute("type",Constants.COMMENTS_TYPE);
 
 		Map multipleSpecimenMap = chkForMultipleSpecimenMap(request);
 		String keyInSpecimenMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
 		String comments = (String) multipleSpecimenMap.get(keyInSpecimenMap);
+		
 
 		Logger.out.debug("setting comments to " + comments);
 
@@ -79,8 +80,6 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	{
 
 		String comments = ((NewSpecimenForm) form).getComments();
-		//		request.getSession().setAttribute("Comments",comments);
-
 		request.setAttribute("output", "success");
 
 		Map multipleSpecimenMap = chkForMultipleSpecimenMap(request);

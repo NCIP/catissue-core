@@ -1251,6 +1251,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String APPEND_COUNT = "_count";
 	public static final String EXTERNALIDENTIFIER_TYPE = "ExternalIdentifier";
 	public static final String BIOHAZARD_TYPE = "BioHazard";
+	public static final String COMMENTS_TYPE = "comments";
+	
 	
 	public static final String MULTIPLE_SPECIMEN_APPLET_NAME = "MultipleSpecimenApplet";
 	public static final String INPUT_APPLET_DATA = "inputAppletData";

@@ -61,14 +61,22 @@
 
 			<table summary="" cellpadding="3" cellspacing="0" border="0">
 				<logic:equal name="type"
+					value="<%=Constants.COMMENTS_TYPE%>">
+					<%submitFunName = "submitComments();";%>
+					<%@ include file="comments.jsp"%>
+				</logic:equal>
+
+				<logic:equal name="type"
 					value="<%=Constants.EXTERNALIDENTIFIER_TYPE%>">
 					<%submitFunName = "submitExternalIdentifiers();";%>
 					<%@ include file="ExternalIdentifiers.jsp"%>
 				</logic:equal>
+				
 				<logic:equal name="type" value="<%=Constants.BIOHAZARD_TYPE%>">
 					<%submitFunName = "submitBioHazards();";%>
 					<%@ include file="BioHazards.jsp"%>
 				</logic:equal>
+				
 
 				<tr>
 					<td align="right" colspan="3"><!-- action buttons begins -->

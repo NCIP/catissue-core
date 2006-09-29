@@ -2798,7 +2798,7 @@ PUBLIC
 	<action path="/NewMultipleSpecimenAction" type="edu.wustl.catissuecore.action.NewMultipleSpecimenAction" parameter="method" 
 	   name="multipleSpecimenForm"
 	   scope="request" validate="true" input="/InitMultipleSpecimen.do?menuSelected=15">
-		<forward name="comments" path="/pages/content/manageBioSpecimen/comments.jsp" />
+		<forward name="comments" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
 		<forward name="externalIdentifier" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
 		<forward name="bioHazard" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
 		<forward name="specimen" path=".catissuecore.multipleSpecimenDef" />
