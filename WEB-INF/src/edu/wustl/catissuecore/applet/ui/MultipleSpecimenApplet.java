@@ -130,7 +130,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 //		JScrollPane scrollPane = new JScrollPane( table );
 		JScrollPane scrollPane= new FixedColumnScrollPane(table);
 		scrollPane.setSize(table.getWidth(),table.getHeight()); 
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER  );  
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED  );  
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
 
 		tablePanel.add( scrollPane );
