@@ -308,7 +308,7 @@
 		<copy todir="${zip.dir}/SQL" overwrite="true">
 			<fileset dir="${base.dir}/SQL" />
 		</copy>
-		<delete dir="${zip.dir}/SQL/DBUpgrade" />
+		<!--delete dir="${zip.dir}/SQL/DBUpgrade" /-->
 
 		<copy file="MySql_DB_Creation.sql" todir="${zip.dir}" overwrite="true" />
 		<copy file="Oracle_DB_Creation.sql" todir="${zip.dir}" overwrite="true" />
