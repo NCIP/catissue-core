@@ -233,18 +233,17 @@ public class NewMultipleSpecimenAction extends DispatchAction
 
 		Map bioHazards = ((NewSpecimenForm) form).getBiohazard();
 		int bioHazardCnt = ((NewSpecimenForm) form).getBhCounter();
-		//		request.getSession().setAttribute("Comments",comments);
 
 		request.setAttribute("output", "success");
 		request.setAttribute("type",Constants.BIOHAZARD_TYPE);
+		setBioHazardRequestAttributes(request);
 
 		Map multipleSpecimenMap = chkForMultipleSpecimenMap(request);
 		String keyInSpecimenMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
 		String keyForCount = keyInSpecimenMap + Constants.APPEND_COUNT;
 		multipleSpecimenMap.put(keyInSpecimenMap, bioHazards);
 		multipleSpecimenMap.put(keyForCount, new Integer(bioHazardCnt));
-
-		setBioHazardRequestAttributes(request);
+		
 		return mapping.findForward("bioHazard");
 	}
 
