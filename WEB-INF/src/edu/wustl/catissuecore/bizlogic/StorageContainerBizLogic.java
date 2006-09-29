@@ -1148,10 +1148,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				+ " 	      where "
 				+ " 		t1.identifier = t11.identifier and  t2.identifier = t22.identifier "
 				+ " 	  ) "
-				+ " 	  AS t7 LEFT OUTER JOIN CATISSUE_CONTAINER_TYPE t6 on "
+				+ " 	  t7 LEFT OUTER JOIN CATISSUE_CONTAINER_TYPE t6 on "
 				+ " 	  t7.PARENT_STORAGE_TYPE_ID = t6.IDENTIFIER "
 				+ " ) "
-				+ " AS t8, CATISSUE_SITE t4, CATISSUE_CONTAINER_TYPE t5 WHERE t8.SITE_ID = t4.IDENTIFIER "
+				+ " t8, CATISSUE_SITE t4, CATISSUE_CONTAINER_TYPE t5 WHERE t8.SITE_ID = t4.IDENTIFIER "
 				+ " AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
 
 		Logger.out.debug("Storage Container query......................" + queryStr);
