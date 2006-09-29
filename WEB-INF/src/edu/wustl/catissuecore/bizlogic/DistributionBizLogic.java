@@ -469,7 +469,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 
 		
 		if(distributionBasedOn.intValue() == Constants.LABEL_BASED_DISTRIBUTION) {
-			whereColumnName = new String[] {"label"};
+			whereColumnName = new String[] {"name"};
 		}
 
 		SpecimenArray specimenArray = null;
