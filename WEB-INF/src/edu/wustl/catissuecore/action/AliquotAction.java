@@ -58,6 +58,7 @@ public class AliquotAction extends BaseAction //SecureAction
 			throws Exception
 	{
 		AliquotForm aliquotForm = (AliquotForm) form;
+		
 		String specimenLabel = aliquotForm.getSpecimenLabel();
 
 		//Extracting the values of the operation & pageOf parameters.
@@ -286,7 +287,7 @@ public class AliquotAction extends BaseAction //SecureAction
 				aliquotForm.setPathologicalStatus(Utility.toString(map.get(Constants.CDE_NAME_PATHOLOGICAL_STATUS)));
 				aliquotForm.setAvailableQuantity(Utility.toString(map.get(Constants.SPECIMEN_TYPE_QUANTITY)));
 				aliquotForm.setConcentration(Utility.toString(map.get("concentration")));
-
+				
 				aliquotForm.setAliquotMap(map);
 			}
 
