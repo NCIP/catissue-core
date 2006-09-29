@@ -37,6 +37,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
  * 
  * 1. initData 
  * 2. submitSpecimens
+ * 3. getResult
  * 
  * @author Rahul Ner
  */
@@ -112,7 +113,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	{
 		String target;
 		Map resultMap = new HashMap();
-		
+
 		try
 		{
 			Map specimenMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
@@ -123,81 +124,138 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 			Map fixedSpecimenMap = appendClassValue(specimenMap);
 
-			//Map SpecimenCollectionMap = (Map) request.getAttribute("MultipleSpecimenCollectionMap");
-			//Add Associated Objects.
 			Map multipleSpecimenSessionMap = (Map) request.getSession().getAttribute(
 					Constants.MULTIPLE_SPECIMEN_MAP_KEY);
 
-			fixedSpecimenMap.putAll(appendClassValue(multipleSpecimenSessionMap));
+			processAssociatedObjectsMap(fixedSpecimenMap, multipleSpecimenSessionMap);
 
 			MapDataParser specimenParser = new MapDataParser("edu.wustl.catissuecore.domain");
-
-			//MapDataParser biohazardsParser = new MapDataParser("edu.wustl.catissuecore.domain");
 
 			Collection specimenCollection = specimenParser.generateData(fixedSpecimenMap);
 
 			Iterator specimenCollectionIterator = specimenCollection.iterator();
 
+			//set default values for the specimen.
 			while (specimenCollectionIterator.hasNext())
 			{
 				Specimen specimen = (Specimen) specimenCollectionIterator.next();
-
-				//specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 				specimen.setAvailable(new Boolean(true));
 				specimen.setAvailableQuantity(specimen.getQuantity());
-
-				//process associated objects.
-				//specimen.setStorageContainer(null);
-				//specimen.setType("Frozen Tissue");
-
-				/*				Long id = specimen.getId();
-				 Map biohazardsMap = (Map) SpecimenCollectionMap.get(id.toString() + "_" + "bioHazards");
-				 specimen.setBiohazardCollection(biohazardsParser.generateData(biohazardsMap));;
-				 */
 			}
 
-			//validate specimen
-
-			//call bizLogic to save specimenCollection
-			
+			//call bizLogic to save specimenCollection. It will first validate all the specimens.
 			insertSpecimens(request, specimenCollection);
-			
-			//clean up activity.
-			multipleSpecimenSessionMap = null;
-			request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION,specimenCollection);
+
+			//if success return to report page		
+			request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION,
+					specimenCollection);
 			target = Constants.SUCCESS;
 
+			//clean up activity.
+			multipleSpecimenSessionMap = null;
+			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, null);
 		}
-		//return to report page		
 		catch (Exception e)
 		{
+			//return to same applet page incase of failure.		
 			target = Constants.FAILURE;
 			String errorMsg = e.getMessage();
-			resultMap.put(Constants.ERROR_DETAIL,errorMsg);
+			resultMap.put(Constants.ERROR_DETAIL, errorMsg);
 			e.printStackTrace();
 		}
 
-		
+		//send response to the applet.
 		resultMap.put(Constants.MULTIPLE_SPECIMEN_RESULT, target);
 		writeMapToResponse(response, resultMap);
-
 		return null;
-		//		return actionMapping.findForward(target);
 	}
 
+	/**
+	 * This method puts all the values defined for the associated object.
+	 *  
+	 * @param specimenMap
+	 * @param multipleSpecimenSessionMap
+	 */
+	private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSessionMap)
+	{
+		Iterator sessionMapItr = multipleSpecimenSessionMap.keySet().iterator();
+
+		while (sessionMapItr.hasNext())
+		{
+			String key = (String) sessionMapItr.next();
+
+			if (key.endsWith(Constants.APPEND_COUNT))
+			{
+				//ignore counts keys
+				continue;
+			}
+
+			Object associatedObject = multipleSpecimenSessionMap.get(key);
+
+			if (associatedObject instanceof String)
+			{
+				// e.g. comments objects
+				String newKeyInSpecimenMap = getUpdatedKey(key);
+				specimenMap.put(newKeyInSpecimenMap, associatedObject);
+			}
+			else if (associatedObject instanceof Map)
+			{
+				//e.g. external Identifier			
+				Map associatedObjectMap = (Map) associatedObject;
+
+				// remove corrosponding key from main map.
+				specimenMap.remove(getUpdatedKey(key));
+
+				Iterator associatedObjectsMapItr = (associatedObjectMap).keySet().iterator();
+
+				while (associatedObjectsMapItr.hasNext())
+				{
+
+					String objectKey = (String) associatedObjectsMapItr.next();
+
+					String newKeyInSpecimenMap = getConsolidatedKey(key, objectKey);
+
+					specimenMap.put(newKeyInSpecimenMap, associatedObjectMap.get(objectKey));
+				}
+			}
+		}
+	}
+
+	/**
+	 * e.g 
+	 * if Session map contains key   "Specimen:1_externalIdentifierCollection" and value as a another map,
+	 * so key will be "Specimen:1_externalIdentifierCollection" 
+	 * and associatedObjectKey is   "ExternalIdentifier:1_id" and to this key some value is associated in that another map.
+	 * And if for specimen 1 , "Molecular" class is selected,
+	 * 
+	 * it will return  MolecularSpecimen:1_ExternalIdentifier:1_id
+	 * 
+	 */
+	private String getConsolidatedKey(String key, String associatedObjectKey)
+	{
+		String keyWithClass = getUpdatedKey(key);
+		String tempKey = keyWithClass.split("_")[0];
+		return tempKey + "_" + associatedObjectKey;
+	}
+
+	/**
+	 * This method is called by applet when submit method return success. It forwards to the report page.
+	 */
 	public ActionForward getResult(ActionMapping actionMapping, ActionForm actionForm,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		String target = (String) request.getParameter(Constants.MULTIPLE_SPECIMEN_RESULT);
-		
-		Collection specimenCollection = (Collection) request.getSession().getAttribute(Constants.SAVED_SPECIMEN_COLLECTION);
-		request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION,null);
-		
-		request.setAttribute(Constants.SAVED_SPECIMEN_COLLECTION,specimenCollection);
-	
+
+		Collection specimenCollection = (Collection) request.getSession().getAttribute(
+				Constants.SAVED_SPECIMEN_COLLECTION);
+		request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, null);
+
+		request.setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, specimenCollection);
+
 		ActionMessages msgs = new ActionMessages();
-		msgs.add("success",new ActionMessage("multipleSpecimen.add.success",String.valueOf(specimenCollection.size())));
-		saveMessages(request,msgs);
+		msgs.add("success", new ActionMessage("multipleSpecimen.add.success", String
+				.valueOf(specimenCollection.size())));
+		saveMessages(request, msgs);
 		return actionMapping.findForward(target);
 	}
 
@@ -214,7 +272,6 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	{
 
 		classMap = new HashMap();
-		
 
 		int noOfSpecimens = Integer.parseInt((String) specimenMap
 				.get(AppletConstants.NO_OF_SPECIMENS));
@@ -225,10 +282,11 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			String classValue = (String) specimenMap.get(AppletConstants.SPECIMEN_PREFIX + i + "_"
 					+ "class");
 
-			if (classValue == null || classValue.trim().length() == 0) {
+			if (classValue == null || classValue.trim().length() == 0)
+			{
 				throw new Exception(ApplicationProperties.getValue("protocol.class.errMsg"));
 			}
-			
+
 			classMap.put(String.valueOf(i), classValue);
 
 			if (!classValue.equals("Molecular"))
@@ -239,9 +297,9 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "class");
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "StorageContainer_temp");
-			
 
-			specimenMap.put(AppletConstants.SPECIMEN_PREFIX + i + "_" + "activityStatus",Constants.ACTIVITY_STATUS_ACTIVE);
+			specimenMap.put(AppletConstants.SPECIMEN_PREFIX + i + "_" + "activityStatus",
+					Constants.ACTIVITY_STATUS_ACTIVE);
 			//specimenMap.put(AppletConstants.SPECIMEN_PREFIX + i + "_" + "available" ,new Boolean(true));
 		}
 	}
@@ -286,7 +344,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		while (it.hasNext())
 		{
 			String key = (String) it.next();
-			String newKey = getUpdatedKey(classMap, key);
+			String newKey = getUpdatedKey(key);
 
 			String value = String.valueOf(inputMap.get(key));
 			newMap.put(newKey, value);
@@ -300,11 +358,10 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	 * if user has selected Fluid as specimen class for specimen no 2 then for the key "Specimen:2_pathologicalStatus"
 	 * this method will return "FluidSpecimen:2_pathologicalStatus".
 	 * 
-	 * @param classMap map that contains specimen no and its specimen class 
 	 * @param key   e.g. 
 	 * @return
 	 */
-	private String getUpdatedKey(Map classMap, String key)
+	private String getUpdatedKey(String key)
 	{
 		String specimenNo = key.substring(key.indexOf(":") + 1, key.indexOf("_"));
 		return (String) classMap.get(specimenNo) + key;
