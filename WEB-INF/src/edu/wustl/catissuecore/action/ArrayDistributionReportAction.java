@@ -83,7 +83,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		String[] specimenColumns = Constants.SPECIMEN_IN_ARRAY_SELECTED_COLUMNS;
 		String []specimenColumnNames = getColumnNames(specimenColumns);
 		
-    	List listOfData = getListOfArrayData(dist,configForm,sessionData) ;
+    	List listOfData = getListOfArrayDataForSave(dist,configForm,sessionData,selectedColumns,specimenColumns) ;
 
     	
 		//Set the request attributes for the Distribution report data
@@ -110,7 +110,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
     		SpecimenArray array = (SpecimenArray) itr.next();
     		List tempList = new ArrayList();
     		tempList.add(array.getId().toString());
-    		tempList.add(array.getBarcode().toString());
+    		tempList.add(Utility.toString(array.getBarcode()));
     		i++;
     		List tempList1 = new ArrayList();
     		tempList1.add(tempList);
@@ -136,7 +136,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			List temp = new ArrayList(dimensionTwo);
 			
 			for(int j=0;j<dimensionTwo;j++) {
-				temp.add("*");
+				temp.add(Constants.UNUSED);
 			}
 			
 			gridInfo.add(i,temp);
@@ -157,7 +157,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			}
 			
 			specimenDetails.add(specimen.getLabel());
-			specimenDetails.add(specimen.getBarcode());
+			specimenDetails.add(Utility.toString(specimen.getBarcode()));
 			specimenDetails.add(Utility.toString(arrayContent.getPositionDimensionOne()));
 			specimenDetails.add(Utility.toString(arrayContent.getPositionDimensionTwo()));
 			specimenDetails.add(specimen.getClassName());
@@ -181,14 +181,14 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	private List getArrayDetails(SpecimenArray array, String[] selectedColumns,SessionDataBean sessionData)throws Exception {
 		List arrayDetails = new ArrayList();		
 		arrayDetails.add(array.getName());
-		arrayDetails.add(array.getBarcode());
-		arrayDetails.add(array.getSpecimenArrayType().getName());
+		arrayDetails.add(Utility.toString(array.getBarcode()));
+		arrayDetails.add(Utility.toString(array.getSpecimenArrayType().getName()));
 		arrayDetails.add(Utility.toString(array.getPositionDimensionOne()));
 		arrayDetails.add(Utility.toString(array.getPositionDimensionTwo()));
 		arrayDetails.add(Utility.toString(array.getCapacity().getOneDimensionCapacity()));
 		arrayDetails.add(Utility.toString(array.getCapacity().getTwoDimensionCapacity()));
-		arrayDetails.add(array.getSpecimenArrayType().getSpecimenClass());
-		arrayDetails.add(array.getSpecimenArrayType().getSpecimenTypeCollection().toString());
+		arrayDetails.add(Utility.toString(array.getSpecimenArrayType().getSpecimenClass()));
+		arrayDetails.add(Utility.toString(array.getSpecimenArrayType().getSpecimenTypeCollection()));
 		return arrayDetails;
 	}
 		
