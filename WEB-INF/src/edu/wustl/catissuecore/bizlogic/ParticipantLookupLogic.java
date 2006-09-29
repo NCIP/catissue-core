@@ -155,7 +155,7 @@ public class ParticipantLookupLogic implements LookupLogic
 				 *  check for match between the two.
 				 */
 				if (userParticipant.getLastName() != null && !userParticipant.getLastName().trim().equals("")
-						&& userParticipant.getLastName() != null && !existingParticipant.getLastName().trim().equals(""))
+						&& existingParticipant.getLastName() != null && !existingParticipant.getLastName().trim().equals(""))
 				{
 					weight += checkLastName(userParticipant.getLastName().trim().toLowerCase(), existingParticipant.getLastName().trim()
 							.toLowerCase());
@@ -167,7 +167,7 @@ public class ParticipantLookupLogic implements LookupLogic
 				 *  check for match between the two.
 				 */
 				if (userParticipant.getFirstName() != null && !userParticipant.getFirstName().trim().equals("")
-						&& userParticipant.getFirstName() != null && !existingParticipant.getFirstName().trim().equals(""))
+						&& existingParticipant.getFirstName() != null && !existingParticipant.getFirstName().trim().equals(""))
 				{
 					weight += checkFirstName(userParticipant.getFirstName().trim().toLowerCase(), existingParticipant.getFirstName().trim()
 							.toLowerCase());
