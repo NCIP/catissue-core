@@ -465,7 +465,7 @@
 		<unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/catissuecorecsm"/>
 		
 		<if>
-			<equals arg1="mysql" arg2="${database.type}"/>		
+			<equals arg1="mysql" arg2="${database.type}"/>
 			<then>
 				<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
 					<include name ="orm1.cfg.xml"/>
@@ -475,7 +475,7 @@
 		</if>
 		
 		<if>	
-				<equals arg1="oracle" arg2="${database.type}"/>		
+				<equals arg1="oracle" arg2="${database.type}"/>
 				<then>
 					<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
 						<include name ="orm1.cfg.xml"/>
