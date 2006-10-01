@@ -161,6 +161,11 @@
 			<include name="catissuecore.hibernate.cfg.xml"/>
 			<replacefilter token="@@dialect@@" value="${mysql.dialect.string}"/>
 		</replace>
+		<!-- added for csm orm1.cfg.xml file-->
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+			<include name ="orm1.cfg.xml"/>
+			<replacefilter token="@@dialect@@" value="${mysql.dialect.h3.string}"/>
+		</replace>
 		
 		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
 			<include name="catissuecore-ds.xml"/>
@@ -173,6 +178,7 @@
 		
 		<!-- change ${csm.dir} to {catissuecore} because using one war only -->
 		<!-- Configuring CSM hibernate property File-->
+		<!--
 		<replace dir="${temp.dir}/catissuecore/WEB-INF" propertyfile="caTissueInstall.properties"> 
 			<include name="classes/hibernate.properties"/>
 			<include name="conf/hibernate.properties"/>
@@ -193,6 +199,7 @@
 				token="hibernate.connection.password catissue_core" 
 			  	value="hibernate.connection.password ${database.password}"/>
 		</replace>
+		-->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}"/>
 		</replace>
@@ -207,6 +214,12 @@
 			<replacefilter token="@@dialect@@" value="${oracle.dialect.string}"/>
 		</replace>
 		
+		<!-- added for csm orm1.cfg.xml file-->
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+			<include name ="orm1.cfg.xml"/>
+			<replacefilter token="@@dialect@@" value="${oracle.dialect.h3.string}"/>
+		</replace>
+			
 		<!-- Configuring Data Source File-->
 		<replace dir="${temp.dir}" propertyfile="caTissueInstall.properties"> 
 			<include name="catissuecore-ds.xml"/>
@@ -218,6 +231,7 @@
 		</replace>
 		<!-- change ${csm.dir} to {catissuecore} because using one war only -->
 		<!-- Configuring CSM hibernate property File-->
+		<!--
 		<replace dir="${temp.dir}/catissuecore/WEB-INF" propertyfile="caTissueInstall.properties"> 
 			<include name="classes/hibernate.properties"/>
 			<include name="conf/hibernate.properties"/>
@@ -238,6 +252,7 @@
 				token="hibernate.connection.password catissue_core" 
 			  	value="hibernate.connection.password ${database.password}"/>
 		</replace>
+		-->
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
 			<replacefilter 
 				token="${mysql.dialect.string}" 
