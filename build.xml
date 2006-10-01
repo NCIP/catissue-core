@@ -2,7 +2,14 @@
 
 <!--Ant Script for create Build for caTISSUE Core-->
 <project name="caTissue Core" default="compile">
-
+	
+	<!--define require dir and Properties for <if> </if> tag-->	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	<classpath>
+	    <pathelement location="./lib/ant-contrib.jar"/>
+	  </classpath>
+	</taskdef>
+	
 	<!--define require dir and Properties -->
 	<property file="caTissueInstall.properties" />
 
@@ -19,8 +26,11 @@
 	<property name="cobertura.dir" value="${target.dir}/reports/coverage" />
 	<property name="report.dir" value="${base.dir}/WEB-INF" />
 	<property name="catissue.applet.dir" value="${base.dir}/Applet/catissue" />
-	<property name="temp.dir" value="${base.dir}/tempCatissuecore"/>
 
+	<!-- csm related properties -->
+	<property name="temp.dir" value="${base.dir}/tempCatissuecore"/>
+	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect"/>
+	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect"/>
 
 
 	<path id="app.classpath">
@@ -453,5 +463,25 @@
 	<!-- unpack caCORE war into temp folder -->
 	<target name="unpack_cacore_war">
 		<unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/catissuecorecsm"/>
+		
+		<if>
+			<equals arg1="mysql" arg2="${database.type}"/>		
+			<then>
+				<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+					<include name ="orm1.cfg.xml"/>
+					<replacefilter token="@@dialect@@" value="${mysql.dialect.h3.string}"/>
+				</replace>
+			</then>
+		</if>
+		
+		<if>	
+				<equals arg1="oracle" arg2="${database.type}"/>		
+				<then>
+					<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+						<include name ="orm1.cfg.xml"/>
+						<replacefilter token="@@dialect@@" value="${oracle.dialect.h3.string}"/>
+					</replace>
+				</then>
+		</if>
 	</target>
 </project>
