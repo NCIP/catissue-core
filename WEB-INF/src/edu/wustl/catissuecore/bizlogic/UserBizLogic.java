@@ -553,6 +553,12 @@ public class UserBizLogic extends DefaultBizLogic
 	{
 
 		User user = (User) obj;
+//		 Added by Ashish Gupta
+		/*
+		if (user == null)
+			throw new DAOException("domain.object.null.err.msg", new String[]{"User"});
+			*/
+		//END	
 		if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false)
 		{
 			if (!Validator.isEnumeratedValue(CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_STATE_LIST, null), user
@@ -596,11 +602,117 @@ public class UserBizLogic extends DefaultBizLogic
 					}
 				}
 			}
+			//Added by Ashish
+		//	apiValidate(user);
+		//END
 		}
-
 		return true;
 	}
+//Added by Ashish
 
+	/**
+	 * @param user user
+	 * @return 
+	 * @throws DAOException
+	 */
+	/*
+	private boolean apiValidate(User user)
+					throws DAOException
+	{
+		Validator validator = new Validator();
+		String message = "";
+		boolean validate = true;
+		
+		if (validator.isEmpty(user.getEmailAddress()))
+		{
+			message = ApplicationProperties.getValue("user.emailAddress");
+			throw new DAOException("errors.item.required", new String[]{message});
+		}
+		else
+		{
+			if (!validator.isValidEmailAddress(user.getEmailAddress()))
+			{
+				message = ApplicationProperties.getValue("user.emailAddress");
+				throw new DAOException("errors.item.format", new String[]{message});
+			}
+		}
+		if (validator.isEmpty(user.getLastName()))
+		{
+			message = ApplicationProperties.getValue("user.lastName");
+			throw new DAOException("errors.item.required", new String[]{message});
+		}
+
+		if (validator.isEmpty(user.getFirstName()))
+		{
+			message = ApplicationProperties.getValue("user.firstName");
+			throw new DAOException("errors.item.required", new String[]{message});
+		}
+
+		if (validator.isEmpty(user.getAddress().getCity()))
+		{
+			message = ApplicationProperties.getValue("user.city");
+			throw new DAOException("errors.item.required", new String[]{message});
+		}
+
+		if (!validator.isValidOption(user.getAddress().getState()))
+		{
+			message = ApplicationProperties.getValue("user.state");
+			throw new DAOException("errors.item.required", new String[]{message});
+		}
+
+		if (validator.isEmpty(user.getAddress().getZipCode()))
+		{
+			message = ApplicationProperties.getValue("user.zipCode");
+			throw new DAOException("errors.item.required", new String[]{message});
+		}
+		else
+		{
+			if (!validator.isValidZipCode(user.getAddress().getZipCode()))
+			{
+				message = ApplicationProperties.getValue("user.zipCode");
+				throw new DAOException("errors.item.format", new String[]{message});
+			}
+		}
+		if (!validator.isValidOption(user.getAddress().getCountry()))
+		{
+			message = ApplicationProperties.getValue("user.country");
+			throw new DAOException("errors.item.required", new String[]{message});
+		}
+
+		if (validator.isEmpty(user.getAddress().getPhoneNumber()))
+		{
+			message = ApplicationProperties.getValue("user.phoneNumber");
+			throw new DAOException("errors.item.required", new String[]{message});
+		}
+		if (validator.isValidOption(String.valueOf(user.getInstitution().getId())) == false)
+		{
+			message = ApplicationProperties.getValue("user.institution");
+			throw new DAOException("errors.item.required", new String[]{message});
+		}
+
+		if (validator.isValidOption(String.valueOf(user.getDepartment().getId())) == false)
+		{
+			message = ApplicationProperties.getValue("user.department");
+			throw new DAOException("errors.item.required", new String[]{message});
+		}
+
+		if (validator.isValidOption(String.valueOf(user.getCancerResearchGroup().getId())) == false)
+		{
+			message = ApplicationProperties.getValue("user.cancerResearchGroup");
+			throw new DAOException("errors.item.required", new String[]{message});
+		}
+		if (user.getRoleId() != null)
+		{
+			if (validator.isValidOption(user.getRoleId()) == false)
+			{
+				message = ApplicationProperties.getValue("user.role");
+				throw new DAOException("errors.item.required", new String[]{message});
+			}
+		}
+		return validate;
+	}
+	*/
+	//END
 	/**
 	 * Returns a list of all roles that can be assigned to a user.
 	 * @return a list of all roles that can be assigned to a user.
