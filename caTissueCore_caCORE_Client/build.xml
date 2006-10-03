@@ -6,7 +6,19 @@
 	
 	<!--define require dir and Properties -->	
 	<property name="base.dir" value="."/>
+	
+	<property name="conf.dir" value="conf" />
+	<property name="lib.dir" value="lib" />
+	<property name="src.dir" value="." />
+
+	<path id="cp">
+		<fileset dir="lib">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathelement path="${conf.dir}"/>
+	</path>
     
+	
 	<path id="app.classpath">
 		<fileset dir="${base.dir}">
 			<include name="*.jar"/>
@@ -37,4 +49,24 @@
         </java>
     </target>
 
+	<!-- run TestClient java file -->
+	<target name="rundemo">
+		<javac srcdir="." >
+			<include name="TestClient.java"/>
+			<include name="APIDemo.java"/>
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+		</javac>
+		<java classname="TestClient" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+			<sysproperty key="log4j.configuration"
+						value="${conf.dir}/client_log4j.properties"/>
+		</java>
+	</target>
+	
 </project>
