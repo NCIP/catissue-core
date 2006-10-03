@@ -1359,10 +1359,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					.valueOf((String) rowList.get(3)), (String) rowList.get(4), (String) rowList
 					.get(4));
 
+			if (containerNodeVector.contains(siteNode))
+			{
+				siteNode = (StorageContainerTreeNode) containerNodeVector.get(containerNodeVector.indexOf(siteNode));
+			}
+			else
+				containerNodeVector.add(siteNode);
 			containerNode.setParentNode(siteNode);
 			siteNode.getChildNodes().add(containerNode);
-
-			containerNodeVector.add(siteNode);
 		}
 
 		return containerNodeVector;
