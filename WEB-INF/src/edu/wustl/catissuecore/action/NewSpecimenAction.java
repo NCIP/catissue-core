@@ -300,7 +300,7 @@ public class NewSpecimenAction extends SecureAction
 		if (operation.equals(Constants.ADD))
 		{
 			if (specimenForm.getSpecimenCollectionGroupId() != null && !specimenForm.getSpecimenCollectionGroupId().equals("") && 
-					specimenForm.getClassName()!=null && !specimenForm.getClassName().equals(""))
+					specimenForm.getClassName()!=null && !specimenForm.getClassName().equals("") && !specimenForm.getClassName().equals("-1"))
 			{
 				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(),
 						Constants.SYSTEM_IDENTIFIER, new Long(specimenForm
