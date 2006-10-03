@@ -366,6 +366,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Aliquots Action
 	public static final String ALIQUOT_ACTION = "Aliquots.do";
 	public static final String CREATE_ALIQUOT_ACTION = "CreateAliquots.do";
+	public static final String ALIQUOT_SUMMARY_ACTION = "AliquotSummary.do";
 	
 	//Constants related to Aliquots functionality
 	public static final String PAGEOF_ALIQUOT = "pageOfAliquot";
@@ -1252,7 +1253,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String EXTERNALIDENTIFIER_TYPE = "ExternalIdentifier";
 	public static final String BIOHAZARD_TYPE = "BioHazard";
 	public static final String COMMENTS_TYPE = "comments";
-	
 	
 	public static final String MULTIPLE_SPECIMEN_APPLET_NAME = "MultipleSpecimenApplet";
 	public static final String INPUT_APPLET_DATA = "inputAppletData";
