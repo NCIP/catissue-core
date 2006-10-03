@@ -21,6 +21,9 @@ public class CancerResearchBizLogic extends DefaultBizLogic
 
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
+	// comment by Ashwin	
+	/*
+	 *  	
 		CancerResearchGroup cancerResearchGroupObj = (CancerResearchGroup) obj;
 		String message = "";
 		if (cancerResearchGroupObj == null)
@@ -35,6 +38,7 @@ public class CancerResearchBizLogic extends DefaultBizLogic
 			message = ApplicationProperties.getValue("cancerResearchGroup.name");
 			throw new DAOException("errors.item.required", new String[]{message});
 		}
+	*/	
 		return true;
 	}
 

@@ -20,6 +20,8 @@ public class DepartmentBizLogic extends DefaultBizLogic
 
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
+		// comment by Ashwin
+		/*
 		Department department = (Department) obj;
 		if (department == null)
 			throw new DAOException("domain.object.null.err.msg", new String[]{"Department"});
@@ -29,6 +31,7 @@ public class DepartmentBizLogic extends DefaultBizLogic
 			String message = ApplicationProperties.getValue("department.name");
 			throw new DAOException("errors.item.required", new String[]{message});
 		}
+		*/
 		return true;
 	}
 

@@ -22,6 +22,8 @@ public class InstitutionBizLogic extends DefaultBizLogic
 
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
+		// comment by Ashwin
+		/*
 		Institution institution = (Institution) obj;
 		if (institution == null)
 			throw new DAOException("domain.object.null.err.msg", new String[]{"Institution"});
@@ -32,6 +34,7 @@ public class InstitutionBizLogic extends DefaultBizLogic
 			String message = ApplicationProperties.getValue("Institution.name");
 			throw new DAOException("errors.item.required", new String[]{message});
 		}
+		*/
 		return true;
 	}
 
