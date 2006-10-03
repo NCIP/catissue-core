@@ -1219,8 +1219,10 @@
 						</td>
 					 </tr>
 				  <% } %>
-				 </tbody>--%>
+				 </tbody>--%>				 
 				<%@ include file="ExternalIdentifiers.jsp" %>
+				
+				<logic:notEqual name="newSpecimenForm" property="lineage" value="Derived">
 				<%-- <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2">
@@ -1312,8 +1314,10 @@
 					 </tr>
 				  <% } %>
 				 </tbody>--%>
-
- 				<%@ include file="BioHazards.jsp" %>
+ 				<%@ include file="BioHazards.jsp" %>				
+				</logic:notEqual>
+				
+				
  				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
 				<tr>					
