@@ -338,7 +338,56 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
     {
 		CollectionProtocolRegistration registration = (CollectionProtocolRegistration)obj;
+/*		//Added by Ashish
+		if (registration == null)
+			throw new DAOException("domain.object.null.err.msg", new String[]{"Participant Registration"});
+		Validator validator = new Validator();
+		if (registration.getCollectionProtocol().getId()==-1)
+		{
+			String message = ApplicationProperties.getValue("collectionprotocolregistration.protocoltitle");
+			throw new DAOException("errors.item.required", new String[]{message});
+			
+	  	}
+     	
+//		if (checkedButton == true)
+		//{
+			if (registration.getParticipant().getId() == -1)
+			{
+				String message = ApplicationProperties.getValue("collectionProtocolReg.participantName");
+				throw new DAOException("errors.item.required", new String[]{message});				
+			}*/
+//		} // name selected
+		//else
+//		{
+			/*
+			if (validator.isEmpty(registration.getParticipant().getId().toString()))
+			{
+				String message = ApplicationProperties.getValue("collectionProtocolReg.participantProtocolID");
+				throw new DAOException("errors.item.required", new String[]{message});
+				
+			}
+//		}
+		//  date validation according to bug id 707, 722 and 730
+		String errorKey = validator.validateDate(Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY),true );
+		if(errorKey.trim().length() >0  )
+		{
+			String message = ApplicationProperties.getValue("collectionprotocolregistration.date");
+			throw new DAOException("errors.item.required", new String[]{message});
+			
+		}
+		
 
+		//
+		if (!validator.isValidOption(registration.getActivityStatus()))
+		{
+			String message = ApplicationProperties.getValue("collectionprotocolregistration.activityStatus");
+			throw new DAOException("errors.item.required", new String[]{message});
+		    
+		}
+		*/
+		//End
+		
+		
 		if(operation.equals(Constants.ADD))
 		{
 			if(!Constants.ACTIVITY_STATUS_ACTIVE.equals(registration.getActivityStatus()))

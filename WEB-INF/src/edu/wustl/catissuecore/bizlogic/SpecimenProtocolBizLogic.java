@@ -13,9 +13,12 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -30,6 +33,40 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpecimenProtocolBizLogic extends DefaultBizLogic
 {
+	//Added by Ashish
+	/*
+	protected Map values = new HashMap();
+	protected Map setSpecimenRequirement(String [] key, SpecimenRequirement requirement)
+	{
+		
+	    values.put(key[0] , requirement.getSpecimenClass());
+		values.put(key[1] , Utility.getUnit(requirement.getSpecimenClass() , requirement.getSpecimenType()));
+		values.put(key[2] , requirement.getSpecimenType());
+		values.put(key[3] , requirement.getTissueSite());
+		values.put(key[4] , requirement.getPathologyStatus());
+		values.put(key[5] , Utility.toString(requirement.getQuantity().getValue()));
+		values.put(key[6] , Utility.toString(requirement.getId()));
+		
+		if(requirement.getSpecimenClass().equals(edu.wustl.catissuecore.util.global.Constants.TISSUE))
+		{
+			String tissueType = requirement.getSpecimenType();
+			if(tissueType.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.FROZEN_TISSUE_SLIDE) || 
+			        tissueType.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.FIXED_TISSUE_BLOCK) || 
+			        tissueType.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.FROZEN_TISSUE_BLOCK)  || 
+			        tissueType.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.FIXED_TISSUE_SLIDE))
+			{
+				values.put(key[5] , Utility.toString(new Integer(requirement.getQuantity().getValue().intValue())));
+			}
+		}
+		
+		return values;
+	}
+	public Object getValue(String key)
+	{
+		return values.get(key);
+	}
+	*/
+	//END
     
     /**
 	 * This method checks for the change in the Activity status of the object. If change is found

@@ -298,7 +298,75 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
     {
 		SpecimenCollectionGroup group = (SpecimenCollectionGroup)obj;
-
+		
+		//Added by Ashish	
+		/*
+		if (group == null)
+			throw new DAOException("domain.object.null.err.msg", new String[]{"SpecimenCollectionGroup"});
+		Validator validator = new Validator();
+		if(group.getCollectionProtocolEvent().getId() == -1)
+		{
+			String message = ApplicationProperties.getValue("specimenCollectionGroup.protocolTitle");
+			throw new DAOException("errors.item.selected", new String[]{message});
+			
+		}
+		
+		if(group.getSite().getId() == -1)
+		{
+			String message = ApplicationProperties.getValue("specimenCollectionGroup.site");
+			throw new DAOException("errors.item.selected", new String[]{message});			
+		}
+		
+		
+		// Check what user has selected Participant Name / Participant Number
+		
+			//if participant name field is checked.
+			if(group.getCollectionProtocolRegistration().getParticipant().getId() == -1)
+			{
+				String message = ApplicationProperties.getValue("specimenCollectionGroup.collectedByParticipant");
+				throw new DAOException("errors.item.selected", new String[]{message});
+				
+			}
+		
+//			if(!validator.isValidOption(group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier()))
+//			{
+//				String message = ApplicationProperties.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber");
+//				throw new DAOException("errors.item.selected", new String[]{message});
+//				
+//			}
+		
+		if(group.getName().equals(""))
+		{
+			String message = ApplicationProperties.getValue("specimenCollectionGroup.groupName");
+			throw new DAOException("errors.item.required", new String[]{message});			
+		}
+		
+        // Mandatory Field : Study Calendar event point
+		if(group.getCollectionProtocolEvent().getId() == -1)
+		{
+			String message = ApplicationProperties.getValue("specimenCollectionGroup.studyCalendarEventPoint");
+			throw new DAOException("errors.item.selected", new String[]{message});			
+		}
+		
+		// Mandatory Field : clinical Diagnosis
+		if(!validator.isValidOption(group.getClinicalDiagnosis()))
+		{
+			String message = ApplicationProperties.getValue("specimenCollectionGroup.clinicalDiagnosis");
+			throw new DAOException("errors.item.selected", new String[]{message});			
+		}
+		
+		// Mandatory Field : clinical Status
+		if(!validator.isValidOption(group.getClinicalStatus()))
+		{
+			String message = ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus");
+			throw new DAOException("errors.item.selected", new String[]{message});			
+		}
+		
+		//Condition for medical Record Number.
+		*/
+		//END
+		
+		
 		List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
 		if(!Validator.isEnumeratedValue(clinicalDiagnosisList,group.getClinicalDiagnosis()))
 		{

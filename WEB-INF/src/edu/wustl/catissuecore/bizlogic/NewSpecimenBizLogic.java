@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.struts.action.ActionError;
@@ -815,6 +816,178 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
+//		Added by Ashish
+/*		
+		Specimen specimen = (Specimen) obj;
+		boolean parentPresent = false;
+		Long collectionEventUserId = null;
+		Map biohazard = null;
+		int bhCounter=1;
+		if (specimen == null)
+			throw new DAOException("domain.object.null.err.msg", new String[]{"Specimen"});
+		Validator validator = new Validator();
+		
+			if (specimen.getSpecimenCollectionGroup().getId().equals("-1"))
+	        {
+				String message = ApplicationProperties.getValue("specimen.specimenCollectionGroupId");
+				throw new DAOException("errors.item.required", new String[]{message});            
+	        }
+	
+		if(specimen.getParentSpecimen() != null)
+    	{
+			parentPresent = true;
+    	}
+     	
+     	if(parentPresent && !validator.isValidOption(specimen.getParentSpecimen().getId().toString()))
+     	{
+     		String message = ApplicationProperties.getValue("createSpecimen.parent");
+			throw new DAOException("errors.item.required", new String[]{message});	     		
+     	}
+     	
+     	if (specimen.getSpecimenCharacteristics().getTissueSite().equals("-1"))
+        {
+     		String message = ApplicationProperties.getValue("specimen.tissueSite");
+			throw new DAOException("errors.item.required", new String[]{message});	
+           
+        }
+     	
+     	if (specimen.getSpecimenCharacteristics().getTissueSide().equals("-1"))
+        {
+     		String message = ApplicationProperties.getValue("specimen.tissueSide");
+			throw new DAOException("errors.item.required", new String[]{message});	
+            
+        }
+     	
+     	if (specimen.getPathologicalStatus().equals("-1"))
+        {
+     		String message = ApplicationProperties.getValue("specimen.pathologicalStatus");
+			throw new DAOException("errors.item.required", new String[]{message});	
+            
+        }  	
+     	 
+     	if(operation.equalsIgnoreCase(Constants.ADD  ) )
+     	{
+     		Iterator specimenEventCollectionIterator = specimen.getSpecimenEventCollection().iterator();
+     		while(specimenEventCollectionIterator.hasNext())
+     		{
+     		//CollectionEvent validation.
+     			Object eventObject = specimenEventCollectionIterator.next();
+     			if(eventObject instanceof CollectionEventParameters)
+     			{
+     				CollectionEventParameters collectionEventParameters =  (CollectionEventParameters)eventObject;
+     				collectionEventUserId = collectionEventParameters.getId();
+//     				if ((collectionEventUserId) == -1L)
+//    	            {
+//    	     			
+//    	    			throw new DAOException("errors.item.required", new String[]{"Collection Name"});
+//    	           		
+//    	            }
+    	           	if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY)) )
+    	           	{
+    	           		
+    	    			throw new DAOException("errors.item.required", new String[]{"Collection Date"});
+    	           		
+    	           	}    	
+    	         	// checks the collectionProcedure
+    	          	if (!validator.isValidOption( collectionEventParameters.getCollectionProcedure() ) )
+    	            {
+    	          		String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
+    	    			throw new DAOException("errors.item.required", new String[]{message});
+    	           		
+    	            }
+     			}
+//     			ReceivedEvent validation
+     			else if(eventObject instanceof ReceivedEventParameters)
+     			{
+     				ReceivedEventParameters receivedEventParameters =  (ReceivedEventParameters)eventObject;
+     				collectionEventUserId = receivedEventParameters.getId();
+//     				if ((receivedEventParameters.getId()) == -1L)
+//     		        {
+//     					throw new DAOException("errors.item.required", new String[]{"Received user"});
+//     		       		
+//     		        }
+     		       	if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY))) 
+     		       	{
+     		       		throw new DAOException("errors.item.required", new String[]{"Received date"});     		       		
+     		       	}
+
+     		     	// checks the collectionProcedure
+     		      	if (!validator.isValidOption(receivedEventParameters.getReceivedQuality() ) )
+     		        {
+     		      		String message = ApplicationProperties.getValue("receivedeventparameters.receivedquality");
+    	    			throw new DAOException("errors.item.required", new String[]{message});     		       		
+     		        }     				
+     			}  		
+     		}
+     	}
+     	//Validations for Biohazard Add-More Block
+     	
+//     	if(specimen.getBiohazardCollection() != null && specimen.getBiohazardCollection().size() != 0)
+//        {
+//     		biohazard = new HashMap();
+//        	
+//        	int i=1;
+//        	
+//        	Iterator it = specimen.getBiohazardCollection().iterator();
+//        	while(it.hasNext())
+//        	{
+//        		String key1 = "Biohazard:" + i + "_type";
+//				String key2 = "Biohazard:" + i + "_id";
+//				String key3 = "Biohazard:" + i + "_persisted";
+//				
+//				Biohazard hazard = (Biohazard)it.next();
+//				
+//				biohazard.put(key1,hazard.getType());
+//				biohazard.put(key2,hazard.getId());
+//				
+//				//boolean for showing persisted value
+//				biohazard.put(key3,"true");
+//				
+//				i++;
+//        	}
+//        	
+//        	bhCounter = specimen.getBiohazardCollection().size();
+//        }
+//        String className = "Biohazard:";
+//        String key1 = "_type";
+//        String key2 = "_" + Constants.SYSTEM_IDENTIFIER;
+//        String key3 = "_persisted";
+//        int index = 1;
+//        
+//        while(true)
+//        {
+//        	String keyOne = className + index + key1;
+//			String keyTwo = className + index + key2;
+//			String keyThree = className + index + key3;
+//			
+//        	String value1 = (String)biohazard.get(keyOne);
+//        	String value2 = (String)biohazard.get(keyTwo);
+//        	String value3 = (String)biohazard.get(keyThree);
+//        	
+//        	if(value1 == null || value2 == null || value3 == null)
+//        	{
+//        		break;
+//        	}
+//        	else if(!validator.isValidOption(value1) && !validator.isValidOption(value2))
+//        	{
+//        		biohazard.remove(keyOne);
+//        		biohazard.remove(keyTwo);
+//        		biohazard.remove(keyThree);
+//        	}
+//        	else if((validator.isValidOption(value1) && !validator.isValidOption(value2)) 
+//        			|| (!validator.isValidOption(value1) && validator.isValidOption( value2)))   		
+//        	{
+//        		String message = ApplicationProperties.getValue("newSpecimen.msg");
+//    			throw new DAOException("errors.newSpecimen.biohazard.missing", new String[]{message});	
+//        		
+//        		
+//        	}
+//        	index++;
+//        }
+     	
+     	
+     	*/
+		//End
 		boolean result;
 
 		if (obj instanceof Collection)
@@ -826,6 +999,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			result = validateSingleSpecimen((Specimen) obj, dao, operation,false);
 		}
 		return result;
+
+		
+		
 	}
 
 	/**

@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
@@ -195,7 +196,126 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
 		Participant participant = (Participant) obj;
+//		 Added by Ashish Gupta
+/*		
+		String message = "";
+		String socialSecurityNumberPartA = "";
+		String socialSecurityNumberPartB = "";
+		String socialSecurityNumberPartC = "";
+		if (participant == null)
+			throw new DAOException("domain.object.null.err.msg", new String[]{"Participant"});
+		Validator validator = new Validator();
+		String errorKeyForBirthDate = "";
+		String errorKeyForDeathDate = "";
 
+		if (!validator.isEmpty(Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY)))
+		{
+			errorKeyForBirthDate = validator.validateDate(Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY),
+					true);
+			if (errorKeyForBirthDate.trim().length() > 0)
+			{
+				message = ApplicationProperties.getValue("participant.birthDate");
+				throw new DAOException(errorKeyForBirthDate, new String[]{message});
+			}
+		}
+
+		if (!validator.isEmpty(Utility.parseDateToString(participant.getDeathDate(),Constants.DATE_PATTERN_MM_DD_YYYY)))
+		{
+			errorKeyForDeathDate = validator.validateDate(Utility.parseDateToString(participant.getDeathDate(),Constants.DATE_PATTERN_MM_DD_YYYY),true);
+			if (errorKeyForDeathDate.trim().length() > 0)
+			{
+				message = ApplicationProperties.getValue("participant.deathDate");
+				throw new DAOException(errorKeyForDeathDate, new String[]{message});
+			}
+		}
+
+		if ((!validator.isEmpty(Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY))) && !validator
+				.isEmpty(Utility.parseDateToString(participant.getDeathDate(),Constants.DATE_PATTERN_MM_DD_YYYY))
+				&& (errorKeyForDeathDate.trim().length() == 0 && errorKeyForBirthDate.trim()
+						.length() == 0))
+		{
+			boolean errorKey1 = validator.compareDates(Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY),
+					Utility.parseDateToString(participant.getDeathDate(),Constants.DATE_PATTERN_MM_DD_YYYY));
+
+			if (!errorKey1)
+			{
+				message = ApplicationProperties.getValue("participant.invaliddate");
+				throw new DAOException("participant.invaliddate",
+						new String[]{message});
+			}
+		}
+		if (participant.getSocialSecurityNumber() != null
+				&& !participant.getSocialSecurityNumber().equals(""))
+		{
+
+			StringTokenizer tok = new StringTokenizer(participant.getSocialSecurityNumber(), "-");
+			socialSecurityNumberPartA = tok.nextToken();
+			socialSecurityNumberPartB = tok.nextToken();
+			socialSecurityNumberPartC = tok.nextToken();
+
+		}
+		String socialSecurityNumber = socialSecurityNumberPartA + "-" + socialSecurityNumberPartB
+				+ "-" + socialSecurityNumberPartC;
+		if (!validator.isEmpty(socialSecurityNumberPartA + socialSecurityNumberPartB
+				+ socialSecurityNumberPartC)
+				&& !validator.isValidSSN(socialSecurityNumber))
+		{
+			message = ApplicationProperties.getValue("participant.socialSecurityNumber");
+			throw new DAOException("errors.invalid",
+					new String[]{message});
+		}
+
+		//Validation for Blank Participant 
+		if (validator.isEmpty(participant.getLastName())
+				&& validator.isEmpty(participant.getFirstName())
+				&& validator.isEmpty(participant.getMiddleName())
+				&& validator.isEmpty(participant.getBirthDate().toString())
+				&& (validator.isEmpty(participant.getDeathDate().toString()))
+				&& !validator.isValidOption(participant.getGender())
+				&& !validator.isValidOption(participant.getVitalStatus())
+				&& !validator.isValidOption(participant.getSexGenotype())
+				&& participant.getEthnicity().equals("-1")
+				&& validator.isEmpty(socialSecurityNumberPartA + socialSecurityNumberPartB
+						+ socialSecurityNumberPartC))
+		{			
+			throw new DAOException(ApplicationProperties.getValue("errors.participant.atLeastOneFieldRequired"));
+		}
+
+		//Validations for Add-More Block
+//		 String className = "ParticipantMedicalIdentifier:";
+//		 String key1 = "_Site_" + Constants.SYSTEM_IDENTIFIER;
+//		 String key2 = "_medicalRecordNumber";
+//		 String key3 = "_" + Constants.SYSTEM_IDENTIFIER;
+//		 int index = 1;
+//
+//		 while(true)
+//		 {
+//		 String keyOne = className + index + key1;
+//		 String keyTwo = className + index + key2;
+//		 String keyThree = className + index + key3;
+//		 
+//		 String value1 = (String)values.get(keyOne);
+//		 String value2 = (String)values.get(keyTwo);
+//		 
+//		 if(value1 == null || value2 == null)
+//		 {
+//		 break;
+//		 }
+//		 else if(!validator.isValidOption(value1) && value2.trim().equals(""))
+//		 {
+//		 values.remove(keyOne);
+//		 values.remove(keyTwo);
+//		 values.remove(keyThree);
+//		 }
+//		 else if((validator.isValidOption(value1) && value2.trim().equals("")) || (!validator.isValidOption(value1) && !value2.trim().equals("")))
+//		 {
+//		 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.participant.missing",ApplicationProperties.getValue("participant.msg")));
+//		 break;
+//		 }
+//		 index++;
+//		 }
+*/
+		// END
 		List genderList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENDER, null);
 
 		if (!Validator.isEnumeratedOrNullValue(genderList, participant.getGender()))
