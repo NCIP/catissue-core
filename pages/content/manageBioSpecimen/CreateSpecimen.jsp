@@ -601,6 +601,8 @@
 				  		<td align="right" colspan="4">
 							<%
 								String changeAction = "setFormAction('"+formName+"')";
+								String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+								String submitAndDistribute = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
 				 			%>
 							<!-- action buttons begins -->
 							<table cellpadding="4" cellspacing="0" border="0">
@@ -610,6 +612,15 @@
 						   					<bean:message key="buttons.submit"/>
 						   				</html:submit>
 						   			</td>
+									<td class="formFieldNoBorders" nowrap>
+										<html:button
+											styleClass="actionButton" property="submitAndDistributeButton"
+											title="<%=Constants.SPECIMEN_BUTTON_TIPS[4]%>"
+											value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[4][0]%>"
+											onclick="<%=submitAndDistribute%>">
+										</html:button>
+									</td>
+									
 									<%-- <td colspan="3">
 										<html:reset styleClass="actionButton">
 											<bean:message key="buttons.reset"/>

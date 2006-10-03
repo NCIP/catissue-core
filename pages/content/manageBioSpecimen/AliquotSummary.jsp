@@ -19,7 +19,9 @@
 
 <html:errors/>
 
-<html:form action="<%=Constants.ALIQUOT_ACTION%>">
+<html:form action="<%=Constants.ALIQUOT_SUMMARY_ACTION%>">
+
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
@@ -35,7 +37,7 @@
 
 <tr>
 <td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 		
 	<tr>
 		<td class="formTitle" height="20" colspan="3">
@@ -142,13 +144,13 @@
 	</tr>
 	</table>
 	
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 	<tr>
 		<td class="formLeftSubTableTitle" width="5">
 	     	#
 	    </td>
 	    <td class="formLeftSubTableTitle" width="5">
-	     	Id
+	     	<bean:message key="specimen.label"/>
 	    </td>
 	    <td class="formRightSubTableTitle">
 			<bean:message key="specimen.quantity"/>
@@ -173,6 +175,7 @@
 
 		for(int i=1;i<=counter;i++)
 		{
+			String labelKey = "value(Specimen:" + i + "_label)";
 			String qtyKey = "value(Specimen:" + i + "_quantity)";
 			String barKey = "value(Specimen:" + i + "_barcode)";
 			String containerKey = "value(Specimen:" + i + "_StorageContainer_id)";
@@ -189,7 +192,7 @@
 		     	<%=i%>.
 		    </td>
 		    <td class="formField" width="5">
-		     	<%=id%>
+		     	<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="label" property="<%=labelKey%>" readonly="true"/>				
 		    </td>
 		    <td class="formField" nowrap>
 				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="quantity" property="<%=qtyKey%>" readonly="true"/>
@@ -215,6 +218,24 @@
 	%>
 	</table>
 </td>
+</tr>
+
+<tr>
+	<td align="right" class="formFieldNoBorders" nowrap>
+		<html:hidden property="submittedFor" value="ForwardTo"/>
+		<html:hidden property="forwardTo" value="distribution"/>
+		<html:hidden property="noOfAliquots"/>
+		<%
+			String formName=Constants.ALIQUOT_SUMMARY_ACTION;
+			String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";			
+		%>		
+		<html:button
+			styleClass="actionButton" property="submitAndDistributeButton"
+			title="<%=Constants.SPECIMEN_BUTTON_TIPS[4]%>"
+			value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[4][0]%>"
+			onclick="<%=confirmDisableFuncName%>">
+		</html:button>
+	</td>
 </tr>
 
 </table>
