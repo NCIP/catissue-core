@@ -235,7 +235,13 @@ public class UserBizLogic extends DefaultBizLogic
 	{
 		User user = (User) obj;
 		User oldUser = (User) oldObj;
-
+		
+		boolean isLoginUserUpdate = false;
+		if(sessionDataBean.getUserName().equals(oldUser.getLoginName())) 
+		{
+			isLoginUserUpdate = true;
+		}
+		
 		//If the user is rejected, its record cannot be updated.
 		if (Constants.ACTIVITY_STATUS_REJECT.equals(oldUser.getActivityStatus()))
 		{
@@ -312,14 +318,20 @@ public class UserBizLogic extends DefaultBizLogic
 				// Audit of user address.
 				dao.audit(user.getAddress(), oldUser.getAddress(), sessionDataBean, true);
 			}
-
-			// Modify the csm user.
-			SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
+			
 			if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD)) 
 			{
 			    user.setFirstTimeLogin(new Boolean(false));
 			}
-			dao.update(user, sessionDataBean, true, true, true);
+			dao.update(user, sessionDataBean, true, true, true);  
+			
+			//Modify the csm user.
+			SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
+			
+			if(isLoginUserUpdate)
+			{
+				sessionDataBean.setUserName(csmUser.getLoginName());
+			}
 
 			//Audit of user.
 			dao.audit(obj, oldObj, sessionDataBean, true);
