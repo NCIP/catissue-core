@@ -270,6 +270,20 @@
 		document.forms[0].submit();
 	}
 	
+	function onSubmit(theSelTo)
+	{		
+		if(theSelTo.length==0)
+		{
+			alert("We need to add atleast one column to define view");
+		}
+		else
+		{
+			var action = "<%=callAction%>";
+			alert(action);
+			onClickAction(action);
+		}
+	}
+	
 </script>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -381,7 +395,8 @@
 			                	<bean:message key="buttons.down"/>
 				            </html:button> 
 			            </td>
-		        	</tr>
+		        	</tr>
+
        			</table>
       		</td>
       	</tr>
@@ -392,7 +407,7 @@
 				<tr>
 	   				<td>
 	   					<%String nAction =  "onClickAction('"+callAction+"')";%>
-	   					<html:button styleClass="actionButton" property="configButton" onclick = "<%=nAction%>">
+	   					<html:button styleClass="actionButton" property="configButton" onclick = "onSubmit(this.form.selectedColumnNames);" >
 	   						<bean:message key="buttons.submit"/>
 	   					</html:button>
 	   				</td>
