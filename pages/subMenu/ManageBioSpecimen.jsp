@@ -76,26 +76,28 @@
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
 				<b><bean:message key="app.newSpecimen" /> </b>
 		</div>
-		<div>
+		<div> Add: 
 			<a class="subMenuPrimary" href="NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&menuSelected=15">
-				<bean:message key="app.add" />
+				<bean:message key="specimen.menu.singleAdd" />
 			</a> | 
-			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen&menuSelected=15" ><bean:message key="app.edit" /></a>
-			 | <a class="subMenuPrimary" href="CreateSpecimen.do?operation=add&amp;pageOf=&menuSelected=15">
-				<bean:message key="app.createSpecimen" />	</a> 
+			<a class="subMenuPrimary" href="InitMultipleSpecimen.do?menuSelected=15">
+				<bean:message key="specimen.menu.multipleAdd" />			
+			</a> |
+			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen&menuSelected=15" >
+				<bean:message key="app.edit" />
+			</a>			
 		</div>
 		<div>
+			<a class="subMenuPrimary" href="CreateSpecimen.do?operation=add&amp;pageOf=&menuSelected=15">
+				<bean:message key="app.createSpecimen" />
+			</a> | 
 			<a class="subMenuPrimary" href="Aliquots.do?pageOf=pageOfAliquot&menuSelected=15">
 				<bean:message key="app.aliquots" />
 			</a> |
 			<a class="subMenuPrimary" href="QuickEvents.do?operation=add&menuSelected=15">
 				<bean:message key="quickEvents.link" />
 			</a>
-		</div>
-		<div>
-			<a class="subMenuPrimary" href="InitMultipleSpecimen.do?menuSelected=15">Multiple specimens</a>
-		</div>
-		
+		</div>		
 	</td>
 </tr>
 
@@ -103,25 +105,23 @@
         strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 20, normalMenuClass , selectedMenuClass , hoverMenuClass);
 %>
 <tr>
-                    <%=strMouseOut%>
-                    <div>
-                                <!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
-                                            <b><bean:message key="app.newSpecimenArray" /> </b>
-                    </div>
-                    <div>
-                                <a class="subMenuPrimary" href="SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20">
-                                            <bean:message key="app.add" />
-                                </a> |
-                                <a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSpecimenArray&amp;aliasName=SpecimenArray&amp;menuSelected=20">
-                                            <bean:message key="app.edit"/>
-                                </a>            
-                    </div>
-                    <div>
-						<a class="subMenuPrimary" href="SpecimenArrayAliquots.do?pageOf=pageOfSpecimenArrayAliquot&menuSelected=20">
-							<bean:message key="app.aliquots" />
-						</a>			
-					</div>
-        </td>
+        <%=strMouseOut%>
+        <div>
+            <!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--> 
+                        <b><bean:message key="app.newSpecimenArray" /> </b>
+        </div>
+        <div>
+            <a class="subMenuPrimary" href="SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20">
+                        <bean:message key="app.add" />
+            </a> |
+            <a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSpecimenArray&amp;aliasName=SpecimenArray&amp;menuSelected=20">
+                        <bean:message key="app.edit"/>
+            </a> |  
+			<a class="subMenuPrimary" href="SpecimenArrayAliquots.do?pageOf=pageOfSpecimenArrayAliquot&menuSelected=20">
+				<bean:message key="app.aliquots" />
+			</a>		
+        </div>                  
+    </td>
 
 </tr>
 
