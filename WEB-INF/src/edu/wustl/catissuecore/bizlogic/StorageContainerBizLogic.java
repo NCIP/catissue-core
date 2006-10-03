@@ -1878,6 +1878,164 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
 		StorageContainer container = (StorageContainer) obj;
+		
+		//Added by Ashish
+		/*
+		String message = "";
+		if (container == null)
+			throw new DAOException("domain.object.null.err.msg", new String[]{"Storage Container"});
+		Validator validator = new Validator();
+		if (container.getStorageType().getId() == -1)
+		{
+			message = ApplicationProperties.getValue("storageContainer.type");
+			throw new DAOException("errors.item.required", new String[]{message});
+			
+		}
+		
+
+		if (container.getSite().getId() == -1 && container.getNoOfContainers() == 1)
+		{
+			message = ApplicationProperties.getValue("storageContainer.site");
+			throw new DAOException("errors.item.required", new String[]{message});
+			
+		}
+		 if (container.getNoOfContainers() == 1)
+		{
+			if (!validator.isNumeric(String.valueOf(container.getPositionDimensionOne()), 1)
+					|| !validator.isNumeric(String.valueOf(container.getPositionDimensionTwo()), 1)
+					|| !validator.isNumeric(String.valueOf(container.getParent().getId()), 1))
+			{
+				message = ApplicationProperties.getValue("storageContainer.parentContainer");
+				throw new DAOException("errors.item.format", new String[]{message});
+				
+			}
+			long longValue = Long.parseLong(String.valueOf(container.getNoOfContainers()));
+            if (longValue <= 0)
+            {
+            	message = ApplicationProperties.getValue("storageContainer.noOfContainers");
+				throw new DAOException("errors.item.format", new String[]{message});            	
+            }
+			
+		}			
+		
+		//validations for Container name
+		if (validator.isEmpty(container.getName()) && container.getNoOfContainers() == 1)
+		{
+			message = ApplicationProperties.getValue("storageContainer.name");
+			throw new DAOException("errors.item.required", new String[]{message});			
+		}
+
+		//validation for collection protocol
+		if (container.getCollectionProtocolCollection().size() > 1)
+		{
+			Iterator collectionProtocolIterator = container.getCollectionProtocolCollection().iterator();
+			while(collectionProtocolIterator.hasNext())
+			{
+				if (((Long)collectionProtocolIterator.next()).longValue() == -1)
+				{
+					message = ApplicationProperties.getValue("storageContainer.collectionProtocolTitle");
+					throw new DAOException("errors.item.format", new String[]{message});					
+				}
+			}
+		}
+
+		//validation for holds storage type
+		if (container.getHoldsStorageTypeCollection() != null && container.getHoldsStorageTypeCollection().size() > 1)
+		{
+			Iterator iter = container.getHoldsStorageTypeCollection().iterator();
+			while(iter.hasNext())
+			{
+				if (((StorageType)iter.next()).getId() == 1)
+				{
+					message = ApplicationProperties.getValue("storageContainer.containerType");
+					throw new DAOException("errors.item.format", new String[]{message});
+					
+				}
+			}
+		}
+		
+		//validation for holds specimen class
+		//new chnage checkValidSelectionForAny(holdsSpecimenClassTypeIds, "storageContainer.specimenType",
+		//		errors);
+
+		
+		// validations for temperature
+		if (!validator.isEmpty(container.getTempratureInCentigrade().toString())
+				&& (!validator.isDouble(container.getTempratureInCentigrade().toString(), false)))
+		{
+			message = ApplicationProperties.getValue("storageContainer.temperature");
+			throw new DAOException("errors.item.format", new String[]{message});
+			
+		}
+
+		//VALIDATIONS FOR DIMENSION 1.
+		if (validator.isEmpty(String.valueOf(container.getPositionDimensionOne())))
+		{
+			message = ApplicationProperties.getValue("storageContainer.oneDimension");
+			throw new DAOException("errors.item.required", new String[]{message});
+			
+		}
+		else
+		{
+			if (!validator.isNumeric(String.valueOf(container.getPositionDimensionOne())))
+			{
+				message = ApplicationProperties.getValue("storageContainer.oneDimension");
+				throw new DAOException("errors.item.format", new String[]{message});
+				
+			}
+		}
+
+		//Validations for dimension 2
+		if (!validator.isEmpty(String.valueOf(container.getPositionDimensionTwo()))
+				&& (!validator.isNumeric(String.valueOf(container.getPositionDimensionTwo()))))
+		{
+			message = ApplicationProperties.getValue("storageContainer.twoDimension");
+			throw new DAOException("errors.item.format", new String[]{message});
+			
+		}
+
+//		if (container.getNoOfContainers() > 1 && this.getSimilarContainersMap().size()>0)
+//		{
+//			for (int i = 1; i <= this.noOfContainers; i++)
+//			{
+//				String iBarcode = (String) this.getSimilarContainerMapValue("simCont:" + i + "_barcode"); //simCont:1_barcode
+//				if (iBarcode != null && iBarcode.equals("")) // this is done because barcode is empty string set by struts
+//				{ // but barcode in DB is unique but can be null.
+//					this.setSimilarContainerMapValue("simCont:" + i + "_barcode", null);
+//				}
+//				
+//				int checkedButtonStatus = Integer.parseInt((String) getSimilarContainerMapValue("checkedButton"));
+//				String siteId = (String) getSimilarContainerMapValue("simCont:" + i + "_siteId");
+//				if (checkedButtonStatus == 2 || siteId == null)
+//				{
+//					String parentContId = (String) getSimilarContainerMapValue("simCont:" + i
+//							+ "_parentContainerId");
+//					String positionDimensionOne = (String) getSimilarContainerMapValue("simCont:" + i
+//							+ "_positionDimensionOne");
+//					String positionDimensionTwo = (String) getSimilarContainerMapValue("simCont:" + i
+//							+ "_positionDimensionTwo");
+//					
+//					if (parentContId.equals("-1") || positionDimensionOne.equals("-1")
+//							|| positionDimensionTwo.equals("-1"))
+//					{
+//						message = ApplicationProperties.getValue("storageContainer.location");
+//						throw new DAOException("errors.item.required", new String[]{message});
+//						
+//					}
+//				}
+//				else
+//				{
+//					if (siteId.equals("-1"))
+//					{
+//						message = ApplicationProperties.getValue("storageContainer.site");
+//						throw new DAOException("errors.item.required", new String[]{message});
+//						
+//					}
+//				}
+//			}
+//		}
+		*/
+		//End
 		if (operation.equals(Constants.ADD))
 		{
 			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(container.getActivityStatus()))
