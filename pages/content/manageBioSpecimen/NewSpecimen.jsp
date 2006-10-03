@@ -315,6 +315,21 @@
 				document.forms[0].mapButton.disabled = false;
 			}
 		}
+		
+		function eventClicked()
+		{			
+			var answer = confirm("Do you want to submit any changes?");
+			var formName;
+			if (answer){
+				setSubmittedFor('ForwardTo','eventParameters');
+				formName = "NewSpecimenEdit.do";
+			}
+			else{
+				var id = document.forms[0].id.value;			
+				formName = "ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&specimenId="+id+"&menuSelected=15";				
+			}			
+			confirmDisable(formName,document.forms[0].activityStatus);
+		}
 	</script>
 </head>
 
@@ -403,7 +418,7 @@
 				<%
 					String eventLinkAction = "'ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&menuSelected=15&specimenId="+form.getId()+"'" ;
 				%>
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="<%=addEventsSubmit%>">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="eventClicked();">
 					<bean:message key="tab.specimen.eventparameters"/>
 				</td>
 
