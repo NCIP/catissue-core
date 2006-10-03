@@ -923,6 +923,7 @@ PUBLIC
 			<forward name="success" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
 			<forward name="failure" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
 			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
+			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=15" />
 		</action>
 		
 		<action path="/CreateSpecimenEdit"
@@ -933,6 +934,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.createSpecimenEditSuccessDef" />
 			<forward name="failure" path="/error.jsp" />
+			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=15" />
 		</action>
 		
 		<action path="/CreateSpecimenSearch"
@@ -2602,6 +2604,16 @@ PUBLIC
 		<forward name="success" path="/Aliquots.do?pageOf=pageOfAliquotSummary&amp;menuSelected=15" />
 		<forward name="failure" path="/Aliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15" />
 	</action>
+	
+	
+	<action path="/AliquotSummary"
+		type="edu.wustl.catissuecore.action.AliquotSummaryAction"
+		name="aliquotForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16"/>
+		<forward name="failure" path="/Aliquots.do?pageOf=pageOfAliquotSummary&amp;menuSelected=15" />
+	</action>	
 
 	<!-- Aliquots Action -->
 	
