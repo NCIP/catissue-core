@@ -6,6 +6,7 @@
  * @version 1.1
  * Created on Aug 28,2006
  */
+
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
@@ -13,7 +14,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+
 import edu.wustl.catissuecore.domain.CellSpecimen;
+import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.QuantityInMicrogram;
@@ -28,89 +33,100 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
-
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 
 /**
  * <p>This class initializes the fields of SpecimenArrayBizLogic.java</p>
  * @author Ashwin Gupta
  * @version 1.1
  */
-public class SpecimenArrayBizLogic extends DefaultBizLogic {
-	
+public class SpecimenArrayBizLogic extends DefaultBizLogic
+{
+
 	/**
 	 * @see edu.wustl.common.bizlogic.AbstractBizLogic#insert(java.lang.Object, edu.wustl.common.dao.DAO, edu.wustl.common.beans.SessionDataBean)
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) 
-					throws DAOException, UserNotAuthorizedException 
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
+			throws DAOException, UserNotAuthorizedException
 	{
 		SpecimenArray specimenArray = (SpecimenArray) obj;
-		doUpdateSpecimenArrayContents(specimenArray,dao,sessionDataBean,true);
-		
-		dao.insert(specimenArray.getCapacity(),sessionDataBean, true, false);
-		dao.insert(specimenArray,sessionDataBean,true,false);
+		doUpdateSpecimenArrayContents(specimenArray, dao, sessionDataBean, true);
+
+		dao.insert(specimenArray.getCapacity(), sessionDataBean, true, false);
+		dao.insert(specimenArray, sessionDataBean, true, false);
 		SpecimenArrayContent specimenArrayContent = null;
 		// TODO move this method to HibernateDAOImpl for common use (for collection insertion)
-		for (Iterator iter = specimenArray.getSpecimenArrayContentCollection().iterator(); iter.hasNext();) 
+		for (Iterator iter = specimenArray.getSpecimenArrayContentCollection().iterator(); iter
+				.hasNext();)
 		{
 			specimenArrayContent = (SpecimenArrayContent) iter.next();
 			specimenArrayContent.setSpecimenArray(specimenArray);
-			dao.insert(specimenArrayContent,sessionDataBean,true,false);
+			dao.insert(specimenArrayContent, sessionDataBean, true, false);
 		}
 	}
-	
+
 	/**
 	 * @see edu.wustl.common.bizlogic.AbstractBizLogic#update(edu.wustl.common.dao.DAO, java.lang.Object, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException {
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
+			throws DAOException, UserNotAuthorizedException
+	{
 		SpecimenArray specimenArray = (SpecimenArray) obj;
-		doUpdateSpecimenArrayContents(specimenArray,dao,sessionDataBean,false);
-		dao.update(specimenArray.getCapacity(),sessionDataBean, true, false,false);
-		dao.update(specimenArray,sessionDataBean, true, false,false);
+		doUpdateSpecimenArrayContents(specimenArray, dao, sessionDataBean, false);
+		dao.update(specimenArray.getCapacity(), sessionDataBean, true, false, false);
+		dao.update(specimenArray, sessionDataBean, true, false, false);
 		SpecimenArrayContent specimenArrayContent = null;
 		//SpecimenArray oldSpecimenArray = (SpecimenArray) oldObj;
-		Collection oldSpecArrayContents = ((SpecimenArray) oldObj).getSpecimenArrayContentCollection(); 
-		
-		for (Iterator iter = specimenArray.getSpecimenArrayContentCollection().iterator(); iter.hasNext();) 
+		Collection oldSpecArrayContents = ((SpecimenArray) oldObj)
+				.getSpecimenArrayContentCollection();
+
+		for (Iterator iter = specimenArray.getSpecimenArrayContentCollection().iterator(); iter
+				.hasNext();)
 		{
 			specimenArrayContent = (SpecimenArrayContent) iter.next();
 			specimenArrayContent.setSpecimenArray(specimenArray);
 			// increment by 1 because of array index starts from 0.
 			if (specimenArrayContent.getPositionDimensionOne() != null)
-			{	
-				specimenArrayContent.setPositionDimensionOne(new Integer(specimenArrayContent.getPositionDimensionOne().intValue() + 1));
-				specimenArrayContent.setPositionDimensionTwo(new Integer(specimenArrayContent.getPositionDimensionTwo().intValue() + 1));
-			}
-			
-			if (isNewSpecimenArrayContent(specimenArrayContent,oldSpecArrayContents)) 
 			{
-				dao.insert(specimenArrayContent,sessionDataBean,true,false);
+				specimenArrayContent.setPositionDimensionOne(new Integer(specimenArrayContent
+						.getPositionDimensionOne().intValue() + 1));
+				specimenArrayContent.setPositionDimensionTwo(new Integer(specimenArrayContent
+						.getPositionDimensionTwo().intValue() + 1));
+			}
+
+			if (isNewSpecimenArrayContent(specimenArrayContent, oldSpecArrayContents))
+			{
+				dao.insert(specimenArrayContent, sessionDataBean, true, false);
 			}
 			else
 			{
-				dao.update(specimenArrayContent,sessionDataBean,true,false,false);
+				dao.update(specimenArrayContent, sessionDataBean, true, false, false);
 			}
 		}
 	}
-	
+
 	/**
 	 * @param specimenArrayContent array contents
 	 * @param oldSpecArrayContents old spec array contents
 	 * @return whether it is new or old
 	 */
-	private boolean isNewSpecimenArrayContent(SpecimenArrayContent specimenArrayContent,Collection oldSpecArrayContents)
+	private boolean isNewSpecimenArrayContent(SpecimenArrayContent specimenArrayContent,
+			Collection oldSpecArrayContents)
 	{
 		boolean isNew = true;
 		SpecimenArrayContent arrayContent = null;
-		
-		for (Iterator iter = oldSpecArrayContents.iterator(); iter.hasNext();) 
+
+		for (Iterator iter = oldSpecArrayContents.iterator(); iter.hasNext();)
 		{
 			arrayContent = (SpecimenArrayContent) iter.next();
-			
-			if (specimenArrayContent.getId() == null) 
+
+			if (specimenArrayContent.getId() == null)
 			{
 				isNew = true;
 				break;
-			} else if (arrayContent.getId().longValue() == specimenArrayContent.getId().longValue()) 
+			}
+			else if (arrayContent.getId().longValue() == specimenArrayContent.getId().longValue())
 			{
 				isNew = false;
 				break;
@@ -118,7 +134,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 		}
 		return isNew;
 	}
-	
+
 	/**
 	 * @param specimenArray specimen array
 	 * @param dao dao
@@ -127,84 +143,102 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 	 * @throws DAOException 
 	 * @throws UserNotAuthorizedException
 	 */
-	private void doUpdateSpecimenArrayContents(SpecimenArray specimenArray,DAO dao,SessionDataBean sessionDataBean,boolean isInsertOperation)
-				 throws DAOException, UserNotAuthorizedException	
+	private void doUpdateSpecimenArrayContents(SpecimenArray specimenArray, DAO dao,
+			SessionDataBean sessionDataBean, boolean isInsertOperation) throws DAOException,
+			UserNotAuthorizedException
 	{
-		Collection specimenArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
+		Collection specimenArrayContentCollection = specimenArray
+				.getSpecimenArrayContentCollection();
 		Collection updatedSpecArrayContentCollection = new HashSet();
 		SpecimenArrayContent specimenArrayContent = null;
 		Specimen specimen = null;
-		if (specimenArrayContentCollection != null && !specimenArrayContentCollection.isEmpty()) 
+		if (specimenArrayContentCollection != null && !specimenArrayContentCollection.isEmpty())
 		{
 			double quantity = 0.0;
 			// fetch array type to check specimen class
-			List arrayTypes = dao.retrieve(SpecimenArrayType.class.getName(),Constants.SYSTEM_IDENTIFIER,specimenArray.getSpecimenArrayType().getId());
+			List arrayTypes = dao.retrieve(SpecimenArrayType.class.getName(),
+					Constants.SYSTEM_IDENTIFIER, specimenArray.getSpecimenArrayType().getId());
 			SpecimenArrayType arrayType = null;
-			
-			if ((arrayTypes != null) && (!arrayTypes.isEmpty())) {
+
+			if ((arrayTypes != null) && (!arrayTypes.isEmpty()))
+			{
 				arrayType = (SpecimenArrayType) arrayTypes.get(0);
 			}
-			
-			for (Iterator iter = specimenArrayContentCollection.iterator(); iter.hasNext();) 
+
+			for (Iterator iter = specimenArrayContentCollection.iterator(); iter.hasNext();)
 			{
 				specimenArrayContent = (SpecimenArrayContent) iter.next();
-				specimen = getSpecimen(dao,specimenArrayContent);
-				if(specimen != null)
+				specimen = getSpecimen(dao, specimenArrayContent);
+				if (specimen != null)
 				{
-					 // check whether array & specimen are compatible on the basis of class
-					 if (!isArrayAndSpecimenCompatibile(arrayType,specimen))
-					 {
-						 throw new DAOException(Constants.ARRAY_SPEC_NOT_COMPATIBLE_EXCEPTION_MESSAGE);
-					 }
-					 
-					 // set quantity object to null when there is no value.. [due to Hibernate exception]
-					 if (specimenArrayContent.getInitialQuantity() != null)
-					 {
-						 if (specimenArrayContent.getInitialQuantity().getValue() == null)
-						 {
-							 specimenArrayContent.setInitialQuantity(null);
-						 }
-					 }
-					 
-					  // if molecular then check available quantity
-					 if (specimen instanceof MolecularSpecimen)
-					 {
-						 	if (specimenArrayContent.getInitialQuantity() != null)
-						 	{	
-							  quantity = specimenArrayContent.getInitialQuantity().getValue().doubleValue();
-								 // incase if specimenArray is created from aliquot page, then skip the Available quantity of specimen. 
-							  if(!specimenArray.isAliquot()) 
-							  {
-								  if (!isAvailableQty(specimen,quantity))
-								  {
-										  throw new DAOException(" Quantity '" + quantity + "' should be less than current Distributed Quantity '" + specimen.getAvailableQuantity().getValue().doubleValue() + "' of specimen :: " + specimen.getLabel());				  	
-								  }
-							  }
-							  if (specimenArrayContent.getInitialQuantity().getId() == null) 
-							  {
-								dao.insert(specimenArrayContent.getInitialQuantity(),sessionDataBean,true,false);
-							  } else {
-								dao.update(specimenArrayContent.getInitialQuantity(),sessionDataBean,true,false,false);  
-							  }
-						 	}
-						 	else
-						 	{
-						 		throw new DAOException(Constants.ARRAY_MOLECULAR_QUAN_EXCEPTION_MESSAGE + specimen.getLabel());						 		
-						 	}
-					 }
-					 specimenArrayContent.setSpecimen(specimen);
-					 updatedSpecArrayContentCollection.add(specimenArrayContent);
+					// check whether array & specimen are compatible on the basis of class
+					if (!isArrayAndSpecimenCompatibile(arrayType, specimen))
+					{
+						throw new DAOException(
+								Constants.ARRAY_SPEC_NOT_COMPATIBLE_EXCEPTION_MESSAGE);
+					}
+
+					// set quantity object to null when there is no value.. [due to Hibernate exception]
+					if (specimenArrayContent.getInitialQuantity() != null)
+					{
+						if (specimenArrayContent.getInitialQuantity().getValue() == null)
+						{
+							specimenArrayContent.setInitialQuantity(null);
+						}
+					}
+
+					// if molecular then check available quantity
+					if (specimen instanceof MolecularSpecimen)
+					{
+						if (specimenArrayContent.getInitialQuantity() != null)
+						{
+							quantity = specimenArrayContent.getInitialQuantity().getValue()
+									.doubleValue();
+							// incase if specimenArray is created from aliquot page, then skip the Available quantity of specimen. 
+							if (!specimenArray.isAliquot())
+							{
+								if (!isAvailableQty(specimen, quantity))
+								{
+									throw new DAOException(
+											" Quantity '"
+													+ quantity
+													+ "' should be less than current Distributed Quantity '"
+													+ specimen.getAvailableQuantity().getValue()
+															.doubleValue() + "' of specimen :: "
+													+ specimen.getLabel());
+								}
+							}
+							if (specimenArrayContent.getInitialQuantity().getId() == null)
+							{
+								dao.insert(specimenArrayContent.getInitialQuantity(),
+										sessionDataBean, true, false);
+							}
+							else
+							{
+								dao.update(specimenArrayContent.getInitialQuantity(),
+										sessionDataBean, true, false, false);
+							}
+						}
+						else
+						{
+							throw new DAOException(Constants.ARRAY_MOLECULAR_QUAN_EXCEPTION_MESSAGE
+									+ specimen.getLabel());
+						}
+					}
+					specimenArrayContent.setSpecimen(specimen);
+					updatedSpecArrayContentCollection.add(specimenArrayContent);
 				}
 			}
-			
+
 			// There should be at least one valid specimen in array
-			if (updatedSpecArrayContentCollection.isEmpty()) {
+			if (updatedSpecArrayContentCollection.isEmpty())
+			{
 				throw new DAOException(Constants.ARRAY_NO_SPECIMEN__EXCEPTION_MESSAGE);
 			}
 		}
 		specimenArray.setSpecimenArrayContentCollection(updatedSpecArrayContentCollection);
 	}
-	
+
 	/**
 	 * @param specimen specimen
 	 * @param quantity quantity
@@ -212,12 +246,13 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 	 */
 	private boolean isAvailableQty(Specimen specimen, double quantity)
 	{
-		
-		if(specimen instanceof MolecularSpecimen)
+
+		if (specimen instanceof MolecularSpecimen)
 		{
 			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
-			double availabeQty = Double.parseDouble(molecularSpecimen.getAvailableQuantity().toString());//molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
-			if(quantity > availabeQty)
+			double availabeQty = Double.parseDouble(molecularSpecimen.getAvailableQuantity()
+					.toString());//molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
+			if (quantity > availabeQty)
 				return false;
 			else
 			{
@@ -227,50 +262,56 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * @param dao dao
 	 * @param arrayContent
 	 * @return
 	 * @throws DAOException
 	 */
-	private Specimen getSpecimen(DAO dao,SpecimenArrayContent arrayContent) throws DAOException
+	private Specimen getSpecimen(DAO dao, SpecimenArrayContent arrayContent) throws DAOException
 	{
 		//get list of Participant's names
 		Specimen specimen = arrayContent.getSpecimen();
-		
+
 		if (specimen != null)
 		{
 			String columnName = null;
 			String columnValue = null;
-			
-			if ((specimen.getLabel() != null) && (!specimen.getLabel().trim().equals(""))) 
+
+			if ((specimen.getLabel() != null) && (!specimen.getLabel().trim().equals("")))
 			{
 				columnName = Constants.SPECIMEN_LABEL_COLUMN_NAME;
 				columnValue = specimen.getLabel();
-			} else if ((specimen.getBarcode() != null) && (!specimen.getBarcode().trim().equals(""))) 
+			}
+			else if ((specimen.getBarcode() != null) && (!specimen.getBarcode().trim().equals("")))
 			{
 				columnName = Constants.SPECIMEN_BARCODE_COLUMN_NAME;
 				columnValue = specimen.getBarcode();
-			} else {
+			}
+			else
+			{
 				return null;
 			}
 			String sourceObjectName = Specimen.class.getName();
 			String whereColumnName = columnName;
 			String whereColumnValue = columnValue;
-	
-			List list = dao.retrieve(sourceObjectName, whereColumnName,whereColumnValue);
+
+			List list = dao.retrieve(sourceObjectName, whereColumnName, whereColumnValue);
 			if (!list.isEmpty())
 			{
 				specimen = (Specimen) list.get(0);
 				//return specimenCollectionGroup;
-			} else {
-				throw new DAOException(Constants.ARRAY_SPECIMEN_DOES_NOT_EXIST_EXCEPTION_MESSAGE + columnValue);
 			}
-	  }
+			else
+			{
+				throw new DAOException(Constants.ARRAY_SPECIMEN_DOES_NOT_EXIST_EXCEPTION_MESSAGE
+						+ columnValue);
+			}
+		}
 		return specimen;
 	}
-	
+
 	/**
 	 * @param array array
 	 * @param specimen specimen 
@@ -279,18 +320,19 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 	 *  | 
 	 *   ----- on the basis of specimen class
 	 */
-	private boolean isArrayAndSpecimenCompatibile(SpecimenArrayType arrayType,Specimen specimen) {
+	private boolean isArrayAndSpecimenCompatibile(SpecimenArrayType arrayType, Specimen specimen)
+	{
 		boolean compatible = false;
 		String arraySpecimenClassName = arrayType.getSpecimenClass();
 		String specSpecimenClassName = getClassName(specimen);
-		
-		if (arraySpecimenClassName.equals(specSpecimenClassName)) 
+
+		if (arraySpecimenClassName.equals(specSpecimenClassName))
 		{
 			compatible = true;
 		}
 		return compatible;
 	}
-	
+
 	/**
 	 * This function returns the actual type of the specimen i.e Cell / Fluid / Molecular / Tissue.
 	 */
@@ -317,4 +359,50 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic {
 		}
 		return className;
 	}
+
+	
+	// Added by Ashish
+	/*
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	{
+		SpecimenArray specimenArray = (SpecimenArray) obj;
+		if (specimenArray == null)
+			throw new DAOException("domain.object.null.err.msg", new String[]{"Specimen Array"});
+		Validator validator = new Validator();
+		if (specimenArray.getSpecimenArrayType().getId() == -1)
+		{
+			String message = ApplicationProperties.getValue("array.arrayType");
+			throw new DAOException("errors.item.required", new String[]{message});
+
+		}
+		//	validate name of array
+		if (validator.isEmpty(specimenArray.getName()))
+		{
+			String message = ApplicationProperties.getValue("array.arrayLabel");
+			throw new DAOException("errors.item.required", new String[]{message});
+
+		}
+
+		// validate storage position
+		if (!validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionOne()), 1)
+				|| !validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionTwo()), 1)
+				|| !validator.isNumeric(
+						String.valueOf(specimenArray.getStorageContainer().getId()), 1))
+		{
+			String message = ApplicationProperties.getValue("array.positionInStorageContainer");
+			throw new DAOException("errors.item.format", new String[]{message});
+
+		}
+
+		// validate user 
+		if (!validator.isValidOption(String.valueOf(specimenArray.getCreatedBy().getId())))
+		{
+			String message = ApplicationProperties.getValue("array.user");
+			throw new DAOException("errors.item.required", new String[]{message});
+
+		}
+		return true;
+	}
+	*/
+	//END
 }
