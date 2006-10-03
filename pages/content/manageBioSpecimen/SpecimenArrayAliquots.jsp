@@ -139,13 +139,8 @@
 							<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcode" property="barcode"/>
 						</logic:equal>
 					</td>
-					<td class="formRequiredLabelBoth" width="5">&nbsp;</td>
-					<td class="formLabel">
-						<bean:message key="specimenArrayAliquots.qtyPerAliquot"/>
-					</td>
-					<td class="formField">
-						<html:text styleClass="formFieldSized5"  maxlength="50"  size="30" styleId="quantityPerAliquot" property="quantityPerAliquot" disabled="true"/>
-					</td>
+					<td class="formRequiredLabel" width="5" colspan="3">&nbsp;</td>
+					
 				</tr>
 				
 				<tr>
