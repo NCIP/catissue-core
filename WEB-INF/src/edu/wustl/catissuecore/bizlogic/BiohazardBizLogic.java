@@ -12,6 +12,9 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -27,19 +30,42 @@ import edu.wustl.common.util.global.Validator;
  */
 public class BiohazardBizLogic extends DefaultBizLogic
 {
-	/**
-     * Overriding the parent class's method to validate the enumerated attribute values
-     */
-	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
-    {
-		Biohazard hazard = (Biohazard)obj;
-		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD, null);
 
-		if(!Validator.isEnumeratedValue(biohazardList,hazard.getType()))
+	/**
+	 * Overriding the parent class's method to validate the enumerated attribute values
+	 */
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	{
+		Biohazard hazard = (Biohazard) obj;
+		String message = "";
+		// Added by Ashish
+/*		if (hazard == null)
+		{
+			message = ApplicationProperties.getValue("app.biohazard");
+			throw new DAOException("domain.object.null.err.msg", new String[]{message});
+		}
+
+		Validator validator = new Validator();
+		if (validator.isEmpty(hazard.getName()))
+		{
+			message = ApplicationProperties.getValue("biohazard.name");
+			throw new DAOException("errors.item.required", new String[]{message});
+		}
+
+		if (!validator.isValidOption(hazard.getType()))
+		{
+			message = ApplicationProperties.getValue("biohazard.type");
+			throw new DAOException("errors.item.selected", new String[]{message});
+
+		}  */
+		//END
+		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_BIOHAZARD, null);
+		if (!Validator.isEnumeratedValue(biohazardList, hazard.getType()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("type.errMsg"));
 		}
-		
+
 		return true;
-    }
+	}
 }
