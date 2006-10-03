@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
@@ -116,24 +117,46 @@ public class DistributionAction extends SpecimenEventParametersAction {
         if (forwardToHashMap != null) {
             Object specimenObjectOrList = forwardToHashMap.get(
                     "specimenObjectKey");
-
-            if (specimenObjectOrList instanceof Specimen) {
-                addDistributionSample((DistributionForm) form, 1,
-                    (Specimen) specimenObjectOrList);
-            } else {
-                List specimenIdList = (List) specimenObjectOrList;
-                DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance()
-                                                                                 .getBizLogic(Constants.DISTRIBUTION_FORM_ID);
-
-                for (int i = 0; i < specimenIdList.size(); i++) {
-                    Long specimenId = Long.getLong((String) specimenIdList.get(
-                                i));
-                    List list = dao.retrieve(Specimen.class.getName(),
-                            Constants.SYSTEM_IDENTIFIER, specimenId);
-                    Specimen specimen = (Specimen) list.get(0);
-                    addDistributionSample((DistributionForm) form, i + 1,
-                        (Specimen) specimen);
-                }
+            if(specimenObjectOrList != null)
+            {
+	            if (specimenObjectOrList instanceof Specimen) {
+	                addDistributionSample((DistributionForm) form, 1,
+	                    (Specimen) specimenObjectOrList);
+	            } else {
+	                List specimenIdList = (List) specimenObjectOrList;
+	                DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance()
+	                                                                                 .getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+	
+	                for (int i = 0; i < specimenIdList.size(); i++) {
+	                    Long specimenId = Long.getLong((String) specimenIdList.get(
+	                                i));
+	                    List list = dao.retrieve(Specimen.class.getName(),
+	                            Constants.SYSTEM_IDENTIFIER, specimenId);
+	                    Specimen specimen = (Specimen) list.get(0);
+	                    addDistributionSample((DistributionForm) form, i + 1,
+	                        (Specimen) specimen);
+	                }
+	            }
+            }
+            else //If forwarded from Aliquout Summary page;
+            {
+            	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+            	String noOfAliquots = (String) forwardToHashMap.get("noOfAliquots");
+            	String labelKey;
+            	List specimenList;
+            	for (int i = 0; i < Integer.valueOf(noOfAliquots).intValue(); i++) {
+            		labelKey = "Specimen:" + (i+1) + "_label";
+            		String label = (String) forwardToHashMap.get(labelKey);            		
+            		specimenList = bizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, label);
+            		if (!specimenList.isEmpty())
+            		{
+            			Specimen specimen = (Specimen) specimenList.get(0);
+            			addDistributionSample((DistributionForm) form, i + 1,
+    	                        (Specimen) specimen);
+            		}
+            		
+            	}
+            	
             }
         }
 
