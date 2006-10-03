@@ -9,13 +9,10 @@
  */
 
 package edu.wustl.catissuecore.bizlogic;
-import edu.wustl.common.util.dbManager.DAOException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import net.sf.hibernate.HibernateException;
@@ -622,7 +619,11 @@ public class DistributionBizLogic extends DefaultBizLogic
 		{
 			throw new DAOException("errors.distribution.specimenNotFound");
 		}
-		specimen = (Specimen) specimenList.get(0);
+		specimen = (Specimen) specimenList.get(0);		
+		if(specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_VALUES[2]))
+		{
+			throw new DAOException("errors.distribution.closedSpecimen");
+		}
 
 		return specimen.getId();
 	}
