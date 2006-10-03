@@ -120,12 +120,17 @@ public class ListSpecimenEventParametersAction  extends SecureAction
 		    	}
 	    	}
 	    	
+	    	if(specimenId == null)
+	    	{
+	    		specimenId = (String) request.getParameter(Constants.SPECIMEN_ID);
+	    	}
+	    	
 	    	request.setAttribute(Constants.SPECIMEN_ID,specimenId);
 	    	
 	    	List specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,specimenId);
 	    	
 	    	if(specimenList!=null && specimenList.size() != 0)
-	    	{
+	    	{ 
 	    		Specimen specimen = (Specimen)specimenList.get(0);
 	    		
 	    		//Setting Specimen Event Parameters' Grid            
