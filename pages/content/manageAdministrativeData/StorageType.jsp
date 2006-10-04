@@ -104,7 +104,7 @@
 	</script>
 
 </head>
-	
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>	
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
         String reqPath = (String)request.getAttribute(Constants.REQ_PATH);  
