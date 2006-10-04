@@ -278,8 +278,7 @@
 		}
 		else
 		{
-			var action = "<%=callAction%>";
-			alert(action);
+			var action = "<%=callAction%>";			
 			onClickAction(action);
 		}
 	}
