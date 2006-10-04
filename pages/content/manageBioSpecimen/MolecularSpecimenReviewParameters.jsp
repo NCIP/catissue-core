@@ -153,6 +153,34 @@ if(currentEventParametersDate.trim().length() > 0)
 
 
 			</td>
+		</tr>		
+		
+		<!-- hours & minutes -->		
+		<tr>
+			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredLabel">
+				<label for="eventparameters.time">
+					<bean:message key="eventparameters.time"/>
+				</label>
+			</td>
+			<td class="formField">
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+					<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
+				</html:select>&nbsp;
+				<label for="eventparameters.timeinhours">
+					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
+				</label>
+<!-- Mandar : 434 : for tooltip -->
+				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1"
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+					<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
+				</html:select>
+				<label for="eventparameters.timeinhours">
+					&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
+				</label>
+			</td>
 		</tr>
 
 
