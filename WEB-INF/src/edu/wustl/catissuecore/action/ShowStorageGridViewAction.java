@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
@@ -140,6 +141,7 @@ public class ShowStorageGridViewAction  extends BaseAction
             fullStatus = new int[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
             childContainerType = new String[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
             
+            //Showing Containers in the Container map.
             if (storageContainer.getChildren() != null)
             {
                 Iterator iterator = storageContainer.getChildren().iterator();
@@ -152,15 +154,16 @@ public class ShowStorageGridViewAction  extends BaseAction
                     childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
                                                    = childStorageContainer.getId().intValue();
                     childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
-                                                   = childStorageContainer.getStorageType().getName();
+                                                   = Constants.CONTAINER_LABEL_CONTAINER_MAP + childStorageContainer.getName();
                                                   
                 }
             }          
             
             IBizLogic specimenBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
             
+            //Showing Specimens in the Container map.
             String sourceObjectName = Specimen.class.getName();
-			String[] selectColumnName = {"id","positionDimensionOne", "positionDimensionTwo","type"};
+			String[] selectColumnName = {"id","positionDimensionOne", "positionDimensionTwo","label"};
 			String[] whereColumnName = {"storageContainer.id"};
             String[] whereColumnCondition = {"="};
 			Object[] whereColumnValue = {id};
@@ -181,13 +184,41 @@ public class ShowStorageGridViewAction  extends BaseAction
                 	Long specimenID = (Long)obj[0]; 
                     Integer positionDimensionOne = (Integer)obj[1];
                     Integer positionDimensionTwo = (Integer)obj[2];
-                    String specimenType = (String)obj[3];
+                    String specimenLable = (String)obj[3];
                     
                     fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
                     childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
                                                    = specimenID.intValue();
                     childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
-                                                                        = specimenType;
+                                                                        = Constants.SPECIMEN_LABEL_CONTAINER_MAP + specimenLable;
+                }
+            }
+            
+            // Showing Specimen Arrays in the Container map.
+            sourceObjectName = SpecimenArray.class.getName();
+            selectColumnName[3] = "name";
+            whereColumnName[0] = "storageContainer.id";
+            
+            list = specimenBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName,
+                    whereColumnCondition, whereColumnValue, joinCondition);
+			
+            if (list != null)
+            {
+                Iterator iterator = list.iterator();
+                while(iterator.hasNext())
+                {
+                	Object obj[] =  (Object[])iterator.next();
+                	
+                	Long specimenID = (Long)obj[0]; 
+                    Integer positionDimensionOne = (Integer)obj[1];
+                    Integer positionDimensionTwo = (Integer)obj[2];
+                    String specimenArrayLable = obj[3].toString();
+                    
+                    fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 2;
+                    childContainerIds[positionDimensionOne.intValue()][positionDimensionTwo.intValue()]
+                                                   = specimenID.intValue();
+                    childContainerType[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] 
+                                                                        = Constants.SPECIMEN_ARRAY_LABEL_CONTAINER_MAP + specimenArrayLable;
                 }
             }
         }
@@ -241,25 +272,38 @@ public class ShowStorageGridViewAction  extends BaseAction
 		
 		//checking for collection Protocol. 
 		String holdCollectionProtocol = (String)session.getAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
-		if (enablePage && holdCollectionProtocol!=null && !holdCollectionProtocol.equals(""))
+		if (enablePage && holdCollectionProtocol!=null)
 		{
-			int collectionProtocolId = Integer.parseInt(holdCollectionProtocol);
-			enablePage = canHoldCollectionProtocol(collectionProtocolId,storageContainer);
+			if (!holdCollectionProtocol.equals(""))
+			{
+				int collectionProtocolId = Integer.parseInt(holdCollectionProtocol);
+				enablePage = canHoldCollectionProtocol(collectionProtocolId,storageContainer);
+			}
+			else
+				enablePage=false;
 		}
 		
 		//checking for sepecimen class.
 		String holdspecimenClass = (String)session.getAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS);
-		if (enablePage && holdspecimenClass!=null && !holdspecimenClass.equals(""))
+		if (enablePage && holdspecimenClass!=null)
 		{
-			enablePage = canHoldSpecimenClass(holdspecimenClass,storageContainer);
+			if (!holdspecimenClass.equals(""))
+				enablePage = canHoldSpecimenClass(holdspecimenClass,storageContainer);
+			else
+				enablePage = false;
 		}
 		
 		//checking for specimen array type.
 		String holdspecimenArrayType = (String)session.getAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
-		if (enablePage && holdspecimenArrayType!=null && !holdspecimenArrayType.equals(""))
+		if (enablePage && holdspecimenArrayType!=null)
 		{
-			int specimenArrayTypeId = Integer.parseInt(holdspecimenArrayType);
-			enablePage = canHoldSpecimenArrayType(specimenArrayTypeId,storageContainer);
+			if (!holdspecimenArrayType.equals(""))
+			{
+				int specimenArrayTypeId = Integer.parseInt(holdspecimenArrayType);
+				enablePage = canHoldSpecimenArrayType(specimenArrayTypeId,storageContainer);
+			}
+			else
+				enablePage = false;
 		}
 		
 		if (enablePage)

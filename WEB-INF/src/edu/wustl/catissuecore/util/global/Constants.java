@@ -1315,4 +1315,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ENABLE_STORAGE_CONTAINER_GRID_PAGE = "enablePage";
 	public static final int ALL_STORAGE_TYPE_ID = 1; //Constant for the "All" storage type, which can hold all container type
 	public static final int ALL_SPECIMEN_ARRAY_TYPE_ID = 2;//Constant for the "All" storage type, which can hold all specimen array type
+	
+	public static final String SPECIMEN_LABEL_CONTAINER_MAP = "Specimen : ";
+	public static final String CONTAINER_LABEL_CONTAINER_MAP = "Container : ";
+	public static final String SPECIMEN_ARRAY_LABEL_CONTAINER_MAP = "Array : ";
 }

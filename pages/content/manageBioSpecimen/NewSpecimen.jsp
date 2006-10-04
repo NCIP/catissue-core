@@ -855,6 +855,10 @@
 								String onChange = "onCustomListBoxChange(this)";
 								String className = form.getClassName();
 								String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
+								if (collectionProtocolId==null)
+									collectionProtocolId="";
+								if (className==null)
+									className="";
 								String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2"
 									+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 									+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;

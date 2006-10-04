@@ -250,7 +250,13 @@ if(currentEventParametersDate.trim().length() > 0)
 				boolean buttonDisabled = true;
 				
 				String className = (String) request.getAttribute(Constants.SPECIMEN_CLASS_NAME);
+				if (className==null)
+					className="";
+				
 				String collectionProtocolId =(String) request.getAttribute(Constants.COLLECTION_PROTOCOL_ID);
+				if (collectionProtocolId==null)
+					collectionProtocolId="";
+
 				String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2"
 						+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 						+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;				

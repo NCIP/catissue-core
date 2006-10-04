@@ -296,13 +296,13 @@ function closeFramedWindow()
 							{%>
 							<td class="mapTdred" noWrap="true">
 								<a href="<%=openStorageContainer%>"> 
-								 <%=childContainerType[i][j]%> : <%=childContainerIds[i][j]%>
+								 <%=childContainerType[i][j]%><!-- : <%=childContainerIds[i][j]%> -->
 								</a>
  							</td>
 					   	  <%}
 							else{%>
 							<td class="mapTdspe" noWrap="true">
-							<%=childContainerType[i][j]%> : <%=childContainerIds[i][j]%>
+							<%=childContainerType[i][j]%><!--: <%=childContainerIds[i][j]%> -->
 							</td>
 							<%}%>
 						<%}
