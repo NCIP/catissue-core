@@ -167,5 +167,30 @@
 
 // biohazard selection
 
+		function onBiohazardTypeSelected(element)
+		{ 
+			var i = (element.name).indexOf("_");
+			var indColon = (element.name).indexOf(":");
+			var comboNo = (element.name).substring(indColon+1,i);
+			
+			var comboToRefresh = "bhId" + comboNo;
+			
+			ele = document.getElementById(comboToRefresh);
+			//To Clear the Combo Box
+			ele.options.length = 0;
+			
+			ele.options[0] = new Option('-- Select --','-1');
+			var j=1;
+			//Populating the corresponding Combo Box
+			for(i=0;i<idArray.length;i++)
+			{
+				if(typeArray[i] == element.value)
+				{
+					ele.options[j++] = new Option(nameArray[i],idArray[i]);
+				}
+			}
+		}
+	
+
 
 </script>

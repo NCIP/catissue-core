@@ -403,10 +403,10 @@ function setStoragePosition(specimenMapKey,storageId,storageType,xPos,yPos) {
 
 function showStoragePositionMap(specimenAttributeKey,collectionGroup,specimenClass) {
 	var  url = "ShowFramedPage.do?pageOf=pageOfMultipleSpecimen";
-	url = url + "&specimenAttributeKey=" + specimenAttributeKey;
-	url = url + "&SpecimenCollectionGroup=" + collectionGroup;
-	url = url + "&specimenClass=" + specimenClass;
-	url = url + "&specimenCallBackFunction=" + "setStoragePosition";
+	url = url + "&amp;specimenAttributeKey=" + specimenAttributeKey;
+	url = url + "&amp;SpecimenCollectionGroup=" + collectionGroup;
+	url = url + "&amp;specimenClass=" + specimenClass;
+	url = url + "&amp;specimenCallBackFunction=" + "setStoragePosition";
 
     NewWindow(url,'name','810','320','yes');
 }

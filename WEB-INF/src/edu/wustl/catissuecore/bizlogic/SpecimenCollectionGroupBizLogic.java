@@ -180,7 +180,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	private void setCollectionProtocolRegistration(DAO dao, SpecimenCollectionGroup specimenCollectionGroup,SpecimenCollectionGroup oldSpecimenCollectionGroup) throws DAOException 
 	{
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
-		String[] selectColumnName = null;
+		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
 		String[] whereColumnName = new String[2];
 		String[] whereColumnCondition = {"=","="};
 		Object[] whereColumnValue = new Object[2];
@@ -219,18 +219,19 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		if(!list.isEmpty())
 		{
 			//check for closed CollectionProtocolRegistration
-			CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)list.get(0);
-			
+			CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
+			collectionProtocolRegistration.setId((Long)list.get(0));
 			if(oldSpecimenCollectionGroup!=null)
 			{
 				CollectionProtocolRegistration collectionProtocolRegistrationOld =oldSpecimenCollectionGroup.getCollectionProtocolRegistration();
+				
 				if(!collectionProtocolRegistration.getId().equals(collectionProtocolRegistrationOld.getId()))
 					checkStatus(dao,collectionProtocolRegistration, "Collection Protocol Registration" );
 			}
 			else
 				checkStatus(dao,collectionProtocolRegistration, "Collection Protocol Registration" );
 			
-		   specimenCollectionGroup.setCollectionProtocolRegistration((CollectionProtocolRegistration)list.get(0));
+		   specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 		}
 	}
 	
