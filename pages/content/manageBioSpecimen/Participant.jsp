@@ -285,6 +285,19 @@ tr#hiddenCombo
 			}
 			document.forms[0].submit();		
 		}
+		
+		function onVitalStatusRadioButtonClick(element)
+		{
+		
+			if(element.value == "Dead")
+			{
+				document.forms[0].deathDate.disabled = false;				
+			}
+			else
+			{
+				document.forms[0].deathDate.disabled = true;
+			}
+		}		 
 	</script>
 </head>
 
@@ -492,49 +505,9 @@ tr#hiddenCombo
 %>
 <bean:message key="page.dateFormat" />&nbsp;
 					 </td>
-				 </tr>
-				 <%-- added by chetan for death date --%>
-				 <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
-					<td class="formLabel">
-						<label for="deathDate">
-							<bean:message key="participant.deathDate"/>
-						</label>
-					</td>
-					 
-					 <td class="formField" colspan="2">
-<%
-	 if(currentDeathDate.trim().length() > 0)
-	{
-			Integer deathYear = new Integer(Utility.getYear(currentDeathDate ));
-			Integer deathMonth = new Integer(Utility.getMonth(currentDeathDate ));
-			Integer deathDay = new Integer(Utility.getDay(currentDeathDate ));
-%>
-			<ncombo:DateTimeComponent name="deathDate"
-									  id="deathDate"
- 									  formName="participantForm"	
-									  month= "<%=deathMonth %>"
-									  year= "<%=deathYear %>"
-									  day= "<%= deathDay %>" 
-									  value="<%=currentDeathDate %>"
-									  styleClass="formDateSized10"
-											 />		
-<% 
-	}
-	else
-	{  
- %>
-			<ncombo:DateTimeComponent name="deathDate"
-									  id="deathDate"
- 									  formName="participantForm"	
-									  styleClass="formDateSized10" 
-											 />		
-<%
-	}
-%>
-<bean:message key="page.dateFormat" />&nbsp;
-					 </td>
-				 </tr> 			 
+				 </tr>			
+
+			 
 				 
 				 <tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
@@ -552,11 +525,63 @@ tr#hiddenCombo
 						</html:select>--%>
 						<logic:iterate id="nvb" name="<%=Constants.VITAL_STATUS_LIST%>">
 						<%	NameValueBean nameValueBean=(NameValueBean)nvb;%>
-						<html:radio property="vitalStatus" value="<%=nameValueBean.getValue()%>"><%=nameValueBean.getName()%> </html:radio>
+						<html:radio property="vitalStatus" onclick="onVitalStatusRadioButtonClick(this)" value="<%=nameValueBean.getValue()%>"><%=nameValueBean.getName()%> </html:radio>
 						</logic:iterate>
 						
 		        	  </td>
 				 </tr>
+				 
+				
+				<%-- added by chetan for death date --%>
+ <tr>
+	<td class="formRequiredNotice" width="5">&nbsp;</td>
+	<td class="formLabel">
+		<label for="deathDate">
+			<bean:message key="participant.deathDate"/>
+		</label>
+	</td>	 
+	<td class="formField" colspan="2">
+<%
+
+	ParticipantForm form = (ParticipantForm) request.getAttribute("participantForm");
+	Boolean deathDisable = new Boolean("false");
+	if(!form.getVitalStatus().trim().equals("Dead"))
+	{
+		deathDisable = new Boolean("true");
+	}
+	 if(currentDeathDate.trim().length() > 0)
+	{
+			Integer deathYear = new Integer(Utility.getYear(currentDeathDate ));
+			Integer deathMonth = new Integer(Utility.getMonth(currentDeathDate ));
+			Integer deathDay = new Integer(Utility.getDay(currentDeathDate ));
+%>
+			<ncombo:DateTimeComponent name="deathDate"
+									  id="deathDate"
+ 									  formName="participantForm"	
+									  month= "<%=deathMonth %>"
+									  year= "<%=deathYear %>"
+									  day= "<%= deathDay %>" 
+									  value="<%=currentDeathDate %>"
+									  styleClass="formDateSized10"
+									  disabled="<%=deathDisable%>"
+											 />		
+<% 
+	}
+	else
+	{  
+ %>
+			<ncombo:DateTimeComponent name="deathDate"
+									  id="deathDate"
+ 									  formName="participantForm"	
+									  styleClass="formDateSized10" 
+									  disabled="<%=deathDisable%>"
+											 />		
+<%
+	}
+%>
+<bean:message key="page.dateFormat" />&nbsp;
+	</td>
+</tr> 
 				 
 				 <tr>
 					<td class="formRequiredNotice" width="5">&nbsp;</td>
