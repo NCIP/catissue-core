@@ -260,11 +260,19 @@ public class ShowStorageGridViewAction  extends BaseAction
 	private void setEnablePageAttributeIfRequired(HttpServletRequest request, StorageContainer storageContainer)
 	{
 		boolean enablePage=true;
-
+		String activityStatus = request.getParameter(Constants.ACTIVITY_STATUS);
+		if (activityStatus!=null && activityStatus.equals(Constants.ACTIVITY_STATUS_CLOSED))
+		{
+			enablePage=false;
+			ActionErrors errors = new ActionErrors();
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.container.closed"));
+			saveErrors(request, errors);
+		}
+		
 		HttpSession session = request.getSession();
 		// checking for container type.
 		String holdContainerType = (String)session.getAttribute(Constants.CAN_HOLD_CONTAINER_TYPE);
-		if (holdContainerType!=null && !holdContainerType.equals(""))
+		if (enablePage && holdContainerType!=null && !holdContainerType.equals(""))
 		{
 			int typeId = Integer.parseInt(holdContainerType);
 			enablePage = canHoldContainerType(typeId, storageContainer);

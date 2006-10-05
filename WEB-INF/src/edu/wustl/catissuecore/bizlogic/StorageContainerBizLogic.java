@@ -1151,17 +1151,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		String queryStr = "SELECT "
 				+ " t8.IDENTIFIER, t8.CONTAINER_NAME, t5.NAME, t8.SITE_ID, t4.TYPE, t8.PARENT_IDENTIFIER, "
-				+ " t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE "
+				+ " t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE, t8.ACTIVITY_STATUS, t8.PARENT_ACTIVITY_STATUS "
 				+ " FROM ( "
 				+ " 	SELECT "
-				+ " 	  t7.IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, t7.STORAGE_TYPE_ID, t7.PARENT_IDENTIFIER, "
-				+ " 	  t7.PARENT_CONTAINER_NAME, t6.NAME AS PARENT_CONTAINER_TYPE "
+				+ " 	  t7.IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, t7.STORAGE_TYPE_ID, t7.ACTIVITY_STATUS, t7.PARENT_IDENTIFIER, "
+				+ " 	  t7.PARENT_CONTAINER_NAME, t6.NAME AS PARENT_CONTAINER_TYPE, t7.PARENT_ACTIVITY_STATUS "
 				+ " 	  FROM "
 				+ " 	  ( "
 				+ " 	  select "
-				+ " 	  t1.IDENTIFIER AS IDENTIFIER, t1.NAME AS CONTAINER_NAME, t11.SITE_ID AS SITE_ID, "
+				+ " 	  t1.IDENTIFIER AS IDENTIFIER, t1.NAME AS CONTAINER_NAME, t11.SITE_ID AS SITE_ID, T1.ACTIVITY_STATUS AS ACTIVITY_STATUS,"
 				+ " 	  t11.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, t2.IDENTIFIER AS PARENT_IDENTIFIER, "
-				+ " 	  t2.NAME AS PARENT_CONTAINER_NAME, t22.STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID"
+				+ " 	  t2.NAME AS PARENT_CONTAINER_NAME, t22.STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID, T2.ACTIVITY_STATUS AS PARENT_ACTIVITY_STATUS"
 				+ " 	  from "
 				+ " 	      CATISSUE_STORAGE_CONTAINER t11, CATISSUE_STORAGE_CONTAINER t22, "
 				+ " 	      CATISSUE_CONTAINER t1 LEFT OUTER JOIN CATISSUE_CONTAINER t2 "
@@ -1237,7 +1237,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					// Create the tree node for the child node.
 					TreeNode treeNodeImpl = new StorageContainerTreeNode(Long
 							.valueOf((String) rowList.get(0)), (String) rowList.get(1),
-							(String) rowList.get(1), toolTip);
+							(String) rowList.get(1), toolTip,(String) rowList.get(8));
 
 					// Add the tree node in the Vector if it is not present.
 					if (treeNodeVector.contains(treeNodeImpl) == false)
@@ -1248,7 +1248,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					// Create the tree node for the parent node and add it in the vector if not present.
 					toolTip = getToolTipData((String) rowList.get(5));
 					treeNodeImpl = new StorageContainerTreeNode(Long.valueOf((String) rowList
-							.get(5)), (String) rowList.get(6), (String) rowList.get(6), toolTip);
+							.get(5)), (String) rowList.get(6), (String) rowList.get(6), toolTip,(String) rowList.get(9));
 					if (treeNodeVector.contains(treeNodeImpl) == false)
 					{
 						treeNodeVector.add(treeNodeImpl);
