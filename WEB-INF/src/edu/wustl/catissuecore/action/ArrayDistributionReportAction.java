@@ -83,7 +83,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		String[] specimenColumns = Constants.SPECIMEN_IN_ARRAY_SELECTED_COLUMNS;
 		String []specimenColumnNames = getColumnNames(specimenColumns);
 		
-    	List listOfData = getListOfArrayDataForSave(dist,configForm,sessionData,selectedColumns,specimenColumns) ;
+    	List listOfData = getListOfArrayData(dist,configForm,sessionData,selectedColumns,specimenColumns) ;
 
     	
 		//Set the request attributes for the Distribution report data
@@ -189,6 +189,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		arrayDetails.add(Utility.toString(array.getCapacity().getTwoDimensionCapacity()));
 		arrayDetails.add(Utility.toString(array.getSpecimenArrayType().getSpecimenClass()));
 		arrayDetails.add(Utility.toString(array.getSpecimenArrayType().getSpecimenTypeCollection()));
+		arrayDetails.add(Utility.toString(array.getComment()));
 		return arrayDetails;
 	}
 		
@@ -213,6 +214,29 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			arrayEntry.setArrayInfo(getArrayDetails(array,arrayColumns,sessionData));
 			getSpecimenDetails(array,specimenColumns,sessionData,arrayEntry);
 			
+			arrayEntries.add(arrayEntry);
+		}
+		return arrayEntries;
+    }
+	
+	/**
+	 * @param dist
+	 * @param configForm
+	 * @param sessionData
+	 * @param arrayColumns
+	 * @param specimenColumns
+	 * @return
+	 * @throws Exception
+	 */
+	protected List getListOfArrayData(Distribution dist,ConfigureResultViewForm configForm,SessionDataBean sessionData,String[] arrayColumns,String[] specimenColumns) throws Exception {
+		List arrayEntries = new ArrayList();	
+		
+		Iterator itr = dist.getSpecimenArrayCollection().iterator();
+		while(itr.hasNext())
+		{
+			SpecimenArray array = (SpecimenArray) itr.next();			
+			List arrayEntry = new ArrayList();
+			arrayEntry.add(getArrayDetails(array,arrayColumns,sessionData));
 			arrayEntries.add(arrayEntry);
 		}
 		return arrayEntries;
