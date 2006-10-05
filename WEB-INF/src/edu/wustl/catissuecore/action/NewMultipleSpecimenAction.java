@@ -15,11 +15,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 
+import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -36,16 +38,15 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward showCommentsDialog(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward showCommentsDialog(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
 		request.setAttribute("output", "init");
-		request.setAttribute("type",Constants.COMMENTS_TYPE);
+		request.setAttribute("type", Constants.COMMENTS_TYPE);
 
 		Map multipleSpecimenMap = chkForMultipleSpecimenMap(request);
 		String keyInSpecimenMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
 		String comments = (String) multipleSpecimenMap.get(keyInSpecimenMap);
-		
 
 		Logger.out.debug("setting comments to " + comments);
 
@@ -61,9 +62,11 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward showMultipleSpecimen(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	// TODO null
+	public ActionForward showMultipleSpecimen(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
+		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY, null);
 		return mapping.findForward("specimen");
 	}
 
@@ -75,8 +78,8 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward submitComments(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward submitComments(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
 
 		String comments = ((NewSpecimenForm) form).getComments();
@@ -99,17 +102,34 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	 */
 	private Map chkForMultipleSpecimenMap(HttpServletRequest request)
 	{
-		Map multipleSpecimenMap = (Map) request.getSession().getAttribute(
-				Constants.MULTIPLE_SPECIMEN_MAP_KEY);
+		Map multipleSpecimenMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
 
 		if (multipleSpecimenMap == null)
 		{
 			Logger.out.debug("adding new multipleSpecimenMap to session");
 			multipleSpecimenMap = new HashMap();
-			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY,
-					multipleSpecimenMap);
+			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, multipleSpecimenMap);
 		}
 
+		return multipleSpecimenMap;
+	}
+
+	/**
+	 * This method returns  multipleSpecimenFormBeanMap from session if present
+	 * if not it adds a new one. 
+	 * @param request
+	 * @return
+	 */
+
+	private Map chkForMultipleSpecimenFormBeanMap(HttpServletRequest request)
+	{
+		Map multipleSpecimenMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY);
+		if (multipleSpecimenMap == null)
+		{
+			Logger.out.debug("adding new MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY to session");
+			multipleSpecimenMap = new HashMap();
+			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY, multipleSpecimenMap);
+		}
 		return multipleSpecimenMap;
 	}
 
@@ -117,10 +137,10 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	 * displays external identifer page populated with previously added information.
 	 * 
 	 */
-	public ActionForward showExtenalIdentifierDialog(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward showExtenalIdentifierDialog(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
-		request.setAttribute("type",Constants.EXTERNALIDENTIFIER_TYPE);
+		request.setAttribute("type", Constants.EXTERNALIDENTIFIER_TYPE);
 		request.setAttribute("output", "init");
 
 		Map multipleSpecimenMap = chkForMultipleSpecimenMap(request);
@@ -145,8 +165,8 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward submitExternalIdentifiers(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward submitExternalIdentifiers(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
 
 		Map externalIdentifiers = ((NewSpecimenForm) form).getExternalIdentifier();
@@ -164,12 +184,12 @@ public class NewMultipleSpecimenAction extends DispatchAction
 		return mapping.findForward("externalIdentifier");
 	}
 
-	public ActionForward deleteExternalIdentifiers(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward deleteExternalIdentifiers(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
 
 		request.setAttribute("output", "init");
-		request.setAttribute("type",Constants.EXTERNALIDENTIFIER_TYPE);
+		request.setAttribute("type", Constants.EXTERNALIDENTIFIER_TYPE);
 		String button = request.getParameter("button");
 		Map externalIdentifiers = ((NewSpecimenForm) form).getExternalIdentifier();
 
@@ -187,22 +207,19 @@ public class NewMultipleSpecimenAction extends DispatchAction
 		return mapping.findForward("externalIdentifier");
 
 	}
-	
 
-	
 	/**
 	 * displays external identifer page populated with previously added information.
 	 * 
 	 */
-	public ActionForward showBioHazardDialog(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward showBioHazardDialog(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
-		request.setAttribute("type",Constants.BIOHAZARD_TYPE);
+		request.setAttribute("type", Constants.BIOHAZARD_TYPE);
 		request.setAttribute("output", "init");
-		
+
 		setBioHazardRequestAttributes(request);
-		
-		
+
 		Map multipleSpecimenMap = chkForMultipleSpecimenMap(request);
 		String keyInSpecimenMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
 		String keyForCount = keyInSpecimenMap + Constants.APPEND_COUNT;
@@ -218,6 +235,112 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	}
 
 	/**
+	 * displays external identifer page populated with previously added information.
+	 * 
+	 */
+	
+	public ActionForward showDerivedSpecimenDialog(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
+	{
+		int rowSelected = -1;
+		if (request.getParameter("rowSelected") != null && !request.getParameter("rowSelected").equals("null"))
+		{
+			rowSelected = Integer.parseInt(request.getParameter("rowSelected"));
+		}
+		Map multipleSpecimenMap = chkForMultipleSpecimenFormBeanMap(request);
+		String keyInSpecimenMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
+
+		List formBeanList = (List) multipleSpecimenMap.get(keyInSpecimenMap);
+		String forward = "derivedSpecimen";
+		boolean flag = false;
+		if (formBeanList != null && formBeanList.size() != 0)
+		{
+			flag = true;
+			if(request.getParameter("deriveButtonClicked")!=null)
+			{
+				request.setAttribute("showDerivedPage","false");
+			}
+			
+		}
+		if (rowSelected != -1 || flag)
+		{
+			if (rowSelected != -1)
+			{
+				AbstractActionForm actionForm = (AbstractActionForm) formBeanList.get(rowSelected);
+				request.setAttribute(Constants.DERIVED_FORM, actionForm);
+				forward = "derivedSpecimenEdit";
+			}
+
+			if (formBeanList != null && formBeanList.size() > 0)
+			{
+				int count = 0;
+
+				List gridData = new ArrayList();
+				Iterator it = formBeanList.iterator();
+
+				while (it.hasNext())
+				{
+					List rowData = new ArrayList();
+					CreateSpecimenForm tempForm = (CreateSpecimenForm) it.next();
+
+					rowData.add(tempForm.getLabel());
+					rowData.add(tempForm.getClassName());
+
+					rowData.add(tempForm.getType());
+					rowData.add(tempForm.getQuantity());
+					rowData.add("" + count);//pageOf
+					gridData.add(rowData);
+					count++;
+				}
+
+				request.setAttribute(Constants.SPREADSHEET_DATA_LIST, gridData);
+			}
+
+		}
+		return mapping.findForward(forward);
+	}
+
+	/**
+	 * displays external identifer page populated with previously added information.
+	 * 
+	 */
+
+	public ActionForward addDerivedSpecimen(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
+	{
+	
+		int rowSelected = -1;
+		if (request.getParameter("rowSelected") != null && !request.getParameter("rowSelected").equals("null"))
+		{
+			rowSelected = Integer.parseInt(request.getParameter("rowSelected"));
+		}
+		AbstractActionForm actionForm = (AbstractActionForm) request.getAttribute(Constants.DERIVED_FORM);
+
+		Map multipleSpecimenMap = chkForMultipleSpecimenFormBeanMap(request);
+		String keyInSpecimenMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
+
+		List formBeanList = (List) multipleSpecimenMap.get(keyInSpecimenMap);
+		if (formBeanList == null)
+		{
+			formBeanList = new ArrayList();
+		}
+
+		if (rowSelected != -1)
+		{
+			formBeanList.remove(rowSelected);
+			formBeanList.add(rowSelected, actionForm);
+		}
+		else
+		{
+			formBeanList.add(actionForm);
+		}
+
+		multipleSpecimenMap.put(keyInSpecimenMap, formBeanList);
+		request.setAttribute("showDerivedPage","false");
+		return mapping.findForward("showDerivedSpecimenDialog");
+	}
+
+	/**
 	 * @param mapping
 	 * @param form
 	 * @param request
@@ -225,16 +348,15 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward submitBioHazards(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward submitBioHazards(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
-		
 
 		Map bioHazards = ((NewSpecimenForm) form).getBiohazard();
 		int bioHazardCnt = ((NewSpecimenForm) form).getBhCounter();
 
 		request.setAttribute("output", "success");
-		request.setAttribute("type",Constants.BIOHAZARD_TYPE);
+		request.setAttribute("type", Constants.BIOHAZARD_TYPE);
 		setBioHazardRequestAttributes(request);
 
 		Map multipleSpecimenMap = chkForMultipleSpecimenMap(request);
@@ -242,16 +364,16 @@ public class NewMultipleSpecimenAction extends DispatchAction
 		String keyForCount = keyInSpecimenMap + Constants.APPEND_COUNT;
 		multipleSpecimenMap.put(keyInSpecimenMap, bioHazards);
 		multipleSpecimenMap.put(keyForCount, new Integer(bioHazardCnt));
-		
+
 		return mapping.findForward("bioHazard");
 	}
 
-	public ActionForward deleteBioHazards(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward deleteBioHazards(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
 
 		request.setAttribute("output", "init");
-		request.setAttribute("type",Constants.BIOHAZARD_TYPE);
+		request.setAttribute("type", Constants.BIOHAZARD_TYPE);
 		String button = request.getParameter("button");
 		Map bioHazards = ((NewSpecimenForm) form).getBiohazard();
 
@@ -270,17 +392,14 @@ public class NewMultipleSpecimenAction extends DispatchAction
 		return mapping.findForward("bioHazard");
 
 	}
-	
 
 	private void setBioHazardRequestAttributes(HttpServletRequest request) throws DAOException
 	{
 
 		//Setting biohazard list
-		
-		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance()
-		.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 
-		
+		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+
 		String[] bhIdArray = {"-1"};
 		String[] bhTypeArray = {Constants.SELECT_OPTION};
 		String[] bhNameArray = {Constants.SELECT_OPTION};
@@ -316,8 +435,7 @@ public class NewMultipleSpecimenAction extends DispatchAction
 		request.setAttribute(Constants.BIOHAZARD_ID_LIST, bhIdArray);
 		request.setAttribute(Constants.BIOHAZARD_TYPES_LIST, bhTypeArray);
 
-		biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_BIOHAZARD, null);
+		biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD, null);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
 
 	}
