@@ -16,6 +16,12 @@
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
+<script src="runtime/lib/grid.js"></script>
+<script src="runtime/formats/date.js"></script>
+<script src="runtime/formats/string.js"></script>
+<script src="runtime/formats/number.js"></script>
+<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 	<script language="JavaScript">
 	
 		//ADD MORE -------- EXTERNAL IDENTIFIER
@@ -74,8 +80,7 @@
 		
 		function onRadioButtonClick(element)
 		{
-		
-			if(element.value == 1)
+     		if(element.value == 1)
 			{
 				document.forms[0].parentSpecimenLabel.disabled = false;
 				document.forms[0].parentSpecimenBarcode.disabled = true;
@@ -87,10 +92,21 @@
 			}
 		}		 
 
-
-	   function onClassOrLabelOrBarcodeChange()
+function classChangeForMultipleSpecimen()
+{
+ 	var action ='NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&specimenAttributeKey=' + document.getElementById("specimenAttributeKey").value + '&derivedSpecimenCollectionGroup=' + document.getElementById("derivedSpecimenCollectionGroup").value + '&retainForm=true';
+	document.forms[0].action = action;
+	document.forms[0].submit();
+}
+			
+	  function onClassOrLabelOrBarcodeChange(multipleSpecimen)
 		{
 		
+			if(multipleSpecimen == "1")
+				{
+				   classChangeForMultipleSpecimen();
+				}
+	
     var radioArray = document.getElementsByName("checkedButton");
  	var flag = "0";
  		if (radioArray[0].checked) 
@@ -137,15 +153,28 @@
 				
 			}
 		}
+		
+		function onAddNewButtonClicked()
+		{
+		    var action = "NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&rowSelected=-1&addNew=true&operation=add";
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		}
+		
+		function closeWindow()
+		{
+		  window.close();
+		}
 	</script>
 </head>
 
 <% 
+        String[] columnList = Constants.DERIVED_SPECIMEN_COLUMNS;
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
 
-		if(operation.equals(Constants.EDIT))
+		if(operation!=null && operation.equals(Constants.EDIT))
 		{
 			editViewButton="buttons."+Constants.VIEW;
 			formName = Constants.CREATE_SPECIMEN_EDIT_ACTION;
@@ -157,7 +186,7 @@
 			readOnlyValue=false;
 		}
 
-		if (operation.equals(Constants.VIEW))
+		if (operation!=null && operation.equals(Constants.VIEW))
 		{
 			readOnlyForAll=true;
 		}
@@ -179,10 +208,165 @@
 				unitSpecimen = form.getUnit();
 		}
 	
+	String multipleSpecimen = "0";
+	String action = Constants.CREATE_SPECIMEN_ADD_ACTION;
+	if(request.getAttribute("multipleSpecimen")!=null) 
+	{
+	   multipleSpecimen = "1";
+	   action = "DerivedMultipleSpecimenAdd.do?retainForm=true";
+	}
+	
+	String onChangeFunctionName = "onClassOrLabelOrBarcodeChange(" + multipleSpecimen + ");" ;
+	String onClassChangeFunctionName = "onTypeChange(this);" + onChangeFunctionName;
+	
 %>
 
+<%
+List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+if(dataList!=null && dataList.size() != 0)
+{
+%>
+
+<script>
+var myData = [<%int xx;%><%for (xx=0;xx<(dataList.size()-1);xx++){%>
+<%
+	List row = (List)dataList.get(xx);
+  	int j;
+%>
+[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"],<%}%>
+<%
+	List row = (List)dataList.get(xx);
+  	int j;
+%>
+[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"]
+];
+
+var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
+</script>
+
+<%}%>
+
+
+
 	<html:errors />
-   <html:form action="<%=Constants.CREATE_SPECIMEN_ADD_ACTION%>">
+   <html:form action="<%=action%>">
+   
+   <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
+<tr>
+	<td>		
+		&nbsp;
+	</td>
+</tr>
+
+<tr>
+ <td>
+    <table summary="" cellpadding="3" cellspacing="0" border="0" width="550" >
+
+<%
+	if(dataList!=null && dataList.size() != 0)
+	{
+	   
+		String title = "Derived Specimens For This Parent Specimen";
+
+%>
+         <tr>
+		 <td width="100%" align="right">
+		 	    <html:button property="addNewDerived" styleClass="actionButton" onclick="onAddNewButtonClicked();">
+				<bean:message key="buttons.addNew"/>
+				</html:button>
+		 </td>
+		 </tr>
+   	 	<tr>
+			<td class="formTitle" height="20" >
+			
+				<%=title%>
+			</td>
+		</tr>
+		
+   	 	<tr>
+			<td>
+				<div STYLE="overflow: auto; width:550; height: 200; padding:0px; margin: 0px; border: 4px solid" id="eventGrid">
+				<script>
+				
+					//	create ActiveWidgets Grid javascript object.
+					var obj = new Active.Controls.Grid;
+					var string  = new Active.Formats.String;
+					var number  = new Active.Formats.Number; 
+
+					number.setTextFormat("#*");
+					
+					//	set number of rows/columns.
+					obj.setRowProperty("count", <%=dataList.size()%>);
+					obj.setColumnProperty("count", <%=columnList.length-1%>);
+					var formats = [string,string,string,string];
+					
+					//	provide cells and headers text
+	
+					obj.setDataText(function(i, j){return myData[i][j]});
+					obj.setColumnProperty("text", function(i){return columns[i]});
+					obj.sort(3,'descending');
+					
+					//	set headers width/height.
+					obj.setRowHeaderWidth("28px");
+					obj.setColumnHeaderHeight("20px");
+			
+					var row = new Active.Templates.Row;
+					row.setEvent("ondblclick", function(){this.action("myAction")}); 
+					
+					
+					obj.setTemplate("row", row);
+			 		obj.setAction("myAction", 
+						function(src)
+						{
+						   var action = "NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&rowSelected=" + myData[this.getSelectionProperty("index")][4] +"&specimenAttributeKey="+document.getElementById("specimenAttributeKey").value;
+				   		   document.forms[0].action = action;
+				           document.forms[0].submit();
+						}
+						);
+						
+						
+						//var frame = document.getElementById("newEventFrame"); frame.src = 'SearchObject.do?pageOf=' + myData[this.getSelectionProperty("index")][<%=columnList.length-1%>] + '&operation=search&id=' + myData[this.getSelectionProperty("index")][0]}); 
+			
+					//	write grid html to the page.
+					document.write(obj);
+				</script>
+				</div>
+			</td>
+		</tr>
+</table>
+	</td>
+	</tr>
+	<tr>
+		 <td width="100%" align="right">
+		 	    <html:button property="closebutton" styleClass="actionButton" onclick="closeWindow();">
+				<bean:message key="buttons.close"/>
+				</html:button>
+		 </td>
+        </tr>
+	
+	</table>
+<% } 
+%>
+		
+	
+	                   <input type="hidden" id="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
+				       name="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
+				       value="<%=request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY)%>" />
+
+						<input type="hidden" id="derivedSpecimenCollectionGroup"
+				       name="derivedSpecimenCollectionGroup"
+				       value="<%=request.getParameter("derivedSpecimenCollectionGroup")%>" />
+					   
+					   	<input type="hidden" id="rowSelected"
+				       name="rowSelected"
+				       value="<%=request.getParameter("rowSelected")%>" />
+	
+	<%
+	
+	if(request.getAttribute("showDerivedPage")==null)
+	{
+	%>
+
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="550">
 		   
 		   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
@@ -226,6 +410,7 @@
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="ForwardTo"/>
 						<html:hidden property="forwardTo" value="eventParameters"/>
+											
 						<td><html:hidden property="exIdCounter"/></td>
 					</td>
 				 </tr>
@@ -255,10 +440,18 @@
 				     	<bean:message key="<%=title%>"/>
 				     </td>
 				 </tr>
+				 
+				 <%
+					boolean radioDisabled = false;
+					if(multipleSpecimen.equals("1"))
+					{
+					     radioDisabled = true;
+					}
+				%>
 				 <tr>
 			     	<td class="formRequiredNoticeNoBottom" width="5">*</td>
 				    <td class="formRequiredLabelLeftBorder" width="175">
-					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
+					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)" disabled="<%=radioDisabled%>" >
 				    &nbsp;
 			        </html:radio>
 						<label for="specimenCollectionGroupId">
@@ -266,9 +459,9 @@
 						</label>
 					</td>
 					<td class="formField" colspan="2">
-					
+						
 					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
-				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" onblur="onClassOrLabelOrBarcodeChange()"/>
+				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="<%=radioDisabled%>" onblur="<%=onChangeFunctionName%>"/>
 			        </logic:equal>
 			
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
@@ -281,7 +474,7 @@
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formRequiredLabel" width="175">
-					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
+					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)" disabled="<%=radioDisabled%>">
 				    &nbsp;
 			        </html:radio>
 						<label for="specimenCollectionGroupId">
@@ -291,11 +484,11 @@
 					<td class="formField" colspan="2">
 					
 					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
-				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="true" onblur="onClassOrLabelOrBarcodeChange()"/>
+				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="true" />
 			        </logic:equal>
 			
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
-				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" onblur="onClassOrLabelOrBarcodeChange()"/>
+				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" onblur="<%=onChangeFunctionName%>"/>
 			        </logic:equal>
 										
 		        	</td>
@@ -326,7 +519,7 @@
 				    <td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onTypeChange(this);onClassOrLabelOrBarcodeChange()">
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=onClassChangeFunctionName%>">
 							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -648,6 +841,9 @@
 			 
 			 <!-- NEW SPECIMEN REGISTRATION ends-->
 	</table>
+	<%
+	}
+	%>
 
 	
  </html:form>
