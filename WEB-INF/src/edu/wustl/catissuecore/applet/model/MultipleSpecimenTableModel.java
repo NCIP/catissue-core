@@ -75,6 +75,18 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		specimenMap = new HashMap();
 		this.columnCount = initialColumnCount;
 		this.specimenAttributeOptions = specimenAttributeOptions;
+		
+		for (int i=1;i<=initialColumnCount;i++) {
+			putIdInMap(i);
+		}
+	}
+
+	/**
+	 * @param i
+	 */
+	private void putIdInMap(int colNo)
+	{
+		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo) + "_" + "id" ,new Long(colNo));
 	}
 
 	/**
@@ -356,6 +368,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	
 	public void addColumn() {
 		columnCount++;
+		putIdInMap(columnCount);
 	}
 
 
