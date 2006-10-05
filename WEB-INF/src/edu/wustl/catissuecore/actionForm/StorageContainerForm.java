@@ -927,11 +927,11 @@ public class StorageContainerForm extends AbstractActionForm
 				}
 			}
 
-			if (this.noOfContainers == 1)
-			{
+			/*if (this.noOfContainers == 1)
+			{*/
 				checkValidNumber(String.valueOf(noOfContainers), "storageContainer.noOfContainers",
 						errors, validator);
-			}
+			/*}*/
 			//validations for Container name
 			if (validator.isEmpty(containerName) && this.noOfContainers == 1)
 			{

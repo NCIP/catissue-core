@@ -315,7 +315,9 @@ public class NewSpecimenAction extends SecureAction
 					String spClass = specimenForm.getClassName();
 					Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
 					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
+					Logger.out.debug("calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass,0);
+					Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 					if(containerMap.isEmpty())
 					{
 						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
@@ -326,7 +328,9 @@ public class NewSpecimenAction extends SecureAction
 						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("storageposition.not.available"));
 						saveErrors(request,errors);
 					}
+					Logger.out.debug("calling checkForInitialValues() function from NewSpecimenAction---");
 					initialValues = checkForInitialValues(containerMap);
+					Logger.out.debug("finish ---calling checkForInitialValues() function from NewSpecimenAction---");
 
 				}
 

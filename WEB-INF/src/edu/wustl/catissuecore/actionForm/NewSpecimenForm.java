@@ -904,4 +904,5 @@ public class NewSpecimenForm extends SpecimenForm
 	{
 		this.lineage = lineage;
 	}
+	
 }

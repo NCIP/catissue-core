@@ -726,7 +726,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
-				 
+				 <%--
 				 <tr>
 				     <td class="formTitle" height="20" colspan="2" nowrap>
 				     	<bean:message key="specimen.externalIdentifier"/>
@@ -791,7 +791,8 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 						</td>
 					 </tr>
 				  <% } %>
-				 </tbody>
+				 </tbody>--%>
+  				<%@ include file="ExternalIdentifiers.jsp" %>
 				 </table>
 			 <!-- Bio-hazards End here -->
 

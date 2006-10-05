@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +19,13 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -33,6 +39,7 @@ import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This action contains methods that are called by MultipleSpecimenApplet
@@ -140,9 +147,11 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			Map multipleSpecimenFormBeanMap = (Map) request.getSession().getAttribute(
 					Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY);
 
+			Map multipleSpecimenEventsFormBean = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
+			if(multipleSpecimenEventsFormBean != null)
+				processEvents(specimenCollection,multipleSpecimenEventsFormBean);
 			Map finalMap = processFormBeansMap(specimenCollection,multipleSpecimenFormBeanMap);
-			
-
+						
 			//call bizLogic to save specimenCollection. It will first validate all the specimens.
 			insertSpecimens(request, finalMap);
 
@@ -449,5 +458,82 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		}
 		return specimenClassTypeMap;
 	}
+	
+	private void processEvents(Collection specimenCollection, Map multipleSpecimenFormBeanMap) throws Exception
+	{
+		
+		
+		Iterator specimenCollectionIterator = specimenCollection.iterator();
+
+		//set default values for the specimen.
+		int i = 1;
+		while (specimenCollectionIterator.hasNext())
+		{
+			Specimen specimen = (Specimen) specimenCollectionIterator.next();
+			NewSpecimenForm form = (NewSpecimenForm) multipleSpecimenFormBeanMap.get("Specimen:"+i+"_specimenEventCollection");
+			if(form == null)
+			{
+				throw new Exception("Give Events for specimen"+i); 
+			}
+			else
+			{
+				Collection specimenEventCollection = new HashSet();
+
+				CollectionEventParametersForm collectionEvent = new CollectionEventParametersForm();
+				collectionEvent.setCollectionProcedure(form
+						.getCollectionEventCollectionProcedure());
+				collectionEvent.setComments(form.getCollectionEventComments());
+				collectionEvent.setContainer(form.getCollectionEventContainer());
+				collectionEvent.setTimeInHours(form.getCollectionEventTimeInHours());
+				collectionEvent.setTimeInMinutes(form.getCollectionEventTimeInMinutes());
+				collectionEvent.setDateOfEvent(form.getCollectionEventdateOfEvent());
+				collectionEvent.setUserId(form.getCollectionEventUserId());
+				collectionEvent.setOperation(form.getOperation());
+
+				CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+				collectionEventParameters.setAllValues(collectionEvent);
+
+				//collectionEventParameters.setSpecimen(specimen);
+				Logger.out.debug("Before specimenEventCollection.size(): "
+						+ specimenEventCollection.size());
+				specimenEventCollection.add(collectionEventParameters);
+				Logger.out.debug("After specimenEventCollection.size(): "
+						+ specimenEventCollection.size());
+
+				Logger.out.debug("...14-July-06... : CollectionEvent set");
+
+				Logger.out.debug("Setting Received event in specimen domain object");
+				//setting received event values
+				ReceivedEventParametersForm receivedEvent = new ReceivedEventParametersForm();
+				receivedEvent.setComments(form.getReceivedEventComments());
+				receivedEvent.setDateOfEvent(form.getReceivedEventDateOfEvent());
+				receivedEvent.setReceivedQuality(form.getReceivedEventReceivedQuality());
+				receivedEvent.setUserId(form.getReceivedEventUserId());
+				receivedEvent.setTimeInMinutes(form.getReceivedEventTimeInMinutes());
+				receivedEvent.setTimeInHours(form.getReceivedEventTimeInHours());
+				receivedEvent.setOperation(form.getOperation());
+
+				ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+				receivedEventParameters.setAllValues(receivedEvent);
+				//receivedEventParameters.setSpecimen(specimen);
+
+				Logger.out.debug("Before specimenEventCollection.size(): "
+						+ specimenEventCollection.size());
+				specimenEventCollection.add(receivedEventParameters);
+				Logger.out.debug("After specimenEventCollection.size(): "
+						+ specimenEventCollection.size());
+				specimen.setSpecimenEventCollection(specimenEventCollection);	
+				Logger.out.debug("...14-July-06... : ReceivedEvent set");
+
+
+			}
+			i++;
+
+			
+		}
+		
+		
+	}
+	
 
 }

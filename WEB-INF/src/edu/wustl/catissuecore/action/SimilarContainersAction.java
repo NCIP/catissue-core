@@ -58,7 +58,7 @@ public class SimilarContainersAction extends SecureAction
 
 		StorageContainerForm similarContainersForm = (StorageContainerForm) form;
 
-		if(similarContainersForm.getSpecimenOrArrayType() == null)
+		if (similarContainersForm.getSpecimenOrArrayType() == null)
 		{
 			similarContainersForm.setSpecimenOrArrayType("Specimen");
 		}
@@ -77,7 +77,8 @@ public class SimilarContainersAction extends SecureAction
 		request.setAttribute(Constants.HOLDS_LIST1, storageTypeListWithAny);
 
 		List storagetypeList = new ArrayList();
-		NameValueBean nvb = new NameValueBean(similarContainersForm.getTypeName(),new Long(similarContainersForm.getTypeId()));
+		NameValueBean nvb = new NameValueBean(similarContainersForm.getTypeName(), new Long(
+				similarContainersForm.getTypeId()));
 		storagetypeList.add(nvb);
 		request.setAttribute(Constants.STORAGETYPELIST, storagetypeList);
 
@@ -88,14 +89,13 @@ public class SimilarContainersAction extends SecureAction
 		request.setAttribute(Constants.SITELIST, list);
 
 		// get the Specimen class and type from the cde
-    	List specimenClassTypeList=Utility.getSpecimenClassTypeListWithAny();
-	  	request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
-	  	
-	  	//Gets the Specimen array Type List and sets it in request
-        List list3=ibizLogic.retrieve(SpecimenArrayType.class.getName());
-    	List spArrayTypeList=Utility.getSpecimenArrayTypeList(list3);
-    	request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
+		List specimenClassTypeList = Utility.getSpecimenClassTypeListWithAny();
+		request.setAttribute(Constants.HOLDS_LIST2, specimenClassTypeList);
 
+		//Gets the Specimen array Type List and sets it in request
+		List list3 = ibizLogic.retrieve(SpecimenArrayType.class.getName());
+		List spArrayTypeList = Utility.getSpecimenArrayTypeList(list3);
+		request.setAttribute(Constants.HOLDS_LIST3, spArrayTypeList);
 
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
@@ -164,47 +164,38 @@ public class SimilarContainersAction extends SecureAction
 		// used for suffixing Unique numbers to auto-generated container name
 		long maxId = bizLogic.getNextContainerNumber();
 		request.setAttribute(Constants.MAX_IDENTIFIER, Long.toString(maxId));
-		request.setAttribute("ContainerNumber",new Long(maxId).toString());
-		List mapSiteList1 = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
+		request.setAttribute("ContainerNumber", new Long(maxId).toString());
+		List mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
 				.getParameter("typeId")).longValue());
-		Map containerMap1 = (Map)mapSiteList1.get(0);
-		List siteList1 = (List)mapSiteList1.get(1);
+		Map containerMap = (Map) mapSiteList.get(0);
+		List siteList1 = (List) mapSiteList.get(1);
 		/*Map containerMap1 = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
-				.getParameter("typeId")).longValue());*/
-		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap1);
-		request.setAttribute("siteForParentList",siteList1);
-		
-
+		 .getParameter("typeId")).longValue());*/
+		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+		request.setAttribute("siteForParentList", siteList1);
+		int noOfContainers = Integer.parseInt((String) request.getParameter("noOfContainers"));
 		if (similarContainersForm.getSimilarContainersMap().size() == 0)
 		{
-			Logger.out.info("inside sixe 0 condition---------------------");
-			int noOfContainers = Integer.parseInt((String) request.getParameter("noOfContainers"));
+
 			int siteOrParentCont = similarContainersForm.getCheckedButton();
-			Logger.out.debug("similarContainersForm.getSimilarContainerMapValue(checkedButton) "
-					+ similarContainersForm.getSimilarContainerMapValue("checkedButton"));
-			Logger.out.debug("siteOrParentCont " + siteOrParentCont);
 			similarContainersForm.setSimilarContainerMapValue("checkedButton", Integer
 					.toString(siteOrParentCont));
 
-			Logger.out.info(" Map:---------------"
-					+ similarContainersForm.getSimilarContainersMap());
 			if (siteOrParentCont == 2)
 			{
 
-				List mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
-						.getParameter("typeId")).longValue());
-				Map containerMap = (Map)mapSiteList.get(0);
-				List siteNameList = (List)mapSiteList.get(1);
-				request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-				request.setAttribute("siteForParentList",siteNameList);
+				//List mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
+				//	.getParameter("typeId")).longValue());
+				//Map containerMap = (Map) mapSiteList.get(0);
+				//List siteNameList = (List) mapSiteList.get(1);
+				//request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+				//request.setAttribute("siteForParentList", siteNameList);
 				String[] startingPoints = new String[3];
 				startingPoints[0] = Long.toString(similarContainersForm.getParentContainerId());
 				startingPoints[1] = Integer.toString(similarContainersForm
 						.getPositionDimensionOne());
 				startingPoints[2] = Integer.toString(similarContainersForm
 						.getPositionDimensionTwo());
-				Logger.out.debug("similarContainersForm.getParentContainerId() #$% "
-						+ similarContainersForm.getParentContainerId());
 				if (similarContainersForm.getParentContainerId() != 0l)
 				{
 					Vector initialValues = getInitalValues(startingPoints, containerMap,
@@ -251,7 +242,6 @@ public class SimilarContainersAction extends SecureAction
 			similarContainersForm.setSimilarContainerMapValue("simCont:1_barcode", barcode);
 
 			request.setAttribute(Constants.PAGEOF, pageOf);
-			System.out.println("SimilarContainersAction pageOf " + pageOf);
 
 		}
 
@@ -277,7 +267,32 @@ public class SimilarContainersAction extends SecureAction
 					+ "_" + typeName + "_" + (maxId + i - 1));
 
 		}
-		Logger.out.info("Similar container map value:"
+
+		String errorStr = request.getParameter("error");
+		if (errorStr != null && errorStr.equals("true"))
+		{
+
+			Vector returner = new Vector();
+			for (int i = 0; i < noOfContainers; i++)
+			{
+
+				/*simCont:1_positionDimensionOne=4
+				 simCont:1_parentContainerId=2
+				 , simCont:1_positionDimensionTwo=3,*/
+				String[] initValues = new String[3];
+				initValues[0] = (String) similarContainersForm
+						.getSimilarContainerMapValue("simCont:" + (i + 1) + "_parentContainerId");
+				initValues[1] = (String) similarContainersForm
+						.getSimilarContainerMapValue("simCont:" + (i + 1) + "_positionDimensionOne");
+				initValues[2] = (String) similarContainersForm
+						.getSimilarContainerMapValue("simCont:" + (i + 1) + "_positionDimensionTwo");
+				returner.add(initValues);
+			}
+
+			request.setAttribute("initValues", returner);
+
+		}
+		Logger.out.debug("Similar container map value:"
 				+ similarContainersForm.getSimilarContainersMap());
 
 		return mapping.findForward(pageOf);
@@ -304,45 +319,6 @@ public class SimilarContainersAction extends SecureAction
 		return true;
 	}
 
-	//	public static void main(String args[])
-	//	{
-	//		Map dMap = new TreeMap();
-	//		Map xMap = new TreeMap();
-	//		List yList = new Vector();
-	//		int counter = 0;
-	//		int counter1 = 0;
-	//		for(int i = 0 ; i < 3 ; i++)
-	//		{
-	//			xMap = new TreeMap();
-	//			for(int j = 0; j <2; j++)
-	//			{
-	//				yList = new Vector();
-	//				for(int k = 0; k < 3; k++)
-	//				{
-	//					yList.add(new Integer(counter++));
-	//				}
-	//				xMap.put(new Integer(counter1++),yList);
-	//			}
-	//			dMap.put(new Integer(i),xMap);
-	//		}
-	//		
-	//		String[] startingPoint = new String[] {"0","1","4"};
-	//		int noOfCont = 7;
-	//		
-	//		Vector results = SimilarContainersAction.getInitalValues(startingPoint,dMap,noOfCont);
-	//		for(int i =0; i< results.size(); i++)
-	//		{
-	//			String[] result = (String[])results.get(i);
-	//			for(int j= 0; j<result.length;j++)
-	//			{
-	//				System.out.println(i+" result "+result[j]);
-	//			}
-	//			System.out.println();
-	//		}
-	//		
-	//		System.out.println("results "+results);
-	//	}
-
 	/**
 	 * @param startingPoint
 	 * @param dMap
@@ -351,10 +327,6 @@ public class SimilarContainersAction extends SecureAction
 	 */
 	private Vector getInitalValues(String[] startingPoint, Map dMap, int noOfContainers)
 	{
-		//System.out.println("dmAp "+dMap+" noOfCont "+noOfContainers);
-		Logger.out.info("Starting point 1:" + startingPoint[0]);
-		Logger.out.info("Starting point 2:" + startingPoint[1]);
-		Logger.out.info("Starting point 3:" + startingPoint[2]);
 		Vector returner = new Vector();
 		String[] initValues = new String[3];
 		Iterator dMapIter = dMap.keySet().iterator();
@@ -367,7 +339,6 @@ public class SimilarContainersAction extends SecureAction
 		}
 		while (!(dMapKey.getValue().equals(startingPoint[0])));
 		Map xMap = (Map) dMap.get(dMapKey);
-		//System.out.println("dMpaKey "+dMapKey.toString()+" xMap "+xMap);
 
 		Iterator xMapIter = xMap.keySet().iterator();
 
@@ -377,7 +348,6 @@ public class SimilarContainersAction extends SecureAction
 		}
 		while (!(xMapKey.getValue().equals(startingPoint[1])));
 		List yList = (List) xMap.get(xMapKey);
-		//System.out.println("xMapKey "+xMapKey.toString()+" yList "+yList);
 
 		Iterator yListIter = yList.iterator();
 		do
@@ -442,6 +412,5 @@ public class SimilarContainersAction extends SecureAction
 
 		return returner;
 	}
-
 
 }

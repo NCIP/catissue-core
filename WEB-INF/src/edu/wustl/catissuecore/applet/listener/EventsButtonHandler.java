@@ -10,14 +10,14 @@ import javax.swing.JTable;
 /**
  * @author vaishali_khandelwal
  * 
- * This class handles all the events of bio hazard button.
+ * This class handles all the events of events button.
  */
-public class BioHazardButtonHandler extends ButtonHandler {
+public class EventsButtonHandler extends ButtonHandler {
 
 	/**
 	 * @param table
 	 */
-	public BioHazardButtonHandler(JTable table) {
+	public EventsButtonHandler(JTable table) {
 		super(table);
 	}
 
@@ -26,7 +26,7 @@ public class BioHazardButtonHandler extends ButtonHandler {
 	 */
 	protected String getJSMethodName()
 	{
-		return "showBioHazardDialog";
+		return "showEventsDialog";
 	}
 
 }

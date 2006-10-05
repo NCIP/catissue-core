@@ -332,7 +332,7 @@
 						<bean:message key="storageContainer.type"/> 
 						</label>
 					</td>
-					<td class="formField">
+					<td class="formField" colspan="2">
 						<%--<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="storageContainerType" property="typeName" readonly="true"/>--%>
 					<html:select property="typeId" styleClass="formFieldSized" styleId="storageContainerType" size="1">
 								<html:options collection="<%=Constants.STORAGETYPELIST%>" labelProperty="name" property="value"/>
@@ -347,7 +347,7 @@
 						<bean:message key="storageContainer.temperature"/> 
 						</label>
 					</td>
-					<td class="formField">
+					<td class="formField" colspan="2">
 						<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="defaultTemperature" property="defaultTemperature" />
 					</td>
 				  </tr>
@@ -360,7 +360,7 @@
 						</label>
 					</td>
 		
-					<td class="formField" >
+					<td class="formField" colspan="2">
 						<!-- Mandar : 434 : for tooltip -->
 						<html:select property="collectionIds" styleClass="formFieldSized" styleId="collectionIds" size="4"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" multiple="true" >
@@ -379,7 +379,7 @@
 						<bean:message key="storageContainer.holds"/> 
 						</label>
 					</td>
-					<td class="formField" >
+					<td class="formField" colspan="2">
 					<table>
 							<tr><td class="standardText" align="center">
 									<bean:message key="storageContainer.containerType"/>
@@ -437,7 +437,7 @@
 					<td class="formRequiredLabel">			
 						&nbsp;<%=label1%>
 					</td>
-					<td class="formField">
+					<td class="formField" colspan="2">
 						<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity" />
 					</td>
 				  </tr>
@@ -455,37 +455,29 @@
 							}
 						%>
 					</td>
-					<td class="formField">
+					<td class="formField" colspan="2">
 						<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity" />
 					</td>
 				  </tr>
-				  <tr>
-					  <td colspan="6">
-						&nbsp;<%--aa--%>
-						</td>
-				   </tr>	  						  	
 		 		  <tr>	
-					<td colspan="6" width="600">
-						<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
-						  <tr>
-							<td class="formLeftSubTableTitle" width="5">
+						<td class="formLeftSubTableTitle" width="5">
 				    		 	#
-						    </td>
-				    		<td class="formRightSubTableTitle">*
+						 </td>
+				    	  <td class="formRightSubTableTitle">*
 								<bean:message key="storageContainer.containerName"/>
-							</td>
-							<td class="formRightSubTableTitle">
+						   </td>
+						 <td class="formRightSubTableTitle">
 								<bean:message key="storageContainer.barcode"/>
-							</td>
-							<td class="formRightSubTableTitle">*
-								<logic:equal name="storageContainerForm" property="checkedButton" value="1">
-								<bean:message key="storageContainer.site"/>
-								</logic:equal>
-								<logic:equal name="storageContainerForm" property="checkedButton" value="2">
-								<bean:message key="storageContainer.parentContainer"/>
-								</logic:equal>
-							</td>
-						  </tr>
+						</td>
+						<td class="formRightSubTableTitle">*
+							<logic:equal name="storageContainerForm" property="checkedButton" value="1">
+							<bean:message key="storageContainer.site"/>
+							</logic:equal>
+							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
+							<bean:message key="storageContainer.parentContainer"/>
+							</logic:equal>
+						</td>
+				 </tr>
 	  
 						  <%-- n-combo-box start --%>
 	  
@@ -606,7 +598,7 @@
 							<td class="formField">
 								<table summary="" cellpadding="3" cellspacing="0" border="0">
 									<tr>
-										<td class="formFieldBottom">
+										<td class="formFieldNoBordersSimple">
 										<logic:equal name="storageContainerForm" property="checkedButton" value="1">
 										<html:select property="<%=siteKey%>" styleClass="formField" styleId="<%=siteSId%>" size="1" onchange="<%=onSiteChange%>">
 										<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
@@ -635,30 +627,30 @@
 											buttonOnClick = "<%=buttonOnClicked%>" />
 											</logic:equal>
 										</td>
-									</tr>
-								</table>
+								   </tr>
+								</table>	
 							</td>
-					   </tr>
+						</tr>		   
 	  			
 	   	
 					  <%
 					  	maxIdentifier++;
 						} //For
 					  %>
-					  <tr>
-					  	
-					  
-					</table>
-					
-				</td>
-			</tr>	
+
 			<tr>
 			   	<td align="right" colspan="6">
 	   			<html:submit styleClass="actionButton" onclick="onClick(this)">
 					<bean:message key="buttons.submit"/>
 				</html:submit>
 				</td>
-	    	 </tr>	
+	    	 </tr>			  	
+					  
+					</table>
+					
+				</td>
+			</tr>	
+			
 			</table>
 		</td>
 	</tr>	
