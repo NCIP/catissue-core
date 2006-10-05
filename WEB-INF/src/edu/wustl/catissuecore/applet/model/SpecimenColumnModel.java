@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.applet.listener.ButtonHandler;
 import edu.wustl.catissuecore.applet.listener.ClassComboBoxHandler;
 import edu.wustl.catissuecore.applet.listener.CollectionGroupItemHandler;
 import edu.wustl.catissuecore.applet.listener.ComboBoxHandler;
+import edu.wustl.catissuecore.applet.listener.EventsButtonHandler;
 import edu.wustl.catissuecore.applet.listener.DerivedSpecimenButtonHandler;
 import edu.wustl.catissuecore.applet.listener.ExternalIdentifierButtonHandler;
 import edu.wustl.catissuecore.applet.listener.MapButtonHandler;
@@ -474,7 +475,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		comments.addActionListener(buttonHandler);
 		
 		//Events 
-		//eventsButton.addActionListener(buttonHandler);
+		eventsButton.addActionListener(new EventsButtonHandler(table));
 		
 		//External Identifier
 		externalIdentifierButton.addActionListener(new ExternalIdentifierButtonHandler(table));

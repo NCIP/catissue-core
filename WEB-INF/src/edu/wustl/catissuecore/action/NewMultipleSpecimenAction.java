@@ -2,6 +2,8 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -10,6 +12,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -19,12 +24,18 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 public class NewMultipleSpecimenAction extends DispatchAction
@@ -38,8 +49,8 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward showCommentsDialog(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	public ActionForward showCommentsDialog(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		request.setAttribute("output", "init");
 		request.setAttribute("type", Constants.COMMENTS_TYPE);
@@ -62,11 +73,11 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	 * @return
 	 * @throws Exception
 	 */
-	// TODO null
-	public ActionForward showMultipleSpecimen(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	public ActionForward showMultipleSpecimen(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY, null);
+		//		request.getSession().removeAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
+
 		return mapping.findForward("specimen");
 	}
 
@@ -102,16 +113,33 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	 */
 	private Map chkForMultipleSpecimenMap(HttpServletRequest request)
 	{
-		Map multipleSpecimenMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
+		Map multipleSpecimenMap = (Map) request.getSession().getAttribute(
+				Constants.MULTIPLE_SPECIMEN_MAP_KEY);
 
 		if (multipleSpecimenMap == null)
 		{
 			Logger.out.debug("adding new multipleSpecimenMap to session");
 			multipleSpecimenMap = new HashMap();
-			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, multipleSpecimenMap);
+			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY,
+					multipleSpecimenMap);
 		}
 
 		return multipleSpecimenMap;
+	}
+
+	private Map chkForEventsMap(HttpServletRequest request)
+	{
+		Map eventsMap = (Map) request.getSession().getAttribute(
+				Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
+
+		if (eventsMap == null)
+		{
+
+			eventsMap = new HashMap();
+			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY, eventsMap);
+		}
+
+		return eventsMap;
 	}
 
 	/**
@@ -212,8 +240,8 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	 * displays external identifer page populated with previously added information.
 	 * 
 	 */
-	public ActionForward showBioHazardDialog(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	public ActionForward showBioHazardDialog(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		request.setAttribute("type", Constants.BIOHAZARD_TYPE);
 		request.setAttribute("output", "init");
@@ -233,8 +261,7 @@ public class NewMultipleSpecimenAction extends DispatchAction
 		}
 		return mapping.findForward("bioHazard");
 	}
-
-	/**
+/**
 	 * displays external identifer page populated with previously added information.
 	 * 
 	 */
@@ -340,6 +367,7 @@ public class NewMultipleSpecimenAction extends DispatchAction
 		return mapping.findForward("showDerivedSpecimenDialog");
 	}
 
+
 	/**
 	 * @param mapping
 	 * @param form
@@ -398,7 +426,8 @@ public class NewMultipleSpecimenAction extends DispatchAction
 
 		//Setting biohazard list
 
-		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance()
+				.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 
 		String[] bhIdArray = {"-1"};
 		String[] bhTypeArray = {Constants.SELECT_OPTION};
@@ -435,8 +464,278 @@ public class NewMultipleSpecimenAction extends DispatchAction
 		request.setAttribute(Constants.BIOHAZARD_ID_LIST, bhIdArray);
 		request.setAttribute(Constants.BIOHAZARD_TYPES_LIST, bhTypeArray);
 
-		biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD, null);
+		biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_BIOHAZARD, null);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
 
 	}
+
+	/**
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward showEventsDialog(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		request.setAttribute("output", "init");
+		request.setAttribute("type", Constants.EVENTS_TYPE);
+
+		setEventsRequestAttributes(request);
+
+		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				Constants.USER_FORM_ID);
+		Collection userCollection = userBizLogic.getUsers(Constants.ADD);
+
+		SessionDataBean sessionData = getSessionData(request);
+		if (sessionData != null)
+		{
+			String user = sessionData.getLastName() + ", " + sessionData.getFirstName();
+			long collectionEventUserId = getIdFromCollection(userCollection, user);
+			((NewSpecimenForm) form).setCollectionEventUserId(collectionEventUserId);
+			((NewSpecimenForm) form).setReceivedEventUserId(collectionEventUserId);
+		}
+		setDateParameters((NewSpecimenForm) form);
+
+		Map multipleSpecimenEventMap = chkForEventsMap(request);
+		String keyInEventSpecimenMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
+		NewSpecimenForm specimenForm = (NewSpecimenForm) multipleSpecimenEventMap
+				.get(keyInEventSpecimenMap);
+
+		if (specimenForm != null)
+		{
+
+			//NewSpecimenForm specimenForm = (NewSpecimenForm)collAndReceivedParameters.get("CollAndRecEvent");
+			setCollectionEventParameters(form, specimenForm);
+			setRecievedEventParameters(form, specimenForm);
+		}
+
+		return mapping.findForward("events");
+	}
+
+	/**
+	 * @param mapping
+	 * @param form
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	public ActionForward submitEvents(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+
+		//request.setAttribute("output", "success");
+		ActionErrors errors = validateEvents(request, form);
+		if (errors.isEmpty())
+		{
+			request.setAttribute("output", "success");
+			Map multipleSpecimenEventMap = chkForEventsMap(request);
+			String keyInSpecimenEventMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
+
+			multipleSpecimenEventMap.put(keyInSpecimenEventMap, form);
+
+			return mapping.findForward("events");
+		}
+		else
+		{
+			saveErrors(request,errors);
+			return showEventsDialog(mapping,form,request,response);
+		}
+		//return mapping.findForward("events");
+	}
+
+	private void setEventsRequestAttributes(HttpServletRequest request) throws DAOException
+	{
+		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				Constants.USER_FORM_ID);
+		Collection userCollection = userBizLogic.getUsers(Constants.ADD);
+
+		request.setAttribute(Constants.USERLIST, userCollection);
+
+		// set the procedure lists
+		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
+		request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
+
+		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_RECEIVED_QUALITY, null);
+		request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
+
+		//		 set the container lists
+		List containerList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_CONTAINER, null);
+		request.setAttribute(Constants.CONTAINER_LIST, containerList);
+
+	}
+
+	private void setCollectionEventParameters(ActionForm form, NewSpecimenForm specimenForm)
+	{
+		((NewSpecimenForm) form).setCollectionEventId(specimenForm.getCollectionEventId());
+		((NewSpecimenForm) form).setCollectionEventSpecimenId(specimenForm
+				.getCollectionEventSpecimenId());
+		((NewSpecimenForm) form).setCollectionEventUserId(specimenForm.getCollectionEventUserId());
+		((NewSpecimenForm) form).setCollectionEventdateOfEvent(specimenForm
+				.getCollectionEventdateOfEvent());
+		((NewSpecimenForm) form).setCollectionEventTimeInHours(specimenForm
+				.getCollectionEventTimeInHours());
+		((NewSpecimenForm) form).setCollectionEventTimeInMinutes(specimenForm
+				.getCollectionEventTimeInMinutes());
+		((NewSpecimenForm) form).setCollectionEventCollectionProcedure(specimenForm
+				.getCollectionEventCollectionProcedure());
+		((NewSpecimenForm) form).setCollectionEventContainer(specimenForm
+				.getCollectionEventContainer());
+		((NewSpecimenForm) form).setCollectionEventComments(specimenForm
+				.getCollectionEventComments());
+
+	}
+
+	private void setRecievedEventParameters(ActionForm form, NewSpecimenForm specimenForm)
+	{
+		((NewSpecimenForm) form).setReceivedEventId(specimenForm.getReceivedEventId());
+		((NewSpecimenForm) form).setReceivedEventSpecimenId(specimenForm
+				.getReceivedEventSpecimenId());
+		((NewSpecimenForm) form).setReceivedEventUserId(specimenForm.getReceivedEventUserId());
+		((NewSpecimenForm) form).setReceivedEventDateOfEvent(specimenForm
+				.getReceivedEventDateOfEvent());
+		((NewSpecimenForm) form).setReceivedEventTimeInHours(specimenForm
+				.getReceivedEventTimeInHours());
+		((NewSpecimenForm) form).setReceivedEventTimeInMinutes(specimenForm
+				.getReceivedEventTimeInMinutes());
+		((NewSpecimenForm) form).setReceivedEventReceivedQuality(specimenForm
+				.getReceivedEventReceivedQuality());
+		((NewSpecimenForm) form).setReceivedEventComments(specimenForm.getReceivedEventComments());
+	}
+
+	private SessionDataBean getSessionData(HttpServletRequest request)
+	{
+		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+		if (obj != null)
+		{
+			SessionDataBean sessionData = (SessionDataBean) obj;
+			return sessionData;
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 * @param userList Collection
+	 * @param userName userName
+	 * @return long
+	 */
+	private long getIdFromCollection(Collection userList, String userName)
+	{
+		Iterator itr = userList.iterator();
+		for (int i = 0; itr.hasNext(); i++)
+		{
+			NameValueBean nameValueBean = (NameValueBean) itr.next();
+			if (nameValueBean.getName() != null && nameValueBean.getName().trim().equals(userName))
+			{
+				String id = nameValueBean.getValue();
+				return Long.valueOf(id).longValue();
+			}
+		}
+		return -1;
+	}
+
+	private void setDateParameters(NewSpecimenForm specimenForm)
+	{
+		// set the current Date and Time for the event.
+		Calendar cal = Calendar.getInstance();
+		//Collection Event fields
+		if (specimenForm.getCollectionEventdateOfEvent() == null)
+		{
+			specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(),
+					Constants.DATE_PATTERN_MM_DD_YYYY));
+		}
+		if (specimenForm.getCollectionEventTimeInHours() == null)
+		{
+			specimenForm.setCollectionEventTimeInHours(Integer.toString(cal
+					.get(Calendar.HOUR_OF_DAY)));
+		}
+		if (specimenForm.getCollectionEventTimeInMinutes() == null)
+		{
+			specimenForm
+					.setCollectionEventTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
+		}
+
+		//ReceivedEvent Fields
+		if (specimenForm.getReceivedEventDateOfEvent() == null)
+		{
+			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(),
+					Constants.DATE_PATTERN_MM_DD_YYYY));
+		}
+		if (specimenForm.getReceivedEventTimeInHours() == null)
+		{
+			specimenForm.setReceivedEventTimeInHours(Integer
+					.toString(cal.get(Calendar.HOUR_OF_DAY)));
+		}
+		if (specimenForm.getReceivedEventTimeInMinutes() == null)
+		{
+			specimenForm.setReceivedEventTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
+		}
+
+	}
+
+	private ActionErrors validateEvents(HttpServletRequest request, ActionForm actionForm)
+	{
+		NewSpecimenForm form = (NewSpecimenForm) actionForm;
+		Validator validator = new Validator();
+		ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+		if (errors == null || errors.size() == 0)
+		{
+			errors = new ActionErrors();
+		}
+		if ((form.getCollectionEventUserId()) == -1L)
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					"Collection Event's user"));
+		}
+		if (!validator.checkDate(form.getCollectionEventdateOfEvent()))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					"Collection Event's date"));
+		}
+
+		// checks the collectionProcedure
+		if (!validator.isValidOption(form.getCollectionEventCollectionProcedure()))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR,
+					new ActionError("errors.item.required", ApplicationProperties
+							.getValue("collectioneventparameters.collectionprocedure")));
+		}
+//		 checks the collection container
+		if (!validator.isValidOption(form.getCollectionEventContainer()))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR,
+					new ActionError("errors.item.required", ApplicationProperties
+							.getValue("collectioneventparameters.container")));
+		}
+
+		if ((form.getReceivedEventUserId()) == -1L)
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					"Received Event's user"));
+		}
+		if (!validator.checkDate(form.getReceivedEventDateOfEvent()))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					"Received Event's date"));
+		}
+
+		// checks the collectionProcedure
+		if (!validator.isValidOption(form.getReceivedEventReceivedQuality()))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+					ApplicationProperties.getValue("receivedeventparameters.receivedquality")));
+		}
+
+		return errors;
+
+	}
+
 }

@@ -13,9 +13,6 @@
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%
-//	String bhIdArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_ID_LIST);
-	//String bhNameArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_NAME_LIST);
-//	String bhTypeArray [] = (String []) request.getAttribute(Constants.BIOHAZARD_TYPES_LIST);
 	
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
@@ -86,73 +83,12 @@
 		readOnlyValue=false;
 	}
 
-
+	String formNameForCal = "newSpecimenForm";
 	
 %>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript">
-
-	
-<%--
-		//ADD MORE -------- EXTERNAL IDENTIFIER
-		function insExIdRow(subdivtag)
-		{
-			var val = parseInt(document.forms[0].exIdCounter.value);
-			val = val + 1;
-			document.forms[0].exIdCounter.value = val;
-		
-			
-			var r = new Array(); 
-			r = document.getElementById(subdivtag).rows;
-			var q = r.length;
-			var rowno = q + 1;
-			var x=document.getElementById(subdivtag).insertRow(0);
-		
-			// First Cell
-			var spreqno=x.insertCell(0);
-			spreqno.className="formSerialNumberField";
-			sname=(q+1);
-			var identifier = "externalIdentifierValue(ExternalIdentifier:" + (q+1) +"_id)";
-			var hiddenTag = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-			spreqno.innerHTML="" + rowno + "." + hiddenTag;
-		
-			//Second Cell
-			var spreqtype=x.insertCell(1);
-			spreqtype.className="formField";
-			spreqtype.colSpan=1;
-			sname="";
-			
-			var name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_name)";
-			sname="<input type='text' name='" + name + "'  maxlength='50' class='formFieldSized15' id='" + name + "'>";      
-		
-		
-			spreqtype.innerHTML="" + sname;
-		
-			//Third Cell
-			var spreqsubtype=x.insertCell(2);
-			spreqsubtype.className="formField";
-			spreqsubtype.colSpan=2;
-			sname="";
-		
-			name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_value)";
-			sname= "";
-			
-			sname="<input type='text' name='" + name + "' maxlength='50'  class='formFieldSized15' id='" + name + "'>"   
-		
-			spreqsubtype.innerHTML="" + sname;
-			
-			//Fourth Cell
-			var checkb=x.insertCell(3);
-			checkb.className="formField";
-			checkb.colSpan=2;
-			sname="";
-			var name = "chk_ex_"+ rowno;
-			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteExId,document.forms[0].exIdCounter,'chk_ex_')\">";
-			checkb.innerHTML=""+sname;
-		}
-		
-	--%>	
 	function deleteExternalIdentifiers()
 	{
 		deleteChecked('addExternalIdentifier','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false);
@@ -161,71 +97,6 @@
 	{
 		deleteChecked('addBiohazardRow','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false);
 	}
-		//ADD MORE FUNCTIONALITY FOR BIOHAZARDS
-		function insBhRow(subdivtag)
-		{
-			var val = parseInt(document.forms[0].bhCounter.value);
-			val = val + 1;
-			document.forms[0].bhCounter.value = val;
-			
-			var r = new Array(); 
-			r = document.getElementById(subdivtag).rows;
-			var q = r.length;
-			var x=document.getElementById(subdivtag).insertRow(0);
-			
-			// First Cell
-			var spreqno=x.insertCell(0);
-			spreqno.className="formSerialNumberField";
-			sname=(q+1);
-			//var identifier = "biohazardValue(Biohazard:" + (q+1) +"_id)";
-			//var hiddenTag = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-			spreqno.innerHTML= "" + sname;
-
-			//Second Cell
-			var spreqtype=x.insertCell(1);
-			spreqtype.className="formField";
-			sname="";
-
-			var name = "biohazardValue(Biohazard:" + (q+1) + "_type)";
-		// Mandar : 434 : for tooltip 
-			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='" + name + "' onchange=onBiohazardTypeSelected(this) onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
-			<%
-					if(biohazardList != null && biohazardList.size() != 0)
-					{
-						for(int i=0;i<biohazardList.size();i++)
-						{
-							NameValueBean bean = (NameValueBean)biohazardList.get(i);
-			%>
-							sname = sname + "<option value='<%=bean.getValue()%>'><%=bean.getName()%></option>";
-			<%			}
-					}
-			%>
-			sname = sname + "</select>";
-			spreqtype.innerHTML="" + sname;
-		
-			//Third Cellvalue()
-			var spreqsubtype=x.insertCell(2);
-			spreqsubtype.className="formField";
-			spreqsubtype.colSpan=2;
-			sname="";
-
-			name = "biohazardValue(Biohazard:" + (q+1) + "_id)";
-			sname= "";
-	//Mandar : 434 : for tooltip 		
-			sname="<select name='" + name + "' size='1' class='formFieldSized15' id='bhId" + (q+1) + "' onmouseover=showTip(this.id) onmouseout=hideTip(this.id)>";
-			sname = sname + "<option value='-1'><%=Constants.SELECT_OPTION%></option>";			
-			sname = sname + "</select>";
-			spreqsubtype.innerHTML="" + sname;
-			
-			//Fourth Cell
-			var checkb=x.insertCell(3);
-			checkb.className="formField";
-			checkb.colSpan=2;
-			sname="";
-			var name = "chk_bio_"+ (q+1);
-			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteBiohazard,document.forms[0].bhCounter,'chk_bio_')\">";
-			checkb.innerHTML=""+sname;
-		}
 		
 		function onCheckboxButtonClick(chkBox)
 		{
@@ -342,16 +213,7 @@
 		{
 			exIdRows = form.getExIdCounter();
 			bhRows	 = form.getBhCounter();
-			//System.out.println("form.getAvailableQuantity()--"+form.getAvailableQuantity());
-			//System.out.println("form.getQuantity()--"+form.getQuantity());
-	//		if(form.getUnit() != null)
-	//		{
-	//			unitSpecimen = form.getUnit();
-	//			System.out.println("\n\n\nunitSpecimen : " +unitSpecimen);
-	//		}	
-	//		else
-	//		{
-				if(form.getClassName().equals("Tissue"))
+			if(form.getClassName().equals("Tissue"))
 				{
 					//Mandar : 25-Apr-06 :Bug 1414
 					if((form.getType()!=null) && (form.getType().equals(Constants.FROZEN_TISSUE_SLIDE)||form.getType().equals(Constants.FIXED_TISSUE_BLOCK)||form.getType().equals(Constants.FROZEN_TISSUE_BLOCK)||form.getType().equals(Constants.NOT_SPECIFIED)||form.getType().equals(Constants.FIXED_TISSUE_SLIDE)))
@@ -381,7 +243,6 @@
 					unitSpecimen = Constants.UNIT_MG;
 				}
 				
-		//	}
 		}
 		
 		
@@ -463,10 +324,10 @@
 								<html:hidden property="forwardTo" value=""/>
 							</td>
 							<td>
-<%--								<html:hidden property="exIdCounter"/>--%>
+
 							</td>
 							<td>
-<%--								<html:hidden property="bhCounter"/>--%>
+
 							</td>
 							<td>
 								<html:hidden property="onSubmit"/>
@@ -939,7 +800,7 @@
 				</table>	
 				
 				
-				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">					
+				<%--<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">					
 					<!-- Mandar AutoEvents start -->		
 					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 					<tr>						
@@ -1089,7 +950,7 @@
 								<!-- Mandar : 434 : for tooltip -->
 								<html:select property="collectionEventCollectionProcedure" styleClass="formFieldSized15" styleId="collectionEventCollectionProcedure" size="1"
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-									<%--html:options name="<%=Constants.PROCEDURE_LIST%>" labelName="<%=Constants.PROCEDURE_LIST%>" /--%>
+									<!--html:options name="<%=Constants.PROCEDURE_LIST%>" labelName="<%=Constants.PROCEDURE_LIST%>" /-->
 									<html:options collection="<%=Constants.PROCEDURE_LIST%>" labelProperty="name" property="value"/>
 								</html:select>							
 						</td>						
@@ -1122,7 +983,7 @@
 							<td class="formField">
 								<html:select property="collectionEventContainer" styleClass="formFieldSized15" styleId="collectionEventContainer" size="1"
 									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-										<%--html:options name="<%=Constants.CONTAINER_LIST%>" labelName="<%=Constants.CONTAINER_LIST%>" /--%>
+										<!--html:options name="<%=Constants.CONTAINER_LIST%>" labelName="<%=Constants.CONTAINER_LIST%>" /-->
 										<html:options collection="<%=Constants.CONTAINER_LIST%>" labelProperty="name" property="value"/>
 								</html:select>
 							</td>
@@ -1154,174 +1015,15 @@
 						
 				 	</tr>
 					</logic:equal>
-					
+				
 				<!-- Mandar: 11-July-06 AutoEvents end  -->
-				</table>	
-				
-<%--				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">--%>
-			<%--	<tr>
-				     <td class="formTitle" height="20" colspan="2">
-				     	<bean:message key="specimen.externalIdentifier"/>
-				     </td>
-				     <td class="formButtonField" colspan="2">
-				     	<html:button property="addExId" styleClass="actionButton" onclick="insExIdRow('addExternalIdentifier')">
-				     		<bean:message key="buttons.addMore"/>
-				     	</html:button>
-				    </td>
-				    <td class="formTitle" align="Right">
-							<html:button property="deleteExId" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false)" disabled="true">
-								<bean:message key="buttons.delete"/>
-							</html:button>
-					</td>
-				 </tr>--%>
-				 
-				 <%--	<tr>
-					 	<td class="formSerialNumberLabel" width="5">
-					     	#
-					    </td>
-					    <td class="formLeftSubTableTitle">
-							<bean:message key="externalIdentifier.name"/>
-						</td>
-					    <td class="formRightSubTableTitle" colspan="2">
-							<bean:message key="externalIdentifier.value"/>
-						</td>
-						<td class="formRightSubTableTitle">
-							<label for="delete" align="center">
-								<bean:message key="addMore.delete" />
-							</label>
-						</td>
-					 </tr>--%>
-<%--				  <tbody id="addExternalIdentifier">
-				  <%
-				  	for(int i=exIdRows;i>=1;i--)
-				  	{
-						String exName = "externalIdentifierValue(ExternalIdentifier:" + i + "_name)";
-						String exValue = "externalIdentifierValue(ExternalIdentifier:" + i + "_value)";
-						String exIdentifier = "externalIdentifierValue(ExternalIdentifier:" + i +"_id)";
-						String check = "chk_ex_"+i;
-				  %>
-					<tr>
-					 	<td class="formSerialNumberField" width="5"><%=i%>.
-				 			<html:hidden property="<%=exIdentifier%>" />
-				 		</td>
-					    <td class="formField">
-				     		<html:text styleClass="formFieldSized15" maxlength="50"  styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
-				    	</td>
-				    	<td class="formField" colspan="2">
-				     		<html:text styleClass="formFieldSized15" maxlength="50"  styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
-				    	</td>
-				    	<%
-							String exKey = "ExternalIdentifier:" + i +"_id";
-							boolean exBool = Utility.isPersistedValue(map,exKey);
-							String exCondition = "";
-							if(exBool)
-								exCondition = "disabled='disabled'";
-
-						%>
-						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=exCondition%> onClick="enableButton(document.forms[0].deleteExId,document.forms[0].exIdCounter,'chk_ex_')">		
-						</td>
-					 </tr>
-				  <% } %>
-				 </tbody>--%>				 
+				</table>	--%>
+				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+				<%@ include file="CollAndRecEvents.jsp" %>
+				</logic:equal>
 				<%@ include file="ExternalIdentifiers.jsp" %>
-				
-				<logic:notEqual name="newSpecimenForm" property="lineage" value="Derived">
-				<%-- <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-				 <tr>
-				     <td class="formTitle" height="20" colspan="2">
-				     	<bean:message key="specimen.biohazards"/>
-				     </td>
-				     <td class="formButtonField" colspan="2">
-				     	<html:button property="addBiohazard" styleClass="actionButton" onclick="insBhRow('addBiohazardRow')">
-				     		<bean:message key="buttons.addMore"/>
-				     	</html:button>
-				    </td>
-				    <td class="formTitle" align="Right">
-							<html:button property="deleteBiohazard" styleClass="actionButton" onclick="deleteChecked('addBiohazardRow','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false)" disabled="true">
-								<bean:message key="buttons.delete"/>
-							</html:button>
-					</td>
-				  </tr>
-				  
-				  <tr>
-				 	<td class="formSerialNumberLabel" width="5">
-				     	#
-				    </td>
-				    <td class="formLeftSubTableTitle">
-						<bean:message key="biohazards.type"/>
-					</td>
-				    <td class="formRightSubTableTitle" colspan="2">
-						<bean:message key="biohazards.name"/>
-					</td>
-					<td class="formRightSubTableTitle">
-							<label for="delete" align="center">
-								<bean:message key="addMore.delete" />
-							</label>
-					</td>
-				 </tr>
-				 
-				 <tbody id="addBiohazardRow">
-				 <%
-				  	Map bioHazardMap = form.getBiohazard();
 
-					for(int i=bhRows;i>=1;i--)
-				  	{
-						String bhType = "biohazardValue(Biohazard:" + i + "_type)";
-						String bhTypeKey = "Biohazard:" + i + "_type";
-						String bhId	  = "biohazardValue(Biohazard:" + i + "_id)";
-						String biohzId = "biohazardValue(Biohazard:" + i + "_persisted)";
-						String check = "chk_bio_"+i;
-				  %>
-					<tr>
-						<td class="formSerialNumberField" width="5"><%=i%>.
-					 		<html:hidden property="<%=biohzId%>" />
-					 	</td>
-					    <td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				     		<html:select property="<%=bhType%>" styleClass="formFieldSized15" styleId="<%=bhType%>" size="1" onchange="onBiohazardTypeSelected(this)"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
-							</html:select>
-				    	</td>
-				    	<td class="formField" colspan="2">
-<!-- Mandar : 434 : for tooltip -->
-				     		<html:select property="<%=bhId%>" styleClass="formFieldSized15" styleId="<%="bhId" + i%>" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:option value="-1"><%=Constants.SELECT_OPTION%></html:option>
-								<%
-									/*String type = (String)request.getParameter(bhType);*/
-									String type = (String)bioHazardMap.get(bhTypeKey);
-									for(int x=0;x<bhIdArray.length;x++)
-									{
-										if(type!=null && type.equals(bhTypeArray[x]))
-										{											
-								%>
-											<html:option value="<%=bhIdArray[x]%>"><%=bhNameArray[x]%></html:option>
-								<%
-										}
-									}
-								%>
-							</html:select>
-				    	</td>
-				    	<%
-							String biohzKey = "Biohazard:" + i + "_persisted";
-				    		String condition = (String)bioHazardMap.get(biohzKey);
-				    		boolean biohzBool = Boolean.valueOf(condition).booleanValue();
-							String biohzCondition = "";
-							if(biohzBool)
-								biohzCondition = "disabled='disabled'";
-						%>
-						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=biohzCondition%> onClick="enableButton(document.forms[0].deleteBiohazard,document.forms[0].bhCounter,'chk_bio_')">		
-						</td>
-					 </tr>
-				  <% } %>
-				 </tbody>--%>
- 				<%@ include file="BioHazards.jsp" %>				
-				</logic:notEqual>
-				
-				
+ 				<%@ include file="BioHazards.jsp" %>
  				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
 				<tr>					
