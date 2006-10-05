@@ -634,14 +634,14 @@ public class DistributionBizLogic extends DefaultBizLogic
 
 		String className = SpecimenArray.class.getName();
 		String[] selectColumnName = null;
-		String[] whereColumnName = {"barcode"};
+		String[] whereColumnName = {Constants.SYSTEM_BARCODE};
 		String[] whereColumnCondition = {"="};
 		String[] value = {barcodeLabel};
 		Object[] whereColumnValue = new Object[]{value};
 
 		if (distributionBasedOn.intValue() == Constants.LABEL_BASED_DISTRIBUTION)
 		{
-			whereColumnName = new String[]{"label"};
+			whereColumnName = new String[]{Constants.SYSTEM_NAME};
 		}
 		
 		
