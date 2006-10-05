@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -28,6 +29,8 @@ import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
+import edu.wustl.common.factory.AbstractDomainObjectFactory;
+import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.ApplicationProperties;
 
@@ -132,19 +135,16 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			MapDataParser specimenParser = new MapDataParser("edu.wustl.catissuecore.domain");
 
 			Collection specimenCollection = specimenParser.generateData(fixedSpecimenMap);
+			
+			//Read session form bean map to associate derived specimens
+			Map multipleSpecimenFormBeanMap = (Map) request.getSession().getAttribute(
+					Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY);
 
-			Iterator specimenCollectionIterator = specimenCollection.iterator();
-
-			//set default values for the specimen.
-			while (specimenCollectionIterator.hasNext())
-			{
-				Specimen specimen = (Specimen) specimenCollectionIterator.next();
-				specimen.setAvailable(new Boolean(true));
-				specimen.setAvailableQuantity(specimen.getQuantity());
-			}
+			Map finalMap = processFormBeansMap(specimenCollection,multipleSpecimenFormBeanMap);
+			
 
 			//call bizLogic to save specimenCollection. It will first validate all the specimens.
-			insertSpecimens(request, specimenCollection);
+			insertSpecimens(request, finalMap);
 
 			//if success return to report page		
 			request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION,
@@ -170,6 +170,47 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		return null;
 	}
 
+	private Map processFormBeansMap(Collection specimenCollection, Map multipleSpecimenFormBeanMap) throws Exception
+	{
+		Map finalSpecimenMap = new HashMap();
+		AbstractDomainObjectFactory abstractDomainObjectFactory = 
+        	(AbstractDomainObjectFactory) MasterFactory.getFactory(
+        	        ApplicationProperties.getValue("app.domainObjectFactory"));
+
+		Iterator specimenCollectionIterator = specimenCollection.iterator();
+
+		//set default values for the specimen.
+		while (specimenCollectionIterator.hasNext())
+		{
+			Specimen specimen = (Specimen) specimenCollectionIterator.next();
+			specimen.setAvailable(new Boolean(true));
+			specimen.setAvailableQuantity(specimen.getQuantity());
+			
+			List derivedFormBeans = null;
+			//Associate derived specimens.
+			if(multipleSpecimenFormBeanMap!=null) 
+			{
+			derivedFormBeans = (List) multipleSpecimenFormBeanMap.get(AppletConstants.SPECIMEN_PREFIX + specimen.getId() + "_" + "derive");
+			}
+			List derivedSpecimens = new ArrayList();
+			
+			//  if no derived, continue with next
+			if( derivedFormBeans != null ) {
+			for (int i=0;i<derivedFormBeans.size();i++) {
+				CreateSpecimenForm derivedSpecimenFormBean = (CreateSpecimenForm) derivedFormBeans.get(i);
+				derivedSpecimenFormBean.setParentSpecimenId(specimen.getId().toString());
+				Specimen derivedSpecimen = (Specimen) abstractDomainObjectFactory.getDomainObject(Constants.CREATE_SPECIMEN_FORM_ID, derivedSpecimenFormBean);
+				derivedSpecimen.setSpecimenCollectionGroup(null);
+				derivedSpecimens.add(derivedSpecimen);
+			}
+			
+			}
+			finalSpecimenMap.put(specimen,derivedSpecimens);
+		}
+		
+		return finalSpecimenMap;
+	}
+
 	/**
 	 * This method puts all the values defined for the associated object.
 	 *  
@@ -178,6 +219,10 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	 */
 	private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSessionMap)
 	{
+		if(multipleSpecimenSessionMap == null)
+		{
+			return;
+		}	
 		Iterator sessionMapItr = multipleSpecimenSessionMap.keySet().iterator();
 
 		while (sessionMapItr.hasNext())
@@ -297,9 +342,11 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "class");
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "StorageContainer_temp");
+			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "derive");
 
 			specimenMap.put(AppletConstants.SPECIMEN_PREFIX + i + "_" + "activityStatus",
 					Constants.ACTIVITY_STATUS_ACTIVE);
+			
 			//specimenMap.put(AppletConstants.SPECIMEN_PREFIX + i + "_" + "available" ,new Boolean(true));
 		}
 	}
@@ -310,7 +357,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	 * @param request
 	 * @param specimenCollection
 	 */
-	private void insertSpecimens(HttpServletRequest request, Collection specimenCollection)
+	private void insertSpecimens(HttpServletRequest request, Map specimenMap)
 			throws Exception
 	{
 		IBizLogic bizLogic;
@@ -320,7 +367,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		SessionDataBean sessionBean = (SessionDataBean) request.getSession().getAttribute(
 				Constants.SESSION_DATA);
 
-		bizLogic.insert(specimenCollection, sessionBean, Constants.HIBERNATE_DAO);
+		bizLogic.insert(specimenMap, sessionBean, Constants.HIBERNATE_DAO);
 
 	}
 
