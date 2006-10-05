@@ -905,6 +905,16 @@ PUBLIC
 		</action>
 		
 		<!--Create Specimen Actions Begin-->
+		<action path="/CreateMultipleSpecimen"
+			type="edu.wustl.catissuecore.action.CreateMultipleSpecimenAction"
+			name="createSpecimenForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/pages/content/manageBioSpecimen/CreateSpecimen.jsp" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		</action>
+		
+		<!--Create Specimen Actions Begin-->
 		<action path="/AddSpecimen"
 			type="edu.wustl.catissuecore.action.AddSpecimenAction"
 			name="createSpecimenForm"
@@ -2813,9 +2823,21 @@ PUBLIC
 		<forward name="comments" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
 		<forward name="externalIdentifier" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
 		<forward name="bioHazard" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
+		<forward name="derivedSpecimen" path="/CreateMultipleSpecimen.do" />
+		<forward name="derivedSpecimenEdit" path="/CreateMultipleSpecimen.do?derivedOperation=edit" />
+		<forward name="showDerivedSpecimenDialog" path="/NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog" />
 		<forward name="specimen" path=".catissuecore.multipleSpecimenDef" />
 		
 	</action>
+	
+		<action path="/DerivedMultipleSpecimenAdd"
+			type="edu.wustl.catissuecore.action.DerivedMultipleSpecimenAddAction"
+			name="createSpecimenForm"
+			validate="true"
+			input="/NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog"
+			scope="request">
+			<forward name="success" path="/NewMultipleSpecimenAction.do?method=addDerivedSpecimen" />
+    	</action>
 	
 	<action path="/InitMultipleSpecimen"
 		type="edu.wustl.catissuecore.action.InitMultipleSpecimenAction"
