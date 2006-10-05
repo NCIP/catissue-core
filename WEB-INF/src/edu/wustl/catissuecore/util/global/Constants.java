@@ -95,7 +95,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PARTICIPANT_IDENTIFIER_IN_CPR = "participant";
 	public static final String APPROVE_USER_STATUS_LIST = "statusList";
 	public static final String EVENT_PARAMETERS_LIST = "eventParametersList";
-		
+			
 	//New Specimen lists.
 	public static final String SPECIMEN_COLLECTION_GROUP_LIST = "specimenCollectionGroupIdList";
 	public static final String SPECIMEN_TYPE_LIST = "specimenTypeList";
@@ -777,6 +777,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String EVENT_PARAMETERS_COLUMNS[] = { "Identifier",
 											"Event Parameter", "User", "Date / Time", "PageOf"};
 	
+	public static final String DERIVED_SPECIMEN_COLUMNS[] = { "Label",
+			"Class", "Type", "Quantity", "rowSelected"};
+	
 	public static final String [] SHOPPING_CART_COLUMNS = {"","Identifier", 
 													"Type", "Subtype", "Tissue Site", "Tissue Side", "Pathological Status"}; 
 	
@@ -1189,6 +1192,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SYSTEM_NAME = "name";
 	
 	//Mandar : 05Sep06 Array for multiple specimen field names
+    public static final String DERIVED_OPERATION = "derivedOperation";
 	public static final String [] MULTIPLE_SPECIMEN_FIELD_NAMES = {
 	        "Collection Group",
 			"Parent ID",
@@ -1244,6 +1248,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	};
 
 	public static final String MULTIPLE_SPECIMEN_MAP_KEY = "MULTIPLE_SPECIMEN_MAP_KEY"; 
+	public static final String MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY = "MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY";
+	public static final String DERIVED_FORM = "DerivedForm";
 	public static final String SPECIMEN_ATTRIBUTE_KEY =   "specimenAttributeKey";
 	
 	public static final String SPECIMEN_CLASS =   "specimenClass";
