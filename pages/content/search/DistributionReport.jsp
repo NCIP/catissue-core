@@ -249,8 +249,8 @@
 				 	{
 				 %>
 				 	<tr>
-				 <%
-				 		List rowData = (List)itr.next();
+				 <%						
+				 		List rowData = (List)itr.next();					
 				 		Iterator innerItr= rowData.iterator();
 				 		while(innerItr.hasNext())
 				 		{
@@ -259,7 +259,8 @@
 				 			<td class="formSerialNumberField" width="5"><%=i%>
 				 			</td>
 				 <%			
-				 			List rowElements = (List)innerItr.next();
+							
+				 			List rowElements = (List)innerItr.next();							
 				 			Iterator elementItr= rowElements.iterator();
 				 			int j=0;
 				 			while(elementItr.hasNext() && j<columnNames.length)
@@ -299,11 +300,19 @@
 						</html:submit>
 					
 					</td>
-					<td>
-						<html:submit styleClass="actionButton" onclick="changeActionOnConfig()">
-							<bean:message  key="buttons.configure" />
-						</html:submit>
-					</td>
+					
+					<%
+						if(distForm.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) 
+						{
+					%>
+							<td>
+								<html:submit styleClass="actionButton" onclick="changeActionOnConfig()">
+									<bean:message  key="buttons.configure" />
+								</html:submit>
+							</td>
+					<%
+						}
+					%>
 				</tr>
 			</table>
 			<!-- action buttons end -->
