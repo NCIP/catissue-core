@@ -389,12 +389,14 @@ function showBioHazardDialog(operation,key) {
 	   var url ='NewMultipleSpecimenAction.do?method=showBioHazardDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
         NewWindow(url,'name','810','320','yes');
 }
-
 function showDerivedSpecimenDialog(operation,key,derivedSpecimenCollectionGroup,derivedSpecimenClass,derivedParentSpecimenLabel,derivedParentSpecimenBarcode,derivedSpecimenType) {
         var url ='NewMultipleSpecimenAction.do?deriveButtonClicked=true&method=showDerivedSpecimenDialog&specimenAttributeKey=' + key + '&operation=' + operation + '&derivedSpecimenCollectionGroup=' + derivedSpecimenCollectionGroup + '&derivedSpecimenClass=' + derivedSpecimenClass + '&derivedParentSpecimenLabel=' + derivedParentSpecimenLabel + '&derivedParentSpecimenBarcode=' + derivedParentSpecimenBarcode + '&derivedSpecimenType=' + derivedSpecimenType;
 	    NewWindow(url,'name','600','600','yes');
 }
-
+function showEventsDialog(operation,key) {
+	   var url ='NewMultipleSpecimenAction.do?method=showEventsDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
+        NewWindow(url,'name','810','320','yes');
+}
 function submitComments() 
 {
   var form =  document.forms[0];
@@ -444,6 +446,12 @@ function deleteExternalIdentifiers()
 	deleteChecked('addExternalIdentifier','<%=Constants.NEW_MULTIPLE_SPECIMEN_ACTION%>?method=deleteExternalIdentifiers&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false)
 }
 
+function submitEvents() 
+{
+  var form =  document.forms[0];
+  form.action =  form.action + "?method=submitEvents";
+  form.submit();
+}
 function deleteBioHazards()
 {
 	deleteChecked('addBiohazardRow','<%=Constants.NEW_MULTIPLE_SPECIMEN_ACTION%>?method=deleteBioHazards&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false);
