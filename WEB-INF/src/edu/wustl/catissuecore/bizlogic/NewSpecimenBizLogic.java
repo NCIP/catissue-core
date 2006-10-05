@@ -22,9 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -77,9 +74,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
-		if (obj instanceof Collection)
+		if (obj instanceof Map)
 		{
-			insertMultipleSpecimen((Collection) obj, dao, sessionDataBean);
+			insertMultipleSpecimen((Map) obj, dao, sessionDataBean);
 		}
 		else
 		{
@@ -95,14 +92,27 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException
 	 */
-	private void insertMultipleSpecimen(Collection specimenList, DAO dao,
+	private void insertMultipleSpecimen(Map specimenMap, DAO dao,
 			SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		Iterator specimenIterator = specimenList.iterator();
+		Iterator specimenIterator = specimenMap.keySet().iterator();
 		while (specimenIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
+			specimen.setId(null); 
 			insertSingleSpecimen(specimen, dao, sessionDataBean, true);
+			
+			List derivedSpecimens = (List) specimenMap.get(specimen);
+			if (derivedSpecimens == null) {
+				continue;
+			}
+			//insert derived specimens
+			for (int i=0;i<derivedSpecimens.size();i++) {
+				Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
+				derivedSpecimen.setParentSpecimen(specimen);
+				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
+				insertSingleSpecimen(derivedSpecimen, dao, sessionDataBean, true);
+			}
 		}
 	}
 
@@ -990,9 +1000,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		//End
 		boolean result;
 
-		if (obj instanceof Collection)
+		if (obj instanceof Map)
 		{
-			result = validateMultipleSpecimen((Collection) obj, dao, operation);
+			result = validateMultipleSpecimen((Map) obj, dao, operation);
 		}
 		else
 		{
@@ -1150,15 +1160,34 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	/**
 	 * validates multiple specimen. Internally it for each specimen it innvokes validateSingleSpecimen. 
 	 */
-	private boolean validateMultipleSpecimen(Collection specimenList, DAO dao, String operation)
+	private boolean validateMultipleSpecimen(Map specimenMap, DAO dao, String operation)
 			throws DAOException
 	{
-		Iterator specimenIterator = specimenList.iterator();
+		Iterator specimenIterator = specimenMap.keySet().iterator();
 		boolean result = true;
 		while (specimenIterator.hasNext() && result == true)
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
+			//validate single specimen
 			result = validateSingleSpecimen(specimen, dao, operation,true);
+			
+			List derivedSpecimens = (List) specimenMap.get(specimen);
+			
+			if (derivedSpecimens == null) {
+				continue;
+			}
+
+			//validate derived specimens
+			for (int i=0;i<derivedSpecimens.size();i++) {
+				
+				Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
+				result = validateSingleSpecimen(derivedSpecimen, dao, operation,false);
+				
+				if(!result) {
+					break;
+				}
+			}
+
 		}
 		return result;
 	}
