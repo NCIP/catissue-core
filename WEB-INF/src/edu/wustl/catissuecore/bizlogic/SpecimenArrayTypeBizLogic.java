@@ -9,20 +9,12 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.Iterator;
-
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
-import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Validator;
 
 /**
  * <p>This class initializes the fields of SpecimenArrayTypeBizLogic.java</p>
@@ -49,7 +41,7 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void update(Object obj, Object oldObj, DAO dao, SessionDataBean sessionDataBean)
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
 		SpecimenArrayType arrayType = (SpecimenArrayType) obj;
