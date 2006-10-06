@@ -30,11 +30,11 @@ public class MapButtonHandler extends ButtonHandler {
 		int colNo = table.getSelectedColumn();
 		int rowNo = table.getSelectedRow();
 		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel) table.getModel();
-		
+		System.out.println("MapButtonHandler in handleAction : row : "+ rowNo + " : "+ colNo);
 		String key = model.getKey(rowNo, colNo);           
 	    String collectionGroup = (String) model.getValueAt(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO,colNo);
 	    String specimenClass = (String) model.getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO,colNo);
-		
+	    System.out.println("MapButtonHandler : key - "+key+ " | collectionGroup - "+ collectionGroup + " | specimenClass - "+specimenClass); 
 	    Object[] parameters = new Object[]{String.valueOf(colNo),collectionGroup,specimenClass}; 
 		
 		CommonAppletUtil.callJavaScriptFunction((JButton) event.getSource(),
