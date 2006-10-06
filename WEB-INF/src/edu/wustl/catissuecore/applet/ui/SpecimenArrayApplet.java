@@ -117,7 +117,7 @@ public class SpecimenArrayApplet extends BaseApplet {
 		applyButton.setEnabled(false);
 		
 		JPanel applyPanel = new JPanel();
-		applyPanel.setBackground(Color.WHITE);
+		applyPanel.setBackground(Color.white);
 		//applyPanel.setOpaque(false);
 		applyPanel.setLayout(new FlowLayout(FlowLayout.LEFT,10,0));
 		applyPanel.add(concPanel);
@@ -135,7 +135,7 @@ public class SpecimenArrayApplet extends BaseApplet {
         scrollPane.setPreferredSize(new Dimension(100,100));
         scrollPane.setOpaque(false);
         //scrollPane.setBackground(Color.WHITE);
-        scrollPane.getViewport().setBackground(Color.WHITE);
+        scrollPane.getViewport().setBackground(Color.white);
         
         applyButton.addActionListener(new ApplyButtonActionHandler(arrayTable));
         JPopupMenu popupMenu = new JPopupMenu();
@@ -162,7 +162,7 @@ public class SpecimenArrayApplet extends BaseApplet {
         this.getContentPane().setLayout(new VerticalLayout(0,10));
         this.getContentPane().add(applyPanel);
         this.getContentPane().add(scrollPane);
-        this.getContentPane().setBackground(Color.WHITE);
+        this.getContentPane().setBackground(Color.white);
 	}
 	
 	/**
