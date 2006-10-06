@@ -21,6 +21,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
+import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.component.BaseTable;
 
 /**
@@ -53,9 +54,10 @@ public class RowHeaderColumnModel extends AbstractCellEditor
 		labels = new JLabel[rowHeaders.length ];
 		for(int counter=0; counter<rowHeaders.length; counter++)
 		{
-			LineBorder border = new LineBorder(Color.BLACK ,1,false );
+			LineBorder border = new LineBorder(Color.black ,1,false );
+	//		labels[counter] = new JLabel(AppletConstants.MULTIPLE_SPECIMEN_MANDATORY+" "+(String)rowHeaders[counter]);
 			labels[counter] = new JLabel(" "+(String)rowHeaders[counter]);
-			labels[counter].setBackground(Color.LIGHT_GRAY );
+			labels[counter].setBackground(Color.lightGray  );
 			labels[counter].setOpaque(true);
 			//labels[counter].setBorder(border);
 			//labels[counter].setSize(150,25 );
