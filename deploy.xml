@@ -427,6 +427,7 @@
 			<transaction  src="${mysql.sql.dir}/csm_catissuecore.sql"/>
 			<transaction  src="${common.sql.dir}/createUser.sql"/>
 			<transaction  src="${common.sql.dir}/insert_default_data.sql"/>
+			<transaction  src="${common.sql.dir}/indexes.sql"/>
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -446,6 +447,7 @@
 			onerror="continue">
 			<transaction  src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.0_to_1.1.sql"/>
 			<transaction  src="${common.sql.dir}/initDB_Insert_Common.sql"/>
+			<transaction  src="${common.sql.dir}/indexes.sql"/>
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -465,6 +467,7 @@
 			onerror="continue">
 			<transaction  src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.0_to_1.1.sql"/>
 			<transaction  src="${common.sql.dir}/initDB_Insert_Common.sql"/>
+			<transaction  src="${common.sql.dir}/indexes.sql"/>
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -491,6 +494,7 @@
 		  <transaction  src="${oracle.sql.dir}/CSM_Create_Oracle.sql"/>
 		  <transaction  src="${oracle.sql.dir}/createUser.sql"/>
 	      <transaction  src="${oracle.sql.dir}/insert_default_data.sql"/>	
+	      <transaction  src="${common.sql.dir}/indexes.sql"/>
 		  <transaction>commit;</transaction>	
     	  <classpath>
             <fileset dir="${lib.dir}">
