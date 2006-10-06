@@ -68,15 +68,6 @@ public class CreateMultipleSpecimenAction extends BaseAction
 			else
 			{
 				createForm = new CreateSpecimenForm();
-				if (request.getParameter("derivedParentSpecimenLabel") != null && !request.getParameter("derivedParentSpecimenLabel").equals("null"))
-				{
-					createForm.setParentSpecimenLabel(request.getParameter("derivedParentSpecimenLabel"));
-				}
-				if (request.getParameter("derivedParentSpecimenBarcode") != null
-						&& !request.getParameter("derivedParentSpecimenBarcode").equals("null"))
-				{
-					createForm.setParentSpecimenBarcode(request.getParameter("derivedParentSpecimenBarcode"));
-				}
 				createForm.setClassName(request.getParameter("derivedSpecimenClass"));
 				createForm.setType(request.getParameter("derivedSpecimenType"));
 			}
@@ -98,17 +89,6 @@ public class CreateMultipleSpecimenAction extends BaseAction
 		{
 			specimenClass = createForm.getClassName();
 		}
-
-/*			if(specimenCollectionGroupName==null || specimenCollectionGroupName.trim().equals("") )
-		 {
-				ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-				if (errors == null || errors.size() == 0)
-				{
-					errors = new ActionErrors();
-				}
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("specimencollectiongroup.not.entered"));
-				saveErrors(request, errors);
-		 }*/
 
 		Map containerMap = new TreeMap();
 		Vector initialValues = null;
