@@ -304,7 +304,8 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 	
 					obj.setDataText(function(i, j){return myData[i][j]});
 					obj.setColumnProperty("text", function(i){return columns[i]});
-					obj.sort(3,'descending');
+					// disable sorting
+					obj.getTemplate("top/item").setEvent("onmousedown", null); 
 					
 					//	set headers width/height.
 					obj.setRowHeaderWidth("28px");
@@ -441,17 +442,13 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				     </td>
 				 </tr>
 				 
-				 <%
-					boolean radioDisabled = false;
-					if(multipleSpecimen.equals("1"))
+				<%				if(!multipleSpecimen.equals("1"))
 					{
-					     radioDisabled = true;
-					}
-				%>
+        			 %>	
 				 <tr>
 			     	<td class="formRequiredNoticeNoBottom" width="5">*</td>
 				    <td class="formRequiredLabelLeftBorder" width="175">
-					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)" disabled="<%=radioDisabled%>" >
+					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)"  >
 				    &nbsp;
 			        </html:radio>
 						<label for="specimenCollectionGroupId">
@@ -461,7 +458,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					<td class="formField" colspan="2">
 						
 					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
-				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="<%=radioDisabled%>" onblur="<%=onChangeFunctionName%>"/>
+				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" onblur="<%=onChangeFunctionName%>"/>
 			        </logic:equal>
 			
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
@@ -474,7 +471,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formRequiredLabel" width="175">
-					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)" disabled="<%=radioDisabled%>">
+					<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
 				    &nbsp;
 			        </html:radio>
 						<label for="specimenCollectionGroupId">
@@ -493,7 +490,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 										
 		        	</td>
 				 </tr>
-				 
+				<%}%> 
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">
 				     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
@@ -812,6 +809,10 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 						   					<bean:message key="buttons.submit"/>
 						   				</html:submit>
 						   			</td>
+									
+					<%				if(!multipleSpecimen.equals("1"))
+					{
+        			 %>	
 									<td class="formFieldNoBorders" nowrap>
 										<html:button
 											styleClass="actionButton" property="submitAndDistributeButton"
@@ -820,6 +821,9 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 											onclick="<%=submitAndDistribute%>">
 										</html:button>
 									</td>
+					<%
+					}
+					%>
 									
 									<%-- <td colspan="3">
 										<html:reset styleClass="actionButton">
