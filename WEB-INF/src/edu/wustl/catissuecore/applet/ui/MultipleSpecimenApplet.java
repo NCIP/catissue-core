@@ -1,6 +1,5 @@
 package edu.wustl.catissuecore.applet.ui;
 
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -13,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
@@ -175,7 +175,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
          	panel.add(link1);panel.add(new JLabel("    ") );
          	startIndex =startIndex +tableModel.getColumnsPerPage()  ;
          	endIndex = endIndex +tableModel.getColumnsPerPage()  ;
-         	totalPages= totalPages+1;
+         	totalPages= pageNo;
     	}
 //     	JButton link1 = new JButton("1 - 10");
 //     	JButton link2 = new JButton("11 - 20");
@@ -257,13 +257,30 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	 */
 	public void updateOnAddSpecimen()
 	{
-		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
-		if(totalPages< tableModel.getTotalPageCount()  )
-		{
-			totalPages++; 
-			JButton newLink = new JButton("AA");
-			newLink.setActionCommand(String.valueOf(totalPages) );
-			linkPanel.repaint(); 
-		}
+		System.out.println("Inside updateOnAddSpecimen()");
+				MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
+				if(totalPages< tableModel.getTotalPageCount()  )
+				{
+					totalPages++;
+					linkPanel.removeAll();  
+					SwingUtilities.updateComponentTreeUI(linkPanel);
+					createLinkPanel(linkPanel );
+					SwingUtilities.updateComponentTreeUI(linkPanel);
+					Runnable panelUpdated = new Runnable() 
+					{
+					     public void run()
+						 {
+					     	SwingUtilities.updateComponentTreeUI(linkPanel);
+					     	System.out.println("Applet link panel refreshed");
+						 }
+					 };
+					 SwingUtilities.invokeLater(panelUpdated);
+//					JButton newLink = new JButton("AA");
+//					newLink.setActionCommand(String.valueOf(totalPages) );
+//					linkPanel.add(newLink);linkPanel.add(new JLabel("    ") );
+//					SwingUtilities.updateComponentTreeUI(newLink );
+//					System.out.println("panel tree ui updated");
+				}
+		
 	}
 }
