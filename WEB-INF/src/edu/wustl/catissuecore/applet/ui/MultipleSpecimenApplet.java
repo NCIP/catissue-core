@@ -7,21 +7,23 @@ import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.LineBorder;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.listener.AddColumnHandler;
+import edu.wustl.catissuecore.applet.listener.PageLinkHandler;
 import edu.wustl.catissuecore.applet.listener.SpecimenSubmitButtonHandler;
 import edu.wustl.catissuecore.applet.listener.TableModelChangeHandler;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
-import edu.wustl.catissuecore.applet.model.RowHeaderColumnModel;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 
 /**
@@ -35,7 +37,14 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	 */
 	private static final long serialVersionUID = 1L;
 	private BaseTable table;
+	private JPanel buttonPanel;
+	private JPanel linkPanel;
+	private JPanel tablePanel;
+	private JPanel footerPanel;
+	private JPanel outerPanel;
 	
+	private int totalPages=0;
+	private final int WIDTH=1000;
 	public void doInit()
     {
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));
@@ -43,22 +52,17 @@ public class MultipleSpecimenApplet extends BaseApplet {
 //		int columnNumber = 4;
 		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());		
 
-		table = new BaseTable(model)
-        {
+		table = new BaseTable(model);
+/*        {
             public Class getColumnClass(int column)
             {
                 return getValueAt(0, column).getClass();
             }
         };
-        table.getTableHeader().setReorderingAllowed(false);
+*/        table.getTableHeader().setReorderingAllowed(false);
 		// Creating Layout
-		getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT ));
-
-		JPanel buttonPanel;
-		JPanel linkPanel;
-		JPanel tablePanel;
-		JPanel footerPanel;
-		JPanel outerPanel;
+		//getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT ));
+		this.getContentPane().setLayout(new VerticalLayout(0,10));
 		
 		buttonPanel = new JPanel();
 		linkPanel = new JPanel();
@@ -98,7 +102,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	    gbc.fill = GridBagConstraints.BOTH;   
 //	    gbc.fill = GridBagConstraints.NONE;
 	    gbl.setConstraints(tablePanel, gbc);
-	    outerPanel.add(tablePanel);
+	    //outerPanel.add(tablePanel);
 
 		// Place a component at cell location (4,1)
 	    gbc = new GridBagConstraints();
@@ -106,10 +110,12 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	    gbc.gridy = 4;
 	    gbc.fill = GridBagConstraints.NONE;
 	    gbl.setConstraints(footerPanel, gbc);
-	    outerPanel.add(footerPanel);
+	    //outerPanel.add(footerPanel);
 
 		//--- gbl
-		
+	    System.out.println("Applet size :- W : "+getWidth()+ " ,H : "+getHeight() );
+		outerPanel.setSize(getWidth(),getHeight());
+		System.out.println("OuterPanel size :- W : "+outerPanel.getWidth()+ " ,H : "+outerPanel.getHeight() );
 	    getContentPane().add(outerPanel);
 		// --------------------
 
@@ -119,29 +125,36 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		table.setColumnSelectionAllowed(true);
 		//table.setRowHeight(3,50);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		 
+	
+        //set current page to 1
+        model.setCurrentPageIndex(1);
         //  Create custom columns
-	//	new RowHeaderColumnModel(table);		//	for zeroth column
-		for(int cnt = 0; cnt < columnNumber; cnt++)
+		for(int cnt = 0; cnt < model.getColumnCount()  ; cnt++)
 		{
 			new SpecimenColumnModel(table, cnt);
 		}
 		table.setAutoCreateColumnsFromModel(false);
 //		JScrollPane scrollPane = new JScrollPane( table );
 		JScrollPane scrollPane= new FixedColumnScrollPane(table);
+		System.out.println("Table Size : "+table.getWidth()+","+table.getHeight());
+		table.setSize(WIDTH,getHeight());
+		System.out.println("Table Size after set : "+table.getWidth()+","+table.getHeight());
 		scrollPane.setSize(table.getWidth(),table.getHeight()); 
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED  );  
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
 
-		tablePanel.add( scrollPane );
+		//tablePanel.add( scrollPane );
+		tablePanel.setSize(WIDTH,getHeight());
+		getContentPane().add(scrollPane);
+		getContentPane().add(footerPanel);
     }
     
     private void createButtonPanel(JPanel panel)
     {
-    	JButton copy = new JButton("Copy");
-    	JButton paste = new JButton("Paste");
-    	JButton addSpecimen = new JButton("Add Specimen");
-    	addSpecimen.addActionListener(new AddColumnHandler(table) );
+    	JButton copy = new JButton(AppletConstants.MULTIPLE_SPECIMEN_COPY  );
+    	JButton paste = new JButton(AppletConstants.MULTIPLE_SPECIMEN_PASTE);
+    	JButton addSpecimen = new JButton(AppletConstants.MULTIPLE_SPECIMEN_ADD_SPECIMEN);
+    	addSpecimen.addActionListener(new AddColumnHandler(table,this) );
     	JLabel placeHolder = new JLabel("     ");
     	panel.add(copy);panel.add(placeHolder );panel.add(paste );
     	panel.add(placeHolder );panel.add(addSpecimen);
@@ -149,10 +162,38 @@ public class MultipleSpecimenApplet extends BaseApplet {
     
     private void createLinkPanel(JPanel panel)
     {
-     	JLabel label1 = new JLabel("1 - 10");
-    	JLabel label2 = new JLabel("11 - 20");
-    	JLabel label3 = new JLabel("21 - 30");
-    	panel.add(label1);panel.add(label2);panel.add(label3);
+    	MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
+    	int startIndex = 1;
+    	int endIndex = tableModel.getColumnsPerPage()  ;
+    	for(int pageNo = 1; pageNo<=tableModel.getTotalPageCount();pageNo++  )
+    	{
+    		JButton link1 = new JButton("  "+ String.valueOf(startIndex )+ " - "+String.valueOf(endIndex )+"  " );
+    		link1.setActionCommand(String.valueOf(pageNo ));
+         	LineBorder border =(LineBorder) BorderFactory.createLineBorder(getBackground() ); 
+         	link1.setBorder(border );
+         	link1.addActionListener(new PageLinkHandler(table));
+         	panel.add(link1);panel.add(new JLabel("    ") );
+         	startIndex =startIndex +tableModel.getColumnsPerPage()  ;
+         	endIndex = endIndex +tableModel.getColumnsPerPage()  ;
+         	totalPages= totalPages+1;
+    	}
+//     	JButton link1 = new JButton("1 - 10");
+//     	JButton link2 = new JButton("11 - 20");
+//     	JButton link3 = new JButton("21 - 30");
+//     	link1.setActionCommand("1");
+//     	link2.setActionCommand("2");
+//     	link3.setActionCommand("3");
+//     	
+//     	LineBorder border =(LineBorder) BorderFactory.createLineBorder(getBackground() ); 
+//     	link1.setBorder(border );
+//     	link2.setBorder(border );
+//     	link3.setBorder(border );
+//     	
+//     	link1.addActionListener(new PageLinkHandler(table));
+//     	link2.addActionListener(new PageLinkHandler(table));
+//     	link3.addActionListener(new PageLinkHandler(table));
+//     	
+//    	panel.add(link1);panel.add(link2);panel.add(link3);
     }
     
     private void createFooterPanel(JPanel panel)
@@ -184,15 +225,45 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		}
 		return null;
 	}
-	
+	/**
+	 * This method is called from Javascript toset the value of the selected location in the applet.
+	 * @param specimenMapKey Identifier of the specimen.
+	 * @param storageId Identifier of the storageContainer.
+	 * @param storageType Label of storage type.
+	 * @param xPos Position (x-axis) in container.
+	 * @param yPos Position (y-axis) in container.
+	 */
 	public void setStorageDetails(String specimenMapKey, String storageId,String storageType,String xPos,String yPos) {
-		int colNo = Integer.parseInt(specimenMapKey);
 		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
-		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(colNo).getCellRenderer();
-		
+		System.out.println("setStorageDetails :-specimenMapKey "+ specimenMapKey+" | storageId " + storageId+ " | storageType " + storageType+ " | xPos " + xPos+ " | yPos " + yPos);
+		int actualColNo =  Integer.parseInt(specimenMapKey);
+		int displayColNo = tableModel.getDisplayColumnNo(actualColNo); 
+		System.out.println("table.getColumnModel().getColumnCount() : " + table.getColumnModel().getColumnCount()); 
+		System.out.println("In applets storage details : display col no" + displayColNo + "actual col no" + actualColNo);
+		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(actualColNo).getCellRenderer();
+//		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(displayColNo).getCellRenderer();		
 		tableModel.setStorageDetails(specimenMapKey, storageId, storageType, xPos, yPos);
-		String storageValue = (String) tableModel.getValueAt(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO,colNo);
-		columnModel.setLocation(storageValue);
-		
+		String storageValue = (String) tableModel.getValueAt(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO,displayColNo);
+	//	columnModel.setLocation(storageValue);
+		columnModel.setLocationFromJS(storageValue);
+// Mandar : 4oct06 : testing setting of storage location data in model.
+		System.out.println("Column : "+ displayColNo);
+	}
+	
+	/**
+	 * This method will be called when the AddSpecimen button is clicked. 
+	 * It will update the applet UI to display the column or the page buttons.
+	 *
+	 */
+	public void updateOnAddSpecimen()
+	{
+		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
+		if(totalPages< tableModel.getTotalPageCount()  )
+		{
+			totalPages++; 
+			JButton newLink = new JButton("AA");
+			newLink.setActionCommand(String.valueOf(totalPages) );
+			linkPanel.repaint(); 
+		}
 	}
 }
