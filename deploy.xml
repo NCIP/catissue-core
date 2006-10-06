@@ -260,6 +260,20 @@
 			  	value="${oracle.dialect.string}"/>
 		</replace>
 	</target>
+	<!--Server clean-up-->
+	<target name="clean_server" description="deletes the WAR file and cache from server ">		
+		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war" />
+		<delete includeemptydirs="true">
+			<fileset dir="${jboss.home.dir}/server/default/work">
+				<include name="**/*" />					
+			</fileset>
+		</delete>
+		<delete includeemptydirs="true">
+			<fileset dir="${jboss.home.dir}/server/default/tmp">
+				<include name="**/*" />					
+			</fileset>
+		</delete>
+	</target>
 	
 	<!--Buid New WAR File-->
 	<target name="build_war">
