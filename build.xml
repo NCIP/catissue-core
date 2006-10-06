@@ -227,19 +227,7 @@
 			 <sleep seconds="2" />
 	</target>				
 	
-	<target name="cleanserver" description="deletes the WAR file and cache from server ">		
-		<delete file="${jboss.home.dir}/server/default/deploy/catissuecore.war" />
-		<delete includeemptydirs="true">
-			<fileset dir="${jboss.home.dir}/server/default/work">
-				<include name="**/*" />					
-			</fileset>
-		</delete>
-		<delete includeemptydirs="true">
-			<fileset dir="${jboss.home.dir}/server/default/tmp">
-				<include name="**/*" />					
-			</fileset>
-		</delete>
-	</target>
+
 
 	<!-- 
 		Generates the Hibernate mapping (HBM) files which are used in mapping 
