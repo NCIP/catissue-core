@@ -23,6 +23,15 @@ public class ComboBoxHandler extends BaseActionHandler
 		super(table);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	public void actionPerformed(ActionEvent event) {
+		
+		if(table.getSelectedColumn() >=0 ) {
+			super.actionPerformed(event);
+		}
+	}
 	/**
 	 * @see edu.wustl.catissuecore.appletui.listener.BaseActionHandler#handleAction(java.awt.event.ActionEvent)
 	 */
