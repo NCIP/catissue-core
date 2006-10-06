@@ -11,8 +11,6 @@
  */
 package edu.wustl.catissuecore.applet.ui;
 
-import java.awt.HeadlessException;
-
 import javax.swing.JApplet;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -43,10 +41,9 @@ public class BaseApplet extends JApplet {
 
 	/**
 	 * Default Constructor.
-	 * @throws HeadlessException -- If Operating system does not support some
-	 * display properties of the compontnts.
+	 * 
 	 */
-	public BaseApplet() throws HeadlessException {
+	public BaseApplet()  {
 		super();
 	}
 
