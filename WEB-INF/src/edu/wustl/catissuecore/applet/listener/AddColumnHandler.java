@@ -41,6 +41,7 @@ public class AddColumnHandler extends ButtonHandler {
 			System.out.println("Applet to be updated for page buttons.");
 			model.addColumn(); 
 			applet.updateOnAddSpecimen();
+			
 		}else if(tableColumnCount < model.getColumnsPerPage())
 		{
 			addColumnToTable(table);	
