@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -48,8 +49,11 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -71,8 +75,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
-			throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		if (obj instanceof Map)
 		{
@@ -92,28 +95,121 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException
 	 */
-	private void insertMultipleSpecimen(Map specimenMap, DAO dao,
-			SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	private void insertMultipleSpecimen(Map specimenMap, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Iterator specimenIterator = specimenMap.keySet().iterator();
 		while (specimenIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
-			specimen.setId(null); 
-			insertSingleSpecimen(specimen, dao, sessionDataBean, true);
-			
+			Long parentSpecimenId = specimen.getId();
+			specimen.setId(null);
+			try
+			{
+				insertSingleSpecimen(specimen, dao, sessionDataBean, true);
+			}
+			catch (DAOException daoException)
+			{
+				String message = " for Specimen in column " + parentSpecimenId;
+				daoException.setSupportingMessage(message);
+				throw daoException;
+			}
+
 			List derivedSpecimens = (List) specimenMap.get(specimen);
-			if (derivedSpecimens == null) {
+			if (derivedSpecimens == null)
+			{
 				continue;
 			}
 			//insert derived specimens
-			for (int i=0;i<derivedSpecimens.size();i++) {
+			for (int i = 0; i < derivedSpecimens.size(); i++)
+			{
 				Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
 				derivedSpecimen.setParentSpecimen(specimen);
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
-				insertSingleSpecimen(derivedSpecimen, dao, sessionDataBean, true);
+
+				try
+				{
+					insertSingleSpecimen(derivedSpecimen, dao, sessionDataBean, true);
+				}
+				catch (DAOException daoException)
+				{
+					int j = i + 1;
+					String message = " for Derived Specimen " + j + " of Parent Specimen in column " + parentSpecimenId;
+					daoException.setSupportingMessage(message);
+					throw daoException;
+				}
 			}
 		}
+	}
+
+	public final void insertMultipleSpecimen(Object obj, SessionDataBean sessionDataBean, int daoType) throws BizLogicException,
+			UserNotAuthorizedException
+	{
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(daoType);
+		try
+		{
+			dao.openSession(sessionDataBean);
+			validate(obj, dao, Constants.ADD);
+			insert(obj, dao, sessionDataBean);
+			dao.commit();
+		}
+		catch (DAOException ex)
+		{
+			String errMsg = formatException(ex.getWrapException(), obj, "Inserting");
+			if (errMsg == null)
+			{
+				errMsg = ex.getMessage();
+			}
+			try
+			{
+				dao.rollback();
+			}
+			catch (DAOException daoEx)
+			{
+				throw new BizLogicException(daoEx.getMessage(), daoEx);
+			}
+			Logger.out.debug("Error in insert");
+			throw new BizLogicException(errMsg, ex);
+		}
+		finally
+		{
+			try
+			{
+				dao.closeSession();
+			}
+			catch (DAOException daoEx)
+			{
+				//TODO ERROR Handling
+				throw new BizLogicException();
+			}
+		}
+	}
+
+	/**
+	 * This method gives the error message.
+	 * This method is overrided for customizing error message
+	 * @param ex - DAOException
+	 * @param obj - Object
+	 * @return - error message string
+	 */
+	public String getErrorMessage(DAOException daoException, Object obj, String operation)
+	{
+		if (obj instanceof HashMap)
+		{
+			obj = new Specimen();
+		}
+		String supportingMessage = daoException.getSupportingMessage();
+		String formatedException = formatException(daoException.getWrapException(), obj, operation);	
+		if(supportingMessage!=null && formatedException!=null)
+		{
+			formatedException += supportingMessage;
+		}
+		if(formatedException==null)
+		{
+			formatedException = daoException.getMessage();
+			if(supportingMessage!=null)
+			formatedException += supportingMessage;
+		}
+		return formatedException;
 	}
 
 	/**
@@ -125,8 +221,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @throws DAOException
 	 * @throws UserNotAuthorizedException
 	 */
-	private void insertSingleSpecimen(Specimen specimen, DAO dao, SessionDataBean sessionDataBean,
-			boolean partOfMulipleSpecimen) throws DAOException, UserNotAuthorizedException
+	private void insertSingleSpecimen(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, boolean partOfMulipleSpecimen)
+			throws DAOException, UserNotAuthorizedException
 	{
 		try
 		{
@@ -172,8 +268,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			Logger.out.debug("17-july-06: 1 ");
 			Collection specimenEventsCollection = specimen.getSpecimenEventCollection();
 			Iterator specimenEventsCollectionIterator = specimenEventsCollection.iterator();
-			Logger.out
-					.debug("specimenEventsCollection.size() : " + specimenEventsCollection.size());
+			Logger.out.debug("specimenEventsCollection.size() : " + specimenEventsCollection.size());
 			while (specimenEventsCollectionIterator.hasNext())
 			{
 				Logger.out.debug("17-july-06: 2 ");
@@ -202,8 +297,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 			//Inserting data for Authorization
 
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
-					protectionObjects, getDynamicGroups(specimen));
+			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(specimen));
 		}
 		catch (SMException e)
 		{
@@ -217,14 +311,13 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		Specimen specimen = (Specimen) obj;
 		String[] dynamicGroups = new String[1];
 
-		dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(
-				specimen.getSpecimenCollectionGroup(), Constants.getCollectionProtocolPGName(null));
+		dynamicGroups[0] = SecurityManager.getInstance(this.getClass()).getProtectionGroupByName(specimen.getSpecimenCollectionGroup(),
+				Constants.getCollectionProtocolPGName(null));
 		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
 		return dynamicGroups;
 	}
 
-	private SpecimenCollectionGroup loadSpecimenCollectionGroup(Long specimenID, DAO dao)
-			throws DAOException
+	private SpecimenCollectionGroup loadSpecimenCollectionGroup(Long specimenID, DAO dao) throws DAOException
 	{
 		//get list of Participant's names
 		String sourceObjectName = Specimen.class.getName();
@@ -234,8 +327,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		Object whereColumnValue[] = {specimenID};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 
-		List list = dao.retrieve(sourceObjectName, selectedColumn, whereColumnName,
-				whereColumnCondition, whereColumnValue, joinCondition);
+		List list = dao.retrieve(sourceObjectName, selectedColumn, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
 		if (!list.isEmpty())
 		{
 			Long specimenCollectionGroupId = (Long) list.get(0);
@@ -246,8 +338,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		return null;
 	}
 
-	private SpecimenCharacteristics loadSpecimenCharacteristics(Long specimenID, DAO dao)
-			throws DAOException
+	private SpecimenCharacteristics loadSpecimenCharacteristics(Long specimenID, DAO dao) throws DAOException
 	{
 		//get list of Participant's names
 		String sourceObjectName = Specimen.class.getName();
@@ -257,8 +348,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		Object whereColumnValue[] = {specimenID};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 
-		List list = dao.retrieve(sourceObjectName, selectedColumn, whereColumnName,
-				whereColumnCondition, whereColumnValue, joinCondition);
+		List list = dao.retrieve(sourceObjectName, selectedColumn, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
 		if (!list.isEmpty())
 		{
 			Long specimenCharacteristicsId = (Long) list.get(0);
@@ -284,8 +374,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			double oldQty = Double.parseDouble(tissueSpecimenOldObj.getQuantity().toString());//tissueSpecimenOldObj.getQuantityInGram().doubleValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
-			double oldAvailableQty = Double.parseDouble(tissueSpecimenOldObj.getAvailableQuantity()
-					.toString());//tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
+			double oldAvailableQty = Double.parseDouble(tissueSpecimenOldObj.getAvailableQuantity().toString());//tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
 
 			double distQty = 0;
 			double newAvailableQty = 0;
@@ -297,8 +386,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			Logger.out.debug("Dist Qty: " + distQty + " New Available Qty: " + newAvailableQty);
 			if (newAvailableQty < 0)
 			{
-				throw new DAOException("Newly modified Quantity '" + newQty
-						+ "' should not be less than current Distributed Quantity '" + distQty
+				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty
 						+ "'");
 			}
 			else
@@ -319,8 +407,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			double oldQty = Double.parseDouble(molecularSpecimenOldObj.getQuantity().toString());//molecularSpecimenOldObj.getQuantityInMicrogram().doubleValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
-			double oldAvailableQty = Double.parseDouble(molecularSpecimenOldObj
-					.getAvailableQuantity().toString());//molecularSpecimenOldObj.getAvailableQuantityInMicrogram().doubleValue();
+			double oldAvailableQty = Double.parseDouble(molecularSpecimenOldObj.getAvailableQuantity().toString());//molecularSpecimenOldObj.getAvailableQuantityInMicrogram().doubleValue();
 
 			double distQty = 0;
 			double newAvailableQty = 0;
@@ -332,8 +419,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			Logger.out.debug("Dist Qty: " + distQty + " New Available Qty: " + newAvailableQty);
 			if (newAvailableQty < 0)
 			{
-				throw new DAOException("Newly modified Quantity '" + newQty
-						+ "' should not be less than current Distributed Quantity '" + distQty
+				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty
 						+ "'");
 			}
 			else
@@ -353,8 +439,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			int oldQty = (int) Double.parseDouble(cellSpecimenOldObj.getQuantity().toString());//cellSpecimenOldObj.getQuantityInCellCount().intValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
-			int oldAvailableQty = (int) Double.parseDouble(cellSpecimenOldObj
-					.getAvailableQuantity().toString());//cellSpecimenOldObj.getAvailableQuantityInCellCount().intValue();
+			int oldAvailableQty = (int) Double.parseDouble(cellSpecimenOldObj.getAvailableQuantity().toString());//cellSpecimenOldObj.getAvailableQuantityInCellCount().intValue();
 
 			int distQty = 0;
 			int newAvailableQty = 0;
@@ -366,8 +451,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			Logger.out.debug("Dist Qty: " + distQty + " New Available Qty: " + newAvailableQty);
 			if (newAvailableQty < 0)
 			{
-				throw new DAOException("Newly modified Quantity '" + newQty
-						+ "' should not be less than current Distributed Quantity '" + distQty
+				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty
 						+ "'");
 			}
 			else
@@ -387,8 +471,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			double oldQty = Double.parseDouble(fluidSpecimenOldObj.getQuantity().toString());//fluidSpecimenOldObj.getQuantityInMilliliter().doubleValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
-			double oldAvailableQty = Double.parseDouble(fluidSpecimenOldObj.getAvailableQuantity()
-					.toString());//fluidSpecimenOldObj.getAvailableQuantityInMilliliter().doubleValue();
+			double oldAvailableQty = Double.parseDouble(fluidSpecimenOldObj.getAvailableQuantity().toString());//fluidSpecimenOldObj.getAvailableQuantityInMilliliter().doubleValue();
 
 			double distQty = 0;
 			double newAvailableQty = 0;
@@ -400,8 +483,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			Logger.out.debug("Dist Qty: " + distQty + " New Available Qty: " + newAvailableQty);
 			if (newAvailableQty < 0)
 			{
-				throw new DAOException("Newly modified Quantity '" + newQty
-						+ "' should not be less than current Distributed Quantity '" + distQty
+				throw new DAOException("Newly modified Quantity '" + newQty + "' should not be less than current Distributed Quantity '" + distQty
 						+ "'");
 			}
 			else
@@ -418,8 +500,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @throws DAOException 
 	 * @throws HibernateException Exception thrown during hibernate operations.
 	 */
-	public void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
-			throws DAOException, UserNotAuthorizedException
+	public void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Specimen specimen = (Specimen) obj;
 		Specimen specimenOld = (Specimen) oldObj;
@@ -438,20 +519,17 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			//Check whether continer is moved to one of its sub container.
 			if (isUnderSubSpecimen(specimen, specimen.getParentSpecimen().getId()))
 			{
-				throw new DAOException(ApplicationProperties
-						.getValue("errors.specimen.under.subspecimen"));
+				throw new DAOException(ApplicationProperties.getValue("errors.specimen.under.subspecimen"));
 			}
 			Logger.out.debug("Loading ParentSpecimen: " + specimen.getParentSpecimen().getId());
 
 			// check for closed ParentSpecimen
 			checkStatus(dao, specimen.getParentSpecimen(), "Parent Specimen");
 
-			SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen()
-					.getId(), dao);
+			SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen().getId(), dao);
 
 			specimen.setSpecimenCollectionGroup(scg);
-			SpecimenCharacteristics sc = loadSpecimenCharacteristics(specimen.getParentSpecimen()
-					.getId(), dao);
+			SpecimenCharacteristics sc = loadSpecimenCharacteristics(specimen.getParentSpecimen().getId(), dao);
 
 			if (!Constants.ALIQUOT.equals(specimen.getLineage()))//specimen instanceof OriginalSpecimen)
 			{
@@ -460,12 +538,10 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		}
 
 		//check for closed Specimen Collection Group
-		if (!specimen.getSpecimenCollectionGroup().getId().equals(
-				specimenOld.getSpecimenCollectionGroup().getId()))
+		if (!specimen.getSpecimenCollectionGroup().getId().equals(specimenOld.getSpecimenCollectionGroup().getId()))
 			checkStatus(dao, specimen.getSpecimenCollectionGroup(), "Specimen Collection Group");
 
-		setSpecimenGroupForSubSpecimen(specimen, specimen.getSpecimenCollectionGroup(), specimen
-				.getSpecimenCharacteristics());
+		setSpecimenGroupForSubSpecimen(specimen, specimen.getSpecimenCollectionGroup(), specimen.getSpecimenCharacteristics());
 
 		if (!Constants.ALIQUOT.equals(specimen.getLineage()))//specimen instanceof OriginalSpecimen)
 		{
@@ -478,8 +554,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		dao.audit(obj, oldObj, sessionDataBean, true);
 
 		//Audit of Specimen Characteristics.
-		dao.audit(specimen.getSpecimenCharacteristics(), specimenOld.getSpecimenCharacteristics(),
-				sessionDataBean, true);
+		dao.audit(specimen.getSpecimenCharacteristics(), specimenOld.getSpecimenCharacteristics(), sessionDataBean, true);
 
 		Collection oldExternalIdentifierCollection = specimenOld.getExternalIdentifierCollection();
 
@@ -493,8 +568,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				exId.setSpecimen(specimen);
 				dao.update(exId, sessionDataBean, true, true, false);
 
-				ExternalIdentifier oldExId = (ExternalIdentifier) getCorrespondingOldObject(
-						oldExternalIdentifierCollection, exId.getId());
+				ExternalIdentifier oldExId = (ExternalIdentifier) getCorrespondingOldObject(oldExternalIdentifierCollection, exId.getId());
 				dao.audit(exId, oldExId, sessionDataBean, true);
 			}
 		}
@@ -518,8 +592,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			}
 			if (!disposalEventPresent)
 			{
-				throw new DAOException(ApplicationProperties
-						.getValue("errors.specimen.not.disabled.no.disposalevent"));
+				throw new DAOException(ApplicationProperties.getValue("errors.specimen.not.disabled.no.disposalevent"));
 			}
 
 			setDisableToSubSpecimen(specimen);
@@ -549,15 +622,13 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		return false;
 	}
 
-	private void setSpecimenGroupForSubSpecimen(Specimen specimen,
-			SpecimenCollectionGroup specimenCollectionGroup,
+	private void setSpecimenGroupForSubSpecimen(Specimen specimen, SpecimenCollectionGroup specimenCollectionGroup,
 			SpecimenCharacteristics specimenCharacteristics)
 	{
 		if (specimen != null)
 		{
 			Logger.out.debug("specimen() " + specimen.getId());
-			Logger.out.debug("specimen.getChildrenContainerCollection() "
-					+ specimen.getChildrenSpecimen().size());
+			Logger.out.debug("specimen.getChildrenContainerCollection() " + specimen.getChildrenSpecimen().size());
 
 			Iterator iterator = specimen.getChildrenSpecimen().iterator();
 			while (iterator.hasNext())
@@ -566,8 +637,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				childSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 				//((OriginalSpecimen)childSpecimen).setSpecimenCharacteristics(specimenCharacteristics);
 
-				setSpecimenGroupForSubSpecimen(childSpecimen, specimenCollectionGroup,
-						specimenCharacteristics);
+				setSpecimenGroupForSubSpecimen(childSpecimen, specimenCollectionGroup, specimenCharacteristics);
 			}
 		}
 	}
@@ -587,8 +657,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		}
 	}
 
-	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean,
-			boolean isCollectionGroupName) throws DAOException, SMException
+	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean, boolean isCollectionGroupName)
+			throws DAOException, SMException
 	{
 		//Load & set Specimen Collection Group if present
 		if (specimen.getSpecimenCollectionGroup() != null)
@@ -596,24 +666,22 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			Object specimenCollectionGroupObj = null;
 			if (isCollectionGroupName)
 			{
-				List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
-						Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
-				
+				List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
+
 				specimenCollectionGroupObj = spgList.get(0);
 			}
 			else
 			{
-				specimenCollectionGroupObj = dao.retrieve(SpecimenCollectionGroup.class.getName(),
-						specimen.getSpecimenCollectionGroup().getId());
+				specimenCollectionGroupObj = dao.retrieve(SpecimenCollectionGroup.class.getName(), specimen.getSpecimenCollectionGroup().getId());
 
 			}
 			if (specimenCollectionGroupObj != null)
 			{
 				SpecimenCollectionGroup spg = (SpecimenCollectionGroup) specimenCollectionGroupObj;
 
-				if(spg.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
+				if (spg.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
 				{
-					throw new DAOException("Specimen Collection Group "  + ApplicationProperties.getValue("error.object.closed"));
+					throw new DAOException("Specimen Collection Group " + ApplicationProperties.getValue("error.object.closed"));
 				}
 				//checkStatus(dao, spg, );
 				specimen.setSpecimenCollectionGroup(spg);
@@ -623,8 +691,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		//Load & set Parent Specimen if present
 		if (specimen.getParentSpecimen() != null)
 		{
-			Object parentSpecimenObj = dao.retrieve(Specimen.class.getName(), specimen
-					.getParentSpecimen().getId());
+			Object parentSpecimenObj = dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getId());
 			if (parentSpecimenObj != null)
 			{
 				Specimen parentSpecimen = (Specimen) parentSpecimenObj;
@@ -639,21 +706,19 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		//Load & set Storage Container
 		if (specimen.getStorageContainer() != null)
 		{
-			Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen
-					.getStorageContainer().getId());
+			Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getId());
 			if (containerObj != null)
 			{
 				StorageContainer container = (StorageContainer) containerObj;
 				// check for closed Storage Container
 				checkStatus(dao, container, "Storage Container");
 
-				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory
-						.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+						Constants.STORAGE_CONTAINER_FORM_ID);
 
 				// --- check for all validations on the storage container.
-				storageContainerBizLogic.checkContainer(dao, container.getId().toString(), specimen
-						.getPositionDimensionOne().toString(), specimen.getPositionDimensionTwo()
-						.toString(), sessionDataBean);
+				storageContainerBizLogic.checkContainer(dao, container.getId().toString(), specimen.getPositionDimensionOne().toString(), specimen
+						.getPositionDimensionTwo().toString(), sessionDataBean);
 
 				specimen.setStorageContainer(container);
 			}
@@ -680,13 +745,11 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		specimen.setBiohazardCollection(set);
 	}
 
-	public void disableRelatedObjectsForSpecimenCollectionGroup(DAO dao,
-			Long specimenCollectionGroupArr[]) throws DAOException
+	public void disableRelatedObjectsForSpecimenCollectionGroup(DAO dao, Long specimenCollectionGroupArr[]) throws DAOException
 	{
 		Logger.out.debug("disableRelatedObjects NewSpecimenBizLogic");
-		List listOfSpecimenId = super.disableObjects(dao, Specimen.class,
-				"specimenCollectionGroup", "CATISSUE_SPECIMEN", "SPECIMEN_COLLECTION_GROUP_ID",
-				specimenCollectionGroupArr);
+		List listOfSpecimenId = super.disableObjects(dao, Specimen.class, "specimenCollectionGroup", "CATISSUE_SPECIMEN",
+				"SPECIMEN_COLLECTION_GROUP_ID", specimenCollectionGroupArr);
 		if (!listOfSpecimenId.isEmpty())
 		{
 			disableSubSpecimens(dao, Utility.toLongArray(listOfSpecimenId));
@@ -706,8 +769,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 	private void disableSubSpecimens(DAO dao, Long speIDArr[]) throws DAOException
 	{
-		List listOfSubElement = super.disableObjects(dao, Specimen.class, "parentSpecimen",
-				"CATISSUE_SPECIMEN", "PARENT_SPECIMEN_ID", speIDArr);
+		List listOfSubElement = super.disableObjects(dao, Specimen.class, "parentSpecimen", "CATISSUE_SPECIMEN", "PARENT_SPECIMEN_ID", speIDArr);
 
 		if (listOfSubElement.isEmpty())
 			return;
@@ -722,27 +784,22 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @throws DAOException
 	 * @throws SMException
 	 */
-	public void assignPrivilegeToRelatedObjectsForSCG(DAO dao, String privilegeName,
-			Long[] specimenCollectionGroupArr, Long userId, String roleId, boolean assignToUser,
-			boolean assignOperation) throws SMException, DAOException
+	public void assignPrivilegeToRelatedObjectsForSCG(DAO dao, String privilegeName, Long[] specimenCollectionGroupArr, Long userId, String roleId,
+			boolean assignToUser, boolean assignOperation) throws SMException, DAOException
 	{
 		Logger.out.debug("assignPrivilegeToRelatedObjectsForSCG NewSpecimenBizLogic");
-		List listOfSpecimenId = super.getRelatedObjects(dao, Specimen.class,
-				"specimenCollectionGroup", specimenCollectionGroupArr);
+		List listOfSpecimenId = super.getRelatedObjects(dao, Specimen.class, "specimenCollectionGroup", specimenCollectionGroupArr);
 		if (!listOfSpecimenId.isEmpty())
 		{
-			super.setPrivilege(dao, privilegeName, Specimen.class, Utility
-					.toLongArray(listOfSpecimenId), userId, roleId, assignToUser, assignOperation);
-			List specimenCharacteristicsIds = super.getRelatedObjects(dao, Specimen.class,
-					new String[]{"specimenCharacteristics." + Constants.SYSTEM_IDENTIFIER},
-					new String[]{Constants.SYSTEM_IDENTIFIER}, Utility
-							.toLongArray(listOfSpecimenId));
-			super.setPrivilege(dao, privilegeName, Address.class, Utility
-					.toLongArray(specimenCharacteristicsIds), userId, roleId, assignToUser,
+			super.setPrivilege(dao, privilegeName, Specimen.class, Utility.toLongArray(listOfSpecimenId), userId, roleId, assignToUser,
+					assignOperation);
+			List specimenCharacteristicsIds = super.getRelatedObjects(dao, Specimen.class, new String[]{"specimenCharacteristics."
+					+ Constants.SYSTEM_IDENTIFIER}, new String[]{Constants.SYSTEM_IDENTIFIER}, Utility.toLongArray(listOfSpecimenId));
+			super.setPrivilege(dao, privilegeName, Address.class, Utility.toLongArray(specimenCharacteristicsIds), userId, roleId, assignToUser,
 					assignOperation);
 
-			assignPrivilegeToSubSpecimens(dao, privilegeName, Specimen.class, Utility
-					.toLongArray(listOfSpecimenId), userId, roleId, assignToUser, assignOperation);
+			assignPrivilegeToSubSpecimens(dao, privilegeName, Specimen.class, Utility.toLongArray(listOfSpecimenId), userId, roleId, assignToUser,
+					assignOperation);
 		}
 	}
 
@@ -755,43 +812,33 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @throws DAOException
 	 * @throws SMException
 	 */
-	private void assignPrivilegeToSubSpecimens(DAO dao, String privilegeName, Class class1,
-			Long[] speIDArr, Long userId, String roleId, boolean assignToUser,
-			boolean assignOperation) throws SMException, DAOException
+	private void assignPrivilegeToSubSpecimens(DAO dao, String privilegeName, Class class1, Long[] speIDArr, Long userId, String roleId,
+			boolean assignToUser, boolean assignOperation) throws SMException, DAOException
 	{
-		List listOfSubElement = super.getRelatedObjects(dao, Specimen.class, "parentSpecimen",
-				speIDArr);
+		List listOfSubElement = super.getRelatedObjects(dao, Specimen.class, "parentSpecimen", speIDArr);
 
 		if (listOfSubElement.isEmpty())
 			return;
-		super.setPrivilege(dao, privilegeName, Specimen.class, Utility
-				.toLongArray(listOfSubElement), userId, roleId, assignToUser, assignOperation);
-		List specimenCharacteristicsIds = super.getRelatedObjects(dao, Specimen.class,
-				new String[]{"specimenCharacteristics." + Constants.SYSTEM_IDENTIFIER},
-				new String[]{Constants.SYSTEM_IDENTIFIER}, Utility.toLongArray(listOfSubElement));
-		super.setPrivilege(dao, privilegeName, Address.class, Utility
-				.toLongArray(specimenCharacteristicsIds), userId, roleId, assignToUser,
+		super.setPrivilege(dao, privilegeName, Specimen.class, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser, assignOperation);
+		List specimenCharacteristicsIds = super.getRelatedObjects(dao, Specimen.class, new String[]{"specimenCharacteristics."
+				+ Constants.SYSTEM_IDENTIFIER}, new String[]{Constants.SYSTEM_IDENTIFIER}, Utility.toLongArray(listOfSubElement));
+		super.setPrivilege(dao, privilegeName, Address.class, Utility.toLongArray(specimenCharacteristicsIds), userId, roleId, assignToUser,
 				assignOperation);
 
-		assignPrivilegeToSubSpecimens(dao, privilegeName, Specimen.class, Utility
-				.toLongArray(listOfSubElement), userId, roleId, assignToUser, assignOperation);
+		assignPrivilegeToSubSpecimens(dao, privilegeName, Specimen.class, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
+				assignOperation);
 	}
 
-	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds,
-			Long userId, String roleId, boolean assignToUser, boolean assignOperation)
-			throws SMException, DAOException
+	public void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser,
+			boolean assignOperation) throws SMException, DAOException
 	{
-		super.setPrivilege(dao, privilegeName, objectType, objectIds, userId, roleId, assignToUser,
-				assignOperation);
-		List specimenCharacteristicsIds = super.getRelatedObjects(dao, Specimen.class,
-				new String[]{"specimenCharacteristics." + Constants.SYSTEM_IDENTIFIER},
-				new String[]{Constants.SYSTEM_IDENTIFIER}, objectIds);
-		super.setPrivilege(dao, privilegeName, Address.class, Utility
-				.toLongArray(specimenCharacteristicsIds), userId, roleId, assignToUser,
+		super.setPrivilege(dao, privilegeName, objectType, objectIds, userId, roleId, assignToUser, assignOperation);
+		List specimenCharacteristicsIds = super.getRelatedObjects(dao, Specimen.class, new String[]{"specimenCharacteristics."
+				+ Constants.SYSTEM_IDENTIFIER}, new String[]{Constants.SYSTEM_IDENTIFIER}, objectIds);
+		super.setPrivilege(dao, privilegeName, Address.class, Utility.toLongArray(specimenCharacteristicsIds), userId, roleId, assignToUser,
 				assignOperation);
 
-		assignPrivilegeToSubSpecimens(dao, privilegeName, Specimen.class, objectIds, userId,
-				roleId, assignToUser, assignOperation);
+		assignPrivilegeToSubSpecimens(dao, privilegeName, Specimen.class, objectIds, userId, roleId, assignToUser, assignOperation);
 	}
 
 	// validation code here
@@ -806,18 +853,16 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @throws SMException
 	 * @throws DAOException
 	 */
-	public void assignPrivilegeToRelatedObjectsForDistributedItem(DAO dao, String privilegeName,
-			Long[] objectIds, Long userId, String roleId, boolean assignToUser,
-			boolean assignOperation) throws SMException, DAOException
+	public void assignPrivilegeToRelatedObjectsForDistributedItem(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId,
+			boolean assignToUser, boolean assignOperation) throws SMException, DAOException
 	{
 		String[] selectColumnNames = {"specimen.id"};
 		String[] whereColumnNames = {"id"};
-		List listOfSubElement = super.getRelatedObjects(dao, DistributedItem.class,
-				selectColumnNames, whereColumnNames, objectIds);
+		List listOfSubElement = super.getRelatedObjects(dao, DistributedItem.class, selectColumnNames, whereColumnNames, objectIds);
 		if (!listOfSubElement.isEmpty())
 		{
-			super.setPrivilege(dao, privilegeName, Specimen.class, Utility
-					.toLongArray(listOfSubElement), userId, roleId, assignToUser, assignOperation);
+			super.setPrivilege(dao, privilegeName, Specimen.class, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
+					assignOperation);
 		}
 	}
 
@@ -826,177 +871,177 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
-//		Added by Ashish
-/*		
-		Specimen specimen = (Specimen) obj;
-		boolean parentPresent = false;
-		Long collectionEventUserId = null;
-		Map biohazard = null;
-		int bhCounter=1;
-		if (specimen == null)
-			throw new DAOException("domain.object.null.err.msg", new String[]{"Specimen"});
-		Validator validator = new Validator();
-		
-			if (specimen.getSpecimenCollectionGroup().getId().equals("-1"))
-	        {
-				String message = ApplicationProperties.getValue("specimen.specimenCollectionGroupId");
-				throw new DAOException("errors.item.required", new String[]{message});            
-	        }
-	
-		if(specimen.getParentSpecimen() != null)
-    	{
-			parentPresent = true;
-    	}
-     	
-     	if(parentPresent && !validator.isValidOption(specimen.getParentSpecimen().getId().toString()))
-     	{
-     		String message = ApplicationProperties.getValue("createSpecimen.parent");
-			throw new DAOException("errors.item.required", new String[]{message});	     		
-     	}
-     	
-     	if (specimen.getSpecimenCharacteristics().getTissueSite().equals("-1"))
-        {
-     		String message = ApplicationProperties.getValue("specimen.tissueSite");
-			throw new DAOException("errors.item.required", new String[]{message});	
-           
-        }
-     	
-     	if (specimen.getSpecimenCharacteristics().getTissueSide().equals("-1"))
-        {
-     		String message = ApplicationProperties.getValue("specimen.tissueSide");
-			throw new DAOException("errors.item.required", new String[]{message});	
-            
-        }
-     	
-     	if (specimen.getPathologicalStatus().equals("-1"))
-        {
-     		String message = ApplicationProperties.getValue("specimen.pathologicalStatus");
-			throw new DAOException("errors.item.required", new String[]{message});	
-            
-        }  	
-     	 
-     	if(operation.equalsIgnoreCase(Constants.ADD  ) )
-     	{
-     		Iterator specimenEventCollectionIterator = specimen.getSpecimenEventCollection().iterator();
-     		while(specimenEventCollectionIterator.hasNext())
-     		{
-     		//CollectionEvent validation.
-     			Object eventObject = specimenEventCollectionIterator.next();
-     			if(eventObject instanceof CollectionEventParameters)
-     			{
-     				CollectionEventParameters collectionEventParameters =  (CollectionEventParameters)eventObject;
-     				collectionEventUserId = collectionEventParameters.getId();
-//     				if ((collectionEventUserId) == -1L)
-//    	            {
-//    	     			
-//    	    			throw new DAOException("errors.item.required", new String[]{"Collection Name"});
-//    	           		
-//    	            }
-    	           	if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY)) )
-    	           	{
-    	           		
-    	    			throw new DAOException("errors.item.required", new String[]{"Collection Date"});
-    	           		
-    	           	}    	
-    	         	// checks the collectionProcedure
-    	          	if (!validator.isValidOption( collectionEventParameters.getCollectionProcedure() ) )
-    	            {
-    	          		String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
-    	    			throw new DAOException("errors.item.required", new String[]{message});
-    	           		
-    	            }
-     			}
-//     			ReceivedEvent validation
-     			else if(eventObject instanceof ReceivedEventParameters)
-     			{
-     				ReceivedEventParameters receivedEventParameters =  (ReceivedEventParameters)eventObject;
-     				collectionEventUserId = receivedEventParameters.getId();
-//     				if ((receivedEventParameters.getId()) == -1L)
-//     		        {
-//     					throw new DAOException("errors.item.required", new String[]{"Received user"});
-//     		       		
-//     		        }
-     		       	if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY))) 
-     		       	{
-     		       		throw new DAOException("errors.item.required", new String[]{"Received date"});     		       		
-     		       	}
+		//		Added by Ashish
+		/*		
+		 Specimen specimen = (Specimen) obj;
+		 boolean parentPresent = false;
+		 Long collectionEventUserId = null;
+		 Map biohazard = null;
+		 int bhCounter=1;
+		 if (specimen == null)
+		 throw new DAOException("domain.object.null.err.msg", new String[]{"Specimen"});
+		 Validator validator = new Validator();
+		 
+		 if (specimen.getSpecimenCollectionGroup().getId().equals("-1"))
+		 {
+		 String message = ApplicationProperties.getValue("specimen.specimenCollectionGroupId");
+		 throw new DAOException("errors.item.required", new String[]{message});            
+		 }
+		 
+		 if(specimen.getParentSpecimen() != null)
+		 {
+		 parentPresent = true;
+		 }
+		 
+		 if(parentPresent && !validator.isValidOption(specimen.getParentSpecimen().getId().toString()))
+		 {
+		 String message = ApplicationProperties.getValue("createSpecimen.parent");
+		 throw new DAOException("errors.item.required", new String[]{message});	     		
+		 }
+		 
+		 if (specimen.getSpecimenCharacteristics().getTissueSite().equals("-1"))
+		 {
+		 String message = ApplicationProperties.getValue("specimen.tissueSite");
+		 throw new DAOException("errors.item.required", new String[]{message});	
+		 
+		 }
+		 
+		 if (specimen.getSpecimenCharacteristics().getTissueSide().equals("-1"))
+		 {
+		 String message = ApplicationProperties.getValue("specimen.tissueSide");
+		 throw new DAOException("errors.item.required", new String[]{message});	
+		 
+		 }
+		 
+		 if (specimen.getPathologicalStatus().equals("-1"))
+		 {
+		 String message = ApplicationProperties.getValue("specimen.pathologicalStatus");
+		 throw new DAOException("errors.item.required", new String[]{message});	
+		 
+		 }  	
+		 
+		 if(operation.equalsIgnoreCase(Constants.ADD  ) )
+		 {
+		 Iterator specimenEventCollectionIterator = specimen.getSpecimenEventCollection().iterator();
+		 while(specimenEventCollectionIterator.hasNext())
+		 {
+		 //CollectionEvent validation.
+		 Object eventObject = specimenEventCollectionIterator.next();
+		 if(eventObject instanceof CollectionEventParameters)
+		 {
+		 CollectionEventParameters collectionEventParameters =  (CollectionEventParameters)eventObject;
+		 collectionEventUserId = collectionEventParameters.getId();
+		 //     				if ((collectionEventUserId) == -1L)
+		 //    	            {
+		 //    	     			
+		 //    	    			throw new DAOException("errors.item.required", new String[]{"Collection Name"});
+		 //    	           		
+		 //    	            }
+		 if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY)) )
+		 {
+		 
+		 throw new DAOException("errors.item.required", new String[]{"Collection Date"});
+		 
+		 }    	
+		 // checks the collectionProcedure
+		 if (!validator.isValidOption( collectionEventParameters.getCollectionProcedure() ) )
+		 {
+		 String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
+		 throw new DAOException("errors.item.required", new String[]{message});
+		 
+		 }
+		 }
+		 //     			ReceivedEvent validation
+		 else if(eventObject instanceof ReceivedEventParameters)
+		 {
+		 ReceivedEventParameters receivedEventParameters =  (ReceivedEventParameters)eventObject;
+		 collectionEventUserId = receivedEventParameters.getId();
+		 //     				if ((receivedEventParameters.getId()) == -1L)
+		 //     		        {
+		 //     					throw new DAOException("errors.item.required", new String[]{"Received user"});
+		 //     		       		
+		 //     		        }
+		 if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY))) 
+		 {
+		 throw new DAOException("errors.item.required", new String[]{"Received date"});     		       		
+		 }
 
-     		     	// checks the collectionProcedure
-     		      	if (!validator.isValidOption(receivedEventParameters.getReceivedQuality() ) )
-     		        {
-     		      		String message = ApplicationProperties.getValue("receivedeventparameters.receivedquality");
-    	    			throw new DAOException("errors.item.required", new String[]{message});     		       		
-     		        }     				
-     			}  		
-     		}
-     	}
-     	//Validations for Biohazard Add-More Block
-     	
-//     	if(specimen.getBiohazardCollection() != null && specimen.getBiohazardCollection().size() != 0)
-//        {
-//     		biohazard = new HashMap();
-//        	
-//        	int i=1;
-//        	
-//        	Iterator it = specimen.getBiohazardCollection().iterator();
-//        	while(it.hasNext())
-//        	{
-//        		String key1 = "Biohazard:" + i + "_type";
-//				String key2 = "Biohazard:" + i + "_id";
-//				String key3 = "Biohazard:" + i + "_persisted";
-//				
-//				Biohazard hazard = (Biohazard)it.next();
-//				
-//				biohazard.put(key1,hazard.getType());
-//				biohazard.put(key2,hazard.getId());
-//				
-//				//boolean for showing persisted value
-//				biohazard.put(key3,"true");
-//				
-//				i++;
-//        	}
-//        	
-//        	bhCounter = specimen.getBiohazardCollection().size();
-//        }
-//        String className = "Biohazard:";
-//        String key1 = "_type";
-//        String key2 = "_" + Constants.SYSTEM_IDENTIFIER;
-//        String key3 = "_persisted";
-//        int index = 1;
-//        
-//        while(true)
-//        {
-//        	String keyOne = className + index + key1;
-//			String keyTwo = className + index + key2;
-//			String keyThree = className + index + key3;
-//			
-//        	String value1 = (String)biohazard.get(keyOne);
-//        	String value2 = (String)biohazard.get(keyTwo);
-//        	String value3 = (String)biohazard.get(keyThree);
-//        	
-//        	if(value1 == null || value2 == null || value3 == null)
-//        	{
-//        		break;
-//        	}
-//        	else if(!validator.isValidOption(value1) && !validator.isValidOption(value2))
-//        	{
-//        		biohazard.remove(keyOne);
-//        		biohazard.remove(keyTwo);
-//        		biohazard.remove(keyThree);
-//        	}
-//        	else if((validator.isValidOption(value1) && !validator.isValidOption(value2)) 
-//        			|| (!validator.isValidOption(value1) && validator.isValidOption( value2)))   		
-//        	{
-//        		String message = ApplicationProperties.getValue("newSpecimen.msg");
-//    			throw new DAOException("errors.newSpecimen.biohazard.missing", new String[]{message});	
-//        		
-//        		
-//        	}
-//        	index++;
-//        }
-     	
-     	
-     	*/
+		 // checks the collectionProcedure
+		 if (!validator.isValidOption(receivedEventParameters.getReceivedQuality() ) )
+		 {
+		 String message = ApplicationProperties.getValue("receivedeventparameters.receivedquality");
+		 throw new DAOException("errors.item.required", new String[]{message});     		       		
+		 }     				
+		 }  		
+		 }
+		 }
+		 //Validations for Biohazard Add-More Block
+		 
+		 //     	if(specimen.getBiohazardCollection() != null && specimen.getBiohazardCollection().size() != 0)
+		 //        {
+		 //     		biohazard = new HashMap();
+		 //        	
+		 //        	int i=1;
+		 //        	
+		 //        	Iterator it = specimen.getBiohazardCollection().iterator();
+		 //        	while(it.hasNext())
+		 //        	{
+		 //        		String key1 = "Biohazard:" + i + "_type";
+		 //				String key2 = "Biohazard:" + i + "_id";
+		 //				String key3 = "Biohazard:" + i + "_persisted";
+		 //				
+		 //				Biohazard hazard = (Biohazard)it.next();
+		 //				
+		 //				biohazard.put(key1,hazard.getType());
+		 //				biohazard.put(key2,hazard.getId());
+		 //				
+		 //				//boolean for showing persisted value
+		 //				biohazard.put(key3,"true");
+		 //				
+		 //				i++;
+		 //        	}
+		 //        	
+		 //        	bhCounter = specimen.getBiohazardCollection().size();
+		 //        }
+		 //        String className = "Biohazard:";
+		 //        String key1 = "_type";
+		 //        String key2 = "_" + Constants.SYSTEM_IDENTIFIER;
+		 //        String key3 = "_persisted";
+		 //        int index = 1;
+		 //        
+		 //        while(true)
+		 //        {
+		 //        	String keyOne = className + index + key1;
+		 //			String keyTwo = className + index + key2;
+		 //			String keyThree = className + index + key3;
+		 //			
+		 //        	String value1 = (String)biohazard.get(keyOne);
+		 //        	String value2 = (String)biohazard.get(keyTwo);
+		 //        	String value3 = (String)biohazard.get(keyThree);
+		 //        	
+		 //        	if(value1 == null || value2 == null || value3 == null)
+		 //        	{
+		 //        		break;
+		 //        	}
+		 //        	else if(!validator.isValidOption(value1) && !validator.isValidOption(value2))
+		 //        	{
+		 //        		biohazard.remove(keyOne);
+		 //        		biohazard.remove(keyTwo);
+		 //        		biohazard.remove(keyThree);
+		 //        	}
+		 //        	else if((validator.isValidOption(value1) && !validator.isValidOption(value2)) 
+		 //        			|| (!validator.isValidOption(value1) && validator.isValidOption( value2)))   		
+		 //        	{
+		 //        		String message = ApplicationProperties.getValue("newSpecimen.msg");
+		 //    			throw new DAOException("errors.newSpecimen.biohazard.missing", new String[]{message});	
+		 //        		
+		 //        		
+		 //        	}
+		 //        	index++;
+		 //        }
+		 
+		 
+		 */
 		//End
 		boolean result;
 
@@ -1006,31 +1051,25 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		}
 		else
 		{
-			result = validateSingleSpecimen((Specimen) obj, dao, operation,false);
+			result = validateSingleSpecimen((Specimen) obj, dao, operation, false);
 		}
 		return result;
 
-		
-		
 	}
 
 	/**
 	 * validates single specimen. 
 	 */
-	private boolean validateSingleSpecimen(Specimen specimen, DAO dao, String operation,boolean partOfMulipleSpecimen)
-			throws DAOException
+	private boolean validateSingleSpecimen(Specimen specimen, DAO dao, String operation, boolean partOfMulipleSpecimen) throws DAOException
 	{
 		if (Constants.ALIQUOT.equals(specimen.getLineage()))
 		{
 			return true;
 		}
 
+		validateFields(specimen, dao, operation, partOfMulipleSpecimen);
 
-		validateFields(specimen,dao,operation,partOfMulipleSpecimen); 
-		
-			
-		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_SPECIMEN_CLASS, null);
+		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
 		String specimenClass = Utility.getSpecimenClassName(specimen);
 
 		if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
@@ -1038,8 +1077,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
 		}
 
-		if (!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass), specimen
-				.getType()))
+		if (!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass), specimen.getType()))
 		{
 			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
 		}
@@ -1048,41 +1086,33 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 		if (characters == null)
 		{
-			throw new DAOException(ApplicationProperties
-					.getValue("specimen.characteristics.errMsg"));
+			throw new DAOException(ApplicationProperties.getValue("specimen.characteristics.errMsg"));
 		}
 		else
 		{
 			if (specimen.getSpecimenCollectionGroup() != null)
 			{
 				//				NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-				List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_TISSUE_SITE, null);
+				List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
 
 				if (!Validator.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
 				{
-					throw new DAOException(ApplicationProperties
-							.getValue("protocol.tissueSite.errMsg"));
+					throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
 				}
 
 				//		    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-				List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_TISSUE_SIDE, null);
+				List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null);
 
 				if (!Validator.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
 				{
-					throw new DAOException(ApplicationProperties
-							.getValue("specimen.tissueSide.errMsg"));
+					throw new DAOException(ApplicationProperties.getValue("specimen.tissueSide.errMsg"));
 				}
 
-				List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
+				List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
 
-				if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen
-						.getPathologicalStatus()))
+				if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen.getPathologicalStatus()))
 				{
-					throw new DAOException(ApplicationProperties
-							.getValue("protocol.pathologyStatus.errMsg"));
+					throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
 				}
 			}
 		}
@@ -1096,14 +1126,12 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(specimen.getActivityStatus()))
 			{
-				throw new DAOException(ApplicationProperties
-						.getValue("activityStatus.active.errMsg"));
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
 			}
 		}
 		else
 		{
-			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, specimen
-					.getActivityStatus()))
+			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, specimen.getActivityStatus()))
 			{
 				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
 			}
@@ -1116,52 +1144,54 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		Validator validator = new Validator();
 
-		
-		
 		if (partOfMulipleSpecimen)
 		{
-			
-			if(specimen.getSpecimenCollectionGroup() == null || validator.isEmpty(specimen.getSpecimenCollectionGroup().getName())) {
+
+			if (specimen.getSpecimenCollectionGroup() == null || validator.isEmpty(specimen.getSpecimenCollectionGroup().getName()))
+			{
 				String quantityString = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required",quantityString));
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
 			}
 
-			List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(),
-					Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
-			
-			if (spgList.size() == 0) {
-				throw new DAOException(ApplicationProperties
-						.getValue("errors.item.unknown","Specimen Collection Group " + specimen.getSpecimenCollectionGroup().getName()));
+			List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
+
+			if (spgList.size() == 0)
+			{
+				throw new DAOException(ApplicationProperties.getValue("errors.item.unknown", "Specimen Collection Group "
+						+ specimen.getSpecimenCollectionGroup().getName()));
 			}
 		}
 
-		if(validator.isEmpty(specimen.getLabel())) {
+		if (validator.isEmpty(specimen.getLabel()))
+		{
 			String labelString = ApplicationProperties.getValue("specimen.label");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",labelString));
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", labelString));
 		}
-		
-		if(specimen.getQuantity() == null || specimen.getQuantity().getValue() == null) {
+
+		if (specimen.getQuantity() == null || specimen.getQuantity().getValue() == null)
+		{
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",quantityString));
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
 		}
 
 		Long storageContainerId = specimen.getStorageContainer().getId();
 		Integer xPos = specimen.getPositionDimensionOne();
 		Integer yPos = specimen.getPositionDimensionTwo();
-		
-		if (storageContainerId == null || xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() <0 )
+
+		if (storageContainerId == null || xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 		{
-			throw new DAOException(ApplicationProperties
-					.getValue("errors.item.format",ApplicationProperties
-							.getValue("specimen.positionInStorageContainer")));
+			throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
+					.getValue("specimen.positionInStorageContainer")));
 		}
 	}
 
 	/**
 	 * validates multiple specimen. Internally it for each specimen it innvokes validateSingleSpecimen. 
+	 * @throws DAOException
+	 * @throws DAOException
 	 */
-	private boolean validateMultipleSpecimen(Map specimenMap, DAO dao, String operation)
-			throws DAOException
+	private boolean validateMultipleSpecimen(Map specimenMap, DAO dao, String operation) throws DAOException
+
 	{
 		Iterator specimenIterator = specimenMap.keySet().iterator();
 		boolean result = true;
@@ -1169,21 +1199,46 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
 			//validate single specimen
-			result = validateSingleSpecimen(specimen, dao, operation,true);
-			
+
+			try
+			{
+				result = validateSingleSpecimen(specimen, dao, operation, true);
+			}
+			catch (DAOException daoException)
+			{
+				String message = daoException.getMessage();
+				message += " for Specimen in column " + specimen.getId();
+				daoException.setMessage(message);
+				throw daoException;
+			}
+
 			List derivedSpecimens = (List) specimenMap.get(specimen);
-			
-			if (derivedSpecimens == null) {
+
+			if (derivedSpecimens == null)
+			{
 				continue;
 			}
 
 			//validate derived specimens
-			for (int i=0;i<derivedSpecimens.size();i++) {
-				
+			for (int i = 0; i < derivedSpecimens.size(); i++)
+			{
+
 				Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
-				result = validateSingleSpecimen(derivedSpecimen, dao, operation,false);
-				
-				if(!result) {
+				try
+				{
+					result = validateSingleSpecimen(derivedSpecimen, dao, operation, false);
+				}
+				catch (DAOException daoException)
+				{
+					int j = i + 1;
+					String message = daoException.getMessage();
+					message += " for Derived Specimen " + j + " of Parent Specimen in column " + specimen.getId();
+					daoException.setMessage(message);
+					throw daoException;
+				}
+
+				if (!result)
+				{
 					break;
 				}
 			}
@@ -1202,11 +1257,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 		if (oldContainer.getId().longValue() == newContainer.getId().longValue())
 		{
-			if (oldSpecimen.getPositionDimensionOne().intValue() == newSpecimen
-					.getPositionDimensionOne().intValue())
+			if (oldSpecimen.getPositionDimensionOne().intValue() == newSpecimen.getPositionDimensionOne().intValue())
 			{
-				if (oldSpecimen.getPositionDimensionTwo().intValue() == newSpecimen
-						.getPositionDimensionTwo().intValue())
+				if (oldSpecimen.getPositionDimensionTwo().intValue() == newSpecimen.getPositionDimensionTwo().intValue())
 				{
 					return false;
 				}
@@ -1233,8 +1286,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		Logger.out.debug("In getIntegrationData() of SpecimenBizLogic ");
 
-		Logger.out.debug("ApplicationName in getIntegrationData() of SCGBizLogic==>"
-				+ applicationID);
+		Logger.out.debug("ApplicationName in getIntegrationData() of SCGBizLogic==>" + applicationID);
 
 		long identifiedPathologyReportId = 0;
 
@@ -1243,16 +1295,13 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			//JDBC call to get matching identifier from database
 			Class.forName("org.gjt.mm.mysql.Driver");
 
-			Connection connection = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/catissuecore", "catissue_core", "catissue_core");
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/catissuecore", "catissue_core", "catissue_core");
 
 			Statement stmt = connection.createStatement();
 
-			String specimenCollectionGroupQuery = "select SPECIMEN_COLLECTION_GROUP_ID from CATISSUE_SPECIMEN where IDENTIFIER="
-					+ id;
+			String specimenCollectionGroupQuery = "select SPECIMEN_COLLECTION_GROUP_ID from CATISSUE_SPECIMEN where IDENTIFIER=" + id;
 
-			ResultSet specimenCollectionGroupResultSet = stmt
-					.executeQuery(specimenCollectionGroupQuery);
+			ResultSet specimenCollectionGroupResultSet = stmt.executeQuery(specimenCollectionGroupQuery);
 
 			long specimenCollectionGroupId = 0;
 			while (specimenCollectionGroupResultSet.next())
@@ -1268,8 +1317,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				return exception;
 			}
 
-			String clinicalReportQuery = "select CLINICAL_REPORT_ID from CATISSUE_SPECIMEN_COLL_GROUP where IDENTIFIER="
-					+ specimenCollectionGroupId;
+			String clinicalReportQuery = "select CLINICAL_REPORT_ID from CATISSUE_SPECIMEN_COLL_GROUP where IDENTIFIER=" + specimenCollectionGroupId;
 
 			ResultSet clinicalReportResultSet = stmt.executeQuery(clinicalReportQuery);
 
@@ -1291,8 +1339,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			String identifiedPathologyReportIdQuery = "select IDENTIFIER from CATISSUE_IDENTIFIED_PATHOLOGY_REPORT where CLINICAL_REPORT_ID="
 					+ clinicalReportId;
 
-			ResultSet identifiedPathologyReportResultSet = stmt
-					.executeQuery(identifiedPathologyReportIdQuery);
+			ResultSet identifiedPathologyReportResultSet = stmt.executeQuery(identifiedPathologyReportIdQuery);
 
 			while (identifiedPathologyReportResultSet.next())
 			{
@@ -1304,8 +1351,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			if (identifiedPathologyReportId == 0)
 			{
 				List exception = new ArrayList();
-				exception
-						.add("IdentifiedPathologyReportId is not available for linked ClinicalReportId");
+				exception.add("IdentifiedPathologyReportId is not available for linked ClinicalReportId");
 				return exception;
 			}
 
@@ -1318,11 +1364,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			Logger.out.debug("JDBC Exception==>" + e.getMessage());
 		}
 
-		IntegrationManager integrationManager = IntegrationManagerFactory
-				.getIntegrationManager(applicationID);
+		IntegrationManager integrationManager = IntegrationManagerFactory.getIntegrationManager(applicationID);
 
-		return integrationManager.getLinkedAppData(new Specimen(), new Long(
-				identifiedPathologyReportId));
+		return integrationManager.getLinkedAppData(new Specimen(), new Long(identifiedPathologyReportId));
 	}
 
 	public String getPageToShow()
