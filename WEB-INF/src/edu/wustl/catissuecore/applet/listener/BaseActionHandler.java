@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JTable;
 
+import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
+
 
 /**
  * This is base Handler class for all of the component in tissuecore.
@@ -33,6 +35,7 @@ public class BaseActionHandler implements ActionListener
 	 */
 	public void actionPerformed(ActionEvent event)
 	{
+		getMultipleSpecimenTableModel().showMapData(); 
 		preActionPerformed(event);		
 		handleAction(event);
 		postActionPerformed(event);
@@ -72,5 +75,13 @@ public class BaseActionHandler implements ActionListener
 	protected void handleAction(ActionEvent event)
 	{
 		
+	}
+	
+	/**
+	 * specific to MultipleSpecimen.
+	 * @return
+	 */
+	protected MultipleSpecimenTableModel getMultipleSpecimenTableModel() {
+		return (MultipleSpecimenTableModel) table.getModel();
 	}
 }
