@@ -5,7 +5,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.MultipleSpecimenForm"%>
 
-
+<html>
 <head>
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
@@ -17,23 +17,30 @@
 					.getAttribute("multipleSpecimenForm");
 			String action = Constants.MULTIPLE_SPECIMEN_APPLET_ACTION;
 %>
-
+</head>
+<body>
 <FORM METHOD=POST ACTION="<%=action%>">
 <div id="errorMessages"></div>
 
 </FORM>
-
-
-<APPLET
-    CODEBASE = "<%=Constants.APPLET_CODEBASE%>"
-    ARCHIVE = "CaTissueApplet.jar"
-    CODE = "edu/wustl/catissuecore/applet/ui/MultipleSpecimenApplet.class"
-    ALT = "Mulitple specimen Applet"
-    NAME = "<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>"
-    width="750" height="650" MAYSCRIPT>
-	<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2">
-	<PARAM name="name" value="<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>">
-	<PARAM name="session_id" value="<%=session.getId()%>">
-	<PARAM name="noOfSpecimen" value="<%=form.getNumberOfSpecimen()%>">
-	<PARAM NAME = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" VALUE = "<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">
-</APPLET>
+			<table cellpadding="0" cellspacing="0" width="100%" height="100%" border="1">
+				<tr width="100%" height="100%">
+				<td width="100%" height="100%">			
+							<APPLET
+							    CODEBASE = "<%=Constants.APPLET_CODEBASE%>"
+							    ARCHIVE = "CaTissueApplet.jar"
+							    CODE = "edu/wustl/catissuecore/applet/ui/MultipleSpecimenApplet.class"
+							    ALT = "Mulitple specimen Applet"
+							    NAME = "<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>"
+							    width="100%" height="550" MAYSCRIPT>
+								<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2">
+								<PARAM name="name" value="<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>">
+								<PARAM name="session_id" value="<%=session.getId()%>">
+								<PARAM name="noOfSpecimen" value="<%=form.getNumberOfSpecimen()%>">
+								<PARAM NAME = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" VALUE = "<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">
+							</APPLET>
+				</td>
+				</tr>
+		   	</table>
+</body>
+</html>
