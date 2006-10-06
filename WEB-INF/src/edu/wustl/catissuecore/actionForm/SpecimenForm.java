@@ -579,7 +579,7 @@ public class SpecimenForm extends AbstractActionForm
 							ApplicationProperties.getValue("specimen.type")));
 				}
 
-				if (!className.equals("Cell") && !validator.isValidOption(type))
+				if (!validator.isValidOption(type))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.subType")));
