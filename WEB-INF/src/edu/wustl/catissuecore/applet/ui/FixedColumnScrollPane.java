@@ -74,9 +74,11 @@ public class FixedColumnScrollPane extends JScrollPane {
 	    {
 	        super( main );
 	 
-	        DefaultTableModel model = new DefaultTableModel (MultipleSpecimenTableModel.getRowHeaders().length ,1);
+	 //       DefaultTableModel model = new DefaultTableModel (MultipleSpecimenTableModel.getRowHeaders().length ,1);
+	        Object header[] = {""};
+	        DefaultTableModel model = new DefaultTableModel (header,MultipleSpecimenTableModel.getRowHeaders().length );
 	        BaseTable fixed = new BaseTable(model);
-	        fixed.setFocusable( false );
+//	        fixed.setFocusable( false );
 	        fixed.setSelectionModel( main.getSelectionModel() );
 	        fixed.getTableHeader().setReorderingAllowed( false );
 	        fixed.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
