@@ -10,6 +10,7 @@ package edu.wustl.catissuecore.applet.listener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -36,6 +37,19 @@ public class BaseFocusHandler implements FocusListener {
 	public void focusGained(FocusEvent e)
 	{
 		System.out.println("In BaseFocusHandler");
+		//to do
+//		if(e.getSource() instanceof JPanel)
+//		{
+//			JPanel src = (JPanel)e.getSource();
+//			Component comps[] = src.getComponents();
+//			for(int cnt=0; cnt<comps.length; cnt++)
+//			{
+//				if(comps[cnt].isEnabled())
+//				{
+//					
+//				}
+//			}
+//		}
 	}
 
 	/* (non-Javadoc)
@@ -44,8 +58,15 @@ public class BaseFocusHandler implements FocusListener {
 	public void focusLost(FocusEvent e)
 	{
 		System.out.println("In BaseFocusHandler");
-		table.getModel().setValueAt(getSelectedValue(e),table.getSelectedRow(),table.getSelectedColumn());
-		System.out.println(getSelectedValue(e)+" Row: "+ table.getSelectedRow()+ " Col: " + table.getSelectedColumn()); 
+		System.out.println(e.getSource().getClass());
+		if(e.getSource() instanceof JButton)
+		{
+				// ignore focus lost
+		}else
+		{
+			table.getModel().setValueAt(getSelectedValue(e),table.getSelectedRow(),table.getSelectedColumn());
+			System.out.println(getSelectedValue(e)+" Row: "+ table.getSelectedRow()+ " Col: " + table.getSelectedColumn()); 
+		}
 	}
 	
 	protected Object getSelectedValue(FocusEvent e)
