@@ -10,7 +10,7 @@
 	  </classpath>
 	</taskdef>
 
-	<property file="caTISSUEInstall.properties"/>
+	<property file="caTissueInstall.properties"/>
 	
 	<property name="base.dir" value="."/>
 	<property name="temp.dir" value="./tempCatissuecore"/>
