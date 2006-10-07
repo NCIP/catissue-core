@@ -160,7 +160,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			MapDataParser specimenParser = new MapDataParser("edu.wustl.catissuecore.domain");
 			System.out.println("After specimenParser");
 			Collection specimenCollection = specimenParser.generateData(fixedSpecimenMap);
-			
+		
 			//Read session form bean map to associate derived specimens
 			Map multipleSpecimenFormBeanMap = (Map) request.getSession().getAttribute(
 					Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY);
@@ -187,6 +187,10 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			//return to same applet page incase of failure.		
 			target = Constants.FAILURE;
 			String errorMsg = e.getMessage();
+			if(errorMsg.startsWith("For input string"))
+			{
+				errorMsg = "Please enter valid Quantity (Instead of " + errorMsg.replaceFirst("For","") + ")"; // temporary fix for error message
+			}
 			resultMap.put(Constants.ERROR_DETAIL, errorMsg);
 			e.printStackTrace();
 		}
@@ -353,7 +357,7 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 			String classValue = (String) specimenMap.get(AppletConstants.SPECIMEN_PREFIX + i + "_"
 					+ "class");
 
-			if (classValue == null || classValue.trim().length() == 0)
+			if (classValue == null || classValue.trim().length() == 0 || classValue.equals("-- Select --"))
 			{
 				throw new Exception(ApplicationProperties.getValue("protocol.class.errMsg") + " for Specimen number " + i);
 			}
