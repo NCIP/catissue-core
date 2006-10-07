@@ -37,9 +37,9 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**
 	 * Row headers for the attributes. This corrosponds to display value for each of the  specimenAttribute in that order.
 	 */
-	private static final String[]  rowHeaders = {"* Specimen Group Name", "* Parent", "* Label", "* Barcode", "* Class", "* Type",
+	private static final String[]  rowHeaders = {"* Specimen Group Name", "* Parent", "* Label", "Barcode", "* Class", "* Type",
 			"* Tissue Site", "* Tissue Side", "* Pathological Status", "* Quantity", "Concentration",
-			"* Storage Position", "Comments", "Events", "External Identifier(s)", "Biohazards",
+			"* Storage Position", "Comments", "* Events", "External Identifier(s)", "Biohazards",
 			"Derive"};
 
 	/**
