@@ -39,7 +39,8 @@ public class DerivedSpecimenButtonHandler extends ButtonHandler {
 		String key = ((MultipleSpecimenTableModel) table.getModel()).getKey(rowNo, colNo);          
 	    String collectionGroup = (String) model.getValueAt(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO,colNo);
 	    String specimenClass = (String) model.getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO,colNo);
-	    String parentSpecimenLabel = (String) model.getValueAt(AppletConstants.SPECIMEN_LABEL_ROW_NO,colNo);
+	    // This is label of parent Speciemen for a Specimen (not derived)
+	    String parentSpecimenLabel = (String) model.getValueAt(AppletConstants.SPECIMEN_PARENT_ROW_NO,colNo);
 	    String parentSpecimenBarcode = (String) model.getValueAt(AppletConstants.SPECIMEN_BARCODE_ROW_NO,colNo);
 	    String parentSpecimenType = (String) model.getValueAt(AppletConstants.SPECIMEN_TYPE_ROW_NO,colNo);
 		
