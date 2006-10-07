@@ -9,10 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,6 +24,8 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -356,7 +355,7 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 
 			if (classValue == null || classValue.trim().length() == 0)
 			{
-				throw new Exception(ApplicationProperties.getValue("protocol.class.errMsg"));
+				throw new Exception(ApplicationProperties.getValue("protocol.class.errMsg") + " for Specimen number " + i);
 			}
 
 			classMap.put(String.valueOf(i), classValue);
