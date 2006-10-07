@@ -17,11 +17,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -31,6 +34,7 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
+import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -48,9 +52,17 @@ public class CaCoreAppServicesDelegator
 	 * @return the sessionID of user if he/she has successfullyy logged in else null
 	 * @throws Exception 
 	 */
-    public String delegateLogin(String userName,String password) throws Exception
+    public Boolean delegateLogin(String userName,String password) throws Exception
 	{
-    	return "";
+    	User validUser = getUser(userName);
+    	Boolean authenticated = Boolean.valueOf(false);
+    	if (validUser != null)
+    	{	
+    		password = PasswordManager.encode(password);
+            boolean loginOK = SecurityManager.getInstance(CaCoreAppServicesDelegator.class).login(userName, password);
+            authenticated = new Boolean(loginOK);
+    	}
+    	return authenticated;
 	}
 	
     /**
@@ -74,11 +86,13 @@ public class CaCoreAppServicesDelegator
 	{
 	    try
 	    {
+	    	/*
 			if (domainObject == null) 
 			{
 				throw new Exception("Please enter valid domain object!! Domain object should not be NULL");
 			}
-			
+			*/
+	    	checkNullObject(domainObject,"Domain Object");
 			IBizLogic bizLogic = getBizLogic(domainObject.getClass().getName());
 			bizLogic.insert(domainObject,getSessionDataBean(userName),Constants.HIBERNATE_DAO);
 			Logger.out.info(" Domain Object has been successfully inserted " + domainObject);
@@ -102,17 +116,18 @@ public class CaCoreAppServicesDelegator
 	{
 		try
 		{
+			/*
 			if (domainObject == null) 
 			{
 				throw new Exception("Please enter valid domain object!! Domain object should not be NULL");
 			}
+			*/
+			checkNullObject(domainObject,"Domain Object");
 			String objectName = domainObject.getClass().getName();
 			IBizLogic bizLogic = getBizLogic(objectName);
 			AbstractDomainObject abstractDomainObject = (AbstractDomainObject) domainObject;
-			// not null check for Id 
-			if (abstractDomainObject.getId() == null) {
-				throw new Exception("Please enter valid Identifier for domain object !! Identifier should not be NULL");	
-			}
+			// not null check for Id
+			checkNullObject(abstractDomainObject.getId(),"Identifier");
             List list = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
 					  abstractDomainObject.getId());
             
@@ -142,6 +157,31 @@ public class CaCoreAppServicesDelegator
 	public Object delegateDelete(String userName, Object domainObject) throws Exception
 	{
 		throw new Exception("caTissue does not support delete");
+	}
+	
+	/**
+	 * @param userName user name
+	 * @param domainObject domain object
+	 * @return list of objects
+	 * @throws Exception
+	 */
+	public List delegateGetObjects(String userName, Object domainObject) throws Exception
+	{
+		List searchObjects = new ArrayList();
+		checkNullObject(domainObject,"Domain Object");
+		String objectName = domainObject.getClass().getName();
+		IBizLogic bizLogic = getBizLogic(objectName);
+		AbstractDomainObject abstractDomainObject = (AbstractDomainObject) domainObject;
+		// not null check for Id
+		checkNullObject(abstractDomainObject.getId(),"Identifier");
+		searchObjects = bizLogic.retrieve(objectName, Constants.SYSTEM_IDENTIFIER,
+				  abstractDomainObject.getId());
+		
+		if (searchObjects.isEmpty())
+		{
+			throw new Exception("Please enter valid domain object for search operation!!");			
+		}
+		return searchObjects;
 	}
 	
 	public List delegateSearchFilter(String userName,List list) throws Exception
@@ -174,7 +214,7 @@ public class CaCoreAppServicesDelegator
 	 */
 	private List filterObjects(String userName, List objectList) throws Exception
 	{
-	    Logger.out.debug("In Filter Objects ......");
+	    Logger.out.debug("In Filter Objects ......" );
 	    
 	    // boolean that indicates whether user has READ_DENIED privilege on the main object.
 		boolean hasReadDeniedForMain = false;
@@ -185,8 +225,6 @@ public class CaCoreAppServicesDelegator
 		
 		Logger.out.debug("Total Objects>>>>>>>>>>>>>>>>>>>>>"+objectList.size());
 		Iterator iterator = objectList.iterator();
-//		Logger.out.debug("objectList iterator Class>>>>>>>>>>>>>>>>>>>>>"+objectList.iterator().getClass());
-//		Logger.out.debug("Object List Class>>>>>>>>>>>>>>>>>>>>>"+objectList.getClass());
 		while(iterator.hasNext())
 		{
 		    
@@ -206,13 +244,14 @@ public class CaCoreAppServicesDelegator
 		    Logger.out.debug("Main object:" + aliasName + " Has READ_DENIED privilege:" + hasReadDeniedForMain);
 		    
 		    // If the user has READ_DENIED privilege on the object, remove that object from the list. 
-		    if (hasReadDeniedForMain)
+/*		    if (hasReadDeniedForMain)
 		    {
-		        Logger.out.debug("Removing Object >>>>>>>>>>>>>>>>>>>>>>>>"+identifier);
+//		        Logger.out.debug("Removing Object >>>>>>>>>>>>>>>>>>>>>>>>"+identifier);
 ////	            iterator.remove();
 //		        toBeRemoved.add(abstractDomainObject);
-		    }
-		    else// In case of no READ_DENIED privilege, check for privilege on identified data. 
+		    } else
+*/		  
+		    if (!hasReadDeniedForMain)// In case of no READ_DENIED privilege, check for privilege on identified data. 
 		    {
 		        //Check the permission of the user on the identified data of the object.
 		        hasPrivilegeOnIdentifiedData = SecurityManager.getInstance(CaCoreAppServicesDelegator.class) 
@@ -220,14 +259,13 @@ public class CaCoreAppServicesDelegator
 													     identifier, Permissions.IDENTIFIED_DATA_ACCESS);
 		        
 				Logger.out.debug("hasPrivilegeOnIdentifiedData:" + hasPrivilegeOnIdentifiedData);
-				
 				// If has no read privilege on identified data, set the identified attributes as NULL. 
 				if (hasPrivilegeOnIdentifiedData == false)
 				{
+					// commented because of lazy initialization problem
 				    removeIdentifiedDataFromObject(abstractDomainObject);
 				}
 				
-				Logger.out.debug("Object Added to filteredObjects List........................."+identifier);
 				filteredObjects.add(abstractDomainObject);
 				Logger.out.debug("Intermediate Size of filteredObjects .............."+filteredObjects.size());
 			}
@@ -257,8 +295,11 @@ public class CaCoreAppServicesDelegator
     {
         Class className = object.getClass();
         String domainObjectClassName = edu.wustl.common.util.Utility.parseClassName(className.getName());
-        String domainClassName = domainObjectClassName.substring(0, (domainObjectClassName.length()-4));
+        String domainClassName = domainObjectClassName;
+        //String domainClassName = domainObjectClassName.substring(0, (domainObjectClassName.length()-4));
         Logger.out.debug("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+domainClassName);
+        System.out.println("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+domainClassName);
+        Logger.out.info("Class Name >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+domainClassName);
         className = Class.forName("edu.wustl.catissuecore.domain."+domainClassName);
         String tableName = "'" + HibernateMetaData.getTableName(className) + "'";
             
@@ -304,10 +345,14 @@ public class CaCoreAppServicesDelegator
 	private void removeSpecimenCollectionGroupIdentifiedData(Object object)
 	{
 	    SpecimenCollectionGroup specimenCollGrp = (SpecimenCollectionGroup) object;
-	    
+	    Logger.out.info("specimenCollGrp getClinicalDiagnosis : " + specimenCollGrp.getClinicalDiagnosis());
+	    Site site = specimenCollGrp.getSite();
+	    Logger.out.info("specimenCollGrp getClinicalDiagnosis : " + site.getName());
 	    ClinicalReport clinicalReport = specimenCollGrp.getClinicalReport();
-	    clinicalReport.setSurgicalPathologyNumber(null);
-	    
+	    if (clinicalReport != null)
+	    {
+	    	clinicalReport.setSurgicalPathologyNumber(null);
+	    }
 //	    ParticipantMedicalIdentifier participantMedicalIdentifier 
 //	    						= clinicalReport.getParticipantMedicalIdentifier();
 //	    if (participantMedicalIdentifier != null)
@@ -330,11 +375,13 @@ public class CaCoreAppServicesDelegator
 	private void removeSpecimenIdentifiedData(Object object) 
 	{
 	    Specimen specimen = (Specimen) object;
-	    
+	    // call Biz logic for change in our objects
 	    SpecimenCollectionGroup specimenCollectionGroup = 
 	        	(SpecimenCollectionGroup) specimen.getSpecimenCollectionGroup();
-	    
-	    removeSpecimenCollectionGroupIdentifiedData(specimenCollectionGroup);
+	    if (specimenCollectionGroup != null)
+	    {	
+	    	removeSpecimenCollectionGroupIdentifiedData(specimenCollectionGroup);
+	    }	
 	}
 	
 	/**
@@ -345,8 +392,10 @@ public class CaCoreAppServicesDelegator
 	{
 	    CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) object;
 	    collectionProtocolRegistration.setRegistrationDate(null);
-	    
-	    removeParticipantIdentifiedData(collectionProtocolRegistration.getParticipant()); 
+	    if (collectionProtocolRegistration.getParticipant() != null)
+	    {	
+	    	removeParticipantIdentifiedData(collectionProtocolRegistration.getParticipant());
+	    }	
 	}
 	
 	/**
@@ -368,6 +417,7 @@ public class CaCoreAppServicesDelegator
 	    }
 	    else if (classObject.getSuperclass().equals(Specimen.class))
 	    {
+	    	Logger.out.info(" Label :: " + ((Specimen) object).getLabel());
 	        removeSpecimenIdentifiedData(object);
 	    }
 	    else if (classObject.equals(CollectionProtocolRegistration.class))
@@ -504,4 +554,42 @@ public class CaCoreAppServicesDelegator
 		sessionDataBean.setUserName(userName);
 		return sessionDataBean;
 	}
+	
+	/**
+	 * check whether the object is null or not
+	 * @param domainObject domain object
+	 * @param messageToken  message token 
+	 * @throws Exception
+	 */
+	private void checkNullObject(Object domainObject,String messageToken) throws Exception
+	{
+		if (domainObject == null) 
+		{
+			throw new Exception("Please enter valid " + messageToken +"!! "+ messageToken + " should not be NULL");
+		}
+	}
+	
+    /**
+     * Gets the user detail on the basis of login name
+     * @param loginName login Name
+     * @return User object
+     * @throws DAOException
+     */
+    private User getUser(String loginName) throws DAOException
+    {
+    	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(User.class.getName());
+    	String[] whereColumnName = {"activityStatus","loginName"};
+    	String[] whereColumnCondition = {"=","="};
+    	String[] whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE, loginName};
+    	
+    	List users = userBizLogic.retrieve(User.class.getName(), whereColumnName, 
+    			whereColumnCondition, whereColumnValue,Constants.AND_JOIN_CONDITION);
+    	
+    	if (!users.isEmpty())
+    	{
+    	    User validUser = (User)users.get(0);
+    	    return validUser;
+    	}
+        return null;
+    }
 }
