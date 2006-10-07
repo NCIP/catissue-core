@@ -76,7 +76,9 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	public ActionForward showMultipleSpecimen(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
-		//		request.getSession().removeAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
+		request.getSession().removeAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY);
+	    request.getSession().removeAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
+	    request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY,new HashMap());
 
 		return mapping.findForward("specimen");
 	}
@@ -131,14 +133,6 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	{
 		Map eventsMap = (Map) request.getSession().getAttribute(
 				Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
-
-		if (eventsMap == null)
-		{
-
-			eventsMap = new HashMap();
-			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY, eventsMap);
-		}
-
 		return eventsMap;
 	}
 
@@ -312,10 +306,9 @@ public class NewMultipleSpecimenAction extends DispatchAction
 
 					rowData.add(tempForm.getLabel());
 					rowData.add(tempForm.getClassName());
-
 					rowData.add(tempForm.getType());
 					rowData.add(tempForm.getQuantity());
-					rowData.add("" + count);//pageOf
+					rowData.add("" + count);
 					gridData.add(rowData);
 					count++;
 				}
