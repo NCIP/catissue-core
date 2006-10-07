@@ -12,6 +12,7 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -93,10 +94,15 @@ public class BaseItemHandler implements ItemListener {
 				for(int i=0;i < comps.length; i++)
 				{
 					Component comp = comps[i];
-					if (comp instanceof JTextField)
+					if (comp instanceof JTextField) 		// for parent specimen
 					{
 						comp.setEnabled(selectedRadio.isSelected());
 					}
+					if (comp instanceof JComboBox )			// for collection group
+					{
+						comp.setEnabled(selectedRadio.isSelected());
+					}
+
 				}
 			}
 		}
