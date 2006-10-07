@@ -648,10 +648,8 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2"
 						+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 						+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;				
-
-					String buttonOnClicked  = "javascript:NewWindow('"+url+"','name','810','320','yes');return false";
-					
-						String noOfEmptyCombos = "3";
+				    String buttonOnClicked  = "window.open('"+url+"','','scrollbars=yes,menubar=no,height=320,width=810,resizable=yes,toolbar=no,location=no,status=no');return false";
+    				String noOfEmptyCombos = "3";
 					boolean disabled = false;
 					if(request.getAttribute("disabled") != null && request.getAttribute("disabled").equals("true"))
 					{
@@ -802,7 +800,11 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 								String submitAndDistribute = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
 				 			%>
 							<!-- action buttons begins -->
-							<table cellpadding="4" cellspacing="0" border="0">
+				<%				if(!multipleSpecimen.equals("1"))
+					{
+        			 %>			
+							
+							<table cellpadding="4" cellspacing="0">
 								<tr>
 						   			<td>
 						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
@@ -810,9 +812,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 						   				</html:submit>
 						   			</td>
 									
-					<%				if(!multipleSpecimen.equals("1"))
-					{
-        			 %>	
+						
 									<td class="formFieldNoBorders" nowrap>
 										<html:button
 											styleClass="actionButton" property="submitAndDistributeButton"
@@ -823,8 +823,23 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 									</td>
 					<%
 					}
+					else
+					{
 					%>
-									
+								<table cellpadding="4" cellspacing="0" width="100%">
+								<tr>
+						   			<td align="right">
+						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
+						   					<bean:message key="buttons.submit"/>
+						   				</html:submit>
+						   			</td>
+									<td width="2%">
+						   				&nbsp;
+						   			</td>
+
+              <%
+			  }
+			  %>								
 									<%-- <td colspan="3">
 										<html:reset styleClass="actionButton">
 											<bean:message key="buttons.reset"/>
