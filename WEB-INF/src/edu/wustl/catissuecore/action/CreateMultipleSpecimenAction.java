@@ -82,9 +82,8 @@ public class CreateMultipleSpecimenAction extends BaseAction
 				Constants.STORAGE_CONTAINER_FORM_ID);
 
 		String specimenCollectionGroupName = (String) request.getParameter("derivedSpecimenCollectionGroup");
-		String specimenClass = null;
-		
-			specimenClass = (String) request.getParameter("derivedSpecimenClass");
+		String parentSpecimenLabel = (String) request.getParameter("derivedParentSpecimenLabel");
+		String specimenClass = (String) request.getParameter("derivedSpecimenClass");
 		if(specimenClass == null)
 		{
 			specimenClass = createForm.getClassName();
@@ -110,10 +109,13 @@ public class CreateMultipleSpecimenAction extends BaseAction
 				{
 					errors = new ActionErrors();
 				}
+			// TODO -- 
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
 				saveErrors(request, errors);
 			}
 			initialValues = checkForInitialValues(containerMap);
+			request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
+			request.setAttribute(Constants.SPECIMEN_CLASS_NAME,specimenClass);;
 		}
 
 		if (derivedOperation!=null && derivedOperation.equals(Constants.EDIT))
