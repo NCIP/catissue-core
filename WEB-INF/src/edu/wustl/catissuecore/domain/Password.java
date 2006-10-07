@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -30,7 +31,8 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
      */
 	protected Date updateDate;
 	
-	protected User user = new User();
+	////Change for API Search   --- Ashwin 04/10/2006
+	protected User user;
 	
 	public Password()
 	{
@@ -119,6 +121,11 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
     
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException 
 	{
+		//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(user))
+    	{
+    		user = new User();
+    	}
     }
 	/**
 	 *  This method will compate two date Objects. When Collections.sort() is called, it will return a list 

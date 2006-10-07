@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -100,7 +101,12 @@ public class SpecimenArrayType extends ContainerType
      */
     public Collection getSpecimenTypeCollection()
     {
-        return specimenTypeCollection;
+	/*		if (specimenTypeCollection == null)
+			{
+				specimenTypeCollection = new HashSet();
+			}
+	*/			
+    		return specimenTypeCollection;
     }
 
     /**
@@ -119,12 +125,22 @@ public class SpecimenArrayType extends ContainerType
     public void setAllValues(AbstractActionForm actionForm) throws AssignDataException {
     		SpecimenArrayTypeForm specimenArrayTypeForm = (SpecimenArrayTypeForm) actionForm;
     		
+    		if (specimenTypeCollection == null)
+    		{
+    			specimenTypeCollection = new HashSet();
+    		}
+    		
     		this.id = new Long(specimenArrayTypeForm.getId());
 	        this.name = specimenArrayTypeForm.getName();
-	        capacity.setOneDimensionCapacity(new Integer(specimenArrayTypeForm.getOneDimensionCapacity()));
-	        capacity.setTwoDimensionCapacity(new Integer(specimenArrayTypeForm.getTwoDimensionCapacity()));
-	        this.comment = specimenArrayTypeForm.getComment();
+	        // Change for API Search   --- Ashwin 04/10/2006
+	    	if (SearchUtil.isNullobject(capacity))
+	    	{
+	    		capacity = new Capacity();
+	    	}
 	        
+		    capacity.setOneDimensionCapacity(new Integer(specimenArrayTypeForm.getOneDimensionCapacity()));
+		    capacity.setTwoDimensionCapacity(new Integer(specimenArrayTypeForm.getTwoDimensionCapacity()));
+	        this.comment = specimenArrayTypeForm.getComment();
 	        this.specimenClass = specimenArrayTypeForm.getSpecimenClass();
 	        String[] specimenTypes = specimenArrayTypeForm.getSpecimenTypes();
 	        if ((specimenTypes != null) && (specimenTypes.length > 0)) {

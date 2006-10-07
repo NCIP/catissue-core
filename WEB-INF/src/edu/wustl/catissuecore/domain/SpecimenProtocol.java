@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.domain;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
@@ -33,10 +34,11 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	 */
 	protected Long id = null;
 	
+	//Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * The current principal investigator of the protocol.
 	 */
-	protected User principalInvestigator = new User();
+	protected User principalInvestigator;
 	
 	/**
 	 * Full title assigned to the protocol.
@@ -275,7 +277,13 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	{
 		Logger.out.debug("SpecimenProtocol: setAllValues ");
         try
-        {
+        {        	
+        	//Change for API Search   --- Ashwin 04/10/2006
+        	if (SearchUtil.isNullobject(principalInvestigator))
+        	{
+        		principalInvestigator = new User();
+        	}
+        	
         	SpecimenProtocolForm spForm = (SpecimenProtocolForm) abstractForm;
         	
         	this.title = spForm.getTitle();

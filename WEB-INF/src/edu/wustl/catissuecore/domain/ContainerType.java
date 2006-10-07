@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -21,7 +22,8 @@ public class ContainerType extends AbstractDomainObject
 
     protected String twoDimensionLabel;
 
-    protected Capacity capacity = new Capacity();
+    // Change for API Search   --- Ashwin 04/10/2006
+    protected Capacity capacity;
     
     protected String comment;
     
@@ -165,6 +167,11 @@ public class ContainerType extends AbstractDomainObject
     public void setAllValues(AbstractActionForm arg0)
             throws AssignDataException
     {
+        // Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(capacity))
+    	{
+    		capacity = new Capacity();
+    	}
     }
     
     /**

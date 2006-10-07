@@ -8,6 +8,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import edu.wustl.catissuecore.domain.ReportedProblem;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -31,6 +32,18 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
     {
         ReportedProblem reportedProblem = (ReportedProblem) obj;
         
+        /**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */
+        ApiSearchUtil.setReportedProblemDefault(reportedProblem);
+        //End:-  Change for API Search 
+        
         dao.insert(obj,sessionDataBean, true, false);
         
         // Send the reported problem to the administrator and the user who reported it.
@@ -45,6 +58,19 @@ public class ReportedProblemBizLogic extends DefaultBizLogic
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
     {
         ReportedProblem reportedProblem = (ReportedProblem) obj;
+        
+        /**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */
+        ApiSearchUtil.setReportedProblemDefault(reportedProblem);
+        //End:-  Change for API Search 
+        
         dao.update(obj, sessionDataBean, true,true, false);
         
         //Audit.

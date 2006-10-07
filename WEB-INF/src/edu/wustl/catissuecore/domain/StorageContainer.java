@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -72,7 +73,7 @@ public class StorageContainer extends Container
 		//this.setNumber(oldContainer.getNumber());
 		this.setName(oldContainer.getName());
 		this.setFull(oldContainer.isFull());
-		if (parent != null)
+		if ((parent != null) && (parent.getChildren() != null))
 		{
 			parent.getChildren().add(this);
 		}
@@ -338,6 +339,12 @@ public class StorageContainer extends Container
 			storageType.setId(new Long(form.getTypeId()));
 			storageType.setOneDimensionLabel(form.getOneDimensionLabel());
 			storageType.setTwoDimensionLabel(form.getTwoDimensionLabel());
+	        // Change for API Search   --- Ashwin 04/10/2006
+	    	if (SearchUtil.isNullobject(this.capacity))
+	    	{
+	    		capacity = new Capacity();
+	    	}
+
 			capacity.setOneDimensionCapacity(new Integer(form.getOneDimensionCapacity()));
 			capacity.setTwoDimensionCapacity(new Integer(form.getTwoDimensionCapacity()));
 

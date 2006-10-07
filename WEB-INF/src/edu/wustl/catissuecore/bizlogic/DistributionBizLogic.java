@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -63,7 +64,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			throws DAOException, UserNotAuthorizedException
 	{
 		Distribution dist = (Distribution) obj;
-
+		
 		//Load & set the User
 		Object userObj = dao.retrieve(User.class.getName(), dist.getUser().getId());
 		if (userObj != null)
@@ -143,6 +144,20 @@ public class DistributionBizLogic extends DefaultBizLogic
 		while (it.hasNext())
 		{
 			DistributedItem item = (DistributedItem) it.next();
+			
+			/**
+			 * Start: Change for API Search   --- Jitendra 06/10/2006
+			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+			 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+			 * So we removed default class level initialization on domain object and are initializing in method
+			 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+			 */
+	        ApiSearchUtil.setDistributedItemDefault(item);
+	        //End:-  Change for API Search 
+	        
+	        
 			//update the available quantity
 			Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getId());
 			double quantity = item.getQuantity().doubleValue();
@@ -216,7 +231,19 @@ public class DistributionBizLogic extends DefaultBizLogic
 		Iterator it = distributedItemCollection.iterator();
 		while (it.hasNext())
 		{
-			DistributedItem item = (DistributedItem) it.next();
+			DistributedItem item = (DistributedItem) it.next();	
+			
+			/**
+			 * Start: Change for API Search   --- Jitendra 06/10/2006
+			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+			 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+			 * So we removed default class level initialization on domain object and are initializing in method
+			 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+			 */
+	        ApiSearchUtil.setDistributedItemDefault(item);
+	        //End:-  Change for API Search 
 
 			DistributedItem oldItem = (DistributedItem) getCorrespondingOldObject(
 					oldDistributedItemCollection, item.getId());
@@ -394,6 +421,18 @@ public class DistributionBizLogic extends DefaultBizLogic
 	{
 		Distribution distribution = (Distribution) obj;
 
+		/**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */
+        ApiSearchUtil.setDistributionDefault(distribution);
+        //End:-  Change for API Search 
+        
 		//Added By Ashish
 /*		if (distribution == null)
 			throw new DAOException("domain.object.null.err.msg", new String[]{"Distribution"});

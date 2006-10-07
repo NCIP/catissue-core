@@ -13,6 +13,7 @@ import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -60,7 +61,20 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			String posDim2 = (String) aliquotMap.get(posDim2Key);			
 			
 			//Create an object of Specimen Subclass
-			SpecimenArray aliquotSpecimenArray = new SpecimenArray();			
+			SpecimenArray aliquotSpecimenArray = new SpecimenArray();
+			
+			/**
+			 * Start: Change for API Search   --- Jitendra 06/10/2006
+			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+			 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+			 * So we removed default class level initialization on domain object and are initializing in method
+			 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+			 */
+			ApiSearchUtil.setSpecimenArrayDefault(aliquotSpecimenArray);
+	    	
+	    	//End: Change for API Search
 
 			if (parentSpecimenArray != null)
 			{
@@ -194,6 +208,19 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 		{
 			SpecimenArrayContent parentSpecimenArrayContent = (SpecimenArrayContent) iter.next();
 			specimenArrayContent = new SpecimenArrayContent();
+			
+			/**
+			 * Start: Change for API Search   --- Jitendra 06/10/2006
+			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+			 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+			 * So we removed default class level initialization on domain object and are initializing in method
+			 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+			 */			
+			ApiSearchUtil.setSpecimenArrayContentDefault(specimenArrayContent);
+			//End:-  Change for API Search 
+			
 			specimenArrayContent.setSpecimen(parentSpecimenArrayContent.getSpecimen());
 			specimenArrayContent.setPositionDimensionOne(parentSpecimenArrayContent.getPositionDimensionOne());
 			specimenArrayContent.setPositionDimensionTwo(parentSpecimenArrayContent.getPositionDimensionTwo());
@@ -218,5 +245,5 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			specimenArrayContentCollection.add(specimenArrayContent);
 		}
 		return specimenArrayContentCollection;
-	}
+	}	
 }

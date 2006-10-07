@@ -45,6 +45,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -98,6 +99,19 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		while (specimenIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
+			
+			/**
+			 * Start: Change for API Search   --- Jitendra 06/10/2006
+			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+			 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+			 * So we removed default class level initialization on domain object and are initializing in method
+			 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+			 */
+			ApiSearchUtil.setSpecimenDefault(specimen);
+			//End:- Change for API Search
+			
 			Long parentSpecimenId = specimen.getId();
 			specimen.setId(null);
 			try
@@ -180,6 +194,17 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		try
 		{
+			/**
+			 * Start: Change for API Search   --- Jitendra 06/10/2006
+			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+			 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+			 * So we removed default class level initialization on domain object and are initializing in method
+			 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+			 */
+			ApiSearchUtil.setSpecimenDefault(specimen);
+			//End:- Change for API Search
 
 			Set protectionObjects = new HashSet();
 			specimen.setLineage(Constants.NEW_SPECIMEN);
@@ -450,6 +475,18 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		Specimen specimen = (Specimen) obj;
 		Specimen specimenOld = (Specimen) oldObj;
+		
+		/**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */
+		ApiSearchUtil.setSpecimenDefault(specimen);
+		//End:- Change for API Search
 
 		//commented by vaishali - no ore required 
 		/*if (isStoragePositionChanged(specimenOld, specimen))

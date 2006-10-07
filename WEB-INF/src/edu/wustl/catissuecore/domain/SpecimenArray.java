@@ -8,6 +8,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -24,16 +25,20 @@ public class SpecimenArray extends Container
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	//Change for API Search   --- Ashwin 04/10/2006
+    protected SpecimenArrayType specimenArrayType;
 
-    protected SpecimenArrayType specimenArrayType = new SpecimenArrayType();
+    //Change for API Search   --- Ashwin 04/10/2006
+    protected User createdBy;
 
-    protected User createdBy = new User();
-
-    protected StorageContainer storageContainer = new StorageContainer();
+    //Change for API Search   --- Ashwin 04/10/2006
+    protected StorageContainer storageContainer;
 
     protected Collection specimenArrayContentCollection = new HashSet();
     
-    protected Boolean available = new Boolean(true);
+    //Change for API Search   --- Ashwin 04/10/2006
+    protected Boolean available;
     
     private transient boolean aliquot = false;
     
@@ -151,6 +156,28 @@ public class SpecimenArray extends Container
      */
     public void setAllValues(AbstractActionForm actionForm) throws AssignDataException 
     {
+    	//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(specimenArrayType))
+    	{
+    		specimenArrayType = new SpecimenArrayType();
+    	}
+    	//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(createdBy))
+    	{
+    		createdBy = new User();
+    	}
+    	//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(storageContainer))
+    	{
+    		storageContainer = new StorageContainer();
+    	}
+    	//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(available))
+    	{
+    		available = new Boolean(true);
+    	}
+    	
+    	
     	if (actionForm instanceof SpecimenArrayAliquotForm) 
     	{
     		SpecimenArrayAliquotForm form = (SpecimenArrayAliquotForm) actionForm;			
@@ -169,8 +196,11 @@ public class SpecimenArray extends Container
 	    		createdBy = new User();
 	    	}
 	    	createdBy.setId(new Long(specimenArrayForm.getCreatedBy()));
+	    	// done in Container class
+	    	/*
 	    	capacity.setOneDimensionCapacity(new Integer(specimenArrayForm.getOneDimensionCapacity()));
 	    	capacity.setTwoDimensionCapacity(new Integer(specimenArrayForm.getTwoDimensionCapacity()));
+	    	*/
 	    	specimenArrayContentCollection = specimenArrayForm.getSpecArrayContentCollection();
 	    	//SpecimenArrayUtil.getSpecimenContentCollection(specimenArrayForm.getSpecimenArrayGridContentList());
     	}

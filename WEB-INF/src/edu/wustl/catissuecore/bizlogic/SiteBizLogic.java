@@ -14,11 +14,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -134,6 +132,19 @@ public class SiteBizLogic extends DefaultBizLogic
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
 		Site site = (Site) obj;
+		
+		/**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */
+		ApiSearchUtil.setSiteDefault(site);
+		//End:- Change for API Search
+		
 		// added by Ashish
 /*		String message = "";
 		if (site == null)

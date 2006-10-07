@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
@@ -31,6 +32,19 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 			throws DAOException, UserNotAuthorizedException
 	{
 		SpecimenArrayType arrayType = (SpecimenArrayType) obj;
+		
+		/**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */
+        ApiSearchUtil.setContainerTypeDefault(arrayType);
+        //End:-  Change for API Search 
+        
 		dao.insert(arrayType.getCapacity(), sessionDataBean, true, true);
 		dao.insert(arrayType, sessionDataBean, true, true);
 	}
@@ -45,6 +59,19 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 			throws DAOException, UserNotAuthorizedException
 	{
 		SpecimenArrayType arrayType = (SpecimenArrayType) obj;
+		
+		/**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */
+        ApiSearchUtil.setContainerTypeDefault(arrayType);
+        //End:-  Change for API Search 
+        
 		dao.update(arrayType.getCapacity(), sessionDataBean, true, true, false);
 		dao.update(arrayType, sessionDataBean, true, true, false);
 
@@ -52,8 +79,8 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 		SpecimenArrayType oldArrayType = (SpecimenArrayType) oldObj;
 		dao.audit(arrayType.getCapacity(), oldArrayType.getCapacity(), sessionDataBean, true);
 		dao.audit(obj, oldObj, sessionDataBean, true);
-	}
-
+	}	
+	
 	//Added by Ashish
 	/*
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException

@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -123,6 +124,18 @@ public class UserBizLogic extends DefaultBizLogic
 				//					                 user.setPassword(csmUser.getPassword());
 				//Add password of user in password table.Updated by Supriya Dankh		 
 				Password password = new Password();
+				
+				/**
+				 * Start: Change for API Search   --- Jitendra 06/10/2006
+				 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+				 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+				 * So we removed default class level initialization on domain object and are initializing in method
+				 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+				 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+				 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+				 */
+		        ApiSearchUtil.setPasswordDefault(password);
+		        //End:-  Change for API Search 
 
 				password.setUser(user);
 				password.setPassword(csmUser.getPassword());
@@ -563,8 +576,21 @@ public class UserBizLogic extends DefaultBizLogic
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
-
-		User user = (User) obj;
+		User user = (User) obj;		
+	
+		/**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */
+		ApiSearchUtil.setUserDefault(user);
+		//End:- Change for API Search    	
+    	
+    	
 //		 Added by Ashish Gupta
 		/*
 		if (user == null)

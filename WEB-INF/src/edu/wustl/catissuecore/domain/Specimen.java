@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -93,10 +94,11 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 */
 	protected Collection biohazardCollection = new HashSet();
 
+	//Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * A physically discreet container that is used to store a specimen  e.g. Box, Freezer etc.
 	 */
-	protected StorageContainer storageContainer = new StorageContainer();
+	protected StorageContainer storageContainer;
 
 	/**
 	 * Collection of Specimen Event Parameters associated with this specimen. 
@@ -113,15 +115,17 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 */
 	protected Collection externalIdentifierCollection = new HashSet();
 
+	//Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * An event that results in the collection of one or more specimen from a participant.
 	 */
-	protected SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+	protected SpecimenCollectionGroup specimenCollectionGroup;
 
+	//Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * The combined anatomic state and pathological disease classification of a specimen.
 	 */
-	protected SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
+	protected SpecimenCharacteristics specimenCharacteristics;
 
 	/**
 	 * A boolean variable which contains a true value if this specimen object is an aliquot 
@@ -145,15 +149,17 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 */
 	protected String label;
 
+	//Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * The quantity of a specimen.
 	 */
-	protected Quantity quantity = new Quantity();
+	protected Quantity quantity;
 
+	//Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * The available quantity of a specimen.
 	 */
-	protected Quantity availableQuantity = new Quantity();
+	protected Quantity availableQuantity;
 
 	protected transient boolean isParentChanged = false;
 
@@ -557,6 +563,36 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 * */
 	public void setAllValues(AbstractActionForm abstractForm)
 	{
+		//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(storageContainer))
+    	{
+    		storageContainer = new StorageContainer();
+    	}
+		
+		//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(specimenCollectionGroup))
+    	{
+    		specimenCollectionGroup = new SpecimenCollectionGroup();
+    	}
+		
+		//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(specimenCharacteristics))
+    	{
+    		specimenCharacteristics = new SpecimenCharacteristics();
+    	}
+		
+		//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(quantity))
+    	{
+    		quantity = new Quantity();
+    	}
+		
+		//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(availableQuantity))
+    	{
+    		availableQuantity = new Quantity();
+    	}
+		
 		if (abstractForm instanceof AliquotForm)
 		{
 			AliquotForm form = (AliquotForm) abstractForm;

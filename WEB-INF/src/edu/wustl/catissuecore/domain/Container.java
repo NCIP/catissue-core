@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.ContainerForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -46,7 +47,8 @@ public class Container extends AbstractDomainObject implements Serializable
 	
 	protected String comment;
 	
-	protected Capacity capacity = new Capacity();
+    // Change for API Search   --- Ashwin 04/10/2006
+	protected Capacity capacity;
 	 
 	protected Collection children = new HashSet();
 	
@@ -259,6 +261,12 @@ public class Container extends AbstractDomainObject implements Serializable
     	if (actionForm instanceof ContainerForm)
     	{
 	    	ContainerForm containerForm = (ContainerForm) actionForm;
+	        // Change for API Search   --- Ashwin 04/10/2006
+	    	if (SearchUtil.isNullobject(this.capacity))
+	    	{
+	    		capacity = new Capacity();
+	    	}
+	    	
 	    	Validator validator = new Validator();
 	        this.id = new Long(containerForm.getId());
 	        

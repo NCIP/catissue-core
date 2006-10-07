@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.EventParametersForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -34,15 +35,17 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
      */
 	protected Long id;
 	
+//	 Change for API Search   --- Ashwin 04/10/2006
 	/**
      * Date and time of the event.
      */
-	protected Date timestamp = Calendar.getInstance().getTime();
+	protected Date timestamp;
 	
+    // Change for API Search   --- Ashwin 04/10/2006
 	/**
      * User who performs the event.
      */
-	protected User user = new User();
+	protected User user;
 	
 	/**
      * Text comments on event.
@@ -143,9 +146,18 @@ public abstract class EventParameters extends AbstractDomainObject implements ja
 		try
 		{
 			EventParametersForm form = (EventParametersForm)abstractForm ;
+	        // Change for API Search   --- Ashwin 04/10/2006
+	    	if (SearchUtil.isNullobject(user))
+	    	{
+	    		user = new User();
+	    	}
+	        // Change for API Search   --- Ashwin 04/10/2006
+	    	if (SearchUtil.isNullobject(timestamp))
+	    	{
+	    		timestamp = Calendar.getInstance().getTime();
+	    	}
+	    	
 			this.comments = form.getComments();
-			
-			
 			
 			user.setId(new Long(form.getUserId()));
 

@@ -9,6 +9,7 @@
  */
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -31,16 +32,18 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
      */
 	protected Double quantity;
 	
+    // Change for API Search   --- Ashwin 04/10/2006
 	/**
      * A single unit of tissue, body fluid, or derivative biological macromolecule that is 
      * collected or created from a Participant
      */
-	protected Specimen specimen = new Specimen();
+	protected Specimen specimen;
 	
+    // Change for API Search   --- Ashwin 04/10/2006
 	/**
      * An event that results in transfer of a specimen from a Repository to a Laboratory.
      */
-	protected Distribution distribution = new Distribution();
+	protected Distribution distribution;
 	
 	transient private Double previousQuantity;
 
@@ -138,7 +141,17 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	 */
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
 	{
-				
+        // Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(specimen))
+    	{
+    		specimen = new Specimen();
+    	}
+    	
+        // Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(distribution))
+    	{
+    		distribution = new Distribution();
+    	}
 	}
 	
 	public String toString()

@@ -10,17 +10,13 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Validator;
 
 /**
  * StorageTypeHDAO is used to add site type information into the database using Hibernate.
@@ -39,6 +35,19 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 			throws DAOException, UserNotAuthorizedException
 	{
 		StorageType type = (StorageType) obj;
+		
+		/**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */
+        ApiSearchUtil.setContainerTypeDefault(type);
+        //End:-  Change for API Search 
+        
 		dao.insert(type.getCapacity(), sessionDataBean, true, true);
 		dao.insert(type, sessionDataBean, true, true);
 	}
@@ -53,6 +62,18 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 			throws DAOException, UserNotAuthorizedException
 	{
 		StorageType type = (StorageType) obj;
+		
+		/**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */
+        ApiSearchUtil.setContainerTypeDefault(type);
+        //End:-  Change for API Search 
 
 		dao.update(type.getCapacity(), sessionDataBean, true, true, false);
 		dao.update(type, sessionDataBean, true, true, false);

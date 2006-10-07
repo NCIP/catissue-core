@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import edu.wustl.catissuecore.actionForm.UserForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -40,25 +41,29 @@ public class User extends AbstractDomainObject implements Serializable
      */
     protected Long id;
 
+    //Change for API Search   --- Ashwin 04/10/2006
     /**
      * A string containing the Last Name of the user.
      */
-    protected String lastName = "";
+    protected String lastName;
 
+    //Change for API Search   --- Ashwin 04/10/2006
     /**
      * A string containing the First Name of the user.
-     */
-    protected String firstName = "";
+     */   
+    protected String firstName;
 
+    //Change for API Search   --- Ashwin 04/10/2006
     /**
      * A string containing the login name of the user.
      */
-    protected String loginName = "";
+    protected String loginName;
 
+    //Change for API Search   --- Ashwin 04/10/2006
     /**
      * EmailAddress of the user.
      */
-    protected String emailAddress = "";
+    protected String emailAddress;
     
     /**
      * Old password of this user.
@@ -75,25 +80,29 @@ public class User extends AbstractDomainObject implements Serializable
      */
     protected Date startDate;
 
+    //Change for API Search   --- Ashwin 04/10/2006
     /**
      * Institute of the user.
      */
-    protected Institution institution = new Institution();
+    protected Institution institution;
 
+    //Change for API Search   --- Ashwin 04/10/2006
     /**
      * Department of the user.
      */
-    protected Department department = new Department();
+    protected Department department;
 
+    //Change for API Search   --- Ashwin 04/10/2006
     /**
      * Contact address of the User.
      */
-    protected Address address = new Address();
+    protected Address address;
 
+    //Change for API Search   --- Ashwin 04/10/2006
     /**
      * Cancer Research Group to which the user belongs.
      */
-    protected CancerResearchGroup cancerResearchGroup = new CancerResearchGroup();
+    protected CancerResearchGroup cancerResearchGroup;
     
        /**
      * Activity Status of user, it could be CLOSED, ACTIVE, DISABLED.
@@ -108,8 +117,8 @@ public class User extends AbstractDomainObject implements Serializable
     /**
      * Role id of the user.
      */
-    protected String roleId = null;
-
+    protected String roleId;
+    
     /**
      * Set of collection protocol.
      */
@@ -123,10 +132,11 @@ public class User extends AbstractDomainObject implements Serializable
      */
     protected Long csmUserId;
     
+    //Change for API Search   --- Ashwin 04/10/2006
     /**
 	 * whether Aliquote in same container
 	 */
-	protected Boolean firstTimeLogin = new Boolean(true);
+	protected Boolean firstTimeLogin;
 
     /**
      * Initialize a new User instance.
@@ -546,7 +556,61 @@ public class User extends AbstractDomainObject implements Serializable
     public void setAllValues(AbstractActionForm abstractForm)
     {
         try
-        {
+        {        	
+        	//Change for API Search   --- Ashwin 04/10/2006
+        	if (SearchUtil.isNullobject(lastName))
+        	{
+        		 lastName = "";
+        	}
+    		
+        	//Change for API Search   --- Ashwin 04/10/2006
+        	if (SearchUtil.isNullobject(firstName))
+        	{
+        		firstName="";
+        	}
+    		
+        	//Change for API Search   --- Ashwin 04/10/2006
+        	if (SearchUtil.isNullobject(loginName))
+        	{
+        		loginName="";
+        	}
+
+        	//Change for API Search   --- Ashwin 04/10/2006
+        	if (SearchUtil.isNullobject(emailAddress))
+        	{
+        		emailAddress="";
+        	}        	
+    		
+        	//Change for API Search   --- Ashwin 04/10/2006
+        	if (SearchUtil.isNullobject(address))
+        	{
+        		address = new Address();
+        	}
+    		
+        	//Change for API Search   --- Ashwin 04/10/2006
+        	if (SearchUtil.isNullobject(institution))
+        	{
+        		institution = new Institution();
+        	}
+    		
+        	//Change for API Search   --- Ashwin 04/10/2006
+        	if (SearchUtil.isNullobject(department))
+        	{
+        		department = new Department();
+        	}
+    		
+        	//Change for API Search   --- Ashwin 04/10/2006
+        	if (SearchUtil.isNullobject(cancerResearchGroup))
+        	{
+        		cancerResearchGroup = new CancerResearchGroup();
+        	} 
+        	
+        	//Change for API Search   --- Ashwin 04/10/2006
+        	if (SearchUtil.isNullobject(firstTimeLogin))
+        	{
+        		firstTimeLogin = new Boolean(true);
+        	}        	
+        	
             UserForm uform = (UserForm) abstractForm;
             this.pageOf = uform.getPageOf();
             

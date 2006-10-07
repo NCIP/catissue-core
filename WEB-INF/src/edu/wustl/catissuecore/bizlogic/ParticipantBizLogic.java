@@ -22,13 +22,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -84,7 +84,7 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 		Iterator it = participantMedicalIdentifierCollection.iterator();
 		while (it.hasNext())
 		{
-			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it.next();
+			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it.next();	        
 			pmIdentifier.setParticipant(participant);
 			dao.insert(pmIdentifier, sessionDataBean, true, true);
 		}
@@ -126,6 +126,19 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 		while (it.hasNext())
 		{
 			ParticipantMedicalIdentifier pmIdentifier = (ParticipantMedicalIdentifier) it.next();
+			
+			/**
+			 * Start: Change for API Search   --- Jitendra 06/10/2006
+			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+			 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+			 * So we removed default class level initialization on domain object and are initializing in method
+			 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+			 */
+	        ApiSearchUtil.setParticipantMedicalIdentifierDefault(pmIdentifier);
+	        //End:-  Change for API Search 
+	        
 			pmIdentifier.setParticipant(participant);
 			dao.update(pmIdentifier, sessionDataBean, true, true, false);
 

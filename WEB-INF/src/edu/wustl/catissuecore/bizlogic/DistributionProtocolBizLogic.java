@@ -11,17 +11,16 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -244,6 +243,18 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 		DistributionProtocol protocol = (DistributionProtocol)obj;	
 		Collection spReqCollection = protocol.getSpecimenRequirementCollection();
 		
+		/**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */
+        ApiSearchUtil.setSpecimenProtocolDefault(protocol);
+        //End:-  Change for API Search 
+		
 		//Added by Ashish
 		/*
 		if (protocol == null)
@@ -398,6 +409,18 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 				}
 				else
 				{
+					/**
+					 * Start: Change for API Search   --- Jitendra 06/10/2006
+					 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+					 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+					 * So we removed default class level initialization on domain object and are initializing in method
+					 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+					 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+					 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+					 */
+					ApiSearchUtil.setSpecimenRequirementDefault(requirement);
+					//End:-  Change for API Search   
+					
 					String specimenClass = requirement.getSpecimenClass();
 					
 					if(!Validator.isEnumeratedValue(specimenClassList,specimenClass))

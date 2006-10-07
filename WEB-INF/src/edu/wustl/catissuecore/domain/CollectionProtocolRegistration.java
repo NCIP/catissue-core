@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -40,22 +41,23 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * registered to a Collection Protocol.
 	 */
 	protected String protocolParticipantIdentifier;
-
+    // Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * Date on which the Participant is registered to the Collection Protocol.
 	 */
-	protected Date registrationDate = new Date();
+	protected Date registrationDate;
 
 	/**
 	 * An individual from whom a specimen is to be collected.
 	 */
 	protected Participant participant = null;
-
+	
+    // Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * A set of written procedures that describe how a 
 	 * biospecimen is prospectively collected.
 	 */
-	protected CollectionProtocol collectionProtocol = new CollectionProtocol();
+	protected CollectionProtocol collectionProtocol;
 
 	protected Collection specimenCollectionGroupCollection = new HashSet();
 	
@@ -233,7 +235,18 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 		try
 		{
 			this.activityStatus		 = form.getActivityStatus();
-			
+	        // Change for API Search   --- Ashwin 04/10/2006
+	    	if (SearchUtil.isNullobject(collectionProtocol))
+	    	{
+	    		collectionProtocol = new CollectionProtocol();
+	    	}
+	    	
+	        // Change for API Search   --- Ashwin 04/10/2006	    	
+	    	if (SearchUtil.isNullobject(this.registrationDate))
+	    	{
+	    		registrationDate  = new Date();
+	    	}
+
 			this.collectionProtocol.setId(new Long(form.getCollectionProtocolID()));
 			
 			if(form.isCheckedButton())
@@ -263,8 +276,13 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
      * Returns message label to display on success add or edit
      * @return String
      */
-	public String getMessageLabel() {		
+	public String getMessageLabel() {
 		
+        // Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(collectionProtocol))
+    	{
+    		collectionProtocol = new CollectionProtocol();
+    	}
 		String message = this.collectionProtocol.title + " ";
 		if (this.participant != null) {
 			if (this.participant.lastName!= null && !this.participant.lastName.equals("") && this.participant.firstName != null && !this.participant.firstName.equals("")) 

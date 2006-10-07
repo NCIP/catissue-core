@@ -429,4 +429,22 @@ public class SearchUtil
 		
 		return displayNamesMap;
 	}
+	
+	
+	/**
+     * check not null
+     * @param object object
+     * @return boolean
+     */
+
+    public static boolean isNullobject(Object object)
+    {
+	    if (object != null)
+	    {
+	                return false;
+	    }
+	    return true;
+    }
+
+
 }

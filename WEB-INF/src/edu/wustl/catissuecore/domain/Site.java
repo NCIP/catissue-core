@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.SiteForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
@@ -47,15 +48,17 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
      */
 	protected String activityStatus;
 	
+	//Change for API Search   --- Ashwin 04/10/2006
 	/**
      * The User who currently coordinates operations at the Site.
      */
-	protected User coordinator = new User();
+	protected User coordinator;
 
+	//Change for API Search   --- Ashwin 04/10/2006
 	/**
      * The address of the site.
      */
-	private Address address = new Address();
+	private Address address;
 
 	//Default Constructor Required by hibernate
 	public Site()
@@ -229,6 +232,18 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
     {
         try
         {
+        	
+        	//Change for API Search   --- Ashwin 04/10/2006
+        	if (SearchUtil.isNullobject(coordinator))
+        	{
+        		coordinator = new User();
+        	}
+        	//Change for API Search   --- Ashwin 04/10/2006
+        	if (SearchUtil.isNullobject(address))
+        	{
+        		address = new Address();
+        	}        	 
+        	
             SiteForm form 	= (SiteForm) abstractForm;
             this.id = new Long(form.getId());
             this.name 		= form.getName().trim() ;

@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.domain;
 import java.util.Collection;
 import java.util.HashSet;
 
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -57,6 +58,7 @@ public class SpecimenRequirement  extends AbstractDomainObject implements java.i
 	 */
 	protected Collection collectionProtocolEventCollection = new HashSet();
 	
+	//Change for API Search   --- Ashwin 04/10/2006
 	protected Quantity quantity = new Quantity();
 	
 	protected String specimenClass; 
@@ -233,6 +235,11 @@ public class SpecimenRequirement  extends AbstractDomainObject implements java.i
 	 */
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
 	{
+		//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(quantity))
+    	{
+    		quantity = new Quantity();
+    	}
 	}
 	
 }

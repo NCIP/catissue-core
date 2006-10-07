@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 
@@ -45,10 +46,11 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
      */
     private String messageBody;
     
+    //Change for API Search   --- Ashwin 04/10/2006
     /**
      * Date the problem was reported.
      */
-    protected Date reportedDate = new Date();
+    protected Date reportedDate;
     
     /**
      * Comments given by problem resolver.
@@ -132,7 +134,13 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
      * @param reportedProblemForm The reportedProblemForm object.
      */
     public void setAllValues(AbstractActionForm abstractActionForm)
-    {
+    {    	
+    	//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(reportedDate))
+    	{
+    		reportedDate = new Date();
+    	}
+    	
         ReportedProblemForm reportedProblemForm = (ReportedProblemForm)abstractActionForm;
         this.id = new Long(reportedProblemForm.getId());
         this.subject = reportedProblemForm.getSubject();

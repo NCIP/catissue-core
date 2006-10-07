@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
@@ -242,6 +243,19 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				{
 					String siteId = (String) simMap.get(simContPrefix + "siteId");
 					Site site = new Site();
+					
+					/**
+					 * Start: Change for API Search   --- Jitendra 06/10/2006
+					 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+					 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+					 * So we removed default class level initialization on domain object and are initializing in method
+					 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+					 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+					 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+					 */
+					ApiSearchUtil.setSiteDefault(site);
+					//End:- Change for API Search   -
+					
 					site.setId(new Long(siteId));
 					cont.setSite(site);
 					loadSite(dao, cont); // <<----
@@ -1919,6 +1933,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
 		StorageContainer container = (StorageContainer) obj;
+		
+		/**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, default values will not get set for the object since setAllValues()
+		 * method of domainObject will not get called. To avoid null pointer exception, we are setting 
+		 * the default values same we were setting in setAllValues() method of domainObject.
+		 */
+		ApiSearchUtil.setContainerDefault(container);
+		//End:- Change for API Search
 
 		//Added by Ashish
 		/*

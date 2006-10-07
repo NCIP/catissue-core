@@ -14,11 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-
 import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.QuantityInMicrogram;
@@ -27,14 +23,13 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Validator;
 
 /**
  * <p>This class initializes the fields of SpecimenArrayBizLogic.java</p>
@@ -50,7 +45,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
-		SpecimenArray specimenArray = (SpecimenArray) obj;
+		SpecimenArray specimenArray = (SpecimenArray) obj;		
 		doUpdateSpecimenArrayContents(specimenArray, dao, sessionDataBean, true);
 
 		dao.insert(specimenArray.getCapacity(), sessionDataBean, true, false);
@@ -168,6 +163,19 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			for (Iterator iter = specimenArrayContentCollection.iterator(); iter.hasNext();)
 			{
 				specimenArrayContent = (SpecimenArrayContent) iter.next();
+				
+				/**
+				 * Start: Change for API Search   --- Jitendra 06/10/2006
+				 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+				 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+				 * So we removed default class level initialization on domain object and are initializing in method
+				 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+				 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+				 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+				 */
+				ApiSearchUtil.setSpecimenArrayContentDefault(specimenArrayContent);
+				//End:- Change for API Search 
+				
 				specimen = getSpecimen(dao, specimenArrayContent);
 				if (specimen != null)
 				{
@@ -360,6 +368,27 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		return className;
 	}
 
+	/**
+	 * Overriding the parent class's method to validate the enumerated attribute values
+	 */
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	{
+		SpecimenArray specimenArray = (SpecimenArray) obj;		
+	
+		/**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */		
+		ApiSearchUtil.setSpecimenArrayDefault(specimenArray);
+		//End:- Change for API Search
+		
+		return true;
+	}
 	
 	// Added by Ashish
 	/*

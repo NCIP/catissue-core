@@ -10,21 +10,19 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -569,14 +567,27 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
+    	
 		//Added by Ashish
 		//setAllValues(obj);
 		//END
 
 		CollectionProtocol protocol = (CollectionProtocol) obj;
-		Collection eventCollection = protocol.getCollectionProtocolEventCollection();
-		//Added by Ashish
+		Collection eventCollection = protocol.getCollectionProtocolEventCollection();		
 		
+		/**
+		 * Start: Change for API Search   --- Jitendra 06/10/2006
+		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+		 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+		 * So we removed default class level initialization on domain object and are initializing in method
+		 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+		 */
+        ApiSearchUtil.setSpecimenProtocolDefault(protocol);
+        //End:-  Change for API Search 
+		
+    	//Added by Ashish
 		/*Validator validator = new Validator();
 		if (protocol == null)
 			throw new DAOException("domain.object.null.err.msg",
@@ -835,7 +846,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 						Iterator reqIterator = reqCollection.iterator();
 
 						while (reqIterator.hasNext())
-						{
+						{							
+							
 							SpecimenRequirement requirement = (SpecimenRequirement) reqIterator
 									.next();
 
@@ -846,6 +858,18 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 							}
 							else
 							{
+								/**
+								 * Start: Change for API Search   --- Jitendra 06/10/2006
+								 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
+								 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
+								 * So we removed default class level initialization on domain object and are initializing in method
+								 * setAllValues() of domain object. But in case of Api Search, default values will not get set 
+								 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
+								 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
+								 */
+								ApiSearchUtil.setSpecimenRequirementDefault(requirement);
+								//End:- Change for API Search 
+								
 								String specimenClass = requirement.getSpecimenClass();
 
 								if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))

@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.StorageTypeForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.exception.AssignDataException;
@@ -144,6 +145,12 @@ public class StorageType extends ContainerType
 			this.oneDimensionLabel = storageTypeForm.getOneDimensionLabel();
 			this.twoDimensionLabel = storageTypeForm.getTwoDimensionLabel();
 
+	        // Change for API Search   --- Ashwin 04/10/2006
+	    	if (SearchUtil.isNullobject(capacity))
+	    	{
+	    		capacity = new Capacity();
+	    	}
+			
 			capacity
 					.setOneDimensionCapacity(new Integer(storageTypeForm.getOneDimensionCapacity()));
 			capacity

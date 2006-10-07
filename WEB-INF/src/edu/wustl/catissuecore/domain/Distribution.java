@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.DistributionForm;
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.MapDataParser;
@@ -30,21 +31,23 @@ import edu.wustl.common.util.logger.Logger;
 public class Distribution extends SpecimenEventParameters implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
-
+	
+    // Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * New location(site) of the item.
 	 */
-	protected Site toSite = new Site();
+	protected Site toSite;
 
 	/**
 	 * Original location(site) of the item. 
 	 */
 	//protected Site fromSite = new Site();
 	
+    // Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * DistributionProtocol associated with this Distribution.
 	 */
-	protected DistributionProtocol distributionProtocol = new DistributionProtocol();
+	protected DistributionProtocol distributionProtocol;
 	
 	/**
 	 * Collection of Items distributed in this distribution.
@@ -193,6 +196,18 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	    {
 	    	super.setAllValues(abstractForm);
 	    	super.specimen = null;
+	        // Change for API Search   --- Ashwin 04/10/2006
+	    	if (SearchUtil.isNullobject(toSite))
+	    	{
+	    		toSite = new Site();
+	    	}
+	    	
+	        // Change for API Search   --- Ashwin 04/10/2006
+	    	if (SearchUtil.isNullobject(distributionProtocol))
+	    	{
+	    		distributionProtocol = new DistributionProtocol();
+	    	}
+
 	    	DistributionForm form = (DistributionForm) abstractForm;
 	        toSite.setId(new Long(form.getToSite()));
 	        //fromSite.setId(new Long(form.getFromSite()));
@@ -262,7 +277,12 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
      * Returns message label to display on success add or edit
      * @return String
      */
-	public String getMessageLabel() {		
+	public String getMessageLabel() {
+        // Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(distributionProtocol))
+    	{
+    		distributionProtocol = new DistributionProtocol();
+    	}
 		String message = this.distributionProtocol.title + " ";
 		if (this.user != null) {
 			if (this.user.lastName!= null && !this.user.lastName.equals("") && this.user.firstName != null && !this.user.firstName.equals("")) 

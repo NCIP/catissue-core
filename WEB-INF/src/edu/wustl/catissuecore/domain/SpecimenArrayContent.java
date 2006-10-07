@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -20,11 +21,14 @@ public class SpecimenArrayContent extends AbstractDomainObject
 	
 	protected Integer positionDimensionTwo;
 	
-	protected Quantity initialQuantity = new Quantity();
+	//Change for API Search   --- Ashwin 04/10/2006
+	protected Quantity initialQuantity;
 	
-	protected SpecimenArray specimenArray = new SpecimenArray();
+	//Change for API Search   --- Ashwin 04/10/2006
+	protected SpecimenArray specimenArray;
 	
-	protected Specimen specimen = new Specimen();
+	//Change for API Search   --- Ashwin 04/10/2006
+	protected Specimen specimen;
 	
 	public SpecimenArrayContent()
 	{
@@ -165,7 +169,23 @@ public class SpecimenArrayContent extends AbstractDomainObject
     public void setAllValues(AbstractActionForm arg0)
             throws AssignDataException
     {
-        
+    	//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(initialQuantity))
+    	{
+    		initialQuantity = new Quantity();
+    	}
+    	
+    	//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(specimenArray))
+    	{
+    		specimenArray = new SpecimenArray();
+    	}
+    	
+    	//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(specimen))
+    	{
+    		 specimen = new Specimen();
+    	}
     }
     
 }

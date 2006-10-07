@@ -9,6 +9,7 @@
 
 package edu.wustl.catissuecore.domain;
 
+import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -31,10 +32,11 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject implement
      */
 	protected String medicalRecordNumber;
 	
+	//Change for API Search   --- Ashwin 04/10/2006
 	/**
      * Source of medical record number.
      */
-	protected Site site = new Site();
+	protected Site site;
 	
 	/**
      * 
@@ -129,7 +131,12 @@ public class ParticipantMedicalIdentifier extends AbstractDomainObject implement
 	 */
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
 	{
-	
+		//Change for API Search   --- Ashwin 04/10/2006
+    	if (SearchUtil.isNullobject(site))
+    	{
+    		site = new Site();
+    	}
+		
 	}
 	
 	public String toString()
