@@ -67,7 +67,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	Map specimenAttributeOptions;
 
 	/***/
-	private int columnsPerPage = 4; 
+	private int columnsPerPage = 5; 
 	
 	/**/
 	private int currentPageIndex = 1;
