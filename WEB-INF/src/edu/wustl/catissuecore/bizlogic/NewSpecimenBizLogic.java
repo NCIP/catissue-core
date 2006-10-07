@@ -166,16 +166,16 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			obj = new Specimen();
 		}
 		String supportingMessage = daoException.getSupportingMessage();
-		String formatedException = formatException(daoException.getWrapException(), obj, operation);	
-		if(supportingMessage!=null && formatedException!=null)
+		String formatedException = formatException(daoException.getWrapException(), obj, operation);
+		if (supportingMessage != null && formatedException != null)
 		{
 			formatedException += supportingMessage;
 		}
-		if(formatedException==null)
+		if (formatedException == null)
 		{
 			formatedException = daoException.getMessage();
-			if(supportingMessage!=null)
-			formatedException += supportingMessage;
+			if (supportingMessage != null)
+				formatedException += supportingMessage;
 		}
 		return formatedException;
 	}
@@ -244,7 +244,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			Iterator specimenEventsCollectionIterator = specimenEventsCollection.iterator();
 			while (specimenEventsCollectionIterator.hasNext())
 			{
-				
+
 				Object eventObject = specimenEventsCollectionIterator.next();
 
 				if (eventObject instanceof CollectionEventParameters)
@@ -252,18 +252,18 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 					CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
 					collectionEventParameters.setSpecimen(specimen);
 					dao.insert(collectionEventParameters, sessionDataBean, true, true);
-				
+
 				}
 				else if (eventObject instanceof ReceivedEventParameters)
 				{
 					ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
 					receivedEventParameters.setSpecimen(specimen);
-									dao.insert(receivedEventParameters, sessionDataBean, true, true);
-					
+					dao.insert(receivedEventParameters, sessionDataBean, true, true);
+
 				}
 
 			}
-		
+
 			//Mandar : 17-july-06 : autoevents end
 
 			//Inserting data for Authorization
@@ -644,6 +644,11 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			throws DAOException, SMException
 	{
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		// set barcode to null in case it is blank
+		if (specimen.getBarcode() != null && specimen.getBarcode().trim().equals(""))
+		{
+			specimen.setBarcode(null);
+		}
 		//Load & set Specimen Collection Group if present
 		if (specimen.getSpecimenCollectionGroup() != null)
 		{
@@ -682,7 +687,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 				// check for closed Parent Specimen
 				checkStatus(dao, parentSpecimen, "Parent Specimen");
-				
+
 				specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 				specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
 				specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
@@ -1228,7 +1233,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				{
 					int j = i + 1;
 					String message = daoException.getMessage();
-					message += " (This message is for Derived Specimen " + j + " of Parent Specimen number " + specimen.getId()+")";
+					message += " (This message is for Derived Specimen " + j + " of Parent Specimen number " + specimen.getId() + ")";
 					daoException.setMessage(message);
 					throw daoException;
 				}
