@@ -153,6 +153,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
     {
     	JButton copy = new JButton(AppletConstants.MULTIPLE_SPECIMEN_COPY  );
     	JButton paste = new JButton(AppletConstants.MULTIPLE_SPECIMEN_PASTE);
+    	copy.setEnabled(false);
+    	paste.setEnabled(false);
     	JButton addSpecimen = new JButton(AppletConstants.MULTIPLE_SPECIMEN_ADD_SPECIMEN);
     	addSpecimen.addActionListener(new AddColumnHandler(table,this) );
     	JLabel placeHolder = new JLabel("     ");
