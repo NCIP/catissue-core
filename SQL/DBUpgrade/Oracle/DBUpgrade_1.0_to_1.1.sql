@@ -470,3 +470,13 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PU
 
 /*changed the sequence name for specimen array content as it was more than 30 chars */
 create sequence CATISSUE_SPECI_ARRAY_CNTNT_SEQ;
+
+/*query auditing */
+create table CATISSUE_AUDIT_EVENT_QUERY_LOG (
+   IDENTIFIER number(19,0) not null,
+   QUERY_DETAILS clob,  
+   AUDIT_EVENT_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+alter table CATISSUE_AUDIT_EVENT_QUERY_LOG add constraint FK62DC439DBC7298A9 foreign key (IDENTIFIER) references CATISSUE_AUDIT_EVENT ;
+create sequence CATISSUE_AUDIT_EVENT_QUERY_SEQ;

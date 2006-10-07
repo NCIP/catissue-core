@@ -473,3 +473,12 @@ alter table CATISSUE_container add constraint NAME unique (NAME);
 /*Poornima -26/09/06-Added unspecified value to Vital status and NOT SPECIFIED value in Tissue Site- */
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2641,'Unspecified',NULL,'2004001');
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2642,'NOT SPECIFIED',NULL,'Tissue_Site_PID');
+
+/*Query audit changes - 5th oct 2006 */
+create table CATISSUE_AUDIT_EVENT_QUERY_LOG (
+   IDENTIFIER bigint not null auto_increment,
+   QUERY_DETAILS longtext,  
+   AUDIT_EVENT_ID bigint,
+   primary key (IDENTIFIER)
+);
+alter table CATISSUE_AUDIT_EVENT_QUERY_LOG add index FK62DC439DBC7298A9 (AUDIT_EVENT_ID), add constraint FK62DC439DBC7298A9 foreign key (IDENTIFIER) references CATISSUE_AUDIT_EVENT (IDENTIFIER);
