@@ -419,7 +419,7 @@
 	
  <!-- Create the Applet JAR Begins-->
 
-    <target name="build_catissue_applet_jar" depends="compile">
+    <target name="build_catissue_applet_jar" depends="compile, build_catissue_applet_compile">
         <mkdir dir="${catissue.applet.dir}"/>
         <delete>
             <fileset dir="${catissue.applet.dir}">
@@ -446,6 +446,20 @@
                 <exclude name="**/CVS*" />                                     
 	        </fileset>
         </delete>
+    </target>
+	
+	<!-- compilation using jdk1.3 -->
+	 <target name="build_catissue_applet_compile" depends="init">
+        <javac destdir="${target.dir}" includeAntRuntime="false" fork="yes" executable="D:/jdk1.3/bin/javac" compiler="javac1.3">
+            <src path="${src.dir}"/>
+            <include name="**/edu/wustl/catissuecore/applet/**" />
+            <include name="**/edu/wustl/catissuecore/util/global/Constants.java" />
+            <classpath>
+              <fileset dir="${lib.dir}">
+                  <include name="*.jar"/>
+              </fileset>
+            </classpath>       
+        </javac>      
     </target>
 	
 	<!-- unpack caCORE war into temp folder -->
