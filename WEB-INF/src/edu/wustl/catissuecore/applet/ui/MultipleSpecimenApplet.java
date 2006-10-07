@@ -177,23 +177,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
          	endIndex = endIndex +tableModel.getColumnsPerPage()  ;
          	totalPages= pageNo;
     	}
-//     	JButton link1 = new JButton("1 - 10");
-//     	JButton link2 = new JButton("11 - 20");
-//     	JButton link3 = new JButton("21 - 30");
-//     	link1.setActionCommand("1");
-//     	link2.setActionCommand("2");
-//     	link3.setActionCommand("3");
-//     	
-//     	LineBorder border =(LineBorder) BorderFactory.createLineBorder(getBackground() ); 
-//     	link1.setBorder(border );
-//     	link2.setBorder(border );
-//     	link3.setBorder(border );
-//     	
-//     	link1.addActionListener(new PageLinkHandler(table));
-//     	link2.addActionListener(new PageLinkHandler(table));
-//     	link3.addActionListener(new PageLinkHandler(table));
-//     	
-//    	panel.add(link1);panel.add(link2);panel.add(link3);
+    	SwingUtilities.updateComponentTreeUI(linkPanel);
     }
     
     private void createFooterPanel(JPanel panel)
