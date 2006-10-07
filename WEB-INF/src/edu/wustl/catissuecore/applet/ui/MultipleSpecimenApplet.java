@@ -73,7 +73,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		outerPanel.setLayout(new GridLayout(4,1));
 		createButtonPanel(buttonPanel);
 		createLinkPanel(linkPanel);
-		createFooterPanel(footerPanel);
+	//	createFooterPanel(footerPanel);
 		
 		//--gblayout
 		GridBagLayout gbl = new GridBagLayout();
@@ -146,7 +146,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		//tablePanel.add( scrollPane );
 		tablePanel.setSize(WIDTH,getHeight());
 		getContentPane().add(scrollPane);
-		getContentPane().add(footerPanel);
+//		getContentPane().add(footerPanel);
+		
     }
     
     private void createButtonPanel(JPanel panel)
@@ -160,6 +161,13 @@ public class MultipleSpecimenApplet extends BaseApplet {
     	JLabel placeHolder = new JLabel("     ");
     	panel.add(copy);panel.add(placeHolder );panel.add(paste );
     	panel.add(placeHolder );panel.add(addSpecimen);
+    	//Temporary added till adjusting height
+    	JButton submit = new JButton("Submit");
+    	submit.addActionListener(new SpecimenSubmitButtonHandler(table));
+    	placeHolder = new JLabel("                         ");
+    	panel.add(placeHolder );panel.add(placeHolder );panel.add(submit );
+
+    	
     }
     
     private void createLinkPanel(JPanel panel)
