@@ -30,14 +30,14 @@
         <javac destdir="${base.dir}" includes="**/*.*" includeAntRuntime="false">
             <src path="${base.dir}"/>
             <classpath>
-              <fileset dir="${base.dir}">
-                  <include name="*.jar"/>
-              </fileset>
-            </classpath>       
+       		  <fileset dir="lib">
+        			<include name="**/*.jar"/>
+        	  </fileset>
+            </classpath>
         </javac>
     </target>
 	
-	<!-- Run ClientDemo class -->
+	<!-- Run ClientDemo class 
     <target name="runClient" depends="compile">
         <java classname="ClientDemo">
         	<classpath>
@@ -48,18 +48,18 @@
             </classpath>  
         </java>
     </target>
-
+	-->
 	<!-- run TestClient java file -->
 	<target name="rundemo">
 		<javac srcdir="." >
-			<include name="TestClient.java"/>
+			<include name="ClientDemo.java"/>
 			<include name="APIDemo.java"/>
 			<classpath refid="cp"/>
 			<classpath>
 				<pathelement location="${src.dir}"/>
 			</classpath>
 		</javac>
-		<java classname="TestClient" fork="true">
+		<java classname="ClientDemo" fork="true">
 			<classpath refid="cp"/>
 			<classpath>
 				<pathelement location="${src.dir}"/>

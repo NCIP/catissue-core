@@ -1,969 +1,1055 @@
-import edu.wustl.catissuecore.domainobject.Address;
-import edu.wustl.catissuecore.domainobject.Biohazard;
-import edu.wustl.catissuecore.domainobject.CancerResearchGroup;
-import edu.wustl.catissuecore.domainobject.CellSpecimenReviewParameters;
-import edu.wustl.catissuecore.domainobject.CheckInCheckOutEventParameter;
-import edu.wustl.catissuecore.domainobject.ClinicalReport;
-import edu.wustl.catissuecore.domainobject.CollectionEventParameters;
-import edu.wustl.catissuecore.domainobject.CollectionProtocol;
-import edu.wustl.catissuecore.domainobject.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domainobject.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domainobject.Department;
-import edu.wustl.catissuecore.domainobject.DisposalEventParameters;
-import edu.wustl.catissuecore.domainobject.DistributedItem;
-import edu.wustl.catissuecore.domainobject.Distribution;
-import edu.wustl.catissuecore.domainobject.DistributionProtocol;
-import edu.wustl.catissuecore.domainobject.EmbeddedEventParameters;
-import edu.wustl.catissuecore.domainobject.ExternalIdentifier;
-import edu.wustl.catissuecore.domainobject.FixedEventParameters;
-import edu.wustl.catissuecore.domainobject.FluidSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domainobject.FrozenEventParameters;
-import edu.wustl.catissuecore.domainobject.Institution;
-import edu.wustl.catissuecore.domainobject.MolecularSpecimenRequirement;
-import edu.wustl.catissuecore.domainobject.MolecularSpecimenReviewParameters;
-import edu.wustl.catissuecore.domainobject.Participant;
-import edu.wustl.catissuecore.domainobject.ParticipantMedicalIdentifier;
-import edu.wustl.catissuecore.domainobject.ProcedureEventParameters;
-import edu.wustl.catissuecore.domainobject.ReceivedEventParameters;
-import edu.wustl.catissuecore.domainobject.Site;
-import edu.wustl.catissuecore.domainobject.Specimen;
-import edu.wustl.catissuecore.domainobject.SpecimenCharacteristics;
-import edu.wustl.catissuecore.domainobject.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domainobject.SpunEventParameters;
-import edu.wustl.catissuecore.domainobject.StorageContainer;
-import edu.wustl.catissuecore.domainobject.StorageContainerCapacity;
-import edu.wustl.catissuecore.domainobject.StorageContainerDetails;
-import edu.wustl.catissuecore.domainobject.StorageType;
-import edu.wustl.catissuecore.domainobject.ThawEventParameters;
-import edu.wustl.catissuecore.domainobject.TissueSpecimenRequirement;
-import edu.wustl.catissuecore.domainobject.TissueSpecimenReviewEventParameters;
-import edu.wustl.catissuecore.domainobject.TransferEventParameters;
-import edu.wustl.catissuecore.domainobject.User;
-import edu.wustl.catissuecore.domainobject.impl.AddressImpl;
-import edu.wustl.catissuecore.domainobject.impl.BiohazardImpl;
-import edu.wustl.catissuecore.domainobject.impl.CancerResearchGroupImpl;
-import edu.wustl.catissuecore.domainobject.impl.CellSpecimenImpl;
-import edu.wustl.catissuecore.domainobject.impl.CellSpecimenReviewParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.CheckInCheckOutEventParameterImpl;
-import edu.wustl.catissuecore.domainobject.impl.ClinicalReportImpl;
-import edu.wustl.catissuecore.domainobject.impl.CollectionEventParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.CollectionProtocolEventImpl;
-import edu.wustl.catissuecore.domainobject.impl.CollectionProtocolImpl;
-import edu.wustl.catissuecore.domainobject.impl.CollectionProtocolRegistrationImpl;
-import edu.wustl.catissuecore.domainobject.impl.DepartmentImpl;
-import edu.wustl.catissuecore.domainobject.impl.DisposalEventParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.DistributedItemImpl;
-import edu.wustl.catissuecore.domainobject.impl.DistributionImpl;
-import edu.wustl.catissuecore.domainobject.impl.DistributionProtocolImpl;
-import edu.wustl.catissuecore.domainobject.impl.EmbeddedEventParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.ExternalIdentifierImpl;
-import edu.wustl.catissuecore.domainobject.impl.FixedEventParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.FluidSpecimenImpl;
-import edu.wustl.catissuecore.domainobject.impl.FluidSpecimenReviewEventParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.FrozenEventParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.InstitutionImpl;
-import edu.wustl.catissuecore.domainobject.impl.MolecularSpecimenRequirementImpl;
-import edu.wustl.catissuecore.domainobject.impl.MolecularSpecimenReviewParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.ParticipantImpl;
-import edu.wustl.catissuecore.domainobject.impl.ParticipantMedicalIdentifierImpl;
-import edu.wustl.catissuecore.domainobject.impl.ProcedureEventParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.ReceivedEventParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.SiteImpl;
-import edu.wustl.catissuecore.domainobject.impl.SpecimenCharacteristicsImpl;
-import edu.wustl.catissuecore.domainobject.impl.SpecimenCollectionGroupImpl;
-import edu.wustl.catissuecore.domainobject.impl.SpecimenImpl;
-import edu.wustl.catissuecore.domainobject.impl.SpunEventParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.StorageContainerCapacityImpl;
-import edu.wustl.catissuecore.domainobject.impl.StorageContainerDetailsImpl;
-import edu.wustl.catissuecore.domainobject.impl.StorageContainerImpl;
-import edu.wustl.catissuecore.domainobject.impl.StorageTypeImpl;
-import edu.wustl.catissuecore.domainobject.impl.ThawEventParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.TissueSpecimenRequirementImpl;
-import edu.wustl.catissuecore.domainobject.impl.TissueSpecimenReviewEventParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.TransferEventParametersImpl;
-import edu.wustl.catissuecore.domainobject.impl.UserImpl;
-import gov.nih.nci.csm.sdk.application.client.ApplicationServiceProvider;
-import gov.nih.nci.csm.sdk.application.client.ClientSession;
-import gov.nih.nci.system.applicationservice.SDKApplicationService;
+import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.Department;
+import edu.wustl.catissuecore.domain.Distribution;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
+import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.domain.User;
+import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.system.applicationservice.ApplicationException;
+import gov.nih.nci.system.applicationservice.ApplicationService;
+import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
+import gov.nih.nci.system.comm.client.ClientSession;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+/*
+import edu.wustl.common.util.Utility;
+import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.global.Variables;
+import org.apache.log4j.PropertyConfigurator;
+*/
+/**
+ * <!-- LICENSE_TEXT_START -->
+* Copyright 2001-2004 SAIC. Copyright 2001-2003 SAIC. This software was developed in conjunction with the National Cancer Institute,
+* and so to the extent government employees are co-authors, any rights in such works shall be subject to Title 17 of the United States Code, section 105.
+* Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+* 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the disclaimer of Article 3, below. Redistributions
+* in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other
+* materials provided with the distribution.
+* 2. The end-user documentation included with the redistribution, if any, must include the following acknowledgment:
+* "This product includes software developed by the SAIC and the National Cancer Institute."
+* If no such end-user documentation is to be included, this acknowledgment shall appear in the software itself,
+* wherever such third-party acknowledgments normally appear.
+* 3. The names "The National Cancer Institute", "NCI" and "SAIC" must not be used to endorse or promote products derived from this software.
+* 4. This license does not authorize the incorporation of this software into any third party proprietary programs. This license does not authorize
+* the recipient to use any trademarks owned by either NCI or SAIC-Frederick.
+* 5. THIS SOFTWARE IS PROVIDED "AS IS," AND ANY EXPRESSED OR IMPLIED WARRANTIES, (INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+* MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE) ARE DISCLAIMED. IN NO EVENT SHALL THE NATIONAL CANCER INSTITUTE,
+* SAIC, OR THEIR AFFILIATES BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+* PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+* WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * <!-- LICENSE_TEXT_END -->
+ */
+
+/**
+ * @author caBIO Team
+ * @version 1.0
+ */
+
 
 
 /**
- * This is the sample client program to insert/update all the caTissue Core
- * objects through API.
- */
+	* ClientDemo.java demonstartes various ways to execute searches with and without
+      * using Application Service Layer (convenience layer that abstracts building criteria
+      * Uncomment different scenarios below to demonstrate the various types of searches
+*/
+
 public class ClientDemo 
 {
-    
-    public static void main(String[] args) throws Exception  
-    {	
-		ApplicationServiceProvider asp = new ApplicationServiceProvider();
-		SDKApplicationService appService = asp.getApplicationService();
+		static ApplicationService appService = null;
+		static APIDemo api = new APIDemo();
+		public static Map dataModelObjectMap = new HashMap();
 		
-		ClientSession cs = ClientSession.getInstance();
-		cs.startSession("admin@admin.com","login123");
-		
-		//To add Institution object
-	    Institution inst = (Institution)appService.createObject(getInstitution());
-	    
-	    //To get the identifier of the object created
-	    System.out.println("The identifier of the object created is " + inst.getId());
-	    
-	    //To update Institution object
-	    //appService.updateObject(getInstitution());
-	    
-	    
-	    //To search all the user objects
-//	    User user = new UserImpl();
-//		user.setLoginName("*");
-//	
-//		List list = appService.search(User.class,user);
-//		System.out.println("List Size......................"+list.size());
-//		
-//		for(int i=0;i<list.size();i++)
-//		{
-//			user = (User)list.get(i);
-//			System.out.println((i+1)+"-->"+user.getLoginName() + " :: " + user.getId() + " :: " + user.getActivityStatus());
-//		}
-		
-		cs.terminateSession();
-    }
-    
-    //Use this function to create/update an object of Institution
-    private static Institution getInstitution()
-    {
-        Institution institution=new InstitutionImpl();
-		institution.setId(new Long(0));
-		institution.setName("WashU");
-        
-		return institution;
-    }
-    
-    //Use this function to create/update an object of Department
-    private static Department getDepartment()
-    {
-        Department dept=new DepartmentImpl();
-        dept.setId(new Long(0));
-        dept.setName("Department of Bio-Informatics");
-        
-        return dept;
-    }
-    
-	//Use this function to create/update an object of CancerResearchGroup
-    private static CancerResearchGroup getCancerResearchGroup()
-    {
-    	CancerResearchGroup crg=new CancerResearchGroupImpl();
-		crg.setId(new Long(0));
-		crg.setName("Tata Memorial Mumbai");
-		
-		return crg;
-    }
-    
-	//Use this function to create/update an object of User
-    private static User getUser()
-    {
-        User user=new UserImpl();
-        
-        user.setId(new Long(0));
-        user.setActivityStatus("Active");
-        
-        user.setEmailAddress("admin@pspl.com");
-        user.setLastName("LastName");
-        user.setFirstName("FirstName");
-        
-//      user.setCsmUserId(new Long(4));
-        
-        Address add=new AddressImpl();
-//      add.setId(new Long(5));
-        add.setStreet("Street");
-        add.setCity("City");
-        add.setState("Alaska");
-        add.setZipCode("11111");
-        add.setCountry("Canada");
-        add.setPhoneNumber("999-999-999");
-        user.setAddress(add);
-        
-        Institution ins=new InstitutionImpl();
-        ins.setId(new Long(1));
-        user.setInstitution(ins);
-        
-        Department dept=new DepartmentImpl();
-        dept.setId(new Long(1));
-        user.setDepartment(dept);
-        
-        CancerResearchGroup crg=new CancerResearchGroupImpl();
-        crg.setId(new Long(1));
-        user.setCancerResearchGroup(crg);
-        
-        return user;
-    }
-    
-	//Use this function to create/update an object of Site
-    private static Site getSite()
-    {
-    	Site site=new SiteImpl();
-		site.setId(new Long(0));
-		site.setName("My Site");
-		site.setType("Laboratory");
-		
-		User usr=new UserImpl();
-		usr.setId(new Long(2));
-		site.setCoordinator(usr);
-		
-		Address add=new AddressImpl();
-//		add.setId(new Long(5));
-		add.setStreet("The Street");
-		add.setCity("The City");
-		add.setState("Alaska");
-		add.setCountry("Canada");
-		add.setZipCode("99999");
-		site.setAddress(add);
-		site.setActivityStatus("Active");
+    public static void main(String[] args) 
+	{
+	
+		System.out.println("*** ClientDemo...");
+		try
+		{
+			ApplicationServiceProvider applicationServiceProvider = new ApplicationServiceProvider(); 
+			appService = applicationServiceProvider.getApplicationService();
+			ClientSession cs = ClientSession.getInstance();
+			try
+			{ 
+				cs.startSession("admin@admin.com", "login12");
+			} 
+			catch (Exception ex) 
+			{ 
+				System.out.println(ex.getMessage()); 
+				ex.printStackTrace();
+				return;
+			}
 
-		return site;
-    }
+			try 
+			{
+				ClientDemo testClient = new ClientDemo();
+				//testClient.createObjects();
+				testClient.serachObject();
+			} 
+			catch (RuntimeException e2) 
+			{
+				e2.printStackTrace();
+			}
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			System.out.println("Test client throws Exception = "+ ex);
+		}
+	}
+    //////////////////////// Start Add operation //////
+	private void createObjects()
+	{
+	try
+	{
+				   // Add sub domain objects	
+			 	   Object obj = api.initSpecimenCharacteristics();
+			 	   SpecimenCharacteristics specimenCharacteristics = (SpecimenCharacteristics) appService.createObject(obj);
+			 	   dataModelObjectMap.put("SpecimenCharacteristics",specimenCharacteristics);
+			 	   
+			 	   obj = api.initSpecimenRequirement();
+			 	   SpecimenRequirement specimenRequirement = (SpecimenRequirement) appService.createObject(obj);
+			 	   dataModelObjectMap.put("SpecimenRequirement",specimenRequirement);
+			
+			 	   obj = api.initCollectionProtocolEvent();
+			 	   CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) appService.createObject(obj);
+			 	   dataModelObjectMap.put("CollectionProtocolEvent",collectionProtocolEvent);
+			 	   
+			 	    
+					testAddInstitution();
+					testAddDepartment();
+					testAddCancerResearchGroup();
+					testAddUser();
+					testAddSite();
+					testAddBioHazard();
+					testAddCollectionProtocol();
+					testAddStorageType();
+					testAddCollectionProtocolRegistration();
+					
+					//testAddStorageContainer();
+					//testAddDistributionProtocol();
+					testAddSpecimenArrayType();
+						
+					testAddParticipant();
+					// participant registration not found
+					
+					testAddSpecimenCollectionGroup();
+					testAddSpecimen();
+					//testAddDistribution();
+					testAddSpecimenArray();
+		}
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+			System.out.println("Test client throws Exception = "+ ex);
+		}
+	}
     
-	//Use this function to create/update an object of StorageType
-    private static StorageType getStorageType()
-    {
-    	StorageType sType=new StorageTypeImpl();
-		sType.setId(new Long(0));
-		
-		StorageContainerCapacity scont=new StorageContainerCapacityImpl();
-//		scont.setId(new Long(10));
-		scont.setOneDimensionCapacity(new Integer(10));
-		scont.setTwoDimensionCapacity(new Integer(20));
-		sType.setDefaultStorageCapacity(scont);
-		
-		sType.setOneDimensionLabel("Dimension X");
-		sType.setTwoDimensionLabel("Dimension Y");
-		sType.setDefaultTempratureInCentigrade(new Double(-100));
-		sType.setType("Deep Freezer");
-        
-    	return sType;
-    }
-    
-	//Use this function to create/update an object of StorageContainer
-    private static StorageContainer getStorageContainer()
-    {
-	    StorageContainer cont=new StorageContainerImpl();
-        cont.setId(new Long(0));
-        cont.setActivityStatus("Active");
-        
-        StorageType sType=new StorageTypeImpl();
-        sType.setId(new Long(1));
-        cont.setStorageType(sType);
-        
-        Site scSite=new SiteImpl();
-        scSite.setId(new Long(1));
-        cont.setSite(scSite);
-        
-//      StorageContainer parent=new StorageContainerImpl();
-//      parent.setId(new Long(23));
-        cont.setParentContainer(null);
-        
-//      cont.setPositionDimensionOne(new Integer(5));
-//      cont.setPositionDimensionTwo(new Integer(5));
+	private void testAddDepartment()
+	{
+		try
+		{
+			Department departmentObj = (Department) api.initDepartment();
+	    	setLogger(departmentObj);
+	    	departmentObj =  (Department) appService.createObject(departmentObj);
+	    	dataModelObjectMap.put("Department",departmentObj);
+			Logger.out.info(" Domain Object is successfully added ----> Name:: " + departmentObj.getName());
+		//+ departmentObj.getId().longValue() + " ::  Name :: " + departmentObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+	private void testAddBioHazard()
+	{
+		try
+		{
+			Biohazard bioHazardObj = (Biohazard) api.initBioHazard();
+	    	setLogger(bioHazardObj);
+	    	bioHazardObj =  (Biohazard) appService.createObject(bioHazardObj);
+	    	dataModelObjectMap.put("Biohazard",bioHazardObj);
+			Logger.out.info(" Domain Object is successfully added ---->  Name:: " + bioHazardObj.getName());
+		//+ bioHazardObj.getId().longValue() + " ::  Name :: " + bioHazardObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+	private void testAddUser()
+	{
+		try
+		{
+			User userObj = (User) api.initUser();
+	    	setLogger(userObj);
+			userObj =  (User) appService.createObject(userObj);
+			dataModelObjectMap.put("User",userObj);
+			Logger.out.info(" Domain Object is successfully added ---->  LoginName:: " + userObj.getId().longValue() + " ::  Name :: " + userObj.getFirstName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+	private void testAddParticipant()
+	{
+		try
+		{
+			Participant participantObj = (Participant) api.initParticipant();
+			setLogger(participantObj);
+			participantObj =  (Participant) appService.createObject(participantObj);
+			dataModelObjectMap.put("Participant",participantObj);
+			Logger.out.info(" Domain Object is successfully added ---->  ID:: " + participantObj.getId().longValue());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
 
-        cont.setBarcode(null);
-//      cont.setNumber(new Integer(1));
-        
-        StorageContainerCapacity scCapacity=new StorageContainerCapacityImpl();
-//      scCapacity.setId(new Long(58));
-        scCapacity.setOneDimensionCapacity(new Integer(5));
-        scCapacity.setTwoDimensionCapacity(new Integer(5));
-        cont.setStorageContainerCapacity(scCapacity);
-                
-        StorageContainerDetails scDetail=new StorageContainerDetailsImpl();
-//      scDetail.setId(new Long(4));
-        scDetail.setParameterName("ParamName1");
-        scDetail.setParameterValue("ParamValue1");
-        scDetail.setStorageContainer(cont);
-        
-        StorageContainerDetails scDetail1=new StorageContainerDetailsImpl();
-//      scDetail.setId(new Long(5));
-        scDetail1.setParameterName("ParamName2");
-        scDetail1.setParameterValue("ParamValue2");
-        scDetail1.setStorageContainer(cont);
-        
-        Collection scDetails=new HashSet();
-        scDetails.add(scDetail);
-        scDetails.add(scDetail1);
-        cont.setStorageContainerDetailsCollection(scDetails);
-        
-        cont.setTempratureInCentigrade(new Double(-10));
-        cont.setIsFull(new Boolean(false));
-        
-        return cont;
-    }
-    
-	//Use this function to create/update an object of Biohazard
-    private static Biohazard getBiohazard()
-    {
-    	Biohazard bHazard=new BiohazardImpl();
-		bHazard.setId(new Long(0));
-		bHazard.setType("Mutagen");
-		bHazard.setComments("My Comments");
-		bHazard.setName("M-Hazard");
+	private void testAddInstitution()
+	{
+		try
+		{
+			Institution institutionObj = (Institution) api.initInstitution();
+	    	setLogger(institutionObj);
+	    	institutionObj =  (Institution) appService.createObject(institutionObj);
+	    	dataModelObjectMap.put("Institution",institutionObj);
+			Logger.out.info(" Domain Object is successfully added ---->  Name:: " + institutionObj.getName());
+		//+ institutionObj.getId().longValue() + " ::  Name :: " + institutionObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+	private void testAddCancerResearchGroup()
+	{
+		try
+		{
+			CancerResearchGroup cancerResearchGroupObj = (CancerResearchGroup) api.initCancerResearchGroup();
+	    	setLogger(cancerResearchGroupObj);
+	    	cancerResearchGroupObj =  (CancerResearchGroup) appService.createObject(cancerResearchGroupObj);
+	    	dataModelObjectMap.put("CancerResearchGroup",cancerResearchGroupObj);
+			Logger.out.info(" Domain Object is successfully added ---->  Name:: " + cancerResearchGroupObj.getName());
+		//+ cancerResearchGroupObj.getId().longValue() + " ::  Name :: " + cancerResearchGroupObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+	private void testAddSite()
+	{
+		try
+		{
+			Site siteObj = (Site) api.initSite();
+	    	setLogger(siteObj);
+			siteObj =  (Site) appService.createObject(siteObj);
+			dataModelObjectMap.put("Site",siteObj);
+			Logger.out.info(" Domain Object is successfully added ----> ID:: " + siteObj.getId().toString());
+		//+ siteObj.getId().longValue() + " ::  Name :: " + siteObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+	private void testAddDistribution()
+	{
+		try
+		{
+			Distribution distributionObj = (Distribution)api.initDistribution();
+	    	setLogger(distributionObj);
+			distributionObj =  (Distribution) appService.createObject(distributionObj);
+			dataModelObjectMap.put("Distribution",distributionObj);
+			Logger.out.info(" Domain Object is successfully added ---->  ID:: " + distributionObj.getId().toString());
+		//+ distributionObj.getId().longValue() + " ::  Name :: " + distributionObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+	private void testAddDistributionProtocol()
+	{
+		try
+		{
+			DistributionProtocol distributionProtocolObj =(DistributionProtocol)api.initDistributionProtocol();
+	    	setLogger(distributionProtocolObj);
+			distributionProtocolObj =  (DistributionProtocol) appService.createObject(distributionProtocolObj);
+			dataModelObjectMap.put("DistributionProtocol",distributionProtocolObj);
+			Logger.out.info(" Domain Object is successfully added ----> ID:: " + distributionProtocolObj.getId().toString());
+		//+ distributionProtocolObj.getId().longValue() + " ::  Name :: " + distributionProtocolObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+	private void testAddCollectionProtocol()
+	{
+		try
+		{
+			CollectionProtocol collectionProtocolObj = (CollectionProtocol)api.initCollectionProtocol();
+			setLogger(collectionProtocolObj);
+			collectionProtocolObj =  (CollectionProtocol) appService.createObject(collectionProtocolObj);
+			dataModelObjectMap.put("CollectionProtocol",collectionProtocolObj);
+			Logger.out.info(" Domain Object is successfully added ---->  ID:: " + collectionProtocolObj.getId().toString());
+		//+ collectionProtocolObj.getId().longValue() + " ::  Name :: " + collectionProtocolObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+	private void testAddCollectionProtocolRegistration()
+	{
+		try
+		{
+		//	System.out.println("ClientDemo....................");
+			CollectionProtocolRegistration collectionProtocolRegistrationObj =(CollectionProtocolRegistration) api.initCollectionProtocolRegistration();
+	    	setLogger(collectionProtocolRegistrationObj);
+			collectionProtocolRegistrationObj =  (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistrationObj);
+			dataModelObjectMap.put("CollectionProtocolRegistration",collectionProtocolRegistrationObj);
+			Logger.out.info(" Domain Object is successfully added ---->   ID:: " + collectionProtocolRegistrationObj.getId().toString());
+		//+ collectionProtocolRegistrationObj.getId().longValue() + " ::  Name :: " + collectionProtocolRegistrationObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+	private void testAddStorageType()
+	{
+		try
+		{
+			StorageType storageTypeObj =(StorageType) api.initStorageType();
+	    	setLogger(storageTypeObj);
+			storageTypeObj =  (StorageType) appService.createObject(storageTypeObj);
+			dataModelObjectMap.put("StorageType",storageTypeObj);
+			Logger.out.info(" Domain Object is successfully added ---->  ID:: " + storageTypeObj.getId().toString());
+		//+ storageTypeObj.getId().longValue() + " ::  Name :: " + storageTypeObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
 
-		return bHazard;
-    }
+	private void testAddStorageContainer()
+	{
+		try
+		{
+			StorageContainer storageContainerObj =(StorageContainer) api.initStorageContainer();
+	    	setLogger(storageContainerObj);
+			storageContainerObj =  (StorageContainer) appService.createObject(storageContainerObj);
+			dataModelObjectMap.put("StorageContainer",storageContainerObj);
+			Logger.out.info(" Domain Object is successfully added ---->    ID:: " + storageContainerObj.getId().toString());
+		//+ storageContainerObj.getId().longValue() + " ::  Name :: " + storageContainerObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+	 private void testAddSpecimen()
+		{
+			try
+			{
+				Specimen specimenObj = (Specimen) api.initSpecimen();
+				setLogger(specimenObj);
+				specimenObj =  (Specimen) appService.createObject(specimenObj);
+				dataModelObjectMap.put("Specimen",specimenObj);
+				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
+				//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + specimenObj.getId().longValue() + " ::  Name :: " + specimenObj.getLabel());
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e);
+				e.printStackTrace();
+			}
+		}
+	 private void testAddSpecimenArrayType()
+		{
+			try
+			{
+				SpecimenArrayType specimenArrayTypeObj = (SpecimenArrayType) api.initSpecimenArrayType();
+				setLogger(specimenArrayTypeObj);
+				specimenArrayTypeObj =  (SpecimenArrayType) appService.createObject(specimenArrayTypeObj);
+				dataModelObjectMap.put("SpecimenArrayType",specimenArrayTypeObj);
+				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenArrayTypeObj.getId().toString());
+				//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + specimenObj.getId().longValue() + " ::  Name :: " + specimenObj.getLabel());
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e);
+				e.printStackTrace();
+			}
+		}
+	 private void testAddSpecimenArray()
+		{
+			try
+			{
+				SpecimenArray specimenArrayObj = (SpecimenArray) api.initSpecimenArray();
+				setLogger(specimenArrayObj);
+				specimenArrayObj =  (SpecimenArray) appService.createObject(specimenArrayObj);
+				dataModelObjectMap.put("SpecimenArray",specimenArrayObj);
+				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenArrayObj.getId().toString());
+		//		Logger.out.info(" Domain Object is successfully added ---->  ID:: " + specimenArrayObj.getId().longValue() + " ::  Name :: " + specimenArrayObj.getName());
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e);
+				e.printStackTrace();
+			}
+		}
+	 	private void testAddSpecimenCollectionGroup()
+		{
+			try
+			{
+				SpecimenCollectionGroup specimenCollectionGroupObj = (SpecimenCollectionGroup) api.initSpecimenCollectionGroup();
+		    	setLogger(specimenCollectionGroupObj);
+				specimenCollectionGroupObj =  (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroupObj);
+				dataModelObjectMap.put("SpecimenCollectionGroup",specimenCollectionGroupObj);
+				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenCollectionGroupObj.getId().toString());
+			//+ specimenCollectionGroupObj.getId().longValue() + " ::  Name :: " + specimenCollectionGroupObj.getName());
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e);
+				e.printStackTrace();
+			}
+		}
+	 	
+////////////////////////////////  End Add operation /////////////////	 	
     
-	//Use this function to create/update an object of CollectionProtocol
-    private static CollectionProtocol getCollectionProtocol()
+    private void serachObject()
     {
-		CollectionProtocol cp=new CollectionProtocolImpl();
-		cp.setId(new Long(0));
-		cp.setActivityStatus("Active");
-		
-		User pi=new UserImpl();
-		pi.setId(new Long(2));
-		cp.setPrincipalInvestigator(pi);
-		
-		User co1=new UserImpl();
-		co1.setId(new Long(1));
-		User co2=new UserImpl();
-		co1.setId(new Long(21));
-		HashSet set = new HashSet();
-		set.add(co1);
-		set.add(co2);
-		cp.setUserCollection(set);
-		
-		cp.setTitle("Collection Protocol");
-		cp.setShortTitle("CP");
-		cp.setIrbIdentifier("IRB_007");
-		Date startDate=new Date();
-		cp.setStartDate(startDate);
-		cp.setEndDate(null);
-		cp.setEnrollment(new Integer(5));
-		cp.setDescriptionURL("URL");
-		
-		//CollectionProtocolEvent
-		CollectionProtocolEvent cpEvent=new CollectionProtocolEventImpl();
-//		cpEvent.setId(new Long(1));
-		cpEvent.setClinicalStatus("New Diagnosis");
-		cpEvent.setStudyCalendarEventPoint(new Double(5));
-		cpEvent.setCollectionProtocol(cp);
-		
-		CollectionProtocolEvent cpEvent1=new CollectionProtocolEventImpl();
-//		cpEvent1.setId(new Long(2));
-		cpEvent1.setClinicalStatus("Operative");
-		cpEvent1.setStudyCalendarEventPoint(new Double(2));
-		cpEvent1.setCollectionProtocol(cp);
-		
-		
-		//SpecimenRequirement
-		MolecularSpecimenRequirement spReq=new MolecularSpecimenRequirementImpl();
-//		spReq.setId(new Long(1));
-		spReq.setSpecimenType("cDNA");
-		spReq.setTissueSite("Abdomen, NOS");
-		spReq.setPathologyStatus("Metastatic");
-		spReq.setQuantityInMicrogram(new Double(100));
-		
-		TissueSpecimenRequirement tissueReq=new TissueSpecimenRequirementImpl();
-//		tissueReq.setId(new Long(2));
-		tissueReq.setSpecimenType("Fixed Tissue Block");
-		tissueReq.setTissueSite("Appendix");
-		tissueReq.setPathologyStatus("Metastatic");
-		tissueReq.setQuantityInGram(new Double(50));
-		
-		MolecularSpecimenRequirement spReq1=new MolecularSpecimenRequirementImpl();
-//		spReq1.setId(new Long(45));
-		spReq1.setSpecimenType("cDNA");
-		spReq1.setTissueSite("Abdomen, NOS");
-		spReq1.setPathologyStatus("Metastatic");
-		spReq1.setQuantityInMicrogram(new Double(300));
-		
-		TissueSpecimenRequirement tissueReq1=new TissueSpecimenRequirementImpl();
-//		tissueReq1.setId(new Long(46));
-		tissueReq1.setSpecimenType("Fixed Tissue");
-		tissueReq1.setTissueSite("Appendix");
-		tissueReq1.setPathologyStatus("Metastatic");
-		tissueReq1.setQuantityInGram(new Double(330));
-		
-		//SpecimenRequirement Collection
-		Collection spReqCollection=new HashSet();
-		
-		spReqCollection.add(spReq);
-		spReqCollection.add(tissueReq);
-		cpEvent.setSpecimenRequirementCollection(spReqCollection);
-		
-		Collection spReqCollection1=new HashSet();
-		spReqCollection1.add(spReq1);
-		spReqCollection1.add(tissueReq1);
-		cpEvent1.setSpecimenRequirementCollection(spReqCollection1);
-		
-		//CollectionProtocolEvent Collection
-		Collection cpEventCollection=new ArrayList();
-		cpEventCollection.add(cpEvent);
-		cpEventCollection.add(cpEvent1);
-		cp.setCollectionProtocolEventCollection(cpEventCollection);
-        
-		return cp;
-    }
-    
-	//Use this function to create/update an object of DistributionProtocol
-    private static DistributionProtocol getDistributionProtocol()
+    	
+    	api = new APIDemo();
+    	//testSearchDepartment();
+    	//testSearchSpecimenArrayType();
+    	/*
+    	testSearchBioHazard();
+    	testSearchDepartment();
+    	testSearchCancerResearchGroup();
+    	testSearchInstitution();
+    	
+    	
+   // 	testSearchCollectionProtocol();
+    	testSearchSite();
+    	testSearchUser();
+    	testSearchParticipant();
+    //	testSearchCollectionProtocolRegistration();
+    	
+    	
+    	testSearchStorageType();
+    	testSearchSpecimen();
+    	testSearchSpecimenArrayType();
+    	testSearchSpecimenArray();
+    	testSearchSpecimenCollectionGroup();
+    	testSearchStorageContainer();
+    	*/
+    	
+/*    	Department department = api.initDepartment();
+    	department.setId(new Long(2));
+		try 
+		{
+			List resultList = appService.search(Department.class, department);
+			System.out.println(" Result list " + resultList);
+			for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+			{
+				Department returneddepartment = (Department) resultsIterator.next();
+				System.out.println(" Name:  " + returneddepartment.getName());
+			}
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+*/    	
+    	
+    	try
+    	{
+    		
+    	MolecularSpecimen specimen = new MolecularSpecimen();
+    	specimen.setId(new Long(1));
+    	
+    	List list = appService.search(MolecularSpecimen.class,specimen);
+    	if(list != null && list.size() != 0)
+    	{
+    		System.out.println("List Size : " + list.size());
+    		specimen = (MolecularSpecimen)list.get(0);
+    		System.out.println("Type : " + specimen.getType() + " :: Id :" + 
+    	specimen.getId());
+    		System.out.println( " "  + specimen.getSpecimenCollectionGroup().getClinicalReport().getSurgicalPathologyNumber());
+    	}
+    	else
+    	{
+    		System.out.println("List is empty.");
+    	}
+    	} 
+    	catch(ApplicationException e)
+    	{
+    		e.printStackTrace();
+    	}
+   }
+	
+    /*    
+    private void testSearchDepartment()
     {
-        DistributionProtocol dp=new DistributionProtocolImpl();
-        dp.setId(new Long(0));
-        dp.setActivityStatus("Active");
-        
-        User pi=new UserImpl();
-		pi.setId(new Long(1));
-        dp.setPrincipalInvestigator(pi);
-        
-        dp.setTitle("The Distribution Protocol");
-		dp.setShortTitle("DP");
-		dp.setIrbIdentifier("IRBID-001");
-		Date startDate=new Date();
-		dp.setStartDate(startDate);
-		dp.setEndDate(null);
-		dp.setEnrollment(new Integer(5));
-		dp.setDescriptionURL("URL");
-        
-		//SpecimenRequirement
-		MolecularSpecimenRequirement spReq=new MolecularSpecimenRequirementImpl();
-//		spReq.setId(new Long(41));
-		spReq.setSpecimenType("protein");
-		spReq.setTissueSite("Abdomen, NOS");
-		spReq.setPathologyStatus("Malignant");
-		spReq.setQuantityInMicrogram(new Double(500));
-		
-		TissueSpecimenRequirement tissueReq=new TissueSpecimenRequirementImpl();
-//		tissueReq.setId(new Long(42));
-		tissueReq.setSpecimenType("Frozen Tissue");
-		tissueReq.setTissueSite("Appendix");
-		tissueReq.setPathologyStatus("Pre-Malignant");
-		tissueReq.setQuantityInGram(new Double(400));
-		
-		//SpecimenRequirement Collection
-		Collection spReqCollection=new HashSet();
-		spReqCollection.add(spReq);
-		spReqCollection.add(tissueReq);
-		dp.setSpecimenRequirementCollection(spReqCollection);
-		
-		return dp;
-    }
-    
-	//Use this function to create/update an object of Participant
-    private static Participant getParticipant()
-    {
-    	Participant participant = new ParticipantImpl();
-    	
-    	participant.setId(new Long(0));
-    	participant.setLastName("Lastname");
-    	participant.setFirstName("Firstname");
-    	participant.setGender("Male");
-    	participant.setSexGenotype("XY");
-    	participant.setRace("African");
-    	participant.setEthnicity("Canal Zone");
-    	participant.setActivityStatus("Active");
-    	participant.setBirthDate(Calendar.getInstance().getTime());
-    	
-    	ParticipantMedicalIdentifier pmi = new ParticipantMedicalIdentifierImpl();
-    	pmi.setId(null);
-    	pmi.setMedicalRecordNumber("MRN-1");
-    	pmi.setParticipant(participant);
-    	Site site = new SiteImpl();
-    	site.setId(new Long(2));
-    	pmi.setSite(site);
-    	
-    	HashSet set = new HashSet();
-    	set.add(pmi);
-    	
-    	participant.setParticipantMedicalIdentifierCollection(set);
-    	
-    	return participant;
-    }
-    
-	//Use this function to create/update an object of CollectionProtocolRegistration
-    private static CollectionProtocolRegistration getCollectionProtocolRegistration()
-    {
-    	CollectionProtocolRegistration registration = new CollectionProtocolRegistrationImpl();
-    	
-    	registration.setId(new Long(0));
-    	registration.setActivityStatus("Active");
-    	
-    	CollectionProtocol cp = new CollectionProtocolImpl();
-    	cp.setId(new Long(1));
-    	registration.setCollectionProtocol(cp);
-    	
-    	Participant participant = new ParticipantImpl();
-    	participant.setId(new Long(3));
-    	registration.setParticipant(participant);
-    	
-//    	registration.setProtocolParticipantIdentifier("1");
-    	
-    	registration.setRegistrationDate(Calendar.getInstance().getTime());
-    	
-    	return registration;
-    }
-    
-	//Use this function to create/update an object of SpecimenCollectionGroup
-    private static SpecimenCollectionGroup getSpecimenCollectionGroup()
-    {
-    	SpecimenCollectionGroup group = new SpecimenCollectionGroupImpl();
-    	
-    	group.setId(new Long(0));
-    	group.setActivityStatus("Active");
-    	
-    	CollectionProtocolRegistration registration = new CollectionProtocolRegistrationImpl();
-    	registration.setId(new Long(1));
-    	group.setCollectionProtocolRegistration(registration);
-    	
-    	SiteImpl site = new SiteImpl();
-    	site.setId(new Long(1));
-    	group.setSite(site);
-    	
-    	group.setClinicalStatus("Operative");
-    	group.setClinicalDiagnosis("Acute leukemia, NOS");
-
-    	ClinicalReport report = new ClinicalReportImpl();
-//    	report.setId(new Long(5));
-    	report.setSurgicalPathologyNumber("S-1000");
-    	ParticipantMedicalIdentifier id = new ParticipantMedicalIdentifierImpl();
-    	id.setId(new Long(1));
-    	report.setParticipantMedicalIdentifier(id);
-    	group.setClinicalReport(report);
-    	
-    	CollectionProtocolEvent event = new CollectionProtocolEventImpl();
-    	event.setId(new Long(1));
-    	group.setCollectionProtocolEvent(event);
-    	    	
-    	return group;
-    }
-    
-	//Use this function to create/update an object of Specimen
-    private static Specimen getSpecimen()
-    {
-    	Specimen specimen = new FluidSpecimenImpl();
-    	
-    	specimen.setId(new Long(0));
-    	specimen.setActivityStatus("Active");
-    	specimen.setAvailable(Boolean.TRUE);
-    	specimen.setBarcode(null);
-    	specimen.setComments("No Comments");
-    	
-    	StorageContainer container = new StorageContainerImpl();
-    	container.setId(new Long(25));
-    	specimen.setStorageContainer(container);
-    	
-    	specimen.setPositionDimensionOne(new Integer(2));
-    	specimen.setPositionDimensionTwo(new Integer(1));
-    	
-    	SpecimenCollectionGroup group = new SpecimenCollectionGroupImpl();
-    	group.setId(new Long(22));
-    	specimen.setSpecimenCollectionGroup(group);
-    	
-//    	Specimen parentSpecimen = new CellSpecimenImpl();
-//    	parentSpecimen.setId(new Long(10));
-//    	specimen.setParentSpecimen(parentSpecimen);
-    	
-    	SpecimenCharacteristics chars = new SpecimenCharacteristicsImpl();
-//    	chars.setId(new Long(69));
-    	chars.setPathologicalStatus("Not Specified");
-    	chars.setTissueSide("Right");
-    	chars.setTissueSite("Appendix");
-    	specimen.setSpecimenCharacteristics(chars);
-    	
-    	specimen.setType("Plasma");
-    	((FluidSpecimenImpl)specimen).setQuantityInMilliliter(new Double(1000));
-    	((FluidSpecimenImpl)specimen).setAvailableQuantityInMilliliter(new Double(1000));
-    	
-    	ExternalIdentifier exId = new ExternalIdentifierImpl();
-//    	exId.setId(new Long("84"));
-    	exId.setName("Ex-Id-1");
-    	exId.setValue("1001");
-    	ExternalIdentifier exId2 = new ExternalIdentifierImpl();
-//    	exId2.setId(new Long("85"));
-    	exId2.setName("Ex-Id-2");
-    	exId2.setValue("2002");
-    	HashSet set = new HashSet();
-    	set.add(exId);
-    	set.add(exId2);
-    	specimen.setExternalIdentifierCollection(set);
-
-    	Biohazard hazard = new BiohazardImpl();
-    	hazard.setId(new Long(11));
-    	Biohazard hazard2 = new BiohazardImpl();
-    	hazard2.setId(new Long(12));
-    	HashSet bioSet = new HashSet();
-    	bioSet.add(hazard);
-    	bioSet.add(hazard2);
-    	specimen.setBiohazardCollection(bioSet);
-    	
-    	return specimen;
-    }
-    
-	//Use this function to create/update an object of Distribution
-    public static Distribution getDistribution()
-    {
-        Distribution dist=new DistributionImpl();
-        dist.setId(new Long(0));
-        dist.setActivityStatus("Active");
-        
-        DistributionProtocol dp=new DistributionProtocolImpl();
-        dp.setId(new Long(44));
-        dist.setDistributionProtocol(dp);
-        
-        User user=new UserImpl();
-        user.setId(new Long(61));
-        dist.setUser(user);
-        
-        Date date=new Date();
-        dist.setTimestamp(date);
-        
-        Site site=new SiteImpl();
-        site.setId(new Long(1));
-        dist.setToSite(site);
-        
-        dist.setComments("No Comments");
-        
-        Specimen specimen=new CellSpecimenImpl();
-        specimen.setId(new Long(610));
-
-        DistributedItem dItem=new DistributedItemImpl();
-//      dItem.setId(new Long(0));
-        dItem.setQuantity(new Double(1.0));
-        dItem.setSpecimen(specimen);
-        dItem.setDistribution(dist);
-        
-        Collection dItems=new HashSet();
-        dItems.add(dItem);
-        dist.setDistributedItemCollection(dItems);
-                
-        return dist;
-    }
-    
-	//Use this function to create/update an object of CellSpecimenReviewParameters
-    private static CellSpecimenReviewParameters getCellSpecimenReviewEventParameter()
-    {
-    	CellSpecimenReviewParameters param = new CellSpecimenReviewParametersImpl();
-    	param.setId(new Long(0));
-    	param.setComments("My Comments");
-    	param.setViableCellPercentage(new Double(100));
-    	param.setNeoplasticCellularityPercentage(new Double(100));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of CheckInCheckOutEventParameter
-    private static CheckInCheckOutEventParameter getCheckInCheckOutEventParameter()
-    {
-    	CheckInCheckOutEventParameter param = new CheckInCheckOutEventParameterImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	param.setStorageStatus("CHECK IN");
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of CollectionEventParameters
-    private static CollectionEventParameters getCollectionEventParameters()
-    {
-    	CollectionEventParameters param = new CollectionEventParametersImpl();
-		param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	param.setCollectionProcedure("Lavage");
-    	param.setContainer("Not Specified");
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of DisposalEventParameters
-    private static DisposalEventParameters getDisposalEventParameters()
-    {
-    	DisposalEventParameters param = new DisposalEventParametersImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	param.setReason("No Reason");
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of EmbeddedEventParameters
-    private static EmbeddedEventParameters getEmbeddedEventParameters()
-    {
-    	EmbeddedEventParameters param = new EmbeddedEventParametersImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	param.setEmbeddingMedium("Plastic");
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of FixedEventParameters
-    private static FixedEventParameters getFixedEventParameters()
-    {
-    	FixedEventParameters param = new FixedEventParametersImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	param.setDurationInMinutes(new Integer(10));
-    	param.setFixationType("Bouin's");
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of FluidSpecimenReviewEventParameters
-    private static FluidSpecimenReviewEventParameters getFluidSpecimenReviewEventParameters()
-    {
-    	FluidSpecimenReviewEventParameters param = new FluidSpecimenReviewEventParametersImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	param.setCellCount(new Double(1000));
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of FrozenEventParameters
-    private static FrozenEventParameters getFrozenEventParameters()
-    {
-    	FrozenEventParameters param = new FrozenEventParametersImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	param.setMethod("Dry Ice");
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of MolecularSpecimenReviewParameters
-    private static MolecularSpecimenReviewParameters getMolecularSpecimenReviewParameters()
-    {
-    	MolecularSpecimenReviewParameters param = new MolecularSpecimenReviewParametersImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	param.setQualityIndex("Index-1");
-    	param.setLaneNumber("235897");
-    	param.setGelImageURL("ImgURL");
-    	param.setGelNumber(new Integer(2500));
-    	param.setAbsorbanceAt260(new Double(234.45));
-    	param.setAbsorbanceAt280(new Double(234.56));
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of ProcedureEventParameters
-    private static ProcedureEventParameters getProcedureEventParameters()
-    {
-    	ProcedureEventParameters param = new ProcedureEventParametersImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	param.setName("Name");
-    	param.setUrl("URL");
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of ReceivedEventParameters
-    private static ReceivedEventParameters getReceivedEventParameters()
-    {
-    	ReceivedEventParameters param = new ReceivedEventParametersImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	param.setReceivedQuality("Frozen");
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of SpunEventParameters
-    private static SpunEventParameters getSpunEventParameters()
-    {
-    	SpunEventParameters param = new SpunEventParametersImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	param.setGForce(new Double(18.56));
-    	param.setDurationInMinutes(new Integer(20));
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of ThawEventParameters
-    private static ThawEventParameters getThawEventParameters()
-    {
-    	ThawEventParameters param = new ThawEventParametersImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of TissueSpecimenReviewEventParameters
-    private static TissueSpecimenReviewEventParameters getTissueSpecimenReviewEventParameters()
-    {
-    	TissueSpecimenReviewEventParameters param = new TissueSpecimenReviewEventParametersImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	param.setHistologicalQuality("Poor- No Definable Features");
-    	param.setNeoplasticCellularityPercentage(new Double(100));
-    	param.setNecrosisPercentage(new Double(100));
-    	param.setLymphocyticPercentage(new Double(10));
-    	param.setTotalCellularityPercentage(new Double(100));
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(42));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
-    }
-    
-	//Use this function to create/update an object of TransferEventParameters
-    private static TransferEventParameters getTransferEventParameters()
-    {
-    	TransferEventParameters param = new TransferEventParametersImpl();
-    	param.setId(new Long(0));
-    	param.setTimestamp(Calendar.getInstance().getTime());
-    	param.setComments("No Comments");
-    	
-    	StorageContainer fromContainer = new StorageContainerImpl();
-    	fromContainer.setId(new Long(24));
-    	param.setFromStorageContainer(fromContainer);
-    	param.setFromPositionDimensionOne(new Integer(1));
-    	param.setFromPositionDimensionTwo(new Integer(1));
-    	
-    	StorageContainer toContainer = new StorageContainerImpl();
-    	toContainer.setId(new Long(24));
-    	param.setToStorageContainer(toContainer);
-    	param.setToPositionDimensionOne(new Integer(1));
-    	param.setToPositionDimensionTwo(new Integer(2));
-    	
-    	User user = new UserImpl();
-    	user.setId(new Long(61));
-    	param.setUser(user);
-    	
-    	Specimen specimen = new SpecimenImpl();
-    	specimen.setId(new Long(25));
-    	param.setSpecimen(specimen);
-    	
-    	return param;
+    	Department department = api.initDepartment();
+    	department.setId(new Long(1));
+		try 
+		{
+			List resultList = appService.search(Department.class, department);
+			for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+			{
+				Department returneddepartment = (Department) resultsIterator.next();
+				System.out.println(returneddepartment.getName());
+			}
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
     }
 
+    private void testSearchSpecimenArrayType()
+    {
+		SpecimenArrayType spec = new SpecimenArrayType();
+		spec.setId(new Long(2));
+		spec.setName("Any");
+		//spec.setCapacity(null);
+		//spec.setSpecimenTypeCollection(null);
+		
+		//spec.setId(new Long(1));
+		//System.out.println(" List of TissueSpecimen objects::  " + results);
+		try 
+		{
+			List resultList = appService.search(SpecimenArrayType.class, spec);
+			System.out.println(" List of SpecimenArrayType objects::  " + resultList);
+			for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+			{
+				SpecimenArrayType returneddepartment = (SpecimenArrayType) resultsIterator.next();
+				System.out.println(returneddepartment.getName());
+				System.out.println(returneddepartment.getId().toString());
+			}
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+    }
+
+    private void testSearchBioHazard()
+    {
+		Biohazard biohazard = new Biohazard();
+		biohazard.setId(new Long(1));
+		//spec.setCapacity(null);
+		//spec.setSpecimenTypeCollection(null);
+		
+		//spec.setId(new Long(1));
+		//System.out.println(" List of TissueSpecimen objects::  " + results);
+		try 
+		{
+			List resultList = appService.search(Biohazard.class, biohazard);
+			System.out.println(" List of SpecimenArrayType objects::  " + resultList);
+			for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+			{
+				Biohazard returneddepartment = (Biohazard) resultsIterator.next();
+				System.out.println(returneddepartment.getName());
+				System.out.println(returneddepartment.getId().toString());
+			}
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+    }
+    */
     
-}//End of class CATISSUECSMClient
+    /////////////////// Start default data insertion ///////
+    /////////////////////////// ----------------------- Start test Search operation
+    
+    private void testSearchDepartment()
+    {
+        //Department department = api.initDepartment();
+    	Department cachedObject = (Department) dataModelObjectMap.get("Department"); 
+    	Department department = new Department();
+    	department.setId(cachedObject.getId());
+    	setLogger(department);
+     	Logger.out.info(" searching domain object");
+         try {
+        	 List resultList = appService.search(Department.class, department);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 Department returneddepartment = (Department) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is found by Serach operation:: Name --- >" + returneddepartment.getName());
+             }
+          }
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+    private void testSearchCancerResearchGroup()
+    {
+    	CancerResearchGroup cachedObject =(CancerResearchGroup) dataModelObjectMap.get("CancerResearchGroup");
+    	CancerResearchGroup cancerResearchGroup = new CancerResearchGroup();
+    	cancerResearchGroup.setId(cachedObject.getId());
+    	setLogger(cancerResearchGroup);
+     	Logger.out.info(" searching domain object");
+//    	cancerResearchGroup.setId(new Long(1));
+         try {
+        	 List resultList = appService.search(CancerResearchGroup.class, cancerResearchGroup);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 CancerResearchGroup returnedcancerResearchGroup = (CancerResearchGroup) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is found by Serach operation:: Name --- >" + returnedcancerResearchGroup.getName());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+	   
+    private void testSearchSite()
+    {
+    	Site cachedObject = (Site) dataModelObjectMap.get("Site");
+    	Site site = new Site();
+    	site.setId(cachedObject.getId());
+   	 	setLogger(site);
+     	Logger.out.info(" searching domain object");
+//        site.setId(new Long(1));
+         try {
+        	 List resultList = appService.search(Site.class,site);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 Site returnedsite = (Site) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedsite.getName());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+    private void testSearchUser()
+    {
+    	 User cachedObject = (User) dataModelObjectMap.get("User");
+    	 User user = (User) new User();
+     	 setLogger(user);
+     	 Logger.out.info(" searching domain object");
+    	 user.setId(cachedObject.getId());
+//    	 user.setId(new Long(1));
+    	 
+         try {
+        	 List resultList = appService.search(User.class,user);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 User returneduser = (User) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returneduser.getEmailAddress());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    } 
+    private void testSearchParticipant()
+    {
+    	 Participant cachedObject = (Participant)dataModelObjectMap.get("Participant");
+    	 Participant participant = new Participant();
+     	 setLogger(participant);
+    	 Logger.out.info(" searching domain object");
+    	 participant.setId(cachedObject.getId());
+//    	 participant.setId(new Long(3));
+         try {
+        	 List resultList = appService.search(Participant.class,participant);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 Participant returnedparticipant = (Participant) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedparticipant.getFirstName());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+    private void testSearchInstitution()
+    {
+    	Institution cachedObject = (Institution)dataModelObjectMap.get("Institution");
+    	Institution institution = new Institution();
+    	setLogger(institution);
+    	Logger.out.info(" searching domain object");
+    	institution.setId(cachedObject.getId());//    	institution.setId(new Long(1));
+         try {
+        	 List resultList = appService.search(Institution.class,institution);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 Institution returnedinstitution = (Institution) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedinstitution.getName());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+    private void testSearchBioHazard()
+    {
+    	Biohazard cachedObject = (Biohazard)dataModelObjectMap.get("Biohazard");
+    	Biohazard biohazard = new Biohazard();
+    	setLogger(biohazard);
+    	Logger.out.info(" searching domain object");
+    	biohazard.setId(cachedObject.getId());    	
+         try {
+        	 List resultList = appService.search(Biohazard.class,biohazard);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 Biohazard returnedbiohazard = (Biohazard) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedbiohazard.getName());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+    private void testSearchDistribution()
+    {
+    	Distribution cachedDistribution =(Distribution)dataModelObjectMap.get("Distribution");
+    	Distribution distribution = new Distribution();
+    	setLogger(distribution);
+    	Logger.out.info(" searching domain object");
+    	distribution.setId(cachedDistribution.getId());
+         try {
+        	 List resultList = appService.search(Distribution.class,distribution);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 Distribution returneddistribution = (Distribution) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returneddistribution.getMessageLabel());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+    private void testSearchDistributionProtocol()
+    {
+    	DistributionProtocol cacheddistributionProtocol =(DistributionProtocol)dataModelObjectMap.get("DistributionProtocol");
+    	DistributionProtocol distributionProtocol =new DistributionProtocol();
+    	setLogger(distributionProtocol);
+    	Logger.out.info(" searching domain object");
+    	distributionProtocol.setId(cacheddistributionProtocol.getId());
+         try {
+        	 List resultList = appService.search(DistributionProtocol.class,distributionProtocol);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 DistributionProtocol returneddistributionprotocol = (DistributionProtocol) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returneddistributionprotocol.getTitle());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+    private void testSearchCollectionProtocol()
+    {
+    	CollectionProtocol cachedcollectionProtocol = (CollectionProtocol)dataModelObjectMap.get("CollectionProtocol");
+    	CollectionProtocol collectionProtocol = new CollectionProtocol();
+    	setLogger(collectionProtocol);
+    	Logger.out.info(" searching domain object");
+    	collectionProtocol.setId(cachedcollectionProtocol.getId());
+         try {
+        	 List resultList = appService.search(CollectionProtocol.class,collectionProtocol);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 CollectionProtocol returnedcollectionprotocol = (CollectionProtocol) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedcollectionprotocol.getTitle());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+    private void testSearchCollectionProtocolRegistration()
+    {
+    	CollectionProtocolRegistration collectionProtocolRegistration =(CollectionProtocolRegistration)dataModelObjectMap.get("CollectionProtocolRegistration");
+    	CollectionProtocolRegistration cachedcollectionProtocolRegistration =new CollectionProtocolRegistration();
+    	setLogger(collectionProtocolRegistration);
+    	Logger.out.info(" searching domain object");
+	    collectionProtocolRegistration.setId(cachedcollectionProtocolRegistration.getId());
+         try {
+        	 List resultList = appService.search(CollectionProtocolRegistration.class,collectionProtocolRegistration);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 CollectionProtocolRegistration returnedcollectionprotocolregistration = (CollectionProtocolRegistration) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedcollectionprotocolregistration.getMessageLabel());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+    }
+    private void testSearchStorageType()
+    {
+    	StorageType cachedstorageType =(StorageType)dataModelObjectMap.get("StorageType");
+    	StorageType storageType =new StorageType();
+    	setLogger(storageType);
+    	Logger.out.info(" searching domain object");
+    	storageType.setId(cachedstorageType.getId());
+    	
+         try {
+        	 List resultList = appService.search(StorageType.class,storageType);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 StorageType returnedstoragetype = (StorageType) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " +returnedstoragetype.getName());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+    }
+    private void testSearchStorageContainer()
+    {
+    	 StorageContainer cachedstorageContainer =(StorageContainer)dataModelObjectMap.get("StorageContainer");
+    	 StorageContainer storageContainer =new StorageContainer();
+      	 setLogger(storageContainer);
+     	Logger.out.info(" searching domain object");
+     	 storageContainer.setId(cachedstorageContainer.getId());
+         try {
+        	 List resultList = appService.search(StorageContainer.class,storageContainer);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 StorageContainer returnedstoragecontainer = (StorageContainer) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedstoragecontainer.getName());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+    private void testSearchSpecimen()
+    {
+    	Specimen cachedspecimen =(Specimen)dataModelObjectMap.get("Specimen");
+    	Specimen specimen = new Specimen();
+     	setLogger(specimen);
+    	Logger.out.info(" searching domain object");
+    	specimen.setId(cachedspecimen.getId());
+         try {
+        	 List resultList = appService.search(Specimen.class,specimen);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 Specimen returnedspecimen = (Specimen) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedspecimen.getLabel());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+    private void testSearchSpecimenArrayType()
+    {
+    	SpecimenArrayType cachedspecimenArrayType =(SpecimenArrayType)dataModelObjectMap.get("SpecimenArrayType");
+    	SpecimenArrayType specimenArrayType = new SpecimenArrayType();
+     	setLogger(specimenArrayType);
+    	Logger.out.info(" searching domain object");
+    	specimenArrayType.setId(cachedspecimenArrayType.getId());
+         try {
+        	 List resultList = appService.search(SpecimenArrayType.class,specimenArrayType);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 SpecimenArrayType returnedspecimenarraytype = (SpecimenArrayType) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedspecimenarraytype.getName());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+    private void testSearchSpecimenArray()
+    {
+    	SpecimenArray cachedspecimenArray = (SpecimenArray) dataModelObjectMap.get("SpecimenArray");
+    	SpecimenArray specimenArray = new SpecimenArray();
+     	setLogger(specimenArray);
+    	Logger.out.info(" searching domain object");
+		specimenArray.setId(cachedspecimenArray.getId());
+         try {
+        	 List resultList = appService.search(SpecimenArray.class,specimenArray);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 SpecimenArray returnedspecimenarray = (SpecimenArray) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " +returnedspecimenarray.getName());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+
+    }
+    private void testSearchSpecimenCollectionGroup()
+    {
+    	SpecimenCollectionGroup cachedspecimenCollectionGroup = (SpecimenCollectionGroup)dataModelObjectMap.get("SpecimenCollectionGroup");
+    	SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+     	setLogger(specimenCollectionGroup);
+    	Logger.out.info(" searching domain object");
+    	specimenCollectionGroup.setId(cachedspecimenCollectionGroup.getId());
+         try {
+        	 List resultList = appService.search(SpecimenCollectionGroup.class,specimenCollectionGroup);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 SpecimenCollectionGroup returnedspecimencollectiongroup = (SpecimenCollectionGroup) resultsIterator.next();
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedspecimencollectiongroup.getName());
+             }
+          } 
+          catch (Exception e) {
+        	  Logger.out.error(e);
+          }
+    }
+
+    /*
+    private void testSearchSpecimenArrayType()
+    {
+		Specimen spec = new Specimen();
+		spec.setId(new Long(2));
+		//spec.setName("Any");
+		//spec.setCapacity(null);
+		//spec.setSpecimenTypeCollection(null);
+		
+		//spec.setId(new Long(1));
+		//System.out.println(" List of TissueSpecimen objects::  " + results);
+		try 
+		{
+			List resultList = appService.search(SpecimenArrayType.class, spec);
+			System.out.println(" List of SpecimenArrayType objects::  " + resultList);
+			for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) 
+			{
+				SpecimenArrayType returneddepartment = (SpecimenArrayType) resultsIterator.next();
+				System.out.println(returneddepartment.getName());
+				System.out.println(returneddepartment.getId().toString());
+			}
+		} 
+		catch (Exception e) 
+		{
+			Logger.out.error(e);
+		}
+    }
+    */
+    
+    ////////////////// --- End Search operation
+/*	private void updateObjects(int id)
+	{
+				APIDemo api = new APIDemo();
+				Object obj = api.initCancerResearchGroup();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initDepartment();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initBioHazard();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initInstitution();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initSite();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initStorageType();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initSpecimenArrayType();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initStorageContainer();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initUser();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initParticipant();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initCollectionProtocol();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initSpecimen();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initSpecimenCollectionGroup();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initDistribution();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initDistributionProtocol();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initCollectionProtocolRegistration();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+				obj = api.initSpecimenArray();
+				AbstractDomainObject domainObject = setId(obj,new Long(1)) ;
+				appService.updateObject(domainObject);
+
+	}
+
+	private AbstractDomainObject setId(Object obj,Long id)
+	{
+		AbstractDomainObject domainObject = (AbstractDomainObject) obj;
+		domainObject.setId(id);
+		return domainObject;
+	}*/
+
+	 private static void setLogger(Object object)
+	{
+			Logger.out = org.apache.log4j.Logger.getLogger(object.getClass());
+	}
+
+}
+
+
