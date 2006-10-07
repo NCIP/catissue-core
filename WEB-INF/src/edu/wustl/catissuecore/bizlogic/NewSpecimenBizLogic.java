@@ -49,11 +49,8 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
-import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -109,7 +106,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			}
 			catch (DAOException daoException)
 			{
-				String message = " for Specimen in column " + parentSpecimenId;
+				String message = " (This message is for Specimen number " + parentSpecimenId + ")";
 				daoException.setSupportingMessage(message);
 				throw daoException;
 			}
@@ -133,53 +130,10 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				catch (DAOException daoException)
 				{
 					int j = i + 1;
-					String message = " for Derived Specimen " + j + " of Parent Specimen in column " + parentSpecimenId;
+					String message = " (This message is for Derived Specimen " + j + " of Parent Specimen number " + parentSpecimenId + ")";
 					daoException.setSupportingMessage(message);
 					throw daoException;
 				}
-			}
-		}
-	}
-
-	public final void insertMultipleSpecimen(Object obj, SessionDataBean sessionDataBean, int daoType) throws BizLogicException,
-			UserNotAuthorizedException
-	{
-		AbstractDAO dao = DAOFactory.getInstance().getDAO(daoType);
-		try
-		{
-			dao.openSession(sessionDataBean);
-			validate(obj, dao, Constants.ADD);
-			insert(obj, dao, sessionDataBean);
-			dao.commit();
-		}
-		catch (DAOException ex)
-		{
-			String errMsg = formatException(ex.getWrapException(), obj, "Inserting");
-			if (errMsg == null)
-			{
-				errMsg = ex.getMessage();
-			}
-			try
-			{
-				dao.rollback();
-			}
-			catch (DAOException daoEx)
-			{
-				throw new BizLogicException(daoEx.getMessage(), daoEx);
-			}
-			Logger.out.debug("Error in insert");
-			throw new BizLogicException(errMsg, ex);
-		}
-		finally
-		{
-			try
-			{
-				dao.closeSession();
-			}
-			catch (DAOException daoEx)
-			{
-				//TODO ERROR Handling
-				throw new BizLogicException();
 			}
 		}
 	}
@@ -228,11 +182,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 
 			Set protectionObjects = new HashSet();
-
-			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
-			specimen.getStorageContainer();
-			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true);
 			specimen.setLineage(Constants.NEW_SPECIMEN);
+			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
+			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true);
 			dao.insert(specimen, sessionDataBean, true, true);
 			protectionObjects.add(specimen);
 
@@ -240,7 +192,6 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			{
 				protectionObjects.add(specimen.getSpecimenCharacteristics());
 			}
-
 			Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 
 			if (externalIdentifierCollection != null)
@@ -251,7 +202,6 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 					exId.setName(null);
 					exId.setValue(null);
-
 					externalIdentifierCollection.add(exId);
 				}
 
@@ -265,34 +215,30 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			}
 
 			//Mandar : 17-july-06 : autoevents start
-			Logger.out.debug("17-july-06: 1 ");
 			Collection specimenEventsCollection = specimen.getSpecimenEventCollection();
 			Iterator specimenEventsCollectionIterator = specimenEventsCollection.iterator();
-			Logger.out.debug("specimenEventsCollection.size() : " + specimenEventsCollection.size());
 			while (specimenEventsCollectionIterator.hasNext())
 			{
-				Logger.out.debug("17-july-06: 2 ");
+				
 				Object eventObject = specimenEventsCollectionIterator.next();
 
 				if (eventObject instanceof CollectionEventParameters)
 				{
 					CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
 					collectionEventParameters.setSpecimen(specimen);
-					Logger.out.debug("17-july-06: 3 ");
 					dao.insert(collectionEventParameters, sessionDataBean, true, true);
-					Logger.out.debug("17-july-06: 4 ");
+				
 				}
 				else if (eventObject instanceof ReceivedEventParameters)
 				{
 					ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
 					receivedEventParameters.setSpecimen(specimen);
-					Logger.out.debug("17-july-06: 3 ");
-					dao.insert(receivedEventParameters, sessionDataBean, true, true);
-					Logger.out.debug("17-july-06: 4 ");
+									dao.insert(receivedEventParameters, sessionDataBean, true, true);
+					
 				}
 
 			}
-			Logger.out.debug("17-july-06: Events Collection inserted");
+		
 			//Mandar : 17-july-06 : autoevents end
 
 			//Inserting data for Authorization
@@ -660,6 +606,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean, boolean isCollectionGroupName)
 			throws DAOException, SMException
 	{
+		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		//Load & set Specimen Collection Group if present
 		if (specimen.getSpecimenCollectionGroup() != null)
 		{
@@ -698,8 +645,11 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 				// check for closed Parent Specimen
 				checkStatus(dao, parentSpecimen, "Parent Specimen");
-
-				specimen.setParentSpecimen(parentSpecimen);
+				
+				specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
+				specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
+				specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
+				specimen.setLineage(Constants.DERIVED_SPECIMEN);
 			}
 		}
 
@@ -1207,7 +1157,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			catch (DAOException daoException)
 			{
 				String message = daoException.getMessage();
-				message += " for Specimen in column " + specimen.getId();
+				message += " (This message is for Specimen number " + specimen.getId() + ")";
 				daoException.setMessage(message);
 				throw daoException;
 			}
@@ -1232,7 +1182,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				{
 					int j = i + 1;
 					String message = daoException.getMessage();
-					message += " for Derived Specimen " + j + " of Parent Specimen in column " + specimen.getId();
+					message += " (This message is for Derived Specimen " + j + " of Parent Specimen number " + specimen.getId()+")";
 					daoException.setMessage(message);
 					throw daoException;
 				}
