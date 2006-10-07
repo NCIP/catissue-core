@@ -65,8 +65,9 @@ public abstract class SpecimenEventParameters extends EventParameters implements
 		
 		//Temporary fix.
 		if(abstractForm.isAddOperation())
-				specimen = new CellSpecimen();
-		
+		{
+			//specimen = new CellSpecimen();
+		}
 		SpecimenEventParametersForm specimenEventParametersForm = (SpecimenEventParametersForm) abstractForm;
 		Logger.out.debug("specimenEventParametersForm.getSpecimenId()............................."+specimenEventParametersForm.getSpecimenId());
 		if(specimen!=null)
