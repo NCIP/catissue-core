@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -349,6 +350,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		//Parent Specimen 
 		parentSpecimen = new JTextField(10);
 		rbparentSpecimen = new JRadioButton();
+		rbparentSpecimen.setEnabled(false );		//	temporarily disabling since issue in Map Data Parser after discussing  Santosh 
 		parentSpecimenPanel = new JPanel();
 		parentSpecimen.setEnabled(false);
 		
@@ -443,7 +445,9 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		ComboBoxHandler comboBoxHandler = new ComboBoxHandler(table);
 		MapButtonHandler mapButtonHandler = new MapButtonHandler(table);
 		ButtonHandler buttonHandler = new ButtonHandler(table);
-		BaseFocusHandler baseFocusHandler = new BaseFocusHandler(table);
+		
+	//Mandar : 07Oct06 : commented due to problems in fetching selected row and column in focuslost event 
+	//	BaseFocusHandler baseFocusHandler = new BaseFocusHandler(table);
 		CollectionGroupComboBoxHandler collectionGroupComboBoxHandler = new CollectionGroupComboBoxHandler(table);
 		
 		//Specimen Collection Group
@@ -454,15 +458,15 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		//Parent Specimen 
 		parentSpecimen.addActionListener(textHandler);
 		rbparentSpecimen.addItemListener(parentSpecimenItemHandler);
-		parentSpecimen.addFocusListener(baseFocusHandler);
+//		parentSpecimen.addFocusListener(baseFocusHandler);
 		
 		// Label
 		label.addActionListener(textHandler);
-		label.addFocusListener(baseFocusHandler);
+//		label.addFocusListener(baseFocusHandler);
 		
 		// Barcode
 		barCode.addActionListener(textHandler);
-		barCode.addFocusListener(baseFocusHandler);
+//		barCode.addFocusListener(baseFocusHandler);
 
 		//Specimen Class
 		classList.addActionListener(classComboBoxHandler);
@@ -481,11 +485,11 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		
 		// Quantity
 		quantity.addActionListener(textHandler);
-		quantity.addFocusListener(baseFocusHandler);
+//		quantity.addFocusListener(baseFocusHandler);
 
 		// Concentration
 		concentration.addActionListener(textHandler);
-		concentration.addFocusListener(baseFocusHandler);
+//		concentration.addFocusListener(baseFocusHandler);
 		
 		//For Storage Location
 		mapButton.addActionListener(mapButtonHandler);
@@ -1057,8 +1061,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 			deriveButton.setEnabled(false);
 			mapButton.setEnabled(false); 
 		}
-		deriveButton.repaint() ;
-		mapButton.repaint() ; 
-		
+		SwingUtilities.updateComponentTreeUI(deriveButton);
+		SwingUtilities.updateComponentTreeUI(mapButton);
 	}
 }
