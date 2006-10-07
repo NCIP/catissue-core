@@ -415,7 +415,18 @@
 			String pos1StyleId = "customListBox_" + rowNumber + "_1";
 			String pos2StyleId = "customListBox_" + rowNumber + "_2";
 
-			String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=" + containerStyleId + "&amp;xDimStyleId=" + pos1StyleId + "&amp;yDimStyleId=" + pos2StyleId + "','name','810','320','yes');return false";
+			String className = form.getSpecimenClass();
+			if (className==null)
+				className="";
+			String collectionProtocolId =form.getSpCollectionGroupId()+"";
+			if (collectionProtocolId==null)
+				collectionProtocolId="";
+		
+			String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=" + containerStyleId + "&amp;xDimStyleId=" + pos1StyleId + "&amp;yDimStyleId=" + pos2StyleId
+				+ "&amp;" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
+				+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
+
+			String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
 	%>
 	<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 		<tr>
