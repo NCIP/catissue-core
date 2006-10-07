@@ -160,7 +160,7 @@
 	<!-- Create the Applet JAR Ends-->
 
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="build_war" depends="init, compile, build_catissue_applet_jar, unpack_cacore_war">
+	<target name="build_war" depends="init, compile, unpack_cacore_war">
 		<delete file="catissuecore.war" />
 		
 		<!-- Here duplicate="preserver" is used skip copying duplicate-->
@@ -419,7 +419,7 @@
 	
  <!-- Create the Applet JAR Begins-->
 
-    <target name="build_catissue_applet_jar" depends="compile, build_catissue_applet_compile">
+    <target name="build_catissue_applet_jar" depends="build_catissue_applet_compile">
         <mkdir dir="${catissue.applet.dir}"/>
         <delete>
             <fileset dir="${catissue.applet.dir}">
@@ -450,10 +450,11 @@
 	
 	<!-- compilation using jdk1.3 -->
 	 <target name="build_catissue_applet_compile" depends="init">
-        <javac destdir="${target.dir}" includeAntRuntime="false" fork="yes" executable="D:/jdk1.3/bin/javac" compiler="javac1.3">
+        <javac destdir="${target.dir}" includeAntRuntime="false" fork="yes" executable="C:/jdk1.3/bin/javac" compiler="javac1.3">
             <src path="${src.dir}"/>
             <include name="**/edu/wustl/catissuecore/applet/**" />
             <include name="**/edu/wustl/catissuecore/util/global/Constants.java" />
+        	<include name="**/edu/wustl/common/util/global/Validator.java" />
             <classpath>
               <fileset dir="${lib.dir}">
                   <include name="*.jar"/>
