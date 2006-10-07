@@ -1160,16 +1160,25 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
 		}
-
-		Long storageContainerId = specimen.getStorageContainer().getId();
-		Integer xPos = specimen.getPositionDimensionOne();
-		Integer yPos = specimen.getPositionDimensionTwo();
-
-		if (storageContainerId == null || xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
+		
+		/**
+		 *  If specimen is virtually located, then in that case storage container is being set null explicitly in Specimen
+		 *  domain object.Hence to avoid NullPointerException here check null of container is required.
+		 *  @author jitendra_agrawal  
+		 */
+		if (specimen.getStorageContainer() != null)
 		{
-			throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
-					.getValue("specimen.positionInStorageContainer")));
+			Long storageContainerId = specimen.getStorageContainer().getId();
+			Integer xPos = specimen.getPositionDimensionOne();
+			Integer yPos = specimen.getPositionDimensionTwo();
+	
+			if (storageContainerId == null || xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
+			{
+				throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
+						.getValue("specimen.positionInStorageContainer")));
+			}
 		}
+		
 	}
 
 	/**
