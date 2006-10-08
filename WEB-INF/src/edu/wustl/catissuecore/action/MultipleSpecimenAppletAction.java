@@ -361,7 +361,18 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 			{
 				throw new Exception(ApplicationProperties.getValue("protocol.class.errMsg") + " for Specimen number " + i);
 			}
-
+			
+			String quantityKey = AppletConstants.SPECIMEN_PREFIX + i + "_" + "Quantity_value";
+			String quantityValue = (String) specimenMap.get(quantityKey);
+			try
+			{
+				Long.parseLong(quantityValue);
+			}
+			catch (NumberFormatException e)
+			{
+				throw new Exception("Please enter valid Quantity for Specimen number " + i);
+			}
+		
 			classMap.put(String.valueOf(i), classValue);
 
 			if (!classValue.equals("Molecular"))
