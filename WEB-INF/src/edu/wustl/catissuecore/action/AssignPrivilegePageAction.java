@@ -28,14 +28,19 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AssignPrivilegesForm;
+import edu.wustl.catissuecore.bizlogic.AssignPrivilegePageBizLogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
@@ -163,6 +168,8 @@ public class AssignPrivilegePageAction extends BaseAction
             {
                 Logger.out.debug("Object Type.............."+privilegesForm.getObjectType());
                 Set recordIds = new HashSet();
+                List recordNames = new ArrayList();              
+                IBizLogic bizLogic = new DefaultBizLogic();                
             	if (privilegesForm.getObjectType()!=null)
             	{
 					List subclassList = HibernateMetaData.getSubClassList(privilegesForm.getObjectType());
@@ -172,11 +179,16 @@ public class AssignPrivilegePageAction extends BaseAction
 					for(int i =0;subclassIt.hasNext();i++)
 					{
 						objects[i+1] = (String) subclassIt.next();
-					}
+					}					
 					recordIds = SecurityManager.getInstance(AssignPrivilegePageAction.class).getObjectsForAssignPrivilege(String.valueOf(sessionData.getCsmUserId()),objects,privilegeName);
+					
+					AssignPrivilegePageBizLogic assignPrivilegePageBizLogic = (AssignPrivilegePageBizLogic)AbstractBizLogicFactory.getBizLogic(
+							ApplicationProperties.getValue("app.bizLogicFactory"),
+								"getBizLogic", Constants.ASSIGN_PRIVILEGE_FORM_ID);			  
+					
+					recordNames = assignPrivilegePageBizLogic.getRecordNames(recordIds,privilegesForm);
             	}
-            	
-            	request.setAttribute(Constants.RECORD_IDS, recordIds);
+            	request.setAttribute(Constants.RECORD_IDS, recordNames);
 			}
             catch (ClassNotFoundException e1) 
 			{
