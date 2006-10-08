@@ -173,7 +173,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 				 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
 				 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 				 */
-				ApiSearchUtil.setSpecimenArrayContentDefault(specimenArrayContent);
+				//ApiSearchUtil.setSpecimenArrayContentDefault(specimenArrayContent);
 				//End:- Change for API Search 
 				
 				specimen = getSpecimen(dao, specimenArrayContent);
