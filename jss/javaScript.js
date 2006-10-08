@@ -449,7 +449,7 @@ function deleteExternalIdentifiers()
 function submitEvents() 
 {
   var form =  document.forms[0];
-  form.action =  form.action + "?method=submitEvents&operation=add";
+  form.action =  form.action + "?method=submitEvents&operation=addMultipleSpecimen";
   form.submit();
 }
 function deleteBioHazards()
