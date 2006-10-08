@@ -104,7 +104,7 @@
 			{				
 				String labelKey = "value(SpecimenArray:" + i + "_label)";
 				String barKey = "value(SpecimenArray:" + i + "_barcode)";
-				String containerKey = "value(SpecimenArray:" + i + "_StorageContainer_id)";
+				String containerKey = "value(SpecimenArray:" + i + "_StorageContainer_name)";
 				String pos1Key = "value(SpecimenArray:" + i + "_positionDimensionOne)";
 				String pos2Key = "value(SpecimenArray:" + i + "_positionDimensionTwo)";
 				
