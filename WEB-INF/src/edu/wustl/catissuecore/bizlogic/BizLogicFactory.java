@@ -165,6 +165,9 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     		case Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID:
     			bizLogic = new SpecimenArrayAliquotsBizLogic();
     			break;
+    		case Constants.ASSIGN_PRIVILEGE_FORM_ID:
+    			bizLogic = new AssignPrivilegePageBizLogic();
+				break;
 //   			 Added by Ashish
  /*   		case Constants.DEPARTMENT_FORM_ID :
     			bizLogic = new DepartmentBizLogic();
