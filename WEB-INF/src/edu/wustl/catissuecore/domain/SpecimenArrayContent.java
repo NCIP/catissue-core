@@ -48,7 +48,7 @@ public class SpecimenArrayContent extends AbstractDomainObject
      * @see edu.wustl.common.domain.AbstractDomainObject#getId()
      * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native" 
-     * @hibernate.generator-param name="sequence" value="CATISSUE_SPECIMEN_ARRAY_CONTENT_SEQ"
+     * @hibernate.generator-param name="sequence" value="CATISSUE_SPECI_ARRAY_CNTNT_SEQ"
      */
     public Long getId()
     {
