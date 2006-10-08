@@ -62,12 +62,14 @@ public abstract class SpecimenEventParameters extends EventParameters implements
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
 	{
 		super.setAllValues(abstractForm);
-		
+			
+		// TODO need to discuss why CellSpecimen is created -- Santosh
 		//Temporary fix.
 		if(abstractForm.isAddOperation())
 		{
-			//specimen = new CellSpecimen();
+			specimen = new CellSpecimen();
 		}
+		
 		SpecimenEventParametersForm specimenEventParametersForm = (SpecimenEventParametersForm) abstractForm;
 		Logger.out.debug("specimenEventParametersForm.getSpecimenId()............................."+specimenEventParametersForm.getSpecimenId());
 		if(specimen!=null)
