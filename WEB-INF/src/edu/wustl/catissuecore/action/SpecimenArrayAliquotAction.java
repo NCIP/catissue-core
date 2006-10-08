@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.SpecimenArrayAliquotForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.SpecimenArrayAliquotsBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
@@ -250,13 +251,18 @@ public class SpecimenArrayAliquotAction extends BaseAction
 			request.setAttribute(Constants.STORAGE_TYPE_ID,specimenArray.getSpecimenArrayType().getId());
 			
 			Map aliquotMap = form.getSpecimenArrayAliquotMap();
+			
+			SpecimenArrayAliquotsBizLogic aliquotBizLogic = (SpecimenArrayAliquotsBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID);
+			long nextAvailablenumber = aliquotBizLogic.getNextAvailableNumber("CATISSUE_SPECIMEN_ARRAY");
+			
 			/**
 			 *  Putting the default label values in the AliquotMap 
 			 */
 			for (int i = 1; i <= aliquotCount; i++)
 			{				
+				
 				String labelKey = "SpecimenArray:" + i + "_label";
-				String aliquotLabel = specimenArrayLabel + "_" + i;
+				String aliquotLabel = specimenArrayLabel + "_" + (nextAvailablenumber + i - 1);
 				aliquotMap.put(labelKey, aliquotLabel);
 			}
 
