@@ -44,11 +44,13 @@ public class ParticipantLookupLogic implements LookupLogic
 	private static final int pointsForRacePartial = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_RACE_PARTIAL));
 	private static final int pointsForGenderExact = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_GENDER_EXACT));
 	private static final int bonusPoints = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_BONUS));
-	private static final int cutoffPoints = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_CUTOFF));
 	private static final int matchCharactersForLastName = Integer.parseInt(XMLPropertyHandler
 			.getValue(Constants.PARTICIPANT_MATCH_CHARACTERS_FOR_LAST_NAME));
-	private static final int totalPoints = pointsForFirstNameExact + pointsForMiddleNameExact + pointsForLastNameExact + pointsForDOBExact
-			+ pointsForSSNExact + pointsForGenderExact + pointsForRaceExact;
+	private static final int cutoffPointsFromProperties = Integer.parseInt(XMLPropertyHandler.getValue(Constants.PARTICIPANT_LOOKUP_CUTOFF));
+	private static final int totalPointsFromProperties = pointsForFirstNameExact + pointsForMiddleNameExact + pointsForLastNameExact
+			+ pointsForDOBExact + pointsForSSNExact + pointsForGenderExact + pointsForRaceExact;
+	private int cutoffPoints;
+	private int totalPoints;
 
 	/**
 	 * This function first retrieves all the participants present in the PARTICIPANT table. Then it checks 
@@ -70,12 +72,17 @@ public class ParticipantLookupLogic implements LookupLogic
 		// Getting the participant object created by user
 		Participant participant = (Participant) participantParams.getObject();
 		
-        // if cutoff is greater than total points, throw exception
-		if (cutoffPoints > totalPoints)
+		// if cutoff is greater than total points, throw exception
+		if (cutoffPoints > totalPointsFromProperties)
 		{
 			throw new Exception(ApplicationProperties.getValue("errors.lookup.cutoff"));
 		}
 		
+		// get total points depending on Participant object created by user
+		totalPoints = calculateTotalPoints(participant);
+		
+		// adjust cutoffPoints as per new total points 
+		cutoffPoints = cutoffPointsFromProperties * totalPoints / totalPointsFromProperties;
 		List listOfParticipants = participantParams.getListOfParticipants();
 
 		// In case List of participants is null or empty, return the Matching Participant List as null.
@@ -89,6 +96,46 @@ public class ParticipantLookupLogic implements LookupLogic
 
 		return participants;
 
+	}
+
+	/**
+	 *  This function calculates the total based on values entered by user
+	 * @param participant - participant object
+	 * @return - cutoff points
+	 */
+	private int calculateTotalPoints(Participant participant)
+	{
+		int totalPointsForParticipant = 0;
+		if (participant.getBirthDate() != null)
+		{
+			totalPointsForParticipant += pointsForDOBExact;
+		}
+		if (participant.getFirstName() != null && !participant.getFirstName().trim().equals(""))
+		{
+			totalPointsForParticipant += pointsForFirstNameExact;
+		}
+		if (participant.getMiddleName() != null && !participant.getMiddleName().trim().equals(""))
+		{
+			totalPointsForParticipant += pointsForMiddleNameExact;
+		}
+		if (participant.getLastName() != null && !participant.getLastName().trim().equals(""))
+		{
+			totalPointsForParticipant += pointsForLastNameExact;
+		}
+		if (participant.getSocialSecurityNumber() != null && !participant.getSocialSecurityNumber().trim().equals(""))
+		{
+			totalPointsForParticipant += pointsForSSNExact;
+		}
+		if (participant.getGender() != null && !participant.getGender().trim().equals(""))
+		{
+			totalPointsForParticipant += pointsForGenderExact;
+		}
+		if (participant.getRaceCollection() != null && participant.getRaceCollection().isEmpty() == false)
+		{
+			totalPointsForParticipant += pointsForRaceExact;
+		}
+
+		return totalPointsForParticipant;
 	}
 
 	/**
