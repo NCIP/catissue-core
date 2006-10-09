@@ -140,12 +140,12 @@ public interface AppletConstants
 	
 	//Constants for buttons
 	public static final String MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS = "ExternalIdentifiers";
-	public static final String MULTIPLE_SPECIMEN_BIOHAZARDS = "BioHazards";
+	public static final String MULTIPLE_SPECIMEN_BIOHAZARDS = "Biohazards";
 	public static final String MULTIPLE_SPECIMEN_EVENTS = "Events";
 	public static final String MULTIPLE_SPECIMEN_DERIVE = "Derive";
 	public static final String MULTIPLE_SPECIMEN_MAP = "Map";
-	public static final String MULTIPLE_SPECIMEN_COMMENTS = "Add Comments";
-	public static final String MULTIPLE_SPECIMEN_ADD_SPECIMEN = "Add Specimen";
+	public static final String MULTIPLE_SPECIMEN_COMMENTS = "Comments";
+	public static final String MULTIPLE_SPECIMEN_ADD_SPECIMEN = "More";
 	public static final String MULTIPLE_SPECIMEN_COPY = "Copy";
 	public static final String MULTIPLE_SPECIMEN_PASTE = "Paste";
 	public static final String MULTIPLE_SPECIMEN_MANDATORY = "*";
