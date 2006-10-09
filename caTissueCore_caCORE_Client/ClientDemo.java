@@ -102,9 +102,14 @@ public class ClientDemo
 			try 
 			{
 				ClientDemo testClient = new ClientDemo();
-				//testClient.createObjects();
-				testClient.serachObject();
-			} 
+				testClient.createObjects();
+				//testClient.serachObject();
+/*				testClient.testAddInstitution();
+				testClient.testAddDepartment();
+				testClient.testAddCancerResearchGroup();
+				testClient.testAddBioHazard();
+				testClient.testAddUser();
+*/			}
 			catch (RuntimeException e2) 
 			{
 				e2.printStackTrace();
@@ -133,7 +138,6 @@ public class ClientDemo
 			 	   obj = api.initCollectionProtocolEvent();
 			 	   CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent) appService.createObject(obj);
 			 	   dataModelObjectMap.put("CollectionProtocolEvent",collectionProtocolEvent);
-			 	   
 			 	    
 					testAddInstitution();
 					testAddDepartment();
@@ -144,18 +148,18 @@ public class ClientDemo
 					testAddCollectionProtocol();
 					testAddStorageType();
 					testAddCollectionProtocolRegistration();
-					
-					//testAddStorageContainer();
-					//testAddDistributionProtocol();
+					testAddStorageContainer();
+					/*
+					testAddDistributionProtocol();					
 					testAddSpecimenArrayType();
-						
+					
 					testAddParticipant();
 					// participant registration not found
-					
-					testAddSpecimenCollectionGroup();
+					//testAddSpecimenCollectionGroup();
 					testAddSpecimen();
-					//testAddDistribution();
+					testAddDistribution();
 					testAddSpecimenArray();
+					*/
 		}
 		catch(Exception ex)
 		{
@@ -374,6 +378,7 @@ public class ClientDemo
 		try
 		{
 			StorageContainer storageContainerObj =(StorageContainer) api.initStorageContainer();
+			
 	    	setLogger(storageContainerObj);
 			storageContainerObj =  (StorageContainer) appService.createObject(storageContainerObj);
 			dataModelObjectMap.put("StorageContainer",storageContainerObj);

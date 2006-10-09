@@ -1,13 +1,7 @@
 
-import java.text.ParseException;
-
 import java.util.Collection;
-
 import java.util.HashSet;
 
-import org.apache.log4j.PropertyConfigurator;
-
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
@@ -17,13 +11,10 @@ import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Container;
-
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
-
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -40,17 +31,8 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
-
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.util.Utility;
-import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Constants;
-import edu.wustl.common.util.global.Variables;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author ashish_gupta
@@ -142,13 +124,13 @@ public class APIDemo
 	 * @param sessionDataBean
 	 * @param obj
 	 * @throws Exception
-	 */
 	private void addData(BizLogicFactory bizLogicFactory, SessionDataBean sessionDataBean,
 			Object obj) throws Exception
 	{
 		IBizLogic bizLogic = bizLogicFactory.getBizLogic(obj.getClass().getName());
 		bizLogic.insert(obj, sessionDataBean, Constants.HIBERNATE_DAO);
 	}
+	 */
 
 	/**
 	 * @return Department
@@ -156,7 +138,7 @@ public class APIDemo
 	public Department initDepartment()
 	{
 		Department dept = new Department();
-		dept.setName("trial 2");
+		dept.setName("dt" + UniqueKeyGeneratorUtil.getUniqueKey());
 		return dept;
 	}
 
@@ -167,7 +149,7 @@ public class APIDemo
 	{
 		Biohazard bioHazard = new Biohazard();
 		bioHazard.setComments("NueroToxicProtein");
-		bioHazard.setName("testBio11");
+		bioHazard.setName("bh" + UniqueKeyGeneratorUtil.getUniqueKey());
 		bioHazard.setType("Toxic");
 		return bioHazard;
 	}
@@ -178,7 +160,7 @@ public class APIDemo
 	public CancerResearchGroup initCancerResearchGroup()
 	{
 		CancerResearchGroup cancerResearchGroup = new CancerResearchGroup();
-		cancerResearchGroup.setName("SitemanCRG11");//Siteman Cancer Research Group
+		cancerResearchGroup.setName("crg" + UniqueKeyGeneratorUtil.getUniqueKey());
 		return cancerResearchGroup;
 	}
 
@@ -188,7 +170,7 @@ public class APIDemo
 	public Institution initInstitution()
 	{
 		Institution institutionObj = new Institution();
-		institutionObj.setName("Washington University School of Medicine1");//Washington University School of Medicine
+		institutionObj.setName("inst" + UniqueKeyGeneratorUtil.getUniqueKey());
 		return institutionObj;
 	}
 
@@ -198,10 +180,10 @@ public class APIDemo
 	public User initUser()
 	{
 		User userObj = new User();
-		userObj.setEmailAddress("admin123@admin1.com");
-		userObj.setLoginName("persistent12345");
-		userObj.setLastName("admin1");
-		userObj.setFirstName("admin12");
+		userObj.setEmailAddress(UniqueKeyGeneratorUtil.getUniqueKey()+ "@admin.com");
+		userObj.setLoginName(userObj.getEmailAddress());
+		userObj.setLastName("last" + UniqueKeyGeneratorUtil.getUniqueKey());
+		userObj.setFirstName("name" + UniqueKeyGeneratorUtil.getUniqueKey());
 
 		Address address = new Address();
 		address.setStreet("Main street");
@@ -234,6 +216,7 @@ public class APIDemo
 		userObj.setPageOf(Constants.PAGEOF_SIGNUP);
 		userObj.setActivityStatus("Active");
 		userObj.setCsmUserId(new Long(1));
+		userObj.setFirstTimeLogin(Boolean.valueOf(false));
 		return userObj;
 	}
 
@@ -245,20 +228,21 @@ public class APIDemo
 		StorageType storageTypeObj = new StorageType();
 		Capacity capacity = new Capacity();
 
-		storageTypeObj.setName("Freezer1");
+		storageTypeObj.setName("st" + UniqueKeyGeneratorUtil.getUniqueKey());
 		storageTypeObj.setDefaultTempratureInCentigrade(new Double(-30));
 		storageTypeObj.setOneDimensionLabel("label 1");
 		storageTypeObj.setTwoDimensionLabel("label 2");
 
-		capacity.setOneDimensionCapacity(new Integer(1));
-		capacity.setTwoDimensionCapacity(new Integer(2));
+		capacity.setOneDimensionCapacity(new Integer(3));
+		capacity.setTwoDimensionCapacity(new Integer(3));
 		storageTypeObj.setCapacity(capacity);
-		storageTypeObj.setId(new Long(20));
+		//storageTypeObj.setId(new Long(20));
 
 		Collection holdsStorageTypeCollection = new HashSet();
 		holdsStorageTypeCollection.add(storageTypeObj);
 
 		storageTypeObj.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
+		storageTypeObj.setActivityStatus("Active");
 
 		Collection holdsSpecimenClassCollection = new HashSet();
 		holdsSpecimenClassCollection.add("Tissue");
@@ -274,7 +258,7 @@ public class APIDemo
 	public SpecimenArrayType initSpecimenArrayType()
 	{
 		SpecimenArrayType specimenArrayType = new SpecimenArrayType();
-		specimenArrayType.setName("MolecularArrayType11");
+		specimenArrayType.setName("sat" + UniqueKeyGeneratorUtil.getUniqueKey());
 		specimenArrayType.setSpecimenClass("Molecular");
 
 		Collection specimenTypeCollection = new HashSet();
@@ -295,7 +279,7 @@ public class APIDemo
 	public StorageContainer initStorageContainer()
 	{
 		StorageContainer storageContainer = new StorageContainer();
-		storageContainer.setName("New Container");
+		storageContainer.setName("sc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
 		StorageType storageType = (StorageType) ClientDemo.dataModelObjectMap.get("StorageType");
 		/*	
@@ -309,10 +293,10 @@ public class APIDemo
 		*/
 		storageContainer.setSite(site);
 
-		Integer conts = new Integer(0);
+		Integer conts = new Integer(1);
 		storageContainer.setNoOfContainers(conts);
 		storageContainer.setTempratureInCentigrade(new Double(-30));
-		storageContainer.setBarcode("barcode1");
+		storageContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
 
 		Capacity capacity = new Capacity();
 		capacity.setOneDimensionCapacity(new Integer(1));
@@ -360,8 +344,8 @@ public class APIDemo
 //		userObj.setId(new Long(1));
 		User userObj = (User) ClientDemo.dataModelObjectMap.get("User");
 
-		siteObj.setEmailAddress("admin1@admin1.com");
-		siteObj.setName("Washington University School of Medicine12345");
+		siteObj.setEmailAddress("admin@admin.com");
+		siteObj.setName("sit" + UniqueKeyGeneratorUtil.getUniqueKey());
 		siteObj.setType("Laboratory");
 		siteObj.setActivityStatus("Active");
 		siteObj.setCoordinator(userObj);
@@ -376,7 +360,6 @@ public class APIDemo
 		addressObj.setStreet("4939 Children's Place");
 		addressObj.setZipCode("63110");
 		siteObj.setAddress(addressObj);
-		System.out.println("Site ... in APIDEmo");
 		return siteObj;
 	}
 
@@ -386,9 +369,9 @@ public class APIDemo
 	public Participant initParticipant()
 	{
 		Participant participant = new Participant();
-		participant.setLastName("Participant123333");
-		participant.setFirstName("Participant11111");
-		participant.setMiddleName("Participant122222");
+		participant.setLastName("last" + UniqueKeyGeneratorUtil.getUniqueKey());
+		participant.setFirstName("frst" + UniqueKeyGeneratorUtil.getUniqueKey());
+		participant.setMiddleName("mdl" + UniqueKeyGeneratorUtil.getUniqueKey());
 /*
 		try
 		{
@@ -412,7 +395,7 @@ public class APIDemo
 		participant.setRaceCollection(raceCollection);
 		participant.setActivityStatus("Active");
 		participant.setEthnicity("Hispanic or Latino");
-		participant.setSocialSecurityNumber("222-22-2222");
+		participant.setSocialSecurityNumber(UniqueKeyGeneratorUtil.getUniqueKey());
 
 		Collection participantMedicalIdentifierCollection = new HashSet();
 		/*participantMedicalIdentifierCollection.add("Washington University School of Medicine");
@@ -436,7 +419,7 @@ public class APIDemo
 		collectionProtocol.setEndDate(null);
 		collectionProtocol.setEnrollment(null);
 		collectionProtocol.setIrbIdentifier("77777");
-		collectionProtocol.setTitle("Collection Protocol456");
+		collectionProtocol.setTitle("cp" + UniqueKeyGeneratorUtil.getUniqueKey());
 		collectionProtocol.setShortTitle("pc!");
 		/*
 		try
@@ -488,7 +471,6 @@ public class APIDemo
 	 */
 	public Specimen initSpecimen()
 	{
-		System.out.println("--- Start ---- ");
 		MolecularSpecimen molecularSpecimen = new MolecularSpecimen();
 
 //		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
@@ -496,26 +478,23 @@ public class APIDemo
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)ClientDemo.dataModelObjectMap.get("SpecimenCollectionGroup");
 		molecularSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 		
-		molecularSpecimen.setLabel("Specimen 123");
-		molecularSpecimen.setBarcode("");
+		molecularSpecimen.setLabel("spec" + UniqueKeyGeneratorUtil.getUniqueKey());
+		molecularSpecimen.setBarcode("bar" + UniqueKeyGeneratorUtil.getUniqueKey());
 		molecularSpecimen.setType("DNA");
 		molecularSpecimen.setAvailable(new Boolean(true));
 		molecularSpecimen.setActivityStatus("Active");
-		System.out.println("--- Start ---- 2");
 //		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
 //		specimenCharacteristics.setTissueSide("Left");
 //		specimenCharacteristics.setTissueSite("Placenta");
 //		specimenCharacteristics.setId(new Long(1));
 		SpecimenCharacteristics specimenCharacteristics = (SpecimenCharacteristics)ClientDemo.dataModelObjectMap.get("SpecimenCharacteristics");
 		molecularSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
-		System.out.println("--- Start ---- 3");
 		molecularSpecimen.setPathologicalStatus("Malignant");
 
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(10));
 		molecularSpecimen.setQuantity(quantity);
 		molecularSpecimen.setAvailableQuantity(quantity);
-		System.out.println("--- Start ---- 4");
 		molecularSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
 		molecularSpecimen.setComments("");
 		// Is virtually located
@@ -523,17 +502,14 @@ public class APIDemo
 		molecularSpecimen.setPositionDimensionOne(null);
 		molecularSpecimen.setPositionDimensionTwo(null);
 		
-		System.out.println("--- Start ---- 5");
-		
 		Collection externalIdentifierCollection = new HashSet();
 		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
-		externalIdentifier.setName("Specimen 1 ext id");
+		externalIdentifier.setName("eid" + UniqueKeyGeneratorUtil.getUniqueKey());
 		externalIdentifier.setValue("11");
 		externalIdentifier.setSpecimen(molecularSpecimen);
 		
 		externalIdentifierCollection.add(externalIdentifier);
 		molecularSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
-		System.out.println("--- Start ---- 6");
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		collectionEventParameters.setComments("");
 //		User user = new User();
@@ -541,7 +517,6 @@ public class APIDemo
 	 //	collectionEventParameters.setId(new Long(0));
 		User user = (User)ClientDemo.dataModelObjectMap.get("User");
 		collectionEventParameters.setUser(user);
-		System.out.println("--- Start ---- 7");
 		/*
 		try
 		{
@@ -555,10 +530,8 @@ public class APIDemo
 			e1.printStackTrace();
 		}
 		*/
-		System.out.println("--- Start ---- 8");
 		collectionEventParameters.setContainer("No additive Vacutainer");
 		collectionEventParameters.setCollectionProcedure("Needle core biopsy");
-		System.out.println("--- Start ---- 9");
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		receivedEventParameters.setUser(user);
 		//receivedEventParameters.setId(new Long(0));
@@ -577,7 +550,6 @@ public class APIDemo
 		*/
 		receivedEventParameters.setReceivedQuality("acceptable");
 		receivedEventParameters.setComments("");
-		System.out.println("--- Start ---- 11");
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
 		specimenEventCollection.add(receivedEventParameters);
@@ -630,7 +602,7 @@ public class APIDemo
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)ClientDemo.dataModelObjectMap.get("CollectionProtocolRegistration");
 		specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 
-		specimenCollectionGroup.setName("Collection Protocol1_1_1.2");
+		specimenCollectionGroup.setName("scg" + UniqueKeyGeneratorUtil.getUniqueKey());
 
 		ClinicalReport clinicalReport = new ClinicalReport();
 		clinicalReport.setSurgicalPathologyNumber("");
@@ -668,7 +640,7 @@ public class APIDemo
 		distributedItemCollection.add(distributedItem);
 		distribution.setDistributedItemCollection(distributedItemCollection);
 
-		DistributionProtocol distributionProtocol = (DistributionProtocol) ClientDemo.dataModelObjectMap.get("DistributionProtocol");
+		//DistributionProtocol distributionProtocol = (DistributionProtocol) ClientDemo.dataModelObjectMap.get("DistributionProtocol");
 		
 		/*
 		= new DistributionProtocol();
@@ -676,6 +648,7 @@ public class APIDemo
 		distribution.setDistributionProtocol(distributionProtocol);
 		*/
 		Site toSite = (Site) ClientDemo.dataModelObjectMap.get("Site");
+		distribution.setToSite(toSite);
 		/*	
 		new Site();
 		toSite.setId(new Long(1));
@@ -717,7 +690,7 @@ public class APIDemo
 		principalInvestigator.setId(new Long(1));
 		*/
 		distributionProtocol.setPrincipalInvestigator(principalInvestigator);
-		distributionProtocol.setTitle("Distribution Protocol2");
+		distributionProtocol.setTitle("DP"+ UniqueKeyGeneratorUtil.getUniqueKey());
 		distributionProtocol.setShortTitle("DP1");
 		distributionProtocol.setIrbIdentifier("55555");
 		/*
@@ -797,8 +770,8 @@ public class APIDemo
 		*/
 		specimenArray.setSpecimenArrayType(specimenArrayType);
 		
-		specimenArray.setBarcode("barcode1");
-		specimenArray.setName("testSpecimenArray" + getUniqueId());
+		specimenArray.setBarcode("bar" + UniqueKeyGeneratorUtil.getUniqueKey());
+		specimenArray.setName("sa" + UniqueKeyGeneratorUtil.getUniqueKey()); 
 		
 		User createdBy = (User) ClientDemo.dataModelObjectMap.get("User");
 		/*
