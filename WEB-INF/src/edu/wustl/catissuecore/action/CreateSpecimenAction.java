@@ -55,8 +55,8 @@ public class CreateSpecimenAction extends SecureAction
 	/**
 	 * Overrides the execute method of Action class.
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		CreateSpecimenForm createForm = (CreateSpecimenForm) form;
 
@@ -87,73 +87,90 @@ public class CreateSpecimenAction extends SecureAction
 		 request.setAttribute(Constants.PAGEOF,pageOf);
 		 */
 
-		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
+		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance()
+				.getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
 
-		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
-				Constants.STORAGE_CONTAINER_FORM_ID);
+		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
+				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		Map containerMap = new HashMap();
 		Vector initialValues = null;
 		if (operation.equals(Constants.ADD))
 		{
-			String parentSpecimenLabel = createForm.getParentSpecimenLabel();
-			if(parentSpecimenLabel == null || parentSpecimenLabel.trim().equals("")) {
-				createForm.setParentSpecimenLabel(createForm.getLabel());
-				createForm.setLabel("");		
-			}
-			if ((createForm.getCheckedButton().equals("1")&&createForm.getParentSpecimenLabel() != null) || (createForm.getCheckedButton().equals("2")&& createForm.getParentSpecimenBarcode() != null))
+			//if this action bcos of delete external identifier then validation should not happen.
+			if (request.getParameter("button") == null)
 			{
-				String errorString = null;
-				String columnName = null;
-				Object columnValue = null;
-
-				// checks whether label or barcode is selected
-				if (createForm.getCheckedButton().equals("1"))
+				String parentSpecimenLabel = createForm.getParentSpecimenLabel();
+				if (parentSpecimenLabel == null || parentSpecimenLabel.trim().equals(""))
 				{
-					columnName = Constants.SYSTEM_LABEL;
-					columnValue = createForm.getParentSpecimenLabel().trim();
-					errorString = ApplicationProperties.getValue("quickEvents.specimenLabel");
+					createForm.setParentSpecimenLabel(createForm.getLabel());
+					createForm.setLabel("");
 				}
-				else
+				if ((createForm.getCheckedButton().equals("1") && createForm
+						.getParentSpecimenLabel() != null)
+						|| (createForm.getCheckedButton().equals("2") && createForm
+								.getParentSpecimenBarcode() != null))
 				{
-					columnName = Constants.SYSTEM_BARCODE;
-					columnValue = createForm.getParentSpecimenBarcode().trim();
-					errorString = ApplicationProperties.getValue("quickEvents.barcode");
-				}
+					String errorString = null;
+					String columnName = null;
+					Object columnValue = null;
 
-				List spList = dao.retrieve(Specimen.class.getName(), columnName, columnValue);
-
-				if (spList != null && !spList.isEmpty())
-				{
-					Specimen sp = (Specimen) spList.get(0);
-					long cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
-					String spClass = createForm.getClassName();
-					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0);
-					if(containerMap.isEmpty())
+					// checks whether label or barcode is selected
+					if (createForm.getCheckedButton().equals("1"))
 					{
-						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-						if (errors == null || errors.size() == 0)
+						columnName = Constants.SYSTEM_LABEL;
+						columnValue = createForm.getParentSpecimenLabel().trim();
+						errorString = ApplicationProperties.getValue("quickEvents.specimenLabel");
+					}
+					else
+					{
+						columnName = Constants.SYSTEM_BARCODE;
+						columnValue = createForm.getParentSpecimenBarcode().trim();
+						errorString = ApplicationProperties.getValue("quickEvents.barcode");
+					}
+
+					List spList = dao.retrieve(Specimen.class.getName(), columnName, columnValue);
+
+					if (spList != null && !spList.isEmpty())
+					{
+						Specimen sp = (Specimen) spList.get(0);
+						long cpId = sp.getSpecimenCollectionGroup()
+								.getCollectionProtocolRegistration().getCollectionProtocol()
+								.getId().longValue();
+						String spClass = createForm.getClassName();
+						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
+								spClass, 0);
+						if (containerMap.isEmpty())
+						{
+							ActionErrors errors = (ActionErrors) request
+									.getAttribute(Globals.ERROR_KEY);
+							if (errors == null || errors.size() == 0)
+							{
+								errors = new ActionErrors();
+							}
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+									"storageposition.not.available"));
+							saveErrors(request, errors);
+						}
+						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
+						request.setAttribute(Constants.SPECIMEN_CLASS_NAME, spClass);
+						;
+						initialValues = checkForInitialValues(containerMap);
+
+					}
+					else
+					{
+						ActionErrors errors = (ActionErrors) request
+								.getAttribute(Globals.ERROR_KEY);
+						if (errors == null)
 						{
 							errors = new ActionErrors();
 						}
-						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("storageposition.not.available"));
-						saveErrors(request,errors);
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+								"quickEvents.specimen.notExists", errorString));
+						saveErrors(request, errors);
 					}
-					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
-					request.setAttribute(Constants.SPECIMEN_CLASS_NAME,spClass);;
-					initialValues = checkForInitialValues(containerMap);
 
 				}
-				else
-				{
-					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-					if (errors == null)
-					{
-						errors = new ActionErrors();
-					}
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("quickEvents.specimen.notExists", errorString));
-					saveErrors(request, errors);
-				}
-
 			}
 		}
 		else
@@ -162,7 +179,8 @@ public class CreateSpecimenAction extends SecureAction
 			Integer id = new Integer(createForm.getStorageContainer());
 			String parentContainerName = "";
 			String valueField1 = "id";
-			List list = dao.retrieve(StorageContainer.class.getName(), valueField1, new Long(createForm.getStorageContainer()));
+			List list = dao.retrieve(StorageContainer.class.getName(), valueField1, new Long(
+					createForm.getStorageContainer()));
 			if (!list.isEmpty())
 			{
 				StorageContainer container = (StorageContainer) list.get(0);
@@ -180,16 +198,19 @@ public class CreateSpecimenAction extends SecureAction
 			containerMap.put(new NameValueBean(parentContainerName, id), pos1Map);
 
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
-			if (createForm.getStorageContainer() != null && !createForm.getStorageContainer().equals("-1"))
+			if (createForm.getStorageContainer() != null
+					&& !createForm.getStorageContainer().equals("-1"))
 			{
 				startingPoints[0] = createForm.getStorageContainer();
 
 			}
-			if (createForm.getPositionDimensionOne() != null && !createForm.getPositionDimensionOne().equals("-1"))
+			if (createForm.getPositionDimensionOne() != null
+					&& !createForm.getPositionDimensionOne().equals("-1"))
 			{
 				startingPoints[1] = createForm.getPositionDimensionOne();
 			}
-			if (createForm.getPositionDimensionTwo() != null && !createForm.getPositionDimensionTwo().equals("-1"))
+			if (createForm.getPositionDimensionTwo() != null
+					&& !createForm.getPositionDimensionTwo().equals("-1"))
 			{
 				startingPoints[2] = createForm.getPositionDimensionTwo();
 			}
@@ -208,15 +229,18 @@ public class CreateSpecimenAction extends SecureAction
 		 request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);*/
 
 		//Setting the specimen class list
-		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
+		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_SPECIMEN_CLASS, null);
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
 		//Setting the specimen type list
-		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE, null);
+		List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_SPECIMEN_TYPE, null);
 		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
 		//Setting biohazard list
-		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD, null);
+		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_NAME_BIOHAZARD, null);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
 
 		// get the Specimen class and type from the cde
@@ -276,7 +300,8 @@ public class CreateSpecimenAction extends SecureAction
 				createForm.setExternalIdentifier(map);
 				createForm.setExIdCounter(1);
 				createForm.setVirtuallyLocated(false);
-				containerMap = getContainerMap(createForm.getParentSpecimenId(), createForm.getClassName(), dao, scbizLogic);
+				containerMap = getContainerMap(createForm.getParentSpecimenId(), createForm
+						.getClassName(), dao, scbizLogic);
 				initialValues = checkForInitialValues(containerMap);
 			}
 		}
@@ -286,16 +311,19 @@ public class CreateSpecimenAction extends SecureAction
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
-	Map getContainerMap(String specimenId, String className, CreateSpecimenBizLogic dao, StorageContainerBizLogic scbizLogic) throws DAOException
+	Map getContainerMap(String specimenId, String className, CreateSpecimenBizLogic dao,
+			StorageContainerBizLogic scbizLogic) throws DAOException
 	{
 		Map containerMap = new HashMap();
 
-		List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(specimenId));
+		List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(
+				specimenId));
 
 		if (!spList.isEmpty())
 		{
 			Specimen sp = (Specimen) spList.get(0);
-			long cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
+			long cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+					.getCollectionProtocol().getId().longValue();
 			String spClass = className;
 			Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
 			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0);

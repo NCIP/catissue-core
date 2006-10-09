@@ -39,6 +39,7 @@ import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.util.MapDataParser;
 
 /**
  * CreateMultipleSpecimenAction initializes the fields in the Create Derived Specimen page of multiple specimen.
@@ -72,6 +73,17 @@ public class CreateMultipleSpecimenAction extends BaseAction
 				createForm.setType(request.getParameter("derivedSpecimenType"));
 			}
 		}
+		
+		List key = new ArrayList();
+		key.add("ExternalIdentifier:i_name");
+		key.add("ExternalIdentifier:i_value");
+
+		//Gets the map from ActionForm
+		Map externalIdMap = createForm.getExternalIdentifier();
+
+		//Calling DeleteRow of BaseAction class
+		MapDataParser.deleteRow(key, externalIdMap, request.getParameter("status"));
+		
 
 		//Gets the value of the operation parameter.
 		String derivedOperation = request.getParameter(Constants.DERIVED_OPERATION);

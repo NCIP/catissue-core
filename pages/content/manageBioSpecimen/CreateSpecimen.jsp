@@ -22,62 +22,62 @@
 <script src="runtime/formats/string.js"></script>
 <script src="runtime/formats/number.js"></script>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+
+<% 
+        String[] columnList = Constants.DERIVED_SPECIMEN_COLUMNS;
+		String operation = (String)request.getAttribute(Constants.OPERATION);
+		String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
+		boolean readOnlyValue=false,readOnlyForAll=false;
+
+		if(operation!=null && operation.equals(Constants.EDIT))
+		{
+			editViewButton="buttons."+Constants.VIEW;
+			formName = Constants.CREATE_SPECIMEN_EDIT_ACTION;
+			readOnlyValue=true;
+		}
+		else
+		{
+			formName = Constants.CREATE_SPECIMEN_ADD_ACTION;
+			readOnlyValue=false;
+		}
+
+		if (operation!=null && operation.equals(Constants.VIEW))
+		{
+			readOnlyForAll=true;
+		}
+
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+
+		Object obj = request.getAttribute("createSpecimenForm");
+		int exIdRows=1;
+		
+		CreateSpecimenForm form = null;
+		String unitSpecimen = "";
+		Map map = null;
+		if(obj != null && obj instanceof CreateSpecimenForm)
+		{
+			form = (CreateSpecimenForm)obj;
+			map = form.getExternalIdentifier();
+			exIdRows = form.getExIdCounter();
+			if(form.getUnit() != null)
+				unitSpecimen = form.getUnit();
+		}
+	
+	String multipleSpecimen = "0";
+	String action = Constants.CREATE_SPECIMEN_ADD_ACTION;
+	if(request.getAttribute("multipleSpecimen")!=null) 
+	{
+	   multipleSpecimen = "1";
+	   action = "DerivedMultipleSpecimenAdd.do?retainForm=true";
+	}
+	
+	String onChangeFunctionName = "onClassOrLabelOrBarcodeChange(" + multipleSpecimen + ");" ;
+	String onClassChangeFunctionName = "onTypeChange(this);" + onChangeFunctionName;
+	
+%>
+
 	<script language="JavaScript">
 	
-		//ADD MORE -------- EXTERNAL IDENTIFIER
-		function insExIdRow(subdivtag)
-		{
-			var val = parseInt(document.forms[0].exIdCounter.value);
-			val = val + 1;
-			document.forms[0].exIdCounter.value = val;
-			
-			var r = new Array(); 
-			r = document.getElementById(subdivtag).rows;
-			var q = r.length;
-			var rowno = q + 1;
-			var x=document.getElementById(subdivtag).insertRow(0);
-		
-			// First Cell
-			var spreqno=x.insertCell(0);
-			spreqno.className="formSerialNumberField";
-			sname=(q+1);
-			spreqno.innerHTML="" + rowno + ".";
-		
-			//Second Cell
-			var spreqtype=x.insertCell(1);
-			spreqtype.className="formField";
-			spreqtype.colSpan=1;
-			sname="";
-			
-			var name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_name)";
-			sname="<input type='text' name='" + name + "' maxlength='50'  class='formFieldSized10' id='" + name + "'>";      
-		
-		
-			spreqtype.innerHTML="" + sname;
-		
-			//Third Cell
-			var spreqsubtype=x.insertCell(2);
-			spreqsubtype.className="formField";
-			spreqsubtype.colSpan=1;
-			sname="";
-		
-			name = "externalIdentifierValue(ExternalIdentifier:" + rowno +"_value)";
-			sname= "";
-			
-			sname="<input type='text' name='" + name + "' maxlength='50'  class='formFieldSized10' id='" + name + "'>"   
-		
-			spreqsubtype.innerHTML="" + sname;
-			
-			//Fourth Cell
-			var checkb=x.insertCell(3);
-			checkb.className="formField";
-			checkb.colSpan=2;
-			sname="";
-			var name = "chk_"+ rowno;
-			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteValue,document.forms[0].exIdCounter,'chk_')\">";
-			checkb.innerHTML=""+sname;
-		}
-		
 		function onRadioButtonClick(element)
 		{
      		if(element.value == 1)
@@ -165,61 +165,17 @@ function classChangeForMultipleSpecimen()
 		{
 		  window.close();
 		}
+		function deleteExternalIdentifiers()
+		{
+			<% if(multipleSpecimen.equals("1")){%>
+				deleteChecked('addExternalIdentifier','CreateMultipleSpecimen.do?status=true&retainForm=true',document.forms[0].exIdCounter,'chk_ex_',false);
+			<%}else {%>			
+				deleteChecked('addExternalIdentifier','CreateSpecimen.do?pageOf=pageOfCreateSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false);
+			<%}%>
+		}
 	</script>
 </head>
 
-<% 
-        String[] columnList = Constants.DERIVED_SPECIMEN_COLUMNS;
-		String operation = (String)request.getAttribute(Constants.OPERATION);
-		String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
-		boolean readOnlyValue=false,readOnlyForAll=false;
-
-		if(operation!=null && operation.equals(Constants.EDIT))
-		{
-			editViewButton="buttons."+Constants.VIEW;
-			formName = Constants.CREATE_SPECIMEN_EDIT_ACTION;
-			readOnlyValue=true;
-		}
-		else
-		{
-			formName = Constants.CREATE_SPECIMEN_ADD_ACTION;
-			readOnlyValue=false;
-		}
-
-		if (operation!=null && operation.equals(Constants.VIEW))
-		{
-			readOnlyForAll=true;
-		}
-
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-
-		Object obj = request.getAttribute("createSpecimenForm");
-		int exIdRows=1;
-		
-		CreateSpecimenForm form = null;
-		String unitSpecimen = "";
-		Map map = null;
-		if(obj != null && obj instanceof CreateSpecimenForm)
-		{
-			form = (CreateSpecimenForm)obj;
-			map = form.getExternalIdentifier();
-			exIdRows = form.getExIdCounter();
-			if(form.getUnit() != null)
-				unitSpecimen = form.getUnit();
-		}
-	
-	String multipleSpecimen = "0";
-	String action = Constants.CREATE_SPECIMEN_ADD_ACTION;
-	if(request.getAttribute("multipleSpecimen")!=null) 
-	{
-	   multipleSpecimen = "1";
-	   action = "DerivedMultipleSpecimenAdd.do?retainForm=true";
-	}
-	
-	String onChangeFunctionName = "onClassOrLabelOrBarcodeChange(" + multipleSpecimen + ");" ;
-	String onClassChangeFunctionName = "onTypeChange(this);" + onChangeFunctionName;
-	
-%>
 
 <%
 List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
@@ -412,7 +368,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 						<html:hidden property="submittedFor" value="ForwardTo"/>
 						<html:hidden property="forwardTo" value="eventParameters"/>
 											
-						<td><html:hidden property="exIdCounter"/></td>
+						<td></td>
 					</td>
 				 </tr>
 				 <tr>
@@ -721,73 +677,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				    	<html:textarea styleClass="formFieldSized" rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 				    </td>
 				 </tr>
-				 <%--
-				 <tr>
-				     <td class="formTitle" height="20" colspan="2" nowrap>
-				     	<bean:message key="specimen.externalIdentifier"/>
-				     </td>
-				     <td class="formButtonField">
-				     	<html:button property="addExId" styleClass="actionButton" onclick="insExIdRow('addExternalIdentifier')">
-				     		<bean:message key="buttons.addMore"/>
-				     	</html:button>
-				    </td>
-				    <td class="formTitle" align="Right">
-							<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addExternalIdentifier','CreateSpecimen.do?operation=<%=operation%>&pageOf=&status=true',document.forms[0].exIdCounter,'chk_',false)" disabled="true">
-								<bean:message key="buttons.delete"/>
-							</html:button>
-						</td>
-				 </tr>
-				 
-				 	<tr>
-					 	<td class="formSerialNumberLabel" width="5">
-					     	#
-					    </td>
-					    <td class="formLeftSubTableTitle">
-							<bean:message key="externalIdentifier.name"/>
-						</td>
-					    <td class="formRightSubTableTitle">
-							<bean:message key="externalIdentifier.value"/>
-						</td>
-						<td class="formRightSubTableTitle">
-							<label for="delete" align="center">
-								<bean:message key="addMore.delete" />
-							</label>
-						</td>
-					 </tr>
-				  <tbody id="addExternalIdentifier">
-				  <%
-				  	for(int i=exIdRows;i>=1;i--)
-				  	{
-						String exName = "externalIdentifierValue(ExternalIdentifier:" + i + "_name)";
-						String exValue = "externalIdentifierValue(ExternalIdentifier:" + i + "_value)";
-						String exIdentifier = "externalIdentifierValue(ExternalIdentifier:" + i +"_id)";
-						String check = "chk_"+i;
-				  %>
-					<tr>
-					 	<td class="formSerialNumberField" width="5"><%=i%>.
-					 		<html:hidden property="<%=exIdentifier%>" />
-					 	</td>
-					    <td class="formField">
-				     		<html:text styleClass="formFieldSized10"  maxlength="50" styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
-				    	</td>
-				    	<td class="formField">
-				     		<html:text styleClass="formFieldSized10"  maxlength="50" styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
-				    	</td>
-				    	<%
-							String key = "";
-							boolean bool = Utility.isPersistedValue(map,key);
-							String condition = "";
-							if(bool)
-								condition = "disabled='disabled'";
-
-						%>
-						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].exIdCounter,'chk_')">		
-						</td>
-					 </tr>
-				  <% } %>
-				 </tbody>--%>
-  				<%@ include file="ExternalIdentifiers.jsp" %>
+				  				<%@ include file="ExternalIdentifiers.jsp" %>
 				 </table>
 			 <!-- Bio-hazards End here -->
 
