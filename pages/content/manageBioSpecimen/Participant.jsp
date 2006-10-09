@@ -761,8 +761,16 @@ tr#hiddenCombo
 					if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){
 						isRegisterButton=false;
 					}%>	
-				<tr><td colspan="4"><table summary="" cellpadding="0" cellspacing="0" border="0" width="600">
 				
+			
+				<tr><td colspan="4"><table summary="" cellpadding="0" cellspacing="0" border="0" width="600">
+				<tr>
+				<td>
+				<font size="2">
+					Probability calculation is based on data entered by user.
+				</font>
+				</td>
+				</tr>
 				<tr>
 				     <td class="formTitle" height="25">
 				     	<bean:message key="participant.lookup"/>
