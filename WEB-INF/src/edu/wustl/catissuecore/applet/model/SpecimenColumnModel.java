@@ -190,9 +190,9 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	{
 		text = (value == null) ? "" : value.toString();
 		Component component = getComponentAt(row, column, hasFocus, isSelected);
-		System.out.println("getTableCellRendererComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
+//		System.out.println("getTableCellRendererComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
 		text = getComponentValue(row);
-		System.out.println("getTableCellRendererComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
+//		System.out.println("getTableCellRendererComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
 
 		return component;
 	}
@@ -207,9 +207,9 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		text = (value == null) ? "" : value.toString();
 		Component component = getComponentAt(row, column, false, isSelected);
 		//Mandar:05Oct06
-		System.out.println("getTableCellEditorComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
+//		System.out.println("getTableCellEditorComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
 		text = getComponentValue(row);
-		System.out.println("getTableCellEditorComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
+//		System.out.println("getTableCellEditorComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
 		return component;
 	}
 
@@ -447,13 +447,13 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		ButtonHandler buttonHandler = new ButtonHandler(table);
 		
 	//Mandar : 07Oct06 : commented due to problems in fetching selected row and column in focuslost event 
-	//	BaseFocusHandler baseFocusHandler = new BaseFocusHandler(table);
+		BaseFocusHandler baseFocusHandler = new BaseFocusHandler(table);
 		CollectionGroupComboBoxHandler collectionGroupComboBoxHandler = new CollectionGroupComboBoxHandler(table);
 		
 		//Specimen Collection Group
 		specimenCollectionGroup.addActionListener(collectionGroupComboBoxHandler);
 		rbspecimenGroup.addItemListener(collectionGroupItemHandler );
-		//specimenCollectionGroup.addFocusListener(baseFocusHandler);
+//		specimenCollectionGroup.addFocusListener(baseFocusHandler); // to set value on click.
 		
 		//Parent Specimen 
 		parentSpecimen.addActionListener(textHandler);
@@ -462,11 +462,11 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		
 		// Label
 		label.addActionListener(textHandler);
-//		label.addFocusListener(baseFocusHandler);
+		label.addFocusListener(baseFocusHandler);
 		
 		// Barcode
 		barCode.addActionListener(textHandler);
-//		barCode.addFocusListener(baseFocusHandler);
+		barCode.addFocusListener(baseFocusHandler);
 
 		//Specimen Class
 		classList.addActionListener(classComboBoxHandler);
@@ -485,11 +485,11 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		
 		// Quantity
 		quantity.addActionListener(textHandler);
-//		quantity.addFocusListener(baseFocusHandler);
+		quantity.addFocusListener(baseFocusHandler);
 
 		// Concentration
 		concentration.addActionListener(textHandler);
-//		concentration.addFocusListener(baseFocusHandler);
+		concentration.addFocusListener(baseFocusHandler);
 		
 		//For Storage Location
 		mapButton.addActionListener(mapButtonHandler);

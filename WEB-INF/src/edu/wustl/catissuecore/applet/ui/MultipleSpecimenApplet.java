@@ -45,9 +45,12 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	
 	private int totalPages=0;
 	private final int WIDTH=1000;
+//	private int currentCellPositionX = 0;
+//	private int currentCellPositionY = 0;
+	
 	public void doInit()
     {
-		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));
+		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));		
 //		columnNumber++;
 //		int columnNumber = 4;
 		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());		
