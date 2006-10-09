@@ -1183,6 +1183,11 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 						.getValue("specimen.positionInStorageContainer")));
 			}
 		}
+		else
+		{
+			throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
+					.getValue("specimen.positionInStorageContainer")));
+		}
 		
 	}
 
