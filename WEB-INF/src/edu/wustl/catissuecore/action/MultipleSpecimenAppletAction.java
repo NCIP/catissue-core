@@ -372,7 +372,14 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 			{
 				throw new Exception("Please enter valid Quantity for Specimen number " + i);
 			}
+			
+			Long storageContainer = (Long) specimenMap.get(AppletConstants.SPECIMEN_PREFIX + i + "_" + "StorageContainer_id");
 		
+			if (storageContainer == null)
+			{
+				throw new Exception("Please give valid Storage Position for Specimen number " + i);
+			}
+			
 			classMap.put(String.valueOf(i), classValue);
 
 			if (!classValue.equals("Molecular"))
@@ -507,7 +514,7 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 			NewSpecimenForm form = (NewSpecimenForm) multipleSpecimenFormBeanMap.get("Specimen:"+i+"_specimenEventCollection");
 			if(form == null)
 			{
-				throw new Exception("Give Events for specimen"+i); 
+				throw new Exception("Please Give Events for specimen number "+i); 
 			}
 			else
 			{
