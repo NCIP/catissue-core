@@ -874,7 +874,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		}
 		
 		// Quantity
-		value = (String) model.getValueAt(AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO ,columnIndex);
+		value = (String) model.getValueAt(AppletConstants.SPECIMEN_QUANTITY_ROW_NO  ,columnIndex);
 		if(!isNull(value ))
 		{
 			setQuantity(value);
