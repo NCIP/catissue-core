@@ -715,9 +715,8 @@ public class UserForm extends AbstractActionForm
 					{
 						// Call static method PasswordManager.validatePasswordOnFormBean() where params are
 						// new password,old password,user name
-						//int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
-						int result = 0;
-						  
+						int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
+							
 						if (result != PasswordManager.SUCCESS)
 						{
 							// get error message of validation failure where param is result of validate() method
