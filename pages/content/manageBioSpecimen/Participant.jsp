@@ -767,7 +767,7 @@ tr#hiddenCombo
 				<tr>
 				<td>
 				<font size="2">
-					Probability calculation is based on data entered by user.
+				Matching probability calculation is based on number of attributes entered, please refer to user manual for more details.
 				</font>
 				</td>
 				</tr>
