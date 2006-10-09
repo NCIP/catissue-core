@@ -5,6 +5,7 @@ import java.awt.Component;
 import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -27,8 +28,8 @@ import edu.wustl.catissuecore.applet.listener.ClassComboBoxHandler;
 import edu.wustl.catissuecore.applet.listener.CollectionGroupComboBoxHandler;
 import edu.wustl.catissuecore.applet.listener.CollectionGroupItemHandler;
 import edu.wustl.catissuecore.applet.listener.ComboBoxHandler;
-import edu.wustl.catissuecore.applet.listener.EventsButtonHandler;
 import edu.wustl.catissuecore.applet.listener.DerivedSpecimenButtonHandler;
+import edu.wustl.catissuecore.applet.listener.EventsButtonHandler;
 import edu.wustl.catissuecore.applet.listener.ExternalIdentifierButtonHandler;
 import edu.wustl.catissuecore.applet.listener.MapButtonHandler;
 import edu.wustl.catissuecore.applet.listener.ParentSpecimenItemHandler;
@@ -83,6 +84,8 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	
 	//TissueSite
 	JComboBox tissueSiteList;
+//	JLabel treeLabel;
+//	JPanel tissueSitePanel;
 	
 	//TissueSide
 	JComboBox tissueSideList;
@@ -263,7 +266,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 			break;
 		//TissueSite
 		case AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO :
-			comp = tissueSiteList;
+			comp = tissueSiteList;				//tissueSitePanel ;
 			break;
 		//TissueSide
 		case AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO :
@@ -382,6 +385,14 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		
 		//TissueSite
 		tissueSiteList = new JComboBox(model.getTissueSiteValues());
+//		System.out.println("ImagePath : "+getClass().getClassLoader().getResource("/images/Tree.gif"));
+//		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("/images/Tree.gif"));
+//		treeLabel = new JLabel(icon); 
+//		tissueSitePanel = new JPanel();
+//		
+//		tissueSitePanel.add(tissueSiteList);
+//		tissueSitePanel.add(treeLabel);
+
 		
 		//TissueSide
 		tissueSideList = new JComboBox(model.getTissueSideValues());
@@ -1063,5 +1074,14 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		}
 		SwingUtilities.updateComponentTreeUI(deriveButton);
 		SwingUtilities.updateComponentTreeUI(mapButton);
+	}
+	
+	
+	/* (non-Javadoc)
+	 * @see javax.swing.AbstractCellEditor#fireEditingStopped()
+	 */
+	protected void fireEditingStopped() {
+		System.out.println("SpecimenColumnModel in fireEditingStopped  doing nothing");
+		//super.fireEditingStopped();
 	}
 }
