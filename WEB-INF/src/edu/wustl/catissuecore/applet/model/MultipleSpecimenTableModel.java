@@ -24,6 +24,10 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private int lastCellColumn = 0;
+	private int lastCellRow = 0;
+
+	
 	/**
 	 * attributes of the specimen for which user can specify the values. 
 	 */
@@ -119,9 +123,16 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			specimenMap.put(getKey(row,column), value);
 		}
        System.out.println("setValueAt " + row + " " + column + ": " + specimenMap.get(getKey(row,column)) + value);
-*/       
+*/
+		/* Code to check the calling method.
+		try
+		{
+			throw new Exception("User Defined");
+		}
+		catch(Exception e){ e.printStackTrace();}
+		*/ 
 		specimenMap.put(getKey(row,column), value);
-		System.out.println("setValueAt " + getKey(row,column)+ ": " + specimenMap.get(getKey(row,column)) + value);
+		System.out.println("setValueAt " + getKey(row,column)+ ": " + specimenMap.get(getKey(row,column))+" - " + value);
 	}
 
 	/**
@@ -449,7 +460,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 * Returns actual column no of the given column  depending on page index.
 	 */
 	private int getActualColumnNo(int selectedColumnNo) {
-		System.out.println(("col converteed to " + selectedColumnNo + "--->" + ((columnsPerPage * ( currentPageIndex - 1) ) + selectedColumnNo)));
+		//System.out.println(("col converteed to " + selectedColumnNo + "--->" + ((columnsPerPage * ( currentPageIndex - 1) ) + selectedColumnNo)));
 		return  ((columnsPerPage * ( currentPageIndex - 1) ) + selectedColumnNo);
 	}
 	
@@ -518,5 +529,32 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	public int getTotalColumnCount()
 	{
 		return columnCount ;
+	}
+	
+	
+	
+	/**
+	 * @return Returns the lastCellColumn.
+	 */
+	public int getLastCellColumn() {
+		return lastCellColumn;
+	}
+	/**
+	 * @param lastCellColumn The lastCellColumn to set.
+	 */
+	public void setLastCellColumn(int currentCellPositionX) {
+		this.lastCellColumn = currentCellPositionX;
+	}
+	/**
+	 * @return Returns the lastCellRow.
+	 */
+	public int getLastCellRow() {
+		return lastCellRow;
+	}
+	/**
+	 * @param lastCellRow The lastCellRow to set.
+	 */
+	public void setLastCellRow(int currentCellPositionY) {
+		this.lastCellRow = currentCellPositionY;
 	}
 }
