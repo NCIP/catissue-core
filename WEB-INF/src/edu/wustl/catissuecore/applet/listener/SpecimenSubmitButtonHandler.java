@@ -2,6 +2,8 @@
 package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.JButton;
@@ -35,7 +37,20 @@ public class SpecimenSubmitButtonHandler extends ButtonHandler
 		appletModel.setData(model.getMap());
 		model.getMap().put(AppletConstants.NO_OF_SPECIMENS,
 				String.valueOf(model.getTotalColumnCount()));
-
+		// --------------
+		System.out.println("Inside Submit Button Handler \n Map Details B4 submission: ");
+		HashMap map =(HashMap) model.getMap();
+		Iterator itr = map.keySet().iterator() ;
+		while(itr.hasNext())
+		{
+			String key =(String) itr.next(); 
+			System.out.println("key : "+key); 
+			String value = map.get(key).toString() ;
+			System.out.println(" Value : "+ value);
+		}
+		System.out.println("\n ***********************************\n"); 
+		
+		// --------------
 		try
 		{
 			MultipleSpecimenApplet applet = (MultipleSpecimenApplet) CommonAppletUtil
