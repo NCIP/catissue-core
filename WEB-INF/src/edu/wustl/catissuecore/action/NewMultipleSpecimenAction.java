@@ -400,7 +400,7 @@ public class NewMultipleSpecimenAction extends DispatchAction
 
 		if (button != null)
 		{
-			if (button.equals("deleteExId"))
+			if (button.equals("deleteBiohazard"))
 			{
 				List key = new ArrayList();
 				key.add("Biohazard:i_type");
