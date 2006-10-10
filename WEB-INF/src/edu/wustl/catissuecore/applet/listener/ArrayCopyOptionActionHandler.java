@@ -1,33 +1,33 @@
 package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JMenuItem;
 import javax.swing.JTable;
 
 
 /**
- * <p>This class initializes the fields of ArrayCopyOptionActionHandler.java</p>
+ * <p>This class is used to handle Array level copy operation.</p>
  * @author Ashwin Gupta
  * @version 1.1
  */
-public class ArrayCopyOptionActionHandler implements ActionListener {
+public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler 
+{
 
 	/**
-	 * Specify the table field 
+	 * constructor with table to persist table objet.
+	 * @param table table used in applet
 	 */
-	private JTable table = null;
-
-	public ArrayCopyOptionActionHandler(JTable table) {
-		this.table = table;
+	public ArrayCopyOptionActionHandler(JTable table)
+	{
+		super(table);
 	}
+	
 	/**
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 * @see edu.wustl.catissuecore.applet.listener.AbstractCopyActionHandler#doActionPerformed()
 	 */
-	public void actionPerformed(ActionEvent e) {
+	protected void doActionPerformed(ActionEvent e) {
 		JMenuItem menuItem = (JMenuItem) e.getSource();
 		System.out.println(menuItem.getText());
 	}
-
 }
