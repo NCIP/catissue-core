@@ -7,6 +7,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +27,10 @@ import edu.wustl.common.query.AdvancedConditionsNode;
 import edu.wustl.common.query.Condition;
 import edu.wustl.common.query.Operator;
 import edu.wustl.common.query.Table;
+import edu.wustl.common.tree.AdvanceQueryTreeNode;
 import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.tree.TreeNode;
-import edu.wustl.common.tree.TreeNodeImpl;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -90,6 +91,12 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 		int specimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.IDENTIFIER)).intValue()-1;
         int parentSpecimenColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.PARENT_SPECIMEN_ID_COLUMN)).intValue()-1;
         
+        int participantFisrtnameColumnId =  ((Integer)columnIdsMap.get(Constants.PARTICIPANT+"."+Constants.PARTICIPANT_FIRST_NAME)).intValue()-1;
+        int participantLastnameColumnId =  ((Integer)columnIdsMap.get(Constants.PARTICIPANT+"."+Constants.PARTICIPANT_LAST_NAME)).intValue()-1;
+		int collectionProtocolNameColumnId =  ((Integer)columnIdsMap.get(Constants.SPECIMEN_PROTOCOL+"."+Constants.SPECIMEN_PROTOCOL_SHORT_TITLE)).intValue()-1;
+		int specimenCollGrpNameColumnId =  ((Integer)columnIdsMap.get(Constants.SPECIMEN_COLLECTION_GROUP+"."+Constants.SPECIMEN_COLLECTION_GROUP_NAME)).intValue()-1;
+		int specimenLableColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.SPECIMEN_LABEL_COLUMN_NAME)).intValue()-1;
+		
         Vector treeDataVector = new Vector();
         Iterator dataListIterator = dataList.iterator();
         List rowList = new ArrayList();
@@ -100,16 +107,19 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
         {
             rowList = (List)dataListIterator.next();
             
+            String participantName = rowList.get(participantFisrtnameColumnId)+" " +rowList.get(participantLastnameColumnId);
+            if (participantName.trim().equals(""))
+            	participantName = "NA";
             setQueryTreeNode((String) rowList.get(participantColumnId),
-					Constants.PARTICIPANT, null, null, null, null,treeDataVector);
+					Constants.PARTICIPANT, participantName, null, null, null, null,treeDataVector);
         	
             //Create tree nodes for Participant & Collection Protocol
 			setQueryTreeNode((String) rowList.get(collectionProtocolColumnId), 
-						Constants.COLLECTION_PROTOCOL,(String) rowList.get(participantColumnId),Constants.PARTICIPANT,
+						Constants.COLLECTION_PROTOCOL, (String) rowList.get(collectionProtocolNameColumnId),(String) rowList.get(participantColumnId),Constants.PARTICIPANT,
 						null, null, treeDataVector);
 			
 			//Create tree nodes for Specimen Collection Group
-			setQueryTreeNode((String) rowList.get(specimenCollGrpColumnId), Constants.SPECIMEN_COLLECTION_GROUP,
+			setQueryTreeNode((String) rowList.get(specimenCollGrpColumnId), Constants.SPECIMEN_COLLECTION_GROUP, (String) rowList.get(specimenCollGrpNameColumnId),
 			                (String) rowList.get(collectionProtocolColumnId), Constants.COLLECTION_PROTOCOL,
 						    (String) rowList.get(participantColumnId),Constants.PARTICIPANT,treeDataVector);
 			
@@ -120,8 +130,8 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 			if(parentSpecimenId.equals("")||parentSpecimenId.equals("0"))
 			{
 				Logger.out.debug("parent specimen not present");
-				setQueryTreeNode((String) rowList.get(specimenColumnId), Constants.SPECIMEN,(String)  
-						rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,treeDataVector);
+				setQueryTreeNode((String) rowList.get(specimenColumnId), Constants.SPECIMEN,(String) rowList.get(specimenLableColumnId), 
+						(String)rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,treeDataVector);
 			}
 			//if parent specimen id is present for the specimen hierarchy
 			else
@@ -134,15 +144,15 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 				Logger.out.debug("list of parent specimen ids:"+specimenIdsHeirarchy);
 				if(specimenIdsHeirarchy.size()>0)
 				{
-					setQueryTreeNode((String)specimenIdsHeirarchy.get(0), Constants.SPECIMEN,(String)
-							rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,treeDataVector);
+					setQueryTreeNode((String)specimenIdsHeirarchy.get(0), Constants.SPECIMEN,(String) rowList.get(specimenLableColumnId),
+							(String) rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,treeDataVector);
 					
 					Iterator specimenIdsHeirarchyItr= specimenIdsHeirarchy.iterator();
 					String parentSpecimenIdInHeirarchy = (String)specimenIdsHeirarchyItr.next();
 					while(specimenIdsHeirarchyItr.hasNext())
 					{
 						specimenId = (String)specimenIdsHeirarchyItr.next();
-						setQueryTreeNode(specimenId, Constants.SPECIMEN,parentSpecimenIdInHeirarchy,Constants.SPECIMEN,null,null,treeDataVector);
+						setQueryTreeNode(specimenId, Constants.SPECIMEN,(String) rowList.get(specimenLableColumnId), parentSpecimenIdInHeirarchy,Constants.SPECIMEN,null,null,treeDataVector);
 						parentSpecimenIdInHeirarchy = specimenId;
 					}
 				}
@@ -169,9 +179,9 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	}   
 	
 	/**
-	 * Creates and returns the vector of TreeNodeImpl nodes from the QueryTreeNodeData nodes passed. 
+	 * Creates and returns the vector of AdvanceQueryTreeNode nodes from the QueryTreeNodeData nodes passed. 
 	 * @param oldNodes Vector of QueryTreeNodeData nodes.
-	 * @return the vector of TreeNodeImpl nodes from the QueryTreeNodeData nodes passed.
+	 * @return the vector of AdvanceQueryTreeNode nodes from the QueryTreeNodeData nodes passed.
 	 */
 	
 	private Vector createHierarchy(Vector oldNodes)
@@ -182,8 +192,8 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	    while (iterator.hasNext())
 	    {
 	        QueryTreeNodeData treeNode = (QueryTreeNodeData) iterator.next();
-	        TreeNodeImpl treeNodeImpl = new TreeNodeImpl(Long.valueOf((String)treeNode.getIdentifier()),
-	                									 treeNode.getObjectName());
+	        AdvanceQueryTreeNode treeNodeImpl = new AdvanceQueryTreeNode(Long.valueOf((String)treeNode.getIdentifier()),
+	                									 treeNode.getObjectName(), treeNode.getDisplayName());
 	        
 	        //If the parent is null, the node is of participant. Add it in the vector.
 	        if (treeNode.getParentIdentifier() == null && treeNode.getCombinedParentIdentifier() == null)
@@ -196,25 +206,27 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	        }
 	        
 	        //The parent node of this node.
-	        TreeNodeImpl parentTreeNode = new TreeNodeImpl();
+	        AdvanceQueryTreeNode parentTreeNode = new AdvanceQueryTreeNode();
 	        if (treeNode.getParentIdentifier() != null)
 	        {
 	            parentTreeNode.setIdentifier(Long.valueOf((String)treeNode.getParentIdentifier()));
 	            parentTreeNode.setValue(treeNode.getParentObjectName());
+	            parentTreeNode.setDisplayName(treeNode.getDisplayName());
 	        }
 	        
 	        //In case of specimen colleciton group, the participant node is also required.
 	        //So creating the parent of the parent node.
-	        TreeNodeImpl parentOfParentNode = new TreeNodeImpl();
+	        AdvanceQueryTreeNode parentOfParentNode = new AdvanceQueryTreeNode();
 	        if (treeNode.getCombinedParentIdentifier() != null)
 	        {
 	            parentOfParentNode.setIdentifier(Long.valueOf((String)treeNode.getCombinedParentIdentifier()));
 	            parentOfParentNode.setValue(treeNode.getCombinedParentObjectName());
+	            parentTreeNode.setDisplayName(treeNode.getDisplayName());
 	            parentTreeNode.setParentNode(parentOfParentNode);
 	        }
 	        
 	        //get the parent node from the final tree node vector.
-	        parentTreeNode = (TreeNodeImpl) getNode(finalTreeNodes, parentTreeNode);
+	        parentTreeNode = (AdvanceQueryTreeNode) getNode(finalTreeNodes, parentTreeNode);
 	        if (parentTreeNode != null)
 	        {
 	            treeNodeImpl.setParentNode(parentTreeNode);
@@ -224,25 +236,38 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	            }
 	        }
 	    }
-	    
+	    sortTreeVector(finalTreeNodes);
 	    return finalTreeNodes;
 	}
 	
+	/**
+	 * To sort the Tree.
+	 * @param nodes reference to the Vector containing AdvanceQueryTreeNode objects.
+	 */
+	private void sortTreeVector(Vector nodes)
+	{
+		Collections.sort(nodes);
+		for (int i=0;i<nodes.size();i++)
+		{
+			AdvanceQueryTreeNode child = (AdvanceQueryTreeNode)nodes.get(i);
+			sortTreeVector(child.getChildNodes());
+		}
+	}
 	/**
 	 * Searches and returns the given node in the vector fo nodes and its child nodes. 
 	 * @param treeNodeVector the vector of tree nodes. 
 	 * @param treeNode the node to be searched.
 	 * @return the node equal to the given node.
 	 */
-	private TreeNode getNode(Vector treeNodeVector, TreeNodeImpl treeNode)
+	private TreeNode getNode(Vector treeNodeVector, AdvanceQueryTreeNode treeNode)
 	{
 	    //The node equal to the given node.
-	    TreeNodeImpl returnNode = null;
+	    AdvanceQueryTreeNode returnNode = null;
 	    
 	    Iterator treeNodeVectorIterator = treeNodeVector.iterator();
 	    while (treeNodeVectorIterator.hasNext())
 	    {
-	        TreeNodeImpl treeNodeImpl = (TreeNodeImpl) treeNodeVectorIterator.next();
+	        AdvanceQueryTreeNode treeNodeImpl = (AdvanceQueryTreeNode) treeNodeVectorIterator.next();
 	        
 	        //If the node is not equal to collection protocol, check only the nodes and not their parents.
 	        if (treeNode.getValue().equals(Constants.COLLECTION_PROTOCOL) == false)
@@ -256,9 +281,9 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	        {
                 if (treeNodeImpl.getParentNode() != null)
                 {
-                    TreeNodeImpl parentNode = (TreeNodeImpl)treeNode.getParentNode();
-		            if ((parentNode.getIdentifier().equals(((TreeNodeImpl)treeNodeImpl.getParentNode()).getIdentifier())
-		                    && parentNode.getValue().equals(((TreeNodeImpl)treeNodeImpl.getParentNode()).getValue()))
+                    AdvanceQueryTreeNode parentNode = (AdvanceQueryTreeNode)treeNode.getParentNode();
+		            if ((parentNode.getIdentifier().equals(((AdvanceQueryTreeNode)treeNodeImpl.getParentNode()).getIdentifier())
+		                    && parentNode.getValue().equals(((AdvanceQueryTreeNode)treeNodeImpl.getParentNode()).getValue()))
 		                && (treeNode.getIdentifier().equals(treeNodeImpl.getIdentifier()) 
 		                    && treeNode.getValue().equals(treeNodeImpl.getValue())))
 		            {
@@ -267,7 +292,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	            }
 	        }
 	        
-	        returnNode = (TreeNodeImpl) getNode(treeNodeImpl.getChildNodes(), treeNode);
+	        returnNode = (AdvanceQueryTreeNode) getNode(treeNodeImpl.getChildNodes(), treeNode);
 	        if (returnNode != null)
 	            break;
 	    }
@@ -276,11 +301,12 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	}
 	
     //Create QueryTreeNode given the Tree node data.
-	private void setQueryTreeNode(String identifier,String objectName,String parentIdentifier,String parentObjectName,String combinedParentIdentifier,String combinedParentObjectName,Vector vector)
+	private void setQueryTreeNode(String identifier,String objectName, String displayName,String parentIdentifier,String parentObjectName,String combinedParentIdentifier,String combinedParentObjectName,Vector vector)
 	{
 		QueryTreeNodeData treeNode = new QueryTreeNodeData();
         treeNode.setIdentifier(identifier);
         treeNode.setObjectName(objectName);
+        treeNode.setDisplayName(displayName);
         treeNode.setParentIdentifier(parentIdentifier);
         treeNode.setParentObjectName(parentObjectName);
         treeNode.setCombinedParentIdentifier(combinedParentIdentifier);
