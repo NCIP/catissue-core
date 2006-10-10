@@ -443,7 +443,7 @@ function submitBioHazards()
 }
 function deleteExternalIdentifiers()
 {
-	deleteChecked('addExternalIdentifier','<%=Constants.NEW_MULTIPLE_SPECIMEN_ACTION%>?method=deleteExternalIdentifiers&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false)
+    deleteChecked('addExternalIdentifier','NewMultipleSpecimenAction.do?method=deleteExternalIdentifiers&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false)
 }
 
 function submitEvents() 
@@ -454,7 +454,7 @@ function submitEvents()
 }
 function deleteBioHazards()
 {
-	deleteChecked('addBiohazardRow','<%=Constants.NEW_MULTIPLE_SPECIMEN_ACTION%>?method=deleteBioHazards&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false);
+	deleteChecked('addBiohazardRow','NewMultipleSpecimenAction.do?method=deleteBioHazards&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false);
 }
 
 
