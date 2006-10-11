@@ -29,25 +29,52 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	{
 		String message = "";
 		message = preValidate();
-		message = doValidate();
-		message = postValidate();
+		if (message != null && !message.equals(""))
+		{
+			message = doValidate();
+		}
+		if (message != null && !message.equals(""))
+		{
+			message = postValidate();
+		}
 		return message;
 	}
 
 	/**
 	 * Perform the pre validations required for copy operation.  
+	 * The different validations performed here are 
+	 * 1. Selection of number of rows in a column or number of columns should be contiguous
+	 * 2. Number of rows/columns selected for copy and paste should match
+	 * 3. If a single row/column is selected while paste operation, there should be enough rows/columns as per copied data  
 	 */
 	protected String preValidate()
 	{
+
+		// TODO null or empty list
 		String message = "";
-          
-		List selectedRows = validatorModel.getSelectedRows();
-		List selectedCols = validatorModel.getSelectedCols();
 		int rowValue = 0;
 		int colValue = 0;
-		int numberOfRowsCopied = 0; // TODO get number of rows copied 
-		int numberOfColsCopied = 0; // TODO get number of rows copied
-		// TODO null or empty list
+		int numberOfRowsCopied = validatorModel.getSelectedCopiedRows().size();
+		int numberOfColsCopied = validatorModel.getSelectedCopiedRows().size();
+		List selectedRows = null;
+		List selectedCols = null;
+
+		// get selected rows and columns as per copy or paste operation
+		if (validatorModel.getOperation().equals("copy"))
+		{
+			selectedRows = validatorModel.getSelectedCopiedRows();
+			selectedCols = validatorModel.getSelectedCopiedCols();
+		}
+		else
+		{
+			selectedRows = validatorModel.getSelectedPastedRows();
+			selectedCols = validatorModel.getSelectedPastedCols();
+		}
+
+		/**
+		 *  -- Number of rows/columns selected for copy and paste should match
+		 *  -- If a single row/column is selected while paste operation, there should be enough rows/columns as per copied data
+		 */
 		if (validatorModel.getOperation().equals("paste"))
 		{
 
@@ -60,13 +87,13 @@ public abstract class BaseCopyPasteValidator implements Serializable
 					return "There are not enough rows to paste the copied data";
 				}
 			}
-		else
-		{
-			if(selectedRows.size()!=numberOfRowsCopied)
+			else
 			{
-				   return "Number of rows selected for copy and paste operation do not match";
+				if (selectedRows.size() != numberOfRowsCopied)
+				{
+					return "Number of rows selected for copy and paste operation do not match";
+				}
 			}
-		}
 
 			if (selectedCols.size() == 1)
 			{
@@ -74,19 +101,22 @@ public abstract class BaseCopyPasteValidator implements Serializable
 				colValue = col.intValue();
 				if (validatorModel.getColumnCount() - colValue < numberOfColsCopied)
 				{
-					return "There are not enough specimens to paste the copied data";
+					return "There are not enough columns to paste the copied data";
 				}
 			}
 			else
 			{
-				if(selectedCols.size()!=numberOfColsCopied)
+				if (selectedCols.size() != numberOfColsCopied)
 				{
-					   return "Number of columns selected for copy and paste operation do not match";
+					return "Number of columns selected for copy and paste operation do not match";
 				}
 			}
 
 		}
-
+		
+		/**
+		 * -- Selection of number of rows in a column or number of columns should be contiguous
+		 */
 		for (int i = 0; i < selectedRows.size(); i++)
 		{
 			Integer row = (Integer) selectedRows.get(i);
@@ -100,7 +130,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 				return "Please select contiguous rows";
 			}
 		}
-		
+
 		for (int i = 0; i < selectedCols.size(); i++)
 		{
 			Integer col = (Integer) selectedCols.get(i);
@@ -114,8 +144,8 @@ public abstract class BaseCopyPasteValidator implements Serializable
 				return "Please select contiguous columns";
 			}
 		}
-		
-	return message;
+
+		return message;
 	}
 
 	/**
