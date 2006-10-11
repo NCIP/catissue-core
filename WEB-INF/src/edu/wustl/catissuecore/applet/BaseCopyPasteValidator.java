@@ -75,7 +75,15 @@ public abstract class BaseCopyPasteValidator implements Serializable
 		if (validatorModel.getOperation().equals("paste"))
 		{
 			message = validateRowsForPaste(selectedRows, validatorModel);
+			if (!message.equals(""))
+			{
+				return message;
+			}
 			message = validateColsForPaste(selectedCols, validatorModel);
+			if (!message.equals(""))
+			{
+				return message;
+			}
 		}
 
 		/**
@@ -83,6 +91,10 @@ public abstract class BaseCopyPasteValidator implements Serializable
 		 */
 
 		message = validateRows(selectedRows);
+		if (!message.equals(""))
+		{
+			return message;
+		}
 
 		/**
 		 * -- Selection of number of columns should be contiguous
