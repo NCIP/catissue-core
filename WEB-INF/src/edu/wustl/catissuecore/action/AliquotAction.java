@@ -38,7 +38,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -48,13 +48,13 @@ import edu.wustl.common.util.global.Validator;
  * AliquotAction initializes all the fields of the page, Aliquots.jsp.
  * @author aniruddha_phadnis
  */
-public class AliquotAction extends BaseAction //SecureAction
+public class AliquotAction extends SecureAction
 {
 
 	/**
 	 * Overrides the execute method of Action class.
 	 */
-	public ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
 		AliquotForm aliquotForm = (AliquotForm) form;

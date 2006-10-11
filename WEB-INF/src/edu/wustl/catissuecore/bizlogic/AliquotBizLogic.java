@@ -10,10 +10,13 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -27,6 +30,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -52,7 +56,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		Specimen parentSpecimen = (Specimen) dao.retrieve(Specimen.class.getName(), aliquot
 				.getParentSpecimen().getId());
 		double dQuantity = 0;
-
+		List aliquotList = new ArrayList();
 		for (int i = 1; i <= aliquot.getNoOfAliquots(); i++)
 		{
 			//Preparing the map keys
@@ -204,8 +208,31 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			exId.setSpecimen(aliquotSpecimen);
 			externalIdentifierCollection.add(exId);
 			dao.insert(exId, sessionDataBean, true, true);
+			aliquotList.add(aliquotSpecimen);
 		}
-
+		/* Vaishali - Inserting authorization data */
+		Iterator itr = aliquotList.iterator();
+		while (itr.hasNext())
+		{
+			Specimen aliquotSpecimen = (Specimen) itr.next();
+        		
+			Set protectionObjects = new HashSet();
+			protectionObjects.add(aliquotSpecimen);
+			if (aliquotSpecimen.getSpecimenCharacteristics() != null)
+			{
+				protectionObjects.add(aliquotSpecimen.getSpecimenCharacteristics());
+			}
+			try
+			{
+				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
+						protectionObjects, getDynamicGroups(aliquotSpecimen));
+			}
+			catch (SMException e)
+			{
+				throw handleSMException(e);
+			}
+		}
+		
 		//Setting the no. of aliquots in the map
 		aliquotMap.put(Constants.SPECIMEN_COUNT, String.valueOf(aliquot.getNoOfAliquots()));
 
@@ -231,6 +258,8 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 
 		//Setting value of isAliquot as true for ForwardTo processor
 		aliquot.setLineage(Constants.ALIQUOT);
+		
+		
 	}
 
 	/**

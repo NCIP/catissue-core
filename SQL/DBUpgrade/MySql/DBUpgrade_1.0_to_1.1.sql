@@ -474,7 +474,7 @@ alter table CATISSUE_container add constraint NAME unique (NAME);
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2641,'Unspecified',NULL,'2004001');
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2642,'NOT SPECIFIED',NULL,'Tissue_Site_PID');
 
-/*Query audit changes - 5th oct 2006 */
+/*Query audit changes - 5th oct 2006 - by vaishali*/
 create table CATISSUE_AUDIT_EVENT_QUERY_LOG (
    IDENTIFIER bigint not null auto_increment,
    QUERY_DETAILS longtext,  
@@ -482,3 +482,12 @@ create table CATISSUE_AUDIT_EVENT_QUERY_LOG (
    primary key (IDENTIFIER)
 );
 alter table CATISSUE_AUDIT_EVENT_QUERY_LOG add index FK62DC439DBC7298A9 (AUDIT_EVENT_ID), add constraint FK62DC439DBC7298A9 foreign key (AUDIT_EVENT_ID) references CATISSUE_AUDIT_EVENT (IDENTIFIER);
+
+/* query audit changes finish */
+
+/* changes for making aliquotAction a secureAction - by vaishali*/
+DELETE FROM `CSM_PROTECTION_ELEMENT` WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.AliquotAction';
+INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (NULL,'edu.wustl.catissuecore.action.AliquotAction','edu.wustl.catissuecore.action.AliquotAction','edu.wustl.catissuecore.action.AliquotAction',NULL,NULL,1,'2006-10-11');
+INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (NULL,19,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.ALiquotAction'),'0000-00-00');
+
+/* finish */

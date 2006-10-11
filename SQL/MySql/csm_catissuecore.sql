@@ -399,6 +399,9 @@ INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,
 INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (312,3,281,'0001-01-01');
 INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (313,19,282,'0001-01-01');
 /* Changes done */
+/* vaishali 11-10-2006 - aliquotAction changes */
+INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (314,19,283,'0000-00-00');
+/* changes done */
 /* Table Objects for table csm_privilege*/
 
 
@@ -739,6 +742,9 @@ INSERT into `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMEN
 INSERT into `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE` ) VALUES (282,'edu.wustl.common.action.SimpleQueryInterfaceAction_SpecimenArray','edu.wustl.common.action.SimpleQueryInterfaceAction_SpecimenArray','edu.wustl.common.action.SimpleQueryInterfaceAction_SpecimenArray',NULL,NULL,1,'2006-08-31');
 /* changes done */
 
+/* vaishali 10-11-2006 */
+INSERT into `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE` ) VALUES (283,'edu.wustl.catissuecore.action.AliquotAction','edu.wustl.catissuecore.action.AliquotAction','edu.wustl.catissuecore.action.AliquotAction',NULL,NULL,1,'2006-10-11');
+/* changes finish */
 /* Table Objects for table csm_protection_group*/
 
 

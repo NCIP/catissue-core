@@ -334,9 +334,9 @@ alter table CATISSUE_SPECIMEN_TYPE  add constraint FKFF69C195ECE89343 foreign ke
 # ------ Select Max(<Indetifier>) from <corresponding-table>. It is assumed that "17" is the Identifier for PROTECTION_GROUP "Adminstrative".
 
 #---- Chnages by Ashwin to take max() id first clean the table.
-DELETE FROM 'CSM_PROTECTION_ELEMENT' WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.SimilarContainersAction';
-INSERT INTO 'CSM_PROTECTION_ELEMENT' ('PROTECTION_ELEMENT_ID','PROTECTION_ELEMENT_NAME','PROTECTION_ELEMENT_DESCRIPTION','OBJECT_ID','ATTRIBUTE','PROTECTION_ELEMENT_TYPE_ID','APPLICATION_ID','UPDATE_DATE') VALUES (CSM_PROTECTIO_PROTECTION_E_SEQ.nextval,'edu.wustl.catissuecore.action.SimilarContainersAction','edu.wustl.catissuecore.action.SimilarContainersAction','edu.wustl.catissuecore.action.SimilarContainersAction',NULL,NULL,1,to_date('2006-07-04','yyyy-mm-dd'));
-INSERT INTO 'CSM_PG_PE' ('PG_PE_ID','PROTECTION_GROUP_ID','PROTECTION_ELEMENT_ID','UPDATE_DATE') VALUES (CSM_PG_PE_PG_PE_ID_SEQ.nextval,17,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.SimilarContainersAction'),to_date('0000-00-00','yyyy-mm-dd'));
+DELETE FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.SimilarContainersAction';
+INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE_ID,APPLICATION_ID,UPDATE_DATE) VALUES (CSM_PROTECTIO_PROTECTION_E_SEQ.nextval,'edu.wustl.catissuecore.action.SimilarContainersAction','edu.wustl.catissuecore.action.SimilarContainersAction','edu.wustl.catissuecore.action.SimilarContainersAction',NULL,NULL,1,to_date('2006-07-04','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (CSM_PG_PE_PG_PE_ID_SEQ.nextval,17,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.SimilarContainersAction'),to_date('0001-01-01','yyyy-mm-dd'));
 
 
 
@@ -471,7 +471,7 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PU
 /*changed the sequence name for specimen array content as it was more than 30 chars */
 create sequence CATISSUE_SPECI_ARRAY_CNTNT_SEQ;
 
-/*query auditing */
+/*query auditing  -vaishali */
 create table CATISSUE_AUDIT_EVENT_QUERY_LOG (
    IDENTIFIER number(19,0) not null,
    QUERY_DETAILS clob,  
@@ -480,3 +480,8 @@ create table CATISSUE_AUDIT_EVENT_QUERY_LOG (
 );
 alter table CATISSUE_AUDIT_EVENT_QUERY_LOG add constraint FK62DC439DBC7298A9 foreign key (AUDIT_EVENT_ID) references CATISSUE_AUDIT_EVENT ;
 create sequence CATISSUE_AUDIT_EVENT_QUERY_SEQ;
+
+/* aliquotAction entries in csm related tables*/
+DELETE FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.AliquotAction';
+INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE_ID,APPLICATION_ID,UPDATE_DATE) VALUES (CSM_PROTECTIO_PROTECTION_E_SEQ.nextval,'edu.wustl.catissuecore.action.AliquotAction','edu.wustl.catissuecore.action.AliquotAction','edu.wustl.catissuecore.action.AliquotAction',NULL,NULL,1,to_date('2006-10-11','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (CSM_PG_PE_PG_PE_ID_SEQ.nextval,19,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.AliquotAction'),to_date('0001-01-01','yyyy-mm-dd'));
