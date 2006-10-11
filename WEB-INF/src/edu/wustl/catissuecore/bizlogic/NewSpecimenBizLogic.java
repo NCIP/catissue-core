@@ -277,7 +277,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 	}
 
-	private String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
+	protected String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
 	{
 		Specimen specimen = (Specimen) obj;
 		String[] dynamicGroups = new String[1];
