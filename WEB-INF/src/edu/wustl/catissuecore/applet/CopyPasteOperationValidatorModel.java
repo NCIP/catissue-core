@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.applet;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -19,11 +20,26 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	/**
 	 * Specify the selectedCopiedRows field - selected rows for copy operation 
 	 */
-	private List selectedRows;
+	private List selectedCopiedRows;
 	/**
 	 * Specify the selectedCopiedCols field - selected cols for copy operation 
 	 */
-	private List selectedCols;
+	private List selectedCopiedCols;
+
+	/**
+	 * Specify the selectedPastedRows field - selected rows for paste operation 
+	 */
+	private List selectedPastedRows;
+	
+	/**
+	 * Specify the selectedPastedCols field - selected cols for paste operation
+	 */
+	private List selectedPastedCols;
+
+	/**
+	 * To hold copied data.
+	 */
+	private HashMap copiedData;	
 
 	/**
 	 * Specify the ignoredRows field - ignored Rows for paste operation 
@@ -102,32 +118,75 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	{
 		this.rowCount = rowCount;
 	}
+	
 	/**
-	 * @return Returns the selectedCols.
+	 * @return Returns the copiedData.
 	 */
-	public List getSelectedCols()
+	public HashMap getCopiedData()
 	{
-		return selectedCols;
+		return copiedData;
 	}
 	/**
-	 * @param selectedCols The selectedCols to set.
+	 * @param copiedData The copiedData to set.
 	 */
-	public void setSelectedCols(List selectedCols)
+	public void setCopiedData(HashMap copiedData)
 	{
-		this.selectedCols = selectedCols;
+		this.copiedData = copiedData;
 	}
 	/**
-	 * @return Returns the selectedRows.
+	 * @return Returns the selectedCopiedCols.
 	 */
-	public List getSelectedRows()
+	public List getSelectedCopiedCols()
 	{
-		return selectedRows;
+		return selectedCopiedCols;
 	}
 	/**
-	 * @param selectedRows The selectedRows to set.
+	 * @param selectedCopiedCols The selectedCopiedCols to set.
 	 */
-	public void setSelectedRows(List selectedRows)
+	public void setSelectedCopiedCols(List selectedCopiedCols)
 	{
-		this.selectedRows = selectedRows;
+		this.selectedCopiedCols = selectedCopiedCols;
+	}
+	/**
+	 * @return Returns the selectedCopiedRows.
+	 */
+	public List getSelectedCopiedRows()
+	{
+		return selectedCopiedRows;
+	}
+	/**
+	 * @param selectedCopiedRows The selectedCopiedRows to set.
+	 */
+	public void setSelectedCopiedRows(List selectedCopiedRows)
+	{
+		this.selectedCopiedRows = selectedCopiedRows;
+	}
+	/**
+	 * @return Returns the selectedPastedCols.
+	 */
+	public List getSelectedPastedCols()
+	{
+		return selectedPastedCols;
+	}
+	/**
+	 * @param selectedPastedCols The selectedPastedCols to set.
+	 */
+	public void setSelectedPastedCols(List selectedPastedCols)
+	{
+		this.selectedPastedCols = selectedPastedCols;
+	}
+	/**
+	 * @return Returns the selectedPastedRows.
+	 */
+	public List getSelectedPastedRows()
+	{
+		return selectedPastedRows;
+	}
+	/**
+	 * @param selectedPastedRows The selectedPastedRows to set.
+	 */
+	public void setSelectedPastedRows(List selectedPastedRows)
+	{
+		this.selectedPastedRows = selectedPastedRows;
 	}
 }
