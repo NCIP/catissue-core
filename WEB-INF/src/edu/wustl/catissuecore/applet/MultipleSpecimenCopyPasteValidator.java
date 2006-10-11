@@ -32,9 +32,9 @@ public abstract class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteVa
 		// TODO
 		MultipleSpecimenTableModel multipleSpecimenTableModel = new MultipleSpecimenTableModel(0, new HashMap());
 
-		for (int i = 0; i < selectedPastedRows.size(); i++)
+		for (int j = 0; j < selectedPastedCols.size(); j++)
 		{
-			for (int j = 0; j < selectedPastedCols.size(); j++)
+			for (int i = 0; i < selectedPastedRows.size(); i++)
 			{
 				if (i == AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO || i == AppletConstants.SPECIMEN_PARENT_ROW_NO
 						|| i == AppletConstants.SPECIMEN_LABEL_ROW_NO || i == AppletConstants.SPECIMEN_BARCODE_ROW_NO
@@ -67,7 +67,7 @@ public abstract class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteVa
 
 				if (flag == false)
 				{
-					return "No match found for " + value + "in row " + (i+1) + "of column " + (j+1);
+					return "No match found for " + value + "in row " + (i + 1) + "of column " + (j + 1);
 				}
 
 			}
