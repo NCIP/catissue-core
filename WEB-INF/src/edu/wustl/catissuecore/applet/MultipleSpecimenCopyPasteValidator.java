@@ -20,7 +20,6 @@ public abstract class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteVa
 	 * It returns error message in case it is not possible to paste the data
 	 *   
 	 */
-	// TODO buttons
 	protected String doValidate()
 	{
 
@@ -29,33 +28,72 @@ public abstract class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteVa
 		List selectedCopiedCols = validatorModel.getSelectedCopiedCols();
 		List selectedPastedRows = validatorModel.getSelectedPastedRows();
 		List selectedPastedCols = validatorModel.getSelectedPastedCols();
+
 		// TODO
 		MultipleSpecimenTableModel multipleSpecimenTableModel = new MultipleSpecimenTableModel(0, new HashMap());
 
 		for (int j = 0; j < selectedPastedCols.size(); j++)
 		{
+			boolean isClassCopied = false;
 			for (int i = 0; i < selectedPastedRows.size(); i++)
 			{
-				if (i == AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO || i == AppletConstants.SPECIMEN_PARENT_ROW_NO
-						|| i == AppletConstants.SPECIMEN_LABEL_ROW_NO || i == AppletConstants.SPECIMEN_BARCODE_ROW_NO
-						|| i == AppletConstants.SPECIMEN_QUANTITY_ROW_NO || i == AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO
-						|| i == AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO)
+				int rowToBePasted = ((Integer) selectedPastedRows.get(i)).intValue();
+				int columnToBePasted = ((Integer) selectedPastedCols.get(j)).intValue();
+				/**
+				 *  This condtion is to check whether row at which data is to be pasted is text
+				 */
+				if (rowToBePasted == AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO || rowToBePasted == AppletConstants.SPECIMEN_PARENT_ROW_NO
+						|| rowToBePasted == AppletConstants.SPECIMEN_LABEL_ROW_NO || rowToBePasted == AppletConstants.SPECIMEN_BARCODE_ROW_NO
+						|| rowToBePasted == AppletConstants.SPECIMEN_QUANTITY_ROW_NO
+						|| rowToBePasted == AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO
+						|| rowToBePasted == AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO)
 				{
 					continue;
 				}
 
-				String key = selectedCopiedRows.get(i) + "@" + selectedCopiedCols.get(j); // TODO @
+				int copiedRow = ((Integer) selectedCopiedRows.get(i)).intValue();
+				int copiedColumn = ((Integer) selectedCopiedCols.get(i)).intValue();
+				String key = copiedRow + "@" + copiedColumn; // TODO @
+
+				/**
+				 *  This condition is to check whether an attempt is made to copy from button to text or text to button
+				 */
+				if (copiedRow >= AppletConstants.SPECIMEN_COMMENTS_ROW_NO && rowToBePasted < AppletConstants.SPECIMEN_COMMENTS_ROW_NO
+						|| copiedRow < AppletConstants.SPECIMEN_COMMENTS_ROW_NO && rowToBePasted >= AppletConstants.SPECIMEN_COMMENTS_ROW_NO)
+				{
+					return "You can not copy from button to text or text to button";
+				}
+				if (copiedRow == AppletConstants.SPECIMEN_CLASS_ROW_NO)
+				{
+					isClassCopied = true;
+				}
 				String value = (String) copiedData.get(key);
 				Object values[] = null;
-				if (i == AppletConstants.SPECIMEN_TYPE_ROW_NO)
+
+				if (rowToBePasted == AppletConstants.SPECIMEN_TYPE_ROW_NO)
 				{
-					values = multipleSpecimenTableModel.getSpecimenTypeValues(""); // TODO
+					/**
+					 *  The value of tyoe array is dependent on class value. So check whether class is also copied
+					 */
+					String classValue = null;
+					if (isClassCopied)
+					{
+						classValue = (String) multipleSpecimenTableModel.getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, copiedColumn);
+					}
+					else
+					{
+						classValue = (String) multipleSpecimenTableModel.getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, columnToBePasted);
+					}
+					values = multipleSpecimenTableModel.getSpecimenTypeValues(classValue); // TODO
 				}
 				else
 				{
-					values = getObjectArray(multipleSpecimenTableModel, i);
+					values = getObjectArray(multipleSpecimenTableModel, rowToBePasted);
 				}
 
+				/**
+				 *  Following code checks whether value copied at source exist at destination in case destination is dropdown
+				 */
 				boolean flag = false;
 				for (int k = 0; k < values.length; k++)
 				{
@@ -65,9 +103,12 @@ public abstract class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteVa
 					}
 				}
 
-				if (flag == false)
+				/**
+				 *  if value copied at source does not exist at destination in case destination is dropdown, return appropriate message
+				 */
+				if (!flag)
 				{
-					return "No match found for " + value + "in row " + (i + 1) + "of column " + (j + 1);
+					return "No match found for " + value + "in row " + (rowToBePasted + 1) + "of column " + (columnToBePasted + 1);
 				}
 
 			}
