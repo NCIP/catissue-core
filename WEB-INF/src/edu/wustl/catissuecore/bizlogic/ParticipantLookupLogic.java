@@ -277,17 +277,26 @@ public class ParticipantLookupLogic implements LookupLogic
 				// If total points are greater than cutoff points, add participant to the List
 				if (weight >= cutoffPoints)
 				{
+					
+					DefaultLookupResult result = new DefaultLookupResult();
+				
+					/**
+					 *  Removed probability after discussion with Mark -- bug number 558
+					 */
+					
+					/*
 					// Finding the probablity.
-					Double probablity = new Double((100 * weight) / totalPoints);
+				    	Double probablity = new Double((100 * weight) / totalPoints);
 
 					// Calculated points might be greater than total points because of BONUS points
 					if (probablity.intValue() > 100)
 					{
 						probablity = new Double(100);
-					}
-					DefaultLookupResult result = new DefaultLookupResult();
+					} 
+					//	result.setProbablity(probablity);	
+					*/
+	
 					result.setObject(existingParticipant);
-					result.setProbablity(probablity);
 					participants.add(result);
 				}
 			}

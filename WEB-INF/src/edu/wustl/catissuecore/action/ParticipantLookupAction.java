@@ -122,7 +122,7 @@ public class ParticipantLookupAction extends BaseAction
 		}
 		Logger.out.info("column List size ;"+columnList.size());
 		List displayList=bizlogic.getColumnList(columnList);
-		displayList.add(0,Constants.PARTICIPANT_PROBABLITY_MATCH);
+	//	displayList.add(0,Constants.PARTICIPANT_PROBABLITY_MATCH);
 		return displayList;
 	}
 	
@@ -141,9 +141,7 @@ public class ParticipantLookupAction extends BaseAction
 			Participant participant=(Participant)result.getObject();
 			
 			List participantInfo=new ArrayList();
-			participantInfo.add(result.getProbablity().toString()+" %");
-			
-			
+		
 			participantInfo.add(Utility.toString(participant.getLastName()));
 			participantInfo.add(Utility.toString(participant.getFirstName()));
 			participantInfo.add(Utility.toString(participant.getMiddleName()));

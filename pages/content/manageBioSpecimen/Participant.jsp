@@ -97,14 +97,14 @@ tr#hiddenCombo
   		//Bug 700: changed the variable name for the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
 		String chkName = "value1(CHK_" + xx + ")";
 	%>
-		["<INPUT TYPE='RADIO' NAME='chkName' onclick='onParticipantClick(<%=row.get(9)%>)' id='<%=xx%>'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"],<%}%>
+		["<INPUT TYPE='RADIO' NAME='chkName' onclick='onParticipantClick(<%=row.get(8)%>)' id='<%=xx%>'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"],<%}%>
 	<%
 		List row = (List)dataList.get(xx);
   		int j;
   		//Bug 700: changed the variable name for the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
 		String chkName = "value1(CHK_" + xx + ")";
 	%>
-		["<INPUT TYPE='RADIO' NAME='chkName' onclick='onParticipantClick(<%=row.get(9)%>)' id='<%=xx%>'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"]
+		["<INPUT TYPE='RADIO' NAME='chkName' onclick='onParticipantClick(<%=row.get(8)%>)' id='<%=xx%>'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"]
 		];
 		
 		var columns = ["",<%int k;%><%for (k=0;k < (columnList.size()-1);k++){if (columnList.get(k).toString().trim().equals("ID")){IDCount++;}%>"<%=columnList.get(k)%>",<%}if (columnList.get(k).toString().trim().equals("ID")){IDCount++;}%>"<%=columnList.get(k)%>"];
@@ -764,13 +764,6 @@ tr#hiddenCombo
 				
 			
 				<tr><td colspan="4"><table summary="" cellpadding="0" cellspacing="0" border="0" width="600">
-				<tr>
-				<td>
-				<font size="2">
-				Matching probability calculation is based on number of attributes entered, please refer to user manual for more details.
-				</font>
-				</td>
-				</tr>
 				<tr>
 				     <td class="formTitle" height="25">
 				     	<bean:message key="participant.lookup"/>
