@@ -198,6 +198,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		//send response to the applet.
 		resultMap.put(Constants.MULTIPLE_SPECIMEN_RESULT, target);
 		writeMapToResponse(response, resultMap);
+		System.out.println("In MultipleSpecimenAppletAction :- resultMap : "+ resultMap);
 		return null;
 	}
 

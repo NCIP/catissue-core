@@ -45,6 +45,8 @@ public class BaseItemHandler implements ItemListener {
 	 */
 	protected void postActionPerformed(ItemEvent event)
 	{
+		System.out.println("\n ************** In BaseItemHandler \n  : "+ getSelectedValue(event) );
+		System.out.println("getSelectedValue(event) : "+getSelectedValue(event)+" table.getSelectedRow() : "+table.getSelectedRow()+" table.getSelectedColumn() : "+ table.getSelectedColumn());
 		//fireEditingStopped();
 		table.getModel().setValueAt(getSelectedValue(event),table.getSelectedRow(),table.getSelectedColumn());
 

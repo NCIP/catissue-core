@@ -1,19 +1,22 @@
 package edu.wustl.catissuecore.applet.model;
 
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -197,6 +200,9 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		text = getComponentValue(row);
 //		System.out.println("getTableCellRendererComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
 
+		//to display tooltip
+		ToolTipManager.sharedInstance().setInitialDelay(0);
+		((JComponent)component).setToolTipText(text);
 		return component;
 	}
 
@@ -346,15 +352,17 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	{
 		//Specimen Collection Group
 		specimenCollectionGroup = new JComboBox(model.getSpecimenCollectionGroupValues());
+		specimenCollectionGroup.setPreferredSize(new Dimension(135,(int)specimenCollectionGroup.getPreferredSize().getHeight() ));
 		rbspecimenGroup = new JRadioButton();
-		collectionGroupPanel = new JPanel();
+		collectionGroupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT  ) );
 		rbspecimenGroup.setSelected(true);
 		
 		//Parent Specimen 
-		parentSpecimen = new JTextField(10);
+		parentSpecimen = new JTextField(15);
 		rbparentSpecimen = new JRadioButton();
+		parentSpecimen.setPreferredSize(new Dimension(135,(int)specimenCollectionGroup.getPreferredSize().getHeight() ));
 		rbparentSpecimen.setEnabled(false );		//	temporarily disabling since issue in Map Data Parser after discussing  Santosh 
-		parentSpecimenPanel = new JPanel();
+		parentSpecimenPanel = new JPanel(new FlowLayout(FlowLayout.LEFT  ) );
 		parentSpecimen.setEnabled(false);
 		
 		//Group for radiobuttons
@@ -403,7 +411,8 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		// Quantity
 		quantity = new JTextField(10);
 		unit = new JLabel();
-		quantityUnitPanel = new JPanel();
+		quantity.setPreferredSize(new Dimension(110,(int)specimenCollectionGroup.getPreferredSize().getHeight() ));
+		quantityUnitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT  ) );
 		
 		quantityUnitPanel.add(quantity);
 		quantityUnitPanel.add(unit);
@@ -414,9 +423,10 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		//For Storage Location
 		mapButton = new JButton(AppletConstants.MULTIPLE_SPECIMEN_MAP );
 		location = new JTextField(10);
+		location.setPreferredSize(new Dimension(110,(int)specimenCollectionGroup.getPreferredSize().getHeight() ));
 		location.setEditable(false );
 		mapButton.setEnabled(false); 
-		storageLocationPanel = new JPanel();
+		storageLocationPanel = new JPanel(new FlowLayout(FlowLayout.LEFT  ) );
 		
 		storageLocationPanel.add(location);
 		storageLocationPanel.add(mapButton);
@@ -573,6 +583,10 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		setTypeListModel(name); 
 		setConcentrationStatus();
 		updateButtons();
+		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel)table.getModel();
+		setUnit(model.getQuantityUnit(columnIndex ) );
+
+		refreshComponent(unit);
 	}
 
 	//--------------- GETTER SETTER ------------------------------------
@@ -1072,8 +1086,8 @@ public class SpecimenColumnModel extends AbstractCellEditor
 			deriveButton.setEnabled(false);
 			mapButton.setEnabled(false); 
 		}
-		SwingUtilities.updateComponentTreeUI(deriveButton);
-		SwingUtilities.updateComponentTreeUI(mapButton);
+		refreshComponent(deriveButton);
+		refreshComponent(mapButton);
 	}
 	
 	
@@ -1084,4 +1098,149 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		System.out.println("SpecimenColumnModel in fireEditingStopped  doing nothing");
 		//super.fireEditingStopped();
 	}
+	
+	// ------------ Mandar : 11Oct06 To update cells after paste. -------
+	
+	/**
+	 * This method updates the specified component and sets the given value to it.
+	 */
+	public void updateComponentValue(int row,String value)
+	{
+		JComponent comp=null;
+		switch (row)
+		{
+		//Specimen Collection Group
+		case AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO :
+			specimenCollectionGroup.setSelectedItem(value);   
+		    comp = specimenCollectionGroup;
+			break;
+		//Parent Specimen 
+		case AppletConstants.SPECIMEN_PARENT_ROW_NO :
+			parentSpecimen.setText(value);
+			comp = parentSpecimen;
+			break;
+		// Label
+		case AppletConstants.SPECIMEN_LABEL_ROW_NO :
+			label.setText(value) ;
+			comp = label; 
+			break;
+		// Barcode
+		case AppletConstants.SPECIMEN_BARCODE_ROW_NO :
+			barCode.setText(value) ;
+			comp = barCode; 
+			break;
+		//Specimen Class
+		case AppletConstants.SPECIMEN_CLASS_ROW_NO :
+			classList.setSelectedItem(value);
+			comp = classList; 
+			break;
+		//Specimen Type
+		case AppletConstants.SPECIMEN_TYPE_ROW_NO :
+			typeList.setSelectedItem(value);
+			comp = typeList; 
+			break;
+		//TissueSite
+		case AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO :
+			tissueSiteList.setSelectedItem(value);
+			comp = tissueSiteList; 
+			break;
+		//TissueSide
+		case AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO :
+			tissueSideList.setSelectedItem(value);
+			comp = tissueSideList; 
+			break;
+		//PathologicalStatus 
+		case AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO : 
+			pathologicalStatusList.setSelectedItem(value);
+			comp = pathologicalStatusList; 
+			break;
+		// Quantity
+		case AppletConstants.SPECIMEN_QUANTITY_ROW_NO :
+			quantity.setText(value)  ;
+			comp = quantity;
+			break;
+		// Concentration
+		case AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO :
+			concentration.setText(value) ;
+			comp = concentration; 
+			break;
+		//For Storage Location
+		case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
+			location.setText(value)   ;
+			comp = location;
+			break;
+		}		
+		refreshComponent(comp);
+		System.out.println(" Component at " + row +" Updated");
+	}
+
+	/**
+	 * This method refreshes the specified component.
+	 * @param row
+	 */
+	public void updateComponent(int row)
+	{
+		JComponent comp=null;
+		switch (row)
+		{
+		//Specimen Collection Group
+		case AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO :
+		    comp = specimenCollectionGroup;
+			break;
+		//Parent Specimen 
+		case AppletConstants.SPECIMEN_PARENT_ROW_NO :
+			comp = parentSpecimen;
+			break;
+		// Label
+		case AppletConstants.SPECIMEN_LABEL_ROW_NO :
+			comp = label; 
+			break;
+		// Barcode
+		case AppletConstants.SPECIMEN_BARCODE_ROW_NO :
+			comp = barCode; 
+			break;
+		//Specimen Class
+		case AppletConstants.SPECIMEN_CLASS_ROW_NO :
+			comp = classList; 
+			break;
+		//Specimen Type
+		case AppletConstants.SPECIMEN_TYPE_ROW_NO :
+			comp = typeList; 
+			break;
+		//TissueSite
+		case AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO :
+			comp = tissueSiteList; 
+			break;
+		//TissueSide
+		case AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO :
+			comp = tissueSideList; 
+			break;
+		//PathologicalStatus 
+		case AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO : 
+			comp = pathologicalStatusList; 
+			break;
+		// Quantity
+		case AppletConstants.SPECIMEN_QUANTITY_ROW_NO :
+			comp = quantity;
+			break;
+		// Concentration
+		case AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO :
+			comp = concentration; 
+			break;
+		//For Storage Location
+		case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
+			comp = location;
+			break;
+		}		
+		refreshComponent(comp);
+	}
+
+	/*
+	 * Refreshes the UI.
+	 */
+	private void refreshComponent(Component comp)
+	{
+		SwingUtilities.updateComponentTreeUI(comp);
+	}
+	
 }

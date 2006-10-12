@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -124,7 +125,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		}
        System.out.println("setValueAt " + row + " " + column + ": " + specimenMap.get(getKey(row,column)) + value);
 */
-		/* Code to check the calling method.
+		/* Code to check the calling method. 
 		try
 		{
 			throw new Exception("User Defined");
@@ -132,6 +133,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		catch(Exception e){ e.printStackTrace();}
 		*/ 
 		specimenMap.put(getKey(row,column), value);
+		System.out.println("In setValueAt : row : "+row + " Column : "+ column);
 		System.out.println("setValueAt " + getKey(row,column)+ ": " + specimenMap.get(getKey(row,column))+" - " + value);
 	}
 
@@ -557,4 +559,26 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	public void setLastCellRow(int currentCellPositionY) {
 		this.lastCellRow = currentCellPositionY;
 	}
+	
+	//----------------------POC for Copy Paste. start
+	CopyPasteOperationValidatorModel copyPasteOperationValidatorModel;
+
+	/**
+	 * @return Returns the CopyPasteOperationValidatorModel.
+	 */
+	public CopyPasteOperationValidatorModel getCopyPasteOperationValidatorModel()
+	{
+		return copyPasteOperationValidatorModel;
+	}
+	/**
+	 * @param CopyPasteOperationValidatorModel The CopyPasteOperationValidatorModel to set.
+	 */
+	public void setCopyPasteOperationValidatorModel(
+			CopyPasteOperationValidatorModel copyOperationValidatorModel)
+	{
+		this.copyPasteOperationValidatorModel = copyOperationValidatorModel;
+	}
+	
+	// -----------------------POC for copy paste end
+
 }

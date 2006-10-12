@@ -139,16 +139,17 @@ public interface AppletConstants
 	String APPLET_ACTION_PARAM_NAME = "method";
 	
 	//Constants for buttons
-	public static final String MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS = "ExternalIdentifiers";
-	public static final String MULTIPLE_SPECIMEN_BIOHAZARDS = "Biohazards";
-	public static final String MULTIPLE_SPECIMEN_EVENTS = "Events";
-	public static final String MULTIPLE_SPECIMEN_DERIVE = "Derive";
+	public static final String MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS = "Add";
+	public static final String MULTIPLE_SPECIMEN_BIOHAZARDS = "Add";
+	public static final String MULTIPLE_SPECIMEN_EVENTS = "Add";
+	public static final String MULTIPLE_SPECIMEN_DERIVE = "Add";
 	public static final String MULTIPLE_SPECIMEN_MAP = "Map";
-	public static final String MULTIPLE_SPECIMEN_COMMENTS = "Comments";
+	public static final String MULTIPLE_SPECIMEN_COMMENTS = "Add";
 	public static final String MULTIPLE_SPECIMEN_ADD_SPECIMEN = "More";
 	public static final String MULTIPLE_SPECIMEN_COPY = "Copy";
 	public static final String MULTIPLE_SPECIMEN_PASTE = "Paste";
 	public static final String MULTIPLE_SPECIMEN_MANDATORY = "*";
 	
 	public static final String MULTIPLE_SPECIMEN_LOCATION_LABEL = "Containerlabel_temp";
+	public static final String MULTIPLE_SPECIMEN_ROW_COLUMN_SEPARATOR="@";
 }

@@ -19,6 +19,8 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.listener.AddColumnHandler;
+import edu.wustl.catissuecore.applet.listener.MultipleSpecimenCopyActionHandler;
+import edu.wustl.catissuecore.applet.listener.MultipleSpecimenPasteActionHandler;
 import edu.wustl.catissuecore.applet.listener.PageLinkHandler;
 import edu.wustl.catissuecore.applet.listener.SpecimenSubmitButtonHandler;
 import edu.wustl.catissuecore.applet.listener.TableModelChangeHandler;
@@ -126,6 +128,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 			
 		//table.getColumnModel().setColumnSelectionAllowed(true);
 		table.setColumnSelectionAllowed(true);
+		table.setCellSelectionEnabled(true );
 		//table.setRowHeight(3,50);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	
@@ -157,13 +160,18 @@ public class MultipleSpecimenApplet extends BaseApplet {
     {
     	JButton copy = new JButton(AppletConstants.MULTIPLE_SPECIMEN_COPY  );
     	JButton paste = new JButton(AppletConstants.MULTIPLE_SPECIMEN_PASTE);
-    	copy.setEnabled(false);
-    	paste.setEnabled(false);
+    	//copy.setEnabled(false);
+    	//paste.setEnabled(false);
+    	copy.addActionListener(new MultipleSpecimenCopyActionHandler(table));
+    	paste.addActionListener(new MultipleSpecimenPasteActionHandler(table));
+    	
     	JButton addSpecimen = new JButton(AppletConstants.MULTIPLE_SPECIMEN_ADD_SPECIMEN);
     	addSpecimen.addActionListener(new AddColumnHandler(table,this) );
+    	
     	JLabel placeHolder = new JLabel("     ");
     	panel.add(copy);panel.add(placeHolder );panel.add(paste );
     	panel.add(placeHolder );panel.add(addSpecimen);
+
     	//Temporary added till adjusting height
     	JButton submit = new JButton("Submit");
     	submit.addActionListener(new SpecimenSubmitButtonHandler(table));

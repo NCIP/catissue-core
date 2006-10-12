@@ -101,22 +101,4 @@ public class FixedColumnScrollPane extends JScrollPane {
 	    }
 		 
 	 // ---------------------------------------MD 28Sep06
-	 
-	 
-	 
-	    public static void main(String[] args)
-	    {
-	        //  Build your table normally
-	 
-	        JTable table = new JTable(10, 8);
-	        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-//	        JScrollPane scrollPane= new FixedColumnScrollPane(table, 1 );
-	        JScrollPane scrollPane= new FixedColumnScrollPane(table);
-	//
-	        JFrame frame = new JFrame("Table Fixed Column Demo");
-	        frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-	        frame.getContentPane().add( scrollPane );
-	        frame.setSize(400, 300);
-	        frame.setVisible(true);
-	    }
 }
