@@ -147,6 +147,11 @@ public class UserBizLogic extends DefaultBizLogic
 
 				// user.setPassword(csmUser.getPassword());            
 			}
+			
+			/**
+			 *  First time login is always set to true when a new user is created
+			 */
+			user.setFirstTimeLogin(new Boolean(true));
 
 			// Create address and the user in catissue tables.
 			dao.insert(user.getAddress(), sessionDataBean, true, false);
