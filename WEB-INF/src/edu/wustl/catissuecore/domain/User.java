@@ -134,7 +134,7 @@ public class User extends AbstractDomainObject implements Serializable
     
     //Change for API Search   --- Ashwin 04/10/2006
     /**
-	 * whether Aliquote in same container
+	 * whether user is logging for the first time
 	 */
 	protected Boolean firstTimeLogin;
 
