@@ -54,6 +54,8 @@
 		<javac srcdir="." >
 			<include name="ClientDemo.java"/>
 			<include name="APIDemo.java"/>
+			<include name="SendBuildReport.java"/>
+			<include name="UniqueKeyGeneratorUtil.java"/>
 			<classpath refid="cp"/>
 			<classpath>
 				<pathelement location="${src.dir}"/>
