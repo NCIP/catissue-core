@@ -10,6 +10,7 @@ import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumnModel;
 
+import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
@@ -55,16 +56,19 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 			
 			if (CommonAppletUtil.validateCell())
 			{
-				updateTableModel();
-				
 				updateUI(validatorModel);
 			}
 		System.out.println("\n >>>>>>>>>>>>>> DONE >>>>>>>>>>>>");
 	}
 	
-	private void updateTableModel()
+	private void updateTableModel(int row, int col, Object value)
 	{
-		System.out.println("This method updates the model.");
+		System.out.println("\n---X------X------X------X------X------X------X---\n");
+		System.out.println("Inside MultipleSpecimenPasteActionHandler updateTableModel. >>>>>>>>>>>>>>>>>>>>>\n");
+		System.out.println("Setting value at row : "+row+" , col : "+col+" , value : "+value);
+		CommonAppletUtil.getMultipleSpecimenTableModel(table).setValueAt(value,row,col );
+		System.out.println("Value Set");
+		System.out.println("\n---X------X------X------X------X------X------X---\n");
 	}
 	
 	private void updateUI(CopyPasteOperationValidatorModel validatorModel)
@@ -105,6 +109,7 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 	
 	private void setUI(CopyPasteOperationValidatorModel validatorModel, HashMap dataMap, int selectedRow, int selectedCol)
 	{
+		int tmpSelectedRow = selectedRow;
 		
 		// copeid rows, columns
 		List copiedRows = validatorModel.getSelectedCopiedRows();
@@ -126,26 +131,45 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 		for(int copiedColumnCount=0; copiedColumnCount<copiedCols.size(); copiedColumnCount++)
 		{
 			int copiedCol = ((Integer)(copiedCols.get(copiedColumnCount))).intValue();
+			selectedRow = tmpSelectedRow;
 			for(int count=0;count<copiedRows.size();count++ )
 			{
 				int copiedRow = ((Integer)(copiedRows.get(count))).intValue();
-				System.out.println("Count : "+count+ " ,copiedRow: "+ copiedRow + " , copiedCol: "+ copiedCol);
-				String key = CommonAppletUtil.getDataKey(copiedRow, copiedCol);
-				System.out.println("Key : "+ key);
-				Object value = dataMap.get(key );
-				System.out.println("Value : "+ value);
+				//check for disabled rows
+				if(!isDisabledRow(selectedRow))
+				{
+					System.out.println("Count : "+count+ " ,copiedRow: "+ copiedRow + " , copiedCol: "+ copiedCol);
+					String key = CommonAppletUtil.getDataKey(copiedRow, copiedCol);
+					System.out.println("Key : "+ key);
+					Object value = dataMap.get(key );
+					System.out.println("Value : "+ value);
 
-				TableColumnModel columnModel = table.getColumnModel();
-				SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(selectedColumnIndex).getCellEditor();
-				scm.updateComponentValue(selectedRow,value.toString() );
-//				SpecimenColumnModel scmRenderer = (SpecimenColumnModel)columnModel.getColumn(selectedColumnIndex).getCellRenderer();
-//				scmRenderer.updateComponent(selectedRow );
-				System.out.println("Row updated : " + selectedRow );
+					TableColumnModel columnModel = table.getColumnModel();
+					SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(selectedColumnIndex).getCellEditor();
+					scm.updateComponentValue(selectedRow,value.toString() );
+					SpecimenColumnModel scmRenderer = (SpecimenColumnModel)columnModel.getColumn(selectedColumnIndex).getCellRenderer();
+					scmRenderer.updateComponent(selectedRow );
+					//To update the model.
+					updateTableModel(selectedRow, selectedColumnIndex,  value);
+
+					System.out.println("Row updated : " + selectedRow );
+				}
 				selectedRow = selectedRow + 1;
 			}
 			selectedColumnIndex++;
 		}
 		SwingUtilities.updateComponentTreeUI(table);
+	}
+	
+	private boolean isDisabledRow(int rowNo)
+	{
+		boolean result=false;
+		if(rowNo == AppletConstants.SPECIMEN_PARENT_ROW_NO || rowNo == AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO   )
+		{
+			result =  true;
+		}
+		System.out.println(rowNo + " Row is disabled : "+ result  );
+		return result ;
 	}
 	
 }

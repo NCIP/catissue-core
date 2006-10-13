@@ -3,9 +3,12 @@ package edu.wustl.catissuecore.applet.listener;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
+import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.table.TableColumnModel;
 
 import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
+import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
@@ -72,7 +75,14 @@ public class MultipleSpecimenCopyActionHandler extends
 			for(int columnIndex=0; columnIndex<selectedColumns.length; columnIndex++)
 			{
 				String key = CommonAppletUtil.getDataKey(selectedRows[rowIndex], selectedColumns[columnIndex]);
-				Object value = table.getValueAt(selectedRows[rowIndex],selectedColumns[columnIndex] );
+				//commented to check the values from cell editor
+//				Object value = table.getValueAt(selectedRows[rowIndex],selectedColumns[columnIndex] );
+				//--------
+				TableColumnModel columnModel = table.getColumnModel();
+				SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(selectedColumns[columnIndex]).getCellEditor();
+				JComponent component = ((JComponent)scm.getTableCellEditorComponent(table,null,true,selectedRows[rowIndex],selectedColumns[columnIndex]));
+				Object value =scm.getCellEditorValue(); 	
+				// -------
 				map.put(key,value );
 			}
 		}

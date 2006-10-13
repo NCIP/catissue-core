@@ -466,8 +466,6 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		ComboBoxHandler comboBoxHandler = new ComboBoxHandler(table);
 		MapButtonHandler mapButtonHandler = new MapButtonHandler(table);
 		ButtonHandler buttonHandler = new ButtonHandler(table);
-		
-	//Mandar : 07Oct06 : commented due to problems in fetching selected row and column in focuslost event 
 		BaseFocusHandler baseFocusHandler = new BaseFocusHandler(table);
 		CollectionGroupComboBoxHandler collectionGroupComboBoxHandler = new CollectionGroupComboBoxHandler(table);
 		
@@ -993,11 +991,9 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	}
 	
 	/**
-	 * Method to set the text value of various components
+	 * Method to get the text value of various components
 	 * @author mandar_deshmukh
 	 *
-	 * TODO To change the template for this generated type comment go to
-	 * Window - Preferences - Java - Code Style - Code Templates
 	 */
 	private String getComponentValue(int row)
 	{
