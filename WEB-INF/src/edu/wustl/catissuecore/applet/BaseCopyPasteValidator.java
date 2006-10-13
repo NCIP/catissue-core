@@ -29,11 +29,11 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	{
 		String message = "";
 		message = preValidate();
-		if (message != null && !message.equals(""))
+		if (message.equals(""))
 		{
 			message = doValidate();
 		}
-		if (message != null && !message.equals(""))
+		if (message.equals(""))
 		{
 			message = postValidate();
 		}
