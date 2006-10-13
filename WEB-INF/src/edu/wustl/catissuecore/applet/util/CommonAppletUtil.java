@@ -11,15 +11,19 @@ package edu.wustl.catissuecore.applet.util;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JApplet;
+import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.table.TableColumnModel;
 
 import netscape.javascript.JSObject;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
+import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 
 
 
@@ -153,6 +157,40 @@ public final class CommonAppletUtil
 	public static String getDataKey(int row, int col)
 	{
 		return String.valueOf(row)+AppletConstants.MULTIPLE_SPECIMEN_ROW_COLUMN_SEPARATOR+String.valueOf(col );	
+	}
+
+	/**
+	 * This method returns the HashMap of data of selected cells.
+	 * @param table Table to get the selected cells.
+	 * @return HashMap containing data of selected cells.
+	 */
+	public static HashMap getSelectedData(JTable table)
+	{
+		int[] selectedColumns = table.getSelectedColumns();
+		int[] selectedRows = table.getSelectedRows();		
+		System.out.println("\n/////////// inside getSelectedData ///////////////////\n");
+		HashMap map = new HashMap();
+		for(int rowIndex=0;rowIndex<selectedRows.length; rowIndex++  )
+		{
+			for(int columnIndex=0; columnIndex<selectedColumns.length; columnIndex++)
+			{
+				String key = CommonAppletUtil.getDataKey(selectedRows[rowIndex], selectedColumns[columnIndex]);
+				//commented to check the values from cell editor
+//				Object value = table.getValueAt(selectedRows[rowIndex],selectedColumns[columnIndex] );
+				//--------
+				TableColumnModel columnModel = table.getColumnModel();
+				SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(selectedColumns[columnIndex]).getCellEditor();
+				JComponent component = ((JComponent)scm.getTableCellEditorComponent(table,null,true,selectedRows[rowIndex],selectedColumns[columnIndex]));
+				Object value =scm.getCellEditorValue();
+				
+				getMultipleSpecimenTableModel(table).setValueAt(value,selectedRows[rowIndex],selectedColumns[columnIndex]);
+				// -------
+				map.put(key,value );
+			}
+		}
+		System.out.println("Returning Map -------------------------\n");
+		System.out.println(map);
+		return map;
 	}
 
 }
