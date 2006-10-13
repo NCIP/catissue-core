@@ -75,7 +75,9 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 			{
 				updateUI(validatorModel);
 			}
-		System.out.println("\n >>>>>>>>>>>>>> DONE >>>>>>>>>>>>");
+		System.out.println("\n >>>>>>>>>>>>>> PASTE DONE >>>>>>>>>>>>");
+		CommonAppletUtil.getMultipleSpecimenTableModel(table).showMapData();
+		System.out.println("\n >>>>>>>>>>>>>>MAP in PASTE  >>>>>>>>>>>>");
 	}
 	
 	private void updateTableModel(int row, int col, Object value)
