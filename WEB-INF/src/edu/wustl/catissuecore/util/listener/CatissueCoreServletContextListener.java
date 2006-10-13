@@ -1,5 +1,5 @@
 /*
- * $Name: 1.39 $
+ * $Name: 1.40 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -7,14 +7,15 @@ package edu.wustl.catissuecore.util.listener;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
-
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -216,6 +217,24 @@ public class CatissueCoreServletContextListener implements ServletContextListene
         Logger.out.debug("System property : "+System.getProperty("gov.nih.nci.security.configFile"));
         Logger.out.debug("System property : "+System.getProperty("edu.wustl.catissuecore.contactUsFile"));
         
+        
+        /**
+         *  Following code is added for caching the Map of all storage containers having empty positions.
+         *  Get the all storage containers having empty positions from ParticipantBizLogic and add it to cache
+         */
+        Map storageContainersMap = null;
+        StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		try
+		{
+			storageContainersMap = storageContainerBizLogic.getAllocatedContainerMap();
+		}
+		catch (Exception ex)
+		{
+			Logger.out.debug("Exception occured getting List of Storage Containers");
+			ex.printStackTrace();
+		}
+        
+        
         /**
          *  Following code is added for caching the Map of all participants.
          *  Get the map of participants from ParticipantBizLogic and add it to cache
@@ -229,23 +248,23 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		}
 		catch (Exception ex)
 		{
-			Logger.out.debug("Exception occured getting List of Participants");
+			Logger.out.debug("Exception occured while getting List of Participants");
 			ex.printStackTrace();
 		}
-  
+		
 		// getting instance of catissueCoreCacheManager and adding participantMap to cache
 	 
 		try
 		{
 			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
 			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS,(HashMap) participantMap);
+			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_STORAGE_CONTAINERS,(TreeMap)storageContainersMap);
 		}
 		catch (CacheException e)
 		{
 			Logger.out.debug("Exception occured while creating instance of CatissueCoreCacheManager");
 			e.printStackTrace();
 		}
-		
 		
     }
     
