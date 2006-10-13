@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.ehcache.CacheException;
+
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -62,12 +64,30 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 	 * @param obj The storageType object to be saved.
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
+	 * @throws 
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Participant participant = (Participant) obj;
 
 		dao.insert(participant, sessionDataBean, true, true);
+		
+//		 getting instance of catissueCoreCacheManager and getting participantMap from cache
+		CatissueCoreCacheManager catissueCoreCacheManager = null;
+		try
+		{
+			catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+			HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
+			participantMap.put(participant.getId(), participant);
+			// adding updated participantMap to cache
+			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS, participantMap);
+		}
+		catch (CacheException e)
+		{
+			Logger.out.debug("Exception occured while getting instance of cachemanager");
+			e.printStackTrace();
+		}
+	
 
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 
@@ -88,7 +108,7 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 			pmIdentifier.setParticipant(participant);
 			dao.insert(pmIdentifier, sessionDataBean, true, true);
 		}
-
+		
 		Set protectionObjects = new HashSet();
 		protectionObjects.add(participant);
 		try
@@ -113,6 +133,22 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 		Participant oldParticipant = (Participant) oldObj;
 
 		dao.update(participant, sessionDataBean, true, true, false);
+		
+        // getting instance of catissueCoreCacheManager and getting participantMap from cache
+		CatissueCoreCacheManager catissueCoreCacheManager = null;
+		try
+		{
+			catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+			HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
+			participantMap.put(participant.getId(), participant);
+			// adding updated participantMap to cache
+			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS, participantMap);
+		}
+		catch (CacheException e)
+		{
+			Logger.out.debug("Exception occured while getting instance of cachemanager");
+			e.printStackTrace();
+		}
 
 		//Audit of Participant.
 		dao.audit(obj, oldObj, sessionDataBean, true);
