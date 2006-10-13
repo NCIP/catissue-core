@@ -130,6 +130,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String OBJECT_COMPLETE_NAME_LIST = "objectCompleteNameList";
 	public static final String SIMPLE_QUERY_INTERFACE_TITLE = "simpleQueryInterfaceTitle";
 	
+	public static final String MAP_OF_STORAGE_CONTAINERS = "storageContainerMap";
 	public static final String STORAGE_CONTAINER_GRID_OBJECT = "storageContainerGridObject";
 	public static final String STORAGE_CONTAINER_CHILDREN_STATUS = "storageContainerChildrenStatus";
 	public static final String START_NUMBER = "startNumber";
@@ -1251,7 +1252,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MULTIPLE_SPECIMEN_MAP_KEY = "MULTIPLE_SPECIMEN_MAP_KEY";
 	public static final String MULTIPLE_SPECIMEN_EVENT_MAP_KEY = "MULTIPLE_SPECIMEN_EVENT_MAP_KEY";
 	public static final String MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY = "MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY";
+	public static final String MULTIPLE_SPECIMEN_BUTTONS_MAP_KEY = "MULTIPLE_SPECIMEN_BUTTONS_MAP_KEY";
 	public static final String DERIVED_FORM = "DerivedForm";
+	
 	
 	public static final String SPECIMEN_ATTRIBUTE_KEY =   "specimenAttributeKey";
 	
@@ -1307,7 +1310,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	// constants required for caching mechanism of ParticipantBizLogic
 	
 	public static final String MAP_OF_PARTICIPANTS = "listOfParticipants";
-	public static final String EHCACHE_FOR_PARTICIPANT_LOOKUP = "cacheForParticipantLookUp";
+	public static final String EHCACHE_FOR_CATISSUE_CORE = "cacheForCaTissueCore";
 	public static final String ADD = "add";
 	public static final String EDIT = "edit";
 	public static final String ID = "id";
