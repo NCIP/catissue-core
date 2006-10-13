@@ -22,6 +22,22 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	 */
 	protected CopyPasteOperationValidatorModel validatorModel;
 
+	/** 
+	 * Default Constructor
+	 */
+	public BaseCopyPasteValidator()
+	{
+		
+	}
+	/**
+	 * Constructor with model
+	 * @param validatorModel model
+	 */
+	public BaseCopyPasteValidator(CopyPasteOperationValidatorModel validatorModel)
+	{
+		this.validatorModel = validatorModel;
+	}
+	
 	/**
 	 * Perform the base level validations required for copy operation.  
 	 */
