@@ -152,4 +152,7 @@ public interface AppletConstants
 	
 	public static final String MULTIPLE_SPECIMEN_LOCATION_LABEL = "Containerlabel_temp";
 	public static final String MULTIPLE_SPECIMEN_ROW_COLUMN_SEPARATOR="@";
+	
+	public static final String COPY_OPERATION = "copy";
+	public static final String PASTE_OPERATION = "paste";
 }
