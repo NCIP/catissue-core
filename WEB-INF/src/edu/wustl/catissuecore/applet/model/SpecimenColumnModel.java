@@ -361,7 +361,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		parentSpecimen = new JTextField(15);
 		rbparentSpecimen = new JRadioButton();
 		parentSpecimen.setPreferredSize(new Dimension(135,(int)specimenCollectionGroup.getPreferredSize().getHeight() ));
-		rbparentSpecimen.setEnabled(false );		//	temporarily disabling since issue in Map Data Parser after discussing  Santosh 
+		rbparentSpecimen.setEnabled(true );		 
 		parentSpecimenPanel = new JPanel(new FlowLayout(FlowLayout.LEFT  ) );
 		parentSpecimen.setEnabled(false);
 		

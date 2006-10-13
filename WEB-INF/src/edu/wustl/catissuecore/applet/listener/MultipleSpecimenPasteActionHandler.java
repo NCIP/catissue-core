@@ -181,7 +181,8 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 	private boolean isDisabledRow(int rowNo)
 	{
 		boolean result=false;
-		if(rowNo == AppletConstants.SPECIMEN_PARENT_ROW_NO || rowNo == AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO   )
+		//rowNo == AppletConstants.SPECIMEN_PARENT_ROW_NO  removed after discussing with Santosh to enable Parent Specimen.
+		if(rowNo == AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO   ) // rowNo == AppletConstants.SPECIMEN_PARENT_ROW_NO 
 		{
 			result =  true;
 		}
