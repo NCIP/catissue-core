@@ -47,8 +47,8 @@ public class CatissueCoreCacheManager
 		CacheManager.create();
 		// get instance of cachemanager
 		manager = CacheManager.getInstance();
-		// get cache for Participant Look which is configured in ehcache.xml
-		cache = manager.getCache(Constants.EHCACHE_FOR_PARTICIPANT_LOOKUP);
+		// get cache for CatissueCore which is configured in ehcache.xml
+		cache = manager.getCache(Constants.EHCACHE_FOR_CATISSUE_CORE);
 	}
 
 	/**
