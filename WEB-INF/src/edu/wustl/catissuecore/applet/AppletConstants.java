@@ -156,5 +156,10 @@ public interface AppletConstants
 	
 	public static final String COPY_OPERATION = "copy";
 	public static final String PASTE_OPERATION = "paste";
+	
+	public static final String ARRAY_COPY_OPTION_LABELBAR = "Label/Barcode";
+	public static final String ARRAY_COPY_OPTION_QUANTITY = "Quantity";
+	public static final String ARRAY_COPY_OPTION_CONCENTRATION = "Concentration";
+	public static final String ARRAY_COPY_OPTION_ALL = "All";
 	public static final int LINK_BUTTON_WIDTH = 70;
 }
