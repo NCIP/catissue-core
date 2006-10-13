@@ -1,7 +1,8 @@
 package edu.wustl.catissuecore.applet.ui;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,15 +42,16 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	private BaseTable table;
 	private JPanel buttonPanel;
 	private JPanel linkPanel;
-	private JPanel tablePanel;
-	private JPanel footerPanel;
-	private JPanel outerPanel;
+//	private JPanel tablePanel;
+//	private JPanel footerPanel;
+//	private JPanel outerPanel;
 	
 	private int totalPages=0;
 	private final int WIDTH=1000;
 //	private int currentCellPositionX = 0;
 //	private int currentCellPositionY = 0;
 	
+	Color appletColor;
 	public void doInit()
     {
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));		
@@ -69,59 +71,60 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		//getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT ));
 		this.getContentPane().setLayout(new VerticalLayout(0,10));
 		
-		buttonPanel = new JPanel();
-		linkPanel = new JPanel();
-		tablePanel = new JPanel();
-		footerPanel = new JPanel();
-		outerPanel = new JPanel();
+		buttonPanel = new JPanel( new FlowLayout(FlowLayout.LEFT ) );
+		linkPanel = new JPanel( new FlowLayout(FlowLayout.LEFT ) );
+//		tablePanel = new JPanel();
+//		footerPanel = new JPanel( new FlowLayout(FlowLayout.RIGHT ) );
+//		outerPanel = new JPanel();
 		
-		outerPanel.setLayout(new GridLayout(4,1));
+//		outerPanel.setLayout(new GridLayout(4,1));
 		createButtonPanel(buttonPanel);
 		createLinkPanel(linkPanel);
-	//	createFooterPanel(footerPanel);
+//		createFooterPanel(footerPanel);
 		
-		//--gblayout
-		GridBagLayout gbl = new GridBagLayout();
-		outerPanel.setLayout(gbl);
-	    final int GRIDX = 0;
-		// Place a component at cell location (1,1)
-	    GridBagConstraints gbc = new GridBagConstraints();
-	    gbc.gridx = GRIDX;
-	    gbc.gridy = 1;
-	    gbc.fill = GridBagConstraints.NONE;
-	    gbl.setConstraints(buttonPanel, gbc);
-	    outerPanel.add(buttonPanel);
-
-		// Place a component at cell location (2,1)
-	    gbc = new GridBagConstraints();
-	    gbc.gridx = GRIDX;
-	    gbc.gridy = 2;
-	    gbc.fill = GridBagConstraints.NONE;
-	    gbl.setConstraints(linkPanel, gbc);
-	    outerPanel.add(linkPanel);
-
-		// Place a component at cell location (3,1)
-	    gbc = new GridBagConstraints();
-	    gbc.gridx = GRIDX;
-	    gbc.gridy = 3;
-	    gbc.fill = GridBagConstraints.BOTH;   
+//		//--gblayout
+//		GridBagLayout gbl = new GridBagLayout();
+//		outerPanel.setLayout(gbl);
+//	    final int GRIDX = 0;
+//		// Place a component at cell location (1,1)
+//	    GridBagConstraints gbc = new GridBagConstraints();
+//	    gbc.gridx = GRIDX;
+//	    gbc.gridy = 1;
 //	    gbc.fill = GridBagConstraints.NONE;
-	    gbl.setConstraints(tablePanel, gbc);
-	    //outerPanel.add(tablePanel);
-
-		// Place a component at cell location (4,1)
-	    gbc = new GridBagConstraints();
-	    gbc.gridx = GRIDX;
-	    gbc.gridy = 4;
-	    gbc.fill = GridBagConstraints.NONE;
-	    gbl.setConstraints(footerPanel, gbc);
-	    //outerPanel.add(footerPanel);
+//	    gbl.setConstraints(buttonPanel, gbc);
+//	    outerPanel.add(buttonPanel);
+//
+//		// Place a component at cell location (2,1)
+//	    gbc = new GridBagConstraints();
+//	    gbc.gridx = GRIDX;
+//	    gbc.gridy = 2;
+//	    gbc.fill = GridBagConstraints.NONE;
+//	    gbl.setConstraints(linkPanel, gbc);
+//	    outerPanel.add(linkPanel);
+//
+//		// Place a component at cell location (3,1)
+//	    gbc = new GridBagConstraints();
+//	    gbc.gridx = GRIDX;
+//	    gbc.gridy = 3;
+//	    gbc.fill = GridBagConstraints.BOTH;   
+////	    gbc.fill = GridBagConstraints.NONE;
+//	    gbl.setConstraints(tablePanel, gbc);
+//	    //outerPanel.add(tablePanel);
+//
+//		// Place a component at cell location (4,1)
+//	    gbc = new GridBagConstraints();
+//	    gbc.gridx = GRIDX;
+//	    gbc.gridy = 4;
+//	    gbc.fill = GridBagConstraints.NONE;
+//	    gbl.setConstraints(footerPanel, gbc);
+//	    //outerPanel.add(footerPanel);
 
 		//--- gbl
 	    System.out.println("Applet size :- W : "+getWidth()+ " ,H : "+getHeight() );
-		outerPanel.setSize(getWidth(),getHeight());
-		System.out.println("OuterPanel size :- W : "+outerPanel.getWidth()+ " ,H : "+outerPanel.getHeight() );
-	    getContentPane().add(outerPanel);
+//		outerPanel.setSize(getWidth(),getHeight());
+//		System.out.println("OuterPanel size :- W : "+outerPanel.getWidth()+ " ,H : "+outerPanel.getHeight() );
+	    getContentPane().add(buttonPanel);
+	    getContentPane().add(linkPanel);
 		// --------------------
 
         table.getModel().addTableModelListener(new TableModelChangeHandler(table));
@@ -150,10 +153,10 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
 
 		//tablePanel.add( scrollPane );
-		tablePanel.setSize(WIDTH,getHeight());
+//		tablePanel.setSize(WIDTH,getHeight());
 		getContentPane().add(scrollPane);
 //		getContentPane().add(footerPanel);
-		
+		setBackground(appletColor);
     }
     
     private void createButtonPanel(JPanel panel)
@@ -161,8 +164,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
     	JButton copy = new JButton(AppletConstants.MULTIPLE_SPECIMEN_COPY  );
     	JButton paste = new JButton(AppletConstants.MULTIPLE_SPECIMEN_PASTE);
     	//copy.setEnabled(false);
-    	//paste.setEnabled(false);
-    	copy.addActionListener(new MultipleSpecimenCopyActionHandler(table));
+    	paste.setEnabled(false);
+    	copy.addActionListener(new MultipleSpecimenCopyActionHandler(table, paste));
     	paste.addActionListener(new MultipleSpecimenPasteActionHandler(table));
     	
     	JButton addSpecimen = new JButton(AppletConstants.MULTIPLE_SPECIMEN_ADD_SPECIMEN);
@@ -171,14 +174,19 @@ public class MultipleSpecimenApplet extends BaseApplet {
     	JLabel placeHolder = new JLabel("     ");
     	panel.add(copy);panel.add(placeHolder );panel.add(paste );
     	panel.add(placeHolder );panel.add(addSpecimen);
-
+    	int usedWidth = copy.getPreferredSize().width+ paste.getPreferredSize().width+ (2 * placeHolder.getPreferredSize().width) ;
+    	usedWidth = usedWidth + placeHolder.getPreferredSize().width + addSpecimen.getPreferredSize().width ;  
+    	
     	//Temporary added till adjusting height
-    	JButton submit = new JButton("Submit");
+    	JPanel submitButtonPanel = new JPanel( new FlowLayout(FlowLayout.RIGHT  ) );
+    	JButton submit = new JButton(AppletConstants.MULTIPLE_SPECIMEN_SUBMIT);
     	submit.addActionListener(new SpecimenSubmitButtonHandler(table));
     	placeHolder = new JLabel("                         ");
-    	panel.add(placeHolder );panel.add(placeHolder );panel.add(submit );
-
-    	
+    	int submitButtonPanelWidth = getWidth()-usedWidth-20;
+    	System.out.println("submitButtonPanelWidth : "+ submitButtonPanelWidth + " usedWidth: "+usedWidth);
+    	submitButtonPanel.setPreferredSize(new Dimension(submitButtonPanelWidth,(int) submit.getPreferredSize().height+5  ) );
+    	submitButtonPanel.add(placeHolder );submitButtonPanel.add(submit );panel.add(submitButtonPanel );
+    	appletColor = panel.getBackground(); 
     }
     
     private void createLinkPanel(JPanel panel)
@@ -186,14 +194,16 @@ public class MultipleSpecimenApplet extends BaseApplet {
     	MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
     	int startIndex = 1;
     	int endIndex = tableModel.getColumnsPerPage()  ;
+    	panel.setLayout(new GridLayout(2,(int)(tableModel.getTotalPageCount()/2),0,0));
     	for(int pageNo = 1; pageNo<=tableModel.getTotalPageCount();pageNo++  )
     	{
-    		JButton link1 = new JButton("  "+ String.valueOf(startIndex )+ " - "+String.valueOf(endIndex )+"  " );
+    		JButton link1 = new JButton(String.valueOf(startIndex )+ " - "+String.valueOf(endIndex ));
     		link1.setActionCommand(String.valueOf(pageNo ));
          	LineBorder border =(LineBorder) BorderFactory.createLineBorder(getBackground() ); 
          	link1.setBorder(border );
+         	link1.setPreferredSize(new Dimension(AppletConstants.LINK_BUTTON_WIDTH,(int)link1.getPreferredSize().getHeight()) );
          	link1.addActionListener(new PageLinkHandler(table));
-         	panel.add(link1);panel.add(new JLabel("    ") );
+         	panel.add(link1);//panel.add(new JLabel("    ") );
          	startIndex =startIndex +tableModel.getColumnsPerPage()  ;
          	endIndex = endIndex +tableModel.getColumnsPerPage()  ;
          	totalPages= pageNo;

@@ -21,9 +21,9 @@ import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
  * @author mandar_deshmukh
  * @version 1.1
  */
-public class MultipleSpecimenCopyActionHandler extends
-		AbstractCopyActionHandler {
-
+public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler 
+{
+	private JButton paste;
 	
 	/**
 	 * Empty constructor
@@ -35,10 +35,12 @@ public class MultipleSpecimenCopyActionHandler extends
 	/**
 	 * @param table
 	 */
-	public MultipleSpecimenCopyActionHandler(JTable table)
+	public MultipleSpecimenCopyActionHandler(JTable table, JButton paste)
 	{
 		super(table);
+		this.paste = paste;
 	}
+
 	/**
 	 * @see edu.wustl.catissuecore.applet.listener.AbstractCopyActionHandler#doActionPerformed(java.awt.event.ActionEvent)
 	 */
@@ -76,6 +78,7 @@ public class MultipleSpecimenCopyActionHandler extends
 		// for validation end
 		CommonAppletUtil.getMultipleSpecimenTableModel(table).setCopyPasteOperationValidatorModel( validatorModel);
 		System.out.println("\n >>>>>>>>>>>>>>   Copy Data Set.    >>>>>>>>>>>>");
+		paste.setEnabled(true );
 		System.out.println("\n >>>>>>>>>>>>>>  DONE >>>>>>>>>>>>");
 	}
 	

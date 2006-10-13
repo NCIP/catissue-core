@@ -149,10 +149,12 @@ public interface AppletConstants
 	public static final String MULTIPLE_SPECIMEN_COPY = "Copy";
 	public static final String MULTIPLE_SPECIMEN_PASTE = "Paste";
 	public static final String MULTIPLE_SPECIMEN_MANDATORY = "*";
+	public static final String MULTIPLE_SPECIMEN_SUBMIT="Submit";
 	
 	public static final String MULTIPLE_SPECIMEN_LOCATION_LABEL = "Containerlabel_temp";
 	public static final String MULTIPLE_SPECIMEN_ROW_COLUMN_SEPARATOR="@";
 	
 	public static final String COPY_OPERATION = "copy";
 	public static final String PASTE_OPERATION = "paste";
+	public static final int LINK_BUTTON_WIDTH = 70;
 }
