@@ -194,7 +194,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
     	MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
     	int startIndex = 1;
     	int endIndex = tableModel.getColumnsPerPage()  ;
-    	panel.setLayout(new GridLayout(2,(int)(tableModel.getTotalPageCount()/2),0,0));
+    	if(tableModel.getTotalPageCount()>10)
+    		panel.setLayout(new GridLayout(2,(int)(tableModel.getTotalPageCount()/2),0,0));
     	for(int pageNo = 1; pageNo<=tableModel.getTotalPageCount();pageNo++  )
     	{
     		JButton link1 = new JButton(String.valueOf(startIndex )+ " - "+String.valueOf(endIndex ));
