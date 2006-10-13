@@ -433,7 +433,12 @@ function submitExternalIdentifiers()
   var form =  document.forms[0];
   form.action =  form.action + "?method=submitExternalIdentifiers";
   form.submit();
-}	   
+}	
+//used to show error messages while copy paste.   
+function showErrorMessage(errorMessage)
+{
+	alert(errorMessage);
+}
 
 function submitBioHazards() 
 {
