@@ -47,6 +47,11 @@ public class SpecimenArrayTableModel extends BaseTabelModel {
 	 * column count 
 	 */
 	private int columnCount;
+
+	/**
+	 * column count 
+	 */
+	private String copySelectedOption;
 	
 	/**
 	 * How specimens are entered either by Label/Barcode.
@@ -177,5 +182,37 @@ public class SpecimenArrayTableModel extends BaseTabelModel {
 	 */
 	public String getSpecimenClass() {
 		return specimenClass;
+	}
+
+	/**
+	 * @return Returns the copySelectedOption.
+	 */
+	public String getCopySelectedOption()
+	{
+		return copySelectedOption;
+	}
+
+	/**
+	 * @param copySelectedOption The copySelectedOption to set.
+	 */
+	public void setCopySelectedOption(String copySelectedOption)
+	{
+		this.copySelectedOption = copySelectedOption;
+	}
+
+	/**
+	 * @return Returns the enterSpecimenBy.
+	 */
+	public String getEnterSpecimenBy()
+	{
+		return enterSpecimenBy;
+	}
+
+	/**
+	 * @param enterSpecimenBy The enterSpecimenBy to set.
+	 */
+	public void setEnterSpecimenBy(String enterSpecimenBy)
+	{
+		this.enterSpecimenBy = enterSpecimenBy;
 	}
 }
