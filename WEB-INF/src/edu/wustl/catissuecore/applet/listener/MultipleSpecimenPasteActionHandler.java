@@ -6,12 +6,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumnModel;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
+import edu.wustl.catissuecore.applet.MultipleSpecimenCopyPasteValidator;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
@@ -52,9 +54,24 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 
 			validatorModel.setSelectedPastedRows(CommonAppletUtil.createListFromArray(selectedRows));
 			validatorModel.setSelectedPastedCols(CommonAppletUtil.createListFromArray(selectedColumns));
+			//for validatior
+			validatorModel.setOperation(AppletConstants.PASTE_OPERATION  );
+			validatorModel.setColumnCount(CommonAppletUtil.getMultipleSpecimenTableModel(table).getTotalColumnCount());
+			validatorModel.setRowCount(table.getRowCount());
+			
 			System.out.println(" Cell info set for Pasting ");
 			
-			if (CommonAppletUtil.validateCell())
+			//for validation
+			MultipleSpecimenCopyPasteValidator copyPasteValidator = new MultipleSpecimenCopyPasteValidator(table,validatorModel);
+			String errorMessage = copyPasteValidator.validateForPaste();
+			System.out.println("Message from copyPasteValidator.validateForPaste() : "+ errorMessage);
+			if(errorMessage.trim().length()>0)
+			{
+			    Object[] parameters = new Object[]{errorMessage }; 
+			    CommonAppletUtil.callJavaScriptFunction((JButton) e.getSource(),
+				getJSMethodName(), parameters);
+			}	// validation end
+			else if (CommonAppletUtil.validateCell())
 			{
 				updateUI(validatorModel);
 			}
@@ -172,4 +189,12 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 		return result ;
 	}
 	
+	/**
+	* @return JS method name for this button.
+	*/
+	protected String getJSMethodName()
+	{
+	return "showErrorMessage";
+	}
+
 }

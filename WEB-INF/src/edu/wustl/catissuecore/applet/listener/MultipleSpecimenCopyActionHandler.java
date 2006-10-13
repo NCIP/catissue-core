@@ -3,11 +3,14 @@ package edu.wustl.catissuecore.applet.listener;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
+import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
+import edu.wustl.catissuecore.applet.MultipleSpecimenCopyPasteValidator;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
@@ -56,7 +59,21 @@ public class MultipleSpecimenCopyActionHandler extends
 		validatorModel.setSelectedCopiedRows(CommonAppletUtil.createListFromArray(selectedRows));
 		validatorModel.setSelectedCopiedCols(CommonAppletUtil.createListFromArray(selectedColumns));
 		validatorModel.setCopiedData(getSelectedData(selectedRows,selectedColumns));
-		
+//for validator
+		validatorModel.setOperation(AppletConstants.COPY_OPERATION);
+		validatorModel.setColumnCount(CommonAppletUtil.getMultipleSpecimenTableModel(table).getTotalColumnCount());
+		validatorModel.setRowCount(table.getRowCount());
+
+		// for validation
+		MultipleSpecimenCopyPasteValidator copyPasteValidator = new MultipleSpecimenCopyPasteValidator(table,validatorModel);
+		String errorMessage = copyPasteValidator.validateForCopy();
+		System.out.println("Message from copyPasteValidator.validateForCopy() : "+ errorMessage);
+		if(errorMessage.trim().length()>0)
+		{
+		    Object[] parameters = new Object[]{errorMessage }; 
+		    CommonAppletUtil.callJavaScriptFunction((JButton) e.getSource(),getJSMethodName(), parameters);
+		}
+		// for validation end
 		CommonAppletUtil.getMultipleSpecimenTableModel(table).setCopyPasteOperationValidatorModel( validatorModel);
 		System.out.println("\n >>>>>>>>>>>>>>   Copy Data Set.    >>>>>>>>>>>>");
 		System.out.println("\n >>>>>>>>>>>>>>  DONE >>>>>>>>>>>>");
@@ -91,5 +108,19 @@ public class MultipleSpecimenCopyActionHandler extends
 		return map;
 	}
 	
+	private void updatePasteButton(ActionEvent e)
+	{
+		
+	}
 
+
+/**
+* @return JS method name for this button.
+*/
+protected String getJSMethodName()
+{
+return "showErrorMessage";
+}
+
+	
 }
