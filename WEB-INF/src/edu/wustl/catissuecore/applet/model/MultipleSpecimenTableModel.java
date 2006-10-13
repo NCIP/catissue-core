@@ -125,13 +125,13 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		}
        System.out.println("setValueAt " + row + " " + column + ": " + specimenMap.get(getKey(row,column)) + value);
 */
-		/* Code to check the calling method. 
+		/* Code to check the calling method.
 		try
 		{
 			throw new Exception("User Defined");
 		}
 		catch(Exception e){ e.printStackTrace();}
-		*/ 
+		 */
 		specimenMap.put(getKey(row,column), value);
 		System.out.println("In setValueAt : row : "+row + " Column : "+ column);
 		System.out.println("setValueAt " + getKey(row,column)+ ": " + specimenMap.get(getKey(row,column))+" - " + value);
