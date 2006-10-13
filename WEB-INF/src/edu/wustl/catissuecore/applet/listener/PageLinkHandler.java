@@ -15,6 +15,7 @@ import javax.swing.table.TableColumn;
 
 import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
+import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
  * @author mandar_deshmukh
@@ -75,5 +76,13 @@ public class PageLinkHandler extends ButtonHandler
 		System.out.println("Table updated  " ); 
 		getMultipleSpecimenTableModel().showMapData();
 		System.out.println("-------------------Done-----------------");
+	}
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.applet.listener.BaseActionHandler#preActionPerformed(java.awt.event.ActionEvent)
+	 */
+	protected void preActionPerformed(ActionEvent event)
+	{
+		//commented by mandar to check handling of selected data.
+		CommonAppletUtil.getSelectedData(table);
 	}
 }

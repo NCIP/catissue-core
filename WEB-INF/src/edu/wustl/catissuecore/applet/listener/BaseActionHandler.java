@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JTable;
 
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
+import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 
 /**

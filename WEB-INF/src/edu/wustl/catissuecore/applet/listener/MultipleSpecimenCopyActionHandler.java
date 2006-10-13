@@ -46,6 +46,10 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 	 */
 	protected void doActionPerformed(ActionEvent e) 
 	{
+		//to set selected data in model.
+		CommonAppletUtil.getSelectedData(table);
+
+		paste.setEnabled(true );
 		//super.handleAction(event);
 		System.out.println("\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
 		System.out.println("Inside MultipleSpecimenCopyActionHandler");
@@ -60,7 +64,7 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 		
 		validatorModel.setSelectedCopiedRows(CommonAppletUtil.createListFromArray(selectedRows));
 		validatorModel.setSelectedCopiedCols(CommonAppletUtil.createListFromArray(selectedColumns));
-		validatorModel.setCopiedData(getSelectedData(selectedRows,selectedColumns));
+		validatorModel.setCopiedData(CommonAppletUtil.getSelectedData(table) );
 //for validator
 		validatorModel.setOperation(AppletConstants.COPY_OPERATION);
 		validatorModel.setColumnCount(CommonAppletUtil.getMultipleSpecimenTableModel(table).getTotalColumnCount());
@@ -78,43 +82,39 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 		// for validation end
 		CommonAppletUtil.getMultipleSpecimenTableModel(table).setCopyPasteOperationValidatorModel( validatorModel);
 		System.out.println("\n >>>>>>>>>>>>>>   Copy Data Set.    >>>>>>>>>>>>");
-		paste.setEnabled(true );
+		CommonAppletUtil.getMultipleSpecimenTableModel(table).showMapData(); 
 		System.out.println("\n >>>>>>>>>>>>>>  DONE >>>>>>>>>>>>");
 	}
 	
-	/*
-	 * This method returns the map holding the selected data.
-	 * The key is represented by the row@column format.
-	 */
-	private HashMap getSelectedData(int[] selectedRows, int[] selectedColumns)
-	{
-		System.out.println("\n/////////// inside getSelectedData ///////////////////\n");
-		HashMap map = new HashMap();
-		for(int rowIndex=0;rowIndex<selectedRows.length; rowIndex++  )
-		{
-			for(int columnIndex=0; columnIndex<selectedColumns.length; columnIndex++)
-			{
-				String key = CommonAppletUtil.getDataKey(selectedRows[rowIndex], selectedColumns[columnIndex]);
-				//commented to check the values from cell editor
-//				Object value = table.getValueAt(selectedRows[rowIndex],selectedColumns[columnIndex] );
-				//--------
-				TableColumnModel columnModel = table.getColumnModel();
-				SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(selectedColumns[columnIndex]).getCellEditor();
-				JComponent component = ((JComponent)scm.getTableCellEditorComponent(table,null,true,selectedRows[rowIndex],selectedColumns[columnIndex]));
-				Object value =scm.getCellEditorValue(); 	
-				// -------
-				map.put(key,value );
-			}
-		}
-		System.out.println("Returning Map -------------------------\n");
-		System.out.println(map);
-		return map;
-	}
+//	/*
+//	 * This method returns the map holding the selected data.
+//	 * The key is represented by the row@column format.
+//	 */
+//	private HashMap getSelectedData(int[] selectedRows, int[] selectedColumns)
+//	{
+//		System.out.println("\n/////////// inside getSelectedData ///////////////////\n");
+//		HashMap map = new HashMap();
+//		for(int rowIndex=0;rowIndex<selectedRows.length; rowIndex++  )
+//		{
+//			for(int columnIndex=0; columnIndex<selectedColumns.length; columnIndex++)
+//			{
+//				String key = CommonAppletUtil.getDataKey(selectedRows[rowIndex], selectedColumns[columnIndex]);
+//				//commented to check the values from cell editor
+////				Object value = table.getValueAt(selectedRows[rowIndex],selectedColumns[columnIndex] );
+//				//--------
+//				TableColumnModel columnModel = table.getColumnModel();
+//				SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(selectedColumns[columnIndex]).getCellEditor();
+//				JComponent component = ((JComponent)scm.getTableCellEditorComponent(table,null,true,selectedRows[rowIndex],selectedColumns[columnIndex]));
+//				Object value =scm.getCellEditorValue(); 	
+//				// -------
+//				map.put(key,value );
+//			}
+//		}
+//		System.out.println("Returning Map -------------------------\n");
+//		System.out.println(map);
+//		return map;
+//	}
 	
-	private void updatePasteButton(ActionEvent e)
-	{
-		
-	}
 
 
 /**

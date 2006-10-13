@@ -113,4 +113,12 @@ public class SpecimenSubmitButtonHandler extends ButtonHandler
 
 	}
 
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.applet.listener.BaseActionHandler#preActionPerformed(java.awt.event.ActionEvent)
+	 */
+	protected void preActionPerformed(ActionEvent event)
+	{
+		//commented by mandar to check handling of selected data.
+		CommonAppletUtil.getSelectedData(table);
+	}
 }
