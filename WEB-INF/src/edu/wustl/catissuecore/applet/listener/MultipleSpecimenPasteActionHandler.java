@@ -177,8 +177,18 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 		}
 		SwingUtilities.updateComponentTreeUI(table);
 	}
+
+	protected void doPasteData(int selectedRow, int selectedCol, Object value)
+	{
+		TableColumnModel columnModel = table.getColumnModel();
+		SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(selectedCol).getCellEditor();
+		scm.updateComponentValue(selectedRow,value.toString() );
+		SpecimenColumnModel scmRenderer = (SpecimenColumnModel)columnModel.getColumn(selectedCol).getCellRenderer();
+		scmRenderer.updateComponent(selectedRow );
+		CommonAppletUtil.getMultipleSpecimenTableModel(table).setValueAt(value,selectedRow,selectedCol);
+	}
 	
-	private boolean isDisabledRow(int rowNo)
+	protected boolean isDisabledRow(int rowNo)
 	{
 		boolean result=false;
 		//rowNo == AppletConstants.SPECIMEN_PARENT_ROW_NO  removed after discussing with Santosh to enable Parent Specimen.
