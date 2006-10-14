@@ -22,6 +22,7 @@ import javax.swing.table.TableColumnModel;
 import netscape.javascript.JSObject;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.component.BaseTable;
+import edu.wustl.catissuecore.applet.model.BaseTabelModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 
@@ -116,6 +117,24 @@ public final class CommonAppletUtil
 			return null;
 	}
 
+	/**
+	 * This method checks the instance of JTable and its model and then returns the model.
+	 * @param table base table in applet 
+	 * @return BaseTableModel 
+	 */
+	public static BaseTabelModel getBaseTableModel(JTable table) 
+	{
+		if(table != null)
+		{
+			if(table instanceof BaseTable && table.getModel() instanceof BaseTabelModel)
+				return (BaseTabelModel)table.getModel();
+			else
+				return null;
+		}
+		else
+			return null;
+	}
+	
 	/*
 	 * For testing of flow.
 	 */
