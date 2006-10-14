@@ -16,10 +16,11 @@
 	SpecimenArrayForm form = (SpecimenArrayForm)request.getAttribute("arrayForm");
 	String operation = (String)request.getAttribute(Constants.OPERATION);
 	String formAction;
-	
+	boolean disabledArrayType = false;
     if (operation.equals(Constants.EDIT))
     {
         formAction = Constants.SPECIMENARRAY_EDIT_ACTION;
+        disabledArrayType = true;
     }
     else
     {
@@ -62,7 +63,7 @@
 					</label>
 				</td>
 				<td class="formField">
-					<html:select property="specimenArrayTypeId" styleClass="formFieldVerySmallSized" styleId="state" size="1" onchange="changeArrayType()">
+					<html:select property="specimenArrayTypeId" styleClass="formFieldVerySmallSized" styleId="state" size="1" onchange="changeArrayType()" disabled="<%=disabledArrayType%>">
 						<html:options collection="<%=Constants.SPECIMEN_ARRAY_TYPE_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 				</td>
