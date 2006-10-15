@@ -169,19 +169,17 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     			bizLogic = new AssignPrivilegePageBizLogic();
 				break;
 //   			 Added by Ashish
- /*   		case Constants.DEPARTMENT_FORM_ID :
+    		case Constants.INSTITUTION_FORM_ID :
+    			bizLogic = new InstitutionBizLogic();
+    			break;
+    		case Constants.DEPARTMENT_FORM_ID :
     			bizLogic = new DepartmentBizLogic();
     			break;
     		case Constants.CANCER_RESEARCH_GROUP_FORM_ID :
     			bizLogic = new CancerResearchBizLogic();
     			break;	
-    		case Constants.INSTITUTION_FORM_ID :
-    			bizLogic = new InstitutionBizLogic();
-    			break;
     			
     		//END
-    		 
-    		 */	
     		case Constants.DEFAULT_BIZ_LOGIC:
             default:
             	bizLogic = new DefaultBizLogic();
@@ -245,6 +243,10 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	{
     		bizLogic = new NewSpecimenBizLogic();
     	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.MolecularSpecimen"))
+    	{
+    		bizLogic = new NewSpecimenBizLogic();
+    	}
     	else if(className.equals("edu.wustl.catissuecore.domain.SpecimenCollectionGroup"))
     	{
     		bizLogic = new SpecimenCollectionGroupBizLogic();
@@ -270,7 +272,7 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     		bizLogic = new SpecimenArrayBizLogic();
     	}
 //    	 Added by Ashish
- /*   	else if(className.equals("edu.wustl.catissuecore.domain.Department"))
+    	else if(className.equals("edu.wustl.catissuecore.domain.Department"))
     	{
     		bizLogic = new DepartmentBizLogic();
     	}    	
@@ -287,17 +289,11 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	{
     		bizLogic = new InstitutionBizLogic();
     	} 
-    	else if(className.equals("edu.wustl.catissuecore.domain.SpecimenArrayType"))
-    	{
-    		bizLogic = new SpecimenArrayTypeBizLogic();
-    	} 
     	else if(className.equals("edu.wustl.catissuecore.domain.CollectionProtocolRegistration"))
     	{
     		bizLogic = new CollectionProtocolRegistrationBizLogic();
     	} 
-    	
     	//END
-    	*/
     	else
     	{
     		bizLogic = new DefaultBizLogic();
