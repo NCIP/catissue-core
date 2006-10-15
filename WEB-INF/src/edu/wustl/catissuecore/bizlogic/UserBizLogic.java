@@ -276,6 +276,16 @@ public class UserBizLogic extends DefaultBizLogic
 		{
 			// Get the csm userId if present. 
 			String csmUserId = null;
+			
+			/**
+			 * Santosh: Changes done for Api
+			 * User should not edit the first time login field.
+			 */			
+			if(user.getFirstTimeLogin() != oldUser.getFirstTimeLogin())
+			{
+				throw new DAOException(ApplicationProperties.getValue("errors.cannotedit.firsttimelogin"));
+			}
+			
 			if (user.getCsmUserId() != null)
 			{
 				csmUserId = user.getCsmUserId().toString();
@@ -317,6 +327,32 @@ public class UserBizLogic extends DefaultBizLogic
 				user.getPasswordCollection().add(password);
 							
 			}
+			//Bug-1516: Jitendra Administartor should be able to edit the password 
+			/*else if(user.getPageOf().equals(Constants.PAGEOF_USER_ADMIN) && !user.getNewPassword().equals(PasswordManager.decode(user.getLatestPassword())))
+			{				
+				Validator validator = new Validator();
+				if (!validator.isEmpty(user.getNewPassword()))
+				{
+					int result = validatePassword(oldUser, user.getNewPassword(), user.getOldPassword());
+
+					Logger.out.debug("return from Password validate " + result);
+
+					//if validatePassword method returns value greater than zero then validation fails
+					if (result != SUCCESS)
+					{
+						// get error message of validation failure 
+						String errorMessage = getPasswordErrorMsg(result);
+
+						Logger.out.debug("Error Message from method" + errorMessage);
+						throw new DAOException(errorMessage);
+					}
+				}
+				csmUser.setPassword(PasswordManager.encode(user.getNewPassword()));
+				// Set values in password domain object and adds changed password in Password Collection
+				Password password = new Password(csmUser.getPassword(), user);
+				user.getPasswordCollection().add(password);
+				user.setFirstTimeLogin(new Boolean(true));
+			}*/
 			else
 			{
 				csmUser.setLoginName(user.getLoginName());
@@ -596,7 +632,7 @@ public class UserBizLogic extends DefaultBizLogic
 		//End:- Change for API Search    	
     	
     	
-//		 Added by Ashish Gupta
+		//Added by Ashish Gupta
 		/*
 		if (user == null)
 			throw new DAOException("domain.object.null.err.msg", new String[]{"User"});
@@ -645,20 +681,21 @@ public class UserBizLogic extends DefaultBizLogic
 					}
 				}
 			}
+			
 			//Added by Ashish
-		//	apiValidate(user);
-		//END
+			apiValidate(user);
+			//END
 		}
 		return true;
 	}
-//Added by Ashish
-
+	
+	//Added by Ashish
 	/**
 	 * @param user user
 	 * @return 
 	 * @throws DAOException
 	 */
-	/*
+	
 	private boolean apiValidate(User user)
 					throws DAOException
 	{
@@ -669,92 +706,96 @@ public class UserBizLogic extends DefaultBizLogic
 		if (validator.isEmpty(user.getEmailAddress()))
 		{
 			message = ApplicationProperties.getValue("user.emailAddress");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));		
+			
 		}
 		else
 		{
 			if (!validator.isValidEmailAddress(user.getEmailAddress()))
 			{
 				message = ApplicationProperties.getValue("user.emailAddress");
-				throw new DAOException("errors.item.format", new String[]{message});
+				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
 			}
 		}
 		if (validator.isEmpty(user.getLastName()))
 		{
 			message = ApplicationProperties.getValue("user.lastName");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
 		if (validator.isEmpty(user.getFirstName()))
 		{
 			message = ApplicationProperties.getValue("user.firstName");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
 		if (validator.isEmpty(user.getAddress().getCity()))
 		{
 			message = ApplicationProperties.getValue("user.city");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
-		if (!validator.isValidOption(user.getAddress().getState()))
+		if (!validator.isValidOption(user.getAddress().getState()) || validator.isEmpty(user.getAddress().getState()))
 		{
 			message = ApplicationProperties.getValue("user.state");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
 		if (validator.isEmpty(user.getAddress().getZipCode()))
 		{
 			message = ApplicationProperties.getValue("user.zipCode");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 		else
 		{
 			if (!validator.isValidZipCode(user.getAddress().getZipCode()))
 			{
 				message = ApplicationProperties.getValue("user.zipCode");
-				throw new DAOException("errors.item.format", new String[]{message});
+				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
 			}
 		}
-		if (!validator.isValidOption(user.getAddress().getCountry()))
+		
+		if (!validator.isValidOption(user.getAddress().getCountry()) || validator.isEmpty(user.getAddress().getCountry()))
 		{
 			message = ApplicationProperties.getValue("user.country");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
 		if (validator.isEmpty(user.getAddress().getPhoneNumber()))
 		{
 			message = ApplicationProperties.getValue("user.phoneNumber");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
-		if (validator.isValidOption(String.valueOf(user.getInstitution().getId())) == false)
+		
+		if (!validator.isValidOption(String.valueOf(user.getInstitution().getId())) || validator.isEmpty(String.valueOf(user.getInstitution().getId())))
 		{
 			message = ApplicationProperties.getValue("user.institution");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
-		if (validator.isValidOption(String.valueOf(user.getDepartment().getId())) == false)
+		if (!validator.isValidOption(String.valueOf(user.getDepartment().getId())) || validator.isEmpty(String.valueOf(user.getDepartment().getId())))
 		{
 			message = ApplicationProperties.getValue("user.department");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
-		if (validator.isValidOption(String.valueOf(user.getCancerResearchGroup().getId())) == false)
+		if (!validator.isValidOption(String.valueOf(user.getCancerResearchGroup().getId())) || validator.isEmpty(String.valueOf(user.getCancerResearchGroup().getId())))
 		{
 			message = ApplicationProperties.getValue("user.cancerResearchGroup");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
+		
 		if (user.getRoleId() != null)
 		{
-			if (validator.isValidOption(user.getRoleId()) == false)
+			if (!validator.isValidOption(user.getRoleId()) || validator.isEmpty(String.valueOf(user.getRoleId())))
 			{
 				message = ApplicationProperties.getValue("user.role");
-				throw new DAOException("errors.item.required", new String[]{message});
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 			}
 		}
 		return validate;
 	}
-	*/
+	
 	//END
 	/**
 	 * Returns a list of all roles that can be assigned to a user.

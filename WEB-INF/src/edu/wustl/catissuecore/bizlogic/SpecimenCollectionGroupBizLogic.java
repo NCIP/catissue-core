@@ -315,33 +315,52 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		SpecimenCollectionGroup group = (SpecimenCollectionGroup)obj;
 		
 		//Added by Ashish	
-		/*
+	
 		if (group == null)
-			throw new DAOException("domain.object.null.err.msg", new String[]{"SpecimenCollectionGroup"});
-		Validator validator = new Validator();
-		if(group.getCollectionProtocolEvent().getId() == -1)
 		{
-			String message = ApplicationProperties.getValue("specimenCollectionGroup.protocolTitle");
-			throw new DAOException("errors.item.selected", new String[]{message});
-			
+			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg","SpecimenCollectionGroup"));
+		}			
+		
+		Validator validator = new Validator();
+		String message="";
+		if(group.getCollectionProtocolRegistration()==null )
+		{
+			message = ApplicationProperties.getValue("errors.specimenCollectionGroup.collectionprotocolregistration");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));				
 		}
 		
-		if(group.getSite().getId() == -1)
+		if(group.getCollectionProtocolRegistration().getCollectionProtocol() == null
+				|| group.getCollectionProtocolRegistration().getCollectionProtocol().getId() == null)
 		{
-			String message = ApplicationProperties.getValue("specimenCollectionGroup.site");
-			throw new DAOException("errors.item.selected", new String[]{message});			
+			message = ApplicationProperties.getValue("errors.specimenCollectionGroup.collectionprotocol");
+			throw new DAOException(ApplicationProperties.getValue("errors.invalid",message));	
+		}
+				
+		if((group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier()==null && 
+		 		 (group.getCollectionProtocolRegistration().getParticipant()==null ||  group.getCollectionProtocolRegistration().getParticipant().getId()==null)))
+		{			
+			throw new DAOException(ApplicationProperties.getValue("errors.collectionprotocolregistration.atleast"));	
+		}
+		
+		if(group.getSite()== null || group.getSite().getId() == null)
+		{
+			message = ApplicationProperties.getValue("specimenCollectionGroup.site");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 		
 		
 		// Check what user has selected Participant Name / Participant Number
 		
 			//if participant name field is checked.
-			if(group.getCollectionProtocolRegistration().getParticipant().getId() == -1)
-			{
-				String message = ApplicationProperties.getValue("specimenCollectionGroup.collectedByParticipant");
-				throw new DAOException("errors.item.selected", new String[]{message});
-				
-			}
+//			if(group.getCollectionProtocolRegistration().getParticipant().getId() == -1)
+//			{
+//				message = ApplicationProperties.getValue("specimenCollectionGroup.protocoltitle");
+//				throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+//				
+//				String message = ApplicationProperties.getValue("specimenCollectionGroup.collectedByParticipant");
+//				throw new DAOException("errors.item.selected", new String[]{message});
+//				
+//			}
 		
 //			if(!validator.isValidOption(group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier()))
 //			{
@@ -350,35 +369,35 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 //				
 //			}
 		
-		if(group.getName().equals(""))
+		if(validator.isEmpty(group.getName()))
 		{
-			String message = ApplicationProperties.getValue("specimenCollectionGroup.groupName");
-			throw new DAOException("errors.item.required", new String[]{message});			
+			message = ApplicationProperties.getValue("specimenCollectionGroup.groupName");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 		
         // Mandatory Field : Study Calendar event point
-		if(group.getCollectionProtocolEvent().getId() == -1)
+		if(group.getCollectionProtocolEvent()== null || group.getCollectionProtocolEvent().getId() == null)
 		{
-			String message = ApplicationProperties.getValue("specimenCollectionGroup.studyCalendarEventPoint");
-			throw new DAOException("errors.item.selected", new String[]{message});			
+			message = ApplicationProperties.getValue("specimenCollectionGroup.studyCalendarEventPoint");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 		
 		// Mandatory Field : clinical Diagnosis
-		if(!validator.isValidOption(group.getClinicalDiagnosis()))
+		if(validator.isEmpty(group.getClinicalDiagnosis()))
 		{
-			String message = ApplicationProperties.getValue("specimenCollectionGroup.clinicalDiagnosis");
-			throw new DAOException("errors.item.selected", new String[]{message});			
+			message = ApplicationProperties.getValue("specimenCollectionGroup.clinicalDiagnosis");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 		
 		// Mandatory Field : clinical Status
-		if(!validator.isValidOption(group.getClinicalStatus()))
+		if(validator.isEmpty(group.getClinicalStatus()))
 		{
-			String message = ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus");
-			throw new DAOException("errors.item.selected", new String[]{message});			
+			message = ApplicationProperties.getValue("specimenCollectionGroup.clinicalStatus");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 		
 		//Condition for medical Record Number.
-		*/
+		
 		//END
 		
 		
@@ -388,7 +407,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			throw new DAOException(ApplicationProperties.getValue("spg.clinicalDiagnosis.errMsg"));
 		}
 
-//		NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+		//NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
         List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS,null);
         if(!Validator.isEnumeratedValue(clinicalStatusList,group.getClinicalStatus()))
 		{

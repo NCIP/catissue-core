@@ -23,18 +23,21 @@ public class InstitutionBizLogic extends DefaultBizLogic
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
 		// comment by Ashwin
-		/*
 		Institution institution = (Institution) obj;
 		if (institution == null)
-			throw new DAOException("domain.object.null.err.msg", new String[]{"Institution"});
-
+		{
+			 String message = ApplicationProperties.getValue("app.institution");
+			 throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg",message));   			
+			//throw new DAOException("domain.object.null.err.msg", new String[]{"Institution"});
+		}
+		
 		Validator validate = new Validator();
 		if (validate.isEmpty(institution.getName()))
 		{
-			String message = ApplicationProperties.getValue("Institution.name");
-			throw new DAOException("errors.item.required", new String[]{message});
+			String message = ApplicationProperties.getValue("institution.name");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));   			
+			//throw new DAOException("errors.item.required", new String[]{message});
 		}
-		*/
 		return true;
 	}
 

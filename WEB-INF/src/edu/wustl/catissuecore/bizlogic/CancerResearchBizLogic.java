@@ -20,25 +20,22 @@ public class CancerResearchBizLogic extends DefaultBizLogic
 {
 
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
-	{
-	// comment by Ashwin	
-	/*
-	 *  	
-		CancerResearchGroup cancerResearchGroupObj = (CancerResearchGroup) obj;
-		String message = "";
-		if (cancerResearchGroupObj == null)
+	{	
+		CancerResearchGroup cancerResearchGroup = (CancerResearchGroup) obj;
+		if (cancerResearchGroup == null)
 		{
-			message = ApplicationProperties.getValue("user.cancerResearchGroup");
-
-			throw new DAOException("domain.object.null.err.msg", new String[]{message});
+			 String message = ApplicationProperties.getValue("app.cancerResearchGroup");
+			 throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg",message));   			
+			//throw new DAOException("domain.object.null.err.msg", new String[]{"Institution"});
 		}
-		Validator validator = new Validator();
-		if (validator.isEmpty(cancerResearchGroupObj.getName()))
+		
+		Validator validate = new Validator();
+		if (validate.isEmpty(cancerResearchGroup.getName()))
 		{
-			message = ApplicationProperties.getValue("cancerResearchGroup.name");
-			throw new DAOException("errors.item.required", new String[]{message});
+			String message = ApplicationProperties.getValue("cancerResearchGroup.name");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));   			
+			//throw new DAOException("errors.item.required", new String[]{message});
 		}
-	*/	
 		return true;
 	}
 

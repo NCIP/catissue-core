@@ -28,6 +28,7 @@ import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -64,7 +65,6 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 	 * @param obj The storageType object to be saved.
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
-	 * @throws 
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
@@ -91,6 +91,10 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 
+		if(participantMedicalIdentifierCollection == null ) 
+		{
+			participantMedicalIdentifierCollection = new HashSet();
+		}
 		if (participantMedicalIdentifierCollection.isEmpty())
 		{
 			//add a dummy participant MedicalIdentifier for Query.
@@ -108,7 +112,7 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 			pmIdentifier.setParticipant(participant);
 			dao.insert(pmIdentifier, sessionDataBean, true, true);
 		}
-		
+
 		Set protectionObjects = new HashSet();
 		protectionObjects.add(participant);
 		try
@@ -245,41 +249,48 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
 		Participant participant = (Participant) obj;
-//		 Added by Ashish Gupta
-/*		
-		String message = "";
-		String socialSecurityNumberPartA = "";
-		String socialSecurityNumberPartB = "";
-		String socialSecurityNumberPartC = "";
-		if (participant == null)
-			throw new DAOException("domain.object.null.err.msg", new String[]{"Participant"});
 		Validator validator = new Validator();
+		//Added by Ashish Gupta
+	
+		String message = "";		
+		if (participant == null)
+		{
+			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg","Participant"));	
+		}
+		
 		String errorKeyForBirthDate = "";
 		String errorKeyForDeathDate = "";
-
-		if (!validator.isEmpty(Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY)))
+		
+		String birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		if (!validator.isEmpty(birthDate))
 		{
-			errorKeyForBirthDate = validator.validateDate(Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY),
-					true);
+			errorKeyForBirthDate = validator.validateDate(birthDate,true);
 			if (errorKeyForBirthDate.trim().length() > 0)
 			{
 				message = ApplicationProperties.getValue("participant.birthDate");
-				throw new DAOException(errorKeyForBirthDate, new String[]{message});
+				throw new DAOException(ApplicationProperties.getValue(errorKeyForBirthDate,message));	
 			}
 		}
-
-		if (!validator.isEmpty(Utility.parseDateToString(participant.getDeathDate(),Constants.DATE_PATTERN_MM_DD_YYYY)))
+		
+		String deathDate = Utility.parseDateToString(participant.getDeathDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+		if (!validator.isEmpty(deathDate))
 		{
-			errorKeyForDeathDate = validator.validateDate(Utility.parseDateToString(participant.getDeathDate(),Constants.DATE_PATTERN_MM_DD_YYYY),true);
+			errorKeyForDeathDate = validator.validateDate(deathDate,true);
 			if (errorKeyForDeathDate.trim().length() > 0)
 			{
 				message = ApplicationProperties.getValue("participant.deathDate");
-				throw new DAOException(errorKeyForDeathDate, new String[]{message});
+				throw new DAOException(ApplicationProperties.getValue(errorKeyForDeathDate,message));	
 			}
 		}
 
-		if ((!validator.isEmpty(Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY))) && !validator
-				.isEmpty(Utility.parseDateToString(participant.getDeathDate(),Constants.DATE_PATTERN_MM_DD_YYYY))
+		if(participant.getVitalStatus() == null || !participant.getVitalStatus().equals("Dead"))
+		{
+			if(!validator.isEmpty(deathDate))
+			{
+				throw new DAOException(ApplicationProperties.getValue("participant.invalid.enddate"));
+			}
+		}
+		if ((!validator.isEmpty(birthDate) && !validator.isEmpty(deathDate))
 				&& (errorKeyForDeathDate.trim().length() == 0 && errorKeyForBirthDate.trim()
 						.length() == 0))
 		{
@@ -287,48 +298,50 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 					Utility.parseDateToString(participant.getDeathDate(),Constants.DATE_PATTERN_MM_DD_YYYY));
 
 			if (!errorKey1)
-			{
-				message = ApplicationProperties.getValue("participant.invaliddate");
-				throw new DAOException("participant.invaliddate",
-						new String[]{message});
+			{				
+				throw new DAOException(ApplicationProperties.getValue("participant.invaliddate"));	
 			}
 		}
-		if (participant.getSocialSecurityNumber() != null
-				&& !participant.getSocialSecurityNumber().equals(""))
-		{
-
-			StringTokenizer tok = new StringTokenizer(participant.getSocialSecurityNumber(), "-");
-			socialSecurityNumberPartA = tok.nextToken();
-			socialSecurityNumberPartB = tok.nextToken();
-			socialSecurityNumberPartC = tok.nextToken();
-
-		}
-		String socialSecurityNumber = socialSecurityNumberPartA + "-" + socialSecurityNumberPartB
-				+ "-" + socialSecurityNumberPartC;
-		if (!validator.isEmpty(socialSecurityNumberPartA + socialSecurityNumberPartB
-				+ socialSecurityNumberPartC)
-				&& !validator.isValidSSN(socialSecurityNumber))
-		{
-			message = ApplicationProperties.getValue("participant.socialSecurityNumber");
-			throw new DAOException("errors.invalid",
-					new String[]{message});
-		}
-
-		//Validation for Blank Participant 
-		if (validator.isEmpty(participant.getLastName())
-				&& validator.isEmpty(participant.getFirstName())
-				&& validator.isEmpty(participant.getMiddleName())
-				&& validator.isEmpty(participant.getBirthDate().toString())
-				&& (validator.isEmpty(participant.getDeathDate().toString()))
-				&& !validator.isValidOption(participant.getGender())
-				&& !validator.isValidOption(participant.getVitalStatus())
-				&& !validator.isValidOption(participant.getSexGenotype())
-				&& participant.getEthnicity().equals("-1")
-				&& validator.isEmpty(socialSecurityNumberPartA + socialSecurityNumberPartB
-						+ socialSecurityNumberPartC))
+		
+		if (!validator.isEmpty(participant.getSocialSecurityNumber()))
 		{			
-			throw new DAOException(ApplicationProperties.getValue("errors.participant.atLeastOneFieldRequired"));
+			if (!validator.isValidSSN(participant.getSocialSecurityNumber()))
+			{				
+				message = ApplicationProperties.getValue("participant.socialSecurityNumber");
+				throw new DAOException(ApplicationProperties.getValue("errors.invalid",message));	
+			}
 		}
+		
+		Collection paticipantMedicicalCollection = participant.getParticipantMedicalIdentifierCollection();		
+		if(paticipantMedicicalCollection != null && !paticipantMedicicalCollection.isEmpty())
+		{
+			Iterator itr = paticipantMedicicalCollection.iterator();
+			while(itr.hasNext())
+			{
+				ParticipantMedicalIdentifier participantIdentifier = (ParticipantMedicalIdentifier) itr.next();
+				Site site = participantIdentifier.getSite();
+				String medicalRecordNo = participantIdentifier.getMedicalRecordNumber();
+				if(validator.isEmpty(medicalRecordNo) || site == null || site.getId()== null)
+		 		{		 			
+					throw new DAOException(ApplicationProperties.getValue("errors.participant.extiden.missing"));	
+		 		}
+			}
+		}
+		//Validation for Blank Participant 
+//		if (validator.isEmpty(participant.getLastName())
+//				&& validator.isEmpty(participant.getFirstName())
+//				&& validator.isEmpty(participant.getMiddleName())
+//				&& validator.isEmpty(participant.getBirthDate().toString())
+//				&& (validator.isEmpty(participant.getDeathDate().toString()))
+//				&& !validator.isValidOption(participant.getGender())
+//				&& !validator.isValidOption(participant.getVitalStatus())
+//				&& !validator.isValidOption(participant.getSexGenotype())
+//				&& participant.getEthnicity().equals("-1")
+//				&& validator.isEmpty(socialSecurityNumberPartA + socialSecurityNumberPartB
+//						+ socialSecurityNumberPartC))
+//		{			
+//			throw new DAOException(ApplicationProperties.getValue("errors.participant.atLeastOneFieldRequired"));
+//		}
 
 		//Validations for Add-More Block
 //		 String className = "ParticipantMedicalIdentifier:";
@@ -363,32 +376,61 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 //		 }
 //		 index++;
 //		 }
-*/
+
 		// END
-		List genderList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENDER, null);
-
-		if (!Validator.isEnumeratedOrNullValue(genderList, participant.getGender()))
+		
+		if(!validator.isEmpty(participant.getVitalStatus()))
 		{
-			throw new DAOException(ApplicationProperties.getValue("participant.gender.errMsg"));
+			List vitalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
+				Constants.CDE_VITAL_STATUS, null);
+			if (!Validator.isEnumeratedOrNullValue(vitalStatusList, participant.getVitalStatus()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("participant.gender.errMsg"));
+			}
 		}
-
-		//        NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-		List genotypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENOTYPE, null);
-		if (!Validator.isEnumeratedOrNullValue(genotypeList, participant.getSexGenotype()))
+		
+		if(!validator.isEmpty(participant.getGender()))
 		{
-			throw new DAOException(ApplicationProperties.getValue("participant.genotype.errMsg"));
+			List genderList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENDER, null);
+	
+			if (!Validator.isEnumeratedOrNullValue(genderList, participant.getGender()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("participant.gender.errMsg"));
+			}
 		}
-
-		//        List raceList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RACE,null);
-		//        if(!Validator.isEnumeratedOrNullValue(raceList,participant.getRace()))
-		//		{
-		//			throw new DAOException(ApplicationProperties.getValue("participant.race.errMsg"));
-		//		}
-
-		List ethnicityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_ETHNICITY, null);
-		if (!Validator.isEnumeratedOrNullValue(ethnicityList, participant.getEthnicity()))
+		
+		if(!validator.isEmpty(participant.getSexGenotype()))
 		{
-			throw new DAOException(ApplicationProperties.getValue("participant.ethnicity.errMsg"));
+			List genotypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_GENOTYPE, null);
+			if (!Validator.isEnumeratedOrNullValue(genotypeList, participant.getSexGenotype()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("participant.genotype.errMsg"));
+			}
+		}		
+		
+		
+		Collection raceCollection = participant.getRaceCollection();
+		if(raceCollection!= null && !raceCollection.isEmpty())
+		{
+			List raceList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RACE,null);
+			Iterator itr = raceCollection.iterator();
+			while(itr.hasNext())
+			{
+				String race = (String) itr.next();
+				if(!validator.isEmpty(race) && !Validator.isEnumeratedOrNullValue(raceList,race))
+				{
+					throw new DAOException(ApplicationProperties.getValue("participant.race.errMsg"));
+				}
+			}			
+		}        
+        
+		if(!validator.isEmpty(participant.getEthnicity()))
+		{
+			List ethnicityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_ETHNICITY, null);
+			if (!Validator.isEnumeratedOrNullValue(ethnicityList, participant.getEthnicity()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("participant.ethnicity.errMsg"));
+			}
 		}
 
 		if (operation.equals(Constants.ADD))

@@ -19,6 +19,7 @@ import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.QuantityInCount;
@@ -434,117 +435,103 @@ public class DistributionBizLogic extends DefaultBizLogic
         //End:-  Change for API Search 
         
 		//Added By Ashish
-/*		if (distribution == null)
-			throw new DAOException("domain.object.null.err.msg", new String[]{"Distribution"});
+		if (distribution == null)
+		{
+			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg","Distribution"));			
+		}
 		Validator validator = new Validator();
-		if (!validator.isValidOption(distribution.getDistributionProtocol().getId().toString()))
-		{
-			Logger.out.debug("dist prot");
-			String message = ApplicationProperties.getValue("distribution.protocol");
-			throw new DAOException("errors.item.required", new String[]{message});
+		String message="";
+		if (distribution.getDistributionProtocol()== null || distribution.getDistributionProtocol().getId()== null)
+		{			
+			message = ApplicationProperties.getValue("distribution.protocol");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
-
-		if (!validator.isValidOption("" + distribution.getUser().getId()))
+		else
 		{
-			String message = ApplicationProperties.getValue("distribution.distributedBy");
-			throw new DAOException("errors.item.required", new String[]{message});
+			Object distributionProtocolObj = dao.retrieve(DistributionProtocol.class.getName(), distribution.getDistributionProtocol().getId());
 		}
-
-		//  date validation 
+		
+		if (distribution.getUser() == null || distribution.getUser().getId() == null )
+		{
+			message = ApplicationProperties.getValue("distribution.distributedBy");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+		}
+		
+		//date validation 
 		String errorKey = validator.validateDate(Utility.parseDateToString(distribution
 				.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY), true);
 		if (errorKey.trim().length() > 0)
 		{
-			String message = ApplicationProperties.getValue("eventparameters.dateofevent");
-			throw new DAOException(errorKey, new String[]{message});
-
+			message = ApplicationProperties.getValue("distribution.date");
+			throw new DAOException( ApplicationProperties.getValue(errorKey,message));
 		}
 
-		if (!validator.isValidOption(distribution.getToSite().getId().toString()))
-		{
-			Logger.out.debug("to site");
-			String message = ApplicationProperties.getValue("distribution.toSite");
-			throw new DAOException("errors.item.required", new String[]{message});
-
-		}
-
-		//Validations for Add-More Block
-		Map values = null;
-		int counter = 0;
-		if (distribution.getDistributedItemCollection() != null)
-		{
-			values = new HashMap();
-
-			Iterator it = distribution.getDistributedItemCollection().iterator();
-			int i = 1;
-
-			while (it.hasNext())
-			{
-				String key1 = "DistributedItem:" + i + "_id";
-				String key2 = "DistributedItem:" + i + "_Specimen_id";
-				String key3 = "DistributedItem:" + i + "_quantity";
-				String key9 = "DistributedItem:" + i + "_availableQty";
-				String key10 = "DistributedItem:" + i + "_previousQuantity";
-				String key12 = "DistributedItem:" + i + "_Specimen_barcode";
-				String key13 = "DistributedItem:" + i + "_Specimen_label";
-
-				DistributedItem dItem = (DistributedItem) it.next();
-				Specimen specimen = dItem.getSpecimen();
-
-				Double quantity = dItem.getQuantity();
-				//dItem.setPreviousQty(quantity);
-
-				values.put(key1, Utility.toString(dItem.getId()));
-				values.put(key2, Utility.toString(specimen.getId()));
-				values.put(key3, quantity.toString());
-				//			values.put(key9,getAvailableQty(specimen));
-				values.put(key10, quantity.toString());
-				values.put(key12, specimen.getBarcode());
-				values.put(key13, specimen.getLabel());
-				i++;
-			}
-			counter = distribution.getDistributedItemCollection().size();
-		}
-		if (values.keySet().isEmpty())
-		{
-			String message = ApplicationProperties.getValue("distribution.distributedItem");
-			throw new DAOException("errors.item.required", new String[]{message});
-
-		}
-
-		Iterator it = values.keySet().iterator();
-		while (it.hasNext())
-		{
-			String key = (String) it.next();
-			String value = (String) values.get(key);
-
-			if (key.indexOf("Specimen_id") != -1 && !validator.isValidOption(value))
-			{
-				String message = ApplicationProperties.getValue("itemrecord.specimenId");
-				throw new DAOException("errors.item.required", new String[]{message});
-
-			}
-
-			if (key.indexOf("_quantity") != -1)
-			{
-				if ((validator.isEmpty(value)))
-				{
-					Logger.out.debug("Quantity empty**************");
-					String message = ApplicationProperties.getValue("itemrecord.quantity");
-					throw new DAOException("errors.item.required", new String[]{message});
-
-				}
-				else if (!validator.isDouble(value))
-				{
-					String message = ApplicationProperties.getValue("itemrecord.quantity");
-					throw new DAOException("errors.item.format", new String[]{message});
-
-				}
-			}
-
+		if (distribution.getToSite()== null || distribution.getToSite().getId()== null)
+		{		
+			message = ApplicationProperties.getValue("distribution.toSite");
+			throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
 		}
 		
-		*/
+		Collection specimenArrayCollection = distribution.getSpecimenArrayCollection();
+		Collection distributedItemCollection = distribution.getDistributedItemCollection();
+		
+		if( (specimenArrayCollection== null || specimenArrayCollection.isEmpty()) && (distributedItemCollection == null ||
+				distributedItemCollection.isEmpty()))
+		{
+			message = ApplicationProperties.getValue("distribution.distributedItem");
+			throw new DAOException( ApplicationProperties.getValue("errors.one.item.required",message));
+		}
+		else
+		{
+			if(specimenArrayCollection != null && !specimenArrayCollection.isEmpty())
+			{
+				Iterator itr = specimenArrayCollection.iterator();
+				while(itr.hasNext())
+				{
+					SpecimenArray specimenArray = (SpecimenArray) itr.next();
+					if(specimenArray==null || specimenArray.getId() == null)
+					{
+						message = ApplicationProperties.getValue("errors.distribution.item.specimenArray");
+						throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
+					}
+					Object object = dao.retrieve(SpecimenArray.class.getName(), specimenArray.getId());
+					if(object == null)
+					{						
+						throw new DAOException( ApplicationProperties.getValue("errors.distribution.specimenArrayNotFound"));
+					}
+				}
+			}
+			if(distributedItemCollection != null && !distributedItemCollection.isEmpty())
+			{
+				Iterator itr = distributedItemCollection.iterator();
+				while(itr.hasNext())
+				{
+					DistributedItem distributedItem = (DistributedItem) itr.next();
+					Specimen specimen = distributedItem.getSpecimen();
+					Double quantity = distributedItem.getQuantity();
+					if(specimen == null || specimen.getId() == null)
+					{
+						message = ApplicationProperties.getValue("errors.distribution.item.specimen");
+						throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
+					}
+					if(quantity == null)
+					{
+						message = ApplicationProperties.getValue("errors.distribution.item.quantity");
+						throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
+					}					
+					Object specimenObj = dao.retrieve(Specimen.class.getName(), specimen.getId());
+					if(specimenObj == null)
+					{					
+						throw new DAOException( ApplicationProperties.getValue("errors.distribution.specimenNotFound"));
+					}
+					else if(((Specimen)specimenObj).getActivityStatus().equals(Constants.ACTIVITY_STATUS_VALUES[2]))
+					{
+						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedSpecimen"));
+					}
+				}
+			}
+		}
+		
 		//END
 
 		if (operation.equals(Constants.ADD))

@@ -146,87 +146,82 @@ public class SiteBizLogic extends DefaultBizLogic
 		//End:- Change for API Search
 		
 		// added by Ashish
-/*		String message = "";
+		String message = "";
 		if (site == null)
-			throw new DAOException("domain.object.null.err.msg", new String[]{"Site"});
-		// app.site
+		{
+			message = ApplicationProperties.getValue("app.site");
+			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg",message));			
+		}
 		Validator validator = new Validator();
 		if (validator.isEmpty(site.getName()))
 		{
 			message = ApplicationProperties.getValue("site.name");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
-		if (!validator.isValidOption(site.getType()))
+		if (validator.isEmpty(site.getType()))
 		{
 			message = ApplicationProperties.getValue("site.type");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));			
 		}
-		if (site.getCoordinator().getId() == -1L)
+		
+		if (site.getCoordinator()== null || site.getCoordinator().getId() ==null || site.getCoordinator().getId().longValue() == -1L)
 		{
 			message = ApplicationProperties.getValue("site.coordinator");
-			throw new DAOException("errors.item.required", new String[]{message});
-
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));
 		}
 
 		if (!validator.isEmpty(site.getEmailAddress())
 				&& !validator.isValidEmailAddress(site.getEmailAddress()))
 		{
 			message = ApplicationProperties.getValue("site.emailAddress");
-			throw new DAOException("errors.item.format", new String[]{message});
-
+			throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));
 		}
 
-		if (validator.isEmpty(site.getAddress().getStreet()))
+		if (site.getAddress() == null || validator.isEmpty(site.getAddress().getStreet()))
 		{
 			message = ApplicationProperties.getValue("site.street");
-			throw new DAOException("errors.item.required", new String[]{message});
-
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
-		if (validator.isEmpty(site.getAddress().getCity()))
+		
+		if (site.getAddress() == null || validator.isEmpty(site.getAddress().getCity()))
 		{
 			message = ApplicationProperties.getValue("site.city");
-			throw new DAOException("errors.item.required", new String[]{message});
-
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
-		if (!validator.isValidOption(site.getAddress().getState()))
+		if (site.getAddress() == null || validator.isEmpty(site.getAddress().getState()))
 		{
 			message = ApplicationProperties.getValue("site.state");
-			throw new DAOException("errors.item.required", new String[]{message});
-
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
-		if (!validator.isValidOption(site.getAddress().getCountry()))
+		if (site.getAddress() == null || validator.isEmpty(site.getAddress().getCountry()))
 		{
 			message = ApplicationProperties.getValue("site.country");
-			throw new DAOException("errors.item.required", new String[]{message});
-
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
-		if (validator.isEmpty(site.getAddress().getZipCode()))
+		if (site.getAddress() == null || validator.isEmpty(site.getAddress().getZipCode()))
 		{
 			message = ApplicationProperties.getValue("site.zipCode");
-			throw new DAOException("errors.item.required", new String[]{message});
-
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 		else
 		{
 			if (!validator.isValidZipCode(site.getAddress().getZipCode()))
 			{
 				message = ApplicationProperties.getValue("site.zipCode");
-				throw new DAOException("errors.item.format", new String[]{message});
-
+				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
 			}
 		}
 
 		if (operation.equals(Constants.EDIT) && !validator.isValidOption(site.getActivityStatus()))
 		{
 			message = ApplicationProperties.getValue("site.activityStatus");
-			throw new DAOException("errors.item.required", new String[]{message});
-
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
-*/
+
 		// END
 
 		List siteList = CDEManager.getCDEManager().getPermissibleValueList(

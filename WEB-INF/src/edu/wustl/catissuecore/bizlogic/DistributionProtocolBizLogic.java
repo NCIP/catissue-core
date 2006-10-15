@@ -256,143 +256,59 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
         //End:-  Change for API Search 
 		
 		//Added by Ashish
-		/*
-		if (protocol == null)
-			throw new DAOException("domain.object.null.err.msg", new String[]{"Distribution Protocol"});
-		Validator validator = new Validator();
-		
-		if (this.values.keySet().isEmpty())
-		{
-			String message = ApplicationProperties.getValue("distributionprotocol.specimenreq");
-			throw new DAOException("errors.item.required", new String[]{message});
-			
-		}
         
-		boolean bSpecimenClass = false;
-		boolean bSpecimenType = false;
-		boolean bTissueSite = false;
-		boolean bPathologyStatus = false;
-		boolean bQuantity = false;
+        Validator validator = new Validator();
+        String message="";
+		if (protocol == null)
+		{			
+			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg","Distribution Protocol"));	
+		}			
 		
-		Iterator iter = this.values.keySet().iterator();
-		while (iter.hasNext())
+		if(protocol.getPrincipalInvestigator() == null)
 		{
-			String key = (String)iter.next();
-			String value = (String)values.get(key);
-			Logger.out.debug(key+ " : " + value);
+			//message = ApplicationProperties.getValue("collectionprotocol.specimenstatus");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required","Principal Investigator"));	
+		}
+		
+		if (validator.isEmpty(protocol.getTitle()))
+		{
+			message = ApplicationProperties.getValue("distributionprotocol.protocoltitle");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+		}
+		
+		if (validator.isEmpty(protocol.getShortTitle()))
+		{
+			message = ApplicationProperties.getValue("distributionprotocol.shorttitle");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+		}
+		
+		if (validator.isEmpty(protocol.getIrbIdentifier()))
+		{
+			message = ApplicationProperties.getValue("distributionprotocol.irbid");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+		}		
+		
+		if(protocol.getStartDate() != null)
+		{
+			String errorKey = validator.validateDate(protocol.getStartDate().toString() ,false);
+//			if(errorKey.trim().length() >0  )		
+//			{
+//				message = ApplicationProperties.getValue("distributionprotocol.startdate");
+//				throw new DAOException(ApplicationProperties.getValue(errorKey,message));	
+//			}
+		}
+		else
+		{
+			message = ApplicationProperties.getValue("distributionprotocol.startdate");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+		}	
 			
-			if(!bSpecimenClass)
-			{
-				if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption( value))
-				{
-					bSpecimenClass = true;
-					String message = ApplicationProperties.getValue("collectionprotocol.specimenclass");
-					throw new DAOException("errors.item.selected", new String[]{message});
-					
-					
-				}
-			}
-			
-			if(!bSpecimenType )
-			{
-				if(key.indexOf("specimenType")!=-1 && !validator.isValidOption( value))
-				{
-					bSpecimenType = true;
-					String message = ApplicationProperties.getValue("collectionprotocol.specimetype");
-					throw new DAOException("errors.item.selected", new String[]{message});
-					
-					
-				}
-			}				
-
-			if(!bTissueSite)
-			{
-				if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption( value))
-				{
-					bTissueSite = true;
-					String message = ApplicationProperties.getValue("collectionprotocol.specimensite");
-					throw new DAOException("errors.item.selected", new String[]{message});
-					
-					
-				}
-			}
-
-			if(!bPathologyStatus )
-			{
-				if(key.indexOf("pathologyStatus")!=-1 && !validator.isValidOption( value))
-				{
-					bPathologyStatus = true; 
-					String message = ApplicationProperties.getValue("collectionprotocol.specimenstatus");
-					throw new DAOException("errors.item.selected", new String[]{message});
-					
-					
-				}
-			}
-				
-			if(!bQuantity )
-			{
-				if(key.indexOf("quantityIn")!=-1)
-				{
-					// check for empty quantity
-					if(validator.isEmpty(value))
-					{
-						bQuantity = true;
-						String message = ApplicationProperties.getValue("collectionprotocol.quantity");
-						throw new DAOException("errors.item.required", new String[]{message});
-    					
-    					
-					}
-					else
-					{
-    					String classKey = key.substring(0,key.lastIndexOf("_") );
-    					classKey = classKey + "_specimenClass";
-    					String classValue = (String)getValue(classKey );
-    					
-						// -------Mandar: 20-12-2005
-						String typeKey = key.substring(0,key.lastIndexOf("_") );
-						typeKey = typeKey + "_specimenType";
-						String typeValue = (String)getValue(typeKey );
-						Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );
-						
-						//
-						 //  if class is cell or type is slide,paraffinblock, 
-						 //  frozen block then qty is in integer
-						 ///
-    					if (classValue.trim().equals("Cell") || typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) ||
-    							typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE))
-    					{
-            				if(!validator.isNumeric(value ))
-            				{
-            					bQuantity = true;
-            					String message = ApplicationProperties.getValue("distributionprotocol.quantity");
-            					throw new DAOException("errors.item.format", new String[]{message});
-            					
-            					
-            				}
-    					}
-    					else
-    					{
-    						if(!validator.isDouble(value ))
-	        				{
-    							bQuantity = true;
-    							String message = ApplicationProperties.getValue("distributionprotocol.quantity");
-    							throw new DAOException("errors.item.required", new String[]{message});
-	        					
-	        					
-	        				}
-    					}
-					}
-				} // if  quantity
-			}
-			}
-			*/
 		//END
 
 		if(spReqCollection != null && spReqCollection.size() != 0)
 		{
-			List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);
+			List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS,null);			
 			
-//	    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
 	    	List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE,null);
 	    	
 	    	List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);

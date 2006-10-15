@@ -572,7 +572,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		//setAllValues(obj);
 		//END
 
-		CollectionProtocol protocol = (CollectionProtocol) obj;
+		CollectionProtocol protocol = (CollectionProtocol) obj; 
 		Collection eventCollection = protocol.getCollectionProtocolEventCollection();		
 		
 		/**
@@ -588,224 +588,80 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
         //End:-  Change for API Search 
 		
     	//Added by Ashish
-		/*Validator validator = new Validator();
+		Validator validator = new Validator();		
+		String message="";
 		if (protocol == null)
-			throw new DAOException("domain.object.null.err.msg",
-					new String[]{"Collection Protocol"});*/
-		//END
-		//Added by Ashish
-/*
-		if (values.isEmpty())
+		{			
+			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg","Collection Protocol"));	
+		}	
+		
+		if (validator.isEmpty(protocol.getTitle()))
 		{
-			String message = ApplicationProperties.getValue("collectionprotocol.eventtitle");
-			throw new DAOException("errors.one.item.required", new String[]{message});
-
+			message = ApplicationProperties.getValue("collectionprotocol.protocoltitle");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
-		// check for atleast 1 specimen requirement per CollectionProtocol Event
-		for (int i = 1; i <= outerCounter; i++)
+		
+		if (validator.isEmpty(protocol.getShortTitle()))
 		{
-			String className = "CollectionProtocolEvent:" + i
-					+ "_SpecimenRequirement:1_specimenClass";
-			Object object = getValue(className);
-			if (object == null)
-			{
-
-				String message = ApplicationProperties.getValue("collectionprotocol.specimenreq");
-				throw new DAOException("errors.one.item.required", new String[]{message});
-			}
+			message = ApplicationProperties.getValue("collectionprotocol.shorttitle");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
-		// ---------END-----------------------------------------
-
-		// Error messages should be in the same sequence as the sequence of fields on the page.
-
-		//Check for PI can not be coordinator of the protocol.
-		if (this.protocolCoordinatorIds != null
-				&& protocol.getPrincipalInvestigator().getId() != -1)
+		
+		if (validator.isEmpty(protocol.getIrbIdentifier()))
 		{
-			for (int ind = 0; ind < protocolCoordinatorIds.length; ind++)
-			{
-				if (protocolCoordinatorIds[ind] == protocol.getPrincipalInvestigator().getId())
-				{
-
-					throw new DAOException("errors.pi.coordinator.same");
-
-				}
-			}
+			message = ApplicationProperties.getValue("collectionprotocol.irbid");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+		}		
+		
+		if(protocol.getStartDate() != null)
+		{
+			String errorKey = validator.validateDate(protocol.getStartDate().toString() ,false);
+//			if(errorKey.trim().length() >0  )		
+//			{
+//				message = ApplicationProperties.getValue("collectionprotocol.startdate");
+//				throw new DAOException(ApplicationProperties.getValue(errorKey,message));	
+//			}
 		}
-
-		Logger.out.debug("Protocol Coordinators : " + protocolCoordinatorIds);
-
-		boolean bClinicalStatus = false;
-		boolean bStudyPoint = false;
-		boolean bSpecimenClass = false;
-		boolean bSpecimenType = false;
-		boolean bTissueSite = false;
-		boolean bPathologyStatus = false;
-
-		Iterator it = this.values.keySet().iterator();
-		while (it.hasNext())
+		else
 		{
-			String key = (String) it.next();
-			String value = (String) values.get(key);
-
-			if (!bClinicalStatus)
+			message = ApplicationProperties.getValue("collectionprotocol.startdate");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+		}
+		if(protocol.getEndDate() != null)
+		{
+			String errorKey = validator.validateDate(protocol.getEndDate().toString() ,false);
+//			if(errorKey.trim().length() >0  )		
+//			{
+//				message = ApplicationProperties.getValue("collectionprotocol.enddate");
+//				throw new DAOException(ApplicationProperties.getValue(errorKey,message));	
+//			}
+		}
+		
+		if(protocol.getPrincipalInvestigator() == null)
+		{
+			//message = ApplicationProperties.getValue("collectionprotocol.specimenstatus");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required","Principal Investigator"));	
+		}
+		
+		Collection protocolCoordinatorCollection = protocol.getUserCollection();
+		if(protocolCoordinatorCollection == null || protocolCoordinatorCollection.isEmpty())
+		{
+			//message = ApplicationProperties.getValue("collectionprotocol.specimenstatus");
+			throw new DAOException(ApplicationProperties.getValue("errors.one.item.required","Protocol Coordinator"));
+		}
+		else
+		{
+			Iterator protocolCoordinatorItr = protocolCoordinatorCollection.iterator();
+			while(protocolCoordinatorItr.hasNext())
 			{
-				if (key.indexOf("clinicalStatus") != -1 && !validator.isValidOption(value))
+				User protocolCoordinator = (User) protocolCoordinatorItr.next();
+				if(protocolCoordinator.getId() == protocol.getPrincipalInvestigator().getId())
 				{
-					bClinicalStatus = true;
-					String message = ApplicationProperties
-							.getValue("collectionprotocol.clinicalstatus");
-					throw new DAOException("errors.item.selected", new String[]{message});
-
+					throw new DAOException(ApplicationProperties.getValue("errors.pi.coordinator.same"));
 				}
 			}
-			if (!bStudyPoint)
-			{
-				if (key.indexOf("studyCalendarEventPoint") != -1)
-				{
-					//As study Calendar Event Point can be an empty value
-					if (validator.isEmpty(value))
-					{
-						bStudyPoint = true;
-						String message = ApplicationProperties
-								.getValue("collectionprotocol.studycalendartitle");
-						throw new DAOException("errors.item.required", new String[]{message});
-
-					}
-					else
-					{
-						//Allow study Calendar Event Point as -ve value
-						if (!validator.isDouble(value, false))
-						{
-							bStudyPoint = true;
-							String message = ApplicationProperties
-									.getValue("collectionprotocol.studycalendartitle");
-							throw new DAOException("errors.studycalendarpoint",
-									new String[]{message});
-
-						}
-					}
-				}
-			}
-
-			if (!bSpecimenClass)
-			{
-				if (key.indexOf("specimenClass") != -1 && !validator.isValidOption(value))
-				{
-					bSpecimenClass = true;
-					String message = ApplicationProperties
-							.getValue("collectionprotocol.specimenclass");
-					throw new DAOException("errors.item.selected", new String[]{message});
-
-				}
-			}
-
-			if (!bSpecimenType)
-			{
-				if (key.indexOf("specimenType") != -1 && !validator.isValidOption(value))
-				{
-					bSpecimenType = true;
-					String message = ApplicationProperties
-							.getValue("collectionprotocol.specimetype");
-					throw new DAOException("errors.item.selected", new String[]{message});
-
-				}
-			}
-
-			if (!bTissueSite)
-			{
-				if (key.indexOf("tissueSite") != -1 && !validator.isValidOption(value))
-				{
-					bTissueSite = true;
-					String message = ApplicationProperties
-							.getValue("collectionprotocol.specimensite");
-					throw new DAOException("errors.item.selected", new String[]{message});
-
-				}
-			}
-
-			if (!bPathologyStatus)
-			{
-				if (key.indexOf("pathologyStatus") != -1 && !validator.isValidOption(value))
-				{
-					bPathologyStatus = true;
-					String message = ApplicationProperties
-							.getValue("collectionprotocol.specimenstatus");
-					throw new DAOException("errors.item.selected", new String[]{message});
-
-				}
-			}
-
-			if (key.indexOf("quantityIn") != -1)
-			{
-				String classKey = key.substring(0, key.lastIndexOf("_"));
-				classKey = classKey + "_specimenClass";
-				String classValue = (String) getValue(classKey);
-				if (classValue.trim().equals("Cell"))
-				{
-					if (validator.isEmpty(value))
-					{
-						String message = ApplicationProperties
-								.getValue("collectionprotocol.quantity");
-						throw new DAOException("errors.item.required", new String[]{message});
-
-					}
-					else if (!validator.isNumeric(value))
-					{
-						String message = ApplicationProperties
-								.getValue("collectionprotocol.quantity");
-						throw new DAOException("errors.item.format", new String[]{message});
-
-					}
-				}
-				else
-				{
-					// -------Mandar: 19-12-2005
-					String typeKey = key.substring(0, key.lastIndexOf("_"));
-					typeKey = typeKey + "_specimenType";
-					String typeValue = (String) getValue(typeKey);
-					Logger.out.debug("TypeKey : " + typeKey + " : Type Value : " + typeValue);
-					if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE)
-							|| typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK)
-							|| typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK)
-							|| typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE))
-					{
-						if (validator.isEmpty(value))
-						{
-							String message = ApplicationProperties
-									.getValue("collectionprotocol.quantity");
-							throw new DAOException("errors.item.required", new String[]{message});
-
-						}
-						else if (!validator.isNumeric(value))
-						{
-							String message = ApplicationProperties
-									.getValue("collectionprotocol.quantity");
-							throw new DAOException("errors.item.format", new String[]{message});
-
-						}
-					}
-					else
-					{
-						if (validator.isEmpty(value))
-						{
-							String message = ApplicationProperties
-									.getValue("collectionprotocol.quantity");
-							throw new DAOException("errors.item.required", new String[]{message});
-
-						}
-						else if (!validator.isDouble(value))
-						{
-							String message = ApplicationProperties
-									.getValue("collectionprotocol.quantity");
-							throw new DAOException("errors.item.format", new String[]{message});
-
-						}
-					}
-				}
-			}
-		}//END
-*/
+		}		
+		
 		if (eventCollection != null && eventCollection.size() != 0)
 		{
 			List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
@@ -837,6 +693,13 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 					{
 						throw new DAOException(ApplicationProperties
 								.getValue("collectionProtocol.clinicalStatus.errMsg"));
+					}
+					
+					//Added for Api Search
+					if (event.getStudyCalendarEventPoint() == null)
+					{
+						message = ApplicationProperties.getValue("collectionprotocol.studycalendartitle");
+						throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));
 					}
 
 					Collection reqCollection = event.getSpecimenRequirementCollection();

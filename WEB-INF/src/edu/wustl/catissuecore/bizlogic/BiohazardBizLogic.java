@@ -12,9 +12,6 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.List;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -39,25 +36,25 @@ public class BiohazardBizLogic extends DefaultBizLogic
 		Biohazard hazard = (Biohazard) obj;
 		String message = "";
 		// Added by Ashish
-/*		if (hazard == null)
+		if (hazard == null)
 		{
 			message = ApplicationProperties.getValue("app.biohazard");
-			throw new DAOException("domain.object.null.err.msg", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg",message));	
 		}
 
 		Validator validator = new Validator();
 		if (validator.isEmpty(hazard.getName()))
 		{
 			message = ApplicationProperties.getValue("biohazard.name");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
-		if (!validator.isValidOption(hazard.getType()))
+		if (!validator.isValidOption(hazard.getType()) || validator.isEmpty(hazard.getType()))
 		{
 			message = ApplicationProperties.getValue("biohazard.type");
-			throw new DAOException("errors.item.selected", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 
-		}  */
+		} 
 		//END
 		List biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_BIOHAZARD, null);

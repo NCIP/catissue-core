@@ -80,7 +80,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
+		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj; 
 		
 		CollectionProtocolRegistration oldCollectionProtocolRegistration = (CollectionProtocolRegistration) oldObj;
 		
@@ -128,11 +128,18 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				String firstName = Utility.toString(oldParticipant.getFirstName());
 				String lastName = Utility.toString(oldParticipant.getLastName());
 				String birthDate = Utility.toString(oldParticipant.getBirthDate());
-				String ssn = Utility.toString(oldParticipant.getSocialSecurityNumber());
+				String ssn = Utility.toString(oldParticipant.getSocialSecurityNumber());				
 				if(firstName.trim().length() == 0 && lastName.trim().length() == 0 && birthDate.trim().length() == 0 && ssn.trim().length() == 0)
 				{
 					collectionProtocolRegistration.setParticipant(oldParticipant);
 				}
+				else
+				{					
+					//create dummy participant.
+					Participant participant = addDummyParticipant(dao, sessionDataBean);
+					collectionProtocolRegistration.setParticipant(participant);
+				}
+										
 			} // oldpart != null
 			else  
 			{
@@ -352,23 +359,39 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
         ApiSearchUtil.setCollectionProtocolRegistrationDefault(registration);
         //End:-  Change for API Search 
         
-/*		//Added by Ashish
+		//Added by Ashish
 		if (registration == null)
-			throw new DAOException("domain.object.null.err.msg", new String[]{"Participant Registration"});
-		Validator validator = new Validator();
-		if (registration.getCollectionProtocol().getId()==-1)
 		{
-			String message = ApplicationProperties.getValue("collectionprotocolregistration.protocoltitle");
-			throw new DAOException("errors.item.required", new String[]{message});
-			
+			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg","Collection Protocol Registration"));			
+		}
+		Validator validator = new Validator();	
+		String message = "";
+		if (registration.getCollectionProtocol() == null || registration.getCollectionProtocol().getId() == null)
+		{
+			message = ApplicationProperties.getValue("collectionprotocolregistration.protocoltitle");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));			
 	  	}
+		
+		String errorKey = validator.validateDate(Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY),true );
+		if(errorKey.trim().length() >0  )
+		{
+			message = ApplicationProperties.getValue("collectionprotocolregistration.date");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));				
+		}
      	
+		if(validator.isEmpty(registration.getProtocolParticipantIdentifier()))
+		{
+			if (registration.getParticipant() == null || registration.getParticipant().getId() == null)
+			{				
+				throw new DAOException(ApplicationProperties.getValue("errors.collectionprotocolregistration.atleast"));	
+			}
+		}
 //		if (checkedButton == true)
 		//{
-			if (registration.getParticipant().getId() == -1)
+			/*if (registration.getParticipant() == null || registration.getParticipant().getId() == null)
 			{
-				String message = ApplicationProperties.getValue("collectionProtocolReg.participantName");
-				throw new DAOException("errors.item.required", new String[]{message});				
+				message = ApplicationProperties.getValue("collectionProtocolReg.participantName");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 			}*/
 //		} // name selected
 		//else
