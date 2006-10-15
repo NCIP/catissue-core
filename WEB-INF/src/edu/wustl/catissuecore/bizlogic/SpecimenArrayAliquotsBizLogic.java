@@ -168,7 +168,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 		if (parentSpecimenArray != null)
 		{	
 			SpecimenArray oldSpecimenArray = (SpecimenArray) dao.retrieve(SpecimenArray.class.getName(), specimenArray.getId());;
-			parentSpecimenArray.setAvailable(Boolean.valueOf(false));
+			updateParentSpecimenArray(parentSpecimenArray);			
 			specimenArrayBizLogic.update(dao, parentSpecimenArray, oldSpecimenArray, sessionDataBean);	
 		}
 		
@@ -176,6 +176,22 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 		populateParentSpecimenArrayData(aliquotMap, specimenArray, parentSpecimenArray);
 		
 	}	 
+	
+	private void updateParentSpecimenArray(SpecimenArray parentSpecimenArray)
+	{
+		parentSpecimenArray.setAvailable(Boolean.valueOf(false));
+		parentSpecimenArray.setAliquot(true);
+		Collection specimenArrayContentCollection = parentSpecimenArray.getSpecimenArrayContentCollection();
+		if(specimenArrayContentCollection != null && !specimenArrayContentCollection.isEmpty())
+		{
+			Iterator itr = specimenArrayContentCollection.iterator();
+			while(itr.hasNext())
+			{
+				SpecimenArrayContent arrayContent = (SpecimenArrayContent) itr.next();
+				arrayContent.getInitialQuantity().setValue(Double.valueOf("0"));				
+			}
+		}
+	}
 	
 	/**
 	 * This function populates the parent specimenArray information in aliquot map. This map will be
@@ -242,7 +258,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 					quantity.setValue(new Double(initialQuantity));	
 					specimenArrayContent.setInitialQuantity(quantity);
 					// reset quantity value of parent array content to 0.0
-					parentSpecimenArrayContent.getInitialQuantity().setValue(Double.valueOf("0"));
+					//parentSpecimenArrayContent.getInitialQuantity().setValue(Double.valueOf("0"));
 				}
 				
 				specimenArrayContent.setConcentrationInMicrogramPerMicroliter(parentSpecimenArrayContent.getConcentrationInMicrogramPerMicroliter());
