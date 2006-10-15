@@ -363,7 +363,7 @@ ALTER TABLE CATISSUE_SPECIMEN_CHAR drop column PATHOLOGICAL_STATUS;
 #------Start:- Jitendra: Bug-1678 -------
 
 alter table catissue_reported_problem modify MESSAGE_BODY varchar(500) NOT NULL;
-alter table CATISSUE_AUDIT_EVENT_DETAILS modify CURRENT_VALUE varchar(500) NOT NULL;
+alter table CATISSUE_AUDIT_EVENT_DETAILS modify CURRENT_VALUE varchar(500);
 
 
 #------End: Jitendra: Bug-1678 -------
