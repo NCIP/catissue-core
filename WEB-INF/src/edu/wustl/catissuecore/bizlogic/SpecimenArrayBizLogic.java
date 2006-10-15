@@ -22,14 +22,20 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 
 /**
  * <p>This class initializes the fields of SpecimenArrayBizLogic.java</p>
@@ -45,7 +51,18 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
-		SpecimenArray specimenArray = (SpecimenArray) obj;		
+		SpecimenArray specimenArray = (SpecimenArray) obj;
+		
+		try
+		{
+			//Added for Api Search
+			checkStorageContainerAvailablePos(specimenArray,dao,sessionDataBean);
+		}
+		catch (SMException e)
+		{
+			throw handleSMException(e);
+		}
+		
 		doUpdateSpecimenArrayContents(specimenArray, dao, sessionDataBean, true);
 
 		dao.insert(specimenArray.getCapacity(), sessionDataBean, true, false);
@@ -84,10 +101,21 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			// increment by 1 because of array index starts from 0.
 			if (specimenArrayContent.getPositionDimensionOne() != null)
 			{
-				specimenArrayContent.setPositionDimensionOne(new Integer(specimenArrayContent
-						.getPositionDimensionOne().intValue() + 1));
-				specimenArrayContent.setPositionDimensionTwo(new Integer(specimenArrayContent
-						.getPositionDimensionTwo().intValue() + 1));
+				//Bug: 2365: grid location of parent array was getting changed 
+				if(specimenArray.isAliquot())
+				{
+					specimenArrayContent.setPositionDimensionOne(new Integer(specimenArrayContent
+							.getPositionDimensionOne().intValue()));
+					specimenArrayContent.setPositionDimensionTwo(new Integer(specimenArrayContent
+							.getPositionDimensionTwo().intValue()));
+				}
+				else
+				{
+					specimenArrayContent.setPositionDimensionOne(new Integer(specimenArrayContent
+							.getPositionDimensionOne().intValue() + 1));
+					specimenArrayContent.setPositionDimensionTwo(new Integer(specimenArrayContent
+							.getPositionDimensionTwo().intValue() + 1));
+				}
 			}
 
 			if (isNewSpecimenArrayContent(specimenArrayContent, oldSpecArrayContents))
@@ -144,9 +172,18 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 	{
 		Collection specimenArrayContentCollection = specimenArray
 				.getSpecimenArrayContentCollection();
-		Collection updatedSpecArrayContentCollection = new HashSet();
+		Collection updatedSpecArrayContentCollection = new HashSet(); 
 		SpecimenArrayContent specimenArrayContent = null;
 		Specimen specimen = null;
+//		try
+//		{
+//			checkStorageContainerAvailablePos(specimenArray,dao,sessionDataBean);
+//		}
+//		catch (SMException e)
+//		{
+//			throw handleSMException(e);
+//		}
+		
 		if (specimenArrayContentCollection != null && !specimenArrayContentCollection.isEmpty())
 		{
 			double quantity = 0.0;
@@ -163,6 +200,12 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			for (Iterator iter = specimenArrayContentCollection.iterator(); iter.hasNext();)
 			{
 				specimenArrayContent = (SpecimenArrayContent) iter.next();
+				
+				//Added by jitendra 
+				if(specimenArrayContent.getPositionDimensionOne() == null || specimenArrayContent.getPositionDimensionTwo() == null)
+				{
+					throw new DAOException(ApplicationProperties.getValue("array.contentPosition.err.msg"));
+				}
 				
 				/**
 				 * Start: Change for API Search   --- Jitendra 06/10/2006
@@ -244,9 +287,41 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 				throw new DAOException(Constants.ARRAY_NO_SPECIMEN__EXCEPTION_MESSAGE);
 			}
 		}
-		specimenArray.setSpecimenArrayContentCollection(updatedSpecArrayContentCollection);
+		
+		specimenArray.setSpecimenArrayContentCollection(updatedSpecArrayContentCollection); 
 	}
 
+	
+	private void checkStorageContainerAvailablePos(SpecimenArray specimenArray,DAO dao,SessionDataBean sessionDataBean) 
+												  throws DAOException,SMException
+	{
+		if (specimenArray.getStorageContainer() != null)
+		{
+			if(specimenArray.getStorageContainer().getId() != null)
+			{
+				Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimenArray.getStorageContainer().getId());
+				if (containerObj != null)
+				{
+					StorageContainer container = (StorageContainer) containerObj;
+					// check for closed Storage Container
+					checkStatus(dao, container, "Storage Container");
+	
+					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+							Constants.STORAGE_CONTAINER_FORM_ID);
+	
+					// --- check for all validations on the storage container.
+					storageContainerBizLogic.checkContainer(dao, container.getId().toString(), specimenArray.getPositionDimensionOne().toString(), specimenArray
+							.getPositionDimensionTwo().toString(), sessionDataBean);
+	
+					specimenArray.setStorageContainer(container);
+				}
+				else
+				{
+					throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
+				}
+			}
+		}		
+	}
 	/**
 	 * @param specimen specimen
 	 * @param quantity quantity
@@ -387,51 +462,108 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		ApiSearchUtil.setSpecimenArrayDefault(specimenArray);
 		//End:- Change for API Search
 		
-		return true;
-	}
-	
-	// Added by Ashish
-	/*
-	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
-	{
-		SpecimenArray specimenArray = (SpecimenArray) obj;
-		if (specimenArray == null)
-			throw new DAOException("domain.object.null.err.msg", new String[]{"Specimen Array"});
-		Validator validator = new Validator();
-		if (specimenArray.getSpecimenArrayType().getId() == -1)
+		//Added by Ashish	
+		if(specimenArray == null)
 		{
-			String message = ApplicationProperties.getValue("array.arrayType");
-			throw new DAOException("errors.item.required", new String[]{message});
-
+			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "Specimen Array"));
 		}
+		
+		Validator validator = new Validator();
+		String message="";
+		if (specimenArray.getSpecimenArrayType()== null || specimenArray.getSpecimenArrayType().getId()== null || specimenArray.getSpecimenArrayType().getId().longValue() == -1)
+		{
+			message = ApplicationProperties.getValue("array.arrayType");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+		}
+		
+		//fetch array type to check specimen class
+		List arrayTypes = dao.retrieve(SpecimenArrayType.class.getName(),
+				Constants.SYSTEM_IDENTIFIER, specimenArray.getSpecimenArrayType().getId());
+		SpecimenArrayType specimenArrayType = null;
+
+		if ((arrayTypes != null) && (!arrayTypes.isEmpty()))
+		{
+			specimenArrayType = (SpecimenArrayType) arrayTypes.get(0);
+		}
+		else
+		{
+			message = ApplicationProperties.getValue("array.arrayType");
+			throw new DAOException(ApplicationProperties.getValue("errors.invalid",message));
+		}
+		
 		//	validate name of array
 		if (validator.isEmpty(specimenArray.getName()))
 		{
-			String message = ApplicationProperties.getValue("array.arrayLabel");
-			throw new DAOException("errors.item.required", new String[]{message});
-
+			message = ApplicationProperties.getValue("array.arrayLabel");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
 		// validate storage position
-		if (!validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionOne()), 1)
+		if (specimenArray.getPositionDimensionOne() == null || specimenArray.getPositionDimensionTwo() == null
+				|| !validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionOne()), 1)
 				|| !validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionTwo()), 1)
 				|| !validator.isNumeric(
 						String.valueOf(specimenArray.getStorageContainer().getId()), 1))
 		{
-			String message = ApplicationProperties.getValue("array.positionInStorageContainer");
-			throw new DAOException("errors.item.format", new String[]{message});
-
+			message = ApplicationProperties.getValue("array.positionInStorageContainer");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
 		}
 
 		// validate user 
-		if (!validator.isValidOption(String.valueOf(specimenArray.getCreatedBy().getId())))
+		if (specimenArray.getCreatedBy()== null || specimenArray.getCreatedBy().getId()== null || !validator.isValidOption(String.valueOf(specimenArray.getCreatedBy().getId())))
 		{
-			String message = ApplicationProperties.getValue("array.user");
-			throw new DAOException("errors.item.required", new String[]{message});
-
+			message = ApplicationProperties.getValue("array.user");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));
 		}
+		
+		//validate capacity 
+		if (specimenArray.getCapacity() == null || specimenArray.getCapacity().getOneDimensionCapacity()== null || 
+				specimenArray.getCapacity().getTwoDimensionCapacity()==null )
+		{			
+			throw new DAOException(ApplicationProperties.getValue("array.capacity.err.msg"));
+		}
+		
+		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
+		String specimenClass = specimenArrayType.getSpecimenClass();
+		
+		if (!isValidClassName(specimenClass))
+		{
+			throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
+		}
+
+		if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
+		{
+			throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
+		}
+		
+		Collection specimenTypes = specimenArrayType.getSpecimenTypeCollection();
+		if(specimenTypes == null || specimenTypes.isEmpty())
+		{			
+			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
+		}
+		else
+		{
+			Iterator itr = specimenTypes.iterator();
+			while(itr.hasNext())
+			{
+				String specimenType = (String) itr.next();
+				if (!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass), specimenType))
+				{
+					throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
+				}
+			}
+		}		
 		return true;
 	}
-	*/
+	
+	private boolean isValidClassName(String className)
+	{
+		if ((className != null) && (className.equalsIgnoreCase(Constants.CELL)) || (className.equalsIgnoreCase(Constants.MOLECULAR)) ||
+				(className.equalsIgnoreCase(Constants.FLUID)) || (className.equalsIgnoreCase(Constants.TISSUE)))
+		{
+			return true;
+		}
+		return false;
+	}
 	//END
 }
