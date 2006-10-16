@@ -16,10 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -90,14 +87,6 @@ public class AddSpecimenAction extends Action
 		}
 		else
 		{
-			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-			if (errors == null)
-			{
-				errors = new ActionErrors();
-			}
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("quickEvents.specimen.notExists", errorString));
-			saveErrors(request, errors);
-
 			return mapping.findForward(Constants.FAILURE);
 		}
 
