@@ -280,12 +280,12 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 					updatedSpecArrayContentCollection.add(specimenArrayContent);
 				}
 			}
-
-			// There should be at least one valid specimen in array
-			if (updatedSpecArrayContentCollection.isEmpty())
-			{
-				throw new DAOException(Constants.ARRAY_NO_SPECIMEN__EXCEPTION_MESSAGE);
-			}
+		}
+		
+		// There should be at least one valid specimen in array
+		if (updatedSpecArrayContentCollection.isEmpty())
+		{
+			throw new DAOException(Constants.ARRAY_NO_SPECIMEN__EXCEPTION_MESSAGE);
 		}
 		
 		specimenArray.setSpecimenArrayContentCollection(updatedSpecArrayContentCollection); 
