@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
@@ -177,7 +178,10 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     			break;
     		case Constants.CANCER_RESEARCH_GROUP_FORM_ID :
     			bizLogic = new CancerResearchBizLogic();
-    			break;	
+    			break;
+    		case Constants.CDE_FORM_ID :
+    			bizLogic = new CDEBizLogic();
+    			break;
     			
     		//END
     		case Constants.DEFAULT_BIZ_LOGIC:
