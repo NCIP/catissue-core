@@ -1,17 +1,10 @@
 package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JTable;
-import javax.swing.table.TableColumnModel;
 
-import edu.wustl.catissuecore.applet.AppletConstants;
-import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
-import edu.wustl.catissuecore.applet.MultipleSpecimenCopyPasteValidator;
-import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
@@ -46,10 +39,12 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 	 */
 	protected void doActionPerformed(ActionEvent e) 
 	{
-		//to set selected data in model.
 		CommonAppletUtil.getSelectedData(table);
-
-		paste.setEnabled(true );
+		paste.setEnabled(true);
+		super.doActionPerformed(e);
+		/*
+		 Commented as code move to common abstractcopy action handler -- Ashwin 
+		//to set selected data in model.
 		//super.handleAction(event);
 		System.out.println("\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
 		System.out.println("Inside MultipleSpecimenCopyActionHandler");
@@ -82,6 +77,7 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 		// for validation end
 		CommonAppletUtil.getMultipleSpecimenTableModel(table).setCopyPasteOperationValidatorModel( validatorModel);
 		System.out.println("\n >>>>>>>>>>>>>>   Copy Data Set.    >>>>>>>>>>>>");
+		*/
 		CommonAppletUtil.getMultipleSpecimenTableModel(table).showMapData(); 
 		System.out.println("\n >>>>>>>>>>>>>>  DONE >>>>>>>>>>>>");
 	}
@@ -122,8 +118,15 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 */
 protected String getJSMethodName()
 {
-return "showErrorMessage";
+	return "showErrorMessage";
 }
 
+/**
+ * @return total coumn count
+ */
+protected int getColumnCount()
+{
+	return CommonAppletUtil.getMultipleSpecimenTableModel(table).getTotalColumnCount();		
+}
 	
 }

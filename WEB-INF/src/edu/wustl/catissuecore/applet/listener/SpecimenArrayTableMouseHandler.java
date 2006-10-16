@@ -28,6 +28,7 @@ public class SpecimenArrayTableMouseHandler extends MouseAdapter {
 		
 		if (model instanceof SpecimenArrayTableModel) {
 			tableModel = (SpecimenArrayTableModel) model;
+			SpecimenArrayApplet arrayApplet = (SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(arrayTable);
 			
 			// enable if molecular specimen 
 			if ((tableModel.getSpecimenClass() != null) && SpecimenArrayAppletUtil.isMolecularSpecimen(tableModel.getSpecimenClass()))
@@ -36,17 +37,13 @@ public class SpecimenArrayTableMouseHandler extends MouseAdapter {
 				int row = arrayTable.getSelectedRow();
 				String concentration = (String) tableModel.getSpecimenArrayModelMap().get(SpecimenArrayAppletUtil.getArrayMapKey(row,column,tableModel.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX));
 				String quantity = (String) tableModel.getSpecimenArrayModelMap().get(SpecimenArrayAppletUtil.getArrayMapKey(row,column,tableModel.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX));
-				JApplet applet = CommonAppletUtil.getBaseApplet(arrayTable);
-				
-				if (applet instanceof SpecimenArrayApplet) {
-					SpecimenArrayApplet arrayApplet = (SpecimenArrayApplet) applet;
-					arrayApplet.getConcentrationTextField().setText(concentration);
-					arrayApplet.getConcentrationTextField().setEnabled(true);
-					arrayApplet.getQuantityTextField().setText(quantity);
-					arrayApplet.getQuantityTextField().setEnabled(true);
-					arrayApplet.getApplyButton().setEnabled(true);
-				}
-			}	
+				arrayApplet.getConcentrationTextField().setText(concentration);
+				arrayApplet.getConcentrationTextField().setEnabled(true);
+				arrayApplet.getQuantityTextField().setText(quantity);
+				arrayApplet.getQuantityTextField().setEnabled(true);
+				arrayApplet.getApplyButton().setEnabled(true);
+			}
+			arrayApplet.getCopyButton().setEnabled(true);
 		}
 		//System.out.println(e.getSource());
 	}

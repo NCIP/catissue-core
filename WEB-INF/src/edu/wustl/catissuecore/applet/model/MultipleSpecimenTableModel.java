@@ -559,26 +559,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	public void setLastCellRow(int currentCellPositionY) {
 		this.lastCellRow = currentCellPositionY;
 	}
-	
-	//----------------------POC for Copy Paste. start
-	CopyPasteOperationValidatorModel copyPasteOperationValidatorModel;
-
-	/**
-	 * @return Returns the CopyPasteOperationValidatorModel.
-	 */
-	public CopyPasteOperationValidatorModel getCopyPasteOperationValidatorModel()
-	{
-		return copyPasteOperationValidatorModel;
-	}
-	/**
-	 * @param CopyPasteOperationValidatorModel The CopyPasteOperationValidatorModel to set.
-	 */
-	public void setCopyPasteOperationValidatorModel(
-			CopyPasteOperationValidatorModel copyOperationValidatorModel)
-	{
-		this.copyPasteOperationValidatorModel = copyOperationValidatorModel;
-	}
-	
 	// -----------------------POC for copy paste end
 
 }

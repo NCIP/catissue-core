@@ -32,13 +32,13 @@ public class SpecimenArrayCopyActionHandler implements ActionListener {
         Component c = (Component) e.getSource();
         
         int px = c.getX();
-        int py = c.getY() + c.getHeight() + 70;
+        int py = c.getY() + c.getHeight() + 50;
         Point point = new Point(px,py);
         //Point point = c.getLocation();
         SwingUtilities.convertPointFromScreen(point,c);
         
         if(!popupMenu.isShowing())
-        	popupMenu.show( c, point.x, point.y);
+        	popupMenu.show(c, point.x, point.y);
         else 
         	popupMenu.setVisible(false);
 	}

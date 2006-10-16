@@ -215,4 +215,31 @@ public class SpecimenArrayTableModel extends BaseTabelModel {
 	{
 		this.enterSpecimenBy = enterSpecimenBy;
 	}
+	
+	/**
+	 * change enter specimen by. 
+	 * @param enterSpecimenBy enter specimen by
+	 */
+	public void changeEnterSpecimenBy(String enterSpecimenBy)
+	{
+		int attrIndex = 0;
+		if (enterSpecimenBy.equals("Label")) {
+			attrIndex = AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX;
+		} else {
+			attrIndex = AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX;
+		}
+		System.out.println(" In table model " + enterSpecimenBy);
+		String value = null;
+		for (int i=0; i < rowCount ; i++) 
+		{
+			  for (int j=0;j < columnCount; j++) 
+			  {
+				  value = getValueAt(i,j).toString();
+				  specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(i,j,columnCount,attrIndex),value);
+				  // change old selction to ""
+				  specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(i,j,columnCount,getAttributeIndex()),"");
+			  }
+		}
+		this.enterSpecimenBy = enterSpecimenBy;		
+	}
 }

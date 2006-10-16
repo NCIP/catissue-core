@@ -2,18 +2,12 @@
 package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumnModel;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
-import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
-import edu.wustl.catissuecore.applet.MultipleSpecimenCopyPasteValidator;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
@@ -39,7 +33,10 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 	 */
 	protected void doActionPerformed(ActionEvent e)
 	{
+			super.doActionPerformed(e);
 			//super.handleAction(event);
+			/*
+			 * Commented as code move to common abstractcopy action handler -- Ashwin
 			System.out.println("\n<<<<<<<<<<<          PASTE         <<<<<<<<<<<<<<<<<<<<<<\n");
 			System.out.println("Inside MultipleSpecimenPasteActionHandler");
 			
@@ -76,10 +73,12 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 				updateUI(validatorModel);
 			}
 		System.out.println("\n >>>>>>>>>>>>>> PASTE DONE >>>>>>>>>>>>");
+		*/
 		CommonAppletUtil.getMultipleSpecimenTableModel(table).showMapData();
 		System.out.println("\n >>>>>>>>>>>>>>MAP in PASTE  >>>>>>>>>>>>");
 	}
 	
+	/*
 	private void updateTableModel(int row, int col, Object value)
 	{
 		System.out.println("\n---X------X------X------X------X------X------X---\n");
@@ -89,7 +88,8 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 		System.out.println("Value Set");
 		System.out.println("\n---X------X------X------X------X------X------X---\n");
 	}
-	
+	*/
+	/*
 	private void updateUI(CopyPasteOperationValidatorModel validatorModel)
 	{
 		System.out.println("This method updates the table UI.");
@@ -179,10 +179,11 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 		}
 		SwingUtilities.updateComponentTreeUI(table);
 	}
-
-	protected void doPasteData(int selectedRow, int selectedCol, Object value)
+	*/
+	protected void doPasteData(int selectedRow, int selectedCol, List valueList)
 	{
 		TableColumnModel columnModel = table.getColumnModel();
+		Object value = valueList.get(0);
 		SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(selectedCol).getCellEditor();
 		scm.updateComponentValue(selectedRow,value.toString() );
 		SpecimenColumnModel scmRenderer = (SpecimenColumnModel)columnModel.getColumn(selectedCol).getCellRenderer();
@@ -208,6 +209,14 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 	protected String getJSMethodName()
 	{
 	return "showErrorMessage";
+	}
+	
+	/**
+	 * @return total coumn count
+	 */
+	protected int getColumnCount()
+	{
+		return CommonAppletUtil.getMultipleSpecimenTableModel(table).getTotalColumnCount();		
 	}
 
 }

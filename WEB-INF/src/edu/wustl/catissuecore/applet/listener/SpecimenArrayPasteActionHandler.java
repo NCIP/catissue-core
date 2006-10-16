@@ -1,8 +1,15 @@
 package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 import javax.swing.JTable;
+
+import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.applet.model.SpecimenArrayTableModel;
+import edu.wustl.catissuecore.applet.ui.SpecimenArrayApplet;
+import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
+import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
 
 /**
  * <p>This class initializes the fields of SpecimenArrayPasteActionHandler.java</p>
@@ -23,6 +30,87 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler 
 	 * @see edu.wustl.catissuecore.applet.listener.AbstractPasteActionHandler#doActionPerformed(java.awt.event.ActionEvent)
 	 */
 	protected void doActionPerformed(ActionEvent e) {
+		super.doActionPerformed(e);
 	}
 
+	/**
+	 * @see edu.wustl.catissuecore.applet.listener.AbstractPasteActionHandler#doPasteData(int, int, java.lang.Object)
+	 */
+	protected void doPasteData(int selectedRow, int selectedCol, List valueList)
+	{
+		if ((table != null) && (!valueList.isEmpty()))
+		{
+			SpecimenArrayTableModel model = (SpecimenArrayTableModel) table.getModel();
+			if (model.getCopySelectedOption().equals(AppletConstants.ARRAY_COPY_OPTION_LABELBAR))
+			{
+				// update model to set copied data
+				if (model.getEnterSpecimenBy().equalsIgnoreCase("Label"))
+				{
+					model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX),valueList.get(0));
+				}
+				else
+				{
+					model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX),valueList.get(0));
+				}
+			}
+			else if (model.getCopySelectedOption().equals(AppletConstants.ARRAY_COPY_OPTION_QUANTITY))
+			{
+				String value = (String) valueList.get(0);
+				if (value == null)
+				{
+					value = "";
+				}
+				model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX),value);
+				// update quantity text field details
+				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table)).getQuantityTextField().setText(value);
+				//model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_ID_INDEX),valueList.get(1));
+			}
+			else if (model.getCopySelectedOption().equals(AppletConstants.ARRAY_COPY_OPTION_CONCENTRATION))
+			{
+				String value = (String) valueList.get(0);
+				if (value == null)
+				{
+					value = "";
+				}
+				model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX),value);
+				// update concentration text field details
+				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table)).getConcentrationTextField().setText(value);
+			}
+			else if (model.getCopySelectedOption().equals(AppletConstants.ARRAY_COPY_OPTION_ALL))
+			{
+				if (model.getEnterSpecimenBy().equalsIgnoreCase("Label"))
+				{
+					model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX),valueList.get(0));
+				}
+				else
+				{
+					model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX),valueList.get(0));
+				}
+				String valueQuantity = (String) valueList.get(1);
+				if (valueQuantity == null)
+				{
+					valueQuantity = "";
+				}
+
+				model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_QUANTITY_INDEX),valueQuantity);
+				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table)).getQuantityTextField().setText(valueQuantity);
+				
+				String valueConc = (String) valueList.get(2);
+				if (valueConc == null)
+				{
+					valueConc = "";
+				}
+				model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX),valueConc);
+				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table)).getConcentrationTextField().setText(valueConc);
+			}
+		}
+	}
+	
+	/**
+	 * @return total coumn count
+	 */
+	protected int getColumnCount()
+	{
+		return table.getColumnCount();		
+	}
 }

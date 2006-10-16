@@ -33,6 +33,8 @@ import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.applet.component.SpecimenArrayTable;
 import edu.wustl.catissuecore.applet.listener.ApplyButtonActionHandler;
 import edu.wustl.catissuecore.applet.listener.ArrayCopyOptionActionHandler;
+import edu.wustl.catissuecore.applet.listener.SpecimenArrayCopyMouseHandler;
+import edu.wustl.catissuecore.applet.listener.SpecimenArrayPasteActionHandler;
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.SpecimenArrayTableModel;
@@ -66,6 +68,17 @@ public class SpecimenArrayApplet extends BaseApplet {
 	 */
 	private JButton applyButton = null;
 	
+	/**
+	 * Specify the copyButton field 
+	 */
+	JButton copyButton = null; 	
+	
+	/**
+	 * Specify the pasteButton field 
+	 */
+	JButton pasteButton = null;
+	
+	
 	private SpecimenArrayTable arrayTable = null;
 	
 	/**
@@ -74,18 +87,33 @@ public class SpecimenArrayApplet extends BaseApplet {
 	String session_id = null;
 	
 	/**
+	 * Specify the enterSpecimenBy field 
+	 */
+	String enterSpecimenBy = null;
+	
+	/**
 	 * @see edu.wustl.catissuecore.appletui.applet.BaseApplet#doInit()
 	 */
 	protected void doInit() 
 	{
 		super.doInit();
-		session_id = getParameter("session_id");
+//		
+		
+/*
+		int rowCount = 3;
+		int columnCount = 3;
+		String specimenClass = "Molecular";
+		Map tableModelMap = new HashMap();
 		String enterSpecimenBy = "Label";
+*/		
+		session_id = getParameter("session_id");
+		
 		int rowCount = new Integer(getParameter("rowCount")).intValue();
 		int columnCount = new Integer(getParameter("columnCount")).intValue();
 		String specimenClass = getParameter("specimenClass");
+		enterSpecimenBy = getParameter("enterSpecimenBy");
 		Map tableModelMap = getTableModelData();
-
+		
 		JLabel concLabel = new JLabel("Concentration");
 		concLabel.setOpaque(false);
 		JLabel quantityLabel = new JLabel("Quantity");
@@ -141,23 +169,35 @@ public class SpecimenArrayApplet extends BaseApplet {
         JPopupMenu popupMenu = new JPopupMenu();
         ArrayCopyOptionActionHandler actionHandler = new ArrayCopyOptionActionHandler(arrayTable);
         
-        JMenuItem labelMenuItem = new JMenuItem("Label/Barcode");
+        JMenuItem labelMenuItem = new JMenuItem(AppletConstants.ARRAY_COPY_OPTION_LABELBAR);
         labelMenuItem.addActionListener(actionHandler);
-        JMenuItem concMenuItem = new JMenuItem("Concentration");
-        concMenuItem.addActionListener(actionHandler);
-        JMenuItem quantityMenuItem = new JMenuItem("Quantity");
+        JMenuItem quantityMenuItem = new JMenuItem(AppletConstants.ARRAY_COPY_OPTION_QUANTITY);
         quantityMenuItem.addActionListener(actionHandler);
-        JMenuItem allMenuItem = new JMenuItem("All");
+        JMenuItem concMenuItem = new JMenuItem(AppletConstants.ARRAY_COPY_OPTION_CONCENTRATION);
+        concMenuItem.addActionListener(actionHandler);
+        JMenuItem allMenuItem = new JMenuItem(AppletConstants.ARRAY_COPY_OPTION_ALL);
         allMenuItem.addActionListener(actionHandler);
         
+        if (!specimenClass.equalsIgnoreCase("Molecular"))
+        {
+        	quantityMenuItem.setEnabled(false);
+        	concMenuItem.setEnabled(false);
+        }
+        
         popupMenu.add(labelMenuItem);
-        popupMenu.add(concMenuItem);
         popupMenu.add(quantityMenuItem);
+        popupMenu.add(concMenuItem);
         popupMenu.add(allMenuItem);
       
-        JButton copyButton = new JButton("Copy");
+        copyButton = new JButton("Copy");
         //copyButton.addActionListener(new SpecimenArrayCopyActionHandler(popupMenu));
-        //applyPanel.add(copyButton);
+        copyButton.addMouseListener(new SpecimenArrayCopyMouseHandler(popupMenu));
+        applyPanel.add(copyButton);
+        pasteButton = new JButton("Paste");
+        pasteButton.addActionListener(new SpecimenArrayPasteActionHandler(arrayTable));
+        applyPanel.add(pasteButton);
+        copyButton.setEnabled(false);
+        pasteButton.setEnabled(false);
         //System.out.println(" decrease gap :: 10");
         this.getContentPane().setLayout(new VerticalLayout(0,10));
         this.getContentPane().add(applyPanel);
@@ -204,6 +244,16 @@ public class SpecimenArrayApplet extends BaseApplet {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * @param enterSpecimenBy enter specimen by
+	 */
+	public void changeEnterSpecimenBy(String enterSpecimenBy)
+	{
+		System.out.println(" Enter Specimen By " + enterSpecimenBy);
+		this.enterSpecimenBy = enterSpecimenBy;
+		((SpecimenArrayTableModel) arrayTable.getModel()).changeEnterSpecimenBy(enterSpecimenBy);
 	}
 
 	/**
@@ -252,5 +302,21 @@ public class SpecimenArrayApplet extends BaseApplet {
 	public void setApplyButton(JButton applyButton) 
 	{
 		this.applyButton = applyButton;
+	}
+
+	/**
+	 * @return Returns the copyButton.
+	 */
+	public JButton getCopyButton()
+	{
+		return copyButton;
+	}
+
+	/**
+	 * @return Returns the pasteButton.
+	 */
+	public JButton getPasteButton()
+	{
+		return pasteButton;
 	}
 }
