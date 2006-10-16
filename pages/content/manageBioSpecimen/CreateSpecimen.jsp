@@ -168,7 +168,7 @@ function classChangeForMultipleSpecimen()
 		function deleteExternalIdentifiers()
 		{
 			<% if(multipleSpecimen.equals("1")){%>
-				deleteChecked('addExternalIdentifier','CreateMultipleSpecimen.do?status=true&retainForm=true',document.forms[0].exIdCounter,'chk_ex_',false);
+				deleteChecked('addExternalIdentifier','NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&status=true&retainForm=true',document.forms[0].exIdCounter,'chk_ex_',false);
 			<%}else {%>			
 				deleteChecked('addExternalIdentifier','CreateSpecimen.do?pageOf=pageOfCreateSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false);
 			<%}%>
