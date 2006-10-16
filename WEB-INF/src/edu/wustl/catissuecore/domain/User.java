@@ -730,7 +730,10 @@ public class User extends AbstractDomainObject implements Serializable
 		return null;
 	}
 	/**
-	 * @return Returns the firstTimeLogin.
+	 * Returns true if a new user is addded
+	 * @hibernate.property name="firstTimeLogin" type="boolean" column="FIRST_TIME_LOGIN" 
+	 * @return true if a new user is created
+	 * @see #setFirstTimeLogin(Boolean)
 	 */
 	public Boolean getFirstTimeLogin()
 	{
