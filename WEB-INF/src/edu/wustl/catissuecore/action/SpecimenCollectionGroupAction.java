@@ -36,7 +36,9 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.logger.Logger;
 
@@ -123,8 +125,13 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		
 		
 		// populating clinical Diagnosis field 
-		List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
-		request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
+    	CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_CLINICAL_DIAGNOSIS);
+    	CDEBizLogic cdeBizLogic = (CDEBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
+    	List clinicalDiagnosisList = new ArrayList();
+    	clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION,""+Constants.SELECT_OPTION_VALUE));
+    	cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(),clinicalDiagnosisList);
+    	request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
+
 		
 		// populating clinical Status field
 		//		NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
