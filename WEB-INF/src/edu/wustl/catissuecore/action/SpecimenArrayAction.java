@@ -34,6 +34,7 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -99,7 +100,9 @@ public class SpecimenArrayAction extends SecureAction
 	    		specimenArrayForm.setCreateSpecimenArray("no");
 	    		isChangeArrayType = true;
 	    		request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,new HashMap());
-    		} else if ((subOperation.equalsIgnoreCase("CreateSpecimenArray")) || subOperation.equalsIgnoreCase("ChangeEnterSpecimenBy"))
+    		} 
+    		//else if ((subOperation.equalsIgnoreCase("CreateSpecimenArray")) || subOperation.equalsIgnoreCase("ChangeEnterSpecimenBy"))
+    		else if (subOperation.equalsIgnoreCase("CreateSpecimenArray"))
     		{
     			specimenArrayForm.setCreateSpecimenArray("yes");
     			request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,createSpecimenArrayMap(specimenArrayForm));
@@ -123,7 +126,18 @@ public class SpecimenArrayAction extends SecureAction
     	if (pageOf == null) {
     		pageOf = Constants.SUCCESS;
     	}
-    	return mapping.findForward(pageOf);
+    	
+    	if ((operation.equals(Constants.ADD)) && specimenArrayForm.getCreatedBy() == 0)
+    	{
+    		if ((userCollection != null) && (userCollection.size() > 1))
+    		{
+    			Iterator iterator = userCollection.iterator();
+    			iterator.next();
+	        	NameValueBean nameValueBean = (NameValueBean) iterator.next();
+	        	specimenArrayForm.setCreatedBy(Long.valueOf(nameValueBean.getValue()).longValue());
+    		}
+        }
+        return mapping.findForward(pageOf);
     }
     
     /**
