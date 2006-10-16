@@ -63,7 +63,7 @@
 					</label>
 				</td>
 				<td class="formField">
-					<html:select property="specimenArrayTypeId" styleClass="formFieldVerySmallSized" styleId="state" size="1" onchange="changeArrayType()" disabled="<%=disabledArrayType%>">
+					<html:select property="specimenArrayTypeId" styleClass="formFieldVerySmallSized" styleId="state" size="1" onchange="changeArrayType()">
 						<html:options collection="<%=Constants.SPECIMEN_ARRAY_TYPE_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
 				</td>
