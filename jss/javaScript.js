@@ -494,10 +494,9 @@ function changeArrayType()
 function doStoreTableData() 
 {
 		var applet = document.applets[0];
-		//alert(applet);
 		if (applet != null) 
 		{
-			applet.updateSessionData();
+			applet.updateSessionData(enterSpecimenBy);
 		}
 }
 
@@ -532,14 +531,25 @@ function doClickEnterSpecimenBy()
 		{
 			return;
 		}
-
-		var confirmChange = confirm("Your entered Array Contents will be lost !! do you really want to continue?");
-		if (confirmChange == true)
+		
+		var applet = document.applets[0];
+		if (applet != null) 
 		{
-			
-			form.subOperation.value="ChangeEnterSpecimenBy";
-			form.action = "SpecimenArray.do?menuSelected=20";
-			form.submit();
+			var form = document.forms[0];
+			var enterSpecimenBy = form.enterSpecimenBy[0].value;
+			if (form.enterSpecimenBy[1].checked)
+			{
+				enterSpecimenBy = form.enterSpecimenBy[1].value;
+			}
+			applet.changeEnterSpecimenBy(enterSpecimenBy);
 		}
+//		var confirmChange = confirm("Your entered Array Contents will be lost !! do you really want to continue?");
+//		if (confirmChange == true)
+//		{
+//			doStoreTableData();
+//			form.subOperation.value="ChangeEnterSpecimenBy";
+//			form.action = "SpecimenArray.do?menuSelected=20";
+//			form.submit();
+//		}
 }
 /* --- End Specimen Array javascript functions ---*/
