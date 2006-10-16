@@ -450,6 +450,24 @@
 			</classpath> 
 		</sql>
   	</target>
+  	<!--Target for Database Upgrade from 1.0 to 1.1-->
+	<target name="db_upgrade">
+		<if>
+			<equals arg1="mysql" arg2="${database.type}"/>		
+			<then>
+				<antcall target="db_upgrade_mysql"/>
+			</then>
+			<elseif>	
+				<equals arg1="oracle" arg2="${database.type}"/>		
+				<then>
+					<antcall target="db_upgrade_oracle"/>
+				</then>
+			</elseif>
+			<else>
+				<echo message="DATABASE UPGRADATION FAILED PLEASE CHECK DATABASE.TYPE PROPERTY" level="error"/>
+			</else>
+		</if>
+	</target>
 		<!--MySQL Database Upgradation -->
 	<target name="db_upgrade_mysql">
 		<echo message="Upgrading MySQL Database for caTISSUECore Application 1.1..."/>
