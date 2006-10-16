@@ -491,6 +491,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int SPECIMEN_ARRAY_FORM_ID = 50;
 	public static final int SPECIMEN_ARRAY_ALIQUOT_FORM_ID = 51;
 	public static final int ASSIGN_PRIVILEGE_FORM_ID = 52;
+	public static final int CDE_FORM_ID = 53;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
