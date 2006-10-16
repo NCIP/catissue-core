@@ -95,7 +95,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
         int participantLastnameColumnId =  ((Integer)columnIdsMap.get(Constants.PARTICIPANT+"."+Constants.PARTICIPANT_LAST_NAME)).intValue()-1;
 		int collectionProtocolNameColumnId =  ((Integer)columnIdsMap.get(Constants.SPECIMEN_PROTOCOL+"."+Constants.SPECIMEN_PROTOCOL_SHORT_TITLE)).intValue()-1;
 		int specimenCollGrpNameColumnId =  ((Integer)columnIdsMap.get(Constants.SPECIMEN_COLLECTION_GROUP+"."+Constants.SPECIMEN_COLLECTION_GROUP_NAME)).intValue()-1;
-		int specimenLableColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.SPECIMEN_LABEL_COLUMN_NAME)).intValue()-1;
+		int specimenLableColumnId = ((Integer)columnIdsMap.get(Constants.SPECIMEN+"."+Constants.SPECIMEN_LABEL)).intValue()-1;
 		
         Vector treeDataVector = new Vector();
         Iterator dataListIterator = dataList.iterator();

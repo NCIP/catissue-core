@@ -1278,7 +1278,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String SPECIMEN_ARRAY_CONTENT_KEY = "SpecimenArrayContentKey";
 	
-	public static final String SPECIMEN_LABEL_COLUMN_NAME = "LABEL";
+	public static final String SPECIMEN_LABEL_COLUMN_NAME = "label";
 	public static final String SPECIMEN_BARCODE_COLUMN_NAME = "barcode";
 	public static final String ARRAY_SPECIMEN_DOES_NOT_EXIST_EXCEPTION_MESSAGE = "Please enter valid specimen for specimen array!!specimen does not exist  ";
 	public static final String ARRAY_NO_SPECIMEN__EXCEPTION_MESSAGE = "Specimen Array should contain at least one specimen";
@@ -1337,5 +1337,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_PROTOCOL ="SpecimenProtocol";
 	public static final String SPECIMEN_PROTOCOL_SHORT_TITLE ="SHORT_TITLE";
 	public static final String SPECIMEN_COLLECTION_GROUP_NAME ="NAME";
-	
+	public static final String SPECIMEN_LABEL = "LABEL";
 }
