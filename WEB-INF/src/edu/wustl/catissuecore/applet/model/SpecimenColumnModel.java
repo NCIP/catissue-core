@@ -361,7 +361,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		parentSpecimen = new JTextField(15);
 		rbparentSpecimen = new JRadioButton();
 		parentSpecimen.setPreferredSize(new Dimension(135,(int)specimenCollectionGroup.getPreferredSize().getHeight() ));
-		rbparentSpecimen.setEnabled(true );		 
+		rbparentSpecimen.setEnabled(false);		 
 		parentSpecimenPanel = new JPanel(new FlowLayout(FlowLayout.LEFT  ) );
 		parentSpecimen.setEnabled(false);
 		
