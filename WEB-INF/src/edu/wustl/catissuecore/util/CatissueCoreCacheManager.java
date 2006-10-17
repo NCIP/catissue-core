@@ -79,6 +79,17 @@ public class CatissueCoreCacheManager
 		// Adding element to cache
 		cache.put(element);
 	}
+	
+	/**
+	 * Method used to remove Serializable object to cache
+	 * @param key - Serializable key
+	 */
+	public void removeObjectFromCache(Serializable key)
+	{
+		// Adding element to cache
+		cache.remove(key);
+	}
+
 
 	/**
 	 * Method used to get Serializable object from cache
