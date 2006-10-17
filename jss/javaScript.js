@@ -496,7 +496,7 @@ function doStoreTableData()
 		var applet = document.applets[0];
 		if (applet != null) 
 		{
-			applet.updateSessionData(enterSpecimenBy);
+			applet.updateSessionData();
 		}
 }
 
