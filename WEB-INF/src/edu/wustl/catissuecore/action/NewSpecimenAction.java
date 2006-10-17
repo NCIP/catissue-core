@@ -117,20 +117,26 @@ public class NewSpecimenAction extends SecureAction
 
 			if (specimenCollectionGroupId != null)
 			{
+				/**
+				 *  Retaining properties of specimen when more is clicked.
+				 *  Bug no -- 2623
+				 */
 				specimenForm.setSpecimenCollectionGroupId(specimenCollectionGroupId);
 				specimenForm.setParentSpecimenId("");
+				specimenForm.setLabel("");
+				specimenForm.setBarcode("");
 				specimenForm.setPositionInStorageContainer("");
-				specimenForm.setQuantity("");
+				/*specimenForm.setQuantity("");
 				specimenForm.setClassName("");
 				specimenForm.setTissueSide("");
 				specimenForm.setTissueSite("");
-				specimenForm.setPathologicalStatus("");
+				specimenForm.setPathologicalStatus("");*/
 				specimenForm.setPositionDimensionOne("");
 				specimenForm.setPositionDimensionTwo("");
 				specimenForm.setStorageContainer("");
 
-				clearCollectionEvent(specimenForm);
-				clearReceivedEvent(specimenForm);
+				/*clearCollectionEvent(specimenForm);
+				clearReceivedEvent(specimenForm);*/
 
 			}
 		}
@@ -401,6 +407,7 @@ public class NewSpecimenAction extends SecureAction
 		{
 			request.setAttribute("disabled", "true");
 		}
+	
 		return mapping.findForward(pageOf);
 	}
 
