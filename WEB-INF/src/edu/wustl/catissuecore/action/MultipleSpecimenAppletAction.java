@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CreateSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
@@ -83,8 +84,8 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	 * @return
 	 * @throws Exception
 	 */
-	public ActionForward initData(ActionMapping actionMapping, ActionForm actionForm,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward initData(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
 		Map DataListsMap = new HashMap();
 
@@ -97,27 +98,23 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 		DataListsMap.put(Constants.SPECIMEN_TYPE_MAP, specimenClassTypeMap);
 		DataListsMap.put(Constants.SPECIMEN_CLASS_LIST, specimenClassList.toArray());
-		DataListsMap.put(Constants.TISSUE_SITE_LIST, Utility.getListForCDE(
-				Constants.CDE_NAME_TISSUE_SITE).toArray());
-		DataListsMap.put(Constants.TISSUE_SIDE_LIST, Utility.getListForCDE(
-				Constants.CDE_NAME_TISSUE_SIDE).toArray());
-		DataListsMap.put(Constants.PATHOLOGICAL_STATUS_LIST, Utility.getListForCDE(
-				Constants.CDE_NAME_PATHOLOGICAL_STATUS).toArray());
+		DataListsMap.put(Constants.TISSUE_SITE_LIST, Utility.getListForCDE(Constants.CDE_NAME_TISSUE_SITE).toArray());
+		DataListsMap.put(Constants.TISSUE_SIDE_LIST, Utility.getListForCDE(Constants.CDE_NAME_TISSUE_SIDE).toArray());
+		DataListsMap.put(Constants.PATHOLOGICAL_STATUS_LIST, Utility.getListForCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS).toArray());
 
 		//------------specimen collection group
-		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance()
-		.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 
 		String sourceObjectName = SpecimenCollectionGroup.class.getName();
 		String[] displayNameFields = {"name"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 
 		List specimenGroupList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
-		ArrayList specimenGroupArrayList = new ArrayList(); 
+		ArrayList specimenGroupArrayList = new ArrayList();
 		specimenGroupArrayList = getNameStringArray(specimenGroupList);
-		DataListsMap.put(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenGroupArrayList.toArray() );
+		DataListsMap.put(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenGroupArrayList.toArray());
 		// ------------------------------------
-		
+
 		writeMapToResponse(response, DataListsMap);
 		return null;
 	}
@@ -135,8 +132,8 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	 * 
 	 * @see org.apache.struts.action.Action#execute(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.ServletRequest, javax.servlet.ServletResponse)
 	 */
-	public ActionForward submitSpecimens(ActionMapping actionMapping, ActionForm actionForm,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward submitSpecimens(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 
 	{
 		String target;
@@ -152,44 +149,41 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			System.out.println("After preprocessSpecimanMap");
 			Map fixedSpecimenMap = appendClassValue(specimenMap);
 			System.out.println("After fixedSpecimenMap");
-			Map multipleSpecimenSessionMap = (Map) request.getSession().getAttribute(
-					Constants.MULTIPLE_SPECIMEN_MAP_KEY);
+			Map multipleSpecimenSessionMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
 
 			processAssociatedObjectsMap(fixedSpecimenMap, multipleSpecimenSessionMap);
 			System.out.println("After processAssociatedObjectsMap");
 			MapDataParser specimenParser = new MapDataParser("edu.wustl.catissuecore.domain");
 			System.out.println("After specimenParser");
 			Collection specimenCollection = specimenParser.generateData(fixedSpecimenMap);
-		
+
 			//Read session form bean map to associate derived specimens
-			Map multipleSpecimenFormBeanMap = (Map) request.getSession().getAttribute(
-					Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY);
+			Map multipleSpecimenFormBeanMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY);
 
 			Map multipleSpecimenEventsFormBean = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
-			if(multipleSpecimenEventsFormBean != null)
-				processEvents(specimenCollection,multipleSpecimenEventsFormBean);
-			Map finalMap = processFormBeansMap(specimenCollection,multipleSpecimenFormBeanMap);
-						
+			if (multipleSpecimenEventsFormBean != null)
+				processEvents(specimenCollection, multipleSpecimenEventsFormBean);
+			Map finalMap = processFormBeansMap(specimenCollection, multipleSpecimenFormBeanMap);
+
 			//call bizLogic to save specimenCollection. It will first validate all the specimens.
 			insertSpecimens(request, finalMap);
 
 			//if success return to report page		
-			request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION,
-					specimenCollection);
+			request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, specimenCollection);
 			target = Constants.SUCCESS;
 
 			//clean up activity.
-			multipleSpecimenSessionMap = null;
-			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, null);
+			multipleSpecimenSessionMap = new HashMap();
+			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, new HashMap());
 		}
 		catch (Exception e)
 		{
 			//return to same applet page incase of failure.		
 			target = Constants.FAILURE;
 			String errorMsg = e.getMessage();
-			if(errorMsg.startsWith("For input string"))
+			if (errorMsg.startsWith("For input string"))
 			{
-				errorMsg = "Please enter valid Quantity (Instead of " + errorMsg.replaceFirst("For","") + ")"; // temporary fix for error message
+				errorMsg = "Please enter valid Quantity (Instead of " + errorMsg.replaceFirst("For", "") + ")"; // temporary fix for error message
 			}
 			resultMap.put(Constants.ERROR_DETAIL, errorMsg);
 			e.printStackTrace();
@@ -198,16 +192,51 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		//send response to the applet.
 		resultMap.put(Constants.MULTIPLE_SPECIMEN_RESULT, target);
 		writeMapToResponse(response, resultMap);
-		System.out.println("In MultipleSpecimenAppletAction :- resultMap : "+ resultMap);
+		System.out.println("In MultipleSpecimenAppletAction :- resultMap : " + resultMap);
+		return null;
+	}
+
+	/**
+	 *  This method checks whether parent with given parent specimen label exists
+	 * @param actionMapping
+	 * @param actionForm
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+
+	public ActionForward checkParentPresent(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request,
+			HttpServletResponse response) throws Exception
+
+	{
+
+		Map specimenMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
+
+		Boolean isParentPresent = new Boolean(false);
+		Map resultMap = new HashMap();
+		String parentSpecimenLabel = (String) specimenMap.get("parentSpecimenLabel");
+		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
+
+		if (parentSpecimenLabel != null && !parentSpecimenLabel.equals("null") && !parentSpecimenLabel.equals(""))
+		{
+			List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, parentSpecimenLabel.trim());
+			if (spList != null && !spList.isEmpty())
+			{
+				isParentPresent = new Boolean(true);
+			}
+		}
+
+		resultMap.put(Constants.MULTIPLE_SPECIMEN_RESULT, isParentPresent);
+		writeMapToResponse(response, resultMap);
 		return null;
 	}
 
 	private Map processFormBeansMap(Collection specimenCollection, Map multipleSpecimenFormBeanMap) throws Exception
 	{
 		Map finalSpecimenMap = new HashMap();
-		AbstractDomainObjectFactory abstractDomainObjectFactory = 
-        	(AbstractDomainObjectFactory) MasterFactory.getFactory(
-        	        ApplicationProperties.getValue("app.domainObjectFactory"));
+		AbstractDomainObjectFactory abstractDomainObjectFactory = (AbstractDomainObjectFactory) MasterFactory.getFactory(ApplicationProperties
+				.getValue("app.domainObjectFactory"));
 
 		Iterator specimenCollectionIterator = specimenCollection.iterator();
 
@@ -217,29 +246,56 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			Specimen specimen = (Specimen) specimenCollectionIterator.next();
 			specimen.setAvailable(new Boolean(true));
 			specimen.setAvailableQuantity(specimen.getQuantity());
-			
+
 			List derivedFormBeans = null;
 			//Associate derived specimens.
-			if(multipleSpecimenFormBeanMap!=null) 
+			if (multipleSpecimenFormBeanMap != null)
 			{
-			derivedFormBeans = (List) multipleSpecimenFormBeanMap.get(AppletConstants.SPECIMEN_PREFIX + specimen.getId() + "_" + "derive");
+				derivedFormBeans = (List) multipleSpecimenFormBeanMap.get(AppletConstants.SPECIMEN_PREFIX + specimen.getId() + "_" + "derive");
 			}
 			List derivedSpecimens = new ArrayList();
-			
+
 			//  if no derived, continue with next
-			if( derivedFormBeans != null ) {
-			for (int i=0;i<derivedFormBeans.size();i++) {
-				CreateSpecimenForm derivedSpecimenFormBean = (CreateSpecimenForm) derivedFormBeans.get(i);
-				derivedSpecimenFormBean.setParentSpecimenId(specimen.getId().toString());
-				Specimen derivedSpecimen = (Specimen) abstractDomainObjectFactory.getDomainObject(Constants.CREATE_SPECIMEN_FORM_ID, derivedSpecimenFormBean);
-				derivedSpecimen.setSpecimenCollectionGroup(null);
-				derivedSpecimens.add(derivedSpecimen);
+			if (derivedFormBeans != null)
+			{
+				for (int i = 0; i < derivedFormBeans.size(); i++)
+				{
+					CreateSpecimenForm derivedSpecimenFormBean = (CreateSpecimenForm) derivedFormBeans.get(i);
+					derivedSpecimenFormBean.setParentSpecimenId(specimen.getId().toString());
+
+					Map externalIdentifiersMap = derivedSpecimenFormBean.getExternalIdentifier();
+					/**
+					 *  Done to ensure all blank values are removed from externalIdentifiersMap
+					 * 
+					 */
+					String exIdKey = "ExternalIdentifier:" + (i + 1) + "_id";
+					String exNameKey = "ExternalIdentifier:" + (i + 1) + "_name";
+					String exNameValue = "ExternalIdentifier:" + (i + 1) + "_value";
+					if (externalIdentifiersMap != null && externalIdentifiersMap.get(exNameKey) != null
+							&& externalIdentifiersMap.get(exNameKey).toString().equals(""))
+					{
+						externalIdentifiersMap.remove(exNameKey);
+					}
+					if (externalIdentifiersMap != null && externalIdentifiersMap.get(exIdKey) != null
+							&& externalIdentifiersMap.get(exIdKey).toString().equals(""))
+					{
+						externalIdentifiersMap.remove(exIdKey);
+					}
+					if (externalIdentifiersMap != null && externalIdentifiersMap.get(exNameValue) != null
+							&& externalIdentifiersMap.get(exNameValue).toString().equals(""))
+					{
+						externalIdentifiersMap.remove(exNameValue);
+					}
+					Specimen derivedSpecimen = (Specimen) abstractDomainObjectFactory.getDomainObject(Constants.CREATE_SPECIMEN_FORM_ID,
+							derivedSpecimenFormBean);
+					derivedSpecimen.setSpecimenCollectionGroup(null);
+					derivedSpecimens.add(derivedSpecimen);
+				}
+
 			}
-			
-			}
-			finalSpecimenMap.put(specimen,derivedSpecimens);
+			finalSpecimenMap.put(specimen, derivedSpecimens);
 		}
-		
+
 		return finalSpecimenMap;
 	}
 
@@ -249,12 +305,12 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	 * @param specimenMap
 	 * @param multipleSpecimenSessionMap
 	 */
-private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSessionMap)
+	private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSessionMap)
 	{
-		if(multipleSpecimenSessionMap == null)
+		if (multipleSpecimenSessionMap == null)
 		{
 			return;
-		}	
+		}
 		Iterator sessionMapItr = multipleSpecimenSessionMap.keySet().iterator();
 
 		while (sessionMapItr.hasNext())
@@ -297,6 +353,7 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 			}
 		}
 	}
+
 	/**
 	 * e.g 
 	 * if Session map contains key   "Specimen:1_externalIdentifierCollection" and value as a another map,
@@ -317,20 +374,18 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 	/**
 	 * This method is called by applet when submit method return success. It forwards to the report page.
 	 */
-	public ActionForward getResult(ActionMapping actionMapping, ActionForm actionForm,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward getResult(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
 		String target = (String) request.getParameter(Constants.MULTIPLE_SPECIMEN_RESULT);
 
-		Collection specimenCollection = (Collection) request.getSession().getAttribute(
-				Constants.SAVED_SPECIMEN_COLLECTION);
+		Collection specimenCollection = (Collection) request.getSession().getAttribute(Constants.SAVED_SPECIMEN_COLLECTION);
 		request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, null);
 
 		request.setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, specimenCollection);
 
 		ActionMessages msgs = new ActionMessages();
-		msgs.add("success", new ActionMessage("multipleSpecimen.add.success", String
-				.valueOf(specimenCollection.size())));
+		msgs.add("success", new ActionMessage("multipleSpecimen.add.success", String.valueOf(specimenCollection.size())));
 		saveMessages(request, msgs);
 		return actionMapping.findForward(target);
 	}
@@ -349,20 +404,18 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 
 		classMap = new HashMap();
 
-		int noOfSpecimens = Integer.parseInt((String) specimenMap
-				.get(AppletConstants.NO_OF_SPECIMENS));
+		int noOfSpecimens = Integer.parseInt((String) specimenMap.get(AppletConstants.NO_OF_SPECIMENS));
 		specimenMap.remove(AppletConstants.NO_OF_SPECIMENS);
 
 		for (int i = 1; i <= noOfSpecimens; i++)
 		{
-			String classValue = (String) specimenMap.get(AppletConstants.SPECIMEN_PREFIX + i + "_"
-					+ "class");
+			String classValue = (String) specimenMap.get(AppletConstants.SPECIMEN_PREFIX + i + "_" + "class");
 
 			if (classValue == null || classValue.trim().length() == 0 || classValue.equals("-- Select --"))
 			{
 				throw new Exception(ApplicationProperties.getValue("protocol.class.errMsg") + " for Specimen number " + i);
 			}
-			
+
 			String quantityKey = AppletConstants.SPECIMEN_PREFIX + i + "_" + "Quantity_value";
 			String quantityValue = (String) specimenMap.get(quantityKey);
 			try
@@ -373,31 +426,29 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 			{
 				throw new Exception("Please enter valid Quantity for Specimen number " + i);
 			}
-			
+
 			Long storageContainer = (Long) specimenMap.get(AppletConstants.SPECIMEN_PREFIX + i + "_" + "StorageContainer_id");
-		
+
 			if (storageContainer == null)
 			{
 				throw new Exception("Please give valid Storage Position for Specimen number " + i);
 			}
-			
+
 			classMap.put(String.valueOf(i), classValue);
 
 			if (!classValue.equals("Molecular"))
 			{
-				specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_"
-						+ "concentrationInMicrogramPerMicroliter");
+				specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "concentrationInMicrogramPerMicroliter");
 			}
 
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "class");
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "StorageContainer_temp");
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "derive");
-//			mandar : to remove the label entry.
+			//			mandar : to remove the label entry.
 			specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + AppletConstants.MULTIPLE_SPECIMEN_LOCATION_LABEL);
 
-			specimenMap.put(AppletConstants.SPECIMEN_PREFIX + i + "_" + "activityStatus",
-					Constants.ACTIVITY_STATUS_ACTIVE);
-			
+			specimenMap.put(AppletConstants.SPECIMEN_PREFIX + i + "_" + "activityStatus", Constants.ACTIVITY_STATUS_ACTIVE);
+
 			//specimenMap.put(AppletConstants.SPECIMEN_PREFIX + i + "_" + "available" ,new Boolean(true));
 		}
 	}
@@ -408,15 +459,13 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 	 * @param request
 	 * @param specimenCollection
 	 */
-	private void insertSpecimens(HttpServletRequest request, Map specimenMap)
-			throws Exception
+	private void insertSpecimens(HttpServletRequest request, Map specimenMap) throws Exception
 	{
 		IBizLogic bizLogic;
 
-		bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties
-				.getValue("app.bizLogicFactory"), "getBizLogic", Constants.NEW_SPECIMEN_FORM_ID);
-		SessionDataBean sessionBean = (SessionDataBean) request.getSession().getAttribute(
-				Constants.SESSION_DATA);
+		bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties.getValue("app.bizLogicFactory"), "getBizLogic",
+				Constants.NEW_SPECIMEN_FORM_ID);
+		SessionDataBean sessionBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 
 		bizLogic.insert(specimenMap, sessionBean, Constants.HIBERNATE_DAO);
 
@@ -500,11 +549,10 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 		}
 		return specimenClassTypeMap;
 	}
-	
+
 	private void processEvents(Collection specimenCollection, Map multipleSpecimenFormBeanMap) throws Exception
 	{
-		
-		
+
 		Iterator specimenCollectionIterator = specimenCollection.iterator();
 
 		//set default values for the specimen.
@@ -512,18 +560,17 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 		while (specimenCollectionIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) specimenCollectionIterator.next();
-			NewSpecimenForm form = (NewSpecimenForm) multipleSpecimenFormBeanMap.get("Specimen:"+i+"_specimenEventCollection");
-			if(form == null)
+			NewSpecimenForm form = (NewSpecimenForm) multipleSpecimenFormBeanMap.get("Specimen:" + i + "_specimenEventCollection");
+			if (form == null)
 			{
-				throw new Exception("Please Give Events for specimen number "+i); 
+				throw new Exception("Please Give Events for specimen number " + i);
 			}
 			else
 			{
 				Collection specimenEventCollection = new HashSet();
 
 				CollectionEventParametersForm collectionEvent = new CollectionEventParametersForm();
-				collectionEvent.setCollectionProcedure(form
-						.getCollectionEventCollectionProcedure());
+				collectionEvent.setCollectionProcedure(form.getCollectionEventCollectionProcedure());
 				collectionEvent.setComments(form.getCollectionEventComments());
 				collectionEvent.setContainer(form.getCollectionEventContainer());
 				collectionEvent.setTimeInHours(form.getCollectionEventTimeInHours());
@@ -536,11 +583,9 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 				collectionEventParameters.setAllValues(collectionEvent);
 
 				//collectionEventParameters.setSpecimen(specimen);
-				Logger.out.debug("Before specimenEventCollection.size(): "
-						+ specimenEventCollection.size());
+				Logger.out.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
 				specimenEventCollection.add(collectionEventParameters);
-				Logger.out.debug("After specimenEventCollection.size(): "
-						+ specimenEventCollection.size());
+				Logger.out.debug("After specimenEventCollection.size(): " + specimenEventCollection.size());
 
 				Logger.out.debug("...14-July-06... : CollectionEvent set");
 
@@ -559,29 +604,25 @@ private void processAssociatedObjectsMap(Map specimenMap, Map multipleSpecimenSe
 				receivedEventParameters.setAllValues(receivedEvent);
 				//receivedEventParameters.setSpecimen(specimen);
 
-				Logger.out.debug("Before specimenEventCollection.size(): "
-						+ specimenEventCollection.size());
+				Logger.out.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
 				specimenEventCollection.add(receivedEventParameters);
-				Logger.out.debug("After specimenEventCollection.size(): "
-						+ specimenEventCollection.size());
-				specimen.setSpecimenEventCollection(specimenEventCollection);	
+				Logger.out.debug("After specimenEventCollection.size(): " + specimenEventCollection.size());
+				specimen.setSpecimenEventCollection(specimenEventCollection);
 				Logger.out.debug("...14-July-06... : ReceivedEvent set");
-
 
 			}
 			i++;
 
-			
 		}
 	}
-	
+
 	private ArrayList getNameStringArray(List specimenGroupList)
 	{
-		ArrayList returnArrayList =new ArrayList();
-		for(int cnt=0;cnt<specimenGroupList.size();cnt++ )
+		ArrayList returnArrayList = new ArrayList();
+		for (int cnt = 0; cnt < specimenGroupList.size(); cnt++)
 		{
-			NameValueBean bean = (NameValueBean)specimenGroupList.get(cnt );
-			returnArrayList.add(bean.getName()); 
+			NameValueBean bean = (NameValueBean) specimenGroupList.get(cnt);
+			returnArrayList.add(bean.getName());
 		}
 		return returnArrayList;
 	}
