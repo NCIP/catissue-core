@@ -419,7 +419,10 @@ public class StorageTypeForm extends AbstractActionForm
 						ApplicationProperties.getValue("storageType.oneDimensionLabel")));
 			}
 
+			if(holdsStorageTypeIds != null) 
+			{
 			checkValidSelectionForAny(holdsStorageTypeIds, "storageType.holdsStorageType", errors);
+			}
 			//checkValidSelectionForAny(holdsSpecimenClassTypeIds,"storageType.holdsSpecimenClass",errors);
 			if (validator.isEmpty(String.valueOf(twoDimensionCapacity)))
 			{
