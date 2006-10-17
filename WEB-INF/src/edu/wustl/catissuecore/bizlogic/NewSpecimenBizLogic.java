@@ -657,12 +657,14 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean, boolean isCollectionGroupName)
 			throws DAOException, SMException
 	{
+		
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		// set barcode to null in case it is blank
 		if (specimen.getBarcode() != null && specimen.getBarcode().trim().equals(""))
 		{
 			specimen.setBarcode(null);
 		}
+		// TODO
 		//Load & set Specimen Collection Group if present
 		if (specimen.getSpecimenCollectionGroup() != null)
 		{
@@ -701,10 +703,6 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 				// check for closed Parent Specimen
 				checkStatus(dao, parentSpecimen, "Parent Specimen");
-
-				specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
-				specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
-				specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
 				specimen.setLineage(Constants.DERIVED_SPECIMEN);
 			}
 		}
@@ -905,18 +903,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 */
 	private boolean validateSingleSpecimen(Specimen specimen, DAO dao, String operation, boolean partOfMulipleSpecimen) throws DAOException
 	{
-//		//Added by Ashish		
-		 boolean parentPresent = false;
-		 Long collectionEventUserId = null;
-		 //Map biohazard = null;
-		 int bhCounter=1;
-		 
-		 if(specimen.getParentSpecimen()!= null)
-		 {
-		 	parentPresent = true;
-		 }
-		 
-		 if (specimen == null)
+		//Added by Ashish		
+	
+	     if (specimen == null)
 		 {		     
 		     throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "Specimen"));	   
 		 }
@@ -1230,6 +1219,27 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
 			//validate single specimen
+			
+			SpecimenCollectionGroup specimenCollectionGroup = null;
+			if (specimen.getSpecimenCollectionGroup()!=null)
+			{
+				List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
+				specimenCollectionGroup = (SpecimenCollectionGroup) spgList.get(0);
+			}
+			
+			// TODO label
+			if (specimenCollectionGroup != null)
+			{
+				
+
+				if (specimenCollectionGroup.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
+				{
+					throw new DAOException("Specimen Collection Group " + ApplicationProperties.getValue("error.object.closed"));
+				}
+				
+				specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+			}
+			
 
 			try
 			{
@@ -1255,6 +1265,10 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			{
 
 				Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
+				derivedSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
+				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
+				derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
+				derivedSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 				try
 				{
 					result = validateSingleSpecimen(derivedSpecimen, dao, operation, false);
