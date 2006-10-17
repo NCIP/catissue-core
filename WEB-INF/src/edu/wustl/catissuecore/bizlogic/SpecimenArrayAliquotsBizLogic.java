@@ -188,7 +188,10 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			while(itr.hasNext())
 			{
 				SpecimenArrayContent arrayContent = (SpecimenArrayContent) itr.next();
-				arrayContent.getInitialQuantity().setValue(Double.valueOf("0"));				
+				if (arrayContent.getSpecimen() instanceof MolecularSpecimen) 
+				{
+					arrayContent.getInitialQuantity().setValue(Double.valueOf("0"));
+				}
 			}
 		}
 	}
