@@ -2811,6 +2811,9 @@ PUBLIC
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
 	<!-- Similar Containers Action -->
+	<!--  Start Applet Actions -->
+	<action path="/SpecimenArrayAppletAction" type="edu.wustl.catissuecore.action.SpecimenArrayAppletAction" parameter="method">
+	</action>
 	<action path="/MultipleSpecimenCopyPasteAction" type="edu.wustl.catissuecore.action.MultipleSpecimenCopyPasteAction" parameter="method">
 	</action>
 
@@ -2818,6 +2821,7 @@ PUBLIC
 			<forward name="success" path=".catissuecore.multipleSpecimenAddSuccessDef" />
 	</action>
 	
+	<!--  End Applet Actions -->
 	<action path="/NewMultipleSpecimenAction" type="edu.wustl.catissuecore.action.NewMultipleSpecimenAction" parameter="method" 
 	   name="multipleSpecimenForm"
 	   scope="request" validate="true" input="/InitMultipleSpecimen.do?menuSelected=15">
