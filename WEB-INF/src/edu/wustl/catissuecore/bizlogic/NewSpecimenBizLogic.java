@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.Address;
@@ -280,13 +281,51 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		Specimen specimen = (Specimen) obj;
+		Map containerMap = null;
+		try
+		{
+			containerMap = StorageContainerUtil.getContainerMapFromCache();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	if(obj instanceof HashMap)
+	{
+		HashMap specimenMap = (HashMap) obj;
+		Iterator specimenIterator = specimenMap.keySet().iterator();
+		while (specimenIterator.hasNext())
+		{
+			Specimen specimen = (Specimen) specimenIterator.next();
+			updateStorageLocations((TreeMap)containerMap,specimen);
+			List derivedSpecimens = (List) specimenMap.get(specimen);
+
+			if (derivedSpecimens != null)
+			{
+			for (int i = 0; i < derivedSpecimens.size(); i++)
+			{
+
+				Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
+				updateStorageLocations((TreeMap)containerMap,derivedSpecimen);
+			}	
+		}
+	}
+	}
+	else 
+	{
+		updateStorageLocations((TreeMap)containerMap,(Specimen)obj); 
+	}
+
+	}
+	
+	void updateStorageLocations(TreeMap containerMap,Specimen specimen) 
+	{
 		try
 		{
 			if (specimen.getStorageContainer() != null)
 			{
 				
-				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+				
 				StorageContainerUtil.deleteSinglePositionInContainerMap(specimen.getStorageContainer(), containerMap,
 						specimen.getPositionDimensionOne().intValue(), specimen.getPositionDimensionTwo().intValue());
 				
@@ -297,7 +336,6 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 
 		}
-
 	}
 
 	protected String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
