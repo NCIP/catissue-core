@@ -32,7 +32,9 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -588,6 +590,37 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * get Unique index to be appended to Name
+	 * @return unique no. to be appended to array name
+	 * @throws DAOException
+	 */
+	public int getUniqueIndexForName() throws DAOException
+	{
+		String sourceObjectName = "CATISSUE_CONTAINER";
+		String[] selectColumnName = {"max(IDENTIFIER) as MAX_IDENTIFIER"};
+		AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+
+		dao.openSession(null);
+		List list = dao.retrieve(sourceObjectName, selectColumnName);
+		dao.closeSession();
+
+		if (!list.isEmpty())
+		{
+			List columnList = (List) list.get(0);
+			if (!columnList.isEmpty())
+			{
+				String str = (String) columnList.get(0);
+				if (!str.equals(""))
+				{
+					int no = Integer.parseInt(str);
+					return no + 1;
+				}
+			}
+		}
+		return 1;
 	}
 	//END
 }
