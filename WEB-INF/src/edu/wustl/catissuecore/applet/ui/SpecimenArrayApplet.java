@@ -231,6 +231,8 @@ public class SpecimenArrayApplet extends BaseApplet {
 	 */
 	public void updateSessionData() 
 	{
+		// set last cell data
+		setLastCellData();
 		String urlString = serverURL + AppletConstants.SPECIMEN_ARRAY_APPLET_ACTION + ";jsessionid="+session_id+"?" + AppletConstants.APPLET_ACTION_PARAM_NAME + "=updateSessionData";
 		AppletModelInterface model = new BaseAppletModel();
 		Map arrayContentDataMap = ((SpecimenArrayTableModel) arrayTable.getModel()).getSpecimenArrayModelMap();
@@ -245,13 +247,16 @@ public class SpecimenArrayApplet extends BaseApplet {
 		}
 	}
 	
-/*	private void setLastCellData()
+	/**
+	 * Set Last Cell Data 
+	 */
+	private void setLastCellData()
 	{
 		int selectedRow = arrayTable.getSelectedRow();
 		int selectedColumn = arrayTable.getSelectedColumn();
-		arrayTable.getModel().getValueAt(selectedRow,selectedColumn);
+		arrayTable.getCellEditor(selectedRow,selectedColumn).stopCellEditing();
 	}
-*/	
+	
 	/**
 	 * @param enterSpecimenBy enter specimen by
 	 */
