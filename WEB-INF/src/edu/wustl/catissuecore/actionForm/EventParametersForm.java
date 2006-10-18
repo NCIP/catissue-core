@@ -39,12 +39,12 @@ public abstract class EventParametersForm extends AbstractActionForm
     /**
      * Time in hours for the Event Parameter.
      * */
-    protected String timeInHours="0";
+    protected String timeInHours;
 
     /**
      * Time in minutes for the Event Parameter.
      * */
-    protected String timeInMinutes="0";
+    protected String timeInMinutes;
 
     /**
      * Date of the Event Parameter.
