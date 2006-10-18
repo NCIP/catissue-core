@@ -156,6 +156,7 @@ public interface AppletConstants
 	
 	public static final String COPY_OPERATION = "copy";
 	public static final String PASTE_OPERATION = "paste";
+	public static final String VALIDATOR_MODEL = "validatorModel";
 	
 	public static final String ARRAY_COPY_OPTION_LABELBAR = "Label/Barcode";
 	public static final String ARRAY_COPY_OPTION_QUANTITY = "Quantity";
