@@ -61,9 +61,10 @@ public class SimilarContainerAddAction extends CommonAddEditAction
 			{
 				String simContPrefix = "simCont:" + i + "_";
 				String contName = (String) simMap.get(simContPrefix + "name");
+				String Id = (String) simMap.get(simContPrefix + "Id");
 				Logger.out.info("contName:" + contName);
-				String Id = new Long(storageContainerForm.getId()
-						- (noOfContainers - i)).toString();
+				/*String Id = new Long(storageContainerForm.getId()
+						- (noOfContainers - i)).toString();*/
 				Logger.out.info("Id:" + Id);
 				list.add(new NameValueBean(contName, Id));
 			}
