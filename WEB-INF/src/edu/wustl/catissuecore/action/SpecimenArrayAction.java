@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,6 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -53,22 +53,47 @@ public class SpecimenArrayAction extends SecureAction
     {
         String operation = request.getParameter(Constants.OPERATION);
         request.setAttribute(Constants.OPERATION, operation);
+        SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
         
         String[] arrayTypeLabelProperty = {"name"};
         String  arrayTypeProperty = "id";
         SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
-        
-        List specimenArrayTypeList = specimenArrayBizLogic.getList(SpecimenArrayType.class.getName(),arrayTypeLabelProperty, arrayTypeProperty, false);
-        
-        for (Iterator iter = specimenArrayTypeList.iterator(); iter.hasNext();) {
-			NameValueBean nameValueBean = (NameValueBean) iter.next();
-			// remove ANY entry from array type list
-			if (nameValueBean.getValue().equals(Constants.ARRAY_TYPE_ANY_VALUE) && nameValueBean.getName().equalsIgnoreCase(Constants.ARRAY_TYPE_ANY_NAME))
-			{
-				iter.remove();
-				break;
+        List specimenArrayTypeList = new ArrayList();
+
+        if (operation.equals(Constants.ADD))
+        {	
+	        specimenArrayTypeList = specimenArrayBizLogic.getList(SpecimenArrayType.class.getName(),arrayTypeLabelProperty, arrayTypeProperty, true);
+	        for (Iterator iter = specimenArrayTypeList.iterator(); iter.hasNext();) 
+	        {
+				NameValueBean nameValueBean = (NameValueBean) iter.next();
+				// remove ANY entry from array type list
+				if (nameValueBean.getValue().equals(Constants.ARRAY_TYPE_ANY_VALUE) && nameValueBean.getName().equalsIgnoreCase(Constants.ARRAY_TYPE_ANY_NAME))
+				{
+					iter.remove();
+					break;
+				}
 			}
-		}
+        }
+        else if (operation.equals(Constants.EDIT))
+        {
+        	String[] selectColumnName = {"id","name"}; 
+        	String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+        	String[] whereColumnCondition = {"="};
+        	Object[] whereColumnValue = {new Long(specimenArrayForm.getSpecimenArrayTypeId())};
+        	String joinCondition = Constants.AND_JOIN_CONDITION;
+        	//specimenArrayBizLogic.retrieve(StorageContainer.class.getName(), new Long(specimenArrayForm.getSpecimenArrayTypeId()));
+    		List specimenArrayTypes = specimenArrayBizLogic.retrieve(SpecimenArrayType.class.getName(),selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,joinCondition);
+    		if ((specimenArrayTypes != null) && (!specimenArrayTypes.isEmpty())) 
+    		{
+    			Object[] obj = (Object[]) specimenArrayTypes.get(0);
+    			Long id = (Long) obj[0];
+    			String name = (String) obj[1];
+    			NameValueBean nameValueBean = new NameValueBean(name,id);
+    			
+    			specimenArrayTypeList.add(nameValueBean);
+    		}
+        }
+        
         
         request.setAttribute(Constants.SPECIMEN_ARRAY_TYPE_LIST, specimenArrayTypeList);
         //Setting the specimen class list
@@ -88,18 +113,19 @@ public class SpecimenArrayAction extends SecureAction
     	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
     	Collection userCollection =  userBizLogic.getUsers(operation);
     	request.setAttribute(Constants.USERLIST, userCollection);
-    	SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
     	Map containerMap = new TreeMap();
     	String subOperation = specimenArrayForm.getSubOperation();
-
+    	boolean isChangeArrayType = false;
+    	
     	if (subOperation != null) 
     	{
-    		boolean isChangeArrayType = false;
     		if (subOperation.equals("ChangeArraytype")) 
     		{
-	    		specimenArrayForm.setCreateSpecimenArray("no");
+	    		//specimenArrayForm.setCreateSpecimenArray("no");
 	    		isChangeArrayType = true;
-	    		request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,new HashMap());
+    			specimenArrayForm.setCreateSpecimenArray("yes");
+    			request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,createSpecimenArrayMap(specimenArrayForm));
+	    		//request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,new HashMap());
     		} 
     		//else if ((subOperation.equalsIgnoreCase("CreateSpecimenArray")) || subOperation.equalsIgnoreCase("ChangeEnterSpecimenBy"))
     		else if (subOperation.equalsIgnoreCase("CreateSpecimenArray"))
@@ -114,6 +140,35 @@ public class SpecimenArrayAction extends SecureAction
 		containerMap = storageContainerBizLogic.getAllocatedContaienrMapForSpecimenArray(specimenArrayForm.getSpecimenArrayTypeId(),0);
     	request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
     	
+    	List initialValues = null;
+    	if (isChangeArrayType)
+    	{
+    		initialValues = checkForInitialValues(containerMap);
+    		
+    	} 
+    	else
+    	{
+    		String[] startingPoints = new String[]{"-1", "-1", "-1"};
+			if (specimenArrayForm.getStorageContainer() != null
+					&& !specimenArrayForm.getStorageContainer().equals("-1"))
+			{
+				startingPoints[0] = specimenArrayForm.getStorageContainer();
+
+			}
+			if (specimenArrayForm.getPositionDimensionOne() != -1)
+			{
+				startingPoints[1] = String.valueOf(specimenArrayForm.getPositionDimensionOne());
+			}
+			
+			if (specimenArrayForm.getPositionDimensionTwo() != -1)
+			{
+				startingPoints[2] = String.valueOf(specimenArrayForm.getPositionDimensionTwo());
+			}
+			
+			initialValues = new ArrayList();
+			initialValues.add(startingPoints);
+    	}
+    	request.setAttribute("initValues", initialValues);
     	if (specimenTypeList == null)
     	{
     		// In case of search & edit operation
@@ -127,14 +182,18 @@ public class SpecimenArrayAction extends SecureAction
     		pageOf = Constants.SUCCESS;
     	}
     	
-    	if ((operation.equals(Constants.ADD)) && specimenArrayForm.getCreatedBy() == 0)
+    	if (operation.equals(Constants.ADD))
     	{
-    		if ((userCollection != null) && (userCollection.size() > 1))
-    		{
-    			Iterator iterator = userCollection.iterator();
-    			iterator.next();
-	        	NameValueBean nameValueBean = (NameValueBean) iterator.next();
-	        	specimenArrayForm.setCreatedBy(Long.valueOf(nameValueBean.getValue()).longValue());
+    		// set default user
+    		if (specimenArrayForm.getCreatedBy() == 0)
+    		{	
+	    		if ((userCollection != null) && (userCollection.size() > 1))
+	    		{
+	    			Iterator iterator = userCollection.iterator();
+	    			iterator.next();
+		        	NameValueBean nameValueBean = (NameValueBean) iterator.next();
+		        	specimenArrayForm.setCreatedBy(Long.valueOf(nameValueBean.getValue()).longValue());
+	    		}
     		}
         }
         return mapping.findForward(pageOf);
@@ -177,7 +236,7 @@ public class SpecimenArrayAction extends SecureAction
     			{
     				specimenArrayForm.setOneDimensionCapacity(arrayType.getCapacity().getOneDimensionCapacity().intValue());
     				specimenArrayForm.setTwoDimensionCapacity(arrayType.getCapacity().getTwoDimensionCapacity().intValue());
-    				specimenArrayForm.setName( arrayType.getName() + "_" + specimenArrayForm.getSpecimenArrayTypeId());
+    				specimenArrayForm.setName( arrayType.getName() + "_" + specimenArrayBizLogic.getUniqueIndexForName());
     			}
     		}
     	}
@@ -220,4 +279,43 @@ public class SpecimenArrayAction extends SecureAction
 		}
 		return arrayContentMap;
     }
+    
+    // TODO move this function to common util because it is being used at many places.
+	/**
+	 * check for initial values for storage container.
+	 * @param containerMap container map
+	 * @return list of initial values
+	 */
+	private List checkForInitialValues(Map containerMap)
+	{
+		List initialValues = null;
+
+		if (containerMap.size() > 0)
+		{
+			String[] startingPoints = new String[3];
+
+			Set keySet = containerMap.keySet();
+			Iterator itr = keySet.iterator();
+			NameValueBean nvb = (NameValueBean) itr.next();
+			startingPoints[0] = nvb.getValue();
+
+			Map map1 = (Map) containerMap.get(nvb);
+			keySet = map1.keySet();
+			itr = keySet.iterator();
+			nvb = (NameValueBean) itr.next();
+			startingPoints[1] = nvb.getValue();
+
+			List list = (List) map1.get(nvb);
+			nvb = (NameValueBean) list.get(0);
+			startingPoints[2] = nvb.getValue();
+
+			Logger.out.info("Starting points[0]" + startingPoints[0]);
+			Logger.out.info("Starting points[1]" + startingPoints[1]);
+			Logger.out.info("Starting points[2]" + startingPoints[2]);
+			initialValues = new ArrayList();
+			initialValues.add(startingPoints);
+		}
+		return initialValues;
+	}
+ 
 }
