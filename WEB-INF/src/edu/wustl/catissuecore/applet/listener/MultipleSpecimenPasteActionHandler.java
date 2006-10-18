@@ -232,13 +232,17 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 	{
 		if(selectedRow < AppletConstants.SPECIMEN_COMMENTS_ROW_NO)
 		{
-		TableColumnModel columnModel = table.getColumnModel();
-		Object value = valueList.get(0);
-		SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(selectedCol).getCellEditor();
-		scm.updateComponentValue(selectedRow,value.toString() );
-		SpecimenColumnModel scmRenderer = (SpecimenColumnModel)columnModel.getColumn(selectedCol).getCellRenderer();
-		scmRenderer.updateComponent(selectedRow );
-		CommonAppletUtil.getMultipleSpecimenTableModel(table).setValueAt(value,selectedRow,selectedCol);
+			TableColumnModel columnModel = table.getColumnModel();
+			Object value = valueList.get(0);
+			SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(selectedCol).getCellEditor();
+			System.out.println("\n\n\nselectedRow : "+ selectedRow);
+			if(scm.isCellEnabled(selectedRow))
+			{
+				scm.updateComponentValue(selectedRow,value.toString() );
+				SpecimenColumnModel scmRenderer = (SpecimenColumnModel)columnModel.getColumn(selectedCol).getCellRenderer();
+				scmRenderer.updateComponent(selectedRow );
+				CommonAppletUtil.getMultipleSpecimenTableModel(table).setValueAt(value,selectedRow,selectedCol);
+			}
 		}
 	}
 	
