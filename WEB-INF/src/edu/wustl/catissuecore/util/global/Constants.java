@@ -1312,6 +1312,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String MAP_OF_PARTICIPANTS = "listOfParticipants";
 	public static final String EHCACHE_FOR_CATISSUE_CORE = "cacheForCaTissueCore";
+	public static final String MAP_OF_DISABLED_CONTAINERS = "listOfDisabledContainers";
+	public static final String MAP_OF_CONTAINER_FOR_DISABLED_SPECIEN = "listOfContainerForDisabledContainerSpecimen";
 	public static final String ADD = "add";
 	public static final String EDIT = "edit";
 	public static final String ID = "id";
