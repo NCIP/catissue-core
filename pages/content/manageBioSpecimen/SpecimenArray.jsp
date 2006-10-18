@@ -4,7 +4,7 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-<%@ page import="java.util.Map"%>
+<%@ page import="java.util.Map,java.util.List"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenArrayForm"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 
@@ -13,14 +13,13 @@
 </html:messages>
 <html:errors/>
 <% 
-	SpecimenArrayForm form = (SpecimenArrayForm)request.getAttribute("arrayForm");
+	SpecimenArrayForm form = (SpecimenArrayForm)request.getAttribute("specimenArrayForm");
 	String operation = (String)request.getAttribute(Constants.OPERATION);
+	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 	String formAction;
-	boolean disabledArrayType = false;
     if (operation.equals(Constants.EDIT))
     {
         formAction = Constants.SPECIMENARRAY_EDIT_ACTION;
-        disabledArrayType = true;
     }
     else
     {
@@ -33,6 +32,7 @@
 <html:form action="<%=formAction%>">
 <html:hidden property="id" />
 <html:hidden property="operation" value="<%=operation%>"/>
+<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 <html:hidden property="subOperation" value=""/>
 <html:hidden property="createSpecimenArray" value="<%=form.getCreateSpecimenArray()%>"/>
 
@@ -66,6 +66,11 @@
 					<html:select property="specimenArrayTypeId" styleClass="formFieldVerySmallSized" styleId="state" size="1" onchange="changeArrayType()">
 						<html:options collection="<%=Constants.SPECIMEN_ARRAY_TYPE_LIST%>" labelProperty="name" property="value"/>
 					</html:select>
+					
+					<html:link href="#" styleId="newSpecimenArrayType" onclick="addNewAction('SpecimenArrayAddNew.do?addNewForwardTo=specimenarraytype&forwardTo=specimenarray&addNewFor=specimenArrayTypeId&subOperation=ChangeArraytype')">
+							<bean:message key="buttons.addNew" />
+					</html:link>
+					
 				</td>
 
 				<td class="formRequiredNoticeWithoutLeftBorder" width="5">*</td>
@@ -143,10 +148,18 @@
 					labelNames = Constants.STORAGE_CONTAINER_LABEL;
 					String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
 					
+					//String[] initValues = new String[3];
+					//initValues[0] = form.getStorageContainer();
+					//initValues[1] = String.valueOf(form.getPositionDimensionOne());
+					//initValues[2] = String.valueOf(form.getPositionDimensionTwo());
+					
 					String[] initValues = new String[3];
-					initValues[0] = form.getStorageContainer();
-					initValues[1] = String.valueOf(form.getPositionDimensionOne());
-					initValues[2] = String.valueOf(form.getPositionDimensionTwo());
+					List initValuesList = (List)request.getAttribute("initValues");
+					if(initValuesList != null)
+					{
+						initValues = (String[])initValuesList.get(0);
+					}
+
 					//System.out.println("NewSpecimen :: "+initValues[0]+"<>"+initValues[1]+"<>"+initValues[2]);			
 					String rowNumber = "1";
 					String styClass = "formFieldSized5";
@@ -184,82 +197,49 @@
 
 			<tr>
 				<td class="formRequiredNotice" width="5">&nbsp;</td>
-				<td class="formRequiredLabelWithoutBorder" width="140">
+				<td class="formRequiredLabelWithoutBorder">
 					<label for="comments">
 						<bean:message key="app.comments"/>
 					</label>
 				</td>
-				<td class="formField" colspan="4">
-					<html:textarea styleClass="formFieldVerySmallSized" rows="3" styleId="comments" property="comment"/>
-				</td>
-			</tr>
-			<tr>
-				<td class="formRequiredNotice" width="5">*</td>
-				<td class="formRequiredLabelWithoutBorder">
-					<label for="array.enterSpecimenBy">
-						<bean:message key="array.enterSpecimenBy" />
-					</label>
-				</td>
-				<td class="formField" colspan="4">
-					<html:radio styleId="enterSpecimenBy" property="enterSpecimenBy" value="Label" onclick="doClickEnterSpecimenBy();"/> Label 
-					<html:radio styleId="enterSpecimenBy" property="enterSpecimenBy" value="Barcode" onclick="doClickEnterSpecimenBy();"/> Barcode 
-				</td>
-			</tr>
-			
-			<tr>
-				<td class="formTitle" colspan="6">
-					<label for="capacity">
-						<bean:message key="app.capacity" />
-					</label>
-				</td>
-			</tr>
-			
-			<tr>
-				<td class="formRequiredNotice" width="5">&nbsp;</td>
-				<td class="formRequiredLabelWithoutBorder">
-					<label for="oneDimensionCapacity">
-						<bean:message key="app.oneDimension" />
-					</label>
-				</td>
 				<td class="formField">
-					<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity" readonly="true"/>
-				</td>
-				<td class="formRequiredNoticeWithoutLeftBorder" width="5">&nbsp;</td>
-				<td class="formRequiredLabelWithoutBorder">
-					<label for="twoDimensionCapacity">
-						<bean:message key="app.twoDimension" />
-					</label>
-				</td>
-				<td class="formField" colspan="3">
-					<html:text styleClass="formFieldSized10" maxlength="10"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity" readonly="true"/>
-				</td>
-			</tr>
-
-			<tr>
-				<td align="right" colspan="6">
-				<!-- action buttons begins -->
-					<table cellpadding="4" cellspacing="0" border="0">
+					<html:textarea styleClass="formFieldVerySmallSized" rows="3" styleId="comments" property="comment"/>
+				<td>
+				<td class="formRequiredLabel" colspan="3">
+					<table cellspacing="0" border="0" width="100%">
 						<tr>
-							<td>
-								<html:button property="createSpecimenArrayButton" styleClass="actionButton" onclick="createSpecimenArrayClicked();">
-									<bean:message  key="buttons.createSpecimenArray" />
-								</html:button>
-							<!-- <html:button property="createSpecimenArray" styleClass="actionButton">
-									<bean:message  key="buttons.createSpecimenArray" />
-								</html:button>
-							 -->	
+							<td class="formFieldNoBordersBold" colspan="2">
+								<label for="capacity">
+									<bean:message key="app.capacity" /> &nbsp;:
+								</label>
 							</td>
 						</tr>
-					</table>
-				<!-- action buttons end -->
+						<tr>
+							<td class="formFieldNoBordersBold">
+								<label for="oneDimensionCapacity">
+									<bean:message key="app.oneDimension" />
+								</label>
+							</td>
+							<td class="formFieldNoBordersBold">
+								<html:text styleClass="formFieldVerySmallSized" maxlength="10"  size="30" styleId="oneDimensionCapacity" property="oneDimensionCapacity" readonly="true"/>
+							</td>
+						</tr>
+						<tr>
+							<td class="formFieldNoBordersBold">
+								<label for="oneDimensionCapacity">
+									<bean:message key="app.twoDimension" />
+								</label>
+							</td>
+							<td class="formFieldNoBordersBold">
+								<html:text styleClass="formFieldVerySmallSized" maxlength="10"  size="30" styleId="twoDimensionCapacity" property="twoDimensionCapacity" readonly="true"/>
+							</td>
+						</tr>
+					</table>			
 				</td>
 			</tr>
-			<% 
-			boolean disabled= true; 
-			if (form.getCreateSpecimenArray().equals("yes")) 
-			{
-				disabled = false; 
-			%>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
 			<tr>	
 				<td colspan="6">
 						<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
@@ -270,8 +250,26 @@
 								</label>
 							</td>
 						</tr>
+						<tr width="100%">
+							<td class="formRequiredNotice" width="5">*</td>
+							<td class="formRequiredLabelWithoutBorder">
+								<label for="array.enterSpecimenBy">
+									<bean:message key="array.enterSpecimenBy" />
+								</label>
+							</td>
+							<td class="formField" colspan="4">
+								<html:radio styleId="enterSpecimenBy" property="enterSpecimenBy" value="Label" onclick="doClickEnterSpecimenBy();"/> Label 
+								<html:radio styleId="enterSpecimenBy" property="enterSpecimenBy" value="Barcode" onclick="doClickEnterSpecimenBy();"/> Barcode 
+							</td>
+						</tr>
+						<% 
+							boolean disabled= true; 
+							if (form.getCreateSpecimenArray().equals("yes")) 
+							{
+								disabled = false; 
+						%>
 						<tr>
-							<td colspan="7">
+							<td class="formField" colspan="7">
 								<APPLET
 									CODEBASE = "<%=Constants.APPLET_CODEBASE%>"
 									ARCHIVE = "CaTissueApplet.jar"
@@ -279,15 +277,14 @@
 									ALT = "Specimen Array Applet"
 									NAME = "<%=Constants.SPECIMEN_ARRAY_APPLET_NAME%>"
 									width="100%" height="150" MAYSCRIPT>
-									<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2"/>
-									<PARAM name="name" value="<%=Constants.SPECIMEN_ARRAY_APPLET_NAME%>"/>
-									<PARAM name="rowCount" value="<%=form.getOneDimensionCapacity()%>"/>
-									<PARAM name="columnCount" value="<%=form.getTwoDimensionCapacity()%>"/>
-									<PARAM name="enterSpecimenBy" value="<%=form.getEnterSpecimenBy()%>"/>
-									<PARAM name="specimenClass" value="<%=form.getSpecimenClass()%>"/>									
-									<PARAM name="session_id" value="<%=session.getId()%>"/>
-									<PARAM NAME = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" VALUE = "<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">
-									
+									<PARAM name='type' value="application/x-java-applet;jpi-version=1.4.2"/>
+									<PARAM name='name' value="<%=Constants.SPECIMEN_ARRAY_APPLET_NAME%>"/>
+									<PARAM name='rowCount' value="<%=form.getOneDimensionCapacity()%>"/>
+									<PARAM name='columnCount' value="<%=form.getTwoDimensionCapacity()%>"/>
+									<PARAM name='enterSpecimenBy' value="<%=form.getEnterSpecimenBy()%>"/>
+									<PARAM name='specimenClass' value="<%=form.getSpecimenClass()%>"/>									
+									<PARAM name='session_id' value="<%=session.getId()%>"/>
+									<PARAM NAME = '<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>' VALUE = "<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">
 								</APPLET>
 							</td>
 							</tr>

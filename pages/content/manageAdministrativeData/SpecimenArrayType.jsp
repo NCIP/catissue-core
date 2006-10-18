@@ -8,6 +8,7 @@
 
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
+		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
         String formName;
 //		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 
@@ -107,6 +108,7 @@
 <html:form action="<%=formName%>">
 <html:hidden property="operation" value="<%=operation%>" />
 <html:hidden property="id" />
+<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 <tr>
 	<td>
