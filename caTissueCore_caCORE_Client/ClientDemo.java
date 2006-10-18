@@ -154,7 +154,14 @@ public class ClientDemo
 			testAddCollectionProtocolRegistration();
 			testAddSpecimenCollectionGroup();
 			testAddStorageType();
-//			testAddStorageContainer();										
+			testAddStorageTypeForNullObject();
+			testAddStorageTypeForNoName();
+			testAddStorageTypeForNoOneDimensionLabel();
+
+			testAddStorageContainer();
+			testAddStorageContainerForNullObject();
+			testAddStorageContainerWithNoName();
+
 			testAddSpecimenArrayType();		
 			testAddSpecimen();
 //			testAddSpecimenArray();
@@ -652,14 +659,73 @@ public class ClientDemo
 		}
 	}
 
+	private void testAddStorageTypeForNullObject()
+	{
+		try
+		{
+			StorageType storageTypeObj =(StorageType) api.initStorageType();
+			setLogger(storageTypeObj);
+	    	storageTypeObj = null;
+	    	//storageTypeObj.setName("");
+	    	//storageTypeObj.setOneDimensionLabel("");
+			storageTypeObj =  (StorageType) appService.createObject(storageTypeObj);
+			dataModelObjectMap.put("StorageType",storageTypeObj);
+			Logger.out.info(" Domain Object should not get added when it is null");
+		
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+
+	private void testAddStorageTypeForNoName()
+	{
+		try
+		{
+			StorageType storageTypeObj =(StorageType) api.initStorageType();
+			setLogger(storageTypeObj);
+	    	storageTypeObj.setName("");
+	    	//storageTypeObj.setOneDimensionLabel("");
+			storageTypeObj =  (StorageType) appService.createObject(storageTypeObj);
+			dataModelObjectMap.put("StorageType",storageTypeObj);
+			Logger.out.info(" Storage Type should not get added when it's name is empty or null");
+		
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+
+	private void testAddStorageTypeForNoOneDimensionLabel()
+	{
+		try
+		{
+			StorageType storageTypeObj =(StorageType) api.initStorageType();
+			setLogger(storageTypeObj);
+	    	storageTypeObj.setOneDimensionLabel("");
+			storageTypeObj =  (StorageType) appService.createObject(storageTypeObj);
+			dataModelObjectMap.put("StorageType",storageTypeObj);
+			Logger.out.info(" Storage Type should not get added when it's One Dimension Label is not given");
+		
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+
 	private void testAddStorageContainer()
 	{
 		try
 		{
 			StorageContainer storageContainerObj =(StorageContainer) api.initStorageContainer();
-			
-	    	setLogger(storageContainerObj);
-	    	Logger.out.info("Inserting domain object------->"+storageContainerObj);
+			setLogger(storageContainerObj);
+			Logger.out.info("Type of storagecontainer:"+storageContainerObj.getStorageType());
 			storageContainerObj =  (StorageContainer) appService.createObject(storageContainerObj);
 			dataModelObjectMap.put("StorageContainer",storageContainerObj);
 			Logger.out.info(" Domain Object is successfully added ---->    ID:: " + storageContainerObj.getId().toString());
@@ -667,10 +733,48 @@ public class ClientDemo
 		}
 		catch(Exception e)
 		{
-			Logger.out.error(e.getMessage(),e);
+			Logger.out.error(e);
 			e.printStackTrace();
 		}
 	}
+	
+	private void testAddStorageContainerForNullObject()
+	{
+		try
+		{
+			StorageContainer storageContainerObj = null;
+			//setLogger(storageContainerObj);
+			storageContainerObj =  (StorageContainer) appService.createObject(storageContainerObj);
+			dataModelObjectMap.put("StorageContainer",storageContainerObj);
+			Logger.out.info(" Domain Object should not get added when it is null");
+		//+ storageContainerObj.getId().longValue() + " ::  Name :: " + storageContainerObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+	private void testAddStorageContainerWithNoName()
+	{
+		try
+		{
+			StorageContainer storageContainerObj =(StorageContainer) api.initStorageContainer();
+			setLogger(storageContainerObj);
+			storageContainerObj.setName("");
+			storageContainerObj =  (StorageContainer) appService.createObject(storageContainerObj);
+			dataModelObjectMap.put("StorageContainer",storageContainerObj);
+			Logger.out.info(" Storage Container should not get added when it's name is not given");
+		//+ storageContainerObj.getId().longValue() + " ::  Name :: " + storageContainerObj.getName());
+		}
+		catch(Exception e)
+		{
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
+
+	
 	 private void testAddSpecimen()
 		{
 			try
