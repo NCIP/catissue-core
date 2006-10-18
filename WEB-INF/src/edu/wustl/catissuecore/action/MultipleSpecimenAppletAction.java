@@ -44,7 +44,6 @@ import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * This action contains methods that are called by MultipleSpecimenApplet
@@ -181,10 +180,6 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			//return to same applet page incase of failure.		
 			target = Constants.FAILURE;
 			String errorMsg = e.getMessage();
-			if (errorMsg.startsWith("For input string"))
-			{
-				errorMsg = "Please enter valid Quantity (Instead of " + errorMsg.replaceFirst("For", "") + ")"; // temporary fix for error message
-			}
 			resultMap.put(Constants.ERROR_DETAIL, errorMsg);
 			e.printStackTrace();
 		}
@@ -581,15 +576,8 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 				CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 				collectionEventParameters.setAllValues(collectionEvent);
-
-				//collectionEventParameters.setSpecimen(specimen);
-				Logger.out.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
-				specimenEventCollection.add(collectionEventParameters);
-				Logger.out.debug("After specimenEventCollection.size(): " + specimenEventCollection.size());
-
-				Logger.out.debug("...14-July-06... : CollectionEvent set");
-
-				Logger.out.debug("Setting Received event in specimen domain object");
+             	specimenEventCollection.add(collectionEventParameters);
+				
 				//setting received event values
 				ReceivedEventParametersForm receivedEvent = new ReceivedEventParametersForm();
 				receivedEvent.setComments(form.getReceivedEventComments());
@@ -604,12 +592,9 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				receivedEventParameters.setAllValues(receivedEvent);
 				//receivedEventParameters.setSpecimen(specimen);
 
-				Logger.out.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
 				specimenEventCollection.add(receivedEventParameters);
-				Logger.out.debug("After specimenEventCollection.size(): " + specimenEventCollection.size());
 				specimen.setSpecimenEventCollection(specimenEventCollection);
-				Logger.out.debug("...14-July-06... : ReceivedEvent set");
-
+				
 			}
 			i++;
 
