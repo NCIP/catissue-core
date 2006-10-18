@@ -13,6 +13,8 @@ package edu.wustl.catissuecore.applet.component;
 
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
@@ -77,4 +79,17 @@ public class BaseTable extends JTable {
 		getTableHeader().setReorderingAllowed(false);
 		//this.selectionBackground = AppletConstants.CELL_SELECTION_COLOR;
 	}
+	//Mandar: to override default behaviour : 18Oct06
+    public void editingStopped(ChangeEvent e) {
+        // Take in the new value
+        TableCellEditor editor = getCellEditor();
+        if (editor != null) {
+            Object value = editor.getCellEditorValue();
+            //commented to prevent setting the value automatically
+           // setValueAt(value, editingRow, editingColumn);
+            removeEditor();
+        }
+    }
+
+	
 }
