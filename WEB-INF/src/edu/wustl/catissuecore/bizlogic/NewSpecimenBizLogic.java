@@ -46,6 +46,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -99,7 +100,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		while (specimenIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
-			
+
 			/**
 			 * Start: Change for API Search   --- Jitendra 06/10/2006
 			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -111,7 +112,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			 */
 			ApiSearchUtil.setSpecimenDefault(specimen);
 			//End:- Change for API Search
-			
+
 			Long parentSpecimenId = specimen.getId();
 			specimen.setId(null);
 			try
@@ -277,6 +278,28 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 	}
 
+	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		Specimen specimen = (Specimen) obj;
+		try
+		{
+			if (specimen.getStorageContainer() != null)
+			{
+				
+				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+				StorageContainerUtil.deleteSinglePositionInContainerMap(specimen.getStorageContainer(), containerMap,
+						specimen.getPositionDimensionOne().intValue(), specimen.getPositionDimensionTwo().intValue());
+				
+
+			}
+		}
+		catch (Exception e)
+		{
+
+		}
+
+	}
+
 	protected String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
 	{
 		Specimen specimen = (Specimen) obj;
@@ -286,6 +309,21 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				Constants.getCollectionProtocolPGName(null));
 		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
 		return dynamicGroups;
+	}
+
+	protected void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen) throws DAOException
+	{
+
+		boolean aa = container.getHoldsSpecimenClassCollection().contains(specimen.getClassName());
+		boolean bb = container.getCollectionProtocolCollection().contains(
+				specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol());
+		if (!container.getHoldsSpecimenClassCollection().contains(specimen.getClassName())
+				|| (!container.getCollectionProtocolCollection().contains(
+						specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol()) && container
+						.getCollectionProtocolCollection().size() != 0))
+		{
+			throw new DAOException("This Storage Container not valid for Specimen");
+		}
 	}
 
 	private SpecimenCollectionGroup loadSpecimenCollectionGroup(Long specimenID, DAO dao) throws DAOException
@@ -475,7 +513,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		Specimen specimen = (Specimen) obj;
 		Specimen specimenOld = (Specimen) oldObj;
-		
+
 		/**
 		 * Start: Change for API Search   --- Jitendra 06/10/2006
 		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -725,7 +763,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 					// --- check for all validations on the storage container.
 					storageContainerBizLogic.checkContainer(dao, container.getId().toString(), specimen.getPositionDimensionOne().toString(), specimen
 							.getPositionDimensionTwo().toString(), sessionDataBean);
-	
+					chkContainerValidForSpecimen(container, specimen);
 					specimen.setStorageContainer(container);
 				}
 				else
@@ -1184,7 +1222,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
 		}
-		
+
 		/**
 		 *  If specimen is virtually located, then in that case storage container is being set null explicitly in Specimen
 		 *  domain object.Hence to avoid NullPointerException here check null of container is required.
@@ -1195,14 +1233,14 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			Long storageContainerId = specimen.getStorageContainer().getId();
 			Integer xPos = specimen.getPositionDimensionOne();
 			Integer yPos = specimen.getPositionDimensionTwo();
-	
+
 			if (storageContainerId == null || xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 			{
 				throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
 						.getValue("specimen.positionInStorageContainer")));
 			}
 		}
-		
+
 	}
 
 	/**

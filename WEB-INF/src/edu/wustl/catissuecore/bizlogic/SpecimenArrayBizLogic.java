@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
@@ -25,6 +26,7 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -77,6 +79,28 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			dao.insert(specimenArrayContent, sessionDataBean, true, false);
 		}
 	}
+	
+	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		SpecimenArray specimenArray = (SpecimenArray) obj;
+		try
+		{
+			if (specimenArray.getStorageContainer() != null)
+			{
+				
+				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+				StorageContainerUtil.deleteSinglePositionInContainerMap(specimenArray.getStorageContainer(), containerMap, specimenArray
+						.getPositionDimensionOne().intValue(), specimenArray.getPositionDimensionTwo().intValue());
+
+			}
+		}
+		catch (Exception e)
+		{
+
+		}
+
+	}
+	
 
 	/**
 	 * @see edu.wustl.common.bizlogic.AbstractBizLogic#update(edu.wustl.common.dao.DAO, java.lang.Object, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
