@@ -219,5 +219,26 @@ public class StorageType extends ContainerType
 			Logger.out.error(excp.getMessage());
 		}
 	}
+	
+	public boolean equals(Object object)
+    {
+    	
+    	if(this.getClass().getName().equals(object.getClass().getName()))
+    	{
+    		StorageType storageType = (StorageType)object;
+    		if(this.getId().longValue() == storageType.getId().longValue())
+    			return true;
+    	}
+    	return false;
+    }
+	public int hashCode()
+	{
+		if(this.getId() != null)
+			return this.getId().hashCode();
+		
+		return super.hashCode();
+	}
+	
+
 
 }
