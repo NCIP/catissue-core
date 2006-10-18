@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CreateSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -73,7 +74,7 @@ public class CreateMultipleSpecimenAction extends BaseAction
 				createForm.setType(request.getParameter("derivedSpecimenType"));
 			}
 		}
-		
+
 		List key = new ArrayList();
 		key.add("ExternalIdentifier:i_name");
 		key.add("ExternalIdentifier:i_value");
@@ -83,7 +84,6 @@ public class CreateMultipleSpecimenAction extends BaseAction
 
 		//Calling DeleteRow of BaseAction class
 		MapDataParser.deleteRow(key, externalIdMap, request.getParameter("status"));
-		
 
 		//Gets the value of the operation parameter.
 		String derivedOperation = request.getParameter(Constants.DERIVED_OPERATION);
@@ -96,23 +96,39 @@ public class CreateMultipleSpecimenAction extends BaseAction
 		String specimenCollectionGroupName = (String) request.getParameter("derivedSpecimenCollectionGroup");
 		String parentSpecimenLabel = (String) request.getParameter("derivedParentSpecimenLabel");
 		String specimenClass = (String) request.getParameter("derivedSpecimenClass");
-		if(specimenClass == null)
+		// TODO which radio is selected
+		if (specimenClass == null)
 		{
 			specimenClass = createForm.getClassName();
+		}
+		long cpId = -1;
+		if (parentSpecimenLabel != null && !parentSpecimenLabel.equals("null") && !parentSpecimenLabel.equals(""))
+		{
+			List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, parentSpecimenLabel.trim());
+			if (spList != null && !spList.isEmpty())
+			{
+				Specimen sp = (Specimen) spList.get(0);
+				cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
+
+			}
+		}
+		else
+		{
+			List specimenCollectionGroupList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.SYSTEM_NAME,
+					specimenCollectionGroupName);
+			if (specimenCollectionGroupList != null && !specimenCollectionGroupList.isEmpty())
+			{
+				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionGroupList.get(0);
+				cpId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
+			}
 		}
 
 		Map containerMap = new TreeMap();
 		Vector initialValues = null;
-		String columnName = Constants.SYSTEM_NAME;
-		Object columnValue = specimenCollectionGroupName;
 
-		List specimenCollectionGroupList = dao.retrieve(SpecimenCollectionGroup.class.getName(), columnName, columnValue);
-
-		if (specimenCollectionGroupList != null && !specimenCollectionGroupList.isEmpty() && specimenClass != null && !specimenClass.equals("null")
-				&& !specimenClass.equals("-- Select --") && !specimenClass.equals("-1"))
+		if (cpId != -1 && specimenClass != null && !specimenClass.equals("null") && !specimenClass.equals("-- Select --")
+				&& !specimenClass.equals("-1"))
 		{
-			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionGroupList.get(0);
-			long cpId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
 			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, specimenClass, 0);
 			if (containerMap.isEmpty())
 			{
@@ -121,16 +137,17 @@ public class CreateMultipleSpecimenAction extends BaseAction
 				{
 					errors = new ActionErrors();
 				}
-			// TODO -- 
+				
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
 				saveErrors(request, errors);
 			}
 			initialValues = checkForInitialValues(containerMap);
-			request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
-			request.setAttribute(Constants.SPECIMEN_CLASS_NAME,specimenClass);;
+			request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
+			request.setAttribute(Constants.SPECIMEN_CLASS_NAME, specimenClass);
+			;
 		}
 
-		if (derivedOperation!=null && derivedOperation.equals(Constants.EDIT))
+		if (derivedOperation != null && derivedOperation.equals(Constants.EDIT))
 		{
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
 			if (createForm.getStorageContainer() != null && !createForm.getStorageContainer().equals("-1"))
