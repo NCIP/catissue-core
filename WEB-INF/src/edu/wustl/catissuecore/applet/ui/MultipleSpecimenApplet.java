@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.listener.AddColumnHandler;
 import edu.wustl.catissuecore.applet.listener.MultipleSpecimenCopyActionHandler;
 import edu.wustl.catissuecore.applet.listener.MultipleSpecimenPasteActionHandler;
+import edu.wustl.catissuecore.applet.listener.MultipleSpecimenTableKeyHandler;
 import edu.wustl.catissuecore.applet.listener.PageLinkHandler;
 import edu.wustl.catissuecore.applet.listener.SpecimenSubmitButtonHandler;
 import edu.wustl.catissuecore.applet.listener.TableModelChangeHandler;
@@ -42,87 +43,35 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	private BaseTable table;
 	private JPanel buttonPanel;
 	private JPanel linkPanel;
-//	private JPanel tablePanel;
-//	private JPanel footerPanel;
-//	private JPanel outerPanel;
 	
 	private int totalPages=0;
 	private final int WIDTH=1000;
-//	private int currentCellPositionX = 0;
-//	private int currentCellPositionY = 0;
 	
 	Color appletColor;
 	public void doInit()
     {
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));		
-//		columnNumber++;
-//		int columnNumber = 4;
 		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());		
 
 		table = new BaseTable(model);
-/*        {
-            public Class getColumnClass(int column)
-            {
-                return getValueAt(0, column).getClass();
-            }
-        };
-*/        table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setReorderingAllowed(false);
+
+		//to set the focus to the editor. Mandar: 16Oct06.
+		table.setSurrendersFocusOnKeystroke(true );
+		table.addKeyListener(new MultipleSpecimenTableKeyHandler(table));
+
 		// Creating Layout
 		//getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT ));
 		this.getContentPane().setLayout(new VerticalLayout(0,10));
 		
 		buttonPanel = new JPanel( new FlowLayout(FlowLayout.LEFT ) );
 		linkPanel = new JPanel( new FlowLayout(FlowLayout.LEFT ) );
-//		tablePanel = new JPanel();
-//		footerPanel = new JPanel( new FlowLayout(FlowLayout.RIGHT ) );
-//		outerPanel = new JPanel();
 		
-//		outerPanel.setLayout(new GridLayout(4,1));
 		createButtonPanel(buttonPanel);
 		createLinkPanel(linkPanel);
-//		createFooterPanel(footerPanel);
-		
-//		//--gblayout
-//		GridBagLayout gbl = new GridBagLayout();
-//		outerPanel.setLayout(gbl);
-//	    final int GRIDX = 0;
-//		// Place a component at cell location (1,1)
-//	    GridBagConstraints gbc = new GridBagConstraints();
-//	    gbc.gridx = GRIDX;
-//	    gbc.gridy = 1;
-//	    gbc.fill = GridBagConstraints.NONE;
-//	    gbl.setConstraints(buttonPanel, gbc);
-//	    outerPanel.add(buttonPanel);
-//
-//		// Place a component at cell location (2,1)
-//	    gbc = new GridBagConstraints();
-//	    gbc.gridx = GRIDX;
-//	    gbc.gridy = 2;
-//	    gbc.fill = GridBagConstraints.NONE;
-//	    gbl.setConstraints(linkPanel, gbc);
-//	    outerPanel.add(linkPanel);
-//
-//		// Place a component at cell location (3,1)
-//	    gbc = new GridBagConstraints();
-//	    gbc.gridx = GRIDX;
-//	    gbc.gridy = 3;
-//	    gbc.fill = GridBagConstraints.BOTH;   
-////	    gbc.fill = GridBagConstraints.NONE;
-//	    gbl.setConstraints(tablePanel, gbc);
-//	    //outerPanel.add(tablePanel);
-//
-//		// Place a component at cell location (4,1)
-//	    gbc = new GridBagConstraints();
-//	    gbc.gridx = GRIDX;
-//	    gbc.gridy = 4;
-//	    gbc.fill = GridBagConstraints.NONE;
-//	    gbl.setConstraints(footerPanel, gbc);
-//	    //outerPanel.add(footerPanel);
 
 		//--- gbl
 	    System.out.println("Applet size :- W : "+getWidth()+ " ,H : "+getHeight() );
-//		outerPanel.setSize(getWidth(),getHeight());
-//		System.out.println("OuterPanel size :- W : "+outerPanel.getWidth()+ " ,H : "+outerPanel.getHeight() );
 	    getContentPane().add(buttonPanel);
 	    getContentPane().add(linkPanel);
 		// --------------------
@@ -132,6 +81,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		//table.getColumnModel().setColumnSelectionAllowed(true);
 		table.setColumnSelectionAllowed(true);
 		table.setCellSelectionEnabled(true );
+		table.setFocusTraversalKeysEnabled(true );
 		//table.setRowHeight(3,50);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	
@@ -152,11 +102,9 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED  );  
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
 
-		//tablePanel.add( scrollPane );
-//		tablePanel.setSize(WIDTH,getHeight());
 		getContentPane().add(scrollPane);
-//		getContentPane().add(footerPanel);
 		setBackground(appletColor);
+		
     }
     
     private void createButtonPanel(JPanel panel)
@@ -291,12 +239,6 @@ public class MultipleSpecimenApplet extends BaseApplet {
 						 }
 					 };
 					 SwingUtilities.invokeLater(panelUpdated);
-//					JButton newLink = new JButton("AA");
-//					newLink.setActionCommand(String.valueOf(totalPages) );
-//					linkPanel.add(newLink);linkPanel.add(new JLabel("    ") );
-//					SwingUtilities.updateComponentTreeUI(newLink );
-//					System.out.println("panel tree ui updated");
 				}
-		
 	}
 }
