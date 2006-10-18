@@ -42,6 +42,7 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.lookup.DefaultLookupParameters;
 import edu.wustl.common.lookup.LookupLogic;
 import edu.wustl.common.security.SecurityManager;
@@ -69,26 +70,7 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Participant participant = (Participant) obj;
-
 		dao.insert(participant, sessionDataBean, true, true);
-		
-//		 getting instance of catissueCoreCacheManager and getting participantMap from cache
-		CatissueCoreCacheManager catissueCoreCacheManager = null;
-		try
-		{
-			catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-			HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
-			participantMap.put(participant.getId(), participant);
-			// adding updated participantMap to cache
-			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS, participantMap);
-		}
-		catch (CacheException e)
-		{
-			Logger.out.debug("Exception occured while getting instance of cachemanager");
-			e.printStackTrace();
-		}
-	
-
 		Collection participantMedicalIdentifierCollection = participant.getParticipantMedicalIdentifierCollection();
 
 		if(participantMedicalIdentifierCollection == null ) 
@@ -126,6 +108,56 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 	}
 
 	/**
+	 * This method gets called after insert method. Any logic after insertnig object in database can be included here.
+	 * @param obj The inserted object.
+	 * @param dao the dao object
+	 * @param sessionDataBean session specific data
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException 
+	 * */
+	protected void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+			updateCache(obj);
+	}
+	
+	/**
+	 * This method gets called after update method. Any logic after updating into database can be included here.
+	 * @param dao the dao object
+	 * @param currentObj The object to be updated.
+	 * @param oldObj The old object.
+	 * @param sessionDataBean session specific data
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 * */
+	protected void postUpdate(DAO dao, Object currentObj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException,
+			UserNotAuthorizedException
+	{
+		   updateCache(currentObj);
+	}
+	/**
+	 *  This method updates the cache for MAP_OF_PARTICIPANTS, shold be called in postInsert/postUpdate 
+	 * @param obj - participant object
+	 */
+	private synchronized void updateCache(Object obj)
+	{
+		Participant participant = (Participant) obj;
+       //  getting instance of catissueCoreCacheManager and getting participantMap from cache
+		CatissueCoreCacheManager catissueCoreCacheManager = null;
+		try
+		{
+			catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+			HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
+			participantMap.put(participant.getId(), participant);
+    	}
+		catch (CacheException e)
+		{
+			Logger.out.debug("Exception occured while getting instance of cachemanager");
+			e.printStackTrace();
+		}
+		
+	}
+
+	/**
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
 	 * @param session The session in which the object is saved.
@@ -137,23 +169,7 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 		Participant oldParticipant = (Participant) oldObj;
 
 		dao.update(participant, sessionDataBean, true, true, false);
-		
-        // getting instance of catissueCoreCacheManager and getting participantMap from cache
-		CatissueCoreCacheManager catissueCoreCacheManager = null;
-		try
-		{
-			catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-			HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
-			participantMap.put(participant.getId(), participant);
-			// adding updated participantMap to cache
-			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS, participantMap);
-		}
-		catch (CacheException e)
-		{
-			Logger.out.debug("Exception occured while getting instance of cachemanager");
-			e.printStackTrace();
-		}
-
+	
 		//Audit of Participant.
 		dao.audit(obj, oldObj, sessionDataBean, true);
 
