@@ -163,4 +163,6 @@ public interface AppletConstants
 	public static final String ARRAY_COPY_OPTION_CONCENTRATION = "Concentration";
 	public static final String ARRAY_COPY_OPTION_ALL = "All";
 	public static final int LINK_BUTTON_WIDTH = 70;
+	
+	public static final Color BG_COLOR = new Color(0xf4f4f5);
 }
