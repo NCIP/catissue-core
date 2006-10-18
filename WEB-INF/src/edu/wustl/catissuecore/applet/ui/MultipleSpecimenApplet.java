@@ -18,7 +18,7 @@ import javax.swing.border.LineBorder;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
-import edu.wustl.catissuecore.applet.component.BaseTable;
+import edu.wustl.catissuecore.applet.component.MultipleSpecimenTable;
 import edu.wustl.catissuecore.applet.listener.AddColumnHandler;
 import edu.wustl.catissuecore.applet.listener.MultipleSpecimenCopyActionHandler;
 import edu.wustl.catissuecore.applet.listener.MultipleSpecimenPasteActionHandler;
@@ -40,7 +40,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	 * Default Serial Version ID
 	 */
 	private static final long serialVersionUID = 1L;
-	private BaseTable table;
+	private MultipleSpecimenTable table;
 	private JPanel buttonPanel;
 	private JPanel linkPanel;
 	
@@ -53,7 +53,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));		
 		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());		
 
-		table = new BaseTable(model);
+		table = new MultipleSpecimenTable(model);
         table.getTableHeader().setReorderingAllowed(false);
 
 		//to set the focus to the editor. Mandar: 16Oct06.
