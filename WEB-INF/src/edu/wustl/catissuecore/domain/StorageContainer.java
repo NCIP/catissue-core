@@ -72,6 +72,8 @@ public class StorageContainer extends Container
 		this.setParent(oldContainer.getParent());
 		//this.setNumber(oldContainer.getNumber());
 		this.setName(oldContainer.getName());
+		this.setPositionDimensionOne(oldContainer.getPositionDimensionOne());
+		this.setPositionDimensionTwo(oldContainer.getPositionDimensionTwo());
 		this.setFull(oldContainer.isFull());
 		if ((parent != null) && (parent.getChildren() != null))
 		{
