@@ -410,7 +410,13 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			{
 				throw new Exception(ApplicationProperties.getValue("protocol.class.errMsg") + " for Specimen number " + i);
 			}
-
+			
+			String parentSpecimenLabel = (String) specimenMap.get(AppletConstants.SPECIMEN_PREFIX + i + "_" + "ParentSpecimen_label");
+			if (parentSpecimenLabel == null || parentSpecimenLabel.trim().length() == 0)
+			{
+				specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "ParentSpecimen_label");
+			}
+			
 			String quantityKey = AppletConstants.SPECIMEN_PREFIX + i + "_" + "Quantity_value";
 			String quantityValue = (String) specimenMap.get(quantityKey);
 			try
