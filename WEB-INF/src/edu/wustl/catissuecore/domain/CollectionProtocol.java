@@ -203,16 +203,11 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	
 	public boolean equals(Object object)
     {
-    	
-    	Logger.out.info("this class---------:"+this.getClass().getName());
-    	Logger.out.info("object class---------:"+object.getClass().getName());
+		Logger.out.info("-----------------1--------------");
     	
     	if(this.getClass().getName().equals(object.getClass().getName()))
     	{
     		CollectionProtocol collectionProtocol = (CollectionProtocol)object;
-    		Logger.out.info("this class id ---------:"+this.getId().longValue());
-        	Logger.out.info("object class id ---------:"+collectionProtocol.getId().longValue());
-        	
     		if(this.getId().longValue() == collectionProtocol.getId().longValue())
     			return true;
     	}
@@ -220,19 +215,19 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     }
 	public int compareTo(Object object)
 	{
-		
-		Logger.out.info("this class---------:"+this.getClass().getName());
-    	Logger.out.info("object class---------:"+object.getClass().getName());
-    	
+		Logger.out.info("-----------------2--------------");
     	if(this.getClass().getName().equals(object.getClass().getName()))
     	{
     		CollectionProtocol collectionProtocol = (CollectionProtocol)object;
-    		Logger.out.info("this class id ---------:"+this.getId().longValue());
-        	Logger.out.info("object class id ---------:"+collectionProtocol.getId().longValue());
-        
-        	return this.getId().compareTo(collectionProtocol.getId());
+    		return this.getId().compareTo(collectionProtocol.getId());
     	}
     	return 0;
+	}
+	public int hashCode()
+	{
+		if(this.getId() != null)
+			return this.getId().hashCode();
+		return super.hashCode();
 	}
 
 	/**
