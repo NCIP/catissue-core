@@ -254,7 +254,16 @@ public class SpecimenArrayApplet extends BaseApplet {
 	{
 		int selectedRow = arrayTable.getSelectedRow();
 		int selectedColumn = arrayTable.getSelectedColumn();
-		arrayTable.getCellEditor(selectedRow,selectedColumn).stopCellEditing();
+		/*
+		System.out.println("  model map:: " + ((SpecimenArrayTableModel) arrayTable.getModel()).getSpecimenArrayModelMap());
+		System.out.println(" selectedRow " + selectedRow);
+		System.out.println(" selectedColumn " + selectedColumn);
+		*/
+		if ((selectedRow > -1) && (selectedColumn > -1) && (selectedRow <= arrayTable.getRowCount()) && (selectedColumn <= arrayTable.getColumnCount()))
+		{
+			arrayTable.getCellEditor(selectedRow,selectedColumn).stopCellEditing();
+		}
+		//System.out.println("  after stopping model map:: " + ((SpecimenArrayTableModel) arrayTable.getModel()).getSpecimenArrayModelMap());
 	}
 	
 	/**

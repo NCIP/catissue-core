@@ -228,16 +228,24 @@ public class SpecimenArrayTableModel extends BaseTabelModel {
 		} else {
 			attrIndex = AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX;
 		}
-		System.out.println(" In table model " + enterSpecimenBy);
 		String value = null;
+		Object valueObj = null;
 		for (int i=0; i < rowCount ; i++) 
 		{
 			  for (int j=0;j < columnCount; j++) 
 			  {
-				  value = getValueAt(i,j).toString();
-				  specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(i,j,columnCount,attrIndex),value);
-				  // change old selction to ""
-				  specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(i,j,columnCount,getAttributeIndex()),"");
+					  valueObj = getValueAt(i,j);
+					  if (valueObj == null)
+					  {
+						  value = String.valueOf("");
+					  }
+					  else
+					  {
+						  value = valueObj.toString();
+					  }					  
+					  specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(i,j,columnCount,attrIndex),value);
+					  // change old selction to ""
+					  specimenArrayModelMap.put(SpecimenArrayAppletUtil.getArrayMapKey(i,j,columnCount,getAttributeIndex()),"");
 			  }
 		}
 		this.enterSpecimenBy = enterSpecimenBy;		
