@@ -13,12 +13,14 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -96,11 +98,12 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 
 					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory
 							.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+					NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 					// --- check for all validations on the storage container.
 					storageContainerBizLogic.checkContainer(dao, container.getId().toString(),
 							specimen.getPositionDimensionOne().toString(), specimen
 									.getPositionDimensionTwo().toString(), sessionDataBean);
-
+					newSpecimenBizLogic.chkContainerValidForSpecimen(container, specimen);
 					specimen.setStorageContainer(container);
 				}
 			}
@@ -158,6 +161,27 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		{
 			throw handleSMException(e);
 		}
+	}
+
+	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		Specimen specimen = (Specimen) obj;
+		try
+		{
+			if (specimen.getStorageContainer() != null)
+			{
+				
+				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+				StorageContainerUtil.deleteSinglePositionInContainerMap(specimen.getStorageContainer(), containerMap, specimen.getPositionDimensionOne().intValue(),specimen.getPositionDimensionTwo().intValue());
+				
+				
+			}
+		}
+		catch (Exception e)
+		{
+
+		}
+
 	}
 
 	private String[] getDynamicGroups(AbstractDomainObject obj) throws SMException

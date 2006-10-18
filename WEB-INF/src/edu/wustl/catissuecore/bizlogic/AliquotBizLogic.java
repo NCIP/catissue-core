@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -45,16 +46,14 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
-			throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Specimen aliquot = (Specimen) obj;
 		String specimenKey = "Specimen:";
 		Map aliquotMap = aliquot.getAliqoutMap();
 
 		//Retrieving the parent specimen of the aliquot
-		Specimen parentSpecimen = (Specimen) dao.retrieve(Specimen.class.getName(), aliquot
-				.getParentSpecimen().getId());
+		Specimen parentSpecimen = (Specimen) dao.retrieve(Specimen.class.getName(), aliquot.getParentSpecimen().getId());
 		double dQuantity = 0;
 		List aliquotList = new ArrayList();
 		for (int i = 1; i <= aliquot.getNoOfAliquots(); i++)
@@ -77,13 +76,12 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			String posDim2 = (String) aliquotMap.get(posDim2Key);
 			String label = (String) aliquotMap.get(labelKey);
 			String virtuallyLocated = (String) aliquotMap.get(virtuallyLocatedKey);
-			Logger.out.info("---------------virtually located value:"
-					+ aliquotMap.get(virtuallyLocatedKey));
+			Logger.out.info("---------------virtually located value:" + aliquotMap.get(virtuallyLocatedKey));
 			dQuantity = dQuantity + Double.parseDouble(quantity);
 
 			//Create an object of Specimen Subclass
 			Specimen aliquotSpecimen = Utility.getSpecimen(parentSpecimen);
-			
+
 			/**
 			 * Start: Change for API Search   --- Jitendra 06/10/2006
 			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -95,7 +93,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			 */
 			ApiSearchUtil.setSpecimenDefault(aliquotSpecimen);
 			//End:- Change for API Search
-			
+
 			aliquotSpecimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
 
 			if (parentSpecimen != null)
@@ -103,20 +101,17 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 				//check for closed ParentSpecimen
 				checkStatus(dao, parentSpecimen, "Parent Specimen");
 				aliquotSpecimen.setParentSpecimen(parentSpecimen);
-				aliquotSpecimen.setSpecimenCharacteristics(parentSpecimen
-						.getSpecimenCharacteristics());
+				aliquotSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 				aliquotSpecimen.setType(parentSpecimen.getType());
 				aliquotSpecimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
 
 				if (aliquotSpecimen instanceof MolecularSpecimen)
 				{
-					Double concentration = ((MolecularSpecimen) parentSpecimen)
-							.getConcentrationInMicrogramPerMicroliter();
+					Double concentration = ((MolecularSpecimen) parentSpecimen).getConcentrationInMicrogramPerMicroliter();
 
 					if (concentration != null)
 					{
-						((MolecularSpecimen) aliquotSpecimen)
-								.setConcentrationInMicrogramPerMicroliter(concentration);
+						((MolecularSpecimen) aliquotSpecimen).setConcentrationInMicrogramPerMicroliter(concentration);
 					}
 				}
 			}
@@ -145,29 +140,29 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 				if (virtuallyLocated == null && containerId != null)
 				{
 					//Setting the storage container of the aliquot
-					StorageContainer container = (StorageContainer) dao.retrieve(
-							StorageContainer.class.getName(), new Long(containerId));
+					StorageContainer container = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), new Long(containerId));
 
 					if (container != null)
 					{
 						//check for closed Storage Container
 						checkStatus(dao, container, "Storage Container");
 
-						StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory
-								.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+						StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+								Constants.STORAGE_CONTAINER_FORM_ID);
 
 						//check for all validations on the storage container.
-						storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2,sessionDataBean);
-						
+						storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2, sessionDataBean);
+						chkContainerValidForSpecimen(container, aliquotSpecimen);
+
 						aliquotSpecimen.setStorageContainer(container);
-						
-						aliquotMap.put(storageContainerNameKey,container.getName());
+
+						aliquotMap.put(storageContainerNameKey, container.getName());
 					}
 				}
 				else
 				{
 					aliquotSpecimen.setStorageContainer(null);
-					
+
 				}
 			}
 			catch (SMException sme)
@@ -196,7 +191,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 
 			//Setting the identifier values in the map
 			aliquotMap.put(idKey, String.valueOf(aliquotSpecimen.getId()));
-			
+
 			//TO BE DELETED LATER
 			aliquot.setId(aliquotSpecimen.getId());
 
@@ -215,7 +210,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		while (itr.hasNext())
 		{
 			Specimen aliquotSpecimen = (Specimen) itr.next();
-        		
+
 			Set protectionObjects = new HashSet();
 			protectionObjects.add(aliquotSpecimen);
 			if (aliquotSpecimen.getSpecimenCharacteristics() != null)
@@ -224,26 +219,25 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			}
 			try
 			{
-				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
-						protectionObjects, getDynamicGroups(aliquotSpecimen));
+				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(aliquotSpecimen));
 			}
 			catch (SMException e)
 			{
 				throw handleSMException(e);
 			}
 		}
-		
+
 		//Setting the no. of aliquots in the map
 		aliquotMap.put(Constants.SPECIMEN_COUNT, String.valueOf(aliquot.getNoOfAliquots()));
 
 		//Adjusting the available quantity of parent specimen
 		if (parentSpecimen != null)
 		{
-			double availableQuantity = parentSpecimen.getAvailableQuantity().getValue()
-					.doubleValue();
+			double availableQuantity = parentSpecimen.getAvailableQuantity().getValue().doubleValue();
 			availableQuantity = availableQuantity - dQuantity;
 			parentSpecimen.setAvailableQuantity(new Quantity(String.valueOf(availableQuantity)));
-			if(availableQuantity<=0) {
+			if (availableQuantity <= 0)
+			{
 				parentSpecimen.setAvailable(new Boolean(false));
 			}
 
@@ -258,8 +252,48 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 
 		//Setting value of isAliquot as true for ForwardTo processor
 		aliquot.setLineage(Constants.ALIQUOT);
-		
-		
+
+	}
+
+	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		Specimen aliquot = (Specimen) obj;
+		String specimenKey = "Specimen:";
+		Map aliquotMap = aliquot.getAliqoutMap();
+		try
+		{
+			for (int i = 1; i <= aliquot.getNoOfAliquots(); i++)
+			{
+
+				String containerIdKey = specimenKey + i + "_StorageContainer_id";
+				String storageContainerNameKey = specimenKey + i + "_stContainerName";
+				String posDim1Key = specimenKey + i + "_positionDimensionOne";
+				String posDim2Key = specimenKey + i + "_positionDimensionTwo";
+				
+				String virtuallyLocatedKey = specimenKey + i + "_virtuallyLocated";
+				String virtuallyLocated = (String) aliquotMap.get(virtuallyLocatedKey);
+				if (virtuallyLocated == null)
+				{
+					String contId = (String) aliquotMap.get(containerIdKey);
+					String contName = (String) aliquotMap.get(storageContainerNameKey);
+					String posOne = (String) aliquotMap.get(posDim1Key);
+					String posTwo = (String) aliquotMap.get(posDim2Key);
+					
+					StorageContainer storageContainer = new StorageContainer();
+					storageContainer.setId(new Long(contId));
+					storageContainer.setName(contName);
+					
+					Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+					StorageContainerUtil.deleteSinglePositionInContainerMap(storageContainer,containerMap,new Integer(posOne).intValue(),new Integer(posTwo).intValue());
+				}
+
+			}
+		}
+		catch (Exception e)
+		{
+
+		}
+
 	}
 
 	/**
@@ -279,25 +313,21 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 	{
 		aliquotMap.put(Constants.CDE_NAME_SPECIMEN_CLASS, parentSpecimen.getClassName());
 		aliquotMap.put(Constants.CDE_NAME_SPECIMEN_TYPE, parentSpecimen.getType());
-		aliquotMap.put(Constants.CDE_NAME_TISSUE_SITE, parentSpecimen.getSpecimenCharacteristics()
-				.getTissueSite());
-		aliquotMap.put(Constants.CDE_NAME_TISSUE_SIDE, parentSpecimen.getSpecimenCharacteristics()
-				.getTissueSide());
-		aliquotMap.put(Constants.CDE_NAME_PATHOLOGICAL_STATUS, parentSpecimen
-				.getPathologicalStatus());
-		aliquotMap.put(Constants.SPECIMEN_TYPE_QUANTITY, parentSpecimen.getAvailableQuantity()
-				.toString());
+		aliquotMap.put(Constants.CDE_NAME_TISSUE_SITE, parentSpecimen.getSpecimenCharacteristics().getTissueSite());
+		aliquotMap.put(Constants.CDE_NAME_TISSUE_SIDE, parentSpecimen.getSpecimenCharacteristics().getTissueSide());
+		aliquotMap.put(Constants.CDE_NAME_PATHOLOGICAL_STATUS, parentSpecimen.getPathologicalStatus());
+		aliquotMap.put(Constants.SPECIMEN_TYPE_QUANTITY, parentSpecimen.getAvailableQuantity().toString());
 
 		if (parentSpecimen instanceof MolecularSpecimen)
 		{
-			aliquotMap.put("concentration", Utility.toString(((MolecularSpecimen) parentSpecimen)
-					.getConcentrationInMicrogramPerMicroliter()));
+			aliquotMap.put("concentration", Utility.toString(((MolecularSpecimen) parentSpecimen).getConcentrationInMicrogramPerMicroliter()));
 		}
 		else
 		{
 			aliquotMap.put("concentration", "");
 		}
 	}
+
 	public long getNextAvailableNumber(String sourceObjectName) throws DAOException
 	{
 		String[] selectColumnName = {"max(IDENTIFIER) as MAX_NAME"};
@@ -309,7 +339,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 
 		dao.closeSession();
 
-		if (list!=null && !list.isEmpty())
+		if (list != null && !list.isEmpty())
 		{
 			List columnList = (List) list.get(0);
 			if (!columnList.isEmpty())

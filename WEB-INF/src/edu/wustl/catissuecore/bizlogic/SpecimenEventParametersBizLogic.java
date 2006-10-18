@@ -7,8 +7,14 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+import net.sf.ehcache.CacheException;
 
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -24,6 +30,8 @@ import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -49,13 +57,11 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
-			throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
 
-		List list = dao.retrieve(User.class.getName(), Constants.SYSTEM_IDENTIFIER,
-				specimenEventParametersObject.getUser().getId());
+		List list = dao.retrieve(User.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenEventParametersObject.getUser().getId());
 		if (!list.isEmpty())
 		{
 			User user = (User) list.get(0);
@@ -65,8 +71,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 			specimenEventParametersObject.setUser(user);
 		}
-		Specimen specimen = (Specimen) dao.retrieve(Specimen.class.getName(),
-				specimenEventParametersObject.getSpecimen().getId());
+		Specimen specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
 
 		// check for closed Specimen
 		checkStatus(dao, specimen, "Specimen");
@@ -78,20 +83,20 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			{
 				TransferEventParameters transferEventParameters = (TransferEventParameters) specimenEventParametersObject;
 
-				specimen.setPositionDimensionOne(transferEventParameters
-						.getToPositionDimensionOne());
-				specimen.setPositionDimensionTwo(transferEventParameters
-						.getToPositionDimensionTwo());
+				specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
+				specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
 
-				StorageContainer storageContainer = (StorageContainer) dao.retrieve(
-						StorageContainer.class.getName(), transferEventParameters
-								.getToStorageContainer().getId());
+				StorageContainer storageContainer = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
+						.getToStorageContainer().getId());
 
 				// check for closed StorageContainer
 				checkStatus(dao, storageContainer, "Storage Container");
 
 				if (storageContainer != null)
 				{
+					NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
+							Constants.NEW_SPECIMEN_FORM_ID);
+					newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainer, specimen);
 					specimen.setStorageContainer(storageContainer);
 				}
 				dao.update(specimen, sessionDataBean, true, true, false);
@@ -104,6 +109,11 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					disableSubSpecimens(dao, specimen.getId().toString());
 
 				}
+				Map disabledCont = new TreeMap();
+				if (specimen.getStorageContainer() != null)
+				{
+					addEntriesInDisabledMap(specimen ,specimen.getStorageContainer(), disabledCont);
+				}
 				specimen.setPositionDimensionOne(null);
 				specimen.setPositionDimensionTwo(null);
 				specimen.setStorageContainer(null);
@@ -111,11 +121,112 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				specimen.setAvailable(new Boolean(false));
 				specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
 				dao.update(specimen, sessionDataBean, true, true, false);
+
+				try
+				{
+					CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+					catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIEN, (Serializable) disabledCont);
+				}
+				catch (CacheException e)
+				{
+
+				}
+
 			}
 
 		}
 
 		dao.insert(specimenEventParametersObject, sessionDataBean, true, true);
+	}
+
+	private void addEntriesInDisabledMap(Specimen specimen ,StorageContainer container, Map disabledConts)
+	{
+		String contNameKey = "StorageContName";
+		String contIdKey = "StorageContIdKey";
+		String pos1Key = "pos1";
+		String pos2Key = "pos2";
+		Map containerDetails = new TreeMap();
+		containerDetails.put(contNameKey, container.getName());
+		containerDetails.put(contIdKey, container.getId());
+		containerDetails.put(pos1Key, specimen.getPositionDimensionOne());
+		containerDetails.put(pos2Key, specimen.getPositionDimensionTwo());
+
+		disabledConts.put(container.getId().toString(), containerDetails);
+
+	}
+
+	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
+		try
+		{
+			if (specimenEventParametersObject instanceof TransferEventParameters)
+			{
+				TransferEventParameters transferEventParameters = (TransferEventParameters) specimenEventParametersObject;
+
+				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+
+				if (transferEventParameters.getFromStorageContainer() != null)
+				{
+					StorageContainer storageContainerFrom = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
+							.getFromStorageContainer().getId());
+					StorageContainerUtil.insertSinglePositionInContainerMap(storageContainerFrom, containerMap, storageContainerFrom
+							.getPositionDimensionOne().intValue(), storageContainerFrom.getPositionDimensionTwo().intValue());
+
+				}
+
+				StorageContainer storageContainerTo = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
+						.getToStorageContainer().getId());
+				StorageContainerUtil.deleteSinglePositionInContainerMap(storageContainerTo, containerMap, transferEventParameters
+						.getToPositionDimensionOne().intValue(), transferEventParameters.getToPositionDimensionTwo().intValue());
+
+			}
+			if (specimenEventParametersObject instanceof DisposalEventParameters)
+			{
+
+				DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
+				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+				if (disposalEventParameters.getSpecimen() != null)
+				{
+
+					Map disabledConts = getContForDisabledSpecimenFromCache();
+
+					Set keySet = disabledConts.keySet();
+					Iterator itr = keySet.iterator();
+					while (itr.hasNext())
+					{
+						String Id = (String) itr.next();
+						Map disabledContDetails = (TreeMap) disabledConts.get(Id);
+						String contNameKey = "StorageContName";
+						//String contIdKey = "StorageContIdKey";
+						String pos1Key = "pos1";
+						String pos2Key = "pos2";
+
+						StorageContainer cont = new StorageContainer();
+						cont.setId(new Long(Id));
+						cont.setName((String) disabledContDetails.get(contNameKey));
+						int x = ((Integer) disabledContDetails.get(pos1Key)).intValue();
+						int y = ((Integer) disabledContDetails.get(pos2Key)).intValue();
+
+						StorageContainerUtil.insertSinglePositionInContainerMap(cont, containerMap, x, y);
+					}
+
+					/*StorageContainer storageContainer = disposalEventParameters.getSpecimen().getStorageContainer();
+					 if (storageContainer != null)
+					 {
+					 storageContainerBizLogic.insertSinglePositionInContainerMap(storageContainer, containerMap, storageContainer
+					 .getPositionDimensionOne().intValue(), storageContainer.getPositionDimensionTwo().intValue());
+					 }*/
+
+				}
+
+			}
+		}
+		catch (Exception e)
+		{
+
+		}
+
 	}
 
 	/**
@@ -124,8 +235,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
-			throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters) obj;
 		SpecimenEventParameters oldSpecimenEventParameters = (SpecimenEventParameters) oldObj;
@@ -134,8 +244,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		//checkStatus(dao, specimenEventParameters.getSpecimen(), "Specimen" );
 
 		// Check for different User
-		if (!specimenEventParameters.getUser().getId().equals(
-				oldSpecimenEventParameters.getUser().getId()))
+		if (!specimenEventParameters.getUser().getId().equals(oldSpecimenEventParameters.getUser().getId()))
 		{
 			checkStatus(dao, specimenEventParameters.getUser(), "User");
 		}
@@ -171,7 +280,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
 		SpecimenEventParameters eventParameter = (SpecimenEventParameters) obj;
-		
+
 		/**
 		 * Start: Change for API Search   --- Jitendra 06/10/2006
 		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -181,69 +290,56 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
 		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 		 */
-        ApiSearchUtil.setEventParametersDefault(eventParameter);
-        //End:-  Change for API Search 
+		ApiSearchUtil.setEventParametersDefault(eventParameter);
+		//End:-  Change for API Search 
 
 		switch (Utility.getEventParametersFormId(eventParameter))
 		{
 			case Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID :
-				String storageStatus = ((CheckInCheckOutEventParameter) eventParameter)
-						.getStorageStatus();
+				String storageStatus = ((CheckInCheckOutEventParameter) eventParameter).getStorageStatus();
 				if (!Validator.isEnumeratedValue(Constants.STORAGE_STATUS_ARRAY, storageStatus))
 				{
-					throw new DAOException(ApplicationProperties
-							.getValue("events.storageStatus.errMsg"));
+					throw new DAOException(ApplicationProperties.getValue("events.storageStatus.errMsg"));
 				}
 				break;
 
 			case Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID :
-				String procedure = ((CollectionEventParameters) eventParameter)
-						.getCollectionProcedure();
-				List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
+				String procedure = ((CollectionEventParameters) eventParameter).getCollectionProcedure();
+				List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
 				if (!Validator.isEnumeratedValue(procedureList, procedure))
 				{
-					throw new DAOException(ApplicationProperties
-							.getValue("events.collectionProcedure.errMsg"));
+					throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
 				}
 
 				String container = ((CollectionEventParameters) eventParameter).getContainer();
-				List containerList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_CONTAINER, null);
+				List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
 				if (!Validator.isEnumeratedOrNullValue(containerList, container))
 				{
-					throw new DAOException(ApplicationProperties
-							.getValue("events.container.errMsg"));
+					throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
 				}
 				break;
 
 			case Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID :
-				String embeddingMedium = ((EmbeddedEventParameters) eventParameter)
-						.getEmbeddingMedium();
-				List embeddingMediumList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_EMBEDDING_MEDIUM, null);
+				String embeddingMedium = ((EmbeddedEventParameters) eventParameter).getEmbeddingMedium();
+				List embeddingMediumList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_EMBEDDING_MEDIUM, null);
 				if (!Validator.isEnumeratedValue(embeddingMediumList, embeddingMedium))
 				{
-					throw new DAOException(ApplicationProperties
-							.getValue("events.embeddingMedium.errMsg"));
+					throw new DAOException(ApplicationProperties.getValue("events.embeddingMedium.errMsg"));
 				}
 				break;
 
 			case Constants.FIXED_EVENT_PARAMETERS_FORM_ID :
 				String fixationType = ((FixedEventParameters) eventParameter).getFixationType();
-				List fixationTypeList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_FIXATION_TYPE, null);
+				List fixationTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_FIXATION_TYPE, null);
 				if (!Validator.isEnumeratedValue(fixationTypeList, fixationType))
 				{
-					throw new DAOException(ApplicationProperties
-							.getValue("events.fixationType.errMsg"));
+					throw new DAOException(ApplicationProperties.getValue("events.fixationType.errMsg"));
 				}
 				break;
 
 			case Constants.FROZEN_EVENT_PARAMETERS_FORM_ID :
 				String method = ((FrozenEventParameters) eventParameter).getMethod();
-				List methodList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_METHOD, null);
+				List methodList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_METHOD, null);
 				if (!Validator.isEnumeratedValue(methodList, method))
 				{
 					throw new DAOException(ApplicationProperties.getValue("events.method.errMsg"));
@@ -252,24 +348,19 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 			case Constants.RECEIVED_EVENT_PARAMETERS_FORM_ID :
 				String quality = ((ReceivedEventParameters) eventParameter).getReceivedQuality();
-				List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_RECEIVED_QUALITY, null);
+				List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
 				if (!Validator.isEnumeratedValue(qualityList, quality))
 				{
-					throw new DAOException(ApplicationProperties
-							.getValue("events.receivedQuality.errMsg"));
+					throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
 				}
 				break;
 
 			case Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID :
-				String histQuality = ((TissueSpecimenReviewEventParameters) eventParameter)
-						.getHistologicalQuality();
-				List histologicalQualityList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_HISTOLOGICAL_QUALITY, null);
+				String histQuality = ((TissueSpecimenReviewEventParameters) eventParameter).getHistologicalQuality();
+				List histologicalQualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_HISTOLOGICAL_QUALITY, null);
 				if (!Validator.isEnumeratedOrNullValue(histologicalQualityList, histQuality))
 				{
-					throw new DAOException(ApplicationProperties
-							.getValue("events.histologicalQuality.errMsg"));
+					throw new DAOException(ApplicationProperties.getValue("events.histologicalQuality.errMsg"));
 				}
 				break;
 
@@ -283,12 +374,10 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		return true;
 	}
 
-	private void validateTransferEventParameters(SpecimenEventParameters eventParameter)
-			throws DAOException
+	private void validateTransferEventParameters(SpecimenEventParameters eventParameter) throws DAOException
 	{
 		TransferEventParameters parameter = (TransferEventParameters) eventParameter;
-		List list = (List) retrieve(TransferEventParameters.class.getName(),
-				Constants.SYSTEM_IDENTIFIER, parameter.getId());
+		List list = (List) retrieve(TransferEventParameters.class.getName(), Constants.SYSTEM_IDENTIFIER, parameter.getId());
 		if (list.size() != 0)
 		{
 			TransferEventParameters parameterCopy = (TransferEventParameters) list.get(0);
@@ -297,10 +386,8 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 			String storageContainer = parameterCopy.getToStorageContainer().getId().toString();
 
 			if (!positionDimensionOne.equals(parameter.getToPositionDimensionOne().toString())
-					|| !positionDimensionTwo.equals(parameter.getToPositionDimensionTwo()
-							.toString())
-					|| !storageContainer.equals(parameter.getToStorageContainer().getId()
-							.toString()))
+					|| !positionDimensionTwo.equals(parameter.getToPositionDimensionTwo().toString())
+					|| !storageContainer.equals(parameter.getToStorageContainer().getId().toString()))
 			{
 				throw new DAOException(ApplicationProperties.getValue("events.toPosition.errMsg"));
 			}
@@ -325,34 +412,46 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	{
 		String sourceObjectName = Specimen.class.getName();
 		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
-		String[] whereColumnName = {"parentSpecimen" , Constants.ACTIVITY_STATUS};
-		String[] whereColumnCondition = {"=" , "!="};
-		String[] whereColumnValue = {speID , Constants.ACTIVITY_STATUS_DISABLED};
+		String[] whereColumnName = {"parentSpecimen", Constants.ACTIVITY_STATUS};
+		String[] whereColumnCondition = {"=", "!="};
+		String[] whereColumnValue = {speID, Constants.ACTIVITY_STATUS_DISABLED};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
-		List listOfSpecimenIDs = dao.retrieve(sourceObjectName,selectColumnName,whereColumnName, whereColumnCondition,whereColumnValue, joinCondition);
+		List listOfSpecimenIDs = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
+				joinCondition);
 		listOfSpecimenIDs = Utility.removeNull(listOfSpecimenIDs);
 		//getRelatedObjects(dao, Specimen.class, "parentSpecimen", speIDArr);
 
 		if (!listOfSpecimenIDs.isEmpty())
 		{
-			throw new DAOException(ApplicationProperties
-					.getValue("errors.specimen.contains.subspecimen"));
+			throw new DAOException(ApplicationProperties.getValue("errors.specimen.contains.subspecimen"));
 		}
 		else
 		{
 			return;
 		}
 	}
-		public List getRelatedObjects(DAO dao, Class sourceClass,
-				String[] whereColumnName, String[] whereColumnValue,String[] whereColumnCondition) throws DAOException {
-			String sourceObjectName = sourceClass.getName();
-			String joinCondition = Constants.AND_JOIN_CONDITION;
-			String selectColumnName [] = {Constants.SYSTEM_IDENTIFIER};
-			List list = dao.retrieve(sourceObjectName, selectColumnName,whereColumnName,whereColumnCondition, whereColumnValue,
-					joinCondition);
-			
-			list = Utility.removeNull(list);
-			return list;
-		}
+
+	public List getRelatedObjects(DAO dao, Class sourceClass, String[] whereColumnName, String[] whereColumnValue, String[] whereColumnCondition)
+			throws DAOException
+	{
+		String sourceObjectName = sourceClass.getName();
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+		String selectColumnName[] = {Constants.SYSTEM_IDENTIFIER};
+		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+		list = Utility.removeNull(list);
+		return list;
+	}
+
+	public Map getContForDisabledSpecimenFromCache() throws Exception
+	{
+		// TODO if map is null
+		// TODO move all code to common utility
+
+		// getting instance of catissueCoreCacheManager and getting participantMap from cache
+		CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+		Map disabledconts = (TreeMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIEN);
+		return disabledconts;
+	}
 
 }
