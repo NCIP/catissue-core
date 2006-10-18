@@ -64,7 +64,7 @@ PUBLIC
 		
 		<form-bean name="similarContainersForm" type="edu.wustl.catissuecore.actionForm.SimilarContainersForm" />
 		
-		<form-bean name="arrayForm" type="edu.wustl.catissuecore.actionForm.SpecimenArrayForm"/>
+		<form-bean name="specimenArrayForm" type="edu.wustl.catissuecore.actionForm.SpecimenArrayForm"/>
 		<form-bean name="arrayTypeForm" type="edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm"/>
 		<form-bean name="multipleSpecimenForm" type="edu.wustl.catissuecore.actionForm.MultipleSpecimenForm"/>
 	</form-beans>
@@ -2678,7 +2678,7 @@ PUBLIC
 
 	<action path="/SpecimenArray"
 		type="edu.wustl.catissuecore.action.SpecimenArrayAction"
-		name="arrayForm"
+		name="specimenArrayForm"
 		validate="false"
 		scope="request">
 		<forward name="success" path=".catissuecore.arrayDef" />
@@ -2690,7 +2690,7 @@ PUBLIC
 	
 	<action path="/SpecimenArrayAdd"
 		type="edu.wustl.catissuecore.action.SpecimenArrayAddEditAction"
-		name="arrayForm"
+		name="specimenArrayForm"
 		validate="true"
 		input="/SpecimenArray.do?operation=add&amp;menuSelected=20"
 		scope="request">
@@ -2701,7 +2701,7 @@ PUBLIC
 	
 	<action path="/SpecimenArraySearch"
 		    type="edu.wustl.catissuecore.action.SpecimenArraySearchAction"
-			name="arrayForm"
+			name="specimenArrayForm"
 			validate="false"
 			input="/SpecimenArray.do?operation=edit&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20"
 			scope="request">
@@ -2713,7 +2713,7 @@ PUBLIC
 
 	<action path="/SpecimenArrayEdit"
 		type="edu.wustl.catissuecore.action.SpecimenArrayAddEditAction"
-		name="arrayForm"
+		name="specimenArrayForm"
 		validate="true"
 		input="/SpecimenArray.do?operation=edit&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20"
 		scope="request">
@@ -2721,6 +2721,17 @@ PUBLIC
 		<forward name="failure" path="/SpecimenArray.do?operation=edit&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
+	 
+	<!-- AddNew Actions Begins -->
+        <action path="/SpecimenArrayAddNew"
+			type="edu.wustl.common.action.AddNewAction"
+			name="specimenArrayForm"
+			validate="false"
+			scope="request">
+			<forward name="specimenarraytype" path="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		</action>
+	<!--  End--> 
 	 
 	<!-- Array Type Action start -->
 	<action path="/SpecimenArrayType"
@@ -2743,6 +2754,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path="/SpecimenArrayTypeSearch.do?pageOf=pageOfSpecimenArrayType&amp;menuSelected=21" />
 		<forward name="failure" path="/SpecimenArrayType.do?operation=add&amp;pageOf=pageOfSpecimenArrayType&amp;menuSelected=21" />
+		<forward name="specimenarray" path="/SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20" />
 		<forward name="access_denied" path="/ManageAdministrativeData.do" />
 	</action>
 
