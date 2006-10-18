@@ -1097,20 +1097,59 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		//				+ " CATISSUE_SITE t4, CATISSUE_STORAGE_TYPE t5 "
 		//				+ " WHERE t8.SITE_ID = t4.IDENTIFIER " + " AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
 
-		String queryStr = "SELECT " + " t8.IDENTIFIER, t8.CONTAINER_NAME, t5.NAME, t8.SITE_ID, t4.TYPE, t8.PARENT_IDENTIFIER, "
-				+ " t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE, t8.ACTIVITY_STATUS, t8.PARENT_ACTIVITY_STATUS " + " FROM ( " + " 	SELECT "
-				+ " 	  t7.IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, t7.STORAGE_TYPE_ID, t7.ACTIVITY_STATUS, t7.PARENT_IDENTIFIER, "
-				+ " 	  t7.PARENT_CONTAINER_NAME, t6.NAME AS PARENT_CONTAINER_TYPE, t7.PARENT_ACTIVITY_STATUS " + " 	  FROM " + " 	  ( "
-				+ " 	  select "
-				+ " 	  t1.IDENTIFIER AS IDENTIFIER, t1.NAME AS CONTAINER_NAME, t11.SITE_ID AS SITE_ID, T1.ACTIVITY_STATUS AS ACTIVITY_STATUS,"
-				+ " 	  t11.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, t2.IDENTIFIER AS PARENT_IDENTIFIER, "
-				+ " 	  t2.NAME AS PARENT_CONTAINER_NAME, t22.STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID, T2.ACTIVITY_STATUS AS PARENT_ACTIVITY_STATUS"
-				+ " 	  from " + " 	      CATISSUE_STORAGE_CONTAINER t11, CATISSUE_STORAGE_CONTAINER t22, "
-				+ " 	      CATISSUE_CONTAINER t1 LEFT OUTER JOIN CATISSUE_CONTAINER t2 " + " 	      on t1.PARENT_CONTAINER_ID = t2.IDENTIFIER "
-				+ " 	      where " + " 		t1.identifier = t11.identifier and  t2.identifier = t22.identifier " + " 	  ) "
-				+ " 	  t7 LEFT OUTER JOIN CATISSUE_CONTAINER_TYPE t6 on " + " 	  t7.PARENT_STORAGE_TYPE_ID = t6.IDENTIFIER " + " ) "
-				+ " t8, CATISSUE_SITE t4, CATISSUE_CONTAINER_TYPE t5 WHERE t8.SITE_ID = t4.IDENTIFIER " + " AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
+//		String queryStr = "SELECT " + " t8.IDENTIFIER, t8.CONTAINER_NAME, t5.NAME, t8.SITE_ID, t4.TYPE, t8.PARENT_IDENTIFIER, "
+//				+ " t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE, t8.ACTIVITY_STATUS, t8.PARENT_ACTIVITY_STATUS " + " FROM ( " + " 	SELECT "
+//				+ " 	  t7.IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, t7.STORAGE_TYPE_ID, t7.ACTIVITY_STATUS, t7.PARENT_IDENTIFIER, "
+//				+ " 	  t7.PARENT_CONTAINER_NAME, t6.NAME AS PARENT_CONTAINER_TYPE, t7.PARENT_ACTIVITY_STATUS " + " 	  FROM " + " 	  ( "
+//				+ " 	  select "
+//				+ " 	  t1.IDENTIFIER AS IDENTIFIER, t1.NAME AS CONTAINER_NAME, t11.SITE_ID AS SITE_ID, T1.ACTIVITY_STATUS AS ACTIVITY_STATUS,"
+//				+ " 	  t11.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, t2.IDENTIFIER AS PARENT_IDENTIFIER, "
+//				+ " 	  t2.NAME AS PARENT_CONTAINER_NAME, t22.STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID, T2.ACTIVITY_STATUS AS PARENT_ACTIVITY_STATUS"
+//				+ " 	  from " + " 	      CATISSUE_STORAGE_CONTAINER t11, CATISSUE_STORAGE_CONTAINER t22, "
+//				+ " 	      CATISSUE_CONTAINER t1 LEFT OUTER JOIN CATISSUE_CONTAINER t2 " + " 	      on t1.PARENT_CONTAINER_ID = t2.IDENTIFIER "
+//				+ " 	      where " + " 		t1.identifier = t11.identifier and  (t2.identifier is null OR t2.identifier = t22.identifier)" + " 	  ) "
+//				+ " 	  t7 LEFT OUTER JOIN CATISSUE_CONTAINER_TYPE t6 on " + " 	  t7.PARENT_STORAGE_TYPE_ID = t6.IDENTIFIER " + " ) "
+//				+ " t8, CATISSUE_SITE t4, CATISSUE_CONTAINER_TYPE t5 WHERE t8.SITE_ID = t4.IDENTIFIER " + " AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
 
+		//Bug-2630: Added by jitendra
+		String queryStr=
+			"SELECT "+
+			"t8.IDENTIFIER, t8.CONTAINER_NAME, t5.NAME, t8.SITE_ID, t4.TYPE, "+ 
+			"t8. PARENT_IDENTIFIER,  t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE, "+ 	
+			"t8. ACTIVITY_STATUS, t8.PARENT_ACTIVITY_STATUS "+ 
+			"FROM "+ 
+			"( "+  	
+				"SELECT "+  	
+					"t7. IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, t7.STORAGE_TYPE_ID, "+
+					"t7.ACTIVITY_STATUS, t7. PARENT_IDENTIFIER, "+  
+					"t7.PARENT_CONTAINER_NAME, t6.NAME AS  PARENT_CONTAINER_TYPE, t7.PARENT_ACTIVITY_STATUS "+  	
+				"FROM "+  	
+				"( "+  	
+					"select "+ 
+						"t10. IDENTIFIER AS IDENTIFIER, t10.CONTAINER_NAME AS CONTAINER_NAME, t10.SITE_ID AS SITE_ID, "+
+						"T10. ACTIVITY_STATUS AS ACTIVITY_STATUS, t10.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, "+
+						"t10.PARENT_IDENTIFIER AS PARENT_IDENTIFIER, t10.PARENT_CONTAINER_NAME AS PARENT_CONTAINER_NAME, "+
+						"t22. STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID, T10.PARENT_ACTIVITY_STATUS AS  PARENT_ACTIVITY_STATUS "+
+					"from "+
+					"( "+
+						"select "+
+							"t1. IDENTIFIER AS IDENTIFIER, t1.NAME AS CONTAINER_NAME, t11.SITE_ID AS SITE_ID, "+
+							"T1. ACTIVITY_STATUS AS ACTIVITY_STATUS, t11.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, "+
+							"t2.IDENTIFIER AS PARENT_IDENTIFIER, t2.NAME AS PARENT_CONTAINER_NAME, "+ 
+							"T2.ACTIVITY_STATUS AS  PARENT_ACTIVITY_STATUS "+ 	  
+						"from "+
+							"CATISSUE_STORAGE_CONTAINER t11,CATISSUE_CONTAINER t1 LEFT OUTER JOIN "+ 
+							"CATISSUE_CONTAINER t2 "+
+						"on t1.PARENT_CONTAINER_ID = t2.IDENTIFIER "+  	      
+						"where t1.identifier = t11.identifier "+  
+					")t10 "+
+					"LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER t22 on t10.PARENT_IDENTIFIER = t22.identifier "+
+				")t7 "+
+				"LEFT OUTER JOIN CATISSUE_CONTAINER_TYPE t6 on t7.PARENT_STORAGE_TYPE_ID = t6.IDENTIFIER "+ 
+			") t8, CATISSUE_SITE t4, CATISSUE_CONTAINER_TYPE t5 "+ 
+			"WHERE "+
+				"t8.SITE_ID = t4.IDENTIFIER  AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
+			
 		Logger.out.debug("Storage Container query......................" + queryStr);
 		List list = null;
 
@@ -1150,6 +1189,24 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			while (iterator.hasNext())
 			{
 				List rowList = (List) iterator.next();
+				
+				//Bug-2630: Added by jitendra 
+				if((String) rowList.get(8) != null && !((String) rowList.get(8)).equals(Constants.ACTIVITY_STATUS_DISABLED))
+				{
+					//Mandar : code for tooltip for the container
+					String toolTip = getToolTipData((String) rowList.get(0));
+	
+					// Create the tree node for the child node.
+					TreeNode treeNodeImpl = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)), (String) rowList.get(1),
+							(String) rowList.get(1), toolTip, (String) rowList.get(8));
+					
+					// Add the tree node in the Vector if it is not present.
+					if (treeNodeVector.contains(treeNodeImpl) == false)
+					{
+						treeNodeVector.add(treeNodeImpl);
+					} 					
+				}
+				
 				if ((String) rowList.get(5) != "") //if parent container is not null
 				{
 					List childIds = new ArrayList();
@@ -1164,30 +1221,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					// Put the container in the child container list of the parent container
 					// and update the Map. 
 					childIds.add(Long.valueOf((String) rowList.get(0)));
-					containerRelationMap.put(Long.valueOf((String) rowList.get(5)), childIds);
-
-					//Mandar : code for tooltip for the container
-					String toolTip = getToolTipData((String) rowList.get(0));
-
-					// Create the tree node for the child node.
-					TreeNode treeNodeImpl = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)), (String) rowList.get(1),
-							(String) rowList.get(1), toolTip, (String) rowList.get(8));
-
-					// Add the tree node in the Vector if it is not present.
-					if (treeNodeVector.contains(treeNodeImpl) == false)
-					{
-						treeNodeVector.add(treeNodeImpl);
-					}
+					containerRelationMap.put(Long.valueOf((String) rowList.get(5)), childIds);				
 
 					// Create the tree node for the parent node and add it in the vector if not present.
-					toolTip = getToolTipData((String) rowList.get(5));
-					treeNodeImpl = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(5)), (String) rowList.get(6), (String) rowList
+					String toolTip = getToolTipData((String) rowList.get(5));
+					TreeNode treeNodeImpl = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(5)), (String) rowList.get(6), (String) rowList
 							.get(6), toolTip, (String) rowList.get(9));
 					if (treeNodeVector.contains(treeNodeImpl) == false)
 					{
 						treeNodeVector.add(treeNodeImpl);
 					}
 				}
+				
 			}
 			printVectorMap(treeNodeVector, containerRelationMap);
 
