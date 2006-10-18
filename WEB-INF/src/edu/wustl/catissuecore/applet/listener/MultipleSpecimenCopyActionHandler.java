@@ -1,10 +1,18 @@
 package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
 
+import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.applet.AppletServerCommunicator;
+import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
+import edu.wustl.catissuecore.applet.model.BaseAppletModel;
+import edu.wustl.catissuecore.applet.ui.MultipleSpecimenApplet;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
@@ -37,11 +45,11 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 	/**
 	 * @see edu.wustl.catissuecore.applet.listener.AbstractCopyActionHandler#doActionPerformed(java.awt.event.ActionEvent)
 	 */
-	protected void doActionPerformed(ActionEvent e) 
+	protected void doActionPerformed(ActionEvent event) 
 	{
 		CommonAppletUtil.getSelectedData(table);
 		paste.setEnabled(true);
-		super.doActionPerformed(e);
+		super.doActionPerformed(event);
 		/*
 		 Commented as code move to common abstractcopy action handler -- Ashwin 
 		//to set selected data in model.
@@ -79,6 +87,52 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 		System.out.println("\n >>>>>>>>>>>>>>   Copy Data Set.    >>>>>>>>>>>>");
 		*/
 		CommonAppletUtil.getMultipleSpecimenTableModel(table).showMapData(); 
+				
+		CopyPasteOperationValidatorModel validatorModel = CommonAppletUtil.getMultipleSpecimenTableModel(table).getCopyPasteOperationValidatorModel();
+		List selectedCopiedRows = validatorModel.getSelectedCopiedRows();
+	
+		
+		/**
+		 *  check if button(s) also copied
+		 */
+	      boolean isButtonCopied = false;
+			for (int i = 0; i < selectedCopiedRows.size(); i++)
+			{
+				int copiedRow = ((Integer) selectedCopiedRows.get(i)).intValue();
+				if(copiedRow >= AppletConstants.SPECIMEN_COMMENTS_ROW_NO)
+				{
+					System.out.println("copiedRow-->"+copiedRow);
+					isButtonCopied = true;
+					break;
+				}
+			}
+
+	if(isButtonCopied)
+	{
+		BaseAppletModel appletModel = new BaseAppletModel();
+		System.out.println("inside -->" + isButtonCopied);
+		Map validatorDataMap = new HashMap();
+		validatorDataMap.put(AppletConstants.VALIDATOR_MODEL,validatorModel);
+	//	validatorDataMap.put(AppletConstants.VALIDATOR_MODEL,"String");
+		appletModel.setData(validatorDataMap);
+		try
+		{
+			MultipleSpecimenApplet applet = (MultipleSpecimenApplet) CommonAppletUtil
+					.getBaseApplet(table);
+			String url = applet.getServerURL()
+					+ "/MultipleSpecimenCopyPasteAction.do?method=copy";
+
+			appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(
+					url, appletModel);
+				
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Exception");
+		}
+	}	
+		
 		System.out.println("\n >>>>>>>>>>>>>>  DONE >>>>>>>>>>>>");
 	}
 	

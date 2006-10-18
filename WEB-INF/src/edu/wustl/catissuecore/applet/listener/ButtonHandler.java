@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JTable;
@@ -43,6 +44,9 @@ public class ButtonHandler extends BaseActionHandler
 	 */
 	protected void handleAction(ActionEvent event)
 	{
+		if(event.getModifiers() == KeyEvent.VK_SHIFT )
+     {
+
 		int colNo = table.getSelectedColumn();
 		int rowNo = table.getSelectedRow();
 		String key = ((MultipleSpecimenTableModel) table.getModel()).getKey(rowNo, colNo);
@@ -50,6 +54,7 @@ public class ButtonHandler extends BaseActionHandler
 		Object[] parameters = {Constants.ADD, key};
 		CommonAppletUtil.callJavaScriptFunction((JButton) event.getSource(),
 				getJSMethodName(), parameters);
+        }
 	}
 
 	/**

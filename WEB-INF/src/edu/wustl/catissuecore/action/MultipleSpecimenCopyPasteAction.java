@@ -11,14 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.actions.DispatchAction;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.util.global.Constants;
 
-public class MultipleSpecimenCopyPasteAction extends DispatchAction
+public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 {
 
 	/**
@@ -38,22 +37,24 @@ public class MultipleSpecimenCopyPasteAction extends DispatchAction
 		Map specimenMap = (HashMap) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
 		Map eventsMap = (HashMap) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
 		Map buttonsMap = new HashMap();
-
-		// TODO
-		CopyPasteOperationValidatorModel validatorModel = new CopyPasteOperationValidatorModel();
+		
+		Map appletDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
+		CopyPasteOperationValidatorModel validatorModel = (CopyPasteOperationValidatorModel) appletDataMap.get(AppletConstants.VALIDATOR_MODEL);
+	
 		MultipleSpecimenTableModel multipleSpecimenTableModel = new MultipleSpecimenTableModel(0, new HashMap());
 
 		List selectedCopiedRows = validatorModel.getSelectedCopiedRows();
 		List selectedCopiedCols = validatorModel.getSelectedCopiedCols();
 		for (int j = 0; j < selectedCopiedCols.size(); j++)
 		{
+			int copiedColumn = ((Integer) selectedCopiedCols.get(j)).intValue();
 			for (int i = 0; i < selectedCopiedRows.size(); i++)
 			{
 				int copiedRow = ((Integer) selectedCopiedRows.get(i)).intValue();
-				int copiedColumn = ((Integer) selectedCopiedCols.get(i)).intValue();
+				
 				if (copiedRow >= AppletConstants.SPECIMEN_COMMENTS_ROW_NO)
 				{
-					String key = copiedRow + "@" + copiedColumn;
+					String key = copiedRow + AppletConstants.MULTIPLE_SPECIMEN_ROW_COLUMN_SEPARATOR + copiedColumn;
 					Object value = null;
 					if (copiedRow == AppletConstants.SPECIMEN_COMMENTS_ROW_NO || copiedRow == AppletConstants.SPECIMEN_BIOHAZARDS_ROW_NO
 							|| copiedRow == AppletConstants.SPECIMEN_EXTERNAL_IDENTIFIERS_ROW_NO)
@@ -76,6 +77,7 @@ public class MultipleSpecimenCopyPasteAction extends DispatchAction
 			}
 		}
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_BUTTONS_MAP_KEY, buttonsMap);
+		writeMapToResponse(response, null);
 		return null;
 	}
 
@@ -100,7 +102,8 @@ public class MultipleSpecimenCopyPasteAction extends DispatchAction
 		Map eventsMap = (HashMap) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
 		Map buttonsMap = (HashMap) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_BUTTONS_MAP_KEY);
 
-		CopyPasteOperationValidatorModel validatorModel = new CopyPasteOperationValidatorModel();
+		Map appletDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
+		CopyPasteOperationValidatorModel validatorModel = (CopyPasteOperationValidatorModel) appletDataMap.get(AppletConstants.VALIDATOR_MODEL);
 		MultipleSpecimenTableModel multipleSpecimenTableModel = new MultipleSpecimenTableModel(0, new HashMap());
 
 		List selectedCopiedRows = validatorModel.getSelectedCopiedRows();
@@ -108,50 +111,62 @@ public class MultipleSpecimenCopyPasteAction extends DispatchAction
 		List selectedPastedRows = validatorModel.getSelectedPastedRows();
 		List selectedPastedCols = validatorModel.getSelectedPastedCols();
 
-		
+		/**
+		 *  Calculate all rows to be pasted in case user has selected a single row to be pasted
+		 */
+		if (selectedPastedRows.size() == 1)
+		{
+			int rowValue = ((Integer) selectedPastedRows.get(0)).intValue();
+			for (int i = 1; i < selectedCopiedRows.size(); i++)
+			{
+				selectedPastedRows.add(new Integer(rowValue + i));
+			}
+		}
+		/**
+		 *  Calculate all columns to be pasted in case user has selected a single column to be pasted
+		 */
+		if (selectedPastedCols.size() == 1)
+		{
+			int rowValue = ((Integer) selectedPastedCols.get(0)).intValue();
+			for (int i = 1; i < selectedCopiedCols.size(); i++)
+			{
+				selectedPastedCols.add(new Integer(rowValue + i));
+			}
+		}
 
 		for (int j = 0; j < selectedCopiedCols.size(); j++)
 		{
+			int copiedColumn = ((Integer) selectedCopiedCols.get(j)).intValue();
+			int pastedColumn = ((Integer) selectedPastedCols.get(j)).intValue();
 			for (int i = 0; i < selectedCopiedRows.size(); i++)
 			{
 				int copiedRow = ((Integer) selectedCopiedRows.get(i)).intValue();
-				int copiedColumn = ((Integer) selectedCopiedCols.get(i)).intValue();
 				int pastedRow = ((Integer) selectedPastedRows.get(i)).intValue();
-				int pastedColumn = ((Integer) selectedPastedCols.get(i)).intValue();
-				boolean singleColumn = false;
-				if (selectedPastedCols.size() == 1)
-				{
-					singleColumn = true;
-				}
+			
 				if (copiedRow >= AppletConstants.SPECIMEN_COMMENTS_ROW_NO)
 				{
 					/**
 					 * If columns selected to paste is 1 and multiple columns are copied,
 					 * increament the column count as per copied columns
 					 */
-					
-					int columnNumber = pastedColumn;
-					if (singleColumn)
-					{
-						columnNumber += j;
-					}
-					String key = copiedRow + "@" + copiedColumn;
+
+					String key = copiedRow + AppletConstants.MULTIPLE_SPECIMEN_ROW_COLUMN_SEPARATOR + copiedColumn;
 					Object value = null;
 					if (copiedRow == AppletConstants.SPECIMEN_COMMENTS_ROW_NO || copiedRow == AppletConstants.SPECIMEN_BIOHAZARDS_ROW_NO
 							|| copiedRow == AppletConstants.SPECIMEN_EXTERNAL_IDENTIFIERS_ROW_NO)
 					{
 						value = buttonsMap.get(key);
-						specimenMap.put(multipleSpecimenTableModel.getKey(copiedRow, columnNumber), value);
+						specimenMap.put(multipleSpecimenTableModel.getKey(pastedRow, pastedColumn), value);
 					}
 					else if (copiedRow == AppletConstants.SPECIMEN_EVENTS_ROW_NO)
 					{
 						value = buttonsMap.get(key);
-						eventsMap.put(multipleSpecimenTableModel.getKey(copiedRow, columnNumber), value);
+						eventsMap.put(multipleSpecimenTableModel.getKey(pastedRow, pastedColumn), value);
 					}
 					else if (copiedRow == AppletConstants.SPECIMEN_DERIVE_ROW_NO)
 					{
 						value = buttonsMap.get(key);
-						formBeanMap.put(multipleSpecimenTableModel.getKey(copiedRow, columnNumber), value);
+						formBeanMap.put(multipleSpecimenTableModel.getKey(pastedRow, pastedColumn), value);
 					}
 				}
 
@@ -161,6 +176,7 @@ public class MultipleSpecimenCopyPasteAction extends DispatchAction
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY, formBeanMap);
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, specimenMap);
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY, eventsMap);
+		writeMapToResponse(response, new HashMap());
 		return null;
 	}
 

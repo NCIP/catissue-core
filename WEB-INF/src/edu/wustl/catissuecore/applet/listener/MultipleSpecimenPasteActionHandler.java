@@ -2,13 +2,19 @@
 package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JTable;
 import javax.swing.table.TableColumnModel;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.applet.AppletServerCommunicator;
+import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
+import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
+import edu.wustl.catissuecore.applet.ui.MultipleSpecimenApplet;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
@@ -31,9 +37,9 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 	/**
 	 * @see edu.wustl.catissuecore.applet.listener.AbstractPasteActionHandler#doActionPerformed(java.awt.event.ActionEvent)
 	 */
-	protected void doActionPerformed(ActionEvent e)
+	protected void doActionPerformed(ActionEvent event)
 	{
-			super.doActionPerformed(e);
+			super.doActionPerformed(event);
 			//super.handleAction(event);
 			/*
 			 * Commented as code move to common abstractcopy action handler -- Ashwin
@@ -76,6 +82,48 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 		*/
 		CommonAppletUtil.getMultipleSpecimenTableModel(table).showMapData();
 		System.out.println("\n >>>>>>>>>>>>>>MAP in PASTE  >>>>>>>>>>>>");
+		
+		CopyPasteOperationValidatorModel validatorModel = CommonAppletUtil.getMultipleSpecimenTableModel(table).getCopyPasteOperationValidatorModel();
+		List selectedCopiedRows = validatorModel.getSelectedCopiedRows();
+	
+		/**
+		 *  check if button(s) also copied
+		 */
+	      boolean isButtonCopied = false;
+			for (int i = 0; i < selectedCopiedRows.size(); i++)
+			{
+				int copiedRow = ((Integer) selectedCopiedRows.get(i)).intValue();
+				if(copiedRow >= AppletConstants.SPECIMEN_COMMENTS_ROW_NO)
+				{
+					isButtonCopied = true;
+					break;
+				}
+			}
+
+	if(isButtonCopied)
+	{
+		BaseAppletModel appletModel = new BaseAppletModel();
+
+		Map validatorDataMap = new HashMap();
+		validatorDataMap.put(AppletConstants.VALIDATOR_MODEL,validatorModel);
+		appletModel.setData(validatorDataMap);
+		try
+		{
+			MultipleSpecimenApplet applet = (MultipleSpecimenApplet) CommonAppletUtil
+					.getBaseApplet(table);
+			String url = applet.getServerURL()
+					+ "/MultipleSpecimenCopyPasteAction.do?method=paste";
+
+			appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(
+					url, appletModel);
+				
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Exception");
+		}
+	}
 	}
 	
 	/*
@@ -182,6 +230,8 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 	*/
 	protected void doPasteData(int selectedRow, int selectedCol, List valueList)
 	{
+		if(selectedRow < AppletConstants.SPECIMEN_COMMENTS_ROW_NO)
+		{
 		TableColumnModel columnModel = table.getColumnModel();
 		Object value = valueList.get(0);
 		SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(selectedCol).getCellEditor();
@@ -189,6 +239,7 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 		SpecimenColumnModel scmRenderer = (SpecimenColumnModel)columnModel.getColumn(selectedCol).getCellRenderer();
 		scmRenderer.updateComponent(selectedRow );
 		CommonAppletUtil.getMultipleSpecimenTableModel(table).setValueAt(value,selectedRow,selectedCol);
+		}
 	}
 	
 	protected boolean isDisabledRow(int rowNo)
