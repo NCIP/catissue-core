@@ -3,6 +3,11 @@ package edu.wustl.catissuecore.applet.model;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
@@ -153,19 +158,20 @@ public class SpecimenColumnModel extends AbstractCellEditor
 			}
 			//for textfield
 			else if(rowno == AppletConstants.SPECIMEN_LABEL_ROW_NO || rowno == AppletConstants.SPECIMEN_BARCODE_ROW_NO ||
-					rowno == AppletConstants.SPECIMEN_COMMENTS_ROW_NO || rowno == AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO)
+					rowno == AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO)
 			{
 				table.setRowHeight(rowno,20);
 			}
 			//for panels
 			else if(rowno == AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO || rowno == AppletConstants.SPECIMEN_PARENT_ROW_NO ||
-					rowno == AppletConstants.SPECIMEN_QUANTITY_ROW_NO || rowno == AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO)
+					rowno == AppletConstants.SPECIMEN_QUANTITY_ROW_NO)
 			{
 				table.setRowHeight(rowno,35);
 			}
 			//for others (Buttons etc)
 			else
 			{
+				//rowno == AppletConstants.SPECIMEN_COMMENTS_ROW_NO || rowno == AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO 
 				table.setRowHeight(rowno,30);	
 			}
 		}
@@ -194,16 +200,17 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
 			boolean hasFocus, int row, int column)
 	{
+//		System.out.println("getTableCellRendererComponent(table, value: "+ value+" , isSelected: " +isSelected+" , hasFocus: "+hasFocus + ", row: "+row+ " , column: "+column);
 		text = (value == null) ? "" : value.toString();
 		Component component = getComponentAt(row, column, hasFocus, isSelected);
 //		System.out.println("getTableCellRendererComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
 		text = getComponentValue(row);
 //		System.out.println("getTableCellRendererComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
-
+		setActiveElement(component,"Renderer");
 		//to display tooltip
 		ToolTipManager.sharedInstance().setInitialDelay(0);
 		((JComponent)component).setToolTipText(text);
-		return component;
+			return component;
 	}
 
 	/** 
@@ -213,12 +220,15 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected,
 			int row, int column)
 	{
+		System.out.println("getTableCellEditorComponent(table, value: "+ value+" , isSelected: " +isSelected+" , row: "+row+ " , column: "+column);
 		text = (value == null) ? "" : value.toString();
-		Component component = getComponentAt(row, column, false, isSelected);
+		boolean hasFocus = isSelected;
+		Component component = getComponentAt(row, column, hasFocus  , isSelected);
 		//Mandar:05Oct06
 //		System.out.println("getTableCellEditorComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
 		text = getComponentValue(row);
 //		System.out.println("getTableCellEditorComponent -- Text Value of R: "+row+ " ,C : "+column + " :- "+text);
+		setActiveElement(component,"Editor");
 		return component;
 	}
 
@@ -331,11 +341,13 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		{
 			comp.setForeground(table.getForeground());
 			comp.setBackground(UIManager.getColor("List.background"));
+			comp.requestFocusInWindow(); 
 		}
-		else if (isSelected)
+		if (isSelected)
 		{
 			comp.setForeground(table.getSelectionForeground());
 			comp.setBackground(table.getSelectionBackground());
+			comp.requestFocusInWindow(); 
 		}
 		else
 		{
@@ -471,7 +483,43 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		
 		//Specimen Collection Group
 		specimenCollectionGroup.addActionListener(collectionGroupComboBoxHandler);
+		specimenCollectionGroup.addKeyListener(new KeyAdapter(){
+			public void keyPressed(KeyEvent e)
+			{
+				System.out.println("\n::::::::::::::::::::::   Inside keyPressed of SCG ***************\n");
+				System.out.println("e.getKeyCode() : "+e.getKeyCode() + " , e.getKeyChar():"+e.getKeyChar() + " : KeyEvent.VK_DOWN : "+ KeyEvent.VK_DOWN ); 
+				if(e.getKeyCode() == KeyEvent.VK_DOWN )
+				{
+					FocusListener focusListeners[] = specimenCollectionGroup.getFocusListeners();
+					for(int i=0;i<focusListeners.length; i++ )
+					{
+						FocusListener listener = focusListeners[i];
+						listener.focusLost(new FocusEvent(specimenCollectionGroup,FocusEvent.FOCUS_LOST  ) );
+					}
+					specimenCollectionGroup.getParent().requestFocus();
+					System.out.println("\n FOCUS Transfered\n");
+				}
+			}
+		}) ;
+		
 		rbspecimenGroup.addItemListener(collectionGroupItemHandler );
+		collectionGroupPanel.addFocusListener(new FocusAdapter(){
+			public void focusGained(FocusEvent fe)
+			{
+				System.out.println("Inside focusGained by Panel");
+				if(specimenCollectionGroup.isEnabled())
+				{
+					FocusListener focusListeners[] = specimenCollectionGroup.getFocusListeners();
+					for(int i=0;i<focusListeners.length; i++ )
+					{
+						FocusListener listener = focusListeners[i];
+						listener.focusGained(new FocusEvent(specimenCollectionGroup,FocusEvent.FOCUS_GAINED  ) );
+					}
+					specimenCollectionGroup.showPopup(); 
+					System.out.println("Focus set on SCG : ");
+				}
+			}
+			} );
 //		specimenCollectionGroup.addFocusListener(baseFocusHandler); // to set value on click.
 		
 		//Parent Specimen 
@@ -512,52 +560,6 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		
 		//For Storage Location
 		mapButton.addActionListener(mapButtonHandler);
-		//testing textchanged listener
-//		location.getDocument().addDocumentListener(new DocumentListener(){
-//			 // This method is called after an insert into the document
-//	        public void insertUpdate(DocumentEvent evt) {
-////	            // Get index of newly inserted characters
-////	            int off = evt.getOffset();
-////	    
-////	            // Get length of new inserted characters
-////	            int len = evt.getLength();
-////	    
-////	            try {
-////	                // Get inserted string
-////	                String str = evt.getDocument().getText(off, len);
-////	            } catch (BadLocationException e) {
-////	            }
-//	        }
-//	    
-//	        // This method is called after a removal from the document
-//	        public void removeUpdate(DocumentEvent evt) {
-////	            // Get starting index of removed characters
-////	            int off = evt.getOffset();
-////	    
-////	            // Get length of removed characters
-////	            int len = evt.getLength();
-////	    
-////	            // The removed characters are not available
-//	        }
-//	    
-//	        // This method is called after one or more attributes have changed.
-//	        // This method is not called when characters are inserted with attributes.
-//	        public void changedUpdate(DocumentEvent evt) {
-//	            // Get starting index of characters whose attributes have changed
-//	            int off = evt.getOffset();
-//	            System.out.println("inside changedUpdate of Location field.");
-//	            // Get length of characters whose attributes have changed
-//	            int len = evt.getLength();
-//	            try {
-//                // Get inserted string
-//                String str = evt.getDocument().getText(off, len);
-//                System.out.println("data:"+str); 
-//	            } 
-//	            catch (BadLocationException e)
-//				{
-//				}
-//	        }
-//		}) ;
 		
 		//For Comments
 		comments.addActionListener(buttonHandler);
@@ -1055,16 +1057,6 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		return value;
 	}
 	
-//	/**
-//	 * This method is used to update the state of derive and map buttons based on the collection group value. 
-//	 * @param enableDeriveButton state of buttons to set. 
-//	 */
-//	public void collectionGroupUpdated(boolean enableDeriveButton)
-//	{
-//		deriveButton.setEnabled(enableDeriveButton);
-//		mapButton.setEnabled(enableDeriveButton); 
-//	}
-	
 	/**
 	 * This method is used to update the state of derive and map buttons based on the collection group and class values. 
 	 *
@@ -1092,7 +1084,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	 */
 	protected void fireEditingStopped() {
 		System.out.println("SpecimenColumnModel in fireEditingStopped  doing nothing");
-		//super.fireEditingStopped();
+		super.fireEditingStopped();
 	}
 	
 	// ------------ Mandar : 11Oct06 To update cells after paste. -------
@@ -1101,7 +1093,7 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	 * This method updates the specified component and sets the given value to it.
 	 */
 	public void updateComponentValue(int row,String value)
-	{
+	{System.out.println("\n\n\n<updateComponentValue : row : "+ row+ " , value : "+ value+">\n\n\n");
 		JComponent comp=null;
 		switch (row)
 		{
@@ -1166,7 +1158,8 @@ public class SpecimenColumnModel extends AbstractCellEditor
 			comp = location;
 			break;
 		}		
-		refreshComponent(comp);
+		if(comp != null)
+			refreshComponent(comp);
 		System.out.println(" Component at " + row +" Updated");
 	}
 
@@ -1228,7 +1221,8 @@ public class SpecimenColumnModel extends AbstractCellEditor
 			comp = location;
 			break;
 		}		
-		refreshComponent(comp);
+		if(comp!=null)
+			refreshComponent(comp);
 	}
 
 	/*
@@ -1239,4 +1233,60 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		SwingUtilities.updateComponentTreeUI(comp);
 	}
 	
+	/*
+	 * This method checks the component type and sets the focus accordingly. 
+	 * @author mandar_deshmukh
+	 * 
+	 */
+	private void setActiveElement(Component comp,String calledFrom)
+	{
+		if(comp.isEnabled() )
+		{
+//			System.out.println("Inside setActiveElement calledFrom : "+ calledFrom);
+			String comptype="";
+			if(comp instanceof JPanel)
+			{
+				Component [] childComponents = ((JPanel)comp).getComponents();
+				for(int count=0; count<childComponents.length; count++)
+				{
+					if((childComponents[count] instanceof JComboBox || childComponents[count] instanceof JTextField ||
+							childComponents[count] instanceof JRadioButton) && childComponents[count].isEnabled() )
+					{
+						comptype = childComponents[count].getClass().toString() ; 
+		//				System.out.println("Focus received : " +childComponents[count].requestFocusInWindow());
+						break;
+					}
+				}
+			}
+			else
+			{
+				comptype = comp.getClass().toString() ;
+	//			System.out.println("Focus received : " +comp.requestFocusInWindow());
+			}
+	//		System.out.println(comptype + "set as Active Element.");	
+		}
+	}
+	
+	public boolean isCellEnabled(int rowNo)
+	{
+		System.out.println("IN SCM isCellEnabled : rowno:- "+rowNo);
+		boolean result = false;
+		switch(rowNo)
+		{
+			case AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO :
+				result = rbspecimenGroup.isSelected();
+			break;
+			case AppletConstants.SPECIMEN_PARENT_ROW_NO :
+				result = rbparentSpecimen.isSelected();
+			break;
+			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
+				result = location.isEnabled();
+			break;
+			default:
+				result = true;
+		}
+		System.out.println("Row is enabled : "+ result);
+		return result;
+	}
+
 }
