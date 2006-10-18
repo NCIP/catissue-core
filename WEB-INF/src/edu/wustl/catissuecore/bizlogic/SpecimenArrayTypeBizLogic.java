@@ -9,6 +9,8 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.Iterator;
+
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.common.beans.SessionDataBean;
@@ -16,6 +18,8 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 
 /**
  * <p>This class initializes the fields of SpecimenArrayTypeBizLogic.java</p>
@@ -82,28 +86,29 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 	}	
 	
 	//Added by Ashish
-	/*
+	
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
 		SpecimenArrayType specimenArrayType = (SpecimenArrayType) obj;
 		String message = "";
 		if (specimenArrayType == null)
-		{			
-			throw new DAOException("domain.object.null.err.msg",
-					new String[]{"Specimen Array Type"});
+		{	
+			throw new DAOException("domain.object.null.err.msg");
+			/*throw new DAOException("domain.object.null.err.msg",
+					new String[]{"Specimen Array Type"});*/
 		}
 		Validator validator = new Validator();
 		if (validator.isEmpty(specimenArrayType.getName()))
 		{
 			message = ApplicationProperties.getValue("arrayType.name");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 
 		}
 		//    	 validate specimen class of array type
 		if (!validator.isValidOption(specimenArrayType.getSpecimenClass()))
 		{
 			message = ApplicationProperties.getValue("arrayType.specimenClass");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 
 		}
 		//      validate specimen type in array type
@@ -119,8 +124,8 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 					if (!validator.isValidOption(temp))
 					{
 						message = ApplicationProperties.getValue("arrayType.specimenType");
-						throw new DAOException("errors.item.selected",
-								new String[]{message});
+						throw new DAOException(ApplicationProperties.getValue("errors.item.selected",
+								message));
 
 					}
 				}
@@ -129,7 +134,7 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 		else
 		{
 			message = ApplicationProperties.getValue("arrayType.specimenType");
-			throw new DAOException("errors.item.required", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));
 
 		}
 
@@ -139,11 +144,11 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 						.getTwoDimensionCapacity()), 1))
 		{
 			message = ApplicationProperties.getValue("arrayType.capacity");
-			throw new DAOException("errors.item.format", new String[]{message});
+			throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
 
 		}
 		return true;
 	}
-	*/
+	
 	//END
 }
