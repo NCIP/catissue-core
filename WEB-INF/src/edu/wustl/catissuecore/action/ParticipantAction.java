@@ -27,7 +27,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
@@ -37,14 +37,14 @@ import edu.wustl.common.util.logger.Logger;
  * This class initializes the fields in the Participant Add/Edit webpage.
  * @author gautam_shetty
  */
-public class ParticipantAction extends BaseAction
+public class ParticipantAction extends SecureAction
 {
 
 	/**
 	 * Overrides the execute method of Action class.
 	 * Sets the various fields in Participant Add/Edit webpage.
 	 * */
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		ParticipantForm participantForm = (ParticipantForm) form;
