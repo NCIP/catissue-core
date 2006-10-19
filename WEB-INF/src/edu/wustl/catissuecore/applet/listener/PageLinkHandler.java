@@ -42,12 +42,12 @@ public class PageLinkHandler extends ButtonHandler
 		String pageNo = ((JButton)e.getSource()).getActionCommand() ;
 		System.out.println("Page Clicked : "+ pageNo);
 		System.out.println("------------------------------------");
-		getMultipleSpecimenTableModel().showMapData();
+		CommonAppletUtil.getMultipleSpecimenTableModel(table).showMapData();
 		System.out.println("-------------------B4 removing columns-----------------");
 		
-		getMultipleSpecimenTableModel().setCurrentPageIndex(Integer.parseInt(pageNo));
+		CommonAppletUtil.getMultipleSpecimenTableModel(table).setCurrentPageIndex(Integer.parseInt(pageNo));
 		
-		int columnCount = getMultipleSpecimenTableModel().getColumnCount();
+		int columnCount = CommonAppletUtil.getMultipleSpecimenTableModel(table).getColumnCount();
 		
 		TableColumn column = null; 
 		
@@ -56,7 +56,7 @@ public class PageLinkHandler extends ButtonHandler
 			table.removeColumn(column);
 		}
 		System.out.println("------------------------------------");
-		getMultipleSpecimenTableModel().showMapData();
+		CommonAppletUtil.getMultipleSpecimenTableModel(table).showMapData();
 		System.out.println("-------------------After removing columns-----------------");
 		 
 		System.out.println("Columns removed : "+table.getColumnCount() ); 
@@ -66,7 +66,7 @@ public class PageLinkHandler extends ButtonHandler
 		}
 		System.out.println("Columns added : "+table.getColumnCount() ); 
 		System.out.println("------------------------------------");
-		getMultipleSpecimenTableModel().showMapData();
+		CommonAppletUtil.getMultipleSpecimenTableModel(table).showMapData();
 		System.out.println("-------------------After adding columns-----------------");
 		
 		for (int i=0; i< columnCount;i++) {
@@ -74,7 +74,7 @@ public class PageLinkHandler extends ButtonHandler
 			specimenColumnModel.updateColumn();
 		}        		
 		System.out.println("Table updated  " ); 
-		getMultipleSpecimenTableModel().showMapData();
+		CommonAppletUtil.getMultipleSpecimenTableModel(table).showMapData();
 		System.out.println("-------------------Done-----------------");
 	}
 	/* (non-Javadoc)
