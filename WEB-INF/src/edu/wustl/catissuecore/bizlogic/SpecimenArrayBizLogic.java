@@ -227,12 +227,6 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			{
 				specimenArrayContent = (SpecimenArrayContent) iter.next();
 				
-				//Added by jitendra 
-				if(specimenArrayContent.getPositionDimensionOne() == null || specimenArrayContent.getPositionDimensionTwo() == null)
-				{
-					throw new DAOException(ApplicationProperties.getValue("array.contentPosition.err.msg"));
-				}
-				
 				/**
 				 * Start: Change for API Search   --- Jitendra 06/10/2006
 				 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -303,6 +297,11 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 						}
 					}
 					specimenArrayContent.setSpecimen(specimen);
+					//Added by jitendra 
+					if(specimenArrayContent.getPositionDimensionOne() == null || specimenArrayContent.getPositionDimensionTwo() == null)
+					{
+						throw new DAOException(ApplicationProperties.getValue("array.contentPosition.err.msg"));
+					}
 					updatedSpecArrayContentCollection.add(specimenArrayContent);
 				}
 			}
