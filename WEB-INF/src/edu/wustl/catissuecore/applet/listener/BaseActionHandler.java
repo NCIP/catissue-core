@@ -5,6 +5,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JTable;
 
+import com.mockobjects.constraint.IsNull;
+
+import edu.wustl.catissuecore.applet.AppletConstants;
+import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
@@ -36,8 +40,11 @@ public class BaseActionHandler implements ActionListener
 	 */
 	public void actionPerformed(ActionEvent event)
 	{
-		//getMultipleSpecimenTableModel().showMapData(); 
-		preActionPerformed(event);		
+		if(!isPasteOperation())
+		{
+			//getMultipleSpecimenTableModel().showMapData(); 
+			preActionPerformed(event);		
+		}
 		handleAction(event);
 		postActionPerformed(event);
 	}
@@ -80,11 +87,33 @@ public class BaseActionHandler implements ActionListener
 		
 	}
 	
-	/**
-	 * specific to MultipleSpecimen.
-	 * @return
-	 */
-	protected MultipleSpecimenTableModel getMultipleSpecimenTableModel() {
-		return (MultipleSpecimenTableModel) table.getModel();
+	private boolean isPasteOperation()
+	{
+		boolean result = false;
+		
+		CopyPasteOperationValidatorModel validatorModel = CommonAppletUtil.getBaseTableModel(table).getCopyPasteOperationValidatorModel();
+		if(!CommonAppletUtil.isNull(validatorModel))
+		{
+			String operationInValidatorModel = validatorModel.getOperation();
+			if(!CommonAppletUtil.isNull(operationInValidatorModel))
+			{
+				if(operationInValidatorModel.equals(AppletConstants.PASTE_OPERATION))
+					result = true;
+				else
+					result = false;
+
+				System.out.println("operationInValidatorModel : "+ operationInValidatorModel + " , Result : "+ result);
+			}
+			else
+				result = false;
+		}
+		return result;
 	}
+//	/**
+//	 * specific to MultipleSpecimen.
+//	 * @return
+//	 */
+//	protected MultipleSpecimenTableModel getMultipleSpecimenTableModel() {
+//		return (MultipleSpecimenTableModel) table.getModel();
+//	}
 }
