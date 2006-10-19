@@ -28,7 +28,7 @@ import edu.wustl.common.util.logger.Logger;
  * from Create Specimen webpage.
  * @author aniruddha_phadnis
  */
-public class CreateSpecimenForm extends SpecimenForm
+public class CreateSpecimenForm extends SpecimenForm implements Cloneable
 {   
     /**
      * Identifier of the Parent Speciemen.
@@ -197,5 +197,20 @@ public class CreateSpecimenForm extends SpecimenForm
 	public void setReset(boolean reset)
 	{
 		this.reset = reset;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	public Object clone()
+	{
+		try
+		{
+			return super.clone();
+		}
+		catch (CloneNotSupportedException e)
+		{
+				e.printStackTrace();
+		}
+		return null;
 	}
 }

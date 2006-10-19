@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
@@ -37,10 +39,10 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 		Map specimenMap = (HashMap) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
 		Map eventsMap = (HashMap) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
 		Map buttonsMap = new HashMap();
-		
+
 		Map appletDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		CopyPasteOperationValidatorModel validatorModel = (CopyPasteOperationValidatorModel) appletDataMap.get(AppletConstants.VALIDATOR_MODEL);
-	
+
 		MultipleSpecimenTableModel multipleSpecimenTableModel = new MultipleSpecimenTableModel(0, new HashMap());
 
 		List selectedCopiedRows = validatorModel.getSelectedCopiedRows();
@@ -51,7 +53,7 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 			for (int i = 0; i < selectedCopiedRows.size(); i++)
 			{
 				int copiedRow = ((Integer) selectedCopiedRows.get(i)).intValue();
-				
+
 				if (copiedRow >= AppletConstants.SPECIMEN_COMMENTS_ROW_NO)
 				{
 					String key = copiedRow + AppletConstants.MULTIPLE_SPECIMEN_ROW_COLUMN_SEPARATOR + copiedColumn;
@@ -142,7 +144,7 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 			{
 				int copiedRow = ((Integer) selectedCopiedRows.get(i)).intValue();
 				int pastedRow = ((Integer) selectedPastedRows.get(i)).intValue();
-			
+
 				if (copiedRow >= AppletConstants.SPECIMEN_COMMENTS_ROW_NO)
 				{
 					/**
@@ -166,7 +168,14 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 					else if (copiedRow == AppletConstants.SPECIMEN_DERIVE_ROW_NO)
 					{
 						value = buttonsMap.get(key);
-						formBeanMap.put(multipleSpecimenTableModel.getKey(pastedRow, pastedColumn), value);
+						ArrayList listOfFormBean = (ArrayList) value;
+						ArrayList newList = new ArrayList();
+						for (int k = 0; k < listOfFormBean.size(); k++)
+						{
+							CreateSpecimenForm createForm = (CreateSpecimenForm) ((CreateSpecimenForm) listOfFormBean.get(k)).clone();
+							newList.add(createForm);
+						}
+						formBeanMap.put(multipleSpecimenTableModel.getKey(pastedRow, pastedColumn), newList);
 					}
 				}
 
@@ -176,7 +185,7 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY, formBeanMap);
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, specimenMap);
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY, eventsMap);
-		writeMapToResponse(response, new HashMap());
+		writeMapToResponse(response, null);
 		return null;
 	}
 
