@@ -61,6 +61,7 @@ public abstract class AbstractPasteActionHandler implements ActionListener {
 	 */
 	protected void preActionPerformed(ActionEvent e)
 	{
+		
 	}
 	
 	/**
@@ -71,7 +72,7 @@ public abstract class AbstractPasteActionHandler implements ActionListener {
 	{
 			//super.handleAction(event);
 			CopyPasteOperationValidatorModel validatorModel = CommonAppletUtil.getBaseTableModel(table).getCopyPasteOperationValidatorModel();
-			
+			validatorModel.setOperation(AppletConstants.PASTE_OPERATION);
 			int[] selectedColumns = table.getSelectedColumns();
 			int[] selectedRows = table.getSelectedRows();
 /*			CommonAppletUtil.printArray(selectedRows );
@@ -182,6 +183,10 @@ public abstract class AbstractPasteActionHandler implements ActionListener {
 	 */
 	protected void postActionPerformed(ActionEvent e)
 	{
+		CopyPasteOperationValidatorModel validatorModel = CommonAppletUtil.getBaseTableModel(table).getCopyPasteOperationValidatorModel();
+		validatorModel.setOperation("");
+		System.out.println("CopyPasteOperationValidatorModel operation set to : "+validatorModel.getOperation());
+		System.out.println("\n\n@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
 	}
 	
 	/**
