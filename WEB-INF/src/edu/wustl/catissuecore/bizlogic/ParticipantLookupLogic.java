@@ -71,16 +71,16 @@ public class ParticipantLookupLogic implements LookupLogic
 
 		// Getting the participant object created by user
 		Participant participant = (Participant) participantParams.getObject();
-		
+
 		// if cutoff is greater than total points, throw exception
 		if (cutoffPoints > totalPointsFromProperties)
 		{
 			throw new Exception(ApplicationProperties.getValue("errors.lookup.cutoff"));
 		}
-		
+
 		// get total points depending on Participant object created by user
 		totalPoints = calculateTotalPoints(participant);
-		
+
 		// adjust cutoffPoints as per new total points 
 		cutoffPoints = cutoffPointsFromProperties * totalPoints / totalPointsFromProperties;
 		List listOfParticipants = participantParams.getListOfParticipants();
@@ -277,25 +277,25 @@ public class ParticipantLookupLogic implements LookupLogic
 				// If total points are greater than cutoff points, add participant to the List
 				if (weight >= cutoffPoints)
 				{
-					
+
 					DefaultLookupResult result = new DefaultLookupResult();
-				
+
 					/**
 					 *  Removed probability after discussion with Mark -- bug number 558
 					 */
-					
-					/*
-					// Finding the probablity.
-				    	Double probablity = new Double((100 * weight) / totalPoints);
 
-					// Calculated points might be greater than total points because of BONUS points
-					if (probablity.intValue() > 100)
-					{
-						probablity = new Double(100);
-					} 
-					//	result.setProbablity(probablity);	
-					*/
-	
+					/*
+					 // Finding the probablity.
+					 Double probablity = new Double((100 * weight) / totalPoints);
+
+					 // Calculated points might be greater than total points because of BONUS points
+					 if (probablity.intValue() > 100)
+					 {
+					 probablity = new Double(100);
+					 } 
+					 //	result.setProbablity(probablity);	
+					 */
+
 					result.setObject(existingParticipant);
 					participants.add(result);
 				}
@@ -481,11 +481,15 @@ public class ParticipantLookupLogic implements LookupLogic
 		{
 			existingNameBlank = true;
 		}
+
+		/**
+		 *  Removed this condition after discussion with Mark -- bug number 558
+		 */
 		// partial match in case one is present and other is not.
-		if (userNameBlank == true && existingNameBlank == false || userNameBlank == false && existingNameBlank == true)
-		{
-			return pointsForMiddleNamePartial;
-		}
+		/*		if (userNameBlank == true && existingNameBlank == false || userNameBlank == false && existingNameBlank == true)
+		 {
+		 return pointsForMiddleNamePartial;
+		 }   */
 
 		if (userNameBlank == false && existingNameBlank == false)
 		{
@@ -524,11 +528,14 @@ public class ParticipantLookupLogic implements LookupLogic
 				return pointsForRaceExact;
 			}
 		}
-		// partial match
-		if ((userRace.isEmpty() == false && existingRace.isEmpty() == true || userRace.isEmpty() == true && existingRace.isEmpty() == false))
-		{
-			return pointsForRacePartial;
-		}
+		/**
+		 *  Removed this condition after discussion with Mark -- bug number 558
+		 */
+		/*	// partial match
+		 if ((userRace.isEmpty() == false && existingRace.isEmpty() == true || userRace.isEmpty() == true && existingRace.isEmpty() == false))
+		 {
+		 return pointsForRacePartial;
+		 }*/
 
 		return 0;
 	}
