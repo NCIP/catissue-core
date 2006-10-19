@@ -218,6 +218,7 @@ public class SpecimenArrayApplet extends BaseApplet {
 		try {
 			model = (AppletModelInterface) AppletServerCommunicator.doAppletServerCommunication(urlString,model);
 			tableDataMap = model.getData();
+			System.out.println(" getTableModelData()   tableDataMap :: " + tableDataMap);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -232,7 +233,7 @@ public class SpecimenArrayApplet extends BaseApplet {
 	public void updateSessionData() 
 	{
 		// set last cell data
-		setLastCellData();
+		//setLastCellData();
 		String urlString = serverURL + AppletConstants.SPECIMEN_ARRAY_APPLET_ACTION + ";jsessionid="+session_id+"?" + AppletConstants.APPLET_ACTION_PARAM_NAME + "=updateSessionData";
 		AppletModelInterface model = new BaseAppletModel();
 		Map arrayContentDataMap = ((SpecimenArrayTableModel) arrayTable.getModel()).getSpecimenArrayModelMap();

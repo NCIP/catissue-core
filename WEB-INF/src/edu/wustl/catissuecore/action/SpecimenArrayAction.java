@@ -119,14 +119,30 @@ public class SpecimenArrayAction extends SecureAction
     	
     	if (subOperation != null) 
     	{
+    		SpecimenArrayType arrayType = null;
+        	if (specimenArrayForm.getSpecimenArrayTypeId() > 0) 
+        	{
+        		String columnName = "id";
+        		String columnVal = "" + specimenArrayForm.getSpecimenArrayTypeId();
+        		List specimenArrayTypes = specimenArrayBizLogic.retrieve(SpecimenArrayType.class.getName(),columnName,columnVal);
+        		if ((specimenArrayTypes != null) && (!specimenArrayTypes.isEmpty())) {
+        			arrayType = (SpecimenArrayType) specimenArrayTypes.get(0);
+        		}	
+        	}
+        	specimenTypeList = doSetClassAndType(specimenArrayForm,specimenArrayBizLogic,arrayType);
     		if (subOperation.equals("ChangeArraytype")) 
     		{
 	    		//specimenArrayForm.setCreateSpecimenArray("no");
 	    		isChangeArrayType = true;
+	    		
+				specimenArrayForm.setOneDimensionCapacity(arrayType.getCapacity().getOneDimensionCapacity().intValue());
+				specimenArrayForm.setTwoDimensionCapacity(arrayType.getCapacity().getTwoDimensionCapacity().intValue());
+				specimenArrayForm.setName( arrayType.getName() + "_" + specimenArrayBizLogic.getUniqueIndexForName());
+				
     			specimenArrayForm.setCreateSpecimenArray("yes");
     			request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,createSpecimenArrayMap(specimenArrayForm));
 	    		//request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,new HashMap());
-    		} 
+    		}
     		//else if ((subOperation.equalsIgnoreCase("CreateSpecimenArray")) || subOperation.equalsIgnoreCase("ChangeEnterSpecimenBy"))
     		else if (subOperation.equalsIgnoreCase("CreateSpecimenArray"))
     		{
@@ -134,7 +150,6 @@ public class SpecimenArrayAction extends SecureAction
     			request.getSession().setAttribute(Constants.SPECIMEN_ARRAY_CONTENT_KEY,createSpecimenArrayMap(specimenArrayForm));
     		}
     		specimenArrayForm.setSubOperation("");
-    		specimenTypeList = doSetClassAndType(specimenArrayForm,specimenArrayBizLogic,isChangeArrayType);
     	}
 		StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		containerMap = storageContainerBizLogic.getAllocatedContaienrMapForSpecimenArray(specimenArrayForm.getSpecimenArrayTypeId(),0);
@@ -206,18 +221,14 @@ public class SpecimenArrayAction extends SecureAction
      * @return  array type
      * @throws DAOException
      */
-    private List doSetClassAndType(SpecimenArrayForm specimenArrayForm,SpecimenArrayBizLogic specimenArrayBizLogic,boolean isChangeArrayType) 
+    private List doSetClassAndType(SpecimenArrayForm specimenArrayForm,SpecimenArrayBizLogic specimenArrayBizLogic,SpecimenArrayType arrayType) 
     							throws DAOException	
     {
-    	SpecimenArrayType arrayType = null;
+    	
     	List specimenTypeList = null;
     	if (specimenArrayForm.getSpecimenArrayTypeId() > 0) 
     	{
-    		String columnName = "id";
-    		String columnVal = "" + specimenArrayForm.getSpecimenArrayTypeId();
-    		List specimenArrayTypes = specimenArrayBizLogic.retrieve(SpecimenArrayType.class.getName(),columnName,columnVal);
-    		if ((specimenArrayTypes != null) && (!specimenArrayTypes.isEmpty())) {
-    			arrayType = (SpecimenArrayType) specimenArrayTypes.get(0);
+    		if (arrayType != null) {
     			specimenArrayForm.setSpecimenClass(arrayType.getSpecimenClass());
     			String[] specimenTypeArr = new String[arrayType.getSpecimenTypeCollection().size()];
     			specimenTypeList = new ArrayList();
@@ -232,13 +243,14 @@ public class SpecimenArrayAction extends SecureAction
 					specimenTypeList.add(nameValueBean);
 				}
     			specimenArrayForm.setSpecimenTypes(specimenTypeArr);
-    			if (isChangeArrayType) 
+    			
+/*    			if (isChangeArrayType) 
     			{
     				specimenArrayForm.setOneDimensionCapacity(arrayType.getCapacity().getOneDimensionCapacity().intValue());
     				specimenArrayForm.setTwoDimensionCapacity(arrayType.getCapacity().getTwoDimensionCapacity().intValue());
     				specimenArrayForm.setName( arrayType.getName() + "_" + specimenArrayBizLogic.getUniqueIndexForName());
     			}
-    		}
+*/    		}
     	}
     		return specimenTypeList;
     }
@@ -318,4 +330,63 @@ public class SpecimenArrayAction extends SecureAction
 		return initialValues;
 	}
  
+	//TODO move this function to common util because it is being used at many places.
+	/**
+	 * add positions while in edit mode
+	 * @param containerMap 
+	 * @param id
+	 * @param containerName
+	 * @param pos1
+	 * @param pos2
+	 */
+	private void addPostions(Map containerMap, Long id, String containerName, Integer pos1, Integer pos2)
+	{
+		int flag = 0;
+		NameValueBean xpos = new NameValueBean(pos1, pos1);
+		NameValueBean ypos = new NameValueBean(pos2, pos2);
+		NameValueBean parentId = new NameValueBean(containerName, id);
+
+		Set keySet = containerMap.keySet();
+		Iterator itr = keySet.iterator();
+		while (itr.hasNext())
+		{
+			NameValueBean nvb = (NameValueBean) itr.next();
+			if (nvb.getValue().equals(id.toString()))
+			{
+				Map pos1Map = (Map) containerMap.get(nvb);
+				Set keySet1 = pos1Map.keySet();
+				Iterator itr1 = keySet1.iterator();
+				while (itr1.hasNext())
+				{
+					NameValueBean nvb1 = (NameValueBean) itr1.next();
+					if (nvb1.getValue().equals(pos1.toString()))
+					{
+						List pos2List = (List) pos1Map.get(nvb1);
+						pos2List.add(ypos);
+						flag = 1;
+						break;
+					}
+				}
+				if (flag != 1)
+				{
+					List pos2List = new ArrayList();
+					pos2List.add(ypos);
+					pos1Map.put(xpos, pos2List);
+					flag = 1;
+				}
+			}
+		}
+		if (flag != 1)
+		{
+			List pos2List = new ArrayList();
+			pos2List.add(ypos);
+
+			Map pos1Map = new TreeMap();
+			pos1Map.put(xpos, pos2List);
+			containerMap.put(parentId, pos1Map);
+
+		}
+
+	}
+	
 }

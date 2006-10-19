@@ -80,10 +80,17 @@ public class SpecimenArraySearchAction extends CommonSearchAction {
 			
 			if (specimen != null) 
 			{
-				key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo,columnNo,columnCount,AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX);
-				value = specimen.getLabel();
+				if ((specimenArrayForm.getEnterSpecimenBy() != null) && (specimenArrayForm.getEnterSpecimenBy().equalsIgnoreCase("Barcode")))
+				{
+					key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo,columnNo,columnCount,AppletConstants.ARRAY_CONTENT_ATTR_BARCODE_INDEX);
+					value = specimen.getBarcode();
+				}
+				else
+				{
+					key = SpecimenArrayAppletUtil.getArrayMapKey(rowNo,columnNo,columnCount,AppletConstants.ARRAY_CONTENT_ATTR_LABEL_INDEX);
+					value = specimen.getLabel();
+				}
 				arrayContentMap.put(key,value);
-				
 				if (specimen instanceof MolecularSpecimen) 
 				{
 					// check qunatity not null
