@@ -40,7 +40,7 @@ public class BaseActionHandler implements ActionListener
 	 */
 	public void actionPerformed(ActionEvent event)
 	{
-		if(!isPasteOperation())
+	//	if(!isPasteOperation())
 		{
 			//getMultipleSpecimenTableModel().showMapData(); 
 			preActionPerformed(event);		
