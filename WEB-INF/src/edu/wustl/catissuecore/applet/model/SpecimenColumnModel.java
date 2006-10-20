@@ -23,6 +23,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
@@ -341,13 +343,15 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		{
 			comp.setForeground(table.getForeground());
 			comp.setBackground(UIManager.getColor("List.background"));
-			comp.requestFocusInWindow(); 
+//			20Oct06<*>			comp.requestFocusInWindow();
+			comp.requestFocus(); 
 		}
 		if (isSelected)
 		{
 			comp.setForeground(table.getSelectionForeground());
 			comp.setBackground(table.getSelectionBackground());
-			comp.requestFocusInWindow(); 
+//			20Oct06<*>	comp.requestFocusInWindow();
+			comp.requestFocus(); 
 		}
 		else
 		{
@@ -487,17 +491,22 @@ public class SpecimenColumnModel extends AbstractCellEditor
 			public void keyPressed(KeyEvent e)
 			{
 				System.out.println("\n::::::::::::::::::::::   Inside keyPressed of SCG ***************\n");
-				System.out.println("e.getKeyCode() : "+e.getKeyCode() + " , e.getKeyChar():"+e.getKeyChar() + " : KeyEvent.VK_DOWN : "+ KeyEvent.VK_DOWN ); 
-				if(e.getKeyCode() == KeyEvent.VK_DOWN )
+				System.out.println("e.getKeyCode() : "+e.getKeyCode() + " , e.getKeyChar():"+e.getKeyChar() + " : KeyEvent.VK_DOWN : "+ KeyEvent.VK_DOWN );
+				System.out.println("specimenCollectionGroup.isPopupVisible() : "+ specimenCollectionGroup.isPopupVisible());
+				if(!specimenCollectionGroup.isPopupVisible()   )
 				{
-					FocusListener focusListeners[] = specimenCollectionGroup.getFocusListeners();
-					for(int i=0;i<focusListeners.length; i++ )
+					if(e.getKeyCode() == KeyEvent.VK_DOWN )
 					{
-						FocusListener listener = focusListeners[i];
-						listener.focusLost(new FocusEvent(specimenCollectionGroup,FocusEvent.FOCUS_LOST  ) );
+//						20Oct06<*>				FocusListener focusListeners[] = specimenCollectionGroup.getFocusListeners();
+						FocusListener focusListeners[] = (FocusListener[])specimenCollectionGroup.getListeners(FocusAdapter.class ); 
+						for(int i=0;i<focusListeners.length; i++ )
+						{
+							FocusListener listener = focusListeners[i];
+							listener.focusLost(new FocusEvent(specimenCollectionGroup,FocusEvent.FOCUS_LOST  ) );
+						}
+						specimenCollectionGroup.getParent().requestFocus();
+						System.out.println("\n FOCUS Transfered\n");
 					}
-					specimenCollectionGroup.getParent().requestFocus();
-					System.out.println("\n FOCUS Transfered\n");
 				}
 			}
 		}) ;
@@ -509,13 +518,22 @@ public class SpecimenColumnModel extends AbstractCellEditor
 				System.out.println("Inside focusGained by Panel");
 				if(specimenCollectionGroup.isEnabled())
 				{
-					FocusListener focusListeners[] = specimenCollectionGroup.getFocusListeners();
+//					20Oct06<*>	FocusListener focusListeners[] = specimenCollectionGroup.getFocusListeners();
+					FocusListener focusListeners[] = (FocusListener[])specimenCollectionGroup.getListeners(FocusAdapter.class );
 					for(int i=0;i<focusListeners.length; i++ )
 					{
 						FocusListener listener = focusListeners[i];
 						listener.focusGained(new FocusEvent(specimenCollectionGroup,FocusEvent.FOCUS_GAINED  ) );
+//						PopupMenuListener []pl = specimenCollectionGroup.getPopupMenuListeners();
+//						for(int j=0;j<pl.length; j++ )
+//						{
+//							PopupMenuListener plist = pl[j];
+//							plist.popupMenuWillBecomeVisible(new PopupMenuEvent(specimenCollectionGroup )   ) 
+//						}
+						
 					}
-					specimenCollectionGroup.showPopup(); 
+					specimenCollectionGroup.showPopup();
+					   
 					System.out.println("Focus set on SCG : ");
 				}
 			}
@@ -560,6 +578,23 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		
 		//For Storage Location
 		mapButton.addActionListener(mapButtonHandler);
+		storageLocationPanel.addFocusListener(new FocusAdapter(){
+			public void focusGained(FocusEvent fe)
+			{
+				System.out.println("Inside focusGained by Location Panel");
+				if(mapButton.isEnabled())
+				{
+//					20Oct06<*>				FocusListener focusListeners[] = mapButton.getFocusListeners();
+					FocusListener focusListeners[] = (FocusListener[])mapButton.getListeners(FocusAdapter.class);
+					for(int i=0;i<focusListeners.length; i++ )
+					{
+						FocusListener listener = focusListeners[i];
+						listener.focusGained(new FocusEvent(mapButton,FocusEvent.FOCUS_GAINED  ) );
+					}
+					System.out.println("Focus set on Map Button : ");
+				}
+			}
+			} ); 
 		
 		//For Comments
 		comments.addActionListener(buttonHandler);

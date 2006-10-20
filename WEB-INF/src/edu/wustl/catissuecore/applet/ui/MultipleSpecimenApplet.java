@@ -57,7 +57,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
         table.getTableHeader().setReorderingAllowed(false);
 
 		//to set the focus to the editor. Mandar: 16Oct06.
-		table.setSurrendersFocusOnKeystroke(true );
+//	20Oct06<*>	table.setSurrendersFocusOnKeystroke(true );
 		table.addKeyListener(new MultipleSpecimenTableKeyHandler(table));
 
 		// Creating Layout
@@ -81,7 +81,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		//table.getColumnModel().setColumnSelectionAllowed(true);
 		table.setColumnSelectionAllowed(true);
 		table.setCellSelectionEnabled(true );
-		table.setFocusTraversalKeysEnabled(true );
+//		20Oct06<*>		table.setFocusTraversalKeysEnabled(true );
 		//table.setRowHeight(3,50);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	
