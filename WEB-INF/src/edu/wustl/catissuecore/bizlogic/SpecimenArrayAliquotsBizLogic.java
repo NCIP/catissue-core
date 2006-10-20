@@ -15,6 +15,7 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -161,7 +162,9 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			//aliquotSpecimenArray.setLineage(Constants.ALIQUOT);
 
 			//Inserting an aliquot in the database			
-			specimenArrayBizLogic.insert(aliquotSpecimenArray, dao, sessionDataBean);		
+			specimenArrayBizLogic.insert(aliquotSpecimenArray, dao, sessionDataBean);	
+			postInsert(aliquotSpecimenArray, dao, sessionDataBean);
+			
 			
 		}
 		
@@ -293,5 +296,26 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			}
 		}
 		return 1;
+	}
+	
+	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		SpecimenArray specimenArray = (SpecimenArray) obj; 
+		try
+		{
+			if (specimenArray.getStorageContainer() != null)
+			{
+				
+				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+				StorageContainerUtil.deleteSinglePositionInContainerMap(specimenArray.getStorageContainer(), containerMap, specimenArray
+						.getPositionDimensionOne().intValue(), specimenArray.getPositionDimensionTwo().intValue());
+
+			}
+		}
+		catch (Exception e)
+		{
+
+		}
+
 	}
 }
