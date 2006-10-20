@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -116,15 +117,15 @@ public class SpecimenArrayAction extends SecureAction
     	Map containerMap = new TreeMap();
     	String subOperation = specimenArrayForm.getSubOperation();
     	boolean isChangeArrayType = false;
+    	String idColumnName = "id";
     	
     	if (subOperation != null) 
     	{
     		SpecimenArrayType arrayType = null;
         	if (specimenArrayForm.getSpecimenArrayTypeId() > 0) 
         	{
-        		String columnName = "id";
         		String columnVal = "" + specimenArrayForm.getSpecimenArrayTypeId();
-        		List specimenArrayTypes = specimenArrayBizLogic.retrieve(SpecimenArrayType.class.getName(),columnName,columnVal);
+        		List specimenArrayTypes = specimenArrayBizLogic.retrieve(SpecimenArrayType.class.getName(),idColumnName,columnVal);
         		if ((specimenArrayTypes != null) && (!specimenArrayTypes.isEmpty())) {
         			arrayType = (SpecimenArrayType) specimenArrayTypes.get(0);
         		}	
@@ -164,11 +165,24 @@ public class SpecimenArrayAction extends SecureAction
     	else
     	{
     		String[] startingPoints = new String[]{"-1", "-1", "-1"};
+    		
+    		String containerName = null;
 			if (specimenArrayForm.getStorageContainer() != null
 					&& !specimenArrayForm.getStorageContainer().equals("-1"))
 			{
 				startingPoints[0] = specimenArrayForm.getStorageContainer();
-
+	        	String[] selectColumnName = {"name"}; 
+	        	String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+	        	String[] whereColumnCondition = {"="};
+	        	Object[] whereColumnValue = {Long.valueOf(startingPoints[0])};
+	        	String joinCondition = Constants.AND_JOIN_CONDITION;
+	        	//specimenArrayBizLogic.retrieve(StorageContainer.class.getName(), new Long(specimenArrayForm.getSpecimenArrayTypeId()));
+	    		List containerList = specimenArrayBizLogic.retrieve(StorageContainer.class.getName(),selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,joinCondition);
+	    		if ((containerList != null) && (!containerList.isEmpty())) 
+	    		{
+	    			containerName = (String) containerList.get(0);
+	    		}
+				//List  = specimenArrayBizLogic.retrieve(StorageContainer.class.getName(), idColumnName, Long.valueOf(startingPoints[0]));
 			}
 			if (specimenArrayForm.getPositionDimensionOne() != -1)
 			{
@@ -179,9 +193,13 @@ public class SpecimenArrayAction extends SecureAction
 			{
 				startingPoints[2] = String.valueOf(specimenArrayForm.getPositionDimensionTwo());
 			}
-			
 			initialValues = new ArrayList();
 			initialValues.add(startingPoints);
+			// if not null
+			if (containerName != null)
+			{
+				addPostions(containerMap,Long.valueOf(startingPoints[0]),containerName,Integer.valueOf(startingPoints[1]),Integer.valueOf(startingPoints[2]));
+			}
     	}
     	request.setAttribute("initValues", initialValues);
     	if (specimenTypeList == null)
