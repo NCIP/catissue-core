@@ -2439,7 +2439,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
+		
 		if (containerMapFromCache != null)
 		{
 			Iterator itr = list.iterator();
@@ -2453,11 +2453,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
-
-					containerMap.put(nvb, positionMap);
+					// deep copy is required due to cache updation by reference
+					Map positionMap1 = deepCopyMap(positionMap);
+					//NameValueBean nvb = new NameValueBean(Name, Id);
+					containerMap.put(nvb, positionMap1);
 				}
 			}
 		}
+		
 		return containerMap;
 	}
 
