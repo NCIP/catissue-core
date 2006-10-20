@@ -656,6 +656,13 @@ public class User extends AbstractDomainObject implements Serializable
                     this.setStartDate(Calendar.getInstance().getTime());
                 }
                 
+                //Bug-1516: Jitendra
+                if (uform.getPageOf().equals(Constants.PAGEOF_USER_ADMIN)
+                        && uform.getOperation().equals(Constants.EDIT))
+                {
+                    this.newPassword = uform.getNewPassword();                    
+                }
+                
                 if (uform.getPageOf().equals(Constants.PAGEOF_APPROVE_USER))
                 {
                     if (uform.getStatus().equals(

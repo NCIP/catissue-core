@@ -327,8 +327,9 @@ public class UserBizLogic extends DefaultBizLogic
 				user.getPasswordCollection().add(password);
 							
 			}
+			
 			//Bug-1516: Jitendra Administartor should be able to edit the password 
-			/*else if(user.getPageOf().equals(Constants.PAGEOF_USER_ADMIN) && !user.getNewPassword().equals(PasswordManager.decode(user.getLatestPassword())))
+			else if(user.getPageOf().equals(Constants.PAGEOF_USER_ADMIN) && !user.getNewPassword().equals(PasswordManager.decode(csmUser.getPassword())))
 			{				
 				Validator validator = new Validator();
 				if (!validator.isEmpty(user.getNewPassword()))
@@ -352,7 +353,7 @@ public class UserBizLogic extends DefaultBizLogic
 				Password password = new Password(csmUser.getPassword(), user);
 				user.getPasswordCollection().add(password);
 				user.setFirstTimeLogin(new Boolean(true));
-			}*/
+			}
 			else
 			{
 				csmUser.setLoginName(user.getLoginName());

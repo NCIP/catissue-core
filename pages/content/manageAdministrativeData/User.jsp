@@ -237,6 +237,34 @@ function handleStatus(status)
 						</td>
 					</tr>
 					
+					<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_ADMIN%>">
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+					<tr>
+					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredLabel">
+						<label for="newPassword">
+							<bean:message key="user.newPassword" />
+						</label>
+					</td>
+					<td class="formField">
+						<html:password styleClass="formFieldSized" size="30" styleId="newPassword" property="newPassword" />
+					</td>
+				</tr>
+			
+				<tr>
+					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredLabel">
+						<label for="confirmNewPassword">
+							<bean:message key="user.confirmNewPassword" />
+						</label>
+					</td>
+					<td class="formField">
+						<html:password styleClass="formFieldSized" size="30" styleId="confirmNewPassword" property="confirmNewPassword" />
+					</td>
+				</tr>
+				</logic:equal>
+				</logic:equal>
+					
 					<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel">
