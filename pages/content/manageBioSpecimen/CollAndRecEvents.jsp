@@ -136,6 +136,59 @@
 						</td>	
 					</tr>	
 					
+					<!-- hours & minutes -->		
+					<tr>
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
+							<label for="eventparameters.time">
+								<bean:message key="eventparameters.time"/>
+							</label>
+						</td>
+						<td class="formField">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="collectionEventTimeInHours" styleClass="formFieldSized5" styleId="collectionEventTimeInHours" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
+							</html:select>&nbsp;
+							<label for="eventparameters.timeinhours">
+								<bean:message key="eventparameters.timeinhours"/>&nbsp; 
+							</label>
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="collectionEventTimeInMinutes" styleClass="formFieldSized5" styleId="collectionEventTimeInMinutes" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
+							</html:select>
+							<label for="eventparameters.timeinhours">
+								&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
+							</label>
+						</td>
+						
+						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredLabel">
+							<label for="eventparameters.time">
+								<bean:message key="eventparameters.time"/>
+							</label>
+						</td>
+						<td class="formField">
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="receivedEventTimeInHours" styleClass="formFieldSized5" styleId="receivedEventTimeInHours" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
+							</html:select>&nbsp;
+							<label for="eventparameters.timeinhours">
+								<bean:message key="eventparameters.timeinhours"/>&nbsp; 
+							</label>
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="receivedEventTimeInMinutes" styleClass="formFieldSized5" styleId="receivedEventTimeInMinutes" size="1"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
+							</html:select>
+							<label for="eventparameters.timeinhours">
+								&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
+							</label>
+						</td>
+					</tr>
+					
 					<tr>					
 						
 						<!-- CollectionEvent fields -->	
