@@ -9,11 +9,6 @@
 
 package edu.wustl.catissuecore.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import edu.wustl.catissuecore.domain.Password;
 import edu.wustl.catissuecore.domain.ReportedProblem;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -190,14 +185,16 @@ public class EmailHandler
 			    body = userDetailsBody;
 			}
 			
-			List pwdList = new ArrayList(user.getPasswordCollection());
-			Collections.sort(pwdList);
-			Password password = (Password) pwdList.get(0);
+			gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(EmailHandler.class).getUserById(user.getCsmUserId().toString());
+			 
+//			List pwdList = new ArrayList(user.getPasswordCollection());
+//			Collections.sort(pwdList);
+//			Password password = (Password) pwdList.get(0);
 			String roleOfUser = SecurityManager.getInstance(EmailHandler.class)
 							.getUserRole(user.getCsmUserId().longValue()).getName();
 			body = body + "\n\n" + ApplicationProperties.getValue("forgotPassword.email.body.start")
 				+ "\n\t "+ ApplicationProperties.getValue("user.loginName")+ Constants.SEPARATOR + user.getLoginName()
-    		    + "\n\t "+ ApplicationProperties.getValue("user.password")+ Constants.SEPARATOR + PasswordManager.decode(password.getPassword())
+    		    + "\n\t "+ ApplicationProperties.getValue("user.password")+ Constants.SEPARATOR + PasswordManager.decode(csmUser.getPassword())
 			    + "\n\t "+ ApplicationProperties.getValue("user.role")+ Constants.SEPARATOR + roleOfUser
 			    + "\n\n" + ApplicationProperties.getValue("email.catissuecore.team");
 			
