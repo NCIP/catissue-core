@@ -162,6 +162,7 @@
 		
 				var action = "NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen&Change=true";
 				document.forms[0].action = action;
+				waitCursor();
 				document.forms[0].submit();
 			}	
 		}

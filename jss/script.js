@@ -11,6 +11,10 @@ function hideCursor(){
 	document.body.style.cursor='default';
 }
 
+function waitCursor(){
+	document.body.style.cursor='wait';
+}
+
 function confirmDelete(){
   if (confirm('Are you sure you want to delete?'))
   {

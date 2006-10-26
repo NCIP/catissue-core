@@ -128,6 +128,7 @@ function classChangeForMultipleSpecimen()
 		
 				var action = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&Change=true";
 				document.forms[0].action = action;
+				waitCursor();
 				document.forms[0].submit();
 			}	
 		}
