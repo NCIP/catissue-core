@@ -27,7 +27,6 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.ApplicationProperties;
 
 /**
  * AddSpecimenAction gets the Specimen Id from Label or Barcode
@@ -49,21 +48,17 @@ public class AddSpecimenAction extends Action
 
 		String[] whereColumnName = new String[1];
 		Object[] whereColumnValue = new Object[1];
-		String errorString = null;
-
+	
 		// checks whether label or barcode is selected
 		if (createForm.getCheckedButton().equals("1"))
 		{
 			whereColumnName[0] = Constants.SYSTEM_LABEL;
 			whereColumnValue[0] = createForm.getParentSpecimenLabel().trim();
-			errorString = ApplicationProperties.getValue("quickEvents.specimenLabel");
-
 		}
 		else
 		{
 			whereColumnName[0] = Constants.SYSTEM_BARCODE;
 			whereColumnValue[0] = createForm.getParentSpecimenBarcode().trim();
-			errorString = ApplicationProperties.getValue("quickEvents.barcode");
 		}
 
 		String[] whereColumnCondition = {"="};
