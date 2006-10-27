@@ -647,7 +647,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		if(protocolCoordinatorCollection == null || protocolCoordinatorCollection.isEmpty())
 		{
 			//message = ApplicationProperties.getValue("collectionprotocol.specimenstatus");
-			throw new DAOException(ApplicationProperties.getValue("errors.one.item.required","Protocol Coordinator"));
+            // TODO --> why this validation is added 
+			// throw new DAOException(ApplicationProperties.getValue("errors.one.item.required","Protocol Coordinator"));
 		}
 		else
 		{
