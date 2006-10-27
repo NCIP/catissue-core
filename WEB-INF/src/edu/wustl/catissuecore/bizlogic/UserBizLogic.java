@@ -520,7 +520,7 @@ public class UserBizLogic extends DefaultBizLogic
 			userList = super.retrieve(className, colName, colValue);
 
 			User appUser = null;
-			if (!userList.isEmpty())
+			if (userList!=null && !userList.isEmpty())
 			{
 				appUser = (User) userList.get(0);
 
