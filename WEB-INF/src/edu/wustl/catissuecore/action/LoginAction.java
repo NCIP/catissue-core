@@ -147,7 +147,7 @@ public class LoginAction extends Action
     	List users = userBizLogic.retrieve(User.class.getName(), whereColumnName, 
     			whereColumnCondition, whereColumnValue,Constants.AND_JOIN_CONDITION);
     	
-    	if (!users.isEmpty())
+    	if (users!=null && !users.isEmpty())
     	{
     	    User validUser = (User)users.get(0);
     	    return validUser;

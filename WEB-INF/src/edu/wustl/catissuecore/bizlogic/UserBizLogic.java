@@ -559,7 +559,7 @@ public class UserBizLogic extends DefaultBizLogic
 	{
 		String statusMessageKey = null;
 		List list = retrieve(User.class.getName(), "emailAddress", emailAddress);
-		if (!list.isEmpty())
+		if (list!=null && !list.isEmpty())
 		{
 			User user = (User) list.get(0);
 			if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
