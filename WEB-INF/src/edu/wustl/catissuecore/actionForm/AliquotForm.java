@@ -433,6 +433,15 @@ public class AliquotForm extends AbstractActionForm
          				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.label")));
          			}
          		}
+         		else if(key.endsWith("_positionDimensionOne")||key.endsWith("_positionDimensionTwo"))
+         		{
+         			String value = (String)aliquotMap.get(key);
+         			 if(!validator.isDouble(value))
+     		        {
+     		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.positionInStorageContainer")));
+     		        	break;
+     		        }
+         		}
          	}
          }
          
