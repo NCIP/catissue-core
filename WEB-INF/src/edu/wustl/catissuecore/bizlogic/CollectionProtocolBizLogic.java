@@ -644,13 +644,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		
 		Collection protocolCoordinatorCollection = protocol.getUserCollection();
-		if(protocolCoordinatorCollection == null || protocolCoordinatorCollection.isEmpty())
-		{
-			//message = ApplicationProperties.getValue("collectionprotocol.specimenstatus");
-            // TODO --> why this validation is added 
-			// throw new DAOException(ApplicationProperties.getValue("errors.one.item.required","Protocol Coordinator"));
-		}
-		else
+//		if(protocolCoordinatorCollection == null || protocolCoordinatorCollection.isEmpty())
+//		{
+//			//message = ApplicationProperties.getValue("collectionprotocol.specimenstatus");
+//			throw new DAOException(ApplicationProperties.getValue("errors.one.item.required","Protocol Coordinator"));
+//		}
+		if(protocolCoordinatorCollection != null && !protocolCoordinatorCollection.isEmpty())
 		{
 			Iterator protocolCoordinatorItr = protocolCoordinatorCollection.iterator();
 			while(protocolCoordinatorItr.hasNext())
