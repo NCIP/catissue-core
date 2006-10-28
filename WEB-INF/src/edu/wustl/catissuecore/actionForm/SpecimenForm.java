@@ -452,6 +452,7 @@ public class SpecimenForm extends AbstractActionForm
 			this.positionInStorageContainer = container.getStorageType().getName() + " : "
 					+ container.getId() + " Pos(" + this.positionDimensionOne + ","
 					+ this.positionDimensionTwo + ")";
+			this.setVirtuallyLocated(false);
 
 		}
 		else
