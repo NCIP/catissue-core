@@ -14,6 +14,7 @@
 <html:errors/>
 <% 
 	SpecimenArrayForm form = (SpecimenArrayForm)request.getAttribute("specimenArrayForm");
+	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 	String operation = (String)request.getAttribute(Constants.OPERATION);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 	String formAction;
@@ -194,7 +195,13 @@
 				</td>
 				<%-- n-combo-box end --%>
 				 </tr>
-
+					<tr>
+					<td>
+						<logic:equal name="exceedsMaxLimit" value="true">
+							<bean:message key="container.maxView"/>
+						</logic:equal>
+					</td>
+				</tr>
 			<tr>
 				<td class="formRequiredNotice" width="5">&nbsp;</td>
 				<td class="formRequiredLabelWithoutBorder">

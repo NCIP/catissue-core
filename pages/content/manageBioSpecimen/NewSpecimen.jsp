@@ -13,10 +13,10 @@
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%
-	
+	//System.out.println("Start of specimen jsp");
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
-	
+	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 	boolean isAddNew = false;
 
@@ -160,9 +160,8 @@
 			if(specimenCollGroupElement.value != "-1" && classNameElement.value != "-1")
 			{
 		
-				var action = "NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen&Change=true";
+				var action = "NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen&virtualLocated=false";
 				document.forms[0].action = action;
-				waitCursor();
 				document.forms[0].submit();
 			}	
 		}
@@ -181,10 +180,11 @@
 			}
 			else
 			{
-				containerName.disabled = false;
+				onCollOrClassChange();
+				/*containerName.disabled = false;
 				pos1.disabled = false;;
 				pos2.disabled = false;;
-				document.forms[0].mapButton.disabled = false;
+				document.forms[0].mapButton.disabled = false;*/
 			}
 		}
 		
@@ -382,7 +382,7 @@
 								<!-- Mandar : 434 : for tooltip -->
 					     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
 					     				styleId="specimenCollectionGroupId" size="1" 
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onCollOrClassChange()">
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
 									<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
 										labelProperty="name" property="value"/>		
 								</html:select>
@@ -464,7 +464,7 @@
 						    </td>
 						    <td class="formField">
 <!-- Mandar : 434 : for tooltip -->
-						     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);onCollOrClassChange()" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 						     	<%
 									String classValue = form.getClassName();
 									if(operation.equals(Constants.EDIT))
@@ -737,7 +737,9 @@
 							%>
 				
 							<%=ScriptGenerator.getJSForOutermostDataTable()%>
+							<%//System.out.println("after getJSForOutermostDataTable in specimen jsp");%>
 							<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
+							<%//System.out.println("after getJSEquivalentFor in specimen jsp");%>
 				
 							<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 				
@@ -758,14 +760,15 @@
 								<%
 									
 									NewSpecimenForm newSpecimenForm = (NewSpecimenForm) request.getAttribute("newSpecimenForm");
+								
 									if(newSpecimenForm.isVirtuallyLocated())
 									{%>Specimen is virtually Located <%}
-								
+									
 								%>
 								</logic:notEqual>	
 								
 
-								
+								<%//System.out.println("Starting of tag in jsp");%>
 									<ncombo:containermap dataMap="<%=dataMap%>" 
 											attributeNames="<%=attrNames%>" 
 											initialValues="<%=initValues%>"  
@@ -783,10 +786,21 @@
 											buttonStyleClass="actionButton" 
 											buttonDisabled ="<%=buttonDisabled%>"/>				
 							</td>
+							<%//System.out.println("End of tag in jsp");%>
 				<%-- n-combo-box end --%>
-						</tr>
-				 
-				 				 
+				</tr>
+
+					<!--%System.out.println("Inside if condition in jsp"+exceedsMaxLimit);
+					if(exceedsMaxLimit!=null && exceedsMaxLimit.equals("true")){
+						%-->
+					<logic:equal name="exceedsMaxLimit" value="true">
+					<tr>
+						<td>
+								<bean:message key="container.maxView"/>
+						</td>
+					</tr>
+					</logic:equal>
+					<!--%}%-->				 				 
 						<tr>
 					     	<td class="formRequiredNotice" width="5">&nbsp;</td>
 						    <td class="formLabel">

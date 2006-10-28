@@ -19,7 +19,7 @@
         String formName;
 		List siteForParent = (List)request.getAttribute("siteForParentList");
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-
+		String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
         {
@@ -581,7 +581,6 @@ function onEditChange()
 											buttonDisabled = "<%=buttonDisabled%>" />
 								</td>
 				        	</logic:equal>
-							
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
 								<td class="formField" colSpan="2">
 								<ncombo:containermap dataMap="<%=dataMap%>" 
@@ -604,7 +603,13 @@ function onEditChange()
 							</logic:equal>						
 						
 					</tr>
-
+					<tr>
+						<td>
+							<logic:equal name="exceedsMaxLimit" value="true">
+								<bean:message key="container.maxView"/>
+							</logic:equal>
+						</td>
+					</tr>	
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel" colspan="2">

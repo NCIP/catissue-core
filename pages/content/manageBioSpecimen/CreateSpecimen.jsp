@@ -27,6 +27,7 @@
         String[] columnList = Constants.DERIVED_SPECIMEN_COLUMNS;
 		String operation = (String)request.getAttribute(Constants.OPERATION);
 		String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
+		String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 		boolean readOnlyValue=false,readOnlyForAll=false;
 
 		if(operation!=null && operation.equals(Constants.EDIT))
@@ -71,8 +72,8 @@
 	   action = "DerivedMultipleSpecimenAdd.do?retainForm=true";
 	}
 	
-	String onChangeFunctionName = "onClassOrLabelOrBarcodeChange(" + multipleSpecimen + ");" ;
-	String onClassChangeFunctionName = "onTypeChange(this);" + onChangeFunctionName;
+	String onCheckboxChange = "setVirtuallyLocated(this,"+multipleSpecimen+")" ;
+	//String onClassChangeFunctionName = "onTypeChange(this);" + onChangeFunctionName;
 	
 %>
 
@@ -99,9 +100,8 @@ function classChangeForMultipleSpecimen()
 	document.forms[0].submit();
 }
 			
-	  function onClassOrLabelOrBarcodeChange(multipleSpecimen)
+	  function onClassOrLabelOrBarcodeChange(multipleSpecimen,element)
 		{
-		
 			if(multipleSpecimen == "1")
 				{
 				   classChangeForMultipleSpecimen();
@@ -126,14 +126,18 @@ function classChangeForMultipleSpecimen()
 			if(flag=="1" && classNameElement.value != "-1")
 			{
 		
-				var action = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&Change=true";
+				var action = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=false";
 				document.forms[0].action = action;
-				waitCursor();
 				document.forms[0].submit();
 			}	
+			else
+			{
+				alert("Please enter Parent Label/Barcode and Specimen Class");
+				element.checked=true;
+			}
 		}
 		
-		function setVirtuallyLocated(element)
+		function setVirtuallyLocated(element,multipleSpecimen)
 		{
 			var containerName = document.getElementById("customListBox_1_0");
 			var pos1 = document.getElementById("customListBox_1_1");
@@ -147,10 +151,11 @@ function classChangeForMultipleSpecimen()
 			}
 			else
 			{
-				containerName.disabled = false;
-				pos1.disabled = false;;
-				pos2.disabled = false;;
-				document.forms[0].mapButton.disabled = false;
+				onClassOrLabelOrBarcodeChange(multipleSpecimen,element);
+//				containerName.disabled = false;
+//				pos1.disabled = false;;
+//				pos2.disabled = false;;
+//				document.forms[0].mapButton.disabled = false;
 				
 			}
 		}
@@ -415,7 +420,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					<td class="formField" colspan="2">
 						
 					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
-				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" onblur="<%=onChangeFunctionName%>"/>
+				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" />
 			        </logic:equal>
 			
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
@@ -442,7 +447,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			        </logic:equal>
 			
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
-				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" onblur="<%=onChangeFunctionName%>"/>
+				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" />
 			        </logic:equal>
 										
 		        	</td>
@@ -473,7 +478,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				    <td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=onClassChangeFunctionName%>">
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onTypeChange(this)">
 							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -622,7 +627,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 									
 				<td class="formField" colSpan="4">
 						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-							<html:checkbox property="virtuallyLocated" onclick="setVirtuallyLocated(this)"/>
+							<html:checkbox property="virtuallyLocated" onclick="<%=onCheckboxChange%>"/>
 							<bean:message key="specimen.virtuallyLocated" />
 						</logic:equal>	
 						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
@@ -644,7 +649,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 											rowNumber="<%=rowNumber%>" 
 											onChange = "<%=onChange%>"
 											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-											
+											disabled = "<%=disabled%>"
 											buttonName="mapButton" 
 											value="Map"
 											buttonOnClick = "<%=buttonOnClicked%>"
@@ -654,7 +659,14 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				<%-- n-combo-box end --%>
 				
 				 </tr>
-	
+					<tr>
+					<td>
+						<logic:equal name="exceedsMaxLimit" value="true">
+							<bean:message key="container.maxView"/>
+						</logic:equal>
+					</td>
+				</tr>	
+
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
 				    <td class="formLabel">

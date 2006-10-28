@@ -60,6 +60,7 @@
 <%
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	String buttonKey = "";
+	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 	if(Constants.PAGEOF_SPECIMEN_ARRAY_ALIQUOT.equals(pageOf))
 	{
 		buttonKey = "buttons.submit";
@@ -303,6 +304,13 @@
 						</td>
 						
 					</tr>
+					<tr>
+					<td>
+						<logic:equal name="exceedsMaxLimit" value="true">
+							<bean:message key="container.maxView"/>
+						</logic:equal>
+					</td>
+				</tr>
 				<%
 					} //For
 				%>	
