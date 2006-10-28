@@ -531,7 +531,10 @@ public class NewMultipleSpecimenAction extends DispatchAction
 		Collection userCollection = userBizLogic.getUsers(Constants.ADD);
 
 		request.setAttribute(Constants.USERLIST, userCollection);
-
+		//Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
+		request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
+		//Sets the minutesList attribute to be used in the Add/Edit FrozenEventParameters Page.
+		request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
 		// set the procedure lists
 		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
 		request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
