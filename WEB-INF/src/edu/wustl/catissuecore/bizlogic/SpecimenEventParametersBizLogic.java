@@ -86,19 +86,33 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
 				specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
 
-				StorageContainer storageContainer = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
-						.getToStorageContainer().getId());
+//				StorageContainer storageContainer = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
+//						.getToStorageContainer().getId());
+				StorageContainer storageContainerObj = new StorageContainer();
+				storageContainerObj.setId(specimen.getStorageContainer().getId());
+				String sourceObjectName = StorageContainer.class.getName();
+				String[] selectColumnName = {"name"};
+				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+				String[] whereColumnCondition = {"="};
+				Object[] whereColumnValue = {specimen.getStorageContainer().getId()};
+				String joinCondition = null;
 
-				// check for closed StorageContainer
-				checkStatus(dao, storageContainer, "Storage Container");
+				List stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
 
-				if (storageContainer != null)
+				if (!stNamelist.isEmpty())
 				{
-					NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
-							Constants.NEW_SPECIMEN_FORM_ID);
-					newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainer, specimen);
-					specimen.setStorageContainer(storageContainer);
+					storageContainerObj.setName((String)stNamelist.get(0));
 				}
+				// check for closed StorageContainer
+				checkStatus(dao, storageContainerObj, "Storage Container");
+
+//				if (storageContainer != null)
+//				{
+//					NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
+//							Constants.NEW_SPECIMEN_FORM_ID);
+					//newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainer, specimen);
+					specimen.setStorageContainer(storageContainerObj);
+//				}
 				dao.update(specimen, sessionDataBean, true, true, false);
 			}
 			if (specimenEventParametersObject instanceof DisposalEventParameters)

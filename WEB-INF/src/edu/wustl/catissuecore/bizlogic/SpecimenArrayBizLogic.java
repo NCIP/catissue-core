@@ -324,26 +324,42 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		{
 			if(specimenArray.getStorageContainer().getId() != null)
 			{
-				Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimenArray.getStorageContainer().getId());
-				if (containerObj != null)
+//				Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimenArray.getStorageContainer().getId());
+//				if (containerObj != null)
+//				{
+//					StorageContainer container = (StorageContainer) containerObj;
+				StorageContainer storageContainerObj = new StorageContainer();
+				storageContainerObj.setId(specimenArray.getStorageContainer().getId());
+				String sourceObjectName = StorageContainer.class.getName();
+				String[] selectColumnName = {"name"};
+				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+				String[] whereColumnCondition = {"="};
+				Object[] whereColumnValue = {specimenArray.getStorageContainer().getId()};
+				String joinCondition = null;
+
+				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+				if (!list.isEmpty())
 				{
-					StorageContainer container = (StorageContainer) containerObj;
+					storageContainerObj.setName((String)list.get(0));
+				}
+
 					// check for closed Storage Container
-					checkStatus(dao, container, "Storage Container");
+					checkStatus(dao, storageContainerObj, "Storage Container");
 	
 					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 							Constants.STORAGE_CONTAINER_FORM_ID);
 	
 					// --- check for all validations on the storage container.
-					storageContainerBizLogic.checkContainer(dao, container.getId().toString(), specimenArray.getPositionDimensionOne().toString(), specimenArray
+					storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimenArray.getPositionDimensionOne().toString(), specimenArray
 							.getPositionDimensionTwo().toString(), sessionDataBean);
 	
-					specimenArray.setStorageContainer(container);
-				}
-				else
-				{
-					throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
-				}
+					specimenArray.setStorageContainer(storageContainerObj);
+//				}
+//				else
+//				{
+//					throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
+//				}
 			}
 		}		
 	}

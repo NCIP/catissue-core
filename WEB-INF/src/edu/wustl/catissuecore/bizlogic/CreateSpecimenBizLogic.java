@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.bizlogic;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -87,25 +88,41 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			if (specimen.getStorageContainer() != null)
 			{
 				//Load & set Storage Container
-				Object storageContainerObj = dao.retrieve(StorageContainer.class.getName(),
-						specimen.getStorageContainer().getId());
-				if (storageContainerObj != null)
+//				Object storageContainerObj = dao.retrieve(StorageContainer.class.getName(),
+//						specimen.getStorageContainer().getId());
+				StorageContainer storageContainerObj = new StorageContainer();
+				storageContainerObj.setId(specimen.getStorageContainer().getId());
+				String sourceObjectName = StorageContainer.class.getName();
+				String[] selectColumnName = {"name"};
+				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+				String[] whereColumnCondition = {"="};
+				Object[] whereColumnValue = {specimen.getStorageContainer().getId()};
+				String joinCondition = null;
+
+				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+				if (!list.isEmpty())
 				{
-					StorageContainer container = (StorageContainer) storageContainerObj;
+					storageContainerObj.setName((String)list.get(0));
+				}
+
+//				if (storageContainerObj != null)
+//				{
+//					StorageContainer container = (StorageContainer) storageContainerObj;
 
 					// check for closed Storage Container
-					checkStatus(dao, container, "Storage Container");
+					checkStatus(dao, storageContainerObj, "Storage Container");
 
 					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory
 							.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 					NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 					// --- check for all validations on the storage container.
-					storageContainerBizLogic.checkContainer(dao, container.getId().toString(),
+					storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(),
 							specimen.getPositionDimensionOne().toString(), specimen
 									.getPositionDimensionTwo().toString(), sessionDataBean);
-					newSpecimenBizLogic.chkContainerValidForSpecimen(container, specimen);
-					specimen.setStorageContainer(container);
-				}
+					//newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainerObj, specimen,dao);
+					specimen.setStorageContainer(storageContainerObj);
+//				}
 			}
 			specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			specimen.setLineage(Constants.DERIVED_SPECIMEN);

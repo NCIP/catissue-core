@@ -140,24 +140,40 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 				if (virtuallyLocated == null && containerId != null)
 				{
 					//Setting the storage container of the aliquot
-					StorageContainer container = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), new Long(containerId));
+//					StorageContainer container = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), new Long(containerId));
+//
+//					if (container != null)
+//					{
+					StorageContainer storageContainerObj = new StorageContainer();
+					storageContainerObj.setId(new Long(containerId));
+					String sourceObjectName = StorageContainer.class.getName();
+					String[] selectColumnName = {"name"};
+					String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+					String[] whereColumnCondition = {"="};
+					Object[] whereColumnValue = {new Long(containerId)};
+					String joinCondition = null;
 
-					if (container != null)
+					List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+					if (!list.isEmpty())
 					{
+						storageContainerObj.setName((String)list.get(0));
+						aliquotMap.put(storageContainerNameKey, (String)list.get(0));
+					}
+
 						//check for closed Storage Container
-						checkStatus(dao, container, "Storage Container");
+						checkStatus(dao, storageContainerObj, "Storage Container");
 
 						StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 								Constants.STORAGE_CONTAINER_FORM_ID);
 
 						//check for all validations on the storage container.
 						storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2, sessionDataBean);
-						chkContainerValidForSpecimen(container, aliquotSpecimen);
+//						chkContainerValidForSpecimen(container, aliquotSpecimen);
 
-						aliquotSpecimen.setStorageContainer(container);
-
-						aliquotMap.put(storageContainerNameKey, container.getName());
-					}
+						aliquotSpecimen.setStorageContainer(storageContainerObj);
+						
+//					}
 				}
 				else
 				{
