@@ -80,13 +80,13 @@ public class StorageContainerUtil
 		if (yPosList != null)
 		{
 
-			Logger.out.debug("deleteSinglePositionInContainerMap method :----yPosList :" + yPosList);
+			//Logger.out.debug("deleteSinglePositionInContainerMap method :----yPosList :" + yPosList);
 			for (int i = 0; i < yPosList.size(); i++)
 			{
 				NameValueBean yPosnvb = (NameValueBean) yPosList.get(i);
 				if (yPosnvb.getValue().equals("" + y))
 				{
-					Logger.out.debug("Removing value:" + y);
+					//Logger.out.debug("Removing value:" + y);
 					yPosList.remove(i);
 					break;
 				}
@@ -95,7 +95,7 @@ public class StorageContainerUtil
 
 			}
 		}
-		Logger.out.debug("deleteSinglePositionInContainerMap method after deleting :----yPosList :" + yPosList);
+		//Logger.out.debug("deleteSinglePositionInContainerMap method after deleting :----yPosList :" + yPosList);
 
 		if (yPosList == null || yPosList.size() == 0)
 		{
