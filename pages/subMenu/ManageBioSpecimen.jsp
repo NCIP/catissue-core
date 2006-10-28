@@ -77,7 +77,7 @@
 				<b><bean:message key="app.newSpecimen" /> </b>
 		</div>
 		<div> Add: 
-			<a class="subMenuPrimary" href="NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&menuSelected=15">
+			<a class="subMenuPrimary" href="NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&menuSelected=15&virtualLocated=true">
 				<bean:message key="specimen.menu.singleAdd" />
 			</a> | 
 			<a class="subMenuPrimary" href="InitMultipleSpecimen.do?menuSelected=15">
@@ -88,7 +88,7 @@
 			</a>			
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="CreateSpecimen.do?operation=add&amp;pageOf=&menuSelected=15">
+			<a class="subMenuPrimary" href="CreateSpecimen.do?operation=add&amp;pageOf=&menuSelected=15&virtualLocated=true">
 				<bean:message key="app.createSpecimen" />
 			</a> | 
 			<a class="subMenuPrimary" href="Aliquots.do?pageOf=pageOfAliquot&menuSelected=15">
