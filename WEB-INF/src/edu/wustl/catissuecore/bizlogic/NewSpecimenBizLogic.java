@@ -349,7 +349,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		return dynamicGroups;
 	}
 
-	protected void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen) throws DAOException
+	protected void chkContainerValidForSpecimen(StorageContainer container, Specimen specimen, DAO dao) throws DAOException
 	{
 
 		boolean aa = container.getHoldsSpecimenClassCollection().contains(specimen.getClassName());
@@ -788,26 +788,42 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			if(specimen.getStorageContainer().getId() != null)
 			{
-				Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getId());
-				if (containerObj != null)
+//				Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getId());
+//				if (containerObj != null)
+//				{
+//					StorageContainer container = (StorageContainer) containerObj;
+				StorageContainer storageContainerObj = new StorageContainer();
+				storageContainerObj.setId(specimen.getStorageContainer().getId());
+				String sourceObjectName = StorageContainer.class.getName();
+				String[] selectColumnName = {"name"};
+				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+				String[] whereColumnCondition = {"="};
+				Object[] whereColumnValue = {specimen.getStorageContainer().getId()};
+				String joinCondition = null;
+
+				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+				if (!list.isEmpty())
 				{
-					StorageContainer container = (StorageContainer) containerObj;
+					storageContainerObj.setName((String)list.get(0));
+				}
+
 					// check for closed Storage Container
-					checkStatus(dao, container, "Storage Container");
+					checkStatus(dao, storageContainerObj, "Storage Container");
 	
 					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 							Constants.STORAGE_CONTAINER_FORM_ID);
 	
 					// --- check for all validations on the storage container.
-					storageContainerBizLogic.checkContainer(dao, container.getId().toString(), specimen.getPositionDimensionOne().toString(), specimen
+					storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(), specimen
 							.getPositionDimensionTwo().toString(), sessionDataBean);
-					chkContainerValidForSpecimen(container, specimen);
-					specimen.setStorageContainer(container);
-				}
-				else
-				{
-					throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
-				}
+					//chkContainerValidForSpecimen(container, specimen,dao);
+					specimen.setStorageContainer(storageContainerObj);
+//				}
+//				else
+//				{
+//					throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
+//				}
 			}
 			
 				
@@ -980,7 +996,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	private boolean validateSingleSpecimen(Specimen specimen, DAO dao, String operation, boolean partOfMulipleSpecimen) throws DAOException
 	{
 		//Added by Ashish		
-	
+		//Logger.out.debug("Start-Inside validate method of specimen bizlogic");
 	     if (specimen == null)
 		 {		     
 		     throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "Specimen"));	   
@@ -1223,7 +1239,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
 			}
 		}
-
+		//Logger.out.debug("End-Inside validate method of specimen bizlogic");
 		return true;
 	}
 
