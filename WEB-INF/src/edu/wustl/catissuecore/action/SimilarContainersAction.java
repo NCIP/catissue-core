@@ -57,7 +57,10 @@ public class SimilarContainersAction extends SecureAction
 				+ form.getClass());
 
 		StorageContainerForm similarContainersForm = (StorageContainerForm) form;
-
+		//boolean to indicate whether the suitable containers to be shown in dropdown 
+		//is exceeding the max limit.
+		String exceedingMaxLimit = "false";
+		
 		if (similarContainersForm.getSpecimenOrArrayType() == null)
 		{
 			similarContainersForm.setSpecimenOrArrayType("Specimen");
@@ -166,12 +169,13 @@ public class SimilarContainersAction extends SecureAction
 		request.setAttribute(Constants.MAX_IDENTIFIER, Long.toString(maxId));
 		request.setAttribute("ContainerNumber", new Long(maxId).toString());
 		List mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
-				.getParameter("typeId")).longValue());
+				.getParameter("typeId")).longValue(),exceedingMaxLimit);
 		Map containerMap = (Map) mapSiteList.get(0);
 		List siteList1 = (List) mapSiteList.get(1);
 		/*Map containerMap1 = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
 		 .getParameter("typeId")).longValue());*/
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 		request.setAttribute("siteForParentList", siteList1);
 		int noOfContainers = Integer.parseInt((String) request.getParameter("noOfContainers"));
 		if (similarContainersForm.getSimilarContainersMap().size() == 0)

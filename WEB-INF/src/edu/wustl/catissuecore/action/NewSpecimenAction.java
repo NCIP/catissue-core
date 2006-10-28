@@ -64,11 +64,16 @@ public class NewSpecimenAction extends SecureAction
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		//Logger.out.debug("NewSpecimenAction start@@@@@@@@@");
 		NewSpecimenForm specimenForm = (NewSpecimenForm) form;
 
 		//Gets the value of the operation parameter.
 		String operation = (String) request.getParameter(Constants.OPERATION);
 
+		//boolean to indicate whether the suitable containers to be shown in dropdown 
+		//is exceeding the max limit.
+		String exceedingMaxLimit=new String();
+		
 		//Sets the operation attribute to be used in the Edit/View Specimen Page in Advance Search Object View. 
 		request.setAttribute(Constants.OPERATION, operation);
 
@@ -76,7 +81,18 @@ public class NewSpecimenAction extends SecureAction
 		{
 			specimenForm.setId(0);
 		}
+		String virtuallyLocated = request.getParameter("virtualLocated");
+		if(virtuallyLocated!=null && virtuallyLocated.equals("true"))
+		{
+			specimenForm.setVirtuallyLocated(true);
+		}
+				
+//		if (operation != null && operation.equalsIgnoreCase(Constants.EDIT))
+//		{
+//			Logger.out.debug("virtuallylocated:"+specimenForm.getVirtuallyLocated());
+//		}
 
+		
 		//Name of button clicked
 		String button = request.getParameter("button");
 		Map map = null;
@@ -308,21 +324,29 @@ public class NewSpecimenAction extends SecureAction
 			if (specimenForm.getSpecimenCollectionGroupId() != null && !specimenForm.getSpecimenCollectionGroupId().equals("") && 
 					specimenForm.getClassName()!=null && !specimenForm.getClassName().equals("") && !specimenForm.getClassName().equals("-1"))
 			{
-				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(),
-						Constants.SYSTEM_IDENTIFIER, new Long(specimenForm
-								.getSpecimenCollectionGroupId()));
-
+				//Logger.out.debug("before retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
+				String []selectColumnName={"collectionProtocolRegistration.id"};
+				String []whereColumnName={Constants.SYSTEM_IDENTIFIER};
+				String []whereColumnCondition={"="};
+				String []whereColumnValue={specimenForm.getSpecimenCollectionGroupId()};
+				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(),selectColumnName ,whereColumnName
+						,whereColumnCondition,whereColumnValue,null );
+				//Logger.out.debug("after retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
 				if (!spCollGroupList.isEmpty())
 				{
-					SpecimenCollectionGroup spCollGroup = (SpecimenCollectionGroup) spCollGroupList
-							.get(0);
-					long cpId = spCollGroup.getCollectionProtocolRegistration()
-							.getCollectionProtocol().getId().longValue();
+//					Object []spCollGroup = (Object[]) spCollGroupList
+//							.get(0);
+					long cpId = ((Long)spCollGroupList.get(0)).longValue();
 					String spClass = specimenForm.getClassName();
 					Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
 					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
-					Logger.out.debug("calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
-					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass,0);
+					if(virtuallyLocated!=null && virtuallyLocated.equals("false"))
+					{
+							specimenForm.setVirtuallyLocated(false);
+					}
+					//Logger.out.debug("calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
+					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass,0,exceedingMaxLimit);
+					//Logger.out.debug("exceedingMaxLimit in action for Boolean:"+exceedingMaxLimit);
 					Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 					if(containerMap.isEmpty())
 					{
@@ -400,6 +424,7 @@ public class NewSpecimenAction extends SecureAction
 
 		}
 		request.setAttribute("initValues", initialValues);
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		// -------------------------
 
@@ -407,7 +432,7 @@ public class NewSpecimenAction extends SecureAction
 		{
 			request.setAttribute("disabled", "true");
 		}
-	
+		//Logger.out.debug("End of specimen action");
 		return mapping.findForward(pageOf);
 	}
 

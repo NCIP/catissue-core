@@ -41,8 +41,8 @@ import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -65,6 +65,10 @@ public class CreateSpecimenAction extends SecureAction
 		key.add("ExternalIdentifier:i_name");
 		key.add("ExternalIdentifier:i_value");
 
+		//boolean to indicate whether the suitable containers to be shown in dropdown 
+		//is exceeding the max limit.
+		String exceedingMaxLimit = "false";
+		
 		//Gets the map from ActionForm
 		Map map = createForm.getExternalIdentifier();
 
@@ -76,7 +80,11 @@ public class CreateSpecimenAction extends SecureAction
 
 		//Sets the operation attribute to be used in the Add/Edit User Page. 
 		request.setAttribute(Constants.OPERATION, operation);
-
+		String virtuallyLocated = request.getParameter("virtualLocated");
+		if(virtuallyLocated!=null && virtuallyLocated.equals("true"))
+		{
+			createForm.setVirtuallyLocated(true);
+		}
 		String pageOf = request.getParameter(Constants.PAGEOF);
 		/*
 		 // ---- chetan 15-06-06 ----
@@ -111,34 +119,39 @@ public class CreateSpecimenAction extends SecureAction
 								.getParentSpecimenBarcode() != null))
 				{
 					String errorString = null;
-					String columnName = null;
-					Object columnValue = null;
+					String []columnName = new String[1];
+					Object []columnValue = new String[1];
 
 					// checks whether label or barcode is selected
 					if (createForm.getCheckedButton().equals("1"))
 					{
-						columnName = Constants.SYSTEM_LABEL;
-						columnValue = createForm.getParentSpecimenLabel().trim();
+						columnName[0] = Constants.SYSTEM_LABEL; 
+						columnValue[0] = createForm.getParentSpecimenLabel().trim();
 						errorString = ApplicationProperties.getValue("quickEvents.specimenLabel");
 					}
 					else
 					{
-						columnName = Constants.SYSTEM_BARCODE;
-						columnValue = createForm.getParentSpecimenBarcode().trim();
+						columnName[0] = Constants.SYSTEM_BARCODE;
+						columnValue[0] = createForm.getParentSpecimenBarcode().trim();
 						errorString = ApplicationProperties.getValue("quickEvents.barcode");
 					}
-
-					List spList = dao.retrieve(Specimen.class.getName(), columnName, columnValue);
+					String []selectColumnName={"specimenCollectionGroup.collectionProtocolRegistration.id"};
+					String []whereColumnCondition={"="};
+					List spList = dao.retrieve(Specimen.class.getName(),selectColumnName ,columnName
+							,whereColumnCondition,columnValue,null ); 
 
 					if (spList != null && !spList.isEmpty())
 					{
-						Specimen sp = (Specimen) spList.get(0);
-						long cpId = sp.getSpecimenCollectionGroup()
-								.getCollectionProtocolRegistration().getCollectionProtocol()
-								.getId().longValue();
+//						Specimen sp = (Specimen) spList.get(0);
+						long cpId = ((Long)spList.get(0)).longValue();
 						String spClass = createForm.getClassName();
+						
+						if(virtuallyLocated.equals("false"))
+						{
+							createForm.setVirtuallyLocated(false);
+						}
 						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
-								spClass, 0);
+								spClass, 0,exceedingMaxLimit);
 						if (containerMap.isEmpty())
 						{
 							ActionErrors errors = (ActionErrors) request
@@ -168,6 +181,8 @@ public class CreateSpecimenAction extends SecureAction
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 								"quickEvents.specimen.notExists", errorString));
 						saveErrors(request, errors);
+						request.setAttribute("disabled", "true");
+						createForm.setVirtuallyLocated(true);
 					}
 
 				}
@@ -301,18 +316,23 @@ public class CreateSpecimenAction extends SecureAction
 				createForm.setExIdCounter(1);
 				createForm.setVirtuallyLocated(false);
 				containerMap = getContainerMap(createForm.getParentSpecimenId(), createForm
-						.getClassName(), dao, scbizLogic);
+						.getClassName(), dao, scbizLogic,exceedingMaxLimit);
 				initialValues = checkForInitialValues(containerMap);
 			}
 		}
 		//*************  ForwardTo implementation *************
-		request.setAttribute("initValues", initialValues);
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+		if (createForm.isVirtuallyLocated())
+		{
+			request.setAttribute("disabled", "true");
+		}
+		
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
 	Map getContainerMap(String specimenId, String className, CreateSpecimenBizLogic dao,
-			StorageContainerBizLogic scbizLogic) throws DAOException
+			StorageContainerBizLogic scbizLogic,String exceedingMaxLimit) throws DAOException
 	{
 		Map containerMap = new HashMap();
 
@@ -326,7 +346,7 @@ public class CreateSpecimenAction extends SecureAction
 					.getCollectionProtocol().getId().longValue();
 			String spClass = className;
 			Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
-			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0);
+			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0,exceedingMaxLimit);
 		}
 
 		return containerMap;
