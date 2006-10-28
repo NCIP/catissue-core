@@ -35,7 +35,6 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -54,7 +53,10 @@ public class StorageContainerAction extends SecureAction
 			throws Exception
 	{
 		StorageContainerForm storageContainerForm = (StorageContainerForm) form;
-
+		//boolean to indicate whether the suitable containers to be shown in dropdown 
+		//is exceeding the max limit.
+		String exceedingMaxLimit = "false";
+		
 		if (storageContainerForm.getSpecimenOrArrayType() == null)
 		{
 			storageContainerForm.setSpecimenOrArrayType("Specimen");
@@ -145,7 +147,7 @@ public class StorageContainerAction extends SecureAction
 		List siteList = new ArrayList();
 		if (storageContainerForm.getTypeId() != -1)
 		{
-			mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(storageContainerForm.getTypeId());
+			mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(storageContainerForm.getTypeId(),exceedingMaxLimit);
 			containerMap = (Map) mapSiteList.get(0);
 			siteList = (List) mapSiteList.get(1);
 
@@ -254,6 +256,7 @@ public class StorageContainerAction extends SecureAction
 			initialValues = checkForInitialValues(containerMap);
 
 		}
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		request.setAttribute("siteForParentList", siteList);
 		request.setAttribute("initValues", initialValues);
@@ -281,7 +284,8 @@ public class StorageContainerAction extends SecureAction
 		}
 		else
 		{
-			if (bizLogic.isContainerFull(new Long(storageContainerForm.getId()).toString()))
+			if (bizLogic.isContainerFull(new Long(storageContainerForm.getId()).toString(),
+					storageContainerForm.getOneDimensionCapacity()+1,storageContainerForm.getTwoDimensionCapacity()+1))
 			{
 				storageContainerForm.setIsFull("true");
 			}

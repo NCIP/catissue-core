@@ -58,7 +58,9 @@ public class AliquotAction extends SecureAction
 			throws Exception
 	{
 		AliquotForm aliquotForm = (AliquotForm) form;
-		
+		//boolean to indicate whether the suitable containers to be shown in dropdown 
+		//is exceeding the max limit.
+		String exceedingMaxLimit = "false";
 		String specimenLabel = aliquotForm.getSpecimenLabel();
 
 		//Extracting the values of the operation & pageOf parameters.
@@ -185,12 +187,12 @@ public class AliquotAction extends SecureAction
 				{
 
 					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
-							Integer.parseInt(aliquotForm.getNoOfAliquots()));
+							Integer.parseInt(aliquotForm.getNoOfAliquots()),exceedingMaxLimit);
 				}
 				else
 				{
 					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
-							0);
+							0,exceedingMaxLimit);
 				}
 				populateAliquotsStorageLocations(aliquotForm, containerMap);
 
@@ -210,6 +212,7 @@ public class AliquotAction extends SecureAction
 				}
 
 				saveErrors(request, errors);
+				request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
 				request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 				request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_CREATE_ALIQUOT);
 				return mapping.findForward(Constants.PAGEOF_CREATE_ALIQUOT);
@@ -254,15 +257,16 @@ public class AliquotAction extends SecureAction
 					if (aliquotForm.isAliqoutInSameContainer())
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()));
+								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()),exceedingMaxLimit);
 					}
 					else
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), 0);
+								.getSpecimenClass(), 0,exceedingMaxLimit);
 					}
 
 					populateAliquotsStorageLocations(aliquotForm, containerMap);
+					request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
 					request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 					request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_CREATE_ALIQUOT);
 					return mapping.findForward(Constants.PAGEOF_CREATE_ALIQUOT);
@@ -340,12 +344,12 @@ public class AliquotAction extends SecureAction
 					{
 
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()));
+								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()),exceedingMaxLimit);
 					}
 					else
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), 0);
+								.getSpecimenClass(), 0,exceedingMaxLimit);
 					}
 					pageOf = checkForSufficientAvailablePositions(request, containerMap, aliquotCount);
 
@@ -356,7 +360,7 @@ public class AliquotAction extends SecureAction
 				}
 			}
 		}
-
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		request.setAttribute(Constants.PAGEOF, pageOf);
 

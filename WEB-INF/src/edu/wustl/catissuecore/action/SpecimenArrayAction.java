@@ -55,7 +55,9 @@ public class SpecimenArrayAction extends SecureAction
         String operation = request.getParameter(Constants.OPERATION);
         request.setAttribute(Constants.OPERATION, operation);
         SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) form;
-        
+		//boolean to indicate whether the suitable containers to be shown in dropdown 
+		//is exceeding the max limit.
+		String exceedingMaxLimit = "false";
         String[] arrayTypeLabelProperty = {"name"};
         String  arrayTypeProperty = "id";
         SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
@@ -153,7 +155,8 @@ public class SpecimenArrayAction extends SecureAction
     		specimenArrayForm.setSubOperation("");
     	}
 		StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		containerMap = storageContainerBizLogic.getAllocatedContaienrMapForSpecimenArray(specimenArrayForm.getSpecimenArrayTypeId(),0);
+		containerMap = storageContainerBizLogic.getAllocatedContaienrMapForSpecimenArray(specimenArrayForm.getSpecimenArrayTypeId(),0,exceedingMaxLimit);
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
     	request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
     	
     	List initialValues = null;

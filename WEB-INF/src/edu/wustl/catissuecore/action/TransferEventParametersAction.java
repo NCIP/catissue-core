@@ -49,6 +49,9 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
 				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 		Map containerMap = new TreeMap();
+		//boolean to indicate whether the suitable containers to be shown in dropdown 
+		//is exceeding the max limit.
+		String exceedingMaxLimit = "false";
 		Vector initialValues = null;
 		//    	
 		if (operation.equals(Constants.ADD))
@@ -104,7 +107,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
 				request.setAttribute(Constants.SPECIMEN_CLASS_NAME,className);
 				Logger.out.info("Spcimen Class:" + className);
-				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0);
+				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0,exceedingMaxLimit);
 
 				if (containerMap.isEmpty())
 				{
@@ -169,6 +172,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 		}
 		request.setAttribute("initValues", initialValues);
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 	}
 

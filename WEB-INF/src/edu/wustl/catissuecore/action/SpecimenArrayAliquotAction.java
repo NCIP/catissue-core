@@ -51,7 +51,9 @@ public class SpecimenArrayAliquotAction extends BaseAction
 		SpecimenArrayAliquotForm specimenArrayAliquotForm = (SpecimenArrayAliquotForm) form;
 		String pageOf = request.getParameter(Constants.PAGEOF);		
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		
+		//boolean to indicate whether the suitable containers to be shown in dropdown 
+		//is exceeding the max limit.
+		String exceedingMaxLimit = "false";
 		if (specimenArrayAliquotForm.getButtonClicked().equalsIgnoreCase("submit"))
 		{
 			Map tempAliquotMap = new HashMap();
@@ -120,7 +122,7 @@ public class SpecimenArrayAliquotAction extends BaseAction
 				checkForSpecimenArray(request, specimenArrayAliquotForm);
 				int aliquotCount = Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 				Long id = (Long)request.getAttribute(Constants.STORAGE_TYPE_ID);
-				containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0);				
+				containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,exceedingMaxLimit);				
 				populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);				
 				request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 				request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT);
@@ -179,7 +181,7 @@ public class SpecimenArrayAliquotAction extends BaseAction
 				{
 					int aliquotCount = Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 					Long id = (Long)request.getAttribute(Constants.STORAGE_TYPE_ID);
-					containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0);					
+					containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,exceedingMaxLimit);					
 					pageOf = checkForSufficientAvailablePositions(request, containerMap, aliquotCount);
 
 					if (Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
@@ -189,7 +191,7 @@ public class SpecimenArrayAliquotAction extends BaseAction
 				}
 			}
 		}
-		
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		request.setAttribute(Constants.PAGEOF, pageOf);
 		return mapping.findForward(pageOf);

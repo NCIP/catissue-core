@@ -56,7 +56,9 @@ public class CreateMultipleSpecimenAction extends BaseAction
 			throws Exception
 	{
 		CreateSpecimenForm createForm = null;
-
+		//boolean to indicate whether the suitable containers to be shown in dropdown 
+		//is exceeding the max limit.
+		String exceedingMaxLimit = "false";
 		if (request.getParameter("retainForm") != null)
 		{
 			createForm = (CreateSpecimenForm) form;
@@ -129,7 +131,7 @@ public class CreateMultipleSpecimenAction extends BaseAction
 		if (cpId != -1 && specimenClass != null && !specimenClass.equals("null") && !specimenClass.equals("-- Select --")
 				&& !specimenClass.equals("-1"))
 		{
-			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, specimenClass, 0);
+			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, specimenClass, 0,exceedingMaxLimit);
 			if (containerMap.isEmpty())
 			{
 				ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
@@ -168,7 +170,7 @@ public class CreateMultipleSpecimenAction extends BaseAction
 		}
 
 		request.setAttribute("initValues", initialValues);
-		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+		//request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		// -------------------------
 
 		String[] fields = {"id"};
@@ -224,6 +226,7 @@ public class CreateMultipleSpecimenAction extends BaseAction
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
 
 		request.setAttribute("initValues", initialValues);
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		request.setAttribute("createSpecimenForm", createForm);
 		request.setAttribute("multipleSpecimen", "true");
