@@ -43,12 +43,15 @@ public class AppletServerCommunicator implements Serializable {
     	
         URL url = new URL(urlString);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
+        //System.out.println("connection object created");
+        connection.setRequestMethod("GET");
         connection.setDoOutput(true);
-        connection.connect();
+        //System.out.println("connection.connect() method commented");
+        //connection.connect();
         ObjectOutputStream outputStream = new ObjectOutputStream(connection
                 .getOutputStream());
         outputStream.writeObject(appletModelInterface);
+        //System.out.println(" flush() is uncommented");
         outputStream.flush();
         outputStream.close();
 
@@ -62,15 +65,22 @@ public class AppletServerCommunicator implements Serializable {
         }
         catch(IOException e)
         {
+        //	System.out.println(" IO Exception " + e);
         	e.printStackTrace();
         }
         catch(ClassNotFoundException e)
         {
             e.printStackTrace();
         }
+        finally
+        {
+        	//System.out.println("Before disconnect in finally");
+        	connection.disconnect();
+        }
         if(inputStream != null)
             inputStream.close();
         
+        //System.out.println("After close() ");
         return appletModelInterface;
     }
 }
