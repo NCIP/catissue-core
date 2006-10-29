@@ -163,6 +163,8 @@ public class SpecimenArrayApplet extends BaseApplet {
         scrollPane.setOpaque(false);
         //scrollPane.setBackground(Color.WHITE);
         scrollPane.getViewport().setBackground(AppletConstants.BG_COLOR);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
         applyButton.addActionListener(new ApplyButtonActionHandler(arrayTable));
         JPopupMenu popupMenu = new JPopupMenu();
