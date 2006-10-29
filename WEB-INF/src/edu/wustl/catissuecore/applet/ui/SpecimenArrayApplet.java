@@ -218,7 +218,7 @@ public class SpecimenArrayApplet extends BaseApplet {
 		try {
 			model = (AppletModelInterface) AppletServerCommunicator.doAppletServerCommunication(urlString,model);
 			tableDataMap = model.getData();
-			System.out.println(" getTableModelData()   tableDataMap :: " + tableDataMap);
+			//System.out.println(" getTableModelData()   tableDataMap :: " + tableDataMap);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -233,7 +233,7 @@ public class SpecimenArrayApplet extends BaseApplet {
 	public void updateSessionData() 
 	{
 		// set last cell data
-		//setLastCellData();
+		setLastCellData();
 		String urlString = serverURL + AppletConstants.SPECIMEN_ARRAY_APPLET_ACTION + ";jsessionid="+session_id+"?" + AppletConstants.APPLET_ACTION_PARAM_NAME + "=updateSessionData";
 		AppletModelInterface model = new BaseAppletModel();
 		Map arrayContentDataMap = ((SpecimenArrayTableModel) arrayTable.getModel()).getSpecimenArrayModelMap();
@@ -253,17 +253,26 @@ public class SpecimenArrayApplet extends BaseApplet {
 	 */
 	private void setLastCellData()
 	{
-		int selectedRow = arrayTable.getSelectedRow();
-		int selectedColumn = arrayTable.getSelectedColumn();
-		/*
-		System.out.println("  model map:: " + ((SpecimenArrayTableModel) arrayTable.getModel()).getSpecimenArrayModelMap());
-		System.out.println(" selectedRow " + selectedRow);
-		System.out.println(" selectedColumn " + selectedColumn);
-		*/
-		if ((selectedRow > -1) && (selectedColumn > -1) && (selectedRow <= arrayTable.getRowCount()) && (selectedColumn <= arrayTable.getColumnCount()))
+		try
 		{
-			arrayTable.getCellEditor(selectedRow,selectedColumn).stopCellEditing();
+			System.out.println(" start setLastCellData() method");
+			int selectedRow = arrayTable.getSelectedRow();
+			int selectedColumn = arrayTable.getSelectedColumn();
+			/*
+			System.out.println("  model map:: " + ((SpecimenArrayTableModel) arrayTable.getModel()).getSpecimenArrayModelMap());
+			System.out.println(" selectedRow " + selectedRow);
+			System.out.println(" selectedColumn " + selectedColumn);
+			*/
+			if ((selectedRow > -1) && (selectedColumn > -1) && (selectedRow <= arrayTable.getRowCount()) && (selectedColumn <= arrayTable.getColumnCount()))
+			{
+				arrayTable.getCellEditor(selectedRow,selectedColumn).stopCellEditing();
+			}
 		}
+		catch(Exception exception)
+		{
+			System.out.println(" Exception occurred in setLastCellData() method" + exception.getMessage());
+		}
+		System.out.println(" end setLastCellData() method");
 		//System.out.println("  after stopping model map:: " + ((SpecimenArrayTableModel) arrayTable.getModel()).getSpecimenArrayModelMap());
 	}
 	
