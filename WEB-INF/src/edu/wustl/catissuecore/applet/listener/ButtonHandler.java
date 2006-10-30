@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
@@ -30,7 +31,22 @@ import edu.wustl.catissuecore.util.global.Constants;
 
 public class ButtonHandler extends BaseActionHandler
 {
+	/*
+	 * This button hold reference to the collection group radio button. 
+	 * Used in DerivedButton and Map Button
+	 */
+	private JRadioButton radioButton;
 
+	/**
+	 * @param table
+	 */
+	public ButtonHandler(JTable table, JRadioButton radioButton)
+	{
+		super(table);
+		this.radioButton = radioButton; 
+	}
+
+	
 	/**
 	 * @param table
 	 */
