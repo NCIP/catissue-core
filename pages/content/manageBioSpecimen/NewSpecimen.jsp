@@ -187,7 +187,20 @@
 				document.forms[0].mapButton.disabled = false;*/
 			}
 		}
-		
+		function resetVirtualLocated()
+		{
+			var virtualCheckBox = document.getElementById("virtuallyLocated");
+			var containerName = document.getElementById("customListBox_1_0");
+			var pos1 = document.getElementById("customListBox_1_1");
+			var pos2 = document.getElementById("customListBox_1_2");
+			if(virtualCheckBox.checked==false)
+			{
+				virtualCheckBox.checked=true;
+				containerName.disabled = true;
+				pos1.disabled = true;
+				pos2.disabled = true;
+			}
+		}
 		function eventClicked()
 		{			
 			var answer = confirm("Do you want to submit any changes?");
@@ -382,7 +395,7 @@
 								<!-- Mandar : 434 : for tooltip -->
 					     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
 					     				styleId="specimenCollectionGroupId" size="1" 
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="resetVirtualLocated()" >
 									<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
 										labelProperty="name" property="value"/>		
 								</html:select>
@@ -464,7 +477,7 @@
 						    </td>
 						    <td class="formField">
 <!-- Mandar : 434 : for tooltip -->
-						     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);resetVirtualLocated()" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 						     	<%
 									String classValue = form.getClassName();
 									if(operation.equals(Constants.EDIT))

@@ -92,7 +92,20 @@
 				document.forms[0].parentSpecimenLabel.disabled = true;
 			}
 		}		 
-
+function resetVirtualLocated()
+{
+	var virtualCheckBox = document.getElementById("virtuallyLocated");
+	var containerName = document.getElementById("customListBox_1_0");
+	var pos1 = document.getElementById("customListBox_1_1");
+	var pos2 = document.getElementById("customListBox_1_2");
+	if(virtualCheckBox.checked==false)
+	{
+		virtualCheckBox.checked=true;
+		containerName.disabled = true;
+		pos1.disabled = true;
+		pos2.disabled = true;
+	}
+}
 function classChangeForMultipleSpecimen()
 {
  	var action ='NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&specimenAttributeKey=' + document.getElementById("specimenAttributeKey").value + '&derivedSpecimenCollectionGroup=' + document.getElementById("derivedSpecimenCollectionGroup").value + '&retainForm=true';
@@ -420,7 +433,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					<td class="formField" colspan="2">
 						
 					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
-				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" />
+				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" onblur="resetVirtualLocated()"/>
 			        </logic:equal>
 			
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
@@ -447,7 +460,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			        </logic:equal>
 			
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
-				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" />
+				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" onblur="resetVirtualLocated()"/>
 			        </logic:equal>
 										
 		        	</td>
@@ -478,7 +491,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				    <td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onTypeChange(this)">
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onTypeChange(this);resetVirtualLocated()">
 							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
