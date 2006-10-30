@@ -118,18 +118,23 @@ public class SpecimenColumnModel extends AbstractCellEditor
 	
 	//For Comments
 	JButton comments;
+	JPanel commentsPanel;
 	
 	//Events 
 	JButton eventsButton;
+	JPanel eventsPanel;
 	
 	//External Identifier
 	JButton externalIdentifierButton;
+	JPanel externalIdentifierPanel;
 	
 	//BioHazard
 	JButton bioHazardButton;
+	JPanel bioHazardPanel;
 
 	//Derive
 	JButton deriveButton;
+	JPanel derivePanel;
 
 	// For holding component value
 	String text="";
@@ -308,23 +313,23 @@ public class SpecimenColumnModel extends AbstractCellEditor
 			break;
 		//For Comments
 		case AppletConstants.SPECIMEN_COMMENTS_ROW_NO :
-			comp = comments;
+			comp = commentsPanel ;
 			break;
 		//Events 
 		case AppletConstants.SPECIMEN_EVENTS_ROW_NO :
-			comp = eventsButton;
+			comp = eventsPanel ;
 			break;
 		//External Identifier
 		case AppletConstants.SPECIMEN_EXTERNAL_IDENTIFIERS_ROW_NO :
-			comp = externalIdentifierButton;
+			comp = externalIdentifierPanel; 
 			break;
 		//BioHazard
 		case AppletConstants.SPECIMEN_BIOHAZARDS_ROW_NO :
-			comp = bioHazardButton;
+			comp = bioHazardPanel ;
 			break;
 		//Derive
 		case AppletConstants.SPECIMEN_DERIVE_ROW_NO :
-			comp = deriveButton;
+			comp = derivePanel ;
 			break;
 		default :
 			comp = new JTextField(10);
@@ -450,19 +455,29 @@ public class SpecimenColumnModel extends AbstractCellEditor
 		
 		//For Comments
 		comments = new JButton(AppletConstants.MULTIPLE_SPECIMEN_COMMENTS);
+		commentsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT  ) );
+		commentsPanel.add(comments); 
 		
 		//Events 
 		eventsButton = new JButton(AppletConstants.MULTIPLE_SPECIMEN_EVENTS );
+		eventsPanel  =  new JPanel(new FlowLayout(FlowLayout.LEFT  ) );
+		eventsPanel.add(eventsButton );
 		
 		//External Identifier
 		externalIdentifierButton = new JButton(AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS );
+		externalIdentifierPanel   =  new JPanel(new FlowLayout(FlowLayout.LEFT  ) );
+		externalIdentifierPanel.add(externalIdentifierButton  );
 		
 		//BioHazard
 		bioHazardButton = new JButton(AppletConstants.MULTIPLE_SPECIMEN_BIOHAZARDS);
+		bioHazardPanel =  new JPanel(new FlowLayout(FlowLayout.LEFT  ) );
+		bioHazardPanel.add(bioHazardButton  ); 
 
 		//Derive
 		deriveButton = new JButton(AppletConstants.MULTIPLE_SPECIMEN_DERIVE);
-		deriveButton.setEnabled(false ); 
+		deriveButton.setEnabled(false );
+		derivePanel =  new JPanel(new FlowLayout(FlowLayout.LEFT  ) );
+		derivePanel.add(deriveButton  ); 
 
 		// For holding component value
 		text=new String();
