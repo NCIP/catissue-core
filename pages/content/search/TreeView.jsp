@@ -29,13 +29,22 @@
 
 	function setParentWindowValue(elementName,elementValue)
 	{ 
-		for (var i=0;i < opener.document.forms[0].elements.length;i++)
-	    {
-	    	if (opener.document.forms[0].elements[i].name == elementName)
-			{
-				opener.document.forms[0].elements[i].value = elementValue;
-			}
-	    }
+		if(elementName.indexOf("MultipleSpecimen:") != -1)
+		{
+			var col = elementName.substring((elementName.indexOf(":")+1),(elementName.indexOf("_")));
+			opener.document.applets[0].setTissueSiteFromTreeMap(col,elementValue);
+		}
+		else
+		{
+			for (var i=0;i < opener.document.forms[0].elements.length;i++)
+		    {
+		    	if (opener.document.forms[0].elements[i].name == elementName)
+				{
+					opener.document.forms[0].elements[i].value = elementValue;
+				}
+		    }
+		}
+
 	}
 </script>
 
