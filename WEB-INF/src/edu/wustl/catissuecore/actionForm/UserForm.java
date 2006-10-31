@@ -662,12 +662,20 @@ public class UserForm extends AbstractActionForm
 				this.setCsmUserId(user.getCsmUserId());
 				try
 				{
-					gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(UserForm.class).getUserById(this.getCsmUserId().toString());
-					if(csmUser != null)
-		            {
-		            	this.setNewPassword(PasswordManager.decode(csmUser.getPassword()));
-		            	this.setConfirmNewPassword(PasswordManager.decode(csmUser.getPassword()));
-		            }    
+					if(this.csmUserId != null) //in case user not approved
+					{
+						gov.nih.nci.security.authorization.domainobjects.User csmUser = SecurityManager.getInstance(UserForm.class).getUserById(this.getCsmUserId().toString());
+						if(csmUser != null)
+			            {
+			            	this.setNewPassword(PasswordManager.decode(csmUser.getPassword()));
+			            	this.setConfirmNewPassword(PasswordManager.decode(csmUser.getPassword()));
+			            }
+					}
+					else
+					{
+						this.setNewPassword("");
+		            	this.setConfirmNewPassword("");
+					}
 				}
 				catch(SMException e)
 				{
@@ -909,34 +917,38 @@ public class UserForm extends AbstractActionForm
 					//Bug- 1516:  
 					if(pageOf.equals(Constants.PAGEOF_USER_ADMIN) && operation.equals(Constants.EDIT))
 					{
-						if (validator.isEmpty(newPassword))
+						String pageFrom = request.getParameter("pageFrom");
+						if(!"ApproveUser".equals(pageFrom))
 						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.newPassword")));
-						}
-
-						if (validator.isEmpty(confirmNewPassword))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-									.getValue("user.confirmNewPassword")));
-						}
-
-						if (!validator.isEmpty(newPassword) && !validator.isEmpty(confirmNewPassword))
-						{
-							if (!newPassword.equals(confirmNewPassword))
+							if (validator.isEmpty(newPassword))
 							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.confirmNewPassword.reType"));
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+										.getValue("user.newPassword")));
 							}
-						}
-						
-						int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
-						
-						if (result != PasswordManager.SUCCESS)
-						{
-							// get error message of validation failure where param is result of validate() method
-						    String errorMessage = PasswordManager.getErrorMessage(result);
-							Logger.out.debug("error from Password validate " + errorMessage);
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
+	
+							if (validator.isEmpty(confirmNewPassword))
+							{
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+										.getValue("user.confirmNewPassword")));
+							}
+	
+							if (!validator.isEmpty(newPassword) && !validator.isEmpty(confirmNewPassword))
+							{
+								if (!newPassword.equals(confirmNewPassword))
+								{
+									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.confirmNewPassword.reType"));
+								}
+							}
+							
+							int result = PasswordManager.validatePasswordOnFormBean(newPassword, oldPassword, request.getSession());
+							
+							if (result != PasswordManager.SUCCESS)
+							{
+								// get error message of validation failure where param is result of validate() method
+							    String errorMessage = PasswordManager.getErrorMessage(result);
+								Logger.out.debug("error from Password validate " + errorMessage);
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
+							}
 						}
 					}
 					// Mandar 10-apr-06 : bugid :353 end 
