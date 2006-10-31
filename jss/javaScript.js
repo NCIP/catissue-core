@@ -404,6 +404,15 @@ function submitComments()
   form.submit();
 }	   
 
+/* Function to show TissueSiteTreeApplet */
+function showTreeMap(column)
+{
+//	alert("TissueSite TreeMap : column"+column);
+	var pName = "MultipleSpecimen:"+column+"_tissueSite";
+//	alert(pName);
+	NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName='+pName+'&cdeName=Tissue Site','name','375','330','yes');
+}
+
 function setStoragePosition(specimenMapKey,storageId,storageType,xPos,yPos) {
    parent.window.opener.document.applets[0].setStorageDetails(specimenMapKey,storageId,storageType,xPos,yPos);
 }
