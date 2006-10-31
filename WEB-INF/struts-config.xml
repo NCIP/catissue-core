@@ -742,6 +742,7 @@ PUBLIC
 			<forward name="success" path="/SpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroup" />
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 			<forward name="createNewSpecimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;virtualLocated=true" />
+			<forward name="createMultipleSpecimen" path="/InitMultipleSpecimen.do?operation=add&amp;menuSelected=15" />			
 		</action>
 
 		<action path="/SpecimenCollectionGroupEdit"
@@ -754,6 +755,7 @@ PUBLIC
 			<forward name="query" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupQuery&amp;menuSelected=12" />
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 			<forward name="createNewSpecimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;virtualLocated=true" />
+			<forward name="createMultipleSpecimen" path="/InitMultipleSpecimen.do?operation=add&amp;menuSelected=15" />			
 		</action>
 
 		<action path="/SpecimenCollectionGroupSearch"

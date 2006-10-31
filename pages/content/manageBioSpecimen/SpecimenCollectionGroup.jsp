@@ -134,9 +134,11 @@
 	<%
 			String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
 			String forwardToSubmitFuctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";									
+			String forwardToSubmitFunctionNameForMultipleSpecimen = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][1]+"')";									
 			String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 			String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
 			String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
+			String forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncName;
 	%>
 		
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">

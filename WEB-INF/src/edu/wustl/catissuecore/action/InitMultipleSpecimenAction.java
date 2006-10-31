@@ -1,5 +1,7 @@
 package edu.wustl.catissuecore.action;
 
+import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -9,6 +11,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -26,6 +29,22 @@ public class InitMultipleSpecimenAction extends Action
 	{
 		String pageOf = request.getParameter(Constants.PAGEOF);
 		
+//		*************  ForwardTo implementation *************
+		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
+
+		if (forwardToHashMap != null)
+		{
+			String specimenCollectionGroupName = (String) forwardToHashMap
+					.get("specimenCollectionGroupName");
+			
+			if (specimenCollectionGroupName != null)
+			{
+				//Setting the specimenCollectionGroup 
+				request.getSession().setAttribute("specimenCollectionGroupName" , specimenCollectionGroupName);
+			}
+		}
+		//*************  ForwardTo implementation *************
+
 		
     	if (pageOf == null) {
     		pageOf = Constants.SUCCESS;

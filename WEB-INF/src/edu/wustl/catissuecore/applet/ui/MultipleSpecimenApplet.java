@@ -51,8 +51,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	public void doInit()
     {
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));		
-		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());		
-
+		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());
+				
 		table = new MultipleSpecimenTable(model);
         table.getTableHeader().setReorderingAllowed(false);
 
@@ -104,6 +104,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
 
 		getContentPane().add(scrollPane);
 		setBackground(appletColor);
+		
+		
 		
     }
     
@@ -180,7 +182,6 @@ public class MultipleSpecimenApplet extends BaseApplet {
 
 			appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(
 					url, appletModel);
-
 			return appletModel.getData();
 		}
 		catch (Exception e)

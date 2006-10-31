@@ -30,6 +30,16 @@
 						  				     	    
 											     	</html:button>
 												</td>
+												<td nowrap class="formFieldNoBorders">
+													<html:button styleClass="actionButton"  
+															property="submitPage" 
+															title="Submit and Add Multiple Specimen"
+															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][0]%>" 
+															disabled="<%=isAddNew%>" 
+															onclick="<%=forwardToSubmitForMultipleSpecimen%>">
+						  				     	    
+											     	</html:button>
+												</td>
 												</logic:notEqual>		
 											</tr>
 										</table>

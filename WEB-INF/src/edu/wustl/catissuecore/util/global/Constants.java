@@ -109,6 +109,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String BIOHAZARD_TYPES_LIST = "biohazardTypesList";
 	public static final String PARENT_SPECIMEN_ID_LIST = "parentSpecimenIdList";
 	public static final String RECEIVED_QUALITY_LIST = "receivedQualityList";
+	public static final String SPECIMEN_COLL_GP_NAME = "specimenCollectionGroupName";
 	
 	//SpecimenCollecionGroup lists.
 	public static final String PROTOCOL_TITLE_LIST = "protocolTitleList";
@@ -943,7 +944,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 
 	public static final String [][] SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST = {
 			{"Submit",				"success"},
-			{"Add Specimen",			"createNewSpecimen"}
+			{"Add Specimen",			"createNewSpecimen"},
+			{"Add Multiple Specimen", "createMultipleSpecimen"}
 	};
 	
 	public static final String [][] PROTOCOL_REGISTRATION_FORWARD_TO_LIST = {

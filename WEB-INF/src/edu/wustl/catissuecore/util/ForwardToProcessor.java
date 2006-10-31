@@ -14,6 +14,7 @@ import java.util.HashMap;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -58,8 +59,9 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 		}
 		else if (domainObject instanceof SpecimenCollectionGroup)
 		{
+			SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)actionForm;
 			forwardToHashMap.put("specimenCollectionGroupId", domainObject.getId().toString());
-
+			forwardToHashMap.put("specimenCollectionGroupName", specimenCollectionGroupForm.getName());
 		}
 		else if (domainObject instanceof Specimen)
 		{

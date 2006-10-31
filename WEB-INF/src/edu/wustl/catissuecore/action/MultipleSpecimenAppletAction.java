@@ -100,7 +100,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		DataListsMap.put(Constants.TISSUE_SITE_LIST, Utility.getListForCDE(Constants.CDE_NAME_TISSUE_SITE).toArray());
 		DataListsMap.put(Constants.TISSUE_SIDE_LIST, Utility.getListForCDE(Constants.CDE_NAME_TISSUE_SIDE).toArray());
 		DataListsMap.put(Constants.PATHOLOGICAL_STATUS_LIST, Utility.getListForCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS).toArray());
-
+		
 		//------------specimen collection group
 		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 
@@ -112,6 +112,10 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		ArrayList specimenGroupArrayList = new ArrayList();
 		specimenGroupArrayList = getNameStringArray(specimenGroupList);
 		DataListsMap.put(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenGroupArrayList.toArray());
+		if(request.getSession().getAttribute("specimenCollectionGroupName") != null)
+		{
+			DataListsMap.put(Constants.SPECIMEN_COLL_GP_NAME,request.getSession().getAttribute("specimenCollectionGroupName"));
+		}
 		// ------------------------------------
 
 		writeMapToResponse(response, DataListsMap);

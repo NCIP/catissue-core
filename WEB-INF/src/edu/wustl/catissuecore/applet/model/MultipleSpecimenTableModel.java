@@ -28,24 +28,20 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	private int lastCellColumn = 0;
 	private int lastCellRow = 0;
 
-	
 	/**
 	 * attributes of the specimen for which user can specify the values. 
 	 */
-	String[] specimenAttribute = {"SpecimenCollectionGroup_name", "ParentSpecimen_label", "label",
-			"barcode", "class", "type", "SpecimenCharacteristics_tissueSite",
-			"SpecimenCharacteristics_tissueSide", "pathologicalStatus", "Quantity_value",
-			"concentrationInMicrogramPerMicroliter", "StorageContainer_temp", "comments",
-			"specimenEventCollection", "externalIdentifierCollection", "biohazardCollection",
-			"derive"};
+	String[] specimenAttribute = {"SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
+			"SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "Quantity_value",
+			"concentrationInMicrogramPerMicroliter", "StorageContainer_temp", "comments", "specimenEventCollection", "externalIdentifierCollection",
+			"biohazardCollection", "derive"};
 
 	/**
 	 * Row headers for the attributes. This corrosponds to display value for each of the  specimenAttribute in that order.
 	 */
-	private static final String[]  rowHeaders = {"* Specimen Group Name", "* Parent", "* Label", "Barcode", "* Class", "* Type",
-			"* Tissue Site", "* Tissue Side", "* Pathological Status", "* Quantity", "Concentration",
-			"* Storage Position", "Comments", "* Events", "External Identifier(s)", "Biohazards",
-			"Derive"};
+	private static final String[] rowHeaders = {"* Specimen Group Name", "* Parent", "* Label", "Barcode", "* Class", "* Type", "* Tissue Site",
+			"* Tissue Side", "* Pathological Status", "* Quantity", "Concentration", "* Storage Position", "Comments", "* Events",
+			"External Identifier(s)", "Biohazards", "Derive"};
 
 	/**
 	 * Data structure maintianed by the model. Its key format is as follows:
@@ -72,23 +68,30 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	Map specimenAttributeOptions;
 
 	/***/
-	private int columnsPerPage = 5; 
-	
+	private int columnsPerPage = 5;
+
 	/**/
 	private int currentPageIndex = 1;
-	
+	private String specimenCollectionGroupName = null;
+
 	/**
 	 * set default map. 
 	 * @param specimenAttributeOptions  initialzation map.
 	 */
 	public MultipleSpecimenTableModel(int initialColumnCount, Map specimenAttributeOptions)
 	{
+
 		specimenMap = new HashMap();
 		this.columnCount = initialColumnCount;
 		this.specimenAttributeOptions = specimenAttributeOptions;
-		
-		for (int i=1;i<=initialColumnCount;i++) {
+		for (int i = 1; i <= initialColumnCount; i++)
+		{
 			putIdInMap(i);
+		}
+		//Setting the specimen Collection group name if add multiple specimen came form add specimen collection group name
+		if (specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME) != null)
+		{
+			setSpecimenCollectionGroupName(specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME).toString());
 		}
 	}
 
@@ -97,7 +100,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	private void putIdInMap(int colNo)
 	{
-		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo) + "_" + "id" ,new Long(colNo));
+		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo) + "_" + "id", new Long(colNo));
 	}
 
 	/**
@@ -105,13 +108,13 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public Object getValueAt(int row, int column)
 	{
-/*		if (column == 0)
-		{
-			return rowHeaders[row];
-		}
-      System.out.println("getValueAt " + row + " " + column + ": " + getKey(row,column) + "  " + specimenMap.get(getKey(row,column)));
-*/      
-		return specimenMap.get(getKey(row,column));
+		/*		if (column == 0)
+		 {
+		 return rowHeaders[row];
+		 }
+		 System.out.println("getValueAt " + row + " " + column + ": " + getKey(row,column) + "  " + specimenMap.get(getKey(row,column)));
+		 */
+		return specimenMap.get(getKey(row, column));
 	}
 
 	/**
@@ -119,22 +122,22 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public void setValueAt(Object value, int row, int column)
 	{
-/*		if (column != 0)
-		{
-			specimenMap.put(getKey(row,column), value);
-		}
-       System.out.println("setValueAt " + row + " " + column + ": " + specimenMap.get(getKey(row,column)) + value);
-*/
-		/* Code to check the calling method.
-		try
-		{
-			throw new Exception("User Defined");
-		}
-		catch(Exception e){ e.printStackTrace();}
+		/*		if (column != 0)
+		 {
+		 specimenMap.put(getKey(row,column), value);
+		 }
+		 System.out.println("setValueAt " + row + " " + column + ": " + specimenMap.get(getKey(row,column)) + value);
 		 */
-		specimenMap.put(getKey(row,column), value);
-		System.out.println("In setValueAt : row : "+row + " Column : "+ column);
-		System.out.println("setValueAt " + getKey(row,column)+ ": " + specimenMap.get(getKey(row,column))+" - " + value);
+		/* Code to check the calling method.
+		 try
+		 {
+		 throw new Exception("User Defined");
+		 }
+		 catch(Exception e){ e.printStackTrace();}
+		 */
+		specimenMap.put(getKey(row, column), value);
+		System.out.println("In setValueAt : row : " + row + " Column : " + column);
+		System.out.println("setValueAt " + getKey(row, column) + ": " + specimenMap.get(getKey(row, column)) + " - " + value);
 	}
 
 	/**
@@ -142,26 +145,31 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public int getColumnCount()
 	{
-		
-		if(currentPageIndex > (columnCount / columnsPerPage)) {
+
+		if (currentPageIndex > (columnCount / columnsPerPage))
+		{
 			return columnCount % columnsPerPage;
 		}
-		
+
 		return columnsPerPage;
 	}
 
 	/**
 	 * @return Returns the currentPageIndex.
 	 */
-	public int getCurrentPageIndex() {
+	public int getCurrentPageIndex()
+	{
 		return currentPageIndex;
 	}
+
 	/**
 	 * @param currentPageIndex The currentPageIndex to set.
 	 */
-	public void setCurrentPageIndex(int currentPageIndex) {
+	public void setCurrentPageIndex(int currentPageIndex)
+	{
 		this.currentPageIndex = currentPageIndex;
 	}
+
 	/** 
 	 * @see javax.swing.table.DefaultTableModel#getRowCount()
 	 */
@@ -180,7 +188,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public String getColumnName(int columnNo)
 	{
-			return "Specimen " + (getActualColumnNo(columnNo)+1) ;
+		return "Specimen " + (getActualColumnNo(columnNo) + 1);
 	}
 
 	/**
@@ -195,43 +203,55 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 * This method return row headers.
 	 * @return 
 	 */
-	public static  Object[] getRowHeaders()
+	public static Object[] getRowHeaders()
 	{
 		return rowHeaders;
+	}
+
+	//Setting the Specimen Collection Group Name For Specimen
+	public void setSpecimenCollectionGroupName(String specimenCollectionGroupName)
+	{
+		this.specimenCollectionGroupName = specimenAttributeOptions.get("specimenCollectionGroupName").toString();
+	}
+
+	//Getting the Specimen Collection Group Name for Specimen
+	public String getSpecimenCollectionGroupName()
+	{
+		return this.specimenCollectionGroupName;
 	}
 
 	/**
 	 * This method initialize data lists 
 	 */
-/*	private Map initDataLists()
-	{
-		BaseAppletModel appletModel = new BaseAppletModel();
-		appletModel.setData(new HashMap());
-		try
-		{
-			appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(
-					"http://localhost:8080/catissuecore/MultipleSpecimenAppletAction.do?method=initData", appletModel);
+	/*	private Map initDataLists()
+	 {
+	 BaseAppletModel appletModel = new BaseAppletModel();
+	 appletModel.setData(new HashMap());
+	 try
+	 {
+	 appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(
+	 "http://localhost:8080/catissuecore/MultipleSpecimenAppletAction.do?method=initData", appletModel);
 
-			Map tempMap = appletModel.getData();
-			 System.out.println(tempMap.get(Constants.SPECIMEN_TYPE_MAP));
-			 System.out.println(tempMap.get(Constants.SPECIMEN_CLASS_LIST));
-			 System.out.println(tempMap.get(Constants.TISSUE_SITE_LIST));
-			 System.out.println(tempMap.get(Constants.TISSUE_SIDE_LIST));
-			 System.out.println(tempMap.get(Constants.PATHOLOGICAL_STATUS_LIST));
-			 
+	 Map tempMap = appletModel.getData();
+	 System.out.println(tempMap.get(Constants.SPECIMEN_TYPE_MAP));
+	 System.out.println(tempMap.get(Constants.SPECIMEN_CLASS_LIST));
+	 System.out.println(tempMap.get(Constants.TISSUE_SITE_LIST));
+	 System.out.println(tempMap.get(Constants.TISSUE_SIDE_LIST));
+	 System.out.println(tempMap.get(Constants.PATHOLOGICAL_STATUS_LIST));
+	 
 
-			return appletModel.getData();
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.out.println("Exception");
-		}
+	 return appletModel.getData();
+	 }
+	 catch (Exception e)
+	 {
+	 e.printStackTrace();
+	 System.out.println("Exception");
+	 }
 
-		return null;
-	}
+	 return null;
+	 }
 
-*/	/**
+	 *//**
 	 * returns specimen type list for given specimen class.
 	 * 
 	 * @param specimenClass
@@ -239,12 +259,12 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public List getSpecimenTypeList(String specimenClass)
 	{
-//		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
-//		return (List) specimenTypeMap.get(specimenClass);
+		//		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
+		//		return (List) specimenTypeMap.get(specimenClass);
 		ArrayList aList = new ArrayList();
-		for(int i=1;i<5;i++)
-			aList.add(specimenClass + "_"+i);
-		
+		for (int i = 1; i < 5; i++)
+			aList.add(specimenClass + "_" + i);
+
 		return aList;
 	}
 
@@ -252,12 +272,13 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	{
 		System.out.println("get type values called");
 		/*String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, column);*/
-		if (specimenClass == null ) {
-			specimenClass = Constants.SELECT_OPTION; 
-	    }
+		if (specimenClass == null)
+		{
+			specimenClass = Constants.SELECT_OPTION;
+		}
 		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
 		return (Object[]) specimenTypeMap.get(specimenClass);
-	} 
+	}
 
 	/**
 	 * returns specimen class list
@@ -304,8 +325,9 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 
 		String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, colNo);
 		String specimenType = (String) getValueAt(AppletConstants.SPECIMEN_TYPE_ROW_NO, colNo);
-		
-		if(specimenClass == null  ) {
+
+		if (specimenClass == null)
+		{
 			return "";
 		}
 
@@ -326,16 +348,16 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		}
 		else if (specimenClass.equals("Tissue"))
 		{
-			if(specimenType == null) {
+			if (specimenType == null)
+			{
 				unit = Constants.UNIT_GM;
-			} else if (specimenType.equals(Constants.MICRODISSECTED))
+			}
+			else if (specimenType.equals(Constants.MICRODISSECTED))
 			{
 				unit = Constants.UNIT_CL;
 			}
-			else if (specimenType.equals(Constants.FROZEN_TISSUE_SLIDE)
-					|| specimenType.equals(Constants.FIXED_TISSUE_BLOCK)
-					|| specimenType.equals(Constants.FROZEN_TISSUE_BLOCK)
-					|| specimenType.equals(Constants.NOT_SPECIFIED)
+			else if (specimenType.equals(Constants.FROZEN_TISSUE_SLIDE) || specimenType.equals(Constants.FIXED_TISSUE_BLOCK)
+					|| specimenType.equals(Constants.FROZEN_TISSUE_BLOCK) || specimenType.equals(Constants.NOT_SPECIFIED)
 					|| specimenType.equals(Constants.FIXED_TISSUE_SLIDE))
 			{
 				unit = Constants.UNIT_CN;
@@ -349,24 +371,24 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		return unit;
 
 	}
-	
+
 	public void specimenClassUpdated(int columnNo)
 	{
 		//---
 		//this.fireTableStructureChanged() ;
 		//---
-/*		fireTableCellUpdated(AppletConstants.SPECIMEN_BARCODE_ROW_NO,columnNo);
-		fireTableCellUpdated(AppletConstants.SPECIMEN_TYPE_ROW_NO,columnNo);
-	
-		
-		System.out.println("updating type " + AppletConstants.SPECIMEN_TYPE_ROW_NO +  " "+ columnNo);
-*/	}
-	
-	public String getKey(int row, int column) {
+		/*		fireTableCellUpdated(AppletConstants.SPECIMEN_BARCODE_ROW_NO,columnNo);
+		 fireTableCellUpdated(AppletConstants.SPECIMEN_TYPE_ROW_NO,columnNo);
+		 
+		 
+		 System.out.println("updating type " + AppletConstants.SPECIMEN_TYPE_ROW_NO +  " "+ columnNo);
+		 */}
+
+	public String getKey(int row, int column)
+	{
 		int actualColumnNo = getActualColumnNo(column);
-		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(actualColumnNo+1) + "_"
-		+ specimenAttribute[row];
-		
+		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(actualColumnNo + 1) + "_" + specimenAttribute[row];
+
 		return specimenKey;
 	}
 
@@ -378,43 +400,44 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 * @return
 	 */
 	public boolean getConcentrationStatus(int column)
-	{	return false;
-//		String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, getActualColumnNo(column));
-//		
-//		if(specimenClass.equalsIgnoreCase(Constants.MOLECULAR)) {
-//			return true;
-//		} 
-//		
-//		return false;
+	{
+		return false;
+		//		String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, getActualColumnNo(column));
+		//		
+		//		if(specimenClass.equalsIgnoreCase(Constants.MOLECULAR)) {
+		//			return true;
+		//		} 
+		//		
+		//		return false;
 	}
-	
+
 	/**
 	 * set storage details in map.
 	 */
-	public void setStorageDetails(String specimenMapKey, String storageId,String storageLabel,String xPos,String yPos) {
+	public void setStorageDetails(String specimenMapKey, String storageId, String storageLabel, String xPos, String yPos)
+	{
 		int colNo = getActualColumnNo(Integer.parseInt(specimenMapKey));
-		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo+1) + "_" + "StorageContainer_id" ,new Long(storageId));
-		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo+1) + "_" + "positionDimensionOne", xPos );
-		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo+1) + "_" + "positionDimensionTwo", yPos );
-		
-		
+		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo + 1) + "_" + "StorageContainer_id", new Long(storageId));
+		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo + 1) + "_" + "positionDimensionOne", xPos);
+		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo + 1) + "_" + "positionDimensionTwo", yPos);
+
 		String storageInfo = storageLabel + "," + xPos + "," + yPos;
 
 		//mandar added new key to hold map data
-		specimenMap.put(getMapTempKey(Integer.parseInt(specimenMapKey)), storageInfo );
+		specimenMap.put(getMapTempKey(Integer.parseInt(specimenMapKey)), storageInfo);
 
 		//setValueAt(storageInfo, AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO, colNo);
-		System.out.println("Setting StorageInfo at : " + getKey(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO, Integer.parseInt(specimenMapKey) ));
+		System.out.println("Setting StorageInfo at : " + getKey(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO, Integer.parseInt(specimenMapKey)));
 		setValueAt(storageInfo, AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO, Integer.parseInt(specimenMapKey));
-	//	setValueAt(storageInfo,10,10);
+		//	setValueAt(storageInfo,10,10);
 
-		System.out.println("setting " + storageInfo + "to " +  AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO + "  " +  colNo);
-//		System.out.println("Getting storageInfo from : "+  getValueAt(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO , colNo));
-//		System.out.println("-------------------------------------------------------\n");
-//			showMapData();
-//		System.out.println("-------------------------------------------------------\n");
+		System.out.println("setting " + storageInfo + "to " + AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO + "  " + colNo);
+		//		System.out.println("Getting storageInfo from : "+  getValueAt(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO , colNo));
+		//		System.out.println("-------------------------------------------------------\n");
+		//			showMapData();
+		//		System.out.println("-------------------------------------------------------\n");
 	}
-	
+
 	/**
 	 * 
 	 * @param column Column for which the map key should be returned.
@@ -423,9 +446,10 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	public String getMapTempKey(int column)
 	{
 		int colNo = getActualColumnNo(column);
-		String key = AppletConstants.SPECIMEN_PREFIX + (colNo+1) + "_" + AppletConstants.MULTIPLE_SPECIMEN_LOCATION_LABEL;
+		String key = AppletConstants.SPECIMEN_PREFIX + (colNo + 1) + "_" + AppletConstants.MULTIPLE_SPECIMEN_LOCATION_LABEL;
 		return key;
 	}
+
 	/**
 	 * 
 	 * @param key Key for which the value is required.
@@ -433,27 +457,28 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public String getMapTempValue(String key)
 	{
-		String value= "";
+		String value = "";
 		try
 		{
-			if(key !=null)
+			if (key != null)
 			{
-				if(specimenMap.containsKey(key ))
-					return specimenMap.get(key ).toString() ;
+				if (specimenMap.containsKey(key))
+					return specimenMap.get(key).toString();
 				else
 					return value;
 			}
-			else 
+			else
 				return value;
 		}
-		catch(Exception e)
+		catch (Exception e)
 		{
 			System.out.println(e.getMessage());
 			return value;
 		}
 	}
-	
-	public void addColumn() {
+
+	public void addColumn()
+	{
 		columnCount++;
 		putIdInMap(columnCount);
 	}
@@ -461,20 +486,22 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**
 	 * Returns actual column no of the given column  depending on page index.
 	 */
-	private int getActualColumnNo(int selectedColumnNo) {
+	private int getActualColumnNo(int selectedColumnNo)
+	{
 		//System.out.println(("col converteed to " + selectedColumnNo + "--->" + ((columnsPerPage * ( currentPageIndex - 1) ) + selectedColumnNo)));
-		return  ((columnsPerPage * ( currentPageIndex - 1) ) + selectedColumnNo);
+		return ((columnsPerPage * (currentPageIndex - 1)) + selectedColumnNo);
 	}
-	
+
 	/**
 	 * This method returns  the display column no of a column given its actual no in the model.
 	 * @param actualColumnNo
 	 * @return
 	 */
-	public int getDisplayColumnNo(int actualColumnNo) {
+	public int getDisplayColumnNo(int actualColumnNo)
+	{
 		return (actualColumnNo % columnsPerPage);
 	}
-	
+
 	/**
 	 * 
 	 * @return This method returns the total number of pages to be created based on the number 
@@ -483,27 +510,29 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	public int getTotalPageCount()
 	{
 		int totalPages = 0;
-		if((columnCount % columnsPerPage)!= 0 )
-			totalPages = (columnCount / columnsPerPage)+1;
+		if ((columnCount % columnsPerPage) != 0)
+			totalPages = (columnCount / columnsPerPage) + 1;
 		else
 			totalPages = (columnCount / columnsPerPage);
-		return totalPages; 
+		return totalPages;
 	}
-	
-	
+
 	/**
 	 * @return Returns the columnsPerPage.
 	 */
-	public int getColumnsPerPage() {
+	public int getColumnsPerPage()
+	{
 		return columnsPerPage;
 	}
+
 	/**
 	 * @param columnsPerPage The columnsPerPage to set.
 	 */
-	public void setColumnsPerPage(int columnsPerPage) {
+	public void setColumnsPerPage(int columnsPerPage)
+	{
 		this.columnsPerPage = columnsPerPage;
 	}
-	
+
 	/**
 	 * @return SPECIMEN COLLECTION GROUP LIST
 	 */
@@ -517,10 +546,10 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	{
 		System.out.println("---------------------------------");
 		System.out.println("in Model showMapData");
-		System.out.println(specimenMap );
+		System.out.println(specimenMap);
 		System.out.println("---------------------------------");
 	}
-	
+
 	/*
 	 * Used in SpecimenSubmitButtonHandler to set number of specimens.
 	 */
@@ -530,33 +559,38 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public int getTotalColumnCount()
 	{
-		return columnCount ;
+		return columnCount;
 	}
-	
-	
-	
+
 	/**
 	 * @return Returns the lastCellColumn.
 	 */
-	public int getLastCellColumn() {
+	public int getLastCellColumn()
+	{
 		return lastCellColumn;
 	}
+
 	/**
 	 * @param lastCellColumn The lastCellColumn to set.
 	 */
-	public void setLastCellColumn(int currentCellPositionX) {
+	public void setLastCellColumn(int currentCellPositionX)
+	{
 		this.lastCellColumn = currentCellPositionX;
 	}
+
 	/**
 	 * @return Returns the lastCellRow.
 	 */
-	public int getLastCellRow() {
+	public int getLastCellRow()
+	{
 		return lastCellRow;
 	}
+
 	/**
 	 * @param lastCellRow The lastCellRow to set.
 	 */
-	public void setLastCellRow(int currentCellPositionY) {
+	public void setLastCellRow(int currentCellPositionY)
+	{
 		this.lastCellRow = currentCellPositionY;
 	}
 	// -----------------------POC for copy paste end
