@@ -146,7 +146,7 @@ public class CreateSpecimenAction extends SecureAction
 						long cpId = ((Long)spList.get(0)).longValue();
 						String spClass = createForm.getClassName();
 						
-						if(virtuallyLocated.equals("false"))
+						if(virtuallyLocated!=null && virtuallyLocated.equals("false"))
 						{
 							createForm.setVirtuallyLocated(false);
 						}
