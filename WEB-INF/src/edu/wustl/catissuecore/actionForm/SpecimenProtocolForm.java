@@ -363,12 +363,9 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("specimenprotocol.invaliddate",ApplicationProperties.getValue("specimenprotocol.invaliddate")));
     				}
     			}
-    			if (!validator.isNumeric(enrollment) && !validator.isEmpty(enrollment ))
+    			if (!validator.isEmpty(enrollment ))
                 {
-                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",ApplicationProperties.getValue("collectionprotocol.participants")));
-                }
-    		/*	else 
-    			{
+
     				try
 					{
     					Integer intEnrollment = new Integer(enrollment);
@@ -376,9 +373,8 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
     				catch(NumberFormatException e)
 					{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.enrollment",ApplicationProperties.getValue("collectionprotocol.participants")));
-					}
-    			} */
-    			
+					}                 	
+                }    				
             }    
 		}
 		catch (Exception excp)
