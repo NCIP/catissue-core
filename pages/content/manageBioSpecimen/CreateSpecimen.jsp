@@ -92,49 +92,50 @@
 				document.forms[0].parentSpecimenLabel.disabled = true;
 			}
 		}		 
-function resetVirtualLocated()
-{
-	var virtualCheckBox = document.getElementById("virtuallyLocated");
-	var containerName = document.getElementById("customListBox_1_0");
-	var pos1 = document.getElementById("customListBox_1_1");
-	var pos2 = document.getElementById("customListBox_1_2");
-	if(virtualCheckBox.checked==false)
-	{
-		virtualCheckBox.checked=true;
-		containerName.disabled = true;
-		pos1.disabled = true;
-		pos2.disabled = true;
-	}
-}
-function classChangeForMultipleSpecimen()
-{
- 	var action ='NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&specimenAttributeKey=' + document.getElementById("specimenAttributeKey").value + '&derivedSpecimenCollectionGroup=' + document.getElementById("derivedSpecimenCollectionGroup").value + '&retainForm=true';
-	document.forms[0].action = action;
-	document.forms[0].submit();
-}
+		function resetVirtualLocated()
+		{
+			var virtualCheckBox = document.getElementById("virtuallyLocated");
+			var containerName = document.getElementById("customListBox_1_0");
+			var pos1 = document.getElementById("customListBox_1_1");
+			var pos2 = document.getElementById("customListBox_1_2");
+			if(virtualCheckBox.checked==false)
+			{
+				virtualCheckBox.checked=true;
+				containerName.disabled = true;
+				pos1.disabled = true;
+				pos2.disabled = true;
+			}
+		}
+		function classChangeForMultipleSpecimen()
+		{
+		 	var action ='NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&specimenAttributeKey=' + document.getElementById("specimenAttributeKey").value + '&derivedSpecimenCollectionGroup=' + document.getElementById("derivedSpecimenCollectionGroup").value + '&retainForm=true';
+			document.forms[0].action = action;
+			document.forms[0].submit();
+		}
 			
-	  function onClassOrLabelOrBarcodeChange(multipleSpecimen,element)
+	  	function onClassOrLabelOrBarcodeChange(multipleSpecimen,element)
 		{
 			if(multipleSpecimen == "1")
 				{
 				   classChangeForMultipleSpecimen();
 				}
 	
-    var radioArray = document.getElementsByName("checkedButton");
- 	var flag = "0";
- 		if (radioArray[0].checked) 
-		{
-		  if(document.getElementById("parentSpecimenLabel").value!= "") 
-		  {
-			   flag = "1";
-		  }
-		} 
-     else {
-			if (document.getElementById("parentSpecimenBarcode").value != "") 
+		    var radioArray = document.getElementsByName("checkedButton");
+		 	var flag = "0";
+ 			if (radioArray[0].checked) 
 			{
-	     	     flag = "1";
+			  if(document.getElementById("parentSpecimenLabel").value!= "") 
+			  {
+				   flag = "1";
+			  }
+			} 
+		     else 
+		     {
+				if (document.getElementById("parentSpecimenBarcode").value != "") 
+				{
+	     	    	 flag = "1";
+				}
 			}
-		}
  	    	var classNameElement = document.getElementById("className");
 			if(flag=="1" && classNameElement.value != "-1")
 			{
@@ -191,6 +192,34 @@ function classChangeForMultipleSpecimen()
 			<%}else {%>			
 				deleteChecked('addExternalIdentifier','CreateSpecimen.do?pageOf=pageOfCreateSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false);
 			<%}%>
+		}
+		
+		function onCheckboxButtonClick(chkBox)
+		{
+			if(chkBox.checked)
+			{
+				document.forms[0].submitAndDistributeButton.disabled=true;
+			}
+			else
+			{
+				document.forms[0].submitAndDistributeButton.disabled=false;
+			}
+		}
+		function onNormalSubmit()
+		{
+			var checked = document.forms[0].aliCheckedButton.checked;
+			if(checked)
+			{
+				setSubmittedFor('ForwardTo','pageOfAliquot');
+				confirmDisable('AddSpecimen.do',document.forms[0].activityStatus);
+			
+			}
+			else
+			{
+				setSubmittedFor('null','success');
+				confirmDisable('AddSpecimen.do',document.forms[0].activityStatus);
+			
+			}
 		}
 	</script>
 </head>
@@ -705,8 +734,27 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				 </tr>
 				  				<%@ include file="ExternalIdentifiers.jsp" %>
 				 </table>
+				 
 			 <!-- Bio-hazards End here -->
-
+			 	<%				if(!multipleSpecimen.equals("1"))
+					{
+      			 %>	
+				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
+				<table cellpadding="4" cellspacing="0">
+					<tr>					
+						<td class="formFieldNoBordersBold" height="20" colspan="5">
+						
+						<%--<html:checkbox property="aliCheckedButton" onclick="onCheckboxButtonClick(this)">
+						&nbsp; <bean:message key="specimen.aliquot.message"/>
+						</html:checkbox>--%>
+						<input type="checkbox" name="aliCheckedButton" onclick="onCheckboxButtonClick(this)" /> &nbsp; <bean:message key="specimen.aliquot.message"/>
+	    				</td>
+					</tr>								
+					
+				</table>
+				</logic:notEqual>
+				<%}%>
+								
  			   	 <logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">		
 				 	<tr>
 				  		<td align="right" colspan="4">
@@ -723,7 +771,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 							<table cellpadding="4" cellspacing="0">
 								<tr>
 						   			<td>
-						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
+						   				<html:submit styleClass="actionButton" property="submitButton" onclick="onNormalSubmit()">
 						   					<bean:message key="buttons.submit"/>
 						   				</html:submit>
 						   			</td>

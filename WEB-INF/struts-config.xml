@@ -913,6 +913,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/CreateSpecimenAdd.do" />
 			<forward name="failure" path="/CreateSpecimen.do" />
+
 		</action>
 		
 		<action path="/CreateSpecimenAdd"
@@ -925,6 +926,7 @@ PUBLIC
 			<forward name="failure" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
 			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
 			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=15" />
+			<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15" />
 		</action>
 		
 		<action path="/CreateSpecimenEdit"
