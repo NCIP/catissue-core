@@ -62,7 +62,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 
 		// Creating Layout
 		//getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT ));
-		this.getContentPane().setLayout(new VerticalLayout(0,10));
+		this.getContentPane().setLayout(new VerticalLayout(0,0));
 		
 		buttonPanel = new JPanel( new FlowLayout(FlowLayout.LEFT ) );
 		linkPanel = new JPanel( new FlowLayout(FlowLayout.LEFT ) );
@@ -142,24 +142,28 @@ public class MultipleSpecimenApplet extends BaseApplet {
     private void createLinkPanel(JPanel panel)
     {
     	MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
-    	int startIndex = 1;
-    	int endIndex = tableModel.getColumnsPerPage()  ;
-    	if(tableModel.getTotalPageCount()>10)
-    		panel.setLayout(new GridLayout(2,(int)(tableModel.getTotalPageCount()/2),0,0));
-    	for(int pageNo = 1; pageNo<=tableModel.getTotalPageCount();pageNo++  )
+    	if(tableModel.getTotalPageCount()>1)
     	{
-    		JButton link1 = new JButton(String.valueOf(startIndex )+ " - "+String.valueOf(endIndex ));
-    		link1.setActionCommand(String.valueOf(pageNo ));
-         	LineBorder border =(LineBorder) BorderFactory.createLineBorder(getBackground() ); 
-         	link1.setBorder(border );
-         	link1.setPreferredSize(new Dimension(AppletConstants.LINK_BUTTON_WIDTH,(int)link1.getPreferredSize().getHeight()) );
-         	link1.addActionListener(new PageLinkHandler(table));
-         	panel.add(link1);//panel.add(new JLabel("    ") );
-         	startIndex =startIndex +tableModel.getColumnsPerPage()  ;
-         	endIndex = endIndex +tableModel.getColumnsPerPage()  ;
-         	totalPages= pageNo;
+        	int startIndex = 1;
+        	int endIndex = tableModel.getColumnsPerPage()  ;
+        	if(tableModel.getTotalPageCount()>10)
+        		panel.setLayout(new GridLayout(2,(int)(tableModel.getTotalPageCount()/2),0,0));
+        	for(int pageNo = 1; pageNo<=tableModel.getTotalPageCount();pageNo++  )
+        	{
+        		JButton link1 = new JButton(String.valueOf(startIndex )+ " - "+String.valueOf(endIndex ));
+        		link1.setActionCommand(String.valueOf(pageNo ));
+             	LineBorder border =(LineBorder) BorderFactory.createLineBorder(getBackground() );
+             	link1.setToolTipText(String.valueOf(startIndex )+ " - "+String.valueOf(endIndex ));
+             	link1.setBorder(border );
+             	link1.setPreferredSize(new Dimension(AppletConstants.LINK_BUTTON_WIDTH,(int)link1.getPreferredSize().getHeight()) );
+             	link1.addActionListener(new PageLinkHandler(table));
+             	panel.add(link1);//panel.add(new JLabel("    ") );
+             	startIndex =startIndex +tableModel.getColumnsPerPage()  ;
+             	endIndex = endIndex +tableModel.getColumnsPerPage()  ;
+             	totalPages= pageNo;
+        	}
+        	SwingUtilities.updateComponentTreeUI(linkPanel);
     	}
-    	SwingUtilities.updateComponentTreeUI(linkPanel);
     }
     
     private void createFooterPanel(JPanel panel)
@@ -242,4 +246,23 @@ public class MultipleSpecimenApplet extends BaseApplet {
 					 SwingUtilities.invokeLater(panelUpdated);
 				}
 	}
+	/**
+	 * This method is called to set the TissueSite value selected from the TissueSiteTreeApplet.
+	 *  
+	 * @param specimenColumn Column to update the TissueSite
+	 * @param value Value to set for the TissueSite.
+	 */
+	public void setTissueSiteFromTreeMap(String specimenColumn, String value)
+	{
+		System.out.println("\n\n*******************     setTissueSiteFromTreeMap   ****************************\n\n");
+		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
+		System.out.println("setTissueSiteFromTreeMap :-specimenColumn "+ specimenColumn);
+		int actualColNo =  Integer.parseInt(specimenColumn);
+		int displayColNo = tableModel.getDisplayColumnNo(actualColNo); 
+		System.out.println("In applets TissueSiteFromTreeMap : display col no" + displayColNo + "actual col no" + actualColNo);
+		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(actualColNo).getCellRenderer();
+		columnModel.updateComponentValue(AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO,value);
+		System.out.println("\n\n*******************     setTissueSiteFromTreeMap   ****************************\n\n");
+	}
+
 }
