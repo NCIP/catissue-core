@@ -8,6 +8,7 @@ package edu.wustl.catissuecore.applet.listener;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
@@ -21,6 +22,7 @@ import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
  */
 public class MapButtonHandler extends ButtonHandler {
 
+	
 	
 	/** (non-Javadoc)
 	 * @see edu.wustl.catissuecore.applet.listener.ButtonHandler#handleAction(java.awt.event.ActionEvent)
@@ -44,8 +46,8 @@ public class MapButtonHandler extends ButtonHandler {
 	/**
 	 * @param table
 	 */
-	public MapButtonHandler(JTable table) {
-		super(table);
+	public MapButtonHandler(JTable table, JRadioButton radioButton) {
+		super(table,radioButton );
 	}
 
 	/**

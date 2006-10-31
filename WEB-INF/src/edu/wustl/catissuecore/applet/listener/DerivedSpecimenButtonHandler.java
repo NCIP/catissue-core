@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
@@ -28,12 +29,13 @@ import edu.wustl.catissuecore.util.global.Constants;
 public class DerivedSpecimenButtonHandler extends ButtonHandler
 {
 
+	
 	/**
 	 * @param table
 	 */
-	public DerivedSpecimenButtonHandler(JTable table)
+	public DerivedSpecimenButtonHandler(JTable table, JRadioButton radioButton)
 	{
-		super(table);
+		super(table,radioButton);
 	}
 
 	/* (non-Javadoc)
