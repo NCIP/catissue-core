@@ -39,10 +39,11 @@ public class CollectionGroupComboBoxHandler extends ComboBoxHandler {
 	{
 		super.handleAction(e);
 		System.out.println("Inside CollectionGroupComboBoxHandler");
+
+//		Mandar: 30Oct06: commented as buttons are enabled by default.
 		
-		TableColumnModel columnModel = table.getColumnModel();
-		SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(table.getSelectedColumn()).getCellEditor();
-		
-		scm.updateButtons();
+//		TableColumnModel columnModel = table.getColumnModel();
+//		SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(table.getSelectedColumn()).getCellEditor();
+//		scm.updateButtons();
 		}
 }
