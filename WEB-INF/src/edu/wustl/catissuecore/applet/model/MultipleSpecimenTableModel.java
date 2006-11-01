@@ -489,7 +489,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**
 	 * Returns actual column no of the given column  depending on page index.
 	 */
-	private int getActualColumnNo(int selectedColumnNo)
+	public int getActualColumnNo(int selectedColumnNo)
 	{
 		//System.out.println(("col converteed to " + selectedColumnNo + "--->" + ((columnsPerPage * ( currentPageIndex - 1) ) + selectedColumnNo)));
 		return ((columnsPerPage * (currentPageIndex - 1)) + selectedColumnNo);
