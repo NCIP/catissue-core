@@ -32,6 +32,8 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 	 */
 	protected JTable table; 
 	
+	protected boolean isValidateSuccess = true;
+	
 	/**
 	 * Default constructor 
 	 */
@@ -118,10 +120,12 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 			validationMessage = validator.validate();
 			if (validationMessage.equals(""))
 			{
+				isValidateSuccess = true;
 				CommonAppletUtil.getBaseTableModel(table).setCopyPasteOperationValidatorModel(validatorModel);
 			}
 			else
 			{
+				isValidateSuccess = false;
 				System.out.println(" validationMessage:: " + validationMessage);
 				Object[] paramArray = {validationMessage};
 				CommonAppletUtil.callJavaScriptFunction(table,getJSMethodName(),paramArray);
