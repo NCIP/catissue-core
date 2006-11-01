@@ -61,6 +61,12 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	 */
 	private String operation;
 
+	
+	/**
+	 * Specify page index
+	 */
+	private int pageIndexWhenCopied;
+
 
 	/**
 	 * @return Returns the columnCount.
@@ -188,5 +194,21 @@ public class CopyPasteOperationValidatorModel implements Serializable {
 	public void setSelectedPastedRows(List selectedPastedRows)
 	{
 		this.selectedPastedRows = selectedPastedRows;
+	}
+		
+	
+	/**
+	 * @return Returns the pageIndexWhenCopied.
+	 */
+	public int getPageIndexWhenCopied()
+	{
+		return pageIndexWhenCopied;
+	}
+	/**
+	 * @param pageIndexWhenCopied The pageIndexWhenCopied to set.
+	 */
+	public void setPageIndexWhenCopied(int pageIndexWhenCopied)
+	{
+		this.pageIndexWhenCopied = pageIndexWhenCopied;
 	}
 }
