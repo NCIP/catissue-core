@@ -211,10 +211,11 @@
 				</td>
 				<td class="formField">
 					<html:textarea styleClass="formFieldVerySmallSized" rows="3" styleId="comments" property="comment"/>
-				<td>
+				</td>
 				<td class="formRequiredLabel" colspan="3">
 					<table cellspacing="0" border="0" width="100%">
 						<tr>
+							<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
 							<td class="formFieldNoBordersBold" colspan="2">
 								<label for="capacity">
 									<bean:message key="app.capacity" /> &nbsp;:
@@ -222,6 +223,7 @@
 							</td>
 						</tr>
 						<tr>
+							<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
 							<td class="formFieldNoBordersBold">
 								<label for="oneDimensionCapacity">
 									<bean:message key="app.oneDimension" />
@@ -232,6 +234,7 @@
 							</td>
 						</tr>
 						<tr>
+							<td class="formRequiredNoticeWithoutBorder" width="5">&nbsp;</td>
 							<td class="formFieldNoBordersBold">
 								<label for="oneDimensionCapacity">
 									<bean:message key="app.twoDimension" />
