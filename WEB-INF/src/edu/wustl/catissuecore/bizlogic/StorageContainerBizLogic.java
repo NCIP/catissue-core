@@ -77,7 +77,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		StorageContainer container = (StorageContainer) obj;
 		container.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		
+
 		//Setting the Parent Container if applicable
 		int posOneCapacity = 1, posTwoCapacity = 1;
 		int positionDimensionOne = Constants.STORAGE_CONTAINER_FIRST_ROW, positionDimensionTwo = Constants.STORAGE_CONTAINER_FIRST_COLUMN;
@@ -230,7 +230,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 		return true;
 	}
-
 
 	// This method sets the collection Storage Types.
 	protected String[] getDynamicGroups(AbstractDomainObject obj) throws SMException
@@ -435,7 +434,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 
 		dao.update(container, sessionDataBean, true, true, false);
-
+		dao.update(container.getCapacity(), sessionDataBean, true, true, false);
 		//Audit of update of storage container.
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		dao.audit(container.getCapacity(), oldContainer.getCapacity(), sessionDataBean, true);
@@ -514,17 +513,34 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			StorageContainer currentContainer = (StorageContainer) currentObj;
 			StorageContainer oldContainer = (StorageContainer) oldObj;
 
+			//if name gets change then update the cache with new key
+			if (!currentContainer.getName().equals(oldContainer.getName()))
+			{
+				StorageContainerUtil.updateNameInCache(containerMap, currentContainer, oldContainer);
+			}
+
+			//If capacity of container gets increased then insert all the new positions in map ..........
+			int xOld = oldContainer.getCapacity().getOneDimensionCapacity().intValue();
+			int xNew = currentContainer.getCapacity().getOneDimensionCapacity().intValue();
+			int yOld = oldContainer.getCapacity().getTwoDimensionCapacity().intValue();
+			int yNew = currentContainer.getCapacity().getTwoDimensionCapacity().intValue();
+			if (xNew > xOld || yNew > yOld)
+			{
+				StorageContainerUtil.insertIncreasedCapacities(containerMap, currentContainer, oldContainer);
+
+			}
+			//finish 
 			if (oldContainer.getParent() != null)
 			{
 				StorageContainer oldParentCont = (StorageContainer) oldContainer.getParent();
-				StorageContainerUtil.insertSinglePositionInContainerMap(oldParentCont, containerMap, currentContainer.getPositionDimensionOne().intValue(),
-						currentContainer.getPositionDimensionTwo().intValue());
+				StorageContainerUtil.insertSinglePositionInContainerMap(oldParentCont, containerMap, currentContainer.getPositionDimensionOne()
+						.intValue(), currentContainer.getPositionDimensionTwo().intValue());
 			}
 			if (currentContainer.getParent() != null)
 			{
 				StorageContainer currentParentCont = (StorageContainer) currentContainer.getParent();
-				StorageContainerUtil.deleteSinglePositionInContainerMap(currentParentCont, containerMap, currentContainer.getPositionDimensionOne().intValue(),
-						currentContainer.getPositionDimensionTwo().intValue());
+				StorageContainerUtil.deleteSinglePositionInContainerMap(currentParentCont, containerMap, currentContainer.getPositionDimensionOne()
+						.intValue(), currentContainer.getPositionDimensionTwo().intValue());
 			}
 
 			if (currentContainer.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
@@ -573,9 +589,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-	public boolean isContainerFull(String containerId,int dimX,int dimY) throws DAOException
+	public boolean isContainerFull(String containerId, int dimX, int dimY) throws DAOException
 	{
-		boolean availablePositions[][] = getAvailablePositionsForContainer(containerId,dimX,dimY);
+		boolean availablePositions[][] = getAvailablePositionsForContainer(containerId, dimX, dimY);
 
 		dimX = availablePositions.length;
 		for (int x = 1; x < dimX; x++)
@@ -1111,59 +1127,40 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		//				+ " CATISSUE_SITE t4, CATISSUE_STORAGE_TYPE t5 "
 		//				+ " WHERE t8.SITE_ID = t4.IDENTIFIER " + " AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
 
-//		String queryStr = "SELECT " + " t8.IDENTIFIER, t8.CONTAINER_NAME, t5.NAME, t8.SITE_ID, t4.TYPE, t8.PARENT_IDENTIFIER, "
-//				+ " t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE, t8.ACTIVITY_STATUS, t8.PARENT_ACTIVITY_STATUS " + " FROM ( " + " 	SELECT "
-//				+ " 	  t7.IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, t7.STORAGE_TYPE_ID, t7.ACTIVITY_STATUS, t7.PARENT_IDENTIFIER, "
-//				+ " 	  t7.PARENT_CONTAINER_NAME, t6.NAME AS PARENT_CONTAINER_TYPE, t7.PARENT_ACTIVITY_STATUS " + " 	  FROM " + " 	  ( "
-//				+ " 	  select "
-//				+ " 	  t1.IDENTIFIER AS IDENTIFIER, t1.NAME AS CONTAINER_NAME, t11.SITE_ID AS SITE_ID, T1.ACTIVITY_STATUS AS ACTIVITY_STATUS,"
-//				+ " 	  t11.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, t2.IDENTIFIER AS PARENT_IDENTIFIER, "
-//				+ " 	  t2.NAME AS PARENT_CONTAINER_NAME, t22.STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID, T2.ACTIVITY_STATUS AS PARENT_ACTIVITY_STATUS"
-//				+ " 	  from " + " 	      CATISSUE_STORAGE_CONTAINER t11, CATISSUE_STORAGE_CONTAINER t22, "
-//				+ " 	      CATISSUE_CONTAINER t1 LEFT OUTER JOIN CATISSUE_CONTAINER t2 " + " 	      on t1.PARENT_CONTAINER_ID = t2.IDENTIFIER "
-//				+ " 	      where " + " 		t1.identifier = t11.identifier and  (t2.identifier is null OR t2.identifier = t22.identifier)" + " 	  ) "
-//				+ " 	  t7 LEFT OUTER JOIN CATISSUE_CONTAINER_TYPE t6 on " + " 	  t7.PARENT_STORAGE_TYPE_ID = t6.IDENTIFIER " + " ) "
-//				+ " t8, CATISSUE_SITE t4, CATISSUE_CONTAINER_TYPE t5 WHERE t8.SITE_ID = t4.IDENTIFIER " + " AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
+		//		String queryStr = "SELECT " + " t8.IDENTIFIER, t8.CONTAINER_NAME, t5.NAME, t8.SITE_ID, t4.TYPE, t8.PARENT_IDENTIFIER, "
+		//				+ " t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE, t8.ACTIVITY_STATUS, t8.PARENT_ACTIVITY_STATUS " + " FROM ( " + " 	SELECT "
+		//				+ " 	  t7.IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, t7.STORAGE_TYPE_ID, t7.ACTIVITY_STATUS, t7.PARENT_IDENTIFIER, "
+		//				+ " 	  t7.PARENT_CONTAINER_NAME, t6.NAME AS PARENT_CONTAINER_TYPE, t7.PARENT_ACTIVITY_STATUS " + " 	  FROM " + " 	  ( "
+		//				+ " 	  select "
+		//				+ " 	  t1.IDENTIFIER AS IDENTIFIER, t1.NAME AS CONTAINER_NAME, t11.SITE_ID AS SITE_ID, T1.ACTIVITY_STATUS AS ACTIVITY_STATUS,"
+		//				+ " 	  t11.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, t2.IDENTIFIER AS PARENT_IDENTIFIER, "
+		//				+ " 	  t2.NAME AS PARENT_CONTAINER_NAME, t22.STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID, T2.ACTIVITY_STATUS AS PARENT_ACTIVITY_STATUS"
+		//				+ " 	  from " + " 	      CATISSUE_STORAGE_CONTAINER t11, CATISSUE_STORAGE_CONTAINER t22, "
+		//				+ " 	      CATISSUE_CONTAINER t1 LEFT OUTER JOIN CATISSUE_CONTAINER t2 " + " 	      on t1.PARENT_CONTAINER_ID = t2.IDENTIFIER "
+		//				+ " 	      where " + " 		t1.identifier = t11.identifier and  (t2.identifier is null OR t2.identifier = t22.identifier)" + " 	  ) "
+		//				+ " 	  t7 LEFT OUTER JOIN CATISSUE_CONTAINER_TYPE t6 on " + " 	  t7.PARENT_STORAGE_TYPE_ID = t6.IDENTIFIER " + " ) "
+		//				+ " t8, CATISSUE_SITE t4, CATISSUE_CONTAINER_TYPE t5 WHERE t8.SITE_ID = t4.IDENTIFIER " + " AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
 
 		//Bug-2630: Added by jitendra
-		String queryStr=
-			"SELECT "+
-			"t8.IDENTIFIER, t8.CONTAINER_NAME, t5.NAME, t8.SITE_ID, t4.TYPE, "+ 
-			"t8. PARENT_IDENTIFIER,  t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE, "+ 	
-			"t8. ACTIVITY_STATUS, t8.PARENT_ACTIVITY_STATUS "+ 
-			"FROM "+ 
-			"( "+  	
-				"SELECT "+  	
-					"t7. IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, t7.STORAGE_TYPE_ID, "+
-					"t7.ACTIVITY_STATUS, t7. PARENT_IDENTIFIER, "+  
-					"t7.PARENT_CONTAINER_NAME, t6.NAME AS  PARENT_CONTAINER_TYPE, t7.PARENT_ACTIVITY_STATUS "+  	
-				"FROM "+  	
-				"( "+  	
-					"select "+ 
-						"t10. IDENTIFIER AS IDENTIFIER, t10.CONTAINER_NAME AS CONTAINER_NAME, t10.SITE_ID AS SITE_ID, "+
-						"T10. ACTIVITY_STATUS AS ACTIVITY_STATUS, t10.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, "+
-						"t10.PARENT_IDENTIFIER AS PARENT_IDENTIFIER, t10.PARENT_CONTAINER_NAME AS PARENT_CONTAINER_NAME, "+
-						"t22. STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID, T10.PARENT_ACTIVITY_STATUS AS  PARENT_ACTIVITY_STATUS "+
-					"from "+
-					"( "+
-						"select "+
-							"t1. IDENTIFIER AS IDENTIFIER, t1.NAME AS CONTAINER_NAME, t11.SITE_ID AS SITE_ID, "+
-							"T1. ACTIVITY_STATUS AS ACTIVITY_STATUS, t11.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, "+
-							"t2.IDENTIFIER AS PARENT_IDENTIFIER, t2.NAME AS PARENT_CONTAINER_NAME, "+ 
-							"T2.ACTIVITY_STATUS AS  PARENT_ACTIVITY_STATUS "+ 	  
-						"from "+
-							"CATISSUE_STORAGE_CONTAINER t11,CATISSUE_CONTAINER t1 LEFT OUTER JOIN "+ 
-							"CATISSUE_CONTAINER t2 "+
-						"on t1.PARENT_CONTAINER_ID = t2.IDENTIFIER "+  	      
-						"where t1.identifier = t11.identifier "+  
-					")t10 "+
-					"LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER t22 on t10.PARENT_IDENTIFIER = t22.identifier "+
-				")t7 "+
-				"LEFT OUTER JOIN CATISSUE_CONTAINER_TYPE t6 on t7.PARENT_STORAGE_TYPE_ID = t6.IDENTIFIER "+ 
-			") t8, CATISSUE_SITE t4, CATISSUE_CONTAINER_TYPE t5 "+ 
-			"WHERE "+
-				"t8.SITE_ID = t4.IDENTIFIER  AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
-			
+		String queryStr = "SELECT " + "t8.IDENTIFIER, t8.CONTAINER_NAME, t5.NAME, t8.SITE_ID, t4.TYPE, "
+				+ "t8. PARENT_IDENTIFIER,  t8.PARENT_CONTAINER_NAME, t8.PARENT_CONTAINER_TYPE, " + "t8. ACTIVITY_STATUS, t8.PARENT_ACTIVITY_STATUS "
+				+ "FROM " + "( " + "SELECT " + "t7. IDENTIFIER, t7.CONTAINER_NAME, t7.SITE_ID, t7.STORAGE_TYPE_ID, "
+				+ "t7.ACTIVITY_STATUS, t7. PARENT_IDENTIFIER, "
+				+ "t7.PARENT_CONTAINER_NAME, t6.NAME AS  PARENT_CONTAINER_TYPE, t7.PARENT_ACTIVITY_STATUS " + "FROM " + "( " + "select "
+				+ "t10. IDENTIFIER AS IDENTIFIER, t10.CONTAINER_NAME AS CONTAINER_NAME, t10.SITE_ID AS SITE_ID, "
+				+ "T10. ACTIVITY_STATUS AS ACTIVITY_STATUS, t10.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, "
+				+ "t10.PARENT_IDENTIFIER AS PARENT_IDENTIFIER, t10.PARENT_CONTAINER_NAME AS PARENT_CONTAINER_NAME, "
+				+ "t22. STORAGE_TYPE_ID AS PARENT_STORAGE_TYPE_ID, T10.PARENT_ACTIVITY_STATUS AS  PARENT_ACTIVITY_STATUS " + "from " + "( "
+				+ "select " + "t1. IDENTIFIER AS IDENTIFIER, t1.NAME AS CONTAINER_NAME, t11.SITE_ID AS SITE_ID, "
+				+ "T1. ACTIVITY_STATUS AS ACTIVITY_STATUS, t11.STORAGE_TYPE_ID AS STORAGE_TYPE_ID, "
+				+ "t2.IDENTIFIER AS PARENT_IDENTIFIER, t2.NAME AS PARENT_CONTAINER_NAME, " + "T2.ACTIVITY_STATUS AS  PARENT_ACTIVITY_STATUS "
+				+ "from " + "CATISSUE_STORAGE_CONTAINER t11,CATISSUE_CONTAINER t1 LEFT OUTER JOIN " + "CATISSUE_CONTAINER t2 "
+				+ "on t1.PARENT_CONTAINER_ID = t2.IDENTIFIER " + "where t1.identifier = t11.identifier " + ")t10 "
+				+ "LEFT OUTER JOIN CATISSUE_STORAGE_CONTAINER t22 on t10.PARENT_IDENTIFIER = t22.identifier " + ")t7 "
+				+ "LEFT OUTER JOIN CATISSUE_CONTAINER_TYPE t6 on t7.PARENT_STORAGE_TYPE_ID = t6.IDENTIFIER "
+				+ ") t8, CATISSUE_SITE t4, CATISSUE_CONTAINER_TYPE t5 " + "WHERE "
+				+ "t8.SITE_ID = t4.IDENTIFIER  AND t8.STORAGE_TYPE_ID = t5.IDENTIFIER ";
+
 		Logger.out.debug("Storage Container query......................" + queryStr);
 		List list = null;
 
@@ -1203,24 +1200,24 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			while (iterator.hasNext())
 			{
 				List rowList = (List) iterator.next();
-				
+
 				//Bug-2630: Added by jitendra 
-				if((String) rowList.get(8) != null && !((String) rowList.get(8)).equals(Constants.ACTIVITY_STATUS_DISABLED))
+				if ((String) rowList.get(8) != null && !((String) rowList.get(8)).equals(Constants.ACTIVITY_STATUS_DISABLED))
 				{
 					//Mandar : code for tooltip for the container
 					String toolTip = getToolTipData((String) rowList.get(0));
-	
+
 					// Create the tree node for the child node.
 					TreeNode treeNodeImpl = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(0)), (String) rowList.get(1),
 							(String) rowList.get(1), toolTip, (String) rowList.get(8));
-					
+
 					// Add the tree node in the Vector if it is not present.
 					if (treeNodeVector.contains(treeNodeImpl) == false)
 					{
 						treeNodeVector.add(treeNodeImpl);
-					} 					
+					}
 				}
-				
+
 				if ((String) rowList.get(5) != "") //if parent container is not null
 				{
 					List childIds = new ArrayList();
@@ -1235,18 +1232,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					// Put the container in the child container list of the parent container
 					// and update the Map. 
 					childIds.add(Long.valueOf((String) rowList.get(0)));
-					containerRelationMap.put(Long.valueOf((String) rowList.get(5)), childIds);				
+					containerRelationMap.put(Long.valueOf((String) rowList.get(5)), childIds);
 
 					// Create the tree node for the parent node and add it in the vector if not present.
 					String toolTip = getToolTipData((String) rowList.get(5));
-					TreeNode treeNodeImpl = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(5)), (String) rowList.get(6), (String) rowList
-							.get(6), toolTip, (String) rowList.get(9));
+					TreeNode treeNodeImpl = new StorageContainerTreeNode(Long.valueOf((String) rowList.get(5)), (String) rowList.get(6),
+							(String) rowList.get(6), toolTip, (String) rowList.get(9));
 					if (treeNodeVector.contains(treeNodeImpl) == false)
 					{
 						treeNodeVector.add(treeNodeImpl);
 					}
 				}
-				
+
 			}
 			//printVectorMap(treeNodeVector, containerRelationMap);
 
@@ -2015,7 +2012,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @return Returns a double dimensional boolean array of position availablity.
 	 * @throws DAOException
 	 */
-	public boolean[][] getAvailablePositionsForContainer(String containerId,int dimX,int dimY) throws DAOException
+	public boolean[][] getAvailablePositionsForContainer(String containerId, int dimX, int dimY) throws DAOException
 	{
 		boolean[][] positions = new boolean[dimX][dimY];
 
@@ -2101,21 +2098,20 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @return Returns a double dimensional boolean array of position availablity.
 	 * @throws DAOException
 	 */
-//	public boolean[][] getAvailablePositions(String containerId) throws DAOException
-//	{
-////		List list = retrieve(StorageContainer.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(containerId));
-////
-////		if (list != null)
-////		{
-////			StorageContainer container = (StorageContainer) list.get(0);
-//			return getAvailablePositionsForContainer(containerId);
-////		}
-////		else
-////		{
-////			return new boolean[0][0];
-////		}
-//	}
-
+	//	public boolean[][] getAvailablePositions(String containerId) throws DAOException
+	//	{
+	////		List list = retrieve(StorageContainer.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(containerId));
+	////
+	////		if (list != null)
+	////		{
+	////			StorageContainer container = (StorageContainer) list.get(0);
+	//			return getAvailablePositionsForContainer(containerId);
+	////		}
+	////		else
+	////		{
+	////			return new boolean[0][0];
+	////		}
+	//	}
 	/**
 	 * This functions returns a map of available rows vs. available columns.
 	 * @param container The container.
@@ -2123,41 +2119,42 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @throws DAOException
 	 */
 
-	public Map getAvailablePositionMapForContainer(String containerId, int aliquotCount,String positionDimensionOne,String positionDimensionTwo) throws DAOException
+	public Map getAvailablePositionMapForContainer(String containerId, int aliquotCount, String positionDimensionOne, String positionDimensionTwo)
+			throws DAOException
 	{
 		Map map = new TreeMap();
 		int count = 0;
 		//Logger.out.debug("dimX:"+positionDimensionOne+":dimY:"+positionDimensionTwo);
-//		if (!container.isFull().booleanValue())
-//		{
+		//		if (!container.isFull().booleanValue())
+		//		{
 		int dimX = Integer.parseInt(positionDimensionOne) + 1;
 		int dimY = Integer.parseInt(positionDimensionTwo) + 1;
 
-			boolean[][] availablePosistions = getAvailablePositionsForContainer(containerId,dimX,dimY);
+		boolean[][] availablePosistions = getAvailablePositionsForContainer(containerId, dimX, dimY);
 
-			for (int x = 1; x < availablePosistions.length; x++)
+		for (int x = 1; x < availablePosistions.length; x++)
+		{
+
+			List list = new ArrayList();
+
+			for (int y = 1; y < availablePosistions[x].length; y++)
 			{
-
-				List list = new ArrayList();
-
-				for (int y = 1; y < availablePosistions[x].length; y++)
+				if (availablePosistions[x][y])
 				{
-					if (availablePosistions[x][y])
-					{
-						list.add(new NameValueBean(new Integer(y), new Integer(y)));
-						count++;
-					}
-				}
-
-				if (!list.isEmpty())
-				{
-					Integer xObj = new Integer(x);
-					NameValueBean nvb = new NameValueBean(xObj, xObj);
-					map.put(nvb, list);
-
+					list.add(new NameValueBean(new Integer(y), new Integer(y)));
+					count++;
 				}
 			}
-//		}
+
+			if (!list.isEmpty())
+			{
+				Integer xObj = new Integer(x);
+				NameValueBean nvb = new NameValueBean(xObj, xObj);
+				map.put(nvb, list);
+
+			}
+		}
+		//		}
 		//Logger.out.info("Map :"+map);
 		if (count < aliquotCount)
 		{
@@ -2166,28 +2163,26 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		return map;
 	}
 
-
 	/**
 	 * This functions returns a map of available rows vs. available columns.
 	 * @param containerId The container identifier.
 	 * @return Returns a map of available rows vs. available columns.
 	 * @throws DAOException
 	 */
-//	public Map getAvailablePositionMap(String containerId, int aliquotCount) throws DAOException
-//	{
-////		List list = retrieve(StorageContainer.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(containerId));
-////
-////		if (list != null)
-////		{
-////			StorageContainer container = (StorageContainer) list.get(0);
-//			return getAvailablePositionMapForContainer(containerId, aliquotCount);
-////		}
-////		else
-////		{
-////			return new TreeMap();
-////		}
-//	}
-
+	//	public Map getAvailablePositionMap(String containerId, int aliquotCount) throws DAOException
+	//	{
+	////		List list = retrieve(StorageContainer.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(containerId));
+	////
+	////		if (list != null)
+	////		{
+	////			StorageContainer container = (StorageContainer) list.get(0);
+	//			return getAvailablePositionMapForContainer(containerId, aliquotCount);
+	////		}
+	////		else
+	////		{
+	////			return new TreeMap();
+	////		}
+	//	}
 	/**
 	 * This functions returns a map of allocated containers vs. their respective free locations.
 	 * @return Returns a map of allocated containers vs. their respective free locations.
@@ -2199,17 +2194,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		 A code snippet inside the commented block should actually be replaced by the
 		 code to get the allocated containers of specific collection protocol
 		 */
-        //List list = retrieve(StorageContainer.class.getName());
-        String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER, "name","capacity.oneDimensionCapacity","capacity.twoDimensionCapacity"};
-        List list = retrieve(StorageContainer.class.getName(),selectColumnName);
+		//List list = retrieve(StorageContainer.class.getName());
+		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER, "name", "capacity.oneDimensionCapacity", "capacity.twoDimensionCapacity"};
+		List list = retrieve(StorageContainer.class.getName(), selectColumnName);
 		Map containerMap = new TreeMap();
-		Logger.out.info("===================== list size:"+list.size());
+		Logger.out.info("===================== list size:" + list.size());
 		Iterator itr = list.iterator();
 		while (itr.hasNext())
 		{
 			Object containerList[] = (Object[]) itr.next();
 			//Logger.out.info("+++++++++++++++++++++++++++:"+container.getName()+"++++++++++:"+container.getId());
-			Map positionMap = getAvailablePositionMapForContainer(String.valueOf(containerList[0]), 0 ,containerList[2].toString(),containerList[3].toString());
+			Map positionMap = getAvailablePositionMapForContainer(String.valueOf(containerList[0]), 0, containerList[2].toString(), containerList[3]
+					.toString());
 
 			if (!positionMap.isEmpty())
 			{
@@ -2236,7 +2232,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-	public List getAllocatedContaienrMapForContainer(long type_id,String exceedingMaxLimit) throws DAOException
+	public List getAllocatedContaienrMapForContainer(long type_id, String exceedingMaxLimit) throws DAOException
 	{
 		List mapSiteList = new ArrayList();
 		//		List list = retrieve(StorageContainer.class.getName());
@@ -2276,46 +2272,45 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		int i=1;
+		int i = 1;
 		if (containerMapFromCache != null)
 		{
 			Iterator itr = list.iterator();
 			while (itr.hasNext())
 			{
-				
-					List list1 = (List) itr.next();
-					String Id = (String) list1.get(0);
-					String Name = (String) list1.get(1);
-					String siteName = (String) list1.get(2);
-					NameValueBean nvb = new NameValueBean(Name, Id);
-					
-					try
+
+				List list1 = (List) itr.next();
+				String Id = (String) list1.get(0);
+				String Name = (String) list1.get(1);
+				String siteName = (String) list1.get(2);
+				NameValueBean nvb = new NameValueBean(Name, Id);
+
+				try
+				{
+					Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
+
+					if (positionMap != null && !positionMap.isEmpty())
 					{
-						Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
-						
-						
-						if (positionMap != null && !positionMap.isEmpty())
+						Map positionMap1 = deepCopyMap(positionMap);
+						//NameValueBean nvb = new NameValueBean(Name, Id);
+						if (i > Constants.CONTAINERS_MAX_LIMIT)
 						{
-							Map positionMap1 = deepCopyMap(positionMap);
-							//NameValueBean nvb = new NameValueBean(Name, Id);
-							if(i>Constants.CONTAINERS_MAX_LIMIT)
-							{
-								exceedingMaxLimit = "true";
-								break;
-							}
-							else
-							{
-								containerMap.put(nvb, positionMap1);
-							}
-							siteList.add(new NameValueBean(siteName, Id));
+							exceedingMaxLimit = "true";
+							break;
 						}
+						else
+						{
+							containerMap.put(nvb, positionMap1);
+						}
+						siteList.add(new NameValueBean(siteName, Id));
 					}
-					
-					catch (Exception e)
-					{
-						Logger.out.info("Error while getting map from cache");
-						e.printStackTrace();
-					}
+				}
+
+				catch (Exception e)
+				{
+					Logger.out.info("Error while getting map from cache");
+					e.printStackTrace();
+				}
 				i++;
 			}
 		}
@@ -2328,7 +2323,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	/* temp function end */
 
-	public Map getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass, int aliquotCount,String exceedingMaxLimit) throws DAOException
+	public Map getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass, int aliquotCount, String exceedingMaxLimit) throws DAOException
 	{
 
 		Logger.out.debug("method : getAllocatedContaienrMapForSpecimen()---getting containers for specimen--------------");
@@ -2369,7 +2364,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		int i=1;
+		int i = 1;
 		if (containerMapFromCache != null)
 		{
 			Iterator itr = list.iterator();
@@ -2382,10 +2377,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
-					if(i>Constants.CONTAINERS_MAX_LIMIT)
+					if (i > Constants.CONTAINERS_MAX_LIMIT)
 					{
 						Logger.out.debug("CONTAINERS_MAX_LIMIT reached");
-						exceedingMaxLimit=new String("true");
+						exceedingMaxLimit = new String("true");
 						break;
 					}
 					else
@@ -2408,7 +2403,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 			Logger.out.debug("getAllocatedContaienrMapForSpecimen()----Size of containerMap:" + containerMap.size());
 		}
-		Logger.out.debug("exceedingMaxLimit----------"+exceedingMaxLimit);
+		Logger.out.debug("exceedingMaxLimit----------" + exceedingMaxLimit);
 		return containerMap;
 
 	}
@@ -2421,7 +2416,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @throws DAOException -- throws DAO Exception
 	 * @see edu.wustl.common.dao.JDBCDAOImpl
 	 */
-	public Map getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id, int noOfAliqoutes,String exceedingMaxLimit) throws DAOException
+	public Map getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id, int noOfAliqoutes, String exceedingMaxLimit) throws DAOException
 	{
 		Map containerMap = new TreeMap();
 
@@ -2461,7 +2456,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		int i=1;
+		int i = 1;
 		if (containerMapFromCache != null)
 		{
 			Iterator itr = list.iterator();
@@ -2469,7 +2464,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				List list1 = (List) itr.next();
 				String Id = (String) list1.get(0);
-				
+
 				String Name = (String) list1.get(1);
 				NameValueBean nvb = new NameValueBean(Name, Id);
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
@@ -2478,9 +2473,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					// deep copy is required due to cache updation by reference
 					Map positionMap1 = deepCopyMap(positionMap);
 					//NameValueBean nvb = new NameValueBean(Name, Id);
-					if(i>Constants.CONTAINERS_MAX_LIMIT)
+					if (i > Constants.CONTAINERS_MAX_LIMIT)
 					{
-						exceedingMaxLimit="true";
+						exceedingMaxLimit = "true";
 						break;
 					}
 					else
@@ -2491,7 +2486,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				i++;
 			}
 		}
-		
+
 		return containerMap;
 	}
 
@@ -2610,25 +2605,25 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	// Method to print the relationMap and treeNode vector. To delete after debug
 	/*private void printVectorMap(Vector v, Map m)
-	{
-		//System.out.println("\n");
-		System.out.println("\nVector Data\n");
-		Iterator itr = v.iterator();
-		while (itr.hasNext())
-		{
-			TreeNodeImpl obj = (TreeNodeImpl) itr.next();
-			System.out.println(obj);
-		}
-		System.out.println("\n-------------------\n");
-		System.out.println("\nMap\n");
-		Iterator key = m.keySet().iterator();
-		while (key.hasNext())
-		{
-			Long k = (Long) key.next();
-			Object val = m.get(k);
-			System.out.println(k + " : " + val.toString());
-		}
-	}*/
+	 {
+	 //System.out.println("\n");
+	 System.out.println("\nVector Data\n");
+	 Iterator itr = v.iterator();
+	 while (itr.hasNext())
+	 {
+	 TreeNodeImpl obj = (TreeNodeImpl) itr.next();
+	 System.out.println(obj);
+	 }
+	 System.out.println("\n-------------------\n");
+	 System.out.println("\nMap\n");
+	 Iterator key = m.keySet().iterator();
+	 while (key.hasNext())
+	 {
+	 Long k = (Long) key.next();
+	 Object val = m.get(k);
+	 System.out.println(k + " : " + val.toString());
+	 }
+	 }*/
 
 	//Method to fetch ToolTipData for a given Container
 	private String getToolTipData(String containerID) throws DAOException
@@ -2665,7 +2660,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	private Map deepCopyMap(Map positionMap)
 	{
-		
+
 		Map positionMap1 = new TreeMap();
 		Set keySet = positionMap.keySet();
 		Iterator itr = keySet.iterator();
@@ -2698,12 +2693,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			List value = (ArrayList) positionMap.get(key);
 			count = count + value.size();
 			/*Iterator itr1 = value.iterator();
-			while (itr1.hasNext())
-			{
-				itr1.next();
-				count++;
+			 while (itr1.hasNext())
+			 {
+			 itr1.next();
+			 count++;
 
-			}*/
+			 }*/
 		}
 		return count;
 	}
