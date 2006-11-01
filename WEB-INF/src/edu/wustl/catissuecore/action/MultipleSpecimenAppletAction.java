@@ -112,9 +112,10 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		ArrayList specimenGroupArrayList = new ArrayList();
 		specimenGroupArrayList = getNameStringArray(specimenGroupList);
 		DataListsMap.put(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenGroupArrayList.toArray());
-		if(request.getSession().getAttribute("specimenCollectionGroupName") != null)
+		if(request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME) != null)
 		{
-			DataListsMap.put(Constants.SPECIMEN_COLL_GP_NAME,request.getSession().getAttribute("specimenCollectionGroupName"));
+			DataListsMap.put(Constants.SPECIMEN_COLL_GP_NAME,request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME));
+			request.getSession().removeAttribute(Constants.SPECIMEN_COLL_GP_NAME );
 		}
 		// ------------------------------------
 
@@ -178,6 +179,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			//clean up activity.
 			multipleSpecimenSessionMap = new HashMap();
 			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, new HashMap());
+			//request.getSession().removeAttribute(Constants.SPECIMEN_COLL_GP_NAME );  
 		}
 		catch (Exception e)
 		{
