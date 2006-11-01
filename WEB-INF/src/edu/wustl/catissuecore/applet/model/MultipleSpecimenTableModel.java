@@ -92,6 +92,8 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		if (specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME) != null)
 		{
 			setSpecimenCollectionGroupName(specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME).toString());
+			for(int count=1;count<=initialColumnCount; count++)
+				setCollectionGroupInModel(count);
 		}
 	}
 
@@ -481,6 +483,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	{
 		columnCount++;
 		putIdInMap(columnCount);
+		setCollectionGroupInModel(columnCount);
 	}
 
 	/**
@@ -594,5 +597,14 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		this.lastCellRow = currentCellPositionY;
 	}
 	// -----------------------POC for copy paste end
+	
+	private void setCollectionGroupInModel(int column)
+	{//todo
+		if(specimenCollectionGroupName != null)
+		{
+			String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO];
+			specimenMap.put(specimenKey, specimenCollectionGroupName );	
+		}
+	}
 
 }
