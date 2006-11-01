@@ -379,7 +379,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	{
 		//Specimen Collection Group
 		specimenCollectionGroup = new JComboBox(model.getSpecimenCollectionGroupValues());
-		specimenCollectionGroup.setPreferredSize(new Dimension(135, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
+		specimenCollectionGroup.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
 		
 		if (model.getSpecimenCollectionGroupName() != null)
 		{
