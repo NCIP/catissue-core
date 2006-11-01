@@ -1,9 +1,12 @@
+
 package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import edu.wustl.catissuecore.domain.Container;
@@ -11,7 +14,6 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.logger.Logger;
 
 public class StorageContainerUtil
 {
@@ -54,6 +56,7 @@ public class StorageContainerUtil
 				if (Integer.parseInt(yPosNvb.getName()) > y)
 				{
 					yPosList.add(i, new NameValueBean(new Integer(y), new Integer(y)));
+					break;
 				}
 			}
 		}
@@ -229,5 +232,80 @@ public class StorageContainerUtil
 		return map;
 	}
 
+	public static synchronized void insertIncreasedCapacities(Map containerMap, StorageContainer currentContainer, StorageContainer oldContainer)
+	{
+		int xOld = oldContainer.getCapacity().getOneDimensionCapacity().intValue();
+		int xNew = currentContainer.getCapacity().getOneDimensionCapacity().intValue();
+		int yOld = oldContainer.getCapacity().getTwoDimensionCapacity().intValue();
+		int yNew = currentContainer.getCapacity().getTwoDimensionCapacity().intValue();
+		NameValueBean storageContainerId = new NameValueBean(currentContainer.getName(), (currentContainer.getId()));
+		TreeMap storageContainerMap = (TreeMap) containerMap.get(storageContainerId);
+		if (storageContainerMap == null)
+		{
+			storageContainerMap = new TreeMap();
+			containerMap.put(storageContainerId, storageContainerMap);
+		}
 
+		if (xNew > xOld)
+		{
+			for (int i = xOld + 1; i <= xNew; i++)
+			{
+				NameValueBean xNvb = new NameValueBean(new Integer(i), new Integer(i));
+
+				List yPosList = new ArrayList();
+				for (int j = 1; j <= yOld; j++)
+				{
+					NameValueBean yNvb = new NameValueBean(new Integer(j), new Integer(j));
+					yPosList.add(yNvb);
+
+				}
+				if (yPosList.size() > 0)
+				{
+					storageContainerMap.put(xNvb, yPosList);
+				}
+
+
+
+			}
+		}
+		if (yNew > yOld)
+		{
+			for (int i = 1; i <= xNew; i++)
+			{
+				NameValueBean xNvb = new NameValueBean(new Integer(i), new Integer(i));
+				List yPosList = new ArrayList();
+				for (int j = yOld + 1; j <= yNew; j++)
+				{
+					NameValueBean yNvb = new NameValueBean(new Integer(j), new Integer(j));
+					
+					yPosList.add(yNvb);
+				}
+				List yList = (ArrayList) storageContainerMap.get(xNvb);
+				if (yList == null)
+				{
+					storageContainerMap.put(xNvb, yPosList);
+				}
+				else
+				{
+					yList.addAll(yPosList);
+				}
+
+			}
+		}
+
+	}
+	
+	public static synchronized void updateNameInCache(Map containerMap, StorageContainer currentContainer, StorageContainer oldContainer)
+	{
+		Set keySet = containerMap.keySet();
+		Iterator itr = keySet.iterator();
+		while(itr.hasNext())
+		{
+			NameValueBean nvb = (NameValueBean) itr.next();
+			if(nvb.getValue().equals(oldContainer.getId().toString()))
+			{
+				nvb.setName(currentContainer.getName());
+			}
+		}
+	}
 }
