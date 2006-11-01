@@ -84,6 +84,24 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		else
 		{
 			insertSingleSpecimen((Specimen) obj, dao, sessionDataBean, false);
+			
+			//Inserting authorization data 
+			Specimen specimen = (Specimen) obj;
+			Set protectionObjects = new HashSet();
+			protectionObjects.add(specimen);
+			if (specimen.getSpecimenCharacteristics() != null)
+			{
+				protectionObjects.add(specimen.getSpecimenCharacteristics());
+			}
+			try
+			{
+				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(specimen));
+			}
+			catch (SMException e)
+			{
+				throw handleSMException(e);
+			}
+
 		}
 	}
 
@@ -97,6 +115,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 */
 	private void insertMultipleSpecimen(Map specimenMap, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
+		List specimenList = new ArrayList();
 		Iterator specimenIterator = specimenMap.keySet().iterator();
 		while (specimenIterator.hasNext())
 		{
@@ -119,6 +138,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			try
 			{
 				insertSingleSpecimen(specimen, dao, sessionDataBean, true);
+				specimenList.add(specimen);
 			}
 			catch (DAOException daoException)
 			{
@@ -142,6 +162,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				try
 				{
 					insertSingleSpecimen(derivedSpecimen, dao, sessionDataBean, true);
+					specimenList.add(derivedSpecimen);
 				}
 				catch (DAOException daoException)
 				{
@@ -151,6 +172,28 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 					throw daoException;
 				}
 			}
+		}
+		
+		//inserting authorization data 
+		Iterator itr  = specimenList.iterator();
+		while(itr.hasNext())
+		{
+			Specimen specimen = (Specimen)itr.next();
+			Set protectionObjects = new HashSet();
+			protectionObjects.add(specimen);
+			if (specimen.getSpecimenCharacteristics() != null)
+			{
+				protectionObjects.add(specimen.getSpecimenCharacteristics());
+			}
+			try
+			{
+				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(specimen));
+			}
+			catch (SMException e)
+			{
+				throw handleSMException(e);
+			}
+
 		}
 	}
 
@@ -208,17 +251,17 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			ApiSearchUtil.setSpecimenDefault(specimen);
 			//End:- Change for API Search
 
-			Set protectionObjects = new HashSet();
+			//Set protectionObjects = new HashSet();
 			specimen.setLineage(Constants.NEW_SPECIMEN);
 			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
 			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true);
 			dao.insert(specimen, sessionDataBean, true, true);
-			protectionObjects.add(specimen);
+			//protectionObjects.add(specimen);
 
-			if (specimen.getSpecimenCharacteristics() != null)
+			/*if (specimen.getSpecimenCharacteristics() != null)
 			{
 				protectionObjects.add(specimen.getSpecimenCharacteristics());
-			}
+			}*/
 			Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 
 			if (externalIdentifierCollection != null)
@@ -270,7 +313,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 			//Inserting data for Authorization
 
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(specimen));
+			//SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, protectionObjects, getDynamicGroups(specimen));
 		}
 		catch (SMException e)
 		{
@@ -290,45 +333,43 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			e.printStackTrace();
 		}
-	if(obj instanceof HashMap)
-	{
-		HashMap specimenMap = (HashMap) obj;
-		Iterator specimenIterator = specimenMap.keySet().iterator();
-		while (specimenIterator.hasNext())
+		if (obj instanceof HashMap)
 		{
-			Specimen specimen = (Specimen) specimenIterator.next();
-			updateStorageLocations((TreeMap)containerMap,specimen);
-			List derivedSpecimens = (List) specimenMap.get(specimen);
-
-			if (derivedSpecimens != null)
+			HashMap specimenMap = (HashMap) obj;
+			Iterator specimenIterator = specimenMap.keySet().iterator();
+			while (specimenIterator.hasNext())
 			{
-			for (int i = 0; i < derivedSpecimens.size(); i++)
-			{
+				Specimen specimen = (Specimen) specimenIterator.next();
+				updateStorageLocations((TreeMap) containerMap, specimen);
+				List derivedSpecimens = (List) specimenMap.get(specimen);
 
-				Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
-				updateStorageLocations((TreeMap)containerMap,derivedSpecimen);
-			}	
+				if (derivedSpecimens != null)
+				{
+					for (int i = 0; i < derivedSpecimens.size(); i++)
+					{
+
+						Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
+						updateStorageLocations((TreeMap) containerMap, derivedSpecimen);
+					}
+				}
+			}
 		}
-	}
-	}
-	else 
-	{
-		updateStorageLocations((TreeMap)containerMap,(Specimen)obj); 
-	}
+		else
+		{
+			updateStorageLocations((TreeMap) containerMap, (Specimen) obj);
+		}
 
 	}
-	
-	void updateStorageLocations(TreeMap containerMap,Specimen specimen) 
+
+	void updateStorageLocations(TreeMap containerMap, Specimen specimen)
 	{
 		try
 		{
 			if (specimen.getStorageContainer() != null)
 			{
-				
-				
-				StorageContainerUtil.deleteSinglePositionInContainerMap(specimen.getStorageContainer(), containerMap,
-						specimen.getPositionDimensionOne().intValue(), specimen.getPositionDimensionTwo().intValue());
-				
+
+				StorageContainerUtil.deleteSinglePositionInContainerMap(specimen.getStorageContainer(), containerMap, specimen
+						.getPositionDimensionOne().intValue(), specimen.getPositionDimensionTwo().intValue());
 
 			}
 		}
@@ -562,28 +603,26 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 		 */
 		ApiSearchUtil.setSpecimenDefault(specimen);
-		
-		//Added for api Search 
-		 if(isStoragePositionChanged(specimenOld, specimen))
-		 {
-		 	throw new DAOException("Storage Position should not be changed while updating the specimen");
-		 }
-		 if(!specimenOld.getLineage().equals(specimen.getLineage()))
-		 {
-		 	throw new DAOException("Lineage should not be changed while updating the specimen");
-		 }
-		 if(!specimenOld.getClassName().equals(specimen.getClassName()))
-		 {
-		 	throw new DAOException("Class should not be changed while updating the specimen");
-		 }
-//		 if(specimenOld.getAvailableQuantity().getValue().longValue() != specimen.getAvailableQuantity().getValue().longValue())
-//		 {
-//		 	throw new DAOException("Available Quantity should not be changed while updating the specimen");
-//		 }
-		 
-		//End:- Change for API Search
 
-		
+		//Added for api Search 
+		if (isStoragePositionChanged(specimenOld, specimen))
+		{
+			throw new DAOException("Storage Position should not be changed while updating the specimen");
+		}
+		if (!specimenOld.getLineage().equals(specimen.getLineage()))
+		{
+			throw new DAOException("Lineage should not be changed while updating the specimen");
+		}
+		if (!specimenOld.getClassName().equals(specimen.getClassName()))
+		{
+			throw new DAOException("Class should not be changed while updating the specimen");
+		}
+		//		 if(specimenOld.getAvailableQuantity().getValue().longValue() != specimen.getAvailableQuantity().getValue().longValue())
+		//		 {
+		//		 	throw new DAOException("Available Quantity should not be changed while updating the specimen");
+		//		 }
+
+		//End:- Change for API Search
 
 		setAvailableQuantity(specimen, specimenOld);
 
@@ -733,7 +772,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean, boolean isCollectionGroupName)
 			throws DAOException, SMException
 	{
-		
+
 		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		// set barcode to null in case it is blank
 		if (specimen.getBarcode() != null && specimen.getBarcode().trim().equals(""))
@@ -786,12 +825,12 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		//Load & set Storage Container
 		if (specimen.getStorageContainer() != null)
 		{
-			if(specimen.getStorageContainer().getId() != null)
+			if (specimen.getStorageContainer().getId() != null)
 			{
-//				Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getId());
-//				if (containerObj != null)
-//				{
-//					StorageContainer container = (StorageContainer) containerObj;
+				//				Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getId());
+				//				if (containerObj != null)
+				//				{
+				//					StorageContainer container = (StorageContainer) containerObj;
 				StorageContainer storageContainerObj = new StorageContainer();
 				storageContainerObj.setId(specimen.getStorageContainer().getId());
 				String sourceObjectName = StorageContainer.class.getName();
@@ -805,28 +844,27 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 				if (!list.isEmpty())
 				{
-					storageContainerObj.setName((String)list.get(0));
+					storageContainerObj.setName((String) list.get(0));
 				}
 
-					// check for closed Storage Container
-					checkStatus(dao, storageContainerObj, "Storage Container");
-	
-					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
-							Constants.STORAGE_CONTAINER_FORM_ID);
-	
-					// --- check for all validations on the storage container.
-					storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(), specimen
-							.getPositionDimensionTwo().toString(), sessionDataBean);
-					//chkContainerValidForSpecimen(container, specimen,dao);
-					specimen.setStorageContainer(storageContainerObj);
-//				}
-//				else
-//				{
-//					throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
-//				}
+				// check for closed Storage Container
+				checkStatus(dao, storageContainerObj, "Storage Container");
+
+				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+						Constants.STORAGE_CONTAINER_FORM_ID);
+
+				// --- check for all validations on the storage container.
+				storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(),
+						specimen.getPositionDimensionTwo().toString(), sessionDataBean);
+				//chkContainerValidForSpecimen(container, specimen,dao);
+				specimen.setStorageContainer(storageContainerObj);
+				//				}
+				//				else
+				//				{
+				//					throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
+				//				}
 			}
-			
-				
+
 		}
 
 		//Setting the Biohazard Collection
@@ -975,7 +1013,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * Overriding the parent class's method to validate the enumerated attribute values
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
-	{		 
+	{
 		boolean result;
 
 		if (obj instanceof Map)
@@ -997,174 +1035,173 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		//Added by Ashish		
 		//Logger.out.debug("Start-Inside validate method of specimen bizlogic");
-	     if (specimen == null)
-		 {		     
-		     throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "Specimen"));	   
-		 }
-		 
-		 Validator validator = new Validator();
-		 
-		 if (specimen.getSpecimenCollectionGroup() == null  || specimen.getSpecimenCollectionGroup().getId() == null || specimen.getSpecimenCollectionGroup().getId().equals("-1"))
-		 {
-			 String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
-			 throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));            
-		 }
-		 
-		 if(specimen.getParentSpecimen()!= null && (specimen.getParentSpecimen().getId()== null || validator.isEmpty(specimen.getParentSpecimen().getId().toString())))
-		 {
-			 String message = ApplicationProperties.getValue("createSpecimen.parent");
-			 throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));			  		
-		 }
+		if (specimen == null)
+		{
+			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "Specimen"));
+		}
 
-		 if (validator.isEmpty(specimen.getLabel()))
-		 {
-		 	 String message = ApplicationProperties.getValue("specimen.label");
-			 throw new DAOException(ApplicationProperties.getValue("errors.item.required",message)); 
-		 } 
-		 
-		 if (validator.isEmpty(specimen.getClassName()))
-		 {
-		 	 String message = ApplicationProperties.getValue("specimen.type");
-			 throw new DAOException(ApplicationProperties.getValue("errors.item.required",message)); 
-		 }  
-		 
-		 if (validator.isEmpty(specimen.getType()))
-		 {
-		 	 String message = ApplicationProperties.getValue("specimen.subType");
-			 throw new DAOException(ApplicationProperties.getValue("errors.item.required",message)); 
-		 }  		 
-		 
-		 if(specimen.getStorageContainer() != null && specimen.getStorageContainer().getId() == null)
-		 {
-		 	String message = ApplicationProperties.getValue("specimen.subType");
-			 throw new DAOException(ApplicationProperties.getValue("errors.invalid",message)); 
-		 }
-		 
-		 if(specimen.getSpecimenEventCollection() != null)
-		 {
-			 Iterator specimenEventCollectionIterator = specimen.getSpecimenEventCollection().iterator();
-			 while(specimenEventCollectionIterator.hasNext())
-			 {
-			 //CollectionEvent validation.
-			 Object eventObject = specimenEventCollectionIterator.next();
-			 if(eventObject instanceof CollectionEventParameters)
-			 {
-				 CollectionEventParameters collectionEventParameters =  (CollectionEventParameters)eventObject;
-				 collectionEventParameters.getUser();
-				 if ( collectionEventParameters.getUser() == null ||  collectionEventParameters.getUser().getId() == null)
-			 	 {				 	
-				 	String message = ApplicationProperties.getValue("specimen.collection.event.user");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));
-		         }
-				 if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY)) )
-				 {
-				 
-				 	 String message = ApplicationProperties.getValue("specimen.collection.event.date");
-					 throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	 
-				 }				 
-				 // checks the collectionProcedure
-				 if (!validator.isValidOption( collectionEventParameters.getCollectionProcedure() ) )
-				 {
-				 	 String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
-					 throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));			 
-				 }		
-				 List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
-				 if (!Validator.isEnumeratedValue(procedureList, collectionEventParameters.getCollectionProcedure()))
-				 {
-					throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
-				 }
-				 
-				 if (!validator.isValidOption( collectionEventParameters.getContainer()) )
-				 {
-				 	 String message = ApplicationProperties.getValue("collectioneventparameters.container");
-					 throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));			 
-				 }	
-				 
-				 List containerList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_CONTAINER, null);
-				 if (!Validator.isEnumeratedValue(containerList, collectionEventParameters.getContainer()))
-				 {
-					throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
-				 }
-			
-			 }
-			 //ReceivedEvent validation
-			 else if(eventObject instanceof ReceivedEventParameters)
-			 {
-				 ReceivedEventParameters receivedEventParameters =  (ReceivedEventParameters)eventObject;				 
- 				 if (receivedEventParameters.getUser() == null || receivedEventParameters.getUser().getId()== null)
- 		         {
- 				 	String message = ApplicationProperties.getValue("specimen.recieved.event.user");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));  		       		
- 		         }
-				 if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY))) 
-				 {
-				 	String message = ApplicationProperties.getValue("specimen.recieved.event.date");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	 		
-				 }		
-				 // checks the collectionProcedure
-				 if (!validator.isValidOption(receivedEventParameters.getReceivedQuality() ) )
-				 {
-				 	String message = ApplicationProperties.getValue("collectioneventparameters.receivedquality");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	  		
-				 }     
-				 
-				 List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
-						Constants.CDE_NAME_RECEIVED_QUALITY, null);
-				 if (!Validator.isEnumeratedValue(qualityList, receivedEventParameters.getReceivedQuality()))
-				 {
-					throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
-				 }
-			   }  		
-			 }
-		 }
-		 
-		 //Validations for Biohazard Add-More Block
-		 Collection bioHazardCollection = specimen.getBiohazardCollection();
-		 Biohazard biohazard = null;
-		 if(bioHazardCollection!= null && !bioHazardCollection.isEmpty())
-		 {
-		 	Iterator itr = bioHazardCollection.iterator();
-		 	while(itr.hasNext())
-		 	{
-		 		biohazard = (Biohazard) itr.next(); 
-		 		if(!validator.isValidOption( biohazard.getType()))
-		 		{
-		 			String message = ApplicationProperties.getValue("newSpecimen.msg");
-					throw new DAOException(ApplicationProperties.getValue("errors.newSpecimen.biohazard.missing",message));	
-		 		}
-		 		if(biohazard.getId() == null)
-		 		{
-		 			String message = ApplicationProperties.getValue("newSpecimen.msg");
-					throw new DAOException(ApplicationProperties.getValue("errors.newSpecimen.biohazard.missing",message));	
-		 		}		 		
-		 	}
-		 }
-		 
-		 //validations for external identifiers
-		 Collection extIdentifierCollection = specimen.getExternalIdentifierCollection();
-		 ExternalIdentifier extIdentifier = null;
-		 if(extIdentifierCollection!= null && !extIdentifierCollection.isEmpty())
-		 {
-		 	Iterator itr = extIdentifierCollection.iterator();
-		 	while(itr.hasNext())
-		 	{
-		 		extIdentifier = (ExternalIdentifier) itr.next(); 
-		 		if(validator.isEmpty( extIdentifier.getName()))
-		 		{
-		 			String message = ApplicationProperties.getValue("specimen.msg");
-					throw new DAOException(ApplicationProperties.getValue("errors.specimen.externalIdentifier.missing",message));	
-		 		}
-		 		if(validator.isEmpty( extIdentifier.getValue()))
-		 		{
-		 			String message = ApplicationProperties.getValue("specimen.msg");
-					throw new DAOException(ApplicationProperties.getValue("errors.specimen.externalIdentifier.missing",message));	
-		 		}		 		
-		 	}
-		 }
+		Validator validator = new Validator();
+
+		if (specimen.getSpecimenCollectionGroup() == null || specimen.getSpecimenCollectionGroup().getId() == null
+				|| specimen.getSpecimenCollectionGroup().getId().equals("-1"))
+		{
+			String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+		}
+
+		if (specimen.getParentSpecimen() != null
+				&& (specimen.getParentSpecimen().getId() == null || validator.isEmpty(specimen.getParentSpecimen().getId().toString())))
+		{
+			String message = ApplicationProperties.getValue("createSpecimen.parent");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+		}
+
+		if (validator.isEmpty(specimen.getLabel()))
+		{
+			String message = ApplicationProperties.getValue("specimen.label");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+		}
+
+		if (validator.isEmpty(specimen.getClassName()))
+		{
+			String message = ApplicationProperties.getValue("specimen.type");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+		}
+
+		if (validator.isEmpty(specimen.getType()))
+		{
+			String message = ApplicationProperties.getValue("specimen.subType");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+		}
+
+		if (specimen.getStorageContainer() != null && specimen.getStorageContainer().getId() == null)
+		{
+			String message = ApplicationProperties.getValue("specimen.subType");
+			throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+		}
+
+		if (specimen.getSpecimenEventCollection() != null)
+		{
+			Iterator specimenEventCollectionIterator = specimen.getSpecimenEventCollection().iterator();
+			while (specimenEventCollectionIterator.hasNext())
+			{
+				//CollectionEvent validation.
+				Object eventObject = specimenEventCollectionIterator.next();
+				if (eventObject instanceof CollectionEventParameters)
+				{
+					CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
+					collectionEventParameters.getUser();
+					if (collectionEventParameters.getUser() == null || collectionEventParameters.getUser().getId() == null)
+					{
+						String message = ApplicationProperties.getValue("specimen.collection.event.user");
+						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					}
+					if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
+					{
+
+						String message = ApplicationProperties.getValue("specimen.collection.event.date");
+						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					}
+					// checks the collectionProcedure
+					if (!validator.isValidOption(collectionEventParameters.getCollectionProcedure()))
+					{
+						String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
+						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					}
+					List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
+					if (!Validator.isEnumeratedValue(procedureList, collectionEventParameters.getCollectionProcedure()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
+					}
+
+					if (!validator.isValidOption(collectionEventParameters.getContainer()))
+					{
+						String message = ApplicationProperties.getValue("collectioneventparameters.container");
+						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					}
+
+					List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
+					if (!Validator.isEnumeratedValue(containerList, collectionEventParameters.getContainer()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
+					}
+
+				}
+				//ReceivedEvent validation
+				else if (eventObject instanceof ReceivedEventParameters)
+				{
+					ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
+					if (receivedEventParameters.getUser() == null || receivedEventParameters.getUser().getId() == null)
+					{
+						String message = ApplicationProperties.getValue("specimen.recieved.event.user");
+						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					}
+					if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
+					{
+						String message = ApplicationProperties.getValue("specimen.recieved.event.date");
+						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					}
+					// checks the collectionProcedure
+					if (!validator.isValidOption(receivedEventParameters.getReceivedQuality()))
+					{
+						String message = ApplicationProperties.getValue("collectioneventparameters.receivedquality");
+						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					}
+
+					List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
+					if (!Validator.isEnumeratedValue(qualityList, receivedEventParameters.getReceivedQuality()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
+					}
+				}
+			}
+		}
+
+		//Validations for Biohazard Add-More Block
+		Collection bioHazardCollection = specimen.getBiohazardCollection();
+		Biohazard biohazard = null;
+		if (bioHazardCollection != null && !bioHazardCollection.isEmpty())
+		{
+			Iterator itr = bioHazardCollection.iterator();
+			while (itr.hasNext())
+			{
+				biohazard = (Biohazard) itr.next();
+				if (!validator.isValidOption(biohazard.getType()))
+				{
+					String message = ApplicationProperties.getValue("newSpecimen.msg");
+					throw new DAOException(ApplicationProperties.getValue("errors.newSpecimen.biohazard.missing", message));
+				}
+				if (biohazard.getId() == null)
+				{
+					String message = ApplicationProperties.getValue("newSpecimen.msg");
+					throw new DAOException(ApplicationProperties.getValue("errors.newSpecimen.biohazard.missing", message));
+				}
+			}
+		}
+
+		//validations for external identifiers
+		Collection extIdentifierCollection = specimen.getExternalIdentifierCollection();
+		ExternalIdentifier extIdentifier = null;
+		if (extIdentifierCollection != null && !extIdentifierCollection.isEmpty())
+		{
+			Iterator itr = extIdentifierCollection.iterator();
+			while (itr.hasNext())
+			{
+				extIdentifier = (ExternalIdentifier) itr.next();
+				if (validator.isEmpty(extIdentifier.getName()))
+				{
+					String message = ApplicationProperties.getValue("specimen.msg");
+					throw new DAOException(ApplicationProperties.getValue("errors.specimen.externalIdentifier.missing", message));
+				}
+				if (validator.isEmpty(extIdentifier.getValue()))
+				{
+					String message = ApplicationProperties.getValue("specimen.msg");
+					throw new DAOException(ApplicationProperties.getValue("errors.specimen.externalIdentifier.missing", message));
+				}
+			}
+		}
 		//End Ashish
-		 
+
 		if (Constants.ALIQUOT.equals(specimen.getLineage()))
 		{
 			//return true;
@@ -1311,27 +1348,25 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
 			//validate single specimen
-			
+
 			SpecimenCollectionGroup specimenCollectionGroup = null;
-			if (specimen.getSpecimenCollectionGroup()!=null)
+			if (specimen.getSpecimenCollectionGroup() != null)
 			{
 				List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
 				specimenCollectionGroup = (SpecimenCollectionGroup) spgList.get(0);
 			}
-			
+
 			// TODO label
 			if (specimenCollectionGroup != null)
 			{
-				
 
 				if (specimenCollectionGroup.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
 				{
 					throw new DAOException("Specimen Collection Group " + ApplicationProperties.getValue("error.object.closed"));
 				}
-				
+
 				specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 			}
-			
 
 			try
 			{
@@ -1391,14 +1426,14 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		StorageContainer oldContainer = oldSpecimen.getStorageContainer();
 		StorageContainer newContainer = newSpecimen.getStorageContainer();
-		
+
 		//Added for api: Jitendra
-		if((oldContainer == null && newContainer !=null) || (oldContainer != null && newContainer ==null) )
+		if ((oldContainer == null && newContainer != null) || (oldContainer != null && newContainer == null))
 		{
 			return true;
-		}		
-		
-		if(oldContainer != null && newContainer != null)
+		}
+
+		if (oldContainer != null && newContainer != null)
 		{
 			if (oldContainer.getId().longValue() == newContainer.getId().longValue())
 			{
@@ -1427,7 +1462,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			return false;
 		}
-		
+
 	}
 
 	/**
