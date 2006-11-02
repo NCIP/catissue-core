@@ -188,7 +188,7 @@ public class StorageContainerAction extends SecureAction
 
 			if (operation.equals(Constants.EDIT))
 			{
-
+				
 				String valueField = "id";
 				List containerList = bizLogic.retrieve(StorageContainer.class.getName(), valueField, new Long(storageContainerForm.getId()));
 				if (!containerList.isEmpty())
@@ -201,16 +201,15 @@ public class StorageContainerAction extends SecureAction
 						Integer pos1 = cont.getPositionDimensionOne();
 						Integer pos2 = cont.getPositionDimensionTwo();
 
-						String parentContainerName = "";
+						String parentContainerName = cont.getParent().getName();
 
-						List containerList1 = bizLogic.retrieve(StorageContainer.class.getName(), valueField, new Long(storageContainerForm
-								.getParentContainerId()));
+						/*List containerList1 = bizLogic.retrieve(StorageContainer.class.getName(), valueField, cont.getParent().getId());
 						if (!containerList1.isEmpty())
 						{
 							StorageContainer container = (StorageContainer) containerList1.get(0);
 							parentContainerName = container.getName();
 
-						}
+						}*/
 						Logger.out.info("-------------ParentcontainerId:" + id);
 						Logger.out.info("-------------Pos1:" + pos1);
 						Logger.out.info("-------------Pos2:" + pos2);
