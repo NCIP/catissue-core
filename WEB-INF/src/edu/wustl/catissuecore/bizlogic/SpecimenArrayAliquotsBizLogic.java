@@ -178,7 +178,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 
 			//Inserting an aliquot in the database			
 			specimenArrayBizLogic.insert(aliquotSpecimenArray, dao, sessionDataBean);	
-			postInsert(aliquotSpecimenArray, dao, sessionDataBean);
+			//postInsert(aliquotSpecimenArray, dao, sessionDataBean);
 			
 			
 		}
@@ -314,18 +314,31 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 	}
 	
 	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
-	{
-		SpecimenArray specimenArray = (SpecimenArray) obj; 
+	{		
+		SpecimenArray specimenArrayAliquot = (SpecimenArray) obj;
+		String specimenKey = "SpecimenArray:";
+		Map aliquotMap = specimenArrayAliquot.getAliqoutMap();
 		try
 		{
-			if (specimenArray.getStorageContainer() != null)
-			{
+			for (int i = 1; i <= specimenArrayAliquot.getAliquotCount(); i++)
+			{				
+				String containerIdKey = specimenKey + i + "_StorageContainer_id";
+				String posDim1Key = specimenKey + i + "_positionDimensionOne";
+				String posDim2Key = specimenKey + i + "_positionDimensionTwo";
+				String storageContainerNameKey = specimenKey + i + "_StorageContainer_name";
+				
+				String contId = (String) aliquotMap.get(containerIdKey);
+				String contName = (String) aliquotMap.get(storageContainerNameKey);
+				String posOne = (String) aliquotMap.get(posDim1Key);
+				String posTwo = (String) aliquotMap.get(posDim2Key);
+				
+				StorageContainer storageContainer = new StorageContainer();
+				storageContainer.setId(new Long(contId));
+				storageContainer.setName(contName);
 				
 				Map containerMap = StorageContainerUtil.getContainerMapFromCache();
-				StorageContainerUtil.deleteSinglePositionInContainerMap(specimenArray.getStorageContainer(), containerMap, specimenArray
-						.getPositionDimensionOne().intValue(), specimenArray.getPositionDimensionTwo().intValue());
-
-			}
+				StorageContainerUtil.deleteSinglePositionInContainerMap(storageContainer,containerMap,new Integer(posOne).intValue(),new Integer(posTwo).intValue());
+			}			
 		}
 		catch (Exception e)
 		{
