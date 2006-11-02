@@ -89,12 +89,12 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 //				StorageContainer storageContainer = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
 //						.getToStorageContainer().getId());
 				StorageContainer storageContainerObj = new StorageContainer();
-				storageContainerObj.setId(specimen.getStorageContainer().getId());
+				storageContainerObj.setId(transferEventParameters.getToStorageContainer().getId());
 				String sourceObjectName = StorageContainer.class.getName();
 				String[] selectColumnName = {"name"};
 				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
 				String[] whereColumnCondition = {"="};
-				Object[] whereColumnValue = {specimen.getStorageContainer().getId()};
+				Object[] whereColumnValue = {transferEventParameters.getToStorageContainer().getId()};
 				String joinCondition = null;
 
 				List stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
@@ -184,8 +184,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				{
 					StorageContainer storageContainerFrom = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
 							.getFromStorageContainer().getId());
-					StorageContainerUtil.insertSinglePositionInContainerMap(storageContainerFrom, containerMap, storageContainerFrom
-							.getPositionDimensionOne().intValue(), storageContainerFrom.getPositionDimensionTwo().intValue());
+					StorageContainerUtil.insertSinglePositionInContainerMap(storageContainerFrom, containerMap, transferEventParameters.getFromPositionDimensionOne().intValue(), transferEventParameters.getFromPositionDimensionTwo().intValue());
 
 				}
 
