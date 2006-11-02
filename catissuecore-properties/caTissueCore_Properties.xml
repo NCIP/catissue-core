@@ -209,4 +209,11 @@
 		<value>0</value>
 	</property>
 	 <!--Constants for Password validations end-->
+
+<!-- Constants for specifing columns per page in MultipleSpecimen -->
+	 	<property>
+		<name>multipleSpecimen.ColumnsPerPage</name>
+		<value>5</value>
+	</property>
+
 </properties>
