@@ -589,8 +589,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-	public boolean isContainerFull(String containerId, int dimX, int dimY) throws DAOException
+	/*public boolean isContainerFull(String containerId, int dimX, int dimY) throws DAOException
 	{
+		
 		boolean availablePositions[][] = getAvailablePositionsForContainer(containerId, dimX, dimY);
 
 		dimX = availablePositions.length;
@@ -605,7 +606,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 		return true;
 
-	}
+	}*/
 
 	private boolean checkForRestrictionsChanged(StorageContainer newContainer, StorageContainer oldContainer)
 	{
@@ -2466,7 +2467,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				String Id = (String) list1.get(0);
 
 				String Name = (String) list1.get(1);
-				NameValueBean nvb = new NameValueBean(Name, Id);
+				NameValueBean nvb = new NameValueBean(Name,Id);
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
