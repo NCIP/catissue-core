@@ -38,6 +38,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -59,98 +60,112 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
-
-		List list = dao.retrieve(User.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenEventParametersObject.getUser().getId());
-		if (!list.isEmpty())
+		try
 		{
-			User user = (User) list.get(0);
-
-			// check for closed User
-			checkStatus(dao, user, "User");
-
-			specimenEventParametersObject.setUser(user);
+			SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
+	
+			List list = dao.retrieve(User.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenEventParametersObject.getUser().getId());
+			if (!list.isEmpty())
+			{
+				User user = (User) list.get(0);
+	
+				// check for closed User
+				checkStatus(dao, user, "User");
+	
+				specimenEventParametersObject.setUser(user);
+			}
+			Specimen specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
+	
+			// check for closed Specimen
+			checkStatus(dao, specimen, "Specimen");
+	
+			if (specimen != null)
+			{
+				specimenEventParametersObject.setSpecimen(specimen);
+				if (specimenEventParametersObject instanceof TransferEventParameters)
+				{
+					TransferEventParameters transferEventParameters = (TransferEventParameters) specimenEventParametersObject;
+	
+					specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
+					specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
+	
+	//				StorageContainer storageContainer = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
+	//						.getToStorageContainer().getId());
+					StorageContainer storageContainerObj = new StorageContainer();
+					storageContainerObj.setId(transferEventParameters.getToStorageContainer().getId());
+					String sourceObjectName = StorageContainer.class.getName();
+					String[] selectColumnName = {"name"};
+					String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+					String[] whereColumnCondition = {"="};
+					Object[] whereColumnValue = {transferEventParameters.getToStorageContainer().getId()};
+					String joinCondition = null;
+	
+					List stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+	
+					if (!stNamelist.isEmpty())
+					{ 
+						storageContainerObj.setName((String)stNamelist.get(0));
+					}
+					// check for closed StorageContainer
+					checkStatus(dao, storageContainerObj, "Storage Container");
+					
+					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+							Constants.STORAGE_CONTAINER_FORM_ID);
+	
+					// --- check for all validations on the storage container.
+					storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(), specimen
+							.getPositionDimensionTwo().toString(), sessionDataBean);
+	
+	//				if (storageContainer != null)
+	//				{
+	//					NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
+	//							Constants.NEW_SPECIMEN_FORM_ID);
+						//newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainer, specimen);
+						specimen.setStorageContainer(storageContainerObj);
+	//				}
+					dao.update(specimen, sessionDataBean, true, true, false);
+				}
+				if (specimenEventParametersObject instanceof DisposalEventParameters)
+				{
+					DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
+					if (disposalEventParameters.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+					{
+						disableSubSpecimens(dao, specimen.getId().toString());
+	
+					}
+					Map disabledCont = new TreeMap();
+					if (specimen.getStorageContainer() != null)
+					{
+						addEntriesInDisabledMap(specimen ,specimen.getStorageContainer(), disabledCont);
+					}
+					specimen.setPositionDimensionOne(null);
+					specimen.setPositionDimensionTwo(null);
+					specimen.setStorageContainer(null);
+	
+					specimen.setAvailable(new Boolean(false));
+					specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
+					dao.update(specimen, sessionDataBean, true, true, false);
+	
+					try
+					{
+						CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
+						catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIEN, (Serializable) disabledCont);
+					}
+					catch (CacheException e)
+					{
+	 
+					}
+	
+				}
+	
+			}
+	
+			dao.insert(specimenEventParametersObject, sessionDataBean, true, true);
 		}
-		Specimen specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
-
-		// check for closed Specimen
-		checkStatus(dao, specimen, "Specimen");
-
-		if (specimen != null)
+		catch (SMException e)
 		{
-			specimenEventParametersObject.setSpecimen(specimen);
-			if (specimenEventParametersObject instanceof TransferEventParameters)
-			{
-				TransferEventParameters transferEventParameters = (TransferEventParameters) specimenEventParametersObject;
-
-				specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
-				specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
-
-//				StorageContainer storageContainer = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
-//						.getToStorageContainer().getId());
-				StorageContainer storageContainerObj = new StorageContainer();
-				storageContainerObj.setId(transferEventParameters.getToStorageContainer().getId());
-				String sourceObjectName = StorageContainer.class.getName();
-				String[] selectColumnName = {"name"};
-				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
-				String[] whereColumnCondition = {"="};
-				Object[] whereColumnValue = {transferEventParameters.getToStorageContainer().getId()};
-				String joinCondition = null;
-
-				List stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-
-				if (!stNamelist.isEmpty())
-				{
-					storageContainerObj.setName((String)stNamelist.get(0));
-				}
-				// check for closed StorageContainer
-				checkStatus(dao, storageContainerObj, "Storage Container");
-
-//				if (storageContainer != null)
-//				{
-//					NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
-//							Constants.NEW_SPECIMEN_FORM_ID);
-					//newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainer, specimen);
-					specimen.setStorageContainer(storageContainerObj);
-//				}
-				dao.update(specimen, sessionDataBean, true, true, false);
-			}
-			if (specimenEventParametersObject instanceof DisposalEventParameters)
-			{
-				DisposalEventParameters disposalEventParameters = (DisposalEventParameters) specimenEventParametersObject;
-				if (disposalEventParameters.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
-				{
-					disableSubSpecimens(dao, specimen.getId().toString());
-
-				}
-				Map disabledCont = new TreeMap();
-				if (specimen.getStorageContainer() != null)
-				{
-					addEntriesInDisabledMap(specimen ,specimen.getStorageContainer(), disabledCont);
-				}
-				specimen.setPositionDimensionOne(null);
-				specimen.setPositionDimensionTwo(null);
-				specimen.setStorageContainer(null);
-
-				specimen.setAvailable(new Boolean(false));
-				specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
-				dao.update(specimen, sessionDataBean, true, true, false);
-
-				try
-				{
-					CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-					catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIEN, (Serializable) disabledCont);
-				}
-				catch (CacheException e)
-				{
-
-				}
-
-			}
-
+			throw handleSMException(e);
 		}
-
-		dao.insert(specimenEventParametersObject, sessionDataBean, true, true);
 	}
 
 	private void addEntriesInDisabledMap(Specimen specimen ,StorageContainer container, Map disabledConts)
