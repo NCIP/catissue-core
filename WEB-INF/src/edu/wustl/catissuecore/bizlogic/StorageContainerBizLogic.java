@@ -2273,9 +2273,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		int i = 1;
+		
 		if (containerMapFromCache != null)
 		{
+			int i = 1;
 			Iterator itr = list.iterator();
 			while (itr.hasNext())
 			{
@@ -2304,6 +2305,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 							containerMap.put(nvb, positionMap1);
 						}
 						siteList.add(new NameValueBean(siteName, Id));
+						i++;
 					}
 				}
 
@@ -2312,7 +2314,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					Logger.out.info("Error while getting map from cache");
 					e.printStackTrace();
 				}
-				i++;
+				
 			}
 		}
 
@@ -2365,9 +2367,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		int i = 1;
+		
 		if (containerMapFromCache != null)
 		{
+			int i = 1;
 			Iterator itr = list.iterator();
 			while (itr.hasNext())
 			{
@@ -2399,8 +2402,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 							containerMap.put(nvb, positionMap);
 						}
 					}
+					i++;
 				}
-				i++;
+				
 			}
 			Logger.out.debug("getAllocatedContaienrMapForSpecimen()----Size of containerMap:" + containerMap.size());
 		}
@@ -2457,9 +2461,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		int i = 1;
+		
 		if (containerMapFromCache != null)
 		{
+			int i = 1;
 			Iterator itr = list.iterator();
 			while (itr.hasNext())
 			{
@@ -2483,8 +2488,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					{
 						containerMap.put(nvb, positionMap1);
 					}
+					i++;
 				}
-				i++;
+				
 			}
 		}
 
