@@ -48,17 +48,22 @@ public class StorageContainerUtil
 		{
 			Collections.sort(yPosList);
 			int size = yPosList.size();
+			boolean insertFlag = true;
 			for (int i = 0; i < size; i++)
 			{
 				NameValueBean yPosNvb = (NameValueBean) yPosList.get(i);
 				if (Integer.parseInt(yPosNvb.getName()) == y)
-					break;
-				if (Integer.parseInt(yPosNvb.getName()) > y)
 				{
-					yPosList.add(i, new NameValueBean(new Integer(y), new Integer(y)));
+					insertFlag = false;
 					break;
 				}
 			}
+			if (insertFlag)
+			{
+				yPosList.add(new NameValueBean(new Integer(y), new Integer(y)));
+				Collections.sort(yPosList);
+			}
+
 		}
 		storageContainerMap.put(nvb, yPosList);
 	}
@@ -264,8 +269,6 @@ public class StorageContainerUtil
 					storageContainerMap.put(xNvb, yPosList);
 				}
 
-
-
 			}
 		}
 		if (yNew > yOld)
@@ -277,7 +280,7 @@ public class StorageContainerUtil
 				for (int j = yOld + 1; j <= yNew; j++)
 				{
 					NameValueBean yNvb = new NameValueBean(new Integer(j), new Integer(j));
-					
+
 					yPosList.add(yNvb);
 				}
 				List yList = (ArrayList) storageContainerMap.get(xNvb);
@@ -294,18 +297,42 @@ public class StorageContainerUtil
 		}
 
 	}
-	
+
 	public static synchronized void updateNameInCache(Map containerMap, StorageContainer currentContainer, StorageContainer oldContainer)
 	{
+		//Using treeMap , so can't directly update the key contents.
+		Map positionMap = new TreeMap();
+		boolean keyRemoved = false;
 		Set keySet = containerMap.keySet();
 		Iterator itr = keySet.iterator();
-		while(itr.hasNext())
+		while (itr.hasNext())
 		{
 			NameValueBean nvb = (NameValueBean) itr.next();
-			if(nvb.getValue().equals(oldContainer.getId().toString()))
+			if (nvb.getValue().equals(oldContainer.getId().toString()) && nvb.getName().equals(oldContainer.getName().toString()))
 			{
-				nvb.setName(currentContainer.getName());
+				positionMap = (Map) containerMap.get(nvb);
+				containerMap.remove(nvb);
+				keyRemoved = true;
+				break;
 			}
 		}
+		if (keyRemoved)
+		{
+			NameValueBean nvbUpdated = new NameValueBean(currentContainer.getName(), currentContainer.getId());
+			containerMap.put(nvbUpdated, positionMap);
+		}
+
+	}
+
+	public static boolean chkContainerFull(String storageContainerId, String storageContainerName) throws Exception
+	{
+		Map containerMap = getContainerMapFromCache();
+
+		NameValueBean nvb = new NameValueBean(storageContainerName, storageContainerId);
+		if (containerMap.containsKey(nvb))
+			return false;
+		else
+			return true;
+
 	}
 }
