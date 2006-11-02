@@ -56,6 +56,7 @@
 			<include name="APIDemo.java"/>
 			<include name="SendBuildReport.java"/>
 			<include name="UniqueKeyGeneratorUtil.java"/>
+			<include name="ReportWriter.java"/>
 			<classpath refid="cp"/>
 			<classpath>
 				<pathelement location="${src.dir}"/>
