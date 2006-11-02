@@ -99,7 +99,7 @@ public class SendBuildReport
     		messageBodyPart = new MimeBodyPart();
     		DataSource source = new FileDataSource(filePath);
     		messageBodyPart.setDataHandler(new DataHandler(source));
-    		messageBodyPart.setFileName("report.log");
+    		messageBodyPart.setFileName("catissuecoreclient.log");
     		mp.addBodyPart(messageBodyPart);
             // add the Multipart to the message
             msg.setContent(mp);
