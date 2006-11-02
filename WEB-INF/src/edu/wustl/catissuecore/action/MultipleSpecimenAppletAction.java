@@ -43,7 +43,9 @@ import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 
 /**
  * This action contains methods that are called by MultipleSpecimenApplet
@@ -118,7 +120,12 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			request.getSession().removeAttribute(Constants.SPECIMEN_COLL_GP_NAME );
 		}
 		// ------------------------------------
-
+		
+		// Mandar : to set columns per page ----- start
+		String columns = XMLPropertyHandler.getValue(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE);
+		DataListsMap.put(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE ,columns );
+		// Mandar : to set columns per page ----- end
+		
 		writeMapToResponse(response, DataListsMap);
 		return null;
 	}
@@ -407,40 +414,135 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 		int noOfSpecimens = Integer.parseInt((String) specimenMap.get(AppletConstants.NO_OF_SPECIMENS));
 		specimenMap.remove(AppletConstants.NO_OF_SPECIMENS);
-
+		Validator validator = new Validator();
+		
 		for (int i = 1; i <= noOfSpecimens; i++)
 		{
-			String classValue = (String) specimenMap.get(AppletConstants.SPECIMEN_PREFIX + i + "_" + "class");
+			// --------------------------------------------------------------
+			
+			//			Specimen Collection Group
+//			String collectionGroupKey = getKey(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO  ,i  );
+//			String collectionGroupValue = (String) specimenMap.get(collectionGroupKey);
+			//			Parent Specimen keys
+			String parentKey =getKey(AppletConstants.SPECIMEN_PARENT_ROW_NO,i  ); 
+			String parentSpecimenLabel = (String) specimenMap.get(parentKey);
 
-			if (classValue == null || classValue.trim().length() == 0 || classValue.equals("-- Select --"))
+			if(validator.isEmpty(parentSpecimenLabel))
 			{
-				throw new Exception(ApplicationProperties.getValue("protocol.class.errMsg") + " for Specimen number " + i);
+				validateField(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO, i, specimenMap, "Specimen Group Name", 2);
+//				if (validator.isEmpty(collectionGroupValue ) || !validator.isValidOption(collectionGroupValue ) )
+//				{
+//					throw new Exception("Please enter Specimen Group Name" + " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + i);
+//				}
 			}
+// ------------------------	
 			
-			String parentSpecimenLabel = (String) specimenMap.get(AppletConstants.SPECIMEN_PREFIX + i + "_" + "ParentSpecimen_label");
-			if (parentSpecimenLabel == null || parentSpecimenLabel.trim().length() == 0)
+			//			Parent Specimen
+			//if (parentSpecimenLabel == null || parentSpecimenLabel.trim().length() == 0)
+			if(validator.isEmpty(parentSpecimenLabel))
 			{
-				specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + i + "_" + "ParentSpecimen_label");
+				specimenMap.remove(parentKey);
 			}
+//			 ------------------------	
 			
-			String quantityKey = AppletConstants.SPECIMEN_PREFIX + i + "_" + "Quantity_value";
+			//			Label
+			validateField(AppletConstants.SPECIMEN_LABEL_ROW_NO, i, specimenMap, "Label", 1);
+//			String labelKey = getKey(AppletConstants.SPECIMEN_LABEL_ROW_NO   ,i  );
+//			String labelValue = (String) specimenMap.get(labelKey);
+//
+//			if (validator.isEmpty(labelValue ))
+//			{
+//				throw new Exception("Please enter Label" + " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + i);
+//			}
+//			 ------------------------	
+			
+			//			Specimen Class
+			validateField(AppletConstants.SPECIMEN_CLASS_ROW_NO, i, specimenMap, "Class", 2);
+
+			String classKey = getKey(AppletConstants.SPECIMEN_CLASS_ROW_NO ,i  );
+			String classValue = (String) specimenMap.get(classKey);
+//
+//			if (validator.isEmpty(classValue) || !validator.isValidOption(classValue  ) )
+//			{
+//				throw new Exception("Please enter Class" + " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + i);
+//			}
+//			 ------------------------	
+			
+			//			Specimen Type
+			validateField(AppletConstants.SPECIMEN_TYPE_ROW_NO, i, specimenMap, "Type", 2);
+
+//			String typeKey = getKey(AppletConstants.SPECIMEN_TYPE_ROW_NO  ,i  );
+//			String typeValue = (String) specimenMap.get(typeKey);
+//
+//			if (validator.isEmpty(typeValue) || !validator.isValidOption(typeValue  ) )
+//			{
+//				throw new Exception("Please enter Type" + " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + i);
+//			}
+//			 ------------------------	
+			
+			//			TissueSite
+			validateField(AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO, i, specimenMap, "TissueSite", 2);
+
+//			String tissueSiteKey = getKey(AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO   ,i  );
+//			String tissueSiteValue = (String) specimenMap.get(tissueSiteKey);
+//
+//			if (validator.isEmpty(tissueSiteValue) || !validator.isValidOption(tissueSiteValue  ) )
+//			{
+//				throw new Exception("Please enter TissueSite" + " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + i);
+//			}
+//			 ------------------------	
+			
+			//			TissueSide
+			validateField(AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO, i, specimenMap, "TissueSide", 2);
+//			String tissueSideKey = getKey(AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO ,i  );
+//			String tissueSideValue = (String) specimenMap.get(tissueSideKey);
+//
+//			if (validator.isEmpty(tissueSideValue) || !validator.isValidOption(tissueSideValue  ) )
+//			{
+//				throw new Exception("Please enter TissueSide" + " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + i);
+//			}
+//			 ------------------------	
+			
+			//			PathologicalStatus
+			validateField(AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO, i, specimenMap, "Pathological Status", 2);
+//			String pathologicalStatusKey = getKey(AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO  ,i  );
+//			String pathologicalStatusValue = (String) specimenMap.get(pathologicalStatusKey  );
+//
+//			if (validator.isEmpty(pathologicalStatusValue) || !validator.isValidOption(pathologicalStatusValue  ) )
+//			{
+//				throw new Exception("Please enter Pathological Status" + " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + i);
+//			}
+//			 ------------------------	
+			
+			//			Quantity
+			String quantityKey = getKey(AppletConstants.SPECIMEN_QUANTITY_ROW_NO,i  );
 			String quantityValue = (String) specimenMap.get(quantityKey);
 			try
 			{
 				Long.parseLong(quantityValue);
+				if(!validator.isPositiveNumeric(quantityValue,1 ))
+				{
+					throw new Exception("Quantity should be greater than zero" + " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + i);
+				}
 			}
 			catch (NumberFormatException e)
 			{
-				throw new Exception("Please enter valid Quantity for Specimen number " + i);
+				throw new Exception("Please enter valid Quantity" + " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + i);
 			}
+//			 ------------------------	
+			
+			//			For Storage Location
+//			Long storageContainer = (Long) specimenMap.get(AppletConstants.SPECIMEN_PREFIX + i + "_" + "StorageContainer_id");
+			validateField(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO, i, specimenMap, "Storage Position", 1);
 
-			Long storageContainer = (Long) specimenMap.get(AppletConstants.SPECIMEN_PREFIX + i + "_" + "StorageContainer_id");
-
-			if (storageContainer == null)
-			{
-				throw new Exception("Please give valid Storage Position for Specimen number " + i);
-			}
-
+//			String storageContainer = (String) specimenMap.get(getKey(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO ,i  ));
+//			if (validator.isEmpty(storageContainer))
+//			{
+//				throw new Exception("Please enter valid Storage Position" + " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + i);
+//			}
+			
+			// --------------------------------------------------------------------
+			
 			classMap.put(String.valueOf(i), classValue);
 
 			if (!classValue.equals("Molecular"))
@@ -570,7 +672,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			NewSpecimenForm form = (NewSpecimenForm) multipleSpecimenFormBeanMap.get("Specimen:" + i + "_specimenEventCollection");
 			if (form == null)
 			{
-				throw new Exception("Please Give Events for specimen number " + i);
+				throw new Exception("Please enter Events"+ " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + i);
 			}
 			else
 			{
@@ -623,4 +725,42 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		}
 		return returnArrayList;
 	}
+	
+	//-----Mandar : for validation of non associated data           start
+	
+	private String getKey(int row, int col)
+	{
+		 // attributes of the specimen.
+		String[] specimenAttribute = {"SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
+				"SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "Quantity_value",
+				"concentrationInMicrogramPerMicroliter", "StorageContainer_temp", "comments", "specimenEventCollection", "externalIdentifierCollection",
+				"biohazardCollection", "derive"};
+		String key = AppletConstants.SPECIMEN_PREFIX + col + "_" + specimenAttribute[row]; 
+		
+		return key;
+	}
+	
+	private void validateField(int row,int col, Map specimenMap, String fieldName, int checkFor) throws Exception 
+	{
+		String key = getKey(row , col  );
+		String value = (String) specimenMap.get(key);
+		Validator validator = new Validator(); 
+		if(checkFor == 1)		//	only check for empty : used for textfields
+		{
+			if (validator.isEmpty(value ))
+			{
+				throw new Exception("Please enter "+fieldName + " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + col);
+			}
+		}
+		else if(checkFor == 2 )		//	check for empty and valid selections : used for combo box
+		{
+			if (validator.isEmpty(value) || !validator.isValidOption(value  ) )
+			{
+				throw new Exception("Please enter "+fieldName + " "+ApplicationProperties.getValue("multiplespecimen.error.forspecimen")+" " + col);
+			}
+		}
+			
+	
+	}
+	// -------------------------------------------------------- end
 }
