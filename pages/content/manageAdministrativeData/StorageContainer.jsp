@@ -603,13 +603,13 @@ function onEditChange()
 							</logic:equal>						
 						
 					</tr>
+					<logic:equal name="exceedsMaxLimit" value="true">
 					<tr>
 						<td>
-							<logic:equal name="exceedsMaxLimit" value="true">
-								<bean:message key="container.maxView"/>
-							</logic:equal>
+							<bean:message key="container.maxView"/>
 						</td>
 					</tr>	
+					</logic:equal>
 					<tr>
 						<td class="formRequiredNotice" width="5">*</td>
 						<td class="formRequiredLabel" colspan="2">
