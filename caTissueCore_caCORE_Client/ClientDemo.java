@@ -89,6 +89,7 @@ public class ClientDemo
 		private String updateOperation = " update ";
 		private String successMessage = " pass ";
 		private String failureMessage = " fail ";
+		private static String filePath = "";
 		
     public static void main(String[] args) 
 	{
@@ -116,7 +117,8 @@ public class ClientDemo
 				reportWriter = ReportWriter.getInstance();
 				String dirFullPath = reportWriter.getDirPath(); 
 				reportWriter.createDir(dirFullPath);
-				reportWriter.createFile(reportWriter.getFileName(dirFullPath));
+				filePath = reportWriter.getFileName(dirFullPath);
+				reportWriter.createFile(filePath);
 				writeHeaderContentsToReport();
 				reportContents = new StringBuffer();
 				testClient.createObjects();
@@ -124,6 +126,7 @@ public class ClientDemo
 				testClient.updateObjects();
 				writeFooterContentsToReport();
 				reportWriter.closeFile();
+				testClient.sendMail();
 /*				testClient.testAddInstitution();
 				testClient.testAddDepartment();
 				testClient.testAddCancerResearchGroup();
@@ -2105,6 +2108,19 @@ public class ClientDemo
 		reportContents.append(objectName + separator + operation + separator + failureMessage + newLine);
 		//reportWriter.writeToFile(objectName + separator + operation + separator + failureMessage + newLine);
 	}
+	
+	private void sendMail()
+	{
+		SendBuildReport report = SendBuildReport.getInstance();
+		String to = "catissue@persistent.co.in";
+		String from = "ashwin_gupta@persistent.co.in";
+		String cc = "munesh_gupta@persistent.co.in";
+		String host = "mail.persistent.co.in";
+        String subject = "Nightly Build Report";
+        String body = "This is test mail to send a nightly build report as report file.Please ignore this mail.";
+        //String filePath = "F:/nightly_build/catissuecore/caTissueCore_caCORE_Client/log/catissuecoreclient.log";
+        report.sendmail(to,cc,null,from,host,subject,body,filePath);
+ 	}
 
 }
 
