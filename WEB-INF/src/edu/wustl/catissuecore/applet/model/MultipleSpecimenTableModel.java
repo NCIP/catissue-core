@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
-import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -95,6 +94,10 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			for(int count=1;count<=initialColumnCount; count++)
 				setCollectionGroupInModel(count);
 		}
+		
+		//mandar: to set columns per page
+		this.columnsPerPage = Integer.parseInt(specimenAttributeOptions.get(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE).toString()) ;
+		System.out.println("Columns per page set to : "+this.columnsPerPage);
 	}
 
 	/**
