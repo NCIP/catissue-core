@@ -1346,4 +1346,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Constants required for max limit on no. of containers in the drop down
 	public static final int CONTAINERS_MAX_LIMIT = 200;
 	public static final String EXCEEDS_MAX_LIMIT = "exceedsMaxLimit";
+	
+	//MultipleSpecimen Constants
+	public static final String MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE="multipleSpecimen.ColumnsPerPage";
 }
