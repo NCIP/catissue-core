@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.XMLPropertyHandler;
 
 public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 {
@@ -42,8 +43,10 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 
 		Map appletDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		CopyPasteOperationValidatorModel validatorModel = (CopyPasteOperationValidatorModel) appletDataMap.get(AppletConstants.VALIDATOR_MODEL);
-
-		MultipleSpecimenTableModel multipleSpecimenTableModel = new MultipleSpecimenTableModel(0, new HashMap());
+		Map dataListsMap = new HashMap();
+		String columns = XMLPropertyHandler.getValue(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE);
+		dataListsMap.put(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE ,columns);
+		MultipleSpecimenTableModel multipleSpecimenTableModel = new MultipleSpecimenTableModel(0, dataListsMap);
 
 		List selectedCopiedRows = validatorModel.getSelectedCopiedRows();
 		List selectedCopiedCols = validatorModel.getSelectedCopiedCols();
@@ -106,7 +109,10 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 
 		Map appletDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		CopyPasteOperationValidatorModel validatorModel = (CopyPasteOperationValidatorModel) appletDataMap.get(AppletConstants.VALIDATOR_MODEL);
-		MultipleSpecimenTableModel multipleSpecimenTableModel = new MultipleSpecimenTableModel(0, new HashMap());
+		Map dataListsMap = new HashMap();
+		String columns = XMLPropertyHandler.getValue(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE);
+		dataListsMap.put(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE ,columns);
+		MultipleSpecimenTableModel multipleSpecimenTableModel = new MultipleSpecimenTableModel(0, dataListsMap);
 
 		List selectedCopiedRows = validatorModel.getSelectedCopiedRows();
 		List selectedCopiedCols = validatorModel.getSelectedCopiedCols();
