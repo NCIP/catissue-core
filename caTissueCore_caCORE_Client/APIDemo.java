@@ -883,6 +883,8 @@ public class APIDemo
 		specimen.setId(new Long(10));
 */		
 		specimenArrayContent.setSpecimen(specimen);
+		specimenArrayContent.setPositionDimensionOne(new Integer(1));
+		specimenArrayContent.setPositionDimensionTwo(new Integer(1));
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(2));
 		specimenArrayContent.setInitialQuantity(quantity);
