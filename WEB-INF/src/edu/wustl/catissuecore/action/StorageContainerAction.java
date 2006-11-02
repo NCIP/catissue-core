@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -284,8 +285,13 @@ public class StorageContainerAction extends SecureAction
 		}
 		else
 		{
-			if (bizLogic.isContainerFull(new Long(storageContainerForm.getId()).toString(),
+			/*if (bizLogic.isContainerFull(new Long(storageContainerForm.getId()).toString(),
 					storageContainerForm.getOneDimensionCapacity()+1,storageContainerForm.getTwoDimensionCapacity()+1))
+			{
+				storageContainerForm.setIsFull("true");
+			}*/
+			
+			if (StorageContainerUtil.chkContainerFull(new Long(storageContainerForm.getId()).toString(),storageContainerForm.getContainerName()))
 			{
 				storageContainerForm.setIsFull("true");
 			}
