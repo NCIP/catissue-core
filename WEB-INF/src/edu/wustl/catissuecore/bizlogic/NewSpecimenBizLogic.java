@@ -358,10 +358,10 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			updateStorageLocations((TreeMap) containerMap, (Specimen) obj);
 		}
-
+	
 	}
-
-	void updateStorageLocations(TreeMap containerMap, Specimen specimen)
+	
+	void updateStorageLocations(TreeMap containerMap,Specimen specimen) 
 	{
 		try
 		{
@@ -783,43 +783,53 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		//Load & set Specimen Collection Group if present
 		if (specimen.getSpecimenCollectionGroup() != null)
 		{
-			Object specimenCollectionGroupObj = null;
+			SpecimenCollectionGroup specimenCollectionGroupObj = null;
 			if (isCollectionGroupName)
 			{
+				/*String sourceObjectName = SpecimenCollectionGroup.class.getName();
+				String[] selectColumnName = {"id"};
+				String[] whereColumnName = {"name"}; 
+				String[] whereColumnCondition = {"="};
+				Object[] whereColumnValue = {specimen.getSpecimenCollectionGroup().getName()};
+				String joinCondition = null;
+
+				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+				specimenCollectionGroupObj = new SpecimenCollectionGroup();
+				specimenCollectionGroupObj.setId((Long)list.get(0));*/
 				List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
 
-				specimenCollectionGroupObj = spgList.get(0);
+				specimenCollectionGroupObj = (SpecimenCollectionGroup)spgList.get(0);
 			}
 			else
 			{
-				specimenCollectionGroupObj = dao.retrieve(SpecimenCollectionGroup.class.getName(), specimen.getSpecimenCollectionGroup().getId());
+				specimenCollectionGroupObj = new SpecimenCollectionGroup();
+				specimenCollectionGroupObj.setId(specimen.getSpecimenCollectionGroup().getId());
 
 			}
 			if (specimenCollectionGroupObj != null)
 			{
-				SpecimenCollectionGroup spg = (SpecimenCollectionGroup) specimenCollectionGroupObj;
-
-				if (spg.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
+				/*if (specimenCollectionGroupObj.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
 				{
 					throw new DAOException("Specimen Collection Group " + ApplicationProperties.getValue("error.object.closed"));
-				}
-				//checkStatus(dao, spg, );
-				specimen.setSpecimenCollectionGroup(spg);
+				}*/
+				checkStatus(dao, specimenCollectionGroupObj,"Specimen Collection Group" );
+				specimen.setSpecimenCollectionGroup(specimenCollectionGroupObj);
 			}
 		}
 
 		//Load & set Parent Specimen if present
 		if (specimen.getParentSpecimen() != null)
 		{
-			Object parentSpecimenObj = dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getId());
-			if (parentSpecimenObj != null)
-			{
-				Specimen parentSpecimen = (Specimen) parentSpecimenObj;
-
+//			Object parentSpecimenObj = dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getId());
+//			if (parentSpecimenObj != null)
+//			{
+				Specimen parentSpecimen = new Specimen();
+				parentSpecimen.setId(specimen.getParentSpecimen().getId());
 				// check for closed Parent Specimen
 				checkStatus(dao, parentSpecimen, "Parent Specimen");
 				specimen.setLineage(Constants.DERIVED_SPECIMEN);
-			}
+//			}
 		}
 
 		//Load & set Storage Container
