@@ -131,7 +131,7 @@ public class CreateMultipleSpecimenAction extends BaseAction
 		if (cpId != -1 && specimenClass != null && !specimenClass.equals("null") && !specimenClass.equals("-- Select --")
 				&& !specimenClass.equals("-1"))
 		{
-			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, specimenClass, 0,exceedingMaxLimit);
+			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, specimenClass, 0,exceedingMaxLimit,true);
 			if (containerMap.isEmpty())
 			{
 				ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);

@@ -345,7 +345,7 @@ public class NewSpecimenAction extends SecureAction
 							specimenForm.setVirtuallyLocated(false);
 					}
 					//Logger.out.debug("calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
-					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass,0,exceedingMaxLimit);
+					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass,0,exceedingMaxLimit,true);
 					//Logger.out.debug("exceedingMaxLimit in action for Boolean:"+exceedingMaxLimit);
 					Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 					if(containerMap.isEmpty())

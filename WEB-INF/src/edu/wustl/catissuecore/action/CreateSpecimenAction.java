@@ -151,7 +151,7 @@ public class CreateSpecimenAction extends SecureAction
 							createForm.setVirtuallyLocated(false);
 						}
 						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
-								spClass, 0,exceedingMaxLimit);
+								spClass, 0,exceedingMaxLimit,true);
 						if (containerMap.isEmpty())
 						{
 							ActionErrors errors = (ActionErrors) request
@@ -346,7 +346,7 @@ public class CreateSpecimenAction extends SecureAction
 					.getCollectionProtocol().getId().longValue();
 			String spClass = className;
 			Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
-			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0,exceedingMaxLimit);
+			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0,exceedingMaxLimit,true);
 		}
 
 		return containerMap;

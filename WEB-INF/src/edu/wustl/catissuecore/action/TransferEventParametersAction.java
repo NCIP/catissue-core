@@ -107,7 +107,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
 				request.setAttribute(Constants.SPECIMEN_CLASS_NAME,className);
 				Logger.out.info("Spcimen Class:" + className);
-				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0,exceedingMaxLimit);
+				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0,exceedingMaxLimit,true);
 
 				if (containerMap.isEmpty())
 				{

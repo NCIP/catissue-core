@@ -187,12 +187,12 @@ public class AliquotAction extends SecureAction
 				{
 
 					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
-							Integer.parseInt(aliquotForm.getNoOfAliquots()),exceedingMaxLimit);
+							Integer.parseInt(aliquotForm.getNoOfAliquots()),exceedingMaxLimit,true);
 				}
 				else
 				{
 					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
-							0,exceedingMaxLimit);
+							0,exceedingMaxLimit,true);
 				}
 				populateAliquotsStorageLocations(aliquotForm, containerMap);
 
@@ -257,12 +257,12 @@ public class AliquotAction extends SecureAction
 					if (aliquotForm.isAliqoutInSameContainer())
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()),exceedingMaxLimit);
+								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()),exceedingMaxLimit,true);
 					}
 					else
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), 0,exceedingMaxLimit);
+								.getSpecimenClass(), 0,exceedingMaxLimit,true);
 					}
 
 					populateAliquotsStorageLocations(aliquotForm, containerMap);
@@ -344,12 +344,12 @@ public class AliquotAction extends SecureAction
 					{
 
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()),exceedingMaxLimit);
+								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()),exceedingMaxLimit,true);
 					}
 					else
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), 0,exceedingMaxLimit);
+								.getSpecimenClass(), 0,exceedingMaxLimit,true);
 					}
 					pageOf = checkForSufficientAvailablePositions(request, containerMap, aliquotCount);
 
