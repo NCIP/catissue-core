@@ -216,7 +216,7 @@
 			}
 			else
 			{
-				setSubmittedFor('null','success');
+				setSubmittedFor('ForwardTo','eventParameters');
 				confirmDisable('AddSpecimen.do',document.forms[0].activityStatus);
 			
 			}
