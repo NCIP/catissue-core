@@ -63,34 +63,34 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		try
 		{
 			SpecimenEventParameters specimenEventParametersObject = (SpecimenEventParameters) obj;
-	
+
 			List list = dao.retrieve(User.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenEventParametersObject.getUser().getId());
 			if (!list.isEmpty())
 			{
 				User user = (User) list.get(0);
-	
+
 				// check for closed User
 				checkStatus(dao, user, "User");
-	
+
 				specimenEventParametersObject.setUser(user);
 			}
 			Specimen specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
-	
+
 			// check for closed Specimen
 			checkStatus(dao, specimen, "Specimen");
-	
+
 			if (specimen != null)
 			{
 				specimenEventParametersObject.setSpecimen(specimen);
 				if (specimenEventParametersObject instanceof TransferEventParameters)
 				{
 					TransferEventParameters transferEventParameters = (TransferEventParameters) specimenEventParametersObject;
-	
-					specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
-					specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
-	
-	//				StorageContainer storageContainer = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
-	//						.getToStorageContainer().getId());
+
+					/*specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
+					 specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());*/
+
+					//				StorageContainer storageContainer = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
+					//						.getToStorageContainer().getId());
 					StorageContainer storageContainerObj = new StorageContainer();
 					storageContainerObj.setId(transferEventParameters.getToStorageContainer().getId());
 					String sourceObjectName = StorageContainer.class.getName();
@@ -99,30 +99,33 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					String[] whereColumnCondition = {"="};
 					Object[] whereColumnValue = {transferEventParameters.getToStorageContainer().getId()};
 					String joinCondition = null;
-	
-					List stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-	
+
+					List stNamelist = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
+							joinCondition);
+
 					if (!stNamelist.isEmpty())
-					{ 
-						storageContainerObj.setName((String)stNamelist.get(0));
+					{
+						storageContainerObj.setName((String) stNamelist.get(0));
 					}
 					// check for closed StorageContainer
 					checkStatus(dao, storageContainerObj, "Storage Container");
-					
+
 					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 							Constants.STORAGE_CONTAINER_FORM_ID);
-	
+
 					// --- check for all validations on the storage container.
-					storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(), specimen
-							.getPositionDimensionTwo().toString(), sessionDataBean);
-	
-	//				if (storageContainer != null)
-	//				{
-	//					NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
-	//							Constants.NEW_SPECIMEN_FORM_ID);
-						//newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainer, specimen);
-						specimen.setStorageContainer(storageContainerObj);
-	//				}
+					storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), transferEventParameters
+							.getToPositionDimensionOne().toString(), transferEventParameters.getToPositionDimensionTwo().toString(), sessionDataBean);
+					
+					//				if (storageContainer != null)
+					//				{
+					//					NewSpecimenBizLogic newSpecimenBizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(
+					//							Constants.NEW_SPECIMEN_FORM_ID);
+					//newSpecimenBizLogic.chkContainerValidForSpecimen(storageContainer, specimen);
+					specimen.setStorageContainer(storageContainerObj);
+					specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
+					specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
+					//				}
 					dao.update(specimen, sessionDataBean, true, true, false);
 				}
 				if (specimenEventParametersObject instanceof DisposalEventParameters)
@@ -131,21 +134,21 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					if (disposalEventParameters.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 					{
 						disableSubSpecimens(dao, specimen.getId().toString());
-	
+
 					}
 					Map disabledCont = new TreeMap();
 					if (specimen.getStorageContainer() != null)
 					{
-						addEntriesInDisabledMap(specimen ,specimen.getStorageContainer(), disabledCont);
+						addEntriesInDisabledMap(specimen, specimen.getStorageContainer(), disabledCont);
 					}
 					specimen.setPositionDimensionOne(null);
 					specimen.setPositionDimensionTwo(null);
 					specimen.setStorageContainer(null);
-	
+
 					specimen.setAvailable(new Boolean(false));
 					specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
 					dao.update(specimen, sessionDataBean, true, true, false);
-	
+
 					try
 					{
 						CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
@@ -153,13 +156,13 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					}
 					catch (CacheException e)
 					{
-	 
+
 					}
-	
+
 				}
-	
+
 			}
-	
+
 			dao.insert(specimenEventParametersObject, sessionDataBean, true, true);
 		}
 		catch (SMException e)
@@ -168,7 +171,7 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		}
 	}
 
-	private void addEntriesInDisabledMap(Specimen specimen ,StorageContainer container, Map disabledConts)
+	private void addEntriesInDisabledMap(Specimen specimen, StorageContainer container, Map disabledConts)
 	{
 		String contNameKey = "StorageContName";
 		String contIdKey = "StorageContIdKey";
@@ -199,7 +202,8 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				{
 					StorageContainer storageContainerFrom = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), transferEventParameters
 							.getFromStorageContainer().getId());
-					StorageContainerUtil.insertSinglePositionInContainerMap(storageContainerFrom, containerMap, transferEventParameters.getFromPositionDimensionOne().intValue(), transferEventParameters.getFromPositionDimensionTwo().intValue());
+					StorageContainerUtil.insertSinglePositionInContainerMap(storageContainerFrom, containerMap, transferEventParameters
+							.getFromPositionDimensionOne().intValue(), transferEventParameters.getFromPositionDimensionTwo().intValue());
 
 				}
 
