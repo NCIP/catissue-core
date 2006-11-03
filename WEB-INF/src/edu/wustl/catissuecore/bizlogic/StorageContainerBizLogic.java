@@ -2326,7 +2326,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	/* temp function end */
 
-	public Map getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass, int aliquotCount, String exceedingMaxLimit) throws DAOException
+	public Map getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass, int aliquotCount, String exceedingMaxLimit, boolean closeSession) throws DAOException
 	{
 
 		Logger.out.debug("method : getAllocatedContaienrMapForSpecimen()---getting containers for specimen--------------");
@@ -2355,7 +2355,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			throw new DAOException(ex.getMessage());
 		}
 
+		if(closeSession)
+		{
 		dao.closeSession();
+		}
 		Logger.out.debug("getAllocatedContaienrMapForSpecimen()----- Size of list--------:" + list.size());
 		Map containerMapFromCache = null;
 		try
