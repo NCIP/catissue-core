@@ -119,7 +119,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse"));
 					}
-						
+
 					//Check weather parent container is valid container to use 
 					boolean parentContainerValidToUSe = isParentContainerValidToUSe(container, pc);
 
@@ -596,23 +596,23 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	}
 
 	/*public boolean isContainerFull(String containerId, int dimX, int dimY) throws DAOException
-	{
-		
-		boolean availablePositions[][] = getAvailablePositionsForContainer(containerId, dimX, dimY);
+	 {
+	 
+	 boolean availablePositions[][] = getAvailablePositionsForContainer(containerId, dimX, dimY);
 
-		dimX = availablePositions.length;
-		for (int x = 1; x < dimX; x++)
-		{
-			dimY = availablePositions[x].length;
-			for (int y = 1; y < dimY; y++)
-			{
-				if (availablePositions[x][y] == true)
-					return false;
-			}
-		}
-		return true;
+	 dimX = availablePositions.length;
+	 for (int x = 1; x < dimX; x++)
+	 {
+	 dimY = availablePositions[x].length;
+	 for (int y = 1; y < dimY; y++)
+	 {
+	 if (availablePositions[x][y] == true)
+	 return false;
+	 }
+	 }
+	 return true;
 
-	}*/
+	 }*/
 
 	private boolean checkForRestrictionsChanged(StorageContainer newContainer, StorageContainer oldContainer)
 	{
@@ -671,9 +671,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					flag = 1;
 					break;
 				}
-				if (flag != 1)
-					return true;
 			}
+			if (flag != 1)
+				return true;
+
 		}
 
 		if (spClassCollNew.size() != spClassCollOld.size())
@@ -2279,7 +2280,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		if (containerMapFromCache != null)
 		{
 			int i = 1;
@@ -2320,7 +2321,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					Logger.out.info("Error while getting map from cache");
 					e.printStackTrace();
 				}
-				
+
 			}
 		}
 
@@ -2332,7 +2333,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	/* temp function end */
 
-	public Map getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass, int aliquotCount, String exceedingMaxLimit, boolean closeSession) throws DAOException
+	public Map getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass, int aliquotCount, String exceedingMaxLimit, boolean closeSession)
+			throws DAOException
 	{
 
 		Logger.out.debug("method : getAllocatedContaienrMapForSpecimen()---getting containers for specimen--------------");
@@ -2361,9 +2363,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			throw new DAOException(ex.getMessage());
 		}
 
-		if(closeSession)
+		if (closeSession)
 		{
-		dao.closeSession();
+			dao.closeSession();
 		}
 		Logger.out.debug("getAllocatedContaienrMapForSpecimen()----- Size of list--------:" + list.size());
 		Map containerMapFromCache = null;
@@ -2376,7 +2378,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		if (containerMapFromCache != null)
 		{
 			int i = 1;
@@ -2413,7 +2415,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					}
 					i++;
 				}
-				
+
 			}
 			Logger.out.debug("getAllocatedContaienrMapForSpecimen()----Size of containerMap:" + containerMap.size());
 		}
@@ -2470,7 +2472,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		if (containerMapFromCache != null)
 		{
 			int i = 1;
@@ -2481,7 +2483,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				String Id = (String) list1.get(0);
 
 				String Name = (String) list1.get(1);
-				NameValueBean nvb = new NameValueBean(Name,Id);
+				NameValueBean nvb = new NameValueBean(Name, Id);
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
@@ -2499,7 +2501,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					}
 					i++;
 				}
-				
+
 			}
 		}
 
