@@ -176,12 +176,15 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 						value = buttonsMap.get(key);
 						ArrayList listOfFormBean = (ArrayList) value;
 						ArrayList newList = new ArrayList();
+						if(listOfFormBean!=null)
+						{
 						for (int k = 0; k < listOfFormBean.size(); k++)
 						{
 							CreateSpecimenForm createForm = (CreateSpecimenForm) ((CreateSpecimenForm) listOfFormBean.get(k)).clone();
 							newList.add(createForm);
 						}
 						formBeanMap.put(multipleSpecimenTableModel.getKey(pastedRow, pastedColumn), newList);
+						}
 					}
 				}
 
