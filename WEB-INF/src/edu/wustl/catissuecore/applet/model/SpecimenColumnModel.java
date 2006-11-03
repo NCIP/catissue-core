@@ -403,7 +403,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 		// adding radiobuttons to group
 		radioGroup.add(rbspecimenGroup);
-		radioGroup.add(rbparentSpecimen);
+//		radioGroup.add(rbparentSpecimen);
 
 		//Adding components to the panel
 		collectionGroupPanel.add(rbspecimenGroup);
@@ -596,9 +596,9 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		//		specimenCollectionGroup.addFocusListener(baseFocusHandler); // to set value on click.
 
 		//Parent Specimen 
-		parentSpecimen.addActionListener(textHandler);
-		rbparentSpecimen.addItemListener(parentSpecimenItemHandler);
-		parentSpecimen.addFocusListener(baseFocusHandler);
+//		parentSpecimen.addActionListener(textHandler);
+//		rbparentSpecimen.addItemListener(parentSpecimenItemHandler);
+//		parentSpecimen.addFocusListener(baseFocusHandler);
 
 		// Label
 		label.addActionListener(textHandler);
@@ -984,13 +984,13 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		}
 
 		//Parent Specimen 
-		value = (String) model.getValueAt(AppletConstants.SPECIMEN_PARENT_ROW_NO, columnIndex);
-		if (!isNull(value))
-		{
-			setRbparentSpecimen(true);
-			setParentSpecimen(value);
-			this.parentSpecimen.setEnabled(true);
-		}
+//		value = (String) model.getValueAt(AppletConstants.SPECIMEN_PARENT_ROW_NO, columnIndex);
+//		if (!isNull(value))
+//		{
+//			setRbparentSpecimen(true);
+//			setParentSpecimen(value);
+//			this.parentSpecimen.setEnabled(true);
+//		}
 
 		// Label
 		value = (String) model.getValueAt(AppletConstants.SPECIMEN_LABEL_ROW_NO, columnIndex);
