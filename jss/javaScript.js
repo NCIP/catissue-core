@@ -390,8 +390,15 @@ function showBioHazardDialog(operation,key) {
         NewWindow(url,'name','810','320','yes');
 }
 function showDerivedSpecimenDialog(operation,key,derivedSpecimenCollectionGroup,derivedSpecimenClass,derivedParentSpecimenLabel,derivedParentSpecimenBarcode,derivedSpecimenType) {
+        
+	 if(derivedSpecimenCollectionGroup==null || derivedSpecimenCollectionGroup=="null" || derivedSpecimenCollectionGroup==""||derivedSpecimenCollectionGroup=="-- Select --")
+       {
+            alert("You have to give Specimen Group Name before creating derived Specimen");
+       }
+  else {
         var url ='NewMultipleSpecimenAction.do?deriveButtonClicked=true&method=showDerivedSpecimenDialog&specimenAttributeKey=' + key + '&operation=' + operation + '&derivedSpecimenCollectionGroup=' + derivedSpecimenCollectionGroup + '&derivedSpecimenClass=' + derivedSpecimenClass + '&derivedParentSpecimenLabel=' + derivedParentSpecimenLabel + '&derivedParentSpecimenBarcode=' + derivedParentSpecimenBarcode + '&derivedSpecimenType=' + derivedSpecimenType;
 	    NewWindow(url,'name','600','600','yes');
+		}
 }
 function showEventsDialog(operation,key) {
 	   var url ='NewMultipleSpecimenAction.do?method=showEventsDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
