@@ -564,35 +564,35 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	public void setAllValues(AbstractActionForm abstractForm)
 	{
 		//Change for API Search   --- Ashwin 04/10/2006
-    	if (SearchUtil.isNullobject(storageContainer))
-    	{
-    		storageContainer = new StorageContainer();
-    	}
-		
+		if (SearchUtil.isNullobject(storageContainer))
+		{
+			storageContainer = new StorageContainer();
+		}
+
 		//Change for API Search   --- Ashwin 04/10/2006
-    	if (SearchUtil.isNullobject(specimenCollectionGroup))
-    	{
-    		specimenCollectionGroup = new SpecimenCollectionGroup();
-    	}
-		
+		if (SearchUtil.isNullobject(specimenCollectionGroup))
+		{
+			specimenCollectionGroup = new SpecimenCollectionGroup();
+		}
+
 		//Change for API Search   --- Ashwin 04/10/2006
-    	if (SearchUtil.isNullobject(specimenCharacteristics))
-    	{
-    		specimenCharacteristics = new SpecimenCharacteristics();
-    	}
-		
+		if (SearchUtil.isNullobject(specimenCharacteristics))
+		{
+			specimenCharacteristics = new SpecimenCharacteristics();
+		}
+
 		//Change for API Search   --- Ashwin 04/10/2006
-    	if (SearchUtil.isNullobject(quantity))
-    	{
-    		quantity = new Quantity();
-    	}
-		
+		if (SearchUtil.isNullobject(quantity))
+		{
+			quantity = new Quantity();
+		}
+
 		//Change for API Search   --- Ashwin 04/10/2006
-    	if (SearchUtil.isNullobject(availableQuantity))
-    	{
-    		availableQuantity = new Quantity();
-    	}
-		
+		if (SearchUtil.isNullobject(availableQuantity))
+		{
+			availableQuantity = new Quantity();
+		}
+
 		if (abstractForm instanceof AliquotForm)
 		{
 			AliquotForm form = (AliquotForm) abstractForm;
@@ -624,8 +624,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 			}
 			else
 			{
-				this.availableQuantity = new Quantity(((SpecimenForm) abstractForm)
-						.getAvailableQuantity());
+				this.availableQuantity = new Quantity(((SpecimenForm) abstractForm).getAvailableQuantity());
 			}
 
 			try
@@ -662,8 +661,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						{
 							String parentSpecimenId = form.getParentSpecimenId();
 							// specimen created from another specimen
-							if (parentSpecimenId != null && !parentSpecimenId.trim().equals("")
-									&& Long.parseLong(parentSpecimenId) > 0)
+							if (parentSpecimenId != null && !parentSpecimenId.trim().equals("") && Long.parseLong(parentSpecimenId) > 0)
 							{
 								isParentChanged = true;
 							}
@@ -671,8 +669,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						else
 						//specimen created from another specimen
 						{
-							if (parentSpecimen.getId().longValue() != Long.parseLong(form
-									.getParentSpecimenId()))
+							if (parentSpecimen.getId().longValue() != Long.parseLong(form.getParentSpecimenId()))
 							{
 								isParentChanged = true;
 							}
@@ -684,16 +681,24 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					{
 						parentSpecimen = new CellSpecimen();
 						parentSpecimen.setId(new Long(form.getParentSpecimenId()));
+						if (form.isVirtuallyLocated())
+						{
+							this.storageContainer = null;
+							this.positionDimensionOne = null;
+							this.positionDimensionTwo = null;
 
-						this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
-						this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
+						}
+						else
+						{
+							this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
+							this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
+						}
 					}
 					else
 					{
 						parentSpecimen = null;
 						specimenCollectionGroup = new SpecimenCollectionGroup();
-						this.specimenCollectionGroup.setId(new Long(form
-								.getSpecimenCollectionGroupId()));
+						this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
 					}
 
 					//Setting the SpecimenCharacteristics
@@ -728,8 +733,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						Logger.out.debug("Setting Collection event in specimen domain object");
 						//seting collection event values
 						CollectionEventParametersForm collectionEvent = new CollectionEventParametersForm();
-						collectionEvent.setCollectionProcedure(form
-								.getCollectionEventCollectionProcedure());
+						collectionEvent.setCollectionProcedure(form.getCollectionEventCollectionProcedure());
 						collectionEvent.setComments(form.getCollectionEventComments());
 						collectionEvent.setContainer(form.getCollectionEventContainer());
 						collectionEvent.setTimeInHours(form.getCollectionEventTimeInHours());
@@ -742,11 +746,9 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						collectionEventParameters.setAllValues(collectionEvent);
 
 						collectionEventParameters.setSpecimen(this);
-						Logger.out.debug("Before specimenEventCollection.size(): "
-								+ specimenEventCollection.size());
+						Logger.out.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
 						specimenEventCollection.add(collectionEventParameters);
-						Logger.out.debug("After specimenEventCollection.size(): "
-								+ specimenEventCollection.size());
+						Logger.out.debug("After specimenEventCollection.size(): " + specimenEventCollection.size());
 
 						Logger.out.debug("...14-July-06... : CollectionEvent set");
 
@@ -765,11 +767,9 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						receivedEventParameters.setAllValues(receivedEvent);
 						receivedEventParameters.setSpecimen(this);
 
-						Logger.out.debug("Before specimenEventCollection.size(): "
-								+ specimenEventCollection.size());
+						Logger.out.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
 						specimenEventCollection.add(receivedEventParameters);
-						Logger.out.debug("After specimenEventCollection.size(): "
-								+ specimenEventCollection.size());
+						Logger.out.debug("After specimenEventCollection.size(): " + specimenEventCollection.size());
 
 						Logger.out.debug("...14-July-06... : ReceivedEvent set");
 
