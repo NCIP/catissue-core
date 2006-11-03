@@ -668,10 +668,14 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 									
 				<td class="formField" colSpan="4">
-						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+						
+						<%
+						     if(operation!=null&&operation.equals(Constants.ADD) || multipleSpecimen!=null&&multipleSpecimen.equals("1")) {
+						%>
 							<html:checkbox property="virtuallyLocated" onclick="<%=onCheckboxChange%>"/>
 							<bean:message key="specimen.virtuallyLocated" />
-						</logic:equal>	
+					   <%}%>
+						
 						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 							<html:checkbox property="virtuallyLocated" styleClass="hidden"/>
 							<%
