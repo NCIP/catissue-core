@@ -119,8 +119,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse"));
 					}
-
-					boolean pa = isParentContainerValidToUSe(container, pc);
+						
+					//Check weather parent container is valid container to use 
 					boolean parentContainerValidToUSe = isParentContainerValidToUSe(container, pc);
 
 					if (!parentContainerValidToUSe)
@@ -212,14 +212,20 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	}
 
+	/**
+	 * this function checks weather parent of the container is valid or not 
+	 * according to restriction provided for the containers
+	 * @param container - Container
+	 * @param parent - Parent Container
+	 * @return boolean true indicating valid to use , false indicating not valid to use.
+	 * @throws DAOException
+	 */
 	protected boolean isParentContainerValidToUSe(StorageContainer container, StorageContainer parent) throws DAOException
 	{
 
 		StorageType storageTypeAny = new StorageType();
 		storageTypeAny.setId(new Long("1"));
 		storageTypeAny.setName("All");
-		//boolean aa = parent.getHoldsStorageTypeCollection().contains(storageTypeAny);
-		//boolean bb = parent.getHoldsStorageTypeCollection().contains(container.getStorageType());
 		if (parent.getHoldsStorageTypeCollection().contains(storageTypeAny))
 		{
 			return true;
@@ -533,8 +539,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			if (oldContainer.getParent() != null)
 			{
 				StorageContainer oldParentCont = (StorageContainer) oldContainer.getParent();
-				StorageContainerUtil.insertSinglePositionInContainerMap(oldParentCont, containerMap, currentContainer.getPositionDimensionOne()
-						.intValue(), currentContainer.getPositionDimensionTwo().intValue());
+				StorageContainerUtil.insertSinglePositionInContainerMap(oldParentCont, containerMap, oldContainer.getPositionDimensionOne()
+						.intValue(), oldContainer.getPositionDimensionTwo().intValue());
 			}
 			if (currentContainer.getParent() != null)
 			{
