@@ -429,8 +429,6 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			//			Specimen Collection Group
 
 			String parentKey = getKey(AppletConstants.SPECIMEN_PARENT_ROW_NO, i);
-			String parentSpecimenLabel = (String) specimenMap.get(parentKey);
-
 			validateField(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO, i, specimenMap, "Specimen Group Name", 2);
 		
 			// ------------------------	
