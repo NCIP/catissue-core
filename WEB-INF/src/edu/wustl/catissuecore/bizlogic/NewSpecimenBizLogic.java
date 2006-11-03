@@ -50,6 +50,7 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
@@ -1350,8 +1351,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @throws DAOException
 	 */
 	private boolean validateMultipleSpecimen(Map specimenMap, DAO dao, String operation) throws DAOException
-
 	{
+
+		populateStorageLocations(dao, specimenMap);
 		Iterator specimenIterator = specimenMap.keySet().iterator();
 		boolean result = true;
 		while (specimenIterator.hasNext() && result == true)
@@ -1359,25 +1361,34 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			Specimen specimen = (Specimen) specimenIterator.next();
 			//validate single specimen
 
-			SpecimenCollectionGroup specimenCollectionGroup = null;
-			if (specimen.getSpecimenCollectionGroup() != null)
-			{
-				List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
-				specimenCollectionGroup = (SpecimenCollectionGroup) spgList.get(0);
-			}
+			/*	if (specimenCollectionGroup != null)
+			 {
 
-			// TODO label
-			if (specimenCollectionGroup != null)
-			{
+			 if (specimenCollectionGroup.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
+			 {
+			 throw new DAOException("Specimen Collection Group " + ApplicationProperties.getValue("error.object.closed"));
+			 }
+			 
+			 specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+			 }  
+			 List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
+			 if(spgList!=null && !spgList.isEmpty())
+			 {
+			 specimenCollectionGroup = (SpecimenCollectionGroup) spgList.get(0);
+			 }
+			 
+			 else if(specimen.getParentSpecimen()!=null)
+			 {
+			 List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, specimen.getParentSpecimen().getLabel());
+			 if (spList != null && !spList.isEmpty())
+			 {
+			 Specimen sp = (Specimen) spList.get(0);
+			 specimenCollectionGroup = sp.getSpecimenCollectionGroup();
+			 }
+			 
+			 } */
 
-				if (specimenCollectionGroup.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
-				{
-					throw new DAOException("Specimen Collection Group " + ApplicationProperties.getValue("error.object.closed"));
-				}
-
-				specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
-			}
-
+			// TODO uncomment code for label, performance
 			try
 			{
 				result = validateSingleSpecimen(specimen, dao, operation, true);
@@ -1405,7 +1416,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				derivedSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 				derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
-				derivedSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+
 				try
 				{
 					result = validateSingleSpecimen(derivedSpecimen, dao, operation, false);
@@ -1428,6 +1439,208 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		}
 		return result;
 	}
+
+	/**
+	 * 
+	 *  Start --> Code added for auto populating storage locations in case of multiple specimen
+	 */
+
+	/**
+	 * This method populates SCG Id and storage locations for Multiple Specimen
+	 * @param dao
+	 * @param specimenMap
+	 * @throws DAOException
+	 */
+	private void populateStorageLocations(DAO dao, Map specimenMap) throws DAOException
+	{
+		final String saperator = "$";
+		Map tempSpecimenMap = new HashMap();
+		Iterator specimenIterator = specimenMap.keySet().iterator();
+		while (specimenIterator.hasNext())
+		{
+			Specimen specimen = (Specimen) specimenIterator.next();
+			//validate single specimen
+			SpecimenCollectionGroup specimenCollectionGroup = null;
+			if (specimen.getSpecimenCollectionGroup() != null)
+			{
+				String[] selectColumnName = {"id", "collectionProtocolRegistration.id"};
+				String[] whereColumnName = {Constants.NAME};
+				String[] whereColumnCondition = {"="};
+				String[] whereColumnValue = {specimen.getSpecimenCollectionGroup().getName()};
+				List spCollGroupList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,
+						whereColumnValue, null);
+				// TODO test
+				if (!spCollGroupList.isEmpty())
+				{
+					Object idList[] = (Object[]) spCollGroupList.get(0);
+					Long scgId = (Long) idList[0];
+					long cpId = ((Long) idList[1]).longValue();
+					specimen.getSpecimenCollectionGroup().setId(scgId);
+					if (specimen.getStorageContainer() == null)
+					{
+						List tempListOfSpecimen = (ArrayList) tempSpecimenMap.get(cpId + saperator + specimen.getClassName());
+						if (tempListOfSpecimen == null)
+						{
+							tempListOfSpecimen = new ArrayList();
+						}
+						int i = 0;
+						for (; i < tempListOfSpecimen.size(); i++)
+						{
+							Specimen sp = (Specimen) tempListOfSpecimen.get(i);
+							if (specimen.getId().longValue() < sp.getId().longValue())
+								break;
+						}
+						tempListOfSpecimen.add(i, specimen);
+						tempSpecimenMap.put(cpId + saperator + specimen.getClassName(), tempListOfSpecimen);
+					}
+				}
+			}
+		}
+
+		Iterator keyIterator = tempSpecimenMap.keySet().iterator();
+		while (keyIterator.hasNext())
+		{
+			String key = (String) keyIterator.next();
+			StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+					Constants.STORAGE_CONTAINER_FORM_ID);
+			String split[] = key.split("[$]");
+			Map containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen((Long.parseLong(split[0])), split[1], 0, "", false);
+			List listOfSpecimens = (ArrayList) tempSpecimenMap.get(key);
+			allocatePositionToSpecimensList(specimenMap, listOfSpecimens, containerMap);
+		}
+	}
+
+	/**
+	 * This function gets the default positions for list of specimens
+	 * @param specimenMap
+	 * @param listOfSpecimens
+	 * @param containerMap
+	 */
+	private void allocatePositionToSpecimensList(Map specimenMap, List listOfSpecimens, Map containerMap)
+	{
+
+		Iterator iterator = containerMap.keySet().iterator();
+		int i = 0;
+		while (iterator.hasNext())
+		{
+			NameValueBean nvb = (NameValueBean) iterator.next();
+			Map tempMap = (Map) containerMap.get(nvb);
+			if (tempMap.size() > 0)
+			{
+				boolean result = false;
+				for (; i < listOfSpecimens.size(); i++)
+				{
+					Specimen tempSpecimen = (Specimen) listOfSpecimens.get(i);
+					result = allocatePositionToSingleSpecimen(specimenMap, tempSpecimen, tempMap, nvb);
+					if (result == false)
+						break;
+				}
+				if (result == true)
+					break;
+			}
+		}
+	}
+
+	/**
+	 *  This function gets the default position specimen,the position should not be used by any other specimen in specimenMap
+	 * @param specimenMap
+	 * @param tempSpecimen
+	 * @param tempMap
+	 * @param nvb
+	 * @return
+	 */
+	private boolean allocatePositionToSingleSpecimen(Map specimenMap, Specimen tempSpecimen, Map tempMap, NameValueBean nvbForContainer)
+	{
+		Iterator itr = tempMap.keySet().iterator();
+		String containerId = nvbForContainer.getValue(), xPos, yPos;
+		while (itr.hasNext())
+		{
+			NameValueBean nvb = (NameValueBean) itr.next();
+			xPos = nvb.getValue();
+
+			List list = (List) tempMap.get(nvb);
+			for (int i = 0; i < list.size(); i++)
+			{
+				nvb = (NameValueBean) list.get(i);
+				yPos = nvb.getValue();
+				boolean result = checkPositionValidForSpecimen(containerId, xPos, yPos, specimenMap);
+				if (result == true)
+				{
+					StorageContainer tempStorageContainer = new StorageContainer();
+					tempStorageContainer.setId(new Long(Long.parseLong(containerId)));
+					tempSpecimen.setPositionDimensionOne(new Integer(Integer.parseInt(xPos)));
+					tempSpecimen.setPositionDimensionTwo(new Integer(Integer.parseInt(yPos)));
+					tempSpecimen.setStorageContainer(tempStorageContainer);
+					return true;
+				}
+			}
+
+		}
+		return false;
+	}
+
+	/**
+	 * This method checks whether the given parameters match with parameters in specimen Map
+	 * @param containerId
+	 * @param pos
+	 * @param pos2
+	 * @param specimenMap
+	 * @return
+	 */
+	private boolean checkPositionValidForSpecimen(String containerId, String xpos, String ypos, Map specimenMap)
+	{
+
+		Iterator specimenIterator = specimenMap.keySet().iterator();
+		while (specimenIterator.hasNext())
+		{
+			Specimen specimen = (Specimen) specimenIterator.next();
+			boolean matchFound = checkMatchingPosition(containerId, xpos, ypos, specimen);
+			if (matchFound == true)
+				return false;
+			List derivedSpecimens = (List) specimenMap.get(specimen);
+
+			if (derivedSpecimens != null)
+			{
+				for (int i = 0; i < derivedSpecimens.size(); i++)
+				{
+
+					Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
+					matchFound = checkMatchingPosition(containerId, xpos, ypos, derivedSpecimen);
+					if (matchFound == true)
+						return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * This method checks whether the given parameters match with parameters of the specimen 
+	 * @param containerId
+	 * @param pos
+	 * @param pos2
+	 * @param specimen
+	 * @return
+	 */
+	private boolean checkMatchingPosition(String containerId, String xpos, String ypos, Specimen specimen)
+	{
+		String storageContainerId = "";
+		if (specimen.getStorageContainer() != null && specimen.getStorageContainer().getId() != null)
+			storageContainerId += specimen.getStorageContainer().getId();
+		else
+			return false;
+
+		String pos1 = specimen.getPositionDimensionOne() + "";
+		String pos2 = specimen.getPositionDimensionTwo() + "";
+		if (storageContainerId.equals(containerId) && xpos.equals(pos1) && ypos.equals(pos2))
+			return true;
+		return false;
+	}
+
+	/**
+	 * 
+	 *  End --> Code added for auto populating storage locations in case of multiple specimen
+	 */
 
 	/* This function checks whether the storage position of a specimen is changed or not 
 	 * & returns the status accordingly.
