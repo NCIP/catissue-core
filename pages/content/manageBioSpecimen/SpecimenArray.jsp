@@ -195,13 +195,14 @@
 				</td>
 				<%-- n-combo-box end --%>
 				 </tr>
+					<logic:equal name="exceedsMaxLimit" value="true">
 					<tr>
-					<td>
-						<logic:equal name="exceedsMaxLimit" value="true">
+						<td>
 							<bean:message key="container.maxView"/>
-						</logic:equal>
-					</td>
-				</tr>
+						</td>
+					</tr>
+				</logic:equal>
+
 			<tr>
 				<td class="formRequiredNotice" width="5">&nbsp;</td>
 				<td class="formRequiredLabelWithoutBorder">

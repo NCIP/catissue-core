@@ -462,13 +462,13 @@
 			</td>
 			
 		</tr>
-		<tr>
-		<td>
-			<logic:equal name="exceedsMaxLimit" value="true">
-				<bean:message key="container.maxView"/>
-			</logic:equal>
-		</td>
-	</tr>
+		<logic:equal name="exceedsMaxLimit" value="true">
+			<tr>
+				<td>
+					<bean:message key="container.maxView"/>
+				</td>
+			</tr>
+		</logic:equal>
 	<%
 		} //For
 	%>
