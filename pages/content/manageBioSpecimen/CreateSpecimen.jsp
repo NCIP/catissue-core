@@ -705,13 +705,13 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				<%-- n-combo-box end --%>
 				
 				 </tr>
+					<logic:equal name="exceedsMaxLimit" value="true">
 					<tr>
-					<td>
-						<logic:equal name="exceedsMaxLimit" value="true">
-							<bean:message key="container.maxView"/>
-						</logic:equal>
-					</td>
-				</tr>	
+						<td>
+								<bean:message key="container.maxView"/>
+						</td>
+					</tr>
+					</logic:equal>
 
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
