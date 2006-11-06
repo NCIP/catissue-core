@@ -84,8 +84,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 					positionTwo = specimen.getPositionDimensionTwo().toString();
 					StorageContainer container = specimen.getStorageContainer();
 					storageContainerID = container.getId().toString();
-					fromPositionData = container.getStorageType().getName() + " : "
-							+ storageContainerID + " Pos(" + positionOne + "," + positionTwo + ")";
+					fromPositionData = container.getName()+":" + " Pos(" + positionOne + "," + positionTwo + ")";
 				}
 				//The fromPositionData(storageContainer Info) of specimen of this event.
 				request.setAttribute(Constants.FROM_POSITION_DATA, fromPositionData);
