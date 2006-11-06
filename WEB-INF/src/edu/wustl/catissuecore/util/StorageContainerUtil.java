@@ -335,4 +335,32 @@ public class StorageContainerUtil
 			return true;
 
 	}
+	public static boolean isPostionAvaialble(String storageContainerId , String storageContainerName , String x , String y) throws Exception
+	{
+		Map containerMap = getContainerMapFromCache();
+		NameValueBean nvb = new NameValueBean(storageContainerName, storageContainerId);
+		Map positionMap = (Map)containerMap.get(nvb);
+		
+		if(positionMap != null && !positionMap.isEmpty())
+		{
+			NameValueBean xNvb = new NameValueBean(x,x);
+			List yList = (List) positionMap.get(xNvb);
+			if(yList != null && !yList.isEmpty())
+			{
+				NameValueBean yNvb = new NameValueBean(y ,y);
+				if(!yList.contains(yNvb))
+					return false;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+		return true;
+		
+	}
 }
