@@ -766,6 +766,9 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 								String changeAction = "setFormAction('"+formName+"')";
 								String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 								String submitAndDistribute = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
+								String addMoreSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";
+								String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;		
+
 				 			%>
 							<!-- action buttons begins -->
 				<%				if(!multipleSpecimen.equals("1"))
@@ -789,6 +792,15 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 											onclick="<%=submitAndDistribute%>">
 										</html:button>
 									</td>
+									<td class="formFieldNoBorders" nowrap>
+										<html:button
+											styleClass="actionButton" property="moreButton"
+											title="<%=Constants.SPECIMEN_BUTTON_TIPS[3]%>"
+											value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>"
+											onclick="<%=addMoreSubmit%>"
+			>
+			</html:button>
+		</td>
 					<%
 					}
 					else
