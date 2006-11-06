@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.util;
 import java.util.HashMap;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
+import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -65,6 +66,7 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 		}
 		else if (domainObject instanceof Specimen)
 		{
+			Specimen specimen = (Specimen) domainObject;
 			//Derive New from This Specimen
 			if (actionForm.getForwardTo().equals("createNew"))
 			{
@@ -73,10 +75,11 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			//Add To Same Collection Group
 			else if (actionForm.getForwardTo().equals("sameCollectionGroup"))
 			{
-				NewSpecimenForm newSpecimenForm = (NewSpecimenForm) actionForm;
-
-				forwardToHashMap.put("specimenCollectionGroupId", newSpecimenForm
-						.getSpecimenCollectionGroupId());
+				/*NewSpecimenForm newSpecimenForm = (NewSpecimenForm) actionForm;*/
+				if (specimen.getSpecimenCollectionGroup().getId() != null)
+				{
+					forwardToHashMap.put("specimenCollectionGroupId", specimen.getSpecimenCollectionGroup().getId().toString());
+				}
 			}
 			//Add Events
 			else if (actionForm.getForwardTo().equals("eventParameters"))
@@ -102,6 +105,6 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
         	forwardToHashMap= (HashMap)((SpecimenArray)domainObject).getAliqoutMap();        	
         }        
 
- 		return forwardToHashMap;
+		return forwardToHashMap;
 	}
 }
