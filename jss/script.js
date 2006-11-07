@@ -62,11 +62,18 @@ function showdatecontrol(strFormname,strElementName,strElementName2)
 						   ",menubar=no,scrollbars=no,top=0,left=0, resizable=no, border=thin");
 }
 
-function send(pageNum,numresultsPerPage,prevPage,pageName) 
+function send(pageNum,numResultsPerPage,prevPage,pageName) 
 {
-	document.forms[0].action = pageName+'?pageNum='+pageNum;
+	document.forms[0].action = pageName+'?pageNum='+pageNum+'&numResultsPerPage='+numResultsPerPage;
 	document.forms[0].submit();
 }
+
+function changeRecordPerPage(pageNum,element,pageName) 
+{
+	document.forms[0].action = pageName+'?pageNum='+pageNum+'&numResultsPerPage='+element.value;
+	document.forms[0].submit();
+}
+
 // function for mouse click
 var objclick;
 function changeMenuSelected(obj, new_style) { 

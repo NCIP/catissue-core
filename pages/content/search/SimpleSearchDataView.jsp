@@ -28,7 +28,7 @@ tr#hiddenCombo
 	
 	int pageNum = Integer.parseInt((String)session.getAttribute(Constants.PAGE_NUMBER));
 	int totalResults = Integer.parseInt((String)session.getAttribute(Constants.TOTAL_RESULTS));
-	int numResultsPerPage = Constants.NUMBER_RESULTS_PER_PAGE_SEARCH;
+	int numResultsPerPage = Integer.parseInt((String)session.getAttribute(Constants.RESULTS_PER_PAGE));
 	String pageName = "SpreadsheetView.do";	
 	
 	AdvanceSearchForm form = (AdvanceSearchForm)session.getAttribute("advanceSearchForm");
@@ -229,7 +229,7 @@ tr#hiddenCombo
 		
 		<tr height="5%">
 			<td class="dataPagingSection">					
-				<custom:test name="Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>" />
+				<custom:test name="Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>"  showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>" />
 				<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>"/>
 				<html:hidden property="isPaging" value="true"/>			
 			</td>

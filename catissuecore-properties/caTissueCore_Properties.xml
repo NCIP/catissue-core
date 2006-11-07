@@ -216,4 +216,8 @@
 		<value>5</value>
 	</property>
 
+	<property>
+		<name>resultView.noOfRecordsPerPage</name>
+		<value>100</value>
+	</property>
 </properties>

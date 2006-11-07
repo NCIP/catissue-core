@@ -28,6 +28,7 @@ import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
+import edu.wustl.common.util.XMLPropertyHandler;
 
 /**
  * DomainObjectListAction is used to show the list of all 
@@ -59,7 +60,17 @@ public class DomainObjectListAction extends SecureAction
         int startIndex = Constants.ZERO;
         
         //The end index in the list of users to be approved/rejected.
-        int endIndex = Constants.NUMBER_RESULTS_PER_PAGE;
+        int recordsPerPage = Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
+        
+        if(request.getParameter(Constants.RESULTS_PER_PAGE) != null) 
+    	{
+        	recordsPerPage = Integer.parseInt(request.getParameter(Constants.RESULTS_PER_PAGE));       
+    	}
+        else if (session.getAttribute(Constants.RESULTS_PER_PAGE)!=null)
+        {
+        	recordsPerPage = Integer.parseInt(session.getAttribute(Constants.RESULTS_PER_PAGE).toString());
+        } 
+        int endIndex = recordsPerPage;
         
         AbstractDomainObjectFactory abstractDomainObjectFactory = (AbstractDomainObjectFactory)
         						MasterFactory.getFactory("edu.wustl.catissuecore.domain.DomainObjectFactory");
@@ -81,7 +92,7 @@ public class DomainObjectListAction extends SecureAction
     					"activityStatus","Pending");
             }
             
-            if (Constants.NUMBER_RESULTS_PER_PAGE > list.size())
+            if (recordsPerPage > list.size())
             {
                 endIndex = list.size();
             }
@@ -93,16 +104,23 @@ public class DomainObjectListAction extends SecureAction
         {
             //Get the list of users from the session.
             list = (List)session.getAttribute(Constants.ORIGINAL_DOMAIN_OBJECT_LIST);
-            
-            //Set the start index of the users in the list.
-            startIndex = (pageNum-1) * Constants.NUMBER_RESULTS_PER_PAGE;
-            
-            //Set the end index of the users in the list.
-            endIndex = startIndex + Constants.NUMBER_RESULTS_PER_PAGE;
-            
-            if (endIndex > list.size())
+            if (recordsPerPage!= Integer.MAX_VALUE)
             {
-                endIndex = list.size();
+	            //Set the start index of the users in the list.
+	            startIndex = (pageNum-1) * recordsPerPage;
+	            
+	            //Set the end index of the users in the list.
+	            endIndex = startIndex + recordsPerPage;
+	            
+	            if (endIndex > list.size())
+	            {
+	                endIndex = list.size();
+	            }
+            }
+            else
+            {
+            	startIndex = 0;
+            	endIndex = list.size();
             }
         }
         
@@ -118,6 +136,7 @@ public class DomainObjectListAction extends SecureAction
         //Saves the total number of results in the request. 
         session.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(list.size()));
         
+        session.setAttribute(Constants.RESULTS_PER_PAGE,recordsPerPage+"");
         //Saves the number of results per page in the request.
         //Prafull:Commented this can be retrived directly from constants on jsp, so no need to save it in request.
 //        request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(Constants.NUMBER_RESULTS_PER_PAGE));

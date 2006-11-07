@@ -15,7 +15,7 @@
 	String title = pageOf + ".searchResultTitle";
 	int pageNum = Integer.parseInt((String)session.getAttribute(Constants.PAGE_NUMBER));
 	int totalResults = Integer.parseInt((String)session.getAttribute(Constants.TOTAL_RESULTS));
-	int numResultsPerPage = Constants.NUMBER_RESULTS_PER_PAGE_SEARCH;
+	int numResultsPerPage = Integer.parseInt((String)session.getAttribute(Constants.RESULTS_PER_PAGE));
 	String pageName = "SpreadsheetView.do";		
 %>
 
@@ -47,7 +47,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.size()-1);k++){%>"<%=columnL
 	<tr>
 		<td class="dataPagingSection">
 			<html:form action="/SpreadsheetExport">				
-				<custom:test name="Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>" />
+				<custom:test name="Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="<%=pageName%>" showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>"/>
 				<html:hidden property="<%=Constants.PAGEOF%>" value="<%=pageOf%>"/>
 				<html:hidden property="isPaging" value="true"/>
 				<html:hidden property="identifierFieldIndex" value="<%=identifierFieldIndex.toString()%>"/>

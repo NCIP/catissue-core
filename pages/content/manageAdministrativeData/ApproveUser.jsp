@@ -9,7 +9,7 @@
 <%
 	  int pageNum = Integer.parseInt((String)session.getAttribute(Constants.PAGE_NUMBER));
 	  int totalResults = Integer.parseInt((String)session.getAttribute(Constants.TOTAL_RESULTS));
-	  int numResultsPerPage = Constants.NUMBER_RESULTS_PER_PAGE_SEARCH;
+	  int numResultsPerPage = Integer.parseInt((String)session.getAttribute(Constants.RESULTS_PER_PAGE));
 %>
 
 </br>
@@ -40,7 +40,7 @@
 				<!-- paging begins -->
 				<tr>
 					<td colspan = "8" class="dataPagingSection">
-						<custom:test name="New User Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="ApproveUserShow.do"/>
+						<custom:test name="New User Search Results" pageNum="<%=pageNum%>" totalResults="<%=totalResults%>" numResultsPerPage="<%=numResultsPerPage%>" pageName="ApproveUserShow.do" showPageSizeCombo="<%=true%>" recordPerPageList="<%=Constants.RESULT_PERPAGE_OPTIONS%>"/>
 					</td>
 				</tr>
 				<!-- paging ends -->				

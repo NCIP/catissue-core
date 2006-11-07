@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -85,6 +86,8 @@ public class SpreadsheetViewAction extends Action
         }        	
     	
         int pageNum = Constants.START_PAGE;
+        int recordsPerPage = Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
+        
         List paginationDataList = null, dataList = null, columnList = null;
         
         //Get the SPREADSHEET_DATA_LIST and SPREADSHEET_COLUMN_LIST from the session.
@@ -95,20 +98,40 @@ public class SpreadsheetViewAction extends Action
     	{
         	pageNum = Integer.parseInt(request.getParameter(Constants.PAGE_NUMBER));       
     	}
+        else if (session.getAttribute(Constants.PAGE_NUMBER)!=null)
+        {
+        	pageNum = Integer.parseInt(session.getAttribute(Constants.PAGE_NUMBER).toString());
+        }
+        	
         
+        if(request.getParameter(Constants.RESULTS_PER_PAGE) != null) 
+    	{
+        	recordsPerPage = Integer.parseInt(request.getParameter(Constants.RESULTS_PER_PAGE));       
+    	}
+        else if (session.getAttribute(Constants.RESULTS_PER_PAGE)!=null)
+        {
+        	recordsPerPage = Integer.parseInt(session.getAttribute(Constants.RESULTS_PER_PAGE).toString());
+        }
         if (dataList != null) 
         {
-        	//Set the start index of the list.
-            int startIndex = (pageNum-1) * Constants.NUMBER_RESULTS_PER_PAGE_SEARCH;            
-            //Set the end index of the list.
-            int endIndex = startIndex + Constants.NUMBER_RESULTS_PER_PAGE_SEARCH;
-	        if (endIndex > dataList.size())
-	        {
-	            endIndex = dataList.size();
-	        }   	
-	        //Get the paginationDataList from startIndex to endIndex of the dataList.
-	        paginationDataList = dataList.subList(startIndex,endIndex);   
-	        
+        	if (recordsPerPage!=Integer.MAX_VALUE)
+        	{
+	        	//Set the start index of the list.
+	            int startIndex = (pageNum-1) * recordsPerPage;            
+	            //Set the end index of the list.
+	            int endIndex = startIndex + recordsPerPage;
+		        if (endIndex > dataList.size())
+		        {
+		            endIndex = dataList.size();
+		        }   	
+		        //Get the paginationDataList from startIndex to endIndex of the dataList.
+		        paginationDataList = dataList.subList(startIndex,endIndex);   
+        	}
+        	else //User has opted to view All records on one page, so take whole list as paginationDataList
+        	{
+        		paginationDataList = dataList;
+        		
+        	}
 	        //Set the total no of records in the request object to be used by pagination tag.
 	        session.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(dataList.size()));	        
         }
@@ -127,6 +150,7 @@ public class SpreadsheetViewAction extends Action
         //Set the current pageNum in the request to be uesd by pagination Tag.
         session.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
         
+        session.setAttribute(Constants.RESULTS_PER_PAGE,recordsPerPage+"");
         //Set the result per page attribute in the request to be uesd by pagination Tag.
 //      Prafull:Commented this can be retrived directly from constants on jsp, so no need to save it in request.
 //        request.setAttribute(Constants.RESULTS_PER_PAGE,Integer.toString(Constants.NUMBER_RESULTS_PER_PAGE_SEARCH));

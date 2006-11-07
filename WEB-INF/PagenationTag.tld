@@ -53,6 +53,16 @@
 		<required>false</required>
 		<rtexprvalue>Yes</rtexprvalue>
 	</attribute>
+	<attribute>
+		<name>showPageSizeCombo</name>
+		<required>false</required>
+		<rtexprvalue>Yes</rtexprvalue>
+	</attribute>
+	<attribute>
+		<name>recordPerPageList</name>
+		<required>false</required>
+		<rtexprvalue>Yes</rtexprvalue>
+	</attribute>
 </tag>
 
 </taglib>
