@@ -6,6 +6,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.common.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties"%>
+<%@ page import="javax.servlet.http.HttpSession"%>
+
 
 <tiles:importAttribute />
 
@@ -23,7 +25,7 @@
 	<%
 		int timeOut = request.getSession().getMaxInactiveInterval() ;		
 		timeOut = timeOut*1000;
-		System.out.println("Session timeout in milliseconds is " + new Integer(timeOut));		
+		System.out.println("Session timeout in milliseconds is " + new Integer(timeOut));			
 	%>
 	timeOut = "<%= timeOut%>";	
 	function sendToHomePage()
@@ -33,10 +35,9 @@
 			   if(obj != null) 
 			   {
 			%>			
-			   var timeoutMessage = "<%= ApplicationProperties.getValue("app.session.timeout") %>"
-			   alert(timeoutMessage);
-			   window.location.href = "<%= Variables.catissueURL %>";				
-			
+			   var timeoutMessage = "<%= ApplicationProperties.getValue("app.session.timeout") %>";
+			   alert(timeoutMessage);			  
+			   window.location.href = "Logout.do";
 			<%
 			   }
 			%>		  
