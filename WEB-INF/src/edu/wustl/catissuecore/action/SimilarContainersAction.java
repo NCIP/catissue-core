@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -170,7 +171,7 @@ public class SimilarContainersAction extends SecureAction
 		request.setAttribute("ContainerNumber", new Long(maxId).toString());
 		List mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
 				.getParameter("typeId")).longValue(),exceedingMaxLimit);
-		Map containerMap = (Map) mapSiteList.get(0);
+		TreeMap containerMap = (TreeMap) mapSiteList.get(0);
 		List siteList1 = (List) mapSiteList.get(1);
 		/*Map containerMap1 = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
 		 .getParameter("typeId")).longValue());*/
@@ -227,9 +228,22 @@ public class SimilarContainersAction extends SecureAction
 			}
 			for (int i = 1; i <= noOfContainers; i++)
 			{
-
+				//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
+				//and it is giving error. So these fields are truncated in case it is longer than 40.
+				//It also solves Bug 2829:System fails to create a default unique storage container name
+				String maxSiteName = siteName;
+				String maxTypeName = typeName;
+				if(siteName.length()>40)
+				{
+					maxSiteName = siteName.substring(0,39);
+				}
+				if(typeName.length()>40)
+				{
+					maxTypeName = typeName.substring(0,39);
+				}
+				
 				similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_name",
-						siteName + "_" + typeName + "_" + (maxId + i - 1));
+						maxSiteName + "_" + maxTypeName + "_" + (maxId + i - 1));
 				if (similarContainersForm.getCheckedButton() == 1)
 				{
 					similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_siteId",

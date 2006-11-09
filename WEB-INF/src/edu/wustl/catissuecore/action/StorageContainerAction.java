@@ -143,13 +143,13 @@ public class StorageContainerAction extends SecureAction
 
 		//    	 ---- chetan 15-06-06 ----
 
-		Map containerMap = new HashMap();
+		TreeMap containerMap = new TreeMap();
 		List mapSiteList = new ArrayList();
 		List siteList = new ArrayList();
 		if (storageContainerForm.getTypeId() != -1)
 		{
 			mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(storageContainerForm.getTypeId(),exceedingMaxLimit);
-			containerMap = (Map) mapSiteList.get(0);
+			containerMap = (TreeMap) mapSiteList.get(0);
 			siteList = (List) mapSiteList.get(1);
 
 		}
@@ -585,7 +585,7 @@ public class StorageContainerAction extends SecureAction
 
 	}
 
-	Vector checkForInitialValues(Map containerMap)
+	Vector checkForInitialValues(TreeMap containerMap)
 	{
 		Vector initialValues = null;
 

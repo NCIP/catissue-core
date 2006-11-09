@@ -994,13 +994,27 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		String containerName = "";
 		if (typeName != null && siteName != null && !typeName.equals("") && !siteName.equals(""))
 		{
+			//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
+			//and it is giving error. So these fields are truncated in case it is longer than 40.
+			//It also solves Bug 2829:System fails to create a default unique storage container name
+			String maxSiteName = siteName;
+			String maxTypeName = typeName;
+			if(siteName.length()>40)
+			{
+				maxSiteName = siteName.substring(0,39);
+			}
+			if(typeName.length()>40)
+			{
+				maxTypeName = typeName.substring(0,39);
+			}
+			
 			if (operation.equals(Constants.ADD))
 			{
-				containerName = siteName + "_" + typeName + "_" + String.valueOf(getNextContainerNumber());
+				containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(getNextContainerNumber());
 			}
 			else
 			{
-				containerName = siteName + "_" + typeName + "_" + String.valueOf(Id);
+				containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(Id);
 			}
 
 		}
@@ -2244,7 +2258,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		List mapSiteList = new ArrayList();
 		//		List list = retrieve(StorageContainer.class.getName());
-		Map containerMap = new TreeMap();
+		TreeMap containerMap = new TreeMap();
 		List siteList = new ArrayList();
 		siteList.add(new NameValueBean("---", "---"));
 
@@ -2254,7 +2268,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		String queryStr = "SELECT t1.IDENTIFIER, t1.NAME, t2.NAME FROM CATISSUE_CONTAINER t1, CATISSUE_SITE t2 ,CATISSUE_STORAGE_CONTAINER t3 WHERE "
 				+ "t1.IDENTIFIER IN (SELECT t4.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_ST_TYPE_REL t4 " + "WHERE t4.STORAGE_TYPE_ID = '" + type_id
 				+ "' OR t4.STORAGE_TYPE_ID='1') and t1.IDENTIFIER = t3.IDENTIFIER and t2.IDENTIFIER=t3.SITE_ID AND " + "t1.ACTIVITY_STATUS='"
-				+ Constants.ACTIVITY_STATUS_ACTIVE + "'";
+				+ Constants.ACTIVITY_STATUS_ACTIVE + "' order by IDENTIFIER";
 
 		Logger.out.debug("Storage Container query......................" + queryStr);
 		List list = new ArrayList();
@@ -2292,7 +2306,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				String Id = (String) list1.get(0);
 				String Name = (String) list1.get(1);
 				String siteName = (String) list1.get(2);
-				NameValueBean nvb = new NameValueBean(Name, Id);
+				NameValueBean nvb = new NameValueBean(Name, Id,true);
 
 				try
 				{
@@ -2333,12 +2347,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	/* temp function end */
 
-	public Map getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass, int aliquotCount, String exceedingMaxLimit, boolean closeSession)
+	public TreeMap getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass, int aliquotCount, String exceedingMaxLimit, boolean closeSession)
 			throws DAOException
 	{
 
 		Logger.out.debug("method : getAllocatedContaienrMapForSpecimen()---getting containers for specimen--------------");
-		Map containerMap = new TreeMap();
+		TreeMap containerMap = new TreeMap();
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		dao.openSession(null);
 
@@ -2349,7 +2363,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				+ "(SELECT t4.IDENTIFIER, t4.NAME FROM CATISSUE_CONTAINER t4 WHERE "
 				+ "t4.IDENTIFIER NOT IN (SELECT t5.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t5) " + " and t4.IDENTIFIER IN "
 				+ "(SELECT t6.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t6 WHERE " + "t6.SPECIMEN_CLASS = '" + specimenClass
-				+ "') AND t4.ACTIVITY_STATUS='Active')";
+				+ "') AND t4.ACTIVITY_STATUS='Active') order by IDENTIFIER";
 
 		Logger.out.debug("Storage Container query......................" + queryStr);
 		List list = new ArrayList();
@@ -2388,7 +2402,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				List list1 = (List) itr.next();
 				String Id = (String) list1.get(0);
 				String Name = (String) list1.get(1);
-				NameValueBean nvb = new NameValueBean(Name, Id);
+				NameValueBean nvb = new NameValueBean(Name, Id,true);
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
@@ -2420,6 +2434,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			Logger.out.debug("getAllocatedContaienrMapForSpecimen()----Size of containerMap:" + containerMap.size());
 		}
 		Logger.out.debug("exceedingMaxLimit----------" + exceedingMaxLimit);
+		
 		return containerMap;
 
 	}
@@ -2432,9 +2447,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @throws DAOException -- throws DAO Exception
 	 * @see edu.wustl.common.dao.JDBCDAOImpl
 	 */
-	public Map getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id, int noOfAliqoutes, String exceedingMaxLimit) throws DAOException
+	public TreeMap getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id, int noOfAliqoutes, String exceedingMaxLimit) throws DAOException
 	{
-		Map containerMap = new TreeMap();
+		TreeMap containerMap = new TreeMap();
 
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		dao.openSession(null);
@@ -2483,7 +2498,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				String Id = (String) list1.get(0);
 
 				String Name = (String) list1.get(1);
-				NameValueBean nvb = new NameValueBean(Name, Id);
+				NameValueBean nvb = new NameValueBean(Name, Id,true);
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
