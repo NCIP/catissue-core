@@ -394,6 +394,12 @@ function enablePreviousCheckBox(element)
 							String attributeNameKey = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
 							String attributeNameValue = (String)form.getValue(attributeNameKey);
 							String attributeType = null;
+							List columnNameValueBeanList = (List) request.getAttribute(attributeNameList);							
+							if(columnNameValueBeanList != null && !columnNameValueBeanList.isEmpty())
+							{
+								NameValueBean nameValueBean = (NameValueBean) columnNameValueBeanList.get(0);
+								attributeNameValue = nameValueBean.getValue();
+							}	
 							if(attributeNameValue != null)
 							{
 								StringTokenizer tokenizer = new StringTokenizer(attributeNameValue,".");
@@ -404,6 +410,8 @@ function enablePreviousCheckBox(element)
 									if(tokenCount == 3) break;
 									tokenCount++;
 								}
+								
+								System.out.println("attributeType--------"+attributeType);								
 								if(attributeType.equals("varchar") || attributeType.equals("text"))
 								{
 							%>
@@ -421,7 +429,8 @@ function enablePreviousCheckBox(element)
 								<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
 							<%
 								}
-								else{
+								else if (attributeType.equals(Constants.FIELD_TYPE_BIGINT))
+								{
 							%>
 								<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
 								<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
@@ -431,16 +440,25 @@ function enablePreviousCheckBox(element)
 								<html:option value="<%=Operator.GREATER_THAN_OR_EQUALS%>"><%=Operator.GREATER_THAN_OR_EQUALS%></html:option>
 							<%
 								}
+								else{
+								
+							%>
+								<html:option value="<%=Operator.STARTS_WITH%>"><%=Operator.STARTS_WITH%></html:option>
+								<html:option value="<%=Operator.ENDS_WITH%>"><%=Operator.ENDS_WITH%></html:option>
+								<html:option value="<%=Operator.CONTAINS%>"><%=Operator.CONTAINS%></html:option>
+								<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
+								<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+							<%
+								}
 							}
 							else
 							{
 						%>
+							<html:option value="<%=Operator.STARTS_WITH%>"><%=Operator.STARTS_WITH%></html:option>
+							<html:option value="<%=Operator.ENDS_WITH%>"><%=Operator.ENDS_WITH%></html:option>
+							<html:option value="<%=Operator.CONTAINS%>"><%=Operator.CONTAINS%></html:option>
 							<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
 							<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
-							<html:option value="<%=Operator.LESS_THAN%>"><%=Operator.LESS_THAN%></html:option>
-							<html:option value="<%=Operator.LESS_THAN_OR_EQUALS%>"><%=Operator.LESS_THAN_OR_EQUALS%></html:option>
-							<html:option value="<%=Operator.GREATER_THAN%>"><%=Operator.GREATER_THAN%></html:option>
-							<html:option value="<%=Operator.GREATER_THAN_OR_EQUALS%>"><%=Operator.GREATER_THAN_OR_EQUALS%></html:option>
 						<%
 							}
 						%>
