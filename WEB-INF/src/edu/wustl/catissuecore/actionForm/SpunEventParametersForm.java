@@ -13,14 +13,12 @@ package edu.wustl.catissuecore.actionForm;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.SpunEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -120,17 +118,17 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
         {
         	
            //	 checks the gForce
-        	if (!validator.isDouble(""+gravityForce ))
-           {
-          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("spuneventparameters.gforce")));
-           }
+//        	if (!validator.isDouble(""+gravityForce ))
+//           {
+//          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("spuneventparameters.gforce")));
+//           }
         	
         	Logger.out.info("durationInMinutes: "+ durationInMinutes  );
             //	 checks the durationInMinutes
-         	if (!validator.isNumeric(String.valueOf(durationInMinutes),1) )
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("spuneventparameters.durationinminutes")));
-            }
+//         	if (!validator.isNumeric(String.valueOf(durationInMinutes),1) )
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("spuneventparameters.durationinminutes")));
+//            }
         	
         }
         catch(Exception excp)

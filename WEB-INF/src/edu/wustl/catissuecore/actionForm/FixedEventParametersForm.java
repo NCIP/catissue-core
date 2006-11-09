@@ -35,7 +35,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * Type of the fixation.
 	 */
-	protected String fixationType;
+	protected String fixationType = Constants.NOTSPECIFIED;
 
 	/**
 	 * Duration, measured in minutes, for which fixation is performed on specimen.
@@ -120,15 +120,15 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
             }
           	
 //       	 checks the durationInMinutes
-         	if (!validator.isNumeric(String.valueOf(durationInMinutes)))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));
-            }
-          	           //	 checks the durationInMinutes
-         	else if (durationInMinutes <= 0 )
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));
-            }
+//         	if (!validator.isNumeric(String.valueOf(durationInMinutes)))
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));
+//            }
+//          	           //	 checks the durationInMinutes
+//         	else if (durationInMinutes <= 0 )
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("fixedeventparameters.durationinminutes")));
+//            }
          	
          }
          catch(Exception excp)

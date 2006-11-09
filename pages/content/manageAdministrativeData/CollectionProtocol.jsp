@@ -379,7 +379,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 					
 <!-- irb id -->						
 					<tr>
-						<td class="formRequiredNotice" width="5">*</td>
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formRequiredLabel">
 							<label for="irbID">
 								<bean:message key="collectionprotocol.irbid" />

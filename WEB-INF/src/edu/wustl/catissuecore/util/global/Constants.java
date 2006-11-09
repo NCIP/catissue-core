@@ -663,15 +663,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String [] MINUTES_ARRAY = {
 	 		"00",
-			"01",
-			"02",
-			"03",
-			"04",
-			"05",
-			"06",
-			"07",
-			"08",
-			"09",
+			"1",
+			"2",
+			"3",
+			"4",
+			"5",
+			"6",
+			"7",
+			"8",
+			"9",
 			"10",
 			"11",
 			"12",
@@ -908,7 +908,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String UNDEFINED = "Undefined";
 	public static final String UNKNOWN = "Unknown";
-	public static final String UNSPECIFIED = "UnSpecified";
+	public static final String UNSPECIFIED = "Unspecified";
+	public static final String NOTSPECIFIED = "Not Specified";
+	
 	public static final String SEARCH_RESULT = "SearchResult.csv";
 	
 //	Mandar : LightYellow and Green colors for CollectionProtocol SpecimenRequirements. Bug id: 587 

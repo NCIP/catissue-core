@@ -199,7 +199,7 @@ if(currentEventParametersDate.trim().length() > 0)
 
 <!-- qualityIndex -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formRequiredLabel">
 				<label for="molecularspecimenreviewparameters.qualityindex">
 					<bean:message key="molecularspecimenreviewparameters.qualityindex"/> 

@@ -237,24 +237,40 @@ public class NewSpecimenAction extends SecureAction
 		else
 		{
 			//Setting the specimen type list
-			List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
+ 			List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_SPECIMEN_TYPE, null);
 			request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+						
 
 			//Setting tissue site list
 			List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_TISSUE_SITE, null);
 			request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
-
+			//Bug- setting the default tissue site
+			if(specimenForm.getTissueSite() == null)
+			{
+				specimenForm.setTissueSite(Constants.NOTSPECIFIED);
+			}
+			
 			//Setting tissue side list
 			List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_TISSUE_SIDE, null);
 			request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
-
+			//Bug- setting the default tissue side
+			if(specimenForm.getTissueSide() == null)
+			{
+				specimenForm.setTissueSide(Constants.NOTSPECIFIED);
+			}
+			
 			//Setting pathological status list
 			List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
 					Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
 			request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
+			//Bug- setting the default pathological status
+			if(specimenForm.getPathologicalStatus() == null)
+			{
+				specimenForm.setPathologicalStatus(Constants.NOTSPECIFIED);
+			}
 		}
 
 		//get the Specimen class and type from the cde
@@ -309,7 +325,7 @@ public class NewSpecimenAction extends SecureAction
 		setCollectionEventRequestParameters(request,specimenForm);
 
 		//Mandar : 11-July-06 AutoEvents : ReceivedEvent
-		setReceivedEventRequestParameters(request);
+		setReceivedEventRequestParameters(request, specimenForm);
 
 		//Mandar : set default date and time too event fields
 		setDateParameters(specimenForm);
@@ -511,12 +527,22 @@ public class NewSpecimenAction extends SecureAction
 		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
 		request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
-
+		//Bug- setting the default collection event procedure
+		if(specimenForm.getCollectionEventCollectionProcedure() == null)
+		{
+			specimenForm.setCollectionEventCollectionProcedure("Not Specified");
+		}
+		
 		// set the container lists
 		List containerList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_CONTAINER, null);
 		request.setAttribute(Constants.CONTAINER_LIST, containerList);
-
+		//Bug- setting the default collection event container
+		if(specimenForm.getCollectionEventContainer() == null)
+		{
+			specimenForm.setCollectionEventContainer("Not Specified");
+		}
+		
 	}
 
 	// Mandar AutoEvents CollectionEvent end
@@ -527,12 +553,17 @@ public class NewSpecimenAction extends SecureAction
 	 * @param request HttpServletRequest instance in which the data will be set. 
 	 * @throws Exception Throws Exception. Helps in handling exceptions at one common point.
 	 */
-	private void setReceivedEventRequestParameters(HttpServletRequest request) throws Exception
+	private void setReceivedEventRequestParameters(HttpServletRequest request, NewSpecimenForm specimenForm) throws Exception
 	{
 
 		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_RECEIVED_QUALITY, null);
 		request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
+		//Bug- setting the default recieved event quality
+		if(specimenForm.getReceivedEventReceivedQuality() == null)
+		{
+			specimenForm.setReceivedEventReceivedQuality("Not Specified");
+		}
 	}
 
 	private void setDateParameters(NewSpecimenForm specimenForm)

@@ -607,11 +607,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 		
-		if (validator.isEmpty(protocol.getIrbIdentifier()))
-		{
-			message = ApplicationProperties.getValue("collectionprotocol.irbid");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
-		}		
+//		if (validator.isEmpty(protocol.getIrbIdentifier()))
+//		{
+//			message = ApplicationProperties.getValue("collectionprotocol.irbid");
+//			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+//		}		
 		
 		if(protocol.getStartDate() != null)
 		{

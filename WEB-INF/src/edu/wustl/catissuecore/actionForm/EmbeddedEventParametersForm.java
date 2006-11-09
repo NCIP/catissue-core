@@ -32,7 +32,7 @@ import edu.wustl.common.util.logger.Logger;
 public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 {
 	
-	private String embeddingMedium;
+	private String embeddingMedium = Constants.NOTSPECIFIED;
 
 	
 	public String getEmbeddingMedium()

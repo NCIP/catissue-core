@@ -264,10 +264,10 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 
           	Logger.out.info("qualityIndex: "+ qualityIndex );
             //	 checks the qualityIndex
-         	if (validator.isEmpty(qualityIndex ))
-            {
-           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.qualityindex")));
-            }
+//         	if (validator.isEmpty(qualityIndex ))
+//            {
+//           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.qualityindex")));
+//            }
 
           	Logger.out.info("laneNumber: "+ laneNumber );
 //            //	 checks the laneNumber

@@ -56,7 +56,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	/**
      * Histological Quality of the specimen.
      */
-	protected String histologicalQuality;
+	protected String histologicalQuality = Constants.NOTSPECIFIED;
 
 	/**
      * Returns the percentage of histologically evident neoplastic cells present in the tissue specimen. 

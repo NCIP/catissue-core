@@ -282,11 +282,11 @@ public class DistributionProtocolBizLogic extends SpecimenProtocolBizLogic imple
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 		
-		if (validator.isEmpty(protocol.getIrbIdentifier()))
-		{
-			message = ApplicationProperties.getValue("distributionprotocol.irbid");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
-		}		
+//		if (validator.isEmpty(protocol.getIrbIdentifier()))
+//		{
+//			message = ApplicationProperties.getValue("distributionprotocol.irbid");
+//			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+//		}		
 		
 		if(protocol.getStartDate() != null)
 		{

@@ -64,12 +64,12 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     /**
      * The gender of a participant.
      */
-    protected String gender;
+    protected String gender = Constants.UNSPECIFIED;
     
     /**
      * The genotype of a participant.
      */
-    protected String genotype;
+    protected String genotype = Constants.UNKNOWN;
 
     /**
      * Social Security Number of the Participant.
@@ -86,12 +86,12 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     /**
      * The race to which the Participant belongs.
      */
-    protected String[] raceTypes={"-1"};
+    protected String[] raceTypes = {Constants.NOTSPECIFIED};
     
     /**
      * Participant's ethnicity status.
      */
-	protected String ethnicity;
+	protected String ethnicity = Constants.NOTSPECIFIED;
 	
 	/**
 	 * The Date of Death of the Participant.
@@ -101,7 +101,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	/**
 	 * Vital status of the Participant.
 	 */
-	protected String vitalStatus;
+	protected String vitalStatus = Constants.UNKNOWN;
 	
     /**
 	 * Map to handle values of all the Participant Medical Identifiers

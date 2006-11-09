@@ -34,9 +34,9 @@ import edu.wustl.common.util.logger.Logger;
 public class SpecimenCollectionGroupForm extends AbstractActionForm
 {
  
-	private String clinicalDiagnosis;
+	private String clinicalDiagnosis = Constants.NOTSPECIFIED;
     
-	private String clinicalStatus;
+	private String clinicalStatus = Constants.NOTSPECIFIED;
 	
 	private String surgicalPathologyNumber;
 	

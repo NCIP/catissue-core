@@ -118,8 +118,8 @@ public class NewSpecimenForm extends SpecimenForm
 	private long collectionEventSpecimenId;
 	private long collectionEventUserId;
 	private String collectionEventdateOfEvent;
-	private String collectionEventTimeInHours="0";
-	private String collectionEventTimeInMinutes="0";
+	private String collectionEventTimeInHours;
+	private String collectionEventTimeInMinutes;
 	private String collectionEventCollectionProcedure;
 	private String collectionEventContainer;
 	private String collectionEventComments;
@@ -131,8 +131,8 @@ public class NewSpecimenForm extends SpecimenForm
 	private long receivedEventSpecimenId;
 	private long receivedEventUserId;
 	private String receivedEventDateOfEvent;
-	private String receivedEventTimeInHours="0";
-	private String receivedEventTimeInMinutes="0";
+	private String receivedEventTimeInHours;
+	private String receivedEventTimeInMinutes;
 	private String receivedEventReceivedQuality;
 	private String receivedEventComments;
 	

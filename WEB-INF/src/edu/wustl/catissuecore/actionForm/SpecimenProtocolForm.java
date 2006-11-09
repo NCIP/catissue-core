@@ -327,10 +327,10 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
                 	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.shorttitle")));
                 }
                 
-                if (validator.isEmpty(this.irbID))
-                {
-                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.irbid")));
-                }
+//              if (validator.isEmpty(this.irbID))
+//              {
+//                	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.irbid")));
+//              }
 
 // --- startdate
                 //  date validation according to bug id  722 and 730 and 939

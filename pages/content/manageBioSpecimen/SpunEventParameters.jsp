@@ -191,7 +191,7 @@ if(currentEventParametersDate.trim().length() > 0)
 
 <!-- gForce -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formRequiredLabel">
 				<label for="gravityForce">
 					<bean:message key="spuneventparameters.gforce"/> 
@@ -204,7 +204,7 @@ if(currentEventParametersDate.trim().length() > 0)
 
 <!-- durationInMinutes-->		
 		<tr>
-			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredNotice" width="5">&nbsp;</td>
 			<td class="formRequiredLabel">
 				<label for="durationInMinutes">
 					<bean:message key="spuneventparameters.durationinminutes"/> 

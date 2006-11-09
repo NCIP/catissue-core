@@ -56,14 +56,16 @@ public class ParticipantAction extends SecureAction
 			participantForm = (ParticipantForm) request.getAttribute("participantForm1");
 			request.setAttribute("participantForm", participantForm);
 		}
-		if (participantForm.getGender() == null)
-		{
-			participantForm.setGender(Constants.UNSPECIFIED);
-		}
-		if (participantForm.getVitalStatus() == null)
-		{
-			participantForm.setVitalStatus(Constants.UNKNOWN);
-		}
+		//Bug- setting the default Gender
+//		if (participantForm.getGender() == null)
+//		{
+//			participantForm.setGender(Constants.UNSPECIFIED);
+//		}
+		//Bug- setting the default Vital status
+//		if (participantForm.getVitalStatus() == null)
+//		{
+//			participantForm.setVitalStatus(Constants.UNKNOWN);
+//		}
 		//List of keys used in map of ActionForm
 		List key = new ArrayList();
 		key.add("ParticipantMedicalIdentifier:i_Site_id");
@@ -106,17 +108,34 @@ public class ParticipantAction extends SecureAction
 		//NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
 		List genotypeList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_GENOTYPE, null);
-		request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);
+		request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);	
+		
+		//Bug- setting the default Genotype
+//		if(participantForm.getGenotype() == null)
+//		{
+//			participantForm.setGenotype(Constants.UNKNOWN);
+//		}
 
 		//Sets the ethnicityList attribute to be used in the Add/Edit Participant Page.
 		List ethnicityList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_ETHNICITY, null);
 		request.setAttribute(Constants.ETHNICITY_LIST, ethnicityList);
+		//Bug- setting the default ethnicity
+//		if (participantForm.getEthnicity() == null)
+//		{
+//			participantForm.setEthnicity(Constants.NOTSPECIFIED);
+//		}
 
 		//Sets the raceList attribute to be used in the Add/Edit Participant Page.
 		List raceList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RACE,
 				null);
-		request.setAttribute(Constants.RACELIST, raceList);
+		request.setAttribute(Constants.RACELIST, raceList);		
+		//Bug- setting the default raceTypes
+//		if (participantForm.getRaceTypes() == null || participantForm.getRaceTypes().length == 0)
+//		{
+//			String[] raceTypes = {Constants.NOTSPECIFIED};
+//			participantForm.setRaceTypes(raceTypes);
+//		}		
 
 		//Sets the vitalStatus attribute to be used in the Add/Edit Participant Page.
 		List vitalStatusList = CDEManager.getCDEManager().getPermissibleValueList(

@@ -35,7 +35,7 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	/**
      * Method applied on specimen to freeze it.
      */
-	private String method;
+	private String method = Constants.NOTSPECIFIED;
 
 	/**
 	 * @return Returns the method applied on specimen to freeze it.
