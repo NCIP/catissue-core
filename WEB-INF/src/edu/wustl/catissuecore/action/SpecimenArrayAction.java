@@ -116,7 +116,7 @@ public class SpecimenArrayAction extends SecureAction
     	UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
     	Collection userCollection =  userBizLogic.getUsers(operation);
     	request.setAttribute(Constants.USERLIST, userCollection);
-    	Map containerMap = new TreeMap();
+    	TreeMap containerMap = new TreeMap();
     	String subOperation = specimenArrayForm.getSubOperation();
     	boolean isChangeArrayType = false;
     	String idColumnName = "id";

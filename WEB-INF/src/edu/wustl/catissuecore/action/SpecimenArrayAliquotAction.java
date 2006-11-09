@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -118,7 +119,7 @@ public class SpecimenArrayAliquotAction extends BaseAction
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimenArrayAliquots.reSubmit"));
 				}
 				
-				Map containerMap = new HashMap();
+				TreeMap containerMap = new TreeMap();
 				checkForSpecimenArray(request, specimenArrayAliquotForm);
 				int aliquotCount = Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 				Long id = (Long)request.getAttribute(Constants.STORAGE_TYPE_ID);
