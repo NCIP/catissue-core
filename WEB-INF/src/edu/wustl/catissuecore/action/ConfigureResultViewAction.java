@@ -35,7 +35,7 @@ public class ConfigureResultViewAction extends BaseAction  {
 			throws Exception {
 			
 			//String target = new String();
-			IBizLogic dao = BizLogicFactory.getInstance().getBizLogic(Constants.CONFIGURE_RESULT_VIEW_ID);
+			IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.CONFIGURE_RESULT_VIEW_ID);
 			String pageOf = (String) request.getAttribute(Constants.PAGEOF);
 			if(pageOf == null)
 				pageOf = (String) request.getParameter(Constants.PAGEOF);
@@ -52,7 +52,7 @@ public class ConfigureResultViewAction extends BaseAction  {
 	        String [] whereCondition = {"in"};
 	        Object [] whereColumnValues = {tables};
 	        //List of objects containing TableNames and aliasName
-	        List tableList = dao.getList(sourceObjectName, displayNameField, valueField, 
+	        List tableList = bizlogic.getList(sourceObjectName, displayNameField, valueField, 
     				whereColumnNames, whereCondition, whereColumnValues,null,null,false);
      
 	        //List of Column data corresponding to table names.
