@@ -2424,6 +2424,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/ShowFramedPage.do?pageOf=pageOfQueryResults" />
 			<forward name="failure" path="/AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface" />
+			<forward name="noResults" path="/AdvanceQueryInterface.do?pageOf=pageOfAdvanceQueryInterface&amp;operation=redefine" />
 		</action>
 		
 		<action path="/ConfigureAdvanceSearchView"

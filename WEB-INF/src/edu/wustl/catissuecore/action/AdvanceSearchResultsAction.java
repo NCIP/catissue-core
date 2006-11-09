@@ -158,24 +158,36 @@ public class AdvanceSearchResultsAction extends BaseAction
 //					"(Participant2.IDENTIFIER  > 0  ) ) )";
 			Logger.out.debug("no. of tables in tableSet after table created"+query.getTableNamesSet().size()+":"+query.getTableNamesSet());
 			Logger.out.debug("Advance Query Sql"+sql);
-			advBizLogic.createTempTable(sql,tempTableName,sessionData,queryResultObjectDataMap, query.hasConditionOnIdentifiedField());
-
-			//Set the columnDisplayNames in session
-			session.setAttribute(Constants.COLUMN_DISPLAY_NAMES,columnNames);
+			int noOfRecords  = advBizLogic.createTempTable(sql,tempTableName,sessionData,queryResultObjectDataMap, query.hasConditionOnIdentifiedField());
 			
-			//Remove configured columns from session for previous query in same session
-			session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,null);
-			session.setAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES,null);
-			session.setAttribute(Constants.CONFIGURED_COLUMN_NAMES,null);
-			session.removeAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
-			//Remove the spreadsheet column display names from session
-			session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,null);
-			
-			//Remove selected node from session
-			session.setAttribute(Constants.SELECTED_NODE,null);
-			
-			//Remove select columnList from Session
-			session.setAttribute(Constants.SELECT_COLUMN_LIST,null);
+			if (noOfRecords!=0)
+			{
+				//Set the columnDisplayNames in session
+				session.setAttribute(Constants.COLUMN_DISPLAY_NAMES,columnNames);
+				
+				//Remove configured columns from session for previous query in same session
+				session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,null);
+				session.setAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES,null);
+				session.setAttribute(Constants.CONFIGURED_COLUMN_NAMES,null);
+				session.removeAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
+				//Remove the spreadsheet column display names from session
+				session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,null);
+				
+				//Remove selected node from session
+				session.setAttribute(Constants.SELECTED_NODE,null);
+				
+				//Remove select columnList from Session
+				session.setAttribute(Constants.SELECT_COLUMN_LIST,null);
+			}
+			else
+			{
+				ActionErrors errors = new ActionErrors();
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						"advanceQuery.noRecordsFound"));
+				saveErrors(request, errors);
+				pageOf=Constants.PAGEOF_ADVANCE_QUERY_INTERFACE;
+				target = Constants.SIMPLE_QUERY_NO_RESULTS;
+			}
 		}
 		
 		request.setAttribute(Constants.PAGEOF, pageOf);
