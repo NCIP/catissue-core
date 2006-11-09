@@ -121,6 +121,7 @@
 						<html:hidden property="operation" value="<%=operation%>" />
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value=""/>
+						<html:hidden property="participantID" />
 					</td>
 					<td><html:hidden property="id"/>
 					<td><html:hidden property="onSubmit"/></td>
@@ -187,20 +188,8 @@
 				</logic:equal>
 
 					<td class="formField">
-						<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="true">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="participantID" styleClass="formFieldSized" styleId="participantID" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
- 							    <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>							
-							</html:select>
-						</logic:equal>
-						<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="false">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="participantID" styleClass="formFieldSized" styleId="participantID" size="1" disabled="true"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
- 							    <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>							
-							</html:select>
-						</logic:equal>
+						<html:text styleClass="formFieldSized" maxlength="10"  size="30" styleId="participantName" 
+					     		property="participantName" disabled="true"/>	
 						&nbsp;
 						<html:link href="#" styleId="newParticipant" onclick="addNewAction('ParticipantRegistrationAddNew.do?addNewForwardTo=participant&forwardTo=participantRegistration&addNewFor=participantId')">
 							<bean:message key="buttons.addNew" />

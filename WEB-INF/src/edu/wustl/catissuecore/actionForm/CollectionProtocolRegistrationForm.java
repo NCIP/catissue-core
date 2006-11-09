@@ -36,6 +36,11 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 * System generated unique participant Identifier
 	 */	
 	private long participantID;
+	
+	/**
+	 * System generated unique participant protocol Identifier.
+	 */	
+	protected String participantName="";
 
 	/**
 	 * System generated unique participant protocol Identifier.
@@ -77,6 +82,9 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 		if((registration.getParticipant() != null) && (firstName.trim().length()>0 || lastName.trim().length()>0 || birthDate.trim().length()>0 || ssn.trim().length()>0))
 	  	{
 	  		this.participantID = registration.getParticipant().getId().longValue();
+	  		
+	  		//Bug-2819: Performance issue due to participant drop down: Jitendra
+	  		this.participantName = registration.getParticipant().getMessageLabel();
 	  		checkedButton = true;
 	  	}
 	  	this.participantProtocolID = Utility.toString(registration.getProtocolParticipantIdentifier());
@@ -260,4 +268,14 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	         setCheckedButton(true);
 	     }
 	 }
+	
+	public String getParticipantName()
+	{
+		return participantName;
+	}
+	
+	public void setParticipantName(String participantName)
+	{
+		this.participantName = participantName;
+	}
 }
