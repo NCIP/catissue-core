@@ -58,7 +58,7 @@ create table CATISSUE_PASSWORD (
 
 alter table CATISSUE_PASSWORD add index FKDE1F38972206F20F (USER_ID), add constraint FKDE1F38972206F20F foreign key (USER_ID) references CATISSUE_USER (IDENTIFIER);
 
-insert into catissue_password (IDENTIFIER,PASSWORD,UPDATE_DATE,USER_ID) (select identifier, password,null,identifier from catissue_user);
+insert into catissue_password (IDENTIFIER,PASSWORD,UPDATE_DATE,USER_ID) (select identifier, password,now(),identifier from catissue_user);
 
 alter table catissue_user drop column password;
 
@@ -500,9 +500,6 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PU
 
 /*Poornima: Need "No Disease" in Clinical Diagnosis Value Domain -  Bug -2735*/
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2645,'No Disease',NULL,'Clinical_Diagnosis_PID');
-
-/*Poornima: New Type Value for Class "Cell" -  Bug -2779*/
-INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2646,'Slide',2,NULL);
 
 /*Poornima: New Type Value for Class "Cell" -  Bug -2779*/
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2646,'Slide',2,NULL);

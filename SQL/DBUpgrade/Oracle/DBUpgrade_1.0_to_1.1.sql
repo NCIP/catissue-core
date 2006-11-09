@@ -58,7 +58,7 @@ create table CATISSUE_PASSWORD (
 
 alter table CATISSUE_PASSWORD add index FKDE1F38972206F20F (USER_ID), add constraint FKDE1F38972206F20F foreign key (USER_ID) references CATISSUE_USER (IDENTIFIER);
 
-insert into catissue_password (IDENTIFIER,PASSWORD,UPDATE_DATE,USER_ID) (select identifier, password,null,identifier from catissue_user);
+insert into catissue_password (IDENTIFIER,PASSWORD,UPDATE_DATE,USER_ID) (select identifier, password,sysdate,identifier from catissue_user);
 
 alter table catissue_user drop column password;
 
@@ -503,5 +503,4 @@ INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PU
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2647,'Not Specified',NULL,'2003990');
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2648,'Not Specified',NULL,'Clinical_Diagnosis_PID');
 UPDATE CATISSUE_PERMISSIBLE_VALUE SET VALUE = 'Not Specified' where IDENTIFIER =  2642;
-
 
