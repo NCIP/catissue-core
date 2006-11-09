@@ -125,7 +125,7 @@ public class CreateMultipleSpecimenAction extends BaseAction
 			}
 		}
 
-		Map containerMap = new TreeMap();
+		TreeMap containerMap = new TreeMap();
 		Vector initialValues = null;
 
 		if (cpId != -1 && specimenClass != null && !specimenClass.equals("null") && !specimenClass.equals("-- Select --")

@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -182,7 +183,7 @@ public class AliquotAction extends SecureAction
 				aliquotForm.setSpecimenLabel(label);
 				aliquotForm.setBarcode(barcode);
 				aliquotForm.setQuantityPerAliquot(quantityperaliquot);
-				Map containerMap = null;
+				TreeMap containerMap = null;
 				if (aliquotForm.isAliqoutInSameContainer())
 				{
 
@@ -253,7 +254,7 @@ public class AliquotAction extends SecureAction
 					ActionErrors errors = getActionErrors(request);
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.qtyInsufficient"));
 					saveErrors(request, errors);
-					Map containerMap = null;
+					TreeMap containerMap = null;
 					if (aliquotForm.isAliqoutInSameContainer())
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
@@ -328,7 +329,7 @@ public class AliquotAction extends SecureAction
 		}
 
 		//Map containerMap = bizLogic.getAllocatedContainerMap();
-		Map containerMap = new HashMap();
+		TreeMap containerMap = new TreeMap();
 		if (Constants.PAGEOF_CREATE_ALIQUOT.equals(request.getParameter(Constants.PAGEOF)))
 		{
 			pageOf = validate(request, aliquotForm);

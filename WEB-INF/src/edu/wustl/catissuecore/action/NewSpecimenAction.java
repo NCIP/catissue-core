@@ -333,7 +333,7 @@ public class NewSpecimenAction extends SecureAction
 		//    	 ---- chetan 15-06-06 ----
 		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
 				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		Map containerMap = new HashMap();
+		TreeMap containerMap = new TreeMap(); 
 		Vector initialValues = null;
 		if (operation.equals(Constants.ADD))
 		{
@@ -377,9 +377,7 @@ public class NewSpecimenAction extends SecureAction
 					Logger.out.debug("calling checkForInitialValues() function from NewSpecimenAction---");
 					initialValues = checkForInitialValues(containerMap);
 					Logger.out.debug("finish ---calling checkForInitialValues() function from NewSpecimenAction---");
-
-				}
-
+				} 
 			}
 		}
 		else
@@ -626,7 +624,7 @@ public class NewSpecimenAction extends SecureAction
 		specimenForm.setReceivedEventUserId(-1);
 	}
 
-	Vector checkForInitialValues(Map containerMap)
+	Vector checkForInitialValues(TreeMap containerMap)
 	{
 		Vector initialValues = null;
 

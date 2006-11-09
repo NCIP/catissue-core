@@ -48,7 +48,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 		String operation = request.getParameter(Constants.OPERATION);
 		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
 				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		Map containerMap = new TreeMap();
+		TreeMap containerMap = new TreeMap();
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";

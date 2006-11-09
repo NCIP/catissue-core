@@ -1504,7 +1504,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					Constants.STORAGE_CONTAINER_FORM_ID);
 			String split[] = key.split("[$]");
-			Map containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen((Long.parseLong(split[0])), split[1], 0, "", false);
+			TreeMap containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen((Long.parseLong(split[0])), split[1], 0, "", false);
 			List listOfSpecimens = (ArrayList) tempSpecimenMap.get(key);
 			allocatePositionToSpecimensList(specimenMap, listOfSpecimens, containerMap);
 		}

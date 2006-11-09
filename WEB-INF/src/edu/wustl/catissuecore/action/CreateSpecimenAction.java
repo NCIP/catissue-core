@@ -100,7 +100,7 @@ public class CreateSpecimenAction extends SecureAction
 
 		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
 				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		Map containerMap = new HashMap();
+		TreeMap containerMap = new TreeMap();
 		Vector initialValues = null;
 		if (operation.equals(Constants.ADD))
 		{
@@ -331,10 +331,10 @@ public class CreateSpecimenAction extends SecureAction
 		return mapping.findForward(Constants.SUCCESS);
 	}
 
-	Map getContainerMap(String specimenId, String className, CreateSpecimenBizLogic dao,
+	TreeMap getContainerMap(String specimenId, String className, CreateSpecimenBizLogic dao,
 			StorageContainerBizLogic scbizLogic,String exceedingMaxLimit) throws DAOException
 	{
-		Map containerMap = new HashMap();
+		TreeMap containerMap = new TreeMap();
 
 		List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(
 				specimenId));

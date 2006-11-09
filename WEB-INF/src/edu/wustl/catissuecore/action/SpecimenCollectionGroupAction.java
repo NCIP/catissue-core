@@ -279,20 +279,26 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			if(!collectionProtocolTitle.equals("")&& (groupParticipantId>0 ||
 					(protocolParticipantId!=null && !protocolParticipantId.equals(""))))
 			{
-
+				//Poornima:Bug 2833 - Error thrown when adding a specimen collection group
+				//Max length of CP is 150 and Max length of SCG is 55, in Oracle the name does not truncate 
+				//and it is giving error. So the title is truncated in case it is longer than 30 .
+				String maxCollTitle = collectionProtocolTitle;
+				if(collectionProtocolTitle.length()>30)
+				{
+					maxCollTitle = collectionProtocolTitle.substring(0,29);
+				}
 				//During add operation the id to set in the default name is generated
 				if(operation.equals(Constants.ADD))
 				{
 					//if participant is selected from the list
 					if(groupParticipantId>0) 
 					{
-						specimenCollectionGroupForm.setName(collectionProtocolTitle+"_"+groupParticipantId+"_"+groupNumber);
-						
+						specimenCollectionGroupForm.setName(maxCollTitle+"_"+groupParticipantId+"_"+groupNumber);
 					}
 					//else if participant protocol Id is selected 
 					else
 					{
-						specimenCollectionGroupForm.setName(collectionProtocolTitle+"_"+protocolParticipantId+"_"+groupNumber);
+						specimenCollectionGroupForm.setName(maxCollTitle+"_"+groupParticipantId+"_"+groupNumber);
 					}
 				}
 				//During edit operation the id to set in the default name using the id
@@ -300,14 +306,14 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				{
 					if(groupParticipantId>0) 
 					{
-						specimenCollectionGroupForm.setName(collectionProtocolTitle+"_"+groupParticipantId+"_"+
+						specimenCollectionGroupForm.setName(maxCollTitle+"_"+groupParticipantId+"_"+
 											specimenCollectionGroupForm.getId());
 						
 					}
 					else
 					{
-						specimenCollectionGroupForm.setName(collectionProtocolTitle+"_"+protocolParticipantId+"_"+
-								specimenCollectionGroupForm.getId());
+						specimenCollectionGroupForm.setName(maxCollTitle+"_"+protocolParticipantId+"_"+
+								specimenCollectionGroupForm.getId()); 
 					}
 				}
 			}
