@@ -213,7 +213,9 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         			Logger.out.debug("NumberFormatException Occured :"+e);
         		}
         	}
-        	else if(((CollectionProtocolRegistrationForm)form).getParticipantID() != 0) //Bug- 2819 :  Jitendra
+        	
+        	 //Bug- 2819 :  Jitendra
+            if(((CollectionProtocolRegistrationForm)form).getParticipantID() != 0) 
         	{        		
         		try
         		{
