@@ -1351,5 +1351,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE="multipleSpecimen.ColumnsPerPage";
 	
 	public static final String NO_OF_RECORDS_PER_PAGE="resultView.noOfRecordsPerPage";
-	public static final int[] RESULT_PERPAGE_OPTIONS = {10,50,100,500,Integer.MAX_VALUE};
+	public static final int[] RESULT_PERPAGE_OPTIONS = {10,50,100,1000,5000};
 }
