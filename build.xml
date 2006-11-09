@@ -160,9 +160,17 @@
 	<!-- Create the Applet JAR Ends-->
 
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="build_war" depends="init, compile, unpack_cacore_war">
+	<target name="build_war" depends="init, compile, unpack_cacore_war,replace_database_type,common_build_war,build_client_jar">
+	</target>
+	<!-- Create war file for installable zip file.Please us this target when creating installable zip. 
+		Note: database type is not replaced 
+	-->
+	<target name="installable_build_war" depends="init, compile, unpack_cacore_war,common_build_war,build_client_jar">
+	</target>
+	
+	<!-- build catissuecore war file which is common to above both targets -->
+	<target name="common_build_war">
 		<delete file="catissuecore.war" />
-		
 		<!-- Here duplicate="preserver" is used skip copying duplicate-->
 		<war destfile="catissuecore.war" webxml="WEB-INF/web.xml" duplicate="preserve">
 			<fileset dir="${base.dir}">
@@ -473,7 +481,7 @@
 	<!-- unpack caCORE war into temp folder -->
 	<target name="unpack_cacore_war">
 		<unwar src="${base.dir}/catissuecorecsm.war" dest="${temp.dir}/catissuecorecsm"/>
-		
+		<!--
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>
 			<then>
@@ -493,5 +501,42 @@
 					</replace>
 				</then>
 		</if>
+		-->
+	</target>
+	
+	<target name="replace_database_type">
+		<if>
+			<equals arg1="mysql" arg2="${database.type}"/>
+			<then>
+				<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+					<include name ="orm1.cfg.xml"/>
+					<replacefilter token="@@dialect@@" value="${mysql.dialect.h3.string}"/>
+				</replace>
+			</then>
+		</if>
+		
+		<if>	
+				<equals arg1="oracle" arg2="${database.type}"/>
+				<then>
+					<replace dir="${temp.dir}/catissuecorecsm/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+						<include name ="orm1.cfg.xml"/>
+						<replacefilter token="@@dialect@@" value="${oracle.dialect.h3.string}"/>
+					</replace>
+				</then>
+		</if>
+	</target>
+	
+	<!-- build catissuecore client jar to content latest domain classes & put inside client lib folder-->
+	<target name="build_client_jar">
+		<jar taskname="buildClientJar" jarfile="${base.dir}/caTissueCore_caCORE_Client/lib/catissuecore.jar">
+			<fileset dir="${target.dir}">
+				<include name="**/edu/wustl/catissuecore/domain/**"/>
+				<include name="**/edu/wustl/catissuecore/actionForm/**"/>
+				<include name="**/edu/wustl/catissuecore/util/**"/>
+				<include name="**/edu/wustl/catissuecore/client/**"/>
+				<exclude name="**/CVS*" />
+				<exclude name="**/java.policy.applet*" />
+			</fileset>
+		</jar>
 	</target>
 </project>
