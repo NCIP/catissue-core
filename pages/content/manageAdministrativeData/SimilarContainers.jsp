@@ -153,12 +153,26 @@
 				{
 					tempContainerNumber1++;
 				}
-				
-				var typeElement = document.getElementById("storageContainerType");
+				var typeElement = document.forms[0].typeName.value;
 				var siteElement = document.getElementById("siteId_"+i);
+
 				if(typeElement.value != "-1" && siteElement.value != "-1" && containerNameElement.value == "")
 				{
-					containerNameElement.value=siteElement.options[siteElement.selectedIndex].text+"_"+typeElement.value+"_"+tempContainerNumber1;
+					//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
+					//and it is giving error. So these fields are truncated in case it is longer than 40.
+					//It also solves Bug 2829:System fails to create a default unique storage container name
+					var maxSiteName = siteElement.options[siteElement.selectedIndex].text;
+					var maxTypeName = typeElement;
+					if(maxSiteName.length>40)
+					{
+						maxSiteName = maxSiteName.substring(0,39);
+					}
+					if(maxTypeName.length>40)
+					{
+						maxTypeName = maxTypeName.substring(0,39);
+					}
+
+					containerNameElement.value=maxSiteName+"_"+maxTypeName+"_"+tempContainerNumber1;
 				}	
 			}
 
@@ -178,10 +192,23 @@
 
 				getSiteName(parentContainerId.options[parentContainerId.selectedIndex].value);
 
-				var typeElement = document.getElementById("storageContainerType");
+				var typeElement = document.forms[0].typeName.value;
 				if(typeElement.value != "" && parentContainerId.value != "-1" && containerNameElement.value == "")
 				{
-					containerNameElement.value = document.forms[0].siteForParentContainer.value + "_"+typeElement.value+"_"+tempContainerNumber1;
+					//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
+					//and it is giving error. So these fields are truncated in case it is longer than 40.
+					//It also solves Bug 2829:System fails to create a default unique storage container name
+					var maxSiteName = document.forms[0].siteForParentContainer.value;
+					var maxTypeName = typeElement;
+					if(maxSiteName.length>40)
+					{
+						maxSiteName = maxSiteName.substring(0,39);
+					}
+					if(maxTypeName.length>40)
+					{
+						maxTypeName = maxTypeName.substring(0,39);
+					}
+					containerNameElement.value = maxSiteName + "_"+maxTypeName+"_"+tempContainerNumber1;
 				}
 			}
 			
@@ -570,7 +597,7 @@
 					    	{
 			    			%>
 						    <td class="formField" nowrap>
-								<html:text styleClass="formFieldSized10"  maxlength="50"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>" />
+								<html:text styleClass="formFieldSized10"  maxlength="100"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>" />
 								&nbsp;
 								<html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>">
 								<bean:message key="StorageContainer.resetName" />
@@ -581,7 +608,7 @@
 		    					}else{
 							    %>
 							<td class="formField" nowrap>
-								<html:text styleClass="formFieldSized10"  maxlength="50"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>"/>
+								<html:text styleClass="formFieldSized10"  maxlength="100"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>"/>
 								&nbsp;
 								<html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>">
 								<bean:message key="StorageContainer.resetName" />
@@ -592,7 +619,7 @@
 		    					}
 							    %>
 						    <td class="formField">
-							<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="<%=barSId%>" property="<%=barcodeKey%>" />
+							<html:text styleClass="formFieldSized10"  maxlength="100"  size="30" styleId="<%=barSId%>" property="<%=barcodeKey%>" />
 							</td>
 			
 							<td class="formField">

@@ -147,7 +147,20 @@
 			var containerNameElement = document.getElementById("containerName");
 			if(typeElement.value != "-1" && siteElement.value != "-1" && containerNameElement.value == "")
 			{
-				nameChange(siteElement.options[siteElement.selectedIndex].text,typeElement.options[typeElement.selectedIndex].text,<%=containerNumber%>);
+				//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
+				//and it is giving error. So these fields are truncated in case it is longer than 40.
+				//It also solves Bug 2829:System fails to create a default unique storage container name
+				var maxSiteName = siteElement.options[siteElement.selectedIndex].text;
+				var maxTypeName = typeElement.options[typeElement.selectedIndex].text;
+				if(maxSiteName.length>40)
+				{
+					maxSiteName = maxSiteName.substring(0,39);
+				}
+				if(maxTypeName.length>40)
+				{
+					maxTypeName = maxTypeName.substring(0,39);
+				}
+				nameChange(maxSiteName,maxTypeName,<%=containerNumber%>);
 			}
 		}
 		function onParentContainerChange(element)
@@ -160,9 +173,24 @@
 			{
 				getSiteName(parentContainer.value);
 				var siteName = document.forms[0].siteForParentContainer.value;
-				nameChange(siteName,typeElement.options[typeElement.selectedIndex].text,<%=containerNumber%>);
+
+				//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
+				//and it is giving error. So these fields are truncated in case it is longer than 40.
+				//It also solves Bug 2829:System fails to create a default unique storage container name
+				var maxSiteName = siteName;
+				var maxTypeName = typeElement.options[typeElement.selectedIndex].text;
+				if(maxSiteName.length>40)
+				{
+					maxSiteName = maxSiteName.substring(0,39);
+				}
+				if(maxTypeName.length>40)
+				{
+					maxTypeName = maxTypeName.substring(0,39);
+				}
+				nameChange(siteName,maxTypeName,<%=containerNumber%>);
 			}	
-			
+			//out of three drop downs if first dropdown that is the storage container name drop is changed
+			//then make a server trip to get all CPs 
 			if(element.name == "parentContainerId")
 			{
 				var action = "StorageContainer.do?operation="+document.forms[0].operation.value+"&pageOf=pageOfStorageContainer&isSiteOrParentContainerChange=true";
@@ -618,7 +646,7 @@ function onEditChange()
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="containerName" property="containerName"/>
+							<html:text styleClass="formFieldSized15" maxlength="100"  size="30" styleId="containerName" property="containerName"/>
 							&nbsp;
 							<html:link href="#" styleId="newSite" onclick="ResetName(this)">
 								<bean:message key="StorageContainer.resetName" />
@@ -650,7 +678,7 @@ function onEditChange()
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" maxlength="50"  size="30" styleId="barcode" property="barcode"/>
+							<html:text styleClass="formFieldSized10" maxlength="100"  size="30" styleId="barcode" property="barcode"/>
 						</td>
 					</tr>
 					
