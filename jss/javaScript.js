@@ -397,7 +397,7 @@ function showDerivedSpecimenDialog(operation,key,derivedSpecimenCollectionGroup,
             alert("You have to give Specimen Group Name before creating derived Specimen");
        }
   else {
-        var url ='NewMultipleSpecimenAction.do?deriveButtonClicked=true&method=showDerivedSpecimenDialog&specimenAttributeKey=' + key + '&operation=' + operation + '&derivedSpecimenCollectionGroup=' + derivedSpecimenCollectionGroup + '&derivedSpecimenClass=' + derivedSpecimenClass + '&derivedParentSpecimenLabel=' + derivedParentSpecimenLabel + '&derivedParentSpecimenBarcode=' + derivedParentSpecimenBarcode + '&derivedSpecimenType=' + derivedSpecimenType;
+        var url ='NewMultipleSpecimenAction.do?deriveButtonClicked=true&method=showDerivedSpecimenDialog&specimenAttributeKey=' + key + '&operation=' + operation + '&derivedSpecimenCollectionGroup=' + derivedSpecimenCollectionGroup + '&derivedSpecimenClass=' + derivedSpecimenClass + '&derivedParentSpecimenLabel=' + derivedParentSpecimenLabel + '&derivedParentSpecimenBarcode=' + derivedParentSpecimenBarcode + '&derivedSpecimenType=' + derivedSpecimenType + '&isMultipleSpecimenCall=true';
 	    NewWindow(url,'name','600','600','yes');
 		}
 }
@@ -420,7 +420,7 @@ function showTreeMap(column)
 //	alert(pName);
 	NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName='+pName+'&cdeName=Tissue Site','name','375','330','yes');
 }
-
+//to delete since locations will be auto allocated.
 function setStoragePosition(specimenMapKey,storageId,storageType,xPos,yPos) {
    parent.window.opener.document.applets[0].setStorageDetails(specimenMapKey,storageId,storageType,xPos,yPos);
 }
@@ -436,7 +436,8 @@ function showStoragePositionMap(specimenAttributeKey,collectionGroup,specimenCla
 }
 
 function getSpecimenSubmitResult(target) {
-	  document.forms[0].action =    document.forms[0].action + "?method=getResult&multipleSpecimenResult=" + target ;  
+//	  document.forms[0].action =    document.forms[0].action + "?method=getResult&multipleSpecimenResult=" + target ;  
+	  document.forms[0].action = "MultipleSpecimenStorageLocation.do";
 	  document.forms[0].submit(); 
 }
 
