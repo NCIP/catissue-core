@@ -600,6 +600,11 @@
 	<definition name=".catissuecore.multipleSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/MultipleSpecimen.jsp" />
 	</definition>
+<!-- Mandar: 07Nov06: Entryfor MultipleSpecimen StorageLocation. -->
+	<definition name=".catissuecore.multipleSpecimenStorageLocationDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/MultipleSpecimenStorageLocation.jsp" />
+	</definition>
+
 	
 	<definition name=".catissuecore.multipleSpecimenAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
             <put name="content" value="/pages/content/manageBioSpecimen/SpecimenReport.jsp" />

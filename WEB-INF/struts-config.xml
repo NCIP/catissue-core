@@ -67,6 +67,7 @@ PUBLIC
 		<form-bean name="specimenArrayForm" type="edu.wustl.catissuecore.actionForm.SpecimenArrayForm"/>
 		<form-bean name="arrayTypeForm" type="edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm"/>
 		<form-bean name="multipleSpecimenForm" type="edu.wustl.catissuecore.actionForm.MultipleSpecimenForm"/>
+		<form-bean name="multipleSpecimenStorageLocationForm" type="edu.wustl.catissuecore.actionForm.MultipleSpecimenStorageLocationForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -2859,6 +2860,29 @@ PUBLIC
 		<forward name="success" path=".catissuecore.initMultipleSpecimenDef" />
 		<forward name="failure" path=".catissuecore.initMultipleSpecimenDef" />
 	</action>
+
+	<!-- Mandar Deshmukh : 07Nov06 entry for MultipleSpecimen Storage Location -->
+	<action path="/MultipleSpecimenStorageLocation"
+		type="edu.wustl.catissuecore.action.MultipleSpecimenStorageLocationAction"
+		name="multipleSpecimenStorageLocationForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path=".catissuecore.multipleSpecimenStorageLocationDef" />
+		<forward name="failure" path="/MultipleSpecimenStorageLocation.do?pageOf=formSubmitted&amp;operation=add&amp;menuSelected=15" />
+	</action>
+	
+	<action path="/MultipleSpecimenStorageLocationAdd"
+		type="edu.wustl.catissuecore.action.MultipleSpecimenSubmitAction"
+		name="multipleSpecimenStorageLocationForm"
+		validate="true"
+		input="/MultipleSpecimenStorageLocation.do?pageOf=formSubmitted&amp;operation=add&amp;menuSelected=15"
+		scope="request">
+		<forward name="success" path=".catissuecore.multipleSpecimenStorageLocationDef" />
+		<forward name="failure" path="/MultipleSpecimenStorageLocation.do?pageOf=formSubmitted&amp;operation=add&amp;menuSelected=15" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	
+	
 	
 	</action-mappings>
 	
