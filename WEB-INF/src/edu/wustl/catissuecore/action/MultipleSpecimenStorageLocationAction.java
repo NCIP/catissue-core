@@ -1,0 +1,130 @@
+/*
+ * Created on Nov 6, 2006
+ *
+ * TODO To change the template for this generated file go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+package edu.wustl.catissuecore.action;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
+import edu.wustl.catissuecore.actionForm.MultipleSpecimenStorageLocationForm;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.util.logger.Logger;
+
+
+/**
+ * @author mandar_deshmukh
+ *
+ * TODO To change the template for this generated type comment go to
+ * Window - Preferences - Java - Code Style - Code Templates
+ */
+public class MultipleSpecimenStorageLocationAction extends BaseAction
+{
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 */
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
+		// TODO Auto-generated method stub		
+		// -----------------------
+		String target = "success";
+		Logger.out.debug("\n\n------IN MultipleSpecimenStorageLocationAction  ----\n\n"+ request.getParameter(Constants.PAGEOF));
+		Logger.out.debug("Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION : "+ Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION +" \n !(Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION.equals(request.getParameter(Constants.PAGEOF))) : " +!(Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION.equals(request.getParameter(Constants.PAGEOF))));
+		if(!(Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION.equals(request.getParameter(Constants.PAGEOF))))
+		{
+			MultipleSpecimenStorageLocationForm aForm = (MultipleSpecimenStorageLocationForm)form;
+			
+			HashMap specimenMap = getSpecimenMap(request);
+			request.setAttribute(Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_SPECIMEN_MAP,specimenMap);
+			aForm.setSpecimenMap( specimenMap);
+			aForm.populateSpecimenOnUIMap(request);  
+			
+//			HashMap locationMap = new HashMap();
+//			locationMap.put("Specimen:1_StorageContainer_id",new Integer(1));
+//			locationMap.put("Specimen:1_pos1",new Integer(1));
+//			locationMap.put("Specimen:1_pos2",new Integer(2));
+//			request.setAttribute(Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_AVAILABLE_MAP,locationMap);
+		}
+		else
+		{
+			//TODO
+			MultipleSpecimenStorageLocationForm aForm = (MultipleSpecimenStorageLocationForm)form;
+			
+			HashMap specimenMap = getSpecimenMap(request);
+			request.setAttribute(Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_SPECIMEN_MAP,specimenMap);
+			aForm.setSpecimenMap( specimenMap);
+
+			//SEND DATA FOR INSERT
+//			Logger.out.debug("\n\n------IN MultipleSpecimenStorageLocationAction ELSE ----\n\n"+ request.getParameter(Constants.PAGEOF));
+		}
+		// -----------------------
+		return mapping.findForward(target ) ;
+	}
+
+	private List getDerivedSpecimenList(int deriveCount)
+	{
+		List derivedList = new ArrayList();
+		for(int i = 1;i<=deriveCount;i++)
+		{
+			derivedList.add(getSpecimen(i,"Derived"));
+		}
+		return derivedList; 
+	}
+	
+	private TissueSpecimen getSpecimen(int i,String prefix)
+	{
+		TissueSpecimen specimen = new TissueSpecimen();
+		specimen.setId(new Long(i) );
+		specimen.setLabel(prefix+"Specimen Label "+i); 
+		specimen.setBarcode(prefix+"Barcode "+i );
+		specimen.setType("Fresh Tissue" );
+		
+		StorageContainer sc = new StorageContainer();
+		sc.setId(new Long(i));
+		specimen.setStorageContainer(sc );
+		specimen.setPositionDimensionOne(new Integer((i+i)) ); 
+		specimen.setPositionDimensionTwo(new Integer((i+i)) ); 
+		
+		return specimen ;
+	}
+
+	private HashMap getSpecimenMap(HttpServletRequest request)
+	{
+		HashMap specimenMap = new HashMap();
+		specimenMap = (HashMap)request.getSession().getAttribute(Constants.SPECIMEN_MAP_KEY);  
+		return specimenMap; 
+	}
+
+// ------------------------------------------	
+	//to test the flow creates dummy data
+	private HashMap getSpecimenMap1()
+	{
+		HashMap specimenMap = new HashMap();
+		for(int i=1;i<5;i++)
+		{
+			Specimen specimen = getSpecimen(i,"");
+			int dc = i; 
+			Logger.out.debug("\ndc: "+dc);
+			List derivedList = getDerivedSpecimenList(dc );
+			specimenMap.put(specimen,derivedList);
+			
+		}
+		return specimenMap; 
+	}
+}
