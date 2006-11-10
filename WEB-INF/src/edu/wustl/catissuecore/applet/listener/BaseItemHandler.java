@@ -48,8 +48,8 @@ public class BaseItemHandler implements ItemListener {
 		System.out.println("\n ************** In BaseItemHandler \n  : "+ getSelectedValue(event) );
 		System.out.println("getSelectedValue(event) : "+getSelectedValue(event)+" table.getSelectedRow() : "+table.getSelectedRow()+" table.getSelectedColumn() : "+ table.getSelectedColumn());
 		//fireEditingStopped();
-		if(table.getSelectedColumn()!=-1)
-			table.getModel().setValueAt(getSelectedValue(event),table.getSelectedRow(),table.getSelectedColumn());
+//		if(table.getSelectedColumn()!=-1)
+//			table.getModel().setValueAt(getSelectedValue(event),table.getSelectedRow(),table.getSelectedColumn());
 
 	}
 
