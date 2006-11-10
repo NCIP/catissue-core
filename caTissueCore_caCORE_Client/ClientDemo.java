@@ -86,7 +86,10 @@ public class ClientDemo
 		private String separator = ",";
 		private static StringBuffer reportContents = null;
 		private String insertOperation = " insert ";
+		private String insertValidateOperation = " validation at insertion time ";
 		private String updateOperation = " update ";
+		private String updateValidateOperation = " validation at updation time ";
+		private String searchOperation = " serach ";
 		private String successMessage = " pass ";
 		private String failureMessage = " fail ";
 		private static String filePath = "";
@@ -97,12 +100,12 @@ public class ClientDemo
 		System.out.println("*** ClientDemo...");
 		try
 		{
-			ApplicationServiceProvider applicationServiceProvider = new ApplicationServiceProvider(); 
-			appService = applicationServiceProvider.getApplicationService();
+			//ApplicationServiceProvider applicationServiceProvider = new ApplicationServiceProvider(); 
+			appService = ApplicationServiceProvider.getApplicationService();
 			ClientSession cs = ClientSession.getInstance();
 			try
 			{ 
-				cs.startSession("admin@admin.com", "Login12");
+				cs.startSession("admin@admin.com", "Login123");
 			} 
 			catch (Exception ex) 
 			{ 
@@ -122,11 +125,11 @@ public class ClientDemo
 				writeHeaderContentsToReport();
 				reportContents = new StringBuffer();
 				testClient.createObjects();
-				//testClient.serachObject();
+				testClient.serachObject();
 				testClient.updateObjects();
 				writeFooterContentsToReport();
 				reportWriter.closeFile();
-				testClient.sendMail();
+				//testClient.sendMail();
 /*				testClient.testAddInstitution();
 				testClient.testAddDepartment();
 				testClient.testAddCancerResearchGroup();
@@ -210,12 +213,12 @@ public class ClientDemo
 			testAddDistribution();
 			
 			/*
-			testAddInstitutionWithWrongData();					
-			testAddDepartmentWithWrongData();			
-			testAddCancerResearchGroupWithWrongData();			
-			testAddUserWithWrongData();			
-			testAddSiteWithWrongData();			
-			testAddBioHazardWithWrongData();			
+			testAddInstitutionWithWrongData();
+			testAddDepartmentWithWrongData();
+			testAddCancerResearchGroupWithWrongData();
+			testAddUserWithWrongData();
+			testAddSiteWithWrongData();
+			testAddBioHazardWithWrongData();
 			testAddCollectionProtocolWithWrongData();				
 			testAddDistributionProtocolWithWrongData();			
 			testAddParticipantWithWrongData();			
@@ -223,7 +226,8 @@ public class ClientDemo
 			testAddSpecimenCollectionGroupWithWrongData();			
 			testAddSpecimenWithWrongData();			
 			testAddDistributionWithWrongData();
-			*/					
+			*/
+								
 		}
 		catch(Exception ex)
 		{
@@ -436,19 +440,22 @@ public class ClientDemo
 	
 	private void testAddInstitutionWithWrongData()
 	{
+		Institution institutionObj = null;
 		try
 		{			
-			Institution institutionObj = (Institution) api.initInstitution();	
+			institutionObj = (Institution) api.initInstitution();	
 			institutionObj.setName(null);
 	    	setLogger(institutionObj);
 	    	Logger.out.info("Inserting domain object------->"+institutionObj);
 	    	institutionObj =  (Institution) appService.createObject(institutionObj);
 	    	dataModelObjectMap.put("Institution",institutionObj);
 			Logger.out.info(" Domain Object is successfully added ---->  Name:: " + institutionObj.getName());
+			writeFailureOperationsToReport("Institution",insertValidateOperation);
 			//+ institutionObj.getId().longValue() + " ::  Name :: " + institutionObj.getName());
 		}
 		catch(Exception e)
 		{
+			writeSuccessfullOperationToReport(institutionObj,insertValidateOperation);
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -478,9 +485,10 @@ public class ClientDemo
 	
 	private void testAddCancerResearchGroupWithWrongData()
 	{
+		CancerResearchGroup cancerResearchGroupObj = null;
 		try
 		{
-			CancerResearchGroup cancerResearchGroupObj = (CancerResearchGroup) api.initCancerResearchGroup();
+			cancerResearchGroupObj = (CancerResearchGroup) api.initCancerResearchGroup();
 			cancerResearchGroupObj.setName(null);
 	    	setLogger(cancerResearchGroupObj);
 	    	Logger.out.info("Inserting domain object------->"+cancerResearchGroupObj);
@@ -490,6 +498,7 @@ public class ClientDemo
 		}
 		catch(Exception e)
 		{
+			writeSuccessfullOperationToReport(cancerResearchGroupObj,insertValidateOperation);
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -518,9 +527,10 @@ public class ClientDemo
 	
 	private void testAddSiteWithWrongData()
 	{
+		Site siteObj = null;
 		try
 		{
-			Site siteObj = (Site) api.initSite();
+			siteObj = (Site) api.initSite();
 			siteObj.setName(null);
 	    	setLogger(siteObj);
 	    	Logger.out.info("Inserting domain object------->"+siteObj);
@@ -530,6 +540,7 @@ public class ClientDemo
 		}
 		catch(Exception e)
 		{
+			writeSuccessfullOperationToReport(siteObj,insertValidateOperation);
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -558,9 +569,10 @@ public class ClientDemo
 	
 	private void testAddDistributionWithWrongData()
 	{
+		Distribution distributionObj = null;
 		try
 		{			
-			Distribution distributionObj = (Distribution)api.initDistribution();
+			distributionObj = (Distribution)api.initDistribution();
 	    	setLogger(distributionObj);
 	    	Logger.out.info("Inserting domain object------->"+distributionObj);
 	    	distributionObj.setDistributionProtocol(null);
@@ -574,6 +586,7 @@ public class ClientDemo
 		}
 		catch(Exception e)
 		{
+			writeSuccessfullOperationToReport(distributionObj,insertValidateOperation);
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -603,9 +616,10 @@ public class ClientDemo
 	
 	private void testAddDistributionProtocolWithWrongData()
 	{
+		DistributionProtocol distributionProtocolObj = null;
 		try
 		{
-			DistributionProtocol distributionProtocolObj =(DistributionProtocol)api.initDistributionProtocol();
+			distributionProtocolObj =(DistributionProtocol)api.initDistributionProtocol();
 	    	setLogger(distributionProtocolObj);
 	    	Logger.out.info("Inserting domain object------->"+distributionProtocolObj);
 	    	distributionProtocolObj.setShortTitle(null);
@@ -616,7 +630,7 @@ public class ClientDemo
 		}
 		catch(Exception e)
 		{
-			
+			writeSuccessfullOperationToReport(distributionProtocolObj,insertValidateOperation);
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -644,9 +658,10 @@ public class ClientDemo
 	
 	private void testAddCollectionProtocolWithWrongData()
 	{
+		CollectionProtocol collectionProtocolObj = null;
 		try
 		{
-			CollectionProtocol collectionProtocolObj = (CollectionProtocol)api.initCollectionProtocol();
+			collectionProtocolObj = (CollectionProtocol)api.initCollectionProtocol();
 			collectionProtocolObj.setTitle(null);
 			setLogger(collectionProtocolObj);
 			Logger.out.info("Inserting domain object------->"+collectionProtocolObj);
@@ -657,6 +672,7 @@ public class ClientDemo
 		}
 		catch(Exception e)
 		{
+			writeSuccessfullOperationToReport(collectionProtocolObj,insertValidateOperation);
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -685,10 +701,11 @@ public class ClientDemo
 	
 	private void testAddCollectionProtocolRegistrationWithWrongData()
 	{
+		CollectionProtocolRegistration collectionProtocolRegistrationObj = null;
 		try
 		{
 		//	System.out.println("ClientDemo....................");
-			CollectionProtocolRegistration collectionProtocolRegistrationObj =(CollectionProtocolRegistration) api.initCollectionProtocolRegistration();
+			collectionProtocolRegistrationObj =(CollectionProtocolRegistration) api.initCollectionProtocolRegistration();
 	    	setLogger(collectionProtocolRegistrationObj);
 	    	Logger.out.info("Inserting domain object------->"+collectionProtocolRegistrationObj);
 	    	collectionProtocolRegistrationObj.setProtocolParticipantIdentifier(null);
@@ -700,6 +717,7 @@ public class ClientDemo
 		}
 		catch(Exception e)
 		{
+			writeSuccessfullOperationToReport(collectionProtocolRegistrationObj,insertValidateOperation);
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -728,9 +746,10 @@ public class ClientDemo
 
 	private void testAddStorageTypeForNullObject()
 	{
+		StorageType storageTypeObj = null;
 		try
 		{
-			StorageType storageTypeObj =(StorageType) api.initStorageType();
+			storageTypeObj =(StorageType) api.initStorageType();
 			setLogger(storageTypeObj);
 	    	storageTypeObj = null;
 	    	//storageTypeObj.setName("");
@@ -742,6 +761,7 @@ public class ClientDemo
 		}
 		catch(Exception e)
 		{
+			writeSuccessfullOperationToReport(storageTypeObj,insertValidateOperation);
 			Logger.out.error(e);
 			e.printStackTrace();
 		}
@@ -749,9 +769,10 @@ public class ClientDemo
 
 	private void testAddStorageTypeForNoName()
 	{
+		StorageType storageTypeObj = null;
 		try
 		{
-			StorageType storageTypeObj =(StorageType) api.initStorageType();
+			storageTypeObj =(StorageType) api.initStorageType();
 			setLogger(storageTypeObj);
 	    	storageTypeObj.setName("");
 	    	//storageTypeObj.setOneDimensionLabel("");
@@ -762,6 +783,7 @@ public class ClientDemo
 		}
 		catch(Exception e)
 		{
+			writeSuccessfullOperationToReport(storageTypeObj,insertValidateOperation + "with No Name");
 			Logger.out.error(e);
 			e.printStackTrace();
 		}
@@ -781,6 +803,7 @@ public class ClientDemo
 		}
 		catch(Exception e)
 		{
+			//writeSuccessfullOperationToReport(storageTypeObj,insertValidateOperation + "with No One Dimension Label");
 			Logger.out.error(e);
 			e.printStackTrace();
 		}
@@ -974,28 +997,42 @@ public class ClientDemo
     
     private void serachObject()
     {
-    	
+		reportContents.append(newLine);
     	api = new APIDemo();
+    	totalOperations++;
     	testSearchInstitution();
+    	totalOperations++;
     	testSearchDepartment();
+    	totalOperations++;
     	testSearchCancerResearchGroup();
+    	totalOperations++;
     	testSearchUser();
+    	totalOperations++;
     	testSearchBioHazard();
+    	totalOperations++;
     	testSearchSite();
+    	totalOperations++;
     	testSearchCollectionProtocol();
-    	testSearchDistributionProtocol();    	
+    	totalOperations++;
+    	testSearchDistributionProtocol();
+    	totalOperations++;
     	testSearchParticipant();
+    	totalOperations++;
     	testSearchCollectionProtocolRegistration();
-    	testSearchSpecimenCollectionGroup();    	
+    	totalOperations++;
+    	testSearchSpecimenCollectionGroup();
+    	totalOperations++;
     	testSearchStorageType();
+    	//totalOperations++;
     	//testSearchStorageContainer();
-    	testSearchSpecimenArrayType();    	
-    	testSearchSpecimen();    	
+    	totalOperations++;
+    	testSearchSpecimenArrayType();
+    	totalOperations++;
+    	testSearchSpecimen();
+    	//totalOperations++;
     	//testSearchSpecimenArray();
-    	testSearchDistribution();	
-    	
-    
-    	
+    	//totalOperations++;
+    	//testSearchDistribution();
 /*    	Department department = api.initDepartment();
     	department.setId(new Long(2));
 		try 
@@ -1130,9 +1167,11 @@ public class ClientDemo
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 Department returneddepartment = (Department) resultsIterator.next();
         		 Logger.out.info(" Domain Object is found by Serach operation:: Name --- >" + returneddepartment.getName());
+        		 writeSuccessfullOperationToReport(returneddepartment,searchOperation);
              }
           }
           catch (Exception e) {
+        	  writeFailureOperationsToReport("Department",searchOperation);
         	  Logger.out.error(e.getMessage(),e);
         	  e.printStackTrace();
           }
@@ -1150,10 +1189,12 @@ public class ClientDemo
         	 List resultList = appService.search(CancerResearchGroup.class, cancerResearchGroup);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 CancerResearchGroup returnedcancerResearchGroup = (CancerResearchGroup) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedcancerResearchGroup,searchOperation);
         		 Logger.out.info(" Domain Object is found by Serach operation:: Name --- >" + returnedcancerResearchGroup.getName());
              }
           } 
           catch (Exception e) {
+        	 writeFailureOperationsToReport("CancerResearchGroup",searchOperation);
           	 Logger.out.error(e.getMessage(),e);
   	 		 e.printStackTrace();
           }
@@ -1172,10 +1213,12 @@ public class ClientDemo
         	 List resultList = appService.search(Site.class,site);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 Site returnedsite = (Site) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedsite,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedsite.getName());
              }
           } 
           catch (Exception e) {
+        	writeFailureOperationsToReport("Site",searchOperation);
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -1194,10 +1237,12 @@ public class ClientDemo
         	 List resultList = appService.search(User.class,user);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 User returneduser = (User) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returneduser,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returneduser.getEmailAddress());
              }
           } 
           catch (Exception e) {
+        	writeFailureOperationsToReport("User",searchOperation);  
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -1215,10 +1260,12 @@ public class ClientDemo
         	 List resultList = appService.search(Participant.class,participant);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 Participant returnedparticipant = (Participant) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedparticipant,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedparticipant.getFirstName());
              }
           } 
           catch (Exception e) {
+        	writeFailureOperationsToReport("Participant",searchOperation);  
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -1235,10 +1282,12 @@ public class ClientDemo
         	 List resultList = appService.search(Institution.class,institution);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 Institution returnedinstitution = (Institution) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedinstitution,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedinstitution.getName());
              }
           } 
           catch (Exception e) {
+        	writeFailureOperationsToReport("Institution",searchOperation);  
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -1255,10 +1304,12 @@ public class ClientDemo
         	 List resultList = appService.search(Biohazard.class,biohazard);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 Biohazard returnedbiohazard = (Biohazard) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedbiohazard,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedbiohazard.getName());
              }
           } 
           catch (Exception e) {
+        	writeFailureOperationsToReport("Biohazard",searchOperation);    
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -1275,10 +1326,12 @@ public class ClientDemo
         	 List resultList = appService.search(Distribution.class,distribution);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 Distribution returneddistribution = (Distribution) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returneddistribution,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returneddistribution.getMessageLabel());
              }
           } 
           catch (Exception e) {
+        	writeFailureOperationsToReport("Distribution",searchOperation);    
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -1295,10 +1348,12 @@ public class ClientDemo
         	 List resultList = appService.search(DistributionProtocol.class,distributionProtocol);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 DistributionProtocol returneddistributionprotocol = (DistributionProtocol) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returneddistributionprotocol,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returneddistributionprotocol.getTitle());
              }
           } 
           catch (Exception e) {
+        	writeFailureOperationsToReport("DistributionProtocol",searchOperation);   
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -1315,11 +1370,13 @@ public class ClientDemo
         	 List resultList = appService.search(CollectionProtocol.class,collectionProtocol);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 CollectionProtocol returnedcollectionprotocol = (CollectionProtocol) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedcollectionprotocol,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedcollectionprotocol.getTitle());
              }
           } 
           catch (Exception e) {
-          	Logger.out.error(e.getMessage(),e);
+        	  writeFailureOperationsToReport("CollectionProtocol",searchOperation);  
+        	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
 
@@ -1335,10 +1392,12 @@ public class ClientDemo
         	 List resultList = appService.search(CollectionProtocolRegistration.class,collectionProtocolRegistration);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 CollectionProtocolRegistration returnedcollectionprotocolregistration = (CollectionProtocolRegistration) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedcollectionprotocolregistration,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedcollectionprotocolregistration.getMessageLabel());
              }
           } 
           catch (Exception e) {
+        	  writeFailureOperationsToReport("CollectionProtocolRegistration",searchOperation);    
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -1355,6 +1414,7 @@ public class ClientDemo
         	 List resultList = appService.search(StorageType.class,storageType);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 StorageType returnedstoragetype = (StorageType) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedstoragetype,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " +returnedstoragetype.getName());
              }
           } 
@@ -1374,10 +1434,12 @@ public class ClientDemo
         	 List resultList = appService.search(StorageContainer.class,storageContainer);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 StorageContainer returnedstoragecontainer = (StorageContainer) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedstoragecontainer,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedstoragecontainer.getName());
              }
           } 
           catch (Exception e) {
+        	  writeFailureOperationsToReport("StorageContainer",searchOperation);   
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -1394,10 +1456,12 @@ public class ClientDemo
         	 List resultList = appService.search(Specimen.class,specimen);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 Specimen returnedspecimen = (Specimen) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedspecimen,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedspecimen.getLabel());
              }
           } 
           catch (Exception e) {
+        	  writeFailureOperationsToReport("Specimen",searchOperation);  
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -1414,10 +1478,12 @@ public class ClientDemo
         	 List resultList = appService.search(SpecimenArrayType.class,specimenArrayType);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 SpecimenArrayType returnedspecimenarraytype = (SpecimenArrayType) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedspecimenarraytype,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedspecimenarraytype.getName());
              }
           } 
           catch (Exception e) {
+        	  writeFailureOperationsToReport("SpecimenArrayType",searchOperation);   
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -1434,10 +1500,12 @@ public class ClientDemo
         	 List resultList = appService.search(SpecimenArray.class,specimenArray);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 SpecimenArray returnedspecimenarray = (SpecimenArray) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedspecimenarray,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " +returnedspecimenarray.getName());
              }
           } 
           catch (Exception e) {
+        	  writeFailureOperationsToReport("SpecimenArray",searchOperation);     
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -1454,10 +1522,12 @@ public class ClientDemo
         	 List resultList = appService.search(SpecimenCollectionGroup.class,specimenCollectionGroup);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 SpecimenCollectionGroup returnedspecimencollectiongroup = (SpecimenCollectionGroup) resultsIterator.next();
+        		 writeSuccessfullOperationToReport(returnedspecimencollectiongroup,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedspecimencollectiongroup.getName());
              }
           } 
           catch (Exception e) {
+        	writeFailureOperationsToReport("SpecimenCollectionGroup",searchOperation);    
           	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
           }
@@ -2117,7 +2187,7 @@ public class ClientDemo
 		String cc = "munesh_gupta@persistent.co.in";
 		String host = "mail.persistent.co.in";
         String subject = "Nightly Build Report";
-        String body = "This is test mail to send a nightly build report as report file.Please ignore this mail.";
+        String body = "nightly build report run for database MySQL";
         //String filePath = "F:/nightly_build/catissuecore/caTissueCore_caCORE_Client/log/catissuecoreclient.log";
         report.sendmail(to,cc,null,from,host,subject,body,filePath);
  	}
