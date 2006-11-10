@@ -257,41 +257,42 @@ if( oldId.indexOf(":") == -1) {
 
 function disableDistributeOptions() {
 
-	  var distributionForm =  document.forms[0];
+	  var distributionForm1 =  document.forms[0];
 	   if (  parseInt(document.forms[0].counter.value) == 0)
 	   {
 		         
-	   			  distributionForm.distributionBasedOn[0].disabled=false
-				  distributionForm.distributionBasedOn[1].disabled=false;
-				  distributionForm.distributionType[0].disabled = false;
-				  distributionForm.distributionType[1].disabled = false;
+	   			  distributionForm1.distributionBasedOn[0].disabled=false
+				  distributionForm1.distributionBasedOn[1].disabled=false;
+				  distributionForm1.distributionType[0].disabled = false;
+				  distributionForm1.distributionType[1].disabled = false;
 				  return;
 	   } 
 
-	 	if (distributionForm.distributionBasedOn[0].checked == true)
+	 	if (distributionForm1.distributionBasedOn[0].checked == true)
 		 {
-        	    distributionForm.distributionBasedOn[1].disabled=true
+        	    distributionForm1.distributionBasedOn[1].disabled=true
 		 }
 
-	 	if (distributionForm.distributionBasedOn[1].checked == true)
+	 	if (distributionForm1.distributionBasedOn[1].checked == true)
 		 {
-        	    distributionForm.distributionBasedOn[0].disabled=true
+        	    distributionForm1.distributionBasedOn[0].disabled=true
 		 }
 
-	 	if (distributionForm.distributionType[0].checked == true)
+	 	if (distributionForm1.distributionType[0].checked == true)
 		 {
-        	    distributionForm.distributionType[1].disabled=true
+        	    distributionForm1.distributionType[1].disabled=true
 		 }
 
-	 	if (distributionForm.distributionType[1].checked == true)
+	 	if (distributionForm1.distributionType[1].checked == true)
 		 {
-        	    distributionForm.distributionType[0].disabled=true
+        	    distributionForm1.distributionType[0].disabled=true
 		 }
 }
 
 function checkDistributionBasedOn() {
 
-	 	if (distributionForm.distributionBasedOn[0].checked == false && distributionForm.distributionBasedOn[1].checked == false) {
+	 	var distributionForm1 =  document.forms[0];
+	 	if (distributionForm1.distributionBasedOn[0].checked == false && distributionForm1.distributionBasedOn[1].checked == false) {
 		 	 alert("Please select 'distribution based on'");
 		 	 return false;
         }
