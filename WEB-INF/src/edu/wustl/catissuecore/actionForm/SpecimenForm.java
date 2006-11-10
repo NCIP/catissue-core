@@ -131,6 +131,14 @@ public class SpecimenForm extends AbstractActionForm
 	protected Map externalIdentifier = new HashMap();
 
 	protected boolean virtuallyLocated;
+	
+	/**
+	 * Identify whether coming from multiple specimen or simple specimen page.
+	 * if "1" then from multipleSpecimen
+	 * else from other page   
+	 */
+	protected String multipleSpecimen = "0";
+	
 
 	/**
 	 * Returns the concentration. 
@@ -597,30 +605,33 @@ public class SpecimenForm extends AbstractActionForm
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("specimen.quantity")));
 				}
-				if (!isVirtuallyLocated())
+				// If not multiple specimen then validate storage container
+				if(!multipleSpecimen.equals("1"))
 				{
-					if (validator.isEmpty(positionDimensionOne)
-							|| validator.isEmpty(positionDimensionTwo)
-							|| validator.isEmpty(storageContainer))
+					if (!isVirtuallyLocated())
 					{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-								"errors.item.required", ApplicationProperties
-										.getValue("specimen.positionInStorageContainer")));
-					}
-					else
-					{
-						if (!validator.isNumeric(positionDimensionOne, 1)
-								|| !validator.isNumeric(positionDimensionTwo, 1)
-								|| !validator.isNumeric(storageContainer, 1))
+						if (validator.isEmpty(positionDimensionOne)
+								|| validator.isEmpty(positionDimensionTwo)
+								|| validator.isEmpty(storageContainer))
 						{
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-									"errors.item.format", ApplicationProperties
+									"errors.item.required", ApplicationProperties
 											.getValue("specimen.positionInStorageContainer")));
 						}
-
+						else
+						{
+							if (!validator.isNumeric(positionDimensionOne, 1)
+									|| !validator.isNumeric(positionDimensionTwo, 1)
+									|| !validator.isNumeric(storageContainer, 1))
+							{
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+										"errors.item.format", ApplicationProperties
+												.getValue("specimen.positionInStorageContainer")));
+							}
+	
+						}
 					}
 				}
-
 				//Validations for External Identifier Add-More Block
 				String className = "ExternalIdentifier:";
 				String key1 = "_name";
@@ -795,5 +806,21 @@ public class SpecimenForm extends AbstractActionForm
 	public void setButtonClicked(String buttonClicked)
 	{
 		this.buttonClicked = buttonClicked;
+	}
+	
+	/**
+	 * @return Returns the multipleSpecimen.
+	 */
+	public String getMultipleSpecimen()
+	{
+		return multipleSpecimen;
+	}
+
+	/**
+	 * @param multipleSpecimen The multipleSpecimen to set.
+	 */
+	public void setMultipleSpecimen(String multipleSpecimen)
+	{
+		this.multipleSpecimen = multipleSpecimen;
 	}
 }

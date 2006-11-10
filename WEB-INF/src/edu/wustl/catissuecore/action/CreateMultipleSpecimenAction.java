@@ -15,15 +15,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.Globals;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -125,13 +121,16 @@ public class CreateMultipleSpecimenAction extends BaseAction
 			}
 		}
 
-		TreeMap containerMap = new TreeMap();
+/*		// commented for storage location remove from derive page --- Ashwin 
+  		TreeMap containerMap = new TreeMap();
 		Vector initialValues = null;
-
+*/
 		if (cpId != -1 && specimenClass != null && !specimenClass.equals("null") && !specimenClass.equals("-- Select --")
 				&& !specimenClass.equals("-1"))
 		{
-			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, specimenClass, 0,exceedingMaxLimit,true);
+/*
+ 			// commented for storage location remove from derive page --- Ashwin
+ 			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, specimenClass, 0,exceedingMaxLimit,true);
 			if (containerMap.isEmpty())
 			{
 				ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
@@ -144,6 +143,7 @@ public class CreateMultipleSpecimenAction extends BaseAction
 				saveErrors(request, errors);
 			}
 			initialValues = checkForInitialValues(containerMap);
+*/			
 			request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
 			request.setAttribute(Constants.SPECIMEN_CLASS_NAME, specimenClass);
 			;
@@ -165,11 +165,14 @@ public class CreateMultipleSpecimenAction extends BaseAction
 			{
 				startingPoints[2] = createForm.getPositionDimensionTwo();
 			}
+			/*
+			// commented for storage location remove from derive page --- Ashwin 
 			initialValues = new Vector();
 			initialValues.add(startingPoints);
+			*/
 		}
-
-		request.setAttribute("initValues", initialValues);
+		//commented for storage location remove from derive page --- Ashwin
+		//request.setAttribute("initValues", initialValues);
 		//request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		// -------------------------
 
@@ -224,10 +227,13 @@ public class CreateMultipleSpecimenAction extends BaseAction
 
 		// set the map to subtype
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
-
-		request.setAttribute("initValues", initialValues);
+		//commented for storage location remove from derive page --- Ashwin
+		//request.setAttribute("initValues", initialValues);
+		
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
-		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+		
+		//commented for storage location remove from derive page --- Ashwin
+		//request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		request.setAttribute("createSpecimenForm", createForm);
 		request.setAttribute("multipleSpecimen", "true");
 		return mapping.findForward(Constants.SUCCESS);

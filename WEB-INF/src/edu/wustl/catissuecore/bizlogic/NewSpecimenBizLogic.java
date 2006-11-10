@@ -50,7 +50,6 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
@@ -1029,7 +1028,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 		if (obj instanceof Map)
 		{
-			result = validateMultipleSpecimen((Map) obj, dao, operation);
+		//validation on multiple specimens are performed in MultipleSpecimenValidationUtil, so dont require to perform the bizlogic validations.
+			return true;
+			//result = validateMultipleSpecimen((Map) obj, dao, operation);
 		}
 		else
 		{
@@ -1349,7 +1350,6 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * validates multiple specimen. Internally it for each specimen it innvokes validateSingleSpecimen. 
 	 * @throws DAOException
 	 * @throws DAOException
-	 */
 	private boolean validateMultipleSpecimen(Map specimenMap, DAO dao, String operation) throws DAOException
 	{
 
@@ -1360,6 +1360,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
 			//validate single specimen
+		 */
 
 			/*	if (specimenCollectionGroup != null)
 			 {
@@ -1387,8 +1388,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			 }
 			 
 			 } */
-
+			/*
 			// TODO uncomment code for label, performance
+	
 			try
 			{
 				result = validateSingleSpecimen(specimen, dao, operation, true);
@@ -1439,7 +1441,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		}
 		return result;
 	}
-
+	*/
 	/**
 	 * 
 	 *  Start --> Code added for auto populating storage locations in case of multiple specimen
@@ -1450,7 +1452,6 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @param dao
 	 * @param specimenMap
 	 * @throws DAOException
-	 */
 	private void populateStorageLocations(DAO dao, Map specimenMap) throws DAOException
 	{
 		final String saperator = "$";
@@ -1460,24 +1461,25 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
 			//validate single specimen
-			SpecimenCollectionGroup specimenCollectionGroup = null;
 			if (specimen.getSpecimenCollectionGroup() != null)
 			{
-				String[] selectColumnName = {"id", "collectionProtocolRegistration.id"};
+				String[] selectColumnName = {"collectionProtocolRegistration.id"};
 				String[] whereColumnName = {Constants.NAME};
 				String[] whereColumnCondition = {"="};
 				String[] whereColumnValue = {specimen.getSpecimenCollectionGroup().getName()};
 				List spCollGroupList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,
 						whereColumnValue, null);
+				// TODO saperate calls for SCG - ID and cpid
+				// SCG - ID will be needed before populateStorageLocations
+				
 				// TODO test
 				if (!spCollGroupList.isEmpty())
 				{
-					Object idList[] = (Object[]) spCollGroupList.get(0);
-					Long scgId = (Long) idList[0];
-					long cpId = ((Long) idList[1]).longValue();
-					specimen.getSpecimenCollectionGroup().setId(scgId);
-					if (specimen.getStorageContainer() == null)
-					{
+					//Object idList[] = (Object[]) spCollGroupList.get(0); // Move up + here
+					long cpId = ((Long) spCollGroupList.get(0)).longValue();
+					//Long scgId = (Long) idList[0]; // Move up 
+					//long cpId = ((Long) idList[0]).longValue();//here
+					//specimen.getSpecimenCollectionGroup().setId(scgId); // Move up
 						List tempListOfSpecimen = (ArrayList) tempSpecimenMap.get(cpId + saperator + specimen.getClassName());
 						if (tempListOfSpecimen == null)
 						{
@@ -1487,16 +1489,35 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 						for (; i < tempListOfSpecimen.size(); i++)
 						{
 							Specimen sp = (Specimen) tempListOfSpecimen.get(i);
-							if (specimen.getId().longValue() < sp.getId().longValue())
+							
+							if ((sp.getId() != null) && (specimen.getId().longValue() < sp.getId().longValue()))
 								break;
 						}
 						tempListOfSpecimen.add(i, specimen);
 						tempSpecimenMap.put(cpId + saperator + specimen.getClassName(), tempListOfSpecimen);
-					}
+						
+						List listOfDerivedSpecimen = (ArrayList) specimenMap.get(specimen);
+							// TODO
+							if (listOfDerivedSpecimen != null)
+							{
+								for (int j = 0; j < listOfDerivedSpecimen.size(); j++)
+								{
+									Specimen tempDerivedSpecimen = (Specimen) listOfDerivedSpecimen.get(j);
+									String derivedKey = cpId + saperator + tempDerivedSpecimen.getClassName();
+									List listOfSpecimen = (ArrayList) tempSpecimenMap.get(derivedKey);
+									if (listOfSpecimen == null)
+									{
+										listOfSpecimen = new ArrayList();
+									}
+									listOfSpecimen.add(tempDerivedSpecimen);
+									tempSpecimenMap.put(derivedKey, listOfSpecimen);
+								}
+							}
 				}
 			}
 		}
 
+		
 		Iterator keyIterator = tempSpecimenMap.keySet().iterator();
 		while (keyIterator.hasNext())
 		{
@@ -1504,21 +1525,40 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					Constants.STORAGE_CONTAINER_FORM_ID);
 			String split[] = key.split("[$]");
+			// TODO when moved to acion pass true
 			TreeMap containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen((Long.parseLong(split[0])), split[1], 0, "", false);
 			List listOfSpecimens = (ArrayList) tempSpecimenMap.get(key);
 			allocatePositionToSpecimensList(specimenMap, listOfSpecimens, containerMap);
 		}
 	}
+	 */
 
 	/**
 	 * This function gets the default positions for list of specimens
 	 * @param specimenMap
 	 * @param listOfSpecimens
 	 * @param containerMap
-	 */
 	private void allocatePositionToSpecimensList(Map specimenMap, List listOfSpecimens, Map containerMap)
 	{
-
+		List newListOfSpecimen = new ArrayList();
+	*/
+	/*	for (int i = 0; i < listOfSpecimens.size(); i++)
+		{
+			Specimen tempSpecimen = (Specimen) listOfSpecimens.get(i);
+			newListOfSpecimen.add(tempSpecimen);
+			List listOfDerivedSpecimen = (ArrayList) specimenMap.get(tempSpecimen);
+			// TODO
+			if (listOfDerivedSpecimen != null)
+			{
+				for (int j = 0; j < listOfDerivedSpecimen.size(); j++)
+				{
+					Specimen tempDerivedSpecimen = (Specimen) listOfDerivedSpecimen.get(j);
+					newListOfSpecimen.add(tempDerivedSpecimen);
+				}
+			}
+		}
+*/
+	/*
 		Iterator iterator = containerMap.keySet().iterator();
 		int i = 0;
 		while (iterator.hasNext())
@@ -1528,11 +1568,11 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			if (tempMap.size() > 0)
 			{
 				boolean result = false;
-				for (; i < listOfSpecimens.size(); i++)
+				for (; i < newListOfSpecimen.size(); i++)
 				{
-					Specimen tempSpecimen = (Specimen) listOfSpecimens.get(i);
+					Specimen tempSpecimen = (Specimen) newListOfSpecimen.get(i);
 					result = allocatePositionToSingleSpecimen(specimenMap, tempSpecimen, tempMap, nvb);
-					if (result == false)
+					if (result == false) // container is exhausted
 						break;
 				}
 				if (result == true)
@@ -1540,15 +1580,16 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			}
 		}
 	}
-
+	*/
 	/**
 	 *  This function gets the default position specimen,the position should not be used by any other specimen in specimenMap
+	 *  This is required because we might have given the same position to another specimen.
 	 * @param specimenMap
 	 * @param tempSpecimen
 	 * @param tempMap
 	 * @param nvb
 	 * @return
-	 */
+	
 	private boolean allocatePositionToSingleSpecimen(Map specimenMap, Specimen tempSpecimen, Map tempMap, NameValueBean nvbForContainer)
 	{
 		Iterator itr = tempMap.keySet().iterator();
@@ -1578,7 +1619,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		}
 		return false;
 	}
-
+ */
 	/**
 	 * This method checks whether the given parameters match with parameters in specimen Map
 	 * @param containerId
@@ -1586,10 +1627,11 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @param pos2
 	 * @param specimenMap
 	 * @return
-	 */
+
 	private boolean checkPositionValidForSpecimen(String containerId, String xpos, String ypos, Map specimenMap)
 	{
 
+         // TODO can be optimised by passing list		
 		Iterator specimenIterator = specimenMap.keySet().iterator();
 		while (specimenIterator.hasNext())
 		{
@@ -1597,6 +1639,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			boolean matchFound = checkMatchingPosition(containerId, xpos, ypos, specimen);
 			if (matchFound == true)
 				return false;
+
 			List derivedSpecimens = (List) specimenMap.get(specimen);
 
 			if (derivedSpecimens != null)
@@ -1613,7 +1656,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		}
 		return true;
 	}
-
+	 */
 	/**
 	 * This method checks whether the given parameters match with parameters of the specimen 
 	 * @param containerId
@@ -1621,7 +1664,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @param pos2
 	 * @param specimen
 	 * @return
-	 */
+
 	private boolean checkMatchingPosition(String containerId, String xpos, String ypos, Specimen specimen)
 	{
 		String storageContainerId = "";
@@ -1636,6 +1679,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			return true;
 		return false;
 	}
+	 */
 
 	/**
 	 * 

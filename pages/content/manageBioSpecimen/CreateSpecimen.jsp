@@ -415,7 +415,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="ForwardTo"/>
 						<html:hidden property="forwardTo" value="eventParameters"/>
-											
+						<html:hidden property="multipleSpecimen" value="<%=multipleSpecimen%>"/>
 						<td></td>
 					</td>
 				 </tr>
@@ -607,7 +607,10 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				    </td>
 				 </tr>
 				
-				
+				<% // storage location should not be shown in case of multiple specimen
+				   if(!multipleSpecimen.equals("1"))
+				   {
+				%>
 				
 				<tr>
 				 	<td class="formRequiredNotice" width="5">*</td>
@@ -705,6 +708,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				<%-- n-combo-box end --%>
 				
 				 </tr>
+				 <%}%>
 					<logic:equal name="exceedsMaxLimit" value="true">
 					<tr>
 						<td>
