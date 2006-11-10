@@ -493,7 +493,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int SPECIMEN_ARRAY_ALIQUOT_FORM_ID = 51;
 	public static final int ASSIGN_PRIVILEGE_FORM_ID = 52;
 	public static final int CDE_FORM_ID = 53;
-	
+	public static final int MULTIPLE_SPECIMEN_STOGAGE_LOCATION_FORM_ID = 54;
 	//Misc
 	public static final String SEPARATOR = " : ";
 	
@@ -1351,7 +1351,26 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//MultipleSpecimen Constants
 	public static final String MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE="multipleSpecimen.ColumnsPerPage";
+	public static final String MULTIPLE_SPECIMEN_STORAGE_LOCATION_ACTION="MultipleSpecimenStorageLocationAdd.do";
+	public static final String MULTIPLE_SPECIMEN_STORAGE_LOCATION_AVAILABLE_MAP="locationMap";
+	public static final String MULTIPLE_SPECIMEN_STORAGE_LOCATION_SPECIMEN_MAP= "specimenMap";
+	public static final String MULTIPLE_SPECIMEN_STORAGE_LOCATION_KEY_SEPARATOR = "$";
+	public static final String PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION = "formSubmitted";
+	public static final String MULTIPLE_SPECIMEN_SUBMIT_SUCCESSFUL = "submitSuccessful";
+	public static final String MULTIPLE_SPECIMEN_SPECIMEN_ORDER_LIST= "specimenOrderList";
 	
 	public static final String NO_OF_RECORDS_PER_PAGE="resultView.noOfRecordsPerPage";
 	public static final int[] RESULT_PERPAGE_OPTIONS = {10,50,100,1000,5000};
+	
+	/**
+	 * Specify the SPECIMEN_MAP_KEY field ) used in multiple specimen applet action.  
+	 */
+	public static final String SPECIMEN_MAP_KEY = "Specimen_derived_map_key";
+	
+	/**
+	 * Specify the SPECIMEN_MAP_KEY field ) used in multiple specimen applet action.  
+	 */
+	public static final String CONTAINER_MAP_KEY = "container_map_key";
+	
+	
 }
