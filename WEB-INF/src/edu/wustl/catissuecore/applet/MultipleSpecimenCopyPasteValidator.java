@@ -113,8 +113,7 @@ public class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteValidator
 					if (rowToBePasted == AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO || rowToBePasted == AppletConstants.SPECIMEN_PARENT_ROW_NO
 							|| rowToBePasted == AppletConstants.SPECIMEN_LABEL_ROW_NO || rowToBePasted == AppletConstants.SPECIMEN_BARCODE_ROW_NO
 							|| rowToBePasted == AppletConstants.SPECIMEN_QUANTITY_ROW_NO
-							|| rowToBePasted == AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO
-							|| rowToBePasted == AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO)
+							|| rowToBePasted == AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO)
 					{
 						continue;
 					}

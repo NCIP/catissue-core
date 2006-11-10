@@ -146,6 +146,7 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 		{
 			int copiedColumn = ((Integer) selectedCopiedCols.get(j)).intValue();
 			int pastedColumn = ((Integer) selectedPastedCols.get(j)).intValue();
+			System.out.println("\n\npastedColumn : "+ pastedColumn);
 			for (int i = 0; i < selectedCopiedRows.size(); i++)
 			{
 				int copiedRow = ((Integer) selectedCopiedRows.get(i)).intValue();

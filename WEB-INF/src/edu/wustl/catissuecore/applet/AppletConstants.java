@@ -126,12 +126,14 @@ public interface AppletConstants
 	short SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO = 8;
 	short SPECIMEN_QUANTITY_ROW_NO = 9;
 	short SPECIMEN_CONCENTRATION_ROW_NO = 10;
-	short SPECIMEN_STORAGE_LOCATION_ROW_NO = 11;
-	short SPECIMEN_COMMENTS_ROW_NO = 12;
-	short SPECIMEN_EVENTS_ROW_NO = 13;
-	short SPECIMEN_EXTERNAL_IDENTIFIERS_ROW_NO = 14;
-	short SPECIMEN_BIOHAZARDS_ROW_NO = 15;
-	short SPECIMEN_DERIVE_ROW_NO = 16;
+	short SPECIMEN_COMMENTS_ROW_NO = 11;
+	short SPECIMEN_EVENTS_ROW_NO = 12;
+	short SPECIMEN_EXTERNAL_IDENTIFIERS_ROW_NO = 13;
+	short SPECIMEN_BIOHAZARDS_ROW_NO = 14;
+	short SPECIMEN_DERIVE_ROW_NO = 15;
+
+//	Mandar: 06Nov06: location removed since auto allocation will take place.
+//	short SPECIMEN_STORAGE_LOCATION_ROW_NO = 11;
 	
 	String  NO_OF_SPECIMENS = "NO_OF_SPECIMENS";
 	// this is key to put specimen map in session.

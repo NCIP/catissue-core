@@ -9,7 +9,10 @@ package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ItemEvent;
 
+import javax.swing.JRadioButton;
 import javax.swing.JTable;
+
+import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
  * @author mandar_deshmukh
@@ -36,5 +39,10 @@ public class ParentSpecimenItemHandler extends BaseItemHandler {
 	{
 		super.handleAction(event);
 		System.out.println("In ParentSpecimenItemHandler");
+		if(table.getSelectedColumn() != -1)
+		{
+			CommonAppletUtil.getMultipleSpecimenTableModel(table).setCollectionGroupRadioButtonValueAt(table.getSelectedColumn(),false); 
+		}
+
 	}
 }

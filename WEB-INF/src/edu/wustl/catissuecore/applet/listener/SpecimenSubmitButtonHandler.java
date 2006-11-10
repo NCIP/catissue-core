@@ -49,7 +49,9 @@ public class SpecimenSubmitButtonHandler extends ButtonHandler
 			System.out.println(" Value : "+ value);
 		}
 		System.out.println("\n ***********************************\n"); 
-		
+		//===========================
+		System.out.println("model.getCollectionGroupRadioButtonMap() : " + model.getCollectionGroupRadioButtonMap()); 
+		//===========================
 		// --------------
 		try
 		{

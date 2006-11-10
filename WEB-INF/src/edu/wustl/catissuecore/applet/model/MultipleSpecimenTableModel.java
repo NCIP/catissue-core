@@ -32,14 +32,14 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	String[] specimenAttribute = {"SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
 			"SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "Quantity_value",
-			"concentrationInMicrogramPerMicroliter", "StorageContainer_temp", "comments", "specimenEventCollection", "externalIdentifierCollection",
+			"concentrationInMicrogramPerMicroliter", "comments", "specimenEventCollection", "externalIdentifierCollection",
 			"biohazardCollection", "derive"};
 
 	/**
 	 * Row headers for the attributes. This corrosponds to display value for each of the  specimenAttribute in that order.
 	 */
 	private static final String[] rowHeaders = {"* Specimen Group Name", "* Parent", "* Label", "Barcode", "* Class", "* Type", "* Tissue Site",
-			"* Tissue Side", "* Pathological Status", "* Quantity", "Concentration", "Storage Position", "Comments", "* Events",
+			"* Tissue Side", "* Pathological Status", "* Quantity", "Concentration", "Comments", "* Events",
 			"External Identifier(s)", "Biohazards", "Derive"};
 
 	/**
@@ -86,6 +86,8 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		for (int i = 1; i <= initialColumnCount; i++)
 		{
 			putIdInMap(i);
+			//to set radio button keys
+			setActualColumnCollectionGroupRadioButtonValue(i);
 		}
 		//Setting the specimen Collection group name if add multiple specimen came form add specimen collection group name
 		if (specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME) != null)
@@ -432,11 +434,12 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		specimenMap.put(getMapTempKey(Integer.parseInt(specimenMapKey)), storageInfo);
 
 		//setValueAt(storageInfo, AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO, colNo);
-		System.out.println("Setting StorageInfo at : " + getKey(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO, Integer.parseInt(specimenMapKey)));
-		setValueAt(storageInfo, AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO, Integer.parseInt(specimenMapKey));
-		//	setValueAt(storageInfo,10,10);
-
-		System.out.println("setting " + storageInfo + "to " + AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO + "  " + colNo);
+		
+//		System.out.println("Setting StorageInfo at : " + getKey(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO, Integer.parseInt(specimenMapKey)));
+//		setValueAt(storageInfo, AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO, Integer.parseInt(specimenMapKey));
+//		//	setValueAt(storageInfo,10,10);
+//
+//		System.out.println("setting " + storageInfo + "to " + AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO + "  " + colNo);
 		//		System.out.println("Getting storageInfo from : "+  getValueAt(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO , colNo));
 		//		System.out.println("-------------------------------------------------------\n");
 		//			showMapData();
@@ -487,6 +490,8 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		columnCount++;
 		putIdInMap(columnCount);
 		setCollectionGroupInModel(columnCount);
+		//to set collection group radio button value
+		setActualColumnCollectionGroupRadioButtonValue(columnCount);
 	}
 
 	/**
@@ -610,4 +615,54 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		}
 	}
 
+	//-------------- For ParentSpecimen - CollectionGroup identification start
+	HashMap collectionGroupRadioButtonMap = new HashMap();
+	
+	/**
+	 * This method sets the state of collectionGroup radio button in the map. 
+	 * @param column Column number of radio button
+	 * @param value Radio button state of that column.
+	 */
+	public void setCollectionGroupRadioButtonValueAt(int column,boolean value)
+	{
+		int actualColumn = getActualColumnNo(column )+1;
+		String key = "Specimen:"+actualColumn+"_collectionGroupRadioSelected";
+		collectionGroupRadioButtonMap.put(key, new Boolean(value));
+	}
+	/**
+	 * 
+	 * @param column Column number to fetch the collection group radio button state.
+	 * @return Radio Button state of collection group for the specified column.
+	 */
+	public boolean getCollectionGroupRadioButtonValueAt(int column)
+	{
+		int actualColumn = getActualColumnNo(column )+1;
+		String key = "Specimen:"+actualColumn+"_collectionGroupRadioSelected";
+		return ((Boolean)collectionGroupRadioButtonMap.get(key)).booleanValue() ;
+	}
+
+	private void setActualColumnCollectionGroupRadioButtonValue(int column)
+	{
+		String key = "Specimen:"+column+"_collectionGroupRadioSelected";
+		collectionGroupRadioButtonMap.put(key, new Boolean(true));
+	}
+
+	
+	/**
+	 * @return Returns the collectionGroupRadioButtonMap.
+	 */
+	public HashMap getCollectionGroupRadioButtonMap()
+	{
+		return collectionGroupRadioButtonMap;
+	}
+	/**
+	 * @param collectionGroupRadioButtonMap The collectionGroupRadioButtonMap to set.
+	 */
+	public void setCollectionGroupRadioButtonMap(HashMap collectionGroupRadioButtonMap)
+	{
+		this.collectionGroupRadioButtonMap = collectionGroupRadioButtonMap;
+	}
+	
+	//-------------- For ParentSpecimen - CollectionGroup identification end
+	
 }

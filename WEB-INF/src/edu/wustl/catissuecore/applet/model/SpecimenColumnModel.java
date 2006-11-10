@@ -113,9 +113,10 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	JTextField concentration;
 
 	//For Storage Location
-	JButton mapButton;
-	JTextField location;
-	JPanel storageLocationPanel;
+//	Mandar: 06Nov06: location removed since auto allocation will take place.
+//	JButton mapButton;
+//	JTextField location;
+//	JPanel storageLocationPanel;
 
 	//For Comments
 	JButton comments;
@@ -314,9 +315,15 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				comp = concentration;
 				break;
 			//For Storage Location
+				/*
+				 * Code commented as storage location will be auto allocated.
+				 * 
 			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
 				comp = storageLocationPanel;
 				break;
+				
+				 */
+
 			//For Comments
 			case AppletConstants.SPECIMEN_COMMENTS_ROW_NO :
 				comp = commentsPanel;
@@ -462,18 +469,20 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		concentration = new JTextField(10);
 
 		//For Storage Location
-		mapButton = new JButton(AppletConstants.MULTIPLE_SPECIMEN_MAP);
-		location = new JTextField(13);
-		location.setPreferredSize(new Dimension(120, (int) specimenCollectionGroup
-				.getPreferredSize().getHeight()));
-		location.setEditable(false);
-		//Mandar : 30Oct06 : Map button enabled by default.
-		//		mapButton.setEnabled(false); 
-		storageLocationPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
-
-		storageLocationPanel.add(location);
-		storageLocationPanel.add(mapButton);
-		//storageLocationPanel.setF 
+// Mandar : 06Nov06 : 	Location removed since auto allocation will take place		
+//		mapButton = new JButton(AppletConstants.MULTIPLE_SPECIMEN_MAP);
+//		location = new JTextField(13);
+//		location.setPreferredSize(new Dimension(120, (int) specimenCollectionGroup
+//				.getPreferredSize().getHeight()));
+//		location.setEditable(false);
+//	Mandar: 06Nov06: location removed since auto allocation will take place.
+//		//Mandar : 30Oct06 : Map button enabled by default.
+//		//		mapButton.setEnabled(false); 
+//		storageLocationPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
+//
+//		storageLocationPanel.add(location);
+//		storageLocationPanel.add(mapButton);
+//		//storageLocationPanel.setF 
 
 		//For Comments
 		comments = new JButton(AppletConstants.MULTIPLE_SPECIMEN_COMMENTS);
@@ -633,27 +642,28 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		concentration.addFocusListener(baseFocusHandler);
 
 		//For Storage Location
-		mapButton.addActionListener(mapButtonHandler);
-		storageLocationPanel.addFocusListener(new FocusAdapter()
-		{
-
-			public void focusGained(FocusEvent fe)
-			{
-				System.out.println("Inside focusGained by Location Panel");
-				if (mapButton.isEnabled())
-				{
-					//					20Oct06<*>				FocusListener focusListeners[] = mapButton.getFocusListeners();
-					FocusListener focusListeners[] = (FocusListener[]) mapButton
-							.getListeners(FocusAdapter.class);
-					for (int i = 0; i < focusListeners.length; i++)
-					{
-						FocusListener listener = focusListeners[i];
-						listener.focusGained(new FocusEvent(mapButton, FocusEvent.FOCUS_GAINED));
-					}
-					System.out.println("Focus set on Map Button : ");
-				}
-			}
-		});
+//		Mandar: 06Nov06: location removed since auto allocation will take place.		
+//		mapButton.addActionListener(mapButtonHandler);
+//		storageLocationPanel.addFocusListener(new FocusAdapter()
+//		{
+//
+//			public void focusGained(FocusEvent fe)
+//			{
+//				System.out.println("Inside focusGained by Location Panel");
+//				if (mapButton.isEnabled())
+//				{
+//					//					20Oct06<*>				FocusListener focusListeners[] = mapButton.getFocusListeners();
+//					FocusListener focusListeners[] = (FocusListener[]) mapButton
+//							.getListeners(FocusAdapter.class);
+//					for (int i = 0; i < focusListeners.length; i++)
+//					{
+//						FocusListener listener = focusListeners[i];
+//						listener.focusGained(new FocusEvent(mapButton, FocusEvent.FOCUS_GAINED));
+//					}
+//					System.out.println("Focus set on Map Button : ");
+//				}
+//			}
+//		});
 
 		//For Comments
 		comments.addActionListener(buttonHandler);
@@ -765,21 +775,22 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		this.label.setText(label);
 	}
 
+//	Mandar: 06Nov06: location removed since auto allocation will take place.
 	/**
 	 * @return Returns the location.
 	 */
-	public String getLocation()
-	{
-		return location.getText();
-	}
+//	public String getLocation()
+//	{
+//		return location.getText();
+//	}
 
 	/**
 	 * @param location The location to set.
 	 */
-	public void setLocation(String location)
-	{
-		this.location.setText(location);
-	}
+//	public void setLocation(String location)
+//	{
+//		this.location.setText(location);
+//	}
 
 	/**
 	 * @return Returns the parentSpecimen.
@@ -974,23 +985,30 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		//		Specimen Collection Group
 		value = (String) model.getValueAt(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO,
 				columnIndex);
-		if (!isNull(value))
+		if(model.getCollectionGroupRadioButtonValueAt(columnIndex ))
 		{
 			setRbspecimenGroup(true);
-			setSpecimenCollectionGroup(value);
-			this.specimenCollectionGroup.setEnabled(true);
-			//			Mandar: 30Oct06: commented as buttons are enabled by default.
-			//			updateButtons();
+			if (!isNull(value))
+			{
+				setSpecimenCollectionGroup(value);
+				this.specimenCollectionGroup.setEnabled(true);
+				//			Mandar: 30Oct06: commented as buttons are enabled by default.
+				//			updateButtons();
+			}
+			
 		}
-
+		else
+		{
+			setRbparentSpecimen(true);
+		}
 		//Parent Specimen 
-//		value = (String) model.getValueAt(AppletConstants.SPECIMEN_PARENT_ROW_NO, columnIndex);
-//		if (!isNull(value))
-//		{
-//			setRbparentSpecimen(true);
-//			setParentSpecimen(value);
-//			this.parentSpecimen.setEnabled(true);
-//		}
+		value = (String) model.getValueAt(AppletConstants.SPECIMEN_PARENT_ROW_NO, columnIndex);
+		if (!isNull(value))
+		{
+			
+			setParentSpecimen(value);
+			this.parentSpecimen.setEnabled(true);
+		}
 
 		// Label
 		value = (String) model.getValueAt(AppletConstants.SPECIMEN_LABEL_ROW_NO, columnIndex);
@@ -1067,21 +1085,22 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		}
 
 		//For Storage Location
+//		Mandar: 06Nov06: location removed since auto allocation will take place.
 		//		System.out.println("Storage location key is " + model.getKey(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO ,columnIndex ));
 		//		value = (String) model.getValueAt(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO ,columnIndex);
 		//		System.out.println("Storage location value is " + value);
-		String key = model.getMapTempKey(columnIndex);
-		System.out.println("Storage location key : " + key);
-		if (!isNull(key))
-		{
-			value = model.getMapTempValue(key);
-			System.out.println("Storage location key : " + key + "value is " + value
-					+ " for Column : " + columnIndex);
-			if ((value.trim().length() > 0))
-			{
-				setLocation(value);
-			}
-		}
+//		String key = model.getMapTempKey(columnIndex);
+//		System.out.println("Storage location key : " + key);
+//		if (!isNull(key))
+//		{
+//			value = model.getMapTempValue(key);
+//			System.out.println("Storage location key : " + key + "value is " + value
+//					+ " for Column : " + columnIndex);
+//			if ((value.trim().length() > 0))
+//			{
+//				setLocation(value);
+//			}
+//		}
 		// ----------------
 	}
 
@@ -1129,10 +1148,11 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		quantity.setNextFocusableComponent(concentration);
 
 		// Concentration
-		concentration.setNextFocusableComponent(mapButton);
+		concentration.setNextFocusableComponent(comments);
 
 		//For Storage Location
-		mapButton.setNextFocusableComponent(comments);
+//		Mandar: 06Nov06: location removed since auto allocation will take place.
+//		mapButton.setNextFocusableComponent(comments);
 
 		//For Comments
 		comments.setNextFocusableComponent(eventsButton);
@@ -1153,7 +1173,8 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	public void setLocationFromJS(String storageValue)
 	{
 		System.out.println("In setLocationFromJS : Column No : " + columnIndex);
-		setLocation(storageValue);
+//		Mandar: 06Nov06: location removed since auto allocation will take place.
+//		setLocation(storageValue);
 
 	}
 
@@ -1213,9 +1234,10 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				value = concentration.getText();
 				break;
 			//For Storage Location
-			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
-				value = location.getText();
-				break;
+//				Mandar: 06Nov06: location removed since auto allocation will take place.		
+//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
+//				value = location.getText();
+//				break;
 			default :
 				value = "";
 		}
@@ -1323,10 +1345,11 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				comp = concentration;
 				break;
 			//For Storage Location
-			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
-				location.setText(value);
-				comp = location;
-				break;
+//				Mandar: 06Nov06: location removed since auto allocation will take place.
+//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
+//				location.setText(value);
+//				comp = location;
+//				break;
 		}
 		if (comp != null)
 			refreshComponent(comp);
@@ -1387,9 +1410,10 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				comp = concentration;
 				break;
 			//For Storage Location
-			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
-				comp = location;
-				break;
+//				Mandar: 06Nov06: location removed since auto allocation will take place.
+//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
+//				comp = location;
+//				break;
 		}
 		if (comp != null)
 			refreshComponent(comp);
@@ -1450,9 +1474,10 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 			case AppletConstants.SPECIMEN_PARENT_ROW_NO :
 				result = rbparentSpecimen.isSelected();
 				break;
-			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
-				result = location.isEnabled();
-				break;
+//				Mandar: 06Nov06: location removed since auto allocation will take place.
+//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
+//				result = location.isEnabled();
+//				break;
 			default :
 				result = true;
 		}

@@ -253,6 +253,15 @@ public class NewMultipleSpecimenAction extends DispatchAction
 			throws Exception
 	{
 		int rowSelected = -1;
+		//mandar: 06Nov06: multiplespecimen call  ----------- start
+		if(request.getParameter("isMultipleSpecimenCall")!= null)
+		{
+			String isMultipleSpecimenCall = request.getParameter("isMultipleSpecimenCall");
+			request.setAttribute("isMultipleSpecimenCall",isMultipleSpecimenCall ); 
+		}
+		//mandar: 06Nov06: multiplespecimen call  ----------- end
+		
+		
 		if (request.getParameter("rowSelected") != null && !request.getParameter("rowSelected").equals("null"))
 		{
 			rowSelected = Integer.parseInt(request.getParameter("rowSelected"));

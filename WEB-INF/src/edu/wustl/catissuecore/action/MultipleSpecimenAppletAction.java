@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,10 +28,13 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CreateSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
@@ -44,8 +48,10 @@ import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This action contains methods that are called by MultipleSpecimenApplet
@@ -154,18 +160,18 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		{
 			Map specimenMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 
-			System.out.println("Submitting the specimen : " + specimenMap);
+			Logger.out.debug("Submitting the specimen : " + specimenMap);
 
 			preprocessSpecimanMap(specimenMap);
-			System.out.println("After preprocessSpecimanMap");
+			Logger.out.debug("After preprocessSpecimanMap");
 			Map fixedSpecimenMap = appendClassValue(specimenMap);
-			System.out.println("After fixedSpecimenMap");
+			Logger.out.debug("After fixedSpecimenMap");
 			Map multipleSpecimenSessionMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
 
 			processAssociatedObjectsMap(fixedSpecimenMap, multipleSpecimenSessionMap);
-			System.out.println("After processAssociatedObjectsMap");
+			Logger.out.debug("After processAssociatedObjectsMap");
 			MapDataParser specimenParser = new MapDataParser("edu.wustl.catissuecore.domain");
-			System.out.println("After specimenParser");
+			Logger.out.debug("After specimenParser");
 			Collection specimenCollection = specimenParser.generateData(fixedSpecimenMap);
 
 			//Read session form bean map to associate derived specimens
@@ -177,8 +183,27 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			Map finalMap = processFormBeansMap(specimenCollection, multipleSpecimenFormBeanMap);
 
 			//call bizLogic to save specimenCollection. It will first validate all the specimens.
-			insertSpecimens(request, finalMap);
-
+			//changes as per ashwin sent files ----
+			// start commented since don't require to insert into database & using  validations which have been put into util -- Ashwin
+			//insertSpecimens(request, finalMap);
+			
+			//HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+			//SessionDataBean sessionBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+			IBizLogic bizLogic = null;
+/*			try
+			{
+*/				bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+/*			}
+			catch (BizLogicException e)
+			{
+				e.printStackTrace();
+				throw new DAOException(e);
+			}
+*/			//dao.openSession(sessionBean);
+			MultipleSpecimenValidationUtil.validateMultipleSpecimen(finalMap,bizLogic,Constants.ADD);
+			//dao.commit();
+			// end
+			// ------------------------------------
 			//if success return to report page		
 			request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, specimenCollection);
 			target = Constants.SUCCESS;
@@ -186,6 +211,11 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			//clean up activity.
 			multipleSpecimenSessionMap = new HashMap();
 			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, new HashMap());
+			// Populate storage positions -- Ashwin
+			Map sessionContainerMap = populateStorageLocations(bizLogic,finalMap);
+			addMapToSession(request,finalMap,Constants.SPECIMEN_MAP_KEY);
+			addMapToSession(request,sessionContainerMap,Constants.CONTAINER_MAP_KEY);
+			// End
 			//request.getSession().removeAttribute(Constants.SPECIMEN_COLL_GP_NAME );  
 		}
 		catch (Exception e)
@@ -200,7 +230,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		//send response to the applet.
 		resultMap.put(Constants.MULTIPLE_SPECIMEN_RESULT, target);
 		writeMapToResponse(response, resultMap);
-		System.out.println("In MultipleSpecimenAppletAction :- resultMap : " + resultMap);
+		Logger.out.debug("In MultipleSpecimenAppletAction :- resultMap : " + resultMap);
 		return null;
 	}
 
@@ -427,15 +457,10 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		{
 
 			//			Specimen Collection Group
-
 			String parentKey = getKey(AppletConstants.SPECIMEN_PARENT_ROW_NO, i);
 			validateField(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO, i, specimenMap, "Specimen Group Name", 2);
-		
-			// ------------------------	
 
 			//			Parent Specimen
-		
-		
 		    specimenMap.remove(parentKey);
 			
 			//			Label
@@ -700,4 +725,266 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 	}
 	// -------------------------------------------------------- end
+	
+	
+	// --- Start populate storage positions -- Ashwin
+	
+	/**
+	 * This method populates SCG Id and storage locations for Multiple Specimen
+	 * @param dao
+	 * @param specimenMap
+	 * @throws DAOException
+	 */
+	private Map populateStorageLocations(IBizLogic bizLogic, Map specimenMap) throws DAOException
+	{
+		final String saperator = "$";
+		Map tempSpecimenMap = new HashMap();
+		Map sessionContainerMap = new HashMap();
+		Iterator specimenIterator = specimenMap.keySet().iterator();
+		while (specimenIterator.hasNext())
+		{
+			Specimen specimen = (Specimen) specimenIterator.next();
+			//validate single specimen
+			if (specimen.getSpecimenCollectionGroup() != null)
+			{
+				//TODO remove this code & get CPID from specimen
+				/*
+				String[] selectColumnName = {"collectionProtocolRegistration.id"};
+				String[] whereColumnName = {Constants.NAME};
+				String[] whereColumnCondition = {"="};
+				String[] whereColumnValue = {specimen.getSpecimenCollectionGroup().getName()};
+				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName, whereColumnCondition,
+						whereColumnValue, null);
+				// TODO saperate calls for SCG - ID and cpid
+				// SCG - ID will be needed before populateStorageLocations
+				
+				// TODO test
+				
+				if (!spCollGroupList.isEmpty())
+				{
+				*/
+					//Object idList[] = (Object[]) spCollGroupList.get(0); // Move up + here
+					long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
+					//Long scgId = (Long) idList[0]; // Move up 
+					//long cpId = ((Long) idList[0]).longValue();//here
+					//specimen.getSpecimenCollectionGroup().setId(scgId); // Move up
+						List tempListOfSpecimen = (ArrayList) tempSpecimenMap.get(cpId + saperator + specimen.getClassName());
+						if (tempListOfSpecimen == null)
+						{
+							tempListOfSpecimen = new ArrayList();
+						}
+						int i = 0;
+						for (; i < tempListOfSpecimen.size(); i++)
+						{
+							Specimen sp = (Specimen) tempListOfSpecimen.get(i);
+							
+							if ((sp.getId() != null) && (specimen.getId().longValue() < sp.getId().longValue()))
+								break;
+						}
+						tempListOfSpecimen.add(i, specimen);
+						tempSpecimenMap.put(cpId + saperator + specimen.getClassName(), tempListOfSpecimen);
+						Logger.out.debug(" cpId + saperator + specimen.getClassName() " + cpId + saperator + specimen.getClassName());
+						
+						List listOfDerivedSpecimen = (ArrayList) specimenMap.get(specimen);
+							// TODO
+							if (listOfDerivedSpecimen != null)
+							{
+								for (int j = 0; j < listOfDerivedSpecimen.size(); j++)
+								{
+									Specimen tempDerivedSpecimen = (Specimen) listOfDerivedSpecimen.get(j);
+									String derivedKey = cpId + saperator + tempDerivedSpecimen.getClassName();
+									List listOfSpecimen = (ArrayList) tempSpecimenMap.get(derivedKey);
+									if (listOfSpecimen == null)
+									{
+										listOfSpecimen = new ArrayList();
+									}
+									listOfSpecimen.add(tempDerivedSpecimen);
+									tempSpecimenMap.put(derivedKey, listOfSpecimen);
+								}
+							}
+				// } if statement end
+			}
+		}
+
+		
+		Iterator keyIterator = tempSpecimenMap.keySet().iterator();
+		while (keyIterator.hasNext())
+		{
+			String key = (String) keyIterator.next();
+			Logger.out.debug(" ---- Key --- " + key);
+			StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+					Constants.STORAGE_CONTAINER_FORM_ID);
+			String split[] = key.split("[$]");
+			// TODO when moved to acion pass true
+			TreeMap containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen((Long.parseLong(split[0])), split[1], 0, "", true);
+			List listOfSpecimens = (ArrayList) tempSpecimenMap.get(key);
+			allocatePositionToSpecimensList(specimenMap, listOfSpecimens, containerMap);
+			// Added by Ashwin for session container map
+			sessionContainerMap.put(key,containerMap);
+		}
+		return sessionContainerMap;
+	}
+
+	/**
+	 * This function gets the default positions for list of specimens
+	 * @param specimenMap
+	 * @param listOfSpecimens
+	 * @param containerMap
+	 */
+	private void allocatePositionToSpecimensList(Map specimenMap, List listOfSpecimens, Map containerMap)
+	{
+		// commented by Ashwin -- As derived has been moved up
+		//List newListOfSpecimen = new ArrayList();
+	/*	for (int i = 0; i < listOfSpecimens.size(); i++)
+		{
+			Specimen tempSpecimen = (Specimen) listOfSpecimens.get(i);
+			newListOfSpecimen.add(tempSpecimen);
+			List listOfDerivedSpecimen = (ArrayList) specimenMap.get(tempSpecimen);
+			// TODO
+			if (listOfDerivedSpecimen != null)
+			{
+				for (int j = 0; j < listOfDerivedSpecimen.size(); j++)
+				{
+					Specimen tempDerivedSpecimen = (Specimen) listOfDerivedSpecimen.get(j);
+					newListOfSpecimen.add(tempDerivedSpecimen);
+				}
+			}
+		}
+	*/
+		Iterator iterator = containerMap.keySet().iterator();
+		int i = 0;
+		while (iterator.hasNext())
+		{
+			NameValueBean nvb = (NameValueBean) iterator.next();
+			Map tempMap = (Map) containerMap.get(nvb);
+			if (tempMap.size() > 0)
+			{
+				boolean result = false;
+				// commented by Ashwin
+				//for (; i < newListOfSpecimen.size(); i++)
+				for (; i < listOfSpecimens.size(); i++)
+				{
+//					 commented by Ashwin
+					//Specimen tempSpecimen = (Specimen) newListOfSpecimen.get(i);
+					Specimen tempSpecimen = (Specimen) listOfSpecimens.get(i);
+					result = allocatePositionToSingleSpecimen(specimenMap, tempSpecimen, tempMap, nvb);
+					if (result == false) // container is exhausted
+						break;
+				}
+				if (result == true)
+					break;
+			}
+		}
+	}
+	
+	/**
+	 *  This function gets the default position specimen,the position should not be used by any other specimen in specimenMap
+	 *  This is required because we might have given the same position to another specimen.
+	 * @param specimenMap
+	 * @param tempSpecimen
+	 * @param tempMap
+	 * @param nvb
+	 * @return
+	 */
+	private boolean allocatePositionToSingleSpecimen(Map specimenMap, Specimen tempSpecimen, Map tempMap, NameValueBean nvbForContainer)
+	{
+		Iterator itr = tempMap.keySet().iterator();
+		String containerId = nvbForContainer.getValue(), xPos, yPos;
+		while (itr.hasNext())
+		{
+			NameValueBean nvb = (NameValueBean) itr.next();
+			xPos = nvb.getValue();
+	
+			List list = (List) tempMap.get(nvb);
+			for (int i = 0; i < list.size(); i++)
+			{
+				nvb = (NameValueBean) list.get(i);
+				yPos = nvb.getValue();
+				boolean result = checkPositionValidForSpecimen(containerId, xPos, yPos, specimenMap);
+				if (result == true)
+				{
+					StorageContainer tempStorageContainer = new StorageContainer();
+					tempStorageContainer.setId(new Long(Long.parseLong(containerId)));
+					tempSpecimen.setPositionDimensionOne(new Integer(Integer.parseInt(xPos)));
+					tempSpecimen.setPositionDimensionTwo(new Integer(Integer.parseInt(yPos)));
+					tempSpecimen.setStorageContainer(tempStorageContainer);
+					return true;
+				}
+			}
+	
+		}
+		return false;
+	}
+	
+	/**
+	 * This method checks whether the given parameters match with parameters in specimen Map
+	 * @param containerId
+	 * @param pos
+	 * @param pos2
+	 * @param specimenMap
+	 * @return
+	 */
+	private boolean checkPositionValidForSpecimen(String containerId, String xpos, String ypos, Map specimenMap)
+	{
+	
+	     // TODO can be optimised by passing list		
+		Iterator specimenIterator = specimenMap.keySet().iterator();
+		while (specimenIterator.hasNext())
+		{
+			Specimen specimen = (Specimen) specimenIterator.next();
+			boolean matchFound = checkMatchingPosition(containerId, xpos, ypos, specimen);
+			if (matchFound == true)
+				return false;
+	
+			List derivedSpecimens = (List) specimenMap.get(specimen);
+	
+			if (derivedSpecimens != null)
+			{
+				for (int i = 0; i < derivedSpecimens.size(); i++)
+				{
+	
+					Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
+					matchFound = checkMatchingPosition(containerId, xpos, ypos, derivedSpecimen);
+					if (matchFound == true)
+						return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * This method checks whether the given parameters match with parameters of the specimen 
+	 * @param containerId
+	 * @param pos
+	 * @param pos2
+	 * @param specimen
+	 * @return
+	 */
+	private boolean checkMatchingPosition(String containerId, String xpos, String ypos, Specimen specimen)
+	{
+		String storageContainerId = "";
+		if (specimen.getStorageContainer() != null && specimen.getStorageContainer().getId() != null)
+			storageContainerId += specimen.getStorageContainer().getId();
+		else
+			return false;
+	
+		String pos1 = specimen.getPositionDimensionOne() + "";
+		String pos2 = specimen.getPositionDimensionTwo() + "";
+		if (storageContainerId.equals(containerId) && xpos.equals(pos1) && ypos.equals(pos2))
+			return true;
+		return false;
+	}
+	
+	// --- End -- Ashwin
+	
+	/**
+	 * Add object to session.
+	 * @param request request
+	 * @param specimenMap specimen map
+	 */
+	private void addMapToSession(HttpServletRequest request,Map specimenMap,String key)
+	{
+		request.getSession().setAttribute(key,specimenMap);
+	}
 }
