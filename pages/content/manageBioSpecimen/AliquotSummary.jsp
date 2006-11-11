@@ -219,24 +219,39 @@
 	</table>
 </td>
 </tr>
-
-<tr>
-	<td align="right" class="formFieldNoBorders" nowrap>
-		<html:hidden property="submittedFor" value="ForwardTo"/>
-		<html:hidden property="forwardTo" value="distribution"/>
-		<html:hidden property="noOfAliquots"/>
-		<%
-			String formName=Constants.ALIQUOT_SUMMARY_ACTION;
-			String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";			
-		%>		
-		<html:button
-			styleClass="actionButton" property="submitAndDistributeButton"
-			title="<%=Constants.SPECIMEN_BUTTON_TIPS[4]%>"
-			value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[4][0]%>"
-			onclick="<%=confirmDisableFuncName%>">
-		</html:button>
-	</td>
+<tr colspan="5">
+		<td align="right">
+			<table width="100%">
+				<tr>									
+					<html:hidden property="submittedFor" value=""/>				
+					<html:hidden property="forwardTo" value=""/>					
+					<html:hidden property="noOfAliquots"/>					
+					<%
+						String formName=Constants.ALIQUOT_SUMMARY_ACTION;
+						String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";			
+						String addMoreSubmitFunctionName= "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";	
+						String distributeSubmitFuntionName= "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"'),"; 			
+						String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;
+						String submitAndDistribute = distributeSubmitFuntionName + confirmDisableFuncName;					
+					%>						
+					<td align="right" class="formFieldNoBorders" nowrap>	
+						<html:button
+							styleClass="actionButton" property="submitAndDistributeButton"
+							title="<%=Constants.SPECIMEN_BUTTON_TIPS[3]%>"
+							value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[3][0]%>"
+							onclick="<%=addMoreSubmit%>">
+						</html:button>
+						
+						<html:button
+							styleClass="actionButton" property="submitAndDistributeButton"
+							title="<%=Constants.SPECIMEN_BUTTON_TIPS[4]%>"
+							value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[4][0]%>"
+							onclick="<%=submitAndDistribute%>">
+						</html:button>
+					</td>
+				<tr>
+			</table>
+		</td>
 </tr>
-
 </table>
 </html:form>
