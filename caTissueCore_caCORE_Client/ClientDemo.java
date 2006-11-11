@@ -105,7 +105,7 @@ public class ClientDemo
 			ClientSession cs = ClientSession.getInstance();
 			try
 			{ 
-				cs.startSession("jitendra_agrawal@persistent.co.in", "Login11");
+				cs.startSession("admin@admin.com", "Login123");
 			} 
 			catch (Exception ex) 
 			{ 
