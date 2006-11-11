@@ -713,7 +713,7 @@ public class APIDemo
 		
 		
 		DistributedItem distributedItem = new DistributedItem();
-		distributedItem.setQuantity(new Double(10));
+		distributedItem.setQuantity(new Double(2));
 		distributedItem.setSpecimen(specimen);
 		Collection distributedItemCollection = new HashSet();
 		distributedItemCollection.add(distributedItem);
@@ -865,10 +865,10 @@ public class APIDemo
 		StorageContainer storageContainer = (StorageContainer) ClientDemo.dataModelObjectMap.get("StorageContainer");
 		/*	
 		new StorageContainer();
-		storageContainer.setId(new Long(1));
-		*/
+		storageContainer.setId(new Long(1));		
 		storageContainer=new StorageContainer();
 		storageContainer.setId(new Long(1));
+		*/
 		specimenArray.setStorageContainer(storageContainer);
 		specimenArray.setPositionDimensionOne(new Integer(1));
 		specimenArray.setPositionDimensionTwo(new Integer(1));
@@ -1156,7 +1156,7 @@ public class APIDemo
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)ClientDemo.dataModelObjectMap.get("SpecimenCollectionGroup");
 		updateSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 		
-		updateSpecimen.setLabel("spec" + UniqueKeyGeneratorUtil.getUniqueKey());
+		//updateSpecimen.setLabel("spec" + UniqueKeyGeneratorUtil.getUniqueKey());
 		updateSpecimen.setBarcode("bar" + UniqueKeyGeneratorUtil.getUniqueKey());
 		updateSpecimen.setType("DNA");
 		updateSpecimen.setAvailable(new Boolean(true));
@@ -1231,6 +1231,132 @@ public class APIDemo
 		updateSpecimen.setBiohazardCollection(biohazardCollection);		
 		
 	}
+	
+	
+	public void updateStorageType(StorageType updateStorageType)
+	{		
+		Capacity capacity = updateStorageType.getCapacity();
+		
+		updateStorageType.setDefaultTempratureInCentigrade(new Double(30));//-30
+		updateStorageType.setOneDimensionLabel("Label-1"); //label 1
+		updateStorageType.setTwoDimensionLabel("Label-2"); //label 2
+
+		capacity.setOneDimensionCapacity(new Integer(2));//3
+		capacity.setTwoDimensionCapacity(new Integer(2));//3
+		updateStorageType.setCapacity(capacity);
+	
+
+//		Collection holdsStorageTypeCollection = new HashSet();
+//		holdsStorageTypeCollection.add(updateStorageType);
+//
+//		updateStorageType.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
+//		updateStorageType.setActivityStatus("Active");
+//
+//		Collection holdsSpecimenClassCollection = new HashSet();		
+//		holdsSpecimenClassCollection.add("Fluid");
+//		holdsSpecimenClassCollection.add("Molecular");
+//		updateStorageType.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
+		
+	}
+	
+	/**
+	 * @return StorageContainer
+	 */
+	public void updateStorageContainer(StorageContainer storageContainer)
+	{	
+		StorageType storageType = (StorageType) ClientDemo.dataModelObjectMap.get("StorageType");		
+		storageContainer.setStorageType(storageType);
+		
+		Site site = (Site) ClientDemo.dataModelObjectMap.get("Site"); 		
+		storageContainer.setSite(site);
+		
+		storageContainer.setTempratureInCentigrade(new Double(30)); //-30
+		storageContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
+
+//		Capacity capacity = storageContainer.getCapacity();
+//		capacity.setOneDimensionCapacity(new Integer(1));
+//		capacity.setTwoDimensionCapacity(new Integer(2));
+//		storageContainer.setCapacity(capacity);
+
+		CollectionProtocol collectionProtocol = (CollectionProtocol) ClientDemo.dataModelObjectMap.get("CollectionProtocol");		
+		
+		Collection collectionProtocolCollection = new HashSet();
+		collectionProtocolCollection.add(collectionProtocol);
+		storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+
+		Collection holdsStorageTypeCollection = new HashSet();
+		holdsStorageTypeCollection.add(storageType);
+		storageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
+
+		Collection holdsSpecimenClassCollection = new HashSet();
+		holdsSpecimenClassCollection.add("Tissue");
+		holdsSpecimenClassCollection.add("Molecular");
+		storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
+		
+		storageContainer.setPositionDimensionOne(new Integer(1));
+		storageContainer.setPositionDimensionTwo(new Integer(2));
+
+		storageContainer.setActivityStatus("Active");
+		storageContainer.setFull(Boolean.valueOf(false));		
+	}
+	
+	/**
+	 * @return SpecimenArrayType
+	 */
+	public void updateSpecimenArrayType(SpecimenArrayType specimenArrayType)
+	{		
+		specimenArrayType.setSpecimenClass("Molecular"); 
+
+		Collection specimenTypeCollection = new HashSet();
+		specimenTypeCollection.add("DNA"); //
+		specimenTypeCollection.add("RNA"); //
+		specimenArrayType.setSpecimenTypeCollection(specimenTypeCollection);
+		specimenArrayType.setComment("");
+		Capacity capacity = specimenArrayType.getCapacity();
+		capacity.setOneDimensionCapacity(new Integer(3)); //4
+		capacity.setTwoDimensionCapacity(new Integer(3)); //4
+		specimenArrayType.setCapacity(capacity);		
+	}
+	
+	public void updateSpecimenArray(SpecimenArray specimenArray)
+	{		
+		SpecimenArrayType specimenArrayType = (SpecimenArrayType) ClientDemo.dataModelObjectMap.get("SpecimenArrayType");
+		specimenArray.setSpecimenArrayType(specimenArrayType);
+		
+		specimenArray.setBarcode("bar" + UniqueKeyGeneratorUtil.getUniqueKey());
+		specimenArray.setName("sa" + UniqueKeyGeneratorUtil.getUniqueKey()); 
+		
+		User createdBy = (User) ClientDemo.dataModelObjectMap.get("User");
+		specimenArray.setCreatedBy(createdBy);
+		
+//		Capacity capacity = specimenArrayType.getCapacity();
+//		specimenArray.setCapacity(capacity);
+		
+		specimenArray.setComment("");
+		StorageContainer storageContainer = (StorageContainer) ClientDemo.dataModelObjectMap.get("StorageContainer");
+		
+		specimenArray.setStorageContainer(storageContainer);
+		specimenArray.setPositionDimensionOne(new Integer(1));
+		specimenArray.setPositionDimensionTwo(new Integer(1));
+		
+//		Collection specimenArrayContentCollection = new HashSet();
+//		SpecimenArrayContent specimenArrayContent = new SpecimenArrayContent();
+//		
+//		Specimen specimen = (Specimen) ClientDemo.dataModelObjectMap.get("Specimen");
+//		specimenArrayContent.setSpecimen(specimen);
+//		specimenArrayContent.setPositionDimensionOne(new Integer(1));
+//		specimenArrayContent.setPositionDimensionTwo(new Integer(1));
+//		Quantity quantity = new Quantity();
+//		quantity.setValue(new Double(2));
+//		specimenArrayContent.setInitialQuantity(quantity);
+//		specimenArrayContentCollection.add(specimenArrayContent);
+//		specimenArray.setSpecimenArrayContentCollection(specimenArrayContentCollection);		
+	}
+	
+	
+	
+	
+	
 	
 	private int getUniqueId()
 	{
