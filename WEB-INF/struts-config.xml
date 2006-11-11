@@ -2614,10 +2614,11 @@ PUBLIC
 	
 	<action path="/AliquotSummary"
 		type="edu.wustl.catissuecore.action.AliquotSummaryAction"
-		name="aliquotForm"
-		validate="false"
-		scope="request">
-		<forward name="success" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16"/>
+		name="aliquotForm"			
+		validate="false"	
+		scope="request">		
+		<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
+		<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 		<forward name="failure" path="/Aliquots.do?pageOf=pageOfAliquotSummary&amp;menuSelected=15" />
 	</action>	
 
