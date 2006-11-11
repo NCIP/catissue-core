@@ -171,6 +171,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			//Used for showing the success message after insert and using it
 			// for edit.
 			container.setId(cont.getId());
+			container.setCapacity(cont.getCapacity());
 
 			if (container.getParent() != null)
 			{
