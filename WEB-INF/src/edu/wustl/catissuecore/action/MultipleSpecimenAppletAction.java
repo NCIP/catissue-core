@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -172,8 +173,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			Logger.out.debug("After processAssociatedObjectsMap");
 			MapDataParser specimenParser = new MapDataParser("edu.wustl.catissuecore.domain");
 			Logger.out.debug("After specimenParser");
-			Collection specimenCollection = specimenParser.generateData(fixedSpecimenMap);
-
+			Collection specimenCollection = specimenParser.generateData(fixedSpecimenMap,true);
 			//Read session form bean map to associate derived specimens
 			Map multipleSpecimenFormBeanMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY);
 
