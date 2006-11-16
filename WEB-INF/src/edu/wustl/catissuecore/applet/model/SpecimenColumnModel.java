@@ -523,7 +523,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	{
 		// Listeners
 		TextFieldHandler textHandler = new TextFieldHandler(table);
-		ParentSpecimenItemHandler parentSpecimenItemHandler = new ParentSpecimenItemHandler(table);
+//		ParentSpecimenItemHandler parentSpecimenItemHandler = new ParentSpecimenItemHandler(table);
 		CollectionGroupItemHandler collectionGroupItemHandler = new CollectionGroupItemHandler(
 				table);
 		ClassComboBoxHandler classComboBoxHandler = new ClassComboBoxHandler(table);

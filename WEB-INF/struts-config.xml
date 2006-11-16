@@ -2442,6 +2442,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path="/DataView.do" />
+			<forward name="failure" path=".catissuecore.commonErrorDetailsDef" />
 		</action>
 		
 		<action path="/ConfigureAdvanceSearchResults"
@@ -2450,6 +2451,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path="/DataView.do" />
+			<forward name="failure" path=".catissuecore.commonErrorDetailsDef" />
 		</action>
 		
 		<!-- Advance Query Interface Actions Ends -->
@@ -2878,7 +2880,7 @@ PUBLIC
 		validate="true"
 		input="/MultipleSpecimenStorageLocation.do?pageOf=formSubmitted&amp;operation=add&amp;menuSelected=15"
 		scope="request">
-		<forward name="success" path=".catissuecore.multipleSpecimenStorageLocationDef" />
+		<forward name="success" path=".catissuecore.multipleSpecimenAddSuccessDef" />
 		<forward name="failure" path="/MultipleSpecimenStorageLocation.do?pageOf=formSubmitted&amp;operation=add&amp;menuSelected=15" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>

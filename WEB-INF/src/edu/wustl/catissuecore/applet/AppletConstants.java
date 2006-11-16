@@ -152,9 +152,12 @@ public interface AppletConstants
 	public static final String MULTIPLE_SPECIMEN_PASTE = "Paste";
 	public static final String MULTIPLE_SPECIMEN_MANDATORY = "*";
 	public static final String MULTIPLE_SPECIMEN_SUBMIT="Submit";
+	public static final String MULTIPLE_SPECIMEN_DELETE_LAST="Delete Last";
 	
 	public static final String MULTIPLE_SPECIMEN_LOCATION_LABEL = "Containerlabel_temp";
 	public static final String MULTIPLE_SPECIMEN_ROW_COLUMN_SEPARATOR="@";
+	//for parent specimen enable
+	public static final String MULTIPLE_SPECIMEN_COLLECTION_GROUP_RADIOMAP="collectionGroupRadioMap";
 	
 	public static final String COPY_OPERATION = "copy";
 	public static final String PASTE_OPERATION = "paste";

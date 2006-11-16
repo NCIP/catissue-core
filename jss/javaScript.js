@@ -166,18 +166,27 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 		{
 
 			var obj = document.getElementById(objId);
-			var tip="";
-			if(obj.selectedIndex == -1)
-				tip="";
-			else
-				tip = obj.options[obj.selectedIndex].text;
-				
-			obj.title = tip;
-
-			var browser=navigator.appName;
-			if(browser=="Microsoft Internet Explorer")
+			if(obj.type == 'text')
 			{
-				showStatus(tip);
+				var tip="";
+				tip = obj.value;
+				obj.title = ""+tip;
+			}
+			else
+			{
+				var tip="";
+				if(obj.selectedIndex == -1)
+					tip="";
+				else
+					tip = obj.options[obj.selectedIndex].text;
+					
+				obj.title = tip;
+
+				var browser=navigator.appName;
+				if(browser=="Microsoft Internet Explorer")
+				{
+					showStatus(tip);
+				}
 			}
 		}
 		function hideTip(objId)

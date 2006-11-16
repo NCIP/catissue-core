@@ -165,28 +165,15 @@
 					</td>
 				</tr>
 					
-				<tr id="row0">
-				<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="true">
-			    	<td class="formRequiredNotice" width="5">*</td>					
-      	 	       	<td class="formRequiredLabel" nowrap>
-                   		<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
-							<label for="participantID">
-								<bean:message key="collectionProtocolReg.participantName" />
-							</label>
-						</html:checkbox>
-					</td>
-				</logic:equal>
-				<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="false">
+				<tr id="row0">				
 			    	<td class="formRequiredNotice" width="5">&nbsp;</td>					
       	 	       	<td class="formLabel" nowrap>
-                   		<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
+                   		
 							<label for="participantID">
 								<bean:message key="collectionProtocolReg.participantName" />
 							</label>
-						</html:checkbox>
+						
 					</td>
-				</logic:equal>
-
 					<td class="formField">
 						<html:text styleClass="formFieldSized" maxlength="10"  size="30" styleId="participantName" 
 					     		property="participantName" disabled="true"/>	
@@ -197,17 +184,11 @@
 					</td>
 				</tr>
 
-				<tr id="row1">
-					
-						<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="true">
-		         		    <td class="formRequiredNotice" width="5">&nbsp;</td>					
-							<td class="formLabel">
-						</logic:equal>
-						<logic:equal name="collectionProtocolRegistrationForm" property="checkedButton" value="false">
-		         		    <td class="formRequiredNotice" width="5">*</td>					
-							<td class="formRequiredLabel">
-						</logic:equal>
-
+				<tr id="row1">					
+						
+						<td class="formRequiredNotice" width="5">&nbsp;</td>					
+						<td class="formLabel">
+						
 						<label for="name">
 							<bean:message key="collectionProtocolReg.participantProtocolID" />
 						</label>

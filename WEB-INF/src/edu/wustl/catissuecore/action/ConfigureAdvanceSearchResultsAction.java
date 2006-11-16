@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -25,6 +27,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -39,6 +42,7 @@ public class ConfigureAdvanceSearchResultsAction extends BaseAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		AdvanceSearchForm advForm = (AdvanceSearchForm)form;
+		String target = Constants.SUCCESS;
 		//get the columns selected in configureResultView
 		String []configuredColumns = advForm.getSelectedColumnNames();
 		HttpSession session = request.getSession();
@@ -63,26 +67,37 @@ public class ConfigureAdvanceSearchResultsAction extends BaseAction
 		//temporary table name
 		String tableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
         JDBCDAO jdbcDAO = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-        jdbcDAO.openSession(sessionData);
         String [] selectColumnNames = selectColumns;
         Logger.out.debug(" Selected Columns:"+selectColumns);
-        
-        //Bug#2003: For having unique records in result view
-        List list = jdbcDAO.retrieve(tableName, selectColumnNames, true); 
-        //end Bug#2003
-        
-        jdbcDAO.closeSession();
-        
-        session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,selectColumnNames);
-        session.setAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES,columnDisplayNames);
-        session.setAttribute(Constants.CONFIGURED_COLUMN_NAMES,configuredColumns);
-        session.removeAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
-        request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
-        
-    	
-        request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnDisplayNames);
-        request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
-		return mapping.findForward(Constants.SUCCESS);
+        jdbcDAO.openSession(sessionData);
+        try
+		{
+            //Bug#2003: For having unique records in result view
+            List list = jdbcDAO.retrieve(tableName, selectColumnNames, true); 
+            //end Bug#2003
+            
+            session.setAttribute(Constants.CONFIGURED_SELECT_COLUMN_LIST,selectColumnNames);
+            session.setAttribute(Constants.CONFIGURED_COLUMN_DISPLAY_NAMES,columnDisplayNames);
+            session.setAttribute(Constants.CONFIGURED_COLUMN_NAMES,configuredColumns);
+            session.removeAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
+            request.setAttribute(Constants.SPREADSHEET_DATA_LIST,list);
+        	
+            request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnDisplayNames);
+            request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_QUERY_RESULTS);
+		}
+        catch(DAOException exp)
+		{
+        	Logger.out.error(exp.getMessage(),exp);
+        	ActionErrors errors = new ActionErrors();
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("advanceQuery.userAlreadyLoggedIn"));
+			saveErrors(request, errors);
+        	target = Constants.FAILURE;
+		}
+        finally
+		{
+            jdbcDAO.closeSession();
+		}
+		return mapping.findForward(target);
 	}
 
 }

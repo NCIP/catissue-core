@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,6 +31,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -504,10 +506,7 @@ public class SpecimenForm extends AbstractActionForm
 		 this.quantity = String.valueOf(((TissueSpecimen) specimen)
 		 .getQuantityInGram());
 		 this.availableQuantity = String.valueOf(((TissueSpecimen) specimen).getAvailableQuantityInGram());
-		 }*/
-
-		this.quantity = specimen.getQuantity().toString();
-		this.availableQuantity = specimen.getAvailableQuantity().toString();
+		 }*/	
 
 		if (specimen instanceof CellSpecimen)
 		{
@@ -531,6 +530,22 @@ public class SpecimenForm extends AbstractActionForm
 		{
 			this.className = specimen.getParentSpecimen().getClassName();
 		}
+		
+		if(!Utility.isQuantityDouble(className,type))
+		{
+			String initial = specimen.getQuantity().toString();
+			String available = specimen.getAvailableQuantity().toString();
+			StringTokenizer st = new StringTokenizer(initial, ".");			
+			this.quantity = st.nextToken();
+			st = new StringTokenizer(available, ".");			
+			this.availableQuantity = st.nextToken();			
+		}
+		else
+		{
+			this.quantity = specimen.getQuantity().toString();
+			this.availableQuantity = specimen.getAvailableQuantity().toString();
+		}
+		
 
 		SpecimenCharacteristics characteristic = specimen.getSpecimenCharacteristics();
 
@@ -600,13 +615,25 @@ public class SpecimenForm extends AbstractActionForm
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.quantity")));
 				}
-				else if (!validator.isDouble(quantity))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
-							ApplicationProperties.getValue("specimen.quantity")));
+				else 
+				{					
+					if(Utility.isQuantityDouble(className,type))
+        			{
+        		        if(!validator.isDouble(quantity))
+        		        {
+        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));        		        	
+        		        }
+        			}
+        			else
+        			{        				
+        				if(!validator.isNumeric(quantity))
+        		        {
+        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));        		        	
+        		        }
+        			}
 				}
 				// If not multiple specimen then validate storage container
-				if(!multipleSpecimen.equals("1"))
+				if(!multipleSpecimen.equals("1")) 
 				{
 					if (!isVirtuallyLocated())
 					{

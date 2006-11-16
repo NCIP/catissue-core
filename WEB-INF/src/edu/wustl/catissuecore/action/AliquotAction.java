@@ -159,7 +159,7 @@ public class AliquotAction extends SecureAction
 					else
 					{
 						// check whether all container IDs are same
-						if (!containerId.equals(tempContainerId))
+						if (containerId==null || !containerId.equals(tempContainerId))
 						{
 							areContainersDifferent = true;
 						}

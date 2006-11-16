@@ -6,6 +6,7 @@
  */
 package edu.wustl.catissuecore.action;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +20,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.MultipleSpecimenStorageLocationForm;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -58,14 +61,24 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 		MultipleSpecimenStorageLocationForm aForm = (MultipleSpecimenStorageLocationForm)form;
 		Logger.out.debug("\naForm.getSpecimenOnUIMap():\n---------------\n"+aForm.getSpecimenOnUIMap()+"\n-----------\n");
 		String target = Constants.FAILURE;
-		if(dataValidate())
-		{
+//		if(dataValidate())
+//		{
 			Map specimenMap = setDataInSpecimens(aForm,request);
 			try
 			{
 				insertSpecimens(request, specimenMap);
 				request.setAttribute(Constants.MULTIPLE_SPECIMEN_SUBMIT_SUCCESSFUL,Constants.MULTIPLE_SPECIMEN_SUBMIT_SUCCESSFUL);
 				target = Constants.SUCCESS;
+				// ----------------- report page
+				Collection specimenCollection = (Collection) request.getSession().getAttribute(Constants.SAVED_SPECIMEN_COLLECTION);
+				request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, null);
+
+				request.setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, specimenCollection);
+
+				ActionMessages msgs = new ActionMessages();
+				msgs.add("success", new ActionMessage("multipleSpecimen.add.success", String.valueOf(specimenCollection.size())));
+				saveMessages(request, msgs);
+
 			}
 			catch(Exception excp)
 			{
@@ -75,8 +88,8 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 				saveErrors(request, errors);
 				target = Constants.FAILURE;
 			}
-		}
-		// TODO Auto-generated method stub
+//		}
+	
 		return mapping.findForward(target ) ;
 	}
 	

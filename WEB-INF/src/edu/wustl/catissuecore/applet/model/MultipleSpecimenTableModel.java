@@ -665,4 +665,49 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	
 	//-------------- For ParentSpecimen - CollectionGroup identification end
 	
+	// -----------------For Delete Last Column
+	
+	public void removeLastColumn()
+	{
+		removeIdFromMap(columnCount);
+		removeCollectionGroupFromModel(columnCount);
+		removeActualColumnCollectionGroupRadioButtonValue(columnCount);
+		removeDataValues(columnCount);
+		// ---------------------
+		columnCount--;
+	}
+
+	private void removeIdFromMap(int colNo)
+	{
+		specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + (colNo) + "_" + "id");
+	}
+
+	private void removeCollectionGroupFromModel(int column)
+	{
+		if(specimenCollectionGroupName != null)
+		{
+			String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO];
+			specimenMap.remove(specimenKey);	
+		}
+	}
+
+	private void removeActualColumnCollectionGroupRadioButtonValue(int column)
+	{
+		String key = "Specimen:"+column+"_collectionGroupRadioSelected";
+		collectionGroupRadioButtonMap.remove(key);
+	}
+
+	private void removeDataValues(int column)
+	{
+		for(int row = 0; row<specimenAttribute.length; row++  )
+		{
+			String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[row];
+			System.out.println("specimenKey: "+specimenKey);
+			if(specimenMap.containsKey(specimenKey))
+			{
+				specimenMap.remove(specimenKey); 
+			}
+		}
+	}
+	
 }

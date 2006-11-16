@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
@@ -93,8 +94,9 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			 */
 			ApiSearchUtil.setSpecimenDefault(aliquotSpecimen);
 			//End:- Change for API Search
-
 			aliquotSpecimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
+//			 set event parameters from parent specimen - added by Ashwin for bug id# 2476
+			aliquotSpecimen.setSpecimenEventCollection(populateAliquoteSpecimenEventCollection(parentSpecimen,aliquotSpecimen));
 
 			if (parentSpecimen != null)
 			{
@@ -370,5 +372,39 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		}
 
 		return 1;
+	}
+//	 set event parameters from parent specimen - added by Ashwin for bug id# 2476
+	/**
+	 * Set event parameters from parent specimen to aliquot
+	 * @param parentSpecimen specimen
+	 * @return set
+	 */
+	private Set populateAliquoteSpecimenEventCollection(Specimen parentSpecimen,Specimen aliquotSpecimen)
+	{
+		Set aliquoteEventCollection = new HashSet();
+		Set parentSpecimeneventCollection = (Set) parentSpecimen.getSpecimenEventCollection();
+		SpecimenEventParameters specimenEventParameters = null;
+		SpecimenEventParameters aliquotSpecimenEventParameters = null;
+		
+		try
+		{
+			if (parentSpecimeneventCollection != null)
+			{	
+				for (Iterator iter = parentSpecimeneventCollection.iterator(); iter.hasNext();)
+				{
+					specimenEventParameters = (SpecimenEventParameters) iter.next();
+					aliquotSpecimenEventParameters = (SpecimenEventParameters) specimenEventParameters.clone();
+					aliquotSpecimenEventParameters.setId(null);
+					aliquotSpecimenEventParameters.setSpecimen(aliquotSpecimen);
+					aliquoteEventCollection.add(aliquotSpecimenEventParameters);
+				}
+			}
+		}
+		catch (CloneNotSupportedException exception)
+		{
+			exception.printStackTrace();
+		}
+		
+		return aliquoteEventCollection;
 	}
 }

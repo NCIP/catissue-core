@@ -74,4 +74,9 @@ public abstract class SpecimenEventParameters extends EventParameters implements
 		if(specimen!=null)
 			specimen.setId(new Long(specimenEventParametersForm.getSpecimenId()));
 	}
+	
+	public Object clone() throws CloneNotSupportedException
+	{
+		return super.clone();
+	}
 }

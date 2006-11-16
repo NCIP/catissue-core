@@ -37,7 +37,10 @@ public class SpecimenSubmitButtonHandler extends ButtonHandler
 		appletModel.setData(model.getMap());
 		model.getMap().put(AppletConstants.NO_OF_SPECIMENS,
 				String.valueOf(model.getTotalColumnCount()));
-		// --------------
+		
+//		//------for parent specimen enable
+//		model.getMap().put(AppletConstants.MULTIPLE_SPECIMEN_COLLECTION_GROUP_RADIOMAP,model.getCollectionGroupRadioButtonMap());
+//		// --------------
 		System.out.println("Inside Submit Button Handler \n Map Details B4 submission: ");
 		HashMap map =(HashMap) model.getMap();
 		Iterator itr = map.keySet().iterator() ;

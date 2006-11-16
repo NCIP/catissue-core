@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import net.sf.ehcache.CacheException;
+
 import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -170,7 +172,7 @@ public class StorageContainerUtil
 	 * @return Returns a map of allocated containers vs. their respective free locations.
 	 * @throws DAOException
 	 */
-	public static Map getContainerMapFromCache() throws Exception
+	public static Map getContainerMapFromCache() throws CacheException
 	{
 		// TODO if map is null
 		// TODO move all code to common utility
@@ -335,7 +337,7 @@ public class StorageContainerUtil
 			return true;
 
 	}
-	public static boolean isPostionAvaialble(String storageContainerId , String storageContainerName , String x , String y) throws Exception
+	public static boolean isPostionAvaialble(String storageContainerId , String storageContainerName , String x , String y) throws CacheException
 	{
 		Map containerMap = getContainerMapFromCache();
 		NameValueBean nvb = new NameValueBean(storageContainerName, storageContainerId);

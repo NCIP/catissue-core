@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,11 +17,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
+import javax.swing.table.TableColumn;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
+import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.component.MultipleSpecimenTable;
 import edu.wustl.catissuecore.applet.listener.AddColumnHandler;
+import edu.wustl.catissuecore.applet.listener.DeleteLastHandler;
 import edu.wustl.catissuecore.applet.listener.MultipleSpecimenCopyActionHandler;
 import edu.wustl.catissuecore.applet.listener.MultipleSpecimenPasteActionHandler;
 import edu.wustl.catissuecore.applet.listener.MultipleSpecimenTableKeyHandler;
@@ -29,6 +34,7 @@ import edu.wustl.catissuecore.applet.listener.TableModelChangeHandler;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
+import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
  * This applet displays main UI for multiple specimen page.
@@ -121,10 +127,16 @@ public class MultipleSpecimenApplet extends BaseApplet {
     	JButton addSpecimen = new JButton(AppletConstants.MULTIPLE_SPECIMEN_ADD_SPECIMEN);
     	addSpecimen.addActionListener(new AddColumnHandler(table,this) );
     	
+    	//deleteLast button
+    	JButton deleteLast = new JButton(AppletConstants.MULTIPLE_SPECIMEN_DELETE_LAST);
+    	deleteLast.addActionListener(new DeleteLastHandler(table,this) );
+
+    	
     	JLabel placeHolder = new JLabel("     ");
     	panel.add(copy);panel.add(placeHolder );panel.add(paste );
     	panel.add(placeHolder );panel.add(addSpecimen);
-    	int usedWidth = copy.getPreferredSize().width+ paste.getPreferredSize().width+ (2 * placeHolder.getPreferredSize().width) ;
+    	panel.add(placeHolder );panel.add(deleteLast);
+    	int usedWidth = copy.getPreferredSize().width+ paste.getPreferredSize().width + deleteLast.getPreferredSize().width + (3 * placeHolder.getPreferredSize().width) ;
     	usedWidth = usedWidth + placeHolder.getPreferredSize().width + addSpecimen.getPreferredSize().width ;  
     	
     	//Temporary added till adjusting height
@@ -139,18 +151,20 @@ public class MultipleSpecimenApplet extends BaseApplet {
     	appletColor = panel.getBackground(); 
     }
     
-    private void createLinkPanel(JPanel panel)
+    private JButton createLinkPanel(JPanel panel)
     {
     	MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
+    	JButton link1 = null;
     	if(tableModel.getTotalPageCount()>1)
     	{
-        	int startIndex = 1;
+       	int startIndex = 1;
         	int endIndex = tableModel.getColumnsPerPage()  ;
+        	//JButton link1 = null;
         	if(tableModel.getTotalPageCount()>10)
         		panel.setLayout(new GridLayout(2,(int)(tableModel.getTotalPageCount()/2),0,0));
         	for(int pageNo = 1; pageNo<=tableModel.getTotalPageCount();pageNo++  )
         	{
-        		JButton link1 = new JButton(String.valueOf(startIndex )+ " - "+String.valueOf(endIndex ));
+        		link1 = new JButton(String.valueOf(startIndex )+ " - "+String.valueOf(endIndex ));
         		link1.setActionCommand(String.valueOf(pageNo ));
              	LineBorder border =(LineBorder) BorderFactory.createLineBorder(getBackground() );
              	link1.setToolTipText(String.valueOf(startIndex )+ " - "+String.valueOf(endIndex ));
@@ -162,8 +176,10 @@ public class MultipleSpecimenApplet extends BaseApplet {
              	endIndex = endIndex +tableModel.getColumnsPerPage()  ;
              	totalPages= pageNo;
         	}
+        	
         	SwingUtilities.updateComponentTreeUI(linkPanel);
     	}
+        	return link1;
     }
     
     private void createFooterPanel(JPanel panel)
@@ -263,6 +279,46 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(actualColNo).getCellRenderer();
 		columnModel.updateComponentValue(AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO,value);
 		System.out.println("\n\n*******************     setTissueSiteFromTreeMap   ****************************\n\n");
+	}
+
+	// ------------------------- For Delete Last Column
+	/**
+	 * This method updates the applet and Page link panel when the delete last button is clicked.
+	 */
+	public void updateOnDeleteLastSpecimen()
+	{
+		System.out.println("Inside updateOnDeleteLastSpecimen()");
+				MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
+				
+				//jiitendra
+				System.out.println("totalPages-----"+totalPages + "tableModel.getTotalPageCount()--"+tableModel.getTotalPageCount());
+				if(totalPages > tableModel.getTotalPageCount()  )
+				{
+					totalPages--;
+					linkPanel.removeAll();  
+					SwingUtilities.updateComponentTreeUI(linkPanel);
+					JButton link1 = createLinkPanel(linkPanel);
+					
+					if (link1 == null)
+					{
+						link1 = new JButton();
+						link1.setActionCommand("1");
+						link1.addActionListener(new PageLinkHandler(table));
+					}
+//					ActionListener[] actionListeners = link1.getActionListeners();
+//		        	for compilation in jdk1.3
+			        	ActionListener[] actionListeners = (ActionListener[])link1.getListeners(ActionListener.class);
+			        	for (int i = 0; i < actionListeners.length; i++) 
+			        	{
+				        	ActionListener actionListener = actionListeners[i];
+				            if (actionListener instanceof PageLinkHandler) {
+				            	actionListener.actionPerformed(new ActionEvent(link1,
+				                        ActionEvent.ACTION_FIRST,"action"));
+				                break;
+				            }
+				        }
+					SwingUtilities.updateComponentTreeUI(linkPanel);
+				}
 	}
 
 }

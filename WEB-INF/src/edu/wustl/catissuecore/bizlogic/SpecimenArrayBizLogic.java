@@ -18,6 +18,7 @@ import java.util.Map;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.QuantityInMicrogram;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -67,7 +68,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			throw handleSMException(e);
 		}
 		
-		doUpdateSpecimenArrayContents(specimenArray, dao, sessionDataBean, true);
+		doUpdateSpecimenArrayContents(specimenArray, null, dao, sessionDataBean, true);
 
 		dao.insert(specimenArray.getCapacity(), sessionDataBean, true, false);
 		dao.insert(specimenArray, sessionDataBean, true, false);
@@ -111,7 +112,9 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			throws DAOException, UserNotAuthorizedException
 	{
 		SpecimenArray specimenArray = (SpecimenArray) obj;
-		doUpdateSpecimenArrayContents(specimenArray, dao, sessionDataBean, false);
+		SpecimenArray oldSpecimenArray = (SpecimenArray) oldObj;
+		
+		doUpdateSpecimenArrayContents(specimenArray, oldSpecimenArray, dao, sessionDataBean, false);
 		dao.update(specimenArray.getCapacity(), sessionDataBean, true, false, false);
 		dao.update(specimenArray, sessionDataBean, true, false, false);
 		SpecimenArrayContent specimenArrayContent = null;
@@ -144,7 +147,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 				}
 			}
 
-			if (isNewSpecimenArrayContent(specimenArrayContent, oldSpecArrayContents))
+			if (checkExitSpecimenArrayContent(specimenArrayContent, oldSpecArrayContents) == null)
 			{
 				dao.insert(specimenArrayContent, sessionDataBean, true, false);
 			}
@@ -157,16 +160,16 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 
 	/**
 	 * @param specimenArrayContent array contents
-	 * @param oldSpecArrayContents old spec array contents
+	 * @param checkExitSpecimenArrayContent spec array contents
 	 * @return whether it is new or old
 	 */
-	private boolean isNewSpecimenArrayContent(SpecimenArrayContent specimenArrayContent,
-			Collection oldSpecArrayContents)
+	private SpecimenArrayContent checkExitSpecimenArrayContent(SpecimenArrayContent specimenArrayContent,
+			Collection specArrayContentCollection)
 	{
 		boolean isNew = true;
 		SpecimenArrayContent arrayContent = null;
 
-		for (Iterator iter = oldSpecArrayContents.iterator(); iter.hasNext();)
+		for (Iterator iter = specArrayContentCollection.iterator(); iter.hasNext();)
 		{
 			arrayContent = (SpecimenArrayContent) iter.next();
 
@@ -181,7 +184,12 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 				break;
 			}
 		}
-		return isNew;
+		
+		if (isNew)
+		{
+			arrayContent = null;
+		}
+		return arrayContent;
 	}
 
 	/**
@@ -192,10 +200,16 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 	 * @throws DAOException 
 	 * @throws UserNotAuthorizedException
 	 */
-	private void doUpdateSpecimenArrayContents(SpecimenArray specimenArray, DAO dao,
+	private void doUpdateSpecimenArrayContents(SpecimenArray specimenArray, SpecimenArray oldSpecimenArray, DAO dao,
 			SessionDataBean sessionDataBean, boolean isInsertOperation) throws DAOException,
 			UserNotAuthorizedException
 	{
+		Collection oldSpecimenArrayContentCollection = null;
+		if(oldSpecimenArray != null)
+		{
+			oldSpecimenArrayContentCollection = oldSpecimenArray.getSpecimenArrayContentCollection();
+		}
+		
 		Collection specimenArrayContentCollection = specimenArray
 				.getSpecimenArrayContentCollection();
 		Collection updatedSpecArrayContentCollection = new HashSet(); 
@@ -265,9 +279,21 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 						{
 							quantity = specimenArrayContent.getInitialQuantity().getValue()
 									.doubleValue();
+							SpecimenArrayContent oldArrayContent = null;
 							// incase if specimenArray is created from aliquot page, then skip the Available quantity of specimen. 
 							if (!specimenArray.isAliquot())
 							{
+								//in case of update, reduce specimen's quantity by difference of new specimenArrayContent's quantiy
+								//and old specimenArrayContent's quantiy.
+								if(oldSpecimenArrayContentCollection != null)
+								{
+									oldArrayContent = checkExitSpecimenArrayContent(specimenArrayContent,oldSpecimenArrayContentCollection);
+									if (oldArrayContent != null)
+									{
+										quantity = quantity - oldArrayContent.getInitialQuantity().getValue().doubleValue(); 
+									}
+								}
+								
 								if (!isAvailableQty(specimen, quantity))
 								{
 									throw new DAOException(
@@ -313,6 +339,28 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			throw new DAOException(Constants.ARRAY_NO_SPECIMEN__EXCEPTION_MESSAGE);
 		}
 		
+		//In case of update, if specimen is removed from specimen array, then specimen array content's quantity 
+		//should get added into specimen's available quantity.
+		if(!isInsertOperation)
+		{
+			Iterator itr = oldSpecimenArrayContentCollection.iterator();
+			while(itr.hasNext())
+			{
+				SpecimenArrayContent oldSpecimenArrayContent = (SpecimenArrayContent) itr.next();
+				SpecimenArrayContent  newSpecimenArrayContent = checkExitSpecimenArrayContent(oldSpecimenArrayContent, specimenArrayContentCollection);
+				if(newSpecimenArrayContent == null || newSpecimenArrayContent.getSpecimen().getLabel().equals(""))
+				{						
+					Specimen oldSpecimen = getSpecimen(dao, oldSpecimenArrayContent);					
+					Double oldQuantity = oldSpecimenArrayContent.getInitialQuantity().getValue();					
+					Quantity quantity = oldSpecimen.getAvailableQuantity();
+					double newQuantity = quantity.getValue().doubleValue() + oldQuantity.doubleValue();
+					quantity.setValue(new Double(newQuantity));
+					oldSpecimen.setAvailableQuantity(quantity);					
+					dao.update(oldSpecimen, sessionDataBean, true, false, false);
+				}
+				
+			}
+		}
 		specimenArray.setSpecimenArrayContentCollection(updatedSpecArrayContentCollection); 
 	}
 
@@ -424,7 +472,14 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			List list = dao.retrieve(sourceObjectName, whereColumnName, whereColumnValue);
 			if (!list.isEmpty())
 			{
-				specimen = (Specimen) list.get(0);
+				specimen = (Specimen) list.get(0);				
+				String activityStatus = specimen.getActivityStatus();
+				//Bug: 2872:-  User should not able to add close/disable specimen in Specimen Array.
+				if(!activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))
+				{
+					throw new DAOException(Constants.ARRAY_SPECIMEN_NOT_ACTIVE_EXCEPTION_MESSAGE
+							+ columnValue);
+				}
 				//return specimenCollectionGroup;
 			}
 			else

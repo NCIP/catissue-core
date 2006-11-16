@@ -471,6 +471,9 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 			String classKey = getKey(AppletConstants.SPECIMEN_CLASS_ROW_NO, i);
 			String classValue = (String) specimenMap.get(classKey);
+			
+			String typeKey = getKey(AppletConstants.SPECIMEN_TYPE_ROW_NO, i);
+			String typeValue = (String) specimenMap.get(typeKey);
 
 			//			Specimen Type
 			validateField(AppletConstants.SPECIMEN_TYPE_ROW_NO, i, specimenMap, "Type", 2);
@@ -489,12 +492,37 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			String quantityValue = (String) specimenMap.get(quantityKey);
 			try
 			{
-				Long.parseLong(quantityValue);
-				if (!validator.isPositiveNumeric(quantityValue, 1))
-				{
-					throw new Exception("Quantity should be greater than zero" + " "
-							+ ApplicationProperties.getValue("multiplespecimen.error.forspecimen") + " " + i);
+				//Bug- 2834 : 
+				if (validator.isEmpty(quantityValue))
+				{					
+					String quantityString = ApplicationProperties.getValue("specimen.quantity");
+					throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
 				}
+				else
+				{
+					if(Utility.isQuantityDouble(classValue,typeValue))
+	    			{
+	    		        if(!validator.isDouble(quantityValue))
+	    		        {   		        	
+	    		        	String quantityString = ApplicationProperties.getValue("specimen.quantity");
+	    					throw new DAOException(ApplicationProperties.getValue("errors.item.format", quantityString));
+	    		        }
+	    			}
+	    			else
+	    			{
+	    				if(!validator.isNumeric(quantityValue))
+	    		        {
+	    					String quantityString = ApplicationProperties.getValue("specimen.quantity");
+	    					throw new DAOException(ApplicationProperties.getValue("errors.item.format", quantityString));        		        	
+	    		        }
+	    			}
+				}
+//				Long.parseLong(quantityValue);
+//				if (!validator.isPositiveNumeric(quantityValue, 1))
+//				{
+//					throw new Exception("Quantity should be greater than zero" + " "
+//							+ ApplicationProperties.getValue("multiplespecimen.error.forspecimen") + " " + i);
+//				}
 			}
 			catch (NumberFormatException e)
 			{
@@ -651,6 +679,8 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 				CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 				collectionEventParameters.setAllValues(collectionEvent);
+				collectionEventParameters.setSpecimen(specimen);
+				
 				specimenEventCollection.add(collectionEventParameters);
 
 				//setting received event values
@@ -665,9 +695,10 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 				ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 				receivedEventParameters.setAllValues(receivedEvent);
-				//receivedEventParameters.setSpecimen(specimen);
-
+				
+				receivedEventParameters.setSpecimen(specimen);
 				specimenEventCollection.add(receivedEventParameters);
+				
 				specimen.setSpecimenEventCollection(specimenEventCollection);
 
 			}
@@ -735,7 +766,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	 * @param specimenMap
 	 * @throws DAOException
 	 */
-	private Map populateStorageLocations(IBizLogic bizLogic, Map specimenMap) throws DAOException
+	private Map populateStorageLocations(IBizLogic bizLogic, Map specimenMap) throws DAOException, Exception
 	{
 		final String saperator = "$";
 		Map tempSpecimenMap = new HashMap();
@@ -817,6 +848,37 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			String split[] = key.split("[$]");
 			// TODO when moved to acion pass true
 			TreeMap containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen((Long.parseLong(split[0])), split[1], 0, "", true);
+			//mandar : to test for null container 
+			if(containerMap == null || containerMap.isEmpty() )
+			{
+				List specimenList = (List)tempSpecimenMap.get( key);
+				String message = "";
+				if(!specimenList.isEmpty()  )
+				{
+					Specimen specimen = (Specimen)specimenList.get(0 );
+					String className = specimen.getClassName();
+					message = "Class : "+ className+ " and ";
+					String collectionGroup="";
+					if(specimen.getSpecimenCollectionGroup() != null)
+						collectionGroup = specimen.getSpecimenCollectionGroup().getName();
+					
+					if(collectionGroup != null)
+					{
+						message = message + "CollectionGroup : "+collectionGroup; 
+					}
+					else
+					{
+						String parentId="";
+						if(specimen.getParentSpecimen() != null)
+							parentId = specimen.getParentSpecimen().getLabel();
+						
+						message = message + "ParentSpecimen : "+parentId;
+					}
+				}
+				throw (new Exception("No storage container available for  specimen(s) with " + message +". System failed to auto allocate the position." ));
+			}
+				
+
 			List listOfSpecimens = (ArrayList) tempSpecimenMap.get(key);
 			allocatePositionToSpecimensList(specimenMap, listOfSpecimens, containerMap);
 			// Added by Ashwin for session container map
@@ -831,7 +893,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	 * @param listOfSpecimens
 	 * @param containerMap
 	 */
-	private void allocatePositionToSpecimensList(Map specimenMap, List listOfSpecimens, Map containerMap)
+	private void allocatePositionToSpecimensList(Map specimenMap, List listOfSpecimens, Map containerMap) throws Exception
 	{
 		// commented by Ashwin -- As derived has been moved up
 		//List newListOfSpecimen = new ArrayList();
@@ -869,11 +931,21 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 					Specimen tempSpecimen = (Specimen) listOfSpecimens.get(i);
 					result = allocatePositionToSingleSpecimen(specimenMap, tempSpecimen, tempMap, nvb);
 					if (result == false) // container is exhausted
+					{ 
 						break;
+					}
+						
 				}
 				if (result == true)
 					break;
 			}
+		}
+		
+		if(i < listOfSpecimens.size())
+		{
+			Specimen tempSpecimen = (Specimen) listOfSpecimens.get(i);
+			//there are still some specimens remaining to be allocated but all the applicable locations are exhausted.
+			throw (new Exception("No storage position available for specimen " + tempSpecimen.getId() +". System failed to auto allocate the position." ));
 		}
 	}
 	
@@ -987,4 +1059,76 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	{
 		request.getSession().setAttribute(key,specimenMap);
 	}
+	
+	
+	// 13Nov06 : Mandar : for delete Last ----------------- start
+	/**
+	 * This method deletes the associated objects for the specified specimen.
+	 */
+	public ActionForward deleteAssociatedObjects(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response)
+	throws Exception
+	{
+		Map dataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
+		Long specimenId = (Long)dataMap.get(Constants.MULTIPLE_SPECIMEN_DELETELAST_SPECIMEN_ID);
+		System.out.println("Associated objects to be deleted for Specimen ID: "+ specimenId );
+		//events map
+		Map eventsMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
+		Logger.out.debug(">>>>>>>>>>>>>>>>>>>                Before Delete <<<<<<<<<<<<<<<<<");
+		Logger.out.debug("Events Map : " );
+		Logger.out.debug(eventsMap);
+
+		//other associated objects
+		Map multipleSpecimenMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
+		Logger.out.debug("Associated Map : " );
+		Logger.out.debug(multipleSpecimenMap);
+
+		//delete events object
+		String key = "Specimen:"+specimenId.intValue() +"_specimenEventCollection";
+		deleteEntry(eventsMap ,key);
+
+		//comments
+		key = "Specimen:"+specimenId.intValue() +"_comments";
+		deleteEntry(multipleSpecimenMap ,key);
+		
+		//externalidentifiers
+		key = "Specimen:"+specimenId.intValue() +"_externalIdentifierCollection";
+		deleteEntry(multipleSpecimenMap ,key);
+		key = "Specimen:"+specimenId.intValue() +"_externalIdentifierCollection_count";
+		deleteEntry(multipleSpecimenMap ,key);
+
+		//biohazards
+		key = "Specimen:"+specimenId.intValue() +"_biohazardCollection";
+		deleteEntry(multipleSpecimenMap ,key);
+		key = "Specimen:"+specimenId.intValue() +"_biohazardCollection_count";
+		deleteEntry(multipleSpecimenMap ,key);
+		
+		//derive
+		//TODO
+
+		Logger.out.debug(">>>>>>>>>>>>>>>>>>>                After Delete <<<<<<<<<<<<<<<<<");
+		Logger.out.debug("Events Map : " );
+		Logger.out.debug(eventsMap);
+		Logger.out.debug("Associated Map : " );
+		Logger.out.debug(multipleSpecimenMap);
+
+		// -----------------------------	
+		//result to be sent to applet.
+		HashMap resultMap = new HashMap(); 
+		String target = Constants.SUCCESS;
+		
+		resultMap.put(Constants.MULTIPLE_SPECIMEN_RESULT, target);
+		writeMapToResponse(response, resultMap);
+		
+		return null;
+	}
+
+	private void deleteEntry(Map map, String key)
+	{
+		if(map.containsKey(key))
+		{
+			map.remove(key); 
+		}
+	}
+	// 13Nov06 : Mandar : for delete Last ----------------- end
+
 }

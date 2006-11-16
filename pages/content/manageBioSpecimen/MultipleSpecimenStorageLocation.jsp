@@ -23,6 +23,7 @@
 	String submitSuccessful = (String)request.getAttribute(Constants.MULTIPLE_SPECIMEN_SUBMIT_SUCCESSFUL);
 %>
 <head>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script src="jss/Hashtable.js" type="text/javascript"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 
@@ -73,6 +74,9 @@
 </html:messages>
 
 <html:errors/>
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="660" height=100%>
+<tr>
+<td height=100% valign="top">
 
 <html:form action="<%=Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_ACTION%>">
 
@@ -90,10 +94,10 @@
 	else
 	{	
  %>
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="660">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
 <tr>
 <td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="660">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="400">
 	<tr>
 		<td class="formMessage" colspan="3">* indicates a required field</td>
 	</tr>
@@ -110,8 +114,19 @@
 %>
 	
 <tr>
-<td>
-	<table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
+<td colspan="3">
+	<table summary="" cellpadding="3" cellspacing="0" border="0" width="350" height="100%">
+<tr>
+<td colspan=3 width="90%">&nbsp;</td>
+  <td align="right" width="*">
+	<!-- action buttons begins -->
+			<html:button styleClass="actionButton" property="submitButton" onclick="submitForm()">
+				Submit
+			</html:button>
+	<!-- action buttons end -->
+	</td>
+</tr>
+	
 	<tr>
 		<td class="formLeftSubTableTitle" width="5">
 	     	#
@@ -205,17 +220,15 @@
 				<html:hidden property="<%=fcollectionProtocolKey%>"/>
 				
 		    </td>
-		    <td class="formField" nowrap>
-				<html:text styleClass="formFieldSized" maxlength="50" size="10" styleId="flabelKey" property="<%=flabelKey%>"/>
+		    <td class="formField">
+				<html:text styleClass="formFieldSized15" maxlength="50" size="10" styleId="<%=flabelKey%>" property="<%=flabelKey%>" 
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized" maxlength="50" size="10" styleId="flabelKey" property="<%=fbarKey%>"/>
+				<html:text styleClass="formFieldSized15" maxlength="50" size="10" styleId="<%=fbarKey%>" property="<%=fbarKey%>" 
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 			</td>
 			<td class="formField" nowrap>
-<%-- 				<html:text styleClass="formFieldSized" maxlength="50" size="10" styleId="flabelKey" property="<%=fstorageContainerKey%>"/>
-				<html:text styleClass="formFieldSized" maxlength="50" size="5" styleId="flabelKey" property="<%=fpositionOneKey%>"/>
-				<html:text styleClass="formFieldSized" maxlength="50" size="5" styleId="flabelKey" property="<%=fpositionTwoKey%>"/>
---%>
 <%
 	String virtuallyLocatedKey = "value(Specimen:" + cnt + "_virtuallyLocated)";
 	String virtuallyLocatedStyleId = "chkBox_"+ rowCount;
@@ -324,16 +337,18 @@
 		<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 		<tr>
 			<td class="formSerialNumberField" width="5">
-		     	<%=cnt %>]<%=i %>
+		     	<%=cnt %>.<%=i %>
 				<html:hidden property="<%=fdclassKey%>"/>
 				<html:hidden property="<%=fdcollectionProtocolKey%>"/>
 
 		    </td>
 		    <td class="formField" nowrap>
-				<html:text styleClass="formFieldSized" maxlength="50" size="10" styleId="flabelKey" property="<%=fdlabelKey%>"/>
+				<html:text styleClass="formFieldSized15" maxlength="50" size="10" styleId="<%=fdlabelKey%>" property="<%=fdlabelKey%>" 
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized" maxlength="50" size="10" styleId="flabelKey" property="<%=fdbarKey%>"/>
+				<html:text styleClass="formFieldSized15" maxlength="50" size="10" styleId="<%=fdbarKey%>" property="<%=fdbarKey%>" 
+				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
 			</td>
 			<td class="formField" nowrap>
 	<%
@@ -414,27 +429,12 @@
 	<td colspan="4">&nbsp;</td>
 </tr>
 
-<tr>
-  <td align="left" colspan="2">
-	<!-- action buttons begins -->
-	<table cellpadding="4" cellspacing="0" border="0">
-	<tr>
-		<td width="50%">
-			&nbsp;
-		</td>
-		<td align="right">
-			<html:button styleClass="actionButton" property="submitButton" onclick="submitForm()">
-				Submit
-			</html:button>
-		</td>
-	</tr>
-	</table>				
-	<!-- action buttons end -->
-	</td>
-</tr>
 </table>
 <%
 	}   //else for submitSuccessful
  %>
 
 </html:form>
+</td>
+</tr>
+</table>

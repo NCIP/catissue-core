@@ -13,6 +13,7 @@
         <property name="hibernate.transaction.factory_class">net.sf.hibernate.transaction.JDBCTransactionFactory</property>
 		<property name="transaction.manager_lookup_class">net.sf.hibernate.transaction.JBossTransactionManagerLookup</property>
     	<property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
+		<property name="hibernate.jdbc.batch_size">0</property>
     	
         <!-- List of all Mapping files -->
         <mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>

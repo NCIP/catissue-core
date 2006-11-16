@@ -280,8 +280,7 @@ public class APIDemo
 
 		capacity.setOneDimensionCapacity(new Integer(3));
 		capacity.setTwoDimensionCapacity(new Integer(3));
-		storageTypeObj.setCapacity(capacity);
-		//storageTypeObj.setId(new Long(20));
+		storageTypeObj.setCapacity(capacity);		
 
 		Collection holdsStorageTypeCollection = new HashSet();
 		holdsStorageTypeCollection.add(storageTypeObj);
@@ -293,6 +292,7 @@ public class APIDemo
 		holdsSpecimenClassCollection.add("Tissue");
 		holdsSpecimenClassCollection.add("Fluid");
 		holdsSpecimenClassCollection.add("Molecular");
+		holdsSpecimenClassCollection.add("Cell");
 		storageTypeObj.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
 		return storageTypeObj;
 	}
@@ -309,7 +309,11 @@ public class APIDemo
 		Collection specimenTypeCollection = new HashSet();
 		specimenTypeCollection.add("DNA");
 		specimenTypeCollection.add("RNA");
+		specimenTypeCollection.add("RNA, nuclear");
+		specimenTypeCollection.add("cDNA");
+		specimenTypeCollection.add("protein");		
 		specimenArrayType.setSpecimenTypeCollection(specimenTypeCollection);
+		
 		specimenArrayType.setComment("");
 		Capacity capacity = new Capacity();
 		capacity.setOneDimensionCapacity(new Integer(4));
@@ -362,9 +366,11 @@ public class APIDemo
 		holdsStorageTypeCollection.add(storageType);
 		storageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
 
-		Collection holdsSpecimenClassCollection = new HashSet();
+		Collection holdsSpecimenClassCollection = new HashSet();		
 		holdsSpecimenClassCollection.add("Tissue");
+		holdsSpecimenClassCollection.add("Fluid");
 		holdsSpecimenClassCollection.add("Molecular");
+		holdsSpecimenClassCollection.add("Cell");
 		storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
 		
 /*		Container parent = new Container();
@@ -379,6 +385,55 @@ public class APIDemo
 		return storageContainer;
 	}
 
+	/**
+	 * @return StorageContainer
+	 */
+	public StorageContainer initStorageContainerForSpecimenArray()
+	{
+		StorageContainer storageContainer = new StorageContainer();
+		storageContainer.setName("sc" + UniqueKeyGeneratorUtil.getUniqueKey());
+
+		StorageType storageType = (StorageType) ClientDemo.dataModelObjectMap.get("StorageType");		
+		storageContainer.setStorageType(storageType);
+		
+		Site site = (Site) ClientDemo.dataModelObjectMap.get("Site"); 		
+		storageContainer.setSite(site);
+
+		Integer conts = new Integer(1);
+		storageContainer.setNoOfContainers(conts);
+		storageContainer.setTempratureInCentigrade(new Double(-30));
+		storageContainer.setBarcode("barc" + UniqueKeyGeneratorUtil.getUniqueKey());
+
+		Capacity capacity = new Capacity();
+		capacity.setOneDimensionCapacity(new Integer(1));
+		capacity.setTwoDimensionCapacity(new Integer(2));
+		storageContainer.setCapacity(capacity);
+
+		CollectionProtocol collectionProtocol = (CollectionProtocol) ClientDemo.dataModelObjectMap.get("CollectionProtocol");		
+	
+		Collection collectionProtocolCollection = new HashSet();
+		collectionProtocolCollection.add(collectionProtocol);
+		storageContainer.setCollectionProtocolCollection(collectionProtocolCollection);
+
+		Collection holdsStorageTypeCollection = new HashSet();
+		holdsStorageTypeCollection.add(storageType);
+		storageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
+				
+		storageContainer.setStorageType(storageType);
+		
+		SpecimenArrayType specimenArrayType = (SpecimenArrayType) ClientDemo.dataModelObjectMap.get("SpecimenArrayType");
+		Collection holdsSpecimenArrayTypeCollection = new HashSet();		
+		holdsSpecimenArrayTypeCollection.add(specimenArrayType);
+		storageContainer.setHoldsSpArrayTypeCollection(holdsSpecimenArrayTypeCollection);
+
+		storageContainer.setPositionDimensionOne(new Integer(1));
+		storageContainer.setPositionDimensionTwo(new Integer(2));
+
+		storageContainer.setActivityStatus("Active");
+		storageContainer.setFull(Boolean.valueOf(false));
+		return storageContainer;
+	}	
+	
 	/**
 	 * @return Site
 	 */
@@ -463,6 +518,16 @@ public class APIDemo
 		return participant;
 	}
 
+	/**
+	 * @return Participant
+	 */
+	public Participant initParticipantWithNoRequiredFields()
+	{
+		Participant participant = new Participant();
+		participant.setActivityStatus("Active");
+		return participant;
+	}
+	
 	/**
 	 * @return CollectionProtocol
 	 */
@@ -754,6 +819,33 @@ public class APIDemo
 	}
 
 	/**
+	 * @return Distribution
+	 */
+	public Distribution initDistribution(Specimen specimen)
+	{
+		Distribution distribution = new Distribution();
+
+		distribution.setActivityStatus("Active");		
+		DistributedItem distributedItem = new DistributedItem();
+		distributedItem.setQuantity(new Double(2));
+		distributedItem.setSpecimen(specimen);
+		Collection distributedItemCollection = new HashSet();
+		distributedItemCollection.add(distributedItem);
+		distribution.setDistributedItemCollection(distributedItemCollection);
+		
+		DistributionProtocol distributionProtocol = (DistributionProtocol) ClientDemo.dataModelObjectMap.get("DistributionProtocol");		
+		distribution.setDistributionProtocol(distributionProtocol);
+		
+		Site toSite = (Site) ClientDemo.dataModelObjectMap.get("Site");		
+		distribution.setToSite(toSite);	
+		distribution.setComments("");
+
+		User user = (User) ClientDemo.dataModelObjectMap.get("User");
+		distribution.setUser(user);
+		return distribution;
+	}
+	
+	/**
 	 * @return DistributionProtocol
 	 */
 	public DistributionProtocol initDistributionProtocol()
@@ -835,6 +927,7 @@ public class APIDemo
 		*/
 		return collectionProtocolRegistration;
 	}
+	
 	public SpecimenArray initSpecimenArray()
 	{
 		SpecimenArray specimenArray = new SpecimenArray();
@@ -892,6 +985,43 @@ public class APIDemo
 		specimenArray.setSpecimenArrayContentCollection(specimenArrayContentCollection);
 		return specimenArray;
 	}
+	
+	
+	public SpecimenArray initSpecimenArray(Specimen specimen, StorageContainer storageContainer, User createdBy)
+	{
+		SpecimenArray specimenArray = new SpecimenArray();		
+		
+		SpecimenArrayType specimenArrayType = (SpecimenArrayType) ClientDemo.dataModelObjectMap.get("SpecimenArrayType");		
+		specimenArray.setSpecimenArrayType(specimenArrayType);
+		
+		specimenArray.setBarcode("bar" + UniqueKeyGeneratorUtil.getUniqueKey());
+		specimenArray.setName("sa" + UniqueKeyGeneratorUtil.getUniqueKey()); 		
+			
+		specimenArray.setCreatedBy(createdBy);
+		
+		Capacity capacity = specimenArrayType.getCapacity();
+		specimenArray.setCapacity(capacity);
+		
+		specimenArray.setComment("");		
+		
+		specimenArray.setStorageContainer(storageContainer);
+		specimenArray.setPositionDimensionOne(new Integer(1));
+		specimenArray.setPositionDimensionTwo(new Integer(1));
+		
+		Collection specimenArrayContentCollection = new HashSet();
+		SpecimenArrayContent specimenArrayContent = new SpecimenArrayContent();		
+
+		specimenArrayContent.setSpecimen(specimen);
+		specimenArrayContent.setPositionDimensionOne(new Integer(1));
+		specimenArrayContent.setPositionDimensionTwo(new Integer(1));
+		Quantity quantity = new Quantity();
+		quantity.setValue(new Double(2));
+		specimenArrayContent.setInitialQuantity(quantity);
+		specimenArrayContentCollection.add(specimenArrayContent);
+		specimenArray.setSpecimenArrayContentCollection(specimenArrayContentCollection);
+		return specimenArray;
+	}
+	
 	
 	public SpecimenCharacteristics initSpecimenCharacteristics()
 	{
@@ -1288,9 +1418,11 @@ public class APIDemo
 		holdsStorageTypeCollection.add(storageType);
 		storageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
 
-		Collection holdsSpecimenClassCollection = new HashSet();
+		Collection holdsSpecimenClassCollection = new HashSet();		
 		holdsSpecimenClassCollection.add("Tissue");
+		holdsSpecimenClassCollection.add("Fluid");
 		holdsSpecimenClassCollection.add("Molecular");
+		holdsSpecimenClassCollection.add("Cell");
 		storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
 		
 		storageContainer.setPositionDimensionOne(new Integer(1));

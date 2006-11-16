@@ -177,7 +177,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
             {    
                 CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
                 cprForm.setParticipantID(participantId.longValue());
-                cprForm.setCheckedButton(true);
+                //cprForm.setCheckedButton(true);
                 //Bug-2819: Performance issue due to participant drop down: Jitendra
                 List participantList = bizLogic.retrieve(sourceObjectName, Constants.SYSTEM_IDENTIFIER, participantId);               
                 if(participantList != null && !participantList.isEmpty())
@@ -199,7 +199,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         		Long participantId=new Long(request.getParameter("participantId"));
         		CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
                 cprForm.setParticipantID(participantId.longValue());
-                cprForm.setCheckedButton(true);
+                //cprForm.setCheckedButton(true);
                 //Bug-2819: Performance issue due to participant drop down: Jitendra
                 List participantList = bizLogic.retrieve(sourceObjectName, Constants.SYSTEM_IDENTIFIER, participantId);               
                 if(participantList != null && !participantList.isEmpty())
@@ -222,7 +222,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         		Long participantId=new Long(((CollectionProtocolRegistrationForm)form).getParticipantID());
         		CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
                 cprForm.setParticipantID(participantId.longValue());
-                cprForm.setCheckedButton(true);                
+                //cprForm.setCheckedButton(true);                
                 List participantList = bizLogic.retrieve(sourceObjectName, Constants.SYSTEM_IDENTIFIER, participantId);               
                 if(participantList != null && !participantList.isEmpty())
                 {

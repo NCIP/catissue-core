@@ -371,6 +371,7 @@ public class NewMultipleSpecimenAction extends DispatchAction
 	{
 
 		Map bioHazards = ((NewSpecimenForm) form).getBiohazard();
+		
 		int bioHazardCnt = ((NewSpecimenForm) form).getBhCounter();
 
 		request.setAttribute("output", "success");

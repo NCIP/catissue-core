@@ -42,6 +42,7 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.integration.IntegrationManager;
@@ -134,7 +135,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			//End:- Change for API Search
 
 			Long parentSpecimenId = specimen.getId();
-			specimen.setId(null);
+			
+			resetId(specimen);
+			
 			try
 			{
 				insertSingleSpecimen(specimen, dao, sessionDataBean, true);
@@ -156,6 +159,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			for (int i = 0; i < derivedSpecimens.size(); i++)
 			{
 				Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
+				resetId(derivedSpecimen);
 				derivedSpecimen.setParentSpecimen(specimen);
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 
@@ -194,6 +198,47 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				throw handleSMException(e);
 			}
 
+		}
+	}
+
+	/**
+	 * By Rahul Ner
+	 * @param specimen
+	 */
+	private void resetId(Specimen specimen)
+	{
+		specimen.setId(null);	
+		Iterator childItr = null;
+		
+		if(specimen.getSpecimenEventCollection() != null) {
+			
+			childItr =  specimen.getSpecimenEventCollection().iterator();
+			while (childItr.hasNext())
+			{
+				SpecimenEventParameters eventParams = (SpecimenEventParameters) childItr.next();
+				eventParams.setSpecimen(specimen);
+				eventParams.setId(null);
+			}
+			
+		}
+
+		if(specimen.getExternalIdentifierCollection() != null) {
+			childItr =  specimen.getExternalIdentifierCollection().iterator();
+			while (childItr.hasNext())
+			{
+				ExternalIdentifier externalIdentifier = (ExternalIdentifier) childItr.next();
+				externalIdentifier.setSpecimen(specimen);
+				externalIdentifier.setId(null);
+			}
+		}
+		
+		if (specimen.getBiohazardCollection() != null) {
+			childItr =  specimen.getBiohazardCollection().iterator();
+			while (childItr.hasNext())
+			{
+				Biohazard biohazard = (Biohazard) childItr.next();
+				//biohazard.setId(null);
+			}
 		}
 	}
 
@@ -250,6 +295,30 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			 */
 			ApiSearchUtil.setSpecimenDefault(specimen);
 			//End:- Change for API Search
+			
+			Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
+
+			if (externalIdentifierCollection != null)
+			{
+				if (externalIdentifierCollection.isEmpty()) //Dummy entry added for query
+				{
+					ExternalIdentifier exId = new ExternalIdentifier();
+
+					exId.setName(null);
+					exId.setValue(null);
+					exId.setSpecimen(specimen);
+					externalIdentifierCollection.add(exId);
+				}
+
+//				Iterator it = externalIdentifierCollection.iterator();
+//				while (it.hasNext())
+//				{
+//					ExternalIdentifier exId = (ExternalIdentifier) it.next();
+//					exId.setSpecimen(specimen);
+//					dao.insert(exId, sessionDataBean, true, true);
+//				}
+			}
+
 
 			//Set protectionObjects = new HashSet();
 			specimen.setLineage(Constants.NEW_SPECIMEN);
@@ -262,52 +331,36 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			{
 				protectionObjects.add(specimen.getSpecimenCharacteristics());
 			}*/
-			Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
+		
 
-			if (externalIdentifierCollection != null)
-			{
-				if (externalIdentifierCollection.isEmpty()) //Dummy entry added for query
-				{
-					ExternalIdentifier exId = new ExternalIdentifier();
-
-					exId.setName(null);
-					exId.setValue(null);
-					externalIdentifierCollection.add(exId);
-				}
-
-				Iterator it = externalIdentifierCollection.iterator();
-				while (it.hasNext())
-				{
-					ExternalIdentifier exId = (ExternalIdentifier) it.next();
-					exId.setSpecimen(specimen);
-					dao.insert(exId, sessionDataBean, true, true);
-				}
-			}
-
+			
 			//Mandar : 17-july-06 : autoevents start
-			Collection specimenEventsCollection = specimen.getSpecimenEventCollection();
-			Iterator specimenEventsCollectionIterator = specimenEventsCollection.iterator();
-			while (specimenEventsCollectionIterator.hasNext())
-			{
-
-				Object eventObject = specimenEventsCollectionIterator.next();
-
-				if (eventObject instanceof CollectionEventParameters)
-				{
-					CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
-					collectionEventParameters.setSpecimen(specimen);
-					dao.insert(collectionEventParameters, sessionDataBean, true, true);
-
-				}
-				else if (eventObject instanceof ReceivedEventParameters)
-				{
-					ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
-					receivedEventParameters.setSpecimen(specimen);
-					dao.insert(receivedEventParameters, sessionDataBean, true, true);
-
-				}
-
-			}
+//			Collection specimenEventsCollection = specimen.getSpecimenEventCollection();
+//			Iterator specimenEventsCollectionIterator = specimenEventsCollection.iterator();
+//			while (specimenEventsCollectionIterator.hasNext())
+//			{
+//
+//				Object eventObject = specimenEventsCollectionIterator.next();
+//				
+//
+//				if (eventObject instanceof CollectionEventParameters)
+//				{
+//					CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
+//					collectionEventParameters.setSpecimen(specimen);
+//					//collectionEventParameters.setId(null);
+//					dao.insert(collectionEventParameters, sessionDataBean, true, true);
+//
+//				}
+//				else if (eventObject instanceof ReceivedEventParameters)
+//				{
+//					ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
+//					receivedEventParameters.setSpecimen(specimen);
+//					//receivedEventParameters.setId(null);
+//					dao.insert(receivedEventParameters, sessionDataBean, true, true);
+//
+//				}
+//
+//			}
 
 			//Mandar : 17-july-06 : autoevents end
 
@@ -829,6 +882,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				// check for closed Parent Specimen
 				checkStatus(dao, parentSpecimen, "Parent Specimen");
 				specimen.setLineage(Constants.DERIVED_SPECIMEN);
+				// set parent specimen event parameters -- added by Ashwin for bug id# 2476
+				specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(specimen.getParentSpecimen(),specimen));				
 //			}
 		}
 
@@ -1831,4 +1886,40 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		return new ArrayList();
 	}
+	
+	// added by Ashwin for bug id# 2476 
+	/**
+	 * Set event parameters from parent specimen to derived specimen
+	 * @param parentSpecimen specimen
+	 * @return set
+	 */
+	private Set populateDeriveSpecimenEventCollection(Specimen parentSpecimen,Specimen deriveSpecimen)
+	{
+		Set deriveEventCollection = new HashSet();
+		Set parentSpecimeneventCollection = (Set) parentSpecimen.getSpecimenEventCollection();
+		SpecimenEventParameters specimenEventParameters = null;
+		SpecimenEventParameters deriveSpecimenEventParameters = null;
+		
+		try
+		{
+			if (parentSpecimeneventCollection != null)
+			{	
+				for (Iterator iter = parentSpecimeneventCollection.iterator(); iter.hasNext();)
+				{
+					specimenEventParameters = (SpecimenEventParameters) iter.next();
+					deriveSpecimenEventParameters = (SpecimenEventParameters) specimenEventParameters.clone();
+					deriveSpecimenEventParameters.setId(null);
+					deriveSpecimenEventParameters.setSpecimen(deriveSpecimen);
+					deriveEventCollection.add(deriveSpecimenEventParameters);
+				}
+			}	
+		}
+		catch (CloneNotSupportedException exception)
+		{
+			exception.printStackTrace();
+		}
+		
+		return deriveEventCollection;
+	}
+	
 }

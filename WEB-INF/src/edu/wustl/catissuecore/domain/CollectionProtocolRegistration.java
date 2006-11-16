@@ -249,7 +249,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 
 			this.collectionProtocol.setId(new Long(form.getCollectionProtocolID()));
 			
-			if(form.isCheckedButton())
+			if(form.getParticipantID() != -1 && form.getParticipantID() != 0)
 			{
 				this.participant = new Participant();
 				this.participant.setId(new Long(form.getParticipantID()));

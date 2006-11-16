@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -33,6 +35,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 public class DefaultSpecimenViewAction extends BaseAction
@@ -99,12 +102,27 @@ public class DefaultSpecimenViewAction extends BaseAction
 			//temporary table name
 			String tableName = Constants.QUERY_RESULTS_TABLE + "_" + sessionData.getUserId();
 			JDBCDAO jdbcDAO = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-			jdbcDAO.openSession(sessionData);
-			List list = jdbcDAO.retrieve(tableName, selectColumnNames, true);
-			request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
-			session.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
-			session.setAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE, defaultViewAttribute);
-			request.setAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE, defaultViewAttribute);
+        	jdbcDAO.openSession(sessionData);
+	        try
+			{
+	        	List list = jdbcDAO.retrieve(tableName, selectColumnNames, true);
+				request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
+				session.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
+				session.setAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE, defaultViewAttribute);
+				request.setAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE, defaultViewAttribute);
+			}
+	        catch(DAOException exp)
+			{
+	        	Logger.out.error(exp.getMessage(),exp);
+	        	ActionErrors errors = new ActionErrors();
+    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("advanceQuery.userAlreadyLoggedIn"));
+    			saveErrors(request, errors);
+	        	target= Constants.FAILURE;
+			}
+			finally
+			{
+	            jdbcDAO.closeSession();
+			}
 		}
 		else
 		{

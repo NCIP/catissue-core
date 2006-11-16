@@ -19,6 +19,7 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
@@ -80,7 +81,8 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			specimen.setParentSpecimen(parentSpecimen);
 			specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());
-
+			// set event parameters from parent specimen - added by Ashwin for bug id# 2476
+			specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(parentSpecimen,specimen));
 			specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
 		}
 		try
@@ -211,4 +213,40 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		Logger.out.debug("Dynamic Group name: " + dynamicGroups[0]);
 		return dynamicGroups;
 	}
+	
+	// added by Ashwin for bug id# 2476 
+	/**
+	 * Set event parameters from parent specimen to derived specimen
+	 * @param parentSpecimen specimen
+	 * @return set
+	 */
+	private Set populateDeriveSpecimenEventCollection(Specimen parentSpecimen,Specimen deriveSpecimen)
+	{
+		Set deriveEventCollection = new HashSet();
+		Set parentSpecimeneventCollection = (Set) parentSpecimen.getSpecimenEventCollection();
+		SpecimenEventParameters specimenEventParameters = null;
+		SpecimenEventParameters deriveSpecimenEventParameters = null;
+		
+		try
+		{
+			if (parentSpecimeneventCollection != null)
+			{	
+				for (Iterator iter = parentSpecimeneventCollection.iterator(); iter.hasNext();)
+				{
+					specimenEventParameters = (SpecimenEventParameters) iter.next();
+					deriveSpecimenEventParameters = (SpecimenEventParameters) specimenEventParameters.clone();
+					deriveSpecimenEventParameters.setId(null);
+					deriveSpecimenEventParameters.setSpecimen(deriveSpecimen);
+					deriveEventCollection.add(deriveSpecimenEventParameters);
+				}
+			}	
+		}
+		catch (CloneNotSupportedException exception)
+		{
+			exception.printStackTrace();
+		}
+		
+		return deriveEventCollection;
+	}
+	
 }

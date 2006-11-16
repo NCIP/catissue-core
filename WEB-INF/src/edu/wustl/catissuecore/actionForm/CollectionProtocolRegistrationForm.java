@@ -85,7 +85,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	  		
 	  		//Bug-2819: Performance issue due to participant drop down: Jitendra
 	  		this.participantName = registration.getParticipant().getMessageLabel();
-	  		checkedButton = true;
+	  		//checkedButton = true;
 	  	}
 	  	this.participantProtocolID = Utility.toString(registration.getProtocolParticipantIdentifier());
 	  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
@@ -186,23 +186,19 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
          	// Mandar 10-apr-06 : bugid :353 
         	// Error messages should be in the same sequence as the sequence of fields on the page.
 
-			// changes as per Bugzilla Bug 287 
-			if (checkedButton == true)
+			// changes as per Bugzilla Bug 287 			
+				
+			if (validator.isEmpty(participantProtocolID))
 			{
-				if (participantID == -1)
+				if (participantID == -1 || participantID == 0)
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionProtocolReg.participantName")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.collectionprotocolregistration.atleast"));
 				}
-			} // name selected
-			else
-			{
-				if (validator.isEmpty(participantProtocolID))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionProtocolReg.participantProtocolID")));
-				}
+				
 			}
+			
 			//  date validation according to bug id 707, 722 and 730
-			String errorKey = validator.validateDate(registrationDate,true );
+			String errorKey = validator.validateDate(registrationDate,true ); 
 			if(errorKey.trim().length() >0  )
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocolregistration.date")));
@@ -237,19 +233,19 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
    }
 
 	
-	/**
-	 * @return returns boolean value of checkbox button
-	 */
-	public boolean isCheckedButton() {
-		return checkedButton;
-	}
-
-	/**
-	 * @param checkedButton sets value of checkeButton
-	 */
-	public void setCheckedButton(boolean checkedButton) {
-		this.checkedButton = checkedButton;
-	}
+//	/**
+//	 * @return returns boolean value of checkbox button
+//	 */
+//	public boolean isCheckedButton() {
+//		return checkedButton;
+//	}
+//
+//	/**
+//	 * @param checkedButton sets value of checkeButton
+//	 */
+//	public void setCheckedButton(boolean checkedButton) {
+//		this.checkedButton = checkedButton;
+//	}
 
 	/**
      * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
@@ -265,7 +261,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	     else if(addNewFor.equals("participantId"))
 	     {
 	         setParticipantID(addObjectIdentifier.longValue());
-	         setCheckedButton(true);
+	         //setCheckedButton(true);
 	     }
 	 }
 	

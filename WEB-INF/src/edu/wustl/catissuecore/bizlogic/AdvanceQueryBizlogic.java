@@ -7,7 +7,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,7 @@ import edu.wustl.common.tree.AdvanceQueryTreeNode;
 import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.tree.TreeNode;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -50,25 +50,32 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
  		Logger.out.debug("sql for create table"+sql);
  		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
         jdbcDao.openSession(sessionData);
-
-        //Delete if there is any tbale existing with same name
-       	jdbcDao.delete(tempTableName);
-       	//Create empty temporary table
-        jdbcDao.createTable(sql);
-
-        //Insert list of data into the temporary table created.
-        List dataList = jdbcDao.executeQuery(searchQuery,sessionData,true,hasConditionOnIdentifiedField,queryResultObjectDataMap);
-        Logger.out.debug("full list to be inserted"+dataList);
-        Iterator dataListItr = dataList.iterator();
-        while(dataListItr.hasNext())
-        {
-        	List rowList = (List)dataListItr.next();
-        	Logger.out.debug("list size to be inserted"+rowList.size()+":"+rowList);
-        	jdbcDao.insert(tempTableName,rowList);
-        }
-        jdbcDao.commit();
-        jdbcDao.closeSession();
-        return dataList.size();
+        int noOfRecords = 0;
+        try
+		{
+	        //Delete if there is any tbale existing with same name
+	       	jdbcDao.delete(tempTableName);
+	       	//Create empty temporary table
+	        jdbcDao.createTable(sql);
+	
+	        //Insert list of data into the temporary table created.
+	        List dataList = jdbcDao.executeQuery(searchQuery,sessionData,true,hasConditionOnIdentifiedField,queryResultObjectDataMap);
+	        Logger.out.debug("full list to be inserted"+dataList);
+	        Iterator dataListItr = dataList.iterator();
+	        while(dataListItr.hasNext())
+	        {
+	        	List rowList = (List)dataListItr.next();
+	        	Logger.out.debug("list size to be inserted"+rowList.size()+":"+rowList);
+	        	jdbcDao.insert(tempTableName,rowList);
+	        }
+	        jdbcDao.commit();
+	        noOfRecords = dataList.size();
+		}
+		finally
+		{
+			jdbcDao.closeSession();
+		}
+        return noOfRecords;
 	}
 	
 	/* Get the data for tree view from temporary table and create tree nodes.
@@ -77,12 +84,24 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	{
 		String tempTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionData.getUserId();
 		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-        jdbcDao.openSession(sessionData);
-        Logger.out.debug("Temp table in adv bizlogic:"+tempTableName);
-        
-        //Retrieve all the data from the temporary table
-		List dataList =  jdbcDao.retrieve(tempTableName);
-		jdbcDao.closeSession();
+		List dataList=null; 
+		jdbcDao.openSession(sessionData);
+		Logger.out.debug("Temp table in adv bizlogic:"+tempTableName);
+		try
+		{
+	        //Retrieve all the data from the temporary table
+			dataList =  jdbcDao.retrieve(tempTableName);
+		}
+		catch (DAOException excp)
+		{
+			Logger.out.error(excp.getMessage(),excp);
+			throw excp;
+		}
+		finally
+		{
+	        jdbcDao.closeSession();
+		}
+
 		Logger.out.debug("List of data for identifiers:"+dataList);
 		
 		//Get column idetifiers from the column ids map.
@@ -237,23 +256,10 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	            }
 	        }
 	    }
-	    sortTreeVector(finalTreeNodes);
+	    Utility.sortTreeVector(finalTreeNodes);
 	    return finalTreeNodes;
 	}
 	
-	/**
-	 * To sort the Tree.
-	 * @param nodes reference to the Vector containing AdvanceQueryTreeNode objects.
-	 */
-	private void sortTreeVector(Vector nodes)
-	{
-		Collections.sort(nodes);
-		for (int i=0;i<nodes.size();i++)
-		{
-			AdvanceQueryTreeNode child = (AdvanceQueryTreeNode)nodes.get(i);
-			sortTreeVector(child.getChildNodes());
-		}
-	}
 	/**
 	 * Searches and returns the given node in the vector fo nodes and its child nodes. 
 	 * @param treeNodeVector the vector of tree nodes. 

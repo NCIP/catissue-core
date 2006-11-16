@@ -64,7 +64,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
 			throws DAOException, UserNotAuthorizedException
 	{
-		Distribution dist = (Distribution) obj;
+		Distribution dist = (Distribution) obj; 
 		
 		//Load & set the User
 		Object userObj = dao.retrieve(User.class.getName(), dist.getUser().getId());
@@ -87,6 +87,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 		if (siteObj != null)
 		{
 			Site site = (Site) siteObj;
+			if(!site.getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+			{
+				throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSite"));
+			}
 			dist.setToSite(site);
 		}
 
@@ -449,6 +453,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 		else
 		{
 			Object distributionProtocolObj = dao.retrieve(DistributionProtocol.class.getName(), distribution.getDistributionProtocol().getId());
+			if(!((DistributionProtocol)distributionProtocolObj).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+			{
+				throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableDP"));
+			}
 		}
 		
 		if (distribution.getUser() == null || distribution.getUser().getId() == null )
@@ -499,6 +507,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 					{						
 						throw new DAOException( ApplicationProperties.getValue("errors.distribution.specimenArrayNotFound"));
 					}
+					else if(!((SpecimenArray)object).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+					{
+						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimenArray"));
+					}
 				}
 			}
 			if(distributedItemCollection != null && !distributedItemCollection.isEmpty())
@@ -524,9 +536,9 @@ public class DistributionBizLogic extends DefaultBizLogic
 					{					
 						throw new DAOException( ApplicationProperties.getValue("errors.distribution.specimenNotFound"));
 					}
-					else if(((Specimen)specimenObj).getActivityStatus().equals(Constants.ACTIVITY_STATUS_VALUES[2]))
+					else if(!((Specimen)specimenObj).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
 					{
-						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedSpecimen"));
+						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimen"));
 					}
 				}
 			}

@@ -25,20 +25,32 @@
 </FORM>
 			<table cellpadding="0" cellspacing="0" width="100%" height="100%" border="1">
 				<tr width="100%" height="100%">
-				<td width="100%" height="100%">			
-							<APPLET
-							    CODEBASE = "<%=Constants.APPLET_CODEBASE%>"
-							    ARCHIVE = "CaTissueApplet.jar"
-							    CODE = "edu/wustl/catissuecore/applet/ui/MultipleSpecimenApplet.class"
-							    ALT = "Mulitple specimen Applet"
-							    NAME = "<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>"
-							    width="100%" height="550" MAYSCRIPT>
-								<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2">
-								<PARAM name="name" value="<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>">
-								<PARAM name="session_id" value="<%=session.getId()%>">
-								<PARAM name="noOfSpecimen" value="<%=form.getNumberOfSpecimen()%>">
-								<PARAM NAME = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" VALUE = "<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">
-							</APPLET>
+				<td width="100%" height="100%">
+							<script language="JavaScript" type="text/javascript">
+									platform = navigator.platform.toLowerCase();
+									document.writeln('<APPLET\n' +
+													'CODEBASE = "<%=Constants.APPLET_CODEBASE%>"\n'+
+													'ARCHIVE = "CaTissueApplet.jar"\n'+
+													'CODE = "edu/wustl/catissuecore/applet/ui/MultipleSpecimenApplet.class"\n'+
+													'ALT = "Mulitple specimen Applet"\n'+
+													'NAME = "<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>"'
+													);
+									if (platform.indexOf("mac") != -1)
+									{
+										document.writeln('width="1000" height="550" MAYSCRIPT>');
+									}
+									else
+									{
+										document.writeln('width="100%" height="550" MAYSCRIPT>');
+									}
+									document.writeln('<PARAM name="type" value="application/x-java-applet;jpi-version=1.3">\n' +
+													'<PARAM name="name" value="<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>">\n'+
+													'<PARAM name="session_id" value="<%=session.getId()%>">\n'+
+													'<PARAM name="noOfSpecimen" value="<%=form.getNumberOfSpecimen()%>">\n'+
+													'<PARAM name = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" value="<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">\n'+
+													'</APPLET>'
+												    );
+							</script>
 				</td>
 				</tr>
 		   	</table>

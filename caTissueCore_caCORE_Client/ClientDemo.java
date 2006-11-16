@@ -85,11 +85,11 @@ public class ClientDemo
 		private static String newLine = "\n";
 		private String separator = ",";
 		private static StringBuffer reportContents = null;
-		private String insertOperation = " insert ";
-		private String insertValidateOperation = " validation at insertion time ";
-		private String updateOperation = " update ";
-		private String updateValidateOperation = " validation at updation time ";
-		private String searchOperation = " serach ";
+		private String insertOperation = " insert, Positive testcase Name: ";
+		private String insertValidateOperation = " insert, Negative testcase Name: ";
+		private String updateOperation = " update, Positive testcase Name: ";
+		private String updateValidateOperation = "update, Negative testcase Name: ";
+		private String searchOperation = " serach, Positive testcase Name: ";
 		private String successMessage = " pass ";
 		private String failureMessage = " fail ";
 		private static String filePath = "";
@@ -175,6 +175,7 @@ public class ClientDemo
 			testAddCollectionProtocol();
 			testAddDistributionProtocol();
 			testAddParticipant();
+			testAddParticipantWithNoRequiredFields();
 			testAddCollectionProtocolRegistration();
 			testAddSpecimenCollectionGroup();
 			testAddStorageType();
@@ -204,7 +205,11 @@ public class ClientDemo
 			testAddSpecimenArrayTypeWithWrongData();
 			testAddSpecimenWithWrongData();		
 			testAddSpecimenArrayWithWrongData();
+			testAddSpecimenArrayWithClosedSpecimen();
 			testAddDistributionWithWrongData();
+			testAddDistributionWithClosedSpecimen();
+			testAddDistributionWithClosedSite();
+			testAddDistributionWithClosedDistributionProtocol();
 			
 								
 		}
@@ -223,13 +228,13 @@ public class ClientDemo
 	    	setLogger(departmentObj);
 	    	departmentObj =  (Department) appService.createObject(departmentObj);
 	    	dataModelObjectMap.put("Department",departmentObj);
-	    	writeSuccessfullOperationToReport(departmentObj,insertOperation);
+	    	writeSuccessfullOperationToReport(departmentObj,insertOperation+"testAddDepartment");
 			Logger.out.info(" Domain Object is successfully added ----> Name:: " + departmentObj.getName());
 		//+ departmentObj.getId().longValue() + " ::  Name :: " + departmentObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeFailureOperationsToReport("Department",insertOperation);
+			writeFailureOperationsToReport("Department",insertOperation+"testAddDepartment");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -245,12 +250,12 @@ public class ClientDemo
 	    	setLogger(departmentObj);
 	    	departmentObj =  (Department) appService.createObject(departmentObj);
 	    	dataModelObjectMap.put("Department",departmentObj);
-	    	writeFailureOperationsToReport("Department",insertValidateOperation);
+	    	writeFailureOperationsToReport("Department",insertValidateOperation + " testAddInstitutionWithWrongData");
 			//Logger.out.info(" Domain Object is successfully added ----> Name:: " + departmentObj.getName());		
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(departmentObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(departmentObj,insertValidateOperation + " testAddInstitutionWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -265,13 +270,13 @@ public class ClientDemo
 	    	bioHazardObj =  (Biohazard) appService.createObject(bioHazardObj);
 	    	System.out.println("-----------------" + bioHazardObj);
 	    	dataModelObjectMap.put("Biohazard",bioHazardObj);
-	    	writeSuccessfullOperationToReport(bioHazardObj,insertOperation);
+	    	writeSuccessfullOperationToReport(bioHazardObj,insertOperation+"testAddBioHazard");
 			Logger.out.info(" Domain Object is successfully added ---->  Name:: " + bioHazardObj.getName());
 		//+ bioHazardObj.getId().longValue() + " ::  Name :: " + bioHazardObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeFailureOperationsToReport("Biohazard",insertOperation);
+			writeFailureOperationsToReport("Biohazard",insertOperation+"testAddBioHazard");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -307,13 +312,13 @@ public class ClientDemo
 	    	setLogger(bioHazardObj);
 	    	bioHazardObj =  (Biohazard) appService.createObject(bioHazardObj);
 	    	dataModelObjectMap.put("Biohazard",bioHazardObj);
-	    	writeFailureOperationsToReport("Biohazard",insertValidateOperation);
+	    	writeFailureOperationsToReport("Biohazard",insertValidateOperation + " testAddBioHazardWithWrongData");
 			//Logger.out.info(" Domain Object is successfully added ---->  Name:: " + bioHazardObj.getName());
 		//+ bioHazardObj.getId().longValue() + " ::  Name :: " + bioHazardObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(bioHazardObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(bioHazardObj,insertValidateOperation + " testAddBioHazardWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -328,7 +333,7 @@ public class ClientDemo
 	    	setLogger(userObj);
 			userObj =  (User) appService.createObject(userObj);
 			dataModelObjectMap.put("User",userObj);
-			writeSuccessfullOperationToReport(userObj,insertOperation);
+			writeSuccessfullOperationToReport(userObj,insertOperation+"testAddUser");
 			Logger.out.info(" Domain Object is successfully added ---->  LoginName:: " + userObj.getId().longValue() + " ::  Name :: " + userObj.getFirstName());
 			
 			User userObj1 = (User) api.initAdminUser();
@@ -340,7 +345,7 @@ public class ClientDemo
 		}
 		catch(Exception e)
 		{
-			writeFailureOperationsToReport("User",insertOperation);
+			writeFailureOperationsToReport("User",insertOperation+"testAddUser");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -355,13 +360,13 @@ public class ClientDemo
 			userObj.setEmailAddress(null);
 	    	setLogger(userObj);
 			userObj =  (User) appService.createObject(userObj);
-			writeFailureOperationsToReport("User",insertValidateOperation);
+			writeFailureOperationsToReport("User",insertValidateOperation + " testAddUserWithWrongData");
 			//dataModelObjectMap.put("User",userObj);
 			//Logger.out.info(" Domain Object is successfully added ---->  LoginName:: " + userObj.getId().longValue() + " ::  Name :: " + userObj.getFirstName());
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(userObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(userObj,insertValidateOperation + " testAddUserWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -375,12 +380,31 @@ public class ClientDemo
 			setLogger(participantObj);
 			participantObj =  (Participant) appService.createObject(participantObj);
 			dataModelObjectMap.put("Participant",participantObj);
-			writeSuccessfullOperationToReport(participantObj,insertOperation);
+			writeSuccessfullOperationToReport(participantObj,insertOperation+"testAddParticipant");
 			Logger.out.info(" Domain Object is successfully added ---->  ID:: " + participantObj.getId().longValue());
 		}
 		catch(Exception e)
 		{
-			writeFailureOperationsToReport("Participant",insertOperation);
+			writeFailureOperationsToReport("Participant",insertOperation+"testAddParticipant");
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+		}
+	}
+	
+	private void testAddParticipantWithNoRequiredFields()
+	{
+		try
+		{
+			Participant participantObj = (Participant) api.initParticipantWithNoRequiredFields();
+			setLogger(participantObj);
+			participantObj =  (Participant) appService.createObject(participantObj);
+			dataModelObjectMap.put("Participant",participantObj);
+			writeSuccessfullOperationToReport(participantObj,insertOperation+"testAddParticipantWithNoRequiredFields");
+			Logger.out.info(" Domain Object is successfully added ---->  ID:: " + participantObj.getId().longValue());
+		}
+		catch(Exception e)
+		{
+			writeFailureOperationsToReport("Participant",insertOperation+"testAddParticipantWithNoRequiredFields");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -395,13 +419,13 @@ public class ClientDemo
 			setLogger(participantObj);
 			participantObj.setGender("wrong");
 			participantObj =  (Participant) appService.createObject(participantObj);
-			writeFailureOperationsToReport("Participant",insertValidateOperation);
+			writeFailureOperationsToReport("Participant",insertValidateOperation + " testAddParticipantWithWrongData");
 			//dataModelObjectMap.put("Participant",participantObj);
 			//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + participantObj.getId().longValue());
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(participantObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(participantObj,insertValidateOperation + " testAddParticipantWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -418,12 +442,12 @@ public class ClientDemo
 	    	institutionObj =  (Institution) appService.createObject(institutionObj);
 	    	dataModelObjectMap.put("Institution",institutionObj);
 			Logger.out.info(" Domain Object is successfully added ---->  Name:: " + institutionObj.getName());
-			writeSuccessfullOperationToReport(institutionObj,insertOperation);
+			writeSuccessfullOperationToReport(institutionObj,insertOperation+"testAddInstitution");
 			//+ institutionObj.getId().longValue() + " ::  Name :: " + institutionObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeFailureOperationsToReport("Institution",insertOperation);
+			writeFailureOperationsToReport("Institution",insertOperation+"testAddInstitution");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -439,7 +463,7 @@ public class ClientDemo
 	    	setLogger(institutionObj);
 	    	Logger.out.info("Inserting domain object------->"+institutionObj);
 	    	institutionObj =  (Institution) appService.createObject(institutionObj);
-	    	writeFailureOperationsToReport("Institution",insertValidateOperation);	    	
+	    	writeFailureOperationsToReport("Institution",insertValidateOperation + "testAddInstitutionWithWrongData");	    	
 	    	//dataModelObjectMap.put("Institution",institutionObj);
 			//Logger.out.info(" Domain Object is successfully added ---->  Name:: " + institutionObj.getName());
 			
@@ -447,7 +471,7 @@ public class ClientDemo
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(institutionObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(institutionObj,insertValidateOperation + "testAddInstitutionWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -462,14 +486,14 @@ public class ClientDemo
 	    	Logger.out.info("Inserting domain object------->"+cancerResearchGroupObj);
 	    	cancerResearchGroupObj =  (CancerResearchGroup) appService.createObject(cancerResearchGroupObj);
 	    	dataModelObjectMap.put("CancerResearchGroup",cancerResearchGroupObj);
-	    	writeSuccessfullOperationToReport(cancerResearchGroupObj,insertOperation);
+	    	writeSuccessfullOperationToReport(cancerResearchGroupObj,insertOperation+"testAddCancerResearchGroup");
 			Logger.out.info(" Domain Object is successfully added ---->  Name:: " + cancerResearchGroupObj.getName());
 		//+ cancerResearchGroupObj.getId().longValue() + " ::  Name :: " + cancerResearchGroupObj.getName());
 		}
 		catch(Exception e)
 		{
 			//writeFailureOperationsToReport("Ca");
-			writeFailureOperationsToReport("CancerResearchGroup",insertOperation);
+			writeFailureOperationsToReport("CancerResearchGroup",insertOperation+"testAddCancerResearchGroup");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -485,13 +509,13 @@ public class ClientDemo
 	    	setLogger(cancerResearchGroupObj);
 	    	Logger.out.info("Inserting domain object------->"+cancerResearchGroupObj);
 	    	cancerResearchGroupObj =  (CancerResearchGroup) appService.createObject(cancerResearchGroupObj);	    	
-	    	writeFailureOperationsToReport("CancerResearchGroup",insertValidateOperation);
+	    	writeFailureOperationsToReport("CancerResearchGroup",insertValidateOperation + " testAddCancerResearchGroupWithWrongData");
 	    	//dataModelObjectMap.put("CancerResearchGroup",cancerResearchGroupObj);
 			//Logger.out.info(" Domain Object is successfully added ---->  Name:: " + cancerResearchGroupObj.getName());		
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(cancerResearchGroupObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(cancerResearchGroupObj,insertValidateOperation + " testAddCancerResearchGroupWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -506,13 +530,13 @@ public class ClientDemo
 	    	Logger.out.info("Inserting domain object------->"+siteObj);
 			siteObj =  (Site) appService.createObject(siteObj);
 			dataModelObjectMap.put("Site",siteObj);
-			writeSuccessfullOperationToReport(siteObj,insertOperation);
+			writeSuccessfullOperationToReport(siteObj,insertOperation+"testAddSite");
 			Logger.out.info(" Domain Object is successfully added ----> ID:: " + siteObj.getId().toString());
 		//+ siteObj.getId().longValue() + " ::  Name :: " + siteObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeFailureOperationsToReport("Site",insertOperation);
+			writeFailureOperationsToReport("Site",insertOperation+"testAddSite");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -528,13 +552,13 @@ public class ClientDemo
 	    	setLogger(siteObj);
 	    	Logger.out.info("Inserting domain object------->"+siteObj);
 			siteObj =  (Site) appService.createObject(siteObj);
-			writeFailureOperationsToReport("Site",insertValidateOperation);
+			writeFailureOperationsToReport("Site",insertValidateOperation + " testAddSiteWithWrongData");
 			//dataModelObjectMap.put("Site",siteObj);
 			//Logger.out.info(" Domain Object is successfully added ----> ID:: " + siteObj.getId().toString());		
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(siteObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(siteObj,insertValidateOperation + " testAddSiteWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -549,13 +573,13 @@ public class ClientDemo
 	    	Logger.out.info("Inserting domain object------->"+distributionObj);
 			distributionObj =  (Distribution) appService.createObject(distributionObj);
 			dataModelObjectMap.put("Distribution",distributionObj);
-			writeSuccessfullOperationToReport(distributionObj,insertOperation);
+			writeSuccessfullOperationToReport(distributionObj,insertOperation+"testAddDistribution");
 			Logger.out.info(" Domain Object is successfully added ---->  ID:: " + distributionObj.getId().toString());
 		//+ distributionObj.getId().longValue() + " ::  Name :: " + distributionObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeFailureOperationsToReport("Distribution",insertOperation);
+			writeFailureOperationsToReport("Distribution",insertOperation+"testAddDistribution");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -574,14 +598,14 @@ public class ClientDemo
 	    	distributionObj.setDistributedItemCollection(null);
 	    	
 			distributionObj =  (Distribution) appService.createObject(distributionObj);
-			writeFailureOperationsToReport("Distribution",insertValidateOperation);
+			writeFailureOperationsToReport("Distribution",insertValidateOperation + " testAddDistributionWithWrongData");
 			//dataModelObjectMap.put("Distribution",distributionObj);
 			//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + distributionObj.getId().toString());
 		//+ distributionObj.getId().longValue() + " ::  Name :: " + distributionObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(distributionObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(distributionObj,insertValidateOperation + " testAddDistributionWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -597,13 +621,13 @@ public class ClientDemo
 	    	Logger.out.info("Inserting domain object------->"+distributionProtocolObj);
 			distributionProtocolObj =  (DistributionProtocol) appService.createObject(distributionProtocolObj);
 			dataModelObjectMap.put("DistributionProtocol",distributionProtocolObj);
-			writeSuccessfullOperationToReport(distributionProtocolObj,insertOperation);
+			writeSuccessfullOperationToReport(distributionProtocolObj,insertOperation+"testAddDistributionProtocol");
 			Logger.out.info(" Domain Object is successfully added ----> ID:: " + distributionProtocolObj.getId().toString());
 		//+ distributionProtocolObj.getId().longValue() + " ::  Name :: " + distributionProtocolObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeFailureOperationsToReport("DistributionProtocol",insertOperation);
+			writeFailureOperationsToReport("DistributionProtocol",insertOperation+"testAddDistributionProtocol");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -619,14 +643,14 @@ public class ClientDemo
 	    	Logger.out.info("Inserting domain object------->"+distributionProtocolObj);
 	    	distributionProtocolObj.setShortTitle(null);
 			distributionProtocolObj =  (DistributionProtocol) appService.createObject(distributionProtocolObj);
-			writeFailureOperationsToReport("DistributionProtocol",insertValidateOperation);
+			writeFailureOperationsToReport("DistributionProtocol",insertValidateOperation + " testAddDistributionProtocolWithWrongData");
 			//dataModelObjectMap.put("DistributionProtocol",distributionProtocolObj);
 			//Logger.out.info(" Domain Object is successfully added ----> ID:: " + distributionProtocolObj.getId().toString());
 		//+ distributionProtocolObj.getId().longValue() + " ::  Name :: " + distributionProtocolObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(distributionProtocolObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(distributionProtocolObj,insertValidateOperation + " testAddDistributionProtocolWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -640,13 +664,13 @@ public class ClientDemo
 			Logger.out.info("Inserting domain object------->"+collectionProtocolObj);
 			collectionProtocolObj =  (CollectionProtocol) appService.createObject(collectionProtocolObj);
 			dataModelObjectMap.put("CollectionProtocol",collectionProtocolObj);
-			writeSuccessfullOperationToReport(collectionProtocolObj,insertOperation);
+			writeSuccessfullOperationToReport(collectionProtocolObj,insertOperation+"testAddCollectionProtocol");
 			Logger.out.info(" Domain Object is successfully added ---->  ID:: " + collectionProtocolObj.getId().toString());
 		//+ collectionProtocolObj.getId().longValue() + " ::  Name :: " + collectionProtocolObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeFailureOperationsToReport("CollectionProtocol",insertOperation);
+			writeFailureOperationsToReport("CollectionProtocol",insertOperation+"testAddCollectionProtocol");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -662,14 +686,14 @@ public class ClientDemo
 			setLogger(collectionProtocolObj);
 			Logger.out.info("Inserting domain object------->"+collectionProtocolObj);
 			collectionProtocolObj =  (CollectionProtocol) appService.createObject(collectionProtocolObj);
-			writeFailureOperationsToReport("CollectionProtocol",insertValidateOperation);
+			writeFailureOperationsToReport("CollectionProtocol",insertValidateOperation + " testAddCollectionProtocolWithWrongData");
 			//dataModelObjectMap.put("CollectionProtocol",collectionProtocolObj);
 			//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + collectionProtocolObj.getId().toString());
 		//+ collectionProtocolObj.getId().longValue() + " ::  Name :: " + collectionProtocolObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(collectionProtocolObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(collectionProtocolObj,insertValidateOperation + " testAddCollectionProtocolWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -684,13 +708,13 @@ public class ClientDemo
 	    	Logger.out.info("Inserting domain object------->"+collectionProtocolRegistrationObj);
 			collectionProtocolRegistrationObj =  (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistrationObj);
 			dataModelObjectMap.put("CollectionProtocolRegistration",collectionProtocolRegistrationObj);
-			writeSuccessfullOperationToReport(collectionProtocolRegistrationObj,insertOperation);
+			writeSuccessfullOperationToReport(collectionProtocolRegistrationObj,insertOperation+"testAddCollectionProtocolRegistration");
 			Logger.out.info(" Domain Object is successfully added ---->   ID:: " + collectionProtocolRegistrationObj.getId().toString());
 		//+ collectionProtocolRegistrationObj.getId().longValue() + " ::  Name :: " + collectionProtocolRegistrationObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeFailureOperationsToReport("CollectionProtocolRegistration",insertOperation);
+			writeFailureOperationsToReport("CollectionProtocolRegistration",insertOperation+"testAddCollectionProtocolRegistration");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -708,14 +732,14 @@ public class ClientDemo
 	    	collectionProtocolRegistrationObj.setProtocolParticipantIdentifier(null);
 	    	collectionProtocolRegistrationObj.setParticipant(null);
 			collectionProtocolRegistrationObj =  (CollectionProtocolRegistration) appService.createObject(collectionProtocolRegistrationObj);
-			writeFailureOperationsToReport("CollectionProtocolRegistration",insertValidateOperation);
+			writeFailureOperationsToReport("CollectionProtocolRegistration",insertValidateOperation + " testAddCollectionProtocolRegistrationWithWrongData");
 			//dataModelObjectMap.put("CollectionProtocolRegistration",collectionProtocolRegistrationObj);
 			//Logger.out.info(" Domain Object is successfully added ---->   ID:: " + collectionProtocolRegistrationObj.getId().toString());
 		//+ collectionProtocolRegistrationObj.getId().longValue() + " ::  Name :: " + collectionProtocolRegistrationObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(collectionProtocolRegistrationObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(collectionProtocolRegistrationObj,insertValidateOperation + " testAddCollectionProtocolRegistrationWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -730,13 +754,13 @@ public class ClientDemo
 	    	Logger.out.info("Inserting domain object------->"+storageTypeObj);
 			storageTypeObj =  (StorageType) appService.createObject(storageTypeObj);
 			dataModelObjectMap.put("StorageType",storageTypeObj);
-			writeSuccessfullOperationToReport(storageTypeObj,insertOperation);
+			writeSuccessfullOperationToReport(storageTypeObj,insertOperation+"testAddStorageType");
 			Logger.out.info(" Domain Object is successfully added ---->  ID:: " + storageTypeObj.getId().toString());
 		//+ storageTypeObj.getId().longValue() + " ::  Name :: " + storageTypeObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeFailureOperationsToReport("StorageType",insertOperation);
+			writeFailureOperationsToReport("StorageType",insertOperation+"testAddStorageType");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -777,14 +801,14 @@ public class ClientDemo
 	    	storageTypeObj.setName("");
 	    	//storageTypeObj.setOneDimensionLabel("");
 			storageTypeObj =  (StorageType) appService.createObject(storageTypeObj);
-			writeFailureOperationsToReport("StorageType",insertValidateOperation + "with No Name");
+			writeFailureOperationsToReport("StorageType",insertValidateOperation + "testAddStorageTypeForNoName");
 			//dataModelObjectMap.put("StorageType",storageTypeObj);
 			//Logger.out.info(" Storage Type should not get added when it's name is empty or null");
 		
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(storageTypeObj,insertValidateOperation + "with No Name");
+			writeSuccessfullOperationToReport(storageTypeObj,insertValidateOperation + "testAddStorageTypeForNoName");
 			Logger.out.error(e);
 			e.printStackTrace();
 		}
@@ -799,14 +823,14 @@ public class ClientDemo
 			setLogger(storageTypeObj);
 	    	storageTypeObj.setOneDimensionLabel("");
 			storageTypeObj =  (StorageType) appService.createObject(storageTypeObj);
-			writeFailureOperationsToReport("StorageType",insertValidateOperation + "with No One Dimension Label");
+			writeFailureOperationsToReport("StorageType",insertValidateOperation + "testAddStorageTypeForNoOneDimensionLabel");
 			//dataModelObjectMap.put("StorageType",storageTypeObj);
 			//Logger.out.info(" Storage Type should not get added when it's One Dimension Label is not given");
 		
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(storageTypeObj,insertValidateOperation + "with No One Dimension Label");
+			writeSuccessfullOperationToReport(storageTypeObj,insertValidateOperation + "testAddStorageTypeForNoOneDimensionLabel");
 			Logger.out.error(e);
 			e.printStackTrace();
 		}
@@ -822,13 +846,13 @@ public class ClientDemo
 			storageContainerObj =  (StorageContainer) appService.createObject(storageContainerObj);
 			Logger.out.info("After insert domain object Storage Container ******* ------->"+storageContainerObj.getCapacity().getId());
 			dataModelObjectMap.put("StorageContainer",storageContainerObj);
-			writeSuccessfullOperationToReport(storageContainerObj,insertOperation);
+			writeSuccessfullOperationToReport(storageContainerObj,insertOperation+"testAddStorageContainer");
 			Logger.out.info(" Domain Object is successfully added ---->    ID:: " + storageContainerObj.getId().toString());
 		//+ storageContainerObj.getId().longValue() + " ::  Name :: " + storageContainerObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeFailureOperationsToReport("StorageContainer",insertOperation);
+			writeFailureOperationsToReport("StorageContainer",insertOperation+"testAddStorageContainer");
 			Logger.out.error(e);
 			e.printStackTrace();
 		}
@@ -864,14 +888,14 @@ public class ClientDemo
 			setLogger(storageContainerObj);
 			storageContainerObj.setName("");
 			storageContainerObj =  (StorageContainer) appService.createObject(storageContainerObj);
-			writeFailureOperationsToReport("StorageContainer",insertValidateOperation);
+			writeFailureOperationsToReport("StorageContainer",insertValidateOperation + " testAddStorageContainerWithNoName");
 			//dataModelObjectMap.put("StorageContainer",storageContainerObj);
 			//Logger.out.info(" Storage Container should not get added when it's name is not given");
 		//+ storageContainerObj.getId().longValue() + " ::  Name :: " + storageContainerObj.getName());
 		}
 		catch(Exception e)
 		{
-			writeSuccessfullOperationToReport(storageContainerObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(storageContainerObj,insertValidateOperation + " testAddStorageContainerWithNoName");
 			Logger.out.error(e);
 			e.printStackTrace();
 		}
@@ -887,14 +911,14 @@ public class ClientDemo
 				Logger.out.info("Inserting domain object------->"+specimenObj);
 				specimenObj =  (Specimen) appService.createObject(specimenObj);
 				dataModelObjectMap.put("Specimen",specimenObj);
-				writeSuccessfullOperationToReport(specimenObj,insertOperation);
+				writeSuccessfullOperationToReport(specimenObj,insertOperation+"testAddSpecimen");
 				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
 				Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
 				//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + specimenObj.getId().longValue() + " ::  Name :: " + specimenObj.getLabel());
 			}
 			catch(Exception e)
 			{
-				writeFailureOperationsToReport("Specimen",insertOperation);
+				writeFailureOperationsToReport("Specimen",insertOperation+"testAddSpecimen");
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
 			}
@@ -910,14 +934,14 @@ public class ClientDemo
 				Logger.out.info("Inserting domain object------->"+specimenObj);				
 				specimenObj.setPathologicalStatus("wrongData");
 				specimenObj =  (Specimen) appService.createObject(specimenObj);
-				writeFailureOperationsToReport("Specimen",insertValidateOperation);				
+				writeFailureOperationsToReport("Specimen",insertValidateOperation + " testAddSpecimenWithWrongData");				
 				//dataModelObjectMap.put("Specimen",specimenObj);
 				//Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
 				//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + specimenObj.getId().longValue() + " ::  Name :: " + specimenObj.getLabel());
 			}
 			catch(Exception e)
 			{
-				writeSuccessfullOperationToReport(specimenObj,insertValidateOperation);
+				writeSuccessfullOperationToReport(specimenObj,insertValidateOperation + " testAddSpecimenWithWrongData");
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
 			}
@@ -933,13 +957,13 @@ public class ClientDemo
 				Logger.out.info("Inserting domain object------->"+specimenArrayTypeObj);
 				specimenArrayTypeObj =  (SpecimenArrayType) appService.createObject(specimenArrayTypeObj);
 				dataModelObjectMap.put("SpecimenArrayType",specimenArrayTypeObj);
-				writeSuccessfullOperationToReport(specimenArrayTypeObj,insertOperation);
+				writeSuccessfullOperationToReport(specimenArrayTypeObj,insertOperation+"testAddSpecimenArrayType");
 				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenArrayTypeObj.getId().toString());
 				//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + specimenObj.getId().longValue() + " ::  Name :: " + specimenObj.getLabel());
 			}
 			catch(Exception e)
 			{
-				writeFailureOperationsToReport("SpecimenArrayType",insertOperation);
+				writeFailureOperationsToReport("SpecimenArrayType",insertOperation+"testAddSpecimenArrayType");
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
 			}
@@ -955,7 +979,7 @@ public class ClientDemo
 			Logger.out.info("Inserting domain object------->"+specimenArrayTypeObj);
 			specimenArrayTypeObj.setSpecimenClass(null);
 			specimenArrayTypeObj =  (SpecimenArrayType) appService.createObject(specimenArrayTypeObj);			
-			writeFailureOperationsToReport("SpecimenArrayType",insertValidateOperation);
+			writeFailureOperationsToReport("SpecimenArrayType",insertValidateOperation + " testAddSpecimenArrayTypeWithWrongData");
 			//dataModelObjectMap.put("SpecimenArrayType",specimenArrayTypeObj);
 			//Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenArrayTypeObj.getId().toString());
 			//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + specimenObj.getId().longValue() + " ::  Name :: " + specimenObj.getLabel());
@@ -963,7 +987,7 @@ public class ClientDemo
 		catch(Exception e)
 		{
 			
-			writeSuccessfullOperationToReport(specimenArrayTypeObj,insertValidateOperation);
+			writeSuccessfullOperationToReport(specimenArrayTypeObj,insertValidateOperation + " testAddSpecimenArrayTypeWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 			e.printStackTrace();
 		}
@@ -978,13 +1002,13 @@ public class ClientDemo
 				Logger.out.info("Inserting domain object------->"+specimenArrayObj);
 				specimenArrayObj =  (SpecimenArray) appService.createObject(specimenArrayObj);
 				dataModelObjectMap.put("SpecimenArray",specimenArrayObj);
-				writeSuccessfullOperationToReport(specimenArrayObj,insertOperation);
+				writeSuccessfullOperationToReport(specimenArrayObj,insertOperation+"testAddSpecimenArray");
 				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenArrayObj.getId().toString());
 		//		Logger.out.info(" Domain Object is successfully added ---->  ID:: " + specimenArrayObj.getId().longValue() + " ::  Name :: " + specimenArrayObj.getName());
 			}
 			catch(Exception e)
 			{
-				writeFailureOperationsToReport("SpecimenArray",insertOperation);
+				writeFailureOperationsToReport("SpecimenArray",insertOperation+"testAddSpecimenArray");
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
 			}
@@ -1000,14 +1024,14 @@ public class ClientDemo
 				Logger.out.info("Inserting domain object------->"+specimenArrayObj);
 				specimenArrayObj.setPositionDimensionOne(null);
 				specimenArrayObj =  (SpecimenArray) appService.createObject(specimenArrayObj);
-				writeFailureOperationsToReport("SpecimenArray",insertValidateOperation);
+				writeFailureOperationsToReport("SpecimenArray",insertValidateOperation + " testAddSpecimenArrayWithWrongData");
 				//dataModelObjectMap.put("SpecimenArray",specimenArrayObj);				
 				//Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenArrayObj.getId().toString());
 		//		Logger.out.info(" Domain Object is successfully added ---->  ID:: " + specimenArrayObj.getId().longValue() + " ::  Name :: " + specimenArrayObj.getName());
 			}
 			catch(Exception e)
 			{				
-				writeSuccessfullOperationToReport(specimenArrayObj,insertValidateOperation);				
+				writeSuccessfullOperationToReport(specimenArrayObj,insertValidateOperation + " testAddSpecimenArrayWithWrongData");				
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
 			}
@@ -1022,13 +1046,13 @@ public class ClientDemo
 		    	Logger.out.info("Inserting domain object------->"+specimenCollectionGroupObj);
 				specimenCollectionGroupObj =  (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroupObj);
 				dataModelObjectMap.put("SpecimenCollectionGroup",specimenCollectionGroupObj);
-				writeSuccessfullOperationToReport(specimenCollectionGroupObj,insertOperation);
+				writeSuccessfullOperationToReport(specimenCollectionGroupObj,insertOperation+"testAddSpecimenCollectionGroup");
 				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenCollectionGroupObj.getId().toString());
 			//+ specimenCollectionGroupObj.getId().longValue() + " ::  Name :: " + specimenCollectionGroupObj.getName());
 			}
 			catch(Exception e)
 			{
-				writeFailureOperationsToReport("SpecimenCollectionGroup",insertOperation);
+				writeFailureOperationsToReport("SpecimenCollectionGroup",insertOperation+"testAddSpecimenCollectionGroup");
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
 			}
@@ -1044,14 +1068,14 @@ public class ClientDemo
 		    	Logger.out.info("Inserting domain object------->"+specimenCollectionGroupObj);
 		    	specimenCollectionGroupObj.setClinicalDiagnosis("wrongData");
 				specimenCollectionGroupObj =  (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroupObj);
-				writeFailureOperationsToReport("SpecimenCollectionGroup",insertValidateOperation);
+				writeFailureOperationsToReport("SpecimenCollectionGroup",insertValidateOperation + " testAddSpecimenCollectionGroupWithWrongData");
 				//dataModelObjectMap.put("SpecimenCollectionGroup",specimenCollectionGroupObj);
 				//Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenCollectionGroupObj.getId().toString());
 			//+ specimenCollectionGroupObj.getId().longValue() + " ::  Name :: " + specimenCollectionGroupObj.getName());
 			}
 			catch(Exception e)
 			{
-				writeSuccessfullOperationToReport(specimenCollectionGroupObj,insertValidateOperation);
+				writeSuccessfullOperationToReport(specimenCollectionGroupObj,insertValidateOperation + " testAddSpecimenCollectionGroupWithWrongData");
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
 			}
@@ -1735,11 +1759,11 @@ public class ClientDemo
 	    	apiDemo.updateInstitution(institution);	  
 	    	//institution.setName("inst"+UniqueKeyGeneratorUtil.getUniqueKey());
 	     	Institution updatedInstitution = (Institution) appService.updateObject(institution);
-	     	writeSuccessfullOperationToReport(updatedInstitution,updateOperation);
+	     	writeSuccessfullOperationToReport(updatedInstitution,updateOperation+"testUpdateInstitution");
 	     	Logger.out.info("Domain object successfully updated ---->"+updatedInstitution);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("Institution",updateOperation);
+	    	writeFailureOperationsToReport("Institution",updateOperation+"testUpdateInstitution");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -1757,11 +1781,11 @@ public class ClientDemo
 	    	//apiDemo.updateInstitution(institution);	  
 	    	//institution.setName("inst"+UniqueKeyGeneratorUtil.getUniqueKey());
 	     	Institution updatedInstitution = (Institution) appService.updateObject(institution);
-	     	writeFailureOperationsToReport("Institution",updateValidateOperation);
+	     	writeFailureOperationsToReport("Institution",updateValidateOperation + " testUpdateInstitutionWithWrongData");
 	     	//Logger.out.info("Domain object successfully updated ---->"+updatedInstitution);
 	    } 
 	    catch (Exception e) {
-	    	writeSuccessfullOperationToReport(institution,updateValidateOperation);
+	    	writeSuccessfullOperationToReport(institution,updateValidateOperation + " testUpdateInstitutionWithWrongData");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -1778,11 +1802,11 @@ public class ClientDemo
 	    	apiDemo.updateDepartment(department);	    	
 	    	//department.setName("dt"+UniqueKeyGeneratorUtil.getUniqueKey());
 	    	Department updatedDepartment = (Department) appService.updateObject(department);
-	    	writeSuccessfullOperationToReport(updatedDepartment,updateOperation);
+	    	writeSuccessfullOperationToReport(updatedDepartment,updateOperation+"testUpdateDepartment");
 	     	Logger.out.info("Domain object successfully updated ---->"+updatedDepartment);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("Department",updateOperation);
+	    	writeFailureOperationsToReport("Department",updateOperation+"testUpdateDepartment");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -1800,11 +1824,11 @@ public class ClientDemo
 	    	//apiDemo.updateDepartment(department);	    	
 	    	//department.setName("dt"+UniqueKeyGeneratorUtil.getUniqueKey());
 	    	Department updatedDepartment = (Department) appService.updateObject(department);
-	    	writeFailureOperationsToReport("Department",updateValidateOperation);
+	    	writeFailureOperationsToReport("Department",updateValidateOperation + " testUpdateDepartmentWithWrongData");
 	     	//Logger.out.info("Domain object successfully updated ---->"+updatedDepartment);
 	    } 
 	    catch (Exception e) {
-	    	writeSuccessfullOperationToReport(department,updateValidateOperation);
+	    	writeSuccessfullOperationToReport(department,updateValidateOperation + " testUpdateDepartmentWithWrongData");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -1821,11 +1845,11 @@ public class ClientDemo
 	    	apiDemo.updateCancerResearchGroup(cancerResearchGroup);	    	
 	    	//cancerResearchGroup.setName("crg"+UniqueKeyGeneratorUtil.getUniqueKey());
 	    	CancerResearchGroup updatedCancerResearchGroup = (CancerResearchGroup) appService.updateObject(cancerResearchGroup);
-	    	writeSuccessfullOperationToReport(updatedCancerResearchGroup,updateOperation);
+	    	writeSuccessfullOperationToReport(updatedCancerResearchGroup,updateOperation+"testUpdateCancerResearchGroup");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedCancerResearchGroup);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("CancerResearchGroup",updateOperation);
+	    	writeFailureOperationsToReport("CancerResearchGroup",updateOperation+"testUpdateCancerResearchGroup");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -1843,11 +1867,11 @@ public class ClientDemo
 	    	//apiDemo.updateCancerResearchGroup(cancerResearchGroup);	    	
 	    	//cancerResearchGroup.setName("crg"+UniqueKeyGeneratorUtil.getUniqueKey());
 	    	CancerResearchGroup updatedCancerResearchGroup = (CancerResearchGroup) appService.updateObject(cancerResearchGroup);
-	    	writeFailureOperationsToReport("CancerResearchGroup",updateValidateOperation);
+	    	writeFailureOperationsToReport("CancerResearchGroup",updateValidateOperation+ " testUpdateCancerResearchGroupWithWrongData");
 	     	//Logger.out.info("Domain object successfully updated ---->"+updatedCancerResearchGroup);
 	    } 
 	    catch (Exception e) {
-	    	writeSuccessfullOperationToReport(cancerResearchGroup,updateValidateOperation);
+	    	writeSuccessfullOperationToReport(cancerResearchGroup,updateValidateOperation + " testUpdateCancerResearchGroupWithWrongData");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -1863,11 +1887,11 @@ public class ClientDemo
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateBiohazard(biohazard);
 	    	Biohazard updatedBiohazard = (Biohazard) appService.updateObject(biohazard);
-	    	writeSuccessfullOperationToReport(updatedBiohazard,updateOperation);
+	    	writeSuccessfullOperationToReport(updatedBiohazard,updateOperation+"testUpdateBiohazard");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedBiohazard);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("Biohazard",updateOperation);
+	    	writeFailureOperationsToReport("Biohazard",updateOperation+"testUpdateBiohazard");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -1885,11 +1909,11 @@ public class ClientDemo
 	    	biohazard.setType("wrongData");
 	    	//apiDemo.updateBiohazard(biohazard);
 	    	Biohazard updatedBiohazard = (Biohazard) appService.updateObject(biohazard);
-	    	writeSuccessfullOperationToReport(updatedBiohazard,updateValidateOperation);
+	    	writeSuccessfullOperationToReport(updatedBiohazard,updateValidateOperation + " testUpdateBiohazardWithWrongData");
 	     	//Logger.out.info("Domain object successfully updated ---->"+updatedBiohazard);
 	    } 
 	    catch (Exception e) {
-	    	writeSuccessfullOperationToReport(biohazard,updateValidateOperation);
+	    	writeSuccessfullOperationToReport(biohazard,updateValidateOperation + " testUpdateBiohazardWithWrongData");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -1905,11 +1929,11 @@ public class ClientDemo
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateSite(site);
 	    	Site updatedSite = (Site) appService.updateObject(site);
-	    	writeSuccessfullOperationToReport(updatedSite,updateOperation);
+	    	writeSuccessfullOperationToReport(updatedSite,updateOperation+"testUpdateSite");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedSite);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("Site",updateOperation);
+	    	writeFailureOperationsToReport("Site",updateOperation+"testUpdateSite");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -1926,11 +1950,11 @@ public class ClientDemo
 	    	site.setType("wrongData");
 	    	//apiDemo.updateSite(site);
 	    	Site updatedSite = (Site) appService.updateObject(site);
-	    	writeFailureOperationsToReport("Site",updateValidateOperation);
+	    	writeFailureOperationsToReport("Site",updateValidateOperation + " testUpdateSiteWithWrongData");
 	     	//Logger.out.info("Domain object successfully updated ---->"+updatedSite);
 	    } 
 	    catch (Exception e) {
-	    	writeSuccessfullOperationToReport(site,updateValidateOperation);
+	    	writeSuccessfullOperationToReport(site,updateValidateOperation + " testUpdateSiteWithWrongData");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -1946,11 +1970,11 @@ public class ClientDemo
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateCollectionProtocol(collectionProtocol);
 	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol) appService.updateObject(collectionProtocol);
-	    	writeSuccessfullOperationToReport(updatedCollectionProtocol,updateOperation);
+	    	writeSuccessfullOperationToReport(updatedCollectionProtocol,updateOperation+"testUpdateCollectionProtocol");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("CollectionProtocol",updateOperation);
+	    	writeFailureOperationsToReport("CollectionProtocol",updateOperation+"testUpdateCollectionProtocol");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -1967,11 +1991,11 @@ public class ClientDemo
 	    	collectionProtocol.setTitle(null);
 	    	//apiDemo.updateCollectionProtocol(collectionProtocol);
 	    	CollectionProtocol updatedCollectionProtocol = (CollectionProtocol) appService.updateObject(collectionProtocol);
-	    	writeFailureOperationsToReport("CollectionProtocol",updateValidateOperation);
+	    	writeFailureOperationsToReport("CollectionProtocol",updateValidateOperation + " testUpdateCollectionProtocolWithWrongData");
 	    	//Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocol);
 	    } 
 	    catch (Exception e) {
-	    	writeSuccessfullOperationToReport(collectionProtocol,updateValidateOperation);
+	    	writeSuccessfullOperationToReport(collectionProtocol,updateValidateOperation + " testUpdateCollectionProtocolWithWrongData");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -1987,11 +2011,11 @@ public class ClientDemo
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateDistributionProtocol(distributionProtocol);
 	    	DistributionProtocol updatedDistributionProtocol = (DistributionProtocol) appService.updateObject(distributionProtocol);
-	    	writeSuccessfullOperationToReport(updatedDistributionProtocol,updateOperation);
+	    	writeSuccessfullOperationToReport(updatedDistributionProtocol,updateOperation+"testUpdateDistributionProtocol");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedDistributionProtocol);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("DistributionProtocol",updateOperation);
+	    	writeFailureOperationsToReport("DistributionProtocol",updateOperation+"testUpdateDistributionProtocol");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -2008,11 +2032,11 @@ public class ClientDemo
 	    	distributionProtocol.setShortTitle(null);
 	    	//apiDemo.updateDistributionProtocol(distributionProtocol);
 	    	DistributionProtocol updatedDistributionProtocol = (DistributionProtocol) appService.updateObject(distributionProtocol);
-	    	writeFailureOperationsToReport("DistributionProtocol",updateValidateOperation);
+	    	writeFailureOperationsToReport("DistributionProtocol",updateValidateOperation + " testUpdateDistributionProtocolWithWrongData");
 	    	//Logger.out.info("Domain object successfully updated ---->"+updatedDistributionProtocol);
 	    } 
 	    catch (Exception e) {
-	    	writeSuccessfullOperationToReport(distributionProtocol,updateValidateOperation);
+	    	writeSuccessfullOperationToReport(distributionProtocol,updateValidateOperation + " testUpdateDistributionProtocolWithWrongData");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -2028,11 +2052,11 @@ public class ClientDemo
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateParticipant(participant);
 	    	Participant updatedParticipant = (Participant) appService.updateObject(participant);
-	    	writeSuccessfullOperationToReport(updatedParticipant,updateOperation);
+	    	writeSuccessfullOperationToReport(updatedParticipant,updateOperation+"testUpdateParticipant");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedParticipant);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("Participant",updateOperation);
+	    	writeFailureOperationsToReport("Participant",updateOperation+"testUpdateParticipant");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -2049,11 +2073,11 @@ public class ClientDemo
 	    	participant.setGender("wrongData");
 	    	//apiDemo.updateParticipant(participant);
 	    	Participant updatedParticipant = (Participant) appService.updateObject(participant);
-	    	writeFailureOperationsToReport("Participant",updateValidateOperation);
+	    	writeFailureOperationsToReport("Participant",updateValidateOperation + " testUpdateParticipantWithWrongData");
 	     	//Logger.out.info("Domain object successfully updated ---->"+updatedParticipant);
 	    } 
 	    catch (Exception e) {
-	    	writeSuccessfullOperationToReport(participant,updateValidateOperation);
+	    	writeSuccessfullOperationToReport(participant,updateValidateOperation + " testUpdateParticipantWithWrongData");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -2069,11 +2093,11 @@ public class ClientDemo
 			APIDemo apiDemo = new APIDemo();
 			apiDemo.updateSpecimenCollectionGroup(specimenCollectionGroup);
 			SpecimenCollectionGroup updatedSpecimenCollectionGroup = (SpecimenCollectionGroup) appService.updateObject(specimenCollectionGroup);
-			writeSuccessfullOperationToReport(updatedSpecimenCollectionGroup,updateOperation);
+			writeSuccessfullOperationToReport(updatedSpecimenCollectionGroup,updateOperation+"testUpdateSpecimenCollectionGroup");
 			Logger.out.info("Domain object successfully updated ---->"+updatedSpecimenCollectionGroup);
 		} 
 		catch (Exception e) {
-			writeFailureOperationsToReport("SpecimenCollectionGroup",updateOperation);
+			writeFailureOperationsToReport("SpecimenCollectionGroup",updateOperation+"testUpdateSpecimenCollectionGroup");
 			Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 		}
@@ -2090,11 +2114,11 @@ public class ClientDemo
 			specimenCollectionGroup.setClinicalStatus("wrongData");
 			//apiDemo.updateSpecimenCollectionGroup(specimenCollectionGroup);
 			SpecimenCollectionGroup updatedSpecimenCollectionGroup = (SpecimenCollectionGroup) appService.updateObject(specimenCollectionGroup);
-			writeFailureOperationsToReport("SpecimenCollectionGroup",updateValidateOperation);
+			writeFailureOperationsToReport("SpecimenCollectionGroup",updateValidateOperation + " testUpdateSpecimenCollectionGroupWithWrongData");
 			//Logger.out.info("Domain object successfully updated ---->"+updatedSpecimenCollectionGroup);
 		} 
 		catch (Exception e) {
-			writeSuccessfullOperationToReport(specimenCollectionGroup,updateValidateOperation);
+			writeSuccessfullOperationToReport(specimenCollectionGroup,updateValidateOperation + " testUpdateSpecimenCollectionGroupWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 		}
@@ -2110,11 +2134,11 @@ public class ClientDemo
 			APIDemo apiDemo = new APIDemo();
 			apiDemo.updateCollectionProtocolRegistration(collectionProtocolRegistration);
 			CollectionProtocolRegistration updatedCollectionProtocolRegistration = (CollectionProtocolRegistration) appService.updateObject(collectionProtocolRegistration);
-			writeSuccessfullOperationToReport(updatedCollectionProtocolRegistration,updateOperation);
+			writeSuccessfullOperationToReport(updatedCollectionProtocolRegistration,updateOperation+"testUpdateCollectionProtocolRegistration");
 			Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocolRegistration);
 		} 
 		catch (Exception e) {
-			writeFailureOperationsToReport("CollectionProtocolRegistration",updateOperation);
+			writeFailureOperationsToReport("CollectionProtocolRegistration",updateOperation+"testUpdateCollectionProtocolRegistration");
 			Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 		}
@@ -2134,11 +2158,11 @@ public class ClientDemo
 			
 			//apiDemo.updateCollectionProtocolRegistration(collectionProtocolRegistration);
 			CollectionProtocolRegistration updatedCollectionProtocolRegistration = (CollectionProtocolRegistration) appService.updateObject(collectionProtocolRegistration);
-			writeFailureOperationsToReport("CollectionProtocolRegistration",updateValidateOperation);
+			writeFailureOperationsToReport("CollectionProtocolRegistration",updateValidateOperation + " testUpdateCollectionProtocolRegistrationWithWrongData");
 			//Logger.out.info("Domain object successfully updated ---->"+updatedCollectionProtocolRegistration);
 		} 
 		catch (Exception e) {
-			writeSuccessfullOperationToReport(collectionProtocolRegistration,updateValidateOperation);
+			writeSuccessfullOperationToReport(collectionProtocolRegistration,updateValidateOperation + " testUpdateCollectionProtocolRegistrationWithWrongData");
 			Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 		}
@@ -2154,11 +2178,11 @@ public class ClientDemo
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateSpecimen(specimen);
 	    	Specimen updatedSpecimen = (Specimen) appService.updateObject(specimen);
-	    	writeSuccessfullOperationToReport(updatedSpecimen,updateOperation);
+	    	writeSuccessfullOperationToReport(updatedSpecimen,updateOperation+"testUpdateSpecimen");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedSpecimen);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("Specimen",updateOperation);
+	    	writeFailureOperationsToReport("Specimen",updateOperation+"testUpdateSpecimen");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -2176,11 +2200,11 @@ public class ClientDemo
 	    	
 	    	//apiDemo.updateSpecimen(specimen);
 	    	Specimen updatedSpecimen = (Specimen) appService.updateObject(specimen);
-	    	writeFailureOperationsToReport("Specimen",updateValidateOperation);	    	
+	    	writeFailureOperationsToReport("Specimen",updateValidateOperation + " testUpdateSpecimenWithWrongData");	    	
 	    	//Logger.out.info("Domain object successfully updated ---->"+updatedSpecimen);
 	    } 
 	    catch (Exception e) {
-	    	writeSuccessfullOperationToReport(specimen,updateValidateOperation);
+	    	writeSuccessfullOperationToReport(specimen,updateValidateOperation + " testUpdateSpecimenWithWrongData");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -2197,11 +2221,11 @@ public class ClientDemo
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateStorageType(storageType);
 	    	StorageType updatedStorageType = (StorageType) appService.updateObject(storageType);
-	    	writeSuccessfullOperationToReport(updatedStorageType,updateOperation);
+	    	writeSuccessfullOperationToReport(updatedStorageType,updateOperation+"testUpdateStorageType");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedStorageType);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("StorageType",updateOperation);
+	    	writeFailureOperationsToReport("StorageType",updateOperation+"testUpdateStorageType");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -2218,11 +2242,11 @@ public class ClientDemo
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateStorageContainer(storageContainer);
 	    	StorageContainer updatedStorageContainer = (StorageContainer) appService.updateObject(storageContainer);
-	    	writeSuccessfullOperationToReport(updatedStorageContainer,updateOperation);
+	    	writeSuccessfullOperationToReport(updatedStorageContainer,updateOperation+"testUpdateStorageContainer");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedStorageContainer);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("StorageContainer",updateOperation);
+	    	writeFailureOperationsToReport("StorageContainer",updateOperation+"testUpdateStorageContainer");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -2238,11 +2262,11 @@ public class ClientDemo
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateSpecimenArrayType(specimenArrayType);
 	    	SpecimenArrayType updatedSpecimenArrayType = (SpecimenArrayType) appService.updateObject(specimenArrayType);
-	    	writeSuccessfullOperationToReport(updatedSpecimenArrayType,updateOperation);
+	    	writeSuccessfullOperationToReport(updatedSpecimenArrayType,updateOperation+"testUpdateSpecimenArrayType");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedSpecimenArrayType);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("SpecimenArrayType",updateOperation);
+	    	writeFailureOperationsToReport("SpecimenArrayType",updateOperation+"testUpdateSpecimenArrayType");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -2258,11 +2282,11 @@ public class ClientDemo
 	    	APIDemo apiDemo = new APIDemo();
 	    	apiDemo.updateSpecimenArray(specimenArray);
 	    	SpecimenArray updatedSpecimenArray = (SpecimenArray) appService.updateObject(specimenArray);
-	    	writeSuccessfullOperationToReport(updatedSpecimenArray,updateOperation);
+	    	writeSuccessfullOperationToReport(updatedSpecimenArray,updateOperation+"testUpdateSpecimenArray");
 	    	Logger.out.info("Domain object successfully updated ---->"+updatedSpecimenArray);
 	    } 
 	    catch (Exception e) {
-	    	writeFailureOperationsToReport("SpecimenArray",updateOperation);
+	    	writeFailureOperationsToReport("SpecimenArray",updateOperation+"testUpdateSpecimenArray");
 	    	Logger.out.error(e.getMessage(),e);
 	 		e.printStackTrace();
 	    }
@@ -2345,6 +2369,153 @@ public class ClientDemo
         //String filePath = "F:/nightly_build/catissuecore/caTissueCore_caCORE_Client/log/catissuecoreclient.log";
         report.sendmail(to,cc,null,from,host,subject,body,filePath);
  	}
+	
+	
+	//------ ------------------------------------------------------------
+	
+	public void testAddDistributionWithClosedSpecimen()
+	{
+		Distribution distributionObj = null;		
+		try
+		{    	
+	    	Specimen insertspecimen = (Specimen) api.initSpecimen();						
+	    	insertspecimen =  (Specimen) appService.createObject(insertspecimen);
+	    	insertspecimen.setActivityStatus("Closed");
+	    	Specimen updatespecimen =  (Specimen) appService.updateObject(insertspecimen);		
+			
+			distributionObj = (Distribution)api.initDistribution(updatespecimen);
+			
+			setLogger(distributionObj);			
+	    	Logger.out.info("In test method testAddDistributionWithClosedSpecimen");	
+			Logger.out.info("Inserting domain object------->"+distributionObj);
+			distributionObj =  (Distribution) appService.createObject(distributionObj);
+			writeFailureOperationsToReport("Distribution",insertValidateOperation+"testAddDistributionWithClosedSpecimen");
+		}
+		catch(Exception e)
+		{	
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+			if(distributionObj != null)
+			{
+				writeSuccessfullOperationToReport(distributionObj,insertValidateOperation+"testAddDistributionWithClosedSpecimen");				
+			}
+			else
+			{
+				Logger.out.info("Could not able to test testAddDistributionWithClosedSpecimen due to fail to initiaze Distribution obj");
+			}
+		}
+	}
+	
+	
+	public void testAddDistributionWithClosedSite()
+	{
+		Distribution distributionObj = null ;		
+		try
+		{  	
+	    	Site insertsite = (Site) api.initSite();			
+			insertsite =  (Site) appService.createObject(insertsite);
+			insertsite.setActivityStatus("Closed");
+			Site updatesite =  (Site) appService.updateObject(insertsite);			
+			distributionObj = (Distribution)api.initDistribution();
+			distributionObj.setToSite(updatesite);	    	
+	    	
+			setLogger(distributionObj);	    	
+	    	Logger.out.info("In test method testAddDistributionWithClosedSite");
+	    	Logger.out.info("Inserting domain object------->"+distributionObj);
+			distributionObj =  (Distribution) appService.createObject(distributionObj);
+			writeFailureOperationsToReport("Distribution",insertValidateOperation+"testAddDistributionWithClosedSite");
+		}
+		catch(Exception e)
+		{		
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+			if(distributionObj != null)
+			{
+				writeSuccessfullOperationToReport(distributionObj,insertValidateOperation+"testAddDistributionWithClosedSite");				
+			}
+			
+			else
+			{
+				Logger.out.info("Could not able to test testAddDistributionWithClosedSite due to fail to initiaze Distribution obj");
+			}
+			
+		}
+	}
+	
+	public void testAddDistributionWithClosedDistributionProtocol()
+	{
+		Distribution distributionObj = null;		
+		try
+		{		  
+	    	
+	    	DistributionProtocol insertdistributionProtocol = (DistributionProtocol) api.initDistributionProtocol();	    	
+	    	insertdistributionProtocol =  (DistributionProtocol) appService.createObject(insertdistributionProtocol);
+	    	insertdistributionProtocol.setActivityStatus("Closed");
+	    	DistributionProtocol updatedistributionProtocol = (DistributionProtocol) appService.updateObject(insertdistributionProtocol);	    	
+	    	
+			distributionObj = (Distribution)api.initDistribution();			
+			distributionObj.setDistributionProtocol(updatedistributionProtocol);
+	    	  	
+			setLogger(distributionObj);	    	
+	    	Logger.out.info("In test method testAddDistributionWithClosedDistributionProtocol");
+			Logger.out.info("Inserting domain object------->"+distributionObj);
+			distributionObj =  (Distribution) appService.createObject(distributionObj);
+			writeFailureOperationsToReport("Distribution",insertValidateOperation+"testAddDistributionWithClosedDistributionProtocol");
+		}
+		catch(Exception e)
+		{			
+			Logger.out.error(e.getMessage(),e);
+			e.printStackTrace();
+			if(distributionObj != null)
+			{
+				writeSuccessfullOperationToReport(distributionObj,insertValidateOperation+"testAddDistributionWithClosedDistributionProtocol");				
+			}
+			else
+			{
+				Logger.out.info("Could not able to test testAddDistributionWithClosedDistributionProtocol due to fail to initiaze Distribution obj");
+			}
+		}
+	}
+	
+	 private void testAddSpecimenArrayWithClosedSpecimen()
+		{ 		
+	 		SpecimenArray specimenArrayObj = null;
+			try
+			{				
+				Specimen insertspecimen = (Specimen) api.initSpecimen();						
+		    	insertspecimen =  (Specimen) appService.createObject(insertspecimen);
+		    	insertspecimen.setActivityStatus("Closed");
+		    	Specimen updatespecimen =  (Specimen) appService.updateObject(insertspecimen);
+		    	
+		    	StorageContainer storageContainer = (StorageContainer) api.initStorageContainerForSpecimenArray();
+		    	storageContainer = (StorageContainer) appService.createObject(storageContainer);
+		    	
+		    	User createdBy = (User) ClientDemo.dataModelObjectMap.get("User");	
+		    	
+				specimenArrayObj = (SpecimenArray) api.initSpecimenArray(updatespecimen, storageContainer, createdBy);
+				
+				setLogger(specimenArrayObj);
+				Logger.out.info("In test method testAddSpecimenArrayWithClosedSpecimen");
+				Logger.out.info("Inserting domain object------->"+specimenArrayObj);
+				specimenArrayObj =  (SpecimenArray) appService.createObject(specimenArrayObj);				
+				writeFailureOperationsToReport("SpecimenArray",insertValidateOperation+"testAddSpecimenArrayWithClosedSpecimen");				
+			}
+			catch(Exception e)
+			{
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+				if(specimenArrayObj != null)
+				{
+					writeSuccessfullOperationToReport(specimenArrayObj,insertValidateOperation+"testAddSpecimenArrayWithClosedSpecimen");					
+				}
+				else
+				{
+					Logger.out.info("Could not able to test testAddSpecimenArrayWithClosedSpecimen due to fail to initiaze SpecimenArray obj");
+				}
+			}
+		}
+	 
+	
 
 }
 

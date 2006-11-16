@@ -46,8 +46,35 @@
 		}
 
 	}
-</script>
-
+									platform = navigator.platform.toLowerCase();
+									document.writeln('<APPLET\n' +
+													'CODEBASE = "<%=Constants.APPLET_CODEBASE%>"\n'+
+													'ARCHIVE = "TreeApplet.jar"\n'+
+													'CODE = "<%=Constants.QUERY_TREE_APPLET%>"\n'+
+													'ALT = "Tree Applet"\n'+
+													'NAME = "<%=Constants.TREE_APPLET_NAME%>"'
+													);
+									if (platform.indexOf("mac") != -1)
+									{
+										document.writeln('width="400" height="500" MAYSCRIPT>');
+									} 
+									else
+									{
+										document.writeln('width="100%" height="500" MAYSCRIPT>');
+									}
+									document.writeln('<PARAM name="type" value="application/x-java-applet;jpi-version=1.3">\n' +
+													'<PARAM name="name" value="<%=Constants.TREE_APPLET_NAME%>">\n'+
+													'<PARAM name="<%=Constants.PROPERTY_NAME%>" value="<%=propertyName%>">\n'+
+													'<PARAM name="<%=Constants.CDE_NAME%>" value="<%=cdeName%>">\n'+
+													'<PARAM name="<%=Constants.PAGEOF%>" value="<%=pageOf%>">\n'+
+													'<PARAM name="<%=Constants.STORAGE_CONTAINER_TYPE%>" value="<%=storageContainerType%>">\n'+
+													'<PARAM name="session_id" value="<%=session.getId()%>">\n'+
+													'<PARAM name = "<%=Constants.STORAGE_CONTAINER_TO_BE_SELECTED%>" value="<%=storageContainerID%>">\n'+
+													'<PARAM name = "<%=Constants.STORAGE_CONTAINER_POSITION%>" value="<%=position%>">\n'+
+													'</APPLET>'
+												    );
+							</script>
+<!-- 
 <APPLET
     CODEBASE = "<%=Constants.APPLET_CODEBASE%>"
     ARCHIVE = "TreeApplet.jar"
@@ -65,7 +92,7 @@
 	<PARAM name="name" value="<%=Constants.TREE_APPLET_NAME%>">
 	<PARAM name="session_id" value="<%=session.getId()%>">
 </APPLET>
-
+ -->
 <!--OBJECT classid="clsid:8AD9C840-044E-11D1-B3E9-00805F499D93"
     width="100%" height="100%" align="top" name="<%=Constants.TREE_APPLET_NAME%>"
     codebase="http://java.sun.com/products/plugin/autodl/jinstall-1_4-windows-i586.cab#Version=1,4,0,0">

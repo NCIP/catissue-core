@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.bizlogic;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1312,7 +1311,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 			//for sorting
 			Vector tempChildNodeList = parentTreeNodeImpl.getChildNodes();
-			Collections.sort(tempChildNodeList);
 			parentTreeNodeImpl.setChildNodes(tempChildNodeList);
 		}
 
@@ -1345,7 +1343,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 				//for sorting
 				Vector tempChildNodeList = siteNode.getChildNodes();
-				Collections.sort(tempChildNodeList);
 				siteNode.setChildNodes(tempChildNodeList);
 			}
 		}
@@ -1354,7 +1351,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Vector containersUnderSite = getContainersUnderSite();
 		containersUnderSite.removeAll(parentNodeVector);
 		parentNodeVector.addAll(containersUnderSite);
-
+		Utility.sortTreeVector(parentNodeVector);
 		return parentNodeVector;
 	}
 
@@ -1728,7 +1725,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	}
 
 	//  Will check only for Position is used or not.
-	protected boolean isPositionAvailable(DAO dao, StorageContainer storageContainer, String posOne, String posTwo)
+	/*protected boolean isPositionAvailable(DAO dao, StorageContainer storageContainer, String posOne, String posTwo)
 	{
 		try
 		{
@@ -1794,7 +1791,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			Logger.out.debug("Error in isPositionAvailable : " + e);
 			return false;
 		}
-	}
+	}*/
 
 	//	 -- storage container validation for specimen
 	public void checkContainer(DAO dao, String storageContainerID, String positionOne, String positionTwo, SessionDataBean sessionDataBean)
@@ -1804,7 +1801,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		//                "id",storageContainerID  );
 
 		String sourceObjectName = StorageContainer.class.getName();
-		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER, "capacity.oneDimensionCapacity", "capacity.twoDimensionCapacity"};
+		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER, "capacity.oneDimensionCapacity", "capacity.twoDimensionCapacity","name"};
 		String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
 		String[] whereColumnCondition = {"="};
 		Object[] whereColumnValue = {storageContainerID};
@@ -1820,10 +1817,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			Logger.out.debug((Long) obj[0]);
 			Logger.out.debug((Integer) obj[1]);
 			Logger.out.debug((Integer) obj[2]);
+			Logger.out.debug((String) obj[3]);
 
 			StorageContainer pc = new StorageContainer();
 			pc.setId((Long) obj[0]);
-
+			pc.setName((String)obj[3]);
 			if (obj[1] != null)
 				pc.setPositionDimensionOne((Integer) obj[1]);
 			if (obj[2] != null)
@@ -1844,7 +1842,16 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			Logger.out.debug("isValidPosition : " + isValidPosition);
 			if (isValidPosition) //	if position is valid 
 			{
-				boolean canUsePosition = isPositionAvailable(dao, pc, positionOne, positionTwo);
+				boolean canUsePosition = false;
+				try
+				{
+					canUsePosition = StorageContainerUtil.isPostionAvaialble(pc.getId().toString(), pc.getName(), positionOne, positionTwo);
+				}
+				catch (CacheException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				Logger.out.debug("canUsePosition : " + canUsePosition);
 				if (canUsePosition) // position empty. can be used 
 				{

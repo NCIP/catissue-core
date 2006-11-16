@@ -281,22 +281,34 @@
 						%>
 						<tr>
 							<td class="formField" colspan="7">
-								<APPLET
-									CODEBASE = "<%=Constants.APPLET_CODEBASE%>"
-									ARCHIVE = "CaTissueApplet.jar"
-									CODE = "<%=Constants.SPECIMEN_ARRAY_APPLET%>"
-									ALT = "Specimen Array Applet"
-									NAME = "<%=Constants.SPECIMEN_ARRAY_APPLET_NAME%>"
-									width="100%" height="150" MAYSCRIPT>
-									<PARAM name='type' value="application/x-java-applet;jpi-version=1.4.2"/>
-									<PARAM name='name' value="<%=Constants.SPECIMEN_ARRAY_APPLET_NAME%>"/>
-									<PARAM name='rowCount' value="<%=form.getOneDimensionCapacity()%>"/>
-									<PARAM name='columnCount' value="<%=form.getTwoDimensionCapacity()%>"/>
-									<PARAM name='enterSpecimenBy' value="<%=form.getEnterSpecimenBy()%>"/>
-									<PARAM name='specimenClass' value="<%=form.getSpecimenClass()%>"/>									
-									<PARAM name='session_id' value="<%=session.getId()%>"/>
-									<PARAM NAME = '<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>' VALUE = "<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">
-								</APPLET>
+							<script language="JavaScript" type="text/javascript">
+									platform = navigator.platform.toLowerCase();
+									document.writeln('<APPLET\n' +
+													'CODEBASE = "<%=Constants.APPLET_CODEBASE%>"\n'+
+													'ARCHIVE = "CaTissueApplet.jar"\n'+
+													'CODE = "<%=Constants.SPECIMEN_ARRAY_APPLET%>"\n'+
+													'ALT = "Specimen Array Applet"\n'+
+													'NAME = "<%=Constants.SPECIMEN_ARRAY_APPLET_NAME%>"'
+													);
+									if (platform.indexOf("mac") != -1)
+									{
+										document.writeln('width="1000" height="150" MAYSCRIPT>');
+									} 
+									else
+									{
+										document.writeln('width="100%" height="150" MAYSCRIPT>');
+									}
+									document.writeln('<PARAM name="type" value="application/x-java-applet;jpi-version=1.3">\n' +
+													'<PARAM name="name" value="<%=Constants.SPECIMEN_ARRAY_APPLET_NAME%>">\n'+
+													'<PARAM name="rowCount" value="<%=form.getOneDimensionCapacity()%>">\n'+
+													'<PARAM name="columnCount" value="<%=form.getTwoDimensionCapacity()%>">\n'+
+													'<PARAM name="enterSpecimenBy" value="<%=form.getEnterSpecimenBy()%>">\n'+
+													'<PARAM name="specimenClass" value="<%=form.getSpecimenClass()%>">\n'+
+													'<PARAM name="session_id" value="<%=session.getId()%>">\n'+
+													'<PARAM name = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" value="<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">\n'+
+													'</APPLET>'
+												    );
+							</script>
 							</td>
 							</tr>
 						</table>
