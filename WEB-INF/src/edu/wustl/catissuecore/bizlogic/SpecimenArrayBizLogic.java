@@ -147,7 +147,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 				}
 			}
 
-			if (checkExitSpecimenArrayContent(specimenArrayContent, oldSpecArrayContents) == null)
+			if (checkExistSpecimenArrayContent(specimenArrayContent, oldSpecArrayContents) == null)
 			{
 				dao.insert(specimenArrayContent, sessionDataBean, true, false);
 			}
@@ -163,28 +163,29 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 	 * @param checkExitSpecimenArrayContent spec array contents
 	 * @return whether it is new or old
 	 */
-	private SpecimenArrayContent checkExitSpecimenArrayContent(SpecimenArrayContent specimenArrayContent,
+	private SpecimenArrayContent checkExistSpecimenArrayContent(SpecimenArrayContent specimenArrayContent,
 			Collection specArrayContentCollection)
 	{
 		boolean isNew = true;
 		SpecimenArrayContent arrayContent = null;
 
 		for (Iterator iter = specArrayContentCollection.iterator(); iter.hasNext();)
-		{
+        {
 			arrayContent = (SpecimenArrayContent) iter.next();
-
 			if (specimenArrayContent.getId() == null)
-			{
-				isNew = true;
-				break;
-			}
-			else if (arrayContent.getId().longValue() == specimenArrayContent.getId().longValue())
-			{
-				isNew = false;
-				break;
-			}
-		}
-		
+            {
+           		isNew = true;
+           		break;
+            }
+            else if (arrayContent.getId() != null)
+            {
+                if (arrayContent.getId().longValue() == specimenArrayContent.getId().longValue())
+                {
+                            isNew = false;
+                            break;
+                }
+            }
+        }		
 		if (isNew)
 		{
 			arrayContent = null;
@@ -287,7 +288,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 								//and old specimenArrayContent's quantiy.
 								if(oldSpecimenArrayContentCollection != null)
 								{
-									oldArrayContent = checkExitSpecimenArrayContent(specimenArrayContent,oldSpecimenArrayContentCollection);
+									oldArrayContent = checkExistSpecimenArrayContent(specimenArrayContent,oldSpecimenArrayContentCollection);
 									if (oldArrayContent != null)
 									{
 										quantity = quantity - oldArrayContent.getInitialQuantity().getValue().doubleValue(); 
@@ -347,7 +348,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			while(itr.hasNext())
 			{
 				SpecimenArrayContent oldSpecimenArrayContent = (SpecimenArrayContent) itr.next();
-				SpecimenArrayContent  newSpecimenArrayContent = checkExitSpecimenArrayContent(oldSpecimenArrayContent, specimenArrayContentCollection);
+				SpecimenArrayContent  newSpecimenArrayContent = checkExistSpecimenArrayContent(oldSpecimenArrayContent, specimenArrayContentCollection);
 				if(newSpecimenArrayContent == null || newSpecimenArrayContent.getSpecimen().getLabel().equals(""))
 				{						
 					Specimen oldSpecimen = getSpecimen(dao, oldSpecimenArrayContent);					
