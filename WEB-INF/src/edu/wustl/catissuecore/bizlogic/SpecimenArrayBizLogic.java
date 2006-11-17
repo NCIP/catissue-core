@@ -344,23 +344,25 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		//should get added into specimen's available quantity.
 		if(!isInsertOperation)
 		{
-			Iterator itr = oldSpecimenArrayContentCollection.iterator();
-			while(itr.hasNext())
-			{
-				SpecimenArrayContent oldSpecimenArrayContent = (SpecimenArrayContent) itr.next();
-				SpecimenArrayContent  newSpecimenArrayContent = checkExistSpecimenArrayContent(oldSpecimenArrayContent, specimenArrayContentCollection);
-				if(newSpecimenArrayContent == null || newSpecimenArrayContent.getSpecimen().getLabel().equals(""))
-				{						
-					Specimen oldSpecimen = getSpecimen(dao, oldSpecimenArrayContent);					
-					Double oldQuantity = oldSpecimenArrayContent.getInitialQuantity().getValue();					
-					Quantity quantity = oldSpecimen.getAvailableQuantity();
-					double newQuantity = quantity.getValue().doubleValue() + oldQuantity.doubleValue();
-					quantity.setValue(new Double(newQuantity));
-					oldSpecimen.setAvailableQuantity(quantity);					
-					dao.update(oldSpecimen, sessionDataBean, true, false, false);
+				Iterator itr = oldSpecimenArrayContentCollection.iterator();
+				while(itr.hasNext())
+				{
+					SpecimenArrayContent oldSpecimenArrayContent = (SpecimenArrayContent) itr.next();
+					SpecimenArrayContent  newSpecimenArrayContent = checkExistSpecimenArrayContent(oldSpecimenArrayContent, specimenArrayContentCollection);
+					if(newSpecimenArrayContent == null || newSpecimenArrayContent.getSpecimen().getLabel().equals(""))
+					{
+						Specimen oldSpecimen = getSpecimen(dao, oldSpecimenArrayContent);
+						if (oldSpecimen != null && oldSpecimen instanceof MolecularSpecimen)
+						{
+							Double oldQuantity = oldSpecimenArrayContent.getInitialQuantity().getValue();					
+							Quantity quantity = oldSpecimen.getAvailableQuantity();
+							double newQuantity = quantity.getValue().doubleValue() + oldQuantity.doubleValue();
+							quantity.setValue(new Double(newQuantity));
+							oldSpecimen.setAvailableQuantity(quantity);
+							dao.update(oldSpecimen, sessionDataBean, true, false, false);
+						}
+					}
 				}
-				
-			}
 		}
 		specimenArray.setSpecimenArrayContentCollection(updatedSpecArrayContentCollection); 
 	}
