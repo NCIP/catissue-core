@@ -318,6 +318,17 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 //					dao.insert(exId, sessionDataBean, true, true);
 //				}
 			}
+			else
+			{
+				//Dummy entry added for query.
+				externalIdentifierCollection = new HashSet();				
+				ExternalIdentifier exId = new ExternalIdentifier();
+				exId.setName(null);
+				exId.setValue(null);
+				exId.setSpecimen(specimen);
+				externalIdentifierCollection.add(exId);
+				specimen.setExternalIdentifierCollection(externalIdentifierCollection);
+			}
 
 
 			//Set protectionObjects = new HashSet();
