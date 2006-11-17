@@ -108,15 +108,22 @@ public class CreateSpecimenAction extends SecureAction
 			if (request.getParameter("button") == null)
 			{
 				String parentSpecimenLabel = createForm.getParentSpecimenLabel();
-				if (parentSpecimenLabel == null || parentSpecimenLabel.trim().equals(""))
+				
+				//Bug-2784: If coming from NewSpecimen page, then only set parent specimen label.
+				Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
+				if(forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null)
 				{
-					createForm.setParentSpecimenLabel(createForm.getLabel());
-					createForm.setLabel("");
+					if (parentSpecimenLabel == null || parentSpecimenLabel.trim().equals(""))
+					{
+						createForm.setParentSpecimenLabel(createForm.getLabel());
+						createForm.setLabel("");
+					}
 				}
+				
 				if ((createForm.getCheckedButton().equals("1") && createForm
-						.getParentSpecimenLabel() != null)
+						.getParentSpecimenLabel() != null && !createForm.getParentSpecimenLabel().equals(""))
 						|| (createForm.getCheckedButton().equals("2") && createForm
-								.getParentSpecimenBarcode() != null))
+								.getParentSpecimenBarcode() != null && !createForm.getParentSpecimenBarcode().equals("")))
 				{
 					String errorString = null;
 					String []columnName = new String[1];
