@@ -654,14 +654,16 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		Iterator specimenCollectionIterator = specimenCollection.iterator();
 
 		//set default values for the specimen.
-		int i = 1;
+		// commented for wrong key used to get form -- Ashwin
+		//int i = 1;
 		while (specimenCollectionIterator.hasNext())
 		{
 			Specimen specimen = (Specimen) specimenCollectionIterator.next();
-			NewSpecimenForm form = (NewSpecimenForm) multipleSpecimenFormBeanMap.get("Specimen:" + i + "_specimenEventCollection");
+			// use specimen.getId() as part of key... here id indicates column no.
+			NewSpecimenForm form = (NewSpecimenForm) multipleSpecimenFormBeanMap.get("Specimen:" + specimen.getId().longValue() + "_specimenEventCollection");
 			if (form == null)
 			{
-				throw new Exception("Please enter Events" + " " + ApplicationProperties.getValue("multiplespecimen.error.forspecimen") + " " + i);
+				throw new Exception("Please enter Events" + " " + ApplicationProperties.getValue("multiplespecimen.error.forspecimen") + " " + specimen.getId());
 			}
 			else
 			{
@@ -702,7 +704,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				specimen.setSpecimenEventCollection(specimenEventCollection);
 
 			}
-			i++;
+			//i++;
 
 		}
 	}
