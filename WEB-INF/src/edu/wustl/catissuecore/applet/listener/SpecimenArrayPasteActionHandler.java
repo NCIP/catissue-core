@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JTable;
 
@@ -103,6 +104,7 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler 
 				model.getSpecimenArrayModelMap().put(SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX),valueConc);
 				((SpecimenArrayApplet) CommonAppletUtil.getBaseApplet(table)).getConcentrationTextField().setText(valueConc);
 			}
+			doPasteDimensions(model,selectedRow,selectedCol);
 		}
 	}
 	
@@ -112,5 +114,23 @@ public class SpecimenArrayPasteActionHandler extends AbstractPasteActionHandler 
 	protected int getColumnCount()
 	{
 		return table.getColumnCount();		
+	}
+	
+	/**
+	 * @param model
+	 * @param selectedRow
+	 * @param selectedCol
+	 */
+	private void doPasteDimensions(SpecimenArrayTableModel model,int selectedRow, int selectedCol)
+	{
+		String posOneDimKey = SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_ONE_INDEX);
+		String posTwoDimKey = SpecimenArrayAppletUtil.getArrayMapKey(selectedRow,selectedCol,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_POS_DIM_TWO_INDEX);
+		Map specimenArrayModelMap = model.getSpecimenArrayModelMap();
+		System.out.println(" In doPasteDimensions() function");
+		if ((specimenArrayModelMap.get(posOneDimKey) == null) || (specimenArrayModelMap.get(posOneDimKey).toString().equals(""))) 
+		{
+			model.getSpecimenArrayModelMap().put(posOneDimKey,String.valueOf(selectedRow));
+			model.getSpecimenArrayModelMap().put(posTwoDimKey,String.valueOf(selectedCol));
+		}
 	}
 }
