@@ -345,7 +345,7 @@ public class StorageContainerUtil
 		
 		if(positionMap != null && !positionMap.isEmpty())
 		{
-			NameValueBean xNvb = new NameValueBean(x,x);
+			NameValueBean xNvb = new NameValueBean(new Integer(x),new Integer(x));
 			List yList = (List) positionMap.get(xNvb);
 			if(yList != null && !yList.isEmpty())
 			{
