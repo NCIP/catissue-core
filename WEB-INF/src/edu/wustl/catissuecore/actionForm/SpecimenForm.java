@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -533,12 +532,11 @@ public class SpecimenForm extends AbstractActionForm
 		
 		if(!Utility.isQuantityDouble(className,type))
 		{
-			String initial = specimen.getQuantity().toString();
-			String available = specimen.getAvailableQuantity().toString();
-			StringTokenizer st = new StringTokenizer(initial, ".");			
-			this.quantity = st.nextToken();
-			st = new StringTokenizer(available, ".");			
-			this.availableQuantity = st.nextToken();			
+			int intQuantity = (int) specimen.getQuantity().getValue().doubleValue();
+			int intAvailableQuantity = (int) specimen.getAvailableQuantity().getValue().doubleValue();
+			
+			this.quantity = new Integer(intQuantity).toString();			
+			this.availableQuantity = new Integer(intAvailableQuantity).toString();			
 		}
 		else
 		{
