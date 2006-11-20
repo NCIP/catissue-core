@@ -6,11 +6,13 @@
  */
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -66,17 +68,20 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 			Map specimenMap = setDataInSpecimens(aForm,request);
 			try
 			{
-				insertSpecimens(request, specimenMap);
+				List specimenList = insertSpecimens(request, specimenMap);
 				request.setAttribute(Constants.MULTIPLE_SPECIMEN_SUBMIT_SUCCESSFUL,Constants.MULTIPLE_SPECIMEN_SUBMIT_SUCCESSFUL);
 				target = Constants.SUCCESS;
 				// ----------------- report page
 				Collection specimenCollection = (Collection) request.getSession().getAttribute(Constants.SAVED_SPECIMEN_COLLECTION);
 				request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, null);
 
-				request.setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, specimenCollection);
+				//to display all inserted specimens Mandar: 16Nov06 
+//				request.setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, specimenCollection);
+				request.setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, specimenList);
+				
 
 				ActionMessages msgs = new ActionMessages();
-				msgs.add("success", new ActionMessage("multipleSpecimen.add.success", String.valueOf(specimenCollection.size())));
+				msgs.add("success", new ActionMessage("multipleSpecimen.add.success", String.valueOf(specimenList.size())));
 				saveMessages(request, msgs);
 
 			}
@@ -206,7 +211,7 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 	 * @param request
 	 * @param specimenCollection
 	 */
-	private void insertSpecimens(HttpServletRequest request, Map specimenMap) throws Exception
+	private List insertSpecimens(HttpServletRequest request, Map specimenMap) throws Exception
 	{
 		IBizLogic bizLogic;
 
@@ -215,8 +220,39 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 		SessionDataBean sessionBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 
 		bizLogic.insert(specimenMap, sessionBean, Constants.HIBERNATE_DAO);
+
+		//specimen list to display 
+		List specimenList = createList(specimenMap);
+		return specimenList;
 	}
 
+	/*
+	 * This method creates a list of specimen that are inserted.
+	 * This list will be used to display specimen labels on the report's page.
+	 */
+	private List createList(Map specimenMap)
+	{
+		List specimenList = new ArrayList();
+		
+		Iterator specimenIterator = specimenMap.keySet().iterator();
+		while (specimenIterator.hasNext())
+		{
+			Specimen specimen = (Specimen) specimenIterator.next();
+			specimenList.add(specimen);
+			List derivedSpecimens = (List) specimenMap.get(specimen);
+
+			if (derivedSpecimens != null)
+			{
+				for (int i = 0; i < derivedSpecimens.size(); i++)
+				{
+
+					Specimen derivedSpecimen = (Specimen) derivedSpecimens.get(i);
+					specimenList.add(derivedSpecimen);
+				}
+			}
+		}
+		return specimenList; 
+	}
 	
 	//------------------------------------- to delete after testing
 	private void printMap(Map map)
