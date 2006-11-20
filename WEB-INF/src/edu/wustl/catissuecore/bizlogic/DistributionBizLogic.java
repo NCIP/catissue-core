@@ -322,7 +322,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		else if (specimen instanceof CellSpecimen)
 		{
 			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
-			int availabeQty = Integer.parseInt(cellSpecimen.getAvailableQuantity().toString());//cellSpecimen.getAvailableQuantityInCellCount().intValue();
+			int availabeQty = (int) Double.parseDouble(cellSpecimen.getAvailableQuantity().toString());//cellSpecimen.getAvailableQuantityInCellCount().intValue();
 			if (quantity > availabeQty)
 				return false;
 			else
@@ -610,7 +610,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		else if (specimen instanceof CellSpecimen)
 		{
 			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
-			int availabeQty = Integer.parseInt(cellSpecimen.getAvailableQuantity().toString());//cellSpecimen.getAvailableQuantityInCellCount().intValue();
+			int availabeQty = (int) Double.parseDouble(cellSpecimen.getAvailableQuantity().toString());//cellSpecimen.getAvailableQuantityInCellCount().intValue();
 			availabeQty = availabeQty + (int) quantity;
 			cellSpecimen.setAvailableQuantity(new QuantityInCount(availabeQty));//cellSpecimen.setAvailableQuantityInCellCount(new Integer(availabeQty));
 		}
