@@ -341,7 +341,7 @@ public class NewSpecimenAction extends SecureAction
 					specimenForm.getClassName()!=null && !specimenForm.getClassName().equals("") && !specimenForm.getClassName().equals("-1"))
 			{
 				//Logger.out.debug("before retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
-				String []selectColumnName={"collectionProtocolRegistration.id"};
+				String []selectColumnName={"collectionProtocolRegistration.collectionProtocol.id"};
 				String []whereColumnName={Constants.SYSTEM_IDENTIFIER};
 				String []whereColumnCondition={"="};
 				String []whereColumnValue={specimenForm.getSpecimenCollectionGroupId()};
