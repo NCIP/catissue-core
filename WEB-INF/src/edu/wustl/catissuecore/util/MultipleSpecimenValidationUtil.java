@@ -311,7 +311,7 @@ public final class MultipleSpecimenValidationUtil
 					String message = ApplicationProperties.getValue("newSpecimen.msg");
 					throw new DAOException(ApplicationProperties.getValue("errors.newSpecimen.biohazard.missing", message));
 				}
-				if (biohazard.getId() == null)
+				if (biohazard.getId() == null || biohazard.getId().toString().equals("-1"))
 				{
 					String message = ApplicationProperties.getValue("newSpecimen.msg");
 					throw new DAOException(ApplicationProperties.getValue("errors.newSpecimen.biohazard.missing", message));
