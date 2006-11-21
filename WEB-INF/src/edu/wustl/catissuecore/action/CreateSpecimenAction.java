@@ -142,7 +142,7 @@ public class CreateSpecimenAction extends SecureAction
 						columnValue[0] = createForm.getParentSpecimenBarcode().trim();
 						errorString = ApplicationProperties.getValue("quickEvents.barcode");
 					}
-					String []selectColumnName={"specimenCollectionGroup.collectionProtocolRegistration.id"};
+					String []selectColumnName={"specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id"};
 					String []whereColumnCondition={"="};
 					List spList = dao.retrieve(Specimen.class.getName(),selectColumnName ,columnName
 							,whereColumnCondition,columnValue,null ); 

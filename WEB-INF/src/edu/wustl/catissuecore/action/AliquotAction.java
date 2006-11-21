@@ -513,7 +513,7 @@ public class AliquotAction extends SecureAction
 		form.setPathologicalStatus(specimen.getPathologicalStatus());
 		form.setInitialAvailableQuantity(getAvailableQuantity(specimen));
 		form.setAvailableQuantity(getAvailableQuantity(specimen));
-		form.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getId().longValue());
+		form.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue());
 		if (specimen instanceof MolecularSpecimen)
 		{
 			String concentration = Utility.toString(((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter());
