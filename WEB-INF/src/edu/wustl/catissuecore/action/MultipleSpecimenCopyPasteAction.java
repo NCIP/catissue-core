@@ -66,6 +66,8 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 					{
 						value = specimenMap.get(multipleSpecimenTableModel.getKey(copiedRow, copiedColumn));
 						buttonsMap.put(key, value);
+						String keyForCount = multipleSpecimenTableModel.getKey(copiedRow, copiedColumn) + Constants.APPEND_COUNT;
+						buttonsMap.put(keyForCount, specimenMap.get(keyForCount));
 					}
 					else if (copiedRow == AppletConstants.SPECIMEN_EVENTS_ROW_NO)
 					{
@@ -166,6 +168,8 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 					{
 						value = buttonsMap.get(key);
 						specimenMap.put(multipleSpecimenTableModel.getKey(pastedRow, pastedColumn), value);
+						String keyForCount = multipleSpecimenTableModel.getKey(copiedRow, copiedColumn) + Constants.APPEND_COUNT;
+						specimenMap.put(multipleSpecimenTableModel.getKey(pastedRow, pastedColumn) + Constants.APPEND_COUNT, buttonsMap.get(keyForCount));
 					}
 					else if (copiedRow == AppletConstants.SPECIMEN_EVENTS_ROW_NO)
 					{
