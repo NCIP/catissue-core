@@ -222,7 +222,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	sname="";
 	objname = subdivname + "_SpecimenRequirement:"+rowno+"_quantity_value)";
 
-	sname="<input type='text' name='" + objname + "' value=''  maxlength='10' class='formFieldSized5' id='" + objname + "'>"        	
+	sname="<input type='text' name='" + objname + "' value='0'  maxlength='10' class='formFieldSized5' id='" + objname + "'>"        	
 	sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 					
 	spreqqty.innerHTML="" + sname;
@@ -843,13 +843,17 @@ function insRow(subdivtag,iCounter,blockCounter)
 								 
 								 String typeclassValue = (String)colForm.getValue(srSubTypeKeyName);
 								 String strHiddenUnitValue = "" + changeUnit(classValue,typeclassValue);
-								 
+								 String srQtyKeyName = srCommonName + "_quantity_value";
+								 String qtyValue = (String)colForm.getValue(srQtyKeyName);
+								if(qtyValue == null)
+									qtyValue="0";
 						%>
 
 			        	<html:text styleClass="formFieldSized5" size="30" 
 			        			styleId="<%=fName%>"  maxlength="10" 
 			        			property="<%=fName%>" 
-			        			readonly="<%=readOnlyValue%>" />
+			        			readonly="<%=readOnlyValue%>"
+								value="<%=qtyValue%>" />
 		        			
 			        	<span id="<%=sName%>">
 			        		<%=strHiddenUnitValue%>
@@ -1101,7 +1105,8 @@ function insRow(subdivtag,iCounter,blockCounter)
 			        	<html:text styleClass="formFieldSized5" size="30"  maxlength="10" 
 			        			styleId="value(CollectionProtocolEvent:`_SpecimenRequirement:1_quantity_value)" 
 			        			property="value(CollectionProtocolEvent:`_SpecimenRequirement:1_quantity_value)" 
-			        			readonly="<%=readOnlyValue%>" />
+			        			readonly="<%=readOnlyValue%>"
+								value="0" />
 			        	<span id="value(CollectionProtocolEvent:`_SpecimenRequirement:1_unitspan)">
 			        		&nbsp;
 						</span>

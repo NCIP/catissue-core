@@ -182,7 +182,7 @@ function insRow(subdivtag)
 	sname="";
 	objname = "value(SpecimenRequirement:"+rowno+"_quantity_value)";
 
-	sname="<input type='text' name='" + objname + "' value=''  maxlength='10'  class='formFieldSized5' id='" + objname + "'>"        	
+	sname="<input type='text' name='" + objname + "' value='0'  maxlength='10'  class='formFieldSized5' id='" + objname + "'>"        	
 	sname = sname + "&nbsp;<span id='" + objunit + "'>&nbsp;</span>"
 					
 	spreqqty.innerHTML="" + sname;
@@ -484,7 +484,7 @@ function insRow(subdivtag)
 			        <bean:message key="distributionprotocol.pathologystatus" />
 			    </td>
 			    
-			    <td class="formLeftSubTitle">* <!--  width="117" -->
+			    <td class="formLeftSubTitle">&nbsp; <!--  width="117" -->
 			    	<b><bean:message key="distributionprotocol.quantity" /></b>
 		        </td>
 		        <td class="formRightSubTableTitle">
@@ -616,12 +616,17 @@ function insRow(subdivtag)
 						objname = "value(SpecimenRequirement:"+ counter +"_quantity_value)";
 						String typeclassValue = (String)form.getValue(srSubTypeKeyName);
 						String strHiddenUnitValue = "" + changeUnit(classValue,typeclassValue);
+						String srQtyKeyName = srCommonName + "_quantity_value";
+						String qtyValue = (String)form.getValue(srQtyKeyName);
+						if(qtyValue == null)
+							qtyValue="0";
 					%>
 			    
 					<html:text styleClass="formFieldSized5" 
 							styleId="<%=objname%>"  maxlength="10" 
 							property="<%=objname%>"
-							readonly="<%=readOnlyValue%>" />
+							readonly="<%=readOnlyValue%>"
+							value="<%=qtyValue %>" />
 					&nbsp;
 					<span id=' <%= objunit %>'>
 						<%=strHiddenUnitValue%>
