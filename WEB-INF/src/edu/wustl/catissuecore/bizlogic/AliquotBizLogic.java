@@ -170,7 +170,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 								Constants.STORAGE_CONTAINER_FORM_ID);
 
 						//check for all validations on the storage container.
-						storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2, sessionDataBean);
+						storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2,aliquotSpecimen.getLabel(), sessionDataBean);
 //						chkContainerValidForSpecimen(container, aliquotSpecimen);
 
 						aliquotSpecimen.setStorageContainer(storageContainerObj);

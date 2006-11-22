@@ -131,7 +131,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 
 						//check for all validations on the storage container.
 						storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2,
-								sessionDataBean);
+								aliquotSpecimenArray.getName(),sessionDataBean);
 
 						aliquotSpecimenArray.setStorageContainer(storageContainerObj);
 						String sourceObjectName = StorageContainer.class.getName();

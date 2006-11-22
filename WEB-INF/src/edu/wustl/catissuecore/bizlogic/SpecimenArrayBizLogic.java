@@ -403,7 +403,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 	
 					// --- check for all validations on the storage container.
 					storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimenArray.getPositionDimensionOne().toString(), specimenArray
-							.getPositionDimensionTwo().toString(), sessionDataBean);
+							.getPositionDimensionTwo().toString(),specimenArray.getName(), sessionDataBean);
 	
 					specimenArray.setStorageContainer(storageContainerObj);
 //				}

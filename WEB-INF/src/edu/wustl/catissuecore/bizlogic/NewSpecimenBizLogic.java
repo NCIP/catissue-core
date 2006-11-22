@@ -931,7 +931,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 				// --- check for all validations on the storage container.
 				storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(),
-						specimen.getPositionDimensionTwo().toString(), sessionDataBean);
+						specimen.getPositionDimensionTwo().toString(),specimen.getLabel(), sessionDataBean);
 				//chkContainerValidForSpecimen(container, specimen,dao);
 				specimen.setStorageContainer(storageContainerObj);
 				//				}
