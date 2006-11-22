@@ -833,7 +833,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		}
 	}
 
-	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean, boolean isCollectionGroupName)
+	private void setSpecimenAttributes(DAO dao, Specimen specimen, SessionDataBean sessionDataBean, boolean partOfMultipleSpecimen)
 			throws DAOException, SMException
 	{
 
@@ -848,7 +848,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		if (specimen.getSpecimenCollectionGroup() != null)
 		{
 			SpecimenCollectionGroup specimenCollectionGroupObj = null;
-			if (isCollectionGroupName)
+			if (partOfMultipleSpecimen)
 			{
 				/*String sourceObjectName = SpecimenCollectionGroup.class.getName();
 				String[] selectColumnName = {"id"};
@@ -931,7 +931,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 				// --- check for all validations on the storage container.
 				storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(),
-						specimen.getPositionDimensionTwo().toString(),specimen.getLabel(), sessionDataBean);
+						specimen.getPositionDimensionTwo().toString(), sessionDataBean,partOfMultipleSpecimen);
 				//chkContainerValidForSpecimen(container, specimen,dao);
 				specimen.setStorageContainer(storageContainerObj);
 				//				}

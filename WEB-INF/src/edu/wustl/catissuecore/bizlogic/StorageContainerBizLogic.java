@@ -1725,9 +1725,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	}
 
 	//  Will check only for Position is used or not.
-	/*protected boolean isPositionAvailable(DAO dao, StorageContainer storageContainer, String posOne, String posTwo)
+	protected boolean isPositionAvailable(DAO dao, StorageContainer storageContainer, String posOne, String posTwo)
 	{
-		try
+	try
 		{
 			String sourceObjectName = Specimen.class.getName();
 			String[] selectColumnName = {"id"};
@@ -1786,15 +1786,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 			return true;
 		}
-		catch (Exception e)
+	catch (Exception e)
 		{
 			Logger.out.debug("Error in isPositionAvailable : " + e);
 			return false;
 		}
-	}*/
+	}
 
 	//	 -- storage container validation for specimen
-	public void checkContainer(DAO dao, String storageContainerID, String positionOne, String positionTwo, String specimenLabel, SessionDataBean sessionDataBean)
+	public void checkContainer(DAO dao, String storageContainerID, String positionOne, String positionTwo, SessionDataBean sessionDataBean, boolean multipleSpecimen)
 			throws DAOException, SMException
 	{
 		//        List list = dao.retrieve(StorageContainer.class.getName(),
@@ -1840,10 +1840,19 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			// check for valid position
 			boolean isValidPosition = validatePosition(pc, positionOne, positionTwo);
 			Logger.out.debug("isValidPosition : " + isValidPosition);
+			boolean canUsePosition = false;
 			if (isValidPosition) //	if position is valid 
 			{
-				boolean canUsePosition = false;
-				try
+			/*	try
+				{*/
+					canUsePosition = isPositionAvailable(dao, pc, positionOne, positionTwo);
+		/*		}
+				catch (Exception e)
+				{
+					
+					e.printStackTrace();
+				}*/
+				/*try
 				{
 					canUsePosition = StorageContainerUtil.isPostionAvaialble(pc.getId().toString(), pc.getName(), positionOne, positionTwo);
 				}
@@ -1851,7 +1860,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+				}*/
 				Logger.out.debug("canUsePosition : " + canUsePosition);
 				if (canUsePosition) // position empty. can be used 
 				{
@@ -1860,9 +1869,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				else
 				// position already in use
 				{
-					//TODO
-					//add specimen label to message . method called from 6 classes requires changes in all of them.
-					throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse",specimenLabel));
+					if(multipleSpecimen)
+					{
+					throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.Multiple.inUse"));
+					}
+					else
+					{
+						throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse"));
+					}
 				}
 			}
 			else
