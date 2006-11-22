@@ -255,17 +255,20 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		Map resultMap = new HashMap();
 		String parentSpecimenLabel = (String) specimenMap.get("parentSpecimenLabel");
 		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
-
+		String collectionGroupName="";
 		if (parentSpecimenLabel != null && !parentSpecimenLabel.equals("null") && !parentSpecimenLabel.equals(""))
 		{
 			List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, parentSpecimenLabel.trim());
 			if (spList != null && !spList.isEmpty())
 			{
 				isParentPresent = new Boolean(true);
+				Specimen specimen = (Specimen)spList.get(0);
+				collectionGroupName = specimen.getSpecimenCollectionGroup().getName();  
 			}
 		}
 
 		resultMap.put(Constants.MULTIPLE_SPECIMEN_RESULT, isParentPresent);
+		resultMap.put(Constants.MULTIPLE_SPECIMEN_PARENT_COLLECTION_GROUP, collectionGroupName);
 		writeMapToResponse(response, resultMap);
 		return null;
 	}
@@ -451,18 +454,47 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 		int noOfSpecimens = Integer.parseInt((String) specimenMap.get(AppletConstants.NO_OF_SPECIMENS));
 		specimenMap.remove(AppletConstants.NO_OF_SPECIMENS);
+		// Mandar:20Nov06 : enable Parent Specimen ----------------------- start
+		Map radioMap = (Map) specimenMap.get(AppletConstants.MULTIPLE_SPECIMEN_COLLECTION_GROUP_RADIOMAP);
+		specimenMap.remove(AppletConstants.MULTIPLE_SPECIMEN_COLLECTION_GROUP_RADIOMAP);
+		// Mandar:20Nov06 : enable Parent Specimen ----------------------- end
+		
 		Validator validator = new Validator();
 
 		for (int i = 1; i <= noOfSpecimens; i++)
 		{
-
-			//			Specimen Collection Group
-			String parentKey = getKey(AppletConstants.SPECIMEN_PARENT_ROW_NO, i);
-			validateField(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO, i, specimenMap, "Specimen Group Name", 2);
-
-			//			Parent Specimen
-		    specimenMap.remove(parentKey);
+			//			 Mandar:20Nov06 : enable Parent Specimen ----------------------- start
+			String radiokey = "Specimen:"+i+"_collectionGroupRadioSelected";
+			boolean iscollectionGroupSelected = ((Boolean)radioMap.get(radiokey)).booleanValue();
 			
+			//if collection group selected remove any parent specimen entry
+			//else remove any collection group entry
+			if(iscollectionGroupSelected)
+			{
+				//			Specimen Collection Group
+				String parentKey = getKey(AppletConstants.SPECIMEN_PARENT_ROW_NO, i);
+				validateField(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO, i, specimenMap, "Specimen Group Name", 2);
+
+				//			Parent Specimen
+			    specimenMap.remove(parentKey);
+			}
+			else
+			{
+				//			Parent Specimen
+				String collectionGroupKey = getKey(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO, i);
+				validateField(AppletConstants.SPECIMEN_PARENT_ROW_NO, i, specimenMap, "Parent Label", 1);
+
+				//			Specimen Collection Group
+			    specimenMap.remove(collectionGroupKey);
+			    
+			    //verify if parent exists
+			    String parentKey = getKey(AppletConstants.SPECIMEN_PARENT_ROW_NO, i);
+			    String parentLabel = (String)specimenMap.get(parentKey); 
+			    verifyParent(parentLabel,specimenMap, i );
+			}
+			//			 Mandar:20Nov06 : enable Parent Specimen ----------------------- end
+			
+			//			Label
 			//			Label
 			validateField(AppletConstants.SPECIMEN_LABEL_ROW_NO, i, specimenMap, "Label", 1);
 
@@ -494,9 +526,10 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			{
 				//Bug- 2834 : 
 				if (validator.isEmpty(quantityValue))
-				{					
-					String quantityString = ApplicationProperties.getValue("specimen.quantity");
-					throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
+				{
+					specimenMap.put(quantityKey,"0");
+//					String quantityString = ApplicationProperties.getValue("specimen.quantity");
+//					throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
 				}
 				else
 				{
@@ -1132,5 +1165,36 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		}
 	}
 	// 13Nov06 : Mandar : for delete Last ----------------- end
+	
+//	 Mandar:20Nov06 : enable Parent Specimen ----------------------- start
+	private void verifyParent(String parentLabel, Map specimenMap, int count) throws Exception
+	{
+		//String parentSpecimenLabel = (String) specimenMap.get("parentSpecimenLabel");
+		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
+
+		if (parentLabel != null && !parentLabel.equals("null") && !parentLabel.equals(""))
+		{
+			List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, parentLabel.trim());
+			if (spList != null && !spList.isEmpty())
+			{
+				Specimen specimen = (Specimen)spList.get(0);
+				//keys
+				// ParentSpecimen_label, ParentSpecimen_id
+				String key = AppletConstants.SPECIMEN_PREFIX + count + "_ParentSpecimen_id";
+				
+				String collectionGroupKey  = getKey(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO,count  ); 
+				
+				specimenMap.put(key,specimen.getId());
+				specimenMap.put(collectionGroupKey,specimen.getSpecimenCollectionGroup().getName());
+			}
+			else
+			{
+				//TODO
+				throw new Exception("Parent Specimen is invalid " + ApplicationProperties.getValue("multiplespecimen.error.forspecimen") + " "
+						+ count);
+			}
+		}
+	}
+//   Mandar:20Nov06 : enable Parent Specimen ----------------------- end
 
 }
