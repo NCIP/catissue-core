@@ -281,6 +281,11 @@
 											buttonStyleClass="actionButton" />
 
 			</td>
+<script>
+			var x = document.getElementById("<%=virtuallyLocatedStyleId%>");
+			setVirtuallyLocated(x);
+</script>
+
 		</tr>
 			<%
 				rowCount++;
@@ -403,6 +408,11 @@
 				<html:text styleClass="formFieldSized" maxlength="50" size="5" styleId="flabelKey" property="<%=fdpositionOneKey%>"/>
 				<html:text styleClass="formFieldSized" maxlength="50" size="5" styleId="flabelKey" property="<%=fdpositionTwoKey%>"/>
 -->
+<script>
+			var x1 = document.getElementById("<%=virtuallyLocatedStyleId%>");
+			setVirtuallyLocated(x1);
+</script>
+
 			</td>
 		</tr>
 			<% 		

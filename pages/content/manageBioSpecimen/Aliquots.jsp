@@ -460,6 +460,10 @@
 											formLabelStyle="formLabelBorderless"
 											buttonStyleClass="actionButton" />
 			</td>
+<script>
+			var x = document.getElementById("<%=virtuallyLocatedStyleId%>");
+			setVirtuallyLocated(x);
+</script>
 			
 		</tr>
 		<logic:equal name="exceedsMaxLimit" value="true">
@@ -475,7 +479,6 @@
 	</table>
 </td>
 </tr>
-
 <tr>
 	<td colspan="4">&nbsp;</td>
 </tr>
