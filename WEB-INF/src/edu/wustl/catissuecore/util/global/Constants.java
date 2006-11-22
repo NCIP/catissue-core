@@ -1360,6 +1360,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MULTIPLE_SPECIMEN_SUBMIT_SUCCESSFUL = "submitSuccessful";
 	public static final String MULTIPLE_SPECIMEN_SPECIMEN_ORDER_LIST= "specimenOrderList";
 	public static final String MULTIPLE_SPECIMEN_DELETELAST_SPECIMEN_ID = "SpecimenId";
+	public static final String MULTIPLE_SPECIMEN_PARENT_COLLECTION_GROUP = "ParentSpecimenCollectionGroup";
 	
 	public static final String NO_OF_RECORDS_PER_PAGE="resultView.noOfRecordsPerPage";
 	public static final int[] RESULT_PERPAGE_OPTIONS = {10,50,100,1000,5000};
