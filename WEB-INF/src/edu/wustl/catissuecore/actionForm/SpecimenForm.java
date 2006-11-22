@@ -63,7 +63,7 @@ public class SpecimenForm extends AbstractActionForm
 	/**
 	 * Amount of Specimen.
 	 */
-	protected String quantity;
+	protected String quantity = "0";
 
 	/**
 	 * Available Amount of Specimen.
@@ -608,27 +608,25 @@ public class SpecimenForm extends AbstractActionForm
 							ApplicationProperties.getValue("specimen.subType")));
 				}
 
-				if (validator.isEmpty(quantity))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-							ApplicationProperties.getValue("specimen.quantity")));
-				}
-				else 
+				if (!validator.isEmpty(quantity))
 				{					
 					if(Utility.isQuantityDouble(className,type))
         			{
-        		        if(!validator.isDouble(quantity))
+        		        if(!validator.isDouble(quantity,true))
         		        {
         		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));        		        	
         		        }
         			}
         			else
         			{        				
-        				if(!validator.isNumeric(quantity))
+        				if(!validator.isNumeric(quantity,0))
         		        {
         		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));        		        	
         		        }
         			}
+				}else
+				{
+					quantity="0";
 				}
 				// If not multiple specimen then validate storage container
 				if(!multipleSpecimen.equals("1")) 

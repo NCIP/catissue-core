@@ -456,52 +456,56 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					}
 				}
 				
-				
-				if(key.indexOf("quantityIn")!=-1)
+				int ind = key.indexOf("_quantity_value");
+				if((key.indexOf("_quantity_value"))!=-1)
 				{
-					String classKey = key.substring(0,key.lastIndexOf("_") );
-					classKey = classKey + "_specimenClass";
-					String classValue = (String)getValue(classKey );
-					if (classValue.trim().equals("Cell"))
+					if(!validator.isEmpty(value))
 					{
-						if(validator.isEmpty(value))
+						String classKey = key.substring(0,key.lastIndexOf("_quantity_value") );
+						classKey = classKey + "_specimenClass";
+						String classValue = (String)getValue(classKey );
+						if (classValue.trim().equals("Cell"))
 						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-						}
-        				else if(!validator.isNumeric(value ))
-        				{
-        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
-        				}
-					}
-					else
-					{
-						// -------Mandar: 19-12-2005
-						String typeKey = key.substring(0,key.lastIndexOf("_") );
-						typeKey = typeKey + "_specimenType";
-						String typeValue = (String)getValue(typeKey );
-						Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );
-						if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) || typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE) )
-						{
-							if(validator.isEmpty(value))
-							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-							}
-	        				else if(!validator.isNumeric(value ))
+//							if(validator.isEmpty(value))
+//							{
+//								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+//							}else
+							if(!validator.isNumeric(value,0 ))
 	        				{
 	        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
 	        				}
 						}
 						else
 						{
-							if(validator.isEmpty(value))
+							// -------Mandar: 19-12-2005
+							String typeKey = key.substring(0,key.lastIndexOf("_quantity_value") );
+							typeKey = typeKey + "_specimenType";
+							String typeValue = (String)getValue(typeKey );
+							Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );
+							if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) || typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE) )
 							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+//								if(validator.isEmpty(value))
+//								{
+//									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+//								}else 
+		        				if(!validator.isNumeric(value,0 ))
+		        				{
+		        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
+		        				}
 							}
-							else if(!validator.isDouble(value ))
-	        				{
-	        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
-	        				}
+							else
+							{
+//								if(validator.isEmpty(value))
+//								{
+//									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+//								}else
+								if(!validator.isDouble(value,true ))
+		        				{
+		        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
+		        				}
+							}
 						}
+						
 					}
 				} // if  quantity
 			}

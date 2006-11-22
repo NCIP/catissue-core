@@ -195,22 +195,22 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
     					
     				if(!bQuantity )
     				{
-	    				if(key.indexOf("quantityIn")!=-1)
+	    				if((key.indexOf("_quantity_value"))!=-1)
 	    				{
 	    					// check for empty quantity
-	    					if(validator.isEmpty(value))
-	    					{
-            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-            					bQuantity = true;
-	    					}
-	    					else
-	    					{
-		    					String classKey = key.substring(0,key.lastIndexOf("_") );
+//	    					if(validator.isEmpty(value))
+//	    					{
+//            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+//            					bQuantity = true;
+//	    					}
+//	    					else
+//	    					{
+		    					String classKey = key.substring(0,key.indexOf("_") );
 		    					classKey = classKey + "_specimenClass";
 		    					String classValue = (String)getValue(classKey );
 		    					
 	    						// -------Mandar: 20-12-2005
-	    						String typeKey = key.substring(0,key.lastIndexOf("_") );
+	    						String typeKey = key.substring(0,key.indexOf("_") );
 	    						typeKey = typeKey + "_specimenType";
 	    						String typeValue = (String)getValue(typeKey );
 	    						Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );
@@ -222,7 +222,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		    					if (classValue.trim().equals("Cell") || typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) ||
 		    							typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE))
 		    					{
-		            				if(!validator.isNumeric(value ))
+		            				if(!validator.isNumeric(value,0 ))
 		            				{
 		            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("distributionprotocol.quantity")));
 		            					bQuantity = true;
@@ -230,14 +230,14 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		    					}
 		    					else
 		    					{
-		    						if(!validator.isDouble(value ))
+		    						if(!validator.isDouble(value ,true))
 			        				{
 			        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.quantity")));
 			        					bQuantity = true;
 			        				}
 		    					}
 	    					}
-	    				} // if  quantity
+//	    				} // if  quantity
     				}
    				}
 		}
