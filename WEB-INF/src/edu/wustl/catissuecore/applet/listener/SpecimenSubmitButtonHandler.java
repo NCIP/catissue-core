@@ -38,9 +38,13 @@ public class SpecimenSubmitButtonHandler extends ButtonHandler
 		model.getMap().put(AppletConstants.NO_OF_SPECIMENS,
 				String.valueOf(model.getTotalColumnCount()));
 		
-//		//------for parent specimen enable
-//		model.getMap().put(AppletConstants.MULTIPLE_SPECIMEN_COLLECTION_GROUP_RADIOMAP,model.getCollectionGroupRadioButtonMap());
-//		// --------------
+		//------for parent specimen enable
+		//===========================
+		System.out.println("model.getCollectionGroupRadioButtonMap() : " + model.getCollectionGroupRadioButtonMap()); 
+		//===========================
+
+		model.getMap().put(AppletConstants.MULTIPLE_SPECIMEN_COLLECTION_GROUP_RADIOMAP,model.getCollectionGroupRadioButtonMap());
+		// --------------
 		System.out.println("Inside Submit Button Handler \n Map Details B4 submission: ");
 		HashMap map =(HashMap) model.getMap();
 		Iterator itr = map.keySet().iterator() ;
@@ -52,9 +56,6 @@ public class SpecimenSubmitButtonHandler extends ButtonHandler
 			System.out.println(" Value : "+ value);
 		}
 		System.out.println("\n ***********************************\n"); 
-		//===========================
-		System.out.println("model.getCollectionGroupRadioButtonMap() : " + model.getCollectionGroupRadioButtonMap()); 
-		//===========================
 		// --------------
 		try
 		{
