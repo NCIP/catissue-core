@@ -1,8 +1,8 @@
 /*
+ * This class populates the data for the storage location page of multiple specimens.
+ * 
  * Created on Nov 6, 2006
- *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
+ * @author mandar_deshmukh
  */
 package edu.wustl.catissuecore.action;
 
@@ -26,11 +26,11 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.logger.Logger;
 
 
-/**
+/*
+ * This class populates the data for the storage location page of multiple specimens.
+ * 
+ * Created on Nov 6, 2006
  * @author mandar_deshmukh
- *
- * TODO To change the template for this generated type comment go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 public class MultipleSpecimenStorageLocationAction extends BaseAction
 {
@@ -55,11 +55,6 @@ public class MultipleSpecimenStorageLocationAction extends BaseAction
 			aForm.setSpecimenMap( specimenMap);
 			aForm.populateSpecimenOnUIMap(request);  
 			
-//			HashMap locationMap = new HashMap();
-//			locationMap.put("Specimen:1_StorageContainer_id",new Integer(1));
-//			locationMap.put("Specimen:1_pos1",new Integer(1));
-//			locationMap.put("Specimen:1_pos2",new Integer(2));
-//			request.setAttribute(Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_AVAILABLE_MAP,locationMap);
 		}
 		else
 		{
@@ -70,8 +65,6 @@ public class MultipleSpecimenStorageLocationAction extends BaseAction
 			request.setAttribute(Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_SPECIMEN_MAP,specimenMap);
 			aForm.setSpecimenMap( specimenMap);
 
-			//SEND DATA FOR INSERT
-//			Logger.out.debug("\n\n------IN MultipleSpecimenStorageLocationAction ELSE ----\n\n"+ request.getParameter(Constants.PAGEOF));
 		}
 		// -----------------------
 		return mapping.findForward(target ) ;
