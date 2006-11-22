@@ -401,7 +401,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		rbparentSpecimen = new JRadioButton();
 		parentSpecimen.setPreferredSize(new Dimension(154, (int) specimenCollectionGroup
 				.getPreferredSize().getHeight()));
-		rbparentSpecimen.setEnabled(false);
+		//rbparentSpecimen.setEnabled(false);
 		parentSpecimenPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		parentSpecimen.setEnabled(false);
 
@@ -410,7 +410,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 		// adding radiobuttons to group
 		radioGroup.add(rbspecimenGroup);
-//		radioGroup.add(rbparentSpecimen);
+		radioGroup.add(rbparentSpecimen);
 
 		//Adding components to the panel
 		collectionGroupPanel.add(rbspecimenGroup);
@@ -435,6 +435,8 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		tissueSiteList = new JComboBox(model.getTissueSiteValues());
 		tissueSiteList.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup
 				.getPreferredSize().getHeight()));
+		//to display notspecified by default
+		tissueSiteList.setSelectedItem(Constants.NOTSPECIFIED); 
 		//Mandar : 30Oct06 : To display Tissue Site Tree
 		System.out.println("ImagePath : "
 				+ getClass().getClassLoader().getResource("images/Tree.gif"));
@@ -451,12 +453,17 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 		//TissueSide
 		tissueSideList = new JComboBox(model.getTissueSideValues());
+		//to display notspecified by default
+		tissueSideList.setSelectedItem(Constants.NOTSPECIFIED); 
 
 		//PathologicalStatus 
 		pathologicalStatusList = new JComboBox(model.getPathologicalStatusValues());
+		//to display notspecified by default
+		pathologicalStatusList.setSelectedItem(Constants.NOTSPECIFIED); 
+
 
 		// Quantity
-		quantity = new JTextField(17);
+		quantity = new JTextField("0",17);
 		unit = new JLabel();
 		quantity.setPreferredSize(new Dimension(110, (int) specimenCollectionGroup
 				.getPreferredSize().getHeight()));
@@ -523,7 +530,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	{
 		// Listeners
 		TextFieldHandler textHandler = new TextFieldHandler(table);
-//		ParentSpecimenItemHandler parentSpecimenItemHandler = new ParentSpecimenItemHandler(table);
+		ParentSpecimenItemHandler parentSpecimenItemHandler = new ParentSpecimenItemHandler(table);
 		CollectionGroupItemHandler collectionGroupItemHandler = new CollectionGroupItemHandler(
 				table);
 		ClassComboBoxHandler classComboBoxHandler = new ClassComboBoxHandler(table);
@@ -605,9 +612,9 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		//		specimenCollectionGroup.addFocusListener(baseFocusHandler); // to set value on click.
 
 		//Parent Specimen 
-//		parentSpecimen.addActionListener(textHandler);
-//		rbparentSpecimen.addItemListener(parentSpecimenItemHandler);
-//		parentSpecimen.addFocusListener(baseFocusHandler);
+		parentSpecimen.addActionListener(textHandler);
+		rbparentSpecimen.addItemListener(parentSpecimenItemHandler);
+		parentSpecimen.addFocusListener(baseFocusHandler);
 
 		// Label
 		label.addActionListener(textHandler);
