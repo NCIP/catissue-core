@@ -1794,7 +1794,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	}*/
 
 	//	 -- storage container validation for specimen
-	public void checkContainer(DAO dao, String storageContainerID, String positionOne, String positionTwo, SessionDataBean sessionDataBean)
+	public void checkContainer(DAO dao, String storageContainerID, String positionOne, String positionTwo, String specimenLabel, SessionDataBean sessionDataBean)
 			throws DAOException, SMException
 	{
 		//        List list = dao.retrieve(StorageContainer.class.getName(),
@@ -1860,7 +1860,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				else
 				// position already in use
 				{
-					throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse"));
+					//TODO
+					//add specimen label to message . method called from 6 classes requires changes in all of them.
+					throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse",specimenLabel));
 				}
 			}
 			else
