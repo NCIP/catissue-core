@@ -236,22 +236,32 @@ public class AliquotAction extends SecureAction
 				 */
 
 				double totalQuantity = 0;
+				ActionErrors errors = getActionErrors(request);
+
+				if (errors == null)
+				{
+					errors = new ActionErrors();
+				}
+
 				while (keyIterator.hasNext())
 				{
 					Validator validator = new Validator();
 					String key = (String) keyIterator.next();
-
 					if (key.endsWith("_quantity"))
 					{
 						String value = (String) aliquotMap.get(key);
-						totalQuantity += Double.parseDouble(value);
+						if(!validator.isDouble(value) )
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+						}else
+							totalQuantity += Double.parseDouble(value);
 					}
 
 				}
 
 				if (totalQuantity > Double.parseDouble(aliquotForm.getInitialAvailableQuantity()))
 				{
-					ActionErrors errors = getActionErrors(request);
+					errors = getActionErrors(request);
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.qtyInsufficient"));
 					saveErrors(request, errors);
 					TreeMap containerMap = null;
