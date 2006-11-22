@@ -89,8 +89,8 @@ function printCal(id,day1, day2, day3, day4, day5, day6, day7, first, month1, mo
 	
 	document.write('	</td>');
 	//KK
-	document.write('	<td class="CALENDARTITLE" align="right"><img src="' + imgsrc + 'next.GIF" onclick="cal_after('+ '\''+id +'\''+ ',' + day + ');"></td>');	
-	document.write('	<td class="CALENDARTITLE" align="left"><img src="' + imgsrc + 'next2.GIF" onclick="cal_after_year('+ '\''+id +'\''+ ',' + day + ');"></td>');
+	document.write('	<td class="CALENDARTITLE" align="right"><img src="' + imgsrc + 'next.gif" onclick="cal_after('+ '\''+id +'\''+ ',' + day + ');"></td>');	
+	document.write('	<td class="CALENDARTITLE" align="left"><img src="' + imgsrc + 'next2.gif" onclick="cal_after_year('+ '\''+id +'\''+ ',' + day + ');"></td>');
 
 	document.write('	<td class="CALENDARTITLE" align="right"><img src="' + imgsrc + 'close.gif" onclick="hideCalendar('+"'"+id+"'"+')"></td>');
 	document.write('	<td class="CALENDARBORDER" width=1><img src="' + imgsrc + 'shim.gif" width="1" height="1"></td>');
