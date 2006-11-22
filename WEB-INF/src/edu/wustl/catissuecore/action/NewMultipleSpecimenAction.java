@@ -499,7 +499,8 @@ public class NewMultipleSpecimenAction extends DispatchAction
 			setCollectionEventParameters(form, specimenForm);
 			setRecievedEventParameters(form, specimenForm);
 		}
-
+		//to display default selection as NotSpecified
+		setDefaultListSelection(form);
 		return mapping.findForward("events");
 	}
 
@@ -701,4 +702,23 @@ public class NewMultipleSpecimenAction extends DispatchAction
 
 	}
 
+	/*
+	 * This method sets the default selection of list boxes to Not Specified.
+	 * @author mandar_deshmukh
+	 *
+	 */
+	private void setDefaultListSelection(ActionForm form)
+	{
+		if(form!=null)
+		{
+			if(((NewSpecimenForm) form).getCollectionEventCollectionProcedure() == null)
+				((NewSpecimenForm) form).setCollectionEventCollectionProcedure(Constants.NOT_SPECIFIED);
+			
+			if(((NewSpecimenForm) form).getCollectionEventContainer() == null)
+				((NewSpecimenForm) form).setCollectionEventContainer(Constants.NOT_SPECIFIED);
+			
+			if(((NewSpecimenForm) form).getReceivedEventReceivedQuality() == null)
+				((NewSpecimenForm) form).setReceivedEventReceivedQuality(Constants.NOT_SPECIFIED);
+		}
+	}
 }

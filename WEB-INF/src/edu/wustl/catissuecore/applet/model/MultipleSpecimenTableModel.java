@@ -72,7 +72,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**/
 	private int currentPageIndex = 1;
 	private String specimenCollectionGroupName = null;
-
+	
 	/**
 	 * set default map. 
 	 * @param specimenAttributeOptions  initialzation map.
@@ -88,6 +88,8 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			putIdInMap(i);
 			//to set radio button keys
 			setActualColumnCollectionGroupRadioButtonValue(i);
+			//set default value for list boxes : TissueSite,TissueSide,Pathological status.
+			setNotSpecified(i);
 		}
 		//Setting the specimen Collection group name if add multiple specimen came form add specimen collection group name
 		if (specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME) != null)
@@ -492,6 +494,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		setCollectionGroupInModel(columnCount);
 		//to set collection group radio button value
 		setActualColumnCollectionGroupRadioButtonValue(columnCount);
+		setNotSpecified(columnCount);
 	}
 
 	/**
@@ -709,5 +712,24 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			}
 		}
 	}
-	
+
+	/*
+	 * This method sets Not Specified for the selection boxes by default.
+	 */
+	private void setNotSpecified(int column)
+	{
+		//pathological status
+		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO];
+		specimenMap.put(specimenKey, Constants.NOT_SPECIFIED);
+		
+		//tissueside
+		specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO];
+		specimenMap.put(specimenKey, Constants.NOT_SPECIFIED);	
+
+		//tissuesite
+		specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO];
+		specimenMap.put(specimenKey, Constants.NOT_SPECIFIED);	
+
+	}
+
 }
