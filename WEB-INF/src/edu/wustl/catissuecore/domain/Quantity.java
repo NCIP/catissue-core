@@ -29,7 +29,7 @@ public class Quantity extends AbstractDomainObject implements Serializable
     /**
 	 * Quantity in mili-liters.
 	 */
-	protected Double value;
+	protected Double value= new Double(0);
     
 	public Quantity()
 	{
