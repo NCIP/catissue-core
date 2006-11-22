@@ -74,6 +74,12 @@ public class DerivedSpecimenButtonHandler extends ButtonHandler
 		}
 		Map resultMap = appletModel.getData();
 		Boolean isParentPresent = (Boolean) resultMap.get(Constants.MULTIPLE_SPECIMEN_RESULT);
+		//parent enabled start
+		String parentCollectionGroup =(String) resultMap.get(Constants.MULTIPLE_SPECIMEN_PARENT_COLLECTION_GROUP);
+		if(parentCollectionGroup.trim().length() > 0  )
+			collectionGroup = parentCollectionGroup;
+		//parent enabled end
+		
 		Object[] parameters = new Object[]{Constants.ADD, key, collectionGroup, specimenClass, parentSpecimenLabel, parentSpecimenBarcode,
 				parentSpecimenType, isParentPresent};
 
