@@ -280,8 +280,13 @@ public class UserBizLogic extends DefaultBizLogic
 			/**
 			 * Santosh: Changes done for Api
 			 * User should not edit the first time login field.
-			 */			
-			if(user.getFirstTimeLogin() != oldUser.getFirstTimeLogin())
+			 */
+			if (user.getFirstTimeLogin() == null)
+			{
+				throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg","First Time Login"));
+			}
+			
+			if(oldUser.getFirstTimeLogin() != null && user.getFirstTimeLogin().booleanValue() != oldUser.getFirstTimeLogin().booleanValue())
 			{
 				throw new DAOException(ApplicationProperties.getValue("errors.cannotedit.firsttimelogin"));
 			}
@@ -528,7 +533,7 @@ public class UserBizLogic extends DefaultBizLogic
 				{
 					//Get the role of the user.
 					Role role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(appUser.getCsmUserId().longValue());
-					Logger.out.debug("In USer biz logic.............role........id......." + role.getId().toString());
+					//Logger.out.debug("In USer biz logic.............role........id......." + role.getId().toString());
 
 					if (role != null)
 					{
