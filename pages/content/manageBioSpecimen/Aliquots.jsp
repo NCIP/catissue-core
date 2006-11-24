@@ -642,4 +642,5 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 %>
 </table>
 <html:hidden property="specimenID"/>
+<html:hidden property="spCollectionGroupId"/>
 </html:form>
