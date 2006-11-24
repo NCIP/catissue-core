@@ -114,6 +114,10 @@ public class ShowStorageGridViewAction  extends BaseAction
 
             setEnablePageAttributeIfRequired(request, storageContainer);
             
+            request.setAttribute("siteName",storageContainer.getSite().getName());
+            request.setAttribute("storageTypeName",storageContainer.getStorageType().getName());
+            
+            
             //Mandar : Labels for Dimensions  
             String oneDimLabel = storageContainer.getStorageType().getOneDimensionLabel();
             String twoDimLabel = storageContainer.getStorageType().getTwoDimensionLabel();

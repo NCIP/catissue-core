@@ -677,22 +677,28 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					}
 
 					Logger.out.debug("isParentChanged " + isParentChanged);
+				/*	if (form.getStContSelection() == 1)
+					{
+						this.storageContainer = null;
+						this.positionDimensionOne = null;
+						this.positionDimensionTwo = null;
+
+					}
+					else if(form.getStContSelection() == 2)
+					{
+						this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
+						this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
+					}
+					else if(form.getStContSelection() == 3)
+					{
+						this.setPositionDimensionOne(new Integer(form.getPos1()));
+						this.setPositionDimensionTwo(new Integer(form.getPos2()));
+					}*/
 					if (form.isParentPresent())
 					{
 						parentSpecimen = new CellSpecimen();
 						parentSpecimen.setId(new Long(form.getParentSpecimenId()));
-						if (form.isVirtuallyLocated())
-						{
-							this.storageContainer = null;
-							this.positionDimensionOne = null;
-							this.positionDimensionTwo = null;
-
-						}
-						else
-						{
-							this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
-							this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
-						}
+						
 					}
 					else
 					{
@@ -777,20 +783,45 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 					//Mandar : autoevents 14-july-06 end
 
-					if (form.isVirtuallyLocated())
+					if (form.isAddOperation())
 					{
-						Logger.out.info("------------------Virtually located--------------");
-						this.storageContainer = null;
-						this.positionDimensionOne = null;
-						this.positionDimensionTwo = null;
+						if(form.getStContSelection()==1)
+						{
+							this.storageContainer = null;
+							this.positionDimensionOne = null;
+							this.positionDimensionTwo = null;
+						}
+						if(form.getStContSelection()==2)
+						{
+							this.storageContainer.setId(new Long(form.getStorageContainer()));
+							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+						}
+						else if(form.getStContSelection()==3)
+						{
+							this.storageContainer.setName(form.getSelectedContainerName());							
+							this.positionDimensionOne = new Integer(form.getPos1());
+							this.positionDimensionTwo = new Integer(form.getPos2());
+
+						}
 					}
 					else
 					{
-						this.storageContainer.setId(new Long(form.getStorageContainer()));
-						this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-						this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
-
+						if(!validator.isEmpty(form.getSelectedContainerName()))
+						{
+							this.storageContainer.setName(form.getSelectedContainerName());							
+							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+						}
+						else
+						{
+							this.storageContainer = null;
+							this.positionDimensionOne = null;
+							this.positionDimensionTwo = null;
+						}
 					}
+
+					
 				}
 				else if (abstractForm instanceof CreateSpecimenForm)
 				{
@@ -829,19 +860,43 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					Collection extCollection = parser.generateData(extMap);
 					this.externalIdentifierCollection = extCollection;
 
-					if (form.isVirtuallyLocated())
+//					if (form.isVirtuallyLocated())
+//					{
+//						Logger.out.info("------------------Virtually located--------------");
+//						this.storageContainer = null;
+//						this.positionDimensionOne = null;
+//						this.positionDimensionTwo = null;
+//					}
+//					else
+//					{
+//						this.storageContainer.setId(new Long(form.getStorageContainer()));
+//						this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+//						this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+//
+//					}
+					
+					//setting the value of storage container
+					if (form.isAddOperation())
 					{
-						Logger.out.info("------------------Virtually located--------------");
-						this.storageContainer = null;
-						this.positionDimensionOne = null;
-						this.positionDimensionTwo = null;
-					}
-					else
-					{
-						this.storageContainer.setId(new Long(form.getStorageContainer()));
-						this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
-						this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+						if(form.getStContSelection()==1)
+						{
+							this.storageContainer = null;
+							this.positionDimensionOne = null;
+							this.positionDimensionTwo = null;
+						}
+						if(form.getStContSelection()==2)
+						{
+							this.storageContainer.setId(new Long(form.getStorageContainer()));
+							this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
+							this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+						}
+						else if(form.getStContSelection()==3)
+						{
+							this.storageContainer.setName(form.getSelectedContainerName());							
+							this.positionDimensionOne = new Integer(form.getPos1());
+							this.positionDimensionTwo = new Integer(form.getPos2());
 
+						}
 					}
 
 				}

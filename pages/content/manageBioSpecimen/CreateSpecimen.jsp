@@ -94,18 +94,33 @@
 		}		 
 		function resetVirtualLocated()
 		{
-			var virtualCheckBox = document.getElementById("virtuallyLocated");
-			var containerName = document.getElementById("customListBox_1_0");
-			var pos1 = document.getElementById("customListBox_1_1");
-			var pos2 = document.getElementById("customListBox_1_2");
-			if(virtualCheckBox.checked==false)
-			{
-				virtualCheckBox.checked=true;
-				containerName.disabled = true;
-				pos1.disabled = true;
-				pos2.disabled = true;
-			}
+			var radioArray = document.getElementsByName("stContSelection");	
+			radioArray[0].checked= true;
+			document.forms[0].selectedContainerName.disabled = true;
+			document.forms[0].pos1.disabled = true;
+			document.forms[0].pos2.disabled = true;
+			document.forms[0].containerMap.disabled = true;
+
+			document.forms[0].customListBox_1_0.disabled = true;
+			document.forms[0].customListBox_1_1.disabled = true;
+			document.forms[0].customListBox_1_2.disabled = true;
 		}
+		
+		function isLabelBarcodeOrClassChange()
+		{
+			var parentLabelElement = document.getElementById("parentSpecimenLabel");
+			var parentBarcodeElement = document.getElementById("parentSpecimenBarcode");
+			var classNameElement = document.getElementById("className");
+			
+			if((parentLabelElement.value != "-1" || parentBarcodeElement.value != "-1") && classNameElement.value != "-1")
+			{
+		
+				var action = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=false";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}	
+		}
+		
 		function classChangeForMultipleSpecimen()
 		{
 		 	var action ='NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&specimenAttributeKey=' + document.getElementById("specimenAttributeKey").value + '&derivedSpecimenCollectionGroup=' + document.getElementById("derivedSpecimenCollectionGroup").value + '&retainForm=true';
@@ -172,7 +187,7 @@
 //				document.forms[0].mapButton.disabled = false;
 				
 			}
-		}
+		} 
 		
 		function onAddNewButtonClicked()
 		{
@@ -416,6 +431,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 						<html:hidden property="submittedFor" value="ForwardTo"/>
 						<html:hidden property="forwardTo" value="eventParameters"/>
 						<html:hidden property="multipleSpecimen" value="<%=multipleSpecimen%>"/>
+						<html:hidden property="containerId" styleId="containerId"/>
 						<td></td>
 					</td>
 				 </tr>
@@ -652,7 +668,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					if (collectionProtocolId==null)
 						collectionProtocolId="";
 					
-					String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2"
+					String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
 						+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 						+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;				
 				    String buttonOnClicked  = "window.open('"+url+"','','scrollbars=yes,menubar=no,height=320,width=810,resizable=yes,toolbar=no,location=no,status=no');return false";
@@ -662,6 +678,23 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					{
 						disabled = true;
 					}	
+					
+					int radioSelected = form.getStContSelection();
+					boolean dropDownDisable = false;
+					boolean textBoxDisable = false;					
+					if(radioSelected == 1)
+					{
+						dropDownDisable = true;
+						textBoxDisable = true;
+					}
+					else if(radioSelected == 2)
+					{									
+						textBoxDisable = true;
+					}
+					else if(radioSelected == 3)
+					{
+						dropDownDisable = true;									
+					}
 
 					%>
 				
@@ -672,39 +705,72 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 									
 				<td class="formField" colSpan="4">
 						
-						<%
-						     if(operation!=null&&operation.equals(Constants.ADD) || multipleSpecimen!=null&&multipleSpecimen.equals("1")) {
-						%>
-							<html:checkbox property="virtuallyLocated" onclick="<%=onCheckboxChange%>"/>
-							<bean:message key="specimen.virtuallyLocated" />
-					   <%}%>
+						<table border="0">
+						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+						<tr>
+							<td ><html:radio value="1" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
+							<td class="formFieldNoBorders">																			
+									<bean:message key="specimen.virtuallyLocated" />											
+							</td>
+						</tr>
+						<tr>
+							<td ><html:radio value="2" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
+							<td>
+								<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
+									attributeNames="<%=attrNames%>" 
+									initialValues="<%=initValues%>"  
+									styleClass = "<%=styClass%>" 
+									tdStyleClass = "<%=tdStyleClass%>" 
+									labelNames="<%=labelNames%>" 
+									rowNumber="<%=rowNumber%>" 
+									onChange = "<%=onChange%>"
+									formLabelStyle="formLabelBorderless"
+									disabled = "<%=dropDownDisable%>"
+									noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
+									</tr>
+									</table>
+							</td>
+						</tr>
+						<tr>
+							<td ><html:radio value="3" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
+							<td class="formLabelBorderless">
+								<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
+								<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
+								<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
+								<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
+									<bean:message key="buttons.map"/>
+								</html:button>
+							</td>
+						</tr>
+						</logic:equal>								
 						
-						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
-							<html:checkbox property="virtuallyLocated" styleClass="hidden"/>
-							<%
-								CreateSpecimenForm createSpecimenForm = (CreateSpecimenForm) request.getAttribute("createSpecimenForm");
-								if(createSpecimenForm != null && createSpecimenForm.isVirtuallyLocated())
-								{%>Specimen is virtually Located <%}
-							
+						<!--
+						<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">								
+
+						<%
+							if(form.getStContSelection() == 1)
+							{%>Specimen is virtually Located <%}									
+							else
+							{
 							%>
+								<tr>											
+									<td class="formLabelBorderless">
+										<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" readonly= "true"/>
+										<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionOne" property="positionDimensionOne" readonly= "true"/>
+										<html:text styleClass="formFieldSized3"  size="5" styleId="positionDimensionTwo" property="positionDimensionTwo" readonly= "true"/>
+										<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "true">
+											<bean:message key="buttons.map"/>
+										</html:button>
+									</td>
+								</tr>
+							<%
+							}
+							
+						%>
 						</logic:notEqual>	
-								
-									<ncombo:containermap dataMap="<%=dataMap%>" 
-											attributeNames="<%=attrNames%>" 
-											initialValues="<%=initValues%>"  
-											styleClass = "<%=styClass%>" 
-											tdStyleClass = "<%=tdStyleClass%>" 
-											labelNames="<%=labelNames%>" 
-											rowNumber="<%=rowNumber%>" 
-											onChange = "<%=onChange%>"
-											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-											disabled = "<%=disabled%>"
-											buttonName="mapButton" 
-											value="Map"
-											buttonOnClick = "<%=buttonOnClicked%>"
-											formLabelStyle="formLabelBorderless"
-											buttonStyleClass="actionButton" />
-					</td>	
+						-->
+						</table>					
+				</td>	
 				<%-- n-combo-box end --%>
 				
 				 </tr>

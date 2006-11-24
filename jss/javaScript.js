@@ -493,7 +493,31 @@ function deleteBioHazards()
 
 /* --- End Multiple Specimen  javascript functions ---*/
 
-
+/*-Common method to select between edit box or drop down to select storage container-*/
+    	function onStorageRadioButtonClick(element)
+    	{
+    		//alert("inside method of radio button click");
+			if(element.value == 1)
+			{
+				/*document.forms[0].selectedContainerName.disabled = true;
+				document.forms[0].pos1.disabled = true;
+				document.forms[0].pos2.disabled = true;*/
+				document.forms[0].containerMap.disabled = true;
+				document.forms[0].customListBox_1_0.disabled = false;
+				document.forms[0].customListBox_1_1.disabled = false;
+				document.forms[0].customListBox_1_2.disabled = false;
+			}
+			else
+			{
+				/*document.forms[0].selectedContainerName.disabled = false;
+				document.forms[0].pos1.disabled = false;
+				document.forms[0].pos2.disabled = false;*/
+				document.forms[0].containerMap.disabled = false;
+				document.forms[0].customListBox_1_0.disabled = true;
+				document.forms[0].customListBox_1_1.disabled = true;
+				document.forms[0].customListBox_1_2.disabled = true;
+			}
+    	}
 /* --- Start Specimen Array javascript functions ---*/
 function changeArrayType() 
 {
@@ -580,3 +604,167 @@ function doClickEnterSpecimenBy()
 //		}
 }
 /* --- End Specimen Array javascript functions ---*/
+
+
+
+
+function onRadioButtonGroupClick(element)
+    	{		
+    		//alert("inside method of radio button click");
+			if(element.value == 1)
+			{
+				document.forms[0].selectedContainerName.disabled = true;
+				document.forms[0].pos1.disabled = true;
+				document.forms[0].pos2.disabled = true;
+
+				document.forms[0].containerMap.disabled = true;
+				document.forms[0].customListBox_1_0.disabled = true;
+				document.forms[0].customListBox_1_1.disabled = true;
+				document.forms[0].customListBox_1_2.disabled = true;
+				
+				//document.forms[0].virtuallyLocated.value = true;
+				
+			}
+			else if(element.value == 2)
+			{
+				document.forms[0].selectedContainerName.disabled = true;
+				document.forms[0].pos1.disabled = true;
+				document.forms[0].pos2.disabled = true;
+
+				document.forms[0].containerMap.disabled = true;
+				document.forms[0].customListBox_1_0.disabled = false;
+				document.forms[0].customListBox_1_1.disabled = false;
+				document.forms[0].customListBox_1_2.disabled = false;
+				
+				//document.forms[0].virtuallyLocated.value = false;
+				
+				onCollOrClassChange();
+
+			}
+			else
+			{
+				document.forms[0].selectedContainerName.disabled = false;
+				document.forms[0].pos1.disabled = false;
+				document.forms[0].pos2.disabled = false;
+				document.forms[0].containerMap.disabled = false;
+
+				document.forms[0].customListBox_1_0.disabled = true;
+				document.forms[0].customListBox_1_1.disabled = true;
+				document.forms[0].customListBox_1_2.disabled = true;
+				
+				//document.forms[0].virtuallyLocated.value = ;
+				onCollOrClassChange();
+			}
+    	}
+		
+		
+		function onRadioButtonGroupClickForTransfer(element)
+    	{		
+    		//alert("inside method of radio button click");
+			
+			if(element.value == 1)
+			{			
+				document.forms[0].selectedContainerName.disabled = true;
+				document.forms[0].pos1.disabled = true;
+				document.forms[0].pos2.disabled = true;
+				document.forms[0].containerMap.disabled = true;
+				
+				document.forms[0].customListBox_1_0.disabled = false;
+				document.forms[0].customListBox_1_1.disabled = false;
+				document.forms[0].customListBox_1_2.disabled = false;				
+				//document.forms[0].virtuallyLocated.value = false;
+				
+			}
+			else if (element.value == 2)
+			{				
+				document.forms[0].selectedContainerName.disabled = false;
+				document.forms[0].pos1.disabled = false;
+				document.forms[0].pos2.disabled = false;
+				document.forms[0].containerMap.disabled = false;
+
+				document.forms[0].customListBox_1_0.disabled = true;
+				document.forms[0].customListBox_1_1.disabled = true;
+				document.forms[0].customListBox_1_2.disabled = true;				
+				//document.forms[0].virtuallyLocated.value = ;				
+			}
+    	}
+		
+		
+		function onRadioButtonGroupClickForDerived(element)
+    	{		
+    		//alert("inside method of radio button click");
+			if(element.value == 1)
+			{
+				document.forms[0].selectedContainerName.disabled = true;
+				document.forms[0].pos1.disabled = true;
+				document.forms[0].pos2.disabled = true;
+
+				document.forms[0].containerMap.disabled = true;
+				document.forms[0].customListBox_1_0.disabled = true;
+				document.forms[0].customListBox_1_1.disabled = true;
+				document.forms[0].customListBox_1_2.disabled = true;
+				
+				//document.forms[0].virtuallyLocated.value = true;
+				
+			}
+			else if(element.value == 2)
+			{
+				document.forms[0].selectedContainerName.disabled = true;
+				document.forms[0].pos1.disabled = true;
+				document.forms[0].pos2.disabled = true;
+
+				document.forms[0].containerMap.disabled = true;
+				document.forms[0].customListBox_1_0.disabled = false;
+				document.forms[0].customListBox_1_1.disabled = false;
+				document.forms[0].customListBox_1_2.disabled = false;
+				
+				isLabelBarcodeOrClassChange();
+				//document.forms[0].virtuallyLocated.value = false;
+		
+			}
+			else
+			{
+				document.forms[0].selectedContainerName.disabled = false;
+				document.forms[0].pos1.disabled = false;
+				document.forms[0].pos2.disabled = false;
+				document.forms[0].containerMap.disabled = false;
+
+				document.forms[0].customListBox_1_0.disabled = true;
+				document.forms[0].customListBox_1_1.disabled = true;
+				document.forms[0].customListBox_1_2.disabled = true;
+				
+				isLabelBarcodeOrClassChange();				
+				//document.forms[0].virtuallyLocated.value = ;
+				
+			}
+    	}
+		
+		
+		function onRadioButtonGroupClickForArray(element)
+    	{
+    		//alert("inside method of radio button click");
+			if(element.value == 1)
+			{
+				document.forms[0].selectedContainerName.disabled = true;
+				document.forms[0].pos1.disabled = true;
+				document.forms[0].pos2.disabled = true;				
+				document.forms[0].containerMap.disabled = true;
+				
+				document.forms[0].customListBox_1_0.disabled = false;
+				document.forms[0].customListBox_1_1.disabled = false;
+				document.forms[0].customListBox_1_2.disabled = false;
+			}
+			else
+			{
+				document.forms[0].selectedContainerName.disabled = false;
+				document.forms[0].pos1.disabled = false;
+				document.forms[0].pos2.disabled = false;
+				document.forms[0].containerMap.disabled = false;
+				
+				document.forms[0].customListBox_1_0.disabled = true;
+				document.forms[0].customListBox_1_1.disabled = true;
+				document.forms[0].customListBox_1_2.disabled = true;
+			}
+    	}
+
+		

@@ -901,7 +901,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		//Load & set Storage Container
 		if (specimen.getStorageContainer() != null)
 		{
-			if (specimen.getStorageContainer().getId() != null)
+			if (specimen.getStorageContainer().getId() != null)				
 			{
 				//				Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimen.getStorageContainer().getId());
 				//				if (containerObj != null)
@@ -1152,10 +1152,34 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
-		if (specimen.getStorageContainer() != null && specimen.getStorageContainer().getId() == null)
+		if (specimen.getStorageContainer() != null && (specimen.getStorageContainer().getId() == null && specimen.getStorageContainer().getName() == null))
 		{
-			String message = ApplicationProperties.getValue("specimen.subType");
+			String message = ApplicationProperties.getValue("specimen.storageContainer");
 			throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+		}
+		
+		if (specimen.getStorageContainer() != null && specimen.getStorageContainer().getName() != null)				
+		{			
+			StorageContainer storageContainerObj = specimen.getStorageContainer();			
+			String sourceObjectName = StorageContainer.class.getName();
+			String[] selectColumnName = {"id"};
+			String[] whereColumnName = {"name"};
+			String[] whereColumnCondition = {"="};
+			Object[] whereColumnValue = {specimen.getStorageContainer().getName()};
+			String joinCondition = null;
+
+			List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+			
+			if (!list.isEmpty())
+			{
+				storageContainerObj.setId((Long) list.get(0));
+				specimen.setStorageContainer(storageContainerObj);
+			}
+			else
+			{
+				String message = ApplicationProperties.getValue("specimen.storageContainer");
+				throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+			}
 		}
 
 		if (specimen.getSpecimenEventCollection() != null)
@@ -1399,11 +1423,11 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		 */
 		if (specimen.getStorageContainer() != null)
 		{
-			Long storageContainerId = specimen.getStorageContainer().getId();
+			//Long storageContainerId = specimen.getStorageContainer().getId();
 			Integer xPos = specimen.getPositionDimensionOne();
 			Integer yPos = specimen.getPositionDimensionTwo();
 
-			if (storageContainerId == null || xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
+			if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
 			{
 				throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
 						.getValue("specimen.positionInStorageContainer")));

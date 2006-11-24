@@ -68,6 +68,29 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	protected String fromPosition;
 
 	protected String positionInStorageContainer;
+	
+	/**
+	 *  Radio button to choose dropdown or map to select storage container.
+	 */
+	private int stContSelection = 1;
+	/**
+	 * Storage container name selected from map
+	 */
+	private String selectedContainerName;
+	/**
+	 * Storage pos1 selected from map
+	 */
+	private String pos1;
+	/**
+	 * Storage pos2 selected from map
+	 */
+	private String pos2;
+	/**
+	 * Storage Id selected from map
+	 */
+	private String containerId;
+	/**
+
 
 	/**
 	 * Returns the Reference to dimensional position one of the specimen in previous storage container before transfer.
@@ -229,6 +252,9 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 
 			this.storageContainer = transferEventParametersObject.getToStorageContainer().getId()
 					.toString();
+			
+			this.selectedContainerName = transferEventParametersObject.getToStorageContainer().getName();
+			
 			this.positionInStorageContainer = transferEventParametersObject.getToStorageContainer()
 					.getStorageType().getName()
 					+ " : "
@@ -301,23 +327,46 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 						ApplicationProperties.getValue("transfereventparameters.fromposition")));
 			}
 
-			if (validator.isEmpty(positionDimensionOne) || validator.isEmpty(positionDimensionTwo)
-					|| validator.isEmpty(storageContainer))
+			if (stContSelection == 1)
 			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
-						ApplicationProperties.getValue("transfereventparameters.toposition")));
-			}
-			else
-			{
-				if (!validator.isNumeric(positionDimensionOne, 1)
-						|| !validator.isNumeric(positionDimensionTwo, 1)
-						|| !validator.isNumeric(storageContainer, 1))
+				if (validator.isEmpty(positionDimensionOne) || validator.isEmpty(positionDimensionTwo)
+						|| validator.isEmpty(storageContainer))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("transfereventparameters.toposition")));
 				}
-
+				else
+				{
+					if (!validator.isNumeric(positionDimensionOne, 1)
+							|| !validator.isNumeric(positionDimensionTwo, 1)
+							|| !validator.isNumeric(storageContainer, 1))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+								ApplicationProperties.getValue("transfereventparameters.toposition")));
+					}
+	
+				}
 			}
+			else if (stContSelection == 2)
+			{
+				if (validator.isEmpty(pos1) || validator.isEmpty(pos2)
+						|| validator.isEmpty(selectedContainerName))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+							ApplicationProperties.getValue("transfereventparameters.toposition")));
+				}
+				else
+				{
+					if (!validator.isNumeric(pos1, 1)
+							|| !validator.isNumeric(pos2, 1))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+								ApplicationProperties.getValue("transfereventparameters.toposition")));
+					}
+	
+				}
+			}
+				
 		}
 		catch (Exception excp)
 		{
@@ -370,5 +419,75 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	public void setPositionInStorageContainer(String toPosition)
 	{
 		this.positionInStorageContainer = toPosition;
+	}
+	/**
+	 * @return Returns the containerId.
+	 */
+	public String getContainerId()
+	{
+		return containerId;
+	}
+	/**
+	 * @param containerId The containerId to set.
+	 */
+	public void setContainerId(String containerId)
+	{
+		this.containerId = containerId;
+	}
+	/**
+	 * @return Returns the pos1.
+	 */
+	public String getPos1()
+	{
+		return pos1;
+	}
+	/**
+	 * @param pos1 The pos1 to set.
+	 */
+	public void setPos1(String pos1)
+	{
+		this.pos1 = pos1;
+	}
+	/**
+	 * @return Returns the pos2.
+	 */
+	public String getPos2()
+	{
+		return pos2;
+	}
+	/**
+	 * @param pos2 The pos2 to set.
+	 */
+	public void setPos2(String pos2)
+	{
+		this.pos2 = pos2;
+	}
+	/**
+	 * @return Returns the selectedContainerName.
+	 */
+	public String getSelectedContainerName()
+	{
+		return selectedContainerName;
+	}
+	/**
+	 * @param selectedContainerName The selectedContainerName to set.
+	 */
+	public void setSelectedContainerName(String selectedContainerName)
+	{
+		this.selectedContainerName = selectedContainerName;
+	}
+	/**
+	 * @return Returns the stContSelection.
+	 */
+	public int getStContSelection()
+	{
+		return stContSelection;
+	}
+	/**
+	 * @param stContSelection The stContSelection to set.
+	 */
+	public void setStContSelection(int stContSelection)
+	{
+		this.stContSelection = stContSelection;
 	}
 }

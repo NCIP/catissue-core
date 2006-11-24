@@ -200,6 +200,7 @@ if(currentEventParametersDate.trim().length() > 0)
 				<html:hidden property="fromPositionDimensionOne" value="<%=posOne%>" />
 				<html:hidden property="fromPositionDimensionTwo" value="<%=posTwo%>" />
 				<html:hidden property="fromStorageContainerId" value="<%=storContId%>" />
+				<html:hidden property="containerId" styleId="containerId"/>
 				<%
 					if(fromPositionData == null)
 					{
@@ -287,11 +288,24 @@ if(currentEventParametersDate.trim().length() > 0)
 				if (collectionProtocolId==null)
 					collectionProtocolId="";
 
-				String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2"
+				String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
 						+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 						+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;				
 				String buttonOnClicked  = "javascript:NewWindow('"+url+"','name','810','320','yes');return false";
 				String noOfEmptyCombos = "3";
+				
+				int radioSelected = form.getStContSelection();
+				boolean dropDownDisable = false;
+				boolean textBoxDisable = false;					
+				if(radioSelected == 1)
+				{						
+					textBoxDisable = true;
+				}
+				else if(radioSelected == 2)
+				{				
+					dropDownDisable = true;									
+				}		
+				
 			%>
 			
 			<%=ScriptGenerator.getJSForOutermostDataTable()%>
@@ -299,23 +313,46 @@ if(currentEventParametersDate.trim().length() > 0)
 			
 			<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 			
-			<td class="formField" colSpan="2">
-						<ncombo:containermap dataMap="<%=dataMap%>" 
-											attributeNames="<%=attrNames%>" 
-											initialValues="<%=initValues%>"  
-											styleClass = "<%=styClass%>" 
-											tdStyleClass = "<%=tdStyleClass%>" 
-											labelNames="<%=labelNames%>" 
-											rowNumber="<%=rowNumber%>" 
-											onChange = "<%=onChange%>"
-											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-											
-											buttonName="mapButton" 
-											value="Map"
-											buttonStyleClass="actionButton"
-											formLabelStyle="formLabelBorderless"
-											buttonOnClick = "<%=buttonOnClicked%>" />			
+			<td class="formField" colSpan="2">							
+				<table border="0">	
+					<tr>
+						<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+						<td ><html:radio value="1" onclick="onRadioButtonGroupClickForTransfer(this)" styleId="stContSelection" property="stContSelection" /></td>
+						</logic:equal>
+						<td>
+							<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
+								attributeNames="<%=attrNames%>" 
+								initialValues="<%=initValues%>"  
+								styleClass = "<%=styClass%>" 
+								tdStyleClass = "<%=tdStyleClass%>" 
+								labelNames="<%=labelNames%>" 
+								rowNumber="<%=rowNumber%>" 
+								onChange = "<%=onChange%>"
+								disabled = "<%=dropDownDisable%>"
+								formLabelStyle="formLabelBorderless"							
+								noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
+								</tr>
+								</table>
+						</td>
+					</tr>
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+					<tr>
+						<td ><html:radio value="2" onclick="onRadioButtonGroupClickForTransfer(this)" styleId="stContSelection" property="stContSelection"/></td>
+						<td class="formLabelBorderless">
+							<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
+							<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
+							<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
+							<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
+								<bean:message key="buttons.map"/>
+							</html:button>
+						</td>
+					</tr>			
+					</logic:equal>
+				</table>											
 			</td>
+			
+			
+
 <%--		 n-combo-box end --%>
 					
 		</tr>

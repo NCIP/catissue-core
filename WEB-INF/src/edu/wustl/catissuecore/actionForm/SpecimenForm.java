@@ -140,7 +140,26 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	protected String multipleSpecimen = "0";
 	
-
+	/**
+	 * Radio button to choose dropdown or map to select storage container.
+	 */
+	private int stContSelection = 1;
+	/**
+	 * Storage container name selected from map
+	 */
+	private String selectedContainerName;
+	/**
+	 * Storage pos1 selected from map
+	 */
+	private String pos1;
+	/**
+	 * Storage pos2 selected from map
+	 */
+	private String pos2;
+	/**
+	 * Storage Id selected from map
+	 */
+	private String containerId;
 	/**
 	 * Returns the concentration. 
 	 * @return String the concentration.
@@ -432,6 +451,76 @@ public class SpecimenForm extends AbstractActionForm
 	{
 		return -1;
 	}
+	/**
+	 * @return Returns the containerId.
+	 */
+	public String getContainerId()
+	{
+		return containerId;
+	}
+	/**
+	 * @param containerId The containerId to set.
+	 */
+	public void setContainerId(String containerId)
+	{
+		this.containerId = containerId;
+	}
+	/**
+	 * @return Returns the pos1.
+	 */
+	public String getPos1()
+	{
+		return pos1;
+	}
+	/**
+	 * @param pos1 The pos1 to set.
+	 */
+	public void setPos1(String pos1)
+	{
+		this.pos1 = pos1;
+	}
+	/**
+	 * @return Returns the pos2.
+	 */
+	public String getPos2()
+	{
+		return pos2;
+	}
+	/**
+	 * @param pos2 The pos2 to set.
+	 */
+	public void setPos2(String pos2)
+	{
+		this.pos2 = pos2;
+	}
+	/**
+	 * @return Returns the selectedContainerName.
+	 */
+	public String getSelectedContainerName()
+	{
+		return selectedContainerName;
+	}
+	/**
+	 * @param selectedContainerName The selectedContainerName to set.
+	 */
+	public void setSelectedContainerName(String selectedContainerName)
+	{
+		this.selectedContainerName = selectedContainerName;
+	}
+	/**
+	 * @return Returns the stContSelection.
+	 */
+	public int getStContSelection()
+	{
+		return stContSelection;
+	}
+	/**
+	 * @param stContSelection The stContSelection to set.
+	 */
+	public void setStContSelection(int stContSelection)
+	{
+		this.stContSelection = stContSelection;
+	}
 
 	/**
 	 * This function Copies the data from an Specimen object to a SpecimenForm object.
@@ -455,18 +544,19 @@ public class SpecimenForm extends AbstractActionForm
 		if (container != null)
 		{
 			this.storageContainer = String.valueOf(container.getId());
+			this.selectedContainerName = container.getName();
 			this.positionDimensionOne = String.valueOf(specimen.getPositionDimensionOne());
 			this.positionDimensionTwo = String.valueOf(specimen.getPositionDimensionTwo());
 
 			this.positionInStorageContainer = container.getStorageType().getName() + " : "
 					+ container.getId() + " Pos(" + this.positionDimensionOne + ","
 					+ this.positionDimensionTwo + ")";
-			this.setVirtuallyLocated(false);
+			this.setStContSelection(2);
 
 		}
 		else
 		{
-			this.setVirtuallyLocated(true);
+			this.setStContSelection(1);
 		}
 
 		this.barcode = specimen.getBarcode();
@@ -631,29 +721,36 @@ public class SpecimenForm extends AbstractActionForm
 				// If not multiple specimen then validate storage container
 				if(!multipleSpecimen.equals("1")) 
 				{
-					if (!isVirtuallyLocated())
-					{
-						if (validator.isEmpty(positionDimensionOne)
-								|| validator.isEmpty(positionDimensionTwo)
-								|| validator.isEmpty(storageContainer))
-						{
-							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-									"errors.item.required", ApplicationProperties
-											.getValue("specimen.positionInStorageContainer")));
-						}
-						else
-						{
-							if (!validator.isNumeric(positionDimensionOne, 1)
-									|| !validator.isNumeric(positionDimensionTwo, 1)
-									|| !validator.isNumeric(storageContainer, 1))
-							{
-								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-										"errors.item.format", ApplicationProperties
-												.getValue("specimen.positionInStorageContainer")));
-							}
-	
-						}
-					}
+//					if (!isVirtuallyLocated())
+//					{
+//						if(stContSelection==2)
+//						{
+//							if (validator.isEmpty(positionDimensionOne)
+//									|| validator.isEmpty(positionDimensionTwo)
+//									|| validator.isEmpty(storageContainer))
+//							{
+//								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//										"errors.item.required", ApplicationProperties
+//												.getValue("specimen.positionInStorageContainer")));
+//							}
+//							else
+//							{
+//								if (!validator.isNumeric(positionDimensionOne, 1)
+//										|| !validator.isNumeric(positionDimensionTwo, 1)
+//										|| !validator.isNumeric(storageContainer, 1))
+//								{
+//									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+//											"errors.item.format", ApplicationProperties
+//													.getValue("specimen.positionInStorageContainer")));
+//								}
+//		
+//							}
+//						}
+//						else if(stContSelection==3)
+//						{
+//							
+//						}
+//					}
 				}
 				//Validations for External Identifier Add-More Block
 				String className = "ExternalIdentifier:";

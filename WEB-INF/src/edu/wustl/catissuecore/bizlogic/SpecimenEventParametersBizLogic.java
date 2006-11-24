@@ -397,6 +397,33 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				break;
 
 			case Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID :
+				TransferEventParameters parameter = (TransferEventParameters) eventParameter;
+			
+				if (parameter.getToStorageContainer() != null && parameter.getToStorageContainer().getName() != null)				
+				{			
+					StorageContainer storageContainerObj = parameter.getToStorageContainer();			
+					String sourceObjectName = StorageContainer.class.getName();
+					String[] selectColumnName = {"id"};
+					String[] whereColumnName = {"name"};
+					String[] whereColumnCondition = {"="};
+					Object[] whereColumnValue = {parameter.getToStorageContainer().getName()};
+					String joinCondition = null;
+
+					List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+					
+					if (!list.isEmpty())
+					{
+						storageContainerObj.setId((Long) list.get(0));
+						parameter.setToStorageContainer(storageContainerObj);
+					}
+					else
+					{
+						String message = ApplicationProperties.getValue("transfereventparameters.toposition");
+						throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+					}
+				}
+				
+				
 				if (Constants.EDIT.equals(operation))
 				{
 					//validateTransferEventParameters(eventParameter);

@@ -32,6 +32,7 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -89,25 +90,60 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		{
 			if (specimen.getStorageContainer() != null)
 			{
-				//Load & set Storage Container
-//				Object storageContainerObj = dao.retrieve(StorageContainer.class.getName(),
-//						specimen.getStorageContainer().getId());
-				StorageContainer storageContainerObj = new StorageContainer();
-				storageContainerObj.setId(specimen.getStorageContainer().getId());
-				String sourceObjectName = StorageContainer.class.getName();
-				String[] selectColumnName = {"name"};
-				String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
-				String[] whereColumnCondition = {"="};
-				Object[] whereColumnValue = {specimen.getStorageContainer().getId()};
-				String joinCondition = null;
+				if (specimen.getStorageContainer() != null && specimen.getStorageContainer().getName() != null)				
+				{			
+					StorageContainer storageContainerObj = specimen.getStorageContainer();			
+					String sourceObjectName = StorageContainer.class.getName();
+					String[] selectColumnName = {"id"};
+					String[] whereColumnName = {"name"};
+					String[] whereColumnCondition = {"="};
+					Object[] whereColumnValue = {specimen.getStorageContainer().getName()};
+					String joinCondition = null;
 
-				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
-
-				if (!list.isEmpty())
-				{
-					storageContainerObj.setName((String)list.get(0));
+					List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+					
+					if (!list.isEmpty())
+					{
+						storageContainerObj.setId((Long) list.get(0));
+						specimen.setStorageContainer(storageContainerObj);
+					}
+					else
+					{
+						String message = ApplicationProperties.getValue("specimen.storageContainer");
+						throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+					}
 				}
-
+				else
+				{
+				
+				
+					//Load & set Storage Container
+	//				Object storageContainerObj = dao.retrieve(StorageContainer.class.getName(),
+	//						specimen.getStorageContainer().getId());
+					StorageContainer storageContainerObj = new StorageContainer();
+					storageContainerObj.setId(specimen.getStorageContainer().getId());
+					String sourceObjectName = StorageContainer.class.getName();
+					String[] selectColumnName = {"name"};
+					String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+					String[] whereColumnCondition = {"="};
+					Object[] whereColumnValue = {specimen.getStorageContainer().getId()};
+					String joinCondition = null;
+	
+					List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+	
+					if (!list.isEmpty())
+					{
+						storageContainerObj.setName((String)list.get(0));
+						specimen.setStorageContainer(storageContainerObj);
+					}
+					else
+					{
+						String message = ApplicationProperties.getValue("specimen.storageContainer");
+						throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+					}
+				}
+				
+				StorageContainer storageContainerObj = specimen.getStorageContainer();
 //				if (storageContainerObj != null)
 //				{
 //					StorageContainer container = (StorageContainer) storageContainerObj;

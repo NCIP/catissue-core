@@ -64,6 +64,9 @@ public class ShowFramedPageAction extends Action
         		pageOf.equals(Constants.PAGEOF_ALIQUOT))
         {
         	String storageType = request.getParameter("storageType");
+        	String isStorageContainer = request.getParameter("storageContainer");
+        	session.setAttribute("storageContainer",isStorageContainer);
+        	
         	String collectionProtocol = request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
         	String specimenClass = request.getParameter(Constants.CAN_HOLD_SPECIMEN_CLASS);
         	String specimenarrayType = request.getParameter(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);

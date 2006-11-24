@@ -6,7 +6,9 @@
 
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
-
+<%
+	String siteName = (String) request.getAttribute("siteName");   
+%>
 <script>
 function setParentWindowValue(elementName,elementValue)
 {
@@ -19,6 +21,26 @@ function setParentWindowValue(elementName,elementValue)
     }
 }
 
+function setCustomListBoxValue(elementId,elementValue)
+{
+	var id = parent.opener.document.getElementById(elementId);
+	
+	if(elementId.match("_2"))
+	{
+		id.value = elementValue;
+	}
+	else
+	{
+		id.value = elementValue;
+		parent.opener.onCustomListBoxChange(id);
+	}
+}
+
+function setContainerName()
+{
+	var siteName = "<%=siteName%>";
+	parent.opener.setContainerName(siteName);	
+}
 function setTextBoxValue(elementId,elementValue)
 {
 	var id = parent.opener.document.getElementById(elementId);	
@@ -320,8 +342,15 @@ function closeFramedWindow()
 															"javascript:setTextBoxValue('" + selectedContainerName + "','"+  storageContainerGridObject.getName() + "');" + 
 															"javascript:setTextBoxValue('" + pos1 + "','"+  i + "');" + 
 															"javascript:setTextBoxValue('" + pos2 + "','"+  j + "');" +
-															"javascript:setParentWindowValue('positionInStorageContainer','"+ storageContainerGridObject.getType() + " : " + storageContainerGridObject.getId() + " Pos (" + i + "," + j + ")');" +
-															"closeFramedWindow()";
+															"javascript:setParentWindowValue('positionInStorageContainer','"+ storageContainerGridObject.getType() + " : " + storageContainerGridObject.getId() + " Pos (" + i + "," + j + ")');" ;								
+								String storageContainer= (String) session.getAttribute("storageContainer");								
+								
+								if(storageContainer != null)
+								{
+									setParentWindowContainer = setParentWindowContainer + "javascript:setContainerName();";
+								}
+															
+								setParentWindowContainer = setParentWindowContainer + "javascript:closeFramedWindow()";
 							}	
 							else if (pageOf.equals(Constants.PAGEOF_ALIQUOT))
 							{
@@ -332,7 +361,7 @@ function closeFramedWindow()
 								+ i + "');"
 								+ "javascript:setTextBoxValue('" + yDimStyleId + "','"
 								+ j + "');closeFramedWindow()";
-							}						
+							}							
 							else
 							{
 								setParentWindowContainer = "javascript:setParentWindowValue('positionInParentContainer','"
