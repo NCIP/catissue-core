@@ -433,7 +433,7 @@ public class AliquotForm extends AbstractActionForm
          				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.label")));
          			}
          		}
-         		else if(key.endsWith("_positionDimensionOne")||key.endsWith("_positionDimensionTwo"))
+         		else if(key.endsWith("_positionDimensionOne_fromMap")||key.endsWith("_positionDimensionTwo_fromMap"))
          		{
          			String value = (String)aliquotMap.get(key);
          			 if(!validator.isDouble(value))
