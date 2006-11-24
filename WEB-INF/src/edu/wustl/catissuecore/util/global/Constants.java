@@ -1110,8 +1110,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//Constants for StorageContainerMap Applet
 	public static final String CONTAINER_STYLEID = "containerStyleId";
+	public static final String CONTAINER_STYLE = "containerStyle";
 	public static final String XDIM_STYLEID = "xDimStyleId";
 	public static final String YDIM_STYLEID = "yDimStyleId";
+	
+	public static final String SELECTED_CONTAINER_NAME="selectedContainerName";
+	public static final String CONTAINERID="containerId";
+	public static final String POS1="pos1";
+	public static final String POS2="pos2";
+	
 	
 	//Constants for QuickEvents
 	public static final String EVENT_SELECTED = "eventSelected";
