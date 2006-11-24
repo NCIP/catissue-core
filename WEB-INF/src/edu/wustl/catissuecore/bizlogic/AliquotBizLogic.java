@@ -36,6 +36,7 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 public class AliquotBizLogic extends NewSpecimenBizLogic
@@ -59,10 +60,13 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		List aliquotList = new ArrayList();
 		for (int i = 1; i <= aliquot.getNoOfAliquots(); i++)
 		{
+				
 			//Preparing the map keys
+			String radioButonKey = "radio_"+i;
 			String quantityKey = specimenKey + i + "_quantity";
 			String barcodeKey = specimenKey + i + "_barcode";
 			String containerIdKey = specimenKey + i + "_StorageContainer_id";
+			String containerNameKey = specimenKey + i + "_StorageContainer_name";
 			String posDim1Key = specimenKey + i + "_positionDimensionOne";
 			String posDim2Key = specimenKey + i + "_positionDimensionTwo";
 			String idKey = specimenKey + i + "_id";
@@ -72,9 +76,49 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			//Retrieving the quantity, barcode & location values for each aliquot
 			String quantity = (String) aliquotMap.get(quantityKey);
 			String barcode = (String) aliquotMap.get(barcodeKey);
-			String containerId = (String) aliquotMap.get(containerIdKey);
-			String posDim1 = (String) aliquotMap.get(posDim1Key);
-			String posDim2 = (String) aliquotMap.get(posDim2Key);
+			String containerName = null;
+			String containerId = null;
+			String posDim1 = null;
+			String posDim2 = null;
+			//get the container values based on user selection from dropdown or map
+			if(aliquotMap.get(radioButonKey).equals("2"))
+			{
+				containerId=(String) aliquotMap.get(containerIdKey);
+				posDim1=(String) aliquotMap.get(posDim1Key);
+				posDim2=(String) aliquotMap.get(posDim2Key);
+			}
+			else if(aliquotMap.get(radioButonKey).equals("3"))
+			{
+				containerName=(String) aliquotMap.get(containerNameKey+"_fromMap");
+				
+				String sourceObjectName = StorageContainer.class.getName();
+				String[] selectColumnName = {"id"};
+				String[] whereColumnName = {"name"};
+				String[] whereColumnCondition = {"="};
+				Object[] whereColumnValue = {containerName};
+				String joinCondition = null;
+
+				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+				
+				if (!list.isEmpty())
+				{
+					containerId = list.get(0).toString();
+				}
+				else
+				{
+					String message = ApplicationProperties.getValue("specimen.storageContainer");
+					throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+				}
+				
+				posDim1=(String) aliquotMap.get(posDim1Key+"_fromMap");
+				posDim2=(String) aliquotMap.get(posDim2Key+"_fromMap");
+				aliquotMap.put(containerIdKey,containerId);
+				aliquotMap.put(posDim1Key,posDim1);
+				aliquotMap.put(posDim2Key,posDim2);
+				aliquotMap.remove(containerIdKey+"_fromMap");
+				aliquotMap.remove(posDim1Key+"_fromMap");
+				aliquotMap.remove(posDim2Key+"_fromMap");
+			}
 			String label = (String) aliquotMap.get(labelKey);
 			String virtuallyLocated = (String) aliquotMap.get(virtuallyLocatedKey);
 			Logger.out.info("---------------virtually located value:" + aliquotMap.get(virtuallyLocatedKey));
@@ -170,7 +214,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 								Constants.STORAGE_CONTAINER_FORM_ID);
 
 						//check for all validations on the storage container.
-						storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2, sessionDataBean,false);
+                       storageContainerBizLogic.checkContainer(dao, containerId, posDim1, posDim2, sessionDataBean,false);
 //						chkContainerValidForSpecimen(container, aliquotSpecimen);
 
 						aliquotSpecimen.setStorageContainer(storageContainerObj);
