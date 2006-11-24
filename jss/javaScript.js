@@ -403,7 +403,7 @@ function showDerivedSpecimenDialog(operation,key,derivedSpecimenCollectionGroup,
         
 	 if(derivedSpecimenCollectionGroup==null || derivedSpecimenCollectionGroup=="null" || derivedSpecimenCollectionGroup==""||derivedSpecimenCollectionGroup=="-- Select --")
        {
-            alert("You have to give Specimen Group Name before creating derived Specimen");
+            alert("You have to give Specimen Group Name or valid Parent Specimen before creating derived Specimen");
        }
   else {
         var url ='NewMultipleSpecimenAction.do?deriveButtonClicked=true&method=showDerivedSpecimenDialog&specimenAttributeKey=' + key + '&operation=' + operation + '&derivedSpecimenCollectionGroup=' + derivedSpecimenCollectionGroup + '&derivedSpecimenClass=' + derivedSpecimenClass + '&derivedParentSpecimenLabel=' + derivedParentSpecimenLabel + '&derivedParentSpecimenBarcode=' + derivedParentSpecimenBarcode + '&derivedSpecimenType=' + derivedSpecimenType + '&isMultipleSpecimenCall=true';
