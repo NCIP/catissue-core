@@ -535,7 +535,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				{
 					if(Utility.isQuantityDouble(classValue,typeValue))
 	    			{
-	    		        if(!validator.isDouble(quantityValue))
+	    		        if(!validator.isDouble(quantityValue,true))
 	    		        {   		        	
 	    		        	String quantityString = ApplicationProperties.getValue("specimen.quantity");
 	    					throw new DAOException(ApplicationProperties.getValue("errors.item.format", quantityString));
@@ -543,7 +543,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	    			}
 	    			else
 	    			{
-	    				if(!validator.isNumeric(quantityValue))
+	    				if(!validator.isNumeric(quantityValue,0))
 	    		        {
 	    					String quantityString = ApplicationProperties.getValue("specimen.quantity");
 	    					throw new DAOException(ApplicationProperties.getValue("errors.item.format", quantityString));        		        	
