@@ -43,15 +43,25 @@ public class ShowFramedPageAction extends Action
         
         //Aniruddha : For removing hardcoded names of html component
         session.setAttribute(Constants.CONTAINER_STYLEID,request.getParameter(Constants.CONTAINER_STYLEID));
+        System.out.println(request.getParameter(Constants.CONTAINER_STYLEID));
+        session.setAttribute(Constants.CONTAINER_STYLE,request.getParameter(Constants.CONTAINER_STYLE));
         session.setAttribute(Constants.XDIM_STYLEID,request.getParameter(Constants.XDIM_STYLEID));
         session.setAttribute(Constants.YDIM_STYLEID,request.getParameter(Constants.YDIM_STYLEID));
+        
+        session.setAttribute(Constants.SELECTED_CONTAINER_NAME,request.getParameter(Constants.SELECTED_CONTAINER_NAME));
+        session.setAttribute(Constants.CONTAINERID,request.getParameter(Constants.CONTAINERID));
+        session.setAttribute(Constants.POS1,request.getParameter(Constants.POS1));
+        session.setAttribute(Constants.POS2,request.getParameter(Constants.POS2));
+        
+        
 
         session.removeAttribute(Constants.CAN_HOLD_CONTAINER_TYPE);
      	session.removeAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
      	session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_CLASS);
      	session.removeAttribute(Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE);
 
-        if (pageOf.equals(edu.wustl.common.util.global.Constants.PAGEOF_SPECIMEN))
+        if (pageOf.equals(edu.wustl.common.util.global.Constants.PAGEOF_SPECIMEN) ||
+        		pageOf.equals(Constants.PAGEOF_ALIQUOT))
         {
         	String storageType = request.getParameter("storageType");
         	String collectionProtocol = request.getParameter(Constants.CAN_HOLD_COLLECTION_PROTOCOL);

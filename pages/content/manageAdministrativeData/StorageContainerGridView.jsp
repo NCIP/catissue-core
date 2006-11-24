@@ -19,19 +19,10 @@ function setParentWindowValue(elementName,elementValue)
     }
 }
 
-function setCustomListBoxValue(elementId,elementValue)
+function setTextBoxValue(elementId,elementValue)
 {
-	var id = parent.opener.document.getElementById(elementId);
-	
-	if(elementId.match("_2"))
-	{
-		id.value = elementValue;
-	}
-	else
-	{
-		id.value = elementValue;
-		parent.opener.onCustomListBoxChange(id);
-	}
+	var id = parent.opener.document.getElementById(elementId);	
+	id.value = elementValue;
 }
 
 function closeFramedWindow()
@@ -92,9 +83,18 @@ function closeFramedWindow()
 	int colSpanValue = storageContainerGridObject.getTwoDimensionCapacity().intValue();
 	System.out.println("rowSpanValue : "+ rowSpanValue + " || colSpanValue : " + colSpanValue);
 	
+	String containerStyle = (String)session.getAttribute(Constants.CONTAINER_STYLE);
+	System.out.println(containerStyle);
 	String containerStyleId = (String)session.getAttribute(Constants.CONTAINER_STYLEID);
+	System.out.println(containerStyleId);
 	String xDimStyleId = (String)session.getAttribute(Constants.XDIM_STYLEID);
 	String yDimStyleId = (String)session.getAttribute(Constants.YDIM_STYLEID);
+	
+	String selectedContainerName= (String) session.getAttribute(Constants.SELECTED_CONTAINER_NAME);
+    String containerId= (String) session.getAttribute(Constants.CONTAINERID);
+    String pos1= (String) session.getAttribute(Constants.POS1);
+    String pos2= (String)session.getAttribute(Constants.POS2);
+		
 
 	//Mandar: 29Aug06 : For container details
 	List collectionProtocolList = (List)request.getAttribute(Constants.MAP_COLLECTION_PROTOCOL_LIST );
@@ -313,30 +313,38 @@ function closeFramedWindow()
 							{
 								setParentWindowContainer = "javascript:" + specimenCallBackFunction + "('" + specimenMapKey + "' , '" + storageContainerGridObject.getId() + "' , '" + storageContainerGridObject.getName() + 
 								"' , '" + i + "' , '" + j + "' );closeFramedWindow()" ;
-							} 
+							} 							
 							else if (pageOf.equals(Constants.PAGEOF_SPECIMEN))
 							{
-								setParentWindowContainer = "javascript:setCustomListBoxValue('" + containerStyleId + "','"+
-															  + storageContainerGridObject.getId() + "');"+"javascript:setCustomListBoxValue('" + xDimStyleId + "','"+
-															  + i + "');"+"javascript:setCustomListBoxValue('" + yDimStyleId + "','"+
-															  + j + "');"+
-																"javascript:setParentWindowValue('positionInStorageContainer','"
-															  + storageContainerGridObject.getType() + " : " 
-															  + storageContainerGridObject.getId()
-															  + " Pos (" + i + "," + j + ")');"+"closeFramedWindow()";
-							}
+								setParentWindowContainer = "javascript:setTextBoxValue('" + containerId + "','"+  storageContainerGridObject.getId() + "');" + 
+															"javascript:setTextBoxValue('" + selectedContainerName + "','"+  storageContainerGridObject.getName() + "');" + 
+															"javascript:setTextBoxValue('" + pos1 + "','"+  i + "');" + 
+															"javascript:setTextBoxValue('" + pos2 + "','"+  j + "');" +
+															"javascript:setParentWindowValue('positionInStorageContainer','"+ storageContainerGridObject.getType() + " : " + storageContainerGridObject.getId() + " Pos (" + i + "," + j + ")');" +
+															"closeFramedWindow()";
+							}	
+							else if (pageOf.equals(Constants.PAGEOF_ALIQUOT))
+							{
+								setParentWindowContainer = "javascript:setTextBoxValue('" + containerStyleId + "','"
+								+ storageContainerGridObject.getId() + "');"+"javascript:setTextBoxValue('" + containerStyle + "','"
+								+ storageContainerGridObject.getName() + "');"
+								+"javascript:setTextBoxValue('" + xDimStyleId + "','"
+								+ i + "');"
+								+ "javascript:setTextBoxValue('" + yDimStyleId + "','"
+								+ j + "');closeFramedWindow()";
+							}						
 							else
 							{
 								setParentWindowContainer = "javascript:setParentWindowValue('positionInParentContainer','"
 															+ storageContainerGridObject.getType() + " : " 
 															+ storageContainerGridObject.getId()
 															+ " Pos (" + i + "," + j + ")');"
-															+ "javascript:setCustomListBoxValue('" + containerStyleId + "','"+
-															+ storageContainerGridObject.getId() + "');"+"javascript:setCustomListBoxValue('" + xDimStyleId + "','"+
+															+ "javascript:setTextBoxValue('" + containerStyleId + "','"
+															+ storageContainerGridObject.getId() + "');"+"javascript:setTextBoxValue('" + xDimStyleId + "','"
 															+ i + "');"
-															+ "javascript:setCustomListBoxValue('" + yDimStyleId + "','"+
+															+ "javascript:setTextBoxValue('" + yDimStyleId + "','"
 															+ j + "');"
-															+ "javascript:setParentWindowValue('startNumber','"+
+															+ "javascript:setParentWindowValue('startNumber','"
 															+ startNumber.intValue() + "');closeFramedWindow()";
 							}
 						%>
