@@ -48,13 +48,13 @@ public class SpecimenSubmitButtonHandler extends ButtonHandler
 		System.out.println("Inside Submit Button Handler \n Map Details B4 submission: ");
 		HashMap map =(HashMap) model.getMap();
 		Iterator itr = map.keySet().iterator() ;
-		while(itr.hasNext())
-		{
-			String key =(String) itr.next(); 
-			System.out.println("key : "+key); 
-			String value = map.get(key).toString() ;
-			System.out.println(" Value : "+ value);
-		}
+//		while(itr.hasNext())
+//		{
+//			String key =(String) itr.next(); 
+//			System.out.println("key : "+key); 
+//			String value = map.get(key).toString() ;
+//			System.out.println(" Value : "+ value);
+//		}
 		System.out.println("\n ***********************************\n"); 
 		// --------------
 		try
@@ -74,26 +74,26 @@ public class SpecimenSubmitButtonHandler extends ButtonHandler
 			System.out.println("\n\n\nInside Submit Button Handler \n Map Details After submission: ");
 			map = (HashMap)appletModel.getData();
 			itr = map.keySet().iterator() ;
-			while(itr.hasNext())
-			{
-				String key =(String) itr.next(); 
-				System.out.println("key : "+key); 
-				String value = map.get(key).toString() ;
-				System.out.println(" Value : "+ value);
-			}
+//			while(itr.hasNext())
+//			{
+//				String key =(String) itr.next(); 
+//				System.out.println("key : "+key); 
+//				String value = map.get(key).toString() ;
+//				System.out.println(" Value : "+ value);
+//			}
 			System.out.println("\n ***********************************\n\n\n"); 
 
 			// ----------------------- data map
 			System.out.println("Inside Submit Button Handler \n Data Map Details After submission: ");
 			map =(HashMap) model.getMap();
 			itr = map.keySet().iterator() ;
-			while(itr.hasNext())
-			{
-				String key =(String) itr.next(); 
-				System.out.println("key : "+key); 
-				String value = map.get(key).toString() ;
-				System.out.println(" Value : "+ value);
-			}
+//			while(itr.hasNext())
+//			{
+//				String key =(String) itr.next(); 
+//				System.out.println("key : "+key); 
+//				String value = map.get(key).toString() ;
+//				System.out.println(" Value : "+ value);
+//			}
 			System.out.println("\n ***********************************\n"); 
 //			 ----------------------- data map end
 
