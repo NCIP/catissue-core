@@ -2064,6 +2064,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfQueryResults" path=".catissuecore.queryResultsDef"/>
 			<forward name="pageOfStorageLocation" path=".catissuecore.storageLocationViewDef"/>
+			<forward name="pageOfAliquot" path=".catissuecore.storageLocationViewDef"/>
 			<forward name="pageOfSpecimen" path=".catissuecore.storageLocationViewDef"/>
 			<forward name="pageOfMultipleSpecimen" path=".catissuecore.storageLocationViewDef"/>	
 			<forward name="pageOfTissueSite" path=".catissuecore.queryResultsTreeViewDef"/>			

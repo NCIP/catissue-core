@@ -7,7 +7,7 @@
 	String position = null;
 	String propertyName = null, cdeName=null;
 	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) ||
-	     pageOf.equals(Constants.PAGEOF_SPECIMEN))
+	     pageOf.equals(Constants.PAGEOF_SPECIMEN) || pageOf.equals(Constants.PAGEOF_ALIQUOT))
 	{
 	   // For all storage container maps...
 		storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
