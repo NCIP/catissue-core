@@ -34,7 +34,7 @@
 <head>
 	<script src="jss/Hashtable.js" type="text/javascript"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-
+	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript">
 	
 	   function onSubmit()
@@ -105,6 +105,65 @@
 				
 			} 
 		}
+		
+		function onStorageRadioClickInAliquot(element)
+    	{		
+    		var index1 =  element.name.lastIndexOf('_');
+    		var index2 =  element.name.lastIndexOf(')');
+    		//rowNumber of the element
+    		var i = (element.name).substring(index1+1,index2);
+    		//alert("inside the javascript"+i);
+			var st1 = "container_" + i + "_0";
+			var pos1 = "pos1_" + i + "_1";
+			var pos2 = "pos2_" + i + "_2";
+			var st2="customListBox_" + i + "_0";
+    		var pos11="customListBox_" + i + "_1";
+    		var pos12="customListBox_" + i + "_2";
+    		var mapButton="mapButton_" + i ;
+    		var stContainerNameFromMap = document.getElementById(st1);
+    		var pos1FromMap = document.getElementById(pos1);
+    		var pos2FromMap = document.getElementById(pos2);    		    		
+    		var stContainerNameFromDropdown = document.getElementById(st2);
+    		var pos1FromDropdown = document.getElementById(pos11);
+    		var pos2FromDropdown = document.getElementById(pos12);    		    		
+    		var containerMapButton =  document.getElementById(mapButton);
+
+    		//alert("inside method of radio button click");
+			if(element.value == 1)
+			{
+				stContainerNameFromMap.disabled = true;
+				pos1FromMap.disabled = true;
+				pos2FromMap.disabled = true;
+
+				containerMapButton.disabled = true;
+				stContainerNameFromDropdown.disabled = true;
+				pos1FromDropdown.disabled = true;
+				pos2FromDropdown.disabled = true;
+			}
+			else if(element.value == 2)
+			{
+				stContainerNameFromMap.disabled = true;
+				pos1FromMap.disabled = true;
+				pos2FromMap.disabled = true;
+
+				containerMapButton.disabled = true;
+				stContainerNameFromDropdown.disabled = false;
+				pos1FromDropdown.disabled = false;
+				pos2FromDropdown.disabled = false;
+
+			}
+			else
+			{
+				stContainerNameFromMap.disabled = false;
+				pos1FromMap.disabled = false;
+				pos2FromMap.disabled = false;
+
+				containerMapButton.disabled = false;
+				stContainerNameFromDropdown.disabled = true;
+				pos1FromDropdown.disabled = true;
+				pos2FromDropdown.disabled = true;
+			}
+    	}		
 		
 	</script>
 </head>
@@ -391,10 +450,27 @@
 			String labelKey = "value(Specimen:" + i + "_label)";
 			String qtyKey = "value(Specimen:" + i + "_quantity)";
 			String barKey = "value(Specimen:" + i + "_barcode)";
-			String virtuallyLocatedKey = "value(Specimen:" + i + "_virtuallyLocated)";
+			//String virtuallyLocatedKey = "value(Specimen:" + i + "_virtuallyLocated)";
 			String containerKey = "value(Specimen:" + i + "_StorageContainer_id)";
 			String pos1Key = "value(Specimen:" + i + "_positionDimensionOne)";
 			String pos2Key = "value(Specimen:" + i + "_positionDimensionTwo)";
+			String containerMap = "value(mapButton_" + i + ")";
+			String containerMapStyle = "mapButton_" + i ;
+			
+			
+			//Keys for container if selected from Map
+			String containerIdFromMapKey = "value(Specimen:" + i + "_StorageContainer_id_fromMap)";
+			String containerNameFromMapKey = "value(Specimen:" + i + "_StorageContainer_name_fromMap)";
+			String pos1FromMapKey = "value(Specimen:" + i + "_positionDimensionOne_fromMap)";
+			String pos2FromMapKey = "value(Specimen:" + i + "_positionDimensionTwo_fromMap)";
+			String stContSelection = "value(radio_" + i + ")";
+			String containerStyle = "container_" + i + "_0";
+			String containerIdStyle = "containerId_" + i + "_0";
+			String pos1Style = "pos1_" + i + "_1";
+			String pos2Style = "pos2_" + i + "_2";
+			String rbKey = "radio_" + i ;
+			aliquotMap.put(rbKey,"1");
+		
 			
 			String virtuallyLocatedStyleId = "chkBox_"+ i;
 			//Preparing data for custom tag
@@ -421,12 +497,32 @@
 			String collectionProtocolId =form.getSpCollectionGroupId()+"";
 			if (collectionProtocolId==null)
 				collectionProtocolId="";
-		
-			String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=" + containerStyleId + "&amp;xDimStyleId=" + pos1StyleId + "&amp;yDimStyleId=" + pos2StyleId
+			String frameUrl="";
+			String storageContSelection=(String)form.getValue("radio_" + i);
+			System.out.println("cont style:"+containerStyle);
+			/*if(storageContSelection!=null && storageContSelection.equals("2"))
+			{
+				frameUrl = "ShowFramedPage.do?pageOf=pageOfAliquot&amp;containerStyleId=" + containerIdStyle 
+				+ "&amp;containerStyle=" + containerStyle 
+				+ "&amp;xDimStyleId=" + pos1StyleId + "&amp;yDimStyleId=" + pos2StyleId
 				+ "&amp;" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 				+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
+				
+			System.out.println("frameUrl:"+frameUrl);	
+			}
+			else if(storageContSelection!=null && storageContSelection.equals("3"))
+			{*/
+
+				frameUrl = "ShowFramedPage.do?pageOf=pageOfAliquot&amp;containerStyleId=" + containerIdStyle + "&amp;xDimStyleId=" + pos1Style + "&amp;yDimStyleId=" + pos2Style
+				+ "&amp;containerStyle=" + containerStyle 
+				+ "&amp;" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
+				+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId ;
+				System.out.println("frameUrl:"+frameUrl);				
+			//}
 
 			String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
+			
+
 	%>
 	<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 		<tr>
@@ -444,8 +540,22 @@
 				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcodes" property="<%=barKey%>" disabled="false"/>
 			</td>
 			<td class="formField" nowrap>
-				<html:checkbox property="<%=virtuallyLocatedKey%>" onclick="setVirtuallyLocated(this)" value="true" styleId="<%=virtuallyLocatedStyleId%>"/><bean:message key="specimen.virtuallyLocated" />
-				<ncombo:containermap dataMap="<%=dataMap%>" 
+							<table border="0">
+							
+								<tr>
+									
+									<td><html:hidden styleId="<%=containerIdStyle%>" property="<%=containerIdFromMapKey%>"/>
+									<html:radio value="1" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>" /></td>
+									<td class="formFieldNoBorders">
+										<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">									
+											<bean:message key="specimen.virtuallyLocated" />
+										</logic:equal>	
+									</td>
+								</tr>
+									<tr>
+									<td ><html:radio value="2" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
+									<td>
+										<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
 											attributeNames="<%=attrNames%>" 
 											initialValues="<%=initValues%>"  
 											styleClass = "<%=styClass%>" 
@@ -453,17 +563,29 @@
 											labelNames="<%=labelNames%>" 
 											rowNumber="<%=rowNumber%>" 
 											onChange = "<%=onChange%>"
-											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-											buttonName="mapButton" 
-											value="Map"
-											buttonOnClick = "<%=buttonOnClicked%>"
 											formLabelStyle="formLabelBorderless"
-											buttonStyleClass="actionButton" />
-			</td>
-<script>
-			var x = document.getElementById("<%=virtuallyLocatedStyleId%>");
-			setVirtuallyLocated(x);
-</script>
+											disabled="true"
+											noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
+											</tr>
+											</table>
+									</td>
+								</tr>
+								<tr>
+									<td ><html:radio value="3" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
+									<td class="formLabelBorderless">
+										<html:text styleClass="formFieldSized10"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled="true"/>
+										<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled="true"/>
+										<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled="true"/>
+										<html:button styleClass="actionButton" styleId = "<%=containerMapStyle%>" property="<%=containerMap%>" onclick="<%=buttonOnClicked%>" disabled="true">
+											<bean:message key="buttons.map"/>
+										</html:button>
+									</td>
+								</tr>
+							</table>
+
+							</td>
+							<%//System.out.println("End of tag in jsp");%>
+				<%-- n-combo-box end --%>
 			
 		</tr>
 		<logic:equal name="exceedsMaxLimit" value="true">
@@ -479,6 +601,7 @@
 	</table>
 </td>
 </tr>
+
 <tr>
 	<td colspan="4">&nbsp;</td>
 </tr>
