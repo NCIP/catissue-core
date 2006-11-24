@@ -365,7 +365,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		{
 			String key = (String) sessionMapItr.next();
 
-			if (key.endsWith(Constants.APPEND_COUNT))
+			if (key==null || key.endsWith(Constants.APPEND_COUNT))
 			{
 				//ignore counts keys
 				continue;
