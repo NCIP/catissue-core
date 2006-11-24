@@ -402,7 +402,7 @@ public class AliquotAction extends SecureAction
 			errorString = "barcode";
 		}
 
-		if (specimenList.isEmpty())
+		if (specimenList==null || specimenList.isEmpty())
 		{
 			ActionErrors errors = getActionErrors(request);
 
