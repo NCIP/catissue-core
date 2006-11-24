@@ -55,14 +55,14 @@
 				containerName.disabled = true;
 				pos1.disabled = true;
 				pos2.disabled = true;
-				document.forms[0].mapButton[substr-1].disabled = true;
+				//document.forms[0].mapButton[substr-1].disabled = true;
 			}
 			else
 			{
 				containerName.disabled = false;
 				pos1.disabled = false;
 				pos2.disabled = false;
-				document.forms[0].mapButton[substr-1].disabled = false;
+				//document.forms[0].mapButton[substr-1].disabled = false;
 				
 			} 
 		}
