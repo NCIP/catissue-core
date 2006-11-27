@@ -241,7 +241,7 @@ public class MultipleSpecimenStorageLocationForm extends AbstractActionForm
         				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.label")));
         			}
         		}
-        		else if(key.endsWith("_PositionOne")||key.endsWith("_PositionTwo"))
+        		else if(key.endsWith("_PositionOne")||key.endsWith("_PositionTwo")||key.indexOf("positionDimension")!=-1)
         		{
         			String value = (String)specimenOnUIMap.get(key);
         			 if(!validator.isDouble(value))
