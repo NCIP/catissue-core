@@ -538,6 +538,13 @@
 				<exclude name="**/java.policy.applet*" />
 			</fileset>
 		</jar>
+		
+		<copy todir="${base.dir}/caTissueCore_caCORE_Client/lib">
+            <fileset dir="${lib.dir}">
+            	<include name="commonpackage.jar"/>
+            </fileset>
+        </copy>
+		
 	</target>
 	
 	<target name="sendMail"  description="Send mail">
