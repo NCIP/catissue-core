@@ -13,8 +13,6 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.common.domain.AbstractDomainObject;
-
 /**
  * @author mandar_deshmukh
  * @author Rahul Ner.
