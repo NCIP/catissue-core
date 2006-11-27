@@ -572,7 +572,7 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 							</tr>
 							<tr>
 								<td ><html:radio value="3" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
-								<td class="formLabelBorderless">
+								<td class="formLabelBorderlessLeft">
 									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled="true"/>
 									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled="true"/>
 									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled="true"/>
