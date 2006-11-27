@@ -34,38 +34,65 @@
 			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION%>' + "&operation=add&menuSelected=15";
 			document.forms[0].submit();
 		}
+		
+		function onStorageRadioClickInMultipleSpecimen(element)
+	{		
+		var index1 =  element.name.lastIndexOf('_');
+		var index2 =  element.name.lastIndexOf(')');
+		//rowNumber of the element
+		var i = (element.name).substring(index1+1,index2);
+		//alert("inside the javascript"+i);
+		var st1 = "container_" + i + "_0";
+		var pos1 = "pos1_" + i + "_1";
+		var pos2 = "pos2_" + i + "_2";
+		var st2="customListBox_" + i + "_0";
+		var pos11="customListBox_" + i + "_1";
+		var pos12="customListBox_" + i + "_2";
+		var mapButton="mapButton_" + i ;
+		var stContainerNameFromMap = document.getElementById(st1);
+		var pos1FromMap = document.getElementById(pos1);
+		var pos2FromMap = document.getElementById(pos2);    		    		
+		var stContainerNameFromDropdown = document.getElementById(st2);
+		var pos1FromDropdown = document.getElementById(pos11);
+		var pos2FromDropdown = document.getElementById(pos12);    		    		
+		var containerMapButton =  document.getElementById(mapButton);
 
-		function setVirtuallyLocated(element)
+		//alert("inside method of radio button click");
+		if(element.value == 1)
 		{
-			var elementId = element.id;
-			var index = elementId.indexOf("_");
-			var len = elementId.length;
-			var substr = elementId.substring(index+1,len);
-			
-			var customListBox1 = "customListBox_"+substr+"_0";
-			var customListBox2 = "customListBox_"+substr+"_1";
-			var customListBox3 = "customListBox_"+substr+"_2";
+			stContainerNameFromMap.disabled = true;
+			pos1FromMap.disabled = true;
+			pos2FromMap.disabled = true;
 
-			var containerName = document.getElementById(customListBox1);
-			var pos1 = document.getElementById(customListBox2);
-			var pos2 = document.getElementById(customListBox3);
-
-			if(element.checked)
-			{
-				containerName.disabled = true;
-				pos1.disabled = true;
-				pos2.disabled = true;
-				//document.forms[0].mapButton[substr-1].disabled = true;
-			}
-			else
-			{
-				containerName.disabled = false;
-				pos1.disabled = false;
-				pos2.disabled = false;
-				//document.forms[0].mapButton[substr-1].disabled = false;
-				
-			} 
+			containerMapButton.disabled = true;
+			stContainerNameFromDropdown.disabled = true;
+			pos1FromDropdown.disabled = true;
+			pos2FromDropdown.disabled = true;
 		}
+		else if(element.value == 2)
+		{
+			stContainerNameFromMap.disabled = true;
+			pos1FromMap.disabled = true;
+			pos2FromMap.disabled = true;
+
+			containerMapButton.disabled = true;
+			stContainerNameFromDropdown.disabled = false;
+			pos1FromDropdown.disabled = false;
+			pos2FromDropdown.disabled = false;
+
+		}
+		else
+		{
+			stContainerNameFromMap.disabled = false;
+			pos1FromMap.disabled = false;
+			pos2FromMap.disabled = false;
+
+			containerMapButton.disabled = false;
+			stContainerNameFromDropdown.disabled = true;
+			pos1FromDropdown.disabled = true;
+			pos2FromDropdown.disabled = true;
+		}
+	}		
 
 </script>
 </head>
@@ -166,7 +193,7 @@
 
 		int rowCount=1;	
 		String rowNumber = String.valueOf(rowCount);	
-		
+		int newCount = 1;
 		
 		if(specimenMap != null)
 		{ 
@@ -236,6 +263,23 @@
 	String containerKey = fstorageContainerKey;
 	String pos1Key = fpositionOneKey;
 	String pos2Key = fpositionTwoKey;
+	
+	//Keys for container if selected from Map
+		String containerMap = "value(mapButton_" + newCount + ")";
+		String containerMapStyle = "mapButton_" + newCount ;
+		String containerIdFromMapKey = "value(Specimen:" + newCount + "_StorageContainer_id_fromMap)";
+		String containerNameFromMapKey = "value(Specimen:" + newCount + "_StorageContainer_name_fromMap)";
+		String pos1FromMapKey = "value(Specimen:" + newCount + "_positionDimensionOne_fromMap)";
+		String pos2FromMapKey = "value(Specimen:" + newCount + "_positionDimensionTwo_fromMap)";
+		String stContSelection = "value(radio_" + newCount + ")";
+		String containerStyle = "container_" + newCount + "_0";
+		String containerIdStyle = "containerId_" +newCount + "_0";
+		String pos1Style = "pos1_" + newCount + "_1";
+		String pos2Style = "pos2_" + newCount + "_2";
+		String rbKey = "radio_" + newCount ;
+		specimenMap.put(rbKey,"2");
+		
+		
 
 	String[] initValues = new String[3];
 	initValues[0] = (String)specimenMap.get(storageContainerKey);
@@ -256,7 +300,8 @@
 			String pos2StyleId = "customListBox_" + rowNumber + "_2";
 
 		
-			String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=" + containerStyleId + "&amp;xDimStyleId=" + pos1StyleId + "&amp;yDimStyleId=" + pos2StyleId
+			String frameUrl = "ShowFramedPage.do?pageOf=pageOfAliquot&amp;containerStyleId=" + containerIdStyle + "&amp;xDimStyleId=" + pos1Style + "&amp;yDimStyleId=" + pos2Style
+			    + "&amp;containerStyle=" + containerStyle
 				+ "&amp;" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 				+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
 
@@ -264,33 +309,53 @@
 
 //System.out.println("\n\n--------------\nData Map For NLevelCombo Main Specimen :\n "+dataMap+"\n\n--------------\n");
  %>
-				<html:checkbox property="<%=virtuallyLocatedKey%>" onclick="setVirtuallyLocated(this)" value="true" styleId="<%=virtuallyLocatedStyleId%>"/><bean:message key="specimen.virtuallyLocated" />
-				<ncombo:containermap dataMap="<%=dataMap%>" 
-											attributeNames="<%=attrNames%>" 
-											initialValues="<%=initValues%>"  
-											styleClass = "<%=styClass%>" 
-											tdStyleClass = "<%=tdStyleClass%>" 
-											labelNames="<%=labelNames%>" 
-											rowNumber="<%=rowNumber%>" 
-											onChange = "<%=onChange%>"
-											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-											buttonName="mapButton" 
-											value="Map"
-											buttonOnClick = "<%=buttonOnClicked%>"
-											formLabelStyle="formLabelBorderless"
-											buttonStyleClass="actionButton" />
-
-			</td>
-<script>
-			var x = document.getElementById("<%=virtuallyLocatedStyleId%>");
-			setVirtuallyLocated(x);
-</script>
-
+ 
+                          <table border="0">
+						
+							<tr>
+								
+								<td><html:hidden styleId="<%=containerIdStyle%>" property="<%=containerIdFromMapKey%>"/>
+								<html:radio value="1" onclick="onStorageRadioClickInMultipleSpecimen(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>" /></td>
+								<td class="formFieldNoBorders">
+								<bean:message key="specimen.virtuallyLocated" />
+								</td>
+							</tr>
+								<tr>
+								<td ><html:radio value="2" onclick="onStorageRadioClickInMultipleSpecimen(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
+								<td>
+									<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
+										attributeNames="<%=attrNames%>" 
+										initialValues="<%=initValues%>"  
+										styleClass = "<%=styClass%>" 
+										tdStyleClass = "<%=tdStyleClass%>" 
+										labelNames="<%=labelNames%>" 
+										rowNumber="<%=rowNumber%>" 
+										onChange = "<%=onChange%>"
+										formLabelStyle="formLabelBorderless"
+										disabled="false"
+										noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
+										</tr>
+										</table>
+								</td>
+							</tr>
+							<tr>
+								<td ><html:radio value="3" onclick="onStorageRadioClickInMultipleSpecimen(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
+								<td class="formLabelBorderlessLeft">
+									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled="true"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled="true"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled="true"/>
+									<html:button styleClass="actionButton" styleId = "<%=containerMapStyle%>" property="<%=containerMap%>" onclick="<%=buttonOnClicked%>" disabled="true">
+										<bean:message key="buttons.map"/>
+									</html:button>
+								</td>
+							</tr>
+						</table>
+						</td>
 		</tr>
 			<%
 				rowCount++;
 				rowNumber = String.valueOf(rowCount);		
-
+                newCount++;
 				Object derivedCount = specimenMap.get(derivedCountKey); 
 				if(derivedCount != null)
 				{
@@ -364,6 +429,22 @@
 		containerKey = fdstorageContainerKey;
 		pos1Key = fdpositionOneKey;
 		pos2Key = fdpositionTwoKey;
+		
+			//Keys for container if selected from Map
+		 containerMap = "value(mapButton_" + newCount + ")";
+		 containerMapStyle = "mapButton_" + newCount ;
+		 containerIdFromMapKey = "value(Specimen:" + newCount + "_StorageContainer_id_fromMap)";
+		 containerNameFromMapKey = "value(Specimen:" + newCount + "_StorageContainer_name_fromMap)";
+		 pos1FromMapKey = "value(Specimen:" + newCount + "_positionDimensionOne_fromMap)";
+		 pos2FromMapKey = "value(Specimen:" + newCount + "_positionDimensionTwo_fromMap)";
+		 stContSelection = "value(radio_" + newCount + ")";
+		 containerStyle = "container_" + newCount + "_0";
+		 containerIdStyle = "containerId_" + newCount + "_0";
+		 pos1Style = "pos1_" + newCount + "_1";
+		 pos2Style = "pos2_" + newCount + "_2";
+		 rbKey = "radio_" + newCount ;
+		 specimenMap.put(rbKey,"2");
+		
 	
 		initValues = new String[3];
 		initValues[0] = (String)specimenMap.get(dstorageContainerKey);
@@ -378,45 +459,62 @@
 		containerStyleId = "customListBox_" + rowNumber + "_0";
 		pos1StyleId = "customListBox_" + rowNumber + "_1";
 		pos2StyleId = "customListBox_" + rowNumber + "_2";
-	
-		frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=" + containerStyleId + "&amp;xDimStyleId=" + pos1StyleId + "&amp;yDimStyleId=" + pos2StyleId
-					+ "&amp;" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+dclassName
-					+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + dcollectionProtocolId;
-	
+		
+		   frameUrl = "ShowFramedPage.do?pageOf=pageOfAliquot&amp;containerStyleId=" + containerIdStyle + "&amp;xDimStyleId=" + pos1Style + "&amp;yDimStyleId=" + pos2Style
+			    + "&amp;containerStyle=" + containerStyle
+				+ "&amp;" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+dclassName
+				+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + dcollectionProtocolId;
+			
 				buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
 
 			//System.out.println("\n\n--------------\nData Map For NLevelCombo Derived Specimen :\n "+dataMap+"\n\n--------------\n");
 	 %>
-				<html:checkbox property="<%=virtuallyLocatedKey%>" onclick="setVirtuallyLocated(this)" value="true" styleId="<%=virtuallyLocatedStyleId%>"/><bean:message key="specimen.virtuallyLocated" />
-				<ncombo:containermap dataMap="<%=dataMap%>" 
-											attributeNames="<%=dattrNames%>" 
-											initialValues="<%=initValues%>"  
-											styleClass = "<%=styClass%>" 
-											tdStyleClass = "<%=tdStyleClass%>" 
-											labelNames="<%=labelNames%>" 
-											rowNumber="<%=rowNumber%>" 
-											onChange = "<%=onChange%>"
-											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-											buttonName="mapButton" 
-											value="Map"
-											buttonOnClick = "<%=buttonOnClicked%>"
-											formLabelStyle="formLabelBorderless"
-											buttonStyleClass="actionButton" />
-
-
-<!-- 				<html:text styleClass="formFieldSized" maxlength="50" size="10" styleId="flabelKey" property="<%=fdstorageContainerKey%>"/>
-				<html:text styleClass="formFieldSized" maxlength="50" size="5" styleId="flabelKey" property="<%=fdpositionOneKey%>"/>
-				<html:text styleClass="formFieldSized" maxlength="50" size="5" styleId="flabelKey" property="<%=fdpositionTwoKey%>"/>
--->
-<script>
-			var x1 = document.getElementById("<%=virtuallyLocatedStyleId%>");
-			setVirtuallyLocated(x1);
-</script>
+				<table border="0">
+						
+							<tr>
+								
+								<td><html:hidden styleId="<%=containerIdStyle%>" property="<%=containerIdFromMapKey%>"/>
+								<html:radio value="1" onclick="onStorageRadioClickInMultipleSpecimen(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>" /></td>
+								<td class="formFieldNoBorders">
+								<bean:message key="specimen.virtuallyLocated" />
+								</td>
+							</tr>
+								<tr>
+								<td ><html:radio value="2" onclick="onStorageRadioClickInMultipleSpecimen(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
+								<td>
+									<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
+										attributeNames="<%=dattrNames%>" 
+										initialValues="<%=initValues%>"  
+										styleClass = "<%=styClass%>" 
+										tdStyleClass = "<%=tdStyleClass%>" 
+										labelNames="<%=labelNames%>" 
+										rowNumber="<%=rowNumber%>" 
+										onChange = "<%=onChange%>"
+										formLabelStyle="formLabelBorderless"
+										disabled="false"
+										noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
+										</tr>
+										</table>
+								</td>
+							</tr>
+							<tr>
+								<td ><html:radio value="3" onclick="onStorageRadioClickInMultipleSpecimen(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
+								<td class="formLabelBorderlessLeft">
+									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled="true"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled="true"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled="true"/>
+									<html:button styleClass="actionButton" styleId = "<%=containerMapStyle%>" property="<%=containerMap%>" onclick="<%=buttonOnClicked%>" disabled="true">
+										<bean:message key="buttons.map"/>
+									</html:button>
+								</td>
+							</tr>
+						</table>
 
 			</td>
 		</tr>
 			<% 		
 				rowCount++;
+				newCount++;
 				rowNumber = String.valueOf(rowCount);				
 					} // for
 			 %>
