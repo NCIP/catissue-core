@@ -3,10 +3,10 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -164,15 +164,11 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			Logger.out.debug("Submitting the specimen : " + specimenMap);
 
 			preprocessSpecimanMap(specimenMap);
-			Logger.out.debug("After preprocessSpecimanMap");
 			Map fixedSpecimenMap = appendClassValue(specimenMap);
-			Logger.out.debug("After fixedSpecimenMap");
 			Map multipleSpecimenSessionMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
 
 			processAssociatedObjectsMap(fixedSpecimenMap, multipleSpecimenSessionMap);
-			Logger.out.debug("After processAssociatedObjectsMap");
 			MapDataParser specimenParser = new MapDataParser("edu.wustl.catissuecore.domain");
-			Logger.out.debug("After specimenParser");
 			Collection specimenCollection = specimenParser.generateData(fixedSpecimenMap,true);
 			//Read session form bean map to associate derived specimens
 			Map multipleSpecimenFormBeanMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY);
@@ -182,25 +178,12 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				processEvents(specimenCollection, multipleSpecimenEventsFormBean);
 			Map finalMap = processFormBeansMap(specimenCollection, multipleSpecimenFormBeanMap);
 
-			//call bizLogic to save specimenCollection. It will first validate all the specimens.
-			//changes as per ashwin sent files ----
-			// start commented since don't require to insert into database & using  validations which have been put into util -- Ashwin
-			//insertSpecimens(request, finalMap);
+		
+			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 			
-			//HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-			//SessionDataBean sessionBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-			IBizLogic bizLogic = null;
-/*			try
-			{
-*/				bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-/*			}
-			catch (BizLogicException e)
-			{
-				e.printStackTrace();
-				throw new DAOException(e);
-			}
-*/			//dao.openSession(sessionBean);
-			MultipleSpecimenValidationUtil.validateMultipleSpecimen(finalMap,bizLogic,Constants.ADD);
+			
+            LinkedHashMap linkedMap = getLinkedHashMap(finalMap);
+			MultipleSpecimenValidationUtil.validateMultipleSpecimen(linkedMap,bizLogic,Constants.ADD);
 			//dao.commit();
 			// end
 			// ------------------------------------
@@ -212,8 +195,8 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			multipleSpecimenSessionMap = new HashMap();
 			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, new HashMap());
 			// Populate storage positions -- Ashwin
-			Map sessionContainerMap = populateStorageLocations(bizLogic,finalMap);
-			addMapToSession(request,finalMap,Constants.SPECIMEN_MAP_KEY);
+			Map sessionContainerMap = populateStorageLocations(bizLogic,linkedMap);
+			addMapToSession(request,linkedMap,Constants.SPECIMEN_MAP_KEY);
 			addMapToSession(request,sessionContainerMap,Constants.CONTAINER_MAP_KEY);
 			// End
 			//request.getSession().removeAttribute(Constants.SPECIMEN_COLL_GP_NAME );  
@@ -232,6 +215,53 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		writeMapToResponse(response, resultMap);
 		Logger.out.debug("In MultipleSpecimenAppletAction :- resultMap : " + resultMap);
 		return null;
+	}
+
+	/**
+	 * This method creates a linked map from random hashmap
+	 * @param finalMap
+	 * @return linked hashmap
+	 */
+	private LinkedHashMap getLinkedHashMap(Map hashMap)
+	{
+		Iterator specimenIterator = hashMap.keySet().iterator();
+		int mapSize = hashMap.keySet().size();
+		int count = 0;
+		LinkedHashMap linkedMap = new LinkedHashMap();
+		List tempList = new ArrayList();
+		while(specimenIterator.hasNext())
+		{   
+			int i=0;
+			Specimen specimen = (Specimen) specimenIterator.next();
+			if(tempList.size() == 0)
+			{
+				tempList.add(specimen);
+			}
+			else 
+			{
+				for(;i<tempList.size();i++)
+				{
+					Specimen tempSpecimen = (Specimen) tempList.get(i);
+					if(tempSpecimen.getId().longValue()>specimen.getId().longValue())
+					{
+						tempList.add(i,specimen);
+						break;
+					}
+					
+				}
+				if(i==tempList.size())
+				{
+					tempList.add(i,specimen);
+				}
+			}
+		}
+		
+		for(int i=0;i<tempList.size();i++)
+		{
+			Specimen tempSpecimen = (Specimen)tempList.get(i);
+			linkedMap.put(tempSpecimen,hashMap.get(tempSpecimen));
+		}
+		return linkedMap;
 	}
 
 	/**
@@ -930,24 +960,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	 */
 	private void allocatePositionToSpecimensList(Map specimenMap, List listOfSpecimens, Map containerMap) throws Exception
 	{
-		// commented by Ashwin -- As derived has been moved up
-		//List newListOfSpecimen = new ArrayList();
-	/*	for (int i = 0; i < listOfSpecimens.size(); i++)
-		{
-			Specimen tempSpecimen = (Specimen) listOfSpecimens.get(i);
-			newListOfSpecimen.add(tempSpecimen);
-			List listOfDerivedSpecimen = (ArrayList) specimenMap.get(tempSpecimen);
-			// TODO
-			if (listOfDerivedSpecimen != null)
-			{
-				for (int j = 0; j < listOfDerivedSpecimen.size(); j++)
-				{
-					Specimen tempDerivedSpecimen = (Specimen) listOfDerivedSpecimen.get(j);
-					newListOfSpecimen.add(tempDerivedSpecimen);
-				}
-			}
-		}
-	*/
+
 		Iterator iterator = containerMap.keySet().iterator();
 		int i = 0;
 		while (iterator.hasNext())
