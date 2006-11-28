@@ -118,8 +118,10 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		List specimenList = new ArrayList();
 		Iterator specimenIterator = specimenMap.keySet().iterator();
+		int count = 0;
 		while (specimenIterator.hasNext())
 		{
+			count++;
 			Specimen specimen = (Specimen) specimenIterator.next();
 
 			/**
@@ -145,7 +147,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			}
 			catch (DAOException daoException)
 			{
-				String message = " (This message is for Specimen number " + parentSpecimenId + ")";
+				String message = " (This message is for Specimen number " + count + ")";
 				daoException.setSupportingMessage(message);
 				throw daoException;
 			}
@@ -171,7 +173,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				catch (DAOException daoException)
 				{
 					int j = i + 1;
-					String message = " (This message is for Derived Specimen " + j + " of Parent Specimen number " + parentSpecimenId + ")";
+					String message = " (This message is for Derived Specimen " + j + " of Parent Specimen number " + count + ")";
 					daoException.setSupportingMessage(message);
 					throw daoException;
 				}
@@ -932,7 +934,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				// --- check for all validations on the storage container.
 				storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimen.getPositionDimensionOne().toString(),
 						specimen.getPositionDimensionTwo().toString(), sessionDataBean,partOfMultipleSpecimen);
-				//chkContainerValidForSpecimen(container, specimen,dao);
+			//    chkContainerValidForSpecimen(specimen.getStorageContainer(), specimen,dao);
 				specimen.setStorageContainer(storageContainerObj);
 				//				}
 				//				else

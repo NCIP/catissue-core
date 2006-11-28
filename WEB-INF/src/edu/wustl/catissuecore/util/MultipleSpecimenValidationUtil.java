@@ -56,9 +56,11 @@ public final class MultipleSpecimenValidationUtil
 */		
 		setSCGinSpecimen(specimenMap,bizLogic);
 		Iterator specimenIterator = specimenMap.keySet().iterator();
+		int count = 0;
 		while (specimenIterator.hasNext() && result == true)
 		{
 			Specimen specimen = (Specimen) specimenIterator.next();
+			count++;
 			// TODO uncomment code for label, performance
 			try
 			{
@@ -67,7 +69,7 @@ public final class MultipleSpecimenValidationUtil
 			catch (DAOException daoException)
 			{
 				String message = daoException.getMessage();
-				message += " (This message is for Specimen number " + specimen.getId() + ")";
+				message += " (This message is for Specimen number " + count + ")";
 				daoException.setMessage(message);
 				throw daoException;
 			}
@@ -96,7 +98,7 @@ public final class MultipleSpecimenValidationUtil
 				{
 					int j = i + 1;
 					String message = daoException.getMessage();
-					message += " (This message is for Derived Specimen " + j + " of Parent Specimen number " + specimen.getId() + ")";
+					message += " (This message is for Derived Specimen " + j + " of Parent Specimen number " + count + ")";
 					daoException.setMessage(message);
 					throw daoException;
 				}
