@@ -469,8 +469,29 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 		String pos1Style = "pos1_" + i + "_1";
 		String pos2Style = "pos2_" + i + "_2";
 		String rbKey = "radio_" + i ;
-		aliquotMap.put(rbKey,"2");
-	
+		if(!form.getButtonClicked().equals("none"))
+		{
+		   aliquotMap.put(rbKey,"2");
+	    }
+		
+		 int radioSelected = Integer.parseInt(aliquotMap.get(rbKey).toString());
+		 boolean dropDownDisable = false;
+		 boolean textBoxDisable = false;
+								
+			if(radioSelected == 1)
+			{
+				dropDownDisable = true;
+				textBoxDisable = true;
+			}
+			else if(radioSelected == 2)
+			{									
+				textBoxDisable = true;
+			}
+			else if(radioSelected == 3)
+			{
+				dropDownDisable = true;									
+		    }					
+		
 		
 		String virtuallyLocatedStyleId = "chkBox_"+ i;
 		//Preparing data for custom tag
@@ -564,19 +585,19 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 										rowNumber="<%=rowNumber%>" 
 										onChange = "<%=onChange%>"
 										formLabelStyle="formLabelBorderless"
-										disabled="false"
+										disabled = "<%=dropDownDisable%>"
 										noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
-										</tr>
+								    	</tr>
 										</table>
 								</td>
 							</tr>
 							<tr>
 								<td ><html:radio value="3" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
 								<td class="formLabelBorderlessLeft">
-									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled="true"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled="true"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled="true"/>
-									<html:button styleClass="actionButton" styleId = "<%=containerMapStyle%>" property="<%=containerMap%>" onclick="<%=buttonOnClicked%>" disabled="true">
+									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled = "<%=textBoxDisable%>"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled = "<%=textBoxDisable%>"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled = "<%=textBoxDisable%>"/>
+									<html:button styleClass="actionButton" styleId = "<%=containerMapStyle%>" property="<%=containerMap%>" onclick="<%=buttonOnClicked%>" disabled = "<%=textBoxDisable%>">
 										<bean:message key="buttons.map"/>
 									</html:button>
 								</td>
