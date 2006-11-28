@@ -282,7 +282,7 @@
 		</delete>
 	</target>
 
-	<target name="create_zip" depends="build_war">
+	<target name="create_zip" depends="installable_build_war">
 		<property name="zip.dir" value="${base.dir}/caTISSUE_Core_Installable_v${application.version}" />
 		<property name="zip.file" value="${base.dir}/caTissue_Core_Installable_v${application.version}.zip" />
 
