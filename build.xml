@@ -528,7 +528,7 @@
 	
 	<!-- build catissuecore client jar to content latest domain classes & put inside client lib folder-->
 	<target name="build_client_jar">
-		<jar taskname="buildClientJar" jarfile="${base.dir}/caTissueCore_caCORE_Client/lib/catissuecore.jar">
+		<jar taskname="buildClientJar" jarfile="${temp.dir}/catissuecore.jar">
 			<fileset dir="${target.dir}">
 				<include name="**/edu/wustl/catissuecore/domain/**"/>
 				<include name="**/edu/wustl/catissuecore/actionForm/**"/>
@@ -539,12 +539,17 @@
 			</fileset>
 		</jar>
 		
-		<copy todir="${base.dir}/caTissueCore_caCORE_Client/lib">
+		<copy todir="${base.dir}/caTissueCore_caCORE_Client/lib" overwrite="true">
             <fileset dir="${lib.dir}">
             	<include name="commonpackage.jar"/>
             </fileset>
         </copy>
-		
+
+		<copy todir="${base.dir}/caTissueCore_caCORE_Client/lib" overwrite="true">
+            <fileset dir="${temp.dir}">
+            	<include name="catissuecore.jar"/>
+            </fileset>
+        </copy>
 	</target>
 	
 	<target name="sendMail"  description="Send mail">
