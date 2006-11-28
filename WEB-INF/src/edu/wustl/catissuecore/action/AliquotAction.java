@@ -346,8 +346,10 @@ public class AliquotAction extends SecureAction
 
 			if (Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
 			{
+				if(!aliquotForm.getButtonClicked().equals("none"))
+				{
 				pageOf = checkForSpecimen(request, aliquotForm);
-
+				}
 				if (Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
 				{
 					int aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
@@ -366,7 +368,10 @@ public class AliquotAction extends SecureAction
 
 					if (Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
 					{
-						populateAliquotsStorageLocations(aliquotForm, containerMap);
+						if(!aliquotForm.getButtonClicked().equals("none"))
+						{
+						   populateAliquotsStorageLocations(aliquotForm, containerMap);
+						}
 					}
 				}
 			}
