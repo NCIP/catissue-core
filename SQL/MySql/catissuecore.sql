@@ -163,6 +163,11 @@ drop table if exists CATISSUE_CONT_HOLDS_SPARRTYPE;
 drop table if exists CATISSUE_SPECIMEN_COLL_GROUP;
 drop table if exists CATISSUE_SPECIMEN_TYPE;
 drop table if exists CATISSUE_AUDIT_EVENT_QUERY_LOG;
+drop table if exists CATISSUE_AUDIT_EVENT;
+drop table if exists CATISSUE_AUDIT_EVENT_LOG;
+drop table if exists CATISSUE_AUDIT_EVENT_DETAILS;
+
+
 
 
 create table CATISSUE_PERMISSIBLE_VALUE (
