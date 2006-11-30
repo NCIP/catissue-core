@@ -28,6 +28,13 @@ N level Interrelated Cobmo Boxes.
 </attribute>
 
 <attribute>
+<name>tdStyleClassArray</name>
+<required>false</required>
+<rtexprvalue>true</rtexprvalue>
+</attribute>
+
+
+<attribute>
 <name>labelNames</name>
 <required>false</required>
 <rtexprvalue>true</rtexprvalue>
@@ -122,6 +129,8 @@ N level Interrelated Cobmo Boxes plus Map Button.
 <required>true</required>
 <rtexprvalue>true</rtexprvalue>
 </attribute>
+
+
 
 <attribute>
 <name>initialValues</name>
