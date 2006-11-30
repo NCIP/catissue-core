@@ -40,6 +40,7 @@ import edu.wustl.common.util.logger.Logger;
 
 
 /**
+ * Specimen Array action is used to perform action level operations for specimen array object.
  * @author gautam_shetty
  * @author ashwin_gupta
  */
