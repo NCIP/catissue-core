@@ -237,6 +237,7 @@ public class SpecimenArrayAction extends SecureAction
     }
     
     /**
+     * set class & type values for specimen array.
      * @param specimenArrayForm 
      * @param specimenArrayBizLogic
      * @param request
@@ -278,6 +279,7 @@ public class SpecimenArrayAction extends SecureAction
     }
     
     /**
+     * Creates specimen array map which will contain specimen array contents.
      * @param specimenArrayForm array Form
      * @return map
      */
