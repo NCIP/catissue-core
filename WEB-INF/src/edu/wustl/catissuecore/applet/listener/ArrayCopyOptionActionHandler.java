@@ -43,6 +43,9 @@ public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler
 		arrayApplet.getPasteButton().setEnabled(true);
 	}
 	
+	/**
+	 * @see edu.wustl.catissuecore.applet.listener.AbstractCopyActionHandler#getValueList(int, int)
+	 */
 	protected List getValueList(int rowIndex,int columnIndex)
 	{
 		List valueList = new ArrayList();
@@ -66,6 +69,13 @@ public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler
 		return valueList;
 	}
 	
+	/** 
+	 * Gets label or barcode depends upon enter specimen by options is selected.
+	 * @param model model
+	 * @param rowIndex
+	 * @param columnIndex
+	 * @return
+	 */
 	private String getCopiedLabelOrBarcode(SpecimenArrayTableModel model,int rowIndex,int columnIndex)
 	{
 		if (model.getEnterSpecimenBy().equalsIgnoreCase("Label"))
@@ -79,6 +89,13 @@ public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler
 	}
 	
 
+	/**
+	 * Gets selected quantity for copy.
+	 * @param model
+	 * @param rowIndex
+	 * @param columnIndex
+	 * @return
+	 */
 	private List getCopiedQuantity(SpecimenArrayTableModel model,int rowIndex,int columnIndex)
 	{
 		List valueList = new ArrayList();
@@ -87,11 +104,25 @@ public class ArrayCopyOptionActionHandler extends AbstractCopyActionHandler
 		return valueList;		
 	}
 
+	/**
+	 * Gets selected Concentration for copy.
+	 * @param model
+	 * @param rowIndex
+	 * @param columnIndex
+	 * @return
+	 */
 	private String getCopiedConcentration(SpecimenArrayTableModel model,int rowIndex,int columnIndex)
 	{
 		return (String) model.getSpecimenArrayModelMap().get(SpecimenArrayAppletUtil.getArrayMapKey(rowIndex,columnIndex,model.getColumnCount(),AppletConstants.ARRAY_CONTENT_ATTR_CONC_INDEX));
 	}
 	
+	/**
+	 * get all copied data.it is used when "All" option is selected among copy popup options.
+	 * @param model
+	 * @param rowIndex
+	 * @param columnIndex
+	 * @return
+	 */
 	private List getCopiedAll(SpecimenArrayTableModel model,int rowIndex,int columnIndex)
 	{
 		List valueList = new ArrayList();

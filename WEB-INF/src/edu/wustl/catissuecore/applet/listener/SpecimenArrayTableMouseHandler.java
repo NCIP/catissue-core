@@ -20,6 +20,9 @@ import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
  */
 public class SpecimenArrayTableMouseHandler extends MouseAdapter {
 
+	/**
+	 * @see java.awt.event.MouseListener#mouseClicked(java.awt.event.MouseEvent)
+	 */
 	public void mouseClicked(MouseEvent e) {
 		super.mouseClicked(e);
 		SpecimenArrayTable arrayTable = (SpecimenArrayTable) e.getSource();
