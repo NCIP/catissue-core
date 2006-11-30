@@ -6,7 +6,9 @@
 	
 	<!--define require dir and Properties -->	
 	<property name="base.dir" value="."/>
-	
+	<property name="sql.dir" value="${base.dir}/sql"/>	
+	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver"/>
+	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver"/>
 	<property name="conf.dir" value="conf" />
 	<property name="lib.dir" value="lib" />
 	<property name="src.dir" value="." />
@@ -71,5 +73,41 @@
 						value="${conf.dir}/client_log4j.properties"/>
 		</java>
 	</target>
+	
+	
+	<target name="db_initialize_oracle">
+			<echo message="Initializing Oracle Database for caTISSUECore Client Application..."/>
+			<sql 
+				driver="${oracle.driver.string}"
+			    url="jdbc:oracle:thin:@10.88.199.74:1521:washu"
+			    userid="catissuecore_test1"
+			    password="test123" 
+	    		onerror="continue"
+	    		rdbms="oracle">
+			  <transaction  src="${sql.dir}/InitialiazeOracleDatabse.sql"/>			  
+	    	  <classpath>
+	            <fileset dir="${lib.dir}">
+	                  <include name="*.jar"/>
+	              </fileset>
+	            </classpath> 
+			</sql>			
+		</target>
+	
+	<target name="db_initialize_mysql">
+				<echo message="Initializing Mysql Database for caTISSUECore Client Application..."/>
+				<sql 
+					driver="${mysql.driver.string}"			
+					url="jdbc:mysql://localhost:3306/nightlybuildcatissue"
+				    userid="root"
+				    password="catissue_core"
+					onerror="continue">
+				  <transaction  src="${sql.dir}/InitialiazeMysqlDatabse.sql"/>			  
+		    	  <classpath>
+		            <fileset dir="${lib.dir}">
+		                  <include name="*.jar"/>
+		              </fileset>
+		            </classpath> 
+				</sql>			
+			</target>
 	
 </project>
