@@ -20,6 +20,13 @@
 		treeViewAction += "&" + Constants.STORAGE_CONTAINER_TO_BE_SELECTED + "=" + storageContainerID +
 						"&" + 	Constants.STORAGE_CONTAINER_POSITION + "=" + position;
 	}
+	
+	
+	String containerName = request.getParameter(Constants.STORAGE_CONTAINER);
+	if(containerName!=null) 
+	{
+	    treeViewAction += "&" + Constants.STORAGE_CONTAINER + "=" + containerName;
+	}
 %>
 
 <table border="0" height="100%" width="100%">

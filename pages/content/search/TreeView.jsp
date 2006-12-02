@@ -2,6 +2,7 @@
 
 <% 	
 	String pageOf = request.getParameter(Constants.PAGEOF);
+	String containerName = request.getParameter(Constants.STORAGE_CONTAINER);
 	String storageContainerType = null;
 	String storageContainerID = null;
 	String position = null;
@@ -67,6 +68,7 @@
 													'<PARAM name="<%=Constants.PROPERTY_NAME%>" value="<%=propertyName%>">\n'+
 													'<PARAM name="<%=Constants.CDE_NAME%>" value="<%=cdeName%>">\n'+
 													'<PARAM name="<%=Constants.PAGEOF%>" value="<%=pageOf%>">\n'+
+													'<PARAM name="<%=Constants.STORAGE_CONTAINER%>" value="<%=containerName%>">\n'+
 													'<PARAM name="<%=Constants.STORAGE_CONTAINER_TYPE%>" value="<%=storageContainerType%>">\n'+
 													'<PARAM name="session_id" value="<%=session.getId()%>">\n'+
 													'<PARAM name = "<%=Constants.STORAGE_CONTAINER_TO_BE_SELECTED%>" value="<%=storageContainerID%>">\n'+
