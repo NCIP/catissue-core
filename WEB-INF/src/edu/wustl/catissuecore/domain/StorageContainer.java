@@ -356,28 +356,58 @@ public class StorageContainer extends Container
 				//Previously Container was in a site
 				if (parent == null)
 				{
-					//Put this in another container
-					if (form.getParentContainerId() > 0)
+					if(form.getStContSelection()==1)
+					{					
+						//Put this in another container
+						if (form.getParentContainerId() > 0)
+						{
+							isParentChanged = true;
+						}
+					}
+					else
 					{
-						isParentChanged = true;
+						if(!form.getContainerId().equals("0"))
+						{
+							isParentChanged = true;
+						}
 					}
 				}
 				else
 				//in another container
 				{
-					if (parent.getId().longValue() != form.getParentContainerId())
+					if(form.getStContSelection()==1)
+					{
+						if (parent.getId().longValue() != form.getParentContainerId())
+						{
+							isParentChanged = true;
+						}
+					}
+					else if(parent.getId().equals(form.getContainerId()))
 					{
 						isParentChanged = true;
-					}
+					}		
+					
 					// code to check if the position of the container is changed
 					else
 					{
-						if (positionDimensionOne.intValue() != form.getPositionDimensionOne()
-								|| positionDimensionTwo.intValue() != form
-										.getPositionDimensionOne())
+						if(form.getStContSelection()==1)
 						{
-							positionChanged = true;
+							if (positionDimensionOne.intValue() != form.getPositionDimensionOne()
+									|| positionDimensionTwo.intValue() != form
+											.getPositionDimensionOne())
+							{
+								positionChanged = true;
+							}
 						}
+						else
+						{
+							if (positionDimensionOne.equals(form.getPos1())
+									|| positionDimensionTwo.equals(form.getPos2()))
+							{
+								positionChanged = true;
+							}
+						}
+						
 					}
 				}
 			}
@@ -385,10 +415,20 @@ public class StorageContainer extends Container
 			Logger.out.debug("isParentChanged " + isParentChanged);
 			if (form.getCheckedButton() == Constants.CONTAINER_IN_ANOTHER_CONTAINER)
 			{
-				parent = new StorageContainer();
-				parent.setId(new Long(form.getParentContainerId()));
-				this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
-				this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
+				if(form.getStContSelection()==1)
+				{
+					parent = new StorageContainer();
+					parent.setId(new Long(form.getParentContainerId()));
+					this.setPositionDimensionOne(new Integer(form.getPositionDimensionOne()));
+					this.setPositionDimensionTwo(new Integer(form.getPositionDimensionTwo()));
+				}
+				else
+				{
+					parent = new StorageContainer();
+					parent.setId(new Long(form.getContainerId()));
+					this.setPositionDimensionOne(new Integer(form.getPos1()));
+					this.setPositionDimensionTwo(new Integer(form.getPos2()));
+				}
 			}
 			else
 			{

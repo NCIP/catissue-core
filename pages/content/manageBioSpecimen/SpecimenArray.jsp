@@ -36,6 +36,7 @@
 <html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 <html:hidden property="subOperation" value=""/>
 <html:hidden property="createSpecimenArray" value="<%=form.getCreateSpecimenArray()%>"/>
+<html:hidden property="containerId" styleId="containerId"/>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 <tr>
@@ -167,31 +168,60 @@
 					String tdStyleClass = "customFormField";
 					String onChange = "onCustomListBoxChange(this)";
 					String arrayTypeId = form.getSpecimenArrayTypeId()+"";
-					String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2"
+					String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
 							+ "&" + Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE +"=" + arrayTypeId;
 					String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
 					String noOfEmptyCombos = "3";
+					
+					int radioSelected = form.getStContSelection();
+					boolean dropDownDisable = false;
+					boolean textBoxDisable = false;					
+					if(radioSelected == 1)
+					{									
+						textBoxDisable = true;
+					}
+					else if(radioSelected == 2)
+					{
+						dropDownDisable = true;									
+					}
+					
 				%>
 				
 				<%=ScriptGenerator.getJSForOutermostDataTable()%>
 				<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 				
 				<td class="formField" colSpan="4">
-						<ncombo:containermap dataMap="<%=dataMap%>" 
-											attributeNames="<%=attrNames%>" 
-											initialValues="<%=initValues%>"  
-											styleClass = "<%=styClass%>" 
-											tdStyleClass = "<%=tdStyleClass%>" 
-											labelNames="<%=labelNames%>" 
-											rowNumber="<%=rowNumber%>" 
-											onChange="<%=onChange%>" 
-											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-											
-											buttonName="mapButton" 
-											value="Map"
-											buttonOnClick = "<%=buttonOnClicked%>"
-											formLabelStyle="formLabelBorderless"
-											buttonStyleClass="actionButton" />				
+						<table border="0">													
+							<tr>								
+								<td ><html:radio value="1" onclick="onRadioButtonGroupClickForArray(this)" styleId="stContSelection" property="stContSelection" /></td>								
+								<td>
+									<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
+										attributeNames="<%=attrNames%>" 
+										initialValues="<%=initValues%>"  
+										styleClass = "<%=styClass%>" 
+										tdStyleClass = "<%=tdStyleClass%>" 
+										labelNames="<%=labelNames%>" 
+										rowNumber="<%=rowNumber%>" 
+										onChange = "<%=onChange%>"
+										formLabelStyle="formLabelBorderless"
+										disabled = "<%=dropDownDisable%>"
+										noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
+										</tr>
+										</table>
+								</td>
+							</tr>							
+							<tr>
+								<td ><html:radio value="2" onclick="onRadioButtonGroupClickForArray(this)" styleId="stContSelection" property="stContSelection" /></td>
+								<td class="formLabelBorderless">
+									<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
+									<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
+										<bean:message key="buttons.map"/>
+									</html:button>
+								</td>
+							</tr>											
+						</table>		
 				</td>
 				<%-- n-combo-box end --%>
 				 </tr>

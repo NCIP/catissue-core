@@ -77,6 +77,27 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	private String createSpecimenArray = "no";
 	
+	/**
+	 * Radio button to choose dropdown or map to select storage container.
+	 */
+	private int stContSelection = 1;
+	/**
+	 * Storage container name selected from map
+	 */
+	private String selectedContainerName;
+	/**
+	 * Storage pos1 selected from map
+	 */
+	private String pos1;
+	/**
+	 * Storage pos2 selected from map
+	 */
+	private String pos2;
+	/**
+	 * Storage Id selected from map
+	 */
+	private String containerId;
+	
 	private String subOperation;
 	
 	//private List specimenArrayGridC  
@@ -278,14 +299,26 @@ public class SpecimenArrayForm extends ContainerForm
                                     .getValue("array.arrayLabel")));
                 }
                 
-               // validate storage position
-				if (!validator.isNumeric(String.valueOf(positionDimensionOne), 1)
+               // validate storage position				
+				if(stContSelection==1)
+				{
+					if (!validator.isNumeric(String.valueOf(positionDimensionOne), 1)
 							|| !validator.isNumeric(String.valueOf(positionDimensionTwo), 1)
 							|| !validator.isNumeric(String.valueOf(storageContainer), 1))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+								ApplicationProperties.getValue("array.positionInStorageContainer")));
+					}
+				}
+				else
 				{
-						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-								"errors.item.format", ApplicationProperties
-										.getValue("array.positionInStorageContainer")));
+					if (!validator.isNumeric(String.valueOf(pos1), 1)
+							|| !validator.isNumeric(String.valueOf(pos2), 1)
+							|| validator.isEmpty(selectedContainerName))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+								ApplicationProperties.getValue("array.positionInStorageContainer")));
+					}
 				}
 				
 				// validate user 
@@ -315,4 +348,81 @@ public class SpecimenArrayForm extends ContainerForm
 	     }
 	 }
 	
+	/**
+	 * @return Returns the serialVersionUID.
+	 */
+	public static long getSerialVersionUID()
+	{
+		return serialVersionUID;
+	}
+	/**
+	 * @return Returns the containerId.
+	 */
+	public String getContainerId()
+	{
+		return containerId;
+	}
+	/**
+	 * @param containerId The containerId to set.
+	 */
+	public void setContainerId(String containerId)
+	{
+		this.containerId = containerId;
+	}
+	/**
+	 * @return Returns the pos1.
+	 */
+	public String getPos1()
+	{
+		return pos1;
+	}
+	/**
+	 * @param pos1 The pos1 to set.
+	 */
+	public void setPos1(String pos1)
+	{
+		this.pos1 = pos1;
+	}
+	/**
+	 * @return Returns the pos2.
+	 */
+	public String getPos2()
+	{
+		return pos2;
+	}
+	/**
+	 * @param pos2 The pos2 to set.
+	 */
+	public void setPos2(String pos2)
+	{
+		this.pos2 = pos2;
+	}
+	/**
+	 * @return Returns the selectedContainerName.
+	 */
+	public String getSelectedContainerName()
+	{
+		return selectedContainerName;
+	}
+	/**
+	 * @param selectedContainerName The selectedContainerName to set.
+	 */
+	public void setSelectedContainerName(String selectedContainerName)
+	{
+		this.selectedContainerName = selectedContainerName;
+	}
+	/**
+	 * @return Returns the stContSelection.
+	 */
+	public int getStContSelection()
+	{
+		return stContSelection;
+	}
+	/**
+	 * @param stContSelection The stContSelection to set.
+	 */
+	public void setStContSelection(int stContSelection)
+	{
+		this.stContSelection = stContSelection;
+	}
 }

@@ -114,7 +114,6 @@ public class StorageContainerForm extends AbstractActionForm
 	 * Text label for dimension two.
 	 */
 	private String barcode;
-
 	/**
 	 * Key.
 	 */
@@ -125,6 +124,28 @@ public class StorageContainerForm extends AbstractActionForm
 	 */
 	private int checkedButton = 1;
 
+	/**
+	 * Radio button to choose dropdown or map to select storage container.
+	 */
+	private int stContSelection = 1;
+	/**
+	 * Storage container name selected from map
+	 */
+	private String selectedContainerName;
+	/**
+	 * Storage pos1 selected from map
+	 */
+	private String pos1;
+	/**
+	 * Storage pos2 selected from map
+	 */
+	private String pos2;
+	/**
+	 * Storage Id selected from map
+	 */
+	private String containerId;
+
+	
 	/**
 	 * Tells whether this container is full or not.
 	 */
@@ -322,7 +343,6 @@ public class StorageContainerForm extends AbstractActionForm
 
 		
 	}
-
 	/**
 	 * Returns an id which refers to the type of the storage.
 	 * @return An id which refers to the type of the storage.
@@ -333,6 +353,77 @@ public class StorageContainerForm extends AbstractActionForm
 		return this.typeId;
 	}
 
+
+	/**
+	 * @return Returns the containerId.
+	 */
+	public String getContainerId()
+	{
+		return containerId;
+	}
+	/**
+	 * @param containerId The containerId to set.
+	 */
+	public void setContainerId(String containerId)
+	{
+		this.containerId = containerId;
+	}
+	/**
+	 * @return Returns the pos1.
+	 */
+	public String getPos1()
+	{
+		return pos1;
+	}
+	/**
+	 * @param pos1 The pos1 to set.
+	 */
+	public void setPos1(String pos1)
+	{
+		this.pos1 = pos1;
+	}
+	/**
+	 * @return Returns the pos2.
+	 */
+	public String getPos2()
+	{
+		return pos2;
+	}
+	/**
+	 * @param pos2 The pos2 to set.
+	 */
+	public void setPos2(String pos2)
+	{
+		this.pos2 = pos2;
+	}
+	/**
+	 * @return Returns the selectedContainerName.
+	 */
+	public String getSelectedContainerName()
+	{
+		return selectedContainerName;
+	}
+	/**
+	 * @param selectedContainerName The selectedContainerName to set.
+	 */
+	public void setSelectedContainerName(String selectedContainerName)
+	{
+		this.selectedContainerName = selectedContainerName;
+	}
+	/**
+	 * @return Returns the stContSelection.
+	 */
+	public int getStContSelection()
+	{
+		return stContSelection;
+	}
+	/**
+	 * @param stContSelection The stContSelection to set.
+	 */
+	public void setStContSelection(int stContSelection)
+	{
+		this.stContSelection = stContSelection;
+	}
 	/**
 	 * Sets an id which refers to the type of the storage.
 	 * @param typeId An id which refers to the type of the storage.
@@ -921,6 +1012,8 @@ public class StorageContainerForm extends AbstractActionForm
 			}
 			else if (checkedButton == 2 && this.noOfContainers == 1)
 			{
+			if(stContSelection==1)
+			{
 				if (!validator.isNumeric(String.valueOf(positionDimensionOne), 1)
 						|| !validator.isNumeric(String.valueOf(positionDimensionTwo), 1)
 						|| !validator.isNumeric(String.valueOf(parentContainerId), 1))
@@ -928,6 +1021,17 @@ public class StorageContainerForm extends AbstractActionForm
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("storageContainer.parentContainer")));
 				}
+			}
+			else
+			{
+				if (!validator.isNumeric(String.valueOf(pos1), 1)
+						|| !validator.isNumeric(String.valueOf(pos2), 1)
+						|| !validator.isNumeric(String.valueOf(containerId), 1))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+							ApplicationProperties.getValue("storageContainer.parentContainer")));
+				}
+			}
 			}
 
 			/*if (this.noOfContainers == 1)

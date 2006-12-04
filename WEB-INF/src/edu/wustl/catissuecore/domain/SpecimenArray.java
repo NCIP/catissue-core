@@ -191,7 +191,19 @@ public class SpecimenArray extends Container
 	    	SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm) actionForm;
 	    	specimenArrayType.setId(new Long(specimenArrayForm.getSpecimenArrayTypeId()));
 	    	
-	    	storageContainer.setId(new Long(specimenArrayForm.getStorageContainer()));
+	    	if(specimenArrayForm.getStContSelection() == 1)
+	    	{
+	    		this.storageContainer.setId(new Long(specimenArrayForm.getStorageContainer()));
+				this.positionDimensionOne = new Integer(specimenArrayForm.getPositionDimensionOne());
+				this.positionDimensionTwo = new Integer(specimenArrayForm.getPositionDimensionTwo());
+	    	}
+	    	else
+	    	{   		
+	    		this.storageContainer.setName(specimenArrayForm.getSelectedContainerName());							
+				this.positionDimensionOne = new Integer(specimenArrayForm.getPos1());
+				this.positionDimensionTwo = new Integer(specimenArrayForm.getPos2());
+	    	}
+	    	
 	    	if (createdBy == null) {
 	    		createdBy = new User();
 	    	}

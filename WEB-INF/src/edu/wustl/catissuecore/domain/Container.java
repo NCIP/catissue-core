@@ -278,8 +278,8 @@ public class Container extends AbstractDomainObject implements Serializable
 	        this.full = new Boolean(containerForm.getIsFull());
 	        this.name = containerForm.getName();
 	        this.activityStatus = containerForm.getActivityStatus();
-	        this.positionDimensionOne = new Integer(containerForm.getPositionDimensionOne());
-	        this.positionDimensionTwo = new Integer(containerForm.getPositionDimensionTwo());
+//	        this.positionDimensionOne = new Integer(containerForm.getPositionDimensionOne());
+//	        this.positionDimensionTwo = new Integer(containerForm.getPositionDimensionTwo());
 	        this.comment = containerForm.getComment();
 	        this.capacity.setOneDimensionCapacity(new Integer(containerForm.getOneDimensionCapacity()));
 	        this.capacity.setTwoDimensionCapacity(new Integer(containerForm.getTwoDimensionCapacity()));

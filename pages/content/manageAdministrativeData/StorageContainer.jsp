@@ -57,6 +57,32 @@
 			form = (StorageContainerForm)request.getAttribute("storageContainerForm");
 		}
 		
+		int siteOrContainerSelected = form.getCheckedButton();
+		int dropdownOrTextboxSelected = form.getStContSelection();
+		
+		boolean dropDownDisable = false;
+		boolean textBoxDisable = false;		
+		boolean containerRadioDisable = false;
+		
+		
+		if(siteOrContainerSelected == 1)
+		{
+			dropDownDisable = true;
+			textBoxDisable = true;			
+			containerRadioDisable = true;
+		}
+		else if(siteOrContainerSelected == 2)
+		{				
+			if(dropdownOrTextboxSelected == 1)
+			{
+				textBoxDisable = true;
+			}								
+			else if(dropdownOrTextboxSelected == 2)
+			{
+				dropDownDisable = true;									
+			}
+		}
+		
 %>
 
 <head>
@@ -97,25 +123,55 @@
 			}
 			confirmDisable(action,formField);
 		}
-		
+
 		function onRadioButtonClick(element)
 		{
+			var radioArray = document.getElementsByName("stContSelection");		 
+			//if site radio button is selected.
 			if(element.value == 1)
 			{
 				document.forms[0].siteId.disabled = false;
+
 				document.forms[0].customListBox_1_0.disabled = true;
 				document.forms[0].customListBox_1_1.disabled = true;
-				document.forms[0].customListBox_1_2.disabled = true;
-				document.forms[0].Map_1.disabled = true;
-			}
-			else
-			{
-				document.forms[0].customListBox_1_0.disabled = false;
-				document.forms[0].customListBox_1_1.disabled = false;
-				document.forms[0].customListBox_1_2.disabled = false;
-				document.forms[0].Map_1.disabled = false;
-				document.forms[0].siteId.disabled = true;
+				document.forms[0].customListBox_1_2.disabled = true;				
+				document.forms[0].containerMap.disabled=true;
 
+				document.forms[0].stContSelection[0].disabled=true;
+				document.forms[0].stContSelection[1].disabled=true;
+
+				//document.forms[0].selectedContainerName.disabled = true;
+				//document.forms[0].pos1.disabled = true;
+				//document.forms[0].pos2.disabled = true;
+				//document.forms[0].stContSelection.disabled=true;
+			}
+			else //if parent container radio button is selected.
+			{
+				document.forms[0].siteId.disabled = true;
+				document.forms[0].stContSelection[0].disabled=false;
+				document.forms[0].stContSelection[1].disabled=false;
+
+				if (radioArray[0].checked) 
+				{
+					document.forms[0].customListBox_1_0.disabled = false;
+					document.forms[0].customListBox_1_1.disabled = false;
+					document.forms[0].customListBox_1_2.disabled = false;
+					document.forms[0].containerMap.disabled=true;
+					//document.forms[0].selectedContainerName.disabled=true;
+					//document.forms[0].pos1.disabled=true;
+					//document.forms[0].pos2.disabled=true;					
+				} 
+				else 
+				{
+					document.forms[0].customListBox_1_0.disabled = true;
+					document.forms[0].customListBox_1_1.disabled = true;
+					document.forms[0].customListBox_1_2.disabled = true;
+					document.forms[0].containerMap.disabled=false;
+					//document.forms[0].selectedContainerName.disabled=false;
+					//document.forms[0].pos1.disabled=false;
+					//document.forms[0].pos2.disabled=false;					
+				}
+				
 				onParentContainerChange(element)
 				//window.location.reload();
 			}
@@ -167,8 +223,17 @@
 		{
 			var typeElement = document.getElementById("typeId");
 			var containerName = document.getElementById("containerName");
-			var parentContainer = document.getElementById("customListBox_1_0");
-		
+			var radioArray = document.getElementsByName("stContSelection");				
+			var parentContainer;				
+			if(radioArray[0].checked)
+			{
+				parentContainer = document.getElementById("customListBox_1_0");				
+			}
+			else
+			{
+				parentContainer = document.getElementById("selectedContainerName");				
+			}
+			
 			if(typeElement.value != "-1" && parentContainer.value != "-1" && containerName.value == "")
 			{
 				getSiteName(parentContainer.value);
@@ -221,7 +286,28 @@
 			}		
 					
 		}	
-			
+		function setContainerName(maxSiteName)
+			{
+				var containerName = document.getElementById("containerName");		
+				var containerNumber = "<%=containerNumber%>";	
+				var typeElement =  document.getElementById("typeId");				
+				var maxTypeName =  typeElement.options[typeElement.selectedIndex].text;
+				if(maxTypeName != "-1" && maxSiteName != "-1")
+				{		
+					//Jitendra:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
+					//and it is giving error. So these fields are truncated in case it is longer than 40.
+					//It also solves Bug 2829:System fails to create a default unique storage container name
+					if(maxSiteName>40)
+					{
+						maxSiteName = maxSiteName.substring(0,39);
+					}
+					if(maxTypeName.length>40)
+					{
+						maxTypeName = maxTypeName.substring(0,39);
+					}					
+					containerName.value=maxSiteName+"_"+maxTypeName+"_"+containerNumber;
+				}
+			}
 //  function to insert a row in the inner block
 
 function insRow(subdivtag)
@@ -442,8 +528,10 @@ function onEditChange()
 				<tr>
 					<td>
 						<html:hidden property="operation" value="<%=operation%>" />
+						<html:hidden property="containerNumber" value="<%=containerNumber%>" />
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>	
 						<input type="hidden" name="radioValue">
+						<html:hidden property="containerId" styleId="containerId"/>
 					</td>
 				</tr>
 				<tr>
@@ -504,7 +592,7 @@ function onEditChange()
 					<tr>
 						<td class="formRequiredNoticeNoBottom" width="5">*</td>
 						<td class="formRequiredLabelLeftBorder" colspan=2>
-							<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
+							<html:radio styleClass="" styleId="checkedButton" property="checkedButton" value="1" onclick="onRadioButtonClick(this)" >
 								<label for="siteId">
 									<bean:message key="storageContainer.site" />
 								</label>
@@ -567,69 +655,59 @@ function onEditChange()
 							
 							String rowNumber = "1";
 							String styClass = "formFieldSized5";
-							String tdStyleClass = "customFormField";
+							String tdStyleClass = "formField";
 							boolean disabled = true;
 							String onChange = "";
 							onChange = "onCustomListBoxChange(this),onParentContainerChange(this)";
 							//String onChange = "onCustomListBoxChange(this);onParentContainerChange()";
 							boolean buttonDisabled = true;
-							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
-							String buttonOnClicked = "StorageMapWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2&amp;storageType=','name','810','320','yes');return false";
+							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";							
+							String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId&amp;storageContainer=true&amp;storageType=";							
+							String buttonOnClicked = "javascript:StorageMapWindow('"+frameUrl+"','name','810','320','yes');return false";
+							
 							String noOfEmptyCombos = "3";
 							
-							String buttonId = "Map_1";		
-
+							//String buttonId = "Map_1";			
+							
 						%>
 					
-					<%=ScriptGenerator.getJSForOutermostDataTable()%>
-					<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
+						<%=ScriptGenerator.getJSForOutermostDataTable()%>
+						<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 					
-					<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-					
-						
-	 						<logic:equal name="storageContainerForm" property="checkedButton" value="1">								
-								<td class="formField" colSpan="2">
-									<ncombo:containermap dataMap="<%=dataMap%>" 
+						<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
+						<td class="formField" colSpan="2">
+							<table border="0">									
+								<tr>
+									<td ><html:radio value="1" onclick="onStorageRadioButtonClick(this)" styleId="stContSelection" property="stContSelection" disabled= "<%=containerRadioDisable%>"/></td>
+									<td>
+										<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
 											attributeNames="<%=attrNames%>" 
 											initialValues="<%=initValues%>"  
 											styleClass = "<%=styClass%>" 
 											tdStyleClass = "<%=tdStyleClass%>" 
 											labelNames="<%=labelNames%>" 
 											rowNumber="<%=rowNumber%>" 
-											disabled="<%=disabled%>"
 											onChange = "<%=onChange%>"
-											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-											
-											buttonName="mapButton" 
-											buttonStyleClass="actionButton"
-											buttonOnClick = "<%=buttonOnClicked%>"
-											value="Map"	
-											id="<%=buttonId%>"	
-											formLabelStyle="formLabelBorderless"								
-											buttonDisabled = "<%=buttonDisabled%>" />
-								</td>
-				        	</logic:equal>
-							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
-								<td class="formField" colSpan="2">
-								<ncombo:containermap dataMap="<%=dataMap%>" 
-											attributeNames="<%=attrNames%>" 
-											initialValues="<%=initValues%>"  
-											styleClass = "<%=styClass%>" 
-											tdStyleClass = "<%=tdStyleClass%>" 
-											labelNames="<%=labelNames%>" 
-											rowNumber="<%=rowNumber%>" 
-											onChange = "<%=onChange%>" 
-											noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-											
-											buttonName="mapButton" 
-											value="Map"
-											id="<%=buttonId%>"
-											formLabelStyle="formLabelBorderless"	
-											buttonStyleClass="actionButton"
-											buttonOnClick = "<%=buttonOnClicked%>" />
-								</td>
-							</logic:equal>						
-						
+											formLabelStyle="formLabelBorderless"
+											disabled = "<%=dropDownDisable%>"
+											noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
+											</tr>
+											</table>
+									</td>
+								</tr>
+								<tr>
+									<td ><html:radio value="2" onclick="onStorageRadioButtonClick(this)" styleId="stContSelection" property="stContSelection" disabled= "<%=containerRadioDisable%>"/></td>
+									<td class="formLabelBorderless">
+										<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" readonly= "<%=textBoxDisable%>"/>
+										<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" readonly= "<%=textBoxDisable%>"/>
+										<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" readonly= "<%=textBoxDisable%>"/>
+										<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
+											<bean:message key="buttons.map"/>
+										</html:button>
+									</td>
+								</tr>								
+							</table>
+						</td>							
 					</tr>
 					<logic:equal name="exceedsMaxLimit" value="true">
 					<tr>

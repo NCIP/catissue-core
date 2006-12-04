@@ -114,6 +114,16 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		SpecimenArray specimenArray = (SpecimenArray) obj;
 		SpecimenArray oldSpecimenArray = (SpecimenArray) oldObj;
 		
+//		try
+//		{
+//			//Added for Api Search
+//			checkStorageContainerAvailablePos(specimenArray,dao,sessionDataBean);
+//		}
+//		catch (SMException e)
+//		{
+//			throw handleSMException(e);
+//		}
+		
 		doUpdateSpecimenArrayContents(specimenArray, oldSpecimenArray, dao, sessionDataBean, false);
 		dao.update(specimenArray.getCapacity(), sessionDataBean, true, false, false);
 		dao.update(specimenArray, sessionDataBean, true, false, false);
@@ -371,14 +381,34 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 	private void checkStorageContainerAvailablePos(SpecimenArray specimenArray,DAO dao,SessionDataBean sessionDataBean) 
 												  throws DAOException,SMException
 	{
-		if (specimenArray.getStorageContainer() != null)
+		if (specimenArray.getStorageContainer() != null) 
 		{
+			if (specimenArray.getStorageContainer() != null && specimenArray.getStorageContainer().getName() != null)				
+			{			
+				StorageContainer storageContainerObj = specimenArray.getStorageContainer();			
+				String sourceObjectName = StorageContainer.class.getName();
+				String[] selectColumnName = {"id"};
+				String[] whereColumnName = {"name"};
+				String[] whereColumnCondition = {"="};
+				Object[] whereColumnValue = {specimenArray.getStorageContainer().getName()};
+				String joinCondition = null; 
+
+				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+				
+				if (!list.isEmpty())
+				{
+					storageContainerObj.setId((Long) list.get(0));
+					specimenArray.setStorageContainer(storageContainerObj);
+				}
+				else
+				{
+					String message = ApplicationProperties.getValue("array.positionInStorageContainer");
+					throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+				}
+			}
+			
 			if(specimenArray.getStorageContainer().getId() != null)
 			{
-//				Object containerObj = dao.retrieve(StorageContainer.class.getName(), specimenArray.getStorageContainer().getId());
-//				if (containerObj != null)
-//				{
-//					StorageContainer container = (StorageContainer) containerObj;
 				StorageContainer storageContainerObj = new StorageContainer();
 				storageContainerObj.setId(specimenArray.getStorageContainer().getId());
 				String sourceObjectName = StorageContainer.class.getName();
@@ -393,25 +423,23 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 				if (!list.isEmpty())
 				{
 					storageContainerObj.setName((String)list.get(0));
-				}
-
-					// check for closed Storage Container
-					checkStatus(dao, storageContainerObj, "Storage Container");
-	
-					StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
-							Constants.STORAGE_CONTAINER_FORM_ID);
-	
-					// --- check for all validations on the storage container.
-					storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimenArray.getPositionDimensionOne().toString(), specimenArray
-							.getPositionDimensionTwo().toString(), sessionDataBean,false);
-	
 					specimenArray.setStorageContainer(storageContainerObj);
-//				}
-//				else
-//				{
-//					throw new DAOException(ApplicationProperties.getValue("errors.storageContainerExist"));
-//				}
+				}				
 			}
+			
+			StorageContainer storageContainerObj = specimenArray.getStorageContainer();	
+			
+			//check for closed Storage Container
+			checkStatus(dao, storageContainerObj, "Storage Container");
+
+			StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+					Constants.STORAGE_CONTAINER_FORM_ID);
+
+			// --- check for all validations on the storage container.
+			storageContainerBizLogic.checkContainer(dao, storageContainerObj.getId().toString(), specimenArray.getPositionDimensionOne().toString(), specimenArray
+					.getPositionDimensionTwo().toString(), sessionDataBean,false);
+
+			specimenArray.setStorageContainer(storageContainerObj);
 		}		
 	}
 	/**
@@ -601,8 +629,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		if (specimenArray.getPositionDimensionOne() == null || specimenArray.getPositionDimensionTwo() == null
 				|| !validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionOne()), 1)
 				|| !validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionTwo()), 1)
-				|| !validator.isNumeric(
-						String.valueOf(specimenArray.getStorageContainer().getId()), 1))
+				|| (!validator.isNumeric(String.valueOf(specimenArray.getStorageContainer().getId()), 1) && validator.isEmpty(specimenArray.getStorageContainer().getName())))
 		{
 			message = ApplicationProperties.getValue("array.positionInStorageContainer");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
