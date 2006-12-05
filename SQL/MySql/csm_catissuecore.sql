@@ -401,6 +401,15 @@ INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,
 /* Changes done */
 /* vaishali 11-10-2006 - aliquotAction changes */
 INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (314,19,283,'0000-00-00');
+/* Mandar 05Dec06 - MultipleSpecimen action entries start */
+INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (315,19,284,'0000-00-00');
+INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (316,19,285,'0000-00-00');
+INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (317,19,286,'0000-00-00');
+INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (318,19,287,'0000-00-00');
+INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (319,19,288,'0000-00-00');
+/* Mandar 05Dec06 - MultipleSpecimen action entries end */
+
+
 /* changes done */
 /* Table Objects for table csm_privilege*/
 
@@ -744,6 +753,16 @@ INSERT into `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMEN
 
 /* vaishali 10-11-2006 */
 INSERT into `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE` ) VALUES (283,'edu.wustl.catissuecore.action.AliquotAction','edu.wustl.catissuecore.action.AliquotAction','edu.wustl.catissuecore.action.AliquotAction',NULL,NULL,1,'2006-10-11');
+
+/* Mandar 05Dec06 - MultipleSpecimen action entries start */
+INSERT into `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE` ) VALUES (284,'edu.wustl.catissuecore.action.MultipleSpecimenAppletAction','edu.wustl.catissuecore.action.MultipleSpecimenAppletAction','edu.wustl.catissuecore.action.MultipleSpecimenAppletAction',NULL,NULL,1,'2006-12-05');
+INSERT into `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE` ) VALUES (285,'edu.wustl.catissuecore.action.MultipleSpecimenCopyPasteAction','edu.wustl.catissuecore.action.MultipleSpecimenCopyPasteAction','edu.wustl.catissuecore.action.MultipleSpecimenCopyPasteAction',NULL,NULL,1,'2006-12-05');
+INSERT into `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE` ) VALUES (286,'edu.wustl.catissuecore.action.SpecimenArrayAppletAction','edu.wustl.catissuecore.action.SpecimenArrayAppletAction','edu.wustl.catissuecore.action.SpecimenArrayAppletAction',NULL,NULL,1,'2006-12-05');
+INSERT into `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE` ) VALUES (287,'edu.wustl.catissuecore.action.MultipleSpecimenAction','edu.wustl.catissuecore.action.MultipleSpecimenAction','edu.wustl.catissuecore.action.MultipleSpecimenAction',NULL,NULL,1,'2006-12-05');
+INSERT into `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE` ) VALUES (288,'edu.wustl.catissuecore.action.NewMultipleSpecimenAction','edu.wustl.catissuecore.action.NewMultipleSpecimenAction','edu.wustl.catissuecore.action.NewMultipleSpecimenAction',NULL,NULL,1,'2006-12-05');
+/* Mandar 05Dec06 - MultipleSpecimen action entries end */
+
+
 /* changes finish */
 /* Table Objects for table csm_protection_group*/
 
