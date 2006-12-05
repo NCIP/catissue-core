@@ -848,9 +848,9 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 							<table cellpadding="4" cellspacing="0">
 								<tr>
 						   			<td>
-						   				<html:submit styleClass="actionButton" property="submitButton" onclick="onNormalSubmit()">
+						   				<html:button styleClass="actionButton" property="submitButton" onclick="onNormalSubmit()">
 						   					<bean:message key="buttons.submit"/>
-						   				</html:submit>
+						   				</html:button>
 						   			</td>
 									
 						
