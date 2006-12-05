@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -63,6 +64,8 @@ import edu.wustl.common.util.logger.Logger;
  * 3. getResult
  * 
  * @author Rahul Ner
+ * @author Mandar Deshmukh
+ * 
  */
 public class MultipleSpecimenAppletAction extends BaseAppletAction
 {
@@ -1209,5 +1212,25 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		}
 	}
 //   Mandar:20Nov06 : enable Parent Specimen ----------------------- end
+	
+	//================================
+//	 --------- Changes By  Mandar : 05Dec06 for Bug 2866. ---  Extending SecureAction.  start
+	   protected ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception 
+	   {
+		   if(methodName.trim().length() > 0  )
+		   {
+			   Method method = getMethod(methodName,this.getClass());
+			   if(method != null)
+			   {
+				   Object args[] = {mapping, form, request, response};
+				   return (ActionForward) method.invoke(this, args);
+			   }
+			   else
+			   	   return null;
+		   }
+		   return null;
+	   }
+//		 --------- Changes By  Mandar : 05Dec06 for Bug 2866. ---  Extending SecureAction.  end
 
 }

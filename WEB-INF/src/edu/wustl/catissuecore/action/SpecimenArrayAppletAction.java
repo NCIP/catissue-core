@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.action;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,4 +96,25 @@ public class SpecimenArrayAppletAction extends BaseAppletAction
 		writeMapToResponse(response,arrayContentMap);
 		return null;
 	}
+	
+	//================================
+//	 --------- Changes By  Mandar : 05Dec06 for Bug 2866. ---  Extending SecureAction.  start
+	   protected ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form,
+           HttpServletRequest request, HttpServletResponse response) throws Exception 
+	   {
+		   if(methodName.trim().length() > 0  )
+		   {
+			   Method method = getMethod(methodName,this.getClass());
+			   if(method != null)
+			   {
+				   Object args[] = {mapping, form, request, response};
+				   return (ActionForward) method.invoke(this, args);
+			   }
+			   else
+			   	   return null;
+		   }
+		   return null;
+	   }
+//		 --------- Changes By  Mandar : 05Dec06 for Bug 2866. ---  Extending SecureAction.  end
+
 }

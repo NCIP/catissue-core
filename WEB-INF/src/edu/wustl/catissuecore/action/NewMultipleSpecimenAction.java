@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -18,7 +19,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.actions.DispatchAction;
 
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -38,7 +39,7 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
-public class NewMultipleSpecimenAction extends DispatchAction
+public class NewMultipleSpecimenAction extends SecureAction
 {
 
 	/**
@@ -585,16 +586,16 @@ public class NewMultipleSpecimenAction extends DispatchAction
 		((NewSpecimenForm) form).setReceivedEventComments(specimenForm.getReceivedEventComments());
 	}
 
-	private SessionDataBean getSessionData(HttpServletRequest request)
-	{
-		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
-		if (obj != null)
-		{
-			SessionDataBean sessionData = (SessionDataBean) obj;
-			return sessionData;
-		}
-		return null;
-	}
+//	private SessionDataBean getSessionData(HttpServletRequest request)
+//	{
+//		Object obj = request.getSession().getAttribute(Constants.SESSION_DATA);
+//		if (obj != null)
+//		{
+//			SessionDataBean sessionData = (SessionDataBean) obj;
+//			return sessionData;
+//		}
+//		return null;
+//	}
 
 	/**
 	 * 
@@ -721,4 +722,79 @@ public class NewMultipleSpecimenAction extends DispatchAction
 				((NewSpecimenForm) form).setReceivedEventReceivedQuality(Constants.NOT_SPECIFIED);
 		}
 	}
+	
+	// -----------------
+	// --------- Changes By  Mandar : 05Dec06 for Bug 2866 
+	// --------- Extending SecureAction.
+	
+	/**
+     * Overrides the executeSecureAction method of SecureAction class.
+     * */
+    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)
+            throws Exception
+    {
+		//-- code for handling method calls
+		String methodName = request.getParameter(Constants.METHOD_NAME);
+		if(methodName!= null)
+		{
+			return invokeMethod(methodName, mapping, form, request, response);
+		}
+		return null;
+    }
+/*
+ * This method calls the specified method passed as parameter.
+ * 
+ */
+	   protected ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception 
+	   {
+		   if(methodName.trim().length() > 0  )
+		   {
+			   Method method = getMethod(methodName,this.getClass());
+			   if(method != null)
+			   {
+				   Object args[] = {mapping, form, request, response};
+				   return (ActionForward) method.invoke(this, args);
+			   }
+			   else
+			   	   return null;
+		   }
+		   return null;
+	   }
+
+    /*
+     * This method returns the method with the specified name if the method exists. Return null other wise.
+     */
+	   protected Method getMethod(String name,Class className)
+	   {
+	   	//argument types
+		    Class[] types =
+	        {
+	            ActionMapping.class,
+	            ActionForm.class,
+	            HttpServletRequest.class,
+	            HttpServletResponse.class
+		   };
+	   		try
+			{
+	   			Method method = className.getDeclaredMethod(name,types );
+	   			return method;
+			}
+	   		catch(NoSuchMethodException excp1)
+			{
+	   			Logger.out.error(excp1.getMessage(),excp1 );
+			}
+	   		catch(NullPointerException excp2)
+			{
+	   			Logger.out.error(excp2.getMessage(),excp2 );
+			}
+	   		catch(SecurityException excp3)
+			{
+	   			Logger.out.error(excp3.getMessage(),excp3 );
+			}
+		    return null;
+	   }
+
+
 }
