@@ -1387,5 +1387,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	 */
 	public static final String STORAGE_LOCATION_SAPERATOR = "@";
 	
-	
+	public static final String METHOD_NAME="method";	
 }
