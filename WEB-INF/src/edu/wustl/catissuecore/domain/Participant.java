@@ -431,7 +431,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * Returns collection of medical identifiers associated with this participant.
 	 * @return collection of medical identifiers of this participant.
 	 * @hibernate.set name="participantMedicalIdentifierCollection" table="CATISSUE_PART_MEDICAL_ID"
-	 * cascade="save-update" inverse="true" lazy="false"
+	 * cascade="none" inverse="true" lazy="false"
 	 * @hibernate.collection-key column="PARTICIPANT_ID"
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier"
 	 * @see setParticipantMedicalIdentifierCollection(Collection)
