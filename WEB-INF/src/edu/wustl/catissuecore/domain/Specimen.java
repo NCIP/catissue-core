@@ -803,9 +803,13 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						}
 						else if(form.getStContSelection()==3)
 						{
-							this.storageContainer.setName(form.getSelectedContainerName());							
+							this.storageContainer.setName(form.getSelectedContainerName());	
+							if (form.getPos1() != null && !form.getPos1().trim().equals("")
+									&& form.getPos2() != null && !form.getPos2().trim().equals(""))
+							{
 							this.positionDimensionOne = new Integer(form.getPos1());
 							this.positionDimensionTwo = new Integer(form.getPos2());
+							}
 
 						}
 					}

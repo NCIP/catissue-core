@@ -41,6 +41,50 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CreateSpecimenBizLogic extends DefaultBizLogic
 {
+	
+	
+	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
+	{
+		Specimen specimen = (Specimen) obj;
+		
+		if (specimen.getStorageContainer() != null
+				&& (specimen.getStorageContainer().getId() == null && specimen.getStorageContainer().getName() == null))
+		{
+			String message = ApplicationProperties.getValue("specimen.storageContainer");
+			throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+		}
+		
+		if (specimen.getStorageContainer() != null && specimen.getStorageContainer().getName() != null)
+		{
+			StorageContainer storageContainerObj = specimen.getStorageContainer();
+			String sourceObjectName = StorageContainer.class.getName();
+			String[] selectColumnName = {"id"};
+			String[] whereColumnName = {"name"};
+			String[] whereColumnCondition = {"="};
+			Object[] whereColumnValue = {specimen.getStorageContainer().getName()};
+			String joinCondition = null;
+
+			List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+			if (!list.isEmpty())
+			{
+				storageContainerObj.setId((Long) list.get(0));
+				specimen.setStorageContainer(storageContainerObj);
+			}
+			else
+			{
+				String message = ApplicationProperties.getValue("specimen.storageContainer");
+				throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+			}
+		}
+		/**
+		 * This method gives first valid storage position to a specimen if it is not given. 
+		 * If storage position is given it validates the storage position 
+		 **/
+		StorageContainerUtil.validateStorageLocationForSpecimen(specimen);
+		return true;
+	}
+
 
 	/**
 	 * Saves the storageType object in the database.

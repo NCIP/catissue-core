@@ -157,9 +157,12 @@ public class MultipleSpecimenStorageLocationForm extends AbstractActionForm
 				specimenOnUIMap.put(labelKey ,specimen.getLabel());
 				specimenOnUIMap.put(typeKey ,specimen.getType());
 				specimenOnUIMap.put(barKey ,specimen.getBarcode());
-				specimenOnUIMap.put(storageContainerKey,specimen.getStorageContainer().getId().toString() );
-				specimenOnUIMap.put(positionOneKey ,specimen.getPositionDimensionOne().toString()  );
-				specimenOnUIMap.put(positionTwoKey ,specimen.getPositionDimensionTwo().toString()  );
+				if(specimen.getStorageContainer()!=null)
+					specimenOnUIMap.put(storageContainerKey,specimen.getStorageContainer().getId().toString() );
+					if(specimen.getPositionDimensionOne()!=null)
+					specimenOnUIMap.put(positionOneKey ,specimen.getPositionDimensionOne().toString() );
+					if(specimen.getPositionDimensionTwo()!=null)
+					specimenOnUIMap.put(positionTwoKey ,specimen.getPositionDimensionTwo().toString() );
 				addDerivedSpecimens(specimen,cnt);
 				cnt++;
 			}
@@ -202,8 +205,11 @@ public class MultipleSpecimenStorageLocationForm extends AbstractActionForm
 				specimenOnUIMap.put(labelKey ,specimen.getLabel());
 				specimenOnUIMap.put(typeKey ,specimen.getType());
 				specimenOnUIMap.put(barKey ,specimen.getBarcode());
+				if(specimen.getStorageContainer()!=null)
 				specimenOnUIMap.put(storageContainerKey,specimen.getStorageContainer().getId().toString() );
+				if(specimen.getPositionDimensionOne()!=null)
 				specimenOnUIMap.put(positionOneKey ,specimen.getPositionDimensionOne().toString() );
+				if(specimen.getPositionDimensionTwo()!=null)
 				specimenOnUIMap.put(positionTwoKey ,specimen.getPositionDimensionTwo().toString() );
 			}
 			specimenOnUIMap.put(parentKey+"DeriveCount",new Integer(derivedList.size()));

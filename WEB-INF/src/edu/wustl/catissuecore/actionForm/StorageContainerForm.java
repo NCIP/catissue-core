@@ -1022,17 +1022,60 @@ public class StorageContainerForm extends AbstractActionForm
 							ApplicationProperties.getValue("storageContainer.parentContainer")));
 				}
 			}
-			else
+			}
+			else if (checkedButton == 2 && this.noOfContainers > 1)
 			{
-				if (!validator.isNumeric(String.valueOf(pos1), 1)
+				
+	    	boolean flag = false;
+				if(pos1!=null&&!pos1.trim().equals(""))
+				{
+					long l = 1;
+	                  try 
+					  {
+	                    	l = Long.parseLong(pos1);
+					  }
+					 catch(Exception e)
+					 {
+					 	flag = true;
+						
+					 }
+					 if(l<=0)
+					 {
+					 	flag = true;
+					 }
+				}
+				if(pos2!=null&&!pos2.trim().equals(""))
+				{
+					long l = 1;
+	                  try 
+					  {
+	                    	l = Long.parseLong(pos2);
+					  }
+					 catch(Exception e)
+					 {
+					 	flag = true;
+						
+					 }
+					 if(l<=0)
+					 {
+					 	flag = true;
+					 }
+				}
+				
+				if(flag)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+							ApplicationProperties.getValue("storageContainer.parentContainer")));
+	    		} 
+			/*	if (!validator.isNumeric(String.valueOf(pos1), 1)
 						|| !validator.isNumeric(String.valueOf(pos2), 1)
 						|| !validator.isNumeric(String.valueOf(containerId), 1))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("storageContainer.parentContainer")));
-				}
+				} */
 			}
-			}
+			
 
 			/*if (this.noOfContainers == 1)
 			{*/
@@ -1105,6 +1148,9 @@ public class StorageContainerForm extends AbstractActionForm
 
 			if (this.noOfContainers > 1 && this.getSimilarContainersMap().size()>0)
 			{
+				
+				String containerPrefixKey = "simCont:";
+				
 				for (int i = 1; i <= this.noOfContainers; i++)
 				{
 					String iBarcode = (String) this.getSimilarContainerMapValue("simCont:" + i + "_barcode"); //simCont:1_barcode
@@ -1112,21 +1158,24 @@ public class StorageContainerForm extends AbstractActionForm
 					{ // but barcode in DB is unique but can be null.
 						this.setSimilarContainerMapValue("simCont:" + i + "_barcode", null);
 					}
-					Logger.out.info("Similar Container Map in SImilarCOntainerForm:"+similarContainersMap);
-					Logger.out.info("Checked button:"+getSimilarContainerMapValue("checkedButton"));
+					
 					int checkedButtonStatus = Integer.parseInt((String) getSimilarContainerMapValue("checkedButton"));
 					String siteId = (String) getSimilarContainerMapValue("simCont:" + i + "_siteId");
 					if (checkedButtonStatus == 2 || siteId == null)
 					{
-						String parentContId = (String) getSimilarContainerMapValue("simCont:" + i
-								+ "_parentContainerId");
-						String positionDimensionOne = (String) getSimilarContainerMapValue("simCont:" + i
-								+ "_positionDimensionOne");
-						String positionDimensionTwo = (String) getSimilarContainerMapValue("simCont:" + i
-								+ "_positionDimensionTwo");
-						Logger.out.debug(i + " parentContId " + parentContId
-								+ " positionDimensionOne " + positionDimensionOne
-								+ " positionDimensionTwo " + positionDimensionOne);
+						
+						String radioButonKey = "radio_" + i;
+						String containerIdKey = containerPrefixKey + i + "_parentContainerId";
+						String containerNameKey = containerPrefixKey + i + "_StorageContainer_name";
+						String posDim1Key = containerPrefixKey + i + "_positionDimensionOne";
+						String posDim2Key = containerPrefixKey + i + "_positionDimensionTwo";
+						
+						if(((String) getSimilarContainerMapValue(radioButonKey)).equals("1"))
+						{
+						String parentContId = (String) getSimilarContainerMapValue(containerIdKey);
+						String positionDimensionOne = (String) getSimilarContainerMapValue(posDim1Key);
+						String positionDimensionTwo = (String) getSimilarContainerMapValue(posDim2Key);
+						
 						if (parentContId.equals("-1") || positionDimensionOne.equals("-1")
 								|| positionDimensionTwo.equals("-1"))
 						{
@@ -1134,6 +1183,21 @@ public class StorageContainerForm extends AbstractActionForm
 									"errors.item.required", ApplicationProperties
 											.getValue("similarcontainers.location")));
 							this.setSimilarContainerMapValue("checkedButton", "2");
+						}
+						}
+						else
+						{
+							String positionDimensionOne = (String) getSimilarContainerMapValue(posDim1Key + "_fromMap");
+							String positionDimensionTwo = (String) getSimilarContainerMapValue(posDim2Key + "_fromMap");
+							
+							 if(positionDimensionOne!=null && !positionDimensionOne.trim().equals("") && !validator.isDouble(positionDimensionOne) || positionDimensionTwo!=null && !positionDimensionTwo.trim().equals("") && !validator.isDouble(positionDimensionTwo) )
+			     		        {
+			     		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.positionInStorageContainer")));
+			     		        	break;
+			     		           
+			     		        }
+							 
+			    					
 						}
 					}
 					else

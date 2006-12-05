@@ -148,6 +148,10 @@ function changeUrl(element,str)
 					"&storageToBeSelected="+ document.forms[0].customListBox_1_0.value +  //parentContainerId.value +
 					"&position=" + document.forms[0].customListBox_1_1.value +   //positionDimensionOne.value + 
 					":" + document.forms[0].customListBox_1_2.value;
+					
+		   var storageContainer = document.getElementById('selectedContainerName').value;
+		   mypage+="&storageContainerName="+storageContainer;		
+					// alert(mypage);
 			settings =
 				'height='+h+',width='+w+',top='+TopPosition+',left='+LeftPosition+',scrollbars='+scroll+',resizable'
 			win = open(mypage,myname,settings)

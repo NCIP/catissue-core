@@ -425,9 +425,16 @@ public class StorageContainer extends Container
 				else
 				{
 					parent = new StorageContainer();
-					parent.setId(new Long(form.getContainerId()));
-					this.setPositionDimensionOne(new Integer(form.getPos1()));
-					this.setPositionDimensionTwo(new Integer(form.getPos2()));
+					if(form.getContainerId()!=null && !form.getContainerId().trim().equals(""))
+					{
+					 parent.setId(new Long(form.getContainerId()));
+					}
+					else
+					{
+					 parent.setName(form.getSelectedContainerName());
+					}
+					this.setPositionDimensionOne(new Integer(form.getPos1().trim()));
+					this.setPositionDimensionTwo(new Integer(form.getPos2().trim()));
 				}
 			}
 			else

@@ -30,6 +30,18 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
+<script language="JavaScript">
+	
+	function mapButtonClickedOnSpecimen(frameUrl)
+	{
+	   	var storageContainer = document.getElementById('selectedContainerName').value;
+		frameUrl+="&storageContainerName="+storageContainer;
+		NewWindow(frameUrl,'name','810','320','yes');
+		
+    }
+		
+	</script>
+
 <html:form action="<%=formAction%>">
 <html:hidden property="id" />
 <html:hidden property="operation" value="<%=operation%>"/>
@@ -149,6 +161,7 @@
 					String[] labelNames = {"ID","Pos1","Pos2"};
 					labelNames = Constants.STORAGE_CONTAINER_LABEL;
 					String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
+					String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"}; 
 					
 					//String[] initValues = new String[3];
 					//initValues[0] = form.getStorageContainer();
@@ -170,19 +183,28 @@
 					String arrayTypeId = form.getSpecimenArrayTypeId()+"";
 					String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
 							+ "&" + Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE +"=" + arrayTypeId;
-					String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
+							
+					String buttonOnClicked = "mapButtonClickedOnSpecimen('"+frameUrl+"')";  		
+					// String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
 					String noOfEmptyCombos = "3";
-					
+					if(operation.equals(Constants.EDIT))
+					{
+					     form.setStContSelection(1);
+					}
 					int radioSelected = form.getStContSelection();
+					
+					System.out.println("HERE-->" + radioSelected);
 					boolean dropDownDisable = false;
 					boolean textBoxDisable = false;					
 					if(radioSelected == 1)
 					{									
 						textBoxDisable = true;
+						dropDownDisable = false;
 					}
 					else if(radioSelected == 2)
 					{
-						dropDownDisable = true;									
+						dropDownDisable = true;		
+                        textBoxDisable = false;						
 					}
 					
 				%>
@@ -200,6 +222,7 @@
 										initialValues="<%=initValues%>"  
 										styleClass = "<%=styClass%>" 
 										tdStyleClass = "<%=tdStyleClass%>" 
+										tdStyleClassArray="<%=tdStyleClassArray%>"
 										labelNames="<%=labelNames%>" 
 										rowNumber="<%=rowNumber%>" 
 										onChange = "<%=onChange%>"
@@ -212,7 +235,7 @@
 							</tr>							
 							<tr>
 								<td ><html:radio value="2" onclick="onRadioButtonGroupClickForArray(this)" styleId="stContSelection" property="stContSelection" /></td>
-								<td class="formLabelBorderless">
+								<td class="formLabelBorderlessLeft">
 									<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
 									<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
 									<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>

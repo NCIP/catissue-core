@@ -225,19 +225,97 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
 		StorageContainer container = (StorageContainer) obj;
+		Map similarContainerMap = container.getSimilarContainerMap();
+		String containerPrefixKey = "simCont:";
+		List positionsToBeAllocatedList = new ArrayList();
+		List usedPositionsList = new ArrayList();
 
-		if (container.getNoOfContainers().intValue() > 1 && container.getSimilarContainerMap().size() > 0)
+		for (int i = 1; i <= container.getNoOfContainers().intValue(); i++)
+		{
+			String radioButonKey = "radio_" + i;
+			String containerIdKey = containerPrefixKey + i + "_parentContainerId";
+			String containerNameKey = containerPrefixKey + i + "_StorageContainer_name";
+			String posDim1Key = containerPrefixKey + i + "_positionDimensionOne";
+			String posDim2Key = containerPrefixKey + i + "_positionDimensionTwo";
+
+			String containerName = null;
+			String containerId = null;
+			String posDim1 = null;
+			String posDim2 = null;
+			//get the container values based on user selection from dropdown or map
+			if (similarContainerMap.get(radioButonKey).equals("1"))
+			{
+				containerId = (String) similarContainerMap.get(containerIdKey);
+				posDim1 = (String) similarContainerMap.get(posDim1Key);
+				posDim2 = (String) similarContainerMap.get(posDim2Key);
+				usedPositionsList.add(containerId + Constants.STORAGE_LOCATION_SAPERATOR + posDim1 + Constants.STORAGE_LOCATION_SAPERATOR + posDim2);
+
+			}
+			else if (similarContainerMap.get(radioButonKey).equals("2"))
+			{
+				containerName = (String) similarContainerMap.get(containerNameKey + "_fromMap");
+
+				String sourceObjectName = StorageContainer.class.getName();
+				String[] selectColumnName = {"id"};
+				String[] whereColumnName = {"name"};
+				String[] whereColumnCondition = {"="};
+				Object[] whereColumnValue = {containerName};
+				String joinCondition = null;
+
+				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+				if (!list.isEmpty())
+				{
+					containerId = list.get(0).toString();
+				}
+				else
+				{
+					String message = ApplicationProperties.getValue("specimen.storageContainer");
+					throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+				}
+
+				posDim1 = (String) similarContainerMap.get(posDim1Key + "_fromMap");
+				posDim2 = (String) similarContainerMap.get(posDim2Key + "_fromMap");
+
+				if (posDim1 == null || posDim1.trim().equals("") || posDim2 == null || posDim2.trim().equals(""))
+				{
+					positionsToBeAllocatedList.add(new Integer(i));
+				}
+				else
+				{
+
+					usedPositionsList.add(containerId + Constants.STORAGE_LOCATION_SAPERATOR + posDim1 + Constants.STORAGE_LOCATION_SAPERATOR
+							+ posDim2); 
+					similarContainerMap.put(containerIdKey, containerId);
+					similarContainerMap.put(posDim1Key, posDim1);
+					similarContainerMap.put(posDim2Key, posDim2);
+					similarContainerMap.remove(containerIdKey + "_fromMap");
+					similarContainerMap.remove(posDim1Key + "_fromMap");
+					similarContainerMap.remove(posDim2Key + "_fromMap");
+				}
+
+			}
+
+		}
+		
+	/*	for (int i = 0; i < positionsToBeAllocatedList.size(); i++)
+		{
+			allocatePositionToSingleSpecimen(positionsToBeAllocatedList.get(i), similarContainerMap, usedPositionsList);
+		} */
+
+		
+		
+		if (container.getNoOfContainers().intValue() > 1 && similarContainerMap.size() > 0)
 		{
 			for (int i = 1; i <= container.getNoOfContainers().intValue(); i++)
 			{
-				int checkedButtonStatus = Integer.parseInt((String) container.getSimilarContainerMap().get("checkedButton"));
-				String siteId = (String) container.getSimilarContainerMap().get("simCont:" + i + "_siteId");
+				int checkedButtonStatus = Integer.parseInt((String) similarContainerMap.get("checkedButton"));
+				String siteId = (String) similarContainerMap.get("simCont:" + i + "_siteId");
 				if (checkedButtonStatus == 2 || siteId == null)
 				{
-					String parentContId = (String) container.getSimilarContainerMap().get("simCont:" + i + "_parentContainerId");
-					String positionDimensionOne = (String) container.getSimilarContainerMap().get("simCont:" + i + "_positionDimensionOne");
-					String positionDimensionTwo = (String) container.getSimilarContainerMap().get("simCont:" + i + "_positionDimensionTwo");
-					Logger.out.debug(i + " parentContId " + parentContId + " positionDimensionTwo " + positionDimensionOne);
+					String parentContId = (String) similarContainerMap.get("simCont:" + i + "_parentContainerId");
+					String positionDimensionOne = (String) similarContainerMap.get("simCont:" + i + "_positionDimensionOne");
+					String positionDimensionTwo = (String) similarContainerMap.get("simCont:" + i + "_positionDimensionTwo");
 					if (parentContId.equals("-1") || positionDimensionOne.equals("-1") || positionDimensionTwo.equals("-1"))
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.item.required", ApplicationProperties

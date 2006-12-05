@@ -349,7 +349,50 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 			}
 			else if (stContSelection == 2)
 			{
-				if (validator.isEmpty(pos1) || validator.isEmpty(pos2)
+				
+				
+				boolean flag = false;
+				if(pos1!=null&&!pos1.trim().equals(""))
+				{
+					long l = 1;
+	                  try 
+					  {
+	                    	l = Long.parseLong(pos1);
+					  }
+					 catch(Exception e)
+					 {
+					 	flag = true;
+						
+					 }
+					 if(l<=0)
+					 {
+					 	flag = true;
+					 }
+				}
+				if(pos2!=null&&!pos2.trim().equals(""))
+				{
+					long l = 1;
+	                  try 
+					  {
+	                    	l = Long.parseLong(pos2);
+					  }
+					 catch(Exception e)
+					 {
+					 	flag = true;
+						
+					 }
+					 if(l<=0)
+					 {
+					 	flag = true;
+					 }
+				}
+				
+				if(flag)
+				{
+								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+									ApplicationProperties.getValue("transfereventparameters.toposition")));
+	    		}
+			/*	if (validator.isEmpty(pos1) || validator.isEmpty(pos2)
 						|| validator.isEmpty(selectedContainerName))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
@@ -364,7 +407,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 								ApplicationProperties.getValue("transfereventparameters.toposition")));
 					}
 	
-				}
+				}  */
 			}
 				
 		}

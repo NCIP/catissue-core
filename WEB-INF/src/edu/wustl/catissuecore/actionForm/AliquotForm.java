@@ -436,10 +436,10 @@ public class AliquotForm extends AbstractActionForm
          		else if(key.indexOf("_positionDimension") != -1)
          		{
          			String value = (String)aliquotMap.get(key);
-         			 if(!validator.isDouble(value))
+         			 if(value!=null && !value.trim().equals("") && !validator.isDouble(value))
      		        {
      		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.positionInStorageContainer")));
-     		        	break;
+     		            break;
      		        }
          		}
          	}

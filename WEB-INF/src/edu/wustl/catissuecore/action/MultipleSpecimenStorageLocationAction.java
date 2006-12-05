@@ -46,7 +46,15 @@ public class MultipleSpecimenStorageLocationAction extends BaseAction
 		String target = "success";
 		Logger.out.debug("\n\n------IN MultipleSpecimenStorageLocationAction  ----\n\n"+ request.getParameter(Constants.PAGEOF));
 		Logger.out.debug("Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION : "+ Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION +" \n !(Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION.equals(request.getParameter(Constants.PAGEOF))) : " +!(Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION.equals(request.getParameter(Constants.PAGEOF))));
-		if(!(Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION.equals(request.getParameter(Constants.PAGEOF))))
+		
+		MultipleSpecimenStorageLocationForm aForm = (MultipleSpecimenStorageLocationForm)form;
+		
+		HashMap specimenMap = getSpecimenMap(request);
+		request.setAttribute(Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_SPECIMEN_MAP,specimenMap);
+		aForm.setSpecimenMap( specimenMap);
+		aForm.populateSpecimenOnUIMap(request);  
+
+		/*if(!(Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION.equals(request.getParameter(Constants.PAGEOF))))
 		{
 			MultipleSpecimenStorageLocationForm aForm = (MultipleSpecimenStorageLocationForm)form;
 			
@@ -59,13 +67,8 @@ public class MultipleSpecimenStorageLocationAction extends BaseAction
 		else
 		{
 			//TODO
-			MultipleSpecimenStorageLocationForm aForm = (MultipleSpecimenStorageLocationForm)form;
 			
-			HashMap specimenMap = getSpecimenMap(request);
-			request.setAttribute(Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_SPECIMEN_MAP,specimenMap);
-			aForm.setSpecimenMap( specimenMap);
-
-		}
+		} */
 		// -----------------------
 		return mapping.findForward(target ) ;
 	}

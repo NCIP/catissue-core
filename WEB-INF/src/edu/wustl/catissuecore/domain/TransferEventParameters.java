@@ -20,6 +20,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TransferEventParameters extends SpecimenEventParameters implements java.io.Serializable
 {
+
 	private static final long serialVersionUID = 1234567890L;
 
 	/**
@@ -171,19 +172,17 @@ public class TransferEventParameters extends SpecimenEventParameters implements 
 	 * @param fromStorageContainer
 	 *            The fromStorageContainer to set.
 	 */
-	public void setFromStorageContainer(
-			edu.wustl.catissuecore.domain.StorageContainer fromStorageContainer)
+	public void setFromStorageContainer(edu.wustl.catissuecore.domain.StorageContainer fromStorageContainer)
 	{
 		this.fromStorageContainer = fromStorageContainer;
 	}
 
-	
 	/**
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
 	 * */
 	public TransferEventParameters()
 	{
-		
+
 	}
 
 	/**
@@ -194,54 +193,58 @@ public class TransferEventParameters extends SpecimenEventParameters implements 
 	{
 		setAllValues(abstractForm);
 	}
-	
-	/**
-     * This function Copies the data from an TransferEventParametersForm object to a TransferEventParameters object.
-     * @param TransferEventParametersForm An TransferEventParametersForm object containing the information about the TransferEventParameters.  
-     * */
-    public void setAllValues(AbstractActionForm abstractForm)
-    {
-        try
-        {
-        	TransferEventParametersForm form = (TransferEventParametersForm) abstractForm;
-        	StorageContainer toObj = new StorageContainer(); 
-        	if(form.getStContSelection() == 1)
-        	{
-        		this.toPositionDimensionOne = new Integer(form.getPositionDimensionOne());
-            	this.toPositionDimensionTwo = new Integer(form.getPositionDimensionTwo());
-            	toObj.setId(new Long(form.getStorageContainer()));
-        	}
-        	else
-        	{
-        		this.toPositionDimensionOne = new Integer(form.getPos1());
-            	this.toPositionDimensionTwo = new Integer(form.getPos2());
-            	toObj.setName(form.getSelectedContainerName());
-        	}			
-        	
-        	this.toStorageContainer = toObj;
-        	
-        	if(form.getFromStorageContainerId() != 0)
-        	{
-        		StorageContainer fromObj = new StorageContainer(); 
-        		fromObj.setId(new Long(form.getFromStorageContainerId()));
-        		this.fromStorageContainer = fromObj;
 
-        		this.fromPositionDimensionOne = new Integer(form.getFromPositionDimensionOne());
-        		this.fromPositionDimensionTwo = new Integer(form.getFromPositionDimensionTwo());
-        	}
-        	else
-        	{
-        		this.fromStorageContainer = null; 
-        		this.fromPositionDimensionOne = null;
-        		this.fromPositionDimensionTwo = null;	
-        	}
-        	
-        	super.setAllValues(form);
-        }
-        catch (Exception excp)
-        {
-            Logger.out.error(excp.getMessage());
-        }
-    }
-	
+	/**
+	 * This function Copies the data from an TransferEventParametersForm object to a TransferEventParameters object.
+	 * @param TransferEventParametersForm An TransferEventParametersForm object containing the information about the TransferEventParameters.  
+	 * */
+	public void setAllValues(AbstractActionForm abstractForm)
+	{
+		try
+		{
+			TransferEventParametersForm form = (TransferEventParametersForm) abstractForm;
+			StorageContainer toObj = new StorageContainer();
+			if (form.getStContSelection() == 1)
+			{
+				this.toPositionDimensionOne = new Integer(form.getPositionDimensionOne());
+				this.toPositionDimensionTwo = new Integer(form.getPositionDimensionTwo());
+				toObj.setId(new Long(form.getStorageContainer()));
+			}
+			else
+			{
+				if (form.getPositionDimensionOne() != null && !form.getPositionDimensionOne().trim().equals("")
+						&& form.getPositionDimensionTwo() != null && !form.getPositionDimensionTwo().trim().equals(""))
+				{
+				this.toPositionDimensionOne = new Integer(form.getPos1());
+				this.toPositionDimensionTwo = new Integer(form.getPos2());
+				}
+				toObj.setName(form.getSelectedContainerName());
+			}
+
+			this.toStorageContainer = toObj;
+
+			if (form.getFromStorageContainerId() != 0)
+			{
+				StorageContainer fromObj = new StorageContainer();
+				fromObj.setId(new Long(form.getFromStorageContainerId()));
+				this.fromStorageContainer = fromObj;
+
+				this.fromPositionDimensionOne = new Integer(form.getFromPositionDimensionOne());
+				this.fromPositionDimensionTwo = new Integer(form.getFromPositionDimensionTwo());
+			}
+			else
+			{
+				this.fromStorageContainer = null;
+				this.fromPositionDimensionOne = null;
+				this.fromPositionDimensionTwo = null;
+			}
+
+			super.setAllValues(form);
+		}
+		catch (Exception excp)
+		{
+			Logger.out.error(excp.getMessage());
+		}
+	}
+
 }

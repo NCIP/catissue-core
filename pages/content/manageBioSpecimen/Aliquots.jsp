@@ -165,6 +165,15 @@ else if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
 		}
 	}		
 	
+	function mapButtonClickedInAliquot(frameUrl,count)
+	{
+	   	var storageContainer = document.getElementById("container_" + count + "_0").value;
+		frameUrl+="&storageContainerName="+storageContainer;
+		//alert(frameUrl);
+		NewWindow(frameUrl,'name','810','320','yes');
+		
+    }
+	
 </script>
 </head>
 
@@ -443,7 +452,7 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 	/* Retrieving a map of available containers */
 	Map dataMap = (Map) request.getAttribute(Constants.AVAILABLE_CONTAINER_MAP);
 	String[] labelNames = Constants.STORAGE_CONTAINER_LABEL;
-
+    String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"};
 
 	for(int i=1;i<=counter;i++)
 	{
@@ -521,27 +530,15 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 		String frameUrl="";
 		String storageContSelection=(String)form.getValue("radio_" + i);
 		System.out.println("cont style:"+containerStyle);
-		/*if(storageContSelection!=null && storageContSelection.equals("2"))
-		{
-			frameUrl = "ShowFramedPage.do?pageOf=pageOfAliquot&amp;containerStyleId=" + containerIdStyle 
-			+ "&amp;containerStyle=" + containerStyle 
-			+ "&amp;xDimStyleId=" + pos1StyleId + "&amp;yDimStyleId=" + pos2StyleId
-			+ "&amp;" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
-			+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
-			
-		System.out.println("frameUrl:"+frameUrl);	
-		}
-		else if(storageContSelection!=null && storageContSelection.equals("3"))
-		{*/
-
+	
 			frameUrl = "ShowFramedPage.do?pageOf=pageOfAliquot&amp;containerStyleId=" + containerIdStyle + "&amp;xDimStyleId=" + pos1Style + "&amp;yDimStyleId=" + pos2Style
 			+ "&amp;containerStyle=" + containerStyle 
 			+ "&amp;" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 			+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId ;
 			System.out.println("frameUrl:"+frameUrl);				
-		//}
+	
 
-		String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
+		  String buttonOnClicked = "mapButtonClickedInAliquot('"+frameUrl+"','"+i+"')"; //javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
 		
 
 %>
@@ -586,6 +583,7 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 										onChange = "<%=onChange%>"
 										formLabelStyle="formLabelBorderless"
 										disabled = "<%=dropDownDisable%>"
+										tdStyleClassArray="<%=tdStyleClassArray%>"
 										noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
 								    	</tr>
 										</table>

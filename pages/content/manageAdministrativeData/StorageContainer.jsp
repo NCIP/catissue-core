@@ -76,10 +76,12 @@
 			if(dropdownOrTextboxSelected == 1)
 			{
 				textBoxDisable = true;
+				dropDownDisable = false;	
 			}								
 			else if(dropdownOrTextboxSelected == 2)
 			{
-				dropDownDisable = true;									
+				dropDownDisable = true;	
+				textBoxDisable = false;
 			}
 		}
 		
@@ -130,6 +132,7 @@
 			//if site radio button is selected.
 			if(element.value == 1)
 			{
+			  
 				document.forms[0].siteId.disabled = false;
 
 				document.forms[0].customListBox_1_0.disabled = true;
@@ -140,36 +143,39 @@
 				document.forms[0].stContSelection[0].disabled=true;
 				document.forms[0].stContSelection[1].disabled=true;
 
-				//document.forms[0].selectedContainerName.disabled = true;
-				//document.forms[0].pos1.disabled = true;
-				//document.forms[0].pos2.disabled = true;
-				//document.forms[0].stContSelection.disabled=true;
+				document.forms[0].selectedContainerName.disabled = true;
+				document.forms[0].pos1.disabled = true;
+				document.forms[0].pos2.disabled = true;
+				document.forms[0].stContSelection.disabled=true;
 			}
 			else //if parent container radio button is selected.
 			{
+			
 				document.forms[0].siteId.disabled = true;
 				document.forms[0].stContSelection[0].disabled=false;
 				document.forms[0].stContSelection[1].disabled=false;
 
 				if (radioArray[0].checked) 
 				{
+				   
 					document.forms[0].customListBox_1_0.disabled = false;
 					document.forms[0].customListBox_1_1.disabled = false;
 					document.forms[0].customListBox_1_2.disabled = false;
 					document.forms[0].containerMap.disabled=true;
-					//document.forms[0].selectedContainerName.disabled=true;
-					//document.forms[0].pos1.disabled=true;
-					//document.forms[0].pos2.disabled=true;					
+					document.forms[0].selectedContainerName.disabled=true;
+					document.forms[0].pos1.disabled=true;
+					document.forms[0].pos2.disabled=true;					
 				} 
 				else 
 				{
+				  
 					document.forms[0].customListBox_1_0.disabled = true;
 					document.forms[0].customListBox_1_1.disabled = true;
 					document.forms[0].customListBox_1_2.disabled = true;
 					document.forms[0].containerMap.disabled=false;
-					//document.forms[0].selectedContainerName.disabled=false;
-					//document.forms[0].pos1.disabled=false;
-					//document.forms[0].pos2.disabled=false;					
+					document.forms[0].selectedContainerName.disabled=false;
+					document.forms[0].pos1.disabled=false;
+					document.forms[0].pos2.disabled=false;					
 				}
 				
 				onParentContainerChange(element)
@@ -646,6 +652,7 @@ function onEditChange()
 							// labelNames = {"Name","Pos1","Pos2"};
 							String[] labelNames = Constants.STORAGE_CONTAINER_LABEL;
 							String[] attrNames = { "parentContainerId", "positionDimensionOne", "positionDimensionTwo"};
+							String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"}; 
 							
 							//String[] initValues = new String[3];
 							//initValues[0] = Integer.toString((int)form.getParentContainerId());
@@ -667,6 +674,25 @@ function onEditChange()
 							
 							String noOfEmptyCombos = "3";
 							
+						/*	 int radioSelected = form.getStContSelection();
+								boolean dropDownDisable = false;
+								boolean textBoxDisable = false;
+								
+								if(radioSelected == 1)
+								{
+									dropDownDisable = true;
+									textBoxDisable = true;
+								}
+								else if(radioSelected == 2)
+								{									
+									textBoxDisable = true;
+								}
+								else if(radioSelected == 3)
+								{
+									dropDownDisable = true;									
+								}
+								*/
+							
 							//String buttonId = "Map_1";			
 							
 						%>
@@ -684,6 +710,7 @@ function onEditChange()
 											attributeNames="<%=attrNames%>" 
 											initialValues="<%=initValues%>"  
 											styleClass = "<%=styClass%>" 
+											tdStyleClassArray="<%=tdStyleClassArray%>"
 											tdStyleClass = "<%=tdStyleClass%>" 
 											labelNames="<%=labelNames%>" 
 											rowNumber="<%=rowNumber%>" 
@@ -697,10 +724,10 @@ function onEditChange()
 								</tr>
 								<tr>
 									<td ><html:radio value="2" onclick="onStorageRadioButtonClick(this)" styleId="stContSelection" property="stContSelection" disabled= "<%=containerRadioDisable%>"/></td>
-									<td class="formLabelBorderless">
-										<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" readonly= "<%=textBoxDisable%>"/>
-										<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" readonly= "<%=textBoxDisable%>"/>
-										<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" readonly= "<%=textBoxDisable%>"/>
+									<td class="formLabelBorderlessLeft">
+										<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
+										<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
+										<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
 										<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
 											<bean:message key="buttons.map"/>
 										</html:button>

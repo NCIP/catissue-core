@@ -118,8 +118,7 @@ public class ContainerMap extends NLevelCustomCombo {
 							" value=\""+value+"\" " +
 							//" onclick=\"StorageMapWindow('ShowFramedPage.do?pageOf=pageOfStorageLocation&amp;storageType=','name','810','320','yes');return false\" " +
 							"onclick= \""+buttonOnClick+" \"" +
-							//(buttonDisabled?"disabled=\"true\"":"")+
-							"disabled=\"true\""+
+							(buttonDisabled?"disabled=\"true\"":"")+
 							" name=\""+buttonName+"\" >"+
 							
 						" </td>");

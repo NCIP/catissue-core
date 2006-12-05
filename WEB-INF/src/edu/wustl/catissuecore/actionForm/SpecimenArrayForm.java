@@ -216,16 +216,26 @@ public class SpecimenArrayForm extends ContainerForm
         {
             this.storageContainer = String.valueOf(container
                     .getId());
+            if(this.stContSelection == 1)
+            {
             this.positionDimensionOne = specimenArray
                     .getPositionDimensionOne().intValue();
             this.positionDimensionTwo = specimenArray
                     .getPositionDimensionTwo().intValue();
-            
+            }
+            else
+            {
+            	this.pos1 = specimenArray
+                .getPositionDimensionOne().toString();
+                this.pos2 = specimenArray
+                .getPositionDimensionTwo().toString();
+            }
             this.positionInStorageContainer = container.getStorageType().getName() + " : " 
 			+ container.getId() + " Pos(" + this.positionDimensionOne + ","
 			+ this.positionDimensionTwo + ")";
         }
         
+        this.setStContSelection(1);
     	this.specimenClass = specimenArray.getSpecimenArrayType().getSpecimenClass();
     	this.specimenTypes = SpecimenArrayUtil.getSpecimenTypesFromCollection(specimenArray.getSpecimenArrayType().getSpecimenTypeCollection());
     	//this.specArrayContentCollection = SpecimenArrayUtil.getSpecimenGridContentCollection(specimenArray.getSpecimenArrayContentCollection());
@@ -312,13 +322,55 @@ public class SpecimenArrayForm extends ContainerForm
 				}
 				else
 				{
-					if (!validator.isNumeric(String.valueOf(pos1), 1)
+					
+					boolean flag = false;
+					if(pos1!=null&&!pos1.trim().equals(""))
+					{
+						long l = 1;
+		                  try 
+						  {
+		                    	l = Long.parseLong(pos1);
+						  }
+						 catch(Exception e)
+						 {
+						 	flag = true;
+							
+						 }
+						 if(l<=0)
+						 {
+						 	flag = true;
+						 }
+					}
+					if(pos2!=null&&!pos2.trim().equals(""))
+					{
+						long l = 1;
+		                  try 
+						  {
+		                    	l = Long.parseLong(pos2);
+						  }
+						 catch(Exception e)
+						 {
+						 	flag = true;
+							
+						 }
+						 if(l<=0)
+						 {
+						 	flag = true;
+						 }
+					}
+					
+					if(flag)
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+								ApplicationProperties.getValue("array.positionInStorageContainer")));
+		    		}
+				/*	if (!validator.isNumeric(String.valueOf(pos1), 1)
 							|| !validator.isNumeric(String.valueOf(pos2), 1)
 							|| validator.isEmpty(selectedContainerName))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 								ApplicationProperties.getValue("array.positionInStorageContainer")));
-					}
+					}*/
 				}
 				
 				// validate user 

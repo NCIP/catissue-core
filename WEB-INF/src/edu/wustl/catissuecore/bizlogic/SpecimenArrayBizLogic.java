@@ -14,6 +14,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+
+import net.sf.ehcache.CacheException;
 
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
@@ -30,6 +33,7 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
@@ -402,7 +406,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 				}
 				else
 				{
-					String message = ApplicationProperties.getValue("array.positionInStorageContainer");
+					String message = ApplicationProperties.getValue("specimen.storageContainer");
 					throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
 				}
 			}
@@ -626,14 +630,104 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		}
 
 		// validate storage position
-		if (specimenArray.getPositionDimensionOne() == null || specimenArray.getPositionDimensionTwo() == null
+		/*if (specimenArray.getPositionDimensionOne() == null || specimenArray.getPositionDimensionTwo() == null
 				|| !validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionOne()), 1)
 				|| !validator.isNumeric(String.valueOf(specimenArray.getPositionDimensionTwo()), 1)
-				|| (!validator.isNumeric(String.valueOf(specimenArray.getStorageContainer().getId()), 1) && validator.isEmpty(specimenArray.getStorageContainer().getName())))
+				|| (!validator.isNumeric(String.valueOf(specimenArray.getStorageContainer().getId()), 1) && validator.isEmpty(specimenArray.getStorageContainer().getName())))*/
+		if((!validator.isNumeric(String.valueOf(specimenArray.getStorageContainer().getId()), 1) && validator.isEmpty(specimenArray.getStorageContainer().getName())))
 		{
 			message = ApplicationProperties.getValue("array.positionInStorageContainer");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
 		}
+		
+		if (specimenArray.getStorageContainer() != null) 
+		{
+			if (specimenArray.getStorageContainer() != null && specimenArray.getStorageContainer().getName() != null)				
+			{			
+				StorageContainer storageContainerObj = specimenArray.getStorageContainer();			
+				String sourceObjectName = StorageContainer.class.getName();
+				String[] selectColumnName = {"id"};
+				String[] whereColumnName = {"name"};
+				String[] whereColumnCondition = {"="};
+				Object[] whereColumnValue = {specimenArray.getStorageContainer().getName()};
+				String joinCondition = null; 
+
+				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+				
+				if (!list.isEmpty())
+				{
+					storageContainerObj.setId((Long) list.get(0));
+					specimenArray.setStorageContainer(storageContainerObj);
+				}
+				else
+				{
+					message = ApplicationProperties.getValue("array.positionInStorageContainer");
+					throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
+				}
+			}
+		}
+//		Long storageContainerId = specimen.getStorageContainer().getId();
+		Integer xPos = specimenArray.getPositionDimensionOne();
+		Integer yPos = specimenArray.getPositionDimensionTwo();
+		boolean isContainerFull = false;
+		/**
+		 *  Following code is added to set the x and y dimension in case only storage container is given 
+		 *  and x and y positions are not given 
+		 */
+		
+		if (xPos == null || yPos == null)
+		{
+		isContainerFull = true;
+		Map containerMapFromCache = null;
+		try
+		{
+			containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+		}
+		catch (CacheException e)
+		{
+			e.printStackTrace();
+		}
+		
+		if (containerMapFromCache != null)
+		{
+			Iterator itr = containerMapFromCache.keySet().iterator();
+			while (itr.hasNext())
+			{
+				NameValueBean nvb = (NameValueBean) itr.next();
+				if(nvb.getValue().toString().equals(specimenArray.getStorageContainer().getId().toString()))
+				{
+				
+					Map tempMap = (Map) containerMapFromCache.get(nvb);
+					Iterator tempIterator = tempMap.keySet().iterator();;
+					NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+					
+					List list = (List) tempMap.get(nvb1);
+					NameValueBean nvb2 = (NameValueBean) list.get(0);
+									
+					specimenArray.setPositionDimensionOne(new Integer(nvb1.getValue()));
+					specimenArray.setPositionDimensionTwo(new Integer(nvb2.getValue()));
+				    isContainerFull = false;
+				    break;
+				}
+				
+			}
+		}
+		
+		xPos = specimenArray.getPositionDimensionOne();
+	    yPos = specimenArray.getPositionDimensionTwo();
+		}
+
+		if(isContainerFull)
+		{
+			throw new DAOException("The Storage Container you specified is full");
+		}
+		else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
+		{
+			throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
+					.getValue("array.positionInStorageContainer")));
+		}
+		
+		
 
 		// validate user 
 		if (specimenArray.getCreatedBy()== null || specimenArray.getCreatedBy().getId()== null || !validator.isValidOption(String.valueOf(specimenArray.getCreatedBy().getId())))

@@ -268,6 +268,62 @@
 			}
 		}
 		
+	function onStorageRadioClickInAliquot(element)
+	{		
+		var index1 =  element.name.lastIndexOf('_');
+		var index2 =  element.name.lastIndexOf(')');
+		//rowNumber of the element
+		var i = (element.name).substring(index1+1,index2);
+		//alert("inside the javascript"+i);
+		var st1 = "container_" + i + "_0";
+		var pos1 = "pos1_" + i + "_1";
+		var pos2 = "pos2_" + i + "_2";
+		var st2="customListBox_" + i + "_0";
+		var pos11="customListBox_" + i + "_1";
+		var pos12="customListBox_" + i + "_2";
+		var mapButton="mapButton_" + i ;
+		var stContainerNameFromMap = document.getElementById(st1);
+		var pos1FromMap = document.getElementById(pos1);
+		var pos2FromMap = document.getElementById(pos2);    		    		
+		var stContainerNameFromDropdown = document.getElementById(st2);
+		var pos1FromDropdown = document.getElementById(pos11);
+		var pos2FromDropdown = document.getElementById(pos12);    		    		
+		var containerMapButton =  document.getElementById(mapButton);
+
+		 if(element.value == 1)
+		{
+			stContainerNameFromMap.disabled = true;
+			pos1FromMap.disabled = true;
+			pos2FromMap.disabled = true;
+
+			containerMapButton.disabled = true;
+			stContainerNameFromDropdown.disabled = false;
+			pos1FromDropdown.disabled = false;
+			pos2FromDropdown.disabled = false;
+
+		}
+		else
+		{
+			stContainerNameFromMap.disabled = false;
+			pos1FromMap.disabled = false;
+			pos2FromMap.disabled = false;
+
+			containerMapButton.disabled = false;
+			stContainerNameFromDropdown.disabled = true;
+			pos1FromDropdown.disabled = true;
+			pos2FromDropdown.disabled = true;
+		}
+	}		
+	
+	function mapButtonClickedInAliquot(frameUrl,count)
+	{
+	   	var storageContainer = document.getElementById("container_" + count + "_0").value;
+		frameUrl+="&storageContainerName="+storageContainer;
+		//alert(frameUrl);
+		NewWindow(frameUrl,'name','810','320','yes');
+		
+    }	
+		
 	</script>
 </head>
 
@@ -516,7 +572,7 @@
 							String[] labelNames = {"ID","Pos1","Pos2"};
 							labelNames = Constants.STORAGE_CONTAINER_LABEL;
 							String[] attrNames = { "parentContainerId", "positionDimensionOne", "positionDimensionTwo"};
-							
+							String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"};
 							String[] initValues = new String[3];
 							//initValues[0] = Integer.toString((int)form.getParentContainerId());
 							////initValues[0] = form.getPositionInParentContainer();
@@ -531,7 +587,10 @@
 							//String onChange = "onCustomListBoxChange(this);onParentContainerChange(this)";
 							//boolean buttonDisabled = true;
 							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
-							String buttonOnClicked = "StorageMapWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2&amp;storageType=','name','810','320','yes');return false";
+	 	                    //String buttonOnClicked = "StorageMapWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2&amp;storageType=','name','810','320','yes');return false";
+							
+							
+						
 							String noOfEmptyCombos = "3";
 							
 						%>
@@ -542,7 +601,7 @@
 			  <%
 				form = simForm;
 				int counter=0;
-		
+		Map similarContainersMap = form.getSimilarContainersMap(); 
 				if(form != null)
 				{
 					counter = (int)form.getNoOfContainers();
@@ -569,7 +628,53 @@
 					String rowNumber = ""+i;
 					String buttonId = "Map_"+i;
 					String onSiteChange = "onSiteChange('"+ i+"')";
-			
+					
+					
+					
+		String containerMap = "similarContainerMapValue(mapButton_" + i + ")";
+		String containerMapStyle = "mapButton_" + i ;
+		
+		
+		//Keys for container if selected from Map
+		String containerIdFromMapKey = "similarContainerMapValue(simCont:" + i + "_StorageContainer_id_fromMap)";
+		String containerNameFromMapKey = "similarContainerMapValue(simCont:" + i + "_StorageContainer_name_fromMap)";
+		String pos1FromMapKey = "similarContainerMapValue(simCont:" + i + "_positionDimensionOne_fromMap)";
+		String pos2FromMapKey = "similarContainerMapValue(simCont:" + i + "_positionDimensionTwo_fromMap)";
+		String stContSelection = "similarContainerMapValue(radio_" + i + ")";
+		String containerStyle = "container_" + i + "_0";
+		String containerIdStyle = "containerId_" + i + "_0";
+		String pos1Style = "pos1_" + i + "_1";
+		String pos2Style = "pos2_" + i + "_2";
+		String rbKey = "radio_" + i ;
+		
+		
+		
+			String frameUrl = "ShowFramedPage.do?pageOf=pageOfAliquot&amp;containerStyleId=" + containerIdStyle + "&amp;xDimStyleId=" + pos1Style + "&amp;yDimStyleId=" + pos2Style
+			                   + "&amp;containerStyle=" + containerStyle ;
+			        System.out.println("frameUrl:"+frameUrl);				
+	
+		       String buttonOnClicked = "mapButtonClickedInAliquot('"+frameUrl+"','"+i+"')"; //javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
+		
+		
+	    if(similarContainersMap.get(rbKey)==null)
+		{
+		   similarContainersMap.put(rbKey,"1");
+	    } 
+	    
+		 int radioSelected = Integer.parseInt(similarContainersMap.get(rbKey).toString());
+		 boolean dropDownDisable = false;
+		 boolean textBoxDisable = false;
+								
+			if(radioSelected == 1)
+			{									
+				textBoxDisable = true;
+			}
+			else if(radioSelected == 2)
+			{
+				dropDownDisable = true;									
+		    }					
+	
+				
 					String resetNameFunction = "resetName('"+ i+"')";
 					attrNames[0] = "similarContainerMapValue(simCont:"+i+"_parentContainerId)";
 					attrNames[1] = "similarContainerMapValue(simCont:"+i+"_positionDimensionOne)";
@@ -633,28 +738,50 @@
 										</logic:equal>
 										</td>
 									</tr>
-									<tr>
-										<td class="formFieldNoBorders">
-											<logic:equal name="storageContainerForm" property="checkedButton" value="2">
-											<ncombo:containermap dataMap="<%=dataMap%>" 
-											attributeNames="<%=attrNames%>" 
-											initialValues="<%=initValues%>"  
-											styleClass = "<%=styClass%>" 
-											tdStyleClass = "<%=tdStyleClass%>" 
-											labelNames="<%=labelNames%>" 
-											rowNumber="<%=rowNumber%>" 
-											onChange = "<%=onChange%>" 
-											noOfEmptyCombos = "<%=noOfEmptyCombos%>"											
-											
-											buttonName="Map" 
-											buttonStyleClass="actionButton"
-											value="Map"
-											id="<%=buttonId%>"
-											formLabelStyle="formLabelBorderless"
-											buttonOnClick = "<%=buttonOnClicked%>" />
-											</logic:equal>
-										</td>
-								   </tr>
+									
+									
+								
+										<td class="formField" nowrap>
+										<logic:equal name="storageContainerForm" property="checkedButton" value="2">	
+										<html:hidden styleId="<%=containerIdStyle%>" property="<%=containerIdFromMapKey%>"/>
+					    	  <table border="0">
+								<tr>
+								<td ><html:radio value="1" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
+								<td>
+									<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
+										attributeNames="<%=attrNames%>" 
+										initialValues="<%=initValues%>"  
+										styleClass = "<%=styClass%>" 
+										tdStyleClass = "<%=tdStyleClass%>" 
+										labelNames="<%=labelNames%>" 
+										rowNumber="<%=rowNumber%>" 
+										onChange = "<%=onChange%>"
+										formLabelStyle="formLabelBorderless"
+										disabled = "<%=dropDownDisable%>"
+										tdStyleClassArray="<%=tdStyleClassArray%>"
+										noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
+								    	</tr>
+										</table>
+								</td>
+							</tr>
+							<tr>
+								<td ><html:radio value="2" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
+								<td class="formLabelBorderlessLeft">
+									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled = "<%=textBoxDisable%>"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled = "<%=textBoxDisable%>"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled = "<%=textBoxDisable%>"/>
+									<html:button styleClass="actionButton" styleId = "<%=containerMapStyle%>" property="<%=containerMap%>" onclick="<%=buttonOnClicked%>" disabled = "<%=textBoxDisable%>">
+										<bean:message key="buttons.map"/>
+									</html:button>
+								</td>
+							</tr>
+						</table>
+						</logic:equal>
+
+						</td>
+						</tr>			
+									
+								   
 								</table>	
 							</td>
 						</tr>		   

@@ -211,6 +211,10 @@ public class AliquotAction extends SecureAction
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.aliquots.sameStorageContainer"));
 				}
+				if (containerMap.size() == 0)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.locations.notSufficientForAliquot"));
+				}
 
 				saveErrors(request, errors);
 				request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);

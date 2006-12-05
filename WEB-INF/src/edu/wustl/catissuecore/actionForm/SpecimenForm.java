@@ -789,6 +789,48 @@ public class SpecimenForm extends AbstractActionForm
 					}
 					index++;
 				}
+				boolean flag = false;
+				if(pos1!=null&&!pos1.trim().equals(""))
+				{
+					long l = 1;
+	                  try 
+					  {
+	                    	l = Long.parseLong(pos1);
+					  }
+					 catch(Exception e)
+					 {
+					 	flag = true;
+						
+					 }
+					 if(l<=0)
+					 {
+					 	flag = true;
+					 }
+				}
+				if(pos2!=null&&!pos2.trim().equals(""))
+				{
+					long l = 1;
+	                  try 
+					  {
+	                    	l = Long.parseLong(pos2);
+					  }
+					 catch(Exception e)
+					 {
+					 	flag = true;
+						
+					 }
+					 if(l<=0)
+					 {
+					 	flag = true;
+					 }
+				}
+				
+				if(flag)
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+							"errors.item.format", ApplicationProperties
+									.getValue("specimen.positionInStorageContainer")));
+	    		}
 			}
 		}
 		catch (Exception excp)

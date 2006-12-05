@@ -220,4 +220,15 @@
 		<name>resultView.noOfRecordsPerPage</name>
 		<value>100</value>
 	</property>
+	
+<!-- Constants for specifing columns per page in MultipleSpecimen -->
+
+<!-- Constant for limiting number of storage containers shown in dropdowns on UI , should be set to appropriate value
+    eg. If containers are big  ( say 100*100) this value should be small so that it will take less time for populating dropdowns  
+ -->	
+	<property>
+		<name>containers_max_limit</name>
+		<value>200</value>
+	</property>
+<!-- Constant for limiting number of storage containers shown in dropdowns on UI-->		
 </properties>

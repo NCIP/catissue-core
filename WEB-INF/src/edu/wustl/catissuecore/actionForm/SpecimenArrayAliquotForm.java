@@ -150,7 +150,15 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
           			{
           				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("specimenArrayAliquots.label")));
           			}
-          		}
+          		} else if(key.indexOf("_positionDimension") != -1)
+         		{
+         			String value = (String)specimenArrayAliquotMap.get(key);
+         			 if(value!=null && !value.trim().equals("") && !validator.isDouble(value))
+     		        {
+     		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.positionInStorageContainer")));
+     		            break;
+     		        }
+         		}
          	}
 		 }
  		 

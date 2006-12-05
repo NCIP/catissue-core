@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
-
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
@@ -34,6 +33,7 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
@@ -421,9 +421,72 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 						String message = ApplicationProperties.getValue("transfereventparameters.toposition");
 						throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
 					}
+					
+					
+						//Long storageContainerId = specimen.getStorageContainer().getId();
+						Integer xPos = parameter.getToPositionDimensionOne();
+						Integer yPos = parameter.getToPositionDimensionTwo();
+						boolean isContainerFull = false;
+						/**
+						 *  Following code is added to set the x and y dimension in case only storage container is given 
+						 *  and x and y positions are not given 
+						 */
+						
+						if (xPos == null || yPos == null)
+						{
+						isContainerFull = true;
+						Map containerMapFromCache = null;
+						try
+						{
+							containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+						}
+						catch (CacheException e)
+						{
+							e.printStackTrace();
+						}
+						
+						if (containerMapFromCache != null)
+						{
+							Iterator itr = containerMapFromCache.keySet().iterator();
+							while (itr.hasNext())
+							{
+								NameValueBean nvb = (NameValueBean) itr.next();
+								if(nvb.getValue().toString().equals(storageContainerObj.getId().toString()))
+								{
+								
+									Map tempMap = (Map) containerMapFromCache.get(nvb);
+									Iterator tempIterator = tempMap.keySet().iterator();;
+									NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+									
+									list = (List) tempMap.get(nvb1);
+									NameValueBean nvb2 = (NameValueBean) list.get(0);
+													
+									parameter.setToPositionDimensionOne(new Integer(nvb1.getValue()));
+									parameter.setToPositionDimensionTwo(new Integer(nvb2.getValue()));
+								    isContainerFull = false;
+								    break;
+								}
+								
+							}
+						}
+						
+						xPos = parameter.getToPositionDimensionOne();
+					    yPos = parameter.getToPositionDimensionTwo();
+						}
+
+						if(isContainerFull)
+						{
+							throw new DAOException("The Storage Container you specified is full");
+						}
+						else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
+						{
+							throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
+									.getValue("transfereventparameters.toposition")));
+						}
+					
+				
+				
 				}
-				
-				
 				if (Constants.EDIT.equals(operation))
 				{
 					//validateTransferEventParameters(eventParameter);

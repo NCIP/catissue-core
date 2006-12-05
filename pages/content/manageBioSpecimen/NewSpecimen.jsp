@@ -97,6 +97,15 @@
 	{
 		deleteChecked('addBiohazardRow','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false);
 	}
+	
+	function mapButtonClickedOnSpecimen(frameUrl)
+	{
+	   	var storageContainer = document.getElementById('selectedContainerName').value;
+		frameUrl+="&storageContainerName="+storageContainer;
+		//alert(frameUrl);
+		NewWindow(frameUrl,'name','810','320','yes');
+		
+    }
 		
 		function onCheckboxButtonClick(chkBox)
 		{
@@ -396,7 +405,7 @@
 								<!-- Mandar : 434 : for tooltip -->
 					     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
 					     				styleId="specimenCollectionGroupId" size="1" 
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="resetVirtualLocated()" >
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onCollOrClassChange()" >
 									<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
 										labelProperty="name" property="value"/>		
 								</html:select>
@@ -478,7 +487,7 @@
 						    </td>
 						    <td class="formField">
 <!-- Mandar : 434 : for tooltip -->
-						     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);resetVirtualLocated()" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);onCollOrClassChange()" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 						     	<%
 									String classValue = form.getClassName();
 									if(operation.equals(Constants.EDIT))
@@ -713,7 +722,7 @@
 								String[] labelNames = {"ID","Pos1","Pos2"};
 								labelNames = Constants.STORAGE_CONTAINER_LABEL;
 								String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
-					
+					            String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"}; 
 								//String[] initValues = new String[3];
 								//initValues[0] = form.getStorageContainer();
 								//initValues[1] = form.getPositionDimensionOne();
@@ -739,7 +748,10 @@
 									+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 									+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
 								System.out.println(frameUrl);
-								String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
+								String buttonOnClicked = "mapButtonClickedOnSpecimen('"+frameUrl+"')";  
+								
+								//"javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false"; 
+								//javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
 								String noOfEmptyCombos = "3";
 
 								boolean disabled = false;
@@ -790,6 +802,7 @@
 									<td>
 										<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
 											attributeNames="<%=attrNames%>" 
+											tdStyleClassArray="<%=tdStyleClassArray%>"
 											initialValues="<%=initValues%>"  
 											styleClass = "<%=styClass%>" 
 											tdStyleClass = "<%=tdStyleClass%>" 
@@ -805,7 +818,7 @@
 								</tr>
 								<tr>
 									<td ><html:radio value="3" onclick="onRadioButtonGroupClick(this)" styleId="stContSelection" property="stContSelection"/></td>
-									<td class="formLabelBorderless">
+									<td class="formLabelBorderlessLeft">
 										<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
 										<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
 										<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>

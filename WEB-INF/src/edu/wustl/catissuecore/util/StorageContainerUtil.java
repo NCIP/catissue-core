@@ -12,10 +12,12 @@ import java.util.TreeMap;
 import net.sf.ehcache.CacheException;
 
 import edu.wustl.catissuecore.domain.Container;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 
 public class StorageContainerUtil
 {
@@ -363,6 +365,80 @@ public class StorageContainerUtil
 			return false;
 		}
 		return true;
+		
+	}
+
+	/**
+	 *  This method gives first valid storage position to a specimen if it is not given. 
+	 *  If storage position is given it validates the storage position
+	 * @param specimen
+	 * @throws DAOException
+	 */
+	public static void validateStorageLocationForSpecimen(Specimen specimen) throws DAOException
+	{
+		if (specimen.getStorageContainer() != null)
+		{
+			//Long storageContainerId = specimen.getStorageContainer().getId();
+			Integer xPos = specimen.getPositionDimensionOne();
+			Integer yPos = specimen.getPositionDimensionTwo();
+			boolean isContainerFull = false;
+			/**
+			 *  Following code is added to set the x and y dimension in case only storage container is given 
+			 *  and x and y positions are not given 
+			 */
+			
+			if (xPos == null || yPos == null)
+			{
+			isContainerFull = true;
+			Map containerMapFromCache = null;
+			try
+			{
+				containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+			}
+			catch (CacheException e)
+			{
+				e.printStackTrace();
+			}
+			
+			if (containerMapFromCache != null)
+			{
+				Iterator itr = containerMapFromCache.keySet().iterator();
+				while (itr.hasNext())
+				{
+					NameValueBean nvb = (NameValueBean) itr.next();
+					if(nvb.getValue().toString().equals(specimen.getStorageContainer().getId().toString()))
+					{
+					
+						Map tempMap = (Map) containerMapFromCache.get(nvb);
+						Iterator tempIterator = tempMap.keySet().iterator();;
+						NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+						
+						List list = (List) tempMap.get(nvb1);
+						NameValueBean nvb2 = (NameValueBean) list.get(0);
+										
+						specimen.setPositionDimensionOne(new Integer(nvb1.getValue()));
+					    specimen.setPositionDimensionTwo(new Integer(nvb2.getValue()));
+					    isContainerFull = false;
+					    break;
+					}
+					
+				}
+			}
+			
+			xPos = specimen.getPositionDimensionOne();
+		    yPos = specimen.getPositionDimensionTwo();
+			}
+
+			if(isContainerFull)
+			{
+				throw new DAOException("The Storage Container you specified is full");
+			}
+			else if (xPos == null || yPos == null || xPos.intValue() < 0 || yPos.intValue() < 0)
+			{
+				throw new DAOException(ApplicationProperties.getValue("errors.item.format", ApplicationProperties
+						.getValue("specimen.positionInStorageContainer")));
+			}
+		}
 		
 	}
 }

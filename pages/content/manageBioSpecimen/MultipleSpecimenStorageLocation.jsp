@@ -31,7 +31,7 @@
 		function submitForm()
 		{
 			var action = '<%=Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_ACTION%>';
-			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION%>' + "&operation=add&menuSelected=15";
+			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION%>' + "&operation=add&menuSelected=15&buttonClicked=submit";
 			document.forms[0].submit();
 		}
 		
@@ -92,7 +92,18 @@
 			pos1FromDropdown.disabled = true;
 			pos2FromDropdown.disabled = true;
 		}
+	
 	}		
+	
+		function mapButtonClickedInMultipleSpecimen(frameUrl,count)
+	{
+	   	var storageContainer = document.getElementById("container_" + count + "_0").value;
+		frameUrl+="&storageContainerName="+storageContainer;
+		//alert(frameUrl);
+		NewWindow(frameUrl,'name','810','320','yes');
+		
+    }
+	
 
 </script>
 </head>
@@ -173,7 +184,13 @@
 	<% 
 		Map specimenMap = null;
 		int counter=1;
+		String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"};
 		String specimenCountKey = "Specimen_Count";
+		String buttonClicked = null;
+		if(request.getParameter("buttonClicked")!=null)
+		{
+		   buttonClicked = "submit";
+		}
 		if(form != null)
 		{
 			specimenMap = form.getSpecimenOnUIMap();
@@ -277,8 +294,29 @@
 		String pos1Style = "pos1_" + newCount + "_1";
 		String pos2Style = "pos2_" + newCount + "_2";
 		String rbKey = "radio_" + newCount ;
-		specimenMap.put(rbKey,"2");
 		
+		if(buttonClicked==null)
+		{
+		specimenMap.put(rbKey,"2");
+		}
+		
+		int radioSelected = Integer.parseInt(specimenMap.get(rbKey).toString());
+		 boolean dropDownDisable = false;
+		 boolean textBoxDisable = false;
+								
+			if(radioSelected == 1)
+			{
+				dropDownDisable = true;
+				textBoxDisable = true;
+			}
+			else if(radioSelected == 2)
+			{									
+				textBoxDisable = true;
+			}
+			else if(radioSelected == 3)
+			{
+				dropDownDisable = true;									
+		    }			
 		
 
 	String[] initValues = new String[3];
@@ -305,7 +343,7 @@
 				+ "&amp;" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 				+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
 
-			String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
+			String buttonOnClicked = "mapButtonClickedInMultipleSpecimen('"+frameUrl+"','"+newCount+"')";
 
 //System.out.println("\n\n--------------\nData Map For NLevelCombo Main Specimen :\n "+dataMap+"\n\n--------------\n");
  %>
@@ -331,8 +369,9 @@
 										labelNames="<%=labelNames%>" 
 										rowNumber="<%=rowNumber%>" 
 										onChange = "<%=onChange%>"
+										tdStyleClassArray="<%=tdStyleClassArray%>"
 										formLabelStyle="formLabelBorderless"
-										disabled="false"
+										disabled = "<%=dropDownDisable%>"
 										noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
 										</tr>
 										</table>
@@ -341,10 +380,10 @@
 							<tr>
 								<td ><html:radio value="3" onclick="onStorageRadioClickInMultipleSpecimen(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
 								<td class="formLabelBorderlessLeft">
-									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled="true"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled="true"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled="true"/>
-									<html:button styleClass="actionButton" styleId = "<%=containerMapStyle%>" property="<%=containerMap%>" onclick="<%=buttonOnClicked%>" disabled="true">
+									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled="true"disabled = "<%=textBoxDisable%>"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled="true"disabled = "<%=textBoxDisable%>"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled="true"disabled = "<%=textBoxDisable%>"/>
+									<html:button styleClass="actionButton" styleId = "<%=containerMapStyle%>" property="<%=containerMap%>" onclick="<%=buttonOnClicked%>" disabled="true"disabled = "<%=textBoxDisable%>">
 										<bean:message key="buttons.map"/>
 									</html:button>
 								</td>
@@ -443,7 +482,28 @@
 		 pos1Style = "pos1_" + newCount + "_1";
 		 pos2Style = "pos2_" + newCount + "_2";
 		 rbKey = "radio_" + newCount ;
-		 specimenMap.put(rbKey,"2");
+		 if(buttonClicked==null)
+		{
+		specimenMap.put(rbKey,"2");
+		}
+		
+		  radioSelected = Integer.parseInt(specimenMap.get(rbKey).toString());
+		  dropDownDisable = false;
+		  textBoxDisable = false;
+								
+			if(radioSelected == 1)
+			{
+				dropDownDisable = true;
+				textBoxDisable = true;
+			}
+			else if(radioSelected == 2)
+			{									
+				textBoxDisable = true;
+			}
+			else if(radioSelected == 3)
+			{
+				dropDownDisable = true;									
+		    }			
 		
 	
 		initValues = new String[3];
@@ -465,8 +525,8 @@
 				+ "&amp;" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+dclassName
 				+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + dcollectionProtocolId;
 			
-				buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
-
+			// buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
+            buttonOnClicked = "mapButtonClickedInMultipleSpecimen('"+frameUrl+"','"+newCount+"')";
 			//System.out.println("\n\n--------------\nData Map For NLevelCombo Derived Specimen :\n "+dataMap+"\n\n--------------\n");
 	 %>
 				<table border="0">
@@ -489,9 +549,10 @@
 										tdStyleClass = "<%=tdStyleClass%>" 
 										labelNames="<%=labelNames%>" 
 										rowNumber="<%=rowNumber%>" 
+										tdStyleClassArray="<%=tdStyleClassArray%>"
 										onChange = "<%=onChange%>"
 										formLabelStyle="formLabelBorderless"
-										disabled="false"
+										disabled = "<%=dropDownDisable%>"
 										noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
 										</tr>
 										</table>
@@ -500,10 +561,10 @@
 							<tr>
 								<td ><html:radio value="3" onclick="onStorageRadioClickInMultipleSpecimen(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
 								<td class="formLabelBorderlessLeft">
-									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled="true"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled="true"/>
-									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled="true"/>
-									<html:button styleClass="actionButton" styleId = "<%=containerMapStyle%>" property="<%=containerMap%>" onclick="<%=buttonOnClicked%>" disabled="true">
+									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled="true"disabled = "<%=textBoxDisable%>"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled="true"disabled = "<%=textBoxDisable%>"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled="true"disabled = "<%=textBoxDisable%>"/>
+									<html:button styleClass="actionButton" styleId = "<%=containerMapStyle%>" property="<%=containerMap%>" onclick="<%=buttonOnClicked%>" disabled="true"disabled = "<%=textBoxDisable%>">
 										<bean:message key="buttons.map"/>
 									</html:button>
 								</td>

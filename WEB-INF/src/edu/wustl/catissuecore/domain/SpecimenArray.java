@@ -199,9 +199,13 @@ public class SpecimenArray extends Container
 	    	}
 	    	else
 	    	{   		
-	    		this.storageContainer.setName(specimenArrayForm.getSelectedContainerName());							
+	    		this.storageContainer.setName(specimenArrayForm.getSelectedContainerName());
+	    		if (specimenArrayForm.getPos1() != null && !specimenArrayForm.getPos1().trim().equals("")
+						&& specimenArrayForm.getPos2() != null && !specimenArrayForm.getPos2().trim().equals(""))
+				{
 				this.positionDimensionOne = new Integer(specimenArrayForm.getPos1());
 				this.positionDimensionTwo = new Integer(specimenArrayForm.getPos2());
+				}
 	    	}
 	    	
 	    	if (createdBy == null) {

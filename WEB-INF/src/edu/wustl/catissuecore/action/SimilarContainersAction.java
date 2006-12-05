@@ -37,6 +37,8 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -51,24 +53,23 @@ public class SimilarContainersAction extends SecureAction
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.SecureAction#executeSecureAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
-		Logger.out.debug("SimilarContainersAction : executeSecureAction() form: type "
-				+ form.getClass());
+		Logger.out.debug("SimilarContainersAction : executeSecureAction() form: type " + form.getClass());
 
 		StorageContainerForm similarContainersForm = (StorageContainerForm) form;
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
-		
+		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+
 		if (similarContainersForm.getSpecimenOrArrayType() == null)
 		{
 			similarContainersForm.setSpecimenOrArrayType("Specimen");
 		}
 		Logger.out.info(" Map:---------------" + similarContainersForm.getSimilarContainersMap());
-		IBizLogic ibizLogic = BizLogicFactory.getInstance()
-				.getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		IBizLogic ibizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 
 		//    	populating collection protocol list.
 		List list1 = ibizLogic.retrieve(CollectionProtocol.class.getName());
@@ -81,8 +82,7 @@ public class SimilarContainersAction extends SecureAction
 		request.setAttribute(Constants.HOLDS_LIST1, storageTypeListWithAny);
 
 		List storagetypeList = new ArrayList();
-		NameValueBean nvb = new NameValueBean(similarContainersForm.getTypeName(), new Long(
-				similarContainersForm.getTypeId()));
+		NameValueBean nvb = new NameValueBean(similarContainersForm.getTypeName(), new Long(similarContainersForm.getTypeId()));
 		storagetypeList.add(nvb);
 		request.setAttribute(Constants.STORAGETYPELIST, storagetypeList);
 
@@ -103,8 +103,8 @@ public class SimilarContainersAction extends SecureAction
 
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
-		List containerTypeList = ibizLogic.retrieve(StorageType.class.getName(),
-				Constants.SYSTEM_IDENTIFIER, new Long(similarContainersForm.getTypeId()));
+		List containerTypeList = ibizLogic.retrieve(StorageType.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(similarContainersForm
+				.getTypeId()));
 		Iterator iter = containerTypeList.iterator();
 		String typeName = "", siteName = "";
 		while (iter.hasNext())
@@ -122,8 +122,7 @@ public class SimilarContainersAction extends SecureAction
 		String valueField1 = "id";
 		if (similarContainersForm.getCheckedButton() == 1)
 		{
-			List siteList = ibizLogic.retrieve(Site.class.getName(), valueField1, new Long(
-					similarContainersForm.getSiteId()));
+			List siteList = ibizLogic.retrieve(Site.class.getName(), valueField1, new Long(similarContainersForm.getSiteId()));
 			if (!siteList.isEmpty())
 			{
 				Site site = (Site) siteList.get(0);
@@ -134,16 +133,55 @@ public class SimilarContainersAction extends SecureAction
 		}
 		else
 		{
-			Logger.out
-					.debug("Long.parseLong(request.getParameter(parentContainerId)......................."
-							+ request.getParameter("parentContainerId"));
-			Logger.out.debug("similarContainerForm.getTypeId()......................."
-					+ similarContainersForm.getTypeId());
+			Logger.out.debug("Long.parseLong(request.getParameter(parentContainerId)......................."
+					+ request.getParameter("parentContainerId"));
+			Logger.out.debug("similarContainerForm.getTypeId()......................." + similarContainersForm.getTypeId());
 			String parentContId = request.getParameter("parentContainerId");
+			
+			
+			if (similarContainersForm.getParentContainerId() == 0)
+			{
+
+				String containerName = similarContainersForm.getSelectedContainerName();
+
+				StorageContainer storageContainerObj = new StorageContainer();
+				String sourceObjectName = StorageContainer.class.getName();
+				String[] selectColumnName = {"id"};
+				String[] whereColumnName = {"name"};
+				String[] whereColumnCondition = {"="};
+				Object[] whereColumnValue = {containerName};
+				String joinCondition = null;
+
+			List containerIdList = bizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
+						joinCondition);
+
+				if (!containerIdList.isEmpty())
+				{
+					similarContainersForm.setParentContainerId(((Long) containerIdList.get(0)).longValue());
+					similarContainersForm.setPositionDimensionOne(Integer.parseInt(similarContainersForm.getPos1()));
+					similarContainersForm.setPositionDimensionTwo(Integer.parseInt(similarContainersForm.getPos2()));
+				}
+				else
+				{
+					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+					if (errors == null || errors.size() == 0)
+					{
+						errors = new ActionErrors();
+						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("storageposition.not.available"));
+						saveErrors(request,errors);
+					}
+					
+				}
+
+			}
+			
+			if(parentContId == null)
+			{
+				parentContId = "" + similarContainersForm.getParentContainerId();
+			}
 			if (parentContId != null)
 			{
-				List containerList = ibizLogic.retrieve(StorageContainer.class.getName(),
-						valueField1, new Long(parentContId));
+				List containerList = ibizLogic.retrieve(StorageContainer.class.getName(), valueField1, new Long(parentContId));
 				if (!containerList.isEmpty())
 				{
 					StorageContainer container = (StorageContainer) containerList.get(0);
@@ -161,16 +199,14 @@ public class SimilarContainersAction extends SecureAction
 		//request.setAttribute("siteId", new Long(siteId));
 
 		String pageOf = request.getParameter(Constants.PAGEOF);
-		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory
-				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		
 
 		// code to set Max(IDENTIFIER) in storage container table 
 		// used for suffixing Unique numbers to auto-generated container name
 		long maxId = bizLogic.getNextContainerNumber();
 		request.setAttribute(Constants.MAX_IDENTIFIER, Long.toString(maxId));
 		request.setAttribute("ContainerNumber", new Long(maxId).toString());
-		List mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
-				.getParameter("typeId")).longValue(),exceedingMaxLimit);
+		List mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(new Long(request.getParameter("typeId")).longValue(), exceedingMaxLimit);
 		TreeMap containerMap = (TreeMap) mapSiteList.get(0);
 		List siteList1 = (List) mapSiteList.get(1);
 		/*Map containerMap1 = bizLogic.getAllocatedContaienrMapForContainer(new Long(request
@@ -183,8 +219,7 @@ public class SimilarContainersAction extends SecureAction
 		{
 
 			int siteOrParentCont = similarContainersForm.getCheckedButton();
-			similarContainersForm.setSimilarContainerMapValue("checkedButton", Integer
-					.toString(siteOrParentCont));
+			similarContainersForm.setSimilarContainerMapValue("checkedButton", Integer.toString(siteOrParentCont));
 
 			if (siteOrParentCont == 2)
 			{
@@ -196,32 +231,28 @@ public class SimilarContainersAction extends SecureAction
 				//request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 				//request.setAttribute("siteForParentList", siteNameList);
 				String[] startingPoints = new String[3];
+				
+
 				startingPoints[0] = Long.toString(similarContainersForm.getParentContainerId());
-				startingPoints[1] = Integer.toString(similarContainersForm
-						.getPositionDimensionOne());
-				startingPoints[2] = Integer.toString(similarContainersForm
-						.getPositionDimensionTwo());
+				startingPoints[1] = Integer.toString(similarContainersForm.getPositionDimensionOne());
+				startingPoints[2] = Integer.toString(similarContainersForm.getPositionDimensionTwo());
+
 				if (similarContainersForm.getParentContainerId() != 0l)
 				{
-					Vector initialValues = getInitalValues(startingPoints, containerMap,
-							noOfContainers);
+					Vector initialValues = getInitalValues(startingPoints, containerMap, noOfContainers);
 					request.setAttribute("initValues", initialValues);
 				}
 
-				if (similarContainersForm.getCheckedButton() == 2
-						&& !(checkAvailability(containerMap, noOfContainers)))
+				if (similarContainersForm.getCheckedButton() == 2 && !(checkAvailability(containerMap, noOfContainers)))
 				{
 					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 					if (errors == null)
 					{
 						errors = new ActionErrors();
 					}
-					System.out.println("errors " + errors + ", ActionErrors.GLOBAL_ERROR "
-							+ ActionErrors.GLOBAL_ERROR
-							+ ", new ActionError(\"errors.storageContainer.overflow\") "
-							+ new ActionError("errors.storageContainer.overflow"));
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-							"errors.storageContainer.overflow"));
+					System.out.println("errors " + errors + ", ActionErrors.GLOBAL_ERROR " + ActionErrors.GLOBAL_ERROR
+							+ ", new ActionError(\"errors.storageContainer.overflow\") " + new ActionError("errors.storageContainer.overflow"));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.storageContainer.overflow"));
 					pageOf = Constants.PAGEOF_STORAGE_CONTAINER;
 					saveErrors(request, errors);
 				}
@@ -233,21 +264,19 @@ public class SimilarContainersAction extends SecureAction
 				//It also solves Bug 2829:System fails to create a default unique storage container name
 				String maxSiteName = siteName;
 				String maxTypeName = typeName;
-				if(siteName.length()>40)
+				if (siteName.length() > 40)
 				{
-					maxSiteName = siteName.substring(0,39);
+					maxSiteName = siteName.substring(0, 39);
 				}
-				if(typeName.length()>40)
+				if (typeName.length() > 40)
 				{
-					maxTypeName = typeName.substring(0,39);
+					maxTypeName = typeName.substring(0, 39);
 				}
-				
-				similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_name",
-						maxSiteName + "_" + maxTypeName + "_" + (maxId + i - 1));
+
+				similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_name", maxSiteName + "_" + maxTypeName + "_" + (maxId + i - 1));
 				if (similarContainersForm.getCheckedButton() == 1)
 				{
-					similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_siteId",
-							new Long(siteId).toString());
+					similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_siteId", new Long(siteId).toString());
 				}
 
 			}
@@ -269,8 +298,7 @@ public class SimilarContainersAction extends SecureAction
 			int i = Integer.parseInt(change);
 			if (similarContainersForm.getCheckedButton() == 1)
 			{
-				String Id = (String) similarContainersForm.getSimilarContainerMapValue("simCont:"
-						+ i + "_siteId");
+				String Id = (String) similarContainersForm.getSimilarContainerMapValue("simCont:" + i + "_siteId");
 				List siteList = ibizLogic.retrieve(Site.class.getName(), valueField1, Id);
 				if (!siteList.isEmpty())
 				{
@@ -281,8 +309,7 @@ public class SimilarContainersAction extends SecureAction
 				}
 			}
 
-			similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_name", siteName
-					+ "_" + typeName + "_" + (maxId + i - 1));
+			similarContainersForm.setSimilarContainerMapValue("simCont:" + i + "_name", siteName + "_" + typeName + "_" + (maxId + i - 1));
 
 		}
 
@@ -298,20 +325,16 @@ public class SimilarContainersAction extends SecureAction
 				 simCont:1_parentContainerId=2
 				 , simCont:1_positionDimensionTwo=3,*/
 				String[] initValues = new String[3];
-				initValues[0] = (String) similarContainersForm
-						.getSimilarContainerMapValue("simCont:" + (i + 1) + "_parentContainerId");
-				initValues[1] = (String) similarContainersForm
-						.getSimilarContainerMapValue("simCont:" + (i + 1) + "_positionDimensionOne");
-				initValues[2] = (String) similarContainersForm
-						.getSimilarContainerMapValue("simCont:" + (i + 1) + "_positionDimensionTwo");
+				initValues[0] = (String) similarContainersForm.getSimilarContainerMapValue("simCont:" + (i + 1) + "_parentContainerId");
+				initValues[1] = (String) similarContainersForm.getSimilarContainerMapValue("simCont:" + (i + 1) + "_positionDimensionOne");
+				initValues[2] = (String) similarContainersForm.getSimilarContainerMapValue("simCont:" + (i + 1) + "_positionDimensionTwo");
 				returner.add(initValues);
 			}
 
 			request.setAttribute("initValues", returner);
 
 		}
-		Logger.out.debug("Similar container map value:"
-				+ similarContainersForm.getSimilarContainersMap());
+		Logger.out.debug("Similar container map value:" + similarContainersForm.getSimilarContainersMap());
 
 		return mapping.findForward(pageOf);
 	}

@@ -1354,7 +1354,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_LABEL = "LABEL";
 	
 	//Constants required for max limit on no. of containers in the drop down
-	public static final int CONTAINERS_MAX_LIMIT = 200;
+	public static final String CONTAINERS_MAX_LIMIT = "containers_max_limit";
 	public static final String EXCEEDS_MAX_LIMIT = "exceedsMaxLimit";
 	
 	//MultipleSpecimen Constants
@@ -1381,6 +1381,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	 * Specify the SPECIMEN_MAP_KEY field ) used in multiple specimen applet action.  
 	 */
 	public static final String CONTAINER_MAP_KEY = "container_map_key";
+	
+	/**
+	 * Used to saperate storage container, xPos, yPos
+	 */
+	public static final String STORAGE_LOCATION_SAPERATOR = "@";
 	
 	
 }

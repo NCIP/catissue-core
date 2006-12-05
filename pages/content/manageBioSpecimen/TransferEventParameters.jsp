@@ -16,6 +16,17 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <!-- Mandar 21-Aug-06 : calendar changes end -->
+<script language="JavaScript">
+		
+			function mapButtonClickedOnSpecimen(frameUrl)
+	{
+	   	var storageContainer = document.getElementById('selectedContainerName').value;
+		frameUrl+="&storageContainerName="+storageContainer;
+		window.open(frameUrl,'','scrollbars=yes,menubar=no,height=320,width=810,resizable=yes,toolbar=no,location=no,status=no');
+		
+    }
+	</script>
+</head>
 
 <%
 		TransferEventParametersForm form = (TransferEventParametersForm)request.getAttribute("transferEventParametersForm");
@@ -265,6 +276,7 @@ if(currentEventParametersDate.trim().length() > 0)
 				String[] labelNames = {"ID","Pos1","Pos2"};
 				labelNames = Constants.STORAGE_CONTAINER_LABEL;
 				String[] attrNames = { "storageContainer", "positionDimensionOne", "positionDimensionTwo"};
+				String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"};
 				String[] initValues = new String[3];
 				List initValuesList = (List)request.getAttribute("initValues");
 				if(initValuesList != null)
@@ -290,8 +302,10 @@ if(currentEventParametersDate.trim().length() > 0)
 
 				String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
 						+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
-						+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;				
-				String buttonOnClicked  = "javascript:NewWindow('"+url+"','name','810','320','yes');return false";
+						+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;		
+
+                String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"')";						
+				// String buttonOnClicked  = "javascript:NewWindow('"+url+"','name','810','320','yes');return false";
 				String noOfEmptyCombos = "3";
 				
 				int radioSelected = form.getStContSelection();
@@ -329,6 +343,7 @@ if(currentEventParametersDate.trim().length() > 0)
 								rowNumber="<%=rowNumber%>" 
 								onChange = "<%=onChange%>"
 								disabled = "<%=dropDownDisable%>"
+								tdStyleClassArray="<%=tdStyleClassArray%>"
 								formLabelStyle="formLabelBorderless"							
 								noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
 								</tr>
@@ -338,7 +353,7 @@ if(currentEventParametersDate.trim().length() > 0)
 					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
 					<tr>
 						<td ><html:radio value="2" onclick="onRadioButtonGroupClickForTransfer(this)" styleId="stContSelection" property="stContSelection"/></td>
-						<td class="formLabelBorderless">
+						<td class="formLabelBorderlessLeft">
 							<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
 							<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
 							<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>

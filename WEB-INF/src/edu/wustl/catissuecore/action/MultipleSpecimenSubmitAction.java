@@ -256,7 +256,7 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 			}
 			String posDim1 = (String) specimenOnUIMap.get("Specimen:" + specimenCounter + "_positionDimensionOne" + "_fromMap");
 			String posDim2 = (String) specimenOnUIMap.get("Specimen:" + specimenCounter + "_positionDimensionTwo" + "_fromMap");
-			
+			specimen.setStorageContainer(new StorageContainer());
 			specimen.getStorageContainer().setId(containerId);
 			specimen.setPositionDimensionOne(new Integer(posDim1));
 			specimen.setPositionDimensionTwo(new Integer(posDim2));

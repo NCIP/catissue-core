@@ -53,6 +53,7 @@ import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.tree.TreeNode;
 import edu.wustl.common.tree.TreeNodeImpl;
 import edu.wustl.common.util.Permissions;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -65,7 +66,10 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDataInterface
 {
-
+	
+	
+    // Getting containersMaxLimit from the xml file in static variable
+	private static final int containersMaxLimit = Integer.parseInt(XMLPropertyHandler.getValue(Constants.CONTAINERS_MAX_LIMIT));
 	/**
 	 * Saves the storageContainer object in the database.
 	 * @param obj The storageType object to be saved.
@@ -1976,6 +1980,29 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		if (container.getParent() != null)
 		{
+			
+			if(container.getParent().getId() == null)
+			{
+			String sourceObjectName = StorageContainer.class.getName();
+			String[] selectColumnName = {"id"};
+			String[] whereColumnName = {"name"};
+			String[] whereColumnCondition = {"="};
+			Object[] whereColumnValue = {container.getParent().getName()};
+			String joinCondition = null;
+
+			List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+			if (!list.isEmpty())
+			{
+				container.getParent().setId((Long) list.get(0));
+			}
+			else
+			{
+				String message1 = ApplicationProperties.getValue("specimen.storageContainer");
+				throw new DAOException(ApplicationProperties.getValue("errors.invalid", message1));
+			}
+			}
+			
 			//VALIDATIONS FOR DIMENSION 1.
 			if (validator.isEmpty(String.valueOf(container.getPositionDimensionOne())))
 			{
@@ -2340,7 +2367,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					{
 						Map positionMap1 = deepCopyMap(positionMap);
 						//NameValueBean nvb = new NameValueBean(Name, Id);
-						if (i > Constants.CONTAINERS_MAX_LIMIT)
+						if (i > containersMaxLimit)
 						{
 							exceedingMaxLimit = "true";
 							break;
@@ -2430,7 +2457,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
-					if (i > Constants.CONTAINERS_MAX_LIMIT)
+					if (i > containersMaxLimit)
 					{
 						Logger.out.debug("CONTAINERS_MAX_LIMIT reached");
 						exceedingMaxLimit = new String("true");
@@ -2529,7 +2556,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					// deep copy is required due to cache updation by reference
 					Map positionMap1 = deepCopyMap(positionMap);
 					//NameValueBean nvb = new NameValueBean(Name, Id);
-					if (i > Constants.CONTAINERS_MAX_LIMIT)
+					if (i > containersMaxLimit)
 					{
 						exceedingMaxLimit = "true";
 						break;

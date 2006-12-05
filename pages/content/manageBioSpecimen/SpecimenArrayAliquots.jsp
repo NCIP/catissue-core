@@ -17,7 +17,7 @@
 <head>
 	<script src="jss/Hashtable.js" type="text/javascript"></script>
 	<script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
-	
+	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 	<script language="JavaScript">
 		function onSubmit()
 		{
@@ -46,7 +46,63 @@
 			document.forms[0].submittedFor.value = "ForwardTo";
 			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=20&buttonClicked=create";
 		    document.forms[0].submit();
-		}		
+		}
+
+function onStorageRadioClickInArray(element)
+	{		
+		var index1 =  element.name.lastIndexOf('_');
+		var index2 =  element.name.lastIndexOf(')');
+		//rowNumber of the element
+		var i = (element.name).substring(index1+1,index2);
+		//alert("inside the javascript"+i);
+		var st1 = "container_" + i + "_0";
+		var pos1 = "pos1_" + i + "_1";
+		var pos2 = "pos2_" + i + "_2";
+		var st2="customListBox_" + i + "_0";
+		var pos11="customListBox_" + i + "_1";
+		var pos12="customListBox_" + i + "_2";
+		var mapButton="mapButton_" + i ;
+		var stContainerNameFromMap = document.getElementById(st1);
+		var pos1FromMap = document.getElementById(pos1);
+		var pos2FromMap = document.getElementById(pos2);    		    		
+		var stContainerNameFromDropdown = document.getElementById(st2);
+		var pos1FromDropdown = document.getElementById(pos11);
+		var pos2FromDropdown = document.getElementById(pos12);    		    		
+		var containerMapButton =  document.getElementById(mapButton);
+
+		 if(element.value == 1)
+		{
+			stContainerNameFromMap.disabled = true;
+			pos1FromMap.disabled = true;
+			pos2FromMap.disabled = true;
+
+			containerMapButton.disabled = true;
+			stContainerNameFromDropdown.disabled = false;
+			pos1FromDropdown.disabled = false;
+			pos2FromDropdown.disabled = false;
+
+		}
+		else
+		{
+			stContainerNameFromMap.disabled = false;
+			pos1FromMap.disabled = false;
+			pos2FromMap.disabled = false;
+
+			containerMapButton.disabled = false;
+			stContainerNameFromDropdown.disabled = true;
+			pos1FromDropdown.disabled = true;
+			pos2FromDropdown.disabled = true;
+		}
+	}
+
+function mapButtonClickedInAliquot(frameUrl,count)
+	{
+	   	var storageContainer = document.getElementById("container_" + count + "_0").value;
+		frameUrl+="&storageContainerName="+storageContainer;
+		//alert(frameUrl);
+		NewWindow(frameUrl,'name','810','320','yes');
+		
+    }	
 		
 	</script>
 </head>
@@ -256,6 +312,7 @@
 						
 						//Preparing data for custom tag
 						String[] attrNames = {containerKey, pos1Key, pos2Key};
+						String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"}; 
 
 						String[] initValues = new String[3];
 						initValues[0] = (String)aliquotMap.get("SpecimenArray:" + i + "_StorageContainer_id");
@@ -271,8 +328,52 @@
 						String containerStyleId = "customListBox_" + rowNumber + "_0";
 						String pos1StyleId = "customListBox_" + rowNumber + "_1";
 						String pos2StyleId = "customListBox_" + rowNumber + "_2";
-
-						String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimenArray&amp;containerStyleId=" + containerStyleId + "&amp;xDimStyleId=" + pos1StyleId + "&amp;yDimStyleId=" + pos2StyleId + "','name','810','320','yes');return false";
+						
+							//Keys for container if selected from Map
+							String containerMap = "value(mapButton_" + i + ")";
+		                    String containerMapStyle = "mapButton_" + i ;
+							String containerIdFromMapKey = "value(SpecimenArray:" + i + "_StorageContainer_id_fromMap)";
+							String containerNameFromMapKey = "value(SpecimenArray:" + i + "_StorageContainer_name_fromMap)";
+							String pos1FromMapKey = "value(SpecimenArray:" + i + "_positionDimensionOne_fromMap)";
+							String pos2FromMapKey = "value(SpecimenArray:" + i + "_positionDimensionTwo_fromMap)";
+							String stContSelection = "value(radio_" + i + ")";
+							String containerStyle = "container_" + i + "_0";
+							String containerIdStyle = "containerId_" + i + "_0";
+							String pos1Style = "pos1_" + i + "_1";
+							String pos2Style = "pos2_" + i + "_2";
+							String rbKey = "radio_" + i ;
+						   
+						   if(aliquotMap.get(rbKey)==null)
+						   {
+            			    aliquotMap.put(rbKey,"1");
+						   }
+						   
+					 	int radioSelected = Integer.parseInt(aliquotMap.get(rbKey).toString());
+					    boolean dropDownDisable = false;
+					    boolean textBoxDisable = false;
+											
+						if(radioSelected == 1)
+						{									
+							textBoxDisable = true;
+						}
+						else if(radioSelected == 2)
+						{
+							dropDownDisable = true;									
+						}		
+						   
+						   
+						   
+							String arrayTypeId = "" + request.getAttribute(Constants.STORAGE_TYPE_ID);
+				         
+						 String frameUrl = "ShowFramedPage.do?pageOf=pageOfAliquot&amp;containerStyleId=" + containerIdStyle + "&amp;xDimStyleId=" + pos1Style + "&amp;yDimStyleId=" + pos2Style
+			            + "&amp;containerStyle=" + containerStyle 						
+			            + "&amp;" + Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE+"="+arrayTypeId;
+			           /* + "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId ;*/
+						
+		    	System.out.println("frameUrl:"+frameUrl);				
+	     	  String buttonOnClicked = "mapButtonClickedInAliquot('"+frameUrl+"','"+i+"')";		
+				
+  	     	//	String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimenArray&amp;containerStyleId=" + containerIdStyle + "&amp;xDimStyleId=" + pos1Style + "&amp;containerStyle=" + containerStyle + "&amp;yDimStyleId=" + pos2Style + "','name','810','320','yes');return false";
 				%>
 				<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 					<tr>
@@ -286,21 +387,45 @@
 							<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcodes" property="<%=barKey%>" disabled="false"/>
 						</td>
 						<td class="formField" nowrap>
+						
+						
+						<table border="0">
+						
 							
-							<ncombo:containermap dataMap="<%=dataMap%>" 
-												 attributeNames="<%=attrNames%>" 
-												 initialValues="<%=initValues%>"  
-												 styleClass = "<%=styClass%>" 
-												 tdStyleClass = "<%=tdStyleClass%>" 
-												 labelNames="<%=labelNames%>" 
-												 rowNumber="<%=rowNumber%>" 
-												 onChange = "<%=onChange%>"
-												 noOfEmptyCombos = "<%=noOfEmptyCombos%>"
-												 buttonName="mapButton" 
-												 value="Map"
-												 buttonOnClick = "<%=buttonOnClicked%>"
-												 formLabelStyle="formLabelBorderless"
-												 buttonStyleClass="actionButton" />
+								<tr>
+								<td ><html:radio value="1" onclick="onStorageRadioClickInArray(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
+								<html:hidden styleId="<%=containerIdStyle%>" property="<%=containerIdFromMapKey%>"/>
+								<td>
+									<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
+										attributeNames="<%=attrNames%>" 
+										initialValues="<%=initValues%>"  
+										styleClass = "<%=styClass%>" 
+										tdStyleClass = "<%=tdStyleClass%>" 
+										tdStyleClassArray="<%=tdStyleClassArray%>"
+										labelNames="<%=labelNames%>" 
+										rowNumber="<%=rowNumber%>" 
+										onChange = "<%=onChange%>"
+										formLabelStyle="formLabelBorderless"
+										disabled = "<%=dropDownDisable%>"
+										noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
+								    	</tr>
+										</table>
+								</td>
+							</tr>
+							<tr>
+								<td ><html:radio value="2" onclick="onStorageRadioClickInArray(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
+								<td class="formLabelBorderlessLeft">
+									<html:text styleClass="formFieldSized10"  size="30" styleId="<%=containerStyle%>" property="<%=containerNameFromMapKey%>" disabled = "<%=textBoxDisable%>"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos1Style%>" property="<%=pos1FromMapKey%>" disabled = "<%=textBoxDisable%>"/>
+									<html:text styleClass="formFieldSized3"  size="5" styleId="<%=pos2Style%>" property="<%=pos2FromMapKey%>" disabled = "<%=textBoxDisable%>"/>
+									<html:button styleClass="actionButton" styleId = "<%=containerMapStyle%>" property="<%=containerMap%>" onclick="<%=buttonOnClicked%>" disabled = "<%=textBoxDisable%>">
+										<bean:message key="buttons.map"/>
+									</html:button>
+								</td>
+							</tr>
+						</table>
+							
+							
 						</td>
 						
 					</tr>

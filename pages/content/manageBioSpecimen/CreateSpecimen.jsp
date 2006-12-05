@@ -236,6 +236,16 @@
 			
 			}
 		}
+		
+			function mapButtonClickedOnSpecimen(frameUrl)
+	{
+	   	var storageContainer = document.getElementById('selectedContainerName').value;
+		frameUrl+="&storageContainerName="+storageContainer;
+		//alert(frameUrl);
+		window.open(frameUrl,'','scrollbars=yes,menubar=no,height=320,width=810,resizable=yes,toolbar=no,location=no,status=no');
+		//NewWindow(frameUrl,'name','810','320','yes');
+		
+    }
 	</script>
 </head>
 
@@ -270,7 +280,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 	<html:errors />
    <html:form action="<%=action%>">
    
-   <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
+   <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="580">
 <tr>
 	<td>		
 		&nbsp;
@@ -279,7 +289,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 
 <tr>
  <td>
-    <table summary="" cellpadding="3" cellspacing="0" border="0" width="550" >
+    <table summary="" cellpadding="3" cellspacing="0" border="0" width="580" >
 
 <%
 	if(dataList!=null && dataList.size() != 0)
@@ -304,7 +314,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		
    	 	<tr>
 			<td>
-				<div STYLE="overflow: auto; width:550; height: 200; padding:0px; margin: 0px; border: 4px solid" id="eventGrid">
+				<div STYLE="overflow: auto; width:580; height: 200; padding:0px; margin: 0px; border: 4px solid" id="eventGrid">
 				<script>
 				
 					//	create ActiveWidgets Grid javascript object.
@@ -387,7 +397,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 	{
 	%>
 
-		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="550">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="580">
 		   
 		   <logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 		   	<tr>
@@ -424,7 +434,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			  <!-- NEW SPECIMEN REGISTRATION BEGINS-->
 	    	  <tr>
 			    <td>
-			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="550">
+			 	 <table summary="" cellpadding="3" cellspacing="0" border="0" width="580">
 				 <tr>
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
@@ -478,7 +488,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					<td class="formField" colspan="2">
 						
 					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
-				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" onblur="resetVirtualLocated()"/>
+				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" onblur="isLabelBarcodeOrClassChange()"/>
 			        </logic:equal>
 			
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
@@ -505,7 +515,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 			        </logic:equal>
 			
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
-				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" onblur="resetVirtualLocated()"/>
+				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" onblur="isLabelBarcodeOrClassChange()"/>
 			        </logic:equal>
 										
 		        	</td>
@@ -536,7 +546,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				    <td class="formField" colspan="2">
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onTypeChange(this);resetVirtualLocated()">
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onTypeChange(this);isLabelBarcodeOrClassChange()">
 							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 		        	</td>
@@ -650,6 +660,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					//initValues[2] = form.getPositionDimensionTwo();
 						String[] initValues = new String[3];
 							List initValuesList = (List)request.getAttribute("initValues");
+							String[] tdStyleClassArray = { "formFieldSized15", "customFormField", "customFormField"};
 							if(initValuesList != null)
 							{
 								initValues = (String[])initValuesList.get(0);
@@ -671,8 +682,9 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 					String url = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId"
 						+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 						+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;				
-				    String buttonOnClicked  = "window.open('"+url+"','','scrollbars=yes,menubar=no,height=320,width=810,resizable=yes,toolbar=no,location=no,status=no');return false";
-    				String noOfEmptyCombos = "3";
+				  //  String buttonOnClicked  = "window.open('"+url+"','','scrollbars=yes,menubar=no,height=320,width=810,resizable=yes,toolbar=no,location=no,status=no');return false";
+    				String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"')";  
+					String noOfEmptyCombos = "3";
 					boolean disabled = false;
 					if(request.getAttribute("disabled") != null && request.getAttribute("disabled").equals("true"))
 					{
@@ -725,6 +737,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 									rowNumber="<%=rowNumber%>" 
 									onChange = "<%=onChange%>"
 									formLabelStyle="formLabelBorderless"
+									tdStyleClassArray="<%=tdStyleClassArray%>"
 									disabled = "<%=dropDownDisable%>"
 									noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
 									</tr>
@@ -733,7 +746,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 						</tr>
 						<tr>
 							<td ><html:radio value="3" onclick="onRadioButtonGroupClickForDerived(this)" styleId="stContSelection" property="stContSelection"/></td>
-							<td class="formLabelBorderless">
+							<td class="formLabelBorderlessLeft">
 								<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
 								<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
 								<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>

@@ -499,9 +499,9 @@ function deleteBioHazards()
     		//alert("inside method of radio button click");
 			if(element.value == 1)
 			{
-				/*document.forms[0].selectedContainerName.disabled = true;
+				document.forms[0].selectedContainerName.disabled = true;
 				document.forms[0].pos1.disabled = true;
-				document.forms[0].pos2.disabled = true;*/
+				document.forms[0].pos2.disabled = true;
 				document.forms[0].containerMap.disabled = true;
 				document.forms[0].customListBox_1_0.disabled = false;
 				document.forms[0].customListBox_1_1.disabled = false;
@@ -509,9 +509,9 @@ function deleteBioHazards()
 			}
 			else
 			{
-				/*document.forms[0].selectedContainerName.disabled = false;
+				document.forms[0].selectedContainerName.disabled = false;
 				document.forms[0].pos1.disabled = false;
-				document.forms[0].pos2.disabled = false;*/
+				document.forms[0].pos2.disabled = false;
 				document.forms[0].containerMap.disabled = false;
 				document.forms[0].customListBox_1_0.disabled = true;
 				document.forms[0].customListBox_1_1.disabled = true;
@@ -638,7 +638,7 @@ function onRadioButtonGroupClick(element)
 				
 				//document.forms[0].virtuallyLocated.value = false;
 				
-				onCollOrClassChange();
+				//onCollOrClassChange();
 
 			}
 			else
@@ -653,7 +653,7 @@ function onRadioButtonGroupClick(element)
 				document.forms[0].customListBox_1_2.disabled = true;
 				
 				//document.forms[0].virtuallyLocated.value = ;
-				onCollOrClassChange();
+				//onCollOrClassChange();
 			}
     	}
 		
@@ -718,7 +718,7 @@ function onRadioButtonGroupClick(element)
 				document.forms[0].customListBox_1_1.disabled = false;
 				document.forms[0].customListBox_1_2.disabled = false;
 				
-				isLabelBarcodeOrClassChange();
+			//	isLabelBarcodeOrClassChange();
 				//document.forms[0].virtuallyLocated.value = false;
 		
 			}
@@ -733,7 +733,7 @@ function onRadioButtonGroupClick(element)
 				document.forms[0].customListBox_1_1.disabled = true;
 				document.forms[0].customListBox_1_2.disabled = true;
 				
-				isLabelBarcodeOrClassChange();				
+				// isLabelBarcodeOrClassChange();				
 				//document.forms[0].virtuallyLocated.value = ;
 				
 			}
