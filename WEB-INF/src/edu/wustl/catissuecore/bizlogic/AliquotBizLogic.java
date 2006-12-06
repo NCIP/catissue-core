@@ -458,9 +458,9 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 
 				String virtuallyLocatedKey = specimenKey + i + "_virtuallyLocated";
 				String virtuallyLocated = (String) aliquotMap.get(virtuallyLocatedKey);
-				if (virtuallyLocated == null)
+				String contId = (String) aliquotMap.get(containerIdKey);
+				if (contId != null)
 				{
-					String contId = (String) aliquotMap.get(containerIdKey);
 					String contName = (String) aliquotMap.get(storageContainerNameKey);
 					String posOne = (String) aliquotMap.get(posDim1Key);
 					String posTwo = (String) aliquotMap.get(posDim2Key);
@@ -478,7 +478,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		}
 		catch (Exception e)
 		{
-
+			  System.out.println("In Catch");
 		}
 
 	}
