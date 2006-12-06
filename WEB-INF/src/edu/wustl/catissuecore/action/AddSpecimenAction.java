@@ -16,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -25,6 +24,7 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -32,13 +32,13 @@ import edu.wustl.common.util.dbManager.DAOException;
  * AddSpecimenAction gets the Specimen Id from Label or Barcode
  * @author santosh_chandak
  */
-public class AddSpecimenAction extends Action
+public class AddSpecimenAction extends SecureAction
 {
 
 	/**
 	 * Overrides the execute method of Action class.
 	 */
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException, DAOException
 	{
 
