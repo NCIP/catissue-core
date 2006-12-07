@@ -235,7 +235,7 @@ public class SpecimenArrayForm extends ContainerForm
 			+ this.positionDimensionTwo + ")";
         }
         
-        this.setStContSelection(1);
+        // this.setStContSelection(1);
     	this.specimenClass = specimenArray.getSpecimenArrayType().getSpecimenClass();
     	this.specimenTypes = SpecimenArrayUtil.getSpecimenTypesFromCollection(specimenArray.getSpecimenArrayType().getSpecimenTypeCollection());
     	//this.specArrayContentCollection = SpecimenArrayUtil.getSpecimenGridContentCollection(specimenArray.getSpecimenArrayContentCollection());
@@ -433,7 +433,10 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public void setPos1(String pos1)
 	{
+		if(pos1!=null && !pos1.trim().equals(""))
+		{
 		this.pos1 = pos1;
+		}
 	}
 	/**
 	 * @return Returns the pos2.
@@ -447,7 +450,11 @@ public class SpecimenArrayForm extends ContainerForm
 	 */
 	public void setPos2(String pos2)
 	{
-		this.pos2 = pos2;
+		if(pos2!=null && !pos2.trim().equals(""))
+		{
+			this.pos2 = pos2;
+		}
+		
 	}
 	/**
 	 * @return Returns the selectedContainerName.

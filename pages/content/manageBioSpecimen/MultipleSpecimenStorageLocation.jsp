@@ -295,9 +295,9 @@
 		String pos2Style = "pos2_" + newCount + "_2";
 		String rbKey = "radio_" + newCount ;
 		
-		if(buttonClicked==null)
+		if(specimenMap.get(rbKey)==null)
 		{
-		specimenMap.put(rbKey,"2");
+		  specimenMap.put(rbKey,"2");
 		}
 		
 		int radioSelected = Integer.parseInt(specimenMap.get(rbKey).toString());

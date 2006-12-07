@@ -478,7 +478,7 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 		String pos1Style = "pos1_" + i + "_1";
 		String pos2Style = "pos2_" + i + "_2";
 		String rbKey = "radio_" + i ;
-		if(!form.getButtonClicked().equals("none"))
+		if(aliquotMap.get(rbKey)==null)
 		{
 		   aliquotMap.put(rbKey,"2");
 	    }
@@ -486,7 +486,8 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 		 int radioSelected = Integer.parseInt(aliquotMap.get(rbKey).toString());
 		 boolean dropDownDisable = false;
 		 boolean textBoxDisable = false;
-								
+		
+        System.out.println(radioSelected);		
 			if(radioSelected == 1)
 			{
 				dropDownDisable = true;

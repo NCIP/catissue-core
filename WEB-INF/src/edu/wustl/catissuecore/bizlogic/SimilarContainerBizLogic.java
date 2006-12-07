@@ -16,12 +16,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+
+import net.sf.ehcache.CacheException;
 
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.SecurityManager;
@@ -298,10 +302,10 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 
 		}
 		
-	/*	for (int i = 0; i < positionsToBeAllocatedList.size(); i++)
+		for (int i = 0; i < positionsToBeAllocatedList.size(); i++)
 		{
-			allocatePositionToSingleSpecimen(positionsToBeAllocatedList.get(i), similarContainerMap, usedPositionsList);
-		} */
+			allocatePositionToSingleContainer(positionsToBeAllocatedList.get(i), similarContainerMap, usedPositionsList);
+		} 
 
 		
 		
@@ -334,6 +338,87 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 *  This method allocates available position to single specimen
+	 * @param object
+	 * @param aliquotMap
+	 * @param usedPositionsList
+	 * @throws DAOException
+	 */
+	private void allocatePositionToSingleContainer(Object object, Map aliquotMap, List usedPositionsList) throws DAOException
+	{
+		int specimenNumber = ((Integer) object).intValue();
+		String specimenKey = "simCont:";
+		List positionsToBeAllocatedList = new ArrayList();
+		String containerNameKey = specimenKey + specimenNumber + "_StorageContainer_name";
+		String containerIdKey = specimenKey + specimenNumber + "_parentContainerId";
+		String posDim1Key = specimenKey + specimenNumber + "_positionDimensionOne";
+		String posDim2Key = specimenKey + specimenNumber + "_positionDimensionTwo";
+		String containerName = (String) aliquotMap.get(containerNameKey + "_fromMap");
+
+		boolean isContainerFull = false;
+		Map containerMapFromCache = null;
+		try
+		{
+			containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+		}
+		catch (CacheException e)
+		{
+			e.printStackTrace();
+		}
+
+		if (containerMapFromCache != null)
+		{
+			Iterator itr = containerMapFromCache.keySet().iterator();
+			while (itr.hasNext())
+			{
+				NameValueBean nvb = (NameValueBean) itr.next();
+				String containerNameFromCacheName = nvb.getName().toString();
+			
+				// TODO
+				if (containerNameFromCacheName.equals(containerName))
+				{
+					String containerId = nvb.getValue();
+					Map tempMap = (Map) containerMapFromCache.get(nvb);
+					Iterator tempIterator = tempMap.keySet().iterator();
+
+					while (tempIterator.hasNext())
+					{
+						NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+						List yPosList = (List) tempMap.get(nvb1);
+						for (int i = 0; i < yPosList.size(); i++)
+						{
+							NameValueBean nvb2 = (NameValueBean) yPosList.get(i);
+							String availaleStoragePosition = containerId + Constants.STORAGE_LOCATION_SAPERATOR + nvb1.getValue()
+									+ Constants.STORAGE_LOCATION_SAPERATOR + nvb2.getValue();
+							int j = 0;
+							
+							for (; j < usedPositionsList.size(); j++)
+							{
+								if (usedPositionsList.get(j).toString().equals(availaleStoragePosition))
+									break;
+							}
+							if (j==usedPositionsList.size())
+							{
+			            		 usedPositionsList.add(availaleStoragePosition);
+								 aliquotMap.put(containerIdKey,containerId);
+								 aliquotMap.put(posDim1Key, nvb1.getValue());
+								 aliquotMap.put(posDim2Key, nvb2.getValue());
+								 aliquotMap.remove(containerIdKey+"_fromMap");
+								 aliquotMap.remove(posDim1Key+"_fromMap");
+								 aliquotMap.remove(posDim2Key+"_fromMap");
+                                 return;
+							}
+
+						}
+					}
+				}
+			}
+		}
+		
+		throw new DAOException("The container you specified does not have enough space to allocate storage position for Aliquot Number " + specimenNumber);
 	}
 
 }

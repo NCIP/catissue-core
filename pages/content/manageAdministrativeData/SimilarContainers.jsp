@@ -741,12 +741,14 @@
 									
 									
 								
-										<td class="formField" nowrap>
+										<td nowrap>
 										<logic:equal name="storageContainerForm" property="checkedButton" value="2">	
-										<html:hidden styleId="<%=containerIdStyle%>" property="<%=containerIdFromMapKey%>"/>
+										
+										
 					    	  <table border="0">
 								<tr>
 								<td ><html:radio value="1" onclick="onStorageRadioClickInAliquot(this)" styleId="<%=stContSelection%>" property="<%=stContSelection%>"/></td>
+								<html:hidden styleId="<%=containerIdStyle%>" property="<%=containerIdFromMapKey%>"/>
 								<td>
 									<ncombo:nlevelcombo dataMap="<%=dataMap%>" 
 										attributeNames="<%=attrNames%>" 
