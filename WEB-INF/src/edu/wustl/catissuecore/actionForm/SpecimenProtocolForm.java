@@ -396,7 +396,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		values.put(key[5] , Utility.toString(requirement.getQuantity().getValue()));
 		values.put(key[6] , Utility.toString(requirement.getId()));
 		
-		if(requirement.getSpecimenClass().equals(Constants.TISSUE))
+		if(requirement.getSpecimenClass().equals(Constants.TISSUE) && requirement.getQuantity().getValue() != null)
 		{
 			String tissueType = requirement.getSpecimenType();
 			if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || 
