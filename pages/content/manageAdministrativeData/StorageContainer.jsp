@@ -438,14 +438,14 @@ function insRow(subdivtag)
 
 function validate(action,formField)
 {
-	if(document.forms[0].checkedButton[1].checked==true)
+	/*if(document.forms[0].checkedButton[1].checked==true)
 	{
 		if(document.forms[0].customListBox_1_0.value == -1 || document.forms[0].customListBox_1_1.value == -1 || document.forms[0].customListBox_1_2.value == -1)
 		{
 			alert("Please enter valid Parent Container");
 			return false;
 		}
-	}
+	}*/
 	
 	if(validateAny(document.forms[0].collectionIds)==false)
 	{

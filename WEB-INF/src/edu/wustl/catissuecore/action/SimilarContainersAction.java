@@ -37,7 +37,6 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
@@ -85,6 +84,7 @@ public class SimilarContainersAction extends SecureAction
 		NameValueBean nvb = new NameValueBean(similarContainersForm.getTypeName(), new Long(similarContainersForm.getTypeId()));
 		storagetypeList.add(nvb);
 		request.setAttribute(Constants.STORAGETYPELIST, storagetypeList);
+		String pageOf = request.getParameter(Constants.PAGEOF);
 
 		//		Populating the Site Array
 		String[] siteDisplayField = {"name"};
@@ -137,8 +137,7 @@ public class SimilarContainersAction extends SecureAction
 					+ request.getParameter("parentContainerId"));
 			Logger.out.debug("similarContainerForm.getTypeId()......................." + similarContainersForm.getTypeId());
 			String parentContId = request.getParameter("parentContainerId");
-			
-			
+
 			if (similarContainersForm.getParentContainerId() == 0)
 			{
 
@@ -152,7 +151,7 @@ public class SimilarContainersAction extends SecureAction
 				Object[] whereColumnValue = {containerName};
 				String joinCondition = null;
 
-			List containerIdList = bizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
+				List containerIdList = bizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue,
 						joinCondition);
 
 				if (!containerIdList.isEmpty())
@@ -167,15 +166,17 @@ public class SimilarContainersAction extends SecureAction
 					if (errors == null || errors.size() == 0)
 					{
 						errors = new ActionErrors();
-						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("storageposition.not.available"));
-						saveErrors(request,errors);
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
+								.getValue("storageContainer.parentContainer")));
+						saveErrors(request, errors);
+						return (mapping.findForward(Constants.PAGEOF_STORAGE_CONTAINER));
 					}
-					
+
 				}
 
 			}
-			
-			if(parentContId == null)
+
+			if (parentContId == null)
 			{
 				parentContId = "" + similarContainersForm.getParentContainerId();
 			}
@@ -197,9 +198,6 @@ public class SimilarContainersAction extends SecureAction
 		similarContainersForm.setSiteId(siteId);
 		//request.setAttribute("siteName", siteName);
 		//request.setAttribute("siteId", new Long(siteId));
-
-		String pageOf = request.getParameter(Constants.PAGEOF);
-		
 
 		// code to set Max(IDENTIFIER) in storage container table 
 		// used for suffixing Unique numbers to auto-generated container name
@@ -231,7 +229,6 @@ public class SimilarContainersAction extends SecureAction
 				//request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 				//request.setAttribute("siteForParentList", siteNameList);
 				String[] startingPoints = new String[3];
-				
 
 				startingPoints[0] = Long.toString(similarContainersForm.getParentContainerId());
 				startingPoints[1] = Integer.toString(similarContainersForm.getPositionDimensionOne());
