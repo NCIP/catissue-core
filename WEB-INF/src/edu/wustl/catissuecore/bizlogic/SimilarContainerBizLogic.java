@@ -247,7 +247,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 			String posDim1 = null;
 			String posDim2 = null;
 			//get the container values based on user selection from dropdown or map
-			if (similarContainerMap.get(radioButonKey).equals("1"))
+			if (similarContainerMap.get(radioButonKey)!=null && similarContainerMap.get(radioButonKey).equals("1"))
 			{
 				containerId = (String) similarContainerMap.get(containerIdKey);
 				posDim1 = (String) similarContainerMap.get(posDim1Key);
@@ -255,7 +255,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 				usedPositionsList.add(containerId + Constants.STORAGE_LOCATION_SAPERATOR + posDim1 + Constants.STORAGE_LOCATION_SAPERATOR + posDim2);
 
 			}
-			else if (similarContainerMap.get(radioButonKey).equals("2"))
+			else if (similarContainerMap.get(radioButonKey)!=null && similarContainerMap.get(radioButonKey).equals("2"))
 			{
 				containerName = (String) similarContainerMap.get(containerNameKey + "_fromMap");
 
