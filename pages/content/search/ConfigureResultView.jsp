@@ -19,6 +19,7 @@
     String selectedColumns[] = null;
     String [] columnNames=null;
 
+
     if(pageOf.equals(Constants.PAGEOF_SIMPLE_QUERY_INTERFACE))
 	{
 		callAction=Constants.SIMPLE_SEARCH_AFTER_CONFIGURE_ACTION+"?pageOf="+Constants.PAGEOF_SIMPLE_QUERY_INTERFACE;
@@ -288,7 +289,7 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 </head>
 <html:errors/>
-<html:form action="<%=Constants.DISTRIBUTION_REPORT_ACTION%>">
+<html:form action="<%=callAction%>">
     <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="1000">
 		<tr>
 		    <td>
@@ -297,13 +298,17 @@
 						<logic:equal name="pageOf" value="<%=Constants.PAGEOF_DISTRIBUTION%>">
 							<td align="right" colspan="3">
 								<html:hidden property="nextAction" value="configure"/>
+
 							</td>
 						
 							<td align="right" colspan="3">
 								<html:hidden property="distributionId"/>
 							</td>
 						</logic:equal>
-						
+
+						<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
+							<html:hidden property="counter"/>
+						</logic:equal>
 				  	</tr>
 				</table>
 			<td>
