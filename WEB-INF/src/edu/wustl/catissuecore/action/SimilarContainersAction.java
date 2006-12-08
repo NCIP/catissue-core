@@ -236,7 +236,23 @@ public class SimilarContainersAction extends SecureAction
 
 				if (similarContainersForm.getParentContainerId() != 0l)
 				{
-					Vector initialValues = getInitalValues(startingPoints, containerMap, noOfContainers);
+					Vector initialValues = null;
+					try
+					{
+					initialValues = getInitalValues(startingPoints, containerMap, noOfContainers);
+					}
+					catch(Exception e)
+					{
+						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+						if (errors == null || errors.size() == 0)
+						{
+							errors = new ActionErrors();
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
+									.getValue("storageContainer.parentContainerPostionInUseOrExceed")));
+							saveErrors(request, errors);
+							return (mapping.findForward(Constants.PAGEOF_STORAGE_CONTAINER));
+						}
+					}
 					request.setAttribute("initValues", initialValues);
 				}
 
