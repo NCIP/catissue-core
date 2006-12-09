@@ -398,7 +398,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 				String containerNameFromCacheName = nvb.getName().toString();
 			
 				// TODO
-				if (containerNameFromCacheName.equals(containerName))
+				if (containerNameFromCacheName.equalsIgnoreCase(containerName.trim()))
 				{
 					String containerId = nvb.getValue();
 					Map tempMap = (Map) containerMapFromCache.get(nvb);
