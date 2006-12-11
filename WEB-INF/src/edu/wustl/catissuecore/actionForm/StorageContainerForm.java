@@ -1023,10 +1023,10 @@ public class StorageContainerForm extends AbstractActionForm
 				}
 			}
 			}
-			else if (checkedButton == 2 && this.noOfContainers > 1)
+			else if (checkedButton == 2 && this.noOfContainers > 1 && stContSelection==2)
 			{
 				
-	    /*	boolean flag = false;
+	    	boolean flag = false;
 				if(pos1!=null&&!pos1.trim().equals(""))
 				{
 					long l = 1;
@@ -1066,13 +1066,13 @@ public class StorageContainerForm extends AbstractActionForm
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("storageContainer.parentContainer")));
-	    		} */
-				if (!validator.isNumeric(String.valueOf(pos1), 1)
+	    		} 
+			/*	if (!validator.isNumeric(String.valueOf(pos1), 1)
 						|| !validator.isNumeric(String.valueOf(pos2), 1))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("storageContainer.parentContainer")));
-				} 
+				} */
 			}
 			
 

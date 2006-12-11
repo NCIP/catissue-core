@@ -115,13 +115,24 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 						throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.dimensionOverflow"));
 					}
 
+					try
+					{
+						//check for all validations on the storage container.
+						checkContainer(dao, container.getParent().getId().toString(), container.getPositionDimensionOne().toString(), container.getPositionDimensionTwo().toString(), sessionDataBean, false);
+					}
+					catch (SMException sme)
+					{
+						sme.printStackTrace();
+						throw handleSMException(sme);
+					}	
+					
 					// check for availability of position
-					boolean canUse = isContainerAvailableForPositions(dao, container);
+				/*	boolean canUse = isContainerAvailableForPositions(dao, container);
 
 					if (!canUse)
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse"));
-					}
+					} */
 
 					//Check weather parent container is valid container to use 
 					boolean parentContainerValidToUSe = isParentContainerValidToUSe(container, pc);
@@ -301,6 +312,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 				StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), container.getParent().getId());
 
+				
 				/* Check if position specified is within the parent container's capacity*/
 				if (false == validatePosition(pc, container))
 				{
@@ -378,12 +390,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				 * Only if parentContainerID, positionOne or positionTwo is changed
 				 *  check for availability of position
 				 */
-				Logger.out.debug("oldContainer.getParentContainer().getId().longValue() : " + oldContainer.getParent().getId().longValue());
-				Logger.out.debug("container.getParentContainer().getId().longValue() : " + container.getParent().getId().longValue());
-				Logger.out.debug("oldContainer.getPositionDimensionOne().intValue() : " + oldContainer.getPositionDimensionOne().intValue());
-				Logger.out.debug("container.getPositionDimensionOne().intValue() : " + container.getPositionDimensionOne().intValue());
-				Logger.out.debug("oldContainer.getPositionDimensionTwo().intValue() : " + oldContainer.getPositionDimensionTwo().intValue());
-				Logger.out.debug("container.getPositionDimensionTwo().intValue() : " + container.getPositionDimensionTwo().intValue());
+			
 
 				if (oldContainer.getPositionDimensionOne().intValue() != container.getPositionDimensionOne().intValue()
 						|| oldContainer.getPositionDimensionTwo().intValue() != container.getPositionDimensionTwo().intValue())
@@ -401,10 +408,33 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		// Mandar : --------- end  25-11-05 -----------------		
 
-		//Check whether size has been reduced
+		
+		
+		boolean flag = true;
+		if (container.getParent().getId().longValue() == oldContainer.getParent().getId().longValue()
+				&& container.getPositionDimensionOne().longValue() == oldContainer.getPositionDimensionOne().longValue()
+				&& container.getPositionDimensionTwo().longValue() == oldContainer.getPositionDimensionTwo().longValue())
+		{
+			flag = false;
+		}
+
+		if (flag)
+		{
+		try
+		{
+			//check for all validations on the storage container.
+			checkContainer(dao, container.getParent().getId().toString(), container.getPositionDimensionOne().toString(), container.getPositionDimensionTwo().toString(), sessionDataBean, false);
+		}
+		catch (SMException sme)
+		{
+			sme.printStackTrace();
+			throw handleSMException(sme);
+		}	
+		}
+
+//		Check whether size has been reduced
 		//Sri: fix for bug #355 (Storage capacity: Reducing capacity should be
 		// handled)
-
 		Integer oldContainerDimOne = oldContainer.getCapacity().getOneDimensionCapacity();
 		Integer oldContainerDimTwo = oldContainer.getCapacity().getTwoDimensionCapacity();
 		Integer newContainerDimOne = container.getCapacity().getOneDimensionCapacity();
@@ -2003,6 +2033,63 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 			}
 			
+			
+				//Long storageContainerId = specimen.getStorageContainer().getId();
+				Integer xPos = container.getPositionDimensionOne();
+				Integer yPos = container.getPositionDimensionTwo();
+				boolean isContainerFull = false;
+				/**
+				 *  Following code is added to set the x and y dimension in case only storage container is given 
+				 *  and x and y positions are not given 
+				 */
+				
+				if (xPos == null || yPos == null)
+				{
+				isContainerFull = true;
+				Map containerMapFromCache = null;
+				try
+				{
+					containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+				}
+				catch (CacheException e)
+				{
+					e.printStackTrace();
+				}
+				
+				if (containerMapFromCache != null)
+				{
+					Iterator itr = containerMapFromCache.keySet().iterator();
+					while (itr.hasNext())
+					{
+						NameValueBean nvb = (NameValueBean) itr.next();
+						if(nvb.getValue().toString().equals(container.getParent().getId().toString()))
+						{
+						
+							Map tempMap = (Map) containerMapFromCache.get(nvb);
+							Iterator tempIterator = tempMap.keySet().iterator();;
+							NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+							
+							List list = (List) tempMap.get(nvb1);
+							NameValueBean nvb2 = (NameValueBean) list.get(0);
+											
+							container.setPositionDimensionOne(new Integer(nvb1.getValue()));
+							container.setPositionDimensionTwo(new Integer(nvb2.getValue()));
+						    isContainerFull = false;
+						    break;
+						}
+						
+					}
+				}
+		
+				if(isContainerFull)
+				{
+					throw new DAOException("The Storage Container you specified is full");
+				}
+		}
+			
+				
+			
+			
 			//VALIDATIONS FOR DIMENSION 1.
 			if (validator.isEmpty(String.valueOf(container.getPositionDimensionOne())))
 			{
@@ -2026,7 +2113,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
 
 			}
-		}
+			
+		
+			}
 		if (operation.equals(Constants.ADD))
 		{
 			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(container.getActivityStatus()))

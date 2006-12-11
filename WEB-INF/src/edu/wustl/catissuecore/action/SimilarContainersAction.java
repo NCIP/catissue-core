@@ -17,6 +17,8 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.ehcache.CacheException;
+
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -32,11 +34,13 @@ import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
@@ -157,7 +161,70 @@ public class SimilarContainersAction extends SecureAction
 				if (!containerIdList.isEmpty())
 				{
 					similarContainersForm.setParentContainerId(((Long) containerIdList.get(0)).longValue());
-					similarContainersForm.setPositionDimensionOne(Integer.parseInt(similarContainersForm.getPos1()));
+					
+					
+					
+					boolean isContainerFull = false;
+					/**
+					 *  Following code is added to set the x and y dimension in case only storage container is given 
+					 *  and x and y positions are not given 
+					 */
+					
+					if (similarContainersForm.getPos1() == null || similarContainersForm.getPos1().equals("") ||similarContainersForm.getPos2() == null || similarContainersForm.getPos2().equals(""))
+					{
+					isContainerFull = true;
+					Map containerMapFromCache = null;
+					try
+					{
+						containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+					}
+					catch (CacheException e)
+					{
+						e.printStackTrace();
+					}
+					
+					if (containerMapFromCache != null)
+					{
+						Iterator itr = containerMapFromCache.keySet().iterator();
+						while (itr.hasNext())
+						{
+							nvb = (NameValueBean) itr.next();
+							if(nvb.getValue().toString().equals("" + similarContainersForm.getParentContainerId()))
+							{
+							
+								Map tempMap = (Map) containerMapFromCache.get(nvb);
+								Iterator tempIterator = tempMap.keySet().iterator();;
+								NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+								
+								List yList = (List) tempMap.get(nvb1);
+								NameValueBean nvb2 = (NameValueBean) yList.get(0);
+												
+								similarContainersForm.setPos1(nvb1.getValue());
+								similarContainersForm.setPos2(nvb2.getValue());
+							    isContainerFull = false;
+							    break;
+							}
+							
+						}
+					}
+			
+					if(isContainerFull)
+					{
+						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+						if (errors == null || errors.size() == 0)
+						{
+							errors = new ActionErrors();
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
+									.getValue("storageContainer.parentContainer")));
+							saveErrors(request, errors);
+							return (mapping.findForward(Constants.PAGEOF_STORAGE_CONTAINER));
+						}
+
+					
+					}
+			}
+					
+    				similarContainersForm.setPositionDimensionOne(Integer.parseInt(similarContainersForm.getPos1()));
 					similarContainersForm.setPositionDimensionTwo(Integer.parseInt(similarContainersForm.getPos2()));
 				}
 				else
@@ -167,7 +234,7 @@ public class SimilarContainersAction extends SecureAction
 					{
 						errors = new ActionErrors();
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-								.getValue("storageContainer.parentContainer")));
+								.getValue("storageContainer.parentContainerFull")));
 						saveErrors(request, errors);
 						return (mapping.findForward(Constants.PAGEOF_STORAGE_CONTAINER));
 					}

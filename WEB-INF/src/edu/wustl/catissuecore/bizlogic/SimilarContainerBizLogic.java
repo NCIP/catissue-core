@@ -116,6 +116,19 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 					cont.setSite(parentContainer.getSite());
 
 				}
+				
+				StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+						Constants.STORAGE_CONTAINER_FORM_ID);
+				try
+				{
+					//check for all validations on the storage container.
+					storageContainerBizLogic.checkContainer(dao, parentContainer.getId().toString(), posOne, posTwo, sessionDataBean, false);
+				}
+				catch (SMException sme)
+				{
+					sme.printStackTrace();
+					throw handleSMException(sme);
+				}
 
 				//		StorageContainer parentContainer = new StorageContainer();
 				//	parentContainer.setId(new Long(parentId));
@@ -126,12 +139,15 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 
 				//chk for positions 
 				// check for availability of position
-				boolean canUse = isContainerAvailableForPositions(dao, cont);
+				
+
+				
+				/*boolean canUse = isContainerAvailableForPositions(dao, cont);
 
 				if (!canUse)
 				{
 					throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse"));
-				}
+				} */
 
 				// Have to set Site object for parentContainer
 				loadSite(dao, parentContainer); // 17-07-2006
