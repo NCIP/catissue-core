@@ -553,11 +553,12 @@
 	</target>
 	
 	<target name="sendMail"  description="Send mail">
-        <mail ssl="off" user="${proxy.username}" password="${proxy.password}" mailhost="${proxy.host}" tolist="${proxy.to}" cclist="${proxy.cc}" subject="${proxy.subject}" from="${proxy.from}" >
-            <message> "${proxy.message}"</message>
-            <fileset dir="${proxy.dir}" includes="${proxy.fileName}" ></fileset>
-        </mail>
-	 </target>
+	        <mail ssl="off" user="${proxy.username}" password="${proxy.password}" mailhost="${proxy.host}" tolist="${proxy.to}" cclist="${proxy.cc}" subject="${proxy.subject}" from="${proxy.from}" >
+	            <message> "${proxy.message}"</message>
+	            <fileset dir="${proxy.dir1}" includes="*.*" ></fileset>
+				<fileset dir="${proxy.dir2}" includes="${proxy.fileName}" ></fileset>
+	        </mail>
+		 </target>
 
 
 </project>
