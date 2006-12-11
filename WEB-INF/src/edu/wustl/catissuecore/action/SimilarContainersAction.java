@@ -215,7 +215,7 @@ public class SimilarContainersAction extends SecureAction
 						{
 							errors = new ActionErrors();
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-									.getValue("storageContainer.parentContainer")));
+									.getValue("storageContainer.parentContainerFull")));
 							saveErrors(request, errors);
 							return (mapping.findForward(Constants.PAGEOF_STORAGE_CONTAINER));
 						}
@@ -234,7 +234,7 @@ public class SimilarContainersAction extends SecureAction
 					{
 						errors = new ActionErrors();
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-								.getValue("storageContainer.parentContainerFull")));
+								.getValue("storageContainer.parentContainer")));
 						saveErrors(request, errors);
 						return (mapping.findForward(Constants.PAGEOF_STORAGE_CONTAINER));
 					}

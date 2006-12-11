@@ -66,10 +66,10 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDataInterface
 {
-	
-	
-    // Getting containersMaxLimit from the xml file in static variable
+
+	// Getting containersMaxLimit from the xml file in static variable
 	private static final int containersMaxLimit = Integer.parseInt(XMLPropertyHandler.getValue(Constants.CONTAINERS_MAX_LIMIT));
+
 	/**
 	 * Saves the storageContainer object in the database.
 	 * @param obj The storageType object to be saved.
@@ -118,21 +118,22 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					try
 					{
 						//check for all validations on the storage container.
-						checkContainer(dao, container.getParent().getId().toString(), container.getPositionDimensionOne().toString(), container.getPositionDimensionTwo().toString(), sessionDataBean, false);
+						checkContainer(dao, container.getParent().getId().toString(), container.getPositionDimensionOne().toString(), container
+								.getPositionDimensionTwo().toString(), sessionDataBean, false);
 					}
 					catch (SMException sme)
 					{
 						sme.printStackTrace();
 						throw handleSMException(sme);
-					}	
-					
-					// check for availability of position
-				/*	boolean canUse = isContainerAvailableForPositions(dao, container);
+					}
 
-					if (!canUse)
-					{
-						throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse"));
-					} */
+					// check for availability of position
+					/*	boolean canUse = isContainerAvailableForPositions(dao, container);
+
+					 if (!canUse)
+					 {
+					 throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.inUse"));
+					 } */
 
 					//Check weather parent container is valid container to use 
 					boolean parentContainerValidToUSe = isParentContainerValidToUSe(container, pc);
@@ -312,7 +313,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 				StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), container.getParent().getId());
 
-				
 				/* Check if position specified is within the parent container's capacity*/
 				if (false == validatePosition(pc, container))
 				{
@@ -390,7 +390,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				 * Only if parentContainerID, positionOne or positionTwo is changed
 				 *  check for availability of position
 				 */
-			
 
 				if (oldContainer.getPositionDimensionOne().intValue() != container.getPositionDimensionOne().intValue()
 						|| oldContainer.getPositionDimensionTwo().intValue() != container.getPositionDimensionTwo().intValue())
@@ -408,10 +407,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		// Mandar : --------- end  25-11-05 -----------------		
 
-		
-		
 		boolean flag = true;
-		if (container.getParent().getId().longValue() == oldContainer.getParent().getId().longValue()
+
+		if (container.getParent() != null && oldContainer.getParent() != null
+				&& container.getParent().getId().longValue() == oldContainer.getParent().getId().longValue()
 				&& container.getPositionDimensionOne().longValue() == oldContainer.getPositionDimensionOne().longValue()
 				&& container.getPositionDimensionTwo().longValue() == oldContainer.getPositionDimensionTwo().longValue())
 		{
@@ -420,19 +419,23 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		if (flag)
 		{
-		try
-		{
-			//check for all validations on the storage container.
-			checkContainer(dao, container.getParent().getId().toString(), container.getPositionDimensionOne().toString(), container.getPositionDimensionTwo().toString(), sessionDataBean, false);
-		}
-		catch (SMException sme)
-		{
-			sme.printStackTrace();
-			throw handleSMException(sme);
-		}	
+			try
+			{
+				//check for all validations on the storage container.
+				if(container.getParent()!=null)
+				{
+				checkContainer(dao, container.getParent().getId().toString(), container.getPositionDimensionOne().toString(), container
+						.getPositionDimensionTwo().toString(), sessionDataBean, false);
+				}
+			}
+			catch (SMException sme)
+			{
+				sme.printStackTrace();
+				throw handleSMException(sme);
+			}
 		}
 
-//		Check whether size has been reduced
+		//		Check whether size has been reduced
 		//Sri: fix for bug #355 (Storage capacity: Reducing capacity should be
 		// handled)
 		Integer oldContainerDimOne = oldContainer.getCapacity().getOneDimensionCapacity();
@@ -1033,15 +1036,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			//It also solves Bug 2829:System fails to create a default unique storage container name
 			String maxSiteName = siteName;
 			String maxTypeName = typeName;
-			if(siteName.length()>40)
+			if (siteName.length() > 40)
 			{
-				maxSiteName = siteName.substring(0,39);
+				maxSiteName = siteName.substring(0, 39);
 			}
-			if(typeName.length()>40)
+			if (typeName.length() > 40)
 			{
-				maxTypeName = typeName.substring(0,39);
+				maxTypeName = typeName.substring(0, 39);
 			}
-			
+
 			if (operation.equals(Constants.ADD))
 			{
 				containerName = maxSiteName + "_" + maxTypeName + "_" + String.valueOf(getNextContainerNumber());
@@ -1761,7 +1764,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	//  Will check only for Position is used or not.
 	protected boolean isPositionAvailable(DAO dao, StorageContainer storageContainer, String posOne, String posTwo)
 	{
-	try
+		try
 		{
 			String sourceObjectName = Specimen.class.getName();
 			String[] selectColumnName = {"id"};
@@ -1820,7 +1823,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 			return true;
 		}
-	catch (Exception e)
+		catch (Exception e)
 		{
 			Logger.out.debug("Error in isPositionAvailable : " + e);
 			return false;
@@ -1828,14 +1831,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	}
 
 	//	 -- storage container validation for specimen
-	public void checkContainer(DAO dao, String storageContainerID, String positionOne, String positionTwo, SessionDataBean sessionDataBean, boolean multipleSpecimen)
-			throws DAOException, SMException
+	public void checkContainer(DAO dao, String storageContainerID, String positionOne, String positionTwo, SessionDataBean sessionDataBean,
+			boolean multipleSpecimen) throws DAOException, SMException
 	{
 		//        List list = dao.retrieve(StorageContainer.class.getName(),
 		//                "id",storageContainerID  );
 
 		String sourceObjectName = StorageContainer.class.getName();
-		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER, "capacity.oneDimensionCapacity", "capacity.twoDimensionCapacity","name"};
+		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER, "capacity.oneDimensionCapacity", "capacity.twoDimensionCapacity", "name"};
 		String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
 		String[] whereColumnCondition = {"="};
 		Object[] whereColumnValue = {storageContainerID};
@@ -1855,7 +1858,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 			StorageContainer pc = new StorageContainer();
 			pc.setId((Long) obj[0]);
-			pc.setName((String)obj[3]);
+			pc.setName((String) obj[3]);
 			if (obj[1] != null)
 				pc.setPositionDimensionOne((Integer) obj[1]);
 			if (obj[2] != null)
@@ -1877,24 +1880,24 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			boolean canUsePosition = false;
 			if (isValidPosition) //	if position is valid 
 			{
-			/*	try
-				{*/
-					canUsePosition = isPositionAvailable(dao, pc, positionOne, positionTwo);
-		/*		}
-				catch (Exception e)
-				{
-					
-					e.printStackTrace();
-				}*/
+				/*	try
+				 {*/
+				canUsePosition = isPositionAvailable(dao, pc, positionOne, positionTwo);
+				/*		}
+				 catch (Exception e)
+				 {
+				 
+				 e.printStackTrace();
+				 }*/
 				/*try
-				{
-					canUsePosition = StorageContainerUtil.isPostionAvaialble(pc.getId().toString(), pc.getName(), positionOne, positionTwo);
-				}
-				catch (CacheException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}*/
+				 {
+				 canUsePosition = StorageContainerUtil.isPostionAvaialble(pc.getId().toString(), pc.getName(), positionOne, positionTwo);
+				 }
+				 catch (CacheException e)
+				 {
+				 // TODO Auto-generated catch block
+				 e.printStackTrace();
+				 }*/
 				Logger.out.debug("canUsePosition : " + canUsePosition);
 				if (canUsePosition) // position empty. can be used 
 				{
@@ -1903,9 +1906,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				else
 				// position already in use
 				{
-					if(multipleSpecimen)
+					if (multipleSpecimen)
 					{
-					throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.Multiple.inUse"));
+						throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.Multiple.inUse"));
 					}
 					else
 					{
@@ -2010,41 +2013,40 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		if (container.getParent() != null)
 		{
-			
-			if(container.getParent().getId() == null)
-			{
-			String sourceObjectName = StorageContainer.class.getName();
-			String[] selectColumnName = {"id"};
-			String[] whereColumnName = {"name"};
-			String[] whereColumnCondition = {"="};
-			Object[] whereColumnValue = {container.getParent().getName()};
-			String joinCondition = null;
 
-			List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+			if (container.getParent().getId() == null)
+			{
+				String sourceObjectName = StorageContainer.class.getName();
+				String[] selectColumnName = {"id"};
+				String[] whereColumnName = {"name"};
+				String[] whereColumnCondition = {"="};
+				Object[] whereColumnValue = {container.getParent().getName()};
+				String joinCondition = null;
 
-			if (!list.isEmpty())
-			{
-				container.getParent().setId((Long) list.get(0));
-			}
-			else
-			{
-				String message1 = ApplicationProperties.getValue("specimen.storageContainer");
-				throw new DAOException(ApplicationProperties.getValue("errors.invalid", message1));
-			}
-			}
-			
-			
-				//Long storageContainerId = specimen.getStorageContainer().getId();
-				Integer xPos = container.getPositionDimensionOne();
-				Integer yPos = container.getPositionDimensionTwo();
-				boolean isContainerFull = false;
-				/**
-				 *  Following code is added to set the x and y dimension in case only storage container is given 
-				 *  and x and y positions are not given 
-				 */
-				
-				if (xPos == null || yPos == null)
+				List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+
+				if (!list.isEmpty())
 				{
+					container.getParent().setId((Long) list.get(0));
+				}
+				else
+				{
+					String message1 = ApplicationProperties.getValue("specimen.storageContainer");
+					throw new DAOException(ApplicationProperties.getValue("errors.invalid", message1));
+				}
+			}
+
+			//Long storageContainerId = specimen.getStorageContainer().getId();
+			Integer xPos = container.getPositionDimensionOne();
+			Integer yPos = container.getPositionDimensionTwo();
+			boolean isContainerFull = false;
+			/**
+			 *  Following code is added to set the x and y dimension in case only storage container is given 
+			 *  and x and y positions are not given 
+			 */
+
+			if (xPos == null || yPos == null)
+			{
 				isContainerFull = true;
 				Map containerMapFromCache = null;
 				try
@@ -2055,41 +2057,39 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				{
 					e.printStackTrace();
 				}
-				
+
 				if (containerMapFromCache != null)
 				{
 					Iterator itr = containerMapFromCache.keySet().iterator();
 					while (itr.hasNext())
 					{
 						NameValueBean nvb = (NameValueBean) itr.next();
-						if(nvb.getValue().toString().equals(container.getParent().getId().toString()))
+						if (nvb.getValue().toString().equals(container.getParent().getId().toString()))
 						{
-						
+
 							Map tempMap = (Map) containerMapFromCache.get(nvb);
-							Iterator tempIterator = tempMap.keySet().iterator();;
+							Iterator tempIterator = tempMap.keySet().iterator();
+							;
 							NameValueBean nvb1 = (NameValueBean) tempIterator.next();
-							
+
 							List list = (List) tempMap.get(nvb1);
 							NameValueBean nvb2 = (NameValueBean) list.get(0);
-											
+
 							container.setPositionDimensionOne(new Integer(nvb1.getValue()));
 							container.setPositionDimensionTwo(new Integer(nvb2.getValue()));
-						    isContainerFull = false;
-						    break;
+							isContainerFull = false;
+							break;
 						}
-						
+
 					}
 				}
-		
-				if(isContainerFull)
+
+				if (isContainerFull)
 				{
 					throw new DAOException("The Storage Container you specified is full");
 				}
-		}
-			
-				
-			
-			
+			}
+
 			//VALIDATIONS FOR DIMENSION 1.
 			if (validator.isEmpty(String.valueOf(container.getPositionDimensionOne())))
 			{
@@ -2113,9 +2113,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
 
 			}
-			
-		
-			}
+
+		}
 		if (operation.equals(Constants.ADD))
 		{
 			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(container.getActivityStatus()))
@@ -2446,7 +2445,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				String Id = (String) list1.get(0);
 				String Name = (String) list1.get(1);
 				String siteName = (String) list1.get(2);
-				NameValueBean nvb = new NameValueBean(Name, Id,true);
+				NameValueBean nvb = new NameValueBean(Name, Id, true);
 
 				try
 				{
@@ -2487,8 +2486,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 	/* temp function end */
 
-	public TreeMap getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass, int aliquotCount, String exceedingMaxLimit, boolean closeSession)
-			throws DAOException
+	public TreeMap getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass, int aliquotCount, String exceedingMaxLimit,
+			boolean closeSession) throws DAOException
 	{
 
 		Logger.out.debug("method : getAllocatedContaienrMapForSpecimen()---getting containers for specimen--------------");
@@ -2542,7 +2541,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				List list1 = (List) itr.next();
 				String Id = (String) list1.get(0);
 				String Name = (String) list1.get(1);
-				NameValueBean nvb = new NameValueBean(Name, Id,true);
+				NameValueBean nvb = new NameValueBean(Name, Id, true);
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
@@ -2574,7 +2573,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			Logger.out.debug("getAllocatedContaienrMapForSpecimen()----Size of containerMap:" + containerMap.size());
 		}
 		Logger.out.debug("exceedingMaxLimit----------" + exceedingMaxLimit);
-		
+
 		return containerMap;
 
 	}
@@ -2587,7 +2586,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @throws DAOException -- throws DAO Exception
 	 * @see edu.wustl.common.dao.JDBCDAOImpl
 	 */
-	public TreeMap getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id, int noOfAliqoutes, String exceedingMaxLimit) throws DAOException
+	public TreeMap getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id, int noOfAliqoutes, String exceedingMaxLimit)
+			throws DAOException
 	{
 		TreeMap containerMap = new TreeMap();
 
@@ -2638,7 +2638,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				String Id = (String) list1.get(0);
 
 				String Name = (String) list1.get(1);
-				NameValueBean nvb = new NameValueBean(Name, Id,true);
+				NameValueBean nvb = new NameValueBean(Name, Id, true);
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
