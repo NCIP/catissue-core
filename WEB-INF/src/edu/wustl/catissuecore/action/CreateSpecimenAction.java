@@ -157,6 +157,8 @@ public class CreateSpecimenAction extends SecureAction
 						{
 							createForm.setVirtuallyLocated(false);
 						}
+						if(spClass!=null)
+						{
 						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
 								spClass, 0,exceedingMaxLimit,true);
 						if (containerMap.isEmpty())
@@ -173,8 +175,8 @@ public class CreateSpecimenAction extends SecureAction
 						}
 						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
 						request.setAttribute(Constants.SPECIMEN_CLASS_NAME, spClass);
-						;
 						initialValues = checkForInitialValues(containerMap);
+						}
 
 					}
 					else
