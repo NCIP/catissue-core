@@ -2596,6 +2596,7 @@ PUBLIC
 		type="edu.wustl.catissuecore.action.AliquotAction"
 		name="aliquotForm"
 		validate="false"
+		parameter="method"
 		scope="request">
 		<forward name="pageOfCreateAliquot" path=".catissuecore.aliquotDef"/>
 		<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15"/>
