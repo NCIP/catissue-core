@@ -13,9 +13,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.ehcache.CacheException;
 
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
@@ -31,8 +34,10 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
@@ -63,8 +68,9 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
-			
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
+
 	{
 		Logger.out.debug("Inside : MultipleSpecimenSubmitAction");
 		MultipleSpecimenStorageLocationForm aForm = (MultipleSpecimenStorageLocationForm) form;
@@ -78,19 +84,143 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 		{
 			specimenMap = setDataInSpecimens(aForm, request);
 		}
+
 		catch (DAOException e)
 		{
-			
+
 			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 			if (errors == null || errors.size() == 0)
 			{
 				errors = new ActionErrors();
 			}
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.positionInStorageContainer")));
-			saveErrors(request,errors);
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties.getValue("specimen.storageContainer")));
+			saveErrors(request, errors);
 			e.printStackTrace();
 			return mapping.findForward(target);
 		}
+
+		List specimenOrderList = (List) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_SPECIMEN_ORDER_LIST);
+		/**
+		 *   Following code is added for giving x and y positions if not already given
+		 */
+		List positionsToBeAllocatedList = new ArrayList();
+		List usedPositionsList = new ArrayList();
+		for (int i = 0; i < specimenOrderList.size(); i++)
+		{
+			Specimen specimen = (Specimen) specimenOrderList.get(i);
+			if (specimen.getPositionDimensionOne() == null || specimen.getPositionDimensionTwo() == null)
+			{
+				positionsToBeAllocatedList.add(specimen);
+			}
+			else
+			{
+				usedPositionsList.add(specimen.getStorageContainer().getId() + Constants.STORAGE_LOCATION_SAPERATOR
+						+ specimen.getPositionDimensionOne() + Constants.STORAGE_LOCATION_SAPERATOR + specimen.getPositionDimensionTwo());
+			}
+
+			List listOfDerivedSpecimen = (List) specimenMap.get(specimen);
+
+			for (int j = 0; j < listOfDerivedSpecimen.size(); j++)
+			{
+				Specimen derivedSpecimen = (Specimen) listOfDerivedSpecimen.get(j);
+				if (derivedSpecimen.getPositionDimensionOne() == null || derivedSpecimen.getPositionDimensionTwo() == null)
+				{
+					positionsToBeAllocatedList.add(derivedSpecimen);
+				}
+				else
+				{
+
+					usedPositionsList.add(derivedSpecimen.getStorageContainer().getId() + Constants.STORAGE_LOCATION_SAPERATOR
+							+ derivedSpecimen.getPositionDimensionOne() + Constants.STORAGE_LOCATION_SAPERATOR
+							+ derivedSpecimen.getPositionDimensionTwo());
+				}
+			}
+
+		}
+
+		boolean isContainerFull = false;
+		Map containerMapFromCache = null;
+		try
+		{
+			containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+		}
+		catch (CacheException e)
+		{
+			e.printStackTrace();
+		}
+
+		for (int k = 0; k < positionsToBeAllocatedList.size(); k++)
+		{
+			Specimen specimen = (Specimen) positionsToBeAllocatedList.get(k);
+			if (containerMapFromCache != null)
+			{
+				Iterator itr = containerMapFromCache.keySet().iterator();
+				while (itr.hasNext())
+				{   
+					boolean flag = false;
+					NameValueBean nvb = (NameValueBean) itr.next();
+					String containerId = nvb.getValue().toString();
+
+					// TODO
+					if (containerId.equalsIgnoreCase(specimen.getStorageContainer().getId().toString()))
+					{
+						
+						//String containerId = nvb.getValue();
+						Map tempMap = (Map) containerMapFromCache.get(nvb);
+						Iterator tempIterator = tempMap.keySet().iterator();
+
+						while (tempIterator.hasNext())
+						{
+							NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+							List yPosList = (List) tempMap.get(nvb1);
+							for (int i = 0; i < yPosList.size(); i++)
+							{
+								NameValueBean nvb2 = (NameValueBean) yPosList.get(i);
+								String availaleStoragePosition = containerId + Constants.STORAGE_LOCATION_SAPERATOR + nvb1.getValue()
+										+ Constants.STORAGE_LOCATION_SAPERATOR + nvb2.getValue();
+								int j = 0;
+
+								for (; j < usedPositionsList.size(); j++)
+								{
+									if (usedPositionsList.get(j).toString().equals(availaleStoragePosition))
+										break;
+								}
+								if (j == usedPositionsList.size())
+								{
+									usedPositionsList.add(availaleStoragePosition);
+
+									specimen.setPositionDimensionOne(new Integer(nvb1.getValue()));
+									specimen.setPositionDimensionTwo(new Integer(nvb2.getValue()));
+									flag = true;
+									break;
+									
+								}
+
+							}
+							if(flag)
+							break;
+						}
+					}
+					if(flag)
+				   break;
+				}
+			}
+			if (specimen.getPositionDimensionOne() == null || specimen.getPositionDimensionTwo() == null)
+			{
+				ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+				if (errors == null || errors.size() == 0)
+				{
+					errors = new ActionErrors();
+				}
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
+						.getValue("specimen.positionInStorageContainerForMultiple")));
+				saveErrors(request, errors);
+				return mapping.findForward(target);
+				//	TODO throw new DAOException("The container you specified does not have enough space to allocate storage position for Aliquot Number " + specimenNumber);
+			}
+
+		}
+
 		try
 		{
 			List specimenList = insertSpecimens(request, specimenMap);
@@ -98,6 +228,7 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 			target = Constants.SUCCESS;
 			// ----------------- report page
 			Collection specimenCollection = (Collection) request.getSession().getAttribute(Constants.SAVED_SPECIMEN_COLLECTION);
+			// TODO Distribution
 			request.getSession().setAttribute(Constants.SAVED_SPECIMEN_COLLECTION, null);
 
 			//to display all inserted specimens Mandar: 16Nov06 
@@ -225,13 +356,13 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 			String containerId = (String) specimenOnUIMap.get(storageContainerKey);
 			String posDim1 = (String) specimenOnUIMap.get(positionOneKey);
 			String posDim2 = (String) specimenOnUIMap.get(positionTwoKey);
-			if(specimen.getStorageContainer() == null)
+			if (specimen.getStorageContainer() == null)
 			{
 				specimen.setStorageContainer(new StorageContainer());
 			}
 			specimen.getStorageContainer().setId(new Long(containerId));
 			specimen.setPositionDimensionOne(new Integer(posDim1));
-         	specimen.setPositionDimensionTwo(new Integer(posDim2));
+			specimen.setPositionDimensionTwo(new Integer(posDim2));
 		}
 		else if (specimenOnUIMap.get(radioButonKey).equals("3"))
 		{
@@ -261,14 +392,28 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 			String posDim1 = (String) specimenOnUIMap.get("Specimen:" + specimenCounter + "_positionDimensionOne" + "_fromMap");
 			String posDim2 = (String) specimenOnUIMap.get("Specimen:" + specimenCounter + "_positionDimensionTwo" + "_fromMap");
 			specimen.setStorageContainer(new StorageContainer());
-			if(specimen.getStorageContainer() == null)
+			if (specimen.getStorageContainer() == null)
 			{
 				specimen.setStorageContainer(new StorageContainer());
 			}
 			specimen.getStorageContainer().setId(containerId);
-			specimen.setPositionDimensionOne(new Integer(posDim1));
-			specimen.setPositionDimensionTwo(new Integer(posDim2));
-			
+			if (posDim1 != null && !posDim1.trim().equals(""))
+			{
+				specimen.setPositionDimensionOne(new Integer(posDim1));
+			}
+			else
+			{
+				specimen.setPositionDimensionOne(null);
+			}
+			if (posDim2 != null && !posDim2.trim().equals(""))
+			{
+				specimen.setPositionDimensionTwo(new Integer(posDim2));
+			}
+			else
+			{
+				specimen.setPositionDimensionTwo(null);
+			}
+
 		}
 		specimenCounter++;
 	}

@@ -7,6 +7,7 @@
  * @version 1.00
  * Created on Aug 10, 2005
  */
+
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
@@ -33,64 +34,56 @@ import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
-
 /**
  * This class initializes the fields in the  Distribution Add/Edit webpage.
  * @author aniruddha_phadnis
  */
-public class DistributionAction extends SpecimenEventParametersAction {
-    protected void setRequestParameters(HttpServletRequest request)
-        throws Exception {
-        DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance()
-                                                                         .getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+public class DistributionAction extends SpecimenEventParametersAction
+{
 
-        //Sets the Site list.
-        String sourceObjectName = Site.class.getName();
-        String[] displayNameFields = { "name" };
-        String valueField = Constants.SYSTEM_IDENTIFIER;
+	protected void setRequestParameters(HttpServletRequest request) throws Exception
+	{
+		DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 
-        List siteList = dao.getList(sourceObjectName, displayNameFields,
-                valueField, true);
+		//Sets the Site list.
+		String sourceObjectName = Site.class.getName();
+		String[] displayNameFields = {"name"};
+		String valueField = Constants.SYSTEM_IDENTIFIER;
 
-        request.setAttribute(Constants.FROM_SITE_LIST, siteList);
-        request.setAttribute(Constants.TO_SITE_LIST, siteList);
+		List siteList = dao.getList(sourceObjectName, displayNameFields, valueField, true);
 
-        //Sets the Distribution Protocol Id List.
-        sourceObjectName = DistributionProtocol.class.getName();
+		request.setAttribute(Constants.FROM_SITE_LIST, siteList);
+		request.setAttribute(Constants.TO_SITE_LIST, siteList);
 
-        String[] displayName = { "title" };
+		//Sets the Distribution Protocol Id List.
+		sourceObjectName = DistributionProtocol.class.getName();
 
-        List protocolList = dao.getList(sourceObjectName, displayName,
-                valueField, true);
-        request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, protocolList);
+		String[] displayName = {"title"};
 
-        //SET THE SPECIMEN Ids LIST
-        String[] displayNameField = { Constants.SYSTEM_IDENTIFIER };
-        List specimenList = dao.getList(Specimen.class.getName(),
-                displayNameField, valueField, true);
-        request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenList);
+		List protocolList = dao.getList(sourceObjectName, displayName, valueField, true);
+		request.setAttribute(Constants.DISTRIBUTIONPROTOCOLLIST, protocolList);
 
-        //			Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
-        request.setAttribute(Constants.ACTIVITYSTATUSLIST,
-            Constants.ACTIVITY_STATUS_VALUES);
+		//SET THE SPECIMEN Ids LIST
+		String[] displayNameField = {Constants.SYSTEM_IDENTIFIER};
+		List specimenList = dao.getList(Specimen.class.getName(), displayNameField, valueField, true);
+		request.setAttribute(Constants.SPECIMEN_ID_LIST, specimenList);
 
-        List distributionType = new ArrayList();
-        distributionType.add(new NameValueBean("Specimen",
-                new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE)));
-        distributionType.add(new NameValueBean("Specimen Array",
-                new Integer(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE)));
+		//			Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
+		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
-        List distributionBasedOn = new ArrayList();
-        distributionBasedOn.add(new NameValueBean("Barcode",
-                new Integer(Constants.BARCODE_BASED_DISTRIBUTION)));
-        distributionBasedOn.add(new NameValueBean("Label",
-                new Integer(Constants.LABEL_BASED_DISTRIBUTION)));
+		List distributionType = new ArrayList();
+		distributionType.add(new NameValueBean("Specimen", new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE)));
+		distributionType.add(new NameValueBean("Specimen Array", new Integer(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE)));
 
-        request.setAttribute(Constants.DISTRIBUTION_TYPE_LIST, distributionType);
-        request.setAttribute(Constants.DISTRIBUTION_BASED_ON, distributionBasedOn);
-    }
+		List distributionBasedOn = new ArrayList();
+		distributionBasedOn.add(new NameValueBean("Barcode", new Integer(Constants.BARCODE_BASED_DISTRIBUTION)));
+		distributionBasedOn.add(new NameValueBean("Label", new Integer(Constants.LABEL_BASED_DISTRIBUTION)));
 
-    protected ActionForward executeSecureAction(ActionMapping mapping,
+		request.setAttribute(Constants.DISTRIBUTION_TYPE_LIST, distributionType);
+		request.setAttribute(Constants.DISTRIBUTION_BASED_ON, distributionBasedOn);
+	}
+
+protected ActionForward executeSecureAction(ActionMapping mapping,
         ActionForm form, HttpServletRequest request,
         HttpServletResponse response) throws Exception {
         super.executeSecureAction(mapping, form, request, response);
@@ -113,6 +106,20 @@ public class DistributionAction extends SpecimenEventParametersAction {
         /* If forwarded from speciman page**/
         HashMap forwardToHashMap = (HashMap) request.getAttribute(
                 "forwardToHashMap");
+        if(forwardToHashMap==null)
+        {
+        	   String specimenLabel = request.getParameter(Constants.SYSTEM_LABEL);
+        	   if(specimenLabel!=null)
+        	   {
+        	   	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+        		List list = bizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, specimenLabel);
+        		if(list!=null&&!list.isEmpty()) {
+        			Specimen specimen = (Specimen) list.get(0);
+        			forwardToHashMap = new HashMap();
+        			forwardToHashMap.put("specimenObjectKey",specimen);
+        	   }
+        	   }
+        }
 
         if (forwardToHashMap != null) {
             Object specimenObjectOrList = forwardToHashMap.get(
@@ -164,57 +171,50 @@ public class DistributionAction extends SpecimenEventParametersAction {
 
         return mapping.findForward((String) request.getParameter(
                 Constants.PAGEOF));
-    }
+    }	private void addDistributionSample(DistributionForm dForm, int itemNo, Specimen specimen)
+	{
+		String keyPrefix = "DistributedItem:" + itemNo + "_";
 
-    private void addDistributionSample(DistributionForm dForm, int itemNo,
-        Specimen specimen) {
-        String keyPrefix = "DistributedItem:" + itemNo + "_";
-
-        dForm.setValue(keyPrefix + "Specimen_id", specimen.getId());
+		dForm.setValue(keyPrefix + "Specimen_id", specimen.getId());
 		dForm.setValue(keyPrefix + "Specimen_barcode", specimen.getBarcode());
 		dForm.setValue(keyPrefix + "Specimen_label", specimen.getLabel());
-		dForm.setValue(keyPrefix + "availableQty", specimen
-				.getAvailableQuantity());
-		
+		dForm.setValue(keyPrefix + "availableQty", specimen.getAvailableQuantity());
+
 		dForm.setCounter(dForm.getCounter() + 1);
-    	dForm.setDistributionBasedOn(new Integer(0));
-    }
+		dForm.setDistributionBasedOn(new Integer(0));
+	}
 
-    private void setSpecimenCharateristics(DistributionForm dForm,
-        HttpServletRequest request) throws DAOException {
-        //Set specimen characteristics according to the specimen ID changed
-        DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance()
-                                                                         .getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+	private void setSpecimenCharateristics(DistributionForm dForm, HttpServletRequest request) throws DAOException
+	{
+		//Set specimen characteristics according to the specimen ID changed
+		DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 
-        String specimenIdKey = request.getParameter("specimenIdKey");
+		String specimenIdKey = request.getParameter("specimenIdKey");
 
-        //Parse key to get row number. Key is in the format DistributedItem:rowNo_Specimen_id
-        MapDataParser parser = new MapDataParser(
-                "edu.wustl.catissuecore.Distribution");
-        int rowNo = parser.parseKeyAndGetRowNo(specimenIdKey);
+		//Parse key to get row number. Key is in the format DistributedItem:rowNo_Specimen_id
+		MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.Distribution");
+		int rowNo = parser.parseKeyAndGetRowNo(specimenIdKey);
 
-        //int a = Integer.parseInt()
-        Logger.out.debug("row number of the dist item: " + rowNo);
+		//int a = Integer.parseInt()
+		Logger.out.debug("row number of the dist item: " + rowNo);
 
-        String specimenId = (String) dForm.getValue("DistributedItem:" + rowNo +
-                "_Specimen_id");
+		String specimenId = (String) dForm.getValue("DistributedItem:" + rowNo + "_Specimen_id");
 
-        //if '--Select--' is selected in the drop down of Specimen Id, empty the row values for that distributed item
-        if (specimenId.equals("-1")) {
-            dForm.setValue("DistributedItem:" + rowNo + "_availableQty", null);
-        }
-        //retrieve the row values for the distributed item for the selected specimen id
-        else {
-            List list = dao.retrieve(Specimen.class.getName(),
-                    Constants.SYSTEM_IDENTIFIER, specimenId);
-            Specimen specimen = (Specimen) list.get(0);
-            dForm.setValue("DistributedItem:" + rowNo + "_availableQty",
-                dForm.getAvailableQty(specimen));
-        }
+		//if '--Select--' is selected in the drop down of Specimen Id, empty the row values for that distributed item
+		if (specimenId.equals("-1"))
+		{
+			dForm.setValue("DistributedItem:" + rowNo + "_availableQty", null);
+		}
+		//retrieve the row values for the distributed item for the selected specimen id
+		else
+		{
+			List list = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenId);
+			Specimen specimen = (Specimen) list.get(0);
+			dForm.setValue("DistributedItem:" + rowNo + "_availableQty", dForm.getAvailableQty(specimen));
+		}
 
-        Logger.out.debug("Map values after speci chars are set: " +
-            dForm.getValues());
-        //Set back the idChange boolean to false.
-        dForm.setIdChange(false);
-    }
+		Logger.out.debug("Map values after speci chars are set: " + dForm.getValues());
+		//Set back the idChange boolean to false.
+		dForm.setIdChange(false);
+	}
 }

@@ -837,8 +837,8 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	private Map populateStorageLocations(IBizLogic bizLogic, Map specimenMap) throws DAOException, Exception
 	{
 		final String saperator = "$";
-		Map tempSpecimenMap = new HashMap();
-		Map sessionContainerMap = new HashMap();
+		Map tempSpecimenMap = new LinkedHashMap();
+		Map sessionContainerMap = new LinkedHashMap();
 		Iterator specimenIterator = specimenMap.keySet().iterator();
 		while (specimenIterator.hasNext())
 		{
