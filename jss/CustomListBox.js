@@ -13,13 +13,13 @@ function onCustomListBoxChange(element)
 
 	//Get the position of last occurrence of underscore
 	var lastIndex = elementId.lastIndexOf("_");
-
+  
 	//Retrieve the row number on which the list box is placed
 	var rowNo = elementId.substring(firstIndex+1,lastIndex);
 
 	//Retrieve the serial number of the list box
 	var serialNo = elementId.substring(lastIndex+1);
-	
+		
 	//Retrieve the list box name till the last underscore
 	var customListBoxName = elementId.substring(0,lastIndex+1);
 
@@ -80,4 +80,35 @@ function onCustomListBoxChange(element)
 			}
 		}
 	}
+}
+
+function onCustomListBoxChangeInAliquot(element)
+{
+   //Get the element identifier
+	var elementId = element.id;
+
+	//Get the position of first occurrence of underscore
+	var firstIndex = elementId.indexOf("_");
+
+	//Get the position of last occurrence of underscore
+	var lastIndex = elementId.lastIndexOf("_");
+  
+	//Retrieve the row number on which the list box is placed
+	var rowNo = elementId.substring(firstIndex+1,lastIndex);
+
+	//Retrieve the serial number of the list box
+	var serialNo = elementId.substring(lastIndex+1);
+	//alert("customListBoxName-->" + customListBoxName);	
+	if(serialNo == 0)
+	{
+	
+	   	document.forms[0].submittedFor.value = "ForwardTo";
+		document.forms[0].action = "CreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=executeContainerChange&rowNo="+rowNo;
+	    document.forms[0].submit();
+
+	}
+	else
+	{
+	  onCustomListBoxChange(element);
+    }
 }
