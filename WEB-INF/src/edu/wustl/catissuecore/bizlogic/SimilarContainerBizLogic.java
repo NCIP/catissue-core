@@ -434,7 +434,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 			}
 		}
 		
-		throw new DAOException("The container you specified does not have enough space to allocate storage position for Aliquot Number " + specimenNumber);
+		throw new DAOException("The container you specified does not have enough space to allocate storage position for Container Number " + specimenNumber);
 	}
 
 }
