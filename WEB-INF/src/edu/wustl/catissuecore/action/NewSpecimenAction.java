@@ -222,8 +222,10 @@ public class NewSpecimenAction extends SecureAction
 		String[] displayNameFields = {"name"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 
-		List specimenList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
-		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenList);
+		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+		sessionData.getUserId();
+		List specimenCollectionGroupList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
+		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenCollectionGroupList);
 
 		//Setting the specimen class list
 		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(

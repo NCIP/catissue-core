@@ -742,59 +742,5 @@ public class NewMultipleSpecimenAction extends SecureAction
 		}
 		return null;
     }
-/*
- * This method calls the specified method passed as parameter.
- * 
- */
-	   protected ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response) throws Exception 
-	   {
-		   if(methodName.trim().length() > 0  )
-		   {
-			   Method method = getMethod(methodName,this.getClass());
-			   if(method != null)
-			   {
-				   Object args[] = {mapping, form, request, response};
-				   return (ActionForward) method.invoke(this, args);
-			   }
-			   else
-			   	   return null;
-		   }
-		   return null;
-	   }
-
-    /*
-     * This method returns the method with the specified name if the method exists. Return null other wise.
-     */
-	   protected Method getMethod(String name,Class className)
-	   {
-	   	//argument types
-		    Class[] types =
-	        {
-	            ActionMapping.class,
-	            ActionForm.class,
-	            HttpServletRequest.class,
-	            HttpServletResponse.class
-		   };
-	   		try
-			{
-	   			Method method = className.getDeclaredMethod(name,types );
-	   			return method;
-			}
-	   		catch(NoSuchMethodException excp1)
-			{
-	   			Logger.out.error(excp1.getMessage(),excp1 );
-			}
-	   		catch(NullPointerException excp2)
-			{
-	   			Logger.out.error(excp2.getMessage(),excp2 );
-			}
-	   		catch(SecurityException excp3)
-			{
-	   			Logger.out.error(excp3.getMessage(),excp3 );
-			}
-		    return null;
-	   }
-
 
 }
