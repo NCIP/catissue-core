@@ -22,6 +22,19 @@
 <html:form action="<%=Constants.ALIQUOT_SUMMARY_ACTION%>">
 
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script>
+	var newWindow;
+	function showNewPage(action)
+	{
+	   	if(newWindow!=null)
+		{
+		   newWindow.close();
+		}
+	     newWindow = window.open(action,'','scrollbars=yes,status=yes,resizable=yes,width=860, height=600');
+	     newWindow.focus(); 
+	
+    }
+</script>
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
@@ -183,16 +196,21 @@
 			String pos1Key = "value(Specimen:" + i + "_positionDimensionOne)";
 			String pos2Key = "value(Specimen:" + i + "_positionDimensionTwo)";
 			String idKey = "Specimen:" + i + "_id";
+			String specimenLabelKey = "Specimen:" + i + "_label";
 			String virtuallyLocatedKey = "Specimen:" + i + "_virtuallyLocated";
-			
 			String id = Utility.toString(aliquotMap.get(idKey));
+			String onClickSpecimenFunction = "showNewPage('SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id=" + id + "')";
 	%>
 		<tr>
 			<td class="formSerialNumberField" width="5">
 		     	<%=i%>.
 		    </td>
 		    <td class="formField" width="5">
-		     	<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="label" property="<%=labelKey%>" readonly="true"/>				
+			
+				<html:link href="#" styleId="label" onclick="<%=onClickSpecimenFunction%>">
+				<%=aliquotMap.get(specimenLabelKey)%>			
+				</html:link>
+			     <html:hidden property="<%=labelKey%>"/>	
 		    </td>
 		    <td class="formField" nowrap>
 				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="quantity" property="<%=qtyKey%>" readonly="true"/>
