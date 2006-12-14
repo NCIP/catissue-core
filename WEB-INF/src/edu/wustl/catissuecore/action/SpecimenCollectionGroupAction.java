@@ -219,7 +219,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			
 			specimenCollectionGroupForm.setCollectionProtocolId(collectionProtocolId.longValue());
 			
-			if(participantId != null)
+			if(participantId != null && participantId.longValue() != 0)
 			{    
 				//Populating the participants registered to a given protocol
 				loadPaticipants(collectionProtocolId.longValue(), bizLogic, request);
@@ -231,6 +231,10 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			}
 			else if(participantProtocolId != null)
 			{
+				//Populating the participants registered to a given protocol
+				loadPaticipants(collectionProtocolId.longValue(), bizLogic, request);
+				
+				loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 				specimenCollectionGroupForm.setProtocolParticipantIdentifier(participantProtocolId);
 				specimenCollectionGroupForm.setCheckedButton(2);
 			}
