@@ -623,11 +623,33 @@ public class SpecimenForm extends AbstractActionForm
 		
 		if(!Utility.isQuantityDouble(className,type))
 		{
-			long intQuantity = (long) specimen.getQuantity().getValue().doubleValue();
-			long intAvailableQuantity = (long) specimen.getAvailableQuantity().getValue().doubleValue();
+			Double doubleQuantity = specimen.getQuantity().getValue();
+			if (doubleQuantity.toString().contains("E"))
+	    	{    		
+				this.quantity = doubleQuantity.toString();
+	    	}
+	    	else
+	    	{
+	    		long longQuantity = doubleQuantity.longValue();
+	    		this.quantity = new Long(longQuantity).toString();
+	    	}
 			
-			this.quantity = new Long(intQuantity).toString();			
-			this.availableQuantity = new Long(intAvailableQuantity).toString();	
+			doubleQuantity = specimen.getAvailableQuantity().getValue();
+			if (doubleQuantity.toString().contains("E"))
+	    	{    		
+				this.availableQuantity = doubleQuantity.toString();
+	    	}
+	    	else
+	    	{
+	    		long longQuantity = doubleQuantity.longValue();
+	    		this.availableQuantity = new Long(longQuantity).toString();
+	    	}
+			
+//			long intQuantity = (long) specimen.getQuantity().getValue().doubleValue();
+//			long intAvailableQuantity = (long) specimen.getAvailableQuantity().getValue().doubleValue();
+//			
+//			this.quantity = new Long(intQuantity).toString();			
+//			this.availableQuantity = new Long(intAvailableQuantity).toString();	
 			
 //			this.quantity = new BigDecimal(specimen.getQuantity().getValue().toString()).toPlainString();
 //			this.availableQuantity = new BigDecimal(specimen.getQuantity().getValue().toString()).toPlainString();
