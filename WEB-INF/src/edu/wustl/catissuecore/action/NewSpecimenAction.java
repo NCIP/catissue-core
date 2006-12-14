@@ -176,7 +176,7 @@ public class NewSpecimenAction extends SecureAction
 
 		if (specimenForm.isParentPresent())//If parent specimen is present then
 		{
-			String[] fields = {Constants.SYSTEM_IDENTIFIER};
+			String[] fields = {Constants.SYSTEM_LABEL};
 			List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields,
 					Constants.SYSTEM_IDENTIFIER, true);
 			request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);

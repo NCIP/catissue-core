@@ -425,7 +425,7 @@
 							<logic:equal name="newSpecimenForm" property="parentPresent" value="true">
 				        	<td class="formRequiredLabel" >
 								<label for="parentSpecimenId">
-									<bean:message key="createSpecimen.parent"/>
+									<bean:message key="createSpecimen.parentLabel"/>
 								</label>
 							</td>
 							
