@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -622,11 +623,14 @@ public class SpecimenForm extends AbstractActionForm
 		
 		if(!Utility.isQuantityDouble(className,type))
 		{
-			int intQuantity = (int) specimen.getQuantity().getValue().doubleValue();
-			int intAvailableQuantity = (int) specimen.getAvailableQuantity().getValue().doubleValue();
+			long intQuantity = (long) specimen.getQuantity().getValue().doubleValue();
+			long intAvailableQuantity = (long) specimen.getAvailableQuantity().getValue().doubleValue();
 			
-			this.quantity = new Integer(intQuantity).toString();			
-			this.availableQuantity = new Integer(intAvailableQuantity).toString();			
+			this.quantity = new Long(intQuantity).toString();			
+			this.availableQuantity = new Long(intAvailableQuantity).toString();	
+			
+//			this.quantity = new BigDecimal(specimen.getQuantity().getValue().toString()).toPlainString();
+//			this.availableQuantity = new BigDecimal(specimen.getQuantity().getValue().toString()).toPlainString();
 		}
 		else
 		{
@@ -700,20 +704,29 @@ public class SpecimenForm extends AbstractActionForm
 
 				if (!validator.isEmpty(quantity))
 				{					
-					if(Utility.isQuantityDouble(className,type))
-        			{
-        		        if(!validator.isDouble(quantity,true))
-        		        {
-        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));        		        	
-        		        }
-        			}
-        			else
-        			{        				
-        				if(!validator.isNumeric(quantity,0))
-        		        {
-        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));        		        	
-        		        }
-        			}
+					try
+					{
+						quantity = new BigDecimal(quantity).toPlainString();
+						if(Utility.isQuantityDouble(className,type))
+	        			{						
+	        		        if(!validator.isDouble(quantity,true))
+	        		        {
+	        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));        		        	
+	        		        }
+	        			}
+	        			else
+	        			{        				
+	        				if(!validator.isNumeric(quantity,0))
+	        		        {
+	        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));        		        	
+	        		        }
+	        			}
+					}
+					catch (NumberFormatException exp)
+			        {    		  
+						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+					}
+					
 				}else
 				{
 					quantity="0";

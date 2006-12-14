@@ -10,6 +10,7 @@
  */
 package edu.wustl.catissuecore.actionForm;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -406,23 +407,31 @@ public class AliquotForm extends AbstractActionForm
          		if(key.endsWith("_quantity"))
          		{
          			String value = (String)aliquotMap.get(key);
-         			
-         			if(Utility.isQuantityDouble(specimenClass,type))
-        			{
-        		        if(!validator.isDouble(value))
-        		        {
-        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
-        		        	break;
-        		        }
-        			}
-        			else
-        			{
-        				if(!validator.isNumeric(value))
-        		        {
-        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
-        		        	break;
-        		        }
-        			}
+         			try
+					{
+	         			value = new BigDecimal(value).toPlainString();
+	         			
+	         			if(Utility.isQuantityDouble(specimenClass,type))
+	        			{
+	        		        if(!validator.isDouble(value))
+	        		        {
+	        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+	        		        	break;
+	        		        }
+	        			}
+	        			else
+	        			{
+	        				if(!validator.isNumeric(value))
+	        		        {
+	        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+	        		        	break;
+	        		        }
+	        			}
+					}
+         			catch (NumberFormatException exp)
+			        {    		  
+						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+					}
          		}
          		else if(key.endsWith("_label"))
          		{

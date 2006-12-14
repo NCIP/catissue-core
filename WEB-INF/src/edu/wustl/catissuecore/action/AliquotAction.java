@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -849,25 +850,35 @@ public class AliquotAction extends SecureAction
 
 		if (quantityPerAliquot != null && quantityPerAliquot.trim().length() != 0)
 		{
-			if (Utility.isQuantityDouble(form.getSpecimenClass(), form.getType()))
+			try		
 			{
-				if (!validator.isDouble(quantityPerAliquot.trim()))
+				quantityPerAliquot = new BigDecimal(quantityPerAliquot).toPlainString();
+				if (Utility.isQuantityDouble(form.getSpecimenClass(), form.getType()))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-							.getValue("aliquots.qtyPerAliquot")));
-					saveErrors(request, errors);
-					return Constants.PAGEOF_ALIQUOT;
+					if (!validator.isDouble(quantityPerAliquot.trim()))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
+								.getValue("aliquots.qtyPerAliquot")));
+						saveErrors(request, errors);
+						return Constants.PAGEOF_ALIQUOT;
+					}
+				}
+				else
+				{
+					if (!validator.isNumeric(quantityPerAliquot.trim()))
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
+								.getValue("aliquots.qtyPerAliquot")));
+						saveErrors(request, errors);
+						return Constants.PAGEOF_ALIQUOT;
+					}
 				}
 			}
-			else
-			{
-				if (!validator.isNumeric(quantityPerAliquot.trim()))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-							.getValue("aliquots.qtyPerAliquot")));
-					saveErrors(request, errors);
-					return Constants.PAGEOF_ALIQUOT;
-				}
+			catch (NumberFormatException exp)
+	        {    		  
+				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+				saveErrors(request, errors);
+				return Constants.PAGEOF_ALIQUOT;
 			}
 		}
 

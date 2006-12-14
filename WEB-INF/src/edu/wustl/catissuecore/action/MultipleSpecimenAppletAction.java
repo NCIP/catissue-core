@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -566,22 +567,32 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				}
 				else
 				{
-					if(Utility.isQuantityDouble(classValue,typeValue))
-	    			{
-	    		        if(!validator.isDouble(quantityValue,true))
-	    		        {   		        	
-	    		        	String quantityString = ApplicationProperties.getValue("specimen.quantity");
-	    					throw new DAOException(ApplicationProperties.getValue("errors.item.format", quantityString));
-	    		        }
-	    			}
-	    			else
-	    			{
-	    				if(!validator.isNumeric(quantityValue,0))
-	    		        {
-	    					String quantityString = ApplicationProperties.getValue("specimen.quantity");
-	    					throw new DAOException(ApplicationProperties.getValue("errors.item.format", quantityString));        		        	
-	    		        }
-	    			}
+					try
+					{
+						quantityValue = new BigDecimal(quantityValue).toPlainString();
+						
+						if(Utility.isQuantityDouble(classValue,typeValue))
+		    			{
+		    		        if(!validator.isDouble(quantityValue,true))
+		    		        {   		        	
+		    		        	String quantityString = ApplicationProperties.getValue("specimen.quantity");
+		    					throw new DAOException(ApplicationProperties.getValue("errors.item.format", quantityString));
+		    		        }
+		    			}
+		    			else
+		    			{
+		    				if(!validator.isNumeric(quantityValue,0))
+		    		        {
+		    					String quantityString = ApplicationProperties.getValue("specimen.quantity");
+		    					throw new DAOException(ApplicationProperties.getValue("errors.item.format", quantityString));        		        	
+		    		        }
+		    			}
+					}
+					catch (NumberFormatException exp)
+			        {    		  
+						String quantityString = ApplicationProperties.getValue("specimen.quantity");
+    					throw new DAOException(ApplicationProperties.getValue("errors.item.format", quantityString));
+					}
 				}
 //				Long.parseLong(quantityValue);
 //				if (!validator.isPositiveNumeric(quantityValue, 1))
