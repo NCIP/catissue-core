@@ -590,15 +590,15 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			CellSpecimen cellSpecimenObj = (CellSpecimen) obj;
 			CellSpecimen cellSpecimenOldObj = (CellSpecimen) oldObj;
 			// get new qunatity modifed by user
-			int newQty = (int) Double.parseDouble(cellSpecimenObj.getQuantity().toString());//cellSpecimenObj.getQuantityInCellCount().intValue();
+			long newQty = (long) Double.parseDouble(cellSpecimenObj.getQuantity().toString());//cellSpecimenObj.getQuantityInCellCount().intValue();
 			// get old qunatity from database
-			int oldQty = (int) Double.parseDouble(cellSpecimenOldObj.getQuantity().toString());//cellSpecimenOldObj.getQuantityInCellCount().intValue();
+			long oldQty = (long) Double.parseDouble(cellSpecimenOldObj.getQuantity().toString());//cellSpecimenOldObj.getQuantityInCellCount().intValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
-			int oldAvailableQty = (int) Double.parseDouble(cellSpecimenOldObj.getAvailableQuantity().toString());//cellSpecimenOldObj.getAvailableQuantityInCellCount().intValue();
+			long oldAvailableQty = (long) Double.parseDouble(cellSpecimenOldObj.getAvailableQuantity().toString());//cellSpecimenOldObj.getAvailableQuantityInCellCount().intValue();
 
-			int distQty = 0;
-			int newAvailableQty = 0;
+			long distQty = 0;
+			long newAvailableQty = 0;
 			// Distributed Qty = Old_Qty - Old_Available_Qty
 			distQty = oldQty - oldAvailableQty;
 
