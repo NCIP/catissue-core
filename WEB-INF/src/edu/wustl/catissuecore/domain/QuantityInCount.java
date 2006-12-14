@@ -33,7 +33,7 @@ public class QuantityInCount extends Quantity implements Serializable
 	/**
 	 * Parameterized Constructor
 	 */
-	public QuantityInCount(int value)
+	public QuantityInCount(long value)
 	{
 //		this.quantity = new Integer(quantity);
 		this.value = new Double(value);
@@ -66,7 +66,7 @@ public class QuantityInCount extends Quantity implements Serializable
      */
     public String toString()
     {
-    	int qty = (int)value.doubleValue();
+    	long qty = (long)value.doubleValue();
     	return String.valueOf(qty);
     }
 }
