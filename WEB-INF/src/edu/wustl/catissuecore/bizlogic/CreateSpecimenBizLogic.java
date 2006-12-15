@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -129,6 +130,22 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			// set event parameters from parent specimen - added by Ashwin for bug id# 2476
 			specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(parentSpecimen,specimen));
 			specimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
+			if(parentSpecimen != null)
+			{
+				Set set = new HashSet();
+				
+				Collection biohazardCollection = parentSpecimen.getBiohazardCollection();
+				if(biohazardCollection != null)
+				{
+					Iterator it = biohazardCollection.iterator();
+					while(it.hasNext())
+					{
+						Biohazard hazard = (Biohazard)it.next();
+						set.add(hazard);
+					}
+				}
+				specimen.setBiohazardCollection(set);
+			}
 		}
 		try
 		{
@@ -208,18 +225,11 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			}
 			specimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			specimen.setLineage(Constants.DERIVED_SPECIMEN);
-			dao.insert(specimen, sessionDataBean, true, true);
-			protectionObjects.add(specimen);
-
-			if (specimen.getSpecimenCharacteristics() != null)
-			{
-				protectionObjects.add(specimen.getSpecimenCharacteristics());
-			}
-
-			//Setting the External Identifier Collection
+			
+//			Setting the External Identifier Collection
 			Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 			// -- Mandar : code to add an empty External Identifier if externalIdentifier is not added.
-			if (externalIdentifierCollection.isEmpty())
+			if (externalIdentifierCollection==null || externalIdentifierCollection.isEmpty())
 			{
 				ExternalIdentifier externalIdentifierObject = new ExternalIdentifier();
 				externalIdentifierObject.setSpecimen(specimen);
@@ -231,26 +241,21 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			{
 				ExternalIdentifier exId = (ExternalIdentifier) it.next();
 				exId.setSpecimen(specimen);
-				dao.insert(exId, sessionDataBean, true, true);
-				//				protectionObjects.add(exId);
+			    //	dao.insert(exId, sessionDataBean, true, true);
+			    //	protectionObjects.add(exId);
+			}
+			
+			dao.insert(specimen, sessionDataBean, true, true);
+			protectionObjects.add(specimen);
+
+			if (specimen.getSpecimenCharacteristics() != null)
+			{
+				protectionObjects.add(specimen.getSpecimenCharacteristics());
 			}
 
-			//		if(parentSpecimen != null)
-			//		{
-			//			Set set = new HashSet();
-			//			
-			//			Collection biohazardCollection = parentSpecimen.getBiohazardCollection();
-			//			if(biohazardCollection != null)
-			//			{
-			//				Iterator it = biohazardCollection.iterator();
-			//				while(it.hasNext())
-			//				{
-			//					Biohazard hazard = (Biohazard)it.next();
-			//					set.add(hazard);
-			//				}
-			//			}
-			//			specimen.setBiohazardCollection(set);
-			//		}
+			
+
+					
 
 			//Inserting data for Authorization
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
