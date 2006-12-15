@@ -54,7 +54,10 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -429,6 +432,47 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 	}
 
+	/**
+	 * This method gets called after update method. Any logic after updating into database can be included here.
+	 * @param dao the dao object
+	 * @param currentObj The object to be updated.
+	 * @param oldObj The old object.
+	 * @param sessionDataBean session specific data
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
+	 * */
+	protected void postUpdate(DAO dao, Object currentObj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException,
+			UserNotAuthorizedException
+	{
+		/**
+		 * Bug 3094 --> This jdbc query updates all the aliquots of a specimen, saperate query is written to improve the performance
+		 */
+		
+		Specimen currentSpecimen = (Specimen) currentObj;
+		Specimen oldSpecimen = (Specimen) oldObj;
+		String type = currentSpecimen.getType();
+		String pathologicalStatus = currentSpecimen.getPathologicalStatus();
+		String id = currentSpecimen.getId().toString();
+		if(!currentSpecimen.getPathologicalStatus().equals(oldSpecimen.getPathologicalStatus())||!currentSpecimen.getType().equals(oldSpecimen.getType()))
+		{
+		try
+		{
+			JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+			jdbcDao.openSession(null);
+
+			String queryStr = "UPDATE CATISSUE_SPECIMEN SET TYPE = '" + type + "',PATHOLOGICAL_STATUS = '" + pathologicalStatus
+					+ "' WHERE LINEAGE = 'ALIQUOT' AND PARENT_SPECIMEN_ID ='" + id + "';";
+
+			jdbcDao.executeUpdate(queryStr);
+			jdbcDao.closeSession();
+		}
+		catch (Exception e)
+		{
+               Logger.out.debug("Exception occured while updating aliquots");
+		}
+		}
+	}
+
 	void updateStorageLocations(TreeMap containerMap, Specimen specimen)
 	{
 		try
@@ -721,7 +765,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		if (!specimen.getSpecimenCollectionGroup().getId().equals(specimenOld.getSpecimenCollectionGroup().getId()))
 			checkStatus(dao, specimen.getSpecimenCollectionGroup(), "Specimen Collection Group");
 
-		setSpecimenGroupForSubSpecimen(specimen, specimen.getSpecimenCollectionGroup(), specimen.getSpecimenCharacteristics());
+ 		setSpecimenGroupForSubSpecimen(specimen, specimen.getSpecimenCollectionGroup(), specimen.getSpecimenCharacteristics());
 
 		if (!Constants.ALIQUOT.equals(specimen.getLineage()))//specimen instanceof OriginalSpecimen)
 		{
