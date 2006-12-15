@@ -363,7 +363,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 			{
 				SpecimenArrayContent oldSpecimenArrayContent = (SpecimenArrayContent) itr.next();
 				SpecimenArrayContent newSpecimenArrayContent = checkExistSpecimenArrayContent(oldSpecimenArrayContent, specimenArrayContentCollection);
-				if (newSpecimenArrayContent == null || newSpecimenArrayContent.getSpecimen().getLabel().equals(""))
+				if (newSpecimenArrayContent == null || newSpecimenArrayContent.getSpecimen().getLabel() == null || newSpecimenArrayContent.getSpecimen().getLabel().equals(""))
 				{
 					Specimen oldSpecimen = getSpecimen(dao, oldSpecimenArrayContent);
 					if (oldSpecimen != null && oldSpecimen instanceof MolecularSpecimen)
