@@ -42,6 +42,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -92,9 +93,9 @@ public class AliquotAction extends SecureAction
 		{
 			aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
 		}
-
+		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
-				aliquotCount, exceedingMaxLimit, true);
+				aliquotCount, exceedingMaxLimit,sessionData, true);
 
 		populateStorageLocationsOnContainerChange(aliquotForm, containerMap,request);
 
@@ -202,7 +203,7 @@ public class AliquotAction extends SecureAction
 		String operation = request.getParameter(Constants.OPERATION);
 		String pageOf = request.getParameter(Constants.PAGEOF);
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-
+		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		/**
 		 *  Following code ensures that 
 		 *  1. Label/Barcode, Aliquot Count, Quantity per Aliquot submitted on click of Submit button 
@@ -318,16 +319,17 @@ public class AliquotAction extends SecureAction
 				aliquotForm.setBarcode(barcode);
 				aliquotForm.setQuantityPerAliquot(quantityperaliquot);
 				TreeMap containerMap = null;
+				
 				if (aliquotForm.isAliqoutInSameContainer())
 				{
 
 					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
-							Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, true);
+							Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit,sessionData, true);
 				}
 				else
 				{
 					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
-							0, exceedingMaxLimit, true);
+							0, exceedingMaxLimit,sessionData, true);
 				}
 				populateAliquotsStorageLocations(aliquotForm, containerMap);
 
@@ -408,12 +410,12 @@ public class AliquotAction extends SecureAction
 					if (aliquotForm.isAliqoutInSameContainer())
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, true);
+								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData,true);
 					}
 					else
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), 0, exceedingMaxLimit, true);
+								.getSpecimenClass(), 0, exceedingMaxLimit,sessionData, true);
 					}
 
 					populateAliquotsStorageLocations(aliquotForm, containerMap);
@@ -497,12 +499,12 @@ public class AliquotAction extends SecureAction
 					{
 
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, true);
+								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit,sessionData, true);
 					}
 					else
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), 0, exceedingMaxLimit, true);
+								.getSpecimenClass(), 0, exceedingMaxLimit,sessionData, true);
 					}
 					pageOf = checkForSufficientAvailablePositions(request, containerMap, aliquotCount);
 

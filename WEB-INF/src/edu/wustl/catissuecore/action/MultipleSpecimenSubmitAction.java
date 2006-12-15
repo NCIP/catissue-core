@@ -108,6 +108,8 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 		for (int i = 0; i < specimenOrderList.size(); i++)
 		{
 			Specimen specimen = (Specimen) specimenOrderList.get(i);
+			if(specimen.getStorageContainer()!=null)
+			{
 			if (specimen.getPositionDimensionOne() == null || specimen.getPositionDimensionTwo() == null)
 			{
 				positionsToBeAllocatedList.add(specimen);
@@ -117,12 +119,15 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 				usedPositionsList.add(specimen.getStorageContainer().getId() + Constants.STORAGE_LOCATION_SAPERATOR
 						+ specimen.getPositionDimensionOne() + Constants.STORAGE_LOCATION_SAPERATOR + specimen.getPositionDimensionTwo());
 			}
+			}
 
-			List listOfDerivedSpecimen = (List) specimenMap.get(specimen);
+        	List listOfDerivedSpecimen = (List) specimenMap.get(specimen);
 
 			for (int j = 0; j < listOfDerivedSpecimen.size(); j++)
 			{
 				Specimen derivedSpecimen = (Specimen) listOfDerivedSpecimen.get(j);
+				if(specimen.getStorageContainer()!=null)
+				{
 				if (derivedSpecimen.getPositionDimensionOne() == null || derivedSpecimen.getPositionDimensionTwo() == null)
 				{
 					positionsToBeAllocatedList.add(derivedSpecimen);
@@ -133,6 +138,7 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 					usedPositionsList.add(derivedSpecimen.getStorageContainer().getId() + Constants.STORAGE_LOCATION_SAPERATOR
 							+ derivedSpecimen.getPositionDimensionOne() + Constants.STORAGE_LOCATION_SAPERATOR
 							+ derivedSpecimen.getPositionDimensionTwo());
+				}
 				}
 			}
 

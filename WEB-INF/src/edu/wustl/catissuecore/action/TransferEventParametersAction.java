@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.logger.Logger;
 
@@ -106,7 +107,9 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
 				request.setAttribute(Constants.SPECIMEN_CLASS_NAME,className);
 				Logger.out.info("Spcimen Class:" + className);
-				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0,exceedingMaxLimit,true);
+				
+				SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0,exceedingMaxLimit,sessionData,true);
 
 				if (containerMap.isEmpty())
 				{

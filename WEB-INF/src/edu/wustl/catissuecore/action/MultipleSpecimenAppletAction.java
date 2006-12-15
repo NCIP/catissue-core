@@ -199,7 +199,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			multipleSpecimenSessionMap = new HashMap();
 			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, new HashMap());
 			// Populate storage positions -- Ashwin
-			Map sessionContainerMap = populateStorageLocations(bizLogic,linkedMap);
+			Map sessionContainerMap = populateStorageLocations(bizLogic,linkedMap,request);
 			addMapToSession(request,linkedMap,Constants.SPECIMEN_MAP_KEY);
 			addMapToSession(request,sessionContainerMap,Constants.CONTAINER_MAP_KEY);
 			// End
@@ -843,9 +843,10 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	 * This method populates SCG Id and storage locations for Multiple Specimen
 	 * @param dao
 	 * @param specimenMap
+	 * @param request
 	 * @throws DAOException
 	 */
-	private Map populateStorageLocations(IBizLogic bizLogic, Map specimenMap) throws DAOException, Exception
+	private Map populateStorageLocations(IBizLogic bizLogic, Map specimenMap, HttpServletRequest request) throws DAOException, Exception
 	{
 		final String saperator = "$";
 		Map tempSpecimenMap = new LinkedHashMap();
@@ -926,7 +927,8 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 					Constants.STORAGE_CONTAINER_FORM_ID);
 			String split[] = key.split("[$]");
 			// TODO when moved to acion pass true
-			TreeMap containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen((Long.parseLong(split[0])), split[1], 0, "", true);
+			SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+			TreeMap containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen((Long.parseLong(split[0])), split[1], 0, "",sessionData, true);
 			//mandar : to test for null container 
 			if(containerMap == null || containerMap.isEmpty() )
 			{

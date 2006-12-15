@@ -37,9 +37,11 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -86,6 +88,7 @@ public class CreateSpecimenAction extends SecureAction
 			createForm.setVirtuallyLocated(true);
 		}
 		String pageOf = request.getParameter(Constants.PAGEOF);
+		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		/*
 		 // ---- chetan 15-06-06 ----
 		 StorageContainerBizLogic bizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
@@ -160,7 +163,7 @@ public class CreateSpecimenAction extends SecureAction
 						if(spClass!=null)
 						{
 						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
-								spClass, 0,exceedingMaxLimit,true);
+								spClass, 0,exceedingMaxLimit,sessionData,true);
 						if (containerMap.isEmpty())
 						{
 							ActionErrors errors = (ActionErrors) request
@@ -325,7 +328,7 @@ public class CreateSpecimenAction extends SecureAction
 				createForm.setExIdCounter(1);
 				createForm.setVirtuallyLocated(false);
 				containerMap = getContainerMap(createForm.getParentSpecimenId(), createForm
-						.getClassName(), dao, scbizLogic,exceedingMaxLimit);
+						.getClassName(), dao, scbizLogic,exceedingMaxLimit,request);
 				initialValues = checkForInitialValues(containerMap);
 			}
 		}
@@ -341,13 +344,13 @@ public class CreateSpecimenAction extends SecureAction
 	}
 
 	TreeMap getContainerMap(String specimenId, String className, CreateSpecimenBizLogic dao,
-			StorageContainerBizLogic scbizLogic,String exceedingMaxLimit) throws DAOException
+			StorageContainerBizLogic scbizLogic,String exceedingMaxLimit, HttpServletRequest request) throws DAOException,SMException
 	{
 		TreeMap containerMap = new TreeMap();
 
 		List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, new Long(
 				specimenId));
-
+		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		if (!spList.isEmpty())
 		{
 			Specimen sp = (Specimen) spList.get(0);
@@ -355,7 +358,7 @@ public class CreateSpecimenAction extends SecureAction
 					.getCollectionProtocol().getId().longValue();
 			String spClass = className;
 			Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
-			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0,exceedingMaxLimit,true);
+			containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0,exceedingMaxLimit,sessionData,true);
 		}
 
 		return containerMap;

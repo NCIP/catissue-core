@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 
 
@@ -52,6 +53,7 @@ public class SpecimenArrayAliquotAction extends BaseAction
 		SpecimenArrayAliquotForm specimenArrayAliquotForm = (SpecimenArrayAliquotForm) form;
 		String pageOf = request.getParameter(Constants.PAGEOF);		
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
+		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
@@ -123,7 +125,7 @@ public class SpecimenArrayAliquotAction extends BaseAction
 				checkForSpecimenArray(request, specimenArrayAliquotForm);
 				int aliquotCount = Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 				Long id = (Long)request.getAttribute(Constants.STORAGE_TYPE_ID);
-				containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,exceedingMaxLimit);				
+				containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,sessionData,exceedingMaxLimit);				
 				populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);				
 				request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 				request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT);
@@ -182,7 +184,7 @@ public class SpecimenArrayAliquotAction extends BaseAction
 				{
 					int aliquotCount = Integer.parseInt(specimenArrayAliquotForm.getAliquotCount());
 					Long id = (Long)request.getAttribute(Constants.STORAGE_TYPE_ID);
-					containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,exceedingMaxLimit);					
+					containerMap = bizLogic.getAllocatedContaienrMapForSpecimenArray(id.longValue(), 0,sessionData,exceedingMaxLimit);					
 					pageOf = checkForSufficientAvailablePositions(request, containerMap, aliquotCount);
 
 					if (Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))

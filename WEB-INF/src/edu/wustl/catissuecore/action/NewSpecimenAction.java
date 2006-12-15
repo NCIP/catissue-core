@@ -222,8 +222,7 @@ public class NewSpecimenAction extends SecureAction
 		String[] displayNameFields = {"name"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 
-		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-		sessionData.getUserId();
+		
 		List specimenCollectionGroupList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenCollectionGroupList);
 
@@ -363,7 +362,8 @@ public class NewSpecimenAction extends SecureAction
 							specimenForm.setVirtuallyLocated(false);
 					}
 					//Logger.out.debug("calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
-					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass,0,exceedingMaxLimit,true);
+					SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass,0,exceedingMaxLimit,sessionData,true);
 					//Logger.out.debug("exceedingMaxLimit in action for Boolean:"+exceedingMaxLimit);
 					Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 					if(containerMap.isEmpty())
