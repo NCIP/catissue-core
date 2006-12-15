@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
+import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
@@ -290,7 +291,42 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			aliquotSpecimen.setAvailable(Boolean.TRUE);
 			aliquotSpecimen.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 			aliquotSpecimen.setLineage(Constants.ALIQUOT);
-
+			/**
+			 *  Aliquot inherits external identifiers and biohazards of parent -- Bug No. 3094
+			 */
+			Collection externalIdentifierCollectionOfAliquot = new HashSet();
+			Collection externalIdentifierCollection = parentSpecimen.getExternalIdentifierCollection();
+			Iterator itr = externalIdentifierCollection.iterator();
+			while(itr.hasNext()) {
+				ExternalIdentifier exId = new ExternalIdentifier();
+				ExternalIdentifier tempExId = (ExternalIdentifier) itr.next();
+				exId.setName(tempExId.getName());
+				exId.setValue(tempExId.getValue());
+				exId.setSpecimen(aliquotSpecimen);
+				externalIdentifierCollectionOfAliquot.add(exId);
+			}
+			aliquotSpecimen.setExternalIdentifierCollection(externalIdentifierCollectionOfAliquot);
+			
+//			Setting the Biohazard Collection
+			Set set = new HashSet();
+			Collection biohazardCollection = parentSpecimen.getBiohazardCollection();
+			if (biohazardCollection != null)
+			{
+				Iterator it = biohazardCollection.iterator();
+				while (it.hasNext())
+				{
+					Biohazard hazard = (Biohazard) it.next();
+					Logger.out.debug("hazard.getId() " + hazard.getId());
+					Object bioObj = dao.retrieve(Biohazard.class.getName(), hazard.getId());
+					if (bioObj != null)
+					{
+						Biohazard hazardObj = (Biohazard) bioObj;
+						set.add(hazardObj);
+					}
+				}
+			}
+			aliquotSpecimen.setBiohazardCollection(set);
+							
 			//Inserting an aliquot in the database
 			dao.insert(aliquotSpecimen, sessionDataBean, true, false);//NEEDS TO BE FIXED FOR SECURE INSERT
 
@@ -299,15 +335,16 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 
 			//TO BE DELETED LATER
 			aliquot.setId(aliquotSpecimen.getId());
+			
 
 			//Adding dummy entry of external identifier for Query Module to fulfil the join condition
-			Collection externalIdentifierCollection = new HashSet();
+		/*	Collection externalIdentifierCollection = new HashSet();
 			ExternalIdentifier exId = new ExternalIdentifier();
 			exId.setName(null);
 			exId.setValue(null);
 			exId.setSpecimen(aliquotSpecimen);
-			externalIdentifierCollection.add(exId);
-			dao.insert(exId, sessionDataBean, true, true);
+			externalIdentifierCollection.add(exId);   
+			dao.insert(exId, sessionDataBean, true, true); */
 			aliquotList.add(aliquotSpecimen);
 		}
 		/* Vaishali - Inserting authorization data */
