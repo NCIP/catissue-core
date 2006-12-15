@@ -2487,7 +2487,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	/* temp function end */
 
 	public TreeMap getAllocatedContaienrMapForSpecimen(long cpId, String specimenClass, int aliquotCount, String exceedingMaxLimit,
-			boolean closeSession) throws DAOException
+			SessionDataBean sessionData, boolean closeSession) throws DAOException
 	{
 
 		Logger.out.debug("method : getAllocatedContaienrMapForSpecimen()---getting containers for specimen--------------");
@@ -2545,6 +2545,21 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
+					StorageContainer sc = new StorageContainer();
+					sc.setId(new Long(Id));
+					boolean hasAccess = true;
+					try
+					{
+						hasAccess = validateContainerAccess(sc,sessionData);
+					}
+					catch (SMException sme)
+					{
+						sme.printStackTrace();
+						throw handleSMException(sme);
+					}
+					if(!hasAccess)
+						continue;
+				
 					if (i > containersMaxLimit)
 					{
 						Logger.out.debug("CONTAINERS_MAX_LIMIT reached");
@@ -2586,7 +2601,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @throws DAOException -- throws DAO Exception
 	 * @see edu.wustl.common.dao.JDBCDAOImpl
 	 */
-	public TreeMap getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id, int noOfAliqoutes, String exceedingMaxLimit)
+	public TreeMap getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id, int noOfAliqoutes, SessionDataBean sessionData,String exceedingMaxLimit)
 			throws DAOException
 	{
 		TreeMap containerMap = new TreeMap();
@@ -2645,6 +2660,20 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					// deep copy is required due to cache updation by reference
 					Map positionMap1 = deepCopyMap(positionMap);
 					//NameValueBean nvb = new NameValueBean(Name, Id);
+					StorageContainer sc = new StorageContainer();
+					sc.setId(new Long(Id));
+					boolean hasAccess = true;
+					try
+					{
+						hasAccess = validateContainerAccess(sc,sessionData);
+					}
+					catch (SMException sme)
+					{
+						sme.printStackTrace();
+						throw handleSMException(sme);
+					}
+					if(!hasAccess)
+						continue;
 					if (i > containersMaxLimit)
 					{
 						exceedingMaxLimit = "true";
