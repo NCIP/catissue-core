@@ -773,19 +773,19 @@ public class UserBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 		
-		if (!validator.isValidOption(String.valueOf(user.getInstitution().getId())) || validator.isEmpty(String.valueOf(user.getInstitution().getId())))
+		if (user.getInstitution().getId()==null || user.getInstitution().getId().longValue()<=0)
 		{
 			message = ApplicationProperties.getValue("user.institution");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
-		if (!validator.isValidOption(String.valueOf(user.getDepartment().getId())) || validator.isEmpty(String.valueOf(user.getDepartment().getId())))
+		if (user.getDepartment().getId()==null || user.getDepartment().getId().longValue()<=0)
 		{
 			message = ApplicationProperties.getValue("user.department");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
 		}
 
-		if (!validator.isValidOption(String.valueOf(user.getCancerResearchGroup().getId())) || validator.isEmpty(String.valueOf(user.getCancerResearchGroup().getId())))
+		if (user.getCancerResearchGroup().getId()==null || user.getCancerResearchGroup().getId().longValue()<=0)
 		{
 			message = ApplicationProperties.getValue("user.cancerResearchGroup");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
