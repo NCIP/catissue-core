@@ -436,7 +436,7 @@ tr#hiddenCombo
 				     	</label>
 				     </td>
 				     <td class="formField" colspan="2">
-				     <html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="lastName" name="participantForm" property="lastName" readonly="<%=readOnlyForAll%>"/>
+				     <html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="lastName" name="participantForm" property="lastName" readonly="<%=readOnlyForAll%>"/>
 				     </td>
 				 </tr>
 				  <tr>
@@ -447,7 +447,7 @@ tr#hiddenCombo
 				     	</label>
 				     </td>
 				     <td class="formField" colspan="2">
-				     	<html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="firstName" property="firstName" readonly="<%=readOnlyForAll%>"/>
+				     	<html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="firstName" property="firstName" readonly="<%=readOnlyForAll%>"/>
 				     </td>
 				 </tr>
 				 <tr>
@@ -458,7 +458,7 @@ tr#hiddenCombo
 				     	</label>
 				     </td>
 				     <td class="formField" colspan="2">
-				     <html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="middleName" property="middleName" readonly="<%=readOnlyForAll%>"/>
+				     <html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="middleName" property="middleName" readonly="<%=readOnlyForAll%>"/>
 				     </td>
 				 </tr>
 				 <tr>

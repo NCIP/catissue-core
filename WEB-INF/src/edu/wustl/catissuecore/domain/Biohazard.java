@@ -95,7 +95,7 @@ public class Biohazard extends AbstractDomainObject implements Serializable
     /**
      * Returns the name of the biohazardous agent.
      * @hibernate.property name="name" type="string" 
-     * column="NAME" length="50" not-null="true" unique="true"
+     * column="NAME" length="255" not-null="true" unique="true"
      * @return the name of the biohazardous agent.
      * @see #setName(String)
      */

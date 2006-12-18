@@ -193,7 +193,7 @@ if(currentEventParametersDate.trim().length() > 0)
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized"  maxlength="200"  styleId="url" property="url" />
+				<html:text styleClass="formFieldSized"  maxlength="255"  styleId="url" property="url" />
 			</td>
 		</tr>
 	
@@ -207,7 +207,7 @@ if(currentEventParametersDate.trim().length() > 0)
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized"  maxlength="50"  styleId="name" property="name" />
+				<html:text styleClass="formFieldSized"  maxlength="255"  styleId="name" property="name" />
 			</td>
 		</tr>
 	

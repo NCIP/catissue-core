@@ -130,7 +130,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 
 	/**
 	 * Returns the title of the protocol.
-	 * @hibernate.property name="title" type="string" column="TITLE" length="150" not-null="true" unique="true"
+	 * @hibernate.property name="title" type="string" column="TITLE" length="255" not-null="true" unique="true"
 	 * @return Returns the title.
 	 */
 	public String getTitle()
@@ -149,7 +149,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 	/**
 	 * Returns the short title of the protocol.
 	 * @hibernate.property name="shortTitle" type="string" column="SHORT_TITLE"
-	 * length="50"
+	 * length="255"
 	 * @return Returns the shortTitle.
 	 */
 	public String getShortTitle()
@@ -167,7 +167,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 
 	/**
 	 * Returns the irb id of the protocol.
-	 * @hibernate.property name="irbIdentifier" type="string" column="IRB_IDENTIFIER" length="50"
+	 * @hibernate.property name="irbIdentifier" type="string" column="IRB_IDENTIFIER" length="255"
 	 * @return Returns the irbIdentifier.
 	 */
 	public String getIrbIdentifier()
@@ -239,7 +239,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 
 	/**
 	 * Returns the descriptionURL.
-	 * @hibernate.property name="descriptionURL" type="string" column="DESCRIPTION_URL" length="200"
+	 * @hibernate.property name="descriptionURL" type="string" column="DESCRIPTION_URL" length="255"
 	 * @return Returns the descriptionURL.
 	 */
 	public String getDescriptionURL()

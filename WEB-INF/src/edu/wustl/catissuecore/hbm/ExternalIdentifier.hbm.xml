@@ -34,7 +34,7 @@
             update="true"
             insert="true"
             column="NAME"
-            length="50"
+            length="255"
         />
 
         <property
@@ -43,7 +43,7 @@
             update="true"
             insert="true"
             column="VALUE"
-            length="50"
+            length="255"
         />
 
         <many-to-one

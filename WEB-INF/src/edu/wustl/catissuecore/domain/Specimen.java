@@ -291,7 +291,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 	/**
 	 * Returns the barcode assigned to the specimen.
-	 * @hibernate.property name="barcode" type="string" column="BARCODE" length="50" unique="true"
+	 * @hibernate.property name="barcode" type="string" column="BARCODE" length="255" unique="true"
 	 * @return the barcode assigned to the specimen.
 	 * @see #setBarcode(String)
 	 */
@@ -312,7 +312,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 	/**
 	 * Returns the comments on the specimen.
-	 * @hibernate.property name="comments" type="string" column="COMMENTS" length="200"
+	 * @hibernate.property name="comments" type="string" column="COMMENTS" length="2000"
 	 * @return the comments on the specimen.
 	 * @see #setComments(String)
 	 */
@@ -1100,7 +1100,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	/**
 	 * Returns the label name of specimen.
 	 * @hibernate.property name="label" type="string" 
-	 * column="LABEL" length="50"
+	 * column="LABEL" length="255"
 	 * @return the label name of specimen.
 	 * @see #setLabel(String)
 	 */

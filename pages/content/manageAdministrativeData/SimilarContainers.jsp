@@ -713,7 +713,7 @@
 		    					}else{
 							    %>
 							<td class="formField" nowrap>
-								<html:text styleClass="formFieldSized10"  maxlength="100"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>"/>
+								<html:text styleClass="formFieldSized10"  maxlength="255"  size="40" styleId="<%=contNameSId%>" property="<%=containerNameKey%>"/>
 								&nbsp;
 								<html:link href="#" styleId="newSite" onclick="<%=resetNameFunction%>">
 								<bean:message key="StorageContainer.resetName" />
@@ -724,7 +724,7 @@
 		    					}
 							    %>
 						    <td class="formField">
-							<html:text styleClass="formFieldSized10"  maxlength="100"  size="30" styleId="<%=barSId%>" property="<%=barcodeKey%>" />
+							<html:text styleClass="formFieldSized10"  maxlength="255"  size="30" styleId="<%=barSId%>" property="<%=barcodeKey%>" />
 							</td>
 			
 							<td class="formField">

@@ -79,7 +79,7 @@ public class Container extends AbstractDomainObject implements Serializable
 	
     /**
      * Returns the activity status of the container.
-	 * @hibernate.property name="activityStatus" type="string" column="ACTIVITY_STATUS" length="20"
+	 * @hibernate.property name="activityStatus" type="string" column="ACTIVITY_STATUS" length="50"
 	 * @return Returns the activity status of the container.
      */
     public String getActivityStatus()
@@ -97,7 +97,7 @@ public class Container extends AbstractDomainObject implements Serializable
     
     /**
      * @return Returns the barcode.
-     * @hibernate.property name="barcode" type="string" column="BARCODE" length="100"
+     * @hibernate.property name="barcode" type="string" column="BARCODE" length="255"
      */
     public String getBarcode()
     {
@@ -202,7 +202,7 @@ public class Container extends AbstractDomainObject implements Serializable
     
     /**
      * @return Returns the name.
-     * @hibernate.property name="name" type="string" column="NAME" length="100"
+     * @hibernate.property name="name" type="string" column="NAME" length="255"
      */
     public String getName()
     {

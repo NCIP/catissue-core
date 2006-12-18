@@ -31,8 +31,7 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	protected String activityStatus;
 	/**
 	 * Returns the reason of disposal.
-	 * @hibernate.property name="reason" type="string" column="REASON" length="50"
-	 * not-null="true"
+	 * @hibernate.property name="reason" type="string" column="REASON" length="255"	
 	 * @return reason of disposal.
 	 */
 	public String getReason()

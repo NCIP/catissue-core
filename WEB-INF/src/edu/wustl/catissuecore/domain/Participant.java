@@ -153,7 +153,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
      * @return String representing the last name of the Participant.
      * @see #setLastName(String)
      * @hibernate.property name="lastName" type="string" 
-     * column="LAST_NAME" length="50"
+     * column="LAST_NAME" length="255"
      */
 	public String getLastName()
 	{
@@ -175,7 +175,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
      * @return String representing the first name of the Participant.
      * @see #setFirstName(String)
      * @hibernate.property name="firstName" type="string" 
-     * column="FIRST_NAME" length="50"
+     * column="FIRST_NAME" length="255"
      */
 	public String getFirstName()
 	{
@@ -197,7 +197,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
      * @return String representing the middle name of the Participant.
      * @see #setMiddleName(String)
      * @hibernate.property name="middleName" type="string" 
-     * column="MIDDLE_NAME" length="50"
+     * column="MIDDLE_NAME" length="255"
      */
 	public String getMiddleName()
 	{
@@ -368,7 +368,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	/**
 	 * Returns the activity status of the participant.
 	 * @hibernate.property name="activityStatus" type="string"
-	 * column="ACTIVITY_STATUS" length="20"
+	 * column="ACTIVITY_STATUS" length="50"
 	 * @return Returns the activity status of the participant.
 	 * @see #setActivityStatus(String)
 	 */

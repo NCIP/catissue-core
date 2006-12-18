@@ -360,7 +360,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 						<%
 							String fieldWidth = Utility.getColumnWidth(CollectionProtocol.class,"title" );
 						%>
-							<html:text styleClass="formFieldSized" maxlength="<%= fieldWidth %>"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -373,7 +373,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="shortTitle" property="shortTitle" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="shortTitle" property="shortTitle" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					
@@ -386,7 +386,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -479,7 +479,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" maxlength="200"  size="30" styleId="descriptionURL" property="descriptionURL" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="descriptionURL" property="descriptionURL" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 

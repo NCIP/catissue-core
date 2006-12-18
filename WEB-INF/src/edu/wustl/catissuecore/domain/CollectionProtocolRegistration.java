@@ -108,7 +108,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * Returns the unique number given by a User to a Participant 
 	 * registered to a Collection Protocol.
 	 * @hibernate.property name="protocolParticipantIdentifier" type="string"
-	 * column="PROTOCOL_PARTICIPANT_ID" length="50"
+	 * column="PROTOCOL_PARTICIPANT_ID" length="255"
 	 * @return the unique number given by a User to a Participant 
 	 * registered to a Collection Protocol.
 	 * @see #setProtocolParticipantIdentifier(Long)
@@ -206,7 +206,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	/**
 	 * Returns the activity status of the participant.
 	 * @hibernate.property name="activityStatus" type="string"
-	 * column="ACTIVITY_STATUS" length="20"
+	 * column="ACTIVITY_STATUS" length="50"
 	 * @return Returns the activity status of the participant.
 	 * @see #setActivityStatus(String)
 	 */

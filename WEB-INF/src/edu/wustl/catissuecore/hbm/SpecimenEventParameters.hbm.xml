@@ -146,7 +146,7 @@
             update="true"
             insert="true"
             column="URL"
-            length="200"
+            length="255"
             not-null="true"
         />
 
@@ -156,7 +156,7 @@
             update="true"
             insert="true"
             column="NAME"
-            length="50"
+            length="255"
             not-null="true"
         />
 
@@ -436,7 +436,7 @@
             update="true"
             insert="true"
             column="GEL_IMAGE_URL"
-            length="200"
+            length="255"
         />
 
         <property
@@ -509,9 +509,8 @@
             update="true"
             insert="true"
             column="REASON"
-            length="50"
-            not-null="true"
-        />
+            length="255"
+         />
 
         </joined-subclass>
 

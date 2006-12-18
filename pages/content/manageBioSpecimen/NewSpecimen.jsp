@@ -465,7 +465,7 @@
 								</label>
 							</td>
 						    <td class="formField" >
-						     	<html:text styleClass="formFieldSized15" size="30" maxlength="50"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
+						     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
 						    </td>							
 							<td class="formRequiredNotice" width="5">&nbsp;</td>
 						    <td class="formLabel">							
@@ -474,7 +474,7 @@
 								</label>								
 							</td>
 						    <td class="formField" >
-								<html:text styleClass="formFieldSized15" maxlength="50"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
+								<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="barcode" property="barcode" readonly="<%=readOnlyForAll%>" />
 				        	</td>
 						</tr>
 				 

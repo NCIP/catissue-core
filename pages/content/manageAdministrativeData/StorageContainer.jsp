@@ -751,7 +751,7 @@ function onEditChange()
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized15" maxlength="100"  size="30" styleId="containerName" property="containerName"/>
+							<html:text styleClass="formFieldSized15" maxlength="255"  size="30" styleId="containerName" property="containerName"/>
 							&nbsp;
 							<html:link href="#" styleId="newSite" onclick="ResetName(this)">
 								<bean:message key="StorageContainer.resetName" />
@@ -783,7 +783,7 @@ function onEditChange()
 							</label>
 						</td>
 						<td class="formField" colspan="2">
-							<html:text styleClass="formFieldSized10" maxlength="100"  size="30" styleId="barcode" property="barcode"/>
+							<html:text styleClass="formFieldSized10" maxlength="255"  size="30" styleId="barcode" property="barcode"/>
 						</td>
 					</tr>
 					

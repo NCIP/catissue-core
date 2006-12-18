@@ -71,7 +71,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
     /**
      * The affiliation of the user with the reported problem.
 	 * @hibernate.property name="affiliation" type="string"
-     * column="AFFILIATION" length="200" not-null="true"
+     * column="AFFILIATION" length="255" not-null="true"
      * @return The affiliation of the reported problem.
      * @see #setAffiliation(String affiliation) 
      */
@@ -89,7 +89,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
     /**
      * The name of the user who reported the problem.
 	 * @hibernate.property name="nameOfReporter" type="string"
-     * column="NAME_OF_REPORTER" length="200" not-null="true"
+     * column="NAME_OF_REPORTER" length="255" not-null="true"
      * @return The name of the user who reported the problem.
      * @see #setNameOfReporter(String nameOfReporter) 
      */
@@ -179,7 +179,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
      * Returns the email id of who reported the problem.
      * @return the email id of who reported the problem.
 	 * @hibernate.property name="from" type="string"
-     * column="REPORTERS_EMAIL_ID" length="50" not-null="true" 
+     * column="REPORTERS_EMAIL_ID" length="255" not-null="true" 
      * @see #setFrom(String)
      */
     public String getFrom()
@@ -223,7 +223,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
      * Returns the subject of the reported problem.
      * @return the subject of the reported problem.
 	 * @hibernate.property name="subject" type="string" 
-     * column="SUBJECT" length="100"
+     * column="SUBJECT" length="255"
      * @see #setSubject(String)
      */
     public String getSubject()

@@ -194,7 +194,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" maxlength="100"  size="30" styleId="emailAddress" property="emailAddress" readonly="<%=readOnlyEmail%>" />
+							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="emailAddress" property="emailAddress" readonly="<%=readOnlyEmail%>" />
 						</td>
 					</tr>
 <!-- Mandar 24-Apr-06 : bugid 972 : Confirm Email address -->
@@ -207,7 +207,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" maxlength="100"  size="30" styleId="confirmEmailAddress" property="confirmEmailAddress" readonly="<%=readOnlyEmail%>" />
+							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="confirmEmailAddress" property="confirmEmailAddress" readonly="<%=readOnlyEmail%>" />
 						</td>
 					</tr>
 				</logic:notEqual>
@@ -221,7 +221,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="lastName" property="lastName" />
+							<html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="lastName" property="lastName" />
 						</td>
 					</tr>
 					
@@ -233,7 +233,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="firstName" property="firstName" />
+							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="firstName" property="firstName" />
 						</td>
 					</tr>
 					
@@ -273,7 +273,7 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="street" property="street" />
+							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="street" property="street" />
 						</td>
 					</tr>
 					

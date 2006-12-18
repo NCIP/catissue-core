@@ -77,7 +77,7 @@ public class ContainerType extends AbstractDomainObject
     
     /**
      * @return Returns the name.
-     * @hibernate.property name="name" type="string" column="NAME" length="100"
+     * @hibernate.property name="name" type="string" column="NAME" length="255"
      */
     public String getName()
     {
@@ -94,7 +94,7 @@ public class ContainerType extends AbstractDomainObject
     
     /**
      * @return Returns the oneDimensionLabel.
-     * @hibernate.property name="oneDimensionLabel" type="string" column="ONE_DIMENSION_LABEL" length="100"
+     * @hibernate.property name="oneDimensionLabel" type="string" column="ONE_DIMENSION_LABEL" length="255"
      */
     public String getOneDimensionLabel()
     {
@@ -111,7 +111,7 @@ public class ContainerType extends AbstractDomainObject
 
     /**
      * @return Returns the twoDimensionLabel.
-     * @hibernate.property name="twoDimensionLabel" type="string" column="TWO_DIMENSION_LABEL" length="100"
+     * @hibernate.property name="twoDimensionLabel" type="string" column="TWO_DIMENSION_LABEL" length="255"
      */
     public String getTwoDimensionLabel()
     {
@@ -146,7 +146,7 @@ public class ContainerType extends AbstractDomainObject
     
     /**
      * @return Returns the activityStatus.
-     * @hibernate.property name="activityStatus" type="string" column="ACTIVITY_STATUS" length="30"
+     * @hibernate.property name="activityStatus" type="string" column="ACTIVITY_STATUS" length="50"
      */
     public String getActivityStatus()
     {

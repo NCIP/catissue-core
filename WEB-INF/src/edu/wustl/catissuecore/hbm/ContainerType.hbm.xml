@@ -40,7 +40,7 @@
             update="true"
             insert="true"
             column="NAME"
-            length="100"
+            length="255"
         />
 
         <property
@@ -49,7 +49,7 @@
             update="true"
             insert="true"
             column="ONE_DIMENSION_LABEL"
-            length="100"
+            length="255"
         />
 
         <property
@@ -58,7 +58,7 @@
             update="true"
             insert="true"
             column="TWO_DIMENSION_LABEL"
-            length="100"
+            length="255"
         />
 
         <property
@@ -76,7 +76,7 @@
             update="true"
             insert="true"
             column="ACTIVITY_STATUS"
-            length="30"
+            length="50"
         />
 
         <!--

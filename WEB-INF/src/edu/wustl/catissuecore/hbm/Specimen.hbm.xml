@@ -73,7 +73,7 @@
             update="true"
             insert="true"
             column="BARCODE"
-            length="50"
+            length="255"
             unique="true"
         />
 
@@ -83,7 +83,7 @@
             update="true"
             insert="true"
             column="COMMENTS"
-            length="200"
+            length="2000"
         />
 
         <property
@@ -264,7 +264,7 @@
             update="true"
             insert="true"
             column="LABEL"
-            length="50"
+            length="255"
         />
 
         <property

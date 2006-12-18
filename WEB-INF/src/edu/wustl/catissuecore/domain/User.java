@@ -184,7 +184,7 @@ public class User extends AbstractDomainObject implements Serializable
 
     /**
 	 * Returns the password assigned to user.
-	 * @hibernate.property name="emailAddress" type="string" column="EMAIL_ADDRESS" length="100"
+	 * @hibernate.property name="emailAddress" type="string" column="EMAIL_ADDRESS" length="255"
 	 * @return Returns the password.
 	 */
     public String getEmailAddress()
@@ -236,7 +236,7 @@ public class User extends AbstractDomainObject implements Serializable
     
     /**
 	 * Returns the firstname assigned to user.
-	 * @hibernate.property name="firstName" type="string" column="FIRST_NAME" length="50"
+	 * @hibernate.property name="firstName" type="string" column="FIRST_NAME" length="255"
 	 * @return Returns the firstName.
 	 */
     public String getFirstName()
@@ -254,7 +254,7 @@ public class User extends AbstractDomainObject implements Serializable
     
     /**
 	 * Returns the lastname assigned to user.
-	 * @hibernate.property name="lastName" type="string" column="LAST_NAME" length="50"
+	 * @hibernate.property name="lastName" type="string" column="LAST_NAME" length="255"
 	 * @return Returns the lastName.
 	 */
     public String getLastName()
@@ -272,7 +272,7 @@ public class User extends AbstractDomainObject implements Serializable
 
     /**
 	 * Returns the loginname assigned to user.
-	 * @hibernate.property name="loginName" type="string" column="LOGIN_NAME" length="50" 
+	 * @hibernate.property name="loginName" type="string" column="LOGIN_NAME" length="255" 
 	 * not-null="true" unique="true"
 	 * @return Returns the loginName.
 	 */

@@ -34,7 +34,7 @@
             update="true"
             insert="true"
             column="PROTOCOL_PARTICIPANT_ID"
-            length="50"
+            length="255"
         />
 
         <property
@@ -71,7 +71,7 @@
             update="true"
             insert="true"
             column="ACTIVITY_STATUS"
-            length="20"
+            length="50"
         />
 
         <set

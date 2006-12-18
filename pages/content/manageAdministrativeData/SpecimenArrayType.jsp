@@ -136,7 +136,7 @@
 					</label>
 				</td>
 				<td class="formField" colspan="3">
-					<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="name" property="name"/>
+					<html:text styleClass="formFieldSized10"  maxlength="255"  size="30" styleId="name" property="name"/>
 				</td>
 			</tr>
 			

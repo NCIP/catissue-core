@@ -34,7 +34,7 @@
             update="true"
             insert="true"
             column="AFFILIATION"
-            length="200"
+            length="255"
             not-null="true"
         />
 
@@ -44,7 +44,7 @@
             update="true"
             insert="true"
             column="NAME_OF_REPORTER"
-            length="200"
+            length="255"
             not-null="true"
         />
 
@@ -54,7 +54,7 @@
             update="true"
             insert="true"
             column="REPORTERS_EMAIL_ID"
-            length="50"
+            length="255"
             not-null="true"
         />
 
@@ -74,7 +74,7 @@
             update="true"
             insert="true"
             column="SUBJECT"
-            length="100"
+            length="255"
         />
 
         <property

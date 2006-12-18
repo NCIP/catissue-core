@@ -118,7 +118,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	}
 	/**
 	 * Returns the system generated unique Specimen Collection Group name.
-	 * @hibernate.property name="name" column="NAME" type="string" length="55"
+	 * @hibernate.property name="name" column="NAME" type="string" length="255"
 	 * @return the system generated unique name.
 	 * @see #setName(String)
 	 */

@@ -547,3 +547,78 @@ INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID
 
 /* Mandar : 06Dec06: For MultipleSpecimen Actions  end */
 
+
+/* Jitendra: Start:- 17dec06: Bug-3141*/
+
+alter table CATISSUE_PARTICIPANT modify LAST_NAME varchar(255);
+alter table CATISSUE_PARTICIPANT modify FIRST_NAME varchar(255);
+alter table CATISSUE_PARTICIPANT modify MIDDLE_NAME varchar(255);
+alter table CATISSUE_PARTICIPANT modify ACTIVITY_STATUS varchar(50);
+
+alter table CATISSUE_SPECIMEN_PROTOCOL modify TITLE varchar(255) not null unique;
+alter table CATISSUE_SPECIMEN_PROTOCOL modify SHORT_TITLE varchar(255);
+alter table CATISSUE_SPECIMEN_PROTOCOL modify IRB_IDENTIFIER varchar(255);
+alter table CATISSUE_SPECIMEN_PROTOCOL modify DESCRIPTION_URL varchar(255);
+
+alter table CATISSUE_PART_MEDICAL_ID modify MEDICAL_RECORD_NUMBER varchar(255);
+
+alter table CATISSUE_CANCER_RESEARCH_GROUP modify NAME varchar(255) not null unique;
+
+alter table CATISSUE_INSTITUTION modify NAME varchar(255) not null unique;
+
+alter table CATISSUE_DEPARTMENT modify NAME varchar(255) not null unique;
+
+alter table CATISSUE_PASSWORD modify PASSWORD varchar(255);
+
+alter table CATISSUE_USER modify FIRST_NAME varchar(255);
+alter table CATISSUE_USER modify LAST_NAME varchar(255);
+alter table CATISSUE_USER modify EMAIL_ADDRESS varchar(255);
+alter table CATISSUE_USER modify LOGIN_NAME varchar(255) not null unique;
+
+alter table CATISSUE_ADDRESS modify STREET varchar(255);
+
+alter table CATISSUE_SPECIMEN modify LABEL varchar(255) unique;
+alter table CATISSUE_SPECIMEN modify BARCODE varchar(255) unique;
+alter table CATISSUE_SPECIMEN modify COMMENTS text;
+
+alter table CATISSUE_SPECIMEN_COLL_GROUP modify NAME varchar(255) unique;
+
+alter table CATISSUE_BIOHAZARD modify NAME varchar(255) not null unique;
+
+alter table CATISSUE_SITE modify NAME varchar(255) not null unique;
+alter table CATISSUE_SITE modify EMAIL_ADDRESS varchar(255);
+
+alter table CATISSUE_EXTERNAL_IDENTIFIER modify NAME varchar(255);
+alter table CATISSUE_EXTERNAL_IDENTIFIER modify VALUE varchar(255);
+
+alter table CATISSUE_CONTAINER modify BARCODE varchar(255) unique;
+alter table CATISSUE_CONTAINER modify NAME varchar(255) unique not null;
+alter table CATISSUE_CONTAINER modify ACTIVITY_STATUS varchar(50);
+
+alter table CATISSUE_CONTAINER_TYPE modify NAME varchar(255) unique;
+alter table CATISSUE_CONTAINER_TYPE modify ONE_DIMENSION_LABEL varchar(255);
+alter table CATISSUE_CONTAINER_TYPE modify TWO_DIMENSION_LABEL varchar(255);
+alter table CATISSUE_CONTAINER_TYPE modify ACTIVITY_STATUS varchar(50);
+
+alter table CATISSUE_COLL_PROT_REG modify PROTOCOL_PARTICIPANT_ID varchar(255);
+alter table CATISSUE_COLL_PROT_REG modify ACTIVITY_STATUS varchar(50);
+
+alter table CATISSUE_REPORTED_PROBLEM modify AFFILIATION varchar(255) not null;
+alter table CATISSUE_REPORTED_PROBLEM modify NAME_OF_REPORTER varchar(255) not null;
+alter table CATISSUE_REPORTED_PROBLEM modify SUBJECT varchar(255);
+alter table CATISSUE_REPORTED_PROBLEM modify REPORTERS_EMAIL_ID varchar(255) not null;
+
+alter table CATISSUE_MOL_SPE_REVIEW_PARAM modify GEL_IMAGE_URL varchar(255);
+
+alter table CATISSUE_DISPOSAL_EVENT_PARAM modify REASON varchar(255);
+
+alter table CATISSUE_PROCEDURE_EVENT_PARAM modify URL varchar(255) not null;
+alter table CATISSUE_PROCEDURE_EVENT_PARAM modify NAME varchar(255) not null;
+
+/* Jitendra: End:- 17dec06: Bug-3141*/
+
+
+
+
+
+

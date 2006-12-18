@@ -69,7 +69,7 @@ public class Password extends AbstractDomainObject implements Serializable, Comp
 	
 	/**
 	 * Returns the password assigned to user.
-	 * @hibernate.property name="password" type="string" column="PASSWORD" length="50"
+	 * @hibernate.property name="password" type="string" column="PASSWORD" length="255"
 	 */
 	public String getPassword() 
 	{

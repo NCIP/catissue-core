@@ -110,10 +110,10 @@
 				 			<html:hidden property="<%=exIdentifier%>" />
 		 		</td>
 			    <td class="formField">
-		     		<html:text styleClass="formFieldSized15" maxlength="50"  styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
+		     		<html:text styleClass="formFieldSized15" maxlength="255"  styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
 		    	</td>
 		    	<td class="formField" colspan="2">
-		     		<html:text styleClass="formFieldSized15" maxlength="50"  styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
+		     		<html:text styleClass="formFieldSized15" maxlength="255"  styleId="<%=exValue%>" property="<%=exValue%>" readonly="<%=readOnlyForAll%>"/>
 		    	</td>
 		    	<%
 					String exKey = "ExternalIdentifier:" + i +"_id";

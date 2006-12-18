@@ -67,7 +67,7 @@ public class ExternalIdentifier extends AbstractDomainObject implements java.io.
     /**
      * Returns the name of the legacy id.
      * @hibernate.property name="name" type="string" 
-     * column="NAME" length="50"
+     * column="NAME" length="255"
      * @return the name of the legacy id.
      * @see #setName(String)
      */
@@ -89,7 +89,7 @@ public class ExternalIdentifier extends AbstractDomainObject implements java.io.
     /**
      * Returns the value of the legacy id.
      * @hibernate.property name="value" type="string" 
-     * column="VALUE" length="50"
+     * column="VALUE" length="255"
      * @return the value of the legacy id.
      * @see #setValue(String)
      */

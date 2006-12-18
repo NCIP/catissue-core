@@ -193,7 +193,7 @@ if(currentEventParametersDate.trim().length() > 0)
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formDateSized" maxlength="200"  size="35" styleId="gelImageURL" property="gelImageURL" />
+				<html:text styleClass="formDateSized" maxlength="255"  size="35" styleId="gelImageURL" property="gelImageURL" />
 			</td>
 		</tr>
 

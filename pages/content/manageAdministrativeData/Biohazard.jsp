@@ -75,7 +75,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="name" property="name"/>
+				<html:text styleClass="formFieldSized15"  maxlength="255"  size="30" styleId="name" property="name"/>
 			</td>
 		</tr>
 		

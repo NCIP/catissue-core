@@ -44,7 +44,7 @@
             update="true"
             insert="true"
             column="TITLE"
-            length="150"
+            length="255"
             not-null="true"
             unique="true"
         />
@@ -55,7 +55,7 @@
             update="true"
             insert="true"
             column="SHORT_TITLE"
-            length="50"
+            length="255"
         />
 
         <property
@@ -64,7 +64,7 @@
             update="true"
             insert="true"
             column="IRB_IDENTIFIER"
-            length="50"
+            length="255"
         />
 
         <property
@@ -100,7 +100,7 @@
             update="true"
             insert="true"
             column="DESCRIPTION_URL"
-            length="200"
+            length="255"
         />
 
         <property

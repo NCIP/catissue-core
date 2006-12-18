@@ -68,7 +68,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
 
 	/**
 	 * Returns the name of the cancer research group.
-	 * @hibernate.property name="name" type="string" column="NAME" length="50"
+	 * @hibernate.property name="name" type="string" column="NAME" length="255"
 	 * not-null="true" unique="true"
 	 * @return name of the department.
 	 */

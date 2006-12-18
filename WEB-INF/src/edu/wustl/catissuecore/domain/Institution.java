@@ -72,7 +72,7 @@ public class Institution extends AbstractDomainObject implements Serializable
 	/**
 	 * Returns the name of the institution.
 	 * @hibernate.property name="name" type="string" 
-	 * column="NAME" length="50" not-null="true" unique="true"
+	 * column="NAME" length="255" not-null="true" unique="true"
 	 * @return Returns the name of the institution. 
 	 * @see #setName(String)
 	 */

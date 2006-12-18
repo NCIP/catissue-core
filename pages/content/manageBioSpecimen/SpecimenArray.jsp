@@ -107,7 +107,7 @@
 					</label>
 				</td>
 				<td class="formField">
-					<html:text styleClass="formFieldVerySmallSized"  maxlength="20"  size="20" styleId="name" property="name"/>
+					<html:text styleClass="formFieldVerySmallSized"  maxlength="name"  size="20" styleId="name" property="name"/>
 				</td>
 
 				<td class="formRequiredNoticeWithoutLeftBorder" width="5">&nbsp;</td>
@@ -117,7 +117,7 @@
 					</label>
 				</td>
 				<td class="formField">
-					<html:text styleClass="formFieldVerySmallSized"  maxlength="50"  size="30" styleId="barcode" property="barcode"/>
+					<html:text styleClass="formFieldVerySmallSized"  maxlength="255"  size="30" styleId="barcode" property="barcode"/>
 				</td>
 			</tr>
 

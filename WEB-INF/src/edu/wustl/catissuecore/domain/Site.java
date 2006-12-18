@@ -97,7 +97,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
 	/**
      * Returns the name of the physical location.
      * @hibernate.property name="name" type="string" 
-     * column="NAME" length="50" not-null="true" unique="true"
+     * column="NAME" length="255" not-null="true" unique="true"
      * @return the name of the physical location.
      * @see #setName(String)
      */
@@ -141,7 +141,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
 	/**
 	 * Returns the emailAddress Address of the site.	
 	 * @hibernate.property name="emailAddress" type="string" 
-     * column="EMAIL_ADDRESS" length="150"
+     * column="EMAIL_ADDRESS" length="255"
      * @return String representing the emailAddress address of the site.
      */
     public String getEmailAddress()

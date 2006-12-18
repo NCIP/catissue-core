@@ -130,7 +130,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized" maxlength="50" size="30" styleId="name" property="name"/>
+							<html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="name" property="name"/>
 						</td>
 					</tr>
 			
@@ -179,7 +179,7 @@
 							</label>
 						</td>
 						<td class="formField">
-							<html:text styleClass="formFieldSized"  maxlength="150"  size="30" styleId="emailAddress" property="emailAddress" />
+							<html:text styleClass="formFieldSized"  maxlength="255"  size="30" styleId="emailAddress" property="emailAddress" />
 						</td>
 					</tr>
 									

@@ -34,7 +34,7 @@
             update="true"
             insert="true"
             column="NAME"
-            length="50"
+            length="255"
             not-null="true"
             unique="true"
         />
@@ -54,7 +54,7 @@
             update="true"
             insert="true"
             column="EMAIL_ADDRESS"
-            length="150"
+            length="255"
         />
 
         <many-to-one

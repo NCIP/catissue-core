@@ -66,7 +66,7 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
      * @return A reference to the location of an electrophoretic gel image of the specimen.
      * @see #setGelImageURL(String)
      * @hibernate.property name="gelImageURL" type="string" 
-     * column="GEL_IMAGE_URL" length="200"
+     * column="GEL_IMAGE_URL" length="255"
      */
 	public String getGelImageURL()
 	{

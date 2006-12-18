@@ -192,7 +192,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="type" property="type"/>
+				<html:text styleClass="formFieldSized10"  maxlength="255"  size="30" styleId="type" property="type"/>
 			</td>
 		</tr>
 
@@ -308,7 +308,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="oneDimensionLabel" property="oneDimensionLabel"/>
+				<html:text styleClass="formFieldSized10"  maxlength="255"  size="30" styleId="oneDimensionLabel" property="oneDimensionLabel"/>
 			</td>
 		</tr>
 
@@ -342,7 +342,7 @@
 				</label>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized10"  maxlength="50" size="30" styleId="twoDimensionLabel" property="twoDimensionLabel"/>
+				<html:text styleClass="formFieldSized10"  maxlength="255" size="30" styleId="twoDimensionLabel" property="twoDimensionLabel"/>
 			</td>
 		</tr>
 		<tr>

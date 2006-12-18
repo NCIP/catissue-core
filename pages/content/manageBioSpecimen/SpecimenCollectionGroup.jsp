@@ -301,7 +301,7 @@
 						</label>
 					</td>
 					<td class="formField">
-						<html:text styleClass="formFieldSized" size="30"  maxlength="50" styleId="name" property="name" />
+						<html:text styleClass="formFieldSized" size="30"  maxlength="255" styleId="name" property="name" />
 						&nbsp;
 						<%String resetAction = "changeAction('SpecimenCollectionGroup.do?operation="+operation+"&pageOf=pageOfSpecimenCollectionGroup&resetName=Yes')"; %>
 						<html:link href="#" styleId="resetName" onclick="<%=resetAction%>">

@@ -35,7 +35,7 @@ public class ProcedureEventParameters extends SpecimenEventParameters
 
 	/**
 	 * Returns the url of the procedure document.
-	 * @hibernate.property name="url" type="string" column="URL" length="200"
+	 * @hibernate.property name="url" type="string" column="URL" length="255"
 	 * not-null="true"
 	 * @return url of the procedure document.
 	 */
@@ -55,7 +55,7 @@ public class ProcedureEventParameters extends SpecimenEventParameters
 
 	/**
 	 * Returns the name of the procedure.
-	 * @hibernate.property name="name" type="string" column="NAME" length="50"
+	 * @hibernate.property name="name" type="string" column="NAME" length="255"
 	 * not-null="true"
 	 * @return name of the procedure.
 	 */

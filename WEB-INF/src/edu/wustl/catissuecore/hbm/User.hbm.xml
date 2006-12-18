@@ -34,7 +34,7 @@
             update="true"
             insert="true"
             column="EMAIL_ADDRESS"
-            length="100"
+            length="255"
         />
 
         <property
@@ -43,7 +43,7 @@
             update="true"
             insert="true"
             column="FIRST_NAME"
-            length="50"
+            length="255"
         />
 
         <property
@@ -52,7 +52,7 @@
             update="true"
             insert="true"
             column="LAST_NAME"
-            length="50"
+            length="255"
         />
 
         <property
@@ -61,7 +61,7 @@
             update="true"
             insert="true"
             column="LOGIN_NAME"
-            length="50"
+            length="255"
             not-null="true"
             unique="true"
         />

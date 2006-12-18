@@ -67,7 +67,7 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	/**
 	 * Returns the name of the department.
 	 * 
-	 * @hibernate.property name="name" type="string" column="NAME" length="50"
+	 * @hibernate.property name="name" type="string" column="NAME" length="255"
 	 * not-null="true" unique="true"
 	 * @return name of the department.
 	 */

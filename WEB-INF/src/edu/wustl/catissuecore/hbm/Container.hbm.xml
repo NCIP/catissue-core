@@ -30,7 +30,7 @@
             update="true"
             insert="true"
             column="ACTIVITY_STATUS"
-            length="20"
+            length="50"
         />
 
         <property
@@ -39,7 +39,7 @@
             update="true"
             insert="true"
             column="BARCODE"
-            length="100"
+            length="255"
         />
 
         <many-to-one
@@ -103,7 +103,7 @@
             update="true"
             insert="true"
             column="NAME"
-            length="100"
+            length="255"
         />
 
         <property
