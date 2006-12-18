@@ -17,11 +17,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
-import javax.swing.table.TableColumn;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
-import edu.wustl.catissuecore.applet.component.BaseTable;
 import edu.wustl.catissuecore.applet.component.MultipleSpecimenTable;
 import edu.wustl.catissuecore.applet.listener.AddColumnHandler;
 import edu.wustl.catissuecore.applet.listener.DeleteLastHandler;
@@ -34,7 +32,6 @@ import edu.wustl.catissuecore.applet.listener.TableModelChangeHandler;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
-import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
  * This applet displays main UI for multiple specimen page.
@@ -210,30 +207,52 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		}
 		return null;
 	}
-//	/**
-//	 * This method is called from Javascript toset the value of the selected location in the applet.
-//	 * @param specimenMapKey Identifier of the specimen.
-//	 * @param storageId Identifier of the storageContainer.
-//	 * @param storageType Label of storage type.
-//	 * @param xPos Position (x-axis) in container.
-//	 * @param yPos Position (y-axis) in container.
-//	 */
-//	public void setStorageDetails(String specimenMapKey, String storageId,String storageType,String xPos,String yPos) {
-//		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
-//		System.out.println("setStorageDetails :-specimenMapKey "+ specimenMapKey+" | storageId " + storageId+ " | storageType " + storageType+ " | xPos " + xPos+ " | yPos " + yPos);
-//		int actualColNo =  Integer.parseInt(specimenMapKey);
-//		int displayColNo = tableModel.getDisplayColumnNo(actualColNo); 
-//		System.out.println("table.getColumnModel().getColumnCount() : " + table.getColumnModel().getColumnCount()); 
-//		System.out.println("In applets storage details : display col no" + displayColNo + "actual col no" + actualColNo);
-//		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(actualColNo).getCellRenderer();
-////		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(displayColNo).getCellRenderer();		
-//		tableModel.setStorageDetails(specimenMapKey, storageId, storageType, xPos, yPos);
-//		String storageValue = (String) tableModel.getValueAt(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO,displayColNo);
-//	//	columnModel.setLocation(storageValue);
-//		columnModel.setLocationFromJS(storageValue);
-//// Mandar : 4oct06 : testing setting of storage location data in model.
-//		System.out.println("Column : "+ displayColNo);
-//	}
+	/**
+	 * This method is called from Javascript toset the value of the selected location in the applet.
+	 * @param specimenMapKey Identifier of the specimen.
+	 * @param storageId Identifier of the storageContainer.
+	 * @param storageType Label of storage type.
+	 * @param xPos Position (x-axis) in container.
+	 * @param yPos Position (y-axis) in container.
+	 */
+	public void setStorageDetails(String specimenMapKey, String storageId,String storageType,String xPos,String yPos) {
+		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
+		System.out.println("setStorageDetails :-specimenMapKey "+ specimenMapKey+" | storageId " + storageId+ " | storageType " + storageType+ " | xPos " + xPos+ " | yPos " + yPos);
+		int actualColNo =  Integer.parseInt(specimenMapKey);
+		int displayColNo = tableModel.getDisplayColumnNo(actualColNo); 
+		System.out.println("table.getColumnModel().getColumnCount() : " + table.getColumnModel().getColumnCount()); 
+		System.out.println("In applets storage details : display col no" + displayColNo + "actual col no" + actualColNo);
+		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(actualColNo).getCellRenderer();
+//		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(displayColNo).getCellRenderer();		
+		tableModel.setStorageDetails(specimenMapKey, storageId, storageType, xPos, yPos);
+		//String storageValue = (String) tableModel.getValueAt(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO,displayColNo);
+	//	columnModel.setLocation(storageValue);
+		String storageValue = null;
+		columnModel.setLocationFromJS(storageValue);
+// Mandar : 4oct06 : testing setting of storage location data in model.
+		System.out.println("Column : "+ displayColNo);
+	}
+	
+	/**
+	 * This method is called from Javascript toset the value of the selected location in the applet.
+	 * @param specimenMapKey Identifier of the specimen.
+	 * @param storageId Identifier of the storageContainer.
+	 * @param storageType Label of storage type.
+	 * @param xPos Position (x-axis) in container.
+	 * @param yPos Position (y-axis) in container.
+	 */
+	public void setButtonCaption(String specimenMapKey) {
+		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
+		String tempKey = specimenMapKey.replaceFirst(AppletConstants.SPECIMEN_PREFIX,"");
+		String columnString = tempKey.substring(0,tempKey.indexOf("_"));
+		int actualColNo =  Integer.parseInt(columnString)-1;
+		int displayColNo = tableModel.getDisplayColumnNo(actualColNo); 
+	//	tableModel.setCaptionInMap(specimenMapKey,buttonType);
+			
+		SpecimenColumnModel columnModel =  (SpecimenColumnModel)table.getColumnModel().getColumn(displayColNo).getCellRenderer();
+		columnModel.setEditCaptionFromJS(specimenMapKey,AppletConstants.EDIT,tableModel);
+
+	}
 	
 	/**
 	 * This method will be called when the AddSpecimen button is clicked. 

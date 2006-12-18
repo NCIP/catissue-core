@@ -9,6 +9,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.Map;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ButtonGroup;
@@ -113,10 +114,10 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	JTextField concentration;
 
 	//For Storage Location
-//	Mandar: 06Nov06: location removed since auto allocation will take place.
-//	JButton mapButton;
-//	JTextField location;
-//	JPanel storageLocationPanel;
+	//	Mandar: 06Nov06: location removed since auto allocation will take place.
+	//	JButton mapButton;
+	//	JTextField location;
+	//	JPanel storageLocationPanel;
 
 	//For Comments
 	JButton comments;
@@ -154,30 +155,25 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		super();
 		this.table = table;
 		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel) table.getModel();
-		columnIndex = column;
+		columnIndex = column; 
 		// set row height based on contents	
 		for (int rowno = 0; rowno < table.getRowCount(); rowno++)
 		{
 			//For combobox
-			if (rowno == AppletConstants.SPECIMEN_CLASS_ROW_NO
-					|| rowno == AppletConstants.SPECIMEN_TYPE_ROW_NO
-					|| rowno == AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO
-					|| rowno == AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO)
+			if (rowno == AppletConstants.SPECIMEN_CLASS_ROW_NO || rowno == AppletConstants.SPECIMEN_TYPE_ROW_NO
+					|| rowno == AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO || rowno == AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO)
 			{
 				table.setRowHeight(rowno, 25);
 			}
 			//for textfield
-			else if (rowno == AppletConstants.SPECIMEN_LABEL_ROW_NO
-					|| rowno == AppletConstants.SPECIMEN_BARCODE_ROW_NO
+			else if (rowno == AppletConstants.SPECIMEN_LABEL_ROW_NO || rowno == AppletConstants.SPECIMEN_BARCODE_ROW_NO
 					|| rowno == AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO)
 			{
 				table.setRowHeight(rowno, 20);
 			}
 			//for panels
-			else if (rowno == AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO
-					|| rowno == AppletConstants.SPECIMEN_PARENT_ROW_NO
-					|| rowno == AppletConstants.SPECIMEN_QUANTITY_ROW_NO
-					|| rowno == AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO)
+			else if (rowno == AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO || rowno == AppletConstants.SPECIMEN_PARENT_ROW_NO
+					|| rowno == AppletConstants.SPECIMEN_QUANTITY_ROW_NO || rowno == AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO)
 			{
 				table.setRowHeight(rowno, 35);
 			}
@@ -197,10 +193,8 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 		System.out.println("SpecimenColumnModel : Col no : " + column);
 		TableColumnModel columnModel = table.getColumnModel();
-		System.out.println("SpecimenColumnModel columnModel.getColumnCount() : "
-				+ columnModel.getColumnCount());
-		System.out
-				.println("SpecimenColumnModel Table.getColumnCount() : " + table.getColumnCount());
+		System.out.println("SpecimenColumnModel columnModel.getColumnCount() : " + columnModel.getColumnCount());
+		System.out.println("SpecimenColumnModel Table.getColumnCount() : " + table.getColumnCount());
 		columnModel.getColumn(column).setCellRenderer(this);
 		columnModel.getColumn(column).setCellEditor(this);
 		columnModel.getColumn(column).setResizable(false);
@@ -233,8 +227,8 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	 */
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
 	{
-		System.out.println("getTableCellEditorComponent(table, value: " + value + " , isSelected: "
-				+ isSelected + " , row: " + row + " , column: " + column);
+		System.out.println("getTableCellEditorComponent(table, value: " + value + " , isSelected: " + isSelected + " , row: " + row + " , column: "
+				+ column);
 		text = (value == null) ? "" : value.toString();
 		boolean hasFocus = isSelected;
 		Component component = getComponentAt(row, column, hasFocus, isSelected);
@@ -315,14 +309,14 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				comp = concentration;
 				break;
 			//For Storage Location
-				/*
-				 * Code commented as storage location will be auto allocated.
-				 * 
-			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
-				comp = storageLocationPanel;
-				break;
-				
-				 */
+			/*
+			 * Code commented as storage location will be auto allocated.
+			 * 
+			 case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
+			 comp = storageLocationPanel;
+			 break;
+			 
+			 */
 
 			//For Comments
 			case AppletConstants.SPECIMEN_COMMENTS_ROW_NO :
@@ -387,7 +381,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		//Specimen Collection Group
 		specimenCollectionGroup = new JComboBox(model.getSpecimenCollectionGroupValues());
 		specimenCollectionGroup.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
-		
+
 		if (model.getSpecimenCollectionGroupName() != null)
 		{
 			specimenCollectionGroup.setSelectedItem(model.getSpecimenCollectionGroupName());
@@ -399,8 +393,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		//Parent Specimen 
 		parentSpecimen = new JTextField(17);
 		rbparentSpecimen = new JRadioButton();
-		parentSpecimen.setPreferredSize(new Dimension(154, (int) specimenCollectionGroup
-				.getPreferredSize().getHeight()));
+		parentSpecimen.setPreferredSize(new Dimension(154, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
 		//rbparentSpecimen.setEnabled(false);
 		parentSpecimenPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		parentSpecimen.setEnabled(false);
@@ -433,13 +426,11 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 		//TissueSite
 		tissueSiteList = new JComboBox(model.getTissueSiteValues());
-		tissueSiteList.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup
-				.getPreferredSize().getHeight()));
+		tissueSiteList.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
 		//to display notspecified by default
-		tissueSiteList.setSelectedItem(Constants.NOTSPECIFIED); 
+		tissueSiteList.setSelectedItem(Constants.NOTSPECIFIED);
 		//Mandar : 30Oct06 : To display Tissue Site Tree
-		System.out.println("ImagePath : "
-				+ getClass().getClassLoader().getResource("images/Tree.gif"));
+		System.out.println("ImagePath : " + getClass().getClassLoader().getResource("images/Tree.gif"));
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("images/Tree.gif"));
 		System.out.println("icon:" + icon);
 		//treeLabel = new JLabel(icon);
@@ -454,19 +445,17 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		//TissueSide
 		tissueSideList = new JComboBox(model.getTissueSideValues());
 		//to display notspecified by default
-		tissueSideList.setSelectedItem(Constants.NOTSPECIFIED); 
+		tissueSideList.setSelectedItem(Constants.NOTSPECIFIED);
 
 		//PathologicalStatus 
 		pathologicalStatusList = new JComboBox(model.getPathologicalStatusValues());
 		//to display notspecified by default
-		pathologicalStatusList.setSelectedItem(Constants.NOTSPECIFIED); 
-
+		pathologicalStatusList.setSelectedItem(Constants.NOTSPECIFIED);
 
 		// Quantity
-		quantity = new JTextField("0",17);
+		quantity = new JTextField("0", 17);
 		unit = new JLabel();
-		quantity.setPreferredSize(new Dimension(110, (int) specimenCollectionGroup
-				.getPreferredSize().getHeight()));
+		quantity.setPreferredSize(new Dimension(110, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
 		quantityUnitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 
 		quantityUnitPanel.add(quantity);
@@ -476,44 +465,84 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		concentration = new JTextField(10);
 
 		//For Storage Location
-// Mandar : 06Nov06 : 	Location removed since auto allocation will take place		
-//		mapButton = new JButton(AppletConstants.MULTIPLE_SPECIMEN_MAP);
-//		location = new JTextField(13);
-//		location.setPreferredSize(new Dimension(120, (int) specimenCollectionGroup
-//				.getPreferredSize().getHeight()));
-//		location.setEditable(false);
-//	Mandar: 06Nov06: location removed since auto allocation will take place.
-//		//Mandar : 30Oct06 : Map button enabled by default.
-//		//		mapButton.setEnabled(false); 
-//		storageLocationPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
-//
-//		storageLocationPanel.add(location);
-//		storageLocationPanel.add(mapButton);
-//		//storageLocationPanel.setF 
+		// Mandar : 06Nov06 : 	Location removed since auto allocation will take place		
+		//		mapButton = new JButton(AppletConstants.MULTIPLE_SPECIMEN_MAP);
+		//		location = new JTextField(13);
+		//		location.setPreferredSize(new Dimension(120, (int) specimenCollectionGroup
+		//				.getPreferredSize().getHeight()));
+		//		location.setEditable(false);
+		//	Mandar: 06Nov06: location removed since auto allocation will take place.
+		//		//Mandar : 30Oct06 : Map button enabled by default.
+		//		//		mapButton.setEnabled(false); 
+		//		storageLocationPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
+		//
+		//		storageLocationPanel.add(location);
+		//		storageLocationPanel.add(mapButton);
+		//		//storageLocationPanel.setF 
 
 		//For Comments
-		comments = new JButton(AppletConstants.MULTIPLE_SPECIMEN_COMMENTS);
+
+		Map buttonStatusMap = model.getButtonStatusMap();
+		int actualPageNo = model.getActualColumnNo(columnIndex);
+		String label = (String) buttonStatusMap.get(actualPageNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+				+ AppletConstants.MULTIPLE_SPECIMEN_COMMENTS_STRING);
+		if (label == null)
+		{
+			label = AppletConstants.ADD;
+		}
+
+		comments = new JButton(label);
 		commentsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		commentsPanel.add(comments);
 
 		//Events 
-		eventsButton = new JButton(AppletConstants.MULTIPLE_SPECIMEN_EVENTS);
+
+		label = (String) buttonStatusMap.get(actualPageNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+				+ AppletConstants.MULTIPLE_SPECIMEN_EVENTS_STRING);
+		if (label == null)
+		{
+			label = AppletConstants.ADD;
+		}
+
+		eventsButton = new JButton(label);
 		eventsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		eventsPanel.add(eventsButton);
 
 		//External Identifier
-		externalIdentifierButton = new JButton(
-				AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS);
+		label = (String) buttonStatusMap.get(actualPageNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+				+ AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS_STRING);
+		if (label == null)
+		{
+			label = AppletConstants.ADD;
+		}
+
+		externalIdentifierButton = new JButton(label);
 		externalIdentifierPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		externalIdentifierPanel.add(externalIdentifierButton);
 
 		//BioHazard
-		bioHazardButton = new JButton(AppletConstants.MULTIPLE_SPECIMEN_BIOHAZARDS);
+		label = (String) buttonStatusMap.get(actualPageNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+				+ AppletConstants.MULTIPLE_SPECIMEN_BIOHAZARDS_STRING);
+		if (label == null)
+		{
+			label = AppletConstants.ADD;
+		}
+
+		bioHazardButton = new JButton(label);
+
 		bioHazardPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		bioHazardPanel.add(bioHazardButton);
 
 		//Derive
-		deriveButton = new JButton(AppletConstants.MULTIPLE_SPECIMEN_DERIVE);
+		label = (String) buttonStatusMap.get(actualPageNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+				+ AppletConstants.MULTIPLE_SPECIMEN_DERIVE_STRING);
+		if (label == null)
+		{
+			label = AppletConstants.ADD;
+		}
+
+		deriveButton = new JButton(label);
+
 		//Mandar : 30Oct06 : Map button enabled by default.
 		//		deriveButton.setEnabled(false );
 		derivePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
@@ -531,19 +560,16 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		// Listeners
 		TextFieldHandler textHandler = new TextFieldHandler(table);
 		ParentSpecimenItemHandler parentSpecimenItemHandler = new ParentSpecimenItemHandler(table);
-		CollectionGroupItemHandler collectionGroupItemHandler = new CollectionGroupItemHandler(
-				table);
+		CollectionGroupItemHandler collectionGroupItemHandler = new CollectionGroupItemHandler(table);
 		ClassComboBoxHandler classComboBoxHandler = new ClassComboBoxHandler(table);
 		TypeComboBoxHandler typeComboBoxHandler = new TypeComboBoxHandler(table);
 		ComboBoxHandler comboBoxHandler = new ComboBoxHandler(table);
 		MapButtonHandler mapButtonHandler = new MapButtonHandler(table, rbspecimenGroup);
 		ButtonHandler buttonHandler = new ButtonHandler(table);
 		BaseFocusHandler baseFocusHandler = new BaseFocusHandler(table);
-		CollectionGroupComboBoxHandler collectionGroupComboBoxHandler = new CollectionGroupComboBoxHandler(
-				table);
+		CollectionGroupComboBoxHandler collectionGroupComboBoxHandler = new CollectionGroupComboBoxHandler(table);
 		//For TissueSite Tree
-		TissueSiteTreeMapButtonHandler tissueSiteTreeMapButtonHandler = new TissueSiteTreeMapButtonHandler(
-				table);
+		TissueSiteTreeMapButtonHandler tissueSiteTreeMapButtonHandler = new TissueSiteTreeMapButtonHandler(table);
 
 		//Specimen Collection Group
 		specimenCollectionGroup.addActionListener(collectionGroupComboBoxHandler);
@@ -552,24 +578,20 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 			public void keyPressed(KeyEvent e)
 			{
-				System.out
-						.println("\n::::::::::::::::::::::   Inside keyPressed of SCG ***************\n");
-				System.out.println("e.getKeyCode() : " + e.getKeyCode() + " , e.getKeyChar():"
-						+ e.getKeyChar() + " : KeyEvent.VK_DOWN : " + KeyEvent.VK_DOWN);
-				System.out.println("specimenCollectionGroup.isPopupVisible() : "
-						+ specimenCollectionGroup.isPopupVisible());
+				System.out.println("\n::::::::::::::::::::::   Inside keyPressed of SCG ***************\n");
+				System.out.println("e.getKeyCode() : " + e.getKeyCode() + " , e.getKeyChar():" + e.getKeyChar() + " : KeyEvent.VK_DOWN : "
+						+ KeyEvent.VK_DOWN);
+				System.out.println("specimenCollectionGroup.isPopupVisible() : " + specimenCollectionGroup.isPopupVisible());
 				if (!specimenCollectionGroup.isPopupVisible())
 				{
 					if (e.getKeyCode() == KeyEvent.VK_DOWN)
 					{
 						//						20Oct06<*>				FocusListener focusListeners[] = specimenCollectionGroup.getFocusListeners();
-						FocusListener focusListeners[] = (FocusListener[]) specimenCollectionGroup
-								.getListeners(FocusAdapter.class);
+						FocusListener focusListeners[] = (FocusListener[]) specimenCollectionGroup.getListeners(FocusAdapter.class);
 						for (int i = 0; i < focusListeners.length; i++)
 						{
 							FocusListener listener = focusListeners[i];
-							listener.focusLost(new FocusEvent(specimenCollectionGroup,
-									FocusEvent.FOCUS_LOST));
+							listener.focusLost(new FocusEvent(specimenCollectionGroup, FocusEvent.FOCUS_LOST));
 						}
 						specimenCollectionGroup.getParent().requestFocus();
 						System.out.println("\n FOCUS Transfered\n");
@@ -588,13 +610,11 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				if (specimenCollectionGroup.isEnabled())
 				{
 					//					20Oct06<*>	FocusListener focusListeners[] = specimenCollectionGroup.getFocusListeners();
-					FocusListener focusListeners[] = (FocusListener[]) specimenCollectionGroup
-							.getListeners(FocusAdapter.class);
+					FocusListener focusListeners[] = (FocusListener[]) specimenCollectionGroup.getListeners(FocusAdapter.class);
 					for (int i = 0; i < focusListeners.length; i++)
 					{
 						FocusListener listener = focusListeners[i];
-						listener.focusGained(new FocusEvent(specimenCollectionGroup,
-								FocusEvent.FOCUS_GAINED));
+						listener.focusGained(new FocusEvent(specimenCollectionGroup, FocusEvent.FOCUS_GAINED));
 						//						PopupMenuListener []pl = specimenCollectionGroup.getPopupMenuListeners();
 						//						for(int j=0;j<pl.length; j++ )
 						//						{
@@ -649,28 +669,28 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		concentration.addFocusListener(baseFocusHandler);
 
 		//For Storage Location
-//		Mandar: 06Nov06: location removed since auto allocation will take place.		
-//		mapButton.addActionListener(mapButtonHandler);
-//		storageLocationPanel.addFocusListener(new FocusAdapter()
-//		{
-//
-//			public void focusGained(FocusEvent fe)
-//			{
-//				System.out.println("Inside focusGained by Location Panel");
-//				if (mapButton.isEnabled())
-//				{
-//					//					20Oct06<*>				FocusListener focusListeners[] = mapButton.getFocusListeners();
-//					FocusListener focusListeners[] = (FocusListener[]) mapButton
-//							.getListeners(FocusAdapter.class);
-//					for (int i = 0; i < focusListeners.length; i++)
-//					{
-//						FocusListener listener = focusListeners[i];
-//						listener.focusGained(new FocusEvent(mapButton, FocusEvent.FOCUS_GAINED));
-//					}
-//					System.out.println("Focus set on Map Button : ");
-//				}
-//			}
-//		});
+		//		Mandar: 06Nov06: location removed since auto allocation will take place.		
+		//		mapButton.addActionListener(mapButtonHandler);
+		//		storageLocationPanel.addFocusListener(new FocusAdapter()
+		//		{
+		//
+		//			public void focusGained(FocusEvent fe)
+		//			{
+		//				System.out.println("Inside focusGained by Location Panel");
+		//				if (mapButton.isEnabled())
+		//				{
+		//					//					20Oct06<*>				FocusListener focusListeners[] = mapButton.getFocusListeners();
+		//					FocusListener focusListeners[] = (FocusListener[]) mapButton
+		//							.getListeners(FocusAdapter.class);
+		//					for (int i = 0; i < focusListeners.length; i++)
+		//					{
+		//						FocusListener listener = focusListeners[i];
+		//						listener.focusGained(new FocusEvent(mapButton, FocusEvent.FOCUS_GAINED));
+		//					}
+		//					System.out.println("Focus set on Map Button : ");
+		//				}
+		//			}
+		//		});
 
 		//For Comments
 		comments.addActionListener(buttonHandler);
@@ -743,6 +763,46 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	}
 
 	/**
+	 * @return Returns the comments.
+	 */
+	public String getCommentsLabel()
+	{
+		return comments.getLabel();
+	}
+
+	/**
+	 * @return Returns the comments.
+	 */
+	public String getEventsLabel()
+	{
+		return eventsButton.getLabel();
+	}
+
+	/**
+	 * @return Returns the comments.
+	 */
+	public String getBiohazardsLable()
+	{
+		return bioHazardButton.getLabel();
+	}
+
+	/**
+	 * @return Returns the comments.
+	 */
+	public String getExtenalidentifierLable()
+	{
+		return externalIdentifierButton.getLabel();
+	}
+
+	/**
+	 * @return Returns the comments.
+	 */
+	public String getDerivedLabel()
+	{
+		return deriveButton.getLabel();
+	}
+
+	/**
 	 * @param comments The comments to set.
 	 */
 	public void setComments(String comments)
@@ -782,23 +842,21 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		this.label.setText(label);
 	}
 
-//	Mandar: 06Nov06: location removed since auto allocation will take place.
+	//	Mandar: 06Nov06: location removed since auto allocation will take place.
 	/**
 	 * @return Returns the location.
 	 */
-//	public String getLocation()
-//	{
-//		return location.getText();
-//	}
-
+	//	public String getLocation()
+	//	{
+	//		return location.getText();
+	//	}
 	/**
 	 * @param location The location to set.
 	 */
-//	public void setLocation(String location)
-//	{
-//		this.location.setText(location);
-//	}
-
+	//	public void setLocation(String location)
+	//	{
+	//		this.location.setText(location);
+	//	}
 	/**
 	 * @return Returns the parentSpecimen.
 	 */
@@ -990,9 +1048,8 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		String value = "";
 		//-----------------
 		//		Specimen Collection Group
-		value = (String) model.getValueAt(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO,
-				columnIndex);
-		if(model.getCollectionGroupRadioButtonValueAt(columnIndex ))
+		value = (String) model.getValueAt(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO, columnIndex);
+		if (model.getCollectionGroupRadioButtonValueAt(columnIndex))
 		{
 			setRbspecimenGroup(true);
 			if (!isNull(value))
@@ -1002,7 +1059,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				//			Mandar: 30Oct06: commented as buttons are enabled by default.
 				//			updateButtons();
 			}
-			
+
 		}
 		else
 		{
@@ -1012,7 +1069,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		value = (String) model.getValueAt(AppletConstants.SPECIMEN_PARENT_ROW_NO, columnIndex);
 		if (!isNull(value))
 		{
-			
+
 			setParentSpecimen(value);
 			this.parentSpecimen.setEnabled(true);
 		}
@@ -1068,8 +1125,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		}
 
 		//PathologicalStatus
-		value = (String) model.getValueAt(AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO,
-				columnIndex);
+		value = (String) model.getValueAt(AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO, columnIndex);
 		if (!isNull(value))
 		{
 			setPathologicalStatusList(value);
@@ -1083,8 +1139,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		}
 
 		// Concentration
-		value = (String) model.getValueAt(AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO,
-				columnIndex);
+		value = (String) model.getValueAt(AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO, columnIndex);
 		if (!isNull(value))
 		{
 			setConcentration(value);
@@ -1092,22 +1147,22 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		}
 
 		//For Storage Location
-//		Mandar: 06Nov06: location removed since auto allocation will take place.
+		//		Mandar: 06Nov06: location removed since auto allocation will take place.
 		//		System.out.println("Storage location key is " + model.getKey(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO ,columnIndex ));
 		//		value = (String) model.getValueAt(AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO ,columnIndex);
 		//		System.out.println("Storage location value is " + value);
-//		String key = model.getMapTempKey(columnIndex);
-//		System.out.println("Storage location key : " + key);
-//		if (!isNull(key))
-//		{
-//			value = model.getMapTempValue(key);
-//			System.out.println("Storage location key : " + key + "value is " + value
-//					+ " for Column : " + columnIndex);
-//			if ((value.trim().length() > 0))
-//			{
-//				setLocation(value);
-//			}
-//		}
+		//		String key = model.getMapTempKey(columnIndex);
+		//		System.out.println("Storage location key : " + key);
+		//		if (!isNull(key))
+		//		{
+		//			value = model.getMapTempValue(key);
+		//			System.out.println("Storage location key : " + key + "value is " + value
+		//					+ " for Column : " + columnIndex);
+		//			if ((value.trim().length() > 0))
+		//			{
+		//				setLocation(value);
+		//			}
+		//		}
 		// ----------------
 	}
 
@@ -1158,8 +1213,8 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		concentration.setNextFocusableComponent(comments);
 
 		//For Storage Location
-//		Mandar: 06Nov06: location removed since auto allocation will take place.
-//		mapButton.setNextFocusableComponent(comments);
+		//		Mandar: 06Nov06: location removed since auto allocation will take place.
+		//		mapButton.setNextFocusableComponent(comments);
 
 		//For Comments
 		comments.setNextFocusableComponent(eventsButton);
@@ -1180,9 +1235,47 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	public void setLocationFromJS(String storageValue)
 	{
 		System.out.println("In setLocationFromJS : Column No : " + columnIndex);
-//		Mandar: 06Nov06: location removed since auto allocation will take place.
-//		setLocation(storageValue);
+		//		Mandar: 06Nov06: location removed since auto allocation will take place.
+		//	setLocation(storageValue);
 
+	}
+
+	public void setEditCaptionFromJS(String objectKey, String status, MultipleSpecimenTableModel tableModel)
+	{
+		objectKey = objectKey.toLowerCase();
+		Map buttonStatusMap = tableModel.getButtonStatusMap();
+		int actuaColumnNo = tableModel.getActualColumnNo(columnIndex);
+		if (objectKey.contains(AppletConstants.MULTIPLE_SPECIMEN_COMMENTS_STRING))
+		{
+			this.comments.setLabel(status);
+			
+			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+					+ AppletConstants.MULTIPLE_SPECIMEN_COMMENTS_STRING,status);
+		}
+		else if (objectKey.contains(AppletConstants.MULTIPLE_SPECIMEN_EVENTS_STRING))
+		{
+			this.eventsButton.setLabel(status);
+			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+					+ AppletConstants.MULTIPLE_SPECIMEN_EVENTS_STRING,status);
+		}
+		else if (objectKey.contains(AppletConstants.MULTIPLE_SPECIMEN_DERIVE_STRING))
+		{
+			this.deriveButton.setLabel(status);
+			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+					+ AppletConstants.MULTIPLE_SPECIMEN_DERIVE_STRING,status);
+		}
+		else if (objectKey.contains(AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS_STRING))
+		{
+			this.externalIdentifierButton.setLabel(status);
+			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+					+ AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS_STRING,status);
+		}
+		else if (objectKey.contains(AppletConstants.MULTIPLE_SPECIMEN_BIOHAZARDS_STRING))
+		{
+			this.bioHazardButton.setLabel(status);
+			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+					+ AppletConstants.MULTIPLE_SPECIMEN_BIOHAZARDS_STRING,status);
+		}
 	}
 
 	/**
@@ -1241,10 +1334,10 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				value = concentration.getText();
 				break;
 			//For Storage Location
-//				Mandar: 06Nov06: location removed since auto allocation will take place.		
-//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
-//				value = location.getText();
-//				break;
+			//				Mandar: 06Nov06: location removed since auto allocation will take place.		
+			//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
+			//				value = location.getText();
+			//				break;
 			default :
 				value = "";
 		}
@@ -1291,8 +1384,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	 */
 	public void updateComponentValue(int row, String value)
 	{
-		System.out.println("\n\n\n<updateComponentValue : row : " + row + " , value : " + value
-				+ ">\n\n\n");
+		System.out.println("\n\n\n<updateComponentValue : row : " + row + " , value : " + value + ">\n\n\n");
 		JComponent comp = null;
 		switch (row)
 		{
@@ -1351,12 +1443,12 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				concentration.setText(value);
 				comp = concentration;
 				break;
-			//For Storage Location
-//				Mandar: 06Nov06: location removed since auto allocation will take place.
-//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
-//				location.setText(value);
-//				comp = location;
-//				break;
+		//For Storage Location
+		//				Mandar: 06Nov06: location removed since auto allocation will take place.
+		//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
+		//				location.setText(value);
+		//				comp = location;
+		//				break;
 		}
 		if (comp != null)
 			refreshComponent(comp);
@@ -1416,11 +1508,11 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 			case AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO :
 				comp = concentration;
 				break;
-			//For Storage Location
-//				Mandar: 06Nov06: location removed since auto allocation will take place.
-//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
-//				comp = location;
-//				break;
+		//For Storage Location
+		//				Mandar: 06Nov06: location removed since auto allocation will take place.
+		//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
+		//				comp = location;
+		//				break;
 		}
 		if (comp != null)
 			refreshComponent(comp);
@@ -1450,8 +1542,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				Component[] childComponents = ((JPanel) comp).getComponents();
 				for (int count = 0; count < childComponents.length; count++)
 				{
-					if ((childComponents[count] instanceof JComboBox
-							|| childComponents[count] instanceof JTextField || childComponents[count] instanceof JRadioButton)
+					if ((childComponents[count] instanceof JComboBox || childComponents[count] instanceof JTextField || childComponents[count] instanceof JRadioButton)
 							&& childComponents[count].isEnabled())
 					{
 						comptype = childComponents[count].getClass().toString();
@@ -1481,10 +1572,10 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 			case AppletConstants.SPECIMEN_PARENT_ROW_NO :
 				result = rbparentSpecimen.isSelected();
 				break;
-//				Mandar: 06Nov06: location removed since auto allocation will take place.
-//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
-//				result = location.isEnabled();
-//				break;
+			//				Mandar: 06Nov06: location removed since auto allocation will take place.
+			//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
+			//				result = location.isEnabled();
+			//				break;
 			default :
 				result = true;
 		}

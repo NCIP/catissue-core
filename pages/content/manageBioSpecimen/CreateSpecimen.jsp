@@ -280,12 +280,26 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 	<html:errors />
    <html:form action="<%=action%>">
    
+                      <input type="hidden" id="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
+				       name="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
+				       value="<%=request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY)%>" />
+
+						<input type="hidden" id="derivedSpecimenCollectionGroup"
+				       name="derivedSpecimenCollectionGroup"
+				       value="<%=request.getParameter("derivedSpecimenCollectionGroup")%>" />
+					   
+					   	<input type="hidden" id="rowSelected"
+				       name="rowSelected"
+				       value="<%=request.getParameter("rowSelected")%>" />
+   
    <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="580">
 <tr>
 	<td>		
 		&nbsp;
 	</td>
 </tr>
+
+                     
 
 <tr>
  <td>
@@ -317,6 +331,8 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 				<div STYLE="overflow: auto; width:580; height: 200; padding:0px; margin: 0px; border: 4px solid" id="eventGrid">
 				<script>
 				
+				    var specimenAttributeKey = document.getElementById("specimenAttributeKey").value;
+			        parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey);
 					//	create ActiveWidgets Grid javascript object.
 					var obj = new Active.Controls.Grid;
 					var string  = new Active.Formats.String;
@@ -379,17 +395,7 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 %>
 		
 	
-	                   <input type="hidden" id="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
-				       name="<%=Constants.SPECIMEN_ATTRIBUTE_KEY%>"
-				       value="<%=request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY)%>" />
-
-						<input type="hidden" id="derivedSpecimenCollectionGroup"
-				       name="derivedSpecimenCollectionGroup"
-				       value="<%=request.getParameter("derivedSpecimenCollectionGroup")%>" />
-					   
-					   	<input type="hidden" id="rowSelected"
-				       name="rowSelected"
-				       value="<%=request.getParameter("rowSelected")%>" />
+	                 
 	
 	<%
 	

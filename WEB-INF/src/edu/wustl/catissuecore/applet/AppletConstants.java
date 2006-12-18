@@ -147,6 +147,15 @@ public interface AppletConstants
 	public static final String MULTIPLE_SPECIMEN_DERIVE = "Add";
 	public static final String MULTIPLE_SPECIMEN_MAP = "Map";
 	public static final String MULTIPLE_SPECIMEN_COMMENTS = "Add";
+	public static final String ADD = "Add";
+	public static final String EDIT = "Edit";
+	
+	public static final String MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS_STRING = "external";
+	public static final String MULTIPLE_SPECIMEN_BIOHAZARDS_STRING = "biohazard";
+	public static final String MULTIPLE_SPECIMEN_EVENTS_STRING = "event";
+	public static final String MULTIPLE_SPECIMEN_DERIVE_STRING = "derive";
+	public static final String MULTIPLE_SPECIMEN_COMMENTS_STRING = "comment";
+	
 	public static final String MULTIPLE_SPECIMEN_ADD_SPECIMEN = "More";
 	public static final String MULTIPLE_SPECIMEN_COPY = "Copy";
 	public static final String MULTIPLE_SPECIMEN_PASTE = "Paste";
@@ -156,6 +165,7 @@ public interface AppletConstants
 	
 	public static final String MULTIPLE_SPECIMEN_LOCATION_LABEL = "Containerlabel_temp";
 	public static final String MULTIPLE_SPECIMEN_ROW_COLUMN_SEPARATOR="@";
+	public static final String MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR="@";
 	//for parent specimen enable
 	public static final String MULTIPLE_SPECIMEN_COLLECTION_GROUP_RADIOMAP="collectionGroupRadioMap";
 	

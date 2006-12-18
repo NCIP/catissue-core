@@ -24,7 +24,7 @@
 			Map map = form.getExternalIdentifier();
 			int exIdRows = 1;
 			int bhRows = 1;
-
+            
 			String unitSpecimen = "";
 			if (form != null)
 			{
@@ -36,21 +36,29 @@
 
 			
 			String action = Constants.NEW_MULTIPLE_SPECIMEN_ACTION;
+			
 %>
 
 <html:errors />
+
 
 <html:messages id="messageKey" message="true" header="messages.header"
 	footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
 <html:form action="<%=action%>">
+<input type="hidden" id="specimenAttributeKey" value="<%=form.getSpecimenAttributeKey()%>"/>
+
 	<table summary="" cellpadding="0" cellspacing="0" border="0"
 		class="contentPage" width="600">
 
 		<logic:equal name="output" value="success">
-			<script language="JavaScript" type="text/javascript">self.close(); 
-	</script>
+			<script language="JavaScript" type="text/javascript">
+			
+			var specimenAttributeKey = document.getElementById("specimenAttributeKey").value;
+			parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey);
+			self.close(); 
+	       </script>
 		</logic:equal>
 		<logic:equal name="output" value="init">
 			<script language="JavaScript" type="text/javascript">window.focus(); 

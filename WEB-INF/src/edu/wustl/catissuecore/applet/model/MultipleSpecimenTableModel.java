@@ -51,6 +51,15 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 * 
 	 */
 	Map specimenMap;
+	
+	/**
+	 * Data structure maintianed by the model. Its key format is as follows:
+	 * 
+	 * key = [ColumnNo]_[SpecimenAttribute]
+	 * value = 'ADD' or 'EDIT' depending on lable of button 
+	 * 
+	 */
+	Map buttonStatusMap;
 
 	int columnCount;
 
@@ -81,6 +90,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	{
 
 		specimenMap = new HashMap();
+		buttonStatusMap = new HashMap();
 		this.columnCount = initialColumnCount;
 		this.specimenAttributeOptions = specimenAttributeOptions;
 		for (int i = 1; i <= initialColumnCount; i++)
@@ -447,6 +457,18 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		//			showMapData();
 		//		System.out.println("-------------------------------------------------------\n");
 	}
+	
+	
+	/**
+	 * set button caption details in map.
+	 */
+	public void setCaptionInMap(String specimenMapKey,String buttonType)
+	{
+		int colNo = getActualColumnNo(Integer.parseInt(specimenMapKey));
+		specimenMap.put(AppletConstants.SPECIMEN_PREFIX + (colNo + 1) + "_" +buttonType+"_BUTTON_STATUS", "EDIT");
+	}
+	
+	
 
 	/**
 	 * 
@@ -732,4 +754,12 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 
 	}
 
+	/**
+	 * @return Returns the buttonStatusMap.
+	 */
+	public Map getButtonStatusMap()
+	{
+		return buttonStatusMap;
+	}
+	
 }

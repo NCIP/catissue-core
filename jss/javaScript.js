@@ -434,6 +434,10 @@ function setStoragePosition(specimenMapKey,storageId,storageType,xPos,yPos) {
    parent.window.opener.document.applets[0].setStorageDetails(specimenMapKey,storageId,storageType,xPos,yPos);
 }
 
+function setCaptionInMapFromJS(specimenMapKey) {
+  parent.window.opener.document.applets[0].setButtonCaption(specimenMapKey);
+}
+
 function showStoragePositionMap(specimenAttributeKey,collectionGroup,specimenClass) {
 	var  url = "ShowFramedPage.do?pageOf=pageOfMultipleSpecimen";
 	url = url + "&specimenAttributeKey=" + specimenAttributeKey;
