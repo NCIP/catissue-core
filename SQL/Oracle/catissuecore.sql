@@ -248,7 +248,7 @@ create table CATISSUE_COLL_COORDINATORS (
 );
 create table CATISSUE_CANCER_RESEARCH_GROUP (
    IDENTIFIER number(19,0) not null ,
-   NAME varchar(50) not null unique,
+   NAME varchar(255) not null unique,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_COLLECTION_PROTOCOL (
@@ -282,7 +282,7 @@ create table CATISSUE_COLL_EVENT_PARAM (
 );
 create table CATISSUE_PASSWORD (
    IDENTIFIER number(19,0) not null ,
-   PASSWORD varchar(50),
+   PASSWORD varchar(255),
    UPDATE_DATE date,
    USER_ID number(19,0),
    primary key (IDENTIFIER)
@@ -294,7 +294,7 @@ create table CATISSUE_SPECIMEN_BIOHZ_REL (
 );
 create table CATISSUE_MOL_SPE_REVIEW_PARAM (
    IDENTIFIER number(19,0) not null,
-   GEL_IMAGE_URL varchar(200),
+   GEL_IMAGE_URL varchar(255),
    QUALITY_INDEX varchar(50),
    LANE_NUMBER varchar(50),
    GEL_NUMBER integer,
@@ -311,13 +311,13 @@ create table CATISSUE_STORAGE_TYPE (
 
 create table CATISSUE_CONTAINER (
    IDENTIFIER number(19,0) not null ,
-   ACTIVITY_STATUS varchar(20),
-   BARCODE varchar(100) unique,
+   ACTIVITY_STATUS varchar(50),
+   BARCODE varchar(255) unique,
    CAPACITY_ID number(19,0),
    PARENT_CONTAINER_ID number(19,0),
    COMMENTS varchar2(500),
    FULL number(1,0),
-   NAME varchar(100) unique not null,
+   NAME varchar(255) unique not null,
    POSITION_DIMENSION_ONE integer,
    POSITION_DIMENSION_TWO integer,
    primary key (IDENTIFIER)
@@ -329,9 +329,9 @@ create table CATISSUE_DISTRIBUTION_SPE_REQ (
 );
 create table CATISSUE_SITE (
    IDENTIFIER number(19,0) not null ,
-   NAME varchar(50) not null unique,
+   NAME varchar(255) not null unique,
    TYPE varchar(50),
-   EMAIL_ADDRESS varchar(150),
+   EMAIL_ADDRESS varchar(255),
    USER_ID number(19,0),
    ACTIVITY_STATUS varchar(50),
    ADDRESS_ID number(19,0),
@@ -354,7 +354,7 @@ create table CATISSUE_COLL_DISTRIBUTION_REL (
 );
 create table CATISSUE_DISPOSAL_EVENT_PARAM (
    IDENTIFIER number(19,0) not null,
-   REASON varchar(50) not null,
+   REASON varchar(255),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_REQUIREMENT (
@@ -368,7 +368,7 @@ create table CATISSUE_SPECIMEN_REQUIREMENT (
 );
 create table CATISSUE_INSTITUTION (
    IDENTIFIER number(19,0) not null ,
-   NAME varchar(50) not null unique,
+   NAME varchar(255) not null unique,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_ST_CONT_ST_TYPE_REL (
@@ -397,13 +397,13 @@ create table CATISSUE_CONT_HOLDS_SPARRTYPE (
 create table CATISSUE_SPECIMEN_PROTOCOL (
    IDENTIFIER number(19,0) not null ,
    PRINCIPAL_INVESTIGATOR_ID number(19,0),
-   TITLE varchar(150) not null unique,
-   SHORT_TITLE varchar(50),
-   IRB_IDENTIFIER varchar(50),
+   TITLE varchar(255) not null unique,
+   SHORT_TITLE varchar(255),
+   IRB_IDENTIFIER varchar(255),
    START_DATE date,
    END_DATE date,
    ENROLLMENT integer,
-   DESCRIPTION_URL varchar(200),
+   DESCRIPTION_URL varchar(255),
    ACTIVITY_STATUS varchar(50),
    primary key (IDENTIFIER)
 );
@@ -414,7 +414,7 @@ create table CATISSUE_FLUID_SPE_EVENT_PARAM (
 );
 create table CATISSUE_BIOHAZARD (
    IDENTIFIER number(19,0) not null ,
-   NAME varchar(50) not null unique,
+   NAME varchar(255) not null unique,
    COMMENTS varchar2(500),
    TYPE varchar(50),
    primary key (IDENTIFIER)
@@ -462,7 +462,7 @@ create table CATISSUE_SPECI_ARRAY_CONTENT (
 );
 create table CATISSUE_ADDRESS (
    IDENTIFIER number(19,0) not null ,
-   STREET varchar(50),
+   STREET varchar(255),
    CITY varchar(50),
    STATE varchar(50),
    COUNTRY varchar(50),
@@ -473,11 +473,11 @@ create table CATISSUE_ADDRESS (
 );
 create table CATISSUE_REPORTED_PROBLEM (
    IDENTIFIER number(19,0) not null ,
-   AFFILIATION varchar(200) not null,
-   NAME_OF_REPORTER varchar(200) not null,
-   REPORTERS_EMAIL_ID varchar(50) not null,
+   AFFILIATION varchar(255) not null,
+   NAME_OF_REPORTER varchar(255) not null,
+   REPORTERS_EMAIL_ID varchar(255) not null,
    MESSAGE_BODY varchar(500) not null,
-   SUBJECT varchar(100),
+   SUBJECT varchar(255),
    REPORTED_DATE date,
    ACTIVITY_STATUS varchar(100),
    COMMENTS varchar2(500),
@@ -506,15 +506,15 @@ create table CATISSUE_DISTRIBUTED_ITEM (
 );
 create table CATISSUE_PARTICIPANT (
    IDENTIFIER number(19,0) not null ,
-   LAST_NAME varchar(50),
-   FIRST_NAME varchar(50),
-   MIDDLE_NAME varchar(50),
+   LAST_NAME varchar(255),
+   FIRST_NAME varchar(255),
+   MIDDLE_NAME varchar(255),
    BIRTH_DATE date,
    GENDER varchar(20),
    GENOTYPE varchar(50),
    ETHNICITY varchar(50),
    SOCIAL_SECURITY_NUMBER varchar(50) unique,
-   ACTIVITY_STATUS varchar(20),
+   ACTIVITY_STATUS varchar(50),
    DEATH_DATE date,
    VITAL_STATUS varchar(50),
    primary key (IDENTIFIER)
@@ -547,11 +547,11 @@ create table CATISSUE_COLL_PROT_EVENT (
 create table CATISSUE_CONTAINER_TYPE (
    IDENTIFIER number(19,0) not null ,
    CAPACITY_ID number(19,0),
-   NAME varchar(100) unique,
-   ONE_DIMENSION_LABEL varchar(100),
-   TWO_DIMENSION_LABEL varchar(100),
+   NAME varchar(255) unique,
+   ONE_DIMENSION_LABEL varchar(255),
+   TWO_DIMENSION_LABEL varchar(255),
    COMMENTS varchar2(500),
-   ACTIVITY_STATUS VARCHAR(20),
+   ACTIVITY_STATUS VARCHAR(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_CAPACITY (
@@ -562,7 +562,7 @@ create table CATISSUE_CAPACITY (
 );
 create table CATISSUE_PART_MEDICAL_ID (
    IDENTIFIER number(19,0) not null ,
-   MEDICAL_RECORD_NUMBER varchar(50),
+   MEDICAL_RECORD_NUMBER varchar(255),
    SITE_ID number(19,0),
    PARTICIPANT_ID number(19,0),
    primary key (IDENTIFIER)
@@ -593,8 +593,8 @@ create table CATISSUE_DISTRIBUTION (
 );
 create table CATISSUE_PROCEDURE_EVENT_PARAM (
    IDENTIFIER number(19,0) not null,
-   URL varchar(200) not null,
-   NAME varchar(50) not null,
+   URL varchar(255) not null,
+   NAME varchar(255) not null,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_DISTRIBUTION_PROTOCOL (
@@ -603,14 +603,14 @@ create table CATISSUE_DISTRIBUTION_PROTOCOL (
 );
 create table CATISSUE_EXTERNAL_IDENTIFIER (
    IDENTIFIER number(19,0) not null ,
-   NAME varchar(50),
-   VALUE varchar(50),
+   NAME varchar(255),
+   VALUE varchar(255),
    SPECIMEN_ID number(19,0),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_DEPARTMENT (
    IDENTIFIER number(19,0) not null ,
-   NAME varchar(50) not null unique,
+   NAME varchar(255) not null unique,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_FIXED_EVENT_PARAM (
@@ -625,11 +625,11 @@ create table CATISSUE_THAW_EVENT_PARAMETERS (
 );
 create table CATISSUE_COLL_PROT_REG (
    IDENTIFIER number(19,0) not null ,
-   PROTOCOL_PARTICIPANT_ID varchar(50),
+   PROTOCOL_PARTICIPANT_ID varchar(255),
    REGISTRATION_DATE date,
    PARTICIPANT_ID number(19,0),
    COLLECTION_PROTOCOL_ID number(19,0),
-   ACTIVITY_STATUS varchar(20),
+   ACTIVITY_STATUS varchar(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_FROZEN_EVENT_PARAM (
@@ -641,14 +641,14 @@ create table CATISSUE_SPECIMEN (
    IDENTIFIER number(19,0) not null ,
    SPECIMEN_CLASS varchar(255) not null,
    TYPE varchar(50),
-   LABEL varchar(50) unique,
+   LABEL varchar(255) unique,
    LINEAGE varchar(50),
    PATHOLOGICAL_STATUS varchar(50),
    AVAILABLE number(1,0),
    POSITION_DIMENSION_ONE integer,
    POSITION_DIMENSION_TWO integer,
-   BARCODE varchar(50) unique,
-   COMMENTS varchar(200),
+   BARCODE varchar(255) unique,
+   COMMENTS varchar2(500),
    ACTIVITY_STATUS varchar(50),
    PARENT_SPECIMEN_ID number(19,0),
    STORAGE_CONTAINER_IDENTIFIER number(19,0),
@@ -661,10 +661,10 @@ create table CATISSUE_SPECIMEN (
 );
 create table CATISSUE_USER (
    IDENTIFIER number(19,0) not null ,
-   EMAIL_ADDRESS varchar(100),
-   FIRST_NAME varchar(50),
-   LAST_NAME varchar(50),
-   LOGIN_NAME varchar(50) not null unique,
+   EMAIL_ADDRESS varchar(255),
+   FIRST_NAME varchar(255),
+   LAST_NAME varchar(255),
+   LOGIN_NAME varchar(255) not null unique,
    START_DATE date,
    ACTIVITY_STATUS varchar(50),
    DEPARTMENT_ID number(19,0),
@@ -692,7 +692,7 @@ create table CATISSUE_ST_CONT_COLL_PROT_REL (
 );
 create table CATISSUE_SPECIMEN_COLL_GROUP (
    IDENTIFIER number(19,0) not null ,
-   NAME varchar(55) unique,
+   NAME varchar(255) unique,
    CLINICAL_DIAGNOSIS varchar(150),
    CLINICAL_STATUS varchar(50),
    ACTIVITY_STATUS varchar(50),
