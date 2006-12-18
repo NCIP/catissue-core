@@ -108,11 +108,23 @@ public class CollectionProtocolRegistrationAction extends SecureAction
             
 	        if(formBeanStack !=null)
 	        {
-	            AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean)formBeanStack.peek();
-	            
-	            SpecimenCollectionGroupForm sessionFormBean =(SpecimenCollectionGroupForm)addNewSessionDataBean.getAbstractActionForm();
-	            
-	            ((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(sessionFormBean.getCollectionProtocolId());
+	        	try
+				{
+		        	AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean)formBeanStack.peek();	        	
+		            SpecimenCollectionGroupForm sessionFormBean =(SpecimenCollectionGroupForm)addNewSessionDataBean.getAbstractActionForm();	            
+		            ((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(sessionFormBean.getCollectionProtocolId());
+				}
+	        	catch(ClassCastException exp)
+				{
+	        		Logger.out.debug("Class cast Exception in CollectionProtocolRegistrationAction ~~~~~~~~~~~~~~~~~~~~~~~>"+exp);
+				}
+
+//	            Object obj = addNewSessionDataBean.getAbstractActionForm();	            
+//	            if (obj instanceof SpecimenCollectionGroupForm)
+//	            {
+//	            	SpecimenCollectionGroupForm sessionFormBean =(SpecimenCollectionGroupForm)addNewSessionDataBean.getAbstractActionForm();
+//	            	((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(sessionFormBean.getCollectionProtocolId());
+//	            }
 	        }
 		}
 		
@@ -173,8 +185,8 @@ public class CollectionProtocolRegistrationAction extends SecureAction
             Long participantId=(Long)forwardToHashMap.get("participantId");
             Logger.out.debug("ParticipantID found in forwardToHashMap========>>>>>>"+participantId);
         
-            if((request.getParameter("firstName").trim().length()>0) || (request.getParameter("lastName").trim().length()>0) || (request.getParameter("birthDate").trim().length()>0) ||( (request.getParameter("socialSecurityNumberPartA").trim().length()>0) && (request.getParameter("socialSecurityNumberPartB").trim().length()>0) && (request.getParameter("socialSecurityNumberPartC").trim().length()>0))) 
-            {    
+//            if((request.getParameter("firstName").trim().length()>0) || (request.getParameter("lastName").trim().length()>0) || (request.getParameter("birthDate").trim().length()>0) ||( (request.getParameter("socialSecurityNumberPartA").trim().length()>0) && (request.getParameter("socialSecurityNumberPartB").trim().length()>0) && (request.getParameter("socialSecurityNumberPartC").trim().length()>0))) 
+//            {    
                 CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
                 cprForm.setParticipantID(participantId.longValue());
                 //cprForm.setCheckedButton(true);
@@ -184,10 +196,8 @@ public class CollectionProtocolRegistrationAction extends SecureAction
                 {
                 	Participant participant = (Participant) participantList.get(0);
                 	cprForm.setParticipantName(participant.getMessageLabel());
-                }
-                
-                
-            }
+                }           
+//            }
         }  
         
         else
