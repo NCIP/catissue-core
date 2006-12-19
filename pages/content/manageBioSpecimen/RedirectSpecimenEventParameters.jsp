@@ -8,9 +8,13 @@
 
 		if(eventId == null)
 			eventId=new Long(request.getParameter(Constants.SYSTEM_IDENTIFIER));
+		String parentUrl = "window.parent.location.href='ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&eventId="+eventId.toString()+"'";
+		if(session.getAttribute("CPQuery") != null)
+		{
+			parentUrl = "window.parent.location.href='CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&eventId="+eventId.toString()+"'";
+		}			
 
-		String parentUrl = "top.window.location.href='ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&eventId="+eventId.toString()+"'";
+
 	%>
-
 	<body onload="<%=parentUrl%>" />
 </logic:present>
