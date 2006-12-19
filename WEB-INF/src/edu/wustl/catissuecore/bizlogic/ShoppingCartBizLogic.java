@@ -52,7 +52,7 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 	        	String str = obj[i].toString();
 	        	int index = str.indexOf("_") + 1;
 	        	
-	        	cart.remove(str.substring(index));
+	        	cart.remove(str.substring(index).trim());
 			}
 		}
 		
@@ -102,7 +102,7 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 					
 					String str = obj[i].toString();
 		        	int index = str.indexOf("_") + 1;
-		        	String key = str.substring(index);
+		        	String key = str.substring(index).trim();
 					Specimen specimen = (Specimen)table.get(key);
 					
 					rowList.add(String.valueOf(specimen.getId()));

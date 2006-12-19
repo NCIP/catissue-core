@@ -1387,5 +1387,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	 */
 	public static final String STORAGE_LOCATION_SAPERATOR = "@";
 	
-	public static final String METHOD_NAME="method";	
+	public static final String METHOD_NAME="method";
+	public static final String GRID_FOR_EVENTS="eventParameter";
+	public static final String GRID_FOR_EDIT_SEARCH="editSearch";
+	public static final String GRID_FOR_DERIVED_SPECIMEN="derivedSpecimen";
+	
 }

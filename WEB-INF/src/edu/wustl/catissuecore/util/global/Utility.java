@@ -19,6 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
@@ -523,27 +524,32 @@ public class Utility extends edu.wustl.common.util.Utility
 
 	public static void main(String[] args)
 	{
-		//		Utility u = new Utility();
-		String dt = "18-10-06";
-		String pt = "dd-MM-yy";
-
-		System.out.println(Utility.getMonth(dt, pt) + "/" + Utility.getDay(dt, pt) + "/"
-				+ Utility.getYear(dt, pt));
-
-		dt = "28-11-06";
-		pt = "dd-MM-yy";
-		System.out.println(Utility.getMonth(dt, pt) + "/" + Utility.getDay(dt, pt) + "/"
-				+ Utility.getYear(dt, pt));
-
-		dt = "18-21-06";
-		pt = "MM-dd-yy";
-		System.out.println(Utility.getMonth(dt, pt) + "/" + Utility.getDay(dt, pt) + "/"
-				+ Utility.getYear(dt, pt));
-
-		dt = "18-asa-06";
-		pt = "dd-MM-yy";
-		System.out.println(Utility.getMonth(dt, pt) + "/" + Utility.getDay(dt, pt) + "/"
-				+ Utility.getYear(dt, pt));
+		String s = "ds fsbsdjf hsfsdfdsh f,sd fsdfjbhsdj sdf,sdf s,sd fds,sd ffs,sd f\"sd fs \"sd fsdF \"sf";
+		Object s1 = toNewGridFormat(s);
+		System.out.println("Original String : "+ s);
+		System.out.println("Updated String : "+ s1);
+		
+//		//		Utility u = new Utility();
+//		String dt = "18-10-06";
+//		String pt = "dd-MM-yy";
+//
+//		System.out.println(Utility.getMonth(dt, pt) + "/" + Utility.getDay(dt, pt) + "/"
+//				+ Utility.getYear(dt, pt));
+//
+//		dt = "28-11-06";
+//		pt = "dd-MM-yy";
+//		System.out.println(Utility.getMonth(dt, pt) + "/" + Utility.getDay(dt, pt) + "/"
+//				+ Utility.getYear(dt, pt));
+//
+//		dt = "18-21-06";
+//		pt = "MM-dd-yy";
+//		System.out.println(Utility.getMonth(dt, pt) + "/" + Utility.getDay(dt, pt) + "/"
+//				+ Utility.getYear(dt, pt));
+//
+//		dt = "18-asa-06";
+//		pt = "dd-MM-yy";
+//		System.out.println(Utility.getMonth(dt, pt) + "/" + Utility.getDay(dt, pt) + "/"
+//				+ Utility.getYear(dt, pt));
 	}
 	
 	/**
@@ -594,4 +600,33 @@ public class Utility extends edu.wustl.common.util.Utility
 		return pvList;
 	}
 	
+	//Mandar : 29Nov06
+    /**
+     * Changes the format of the string compatible to New Grid Format, 
+     * removing escape characters and special characters from the string
+     * Also replaces comma with space as comma is used as a delimiter.
+     * @param obj - Unformatted obj to be printed in Grid Format
+     * @return obj - Foratted obj to print in Grid Format
+     */
+    public static Object toNewGridFormat(Object obj)
+    {
+    	obj = toGridFormat(obj);
+        if(obj instanceof String)
+        {
+            String objString=(String)obj;
+            StringBuffer tokenedString=new StringBuffer();
+            
+            StringTokenizer tokenString=new StringTokenizer(objString,","); 
+            
+            while(tokenString.hasMoreTokens())
+            {
+               tokenedString.append(tokenString.nextToken()+" ");
+            }
+            String gridFormattedStr=new String(tokenedString);
+            obj=gridFormattedStr;
+        }
+ 
+        return obj;
+    }
+
 }
