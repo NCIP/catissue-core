@@ -28,7 +28,6 @@ import edu.wustl.catissuecore.applet.listener.MultipleSpecimenPasteActionHandler
 import edu.wustl.catissuecore.applet.listener.MultipleSpecimenTableKeyHandler;
 import edu.wustl.catissuecore.applet.listener.PageLinkHandler;
 import edu.wustl.catissuecore.applet.listener.SpecimenSubmitButtonHandler;
-import edu.wustl.catissuecore.applet.listener.TableModelChangeHandler;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
@@ -60,8 +59,10 @@ public class MultipleSpecimenApplet extends BaseApplet {
         table.getTableHeader().setReorderingAllowed(false);
 
 		//to set the focus to the editor. Mandar: 16Oct06.
-//	20Oct06<*>	table.setSurrendersFocusOnKeystroke(true );
-		table.addKeyListener(new MultipleSpecimenTableKeyHandler(table));
+        	//not in jdk1.3 so commented.
+        //table.setSurrendersFocusOnKeystroke(true );
+
+        table.addKeyListener(new MultipleSpecimenTableKeyHandler(table));
 
 		// Creating Layout
 		//getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT ));
@@ -79,7 +80,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	    getContentPane().add(linkPanel);
 		// --------------------
 
-        table.getModel().addTableModelListener(new TableModelChangeHandler(table));
+    //    table.getModel().addTableModelListener(new TableModelChangeHandler(table));
 			
 		//table.getColumnModel().setColumnSelectionAllowed(true);
 		table.setColumnSelectionAllowed(true);
@@ -107,8 +108,12 @@ public class MultipleSpecimenApplet extends BaseApplet {
 
 		getContentPane().add(scrollPane);
 		setBackground(appletColor);
-		
-		
+	
+		//not in jdk1.3
+//		getContentPane().setFocusable(true );
+		this.requestFocus(); 
+		table.requestDefaultFocus(); 
+
 		
     }
     
@@ -116,6 +121,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
     {
     	JButton copy = new JButton(AppletConstants.MULTIPLE_SPECIMEN_COPY  );
     	JButton paste = new JButton(AppletConstants.MULTIPLE_SPECIMEN_PASTE);
+    	copy.setMnemonic(AppletConstants.MULTIPLE_SPECIMEN_COPY_ACCESSKEY);
+    	paste.setMnemonic(AppletConstants.MULTIPLE_SPECIMEN_PASTE_ACCESSKEY);
     	//copy.setEnabled(false);
     	paste.setEnabled(false);
     	copy.addActionListener(new MultipleSpecimenCopyActionHandler(table, paste));
@@ -126,6 +133,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
     	
     	//deleteLast button
     	JButton deleteLast = new JButton(AppletConstants.MULTIPLE_SPECIMEN_DELETE_LAST);
+    	deleteLast.setMnemonic(AppletConstants.MULTIPLE_SPECIMEN_DELETE_LAST_ACCESSKEY);
     	deleteLast.addActionListener(new DeleteLastHandler(table,this) );
 
     	

@@ -55,6 +55,7 @@ public class SpecimenSubmitButtonHandler extends ButtonHandler
 //			String value = map.get(key).toString() ;
 //			System.out.println(" Value : "+ value);
 //		}
+		System.out.println("\n"+map);
 		System.out.println("\n ***********************************\n"); 
 		// --------------
 		try

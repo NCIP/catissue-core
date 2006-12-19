@@ -10,9 +10,9 @@
 package edu.wustl.catissuecore.applet.listener;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
 
@@ -60,7 +60,8 @@ public class ButtonHandler extends BaseActionHandler
 	 */
 	protected void handleAction(ActionEvent event)
 	{
-		if(event.getModifiers() == KeyEvent.VK_SHIFT )
+		System.out.println("15-dec-06 : ButtonHandler : event.getModifiers():"+ event.getModifiers());
+//		if(event.getModifiers() == KeyEvent.VK_SHIFT )
      {
 
 		int colNo = table.getSelectedColumn();
@@ -70,6 +71,10 @@ public class ButtonHandler extends BaseActionHandler
 		Object[] parameters = {Constants.ADD, key};
 		CommonAppletUtil.callJavaScriptFunction((JButton) event.getSource(),
 				getJSMethodName(), parameters);
+		
+		//to get focus back when returned on page
+		JComponent comp = (JComponent)event.getSource();
+		comp.requestDefaultFocus(); 
         }
 	}
 

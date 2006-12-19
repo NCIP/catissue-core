@@ -10,7 +10,10 @@ import java.awt.Component;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.JComboBox;
 import javax.swing.JTable;
+
+import edu.wustl.catissuecore.applet.AppletConstants;
 
 
 /**
@@ -39,19 +42,35 @@ public class MultipleSpecimenTableKeyHandler extends KeyAdapter
 	public void keyPressed(KeyEvent e)
 	{
 		System.out.println("\n>>>>>>>>>>>>>>> Inside MultipleSpecimenTableKeyHandler keyPressed >>>>>>>>>>>>>>>>>\n");
-		super.keyPressed(e);
+//		super.keyPressed(e);
 		int keyCode = e.getKeyCode();
-		System.out.println("Key : "+keyCode + " , KeyEvent.VK_TAB : "+ KeyEvent.VK_TAB );
-		if(keyCode == KeyEvent.VK_TAB)
-		{
-			System.out.println("Tab key pressed");
-			int row = table.getSelectedRow();
-			int col = table.getSelectedColumn();
-			System.out.println("Selected Row: "+ row + " , Col : "+ col);
-			//to stop the default handling.
-			e.consume();
-			table.changeSelection(row+1,col,false,false );
-		}
+		if(keyCode == KeyEvent.VK_ENTER)
+			table.getColumnModel().getColumn(table.getSelectedColumn()).getCellEditor().stopCellEditing();
+//		int keyCode = e.getKeyCode();
+//		System.out.println("Key : "+keyCode + " , KeyEvent.VK_TAB : "+ KeyEvent.VK_TAB );
+//		if(keyCode == KeyEvent.VK_TAB)
+//		{
+//			System.out.println("Tab key pressed");
+//			int row = table.getSelectedRow();
+//			int col = table.getSelectedColumn();
+//			System.out.println("Selected Row: "+ row + " , Col : "+ col);
+//			//to stop the default handling.
+//			e.consume();
+//			table.changeSelection(row+1,col,false,false );
+//		}
+//		else if(e.getKeyCode() == KeyEvent.VK_DOWN && e.isAltDown())
+//		{
+//			int row = table.getSelectedRow();
+//			int col = table.getSelectedColumn(); 
+//			if(row == AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO)
+//			{
+//				Object obj = table.getCellEditor().getTableCellEditorComponent(table,null,true,row,col );
+//				if(obj instanceof JComboBox)
+//				{
+//					((JComboBox)obj).firePopupMenuWillBecomeVisible(); 
+//				}
+//			}
+//		}
 		System.out.println("<<<<<<<<<<<<<<<<<<<< Key Pressed Done >>>>>>>>>>>>>");
 	}
 }

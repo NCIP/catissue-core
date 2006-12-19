@@ -56,7 +56,7 @@ public class BaseActionHandler implements ActionListener
 	{
 		System.out.println("inside BaseActionHandler: - preActionPerformed");
 	 	int colNo = table.getSelectedColumn();
-	 	table.getColumnModel().getColumn(colNo).getCellEditor().stopCellEditing();
+//	 	table.getColumnModel().getColumn(colNo).getCellEditor().stopCellEditing();
 		table.getModel().setValueAt(getSelectedValue(event),table.getSelectedRow(),table.getSelectedColumn());
 		System.out.println("table.getModel().setValueAt(getSelectedValue(event) : "+table.getModel().getValueAt(table.getSelectedRow(),table.getSelectedColumn())+" table.getSelectedRow() : "+table.getSelectedRow()+" table.getSelectedColumn() : " + table.getSelectedColumn());
 		System.out.println("inside BaseActionHandler: - preActionPerformed done");

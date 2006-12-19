@@ -180,4 +180,9 @@ public interface AppletConstants
 	public static final int LINK_BUTTON_WIDTH = 70;
 	
 	public static final Color BG_COLOR = new Color(0xf4f4f5);
+	
+	public static final char MULTIPLE_SPECIMEN_COPY_ACCESSKEY = 'C';
+	public static final char MULTIPLE_SPECIMEN_PASTE_ACCESSKEY = 'P';
+	public static final char MULTIPLE_SPECIMEN_DELETE_LAST_ACCESSKEY='D';
+
 }
