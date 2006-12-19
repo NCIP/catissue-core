@@ -10,7 +10,7 @@
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	Integer identifierFieldIndex = (Integer)request.getAttribute(Constants.IDENTIFIER_FIELD_INDEX);
 	String title = pageOf + ".searchResultTitle";
-	int pageNum = Integer.parseInt((String)session.getAttribute(Constants.PAGE_NUMBER));
+	int pageNum = Integer.parseInt((String)request.getAttribute(Constants.PAGE_NUMBER));
 	int totalResults = Integer.parseInt((String)session.getAttribute(Constants.TOTAL_RESULTS));
 	int numResultsPerPage = Integer.parseInt((String)session.getAttribute(Constants.RESULTS_PER_PAGE));
 	String pageName = "SpreadsheetView.do";		

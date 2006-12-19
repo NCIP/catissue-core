@@ -148,7 +148,7 @@ public class SpreadsheetViewAction extends Action
         request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnList); 
         
         //Set the current pageNum in the request to be uesd by pagination Tag.
-        session.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
+        request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
         
         session.setAttribute(Constants.RESULTS_PER_PAGE,recordsPerPage+"");
         //Set the result per page attribute in the request to be uesd by pagination Tag.

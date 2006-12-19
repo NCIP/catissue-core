@@ -131,7 +131,7 @@ public class DomainObjectListAction extends SecureAction
         request.setAttribute(Constants.SHOW_DOMAIN_OBJECT_LIST,showList);
         
         //Saves the page number in the request.
-        session.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
+        request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
         
         //Saves the total number of results in the request. 
         session.setAttribute(Constants.TOTAL_RESULTS,Integer.toString(list.size()));
