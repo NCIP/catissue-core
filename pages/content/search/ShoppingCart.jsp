@@ -7,13 +7,11 @@
 <%@ page import="edu.wustl.catissuecore.domain.Specimen"%>
 <%@ page import="edu.wustl.common.query.ShoppingCart"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="java.util.ArrayList"%>
 
-<link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
-<script src="runtime/lib/grid.js"></script>
-<script src="runtime/lib/gridcheckbox.js"></script>
-<script src="runtime/formats/date.js"></script>
-<script src="runtime/formats/string.js"></script>
-<script src="runtime/formats/number.js"></script>
+
 <script src="jss/script.js"></script>
 
 <style>
@@ -28,48 +26,23 @@
 %>
 <head>
 <%
-	String [] columnList = Constants.SHOPPING_CART_COLUMNS;
+	String [] columnList1 = Constants.SHOPPING_CART_COLUMNS;
+	List columnList = new ArrayList();
+	for(int i=0;i<columnList1.length;i++)
+	{
+		columnList.add(columnList1[i]);
+	}
+	//columnList.add(0," ");
+
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-
-if(dataList.size() != 0)
-{
 %>
-
-	<script>
-		var myData = [<%int xx;%><%for (xx=0;xx<(dataList.size()-1);xx++){%>
-	<%
-		List row = (List)dataList.get(xx);
-  		int j;
-	%>
-		[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"],<%}%>
-	<%
-		List row = (List)dataList.get(xx);
-  		int j;
-	%>
-		[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"]
-		];
-		
-		var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
-	</script>
-
-<% } %>
 
 	<script language="javascript">
 	var colZeroDir='ascending';
 		function onDelete()
 		{
-			var isChecked = "false";
-			for (var i=0;i < document.forms[0].elements.length;i++)
-		    {
-		    	var e = document.forms[0].elements[i];
-		    	
-		        if (e.name != "checkAll" && e.type == "checkbox" && e.checked == true)
-		        {
-		        	isChecked = "true";
-		        	break;
-		        }
-		    }
+			var isChecked = updateHiddenFields();
 		    
 		    if(isChecked == "true")
 		    {
@@ -87,17 +60,7 @@ if(dataList.size() != 0)
 		
 		function onExport()
 		{
-			var isChecked = "false";
-			for (var i=0;i < document.forms[0].elements.length;i++)
-		    {
-		    	var e = document.forms[0].elements[i];
-		    	
-		        if (e.name != "checkAll" && e.type == "checkbox" && e.checked == true)
-		        {
-		        	isChecked = "true";
-		        	break;
-		        }
-		    }
+			var isChecked = updateHiddenFields();
 		    
 		    if(isChecked == "true")
 		    {
@@ -127,22 +90,6 @@ if(dataList.size() != 0)
 			}
 		}
 		
-		
-		function checkAll(element)
-		{
-			if(element.name == "checkAll1")
-			{
-				var check2 = document.getElementById("checkAll2");
-				check2.checked = element.checked;
-				checkUncheck(element);
-			}
-			else
-			{
-				var check1 = document.getElementById("checkAll1");
-				check1.checked = element.checked;
-				checkUncheck(element);
-			}
-		}	
 	</script>
 </head>
 
@@ -186,48 +133,23 @@ if(dataList.size() != 0)
 	
 	<tr height="85%">
 		<td width="100%">
-			<div STYLE="overflow: auto; width:100%; height:100%; padding:0px; margin: 0px; border: 1px solid">
-				<script>
-					
-						//	create ActiveWidgets Grid javascript object.
-						var obj = new Active.Controls.Grid;
-						
-						//	set number of rows/columns.
-						obj.setRowProperty("count", <%=dataList.size()%>);
-						obj.setColumnProperty("count", <%=columnList.length%>);
-						
-						//	provide cells and headers text
-						obj.setDataProperty("text", function(i, j){return myData[i][j]});
-						obj.setColumnProperty("text", function(i){return columns[i]});
-						
-						//	set headers width/height.
-						obj.setRowHeaderWidth("28px");
-						obj.setColumnHeaderHeight("20px");
-						
-						//original sort method  
-						var _sort = obj.sort; 
-						//overide sort function to meet our requirenemnt
-					    obj.sort = function(index, direction, alternateIndex){ 
-					        
-					    //if check box column is clicked
-					    //then sort on the flag those are in 8th column
-					        if(index==0)
-					        {
-					        	index=myData[0].length-1;
-					        	direction=colZeroDir;
-								if(colZeroDir=='ascending')colZeroDir='descending';
-								else colZeroDir='ascending';
-					        	
-					        } 
-					        
-				            _sort.call(this, index, direction); 
-					        
-					        return true;
-					    }
-						//	write grid html to the page.
-						document.write(obj);
-				</script>
-			</div>
+<!--  **************  Code for New Grid  *********************** -->
+			<script>
+					function shopingcart(id)
+					{
+						//do nothing
+					} 				
+
+					/* 
+						to be used when you want to specify another javascript function for row selection.
+						useDefaultRowClickHandler =1 | any value other than 1 indicates you want to use another row click handler.
+						useFunction = "";  Function to be used. 	
+					*/
+					var useDefaultRowClickHandler =2;
+					var useFunction = "shopingcart";	
+			</script>
+			<%@ include file="/pages/content/search/AdvanceGrid.jsp" %>
+<!--  **************  Code for New Grid  *********************** -->
 		</td>
 	</tr>
 

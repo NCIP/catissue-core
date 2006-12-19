@@ -234,7 +234,8 @@ public class ShoppingCartAction  extends BaseAction
 					List rowData = new ArrayList();
 					
 					//Adding checkbox as a first column of the grid
-					rowData.add("<input type='checkbox' name='value(CB_" + specimen.getId() + ")' id='" + id + "' onClick='changeData(this)'>");
+				//	rowData.add("<input type='checkbox' name='value(CB_" + specimen.getId() + ")' id='" + id + "' onClick='changeData(this)'>");
+					rowData.add(String.valueOf(specimen.getId())); // for check box value
 					rowData.add(String.valueOf(specimen.getId()));
 					rowData.add(specimen.getClassName());
 					

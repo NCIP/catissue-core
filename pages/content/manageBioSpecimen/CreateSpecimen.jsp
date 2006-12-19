@@ -10,6 +10,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+
 
 
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
@@ -24,8 +26,15 @@
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 
 <% 
-        String[] columnList = Constants.DERIVED_SPECIMEN_COLUMNS;
+        String[] columnList1 = Constants.DERIVED_SPECIMEN_COLUMNS;
+		List columnList = new ArrayList();
+		for(int i=0;i<columnList1.length;i++)
+		{
+			columnList.add(columnList1[i]);
+		}
+
 		String operation = (String)request.getAttribute(Constants.OPERATION);
+		Integer identifierFieldIndex = new Integer(4);
 		String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 		boolean readOnlyValue=false,readOnlyForAll=false;
@@ -252,28 +261,7 @@
 
 <%
 List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-if(dataList!=null && dataList.size() != 0)
-{
 %>
-
-<script>
-var myData = [<%int xx;%><%for (xx=0;xx<(dataList.size()-1);xx++){%>
-<%
-	List row = (List)dataList.get(xx);
-  	int j;
-%>
-[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"],<%}%>
-<%
-	List row = (List)dataList.get(xx);
-  	int j;
-%>
-[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"]
-];
-
-var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
-</script>
-
-<%}%>
 
 
 
@@ -328,55 +316,33 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		
    	 	<tr>
 			<td>
-				<div STYLE="overflow: auto; width:580; height: 200; padding:0px; margin: 0px; border: 4px solid" id="eventGrid">
 				<script>
-				
 				    var specimenAttributeKey = document.getElementById("specimenAttributeKey").value;
 			        parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey);
-					//	create ActiveWidgets Grid javascript object.
-					var obj = new Active.Controls.Grid;
-					var string  = new Active.Formats.String;
-					var number  = new Active.Formats.Number; 
+					function derivedSpecimenGrid(id)
+					{
+						var cl = mygrid.cells(id,4);
+						var rowSelected = cl.getValue();
+						var c2 = mygrid.cells(id,0);
+						var eventId = c2.getValue();
 
-					number.setTextFormat("#*");
-					
-					//	set number of rows/columns.
-					obj.setRowProperty("count", <%=dataList.size()%>);
-					obj.setColumnProperty("count", <%=columnList.length-1%>);
-					var formats = [string,string,string,string];
-					
-					//	provide cells and headers text
-	
-					obj.setDataText(function(i, j){return myData[i][j]});
-					obj.setColumnProperty("text", function(i){return columns[i]});
-					// disable sorting
-					obj.getTemplate("top/item").setEvent("onmousedown", null); 
-					
-					//	set headers width/height.
-					obj.setRowHeaderWidth("28px");
-					obj.setColumnHeaderHeight("20px");
-			
-					var row = new Active.Templates.Row;
-					row.setEvent("ondblclick", function(){this.action("myAction")}); 
-					
-					
-					obj.setTemplate("row", row);
-			 		obj.setAction("myAction", 
-						function(src)
-						{
-						   var action = "NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&rowSelected=" + myData[this.getSelectionProperty("index")][4] +"&specimenAttributeKey="+document.getElementById("specimenAttributeKey").value;
-				   		   document.forms[0].action = action;
-				           document.forms[0].submit();
-						}
-						);
-						
-						
-						//var frame = document.getElementById("newEventFrame"); frame.src = 'SearchObject.do?pageOf=' + myData[this.getSelectionProperty("index")][<%=columnList.length-1%>] + '&operation=search&id=' + myData[this.getSelectionProperty("index")][0]}); 
-			
-					//	write grid html to the page.
-					document.write(obj);
+					//	alert("eventId : "+eventId + " , pageOf: "+pageOf);
+						var url = "NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&rowSelected=" + rowSelected +"&specimenAttributeKey="+document.getElementById("specimenAttributeKey").value;
+//						var url = "SearchObject.do?pageOf="+pageOf+"&operation=search&id="+eventId;
+						document.forms[0].action = url;
+				        document.forms[0].submit();
+					} 				
+
+					/* 
+						to be used when you want to specify another javascript function for row selection.
+						useDefaultRowClickHandler =1 | any value other than 1 indicates you want to use another row click handler.
+						useFunction = "";  Function to be used. 	
+					*/
+					var useDefaultRowClickHandler =2;
+					var useFunction = "derivedSpecimenGrid";	
+					var gridFor="<%=Constants.GRID_FOR_DERIVED_SPECIMEN%>";
 				</script>
-				</div>
+				<%@ include file="/pages/content/search/GridPage.jsp" %>
 			</td>
 		</tr>
 </table>

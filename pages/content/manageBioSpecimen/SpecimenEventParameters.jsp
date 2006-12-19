@@ -3,8 +3,12 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
 <%@ page import="java.util.List"%>
+<%@ page import="java.util.ArrayList"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+
 
 
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
@@ -18,10 +22,16 @@
 .active-column-1 {width:200px}
 </style>
 <%
-	String[] columnList = Constants.EVENT_PARAMETERS_COLUMNS;
+	String[] columnList1 = Constants.EVENT_PARAMETERS_COLUMNS;
+	List columnList = new ArrayList();
+	for(int i=0;i<columnList1.length;i++)
+	{
+		columnList.add(columnList1[i]);
+	}
 	String title = null;
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	Integer identifierFieldIndex = new Integer(0);
 	String specimenIdentifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
 	if(specimenIdentifier == null || specimenIdentifier.equals("0"))
 		specimenIdentifier = (String)request.getParameter(Constants.SPECIMEN_ID);
@@ -29,16 +39,6 @@
 
 	//------------- Mandar 04-july-06 QuickEvents
 	String eventSelected = (String)request.getAttribute(Constants.EVENT_SELECTED);
-//	System.out.println("eventSelected : "+eventSelected);
-
-//		Object obj = request.getAttribute("listSpecimenEventParametersForm");
-//		System.out.println("Class : "+ obj.getClass().getName() ); 
-//		ListSpecimenEventParametersForm form = null;
-//		if(obj != null && obj instanceof ListSpecimenEventParametersForm)
-//		{
-//			form = (ListSpecimenEventParametersForm)obj;
-//			System.out.println("FormData : "+form.getSpecimenEventParameter()+" : " + form.getSpecimenId() );
-//		}
 
 		String iframeSrc="";
 		String formAction = Constants.SPECIMEN_ADD_ACTION;
@@ -51,30 +51,7 @@
 //		System.out.println("iframeSrc : "+ iframeSrc);
 	//------------- Mandar 04-july-06 QuickEvents
 
-
-if(dataList!=null && dataList.size() != 0)
-{
 %>
-
-<script>
-var myData = [<%int xx;%><%for (xx=0;xx<(dataList.size()-1);xx++){%>
-<%
-	List row = (List)dataList.get(xx);
-  	int j;
-%>
-[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"],<%}%>
-<%
-	List row = (List)dataList.get(xx);
-  	int j;
-%>
-[<%for (j=0;j < (row.size()-1);j++){%>"<%=row.get(j)%>",<%}%>"<%=row.get(j)%>"]
-];
-
-var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnList[k]%>",<%}%>"<%=columnList[k]%>"];
-</script>
-
-<%}%>
-
 <script language="JavaScript">
 
 	function onParameterChange(element)
@@ -190,44 +167,32 @@ var columns = [<%int k;%><%for (k=0;k < (columnList.length-1);k++){%>"<%=columnL
 		
    	 	<tr>
 			<td>
-				<div STYLE="overflow: auto; width:550; height: 200; padding:0px; margin: 0px; border: 1px solid" id="eventGrid">
 				<script>
-				
-					//	create ActiveWidgets Grid javascript object.
-					var obj = new Active.Controls.Grid;
-					var date  = new Active.Formats.Date; 
-			 		var string  = new Active.Formats.String;
-					var number  = new Active.Formats.Number; 
+					function eventParametersGrid(id)
+					{
+						
+						var cl = mygrid.cells(id,4);
+						var pageOf = cl.getValue();
+						var c2 = mygrid.cells(id,0);
+						var eventId = c2.getValue();
 
-					date.setTextFormat("mm-dd-yyyy HH:mm");
-					number.setTextFormat("#*");
-					
-					//	set number of rows/columns.
-					obj.setRowProperty("count", <%=dataList.size()%>);
-					obj.setColumnProperty("count", <%=columnList.length-1%>);
-					var formats = [number,string,string,date];
-					
-					//	provide cells and headers text
-					//obj.setDataProperty("text", function(i, j){return formats[j].dataToValue(myData[i][j])});
-					obj.setDataText(function(i, j){return myData[i][j]});
-					obj.setColumnProperty("text", function(i){return columns[i]});
-					obj.sort(3,'descending');
-					
-					//	set headers width/height.
-					obj.setRowHeaderWidth("28px");
-					obj.setColumnHeaderHeight("20px");
-			
-					var row = new Active.Templates.Row;
-					row.setEvent("ondblclick", function(){this.action("myAction")}); 
-					
-					obj.setTemplate("row", row);
-			   		obj.setAction("myAction", 
-						function(src){var frame = document.getElementById("newEventFrame"); frame.src = 'SearchObject.do?pageOf=' + myData[this.getSelectionProperty("index")][<%=columnList.length-1%>] + '&operation=search&id=' + myData[this.getSelectionProperty("index")][0]}); 
-			
-					//	write grid html to the page.
-					document.write(obj);
+					//	alert("eventId : "+eventId + " , pageOf: "+pageOf);
+
+						var url = "SearchObject.do?pageOf="+pageOf+"&operation=search&id="+eventId;
+						var frame = document.getElementById("newEventFrame"); 
+						frame.src = url; 
+					} 				
+
+					/* 
+						to be used when you want to specify another javascript function for row selection.
+						useDefaultRowClickHandler =1 | any value other than 1 indicates you want to use another row click handler.
+						useFunction = "";  Function to be used. 	
+					*/
+					var useDefaultRowClickHandler =2;
+					var gridFor="<%=Constants.GRID_FOR_EVENTS%>";
+					var useFunction = "eventParametersGrid";	
 				</script>
-				</div>
+				<%@ include file="/pages/content/search/GridPage.jsp" %>
 			</td>
 		</tr>
 <% } else

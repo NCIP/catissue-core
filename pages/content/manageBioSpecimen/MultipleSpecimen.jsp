@@ -17,10 +17,18 @@
 					.getAttribute("multipleSpecimenForm");
 			String action = Constants.MULTIPLE_SPECIMEN_APPLET_ACTION;
 %>
+<script>
+	function activateApplet()
+	{
+		alert("AppletActivated");
+		document.applets[0].focus();
+	}
+</script>
 </head>
-<body>
+<body onLoad="document.forms[0].hiddenField.focus()">
 <FORM METHOD=POST ACTION="<%=action%>">
 <div id="errorMessages"></div>
+<input type=hidden name=hiddenField size=10 onFocus="activateApplet()">
 
 </FORM>
 			<table cellpadding="0" cellspacing="0" width="100%" height="100%" border="1">
@@ -33,6 +41,7 @@
 													'ARCHIVE = "CaTissueApplet.jar"\n'+
 													'CODE = "edu/wustl/catissuecore/applet/ui/MultipleSpecimenApplet.class"\n'+
 													'ALT = "Mulitple specimen Applet"\n'+
+													'tabindex=0\n'+
 													'NAME = "<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>"'
 													);
 									if (platform.indexOf("mac") != -1)

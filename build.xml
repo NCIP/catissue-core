@@ -178,6 +178,7 @@
 				<include name="css/**" />
 				<include name="images/**" />
 				<include name="jss/**" />
+				<include name="dhtml_comp/**" />
 				<include name="pages/**" />
 				<include name="runtime/**" />
 				<include name="WEB-INF/**" />
