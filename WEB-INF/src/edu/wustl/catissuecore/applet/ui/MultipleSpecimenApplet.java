@@ -243,8 +243,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	 */
 	public void setButtonCaption(String specimenMapKey) {
 		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
-		String tempKey = specimenMapKey.replaceFirst(AppletConstants.SPECIMEN_PREFIX,"");
-		String columnString = tempKey.substring(0,tempKey.indexOf("_"));
+		String columnString = specimenMapKey.substring(AppletConstants.SPECIMEN_PREFIX.length(),specimenMapKey.indexOf("_"));
 		int actualColNo =  Integer.parseInt(columnString)-1;
 		int displayColNo = tableModel.getDisplayColumnNo(actualColNo); 
 	//	tableModel.setCaptionInMap(specimenMapKey,buttonType);

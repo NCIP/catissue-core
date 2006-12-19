@@ -155,7 +155,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		super();
 		this.table = table;
 		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel) table.getModel();
-		columnIndex = column; 
+		columnIndex = column;
 		// set row height based on contents	
 		for (int rowno = 0; rowno < table.getRowCount(); rowno++)
 		{
@@ -1245,36 +1245,36 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		objectKey = objectKey.toLowerCase();
 		Map buttonStatusMap = tableModel.getButtonStatusMap();
 		int actuaColumnNo = tableModel.getActualColumnNo(columnIndex);
-		if (objectKey.contains(AppletConstants.MULTIPLE_SPECIMEN_COMMENTS_STRING))
+		if (objectKey.indexOf(AppletConstants.MULTIPLE_SPECIMEN_COMMENTS_STRING) != -1)
 		{
 			this.comments.setLabel(status);
-			
-			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
-					+ AppletConstants.MULTIPLE_SPECIMEN_COMMENTS_STRING,status);
+
+			buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+					+ AppletConstants.MULTIPLE_SPECIMEN_COMMENTS_STRING, status);
 		}
-		else if (objectKey.contains(AppletConstants.MULTIPLE_SPECIMEN_EVENTS_STRING))
+		else if (objectKey.indexOf(AppletConstants.MULTIPLE_SPECIMEN_EVENTS_STRING) != -1)
 		{
 			this.eventsButton.setLabel(status);
-			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
-					+ AppletConstants.MULTIPLE_SPECIMEN_EVENTS_STRING,status);
+			buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+					+ AppletConstants.MULTIPLE_SPECIMEN_EVENTS_STRING, status);
 		}
-		else if (objectKey.contains(AppletConstants.MULTIPLE_SPECIMEN_DERIVE_STRING))
+		else if (objectKey.indexOf(AppletConstants.MULTIPLE_SPECIMEN_DERIVE_STRING) != -1)
 		{
 			this.deriveButton.setLabel(status);
-			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
-					+ AppletConstants.MULTIPLE_SPECIMEN_DERIVE_STRING,status);
+			buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+					+ AppletConstants.MULTIPLE_SPECIMEN_DERIVE_STRING, status);
 		}
-		else if (objectKey.contains(AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS_STRING))
+		else if (objectKey.indexOf(AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS_STRING) != -1)
 		{
 			this.externalIdentifierButton.setLabel(status);
-			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
-					+ AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS_STRING,status);
+			buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+					+ AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS_STRING, status);
 		}
-		else if (objectKey.contains(AppletConstants.MULTIPLE_SPECIMEN_BIOHAZARDS_STRING))
+		else if (objectKey.indexOf(AppletConstants.MULTIPLE_SPECIMEN_BIOHAZARDS_STRING) != -1)
 		{
 			this.bioHazardButton.setLabel(status);
-			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
-					+ AppletConstants.MULTIPLE_SPECIMEN_BIOHAZARDS_STRING,status);
+			buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+					+ AppletConstants.MULTIPLE_SPECIMEN_BIOHAZARDS_STRING, status);
 		}
 	}
 
