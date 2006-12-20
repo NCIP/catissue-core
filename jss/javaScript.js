@@ -451,6 +451,10 @@ function showStoragePositionMap(specimenAttributeKey,collectionGroup,specimenCla
 function getSpecimenSubmitResult(target) {
 //	  document.forms[0].action =    document.forms[0].action + "?method=getResult&multipleSpecimenResult=" + target ;  
 	  document.forms[0].action = "MultipleSpecimenStorageLocation.do";
+	  if(window.parent.frames.length > 0)
+      {
+		document.forms[0].action = "CPQueryMultipleSpecimenStorageLocation.do?pageOf=pageOfMultipleSpecimenCPQuery";
+	  }
 	  document.forms[0].submit(); 
 }
 
