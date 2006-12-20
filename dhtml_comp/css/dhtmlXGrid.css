@@ -46,11 +46,11 @@ div.gridbox table.obj td span.space, div.gridbox table.obj td img.space{
 	width:18px;
 	}
 div.gridbox table.obj tr.rowselected td.cellselected, div.gridbox table.obj td.cellselected {
-	background-color:#d8d8d8;
+	background-color:#1e23e8;/* d8d8d8 MD20Dec06*/
 	color:black;
 	}
 div.gridbox table.obj tr.rowselected td{
-	background-color:#e1e0d7;
+	background-color:#1e23e8;/* e1e0d7; MD20Dec06*/
 	color:black;
 	}
 div.gridbox table.obj td.editable{
@@ -151,11 +151,12 @@ div.gridbox_xp table.obj td {
 	vertical-align:middle;
 	}
 div.gridbox table.obj tr.rowselected td{
-	background-color:whitesmoke;
-	color:black;
+	background-color:#1e23e8;/* whitesmoke; MD20Dec06*/
+	color:white; /*black; MD20Dec06*/
 	}
 div.gridbox table.obj tr.rowselected td.cellselected, div.gridbox table.obj td.cellselected {
-	background-color:whitesmoke;
+	background-color:#1e23e8;/* whitesmoke; MD20Dec06*/
+	color:white;	/* Added by Mandar */
 	}
 div.gridbox_xp table.row20px tr  td{
     height:22px;
