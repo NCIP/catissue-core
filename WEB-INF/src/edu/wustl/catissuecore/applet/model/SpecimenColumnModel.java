@@ -1330,32 +1330,36 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		if (objectKey.indexOf(AppletConstants.MULTIPLE_SPECIMEN_COMMENTS_STRING)!=-1)
 		{
 			this.comments.setLabel(status);
-			
-			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+		    refreshComponent(this.comments);
+			buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
 					+ AppletConstants.MULTIPLE_SPECIMEN_COMMENTS_STRING,status);
 		}
 		else if (objectKey.indexOf(AppletConstants.MULTIPLE_SPECIMEN_EVENTS_STRING)!=-1)
 		{
 			this.eventsButton.setLabel(status);
+			 refreshComponent(this.eventsButton);
 			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
 					+ AppletConstants.MULTIPLE_SPECIMEN_EVENTS_STRING,status);
 		}
 		else if (objectKey.indexOf(AppletConstants.MULTIPLE_SPECIMEN_DERIVE_STRING)!=-1)
 		{
 			this.deriveButton.setLabel(status);
+			  refreshComponent(this.deriveButton);
 			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
 					+ AppletConstants.MULTIPLE_SPECIMEN_DERIVE_STRING,status);
 		}
 		else if (objectKey.indexOf(AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS_STRING)!=-1)
 		{
 			this.externalIdentifierButton.setLabel(status);
+			refreshComponent(this.externalIdentifierButton);
 			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
 					+ AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS_STRING,status);
 		}
 		else if (objectKey.indexOf(AppletConstants.MULTIPLE_SPECIMEN_BIOHAZARDS_STRING)!=-1)
 		{
 			this.bioHazardButton.setLabel(status);
-			 buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
+			refreshComponent(this.bioHazardButton);
+		    buttonStatusMap.put(actuaColumnNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
 					+ AppletConstants.MULTIPLE_SPECIMEN_BIOHAZARDS_STRING,status);
 		}
 	}
