@@ -63,6 +63,13 @@ var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList)%><%="\""%>;
 	mygrid.setEditable("FALSE");
 	mygrid.enableAutoHeigth(false);
 
+//	document.write("<hr>"+colWidth+"<hr>");
+	if(useFunction == "eventParametersGrid" || useFunction == "derivedSpecimenGrid")
+	{
+		colWidth = "130,130,130,130,0";
+	}
+//	document.write("<hr>"+colWidth+"<hr>");
+
 	mygrid.setInitWidths(colWidth);
 
 	//mygrid.setColAlign("left,left")
@@ -84,18 +91,15 @@ var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList)%><%="\""%>;
 		mygrid.addRow(row+1,myData[row],row+1);
 	}
 
+	if(useFunction == "eventParametersGrid" || useFunction == "derivedSpecimenGrid")
+	{
+		mygrid.setHeaderCol(4,"");
+		mygrid.setColumnHidden(4,true);
+	}
+
 	//mygrid.setOnRowSelectHandler(funcName);
 	mygrid.setOnRowDblClickedHandler(funcName);
 	mygrid.setSizes();
 
-if(useFunction == "eventParametersGrid")
-{
-	mygrid.setHeaderCol(4,"");
-	mygrid.setColumnHidden(4,true);
-	for(i=0;i<=3;i++)
-	{
-		mygrid.setColWidth(i,125);
-	}
-}
 
 </script>
