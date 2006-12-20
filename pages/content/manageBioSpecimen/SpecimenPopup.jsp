@@ -55,8 +55,11 @@
 		<logic:equal name="output" value="success">
 			<script language="JavaScript" type="text/javascript">
 			
-			var specimenAttributeKey = document.getElementById("specimenAttributeKeyForJS").value;
-			parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey);
+			var specimenAttributeKey = document.getElementById("specimenAttributeKeyForJS");
+			if(specimenAttributeKey!=null)
+			{
+			    parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey.value);
+			}
 			self.close(); 
 	       </script>
 		</logic:equal>

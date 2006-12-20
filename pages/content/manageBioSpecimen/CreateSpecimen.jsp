@@ -317,8 +317,11 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
    	 	<tr>
 			<td>
 				<script>
-				    var specimenAttributeKey = document.getElementById("specimenAttributeKey").value;
-			        parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey);
+				    var specimenAttributeKey = document.getElementById("specimenAttributeKey");
+					if(specimenAttributeKey!=null)
+					{
+			          parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey.value);
+					}
 					function derivedSpecimenGrid(id)
 					{
 						var cl = mygrid.cells(id,4);
