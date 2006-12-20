@@ -75,18 +75,35 @@
 		readOnlyValue=true;
 		if(pageOf.equals(Constants.QUERY))
 			formName = Constants.QUERY_SPECIMEN_EDIT_ACTION + "?pageOf="+pageOf;
+		if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+		{
+			formName = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION + "?pageOf="+pageOf;
+		}
 
 	}
 	else
 	{
 		formName = Constants.SPECIMEN_ADD_ACTION;
 		readOnlyValue=false;
+		if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+		{
+			formName = Constants.CP_QUERY_SPECIMEN_ADD_ACTION + "?pageOf="+pageOf;
+		}
 	}
 
 	String formNameForCal = "newSpecimenForm";
 	
 %>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
+	<%if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+	{%>
+		<script language="javascript">
+			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
+			
+		</script>
+	<%}%>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript">
 	function deleteExternalIdentifiers()
@@ -137,15 +154,29 @@
 			
 			if(checked)
 			{
+			<% String actionToCall = null;%>
 				if(operation == "add")
 				{
 					setSubmittedFor('null','pageOfAliquot');
-					confirmDisable('NewSpecimenAdd.do',document.forms[0].activityStatus);
+					<%
+					actionToCall = "NewSpecimenAdd.do";
+					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
+					actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
+
+					}%>
+					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
 				else
 				{
+				
 					setSubmittedFor('null','pageOfAliquot');
-					confirmDisable('NewSpecimenEdit.do',document.forms[0].activityStatus);
+					<%
+					actionToCall = "NewSpecimenEdit.do";
+					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
+					actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+
+					}%>
+					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
 			}
 			else
@@ -153,23 +184,44 @@
 				if(operation == "add")
 				{
 					setSubmittedFor('null','success');
-					confirmDisable('NewSpecimenAdd.do',document.forms[0].activityStatus);
+					<%
+					actionToCall = "NewSpecimenAdd.do";
+					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
+					actionToCall = Constants.CP_QUERY_SPECIMEN_ADD_ACTION;
+
+					}%>
+					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
 				else
 				{
 					setSubmittedFor('null','success');
-					confirmDisable('NewSpecimenEdit.do',document.forms[0].activityStatus);
+					<%
+					actionToCall = "NewSpecimenEdit.do";
+					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
+					actionToCall = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION;
+
+					}%>
+					
+					confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 				}
 			}
+			
 		}
+
 		function onCollOrClassChange()
 		{
 			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupId");
 			var classNameElement = document.getElementById("className");
 			if(specimenCollGroupElement.value != "-1" && classNameElement.value != "-1")
 			{
-		
-				var action = "NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen&virtualLocated=false";
+					
+				<%
+				String actionOnCollOrClassChange = "NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen&virtualLocated=false";
+				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+				{
+					actionOnCollOrClassChange = "CPQueryNewSpecimen.do?operation=add&pageOf=pageOfNewSpecimenCPQuery&virtualLocated=false";
+				}%>
+				var action = "<%=actionOnCollOrClassChange%>";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}	
@@ -212,17 +264,33 @@
 		function eventClicked()
 		{			
 			var answer = confirm("Do you want to submit any changes?");
-			var formName;
+			var formName;;
+			<% String formNameAction = null;%>
 			if (answer){
 				setSubmittedFor('ForwardTo','eventParameters');
-				formName = "NewSpecimenEdit.do";
+				<%
+				formNameAction = "NewSpecimenEdit.do";
+				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+				{
+					formNameAction = "CPQueryNewSpecimenEdit.do";
+				}%>
+				formName = "<%=formNameAction%>";
 			}
 			else{
 				var id = document.forms[0].id.value;			
-				formName = "ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&specimenId="+id+"&menuSelected=15";				
+				<%
+				formNameAction = "ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters";
+				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+				{
+					formNameAction = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery";
+				}%>
+						
+				formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15";				
 			}			
+
 			confirmDisable(formName,document.forms[0].activityStatus);
 		}
+
 	</script>
 </head>
 
@@ -411,10 +479,19 @@
 								</html:select>
 								&nbsp;
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+		   						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SPECIMEN_CP_QUERY%>">
 								<html:link href="#" styleId="newUser" onclick="addNewAction('NewSpecimenAddNew.do?addNewForwardTo=specimenCollectionGroup&forwardTo=createNewSpecimen&addNewFor=specimenCollectionGroupId')">
 									<bean:message key="buttons.addNew" />
 								</html:link>					   
 		   						</logic:notEqual>
+		   						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SPECIMEN_CP_QUERY%>">
+								<html:link href="#" styleId="newUser" onclick="addNewAction('NewSpecimenAddNew.do?addNewForwardTo=specimenCollectionGroupCPQuery&forwardTo=createNewSpecimen&addNewFor=specimenCollectionGroupId')">
+									<bean:message key="buttons.addNew" />
+								</html:link>					   
+		   						</logic:equal>
+		   						</logic:notEqual>
+		   						
+		   						
 								 <!-- <a href="SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup">
 									<bean:message key="app.addNew" />
 									</a> 

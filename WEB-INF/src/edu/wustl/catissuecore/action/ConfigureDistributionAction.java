@@ -29,7 +29,9 @@ public class ConfigureDistributionAction extends BaseAction
     	//Set the tables for the configuration of distribution report
     	HttpSession session =request.getSession();
     	session.setAttribute(Constants.TABLE_ALIAS_NAME, Constants.DISTRIBUTION_TABLE_AlIAS);
-    	request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_DISTRIBUTION);
+    	String pageOf = request.getParameter(Constants.PAGEOF);
+		request.setAttribute(Constants.PAGEOF, pageOf);
+
     	return (mapping.findForward("Success"));
     }
 }

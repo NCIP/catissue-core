@@ -43,6 +43,10 @@
 		String iframeSrc="";
 		String formAction = Constants.SPECIMEN_ADD_ACTION;
 		String specimenPath ="'NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
+		if(pageOf.equals(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY))
+		{
+			specimenPath ="'QuerySpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimenCPQuery&id="+specimenIdentifier+"'" ;
+		}
 		if(eventSelected != null)	
 		{
 			iframeSrc = getEventAction(eventSelected, specimenIdentifier);
@@ -52,6 +56,17 @@
 	//------------- Mandar 04-july-06 QuickEvents
 
 %>
+
+<%if(pageOf.equals(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY))
+	{%>
+		<script language="javascript">
+			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
+			
+		</script>
+	<%}%>
+
 <script language="JavaScript">
 
 	function onParameterChange(element)

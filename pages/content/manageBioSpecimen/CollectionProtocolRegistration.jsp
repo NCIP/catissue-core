@@ -23,6 +23,7 @@
 
 				String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 				boolean isAddNew = false;
+				String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 
 			    String operation = (String) request.getAttribute(Constants.OPERATION);
 		        String reqPath = (String)request.getAttribute(Constants.REQ_PATH);

@@ -33,10 +33,11 @@
 			return " ";
 
 	}
-
+	
 	String formName;
 
 	%>
+	<%String pageOf = (String) request.getAttribute(Constants.PAGEOF);%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp"%>
 <%List specimenIdList = (List) request
 					.getAttribute(Constants.SPECIMEN_ID_LIST);
@@ -49,15 +50,35 @@
 			boolean readOnlyValue = false, readOnlyForAll = false;
 			if (operation.equals(Constants.EDIT)) {
 				formName = Constants.DISTRIBUTION_EDIT_ACTION;
+				if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
+				{
+					formName = Constants.CP_QUERY_DISTRIBUTION_EDIT_ACTION + "?pageOf="+pageOf;
+				}
+
 				readOnlyValue = true;
 			} else {
 			formName = Constants.DISTRIBUTION_ADD_ACTION;
+			if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_DISTRIBUTION_ADD_ACTION + "?pageOf="+pageOf;
+			}
+
 				readOnlyValue = false;
 			}
 			
 //			formName = "DistributionSubmit.do";
 %>
 <head>
+	<%if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
+	{%>
+		<script language="javascript">
+			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
+			
+		</script>
+	<%}%>
+
 <script language="JavaScript" type="text/javascript"
 	src="jss/javaScript.js"></script>
 <script language="JavaScript"><!--
@@ -171,7 +192,7 @@
 </head>
 
 
-<%String pageOf = (String) request.getAttribute(Constants.PAGEOF);
+<%
 			String currentDistributionDate = "";
 			Object obj = request.getAttribute("distributionForm");
 			int noOfRows = 1;

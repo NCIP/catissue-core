@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -31,6 +32,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -97,6 +99,14 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 	}
 
+	
+	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	{
+		CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
+		ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
+		participantRegistrationCacheManager.addNewCP(collectionProtocol.getId(),collectionProtocol.getTitle());
+		
+	}
 	/**
 	 * Updates the persistent object in the database.
 	 * @param obj The object to be updated.
@@ -797,5 +807,24 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 
 		return true;
+	}
+	
+	public void postUpdate(DAO dao, Object currentObj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException,
+			UserNotAuthorizedException 
+	{
+		CollectionProtocol collectionProtocol = (CollectionProtocol) currentObj;
+		CollectionProtocol collectionProtocolOld = (CollectionProtocol) oldObj;
+		ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
+		if(!collectionProtocol.getTitle().equals(collectionProtocolOld.getTitle()))
+		{
+			participantRegistrationCacheManager.updateCPTitle(collectionProtocol.getId(),collectionProtocol.getTitle());
+		}
+		
+		if(collectionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		{
+			participantRegistrationCacheManager.removeCP(collectionProtocol.getId());
+		}
+		
+		
 	}
 }

@@ -76,6 +76,9 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 		MultipleSpecimenStorageLocationForm aForm = (MultipleSpecimenStorageLocationForm) form;
 		Logger.out.debug("\naForm.getSpecimenOnUIMap():\n---------------\n" + aForm.getSpecimenOnUIMap() + "\n-----------\n");
 		String target = Constants.FAILURE;
+		String pageOf = request.getParameter(Constants.PAGEOF);
+		request.setAttribute(Constants.PAGEOF,pageOf);
+		
 		//		if(dataValidate())
 		//		{
 		specimenCounter = 1;

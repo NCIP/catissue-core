@@ -21,14 +21,14 @@ Date   : May 12, 2006
 String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 String buttonKey = "";
 String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
-if(Constants.PAGEOF_ALIQUOT.equals(pageOf))
-{
-	buttonKey = "buttons.submit";
-}
-else if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
-{
-	buttonKey = "buttons.resubmit";
-}
+	if(Constants.PAGEOF_ALIQUOT.equals(pageOf) || Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf))
+	{
+		buttonKey = "buttons.submit";
+	}
+	else if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf))
+	{
+		buttonKey = "buttons.resubmit";
+	}
 %>
 
 <head>
@@ -41,6 +41,12 @@ else if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
 	{
 		var action = '<%=Constants.CREATE_ALIQUOT_ACTION%>';
 		document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=submit";;
+		
+		<%if(Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf)){%>
+			var CPaction = '<%=Constants.CP_QUERY_CREATE_ALIQUOT_ACTION%>';
+			document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY%>' + "&operation=add&menuSelected=15&buttonClicked=submit";;
+								
+		<%}%>
 		document.forms[0].submit();
 	}
 	
@@ -63,6 +69,11 @@ else if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
 		var action = '<%=Constants.CREATE_ALIQUOT_ACTION%>';
 		document.forms[0].submittedFor.value = "ForwardTo";
 		document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=create";
+		<%if(Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf)){%>
+		var CPaction = '<%=Constants.CP_QUERY_CREATE_ALIQUOT_ACTION%>';
+		document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY%>' + "&operation=add&menuSelected=15&buttonClicked=create";;
+							
+		<%}%>
 	    document.forms[0].submit();
 	}
 	
@@ -71,6 +82,11 @@ else if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
 	    var action = '<%=Constants.CREATE_ALIQUOT_ACTION%>';
 		document.forms[0].submittedFor.value = "ForwardTo";
 		document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=checkbox";
+		<%if(Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf)){%>
+		var CPaction = '<%=Constants.CP_QUERY_CREATE_ALIQUOT_ACTION%>';
+			document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY%>' + "&operation=add&menuSelected=15&buttonClicked=checkbox";;
+							
+		<%}%>
 	    document.forms[0].submit();
 	}
 	
@@ -281,6 +297,8 @@ if(form != null)
 }
 
 if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
+{
+if(!Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf))
 {
 %>
 
@@ -659,6 +677,7 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 </tr>
 <%
 } //If pageOf != "Aliquot Page"
+}
 %>
 </table>
 <html:hidden property="specimenID"/>

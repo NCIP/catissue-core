@@ -15,9 +15,9 @@
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 		boolean isAddNew = false;	
 
-		String appendingPath = "/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
+		String appendingPath = "/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
 		if (reqPath != null)
-			appendingPath = reqPath + "|/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup";
+			appendingPath = reqPath + "|/SpecimenCollectionGroup.do?operation=add&pageOf="+pageOf;
 	
 	   		Object obj = request.getAttribute("specimenCollectionGroupForm");
 			SpecimenCollectionGroupForm form =null;
@@ -27,6 +27,8 @@
 				form = (SpecimenCollectionGroupForm)obj;
 			}	
 	
+		String formName, pageView = operation ,editViewButton="buttons."+Constants.EDIT;
+		boolean readOnlyValue=false,readOnlyForAll=false;
 	   	if(!operation.equals("add") )
 	   	{
 	   		obj = request.getAttribute("specimenCollectionGroupForm");
@@ -34,13 +36,13 @@
 			if(obj != null && obj instanceof SpecimenCollectionGroupForm)
 			{
 				form = (SpecimenCollectionGroupForm)obj;
-		   		appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf=pageOfSpecimenCollectionGroup&id="+form.getId() ;
+		   		appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf="+pageOf+"&id="+form.getId() ;
 		   		int checkedButton1 = form.getCheckedButton();
 		   	}
+			
 	   	}
 			
-		String formName, pageView = operation ,editViewButton="buttons."+Constants.EDIT;
-		boolean readOnlyValue=false,readOnlyForAll=false;
+
 
 		if(operation.equals(Constants.EDIT))
 		{
@@ -49,18 +51,37 @@
 			readOnlyValue=true;
 			if(pageOf.equals(Constants.QUERY))
 				formName = Constants.QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
+			if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
+			}
+				
 
 		}
 		else
 		{
 			formName = Constants.SPECIMEN_COLLECTION_GROUP_ADD_ACTION;
+			if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_ADD_ACTION + "?pageOf="+pageOf;
+			}
 			readOnlyValue=false;
 		}
 
 %>
-
-
 <head>
+
+	<%if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+	{%>
+		<script language="javascript">
+			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
+			window.parent.frames[0].location="showCpAndParticipants.do?cpId="+cpId+"&participantId="+participantId;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
+			
+		</script>
+	<%}%>
+
 	<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
      <script language="JavaScript">
      
@@ -85,7 +106,7 @@
 		
         function onChangeEvent(element)
 		{
-        	var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=pageOfSpecimenCollectionGroup&" +
+        	var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=<%=pageOf%>&" +
         			"isOnChange=true";
         	changeAction(action);
 		}
@@ -186,10 +207,11 @@
 				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
-						&nbsp;
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
 						<html:link href="#" styleId="newCollectionProtocol" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=collectionProtocol&forwardTo=specimenCollectionGroup&addNewFor=collectionProtocol')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
+						</logic:notEqual>
 		        	</td>
 				 </tr>
 
@@ -207,10 +229,12 @@
 				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
   							<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 						</html:select>
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
 						&nbsp;
 						<html:link href="#" styleId="newSite" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=site&forwardTo=specimenCollectionGroup&addNewFor=site')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
+						</logic:notEqual>
 		        	</td>
 				 </tr>
 				 

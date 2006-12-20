@@ -11,7 +11,6 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
@@ -27,10 +26,11 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.AddNewSessionDataBean;
 import edu.wustl.common.beans.NameValueBean;
@@ -59,14 +59,6 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         if(operation.equalsIgnoreCase(Constants.ADD ) )
         {
         	((CollectionProtocolRegistrationForm)form).setId(0);
-        	
-        	//Bug- setting the current Date by default.
-    		Calendar cal = Calendar.getInstance();    		
-    		if (((CollectionProtocolRegistrationForm)form).getRegistrationDate() == null)
-    		{
-    			((CollectionProtocolRegistrationForm)form).setRegistrationDate(Utility.parseDateToString(cal.getTime(),
-    					Constants.DATE_PATTERN_MM_DD_YYYY));
-    		}
         }
 
 		//Sets the pageOf attribute
@@ -108,71 +100,64 @@ public class CollectionProtocolRegistrationAction extends SecureAction
             
 	        if(formBeanStack !=null)
 	        {
-	        	try
-				{
-		        	AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean)formBeanStack.peek();	        	
-		            SpecimenCollectionGroupForm sessionFormBean =(SpecimenCollectionGroupForm)addNewSessionDataBean.getAbstractActionForm();	            
-		            ((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(sessionFormBean.getCollectionProtocolId());
-				}
-	        	catch(ClassCastException exp)
-				{
-	        		Logger.out.debug("Class cast Exception in CollectionProtocolRegistrationAction ~~~~~~~~~~~~~~~~~~~~~~~>"+exp);
-				}
-
-//	            Object obj = addNewSessionDataBean.getAbstractActionForm();	            
-//	            if (obj instanceof SpecimenCollectionGroupForm)
-//	            {
-//	            	SpecimenCollectionGroupForm sessionFormBean =(SpecimenCollectionGroupForm)addNewSessionDataBean.getAbstractActionForm();
-//	            	((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(sessionFormBean.getCollectionProtocolId());
-//	            }
+	            AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean)formBeanStack.peek();
+	            
+	            SpecimenCollectionGroupForm sessionFormBean =(SpecimenCollectionGroupForm)addNewSessionDataBean.getAbstractActionForm();
+	            
+	            ((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(sessionFormBean.getCollectionProtocolId());
 	        }
+		}
+		
+		if(request.getParameter(Constants.CP_SEARCH_CP_ID)!=null)
+		{
+			long cpSearchCpId = new Long(request.getParameter(Constants.CP_SEARCH_CP_ID)).longValue();
+			
+		    ((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(cpSearchCpId);
 		}
 		
 		//get list of Participant's names
 		sourceObjectName = Participant.class.getName();
+		String[] participantsFields = {"lastName","firstName","birthDate","socialSecurityNumber"};
+		String[] whereColumnName = {"lastName","firstName","birthDate","socialSecurityNumber"};
+		String[] whereColumnCondition;
+		Object[] whereColumnValue;
 		
-		//Bug-2819: Performance issue due to participant drop down: Commented by Jitendra
-//		String[] participantsFields = {"lastName","firstName","birthDate","socialSecurityNumber"};
-//		String[] whereColumnName = {"lastName","firstName","birthDate","socialSecurityNumber"};
-//		String[] whereColumnCondition;
-//		Object[] whereColumnValue;
-//		
-//		// get Database name and set conditions 
-//		if(Variables.databaseName.equals(Constants.MYSQL_DATABASE))
-//		{
-//			whereColumnCondition = new String[]{"!=","!=","is not","is not"};
-//			whereColumnValue = new String[]{"","",null,null};
-//		}
-//		else
-//		{
-//			// for ORACLE
-//			whereColumnCondition = new String[]{"is not null","is not null","is not null","is not null"};
-//			whereColumnValue = new String[]{};
-//		}
-//		
-//		String joinCondition = Constants.OR_JOIN_CONDITION;
-//		String separatorBetweenFields = ", ";
-//		
-//		list = bizLogic.getList(sourceObjectName, participantsFields, valueField, whereColumnName,
-//	            whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
-//		
-//		
-//		//get list of Disabled Participants
-//		String[] participantsFields2 = {Constants.SYSTEM_IDENTIFIER};
-//		String[] whereColumnName2 = {"activityStatus"};
-//		String[] whereColumnCondition2 = {"="};
-//		String[] whereColumnValue2 = {Constants.ACTIVITY_STATUS_DISABLED};
-//		String joinCondition2 = Constants.AND_JOIN_CONDITION;
-//		String separatorBetweenFields2 = ",";
-//		
-//		List listOfDisabledParticipant = bizLogic.getList(sourceObjectName, participantsFields2, valueField, whereColumnName2,
-//	            whereColumnCondition2, whereColumnValue2, joinCondition2, separatorBetweenFields2, false);
-//		
-//		//removing disabled participants from the list of Participants
-//		list=removeDisabledParticipant(list, listOfDisabledParticipant);
-//		
-//		// Sets the participantList attribute to be used in the Site Add/Edit Page.
-//		request.setAttribute(Constants.PARTICIPANT_LIST, list);
+		// get Database name and set conditions 
+		if(Variables.databaseName.equals(Constants.MYSQL_DATABASE))
+		{
+			whereColumnCondition = new String[]{"!=","!=","is not","is not"};
+			whereColumnValue = new String[]{"","",null,null};
+		}
+		else
+		{
+			// for ORACLE
+			whereColumnCondition = new String[]{"is not null","is not null","is not null","is not null"};
+			whereColumnValue = new String[]{};
+		}
+		
+		String joinCondition = Constants.OR_JOIN_CONDITION;
+		String separatorBetweenFields = ", ";
+		
+		list = bizLogic.getList(sourceObjectName, participantsFields, valueField, whereColumnName,
+	            whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
+		
+		
+		//get list of Disabled Participants
+		String[] participantsFields2 = {Constants.SYSTEM_IDENTIFIER};
+		String[] whereColumnName2 = {"activityStatus"};
+		String[] whereColumnCondition2 = {"="};
+		String[] whereColumnValue2 = {Constants.ACTIVITY_STATUS_DISABLED};
+		String joinCondition2 = Constants.AND_JOIN_CONDITION;
+		String separatorBetweenFields2 = ",";
+		
+		List listOfDisabledParticipant = bizLogic.getList(sourceObjectName, participantsFields2, valueField, whereColumnName2,
+	            whereColumnCondition2, whereColumnValue2, joinCondition2, separatorBetweenFields2, false);
+		
+		//removing disabled participants from the list of Participants
+		list=removeDisabledParticipant(list, listOfDisabledParticipant);
+		
+		// Sets the participantList attribute to be used in the Site Add/Edit Page.
+		request.setAttribute(Constants.PARTICIPANT_LIST, list);
 		
 		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
         request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
@@ -185,8 +170,8 @@ public class CollectionProtocolRegistrationAction extends SecureAction
             Long participantId=(Long)forwardToHashMap.get("participantId");
             Logger.out.debug("ParticipantID found in forwardToHashMap========>>>>>>"+participantId);
         
-//            if((request.getParameter("firstName").trim().length()>0) || (request.getParameter("lastName").trim().length()>0) || (request.getParameter("birthDate").trim().length()>0) ||( (request.getParameter("socialSecurityNumberPartA").trim().length()>0) && (request.getParameter("socialSecurityNumberPartB").trim().length()>0) && (request.getParameter("socialSecurityNumberPartC").trim().length()>0))) 
-//            {    
+            if((request.getParameter("firstName").trim().length()>0) || (request.getParameter("lastName").trim().length()>0) || (request.getParameter("birthDate").trim().length()>0) ||( (request.getParameter("socialSecurityNumberPartA").trim().length()>0) && (request.getParameter("socialSecurityNumberPartB").trim().length()>0) && (request.getParameter("socialSecurityNumberPartC").trim().length()>0))) 
+            {    
                 CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
                 cprForm.setParticipantID(participantId.longValue());
                 //cprForm.setCheckedButton(true);
@@ -197,12 +182,12 @@ public class CollectionProtocolRegistrationAction extends SecureAction
                 	Participant participant = (Participant) participantList.get(0);
                 	cprForm.setParticipantName(participant.getMessageLabel());
                 }           
-//            }
-        }  
-        
+                
+            }
+        }
         else
         {
-        	if(request.getParameter("participantId")!=null && !request.getParameter("participantId").equals(""))
+        	if(request.getParameter("participantId")!=null)
         	{
         		try
         		{
@@ -210,8 +195,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         		CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
                 cprForm.setParticipantID(participantId.longValue());
                 //cprForm.setCheckedButton(true);
-                //Bug-2819: Performance issue due to participant drop down: Jitendra
-                List participantList = bizLogic.retrieve(sourceObjectName, Constants.SYSTEM_IDENTIFIER, participantId);               
+                 List participantList = bizLogic.retrieve(sourceObjectName, Constants.SYSTEM_IDENTIFIER, participantId);               
                 if(participantList != null && !participantList.isEmpty())
                 {
                 	Participant participant = (Participant) participantList.get(0);
@@ -223,7 +207,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         			Logger.out.debug("NumberFormatException Occured :"+e);
         		}
         	}
-        	
+        	       	
         	 //Bug- 2819 :  Jitendra
             if(((CollectionProtocolRegistrationForm)form).getParticipantID() != 0) 
         	{        		
@@ -248,6 +232,10 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         }
         //*************  ForwardTo implementation *************
         
+     /*   Logger.out.info("--------------------------------- caching ---------------");
+        CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+        List list12 =cBizLogic.getAllParticipantRegistrationInfo();
+        Logger.out.info("--------------------------------- caching end ---------------");*/
 		return mapping.findForward(pageOf);
 	}
 	

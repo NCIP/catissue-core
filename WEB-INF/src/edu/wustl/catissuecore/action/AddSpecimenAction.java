@@ -43,6 +43,8 @@ public class AddSpecimenAction extends SecureAction
 	{
 
 		CreateSpecimenForm createForm = (CreateSpecimenForm) form;
+		String pageOf = request.getParameter(Constants.PAGEOF);
+		
 		String sourceObjectName = Specimen.class.getName();
 		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
 
@@ -78,6 +80,10 @@ public class AddSpecimenAction extends SecureAction
 			Long specimen = (Long) obj;
 			createForm.setParentSpecimenId("" + specimen.longValue());
 			createForm.setReset(false);   // Will not reset the parameters   
+			if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
+			{
+				return mapping.findForward(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY);
+			}
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		else

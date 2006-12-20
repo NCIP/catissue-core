@@ -6,9 +6,24 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.MultipleSpecimenForm"%>
 
 <%
-  String action = Constants.NEW_MULTIPLE_SPECIMEN_ACTION + "?method=showMultipleSpecimen&amp;menuSelected=15";
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+    String action = Constants.NEW_MULTIPLE_SPECIMEN_ACTION + "?method=showMultipleSpecimen&amp;menuSelected=15";
+	if(pageOf != null && pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN_CP_QUERY))
+	{
+		action = Constants.CP_QUERY_NEW_MULTIPLE_SPECIMEN_ACTION + "?method=showMultipleSpecimen&amp;menuSelected=15";
+	}
 %>
-
+<head>
+	<%if(pageOf != null && pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN_CP_QUERY))
+	{%>
+		<script language="javascript">
+			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
+			
+		</script>
+	<%}%>
+</head>
 <html:errors />
 <html:messages id="messageKey" message="true" header="messages.header"
 	footer="messages.footer">

@@ -114,6 +114,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	private int counter=1;
 	
 	
+	private long cpId = -1; 
     /**
      * Initializes an empty ParticipantForm object. 
      */
@@ -664,5 +665,15 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	 */
 	public void setVitalStatus(String vitalStatus) {
 		this.vitalStatus = vitalStatus;
+	}
+
+	public long getCpId()
+	{
+		return cpId;
+	}
+
+	public void setCpId(long cpId)
+	{
+		this.cpId = cpId;
 	}
 }

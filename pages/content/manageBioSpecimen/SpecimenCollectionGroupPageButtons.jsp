@@ -19,6 +19,7 @@
 						  				     	    
 											     	</html:button>
 												</td>
+											
 												<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 												<td nowrap class="formFieldNoBorders">
 													<html:button styleClass="actionButton"  

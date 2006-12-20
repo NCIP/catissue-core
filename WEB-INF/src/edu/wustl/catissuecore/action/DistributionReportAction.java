@@ -71,6 +71,10 @@ public class DistributionReportAction extends BaseDistributionReportAction
     	request.setAttribute(Constants.COLUMN_NAMES_LIST, columnNames);
     	request.setAttribute(Constants.DISTRIBUTED_ITEMS_DATA, listOfData);
     	setSelectedMenuRequestAttribute(request);
+
+    	String pageOf = request.getParameter(Constants.PAGEOF);
+		request.setAttribute(Constants.PAGEOF, pageOf);
+
 		return (mapping.findForward("Success"));
 	}
 }

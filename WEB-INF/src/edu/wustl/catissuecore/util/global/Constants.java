@@ -423,6 +423,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String QUERY_COLLECTION_PROTOCOL_EDIT_ACTION = "QueryCollectionProtocolEdit.do";
 	public static final String QUERY_SPECIMEN_COLLECTION_GROUP_SEARCH_ACTION = "QuerySpecimenCollectionGroupSearch.do?id=";
 	public static final String QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION = "QuerySpecimenCollectionGroupEdit.do";
+	public static final String QUERY_SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "QuerySpecimenCollectionGroupAdd.do";
 	public static final String QUERY_SPECIMEN_SEARCH_ACTION = "QuerySpecimenSearch.do?id=";
 	public static final String QUERY_SPECIMEN_EDIT_ACTION = "QuerySpecimenEdit.do";
 	//public static final String QUERY_ACCESSION_SEARCH_ACTION = "QueryAccessionSearch.do?id=";
@@ -957,7 +958,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 
 	public static final String [][] PARTICIPANT_FORWARD_TO_LIST = {
 			{"Submit",					"success"},
-			{"Register to Protocol",	"createParticipantRegistration"}
+			{"Register to Protocol",	"createParticipantRegistration"},
+			{"Specimen Collection Group", "specimenCollectionGroup"}
 	};
 	
 	public static final String [][] STORAGE_TYPE_FORWARD_TO_LIST = {
@@ -1323,6 +1325,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	// constants required for caching mechanism of ParticipantBizLogic
 	
 	public static final String MAP_OF_PARTICIPANTS = "listOfParticipants";
+	public static final String LIST_OF_REGISTRATION_INFO = "listOfParticipantRegistrations";
 	public static final String EHCACHE_FOR_CATISSUE_CORE = "cacheForCaTissueCore";
 	public static final String MAP_OF_DISABLED_CONTAINERS = "listOfDisabledContainers";
 	public static final String MAP_OF_CONTAINER_FOR_DISABLED_SPECIEN = "listOfContainerForDisabledContainerSpecimen";
@@ -1392,4 +1395,43 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String GRID_FOR_EDIT_SEARCH="editSearch";
 	public static final String GRID_FOR_DERIVED_SPECIMEN="derivedSpecimen";
 	
+	
+		//CpBasedSearch Constants
+	public static final String CP_QUERY_PARTICIPANT_EDIT_ACTION = "CPQueryParticipantEdit.do";
+	public static final String CP_QUERY_SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "CPQuerySpecimenCollectionGroupAdd.do";
+	public static final String CP_QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION = "CPQuerySpecimenCollectionGroupEdit.do";
+	public static final String CP_AND_PARTICIPANT_VIEW="cpAndParticipantView";
+	public static final String DATA_DETAILS_VIEW="cpAndParticipantView";
+	public static final String SHOW_CP_AND_PARTICIPANTS_ACTION="showCpAndParticipants.do";
+	public static final String PAGE_OF_CP_QUERY_RESULTS = "pageOfCpQueryResults";
+	public static final String CP_LIST = "cpList";
+	public static final String REGISTERED_PARTICIPANT_LIST = "participantList";
+	public static final String PAGE_OF_PARTICIPANT_CP_QUERY = "pageOfParticipantCPQuery";
+	public static final String PAGE_OF_SCG_CP_QUERY = "pageOfSpecimenCollectionGroupCPQuery";
+	public static final String CP_SEARCH_PARTICIPANT_ID="cpSearchParticipantId";
+	public static final String CP_SEARCH_CP_ID="cpSearchCpId";
+	public static final String CP_TREE_VIEW = "cpTreeView";
+	public static final String CP_TREE_VIEW_ACTION = "showTree.do";
+	public static final String PAGE_OF_SPECIMEN_CP_QUERY = "pageOfNewSpecimenCPQuery";
+	public static final String CP_QUERY_SPECIMEN_ADD_ACTION = "CPQueryNewSpecimenAdd.do";
+	public static final String CP_QUERY_SPECIMEN_EDIT_ACTION = "CPQueryNewSpecimenEdit.do";
+	public static final String PAGE_OF_CREATE_SPECIMEN_CP_QUERY = "pageOfCreateSpecimenCPQuery";
+	public static final String PAGE_OF_ALIQUOT_CP_QUERY = "pageOfAliquotCPQuery";
+	public static final String PAGE_OF_CREATE_ALIQUOT_CP_QUERY = "pageOfCreateAliquotCPQuery"; 
+	public static final String PAGE_OF_ALIQUOT_SUMMARY_CP_QUERY = "pageOfAliquotSummaryCPQuery";
+	public static final String CP_QUERY_CREATE_ALIQUOT_ACTION = "CPQueryCreateAliquots.do";
+	public static final String CP_QUERY_CREATE_SPECIMEN_ADD_ACTION = "CPQueryAddSpecimen.do";
+	public static final String PAGE_OF_DISTRIBUTION_CP_QUERY = "pageOfDistributionCPQuery";
+	public static final String CP_QUERY_DISTRIBUTION_EDIT_ACTION = "CPQueryDistributionEdit.do";
+	public static final String CP_QUERY_DISTRIBUTION_ADD_ACTION = "CPQueryDistributionAdd.do";
+	public static final String CP_QUERY_DISTRIBUTION_REPORT_SAVE_ACTION="CPQueryDistributionReportSave.do";
+	public static final String CP_QUERY_ARRAY_DISTRIBUTION_REPORT_SAVE_ACTION="CPQueryArrayDistributionReportSave.do";
+	public static final String CP_QUERY_CONFIGURE_DISTRIBUTION_ACTION = "CPQueryConfigureDistribution.do";
+	public static final String CP_QUERY_DISTRIBUTION_REPORT_ACTION = "CPQueryDistributionReport.do";
+	public static final String PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY = "pageOfListSpecimenEventParametersCPQuery";
+	public static final String PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY = "pageOfCollectionProtocolRegistrationCPQuery";
+	public static final String PAGE_OF_MULTIPLE_SPECIMEN_CP_QUERY = "pageOfMultipleSpecimenCPQuery";
+	public static final String CP_QUERY_NEW_MULTIPLE_SPECIMEN_ACTION = "CPQueryNewMultipleSpecimenAction.do";
+	public static final String CP_QUERY_MULTIPLE_SPECIMEN_STORAGE_LOCATION_ACTION="CPQueryMultipleSpecimenStorageLocationAdd.do";
+	public static final String CP_QUERY_PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION = "CPQueryformSubmitted";
 }

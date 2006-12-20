@@ -1,3 +1,4 @@
+
 /**
  * <p>Title: StorageTypeHDAO Class>
  * <p>Description:	StorageTypeHDAO is used to add site type information into the database using Hibernate.</p>
@@ -25,7 +26,7 @@ import edu.wustl.common.util.global.Validator;
 
 /**
  * StorageTypeHDAO is used to add site type information into the database using Hibernate.
- * @author aniruddha_phadnis
+ * @author vaishali_khandelwal
  */
 public class StorageTypeBizLogic extends DefaultBizLogic
 {

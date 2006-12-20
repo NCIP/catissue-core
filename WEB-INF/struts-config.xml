@@ -68,6 +68,7 @@ PUBLIC
 		<form-bean name="arrayTypeForm" type="edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm"/>
 		<form-bean name="multipleSpecimenForm" type="edu.wustl.catissuecore.actionForm.MultipleSpecimenForm"/>
 		<form-bean name="multipleSpecimenStorageLocationForm" type="edu.wustl.catissuecore.actionForm.MultipleSpecimenStorageLocationForm"/>
+		<form-bean name="cpSearchForm" type="edu.wustl.catissuecore.actionForm.CPSearchForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -189,6 +190,7 @@ PUBLIC
 			<forward name="pageOfParticipant" path=".catissuecore.participantDef" />
 			<forward name="pageOfSCGParticipant" path=".catissuecore.participantDef" />
 			<forward name="pageOfParticipantQuery" path=".catissuecore.participantEditDef" />
+			<forward name="pageOfParticipantCPQuery" path=".catissuecore.participantEditDef" />
 			<forward name="failure" path=".catissuecore.participantDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -245,6 +247,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="query" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantQuery&amp;menuSelected=12" />
+			<forward name="pageOfParticipantCPQuery" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantQuery&amp;menuSelected=12" />			
 			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="redirectTo" path="" />
 			<forward name="createParticipantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
@@ -729,6 +732,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef" />
 			<forward name="pageOfSpecimenCollectionGroupQuery" path=".catissuecore.specimenCollectionGroupEditDef" />
+			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.specimenCollectionGroupEditDef" />			
 			<forward name="failure" path=".catissuecore.specimenCollectionGroupDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -830,6 +834,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfNewSpecimen" path=".catissuecore.newSpecimenDef" />
 			<forward name="query" path=".catissuecore.specimenEditDef" />
+			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.specimenEditDef" />
 			<forward name="failure" path=".catissuecore.newSpecimenDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -913,10 +918,11 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path="/CreateSpecimenAdd.do" />
+			<forward name="pageOfCreateSpecimenCPQuery" path="/CPQueryCreateSpecimenAdd.do" />
 			<forward name="failure" path="/CreateSpecimen.do" />
 
 		</action>
-		
+
 		<action path="/CreateSpecimenAdd"
 			type="edu.wustl.common.action.CommonAddEditAction"
 			name="createSpecimenForm"
@@ -2131,35 +2137,19 @@ PUBLIC
 		<!--Query Result View Actions End-->
 		
 		<!--Participant Object View Actions Begin-->
-		<action path="/QueryParticipant"
-			type="edu.wustl.catissuecore.action.ParticipantAction"
-			name="participantForm"
+
+		<action path="/QueryCollectionProtocolRegistration"
+			type="edu.wustl.catissuecore.action.CollectionProtocolRegistrationAction"
+			name="collectionProtocolRegistrationForm"
 			validate="false"
 			scope="request">
-			<forward name="query" path=".catissuecore.queryParticipantViewDef" />
-			<forward name="failure" path=".catissuecore.queryParticipantViewDef" />
-		</action>
-		
-		<action path="/QueryParticipantSearch"
-		    type="edu.wustl.common.action.CommonSearchAction"
-			name="participantForm"
-			validate="false"
-			scope="request">
-			<forward name="pageOfParticipantQueryEdit" path="/QueryParticipant.do?operation=edit&amp;pageOf=query"/>
-			<forward name="failure" path="/QueryParticipant.do?pageOf=query"/>
-		</action>
-		
-		<action path="/QueryParticipantEdit"
-			type="edu.wustl.common.action.CommonAddEditAction"
-			name="participantForm"
-			validate="true"
-			input="/QueryParticipant.do?operation=edit&amp;pageOf=query"
-			scope="request">
-			<forward name="query" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantQuery&amp;menuSelected=12" />
-			<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
+			<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.queryCollectionProtocolRegistrationDef" />
+			<forward name="failure" path=".catissuecore.queryCollectionProtocolRegistrationDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
 		
+			
 		<!--Participant Object View Actions End-->
 		
 		<!--Collection Protocol Object View Actions Begin-->
@@ -2200,6 +2190,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="query" path=".catissuecore.querySpecimenCollectionGroupViewDef" />
+			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.querySpecimenCollectionGroupViewDef" />
 			<forward name="failure" path=".catissuecore.querySpecimenCollectionGroupViewDef" />
 		</action>
 		
@@ -2209,7 +2200,18 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="pageOfSpecimenCollectionGroupQueryEdit" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=query"/>
+			<forward name="pageOfSpecimenCollectionGroupCPQueryEdit" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery"/>			
 			<forward name="failure" path="/QuerySpecimenCollectionGroup.do?pageOf=query"/>
+		</action>
+		<action path="/QuerySpecimenCollectionGroupAdd"
+			type="edu.wustl.common.action.CommonAddEditAction"
+			name="specimenCollectionGroupForm"
+			validate="true"
+			input="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=query"
+			scope="request">
+			<forward name="query" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupQuery&amp;menuSelected=12" />
+			<forward name="success" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />
+			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=12" />
 		</action>
 		
 		<action path="/QuerySpecimenCollectionGroupEdit"
@@ -2231,6 +2233,16 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="query" path=".catissuecore.querySpecimenViewDef" />
+			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.querySpecimenViewDef" />
+			<forward name="failure" path=".catissuecore.querySpecimenViewDef" />
+		</action>
+		<action path="/QueryCreateSpecimen"
+			type="edu.wustl.catissuecore.action.AddSpecimenAction"
+			name="newSpecimenForm"
+			validate="false"
+			scope="request">
+			<forward name="query" path=".catissuecore.querySpecimenViewDef" />
+			<forward name="pageOfCreateSpecimenCPQuery" path=".catissuecore.createCPSpecimenDef" />
 			<forward name="failure" path=".catissuecore.querySpecimenViewDef" />
 		</action>
 		
@@ -2240,6 +2252,7 @@ PUBLIC
 			validate="false"						
 			scope="request">
 			<forward name="pageOfSpecimenQueryEdit" path="/QuerySpecimen.do?operation=edit&amp;pageOf=query"/>
+			<forward name="pageOfNewSpecimenCPQuery" path="/QuerySpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery"/>
 			<forward name="failure" path="/QuerySpecimen.do?pageOf=query"/>
 		</action>
 			
@@ -2565,6 +2578,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
+			<forward name="specimenCollectionGroupCPQuery" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14" />			
 		</action>
 
 		<action path="/DistributionAddNew"
@@ -2614,6 +2628,7 @@ PUBLIC
 		<forward name="success" path="/Aliquots.do?pageOf=pageOfAliquotSummary&amp;menuSelected=15" />
 		<forward name="failure" path="/Aliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15" />
 	</action>
+	
 	
 	
 	<action path="/AliquotSummary"
@@ -2888,7 +2903,436 @@ PUBLIC
 	</action>
 	
 	
+	<!-- CP bases Search mappings -->
+	<action path="/CpBasedSearch"
+		type="edu.wustl.catissuecore.action.CPBasedSearchAction"
+		name="cpSearchForm"
+		scope="request">
+		<forward name="success" path=".catissuecore.cpBasedSearchDef"/>
+		<forward name="failure" path=".catissuecore.cpBasedSearchDef"/>
+	</action>
 	
+	<action path="/showCpAndParticipants"
+		type="edu.wustl.catissuecore.action.ShowCPAndParticipantsAction"
+		name="cpSearchForm"
+		scope="request">
+		<forward name="success" path="/pages/content/manageBioSpecimen/ShowCpAndParticipants.jsp"/>
+		<forward name="failure" path="/pages/content/manageBioSpecimen/ShowCpAndParticipants.jsp"/>
+	</action>
+
+	<action path="/showTree"
+		type="edu.wustl.catissuecore.action.ShowTreeAction"
+		name="cpSearchForm"
+		scope="request">
+		<forward name="success" path="/pages/content/manageBioSpecimen/SpecimenTreeView.jsp"/>
+		<forward name="failure" path="/pages/content/manageBioSpecimen/SpecimenTreeView.jsp"/>
+	</action>
+	<!-- Listing events associated with specimens -->	
+	<action path="/CPQueryListSpecimenEventParameters"
+		type="edu.wustl.catissuecore.action.ListSpecimenEventParametersAction"
+		name="listSpecimenEventParametersForm"
+		scope="request">
+		<forward name="pageOfListSpecimenEventParametersCPQuery" path=".catissuecore.newSpecimenEventParametersCPQueryDef" />
+		<forward name="failure" path=".catissuecore.newSpecimenEventParametersCPQueryDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	
+	<!-- derived specimens -->
+	<action path="/CPQueryCreateSpecimen"
+		type="edu.wustl.catissuecore.action.CreateSpecimenAction"
+		name="createSpecimenForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path=".catissuecore.createSpecimenCPQueryDef" />
+		<forward name="failure" path=".catissuecore.createSpecimenCPQueryDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	
+	<!-- distribution -->
+	<action path="/CPQueryDistribution"
+			type="edu.wustl.catissuecore.action.DistributionAction"
+			name="distributionForm"
+			validate="false"
+			scope="request">
+			<forward name="pageOfDistributionCPQuery" path=".catissuecore.distributionCPQueryDef" />
+			<forward name="failure" path=".catissuecore.distributionCPQueryDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		</action>
+
+	<action path="/CPQueryDistributionSubmit"
+		type="edu.wustl.catissuecore.action.DistributionSubmitAction"
+		name="distributionForm"
+		validate="true"
+		input="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16"
+		scope="request">
+		<forward name="addSuccess" path="/CPQueryDistributionAdd.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
+		<forward name="editSuccess" path="/CPQueryDistributionAdd.do?operation=edit&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
+		<forward name="failure" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
+	</action>
+		
+	<action path="/CPQueryDistributionAdd"
+		type="edu.wustl.catissuecore.action.DistributionSubmitAction"
+		name="distributionForm"
+		validate="true"
+		input="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16"
+		scope="request">
+		<forward name="success" path="/CPQueryDistributionReport.do" />
+		<forward name="arraySuccess" path="/CPQueryArrayDistributionReport.do" />
+		<forward name="failure" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
+	</action>
+		
+	<action path="/CPQueryDistributionEdit"
+		type="edu.wustl.catissuecore.action.DistributionSubmitAction"
+		name="distributionForm"
+		validate="true"
+		input="/CPQueryDistribution.do?operation=edit&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16"
+		scope="request">
+		<forward name="success" path="/CPQueryDistributionReport.do" />
+		<forward name="failure" path="/CPQueryDistribution.do?operation=edit&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
+	</action>
+		
+	<action path="/CPQueryDistributionSearch"
+	    type="edu.wustl.common.action.CommonSearchAction"
+		name="distributionForm"
+		validate="false"
+		input="/CPQueryDistribution.do?operation=edit&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16"
+		scope="request">
+		<forward name="pageOfDistribution" path="/CPQueryDistribution.do?operation=edit&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16"/>
+		<forward name="pageOfSimpleQueryInterface" path="/CPQueryDistribution.do?operation=edit&amp;pageOf=pageOfSimpleQueryInterfaceCPQuery&amp;menuSelected=16"/>
+		<forward name="failure" path="/CPQueryDistribution.do?operation=edit&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16"/>
+	</action>    
+
+	<action path="/CPQueryDistributionSearchFromMenu"
+	    type="edu.wustl.common.action.CommonSearchAction"
+		name="distributionForm"
+		validate="false"
+		input="/CPQueryDistribution.do?operation=edit&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16"
+		scope="request">
+		<forward name="pageOfDistribution" path="/CPQueryDistributionReport.do"/>
+		<forward name="pageOfArrayDistribution" path="/CPQueryArrayDistributionReport.do"/>
+		<forward name="pageOfSimpleQueryInterface" path="/CPQueryDistribution.do?operation=edit&amp;pageOf=pageOfSimpleQueryInterfaceCPQuery&amp;menuSelected=16"/>
+		<forward name="failure" path="/CPQueryDistribution.do?operation=edit&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16"/>
+	</action>    
+
+	<action path="/CPQueryDistributionReport"
+		type="edu.wustl.catissuecore.action.DistributionReportAction"
+		name="configureResultViewForm"
+		validate="false"
+		scope="request">
+		<forward name="Success" path=".catissuecore.distributionReportSuccessCPQueryDef" />
+	</action>
+
+	<action path="/CPQueryArrayDistributionReport"
+		type="edu.wustl.catissuecore.action.ArrayDistributionReportAction"
+		name="configureResultViewForm"
+		validate="false"
+		scope="request">
+		<forward name="Success" path=".catissuecore.distributionReportSuccessCPQueryDef" />
+	</action>
+
+	<action path="/CPQueryConfigureDistribution"
+		type="edu.wustl.catissuecore.action.ConfigureDistributionAction"
+		name="configureResultViewForm"
+		validate="false"
+		scope="request">
+		<forward name="Success" path="/CPQueryConfigureResultView.do?pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
+	</action>
+		
+	<action path="/CPQueryConfigureResultView"
+		type="edu.wustl.catissuecore.action.ConfigureResultViewAction"
+		name="configureResultViewForm"
+		validate="false"
+		scope="request">
+		<forward name="pageOfDistributionCPQuery" path=".catissuecore.configurationSuccessCPQueryDef" />			
+	</action>
+		
+	<action path="/CPQueryDistributionReportSave"
+		type="edu.wustl.catissuecore.action.DistributionReportSaveAction"
+		name="configureResultViewForm"
+		validate="false"
+		scope="request">
+		<forward name="Success" path="/CPQueryDistributionReport.do&amp;menuSelected=16" />
+	</action>
+
+	<action path="/CPQueryArrayDistributionReportSave"
+		type="edu.wustl.catissuecore.action.ArrayDistributionReportSaveAction"
+		name="configureResultViewForm"
+		validate="false"
+		scope="request">
+		<forward name="Success" path="/CPQueryDistributionReport.do&amp;menuSelected=16" />
+	</action>
+		
+	<action path="/CPQueryCreateSpecimenAdd"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="createSpecimenForm"
+		validate="true"
+		input="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15"
+		scope="request">
+		<forward name="success" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
+		<forward name="failure" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
+		<forward name="eventParameters" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
+		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=15" />
+		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquotCPQuery&amp;menuSelected=15" />
+	</action>
+
+	<action path="/CPQueryAddSpecimen"
+		type="edu.wustl.catissuecore.action.AddSpecimenAction"
+		name="createSpecimenForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path="/CPQueryCreateSpecimenAdd.do" />
+		<forward name="failure" path="/CPQueryCreateSpecimen.do" />
+	</action>
+	
+	<action path="/QueryParticipant"
+		type="edu.wustl.catissuecore.action.ParticipantAction"
+		name="participantForm"
+		validate="false"
+		scope="request">
+		<forward name="query" path=".catissuecore.queryParticipantViewDef" />
+		<forward name="pageOfParticipantCPQuery" path=".catissuecore.queryParticipantViewDef" />
+		<forward name="failure" path=".catissuecore.queryParticipantViewDef" />
+	</action>
+		
+	<action path="/QueryParticipantSearch"
+	    type="edu.wustl.common.action.CommonSearchAction"
+		name="participantForm"
+		validate="false"
+		scope="request">
+		<forward name="pageOfParticipantQueryEdit" path="/QueryParticipant.do?operation=edit&amp;pageOf=query"/>
+		<forward name="pageOfParticipantCPQueryEdit" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery"/>
+		<forward name="failure" path="/QueryParticipant.do?pageOf=query"/>
+	</action>
+		
+	<action path="/QueryParticipantEdit"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="participantForm"
+		validate="true"
+		input="/QueryParticipant.do?operation=edit&amp;pageOf=query"
+		scope="request">
+		<forward name="query" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantQuery&amp;menuSelected=12" />
+		<forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />			
+		<forward name="specimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=13" />
+		<forward name="failure" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
+	</action>
+
+	<action path="/CPQueryParticipantEdit"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="participantForm"
+		validate="true"
+		input="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery"
+		scope="request">
+		<forward name="success" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />			
+		<forward name="specimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=13" />
+		<forward name="failure" path="/QueryParticipant.do?operation=edit&amp;pageOf=pageOfParticipantCPQuery&amp;menuSelected=12" />
+	</action>
+		
+	<action path="/CPQuerySpecimenCollectionGroupAdd"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="specimenCollectionGroupForm"
+		validate="true"
+		input="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery"
+		scope="request">
+		<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
+		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
+		<forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" />			
+		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
+	</action>
+		
+	<action path="/CPQueryNewSpecimen"
+		type="edu.wustl.catissuecore.action.NewSpecimenAction"
+		name="newSpecimenForm"
+		validate="false"
+		scope="request">
+		<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.specimenEditDef" />
+		<forward name="failure" path=".catissuecore.specimenEditDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+		
+	<action path="/CPQueryNewSpecimen"
+		type="edu.wustl.catissuecore.action.NewSpecimenAction"
+		name="newSpecimenForm"
+		validate="false"
+		scope="request">
+		<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.specimenEditDef" />
+		<forward name="failure" path=".catissuecore.specimenEditDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	
+	<action path="/CPQueryNewSpecimenAdd"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="newSpecimenForm"
+		validate="true"
+		input="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15"
+		scope="request">
+		<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
+		<forward name="failure" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
+		<forward name="createNew" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15&amp;virtualLocated=true" />
+		<forward name="sameCollectionGroup" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
+		<forward name="eventParameters" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
+		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquotCPQuery&amp;menuSelected=15" />
+		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
+	</action>
+		
+			
+	<action path="/CPQueryNewSpecimenEdit"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="newSpecimenForm"
+		validate="true"
+		input="/CPQueryNewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15"
+		scope="request">
+		<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
+		<forward name="failure" path="/CPQueryNewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
+		<forward name="createNew" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
+		<forward name="sameCollectionGroup" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
+		<forward name="query" path="/NewSpecimen.do?operation=edit&amp;pageOf=query&amp;menuSelected=12" />
+		<forward name="eventParameters" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
+		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquotCPQuery&amp;menuSelected=15" />
+		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
+	</action>
+	
+	<action path="/CPQuerySpecimenCollectionGroupEdit"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="specimenCollectionGroupForm"
+		validate="true"
+		input="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=query"
+		scope="request">
+		<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
+		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
+		<forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" />			
+		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupQuery&amp;menuSelected=12" />
+	</action>
+
+	<action path="/CPQueryAliquots"
+		type="edu.wustl.catissuecore.action.AliquotAction"
+		name="aliquotForm"
+		validate="false"
+		scope="request">
+		<forward name="pageOfAliquotCPQuery" path=".catissuecore.aliquotCPQueryDef" />
+		<forward name="pageOfCreateAliquotCPQuery" path=".catissuecore.aliquotCPQueryDef"/>
+		<forward name="pageOfAliquotSummaryCPQuery" path=".catissuecore.aliquotSummaryCpQueryDef" />
+		<forward name="failure" path=".catissuecore.aliquotCPQueryDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	<action path="/CPQueryCreateAliquots"
+		type="edu.wustl.catissuecore.action.AliquotAction"
+		name="aliquotForm"
+		validate="false"
+		scope="request">
+		<forward name="pageOfCreateAliquotCPQuery" path=".catissuecore.aliquotCPQueryDef"/>
+		<forward name="pageOfAliquotCPQuery" path="/CPQueryAliquots.do?pageOf=pageOfAliquotCPQuery&amp;menuSelected=15"/>
+	    <forward name="commonAddEdit" path="/CPQueryAliquotAdd.do?pageOf=pageOfAliquotSummaryCPQuery&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=none"/>
+		<forward name="failure" path=".catissuecore.aliquotDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	<action path="/CPQueryAliquotAdd"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="aliquotForm"
+		validate="true"
+		input="/CpQueryCreateAliquots.do?pageOf=pageOfCreateAliquotCPQuery&amp;menuSelected=15"
+		scope="request">
+		<forward name="success" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummaryCPQuery&amp;menuSelected=15" />
+		<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfCreateAliquotCpQuery&amp;menuSelected=15" />
+	</action>
+			
+	<action path="/CPQueryAliquotSummary"
+		type="edu.wustl.catissuecore.action.AliquotSummaryAction"
+		name="aliquotForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16"/>
+		<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummaryCPQuery&amp;menuSelected=15" />
+	</action>	
+	
+	
+    <action path="/CPQueryCollectionProtocolRegistration"
+		type="edu.wustl.catissuecore.action.CollectionProtocolRegistrationAction"
+		name="collectionProtocolRegistrationForm"
+		validate="false"
+		scope="request">
+		<forward name="pageOfCollectionProtocolRegistrationCPQuery" path=".catissuecore.collectionProtocolRegistrationCPQueryDef" />
+		<forward name="failure" path=".catissuecore.collectionProtocolRegistrationDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+
+	<action path="/CPQueryCollectionProtocolRegistrationAdd"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="collectionProtocolRegistrationForm"
+		validate="true"
+		input="/CPQueryCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13"
+		scope="request">
+		<forward name="success" path="/CPQueryCollectionProtocolRegistrationSearch.do?pageOf=pageOfCollectionProtocolRegistrationCPQuery" />
+		<forward name="failure" path="/CPQueryCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
+	</action>
+	
+	<action path="/CPQueryCollectionProtocolRegistrationEdit"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="collectionProtocolRegistrationForm"
+		validate="true"
+		input="/CPQueryCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13"
+		scope="request">
+		<forward name="success" path="/CPQueryCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
+		<forward name="failure" path="/CPQueryCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
+	</action>
+		
+	<action path="/CPQueryCollectionProtocolRegistrationSearch"
+	    type="edu.wustl.common.action.CommonSearchAction"
+		name="collectionProtocolRegistrationForm"
+		validate="false"
+		input="/CPQueryCollectionProtocolRegistrationSearch.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13"
+		scope="request">
+		<forward name="pageOfCollectionProtocolRegistrationCPQuery" path="/CPQueryCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13"/>
+		<forward name="failure" path="/CPQueryCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13"/>
+	</action>    
+	<!-- Collection Protocol Registration Actions Ends -->
+
+
+	<action path="/CPQueryInitMultipleSpecimen"
+		type="edu.wustl.catissuecore.action.InitMultipleSpecimenAction"
+		name="multipleSpecimenForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path=".catissuecore.initMultipleSpecimenCPQueryDef" />
+		<forward name="pageOfMultipleSpecimenCPQuery" path=".catissuecore.initMultipleSpecimenCPQueryDef" />
+		<forward name="failure" path=".catissuecore.initMultipleSpecimenCPQueryDef" />
+	</action>
+
+	<!-- Mandar Deshmukh : 07Nov06 entry for MultipleSpecimen Storage Location -->
+	<action path="/CPQueryMultipleSpecimenStorageLocation"
+		type="edu.wustl.catissuecore.action.MultipleSpecimenStorageLocationAction"
+		name="multipleSpecimenStorageLocationForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path=".catissuecore.multipleSpecimenStorageLocationCPQueryDef" />
+		<forward name="failure" path="/CPQueryMultipleSpecimenStorageLocation.do?pageOf=formSubmitted&amp;operation=add&amp;menuSelected=15" />
+	</action>
+	
+	<action path="/CPQueryMultipleSpecimenStorageLocationAdd"
+		type="edu.wustl.catissuecore.action.MultipleSpecimenSubmitAction"
+		name="multipleSpecimenStorageLocationForm"
+		validate="true"
+		input="/CPQueryMultipleSpecimenStorageLocation.do?pageOf=formSubmitted&amp;operation=add&amp;menuSelected=15"
+		scope="request">
+		<forward name="success" path=".catissuecore.multipleSpecimenAddSuccessCPQueryDef" />
+		<forward name="failure" path="/CPQueryMultipleSpecimenStorageLocation.do?pageOf=formSubmitted&amp;operation=add&amp;menuSelected=15" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+	</action>
+	
+	<action path="/CPQueryNewMultipleSpecimenAction"
+	     type="edu.wustl.catissuecore.action.NewMultipleSpecimenAction" parameter="method" 
+	     name="multipleSpecimenForm"
+	     scope="request" validate="true" input="/CPQueryInitMultipleSpecimen.do?menuSelected=15">
+		<forward name="comments" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
+		<forward name="externalIdentifier" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
+		<forward name="bioHazard" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
+		<forward name="events" path="/pages/content/manageBioSpecimen/SpecimenPopup.jsp" />
+		<forward name="derivedSpecimen" path="/CreateMultipleSpecimen.do" />
+		<forward name="derivedSpecimenEdit" path="/CreateMultipleSpecimen.do?derivedOperation=edit" />
+		<forward name="showDerivedSpecimenDialog" path="/NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog" />
+		<forward name="specimen" path=".catissuecore.multipleSpecimenCPQueryDef" />
+		
+	</action>
+
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

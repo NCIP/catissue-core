@@ -97,7 +97,7 @@ public class CreateSpecimenAction extends SecureAction
 		 // -------------------------
 		 request.setAttribute(Constants.PAGEOF,pageOf);
 		 */
-
+		request.setAttribute(Constants.PAGEOF,pageOf);
 		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance()
 				.getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
 

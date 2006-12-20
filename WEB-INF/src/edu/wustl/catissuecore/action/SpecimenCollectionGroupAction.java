@@ -214,6 +214,11 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		if(forwardToHashMap !=null)
 		{
 			Long collectionProtocolId = (Long)forwardToHashMap.get("collectionProtocolId");
+			if(collectionProtocolId == null && request.getParameter("cpId") != null && !request.getParameter("cpId").equals("null"))
+			{
+				collectionProtocolId = new Long(request.getParameter("cpId"));
+			}
+			
 			Long participantId=(Long)forwardToHashMap.get("participantId");
 			String participantProtocolId = (String) forwardToHashMap.get("participantProtocolId");
 			
@@ -322,6 +327,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				}
 			}
 		}
+		
 		request.setAttribute(Constants.PAGEOF,pageOf);
 		Logger.out.debug("page of in Specimen coll grp action:"+request.getParameter(Constants.PAGEOF));
 		// -------called from Collection Protocol Registration end -------------------------------

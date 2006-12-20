@@ -20,7 +20,18 @@
 <html:errors/>
 
 <html:form action="<%=Constants.ALIQUOT_SUMMARY_ACTION%>">
-
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<%
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+if(pageOf.equals(Constants.PAGE_OF_ALIQUOT_SUMMARY_CP_QUERY))
+	{%>
+		<script language="javascript">
+			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
+			
+		</script>
+	<%}%>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script>
 	var newWindow;

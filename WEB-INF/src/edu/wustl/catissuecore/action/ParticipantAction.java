@@ -56,6 +56,10 @@ public class ParticipantAction extends SecureAction
 			participantForm = (ParticipantForm) request.getAttribute("participantForm1");
 			request.setAttribute("participantForm", participantForm);
 		}
+		if (participantForm.getOperation().equals(Constants.EDIT))
+		{
+			request.setAttribute("participantId", new Long(participantForm.getId()).toString());
+		}
 		//Bug- setting the default Gender
 //		if (participantForm.getGender() == null)
 //		{

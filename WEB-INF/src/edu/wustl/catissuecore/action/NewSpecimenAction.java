@@ -449,6 +449,8 @@ public class NewSpecimenAction extends SecureAction
 			request.setAttribute("disabled", "true");
 		}
 		//Logger.out.debug("End of specimen action");
+		
+		
 		return mapping.findForward(pageOf);
 	}
 

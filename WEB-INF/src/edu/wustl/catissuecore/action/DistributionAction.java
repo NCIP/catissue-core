@@ -168,6 +168,8 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
         }
 
         Logger.out.debug("executeSecureAction");
+        String pageOf = request.getParameter(Constants.PAGEOF);
+		request.setAttribute(Constants.PAGEOF, pageOf);
 
         return mapping.findForward((String) request.getParameter(
                 Constants.PAGEOF));

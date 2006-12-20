@@ -30,7 +30,7 @@ public class InitMultipleSpecimenAction extends SecureAction
 		
 //		*************  ForwardTo implementation *************
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
-
+  
 		if (forwardToHashMap != null)
 		{
 			String specimenCollectionGroupName = (String) forwardToHashMap
@@ -47,7 +47,9 @@ public class InitMultipleSpecimenAction extends SecureAction
 		
     	if (pageOf == null) {
     		pageOf = Constants.SUCCESS;
+    		
     	}
+    	request.setAttribute("pageOf",pageOf);
     	return mapping.findForward(pageOf);
 	}
 }

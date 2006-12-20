@@ -7,8 +7,20 @@
 <%@ page import="edu.wustl.catissuecore.domain.Specimen"%>
 <%@ page import="java.util.*"%>
 
-
+<%
+	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+%>
 <head>
+	<%if(pageOf != null && pageOf.equals(Constants.CP_QUERY_PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION))
+	{%>
+		<script language="javascript">
+			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
+			
+		</script>
+	<%}%>
+
 <script language="JavaScript" type="text/javascript"
 	src="jss/javascript.js"></script>
 	

@@ -34,6 +34,14 @@
 		selectedColumns = form.getSelectedColumnNames();
 
 	}
+	else if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
+	{
+		callAction=Constants.CP_QUERY_DISTRIBUTION_REPORT_ACTION;
+		ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
+		selectedColumns = form.getSelectedColumnNames();
+
+	}
+
 	else if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
 	{
 		callAction = Constants.CONFIGURE_ADVANCED_SEARCH_RESULTS_ACTION;
@@ -303,11 +311,22 @@
 						
 							<td align="right" colspan="3">
 								<html:hidden property="distributionId"/>
+								<html:hidden property="pageOf" value="<%=pageOf%>"/>
 							</td>
 						</logic:equal>
 
 						<logic:equal name="pageOf" value="<%=Constants.PAGEOF_SIMPLE_QUERY_INTERFACE%>">
 							<html:hidden property="counter"/>
+						</logic:equal>
+						<logic:equal name="pageOf" value="<%=Constants.PAGE_OF_DISTRIBUTION_CP_QUERY%>">
+							<td align="right" colspan="3">
+								<html:hidden property="nextAction" value="configure"/>
+							</td>
+						
+							<td align="right" colspan="3">
+								<html:hidden property="distributionId"/>
+								<html:hidden property="pageOf" value="<%=pageOf%>"/>
+							</td>
 						</logic:equal>
 				  	</tr>
 				</table>

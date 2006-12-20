@@ -32,6 +32,10 @@
 		{
 			var action = '<%=Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_ACTION%>';
 			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION%>' + "&operation=add&menuSelected=15&buttonClicked=submit";
+			<%if(pageOf != null && pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN_CP_QUERY)) {%>
+			action = '<%=Constants.CP_QUERY_MULTIPLE_SPECIMEN_STORAGE_LOCATION_ACTION%>';
+			document.forms[0].action = action + "?pageOf=" + '<%=Constants.CP_QUERY_PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION%>' + "&operation=add&menuSelected=15&buttonClicked=submit";
+			<%}%>
 			document.forms[0].submit();
 		}
 		

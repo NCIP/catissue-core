@@ -28,6 +28,8 @@ tr#hiddenCombo
 <script src="jss/script.js" type="text/javascript"></script>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <% 
+		String parentUrl = null;
+		String cpId = null;
 		List siteList = (List)request.getAttribute(Constants.SITELIST);
 
 		String participantId=(String)request.getAttribute("participantId");
@@ -47,6 +49,10 @@ tr#hiddenCombo
 			readOnlyValue=true;
 			if(pageOf.equals(Constants.QUERY))
 				formName = Constants.QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
+			if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
+			}
 		}
 		else
 		{
@@ -388,6 +394,7 @@ tr#hiddenCombo
 				 <tr>
 					<td>
 						<input type="hidden" name="participantId" value="<%=participantId%>"/>
+						<input type="hidden" name="cpId" id="cpId"/>
 						<input type="hidden" name="radioValue"/>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
@@ -833,9 +840,10 @@ tr#hiddenCombo
 								<%
 									String normalSubmitFunctionName = "setSubmittedForParticipant('" + submittedFor+ "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]+"')";
 									String forwardToSubmitFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";									
-								
+									String forwardToSCGFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[2][1]+"')";									
 									String normalSubmit = normalSubmitFunctionName ;
 									String forwardToSubmit = forwardToSubmitFunctionName ;
+									String forwardToSCG = forwardToSCGFunctionName ;
 								%>
 																
 								<!-- PUT YOUR COMMENT HERE -->
@@ -853,6 +861,7 @@ tr#hiddenCombo
 									
 								
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
 								<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  
 											property="registratioPage" 
@@ -863,6 +872,19 @@ tr#hiddenCombo
 									</html:button>
 								</td>
 								</logic:notEqual>
+								</logic:notEqual>
+								
+								<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
+								<td nowrap class="formFieldNoBorders">									
+									<html:button styleClass="actionButton"  
+											property="registratioPage" 
+											title="Submit and Register to protocol"
+											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[2][0]%>" 
+					  						onclick="<%=forwardToSCG%>">
+									</html:button>
+								</td>
+								</logic:equal>						
+								
 								<%--<td>
 									<html:submit styleClass="actionButton" disabled="true">
 							   		<bean:message key="buttons.getClinicalData"/>
@@ -890,4 +912,18 @@ tr#hiddenCombo
 	<%
 	}
 	%>
+	
+	<%-- this is done at the end beacuse we want to set CpId value --%>
+	<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+	{%>
+	<script language="javascript">
+			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			document.getElementById("cpId").value=cpId;
+			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
+			window.parent.frames[0].location="showCpAndParticipants.do?cpId="+cpId+"&participantId="+participantId;
+	</script>
+
+	<%}%>
+	
+	
 	 </html:form>

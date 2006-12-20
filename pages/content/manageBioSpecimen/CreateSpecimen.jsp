@@ -38,7 +38,7 @@
 		String formName,pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 		boolean readOnlyValue=false,readOnlyForAll=false;
-
+		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 		if(operation!=null && operation.equals(Constants.EDIT))
 		{
 			editViewButton="buttons."+Constants.VIEW;
@@ -48,6 +48,10 @@
 		else
 		{
 			formName = Constants.CREATE_SPECIMEN_ADD_ACTION;
+			if(pageOf!=null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_CREATE_SPECIMEN_ADD_ACTION ;
+			}
 			readOnlyValue=false;
 		}
 
@@ -56,7 +60,7 @@
 			readOnlyForAll=true;
 		}
 
-		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+
 
 		Object obj = request.getAttribute("createSpecimenForm");
 		int exIdRows=1;
@@ -85,6 +89,9 @@
 	//String onClassChangeFunctionName = "onTypeChange(this);" + onChangeFunctionName;
 	
 %>
+
+
+
 
 	<script language="JavaScript">
 	
@@ -231,17 +238,22 @@
 		}
 		function onNormalSubmit()
 		{
+			<% String actionToCall = null;
+				actionToCall = "AddSpecimen.do";
+				if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY)){
+				actionToCall = Constants.CP_QUERY_CREATE_SPECIMEN_ADD_ACTION;
+			}%>
 			var checked = document.forms[0].aliCheckedButton.checked;
 			if(checked)
 			{
 				setSubmittedFor('ForwardTo','pageOfAliquot');
-				confirmDisable('AddSpecimen.do',document.forms[0].activityStatus);
+				confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 			
 			}
 			else
 			{
 				setSubmittedFor('ForwardTo','eventParameters');
-				confirmDisable('AddSpecimen.do',document.forms[0].activityStatus);
+				confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 			
 			}
 		}
@@ -256,6 +268,16 @@
 		
     }
 	</script>
+	
+		<%if(pageOf!=null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
+	{%>
+		<script language="javascript">
+			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
+			
+		</script>
+	<%}%>
 </head>
 
 

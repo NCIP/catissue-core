@@ -15,6 +15,7 @@ import java.util.HashMap;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
@@ -41,7 +42,15 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 
 		if (domainObject instanceof Participant)
 		{
+			ParticipantForm participantForm = (ParticipantForm) actionForm;
+			
 			forwardToHashMap.put("participantId", domainObject.getId());
+			if(participantForm.getCpId() != -1)
+			{
+				forwardToHashMap.put("collectionProtocolId", new Long(participantForm.getCpId()));
+			}
+			
+			
 		}
 		else if (domainObject instanceof StorageType) //Added this if condition to resolve Bug: 1938
 		{

@@ -147,6 +147,23 @@
 	</td>
 </tr>
 
+<!-- menu id : 16 -->
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 22, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
+<tr>
+	<%=strMouseOut%>
+		<div>
+			<%--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--%> 
+				<a class="subMenuPrimary" href="CpBasedSearch.do">
+				<b>CP based Search</b>
+				</a>
+		</div>
+		
+	</td>
+</tr>
+
+
 <!-- tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
 		

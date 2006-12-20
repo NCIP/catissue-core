@@ -355,8 +355,16 @@ public class AliquotAction extends SecureAction
 				saveErrors(request, errors);
 				request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 				request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
+				if(Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf))
+				{
+					request.setAttribute(Constants.PAGEOF, Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY);
+					return mapping.findForward(Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY);
+				}
+				else
+				{
 				request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_CREATE_ALIQUOT);
 				return mapping.findForward(Constants.PAGEOF_CREATE_ALIQUOT);
+				}
 
 			}
 
@@ -518,7 +526,44 @@ public class AliquotAction extends SecureAction
 				}
 			}
 		}
-		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
+		else
+		{
+			if (Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(request.getParameter(Constants.PAGEOF)))
+			{
+				pageOf = validateCpQuery(request, aliquotForm);
+
+				if (Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf))
+				{
+					pageOf = checkForSpecimenCPQuery(request, aliquotForm);
+
+					if (Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf))
+					{
+						int aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
+						if (aliquotForm.isAliqoutInSameContainer())
+						{
+
+							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
+									.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()),exceedingMaxLimit,sessionData,true);
+						}
+						else
+						{
+							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
+									.getSpecimenClass(), 0,exceedingMaxLimit,sessionData,true);
+						}
+						pageOf = checkForSufficientAvailablePositionsCPQuery(request, containerMap, aliquotCount);
+
+						if (Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf))
+						{
+							populateAliquotsStorageLocations(aliquotForm, containerMap);
+						}
+					}
+				}
+			
+				
+			}
+		}
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
+
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		request.setAttribute(Constants.PAGEOF, pageOf);
 
@@ -603,6 +648,81 @@ public class AliquotAction extends SecureAction
 		}
 	}
 
+	private String checkForSpecimenCPQuery(HttpServletRequest request, AliquotForm form) throws Exception
+	{
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		String specimenLabel = form.getSpecimenLabel();
+		List specimenList = new ArrayList();
+		String errorString = "";
+
+		if (form.getCheckedButton().equals("1"))
+		{
+			specimenList = bizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, specimenLabel);
+			errorString = Constants.SYSTEM_LABEL;
+		}
+		else
+		{
+			String barcode = form.getBarcode().trim();
+			specimenList = bizLogic.retrieve(Specimen.class.getName(), "barcode", barcode);
+			errorString = "barcode";
+		}
+
+		if (specimenList.isEmpty())
+		{
+			ActionErrors errors = getActionErrors(request);
+
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("aliquots.specimen.notExists", errorString));
+			saveErrors(request, errors);
+
+			return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
+		}
+		else
+		{
+			Specimen specimen = (Specimen) specimenList.get(0);
+			/**
+			 * set the value of aliquotInSameContainer which was set while creation of collection protocol
+			 * required for Bug 2309
+			 */
+			Boolean aliquotInSameContainer = specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getCollectionProtocol()
+					.getAliqoutInSameContainer();
+			if (aliquotInSameContainer != null)
+			{
+				form.setAliqoutInSameContainer(aliquotInSameContainer.booleanValue());
+			}
+			populateParentSpecimenData(form, specimen);
+
+			form.setSpecimenID("" + specimen.getId());
+			//	request.setAttribute(Constants.SPECIMEN_ID,specimen.getId());
+
+			String pageOf = checkQuantityPerAliquotCPQuery(request, form);
+
+			if (Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf))
+			{
+				boolean isDouble = Utility.isQuantityDouble(form.getSpecimenClass(), form.getType());
+
+				if (!distributeAvailableQuantity(form, isDouble))
+				{
+					ActionErrors errors = getActionErrors(request);
+
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.qtyInsufficient"));
+					saveErrors(request, errors);
+
+					return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
+				}
+				else
+				{
+					return Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY;
+				}
+			}
+			else
+			{
+				return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
+			}
+		}
+	}
+
+
+	
 	//This method checks whether there are sufficient storage locations are available or not.
 	private String checkForSufficientAvailablePositions(HttpServletRequest request, Map containerMap, int aliquotCount)
 	{
@@ -656,6 +776,61 @@ public class AliquotAction extends SecureAction
 			saveErrors(request, errors);
 
 			return Constants.PAGEOF_ALIQUOT;
+		}
+	}
+
+	private String checkForSufficientAvailablePositionsCPQuery(HttpServletRequest request, Map containerMap, int aliquotCount)
+	{
+		int counter = 0;
+
+		if (containerMap.isEmpty())
+		{
+			ActionErrors errors = getActionErrors(request);
+
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.locations.notSufficient"));
+			saveErrors(request, errors);
+
+			return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
+		}
+		else
+		{
+			Object[] containerId = containerMap.keySet().toArray();
+
+			for (int i = 0; i < containerId.length; i++)
+			{
+				Map xDimMap = (Map) containerMap.get(containerId[i]);
+
+				if (!xDimMap.isEmpty())
+				{
+					Object[] xDim = xDimMap.keySet().toArray();
+
+					for (int j = 0; j < xDim.length; j++)
+					{
+						List yDimList = (List) xDimMap.get(xDim[j]);
+						counter = counter + yDimList.size();
+
+						if (counter >= aliquotCount)
+						{
+							i = containerId.length;
+							break;
+						}
+					}
+				}
+			}
+		}
+
+		if (counter >= aliquotCount)
+		{
+			return Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY;
+		}
+		else
+		{
+			ActionErrors errors = getActionErrors(request);
+
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.locations.notSufficient"));
+			saveErrors(request, errors);
+
+			return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
 		}
 	}
 
@@ -887,6 +1062,41 @@ public class AliquotAction extends SecureAction
 		return Constants.PAGEOF_CREATE_ALIQUOT;
 	}
 
+	//This function checks the quantity per aliquot is valid or not
+	private String checkQuantityPerAliquotCPQuery(HttpServletRequest request, AliquotForm form) throws Exception
+	{
+		Validator validator = new Validator();
+		String quantityPerAliquot = form.getQuantityPerAliquot();
+		ActionErrors errors = getActionErrors(request);
+
+		if (quantityPerAliquot != null && quantityPerAliquot.trim().length() != 0)
+		{
+			if (Utility.isQuantityDouble(form.getSpecimenClass(), form.getType()))
+			{
+				if (!validator.isDouble(quantityPerAliquot.trim()))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
+							.getValue("aliquots.qtyPerAliquot")));
+					saveErrors(request, errors);
+					return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
+				}
+			}
+			else
+			{
+				if (!validator.isNumeric(quantityPerAliquot.trim()))
+				{
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
+							.getValue("aliquots.qtyPerAliquot")));
+					saveErrors(request, errors);
+					return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
+				}
+			}
+		}
+
+		return Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY;
+	}
+
+
 	//This method validates the formbean.
 	private String validate(HttpServletRequest request, AliquotForm form)
 	{
@@ -922,6 +1132,42 @@ public class AliquotAction extends SecureAction
 		saveErrors(request, errors);
 		return pageOf;
 	}
+
+	private String validateCpQuery(HttpServletRequest request, AliquotForm form)
+	{
+		Validator validator = new Validator();
+		ActionErrors errors = getActionErrors(request);
+
+		String pageOf = Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY;
+
+		if (form.getCheckedButton().equals("1"))
+		{
+			if (validator.isEmpty(form.getSpecimenLabel()))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
+						.getValue("createSpecimen.parentLabel")));
+				pageOf = Constants.PAGE_OF_ALIQUOT_CP_QUERY;
+			}
+		}
+		else
+		{
+			if (form.getBarcode() == null || form.getBarcode().trim().length() == 0)
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties.getValue("specimen.barcode")));
+				pageOf = Constants.PAGE_OF_ALIQUOT_CP_QUERY;
+			}
+		}
+
+		if (!validator.isNumeric(form.getNoOfAliquots()))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties.getValue("aliquots.noOfAliquots")));
+			pageOf = Constants.PAGE_OF_ALIQUOT_CP_QUERY;
+		}
+
+		saveErrors(request, errors);
+		return pageOf;
+	}
+
 
 	/* This method returns the ActionErrors object present in the request scope.
 	 * If it is absent method creates & returns new ActionErrors object.

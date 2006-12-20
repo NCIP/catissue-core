@@ -166,7 +166,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			Map specimenMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 
 			Logger.out.debug("Submitting the specimen : " + specimenMap);
-
+			String pageOf = request.getParameter("pageOf");
 			preprocessSpecimanMap(specimenMap);
 			Map fixedSpecimenMap = appendClassValue(specimenMap);
 			Map multipleSpecimenSessionMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);

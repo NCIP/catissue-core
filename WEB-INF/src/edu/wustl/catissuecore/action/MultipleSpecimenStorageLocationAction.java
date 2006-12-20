@@ -46,7 +46,8 @@ public class MultipleSpecimenStorageLocationAction extends BaseAction
 		String target = "success";
 		Logger.out.debug("\n\n------IN MultipleSpecimenStorageLocationAction  ----\n\n"+ request.getParameter(Constants.PAGEOF));
 		Logger.out.debug("Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION : "+ Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION +" \n !(Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION.equals(request.getParameter(Constants.PAGEOF))) : " +!(Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION.equals(request.getParameter(Constants.PAGEOF))));
-		
+		String pageOf = request.getParameter(Constants.PAGEOF);
+		request.setAttribute(Constants.PAGEOF,pageOf);
 		MultipleSpecimenStorageLocationForm aForm = (MultipleSpecimenStorageLocationForm)form;
 		
 		HashMap specimenMap = getSpecimenMap(request);

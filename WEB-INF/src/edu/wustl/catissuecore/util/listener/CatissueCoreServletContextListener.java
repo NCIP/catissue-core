@@ -1,19 +1,23 @@
 /*
- * $Name: 1.40 $
+ * $Name: 1.41 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.Vector;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Address;
@@ -252,6 +256,19 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			ex.printStackTrace();
 		}
 		
+		List participantRegInfoList = null;
+		CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+		try
+		{
+			participantRegInfoList = cBizLogic.getAllParticipantRegistrationInfo();
+		}
+		catch(Exception e)
+		{
+			Logger.out.debug("Exception occured while getting List of Participant's reg info");
+			e.printStackTrace();
+		}
+		
+		
 		// getting instance of catissueCoreCacheManager and adding participantMap to cache
 	 
 		try
@@ -259,6 +276,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
 			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS,(HashMap) participantMap);
 			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_STORAGE_CONTAINERS,(TreeMap)storageContainersMap);
+			catissueCoreCacheManager.addObjectToCache(Constants.LIST_OF_REGISTRATION_INFO,(Vector)participantRegInfoList);
 		}
 		catch (CacheException e)
 		{

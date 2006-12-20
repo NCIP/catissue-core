@@ -289,6 +289,7 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/CollectionProtocolRegistration.jsp" />
 	</definition>
 
+
 	<definition name=".catissuecore.collectionProtocolRegistrationAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
@@ -314,6 +315,8 @@
 	<definition name=".catissuecore.newSpecimenEventParametersDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenEventParameters.jsp" />
 	</definition>
+
+
 	<!-- NEW SPECIMEN EVENT PARAMETERS -->
 	
 	<!-- NEW SPECIMEN -->
@@ -335,6 +338,7 @@
 	<definition name=".catissuecore.createSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CreateSpecimen.jsp" />
 	</definition>
+
 
 	<definition name=".catissuecore.createSpecimenAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
@@ -578,6 +582,7 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/Distribution.jsp" />
 	</definition>
 
+
 	<definition name=".catissuecore.distributionAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
@@ -589,9 +594,13 @@
 	<definition name=".catissuecore.configurationSuccessDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/ConfigureResultView.jsp" />
 	</definition>
+
+
 	<definition name=".catissuecore.distributionReportSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/search/DistributionReport.jsp" />
 	</definition>
+
+
 
 	<definition name=".catissuecore.initMultipleSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/InitMultipleSpecimen.jsp" />
@@ -687,7 +696,6 @@
 	<definition name=".catissuecore.queryParticipantViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
 	</definition>
-
 	<definition name=".catissuecore.queryCollectionProtocolViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
 	</definition>
@@ -703,7 +711,10 @@
 	<definition name=".catissuecore.queryResultsSpreadsheetViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/search/SimpleSearchDataView.jsp"/>
 	</definition>
-	
+	<definition name=".catissuecore.queryCollectionProtocolRegistrationDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CollectionProtocolRegistration.jsp" />
+	</definition>
+
 	<definition name=".catissuecore.storageLocationViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/StorageContainerLocationView.jsp" />
 	</definition>
@@ -729,6 +740,9 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimen.jsp" />
 	</definition>
 	
+	<definition name=".catissuecore.createCPSpecimenDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CreateSpecimen.jsp" />
+	</definition>
 	
 		
 	<!-- ShoppingCart -->
@@ -838,10 +852,12 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/Aliquots.jsp" />
 	</definition>
 	
+
 	<!-- ALIQUOT SUMMARY -->
 	<definition name=".catissuecore.aliquotSummaryDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/AliquotSummary.jsp" />
 	</definition>
+
 	
 	<!-- CREATE SPECIMEN ARRAY ALIQUOTS -->
 	<definition name=".catissuecore.specimenArrayAliquotDef" extends=".catissuecore.manageBioSpecimenHomeDef">
@@ -869,4 +885,54 @@
 	<definition name=".catissuecore.arrayDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenArray.jsp" />
 	</definition>
+
+	<definition name=".catissuecore.cpBasedSearchDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CPBasedSearchResults.jsp" />
+	</definition>
+	<definition name=".participantAddSuccess" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CPBasedSearchResultsDirect.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.newSpecimenEventParametersCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenEventParameters.jsp" />
+	</definition>
+	<definition name=".catissuecore.createSpecimenCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CreateSpecimen.jsp" />
+	</definition>
+	<definition name=".catissuecore.distributionCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Distribution.jsp" />
+	</definition>
+	<definition name=".catissuecore.configurationSuccessCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/search/ConfigureResultView.jsp" />
+	</definition>
+	<definition name=".catissuecore.distributionReportSuccessCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/search/DistributionReport.jsp" />
+	</definition>
+	<definition name=".catissuecore.distributionReportSuccessCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/search/DistributionReport.jsp" />
+	</definition>
+	<definition name=".catissuecore.aliquotCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Aliquots.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.aliquotSummaryCpQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/AliquotSummary.jsp" />
+	</definition>
+	<definition name=".catissuecore.collectionProtocolRegistrationCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CollectionProtocolRegistration.jsp" />
+	</definition>
+	<definition name=".catissuecore.initMultipleSpecimenCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/InitMultipleSpecimen.jsp" />
+	</definition>
+	<definition name=".catissuecore.multipleSpecimenStorageLocationCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/MultipleSpecimenStorageLocation.jsp" />
+	</definition>
+	<definition name=".catissuecore.multipleSpecimenAddSuccessCPQueryDef" extends=".catissuecore.queryDataViewDef">
+            <put name="content" value="/pages/content/manageBioSpecimen/SpecimenReport.jsp" />
+    </definition>
+	<definition name=".catissuecore.multipleSpecimenCPQueryDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/MultipleSpecimen.jsp" />
+	</definition>
+
+
 </tiles-definitions>

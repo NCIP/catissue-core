@@ -35,6 +35,7 @@ public class StorageTypeAction  extends SecureAction
     /**
      * Overrides the execute method of Action class.
      * Initializes the various fields in StorageType.jsp Page.
+     * @author Vaishali Khandelwal
      * */
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)

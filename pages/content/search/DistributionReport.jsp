@@ -14,11 +14,23 @@
 		ConfigureResultViewForm form = (ConfigureResultViewForm)request.getAttribute("configureResultViewForm");
 		String []selectedColumns=form.getSelectedColumnNames();
 		String reportSaveAction = "";
+		String pageOf = (String) request.getAttribute(Constants.PAGEOF);
 		
 		if(distForm.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) {
 			reportSaveAction = Constants.DISTRIBUTION_REPORT_SAVE_ACTION;
+			if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
+			{
+				reportSaveAction = Constants.CP_QUERY_DISTRIBUTION_REPORT_SAVE_ACTION ;
+			}
+
 		} else {
+
 			reportSaveAction = Constants.ARRAY_DISTRIBUTION_REPORT_SAVE_ACTION;
+			if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
+			{
+				reportSaveAction = Constants.CP_QUERY_ARRAY_DISTRIBUTION_REPORT_SAVE_ACTION ;
+			}
+
 		}
 		
 %> 
@@ -36,7 +48,13 @@
 	{
 		document.forms[0].reportAction.value="true";
 		selectOptions(document.forms[0].selectedColumnNames);
+		<%if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
+		{%>
+			setFormAction("<%=Constants.CP_QUERY_CONFIGURE_DISTRIBUTION_ACTION%>");
+		<%}
+		else{%>
 		setFormAction("<%=Constants.CONFIGURE_DISTRIBUTION_ACTION%>");
+		<%}%>
 		//document.forms[0].action = "<%=Constants.DISTRIBUTION_REPORT_ACTION%>";
 		//document.forms[0].submit();
 	}
@@ -70,6 +88,7 @@
 		
 		<td align="right" colspan="3">
 			<html:hidden property="reportAction" value="true"/>
+			<html:hidden property="pageOf" value="<%=pageOf%>"/>
 		</td>
 		
 	</tr>
