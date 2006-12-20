@@ -187,10 +187,7 @@
 					String buttonOnClicked = "mapButtonClickedOnSpecimen('"+frameUrl+"')";  		
 					// String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
 					String noOfEmptyCombos = "3";
-					if(operation.equals(Constants.EDIT))
-					{
-					     form.setStContSelection(1);
-					}
+					
 					int radioSelected = form.getStContSelection();
 					
 					System.out.println("HERE-->" + radioSelected);
