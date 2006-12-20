@@ -47,7 +47,6 @@
 	<%=messageKey%>
 </html:messages>
 <html:form action="<%=action%>">
-<input type="hidden" id="specimenAttributeKeyForJS" name="specimenAttributeKeyForJS" value="<%=form.getSpecimenAttributeKey()%>"/>
 
 	<table summary="" cellpadding="0" cellspacing="0" border="0"
 		class="contentPage" width="600">
@@ -55,10 +54,10 @@
 		<logic:equal name="output" value="success">
 			<script language="JavaScript" type="text/javascript">
 			
-			var specimenAttributeKey = document.getElementById("specimenAttributeKeyForJS");
+			var specimenAttributeKey = "<%=form.getSpecimenAttributeKey()%>";
 			if(specimenAttributeKey!=null)
 			{
-			    parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey.value);
+			    parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey);
 			}
 			self.close(); 
 	       </script>
