@@ -2,7 +2,7 @@
 
 <!--Ant Script for create Build for caTISSUE Core-->
 
-<project name="csmSdk_Client" default="compile">
+<project name="caTissue Core v 1.1 Client" default="compile">
 	
 	<!--define require dir and Properties -->	
 	<property name="base.dir" value="."/>	
@@ -49,8 +49,8 @@
     </target>
 	-->
 	<!-- run TestClient java file -->
-	<target name="rundemo">
-		<javac srcdir="." >
+	<target name="rundemo" depends="compile">
+		<!-- <javac srcdir="." >
 			<include name="ClientDemo.java"/>
 			<include name="APIDemo.java"/>
 			<include name="SendBuildReport.java"/>
@@ -61,6 +61,7 @@
 				<pathelement location="${src.dir}"/>
 			</classpath>
 		</javac>
+		-->
 		<java classname="ClientDemo" fork="true">
 			<classpath refid="cp"/>
 			<classpath>
