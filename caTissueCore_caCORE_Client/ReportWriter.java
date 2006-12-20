@@ -52,7 +52,7 @@ public class ReportWriter
 		String currDir = System.getProperty("user.dir");
 		StringBuffer dirPath = new StringBuffer(currDir);
 		dirPath.append("\\report");
-		System.out.println(dirPath);
+		System.out.println("Build report directory: "+dirPath);
 		return dirPath.toString();
 	}
 	
@@ -64,7 +64,7 @@ public class ReportWriter
 	    SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatSuffix);
 		String dateStr = dateFormat.format(currDate);
 		filePath.append(fileName + dateStr +".txt");
-		System.out.println(filePath);
+		System.out.println("Build report File Name: "+fileName + dateStr +".txt");
 		return filePath.toString();
 	}
 	
@@ -88,7 +88,7 @@ public class ReportWriter
 	{
 		try
 		{
-			System.out.println(filePath);
+			//System.out.println(filePath);
 			writer = new BufferedWriter(new FileWriter(filePath));
 		}
 		catch (IOException e)
