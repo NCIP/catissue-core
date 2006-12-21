@@ -147,7 +147,14 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 		{
 			catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
 			HashMap participantMap = (HashMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_PARTICIPANTS);
-			participantMap.put(participant.getId(), participant);
+			if(participant.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED))
+			{
+				participantMap.remove(participant.getId());
+			}
+			else
+			{
+			    participantMap.put(participant.getId(), participant);
+			}
     	}
 		catch (CacheException e)
 		{
