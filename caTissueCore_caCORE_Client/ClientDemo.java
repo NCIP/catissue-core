@@ -2359,15 +2359,15 @@ public class ClientDemo
 	
 	private void sendMail()
 	{
-		SendBuildReport report = SendBuildReport.getInstance();
-		String to = "catissue@persistent.co.in";
-		String from = "ashwin_gupta@persistent.co.in";
-		String cc = "munesh_gupta@persistent.co.in";
-		String host = "mail.persistent.co.in";
-        String subject = "Nightly Build Report";
-        String body = "nightly build report run for database MySQL";
-        //String filePath = "F:/nightly_build/catissuecore/caTissueCore_caCORE_Client/log/catissuecoreclient.log";
-        report.sendmail(to,cc,null,from,host,subject,body,filePath);
+//		SendBuildReport report = SendBuildReport.getInstance();
+//		String to = "catissue@persistent.co.in";
+//		String from = "ashwin_gupta@persistent.co.in";
+//		String cc = "munesh_gupta@persistent.co.in";
+//		String host = "mail.persistent.co.in";
+//        String subject = "Nightly Build Report";
+//        String body = "nightly build report run for database MySQL";
+//        //String filePath = "F:/nightly_build/catissuecore/caTissueCore_caCORE_Client/log/catissuecoreclient.log";
+//        report.sendmail(to,cc,null,from,host,subject,body,filePath);
  	}
 	
 	
