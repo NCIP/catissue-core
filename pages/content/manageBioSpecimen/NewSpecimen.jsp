@@ -525,7 +525,7 @@
 							</td>
 							<td class="formField" >								
 					     		<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="lineage" property="lineage" 
-					     		disabled="true"/>														     	
+					     		readonly="true"/>														     	
 							</td>
 							</logic:equal>
 							
@@ -1227,4 +1227,7 @@ if(pageView.equals("edit"))
 <%
 }
 %>
+<html:hidden property="stContSelection"/>
+<html:hidden property="concentration"/>
+<html:hidden property="lineage"/>
 </html:form>
