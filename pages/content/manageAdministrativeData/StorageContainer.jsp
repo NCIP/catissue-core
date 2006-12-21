@@ -298,7 +298,7 @@
 				var containerNumber = "<%=containerNumber%>";	
 				var typeElement =  document.getElementById("typeId");				
 				var maxTypeName =  typeElement.options[typeElement.selectedIndex].text;
-				if(maxTypeName != "-1" && maxSiteName != "-1")
+				if(maxTypeName != "-1" && maxSiteName != "-1" && containerName.value=="")
 				{		
 					//Jitendra:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
 					//and it is giving error. So these fields are truncated in case it is longer than 40.
