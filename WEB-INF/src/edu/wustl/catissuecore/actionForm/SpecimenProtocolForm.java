@@ -393,7 +393,28 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		values.put(key[2] , requirement.getSpecimenType());
 		values.put(key[3] , requirement.getTissueSite());
 		values.put(key[4] , requirement.getPathologyStatus());
-		values.put(key[5] , Utility.toString(requirement.getQuantity().getValue()));
+		//values.put(key[5] , Utility.toString(requirement.getQuantity().getValue()));
+		
+		if(!Utility.isQuantityDouble(requirement.getSpecimenClass(),requirement.getSpecimenType()))
+		{
+			Double doubleQuantity = requirement.getQuantity().getValue();
+			if (doubleQuantity.toString().contains("E"))
+	    	{    		
+				values.put(key[5] , doubleQuantity.toString()); 
+	    	}
+	    	else
+	    	{
+	    		long longQuantity = doubleQuantity.longValue();
+	    		values.put(key[5] , new Long(longQuantity).toString()); 
+	    		
+	    	}		
+	
+		}
+		else
+		{
+		 values.put(key[5] , requirement.getQuantity().toString()); 
+	}
+		
 		values.put(key[6] , Utility.toString(requirement.getId()));
 		
 		if(requirement.getSpecimenClass().equals(Constants.TISSUE) && requirement.getQuantity().getValue() != null)
