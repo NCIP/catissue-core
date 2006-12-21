@@ -10,13 +10,12 @@ div.gridbox table.hdr td {
 	text-align: center;
 	margin:0px;
 	padding:5px 0px 5px 0px ;
-	white-space: nowrap;
 	font-weight:normal;
     -moz-user-select:none;
     overflow:hidden;
 	}
 div.gridbox table.hdr td div.hdrcell{
-	
+	overflow:hidden;
 }
 div.gridbox table.obj td {
 	border: 1px solid;
@@ -46,11 +45,11 @@ div.gridbox table.obj td span.space, div.gridbox table.obj td img.space{
 	width:18px;
 	}
 div.gridbox table.obj tr.rowselected td.cellselected, div.gridbox table.obj td.cellselected {
-	background-color:#1e23e8;/* d8d8d8 MD20Dec06*/
+	background-color:#d8d8d8;
 	color:black;
 	}
 div.gridbox table.obj tr.rowselected td{
-	background-color:#1e23e8;/* e1e0d7; MD20Dec06*/
+	background-color:#e1e0d7;
 	color:black;
 	}
 div.gridbox table.obj td.editable{
@@ -83,6 +82,11 @@ div.gridbox table.obj td.editable{
     border-color:black silver silver black;
     position:absolute;
 	height:100px;
+}
+.dhx_clist{
+    background-color:white;
+    border:1px solid black;
+    padding:2px 2px 2px 2px;
 }
 .gridDragLine{
    position:absolute;
@@ -121,7 +125,7 @@ div.gridbox_xp{
 }
 div.gridbox_xp table.hdr td {
 	color:#616161;
-	background-image:url('../imgs/header_bg.gif');
+	background-image:url('../imgs/header_bg_60.gif');
 	border:0px;
 	text-align: center;
 	margin:0px;
@@ -151,18 +155,119 @@ div.gridbox_xp table.obj td {
 	vertical-align:middle;
 	}
 div.gridbox table.obj tr.rowselected td{
-	background-color:#1e23e8;/* whitesmoke; MD20Dec06*/
-	color:white; /*black; MD20Dec06*/
+	background-color:whitesmoke;
+	color:black;
 	}
 div.gridbox table.obj tr.rowselected td.cellselected, div.gridbox table.obj td.cellselected {
-	background-color:#1e23e8;/* whitesmoke; MD20Dec06*/
-	color:white;	/* Added by Mandar */
+	background-color:whitesmoke;
 	}
 div.gridbox_xp table.row20px tr  td{
     height:22px;
     white-space: nowrap;
     padding:1px;
 }
+/* gray skin --------------------------------------------------*/
 
+div.gridbox_gray {
+	border:1px solid gray;
+	background-color:#D4D0C8;
+}
+
+/* mt skin ------------------------------------------------------*/
+div.gridbox_mt{
+	border:1px solid lightgrey;
+}
+div.gridbox_mt table.hdr td {
+	color:#616161;
+	border:0px;
+	border-bottom: 1px solid lightgrey;
+	border-left: 1px solid lightgrey
+	text-align: center;
+	margin:0px;
+	background-image:url('../imgs/header_bg.gif');
+	padding: 0px 0px 0px 0px;
+	-moz-user-select:none;
+	overflow:hidden;
+	}
+div.gridbox_mt table.hdr td div.hdrcell{
+	height:16px;
+	white-space : nowrap;
+	font-family:Verdana;
+	font-size:12px;
+}
+div.gridbox_mt table.obj td {
+	border:0px;
+	border-bottom: 1px solid lightgrey;
+	border-right: 0px solid lightgrey;
+	font-family:Verdana;
+	font-size:12px;
+    -moz-user-select:none;
+    overflow:hidden;
+    padding-top:0px;
+    padding-bottom:0px;
+	vertical-align:middle;
+	}
+div.gridbox_mt table.obj tr.rowselected td{
+	background-color:#D6D3FA;
+	color:black;
+	}
+div.gridbox_mt table.obj tr.rowselected td.cellselected, div.gridbox table.obj td.cellselected {
+	background-color:#D6D3FA;
+	}
+div.gridbox_mt table.row20px tr  td{
+    height:22px;
+    white-space: nowrap;
+    padding:1px;
+}
+
+/*------------------------------------------------------------*/
+
+
+div.gridbox div.ftr{
+  position:absolute;
+  left:0px;
+  bottom:1px;
+  width:100%;
+  padding-right:20px;
+  overflow:hidden;
+}
+
+div.gridbox div.ftr td {
+		height:20px;
+		padding:0px;
+		padding-left:10px;
+		padding-right:5px;
+		border-top:1px solid gray;
+		border-right:1px solid gray;
+		background-color:#ffffcc;
+		font-style : italic;
+		font-family:arial;
+		font-size:12px;
+	}
+
+div.gridbox table.hdr td.columnTargetR div.hdrcell{
+	border-right:3px double #FF6600;
+	border-left:3px solid #D4D0C8;
+}
+
+div.gridbox table.hdr td.columnTargetL div.hdrcell{
+	border-right:3px solid #D4D0C8;
+	border-left:3px double #FF6600;
+}
+
+.dhx_dragColDiv{
+	font-family:Arial;
+	font-size:12px;
+	background-color:#D4D0C8;
+	border: 1px solid;
+	border-color : white Gray Gray white;
+	text-align: center;
+	margin:0px;
+	padding:5px 20px 5px 20px ;
+	font-weight:normal;
+	filter:alpha(opacity:75);
+	-moz-opacity:0.75;
+	opacity:0.75;
+}
 
 

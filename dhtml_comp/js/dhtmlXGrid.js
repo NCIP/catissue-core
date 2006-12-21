@@ -1576,6 +1576,7 @@ function dhtmlXGridObject(id){
  return this.cells4(this.cell);
  else
  var c = this.getRowById(row_id);
+// alert("MD : row_id:"+row_id +",col: "+ col);
  var cell=(c._childIndexes?c.childNodes[c._childIndexes[col]]:c.childNodes[col]);
  return this.cells4(cell);
 }
