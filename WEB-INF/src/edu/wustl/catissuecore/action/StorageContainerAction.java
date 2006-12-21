@@ -120,6 +120,10 @@ public class StorageContainerAction extends SecureAction
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
 
 		long container_number = bizLogic.getNextContainerNumber();
+		if(operation.equals(Constants.EDIT))
+		{
+			container_number = storageContainerForm.getId();
+		}
 		request.setAttribute("ContainerNumber", new Long(container_number).toString());
 
 		Logger.out.info("is container full:" + storageContainerForm.getIsFull());
