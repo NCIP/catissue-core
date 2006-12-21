@@ -11,6 +11,7 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -464,48 +465,55 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						String classKey = key.substring(0,key.lastIndexOf("_quantity_value") );
 						classKey = classKey + "_specimenClass";
 						String classValue = (String)getValue(classKey );
-						if (classValue.trim().equals("Cell"))
+						try
 						{
-//							if(validator.isEmpty(value))
-//							{
-//								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-//							}else
-							if(!validator.isNumeric(value,0 ))
-	        				{
-	        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
-	        				}
-						}
-						else
-						{
-							// -------Mandar: 19-12-2005
-							String typeKey = key.substring(0,key.lastIndexOf("_quantity_value") );
-							typeKey = typeKey + "_specimenType";
-							String typeValue = (String)getValue(typeKey );
-							Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );
-							if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) || typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE) )
+							value = new BigDecimal(value).toPlainString();
+							if (classValue.trim().equals("Cell"))
 							{
 //								if(validator.isEmpty(value))
 //								{
 //									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-//								}else 
-		        				if(!validator.isNumeric(value,0 ))
+//								}else
+								if(!validator.isNumeric(value,0 ))
 		        				{
 		        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
 		        				}
 							}
 							else
 							{
-//								if(validator.isEmpty(value))
-//								{
-//									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-//								}else
-								if(!validator.isDouble(value,true ))
-		        				{
-		        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
-		        				}
+								// -------Mandar: 19-12-2005
+								String typeKey = key.substring(0,key.lastIndexOf("_quantity_value") );
+								typeKey = typeKey + "_specimenType";
+								String typeValue = (String)getValue(typeKey );
+								Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );							
+								if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) || typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE) )
+								{
+//									if(validator.isEmpty(value))
+//									{
+//										errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+//									}else 
+			        				if(!validator.isNumeric(value,0 ))
+			        				{
+			        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
+			        				}
+								}
+								else
+								{
+//									if(validator.isEmpty(value))
+//									{
+//										errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
+//									}else
+									if(!validator.isDouble(value,true ))
+			        				{
+			        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
+			        				}
+								}
 							}
 						}
-						
+						catch (NumberFormatException exp)
+				        {    		  
+							errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
+						}		
 					}
 				} // if  quantity
 			}
