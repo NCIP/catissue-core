@@ -11,6 +11,7 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -215,27 +216,35 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	    						String typeValue = (String)getValue(typeKey );
 	    						Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );
 	    						
-	    						/*
-	    						 *  if class is cell or type is slide,paraffinblock, 
-	    						 *  frozen block then qty is in integer
-	    						 */
-		    					if (classValue.trim().equals("Cell") || typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) ||
-		    							typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE))
-		    					{
-		            				if(!validator.isNumeric(value,0 ))
-		            				{
-		            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("distributionprotocol.quantity")));
-		            					bQuantity = true;
-		            				}
-		    					}
-		    					else
-		    					{
-		    						if(!validator.isDouble(value ,true))
-			        				{
-			        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.quantity")));
-			        					bQuantity = true;
-			        				}
-		    					}
+	    						try
+								{
+	    							value = new BigDecimal(value).toPlainString();	    						
+		    						/*
+		    						 *  if class is cell or type is slide,paraffinblock, 
+		    						 *  frozen block then qty is in integer
+		    						 */
+			    					if (classValue.trim().equals("Cell") || typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) ||
+			    							typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE))
+			    					{
+			            				if(!validator.isNumeric(value,0 ))
+			            				{
+			            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("distributionprotocol.quantity")));
+			            					bQuantity = true;
+			            				}
+			    					}
+			    					else
+			    					{
+			    						if(!validator.isDouble(value ,true))
+				        				{
+				        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distributionprotocol.quantity")));
+				        					bQuantity = true;
+				        				}
+			    					}
+								}
+	    						catch (NumberFormatException exp)
+						        {    		  
+									errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("distributionprotocol.quantity")));
+								}		
 	    					}
 //	    				} // if  quantity
     				}
