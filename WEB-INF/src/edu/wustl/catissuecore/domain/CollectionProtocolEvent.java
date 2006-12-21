@@ -11,7 +11,7 @@
 package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -45,7 +45,7 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 	/**
 	 * Collection of SpecimenRequirements associated with the CollectionProtocolEvent.
 	 */
-	protected Collection specimenRequirementCollection = new HashSet();
+	protected Collection specimenRequirementCollection = new LinkedHashSet();
 	
 	/**
 	 * CollectionProtocol associated with the CollectionProtocolEvent.
