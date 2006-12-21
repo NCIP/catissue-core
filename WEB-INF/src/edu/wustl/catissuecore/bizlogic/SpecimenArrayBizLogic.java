@@ -302,6 +302,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 						if (specimenArrayContent.getInitialQuantity() != null)
 						{
 							quantity = specimenArrayContent.getInitialQuantity().getValue().doubleValue();
+							double tempQuantity = quantity;
 							SpecimenArrayContent oldArrayContent = null;
 							// incase if specimenArray is created from aliquot page, then skip the Available quantity of specimen. 
 							if (!specimenArray.isAliquot())
@@ -319,7 +320,7 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 
 								if (!isAvailableQty(specimen, quantity))
 								{
-									throw new DAOException(" Quantity '" + quantity + "' should be less than current Distributed Quantity '"
+									throw new DAOException(" Quantity '" + tempQuantity + "' should be less than current Distributed Quantity '"
 											+ specimen.getAvailableQuantity().getValue().doubleValue() + "' of specimen :: " + specimen.getLabel());
 								}
 							}
