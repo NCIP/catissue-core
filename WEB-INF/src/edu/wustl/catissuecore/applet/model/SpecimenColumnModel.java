@@ -4,42 +4,25 @@ package edu.wustl.catissuecore.applet.model;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.Vector;	  
 import java.util.Map;
+
 import javax.swing.AbstractCellEditor;
-import javax.swing.Action;
 import javax.swing.ButtonGroup;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
-import javax.swing.text.Document;
-
-import org.apache.xalan.processor.StopParseException;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.component.BaseTable;
@@ -55,9 +38,13 @@ import edu.wustl.catissuecore.applet.listener.EventsButtonHandler;
 import edu.wustl.catissuecore.applet.listener.ExternalIdentifierButtonHandler;
 import edu.wustl.catissuecore.applet.listener.MapButtonHandler;
 import edu.wustl.catissuecore.applet.listener.ParentSpecimenItemHandler;
+import edu.wustl.catissuecore.applet.listener.SpecimenCheckBoxHandler;
 import edu.wustl.catissuecore.applet.listener.TextFieldHandler;
 import edu.wustl.catissuecore.applet.listener.TissueSiteTreeMapButtonHandler;
 import edu.wustl.catissuecore.applet.listener.TypeComboBoxHandler;
+import edu.wustl.catissuecore.applet.ui.ModifiedButton;
+import edu.wustl.catissuecore.applet.ui.ModifiedComboBox;
+import edu.wustl.catissuecore.applet.ui.ModifiedTextField;
 import edu.wustl.catissuecore.util.global.Constants;
 
 /**
@@ -78,6 +65,9 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	BaseTable table;
 
 	// Fields as per Model.
+	
+	//For Specimen Checkbox
+	JCheckBox specimenCheckBox ;
 
 	//Specimen Collection Group
 	ModifiedComboBox specimenCollectionGroup;
@@ -171,7 +161,11 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		for (int rowno = 0; rowno < table.getRowCount(); rowno++)
 		{
 			//For combobox
-			if (rowno == AppletConstants.SPECIMEN_CLASS_ROW_NO
+			if(rowno == AppletConstants.SPECIMEN_CHECKBOX_ROW_NO)
+			{
+				table.setRowHeight(rowno, 20);
+			}
+			else if (rowno == AppletConstants.SPECIMEN_CLASS_ROW_NO
 					|| rowno == AppletConstants.SPECIMEN_TYPE_ROW_NO
 					|| rowno == AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO
 					|| rowno == AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO)
@@ -282,6 +276,11 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 		switch (row)
 		{
+			//Specimencheckbox
+			case AppletConstants.SPECIMEN_CHECKBOX_ROW_NO  :
+				comp = specimenCheckBox;
+				break;
+			
 			//Specimen Collection Group
 			case AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO :
 				comp = collectionGroupPanel;
@@ -396,6 +395,10 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	 */
 	private void instantiateObjects(MultipleSpecimenTableModel model, int column)
 	{
+		// specimen check box
+		specimenCheckBox = new JCheckBox(model.getColumnName(column),model.getSpecimenCheckBoxValueAt(column )); 
+		specimenCheckBox.setActionCommand(""+(column+1)); 
+		
 		//Specimen Collection Group
 		specimenCollectionGroup = new ModifiedComboBox(model.getSpecimenCollectionGroupValues());
 		specimenCollectionGroup.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
@@ -617,6 +620,12 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		//For TissueSite Tree
 		TissueSiteTreeMapButtonHandler tissueSiteTreeMapButtonHandler = new TissueSiteTreeMapButtonHandler(
 				table);
+		
+		//******Specimen checkbox
+		SpecimenCheckBoxHandler specimenCheckBoxHandler = new SpecimenCheckBoxHandler(table);
+		
+		//specimen checkbox
+		specimenCheckBox.addItemListener(specimenCheckBoxHandler ); 
 
 		//Specimen Collection Group
 		specimenCollectionGroup.addActionListener(collectionGroupComboBoxHandler);
@@ -1375,6 +1384,10 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 		switch (row)
 		{
+			//checkbox
+			case AppletConstants.SPECIMEN_CHECKBOX_ROW_NO :
+				value = String.valueOf(specimenCheckBox.isSelected()) ;
+				break;
 			//Specimen Collection Group
 			case AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO :
 				value = specimenCollectionGroup.getSelectedItem().toString();
@@ -1475,6 +1488,12 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		JComponent comp = null;
 		switch (row)
 		{
+			//checkbox
+			case AppletConstants.SPECIMEN_CHECKBOX_ROW_NO :
+				specimenCheckBox.setSelected(Boolean.getBoolean(value) );
+				comp = specimenCheckBox;
+				break;
+
 			//Specimen Collection Group
 			case AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO :
 				specimenCollectionGroup.setSelectedItem(value);
@@ -1551,6 +1570,11 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		JComponent comp = null;
 		switch (row)
 		{
+			//checkbox
+			case AppletConstants.SPECIMEN_CHECKBOX_ROW_NO :
+				comp = specimenCheckBox;
+				break;
+
 			//Specimen Collection Group
 			case AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO :
 				comp = specimenCollectionGroup;
@@ -1755,203 +1779,205 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	// -------------------Mandar For Focus Handling 11-Dec-06 end
 */
 }
+//TODO 
+//Delete the class as moved to a separate file
 
 // -----------Class to override default ModifiedComboBox and request focus when displayed
-class ModifiedComboBox extends JComboBox 
-{
-	
-	/**
-	 * @param items
-	 */
-	public ModifiedComboBox(Object[] items)
-	{
-		super(items);
-		addListener();
-	}
-	/**
-	 * @param arg0
-	 */
-	public ModifiedComboBox(Vector arg0)
-	{
-		super(arg0);
-		addListener();
-	}
-	/**
-	 * @param aModel
-	 */
-	public ModifiedComboBox(ComboBoxModel aModel)
-	{
-		super(aModel);
-		addListener();
-	}
-
-	public ModifiedComboBox()
-	{
-		addListener();
-	}
-	private void addListener()
-	{
-	 	addAncestorListener( new AncestorListener()
-	 	{
-	 		public void ancestorAdded(AncestorEvent e)
-	 		{
-	 			requestFocus();
-	 		}
-	 		public void ancestorMoved(AncestorEvent e){}
-	 		public void ancestorRemoved(AncestorEvent e){}
-	 	});
-	 	
-	 	addFocusListener(new FocusAdapter(){
-	 		public void focusGained(FocusEvent fe)
-	 		{
-	 			showPopup(); 
-	 			System.out.println("Focus Gained 15Dec06");
-	 		}
-	 		public void focusLost(FocusEvent fe)
-	 		{
-	 			System.out.println("Focus Lost 15Dec06");
-	 			//transferFocus();
-	 			
-	 			if(getPeer() !=null)
-	 			{
-	 				System.out.println("getPeer().getClass().getName()  : "+getPeer().getClass().getName()  );	
-	 				//getParent().getPeer().requestFocus();
-	 				//getPeer().requestFocus();
-	 			}
-	 			else
-	 			{
-	 				System.out.println("getPeer().getClass().getName() : NULL"); 
-	 				getParent().requestFocus();
-	 			}
-	 		}
-	 		
- 		});
-	}
-}
+//class ModifiedComboBox extends JComboBox 
+//{
+//	
+//	/**
+//	 * @param items
+//	 */
+//	public ModifiedComboBox(Object[] items)
+//	{
+//		super(items);
+//		addListener();
+//	}
+//	/**
+//	 * @param arg0
+//	 */
+//	public ModifiedComboBox(Vector arg0)
+//	{
+//		super(arg0);
+//		addListener();
+//	}
+//	/**
+//	 * @param aModel
+//	 */
+//	public ModifiedComboBox(ComboBoxModel aModel)
+//	{
+//		super(aModel);
+//		addListener();
+//	}
+//
+//	public ModifiedComboBox()
+//	{
+//		addListener();
+//	}
+//	private void addListener()
+//	{
+//	 	addAncestorListener( new AncestorListener()
+//	 	{
+//	 		public void ancestorAdded(AncestorEvent e)
+//	 		{
+//	 			requestFocus();
+//	 		}
+//	 		public void ancestorMoved(AncestorEvent e){}
+//	 		public void ancestorRemoved(AncestorEvent e){}
+//	 	});
+//	 	
+//	 	addFocusListener(new FocusAdapter(){
+//	 		public void focusGained(FocusEvent fe)
+//	 		{
+//	 			showPopup(); 
+//	 			System.out.println("Focus Gained 15Dec06");
+//	 		}
+////	 		public void focusLost(FocusEvent fe)
+////	 		{
+////	 			System.out.println("Focus Lost 15Dec06");
+////	 			//transferFocus();
+////	 			
+////	 			if(getPeer() !=null)
+////	 			{
+////	 				System.out.println("getPeer().getClass().getName()  : "+getPeer().getClass().getName()  );	
+////	 				//getParent().getPeer().requestFocus();
+////	 				//getPeer().requestFocus();
+////	 			}
+////	 			else
+////	 			{
+////	 				System.out.println("getPeer().getClass().getName() : NULL"); 
+////	 				getParent().requestFocus();
+////	 			}
+////	 		}
+//	 		
+// 		});
+//	}
+//}
 
 //-----class for textfield
-class ModifiedTextField extends JTextField 
-{
-	
-	/**
-	 * 
-	 */
-	public ModifiedTextField()
-	{
-		super();
-		addListener();
-		// TODO Auto-generated constructor stub
-	}
-	/**
-	 * @param columns
-	 */
-	public ModifiedTextField(int columns)
-	{
-		super(columns);
-		addListener();
-		// TODO Auto-generated constructor stub
-	}
-	/**
-	 * @param text
-	 */
-	public ModifiedTextField(String text)
-	{
-		super(text);
-		addListener();
-		// TODO Auto-generated constructor stub
-	}
-	/**
-	 * @param text
-	 * @param columns
-	 */
-	public ModifiedTextField(String text, int columns)
-	{
-		super(text, columns);
-		addListener();
-		// TODO Auto-generated constructor stub
-	}
-	/**
-	 * @param doc
-	 * @param text
-	 * @param columns
-	 */
-	public ModifiedTextField(Document doc, String text, int columns)
-	{
-		super(doc, text, columns);
-		addListener();
-		// TODO Auto-generated constructor stub
-	}
-	private void addListener()
-	{
-	 	addAncestorListener( new AncestorListener()
-	 	{
-	 		public void ancestorAdded(AncestorEvent e)
-	 		{
-	 			requestFocus();
-	 		}
-	 		public void ancestorMoved(AncestorEvent e){}
-	 		public void ancestorRemoved(AncestorEvent e){}
-	 	});
-	}
-}
-
+//class ModifiedTextField extends JTextField 
+//{
+//	
+//	/**
+//	 * 
+//	 */
+//	public ModifiedTextField()
+//	{
+//		super();
+//		addListener();
+//		// TODO Auto-generated constructor stub
+//	}
+//	/**
+//	 * @param columns
+//	 */
+//	public ModifiedTextField(int columns)
+//	{
+//		super(columns);
+//		addListener();
+//		// TODO Auto-generated constructor stub
+//	}
+//	/**
+//	 * @param text
+//	 */
+//	public ModifiedTextField(String text)
+//	{
+//		super(text);
+//		addListener();
+//		// TODO Auto-generated constructor stub
+//	}
+//	/**
+//	 * @param text
+//	 * @param columns
+//	 */
+//	public ModifiedTextField(String text, int columns)
+//	{
+//		super(text, columns);
+//		addListener();
+//		// TODO Auto-generated constructor stub
+//	}
+//	/**
+//	 * @param doc
+//	 * @param text
+//	 * @param columns
+//	 */
+//	public ModifiedTextField(Document doc, String text, int columns)
+//	{
+//		super(doc, text, columns);
+//		addListener();
+//		// TODO Auto-generated constructor stub
+//	}
+//	private void addListener()
+//	{
+//	 	addAncestorListener( new AncestorListener()
+//	 	{
+//	 		public void ancestorAdded(AncestorEvent e)
+//	 		{
+//	 			requestFocus();
+//	 		}
+//	 		public void ancestorMoved(AncestorEvent e){}
+//	 		public void ancestorRemoved(AncestorEvent e){}
+//	 	});
+//	}
+//}
+//
 // -----Class for focused buttons
-class ModifiedButton extends JButton 
-{
-	
-	/**
-	 * 
-	 */
-	public ModifiedButton()
-	{
-		super();
-		addListener();
-	}
-	/**
-	 * @param text
-	 */
-	public ModifiedButton(String text)
-	{
-		super(text);
-		addListener();
-	}
-	/**
-	 * @param text
-	 * @param icon
-	 */
-	public ModifiedButton(String text, Icon icon)
-	{
-		super(text, icon);
-		addListener();
-	}
-	/**
-	 * @param a
-	 */
-	public ModifiedButton(Action a)
-	{
-		super(a);
-		addListener();
-	}
-	/**
-	 * @param icon
-	 */
-	public ModifiedButton(Icon icon)
-	{
-		super(icon);
-		addListener();
-	}
-	
-	private void addListener()
-	{
-	 	addAncestorListener( new AncestorListener()
-	 	{
-	 		public void ancestorAdded(AncestorEvent e)
-	 		{
-	 			requestFocus();
-	 		}
-	 		public void ancestorMoved(AncestorEvent e){}
-	 		public void ancestorRemoved(AncestorEvent e){}
-	 	});
-	}
-}
+//class ModifiedButton extends JButton 
+//{
+//	
+//	/**
+//	 * 
+//	 */
+//	public ModifiedButton()
+//	{
+//		super();
+//		addListener();
+//	}
+//	/**
+//	 * @param text
+//	 */
+//	public ModifiedButton(String text)
+//	{
+//		super(text);
+//		addListener();
+//	}
+//	/**
+//	 * @param text
+//	 * @param icon
+//	 */
+//	public ModifiedButton(String text, Icon icon)
+//	{
+//		super(text, icon);
+//		addListener();
+//	}
+//	/**
+//	 * @param a
+//	 */
+//	public ModifiedButton(Action a)
+//	{
+//		super(a);
+//		addListener();
+//	}
+//	/**
+//	 * @param icon
+//	 */
+//	public ModifiedButton(Icon icon)
+//	{
+//		super(icon);
+//		addListener();
+//	}
+//	
+//	private void addListener()
+//	{
+//	 	addAncestorListener( new AncestorListener()
+//	 	{
+//	 		public void ancestorAdded(AncestorEvent e)
+//	 		{
+//	 			requestFocus();
+//	 		}
+//	 		public void ancestorMoved(AncestorEvent e){}
+//	 		public void ancestorRemoved(AncestorEvent e){}
+//	 	});
+//	}
+//}
 	

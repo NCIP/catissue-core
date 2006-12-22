@@ -30,7 +30,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**
 	 * attributes of the specimen for which user can specify the values. 
 	 */
-	String[] specimenAttribute = {"SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
+	String[] specimenAttribute = {"","SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
 			"SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "Quantity_value",
 			"concentrationInMicrogramPerMicroliter", "comments", "specimenEventCollection", "externalIdentifierCollection",
 			"biohazardCollection", "derive"};
@@ -38,7 +38,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**
 	 * Row headers for the attributes. This corrosponds to display value for each of the  specimenAttribute in that order.
 	 */
-	private static final String[] rowHeaders = {"* Specimen Group Name", "* Parent", "* Label", "Barcode", "* Class", "* Type", "* Tissue Site",
+	private static final String[] rowHeaders = {"","* Specimen Group Name", "* Parent", "* Label", "Barcode", "* Class", "* Type", "* Tissue Site",
 			"* Tissue Side", "* Pathological Status", "* Quantity", "Concentration", "Comments", "* Events",
 			"External Identifier(s)", "Biohazards", "Derive"};
 
@@ -100,6 +100,8 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			setActualColumnCollectionGroupRadioButtonValue(i);
 			//set default value for list boxes : TissueSite,TissueSide,Pathological status.
 			setNotSpecified(i);
+			//****For specimen checkbox
+			setActualColumnSpecimenCheckBoxValue(i);
 		}
 		//Setting the specimen Collection group name if add multiple specimen came form add specimen collection group name
 		if (specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME) != null)
@@ -517,6 +519,9 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		//to set collection group radio button value
 		setActualColumnCollectionGroupRadioButtonValue(columnCount);
 		setNotSpecified(columnCount);
+		//**********For CheckBox
+		setActualColumnSpecimenCheckBoxValue(columnCount);
+		
 	}
 
 	/**
@@ -697,8 +702,11 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		removeIdFromMap(columnCount);
 		removeCollectionGroupFromModel(columnCount);
 		removeActualColumnCollectionGroupRadioButtonValue(columnCount);
-		removeDataValues(columnCount);
+		removeDataValues(columnCount);		
 		// ---------------------
+		//******* CheckBox
+		removeActualColumnSpecimenCheckBoxValue(columnCount);
+		
 		columnCount--;
 	}
 
@@ -761,5 +769,60 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	{
 		return buttonStatusMap;
 	}
+//****************** Mandar : 22Dec06 For Specimen CheckBox start
+	HashMap specimenCheckBoxMap = new HashMap();
 	
+	/**
+	 * This method sets the state of collectionGroup radio button in the map. 
+	 * @param column Column number of radio button
+	 * @param value Radio button state of that column.
+	 */
+	public void setSpecimenCheckBoxValueAt(int column,boolean value)
+	{
+		int actualColumn = getActualColumnNo(column )+1;
+		String key = ""+actualColumn;
+		specimenCheckBoxMap.put(key, new Boolean(value));
+	}
+	/**
+	 * 
+	 * @param column Column number to fetch the collection group radio button state.
+	 * @return Radio Button state of collection group for the specified column.
+	 */
+	public boolean getSpecimenCheckBoxValueAt(int column)
+	{
+		int actualColumn = getActualColumnNo(column )+1;
+		String key = ""+actualColumn;
+		return ((Boolean)specimenCheckBoxMap.get(key)).booleanValue() ;
+	}
+
+	private void setActualColumnSpecimenCheckBoxValue(int column)
+	{
+		String key = ""+column;
+		specimenCheckBoxMap.put(key, new Boolean(false));
+	}
+
+	
+	/**
+	 * @return Returns the collectionGroupRadioButtonMap.
+	 */
+	public HashMap getSpecimenCheckBoxMap()
+	{
+		return specimenCheckBoxMap;
+	}
+	/**
+	 * @param specimenCheckBoxMap The specimenCheckBoxMap to set.
+	 */
+	public void setSpecimenCheckBoxMap(HashMap specimenCheckBoxMap)
+	{
+		this.specimenCheckBoxMap = specimenCheckBoxMap;
+	}
+
+	private void removeActualColumnSpecimenCheckBoxValue(int column)
+	{
+		String key = ""+column;
+		specimenCheckBoxMap.remove(key);
+	}
+
+//	****************** Mandar : 22Dec06 For Specimen CheckBox end
+
 }
