@@ -792,7 +792,10 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	{
 		int actualColumn = getActualColumnNo(column )+1;
 		String key = ""+actualColumn;
-		return ((Boolean)specimenCheckBoxMap.get(key)).booleanValue() ;
+		if(specimenCheckBoxMap.containsKey(key))
+			return ((Boolean)specimenCheckBoxMap.get(key)).booleanValue() ;
+		else
+			return false;
 	}
 
 	private void setActualColumnSpecimenCheckBoxValue(int column)
