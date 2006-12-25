@@ -105,7 +105,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		System.out.println("Table Size : "+table.getWidth()+","+table.getHeight());
 		table.setSize(WIDTH,getHeight());
 		System.out.println("Table Size after set : "+table.getWidth()+","+table.getHeight());
-		scrollPane.setSize(table.getWidth(),table.getHeight()); 
+		scrollPane.setPreferredSize(new Dimension(table.getWidth(),table.getHeight())); 
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED  );  
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
 
@@ -115,7 +115,6 @@ public class MultipleSpecimenApplet extends BaseApplet {
 //		getContentPane().setFocusable(true );
 		this.requestFocus(); 
 		table.requestDefaultFocus(); 
-
 		
     }
     
