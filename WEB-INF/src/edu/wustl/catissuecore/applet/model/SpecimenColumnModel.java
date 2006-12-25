@@ -1,6 +1,7 @@
 
 package edu.wustl.catissuecore.applet.model;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -368,26 +369,29 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	 */
 	private void formatComponent(Component comp, boolean hasFocus, boolean isSelected)
 	{
-		if (hasFocus)
+		if(comp != specimenCheckBox )
 		{
-			comp.setForeground(table.getForeground());
-			comp.setBackground(UIManager.getColor("List.background"));
-			//			20Oct06<*>			comp.requestFocusInWindow();
-			comp.requestFocus();
+			if (hasFocus)
+			{
+				comp.setForeground(table.getForeground());
+				comp.setBackground(UIManager.getColor("List.background"));
+				//			20Oct06<*>			comp.requestFocusInWindow();
+				comp.requestFocus();
+			}
+			if (isSelected)
+			{
+				comp.setForeground(table.getSelectionForeground());
+				comp.setBackground(table.getSelectionBackground());
+				//			20Oct06<*>	comp.requestFocusInWindow();
+				comp.requestFocus();
+			}
+			else
+			{
+				comp.setForeground(table.getForeground());
+				comp.setBackground(UIManager.getColor("List.background"));
+			}
+			comp.repaint();
 		}
-		if (isSelected)
-		{
-			comp.setForeground(table.getSelectionForeground());
-			comp.setBackground(table.getSelectionBackground());
-			//			20Oct06<*>	comp.requestFocusInWindow();
-			comp.requestFocus();
-		}
-		else
-		{
-			comp.setForeground(table.getForeground());
-			comp.setBackground(UIManager.getColor("List.background"));
-		}
-		comp.repaint();
 	}
 
 	/*
@@ -398,6 +402,8 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		// specimen check box
 		specimenCheckBox = new JCheckBox(model.getColumnName(column),model.getSpecimenCheckBoxValueAt(column )); 
 		specimenCheckBox.setActionCommand(""+(column+1)); 
+		specimenCheckBox.setBackground(Color.lightGray  );
+		specimenCheckBox.setOpaque(true );
 		
 		//Specimen Collection Group
 		specimenCollectionGroup = new ModifiedComboBox(model.getSpecimenCollectionGroupValues());

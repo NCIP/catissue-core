@@ -57,6 +57,9 @@ public class MultipleSpecimenApplet extends BaseApplet {
 				
 		table = new MultipleSpecimenTable(model);
         table.getTableHeader().setReorderingAllowed(false);
+        
+        //****** Remove columnHeaders
+        table.setTableHeader(null );
 
 		//to set the focus to the editor. Mandar: 16Oct06.
         	//not in jdk1.3 so commented.
@@ -108,7 +111,6 @@ public class MultipleSpecimenApplet extends BaseApplet {
 
 		getContentPane().add(scrollPane);
 		setBackground(appletColor);
-	
 		//not in jdk1.3
 //		getContentPane().setFocusable(true );
 		this.requestFocus(); 
