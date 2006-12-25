@@ -14,7 +14,7 @@
 					onclick="<%=normalSubmit%>">				  				     	    
 	     	</html:button>
 		</td>
-		
+		<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
 		<td nowrap class="formFieldNoBorders"> 
 			<html:button styleClass="actionButton"  
 					property="submitPage" 
@@ -23,6 +23,8 @@
 					disabled="<%=isAddNew%>" 
 					onclick="<%=forwardToSubmit%>">
 	     	</html:button>
+	     	
 		</td>
+		</logic:notEqual>
 	</tr>
 </table>

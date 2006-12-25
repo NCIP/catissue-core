@@ -17,6 +17,12 @@
 <script src="runtime/formats/string.js"></script>
 <script src="runtime/formats/number.js"></script>
 <script src="jss/script.js"></script>
+<!-- Mandar 11-Aug-06 : For calendar changes -->
+<script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<!-- Mandar 11-Aug-06 : calendar changes end -->
+
 <style>
 .active-column-0 {width:30px}
 tr#hiddenCombo
@@ -57,6 +63,11 @@ tr#hiddenCombo
 		else
 		{
 			formName = Constants.PARTICIPANT_LOOKUP_ACTION;
+			if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+			{
+				formName = Constants.CP_QUERY_PARTICIPANT_LOOKUP_ACTION;
+			}
+
 			readOnlyValue=false;
 		}
 
@@ -216,6 +227,10 @@ tr#hiddenCombo
 		function AddParticipant()
 		{
 			document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
+			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+			{%>
+			document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
+			<%}%>
 			document.forms[0].submit();
 		}
 		//This function is called when user clicks on 'Use Selected Participant' Button
@@ -228,6 +243,7 @@ tr#hiddenCombo
 			}
 			else
 			{
+			
 				document.forms[0].action="ParticipantSelect.do?operation=add&id="+document.forms[0].participantId.value;
 				alert("3");
 				alert(document.forms[0].action);
@@ -246,7 +262,13 @@ tr#hiddenCombo
 			<%}%>
 			
 			document.forms[0].radioValue.value="Add";
+			
 			document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
+			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+			{%>
+			document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
+			<%}%>
+			
 			
 		}
 	
@@ -274,12 +296,20 @@ tr#hiddenCombo
 				if(document.forms[0].radioValue.value=="Add")
 				{
 					document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
+					<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+					{%>
+					document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
+					<%}%>
 				}
 				else
 				{
 					if(document.forms[0].radioValue.value=="Lookup")
 					{
 						document.forms[0].action="<%=Constants.PARTICIPANT_LOOKUP_ACTION%>";
+						<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+						{%>
+						document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_LOOKUP_ACTION%>";
+						<%}%>												
 						document.forms[0].submit();
 					}
 				}		
@@ -861,7 +891,8 @@ tr#hiddenCombo
 									
 								
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
+								<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
+								<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">								
 								<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  
 											property="registratioPage" 
@@ -871,10 +902,12 @@ tr#hiddenCombo
 					  						onclick="<%=forwardToSubmit%>">
 									</html:button>
 								</td>
-								</logic:notEqual>
+								</logic:equal>
+								</logic:equal>
 								</logic:notEqual>
 								
-								<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
+							<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
+							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">								
 								<td nowrap class="formFieldNoBorders">									
 									<html:button styleClass="actionButton"  
 											property="registratioPage" 
@@ -883,7 +916,8 @@ tr#hiddenCombo
 					  						onclick="<%=forwardToSCG%>">
 									</html:button>
 								</td>
-								</logic:equal>						
+						    </logic:equal>						
+						    </logic:equal>						
 								
 								<%--<td>
 									<html:submit styleClass="actionButton" disabled="true">

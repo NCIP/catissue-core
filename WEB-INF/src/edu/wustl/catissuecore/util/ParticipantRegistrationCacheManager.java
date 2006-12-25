@@ -56,9 +56,9 @@ public class ParticipantRegistrationCacheManager
 	 * @param cpId
 	 * @param participantID
 	 */
-	public synchronized void registerParticipant(Long cpId, Long participantID)
+	public synchronized void registerParticipant(Long cpId, Long participantID, String protocolParticipantID)
 	{
-		participantRegCache.registerParticipant(cpId, participantID);
+		participantRegCache.registerParticipant(cpId, participantID, protocolParticipantID);
 	}
 
 	/**
@@ -66,9 +66,9 @@ public class ParticipantRegistrationCacheManager
 	 * @param cpId
 	 * @param participantID
 	 */
-	public synchronized void deRegisterParticipant(Long cpId, Long participantID)
+	public synchronized void deRegisterParticipant(Long cpId, Long participantID, String protocolParticipantID)
 	{
-		participantRegCache.deRegisterParticipant(cpId, participantID);
+		participantRegCache.deRegisterParticipant(cpId, participantID, protocolParticipantID);
 	}
 
 	/**
@@ -76,10 +76,10 @@ public class ParticipantRegistrationCacheManager
 	 * @param cpId
 	 * @return
 	 */
-	public List getParticipantCollection(Long cpId)
+	/*public List getParticipantCollection(Long cpId)
 	{
 		return participantRegCache.getParticipantIDCollection(cpId);
-	}
+	}*/
 
 	/**
 	 * This method returns the CP ids and CP titles
@@ -111,9 +111,18 @@ public class ParticipantRegistrationCacheManager
 
 	public List getParticipantNames(Long cpId)
 	{
-		List participantIdList = participantRegCache.getParticipantIDCollection(cpId);
-		List participantNames = participantCahe.getParticpantNamesWithID(participantIdList);
+		List participantInfoList = participantRegCache.getParticipantInfoCollection(cpId);
+		List participantNames = participantCahe.getParticpantNamesWithID(participantInfoList);
 		return participantNames;
 	}
 
+	/**
+	 * This method adds the participant in Map
+	 * @param participant the object which is to be added in map
+	 */
+	public void addParticipant(Participant participant)
+	{
+		participantCahe.addParticipant(participant);
+	}
+	
 }

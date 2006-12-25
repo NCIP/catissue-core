@@ -8,6 +8,11 @@
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
+<!-- Mandar 11-Aug-06 : For calendar changes -->
+<script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+<!-- Mandar 11-Aug-06 : calendar changes end -->
 <%
 	   		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
 			CollectionProtocolRegistrationForm form =null;
@@ -168,9 +173,11 @@
 						    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
 					    </html:select>
 						&nbsp;
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
 						<html:link href="#" styleId="newCollectionProtocol" onclick="addNewAction('ParticipantRegistrationAddNew.do?addNewForwardTo=collectionProtocol&forwardTo=participantRegistration&addNewFor=collectionProtocolId')">
 							<bean:message key="buttons.addNew" />
 						</html:link>					   
+						</logic:notEqual>
 					</td>
 				</tr>
 					
@@ -187,9 +194,18 @@
 						<html:text styleClass="formFieldSized" maxlength="10"  size="30" styleId="participantName" 
 					     		property="participantName" disabled="true"/>	
 						&nbsp;
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
 						<html:link href="#" styleId="newParticipant" onclick="addNewAction('ParticipantRegistrationAddNew.do?addNewForwardTo=participant&forwardTo=participantRegistration&addNewFor=participantId')">
 							<bean:message key="buttons.addNew" />
-						</html:link>				   
+						</html:link>			
+						</logic:notEqual>
+						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
+						<html:link href="#" styleId="newParticipant" onclick="addNewAction('CPQueryParticipantRegistrationAddNew.do?addNewForwardTo=participant&forwardTo=participantRegistration&addNewFor=participantId')">
+							<bean:message key="buttons.addNew" />
+						</html:link>			
+						</logic:equal>
+						
+							   
 					</td>
 				</tr>
 

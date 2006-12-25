@@ -71,9 +71,9 @@ class ParticipantRegistrationCache
 		ParticipantRegistrationInfo participantRegInfo = new ParticipantRegistrationInfo();
 		participantRegInfo.setCpId(cpId);
 		participantRegInfo.setCpTitle(cpTitle);
-		List participantIdList = new ArrayList();
-		participantRegInfo.setParticipantIdCollection(participantIdList);
-		
+		List participantInfoList = new ArrayList();
+		participantRegInfo.setParticipantInfoCollection(participantInfoList);
+			
 		participantRegistrationInfoList.add(participantRegInfo);
 	}
 
@@ -135,7 +135,7 @@ class ParticipantRegistrationCache
 	 * 	@param cpId
 	 * 	@param participantID
 	 */
-	public void registerParticipant(Long cpId, Long participantID)
+	public void registerParticipant(Long cpId, Long participantID, String protocolParticipantID)
 	{
 		//This method searches the participantRegistrationInfo object in the 
 		//participantRegistrationInfoList where cpID = cpId and adds the participantId in 
@@ -151,8 +151,16 @@ class ParticipantRegistrationCache
 			ParticipantRegistrationInfo participantRegInfo = (ParticipantRegistrationInfo) itr.next();
 			if (participantRegInfo.getCpId().longValue() == cpId.longValue())
 			{
-				List participantIdList = (List) participantRegInfo.getParticipantIdCollection();
-				participantIdList.add(participantID);
+				List participantInfoList = (List) participantRegInfo.getParticipantInfoCollection();
+
+				if (participantID != null)
+				{
+					String participantInfo = participantID.toString() + ":";
+					if (protocolParticipantID != null && !protocolParticipantID.equals(""))
+						participantInfo = participantInfo + protocolParticipantID;
+
+					participantInfoList.add(participantInfo);
+				}
 				break;
 			}
 		}
@@ -166,7 +174,7 @@ class ParticipantRegistrationCache
 	 *	@param cpId
 	 * 	@param participantID
 	 */
-	public void deRegisterParticipant(Long cpId, Long participantID)
+	public void deRegisterParticipant(Long cpId, Long participantID, String protocolparticipantID)
 	{
 		//This method searches the participantRegistrationInfo object in the 
 		//participantRegistrationInfoList where cpID = cpId and removes the participantId from
@@ -182,8 +190,17 @@ class ParticipantRegistrationCache
 			ParticipantRegistrationInfo participantRegInfo = (ParticipantRegistrationInfo) itr.next();
 			if (participantRegInfo.getCpId().longValue() == cpId.longValue())
 			{
-				List participantIdList = (List) participantRegInfo.getParticipantIdCollection();
-				participantIdList.remove(participantID);
+				List participantInfoList = (List) participantRegInfo.getParticipantInfoCollection();
+				if (participantID != null)
+				{
+					String participantInfo = participantID.toString() + ":";
+					if (protocolparticipantID != null && !protocolparticipantID.equals(""))
+						participantInfo = participantInfo + protocolparticipantID;
+
+					participantInfoList.remove(participantInfo);
+				}
+				
+				
 				break;
 			}
 		}
@@ -196,23 +213,23 @@ class ParticipantRegistrationCache
 	 * 	@param cpId
 	 * 	@return
 	 */
-	public List getParticipantIDCollection(Long cpId)
+	public List getParticipantInfoCollection(Long cpId)
 	{
 		//This method searches the participantRegistrationInfo object in the 
 		//participantRegistrationInfoList where cpID = cpId and returns the Participant 
 		//Collection
-		List participantIDList = null;
+		List participantInfoList = null;
 		Iterator itr = participantRegistrationInfoList.iterator();
 		while (itr.hasNext())
 		{
 			ParticipantRegistrationInfo participantRegInfo = (ParticipantRegistrationInfo) itr.next();
 			if (participantRegInfo.getCpId().longValue() == cpId.longValue())
 			{
-				participantIDList = (List) participantRegInfo.getParticipantIdCollection();
+				participantInfoList = (List) participantRegInfo.getParticipantInfoCollection();
 				break;
 			}
 		}
-		return participantIDList;
+		return participantInfoList;
 	}
 
 	/**

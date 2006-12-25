@@ -79,7 +79,7 @@ public class ShowCPAndParticipantsAction extends BaseAction
 		Collections.sort(participantColl);
 		request.setAttribute(Constants.REGISTERED_PARTICIPANT_LIST, participantColl);
 		//if participantId is not null then set that in form for further use.
-		if (request.getParameter("participantId") != null)
+		if (request.getParameter("participantId") != null && !request.getParameter("participantId").equals(""))
 		{
 			Long participantId = new Long(request.getParameter("participantId"));
 			cpsearchForm.setParticipantId(participantId);

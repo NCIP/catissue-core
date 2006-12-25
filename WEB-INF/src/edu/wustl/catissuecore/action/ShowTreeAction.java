@@ -31,7 +31,7 @@ public class ShowTreeAction extends BaseAction
 		String cpId = request.getParameter(Constants.CP_SEARCH_CP_ID);
 		String participantId = request.getParameter(Constants.CP_SEARCH_PARTICIPANT_ID);
 		Vector treeData = null;
-		if (cpId != null && participantId != null)
+		if (cpId != null && participantId != null && !cpId.equals("") && !participantId.equals(""))
 		{
 			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);

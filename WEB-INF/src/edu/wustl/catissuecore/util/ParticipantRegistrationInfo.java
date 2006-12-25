@@ -12,7 +12,8 @@ public class ParticipantRegistrationInfo
 	
 	private Long cpId;
 	private String cpTitle;
-	private List participantIdCollection;
+	private List participantInfoCollection;
+	
 
 	/**
 	 * this method returns the CP id
@@ -51,21 +52,22 @@ public class ParticipantRegistrationInfo
 	}
 
 	/**
-	 * This method returns the Participant ID collection
-	 * @return Participant Id Collection
+	 * This method returns the Participant Info collection
+	 * @return Participant Info Collection
 	 */
-	public List getParticipantIdCollection()
+	public List getParticipantInfoCollection()
 	{
-		return participantIdCollection;
+		return participantInfoCollection;
 	}
 
 	/**
-	 * This method sets the participant IS Collection
-	 * @param participantIdCollection
+	 * This method sets the participant Info Collection
+	 * @param participantInfoCollection
 	 */
-	public void setParticipantIdCollection(List participantIdCollection)
+	public void setParticipantInfoCollection(List participantInfoCollection)
 	{
-		this.participantIdCollection = participantIdCollection;
+		this.participantInfoCollection = participantInfoCollection;
 	}
 
+	
 }

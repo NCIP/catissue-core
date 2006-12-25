@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
 
@@ -92,26 +92,61 @@ public class ParticipantCache
 	 * @param participantIdList Participant ID List
 	 * @return List which contains Participant Names in format ID:lastName:firstName
 	 */
-	public List getParticpantNamesWithID(List participantIdList)
+	public List getParticpantNamesWithID(List participantInfoList)
 	{
 		//This method returns the participant names with ID
 		List participantList = new ArrayList();
-		Iterator itr = participantIdList.iterator();
+		Iterator itr = participantInfoList.iterator();
 		while (itr.hasNext())
 		{
-			Long participantId = (Long) itr.next();
+			String participantInfo = (String) itr.next();
+			Long participantId = null;
+			String protocolParticipantId = null;
+			StringTokenizer st = new StringTokenizer(participantInfo,":");
+			while(st.hasMoreTokens())
+			{
+				participantId = new Long(st.nextToken());
+				if(st.hasMoreTokens())
+					protocolParticipantId = st.nextToken();
+			}
 			Participant participant = (Participant) participantsMap.get(participantId);
 			if (participant != null)
 			{
 				String info = participant.getId().toString();
+				String participantDisplayInfo ="";
 				if (participant.getLastName() != null && !participant.getLastName().equals(""))
 				{
-					info = info + ":" + participant.getLastName();
+					participantDisplayInfo = participant.getLastName();
 				}
 				if (participant.getFirstName() != null && !participant.getFirstName().equals(""))
 				{
-					info = info + " , " + participant.getFirstName();
+					if (participant.getLastName() == null || participant.getLastName().equals(""))
+					{
+						participantDisplayInfo = participant.getFirstName();
+					}
+					else
+					{
+						participantDisplayInfo = participantDisplayInfo + " , " + participant.getFirstName();
+					}
 				}
+				if(participantDisplayInfo.equals(""))
+				{
+					participantDisplayInfo = "N/A";
+				}
+				if(protocolParticipantId != null && !protocolParticipantId.equals(""))
+				{
+					participantDisplayInfo = participantDisplayInfo+ " ("+protocolParticipantId+")";
+				}
+				else
+				{
+					participantDisplayInfo = participantDisplayInfo+ " (N/A)";
+				}
+					
+				if(participantDisplayInfo.equals(""))
+				{
+					participantDisplayInfo = "N/A";
+				}
+				info = info +":"+participantDisplayInfo;
 				participantList.add(info);
 			}
 		}
