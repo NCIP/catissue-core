@@ -21,6 +21,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.ParticipantCache;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -83,7 +84,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) obj;
 		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
 		participantRegCacheManager.registerParticipant(collectionProtocolRegistration.getCollectionProtocol().getId(), collectionProtocolRegistration
-				.getParticipant().getId());
+				.getParticipant().getId(), collectionProtocolRegistration.getProtocolParticipantIdentifier());
 		/*ParticipantCacheUtil.addParticipantRegInfo(collectionProtocolRegistration.getCollectionProtocol().getId(), collectionProtocolRegistration
 		 .getCollectionProtocol().getTitle(), collectionProtocolRegistration.getParticipant().getId());*/
 
@@ -195,16 +196,17 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		Long newCPId = collectionProtocolRegistration.getCollectionProtocol().getId();
 		Long oldParticipantId = oldCollectionProtocolRegistration.getParticipant().getId();
 		Long newParticipantId = collectionProtocolRegistration.getParticipant().getId();
-
+		String oldProtocolParticipantId = oldCollectionProtocolRegistration.getProtocolParticipantIdentifier();
+		String newProtocolParticipantId = collectionProtocolRegistration.getProtocolParticipantIdentifier();
 		if (oldCPId.longValue() != newCPId.longValue() || oldParticipantId.longValue() != newParticipantId.longValue())
 		{
-			participantRegCacheManager.deRegisterParticipant(oldCPId, oldParticipantId);
-			participantRegCacheManager.registerParticipant(newCPId, newParticipantId);
+			participantRegCacheManager.deRegisterParticipant(oldCPId, oldParticipantId, oldProtocolParticipantId);
+			participantRegCacheManager.registerParticipant(newCPId, newParticipantId, newProtocolParticipantId);
 		}
 
 		if(collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
-			participantRegCacheManager.deRegisterParticipant(newCPId,newParticipantId);
+			participantRegCacheManager.deRegisterParticipant(newCPId,newParticipantId,newProtocolParticipantId);
 		}
 			
 	}
@@ -290,7 +292,10 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		partMedIdentifier.setParticipant(participant);
 		dao.insert(partMedIdentifier, sessionDataBean, true, true);
-
+			
+		/* inserting dummy participant in participant cache */
+		ParticipantRegistrationCacheManager  participantRegCache = new ParticipantRegistrationCacheManager();
+		participantRegCache.addParticipant(participant);
 		return participant;
 	}
 
@@ -585,12 +590,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		List participantRegistrationInfoList = new Vector();
 
-		//This query is for getting collection protocol information and participant id from a 
-		//collectionProtocolRegistraton table and result list will be ordered by collection protocol Id
-		/*String hql = "select cpr.collectionProtocol.id ,cpr.collectionProtocol.title, cpr.participant.id from "
-		 + CollectionProtocolRegistration.class.getName() + " cpr order by cpr.collectionProtocol.id";*/
-
-		String hql = "select cpr.collectionProtocol.id ,ccp.title,cpr.participant.id from " + CollectionProtocolRegistration.class.getName()
+		String hql = "select cpr.collectionProtocol.id ,ccp.title,cpr.participant.id,cpr.protocolParticipantIdentifier from " + CollectionProtocolRegistration.class.getName()
 				+ " as cpr right outer join cpr.collectionProtocol as ccp where ccp.id = cpr.collectionProtocol.id order by ccp.id";
 
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
@@ -608,19 +608,33 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				Long cpId = (Long) obj[0];
 				String cpTitle = (String) obj[1];
 				Long participantID = (Long) obj[2];
-				List participantIdList = new ArrayList();
+				String protocolParticipantId = (String) obj[3]; 
+				List participantInfoList = new ArrayList();
+				
 				if (participantID != null)
-					participantIdList.add(participantID);
-
+				{
+					String participantInfo =participantID.toString()+":";
+					if(protocolParticipantId != null && !protocolParticipantId.equals(""))
+						participantInfo = participantInfo + protocolParticipantId;
+					participantInfoList.add(participantInfo);
+					
+				}
+				
 				for (int j = i + 1; j < list.size(); j++, i++)
 				{
 					Object[] obj1 = (Object[]) list.get(j);
 					Long cpId1 = (Long) obj1[0];
 					Long participantID1 = (Long) obj1[2];
+					String protocolParticipantId1 = (String) obj1[3];
 					if (cpId1.longValue() == cpId.longValue())
 					{
 						if (participantID1 != null)
-							participantIdList.add(participantID1);
+						{
+							String participantInfo =participantID1.toString()+":";
+							if(protocolParticipantId1 != null && !protocolParticipantId1.equals(""))
+								participantInfo = participantInfo + protocolParticipantId1;
+							participantInfoList.add(participantInfo);
+						}
 					}
 					else
 					{
@@ -632,7 +646,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				ParticipantRegistrationInfo prInfo = new ParticipantRegistrationInfo();
 				prInfo.setCpId(cpId);
 				prInfo.setCpTitle(cpTitle);
-				prInfo.setParticipantIdCollection(participantIdList);
+				prInfo.setParticipantInfoCollection(participantInfoList);
 				participantRegistrationInfoList.add(prInfo);
 			}
 		}

@@ -607,14 +607,21 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 	public Vector getSCGandSpecimensModified(Long cpId, Long participantId) throws Exception
 	{
-		/*String hql = "select cpr.collectionProtocol.id ,ccp.title,cpr.participant.id from " + CollectionProtocolRegistration.class.getName()
-		 + " as cpr right outer join cpr.collectionProtocol as ccp where ccp.id = cpr.collectionProtocol.id order by ccp.id";*/
-		/*String hql = "select sp.specimenCollectionGroup.id, sp.specimenCollectionGroup.name, sp.id, sp.label, elements(sp.childrenSpecimen) from " + Specimen.class.getName()
-				+ " as sp where sp.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and sp.specimenCollectionGroup.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and sp.parentSpecimen.id is null order by sp.specimenCollectionGroup.id";*/
-		String hql1 = "select sp.specimenCollectionGroup.id, sp.specimenCollectionGroup.name, sp.id, sp.label from " + Specimen.class.getName()
-		+ " as sp where sp.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and sp.specimenCollectionGroup.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and sp.parentSpecimen.id is null order by sp.specimenCollectionGroup.id";
-		String hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id from "+ Specimen.class.getName() 
-						+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and scg.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
+		String hql =null;
+		if(participantId.longValue() == -1)
+		{
+			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id from "+ Specimen.class.getName() 
+			+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
+
+		}
+		else
+		{
+			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id from "+ Specimen.class.getName() 
+			+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and scg.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
+			
+		}
+		/*String hql1 = "select sp.specimenCollectionGroup.id, sp.specimenCollectionGroup.name, sp.id, sp.label from " + Specimen.class.getName()
+		+ " as sp where sp.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and sp.specimenCollectionGroup.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and sp.parentSpecimen.id is null order by sp.specimenCollectionGroup.id";*/
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(null);
 
