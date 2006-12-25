@@ -802,7 +802,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	private String getKey(int row, int col)
 	{
 		// attributes of the specimen.
-		String[] specimenAttribute = {"SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
+		String[] specimenAttribute = {"","SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
 				"SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "Quantity_value",
 				"concentrationInMicrogramPerMicroliter", "StorageContainer_temp", "comments", "specimenEventCollection",
 				"externalIdentifierCollection", "biohazardCollection", "derive"};
