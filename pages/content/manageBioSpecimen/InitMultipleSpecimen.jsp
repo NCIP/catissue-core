@@ -15,11 +15,17 @@
 %>
 <head>
 	<%if(pageOf != null && pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN_CP_QUERY))
-	{%>
+	{
+	String nodeId = "SpecimenCollectionGroup_";
+	if(session.getAttribute("specimenCollectionGroupId") != null) {
+		String scgId = (String) session.getAttribute("specimenCollectionGroupId");
+		nodeId = nodeId + scgId;
+	}
+	%>
 		<script language="javascript">
 			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
 			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
-			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId+"&nodeId=<%=nodeId%>";
 			
 		</script>
 	<%}%>

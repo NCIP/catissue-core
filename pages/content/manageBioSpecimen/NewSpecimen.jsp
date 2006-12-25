@@ -16,6 +16,7 @@
 	//System.out.println("Start of specimen jsp");
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
+	String nodeId="";
 	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 	boolean isAddNew = false;
@@ -79,7 +80,7 @@
 		{
 			formName = Constants.CP_QUERY_SPECIMEN_EDIT_ACTION + "?pageOf="+pageOf;
 		}
-
+		nodeId= "Specimen_"+form.getId();
 	}
 	else
 	{
@@ -89,6 +90,7 @@
 		{
 			formName = Constants.CP_QUERY_SPECIMEN_ADD_ACTION + "?pageOf="+pageOf;
 		}
+		nodeId= "SpecimenCollectionGroup_"+form.getSpecimenCollectionGroupId();
 	}
 
 	String formNameForCal = "newSpecimenForm";
@@ -100,8 +102,7 @@
 		<script language="javascript">
 			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
 			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
-			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
-			
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId+"&nodeId=<%=nodeId%>";
 		</script>
 	<%}%>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -157,7 +158,7 @@
 			<% String actionToCall = null;%>
 				if(operation == "add")
 				{
-					setSubmittedFor('null','pageOfAliquot');
+					setSubmittedFor('ForwardTo','pageOfAliquot');
 					<%
 					actionToCall = "NewSpecimenAdd.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
@@ -169,7 +170,7 @@
 				else
 				{
 				
-					setSubmittedFor('null','pageOfAliquot');
+					setSubmittedFor('ForwardTo','pageOfAliquot');
 					<%
 					actionToCall = "NewSpecimenEdit.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){

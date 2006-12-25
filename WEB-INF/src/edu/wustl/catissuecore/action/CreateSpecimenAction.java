@@ -116,6 +116,7 @@ public class CreateSpecimenAction extends SecureAction
 				Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
 				if(forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null)
 				{
+					request.setAttribute(Constants.PARENT_SPECIMEN_ID,forwardToHashMap.get("parentSpecimenId"));
 					if (parentSpecimenLabel == null || parentSpecimenLabel.trim().equals(""))
 					{
 						createForm.setParentSpecimenLabel(createForm.getLabel());

@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
@@ -137,23 +138,34 @@ public class NewSpecimenAction extends SecureAction
 				 *  Retaining properties of specimen when more is clicked.
 				 *  Bug no -- 2623
 				 */
-				specimenForm.setSpecimenCollectionGroupId(specimenCollectionGroupId);
+				setFormValues(specimenForm,specimenCollectionGroupId);
+				/* removedspecimenForm.setSpecimenCollectionGroupId(specimenCollectionGroupId);
 				specimenForm.setParentSpecimenId("");
 				specimenForm.setLabel("");
 				specimenForm.setBarcode("");
-				specimenForm.setPositionInStorageContainer("");
+				specimenForm.setPositionInStorageContainer("");*/
+				
 				/*specimenForm.setQuantity("");
 				specimenForm.setClassName("");
 				specimenForm.setTissueSide("");
 				specimenForm.setTissueSite("");
 				specimenForm.setPathologicalStatus("");*/
-				specimenForm.setPositionDimensionOne("");
+				
+				/* removed specimenForm.setPositionDimensionOne("");
 				specimenForm.setPositionDimensionTwo("");
-				specimenForm.setStorageContainer("");
+				specimenForm.setStorageContainer("");*/
 
 				/*clearCollectionEvent(specimenForm);
 				clearReceivedEvent(specimenForm);*/
 
+			}
+		}
+		else
+		{
+			if(request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID) != null)
+			{
+				String specimenCollectionGroupId = request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID);
+				setFormValues(specimenForm,specimenCollectionGroupId);
 			}
 		}
 		//*************  ForwardTo implementation *************
@@ -682,6 +694,25 @@ public class NewSpecimenAction extends SecureAction
 			}
 		}
 		return -1;
+	}
+	private void setFormValues(NewSpecimenForm specimenForm,String specimenCollectionGroupId)
+	{
+		specimenForm.setSpecimenCollectionGroupId(specimenCollectionGroupId);
+		specimenForm.setParentSpecimenId("");
+		specimenForm.setLabel("");
+		specimenForm.setBarcode("");
+		specimenForm.setPositionInStorageContainer("");
+		/*specimenForm.setQuantity("");
+		specimenForm.setClassName("");
+		specimenForm.setTissueSide("");
+		specimenForm.setTissueSite("");
+		specimenForm.setPathologicalStatus("");*/
+		specimenForm.setPositionDimensionOne("");
+		specimenForm.setPositionDimensionTwo("");
+		specimenForm.setStorageContainer("");
+
+		/*clearCollectionEvent(specimenForm);
+		clearReceivedEvent(specimenForm);*/
 	}
 
 }

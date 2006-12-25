@@ -139,6 +139,7 @@
 		
 		function classChangeForMultipleSpecimen()
 		{
+		
 		 	var action ='NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog&specimenAttributeKey=' + document.getElementById("specimenAttributeKey").value + '&derivedSpecimenCollectionGroup=' + document.getElementById("derivedSpecimenCollectionGroup").value + '&retainForm=true';
 			document.forms[0].action = action;
 			document.forms[0].submit();
@@ -170,9 +171,12 @@
  	    	var classNameElement = document.getElementById("className");
 			if(flag=="1" && classNameElement.value != "-1")
 			{
-		
-				var action = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=false";
-				document.forms[0].action = action;
+				<% String actionToCall1 = null;
+					actionToCall1 = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=false";
+					if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY)){
+					actionToCall1 = Constants.CP_QUERY_CREATE_SPECIMEN_ACTION+"?operation=add";
+				}%>
+				document.forms[0].action = "<%=actionToCall1%>";
 				document.forms[0].submit();
 			}	
 			else
@@ -270,14 +274,20 @@
 	</script>
 	
 		<%if(pageOf!=null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY))
-	{%>
+		{
+			if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
+			{
+				Long parentSpecimenId = (Long) request.getAttribute(Constants.PARENT_SPECIMEN_ID);
+				String nodeId = "Specimen_"+parentSpecimenId.toString();	
+		%>
 		<script language="javascript">
 			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
 			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
-			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId+"&nodeId=<%=nodeId%>";
 			
 		</script>
-	<%}%>
+		
+	<%}}%>
 </head>
 
 

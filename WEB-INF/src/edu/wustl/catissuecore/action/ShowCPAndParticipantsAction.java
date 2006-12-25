@@ -70,16 +70,9 @@ public class ShowCPAndParticipantsAction extends BaseAction
 				String participantIdAndName = (String) itr.next();
 				int index = participantIdAndName.indexOf(":");
 				Long Id = null;
-				String name="N/A";
-				if(index == -1)
-				{
-					Id = new Long(participantIdAndName);
-				}
-				else
-				{
-					Id = new Long(participantIdAndName.substring(0, index));
-					name = participantIdAndName.substring(index + 1);
-				}
+				String name="";
+				Id = new Long(participantIdAndName.substring(0, index));
+				name = participantIdAndName.substring(index + 1);
 				participantColl.add(new NameValueBean(name, Id));
 			}
 		}

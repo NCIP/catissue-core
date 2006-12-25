@@ -41,6 +41,13 @@ public class InitMultipleSpecimenAction extends SecureAction
 				//Setting the specimenCollectionGroup 
 				request.getSession().setAttribute("specimenCollectionGroupName" , specimenCollectionGroupName);
 			}
+			String specimenCollectionGroupId = (String) forwardToHashMap
+			.get("specimenCollectionGroupId");
+			if(specimenCollectionGroupId != null)
+			{
+				request.getSession().setAttribute("specimenCollectionGroupId" , specimenCollectionGroupId);
+			}
+			
 		}
 		//*************  ForwardTo implementation *************
 

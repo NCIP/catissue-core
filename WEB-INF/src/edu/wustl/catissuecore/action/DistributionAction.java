@@ -127,6 +127,11 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
             if(specimenObjectOrList != null)
             {
 	            if (specimenObjectOrList instanceof Specimen) {
+	            	/* this code is for setting specimenId  for showing specimen selected in tree */
+	            	Specimen sp = (Specimen) specimenObjectOrList;
+	            	String spId = sp.getId().toString();
+	            	request.setAttribute(Constants.SPECIMEN_ID,spId);
+	            	
 	                addDistributionSample((DistributionForm) form, 1,
 	                    (Specimen) specimenObjectOrList);
 	            } else {

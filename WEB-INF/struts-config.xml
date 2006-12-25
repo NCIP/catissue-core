@@ -2192,6 +2192,7 @@ PUBLIC
 			<forward name="query" path=".catissuecore.querySpecimenCollectionGroupViewDef" />
 			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.querySpecimenCollectionGroupViewDef" />
 			<forward name="failure" path=".catissuecore.querySpecimenCollectionGroupViewDef" />
+			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
 		<action path="/QuerySpecimenCollectionGroupSearch"
@@ -3092,6 +3093,7 @@ PUBLIC
 		<forward name="query" path=".catissuecore.queryParticipantViewDef" />
 		<forward name="pageOfParticipantCPQuery" path=".catissuecore.queryParticipantViewDef" />
 		<forward name="failure" path=".catissuecore.queryParticipantViewDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
 		
 	<action path="/QueryParticipantSearch"
@@ -3331,6 +3333,15 @@ PUBLIC
 		<forward name="showDerivedSpecimenDialog" path="/NewMultipleSpecimenAction.do?method=showDerivedSpecimenDialog" />
 		<forward name="specimen" path=".catissuecore.multipleSpecimenCPQueryDef" />
 		
+	</action>
+	<action path="/CPQuerySpecimenCollectionGroupForTech"
+		type="edu.wustl.catissuecore.action.SpecimenCollectionGroupForTechAction"
+		name="specimenCollectionGroupForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path=".catissuecore.specimenCollectionGroupTechDef" />
+		<forward name="failure" path=".catissuecore.specimenCollectionGroupTechDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
 
 	</action-mappings>

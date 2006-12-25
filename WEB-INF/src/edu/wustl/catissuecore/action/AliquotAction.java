@@ -103,6 +103,12 @@ public class AliquotAction extends SecureAction
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		request.setAttribute(Constants.PAGEOF, pageOf);
 
+		Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
+		if(forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null)
+		{
+			request.setAttribute(Constants.PARENT_SPECIMEN_ID,forwardToHashMap.get("parentSpecimenId"));
+		}
+		
 		return mapping.findForward(pageOf);
 	}
 
@@ -571,6 +577,19 @@ public class AliquotAction extends SecureAction
 		 List specimenIdList = bizLogic.getList(Specimen.class.getName(), displayNameField, Constants.SYSTEM_IDENTIFIER, true);
 		 request.setAttribute(Constants.SPECIMEN_ID_LIST,specimenIdList); */
 
+		Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
+		if(forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null)
+		{
+			request.setAttribute(Constants.PARENT_SPECIMEN_ID,forwardToHashMap.get("parentSpecimenId"));
+		}
+		else
+		{
+			if(request.getParameter(Constants.PARENT_SPECIMEN_ID) != null)
+			{
+				request.setAttribute(Constants.PARENT_SPECIMEN_ID,request.getParameter(Constants.PARENT_SPECIMEN_ID));
+			}
+		}
+		
 		return mapping.findForward(pageOf);
 	}
 

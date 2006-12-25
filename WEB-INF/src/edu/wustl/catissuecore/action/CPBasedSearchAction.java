@@ -7,7 +7,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.security.SecurityManager;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * This Action is for forwarding to CPResultsView Page 
@@ -21,6 +29,14 @@ public class CPBasedSearchAction extends BaseAction
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {
 		
+		SessionDataBean sessionDataBean = super.getSessionData(request);
+		long csmUserId = new Long(sessionDataBean.getCsmUserId()).longValue();
+		Role role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(csmUserId);
+		if(role.getName() != null && role.getName().equals(Constants.TECHNICIAN))
+			request.getSession().setAttribute("Access", "Denied");
+		
 		return mapping.findForward("success");
+		
     }
+	        
 }

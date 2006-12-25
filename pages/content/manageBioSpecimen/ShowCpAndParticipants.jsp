@@ -7,17 +7,30 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 
+<%
+	String access = null;
+	access = (String)session.getAttribute("Access");
+		
+
+%>
 
 <head>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <script language="JavaScript">
 		function onCpChange(element)
 		{
+			var cpId = document.getElementById("cpId");
+			var participantId = document.getElementById("participantId");
+			 <%if(access != null && access.equals("Denied"))
+			{%>
+				window.parent.frames[1].location = "showTree.do?<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=-1&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value;			
+			<%} else {%>
+							
 			var action = "showCpAndParticipants.do";
 			document.forms[0].action = action;
 
 			document.forms[0].submit();
-
+			<%}%>
 		}
 		
 		function onParticipantChange(element)
@@ -39,8 +52,7 @@
 			}
 			else
 			{
-				document.forms[0].action="CPQueryCollectionProtocolRegistration.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value+"&pageOf="+<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>;
-				document.forms[0].submit();
+				window.parent.frames[2].location = "CPQueryCollectionProtocolRegistration.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value+"&operation=add&pageOf=<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>";
 			}
 		}	
 		
@@ -61,7 +73,7 @@
 	<tr>
 		<td>&nbsp;&nbsp;&nbsp;</td>
 		<td class="formRequiredLabelWithoutBorder">
-			Collection Protocol :
+			Collection Protocol : <html:link href="#" styleId="register" onclick="RegisterParticipants()">Register</html:link>
 		</td>
 	</tr>		
 	<tr>
@@ -75,23 +87,34 @@
 			
 		</td>
 	</tr>
+		
+	
+	 <%if(access != null && access.equals("Denied"))
+	{%>
+	<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+		<td nowrap>
+			<html:hidden property="participantId" styleId="participantId" value="-1"/>
+		</td>
+	</tr>
+	<%} else {%>	
 	<tr>
 	<td>&nbsp;&nbsp;&nbsp;</td>
 		<td class="formRequiredLabelWithoutBorder">
-			Participant :
+			Participant : Name (Protocol Id) 
 		</td>
-	</tr>		
+	</tr>	
 	
 	<tr>
-	<td>&nbsp;&nbsp;&nbsp;</td>
+		<td>&nbsp;&nbsp;&nbsp;</td>
 		<td class="formField" nowrap>
-
 			<html:select property="participantId" styleClass="formFieldSized15" styleId="participantId" size="7" onchange="onParticipantChange(this)"
 			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.REGISTERED_PARTICIPANT_LIST%>" labelProperty="name" property="value"/>
 			</html:select>
-
+	
 		</td>
 	</tr>
+		<%}%>
 </table>		
 </html:form>

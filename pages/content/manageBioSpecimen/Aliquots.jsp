@@ -21,6 +21,7 @@ Date   : May 12, 2006
 String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 String buttonKey = "";
 String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
+String parentSPId = "-1";
 	if(Constants.PAGEOF_ALIQUOT.equals(pageOf) || Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf))
 	{
 		buttonKey = "buttons.submit";
@@ -29,12 +30,30 @@ String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMI
 	{
 		buttonKey = "buttons.resubmit";
 	}
+	if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
+	{
+		parentSPId = (String) request.getAttribute(Constants.PARENT_SPECIMEN_ID);
+	 }
 %>
 
 <head>
 <script src="jss/Hashtable.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<%if(pageOf.equals(Constants.PAGE_OF_ALIQUOT_CP_QUERY))
+{
+	String nodeId="Specimen_";
+	if(parentSPId!= null)
+	{
+		nodeId = nodeId+parentSPId;
+    }
+%>
+		<script language="javascript">
+			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId+"&nodeId=<%=nodeId%>";
+		</script>
+<%}%>
 <script language="JavaScript">
 
    function onSubmit()
@@ -44,7 +63,7 @@ String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMI
 		
 		<%if(Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf)){%>
 			var CPaction = '<%=Constants.CP_QUERY_CREATE_ALIQUOT_ACTION%>';
-			document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY%>' + "&operation=add&menuSelected=15&buttonClicked=submit";;
+			document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY%>' + "&operation=add&menuSelected=15&buttonClicked=submit&<%=Constants.PARENT_SPECIMEN_ID%>=<%=parentSPId%>";
 								
 		<%}%>
 		document.forms[0].submit();
@@ -71,7 +90,7 @@ String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMI
 		document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=create";
 		<%if(Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf)){%>
 		var CPaction = '<%=Constants.CP_QUERY_CREATE_ALIQUOT_ACTION%>';
-		document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY%>' + "&operation=add&menuSelected=15&buttonClicked=create";;
+		document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY%>' + "&operation=add&menuSelected=15&buttonClicked=create&<%=Constants.PARENT_SPECIMEN_ID%>=<%=parentSPId%>";
 							
 		<%}%>
 	    document.forms[0].submit();
@@ -84,7 +103,7 @@ String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMI
 		document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=checkbox";
 		<%if(Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf)){%>
 		var CPaction = '<%=Constants.CP_QUERY_CREATE_ALIQUOT_ACTION%>';
-			document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY%>' + "&operation=add&menuSelected=15&buttonClicked=checkbox";;
+			document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY%>' + "&operation=add&menuSelected=15&buttonClicked=checkbox&<%=Constants.PARENT_SPECIMEN_ID%>=<%=parentSPId%>";
 							
 		<%}%>
 	    document.forms[0].submit();

@@ -12,11 +12,18 @@
 %>
 <head>
 	<%if(pageOf != null && pageOf.equals(Constants.CP_QUERY_PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION))
-	{%>
+	{
+		String nodeId = "SpecimenCollectionGroup_";
+		if(session.getAttribute("specimenCollectionGroupId") != null) {
+			String scgId = (String) session.getAttribute("specimenCollectionGroupId");
+			session.removeAttribute("specimenCollectionGroupId");
+			nodeId = nodeId + scgId;
+		}
+%>
 		<script language="javascript">
 			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
 			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
-			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId+"&nodeId=<%=nodeId%>";
 			
 		</script>
 	<%}%>
@@ -38,6 +45,12 @@
 	
     }
 		
+	function CPQuerySpecimen(id)
+	{
+		alert(id);
+		window.parent.frames[2].location = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&id="+id;
+		alert("hi");
+	}	
 		
 		
 	</script>
@@ -91,6 +104,13 @@
 					String onClickAliquotFunction = "showNewPage('Aliquots.do?pageOf=pageOfAliquot&menuSelected=15&label=" + specimenLabel + "')";
 					String onClickDeriveFunction = "showNewPage('CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=true&parentSpecimenLabel=" + specimenLabel + "')";
 					String onClickDistributeFunction = "showNewPage('Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&label=" + specimenLabel + "')";
+					if(pageOf != null && pageOf.equals(Constants.CP_QUERY_PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION))
+					{
+						onClickSpecimenFunction = "CPQuerySpecimen(" + specimen.getId() + ")";
+						onClickAliquotFunction = "showNewPage('Aliquots.do?pageOf=pageOfAliquot&menuSelected=15&label=" + specimenLabel + "')";
+						onClickDeriveFunction = "showNewPage('CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=true&parentSpecimenLabel=" + specimenLabel + "')";
+						onClickDistributeFunction = "showNewPage('Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&label=" + specimenLabel + "')";
+					}							
 					String barcode = specimen.getBarcode();
 					if(barcode==null)
 					{
@@ -102,7 +122,8 @@
 					<td class="formField">&nbsp;
 					<html:link href="#" styleId="specimen" onclick="<%=onClickSpecimenFunction%>">
 					<%=specimen.getLabel()%>
-					</html:link></td>
+					</html:link>
+					</td>
 					<td class="formField">&nbsp;
 					&nbsp;<%=barcode%>
 					</td>

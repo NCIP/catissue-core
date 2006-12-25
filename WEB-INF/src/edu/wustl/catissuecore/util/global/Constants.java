@@ -1414,6 +1414,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_TREE_VIEW_ACTION = "showTree.do";
 	public static final String PAGE_OF_SPECIMEN_CP_QUERY = "pageOfNewSpecimenCPQuery";
 	public static final String CP_QUERY_SPECIMEN_ADD_ACTION = "CPQueryNewSpecimenAdd.do";
+	public static final String CP_QUERY_CREATE_SPECIMEN_ACTION = "CPQueryCreateSpecimen.do";
 	public static final String CP_QUERY_SPECIMEN_EDIT_ACTION = "CPQueryNewSpecimenEdit.do";
 	public static final String PAGE_OF_CREATE_SPECIMEN_CP_QUERY = "pageOfCreateSpecimenCPQuery";
 	public static final String PAGE_OF_ALIQUOT_CP_QUERY = "pageOfAliquotCPQuery";
@@ -1434,4 +1435,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_QUERY_NEW_MULTIPLE_SPECIMEN_ACTION = "CPQueryNewMultipleSpecimenAction.do";
 	public static final String CP_QUERY_MULTIPLE_SPECIMEN_STORAGE_LOCATION_ACTION="CPQueryMultipleSpecimenStorageLocationAdd.do";
 	public static final String CP_QUERY_PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION = "CPQueryformSubmitted";
+	public static final String CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_ADD_ACTION = "CPQueryCollectionProtocolRegistrationAdd.do";
+	public static final String CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION = "CPQueryCollectionProtocolRegistrationEdit.do";
 }

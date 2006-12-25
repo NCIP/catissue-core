@@ -933,6 +933,9 @@
 	<definition name=".catissuecore.multipleSpecimenCPQueryDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/MultipleSpecimen.jsp" />
 	</definition>
+	<definition name=".catissuecore.specimenCollectionGroupTechDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CPQuerySCGForTechnician.jsp" />
+	</definition>
 
 
 </tiles-definitions>

@@ -37,11 +37,19 @@
 		        if (operation.equals(Constants.EDIT))
 		        {						
 		            formName = Constants.COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION;
+					if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
+					{
+						formName = Constants.CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION + "?pageOf="+pageOf;
+					}
 		            readOnlyValue = false;
 		        }
 		        else
 		        {
 		            formName = Constants.COLLECTIONP_ROTOCOL_REGISTRATION_ADD_ACTION;
+					if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
+					{
+						formName = Constants.CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_ADD_ACTION + "?pageOf="+pageOf;
+					}
 		            readOnlyValue = false;
 		        }
 %>

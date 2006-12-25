@@ -67,7 +67,7 @@
 			}
 			readOnlyValue=false;
 		}
-
+		long idToTree = form.getId();
 %>
 <head>
 
@@ -77,7 +77,7 @@
 			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
 			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
 			window.parent.frames[0].location="showCpAndParticipants.do?cpId="+cpId+"&participantId="+participantId;
-			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId;
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId+"&nodeId=SpecimenCollectionGroup_"+<%=idToTree%>;
 			
 		</script>
 	<%}%>

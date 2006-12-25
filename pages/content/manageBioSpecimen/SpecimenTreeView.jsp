@@ -11,8 +11,17 @@
 <%
 		String participantId=(String)request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);
 		String cpId=(String)request.getAttribute(Constants.CP_SEARCH_CP_ID);
+		String access = null;
+		access = (String)session.getAttribute("Access");
+		String divHeight = "170";
+		if(access != null && access.equals("Denied"))
+		{
+			divHeight = "280";		
+		}
+
 %>
 <head>
+	<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 	<title>DHTML Tree samples. dhtmlXTree - Action handlers</title>
 	<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXTree.css">
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmXTreeCommon.js"></script>
@@ -21,10 +30,16 @@
 
 <body>
 	<table>
+		<tr>	
+			<td>&nbsp;&nbsp;</td>
+			<td class="formRequiredLabelWithoutBorder">
+				Details :
+			</td>
+		</tr>	
 		<tr>
 		<td>&nbsp;&nbsp;</td>
 			<td align="left">
-				<div id="treeboxbox_tree" style="width:161; height:190;background-color:#f5f5f5;border :1px solid Silver;; overflow:auto;"/>
+				<div id="treeboxbox_tree" style="width:161; height:<%=divHeight%>;background-color:#f5f5f5;border :1px solid Silver;; overflow:auto;"/>
 			</td>
 			
 		</tr>
@@ -41,12 +56,18 @@
 			function tonclick(id)
 			{
 				var str = id;
+				var name = tree.getItemText(id);
 				var i = str.indexOf('_');
 				var obj1 = str.substring(0,i);
 				var id1 = str.substring(i+1);
 				if(obj1 == "<%=Constants.SPECIMEN_COLLECTION_GROUP%>")
 				{
+					<%if(access != null && access.equals("Denied"))
+					{%>
+					window.parent.frames[2].location = "CPQuerySpecimenCollectionGroupForTech.do?pageOf=pageOfSpecimenCollectionGroupCPQuery&operation=edit&id="+id1+"&name="+name;
+					<%}else {%>
 					window.parent.frames[2].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&operation=edit&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+<%=participantId%>+"&<%=Constants.CP_SEARCH_CP_ID%>="+<%=cpId%>;
+					<%}%>
 				}
 				else
 				{
@@ -86,9 +107,22 @@
 			<%	
 					}
 				}
+
 			%>
-
-
+			tree.closeAllItems("0");
+			<%if(request.getParameter("nodeId") != null)
+			{
+				String nodeId = request.getParameter("nodeId");
+				
+			%>
+			var parentId = tree.getParentId("<%=nodeId%>");
+			tree.openItem(parentId);
+			tree.selectItem("<%=nodeId%>",false);
+			tree.openItem("<%=nodeId%>");
+			
+			<%}%>	
+										
+	
 			
 	</script>
 
