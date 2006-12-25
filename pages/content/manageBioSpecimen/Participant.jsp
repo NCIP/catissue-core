@@ -904,6 +904,17 @@ tr#hiddenCombo
 								</td>
 								</logic:equal>
 								</logic:equal>
+								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">
+								<td nowrap class="formFieldNoBorders">									
+									<html:button styleClass="actionButton"  
+											property="registratioPage" 
+											title="Submit and Register to protocol"
+											value="<%=Constants.PARTICIPANT_FORWARD_TO_LIST[1][0]%>" 
+											disabled="<%=isRegisterButton%>"
+					  						onclick="<%=forwardToSubmit%>">
+									</html:button>
+								</td>
+								</logic:notEqual>	
 								</logic:notEqual>
 								
 							<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>">

@@ -3248,6 +3248,14 @@ PUBLIC
 		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquotCPQuery&amp;menuSelected=15" />
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
 	</action>
+
+	<action path="/CPQuerySpecimenCollectionGroupAddNew"
+		type="edu.wustl.common.action.AddNewAction"
+		name="specimenCollectionGroupForm"
+		validate="false"
+		scope="request">
+		<forward name="participantRegistration" path="/CPQueryCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
+	</action>
 	
 	<action path="/CPQuerySpecimenCollectionGroupEdit"
 		type="edu.wustl.common.action.CommonAddEditAction"

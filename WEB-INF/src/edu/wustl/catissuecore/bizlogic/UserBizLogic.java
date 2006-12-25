@@ -61,7 +61,7 @@ public class UserBizLogic extends DefaultBizLogic
 	public static final int FAIL_CHANGED_WITHIN_SOME_DAY = 11;
 	public static final int FAIL_SAME_NAME_SURNAME_EMAIL = 12;
 	public static final int FAIL_PASSWORD_EXPIRED = 13;
-	
+
 	public static final int SUCCESS = 0;
 
 	/**
@@ -124,7 +124,7 @@ public class UserBizLogic extends DefaultBizLogic
 				//					                 user.setPassword(csmUser.getPassword());
 				//Add password of user in password table.Updated by Supriya Dankh		 
 				Password password = new Password();
-				
+
 				/**
 				 * Start: Change for API Search   --- Jitendra 06/10/2006
 				 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -134,8 +134,8 @@ public class UserBizLogic extends DefaultBizLogic
 				 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
 				 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 				 */
-		        ApiSearchUtil.setPasswordDefault(password);
-		        //End:-  Change for API Search 
+				ApiSearchUtil.setPasswordDefault(password);
+				//End:-  Change for API Search 
 
 				password.setUser(user);
 				password.setPassword(csmUser.getPassword());
@@ -147,7 +147,7 @@ public class UserBizLogic extends DefaultBizLogic
 
 				// user.setPassword(csmUser.getPassword());            
 			}
-			
+
 			/**
 			 *  First time login is always set to true when a new user is created
 			 */
@@ -253,13 +253,13 @@ public class UserBizLogic extends DefaultBizLogic
 	{
 		User user = (User) obj;
 		User oldUser = (User) oldObj;
-		
+
 		boolean isLoginUserUpdate = false;
-		if(sessionDataBean.getUserName().equals(oldUser.getLoginName())) 
+		if (sessionDataBean.getUserName().equals(oldUser.getLoginName()))
 		{
 			isLoginUserUpdate = true;
 		}
-		
+
 		//If the user is rejected, its record cannot be updated.
 		if (Constants.ACTIVITY_STATUS_REJECT.equals(oldUser.getActivityStatus()))
 		{
@@ -276,21 +276,21 @@ public class UserBizLogic extends DefaultBizLogic
 		{
 			// Get the csm userId if present. 
 			String csmUserId = null;
-			
+
 			/**
 			 * Santosh: Changes done for Api
 			 * User should not edit the first time login field.
 			 */
 			if (user.getFirstTimeLogin() == null)
 			{
-				throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg","First Time Login"));
+				throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "First Time Login"));
 			}
-			
-			if(oldUser.getFirstTimeLogin() != null && user.getFirstTimeLogin().booleanValue() != oldUser.getFirstTimeLogin().booleanValue())
+
+			if (oldUser.getFirstTimeLogin() != null && user.getFirstTimeLogin().booleanValue() != oldUser.getFirstTimeLogin().booleanValue())
 			{
 				throw new DAOException(ApplicationProperties.getValue("errors.cannotedit.firsttimelogin"));
 			}
-			
+
 			if (user.getCsmUserId() != null)
 			{
 				csmUserId = user.getCsmUserId().toString();
@@ -330,12 +330,13 @@ public class UserBizLogic extends DefaultBizLogic
 				// Set values in password domain object and adds changed password in Password Collection
 				Password password = new Password(csmUser.getPassword(), user);
 				user.getPasswordCollection().add(password);
-							
+
 			}
-			
+
 			//Bug-1516: Jitendra Administartor should be able to edit the password 
-			else if(user.getPageOf().equals(Constants.PAGEOF_USER_ADMIN) && !user.getNewPassword().equals(PasswordManager.decode(csmUser.getPassword())))
-			{				
+			else if (user.getPageOf().equals(Constants.PAGEOF_USER_ADMIN)
+					&& !user.getNewPassword().equals(PasswordManager.decode(csmUser.getPassword())))
+			{
 				Validator validator = new Validator();
 				if (!validator.isEmpty(user.getNewPassword()))
 				{
@@ -372,23 +373,23 @@ public class UserBizLogic extends DefaultBizLogic
 				{
 					SecurityManager.getInstance(UserBizLogic.class).assignRoleToUser(csmUser.getUserId().toString(), user.getRoleId());
 				}
-			
+
 				dao.update(user.getAddress(), sessionDataBean, true, false, false);
 
 				// Audit of user address.
 				dao.audit(user.getAddress(), oldUser.getAddress(), sessionDataBean, true);
 			}
-			
-			if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD)) 
+
+			if (user.getPageOf().equals(Constants.PAGEOF_CHANGE_PASSWORD))
 			{
-			    user.setFirstTimeLogin(new Boolean(false));
+				user.setFirstTimeLogin(new Boolean(false));
 			}
-			dao.update(user, sessionDataBean, true, true, true);  
-			
+			dao.update(user, sessionDataBean, true, true, true);
+
 			//Modify the csm user.
 			SecurityManager.getInstance(UserBizLogic.class).modifyUser(csmUser);
-			
-			if(isLoginUserUpdate)
+
+			if (isLoginUserUpdate)
 			{
 				sessionDataBean.setUserName(csmUser.getLoginName());
 			}
@@ -525,7 +526,7 @@ public class UserBizLogic extends DefaultBizLogic
 			userList = super.retrieve(className, colName, colValue);
 
 			User appUser = null;
-			if (userList!=null && !userList.isEmpty())
+			if (userList != null && !userList.isEmpty())
 			{
 				appUser = (User) userList.get(0);
 
@@ -560,17 +561,16 @@ public class UserBizLogic extends DefaultBizLogic
 	 * @throws UserNotAuthorizedException
 	 * @throws UserNotAuthorizedException
 	 */
-	public String sendForgotPassword(String emailAddress,SessionDataBean sessionData) throws DAOException, UserNotAuthorizedException 
+	public String sendForgotPassword(String emailAddress, SessionDataBean sessionData) throws DAOException, UserNotAuthorizedException
 	{
 		String statusMessageKey = null;
 		List list = retrieve(User.class.getName(), "emailAddress", emailAddress);
-		if (list!=null && !list.isEmpty())
+		if (list != null && !list.isEmpty())
 		{
 			User user = (User) list.get(0);
 			if (user.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
 			{
 				EmailHandler emailHandler = new EmailHandler();
-				
 
 				//Send the login details email to the user.
 				boolean emailStatus = false;
@@ -580,7 +580,7 @@ public class UserBizLogic extends DefaultBizLogic
 				}
 				catch (DAOException e)
 				{
-						e.printStackTrace();
+					e.printStackTrace();
 				}
 				if (emailStatus)
 				{
@@ -590,13 +590,13 @@ public class UserBizLogic extends DefaultBizLogic
 					 *  Note --> We can not use CommonAddEditAction to update as the user has not still logged in
 					 *  and user authorisation will fail. So writing saperate code for update. 
 					 */
-					
+
 					user.setFirstTimeLogin(new Boolean(true));
 					AbstractDAO dao = DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 					dao.openSession(sessionData);
-			    	dao.update(user, sessionData, true, true, true);
+					dao.update(user, sessionData, true, true, true);
 					dao.commit();
-			        dao.closeSession();
+					dao.closeSession();
 					statusMessageKey = "password.send.success";
 				}
 				else
@@ -623,8 +623,8 @@ public class UserBizLogic extends DefaultBizLogic
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
-		User user = (User) obj;		
-	
+		User user = (User) obj;
+
 		/**
 		 * Start: Change for API Search   --- Jitendra 06/10/2006
 		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -636,13 +636,12 @@ public class UserBizLogic extends DefaultBizLogic
 		 */
 		ApiSearchUtil.setUserDefault(user);
 		//End:- Change for API Search    	
-    	
-    	
+
 		//Added by Ashish Gupta
 		/*
-		if (user == null)
-			throw new DAOException("domain.object.null.err.msg", new String[]{"User"});
-			*/
+		 if (user == null)
+		 throw new DAOException("domain.object.null.err.msg", new String[]{"User"});
+		 */
 		//END	
 		if (Constants.PAGEOF_CHANGE_PASSWORD.equals(user.getPageOf()) == false)
 		{
@@ -687,121 +686,120 @@ public class UserBizLogic extends DefaultBizLogic
 					}
 				}
 			}
-			
+
 			//Added by Ashish
 			apiValidate(user);
 			//END
 		}
 		return true;
 	}
-	
+
 	//Added by Ashish
 	/**
 	 * @param user user
 	 * @return 
 	 * @throws DAOException
 	 */
-	
-	private boolean apiValidate(User user)
-					throws DAOException
+
+	private boolean apiValidate(User user) throws DAOException
 	{
 		Validator validator = new Validator();
 		String message = "";
 		boolean validate = true;
-		
+
 		if (validator.isEmpty(user.getEmailAddress()))
 		{
 			message = ApplicationProperties.getValue("user.emailAddress");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));		
-			
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+
 		}
 		else
 		{
 			if (!validator.isValidEmailAddress(user.getEmailAddress()))
 			{
 				message = ApplicationProperties.getValue("user.emailAddress");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
+				throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
 			}
 		}
 		if (validator.isEmpty(user.getLastName()))
 		{
 			message = ApplicationProperties.getValue("user.lastName");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
 		if (validator.isEmpty(user.getFirstName()))
 		{
 			message = ApplicationProperties.getValue("user.firstName");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
 		if (validator.isEmpty(user.getAddress().getCity()))
 		{
 			message = ApplicationProperties.getValue("user.city");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
 		if (!validator.isValidOption(user.getAddress().getState()) || validator.isEmpty(user.getAddress().getState()))
 		{
 			message = ApplicationProperties.getValue("user.state");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
 		if (validator.isEmpty(user.getAddress().getZipCode()))
 		{
 			message = ApplicationProperties.getValue("user.zipCode");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 		else
 		{
 			if (!validator.isValidZipCode(user.getAddress().getZipCode()))
 			{
 				message = ApplicationProperties.getValue("user.zipCode");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
+				throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
 			}
 		}
-		
+
 		if (!validator.isValidOption(user.getAddress().getCountry()) || validator.isEmpty(user.getAddress().getCountry()))
 		{
 			message = ApplicationProperties.getValue("user.country");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
 		if (validator.isEmpty(user.getAddress().getPhoneNumber()))
 		{
 			message = ApplicationProperties.getValue("user.phoneNumber");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
-		
-		if (user.getInstitution().getId()==null || user.getInstitution().getId().longValue()<=0)
+
+		if (user.getInstitution().getId() == null || user.getInstitution().getId().longValue() <= 0)
 		{
 			message = ApplicationProperties.getValue("user.institution");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
-		if (user.getDepartment().getId()==null || user.getDepartment().getId().longValue()<=0)
+		if (user.getDepartment().getId() == null || user.getDepartment().getId().longValue() <= 0)
 		{
 			message = ApplicationProperties.getValue("user.department");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
-		if (user.getCancerResearchGroup().getId()==null || user.getCancerResearchGroup().getId().longValue()<=0)
+		if (user.getCancerResearchGroup().getId() == null || user.getCancerResearchGroup().getId().longValue() <= 0)
 		{
 			message = ApplicationProperties.getValue("user.cancerResearchGroup");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
-		
+
 		if (user.getRoleId() != null)
 		{
 			if (!validator.isValidOption(user.getRoleId()) || validator.isEmpty(String.valueOf(user.getRoleId())))
 			{
 				message = ApplicationProperties.getValue("user.role");
-				throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 			}
 		}
 		return validate;
 	}
-	
+
 	//END
 	/**
 	 * Returns a list of all roles that can be assigned to a user.
@@ -856,17 +854,17 @@ public class UserBizLogic extends DefaultBizLogic
 			//Get the last updated date of the password
 			Date lastestUpdateDate = ((Password) oldPwdList.get(0)).getUpdateDate();
 			boolean firstTimeLogin = false;
-			if(oldUser.getFirstTimeLogin() != null)
+			if (oldUser.getFirstTimeLogin() != null)
 			{
 				firstTimeLogin = oldUser.getFirstTimeLogin().booleanValue();
 			}
-			if (!firstTimeLogin) 
+			if (!firstTimeLogin)
 			{
-			if (checkPwdUpdatedOnSameDay(lastestUpdateDate))
-			{
-				Logger.out.debug("Password is not valid returning FAIL_CHANGED_WITHIN_SOME_DAY");
-				return FAIL_CHANGED_WITHIN_SOME_DAY;
-			}
+				if (checkPwdUpdatedOnSameDay(lastestUpdateDate))
+				{
+					Logger.out.debug("Password is not valid returning FAIL_CHANGED_WITHIN_SOME_DAY");
+					return FAIL_CHANGED_WITHIN_SOME_DAY;
+				}
 			}
 
 			/**	
@@ -880,56 +878,55 @@ public class UserBizLogic extends DefaultBizLogic
 			emailAddress = emailAddress.substring(0, usernameBeforeMailaddress);
 			String userFirstName = oldUser.getFirstName();
 			String userLastName = oldUser.getLastName();
-	      			
+
 			StringBuffer sb = new StringBuffer(newPassword);
-			if (emailAddress != null && newPassword.toLowerCase().indexOf(emailAddress.toLowerCase())!=-1)
+			if (emailAddress != null && newPassword.toLowerCase().indexOf(emailAddress.toLowerCase()) != -1)
 			{
 				Logger.out.debug("Password is not valid returning FAIL_SAME_NAME_SURNAME_EMAIL");
-				return FAIL_SAME_NAME_SURNAME_EMAIL; 
+				return FAIL_SAME_NAME_SURNAME_EMAIL;
 			}
-			
-			if (userFirstName != null && newPassword.toLowerCase().indexOf(userFirstName.toLowerCase())!=-1)
+
+			if (userFirstName != null && newPassword.toLowerCase().indexOf(userFirstName.toLowerCase()) != -1)
 			{
 				Logger.out.debug("Password is not valid returning FAIL_SAME_NAME_SURNAME_EMAIL");
-				return FAIL_SAME_NAME_SURNAME_EMAIL; 
+				return FAIL_SAME_NAME_SURNAME_EMAIL;
 			}
-			
-			if (userLastName != null && newPassword.toLowerCase().indexOf(userLastName.toLowerCase())!=-1)
+
+			if (userLastName != null && newPassword.toLowerCase().indexOf(userLastName.toLowerCase()) != -1)
 			{
 				Logger.out.debug("Password is not valid returning FAIL_SAME_NAME_SURNAME_EMAIL");
-				return FAIL_SAME_NAME_SURNAME_EMAIL; 
+				return FAIL_SAME_NAME_SURNAME_EMAIL;
 			}
-			
+
 		}
 		return SUCCESS;
 	}
-	
-	
+
 	/**
 	 * This function checks whether user has logged in for first time or whether user's password is expired. 
 	 * In both these case user needs to change his password so Error key is returned
 	 * @param user - user object
 	 * @throws DAOException - throws DAOException
 	 */
-	public String checkFirstLoginAndExpiry(User user) 
+	public String checkFirstLoginAndExpiry(User user)
 	{
 		List passwordList = new ArrayList(user.getPasswordCollection());
-		
+
 		boolean firstTimeLogin = false;
-		if(user.getFirstTimeLogin() != null)
+		if (user.getFirstTimeLogin() != null)
 		{
 			firstTimeLogin = user.getFirstTimeLogin().booleanValue();
 		}
 		// If user has logged in for the first time, return key of Change password on first login
-		if (firstTimeLogin) 
+		if (firstTimeLogin)
 		{
-		  	return "errors.changePassword.changeFirstLogin";
+			return "errors.changePassword.changeFirstLogin";
 		}
-		
+
 		Collections.sort(passwordList);
-		Password lastPassword = (Password)passwordList.get(0);
+		Password lastPassword = (Password) passwordList.get(0);
 		Date lastUpdateDate = lastPassword.getUpdateDate();
-		
+
 		Validator validator = new Validator();
 		//Get difference in days between last password update date and current date.
 		long dayDiff = validator.getDateDiff(lastUpdateDate, new Date());
@@ -937,9 +934,9 @@ public class UserBizLogic extends DefaultBizLogic
 		if (dayDiff > expireDaysCount)
 		{
 			return "errors.changePassword.expire";
-    	}
+		}
 		return Constants.SUCCESS;
-		
+
 	}
 
 	private boolean checkPwdNotSameAsLastN(String newPassword, List oldPwdList)
@@ -992,8 +989,8 @@ public class UserBizLogic extends DefaultBizLogic
 			case FAIL_SAME_AS_LAST_N :
 				List parameters = new ArrayList();
 				String dayCount = "" + Integer.parseInt(XMLPropertyHandler.getValue("password.not_same_as_last_n"));
-				parameters.add(dayCount);				
-				errMsg = ApplicationProperties.getValue("errors.newPassword.sameAsLastn",parameters);
+				parameters.add(dayCount);
+				errMsg = ApplicationProperties.getValue("errors.newPassword.sameAsLastn", parameters);
 				break;
 			case FAIL_FIRST_LOGIN :
 				errMsg = ApplicationProperties.getValue("errors.changePassword.changeFirstLogin");
@@ -1006,7 +1003,7 @@ public class UserBizLogic extends DefaultBizLogic
 				break;
 			case FAIL_SAME_NAME_SURNAME_EMAIL :
 				errMsg = ApplicationProperties.getValue("errors.changePassword.sameAsNameSurnameEmail");
-				break;	
+				break;
 			case FAIL_PASSWORD_EXPIRED :
 				errMsg = ApplicationProperties.getValue("errors.changePassword.expire");
 			default :
@@ -1016,6 +1013,39 @@ public class UserBizLogic extends DefaultBizLogic
 		return errMsg;
 	}
 
+	public NameValueBean getRoleOfUser(Long userId) throws DAOException,SMException
+	{
+		NameValueBean userRole = null;
+		String sourceObjectName = User.class.getName();
+		String[] selectColumnName = {"csmUserId"};
+		String[] whereColumnName = {"id"};
+		String[] whereColumnCondition = {"="};
+		Object[] whereColumnValue = {userId};
+		String joinCondition = Constants.AND_JOIN_CONDITION;
+
+		List userList = null;
+		User appUser = null;
+		userList = super.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+		if (userList != null && !userList.isEmpty())
+		{
+			Long csmUserId = (Long) userList.get(0);
+
+			if (csmUserId != null)
+			{
+				//Get the role of the user.
+				Role role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(appUser.getCsmUserId().longValue());
+				//Logger.out.debug("In USer biz logic.............role........id......." + role.getId().toString());
+
+				if (role != null)
+				{
+					userRole.setName(role.getName());
+					userRole.setValue(role.getId());
+				}
+			}
+		}
+
+		return userRole;
+	}
 	//					     //method to return a comma seperated list of emails of administrators of a particular institute
 	//					     
 	//					     private String getInstitutionAdmins(Long instID) throws DAOException,SMException 

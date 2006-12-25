@@ -269,9 +269,17 @@
 						
 						&nbsp;
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
 						<html:link href="#" styleId="newParticipant" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=participant')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
+						</logic:notEqual>
+						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
+						<html:link href="#" styleId="newParticipant" onclick="addNewAction('CPQuerySpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=participant')">
+							<bean:message key="buttons.addNew" />
+						</html:link>
+						</logic:equal>
+						
  						</logic:notEqual>
 					</td>
   					
@@ -311,9 +319,16 @@
 					
 						&nbsp;
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
  						<html:link href="#" styleId="newParticipant" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=protocolParticipantIdentifier')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
+						</logic:notEqual>
+						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
+						<html:link href="#" styleId="newParticipant" onclick="addNewAction('CPQuerySpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=protocolParticipantIdentifier')">
+							<bean:message key="buttons.addNew" />
+						</html:link>
+						</logic:equal>
 	 					</logic:notEqual>
 		        	</td>
 				 </tr>

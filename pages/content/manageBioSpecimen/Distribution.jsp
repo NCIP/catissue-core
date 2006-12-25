@@ -305,11 +305,15 @@
 						onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 						<html:options collection="<%=Constants.DISTRIBUTIONPROTOCOLLIST%>"
 							labelProperty="name" property="value" />
-					</html:select> &nbsp; <html:link href="#"
+					</html:select> &nbsp; 
+					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_DISTRIBUTION_CP_QUERY%>">
+					<html:link href="#"
 						styleId="newDistributionProtocol"
 						onclick="addNewAction('DistributionAddNew.do?addNewForwardTo=distributionProtocol&forwardTo=distribution&addNewFor=distributionProtocolId')">
 						<bean:message key="buttons.addNew" />
-					</html:link></td>
+					</html:link>
+					</logic:notEqual>
+					</td>
 				</tr>
 
 				<!-- User -->
@@ -323,10 +327,14 @@
 						onmouseout="hideTip(this.id)">
 						<html:options collection="<%=Constants.USERLIST%>"
 							labelProperty="name" property="value" />
-					</html:select> &nbsp; <html:link href="#" styleId="newUser"
+					</html:select> &nbsp; 
+					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_DISTRIBUTION_CP_QUERY%>">
+					<html:link href="#" styleId="newUser"
 						onclick="addNewAction('DistributionAddNew.do?addNewForwardTo=distributedBy&forwardTo=distribution&addNewFor=userId')">
 						<bean:message key="buttons.addNew" />
-					</html:link></td>
+					</html:link>
+					</logic:notEqual>
+					</td>
 				</tr>
 
 				<!-- date -->
@@ -424,10 +432,14 @@
 						onmouseout="hideTip(this.id)">
 						<html:options collection="<%=Constants.TO_SITE_LIST%>"
 							labelProperty="name" property="value" />
-					</html:select> &nbsp; <html:link href="#" styleId="newSite"
+					</html:select> &nbsp; 
+					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_DISTRIBUTION_CP_QUERY%>">
+					<html:link href="#" styleId="newSite"
 						onclick="addNewAction('DistributionAddNew.do?addNewForwardTo=toSite&forwardTo=distribution&addNewFor=toSite')">
 						<bean:message key="buttons.addNew" />
-					</html:link></td>
+					</html:link>
+					</logic:notEqual>
+					</td>
 				</tr>
 				<!-- activitystatus -->
 				<logic:equal name="<%=Constants.OPERATION%>"

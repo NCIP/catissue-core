@@ -59,6 +59,13 @@
 		        }
 %>
 <head>
+<%if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
+	{%>
+		<script language="javascript">
+			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			window.parent.frames[0].location="showCpAndParticipants.do?cpId="+cpId;
+		</script>
+	<%}%>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript">
 		function onCheckboxButtonClick(element,dropDownList)
