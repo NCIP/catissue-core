@@ -19,13 +19,14 @@
 
 <html:errors/>
 
-<html:form action="<%=Constants.ALIQUOT_SUMMARY_ACTION%>">
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <%
+	String formName = Constants.ALIQUOT_SUMMARY_ACTION;
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	String CPQuery = (String)request.getAttribute(Constants.CP_QUERY);
 	if(CPQuery != null)
 	{
+		formName = Constants.CP_QUERY_ALIQUOT_SUMMARY_ACTION;
 	String nodeId="Specimen_";
 	if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
 	{
@@ -53,8 +54,14 @@
 	     newWindow.focus(); 
 	
     }
+    
+    function CPQueryAliquot(action)
+	{
+		window.parent.frames[2].location = action;
+	}	
+		
 </script>
-
+<html:form action="<%=formName%>">
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 
 <%
@@ -219,6 +226,10 @@
 			String virtuallyLocatedKey = "Specimen:" + i + "_virtuallyLocated";
 			String id = Utility.toString(aliquotMap.get(idKey));
 			String onClickSpecimenFunction = "showNewPage('SearchObject.do?pageOf=pageOfNewSpecimen&operation=search&id=" + id + "')";
+			if(CPQuery != null)
+			{
+				onClickSpecimenFunction = "CPQueryAliquot('QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&id=" + id + "')";
+			}
 	%>
 		<tr>
 			<td class="formSerialNumberField" width="5">
@@ -264,7 +275,7 @@
 					<html:hidden property="forwardTo" value=""/>					
 					<html:hidden property="noOfAliquots"/>					
 					<%
-						String formName=Constants.ALIQUOT_SUMMARY_ACTION;
+
 						String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";			
 						String addMoreSubmitFunctionName= "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[3][1]+"')";	
 						String distributeSubmitFuntionName= "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"'),"; 			
