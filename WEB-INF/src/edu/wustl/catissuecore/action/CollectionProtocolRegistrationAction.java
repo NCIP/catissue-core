@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -241,7 +242,11 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         {
         	CollectionProtocolRegistrationForm cprForm = (CollectionProtocolRegistrationForm)form;
         	String participantId = new Long(cprForm.getParticipantID()).toString();
-        	request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID,participantId);
+        	if(cprForm.getParticipantID() == 0 && cprForm.getParticipantProtocolID() != null)
+        	{
+        		participantId = getParticipantIdForProtocolId(cprForm.getParticipantProtocolID(),bizLogic);
+        	}
+            request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID,participantId);
         }
         
 		return mapping.findForward(pageOf);
@@ -285,5 +290,22 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	   Logger.out.debug("No.Of Active Participants ~~~~~~~~~~~~~~~~~~~~~~~>"+listOfActiveParticipant.size());
 	   
 	   return listOfActiveParticipant;
+	}
+	private String getParticipantIdForProtocolId(String participantProtocolId,IBizLogic bizLogic) throws Exception
+	{
+		String sourceObjectName = CollectionProtocolRegistration.class.getName();
+		String selectColumnName[] = {"participant.id"};
+		String whereColumnName[] = {"protocolParticipantIdentifier"};
+		String whereColumnCondition[] = {"="};
+		Object[] whereColumnValue = {participantProtocolId};
+		List participantList = bizLogic.retrieve(sourceObjectName,selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,Constants.AND_JOIN_CONDITION);
+		if(participantList != null && !participantList.isEmpty())
+		{
+			
+			String participantId = ((Long) participantList.get(0)).toString();
+			return participantId;
+			
+		}
+		return null;
 	}
 }

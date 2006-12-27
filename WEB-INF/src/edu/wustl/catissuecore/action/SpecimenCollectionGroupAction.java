@@ -233,6 +233,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				
 				specimenCollectionGroupForm.setParticipantId(participantId.longValue());
 				specimenCollectionGroupForm.setCheckedButton(1);
+				request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID,participantId.toString());
+				
 			}
 			else if(participantProtocolId != null)
 			{
@@ -242,6 +244,11 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 				specimenCollectionGroupForm.setProtocolParticipantIdentifier(participantProtocolId);
 				specimenCollectionGroupForm.setCheckedButton(2);
+				String cpParticipantId = getParticipantIdForProtocolId(participantProtocolId,bizLogic);
+				if(cpParticipantId != null)
+				{
+					request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID,cpParticipantId);
+				}
 			}
 			//Bug 1915:SpecimenCollectionGroup.Study Calendar Event Point not populated when page is loaded through proceedTo
 			//Populating the Collection Protocol Events
@@ -494,5 +501,23 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
 		
 		request.setAttribute(Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST, list);
+	}
+	
+	private String getParticipantIdForProtocolId(String participantProtocolId,IBizLogic bizLogic) throws Exception
+	{
+		String sourceObjectName = CollectionProtocolRegistration.class.getName();
+		String selectColumnName[] = {"participant.id"};
+		String whereColumnName[] = {"protocolParticipantIdentifier"};
+		String whereColumnCondition[] = {"="};
+		Object[] whereColumnValue = {participantProtocolId};
+		List participantList = bizLogic.retrieve(sourceObjectName,selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,Constants.AND_JOIN_CONDITION);
+		if(participantList != null && !participantList.isEmpty())
+		{
+			
+			String participantId = ((Long) participantList.get(0)).toString();
+			return participantId;
+			
+		}
+		return null;
 	}
 }
