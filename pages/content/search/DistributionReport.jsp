@@ -18,7 +18,7 @@
 		
 		if(distForm.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) {
 			reportSaveAction = Constants.DISTRIBUTION_REPORT_SAVE_ACTION;
-			if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
+			if(pageOf != null && pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
 			{
 				reportSaveAction = Constants.CP_QUERY_DISTRIBUTION_REPORT_SAVE_ACTION ;
 			}
@@ -26,7 +26,7 @@
 		} else {
 
 			reportSaveAction = Constants.ARRAY_DISTRIBUTION_REPORT_SAVE_ACTION;
-			if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
+			if(pageOf != null && pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
 			{
 				reportSaveAction = Constants.CP_QUERY_ARRAY_DISTRIBUTION_REPORT_SAVE_ACTION ;
 			}
@@ -48,7 +48,7 @@
 	{
 		document.forms[0].reportAction.value="true";
 		selectOptions(document.forms[0].selectedColumnNames);
-		<%if(pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
+		<%if(pageOf != null && pageOf.equals(Constants.PAGE_OF_DISTRIBUTION_CP_QUERY))
 		{%>
 			setFormAction("<%=Constants.CP_QUERY_CONFIGURE_DISTRIBUTION_ACTION%>");
 		<%}
