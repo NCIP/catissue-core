@@ -20,27 +20,28 @@ Date   : May 12, 2006
 <%
 String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 String buttonKey = "";
-String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 String parentSPId = "-1";
-	if(Constants.PAGEOF_ALIQUOT.equals(pageOf) || Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf))
-	{
-		buttonKey = "buttons.submit";
-	}
-	else if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf))
-	{
-		buttonKey = "buttons.resubmit";
-	}
-	if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
-	{
-		parentSPId = (String) request.getAttribute(Constants.PARENT_SPECIMEN_ID);
-	 }
+String CPQuery= (String)request.getAttribute(Constants.CP_QUERY);
+String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
+if(Constants.PAGEOF_ALIQUOT.equals(pageOf))
+{
+	buttonKey = "buttons.submit";
+}
+else if(Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
+{
+	buttonKey = "buttons.resubmit";
+}
+if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
+{
+	parentSPId = (String) request.getAttribute(Constants.PARENT_SPECIMEN_ID);
+}
 %>
 
 <head>
 <script src="jss/Hashtable.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-<%if(pageOf.equals(Constants.PAGE_OF_ALIQUOT_CP_QUERY))
+<%if(CPQuery!= null)
 {
 	String nodeId="Specimen_";
 	if(parentSPId!= null)
@@ -60,10 +61,9 @@ String parentSPId = "-1";
 	{
 		var action = '<%=Constants.CREATE_ALIQUOT_ACTION%>';
 		document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=submit";;
-		
-		<%if(Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf)){%>
+		<%if(CPQuery != null){%>
 			var CPaction = '<%=Constants.CP_QUERY_CREATE_ALIQUOT_ACTION%>';
-			document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY%>' + "&operation=add&menuSelected=15&buttonClicked=submit&<%=Constants.PARENT_SPECIMEN_ID%>=<%=parentSPId%>";
+			document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=submit&<%=Constants.PARENT_SPECIMEN_ID%>=<%=parentSPId%>&<%=Constants.CP_QUERY%>=<%=CPQuery%>";
 								
 		<%}%>
 		document.forms[0].submit();
@@ -88,9 +88,9 @@ String parentSPId = "-1";
 		var action = '<%=Constants.CREATE_ALIQUOT_ACTION%>';
 		document.forms[0].submittedFor.value = "ForwardTo";
 		document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=create";
-		<%if(Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf)){%>
+		<%if(CPQuery != null){%>
 		var CPaction = '<%=Constants.CP_QUERY_CREATE_ALIQUOT_ACTION%>';
-		document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY%>' + "&operation=add&menuSelected=15&buttonClicked=create&<%=Constants.PARENT_SPECIMEN_ID%>=<%=parentSPId%>";
+		document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=create&<%=Constants.PARENT_SPECIMEN_ID%>=<%=parentSPId%>&<%=Constants.CP_QUERY%>=<%=CPQuery%>";
 							
 		<%}%>
 	    document.forms[0].submit();
@@ -101,9 +101,9 @@ String parentSPId = "-1";
 	    var action = '<%=Constants.CREATE_ALIQUOT_ACTION%>';
 		document.forms[0].submittedFor.value = "ForwardTo";
 		document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=checkbox";
-		<%if(Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf)){%>
-		var CPaction = '<%=Constants.CP_QUERY_CREATE_ALIQUOT_ACTION%>';
-			document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY%>' + "&operation=add&menuSelected=15&buttonClicked=checkbox&<%=Constants.PARENT_SPECIMEN_ID%>=<%=parentSPId%>";
+		<%if(CPQuery != null){%>
+			var CPaction = '<%=Constants.CP_QUERY_CREATE_ALIQUOT_ACTION%>';
+			document.forms[0].action = CPaction + "?pageOf=" + '<%=Constants.PAGEOF_CREATE_ALIQUOT%>' + "&operation=add&menuSelected=15&buttonClicked=checkbox&<%=Constants.PARENT_SPECIMEN_ID%>=<%=parentSPId%>&<%=Constants.CP_QUERY%>=<%=CPQuery%>";
 							
 		<%}%>
 	    document.forms[0].submit();
@@ -316,8 +316,6 @@ if(form != null)
 }
 
 if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
-{
-if(!Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf))
 {
 %>
 
@@ -553,7 +551,12 @@ if(!Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf))
 		String noOfEmptyCombos = "3";
 		String styClass = "formFieldSized5";
 		String tdStyleClass = "customFormField";
-		String onChange = "onCustomListBoxChangeInAliquot(this)";
+		String onChange = "onCustomListBoxChangeInAliquot(this,'CreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=executeContainerChange')";
+		if(CPQuery!= null)
+		{
+			onChange = "onCustomListBoxChangeInAliquot(this,'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=executeContainerChange&CPQuery=true')";
+		}
+
 
 		String containerStyleId = "customListBox_" + rowNumber + "_0";
 		String pos1StyleId = "customListBox_" + rowNumber + "_1";
@@ -696,7 +699,6 @@ if(!Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf))
 </tr>
 <%
 } //If pageOf != "Aliquot Page"
-}
 %>
 </table>
 <html:hidden property="specimenID"/>

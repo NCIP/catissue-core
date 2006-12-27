@@ -104,7 +104,10 @@ PUBLIC
 					type="edu.wustl.catissuecore.action.ForwardAction">
 					<forward name="success" path=".catissuecore.manageBioSpecimenHomeDef" />
 		</action>
-		
+		<action path="/QueryManageBioSpecimen"
+					type="edu.wustl.catissuecore.action.ForwardAction">
+					<forward name="success" path=".catissuecore.queryHomeViewDef" />
+		</action>
 		<action path="/Search"
 					type="edu.wustl.catissuecore.action.ForwardAction">
 					<forward name="success" path=".catissuecore.searchHomeDef" />
@@ -2145,7 +2148,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.queryCollectionProtocolRegistrationDef" />
 			<forward name="failure" path=".catissuecore.queryCollectionProtocolRegistrationDef" />
-			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+			<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 		</action>
 
 		
@@ -2192,7 +2195,7 @@ PUBLIC
 			<forward name="query" path=".catissuecore.querySpecimenCollectionGroupViewDef" />
 			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.querySpecimenCollectionGroupViewDef" />
 			<forward name="failure" path=".catissuecore.querySpecimenCollectionGroupViewDef" />
-			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+			<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 		</action>
 		
 		<action path="/QuerySpecimenCollectionGroupSearch"
@@ -2935,7 +2938,7 @@ PUBLIC
 		scope="request">
 		<forward name="pageOfListSpecimenEventParametersCPQuery" path=".catissuecore.newSpecimenEventParametersCPQueryDef" />
 		<forward name="failure" path=".catissuecore.newSpecimenEventParametersCPQueryDef" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 	
 	<!-- derived specimens -->
@@ -2946,7 +2949,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path=".catissuecore.createSpecimenCPQueryDef" />
 		<forward name="failure" path=".catissuecore.createSpecimenCPQueryDef" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 	
 	<!-- distribution -->
@@ -2957,7 +2960,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfDistributionCPQuery" path=".catissuecore.distributionCPQueryDef" />
 			<forward name="failure" path=".catissuecore.distributionCPQueryDef" />
-			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+			<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 		</action>
 
 	<action path="/CPQueryDistributionSubmit"
@@ -3093,7 +3096,7 @@ PUBLIC
 		<forward name="query" path=".catissuecore.queryParticipantViewDef" />
 		<forward name="pageOfParticipantCPQuery" path=".catissuecore.queryParticipantViewDef" />
 		<forward name="failure" path=".catissuecore.queryParticipantViewDef" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 
 	<action path="/CPQueryParticipantLookup"
@@ -3164,7 +3167,7 @@ PUBLIC
 		scope="request">
 		<forward name="pageOfParticipantCPQuery" path=".catissuecore.queryParticipantViewDef" />
 		<forward name="failure" path=".catissuecore.queryParticipantViewDef" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 
 	<action path="/CPQueryParticipantEdit"
@@ -3204,7 +3207,7 @@ PUBLIC
 		scope="request">
 		<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.specimenEditDef" />
 		<forward name="failure" path=".catissuecore.specimenEditDef" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 		
 	<action path="/CPQueryNewSpecimen"
@@ -3214,7 +3217,7 @@ PUBLIC
 		scope="request">
 		<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.specimenEditDef" />
 		<forward name="failure" path=".catissuecore.specimenEditDef" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 	
 	<action path="/CPQueryNewSpecimenAdd"
@@ -3228,7 +3231,7 @@ PUBLIC
 		<forward name="createNew" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15&amp;virtualLocated=true" />
 		<forward name="sameCollectionGroup" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
 		<forward name="eventParameters" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
-		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquotCPQuery&amp;menuSelected=15" />
+		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;CPQuery=true&amp;menuSelected=15" />
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
 	</action>
 		
@@ -3245,7 +3248,7 @@ PUBLIC
 		<forward name="sameCollectionGroup" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
 		<forward name="query" path="/NewSpecimen.do?operation=edit&amp;pageOf=query&amp;menuSelected=12" />
 		<forward name="eventParameters" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
-		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquotCPQuery&amp;menuSelected=15" />
+		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;CPQuery=true&amp;menuSelected=15" />
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
 	</action>
 
@@ -3274,31 +3277,31 @@ PUBLIC
 		name="aliquotForm"
 		validate="false"
 		scope="request">
-		<forward name="pageOfAliquotCPQuery" path=".catissuecore.aliquotCPQueryDef" />
-		<forward name="pageOfCreateAliquotCPQuery" path=".catissuecore.aliquotCPQueryDef"/>
-		<forward name="pageOfAliquotSummaryCPQuery" path=".catissuecore.aliquotSummaryCpQueryDef" />
+		<forward name="pageOfAliquot" path=".catissuecore.aliquotCPQueryDef" />
+		<forward name="pageOfCreateAliquot" path=".catissuecore.aliquotCPQueryDef"/>
+		<forward name="pageOfAliquotSummary" path=".catissuecore.aliquotSummaryCpQueryDef" />
 		<forward name="failure" path=".catissuecore.aliquotCPQueryDef" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 	<action path="/CPQueryCreateAliquots"
 		type="edu.wustl.catissuecore.action.AliquotAction"
 		name="aliquotForm"
 		validate="false"
 		scope="request">
-		<forward name="pageOfCreateAliquotCPQuery" path=".catissuecore.aliquotCPQueryDef"/>
-		<forward name="pageOfAliquotCPQuery" path="/CPQueryAliquots.do?pageOf=pageOfAliquotCPQuery&amp;menuSelected=15"/>
-	    <forward name="commonAddEdit" path="/CPQueryAliquotAdd.do?pageOf=pageOfAliquotSummaryCPQuery&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=none"/>
+		<forward name="pageOfCreateAliquot" path=".catissuecore.aliquotCPQueryDef"/>
+		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;CPQuery=true&amp;menuSelected=15"/>
+	    <forward name="commonAddEdit" path="/CPQueryAliquotAdd.do?pageOf=pageOfAliquotSummary&amp;CPQuery=true&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=none"/>
 		<forward name="failure" path=".catissuecore.aliquotDef" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 	<action path="/CPQueryAliquotAdd"
 		type="edu.wustl.common.action.CommonAddEditAction"
 		name="aliquotForm"
 		validate="true"
-		input="/CpQueryCreateAliquots.do?pageOf=pageOfCreateAliquotCPQuery&amp;menuSelected=15"
+		input="/CpQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15"
 		scope="request">
-		<forward name="success" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummaryCPQuery&amp;menuSelected=15" />
-		<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfCreateAliquotCpQuery&amp;menuSelected=15" />
+		<forward name="success" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummary&amp;CPQuery=true&amp;menuSelected=15" />
+		<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfCreateAliquot&amp;CPQuery=true&amp;menuSelected=15" />
 	</action>
 			
 	<action path="/CPQueryAliquotSummary"
@@ -3307,7 +3310,7 @@ PUBLIC
 		validate="false"
 		scope="request">
 		<forward name="success" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16"/>
-		<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummaryCPQuery&amp;menuSelected=15" />
+		<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummary&amp;CPQuery=true&amp;menuSelected=15" />
 	</action>	
 	
 	
@@ -3318,14 +3321,14 @@ PUBLIC
 		scope="request">
 		<forward name="pageOfCollectionProtocolRegistrationCPQuery" path=".catissuecore.collectionProtocolRegistrationCPQueryDef" />
 		<forward name="failure" path=".catissuecore.collectionProtocolRegistrationDef" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 
 	<action path="/CPQueryCollectionProtocolRegistrationAdd"
 		type="edu.wustl.common.action.CommonAddEditAction"
 		name="collectionProtocolRegistrationForm"
 		validate="true"
-		input="/CPQueryCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13"
+		input="/CPQueryCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13"
 		scope="request">
 		<forward name="success" path="/CPQueryCollectionProtocolRegistrationSearch.do?pageOf=pageOfCollectionProtocolRegistrationCPQuery" />
 		<forward name="failure" path="/CPQueryCollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
@@ -3384,7 +3387,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path=".catissuecore.multipleSpecimenAddSuccessCPQueryDef" />
 		<forward name="failure" path="/CPQueryMultipleSpecimenStorageLocation.do?pageOf=formSubmitted&amp;operation=add&amp;menuSelected=15" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 	
 	<action path="/CPQueryNewMultipleSpecimenAction"
@@ -3408,7 +3411,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path=".catissuecore.specimenCollectionGroupTechDef" />
 		<forward name="failure" path=".catissuecore.specimenCollectionGroupTechDef" />
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
 
 	</action-mappings>

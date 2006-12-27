@@ -27,8 +27,9 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	 */
 	public BaseCopyPasteValidator()
 	{
-		
+
 	}
+
 	/**
 	 * Constructor with model
 	 * @param validatorModel model
@@ -37,7 +38,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 	{
 		this.validatorModel = validatorModel;
 	}
-	
+
 	/**
 	 * Perform the base level validations required for copy operation.  
 	 */
@@ -223,7 +224,7 @@ public abstract class BaseCopyPasteValidator implements Serializable
 		}
 		else
 		{
-			if (selectedCols.size() != numberOfColsCopied)
+			if (selectedCols.size() != numberOfColsCopied) // && numberOfColsCopied!=1)
 			{
 				return "Number of columns selected for copy and paste operation do not match";
 			}

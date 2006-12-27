@@ -53,70 +53,67 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 	protected void doActionPerformed(ActionEvent event)
 	{
 		CommonAppletUtil.getSelectedData(table);
-		paste.setEnabled(true);
+		
 		super.doActionPerformed(event);
-		
-		MultipleSpecimenTableModel multipleSpecimenTableModel = CommonAppletUtil.getMultipleSpecimenTableModel(table);
-		multipleSpecimenTableModel.showMapData();
-
-		CopyPasteOperationValidatorModel validatorModel = multipleSpecimenTableModel.getCopyPasteOperationValidatorModel();
-		List selectedCopiedRows = validatorModel.getSelectedCopiedRows();
+		paste.setEnabled(true);
 	
-		
-	if(isValidateSuccess)	
-	{
-		/**
-		 *  check if button(s) also copied
-		 */
-		boolean isButtonCopied = false;
-		for (int i = 0; i < selectedCopiedRows.size(); i++)
+		if (isValidateSuccess)
 		{
-			int copiedRow = ((Integer) selectedCopiedRows.get(i)).intValue();
-			if (copiedRow >= AppletConstants.SPECIMEN_COMMENTS_ROW_NO)
+			MultipleSpecimenTableModel multipleSpecimenTableModel = CommonAppletUtil.getMultipleSpecimenTableModel(table);
+			multipleSpecimenTableModel.showMapData();
+
+			CopyPasteOperationValidatorModel validatorModel = multipleSpecimenTableModel.getCopyPasteOperationValidatorModel();
+			List selectedCopiedRows = validatorModel.getSelectedCopiedRows();
+			/**
+			 *  check if button(s) also copied
+			 */
+			boolean isButtonCopied = false;
+			for (int i = 0; i < selectedCopiedRows.size(); i++)
 			{
-				isButtonCopied = true;
-				break;
+				int copiedRow = ((Integer) selectedCopiedRows.get(i)).intValue();
+				if (copiedRow >= AppletConstants.SPECIMEN_COMMENTS_ROW_NO)
+				{
+					isButtonCopied = true;
+					break;
+				}
+			}
+
+			if (isButtonCopied)
+			{
+				List selectedCopiedCols = validatorModel.getSelectedCopiedCols();
+				List tempSelectedCopiedCols = new ArrayList();
+				for (int i = 0; i < selectedCopiedCols.size(); i++)
+				{
+					int copiedCol = ((Integer) selectedCopiedCols.get(i)).intValue();
+					Integer tempCopiedCol = new Integer(multipleSpecimenTableModel.getActualColumnNo(copiedCol));
+					tempSelectedCopiedCols.add(tempCopiedCol);
+				}
+
+				validatorModel.setSelectedCopiedCols(tempSelectedCopiedCols);
+				validatorModel.setPageIndexWhenCopied(multipleSpecimenTableModel.getCurrentPageIndex());
+				BaseAppletModel appletModel = new BaseAppletModel();
+				Map validatorDataMap = new HashMap();
+				validatorDataMap.put(AppletConstants.VALIDATOR_MODEL, validatorModel);
+				appletModel.setData(validatorDataMap);
+				try
+				{
+					MultipleSpecimenApplet applet = (MultipleSpecimenApplet) CommonAppletUtil.getBaseApplet(table);
+					String url = applet.getServerURL() + "/MultipleSpecimenCopyPasteAction.do?method=copy";
+
+					appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(url, appletModel);
+
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+					System.out.println("Exception");
+				}
+				validatorModel.setSelectedCopiedCols(selectedCopiedCols);
 			}
 		}
-
-		
-		if (isButtonCopied)
-		{
-			List selectedCopiedCols = validatorModel.getSelectedCopiedCols();
-			List tempSelectedCopiedCols = new ArrayList();
-			for (int i = 0; i < selectedCopiedCols.size(); i++)
-			{
-				int copiedCol = ((Integer) selectedCopiedCols.get(i)).intValue();
-				Integer tempCopiedCol = new Integer(multipleSpecimenTableModel.getActualColumnNo(copiedCol));
-				tempSelectedCopiedCols.add(tempCopiedCol);
-			}
-		
-		    validatorModel.setSelectedCopiedCols(tempSelectedCopiedCols);
-		    validatorModel.setPageIndexWhenCopied(multipleSpecimenTableModel.getCurrentPageIndex());
-			BaseAppletModel appletModel = new BaseAppletModel();
-			Map validatorDataMap = new HashMap();
-			validatorDataMap.put(AppletConstants.VALIDATOR_MODEL, validatorModel);
-			appletModel.setData(validatorDataMap);
-			try
-			{
-				MultipleSpecimenApplet applet = (MultipleSpecimenApplet) CommonAppletUtil.getBaseApplet(table);
-				String url = applet.getServerURL() + "/MultipleSpecimenCopyPasteAction.do?method=copy";
-
-				appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(url, appletModel);
-
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-				System.out.println("Exception");
-			}
-			validatorModel.setSelectedCopiedCols(selectedCopiedCols);
-		}
-	}
 
 		System.out.println("\n >>>>>>>>>>>>>>  DONE >>>>>>>>>>>>");
 	}
-
 
 	/**
 	 * @return JS method name for this button.

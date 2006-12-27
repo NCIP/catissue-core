@@ -556,9 +556,11 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		/*String hql = "select cpr.collectionProtocol.id ,ccp.title,cpr.participant.id from " + CollectionProtocolRegistration.class.getName()
 		 + " as cpr right outer join cpr.collectionProtocol as ccp where ccp.id = cpr.collectionProtocol.id order by ccp.id";*/
 		/*String hql = "select sp.specimenCollectionGroup.id, sp.specimenCollectionGroup.name, sp.id, sp.label, elements(sp.childrenSpecimen) from " + Specimen.class.getName()
-				+ " as sp where sp.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and sp.specimenCollectionGroup.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and sp.parentSpecimen.id is null order by sp.specimenCollectionGroup.id";*/
+		 + " as sp where sp.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and sp.specimenCollectionGroup.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and sp.parentSpecimen.id is null order by sp.specimenCollectionGroup.id";*/
 		String hql = "select sp.specimenCollectionGroup.id, sp.specimenCollectionGroup.name, sp.id, sp.label from " + Specimen.class.getName()
-		+ " as sp where sp.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and sp.specimenCollectionGroup.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and sp.parentSpecimen.id is null order by sp.specimenCollectionGroup.id";
+				+ " as sp where sp.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id= " + cpId.toString()
+				+ " and sp.specimenCollectionGroup.collectionProtocolRegistration.participant.id= " + participantId.toString()
+				+ " and sp.parentSpecimen.id is null order by sp.specimenCollectionGroup.id";
 
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(null);
@@ -577,8 +579,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 				String scgName = (String) obj[1];
 				Long spId = (Long) obj[2];
 				String spLabel = (String) obj[3];
-				
-				
+
 				List spList = new ArrayList();
 				spList.add(new NameValueBean(spLabel, spId));
 				for (int j = i + 1; j < list.size(); j++, i++)
@@ -607,21 +608,24 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 	public Vector getSCGandSpecimensModified(Long cpId, Long participantId) throws Exception
 	{
-		String hql =null;
-		if(participantId.longValue() == -1)
+		String hql = null;
+		if (participantId.longValue() == -1)
 		{
-			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id from "+ Specimen.class.getName() 
-			+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
+			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id from " + Specimen.class.getName()
+					+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "
+					+ cpId.toString() + " and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
 
 		}
 		else
 		{
-			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id from "+ Specimen.class.getName() 
-			+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and scg.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
-			
+			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id,scg.activityStatus,sp.activityStatus from " + Specimen.class.getName()
+					+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "
+					+ cpId.toString() + " and scg.collectionProtocolRegistration.participant.id= " + participantId.toString()
+					+ " and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
+
 		}
 		/*String hql1 = "select sp.specimenCollectionGroup.id, sp.specimenCollectionGroup.name, sp.id, sp.label from " + Specimen.class.getName()
-		+ " as sp where sp.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and sp.specimenCollectionGroup.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and sp.parentSpecimen.id is null order by sp.specimenCollectionGroup.id";*/
+		 + " as sp where sp.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and sp.specimenCollectionGroup.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and sp.parentSpecimen.id is null order by sp.specimenCollectionGroup.id";*/
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(null);
 
@@ -638,13 +642,11 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 				Object[] obj = (Object[]) list.get(i);
 				Long scgId = (Long) obj[0];
 				String scgName = (String) obj[1];
-				/*Long spId = (Long) obj[2];
-				String spLabel = (String) obj[3];*/
-				setQueryTreeNode(scgId.toString(),Constants.SPECIMEN_COLLECTION_GROUP,scgName,"0",null,null,null,treeData);
-				//setQueryTreeNode(spId.toString(),Constants.SPECIMEN,spLabel,scgId.toString(),Constants.SPECIMEN_COLLECTION_GROUP,null,null,treeData);
-				//List spList = new ArrayList();
-				//spList.add(new NameValueBean(spLabel, spId));
-				for (int j = i ; j < list.size(); j++, i++)
+				String scgActivityStatus = (String) obj[5];
+
+				setQueryTreeNode(scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, scgName, "0", null, null, null, scgActivityStatus, treeData);
+
+				for (int j = i; j < list.size(); j++, i++)
 				{
 					Object[] obj1 = (Object[]) list.get(j);
 					Long scgId1 = (Long) obj1[0];
@@ -654,19 +656,24 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 						Long spId1 = (Long) obj1[2];
 						String spLabel1 = (String) obj1[3];
 						Long parentSpecimenId = (Long) obj1[4];
-						
-					//	spList.add(new NameValueBean(spLabel1, spId1));
-						if(spId1 != null)
+						String spActivityStatus = (String) obj1[6];
+
+						//	spList.add(new NameValueBean(spLabel1, spId1));
+						if (spId1 != null)
 						{
-							if(parentSpecimenId != null)
+							if (parentSpecimenId != null)
 							{
-								setQueryTreeNode(spId1.toString(),Constants.SPECIMEN,spLabel1,parentSpecimenId.toString(),Constants.SPECIMEN,null,null,treeData);
+								setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, parentSpecimenId.toString(), Constants.SPECIMEN,
+										null, null, spActivityStatus, treeData);
+
 							}
 							else
 							{
-							setQueryTreeNode(spId1.toString(),Constants.SPECIMEN,spLabel1,scgId1.toString(),Constants.SPECIMEN_COLLECTION_GROUP,null,null,treeData);
+								setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, scgId1.toString(),
+										Constants.SPECIMEN_COLLECTION_GROUP, null, null, spActivityStatus, treeData);
+
 							}
-						//getChildrenSpecimens(spId1,treeData);
+							//getChildrenSpecimens(spId1,treeData);
 						}
 					}
 					else
@@ -676,24 +683,22 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 					}
 				}
 
-				
 			}
 		}
 
 		return treeData;
 	}
 
-	private void getChildrenSpecimens(Long spId, Vector treeData) throws Exception
+	/*private void getChildrenSpecimens(Long spId, Vector treeData) throws Exception
 	{
-		String hql = "select sp.id, sp.label from " + Specimen.class.getName()
-		+ " as sp where sp.parentSpecimen.id = "+spId.toString();
+		String hql = "select sp.id, sp.label from " + Specimen.class.getName() + " as sp where sp.parentSpecimen.id = " + spId.toString();
 
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(null);
 
 		List list = dao.executeQuery(hql, null, false, null);
 		dao.closeSession();
-		if (list != null && list.size()>0)
+		if (list != null && list.size() > 0)
 		{
 			for (int i = 0; i < list.size(); i++)
 			{
@@ -701,28 +706,33 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 				Object[] obj = (Object[]) list.get(i);
 				Long spId1 = (Long) obj[0];
 				String spLabel1 = (String) obj[1];
-				setQueryTreeNode(spId1.toString(),Constants.SPECIMEN,spLabel1,spId.toString(),Constants.SPECIMEN,null,null,treeData);
+				setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, spId.toString(), Constants.SPECIMEN, null, null, treeData);
 				Logger.out.info("list size -----------:" + list.size());
-				getChildrenSpecimens(spId1,treeData); 
-			}	
-		}	
+				getChildrenSpecimens(spId1, treeData);
+			}
+		}
 		else
 		{
 			return;
 		}
 
-	}
-	private void setQueryTreeNode(String identifier,String objectName, String displayName,String parentIdentifier,String parentObjectName,String combinedParentIdentifier,String combinedParentObjectName,Vector vector)
+	}*/
+
+	private void setQueryTreeNode(String identifier, String objectName, String displayName, String parentIdentifier, String parentObjectName,
+			String combinedParentIdentifier, String combinedParentObjectName, String activityStatus, Vector vector)
 	{
-		QueryTreeNodeData treeNode = new QueryTreeNodeData();
-        treeNode.setIdentifier(identifier);
-        treeNode.setObjectName(objectName);
-        treeNode.setDisplayName(displayName);
-        treeNode.setParentIdentifier(parentIdentifier);
-        treeNode.setParentObjectName(parentObjectName);
-        treeNode.setCombinedParentIdentifier(combinedParentIdentifier);
-        treeNode.setCombinedParentObjectName(combinedParentObjectName);
-        
-        vector.add(treeNode);
+		if (!activityStatus.equals(Constants.ACTIVITY_STATUS_DISABLED))
+		{
+			QueryTreeNodeData treeNode = new QueryTreeNodeData();
+			treeNode.setIdentifier(identifier);
+			treeNode.setObjectName(objectName);
+			treeNode.setDisplayName(displayName);
+			treeNode.setParentIdentifier(parentIdentifier);
+			treeNode.setParentObjectName(parentObjectName);
+			treeNode.setCombinedParentIdentifier(combinedParentIdentifier);
+			treeNode.setCombinedParentObjectName(combinedParentObjectName);
+
+			vector.add(treeNode);
+		}
 	}
 }

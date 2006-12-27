@@ -60,7 +60,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 * 
 	 */
 	Map buttonStatusMap;
-
+	
 	int columnCount;
 
 	/** This is a map that holds options to be displayed for various attributes of the specimen
@@ -74,13 +74,17 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 * 4. Array of values for Pathological
 	 * */
 	Map specimenAttributeOptions;
-
+ 
 	/***/
 	private int columnsPerPage = 5;
 
 	/**/
 	private int currentPageIndex = 1;
 	private String specimenCollectionGroupName = null;
+/*	private String specimenClass = null;
+	private String specimenType = null;
+	private String pathologicalStatus = null;
+	private String tissueSite = null;*/
 	
 	/**
 	 * set default map. 
@@ -107,8 +111,19 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		if (specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME) != null)
 		{
 			setSpecimenCollectionGroupName(specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME).toString());
+//			setSpecimenClass();
+//			setSpecimenType();
+//			setPathologicalStatus();
+//			setTissueSite();
+					
 			for(int count=1;count<=initialColumnCount; count++)
+			{
 				setCollectionGroupInModel(count);
+			/*	setDataInModel(count,AppletConstants.SPECIMEN_CLASS_ROW_NO,specimenClass);
+				setDataInModel(count,AppletConstants.SPECIMEN_TYPE_ROW_NO,specimenType);
+				setDataInModel(count,AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO,pathologicalStatus);
+				setDataInModel(count,AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO,tissueSite);*/
+			}	
 		}
 		
 		//mandar: to set columns per page
@@ -232,7 +247,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	//Setting the Specimen Collection Group Name For Specimen
 	public void setSpecimenCollectionGroupName(String specimenCollectionGroupName)
 	{
-		this.specimenCollectionGroupName = specimenAttributeOptions.get("specimenCollectionGroupName").toString();
+		this.specimenCollectionGroupName = specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME).toString();
 	}
 
 	//Getting the Specimen Collection Group Name for Specimen
@@ -644,6 +659,33 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			specimenMap.put(specimenKey, specimenCollectionGroupName );	
 		}
 	}
+	
+	private void removeCollectionGroupFromModel(int column)
+	{
+		if(specimenCollectionGroupName != null)
+		{
+			String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO];
+			specimenMap.remove(specimenKey);	
+		}
+	}
+	
+/*	private void setDataInModel(int column, short rowNo, String value)
+	{//todo
+		if(specimenCollectionGroupName != null)
+		{
+			String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[rowNo];
+			specimenMap.put(specimenKey,value);	
+		}
+	}
+	
+	private void removeDataFromModel(int column, short rowNo)
+	{
+		if(specimenCollectionGroupName != null)
+		{
+			String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[rowNo];
+			specimenMap.remove(specimenKey);	
+		}
+	}*/
 
 	//-------------- For ParentSpecimen - CollectionGroup identification start
 	HashMap collectionGroupRadioButtonMap = new HashMap();
@@ -701,8 +743,12 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	{
 		removeIdFromMap(columnCount);
 		removeCollectionGroupFromModel(columnCount);
+	/*	removeDataFromModel(columnCount,AppletConstants.SPECIMEN_CLASS_ROW_NO);
+		removeDataFromModel(columnCount,AppletConstants.SPECIMEN_TYPE_ROW_NO);
+		removeDataFromModel(columnCount,AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO);
+		removeDataFromModel(columnCount,AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO);*/
 		removeActualColumnCollectionGroupRadioButtonValue(columnCount);
-		removeDataValues(columnCount);		
+		removeDataValues(columnCount);
 		// ---------------------
 		//******* CheckBox
 		removeActualColumnSpecimenCheckBoxValue(columnCount);
@@ -713,15 +759,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	private void removeIdFromMap(int colNo)
 	{
 		specimenMap.remove(AppletConstants.SPECIMEN_PREFIX + (colNo) + "_" + "id");
-	}
-
-	private void removeCollectionGroupFromModel(int column)
-	{
-		if(specimenCollectionGroupName != null)
-		{
-			String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO];
-			specimenMap.remove(specimenKey);	
-		}
 	}
 
 	private void removeActualColumnCollectionGroupRadioButtonValue(int column)
@@ -761,6 +798,63 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		specimenMap.put(specimenKey, Constants.NOT_SPECIFIED);	
 
 	}
+//	/**
+//	 * @return Returns the pathologicalStatus.
+//	 */
+//	public String getPathologicalStatus()
+//	{
+//		return pathologicalStatus;
+//	}
+//	/**
+//	 * @param pathologicalStatus The pathologicalStatus to set.
+//	 */
+//	public void setPathologicalStatus()
+//	{
+//		this.pathologicalStatus = specimenAttributeOptions.get(Constants.CDE_NAME_PATHOLOGICAL_STATUS).toString();
+//	}
+//	/**
+//	 * @return Returns the specimenClass.
+//	 */
+//	public String getSpecimenClass()
+//	{
+//		return specimenClass;
+//	}
+//	/**
+//	 * @param specimenClass The specimenClass to set.
+//	 */
+//	public void setSpecimenClass()
+//	{
+//		this.specimenClass = specimenAttributeOptions.get(Constants.SPECIMEN_CLASS).toString();
+//	}
+//	/**
+//	 * @return Returns the specimenType.
+//	 */
+//	public String getSpecimenType()
+//	{
+//		return specimenType;
+//	}
+//	/**
+//	 * @param specimenType The specimenType to set.
+//	 */
+//	public void setSpecimenType()
+//	{
+//		this.specimenType = specimenAttributeOptions.get(Constants.SPECIMEN_TYPE).toString();
+//	}
+//	/**
+//	 * @return Returns the tissueSite.
+//	 */
+//	public String getTissueSite()
+//	{
+//		return tissueSite;
+//	}
+//	/**
+//	 * @param tissueSite The tissueSite to set.
+//	 */
+//	public void setTissueSite()
+//	{
+//		this.tissueSite = specimenAttributeOptions.get(Constants.TISSUE_SITE).toString();
+//	}
+//	
 
 	/**
 	 * @return Returns the buttonStatusMap.
@@ -790,12 +884,13 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public boolean getSpecimenCheckBoxValueAt(int column)
 	{
-		int actualColumn = getActualColumnNo(column )+1;
+		int actualColumn = getActualColumnNo(column)+1;
 		String key = ""+actualColumn;
-		if(specimenCheckBoxMap.containsKey(key))
-			return ((Boolean)specimenCheckBoxMap.get(key)).booleanValue() ;
-		else
-			return false;
+		if(specimenCheckBoxMap.get(key)==null)
+		{
+			specimenCheckBoxMap.put(key, new Boolean(false));
+		}
+		return ((Boolean)specimenCheckBoxMap.get(key)).booleanValue() ;
 	}
 
 	private void setActualColumnSpecimenCheckBoxValue(int column)
@@ -827,5 +922,5 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	}
 
 //	****************** Mandar : 22Dec06 For Specimen CheckBox end
-
+	
 }

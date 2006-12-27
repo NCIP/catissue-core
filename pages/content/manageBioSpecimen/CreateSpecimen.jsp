@@ -131,7 +131,12 @@
 			if((parentLabelElement.value != "-1" || parentBarcodeElement.value != "-1") && classNameElement.value != "-1")
 			{
 		
-				var action = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=false";
+				<% String actionToCall2 = null;
+					actionToCall2 = "CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=false";
+					if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY)){
+					actionToCall2 = Constants.CP_QUERY_CREATE_SPECIMEN_ACTION+"?pageOf="+Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY+"&operation=add&virtualLocated=false";
+				}%>
+				var action = "<%=actionToCall2%>";
 				document.forms[0].action = action;
 				document.forms[0].submit();
 			}	

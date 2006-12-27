@@ -17,15 +17,16 @@ import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
  */
 public class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteValidator
 {
+
 	/**
 	 * Reference of the table.
 	 */
 	protected JTable table;
-	
+
 	public MultipleSpecimenCopyPasteValidator(JTable table, CopyPasteOperationValidatorModel validatorModel)
 	{
 		super(validatorModel);
-		this.table = table ;
+		this.table = table;
 	}
 
 	/**
@@ -67,20 +68,24 @@ public class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteValidator
 					selectedPastedCols.add(new Integer(rowValue + i));
 				}
 			}
-	
-			MultipleSpecimenTableModel multipleSpecimenTableModel = CommonAppletUtil.getMultipleSpecimenTableModel( table); 
-	
+
+			MultipleSpecimenTableModel multipleSpecimenTableModel = CommonAppletUtil.getMultipleSpecimenTableModel(table);
+
 			for (int j = 0; j < selectedPastedCols.size(); j++)
 			{
 				boolean isClassCopied = false;
 				int columnToBePasted = ((Integer) selectedPastedCols.get(j)).intValue();
 				int copiedColumn = ((Integer) selectedCopiedCols.get(j)).intValue();
-				
+			/*	if (selectedCopiedCols.size() > 1)
+				{
+					copiedColumn = ((Integer) selectedCopiedCols.get(j)).intValue();
+				}*/
+
 				for (int i = 0; i < selectedPastedRows.size(); i++)
 				{
 					int rowToBePasted = ((Integer) selectedPastedRows.get(i)).intValue();
 					int copiedRow = ((Integer) selectedCopiedRows.get(i)).intValue();
-					
+
 					/**
 					 *  This condition is to check whether an attempt is made to copy from button to text or text to button
 					 */
@@ -89,7 +94,7 @@ public class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteValidator
 					{
 						return "You can not copy from button to text or text to button";
 					}
-	
+
 					/**
 					 *  Check whether button from which Object is copied and button to which the object is pasted match. Return error if they do not match
 					 */
@@ -106,7 +111,7 @@ public class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteValidator
 					{
 						return "The Object should be of same type when you do copy-paste on button";
 					}
-	
+
 					/**
 					 *  This condtion is to check whether row at which data is to be pasted is text
 					 */
@@ -117,18 +122,17 @@ public class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteValidator
 					{
 						continue;
 					}
-	
-					
+
 					if (rowToBePasted < AppletConstants.SPECIMEN_COMMENTS_ROW_NO)
 					{
 						if (rowToBePasted == AppletConstants.SPECIMEN_CLASS_ROW_NO)
 						{
 							isClassCopied = true;
 						}
-						String key = CommonAppletUtil.getDataKey(copiedRow , copiedColumn); 
+						String key = CommonAppletUtil.getDataKey(copiedRow, copiedColumn);
 						String value = (String) (((List) copiedData.get(key)).get(0));
 						Object values[] = null;
-		
+
 						if (rowToBePasted == AppletConstants.SPECIMEN_TYPE_ROW_NO)
 						{
 							/**
@@ -151,30 +155,37 @@ public class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteValidator
 						{
 							values = getObjectArray(multipleSpecimenTableModel, rowToBePasted);
 						}
-		
+
 						/**
 						 *  Following code checks whether value copied at source exist at destination in case destination is dropdown
 						 */
 						boolean flag = false;
-						for (int k = 0; k < values.length; k++)
+						if (value.equals(""))
 						{
-							if (values[k].toString().equalsIgnoreCase(value))
+							flag = true;
+						}
+						else
+						{
+							for (int k = 0; k < values.length; k++)
 							{
-								flag = true;
+								if (values[k].toString().equalsIgnoreCase(value))
+								{
+									flag = true;
+								}
 							}
 						}
-		
+
 						/**
 						 *  if value copied at source does not exist at destination in case destination is dropdown, return appropriate message
 						 */
 						if (!flag)
 						{
-							return "No match found for " + value + " in row " + (rowToBePasted + 1) + " of column " + (columnToBePasted + 1);
+						//	return "No match found for " + value + " in row " + (rowToBePasted + 1) + " of column " + (columnToBePasted + 1);
 						}
 					}
 				}
 			}
-		}	
+		}
 		return "";
 	}
 
@@ -204,7 +215,7 @@ public class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteValidator
 		}
 		return null;
 	}
-	
+
 	/**
 	 * This method should be called for validating copy operation
 	 * @return error message if any in PreValidate
@@ -213,7 +224,7 @@ public class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteValidator
 	{
 		return preValidate();
 	}
-	
+
 	/**
 	 * This method should be called for validating paste operation
 	 * @return error message if any in PreValidate

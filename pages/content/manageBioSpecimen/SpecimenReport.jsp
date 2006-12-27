@@ -45,11 +45,9 @@
 	
     }
 		
-	function CPQuerySpecimen(id)
+	function CPQuerySpecimen(action)
 	{
-		alert(id);
-		window.parent.frames[2].location = "QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&id="+id;
-		alert("hi");
+		window.parent.frames[2].location = action;
 	}	
 		
 		
@@ -106,10 +104,11 @@
 					String onClickDistributeFunction = "showNewPage('Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&label=" + specimenLabel + "')";
 					if(pageOf != null && pageOf.equals(Constants.CP_QUERY_PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION))
 					{
-						onClickSpecimenFunction = "CPQuerySpecimen(" + specimen.getId() + ")";
-						onClickAliquotFunction = "showNewPage('Aliquots.do?pageOf=pageOfAliquot&menuSelected=15&label=" + specimenLabel + "')";
-						onClickDeriveFunction = "showNewPage('CreateSpecimen.do?operation=add&pageOf=&menuSelected=15&virtualLocated=true&parentSpecimenLabel=" + specimenLabel + "')";
-						onClickDistributeFunction = "showNewPage('Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&label=" + specimenLabel + "')";
+
+						onClickSpecimenFunction = "CPQuerySpecimen('QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&id=" + specimen.getId() + "')";
+						onClickAliquotFunction = "CPQuerySpecimen('CPQueryAliquots.do?pageOf=pageOfAliquot&CPQuery=true&label=" + specimenLabel + "&parentSpecimenId=" + specimen.getId() +"')";
+						onClickDeriveFunction = "CPQuerySpecimen('CPQueryCreateSpecimen.do?operation=add&pageOf=pageOfCreateSpecimenCPQuery&virtualLocated=true&parentSpecimenLabel=" + specimenLabel + "')";
+						onClickDistributeFunction = "CPQuerySpecimen('CPQueryDistribution.do?operation=add&pageOf=pageOfDistributionCPQuery&label=" + specimenLabel + "')";
 					}							
 					String barcode = specimen.getBarcode();
 					if(barcode==null)

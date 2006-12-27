@@ -236,6 +236,14 @@ public class CollectionProtocolRegistrationAction extends SecureAction
         CollectionProtocolRegistrationBizLogic cBizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
         List list12 =cBizLogic.getAllParticipantRegistrationInfo();
         Logger.out.info("--------------------------------- caching end ---------------");*/
+        
+        if(request.getParameter(Constants.OPERATION).equals(Constants.EDIT))
+        {
+        	CollectionProtocolRegistrationForm cprForm = (CollectionProtocolRegistrationForm)form;
+        	String participantId = new Long(cprForm.getParticipantID()).toString();
+        	request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID,participantId);
+        }
+        
 		return mapping.findForward(pageOf);
 	}
 	

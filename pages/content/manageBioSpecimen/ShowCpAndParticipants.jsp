@@ -71,13 +71,13 @@
 
 <table summary="" cellpadding="0" cellspacing="0" border="0">
 	<tr>
-		<td>&nbsp;&nbsp;&nbsp;</td>
-		<td class="formRequiredLabelWithoutBorder">
-			Collection Protocol : <html:link href="#" styleId="register" onclick="RegisterParticipants()">Register</html:link>
+
+		<td class="formLabelBorderlessLeft">
+			<b>Collection Protocol :</b> <html:link href="#" styleId="register" onclick="RegisterParticipants()">Register</html:link>
 		</td>
 	</tr>		
 	<tr>
-			<td>&nbsp;&nbsp;&nbsp;</td>
+
 		<td class="formField" nowrap>
 			<html:select property="cpId" styleClass="formFieldSized15" styleId="cpId" size="1" onchange="onCpChange(this)"
 			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -92,23 +92,23 @@
 	 <%if(access != null && access.equals("Denied"))
 	{%>
 	<tr>
-	<td>&nbsp;&nbsp;&nbsp;</td>
+
 		<td nowrap>
 			<html:hidden property="participantId" styleId="participantId" value="-1"/>
 		</td>
 	</tr>
 	<%} else {%>	
 	<tr>
-	<td>&nbsp;&nbsp;&nbsp;</td>
-		<td class="formRequiredLabelWithoutBorder">
-			Participant : Name (Protocol Id) 
+
+		<td class="formLabelBorderlessLeft">
+			<b>Participant :</b> Name (Protocol Id) 
 		</td>
 	</tr>	
 	
 	<tr>
-		<td>&nbsp;&nbsp;&nbsp;</td>
+
 		<td class="formField" nowrap>
-			<html:select property="participantId" styleClass="formFieldSized15" styleId="participantId" size="7" onchange="onParticipantChange(this)"
+			<html:select property="participantId" styleClass="formFieldSized15" styleId="participantId" size="10" onchange="onParticipantChange(this)"
 			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.REGISTERED_PARTICIPANT_LIST%>" labelProperty="name" property="value"/>
 			</html:select>

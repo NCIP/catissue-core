@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
+import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -61,6 +62,10 @@ public class AliquotAction extends SecureAction
 			throws Exception
 	{
 		//-- code for handling method calls
+		if (request.getParameter(Constants.CP_QUERY) != null)
+		{
+			request.setAttribute(Constants.CP_QUERY, "CPQuery");
+		}
 		String methodName = request.getParameter(Constants.METHOD_NAME);
 		if (methodName == null)
 		{
@@ -95,20 +100,15 @@ public class AliquotAction extends SecureAction
 		}
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
-				aliquotCount, exceedingMaxLimit,sessionData, true);
+				aliquotCount, exceedingMaxLimit, sessionData, true);
 
-		populateStorageLocationsOnContainerChange(aliquotForm, containerMap,request);
+		populateStorageLocationsOnContainerChange(aliquotForm, containerMap, request);
 
 		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		request.setAttribute(Constants.PAGEOF, pageOf);
+		setParentSpecimenInRequest(request);
 
-		Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
-		if(forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null)
-		{
-			request.setAttribute(Constants.PARENT_SPECIMEN_ID,forwardToHashMap.get("parentSpecimenId"));
-		}
-		
 		return mapping.findForward(pageOf);
 	}
 
@@ -123,9 +123,9 @@ public class AliquotAction extends SecureAction
 		int aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
 		int counter = Integer.parseInt(request.getParameter("rowNo"));
 		String containerKey = "Specimen:" + counter + "_StorageContainer_id";
-        String containerName = (String) aliquotMap.get(containerKey);
+		String containerName = (String) aliquotMap.get(containerKey);
 		boolean flag = true;
-		if(containerName.equals("-1"))
+		if (containerName.equals("-1"))
 		{
 			return;
 		}
@@ -136,12 +136,12 @@ public class AliquotAction extends SecureAction
 			for (int i = 0; i < containerId.length; i++)
 			{
 				NameValueBean containerNvb = (NameValueBean) containerId[i];
-				if(flag && containerNvb.getValue().toString().equals(containerName))
+				if (flag && containerNvb.getValue().toString().equals(containerName))
 				{
 					flag = false;
 				}
-				if(flag)
-				continue;
+				if (flag)
+					continue;
 				Map xDimMap = (Map) containerMap.get(containerId[i]);
 
 				if (!xDimMap.isEmpty())
@@ -179,7 +179,7 @@ public class AliquotAction extends SecureAction
 		}
 
 		aliquotForm.setAliquotMap(aliquotMap);
-		if(counter<aliquotCount)
+		if (counter < aliquotCount)
 		{
 			ActionErrors errors = getActionErrors(request);
 
@@ -189,8 +189,8 @@ public class AliquotAction extends SecureAction
 			}
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.locations.notSufficientForAliquotDropdown"));
 			saveErrors(request, errors);
-	   }
-		
+		}
+
 	}
 
 	/**
@@ -281,6 +281,7 @@ public class AliquotAction extends SecureAction
 			 * 'Store all Containers aliquots in same container' is true
 			 */
 			boolean areContainersDifferent = false;
+			boolean wrongStorageContainerName = false;
 
 			if (aliquotForm.isAliqoutInSameContainer() && aliquotForm.getButtonClicked().equalsIgnoreCase("create"))
 			{
@@ -291,8 +292,46 @@ public class AliquotAction extends SecureAction
 
 				for (int i = 1; i <= noOfAliquots; i++)
 				{
+					String radioButonKey = "radio_" + i;
 					String containerIdKey = specimenKey + i + "_StorageContainer_id";
-					String containerId = (String) aliquotMap.get(containerIdKey);
+					String containerNameKey = specimenKey + i + "_StorageContainer_name";
+					String containerId = null;
+					if (aliquotMap.get(radioButonKey).equals("2"))
+					{
+						containerId = (String) aliquotMap.get(containerIdKey);
+					}
+					else if (aliquotMap.get(radioButonKey).equals("3"))
+					{
+						String containerName = (String) aliquotMap.get(containerNameKey + "_fromMap");
+
+						String sourceObjectName = StorageContainer.class.getName();
+						String[] selectColumnName = {"id"};
+						String[] whereColumnName = {"name"};
+						String[] whereColumnCondition = {"="};
+						Object[] whereColumnValue = {containerName};
+						String joinCondition = null;
+						IBizLogic defaultBizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+						List list = defaultBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition,
+								whereColumnValue, joinCondition);
+
+						if (!list.isEmpty())
+						{
+							containerId = list.get(0).toString();
+						}
+						else
+						{
+							wrongStorageContainerName = true;
+							ActionErrors errors = getActionErrors(request);
+							if (errors == null)
+							{
+								errors = new ActionErrors();
+							}
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.specimen.storageContainerEditBox"));
+							saveErrors(request, errors);
+						}
+
+					}
+
 					if (i == 1)
 					{
 						tempContainerId = containerId;
@@ -325,17 +364,17 @@ public class AliquotAction extends SecureAction
 				aliquotForm.setBarcode(barcode);
 				aliquotForm.setQuantityPerAliquot(quantityperaliquot);
 				TreeMap containerMap = null;
-				
+
 				if (aliquotForm.isAliqoutInSameContainer())
 				{
 
 					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
-							Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit,sessionData, true);
+							Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
 				}
 				else
 				{
 					containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm.getSpecimenClass(),
-							0, exceedingMaxLimit,sessionData, true);
+							0, exceedingMaxLimit, sessionData, true);
 				}
 				populateAliquotsStorageLocations(aliquotForm, containerMap);
 
@@ -349,7 +388,7 @@ public class AliquotAction extends SecureAction
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.aliquots.reSubmit"));
 				}
-				if (areContainersDifferent == true)
+				if (areContainersDifferent == true && !wrongStorageContainerName)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.aliquots.sameStorageContainer"));
 				}
@@ -361,16 +400,8 @@ public class AliquotAction extends SecureAction
 				saveErrors(request, errors);
 				request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 				request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
-				if(Constants.PAGE_OF_ALIQUOT_CP_QUERY.equals(pageOf) || Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf))
-				{
-					request.setAttribute(Constants.PAGEOF, Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY);
-					return mapping.findForward(Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY);
-				}
-				else
-				{
 				request.setAttribute(Constants.PAGEOF, Constants.PAGEOF_CREATE_ALIQUOT);
 				return mapping.findForward(Constants.PAGEOF_CREATE_ALIQUOT);
-				}
 
 			}
 
@@ -424,12 +455,12 @@ public class AliquotAction extends SecureAction
 					if (aliquotForm.isAliqoutInSameContainer())
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData,true);
+								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
 					}
 					else
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), 0, exceedingMaxLimit,sessionData, true);
+								.getSpecimenClass(), 0, exceedingMaxLimit, sessionData, true);
 					}
 
 					populateAliquotsStorageLocations(aliquotForm, containerMap);
@@ -471,6 +502,7 @@ public class AliquotAction extends SecureAction
 				saveMessages(request, messages);
 			}
 
+			setParentSpecimenInRequest(request);
 			return mapping.findForward(pageOf);
 
 		}
@@ -513,12 +545,12 @@ public class AliquotAction extends SecureAction
 					{
 
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit,sessionData, true);
+								.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()), exceedingMaxLimit, sessionData, true);
 					}
 					else
 					{
 						containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-								.getSpecimenClass(), 0, exceedingMaxLimit,sessionData, true);
+								.getSpecimenClass(), 0, exceedingMaxLimit, sessionData, true);
 					}
 					pageOf = checkForSufficientAvailablePositions(request, containerMap, aliquotCount);
 
@@ -532,64 +564,15 @@ public class AliquotAction extends SecureAction
 				}
 			}
 		}
-		else
-		{
-			if (Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(request.getParameter(Constants.PAGEOF)))
-			{
-				pageOf = validateCpQuery(request, aliquotForm);
-
-				if (Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf))
-				{
-					pageOf = checkForSpecimenCPQuery(request, aliquotForm);
-
-					if (Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf))
-					{
-						int aliquotCount = Integer.parseInt(aliquotForm.getNoOfAliquots());
-						if (aliquotForm.isAliqoutInSameContainer())
-						{
-
-							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-									.getSpecimenClass(), Integer.parseInt(aliquotForm.getNoOfAliquots()),exceedingMaxLimit,sessionData,true);
-						}
-						else
-						{
-							containerMap = bizLogic.getAllocatedContaienrMapForSpecimen(aliquotForm.getSpCollectionGroupId(), aliquotForm
-									.getSpecimenClass(), 0,exceedingMaxLimit,sessionData,true);
-						}
-						pageOf = checkForSufficientAvailablePositionsCPQuery(request, containerMap, aliquotCount);
-
-						if (Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf))
-						{
-							populateAliquotsStorageLocations(aliquotForm, containerMap);
-						}
-					}
-				}
-			
-				
-			}
-		}
-		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
-
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		request.setAttribute(Constants.PAGEOF, pageOf);
 
 		/*  String [] displayNameField = {Constants.SYSTEM_IDENTIFIER};
 		 List specimenIdList = bizLogic.getList(Specimen.class.getName(), displayNameField, Constants.SYSTEM_IDENTIFIER, true);
 		 request.setAttribute(Constants.SPECIMEN_ID_LIST,specimenIdList); */
+		setParentSpecimenInRequest(request);
 
-		Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
-		if(forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null)
-		{
-			request.setAttribute(Constants.PARENT_SPECIMEN_ID,forwardToHashMap.get("parentSpecimenId"));
-		}
-		else
-		{
-			if(request.getParameter(Constants.PARENT_SPECIMEN_ID) != null)
-			{
-				request.setAttribute(Constants.PARENT_SPECIMEN_ID,request.getParameter(Constants.PARENT_SPECIMEN_ID));
-			}
-		}
-		
 		return mapping.findForward(pageOf);
 	}
 
@@ -667,81 +650,6 @@ public class AliquotAction extends SecureAction
 		}
 	}
 
-	private String checkForSpecimenCPQuery(HttpServletRequest request, AliquotForm form) throws Exception
-	{
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		String specimenLabel = form.getSpecimenLabel();
-		List specimenList = new ArrayList();
-		String errorString = "";
-
-		if (form.getCheckedButton().equals("1"))
-		{
-			specimenList = bizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, specimenLabel);
-			errorString = Constants.SYSTEM_LABEL;
-		}
-		else
-		{
-			String barcode = form.getBarcode().trim();
-			specimenList = bizLogic.retrieve(Specimen.class.getName(), "barcode", barcode);
-			errorString = "barcode";
-		}
-
-		if (specimenList.isEmpty())
-		{
-			ActionErrors errors = getActionErrors(request);
-
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("aliquots.specimen.notExists", errorString));
-			saveErrors(request, errors);
-
-			return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
-		}
-		else
-		{
-			Specimen specimen = (Specimen) specimenList.get(0);
-			/**
-			 * set the value of aliquotInSameContainer which was set while creation of collection protocol
-			 * required for Bug 2309
-			 */
-			Boolean aliquotInSameContainer = specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getCollectionProtocol()
-					.getAliqoutInSameContainer();
-			if (aliquotInSameContainer != null)
-			{
-				form.setAliqoutInSameContainer(aliquotInSameContainer.booleanValue());
-			}
-			populateParentSpecimenData(form, specimen);
-
-			form.setSpecimenID("" + specimen.getId());
-			//	request.setAttribute(Constants.SPECIMEN_ID,specimen.getId());
-
-			String pageOf = checkQuantityPerAliquotCPQuery(request, form);
-
-			if (Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY.equals(pageOf))
-			{
-				boolean isDouble = Utility.isQuantityDouble(form.getSpecimenClass(), form.getType());
-
-				if (!distributeAvailableQuantity(form, isDouble))
-				{
-					ActionErrors errors = getActionErrors(request);
-
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.qtyInsufficient"));
-					saveErrors(request, errors);
-
-					return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
-				}
-				else
-				{
-					return Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY;
-				}
-			}
-			else
-			{
-				return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
-			}
-		}
-	}
-
-
-	
 	//This method checks whether there are sufficient storage locations are available or not.
 	private String checkForSufficientAvailablePositions(HttpServletRequest request, Map containerMap, int aliquotCount)
 	{
@@ -795,61 +703,6 @@ public class AliquotAction extends SecureAction
 			saveErrors(request, errors);
 
 			return Constants.PAGEOF_ALIQUOT;
-		}
-	}
-
-	private String checkForSufficientAvailablePositionsCPQuery(HttpServletRequest request, Map containerMap, int aliquotCount)
-	{
-		int counter = 0;
-
-		if (containerMap.isEmpty())
-		{
-			ActionErrors errors = getActionErrors(request);
-
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.locations.notSufficient"));
-			saveErrors(request, errors);
-
-			return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
-		}
-		else
-		{
-			Object[] containerId = containerMap.keySet().toArray();
-
-			for (int i = 0; i < containerId.length; i++)
-			{
-				Map xDimMap = (Map) containerMap.get(containerId[i]);
-
-				if (!xDimMap.isEmpty())
-				{
-					Object[] xDim = xDimMap.keySet().toArray();
-
-					for (int j = 0; j < xDim.length; j++)
-					{
-						List yDimList = (List) xDimMap.get(xDim[j]);
-						counter = counter + yDimList.size();
-
-						if (counter >= aliquotCount)
-						{
-							i = containerId.length;
-							break;
-						}
-					}
-				}
-			}
-		}
-
-		if (counter >= aliquotCount)
-		{
-			return Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY;
-		}
-		else
-		{
-			ActionErrors errors = getActionErrors(request);
-
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.locations.notSufficient"));
-			saveErrors(request, errors);
-
-			return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
 		}
 	}
 
@@ -1046,7 +899,7 @@ public class AliquotAction extends SecureAction
 
 		if (quantityPerAliquot != null && quantityPerAliquot.trim().length() != 0)
 		{
-			try		
+			try
 			{
 				quantityPerAliquot = new BigDecimal(quantityPerAliquot).toPlainString();
 				if (Utility.isQuantityDouble(form.getSpecimenClass(), form.getType()))
@@ -1071,8 +924,8 @@ public class AliquotAction extends SecureAction
 				}
 			}
 			catch (NumberFormatException exp)
-	        {    		  
-				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties.getValue("specimen.quantity")));
 				saveErrors(request, errors);
 				return Constants.PAGEOF_ALIQUOT;
 			}
@@ -1080,41 +933,6 @@ public class AliquotAction extends SecureAction
 
 		return Constants.PAGEOF_CREATE_ALIQUOT;
 	}
-
-	//This function checks the quantity per aliquot is valid or not
-	private String checkQuantityPerAliquotCPQuery(HttpServletRequest request, AliquotForm form) throws Exception
-	{
-		Validator validator = new Validator();
-		String quantityPerAliquot = form.getQuantityPerAliquot();
-		ActionErrors errors = getActionErrors(request);
-
-		if (quantityPerAliquot != null && quantityPerAliquot.trim().length() != 0)
-		{
-			if (Utility.isQuantityDouble(form.getSpecimenClass(), form.getType()))
-			{
-				if (!validator.isDouble(quantityPerAliquot.trim()))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-							.getValue("aliquots.qtyPerAliquot")));
-					saveErrors(request, errors);
-					return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
-				}
-			}
-			else
-			{
-				if (!validator.isNumeric(quantityPerAliquot.trim()))
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties
-							.getValue("aliquots.qtyPerAliquot")));
-					saveErrors(request, errors);
-					return Constants.PAGE_OF_ALIQUOT_CP_QUERY;
-				}
-			}
-		}
-
-		return Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY;
-	}
-
 
 	//This method validates the formbean.
 	private String validate(HttpServletRequest request, AliquotForm form)
@@ -1152,42 +970,6 @@ public class AliquotAction extends SecureAction
 		return pageOf;
 	}
 
-	private String validateCpQuery(HttpServletRequest request, AliquotForm form)
-	{
-		Validator validator = new Validator();
-		ActionErrors errors = getActionErrors(request);
-
-		String pageOf = Constants.PAGE_OF_CREATE_ALIQUOT_CP_QUERY;
-
-		if (form.getCheckedButton().equals("1"))
-		{
-			if (validator.isEmpty(form.getSpecimenLabel()))
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
-						.getValue("createSpecimen.parentLabel")));
-				pageOf = Constants.PAGE_OF_ALIQUOT_CP_QUERY;
-			}
-		}
-		else
-		{
-			if (form.getBarcode() == null || form.getBarcode().trim().length() == 0)
-			{
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties.getValue("specimen.barcode")));
-				pageOf = Constants.PAGE_OF_ALIQUOT_CP_QUERY;
-			}
-		}
-
-		if (!validator.isNumeric(form.getNoOfAliquots()))
-		{
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format", ApplicationProperties.getValue("aliquots.noOfAliquots")));
-			pageOf = Constants.PAGE_OF_ALIQUOT_CP_QUERY;
-		}
-
-		saveErrors(request, errors);
-		return pageOf;
-	}
-
-
 	/* This method returns the ActionErrors object present in the request scope.
 	 * If it is absent method creates & returns new ActionErrors object.
 	 */
@@ -1203,4 +985,19 @@ public class AliquotAction extends SecureAction
 		return errors;
 	}
 
+	private void setParentSpecimenInRequest(HttpServletRequest request)
+	{
+		Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
+		if (forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null)
+		{
+			request.setAttribute(Constants.PARENT_SPECIMEN_ID, forwardToHashMap.get("parentSpecimenId"));
+		}
+		else
+		{
+			if (request.getParameter(Constants.PARENT_SPECIMEN_ID) != null)
+			{
+				request.setAttribute(Constants.PARENT_SPECIMEN_ID, request.getParameter(Constants.PARENT_SPECIMEN_ID));
+			}
+		}
+	}
 }

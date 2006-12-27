@@ -197,8 +197,16 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		Long oldParticipantId = oldCollectionProtocolRegistration.getParticipant().getId();
 		Long newParticipantId = collectionProtocolRegistration.getParticipant().getId();
 		String oldProtocolParticipantId = oldCollectionProtocolRegistration.getProtocolParticipantIdentifier();
+		
+		if(oldProtocolParticipantId == null)
+			oldProtocolParticipantId = "";
+		
 		String newProtocolParticipantId = collectionProtocolRegistration.getProtocolParticipantIdentifier();
-		if (oldCPId.longValue() != newCPId.longValue() || oldParticipantId.longValue() != newParticipantId.longValue())
+		
+		if(newProtocolParticipantId == null)
+			newProtocolParticipantId = "";
+		
+		if (oldCPId.longValue() != newCPId.longValue() || oldParticipantId.longValue() != newParticipantId.longValue() || !oldProtocolParticipantId.equals(newProtocolParticipantId))
 		{
 			participantRegCacheManager.deRegisterParticipant(oldCPId, oldParticipantId, oldProtocolParticipantId);
 			participantRegCacheManager.registerParticipant(newCPId, newParticipantId, newProtocolParticipantId);

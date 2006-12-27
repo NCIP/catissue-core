@@ -98,7 +98,9 @@
 %>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 	<%if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
-	{%>
+	{
+		strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
+		%>
 		<script language="javascript">
 			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
 			var participantId = window.parent.frames[0].document.getElementById("participantId").value;

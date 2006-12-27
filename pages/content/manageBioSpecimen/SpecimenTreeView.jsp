@@ -29,27 +29,25 @@
 </head>
 
 <body>
-	<table>
+<table border="0" cellpadding="0" cellspacing="0">
 		<tr>	
-			<td>&nbsp;&nbsp;</td>
-			<td class="formRequiredLabelWithoutBorder">
-				Details :
+			<td class="formLabelBorderlessLeft" colspan="2" width="161">
+				<b>Specimen Details :</b>
 			</td>
 		</tr>	
 		<tr>
-		<td>&nbsp;&nbsp;</td>
-			<td align="left">
-				<div id="treeboxbox_tree" style="width:161; height:<%=divHeight%>;background-color:#f5f5f5;border :1px solid Silver;; overflow:auto;"/>
+			<td align="left" colspan="2">
+				<div id="treeboxbox_tree" style="width:166; height:<%=divHeight%>;background-color:#f5f5f5;border :1px solid Silver;; overflow:auto;"/>
 			</td>
 			
 		</tr>
 		<tr>
-		<td>&nbsp;&nbsp;</td>
-		<td>
+			<td colspan="2">
 		
-		<input type="hidden" name="participantId" value="<%=participantId%>"/>
-		<input type="hidden" name="cpId" value="<%=cpId%>"/>
-		</td></tr>		
+			<input type="hidden" name="participantId" value="<%=participantId%>"/>
+			<input type="hidden" name="cpId" value="<%=cpId%>"/>
+			</td>
+	</tr>		
 	</table>
 
 	<script language="javascript">

@@ -60,10 +60,17 @@
 %>
 <head>
 <%if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
-	{%>
+	{
+	String participantId = (String)request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);
+	%>
 		<script language="javascript">
 			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			<%if(participantId != null){%>
+			window.parent.frames[0].location="showCpAndParticipants.do?cpId="+cpId+"&participantId=<%=participantId%>";
+			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=<%=participantId%>";
+			<%} else{%>
 			window.parent.frames[0].location="showCpAndParticipants.do?cpId="+cpId;
+			<%}%>
 		</script>
 	<%}%>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>

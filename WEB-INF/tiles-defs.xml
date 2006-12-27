@@ -250,6 +250,9 @@
 	
 	<definition name=".catissuecore.queryDataViewDef" path="/pages/content/search/ContentLayout.jsp">
 	</definition>
+	<definition name=".catissuecore.queryHomeViewDef" path="/pages/content/search/ContentLayout.jsp">
+		<put name="content" value="/pages/content/manageBioSpecimen/CPQueryHome.jsp" />
+	</definition>
 	
 	<definition name=".catissuecore.commonErrorDetailsDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/common/ErrorDetails.jsp" />

@@ -165,7 +165,7 @@ public class NewSpecimenAction extends SecureAction
 			if(request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID) != null)
 			{
 				String specimenCollectionGroupId = request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID);
-				setFormValues(specimenForm,specimenCollectionGroupId);
+				//setFormValues(specimenForm,specimenCollectionGroupId);
 			}
 		}
 		//*************  ForwardTo implementation *************
@@ -702,17 +702,11 @@ public class NewSpecimenAction extends SecureAction
 		specimenForm.setLabel("");
 		specimenForm.setBarcode("");
 		specimenForm.setPositionInStorageContainer("");
-		/*specimenForm.setQuantity("");
-		specimenForm.setClassName("");
-		specimenForm.setTissueSide("");
-		specimenForm.setTissueSite("");
-		specimenForm.setPathologicalStatus("");*/
 		specimenForm.setPositionDimensionOne("");
 		specimenForm.setPositionDimensionTwo("");
 		specimenForm.setStorageContainer("");
 
-		/*clearCollectionEvent(specimenForm);
-		clearReceivedEvent(specimenForm);*/
+		
 	}
 
 }

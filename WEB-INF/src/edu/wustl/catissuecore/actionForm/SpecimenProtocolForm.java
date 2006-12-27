@@ -398,7 +398,11 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		if(!Utility.isQuantityDouble(requirement.getSpecimenClass(),requirement.getSpecimenType()))
 		{
 			Double doubleQuantity = requirement.getQuantity().getValue();
-			if (doubleQuantity.toString().contains("E"))
+			if(doubleQuantity == null)
+			{
+				values.put(key[5] , "0"); 
+			}
+			else if (doubleQuantity.toString().contains("E"))
 	    	{    		
 				values.put(key[5] , doubleQuantity.toString()); 
 	    	}
@@ -412,8 +416,15 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		}
 		else
 		{
-		 values.put(key[5] , requirement.getQuantity().toString()); 
-	}
+			if(requirement.getQuantity().getValue() == null)
+			{
+				values.put(key[5] , "0"); 
+			}
+			else
+			{
+				values.put(key[5] , requirement.getQuantity().toString());
+			}
+		}
 		
 		values.put(key[6] , Utility.toString(requirement.getId()));
 		

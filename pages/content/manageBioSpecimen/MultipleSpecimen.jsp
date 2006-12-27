@@ -27,7 +27,7 @@
 		nodeId = nodeId + scgId;
 	}
 	%>
-%>
+
 		<script language="javascript">
 			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
 			var participantId = window.parent.frames[0].document.getElementById("participantId").value;

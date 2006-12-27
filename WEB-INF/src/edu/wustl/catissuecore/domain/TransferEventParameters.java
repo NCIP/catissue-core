@@ -212,8 +212,8 @@ public class TransferEventParameters extends SpecimenEventParameters implements 
 			}
 			else
 			{
-				if (form.getPositionDimensionOne() != null && !form.getPositionDimensionOne().trim().equals("")
-						&& form.getPositionDimensionTwo() != null && !form.getPositionDimensionTwo().trim().equals(""))
+				if (form.getPos1() != null && !form.getPos1().trim().equals("")
+						&& form.getPos2() != null && !form.getPos2().trim().equals(""))
 				{
 				this.toPositionDimensionOne = new Integer(form.getPos1());
 				this.toPositionDimensionTwo = new Integer(form.getPos2());

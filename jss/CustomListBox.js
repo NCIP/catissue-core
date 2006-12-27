@@ -82,7 +82,7 @@ function onCustomListBoxChange(element)
 	}
 }
 
-function onCustomListBoxChangeInAliquot(element)
+function onCustomListBoxChangeInAliquot(element,action)
 {
    //Get the element identifier
 	var elementId = element.id;
@@ -103,7 +103,7 @@ function onCustomListBoxChangeInAliquot(element)
 	{
 	
 	   	document.forms[0].submittedFor.value = "ForwardTo";
-		document.forms[0].action = "CreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=executeContainerChange&rowNo="+rowNo;
+		document.forms[0].action = action+"&rowNo="+rowNo;
 	    document.forms[0].submit();
 
 	}

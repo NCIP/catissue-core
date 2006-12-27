@@ -1397,6 +1397,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	
 	//CpBasedSearch Constants
+	public static final String CP_QUERY = "CPQuery";
 	public static final String CP_QUERY_PARTICIPANT_EDIT_ACTION = "CPQueryParticipantEdit.do";
 	public static final String CP_QUERY_PARTICIPANT_ADD_ACTION = "CPQueryParticipantAdd.do";
 	public static final String CP_QUERY_SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "CPQuerySpecimenCollectionGroupAdd.do";
@@ -1439,4 +1440,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_ADD_ACTION = "CPQueryCollectionProtocolRegistrationAdd.do";
 	public static final String CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION = "CPQueryCollectionProtocolRegistrationEdit.do";
 	public static final String CP_QUERY_PARTICIPANT_LOOKUP_ACTION= "CPQueryParticipantLookup.do";
+	public static final String CP_QUERY_BIO_SPECIMEN = "/QueryManageBioSpecimen.do";
 }
