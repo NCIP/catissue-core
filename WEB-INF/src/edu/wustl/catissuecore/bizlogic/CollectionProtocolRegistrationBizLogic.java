@@ -191,32 +191,33 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		ParticipantRegistrationCacheManager participantRegCacheManager = new ParticipantRegistrationCacheManager();
 		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) currentObj;
 		CollectionProtocolRegistration oldCollectionProtocolRegistration = (CollectionProtocolRegistration) oldObj;
-		
+
 		Long oldCPId = oldCollectionProtocolRegistration.getCollectionProtocol().getId();
 		Long newCPId = collectionProtocolRegistration.getCollectionProtocol().getId();
 		Long oldParticipantId = oldCollectionProtocolRegistration.getParticipant().getId();
 		Long newParticipantId = collectionProtocolRegistration.getParticipant().getId();
 		String oldProtocolParticipantId = oldCollectionProtocolRegistration.getProtocolParticipantIdentifier();
-		
-		if(oldProtocolParticipantId == null)
+
+		if (oldProtocolParticipantId == null)
 			oldProtocolParticipantId = "";
-		
+
 		String newProtocolParticipantId = collectionProtocolRegistration.getProtocolParticipantIdentifier();
-		
-		if(newProtocolParticipantId == null)
+
+		if (newProtocolParticipantId == null)
 			newProtocolParticipantId = "";
-		
-		if (oldCPId.longValue() != newCPId.longValue() || oldParticipantId.longValue() != newParticipantId.longValue() || !oldProtocolParticipantId.equals(newProtocolParticipantId))
+
+		if (oldCPId.longValue() != newCPId.longValue() || oldParticipantId.longValue() != newParticipantId.longValue()
+				|| !oldProtocolParticipantId.equals(newProtocolParticipantId))
 		{
 			participantRegCacheManager.deRegisterParticipant(oldCPId, oldParticipantId, oldProtocolParticipantId);
 			participantRegCacheManager.registerParticipant(newCPId, newParticipantId, newProtocolParticipantId);
 		}
 
-		if(collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		if (collectionProtocolRegistration.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
-			participantRegCacheManager.deRegisterParticipant(newCPId,newParticipantId,newProtocolParticipantId);
+			participantRegCacheManager.deRegisterParticipant(newCPId, newParticipantId, newProtocolParticipantId);
 		}
-			
+
 	}
 
 	private Set getProtectionObjects(AbstractDomainObject obj)
@@ -300,9 +301,9 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		partMedIdentifier.setParticipant(participant);
 		dao.insert(partMedIdentifier, sessionDataBean, true, true);
-			
+
 		/* inserting dummy participant in participant cache */
-		ParticipantRegistrationCacheManager  participantRegCache = new ParticipantRegistrationCacheManager();
+		ParticipantRegistrationCacheManager participantRegCache = new ParticipantRegistrationCacheManager();
 		participantRegCache.addParticipant(participant);
 		return participant;
 	}
@@ -598,7 +599,8 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		List participantRegistrationInfoList = new Vector();
 
-		String hql = "select cpr.collectionProtocol.id ,ccp.title,cpr.participant.id,cpr.protocolParticipantIdentifier from " + CollectionProtocolRegistration.class.getName()
+		String hql = "select cpr.collectionProtocol.id ,ccp.title,cpr.participant.id,cpr.protocolParticipantIdentifier,ccp.activityStatus,cpr.participant.activityStatus from "
+				+ CollectionProtocolRegistration.class.getName()
 				+ " as cpr right outer join cpr.collectionProtocol as ccp where ccp.id = cpr.collectionProtocol.id order by ccp.id";
 
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
@@ -616,30 +618,35 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				Long cpId = (Long) obj[0];
 				String cpTitle = (String) obj[1];
 				Long participantID = (Long) obj[2];
-				String protocolParticipantId = (String) obj[3]; 
+				String protocolParticipantId = (String) obj[3];
+				String cpStatus = (String) obj[4];
+				String participantStatus = (String) obj[5];
+
 				List participantInfoList = new ArrayList();
-				
-				if (participantID != null)
+
+				if (participantID != null && !participantStatus.equals(Constants.ACTIVITY_STATUS_DISABLED))
 				{
-					String participantInfo =participantID.toString()+":";
-					if(protocolParticipantId != null && !protocolParticipantId.equals(""))
+					String participantInfo = participantID.toString() + ":";
+					if (protocolParticipantId != null && !protocolParticipantId.equals(""))
 						participantInfo = participantInfo + protocolParticipantId;
 					participantInfoList.add(participantInfo);
-					
+
 				}
-				
+
 				for (int j = i + 1; j < list.size(); j++, i++)
 				{
 					Object[] obj1 = (Object[]) list.get(j);
 					Long cpId1 = (Long) obj1[0];
 					Long participantID1 = (Long) obj1[2];
 					String protocolParticipantId1 = (String) obj1[3];
+					String participantStatus1 = (String) obj1[5];
+
 					if (cpId1.longValue() == cpId.longValue())
 					{
-						if (participantID1 != null)
+						if (participantID1 != null && !participantStatus1.equals(Constants.ACTIVITY_STATUS_DISABLED))
 						{
-							String participantInfo =participantID1.toString()+":";
-							if(protocolParticipantId1 != null && !protocolParticipantId1.equals(""))
+							String participantInfo = participantID1.toString() + ":";
+							if (protocolParticipantId1 != null && !protocolParticipantId1.equals(""))
 								participantInfo = participantInfo + protocolParticipantId1;
 							participantInfoList.add(participantInfo);
 						}
@@ -651,11 +658,14 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				}
 
 				//Creating ParticipanrRegistrationInfo object and storing in a vector participantRegistrationInfoList.
-				ParticipantRegistrationInfo prInfo = new ParticipantRegistrationInfo();
-				prInfo.setCpId(cpId);
-				prInfo.setCpTitle(cpTitle);
-				prInfo.setParticipantInfoCollection(participantInfoList);
-				participantRegistrationInfoList.add(prInfo);
+				if (!cpStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED))
+				{
+					ParticipantRegistrationInfo prInfo = new ParticipantRegistrationInfo();
+					prInfo.setCpId(cpId);
+					prInfo.setCpTitle(cpTitle);
+					prInfo.setParticipantInfoCollection(participantInfoList);
+					participantRegistrationInfoList.add(prInfo);
+				}
 			}
 		}
 
