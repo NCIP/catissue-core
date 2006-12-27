@@ -78,6 +78,10 @@
 		<script language="javascript">
 			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
 			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
+			<%if(request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID) != null ) {
+			String cpParticipantId = (String) request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);%>
+			participantId = <%=cpParticipantId%>;
+			<%}%>
 			window.parent.frames[0].location="showCpAndParticipants.do?cpId="+cpId+"&participantId="+participantId;
 			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId+"&nodeId=SpecimenCollectionGroup_"+<%=idToTree%>;
 			
@@ -110,6 +114,11 @@
 		{
         	var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=<%=pageOf%>&" +
         			"isOnChange=true";
+        	<%if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+			{%>
+				action = "QuerySpecimenCollectionGroup.do?pageOf=<%=pageOf%>&operation=<%=operation%>&"+
+						"isOnChange=true";
+			<%}%>		
         	changeAction(action);
 		}
         function changeAction(action)
@@ -344,7 +353,10 @@
 					<td class="formField">
 						<html:text styleClass="formFieldSized" size="30"  maxlength="255" styleId="name" property="name" />
 						&nbsp;
-						<%String resetAction = "changeAction('SpecimenCollectionGroup.do?operation="+operation+"&pageOf=pageOfSpecimenCollectionGroup&resetName=Yes')"; %>
+						<%String resetAction = "changeAction('SpecimenCollectionGroup.do?operation="+operation+"&pageOf=pageOfSpecimenCollectionGroup&resetName=Yes')"; 
+						if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY)){
+							resetAction = "changeAction('QuerySpecimenCollectionGroup.do?operation="+operation+"&pageOf=pageOfSpecimenCollectionGroupCPQuery&resetName=Yes')"; 
+						}%>
 						<html:link href="#" styleId="resetName" onclick="<%=resetAction%>">
 							<bean:message key="link.resetName" />
 						</html:link>
