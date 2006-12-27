@@ -1423,6 +1423,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGE_OF_CREATE_ALIQUOT_CP_QUERY = "pageOfCreateAliquotCPQuery"; 
 	public static final String PAGE_OF_ALIQUOT_SUMMARY_CP_QUERY = "pageOfAliquotSummaryCPQuery";
 	public static final String CP_QUERY_CREATE_ALIQUOT_ACTION = "CPQueryCreateAliquots.do";
+	public static final String CP_QUERY_ALIQUOT_SUMMARY_ACTION = "CPQueryAliquotSummary.do";
 	public static final String CP_QUERY_CREATE_SPECIMEN_ADD_ACTION = "CPQueryAddSpecimen.do";
 	public static final String PAGE_OF_DISTRIBUTION_CP_QUERY = "pageOfDistributionCPQuery";
 	public static final String CP_QUERY_DISTRIBUTION_EDIT_ACTION = "CPQueryDistributionEdit.do";

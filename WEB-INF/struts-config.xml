@@ -3076,7 +3076,7 @@ PUBLIC
 		<forward name="failure" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
 		<forward name="eventParameters" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=15" />
-		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquotCPQuery&amp;menuSelected=15" />
+		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15" />
 	</action>
 
 	<action path="/CPQueryAddSpecimen"
@@ -3311,6 +3311,9 @@ PUBLIC
 		scope="request">
 		<forward name="success" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16"/>
 		<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummary&amp;CPQuery=true&amp;menuSelected=15" />
+		<forward name="sameCollectionGroup" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
+		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=16" />
+			
 	</action>	
 	
 	
@@ -3345,6 +3348,9 @@ PUBLIC
 		scope="request">
 		<forward name="success" path="/CPQueryCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
 		<forward name="failure" path="/CPQueryCollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistrationCPQuery&amp;menuSelected=13" />
+		<forward name="createSpecimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14" />
+		<forward name="specimenCollectionGroup" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14" />
+		
 	</action>
 		
 	<action path="/CPQueryCollectionProtocolRegistrationSearch"
