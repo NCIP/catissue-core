@@ -9,13 +9,8 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.ParticipantForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 
-<link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
-<script src="runtime/lib/grid.js"></script>
-<script src="runtime/lib/gridcheckbox.js"></script>
-<script src="runtime/formats/date.js"></script>
-<script src="runtime/formats/string.js"></script>
-<script src="runtime/formats/number.js"></script>
 <script src="jss/script.js"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
@@ -106,32 +101,6 @@ tr#hiddenCombo
 
 	int IDCount = 0;
 	%>
-	<%if(dataList != null && dataList.size() != 0)
-	{
-	%>
-	
-	<script>
-		var myData = [<%int xx;%><%for (xx=0;xx<(dataList.size()-1);xx++){%>
-	<%
-		List row = (List)dataList.get(xx);
-  		int j;
-  		//Bug 700: changed the variable name for the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
-		String chkName = "value1(CHK_" + xx + ")";
-	%>
-		["<INPUT TYPE='RADIO' NAME='chkName' onclick='onParticipantClick(<%=row.get(8)%>)' id='<%=xx%>'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"],<%}%>
-	<%
-		List row = (List)dataList.get(xx);
-  		int j;
-  		//Bug 700: changed the variable name for the map values as it was same in both AdvanceSearchForm and SimpleQueryInterfaceForm
-		String chkName = "value1(CHK_" + xx + ")";
-	%>
-		["<INPUT TYPE='RADIO' NAME='chkName' onclick='onParticipantClick(<%=row.get(8)%>)' id='<%=xx%>'>",<%for (j=0;j < (row.size()-1);j++){%>"<%=Utility.toGridFormat(row.get(j))%>",<%}%>"<%=Utility.toGridFormat(row.get(j))%>","1"]
-		];
-		
-		var columns = ["",<%int k;%><%for (k=0;k < (columnList.size()-1);k++){if (columnList.get(k).toString().trim().equals("ID")){IDCount++;}%>"<%=columnList.get(k)%>",<%}if (columnList.get(k).toString().trim().equals("ID")){IDCount++;}%>"<%=columnList.get(k)%>"];
-	</script>
-
-<% }%>
 	
 	<script language="JavaScript">
 		//function to insert a row in the inner block
@@ -220,8 +189,15 @@ tr#hiddenCombo
 		//this function is called when participant clicks on radiao button 
 		function onParticipantClick(participant_id)
 		{
-			document.forms[0].participantId.value=participant_id;
-			document.forms[0].id.value=participant_id;
+			//mandar for grid
+			var cl = mygrid.cells(participant_id,mygrid.getColumnCount()-1);
+			var pid = cl.getValue();
+			//alert(pid);
+			//participant_id = pid;
+			//------------
+			//document.forms[0].participantId.value=participant_id;
+			document.forms[0].participantId.value=pid;
+			document.forms[0].id.value=pid;
 			document.forms[0].submitPage.disabled=true;
 			document.forms[0].registratioPage.disabled=false;
 		
@@ -290,6 +266,7 @@ tr#hiddenCombo
 		
 		function setSubmittedForParticipant(submittedFor,forwardTo)
 		{
+
 			document.forms[0].submittedFor.value = submittedFor;
 			document.forms[0].forwardTo.value    = forwardTo;
 			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
@@ -808,35 +785,30 @@ tr#hiddenCombo
        		    </tr>				
 	  			<tr height=110 valign=top>
 					<td valign=top class="formFieldAllBorders">
-						<div STYLE="overflow: auto; width:100%; height:100%; padding:px; margin: 1px; border: 0px solid">
-						<script>
-						//	create ActiveWidgets Grid javascript object.
-						var obj = new Active.Controls.Grid;
-						
-						//	set number of rows/columns.
-						obj.setRowProperty("count", <%=dataList.size()%>);
-						obj.setColumnProperty("count", <%=(columnList.size()-IDCount) + 1%>);
-					
-						//	provide cells and headers text
-						obj.setDataProperty("text", function(i, j){return myData[i][j]});
-						obj.setColumnProperty("text", function(i){return columns[i]});
-						
-						//	set headers width/height.
-						obj.setRowHeaderWidth("28px");
-						obj.setColumnHeaderHeight("20px");
-										    
-					    //double click events
-					    var row = new Active.Templates.Row;
-						row.setEvent("ondblclick", function(){this.action("myAction")}); 
+<!--  **************  Code for New Grid  *********************** -->
+			<script>
+					function participant(id)
+					{
+						//do nothing
+						//mandar for grid
+						var cl = mygrid.cells(id,mygrid.getColumnCount()-1);
+						var pid = cl.getValue();
+						//alert(pid);
+						//------------
+						window.location.href = 'ParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+pid
+					} 				
 
-						obj.setTemplate("row", row);
-		   				obj.setAction("myAction", 
-						function(src){window.location.href = 'ParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+myData[this.getSelectionProperty("index")][10]}); 
+					/* 
+						to be used when you want to specify another javascript function for row selection.
+						useDefaultRowClickHandler =1 | any value other than 1 indicates you want to use another row click handler.
+						useFunction = "";  Function to be used. 	
+					*/
+					var useDefaultRowClickHandler =2;
+					var useFunction = "participant";	
+			</script>
+			<%@ include file="/pages/content/search/AdvanceGrid.jsp" %>
+<!--  **************  Code for New Grid  *********************** -->
 
-						//	write grid html to the page.
-						document.write(obj);
-						</script>
-						</div>
 					</td>
 				  </tr>
 				  <tr>
