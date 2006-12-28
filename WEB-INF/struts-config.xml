@@ -432,6 +432,7 @@ PUBLIC
 		<action path="/SetSessionDataForUpdatePassword"
 			type="edu.wustl.catissuecore.action.SetSessionDataForUpdatePasswordAction"
 			name="userForm"
+			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.userProfileSuccessDef" />
 			<forward name="failure" path="/ChangePassword.do?operation=edit&amp;pageOf=pageOfChangePassword" />
