@@ -239,10 +239,14 @@
 			if(chkBox.checked)
 			{
 				document.forms[0].submitAndDistributeButton.disabled=true;
+				document.forms[0].moreButton.disabled=true;
+				
+				
 			}
 			else
 			{
 				document.forms[0].submitAndDistributeButton.disabled=false;
+				document.forms[0].moreButton.disabled=false;
 			}
 		}
 		function onNormalSubmit()
