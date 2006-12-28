@@ -296,11 +296,11 @@ public class AliquotAction extends SecureAction
 					String containerIdKey = specimenKey + i + "_StorageContainer_id";
 					String containerNameKey = specimenKey + i + "_StorageContainer_name";
 					String containerId = null;
-					if (aliquotMap.get(radioButonKey).equals("2"))
+					if (aliquotMap.get(radioButonKey)!=null && aliquotMap.get(radioButonKey).equals("2"))
 					{
 						containerId = (String) aliquotMap.get(containerIdKey);
 					}
-					else if (aliquotMap.get(radioButonKey).equals("3"))
+					else if (aliquotMap.get(radioButonKey)!=null && aliquotMap.get(radioButonKey).equals("3"))
 					{
 						String containerName = (String) aliquotMap.get(containerNameKey + "_fromMap");
 
@@ -381,22 +381,23 @@ public class AliquotAction extends SecureAction
 				ActionErrors errors = getActionErrors(request);
 
 				if (errors == null)
-				{
+				{   
 					errors = new ActionErrors();
-				}
+				}	
+				
 				if (arePropertiesChanged == true)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.aliquots.reSubmit"));
 				}
-				if (areContainersDifferent == true && !wrongStorageContainerName)
+				else if (areContainersDifferent == true && !wrongStorageContainerName)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.aliquots.sameStorageContainer"));
 				}
-				if (containerMap.size() == 0)
+				else if (containerMap.size() == 0)
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.locations.notSufficientForAliquot"));
 				}
-
+				
 				saveErrors(request, errors);
 				request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 				request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
