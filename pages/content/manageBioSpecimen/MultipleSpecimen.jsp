@@ -39,16 +39,18 @@
 
 	function activateApplet()
 	{
-		alert("AppletActivated");
-		document.applets[0].focus();
+		var w = window.self;
+		w.focus=true;
+
+		var x = document.getElementById("msa");
+		x.focus= true;
+		x.click();
 	}
 </script>
 </head>
-<body onLoad="document.forms[0].hiddenField.focus()">
+<body>
 <FORM METHOD=POST ACTION="<%=action%>">
 <div id="errorMessages"></div>
-<input type=hidden name=hiddenField size=10 onFocus="activateApplet()">
-
 </FORM>
 			<table cellpadding="0" cellspacing="0" width="100%" height="100%" border="1">
 				<tr width="100%" height="100%">
