@@ -51,6 +51,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
  		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
         jdbcDao.openSession(sessionData);
         int noOfRecords = 0;
+        List dataList =null;
         try
 		{
 	        //Delete if there is any tbale existing with same name
@@ -59,8 +60,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	        jdbcDao.createTable(sql);
 	
 	        //Insert list of data into the temporary table created.
-	        List dataList = jdbcDao.executeQuery(searchQuery,sessionData,true,hasConditionOnIdentifiedField,queryResultObjectDataMap);
-	        Logger.out.debug("full list to be inserted"+dataList);
+	        dataList = jdbcDao.executeQuery(searchQuery,sessionData,true,hasConditionOnIdentifiedField,queryResultObjectDataMap);	        
 	        Iterator dataListItr = dataList.iterator();
 	        while(dataListItr.hasNext())
 	        {
@@ -70,6 +70,14 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	        }
 	        jdbcDao.commit();
 	        noOfRecords = dataList.size();
+		}
+        catch(Exception e)
+		{
+        	Logger.out.error("Exception occured in createTempTable method of AdvanceQueryBizlogic: " + e.getMessage() , e);
+        	Logger.out.error("Sql for creating temporary table : " + sql);
+        	Logger.out.error("Search query being executed : " + searchQuery);  
+        	Logger.out.error("Full list to be inserted : " + dataList);
+        	throw e;
 		}
 		finally
 		{
