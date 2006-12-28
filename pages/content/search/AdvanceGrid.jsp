@@ -78,7 +78,12 @@ var colDataTypes = colTypes;
 
 while(colDataTypes.indexOf("str") !=-1)
 colDataTypes=colDataTypes.replace(/str/,"ro");
-
+/*
+document.write("<hr>myData[0] : "+myData[0]+"<hr>");
+document.write("<hr>columns : "+columns+"<hr>");
+document.write("<hr>colDataTypes : "+colDataTypes+"<hr>");
+document.write("<hr>colWidth : "+colWidth+"<hr>");
+*/
 </script>
 
 <table width="100%">
@@ -93,12 +98,28 @@ colDataTypes=colDataTypes.replace(/str/,"ro");
 <script>
 	mygrid = new dhtmlXGridObject('gridbox');
 	mygrid.setImagePath("dhtml_comp/imgs/");
+
+	if(useFunction == "participant")
+	{
+//		alert("test");
+		colDataTypes=colDataTypes.replace(/ch/,"ra");
+		colDataTypes=colDataTypes.replace(/int/,"ro");
+		columns=","+columns+",";
+		colWidth = colWidth+",100,0";
+		mygrid.setOnCheckHandler(onParticipantClick);
+		mygrid.setOnRowDblClickedHandler(useFunction);
+/*document.write("<hr>myData[0] : "+myData[0]+"<hr>");
+document.write("<hr>columns : "+columns+"<hr>");
+document.write("<hr>colDataTypes : "+colDataTypes+"<hr>");
+document.write("<hr>colWidth : "+colWidth+"<hr>");
+*/
+	}
+
 	mygrid.setHeader(columns);
 	//mygrid.setEditable("FALSE");
 	mygrid.enableAutoHeigth(false);
 
 	mygrid.setInitWidths(colWidth);
-	
 	mygrid.setColTypes(colDataTypes);
 	mygrid.enableMultiselect(true);
 //	mygrid.chNoState = "0";
@@ -144,6 +165,12 @@ colDataTypes=colDataTypes.replace(/str/,"ro");
 		//var chkName = "value1(CHK_" + row + ")";
 		document.write("<input type='hidden' name='"+chkName +"' id='"+row+"' value='1'>");
 	}
+
+	if(useFunction == "participant")
+	{
+		mygrid.setColumnHidden(mygrid.getColumnCount()-1,true);
+	}
+
 	//fix for grid display on IE for first time.
 	mygrid.setSizes();
 </script>
