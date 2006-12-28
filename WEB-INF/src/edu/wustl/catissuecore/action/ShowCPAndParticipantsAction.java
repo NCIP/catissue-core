@@ -78,11 +78,19 @@ public class ShowCPAndParticipantsAction extends BaseAction
 		}
 		Collections.sort(participantColl);
 		request.setAttribute(Constants.REGISTERED_PARTICIPANT_LIST, participantColl);
+		
 		//if participantId is not null then set that in form for further use.
+		
 		if (request.getParameter("participantId") != null && !request.getParameter("participantId").equals(""))
 		{
 			Long participantId = new Long(request.getParameter("participantId"));
 			cpsearchForm.setParticipantId(participantId);
+		}
+//		when collection protocol gets changes then don't shown any participant seelcted...
+		String cpChange = request.getParameter("cpChange");
+		if(cpChange != null)
+		{
+			cpsearchForm.setParticipantId(null);
 		}
 		
 		return mapping.findForward("success");

@@ -26,7 +26,7 @@
 				window.parent.frames[1].location = "showTree.do?<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=-1&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value;			
 			<%} else {%>
 							
-			var action = "showCpAndParticipants.do";
+			var action = "showCpAndParticipants.do?cpChange=true";
 			document.forms[0].action = action;
 
 			document.forms[0].submit();

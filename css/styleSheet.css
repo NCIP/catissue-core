@@ -482,6 +482,17 @@ td.formSerialNumberField{ /* for the cell that contains the Serial Number */
   text-align:left;
 }
 
+.formLabelAllBorder{ /* for the non-required form labels */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  background-color:#F4F4F5; /* constant: light gray */
+  color:#000000; /* constant: black */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
 .formLabelBorderless{ /* for the non-required form labels */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.7em;

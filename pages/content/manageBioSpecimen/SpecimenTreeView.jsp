@@ -31,7 +31,7 @@
 <body>
 <table border="0" cellpadding="0" cellspacing="0">
 		<tr>	
-			<td class="formLabelBorderlessLeft" colspan="2" width="161">
+			<td class="formLabelAllBorder" colspan="2" width="161">
 				<b>Specimen Details :</b>
 			</td>
 		</tr>	
@@ -78,6 +78,7 @@
 
 			tree.setImagePath("dhtml_comp/imgs/");
 			tree.setOnClickHandler(tonclick);
+			<%-- in this tree for root node parent node id is "0" --%>
 			<% Vector treeData = (Vector)request.getAttribute("treeData");
 				if(treeData != null && treeData.size() != 0)
 				{
