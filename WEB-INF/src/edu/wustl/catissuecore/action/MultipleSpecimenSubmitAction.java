@@ -129,7 +129,7 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 			for (int j = 0; j < listOfDerivedSpecimen.size(); j++)
 			{
 				Specimen derivedSpecimen = (Specimen) listOfDerivedSpecimen.get(j);
-				if(specimen.getStorageContainer()!=null)
+				if(derivedSpecimen.getStorageContainer()!=null)
 				{
 				if (derivedSpecimen.getPositionDimensionOne() == null || derivedSpecimen.getPositionDimensionTwo() == null)
 				{
