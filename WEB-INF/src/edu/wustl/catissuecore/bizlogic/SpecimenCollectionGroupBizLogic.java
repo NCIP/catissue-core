@@ -611,7 +611,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		String hql = null;
 		if (participantId.longValue() == -1)
 		{
-			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id from " + Specimen.class.getName()
+			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id ,scg.activityStatus,sp.activityStatus from " + Specimen.class.getName()
 					+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "
 					+ cpId.toString() + " and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
 

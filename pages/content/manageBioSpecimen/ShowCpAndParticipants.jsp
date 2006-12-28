@@ -73,7 +73,8 @@
 	<tr>
 
 		<td class="formLabelBorderlessLeft">
-			<b>Collection Protocol :</b> <html:link href="#" styleId="register" onclick="RegisterParticipants()">Register</html:link>
+			<b>Collection Protocol :</b> <%if(access == null || !access.equals("Denied"))
+	{%> <html:link href="#" styleId="register" onclick="RegisterParticipants()">Register</html:link><%}%>
 		</td>
 	</tr>		
 	<tr>
