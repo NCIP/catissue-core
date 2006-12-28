@@ -3071,13 +3071,14 @@ PUBLIC
 		type="edu.wustl.common.action.CommonAddEditAction"
 		name="createSpecimenForm"
 		validate="true"
-		input="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15"
+		input="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimenCPQuery&amp;menuSelected=15"
 		scope="request">
 		<forward name="success" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
 		<forward name="failure" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15" />
 		<forward name="eventParameters" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=15" />
-		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15" />
+		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;CPQuery=true&amp;menuSelected=15" />
+		<forward name="sameCollectionGroup" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
 	</action>
 
 	<action path="/CPQueryAddSpecimen"
@@ -3225,7 +3226,7 @@ PUBLIC
 		type="edu.wustl.common.action.CommonAddEditAction"
 		name="newSpecimenForm"
 		validate="true"
-		input="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15"
+		input="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15"
 		scope="request">
 		<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
 		<forward name="failure" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
