@@ -35,33 +35,9 @@
             </classpath>
         </javac>
     </target>
-	
-	<!-- Run ClientDemo class 
-    <target name="runClient" depends="compile">
-        <java classname="ClientDemo">
-        	<classpath>
-	            <pathelement location="${base.dir}"/>
-        		<fileset dir="${base.dir}">
-        				<include name="*.jar"/>
-        		</fileset>
-            </classpath>  
-        </java>
-    </target>
-	-->
+		
 	<!-- run TestClient java file -->
-	<target name="rundemo" depends="compile">
-		<!-- <javac srcdir="." >
-			<include name="ClientDemo.java"/>
-			<include name="APIDemo.java"/>
-			<include name="SendBuildReport.java"/>
-			<include name="UniqueKeyGeneratorUtil.java"/>
-			<include name="ReportWriter.java"/>
-			<classpath refid="cp"/>
-			<classpath>
-				<pathelement location="${src.dir}"/>
-			</classpath>
-		</javac>
-		-->
+	<target name="rundemo" depends="compile">		
 		<java classname="ClientDemo" fork="true">
 			<classpath refid="cp"/>
 			<classpath>
@@ -70,6 +46,5 @@
 			<sysproperty key="log4j.configuration"
 						value="${conf.dir}/client_log4j.properties"/>
 		</java>
-	</target>
-	
+	</target>	
 </project>
