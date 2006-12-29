@@ -219,7 +219,7 @@
 			{
 					
 				<%
-				String actionOnCollOrClassChange = "NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen&virtualLocated=false";
+				String actionOnCollOrClassChange = "NewSpecimen.do?pageOf=pageOfNewSpecimen&virtualLocated=false";
 				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 				{
 					actionOnCollOrClassChange = "CPQueryNewSpecimen.do?operation=add&pageOf=pageOfNewSpecimenCPQuery&virtualLocated=false";
@@ -512,7 +512,7 @@
 				        	<td class="formField" colspan="<%=specimenColSpan%>">
 				        		<html:hidden property="specimenCollectionGroupId"/>
 								<!-- Mandar : 434 : for tooltip -->
-					     		<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>"
+								<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>"
 								 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 									<html:options collection="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
 								</html:select>
