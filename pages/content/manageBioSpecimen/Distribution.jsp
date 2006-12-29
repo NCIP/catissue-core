@@ -254,7 +254,7 @@
 					<td><html:hidden property="id" /></td>
 					<td><html:hidden property="idChange" /></td>
 					<td><html:hidden property="onSubmit" /></td>
-					<td><html:hidden property="pageOf" /></td>
+					
 
 				</tr>
 

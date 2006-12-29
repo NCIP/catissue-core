@@ -88,7 +88,7 @@
 		
 		<td align="right" colspan="3">
 			<html:hidden property="reportAction" value="true"/>
-			<html:hidden property="pageOf" value="<%=pageOf%>"/>
+			
 		</td>
 		
 	</tr>
