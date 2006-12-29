@@ -194,11 +194,6 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
         return bizLogic;
     }
     
-//    public IBizLogic getDefaultBizLogic()
-//    {
-//    	return new DefaultBizLogic();
-//    }
-    
     /**
      * Returns DAO instance according to the fully qualified class name.
      * @param className The name of the class.

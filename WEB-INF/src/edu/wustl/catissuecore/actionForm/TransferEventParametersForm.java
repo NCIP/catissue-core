@@ -270,39 +270,6 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 					+ " Pos("
 					+ this.fromPositionDimensionOne
 					+ "," + this.fromPositionDimensionTwo + ")";
-
-			//			// ---------------------------------------------
-			//			String specimenId = transferEventParametersObject.getSpecimen().getId().toString(); 
-			//			IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-			//	    	
-			//	    	String identifier = specimenId ;
-			//	    	
-			//	    	Logger.out.debug("\t\t*****************Form**************SpecimenID : "+identifier );
-			//	    	List specimenList = bizLogic.retrieve(Specimen.class.getName(),Constants.SYSTEM_IDENTIFIER,identifier);
-			//	    	
-			//	    	String posOne = null;
-			//	    	String posTwo = null;
-			//	    	String storContId = null;
-			//	    	String fromPositionData = null;
-			//	    	if(specimenList!=null && specimenList.size() != 0)
-			//	    	{
-			//	    		Specimen specimen = (Specimen)specimenList.get(0);
-			//	    		posOne = specimen.getPositionDimensionOne().toString();
-			//	    		posTwo = specimen.getPositionDimensionTwo().toString();
-			//	    		
-			//	    		StorageContainer container = specimen.getStorageContainer();
-			//	    		storContId = container.getId().toString();
-			//	    		fromPositionData = container.getStorageType().getName() + " : " 
-			//				+ storContId + " Pos(" + posOne + "," + posTwo + ")";
-			//	    		
-			//	            Logger.out.debug("\t\t************************************");
-			//	            Logger.out.debug("\t\t*******************************SPID : "+specimenId );
-			//	            Logger.out.debug("\t\t*******************************fromPosData : "+fromPositionData );
-			//	            Logger.out.debug("\t\t*******************************Pos 1 : " + posOne );
-			//	            Logger.out.debug("\t\t*******************************Pos 2 : " + posTwo );
-			//	    	}	
-			//			// ---------------------------------------------
-
 		}
 		catch (Exception excp)
 		{
