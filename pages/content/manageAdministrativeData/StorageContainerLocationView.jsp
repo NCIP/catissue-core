@@ -27,7 +27,33 @@
 	{
 	    treeViewAction += "&" + Constants.STORAGE_CONTAINER + "=" + containerName;
 	}
+
+	        boolean mac = false;
+	        Object os = request.getHeader("user-agent");
+			if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
+			{
+			    mac = true;
+			}
+	
+	if(mac)
+   {	
 %>
+ <table border="0" height="320" width="810">
+	<tr height="320">
+		<td width="200">
+			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeViewAction%>" scrolling="yes" frameborder="1" width="200" height="320">
+				Your Browser doesn't support IFrames.
+			</iframe>
+		</td>
+		<td width="610">
+			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" scrolling="yes" frameborder="1" width="610" height="320">
+				Your Browser doesn't support IFrames.
+			</iframe>
+		</td>
+	</tr>
+</table>
+
+<%  } else { %>
 
 <table border="0" height="100%" width="100%">
 	<tr height="100%">
@@ -43,3 +69,7 @@
 		</td>
 	</tr>
 </table>
+
+<%
+}
+%>
