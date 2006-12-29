@@ -1021,52 +1021,17 @@ public class StorageContainerForm extends AbstractActionForm
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
 							ApplicationProperties.getValue("storageContainer.parentContainer")));
 				}
+			} else
+			{
+					checkPositionForParent(errors);
 			}
+			
+			
 			}
-			else if (checkedButton == 2 && this.noOfContainers > 1 && stContSelection==2)
+			else if (checkedButton == 2 && this.noOfContainers >= 1 && stContSelection==2)
 			{
 				
-	    	boolean flag = false;
-				if(pos1!=null&&!pos1.trim().equals(""))
-				{
-					long l = 1;
-	                  try 
-					  {
-	                    	l = Long.parseLong(pos1);
-					  }
-					 catch(Exception e)
-					 {
-					 	flag = true;
-						
-					 }
-					 if(l<=0)
-					 {
-					 	flag = true;
-					 }
-				}
-				if(pos2!=null&&!pos2.trim().equals(""))
-				{
-					long l = 1;
-	                  try 
-					  {
-	                    	l = Long.parseLong(pos2);
-					  }
-					 catch(Exception e)
-					 {
-					 	flag = true;
-						
-					 }
-					 if(l<=0)
-					 {
-					 	flag = true;
-					 }
-				}
-				
-				if(flag)
-				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
-							ApplicationProperties.getValue("storageContainer.parentContainer")));
-	    		} 
+				checkPositionForParent(errors);
 			/*	if (!validator.isNumeric(String.valueOf(pos1), 1)
 						|| !validator.isNumeric(String.valueOf(pos2), 1))
 				{
@@ -1219,6 +1184,57 @@ public class StorageContainerForm extends AbstractActionForm
 			Logger.out.error(excp.getMessage(), excp);
 		}
 		return errors;
+	}
+
+	/**
+	 * @param pos12
+	 * @param pos22
+	 * @param errors
+	 */
+	private void checkPositionForParent(ActionErrors errors)
+	{
+		boolean flag = false;
+		if(pos1!=null&&!pos1.trim().equals(""))
+		{
+			long l = 1;
+              try 
+			  {
+                	l = Long.parseLong(pos1);
+			  }
+			 catch(Exception e)
+			 {
+			 	flag = true;
+				
+			 }
+			 if(l<=0)
+			 {
+			 	flag = true;
+			 }
+		}
+		if(pos2!=null&&!pos2.trim().equals(""))
+		{
+			long l = 1;
+              try 
+			  {
+                	l = Long.parseLong(pos2);
+			  }
+			 catch(Exception e)
+			 {
+			 	flag = true;
+				
+			 }
+			 if(l<=0)
+			 {
+			 	flag = true;
+			 }
+		}
+		
+		if(flag)
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",
+					ApplicationProperties.getValue("storageContainer.parentContainer")));
+		} 
+		
 	}
 
 	//This function if 'any' option is selected then no other option should be selected */
