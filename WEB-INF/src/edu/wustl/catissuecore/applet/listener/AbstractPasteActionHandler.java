@@ -225,10 +225,7 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 	private void setUI(CopyPasteOperationValidatorModel validatorModel, HashMap dataMap, int selectedRow, int selectedCol)
 	{
 		// Row at which data is to be set cant be checkbox
-		if (selectedRow == 0)
-		{
-			selectedRow = 1;
-		}
+		
 		int tmpSelectedRow = selectedRow;
 		List copiedRows = validatorModel.getSelectedCopiedRows();
 		List copiedCols = validatorModel.getSelectedCopiedCols();
