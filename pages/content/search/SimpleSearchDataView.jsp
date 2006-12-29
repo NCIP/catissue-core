@@ -49,9 +49,12 @@ tr#hiddenCombo
 		function onAddToCart()
 		{
 			var isChecked = updateHiddenFields();
+			
 		    if(isChecked == "true")
 		    {
-				var action = "ShoppingCart.do?operation=add";
+			    var pageNum = "<%=pageNum%>";
+				var action = "ShoppingCart.do?operation=add&pageNum="+pageNum;
+			
 				document.forms[0].operation.value="add";
 				document.forms[0].action = action;
 				document.forms[0].target = "myframe1";
