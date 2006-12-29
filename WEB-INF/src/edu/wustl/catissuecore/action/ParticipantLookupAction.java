@@ -148,34 +148,7 @@ public class ParticipantLookupAction extends BaseAction
 			participantInfo.add(Utility.toString(participant.getBirthDate()));
 			participantInfo.add(Utility.toString(participant.getDeathDate()));
 			participantInfo.add(Utility.toString(participant.getVitalStatus()));
-			participantInfo.add(Utility.toString(participant.getGender()));
-						/*if(participant.getSexGenotype()!=null)
-			{
-				participantInfo.add(participant.getSexGenotype());
-			}
-			else
-			{
-				participantInfo.add("");
-			}*/
-			
-			/*if(participant.getRace()!=null)
-			{
-				participantInfo.add(participant.getRace());
-			}
-			else
-			{
-				participantInfo.add("");
-			}
-			*/
-			/*if(participant.getEthnicity()!=null)
-			{
-				participantInfo.add(participant.getEthnicity());
-			}
-			else
-			{
-				participantInfo.add("");
-			}
-			*/
+			participantInfo.add(Utility.toString(participant.getGender()));						
 			participantInfo.add(Utility.toString(participant.getSocialSecurityNumber()));
 			participantInfo.add(participant.getId());
 			participantDisplayList.add(participantInfo);
