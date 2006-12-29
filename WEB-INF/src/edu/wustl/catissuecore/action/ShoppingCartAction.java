@@ -52,6 +52,11 @@ public class ShoppingCartAction  extends BaseAction
     {
         //Gets the value of the operation parameter.
         String operation = (String)request.getParameter(Constants.OPERATION);
+        String pageNo = (String)request.getParameter(Constants.PAGE_NUMBER);
+        if(pageNo != null)
+        {
+        	request.setAttribute(Constants.PAGE_NUMBER,pageNo);
+        }
         String target = Constants.SUCCESS;
         HttpSession session = request.getSession(true);
         ShoppingCart cart = (ShoppingCart)session.getAttribute(Constants.SHOPPING_CART);
