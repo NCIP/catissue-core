@@ -28,10 +28,9 @@ function confirmDisable(action,formField)
 {
 	if((formField != undefined) && (formField.value == "Disabled"))
 	{
-		var go = confirm("Are you sure, you want to disable?");
+		var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
 		if (go==true)
-		{
-			document.forms[0].action = action;
+		{	document.forms[0].action = action;
 			document.forms[0].submit();
 		}
 	}
