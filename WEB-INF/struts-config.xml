@@ -3230,7 +3230,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path="/QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery" />
 		<forward name="failure" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
-		<forward name="createNew" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15&amp;virtualLocated=true" />
+		<forward name="createNew" path="/CPQueryCreateSpecimen.do?operation=add&amp;pageOf=pageOfCreateSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 		<forward name="sameCollectionGroup" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
 		<forward name="eventParameters" path="/CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery&amp;menuSelected=15" />
 		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;CPQuery=true&amp;menuSelected=15" />
