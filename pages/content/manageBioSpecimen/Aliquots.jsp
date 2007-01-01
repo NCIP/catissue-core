@@ -554,7 +554,7 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 		String onChange = "onCustomListBoxChangeInAliquot(this,'CreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=executeContainerChange')";
 		if(CPQuery!= null)
 		{
-			onChange = "onCustomListBoxChangeInAliquot(this,'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=executeContainerChange&CPQuery=true')";
+			onChange = "onCustomListBoxChangeInAliquot(this,'CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&operation=add&menuSelected=15&method=executeContainerChange&CPQuery=true&"+Constants.PARENT_SPECIMEN_ID+"="+parentSPId+"')";	
 		}
 
 
