@@ -104,10 +104,17 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		JScrollPane scrollPane= new FixedColumnScrollPane(table);
 		System.out.println("Table Size : "+table.getWidth()+","+table.getHeight());
 		table.setSize(WIDTH,getHeight());
+		Dimension dim = new Dimension(WIDTH,getHeight()-65) ;
+//		table.setPreferredSize( dim);
+//		table.setPreferredScrollableViewportSize(new Dimension(WIDTH,getHeight()));
 		System.out.println("Table Size after set : "+table.getWidth()+","+table.getHeight());
-		scrollPane.setPreferredSize(new Dimension(table.getWidth(),table.getHeight())); 
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED  );  
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
+//		scrollPane.setSize(table.getWidth(),table.getHeight());
+		scrollPane.setPreferredSize(dim );
+		System.out.println("\nscrollPane.getPreferredSize(): "+ scrollPane.getPreferredSize());
+		scrollPane.setSize(dim );   
+		
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER  );  
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS); 
 
 		getContentPane().add(scrollPane);
 		setBackground(appletColor);
