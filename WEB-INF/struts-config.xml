@@ -3266,7 +3266,7 @@ PUBLIC
 		type="edu.wustl.common.action.CommonAddEditAction"
 		name="specimenCollectionGroupForm"
 		validate="true"
-		input="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=query"
+		input="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery"
 		scope="request">
 		<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
