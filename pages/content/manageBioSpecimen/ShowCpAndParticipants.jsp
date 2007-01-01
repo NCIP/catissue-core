@@ -109,7 +109,7 @@
 	<tr>
 
 		<td class="formField" nowrap>
-			<html:select property="participantId" styleClass="formFieldSized15" styleId="participantId" size="10" onchange="onParticipantChange(this)"
+			<html:select property="participantId" styleClass="formFieldSized15" styleId="participantId" size="8" onchange="onParticipantChange(this)"
 			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.REGISTERED_PARTICIPANT_LIST%>" labelProperty="name" property="value"/>
 			</html:select>
