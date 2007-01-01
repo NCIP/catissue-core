@@ -62,6 +62,7 @@ public class SpecimenCollectionGroupForTechAction extends BaseAction
 			request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID,id);
 			//setting name in session to show SCG selected in multiple specimen page
 			request.getSession().setAttribute(Constants.SPECIMEN_COLL_GP_NAME,name);
+			request.getSession().setAttribute("specimenCollectionGroupId" , id);
 			return mapping.findForward(Constants.SUCCESS);
 		}
 		else
