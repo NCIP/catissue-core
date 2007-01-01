@@ -35,41 +35,25 @@
 			    mac = true;
 			}
 	
+	String height = "100%";
 	if(mac)
    {	
+        height = "320";
+   }
 %>
- <table border="0" height="320" width="810">
-	<tr height="320">
-		<td width="200">
-			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeViewAction%>" scrolling="yes" frameborder="1" width="200" height="320">
-				Your Browser doesn't support IFrames.
-			</iframe>
-		</td>
-		<td width="610">
-			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" scrolling="yes" frameborder="1" width="610" height="320">
-				Your Browser doesn't support IFrames.
-			</iframe>
-		</td>
-	</tr>
-</table>
-
-<%  } else { %>
 
 <table border="0" height="100%" width="100%">
 	<tr height="100%">
 		<td width="25%">
-			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeViewAction%>" scrolling="yes" frameborder="1" width="100%" height="100%">
+			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeViewAction%>" scrolling="yes" frameborder="1" width="100%" height="<%=height%>">
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
 		<td width="74%">
-			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" scrolling="yes" frameborder="1" width="100%" height="100%">
+			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" scrolling="yes" frameborder="1" width="100%" height="<%=height%>">
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
 	</tr>
 </table>
 
-<%
-}
-%>

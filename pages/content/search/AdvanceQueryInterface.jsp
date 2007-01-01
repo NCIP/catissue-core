@@ -30,6 +30,21 @@
 			action = "SpecimenAdvanceSearch.do?pageOf=pageOfSpecimenAdvanceSearch";
 		}
 	}
+	        
+	        boolean mac = false;
+	        Object os = request.getHeader("user-agent");
+			if(os!=null && os.toString().toLowerCase().indexOf("mac")!=-1)
+			{
+			    mac = true;
+			}
+	String height1 = "100%";		
+	String height2 = "100%";	
+	if(mac)
+	{
+	  height1="200";
+	  height2="90";
+	}
+	
 	%>
 </head>
 
@@ -54,7 +69,7 @@
        		<table width="100%" height="100%"> 
 			<tr>
 				<td width="100%">
-				    <iframe name="searchPageFrame" id="searchPageFrame" src="<%=action%>" width="90%" height="100%" frameborder="0" scrolling="auto">
+				    <iframe name="searchPageFrame" id="searchPageFrame" src="<%=action%>" width="90%" height="<%=height1%>" frameborder="0" scrolling="auto">
 		            </iframe>
 				</td>
 			</tr>
@@ -67,7 +82,7 @@
 			<table width="100%" height="100%"> 
 			<tr>
 				<td width="100%">
-		            <iframe name="queryFrame" id="queryFrame" src="AdvanceQueryView.do" width="80%" height="100%" frameborder="0" scrolling="auto">
+		            <iframe name="queryFrame" id="queryFrame" src="AdvanceQueryView.do" width="80%" height="<%=height2%>"frameborder="0" scrolling="auto">
         		    </iframe>
 				</td>
 			</tr>
