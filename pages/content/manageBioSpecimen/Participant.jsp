@@ -12,7 +12,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 
 <script src="jss/script.js"></script>
-<!-- Mandar 11-Aug-06 : For calendar changes -->
+<!-- Mandar 11-Aug-06 : For calendar changes --> 
 <script src="jss/calendarComponent.js"></script>
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
@@ -216,7 +216,7 @@ tr#hiddenCombo
 		//This function is called when user clicks on 'Use Selected Participant' Button
 		function UseSelectedParticipant()
 		{
-		alert("2");
+		
 			if(document.forms[0].participantId.value=="" || document.forms[0].participantId.value=="0")
 			{
 				alert("Please select the Participant from the list");
@@ -225,7 +225,6 @@ tr#hiddenCombo
 			{
 			
 				document.forms[0].action="ParticipantSelect.do?operation=add&id="+document.forms[0].participantId.value;
-				alert("3");
 				alert(document.forms[0].action);
 				document.forms[0].submit();
 				//window.location.href="ParticipantSelect.do?operation=add&participantId="+document.forms[0].participantId.value+"&submittedFor="+document.forms[0].submittedFor.value+"&forwardTo="+document.forms[0].forwardTo.value;
@@ -296,8 +295,19 @@ tr#hiddenCombo
 				}		
 			<%}%>	
 			
-			document.forms[0].submit();		
+	if((document.forms[0].activityStatus != undefined) && (document.forms[0].activityStatus.value == "Disabled"))
+   	{
+	    var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
+		if (go==true)
+		{
+			document.forms[0].submit();
 		}
+	} 
+	else
+	{
+			document.forms[0].submit();		
+	}
+}
 		
 		function onVitalStatusRadioButtonClick(element)
 		{
@@ -844,6 +854,7 @@ tr#hiddenCombo
 									String forwardToSubmit = forwardToSubmitFunctionName + ","+confirmDisableFuncName;
 								--%>
 								<%
+								    
 									String normalSubmitFunctionName = "setSubmittedForParticipant('" + submittedFor+ "','" + Constants.PARTICIPANT_FORWARD_TO_LIST[0][1]+"')";
 									String forwardToSubmitFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[1][1]+"')";									
 									String forwardToSCGFunctionName = "setSubmittedForParticipant('ForwardTo','" + Constants.PARTICIPANT_FORWARD_TO_LIST[2][1]+"')";									
