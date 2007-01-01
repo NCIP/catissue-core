@@ -229,6 +229,8 @@ public class AdvanceSearchResultsAction extends BaseAction
 	private void copy(DefaultMutableTreeNode oldCopy,DefaultMutableTreeNode newCopy)
 	{
 		DefaultMutableTreeNode child = new DefaultMutableTreeNode();
+		if(oldCopy != null)
+		{
 		int childCount = oldCopy.getChildCount();
 		for(int i=0;i<childCount;i++)
 		{
@@ -253,6 +255,7 @@ public class AdvanceSearchResultsAction extends BaseAction
 			DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(newAdvNode);
 			newCopy.add(newChild);
 			copy(child,newChild);
+		}
 		}
 	}
 }
