@@ -7,7 +7,6 @@
  */
 package edu.wustl.catissuecore.applet.ui;
 
-import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
