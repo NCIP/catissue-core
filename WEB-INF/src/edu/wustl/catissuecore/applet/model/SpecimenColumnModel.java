@@ -412,9 +412,9 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		rbspecimenGroup.setSelected(true);
 
 		//Parent Specimen 
-		parentSpecimen = new ModifiedTextField(17);
+		parentSpecimen = new ModifiedTextField(10);
 		rbparentSpecimen = new JRadioButton();
-		parentSpecimen.setPreferredSize(new Dimension(154, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
+		parentSpecimen.setPreferredSize(new Dimension(100, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
 		//rbparentSpecimen.setEnabled(false);
 		parentSpecimenPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		parentSpecimen.setEnabled(false);
@@ -814,7 +814,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		//		updateButtons();
 		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel) table.getModel();
 		setUnit(model.getQuantityUnit(columnIndex));
-
+        
 		refreshComponent(unit);
 	}
 

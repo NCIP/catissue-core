@@ -39,7 +39,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 * Row headers for the attributes. This corrosponds to display value for each of the  specimenAttribute in that order.
 	 */
 	private static final String[] rowHeaders = {"","* Specimen Group Name", "* Parent", "* Label", "Barcode", "* Class", "* Type", "* Tissue Site",
-			"* Tissue Side", "* Pathological Status", "* Quantity", "Concentration", "Comments", "* Events",
+			"* Tissue Side", "* Pathological Status", "Quantity", "Concentration", "Comments", "* Events",
 			"External Identifier(s)", "Biohazards", "Derive"};
 
 	/**
@@ -437,14 +437,14 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public boolean getConcentrationStatus(int column)
 	{
-		return false;
-		//		String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, getActualColumnNo(column));
-		//		
-		//		if(specimenClass.equalsIgnoreCase(Constants.MOLECULAR)) {
-		//			return true;
-		//		} 
-		//		
-		//		return false;
+	//	return false;
+				String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, column);
+				
+				if(specimenClass!=null && specimenClass.equalsIgnoreCase(Constants.MOLECULAR)) {
+					return true;
+				} 
+				
+				return false;
 	}
 
 	/**
