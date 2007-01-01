@@ -39,14 +39,33 @@ var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList)%><%="\""%>;
 
 
 <script>
-	function rowClick(id)
+/*	function rowClick(id)
 	{
 		var colid = <%=identifierFieldIndex.intValue()%>;
 		var cl = mygrid.cells(id,colid);
 		var searchId = cl.getValue();
 		var url = "SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+searchId;
 		window.location.href = url;
+	}
+*/
+// function modified to display distribution array.
+// problem in query data.
+	function rowClick(id)
+	{
+		var colid = <%=identifierFieldIndex.intValue()%>;
+		var x=document.getElementsByName("pageOf");
+		//alert(x);
+		if(x[0].value == "pageOfArrayDistribution")
+		{
+			colid=0;
+		}
+		//alert(colid);
+		var cl = mygrid.cells(id,colid);
+		var searchId = cl.getValue();
+		var url = "SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+searchId;
+		window.location.href = url;
 	} 			
+ 			
 	var funcName = "rowClick";
 	if(useDefaultRowClickHandler == 1)
 	{
