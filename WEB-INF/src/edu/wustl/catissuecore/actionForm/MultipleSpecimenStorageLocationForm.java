@@ -232,7 +232,7 @@ public class MultipleSpecimenStorageLocationForm extends AbstractActionForm
 	{
 		ActionErrors errors = new ActionErrors();
 
-		if (Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION.equals(request.getParameter(Constants.PAGEOF)))
+		if (request.getParameter("formSubmitted")!=null)
 		{
 			Iterator keyIterator = specimenOnUIMap.keySet().iterator();
 

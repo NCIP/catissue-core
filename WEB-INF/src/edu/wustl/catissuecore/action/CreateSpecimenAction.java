@@ -165,10 +165,11 @@ public class CreateSpecimenAction extends SecureAction
 						{
 						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
 								spClass, 0,exceedingMaxLimit,sessionData,true);
+						ActionErrors errors = (ActionErrors) request
+						.getAttribute(Globals.ERROR_KEY);
 						if (containerMap.isEmpty())
 						{
-							ActionErrors errors = (ActionErrors) request
-									.getAttribute(Globals.ERROR_KEY);
+						
 							if (errors == null || errors.size() == 0)
 							{
 								errors = new ActionErrors();
@@ -179,7 +180,21 @@ public class CreateSpecimenAction extends SecureAction
 						}
 						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
 						request.setAttribute(Constants.SPECIMEN_CLASS_NAME, spClass);
-						initialValues = checkForInitialValues(containerMap);
+					
+						if (errors == null || errors.size() == 0)
+						{
+							initialValues = checkForInitialValues(containerMap);
+						}
+						else
+						{
+							String[] startingPoints = new String[3];
+							startingPoints[0] = createForm.getStorageContainer();
+							startingPoints[1] = createForm.getPositionDimensionOne();
+							startingPoints[2] = createForm.getPositionDimensionTwo() ;
+							initialValues = new Vector();
+							initialValues.add(startingPoints);
+						}
+					
 						}
 
 					}

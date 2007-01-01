@@ -137,7 +137,7 @@
 					actionToCall2 = Constants.CP_QUERY_CREATE_SPECIMEN_ACTION+"?pageOf="+Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY+"&operation=add&virtualLocated=false";
 				}%>
 				var action = "<%=actionToCall2%>";
-				document.forms[0].action = action;
+				document.forms[0].action = action + "&isLabelBarcodeOrClassChange=true";
 				document.forms[0].submit();
 			}	
 		}

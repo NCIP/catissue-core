@@ -35,6 +35,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -189,7 +190,11 @@ public class SpecimenArrayAliquotAction extends BaseAction
 
 					if (Constants.PAGEOF_SPECIMEN_ARRAY_CREATE_ALIQUOT.equals(pageOf))
 					{
-						populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);
+						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+						if (errors == null || errors.size() == 0)
+						{
+						   populateAliquotsStorageLocations(specimenArrayAliquotForm, containerMap);
+						}
 					}					
 				}
 			}

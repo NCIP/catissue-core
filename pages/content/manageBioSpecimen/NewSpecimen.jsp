@@ -225,7 +225,7 @@
 					actionOnCollOrClassChange = "CPQueryNewSpecimen.do?operation=add&pageOf=pageOfNewSpecimenCPQuery&virtualLocated=false";
 				}%>
 				var action = "<%=actionOnCollOrClassChange%>";
-				document.forms[0].action = action;
+				document.forms[0].action = action + "&onCollOrClassChange=true";
 				document.forms[0].submit();
 			}	
 		}
@@ -265,7 +265,10 @@
 			document.forms[0].customListBox_1_2.disabled = true;
 		}
 		function eventClicked()
-		{			
+		{		
+               
+			  // Clear the value of onSubmit 
+		    document.forms[0].onSubmit.value="";
 			var answer = confirm("Do you want to submit any changes?");
 			var formName;;
 			<% String formNameAction = null;%>

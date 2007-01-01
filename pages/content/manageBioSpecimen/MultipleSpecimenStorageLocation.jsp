@@ -20,6 +20,10 @@
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	if(request.getParameter("formSubmitted")!=null)
+	{
+	     pageOf = (String)request.getParameter(Constants.PAGEOF);
+	}
 	String submitSuccessful = (String)request.getAttribute(Constants.MULTIPLE_SPECIMEN_SUBMIT_SUCCESSFUL);
 %>
 <head>
@@ -30,11 +34,12 @@
 <script>
 		function submitForm()
 		{
-			var action = '<%=Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_ACTION%>';
-			document.forms[0].action = action + "?pageOf=" + '<%=Constants.PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION%>' + "&operation=add&menuSelected=15&buttonClicked=submit";
-			<%if(pageOf != null && pageOf.equals(Constants.PAGE_OF_MULTIPLE_SPECIMEN_CP_QUERY)) {%>
+		    var action = '<%=Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_ACTION%>';
+			<%System.out.println("pageOf----"+ pageOf);%>
+			document.forms[0].action = action + "?formSubmitted=true&operation=add&menuSelected=15&buttonClicked=submit&pageOf=" + '<%=pageOf%>';
+			<%if(pageOf != null && pageOf.toLowerCase().indexOf("cpquery")!=-1) {%>
 			action = '<%=Constants.CP_QUERY_MULTIPLE_SPECIMEN_STORAGE_LOCATION_ACTION%>';
-			document.forms[0].action = action + "?pageOf=" + '<%=Constants.CP_QUERY_PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION%>' + "&operation=add&menuSelected=15&buttonClicked=submit";
+			document.forms[0].action = action + "?pageOf=" + '<%=Constants.CP_QUERY_PAGEOF_MULTIPLE_SPECIMEN_STORAGE_LOCATION%>' + "&operation=add&menuSelected=15&formSubmitted=true&buttonClicked=submit";
 			<%}%>
 			document.forms[0].submit();
 		}

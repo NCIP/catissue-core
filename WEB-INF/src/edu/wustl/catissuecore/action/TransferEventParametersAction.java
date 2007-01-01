@@ -44,7 +44,7 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
-		TransferEventParametersForm form = (TransferEventParametersForm) request
+		TransferEventParametersForm transferEventParametersForm = (TransferEventParametersForm) request
 				.getAttribute("transferEventParametersForm");
 		String operation = request.getParameter(Constants.OPERATION);
 		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
@@ -110,10 +110,10 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				
 				SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 				containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, className, 0,exceedingMaxLimit,sessionData,true);
-
+				ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 				if (containerMap.isEmpty())
 				{
-					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+					
 					if (errors == null || errors.size() == 0)
 					{
 						errors = new ActionErrors();
@@ -122,26 +122,38 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 							"storageposition.not.available"));
 					saveErrors(request, errors);
 				}
-				initialValues = checkForInitialValues(containerMap);
-
+				if(errors == null || errors.size() == 0)
+				{
+				      initialValues = checkForInitialValues(containerMap);
+				} else
+				{
+					String[] startingPoints = new String[3];
+					startingPoints[0] = transferEventParametersForm.getStorageContainer();
+					startingPoints[1] = transferEventParametersForm.getPositionDimensionOne();
+					startingPoints[2] = transferEventParametersForm.getPositionDimensionTwo() ;
+					initialValues = new Vector();
+					initialValues.add(startingPoints);
+					
+				}
+				
 			}
 		} // operation=add
 		else
 		{
 
-			Integer id = new Integer(form.getStorageContainer());
+			Integer id = new Integer(transferEventParametersForm.getStorageContainer());
 			String parentContainerName = "";
 			String valueField1 = "id";
 			List list = scbizLogic.retrieve(StorageContainer.class.getName(), valueField1,
-					new Long(form.getStorageContainer()));
+					new Long(transferEventParametersForm.getStorageContainer()));
 			if (!list.isEmpty())
 			{
 				StorageContainer container = (StorageContainer) list.get(0);
 				parentContainerName = container.getName();
 
 			}
-			Integer pos1 = new Integer(form.getPositionDimensionOne());
-			Integer pos2 = new Integer(form.getPositionDimensionTwo());
+			Integer pos1 = new Integer(transferEventParametersForm.getPositionDimensionOne());
+			Integer pos2 = new Integer(transferEventParametersForm.getPositionDimensionTwo());
 
 			List pos2List = new ArrayList();
 			pos2List.add(new NameValueBean(pos2, pos2));
@@ -151,20 +163,20 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 			containerMap.put(new NameValueBean(parentContainerName, id), pos1Map);
 
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
-			if (form.getStorageContainer() != null && !form.getStorageContainer().equals("-1"))
+			if (transferEventParametersForm.getStorageContainer() != null && !transferEventParametersForm.getStorageContainer().equals("-1"))
 			{
-				startingPoints[0] = form.getStorageContainer();
+				startingPoints[0] = transferEventParametersForm.getStorageContainer();
 
 			}
-			if (form.getPositionDimensionOne() != null
-					&& !form.getPositionDimensionOne().equals("-1"))
+			if (transferEventParametersForm.getPositionDimensionOne() != null
+					&& !transferEventParametersForm.getPositionDimensionOne().equals("-1"))
 			{
-				startingPoints[1] = form.getPositionDimensionOne();
+				startingPoints[1] = transferEventParametersForm.getPositionDimensionOne();
 			}
-			if (form.getPositionDimensionTwo() != null
-					&& !form.getPositionDimensionTwo().equals("-1"))
+			if (transferEventParametersForm.getPositionDimensionTwo() != null
+					&& !transferEventParametersForm.getPositionDimensionTwo().equals("-1"))
 			{
-				startingPoints[2] = form.getPositionDimensionTwo();
+				startingPoints[2] = transferEventParametersForm.getPositionDimensionTwo();
 			}
 			initialValues = new Vector();
 			Logger.out.info("Starting points[0]" + startingPoints[0]);

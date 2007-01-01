@@ -62,8 +62,8 @@ public class NewSpecimenAction extends SecureAction
 	/**
 	 * Overrides the execute method of Action class.
 	 */
-	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
 	{
 		//Logger.out.debug("NewSpecimenAction start@@@@@@@@@");
 		NewSpecimenForm specimenForm = (NewSpecimenForm) form;
@@ -73,8 +73,8 @@ public class NewSpecimenAction extends SecureAction
 
 		//boolean to indicate whether the suitable containers to be shown in dropdown 
 		//is exceeding the max limit.
-		String exceedingMaxLimit=new String();
-		
+		String exceedingMaxLimit = new String();
+
 		//Sets the operation attribute to be used in the Edit/View Specimen Page in Advance Search Object View. 
 		request.setAttribute(Constants.OPERATION, operation);
 
@@ -83,17 +83,16 @@ public class NewSpecimenAction extends SecureAction
 			specimenForm.setId(0);
 		}
 		String virtuallyLocated = request.getParameter("virtualLocated");
-		if(virtuallyLocated!=null && virtuallyLocated.equals("true"))
+		if (virtuallyLocated != null && virtuallyLocated.equals("true"))
 		{
 			specimenForm.setVirtuallyLocated(true);
 		}
-				
-//		if (operation != null && operation.equalsIgnoreCase(Constants.EDIT))
-//		{
-//			Logger.out.debug("virtuallylocated:"+specimenForm.getVirtuallyLocated());
-//		}
 
-		
+		//		if (operation != null && operation.equalsIgnoreCase(Constants.EDIT))
+		//		{
+		//			Logger.out.debug("virtuallylocated:"+specimenForm.getVirtuallyLocated());
+		//		}
+
 		//Name of button clicked
 		String button = request.getParameter("button");
 		Map map = null;
@@ -127,10 +126,8 @@ public class NewSpecimenAction extends SecureAction
 
 		if (forwardToHashMap != null)
 		{
-			String specimenCollectionGroupId = (String) forwardToHashMap
-					.get("specimenCollectionGroupId");
-			Logger.out.debug("SpecimenCollectionGroupId found in forwardToHashMap========>>>>>>"
-					+ specimenCollectionGroupId);
+			String specimenCollectionGroupId = (String) forwardToHashMap.get("specimenCollectionGroupId");
+			Logger.out.debug("SpecimenCollectionGroupId found in forwardToHashMap========>>>>>>" + specimenCollectionGroupId);
 
 			if (specimenCollectionGroupId != null)
 			{
@@ -138,31 +135,31 @@ public class NewSpecimenAction extends SecureAction
 				 *  Retaining properties of specimen when more is clicked.
 				 *  Bug no -- 2623
 				 */
-				setFormValues(specimenForm,specimenCollectionGroupId);
+				setFormValues(specimenForm, specimenCollectionGroupId);
 				/* removedspecimenForm.setSpecimenCollectionGroupId(specimenCollectionGroupId);
-				specimenForm.setParentSpecimenId("");
-				specimenForm.setLabel("");
-				specimenForm.setBarcode("");
-				specimenForm.setPositionInStorageContainer("");*/
-				
+				 specimenForm.setParentSpecimenId("");
+				 specimenForm.setLabel("");
+				 specimenForm.setBarcode("");
+				 specimenForm.setPositionInStorageContainer("");*/
+
 				/*specimenForm.setQuantity("");
-				specimenForm.setClassName("");
-				specimenForm.setTissueSide("");
-				specimenForm.setTissueSite("");
-				specimenForm.setPathologicalStatus("");*/
-				
+				 specimenForm.setClassName("");
+				 specimenForm.setTissueSide("");
+				 specimenForm.setTissueSite("");
+				 specimenForm.setPathologicalStatus("");*/
+
 				/* removed specimenForm.setPositionDimensionOne("");
-				specimenForm.setPositionDimensionTwo("");
-				specimenForm.setStorageContainer("");*/
+				 specimenForm.setPositionDimensionTwo("");
+				 specimenForm.setStorageContainer("");*/
 
 				/*clearCollectionEvent(specimenForm);
-				clearReceivedEvent(specimenForm);*/
+				 clearReceivedEvent(specimenForm);*/
 
 			}
 		}
 		else
 		{
-			if(request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID) != null)
+			if (request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID) != null)
 			{
 				String specimenCollectionGroupId = request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID);
 				//setFormValues(specimenForm,specimenCollectionGroupId);
@@ -183,14 +180,12 @@ public class NewSpecimenAction extends SecureAction
 		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
 
-		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance()
-				.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 
 		if (specimenForm.isParentPresent())//If parent specimen is present then
 		{
 			String[] fields = {Constants.SYSTEM_LABEL};
-			List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields,
-					Constants.SYSTEM_IDENTIFIER, true);
+			List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true);
 			request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);
 		}
 
@@ -234,13 +229,11 @@ public class NewSpecimenAction extends SecureAction
 		String[] displayNameFields = {"name"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 
-		
 		List specimenCollectionGroupList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenCollectionGroupList);
 
 		//Setting the specimen class list
-		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_SPECIMEN_CLASS, null);
+		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
 
 		if (Constants.ALIQUOT.equals(specimenForm.getLineage()))
@@ -250,37 +243,32 @@ public class NewSpecimenAction extends SecureAction
 		else
 		{
 			//Setting the specimen type list
- 			List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(
-					Constants.CDE_NAME_SPECIMEN_TYPE, null);
+			List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE, null);
 			request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-						
 
 			//Setting tissue site list
-			List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(
-					Constants.CDE_NAME_TISSUE_SITE, null);
+			List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
 			request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 			//Bug- setting the default tissue site
-			if(specimenForm.getTissueSite() == null)
+			if (specimenForm.getTissueSite() == null)
 			{
 				specimenForm.setTissueSite(Constants.NOTSPECIFIED);
 			}
-			
+
 			//Setting tissue side list
-			List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(
-					Constants.CDE_NAME_TISSUE_SIDE, null);
+			List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null);
 			request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
 			//Bug- setting the default tissue side
-			if(specimenForm.getTissueSide() == null)
+			if (specimenForm.getTissueSide() == null)
 			{
 				specimenForm.setTissueSide(Constants.NOTSPECIFIED);
 			}
-			
+
 			//Setting pathological status list
-			List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
-					Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
+			List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
 			request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
 			//Bug- setting the default pathological status
-			if(specimenForm.getPathologicalStatus() == null)
+			if (specimenForm.getPathologicalStatus() == null)
 			{
 				specimenForm.setPathologicalStatus(Constants.NOTSPECIFIED);
 			}
@@ -330,12 +318,11 @@ public class NewSpecimenAction extends SecureAction
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
 
 		//Setting biohazard list
-		biohazardList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_BIOHAZARD, null);
+		biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD, null);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
 
 		//Mandar : 10-July-06 AutoEvents : CollectionEvent
-		setCollectionEventRequestParameters(request,specimenForm);
+		setCollectionEventRequestParameters(request, specimenForm);
 
 		//Mandar : 11-July-06 AutoEvents : ReceivedEvent
 		setReceivedEventRequestParameters(request, specimenForm);
@@ -344,73 +331,84 @@ public class NewSpecimenAction extends SecureAction
 		setDateParameters(specimenForm);
 
 		//    	 ---- chetan 15-06-06 ----
-		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory
-				.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-		TreeMap containerMap = new TreeMap(); 
+		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
+				Constants.STORAGE_CONTAINER_FORM_ID);
+		TreeMap containerMap = new TreeMap();
 		Vector initialValues = null;
 		if (operation.equals(Constants.ADD))
 		{
-			if (specimenForm.getSpecimenCollectionGroupId() != null && !specimenForm.getSpecimenCollectionGroupId().equals("") && 
-					specimenForm.getClassName()!=null && !specimenForm.getClassName().equals("") && !specimenForm.getClassName().equals("-1"))
+			if (specimenForm.getSpecimenCollectionGroupId() != null && !specimenForm.getSpecimenCollectionGroupId().equals("")
+					&& specimenForm.getClassName() != null && !specimenForm.getClassName().equals("") && !specimenForm.getClassName().equals("-1"))
 			{
 				//Logger.out.debug("before retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
-				String []selectColumnName={"collectionProtocolRegistration.collectionProtocol.id"};
-				String []whereColumnName={Constants.SYSTEM_IDENTIFIER};
-				String []whereColumnCondition={"="};
-				String []whereColumnValue={specimenForm.getSpecimenCollectionGroupId()};
-				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(),selectColumnName ,whereColumnName
-						,whereColumnCondition,whereColumnValue,null );
+				String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol.id"};
+				String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+				String[] whereColumnCondition = {"="};
+				String[] whereColumnValue = {specimenForm.getSpecimenCollectionGroupId()};
+				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
+						whereColumnCondition, whereColumnValue, null);
 				//Logger.out.debug("after retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
 				if (!spCollGroupList.isEmpty())
 				{
-//					Object []spCollGroup = (Object[]) spCollGroupList
-//							.get(0);
-					long cpId = ((Long)spCollGroupList.get(0)).longValue();
+					//					Object []spCollGroup = (Object[]) spCollGroupList
+					//							.get(0);
+					long cpId = ((Long) spCollGroupList.get(0)).longValue();
 					String spClass = specimenForm.getClassName();
 					Logger.out.info("cpId :" + cpId + "spClass:" + spClass);
-					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID,cpId+"");
-					if(virtuallyLocated!=null && virtuallyLocated.equals("false"))
+					request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
+					if (virtuallyLocated != null && virtuallyLocated.equals("false"))
 					{
-							specimenForm.setVirtuallyLocated(false);
+						specimenForm.setVirtuallyLocated(false);
 					}
 					//Logger.out.debug("calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 					SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
-					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass,0,exceedingMaxLimit,sessionData,true);
+					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, true);
 					//Logger.out.debug("exceedingMaxLimit in action for Boolean:"+exceedingMaxLimit);
 					Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
-					if(containerMap.isEmpty())
+					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+					if (containerMap.isEmpty())
 					{
-						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+						
 						if (errors == null || errors.size() == 0)
 						{
 							errors = new ActionErrors();
 						}
-						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("storageposition.not.available"));
-						saveErrors(request,errors);
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("storageposition.not.available"));
+						saveErrors(request, errors);
 					}
 					Logger.out.debug("calling checkForInitialValues() function from NewSpecimenAction---");
-					initialValues = checkForInitialValues(containerMap);
+					if (errors == null || errors.size() == 0)
+					{
+						initialValues = checkForInitialValues(containerMap);
+					}
+					else
+					{
+						String[] startingPoints = new String[3];
+						startingPoints[0] = specimenForm.getStorageContainer();
+						startingPoints[1] = specimenForm.getPositionDimensionOne();
+						startingPoints[2] = specimenForm.getPositionDimensionTwo() ;
+						initialValues = new Vector();
+						initialValues.add(startingPoints);
+					}
 					Logger.out.debug("finish ---calling checkForInitialValues() function from NewSpecimenAction---");
-				} 
+				}
 			}
 		}
 		else
 		{
 			containerMap = new TreeMap();
 			String[] startingPoints = new String[]{"-1", "-1", "-1"};
-			
+
 			Logger.out.info("--------------container:" + specimenForm.getStorageContainer());
 			Logger.out.info("--------------pos1:" + specimenForm.getPositionDimensionOne());
 			Logger.out.info("--------------pos2:" + specimenForm.getPositionDimensionTwo());
 
-			if (specimenForm.getStorageContainer() != null
-					&& !specimenForm.getStorageContainer().equals(""))
+			if (specimenForm.getStorageContainer() != null && !specimenForm.getStorageContainer().equals(""))
 			{
 				Integer id = new Integer(specimenForm.getStorageContainer());
 				String parentContainerName = "";
 				String valueField1 = "id";
-				List list = bizLogic.retrieve(StorageContainer.class.getName(), valueField1,
-						new Long(specimenForm.getStorageContainer()));
+				List list = bizLogic.retrieve(StorageContainer.class.getName(), valueField1, new Long(specimenForm.getStorageContainer()));
 				if (!list.isEmpty())
 				{
 					StorageContainer container = (StorageContainer) list.get(0);
@@ -427,19 +425,16 @@ public class NewSpecimenAction extends SecureAction
 				pos1Map.put(new NameValueBean(pos1, pos1), pos2List);
 				containerMap.put(new NameValueBean(parentContainerName, id), pos1Map);
 
-				if (specimenForm.getStorageContainer() != null
-						&& !specimenForm.getStorageContainer().equals("-1"))
+				if (specimenForm.getStorageContainer() != null && !specimenForm.getStorageContainer().equals("-1"))
 				{
 					startingPoints[0] = specimenForm.getStorageContainer();
 
 				}
-				if (specimenForm.getPositionDimensionOne() != null
-						&& !specimenForm.getPositionDimensionOne().equals("-1"))
+				if (specimenForm.getPositionDimensionOne() != null && !specimenForm.getPositionDimensionOne().equals("-1"))
 				{
 					startingPoints[1] = specimenForm.getPositionDimensionOne();
 				}
-				if (specimenForm.getPositionDimensionTwo() != null
-						&& !specimenForm.getPositionDimensionTwo().equals("-1"))
+				if (specimenForm.getPositionDimensionTwo() != null && !specimenForm.getPositionDimensionTwo().equals("-1"))
 				{
 					startingPoints[2] = specimenForm.getPositionDimensionTwo();
 				}
@@ -452,7 +447,7 @@ public class NewSpecimenAction extends SecureAction
 
 		}
 		request.setAttribute("initValues", initialValues);
-		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
+		request.setAttribute(Constants.EXCEEDS_MAX_LIMIT, exceedingMaxLimit);
 		request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP, containerMap);
 		// -------------------------
 
@@ -461,8 +456,7 @@ public class NewSpecimenAction extends SecureAction
 			request.setAttribute("disabled", "true");
 		}
 		//Logger.out.debug("End of specimen action");
-		
-		
+
 		return mapping.findForward(pageOf);
 	}
 
@@ -490,8 +484,7 @@ public class NewSpecimenAction extends SecureAction
 		request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
 
 		//Setting pathological status list
-		bean = new NameValueBean(specimenForm.getPathologicalStatus(), specimenForm
-				.getPathologicalStatus());
+		bean = new NameValueBean(specimenForm.getPathologicalStatus(), specimenForm.getPathologicalStatus());
 		List pathologicalStatusList = new ArrayList();
 		pathologicalStatusList.add(bean);
 		request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
@@ -522,41 +515,38 @@ public class NewSpecimenAction extends SecureAction
 		//        request.setAttribute(Constants.SPECIMEN_ID, specimenId);
 		//        Logger.out.debug("\t\t SpecimenEventParametersAction************************************ : "+specimenId );
 		//        
-		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(
-				Constants.USER_FORM_ID);
+		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
 		Collection userCollection = userBizLogic.getUsers(operation);
 
 		request.setAttribute(Constants.USERLIST, userCollection);
-		
+
 		SessionDataBean sessionData = getSessionData(request);
-		if(sessionData != null)
+		if (sessionData != null)
 		{
-			String user = sessionData.getLastName()+", "+sessionData.getFirstName();
-			long collectionEventUserId = getIdFromCollection(userCollection,user);
+			String user = sessionData.getLastName() + ", " + sessionData.getFirstName();
+			long collectionEventUserId = getIdFromCollection(userCollection, user);
 			specimenForm.setCollectionEventUserId(collectionEventUserId);
-			specimenForm.setReceivedEventUserId(collectionEventUserId);			
+			specimenForm.setReceivedEventUserId(collectionEventUserId);
 		}
 
 		// set the procedure lists
-		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
+		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
 		request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
 		//Bug- setting the default collection event procedure
-		if(specimenForm.getCollectionEventCollectionProcedure() == null)
+		if (specimenForm.getCollectionEventCollectionProcedure() == null)
 		{
 			specimenForm.setCollectionEventCollectionProcedure("Not Specified");
 		}
-		
+
 		// set the container lists
-		List containerList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_CONTAINER, null);
+		List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
 		request.setAttribute(Constants.CONTAINER_LIST, containerList);
 		//Bug- setting the default collection event container
-		if(specimenForm.getCollectionEventContainer() == null)
+		if (specimenForm.getCollectionEventContainer() == null)
 		{
 			specimenForm.setCollectionEventContainer("Not Specified");
 		}
-		
+
 	}
 
 	// Mandar AutoEvents CollectionEvent end
@@ -570,11 +560,10 @@ public class NewSpecimenAction extends SecureAction
 	private void setReceivedEventRequestParameters(HttpServletRequest request, NewSpecimenForm specimenForm) throws Exception
 	{
 
-		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(
-				Constants.CDE_NAME_RECEIVED_QUALITY, null);
+		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
 		request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
 		//Bug- setting the default recieved event quality
-		if(specimenForm.getReceivedEventReceivedQuality() == null)
+		if (specimenForm.getReceivedEventReceivedQuality() == null)
 		{
 			specimenForm.setReceivedEventReceivedQuality("Not Specified");
 		}
@@ -587,30 +576,25 @@ public class NewSpecimenAction extends SecureAction
 		//Collection Event fields
 		if (specimenForm.getCollectionEventdateOfEvent() == null)
 		{
-			specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(),
-					Constants.DATE_PATTERN_MM_DD_YYYY));
+			specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
 		}
 		if (specimenForm.getCollectionEventTimeInHours() == null)
 		{
-			specimenForm.setCollectionEventTimeInHours(Integer.toString(cal
-					.get(Calendar.HOUR_OF_DAY)));
+			specimenForm.setCollectionEventTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
 		}
 		if (specimenForm.getCollectionEventTimeInMinutes() == null)
 		{
-			specimenForm
-					.setCollectionEventTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
+			specimenForm.setCollectionEventTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
 		}
 
 		//ReceivedEvent Fields
 		if (specimenForm.getReceivedEventDateOfEvent() == null)
 		{
-			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(),
-					Constants.DATE_PATTERN_MM_DD_YYYY));
+			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
 		}
 		if (specimenForm.getReceivedEventTimeInHours() == null)
 		{
-			specimenForm.setReceivedEventTimeInHours(Integer
-					.toString(cal.get(Calendar.HOUR_OF_DAY)));
+			specimenForm.setReceivedEventTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
 		}
 		if (specimenForm.getReceivedEventTimeInMinutes() == null)
 		{
@@ -674,28 +658,29 @@ public class NewSpecimenAction extends SecureAction
 
 		//request.setAttribute("initValues", initialValues);
 	}
-	
+
 	/**
 	 * 
 	 * @param userList Collection
 	 * @param userName userName
 	 * @return long
 	 */
-	private long getIdFromCollection(Collection userList, String userName) 
-	{		
+	private long getIdFromCollection(Collection userList, String userName)
+	{
 		Iterator itr = userList.iterator();
-		for(int i=0; itr.hasNext(); i++)
+		for (int i = 0; itr.hasNext(); i++)
 		{
 			NameValueBean nameValueBean = (NameValueBean) itr.next();
-			if(nameValueBean.getName() != null && nameValueBean.getName().trim().equals(userName))
-			{				
+			if (nameValueBean.getName() != null && nameValueBean.getName().trim().equals(userName))
+			{
 				String id = nameValueBean.getValue();
 				return Long.valueOf(id).longValue();
 			}
 		}
 		return -1;
 	}
-	private void setFormValues(NewSpecimenForm specimenForm,String specimenCollectionGroupId)
+
+	private void setFormValues(NewSpecimenForm specimenForm, String specimenCollectionGroupId)
 	{
 		specimenForm.setSpecimenCollectionGroupId(specimenCollectionGroupId);
 		specimenForm.setParentSpecimenId("");
@@ -706,7 +691,6 @@ public class NewSpecimenAction extends SecureAction
 		specimenForm.setPositionDimensionTwo("");
 		specimenForm.setStorageContainer("");
 
-		
 	}
 
 }
