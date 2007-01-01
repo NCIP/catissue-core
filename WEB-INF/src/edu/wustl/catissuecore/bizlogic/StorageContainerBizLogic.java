@@ -2869,14 +2869,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		while (itr.hasNext())
 		{
 			NameValueBean key = (NameValueBean) itr.next();
-			NameValueBean key1 = new NameValueBean(key.getName(), key.getValue());
+			NameValueBean key1 = new NameValueBean(key.getName(), key.getValue(),true);
 			List value = (ArrayList) positionMap.get(key);
 			List value1 = new ArrayList();
 			Iterator itr1 = value.iterator();
 			while (itr1.hasNext())
 			{
 				NameValueBean ypos = (NameValueBean) itr1.next();
-				NameValueBean ypos1 = new NameValueBean(ypos.getName(), ypos.getValue());
+				NameValueBean ypos1 = new NameValueBean(ypos.getName(), ypos.getValue(),true);
 				value1.add(ypos1);
 			}
 			positionMap1.put(key1, value1);
