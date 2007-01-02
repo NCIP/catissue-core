@@ -32,7 +32,17 @@ var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList)%><%="\""%>;
 <table width="100%">
 	<tr>
 		<td>
-			<div id="gridbox" width="100%" height="350px" style="background-color:white;overflow:hidden"></div>
+			<script>	
+			//for derive only
+			if(useFunction == "derivedSpecimenGrid")	// useFunction == "eventParametersGrid" ||
+			{
+				document.write("<div id='gridbox' width='100%' height='150px' style='background-color:white;overflow:hidden'></div>");
+			}
+			else
+			{
+				document.write("<div id='gridbox' width='100%' height='350px' style='background-color:white;overflow:hidden'></div>");
+			}
+			</script>
 		</td>
 	</tr>
 </table>
