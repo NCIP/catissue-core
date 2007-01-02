@@ -64,7 +64,7 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
   </servlet-mapping>
   
 	<session-config>
-	<session-timeout>10</session-timeout> |#1 </session-config>
+	<session-timeout>30</session-timeout> |#1 </session-config>
   
  <!--Usual Welcome-file-list-->
   <welcome-file-list>
