@@ -3300,7 +3300,7 @@ PUBLIC
 		type="edu.wustl.common.action.CommonAddEditAction"
 		name="aliquotForm"
 		validate="true"
-		input="/CpQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15"
+		input="/CPQueryCreateAliquots.do?pageOf=pageOfCreateAliquot&amp;menuSelected=15"
 		scope="request">
 		<forward name="success" path="/CPQueryAliquots.do?pageOf=pageOfAliquotSummary&amp;CPQuery=true&amp;menuSelected=15" />
 		<forward name="failure" path="/CPQueryAliquots.do?pageOf=pageOfCreateAliquot&amp;CPQuery=true&amp;menuSelected=15" />
