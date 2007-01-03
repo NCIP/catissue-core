@@ -111,11 +111,24 @@
 <script language="JavaScript">
 	function deleteExternalIdentifiers()
 	{
+	<%if(!pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+	{%>
 		deleteChecked('addExternalIdentifier','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false);
+	<%} else {%>
+		deleteChecked('addExternalIdentifier','CPQueryNewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimenCPQuery&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false);
+	<%}%>
+		
 	}
 	function deleteBioHazards()
 	{
+	<%if(!pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+	{%>
 		deleteChecked('addBiohazardRow','NewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimen&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false);
+	<%} else {%>
+		deleteChecked('addBiohazardRow','CPQueryNewSpecimen.do?operation=<%=operation%>&pageOf=pageOfNewSpecimenCPQuery&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false);
+	<%}%>
+		
+
 	}
 	
 	function mapButtonClickedOnSpecimen(frameUrl)
@@ -226,7 +239,7 @@
 				String actionOnCollOrClassChange = "NewSpecimen.do?pageOf=pageOfNewSpecimen&virtualLocated=false";
 				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 				{
-					actionOnCollOrClassChange = "CPQueryNewSpecimen.do?operation=add&pageOf=pageOfNewSpecimenCPQuery&virtualLocated=false";
+					actionOnCollOrClassChange = "CPQueryNewSpecimen.do?pageOf=pageOfNewSpecimenCPQuery&virtualLocated=false";
 				}%>
 				var action = "<%=actionOnCollOrClassChange%>";
 				document.forms[0].action = action + "&onCollOrClassChange=true";
