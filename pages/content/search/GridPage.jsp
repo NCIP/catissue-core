@@ -63,13 +63,14 @@ var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList)%><%="\""%>;
 	function rowClick(id)
 	{
 		var colid = <%=identifierFieldIndex.intValue()%>;
-		var x=document.getElementsByName("pageOf");
+/*		var x=document.getElementsByName("pageOf");
 		//alert(x);
 		if(x[0].value == "pageOfArrayDistribution")
 		{
 			colid=0;
 		}
 		//alert(colid);
+*/
 		var cl = mygrid.cells(id,colid);
 		var searchId = cl.getValue();
 		var url = "SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+searchId;
