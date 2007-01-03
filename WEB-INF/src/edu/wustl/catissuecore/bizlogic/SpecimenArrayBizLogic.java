@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
-
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
@@ -40,6 +39,7 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -105,6 +105,36 @@ public class SpecimenArrayBizLogic extends DefaultBizLogic
 		}
 
 	}
+	
+	public void postUpdate(DAO dao, Object currentObj, Object oldObj, SessionDataBean sessionDataBean) throws BizLogicException,
+	UserNotAuthorizedException
+{
+try
+{
+	Map containerMap = StorageContainerUtil.getContainerMapFromCache();
+	SpecimenArray specimenArrayCurrentObject = (SpecimenArray) currentObj;
+	SpecimenArray specimenArrayOldObject = (SpecimenArray) oldObj;
+
+	
+    
+	//If capacity of container gets increased then insert all the new positions in map ..........
+	int xOld = specimenArrayOldObject.getPositionDimensionOne().intValue();
+	int xNew = specimenArrayCurrentObject.getPositionDimensionOne().intValue();
+	int yOld = specimenArrayOldObject.getPositionDimensionTwo().intValue();
+	int yNew = specimenArrayCurrentObject.getPositionDimensionTwo().intValue();
+	long containerIdOld = specimenArrayCurrentObject.getStorageContainer().getId().longValue();
+	long containerIdNew = specimenArrayOldObject.getStorageContainer().getId().longValue();
+	if (xNew != xOld || yNew != yOld || containerIdOld!=containerIdNew)
+	{
+		StorageContainerUtil.insertSinglePositionInContainerMap(specimenArrayOldObject.getStorageContainer(), containerMap, xOld,yOld);
+		StorageContainerUtil.deleteSinglePositionInContainerMap(specimenArrayCurrentObject.getStorageContainer(), containerMap, xNew,yNew);
+	}
+
+}
+catch (Exception e)
+{
+}
+}
 
 	/**
 	 * @see edu.wustl.common.bizlogic.AbstractBizLogic#update(edu.wustl.common.dao.DAO, java.lang.Object, java.lang.Object, edu.wustl.common.beans.SessionDataBean)
