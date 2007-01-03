@@ -126,6 +126,12 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 
         	List listOfDerivedSpecimen = (List) specimenMap.get(specimen);
 
+        	if(listOfDerivedSpecimen == null)
+        	{
+        		specimenMap.put(specimen,new ArrayList());
+        	}
+        	else
+        	{
 			for (int j = 0; j < listOfDerivedSpecimen.size(); j++)
 			{
 				Specimen derivedSpecimen = (Specimen) listOfDerivedSpecimen.get(j);
@@ -144,6 +150,7 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 				}
 				}
 			}
+        	}
 
 		}
 
