@@ -157,36 +157,19 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 }
 		
 	//Mandar: 24-Apr-06 for tooltip
+		// -------
+		var timeInterval=100;
+	var interval = self.setInterval("setTip()",timeInterval);
+	var objID="";
+
 		function showStatus(sMsg) 
 		{
 		    window.status = sMsg ;
 		}
 		function showTip(objId)
 		{
-
-			var obj = document.getElementById(objId);
-			if(obj.type == 'text')
-			{
-				var tip="";
-				tip = obj.value;
-				obj.title = ""+tip;
-			}
-			else
-			{
-				var tip="";
-				if(obj.selectedIndex == -1)
-					tip="";
-				else
-					tip = obj.options[obj.selectedIndex].text;
-					
-				obj.title = tip;
-
-				var browser=navigator.appName;
-				if(browser=="Microsoft Internet Explorer")
-				{
-					showStatus(tip);
-				}
-			}
+			objID = objId;
+			interval = self.setInterval("setTip()",timeInterval);
 		}
 		function hideTip(objId)
 		{
@@ -198,9 +181,40 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 			{
 				showStatus(' ');
 			}
-			
+			interval = window.clearInterval(interval);
 		}	
-		
+
+		function setTip()
+		{
+			var obj = document.getElementById(objID);
+			if(obj != null)
+			{
+				if(obj.type == 'text')
+				{
+					var tip="";
+					tip = obj.value;
+					obj.title = ""+tip;
+				}
+				else
+				{
+					var tip="";
+					if(obj.selectedIndex == -1)
+						tip="";
+					else
+						tip = obj.options[obj.selectedIndex].text;
+						
+					obj.title = tip;
+
+					var browser=navigator.appName;
+					if(browser=="Microsoft Internet Explorer")
+					{
+						showStatus(tip);
+					}
+				}
+			}
+		}
+	// -------
+	
 		function moveToNext(element,value,nextID )
 		{
 		if (value.length==element.maxLength)
