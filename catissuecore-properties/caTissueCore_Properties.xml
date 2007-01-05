@@ -213,7 +213,7 @@
 <!-- Constants for specifing columns per page in MultipleSpecimen -->
 	 	<property>
 		<name>multipleSpecimen.ColumnsPerPage</name>
-		<value>5</value>
+		<value>4</value>
 	</property>
 
 	<property>
