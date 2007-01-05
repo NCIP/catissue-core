@@ -1,12 +1,3 @@
-# ------ Create unique key for catissue_related_tables_map and catissue_search_display_data----
-#--Remove duplicate entries first
-delete from CATISSUE_RELATED_TABLES_MAP where FIRST_TABLE_ID=38 and SECOND_TABLE_ID=19;
-alter table CATISSUE_RELATED_TABLES_MAP add constraint RELATED_TABLES_KEY unique (FIRST_TABLE_ID,SECOND_TABLE_ID);
-alter table CATISSUE_SEARCH_DISPLAY_DATA add constraint SEARCH_DATA_KEY unique (RELATIONSHIP_ID,COL_ID);
-#---Insert one entry for the above deleted duplicate entry --
-insert into CATISSUE_RELATED_TABLES_MAP values ( 38 , 19 , 'DISTRIBUTION_PROTOCOL_ID','IDENTIFIER');
-#------ End:25/07/06 Poornima: Bug-1951 -------
-
 # ------ 'Death date' and 'Vital status' attribute addition to Participant table ------
 # ---------- 23 May 2006 -------------
 ALTER TABLE catissue_participant ADD COLUMN DEATH_DATE DATE;
@@ -26,21 +17,11 @@ insert into catissue_race(participant_id,race_name) (select identifier,race from
 
 alter table catissue_participant drop column race;
 
-
-# ------ For simple search on Participant 'Death date' and 'Vital status' ---------
-insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 303, 31, 'DEATH_DATE', 'date');
-insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 304, 31, 'VITAL_STATUS', 'varchar');
-
 # ----- VitalStatus Constant and Permissible value ----- 
 INSERT INTO CATISSUE_CDE VALUES ( '2004001','VitalStatus','Vital status of the participant.',1.0,null);
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2638,'Dead',NULL,'2004001');
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2639,'Alive',NULL,'2004001');
 INSERT INTO CATISSUE_PERMISSIBLE_VALUE (IDENTIFIER, VALUE, PARENT_IDENTIFIER, PUBLIC_ID) VALUES(2640,'Unknown',NULL,'2004001');
-
-
-# ------ Bug 1997:Specimen class not queriable - Added specimen class field entry ------
-INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME) VALUES (34, 102 , 'Specimen Class');
-
 
 
 #-- user paasword changes 
