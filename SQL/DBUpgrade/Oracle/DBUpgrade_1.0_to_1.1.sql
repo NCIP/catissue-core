@@ -606,14 +606,7 @@ alter table CATISSUE_MOL_SPE_REVIEW_PARAM modify GEL_IMAGE_URL varchar(255);
 alter table CATISSUE_PROCEDURE_EVENT_PARAM modify URL varchar(255);
 alter table CATISSUE_PROCEDURE_EVENT_PARAM modify NAME varchar(255);
 
-alter table CATISSUE_DISPOSAL_EVENT_PARAM drop constraint FK1BC818D6BC7298A9;
-drop table CATISSUE_DISPOSAL_EVENT_PARAM;
-create table CATISSUE_DISPOSAL_EVENT_PARAM (
-   IDENTIFIER number(19,0) not null,
-   REASON varchar(255),
-   primary key (IDENTIFIER);
-);
-alter table CATISSUE_DISPOSAL_EVENT_PARAM  add constraint FK1BC818D6BC7298A9 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_EVENT_PARAM ;
+alter table CATISSUE_DISPOSAL_EVENT_PARAM modify REASON null;
 
 /*Jitendra: End:- 17dec06: Bug-3141*/
 
