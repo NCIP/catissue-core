@@ -284,10 +284,10 @@ public class ParticipantLookupLogic implements LookupLogic
 					 *  Removed probability after discussion with Mark -- bug number 558
 					 */
 
-					 // Finding the probablity.
-				/*	if(totalPoints!=0)
-					{
-					
+					// Finding the probablity.
+					/*	if(totalPoints!=0)
+					 {
+					 
 					 Double probablity = new Double((100 * weight) / totalPoints);
 
 					 // Calculated points might be greater than total points because of BONUS points
@@ -295,9 +295,9 @@ public class ParticipantLookupLogic implements LookupLogic
 					 {
 					 probablity = new Double(100);
 					 } 
-					   result.setProbablity(probablity);	
-					} */
-					
+					 result.setProbablity(probablity);	
+					 } */
+
 					result.setObject(existingParticipant);
 					participants.add(result);
 				}
@@ -523,7 +523,7 @@ public class ParticipantLookupLogic implements LookupLogic
 	{
 
 		// complete match
-		if (userRace.isEmpty() == false && existingRace.isEmpty() == false)
+		if (userRace != null && userRace.isEmpty() == false && existingRace != null && existingRace.isEmpty() == false)
 		{
 			if (userRace.equals(existingRace))
 			{
