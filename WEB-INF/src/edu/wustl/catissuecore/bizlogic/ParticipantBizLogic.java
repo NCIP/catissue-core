@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -24,7 +25,6 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.ehcache.CacheException;
-
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -560,9 +560,11 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 		return matchingParticipantList;
 
 	}
-
+	
 	/**
 	 * This function returns the list of all the objects present in the Participant table.
+	 * Two queries are executed from this function to get participant data and race data.
+	 * Participant objects are formed by retrieving only required data, making it time and space efficient 
 	 * @return - List of participants 
 	 */
 	public Map getAllParticipants() throws Exception
@@ -570,13 +572,63 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 		// Initialising instance of IBizLogic
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String sourceObjectName = Participant.class.getName();
-
+		String selectColumnNames[] = {"id","lastName","firstName","middleName","birthDate","gender","sexGenotype","ethnicity","socialSecurityNumber","activityStatus","deathDate","vitalStatus"};
+		String whereColumnName[] = {"activityStatus"};
+		String whereColumnCondition[] = {"!="};
+		Object whereColumnValue[] = {Constants.ACTIVITY_STATUS_DISABLED};
+ 
 		// getting all the participants from the database 
-		List listOfParticipants = bizLogic.retrieve(sourceObjectName);
+		List listOfParticipants = bizLogic.retrieve(sourceObjectName,selectColumnNames,whereColumnName,whereColumnCondition,whereColumnValue,null);
+		
+		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		dao.openSession(null);
+
+		String queryStr = "SELECT * FROM CATISSUE_RACE WHERE PARTICIPANT_ID IN (SELECT PARTICIPANT_ID FROM CATISSUE_PARTICIPANT WHERE ACTIVITY_STATUS!='DISABLED')";
+		List listOfRaceObjects = new ArrayList();
+
+		try
+		{
+			listOfRaceObjects = dao.executeQuery(queryStr, null, false, null);
+		}
+		catch (Exception ex)
+		{
+			throw new DAOException(ex.getMessage());
+		}
+		dao.closeSession();
+		Map mapOfRaceCollection = new HashMap();
+		for (int i = 0; i < listOfRaceObjects.size(); i++)
+		{
+			List objectArray = (ArrayList) listOfRaceObjects.get(i);
+			Long participantId = (new Long(objectArray.get(0).toString()));
+			String race = (String) objectArray.get(1);
+			if(mapOfRaceCollection.get(participantId)==null)
+			{
+				mapOfRaceCollection.put(participantId, new HashSet());
+			}
+			((HashSet)mapOfRaceCollection.get(participantId)).add(race);	
+    	}
+		
+		
+		
 		Map mapOfParticipants = new HashMap();
 		for (int i = 0; i < listOfParticipants.size(); i++)
 		{
-			Participant participant = (Participant) listOfParticipants.get(i);
+			Object [] obj = (Object[]) listOfParticipants.get(i);
+			
+			Long id = (Long) obj[0];
+			String lastName = (String) obj[1];
+			String firstName = (String) obj[2];
+			String middleName = (String) obj[3];
+			Date birthDate = (Date) obj[4];
+			String gender = (String) obj[5];
+			String sexGenotype = (String) obj[6];
+			String ethnicity = (String) obj[7];
+			String socialSecurityNumber = (String) obj[8];
+			String activityStatus = (String) obj[9];
+			Date deathDate = (Date) obj[10];
+			String vitalStatus = (String) obj[11];
+					
+			Participant participant = new Participant(id,lastName,firstName,middleName,birthDate,gender,sexGenotype,(Collection)mapOfRaceCollection.get(id),ethnicity,socialSecurityNumber,activityStatus,deathDate,vitalStatus);
 			mapOfParticipants.put(participant.getId(), participant);
 		}
 		return mapOfParticipants;
@@ -653,4 +705,5 @@ public class ParticipantBizLogic extends IntegrationBizLogic
 	{
 		return new ArrayList();
 	}
+		
 }
