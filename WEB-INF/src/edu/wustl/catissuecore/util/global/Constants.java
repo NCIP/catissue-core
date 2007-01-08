@@ -1403,7 +1403,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_QUERY_SPECIMEN_COLLECTION_GROUP_ADD_ACTION = "CPQuerySpecimenCollectionGroupAdd.do";
 	public static final String CP_QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION = "CPQuerySpecimenCollectionGroupEdit.do";
 	public static final String CP_AND_PARTICIPANT_VIEW="cpAndParticipantView";
-	public static final String DATA_DETAILS_VIEW="cpAndParticipantView";
+	public static final String DATA_DETAILS_VIEW="dataDetailsView";
 	public static final String SHOW_CP_AND_PARTICIPANTS_ACTION="showCpAndParticipants.do";
 	public static final String PAGE_OF_CP_QUERY_RESULTS = "pageOfCpQueryResults";
 	public static final String CP_LIST = "cpList";
