@@ -28,11 +28,16 @@
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	
 	String selectMenu = (String) request.getAttribute(Constants.MENU_SELECTED);
+	String objectChanged="";
 	if(obj != null && obj instanceof SimpleQueryInterfaceForm)
 	{
 		SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
 		noOfRows = form.getCounter();		
-		form.setValue("SimpleConditionsNode:"+Integer.parseInt(noOfRows)+"_Condition_DataElement_field",null);		
+		objectChanged = request.getParameter("objectChanged");			
+		if(objectChanged != null && !objectChanged.equals(""))
+		{
+			form.setValue("SimpleConditionsNode:"+Integer.parseInt(noOfRows)+"_Condition_DataElement_field",null);		
+		}		
 	}
         
 	String title = (String)request.getAttribute(Constants.SIMPLE_QUERY_INTERFACE_TITLE);
@@ -61,7 +66,7 @@ function onObjectChange(element,action)
 	var index = element.name.indexOf("(");
 	var lastIndex = element.name.lastIndexOf(")");
 	
-	var saveObject = document.getElementById("objectChanged");
+	var saveObject = document.getElementById("objectChanged");	
 	saveObject.value = element.name.substring(index+1,lastIndex);
 	
 	callAction(action);
@@ -316,6 +321,7 @@ function enablePreviousCheckBox(element)
 					for (int i=1;i<=Integer.parseInt(noOfRows);i++){
 						String objectName = "value(SimpleConditionsNode:"+i+"_Condition_DataElement_table)";
 						String attributeName = "value(SimpleConditionsNode:"+i+"_Condition_DataElement_field)";
+						
 						String attributeCondition = "value(SimpleConditionsNode:"+i+"_Condition_Operator_operator)";
 						String attributeValue = "value(SimpleConditionsNode:"+i+"_Condition_value)";
 						String attributeValueID = "SimpleConditionsNode"+i+"_Condition_value_ID";
@@ -397,7 +403,7 @@ function enablePreviousCheckBox(element)
 							String attributeNameValue = (String)form.getValue(attributeNameKey);
 							String attributeType = null;	
 							List columnNameValueBeanList = (List) request.getAttribute(attributeNameList);							
-							if(columnNameValueBeanList != null && !columnNameValueBeanList.isEmpty() && i==Integer.parseInt(noOfRows))
+							if(columnNameValueBeanList != null && !columnNameValueBeanList.isEmpty() && i==Integer.parseInt(noOfRows) && objectChanged != null && !objectChanged.equals(""))
 							{								
 								NameValueBean nameValueBean = (NameValueBean) columnNameValueBeanList.get(0);
 								attributeNameValue = nameValueBean.getValue();
@@ -412,8 +418,8 @@ function enablePreviousCheckBox(element)
 									attributeType = tokenizer.nextToken();
 									if(tokenCount == 3) break;
 									tokenCount++;
-								}								
-								System.out.println("attributeType--------"+attributeType);								
+								}
+															
 								if(attributeType.equals("varchar") || attributeType.equals("text"))
 								{
 							%>
