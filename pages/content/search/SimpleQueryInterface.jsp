@@ -31,7 +31,8 @@
 	if(obj != null && obj instanceof SimpleQueryInterfaceForm)
 	{
 		SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
-		noOfRows = form.getCounter();
+		noOfRows = form.getCounter();		
+		form.setValue("SimpleConditionsNode:"+Integer.parseInt(noOfRows)+"_Condition_DataElement_field",null);		
 	}
         
 	String title = (String)request.getAttribute(Constants.SIMPLE_QUERY_INTERFACE_TITLE);
@@ -44,7 +45,8 @@
 	else
 	{
 		title=alias+".Search";
-	}
+	}	
+	
 %>
 <script>
 
@@ -393,12 +395,13 @@ function enablePreviousCheckBox(element)
 						<%
 							String attributeNameKey = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
 							String attributeNameValue = (String)form.getValue(attributeNameKey);
-							String attributeType = null;
+							String attributeType = null;	
 							List columnNameValueBeanList = (List) request.getAttribute(attributeNameList);							
-							if(columnNameValueBeanList != null && !columnNameValueBeanList.isEmpty())
-							{
+							if(columnNameValueBeanList != null && !columnNameValueBeanList.isEmpty() && i==Integer.parseInt(noOfRows))
+							{								
 								NameValueBean nameValueBean = (NameValueBean) columnNameValueBeanList.get(0);
 								attributeNameValue = nameValueBean.getValue();
+								
 							}	
 							if(attributeNameValue != null)
 							{
@@ -409,8 +412,7 @@ function enablePreviousCheckBox(element)
 									attributeType = tokenizer.nextToken();
 									if(tokenCount == 3) break;
 									tokenCount++;
-								}
-								
+								}								
 								System.out.println("attributeType--------"+attributeType);								
 								if(attributeType.equals("varchar") || attributeType.equals("text"))
 								{
@@ -430,6 +432,17 @@ function enablePreviousCheckBox(element)
 							<%
 								}
 								else if (attributeType.equals(Constants.FIELD_TYPE_BIGINT))
+								{
+							%>
+								<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
+								<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
+								<html:option value="<%=Operator.LESS_THAN%>"><%=Operator.LESS_THAN%></html:option>
+								<html:option value="<%=Operator.LESS_THAN_OR_EQUALS%>"><%=Operator.LESS_THAN_OR_EQUALS%></html:option>
+								<html:option value="<%=Operator.GREATER_THAN%>"><%=Operator.GREATER_THAN%></html:option>
+								<html:option value="<%=Operator.GREATER_THAN_OR_EQUALS%>"><%=Operator.GREATER_THAN_OR_EQUALS%></html:option>
+							<%
+								}
+								else if (attributeType.equals(Constants.FIELD_TYPE_DATE))
 								{
 							%>
 								<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
