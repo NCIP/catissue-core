@@ -59,6 +59,7 @@
 		        }
 %>
 <head>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <%if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
 	{
 	String participantId = (String)request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);
@@ -73,7 +74,7 @@
 			<%}%>
 		</script>
 	<%}%>
-<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+
 <script language="JavaScript">
 		function onCheckboxButtonClick(element,dropDownList)
 		{
