@@ -949,10 +949,10 @@ tr#hiddenCombo
 	<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 	{%>
 	<script language="javascript">
-			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			var cpId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("cpId").value;
 			document.getElementById("cpId").value=cpId;
-			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
-			window.parent.frames[0].location="showCpAndParticipants.do?cpId="+cpId+"&participantId="+participantId;
+			var participantId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("participantId").value;
+			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId+"&participantId="+participantId;
 	</script>
 
 	<%}%>

@@ -64,12 +64,12 @@
 	String participantId = (String)request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);
 	%>
 		<script language="javascript">
-			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
+			var cpId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("cpId").value;
 			<%if(participantId != null){%>
-			window.parent.frames[0].location="showCpAndParticipants.do?cpId="+cpId+"&participantId=<%=participantId%>";
-			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=<%=participantId%>";
+			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId+"&participantId=<%=participantId%>";
+			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=<%=participantId%>";
 			<%} else{%>
-			window.parent.frames[0].location="showCpAndParticipants.do?cpId="+cpId;
+			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId;
 			<%}%>
 		</script>
 	<%}%>

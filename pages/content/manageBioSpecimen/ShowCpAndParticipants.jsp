@@ -16,6 +16,7 @@
 
 <head>
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript">
 		function onCpChange(element)
 		{
@@ -23,9 +24,9 @@
 			var participantId = document.getElementById("participantId");
 			 <%if(access != null && access.equals("Denied"))
 			{%>
-				window.parent.frames[1].location = "showTree.do?<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=-1&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value;			
+				window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location = "showTree.do?<%=Constants.CP_SEARCH_PARTICIPANT_ID%>=-1&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value;			
 			<%} else {%>
-			window.parent.frames[1].location = "showTree.do";							
+			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location = "showTree.do";							
 			var action = "showCpAndParticipants.do?cpChange=true";
 			document.forms[0].action = action;
 			
@@ -38,7 +39,7 @@
 			var cpId = document.getElementById("cpId");
 			var participantId = document.getElementById("participantId");
 			window.parent.frames[2].location = "QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=edit&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value+"&id="+participantId.value;
-			window.parent.frames[1].location = "showTree.do?<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId.value+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value;			
+			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location = "showTree.do?<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId.value+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value;			
 			
 			
 		}

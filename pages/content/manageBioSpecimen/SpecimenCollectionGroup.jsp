@@ -76,14 +76,14 @@
 		strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 	%>
 		<script language="javascript">
-			var cpId = window.parent.frames[0].document.getElementById("cpId").value;
-			var participantId = window.parent.frames[0].document.getElementById("participantId").value;
+			var cpId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("cpId").value;
+			var participantId = window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].document.getElementById("participantId").value;
 			<%if(request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID) != null ) {
 			String cpParticipantId = (String) request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);%>
 			participantId = <%=cpParticipantId%>;
 			<%}%>
-			window.parent.frames[0].location="showCpAndParticipants.do?cpId="+cpId+"&participantId="+participantId;
-			window.parent.frames[1].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId+"&nodeId=SpecimenCollectionGroup_"+<%=idToTree%>;
+			window.parent.frames['<%=Constants.CP_AND_PARTICIPANT_VIEW%>'].location="showCpAndParticipants.do?cpId="+cpId+"&participantId="+participantId;
+			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location="showTree.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId+"&nodeId=SpecimenCollectionGroup_"+<%=idToTree%>;
 			
 		</script>
 	<%}%>
