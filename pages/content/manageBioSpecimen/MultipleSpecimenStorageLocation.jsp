@@ -254,6 +254,12 @@
 				if (className==null)
 					className="";
 
+				//---------
+				String typeName = (String)specimenMap.get(typeKey);  
+				if (typeName==null)
+					typeName="";
+				//---------
+
 				String collectionProtocolId = (String)specimenMap.get(collectionProtocolKey);  
 				if (collectionProtocolId==null)
 					collectionProtocolId="";
@@ -274,12 +280,30 @@
 				
 		    </td>
 		    <td class="formField">
-				<html:text styleClass="formFieldSized15" maxlength="50" size="10" styleId="<%=flabelKey%>" property="<%=flabelKey%>" 
+			<TABLE>
+			<TR>
+				<TD class="formFieldNoBordersSimple">
+					<html:text styleClass="formFieldSized15" maxlength="50" size="10" styleId="<%=flabelKey%>" property="<%=flabelKey%>" 
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
+				</TD>
+			</TR>
+			<TR>
+				<TD class="formFieldNoBordersSimple"><B>Class:</B> <%=className%></TD>
+			</TR>
+			</TABLE>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized15" maxlength="50" size="10" styleId="<%=fbarKey%>" property="<%=fbarKey%>" 
+			<TABLE>
+			<TR>
+				<TD class="formFieldNoBordersSimple">
+					<html:text styleClass="formFieldSized15" maxlength="50" size="10" styleId="<%=fbarKey%>" property="<%=fbarKey%>" 
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
+				</TD>
+			</TR>
+			<TR>
+				<TD class="formFieldNoBordersSimple"><B>Type:</B> <%=typeName%></TD>
+			</TR>
+			</TABLE>
 			</td>
 			<td class="formField" nowrap>
 <%
@@ -436,6 +460,11 @@
 				if (dclassName==null)
 					dclassName="";
 
+				//-----------------
+				String dtypeName = (String)specimenMap.get(dtypeKey);  
+				if (dtypeName==null)
+					dtypeName="";
+				//-----------------
 				String dcollectionProtocolId = (String)specimenMap.get(dcollectionProtocolKey);  
 				if (dcollectionProtocolId==null)
 					dcollectionProtocolId="";
@@ -461,12 +490,30 @@
 
 		    </td>
 		    <td class="formField" nowrap>
+			<TABLE>
+			<TR>
+				<TD class="formFieldNoBordersSimple">
 				<html:text styleClass="formFieldSized15" maxlength="50" size="10" styleId="<%=fdlabelKey%>" property="<%=fdlabelKey%>" 
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
+				</TD>
+			</TR>
+			<TR>
+				<TD class="formFieldNoBordersSimple"><B>Class:</B> <%=dclassName%></TD>
+			</TR>
+			</TABLE>
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized15" maxlength="50" size="10" styleId="<%=fdbarKey%>" property="<%=fdbarKey%>" 
+			<TABLE>
+			<TR>
+				<TD class="formFieldNoBordersSimple">
+					<html:text styleClass="formFieldSized15" maxlength="50" size="10" styleId="<%=fdbarKey%>" property="<%=fdbarKey%>" 
 				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)"/>
+				</TD>
+			</TR>
+			<TR>
+				<TD class="formFieldNoBordersSimple"><B>Type:</B> <%=dtypeName%></TD>
+			</TR>
+			</TABLE>
 			</td>
 			<td class="formField" nowrap>
 	<%
