@@ -17,9 +17,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.ClinicalReport;
@@ -35,7 +33,6 @@ import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
@@ -551,62 +548,14 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		return 1;
 	}
 
-	public Map getSCGandSpecimens(Long cpId, Long participantId) throws Exception
-	{
-		/*String hql = "select cpr.collectionProtocol.id ,ccp.title,cpr.participant.id from " + CollectionProtocolRegistration.class.getName()
-		 + " as cpr right outer join cpr.collectionProtocol as ccp where ccp.id = cpr.collectionProtocol.id order by ccp.id";*/
-		/*String hql = "select sp.specimenCollectionGroup.id, sp.specimenCollectionGroup.name, sp.id, sp.label, elements(sp.childrenSpecimen) from " + Specimen.class.getName()
-		 + " as sp where sp.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and sp.specimenCollectionGroup.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and sp.parentSpecimen.id is null order by sp.specimenCollectionGroup.id";*/
-		String hql = "select sp.specimenCollectionGroup.id, sp.specimenCollectionGroup.name, sp.id, sp.label from " + Specimen.class.getName()
-				+ " as sp where sp.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id= " + cpId.toString()
-				+ " and sp.specimenCollectionGroup.collectionProtocolRegistration.participant.id= " + participantId.toString()
-				+ " and sp.parentSpecimen.id is null order by sp.specimenCollectionGroup.id";
-
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession(null);
-
-		List list = dao.executeQuery(hql, null, false, null);
-		Logger.out.info("list size -----------:" + list.size());
-		dao.closeSession();
-		Map map1 = new TreeMap();
-		if (list != null)
-		{
-			for (int i = 0; i < list.size(); i++)
-			{
-				//Getitng participants for a particular CP.
-				Object[] obj = (Object[]) list.get(i);
-				Long scgId = (Long) obj[0];
-				String scgName = (String) obj[1];
-				Long spId = (Long) obj[2];
-				String spLabel = (String) obj[3];
-
-				List spList = new ArrayList();
-				spList.add(new NameValueBean(spLabel, spId));
-				for (int j = i + 1; j < list.size(); j++, i++)
-				{
-					Object[] obj1 = (Object[]) list.get(j);
-					Long scgId1 = (Long) obj1[0];
-
-					if (scgId.longValue() == scgId1.longValue())
-					{
-						Long spId1 = (Long) obj1[2];
-						String spLabel1 = (String) obj1[3];
-						spList.add(new NameValueBean(spLabel1, spId1));
-					}
-					else
-					{
-						break;
-					}
-				}
-
-				map1.put(new NameValueBean(scgName, scgId), spList);
-			}
-		}
-
-		return map1;
-	}
-
-	public Vector getSCGandSpecimensModified(Long cpId, Long participantId) throws Exception
+	/**
+	 * This function gets the specimen coll group and specimens under that SCG.
+	 * @param cpId 
+	 * @param participantId
+	 * @return
+	 * @throws Exception
+	 */
+	public Vector getSCGandSpecimens(Long cpId, Long participantId) throws Exception
 	{
 		String hql = null;
 		if (participantId.longValue() == -1)
@@ -624,8 +573,6 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 					+ " and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
 
 		}
-		/*String hql1 = "select sp.specimenCollectionGroup.id, sp.specimenCollectionGroup.name, sp.id, sp.label from " + Specimen.class.getName()
-		 + " as sp where sp.specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id= "+cpId.toString() +" and sp.specimenCollectionGroup.collectionProtocolRegistration.participant.id= "+ participantId.toString()+" and sp.parentSpecimen.id is null order by sp.specimenCollectionGroup.id";*/
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(null);
 
@@ -658,7 +605,6 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 						Long parentSpecimenId = (Long) obj1[4];
 						String spActivityStatus = (String) obj1[6];
 
-						//	spList.add(new NameValueBean(spLabel1, spId1));
 						if (spId1 != null)
 						{
 							if (parentSpecimenId != null)
@@ -673,7 +619,6 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 										Constants.SPECIMEN_COLLECTION_GROUP, null, null, spActivityStatus, treeData);
 
 							}
-							//getChildrenSpecimens(spId1,treeData);
 						}
 					}
 					else
@@ -689,35 +634,19 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		return treeData;
 	}
 
-	/*private void getChildrenSpecimens(Long spId, Vector treeData) throws Exception
-	{
-		String hql = "select sp.id, sp.label from " + Specimen.class.getName() + " as sp where sp.parentSpecimen.id = " + spId.toString();
 
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession(null);
-
-		List list = dao.executeQuery(hql, null, false, null);
-		dao.closeSession();
-		if (list != null && list.size() > 0)
-		{
-			for (int i = 0; i < list.size(); i++)
-			{
-				//Getitng participants for a particular CP.
-				Object[] obj = (Object[]) list.get(i);
-				Long spId1 = (Long) obj[0];
-				String spLabel1 = (String) obj[1];
-				setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, spId.toString(), Constants.SPECIMEN, null, null, treeData);
-				Logger.out.info("list size -----------:" + list.size());
-				getChildrenSpecimens(spId1, treeData);
-			}
-		}
-		else
-		{
-			return;
-		}
-
-	}*/
-
+	/**
+	 * This function sets the data in QuertTreeNodeData object adds in a list of these nodes.
+	 * @param identifier
+	 * @param objectName
+	 * @param displayName
+	 * @param parentIdentifier
+	 * @param parentObjectName
+	 * @param combinedParentIdentifier
+	 * @param combinedParentObjectName
+	 * @param activityStatus
+	 * @param vector
+	 */
 	private void setQueryTreeNode(String identifier, String objectName, String displayName, String parentIdentifier, String parentObjectName,
 			String combinedParentIdentifier, String combinedParentObjectName, String activityStatus, Vector vector)
 	{
