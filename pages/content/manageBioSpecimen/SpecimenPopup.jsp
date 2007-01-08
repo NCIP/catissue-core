@@ -58,6 +58,7 @@
 			if(specimenAttributeKey!=null)
 			{
 			    parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey);
+				parent.window.opener.activateApplet();
 			}
 			self.close(); 
 	       </script>

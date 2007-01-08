@@ -41,10 +41,13 @@
 	{
 		var w = window.self;
 		w.focus=true;
-
-		var x = document.getElementById("msa");
-		x.focus= true;
-		x.click();
+		platform = navigator.platform.toLowerCase();
+		if(platform.indexOf("Win32") != -1)
+		{
+			var x = document.getElementById("msa");
+			x.focus= true;
+			x.click();
+		}
 	}
 </script>
 </head>
@@ -63,7 +66,8 @@
 													'CODE = "edu/wustl/catissuecore/applet/ui/MultipleSpecimenApplet.class"\n'+
 													'ALT = "Mulitple specimen Applet"\n'+
 													'tabindex=0\n'+
-													'NAME = "<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>"'
+													'NAME = "<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>"\n'+
+													'id="msa"'
 													);
 									if (platform.indexOf("mac") != -1)
 									{
