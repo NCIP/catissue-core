@@ -7,6 +7,9 @@ import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.OrderDetails;
+import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -82,7 +85,7 @@ public class ClientDemo
 		private static int successfullOperations;
 		private static int failureOperations;
 		private static String tabSpacing = "\t\t\t";
-		private static String newLine = "\n";
+		private static String newLine = System.getProperty("line.separator");
 		private String separator = ",";
 		private static StringBuffer reportContents = null;
 		private String insertOperation = " insert, Positive testcase Name: ";
@@ -113,30 +116,30 @@ public class ClientDemo
 				ex.printStackTrace();
 				return;
 			}
-
+			try
+			{				
+				reportContents = new StringBuffer();
+				ClientDemo testClient = new ClientDemo();				
+				testClient.createObjects();
+				testClient.serachObject();
+				testClient.updateObjects();				
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+			
 			try 
 			{
-				ClientDemo testClient = new ClientDemo();
 				reportWriter = ReportWriter.getInstance();
 				String dirFullPath = reportWriter.getDirPath(); 
 				reportWriter.createDir(dirFullPath);
 				filePath = reportWriter.getFileName(dirFullPath);
 				reportWriter.createFile(filePath);
 				writeHeaderContentsToReport();
-				reportContents = new StringBuffer();
-				testClient.createObjects();
-				testClient.serachObject();
-				testClient.updateObjects();
 				writeFooterContentsToReport();
 				reportWriter.closeFile();
-				//testClient.sendMail();
-/*				testClient.testAddInstitution();
-				testClient.testAddDepartment();
-				testClient.testAddCancerResearchGroup();
-				testClient.testAddBioHazard();
-				testClient.testAddUser();
-				
-*/			}
+			}
 			catch (RuntimeException e2) 
 			{
 				e2.printStackTrace();
@@ -184,6 +187,7 @@ public class ClientDemo
 			testAddSpecimen();
 			testAddSpecimenArray();
 			testAddDistribution();
+<<<<<<< ClientDemo.java
 			
 			
 			testAddInstitutionWithWrongData();
@@ -211,7 +215,8 @@ public class ClientDemo
 			testAddDistributionWithClosedSite();
 			testAddDistributionWithClosedDistributionProtocol();
 			
-								
+			testAddOrderWithData();
+			testAddOrderWithWrongData();	
 		}
 		catch(Exception ex)
 		{
@@ -568,7 +573,7 @@ public class ClientDemo
 	{
 		try
 		{			
-			Distribution distributionObj = (Distribution)api.initDistribution();
+			Distribution distributionObj = (Distribution)api.initDistribution();			
 	    	setLogger(distributionObj);
 	    	Logger.out.info("Inserting domain object------->"+distributionObj);
 			distributionObj =  (Distribution) appService.createObject(distributionObj);
@@ -616,7 +621,7 @@ public class ClientDemo
 	{
 		try
 		{
-			DistributionProtocol distributionProtocolObj =(DistributionProtocol)api.initDistributionProtocol();
+			DistributionProtocol distributionProtocolObj =(DistributionProtocol)api.initDistributionProtocol();						
 	    	setLogger(distributionProtocolObj);
 	    	Logger.out.info("Inserting domain object------->"+distributionProtocolObj);
 			distributionProtocolObj =  (DistributionProtocol) appService.createObject(distributionProtocolObj);
@@ -2359,15 +2364,15 @@ public class ClientDemo
 	
 	private void sendMail()
 	{
-//		SendBuildReport report = SendBuildReport.getInstance();
-//		String to = "catissue@persistent.co.in";
-//		String from = "ashwin_gupta@persistent.co.in";
-//		String cc = "munesh_gupta@persistent.co.in";
-//		String host = "mail.persistent.co.in";
-//        String subject = "Nightly Build Report";
-//        String body = "nightly build report run for database MySQL";
-//        //String filePath = "F:/nightly_build/catissuecore/caTissueCore_caCORE_Client/log/catissuecoreclient.log";
-//        report.sendmail(to,cc,null,from,host,subject,body,filePath);
+		SendBuildReport report = SendBuildReport.getInstance();
+		String to = "catissue@persistent.co.in";
+		String from = "ashwin_gupta@persistent.co.in";
+		String cc = "munesh_gupta@persistent.co.in";
+		String host = "mail.persistent.co.in";
+        String subject = "Nightly Build Report";
+        String body = "nightly build report run for database MySQL";
+        //String filePath = "F:/nightly_build/catissuecore/caTissueCore_caCORE_Client/log/catissuecoreclient.log";
+        report.sendmail(to,cc,null,from,host,subject,body,filePath);
  	}
 	
 	
@@ -2514,7 +2519,66 @@ public class ClientDemo
 				}
 			}
 		}
+	 private void testAddOrderWithData()
+		{
+			OrderDetails orderObj = null;
+			try
+			{
+				orderObj = (OrderDetails)api.initOrder();
+				setLogger(orderObj);
+				orderObj = (OrderDetails) appService.createObject(orderObj);
+					
+				dataModelObjectMap.put("OrderDetails",orderObj);
+				Logger.out.info("Order Domain Object is successfully added ---> Name :: " + orderObj.getName());
+				writeSuccessfullOperationToReport(orderObj,insertOperation+" testAddOrder");
+				//writeFailureOperationsToReport("orderObj",insertValidateOperation+" testAddOrderWIthWrongData");
+			}
+			catch(Exception e)
+			{
+				writeFailureOperationsToReport("orderObj",insertOperation+" testAddOrder");
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+				/*if(orderObj != null)
+				{
+					writeSuccessfullOperationToReport(orderObj,insertOperation+" testAddOrder");
+				}
+				else
+				{
+					Logger.out.info("Could not able to test testAddOrderWithData due to fail to initiaze Order obj");
+				}*/
+			}
+		}
 	 
+		private void testAddOrderWithWrongData()
+		{
+			OrderDetails orderObj = null;
+			try
+			{
+				orderObj = (OrderDetails)api.initOrder();
+				orderObj.setName(null);
+				setLogger(orderObj);
+				orderObj = (OrderDetails) appService.createObject(orderObj);
+					
+				dataModelObjectMap.put("OrderDetails",orderObj);
+				Logger.out.info("Order Domain Object is successfully added ---> Name :: " + orderObj.getName());
+				writeFailureOperationsToReport("orderObj",insertValidateOperation+" testAddOrderWIthWrongData");
+			}
+			catch(Exception e)
+			{
+				writeSuccessfullOperationToReport(orderObj,insertValidateOperation+" testAddOrderWIthWrongData");
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+				/*if(orderObj != null)
+				{
+					writeSuccessfullOperationToReport(orderObj,insertValidateOperation+" testAddOrderWIthWrongData");	
+				}
+				
+				else
+				{
+					Logger.out.info("Could not able to test testAddOrderWithWrongData due to fail to initiaze Order obj");
+				}*/
+			}
+		}
 	
 
 }
