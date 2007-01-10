@@ -42,7 +42,6 @@
 			
 				String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 				boolean isAddNew = false;
-				String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 
 			    String operation = (String) request.getAttribute(Constants.OPERATION);
 		        String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
@@ -52,7 +51,7 @@
 		        
 		        String formName;
 
-		        boolean readOnlyValue;
+                boolean readOnlyValue;
 		        if (operation.equals(Constants.EDIT))
 		        {						
 		            formName = Constants.COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION;
@@ -71,6 +70,7 @@
 					}
 		            readOnlyValue = false;
 		        }
+
 %>
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -215,8 +215,8 @@
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="submitform()">
 						    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
 					    </html:select>
-						&nbsp;
-						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
+						&nbsp;	 
+<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
 						<html:link href="#" styleId="newCollectionProtocol" onclick="addNewAction('ParticipantRegistrationAddNew.do?addNewForwardTo=collectionProtocol&forwardTo=participantRegistration&addNewFor=collectionProtocolId')">
 							<bean:message key="buttons.addNew" />
 						</html:link>					   
@@ -240,7 +240,7 @@
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
 						<html:link href="#" styleId="newParticipant" onclick="addNewAction('ParticipantRegistrationAddNew.do?addNewForwardTo=participant&forwardTo=participantRegistration&addNewFor=participantId')">
 							<bean:message key="buttons.addNew" />
-						</html:link>			
+						</html:link>				   
 						</logic:notEqual>
 						<logic:equal name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>">
 						<html:link href="#" styleId="newParticipant" onclick="addNewAction('CPQueryParticipantRegistrationAddNew.do?addNewForwardTo=participant&forwardTo=participantRegistration&addNewFor=participantId')">
