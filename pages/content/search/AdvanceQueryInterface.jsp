@@ -65,7 +65,7 @@
     </tr>
     
      <tr width="100%">
-       <td height="65%">
+       <td height="60%">
        		<table width="100%" height="100%"> 
 			<tr>
 				<td width="100%">
@@ -78,7 +78,7 @@
      </tr>
 
     <tr width="100%">
-        <td height="25%">
+        <td height="30%"> 
 			<table width="100%" height="100%"> 
 			<tr>
 				<td width="100%">
