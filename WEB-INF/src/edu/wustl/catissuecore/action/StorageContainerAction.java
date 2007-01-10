@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -174,9 +175,15 @@ public class StorageContainerAction extends SecureAction
 				List containerList = bizLogic.retrieve(StorageContainer.class.getName(), valueField, new Long(initValues[0]));
 				if (!containerList.isEmpty())
 				{
+					if(storageContainerForm.getCheckedButton() == 2 && storageContainerForm.getStContSelection() == 1)
+					{
 					StorageContainer container = (StorageContainer) containerList.get(0);
 					storageContainerForm.setCollectionIds(getDefaultHoldCPList(container));
-
+					}     
+					else
+					{
+						storageContainerForm.setCollectionIds(new long[]{-1});
+					}
 				}
 				if (storageContainerForm.getContainerName().equals(""))
 				{
