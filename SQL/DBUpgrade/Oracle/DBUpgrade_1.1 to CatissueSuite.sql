@@ -78,7 +78,7 @@ INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Status'),to_date('2006-11-27','yyyy-mm-dd') from dual;
 
 	
-	#---- Ordering system  related alter table script
+	/* Ordering system  related alter table script  */
 alter table CATISSUE_EXISTING_SP_ORD_ITEM drop constraint FKF8B855EEBC7298A9;
 alter table CATISSUE_EXISTING_SP_ORD_ITEM drop constraint FKF8B855EE60773DB2;
 alter table CATISSUE_PATH_CASE_ORDER_ITEM drop constraint FKBD5029D5F69249F7;
@@ -97,7 +97,7 @@ alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop constraint FKC5C92CCBCE5FBC3A;
 alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop constraint FKC5C92CCBBC7298A9;
 
 
-	#-------- Consent Tracking alter scripts
+	/* Consent Tracking alter scripts */
 alter table CATISSUE_CONSENT_TIER_RESPONSE drop constraint FKFB1995FD4AD77FCB;
 alter table CATISSUE_CONSENT_TIER_RESPONSE drop constraint FKFB1995FD17B9953;
 alter table CATISSUE_CONSENT_TIER_STATUS drop constraint FKF74E94AEF69249F7;
@@ -105,7 +105,7 @@ alter table CATISSUE_CONSENT_TIER_STATUS drop constraint FKF74E94AE60773DB2;
 alter table CATISSUE_CONSENT_TIER_STATUS drop constraint FKF74E94AE17B9953;
 alter table CATISSUE_CONSENT_TIER drop constraint FK51725303E36A4B4F;
 
-#------- ordering system relate tables---- 
+/* ordering system relate tables---- */
 drop table CATISSUE_EXISTING_SP_ORD_ITEM;
 drop table CATISSUE_PATH_CASE_ORDER_ITEM;
 drop table CATISSUE_ORDER_ITEM;
@@ -161,7 +161,7 @@ create table CATISSUE_SPECIMEN_ORDER_ITEM (
    ARRAY_ORDER_ITEM_ID number(19,0),
    primary key (IDENTIFIER)
 );
-#-----------------Array order item tables.
+/*Array order item tables.*/
 create table CATISSUE_SP_ARRAY_ORDER_ITEM (
    IDENTIFIER number(19,0) not null,
    SPECIMEN_ARRAY_ID number(19,0),
@@ -191,7 +191,7 @@ alter table CATISSUE_SPECIMEN_ORDER_ITEM add constraint FK48C3B39F83505A30 forei
 alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBCE5FBC3A foreign key (ARRAY_TYPE_ID) references CATISSUE_SPECIMEN_ARRAY_TYPE (IDENTIFIER);
 alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBBC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
 
-#------ Consent Tracking related drop, create and add foreign key scripts.
+/*Consent Tracking related drop, create and add foreign key scripts.*/
 drop table CATISSUE_CONSENT_TIER_RESPONSE;
 drop table CATISSUE_CONSENT_TIER_STATUS;
 drop table CATISSUE_CONSENT_TIER;
@@ -248,11 +248,11 @@ alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop constraint FKC5C92CCBC4A3C438;
 alter table catissue_new_sp_ar_order_item add  SPECIMEN_ARRAY_ID number(19,0);
 alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY (IDENTIFIER);
 
-#---------------------Ordering System Permissions----Ashish 4/1/06
-insert into csm_role(ROLE_ID,ROLE_NAME,ROLE_DESCRIPTION,APPLICATION_ID) values (11,'CREATE_ONLY','Create only role',1);
-insert into csm_role_privilege(ROLE_PRIVILEGE_ID,ROLE_ID,PRIVILEGE_ID) values (28,11,1);
+/*Ordering System Permissions----Ashish 4/1/06*/
+insert into csm_role(ROLE_ID,ROLE_NAME,ROLE_DESCRIPTION,APPLICATION_ID,ACTIVE_FLAG,UPDATE_DATE) values (11,'CREATE_ONLY','Create only role',1,0,to_date('0001-01-01','yyyy-mm-dd'));
+insert into csm_role_privilege(ROLE_PRIVILEGE_ID,ROLE_ID,PRIVILEGE_ID,UPDATE_DATE) values (28,11,1,to_date('0001-01-01','yyyy-mm-dd'));
 
-insert into csm_protection_group(PROTECTION_GROUP_ID,PROTECTION_GROUP_NAME,APPLICATION_ID) values (44,'SCIENTIST_PROTECTION_GROUP',1);
+insert into csm_protection_group(PROTECTION_GROUP_ID,PROTECTION_GROUP_NAME,APPLICATION_ID,UPDATE_DATE,LARGE_ELEMENT_COUNT_FLAG) values (44,'SCIENTIST_PROTECTION_GROUP',1,to_date('0001-01-01','yyyy-mm-dd'),0);
 
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2007-01-04','yyyy-mm-dd') from dual;
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='OrderItem'),to_date('2007-01-04','yyyy-mm-dd') from dual;
@@ -265,7 +265,7 @@ INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTIO
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Array Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
 
-insert into csm_user_group_role_pg(USER_GROUP_ROLE_PG_ID,GROUP_ID,ROLE_ID,PROTECTION_GROUP_ID) values (102,4,11,44);
+insert into csm_user_group_role_pg(USER_GROUP_ROLE_PG_ID,GROUP_ID,ROLE_ID,PROTECTION_GROUP_ID,UPDATE_DATE) values (102,4,11,44,to_date('2007-01-04','yyyy-mm-dd'));
 
 INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'edu.wustl.catissuecore.action.RequestListAction','edu.wustl.catissuecore.action.RequestListAction','edu.wustl.catissuecore.action.RequestListAction',NULL,NULL,1,to_date('2007-01-04','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.RequestListAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
