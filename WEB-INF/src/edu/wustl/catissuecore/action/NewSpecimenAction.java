@@ -121,6 +121,61 @@ public class NewSpecimenAction extends SecureAction
 			}
 		}
 
+		//Consent Tracking Virender Mehta
+		//Adding name,value pair in NameValueBean 
+		String tableStatus="";
+		String showConsents = request.getParameter(Constants.SHOW_CONSENTS); 
+		if(showConsents!=null && showConsents.equalsIgnoreCase(Constants.YES))
+		{
+			String scg_id=null;
+			String errorShowConsent=request.getParameter("errorShowConsent");
+			if(operation.equalsIgnoreCase(Constants.EDIT)
+			  ||(errorShowConsent!=null&&errorShowConsent.equalsIgnoreCase(Constants.YES)))
+			{
+				scg_id = String.valueOf(specimenForm.getSpecimenCollectionGroupId());
+			}
+			else
+			{
+				scg_id = request.getParameter(Constants.ID);
+				
+			}
+			tableStatus = request.getParameter("tableId4");
+			if(tableStatus.equals("disable"))
+			{
+				request.setAttribute("tableStatus",tableStatus);
+			}
+			
+			CollectionProtocolRegistration collectionProtocolRegistration = getcollectionProtocolRegistrationObj(scg_id);
+			User witness= collectionProtocolRegistration.getConsentWitness();
+			if(witness==null||witness.getFirstName()==null)
+			{
+				String witnessName="";
+				specimenForm.setWitnessName(witnessName);
+			}
+			else
+			{
+				specimenForm.setWitnessName(witness.getFirstName());
+			}
+			String getConsentDate=Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+			specimenForm.setConsentDate(getConsentDate);
+			String getSignedConsentURL=Utility.toString(collectionProtocolRegistration.getSignedConsentDocumentURL());
+			specimenForm.setSignedConsentUrl(getSignedConsentURL);
+
+			if(operation.equalsIgnoreCase(Constants.ADD))
+			{
+				Set participantResponseSet =(Set)collectionProtocolRegistration.getConsentTierResponseCollection();
+				List participantResponseList= new ArrayList(participantResponseSet);
+				Map tempMap=prepareConsentMap(participantResponseList);
+				specimenForm.setConsentResponseForSpecimenValues(tempMap);
+				specimenForm.setConsentTierCounter(participantResponseList.size());
+			}
+						
+			List specimenResponseList = new ArrayList();
+			specimenResponseList=Utility.responceList(operation);
+			request.setAttribute("specimenResponseList", specimenResponseList);
+		}
+		//Consent Tracking Virender Mehta		
+
 		//*************  ForwardTo implementation *************
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
 
@@ -680,6 +735,52 @@ public class NewSpecimenAction extends SecureAction
 		return -1;
 	}
 
+	//Consent Tracking (Virender Mehta)	
+	/**
+	 * This function will return CollectionProtocolRegistration object 
+	 * @param scg_id Selected SpecimenCollectionGroup ID
+	 * @return collectionProtocolRegistration
+	 */
+	private CollectionProtocolRegistration getcollectionProtocolRegistrationObj(String scg_id) throws DAOException
+	{
+		SpecimenCollectionGroupBizLogic specimenCollectionBizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+		String colName = "id";			
+		List getSCGIdFromDB = specimenCollectionBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), colName, scg_id);		
+		SpecimenCollectionGroup specimenCollectionGroupObject = (SpecimenCollectionGroup)getSCGIdFromDB.get(0);
+		CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroupObject.getCollectionProtocolRegistration();
+		return collectionProtocolRegistration;
+	}
+	
+	/**
+	 * Prepare Map for Consent tiers
+	 * @param participantResponseList This list will be iterated to map to populate participant Response status.
+	 * @return tempMap
+	 */
+	private Map prepareConsentMap(List participantResponseList)
+	{
+		Map tempMap = new HashMap();
+		if(participantResponseList!=null)
+		{
+			int i = 0;
+			Iterator consentResponseCollectionIter = participantResponseList.iterator();
+			while(consentResponseCollectionIter.hasNext())
+			{
+				ConsentTierResponse consentTierResponse = (ConsentTierResponse)consentResponseCollectionIter.next();
+				ConsentTier consent = consentTierResponse.getConsentTier();
+				String idKey="ConsentBean:"+i+"_consentTierID";
+				String statementKey="ConsentBean:"+i+"_statement";
+				String responseKey="ConsentBean:"+i+"_participantResponse";
+										
+				tempMap.put(idKey, consent.getId());
+				tempMap.put(statementKey,consent.getStatement());
+				tempMap.put(responseKey,consentTierResponse.getResponse());
+				i++;
+			}
+		}
+		return tempMap;
+	}	
+	//Consent Tracking (Virender Mehta)		
+
 	private void setFormValues(NewSpecimenForm specimenForm, String specimenCollectionGroupId)
 	{
 		specimenForm.setSpecimenCollectionGroupId(specimenCollectionGroupId);
@@ -692,5 +793,4 @@ public class NewSpecimenAction extends SecureAction
 		specimenForm.setStorageContainer("");
 
 	}
-
 }
