@@ -275,7 +275,10 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     		ConsentBean consentBean = (ConsentBean)iter.next();
     		ConsentTier consentTier = new ConsentTier();
     		consentTier.setStatement(consentBean.getStatement());
-    		consentStatementColl.add(consentTier);
+    		if(consentBean.getStatement().trim().length()>0)
+    		{
+    			consentStatementColl.add(consentTier);
+    		}
     	}	
     	return consentStatementColl;
     }

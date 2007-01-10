@@ -75,7 +75,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	/**
 	 * No of Consent Tier
 	 */
-	private int consentTierCounter=1;
+	private int consentTierCounter=0;
 
 	/**
 	 * Signed Consent URL
@@ -173,26 +173,13 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	  	/**
 	  	 * For Consent tracking setting UI attributes
 	  	 */
-	  	
 	  	User witness= registration.getConsentWitness();
-	  	this.signedConsentUrl=Utility.toString(registration.getSignedConsentDocumentURL());
-	  	if(this.signedConsentUrl==null)
-	  	{
-	  		this.signedConsentUrl="";
-	  	}
-	  	if(witness==null)
-	  	{
-	  		// this.witnessId=-1;
-	  	}
-	  	else
+	  	if(witness!=null)
 	  	{
 	  		this.witnessId=witness.getId();
 	  	}
+	  	this.signedConsentUrl=Utility.toString(registration.getSignedConsentDocumentURL());
 	  	this.consentDate=Utility.parseDateToString(registration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
-	  	if(this.consentDate==null)
-	  	{
-	  		this.consentDate="";
-	  	}
 	  	this.consentResponseValues=prepareParticipantResponseMap(registration.getConsentTierResponseCollection());
 	  	
     }
@@ -229,10 +216,6 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 				i++;
 			}
 			consentTierCounter = consentTierResponseCollection.size();
-			if(consentTierCounter==0)
-			{
-				consentTierCounter = 1;
-			}		
 			return tempMap;
 		}
 		else

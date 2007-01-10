@@ -53,7 +53,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	/**
 	 * No of Consent Tier
 	 */
-	private int consentTierCounter=1;
+	private int consentTierCounter=0;
 	/**
 	 * Signed Consent URL
 	 */
@@ -395,15 +395,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 			this.witnessName=Utility.toString(witness.getFirstName());
 		}
 		this.signedConsentUrl=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
-		if(this.signedConsentUrl==null)
-		{
-			this.signedConsentUrl="";
-		}
 		this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
-		if(this.consentDate==null)
-		{
-			this.consentDate="";
-		}
 		Collection consentResponse = specimenCollectionGroup.getConsentTierStatusCollection();
 		Collection consentResponseParticipantlevel=specimenCollectionGroup.getCollectionProtocolRegistration().getConsentTierResponseCollection();
 		this.consentResponseForSpecimenValues=prepareSCGResponseMap(consentResponse,consentResponseParticipantlevel);
@@ -444,10 +436,6 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 					i++;
 				}
 				consentTierCounter = statusResponseCollection.size();
-				if(consentTierCounter==0)
-				{
-					consentTierCounter = 1;
-				}		
 				return tempMap;
 			}		
 			else

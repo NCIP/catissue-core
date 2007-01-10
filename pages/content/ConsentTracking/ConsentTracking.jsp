@@ -15,8 +15,6 @@
 <script language="JavaScript">
 
 <%-- On calling this function all the response dropdown value set to "Withdraw" --%>
-
-
 function withdrawAll(element)
 {	
 	var withdraw = "<%=form.getConsentTierMap()%>";
@@ -24,7 +22,7 @@ function withdrawAll(element)
 	{
 		var withdrawId = withdraw.replace(/`/,i);
 		var withdrawObject = document.getElementById(withdrawId);
-		withdrawObject.selectedIndex=4; 
+		withdrawObject.selectedIndex=3; 
 	}
 }
 
@@ -37,7 +35,7 @@ function popupWindow(nofConsentTiers)
 	{
 		var withdrawId = withdraw.replace(/`/,i);
 		var withdrawObject = document.getElementById(withdrawId);
-		if(withdrawObject.selectedIndex==4)
+		if(withdrawObject.selectedIndex==3)
 		{
 			iCount--;
 		}
@@ -48,11 +46,15 @@ function popupWindow(nofConsentTiers)
 		var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true";
 		window.open(url,'WithdrawAll','height=40,width=400');
 	}
-	else
+	else if(iCount==nofConsentTiers)
 	{	
+		return <%=normalSubmit%>;
+	}	
+	else
+	{
 		var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=false";
 		window.open(url,'Withdraw','height=110,width=400');
-	}	
+	}
 }	
 
 </script>							
@@ -108,13 +110,19 @@ function popupWindow(nofConsentTiers)
 						<%
 						ConsentTierData consentTierForm =(ConsentTierData)form;
 						List consentTierList=(List)consentTierForm.getConsentTiers();
-						if(operation.equals("edit"))
+						boolean withdrawAllDisabled=false;
+						if(consentTierList==null||consentTierList.isEmpty())
+						{
+							consentTierList =new ArrayList();
+							withdrawAllDisabled=true;
+						}
+						if(operation.equals(Constants.EDIT))
 						{
 						String str = "withdrawAll('"+ consentTierList.size()+"')";
 						
 						%>
 							<div style="float:right;">
-								<html:button property="addButton" styleClass="actionButton" onclick="<%=str%>" value="Withdraw All"/>
+								<html:button property="addButton" disabled="<%=withdrawAllDisabled%>" styleClass="actionButton" onclick="<%=str%>" value="Withdraw All"/>
 							</div>	
 						<%
 						}
