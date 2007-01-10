@@ -34,7 +34,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	/**
 	 * String containing the item requested for
 	 */
-	private String requestfor;
+	private String requestFor;
 	
 	/**
 	 * Specimen or Pathological case.
@@ -97,7 +97,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	/**
 	 * The specimen associated with the order item.
 	 */
-	private String specimenId = "";
+	//private String specimenId = "";
 	
 	/**
 	 * @return description
@@ -125,20 +125,20 @@ public class DefinedArrayDetailsBean implements Serializable
 
 	/**
 	 * @return the specimenId
-	 */
+	 *//*
 	public String getSpecimenId()
 	{
 		return specimenId;
 	}
 
 	
-	/**
+	*//**
 	 * @param specimenId the specimenId to set
-	 */
+	 *//*
 	public void setSpecimenId(String specimenId)
 	{
 		this.specimenId = specimenId;
-	}
+	}*/
 	
 	
 	/**
@@ -275,18 +275,18 @@ public class DefinedArrayDetailsBean implements Serializable
 	 * Returns the item requested for
 	 * @return requestfor
 	 */
-	public String getRequestfor()
+	public String getRequestFor()
 	{
-		return requestfor;
+		return requestFor;
 	}
 	
 	/**
 	 * Sets the item requested for
 	 * @param requestfor String indicating whether specimen derivative is requested or it is requested as is by the user
 	 */
-	public void setRequestfor(String requestfor)
+	public void setRequestFor(String requestFor)
 	{
-		this.requestfor = requestfor;
+		this.requestFor = requestFor;
 	}
 
 	/**
