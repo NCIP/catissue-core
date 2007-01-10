@@ -628,5 +628,24 @@ public class Utility extends edu.wustl.common.util.Utility
  
         return obj;
     }
-
+ 
+ //Consent tracking(Virender Mehta)   
+    /**
+	 * Prepare Respopnse List
+	 * @param opr If Operation = Edit then "Withdraw" is added in the List
+	 * @return listOfResponces
+	 */
+   public static List responceList(String addeditOperation)
+	{
+		List listOfResponces=new ArrayList();
+		listOfResponces.add(new NameValueBean(Constants.NOT_SPECIFIED,Constants.NOT_SPECIFIED));
+		listOfResponces.add(new NameValueBean(Constants.BOOLEAN_YES,Constants.BOOLEAN_YES));
+		listOfResponces.add(new NameValueBean(Constants.BOOLEAN_NO,Constants.BOOLEAN_NO));
+		if(addeditOperation.equalsIgnoreCase(Constants.EDIT))
+		{
+			listOfResponces.add(new NameValueBean(Constants.WITHDRAWN,Constants.WITHDRAWN));
+		}
+		return listOfResponces;  	
+	}
+// Consent tracking(Virender Mehta) 
 }
