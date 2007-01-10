@@ -225,6 +225,12 @@ alter table CATISSUE_CONSENT_TIER_STATUS  add constraint FKF74E94AE60773DB2 fore
 alter table CATISSUE_CONSENT_TIER_STATUS  add constraint FKF74E94AE17B9953 foreign key (CONSENT_TIER_ID) references CATISSUE_CONSENT_TIER (IDENTIFIER);
 alter table CATISSUE_CONSENT_TIER  add constraint FK51725303E36A4B4F foreign key (COLL_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
 
+create sequence CATISSUE_CONSENT_TIER_RES_SEQ;
+create sequence CATISSUE_CONSENT_TIER_STAT_SEQ;
+create sequence CATISSUE_CONSENT_TIER_SEQ;
+create sequence CATISSUE_ORDER_SEQ;
+create sequence CATISSUE_ORDER_ITEM_SEQ;
+
 /*----caTissue tables changed for ordering system and consent tracking----- */
 alter table CATISSUE_DISTRIBUTION drop constraint FK54276680783867CC;	
 alter table CATISSUE_DISTRIBUTED_ITEM drop constraint FKA7C3ED4BC4A3C438;	
