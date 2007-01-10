@@ -53,93 +53,6 @@ import edu.wustl.common.util.logger.Logger;
 public class CollectionProtocolRegistrationAction extends SecureAction
 {
 		
-	//Consent Tracking Virender Mehta		
-	public List getConsentList(String collectionProtocolID) throws DAOException
-    {   	
-    	CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
-		String colName = "id";		
-		List collProtList  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), colName, collectionProtocolID);		
-		CollectionProtocol collectionProtocol = (CollectionProtocol)collProtList.get(0);
-		//Setting consent tiers
-		Set consentList = (Set)collectionProtocol.getConsentTierCollection();
-		List finalConsentList = new ArrayList(consentList);
-    	return finalConsentList;
-    }
-	/**
-	 * Prepare map for Showing Consents for a CollectionprotocolID when Operation=Add
-	 * @param requestConsentList This is the List of Consents for a selected  CollectionProtocolID
-	 * @return tempMap
-	 */
-	private Map prepareConsentMap(List requestConsentList)
-	{
-		Map tempMap = new HashMap(); 
-		if(requestConsentList!=null)
-		{
-			int i=0;
-			Iterator consentTierCollectionIter = requestConsentList.iterator();
-			String idKey=null;
-			String statementKey=null;
-			while(consentTierCollectionIter.hasNext())
-			{
-				ConsentTier consent=(ConsentTier)consentTierCollectionIter.next();
-				idKey="ConsentBean:"+i+"_consentTierID";
-				statementKey="ConsentBean:"+i+"_statement";
-										
-				tempMap.put(idKey, consent.getId());
-				tempMap.put(statementKey,consent.getStatement());
-				i++;
-			}
-		}
-		return tempMap;
-	}
-	 
-	/**
-	 * Adding name,value pair in NameValueBean
-	 * @param addeditOperation check for operation Add/Edit
-	 * @return listOfResponces
-	 */
-	private List participantResponce(String addeditOperation)
-	{
-		List listOfResponces=new ArrayList();
-		listOfResponces.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-		listOfResponces.add(new NameValueBean(Constants.BOOLEAN_YES,Constants.BOOLEAN_YES));
-		listOfResponces.add(new NameValueBean(Constants.BOOLEAN_NO,Constants.BOOLEAN_NO));
-		listOfResponces.add(new NameValueBean(Constants.NOT_SPECIFIED,Constants.NOT_SPECIFIED));
-		if(addeditOperation.equalsIgnoreCase(Constants.EDIT))
-		{
-			listOfResponces.add(new NameValueBean(Constants.WITHDRAWN,Constants.WITHDRAWN));
-		}
-		return listOfResponces;  	
-	}
-	
-	/**
-	 * Adding name,value pair in NameValueBean for Witness Name
-	 * @param collProtId Get Witness List for this ID
-	 * @return consentWitnessList
-	 */ 
-	private List witnessNameList(String collProtId) throws DAOException
-	{		
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-		String colName = Constants.ID;
-		List collProtList = bizLogic.retrieve(CollectionProtocol.class.getName(), colName, collProtId);		
-		CollectionProtocol collectionProtocol = (CollectionProtocol)collProtList.get(0);
-		//Setting the consent witness
-		List consentWitnessList = new ArrayList();
-		consentWitnessList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-		Collection userColl = collectionProtocol.getUserCollection();
-		Iterator iter = userColl.iterator();
-		while(iter.hasNext())
-		{
-			User user = (User)iter.next();
-			consentWitnessList.add(new NameValueBean(user.getFirstName(),user.getId()));
-		}		
-		//Setting the PI
-		User principalInvestigator = collectionProtocol.getPrincipalInvestigator();
-		consentWitnessList.add(new NameValueBean(principalInvestigator.getFirstName(),principalInvestigator.getId()));
-		
-		return consentWitnessList;
-	}	
-	//Consent Tracking Virender Mehta
 	/**
 	 * Overrides the execute method of Action class.
 	 * Sets the various fields in Participant Registration Add/Edit webpage.
@@ -172,7 +85,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 			//Getting witness name list for CollectionProtocolID
 			List witnessList = witnessNameList(cp_id);
 			//Getting ResponseList if Operation=Edit then "Withdraw" is added to the List 
-			List responseList= participantResponce(operation);
+			List responseList= Utility.responceList(operation);
 			if(operation.equalsIgnoreCase(Constants.ADD))
 			{
 				List requestConsentList = getConsentList(cp_id);
@@ -426,4 +339,77 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		}
 		return null;
 	}
+
+	//Consent Tracking Virender Mehta		
+	/**
+	 * Adding name,value pair in NameValueBean for Witness Name
+	 * @param collProtId Get Witness List for this ID
+	 * @return consentWitnessList
+	 */ 
+	public List getConsentList(String collectionProtocolID) throws DAOException
+    {   	
+    	CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+		String colName = "id";		
+		List collProtList  = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), colName, collectionProtocolID);		
+		CollectionProtocol collectionProtocol = (CollectionProtocol)collProtList.get(0);
+		//Setting consent tiers
+		Set consentList = (Set)collectionProtocol.getConsentTierCollection();
+		List finalConsentList = new ArrayList(consentList);
+    	return finalConsentList;
+    }
+	/**
+	 * Prepare map for Showing Consents for a CollectionprotocolID when Operation=Add
+	 * @param requestConsentList This is the List of Consents for a selected  CollectionProtocolID
+	 * @return tempMap
+	 */
+	private Map prepareConsentMap(List requestConsentList)
+	{
+		Map tempMap = new HashMap(); 
+		if(requestConsentList!=null)
+		{
+			int i=0;
+			Iterator consentTierCollectionIter = requestConsentList.iterator();
+			String idKey=null;
+			String statementKey=null;
+			while(consentTierCollectionIter.hasNext())
+			{
+				ConsentTier consent=(ConsentTier)consentTierCollectionIter.next();
+				idKey="ConsentBean:"+i+"_consentTierID";
+				statementKey="ConsentBean:"+i+"_statement";
+										
+				tempMap.put(idKey, consent.getId());
+				tempMap.put(statementKey,consent.getStatement());
+				i++;
+			}
+		}
+		return tempMap;
+	}
+	/**
+	 * Adding name,value pair in NameValueBean for Witness Name
+	 * @param collProtId Get Witness List for this ID
+	 * @return consentWitnessList
+	 */ 
+	private List witnessNameList(String collProtId) throws DAOException
+	{		
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		String colName = Constants.ID;
+		List collProtList = bizLogic.retrieve(CollectionProtocol.class.getName(), colName, collProtId);		
+		CollectionProtocol collectionProtocol = (CollectionProtocol)collProtList.get(0);
+		//Setting the consent witness
+		List consentWitnessList = new ArrayList();
+		consentWitnessList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+		Collection userColl = collectionProtocol.getUserCollection();
+		Iterator iter = userColl.iterator();
+		while(iter.hasNext())
+		{
+			User user = (User)iter.next();
+			consentWitnessList.add(new NameValueBean(user.getFirstName(),user.getId()));
+		}		
+		//Setting the PI
+		User principalInvestigator = collectionProtocol.getPrincipalInvestigator();
+		consentWitnessList.add(new NameValueBean(principalInvestigator.getFirstName(),principalInvestigator.getId()));
+		
+		return consentWitnessList;
+	}	
+	//Consent Tracking Virender Mehta
 }
