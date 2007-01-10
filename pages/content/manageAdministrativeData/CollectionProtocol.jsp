@@ -22,7 +22,7 @@
     String operation = (String) request.getAttribute(Constants.OPERATION);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
     
-    String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;;
+    String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 	String currentCollectionProtocolDate="";
 	CollectionProtocolForm form = (CollectionProtocolForm) request.getAttribute("collectionProtocolForm");
 	if(form != null)
@@ -239,7 +239,153 @@ function insRow(subdivtag,iCounter,blockCounter)
 
 }
 
+
+//Consent Tracking Module Virender Mehta(Start)
+	//This Function will add more consent Tier 
+	function addConsentTier()
+	{		
+		var rowCount = document.getElementById('innertable').rows.length;
+		var createRow = document.getElementById('innertable').insertRow(1);
+		var createSerialNo=createRow.insertCell(0);
+		var createCheckBox=createRow.insertCell(1);
+		var createTextArea=createRow.insertCell(2);
+		
+		var iCount = rowCount-1;
+		var consentName="consentValue(ConsentBean:"+iCount+"_statement)";
+			
+		createSerialNo.className="tabrightmostcell";
+		createSerialNo.setAttribute('align','right');
+		createCheckBox.className="formField";
+		createCheckBox.setAttribute('align','center');
+		createTextArea.className="formField";
+		
+						
+		createSerialNo.innerHTML=rowCount+".";
+		createCheckBox.innerHTML="<input type='checkbox' name='consentcheckBoxs' id='check"+iCount+"'>";
+		createTextArea.innerHTML="<textarea rows='2'class='formFieldSized' style='width:90%;' name="+consentName+">";
+				
+	}
 	
+	//On selecting Select All CheckBox all the associted check box wiil be selected
+	function checkAll(chkInstance)
+	{
+		var chkCount= document.getElementsByName('consentcheckBoxs').length;
+		for (var i=0;i<chkCount;i++)
+		{
+			var elements = document.getElementsByName('consentcheckBoxs');
+			elements[i].checked = chkInstance.checked;
+		}
+	}
+
+	//This function will delete the selected consent Tier
+	function deleteSelected()
+	{
+		var rowIndex = 0;	
+		var rowCount=document.getElementById('innertable').rows.length;
+		var removeButton = document.getElementsByName('removeButton');
+		
+		/** creating checkbox name**/
+		var chkBox = document.getElementsByName('consentcheckBoxs');
+		var lengthChk=chkBox.length;
+		var j = 0;
+		for(var i=0;i<lengthChk;i++)
+		{
+			if(chkBox[j].checked==true)
+			{
+				var gettable = document.getElementById('innertable');
+				var currentRow = chkBox[j].parentNode.parentNode;
+				rowIndex = currentRow.rowIndex;
+				gettable.deleteRow(rowIndex);
+			}
+			else
+			{
+				j++;
+			}	
+		}
+		var j = chkBox.length;
+		for(var i=0;i<chkBox.length;i++)
+		{
+			var currentRow = chkBox[i].parentNode.parentNode;
+			currentRow.childNodes[0].innerHTML=(j-i)+".";
+		}		
+	}	
+	
+	//This function will the called while switching between Tabs
+	function switchToTab(selectedTab)
+	{
+		var displayKey="block";
+		
+		if(!document.all)
+			displayKey="table";
+			
+		var displayTable=displayKey;
+		var tabSelected="none";
+		
+		if(selectedTab=="collectionProtocolTab")
+		{
+			tabSelected=displayKey;
+			displayTable="none";
+		}	
+		
+		var display=document.getElementById('table1');
+		display.style.display=tabSelected;
+		
+		var display2=document.getElementById('table2'); 
+		display2.style.display=tabSelected;
+			
+		var display3=document.getElementById('table3'); 
+		display3.style.display=tabSelected;
+			
+		var display4=document.getElementById('table4');
+		display4.style.display=displayTable;	
+		
+		var display5=document.getElementById('submittable');
+		display5.style.display=tabSelected;
+		
+				
+		var collectionTab=document.getElementById('collectionProtocolTab');
+		var consentTab=document.getElementById('consentTab');
+		
+		if(selectedTab=="collectionProtocolTab")
+		{
+			updateTab(collectionTab,consentTab);
+		}
+		else		
+		{
+			updateTab(consentTab,collectionTab);
+		}
+		
+	}
+	
+	//This function is for changing the behaviour of TABs
+	function updateTab(tab1, tab2)
+	{
+		tab1.onmouseover=null;
+		tab1.onmouseout=null;
+		tab1.className="tabMenuItemSelected";
+	
+		tab2.className="tabMenuItem";
+		tab2.onmouseover=function() { changeMenuStyle(this,'tabMenuItemOver'),showCursor();};
+		tab2.onmouseout=function() {changeMenuStyle(this,'tabMenuItem'),hideCursor();};
+	}
+
+	//On calling this function the tab will be switched to CollectionProtocol Page
+	function collectionProtocolPage()
+	{
+		switchToTab("collectionProtocolTab");
+	}
+
+	//On calling this function the tab will be switched to Consent Page	
+	function consentPage()
+	{
+		var checkboxObject=document.getElementById('defineConsents');
+		if(checkboxObject.checked)
+		{
+			switchToTab("consentTab");
+		}
+	}
+//	Consent Tracking Module Virender Mehta (End)
+
 //-->
 </SCRIPT>
 
@@ -263,8 +409,27 @@ function insRow(subdivtag,iCounter,blockCounter)
 
 <html:form action="<%=formName%>">
 
+<%
+if(pageView.equals("add") || pageView.equals("edit"))
+{
+%>
+ <table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="90%">
+	<tr>
+ 		<td height="20" width="9%" nowrap class="tabMenuItemSelected" onclick="collectionProtocolPage()" id="collectionProtocolTab">CollectionProtocol</td>
+
+        <td height="20" width="10%" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">
+		    <bean:message key="consents.consents" />        
+        </td>								
+     <td width="*" class="tabMenuSeparator" colspan="2">&nbsp;</td>
+   </tr>
+   <tr>
+	<td class="tabField" colspan="4">
+<%
+}
+%>
+
 <!-- table 1 -->
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" id="table1" class="contentPage" width="100%">
 <!-- NEW COLLECTIONPROTOCOL ENTRY BEGINS-->
 
 <!-- If operation is equal to edit or search but,the page is for query the identifier field is not shown -->
@@ -286,15 +451,25 @@ function insRow(subdivtag,iCounter,blockCounter)
 					<td><html:hidden property="id" />
 					<html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
 				</tr>
-
-					<tr>
-						<td class="formMessage" colspan="4">* indicates a required field</td>
-					</tr>
+		
+				<tr>
+					<td class="formMessage" colspan="4">* indicates a required field</td>
+				</tr>
 <!-- page title -->	
 					<tr>
-						<td class="formTitle" height="20" colspan="4">
+						<td class="formTitle" height="20" width="100%" colspan="6">
 							<%String title = "collectionprotocol."+pageView+".title";%>
+							<div style="float:right;">
+								<input type="checkbox" name="defineConsents" id="defineConsents" />
+							</div>
+							<div style="float:right;" id="consentLinkCont">
+								<html:link href="#" styleId="consentPageLink" onclick="consentPage()">
+									<bean:message key="consent.defineconsents" />
+								</html:link>	
+							</div>
+							<div>
 								<bean:message key="<%=title%>"/>							
+							</div>
 						</td>
 					</tr>
 
@@ -360,7 +535,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 						<%
 							String fieldWidth = Utility.getColumnWidth(CollectionProtocol.class,"title" );
 						%>
-							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="<%= fieldWidth %>"  size="30" styleId="title" property="title" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -373,7 +548,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="shortTitle" property="shortTitle" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="shortTitle" property="shortTitle" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 					
@@ -386,7 +561,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="50"  size="30" styleId="irbID" property="irbID" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -479,7 +654,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<html:text styleClass="formFieldSized" maxlength="255"  size="30" styleId="descriptionURL" property="descriptionURL" readonly="<%=readOnlyValue%>" />
+							<html:text styleClass="formFieldSized" maxlength="200"  size="30" styleId="descriptionURL" property="descriptionURL" readonly="<%=readOnlyValue%>" />
 						</td>
 					</tr>
 
@@ -508,32 +683,39 @@ function insRow(subdivtag,iCounter,blockCounter)
 		<tr><td>&nbsp;</td></tr> <!-- SEPARATOR -->
 </table>
 
+<!-- Define Consent Page start  Virender Mehta-->
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
-<tr><td>
-<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+<%@ include file="/pages/content/ConsentTracking/DefineConsent.jsp" %>
+
+<!-- Define Consent Page end Virender Mehta-->
+
+<table summary="" cellpadding="0" cellspacing="0" border="0"  id ="table2" class="contentPage" width="100%">
 	<tr>
-	<td class="formTitle">
-			<b><bean:message key="collectionprotocol.eventtitle" /></b>
-	</td>
-	<td align="right" class="formTitle">		
-			<html:button property="addCollectionProtocolEvents" styleClass="actionButton" onclick="addBlock('outerdiv','d1')">Add More</html:button>
-			<html:hidden property="outerCounter"/>	
-	</td>
-	<td class="formTitle" align="Right">
-		<html:button property="deleteCollectionProtocolEvents" styleClass="actionButton" onclick="deleteChecked('outerdiv','CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteCollectionProtocolEvents',document.forms[0].outerCounter,'chk_proto_',true)" disabled="true">
-			<bean:message key="buttons.delete"/>
-		</html:button>
-	</td>
+		<td>
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+				<tr>
+					<td class="formTitle">
+							<b><bean:message key="collectionprotocol.eventtitle" /></b>
+					</td>
+					<td align="right" class="formTitle">		
+							<html:button property="addCollectionProtocolEvents" styleClass="actionButton" onclick="addBlock('outerdiv','d1')">Add More</html:button>
+							<html:hidden property="outerCounter"/>	
+					</td>
+					<td class="formTitle" align="Right">
+						<html:button property="deleteCollectionProtocolEvents" styleClass="actionButton" onclick="deleteChecked('outerdiv','CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteCollectionProtocolEvents',document.forms[0].outerCounter,'chk_proto_',true)" disabled="true">
+							<bean:message key="buttons.delete"/>
+						</html:button>
+					</td>
+			  </tr>
+		   </table>
+		</td>
 	</tr>
-</table>
-</td></tr>
 </table>
 
 
 <!--  outermostdiv start --><!-- outer div tag  for entire block -->
 
-<table width="100%">
+<table width="100%" id="table3">
 <tbody id="outerdiv">
 <tr>
 <td>
@@ -893,55 +1075,35 @@ function insRow(subdivtag,iCounter,blockCounter)
 </td></tr></tbody></table>
 <!-- outermosttable  -->
 
-<table width="100%">	
-	<!-- to keep -->
-		<tr>
-			<td align="right" colspan="3">
-				<!-- action buttons begins -->
-				<!-- table 6 -->
-				<table cellpadding="4" cellspacing="0" border="0">
-					<tr>
-						<!-- td>
-							<html:submit styleClass="actionButton">
-								<bean:message  key="buttons.submit" />
-							</html:submit>
-							</td-->
-							
-						   <td class="formLabelNoBackGround" width="30%">
-			               <html:checkbox property="aliqoutInSameContainer">
-			               <bean:message key="aliquots.storeAllAliquotes" />
-			                </html:checkbox>
-	 	                   </td>
+<table cellpadding="0" cellspacing="0" border="0" width = "100%" style="margin-left:5%;" id="submittable">
+		<tr><td>&nbsp;&nbsp;</td></tr>		
+			<tr>
+				<td class="formLabelNoBackGround" style="font-size:12;" bgcolor="#F4F4F5" width="50%">
+					<html:checkbox property="aliqoutInSameContainer">
+						<bean:message key="aliquots.storeAllAliquotes" />
+					</html:checkbox>
+				</td>
 						   
-						   <td width="55%">
-						   &nbsp;
-						   </td>
-						
-						<td width="15%">
-						<%
-						   	String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-						%>
-							<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
-								<bean:message key="buttons.submit"/>
-							</html:button>
-						</td>
-						
-							<%-- td>
-								<html:reset styleClass="actionButton" >
-									<bean:message  key="buttons.reset" />
-								</html:reset>
-							</td --%>
-					</tr>
-				</table>  
-				<!-- table 6 end -->
-				<!-- action buttons end -->
-			</td>
-		</tr>
-
-	<!-- NEW COLLECTIONPROTOCOL ENTRY ends-->
+				<td align="right" bgcolor="#F4F4F5">
+				<%
+				   	String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+				%>
+					<html:button styleClass="actionButton" property="submitPage" onclick="<%=action%>">
+						<bean:message key="buttons.submit"/>
+					</html:button>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;
+				</td>
+			</tr>
 </table>
-</html:form>
 
+
+</td></tr></table>
+	
+</html:form>
 
 <html:form action="DummyCollectionProtocol.do">
 <div id="d1">
