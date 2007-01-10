@@ -19,7 +19,7 @@
             unsaved-value="null"
         >
             <generator class="native">
-                <param name="sequence">CATISSUE_CONSENT_TIER_SEQ</param>
+                <param name="sequence">CATISSUE_CONSENT_TIER_RES_SEQ</param>
             </generator>
         </id>
 

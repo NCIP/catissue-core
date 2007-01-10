@@ -81,7 +81,7 @@ public class ConsentTierStatus extends AbstractDomainObject implements Serializa
 
 	/**
 	 * @hibernate.id unsaved-value="null" type="long" column="IDENTIFIER" generator-class="native" 
-	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONSENT_TIER_SEQ"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONSENT_TIER_STAT_SEQ"
 	 */
 	public Long getId()
 	{

@@ -69,7 +69,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	 * Returns the system generated unique id.
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
-	 * @hibernate.generator-param name="sequence" value="CATISSUE_ORDER_SEQ"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_ORDER_ITEM_SEQ"
 	 * @return the system generated unique id.
 	 * @see #setId(Long)
 	 * */

@@ -58,7 +58,7 @@ public class ConsentTierResponse extends AbstractDomainObject implements Seriali
 
 	/**
 	 * @hibernate.id unsaved-value="null" generator-class="native" type="long" column="IDENTIFIER"
-	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONSENT_TIER_SEQ"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONSENT_TIER_RES_SEQ"
 	 * 
 	 */
 	public Long getId()
