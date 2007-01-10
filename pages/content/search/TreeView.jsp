@@ -6,6 +6,7 @@
 	String storageContainerType = null;
 	String storageContainerID = null;
 	String position = null;
+	String specimenType = null , specimenClass = null ;
 	String propertyName = null, cdeName=null;
 	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) ||
 	     pageOf.equals(Constants.PAGEOF_SPECIMEN) || pageOf.equals(Constants.PAGEOF_ALIQUOT))
@@ -19,6 +20,14 @@
 	{
 		propertyName = request.getParameter(Constants.PROPERTY_NAME);
 		cdeName = request.getParameter(Constants.CDE_NAME);
+	}
+	//Added By Ramya.
+	//To Display Specimen tree in RequestDetails.jsp(Ordering System)
+	else if (pageOf.equals(Constants.PAGEOF_SPECIMEN_TREE))
+	{
+		propertyName = request.getParameter(Constants.PROPERTY_NAME);
+		specimenType = 	request.getParameter(Constants.SPECIMEN_TYPE);
+		specimenClass = request.getParameter(Constants.SPECIMEN_CLASS);	
 	}
 %>
 
@@ -85,6 +94,8 @@
     NAME = "<%=Constants.TREE_APPLET_NAME%>"
     width="400" height="500" MAYSCRIPT>
     <PARAM name="<%=Constants.PROPERTY_NAME%>" value="<%=propertyName%>">
+    <PARAM name="<%=Constants.SPECIMEN_TYPE%>" value="<%=specimenType%>">
+    <PARAM name="<%=Constants.SPECIMEN_CLASS%>" value="<%=specimenClass%>">
 	<PARAM name="<%=Constants.CDE_NAME%>" value="<%=cdeName%>">
 	<PARAM name="type" value="application/x-java-applet;jpi-version=1.4.2">
 	<PARAM name="<%=Constants.PAGEOF%>" value="<%=pageOf%>">

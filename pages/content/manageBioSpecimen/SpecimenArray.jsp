@@ -50,6 +50,10 @@
 <html:hidden property="createSpecimenArray" value="<%=form.getCreateSpecimenArray()%>"/>
 <html:hidden property="containerId" styleId="containerId"/>
 
+<!-- For Ordering System -->
+<html:hidden  property="isDefinedArray" value="<%=form.getIsDefinedArray()%>"/>
+<html:hidden  property="newArrayOrderItemId" value="<%=form.getNewArrayOrderItemId()%>"/>	
+
 <table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%">
 <tr>
 	<td>

@@ -28,6 +28,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -44,8 +45,8 @@ import edu.wustl.common.util.logger.Logger;
  * @author gautam_shetty
  */
 public class CollectionProtocolForm extends SpecimenProtocolForm
-{
-	protected long protocolCoordinatorIds[];
+{		
+	protected long []protocolCoordinatorIds;
 
 	/**
 	 * Counter that contains number of rows in the 'Add More' functionality. outer block
@@ -53,7 +54,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	private int outerCounter=1;
 
 	/**
-	 * Counter that contains number of rows in the 'Add More' functionality. inner block
+	 * @return Returns the innerLoopValues.
+	 * 
 	 */
 	protected Map innerLoopValues = new HashMap();
 		
@@ -61,15 +63,81 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * whether Aliquote in same container
 	 */
 	protected boolean aliqoutInSameContainer = false;
+		
+	/**
+	 * Unsigned Form Url for the Consents
+	 */
+	protected String unsignedConsentURLName;
+
+	/**
+	 * Map for Storing Values of Consent Tiers.
+	 */
+	protected Map consentValues = new HashMap();
 	
 	/**
-	 * @return Returns the innerLoopValues.
+	 * No of Consent Tier
+	 */
+	private int consentTierCounter=1;
+
+	/**
+	 * No argument constructor for CollectionProtocolForm class.
+	 */
+	public CollectionProtocolForm()
+	{
+		super();
+	}
+
+	/**
+     * @param key  Value of Key 
+     * @param value Value corrosponding to the Key
+     */
+    public void setValue(String key, Object value) 
+    {
+    	if (isMutable())
+   	 	{
+    		values.put(key, value);
+   	 	}
+    }
+    
+    /**
+     * @return This is used to get corresponding Value from the Map
+     * @param key This is used to get corresponding Value from the Map   
+     */
+    public Object getValue(String key) 
+    {
+        return values.get(key);
+    }
+    
+	/**
+	 * @return values in map
+	 */
+	public Collection getAllValues() 
+	{
+		return values.values();
+	}
+	
+	/**
+	 * @return values
+	 */
+	public Map getValues() 
+	{
+		return values;
+	}
+	
+	/**
+	 * @param values Set the values
+	 */
+	public void setValues(Map values) 
+	{
+		this.values = values;
+	}	
+	/**
+	 * @return innerLoopValues
 	 */
 	public Map getInnerLoopValues()
 	{
 		return innerLoopValues;
 	}
-	
 	/**
 	 * @param innerLoopValues The innerLoopValues to set.
 	 */
@@ -86,14 +154,15 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	public void setIvl(String key, Object value)///changes here
 	{
 	    if (isMutable())
+	    {
 	        innerLoopValues.put(key, value);
+	    }
 	}
 
 	/**
 	 * Returns the object to which this map maps the specified key.
 	 * 
-	 * @param key
-	 *            the required key.
+	 * @param key the required key.
 	 * @return the object to which this map maps the specified key.
 	 */
 	public Object getIvl(String key)
@@ -117,13 +186,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	}
 	
 	/**
-	 * No argument constructor for CollectionProtocolForm class.
+	 * for reset
 	 */
-	public CollectionProtocolForm()
-	{
-		super();
-	}
-	
 	protected void reset()
 	{
 //		super.reset();
@@ -194,7 +258,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		
 		//At least one outer row should be displayed in ADD MORE therefore
 		if(outerCounter == 0)
+		{
 			outerCounter = 1;
+		}
 		
 		//Populating the user-id array
 		Collection userCollection = cProtocol.getUserCollection();
@@ -212,12 +278,51 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				i++;
 			}
 		}
-		if(cProtocol.getAliqoutInSameContainer()!= null) {
-		aliqoutInSameContainer = cProtocol.getAliqoutInSameContainer().booleanValue();
+		if(cProtocol.getAliqoutInSameContainer()!= null) 
+		{
+			aliqoutInSameContainer = cProtocol.getAliqoutInSameContainer().booleanValue();
 		}
+		
+		//For Consent Tracking 
+		this.unsignedConsentURLName = cProtocol.getUnsignedConsentDocumentURL();		
+		this.consentValues = prepareConsentTierMap(cProtocol.getConsentTierCollection());
+	}
+	/**
+	 * For Consent Tracking
+	 * Setting the consentValuesMap 
+	 * @param consentTierColl This Containes the collection of ConsentTier
+	 * @return tempMap
+	 */
+	private Map prepareConsentTierMap(Collection consentTierColl)
+	{
+		Map tempMap = new HashMap();
+		if(consentTierColl!=null)
+		{
+			Iterator consentTierCollIter = consentTierColl.iterator();			
+			int i = 0;
+			while(consentTierCollIter.hasNext())
+			{
+				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
+				String key = "ConsentBean:"+i+"_statement";
+				tempMap.put(key, consent.getStatement());
+				i++;
+			}
+			consentTierCounter = consentTierColl.size();
+		}
+		
+		if(consentTierCounter==0)
+		{
+			consentTierCounter = 1;
+		}
+		
+		return tempMap;
 	}
 	
-	
+	/**
+	 * 
+	 * @param specimenRequirementCollection This contains the Collection of specimen Requirement
+	 * @param counter This is for tracking counts
+	 */
 	private void populateSpecimenRequirement(Collection specimenRequirementCollection, int counter)
 	{
 		int innerCounter = 0;
@@ -229,7 +334,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			while(iterator.hasNext())
 			{
 			    SpecimenRequirement specimenRequirement = (SpecimenRequirement)iterator.next();
-				String key[] = {
+				String []key = {
 					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_specimenClass",
 					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_unitspan",
 					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_specimenType",
@@ -246,113 +351,40 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		
 		//At least one inner row should be displayed in ADD MORE therefore
 		if(innerCounter == 0)
-			innerCounter = 1;
-		
-		String innerCounterKey = String.valueOf(counter);
-		innerLoopValues.put(innerCounterKey,String.valueOf(innerCounter));
-	}
-	
-	/**
-	 *This method populates Specimen Requirements objects of SpecimenRequirement
-	private void populateDomainObjectSpecimenRequirement(Collection specimenRequirementCollection, int counter)
-	{
-	    int innerCounter = 0;
-		if(specimenRequirementCollection != null)
 		{
-			int j = 1;
-
-			Iterator iterator = specimenRequirementCollection.iterator();
-			while(iterator.hasNext())
-			{
-				//CODE_REVIEW:KAPIL requirement should be naamed as specimenRequirement
-				//CODE_REVIEW:KAPIL requirement check for null
-			    SpecimenRequirement specimeRequirement = (SpecimenRequirement)iterator.next();
-			    
-			    if(specimeRequirement != null)
-			    {
-					String key1 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenClass";
-					String key3 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_specimenType";
-					String key4 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_tissueSite";
-					String key5 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_pathologyStatus";
-					String key6 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_quantity_value";
-					String key7 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_id";
-					String key2 = "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + j +"_unitspan";
-					
-					values.put(key3,specimeRequirement.getSpecimenType());
-					values.put(key4,specimeRequirement.getTissueSite());
-					values.put(key5,specimeRequirement.getPathologyStatus());
-					values.put(key7,Utility.toString(specimeRequirement.getId()));
-					
-					if(specimeRequirement instanceof TissueSpecimenRequirement)
-					{
-						//CODE_REVIEW:KAPIL use some common code for this and populateSpecimenRequirement method 
-						values.put(key1,"Tissue");
-						values.put(key2,Constants.UNIT_GM);
-						String tissueType = specimeRequirement.getSpecimenType();
-						if(tissueType != null && (tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK) || tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)))
-						{
-							values.put(key6,Utility.toString(new Integer(((TissueSpecimenRequirement) specimeRequirement).getQuantityInGram().intValue())));
-						}
-						else
-							values.put(key6,Utility.toString(((TissueSpecimenRequirement)specimeRequirement).getQuantityInGram()));
-					}
-					else if(specimeRequirement instanceof CellSpecimenRequirement)
-					{
-						values.put(key1,"Cell");
-						values.put(key2,Constants.UNIT_CC);
-						values.put(key6,Utility.toString(((CellSpecimenRequirement)specimeRequirement).getQuantityInCellCount()));
-					}
-					else if(specimeRequirement instanceof MolecularSpecimenRequirement)
-					{
-						values.put(key1,"Molecular");
-						values.put(key2,Constants.UNIT_MG);
-						values.put(key6,Utility.toString(((MolecularSpecimenRequirement)specimeRequirement).getQuantityInMicrogram()));
-					}
-					else if(specimeRequirement instanceof FluidSpecimenRequirement)
-					{
-						values.put(key1,"Fluid");
-						values.put(key2,Constants.UNIT_ML);
-						values.put(key6,Utility.toString(((FluidSpecimenRequirement)specimeRequirement).getQuantityInMilliliter()));
-					}
-			    }
-				
-				j++;
-			}
-			
-			innerCounter = specimenRequirementCollection.size();
+			innerCounter = 1;
 		}
 		
-		//At least one inner row should be displayed in ADD MORE therefore
-		if(innerCounter == 0)
-			innerCounter = 1;
-		
 		String innerCounterKey = String.valueOf(counter);
 		innerLoopValues.put(innerCounterKey,String.valueOf(innerCounter));
 	}
-	*/
 	
 	/**
+	 * 
 	 * Overrides the validate method of ActionForm.
+	 * @param mapping ActionMapping
+	 * @param request HttpServletRequest
+	 * @return errors
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		Logger.out.debug("OPERATION : ----- : " + operation );
-		ActionErrors errors = super.validate(mapping, request );
+		Logger.out.debug("OPERATION : ----- : " + operation);
+		ActionErrors errors = super.validate(mapping, request);
 		Validator validator = new Validator();
 		try
 		{
 			setRedirectValue(validator);
 			// ---------START --------------------------------------			
-				if(values.isEmpty() )
+				if(values.isEmpty())
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",ApplicationProperties.getValue("collectionprotocol.eventtitle")));
 				}
 			// check for atleast 1 specimen requirement per CollectionProtocol Event
-				for(int i=1;i<=outerCounter;i++ )
+				for(int i=1;i<=outerCounter;i++)
 				{
 					String className = "CollectionProtocolEvent:"+i+"_SpecimenRequirement:1_specimenClass";
-					Object obj = getValue( className  );
-					if(obj == null )
+					Object obj = getValue(className);
+					if(obj == null)
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",ApplicationProperties.getValue("collectionprotocol.specimenreq")));
 					}
@@ -366,9 +398,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			//Check for PI can not be coordinator of the protocol.
 			if(this.protocolCoordinatorIds != null && this.principalInvestigatorId!=-1)
 			{
-				for(int ind=0; ind < protocolCoordinatorIds.length ; ind++ )
+				for(int ind=0; ind < protocolCoordinatorIds.length; ind++)
 				{
-				 	if(protocolCoordinatorIds[ind] == this.principalInvestigatorId )
+				 	if(protocolCoordinatorIds[ind] == this.principalInvestigatorId)
 				 	{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.pi.coordinator.same"));
 						break;
@@ -376,7 +408,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				}
 			}
 				
-			Logger.out.debug("Protocol Coordinators : " + protocolCoordinatorIds ); 
+			Logger.out.debug("Protocol Coordinators : " + protocolCoordinatorIds); 
 			
 			boolean bClinicalStatus = false;
 			boolean bStudyPoint = false;
@@ -393,7 +425,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				
 				if(!bClinicalStatus)
 				{
-					if(key.indexOf("clinicalStatus")!=-1 && !validator.isValidOption( value))
+					if(key.indexOf("clinicalStatus")!=-1 && !validator.isValidOption(value))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.clinicalstatus")));
 						bClinicalStatus = true;
@@ -401,7 +433,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				}				
 				if(!bStudyPoint)
 				{
-					if(key.indexOf("studyCalendarEventPoint")!=-1 )
+					if(key.indexOf("studyCalendarEventPoint")!=-1)
 					{
 						//As study Calendar Event Point can be an empty value
 						if(validator.isEmpty(value))
@@ -423,16 +455,16 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				
 				if(!bSpecimenClass)
 				{
-					if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption( value))
+					if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption(value))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenclass")));
 						bSpecimenClass = true;
 					}
 				}
 				
-				if(!bSpecimenType )
+				if(!bSpecimenType)
 				{
-					if(key.indexOf("specimenType")!=-1 && !validator.isValidOption( value))
+					if(key.indexOf("specimenType")!=-1 && !validator.isValidOption(value))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimetype")));
 						bSpecimenType = true;
@@ -441,16 +473,16 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 				if(!bTissueSite)
 				{
-					if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption( value))
+					if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption(value))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimensite")));
 						bTissueSite = true;
 					}
 				}
 
-				if(!bPathologyStatus )
+				if(!bPathologyStatus)
 				{
-					if(key.indexOf("pathologyStatus")!=-1 && !validator.isValidOption( value))
+					if(key.indexOf("pathologyStatus")!=-1 && !validator.isValidOption(value))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenstatus")));
 						bPathologyStatus = true; 
@@ -527,17 +559,19 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		}
 		return errors;
 	}
-	
-	
-	
+		
 	/**
-	 * Returns the id assigned to form bean
+	 *@return Returns the id assigned to form bean
 	 */
 	public int getFormId()
 	{
 		return Constants.COLLECTION_PROTOCOL_FORM_ID;
 	}
 	
+	/**
+	 * This is the main Class that creates object of CollectionProtocolForm 
+	 * 	@param args cmd line arguments
+	 */
 	public static void main(String[] args)
 	{
 		int maxCount=1;
@@ -570,20 +604,19 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	
 	/**
      * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
-     * @param formBeanId - FormBean ID of the object inserted
-     *  @param addObjectIdentifier - Identifier of the Object inserted 
+     * @param addNewFor - FormBean ID of the object inserted
+     * @param addObjectIdentifier - Identifier of the Object inserted 
      */
     public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
     {
-        if(addNewFor.equals("principalInvestigator") )
+        if(addNewFor.equals("principalInvestigator"))
         {
             setPrincipalInvestigatorId(addObjectIdentifier.longValue());
         }
-        else if(addNewFor.equals("protocolCoordinator") )
+        else if(addNewFor.equals("protocolCoordinator"))
         {
-            long pcoordIDs[] = { Long.parseLong( addObjectIdentifier.toString() ) };
-           
-			setProtocolCoordinatorIds(pcoordIDs); 
+            long []pcoordIDs = {Long.parseLong(addObjectIdentifier.toString())};           
+			setProtocolCoordinatorIds(pcoordIDs);
         } 
     }
 	
@@ -601,4 +634,79 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		this.aliqoutInSameContainer = aliqoutInSameContainer;
 	}
+	
+	
+	//	For Consent Tracking Start
+	
+	/**
+	 * @return unsignedConsentURLName  Get Unsigned Signed URL name  
+	 */
+	public String getUnsignedConsentURLName()
+	{
+		return unsignedConsentURLName;
+	}
+	
+	/**
+	 * @param unsignedConsentURLName  Set Unsigned Signed URL name
+	 */
+	public void setUnsignedConsentURLName(String unsignedConsentURLName)
+	{
+		this.unsignedConsentURLName = unsignedConsentURLName;
+	}	
+	
+	/**
+     * @param key Key
+     * @param value Value
+     */
+    public void setConsentValue(String key, Object value) 
+    {
+   	 	if (isMutable())
+   	 	{
+   	 		consentValues.put(key, value);
+   	 	}
+    }
+
+    /**
+     * @param key Key
+     * @return Statements
+     */
+    public Object getConsentValue(String key) 
+    {
+        return consentValues.get(key);
+    }
+
+    /**
+     * 
+     * @return consentValues   Set Consents into the Map
+     */
+    public Map getConsentValues() 
+	{
+		return consentValues;
+	}
+	
+    /**
+     * @param consentValues Set Consents into the Map
+     */
+	public void setConsentValues(Map consentValues) 
+	{
+		this.consentValues = consentValues;
+	}
+
+	/**
+	 *@return consentTierCounter  This will keep track of count of Consent Tier
+	 */
+	public int getConsentTierCounter()
+	{
+		return consentTierCounter;
+	}
+	
+	/**
+	 * 
+	 * @param consentTierCounter  This will keep track of count of Consent Tier
+	 */
+	public void setConsentTierCounter(int consentTierCounter)
+	{
+		this.consentTierCounter = consentTierCounter;
+	}	
+//	For Consent Tracking End
 }

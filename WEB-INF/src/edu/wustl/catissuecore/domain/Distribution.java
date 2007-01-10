@@ -65,6 +65,29 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	 */
 	protected Collection specimenArrayCollection = new HashSet(); 
 
+	/**
+	 * OrderDetails associated with the order_item.
+	 */
+	protected OrderDetails orderId;
+	
+	/**
+	 * @return the orderId
+	 * @hibernate.many-to-one column="ORDER_ID" class="edu.wustl.catissuecore.domain.OrderDetails" constrained="true"
+	 */
+	public OrderDetails getOrderId()
+	{
+		return orderId;
+	}
+
+	
+	/**
+	 * @param orderId the orderId to set
+	 */
+	public void setOrderId(OrderDetails orderId)
+	{
+		this.orderId = orderId;
+	}
+
 	//Default Constructor
 	public Distribution()
 	{
@@ -219,15 +242,28 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	        map = fixMap(map);
 	        Logger.out.debug("fixedMap "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+	        //Change for Consent tracking (Virender Mehta)
 	        Collection itemCollectionMap = parser.generateData(map);
+	        Collection finalItemCollecitonMap = new HashSet(); 
+	        Iterator itr = itemCollectionMap.iterator();
+	        while(itr.hasNext())
+	        {
+	        	DistributedItem distributedItem = (DistributedItem) itr.next();
+	        	if(distributedItem.getSpecimen() != null)
+	        		finalItemCollecitonMap.add(distributedItem);
+	        }
 	        
-	        if (form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE ) {
-		        distributedItemCollection = itemCollectionMap;
-	        } else {
-	        	specimenArrayCollection = itemCollectionMap;
+	        if (form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE ) 
+	        {
+		        distributedItemCollection = finalItemCollecitonMap;
+	        }
+	        else
+	        {
+	        	specimenArrayCollection = finalItemCollecitonMap;
 	        }
 	        Logger.out.debug("distributedItemCollection "+distributedItemCollection);
 	    }
+	    //Change for Consent tracking (Virender Mehta)	    
 	    catch(Exception excp)
 	    {
 	    	// use of logger as per bug 79

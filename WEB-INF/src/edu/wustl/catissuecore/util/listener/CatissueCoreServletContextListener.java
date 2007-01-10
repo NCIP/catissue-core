@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41 $
+ * $Name: 1.42 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -15,6 +15,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
+import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
@@ -40,6 +41,7 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.CVSTagReader;
@@ -281,6 +283,18 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		catch (CacheException e)
 		{
 			Logger.out.debug("Exception occured while creating instance of CatissueCoreCacheManager");
+			e.printStackTrace();
+		}
+//		 Initialising Entity cache
+		try
+		{
+			EntityCache entityCache = EntityCacheFactory.getInstance();
+			entityCache.init();
+			Logger.out.debug("Entity Cache is initialised");
+		}
+		catch (Exception e)
+		{
+			Logger.out.debug("Exception occured while initialising entity cache");
 			e.printStackTrace();
 		}
 		

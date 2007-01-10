@@ -61,7 +61,7 @@
 	</script>
 </head>
 
-<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+<table summary="" cellpadding="3" cellspacing="0" border="0" id="externalIdentifiers" width="100%">
 		<tr>
 		     <td class="formTitle" height="20" colspan="2">
 		     	<bean:message key="specimen.externalIdentifier"/>

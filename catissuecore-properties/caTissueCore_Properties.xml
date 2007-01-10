@@ -1,6 +1,102 @@
 
 <properties>
 
+	<!--Suite-->	 
+	<!--Constants for ReportLoader start -->	
+	<property>
+		<name>maxParticipantMatchingPercentage</name>
+		<value>50</value>
+	</property>
+	<property>
+		<name>sessiondataloginname</name>
+		<value>admin@admin.com</value>
+	</property>
+	<property>
+		<name>inputDir</name>
+		<value>./inputFiles</value>
+	</property>
+	<property>
+		<name>badFilesDir</name>
+		<value>./badFiles</value>
+	</property>
+	<property>
+		<name>processFileDir</name>
+		<value>./parsedFiles</value>
+	</property>
+	<property>
+		<name>pollersleeptime</name>
+		<value>100000</value>
+	</property>
+	<property>
+		<name>reportloaderqueuesleep</name>
+		<value>100000</value>
+	</property>
+	<property>
+		<name>site.info.filename</name>
+		<value>./CaTIES_conf/sites_configuration.xml</value>
+	</property>
+	
+	<!--Constants for ReportLoader end -->
+	
+	<!-- Constants for Deidentification of report start -->
+	<property>
+		<name>deid.home</name>
+		<value>C:\PROGRA~1\DEID</value>
+	</property>
+
+	<property>
+		<name>deid.dnyFolder</name>
+		<value>C:\PROGRA~1\DEID</value>
+	</property>
+
+	<!-- Cannot be bigger than Long.MAX_SIZE -->
+	<property>
+		<name>deid.sleepsize</name>
+		<value>86400000</value>
+	</property>
+
+	<property>
+		<name>deid.batchsize</name>
+		<value>20</value>
+	</property>
+
+	<property>
+		<name>deid.config.filename</name>
+		<value>deid.cfg</value>
+	</property>
+
+	<property>
+		<name>deid.sectionheaderpriority.filename</name>
+		<value>SectionHeaderConfig.txt</value>
+	</property>
+	
+	<property>
+		<name>deid.dtd.filename</name>
+		<value>Dataset.dtd</value>
+	</property>
+	<property>
+		<name>threadPool.corePoolSize</name>
+		<value>4</value>
+	</property>
+	<property>
+		<name>threadPool.maxPoolSize</name>
+		<value>20</value>
+	</property>
+	<property>
+		<name>threadPool.keepAliveSeconds</name>
+		<value>100</value>
+	</property>
+	<!-- Constants for Deidentification of report  end -->
+
+	<!-- property for DynamicUI xml file -->
+	<property>
+		<name>xmlfile.dynamicUI</name>
+		<value>dynamicUI.xml</value>
+	</property>
+
+	<!--Suite-->	
+
+
 	<property>
 		<name>server.port</name>
 		<value>8080</value>

@@ -101,7 +101,42 @@ public class SpecimenArrayForm extends ContainerForm
 	private String subOperation;
 	
 	//private List specimenArrayGridC  
+	
+	//For Uploading the array from Ordering System
+	private String isDefinedArray;	
+	private String newArrayOrderItemId;
 
+	/**
+	 * @return the newArrayOrderItemId
+	 */
+	public String getNewArrayOrderItemId()
+	{
+		return newArrayOrderItemId;
+	}
+	
+	/**
+	 * @param newArrayOrderItemId the newArrayOrderItemId to set
+	 */
+	public void setNewArrayOrderItemId(String newArrayOrderItemId)
+	{
+		this.newArrayOrderItemId = newArrayOrderItemId;
+	}
+	/**
+	 * @return the isDefinedArray
+	 */
+	public String getIsDefinedArray()
+	{
+		return isDefinedArray;
+	}	
+	/**
+	 * @param isDefinedArray the isDefinedArray to set
+	 */
+	public void setIsDefinedArray(String isDefinedArray)
+	{
+		this.isDefinedArray = isDefinedArray;
+	}
+	// END
+	
 	/** 
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
 	 */

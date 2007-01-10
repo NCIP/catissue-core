@@ -12,9 +12,11 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
+import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
@@ -24,6 +26,10 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass table="CATISSUE_COLLECTION_PROTOCOL"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Mandar Deshmukh
+ */
+/**
+ * @author virender_mehta
+ *
  */
 public class CollectionProtocol extends SpecimenProtocol implements java.io.Serializable,Comparable
 {
@@ -50,6 +56,54 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	protected Boolean aliqoutInSameContainer;
 	
 	//protected Collection storageContainerCollection=new HashSet();
+	
+	//-----For Consent Tracking. Ashish 22/11/06
+	/**
+	 * The collection of consent tiers associated with the collection protocol.
+	 */
+	protected Collection consentTierCollection;
+	/**
+	 * The unsigned document URL for the collection protocol.
+	 */
+	protected String unsignedConsentDocumentURL;
+	/**
+	 * @return the unsignedConsentDocumentURL
+	 * @hibernate.property name="unsignedConsentDocumentURL" type="string" length="1000" column="UNSIGNED_CONSENT_DOC_URL"
+	 */
+	public String getUnsignedConsentDocumentURL()
+	{
+		return unsignedConsentDocumentURL;
+	}
+
+	
+	/**
+	 * @param unsignedConsentDocumentURL the unsignedConsentDocumentURL to set
+	 */
+	public void setUnsignedConsentDocumentURL(String unsignedConsentDocumentURL)
+	{
+		this.unsignedConsentDocumentURL = unsignedConsentDocumentURL;
+	}
+
+	/**
+	 * @return the consentTierCollection
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTier" cascade="save-update" lazy="false"
+	 * @hibernate.set table="CATISSUE_CONSENT_TIER" inverse="false" name="consentTierCollection"
+	 * @hibernate.collection-key column="COLL_PROTOCOL_ID"
+	 */
+	public Collection getConsentTierCollection()
+	{
+		return consentTierCollection;
+	}
+	
+	/**
+	 * @param consentTierCollection the consentTierCollection to set
+	 */
+	public void setConsentTierCollection(Collection consentTierCollection)
+	{
+		this.consentTierCollection = consentTierCollection;
+	}
+	//-----Consent Tracking End
+	
 	/**
 	 * NOTE: Do not delete this constructor. Hibernet uses this by reflection API.
 	 * */
@@ -58,6 +112,10 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 		super();
 	}
 	
+	/**
+	 *
+	 * @param form This is abstract action form
+	 */
 	public CollectionProtocol(AbstractActionForm form)
 	{
 		setAllValues(form);
@@ -77,7 +135,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	}
 
 	/**
-	 * @param studyCollection The studyCollection to set.
+	 * @param distributionProtocolCollection The studyCollection to set.
 	 */
 	public void setDistributionProtocolCollection(Collection distributionProtocolCollection)
 	{
@@ -152,7 +210,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 
 	   /**
      * This function Copies the data from an CollectionProtocolForm object to a CollectionProtocol object.
-     * @param CollectionProtocol An CollectionProtocolForm object containing the information about the CollectionProtocol.  
+     * @param abstractForm An CollectionProtocolForm object containing the information about the CollectionProtocol.  
      * */
     public void setAllValues(AbstractActionForm abstractForm)
     {
@@ -185,6 +243,12 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        this.collectionProtocolEventCollection = parser.generateData(map);
 	        Logger.out.debug("collectionProtocolEventCollection "+this.collectionProtocolEventCollection);
+	        
+	        //For Consent Tracking ----Ashish 1/12/06
+	        //Setting the unsigned doc url.
+	        this.unsignedConsentDocumentURL = cpForm.getUnsignedConsentURLName();
+	        //Setting the consent tier collection.
+	        this.consentTierCollection = prepareConsentTierCollection(cpForm.getConsentValues()); 
         }
         catch (Exception excp)
         {
@@ -193,14 +257,41 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         }
     }
     
+   
+    /**
+     * @param consentTierMap Consent Tier Map
+     * @return consentStatementColl
+     * @throws Exception - Exception 
+     */
+    private Collection prepareConsentTierCollection(Map consentTierMap) throws Exception 
+    {
+    	MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
+    	Collection beanObjColl = mapdataParser.generateData(consentTierMap);
+    	
+    	Collection<ConsentTier> consentStatementColl = new HashSet<ConsentTier>();
+    	Iterator iter = beanObjColl.iterator();        
+    	while(iter.hasNext())
+    	{
+    		ConsentBean consentBean = (ConsentBean)iter.next();
+    		ConsentTier consentTier = new ConsentTier();
+    		consentTier.setStatement(consentBean.getStatement());
+    		consentStatementColl.add(consentTier);
+    	}	
+    	return consentStatementColl;
+    }
+    
     /**
      * Returns message label to display on success add or edit
      * @return String
      */
-	public String getMessageLabel() {		
+	public String getMessageLabel()
+	{		
 		return this.title;
 	}
-	
+	/**
+	 * @param object For equalizing
+	 * @return boolean
+	 */
 	public boolean equals(Object object)
     {
 		Logger.out.info("-----------------1--------------");
@@ -209,10 +300,17 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     	{
     		CollectionProtocol collectionProtocol = (CollectionProtocol)object;
     		if(this.getId().longValue() == collectionProtocol.getId().longValue())
+    		{
     			return true;
+    		}
     	}
     	return false;
     }
+	/**
+	 * 
+	 * @param object For comparing 
+	 * @return int
+	 */
 	public int compareTo(Object object)
 	{
 		Logger.out.info("-----------------2--------------");
@@ -230,18 +328,22 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 		return super.hashCode();
 	}
 
+
 	/**
 	 * @return Returns the aliqoutInSameContainer.
 	 * @hibernate.property name="aliqoutInSameContainer" type="boolean" column="ALIQUOT_IN_SAME_CONTAINER"
 	 */
-	public Boolean getAliqoutInSameContainer() {
+	public Boolean getAliqoutInSameContainer() 
+	{
 		return aliqoutInSameContainer;
 	}
 
 	/**
 	 * @param aliqoutInSameContainer The aliqoutInSameContainer to set.
 	 */
-	public void setAliqoutInSameContainer(Boolean aliqoutInSameContainer) {
+	public void setAliqoutInSameContainer(Boolean aliqoutInSameContainer) 
+	{
 		this.aliqoutInSameContainer = aliqoutInSameContainer;
 	}
+
 }

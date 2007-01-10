@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 
 <!DOCTYPE hibernate-mapping PUBLIC
     "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
@@ -8,7 +8,7 @@
 >
     <class
         name="edu.wustl.catissuecore.domain.SpecimenProtocol"
-        table="CATISSUE_SPECIMEN_PROTOCOL"
+        table="CATISSUE_SPECIMEN_PROTOCOL"        
     >
 
         <id
@@ -20,11 +20,6 @@
         >
             <generator class="native">
                 <param name="sequence">CATISSUE_SPECIMEN_PROTOCOL_SEQ</param>
-              <!--  
-                  To add non XDoclet generator parameters, create a file named 
-                  hibernate-generator-params-SpecimenProtocol.xml 
-                  containing the additional parameters and place it in your merge dir. 
-              --> 
             </generator>
         </id>
 
@@ -121,10 +116,38 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.CollectionProtocol"
             table="CATISSUE_COLLECTION_PROTOCOL"
+            dynamic-update="false"
+            dynamic-insert="false"
         >
-            <key
-                column="IDENTIFIER"
-            />
+        <key
+            column="IDENTIFIER"
+        />
+        <property
+            name="unsignedConsentDocumentURL"
+            type="string"
+            update="true"
+            insert="true"
+            column="UNSIGNED_CONSENT_DOC_URL"
+            length="1000"
+        />
+
+        <set
+            name="consentTierCollection"
+            table="CATISSUE_CONSENT_TIER"
+            lazy="false"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="COLL_PROTOCOL_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.ConsentTier"
+              />
+        </set>
 
         <set
             name="distributionProtocolCollection"
@@ -135,16 +158,15 @@
             sort="unsorted"
         >
 
-            <key
-                column="COLLECTION_PROTOCOL_ID"
-            >
-            </key>
+              <key
+                  column="COLLECTION_PROTOCOL_ID"
+              />
 
-            <many-to-many
-                class="edu.wustl.catissuecore.domain.DistributionProtocol"
-                column="DISTRIBUTION_PROTOCOL_ID"
-                outer-join="auto"
-             />
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.DistributionProtocol"
+                  column="DISTRIBUTION_PROTOCOL_ID"
+                  outer-join="auto"
+              />
 
         </set>
 
@@ -157,16 +179,15 @@
             sort="unsorted"
         >
 
-            <key
-                column="COLLECTION_PROTOCOL_ID"
-            >
-            </key>
+              <key
+                  column="COLLECTION_PROTOCOL_ID"
+              />
 
-            <many-to-many
-                class="edu.wustl.catissuecore.domain.User"
-                column="USER_ID"
-                outer-join="auto"
-             />
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.User"
+                  column="USER_ID"
+                  outer-join="auto"
+              />
 
         </set>
 
@@ -179,18 +200,16 @@
             sort="unsorted"
         >
 
-            <key
-                column="COLLECTION_PROTOCOL_ID"
-            >
-            </key>
+              <key
+                  column="COLLECTION_PROTOCOL_ID"
+              />
 
-            <one-to-many
+              <one-to-many
                   class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
-            />
-
+              />
         </set>
 
-		<property
+        <property
             name="aliqoutInSameContainer"
             type="boolean"
             update="true"
@@ -202,10 +221,12 @@
         <joined-subclass
             name="edu.wustl.catissuecore.domain.DistributionProtocol"
             table="CATISSUE_DISTRIBUTION_PROTOCOL"
+            dynamic-update="false"
+            dynamic-insert="false"
         >
-            <key
-                column="IDENTIFIER"
-            />
+        <key
+            column="IDENTIFIER"
+        />
 
         <set
             name="specimenRequirementCollection"
@@ -216,16 +237,15 @@
             sort="unsorted"
         >
 
-            <key
-                column="DISTRIBUTION_PROTOCOL_ID"
-            >
-            </key>
+              <key
+                  column="DISTRIBUTION_PROTOCOL_ID"
+              />
 
-            <many-to-many
-                class="edu.wustl.catissuecore.domain.SpecimenRequirement"
-                column="SPECIMEN_REQUIREMENT_ID"
-                outer-join="auto"
-             />
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenRequirement"
+                  column="SPECIMEN_REQUIREMENT_ID"
+                  outer-join="auto"
+              />
 
         </set>
 
@@ -238,16 +258,15 @@
             sort="unsorted"
         >
 
-            <key
-                column="DISTRIBUTION_PROTOCOL_ID"
-            >
-            </key>
+              <key
+                  column="DISTRIBUTION_PROTOCOL_ID"
+              />
 
-            <many-to-many
-                class="edu.wustl.catissuecore.domain.CollectionProtocol"
-                column="COLLECTION_PROTOCOL_ID"
-                outer-join="auto"
-             />
+              <many-to-many
+                  class="edu.wustl.catissuecore.domain.CollectionProtocol"
+                  column="COLLECTION_PROTOCOL_ID"
+                  outer-join="auto"
+              />
 
         </set>
 

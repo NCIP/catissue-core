@@ -47,4 +47,3 @@
 	var useFunction = "";	
 </script>
 <%@ include file="/pages/content/search/GridPage.jsp" %>
-

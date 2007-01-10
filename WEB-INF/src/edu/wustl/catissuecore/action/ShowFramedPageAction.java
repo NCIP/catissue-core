@@ -32,6 +32,12 @@ public class ShowFramedPageAction extends Action
     
     /**
      * Overrides the execute method in Action class.
+     * @param mapping ActionMapping object
+     * @param form ActionForm object
+     * @param request HttpServletRequest object
+     * @param response HttpServletResponse object
+     * @return ActionForward object
+     * @throws Exception object
      */
     public ActionForward execute(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -114,6 +120,21 @@ public class ShowFramedPageAction extends Action
             	String collectionProtocol = group.getCollectionProtocolRegistration().getCollectionProtocol().getId() +"";
             	session.setAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL,collectionProtocol);
             }
+        }
+        //Added By Ramya for orderingsystem module.
+        else if(pageOf.equals(Constants.PAGEOF_SPECIMEN_TREE))
+        {
+        	String propertyName = request.getParameter(Constants.PROPERTY_NAME);
+        	request.setAttribute(Constants.PROPERTY_NAME,propertyName);
+        	
+        	//Get the Specimen type and set it in request object.
+        	String specimenType = request.getParameter(Constants.SPECIMEN_TYPE);
+        	request.setAttribute(Constants.SPECIMEN_TYPE,specimenType);
+        	
+        	//Get the Class of Specimen and set it in request object.
+        	String specimenClass = request.getParameter(Constants.SPECIMEN_CLASS);
+        	request.setAttribute(Constants.SPECIMEN_CLASS,specimenClass);
+        	
         }
         
         return mapping.findForward(pageOf);

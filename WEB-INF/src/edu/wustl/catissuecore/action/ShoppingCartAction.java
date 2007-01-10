@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
@@ -50,7 +51,7 @@ public class ShoppingCartAction  extends BaseAction
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
-        //Gets the value of the operation parameter.
+    	//Gets the value of the operation parameter.
         String operation = (String)request.getParameter(Constants.OPERATION);
         String pageNo = (String)request.getParameter(Constants.PAGE_NUMBER);
         if(pageNo != null)
@@ -69,8 +70,9 @@ public class ShoppingCartAction  extends BaseAction
         	cart = new ShoppingCart();
         }
         
-        if(operation == null)
+        if(request.getParameter(Constants.OPERATION) == null)
         {
+        	
         	/*List specimenList = bizLogic.retrieve(Specimen.class.getName());
         	Iterator it = specimenList.iterator();
         	
@@ -81,11 +83,12 @@ public class ShoppingCartAction  extends BaseAction
         	}
         	
         	session.setAttribute(Constants.SHOPPING_CART,cart);*/
+        	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));
         	
-        	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));        		
         }
         else
         {
+        	session.setAttribute("OrderForm","true");
         	if(operation.equals(Constants.ADD)) //IF OPERATION IS "ADD"
 	        {
         		//Get the checkbox map values
@@ -203,24 +206,50 @@ public class ShoppingCartAction  extends BaseAction
 	        	String path = "/" + fileName;
 	        	return new ActionForward(path);
 	        }
-	        
+        	
+	        else if(operation.equals("addToOrderList"))
+	        {
+	        	addToOrderLiist(advForm,request,cart,session);
+				target = new String("requestToOrder");
+	        }
         	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));
         }
         //Sets the operation attribute to be used in the Add/Edit Shopping Cart Page. 
+
         request.setAttribute(Constants.OPERATION, operation);
-        
         
     	request.setAttribute(Constants.MENU_SELECTED,new String("18") );
     	Logger.out.debug(Constants.MENU_SELECTED + " set in ShoppingCart Action : 18  -- "  ); 
 
-        
-        return mapping.findForward(target);
+
+    	if(advForm.getValues().size()!=0)
+    	{
+	    	if(session.getAttribute("OrderForm")==null) 
+	    	{
+	    		ActionErrors errors = new ActionErrors();
+	        	ActionError error = new ActionError("errors.order.alreadygiven");
+	        	errors.add(ActionErrors.GLOBAL_ERROR,error);
+	        	saveErrors(request,errors);
+	    	}
+	    	else
+	    	{
+		       	if(session.getAttribute("RequestedBioSpecimens") != null)
+		    		session.removeAttribute("RequestedBioSpecimens");
+		    	
+		    	if(session.getAttribute("OrderForm") != null)
+		    		session.removeAttribute("OrderForm");
+		    	
+		    	if(session.getAttribute("DefineArrayFormObjects")!=null)
+		    		session.removeAttribute("DefineArrayFormObjects");
+	    	}
+    	}
+    	return mapping.findForward(target);
     }
     
     //This function prepares the data in Grid Format
     private List makeGridData(ShoppingCart cart)
     {	
-		List gridData = new ArrayList(); 
+    	List gridData = new ArrayList(); 
 			
     	if(cart != null)
 		{
@@ -260,7 +289,35 @@ public class ShoppingCartAction  extends BaseAction
 				}
 			}
 		}
-		
 		return gridData;
     }
+    
+    private void addToOrderLiist(AdvanceSearchForm advForm,HttpServletRequest request,ShoppingCart cart,HttpSession session)
+    {
+    	Map map = advForm.getValues();
+    	Object obj[] = map.keySet().toArray();
+		if(cart != null)
+		{
+			Hashtable table = cart.getCart();
+			if(table != null && table.size() != 0)
+			{
+				List specimenIdList=new ArrayList();
+				String strSpecimenId;
+				for(int i=0;i<obj.length;i++)
+				{
+					String str = obj[i].toString();
+		        	int index = str.indexOf("_") + 1;
+		        	String key = str.substring(index);
+					Specimen specimen = (Specimen)table.get(key);
+					strSpecimenId=String.valueOf(specimen.getId());
+					specimenIdList.add(strSpecimenId);
+				}
+				//request.setAttribute("specimenId", specimenIdList);
+				session.setAttribute("specimenId", specimenIdList);
+			}
+		}
+
+    }
+    
+    
 }

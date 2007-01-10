@@ -66,7 +66,10 @@
 				readOnlyValue = false;
 			}
 			
-//			formName = "DistributionSubmit.do";
+//	formName = "DistributionSubmit.do";
+	String signedConsentDate = "";
+	String selectProperty="";
+	
 %>
 <head>
 <script language="JavaScript" type="text/javascript"
@@ -101,6 +104,7 @@
 		    var barcodeDisabled = "";
 			var labelDisabled = "";
 			var quantityDisabled = "";
+			var consentForSpecimen=""
 
            if (document.forms[0].distributionBasedOn[0].checked == true)  {
 		             labelDisabled = "disabled";
@@ -112,18 +116,14 @@
 		   if (document.forms[0].distributionType[1].checked == true) {
 				quantityDisabled="disabled";
 			}
-
-
 			
 			var r = new Array(); 
 			r = document.getElementById(subdivtag).rows;
 			var q = r.length;
+	
 			var x=document.getElementById(subdivtag).insertRow(q);
 			var quantVal = "";
-			
-
-
-            
+			    
 			
 			// First Cell
 			var spreqno=x.insertCell(0);
@@ -138,11 +138,7 @@
 				  quantVal = "1";
 
 			}
-
     		var cell1 = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-
-
-			
 			spreqno.innerHTML="" + cell1+  rowno ;
 
 
@@ -153,6 +149,7 @@
 			sname="";
 
 			var name = "value(DistributedItem:" + rowno + "_Specimen_barcode)";
+			var keyValue=name;
 			sname="<input type='text'   " + barcodeDisabled  +  "  name='" + name + "'   class='formField' id='" + name + "'>";
 			spreqidentifier.innerHTML="" + sname;
 			
@@ -163,11 +160,12 @@
 			sname="";
 
 			var name = "value(DistributedItem:" + rowno + "_Specimen_label)";
+	
 			sname="<input type='text' " + labelDisabled  +  "  name='" + name + "'   class='formField' id='" + name + "'>";
 			spreqidentifier.innerHTML="" + sname;
 
 			
-			//Ninth Cell
+			//3rd Cell
 			var spreqquantity=x.insertCell(3);
 			spreqquantity.className="formField";
 			//spreqquantity.colspan=2;
@@ -181,7 +179,7 @@
 			sname = sname + "<input type='hidden' name='" + previousQuantity + "' value='' id='" + previousQuantity + "'>";
 			spreqquantity.innerHTML="" + sname;
 			
-			//Tenth  Cell
+			//4th  Cell
 			var checkb=x.insertCell(4);
 			checkb.className="formField";
 
@@ -189,9 +187,38 @@
 			var name = "chk_"+ rowno;
 			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"document.forms[0].deleteValue.disabled = false\">";
 			checkb.innerHTML=""+sname;	
+
+			//Consent Tracking Module (Virender Mehta)
+			//5th  Cell
+			var consent=x.insertCell(5);
+			consent.className="formField";
+			consent.colSpan=2;
+			sname="";
+			var verificationStatusKey = "value(DistributedItem:"+rowno+"_verificationKey)";
+			var name = "chk_"+ rowno;
+			var anchorTag = document.createElement("a");
+			var barcodeStatus="barcodeStatus"+rowno;
+			anchorTag.setAttribute("id",barcodeStatus);
+			anchorTag.setAttribute("href", "javascript:getbarCode('"+keyValue+"','"+barcodeStatus+"','"+verificationStatusKey+"');");
+			anchorTag.innerHTML="View"+"<input type='hidden' name='" + verificationStatusKey + "' value='View' id='" + verificationStatusKey + "'>";
+			consent.appendChild(anchorTag);
 		}
-	
-		--></script>
+		//This function get the barcode value and prepare URL for Submit
+		function getbarCode(identifier,barcodeId,verificationKey)
+		{
+			var barcode=document.getElementById(identifier);
+			if(barcode.value==null||barcode.value=="")
+			{
+				alert("Please Enter Barcode Value");
+				return;
+			}
+			var url ='Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&showConsents=yes&verificationKey='+verificationKey+'&barcodeId='+barcodeId+'&barcode=';
+			url+=barcode.value;
+			window.open(url,'ConsentVerificationForm','height=200,width=800');
+		}
+		//Consent Tracking Module Virender mehta	
+-->
+</script>
 </head>
 
 
@@ -472,13 +499,12 @@
 					<td >&nbsp;</td>
 				</tr>
 			</table>
-			<table  summary="" cellpadding="3" cellspacing="0" border="0"
-				width="433">
-						<tr>
+			<table  summary="" cellpadding="3" cellspacing="0" border="0" width="95%">
+				<tr>
 			        <td class="formRequiredNotice" style="border-top:1px solid #5C5C5C"  width="5">*</td>
 					<td class="formRequiredLabel" style="border-top:1px solid #5C5C5C" ><label for="type"> <bean:message
 						key="distribution.distributionBasedOn" /> </label></td>
-					<td class="formField" style="border-top:1px solid #5C5C5C"  colspan="3"><logic:iterate id="nvb"
+					<td class="formField" style="border-top:1px solid #5C5C5C"  colspan="5"><logic:iterate id="nvb"
 						name="<%=Constants.DISTRIBUTION_BASED_ON%>" >
 						<%NameValueBean distributionBasedOn = (NameValueBean) nvb;%>
 						<html:radio property="distributionBasedOn"
@@ -490,7 +516,7 @@
 
 				<!--  Distributed Item begin here -->
 				<tr>
-					<td class="formTitle" height="20" colspan="3"><bean:message
+					<td class="formTitle" height="20" colspan="5"><bean:message
 						key="distribution.distributedItem" /></td>
 					<td class="formButtonField"><html:button property="addKeyValue"
 						styleClass="actionButton" onclick="if(checkDistributionBasedOn() ) { insRow('addMore');disableDistributeOptions()}">
@@ -502,19 +528,20 @@
 						disabled="true">
 						<bean:message key="buttons.delete" />
 					</html:button></td>
-
 				</tr>
+
 				<tr>
 					<td class="formLeftSubTitle" width="5">#</td>
-
 					<td class="formLeftSubTitle"  >* <bean:message
 						key="distribution.distributionBasedOn.barcode" /></td>
 					<td class="formLeftSubTitle" >* <bean:message
 						key="distribution.distributionBasedOn.label" /></td>
-					<td class="formLeftSubTitle">* <bean:message
+					<td class="formLeftSubTitle" >* <bean:message
 						key="itemrecord.quantity" /></td>
 					<td class="formLeftSubTitle"><label for="delete" align="center"> <bean:message
 						key="addMore.delete" /> </label></td>
+					<td class="formLeftSubTitle" colspan="2"><label align="center"><bean:message key="consent.consentforspecimen"/></label></td>
+					
 				</tr>
 
 				<tbody id="addMore">
@@ -558,7 +585,10 @@
 					+ "_previousQuantity)";
 					String check = "chk_" + i;
 
-
+					//Change added for Consent Tracking
+					String barcodeStatus="barcodeStatus"+1;
+					String verificationStatusKey = "value(DistributedItem:" + i + "_verificationKey)";
+					//Change added for Consent Tracking
 					
 /*					String tissueSite = "value(DistributedItem:" + i
 							+ "_tissueSite)";
@@ -573,6 +603,7 @@
 					String type = "value(DistributedItem:" + i
 							+ "_Specimen_type)";
 					String key = "DistributedItem:" + i + "_Specimen_className";
+					
 					//String unitKey = "DistributedItem:" + i + "_unit";
 					//String unitProperty = "value(DistributedItem:"+i+"_unit)";
 					//String fName = "onSpecimenTypeChange(this,'" + unitSpan + "','" + itemName + "','" + unitProperty + "')";
@@ -583,10 +614,9 @@
 					key = "DistributedItem:" + i + "_Specimen_type";
 					String typeValue = (String) formBean.getValue(key);
 					String strUnitValue = changeUnit(classValue, typeValue);
-*/					
-
-					%>
-					<tr>
+*/					%>
+				
+				<tr>
 					     <td class="formSerialNumberField" width="5%"><html:hidden  property="<%=dIdentifier%>" /><%=i%></td>
 							<td class="formField" ><html:text styleClass="formField"
 							styleId="<%=barcodeKey%>" property="<%=barcodeKey%>" disabled="<%=disableBarcode%>"
@@ -611,11 +641,17 @@
 							name="<%=check %>" id="<%=check %>" <%=condition%>
 							onClick="document.forms[0].deleteValue.disabled = false;">
 						</td>
-
+						<!-- Change Added for Consent Tracking -->
+						<html:hidden property="<%=verificationStatusKey%>"/>
+						<td class="formField" colspan="2">
+							<a href="javascript:getbarCode('<%=barcodeKey%>','<%=barcodeStatus%>','<%=verificationStatusKey%>')"><bean:write name="distributionForm" property="<%=verificationStatusKey%>" /></a>
+						</td>
+						<!-- Change Added for Consent Tracking -->
 					</tr>
-					<%}
-
-				%>
+					
+					<%
+					}
+					%>
 				</tbody>
 				<!-- Distributed item End here -->
 				<!-- buttons -->

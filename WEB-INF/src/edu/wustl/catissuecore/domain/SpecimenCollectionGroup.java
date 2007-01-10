@@ -13,11 +13,17 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 
+import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.bean.ConsentBean;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -84,7 +90,53 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      */
     protected CollectionProtocolRegistration collectionProtocolRegistration;
 
-    public SpecimenCollectionGroup()
+    /**
+     * A Participant for a specimen collection group.
+     */
+    protected Participant participant;
+    
+    /**
+     * An identified surgical pathology report associated with 
+     * current specimen collection group  
+     */
+    
+    protected IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport;
+
+    /**
+     * An deidentified surgical pathology report associated with 
+     * current specimen collection group  
+     */
+
+    protected DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
+    
+    //----For Consent Tracking. Ashish 22/11/06
+    /**
+     * The consent tier status by multiple participants for a particular specimen collection group.
+     */
+    protected Collection consentTierStatusCollection;
+
+	
+	/**
+	 * @return the consentTierStatusCollection
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierStatus" lazy="false" cascade="save-update"
+	 * @hibernate.set table="CATISSUE_CONSENT_TIER_STATUS" name="consentTierStatusCollection"
+	 * @hibernate.collection-key column="SPECIMEN_COLL_GROUP_ID"
+	 */
+	public Collection getConsentTierStatusCollection()
+	{
+		return consentTierStatusCollection;
+	}
+	
+	/**
+	 * @param consentTierStatusCollection the consentTierStatusCollection to set
+	 */
+	public void setConsentTierStatusCollection(Collection consentTierStatusCollection)
+	{
+		this.consentTierStatusCollection = consentTierStatusCollection;
+	}
+    //----Consent Tracking End
+
+   	public SpecimenCollectionGroup()
     {
     
     }
@@ -384,12 +436,53 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			CollectionProtocol collectionProtocol = new CollectionProtocol();
 			collectionProtocol.setId(new Long(form.getCollectionProtocolId()));
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+			
+			/**
+			 * Setting the consentTier responses for SCG Level. 
+			 * Virender Mehta
+			 */
+			this.consentTierStatusCollection = prepareParticipantResponseCollection(form);
 		}
 		catch(Exception e)
 		{
 			Logger.out.error(e.getMessage(),e);
 			throw new AssignDataException();
 		}
+	}
+	
+	/**
+	* For Consent Tracking
+	* Setting the Domain Object 
+	* @param  form CollectionProtocolRegistrationForm
+	* @return consentResponseColl
+	*/
+	private Collection prepareParticipantResponseCollection(SpecimenCollectionGroupForm form) 
+	{
+		MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
+        Collection beanObjColl=null;
+		try
+		{
+			beanObjColl = mapdataParser.generateData(form.getConsentResponseForScgValues());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+        Iterator iter = beanObjColl.iterator();
+        Collection consentResponseColl = new HashSet();
+        while(iter.hasNext())
+        {
+        	ConsentBean consentBean = (ConsentBean)iter.next();
+        	ConsentTierStatus consentTierstatus = new ConsentTierStatus();
+        	//Setting response
+        	consentTierstatus.setStatus(consentBean.getSpecimenCollectionGroupLevelResponse());
+        	//Setting consent tier
+        	ConsentTier consentTier = new ConsentTier();
+        	consentTier.setId(new Long(consentBean.getConsentTierID()));
+        	consentTierstatus.setConsentTier(consentTier);	        	
+        	consentResponseColl.add(consentTierstatus);
+        }
+        return consentResponseColl;
 	}
 	
 	 /**
@@ -399,4 +492,52 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	public String getMessageLabel() {		
 		return this.name;
 	}
+	
+	 /**
+	 * Returns deidentified surgical pathology report of the current specimen collection group
+	 * @hibernate.one-to-one  name="deIdentifiedSurgicalPathologyReport"
+	 * class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+	 * property-ref="specimenCollectionGroup" not-null="false" cascade="save-update"
+	 */
+    public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport() {
+		return deIdentifiedSurgicalPathologyReport;
+	}
+
+	public void setDeIdentifiedSurgicalPathologyReport(
+			DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport) {
+		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
+	}
+	
+	/**
+	 * Returns deidentified surgical pathology report of the current specimen collection group
+	 * @hibernate.one-to-one  name="identifiedSurgicalPathologyReport"
+	 * class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
+	 * propertyref="specimenCollectionGroup" not-null="false" cascade="save-update"
+	 */
+	public IdentifiedSurgicalPathologyReport getIdentifiedSurgicalPathologyReport() {
+		return identifiedSurgicalPathologyReport;
+	}
+
+	public void setIdentifiedSurgicalPathologyReport(
+			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport) {
+		this.identifiedSurgicalPathologyReport = identifiedSurgicalPathologyReport;
+	}
+
+	/**
+     * Returns particiant of the current specimen collection group  
+     * @hibernate.many-to-one column="PARTICIPANT_ID" 
+     * class="edu.wustl.catissuecore.domain.Participant" constrained="true"
+     * @return the physical location associated with biospecimen collection, 
+     * storage, processing, or utilization.
+     * @see #setSite(Site)
+     */
+    public Participant getParticipant() {
+		return participant;
+	}
+
+	public void setParticipant(Participant participant) {
+		this.participant = participant;
+	}
+
+	
 }

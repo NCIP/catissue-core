@@ -58,11 +58,14 @@ public class DistributionSubmitAction extends CommonAddEditAction {
 		if (dform.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) {
 
 			for (int i = 1; i <= dform.getCounter(); i++) {
+				
 				String specimenkey = "DistributedItem:" + i + "_Specimen_id";
-
+				
+				String verificationStatusKey = "DistributedItem:" + i + "_verificationKey";
+				
 				String barcodeKey = "DistributedItem:" + i
 						+ "_Specimen_barcode";
-
+	
 				if (!barcodeBased) {
 					barcodeKey = "DistributedItem:" + i + "_Specimen_label";
 				}
@@ -70,7 +73,12 @@ public class DistributionSubmitAction extends CommonAddEditAction {
 				String barcodeLabel = (String) dform.getValue(barcodeKey);
 				Long specimenId = bizLogic.getSpecimenId(barcodeLabel, dform
 						.getDistributionBasedOn());
-				dform.setValue(specimenkey, specimenId.toString());
+				
+				String verificationStatus=(String)dform.getValue(verificationStatusKey);
+				if(verificationStatus.equalsIgnoreCase(Constants.COMPLETE))
+				{
+					dform.setValue(specimenkey, specimenId.toString());
+				}
 			}
 
 		} else {

@@ -140,6 +140,24 @@
             column="IDENTIFIER"
         />
 
+        <set
+            name="newSpecimenArrayOrderItemCollection"
+            table="CATISSUE_NEW_SP_AR_ORDER_ITEM"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_ARRAY_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem"
+              />
+        </set>
+
         <many-to-one
             name="createdBy"
             class="edu.wustl.catissuecore.domain.User"
@@ -195,7 +213,7 @@
             insert="true"
             column="AVAILABLE"
         />
-        
+
         </joined-subclass>
         <joined-subclass
             name="edu.wustl.catissuecore.domain.StorageContainer"
@@ -240,8 +258,8 @@
               <key
                   column="STORAGE_CONTAINER_ID"
               />
-			
-			<element column="SPECIMEN_CLASS" type="string" length="50"/>
+              <element column="SPECIMEN_CLASS" type="string" length="50"/>
+
         </set>
 
         <set
@@ -264,12 +282,13 @@
               />
 
         </set>
+
         <set
             name="holdsSpArrayTypeCollection"
             table="CATISSUE_CONT_HOLDS_SPARRTYPE"
             lazy="false"
             inverse="false"
-            cascade="none"
+            cascade="save-update"
             sort="unsorted"
         >
 
@@ -282,9 +301,8 @@
                   column="SPECIMEN_ARRAY_TYPE_ID"
                   outer-join="auto"
               />
-        </set>
-        
 
+        </set>
 
         <many-to-one
             name="site"

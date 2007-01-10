@@ -318,4 +318,48 @@ public class EmailHandler
         return emailStatus;
     }
     
+    /**
+     * Sends email to Administrator and CC to Scientist on successful placement of order.
+     * 
+     * Returns true if mail is sent successfully.
+     * @param none
+     * @return boolean indicating true/false 
+     */
+ 
+    public boolean sendEmailForOrderingPlacement(String toEmailAddress,String emailBody)
+    {
+    	//Send ToEmail to the Scientist and CCEmail to Administrator
+    	//String toEmailAddress = user.getEmailAddress();
+    	String ccEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
+    	String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
+    	String mailServer = XMLPropertyHandler.getValue("email.mailServer");
+    	
+    	String subject = ApplicationProperties
+		.getValue("orderingsystem.email.subject.orderPlaced");
+
+    	//String body = "\n\n" + ApplicationProperties.getValue("orderingsystem.email.body.orderPlaced") + "For Order#" + orderId;
+    	
+    	SendEmail email = new SendEmail();
+    	 
+    	boolean emailStatus = email.sendmail(toEmailAddress, ccEmailAddress,null,
+					sendFromEmailAddress, mailServer, subject, emailBody);
+    	
+    	
+    	return emailStatus;
+    }
+    /**
+     * Sends email to Scientist and cc to Admin on distribution of the order. 
+     * @return
+     */
+    public boolean sendEmailForOrderDistribution(String body,String toEmailAddress,String fromEmailAddress,String subject)
+    {
+    	String mailServer = XMLPropertyHandler.getValue("email.mailServer");
+    	
+    	SendEmail email = new SendEmail();
+    	
+    	boolean emailStatus = email.sendmail(toEmailAddress, null,null,
+    			fromEmailAddress, mailServer, subject, body);
+	
+    	return emailStatus;
+    }
 }

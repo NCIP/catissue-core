@@ -46,7 +46,18 @@
             insert="true"
             column="SPECIMEN_ID"
         />
-
+        
+       <!-- Added by Ashish --> 
+        <many-to-one
+            name="specimenArray"
+            class="edu.wustl.catissuecore.domain.SpecimenArray"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_ARRAY_ID"
+        />
+		<!-- END -->
         <many-to-one
             name="distribution"
             class="edu.wustl.catissuecore.domain.Distribution"

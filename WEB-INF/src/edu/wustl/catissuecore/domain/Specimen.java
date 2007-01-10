@@ -23,7 +23,9 @@ import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
+import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
+import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -166,7 +168,34 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	private transient int noOfAliquots;
 
 	private transient Map aliqoutMap = new HashMap();
-
+	
+	//-----For Consent Tracking. Ashish 21/11/06
+	/**
+	 * The consent tier status for multiple participants for a particular specimen.
+	 */
+	protected Collection consentTierStatusCollection;
+	
+	
+	/**
+	 * @return the consentTierStatusCollection
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierStatus" lazy="false" cascade="save-update"
+	 * @hibernate.set name="consentTierStatusCollection" table="CATISSUE_CONSENT_TIER_STATUS"
+	 * @hibernate.collection-key column="SPECIMEN_ID"
+	 */
+	public Collection getConsentTierStatusCollection()
+	{
+		return consentTierStatusCollection;
+	}
+	
+	/**
+	 * @param consentTierStatusCollection the consentTierStatusCollection to set
+	 */
+	public void setConsentTierStatusCollection(Collection consentTierStatusCollection)
+	{
+		this.consentTierStatusCollection = consentTierStatusCollection;
+	}
+	//-----Consent Tracking end.
+	
 	public Specimen()
 	{
 	}
@@ -915,7 +944,48 @@ public class Specimen extends AbstractDomainObject implements Serializable
 				Logger.out.error(excp.getMessage(), excp);
 			}
 		}
+		//Setting the consentTier responses. (Virender Mehta)
+		if (abstractForm instanceof NewSpecimenForm)
+		{
+			NewSpecimenForm form = (NewSpecimenForm) abstractForm;
+			this.consentTierStatusCollection = prepareParticipantResponseCollection(form);
+		}
 
+	}
+	
+	/**
+	* For Consent Tracking
+	* Setting the Domain Object 
+	* @param  form CollectionProtocolRegistrationForm
+	* @return consentResponseColl
+	*/
+	private Collection prepareParticipantResponseCollection(NewSpecimenForm form) 
+	{
+		MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
+        Collection beanObjColl=null;
+		try
+		{
+			beanObjColl = mapdataParser.generateData(form.getConsentResponseForSpecimenValues());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+        Iterator iter = beanObjColl.iterator();
+        Collection consentResponseColl = new HashSet();
+        while(iter.hasNext())
+        {
+        	ConsentBean consentBean = (ConsentBean)iter.next();
+        	ConsentTierStatus consentTierstatus = new ConsentTierStatus();
+        	//Setting response
+        	consentTierstatus.setStatus(consentBean.getSpecimenLevelResponse());
+        	//Setting consent tier
+        	ConsentTier consentTier = new ConsentTier();
+        	consentTier.setId(new Long(consentBean.getConsentTierID()));
+        	consentTierstatus.setConsentTier(consentTier);	        	
+        	consentResponseColl.add(consentTierstatus);
+        }
+        return consentResponseColl;
 	}
 
 	protected Map fixMap(Map orgMap)

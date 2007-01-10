@@ -7,13 +7,34 @@
 	
 	<tr>
 		<td nowrap class="formFieldNoBorders">
-			<html:button styleClass="actionButton" 
-					property="submitPage" 
-					title="Submit Only"
-					value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>" 
-					onclick="<%=normalSubmit%>">				  				     	    
-	     	</html:button>
-		</td>
+		<%
+			if(operation.equals(Constants.ADD))
+			{
+		%>
+				<html:button styleClass="actionButton" 
+						property="submitPage" 
+						title="Submit Only"
+						value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>" 
+						onclick="<%=normalSubmit%>">				  				     	    
+		     	</html:button>
+	    <%	
+			}
+			else
+			{
+				ConsentTierData consentForm =(ConsentTierData)form;
+				List consentTier=(List)consentForm.getConsentTiers();
+				String str = "popupWindow('"+ consentTier.size() +"')";
+		%>	
+				<html:button styleClass="actionButton" 
+						property="submitPage" 
+						title="Submit Only"
+						value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>" 
+						onclick="<%=str%>">				  				     	    
+		     	</html:button>
+		<%
+			}
+		%>     	
+     	</td>
 
 		<td nowrap class="formFieldNoBorders"> 
 			<html:button styleClass="actionButton"  

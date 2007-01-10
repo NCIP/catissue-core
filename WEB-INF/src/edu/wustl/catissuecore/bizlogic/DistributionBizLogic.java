@@ -102,7 +102,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		{
 			insertDistributedItem(dist, dao, sessionDataBean, distributedItemCollection);
 		}
-
+		
 		try
 		{
 			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
@@ -164,24 +164,27 @@ public class DistributionBizLogic extends DefaultBizLogic
 	        
 	        
 			//update the available quantity
-			Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getId());
-			double quantity = item.getQuantity().doubleValue();
-			boolean availability = checkAvailableQty((Specimen) specimenObj, quantity);
-			if (!availability)
-			{
-				throw new DAOException(ApplicationProperties
-						.getValue("errors.distribution.quantity"));
-			}
-			else
-			{
-				dao
-						.update(specimenObj, sessionDataBean, Constants.IS_AUDITABLE_TRUE,
-								Constants.IS_SECURE_UPDATE_TRUE,
-								Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
-			}
+	        //Changed by Ashish
+	                 
+	        if(item.getSpecimenArray() == null)	        
+	        {
+	        	Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getId());
+	        	double quantity = item.getQuantity().doubleValue();
+	        	boolean availability = checkAvailableQty((Specimen) specimenObj, quantity);
+				if (!availability)
+				{
+					throw new DAOException(ApplicationProperties.getValue("errors.distribution.quantity"));
+				}
+				else
+				{
+					dao.update(specimenObj, sessionDataBean, Constants.IS_AUDITABLE_TRUE,
+									Constants.IS_SECURE_UPDATE_TRUE,
+									Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
+				}
+	        }
+
 			item.setDistribution(dist);
-			dao.insert(item, sessionDataBean, Constants.IS_AUDITABLE_TRUE,
-					Constants.IS_SECURE_UPDATE_TRUE);
+			dao.insert(item, sessionDataBean, Constants.IS_AUDITABLE_TRUE, Constants.IS_SECURE_UPDATE_TRUE);
 		}
 	}
 
@@ -196,7 +199,8 @@ public class DistributionBizLogic extends DefaultBizLogic
 		while (distributedItemIterator.hasNext())
 		{
 			DistributedItem distributedItem = (DistributedItem) distributedItemIterator.next();
-			protectionObjects.add(distributedItem.getSpecimen());
+			if(distributedItem.getSpecimenArray() == null)
+				protectionObjects.add(distributedItem.getSpecimen());
 		}
 
 		return protectionObjects;

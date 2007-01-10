@@ -15,6 +15,23 @@
     	<property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
 		<property name="hibernate.jdbc.batch_size">0</property>
     	
+		<!--Suite-->
+		<mapping resource="edu/wustl/catissuecore/hbm/OrderItem.hbm.xml" />
+		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />
+	
+		<mapping resource="edu/wustl/catissuecore/hbm/ConceptReferent.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/PathologyReportReviewParameterSet.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/QuarantineEventParameterSet.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ReportContent.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ReportSection.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/SurgicalPathologyReport.hbm.xml"/>
+	
+		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTier.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierResponse.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierStatus.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ReportLoaderQueue.hbm.xml"/>
+		<!--Suite-->
+
         <!-- List of all Mapping files -->
         <mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEvent.hbm.xml"/>

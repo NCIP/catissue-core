@@ -5,7 +5,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
-
+<%@ page import="java.util.*"%>
+<%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes -->
@@ -14,18 +15,31 @@
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 <%
-	   		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
+	
+			String pageOf=(String)request.getAttribute(Constants.PAGEOF);
+			Object obj = request.getAttribute("collectionProtocolRegistrationForm");
 			CollectionProtocolRegistrationForm form =null;
 			String currentRegistrationDate = "";
+			String signedConsentDate = "";
+			String selectProperty="";
 			if(obj != null && obj instanceof CollectionProtocolRegistrationForm)
 			{
 				form = (CollectionProtocolRegistrationForm)obj;
 				currentRegistrationDate = form.getRegistrationDate();  
-				
+				signedConsentDate=form.getConsentDate();
+			
 				if(currentRegistrationDate == null)
+				{
 					currentRegistrationDate = "";
+				}
+				if(signedConsentDate == null)
+				{
+					signedConsentDate = "";
+				}
+					
 			}
 
+			
 				String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 				boolean isAddNew = false;
 				String pageOf = (String)request.getAttribute(Constants.PAGEOF);
@@ -76,6 +90,20 @@
 	<%}%>
 
 <script language="JavaScript">
+
+//Consent Tracking Virender Mehta
+
+		function submitform()
+		{
+		  var collectionProtocolObj=document.getElementById('collectionProtocolID');
+		  var selectedIndexValue=collectionProtocolObj.value;
+		  var action ="CollectionProtocolRegistration.do?showConsents=yes&pageOf=pageOfCollectionProtocolRegistration&operation=<%=operation%>&id="+selectedIndexValue;
+		  document.forms[0].action = action;
+		  document.forms[0].submit();
+		}
+		
+//Consent Tracking Virender Mehta
+
 		function onCheckboxButtonClick(element,dropDownList)
 		{
 			// changes as per bug 287
@@ -137,8 +165,8 @@
 			String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
 			String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
 	%>	
+
 	
-		
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
 	
 		<!-- NEW Collection Protocol Registration ENTRY BEGINS-->
@@ -184,7 +212,7 @@
 					<td class="formField">
 <!-- Mandar : 434 : for tooltip -->
 						<html:select property="collectionProtocolID" styleClass="formFieldSized" styleId="collectionProtocolID" size="1"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="submitform()">
 						    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
 					    </html:select>
 						&nbsp;
@@ -282,7 +310,7 @@
 <%
 	}
 %>
-<bean:message key="page.dateFormat" />&nbsp;
+	<bean:message key="page.dateFormat" />&nbsp;
 
 				 	</td>
 				</tr>
@@ -313,10 +341,32 @@
 			        %> 
 				</tr>
 			</table>
-		</td>
-		</tr>
-
-		<!-- NEW Collection Protocol Registration ENTRY ends-->
+	
+	<table>
+		<tr><td></td></tr><tr><td></td></tr>
 	</table>
-	<%@ include file="CollectionProtocolRegistrationPageButtons.jsp"%>
+
+<%--  Consent Tracking Virender Mehta	 --%>
+
+	<%
+		List responseList =(List)request.getAttribute("responseList");
+		if(responseList!=null)
+		{
+	%>
+   	 
+     <%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %>  
+
+	<%
+		}
+	%>			
+
+<!--  Consent Tracking Virender Mehta	 -->	
+
+	</td>
+</tr>
+	<!-- NEW Collection Protocol Registration ENTRY ends-->
+</table>
+				
+	<%@ include file="CollectionProtocolRegistrationPageButtons.jsp" %>
+
 </html:form>

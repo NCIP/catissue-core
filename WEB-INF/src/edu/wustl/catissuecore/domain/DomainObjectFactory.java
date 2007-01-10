@@ -14,6 +14,8 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
+import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameterSet;
+import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameterSet;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -169,7 +171,33 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
             case Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID:
             	className = SpecimenArray.class.getName();
         	 break;
+        	//Ordering System
+            case Constants.REQUEST_LIST_FILTERATION_FORM_ID:
+            	className = OrderDetails.class.getName();
+        	 break;
+        	 
+            case Constants.REQUEST_DETAILS_FORM_ID:
+            	className = OrderDetails.class.getName();
+        	 break;
         	
+            case Constants.ORDER_FORM_ID:
+            	className = OrderDetails.class.getName();
+		 		break;
+		 		
+			case Constants.ORDER_ARRAY_FORM_ID:
+            	className = OrderDetails.class.getName();
+				break;
+			case Constants.ORDER_PATHOLOGY_FORM_ID:
+            	className = OrderDetails.class.getName();
+				break;
+			case Constants.SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+				className = PathologyReportReviewParameterSet.class.getName();
+				break;
+			case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+				className = QuarantineEventParameterSet.class.getName();
+				break;
+
+				
         }
         return className;
     }
@@ -357,6 +385,24 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 		     	abstractDomain = new SpecimenArray(form);
 		 		break;		 	
 				 
+			case Constants.ORDER_FORM_ID:
+				abstractDomain = new OrderDetails(form);
+		 		break;
+		 		
+			case Constants.ORDER_ARRAY_FORM_ID:
+				abstractDomain = new OrderDetails(form);
+				break;
+			case Constants.ORDER_PATHOLOGY_FORM_ID:
+				abstractDomain = new OrderDetails(form);
+				break;
+			case Constants.SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+				abstractDomain = new PathologyReportReviewParameterSet(form);
+				break;
+			case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+				abstractDomain = new QuarantineEventParameterSet(form);
+				break;
+				
+				
 			//added as per bug 79
              default:
             		abstractDomain = null;

@@ -11,13 +11,33 @@
 											</logic:equal>
 											<tr>
 												<td nowrap class="formFieldNoBorders">
+												<%
+												if(operation.equals(Constants.ADD))
+												{
+												%>
 													<html:button styleClass="actionButton" 
 															property="submitPage" 
 															title="Submit Only"
 															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>" 
-															onclick="<%=normalSubmit%>">
-						  				     	    
+															onclick="<%=normalSubmit%>"	>
+												   	</html:button>
+												<%	
+												}
+												else
+												{
+													ConsentTierData consentForm =(ConsentTierData)form;
+													List consentTier=(List)consentForm.getConsentTiers();
+													String str = "popupWindow('"+ consentTier.size() +"')";
+												%>
+													<html:button styleClass="actionButton" 
+															property="submitPage" 
+															title="Submit Only"
+															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>" 
+															onclick="<%=str%>">
 											     	</html:button>
+												<%	
+												}
+												%>
 												</td>
 											
 												<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">

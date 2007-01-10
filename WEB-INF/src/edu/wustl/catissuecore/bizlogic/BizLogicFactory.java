@@ -184,6 +184,25 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     			bizLogic = new CDEBizLogic();
     			break;
     			
+    		case Constants.REQUEST_DETAILS_FORM_ID:
+    			bizLogic = new OrderBizLogic();
+    			break;	    			    			
+    		case Constants.ORDER_PATHOLOGY_FORM_ID:
+    			bizLogic = new OrderBizLogic();
+    		break;	
+    		case Constants.NEW_PATHOLOGY_FORM_ID:
+    			bizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
+    		break;	
+    		case Constants.ORDER_FORM_ID:
+    			bizLogic = new OrderBizLogic();
+    			break;
+    		case Constants.ORDER_ARRAY_FORM_ID:
+    			bizLogic = new OrderBizLogic();
+    			break;
+//				Ordering System
+    		case Constants.REQUEST_LIST_FILTERATION_FORM_ID:
+    			bizLogic = new OrderBizLogic();
+    			break;
     		//END
     		case Constants.DEFAULT_BIZ_LOGIC:
             default:
@@ -203,6 +222,31 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     {
     	IBizLogic bizLogic = null;
     	
+    	if(className.equals("edu.wustl.catissuecore.domain.OrderItem") || className.equals("edu.wustl.catissuecore.domain.PathologicalCaseOrderItem") || className.equals("edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem") || className.equals("edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem"))
+    	{
+    		bizLogic = new OrderBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.OrderDetails"))
+    	{
+    		bizLogic = new OrderBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"))
+    	{
+    		bizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.TextContent"))
+    	{
+    		bizLogic = new TextReportContentBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"))
+    	{
+    		bizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue"))
+    	{
+    		bizLogic = new ReportLoaderQueueBizLogic();
+    	}
+    	else 
     	if(className.equals("edu.wustl.catissuecore.domain.User"))
     	{
     		bizLogic = new UserBizLogic();

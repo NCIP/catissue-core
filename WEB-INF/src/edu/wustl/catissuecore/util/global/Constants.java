@@ -18,6 +18,79 @@ package edu.wustl.catissuecore.util.global;
 
 public class Constants extends edu.wustl.common.util.global.Constants
 {
+//// suite constants
+	
+	//Consent tracking
+	public static final String 	SHOW_CONSENTS="showConsents";
+	public static final String 	YES="yes";
+	public static final String 	CP_ID="cpID";
+	public static final String 	BARCODE="barcode";
+	public static final String 	POPUP="popup";
+	public static final String 	ERROR="error";
+	public static final String 	ERROR_SHOWCONSENTS="errorShowConsent";
+	public static final String 	COMPLETE="Complete";
+	
+	//Ordering System Status
+	public static final String CDE_NAME_REQUEST_STATUS="Request Status";
+	public static final String CDE_NAME_REQUESTED_ITEMS_STATUS="Requested Items Status";
+
+	public static final String REQUEST_LIST="requestStatusList";
+	public static final String REQUESTED_ITEMS_STATUS_LIST="requestedItemsStatusList";
+	public static final String ARRAY_STATUS_LIST="arrayStatusList";
+	
+	
+	public static final String REQUEST_OBJECT="requestObjectList";
+	public static final String REQUEST_DETAILS_LIST="requestDetailsList";
+	public static final String ARRAY_REQUESTS_BEAN_LIST="arrayRequestsBeanList";
+	
+    public static final String SPECIMEN_ORDER_FORM_TYPE = "specimen";
+    public static final String ARRAY_ORDER_FORM_TYPE = "specimenArray";
+    public static final String PATHOLOGYCASE_ORDER_FORM_TYPE="pathologyCase";
+    public static final String REQUESTED_BIOSPECIMENS="RequestedBioSpecimens";
+	
+	//Constants required in RequestDetailsPage
+	public static final String SUBMIT_REQUEST_DETAILS_ACTION="SubmitRequestDetails.do";
+	public static final String REQUEST_HEADER_OBJECT = "requestHeaderObject";
+	public static final String SITE_LIST_OBJECT = "siteList";
+	public static final String REQUEST_DETAILS_PAGE = "RequestDetails.do";
+	public static final String ARRAYREQUEST_DETAILS_PAGE = "ArrayRequests.do";
+	public static final String ARRAY_REQUESTS_LIST = "arrayRequestsList";
+	public static final String EXISISTINGARRAY_REQUESTS_LIST = "existingArrayRequestDetailsList";
+	public static final String DEFINEDARRAY_REQUESTS_LIST = "DefinedRequestDetailsMapList";
+	
+	//Constants for Order Status
+	public static final String ORDER_STATUS_NEW = "New";
+	public static final String ORDER_STATUS_PENDING = "Pending";
+	public static final String ORDER_STATUS_REJECTED = "Rejected";
+	public static final String ORDER_STATUS_COMPLETED = "Completed";
+	
+	//Constants for Order Request Status.
+	public static final String ORDER_REQUEST_STATUS_NEW = "New";
+	public static final String ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW = "Pending - Protocol Review";
+	public static final String ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION = "Pending - Specimen Preparation";
+	public static final String ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION = "Pending - For Distribution";
+	public static final String ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST = "Rejected - Inappropriate Request";	
+	public static final String ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE = "Rejected - Specimen Unavailable";
+	public static final String ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE = "Rejected - Unable to Create";
+	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED = "Distributed";
+	
+ //	 Report Loader 
+	public static final String MAX_PARTICIPANT_MATCHING_PERCENTAGE="maxParticipantMatchingPercentage";	
+/////	
+	// Query Module Interface UI constants
+	public static final String ViewSearchResultsAction = "ViewSearchResultsAction.do";
+	public static final String categorySearchForm = "categorySearchForm";
+	public static final String SearchCategory = "SearchCategory.do";
+	public static final String DefineSearchResultsViewAction = "DefineSearchResultsView.do";
+	
+	//Surgical Pathology Report UI constants
+	public static final String SPR_VIEW_ACTION="ViewSurgicalPathologyReport.do";
+	public static final String VIEW_SURGICAL_PATHOLOGY_REPORT="viewSPR";
+	public static final String PAGEOF_SPECIMEN_COLLECTION_GROUP="pageOfSpecimenCollectionGroup";
+	public static final String PAGEOF_PARTICIPANT="pageOfParticipant";
+	public static final String PAGEOF_SPECIMEN="pageOfSpecimen";
+
+
 	public static final String MAX_IDENTIFIER = "maxIdentifier";
     public static final String AND_JOIN_CONDITION = "AND";
 	public static final String OR_JOIN_CONDITION = "OR";
@@ -370,6 +443,28 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CREATE_ALIQUOT_ACTION = "CreateAliquots.do";
 	public static final String ALIQUOT_SUMMARY_ACTION = "AliquotSummary.do";
 	
+	//Constants required in Ordering System.
+    public static final String ACTION_ORDER_LIST = "OrderExistingSpecimen.do";  
+    public static final String SPECIMEN_TREE_SPECIMEN_ID = "specimenId";
+    public static final String SPECIMEN_TREE_SPECCOLLGRP_ID = "specimenCollGrpId";
+    public static final String ACTION_REMOVE_ORDER_ITEM = "AddToOrderListSpecimen.do?remove=yes";
+    public static final String ACTION_REMOVE_ORDER_ITEM_ARRAY = "AddToOrderListArray.do?remove=yes";
+    public static final String ACTION_REMOVE_ORDER_ITEM_PATHOLOGYCASE = "AddToOrderListPathologyCase.do?remove=yes";
+    public static final String DEFINEARRAY_REQUESTMAP_LIST = "definedArrayRequestMapList";
+    public static final String CREATE_DEFINED_ARRAY = "CreateDefinedArray.do";
+    
+    public static final String ACTION_SAVE_ORDER_ITEM = "SaveOrderItems.do";
+
+    public static final String ORDERTO_LIST_ARRAY = "orderToListArrayList";
+    public static final String ACTION_SAVE_ORDER_ARRAY_ITEM = "SaveOrderArrayItems.do";
+    public static final String ACTION_SAVE_ORDER_PATHOLOGY_ITEM="SaveOrderPathologyItems.do";
+    
+    public static final String ACTION_ADD_ORDER_SPECIMEN_ITEM="AddToOrderListSpecimen.do";
+    public static final String ACTION_ADD_ORDER_ARRAY_ITEM="AddToOrderListArray.do";
+    public static final String ACTION_ADD_ORDER_PATHOLOGY_ITEM="AddToOrderListPathologyCase.do";
+    public static final String ACTION_DEFINE_ARRAY="DefineArraySubmit.do";
+
+    
 	//Constants related to Aliquots functionality
 	public static final String PAGEOF_ALIQUOT = "pageOfAliquot";
 	public static final String PAGEOF_CREATE_ALIQUOT = "pageOfCreateAliquot";
@@ -498,6 +593,19 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Misc
 	public static final String SEPARATOR = " : ";
 	
+	
+	//	CATIES
+	public static final int SURGICAL_PATHOLOGY_REPORT_FORM_ID=60;
+	public static final int DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID=61;
+	
+	//Ordering System
+	public static final int REQUEST_DETAILS_FORM_ID = 54;
+	public static final int REQUEST_LIST_FILTERATION_FORM_ID = 55;
+	public static final int ORDER_FORM_ID = 56;
+	public static final int ORDER_ARRAY_FORM_ID = 57;	
+	public static final int ORDER_PATHOLOGY_FORM_ID = 58;
+	public static final int NEW_PATHOLOGY_FORM_ID=59;
+	
 	//Identifiers for JDBC DAO.
 	public static final int QUERY_RESULT_TREE_JDBC_DAO = 1;
 	
@@ -515,7 +623,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Approve User Constants
 	public static final int ZERO = 0;
 	public static final int START_PAGE = 1;
-	public static final int NUMBER_RESULTS_PER_PAGE = 5;
+	public static final int NUMBER_RESULTS_PER_PAGE = 10;
 	public static final int NUMBER_RESULTS_PER_PAGE_SEARCH = 15;
 	public static final String PAGE_NUMBER = "pageNum";
 	public static final String RESULTS_PER_PAGE = "numResultsPerPage"; 
@@ -832,6 +940,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FROZEN_TISSUE_SLIDE = "Frozen Tissue Slide";	// SLIDE	 
 	public static final String FIXED_TISSUE_BLOCK = "Fixed Tissue Block";	// PARAFFIN BLOCK	 
 	public static final String NOT_SPECIFIED = "Not Specified";
+	public static final String WITHDRAWN = "Withdrawn";
 	// tissue types with unit= g
 	public static final String FRESH_TISSUE = "Fresh Tissue";			 
 	public static final String FROZEN_TISSUE = "Frozen Tissue";			 

@@ -45,6 +45,30 @@ public class SpecimenArray extends Container
     private transient int aliquotCount;
 
 	private transient Map aliqoutMap = new HashMap();
+	
+	//Ordering System ---- Ashish 
+	protected Collection newSpecimenArrayOrderItemCollection = new HashSet();
+
+	/**
+	 * @return the newSpecimenArrayOrderItemCollection
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem" cascade="save-update" lazy="false"
+	 * @hibernate.set name="newSpecimenArrayOrderItemCollection" table="CATISSUE_NEW_SP_AR_ORDER_ITEM"
+	 * @hibernate.collection-key column="SPECIMEN_ARRAY_ID" 
+	 */
+	public Collection getNewSpecimenArrayOrderItemCollection()
+	{
+		return newSpecimenArrayOrderItemCollection;
+	}
+	
+	/**
+	 * @param newSpecimenArrayOrderItemCollection the newSpecimenArrayOrderItemCollection to set
+	 */
+	public void setNewSpecimenArrayOrderItemCollection(Collection newSpecimenArrayOrderItemCollection)
+	{
+		this.newSpecimenArrayOrderItemCollection = newSpecimenArrayOrderItemCollection;
+	}
+	
+	//Ordering System End
 
     /**
      * Default Constructor 
@@ -219,6 +243,16 @@ public class SpecimenArray extends Container
 	    	*/
 	    	specimenArrayContentCollection = specimenArrayForm.getSpecArrayContentCollection();
 	    	//SpecimenArrayUtil.getSpecimenContentCollection(specimenArrayForm.getSpecimenArrayGridContentList());
+	    	
+	    	//Ordering System
+	    	if(specimenArrayForm.getIsDefinedArray().equalsIgnoreCase("True"))
+	    	{
+	    		  NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = new NewSpecimenArrayOrderItem();
+	    		  newSpecimenArrayOrderItem.setId(new Long(specimenArrayForm.getNewArrayOrderItemId()));
+	    		  Collection tempColl = new HashSet(); 
+	    		  tempColl.add(newSpecimenArrayOrderItem);
+	    		  this.newSpecimenArrayOrderItemCollection = tempColl;
+	    	}
     	}
     }
     
@@ -270,4 +304,5 @@ public class SpecimenArray extends Container
 	{
 		this.aliquot = aliquot;
 	}
+
 }

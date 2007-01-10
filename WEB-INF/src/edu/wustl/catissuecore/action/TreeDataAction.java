@@ -27,6 +27,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.bizlogic.AdvanceQueryBizlogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenTreeBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -42,9 +43,14 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class TreeDataAction extends BaseAction
 {
-    
-    /**
-     * Overrides the execute method of the Action class.
+	 /**
+     * Overrides the execute method in Action class.
+     * @param mapping ActionMapping object
+     * @param form ActionForm object
+     * @param request HttpServletRequest object
+     * @param response HttpServletResponse object
+     * @return ActionForward object
+     * @throws Exception object
      */
     public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
@@ -79,6 +85,24 @@ public class TreeDataAction extends BaseAction
             		pageOf.equals(Constants.PAGEOF_ALIQUOT))
             {
                 dataList = bizLogic.getTreeViewData();
+            }
+            //Added By Ramya.Instantiate biz logic for Specimen Tree to display in RequestDetails.jsp
+            else if(pageOf.equals(Constants.PAGEOF_SPECIMEN_TREE))
+            {
+            	HttpSession session = request.getSession();
+            	if(session.getAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID) != null)
+            	{
+            		String strSpecimenId = (String) session.getAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID);
+            		Long specimenId = new Long(strSpecimenId);
+            		bizLogic = new SpecimenTreeBizLogic(specimenId,false);
+            	}
+            	if(session.getAttribute(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID) != null)
+            	{
+            		String strSpecimenCollgrpId = (String) session.getAttribute(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID);
+            		Long specimenCollgrpId = new Long(strSpecimenCollgrpId);
+            		bizLogic = new SpecimenTreeBizLogic(specimenCollgrpId,true);
+            	}
+            	dataList = bizLogic.getTreeViewData();
             }
             
             String contentType = "application/x-java-serialized-object";

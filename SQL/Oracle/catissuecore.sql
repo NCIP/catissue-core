@@ -94,6 +94,12 @@ alter table CATISSUE_AUDIT_EVENT drop constraint FKACAF697A2206F20F;
 alter table CATISSUE_AUDIT_EVENT_LOG drop constraint FK8BB672DF77F0B904;
 alter table CATISSUE_AUDIT_EVENT_DETAILS drop constraint FK5C07745D34FFD77F;
 alter table CATISSUE_AUDIT_EVENT_QUERY_LOG drop constraint FK62DC439DBC7298A9;
+
+/*----caTissue tables changed for ordering system and consent tracking----- */
+alter table CATISSUE_DISTRIBUTION drop constraint FK54276680783867CC;	
+alter table CATISSUE_DISTRIBUTED_ITEM drop constraint FKA7C3ED4BC4A3C438;	
+alter table CATISSUE_COLL_PROT_REG drop constraint FK5EB25F13A0FF79D4;
+
 drop table  CATISSUE_PERMISSIBLE_VALUE;
 drop table  CATISSUE_CDE;
 drop table  CATISSUE_COLL_COORDINATORS;
@@ -254,6 +260,7 @@ create table CATISSUE_CANCER_RESEARCH_GROUP (
 create table CATISSUE_COLLECTION_PROTOCOL (
    IDENTIFIER number(19,0) not null,
    ALIQUOT_IN_SAME_CONTAINER number(1,0),
+   UNSIGNED_CONSENT_DOC_URL varchar2(500),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_EVENT_PARAM (
@@ -502,6 +509,7 @@ create table CATISSUE_DISTRIBUTED_ITEM (
    QUANTITY double precision,
    SPECIMEN_ID number(19,0),
    DISTRIBUTION_ID number(19,0),
+   SPECIMEN_ARRAY_ID number(19,0),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_PARTICIPANT (
@@ -589,6 +597,7 @@ create table CATISSUE_DISTRIBUTION (
    EVENT_TIMESTAMP date,
    USER_ID number(19,0),
    COMMENTS varchar2(500),
+   ORDER_ID number(19,0),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_PROCEDURE_EVENT_PARAM (
@@ -629,7 +638,10 @@ create table CATISSUE_COLL_PROT_REG (
    REGISTRATION_DATE date,
    PARTICIPANT_ID number(19,0),
    COLLECTION_PROTOCOL_ID number(19,0),
-   ACTIVITY_STATUS varchar(50),
+   ACTIVITY_STATUS varchar(20),
+   CONSENT_SIGN_DATE date,
+   CONSENT_DOC_URL varchar2(500),
+   CONSENT_WITNESS number(19,0),   
    primary key (IDENTIFIER)
 );
 create table CATISSUE_FROZEN_EVENT_PARAM (
@@ -811,6 +823,12 @@ alter table CATISSUE_PERMISSIBLE_VALUE  add constraint FK57DDCE1FC56C2B1 foreign
 alter table CATISSUE_AUDIT_EVENT  add constraint FKACAF697A2206F20F foreign key (USER_ID) references CATISSUE_USER  ;
 alter table CATISSUE_AUDIT_EVENT_LOG  add constraint FK8BB672DF77F0B904 foreign key (AUDIT_EVENT_ID) references CATISSUE_AUDIT_EVENT  ;
 alter table CATISSUE_AUDIT_EVENT_DETAILS  add constraint FK5C07745D34FFD77F foreign key (AUDIT_EVENT_LOG_ID) references CATISSUE_AUDIT_EVENT_LOG  ;
+
+#---------- caTissue Tables changed for Ordering System and Consent Tracking ----Ashish 3/1/07
+alter table CATISSUE_DISTRIBUTION add constraint FK54276680783867CC foreign key (ORDER_ID) references CATISSUE_ORDER (IDENTIFIER);
+alter table CATISSUE_COLL_PROT_REG add constraint FK5EB25F13A0FF79D4 foreign key (CONSENT_WITNESS) references CATISSUE_USER (IDENTIFIER);
+alter table CATISSUE_DISTRIBUTED_ITEM add constraint FKA7C3ED4BC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY (IDENTIFIER);
+
 create sequence CATISSUE_CANCER_RES_GRP_SEQ;
 create sequence CATISSUE_USER_SEQ;
 create sequence CATISSUE_SPECIMEN_PROTOCOL_SEQ;
@@ -848,3 +866,154 @@ create sequence CATISSUE_CONTAINER_SEQ;
 create sequence CATISSUE_SPECI_ARRAY_CNTNT_SEQ;
 create sequence CATISSUE_DISTRIBUTION_SEQ;
 create sequence CATISSUE_AUDIT_EVENT_QUERY_SEQ;
+
+#--------Ordering System related tables----Ashish   3/1/07
+#---- Ordering system  related alter table script
+alter table CATISSUE_EXISTING_SP_ORD_ITEM drop constraint FKF8B855EEBC7298A9;
+alter table CATISSUE_EXISTING_SP_ORD_ITEM drop constraint FKF8B855EE60773DB2;
+alter table CATISSUE_PATH_CASE_ORDER_ITEM drop constraint FKBD5029D5F69249F7;
+alter table CATISSUE_PATH_CASE_ORDER_ITEM drop constraint FKBD5029D5BC7298A9;
+alter table CATISSUE_ORDER_ITEM drop constraint FKB501E88060975C0B;
+alter table CATISSUE_ORDER_ITEM drop constraint FKB501E880783867CC;
+alter table CATISSUE_DERIEVED_SP_ORD_ITEM drop constraint FK3742152BBC7298A9;
+alter table CATISSUE_DERIEVED_SP_ORD_ITEM drop constraint FK3742152B60773DB2;
+alter table CATISSUE_ORDER drop constraint FK543F22B26B1F36E7;
+alter table CATISSUE_DISTRIBUTION drop constraint FK54276680783867CC;
+alter table CATISSUE_SP_ARRAY_ORDER_ITEM drop constraint FKE3823170BC7298A9;
+alter table CATISSUE_SP_ARRAY_ORDER_ITEM drop constraint FKE3823170C4A3C438;
+alter table CATISSUE_SPECIMEN_ORDER_ITEM drop constraint FK48C3B39FBC7298A9;
+alter table CATISSUE_SPECIMEN_ORDER_ITEM drop constraint FK48C3B39F83505A30;
+alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop constraint FKC5C92CCBCE5FBC3A;
+alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop constraint FKC5C92CCBBC7298A9;
+
+
+	#-------- Consent Tracking alter scripts
+alter table CATISSUE_CONSENT_TIER_RESPONSE drop constraint FKFB1995FD4AD77FCB;
+alter table CATISSUE_CONSENT_TIER_RESPONSE drop constraint FKFB1995FD17B9953;
+alter table CATISSUE_CONSENT_TIER_STATUS drop constraint FKF74E94AEF69249F7;
+alter table CATISSUE_CONSENT_TIER_STATUS drop constraint FKF74E94AE60773DB2;
+alter table CATISSUE_CONSENT_TIER_STATUS drop constraint FKF74E94AE17B9953;
+alter table CATISSUE_CONSENT_TIER drop constraint FK51725303E36A4B4F;
+
+#------- ordering system relate tables---- 
+drop table CATISSUE_EXISTING_SP_ORD_ITEM;
+drop table CATISSUE_PATH_CASE_ORDER_ITEM;
+drop table CATISSUE_ORDER_ITEM;
+drop table CATISSUE_DERIEVED_SP_ORD_ITEM;
+drop table CATISSUE_ORDER;
+drop table CATISSUE_SP_ARRAY_ORDER_ITEM;
+drop table CATISSUE_SPECIMEN_ORDER_ITEM;
+drop table CATISSUE_NEW_SP_AR_ORDER_ITEM;
+
+create table CATISSUE_EXISTING_SP_ORD_ITEM (
+   IDENTIFIER number(19,0) not null,
+   SPECIMEN_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_PATH_CASE_ORDER_ITEM (
+   IDENTIFIER number(19,0) not null,
+   PATHOLOGICAL_STATUS varchar(255),
+   TISSUE_SITE varchar(255),
+   SPECIMEN_CLASS varchar(255),
+   SPECIMEN_TYPE varchar(255),
+   SPECIMEN_COLL_GROUP_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_ORDER_ITEM (
+   IDENTIFIER number(19,0) not null,
+   DESCRIPTION varchar2(500),
+   DISTRIBUTED_ITEM_ID number(19,0),
+   STATUS varchar(50),
+   REQUESTED_QUANTITY double precision,
+   ORDER_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+
+create table CATISSUE_DERIEVED_SP_ORD_ITEM (
+   IDENTIFIER number(19,0) not null,
+   SPECIMEN_CLASS varchar(255),
+   SPECIMEN_TYPE varchar(255),
+   SPECIMEN_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_ORDER (
+   IDENTIFIER number(19,0) not null,
+   COMMENTS varchar2(500),
+   DISTRIBUTION_PROTOCOL_ID number(19,0),
+   NAME varchar2(500),
+   REQUESTED_DATE date,
+   STATUS varchar(50),
+   primary key (IDENTIFIER)
+);
+
+create table CATISSUE_SPECIMEN_ORDER_ITEM (
+   IDENTIFIER number(19,0) not null,
+   ARRAY_ORDER_ITEM_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+#-----------------Array order item tables.
+create table CATISSUE_SP_ARRAY_ORDER_ITEM (
+   IDENTIFIER number(19,0) not null,
+   SPECIMEN_ARRAY_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+
+create table CATISSUE_NEW_SP_AR_ORDER_ITEM (
+   IDENTIFIER number(19,0) not null,
+   ARRAY_TYPE_ID number(19,0),
+   NAME varchar(255),
+   SPECIMEN_ARRAY_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+alter table CATISSUE_EXISTING_SP_ORD_ITEM add constraint FKF8B855EEBC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_EXISTING_SP_ORD_ITEM add constraint FKF8B855EE60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
+alter table CATISSUE_PATH_CASE_ORDER_ITEM add constraint FKBD5029D5F69249F7 foreign key (SPECIMEN_COLL_GROUP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
+alter table CATISSUE_PATH_CASE_ORDER_ITEM add constraint FKBD5029D5BC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_ORDER_ITEM add constraint FKB501E88060975C0B foreign key (DISTRIBUTED_ITEM_ID) references CATISSUE_DISTRIBUTED_ITEM (IDENTIFIER);
+alter table CATISSUE_ORDER_ITEM add constraint FKB501E880783867CC foreign key (ORDER_ID) references CATISSUE_ORDER (IDENTIFIER);
+alter table CATISSUE_DISTRIBUTION add constraint FK54276680783867CC foreign key (ORDER_ID) references CATISSUE_ORDER (IDENTIFIER);
+alter table CATISSUE_DERIEVED_SP_ORD_ITEM add constraint FK3742152BBC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_DERIEVED_SP_ORD_ITEM add constraint FK3742152B60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
+alter table CATISSUE_ORDER add constraint FK543F22B26B1F36E7 foreign key (DISTRIBUTION_PROTOCOL_ID) references CATISSUE_DISTRIBUTION_PROTOCOL (IDENTIFIER);
+alter table CATISSUE_SP_ARRAY_ORDER_ITEM add constraint FKE3823170BC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_SP_ARRAY_ORDER_ITEM add constraint FKE3823170C4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY (IDENTIFIER);
+alter table CATISSUE_SPECIMEN_ORDER_ITEM add constraint FK48C3B39FBC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_SPECIMEN_ORDER_ITEM add constraint FK48C3B39F83505A30 foreign key (ARRAY_ORDER_ITEM_ID) references CATISSUE_NEW_SP_AR_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBCE5FBC3A foreign key (ARRAY_TYPE_ID) references CATISSUE_SPECIMEN_ARRAY_TYPE (IDENTIFIER);
+alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBBC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY (IDENTIFIER);
+
+#------ Consent Tracking related drop, create and add foreign key scripts.
+drop table CATISSUE_CONSENT_TIER_RESPONSE;
+drop table CATISSUE_CONSENT_TIER_STATUS;
+drop table CATISSUE_CONSENT_TIER;
+
+create table CATISSUE_CONSENT_TIER_RESPONSE (
+   IDENTIFIER number(19,0) not null,
+   RESPONSE varchar(10),
+   CONSENT_TIER_ID number(19,0),
+   COLL_PROT_REG_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_CONSENT_TIER_STATUS (
+   IDENTIFIER number(19,0) not null,
+   CONSENT_TIER_ID number(19,0),
+   STATUS varchar(255),
+   SPECIMEN_ID number(19,0),
+   SPECIMEN_COLL_GROUP_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_CONSENT_TIER (
+   IDENTIFIER number(19,0) not null,
+   STATEMENT varchar2(500),
+   COLL_PROTOCOL_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+
+alter table CATISSUE_CONSENT_TIER_RESPONSE  add constraint FKFB1995FD4AD77FCB foreign key (COLL_PROT_REG_ID) references CATISSUE_COLL_PROT_REG (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER_RESPONSE  add constraint FKFB1995FD17B9953 foreign key (CONSENT_TIER_ID) references CATISSUE_CONSENT_TIER (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER_STATUS  add constraint FKF74E94AEF69249F7 foreign key (SPECIMEN_COLL_GROUP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER_STATUS  add constraint FKF74E94AE60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER_STATUS  add constraint FKF74E94AE17B9953 foreign key (CONSENT_TIER_ID) references CATISSUE_CONSENT_TIER (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER  add constraint FK51725303E36A4B4F foreign key (COLL_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
+

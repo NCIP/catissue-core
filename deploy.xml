@@ -33,6 +33,13 @@
 	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<property name="oracle.lib" value="oracleDriver.jar"/>
 	
+	<property name="catiesInstallType" value="${caties.installation.type}"/>
+		
+	<property name="catiesInstallDir" value="${caties.installation.dir}"/>
+	
+	<property name="deidjar.dir" value="${caties.installation.dir}/deid"/>
+	<property name="filepollerjar.dir" value="${caties.installation.dir}/filepoller"/>
+	
 	<!-- Check for required properties -->
 	<target name="assert">
 		<if>
@@ -105,6 +112,23 @@
 			<then>
 				<fail message="The property 'first.admin.password' can not be empty"/>
 			</then>
+		</if>
+		
+		<if>
+			<equals arg1="" arg2="${catiesInstallDir}"/>
+			<then>
+				<fail message="The property 'caties.installation.dir' can not be empty"/>
+			</then>
+		</if>
+		<if>
+			<or>
+				<equals arg1="standAlone" arg2="${caties.installation.type}"/>
+				<equals arg1="webApplication" arg2="${caties.installation.type}"/>	
+			</or>
+			<then/>
+		<else>
+			<fail message="The value of property 'caties.installation.type' must be standAlone or webApplication" />
+		</else>	
 		</if>
 	</target>
 	
@@ -693,6 +717,110 @@ Thanking You,
 				</fileset>
 			</copy>	
 		<delete dir="${temp.dir}"/>
+	</target>
+	
+	
+	<!-- build for CaTIES -->
+	<target name="caties_install" depends="assert">
+		<property name="tempCatiesDir" value="${caties.installation.dir}/tempCatiesDir" />
+		<delete quiet="true" dir="${caties.installation.dir}" />
+		<mkdir dir="${tempCatiesDir}" />
+		<copy todir="${tempCatiesDir}/catissuecore-properties" overwrite="true">
+			<fileset dir="${base.dir}/catissuecore-properties">
+				<include name="*.*"/>
+			</fileset>
+		</copy>
+		<copy todir="${tempCatiesDir}/classes">
+			<fileset dir="${base.dir}/WEB-INF/classes" />
+		</copy>
+		<copy todir="${tempCatiesDir}/lib" overwrite="true">
+			<fileset dir="${base.dir}/WEB-INF/lib">
+				<include name="*.jar"/>
+			</fileset>
+		</copy>	
+		<copy file="${base.dir}/WEB-INF/src/ApplicationResources.properties" todir="${tempCatiesDir}" overwrite="true"/>
+		<copy file="CDEConfig.xml" todir="${tempCatiesDir}" overwrite="true"/>
+		<copy file="caTissueInstall.properties" todir="${tempCatiesDir}" overwrite="true"/>
+		<copy file="catissuecore-ds.xml" todir="${tempCatiesDir}" />
+		<copy file="Dataset.dtd" todir="${tempCatiesDir}" />
+		<copy file="caTissueInstall.properties" todir="${tempCatiesDir}" />
+		<copy file="${base.dir}/CaTIES_conf/sites_configuration.xml" todir="${tempCatiesDir}/CaTIES_conf" />
+		<if>
+			<equals arg1="standAlone" arg2="${catiesInstallType}" />
+			<then>
+				<copy file="${base.dir}/CaTIES_conf/hibernate.cfg.xml" todir="${tempCatiesDir}/classes" overwrite="true" />
+				<copy file="${base.dir}/CaTIES_conf/catissuecore.hibernate.cfg.xml" todir="${tempCatiesDir}/catissuecore-properties" overwrite="true"/>
+				<copy file="${base.dir}/CaTIES_conf/catissuecore.hibernate.cfg.xml" todir="${tempCatiesDir}" overwrite="true"/>
+				<if>
+					<equals arg1="mysql" arg2="${database.type}"/>
+					<then>
+						<replace dir="${tempCatiesDir}" propertyfile="${tempCatiesDir}/caTissueInstall.properties">
+							<include name="**/*.cfg.xml" />
+							<replacefilter token="@@DIALECT@@" value="MySQLDialect"/>
+							<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
+							<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
+							<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}"/>
+							<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>
+						</replace>
+					</then>
+				<elseif>
+					<equals arg1="oracle" arg2="${database.type}"/>
+					<then>
+						<replace dir="${tempCatiesDir}" propertyfile="${tempCatiesDir}/caTissueInstall.properties">
+							<include name="**/*.cfg.xml" />
+							<replacefilter token="@@DIALECT@@" value="OracleDialect"/>
+							<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
+							<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
+							<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}"/>
+							<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>
+						</replace>
+					</then>
+				</elseif>
+				</if>
+			</then>
+		</if>
+		
+		<replace dir="${tempCatiesDir}/catissuecore-properties"> 
+			<include name="ApplicationSecurityConfig.xml"/>
+			<replacefilter token="@@hibernate-config-file@@" value="./catissuecore-properties/catissuecore.hibernate.cfg.xml"/>
+		</replace>
+		
+		<mkdir dir="${tempCatiesDir}/jar" />
+		<jar destfile="${tempCatiesDir}/jar/filepoller.jar" basedir="${tempCatiesDir}/classes">
+		    <manifest>
+		      <attribute name="Built-By" value="${user.name}"/>
+		    	<attribute name="Main-Class" value="edu/wustl/catissuecore/reportloader/FilePoller" />
+		      <section name="edu/wustl/catissuecore/reportloader/ReportProcessor.class">
+		        <attribute name="Sealed" value="false"/>
+		      </section>
+		    </manifest>
+		</jar>	
+		
+		<copy file="${tempCatiesDir}/jar/filepoller.jar" todir="${filepollerjar.dir}" overwrite="true"/>
+		<copy todir="${filepollerjar.dir}" overwrite="true">
+			<fileset dir="${tempCatiesDir}">	
+			</fileset>
+		</copy>	
+		<copy file="${base.dir}/CaTIES_conf/filepoller.bat" todir="${filepollerjar.dir}" overwrite="true"/>
+		<delete dir="${filepollerjar.dir}/jar" />
+		
+		<jar destfile="${tempCatiesDir}/jar/deid.jar" basedir="${tempCatiesDir}/classes">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}"/>
+			   	<attribute name="Main-Class" value="edu/wustl/catissuecore/deid/DeIDPipeline" />
+				<section name="edu/wustl/catissuecore/deid/DeidPipeline.class">
+					<attribute name="Sealed" value="false"/>
+				</section>
+			</manifest>
+		</jar>	
+		<copy file="${tempCatiesDir}/jar/deid.jar" todir="${deidjar.dir}" />
+		<copy todir="${deidjar.dir}" overwrite="true">
+			<fileset dir="${tempCatiesDir}">
+			</fileset>
+		</copy>	
+		<copy file="${base.dir}/CaTIES_conf/deid.bat" todir="${deidjar.dir}" overwrite="true"/>
+		<delete dir="${deidjar.dir}/jar" />
+		<delete dir="${tempCatiesDir}" />
 	</target>
 	
 </project>

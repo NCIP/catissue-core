@@ -134,6 +134,16 @@
             column="COMMENTS"
             length="500"
         />
+        
+        <many-to-one
+            name="orderId"
+            class="edu.wustl.catissuecore.domain.OrderDetails"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ORDER_ID"
+        />
 
         <!--
             To add non XDoclet property mappings, create a file named

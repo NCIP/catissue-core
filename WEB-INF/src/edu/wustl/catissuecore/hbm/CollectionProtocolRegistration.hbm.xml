@@ -8,8 +8,9 @@
     <class
         name="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
         table="CATISSUE_COLL_PROT_REG"
-     >
-
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
 
         <id
             name="id"
@@ -20,13 +21,53 @@
         >
             <generator class="native">
                 <param name="sequence">CATISSUE_COLL_PROT_REG_SEQ</param>
-				 <!--  
-                  To add non XDoclet generator parameters, create a file named 
-                  hibernate-generator-params-CollectionProtocolRegistration.xml 
-                  containing the additional parameters and place it in your merge dir. 
-              --> 
             </generator>
         </id>
+
+        <property
+            name="consentSignatureDate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            column="CONSENT_SIGN_DATE"
+        />
+
+        <property
+            name="signedConsentDocumentURL"
+            type="string"
+            update="true"
+            insert="true"
+            column="CONSENT_DOC_URL"
+            length="1000"
+        />
+
+        <set
+            name="consentTierResponseCollection"
+            table="CATISSUE_CONSENT_TIER_RESPONSE"
+            lazy="false"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="COLL_PROT_REG_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.ConsentTierResponse"
+              />
+        </set>
+
+        <many-to-one
+            name="consentWitness"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="CONSENT_WITNESS"
+        />
 
         <property
             name="protocolParticipantIdentifier"

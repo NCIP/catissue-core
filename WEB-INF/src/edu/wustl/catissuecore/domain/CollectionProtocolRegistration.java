@@ -13,12 +13,15 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
+import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
@@ -35,7 +38,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * System generated unique id.
 	 */
 	protected Long id;
-
+	
 	/**
 	 * A unique number given by a User to a Participant 
 	 * registered to a Collection Protocol.
@@ -65,6 +68,95 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * Defines whether this CollectionProtocolRegistration record can be queried (Active) or not queried (Inactive) by any actor
 	 * */
 	protected String activityStatus;
+
+	//-----For Consent Tracking. Ashish 21/11/06
+	/**
+	 * The signed consent document URL.
+	 */
+	protected String signedConsentDocumentURL;
+	/**
+	 * The date on which consent document was signed.
+	 */
+	protected Date consentSignatureDate;
+	/**
+	 * The witness for the signed consent document.
+	 */
+	protected User consentWitness;
+	/**
+	 * The collection of responses of multiple participants for a particular consent.
+	 */
+	protected Collection consentTierResponseCollection;
+	
+	/**
+	 * @return the consentSignatureDate
+	 * @hibernate.property name="consentSignatureDate" column="CONSENT_SIGN_DATE"  
+	 */
+	public Date getConsentSignatureDate()
+	{
+		return consentSignatureDate;
+	}
+	
+	/**
+	 * @param consentSignatureDate the consentSignatureDate to set
+	 */
+	public void setConsentSignatureDate(Date consentSignatureDate)
+	{
+		this.consentSignatureDate = consentSignatureDate;
+	}
+	
+	/**
+	 * @return the signedConsentDocumentURL
+	 * @hibernate.property name="signedConsentDocumentURL" type="string" length="1000" column="CONSENT_DOC_URL"
+	 */
+	public String getSignedConsentDocumentURL()
+	{
+		return signedConsentDocumentURL;
+	}
+	
+	/**
+	 * @param signedConsentDocumentURL the signedConsentDocumentURL to set
+	 */
+	public void setSignedConsentDocumentURL(String signedConsentDocumentURL)
+	{
+		this.signedConsentDocumentURL = signedConsentDocumentURL;
+	}
+	
+	/**
+	 * @return the consentTierResponseCollection
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierResponse" lazy="false" cascade="save-update"
+	 * @hibernate.set name="consentTierResponseCollection" table="CATISSUE_CONSENT_TIER_RESPONSE" 
+	 * @hibernate.collection-key column="COLL_PROT_REG_ID"
+	 */
+	public Collection getConsentTierResponseCollection()
+	{
+		return consentTierResponseCollection;
+	}
+	
+	/**
+	 * @param consentTierResponseCollection the consentTierResponseCollection to set
+	 */
+	public void setConsentTierResponseCollection(Collection consentTierResponseCollection)
+	{
+		this.consentTierResponseCollection = consentTierResponseCollection;
+	}
+	
+	/**
+	 * @return the consentWitness
+	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.User" constrained="true" column="CONSENT_WITNESS"
+	 */
+	public User getConsentWitness()
+	{
+		return consentWitness;
+	}
+	
+	/**
+	 * @param consentWitness the consentWitness to set
+	 */
+	public void setConsentWitness(User consentWitness)
+	{
+		this.consentWitness = consentWitness;
+	}
+	//-----Consent Tracking End
 	
 	public CollectionProtocolRegistration()
 	{
@@ -264,6 +356,20 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			this.registrationDate = Utility.parseDate(form.getRegistrationDate(),Utility.datePattern(form.getRegistrationDate()));
 			
 			
+			//For Consent Tracking ----Ashish 1/12/06
+			//Setting the consent sign date.
+			this.consentSignatureDate = Utility.parseDate(form.getConsentDate());
+			//Setting the signed doc url
+			this.signedConsentDocumentURL = form.getSignedConsentUrl();
+			//Setting the consent witness
+			if(form.getWitnessId()!=-1)
+			{
+				this.consentWitness = new User();
+				consentWitness.setId(new Long(form.getWitnessId()));
+			}
+			//Preparing  Consent tier response Collection 
+			this.consentTierResponseCollection = prepareParticipantResponseCollection(form);
+			
 		}
 		catch (Exception e)
 		{
@@ -271,8 +377,45 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			throw new AssignDataException();
 		}
 	}
+
+//Consent Tracking 	
+  /**
+	* For Consent Tracking
+	* Setting the Domain Object 
+	* @param  form CollectionProtocolRegistrationForm
+	* @return consentResponseColl
+	*/
+	private Collection prepareParticipantResponseCollection(CollectionProtocolRegistrationForm form) 
+	{
+		MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
+        Collection beanObjColl=null;
+		try
+		{
+			beanObjColl = mapdataParser.generateData(form.getConsentResponseValues());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+        Iterator iter = beanObjColl.iterator();
+        Collection consentResponseColl = new HashSet();
+        while(iter.hasNext())
+        {
+        	ConsentBean consentBean = (ConsentBean)iter.next();
+        	ConsentTierResponse consentTierResponse = new ConsentTierResponse();
+        	//Setting response
+        	consentTierResponse.setResponse(consentBean.getParticipantResponse());
+        	//Setting consent tier
+        	ConsentTier consentTier = new ConsentTier();
+        	consentTier.setId(new Long(consentBean.getConsentTierID()));
+        	consentTierResponse.setConsentTier(consentTier);
+        	consentResponseColl.add(consentTierResponse);
+        }
+        return consentResponseColl;
+	}
+//Consent Tracking
 	
-	 /**
+	/**
      * Returns message label to display on success add or edit
      * @return String
      */

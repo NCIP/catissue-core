@@ -46,7 +46,34 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	protected Distribution distribution;
 	
 	transient private Double previousQuantity;
+	
+	//Added by Ashish----13/12/06----
+	protected SpecimenArray specimenArray;
+	
+	//Added for Consent tracking (Virender Mehta)
+	/**
+	 * This string will have the status Complete/View depending upon the Admin Verification
+	 */
+	protected String verificationKey="View";
+	
+	/**
+	 * @hibernate.many-to-one column="SPECIMEN_ARRAY_ID" cascade="none" class="edu.wustl.catissuecore.domain.SpecimenArray" contrained="false"
+	 * @return the specimenArray
+	 */
+	public SpecimenArray getSpecimenArray()
+	{
+		return specimenArray;
+	}
 
+	
+	/**
+	 * @param specimenArray the specimenArray to set
+	 */
+	public void setSpecimenArray(SpecimenArray specimenArray)
+	{
+		this.specimenArray = specimenArray;
+	}
+	// End Ashish
 	/**
      * Returns the system generated unique id.
      * @return Long System generated unique id.
@@ -171,5 +198,21 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	public void setPreviousQuantity(Double previousQuantity) {
 		this.previousQuantity = previousQuantity;
 	}
-	
+
+	//Consent Tracking (Virender Mehta)
+	/**
+	 * @return Returns the verificationKey Status view/complete
+	 */
+	public String getVerificationKey()
+	{
+		return verificationKey;
+	}
+	/**
+	 * @param verificationKey Returns the verificationKey Status view/complete
+	 */
+	public void setVerificationKey(String verificationKey)
+	{
+		this.verificationKey = verificationKey;
+	}
+	//Consent Tracking (Virender Mehta)
 }

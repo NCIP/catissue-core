@@ -4,6 +4,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Variables;
+import java.util.Properties;
+import java.io.FileInputStream;
 
 
 /**
@@ -31,6 +35,10 @@ public class ReportWriter
 	 */
 	private String dateFormatSuffix = "dd_MM_yyyy_HH_mm_ss";
 	
+	/**
+	 * It specifies the db name
+	 */
+	private String databaseName = "mysql";
 	
 	/**
 	 * @return report writer object
@@ -52,7 +60,7 @@ public class ReportWriter
 		String currDir = System.getProperty("user.dir");
 		StringBuffer dirPath = new StringBuffer(currDir);
 		dirPath.append("\\report");
-		System.out.println("Build report directory: "+dirPath);
+		System.out.println(dirPath);
 		return dirPath.toString();
 	}
 	
@@ -60,11 +68,28 @@ public class ReportWriter
 	{
 		StringBuffer fileName = new StringBuffer(fileNamePrefix);
 		StringBuffer filePath = new StringBuffer(currDirString);
-		Date currDate = new Date();
+		
+		try
+		{
+			Properties properties = new Properties();
+			FileInputStream propertyFile = new FileInputStream("..\\caTissueInstall.properties");
+			properties.load(propertyFile);
+			System.setProperties(properties);
+			databaseName = System.getProperty("database.type");
+		}
+		catch(Exception e)
+		{
+			System.out.println(" Error in reading properties " + e.getMessage());
+		}
+		
+		/*Date currDate = new Date();
 	    SimpleDateFormat dateFormat = new SimpleDateFormat(dateFormatSuffix);
-		String dateStr = dateFormat.format(currDate);
-		filePath.append(fileName + dateStr +".txt");
-		System.out.println("Build report File Name: "+fileName + dateStr +".txt");
+		String dateStr = dateFormat.format(currDate);*/
+		
+		/*filePath.append(fileName + dbName + "_" + dateStr +".txt");*/
+		filePath.append(fileName + databaseName + ".txt");
+	
+		System.out.println(filePath);
 		return filePath.toString();
 	}
 	
@@ -88,7 +113,7 @@ public class ReportWriter
 	{
 		try
 		{
-			//System.out.println(filePath);
+			System.out.println(filePath);
 			writer = new BufferedWriter(new FileWriter(filePath));
 		}
 		catch (IOException e)

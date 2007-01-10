@@ -633,6 +633,68 @@ INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE
 
 /* done */
 --
+/*-----Ordering System----Ashish   3/1/07------*/
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Order','Order Object','edu.wustl.catissuecore.domain.OrderDetails',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'OrderItem','OrderItem Object','edu.wustl.catissuecore.domain.OrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Derived Specimen Order Item','Derived Specimen Order Item Object','edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Existing Specimen Array Order Item','Existing Specimen Array Order Item Object','edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Existing Specimen Order Item','Existing Specimen Order Item Object','edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'New Specimen Array Order Item','New Specimen Array Order Item Object','edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'New Specimen Order Item','New Specimen Order Item Object','edu.wustl.catissuecore.domain.NewSpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Pathological Case Order Item','Pathological Case Order Item Object','edu.wustl.catissuecore.domain.PathologicalCaseOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Specimen Array Order Item','Specimen Array Order Item Object','edu.wustl.catissuecore.domain.SpecimenArrayOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Specimen Order Item','Specimen Order Item Object','edu.wustl.catissuecore.domain.SpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+	
+	/*--------Consent Tracking-------*/
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier','ConsentTier Object','edu.wustl.catissuecore.domain.ConsentTier',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier Response','Consent Tier Response Object','edu.wustl.catissuecore.domain.ConsentTierResponse',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier Status','Consent Tier Status Object','edu.wustl.catissuecore.domain.ConsentTierStatus',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+	
+	/*-------Ordering System---------*/
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='OrderItem'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='OrderItem'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='OrderItem'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Derived Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Derived Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Derived Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Pathological Case Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Pathological Case Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Pathological Case Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+	
+	/*--------Consent Tracking-------*/
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Response'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Response'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Response'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Status'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Status'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Status'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+
+
+
 -- Dumping data for table csm_privilege
 --
 
@@ -846,5 +908,90 @@ SELECT CSM_USER_GROU_USER_GROUP_R_SEQ.NEXTVAL FROM DUAL;
 ALTER SEQUENCE CSM_USER_GROU_USER_GROUP_R_SEQ INCREMENT BY 1;
 
 -- CSM_PG_PE
+
+#---------------------Ordering System Permissions----Ashish 4/1/06
+insert into csm_role(ROLE_ID,ROLE_NAME,ROLE_DESCRIPTION,APPLICATION_ID) values (11,'CREATE_ONLY','Create only role',1);
+insert into csm_role_privilege(ROLE_PRIVILEGE_ID,ROLE_ID,PRIVILEGE_ID) values (28,11,1);
+
+insert into csm_protection_group(PROTECTION_GROUP_ID,PROTECTION_GROUP_NAME,APPLICATION_ID) values (44,'SCIENTIST_PROTECTION_GROUP',1);
+
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='OrderItem'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Derived Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Array Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Array Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Pathological Case Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Array Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,44,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Order Item'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+
+insert into csm_user_group_role_pg(USER_GROUP_ROLE_PG_ID,GROUP_ID,ROLE_ID,PROTECTION_GROUP_ID) values (102,4,11,44);
+
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'edu.wustl.catissuecore.action.RequestListAction','edu.wustl.catissuecore.action.RequestListAction','edu.wustl.catissuecore.action.RequestListAction',NULL,NULL,1,to_date('2007-01-04','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.RequestListAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.RequestListAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.RequestListAction'),to_date('2007-01-04','yyyy-mm-dd') from dual;
+
+/*-----Ordering System------*/
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Order','Order Object','edu.wustl.catissuecore.domain.OrderDetails',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'OrderItem','OrderItem Object','edu.wustl.catissuecore.domain.OrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Derived Specimen Order Item','Derived Specimen Order Item Object','edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Existing Specimen Array Order Item','Existing Specimen Array Order Item Object','edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Existing Specimen Order Item','Existing Specimen Order Item Object','edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'New Specimen Array Order Item','New Specimen Array Order Item Object','edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'New Specimen Order Item','New Specimen Order Item Object','edu.wustl.catissuecore.domain.NewSpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Pathological Case Order Item','Pathological Case Order Item Object','edu.wustl.catissuecore.domain.PathologicalCaseOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Specimen Array Order Item','Specimen Array Order Item Object','edu.wustl.catissuecore.domain.SpecimenArrayOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Specimen Order Item','Specimen Order Item Object','edu.wustl.catissuecore.domain.SpecimenOrderItem',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+	
+	/*--------Consent Tracking-------*/
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier','ConsentTier Object','edu.wustl.catissuecore.domain.ConsentTier',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier Response','Consent Tier Response Object','edu.wustl.catissuecore.domain.ConsentTierResponse',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier Status','Consent Tier Status Object','edu.wustl.catissuecore.domain.ConsentTierStatus',NULL,NULL,1,to_date('2006-11-27','yyyy-mm-dd') from CSM_PROTECTION_ELEMENT;
+	
+	/*-------Ordering System---------*/
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Order'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='OrderItem'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='OrderItem'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='OrderItem'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Derived Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Derived Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Derived Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Existing Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='New Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Pathological Case Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Pathological Case Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Pathological Case Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Array Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Specimen Order Item'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+	
+	/*--------Consent Tracking-------*/
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Response'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Response'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Response'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Status'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Status'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Status'),to_date('2006-11-27','yyyy-mm-dd') from dual;
+
 
 COMMIT;

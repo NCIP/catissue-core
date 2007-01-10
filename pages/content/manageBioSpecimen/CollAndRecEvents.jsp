@@ -1,5 +1,5 @@
 
-<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">					
+<table summary="" cellpadding="3" cellspacing="0" id="collectionEvent" border="0" width="100%">					
 					<!-- Mandar AutoEvents start -->		
 
 					<tr>						

@@ -1,15 +1,15 @@
 <?xml version ="1.0"?>
 
 <!--Ant Script for create Build for caTISSUE Core-->
-<project name="caTissue Core" default="compile">
-	
-	<!--define require dir and Properties for <if> </if> tag-->	
+<project name="caTissue Suite" default="compile">
+
+	<!--define require dir and Properties for <if> </if> tag-->
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
-	<classpath>
-	    <pathelement location="./lib/ant-contrib.jar"/>
-	  </classpath>
+		<classpath>
+			<pathelement location="./lib/ant-contrib.jar" />
+		</classpath>
 	</taskdef>
-	
+
 	<!--define require dir and Properties -->
 	<property file="caTissueInstall.properties" />
 
@@ -27,11 +27,27 @@
 	<property name="report.dir" value="${base.dir}/WEB-INF" />
 	<property name="catissue.applet.dir" value="${base.dir}/Applet/catissue" />
 
-	<!-- csm related properties -->
-	<property name="temp.dir" value="${base.dir}/tempCatissuecore"/>
-	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect"/>
-	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect"/>
+	<!--Properties set for checkstyle "Tools that generate report of code convention violations"-->
+	<property name="checkstyle.dir" value="${base.dir}/checkstyle" />
+	<property name="checkstyle.rules.file" value="${checkstyle.dir}/CheckStyleRules.xml" />
+	<property name="checkstyle.report.formatter" value="${checkstyle.dir}/report_formatter/checkstyle-simple.xsl" />
+	<property name="checkstyle.report.dir" value="${checkstyle.dir}/checkstyle_reports" />
+	<property name="checkstyle.unformatted.report" value="${checkstyle.report.dir}/checkstyle_report.xml" />
+	<property name="checkstyle.formatted.report" value="${checkstyle.report.dir}/catissue_suite_checkstyle_report.html" />
 
+	<!-- csm related properties -->
+	<property name="temp.dir" value="${base.dir}/tempCatissuecore" />
+	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect" />
+	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect" />
+	
+	<!--JUnit related Properties -->
+	<property name="junit.dir" value="${base.dir}/junit"/>
+	<property name="junit.report.dir" value="${junit.dir}/reports"/>
+	
+	<path id="checkstyle.classpath">
+		<pathelement location="${lib.dir}/commonpackage.jar" />
+		<pathelement location="${lib.dir}/DynamicExtensions.jar" />
+	</path>
 
 	<path id="app.classpath">
 		<fileset dir="${lib.dir}">
@@ -69,7 +85,11 @@
 		<!-- Create the build directory structure used by compile -->
 		<mkdir dir="${target.dir}" />
 		<!-- Create the temp directory for caCORE CSM war file-->
-		<mkdir dir="${temp.dir}"/>
+		<mkdir dir="${temp.dir}" />
+
+		<!-- Create the checkstyle report directory-->
+		<delete dir="${checkstyle.report.dir}" />
+		<mkdir dir="${checkstyle.report.dir}" />
 	</target>
 
 	<target name="clean" description="clean up">
@@ -79,17 +99,48 @@
 				<exclude name="CVS" />
 			</fileset>
 		</delete>
+
+	</target>
+
+	<target name="checkstyle" depends="init" description="Generates a report of code convention violations.">
+		<taskdef resource="checkstyletask.properties" classpath="${extra_lib.dir}/checkstyle-all-4.2.jar" />
+
+		<checkstyle config="${checkstyle.rules.file}" failureProperty="checkstyle.failed" failOnViolation="false" classpathref="checkstyle.classpath">
+			<formatter type="xml" tofile="${checkstyle.unformatted.report}" />
+			<fileset dir="${src.dir}" includes="**/bean/*.java" />
+			<fileset dir="${src.dir}" includes="**/actionForm/RequestDetailsForm.java, **/actionForm/RequestListFilterationForm.java,
+						**/actionForm/CollectionProtocolForm.java" />
+			<fileset dir="${src.dir}" includes="**/actionForm/OrderForm.java, **/actionForm/OrderSpecimenForm.java, **/actionForm/OrderBiospecimenArrayForm.java ,**/actionForm/OrderPathologyCaseForm.java, **/actionForm/DefineArrayForm.java" />
+			<fileset dir="${src.dir}" includes="**/action/OrderSpecimenInitAction.java, **/action/OrderBiospecimenArrayAction.java, **/action/OrderPathologyCaseAction.java, **/action/RequestToOrderAction.java, **/RequestToOrderSubmitAction.java, **DefineArrayAction.java, **DefineArraySubmitAction.java" />
+			<fileset dir="${src.dir}" includes="**/action/RequestDetailsAction.java, **/action/RequestListAction.java, **/action/SubmitRequestDetailsAction.java, 
+						**/action/UpdateAvailableQuantity.java" />
+			<fileset dir="${src.dir}" includes="**/action/ShowFramedPageAction.java ,**/action/UpdateStatusAction.java ,**/action/TreeDataAction.java ,**/action/AddToOrderListAction.java" />
+			<fileset dir="${src.dir}" includes="**/util/OrderingSystemUtil.java" />
+			<fileset dir="${src.dir}" includes="**/domain/pathology/*.java" />
+			<fileset dir="${src.dir}" includes="**/domain/OrderItem.java, **/domain/OrderDetails.java, **/domain/SpecimenOrderItem.java, **/domain/ExistingSpecimenOrderItem.java, **/domain/NewSpecimenOrderItem.java, **/domain/DerivedSpecimenOrderItem.java, **/domain/PathologicalCaseOrderItem.java, **/domain/SpecimenArrayOrderItem.java, 
+				   		**/domain/ExistingSpecimenArrayOrderItem.java,**/domain/CollectionProtocol.java" />
+			<fileset dir="${src.dir}" includes="**/reportloader/*.java" />
+			<fileset dir="${src.dir}" includes="**/bizlogic/OrderBizLogic.java" />
+			<fileset dir="${src.dir}" includes="**/bizlogic/querysuite/*.java" />
+			<fileset dir="${src.dir}" includes="**/action/querysuite/*.java" />
+			<fileset dir="${src.dir}" includes="**/edu/wustl/catissuecore/util/querysuite/*.java"/>					
+		</checkstyle>
+
+		<style in="${checkstyle.unformatted.report}" out="${checkstyle.formatted.report}" style="${checkstyle.report.formatter}" />
+	</target>
+
+	<target name="checkstyle_wrapper" depends="checkstyle" description="Breaks the build is checkstyle detected code conventions violations.">
 	</target>
 
 	<!-- Compile all files, generated and hand-written -->
-	<target name="compile" depends="init">
+	<target name="compile" depends="init, checkstyle_wrapper">
 		<javac destdir="${target.dir}" includes="**/*.*" includeAntRuntime="false" debug="yes">
 			<src path="${src.dir}" />
 			<classpath>
 				<fileset dir="${lib.dir}">
 					<include name="*.jar" />
 				</fileset>
-				<pathelement location="C:\apache-ant-1.6.5\lib\ant.jar"/>
+				<pathelement location="C:\apache-ant-1.6.5\lib\ant.jar" />
 			</classpath>
 		</javac>
 		<copy todir="${target.dir}">
@@ -202,14 +253,14 @@
 				<exclude name="**/caTissue_Core_Installable/**"/>
 				<exclude name="**/caTISSUECore caCORE Client/**"/-->
 			</fileset>
-			
+
 			<!-- change for csm related war -->
 			<fileset dir="${temp.dir}/catissuecorecsm">
 				<include name="**/WEB-INF/**" />
 				<include name="**/images/**" />
 				<include name="**/log/**" />
 				<include name="**/*" />
-				
+
 				<exclude name="**/WEB-INF/web.xml" />
 				<exclude name="**/WEB-INF/classes/edu/wustl/catissuecore/domain/**" />
 				<exclude name="**/WEB-INF/lib/csmapi.jar" />
@@ -217,25 +268,25 @@
 			</fileset>
 		</war>
 	</target>
-	
+
 	<target name="clean_temp_dir_csmwar" description="delete temp directory used for caCORE unpack">
 		<!-- do delete ${temp.dir} -->
 		<delete dir="${temp.dir}" />
 		<delete file="${jboss.home.dir}/server/default/deploy/catissuecorecsm.war" />
 	</target>
-	
+
 	<!--Deploys the application war file at JBOSS server by coping it to deploy directory of application server-->
 	<target name="deploy">
-			<!--antcall target="clean" /-->
-			<antcall target="build_war" />
-			<!-- delete temp dir -->
-			<antcall target="clean_temp_dir_csmwar" />
-			<!--antcall target="cleanserver" /-->
-			<!-- Not required to copy csm war file -->
-			 <copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" />
-			 <sleep seconds="2" />
-	</target>				
-	
+		<!--antcall target="clean" /-->
+		<antcall target="build_war" />
+		<!-- delete temp dir -->
+		<antcall target="clean_temp_dir_csmwar" />
+		<!--antcall target="cleanserver" /-->
+		<!-- Not required to copy csm war file -->
+		<copy file="catissuecore.war" todir="${jboss.home.dir}/server/default/deploy" />
+		<sleep seconds="2" />
+	</target>
+
 
 
 	<!-- 
@@ -250,11 +301,11 @@
 		</taskdef>
 
 		<!-- Execute the hibernatedoclet task -->
-		<hibernatedoclet destdir="${src.dir}" excludedtags="@version,@author,@todo"
-					     force="${generateforce}" mergedir="${src.dir}" verbose="false">
+		<hibernatedoclet destdir="${src.dir}" excludedtags="@version,@author,@todo" force="${generateforce}" mergedir="${src.dir}" verbose="false">
 			<fileset dir="${src.dir}">
 				<include name="**/domain/*.java" />
-				<include name="**/cde/*.java" />
+				<include name="**/domain/pathology/*.java" />
+				<!--include name="**/cde/*.java" /-->
 			</fileset>
 			<hibernate version="2.0" />
 		</hibernatedoclet>
@@ -262,7 +313,8 @@
 		<!-- Upgrade grammar from Hibernate1 to Hibernate2 -->
 		<replace dir="${src.dir}">
 			<include name="**/domain/*.hbm.xml" />
-			<include name="**/cde/*.hbm.xml" />
+			<!--include name="**/cde/*.hbm.xml" /-->
+			<include name="**/domain/pathology/*.hbm.xml" />
 			<replacefilter token="readonly=" value="inverse=" />
 			<replacefilter token="role=" value="name=" />
 			<replacefilter token="hibernate-mapping.dtd" value="hibernate-mapping-2.0.dtd" />
@@ -272,14 +324,18 @@
 			<fileset dir="${src.dir}/edu/wustl/catissuecore/domain">
 				<include name="*.hbm.xml" />
 			</fileset>
-			<fileset dir="${src.dir}/edu/wustl/common/cde">
+			<!--fileset dir="${src.dir}/edu/wustl/common/cde">
+				<include name="*.hbm.xml" />
+			</fileset-->
+			<fileset dir="${src.dir}/edu/wustl/catissuecore/domain/pathology">
 				<include name="*.hbm.xml" />
 			</fileset>
 		</copy>
 
 		<delete>
 			<fileset dir="${src.dir}/edu/wustl/catissuecore/domain" includes="*.hbm.xml" />
-			<fileset dir="${src.dir}/edu/wustl/common/cde" includes="*.hbm.xml" />
+			<!--fileset dir="${src.dir}/edu/wustl/common/cde" includes="*.hbm.xml" /-->
+			<fileset dir="${src.dir}/edu/wustl/catissuecore/domain/pathology" includes="*.hbm.xml" />
 		</delete>
 	</target>
 
@@ -335,10 +391,10 @@
 		<delete dir="${zip.dir}" />
 	</target>
 
-	
-  <!-- =================================================================== -->
-  <!-- Junit test case execution report                                    -->
-  <!-- =================================================================== -->
+
+	<!-- =================================================================== -->
+	<!-- Junit test case execution report                                    -->
+	<!-- =================================================================== -->
 	<target name="run_junit_testcases">
 		<mkdir dir="${target.dir}/reports" />
 		<mkdir dir="${target.dir}/reports/junit" />
@@ -368,14 +424,14 @@
 
 		</junit>
 	</target>
-	
 
-	<target name="gen_report_junit_testcases">
+
+	<target name="gen_detailed_report_junit_testcases">
 		<antcall target="clean" />
 		<antcall target="compile" />
 		<antcall target="run_junit_testcases" />
 		<mkdir dir="${report.dir}/reports/junit" />
-		
+
 		<junitreport todir="${report.dir}/reports/junit">
 			<fileset dir="${target.dir}/reports/junit">
 				<include name="TEST-*.xml" />
@@ -383,11 +439,44 @@
 			<report todir="${report.dir}/reports/junit" />
 		</junitreport>
 	</target>
-	
 
-  <!-- =================================================================== -->
-  <!-- Cobertura code coverage report                                      -->
-  <!-- =================================================================== -->
+
+	<!--  Added by Ashish Gupta for Ordering System and Consent Tracking -->
+	<target name="gen_simple_report_junit_testcases" depends="compile">
+		<delete dir="${junit.report.dir}" />
+		<mkdir dir="${junit.report.dir}" />
+		<junit printsummary="yes" haltonfailure="no" fork="yes">
+			<!--formatter type="plain" usefile="false"/-->
+			<formatter type="xml" />
+			<batchtest todir="${junit.report.dir}">
+				<fileset dir="${src.dir}">
+					<include name="**/TestAll.java" />
+				</fileset>
+			</batchtest>
+			<classpath>
+				<!--  <pathelement location="${junit.classes.dir}"/> -->
+				<pathelement location="${target.dir}" />
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</junit>
+		<junitreport todir="${junit.report.dir}">
+			<fileset dir="${junit.report.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report todir="${junit.report.dir}" />
+		</junitreport>
+		<delete>
+			<fileset dir="${junit.report.dir}">
+				<include name="**/**/*.xml" />
+			</fileset>
+		</delete>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- Cobertura code coverage report                                      -->
+	<!-- =================================================================== -->
 
 	<taskdef classpathref="junit.classpath" resource="tasks.properties" />
 
@@ -535,6 +624,7 @@
 				<include name="**/edu/wustl/catissuecore/actionForm/**"/>
 				<include name="**/edu/wustl/catissuecore/util/**"/>
 				<include name="**/edu/wustl/catissuecore/client/**"/>
+				<include name="**/edu/wustl/catissuecore/bean/**" />
 				<exclude name="**/CVS*" />
 				<exclude name="**/java.policy.applet*" />
 			</fileset>
@@ -559,7 +649,19 @@
 	            <fileset dir="${proxy.dir1}" includes="*.*" ></fileset>
 				<fileset dir="${proxy.dir2}" includes="${proxy.fileName}" ></fileset>
 	        </mail>
-		 </target>
-
-
+	</target>
+	<target name="Generate-Schema">
+		<java classname="edu.wustl.common.util.dbManager.GenerateSchema">
+			<arg value="false" />
+			<classpath>
+				<pathelement path="${target.dir}" />
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+				<fileset dir="${extra_lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</java>
+	</target>
 </project>

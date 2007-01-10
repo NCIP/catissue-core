@@ -70,7 +70,7 @@ function send(pageNum,numResultsPerPage,prevPage,pageName)
 
 function changeRecordPerPage(pageNum,element,pageName) 
 {
-	document.forms[0].action = pageName+'?pageNum=1&numResultsPerPage='+element.value;
+	document.forms[0].action = pageName+'?pageNum='+pageNum+'&numResultsPerPage='+element.value;
 	document.forms[0].submit();
 }
 
