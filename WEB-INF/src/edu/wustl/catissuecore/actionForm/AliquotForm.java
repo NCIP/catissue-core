@@ -413,7 +413,7 @@ public class AliquotForm extends AbstractActionForm
 	         			
 	         			if(Utility.isQuantityDouble(specimenClass,type))
 	        			{
-	        		        if(!validator.isDouble(value))
+	        		        if(!validator.isDouble(value,true))
 	        		        {
 	        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
 	        		        	break;
@@ -421,7 +421,7 @@ public class AliquotForm extends AbstractActionForm
 	        			}
 	        			else
 	        			{
-	        				if(!validator.isNumeric(value))
+	        				if(!validator.isNumeric(value,0))
 	        		        {
 	        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
 	        		        	break;
