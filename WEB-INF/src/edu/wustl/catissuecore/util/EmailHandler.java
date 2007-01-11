@@ -326,25 +326,15 @@ public class EmailHandler
      * @return boolean indicating true/false 
      */
  
-    public boolean sendEmailForOrderingPlacement(String toEmailAddress,String emailBody)
+    public boolean sendEmailForOrderingPlacement(String ccEmailAddress,String emailBody,String subject)
     {
-    	//Send ToEmail to the Scientist and CCEmail to Administrator
-    	//String toEmailAddress = user.getEmailAddress();
-    	String ccEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
+    	String toEmailAddress = XMLPropertyHandler.getValue("email.administrative.emailAddress");
     	String sendFromEmailAddress = XMLPropertyHandler.getValue("email.sendEmailFrom.emailAddress");
     	String mailServer = XMLPropertyHandler.getValue("email.mailServer");
     	
-    	String subject = ApplicationProperties
-		.getValue("orderingsystem.email.subject.orderPlaced");
-
-    	//String body = "\n\n" + ApplicationProperties.getValue("orderingsystem.email.body.orderPlaced") + "For Order#" + orderId;
-    	
     	SendEmail email = new SendEmail();
-    	 
     	boolean emailStatus = email.sendmail(toEmailAddress, ccEmailAddress,null,
 					sendFromEmailAddress, mailServer, subject, emailBody);
-    	
-    	
     	return emailStatus;
     }
     /**
