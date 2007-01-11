@@ -90,7 +90,8 @@
 								<html:hidden name="requestDetailsForm" property="<%=orderItemIdInDefineArray%>" value="<%= orderItemInBean %>"/> 
 								<html:hidden name="requestDetailsForm" property="<%=definedArrayId%>" value="<%= arrayIdInBean %>"/> 
 								<a id="<%=switchArray%>" style="text-decoration:none" href="javascript:switchDefinedArrayBlock('<%=arrayRowCounter%>');">  
-								<img src="images/nolines_minus.gif" border="0"/>
+									<img src="images/nolines_minus.gif" border="0"/>
+								</a>
 							</td>
 					</tr>
 		 		</table>
@@ -140,7 +141,7 @@
 							String descriptionArray = "value(DefinedArrayDetailsBean:"+rowNumber+"_description)";
 							String instanceOfArray = "value(DefinedArrayDetailsBean:"+rowNumber+"_instanceOf)";
 							String orderItemIdArray = "value(DefinedArrayDetailsBean:"+rowNumber+"_orderItemId)";
-							String specimenIdInMapArray = "value(DefinedArrayDetailsBean:"+rowNumber+"_specimenId)";
+							String specimenIdInMapArray = "value(DefinedArrayDetailsBean:"+rowNumber+"_speicmenId)";
 							boolean disableArrayOrderItemRow = false;
 
 							if(defineArrayDetailsBeanObj.getAssignedStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST) 
@@ -188,7 +189,7 @@
 		
 											<bean:define id="specimenTypeInArray" name="defineArrayDetailsBeanObj" property="type" type="java.lang.String"/>
 											<bean:define id="specimenClassInArray" name="defineArrayDetailsBeanObj" property="className" type="java.lang.String"/>
-											<bean:define id="specimenObjIdInArray" name="defineArrayDetailsBeanObj" property="specimenId" type="java.lang.String"/>
+											<bean:define id="specimenObjIdInArray" name="defineArrayDetailsBeanObj" property="speicmenId" type="java.lang.String"/>
 											<bean:define id="specimenCollGrpIdInArray" name="defineArrayDetailsBeanObj" property="specimenCollGroupId" type="java.lang.String"/>
 											<%
 									 			if(!specimenObjIdInArray.equals(""))
@@ -239,7 +240,7 @@
 											</div>
 							 		</td>
 							 		<%
-										String assignedQty = defineArrayDetailsBeanObj.getAssignedQty() ;
+										String assignedQty = defineArrayDetailsBeanObj.getAssignedQty();
 									%>
 							 		<td class="dataCellText" width="10%">
 							 				<html:text name="requestDetailsForm" styleClass="formFieldSized3" maxlength="4"  property="<%= assignQtyArray %>" value="<%= assignedQty %>" disabled="<%= disableArrayOrderItemRow %>" />
@@ -291,7 +292,7 @@
 							 <% 
 									String orderItemIdInArray = defineArrayDetailsBeanObj.getOrderItemId();
 								  	String instanceOfObjInArray = defineArrayDetailsBeanObj.getInstanceOf();
-								  	String specimenIdInArray = defineArrayDetailsBeanObj.getSpecimenId();
+								  	String specimenIdInArray = defineArrayDetailsBeanObj.getSpeicmenId();
 							%>
 							<html:hidden name="requestDetailsForm" property="<%= instanceOfArray %>" value="<%= instanceOfObjInArray %>"/>
 							<html:hidden name="requestDetailsForm" property="<%= orderItemIdArray %>" value="<%= orderItemIdInArray %>" />
@@ -401,7 +402,7 @@
 							String addDescription = "value(ExistingArrayDetailsBean:"+rowCounter+"_addDescription)";
 							String existingArrayId = "value(ExistingArrayDetailsBean:"+rowCounter+"_arrayId)";	
 							String existingArrayOrderItemId = "value(ExistingArrayDetailsBean:"+rowCounter+"_orderItemId)";	
-							String existingRequestedQty = "value(ExistingArrayDetailsBean:"+rowCounter+"_requestedQuantity)";
+							//String existingRequestedQty = "value(ExistingArrayDetailsBean:"+rowCounter+"_requestedQuantity)";
 							String existingAssignedQty = "value(ExistingArrayDetailsBean:"+rowCounter+"_assignedQuantity)";				
 	
 							//To assign id to select element
@@ -427,8 +428,9 @@
 											if(new Double(existingArrayRequestObj.getRequestedQuantity()).doubleValue() == 0.0)
 											{
 							%>
-								<html:text property="<%=existingRequestedQty%>" styleClass="formFieldSized3" maxlength="8"  size="5" value="NA" disabled="true"/>
-								<html:hidden name="requestDetailsForm" property="<%=existingRequestedQty%>" value="0.0" />
+								<%--html:text property="<%=existingRequestedQty%>" styleClass="formFieldSized3" maxlength="8"  size="5" value="NA" disabled="true"/--%>
+														NA
+								<%--html:hidden name="requestDetailsForm" property="<%=existingRequestedQty%>" value="0.0" /--%>
 							<%
 											}
 							  //If Tissue Slides from Block,then,display the quantity in textbox
@@ -436,7 +438,8 @@
 											else
 											{	
 							%>
-								<html:text property="<%=existingRequestedQty%>" styleClass="formFieldSized3" maxlength="8"  size="5" disabled="<%=disableExistingArrayOrderItem%>"/>
+								<!--html:text property="requestedQuantity" name="existingArrayRequestObj" styleClass="formFieldSized3" maxlength="8"  size="5" disabled="true"/-->
+								<bean:write name="existingArrayRequestObj" property="requestedQuantity" />
 							<%
 											}
 							%>
