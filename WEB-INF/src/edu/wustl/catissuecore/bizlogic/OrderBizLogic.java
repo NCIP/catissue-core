@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.Distribution;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem;
 import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
@@ -76,9 +78,10 @@ public class OrderBizLogic extends DefaultBizLogic
 			User userObj = (User)userList.get(0);
 			EmailHandler emailHandler = new EmailHandler();
 			
-			String emailBody = makeEmailBodyForOrderPlacement(userObj,order);
+			String emailBody = makeEmailBodyForOrderPlacement(userObj,order,dao);
+			String subject = "The Order " + order.getName() +" has been successfully placed.";
+			emailSent = emailHandler.sendEmailForOrderingPlacement(userObj.getEmailAddress(),emailBody,subject);
 			
-			emailSent = emailHandler.sendEmailForOrderingPlacement(userObj.getEmailAddress(),emailBody);
 			if(emailSent)
 			{
 				Logger.out.debug(" In OrderBizLogic --> Email sent To Admin and Scientist successfully ");
@@ -385,19 +388,23 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @param userObj  User object containing the logged in user info
 	 * @param order OrderDetails instance containing details of the requested order and order items under that order
 	 * @return emailBody String containing the email message body
+	 * @throws DAOException 
 	 */
-	private String makeEmailBodyForOrderPlacement(User userObj,OrderDetails order)
+	private String makeEmailBodyForOrderPlacement(User userObj,OrderDetails order,DAO dao) throws DAOException
 	{
-		String emailBodyHeader = "Dear " + userObj.getFirstName() + " " + userObj.getLastName() + ",";
-		String messageLine1 = "This is to acknowledge that we have successfully received the Order " + order.getName() + "placed under Distribution Protocol " + order.getDistributionProtocol().getTitle() + ".";
+		String emailBodyHeader = "Dear caTissue Administrator ,";
+		String colName="id";
+		List distributionProtocolList = dao.retrieve(DistributionProtocol.class.getName(),colName,order.getDistributionProtocol().getId());
+		String messageLine1 = "This is to notify that the Order " + order.getName() + " requested by " + userObj.getFirstName() + " " + userObj.getLastName() + " under Distribution Protocol " + ((DistributionProtocol)distributionProtocolList.get(0)).getTitle() + " have been placed successfully.";
+		
 		//String messageLine2 = "The details of the Order are as follows:";
 		
 		//String emailMsgHeader = emailBodyHeader + "\n" + messageLine1 + "\n" + messageLine2 + "\n";
 		String emailMsgHeader = emailBodyHeader + "\n" + messageLine1 + "\n";
-		String emailMsgFooter = "\n" + "We will get back to you shortly with status of each of the items requested";
-		String emailMsgFooterRegards = "\n" + " Regards";
+		//String emailMsgFooter = "\n" + "We will get back to you shortly with status of each of the items requested";
+		String emailMsgFooterRegards = "\n" + " Regards, ";
 		String emailMsgFooterSign = "\n" + " caTissue Administrator";
-		emailMsgFooter = emailMsgFooter + emailMsgFooterRegards + emailMsgFooterSign;
+		String emailMsgFooter = emailMsgFooterRegards + emailMsgFooterSign;
 		
 		int serialNo = 1;
 		
