@@ -33,7 +33,8 @@
 	{
 		SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
 		noOfRows = form.getCounter();		
-		objectChanged = request.getParameter("objectChanged");			
+		objectChanged = request.getParameter("objectChanged");
+       	
 		if(objectChanged != null && !objectChanged.equals(""))
 		{
 			form.setValue("SimpleConditionsNode:"+Integer.parseInt(noOfRows)+"_Condition_DataElement_field",null);		
@@ -403,7 +404,7 @@ function enablePreviousCheckBox(element)
 							String attributeNameValue = (String)form.getValue(attributeNameKey);
 							String attributeType = null;	
 							List columnNameValueBeanList = (List) request.getAttribute(attributeNameList);							
-							if(columnNameValueBeanList != null && !columnNameValueBeanList.isEmpty() && i==Integer.parseInt(noOfRows) && objectChanged != null && !objectChanged.equals(""))
+							if(columnNameValueBeanList != null && !columnNameValueBeanList.isEmpty() && i==Integer.parseInt(noOfRows) && (objectChanged == null || !objectChanged.equals("")))
 							{								
 								NameValueBean nameValueBean = (NameValueBean) columnNameValueBeanList.get(0);
 								attributeNameValue = nameValueBean.getValue();
@@ -419,7 +420,7 @@ function enablePreviousCheckBox(element)
 									if(tokenCount == 3) break;
 									tokenCount++;
 								}
-															
+								System.out.println("attributeType-----------"+attributeType);							
 								if(attributeType.equals("varchar") || attributeType.equals("text"))
 								{
 							%>
