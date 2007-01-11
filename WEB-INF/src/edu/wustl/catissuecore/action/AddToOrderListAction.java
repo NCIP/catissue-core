@@ -157,33 +157,23 @@ public class AddToOrderListAction  extends BaseAction
 					{
 						OrderSpecimenForm orderSpecimenFormObject = (OrderSpecimenForm) form;
 						removeSelectedItems(orderSpecimenFormObject.getItemsToRemove(),session);
+						target=Constants.SPECIMEN_ORDER_FORM_TYPE;
 					}
 					else if(typeOf.equals(Constants.ARRAY_ORDER_FORM_TYPE)) //If typeOf == 'biospecimen array'
 					{
 						OrderBiospecimenArrayForm orderArrayFormObject = (OrderBiospecimenArrayForm) form;
 						removeSelectedItems(orderArrayFormObject.getItemsToRemove(),session);
+						target=Constants.ARRAY_ORDER_FORM_TYPE;
 					}
 					else if(typeOf.equals(Constants.PATHOLOGYCASE_ORDER_FORM_TYPE)) //If typeOf == 'pathological case'
 					{
 						OrderPathologyCaseForm pathologyFormObject = (OrderPathologyCaseForm) form;
 						removeSelectedItems(pathologyFormObject.getItemsToRemove(),session);
+						target=Constants.PATHOLOGYCASE_ORDER_FORM_TYPE;
 					}
 				}//End if(remove == "yes")
 			}//End else
 	
-			if(typeOf.equals(Constants.SPECIMEN_ORDER_FORM_TYPE))
-			{
-				target=Constants.SPECIMEN_ORDER_FORM_TYPE;
-			}
-			if(typeOf.equals(Constants.ARRAY_ORDER_FORM_TYPE))
-			{
-				target=Constants.ARRAY_ORDER_FORM_TYPE;
-			}
-			
-			if(typeOf.equals(Constants.PATHOLOGYCASE_ORDER_FORM_TYPE))
-			{
-				target=Constants.PATHOLOGYCASE_ORDER_FORM_TYPE;
-			}
 			
 			Logger.out.debug(" End --------- In AddToOrderListAction.java ");
 	    	return mapping.findForward(target);
@@ -290,9 +280,14 @@ public class AddToOrderListAction  extends BaseAction
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_requestedQuantity", tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_requestedQuantity"));
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_description", tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_description"));
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_unitRequestedQuantity", tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_unitRequestedQuantity"));
+			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenClass",tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenClass"));
+			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenType",tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenType"));
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_isDerived",orderSpecimenFormObject.getTypeOfSpecimen());
-			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenClass",orderSpecimenFormObject.getSpecimenClassName());
-			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenType",orderSpecimenFormObject.getSpecimenType());
+			if(orderSpecimenFormObject.getTypeOfSpecimen().equalsIgnoreCase("true"))
+			{
+				specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenClass",orderSpecimenFormObject.getSpecimenClassName());
+				specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenType",orderSpecimenFormObject.getSpecimenType());
+			}
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_checkedToRemove",tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_checkedToRemove"));
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_typeOfItem",tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_typeOfItem"));
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_arrayName",orderSpecimenFormObject.getAddToArray());
@@ -385,6 +380,7 @@ public class AddToOrderListAction  extends BaseAction
 		return pathologyMap;
 
 	}
+	
 }
 
 	
