@@ -647,10 +647,11 @@
 		String pos2Style = "pos2_" + i + "_2";
 		String rbKey = "radio_" + i ;
 		
+		long storageType = form.getTypeId();
 		
 		
 			String frameUrl = "ShowFramedPage.do?pageOf=pageOfAliquot&amp;containerStyleId=" + containerIdStyle + "&amp;xDimStyleId=" + pos1Style + "&amp;yDimStyleId=" + pos2Style
-			                   + "&amp;containerStyle=" + containerStyle ;
+			                   + "&amp;containerStyle=" + containerStyle + "&amp;storageType=" + storageType ;
 			        System.out.println("frameUrl:"+frameUrl);				
 	
 		       String buttonOnClicked = "mapButtonClickedInAliquot('"+frameUrl+"','"+i+"')"; //javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
