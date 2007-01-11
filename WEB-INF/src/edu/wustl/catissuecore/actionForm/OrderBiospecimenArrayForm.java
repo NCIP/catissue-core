@@ -172,7 +172,7 @@ public class OrderBiospecimenArrayForm extends AbstractActionForm
 		if (selectedItems != null) 
 		{
 			boolean isNumber = true;
-			if ((values != null) || (values.size() != 0)) 
+			if (values != null && values.size() != 0) 
 			{
 				String cnt = null;
 				int reqQntyError = 0;
