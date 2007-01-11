@@ -308,6 +308,7 @@ public class ShoppingCartAction  extends BaseAction
 					String str = obj[i].toString();
 		        	int index = str.indexOf("_") + 1;
 		        	String key = str.substring(index);
+		        	key = key.trim();
 					Specimen specimen = (Specimen)table.get(key);
 					strSpecimenId=String.valueOf(specimen.getId());
 					specimenIdList.add(strSpecimenId);
