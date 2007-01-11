@@ -1,10 +1,12 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -369,58 +371,51 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 
 		if (selectedItems != null) 
 		{
-			boolean isNumber = true;
-			if ((values != null) || (values.size() != 0)) 
+			HttpSession session = request.getSession();
+			List defineArrayFormList = (List) session.getAttribute("DefineArrayFormObjects");
+			Map dataMap=(Map)session.getAttribute(Constants.REQUESTED_BIOSPECIMENS);
+			DefineArrayForm defineArrayFormObj = null;
+			int capacity = 0;
+			
+			if (defineArrayFormList != null)
 			{
-				String cnt = null;
-				int reqQntyError = 0;
-				for (int i = 0; i < selectedItems.length; i++)
+				defineArrayFormObj = (DefineArrayForm) searchDefineArrayList(defineArrayFormList,
+						addToArray);
+				capacity = Integer.parseInt(defineArrayFormObj.getDimenmsionX())
+						* Integer.parseInt(defineArrayFormObj.getDimenmsionY());
+			}
+			if(!addToArray.equalsIgnoreCase("None"))
+			{
+				if(dataMap==null)
 				{
-					cnt = selectedItems[i];
-					String key="OrderSpecimenBean:" + cnt
-					+ "_requestedQuantity";
-					if ((values.get(key)) == null
-							|| (values.get(key)).equals("")) 
+					if(selectedItems.length>capacity)
 					{
-						reqQntyError = 1;
-						break;
-					} 
+						errors.add("addToArray", new ActionError("errors.order.capacityless"));
+						values.clear();
+					}
+				}
+				else
+				{
+					if(dataMap.containsKey(addToArray))
+					{
+						List orderItems=(List)dataMap.get(addToArray);
+						if(orderItems.size()+selectedItems.length>capacity)
+						{
+							errors.add("addToArray", new ActionError("errors.order.capacityless"));
+							values.clear();
+						}
+					}
 					else
 					{
-						isNumber = isNumeric(values.get(
-								key).toString());
-						if (!(isNumber))
+						if(selectedItems.length>capacity)
 						{
-							reqQntyError = 2;
-							break;
-						}
-						else 
-						{
-							Double reqQnty = new Double(values.get(
-									key).toString());
-							if (reqQnty < 0.0 || reqQnty == 0.0)
-							{
-								reqQntyError = 1;
-								break;
-							}
+							errors.add("addToArray", new ActionError("errors.order.capacityless"));
+							values.clear();
 						}
 					}
 				}
-
-				if (reqQntyError == 1)
-				{
-					errors.add("values", new ActionError(
-							"errors.requestedQuantity.required"));
-					values.clear();
-				}
-				if (reqQntyError == 2) 
-				{
-					errors.add("values", new ActionError(
-							"errors.requestedQuantityBeNumeric.required"));
-					values.clear();
-				}
 			}
-
+			
 			if (typeOfCase.equals("false")) 
 			{
 				if (specimenClass.equals("-1")
@@ -437,7 +432,23 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 							"errors.specimenType.required"));
 					values.clear();
 				}
+				if (!addToArray.equalsIgnoreCase("None") && defineArrayFormObj != null
+						&& !defineArrayFormObj.getArrayClass().equals(specimenClass))
+				{
+					errors.add("addToArray", new ActionError("errors.order.properclass"));
+					values.clear();
+				}
 			}
+			else
+			{
+				if(!addToArray.equalsIgnoreCase("None") && defineArrayFormObj != null
+						&& !defineArrayFormObj.getArrayClass().equals("Tissue"))
+				{
+					errors.add("addToArray", new ActionError("errors.order.properclass"));
+					values.clear();
+				}
+			}
+			
 			if (pathologicalStatus.equals("-1")
 					|| pathologicalStatus.equals("-- Select --")) 
 			{
@@ -451,8 +462,73 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 						"errors.tissueSite.required"));
 				values.clear();
 			}
+
+			boolean isNumber = true;
+			if (values != null && values.size() != 0) 
+			{
+				String cnt = null;
+				int reqQntyError = 0;
+				for (int i = 0; i < selectedItems.length; i++)
+				{
+					cnt = selectedItems[i];
+					String key="OrderSpecimenBean:" + cnt
+					+ "_requestedQuantity";
+					if ((values.get(key)) == null
+							|| (values.get(key)).equals("")) 
+					{
+						errors.add("values", new ActionError(
+						"errors.requestedQuantity.required"));
+						values.clear();
+						break;
+					} 
+					else
+					{
+						isNumber = isNumeric(values.get(
+								key).toString());
+						if (!(isNumber))
+						{
+							errors.add("values", new ActionError(
+							"errors.requestedQuantityBeNumeric.required"));
+							values.clear();
+							break;
+						}
+						else 
+						{
+							Double reqQnty = new Double(values.get(
+									key).toString());
+							if (reqQnty < 0.0 || reqQnty == 0.0)
+							{
+								errors.add("values", new ActionError(
+								"errors.requestedQuantity.required"));
+								values.clear();
+								break;
+							}
+						}
+					}
+				}
+			}
 		}
 		return errors;
+	}
+
+	/**
+	 * @param defineArrayFormList List containing DefineArrayForm objects
+	 * @param arrayName String containing name of array
+	 * @return defineArrayFormObj 
+	 */
+	private DefineArrayForm searchDefineArrayList(List defineArrayFormList, String arrayName)
+	{
+		Iterator iter = defineArrayFormList.iterator();
+		DefineArrayForm defineArrayFormObj = null;
+		while (iter.hasNext())
+		{
+			defineArrayFormObj = (DefineArrayForm) iter.next();
+			if (defineArrayFormObj.getArrayName().equalsIgnoreCase(arrayName))
+			{
+				break;
+			}
+		}
+		return defineArrayFormObj;
 	}
 
 	/**
