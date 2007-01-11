@@ -252,17 +252,17 @@ public class RequestDetailsAction extends BaseAction
 		String colName = "name";
 		String colValue = arrayRequestBean.getArrayName();
 		
-		List specimenArrayList = (ArrayList)bizLogic.retrieve(SpecimenArray.class.getName(),colName,colValue);
-		if(specimenArrayList != null && specimenArrayList.size() != 0)
+		//List specimenArrayList = (ArrayList)bizLogic.retrieve(SpecimenArray.class.getName(),colName,colValue);
+		SpecimenArray specimenArrayObj = newSpecimenArrayOrderItem.getSpecimenArray();
+		if(specimenArrayObj != null)
 		{
-			SpecimenArray specimenArrayObj =  (SpecimenArray)specimenArrayList.get(0);
 			arrayRequestBean.setArrayId(specimenArrayObj.getId().toString());
 		}
 		
 		//Populate status list of individual array
 		List arrayStatusList = OrderingSystemUtil.getPossibleStatusList(arrayRequestBean.getAssignedStatus());
 		//Remove 'Distributed' option from the list if defined array is not created in the system.
-		if(specimenArrayList != null && specimenArrayList.size() == 0)
+		if(specimenArrayObj == null)
 		{
 			Iterator arrayStatusListItr = arrayStatusList.iterator();
 			while (arrayStatusListItr.hasNext())
@@ -303,7 +303,7 @@ public class RequestDetailsAction extends BaseAction
 			{
 				DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)specimenOrderItem;
 				arrayDetailsBean.setRequestedItem(derivedSpecimenOrderItem.getSpecimen().getLabel());
-				
+				arrayDetailsBean.setSpeicmenId(derivedSpecimenOrderItem.getSpecimen().getId().toString());
 				//Obtain all children specimens
 				Collection childrenSpecimenList = getAllChildrenSpecimen(derivedSpecimenOrderItem.getSpecimen(),derivedSpecimenOrderItem.getSpecimen().getChildrenSpecimen());
 				//Obtain only those specimens of this class and type from the above list
@@ -389,7 +389,7 @@ public class RequestDetailsAction extends BaseAction
 			  	arrayDetailsBean.setType(pathologicalCaseOrderItem.getSpecimenType());
 			  	arrayDetailsBean.setDescription(pathologicalCaseOrderItem.getDescription());
 			  	arrayDetailsBean.setOrderItemId(pathologicalCaseOrderItem.getId().toString());
-			  	
+			  	//arrayDetailsBean.setSpeicmenId(pathologicalCaseOrderItem.get);
 			}
 			//arrayDetailsBean.setArrayRequestBean(arrayRequestBean);
 			//Add all the arrayDetailsBean in the list
