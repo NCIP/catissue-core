@@ -346,6 +346,10 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			//Set protectionObjects = new HashSet();
 			specimen.setLineage(Constants.NEW_SPECIMEN);
 			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
+			if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
+			{
+				specimen.setAvailable(new Boolean(false));
+			}
 			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true);
 			dao.insert(specimen, sessionDataBean, true, true);
 			//protectionObjects.add(specimen);
@@ -772,6 +776,24 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
 		}
 
+		/**
+		 * Refer bug 3269 
+		 * 1. If quantity of old object > 0 and it is unavailable, it was marked 
+         *    unavailale by user. 
+         * 2. If quantity of old object = 0, we can assume that it is unavailable because its quantity 
+         *    has become 0.
+		 */
+		
+		if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
+		{
+			specimen.setAvailable(new Boolean(false));
+		}
+		else if(specimenOld.getAvailableQuantity().getValue().doubleValue()==0)
+		{
+			// quantity of old object is zero and that of current is nonzero
+			specimen.setAvailable(new Boolean(true));
+		}
+		
 		dao.update(specimen, sessionDataBean, true, false, false);//dao.update(specimen, sessionDataBean, true, true, false);
 
 		//Audit of Specimen.
