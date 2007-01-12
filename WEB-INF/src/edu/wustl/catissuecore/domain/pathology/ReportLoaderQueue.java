@@ -49,7 +49,7 @@ public class ReportLoaderQueue
 	 * @return system generated id
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native" 
-	 * @hibernate.generator-param name="sequence" value="CATISSUE_REPORTLOADER_QUEUE_SEQ"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_REPORT_QUEUE_SEQ"
 	 */
 	public Long getId()
 	{
@@ -63,7 +63,7 @@ public class ReportLoaderQueue
 	
 	/**
 	 * Returns the collection of Studies for this Protocol.
-	 * @hibernate.set name="participantCollection" table="CATISSUE_REPORT_PARTICIPANT_REL" 
+	 * @hibernate.set name="participantCollection" table="CATISSUE_REPORT_PARTICIP_REL" 
 	 * cascade="save-update" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="REPORT_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.Participant" column="PARTICIPANT_ID"
