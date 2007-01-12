@@ -20,8 +20,8 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />
 	
 		<mapping resource="edu/wustl/catissuecore/hbm/ConceptReferent.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/PathologyReportReviewParameterSet.hbm.xml"/>
-		<mapping resource="edu/wustl/catissuecore/hbm/QuarantineEventParameterSet.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/PathologyReportReviewParameter.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/QuarantineEventParameter.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ReportContent.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/ReportSection.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/SurgicalPathologyReport.hbm.xml"/>
@@ -68,6 +68,6 @@
 		<mapping resource="edu/wustl/common/hbm/PermissibleValueImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/QueryColumnData.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/QueryTableData.hbm.xml"/>
-    </session-factory>
+	</session-factory>
     
 </hibernate-configuration>
