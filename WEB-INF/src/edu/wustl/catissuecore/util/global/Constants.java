@@ -468,6 +468,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String ACTION_ADD_ORDER_ARRAY_ITEM="AddToOrderListArray.do";
     public static final String ACTION_ADD_ORDER_PATHOLOGY_ITEM="AddToOrderListPathologyCase.do";
     public static final String ACTION_DEFINE_ARRAY="DefineArraySubmit.do";
+    public static final String ACTION_ORDER_SPECIMEN="OrderExistingSpecimen.do";
+    public static final String ACTION_ORDER_BIOSPECIMENARRAY="OrderBiospecimenArray.do";
+    public static final String ACTION_ORDER_PATHOLOGYCASE="OrderPathologyCase.do";
+    
 
     
 	//Constants related to Aliquots functionality
