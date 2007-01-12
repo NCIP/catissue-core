@@ -91,7 +91,7 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	* @hibernate.collection-key
 	* column="DEID_REPORT_ID"
 	* @hibernate.collection-one-to-many
-	* class="edu.wustl.catissuecore.domain.pathology.QuarantineEventParameterSet"
+	* class="edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter"
 	*/
 	public Set getQuarantinEventParameterSetCollection()
 	{

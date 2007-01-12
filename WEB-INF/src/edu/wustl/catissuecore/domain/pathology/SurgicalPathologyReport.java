@@ -181,7 +181,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
     * @hibernate.set inverse="false" table="CATISSUE_REVIEWREPORT_PARAM"
 	* lazy="false" cascade="all" 
 	* @hibernate.collection-key column="REPORT_ID"
-	* @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameterSet"
+	* @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter"
 	*/
 	public Set getPathologyReportReviewParameterSetCollection()
 	{

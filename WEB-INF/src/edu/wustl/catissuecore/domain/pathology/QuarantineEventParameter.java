@@ -16,7 +16,7 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.class
  * table="CATISSUE_QUARANTINE_PARAMS"
  */
-public class QuarantineEventParameterSet extends EventParameters
+public class QuarantineEventParameter extends EventParameters
 {
 
 	/**
@@ -32,7 +32,7 @@ public class QuarantineEventParameterSet extends EventParameters
 	/**
 	 * Constructor
 	 */
-	public QuarantineEventParameterSet()
+	public QuarantineEventParameter()
 	{
 
 	}
@@ -128,8 +128,18 @@ public class QuarantineEventParameterSet extends EventParameters
 	 * @param form AbstractActionForm
 	 * @throws AssignDataException object.
 	 */
-    public QuarantineEventParameterSet(AbstractActionForm form)throws AssignDataException
+    public QuarantineEventParameter(AbstractActionForm form)throws AssignDataException
 	{
 		setAllValues(form);
+	}
+    
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel()
+	{
+		return (" De-Identified Report.");
+		
 	}
 }

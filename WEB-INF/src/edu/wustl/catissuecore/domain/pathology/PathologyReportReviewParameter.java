@@ -6,7 +6,6 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
 import edu.wustl.catissuecore.domain.EventParameters;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -16,9 +15,9 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * Represents the review report parameters 
  * @hibernate.class
- * table="CATISSUE_REVIEWREPORT_PARAM"
+ * table="CATISSUE_REVIEW_PARAMS"
  */
-public class PathologyReportReviewParameterSet extends EventParameters
+public class PathologyReportReviewParameter extends EventParameters
 {
 
 	/**
@@ -30,12 +29,16 @@ public class PathologyReportReviewParameterSet extends EventParameters
 	 * Surgical pathology report associated with current review parameter set.  
 	 */
 	protected SurgicalPathologyReport surgicalPathologyReport;
-
+	
+	/**
+	 * Review Status
+	 */
+	protected String status;
 
 	/**
 	 * Constructor
 	 */
-	public PathologyReportReviewParameterSet()
+	public PathologyReportReviewParameter()
 	{
 
 	}
@@ -47,7 +50,7 @@ public class PathologyReportReviewParameterSet extends EventParameters
 	 * @see #setId(Integer)
 	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
 	 * unsaved-value="null" generator-class="native"
-	 * @hibernate.generator-param name="sequence" value="CATISSUE_PATHLOGY_EVENT_PARAM_SEQ"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_REVIEW_PARAMS_SEQ"
 	 */
 	public Long getId()
 	{
@@ -123,7 +126,7 @@ public class PathologyReportReviewParameterSet extends EventParameters
 			else if(form.getDeIdentifiedReportId()!=0)
 			{
 				className=DeidentifiedSurgicalPathologyReport.class.getName();
-				List DeisprList=defaultBizLogic.retrieve(className, colName, form.getIdentifiedReportId());
+				List DeisprList=defaultBizLogic.retrieve(className, colName, form.getDeIdentifiedReportId());
 				DeidentifiedSurgicalPathologyReport deReport=(DeidentifiedSurgicalPathologyReport)DeisprList.get(0);
 				Set pathologyReportReviewParameterSetCollection=deReport.getPathologyReportReviewParameterSetCollection();
 				pathologyReportReviewParameterSetCollection.add(this);
@@ -142,8 +145,39 @@ public class PathologyReportReviewParameterSet extends EventParameters
 	 * @param form AbstractActionForm
 	 * @throws AssignDataException object.
 	 */
-    public PathologyReportReviewParameterSet(AbstractActionForm form)throws AssignDataException
+    public PathologyReportReviewParameter(AbstractActionForm form)throws AssignDataException
 	{
 		setAllValues(form);
+	}
+    
+    /**
+     * Returns message label to display on success add or edit
+     * @return String
+     */
+	public String getMessageLabel()
+	{
+		return (" Pathology Report.");
+		
+	}
+
+
+	/**
+     *@return reviewe status 
+     * @hibernate.property  name="status"
+     * type="string" column="STATUS"
+     * length="100"
+     */
+	public String getStatus()
+	{
+		return status;
+	}
+
+
+	/**
+	 * @param status sets the review status.
+	 */
+	public void setStatus(String status)
+	{
+		this.status = status;
 	}
 }
