@@ -77,19 +77,8 @@
 		}
 		
 		function addToOrderList()
-		{
-			var isChecked = "false";
-			for (var i=0;i < document.forms[0].elements.length;i++)
-		    {
-		    	var e = document.forms[0].elements[i];
-		    	
-		        if (e.name != "checkAll" && e.type == "checkbox" && e.checked == true)
-		        {
-		        	isChecked = "true";
-		        	break;
-		        }
-		    }
-		    
+		{			
+		    var isChecked = updateHiddenFields();
 		    if(isChecked == "true")
 		    {
 				var action = "ShoppingCart.do?operation=addToOrderList";
@@ -101,7 +90,6 @@
 			{
 				alert("Please select at least one checkbox");
 			}
-		
 		}
 		
 		var selected;
