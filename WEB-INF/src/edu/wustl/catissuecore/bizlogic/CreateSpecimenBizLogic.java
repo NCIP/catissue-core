@@ -245,6 +245,10 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			    //	protectionObjects.add(exId);
 			}
 			
+			if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
+			{
+				specimen.setAvailable(new Boolean(false));
+			}
 			dao.insert(specimen, sessionDataBean, true, true);
 			protectionObjects.add(specimen);
 

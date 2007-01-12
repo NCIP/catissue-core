@@ -326,6 +326,11 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 				}
 			}
 			aliquotSpecimen.setBiohazardCollection(set);
+			
+			if(aliquotSpecimen.getAvailableQuantity().getValue().doubleValue() == 0)
+			{
+				aliquotSpecimen.setAvailable(new Boolean(false));
+			}
 							
 			//Inserting an aliquot in the database
 			dao.insert(aliquotSpecimen, sessionDataBean, true, false);//NEEDS TO BE FIXED FOR SECURE INSERT
