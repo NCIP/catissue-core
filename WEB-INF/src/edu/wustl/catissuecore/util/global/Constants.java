@@ -92,6 +92,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGEOF_SPECIMEN_COLLECTION_GROUP="pageOfSpecimenCollectionGroup";
 	public static final String PAGEOF_PARTICIPANT="pageOfParticipant";
 	public static final String PAGEOF_SPECIMEN="pageOfSpecimen";
+	public static final String REVIEW="REVIEW";
+	public static final String QUARANTINE="QUARANTINE";
 
 
 	public static final String MAX_IDENTIFIER = "maxIdentifier";
