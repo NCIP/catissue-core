@@ -14,8 +14,8 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
-import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameterSet;
-import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameterSet;
+import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
+import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -191,10 +191,10 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
             	className = OrderDetails.class.getName();
 				break;
 			case Constants.SURGICAL_PATHOLOGY_REPORT_FORM_ID:
-				className = PathologyReportReviewParameterSet.class.getName();
+				className = PathologyReportReviewParameter.class.getName();
 				break;
 			case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID:
-				className = QuarantineEventParameterSet.class.getName();
+				className = QuarantineEventParameter.class.getName();
 				break;
 
 				
@@ -396,10 +396,10 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 				abstractDomain = new OrderDetails(form);
 				break;
 			case Constants.SURGICAL_PATHOLOGY_REPORT_FORM_ID:
-				abstractDomain = new PathologyReportReviewParameterSet(form);
+				abstractDomain = new PathologyReportReviewParameter(form);
 				break;
 			case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID:
-				abstractDomain = new QuarantineEventParameterSet(form);
+				abstractDomain = new QuarantineEventParameter(form);
 				break;
 				
 				
