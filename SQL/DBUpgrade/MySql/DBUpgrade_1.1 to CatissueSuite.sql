@@ -260,7 +260,7 @@ alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop foreign key FKC5C92CCBC4A3C438;
 alter table catissue_new_sp_ar_order_item add column SPECIMEN_ARRAY_ID bigint;
 alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add index FKC5C92CCBC4A3C438 (SPECIMEN_ARRAY_ID), add constraint FKC5C92CCBC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY (IDENTIFIER);
 
-/*-------------- caTIES related Tables  -----------*/
+/****caTIES Realated Tables - start**********/
 
 alter table CATISSUE_REPORT_TEXTCONTENT drop foreign key FKD74882FD91092806;
 alter table CATISSUE_REPORT_TEXTCONTENT drop foreign key FKD74882FDBC7298A9;
@@ -280,19 +280,18 @@ alter table CATISSUE_PATHOLOGY_REPORT drop foreign key FK904EC9F040DCD7BF;
 alter table CATISSUE_REPORT_XMLCONTENT drop foreign key FK4597C9F1BC7298A9;
 alter table CATISSUE_REPORT_XMLCONTENT drop foreign key FK4597C9F191092806;
 
-
 drop table if exists CATISSUE_REPORT_TEXTCONTENT;
 drop table if exists CATISSUE_IDENTIFIED_REPORT;
 drop table if exists CATISSUE_CONCEPT_REFERENT;
 drop table if exists CATISSUE_REPORT_CONTENT;
-drop table if exists CATISSUE_REVIEWREPORT_PARAM;
+drop table if exists CATISSUE_REVIEW_PARAMS;
 drop table if exists CATISSUE_REPORT_BICONTENT;
 drop table if exists CATISSUE_REPORT_SECTION;
 drop table if exists CATISSUE_DEIDENTIFIED_REPORT;
 drop table if exists CATISSUE_PATHOLOGY_REPORT;
 drop table if exists CATISSUE_REPORT_XMLCONTENT;
 drop table if exists CATISSUE_REPORT_QUEUE;
-drop table if exists CATISSUE_REPORT_PARTICIPANT_REL;
+drop table if exists CATISSUE_REPORT_PARTICIP_REL;
 
 
 create table CATISSUE_REPORT_TEXTCONTENT (
@@ -316,13 +315,14 @@ create table CATISSUE_REPORT_CONTENT (
    REPORT_DATA text,
    primary key (IDENTIFIER)
 );
-create table CATISSUE_REVIEWREPORT_PARAM (
+create table CATISSUE_REVIEW_PARAMS (
    IDENTIFIER bigint not null auto_increment,
    REVIEWER_ROLE varchar(100),
    REPORT_ID bigint,
    EVENT_TIMESTAMP datetime,
    USER_ID bigint,
    COMMENTS text,
+   STATUS varchar(100),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REPORT_BICONTENT (
@@ -353,6 +353,7 @@ create table CATISSUE_QUARANTINE_PARAMS (
    EVENT_TIMESTAMP datetime,
    USER_ID bigint,
    COMMENTS text,
+   STATUS varchar(100),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_PATHOLOGY_REPORT (
@@ -379,7 +380,7 @@ create table CATISSUE_REPORT_QUEUE (
    primary key (IDENTIFIER)
 );
 
-create table CATISSUE_REPORT_PARTICIPANT_REL(
+create table CATISSUE_REPORT_PARTICIP_REL(
    PARTICIPANT_ID bigint,
    REPORT_ID bigint
 );
@@ -390,8 +391,8 @@ alter table CATISSUE_IDENTIFIED_REPORT add index FK6A2246DCBC7298A9 (IDENTIFIER)
 alter table CATISSUE_IDENTIFIED_REPORT add index FK6A2246DC752DD177 (DEID_REPORT), add constraint FK6A2246DC752DD177 foreign key (DEID_REPORT) references CATISSUE_DEIDENTIFIED_REPORT (IDENTIFIER);
 alter table CATISSUE_IDENTIFIED_REPORT add index FK6A2246DC91741663 (SCG_ID), add constraint FK6A2246DC91741663 foreign key (SCG_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
 alter table CATISSUE_CONCEPT_REFERENT add index FK799CCA7E9F96B363 (DEIDENTIFIED_REPORT_ID), add constraint FK799CCA7E9F96B363 foreign key (DEIDENTIFIED_REPORT_ID) references CATISSUE_DEIDENTIFIED_REPORT (IDENTIFIER);
-alter table CATISSUE_REVIEWREPORT_PARAM add index FK5311FFF62206F20F (USER_ID), add constraint FK5311FFF62206F20F foreign key (USER_ID) references CATISSUE_USER (IDENTIFIER);
-alter table CATISSUE_REVIEWREPORT_PARAM add index FK5311FFF691092806 (REPORT_ID), add constraint FK5311FFF691092806 foreign key (REPORT_ID) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
+alter table CATISSUE_REVIEW_PARAMS add index FK5311FFF62206F20F (USER_ID), add constraint FK5311FFF62206F20F foreign key (USER_ID) references CATISSUE_USER (IDENTIFIER);
+alter table CATISSUE_REVIEW_PARAMS add index FK5311FFF691092806 (REPORT_ID), add constraint FK5311FFF691092806 foreign key (REPORT_ID) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
 alter table CATISSUE_REPORT_BICONTENT add index FK8A9A4EE391092806 (REPORT_ID), add constraint FK8A9A4EE391092806 foreign key (REPORT_ID) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
 alter table CATISSUE_REPORT_BICONTENT add index FK8A9A4EE3BC7298A9 (IDENTIFIER), add constraint FK8A9A4EE3BC7298A9 foreign key (IDENTIFIER) references CATISSUE_REPORT_CONTENT (IDENTIFIER);
 alter table CATISSUE_DEIDENTIFIED_REPORT add index FKCDD0DF7BBC7298A9 (IDENTIFIER), add constraint FKCDD0DF7BBC7298A9 foreign key (IDENTIFIER) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
@@ -401,6 +402,15 @@ alter table CATISSUE_QUARANTINE_PARAMS add index FK3C12AE3B3EEC14E3 (DEID_REPORT
 alter table CATISSUE_PATHOLOGY_REPORT add index FK904EC9F040DCD7BF (SOURCE_ID), add constraint FK904EC9F040DCD7BF foreign key (SOURCE_ID) references CATISSUE_SITE (IDENTIFIER);
 alter table CATISSUE_REPORT_XMLCONTENT add index FK4597C9F1BC7298A9 (IDENTIFIER), add constraint FK4597C9F1BC7298A9 foreign key (IDENTIFIER) references CATISSUE_REPORT_CONTENT (IDENTIFIER);
 alter table CATISSUE_REPORT_XMLCONTENT add index FK4597C9F191092806 (REPORT_ID), add constraint FK4597C9F191092806 foreign key (REPORT_ID) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
+
+INSERT INTO CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Review Comments','PathologyReportReviewParameter Object','edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter',NULL,NULL,1,'2006-11-27' from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,20,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Review Comments'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Quarantine Comments','QuarantineEventParameter Object','edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter',NULL,NULL,1,'2006-11-27' from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,20,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Quarantine Comments'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID) values ( 77, 'CATISSUE_REVIEW_PARAMS', 'Review Comment', 'PathologyReportReviewParameter', 1);
+INSERT INTO CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID) values ( 78, 'CATISSUE_REVIEW_PARAMS', 'Quarantine Comment', 'QuarantineEventParameter', 1);
+
+/****caTIES Realated Tables - end**********/
 
 #---------------------Ordering System Permissions----Ashish 4/1/06
 insert into csm_role(ROLE_ID,ROLE_NAME,ROLE_DESCRIPTION,APPLICATION_ID) values (11,'CREATE_ONLY','Create only role',1);
