@@ -44,13 +44,13 @@ function onCancel()
 	var typeOf='<%=typeOf%>';
 	var action="";
 	if(typeOf=='<%=Constants.SPECIMEN_ORDER_FORM_TYPE%>')
-	action="<%=Constants.ACTION_ADD_ORDER_SPECIMEN_ITEM%>"+"?typeOf="+"<%=Constants.SPECIMEN_ORDER_FORM_TYPE%>";
+		action="<%=Constants.ACTION_ORDER_SPECIMEN%>";
 	
 	if(typeOf=='<%=Constants.ARRAY_ORDER_FORM_TYPE%>')
-	action="<%=Constants.ACTION_ADD_ORDER_ARRAY_ITEM%>"+"?typeOf="+"<%=Constants.ARRAY_ORDER_FORM_TYPE%>";
+		action="<%=Constants.ACTION_ORDER_BIOSPECIMENARRAY%>";
 	
 	if(typeOf=='<%=Constants.PATHOLOGYCASE_ORDER_FORM_TYPE%>')
-		action="<%=Constants.ACTION_ADD_ORDER_PATHOLOGY_ITEM%>"+"?typeOf="+"<%=Constants.PATHOLOGYCASE_ORDER_FORM_TYPE%>";
+		action="<%=Constants.ACTION_ORDER_PATHOLOGYCASE%>";
 		
 	document.DefineArray.action = action;		
 	document.DefineArray.submit();
