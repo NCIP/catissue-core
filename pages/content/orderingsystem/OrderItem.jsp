@@ -461,6 +461,8 @@ String onClassChangeFunctionName = "onTypeChange(this)";
 								String isDerived="value(OrderSpecimenBean:"+i+"_isDerived)";
 								String specimenId="value(OrderSpecimenBean:"+i+"_specimenId)";
 								String typeOfItem="value(OrderSpecimenBean:"+i+"_typeOfItem)";
+								String specimenClass="value(OrderSpecimenBean:"+i+"_specimenClass)";
+								String specimenType="value(OrderSpecimenBean:"+i+"_specimenType)";
 							%>
 							<tr class="dataRowLight" width="100%">
 	
@@ -491,6 +493,10 @@ String onClassChangeFunctionName = "onTypeChange(this)";
 										<span id="requnitSpan"></span>		
 										<html:hidden property="<%=unitRequestedQuantity%>" value="" styleId="unitRequestedQuantity"/>
 										<html:hidden property="<%=isDerived%>" styleId="isDerived" value=""/>
+										
+										<html:hidden property="<%=specimenClass%>" styleId="specimenClass" value="<%=obj.getClassName()%>"/>
+										<html:hidden property="<%=specimenType%>" styleId="specimenType" value="<%=obj.getType()%>"/>
+
 									</td>
 
 									<td class="dataCellText" width="34%">
