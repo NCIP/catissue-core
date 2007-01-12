@@ -203,6 +203,13 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     		case Constants.REQUEST_LIST_FILTERATION_FORM_ID:
     			bizLogic = new OrderBizLogic();
     			break;
+//				View Surgical Pathology Report
+    		case Constants.SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+    			bizLogic=new PathologyReportReviewParameterBizLogic();
+    			break;	
+    		case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+    			bizLogic=new QuarantineEventParameterBizLogic();
+    			break;	
     		//END
     		case Constants.DEFAULT_BIZ_LOGIC:
             default:
@@ -337,6 +344,15 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	{
     		bizLogic = new CollectionProtocolRegistrationBizLogic();
     	} 
+   // Report Event Parameters
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter"))
+    	{
+    		bizLogic = new PathologyReportReviewParameterBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter"))
+    	{
+    		bizLogic = new QuarantineEventParameterBizLogic();
+    	}
     	//END
     	else
     	{
