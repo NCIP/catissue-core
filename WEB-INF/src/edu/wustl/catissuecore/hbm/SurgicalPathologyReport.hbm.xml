@@ -75,7 +75,7 @@
               />
 
               <one-to-many
-                  class="edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameterSet"
+                  class="edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter"
               />
         </set>
 
@@ -181,7 +181,7 @@
               />
 
               <one-to-many
-                  class="edu.wustl.catissuecore.domain.pathology.QuarantineEventParameterSet"
+                  class="edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter"
               />
         </set>
 
