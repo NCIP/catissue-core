@@ -249,7 +249,7 @@ function onCheck()
 <html:form action="AddToOrderListSpecimen.do" type="edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm"
 			name="OrderPathologyCase">
   <div height="90%">			
-	<table summary="Table to display Pathology Case Reports" cellpadding="0" cellspacing="0" border="1" class="tabPage" width="100%" style="border-right:1px solid #5C5C5C;padding-right:0em;">
+	<table summary="Table to display Pathology Case Reports" cellpadding="0" cellspacing="0" border="0" class="tabPage" width="100%" style="border-right:1px solid #5C5C5C;padding-right:0em;">
 		<tr style="background-color:#AAAAAB">
 			<td height="30" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="specimen()" nowrap>		
 				<bean:message key="orderingSystem.tab.biospecimen"/>				
@@ -550,11 +550,9 @@ function onCheck()
 					<table cellpadding="4" cellspacing="0" border="0">
 						<tr>
 							<td width="50%" class="formLabelBorderless" style="background-color:white">
-								<span style="font-size:1em">
 									<label for="AddToArrayName">
 										 <bean:message key="orderingsystem.label.defineArrayName" />
 									 </label>:
-								</span>
 								<html:select property="addToArray" styleClass="formFieldSized10" size="1" 
 						 			onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 									<html:options collection="<%= Constants.ORDERTO_LIST_ARRAY  %>" labelProperty="name" property="value"/>		
