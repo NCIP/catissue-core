@@ -35,7 +35,7 @@
 
         <set
             name="participantCollection"
-            table="CATISSUE_REPORT_PARTICIPANT_REL"
+            table="CATISSUE_REPORT_PARTICIP_REL"
             lazy="false"
             inverse="false"
             cascade="save-update"
