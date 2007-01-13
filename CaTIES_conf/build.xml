@@ -1,0 +1,40 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for caTIES-->
+
+<project name="caTIES">
+	
+	<!--define require dir and Properties -->	
+	<property name="base.dir" value="."/>	
+	<property name="conf.dir" value="conf" />
+	<property name="lib.dir" value="lib" />
+	<property name="src.dir" value="." />
+
+	<path id="cp">
+		<fileset dir="${base.dir}/lib">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathelement path="${conf.dir}"/>
+	</path>
+    
+	<!-- run FilePoller java file -->
+	<target name="run_FilePoller">
+		<java classname="edu.wustl.catissuecore.reportloader.FilePoller" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="classes"/>
+			</classpath>
+		</java>
+	</target>
+	
+
+	<!-- run DeIDPipelineManager java file -->
+	<target name="run_deid">
+		<java classname="edu.wustl.catissuecore.deid.DeIDPipelineManager" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="classes"/>
+			</classpath>
+		</java>
+	</target>
+</project>
