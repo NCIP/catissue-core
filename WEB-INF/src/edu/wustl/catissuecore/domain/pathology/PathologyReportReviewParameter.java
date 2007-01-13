@@ -109,9 +109,9 @@ public class PathologyReportReviewParameter extends EventParameters
 			DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
 			String className;
 			String colName=new String(Constants.SYSTEM_IDENTIFIER);
-			//PathologyReportReviewParameter reviewParam=new PathologyReportReviewParameter();
 			this.setComments(form.getComments());
 			this.setTimestamp(new Date());
+			this.setStatus(Constants.COMMENT_STATUS_RENDING);
 			
 			if(form.getIdentifiedReportId()!=0)
 			{
@@ -162,7 +162,7 @@ public class PathologyReportReviewParameter extends EventParameters
 
 
 	/**
-     *@return reviewe status 
+     * @return reviewe status 
      * @hibernate.property  name="status"
      * type="string" column="STATUS"
      * length="100"
