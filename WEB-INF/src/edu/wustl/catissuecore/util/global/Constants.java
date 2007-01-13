@@ -99,7 +99,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COMMENT_STATUS_NOT_REVIEWED="NOT_REVIEWED";
 	public static final String COMMENT_STATUS_QUARANTINED="QUARANTINED";
 	public static final String COMMENT_STATUS_NOT_QUARANTINED="NOT_QUARANTINED";
-	public static final String ROLE_ADMINISTRATOR="ADMINISTRATOR";
+	public static final String ROLE_ADMINISTRATOR="Administrator";
 
 	public static final String MAX_IDENTIFIER = "maxIdentifier";
     public static final String AND_JOIN_CONDITION = "AND";
