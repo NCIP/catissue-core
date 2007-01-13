@@ -28,6 +28,11 @@ public class QuarantineEventParameter extends EventParameters
 	 * de-identified surgical pthology report.
 	 */
 	protected DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport;
+	
+	/**
+	 * Quarantine comment status of de-identified surgical pthology report.
+	 */
+	protected String status;
 
 	/**
 	 * Constructor
@@ -104,6 +109,7 @@ public class QuarantineEventParameter extends EventParameters
 			String colName=new String(Constants.SYSTEM_IDENTIFIER);
 			this.setComments(form.getComments());
 			this.setTimestamp(new Date());
+			this.setStatus(Constants.COMMENT_STATUS_RENDING);
 			
 			if(form.getDeIdentifiedReportId()!=0)
 			{
@@ -141,5 +147,25 @@ public class QuarantineEventParameter extends EventParameters
 	{
 		return (" De-Identified Report.");
 		
+	}
+
+	/**
+     * @return quarantine comment status 
+     * @hibernate.property  name="status"
+     * type="string" column="STATUS"
+     * length="100"
+     */
+	public String getStatus()
+	{
+		return status;
+	}
+
+	/**
+     * Returns quarantine comment status.
+     * @return String
+     */
+	public void setStatus(String status)
+	{
+		this.status = status;
 	}
 }
