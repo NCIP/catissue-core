@@ -149,6 +149,7 @@
 				<include name="**/*.xml" />
 				<include name="**/*.hbm.xml" />
 				<include name="**/*.ser" />
+				<include name="**/*.dll" />
 			</fileset>
 		</copy>
 
