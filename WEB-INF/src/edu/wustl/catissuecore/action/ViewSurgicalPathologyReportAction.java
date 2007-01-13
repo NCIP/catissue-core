@@ -24,7 +24,10 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * @author vijay_pande
@@ -82,9 +85,12 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			if(isAuthorized)
 			{
 				viewSPR.setAllValues(scg.getIdentifiedSurgicalPathologyReport());
+				viewSPR.setParticipant(scg.getParticipant());
+				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 			}
 			else
 			{
+				viewSPR.setIdentifiedReportTextContent("You are not authorized to view this report");
 				viewSPR.setParticipant(scg.getParticipant());
 				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 			}
@@ -101,6 +107,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			if(isAuthorized)
 			{
 				viewSPR.setAllValues(scg.getIdentifiedSurgicalPathologyReport());
+				viewSPR.setParticipant(scg.getParticipant());
+				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 			}
 			else
 			{
@@ -192,19 +200,23 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	
 	private boolean isAuthorized(SessionDataBean sessionBean) throws Exception
 	{
-		SecurityManager sm=SecurityManager.getInstance(User.class);
-		try{
-			if(sm.isAuthorizedToExecuteAction(sessionBean.getUserName(), this.getClass().getName()))
+		SecurityManager sm=SecurityManager.getInstance(this.getClass());
+		try
+		{
+			Role role=sm.getUserRole(sessionBean.getUserId());
+			if(role.getName().equalsIgnoreCase(Constants.ROLE_ADMINISTRATOR))
 			{
 				return true;
 			}
+			
 		}
-		catch(Exception  ex)
+		catch(SMException ex)
 		{
-			return false;
+			Logger.out.info("Reviewer's Role not found!");
 		}
 		return false;
-	}	
+	}
+	
 }
 
 
