@@ -13,6 +13,9 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.security.SecurityManager;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 
 public class PathologyReportReviewParameterBizLogic extends IntegrationBizLogic
 {
@@ -31,6 +34,18 @@ public class PathologyReportReviewParameterBizLogic extends IntegrationBizLogic
 		className=User.class.getName();
 		List userList=dao.retrieve(className, colName, sessionDataBean.getUserId());
 		reviewParam.setUser((User)userList.get(0));
+		String reviewerRole;
+		SecurityManager sm=SecurityManager.getInstance(this.getClass());
+		try
+		{
+			Role role=sm.getUserRole(sessionDataBean.getUserId());
+			reviewerRole=role.getName();
+			reviewParam.setReviewerRole(reviewerRole);
+		}
+		catch(SMException ex)
+		{
+			Logger.out.info("Review Role not found!");
+		}
 		dao.insert(reviewParam, sessionDataBean, true, true);
 		
 		Set protectionObjects = new HashSet();
