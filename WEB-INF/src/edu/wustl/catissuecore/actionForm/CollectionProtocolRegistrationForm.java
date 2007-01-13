@@ -529,9 +529,11 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 		{	
 			strArray = new String[4];
 			strArray[0]="consentResponseValue(ConsentBean:"+counter+"_consentTierID)";
-			strArray[1]=(String)this.consentResponseValues.get("ConsentBean:"+counter+"_statement");
+			strArray[1]="consentResponseValue(ConsentBean:"+counter+"_statement)";
+			//strArray[1]=(String)this.consentResponseValues.get("ConsentBean:"+counter+"_statement");
 			strArray[2]="consentResponseValue(ConsentBean:"+counter+"_participantResponse)";
 			strArray[3]="consentResponseValue(ConsentBean:"+counter+"_participantResponseID)";
+			
 			consentTiersList.add(strArray);
 		}
 		return consentTiersList;

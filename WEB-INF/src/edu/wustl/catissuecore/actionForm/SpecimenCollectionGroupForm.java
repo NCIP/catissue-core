@@ -705,8 +705,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		{	
 			strArray = new String[6];
 			strArray[0]="consentResponseForScgValues(ConsentBean:"+counter+"_consentTierID)";
-			strArray[1]=(String)this.consentResponseForScgValues.get("ConsentBean:"+counter+"_statement");
-			strArray[2]=(String)this.consentResponseForScgValues.get("ConsentBean:"+counter+"_participantResponse");
+			strArray[1]="consentResponseForScgValues(ConsentBean:"+counter+"_statement)";
+			strArray[2]="consentResponseForScgValues(ConsentBean:"+counter+"_participantResponse)";
 			strArray[3]="consentResponseForScgValues(ConsentBean:"+counter+"_participantResponseID)";
 			strArray[4]="consentResponseForScgValues(ConsentBean:"+counter+"_specimenCollectionGroupLevelResponse)";
 			strArray[5]="consentResponseForScgValues(ConsentBean:"+counter+"_specimenCollectionGroupLevelResponseID)";

@@ -365,6 +365,35 @@ function popupWindow(nofConsentTiers)
 									 	responseKey=stringArray[4];
 									 	responseIdKey=stringArray[5];
 									 }
+									 String consentStatementKey ="ConsentBean:"+counter+"_statement";
+									 String participantKey ="ConsentBean:"+counter+"_participantResponse";
+									 String specimenKey ="ConsentBean:"+counter+"_specimenLevelResponse";
+						
+									 Object formObject = form;
+									 String consentResponseDisplay="";
+									 String responseDisplay="";
+									 String specimenResponseDisplay="";
+									 if (formObject instanceof SpecimenCollectionGroupForm)
+									    {
+										consentResponseDisplay=(String)((SpecimenCollectionGroupForm)formObject).getConsentResponseForScgValue(consentStatementKey);
+											responseDisplay=(String)((SpecimenCollectionGroupForm)formObject).getConsentResponseForScgValue(participantKey);
+										}
+										else if(formObject instanceof CollectionProtocolRegistrationForm)
+										{
+											consentResponseDisplay=(String)((CollectionProtocolRegistrationForm)formObject).getConsentResponseValue(consentStatementKey);
+										}
+										else if(formObject instanceof NewSpecimenForm)
+										{
+											consentResponseDisplay=(String)((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(consentStatementKey);
+											responseDisplay=(String)((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(participantKey);
+										}
+										else if(formObject instanceof DistributionForm)
+										{
+											consentResponseDisplay=(String)((DistributionForm)formObject).getConsentResponseForDistributionValue(consentStatementKey);
+											responseDisplay=(String)((DistributionForm)formObject).getConsentResponseForDistributionValue(participantKey);
+											specimenResponseDisplay=(String)((DistributionForm)formObject).getConsentResponseForDistributionValue(specimenKey);
+										}
+																	
 								%>		
 								<%-- Serial No # --%>										
 								<tr>
@@ -374,7 +403,8 @@ function popupWindow(nofConsentTiers)
 									<%-- Get Consents # --%>										
 									<td class="formField" width="31%">
 									<html:hidden property="<%=consentIDKey%>"/>
-									<%=consents%>
+									<html:hidden property="<%=consents%>"/>
+									<%=consentResponseDisplay%>
 									</td>
 									<%-- If Page of Collection Protocol Reg then show drop down --%>										
 									<%
@@ -397,7 +427,8 @@ function popupWindow(nofConsentTiers)
 									%>
 									<td align="left" class="formField">
 										<html:hidden property="<%=participantResponseIDKey%>"/>
-										<%=participantResponseKey%>
+										<html:hidden property="<%=participantResponseKey%>"/>
+										<%=responseDisplay%>
 									</td>
 									<%-- If Page of SCG then show SCG level Response dropdown --%>																												
 									<%
@@ -435,7 +466,8 @@ function popupWindow(nofConsentTiers)
 									%>
 									<td align="left" class="formField">
 										<html:hidden property="<%=responseIdKey%>"/>
-										 <%=responseKey%>
+										<html:hidden property="<%=responseKey%>"/>
+										 <%=specimenResponseDisplay%>
 									</td>
 								</tr>	
 								<%

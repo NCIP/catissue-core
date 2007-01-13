@@ -27,6 +27,7 @@
 			
 			<%	
 				String barcodeStatus=(String)request.getAttribute("barcodeStatus"); 
+				String normalSubmit="";
 			%>	
 
 			<%		

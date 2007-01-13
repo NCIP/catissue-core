@@ -96,8 +96,8 @@
 		function submitform()
 		{
 		  var collectionProtocolObj=document.getElementById('collectionProtocolID');
-		  var selectedIndexValue=collectionProtocolObj.value;
-		  var action ="CollectionProtocolRegistration.do?showConsents=yes&pageOf=pageOfCollectionProtocolRegistration&operation=<%=operation%>&id="+selectedIndexValue;
+		 // var selectedIndexValue=collectionProtocolObj.value;
+		  var action ="CollectionProtocolRegistration.do?showConsents=yes&pageOf=pageOfCollectionProtocolRegistration&operation=<%=operation%>";
 		  document.forms[0].action = action;
 		  document.forms[0].submit();
 		}

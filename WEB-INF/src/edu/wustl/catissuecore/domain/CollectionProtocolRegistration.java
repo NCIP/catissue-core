@@ -405,9 +405,13 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
         	ConsentTierResponse consentTierResponse = new ConsentTierResponse();
         	//Setting response
         	consentTierResponse.setResponse(consentBean.getParticipantResponse());
+        	if(consentBean.getParticipantResponseID().trim().length()>0)
+        	{
+        		consentTierResponse.setId(Long.parseLong(consentBean.getParticipantResponseID()));
+        	}
         	//Setting consent tier
         	ConsentTier consentTier = new ConsentTier();
-        	consentTier.setId(new Long(consentBean.getConsentTierID()));
+        	consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
         	consentTierResponse.setConsentTier(consentTier);
         	consentResponseColl.add(consentTierResponse);
         }

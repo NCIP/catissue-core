@@ -43,7 +43,9 @@
 
 		String iframeSrc="";
 		String formAction = Constants.SPECIMEN_ADD_ACTION;
-		String specimenPath ="'NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
+		String specimenPath ="'NewSpecimenSearch.do?operation=search&tab=specimen&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
+		String consentTab="'NewSpecimenSearch.do?operation=search&tab=consent&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
+		
 		if(pageOf.equals(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY))
 		{
 			specimenPath ="'QuerySpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimenCPQuery&id="+specimenIdentifier+"'" ;
@@ -150,8 +152,12 @@
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
 					<%=Constants.CLINICAL_ANNOTATIONS %>
 				</td>
+				</td>
+				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="addNewAction(<%= consentTab %>)" id="consentTab">
+					<bean:message key="consents.consents"/>            
+				</td>
 
-				<td width="450" class="tabMenuSeparator" colspan="2">&nbsp;</td>
+				<td width="350" class="tabMenuSeparator" colspan="1">&nbsp;</td>
 			</tr>
 			<tr>
 				<td class="tabField" colspan="6">

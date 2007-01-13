@@ -61,42 +61,39 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+		CollectionProtocolRegistrationForm collectionProtocolRegistrationForm = (CollectionProtocolRegistrationForm)form;
 		//Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
+		//CollectionProtocolId
+		String cp_id=String.valueOf(collectionProtocolRegistrationForm.getCollectionProtocolID());
 
 		//Consent Tracking (Virender Mehta)
-		CollectionProtocolRegistrationForm collectionProtocolRegistrationForm = (CollectionProtocolRegistrationForm)form;			
-		String showConsents = request.getParameter(Constants.SHOW_CONSENTS);		
-		if(showConsents!=null && showConsents.equalsIgnoreCase(Constants.YES))
+					
+		String showConsents = request.getParameter(Constants.SHOW_CONSENTS);	
+		if(!cp_id.equals("-1"))
 		{
-			//CollectionProtocolId
-			String cp_id=null;
-			String errorShowConsent=request.getParameter(Constants.ERROR_SHOWCONSENTS);
-			if(operation.equalsIgnoreCase(Constants.EDIT)
-					  ||(errorShowConsent!=null&&errorShowConsent.equalsIgnoreCase(Constants.YES)))
+			if(showConsents!=null && showConsents.equalsIgnoreCase(Constants.YES))
 			{
-				cp_id = String.valueOf(collectionProtocolRegistrationForm.getCollectionProtocolID());
-			}
-			else
-			{
-				cp_id = request.getParameter(Constants.ID);
-			}
-			
-			//Adding name,value pair in NameValueBean
-			//Getting witness name list for CollectionProtocolID
-			List witnessList = witnessNameList(cp_id);
-			//Getting ResponseList if Operation=Edit then "Withdraw" is added to the List 
-			List responseList= Utility.responceList(operation);
-			if(operation.equalsIgnoreCase(Constants.ADD))
-			{
+				//Adding name,value pair in NameValueBean
+				//Getting witness name list for CollectionProtocolID
+				List witnessList = witnessNameList(cp_id);
+				//Getting ResponseList if Operation=Edit then "Withdraw" is added to the List 
+				List responseList= Utility.responceList(operation);
 				List requestConsentList = getConsentList(cp_id);
-				Map tempMap=prepareConsentMap(requestConsentList);
-				collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
-				collectionProtocolRegistrationForm.setConsentTierCounter(requestConsentList.size()) ;
-			}
-			request.setAttribute("witnessList", witnessList);			
-			request.setAttribute("responseList", responseList);
-		}		
+				if(operation.equalsIgnoreCase(Constants.ADD))
+				{
+					Map tempMap=prepareConsentMap(requestConsentList);
+					collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
+					collectionProtocolRegistrationForm.setConsentTierCounter(requestConsentList.size()) ;
+				}
+				else
+				{
+					collectionProtocolRegistrationForm.setConsentTierCounter(requestConsentList.size()) ;  
+				}
+				request.setAttribute("witnessList", witnessList);			
+				request.setAttribute("responseList", responseList);
+			}		
+		}
 		//Consent Tracking Virender Mehta		
 		
 		//Sets the operation attribute to be used in the Add/Edit User Page. 

@@ -1114,8 +1114,8 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 		{	
 			strArray = new String[6];
 			strArray[0]="consentResponseForSpecimenValues(ConsentBean:"+counter+"_consentTierID)";
-			strArray[1]=(String)this.consentResponseForSpecimenValues.get("ConsentBean:"+counter+"_statement");
-			strArray[2]=(String)this.consentResponseForSpecimenValues.get("ConsentBean:"+counter+"_participantResponse");
+			strArray[1]="consentResponseForSpecimenValues(ConsentBean:"+counter+"_statement)";
+			strArray[2]="consentResponseForSpecimenValues(ConsentBean:"+counter+"_participantResponse)";
 			strArray[3]="consentResponseForSpecimenValues(ConsentBean:"+counter+"_participantResponseID)";
 			strArray[4]="consentResponseForSpecimenValues(ConsentBean:"+counter+"_specimenLevelResponse)";
 			strArray[5]="consentResponseForSpecimenValues(ConsentBean:"+counter+"_specimenLevelResponseID)";

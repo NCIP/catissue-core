@@ -979,6 +979,10 @@ public class Specimen extends AbstractDomainObject implements Serializable
         	ConsentTierStatus consentTierstatus = new ConsentTierStatus();
         	//Setting response
         	consentTierstatus.setStatus(consentBean.getSpecimenLevelResponse());
+        	if(consentBean.getSpecimenLevelResponseID().trim().length()>0)
+        	{
+        		consentTierstatus.setId(Long.parseLong(consentBean.getSpecimenLevelResponseID()));
+        	}
         	//Setting consent tier
         	ConsentTier consentTier = new ConsentTier();
         	consentTier.setId(new Long(consentBean.getConsentTierID()));

@@ -636,7 +636,7 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
      * @param key Key prepared for saving data.
      * @return consentResponseForDistributionValues.get(key)
      */
-    public void setConsentResponseForSpecimenValue(String key, Object value) 
+    public void setConsentResponseForDistributionValue(String key, Object value) 
     {
    	 if (isMutable())
    		consentResponseForDistributionValues.put(key, value);
@@ -646,7 +646,7 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
      * @param key Key prepared for saving data.
      * @return consentResponseForSpecimenValues.get(key)
      */
-    public Object getConsentResponseForSpecimenValue(String key) 
+    public Object getConsentResponseForDistributionValue(String key) 
     {
         return consentResponseForDistributionValues.get(key);
     }
@@ -654,7 +654,7 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
 	/**
 	 * @return values in map consentResponseForDistributionValues
 	 */
-	public Collection getAllConsentResponseForSpecimenValue() 
+	public Collection getAllConsentResponseForDistributionValue() 
 	{
 		return consentResponseForDistributionValues.values();
 	}
@@ -672,10 +672,10 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
 		{	
 			strArray = new String[6];
 			strArray[0]="consentResponseForDistributionValues(ConsentBean:"+counter+"_consentTierID)";
-			strArray[1]=this.consentResponseForDistributionValues.get("ConsentBean:"+counter+"_statement").toString();
-			strArray[2]=this.consentResponseForDistributionValues.get("ConsentBean:"+counter+"_participantResponse").toString();
+			strArray[1]="consentResponseForDistributionValues(ConsentBean:"+counter+"_statement)";
+			strArray[2]="consentResponseForDistributionValues(ConsentBean:"+counter+"_participantResponse)";
 			strArray[3]="consentResponseForDistributionValues(ConsentBean:"+counter+"_participantResponseID)";
-			strArray[4]=this.consentResponseForDistributionValues.get("ConsentBean:"+counter+"_specimenLevelResponse").toString();
+			strArray[4]="consentResponseForDistributionValues(ConsentBean:"+counter+"_specimenLevelResponse)";
 			strArray[5]="consentResponseForDistributionValues(ConsentBean:"+counter+"_specimenLevelResponseID)";
 			consentTiersList.add(strArray);
 		}

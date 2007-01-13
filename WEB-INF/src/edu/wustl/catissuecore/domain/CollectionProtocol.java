@@ -27,10 +27,6 @@ import edu.wustl.common.util.logger.Logger;
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Mandar Deshmukh
  */
-/**
- * @author virender_mehta
- *
- */
 public class CollectionProtocol extends SpecimenProtocol implements java.io.Serializable,Comparable
 {
 	private static final long serialVersionUID = 1234567890L;
@@ -275,6 +271,10 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     		ConsentBean consentBean = (ConsentBean)iter.next();
     		ConsentTier consentTier = new ConsentTier();
     		consentTier.setStatement(consentBean.getStatement());
+    		if(consentBean.getConsentTierID().trim().length()>0)
+    		{
+    			consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
+    		}
     		if(consentBean.getStatement().trim().length()>0)
     		{
     			consentStatementColl.add(consentTier);
