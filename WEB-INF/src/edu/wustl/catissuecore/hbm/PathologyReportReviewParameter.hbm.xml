@@ -45,6 +45,15 @@
         />
 
         <property
+            name="status"
+            type="string"
+            update="true"
+            insert="true"
+            column="STATUS"
+            length="100"
+        />
+
+        <property
             name="timestamp"
             type="timestamp"
             update="true"
@@ -73,7 +82,7 @@
 
         <!--
             To add non XDoclet property mappings, create a file named
-                hibernate-properties-PathologyReportReviewParameterSet.xml
+                hibernate-properties-PathologyReportReviewParameter.xml
             containing the additional properties and place it in your merge dir.
         -->
 
