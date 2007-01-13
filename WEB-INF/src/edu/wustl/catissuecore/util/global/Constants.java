@@ -94,7 +94,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGEOF_SPECIMEN="pageOfSpecimen";
 	public static final String REVIEW="REVIEW";
 	public static final String QUARANTINE="QUARANTINE";
-
+	public static final String COMMENT_STATUS_RENDING="PENDING";
+	public static final String COMMENT_STATUS_REVIEWED="REVIEWED";
+	public static final String COMMENT_STATUS_NOT_REVIEWED="NOT_REVIEWED";
+	public static final String COMMENT_STATUS_QUARANTINED="QUARANTINED";
+	public static final String COMMENT_STATUS_NOT_QUARANTINED="NOT_QUARANTINED";
+	public static final String ROLE_ADMINISTRATOR="ADMINISTRATOR";
 
 	public static final String MAX_IDENTIFIER = "maxIdentifier";
     public static final String AND_JOIN_CONDITION = "AND";
