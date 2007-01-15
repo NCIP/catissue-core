@@ -303,18 +303,14 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			while(consentTierCollIter.hasNext())
 			{
 				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
-				String key = "ConsentBean:"+i+"_statement";
-				tempMap.put(key, consent.getStatement());
+				String statement = "ConsentBean:"+i+"_statement";
+				String statementkey = "ConsentBean:"+i+"_consentTierID";
+				tempMap.put(statement, consent.getStatement());
+				tempMap.put(statementkey, consent.getId());
 				i++;
 			}
 			consentTierCounter = consentTierColl.size();
 		}
-		
-		if(consentTierCounter==0)
-		{
-			consentTierCounter = 1;
-		}
-		
 		return tempMap;
 	}
 	

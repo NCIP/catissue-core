@@ -244,6 +244,9 @@ function insRow(subdivtag,iCounter,blockCounter)
 	//This Function will add more consent Tier 
 	function addConsentTier()
 	{		
+		var val = parseInt(document.forms[0].consentTierCounter.value);
+		val = val + 1;
+		document.forms[0].consentTierCounter.value = val;
 		var rowCount = document.getElementById('innertable').rows.length;
 		var createRow = document.getElementById('innertable').insertRow(1);
 		var createSerialNo=createRow.insertCell(0);
@@ -252,6 +255,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 		
 		var iCount = rowCount-1;
 		var consentName="consentValue(ConsentBean:"+iCount+"_statement)";
+		var consentKey="consentValue(ConsentBean:"+iCount+"_consentTierID)";
 			
 		createSerialNo.className="tabrightmostcell";
 		createSerialNo.setAttribute('align','right');
@@ -259,11 +263,11 @@ function insRow(subdivtag,iCounter,blockCounter)
 		createCheckBox.setAttribute('align','center');
 		createTextArea.className="formField";
 		
-						
+		var sname = "<input type='hidden' id='" + consentKey + "'>";				
+		
 		createSerialNo.innerHTML=rowCount+".";
 		createCheckBox.innerHTML="<input type='checkbox' name='consentcheckBoxs' id='check"+iCount+"'>";
-		createTextArea.innerHTML="<textarea rows='2'class='formFieldSized' style='width:90%;' name="+consentName+">";
-				
+		createTextArea.innerHTML=sname+"<textarea rows='2'class='formFieldSized' style='width:90%;' name="+consentName+">";
 	}
 	
 	//On selecting Select All CheckBox all the associted check box wiil be selected
@@ -378,10 +382,15 @@ function insRow(subdivtag,iCounter,blockCounter)
 	//On calling this function the tab will be switched to Consent Page	
 	function consentPage()
 	{
+		
 		var checkboxObject=document.getElementById('defineConsents');
 		if(checkboxObject.checked)
 		{
 			switchToTab("consentTab");
+		}
+		else
+		{
+			alert("Consent checkbox is not checked");
 		}
 	}
 //	Consent Tracking Module Virender Mehta (End)
@@ -459,17 +468,7 @@ if(pageView.equals("add") || pageView.equals("edit"))
 					<tr>
 						<td class="formTitle" height="20" width="100%" colspan="6">
 							<%String title = "collectionprotocol."+pageView+".title";%>
-							<div style="float:right;">
-								<input type="checkbox" name="defineConsents" id="defineConsents" />
-							</div>
-							<div style="float:right;" id="consentLinkCont">
-								<html:link href="#" styleId="consentPageLink" onclick="consentPage()">
-									<bean:message key="consent.defineconsents" />
-								</html:link>	
-							</div>
-							<div>
-								<bean:message key="<%=title%>"/>							
-							</div>
+							<bean:message key="<%=title%>"/>							
 						</td>
 					</tr>
 
@@ -631,6 +630,18 @@ if(pageView.equals("add") || pageView.equals("edit"))
 						 </td>
 					</tr>
 				</logic:equal>
+	<!-- Consent Check box -->
+				<tr>
+						<td class="formRequiredNotice" width="5">&nbsp;</td>
+						<td class="formLabel">
+							<label for="enrollment">
+								Do you want to enter consents
+							</label>
+						</td>
+						<td class="formField" colspan=2>
+							<input type="checkbox" name="defineConsents" id="defineConsents" />
+						</td>
+					</tr>
 
 <!-- no of participants -->						
 					<tr>

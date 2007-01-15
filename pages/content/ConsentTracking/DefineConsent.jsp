@@ -82,22 +82,23 @@
 									
 									<%-- Title Statements --%>
 									<td class="formLeftSubTableTitle" width="90%">
+										<html:hidden property="consentTierCounter"/>
 										<bean:message key="consent.statements" />
 									</td>
 								</tr>
 								<%-- If Operation=Edit then get Consents from DB and Operation=Add then show one ConsentTier --%>								
 								<%
 								CollectionProtocolForm collectionProtocolForm = null;
-								Object requestObject = request.getAttribute("collectionProtocolForm");
+								collectionProtocolForm =(CollectionProtocolForm)request.getAttribute("collectionProtocolForm");
 								int noOfConsents=1;
-								if(requestObject != null && requestObject instanceof CollectionProtocolForm)
+								if(collectionProtocolForm != null && collectionProtocolForm instanceof CollectionProtocolForm)
 								{
-									collectionProtocolForm = (CollectionProtocolForm)requestObject;
 									noOfConsents = collectionProtocolForm.getConsentTierCounter();																							
 								}
 								for(int counter=0;counter<noOfConsents;counter++)
 								{		
 									String consentName="consentValue(ConsentBean:"+counter+"_statement)";
+									String consentKey="consentValue(ConsentBean:"+counter+"_consentTierID)";
 								%>
 								<tr>
 									<td class="tabrightmostcell" width="3%" align="right" width="5%">
@@ -106,6 +107,7 @@
 									<td class="formField" width="10%" align="center" width="5%">
 										<input type="checkbox" name="consentcheckBoxs" Id="check1"/>
 									</td>
+									<html:hidden property="<%=consentKey%>"/>
 									<td class="formField" width="90%">
 										<html:textarea styleClass="formFieldSized" style="width:90%;" rows="2" property="<%=consentName%>"/>
 									</td>

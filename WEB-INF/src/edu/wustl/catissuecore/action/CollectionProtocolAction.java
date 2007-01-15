@@ -11,6 +11,9 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,9 +25,16 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -54,8 +64,16 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
         request.setAttribute(Constants.OPERATION,operation);
 
     	
-    	CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form; 
-    	
+    	CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form;
+    	String cp_id = String.valueOf(collectionProtocolForm.getId());
+    	if(!cp_id.equalsIgnoreCase("0"))
+    	{
+			CollectionProtocol collectionProtocol = getCPObj(cp_id);
+			Collection consentTierCollection=collectionProtocol.getConsentTierCollection();
+			Map tempMap= prepareConsentMap(consentTierCollection);
+	    	collectionProtocolForm.setConsentValues(tempMap);
+	    	collectionProtocolForm.setConsentTierCounter(consentTierCollection.size());
+    	}	    	
     	//Name of delete button clicked
         String button = request.getParameter("button");
          
@@ -127,4 +145,42 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 //		// -- 24-Jan-06 end
         return mapping.findForward(pageOf);
     }
+    /**
+	 * This function will return CollectionProtocolRegistration object 
+	 * @param scg_id Selected SpecimenCollectionGroup ID
+	 * @return collectionProtocolRegistration
+	 */
+	private CollectionProtocol getCPObj(String cp_id) throws DAOException
+	{
+		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+		String colName = "id";			
+		List getCPFromDB = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), colName, cp_id);		
+		CollectionProtocol collectionProtocolObject = (CollectionProtocol)getCPFromDB.get(0);
+		return collectionProtocolObject;
+	}
+	
+	private Map prepareConsentMap(Collection consentTierColl)
+	{
+		Map tempMap = new HashMap();
+		if(consentTierColl!=null)
+		{
+			Iterator consentTierCollIter = consentTierColl.iterator();			
+			int i = 0;
+			while(consentTierCollIter.hasNext())
+			{
+				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
+				String statement = "ConsentBean:"+i+"_statement";
+				String statementkey = "ConsentBean:"+i+"_consentTierID";
+				tempMap.put(statement, consent.getStatement());
+				tempMap.put(statementkey, consent.getId());
+				i++;
+			}
+			return tempMap;
+		}
+		else
+		{
+			return null;
+		}
+		
+	}
 }
