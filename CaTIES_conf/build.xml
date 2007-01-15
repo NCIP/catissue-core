@@ -6,7 +6,7 @@
 	
 	<!--define require dir and Properties -->	
 	<property name="base.dir" value="."/>	
-	<property name="conf.dir" value="conf" />
+	
 	<property name="lib.dir" value="lib" />
 	<property name="src.dir" value="." />
 
@@ -14,15 +14,15 @@
 		<fileset dir="${base.dir}/lib">
 			<include name="**/*.jar"/>
 		</fileset>
-		<pathelement path="${conf.dir}"/>
+		
 	</path>
     
 	<!-- run FilePoller java file -->
 	<target name="run_FilePoller">
-		<java classname="edu.wustl.catissuecore.reportloader.FilePoller" fork="true">
+		<java classname="edu.wustl.catissuecore.reportloader.FilePoller">
 			<classpath refid="cp"/>
 			<classpath>
-				<pathelement location="classes"/>
+				<pathelement location="caties.jar"/>
 			</classpath>
 		</java>
 	</target>
@@ -30,10 +30,10 @@
 
 	<!-- run DeIDPipelineManager java file -->
 	<target name="run_deid">
-		<java classname="edu.wustl.catissuecore.deid.DeIDPipelineManager" fork="true">
+		<java classname="edu.wustl.catissuecore.deid.DeIDPipelineManager">
 			<classpath refid="cp"/>
 			<classpath>
-				<pathelement location="classes"/>
+				<pathelement location="caties.jar"/>
 			</classpath>
 		</java>
 	</target>
