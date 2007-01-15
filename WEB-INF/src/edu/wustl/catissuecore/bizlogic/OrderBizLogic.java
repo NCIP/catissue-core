@@ -402,8 +402,8 @@ public class OrderBizLogic extends DefaultBizLogic
 		//String emailMsgHeader = emailBodyHeader + "\n" + messageLine1 + "\n" + messageLine2 + "\n";
 		String emailMsgHeader = emailBodyHeader + "\n" + messageLine1 + "\n";
 		//String emailMsgFooter = "\n" + "We will get back to you shortly with status of each of the items requested";
-		String emailMsgFooterRegards = "\n" + " Regards, ";
-		String emailMsgFooterSign = "\n" + " caTissue Administrator";
+		String emailMsgFooterRegards = "\n" + "Regards, ";
+		String emailMsgFooterSign = "\n" + "caTissue Administrator";
 		String emailMsgFooter = emailMsgFooterRegards + emailMsgFooterSign;
 		
 		int serialNo = 1;
