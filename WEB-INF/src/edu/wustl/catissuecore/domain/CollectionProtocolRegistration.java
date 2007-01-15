@@ -361,15 +361,18 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			this.consentSignatureDate = Utility.parseDate(form.getConsentDate());
 			//Setting the signed doc url
 			this.signedConsentDocumentURL = form.getSignedConsentUrl();
+			if(signedConsentDocumentURL.equals(""))
+			{
+				this.signedConsentDocumentURL=null;
+			}
 			//Setting the consent witness
-			if(form.getWitnessId()!=-1)
+			if(form.getWitnessId()!=0)
 			{
 				this.consentWitness = new User();
 				consentWitness.setId(new Long(form.getWitnessId()));
 			}
 			//Preparing  Consent tier response Collection 
 			this.consentTierResponseCollection = prepareParticipantResponseCollection(form);
-			
 		}
 		catch (Exception e)
 		{
@@ -405,7 +408,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
         	ConsentTierResponse consentTierResponse = new ConsentTierResponse();
         	//Setting response
         	consentTierResponse.setResponse(consentBean.getParticipantResponse());
-        	if(consentBean.getParticipantResponseID().trim().length()>0)
+        	if(consentBean.getParticipantResponseID()!=null&&consentBean.getParticipantResponseID().trim().length()>0)
         	{
         		consentTierResponse.setId(Long.parseLong(consentBean.getParticipantResponseID()));
         	}

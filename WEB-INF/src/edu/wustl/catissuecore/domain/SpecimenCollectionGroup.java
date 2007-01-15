@@ -476,7 +476,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
         	ConsentTierStatus consentTierstatus = new ConsentTierStatus();
         	//Setting response
         	consentTierstatus.setStatus(consentBean.getSpecimenCollectionGroupLevelResponse());
-        	if(consentBean.getSpecimenCollectionGroupLevelResponseID().trim().length()>0)
+        	if(consentBean.getSpecimenCollectionGroupLevelResponseID()!=null&&consentBean.getSpecimenCollectionGroupLevelResponseID().trim().length()>0)
         	{
         		consentTierstatus.setId(Long.parseLong(consentBean.getSpecimenCollectionGroupLevelResponseID()));
         	}
