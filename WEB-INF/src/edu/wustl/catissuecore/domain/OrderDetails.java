@@ -928,7 +928,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		//Updating Description and Status.
 		orderItem.setId(new Long(existingArrayDetailsBean.getOrderItemId()));
 		orderItem.setStatus(existingArrayDetailsBean.getAssignedStatus());
-		orderItem.setDescription(existingArrayDetailsBean.getDescription());			
+		orderItem.setDescription(existingArrayDetailsBean.getAddDescription());			
 		//Setting the order id 
 		orderItem.setOrder(order);			
 		//For Distribution.

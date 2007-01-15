@@ -161,16 +161,19 @@ public class RequestListAction extends SecureAction
 		List requestList  = new ArrayList();
 		RequestViewBean requestViewBean = null;		
 		OrderDetails order = null;
-		Iterator iter = orderListFromDB.iterator();
-		while(iter.hasNext())
-		{			
-			order = (OrderDetails)iter.next();
-			requestViewBean = OrderingSystemUtil.getRequestViewBeanToDisplay(order);
-			
-			requestViewBean.setRequestId(order.getId().toString());				
-			requestViewBean.setStatus(order.getStatus());
-			
-			requestList.add(requestViewBean);
+		if(orderListFromDB != null)
+		{
+			Iterator iter = orderListFromDB.iterator();
+			while(iter.hasNext())
+			{			
+				order = (OrderDetails)iter.next();
+				requestViewBean = OrderingSystemUtil.getRequestViewBeanToDisplay(order);
+				
+				requestViewBean.setRequestId(order.getId().toString());				
+				requestViewBean.setStatus(order.getStatus());
+				
+				requestList.add(requestViewBean);
+			}
 		}
 		return requestList;
 	}

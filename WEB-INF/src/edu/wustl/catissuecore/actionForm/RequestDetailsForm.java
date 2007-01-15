@@ -23,6 +23,13 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bean.DefinedArrayDetailsBean;
 import edu.wustl.catissuecore.bean.RequestDetailsBean;
+import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
+import edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem;
+import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
+import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
+import edu.wustl.catissuecore.domain.OrderDetails;
+import edu.wustl.catissuecore.domain.OrderItem;
+import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -174,7 +181,43 @@ public class RequestDetailsForm extends AbstractActionForm
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		
+		values = new HashMap();
+		int i = 0;
+		OrderDetails order = (OrderDetails)abstractDomain;
+		Collection orderItemColl = order.getOrderItemCollection();
+		Iterator iter = orderItemColl.iterator();
+		while(iter.hasNext())
+		{		
+			OrderItem orderItem = (OrderItem)iter.next();
+			//Making keys
+	//		String requestFor = "RequestDetailsBean:"+i+"_requestFor"; 
+	//	 	String assignQty = "RequestDetailsBean:"+i+"_assignedQty";
+			String assignStatus = null;
+			String description = null;
+			if((orderItem instanceof ExistingSpecimenOrderItem) || (orderItem instanceof DerivedSpecimenOrderItem) || (orderItem instanceof PathologicalCaseOrderItem))
+			{
+			 	assignStatus = "RequestDetailsBean:"+i+"_assignedStatus"; 	
+				description = "RequestDetailsBean:"+i+"_description";
+			}
+			else if(orderItem instanceof ExistingSpecimenArrayOrderItem)
+			{
+				assignStatus = "ExistingArrayDetailsBean:"+i+"_assignedStatus"; 	
+				description = "ExistingArrayDetailsBean:"+i+"_description";
+			}
+			else if(orderItem instanceof NewSpecimenArrayOrderItem)
+			{
+				assignStatus = "DefinedArrayRequestBean:"+i+"_assignedStatus";				
+			}
+			// ArrayDetailsBean if order id in null for order items.
+			else if(orderItem.getOrder() == null)
+			{
+				assignStatus = "DefinedArrayDetailsBean:"+i+"_assignedStatus"; 	
+				description = "DefinedArrayDetailsBean:"+i+"_description";
+			}				
+			values.put(assignStatus,orderItem.getStatus());
+			values.put(description, orderItem.getDescription());			
+			i++;
+		}
 	}
 
 	

@@ -57,6 +57,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ARRAY_REQUESTS_LIST = "arrayRequestsList";
 	public static final String EXISISTINGARRAY_REQUESTS_LIST = "existingArrayRequestDetailsList";
 	public static final String DEFINEDARRAY_REQUESTS_LIST = "DefinedRequestDetailsMapList";
+	public static final String ITEM_STATUS_LIST="itemsStatusList";
+	public static final String ITEM_STATUS_LIST_WO_DISTRIBUTE="itemsStatusListWithoutDistribute";
 	
 	//Constants for Order Status
 	public static final String ORDER_STATUS_NEW = "New";
