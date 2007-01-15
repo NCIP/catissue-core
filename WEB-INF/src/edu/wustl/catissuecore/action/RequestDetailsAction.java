@@ -719,10 +719,10 @@ public class RequestDetailsAction extends BaseAction
 						existingArrayDetailsBean.setItemStatusList(possibleStatusList);
 				}
 				//In case of Request Details List displayed in RequestDetails.jsp
-//				if(orderItemObj instanceof RequestDetailsBean)
-//				{
-//					RequestDetailsBean requestDetailsBean = (RequestDetailsBean) orderItemObj;
-//					List possibleStatusList = OrderingSystemUtil.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
+				if(orderItemObj instanceof RequestDetailsBean)
+				{
+					RequestDetailsBean requestDetailsBean = (RequestDetailsBean) orderItemObj;
+					List possibleStatusList = OrderingSystemUtil.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
 //					
 //					//Removing the status 'Distributed' if the requested Specimen is not present in the Db.
 //					if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Derived"))
@@ -742,8 +742,8 @@ public class RequestDetailsAction extends BaseAction
 //							possibleStatusList.remove(indexToRemove);
 //						}	
 //					}
-//					requestDetailsBean.setItemsStatusList(possibleStatusList);
-//				}
+					requestDetailsBean.setItemsStatusList(possibleStatusList);
+				}
 				
 			}//End else
 			
