@@ -8,7 +8,7 @@
 	
     <session-factory>
     	<property name="show_sql">false</property>
-    	<property name="dialect">net.sf.hibernate.dialect.MySQLDialect</property>	
+    	<property name="dialect">net.sf.hibernate.dialect.@@DIALECT@@</property>	
     	<property name="hibernate.transaction.factory_class">net.sf.hibernate.transaction.JDBCTransactionFactory</property>
         <property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
         
