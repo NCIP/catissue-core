@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -42,15 +43,15 @@ import edu.wustl.common.util.logger.Logger;
  * SpecimenArrayAliquotAction initializes all the fields of the page SpecimenArrayAliquots.jsp.
  * @author jitendra_agrawal
  */
-public class SpecimenArrayAliquotAction extends BaseAction
+public class SpecimenArrayAliquotAction extends SecureAction
 {
 
 	/**
 	 * Overrides the execute method of Action class.
 	 */
-	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
+	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{		
+	{	
 		SpecimenArrayAliquotForm specimenArrayAliquotForm = (SpecimenArrayAliquotForm) form;
 		String pageOf = request.getParameter(Constants.PAGEOF);		
 		StorageContainerBizLogic bizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
