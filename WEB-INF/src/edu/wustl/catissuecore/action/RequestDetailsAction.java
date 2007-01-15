@@ -73,7 +73,7 @@ public class RequestDetailsAction extends BaseAction
 	{
 		RequestDetailsForm requestDetailsForm = (RequestDetailsForm) form;
 		// The request Id on which the user has clicked
-		String requestId = request.getParameter("id");
+		String requestId = request.getParameter("id");		
 		
 		//Setting the order id in the form to retrieve the corresponding orderitems from the db in CommonAddEditAction.
 		requestDetailsForm.setId((new Long(requestId)).longValue());
@@ -92,6 +92,23 @@ public class RequestDetailsAction extends BaseAction
 		
 		//The order items list corresponding to the request Id
 		getRequestDetailsList(requestId, requestDetailsForm,request);
+		
+		//setting Item Status List in Request
+		request.setAttribute(Constants.ITEM_STATUS_LIST, OrderingSystemUtil.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW));
+		
+		//setting Items status list without "Distributed" option.
+		List tempList = OrderingSystemUtil.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
+		Iterator tempListIter = tempList.iterator();
+		while (tempListIter.hasNext())
+		{
+			NameValueBean nameValueBean = (NameValueBean)tempListIter.next();
+			if(nameValueBean.getValue().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+			{
+				tempList.remove(nameValueBean);
+				break;
+			}
+		}
+		request.setAttribute(Constants.ITEM_STATUS_LIST_WO_DISTRIBUTE, tempList);
 		
 		return mapping.findForward("success");
 	}
@@ -113,9 +130,15 @@ public class RequestDetailsAction extends BaseAction
 		int finalSpecimenListId = 0;
 		
 		OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_DETAILS_FORM_ID);
-		String colName = "order";
+		String colName = "id";
 		
-		List orderItemsListFromDB = orderBizLogic.retrieve(OrderItem.class.getName(), colName, id);
+		List orderList = orderBizLogic.retrieve(OrderDetails.class.getName(), colName, id);
+		OrderDetails order = (OrderDetails)orderList.get(0);
+		
+		//populating Map in the form
+	  	requestDetailsForm.setAllValues(order);
+	  	
+		Collection orderItemsListFromDB = order.getOrderItemCollection(); 
 		
 		List requestDetailsList = new ArrayList();
 		RequestDetailsBean requestDetailsBean = null;
@@ -141,8 +164,8 @@ public class RequestDetailsAction extends BaseAction
 					{
 						 requestDetailsBean = new RequestDetailsBean();
 						 if(orderItem instanceof ExistingSpecimenOrderItem)
-						  {
-							  	ExistingSpecimenOrderItem existingSpecimenorderItem = (ExistingSpecimenOrderItem)orderItem;
+						  {								
+							  	ExistingSpecimenOrderItem existingSpecimenorderItem = (ExistingSpecimenOrderItem)orderItem;							  	
 							  	requestDetailsBean = populateRequestDetailsBeanForExistingSpecimen(requestDetailsBean,existingSpecimenorderItem);					    
 							  	requestDetailsList.add(requestDetailsBean);
 							  	finalSpecimenListId ++;
@@ -218,8 +241,8 @@ public class RequestDetailsAction extends BaseAction
 		existingArrayDetailsBean.setArrayId(existingSpecimenArrayOrderItem.getSpecimenArray().getId().toString());
 		existingArrayDetailsBean.setRequestedQuantity(existingSpecimenArrayOrderItem.getRequestedQuantity().getValue().toString());
 		
-		//Populate status list of individual array
-		List existingArrayStatusList = OrderingSystemUtil.getPossibleStatusList(existingArrayDetailsBean.getAssignedStatus());
+		//Populate status list of individual array //As Per Mark's comment, initial status always "New"
+		List existingArrayStatusList = OrderingSystemUtil.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
 		existingArrayDetailsBean.setItemStatusList(existingArrayStatusList);
 		
 		return existingArrayDetailsBean;
@@ -260,7 +283,7 @@ public class RequestDetailsAction extends BaseAction
 		}
 		
 		//Populate status list of individual array
-		List arrayStatusList = OrderingSystemUtil.getPossibleStatusList(arrayRequestBean.getAssignedStatus());
+		List arrayStatusList = OrderingSystemUtil.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
 		//Remove 'Distributed' option from the list if defined array is not created in the system.
 		if(specimenArrayObj == null)
 		{
@@ -305,9 +328,9 @@ public class RequestDetailsAction extends BaseAction
 				arrayDetailsBean.setRequestedItem(derivedSpecimenOrderItem.getSpecimen().getLabel());
 				arrayDetailsBean.setSpeicmenId(derivedSpecimenOrderItem.getSpecimen().getId().toString());
 				//Obtain all children specimens
-				Collection childrenSpecimenList = getAllChildrenSpecimen(derivedSpecimenOrderItem.getSpecimen(),derivedSpecimenOrderItem.getSpecimen().getChildrenSpecimen());
+				Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getSpecimen(),derivedSpecimenOrderItem.getSpecimen().getChildrenSpecimen());
 				//Obtain only those specimens of this class and type from the above list
-			    List finalChildrenSpecimenList = getChildrenSpecimenForClassAndType(childrenSpecimenList,derivedSpecimenOrderItem.getSpecimenClass(),derivedSpecimenOrderItem.getSpecimenType());
+			    List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList,derivedSpecimenOrderItem.getSpecimenClass(),derivedSpecimenOrderItem.getSpecimenType());
 			    List childrenSpecimenListToDisplay = getNameValueBeanList(finalChildrenSpecimenList);
 			    arrayDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 			    
@@ -332,18 +355,18 @@ public class RequestDetailsAction extends BaseAction
 		    	while (childrenSpecimenListIterator.hasNext())
 		    	{
 		    		Specimen specimen = (Specimen)childrenSpecimenListIterator.next();
-		    		List childSpecimenCollection = getAllChildrenSpecimen(specimen,specimen.getChildrenSpecimen());
+		    		List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen,specimen.getChildrenSpecimen());
 		    		List finalChildrenSpecimenCollection = null;
 		    		if(pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null && !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("") && !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase(""))
 		    	    {
 		    			//"Derived"	   
-		    			finalChildrenSpecimenCollection = getChildrenSpecimenForClassAndType(childSpecimenCollection,pathologicalCaseOrderItem.getSpecimenClass(),pathologicalCaseOrderItem.getSpecimenType());
+		    			finalChildrenSpecimenCollection = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childSpecimenCollection,pathologicalCaseOrderItem.getSpecimenClass(),pathologicalCaseOrderItem.getSpecimenType());
 		    			isDerived = true;
 		    	    }	    	
 				    else
 				    {
 				    	//"Block" . Specimen class = "Tissue" , Specimen Type = "Block".
-				    	finalChildrenSpecimenCollection = getChildrenSpecimenForClassAndType(childSpecimenCollection,"Tissue","Block");
+				    	finalChildrenSpecimenCollection = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childSpecimenCollection,"Tissue","Block");
 				    }
 		    		if(finalChildrenSpecimenCollection!=null)
 		    		{
@@ -429,32 +452,7 @@ public class RequestDetailsAction extends BaseAction
 		}
 		return requestViewBean;		
 	}
-	/**
-	 * @param rootNode Specimen
-	 * @param childNodes Collection
-	 * @return List. AyyayList of children Specimen objects.
-	 */
-	private List getAllChildrenSpecimen(Specimen rootNode,Collection childNodes)
-	{
-		ArrayList childrenSpecimenList = new ArrayList();	
-		
-		//If no childNodes present then tree will contain only the root node.
-		if(childNodes == null)
-		{
-			return null;
-		}
-		
-		//Otherwise
-		Iterator specimenItr = childNodes.iterator();
-		while(specimenItr.hasNext())
-		{
-			Specimen specimen  = (Specimen)specimenItr.next();
-			List subChildNodesList = getAllChildrenSpecimen(specimen,specimen.getChildrenSpecimen());
-			childrenSpecimenList.add(specimen);
-		}
-		
-		return childrenSpecimenList;
-	}
+	
 
 	/**
 	 * @param listToConvert Collection
@@ -473,26 +471,7 @@ public class RequestDetailsAction extends BaseAction
 		
 		return nameValueBeanList;
 	}
-	/**
-	 * @param childrenSpecimenList Collection
-	 * @param className String
-	 * @param type String
-	 * @return List. The namevaluebean list of children specimen of particular 'class' and 'type' to display.
-	 */
-	private List getChildrenSpecimenForClassAndType(Collection childrenSpecimenList,String className,String type)
-	{
-		List finalChildrenSpecimenList = new ArrayList();		
-		Iterator childrenSpecimenListIterator = childrenSpecimenList.iterator();
-		while(childrenSpecimenListIterator.hasNext())
-		{
-			Specimen childrenSpecimen = (Specimen)childrenSpecimenListIterator.next();
-			if(childrenSpecimen.getClassName().trim().equalsIgnoreCase(className) && childrenSpecimen.getType().trim().equalsIgnoreCase(type))
-			{
-				finalChildrenSpecimenList.add(childrenSpecimen);
-			}
-		}
-		return finalChildrenSpecimenList;
-	}
+	
 	/**
 	 * @return List of site objects.
 	 * @throws DAOException object
@@ -525,7 +504,8 @@ public class RequestDetailsAction extends BaseAction
 	    requestDetailsBean.setInstanceOf("Existing");
 	  	requestDetailsBean.setRequestedQty(existingSpecimenorderItem.getRequestedQuantity().getValue().toString());
 	  	requestDetailsBean.setAvailableQty(existingSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString());
-	  	requestDetailsBean.setAssignedStatus(existingSpecimenorderItem.getStatus());
+	  	//TODO remove from action class and put in action Form.
+	    requestDetailsBean.setAssignedStatus(existingSpecimenorderItem.getStatus());
 	 	requestDetailsBean.setClassName(existingSpecimenorderItem.getSpecimen().getClassName());
 	 	requestDetailsBean.setType(existingSpecimenorderItem.getSpecimen().getType());
 	  	requestDetailsBean.setDescription(existingSpecimenorderItem.getDescription());
@@ -551,8 +531,8 @@ public class RequestDetailsAction extends BaseAction
 	{
 		requestDetailsBean.setRequestedItem(derivedSpecimenorderItem.getSpecimen().getLabel());
 		Long specimenId = derivedSpecimenorderItem.getSpecimen().getId();
-		Collection childrenSpecimenList = getAllChildrenSpecimen(derivedSpecimenorderItem.getSpecimen(),derivedSpecimenorderItem.getSpecimen().getChildrenSpecimen());
-	    List finalChildrenSpecimenList = getChildrenSpecimenForClassAndType(childrenSpecimenList,derivedSpecimenorderItem.getSpecimenClass(),derivedSpecimenorderItem.getSpecimenType());
+		Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenorderItem.getSpecimen(),derivedSpecimenorderItem.getSpecimen().getChildrenSpecimen());
+	    List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList,derivedSpecimenorderItem.getSpecimenClass(),derivedSpecimenorderItem.getSpecimenType());
 	    //	  removing final specimen List from session
 		request.getSession().removeAttribute("finalSpecimenList"+finalSpecimenListId);
 	    //To display the available quantity of the selected specimen from RequestFor dropdown.
@@ -599,24 +579,29 @@ public class RequestDetailsAction extends BaseAction
 		requestDetailsBean.setRequestedItem(pathologicalCaseOrderItem.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport().getAccessionNumber());
 	    
 		Collection childrenSpecimenList = pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSpecimenCollection();
+		// Removing distributed option if no specimens are present in that SCG. ie. childrenSpecimenList.size() == 0
+		if(childrenSpecimenList.size() == 0)
+		{
+			isDerived = true;
+		}
 	    	Iterator childrenSpecimenListIterator = childrenSpecimenList.iterator();
 	    	List totalChildrenSpecimenColl = null;
 	    	List childrenSpecimenListToDisplay=null;
 	    	while (childrenSpecimenListIterator.hasNext())
 	    	{
 	    		Specimen specimen = (Specimen)childrenSpecimenListIterator.next();
-	    		List childSpecimenCollection = getAllChildrenSpecimen(specimen,specimen.getChildrenSpecimen());
+	    		List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen,specimen.getChildrenSpecimen());
 	    		List finalChildrenSpecimenCollection = null;
 	    		if(pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null && !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("") && !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase(""))
 	    	    {
 	    			//"Derived"	   
-	    			finalChildrenSpecimenCollection = getChildrenSpecimenForClassAndType(childSpecimenCollection,pathologicalCaseOrderItem.getSpecimenClass(),pathologicalCaseOrderItem.getSpecimenType());
+	    			finalChildrenSpecimenCollection = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childSpecimenCollection,pathologicalCaseOrderItem.getSpecimenClass(),pathologicalCaseOrderItem.getSpecimenType());
 	    			isDerived = true;
 	    	    }	    	
 			    else
 			    {
 			    	//"Block" . Specimen class = "Tissue" , Specimen Type = "Block".
-			    	finalChildrenSpecimenCollection = getChildrenSpecimenForClassAndType(childSpecimenCollection,"Tissue","Block");
+			    	finalChildrenSpecimenCollection = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childSpecimenCollection,"Tissue","Block");
 			    }
 	    		if(finalChildrenSpecimenCollection!=null)
 	    		{
@@ -704,7 +689,7 @@ public class RequestDetailsAction extends BaseAction
 						DefinedArrayDetailsBean definedArrayDetailsBean = (DefinedArrayDetailsBean)defineArrayDetailsListItr.next();
 						
 						//Get possible next statuses for a given status
-						List possibleStatusList = OrderingSystemUtil.getPossibleStatusList(definedArrayDetailsBean.getAssignedStatus());
+						List possibleStatusList = OrderingSystemUtil.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
 						int indexToRemove = 0;
 						Iterator statusListIter = possibleStatusList.iterator();
 						while(statusListIter.hasNext())
@@ -730,35 +715,35 @@ public class RequestDetailsAction extends BaseAction
 				if(orderItemObj instanceof ExistingArrayDetailsBean)
 				{
 						ExistingArrayDetailsBean existingArrayDetailsBean = (ExistingArrayDetailsBean)orderItemObj;
-						List possibleStatusList = OrderingSystemUtil.getPossibleStatusList(existingArrayDetailsBean.getAssignedStatus());
+						List possibleStatusList = OrderingSystemUtil.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
 						existingArrayDetailsBean.setItemStatusList(possibleStatusList);
 				}
 				//In case of Request Details List displayed in RequestDetails.jsp
-				if(orderItemObj instanceof RequestDetailsBean)
-				{
-					RequestDetailsBean requestDetailsBean = (RequestDetailsBean) orderItemObj;
-					List possibleStatusList = OrderingSystemUtil.getPossibleStatusList(requestDetailsBean.getAssignedStatus());
-					
-					//Removing the status 'Distributed' if the requested Specimen is not present in the Db.
-					if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Derived"))
-					{
-						if(requestDetailsBean.getSpecimenList().size() == 0)
-						{
-							int indexToRemove = 0;
-							Iterator statusListIter = possibleStatusList.iterator();
-							while(statusListIter.hasNext())
-							{
-								NameValueBean nameValueBeanObj = (NameValueBean)statusListIter.next();
-								if(nameValueBeanObj.getName().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
-								{
-									indexToRemove = possibleStatusList.indexOf(nameValueBeanObj);
-								}
-							}
-							possibleStatusList.remove(indexToRemove);
-						}	
-					}
-					requestDetailsBean.setItemsStatusList(possibleStatusList);
-				}
+//				if(orderItemObj instanceof RequestDetailsBean)
+//				{
+//					RequestDetailsBean requestDetailsBean = (RequestDetailsBean) orderItemObj;
+//					List possibleStatusList = OrderingSystemUtil.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
+//					
+//					//Removing the status 'Distributed' if the requested Specimen is not present in the Db.
+//					if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Derived"))
+//					{
+//						if(requestDetailsBean.getSpecimenList().size() == 0)
+//						{
+//							int indexToRemove = 0;
+//							Iterator statusListIter = possibleStatusList.iterator();
+//							while(statusListIter.hasNext())
+//							{
+//								NameValueBean nameValueBeanObj = (NameValueBean)statusListIter.next();
+//								if(nameValueBeanObj.getName().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+//								{
+//									indexToRemove = possibleStatusList.indexOf(nameValueBeanObj);
+//								}
+//							}
+//							possibleStatusList.remove(indexToRemove);
+//						}	
+//					}
+//					requestDetailsBean.setItemsStatusList(possibleStatusList);
+//				}
 				
 			}//End else
 			
