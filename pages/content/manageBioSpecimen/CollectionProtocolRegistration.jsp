@@ -179,6 +179,7 @@
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value=""/>
 						<html:hidden property="participantID" />
+						<html:hidden property="withdrawlButtonStatus"/>
 					</td>
 					<td><html:hidden property="id"/>
 					<td><html:hidden property="onSubmit"/></td>
@@ -350,6 +351,7 @@
 
 	<%
 		List responseList =(List)request.getAttribute("responseList");
+		//&&form.getConsentTierCounter()>0
 		if(responseList!=null)
 		{
 	%>

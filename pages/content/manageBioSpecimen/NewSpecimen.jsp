@@ -520,6 +520,7 @@
 								<html:hidden property="forwardTo" value=""/>
 								<html:hidden property="virtuallyLocated"/>
 								<html:hidden property="containerId" styleId="containerId"/>
+								<html:hidden property="withdrawlButtonStatus"/>
 							</td>
 							<td>
 

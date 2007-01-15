@@ -63,7 +63,6 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 
 	/**
 	 * Represents the weather participant Name is selected or not.
-	 *
 	 */    	
 	protected boolean checkedButton; 	
 	
@@ -90,6 +89,11 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	 * Consent Date, Date on which Consent is Signed
 	 */
 	protected String consentDate="";
+	/**
+	 * Consent Date, Date on which Consent is Signed
+	 */
+	protected String withdrawlButtonStatus;
+	
 	
 	//Consent Tracking Module Virneder Mehta 25/11/2006	
 
@@ -517,6 +521,24 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	}
 	
 	/**
+	 * It returns status of button(return,discard,reset)
+	 * @return withdrawlButtonStatus
+	 */
+	public String getWithdrawlButtonStatus()
+	{
+		return withdrawlButtonStatus;
+	}
+
+	/**
+	 * It returns status of button(return,discard,reset)
+	 * @param withdrawlButtonStatus return,discard,reset
+	 */
+	public void setWithdrawlButtonStatus(String withdrawlButtonStatus)
+	{
+		this.withdrawlButtonStatus = withdrawlButtonStatus;
+	}
+	
+	/**
 	 * This function creates Array of String of keys and add them into the consentTiersList.
 	 * @return consentTiersList
 	 */
@@ -546,6 +568,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	public String getConsentTierMap()
 	{
 		return "consentResponseValue(ConsentBean:`_participantResponse)";
-	}
-	//Consent Tracking Virender Mehta 	
+	}	
+//	Consent Tracking Virender Mehta 	
+
 }

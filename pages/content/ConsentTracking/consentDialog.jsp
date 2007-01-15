@@ -5,7 +5,8 @@
 	 @author Virender Mehta 
 	 @version 1.1	
 	 Jsp name: consentDialog.jsp
-	 Description: This jsp is associated with ConsentTracking.jsp for pageOf SCG and pageOf NewSpecimen.
+	 Description: This jsp is associated with ConsentTracking.jsp for pageOf CollectionprotocolResistration,
+	 SpecimenCollectionGroup and NewSpecimen.
 	 Company: Washington University, School of Medicine, St. Louis.
 -->		
 
@@ -14,6 +15,14 @@
 	String withdrawAll = request.getParameter("withrawall");
 	System.out.println(withdrawAll);
 %>
+<script language="JavaScript">
+
+function getButtonStatus(element)
+{
+	parent.opener.document.forms[0].withdrawlButtonStatus.value=element.value;
+}
+
+</script>
 
 <html>
 	<head>
@@ -60,7 +69,7 @@
 						</b>	
 					</td>
 					<td align="right" class="formField">
-						<html:button styleClass="actionButton" style="width:100%" value="Discard" property="discard"/>
+						<input type="button" style="actionButton" style="width:100%" value="Discard"  onclick="getButtonStatus(this)"/>
 					</td>
 				</tr>
 				<tr>
@@ -70,7 +79,7 @@
 						<b>
 					</td>
 					<td align="right" class="formField">
-						<html:button styleClass="actionButton" style="width:100%" value="Return" property="return"/>
+						<input type="button" style="actionButton" style="width:100%" value="Return"  onclick="getButtonStatus(this)"/>
 					</td>
 				</tr>
 				<%
@@ -84,7 +93,7 @@
 						<b>
 					</td>
 					<td align="right" class="formField">
-						<html:button styleClass="actionButton" value="Reset" style="width:100%" property="reset"/>
+						<input type="button" style="actionButton" value="Reset" style="width:100%" onclick="getButtonStatus(this)"/>
 					</td>
 				</tr>
 				<%

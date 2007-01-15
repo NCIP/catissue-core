@@ -67,6 +67,12 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	 * Consent Date, Date on which Consent is Signed
 	 */
 	protected String consentDate="";
+	
+	/**
+	 * Consent Date, Date on which Consent is Signed
+	 */
+	protected String withdrawlButtonStatus;
+	
 	//Consent Tracking Module (Virender Mehta)
 
 	/**
@@ -1099,6 +1105,24 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	public void setWitnessName(String witnessName)
 	{
 		this.witnessName = witnessName;
+	}
+	
+	/**
+	 * It returns status of button(return,discard,reset)
+	 * @return withdrawlButtonStatus
+	 */
+	public String getWithdrawlButtonStatus()
+	{
+		return withdrawlButtonStatus;
+	}
+
+	/**
+	 * It returns status of button(return,discard,reset)
+	 * @param withdrawlButtonStatus return,discard,reset
+	 */
+	public void setWithdrawlButtonStatus(String withdrawlButtonStatus)
+	{
+		this.withdrawlButtonStatus = withdrawlButtonStatus;
 	}
 	
 	/**

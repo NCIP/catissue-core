@@ -57,6 +57,7 @@
 				 <!--Collection Protocol -->
 				 <tr>
 			     	<td class="formRequiredNotice" width="5">*</td>
+			     	<html:hidden property="withdrawlButtonStatus"/>
 				    <td class="formRequiredLabel">
 						<label for="collectionProtocolId">
 							<bean:message key="specimenCollectionGroup.protocolTitle"/>
