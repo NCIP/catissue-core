@@ -178,7 +178,7 @@
 									String orderItemId = "value(RequestDetailsBean:"+i+"_orderItemId)";
 									String specimenIdInMap = "value(RequestDetailsBean:"+i+"_specimenId)";
 									boolean disableRow = false;
-									if(requestDetailsBeanObj.getAssignedStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST) || requestDetailsBeanObj.getAssignedStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE) || requestDetailsBeanObj.getAssignedStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE) || requestDetailsBeanObj.getAssignedStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+									if(requestDetailsBeanObj.getAssignedStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
 									{
 										disableRow=true;
 									}
@@ -287,8 +287,13 @@
 									 	<td class="dataCellText" width="30%">									 											 		
 									 		<html:select property="<%=assignStatus %>" name="requestDetailsForm" styleClass="formFieldSized15" styleId="<%=select%>"  
 					 								onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableRow %>">
-					 								<html:optionsCollection property="itemsStatusList" name="requestDetailsBeanObj" label="name" value="value"/>		
-									 				   
+					 								<%if((requestDetailsBeanObj.getInstanceOf().trim().equalsIgnoreCase("Derived") || requestDetailsBeanObj.getInstanceOf().trim().equalsIgnoreCase("Pathological")) && (requestDetailsBeanObj.getSpecimenList().size() == 0))
+					 								{
+					 								 %>
+					 								 	<html:options collection="<%=Constants.ITEM_STATUS_LIST_WO_DISTRIBUTE%>" labelProperty="name" property="value"/>											 				   
+					 								 <%}else{%>					 								
+						 								<html:options collection="<%=Constants.ITEM_STATUS_LIST%>" labelProperty="name" property="value"/>											 				   
+					 								<%}%>
 									 		</html:select>
 									 	</td>
 									 </tr>
@@ -311,9 +316,8 @@
 									    				<bean:message key="orderingSystem.requestdetails.label.description" />
 									   				</label> : 				
 									   			</td>
-												<td rowspan='2' nowrap>
-												 <bean:define id="specimenDescription" name="requestDetailsBeanObj" property="description" type="java.lang.String" />
-													<html:textarea styleId="description" styleClass="formFieldSized2" value="<%=specimenDescription%>" property="description" cols='60' rows='2' disabled="<%= disableRow %>"/>
+												<td rowspan='2' nowrap>												 
+													<html:textarea styleId="description" styleClass="formFieldSized2"  property="<%= description%>" cols='60' rows='2' disabled="<%= disableRow %>"/>
 												</td>
 									   		</tr>
 									   		<tr>

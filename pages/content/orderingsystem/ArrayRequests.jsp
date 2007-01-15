@@ -74,7 +74,7 @@
 								<bean:message key='orderingSystem.tableheader.label.arrayStatus' />:
 								<html:select property="<%= arrayStatus %>" name="requestDetailsForm" styleClass="formFieldSized2" styleId="<%=arrayId%>" 				 								
 									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" > 
-									<html:optionsCollection property="arrayStatusList"  name="definedArrayRequestBean" label="name" value="value"/>
+									<html:options collection="<%=Constants.ITEM_STATUS_LIST%>" labelProperty="name" property="value"/>											 				   
 								</html:select>
 							</td>
 							<td nowrap>
@@ -254,7 +254,7 @@
 								 	<td class="dataCellText" width="30%">
 							 				<html:select property="<%=assignStatusArray%>" name="requestDetailsForm" styleClass="formFieldSized15"  
 								 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableArrayOrderItemRow %>">
-								 			 	<html:optionsCollection property="itemStatusList" name="defineArrayDetailsBeanObj" label="name" value="value"/>		
+								 			 	<html:options collection="<%=Constants.ITEM_STATUS_LIST%>" labelProperty="name" property="value"/>											 				   
 											</html:select>
 								 	</td>
 							</tr>
@@ -404,7 +404,8 @@
 							String existingArrayOrderItemId = "value(ExistingArrayDetailsBean:"+rowCounter+"_orderItemId)";	
 							//String existingRequestedQty = "value(ExistingArrayDetailsBean:"+rowCounter+"_requestedQuantity)";
 							String existingAssignedQty = "value(ExistingArrayDetailsBean:"+rowCounter+"_assignedQuantity)";				
-	
+							String description = "value(ExistingArrayDetailsBean:"+rowCounter+"_description)";
+							
 							//To assign id to select element
 							String existingArraySelectId = "existingArray_" + rowCounter;
 							boolean disableExistingArrayOrderItem = false;
@@ -468,9 +469,8 @@
 							%>
 							</td>
 					 		
-					 		<td class="dataCellText" width="20%">
-					 		<bean:define id="existingArrayDescription" name="existingArrayRequestObj" property="description" type="java.lang.String" /> 
-					 		<html:textarea styleId="description" styleClass="formFieldSized" value="<%=existingArrayDescription%>" property="description" cols='60' rows='2' disabled="<%=disableExistingArrayOrderItem%>"/>
+					 		<td class="dataCellText" width="20%">					 		
+						 		<html:textarea name="requestDetailsForm" styleId="description" styleClass="formFieldSized" property="<%= description %>" cols='60' rows='2' readonly="true"/>
 					 		</td>
 					 		
 					 		<td class="dataCellText" width="15%">
@@ -480,7 +480,7 @@
 					 		<td class="dataCellText" width="25%">
 					 			<html:select property="<%=assignedStatus%>" name="requestDetailsForm" styleClass="formFieldSized15" styleId="<%=existingArraySelectId%>" 
 								 			disabled="<%=disableExistingArrayOrderItem%>" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								 	<html:optionsCollection property="itemStatusList" name="existingArrayRequestObj" label="name" value="value"/>		
+								 	<html:options collection="<%=Constants.ITEM_STATUS_LIST%>" labelProperty="name" property="value"/>											 				   
 								</html:select>
 					 		</td>
 		
