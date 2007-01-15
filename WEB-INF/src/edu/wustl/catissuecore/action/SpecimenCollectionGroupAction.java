@@ -138,46 +138,46 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 						indexType="protocolParticipantIdentifier";
 					}
 				}
-				//Get CollectionprotocolRegistration Object
-				CollectionProtocolRegistration collectionProtocolRegistration=getcollectionProtocolRegistrationObj(id,cp_id,indexType);
-				
-				User witness= collectionProtocolRegistration.getConsentWitness();
-				if(witness==null||witness.getFirstName()==null)
+				//If participant and Participant ProtocolIdentifier is not selected
+				if(!id.equalsIgnoreCase("-1"))
 				{
-					String witnessName="";
-					specimenCollectionGroupForm.setWitnessName(witnessName);
-				}
-				else
-				{
-					specimenCollectionGroupForm.setWitnessName(witness.getFirstName());
-				}
-				String getConsentDate=Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
-				specimenCollectionGroupForm.setConsentDate(getConsentDate);
-				String getSignedConsentURL=Utility.toString(collectionProtocolRegistration.getSignedConsentDocumentURL());
-				specimenCollectionGroupForm.setSignedConsentUrl(getSignedConsentURL);
-				//Set witnessName,ConsentDate and SignedConsentURL				
-				
-				Set participantResponseSet = (Set)collectionProtocolRegistration.getConsentTierResponseCollection();
-				List participantResponseList= new ArrayList(participantResponseSet);
-				
-				if(operation.equalsIgnoreCase(Constants.ADD))
-				{
-					Map tempMap=prepareConsentMap(participantResponseList);
-					specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
-					specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size()) ;
-				}
-				else
-				{
-					String scgID = String.valueOf(specimenCollectionGroupForm.getId());
-					SpecimenCollectionGroup specimenCollectionGroup = getSCGObj(scgID);
+					//Get CollectionprotocolRegistration Object
+					CollectionProtocolRegistration collectionProtocolRegistration=getcollectionProtocolRegistrationObj(id,cp_id,indexType);
+					User witness= collectionProtocolRegistration.getConsentWitness();
+					if(witness==null||witness.getFirstName()==null)
+					{
+						String witnessName="";
+						specimenCollectionGroupForm.setWitnessName(witnessName);
+					}
+					else
+					{
+						specimenCollectionGroupForm.setWitnessName(witness.getFirstName());
+					}
+					String getConsentDate=Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+					specimenCollectionGroupForm.setConsentDate(getConsentDate);
+					String getSignedConsentURL=Utility.toString(collectionProtocolRegistration.getSignedConsentDocumentURL());
+					specimenCollectionGroupForm.setSignedConsentUrl(getSignedConsentURL);
+					//Set witnessName,ConsentDate and SignedConsentURL				
 					
-					Collection consentResponse = specimenCollectionGroup.getCollectionProtocolRegistration().getConsentTierResponseCollection();
-					Collection consentResponseStatuslevel= specimenCollectionGroup.getConsentTierStatusCollection();
-								
-					Map tempMap=prepareSCGResponseMap(consentResponseStatuslevel, consentResponse);
+					Set participantResponseSet = (Set)collectionProtocolRegistration.getConsentTierResponseCollection();
+					List participantResponseList= new ArrayList(participantResponseSet);
 					
-					specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
-					specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size()) ;
+					if(operation.equalsIgnoreCase(Constants.ADD))
+					{
+						Map tempMap=prepareConsentMap(participantResponseList);
+						specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
+						specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size()) ;
+					}
+					else
+					{
+						String scgID = String.valueOf(specimenCollectionGroupForm.getId());
+						SpecimenCollectionGroup specimenCollectionGroup = getSCGObj(scgID);
+						Collection consentResponse = specimenCollectionGroup.getCollectionProtocolRegistration().getConsentTierResponseCollection();
+						Collection consentResponseStatuslevel= specimenCollectionGroup.getConsentTierStatusCollection();
+						Map tempMap=prepareSCGResponseMap(consentResponseStatuslevel, consentResponse);
+						specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
+						specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size()) ;
+					}
 				}
 				//Setting the participant responses
 				//Adding name,value pair in NameValueBean 
