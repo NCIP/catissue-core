@@ -10,10 +10,13 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.domain.OrderDetails;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
@@ -102,5 +105,51 @@ public class OrderingSystemUtil
 		requestViewBean.setRequestedDate(Utility.parseDateToString(order.getRequestedDate(), Constants.DATE_PATTERN_MM_DD_YYYY));
 		requestViewBean.setEmail(order.getDistributionProtocol().getPrincipalInvestigator().getEmailAddress());
 		return requestViewBean;
+	}
+	/**
+	 * @param rootNode Specimen
+	 * @param childNodes Collection
+	 * @return List. AyyayList of children Specimen objects.
+	 */
+	public static List getAllChildrenSpecimen(Specimen rootNode,Collection childNodes)
+	{
+		ArrayList childrenSpecimenList = new ArrayList();	
+		
+		//If no childNodes present then tree will contain only the root node.
+		if(childNodes == null)
+		{
+			return null;
+		}
+		
+		//Otherwise
+		Iterator specimenItr = childNodes.iterator();
+		while(specimenItr.hasNext())
+		{
+			Specimen specimen  = (Specimen)specimenItr.next();
+			List subChildNodesList = getAllChildrenSpecimen(specimen,specimen.getChildrenSpecimen());
+			childrenSpecimenList.add(specimen);
+		}
+		
+		return childrenSpecimenList;
+	}
+	/**
+	 * @param childrenSpecimenList Collection
+	 * @param className String
+	 * @param type String
+	 * @return List. The namevaluebean list of children specimen of particular 'class' and 'type' to display.
+	 */
+	public static List getChildrenSpecimenForClassAndType(Collection childrenSpecimenList,String className,String type)
+	{
+		List finalChildrenSpecimenList = new ArrayList();		
+		Iterator childrenSpecimenListIterator = childrenSpecimenList.iterator();
+		while(childrenSpecimenListIterator.hasNext())
+		{
+			Specimen childrenSpecimen = (Specimen)childrenSpecimenListIterator.next();
+			if(childrenSpecimen.getClassName().trim().equalsIgnoreCase(className) && childrenSpecimen.getType().trim().equalsIgnoreCase(type))
+			{
+				finalChildrenSpecimenList.add(childrenSpecimen);
+			}
+		}
+		return finalChildrenSpecimenList;
 	}
 }
