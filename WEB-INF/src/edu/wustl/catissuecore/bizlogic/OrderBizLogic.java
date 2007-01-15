@@ -15,7 +15,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.wustl.catissuecore.bean.ExistingArrayDetailsBean;
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
@@ -28,6 +27,7 @@ import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
@@ -180,26 +180,45 @@ public class OrderBizLogic extends DefaultBizLogic
 				{
 					throw new DAOException(ApplicationProperties.getValue("orderdistribution.quantity.format.errmsg"));
 				}
-			}
-			//If requestFor drop down is null, do not allow distribution of that order item
-//			if(orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+			}	
+//			Collection oldOrderItemColl = oldOrder.getOrderItemCollection();
+//			Iterator oldOrderItemCollIter = oldOrderItemColl.iterator();
+//			while(oldOrderItemCollIter.hasNext())
 //			{
-//				if(orderItem instanceof DerivedSpecimenOrderItem)
+//				OrderItem oldorderItem = (OrderItem)oldOrderItemCollIter.next();
+//				if(oldorderItem.getId().compareTo(orderItem.getId()) == 0)
 //				{
-//					DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)orderItem;
-//					List childrenSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getDistributedItem().getSpecimen(),derivedSpecimenOrderItem.getDistributedItem().getSpecimen().getChildrenSpecimen());
-//					List finalChildrenSpecimenCollection = null;
-//					if(childrenSpecimenCollection != null)
+//					//If requestFor drop down is null, do not allow distribution of that order item
+//					if(orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
 //					{
-//						finalChildrenSpecimenCollection = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenCollection,derivedSpecimenOrderItem.getSpecimenClass(),derivedSpecimenOrderItem.getSpecimenType());
+//						if(oldorderItem instanceof DerivedSpecimenOrderItem)
+//						{
+//							DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)oldorderItem;
+//							List childrenSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(orderItem.getDistributedItem().getSpecimen(),orderItem.getDistributedItem().getSpecimen().getChildrenSpecimen());
+//							List finalChildrenSpecimenCollection = null;
+//							if(childrenSpecimenCollection != null)
+//							{
+//								finalChildrenSpecimenCollection = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenCollection,derivedSpecimenOrderItem.getSpecimenClass(),derivedSpecimenOrderItem.getSpecimenType());
+//							}
+//							if(finalChildrenSpecimenCollection == null || finalChildrenSpecimenCollection.isEmpty())
+//							{
+//								throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.notpossible.errmsg"));
+//							}
+//						}
+//						else if(oldorderItem instanceof NewSpecimenArrayOrderItem)
+//						{
+//							NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)oldorderItem;
+//							if(newSpecimenArrayOrderItem.getSpecimenArray() == null)
+//							{
+//								throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.arrayNotCreated.errmsg"));
+//							}
+//						}
 //					}
-//					if(finalChildrenSpecimenCollection == null || finalChildrenSpecimenCollection.isEmpty())
-//					{
-//						throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.notpossible.errmsg"));
-//					}
-//				}
+//				}				
 //			}
 		}
+		
+		
 		return true;
 	}
 
@@ -234,7 +253,7 @@ public class OrderBizLogic extends DefaultBizLogic
 			{
 				OrderItem newOrderItem = (OrderItem) newSetIter.next();
 				//Update Old OrderItem only when its Id matches with NewOrderItem id and the order is not distributed and the oldorderitem status and neworderitem status are different or description has been updated.
-				if (oldOrderItem.getId().compareTo(newOrderItem.getId()) == 0 && oldOrderItem.getDistributedItem() == null && (!oldOrderItem.getStatus().trim().equalsIgnoreCase(newOrderItem.getStatus().trim()) || !oldOrderItem.getDescription().trim().equalsIgnoreCase(newOrderItem.getDescription().trim())))
+				if (oldOrderItem.getId().compareTo(newOrderItem.getId()) == 0 && oldOrderItem.getDistributedItem() == null && (!oldOrderItem.getStatus().trim().equalsIgnoreCase(newOrderItem.getStatus().trim()) || (oldOrderItem.getDescription() != null && !oldOrderItem.getDescription().equalsIgnoreCase(newOrderItem.getDescription()))))
 				{					
 						if (newOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
 						{
