@@ -383,9 +383,10 @@ function insRow(subdivtag,iCounter,blockCounter)
 	function consentPage()
 	{
 		
-		var checkboxObject=document.getElementById('defineConsents');
+		var checkboxObject=document.getElementById('consentChecked');
 		if(checkboxObject.checked)
 		{
+			document.forms[0].consentChecked.value = true;
 			switchToTab("consentTab");
 		}
 		else
@@ -630,16 +631,16 @@ if(pageView.equals("add") || pageView.equals("edit"))
 						 </td>
 					</tr>
 				</logic:equal>
-	<!-- Consent Check box -->
+<!-- Consent Check box -->
 				<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel">
-							<label for="enrollment">
-								Do you want to enter consents
+							<label for="consentChecked">
+								<bean:message key="consent.consentcheckedmessage" />
 							</label>
 						</td>
 						<td class="formField" colspan=2>
-							<input type="checkbox" name="defineConsents" id="defineConsents" />
+							<html:checkbox property="consentChecked" styleId="consentChecked" />
 						</td>
 					</tr>
 

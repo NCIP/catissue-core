@@ -63,7 +63,8 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * whether Aliquote in same container
 	 */
 	protected boolean aliqoutInSameContainer = false;
-		
+	
+	//Consent tracking(Virender Mehta)
 	/**
 	 * Unsigned Form Url for the Consents
 	 */
@@ -78,7 +79,12 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * No of Consent Tier
 	 */
 	private int consentTierCounter=1;
-
+	/**
+	 * CheckBox for consent is checked or not
+	 */
+	private boolean consentChecked = false;
+	
+	//Consent tracking(Virender Mehta)
 	/**
 	 * No argument constructor for CollectionProtocolForm class.
 	 */
@@ -704,5 +710,23 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		this.consentTierCounter = consentTierCounter;
 	}	
+	/**
+	 * Get the status of consent Checkbox
+	 * @return consentChecked
+	 */
+	public boolean getConsentChecked()
+	{
+		return consentChecked;
+	}
+
+	/**
+	 * Get the status of consent Checkbox
+	 * @param consentChecked Get the status of consent Checkbox
+	 */
+	public void setConsentChecked(boolean consentChecked)
+	{
+		this.consentChecked = consentChecked;
+	}
+
 //	For Consent Tracking End
 }
