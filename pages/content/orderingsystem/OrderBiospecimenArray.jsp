@@ -35,10 +35,13 @@ function showTissueSlideFromBlock(object,element)
 		var rowCount = document.getElementById('rowCount').value;			
 		for(var i=0;i<rowCount;i++)
 		{
-			var reqVar = 'requestedQuantity_' +i;				
+			var reqVar = 'requestedQuantity_' +i;	
+			//TextBox of the Requested Qty
 			txtId = document.getElementById(reqVar);				
 			txtId.disabled=true;
 			txtId.value="NA";
+			var unitReqQtyId = "unitRequestedQuantity_" + i;
+			document.getElementById(unitReqQtyId).innerHTML="";
 		}	
 
 	}
@@ -53,10 +56,13 @@ function showTissueSlideFromBlock(object,element)
 		var rowCount = document.getElementById('rowCount').value;			
 		for(var i=0;i<rowCount;i++)
 		{
-			var reqVar = 'requestedQuantity_' +i;				
+			var reqVar = 'requestedQuantity_' +i;	
+			//TextBox of the Requested Qty			
 			txtId = document.getElementById(reqVar);				
 			txtId.disabled=false;
 			txtId.value="";
+			var unitReqQtyId = "unitRequestedQuantity_" + i;
+			document.getElementById(unitReqQtyId).innerHTML="<%=Constants.UNIT_CN%>";
 		}	
 	}
 }
@@ -215,8 +221,6 @@ function onCheck()
 		document.OrderBiospecimenArray.orderButton.disabled=true;
 }
 
-
-
 </script>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <%boolean readOnlyValue=false,readOnlyForAll=false;
@@ -373,6 +377,7 @@ String onClassChangeFunctionName = "onTypeChange(this)";%>
 									test="unblock";
 							}
 								String txtReqQty = "requestedQuantity_" + i;
+								String unitReqQtyId = "unitRequestedQuantity_" + i;
 							%>
 									<tr class="dataRowLight" width="100%">
 			
@@ -390,6 +395,8 @@ String onClassChangeFunctionName = "onTypeChange(this)";%>
 	
 										<td class="dataCellText" width="25%" >
 											<html:text property="<%=requestedQuantity%>" styleClass="formFieldSized3" maxlength="8"  size="5" styleId="<%=txtReqQty%>" value="NA" disabled="true"/>
+											<span id="<%=unitReqQtyId%>"></span>
+											<html:hidden property="<%=unitRequestedQuantity%>" value="" styleId="unitRequestedQuantity"/>
 										</td>
 											
 										<td class="dataCellText" width="20%">  

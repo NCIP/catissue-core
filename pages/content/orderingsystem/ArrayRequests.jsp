@@ -439,7 +439,8 @@
 											{	
 							%>
 								<!--html:text property="requestedQuantity" name="existingArrayRequestObj" styleClass="formFieldSized3" maxlength="8"  size="5" disabled="true"/-->
-								<bean:write name="existingArrayRequestObj" property="requestedQuantity" />
+								<bean:write name="existingArrayRequestObj" property="requestedQuantity" />&nbsp;&nbsp;
+								<%=Constants.UNIT_CN%>
 							<%
 											}
 							%>
@@ -461,6 +462,7 @@
 											{	
 							%>
 								<html:text property="<%=existingAssignedQty%>" styleClass="formFieldSized3" maxlength="8"  size="5" disabled="<%=disableExistingArrayOrderItem%>"/>
+								&nbsp;&nbsp;<%=Constants.UNIT_CN%>
 							<%
 											}
 							%>
