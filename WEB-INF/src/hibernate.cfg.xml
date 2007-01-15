@@ -9,11 +9,17 @@
     <session-factory>
     	<property name="show_sql">false</property>
     	<property name="dialect">net.sf.hibernate.dialect.MySQLDialect</property>	
-        <property name="connection.datasource">java:/catissuecore</property>
-        <property name="hibernate.transaction.factory_class">net.sf.hibernate.transaction.JDBCTransactionFactory</property>
-		<property name="transaction.manager_lookup_class">net.sf.hibernate.transaction.JBossTransactionManagerLookup</property>
-    	<property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
-		<property name="hibernate.jdbc.batch_size">0</property>
+    	<property name="hibernate.transaction.factory_class">net.sf.hibernate.transaction.JDBCTransactionFactory</property>
+        <property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
+        
+        <@@WEBAPPLICATION_START@@property name="connection.datasource">java:/catissuecore</property>
+        <property name="transaction.manager_lookup_class">net.sf.hibernate.transaction.JBossTransactionManagerLookup</property>
+		<property name="hibernate.jdbc.batch_size">0</property @@WEBAPPLICATION_END@@>
+		
+		<@@STANDALONE_START@@property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+	    <property name="connection.url">@@URL@@</property>
+	    <property name="connection.username">@@DATABASE_USERNAME@@</property>
+	    <property name="connection.password">@@DATABSE_PASSWORD@@</property @@STANDALONE_END@@>   
     	
 		<!--Suite-->
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderItem.hbm.xml" />
