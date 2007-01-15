@@ -623,3 +623,8 @@ update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.acti
 update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageType', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageType', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageType' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_StorageType';
 update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_User', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_User', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_User' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_User';
 
+/* changes for making cpbasedSearchAction a secureAction - by vaishali*/
+DELETE FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.CPBasedSearchAction';
+INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE_ID,APPLICATION_ID,UPDATE_DATE) VALUES (CSM_PROTECTIO_PROTECTION_E_SEQ.nextval,'edu.wustl.catissuecore.action.CPBasedSearchAction','edu.wustl.catissuecore.action.CPBasedSearchAction','edu.wustl.catissuecore.action.CPBasedSearchAction',NULL,NULL,1,to_date('2007-01-15','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (CSM_PG_PE_PG_PE_ID_SEQ.nextval,19,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.CPBasedSearchAction'),to_date('0001-01-01','yyyy-mm-dd'));
+

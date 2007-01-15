@@ -626,3 +626,16 @@ update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.acti
 update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageContainer', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageContainer', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageContainer' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_StorageContainer';
 update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageType', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageType', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageType' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_StorageType';
 update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_User', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_User', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_User' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_User';
+
+
+
+
+
+
+/* changes for making cpbasedSearchAction a secureAction - by vaishali*/
+DELETE FROM `CSM_PROTECTION_ELEMENT` WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.CPBasedSearchAction';
+INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (NULL,'edu.wustl.catissuecore.action.CPBasedSearchAction','edu.wustl.catissuecore.action.CPBasedSearchAction','edu.wustl.catissuecore.action.CPBasedSearchAction',NULL,NULL,1,'2007-01-15');
+INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (NULL,19,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.CPBasedSearchAction'),'0000-00-00');
+
+
+/* finish */

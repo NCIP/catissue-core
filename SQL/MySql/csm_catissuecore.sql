@@ -414,6 +414,8 @@ INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,
 /* Mandar 05Dec06 - MultipleSpecimen action entries end */
 
 
+/* changes for making cpbasedSearchAction a secureAction - by vaishali*/
+INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (323,19,292,'0000-00-00');
 /* changes done */
 /* Table Objects for table csm_privilege*/
 
@@ -771,6 +773,8 @@ INSERT into `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMEN
 /* Mandar 05Dec06 - MultipleSpecimen action entries end */
 
 
+/* cpBasedSearchResult changes  - vaishali*/
+INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (292,'edu.wustl.catissuecore.action.CPBasedSearchAction','edu.wustl.catissuecore.action.CPBasedSearchAction','edu.wustl.catissuecore.action.CPBasedSearchAction',NULL,NULL,1,'2007-01-15');
 /* changes finish */
 /* Table Objects for table csm_protection_group*/
 
