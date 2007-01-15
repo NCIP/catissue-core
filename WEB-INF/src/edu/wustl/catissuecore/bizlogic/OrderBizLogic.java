@@ -10,12 +10,12 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.wustl.catissuecore.bean.ExistingArrayDetailsBean;
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
@@ -26,6 +26,7 @@ import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.OrderItem;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
 import edu.wustl.catissuecore.util.EmailHandler;
+import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -180,6 +181,24 @@ public class OrderBizLogic extends DefaultBizLogic
 					throw new DAOException(ApplicationProperties.getValue("orderdistribution.quantity.format.errmsg"));
 				}
 			}
+			//If requestFor drop down is null, do not allow distribution of that order item
+//			if(orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+//			{
+//				if(orderItem instanceof DerivedSpecimenOrderItem)
+//				{
+//					DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)orderItem;
+//					List childrenSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getDistributedItem().getSpecimen(),derivedSpecimenOrderItem.getDistributedItem().getSpecimen().getChildrenSpecimen());
+//					List finalChildrenSpecimenCollection = null;
+//					if(childrenSpecimenCollection != null)
+//					{
+//						finalChildrenSpecimenCollection = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenCollection,derivedSpecimenOrderItem.getSpecimenClass(),derivedSpecimenOrderItem.getSpecimenType());
+//					}
+//					if(finalChildrenSpecimenCollection == null || finalChildrenSpecimenCollection.isEmpty())
+//					{
+//						throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.notpossible.errmsg"));
+//					}
+//				}
+//			}
 		}
 		return true;
 	}
@@ -214,8 +233,8 @@ public class OrderBizLogic extends DefaultBizLogic
 			while (newSetIter.hasNext())
 			{
 				OrderItem newOrderItem = (OrderItem) newSetIter.next();
-				//Update Old OrderItem only when its Id matches with NewOrderItem id and the order is not distributed and the oldorderitem status and neworderitem status are different.
-				if (oldOrderItem.getId().compareTo(newOrderItem.getId()) == 0 && oldOrderItem.getDistributedItem() == null && !oldOrderItem.getStatus().trim().equalsIgnoreCase(newOrderItem.getStatus().trim()))
+				//Update Old OrderItem only when its Id matches with NewOrderItem id and the order is not distributed and the oldorderitem status and neworderitem status are different or description has been updated.
+				if (oldOrderItem.getId().compareTo(newOrderItem.getId()) == 0 && oldOrderItem.getDistributedItem() == null && (!oldOrderItem.getStatus().trim().equalsIgnoreCase(newOrderItem.getStatus().trim()) || !oldOrderItem.getDescription().trim().equalsIgnoreCase(newOrderItem.getDescription().trim())))
 				{					
 						if (newOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
 						{
@@ -253,7 +272,14 @@ public class OrderBizLogic extends DefaultBizLogic
 						//Setting Description and Status.
 						if(newOrderItem.getDescription() != null)
 						{
-							oldOrderItem.setDescription(oldOrderItem.getDescription()+" "+newOrderItem.getDescription());
+							if(oldOrderItem instanceof ExistingSpecimenArrayOrderItem)
+							{
+								oldOrderItem.setDescription(oldOrderItem.getDescription()+" "+newOrderItem.getDescription());
+							}
+							else
+							{
+								oldOrderItem.setDescription(newOrderItem.getDescription());
+							}
 						}
 						oldOrderItem.setStatus(newOrderItem.getStatus());												
 						//The number of Order Items updated.
@@ -338,23 +364,27 @@ public class OrderBizLogic extends DefaultBizLogic
 	 */
 	private void calculateOrderStatus(OrderItem oldOrderItem)
 	{
-		//		For order status
-		if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_NEW))
-		{
-			orderStatusNew++;
-		}
-		else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
-		{
-			orderStatusCompleted++;
-		}
-		else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION) || oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW) || oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION))
-		{
-			orderStatusPending++;
-		}
-		else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST) || oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE) || oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE))
-		{
-			orderStatusRejected++;
-		}
+		//Order id is null for specimen orderItems associated with NewSpecimenArrayOrderItem
+//		if(oldOrderItem.getOrder().getId() != null)
+//		{
+//			For order status
+			if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_NEW))
+			{
+				orderStatusNew++;
+			}
+			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+			{
+				orderStatusCompleted++;
+			}
+			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION) || oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW) || oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION))
+			{
+				orderStatusPending++;
+			}
+			else if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST) || oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE) || oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE))
+			{
+				orderStatusRejected++;
+			}
+//		}
 	}
 	/**
 	 * @param orderOld object
