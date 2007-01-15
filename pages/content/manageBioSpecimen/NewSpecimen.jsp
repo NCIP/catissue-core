@@ -366,9 +366,11 @@
 		var display3=document.getElementById('bioHazards'); 
 		display3.style.display=tabSelected;
 			
-		var display4=document.getElementById('table4');
-		display4.style.display=displayTable;	
-		
+		var displayConsentTable=document.getElementById('table4');
+		if(displayConsentTable!=null)
+		{
+			displayConsentTable.style.display=displayTable;	
+		}
 		var display5=document.getElementById('specimenPageButton');
 		display5.style.display=showAlways;
 		
@@ -1380,7 +1382,7 @@
 <!--  Consent Tracking Module Virender mehta	 -->														
 							<%
 							List requestParticipantResponse = (List)request.getAttribute("specimenResponseList");						 	
-							if(requestParticipantResponse!=null)
+							if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
 							{
 							%>
 							    <%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %> 

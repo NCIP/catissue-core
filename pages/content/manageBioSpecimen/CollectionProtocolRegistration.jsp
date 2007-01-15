@@ -351,8 +351,7 @@
 
 	<%
 		List responseList =(List)request.getAttribute("responseList");
-		//&&form.getConsentTierCounter()>0
-		if(responseList!=null)
+		if(responseList!=null&&form.getConsentTierCounter()>0)
 		{
 	%>
    	 

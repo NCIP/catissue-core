@@ -330,7 +330,7 @@
 
 	<%
 		List requestParticipantResponse = (List)request.getAttribute("specimenCollectionGroupResponseList");						 	
-		if(requestParticipantResponse!=null)
+		if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
 		{
 			
 	%>
