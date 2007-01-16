@@ -403,7 +403,8 @@ function enablePreviousCheckBox(element)
 							String attributeNameKey = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
 							String attributeNameValue = (String)form.getValue(attributeNameKey);
 							String attributeType = null;	
-							List columnNameValueBeanList = (List) request.getAttribute(attributeNameList);							
+							List columnNameValueBeanList = (List) request.getAttribute(attributeNameList);		
+							System.out.println("---------"+objectChanged);
 							if(columnNameValueBeanList != null && !columnNameValueBeanList.isEmpty() && i==Integer.parseInt(noOfRows) && (objectChanged == null || !objectChanged.equals("")))
 							{								
 								NameValueBean nameValueBean = (NameValueBean) columnNameValueBeanList.get(0);
@@ -438,7 +439,7 @@ function enablePreviousCheckBox(element)
 								<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
 							<%
 								}
-								else if (attributeType.equals(Constants.FIELD_TYPE_BIGINT))
+								else if (attributeType.equals(Constants.FIELD_TYPE_BIGINT) || attributeType.equals("double"))
 								{
 							%>
 								<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
