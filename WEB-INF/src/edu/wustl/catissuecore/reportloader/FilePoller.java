@@ -36,7 +36,7 @@ public class FilePoller implements Observable
 		XMLPropertyHandler.init("./catissuecore-properties"+File.separator+"caTissueCore_Properties.xml");
 		SiteInfoHandler.init(XMLPropertyHandler.getValue("site.info.filename"));
 		ApplicationProperties.initBundle("ApplicationResources");
-		
+		edu.wustl.catissuecore.util.global.Variables.isLoadFromCaties=true;
 	}
 	
 	/**
