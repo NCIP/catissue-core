@@ -366,7 +366,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 				this.signedConsentDocumentURL=null;
 			}
 			//Setting the consent witness
-			if(form.getWitnessId()!=0)
+			if(form.getWitnessId()>0)
 			{
 				this.consentWitness = new User();
 				consentWitness.setId(new Long(form.getWitnessId()));
