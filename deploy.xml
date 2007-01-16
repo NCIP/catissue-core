@@ -712,7 +712,7 @@ Thanking You,
 		<delete dir="${temp.dir}"/>
 	</target>
 	
-	<target name="catiesInstall" >
+	<target name="caties_install" >
 		<if>
 			<equals arg1="standAlone" arg2="${caties.installation.type}" />
 			<then>
@@ -770,10 +770,10 @@ Thanking You,
 				<copy file="${basedir}/CaTIES_conf/build.xml" todir="${caties.installation.dir}" overwrite="true"/>
 				<copy file="${basedir}/CaTIES_conf/sites_configuration.xml" todir="${caties.installation.dir}/CaTIES_conf" overwrite="true"/>
 				<delete dir="${temp.dir}" />
-			</then>
-		</if>
+			</then>	
 		<else>
 			<echo message="Oops! This task is for standAlone Application only....! Pleases check your catissueInstall.properties file." />
 		</else>
+		</if>
 	</target>
 </project>
