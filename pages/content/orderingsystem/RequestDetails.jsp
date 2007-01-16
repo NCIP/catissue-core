@@ -98,7 +98,7 @@
 						 			onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%= Constants.REQUESTED_ITEMS_STATUS_LIST %>" labelProperty="name" property="value"/>		
 						</html:select> 
-						<html:button value="Update" property="changeStatusButton" styleClass="actionButton" onclick="updateAllStatus()" title="<%= ApplicationProperties.getValue("requestdetails.tooltip.updateAllRequestStatus") %>">
+						<html:button value="Update All" property="changeStatusButton" styleClass="actionButton" onclick="updateAllStatus()" title="<%= ApplicationProperties.getValue("requestdetails.tooltip.updateAllRequestStatus") %>">
 					</html:button>
 					</td>
 					
@@ -287,7 +287,7 @@
 									 	<td class="dataCellText" width="30%">									 											 		
 									 		<html:select property="<%=assignStatus %>" name="requestDetailsForm" styleClass="formFieldSized15" styleId="<%=select%>"  
 					 								onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableRow %>">
-					 								<%if((requestDetailsBeanObj.getInstanceOf().trim().equalsIgnoreCase("Derived") || requestDetailsBeanObj.getInstanceOf().trim().equalsIgnoreCase("Pathological")) && (requestDetailsBeanObj.getSpecimenList().size() == 0))
+					 									<%if((requestDetailsBeanObj.getInstanceOf().trim().equalsIgnoreCase("Derived") || requestDetailsBeanObj.getInstanceOf().trim().equalsIgnoreCase("Pathological")) && (requestDetailsBeanObj.getSpecimenList().size() == 0))
 					 								{
 					 								 %>
 					 								 	<html:options collection="<%=Constants.ITEM_STATUS_LIST_WO_DISTRIBUTE%>" labelProperty="name" property="value"/>											 				   
