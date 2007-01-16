@@ -182,7 +182,10 @@ public class RequestDetailsForm extends AbstractActionForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		values = new HashMap();
-		int i = 0;
+		int requestDetailsBeanCounter = 0;
+		int arrayRequestBeanCounter = 0;
+		int arrayDetailsBeanCounter = 0;
+		int existingArrayBeanCounter = 0;
 		OrderDetails order = (OrderDetails)abstractDomain;
 		Collection orderItemColl = order.getOrderItemCollection();
 		Iterator iter = orderItemColl.iterator();
@@ -192,31 +195,34 @@ public class RequestDetailsForm extends AbstractActionForm
 			//Making keys
 	//		String requestFor = "RequestDetailsBean:"+i+"_requestFor"; 
 	//	 	String assignQty = "RequestDetailsBean:"+i+"_assignedQty";
-			String assignStatus = null;
-			String description = null;
-			if((orderItem instanceof ExistingSpecimenOrderItem) || (orderItem instanceof DerivedSpecimenOrderItem) || (orderItem instanceof PathologicalCaseOrderItem))
+			String assignStatus = "";
+			String description = "";
+			if(((orderItem instanceof ExistingSpecimenOrderItem) || (orderItem instanceof DerivedSpecimenOrderItem) || (orderItem instanceof PathologicalCaseOrderItem)) && (orderItem.getOrder().getId() != null))
 			{
-			 	assignStatus = "RequestDetailsBean:"+i+"_assignedStatus"; 	
-				description = "RequestDetailsBean:"+i+"_description";
+			 	assignStatus = "RequestDetailsBean:"+requestDetailsBeanCounter+"_assignedStatus"; 	
+				description = "RequestDetailsBean:"+requestDetailsBeanCounter+"_description";
+				requestDetailsBeanCounter++;
 			}
 			else if(orderItem instanceof ExistingSpecimenArrayOrderItem)
 			{
-				assignStatus = "ExistingArrayDetailsBean:"+i+"_assignedStatus"; 	
-				description = "ExistingArrayDetailsBean:"+i+"_description";
+				assignStatus = "ExistingArrayDetailsBean:"+existingArrayBeanCounter+"_assignedStatus"; 	
+				description = "ExistingArrayDetailsBean:"+existingArrayBeanCounter+"_description";
+				existingArrayBeanCounter++;
 			}
 			else if(orderItem instanceof NewSpecimenArrayOrderItem)
 			{
-				assignStatus = "DefinedArrayRequestBean:"+i+"_assignedStatus";				
+				assignStatus = "DefinedArrayRequestBean:"+arrayRequestBeanCounter+"_assignedStatus";
+				arrayRequestBeanCounter++;
 			}
 			// ArrayDetailsBean if order id in null for order items.
-			else if(orderItem.getOrder() == null)
+			else if(orderItem.getOrder().getId() == null)
 			{
-				assignStatus = "DefinedArrayDetailsBean:"+i+"_assignedStatus"; 	
-				description = "DefinedArrayDetailsBean:"+i+"_description";
+				assignStatus = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_assignedStatus"; 	
+				description = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_description";
+				arrayDetailsBeanCounter++;
 			}				
 			values.put(assignStatus,orderItem.getStatus());
 			values.put(description, orderItem.getDescription());			
-			i++;
 		}
 	}
 
