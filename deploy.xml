@@ -33,13 +33,6 @@
 	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<property name="oracle.lib" value="oracleDriver.jar"/>
 	
-	<property name="catiesInstallType" value="${caties.installation.type}"/>
-		
-	<property name="catiesInstallDir" value="${caties.installation.dir}"/>
-	
-	<property name="deidjar.dir" value="${caties.installation.dir}/deid"/>
-	<property name="filepollerjar.dir" value="${caties.installation.dir}/filepoller"/>
-	
 	<!-- Check for required properties -->
 	<target name="assert">
 		<if>
@@ -115,7 +108,7 @@
 		</if>
 		
 		<if>
-			<equals arg1="" arg2="${catiesInstallDir}"/>
+			<equals arg1="" arg2="${caties.installation.dir}"/>
 			<then>
 				<fail message="The property 'caties.installation.dir' can not be empty"/>
 			</then>
@@ -229,7 +222,7 @@
 			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}"/>
 		</replace>
 		<if>
-			<equals arg1="standAlone" arg2="${catiesInstallType}" />
+			<equals arg1="standAlone" arg2="${caties.installation.type}" />
 			<then>
 				<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
 					<replacefilter token="@@WEBAPPLICATION_START@@" value="!--"/>
@@ -303,7 +296,7 @@
 			  	value="${oracle.dialect.string}"/>
 		</replace>
 		<if>
-			<equals arg1="standAlone" arg2="${catiesInstallType}" />
+			<equals arg1="standAlone" arg2="${caties.installation.type}" />
 			<then>
 				<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
 					<replacefilter token="@@WEBAPPLICATION_START@@" value="!--"/>
@@ -759,16 +752,16 @@ Thanking You,
 	
 	<target name="catiesInstall" >
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
-		<copy todir="${catiesInstallDir}/classes">
+		<copy todir="${caties.installation.dir}/classes">
 					<fileset dir="${temp.dir}/catissuecore/WEB-INF/classes" />
 		</copy>
 		<if>
-			<equals arg1="standAlone" arg2="${catiesInstallType}" />
+			<equals arg1="standAlone" arg2="${caties.installation.type}" />
 			<then>
 				<if>
 					<equals arg1="mysql" arg2="${database.type}"/>
 					<then>
-						<replace file="${catiesInstallDir}/classes/hibernate.cfg.xml" propertyfile="${basedir}/caTissueInstall.properties">
+						<replace file="${caties.installation.dir}/classes/hibernate.cfg.xml" propertyfile="${basedir}/caTissueInstall.properties">
 							<replacefilter token="@@DIALECT@@" value="MySQLDialect"/>
 							<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
 						</replace>
@@ -784,7 +777,7 @@ Thanking You,
 					</then>
 				</elseif>
 				</if>
-				<replace file="${catiesInstallDir}/classes/hibernate.cfg.xml" propertyfile="${basedir}/caTissueInstall.properties">
+				<replace file="${caties.installation.dir}/classes/hibernate.cfg.xml" propertyfile="${basedir}/caTissueInstall.properties">
 					<replacefilter token="@@DATABASE_USERNAME@@" value="${database.username}"/>
 					<replacefilter token="@@DATABSE_PASSWORD@@" value="${database.password}"/>
 					<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>
@@ -795,19 +788,25 @@ Thanking You,
 				</replace>
 			</then>
 		</if>
-		<jar destfile="${catiesInstallDir}/caties.jar" basedir="${catiesInstallDir}/classes" />	
-		<delete dir="${catiesInstallDir}/classes" />
-		<copy todir="${catiesInstallDir}/catissuecore-properties">
+		<jar destfile="${caties.installation.dir}/catiesRun.jar" basedir="${caties.installation.dir}/classes" />	
+		<delete dir="${caties.installation.dir}/classes" />
+		<copy todir="${caties.installation.dir}/catissuecore-properties">
 			<fileset dir="${base.dir}/catissuecore-properties" />
 		</copy>
-		<copy todir="${catiesInstallDir}/lib">
-			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib" />
+		<replace file="${caties.installation.dir}/catissuecore-properties/ApplicationSecurityConfig.xml" propertyfile="${basedir}/caTissueInstall.properties">
+			<replacefilter token="@@hibernate-config-file@@" value="./catissuecore-properties/catissuecore.hibernate.cfg.xml"/>	
+		</replace>
+		<copy todir="${caties.installation.dir}/lib">
+			<fileset dir="${temp.dir}/catissuecore/WEB-INF/lib">
+				<exclude name="**/*client.jar*"/>
+				<exclude name="**/*caTies.jar*"/>
+			</fileset>
 		</copy>
-		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties" todir="${catiesInstallDir}" overwrite="true"/>
-		<copy file="CDEConfig.xml" todir="${catiesInstallDir}" overwrite="true"/>
-		<copy file="dataset.dtd" todir="${catiesInstallDir}" overwrite="true"/>
-		<copy file="${basedir}/CaTIES_conf/build.xml" todir="${catiesInstallDir}" overwrite="true"/>
-		<copy file="${basedir}/CaTIES_conf/sites_configuration.xml" todir="${catiesInstallDir}/CaTIES_conf" overwrite="true"/>
+		<copy file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties" todir="${caties.installation.dir}" overwrite="true"/>
+		<copy file="${temp.dir}/catissuecore/CDEConfig.xml" todir="${caties.installation.dir}" overwrite="true"/>
+		<copy file="dataset.dtd" todir="${caties.installation.dir}" overwrite="true"/>
+		<copy file="${basedir}/CaTIES_conf/build.xml" todir="${caties.installation.dir}" overwrite="true"/>
+		<copy file="${basedir}/CaTIES_conf/sites_configuration.xml" todir="${caties.installation.dir}/CaTIES_conf" overwrite="true"/>
 		<delete dir="${temp.dir}" />
 	</target>
 </project>
