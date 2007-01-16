@@ -642,9 +642,18 @@
 							onClick="document.forms[0].deleteValue.disabled = false;">
 						</td>
 						<!-- Change Added for Consent Tracking -->
-						<html:hidden property="<%=verificationStatusKey%>"/>
 						<td class="formField" colspan="2">
-							<a href="javascript:getbarCode('<%=barcodeKey%>','<%=barcodeStatus%>','<%=verificationStatusKey%>')"><bean:write name="distributionForm" property="<%=verificationStatusKey%>" /></a>
+							<a id="<%=barcodeStatus%>" href="javascript:getbarCode('<%=barcodeKey%>','<%=barcodeStatus%>','<%=verificationStatusKey%>')">
+							
+							<logic:notEmpty name="distributionForm" property="<%=verificationStatusKey%>">
+								<bean:write name="distributionForm" property="<%=verificationStatusKey%>"/>
+							</logic:notEmpty>
+
+							<logic:empty name="distributionForm" property="<%=verificationStatusKey%>">
+								<%=Constants.VIEW_CONSENTS %>
+							</logic:empty>
+							<html:hidden property="<%=verificationStatusKey%>" styleId="<%=verificationStatusKey%>"/>
+							</a>
 						</td>
 						<!-- Change Added for Consent Tracking -->
 					</tr>
