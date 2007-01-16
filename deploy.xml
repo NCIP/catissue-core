@@ -755,7 +755,7 @@ Thanking You,
 					<replacefilter token="@@DATABASE_NAME@@" value="${database.name}"/>
 				</replace>
 		
-				<jar destfile="${caties.installation.dir}/catiesRun.jar" basedir="${caties.installation.dir}/classes" />	
+				<jar destfile="${caties.installation.dir}/caties.jar" basedir="${caties.installation.dir}/classes" />	
 				<delete dir="${caties.installation.dir}/classes" />
 				
 				<copy todir="${caties.installation.dir}/lib">
