@@ -9,7 +9,6 @@
 	
 	<property name="lib.dir" value="lib" />
 	<property name="src.dir" value="." />
-
 	<path id="cp">
 		<fileset dir="${base.dir}/lib">
 			<include name="**/*.jar"/>
@@ -22,7 +21,7 @@
 		<java classname="edu.wustl.catissuecore.reportloader.FilePoller">
 			<classpath refid="cp"/>
 			<classpath>
-				<pathelement location="caties.jar"/>
+				<pathelement location="catiesRun.jar"/>
 			</classpath>
 		</java>
 	</target>
@@ -33,7 +32,7 @@
 		<java classname="edu.wustl.catissuecore.deid.DeIDPipelineManager">
 			<classpath refid="cp"/>
 			<classpath>
-				<pathelement location="caties.jar"/>
+				<pathelement location="catiesRun.jar"/>
 			</classpath>
 		</java>
 	</target>
