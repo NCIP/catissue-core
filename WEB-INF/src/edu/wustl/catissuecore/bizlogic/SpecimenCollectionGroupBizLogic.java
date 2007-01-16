@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
@@ -73,34 +74,40 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 			specimenCollectionGroup.setSite((Site) siteObj);
 		}
-
-		Object collectionProtocolEventObj = dao.retrieve(CollectionProtocolEvent.class.getName(), specimenCollectionGroup
-				.getCollectionProtocolEvent().getId());
-		if (collectionProtocolEventObj != null)
+		
+		if(!Variables.isLoadFromCaties)
 		{
-			CollectionProtocolEvent cpe = (CollectionProtocolEvent) collectionProtocolEventObj;
-
-			//check for closed CollectionProtocol
-			checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
-
-			specimenCollectionGroup.setCollectionProtocolEvent(cpe);
+			Object collectionProtocolEventObj = dao.retrieve(CollectionProtocolEvent.class.getName(), specimenCollectionGroup
+					.getCollectionProtocolEvent().getId());
+			if (collectionProtocolEventObj != null)
+			{
+				CollectionProtocolEvent cpe = (CollectionProtocolEvent) collectionProtocolEventObj;
+		
+				//check for closed CollectionProtocol
+				checkStatus(dao, cpe.getCollectionProtocol(), "Collection Protocol");
+		
+				specimenCollectionGroup.setCollectionProtocolEvent(cpe);
+			}
+			setClinicalReport(dao, specimenCollectionGroup);
+			setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
 		}
-
-		setClinicalReport(dao, specimenCollectionGroup);
-		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
+		
 
 		dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
 		if (specimenCollectionGroup.getClinicalReport() != null)
 			dao.insert(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true);
-
-		try
+		
+		if(!Variables.isLoadFromCaties)
 		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(specimenCollectionGroup),
-					getDynamicGroups(specimenCollectionGroup));
-		}
-		catch (SMException e)
-		{
-			throw handleSMException(e);
+			try
+			{
+				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(specimenCollectionGroup),
+						getDynamicGroups(specimenCollectionGroup));
+			}
+			catch (SMException e)
+			{
+				throw handleSMException(e);
+			}
 		}
 	}
 
@@ -329,26 +336,26 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 		Validator validator = new Validator();
 		String message = "";
-		if (group.getCollectionProtocolRegistration() == null)
+		if (!Variables.isLoadFromCaties && group.getCollectionProtocolRegistration() == null)
 		{
 			message = ApplicationProperties.getValue("errors.specimenCollectionGroup.collectionprotocolregistration");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 
-		if (group.getCollectionProtocolRegistration().getCollectionProtocol() == null
-				|| group.getCollectionProtocolRegistration().getCollectionProtocol().getId() == null)
+		if (!Variables.isLoadFromCaties && (group.getCollectionProtocolRegistration().getCollectionProtocol() == null
+				|| group.getCollectionProtocolRegistration().getCollectionProtocol().getId() == null))
 		{
 			message = ApplicationProperties.getValue("errors.specimenCollectionGroup.collectionprotocol");
 			throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
 		}
 
-		if ((group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier() == null && (group.getCollectionProtocolRegistration()
+		if (!Variables.isLoadFromCaties && (group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier() == null && (group.getCollectionProtocolRegistration()
 				.getParticipant() == null || group.getCollectionProtocolRegistration().getParticipant().getId() == null)))
 		{
 			throw new DAOException(ApplicationProperties.getValue("errors.collectionprotocolregistration.atleast"));
 		}
 
-		if (group.getSite() == null || group.getSite().getId() == null)
+		if (!Variables.isLoadFromCaties && group.getSite() == null || group.getSite().getId() == null)
 		{
 			message = ApplicationProperties.getValue("specimenCollectionGroup.site");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
@@ -381,7 +388,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		}
 
 		// Mandatory Field : Study Calendar event point
-		if (group.getCollectionProtocolEvent() == null || group.getCollectionProtocolEvent().getId() == null)
+		if (!Variables.isLoadFromCaties && (group.getCollectionProtocolEvent() == null || group.getCollectionProtocolEvent().getId() == null))
 		{
 			message = ApplicationProperties.getValue("specimenCollectionGroup.studyCalendarEventPoint");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
