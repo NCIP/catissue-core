@@ -6,14 +6,12 @@
 	
 	<!--define require dir and Properties -->	
 	<property name="base.dir" value="."/>	
-	
 	<property name="lib.dir" value="lib" />
 	<property name="src.dir" value="." />
 	<path id="cp">
 		<fileset dir="${base.dir}/lib">
 			<include name="**/*.jar"/>
-		</fileset>
-		
+		</fileset>	
 	</path>
     
 	<!-- run FilePoller java file -->
@@ -26,7 +24,6 @@
 		</java>
 	</target>
 	
-
 	<!-- run DeIDPipelineManager java file -->
 	<target name="run_deid">
 		<java classname="edu.wustl.catissuecore.deid.DeIDPipelineManager">
