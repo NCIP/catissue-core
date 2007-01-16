@@ -26,6 +26,7 @@ public class Variables extends edu.wustl.common.util.global.Variables
     public static String databaseDriver=new String();
     public static String[] databasenames;
     public static String applicationCvsTag = new String();
+    public static boolean isLoadFromCaties=false;
 
     public static String prepareColTypes(List dataColl)
     {
