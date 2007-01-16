@@ -237,7 +237,7 @@ public class UpdateStatusAction extends BaseAction
 			List orderItemStatusCollec = (ArrayList)requestDetailsBean.getItemsStatusList();
 			List newStatusList = constructNewStatusList(orderItemStatusCollec);
 			
-			if(newStatusList.contains(updateValue))
+			if(!(requestDetailsBean.getAssignedStatus().equals(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED)) && newStatusList.contains(updateValue))
 			{
 				newStatusList.remove(updateValue);
 				//To display updated new value in the first option of <html:select>
@@ -248,7 +248,9 @@ public class UpdateStatusAction extends BaseAction
 				responseList.add(i,newStatusList);				
 			}
 			else
-			{								
+			{		
+				newStatusList.remove(requestDetailsBean.getAssignedStatus());
+				newStatusList.add(0,requestDetailsBean.getAssignedStatus());
 				responseList.add(i,newStatusList);//list of beans sent in the response.
 			}
 			i++;
