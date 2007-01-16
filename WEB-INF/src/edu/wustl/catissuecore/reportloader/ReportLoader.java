@@ -236,17 +236,13 @@ public class ReportLoader
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		scg.setParticipant(this.participant);
-		List clinicalDiagnosisList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_DIAGNOSIS,null);
-		NameValueBean nv =(NameValueBean) clinicalDiagnosisList.get(1);
-		scg.setClinicalDiagnosis(nv.getValue());
-		
-		List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS,null);
-		NameValueBean nv1 =(NameValueBean) clinicalStatusList.get(1);
-		scg.setClinicalStatus(nv1.getValue());
+		scg.setClinicalDiagnosis(Constants.NOT_SPECIFIED);
+		scg.setClinicalStatus(Constants.NOT_SPECIFIED);
 		scg.setSite(this.site); 
 		scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport);
 		this.identifiedReport.setSpecimenCollectionGroup(scg);
 		((Set)this.participant.getSpecimenCollectionGroupCollection()).add(scg);
+		scg.setName("caties_"+ this.identifiedReport.getAccessionNumber().toString());
 		return scg;
 	}
 	
