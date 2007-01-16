@@ -13,15 +13,15 @@
 	</property>
 	<property>
 		<name>inputDir</name>
-		<value>./inputFiles</value>
+		<value>./input_files</value>
 	</property>
 	<property>
 		<name>badFilesDir</name>
-		<value>./badFiles</value>
+		<value>./bad_files</value>
 	</property>
 	<property>
 		<name>processFileDir</name>
-		<value>./parsedFiles</value>
+		<value>./parsed_files</value>
 	</property>
 	<property>
 		<name>pollersleeptime</name>
