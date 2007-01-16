@@ -253,7 +253,7 @@ public class OrderBizLogic extends DefaultBizLogic
 			{
 				OrderItem newOrderItem = (OrderItem) newSetIter.next();
 				//Update Old OrderItem only when its Id matches with NewOrderItem id and the order is not distributed and the oldorderitem status and neworderitem status are different or description has been updated.
-				if (oldOrderItem.getId().compareTo(newOrderItem.getId()) == 0 && oldOrderItem.getDistributedItem() == null && (!oldOrderItem.getStatus().trim().equalsIgnoreCase(newOrderItem.getStatus().trim()) || (oldOrderItem.getDescription() != null && !oldOrderItem.getDescription().equalsIgnoreCase(newOrderItem.getDescription()))))
+				if (oldOrderItem.getId().compareTo(newOrderItem.getId()) == 0 && oldOrderItem.getDistributedItem() == null && !oldOrderItem.getStatus().trim().equalsIgnoreCase(newOrderItem.getStatus().trim()))
 				{					
 						if (newOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
 						{
