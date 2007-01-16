@@ -15,11 +15,11 @@
 	</path>
     
 	<!-- run FilePoller java file -->
-	<target name="run_FilePoller">
+	<target name="run_report_loader_server">
 		<java classname="edu.wustl.catissuecore.reportloader.FilePoller">
 			<classpath refid="cp"/>
 			<classpath>
-				<pathelement location="catiesRun.jar"/>
+				<pathelement location="caties.jar"/>
 			</classpath>
 		</java>
 	</target>
@@ -29,7 +29,7 @@
 		<java classname="edu.wustl.catissuecore.deid.DeIDPipelineManager">
 			<classpath refid="cp"/>
 			<classpath>
-				<pathelement location="catiesRun.jar"/>
+				<pathelement location="caties.jar"/>
 			</classpath>
 		</java>
 	</target>
