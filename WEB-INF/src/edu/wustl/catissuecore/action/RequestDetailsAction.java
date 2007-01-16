@@ -26,8 +26,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.RequestDetailsForm;
-import edu.wustl.catissuecore.bean.DefinedArrayRequestBean;
 import edu.wustl.catissuecore.bean.DefinedArrayDetailsBean;
+import edu.wustl.catissuecore.bean.DefinedArrayRequestBean;
 import edu.wustl.catissuecore.bean.ExistingArrayDetailsBean;
 import edu.wustl.catissuecore.bean.RequestDetailsBean;
 import edu.wustl.catissuecore.bean.RequestViewBean;
@@ -723,25 +723,25 @@ public class RequestDetailsAction extends BaseAction
 				{
 					RequestDetailsBean requestDetailsBean = (RequestDetailsBean) orderItemObj;
 					List possibleStatusList = OrderingSystemUtil.getPossibleStatusList(Constants.ORDER_REQUEST_STATUS_NEW);
-//					
-//					//Removing the status 'Distributed' if the requested Specimen is not present in the Db.
-//					if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Derived"))
-//					{
-//						if(requestDetailsBean.getSpecimenList().size() == 0)
-//						{
-//							int indexToRemove = 0;
-//							Iterator statusListIter = possibleStatusList.iterator();
-//							while(statusListIter.hasNext())
-//							{
-//								NameValueBean nameValueBeanObj = (NameValueBean)statusListIter.next();
-//								if(nameValueBeanObj.getName().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
-//								{
-//									indexToRemove = possibleStatusList.indexOf(nameValueBeanObj);
-//								}
-//							}
-//							possibleStatusList.remove(indexToRemove);
-//						}	
-//					}
+					
+					//Removing the status 'Distributed' if the requested Specimen is not present in the Db.
+					if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Derived"))
+					{
+						if(requestDetailsBean.getSpecimenList().size() == 0)
+						{
+							int indexToRemove = 0;
+							Iterator statusListIter = possibleStatusList.iterator();
+							while(statusListIter.hasNext())
+							{
+								NameValueBean nameValueBeanObj = (NameValueBean)statusListIter.next();
+								if(nameValueBeanObj.getName().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+								{
+									indexToRemove = possibleStatusList.indexOf(nameValueBeanObj);
+								}
+							}
+							possibleStatusList.remove(indexToRemove);
+						}	
+					}
 					requestDetailsBean.setItemsStatusList(possibleStatusList);
 				}
 				
