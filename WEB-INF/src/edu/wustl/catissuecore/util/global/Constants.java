@@ -87,7 +87,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DefineSearchResultsViewAction = "DefineSearchResultsView.do";
 	public static final String QUERY_DAG_VIEW_APPLET = "edu/wustl/catissuecore/applet/ui/querysuite/DiagrammaticViewApplet.class";
 	public static final String QUERY_DAG_VIEW_APPLET_NAME = "Dag View Applet";
-	public static final String APP_DYNAMIC_UI_XML = "app.dynamiUIXml";
+	public static final String APP_DYNAMIC_UI_XML = "xmlfile.dynamicUI";
+	public static final String QUERY_CONDITION_DELIMITER = "@#condition#@";
+	public static final String QUERY_OPERATOR_DELIMITER = "!*=*!";
 	
 	//Surgical Pathology Report UI constants
 	public static final String SPR_VIEW_ACTION="ViewSurgicalPathologyReport.do";
