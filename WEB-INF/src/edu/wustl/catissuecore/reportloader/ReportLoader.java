@@ -8,6 +8,9 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
+import edu.wustl.catissuecore.domain.ClinicalReport;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -18,6 +21,7 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.lookup.DefaultLookupResult;
@@ -122,7 +126,7 @@ public class ReportLoader
 		SpecimenCollectionGroup scg=null;
 		try
 		{
-			identifiedReport.setReportStatus(Parser.PENDING_FOR_DEID);
+			
 		/*	if(!isParticipantExists)
 			{
 				size =checkForParticipant();
@@ -138,6 +142,8 @@ public class ReportLoader
 			{*/
 				checkForSite();
 				scg=checkForSpecimenCollectionGroup();
+				identifiedReport.setReportStatus(Parser.PENDING_FOR_DEID);
+				identifiedReport.setSource(this.site);
 				if(scg!=null)
 				{
 					ReportLoaderUtil.saveObject(scg);
@@ -243,6 +249,24 @@ public class ReportLoader
 		this.identifiedReport.setSpecimenCollectionGroup(scg);
 		((Set)this.participant.getSpecimenCollectionGroupCollection()).add(scg);
 		scg.setName("caties_"+ this.identifiedReport.getAccessionNumber().toString());
+		
+		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+		String className;
+		String colName=new String(Constants.SYSTEM_IDENTIFIER);
+		className=CollectionProtocolRegistration.class.getName();
+		List collRegProtcolList=defaultBizLogic.retrieve(className, colName, new Long(1));
+		CollectionProtocolRegistration collRegProtcol=(CollectionProtocolRegistration)collRegProtcolList.get(0);
+		scg.setCollectionProtocolRegistration(collRegProtcol);
+		
+		className=CollectionProtocolEvent.class.getName();
+		List collProtocolEventList=defaultBizLogic.retrieve(className, colName, new Long(1));
+		CollectionProtocolEvent collProtocolEvent=(CollectionProtocolEvent)collProtocolEventList.get(0);
+		scg.setCollectionProtocolEvent(collProtocolEvent);
+		
+		ClinicalReport clinicalReport=new ClinicalReport();
+		scg.setClinicalReport(clinicalReport);
+		
+		ReportLoaderUtil.saveObject(clinicalReport);
 		return scg;
 	}
 	
