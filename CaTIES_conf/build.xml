@@ -25,7 +25,7 @@
 	</target>
 	
 	<!-- run DeIDPipelineManager java file -->
-	<target name="run_deid">
+	<target name="run_deid_server">
 		<java classname="edu.wustl.catissuecore.deid.DeIDPipelineManager">
 			<classpath refid="cp"/>
 			<classpath>

@@ -11,24 +11,9 @@
 package edu.wustl.catissuecore.integration;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import edu.upmc.opi.caBIG.caTIES.database.domain.IdentifiedPathologyReport;
-import edu.upmc.opi.caBIG.caTIES.database.domain.IdentifiedPatient;
-import edu.upmc.opi.caBIG.caTIES.database.domain.PathologyReport;
-import edu.upmc.opi.caBIG.caTIES.database.domain.Patient;
-import edu.upmc.opi.caBIG.caTIES.database.domain.Query;
-import edu.upmc.opi.caBIG.caTIES.database.domain.impl.IdentifiedPathologyReportImpl;
-import edu.upmc.opi.caBIG.caTIES.database.domain.impl.IdentifiedPatientImpl;
-import edu.upmc.opi.caBIG.caTIES.database.domain.impl.PathologyReportImpl;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.system.applicationservice.ApplicationService;
@@ -50,7 +35,7 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
     {
         Logger.out.debug("Class of object received in getLinkedAppData of CaTiesIntegrationMgrImpl===>"+ linkedObj.getClass());
         
-        if(linkedObj instanceof SpecimenCollectionGroup || linkedObj instanceof Specimen)
+/*        if(linkedObj instanceof SpecimenCollectionGroup || linkedObj instanceof Specimen)
         {
             Logger.out.debug("Linked object is SpecimenCollectionGroup or Specimen");
             return findIdentifiedPathologyReport(id);
@@ -60,7 +45,7 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
             Logger.out.debug("Linked object is Participant");
             return findReportsForPatient(id);
         }
-        
+*/        
         return new ArrayList();
     }
     
@@ -69,7 +54,7 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
         return new ArrayList();
     }
     
-    private void findPathologyReportByUId(String UId)
+ /*   private void findPathologyReportByUId(String UId)
     {
     	try 
     	{
@@ -77,7 +62,6 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
     		
     	    PathologyReport pathologyReport = new PathologyReportImpl();
     	    pathologyReport.setUuid(UId);
-//    	    pathologyReport.setConceptCodeSet("*AC9107744*AC9337421*AC0282411*");
     	    
     	    List resultList = appService.search(PathologyReport.class, pathologyReport);
     	
@@ -486,5 +470,5 @@ public class CaTiesIntegrationMgrImpl extends IntegrationManager
 		
 		return result ;
     }
-    
+    */
 }
