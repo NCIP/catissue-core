@@ -1,5 +1,5 @@
 /*
- * $Name: 1.42 $
+ * $Name: 1.43 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -289,7 +289,6 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		try
 		{
 			EntityCache entityCache = EntityCacheFactory.getInstance();
-			entityCache.init();
 			Logger.out.debug("Entity Cache is initialised");
 		}
 		catch (Exception e)
