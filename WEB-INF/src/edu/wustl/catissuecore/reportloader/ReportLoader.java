@@ -1,14 +1,19 @@
 package edu.wustl.catissuecore.reportloader;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import net.sf.hibernate.mapping.Collection;
+
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.ClinicalReport;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
@@ -253,18 +258,41 @@ public class ReportLoader
 		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
 		String className;
 		String colName=new String(Constants.SYSTEM_IDENTIFIER);
-		className=CollectionProtocolRegistration.class.getName();
-		List collRegProtcolList=defaultBizLogic.retrieve(className, colName, new Long(1));
-		CollectionProtocolRegistration collRegProtcol=(CollectionProtocolRegistration)collRegProtcolList.get(0);
-		scg.setCollectionProtocolRegistration(collRegProtcol);
-		
+			
 		className=CollectionProtocolEvent.class.getName();
 		List collProtocolEventList=defaultBizLogic.retrieve(className, colName, new Long(1));
 		CollectionProtocolEvent collProtocolEvent=(CollectionProtocolEvent)collProtocolEventList.get(0);
 		scg.setCollectionProtocolEvent(collProtocolEvent);
+
+		CollectionProtocolRegistration collProtocolReg=new CollectionProtocolRegistration();
 		
+		
+		
+		collProtocolReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		collProtocolReg.setRegistrationDate(new Date());
+		collProtocolReg.setParticipant(this.participant);		
+		collProtocolReg.setCollectionProtocol(collProtocolEvent.getCollectionProtocol());
+		
+		System.out.println(".participant "+participant.getId());
+		System.out.println(".participant "+collProtocolEvent.getCollectionProtocol().getId());
+		
+		try
+		{
+			ReportLoaderUtil.saveObject(collProtocolReg);
+		}
+		catch(Exception ex)
+		{
+			Logger.out.error("Error",ex);
+			ex.printStackTrace();
+		}
+		
+		
+		//((Set)collProtocolReg.getSpecimenCollectionGroupCollection()).add(scg);
+		scg.setCollectionProtocolRegistration(collProtocolReg);
+
 		ClinicalReport clinicalReport=new ClinicalReport();
 		scg.setClinicalReport(clinicalReport);
+		
 		
 		ReportLoaderUtil.saveObject(clinicalReport);
 		return scg;
