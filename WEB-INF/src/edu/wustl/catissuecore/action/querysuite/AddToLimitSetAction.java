@@ -1,9 +1,6 @@
 
 package edu.wustl.catissuecore.action.querysuite;
 
-import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,10 +8,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.domain.Entity;
-import edu.wustl.cab2b.client.ui.query.QueryObject;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
-import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.common.action.BaseAction;
 
 /**
@@ -42,13 +36,12 @@ public class AddToLimitSetAction extends BaseAction
 		String entityName = searchForm.getEntityName();
 		String queryStrTemp = searchForm.getTempStr();
 		String queryStr = searchForm.getStringToCreateQueryObject();
-		QueryObject queryObject = (QueryObject)request.getSession().getAttribute("QueryObject");
 		//TODO uncomment it after getting new release form cab2b 
 		/*if(queryObject == null)
 		{
 			queryObject = new QueryObject();
 		}*/
-		if(queryObject != null)
+		/*if(queryObject != null)
 		{
 			Map searchedEntitiesMap = (Map) request.getSession().getAttribute("searchedEntitiesMap");
 			Entity entity = (Entity) searchedEntitiesMap.get(entityName);
@@ -79,7 +72,7 @@ public class AddToLimitSetAction extends BaseAction
 			
 		}
 		response.getWriter().write(queryStrTemp);
-		request.getSession().setAttribute("QueryObject", queryObject);
+		request.getSession().setAttribute("QueryObject", queryObject);*/
 		return null;
 	}
 }

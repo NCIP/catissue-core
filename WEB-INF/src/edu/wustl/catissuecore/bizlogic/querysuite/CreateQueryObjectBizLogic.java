@@ -1,21 +1,13 @@
 
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 import edu.common.dynamicextensions.domain.Entity;
-import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.cab2b.client.ui.query.QueryObject;
-import edu.wustl.catissuecore.actionForm.CategorySearchForm;
-import edu.wustl.common.querysuite.exceptions.CyclicException;
 
 /**
  * Creates Query Object as per the data filled by the user on AddLimits section.
@@ -35,7 +27,7 @@ public class CreateQueryObjectBizLogic
 	 * @throws DynamicExtensionsApplicationException  DynamicExtensionsApplicationException
 	 * @throws DynamicExtensionsSystemException  DynamicExtensionsSystemException
 	 * @throws CyclicException CyclicException
-	 */
+	 *//*
 	public QueryObject addRulesToQueryObject(QueryObject queryObject,String queryStr, Entity entity, CategorySearchForm searchForm)
 	throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException, CyclicException
 	{
@@ -72,12 +64,12 @@ public class CreateQueryObjectBizLogic
 				}
 			}
 
-			/*	queryObject.addRule(attributes, attributeOperators, firstAttributeValues, secondAttributeValues);
-			queryObject.updateLogicalOperator(entity.getName(),LogicalOperator.And.toString());	*/
+				queryObject.addRule(attributes, attributeOperators, firstAttributeValues, secondAttributeValues);
+			queryObject.updateLogicalOperator(entity.getName(),LogicalOperator.And.toString());	
 		}
 		return queryObject;
 	}
-
+*/
 	/**
 	 * Initialises the resource bundle.
 	 * @return new Resource bundle
