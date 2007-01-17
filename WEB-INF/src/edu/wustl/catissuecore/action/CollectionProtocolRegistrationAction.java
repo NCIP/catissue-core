@@ -56,7 +56,8 @@ import edu.wustl.common.util.logger.Logger;
 
 public class CollectionProtocolRegistrationAction extends SecureAction
 {
-		
+	//This will keep track of no of consents for a particular participant
+	int consentCounter;	
 	/**
 	 * Overrides the execute method of Action class.
 	 * Sets the various fields in Participant Registration Add/Edit webpage.
@@ -67,6 +68,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		CollectionProtocolRegistrationForm collectionProtocolRegistrationForm = (CollectionProtocolRegistrationForm)form;
 		//Gets the value of the operation parameter.
 		String operation = request.getParameter(Constants.OPERATION);
+		
 		//CollectionProtocolId
 		String cp_id=String.valueOf(collectionProtocolRegistrationForm.getCollectionProtocolID());
 
@@ -97,9 +99,8 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 					//Collection consentCollection = collectionProtocolRegistration.getConsentTierResponseCollection().getConsentTierCollection();
 					Collection consentResponse = collectionProtocolRegistration.getConsentTierResponseCollection();
 					Map tempMap=prepareMap(consentResponse);
-					System.out.println(tempMap+"Map in Action class");
 					collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
-					collectionProtocolRegistrationForm.setConsentTierCounter(requestConsentList.size()) ;
+					collectionProtocolRegistrationForm.setConsentTierCounter(consentCounter) ;
 				}
 				request.setAttribute("witnessList", witnessList);			
 				request.setAttribute("responseList", responseList);
@@ -404,6 +405,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 					i++;
 				}
 			}
+			consentCounter=i;
 			return tempMap;
 		}
 		else
