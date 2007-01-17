@@ -20,14 +20,12 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.cab2b.client.ui.query.QueryObject;
 import edu.wustl.catissuecore.bizlogic.TreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
-import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -43,7 +41,7 @@ public class ViewSearchResultsAction extends BaseAction
 	 * @return ActionForward actionForward
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	throws Exception
 	{
 		setResultsForView(request);
 		return mapping.findForward("success");
@@ -59,42 +57,29 @@ public class ViewSearchResultsAction extends BaseAction
 	 * @throws DynamicExtensionsSystemException DynamicExtensionsSystemException
 	 */
 	public void setResultsForView(HttpServletRequest request) throws DAOException, ClassNotFoundException, DynamicExtensionsSystemException,
-			DynamicExtensionsApplicationException, MultipleRootsException
+	DynamicExtensionsApplicationException, MultipleRootsException
 	{
-		//ISqlGenerator sqlGenerator = SqlGeneratorFactory.getInstance(EntityManager.getInstance());
-		//EntityManagerFactory.getEntityManager();
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		dao.openSession(null);
-		QueryObject queryObject = (QueryObject) request.getSession().getAttribute("QueryObject");
 		String sql = "";
 		Vector treeData = new Vector();
 		List list = new ArrayList();
 		List<String> columnNames = new ArrayList<String>();
-		if (queryObject != null)
+		Logger.out.debug("SQL************" + sql);
+		sql = "Select Participant_1.ACTIVITY_STATUS, Participant_1.BIRTH_DATE, Participant_1.DEATH_DATE, Participant_1.ETHNICITY, Participant_1.FIRST_NAME, Participant_1.GENDER, Participant_1.IDENTIFIER, Participant_1.LAST_NAME, Participant_1.MIDDLE_NAME, Participant_1.GENOTYPE, Participant_1.SOCIAL_SECURITY_NUMBER, Participant_1.VITAL_STATUS From catissue_participant Participant_1 left join catissue_part_medical_id ParticipantMedicalIdentif_2 on (Participant_1.IDENTIFIER=ParticipantMedicalIdentif_2.PARTICIPANT_ID) Where (Participant_1.FIRST_NAME like 'A%') And(ParticipantMedicalIdentif_2.IDENTIFIER!=0)";
+		list = dao.executeQuery(sql, null, false, false, null);
+		if (list != null && list.size() != 0)
 		{
-			IQuery query = queryObject.getQuery();
-			if (query != null)
+			List row = (List) list.get(0);
+			for (int i = 0; i < row.size(); i++)
 			{
-				//sql = SqlGeneratorFactory.getInstance(new EntityManagerMock()).generateSQL(query);
-				/*JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-				dao.openSession(null);*/
-				Logger.out.debug("SQL************" + sql);
-				sql = "Select Participant_1.ACTIVITY_STATUS, Participant_1.BIRTH_DATE, Participant_1.DEATH_DATE, Participant_1.ETHNICITY, Participant_1.FIRST_NAME, Participant_1.GENDER, Participant_1.IDENTIFIER, Participant_1.LAST_NAME, Participant_1.MIDDLE_NAME, Participant_1.GENOTYPE, Participant_1.SOCIAL_SECURITY_NUMBER, Participant_1.VITAL_STATUS From catissue_participant Participant_1 left join catissue_part_medical_id ParticipantMedicalIdentif_2 on (Participant_1.IDENTIFIER=ParticipantMedicalIdentif_2.PARTICIPANT_ID) Where (Participant_1.FIRST_NAME like 'A%') And(ParticipantMedicalIdentif_2.IDENTIFIER!=0)";
-				list = dao.executeQuery(sql, null, false, false, null);
-				if (list != null && list.size() != 0)
-				{
-					List row = (List) list.get(0);
-					for (int i = 0; i < row.size(); i++)
-					{
-						columnNames.add("Column" + i);
-					}
-				}
-				TreeBizLogic treeBizLogic = new TreeBizLogic();
-				treeData = treeBizLogic.getQueryTreeNode();
-
-				dao.closeSession();
+				columnNames.add("Column" + i);
 			}
 		}
+		TreeBizLogic treeBizLogic = new TreeBizLogic();
+		treeData = treeBizLogic.getQueryTreeNode();
+
+		dao.closeSession();
 		request.setAttribute("treeData", treeData);
 		request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
 		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
