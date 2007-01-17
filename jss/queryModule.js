@@ -238,7 +238,7 @@ else
 		function showEntityInformation(text)
 		{					
 			
-			onProduceQueryUpdate("");
+			//onProduceQueryUpdate("");
 			var element = document.getElementById('addLimits');
 			element.innerHTML =text;
 		}
@@ -247,7 +247,6 @@ else
 		
 		function produceQuery(url,nameOfFormToPost, entityName , attributesList) 
 		{
-			
 			//var element = document.getElementById('query');
 			var strToCreateQueyObject ="";
 			var a = attributesList.split(";");
@@ -268,9 +267,7 @@ else
 					else
 					{
 						var op = document.forms[nameOfFormToPost].elements[opId].value;
-
 					}					
-				//var queryString =queryString +  "condition"+i+"="+ a[i] + "*" + op + "*" + textId +"; AND ";
 				if(op != "Between")
 				{
 					if(textId != "")
@@ -283,7 +280,7 @@ else
 						{
 							textThis = textThis + " "+ a[i] + " " + op + " " + textId+ ";  ";			
 						}
-						strToCreateQueyObject = strToCreateQueyObject + "condition="+ a[i] + "*" + op + "*" + textId +";";
+						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ a[i] + "!*=*!" + op + "!*=*!" + textId +";";
 					}
 				}
 				if(op == "Between")
@@ -298,62 +295,19 @@ else
 						{
 							textThis = textThis + " "+ a[i] + " " + op + " (" + textId +", "+textId1 +") ;  ";	
 						}
-							strToCreateQueyObject =  strToCreateQueyObject + "condition="+ a[i] + "*" + op + "*" + textId +"*"+textId1+";";
+							strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ a[i] + "!*=*!" + op + "!*=*!" + textId +"!*=*!"+textId1+";";
 					}
 		
 				}
 			}
-			var queryStr = "";
-			if(textThis != "")
-			{
-				queryStr = " " +entityName + " where " + textThis;
-			}
-			stringQuery = stringQuery + queryStr;
-			var request = newXMLHTTPReq();				
-			var actionURL;
-			var handlerFunction = getReadyStateHandler(request,onProduceQueryUpdate,true);
-
-			request.onreadystatechange = handlerFunction;
-
-			actionURL = "entityName=" + entityName + "&stringToCreateQueryObject=" + strToCreateQueyObject + "&tempStr="+ stringQuery;
-
-			<!-- Open connection to servlet -->
-			request.open("POST",url,true);	
-			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-			request.send(actionURL);
-			//clearForm1(attributesList);
+		
+			document.applets[0].addExpression(strToCreateQueyObject,entityName);
 		}
 
-		function onProduceQueryUpdate(text)
+	/*	function onProduceQueryUpdate(expressionId)
 		{
-		//showEntityInformation("");	
-		var element = document.getElementById('queryTableTd');
-		element.innerHTML = "";
-/*		var messagesTd = document.getElementById('messagesTd');
-		var messagesTr = document.getElementById('messagesTr');
-		if(text.indexOf("QueryString : ") == -1)
-			{
-				//var element = document.getElementById('messages');
-				
-				if(text != "undefined")
-				{
-					messagesTd.style.visibility="";	
-					messagesTd.height ="1px"
-					messagesTr.style.visibility="";	
-					//element.innerHTML = "<APPLET CODE='DiagrammaticViewApplet.class' WIDTH='150' HEIGHT='25'></APPLET>"
-					messagesTd.innerHTML = text;
-				}
-			} 
-		else
-			{			
-				messagesTd.innerHTML = "";*/
-				if(text != "undefined")
-				{
-					//element.innerHTML = "<APPLET CODE='DiagrammaticViewApplet.class' WIDTH='150' HEIGHT='25'></APPLET>"
-					element.innerHTML = text;
-				}
-		//	}
-		}
+			document.applets[0].addExpression(expressionId);
+		}*/
 		function clearForm1(attributesList)
 		{
 			var a = attributesList.split(";");
