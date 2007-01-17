@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 
+import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -79,11 +80,12 @@ public class JniDeID
 		try 
 		{
 			JniDeID dummy = new JniDeID();
-			String dllPath = dummy.getClass().getResource("JniDeId.dll").getPath();
+			String dllPath = Variables.applicationHome+File.separator+"JniDeId.dll";
 			dllPath = dllPath.replaceAll("%20", " ");
 		    File dllFile = new File(dllPath) ;
 	        dllPath = dllFile.getAbsolutePath() ;
 	        System.load(dllPath);
+	        Logger.out.info("Loading dll file at "+dllPath);
 		} 
 		catch (Exception x) 
 		{
