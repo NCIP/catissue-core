@@ -310,7 +310,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 			this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
 			Collection consentResponse = specimenCollectionGroup.getConsentTierStatusCollection();
 			Collection consentResponseParticipantlevel=specimenCollectionGroup.getCollectionProtocolRegistration().getConsentTierResponseCollection();
-			this.consentResponseForScgValues=prepareSCGResponseMap(consentResponse,consentResponseParticipantlevel);
+			//this.consentResponseForScgValues=prepareSCGResponseMap(consentResponse,consentResponseParticipantlevel);
 	}
 
 	/**
@@ -331,7 +331,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 				{
 					ConsentTierStatus consentTierstatus=(ConsentTierStatus)statusResponsIter.next();
 					ConsentTierResponse consentTierResponse=(ConsentTierResponse)participantResponseIter.next();
-					ConsentTier consent = consentTierstatus.getConsentTier();
+					ConsentTier consent = consentTierResponse.getConsentTier();
 					String idKey="ConsentBean:"+i+"_consentTierID";
 					String statementKey="ConsentBean:"+i+"_statement";
 					String participantResponsekey = "ConsentBean:"+i+"_participantResponse";

@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
@@ -205,24 +206,33 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 				return mapping.findForward(Constants.POPUP);
 	        }
 		    //Getting SpecimenCollectionGroup object
-	        SpecimenCollectionGroup specimenCollectionGroup = getConsentListForSpecimen(barcode);
+	        Specimen specimen = getConsentListForSpecimen(barcode);
+	        //SpecimenCollectionGroup specimenCollectionGroup = getConsentListForSpecimen(barcode);
 	        //Getting CollectionProtocolRegistration object
-	        CollectionProtocolRegistration collectionProtocolRegistration=specimenCollectionGroup.getCollectionProtocolRegistration();
+	        CollectionProtocolRegistration collectionProtocolRegistration=specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
 	        
 	        //Getting WitnessName,Consent Date,Signed Url using collectionProtocolRegistration object
-	        String witnessName=Utility.toString(collectionProtocolRegistration.getConsentWitness().getFirstName());
-			String getConsentDate=Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+	        User witness= collectionProtocolRegistration.getConsentWitness();
+			if(witness==null||witness.getFirstName()==null)
+			{
+				String witnessName="";
+				dForm.setWitnessName(witnessName);
+			}
+			else
+			{
+				dForm.setWitnessName(witness.getFirstName());
+			}
+	        String getConsentDate=Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
 			String getSignedConsentURL=Utility.toString(collectionProtocolRegistration.getSignedConsentDocumentURL());
 			
 			//Setting WitnessName,CinsentDate and Signed Consent Url				
-			dForm.setWitnessName(witnessName);
 			dForm.setConsentDate(getConsentDate);
 			dForm.setSignedConsentUrl(getSignedConsentURL);
 			
 			//Getting ConsentResponse collection for CPR level
 			Set participantResponseSet = (Set)collectionProtocolRegistration.getConsentTierResponseCollection();
 			//Getting ConsentResponse collection for Specimen level
-			Set specimenLevelResponseSet = (Set)specimenCollectionGroup.getConsentTierStatusCollection();
+			Set specimenLevelResponseSet = (Set)specimen.getConsentTierStatusCollection();
 			List participantResponseList= new ArrayList(participantResponseSet);
 			List specimenLevelResponseList= new ArrayList(specimenLevelResponseSet);
 			//Prepare Map and iterate both Collections  
@@ -305,33 +315,49 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
     private Map prepareConsentMap(List participantResponseList, List specimenLevelResponseList)
 	{
 		Map tempMap = new HashMap();
+		Long consentTierID;
+		Long consentID;
 		if(participantResponseList!=null)
 		{
 			int i = 0;
 			Iterator consentResponseCollectionIter = participantResponseList.iterator();
-			Iterator specimenCollectionIter = specimenLevelResponseList.iterator();
 			while(consentResponseCollectionIter.hasNext())
 			{
 				ConsentTierResponse consentTierResponse = (ConsentTierResponse)consentResponseCollectionIter.next();
-				ConsentTier consent = consentTierResponse.getConsentTier();
-				ConsentTierStatus specimenConsentResponse=(ConsentTierStatus)specimenCollectionIter.next();
-				String idKey="ConsentBean:"+i+"_consentTierID";
-				String statementKey="ConsentBean:"+i+"_statement";
-				String responseKey="ConsentBean:"+i+"_participantResponse";
-				String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
-				String specimenResponsekey  = "ConsentBean:"+i+"_specimenLevelResponse";
-				String specimenResponseIDkey ="ConsentBean:"+i+"_specimenLevelResponseID";
-				//Adding Keys and its data into the Map
-				tempMap.put(idKey, consent.getId());
-				tempMap.put(statementKey,consent.getStatement());
-				tempMap.put(responseKey,consentTierResponse.getResponse());
-				tempMap.put(participantResponceIdKey, consentTierResponse.getId());
-				tempMap.put(specimenResponsekey, specimenConsentResponse.getStatus());
-				tempMap.put(specimenResponseIDkey, specimenConsentResponse.getId());
-				i++;
+				consentTierID=consentTierResponse.getConsentTier().getId();
+				Iterator specimenCollectionIter = specimenLevelResponseList.iterator();	
+				while(specimenCollectionIter.hasNext())
+				{
+					ConsentTierStatus specimenConsentResponse=(ConsentTierStatus)specimenCollectionIter.next();
+					consentID=specimenConsentResponse.getConsentTier().getId();
+					if(consentTierID.longValue()==consentID.longValue())						
+					{
+						ConsentTier consent = consentTierResponse.getConsentTier();
+						String idKey="ConsentBean:"+i+"_consentTierID";
+						String statementKey="ConsentBean:"+i+"_statement";
+						String responseKey="ConsentBean:"+i+"_participantResponse";
+						String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
+						String specimenResponsekey  = "ConsentBean:"+i+"_specimenLevelResponse";
+						String specimenResponseIDkey ="ConsentBean:"+i+"_specimenLevelResponseID";
+						//Adding Keys and its data into the Map
+						tempMap.put(idKey, consent.getId());
+						tempMap.put(statementKey,consent.getStatement());
+						tempMap.put(responseKey,consentTierResponse.getResponse());
+						tempMap.put(participantResponceIdKey, consentTierResponse.getId());
+						tempMap.put(specimenResponsekey, specimenConsentResponse.getStatus());
+						tempMap.put(specimenResponseIDkey, specimenConsentResponse.getId());
+						i++;
+						break;
+					}
+				}
 			}
+			return tempMap;
 		}
-		return tempMap;
+		else
+		{
+			return null;
+		}
+		
 	}	
     
     /**
@@ -339,14 +365,13 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 	 * @param barcode  Barcode is the Unique number,using barcode this function return specimenCollectionGroup object
 	 * @return specimenCollectionGroup SpecimenCollectionGroup object
 	 */
-    private SpecimenCollectionGroup getConsentListForSpecimen(String barcode) throws DAOException
+    private Specimen getConsentListForSpecimen(String barcode) throws DAOException
 	{
 		NewSpecimenBizLogic  newSpecimenBizLogic = (NewSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		String colName = "barcode";
 		List specimenList  = newSpecimenBizLogic.retrieve(Specimen.class.getName(), colName, barcode);
 		Specimen specimen = (Specimen)specimenList.get(0);
-		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)specimen.getSpecimenCollectionGroup();
-		return specimenCollectionGroup;
+		return specimen;
 	}
     //Consent Tracking Virender Mehta
 }

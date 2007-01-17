@@ -184,7 +184,8 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	  	}
 	  	this.signedConsentUrl=Utility.toString(registration.getSignedConsentDocumentURL());
 	  	this.consentDate=Utility.parseDateToString(registration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
-	  	this.consentResponseValues=prepareParticipantResponseMap(registration.getConsentTierResponseCollection());
+	  	//this.consentResponseValues=prepareParticipantResponseMap(registration.getConsentTierResponseCollection());
+	  
 	  	
     }
     

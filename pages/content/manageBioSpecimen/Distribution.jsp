@@ -214,7 +214,7 @@
 			}
 			var url ='Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&showConsents=yes&verificationKey='+verificationKey+'&barcodeId='+barcodeId+'&barcode=';
 			url+=barcode.value;
-			window.open(url,'ConsentVerificationForm','height=200,width=800');
+			window.open(url,'ConsentVerificationForm','height=200,width=800','scrollbars=1');
 		}
 		//Consent Tracking Module Virender mehta	
 -->

@@ -410,12 +410,12 @@ function popupWindow(nofConsentTiers)
 									<%
 									if(pageOf.equals("pageOfCollectionProtocolRegistration"))
 									{
-										String keyValue=request.getParameter(participantResponseKey);
+										
 									%>
 									<td align="left" class="formField">
 										<html:hidden property="<%=participantResponseIDKey%>"/>
 										<html:select property="<%=participantResponseKey%>" styleClass="formFieldSized10" styleId="<%=participantResponseKey%>" size="1"
-											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" value="<%=keyValue%>">
+											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 											<html:options collection="<%=collection%>" labelProperty="name" property="value" />
 										</html:select>
 									</td>
@@ -435,12 +435,11 @@ function popupWindow(nofConsentTiers)
 									}
 									if(pageOf.equals("pageOfSpecimenCollectionGroup"))
 									{
-										String keyValue=request.getParameter(responseKey);
 									%>
 									<td align="left" class="formField">
 										<html:hidden property="<%=responseIdKey%>"/>
 										<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
-											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" value="<%=keyValue%>">
+											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
 											<html:options collection="<%=collection%>" labelProperty="name" property="value" />
 										</html:select>
 									</td>
@@ -449,12 +448,11 @@ function popupWindow(nofConsentTiers)
 									}
 									else if(pageOf.equals("pageOfNewSpecimen"))
 									{
-										String keyValue=request.getParameter(responseKey);
 									%>
 									<td align="left" class="formField" >
 										<html:hidden property="<%=responseIdKey%>"/>
 										<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
-											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" value="<%=keyValue%>">
+											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 											<html:options collection="<%=collection%>" labelProperty="name" property="value" />
 										</html:select>
 									</td>

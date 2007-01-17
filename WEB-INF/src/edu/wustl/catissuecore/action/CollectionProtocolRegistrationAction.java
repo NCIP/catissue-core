@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,9 +32,11 @@ import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -81,14 +84,22 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 				List responseList= Utility.responceList(operation);
 				List requestConsentList = getConsentList(cp_id);
 				if(operation.equalsIgnoreCase(Constants.ADD))
-				{
+				{ 
 					Map tempMap=prepareConsentMap(requestConsentList);
 					collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
 					collectionProtocolRegistrationForm.setConsentTierCounter(requestConsentList.size()) ;
 				}
 				else
 				{
-					collectionProtocolRegistrationForm.setConsentTierCounter(requestConsentList.size()) ;  
+					String cprID = String.valueOf(collectionProtocolRegistrationForm.getId());
+					//getcprObj
+					CollectionProtocolRegistration collectionProtocolRegistration = getcprObj(cprID);
+					//Collection consentCollection = collectionProtocolRegistration.getConsentTierResponseCollection().getConsentTierCollection();
+					Collection consentResponse = collectionProtocolRegistration.getConsentTierResponseCollection();
+					Map tempMap=prepareMap(consentResponse);
+					System.out.println(tempMap+"Map in Action class");
+					collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
+					collectionProtocolRegistrationForm.setConsentTierCounter(requestConsentList.size()) ;
 				}
 				request.setAttribute("witnessList", witnessList);			
 				request.setAttribute("responseList", responseList);
@@ -355,6 +366,66 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		List finalConsentList = new ArrayList(consentList);
     	return finalConsentList;
     }
+	
+	/**
+	 * Prepare map for Showing Consents for a CollectionprotocolID when Operation=Add
+	 * @param requestConsentList This is the List of Consents for a selected  CollectionProtocolID
+	 * @return tempMap
+	 */
+	private Map prepareMap(Collection partiResponseCollection)
+	{
+		Map tempMap = new LinkedHashMap(); 
+		if(partiResponseCollection!=null)
+		{
+			int i=0;
+			Iterator consentResponseCollectionIter = partiResponseCollection.iterator();
+			String idKey=null;
+			String statementKey=null;
+			String responsekey=null;
+			String participantResponceIdKey=null;
+			Long consentTierID;
+			Long consentID;
+			while(consentResponseCollectionIter.hasNext())
+			{
+				ConsentTierResponse consentTierResponse=(ConsentTierResponse)consentResponseCollectionIter.next();
+				ConsentTier consent = (ConsentTier)consentTierResponse.getConsentTier();
+				consentTierID = consentTierResponse.getConsentTier().getId();
+				consentID= consent.getId();
+				if(consentTierID.longValue()==consentID.longValue())						
+				{
+					idKey="ConsentBean:"+i+"_consentTierID";
+					statementKey="ConsentBean:"+i+"_statement";
+					responsekey = "ConsentBean:"+i+"_participantResponse";
+					participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
+					tempMap.put(idKey, consent.getId());
+					tempMap.put(statementKey,consent.getStatement());
+					tempMap.put(responsekey, consentTierResponse.getResponse());
+					tempMap.put(participantResponceIdKey, consentTierResponse.getId());
+					i++;
+				}
+			}
+			return tempMap;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	/**
+	 * This function will return CollectionProtocolRegistration object 
+	 * @param scg_id Selected SpecimenCollectionGroup ID
+	 * @return collectionProtocolRegistration
+	 */
+	private CollectionProtocolRegistration getcprObj(String cpr_id) throws DAOException
+	{
+		CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+		String colName = "id";			
+		List getCPRIdFromDB = collectionProtocolRegistrationBizLogic.retrieve(CollectionProtocolRegistration.class.getName(), colName, cpr_id);		
+		CollectionProtocolRegistration collectionProtocolRegistrationObject = (CollectionProtocolRegistration)getCPRIdFromDB.get(0);
+		return collectionProtocolRegistrationObject;
+	}
+	
 	/**
 	 * Prepare map for Showing Consents for a CollectionprotocolID when Operation=Add
 	 * @param requestConsentList This is the List of Consents for a selected  CollectionProtocolID

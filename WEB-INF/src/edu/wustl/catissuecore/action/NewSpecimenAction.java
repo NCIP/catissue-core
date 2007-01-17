@@ -152,9 +152,9 @@ public class NewSpecimenAction extends SecureAction
 				{
 					request.setAttribute("tableStatus",tableStatus);
 				}
-				
-				CollectionProtocolRegistration collectionProtocolRegistration = getcollectionProtocolRegistrationObj(scg_id);
-				User witness= collectionProtocolRegistration.getConsentWitness();
+				SpecimenCollectionGroup specimenCollectionGroup = getSCGObj(scg_id);
+				//CollectionProtocolRegistration collectionProtocolRegistration = getcollectionProtocolRegistrationObj(scg_id);
+				User witness= specimenCollectionGroup.getCollectionProtocolRegistration().getConsentWitness();
 				if(witness==null||witness.getFirstName()==null)
 				{
 					String witnessName="";
@@ -164,16 +164,19 @@ public class NewSpecimenAction extends SecureAction
 				{
 					specimenForm.setWitnessName(witness.getFirstName());
 				}
-				String getConsentDate=Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+				String getConsentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
 				specimenForm.setConsentDate(getConsentDate);
-				String getSignedConsentURL=Utility.toString(collectionProtocolRegistration.getSignedConsentDocumentURL());
+				String getSignedConsentURL=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
 				specimenForm.setSignedConsentUrl(getSignedConsentURL);
 				
-				Set participantResponseSet =(Set)collectionProtocolRegistration.getConsentTierResponseCollection();
+				Set participantResponseSet =(Set)specimenCollectionGroup.getCollectionProtocolRegistration().getConsentTierResponseCollection();
 				List participantResponseList= new ArrayList(participantResponseSet);
+				
+				
 				if(operation.equalsIgnoreCase(Constants.ADD))
 				{
-					Map tempMap=prepareConsentMap(participantResponseList);
+					Collection consentResponseStatuslevel= specimenCollectionGroup.getConsentTierStatusCollection();
+					Map tempMap=prepareConsentMap(participantResponseList,consentResponseStatuslevel);
 					specimenForm.setConsentResponseForSpecimenValues(tempMap);
 					specimenForm.setConsentTierCounter(participantResponseList.size());
 				}
@@ -768,6 +771,19 @@ public class NewSpecimenAction extends SecureAction
 		CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroupObject.getCollectionProtocolRegistration();
 		return collectionProtocolRegistration;
 	}
+	/**
+	 * This function will return CollectionProtocolRegistration object 
+	 * @param scg_id Selected SpecimenCollectionGroup ID
+	 * @return collectionProtocolRegistration
+	 */
+	private SpecimenCollectionGroup getSCGObj(String scg_id) throws DAOException
+	{
+		SpecimenCollectionGroupBizLogic specimenCollectionBizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+		String colName = "id";			
+		List getSCGIdFromDB = specimenCollectionBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), colName, scg_id);		
+		SpecimenCollectionGroup specimenCollectionGroupObject = (SpecimenCollectionGroup)getSCGIdFromDB.get(0);
+		return specimenCollectionGroupObject;
+	}
 	
 	/**
 	* For ConsentTracking Preparing consentResponseForScgValues for populating Dynamic contents on the UI  
@@ -778,32 +794,42 @@ public class NewSpecimenAction extends SecureAction
     private Map prepareSCGResponseMap(Collection statusResponseCollection, Collection partiResponseCollection)
 	   {
 	    	Map tempMap = new HashMap();
+	    	Long consentTierID;
+			Long consentID;
 			if(partiResponseCollection!=null ||statusResponseCollection!=null)
 			{
 				int i = 0;
 				Iterator statusResponsIter = statusResponseCollection.iterator();			
-				Iterator participantResponseIter = partiResponseCollection.iterator();
 				while(statusResponsIter.hasNext())
 				{
 					ConsentTierStatus consentTierstatus=(ConsentTierStatus)statusResponsIter.next();
-					ConsentTierResponse consentTierResponse=(ConsentTierResponse)participantResponseIter.next();
-					ConsentTier consent = consentTierstatus.getConsentTier();
-					String idKey="ConsentBean:"+i+"_consentTierID";
-					String statementKey="ConsentBean:"+i+"_statement";
-					String participantResponsekey = "ConsentBean:"+i+"_participantResponse";
-					String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
-					String specimenResponsekey  = "ConsentBean:"+i+"_specimenLevelResponse";
-					String specimenResponseIDkey ="ConsentBean:"+i+"_specimenLevelResponseID";
-					
-					tempMap.put(idKey, consent.getId());
-					tempMap.put(statementKey,consent.getStatement());
-					tempMap.put(participantResponsekey, consentTierResponse.getResponse());
-					tempMap.put(participantResponceIdKey, consentTierResponse.getId());
-					tempMap.put(specimenResponsekey, consentTierstatus.getStatus());
-					tempMap.put(specimenResponseIDkey, consentTierstatus.getId());
-					i++;
+					consentTierID=consentTierstatus.getConsentTier().getId();
+					Iterator participantResponseIter = partiResponseCollection.iterator();
+					while(participantResponseIter.hasNext())
+					{
+						ConsentTierResponse consentTierResponse=(ConsentTierResponse)participantResponseIter.next();
+						consentID=consentTierResponse.getConsentTier().getId();
+						if(consentTierID.longValue()==consentID.longValue())						
+						{
+							ConsentTier consent = consentTierResponse.getConsentTier();
+							String idKey="ConsentBean:"+i+"_consentTierID";
+							String statementKey="ConsentBean:"+i+"_statement";
+							String participantResponsekey = "ConsentBean:"+i+"_participantResponse";
+							String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
+							String specimenResponsekey  = "ConsentBean:"+i+"_specimenLevelResponse";
+							String specimenResponseIDkey ="ConsentBean:"+i+"_specimenLevelResponseID";
+							
+							tempMap.put(idKey, consent.getId());
+							tempMap.put(statementKey,consent.getStatement());
+							tempMap.put(participantResponsekey, consentTierResponse.getResponse());
+							tempMap.put(participantResponceIdKey, consentTierResponse.getId());
+							tempMap.put(specimenResponsekey, consentTierstatus.getStatus());
+							tempMap.put(specimenResponseIDkey, consentTierstatus.getId());
+							i++;
+							break;
+						}
+					}
 				}
-				
 				return tempMap;
 			}		
 			else
@@ -818,28 +844,55 @@ public class NewSpecimenAction extends SecureAction
 	 * @param participantResponseList This list will be iterated to map to populate participant Response status.
 	 * @return tempMap
 	 */
-	private Map prepareConsentMap(List participantResponseList)
+	private Map prepareConsentMap(List participantResponseList,Collection consentResponse)
 	{
 		Map tempMap = new HashMap();
-		if(participantResponseList!=null)
+		Long consentTierID;
+		Long consentID;
+		if(participantResponseList!=null||consentResponse!=null)
 		{
 			int i = 0;
 			Iterator consentResponseCollectionIter = participantResponseList.iterator();
 			while(consentResponseCollectionIter.hasNext())
 			{
 				ConsentTierResponse consentTierResponse = (ConsentTierResponse)consentResponseCollectionIter.next();
-				ConsentTier consent = consentTierResponse.getConsentTier();
-				String idKey="ConsentBean:"+i+"_consentTierID";
-				String statementKey="ConsentBean:"+i+"_statement";
-				String responseKey="ConsentBean:"+i+"_participantResponse";
-										
-				tempMap.put(idKey, consent.getId());
-				tempMap.put(statementKey,consent.getStatement());
-				tempMap.put(responseKey,consentTierResponse.getResponse());
-				i++;
+				Iterator statusCollectionIter = consentResponse.iterator();	
+				consentTierID=consentTierResponse.getConsentTier().getId();
+				while(statusCollectionIter.hasNext())
+				{
+					ConsentTierStatus consentTierstatus=(ConsentTierStatus)statusCollectionIter.next();
+					consentID=consentTierstatus.getConsentTier().getId();
+					if(consentTierID.longValue()==consentID.longValue())						
+					{
+						ConsentTier consent = consentTierResponse.getConsentTier();
+						String idKey="ConsentBean:"+i+"_consentTierID";
+						String statementKey="ConsentBean:"+i+"_statement";
+						String responseKey="ConsentBean:"+i+"_participantResponse";
+						String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
+						String scgResponsekey  = "ConsentBean:"+i+"_specimenCollectionGroupLevelResponse";
+						String scgResponseIDkey ="ConsentBean:"+i+"_specimenCollectionGroupLevelResponseID";
+						String specimenResponsekey  = "ConsentBean:"+i+"_specimenLevelResponse";
+						String specimenResponseIDkey ="ConsentBean:"+i+"_specimenLevelResponseID";
+					
+						tempMap.put(idKey, consent.getId());
+						tempMap.put(statementKey,consent.getStatement());
+						tempMap.put(responseKey,consentTierResponse.getResponse());
+						tempMap.put(participantResponceIdKey,consentTierResponse.getId());
+						tempMap.put(scgResponsekey, consentTierstatus.getStatus());
+						tempMap.put(scgResponseIDkey, consentTierstatus.getId());
+						tempMap.put(specimenResponsekey,consentTierstatus.getStatus());
+						tempMap.put(specimenResponseIDkey,null);
+						i++;
+						break;
+					}
+				}
 			}
+			return tempMap;
 		}
-		return tempMap;
+		else
+		{
+			return null;
+		}
 	}	
 	/**
 	 * This function will return CollectionProtocolRegistration object 
