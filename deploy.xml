@@ -737,7 +737,7 @@ Thanking You,
 		<delete dir="${temp.dir}"/>
 	</target>
 	
-	<target name="caties_install" >
+	<target name="deploy_caties" >
 		<if>
 			<equals arg1="standAlone" arg2="${caties.installation.type}" />
 			<then>
