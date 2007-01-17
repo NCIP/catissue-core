@@ -26,10 +26,7 @@
 			</a> |  
 			<a class="subMenuPrimary" href="AdvanceQueryInterfaceDefaultPage.do?pageOf=pageOfAdvanceQueryInterface&menuSelected=17">
 					<bean:message key="app.advancedSearch" />
-			</a> |
-			<a class="subMenuPrimary" href="SearchCategory.do">
-				<bean:message key="query.name" />
-			</a>		
+			</a> 
 		</div>
 	</td>
 </tr>
