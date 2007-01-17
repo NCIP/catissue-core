@@ -175,6 +175,15 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 */
 	protected Collection consentTierStatusCollection;
 	
+	//Mandar 15-jan-07 
+	/*
+	 * To perform operation based on withdraw button clicked.
+	 * Default No Action to allow normal behaviour. 
+	 */
+	protected String consentWithdrawalOption=Constants.WITHDRAW_RESPONSE_NOACTION;
+	
+
+	
 	
 	/**
 	 * @return the consentTierStatusCollection
@@ -949,6 +958,8 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		{
 			NewSpecimenForm form = (NewSpecimenForm) abstractForm;
 			this.consentTierStatusCollection = prepareParticipantResponseCollection(form);
+			// ----------- Mandar --16-Jan-07
+			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();  
 		}
 
 	}
@@ -1223,4 +1234,14 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	{
 		return this.label;
 	}
+	//----------------------------Mandar 16-jan-07
+	public String getConsentWithdrawalOption() {
+		return consentWithdrawalOption;
+	}
+
+	public void setConsentWithdrawalOption(String consentWithdrawalOption) {
+		this.consentWithdrawalOption = consentWithdrawalOption;
+	}
+	
+
 }

@@ -113,7 +113,7 @@
             table="CATISSUE_SPECIMEN"
             lazy="false"
             inverse="true"
-            cascade="none"
+            cascade="save-update"
             sort="unsorted"
         >
 

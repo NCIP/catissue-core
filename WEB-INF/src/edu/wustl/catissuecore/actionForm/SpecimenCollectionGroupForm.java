@@ -92,7 +92,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	/**
 	 * Consent Date, Date on which Consent is Signed
 	 */
-	protected String withdrawlButtonStatus;
+	protected String withdrawlButtonStatus = Constants.WITHDRAW_RESPONSE_NOACTION;
 	
 //Consent Tracking Module Virender Mehta 
  		   

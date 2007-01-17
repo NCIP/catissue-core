@@ -71,7 +71,7 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	/**
 	 * Consent Date, Date on which Consent is Signed
 	 */
-	protected String withdrawlButtonStatus;
+	protected String withdrawlButtonStatus = Constants.WITHDRAW_RESPONSE_NOACTION;
 	
 	//Consent Tracking Module (Virender Mehta)
 

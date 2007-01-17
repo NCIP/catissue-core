@@ -15,11 +15,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -114,6 +114,15 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * The consent tier status by multiple participants for a particular specimen collection group.
      */
     protected Collection consentTierStatusCollection;
+    
+	//Mandar 15-jan-07 
+	/*
+	 * To perform operation based on withdraw button clicked.
+	 * Default No Action to allow normal behaviour. 
+	 */
+	protected String consentWithdrawalOption=Constants.WITHDRAW_RESPONSE_NOACTION;
+	
+
 
 	
 	/**
@@ -442,6 +451,9 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			 * Virender Mehta
 			 */
 			this.consentTierStatusCollection = prepareParticipantResponseCollection(form);
+			
+			// ----------- Mandar --15-Jan-07
+			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();  
 		}
 		catch(Exception e)
 		{
@@ -542,6 +554,16 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	public void setParticipant(Participant participant) {
 		this.participant = participant;
 	}
+
+	//----------------------------Mandar 15-jan-07
+	public String getConsentWithdrawalOption() {
+		return consentWithdrawalOption;
+	}
+
+	public void setConsentWithdrawalOption(String consentWithdrawalOption) {
+		this.consentWithdrawalOption = consentWithdrawalOption;
+	}
+	
 
 	
 }

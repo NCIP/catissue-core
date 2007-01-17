@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
@@ -49,6 +50,7 @@ import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -772,6 +774,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
 		}
 
+		//Mandar: 16-Jan-07
+		updateConsentWithdrawStatus(specimen, dao, sessionDataBean);
 		dao.update(specimen, sessionDataBean, true, false, false);//dao.update(specimen, sessionDataBean, true, true, false);
 
 		//Audit of Specimen.
@@ -799,33 +803,47 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 		//Disable functionality
 		Logger.out.debug("specimen.getActivityStatus() " + specimen.getActivityStatus());
-		if (specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
+		if(specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION ) )
 		{
-			//			 check for disabling a specimen 
-			boolean disposalEventPresent = false;
-			Collection eventCollection = specimen.getSpecimenEventCollection();
-			Iterator itr = eventCollection.iterator();
-			while (itr.hasNext())
+			if (specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 			{
-				Object eventObject = itr.next();
-				if (eventObject instanceof DisposalEventParameters)
+				//			 check for disabling a specimen 
+				boolean disposalEventPresent = false;
+				Collection eventCollection = specimen.getSpecimenEventCollection();
+				Iterator itr = eventCollection.iterator();
+				while (itr.hasNext())
 				{
-					disposalEventPresent = true;
-					break;
+					Object eventObject = itr.next();
+					if (eventObject instanceof DisposalEventParameters)
+					{
+						disposalEventPresent = true;
+						break;
+					}
 				}
-			}
-			if (!disposalEventPresent)
-			{
-				throw new DAOException(ApplicationProperties.getValue("errors.specimen.not.disabled.no.disposalevent"));
-			}
+				if (!disposalEventPresent)
+				{
+					throw new DAOException(ApplicationProperties.getValue("errors.specimen.not.disabled.no.disposalevent"));
+				}
 
-			setDisableToSubSpecimen(specimen);
-			Logger.out.debug("specimen.getActivityStatus() " + specimen.getActivityStatus());
-			Long specimenIDArr[] = new Long[1];
-			specimenIDArr[0] = specimen.getId();
+				setDisableToSubSpecimen(specimen);
+				Logger.out.debug("specimen.getActivityStatus() " + specimen.getActivityStatus());
+				Long specimenIDArr[] = new Long[1];
+				specimenIDArr[0] = specimen.getId();
 
-			disableSubSpecimens(dao, specimenIDArr);
+				disableSubSpecimens(dao, specimenIDArr);
+			}
 		}
+//		else
+//		{
+//			if(specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_DISCARD ) )
+//			{
+//				setDisableToSubSpecimen(specimen);
+//				Long specimenIDArr[] = new Long[1];
+//				specimenIDArr[0] = specimen.getId();
+//
+//				disableSubSpecimens(dao, specimenIDArr);
+//			}
+//		}
 	}
 
 	private boolean isUnderSubSpecimen(Specimen specimen, Long parentSpecimenID)
@@ -1994,4 +2012,50 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		return deriveEventCollection;
 	}
 
+	//Mandar: 16-Jan-07 ConsentWithdrawl
+	/*
+	 * This method updates the consents and specimen based on the the consent withdrawal option.
+	 */
+	private void updateConsentWithdrawStatus(Specimen specimen,   DAO dao, SessionDataBean sessionDataBean)
+	{
+		if(specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_DISCARD ))
+		{
+			Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
+			Iterator itr = consentTierStatusCollection.iterator();
+			while(itr.hasNext())
+			{
+				ConsentTierStatus status = (ConsentTierStatus)itr.next();
+				WithdrawConsentUtil.updateSpecimenStatus(specimen, specimen.getConsentWithdrawalOption(), status.getConsentTier().getId().longValue(), dao, sessionDataBean   );
+				break;
+			}
+			//--------- For derived specimen
+			
+			Collection childSpecimens = specimen.getChildrenSpecimen();
+			Iterator childItr = childSpecimens.iterator();  
+			while(childItr.hasNext() )
+			{
+				Specimen childSpecimen = (Specimen)itr.next();
+				consentWithdrawForchildSpecimens(childSpecimen , dao,  sessionDataBean);
+			}
+		}
+	}
+	
+	private void consentWithdrawForchildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean)
+	{
+		if(specimen!=null)
+		{
+			Collection childSpecimens = specimen.getChildrenSpecimen();
+			Iterator itr = childSpecimens.iterator();  
+			while(itr.hasNext() )
+			{
+				Specimen childSpecimen = (Specimen)itr.next();
+				
+				consentWithdrawForchildSpecimens(childSpecimen, dao, sessionDataBean);
+				WithdrawConsentUtil.withdrawResponse(childSpecimen, Constants.WITHDRAW_RESPONSE_DISCARD, dao, sessionDataBean );
+				
+			}
+		}
+		
+		
+	}
 }

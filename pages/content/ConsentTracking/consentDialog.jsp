@@ -1,5 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+
 
 <!-- 
 	 @author Virender Mehta 
@@ -20,6 +22,9 @@
 function getButtonStatus(element)
 {
 	parent.opener.document.forms[0].withdrawlButtonStatus.value=element.value;
+	parent.opener.document.forms[0].submit();
+	self.close();
+	
 }
 
 </script>
@@ -69,7 +74,7 @@ function getButtonStatus(element)
 						</b>	
 					</td>
 					<td align="right" class="formField">
-						<input type="button" style="actionButton" style="width:100%" value="Discard"  onclick="getButtonStatus(this)"/>
+						<input type="button" style="actionButton" style="width:100%" value="<%=Constants.WITHDRAW_RESPONSE_DISCARD %>"  onclick="getButtonStatus(this)"/>
 					</td>
 				</tr>
 				<tr>
@@ -79,7 +84,7 @@ function getButtonStatus(element)
 						<b>
 					</td>
 					<td align="right" class="formField">
-						<input type="button" style="actionButton" style="width:100%" value="Return"  onclick="getButtonStatus(this)"/>
+						<input type="button" style="actionButton" style="width:100%" value="<%=Constants.WITHDRAW_RESPONSE_RETURN%>"  onclick="getButtonStatus(this)"/>
 					</td>
 				</tr>
 				<%
@@ -93,7 +98,7 @@ function getButtonStatus(element)
 						<b>
 					</td>
 					<td align="right" class="formField">
-						<input type="button" style="actionButton" value="Reset" style="width:100%" onclick="getButtonStatus(this)"/>
+						<input type="button" style="actionButton" value="<%=Constants.WITHDRAW_RESPONSE_RESET %>" style="width:100%" onclick="getButtonStatus(this)"/>
 					</td>
 				</tr>
 				<%

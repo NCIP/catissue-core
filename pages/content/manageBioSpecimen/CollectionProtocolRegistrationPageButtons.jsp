@@ -29,7 +29,7 @@
 						property="submitPage" 
 						title="Submit Only"
 						value="<%=Constants.PROTOCOL_REGISTRATION_FORWARD_TO_LIST[0][0]%>" 
-						onclick="<%=str%>">				  				     	    
+						onclick="<%=str%>">			  				     	    
 		     	</html:button>
 		<%
 			}

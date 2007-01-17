@@ -1568,4 +1568,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION = "CPQueryCollectionProtocolRegistrationEdit.do";
 	public static final String CP_QUERY_PARTICIPANT_LOOKUP_ACTION= "CPQueryParticipantLookup.do";
 	public static final String CP_QUERY_BIO_SPECIMEN = "/QueryManageBioSpecimen.do";
+	
+	//Mandar : 15-Jan-07
+	public static final String WITHDRAW_RESPONSE_NOACTION= "No Action";
+	public static final String WITHDRAW_RESPONSE_DISCARD= "Discard";
+	public static final String WITHDRAW_RESPONSE_RETURN= "Return";
+	public static final String WITHDRAW_RESPONSE_RESET= "Reset";
+	public static final String WITHDRAW_RESPONSE_REASON= "Specimen consents withdrawn";
+
 }

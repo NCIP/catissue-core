@@ -11,18 +11,23 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
+import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -165,6 +170,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			}
 		}
 		checkUniqueConstraint(dao, collectionProtocolRegistration, oldCollectionProtocolRegistration);
+		//Mandar 11-Jan-07 To disable consents accordingly in SCG and Specimen(s) start
+		if(isConsentsChanged(collectionProtocolRegistration,oldCollectionProtocolRegistration ))
+		{
+			verifyAndUpdateConsentWithdrawn(collectionProtocolRegistration, dao, sessionDataBean);
+		}
+		//Mandar 11-Jan-07 To disable consents accordingly in SCG and Specimen(s) end
 		//Update registration
 		dao.update(collectionProtocolRegistration, sessionDataBean, true, true, false);
 
@@ -670,5 +681,145 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 
 		return participantRegistrationInfoList;
 	}
+
+	//Mandar : 11-Jan-07 For Consent Tracking Withdrawal -------- start
+	/*
+	 * isConsentsChanged(collectionProtocolRegistration, oldCollectionProtocolRegistration)
+	 * verifyAndUpdateConsentWithdrawn(collectionProtocolRegistration)
+	 * updateSCG(collectionProtocolRegistration, consentTierResponse)
+	 * 
+	 */
+	
+	/*
+	 * This method checks whether the consents are changed or not.
+	 */
+	private boolean isConsentsChanged(CollectionProtocolRegistration collectionProtocolRegistration, CollectionProtocolRegistration oldCollectionProtocolRegistration)
+	{
+		/*
+		 * To be uncommented once CPR edit consent is working. 
+		 * Virender is working on it.
+		boolean result = false;
+		Collection newConsentTierResponseCollection = collectionProtocolRegistration.getConsentTierResponseCollection();
+		Collection oldConsentTierResponseCollection = oldCollectionProtocolRegistration.getConsentTierResponseCollection();
+		
+		Iterator itr = newConsentTierResponseCollection.iterator() ;
+		while(itr.hasNext() )
+		{
+			Object obj = itr.next();
+			if(!oldConsentTierResponseCollection.contains(obj ))
+			{
+				result = true;
+			}
+		}
+		return result;
+		*/
+		return true;
+	}
+	
+	/*
+	 * This method verifies and updates SCG and child elements for withdrawn consents
+	 */
+	private void verifyAndUpdateConsentWithdrawn(CollectionProtocolRegistration collectionProtocolRegistration,  DAO dao, SessionDataBean sessionDataBean)
+	{
+		Collection newConsentTierResponseCollection = collectionProtocolRegistration.getConsentTierResponseCollection();
+		Iterator itr = newConsentTierResponseCollection.iterator() ;
+		while(itr.hasNext() )
+		{
+			ConsentTierResponse consentTierResponse = (ConsentTierResponse)itr.next();
+			if(consentTierResponse.getResponse().equalsIgnoreCase(Constants.WITHDRAWN ) )	
+			{
+				updateSCG(collectionProtocolRegistration, consentTierResponse, dao,  sessionDataBean);
+			}
+		}
+	}
+	
+	/*
+	 * This method updates all the scg's associated with the selected collectionprotocolregistration.
+	 */
+	private void updateSCG(CollectionProtocolRegistration collectionProtocolRegistration, ConsentTierResponse obj,  DAO dao, SessionDataBean sessionDataBean)
+	{
+		Collection newScgCollection = new HashSet(); 
+		Collection scgCollection = collectionProtocolRegistration.getSpecimenCollectionGroupCollection();
+		Iterator scgItr = scgCollection.iterator();
+		while(scgItr.hasNext() )
+		{
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)scgItr.next();
+			long consentTierID = obj.getConsentTier().getId().longValue();
+			String cprWithdrawOption = collectionProtocolRegistration.getConsentWithdrawalOption();
+			
+			WithdrawConsentUtil.updateSCG(scg, consentTierID, cprWithdrawOption, dao, sessionDataBean);
+			
+//			Collection newScgStatusCollection = new HashSet();
+//			Iterator itr = scg.getConsentTierStatusCollection().iterator() ;
+//			while(itr.hasNext() )
+//			{
+//				ConsentTierStatus consentTierstatus = (ConsentTierStatus)itr.next();
+//				//compare consent tier id of scg with cpr consent tier of response
+//				if(consentTierstatus.getConsentTier().getId().longValue() == obj.getConsentTier().getId().longValue())
+//				{
+//					consentTierstatus.setStatus( Constants.WITHDRAWN);
+//					updateSpecimens(scg,obj.getConsentTier().getId().longValue(),collectionProtocolRegistration.getConsentWithdrawalOption()  );
+//				}
+//				newScgStatusCollection.add(consentTierstatus );	// set updated consenttierstatus in scg
+//			}
+//			scg.setConsentTierStatusCollection( newScgStatusCollection);
+			newScgCollection.add(scg);	// set updated scg in cpr
+		}
+		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(newScgCollection );
+	}
+
+	//TODO 
+	//delete after testing moved to Util class
+//	/*
+//	 * This method updates the specimens for the given SCG and sets the consent status to withdraw.
+//	 */
+//	private void updateSpecimens(SpecimenCollectionGroup scg,long consentTierID, String consentWithdrawalOption)
+//	{
+//		Logger.out.debug(">>>>>>>>. Update Specimen >>>>>>>>" );
+//		Collection specimenCollection = scg.getSpecimenCollection();
+//		Collection updatedSpecimenCollection = new HashSet();
+//		Iterator specimenItr = specimenCollection.iterator() ;
+//		while(specimenItr.hasNext() )
+//		{
+//			Specimen specimen = (Specimen)specimenItr.next();
+//			Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
+//			Collection updatedSpecimenStatusCollection = new HashSet();
+//			Iterator specimenStatusItr = consentTierStatusCollection.iterator() ;
+//			while(specimenStatusItr.hasNext() )
+//			{
+//				ConsentTierStatus consentTierstatus = (ConsentTierStatus)specimenStatusItr.next() ;
+//				if(consentTierstatus.getConsentTier().getId().longValue() == consentTierID)
+//				{
+//					consentTierstatus.setStatus(Constants.WITHDRAWN );
+//					withdrawResponse(specimen, consentWithdrawalOption);
+//				}
+//				updatedSpecimenStatusCollection.add(consentTierstatus );
+//			}
+//			specimen.setConsentTierStatusCollection( updatedSpecimenStatusCollection);
+//			updatedSpecimenCollection.add(specimen );
+//		}
+//		scg.setSpecimenCollection(updatedSpecimenCollection );
+//	}
+//
+//	/*
+//	 * This method performs an action on specimen based on user response.
+//	 */
+//	private void withdrawResponse(Specimen specimen, String consentWithdrawalOption)
+//	{
+//		if(consentWithdrawalOption.equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED ))
+//		{
+//			specimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+//		}
+//		else if(consentWithdrawalOption.equalsIgnoreCase("Return" ))
+//		{
+//			addReturnEvent(specimen);
+//		}
+//	}
+//	
+//	private void addReturnEvent(Specimen specimen)
+//	{
+//		
+//	}
+	//Mandar : 11-Jan-07 For Consent Tracking Withdrawal -------- end
 
 }

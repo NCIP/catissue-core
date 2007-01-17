@@ -15,7 +15,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -23,6 +25,8 @@ import java.util.Vector;
 import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
@@ -31,6 +35,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -167,6 +172,13 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		//CollectionProtocol check complete.
 
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, oldspecimenCollectionGroup);
+
+		//Mandar 15-Jan-07 To disable consents accordingly in SCG and Specimen(s) start
+		if(isConsentsChanged(specimenCollectionGroup,oldspecimenCollectionGroup ))
+		{
+			verifyAndUpdateConsentWithdrawn(specimenCollectionGroup, dao,  sessionDataBean);
+		}
+		//Mandar 15-Jan-07 To disable consents accordingly in SCG and Specimen(s) end
 
 		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
 		dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true, false);
@@ -671,4 +683,54 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			vector.add(treeNode);
 		}
 	}
+	
+	//Mandar : 15-Jan-07 For Consent Tracking Withdrawal -------- start
+
+	/*
+	 * This method checks whether the consents are changed or not.
+	 */
+	private boolean isConsentsChanged(SpecimenCollectionGroup newObject, SpecimenCollectionGroup oldSCG)
+	{
+		/*
+		 * To be uncommented once CPR edit consent is working. 
+		 * Virender is working on it.
+
+		boolean result = false;
+		Collection newConsentTierStatusCollection = newObject.getConsentTierStatusCollection();
+		Collection oldConsentTierStatusCollection = oldSCG.getConsentTierStatusCollection();
+		
+		Iterator itr = newConsentTierStatusCollection.iterator() ;
+		while(itr.hasNext() )
+		{
+			Object obj = itr.next();
+			if(!oldConsentTierStatusCollection.contains(obj ))
+			{
+				result = true;
+			}
+		}
+		return result;
+*/
+		return true;
+	}
+	
+	/*
+	 * This method verifies and updates SCG and child elements for withdrawn consents
+	 */
+	private void verifyAndUpdateConsentWithdrawn(SpecimenCollectionGroup specimenCollectionGroup,  DAO dao, SessionDataBean sessionDataBean)
+	{
+		Collection newConsentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
+		Iterator itr = newConsentTierStatusCollection.iterator() ;
+		while(itr.hasNext() )
+		{
+			ConsentTierStatus consentTierStatus = (ConsentTierStatus)itr.next();
+			if(consentTierStatus.getStatus().equalsIgnoreCase(Constants.WITHDRAWN ) )	
+			{
+				long consentTierID = consentTierStatus.getConsentTier().getId().longValue();
+				String cprWithdrawOption = specimenCollectionGroup.getConsentWithdrawalOption();
+				WithdrawConsentUtil.updateSCG(specimenCollectionGroup, consentTierID, cprWithdrawOption, dao, sessionDataBean);
+				//break;
+			}
+		}
+	}
+
 }

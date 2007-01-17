@@ -18,6 +18,7 @@ import java.util.Iterator;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.util.SearchUtil;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -86,6 +87,15 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * The collection of responses of multiple participants for a particular consent.
 	 */
 	protected Collection consentTierResponseCollection;
+	
+	//Mandar 15-jan-07 
+	/*
+	 * To perform operation based on withdraw button clicked.
+	 * Default No Action to allow normal behaviour. 
+	 */
+	protected String consentWithdrawalOption=Constants.WITHDRAW_RESPONSE_NOACTION;
+	
+
 	
 	/**
 	 * @return the consentSignatureDate
@@ -373,6 +383,9 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 			}
 			//Preparing  Consent tier response Collection 
 			this.consentTierResponseCollection = prepareParticipantResponseCollection(form);
+			
+			//Mandar: 16-jan-07 : - For withdraw options
+			this.consentWithdrawalOption = form.getWithdrawlButtonStatus(); 
 		}
 		catch (Exception e)
 		{
@@ -474,4 +487,14 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	{
 		this.specimenCollectionGroupCollection = specimenCollectionGroupCollection;
 	}
+	
+	//----------------------------Mandar 15-jan-07
+	public String getConsentWithdrawalOption() {
+		return consentWithdrawalOption;
+	}
+
+	public void setConsentWithdrawalOption(String consentWithdrawalOption) {
+		this.consentWithdrawalOption = consentWithdrawalOption;
+	}
+	
 }
