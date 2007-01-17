@@ -366,6 +366,8 @@
 				  	value="${jboss.home.dir}/server/default/catissuecore-properties/ApplicationSecurityConfig.xml"/>
 		<replacefilter token="@@app-properties-file@@" 
 				  	value="${jboss.home.dir}/server/default/catissuecore-properties/caTissueCore_Properties.xml"/>
+		<!-- replacefilter token="@@app-dynamicuixml-file@@" 
+				  	value="${jboss.home.dir}/server/default/catissuecore-properties/dynamicUI.xml"/-->
 
 		</replace>
 
@@ -459,6 +461,9 @@
 			<transaction  src="${common.sql.dir}/createUser.sql"/>
 			<transaction  src="${common.sql.dir}/insert_default_data.sql"/>
 			<transaction  src="${common.sql.dir}/indexes.sql"/>
+			<transaction  src="${mysql.sql.dir}/caB2B Table Generation Script.sql"/>
+			<transaction  src="${mysql.sql.dir}/dynamicextension.sql"/>	
+			<transaction  src="${mysql.sql.dir}/catissueSuite.sql"/>	
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -497,6 +502,26 @@
 			<transaction  src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.0_to_1.1.sql"/>
 			<transaction  src="${common.sql.dir}/initDB_Insert_Common.sql"/>
 			<transaction  src="${common.sql.dir}/indexes.sql"/>
+			<transaction>commit;</transaction>
+			<classpath>
+			<fileset dir="${lib.dir}">
+			  <include name="*.jar"/>
+			  </fileset>
+			</classpath> 
+		</sql>
+  	</target>
+  	<target name="db_upgrade_1.1_to_CatissueSuite_mysql">
+		<echo message="Upgrading MySQL Database for caTISSUECore Application 1.1 to CatissueSuite..."/>
+		<sql
+			driver="${mysql.driver.string}"
+		    url="jdbc:mysql://${database.host}:${database.port}/${database.name}"
+		    userid="${database.username}"
+		    password="${database.password}" 
+			onerror="continue">		
+			<transaction  src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.1 to CatissueSuite.sql"/>	
+			<transaction  src="${mysql.sql.dir}/caB2B Table Generation Script.sql"/>
+			<transaction  src="${mysql.sql.dir}/dynamicextension.sql.sql"/>		
+			<transaction  src="${mysq.sql.dir}/catissueSuite.sql"/>	
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
