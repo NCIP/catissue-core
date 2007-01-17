@@ -766,7 +766,8 @@ Thanking You,
 				</copy>
 				<copy file="${temp.dir}/catissuecore/WEB-INF/classes/ApplicationResources.properties" todir="${caties.installation.dir}" overwrite="true"/>
 				<copy file="${temp.dir}/catissuecore/CDEConfig.xml" todir="${caties.installation.dir}" overwrite="true"/>
-				<copy file="dataset.dtd" todir="${caties.installation.dir}" overwrite="true"/>
+				<copy file="Dataset.dtd" todir="${caties.installation.dir}" overwrite="true"/>
+				<copy file="JniDeID.dll" todir="${caties.installation.dir}" overwrite="true"/>
 				<copy file="${basedir}/CaTIES_conf/build.xml" todir="${caties.installation.dir}" overwrite="true"/>
 				<copy file="${basedir}/CaTIES_conf/sites_configuration.xml" todir="${caties.installation.dir}/CaTIES_conf" overwrite="true"/>
 				<delete dir="${temp.dir}" />
