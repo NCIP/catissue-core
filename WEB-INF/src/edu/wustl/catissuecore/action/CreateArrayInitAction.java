@@ -30,7 +30,6 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.util.SpecimenArrayAppletUtil;
-import edu.wustl.catissuecore.bean.DefinedArrayDetailsBean;
 import edu.wustl.catissuecore.bean.DefinedArrayRequestBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
@@ -41,7 +40,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -186,7 +185,8 @@ public class CreateArrayInitAction extends BaseAction
 		    	}
 		    	
 		    	StorageContainerBizLogic storageContainerBizLogic = (StorageContainerBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_CONTAINER_FORM_ID);
-				containerMap = storageContainerBizLogic.getAllocatedContaienrMapForSpecimenArray(specimenArrayForm.getSpecimenArrayTypeId(),0,null,exceedingMaxLimit);
+		    	SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+				containerMap = storageContainerBizLogic.getAllocatedContaienrMapForSpecimenArray(specimenArrayForm.getSpecimenArrayTypeId(),0,sessionData,exceedingMaxLimit);
 				request.setAttribute(Constants.EXCEEDS_MAX_LIMIT,exceedingMaxLimit);
 		    	request.setAttribute(Constants.AVAILABLE_CONTAINER_MAP,containerMap);
 		    	
