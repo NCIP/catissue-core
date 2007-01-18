@@ -239,7 +239,7 @@ public class StorageContainer extends Container
 	 * @return Returns the holdsSpArrayTypeCollection.
 	 * Returns the collection of specimen array types associated with container 
 	 * @hibernate.set name="holdsSpArrayTypeCollection" table="CATISSUE_CONT_HOLDS_SPARRTYPE"
-	 * cascade="save-update" inverse="false" lazy="false"
+	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenArrayType" column="SPECIMEN_ARRAY_TYPE_ID"
 	 */
