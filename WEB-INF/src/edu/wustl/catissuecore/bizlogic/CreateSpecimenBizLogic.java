@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
@@ -123,7 +124,22 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 
 			// check for closed ParentSpecimen
 			checkStatus(dao, parentSpecimen, "Parent Specimen");
-
+			
+			//Mandar:-17-Jan-07 Get parent consent status : start
+			Collection consentTierStatusCollection = new HashSet();
+			Collection parentStatusCollection = parentSpecimen.getConsentTierStatusCollection();
+			Iterator parentStatusCollectionIterator = parentStatusCollection.iterator();
+			while(parentStatusCollectionIterator.hasNext() )
+			{
+				ConsentTierStatus cts = (ConsentTierStatus)parentStatusCollectionIterator.next();
+				ConsentTierStatus newCts = new ConsentTierStatus();
+				newCts.setStatus(cts.getStatus());
+				newCts.setConsentTier(cts.getConsentTier());
+				consentTierStatusCollection.add(newCts);
+			}
+			specimen.setConsentTierStatusCollection( consentTierStatusCollection);
+			
+			//Mandar:-17-Jan-07 Get parent consent status : end
 			specimen.setParentSpecimen(parentSpecimen);
 			specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());

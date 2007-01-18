@@ -31,6 +31,14 @@ import edu.wustl.common.util.logger.Logger;
 
 public class WithdrawConsentUtil
 {
+	/**
+	 * This method updates the SpecimenCollectionGroup instance by setting all the consent tierstatus to with 
+	 * @param scg Instance of SpecimenCollectionGroup to be updated.
+	 * @param consentTierID Identifier of ConsentTier to be withdrawn.
+	 * @param withdrawOption Action to be performed on the withdrawn collectiongroup.
+	 * @param dao DAO instance. Used for inserting disposal event. 
+	 * @param sessionDataBean SessionDataBean instance. Used for inserting disposal event.
+	 */
 	public static void updateSCG(SpecimenCollectionGroup scg, long consentTierID, String withdrawOption,  DAO dao, SessionDataBean sessionDataBean)
 	{
 		Collection newScgStatusCollection = new HashSet();
@@ -42,7 +50,7 @@ public class WithdrawConsentUtil
 			if(consentTierstatus.getConsentTier().getId().longValue() == consentTierID)
 			{
 				consentTierstatus.setStatus( Constants.WITHDRAWN);
-				updateSpecimens(scg,consentTierID,withdrawOption , dao, sessionDataBean );
+				updateSpecimensInSCG(scg,consentTierID,withdrawOption , dao, sessionDataBean );
 			}
 			newScgStatusCollection.add(consentTierstatus );	// set updated consenttierstatus in scg
 		}
@@ -52,7 +60,7 @@ public class WithdrawConsentUtil
 	/*
 	 * This method updates the specimens for the given SCG and sets the consent status to withdraw.
 	 */
-	private static void updateSpecimens(SpecimenCollectionGroup scg,long consentTierID, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean)
+	private static void updateSpecimensInSCG(SpecimenCollectionGroup scg,long consentTierID, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean)
 	{
 		Logger.out.debug(">>>>>>>>. Update Specimen >>>>>>>>" );
 		Collection specimenCollection = scg.getSpecimenCollection();
@@ -62,11 +70,20 @@ public class WithdrawConsentUtil
 		{
 			Specimen specimen = (Specimen)specimenItr.next();
 			updateSpecimenStatus(specimen, consentWithdrawalOption, consentTierID, dao, sessionDataBean);
+		//	updateChildSpecimens(specimen, consentWithdrawalOption, consentTierID, dao, sessionDataBean);
 			updatedSpecimenCollection.add(specimen );
 		}
 		scg.setSpecimenCollection(updatedSpecimenCollection );
 	}
 	
+	/**
+	 * This method updates the Specimen instance by setting all the consenttierstatus to withdraw. 
+	 * @param specimen  Instance of Specimen to be updated. 
+	 * @param consentWithdrawalOption Action to be performed on the withdrawn specimen.
+	 * @param consentTierID Identifier of ConsentTier to be withdrawn.
+	 * @param dao DAO instance. Used for inserting disposal event. 
+	 * @param sessionDataBean SessionDataBean instance. Used for inserting disposal event.
+	 */
 	public static void updateSpecimenStatus(Specimen specimen, String consentWithdrawalOption, long consentTierID,  DAO dao, SessionDataBean sessionDataBean)
 	{
 		Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
@@ -83,13 +100,13 @@ public class WithdrawConsentUtil
 			updatedSpecimenStatusCollection.add(consentTierstatus );
 		}
 		specimen.setConsentTierStatusCollection( updatedSpecimenStatusCollection);
-
+		updateChildSpecimens(specimen, consentWithdrawalOption, consentTierID, dao, sessionDataBean);
 	}
 
 	/*
 	 * This method performs an action on specimen based on user response.
 	 */
-	public static void withdrawResponse(Specimen specimen, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean)
+	private static void withdrawResponse(Specimen specimen, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean)
 	{
 		if(consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_DISCARD))
 		{
@@ -121,11 +138,15 @@ public class WithdrawConsentUtil
 		}
 	}
 	
+	//TODO
+	//method for return event.
 	private static void addReturnEvent(Specimen specimen)
 	{
-		
 	}
 
+	/*
+	 * This method adds a disposal event to the specimen.
+	 */
 	private static void addDisposalEvent(Specimen specimen, DAO dao, SessionDataBean sessionDataBean)
 	{
 		try
@@ -137,12 +158,41 @@ public class WithdrawConsentUtil
 			disposalEvent.setSpecimen(specimen );
 			dao.insert(disposalEvent,sessionDataBean,true,true) ;
 			
-			eventCollection.add(disposalEvent );
+			eventCollection.add(disposalEvent);
 			specimen.setSpecimenEventCollection(eventCollection);
 		}
 		catch(Exception excp)
 		{
-			Logger.out.error(excp.getMessage(),excp );
+			excp.printStackTrace(); 
 		}
 	}
+	
+	//TODO
+	//Check and integrate the two methods if possible.  
+	private static void updateChildSpecimens(Specimen specimen, String consentWithdrawalOption, long consentTierID, DAO dao, SessionDataBean sessionDataBean)
+	{
+		Collection childSpecimens = specimen.getChildrenSpecimen();
+		Iterator childItr = childSpecimens.iterator();  
+		while(childItr.hasNext() )
+		{
+			Specimen childSpecimen = (Specimen)childItr.next();
+			consentWithdrawForchildSpecimens(childSpecimen , dao,  sessionDataBean, consentWithdrawalOption, consentTierID);
+		}
+	}
+	
+	private static void consentWithdrawForchildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, String consentWithdrawalOption, long consentTierID)
+	{
+		if(specimen!=null)
+		{
+			updateSpecimenStatus(specimen,  consentWithdrawalOption, consentTierID, dao, sessionDataBean);
+			Collection childSpecimens = specimen.getChildrenSpecimen();
+			Iterator itr = childSpecimens.iterator();  
+			while(itr.hasNext() )
+			{
+				Specimen childSpecimen = (Specimen)itr.next();
+				consentWithdrawForchildSpecimens(childSpecimen, dao, sessionDataBean, consentWithdrawalOption, consentTierID);
+			}
+		}
+	}
+
 }

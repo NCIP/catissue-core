@@ -2016,7 +2016,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	/*
 	 * This method updates the consents and specimen based on the the consent withdrawal option.
 	 */
-	private void updateConsentWithdrawStatus(Specimen specimen,   DAO dao, SessionDataBean sessionDataBean)
+	private void updateConsentWithdrawStatus(Specimen specimen, DAO dao, SessionDataBean sessionDataBean)
 	{
 		if(specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_DISCARD ))
 		{
@@ -2028,34 +2028,6 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				WithdrawConsentUtil.updateSpecimenStatus(specimen, specimen.getConsentWithdrawalOption(), status.getConsentTier().getId().longValue(), dao, sessionDataBean   );
 				break;
 			}
-			//--------- For derived specimen
-			
-			Collection childSpecimens = specimen.getChildrenSpecimen();
-			Iterator childItr = childSpecimens.iterator();  
-			while(childItr.hasNext() )
-			{
-				Specimen childSpecimen = (Specimen)itr.next();
-				consentWithdrawForchildSpecimens(childSpecimen , dao,  sessionDataBean);
-			}
 		}
-	}
-	
-	private void consentWithdrawForchildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean)
-	{
-		if(specimen!=null)
-		{
-			Collection childSpecimens = specimen.getChildrenSpecimen();
-			Iterator itr = childSpecimens.iterator();  
-			while(itr.hasNext() )
-			{
-				Specimen childSpecimen = (Specimen)itr.next();
-				
-				consentWithdrawForchildSpecimens(childSpecimen, dao, sessionDataBean);
-				WithdrawConsentUtil.withdrawResponse(childSpecimen, Constants.WITHDRAW_RESPONSE_DISCARD, dao, sessionDataBean );
-				
-			}
-		}
-		
-		
 	}
 }
