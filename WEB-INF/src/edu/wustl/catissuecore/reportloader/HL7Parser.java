@@ -65,6 +65,7 @@ public class HL7Parser extends Parser
 			String line = "";
 			line=this.getParticipantDataFromReportMap(reportMap, Parser.PID);
 			//participant = parserParticipantInformation(line);
+			this.site=parseSiteInformation(line);
 			participant =p;
 			line=this.getReportDataFromReportMap(reportMap, Parser.OBR);
 			report = extractOBRSegment(line);
@@ -91,8 +92,15 @@ public class HL7Parser extends Parser
 				{
 					report.getTextContent().setReportSectionCollection(reportSectionSet);
 					
-				}	
-				reportLoader = new ReportLoader(participant, report,createNewSite());
+				}
+				if(this.site!=null)
+				{
+					reportLoader = new ReportLoader(participant, report,this.site);
+				}
+				else
+				{
+					reportLoader = new ReportLoader(participant, report,createNewSite());
+				}
 				reportLoader.process();
 			}
 		}
@@ -108,6 +116,10 @@ public class HL7Parser extends Parser
 	 */
 	private Site createNewSite()throws Exception
 	{
+		if(this.site!=null)
+		{
+			return this.site;
+		}
 		NameValueBean nv=null;
 		List list=null;
 		Site s = new Site();
@@ -576,6 +588,10 @@ public class HL7Parser extends Parser
 					if(siteList!=null && siteList.size()>0)
 					{
 						site=(Site)siteList.get(0);
+					}
+					else
+					{
+						Logger.out.error("Site name "+siteName+" not found in the database!");
 					}
 				}
 				break;
