@@ -195,4 +195,25 @@ public class WithdrawConsentUtil
 		}
 	}
 
+	/**
+	 * This method is used to copy the consents from parent specimen to the child specimen.
+	 * 
+	 * @param specimen Instance of specimen. It is the child specimen to which the consents will be set.
+	 * @param parentSpecimen Instance of specimen. It is the parent specimen from which the consents will be copied.
+	 */
+	public static void setConsentsFromParent(Specimen specimen, Specimen parentSpecimen)
+	{
+		Collection consentTierStatusCollection = new HashSet();
+		Collection parentStatusCollection = parentSpecimen.getConsentTierStatusCollection();
+		Iterator parentStatusCollectionIterator = parentStatusCollection.iterator();
+		while(parentStatusCollectionIterator.hasNext() )
+		{
+			ConsentTierStatus cts = (ConsentTierStatus)parentStatusCollectionIterator.next();
+			ConsentTierStatus newCts = new ConsentTierStatus();
+			newCts.setStatus(cts.getStatus());
+			newCts.setConsentTier(cts.getConsentTier());
+			consentTierStatusCollection.add(newCts);
+		}
+		specimen.setConsentTierStatusCollection( consentTierStatusCollection);
+	}
 }

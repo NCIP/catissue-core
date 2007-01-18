@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
@@ -189,6 +190,9 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			{
 				//check for closed ParentSpecimen
 				checkStatus(dao, parentSpecimen, "Parent Specimen");
+//				Mandar:-18-Jan-07 Get parent consent status : start
+				WithdrawConsentUtil.setConsentsFromParent(aliquotSpecimen, parentSpecimen);
+//				Mandar:-18-Jan-07 Get parent consent status : end
 				aliquotSpecimen.setParentSpecimen(parentSpecimen);
 				aliquotSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 				aliquotSpecimen.setType(parentSpecimen.getType());
