@@ -412,6 +412,12 @@
 		{	
 						
 			var ind=document.getElementById('specimenCollectionGroupId');
+			if(ind == null)
+			{
+				var x = document.getElementsByName('specimenCollectionGroupId');
+				ind = x[0];
+			}
+			
 			var index=ind.selectedIndex;
 			if(index==0)
 			{
