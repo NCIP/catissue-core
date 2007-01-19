@@ -75,7 +75,7 @@ public class DistributionSubmitAction extends CommonAddEditAction {
 						.getDistributionBasedOn());
 				
 				String verificationStatus=(String)dform.getValue(verificationStatusKey);
-				if(verificationStatus.equalsIgnoreCase(Constants.COMPLETE))
+				if(!verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS))
 				{
 					dform.setValue(specimenkey, specimenId.toString());
 				}

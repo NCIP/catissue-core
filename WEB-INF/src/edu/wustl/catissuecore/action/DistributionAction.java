@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -37,7 +38,6 @@ import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -53,7 +53,8 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class DistributionAction extends SpecimenEventParametersAction
 {
-
+	//This counter will keep track of the no of consentTiers 
+	int consentTierCounter;
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 		DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
@@ -189,12 +190,22 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
         String showConsents = request.getParameter(Constants.SHOW_CONSENTS); 
 		if(showConsents!=null && showConsents.equalsIgnoreCase(Constants.YES))
 		{
-	        String barcode = request.getParameter(Constants.BARCODE);
+			String barcodeLable=null;
+			int barcodeLabelBasedDistribution=1;
+			String labelBarcodeValue = request.getParameter("labelBarcode");
+			if(labelBarcodeValue.equalsIgnoreCase("1"))
+			{
+				barcodeLabelBasedDistribution=1;
+			}
+			else
+			{
+				barcodeLabelBasedDistribution=2;
+			}
+			barcodeLable = request.getParameter(Constants.BARCODE_LABLE);	        		        	
 	        DistributionBizLogic bizLogic = (DistributionBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
-	        
 	        try
 	        {
-	        	bizLogic.getSpecimenId(barcode,Constants.BARCODE_BASED_DISTRIBUTION);
+	        	bizLogic.getSpecimenId(barcodeLable,barcodeLabelBasedDistribution);
 	        }
 	        catch (DAOException dao)
 	        {
@@ -206,7 +217,7 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 				return mapping.findForward(Constants.POPUP);
 	        }
 		    //Getting SpecimenCollectionGroup object
-	        Specimen specimen = getConsentListForSpecimen(barcode);
+	        Specimen specimen = getConsentListForSpecimen(barcodeLable, barcodeLabelBasedDistribution);
 	        //SpecimenCollectionGroup specimenCollectionGroup = getConsentListForSpecimen(barcode);
 	        //Getting CollectionProtocolRegistration object
 	        CollectionProtocolRegistration collectionProtocolRegistration=specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
@@ -230,16 +241,14 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 			dForm.setSignedConsentUrl(getSignedConsentURL);
 			
 			//Getting ConsentResponse collection for CPR level
-			Set participantResponseSet = (Set)collectionProtocolRegistration.getConsentTierResponseCollection();
+			Collection participantResponseCollection = collectionProtocolRegistration.getConsentTierResponseCollection();
 			//Getting ConsentResponse collection for Specimen level
-			Set specimenLevelResponseSet = (Set)specimen.getConsentTierStatusCollection();
-			List participantResponseList= new ArrayList(participantResponseSet);
-			List specimenLevelResponseList= new ArrayList(specimenLevelResponseSet);
+			Collection specimenLevelResponseCollection=specimen.getConsentTierStatusCollection();
 			//Prepare Map and iterate both Collections  
-			Map tempMap=prepareConsentMap(participantResponseList,specimenLevelResponseList);
+			Map tempMap=prepareConsentMap(participantResponseCollection, specimenLevelResponseCollection);
 			//Setting map and counter in the form 
 			dForm.setConsentResponseForDistributionValues(tempMap);
-			dForm.setConsentTierCounter(participantResponseList.size());
+			dForm.setConsentTierCounter(consentTierCounter);
 		}       
 		Logger.out.debug("executeSecureAction");
 		
@@ -312,7 +321,7 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 	 * @param specimenLevelResponseList This List will be iterated and added to map to populate Specimen Level response.
 	 * @return tempMap
 	 */
-    private Map prepareConsentMap(List participantResponseList, List specimenLevelResponseList)
+    private Map prepareConsentMap(Collection participantResponseList, Collection specimenLevelResponseList)
 	{
 		Map tempMap = new HashMap();
 		Long consentTierID;
@@ -351,6 +360,7 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 					}
 				}
 			}
+			consentTierCounter=i;
 			return tempMap;
 		}
 		else
@@ -358,17 +368,25 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 			return null;
 		}
 		
-	}	
+	}
     
     /**
 	 * This function returns SpecimenCollectionGroup object by reading Barcode value
 	 * @param barcode  Barcode is the Unique number,using barcode this function return specimenCollectionGroup object
 	 * @return specimenCollectionGroup SpecimenCollectionGroup object
 	 */
-    private Specimen getConsentListForSpecimen(String barcode) throws DAOException
+    private Specimen getConsentListForSpecimen(String barcode,int barcodeLabelBasedDistribution) throws DAOException
 	{
 		NewSpecimenBizLogic  newSpecimenBizLogic = (NewSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-		String colName = "barcode";
+		String colName=null;
+		if(barcodeLabelBasedDistribution==Constants.BARCODE_BASED_DISTRIBUTION)
+		{
+			colName="barcode";	
+		}
+		else
+		{
+			colName="label";
+		}
 		List specimenList  = newSpecimenBizLogic.retrieve(Specimen.class.getName(), colName, barcode);
 		Specimen specimen = (Specimen)specimenList.get(0);
 		return specimen;
