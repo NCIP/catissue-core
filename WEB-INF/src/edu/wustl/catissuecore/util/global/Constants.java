@@ -30,6 +30,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String 	ERROR_SHOWCONSENTS="errorShowConsent";
 	public static final String 	COMPLETE="Complete";
 	public static final String 	VIEW_CONSENTS="View";
+	public static final String 	APPLY="Apply";
+	public static final String 	APPLY_ALL="ApplyAll";
 	
 	//Ordering System Status
 	public static final String CDE_NAME_REQUEST_STATUS="Request Status";
