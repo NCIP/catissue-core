@@ -22,12 +22,16 @@
 function getButtonStatus(element)
 {
 	parent.opener.document.forms[0].withdrawlButtonStatus.value=element.value;
-	parent.opener.document.forms[0].onSubmit.value="<%=Constants.BIO_SPECIMEN%>";
-	parent.opener.document.forms[0].activityStatus.value="<%=Constants.ACTIVITY_STATUS_DISABLED%>" ;
+	//alert(parent.opener.document.forms[0].name);
+	if(parent.opener.document.forms[0].name == "newSpecimenForm")
+	{
+		parent.opener.document.forms[0].onSubmit.value="<%=Constants.BIO_SPECIMEN%>";
+		parent.opener.document.forms[0].activityStatus.value="<%=Constants.ACTIVITY_STATUS_DISABLED%>" ;
+	}
 	parent.opener.document.forms[0].submit();
 	self.close();
-	
 }
+
 
 </script>
 
