@@ -11,6 +11,7 @@
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
+
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
@@ -92,16 +93,12 @@
 <script language="JavaScript">
 
 //Consent Tracking Virender Mehta
-
 		function submitform()
 		{
-		  var collectionProtocolObj=document.getElementById('collectionProtocolID');
-		 // var selectedIndexValue=collectionProtocolObj.value;
 		  var action ="CollectionProtocolRegistration.do?showConsents=yes&pageOf=pageOfCollectionProtocolRegistration&operation=<%=operation%>";
 		  document.forms[0].action = action;
 		  document.forms[0].submit();
 		}
-		
 //Consent Tracking Virender Mehta
 
 		function onCheckboxButtonClick(element,dropDownList)
@@ -346,12 +343,14 @@
 	<table>
 		<tr><td></td></tr><tr><td></td></tr>
 	</table>
-
+	<div id="container">
+	</div>
 <%--  Consent Tracking Virender Mehta	 --%>
 
 	<%
 		List responseList =(List)request.getAttribute("responseList");
-		if(responseList!=null&&form.getConsentTierCounter()>0)
+    	//if(responseList!=null&&form.getConsentTierCounter()>0)
+		if(form.getConsentTierCounter()>0)
 		{
 	%>
    	 

@@ -21,7 +21,11 @@
 			{
 				ConsentTierData consentForm =(ConsentTierData)form;
 				List consentTier=(List)consentForm.getConsentTiers();
-				String str = "popupWindow('"+ consentTier.size() +"')";
+				String str = "onNormalSubmit()";
+				if(consentTier.size()>0)
+				{
+					str = "popupWindow('"+ consentTier.size() +"')";
+				}
 		 %>	
 				<html:button
 					styleClass="actionButton" property="submitButton"

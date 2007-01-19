@@ -8,6 +8,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
+<script src="jss/ajax.js"></script>
 
 <%!private String changeUnit(String specimenType, String subType) {
 		if (specimenType == null)
@@ -160,7 +161,7 @@
 			sname="";
 
 			var name = "value(DistributedItem:" + rowno + "_Specimen_label)";
-	
+			var labelKeyValue=name;
 			sname="<input type='text' " + labelDisabled  +  "  name='" + name + "'   class='formField' id='" + name + "'>";
 			spreqidentifier.innerHTML="" + sname;
 
@@ -199,24 +200,68 @@
 			var anchorTag = document.createElement("a");
 			var barcodeStatus="barcodeStatus"+rowno;
 			anchorTag.setAttribute("id",barcodeStatus);
-			anchorTag.setAttribute("href", "javascript:getbarCode('"+keyValue+"','"+barcodeStatus+"','"+verificationStatusKey+"');");
+			var labelBarcode;
+			if (document.forms[0].distributionBasedOn[0].checked == true)  
+			{
+				labelbarcodeKey=keyValue;
+				labelBarcode=1;
+		    }
+			else
+			{
+				labelbarcodeKey=labelKeyValue;
+				labelBarcode=2;
+			}
+			anchorTag.setAttribute("href", "javascript:getbarCode('"+labelbarcodeKey+"','"+barcodeStatus+"','"+verificationStatusKey+"','"+labelBarcode+"');");
 			anchorTag.innerHTML="View"+"<input type='hidden' name='" + verificationStatusKey + "' value='View' id='" + verificationStatusKey + "'>";
 			consent.appendChild(anchorTag);
 		}
 		//This function get the barcode value and prepare URL for Submit
-		function getbarCode(identifier,barcodeId,verificationKey)
+		function getbarCode(identifier,barcodeId,verificationKey,labelBarcode)
 		{
-			var barcode=document.getElementById(identifier);
-			if(barcode.value==null||barcode.value=="")
+			var barcodelabel=document.getElementById(identifier);
+			if(barcodelabel.value==null||barcodelabel.value=="")
 			{
-				alert("Please Enter Barcode Value");
+				alert("Please enter some valid value");
 				return;
 			}
-			var url ='Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&showConsents=yes&verificationKey='+verificationKey+'&barcodeId='+barcodeId+'&barcode=';
-			url+=barcode.value;
-			window.open(url,'ConsentVerificationForm','height=200,width=800','scrollbars=1');
+			var url ='Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&showConsents=yes&labelBarcode='+labelBarcode+'&verificationKey='+verificationKey+'&barcodeId='+barcodeId+'&barcodelabel=';
+			url+=barcodelabel.value;
+			var dataToSend='showConsents=yes&labelBarcode='+labelBarcode+'&barcodelabel='+barcodelabel.value;
+			ajaxCall(dataToSend, url, barcodeId, verificationKey);
 		}
-		//Consent Tracking Module Virender mehta	
+
+		//Ajax Code Start
+		function ajaxCall(dataToSend, url, barcodeId, verificationKey)
+		{
+			var request = newXMLHTTPReq();
+			request.onreadystatechange=function(){checkForConsents(request, url, barcodeId, verificationKey)};
+			//send data to ActionServlet
+			//Open connection to servlet
+			request.open("POST","CheckConsents.do",true);
+			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			request.send(dataToSend);
+		}
+
+		function checkForConsents(request, url, barcodeId,verificationKey)
+		{
+			if(request.readyState == 4)
+			{  
+				//Response is ready
+				if(request.status == 200)
+				{
+					var responseString = request.responseText;
+					if(responseString=="ShowConsents")
+					{
+						window.open(url,'ConsentVerificationForm','height=200,width=800,scrollbars=1,resizable=1');
+					}
+					else
+					{
+						document.getElementById(barcodeId).innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='No consents' id='" + verificationKey + "'/>";;
+					}
+				}
+			}
+		}
+	//Consent Tracking Module Virender mehta	
 -->
 </script>
 </head>
@@ -633,9 +678,20 @@
 						<%
 					boolean bool = Utility.isPersistedValue(map, keyid);
 					String condition = "";
+					String labelbarcodeKey="";
+					String labelBarcode="1";
 					if (bool)
 						condition = "disabled='disabled'";
-
+					if(formBean.getDistributionBasedOn().intValue() == Constants.BARCODE_BASED_DISTRIBUTION)
+					{
+						labelbarcodeKey=barcodeKey;
+						labelBarcode="1";
+					} 
+					else
+					{
+						labelbarcodeKey=labelKey;
+						labelBarcode="2";
+					}
 					%>
 						<td class="formField" width="5"><input type=checkbox
 							name="<%=check %>" id="<%=check %>" <%=condition%>
@@ -643,7 +699,7 @@
 						</td>
 						<!-- Change Added for Consent Tracking -->
 						<td class="formField" colspan="2">
-							<a id="<%=barcodeStatus%>" href="javascript:getbarCode('<%=barcodeKey%>','<%=barcodeStatus%>','<%=verificationStatusKey%>')">
+							<a id="<%=barcodeStatus%>" href="javascript:getbarCode('<%=labelbarcodeKey%>','<%=barcodeStatus%>','<%=verificationStatusKey%>','<%=labelBarcode%>')">
 							
 							<logic:notEmpty name="distributionForm" property="<%=verificationStatusKey%>">
 								<bean:write name="distributionForm" property="<%=verificationStatusKey%>"/>
