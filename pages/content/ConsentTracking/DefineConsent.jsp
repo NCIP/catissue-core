@@ -93,7 +93,7 @@
 								int noOfConsents=1;
 								if(collectionProtocolForm != null && collectionProtocolForm instanceof CollectionProtocolForm)
 								{
-									noOfConsents = collectionProtocolForm.getConsentTierCounter();																							
+									noOfConsents = collectionProtocolForm.getConsentTierCounter();								
 								}
 								for(int counter=0;counter<noOfConsents;counter++)
 								{		
@@ -105,7 +105,20 @@
 										<%=(noOfConsents-counter)%>.
 									</td>
 									<td class="formField" width="10%" align="center" width="5%">
-										<input type="checkbox" name="consentcheckBoxs" Id="check1"/>
+									<%
+									if(operation.equals(Constants.EDIT))
+									{
+									%>
+									<input type="checkbox" name="consentcheckBoxs" Id="check1" disabled="disabled"/>	
+									<%
+									}
+									else
+									{
+									%>
+									<input type="checkbox" name="consentcheckBoxs" Id="check1"/>
+									<%
+									}
+									%>
 									</td>
 									<html:hidden property="<%=consentKey%>"/>
 									<td class="formField" width="90%">
