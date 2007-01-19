@@ -24,7 +24,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String 	SHOW_CONSENTS="showConsents";
 	public static final String 	YES="yes";
 	public static final String 	CP_ID="cpID";
-	public static final String 	BARCODE="barcode";
+	public static final String 	BARCODE_LABLE="barcodelabel";
 	public static final String 	POPUP="popup";
 	public static final String 	ERROR="error";
 	public static final String 	ERROR_SHOWCONSENTS="errorShowConsent";
