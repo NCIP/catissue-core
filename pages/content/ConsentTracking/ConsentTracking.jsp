@@ -48,7 +48,23 @@ function popupWindow(nofConsentTiers)
 	}
 	else if(iCount==nofConsentTiers)
 	{	
-		return <%=normalSubmit%>;
+		<%
+			Object formInstance = form;
+			if(formInstance instanceof NewSpecimenForm)
+			{
+		%>
+				return onNormalSubmit();
+		<%
+			}
+			else
+		   {
+		%>
+				alert("virender");
+				return <%=normalSubmit%>;
+		<%
+		   }
+		%>
+		
 	}	
 	else
 	{

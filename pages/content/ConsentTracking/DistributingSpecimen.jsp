@@ -26,15 +26,15 @@
 			<script language="JavaScript">
 			
 			<%	
-				String barcodeStatus=(String)request.getAttribute("barcodeStatus"); 
+				String barcodeLabelStatus=(String)request.getAttribute("barcodeStatus"); 
 				String normalSubmit="";
 			%>	
 
 			<%		
-				if(barcodeStatus.equalsIgnoreCase("invalid"))
+				if(barcodeLabelStatus.equalsIgnoreCase("invalid"))
 				{
 			%>		
-					alert("Please enter Valid Barcode");
+					alert("Please enter valid value");
 					window.close();
 			<%		
 				}
@@ -42,11 +42,9 @@
 			</script>
 			<script language="JavaScript">
 			<%
-			if(barcodeStatus.equalsIgnoreCase("valid"))
+			if(barcodeLabelStatus.equalsIgnoreCase("valid"))
 			{
 			%>	
-			
-			
 			<!-- This function will check if the verifyCheck box is checked or not -->			
 			
 				function submitAllResponses()
@@ -85,8 +83,20 @@
 				
 	%>
 			<html:form action="Distribution.do">
-				<%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %> 
-			</html:form>
+			<%
+				if(form.getConsentTierCounter() > 0)
+				{
+		    %>
+					<%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %> 
+			<%
+				}
+				else
+				{
+			%>
+				<script language="JavaScript">alert("No Consents available"); </script>
+			<%
+				}
+			%></html:form>
 
 	</body>
 </html>
