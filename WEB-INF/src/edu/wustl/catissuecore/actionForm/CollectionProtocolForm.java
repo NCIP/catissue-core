@@ -83,7 +83,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 * CheckBox for consent is checked or not
 	 */
 	private boolean consentChecked = false;
-	
 	//Consent tracking(Virender Mehta)
 	/**
 	 * No argument constructor for CollectionProtocolForm class.
@@ -310,8 +309,10 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			{
 				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
 				String statement = "ConsentBean:"+i+"_statement";
+				//String predefinedConsents = "ConsentBean:"+i+"_predefinedConsents";
 				String statementkey = "ConsentBean:"+i+"_consentTierID";
 				tempMap.put(statement, consent.getStatement());
+				//tempMap.put(predefinedConsents, consent.getStatement());
 				tempMap.put(statementkey, consent.getId());
 				i++;
 			}
@@ -727,6 +728,5 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		this.consentChecked = consentChecked;
 	}
-
 //	For Consent Tracking End
 }

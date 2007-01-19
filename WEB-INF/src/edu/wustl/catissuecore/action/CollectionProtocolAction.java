@@ -27,11 +27,15 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -73,7 +77,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			Map tempMap= prepareConsentMap(consentTierCollection);
 	    	collectionProtocolForm.setConsentValues(tempMap);
 	    	collectionProtocolForm.setConsentTierCounter(consentTierCollection.size());
-    	}	    	
+    	}
     	//Name of delete button clicked
         String button = request.getParameter("button");
          
@@ -147,8 +151,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     }
     /**
 	 * This function will return CollectionProtocolRegistration object 
-	 * @param scg_id Selected SpecimenCollectionGroup ID
-	 * @return collectionProtocolRegistration
+	 * @param cp_id Selected SpecimenCollectionGroup ID
+	 * @return collectionProtocolObject
 	 */
 	private CollectionProtocol getCPObj(String cp_id) throws DAOException
 	{
@@ -158,7 +162,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		CollectionProtocol collectionProtocolObject = (CollectionProtocol)getCPFromDB.get(0);
 		return collectionProtocolObject;
 	}
-	
+
 	private Map prepareConsentMap(Collection consentTierColl)
 	{
 		Map tempMap = new HashMap();
@@ -183,4 +187,13 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		}
 		
 	}
+//	public List consentsList()
+//	{
+//		List listOfResponces=new ArrayList();
+//		listOfResponces.add(new NameValueBean("DNA","DNA"));
+//		listOfResponces.add(new NameValueBean("AIDS","AIDS"));
+//		listOfResponces.add(new NameValueBean("RNA","RNA"));
+//		listOfResponces.add(new NameValueBean("Viral","Viral"));
+//		return listOfResponces;  	
+//	}
 }
