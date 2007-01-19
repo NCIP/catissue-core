@@ -53,7 +53,7 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
 	/**
 	 * No of Consent Tier
 	 */
-	private int consentTierCounter=1;
+	private int consentTierCounter=0;
 	/**
 	 * Signed Consent URL
 	 */
