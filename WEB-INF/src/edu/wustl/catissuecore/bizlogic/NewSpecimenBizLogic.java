@@ -2018,7 +2018,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 */
 	private void updateConsentWithdrawStatus(Specimen specimen, DAO dao, SessionDataBean sessionDataBean)
 	{
-		if(specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_DISCARD ))
+		if(!specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION ))
 		{
 			Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
 			Iterator itr = consentTierStatusCollection.iterator();

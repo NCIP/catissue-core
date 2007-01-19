@@ -436,3 +436,17 @@ INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID fro
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.RequestListAction'),'2007-01-04' from CSM_PG_PE;
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='edu.wustl.catissuecore.action.RequestListAction'),'2007-01-04' from CSM_PG_PE;
 
+#------------------------New Table entry For ConsentWithdrawal ---------- Mandar : 18-Jan-07 -------------start
+insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID, FOR_SQI) values ( 79, 'CATISSUE_RETURN_EVENT_PARAMETERS', 'Return Event Parameters', 'ReturnEventParameters',2,2);
+insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 328, 79, 'IDENTIFIER', 'bigint');
+
+create table CATISSUE_RETURN_EVENT_PARAMETERS (
+   IDENTIFIER bigint not null,
+   primary key (IDENTIFIER)
+);
+
+alter table CATISSUE_RETURN_EVENT_PARAMETERS add index FKD8890A48BC7298A91 (IDENTIFIER), add constraint FKD8890A48BC7298A91 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_EVENT_PARAM (IDENTIFIER);
+
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'ReturnEventParameters','ReturnEventParameters Class','edu.wustl.catissuecore.domain.ReturnEventParameters',NULL,NULL,1,'2007-01-17' from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='ReturnEventParameters'),'2006-11-27' from CSM_PG_PE;
+#------------------------New Table entry For ConsentWithdrawal ---------- Mandar : 18-Jan-07 -------------end

@@ -14,6 +14,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
+import edu.wustl.catissuecore.domain.ReturnEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -108,40 +109,55 @@ public class WithdrawConsentUtil
 	 */
 	private static void withdrawResponse(Specimen specimen, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean)
 	{
+		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+		specimen.setAvailable(new Boolean(false) );
 		if(consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_DISCARD))
 		{
-			specimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
-			specimen.setAvailable(new Boolean(false) );
 			addDisposalEvent(specimen, dao, sessionDataBean);
-			if(specimen.getStorageContainer() !=null)		// locations cleared
-			{
-				Map containerMap = null;
-				try
-				{
-					containerMap = StorageContainerUtil.getContainerMapFromCache();
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-				StorageContainerUtil.insertSinglePositionInContainerMap(specimen.getStorageContainer(),containerMap,specimen.getPositionDimensionOne().intValue(), specimen.getPositionDimensionTwo().intValue()    );
-			}
-			specimen.setPositionDimensionOne(null );
-			specimen.setPositionDimensionTwo(null );
-			specimen.setStorageContainer(null );
-			specimen.setAvailableQuantity(null );
-			specimen.setQuantity(null );
 		}
 		else if(consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_RETURN))
 		{
-			addReturnEvent(specimen);
+			addReturnEvent(specimen, dao, sessionDataBean);
 		}
+
+		if(specimen.getStorageContainer() !=null)		// locations cleared
+		{
+			Map containerMap = null;
+			try
+			{
+				containerMap = StorageContainerUtil.getContainerMapFromCache();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+			StorageContainerUtil.insertSinglePositionInContainerMap(specimen.getStorageContainer(),containerMap,specimen.getPositionDimensionOne().intValue(), specimen.getPositionDimensionTwo().intValue()    );
+		}
+		specimen.setPositionDimensionOne(null );
+		specimen.setPositionDimensionTwo(null );
+		specimen.setStorageContainer(null );
+		specimen.setAvailableQuantity(null );
+		specimen.setQuantity(null );
 	}
 	
 	//TODO
 	//method for return event.
-	private static void addReturnEvent(Specimen specimen)
+	private static void addReturnEvent(Specimen specimen, DAO dao, SessionDataBean sessionDataBean)
 	{
+		try
+		{
+			Collection eventCollection = specimen.getSpecimenEventCollection();
+			ReturnEventParameters returnEvent = new ReturnEventParameters();
+			returnEvent.setSpecimen(specimen );
+			dao.insert(returnEvent,sessionDataBean,true,true) ;
+			
+			eventCollection.add(returnEvent);
+			specimen.setSpecimenEventCollection(eventCollection);
+		}
+		catch(Exception excp)
+		{
+			excp.printStackTrace(); 
+		}
 	}
 
 	/*
