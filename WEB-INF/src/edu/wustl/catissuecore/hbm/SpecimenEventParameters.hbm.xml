@@ -515,7 +515,7 @@
         </joined-subclass>
         <joined-subclass
             name="edu.wustl.catissuecore.domain.ReturnEventParameters"
-            table="CATISSUE_RETURN_EVENT_PARAMETERS"
+            table="CATISSUE_RETURN_EVENT_PARAM"
         >
             <key
                 column="IDENTIFIER"

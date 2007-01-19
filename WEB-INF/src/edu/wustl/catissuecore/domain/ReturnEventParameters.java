@@ -13,7 +13,7 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * Attributes associated with return event of a specimen.
- * @hibernate.joined-subclass table="CATISSUE_RETURN_EVENT_PARAMETERS"
+ * @hibernate.joined-subclass table="CATISSUE_RETURN_EVENT_PARAM"
  * @hibernate.joined-subclass-key column="IDENTIFIER" 
  * @author Mandar Deshmukh
  */
