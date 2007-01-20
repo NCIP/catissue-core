@@ -119,14 +119,15 @@ function submitQuarantineComments()
 }
 </script>
 <% readOnlyForAll=true; %>
-<table id="reportTable" summary="" cellspacing="5" cellpadding="0" border="0"  width="600" >
+<table id="reportTable" summary="" cellspacing="5" cellpadding="0" border="0"  style="table-layout:fixed" width="750" >
 	 <tr>
-		<td><html:hidden property="id" /></td>
-		<td><html:hidden property="identifiedReportId" /></td>
-		<td><html:hidden property="deIdentifiedReportId" /></td>
-		<td><html:hidden property="submittedFor"/></td>
-		<td><html:hidden property="onSubmit"/></td>
-		<td><html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
+		<td><html:hidden property="id" />
+		<html:hidden property="identifiedReportId" />
+		<html:hidden property="deIdentifiedReportId" />
+		<html:hidden property="submittedFor"/>
+		<html:hidden property="onSubmit"/>
+		<html:hidden property="redirectTo" value="<%=reqPath%>"/>
+		</td>
 	</tr>
 <%if(pageOf.equalsIgnoreCase(Constants.PAGEOF_PARTICIPANT))
 {
@@ -169,8 +170,8 @@ function submitQuarantineComments()
 		</td>
 	</tr>
 	<tr>
-		<td width="16%" rowspan="8" valign="top" >
-		<table border="0" cellpadding="5" cellspacing="0" width="200" id="categoryHighlighter" >
+		<td width="15%" rowspan="8" valign="top" >
+		<table border="0" cellpadding="5" cellspacing="0" width="100%" id="categoryHighlighter" >
 			<tr>
 				<td colspan="2" class="formTitle" height="20">
 					<bean:message key="viewSurgicalPathologyReport.categoryHighlighter.title"/>
@@ -188,7 +189,7 @@ function submitQuarantineComments()
 			</tr>
 		</table>
 		</td>
-		<td colspan="2"  >
+		<td colspan="2" width="85%" >
 		<table border="0" cellpadding="0" cellspacing="0"   width="100%" id="table2" >
 			<tr>
 				<td class="formTitle" height="20" >
@@ -452,7 +453,7 @@ if (formSPR.getRace() != null)
 	</tr>
 	<tr>	
 	<td colspan="2">
-		<table id="commentsTable">
+		<table id="commentsTable" style="table-layout:fixed" width="100%">
 			<tr>
 				<td width="80%" colspan="2" class="formTitle" height="20">
 					<bean:message key="requestdetails.header.label.Comments"/>
@@ -460,15 +461,13 @@ if (formSPR.getRace() != null)
 			</tr>
 			<tr>
 				<td colspan="2">
-					<html:textarea property="comments" rows="3" cols="90"/>
+					<html:textarea property="comments" rows="3" cols="58"/>
 				</td>
 			</tr>
+			
 			<tr>
-				<td colspan="2">&nbsp;</td>
-			</tr>
-			<tr>
-				<td width="30%">&nbsp;</td>
-				<td>
+				
+				<td colspan="2" align="right">
 <%if(!(formSPR.getIdentifiedReportId()!=0 || formSPR.getDeIdentifiedReportId()!=0)) 
 {%>
 					<html:button property="action1" styleClass="actionButton" onclick="submitReviewComments()" disabled="true">
