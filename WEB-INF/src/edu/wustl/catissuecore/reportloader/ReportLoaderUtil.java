@@ -24,8 +24,8 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ReportLoaderUtil
 {
-
 	/**
+	 * @param participant
 	 * @return number of matching participants
 	 * @throws Exception throws exception
 	 */
@@ -125,7 +125,7 @@ public class ReportLoaderUtil
 	}
 	
 	/**
-	 * This method creates new directory.
+	 * his method creates new directory.
 	 * @param dirStr directory name  
 	 * @throws IOException
 	 */

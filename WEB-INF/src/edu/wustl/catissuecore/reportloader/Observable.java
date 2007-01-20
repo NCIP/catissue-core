@@ -6,6 +6,10 @@ package edu.wustl.catissuecore.reportloader;
 
 public interface Observable
 {
-	public void register(Observer  obr);
+	/**
+	 * @param obr
+	 * Method to register the object with observer
+	 */
+	void register(Observer  obr);
 	
 }

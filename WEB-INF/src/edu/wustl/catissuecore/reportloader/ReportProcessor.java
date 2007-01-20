@@ -53,7 +53,8 @@ public class ReportProcessor implements Observer
 	 * @param obj file object
 	 */
 	
-	public void run(Object obj){
+	public void run(Object obj)
+	{
 		String[] files=null;
 		File inputDir=null;
 		List fileToDelete=null;
@@ -92,6 +93,12 @@ public class ReportProcessor implements Observer
 	}
 	
 	
+	/**
+	 * @param sourceFile
+	 * @param destinationFile
+	 * @throws Exception
+	 * Copy sourceFile to destinationFile location
+	 */
 	private static void copyFile(String sourceFile,String destinationFile)throws Exception
 	{
 		File tempFile= new File(sourceFile);
@@ -108,6 +115,11 @@ public class ReportProcessor implements Observer
 		fw.close();
 	}
 	
+	/**
+	 * @param list
+	 * @throws Exception
+	 * Delete files
+	 */
 	private static void deleteFiles(List list)throws Exception
 	{
 		

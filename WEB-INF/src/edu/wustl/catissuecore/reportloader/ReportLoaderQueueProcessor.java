@@ -17,6 +17,9 @@ import edu.wustl.common.util.logger.Logger;
 public class ReportLoaderQueueProcessor extends Thread
 {
 
+	/**
+	 * @see java.lang.Thread#run()
+	 */
 	public void run()
 	{
 		List queue=null;

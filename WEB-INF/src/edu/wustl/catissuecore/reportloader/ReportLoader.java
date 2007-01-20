@@ -1,6 +1,5 @@
 package edu.wustl.catissuecore.reportloader;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,12 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import net.sf.hibernate.mapping.Collection;
-
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.ClinicalReport;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
@@ -24,13 +20,8 @@ import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.lookup.DefaultLookupResult;
-import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -266,15 +257,10 @@ public class ReportLoader
 
 		CollectionProtocolRegistration collProtocolReg=new CollectionProtocolRegistration();
 		
-		
-		
 		collProtocolReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		collProtocolReg.setRegistrationDate(new Date());
 		collProtocolReg.setParticipant(this.participant);		
 		collProtocolReg.setCollectionProtocol(collProtocolEvent.getCollectionProtocol());
-		
-		System.out.println(".participant "+participant.getId());
-		System.out.println(".participant "+collProtocolEvent.getCollectionProtocol().getId());
 		
 		try
 		{
@@ -282,8 +268,7 @@ public class ReportLoader
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("Error",ex);
-			ex.printStackTrace();
+			Logger.out.error("Error: Could not save object of CollectionProtocolRegistration",ex);
 		}
 		
 		

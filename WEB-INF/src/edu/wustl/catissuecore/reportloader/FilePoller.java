@@ -43,9 +43,9 @@ public class FilePoller implements Observable
 	 * @param args
 	 * start up method
 	 */
-	public static void main(String args[])
+	public static void main(String[] args)
 	{
-		String files[]=null;
+		String[] files=null;
 		File inputDir=null;
 		File errorFileDir=null;
 		File fileDir=null;
@@ -87,18 +87,27 @@ public class FilePoller implements Observable
 		}	
 	}
 	
+	/** 
+	 * @see edu.wustl.catissuecore.reportloader.Observable#register(edu.wustl.catissuecore.reportloader.Observer)
+	 */
 	public void register(Observer o)
 	{
 		this.obr=o;
 	}
 
 	
+	/**
+	 * @return obr object of Observer
+	 */
 	public Observer getObr()
 	{
 		return obr;
 	}
 
 	
+	/**
+	 * @param obr 
+	 */
 	public void setObr(Observer obr)
 	{
 		this.obr = obr;

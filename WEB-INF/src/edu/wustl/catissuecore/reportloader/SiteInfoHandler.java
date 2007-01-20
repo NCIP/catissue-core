@@ -24,8 +24,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -38,6 +36,10 @@ public class SiteInfoHandler
 
 	private static Document document = null;
 	
+	/**
+	 * @param path
+	 * @throws Exception
+	 */
 	public static void init(String path) throws Exception
 	{
 	//	Logger.out.debug("path.........................."+path);
@@ -70,13 +72,13 @@ public class SiteInfoHandler
 	}
 
 	/**
+	 * @param siteName
+	 * @return abrreviation name
 	 * <p>
-	 * Description:This method takes the property name as String argument and
-	 * returns the properties value as String. Put the xml file in the path as
-	 * you will provide the path
+	 * Description:This method takes the property siteName as String argument and
+	 * returns the abbreviation value as String. 
 	 * </p>
 	 */
-
 	public static String getSiteAbbriviation(String siteName)
 	{
 		// it gives the rootNode of the xml file
@@ -122,7 +124,14 @@ public class SiteInfoHandler
 		return null;
 	}
 	
-	
+	/**
+	 * @param abbr
+	 * @return siteName name of the associted site
+	 * p>
+	 * Description:This method takes the property siteName as String argument and
+	 * returns the abbreviation value as String. 
+	 * </p>
+	 */
 	public static String getSiteName(String abbr)
 	{
 		// it gives the rootNode of the xml file

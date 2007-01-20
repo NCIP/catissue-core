@@ -4,7 +4,6 @@ package edu.wustl.catissuecore.reportloader;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -25,8 +25,6 @@ import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -44,7 +42,8 @@ public class HL7Parser extends Parser
 	private Site site=null;
 	
 	/**
-	 * @param reportMap
+	 * @param reportMap 
+	 * @param p 
 	 * This method processes the map structure of a report in a HL7 file.
 	 * It gets different sections in the map and creates different report sections from it. 
 	 */
@@ -189,6 +188,7 @@ public class HL7Parser extends Parser
 	
 	/**
 	 * @param fileName HL7 file name 
+	 * @throws Exception
 	 */
 	public void parse(String fileName)throws Exception
 	{
@@ -218,7 +218,8 @@ public class HL7Parser extends Parser
 							{
 								if(validateReportMap(reportMap))
 								{
-									try{
+									try
+									{
 										Participant participant = parserParticipantInformation(this.getParticipantDataFromReportMap(reportMap, Parser.PID));
 										
 										participantList=ReportLoaderUtil.checkForParticipant(participant);
@@ -290,6 +291,12 @@ public class HL7Parser extends Parser
 		}
 	}
 
+	/**
+	 * @param participant
+	 * @param site
+	 * @throws Exception
+	 * Associate site object with respective participant object
+	 */
 	private void setSiteToParticipant(Participant participant,Site site)throws Exception
 	{
 		Collection collection= participant.getParticipantMedicalIdentifierCollection();
@@ -714,6 +721,7 @@ public class HL7Parser extends Parser
 	 /**
 	 * @param reportMap report map representing map of different pathology reports 
 	 * @return boolean represents report is valid or not
+	 * @throws Exception
 	 */
    public boolean validateReportMap(Map reportMap)throws Exception
    {
