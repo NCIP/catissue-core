@@ -90,7 +90,7 @@ public class ClientDemo
 		private String insertValidateOperation = " insert, Negative testcase Name: ";
 		private String updateOperation = " update, Positive testcase Name: ";
 		private String updateValidateOperation = "update, Negative testcase Name: ";
-		private String searchOperation = " serach, Positive testcase Name: ";
+		private String searchOperation = " search, Positive testcase Name: ";
 		private String successMessage = " pass ";
 		private String failureMessage = " fail ";
 		private static String filePath = "";
