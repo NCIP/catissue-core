@@ -90,9 +90,18 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	protected String consentDate="";
 	
 	/**
-	 * Consent Date, Date on which Consent is Signed
+	 * This will be set in case of withdrawl popup
 	 */
 	protected String withdrawlButtonStatus = Constants.WITHDRAW_RESPONSE_NOACTION;
+	/**
+	 * This will be set in case if there is any change in response.
+	 */
+	protected String applyChangesTo= Constants.APPLY_NONE;
+	/**
+	 * If user changes the response after submiting response then this string will have 
+	 * responseKeys for which response is changed .
+	 */
+	protected String stringOfResponseKeys="";
 	
 //Consent Tracking Module Virender Mehta 
  		   
@@ -713,6 +722,40 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 	public void setWithdrawlButtonStatus(String withdrawlButtonStatus)
 	{
 		this.withdrawlButtonStatus = withdrawlButtonStatus;
+	}
+	
+	/**
+	 * @return applyChangesTo
+	 */
+	public String getApplyChangesTo()
+	{
+		return applyChangesTo;
+	}
+
+	/**
+	 * @param applyChangesTo 
+	 */
+	public void setApplyChangesTo(String applyChangesTo)
+	{
+		this.applyChangesTo = applyChangesTo;
+	}
+	
+	/**
+	 * 
+	 * @return stringOfResponseKeys
+	 */
+	public String getStringOfResponseKeys()
+	{
+		return stringOfResponseKeys;
+	}
+	
+	/**
+	 * 
+	 * @param stringOfResponseKeys
+	 */
+	public void setStringOfResponseKeys(String stringOfResponseKeys)
+	{
+		this.stringOfResponseKeys = stringOfResponseKeys;
 	}
 	
 	/**

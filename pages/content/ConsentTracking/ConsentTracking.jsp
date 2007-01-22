@@ -14,6 +14,51 @@
 -->						
 <script language="JavaScript">
 
+var consentIDArray=new Array(<%=form.getConsentTierCounter()%>);
+var changeInStatus=false;
+
+function changeInResponse(responseIdkey)
+{
+	var index=-1;
+	var flag=false;
+	for(i=0;i<consentIDArray.length;i++)
+	{
+		if(consentIDArray[i]==responseIdkey)
+		{
+			flag=true;
+			break;
+		}
+		if(consentIDArray[i]!=null&&consentIDArray[i]!="")
+		{
+			index=i;
+		}
+	}
+	if(flag==false)
+	{
+		consentIDArray[index+1]=responseIdkey;
+		changeInStatus=true;
+	}	
+}
+
+function submitString()
+{
+	var str="";
+	for(i=0;i<consentIDArray.length;i++)
+	{
+		if(i==consentIDArray.length-1)
+		{
+			str=str+consentIDArray[i];
+		}
+		else
+		{
+			str=str+consentIDArray[i]+",";
+		}
+	}
+	document.forms[0].stringOfResponseKeys.value=str;
+	//document.forms[0].submit();
+}
+
+
 <%-- On calling this function all the response dropdown value set to "Withdraw" --%>
 function withdrawAll(element)
 {	
@@ -43,32 +88,40 @@ function popupWindow(nofConsentTiers)
 	<%--When Withdraw All button is clicked--%>	
 	if(iCount==0)
 	{
-		var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true";
+		var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true&response=withdraw";
 		window.open(url,'WithdrawAll','height=40,width=400');
 	}
 	else if(iCount==nofConsentTiers)
 	{	
-		<%
-			Object formInstance = form;
-			if(formInstance instanceof NewSpecimenForm)
-			{
-		%>
-				return onNormalSubmit();
-		<%
-			}
-			else
-		   {
-		%>
-				alert("virender");
-				return <%=normalSubmit%>;
-		<%
-		   }
-		%>
+		if(changeInStatus==false)
+		{
+			<%
+				Object formInstance = form;
+				if(formInstance instanceof NewSpecimenForm)
+				{
+			%>
+					return onNormalSubmit();
+			<%
+				}
+				else
+			   {
+			%>
+					return <%=normalSubmit%>;
+			<%
+			   }
+			%>
+		}
+		else
+		{
+			submitString();
+			var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true&response=nowithdraw";
+			window.open(url,'WithdrawAll','height=40,width=400');
+		}
 		
 	}	
 	else
 	{
-		var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=false";
+		var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=false&response=withdraw";
 		window.open(url,'Withdraw','height=110,width=400');
 	}
 }	
@@ -432,7 +485,7 @@ function popupWindow(nofConsentTiers)
 										<html:hidden property="<%=participantResponseIDKey%>"/>
 										<html:select property="<%=participantResponseKey%>" styleClass="formFieldSized10" styleId="<%=participantResponseKey%>" size="1"
 											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-											<html:options collection="<%=collection%>" labelProperty="name" property="value" />
+											<html:options collection="<%=collection%>" labelProperty="name" property="value"/>
 										</html:select>
 									</td>
 									<%-- If Page of SCG or New Specimen or Distribution then show participant Response. --%>																			
@@ -451,11 +504,16 @@ function popupWindow(nofConsentTiers)
 									}
 									if(pageOf.equals("pageOfSpecimenCollectionGroup"))
 									{
+										String idKey=";";
+										if(operation.equals(Constants.EDIT))
+										{
+											idKey ="changeInResponse('"+responseIdKey+"')";
+										}
 									%>
 									<td align="left" class="formField">
 										<html:hidden property="<%=responseIdKey%>"/>
 										<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
-											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
+											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=idKey%>">
 											<html:options collection="<%=collection%>" labelProperty="name" property="value" />
 										</html:select>
 									</td>
@@ -464,11 +522,16 @@ function popupWindow(nofConsentTiers)
 									}
 									else if(pageOf.equals("pageOfNewSpecimen"))
 									{
+										String statusKey=";";
+										if(operation.equals(Constants.EDIT))
+										{
+											statusKey="changeInResponse('"+responseIdKey+"')";
+										}
 									%>
 									<td align="left" class="formField" >
 										<html:hidden property="<%=responseIdKey%>"/>
 										<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
-											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=statusKey%>">
 											<html:options collection="<%=collection%>" labelProperty="name" property="value" />
 										</html:select>
 									</td>

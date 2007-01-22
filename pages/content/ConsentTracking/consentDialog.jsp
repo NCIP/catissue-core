@@ -15,23 +15,22 @@
 
 <%
 	String withdrawAll = request.getParameter("withrawall");
-	System.out.println(withdrawAll);
+	String getConsentResponse = request.getParameter("response");
 %>
 <script language="JavaScript">
 
 function getButtonStatus(element)
 {
 	parent.opener.document.forms[0].withdrawlButtonStatus.value=element.value;
-	//alert(parent.opener.document.forms[0].name);
 	if(parent.opener.document.forms[0].name == "newSpecimenForm")
 	{
 		parent.opener.document.forms[0].onSubmit.value="<%=Constants.BIO_SPECIMEN%>";
 		parent.opener.document.forms[0].activityStatus.value="<%=Constants.ACTIVITY_STATUS_DISABLED%>" ;
 	}
+	parent.opener.document.forms[0].applyChangesTo.value=element.value;
 	parent.opener.document.forms[0].submit();
 	self.close();
 }
-
 
 </script>
 
@@ -54,62 +53,96 @@ function getButtonStatus(element)
 		<link rel="stylesheet" type="text/css" href="../../../css/styleSheet.css" />
 	</head>
 		<body class="formRequiredNotice">
+		<%
+		if(getConsentResponse.equals("withdraw"))
+		{
+		%>
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
-				<tr>
-					<td class="formTitle" height="20%" colspan="2">
+					<tr>
+						<td class="formTitle" height="20%" colspan="2">
+						<%
+							if(withdrawAll.equals("true"))
+							{
+						%>	
+								<b><bean:message key="consent.withdrawspecimens" /></b>
+						<%		
+							}
+							else
+							{
+						%>	
+								<b><bean:message key="consent.withdrawquestion" /></b>
+						<%		
+							}
+						%>		
+						</td>
+					</tr>
+					<tr>
+						<td class="tabrightmostcell">
+							<b>
+								<bean:message key="consent.discard" />
+							</b>	
+						</td>
+						<td align="right" class="formField">
+							<input type="button" style="actionButton" style="width:100%" value="<%=Constants.WITHDRAW_RESPONSE_DISCARD %>"  onclick="getButtonStatus(this)"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="tabrightmostcell">
+							<b>
+								<bean:message key="consent.returntocollectionsite" />
+							<b>
+						</td>
+						<td align="right" class="formField">
+							<input type="button" style="actionButton" style="width:100%" value="<%=Constants.WITHDRAW_RESPONSE_RETURN%>"  onclick="getButtonStatus(this)"/>
+						</td>
+					</tr>
 					<%
-						if(withdrawAll.equals("true"))
-						{
-					%>	
-							<b><bean:message key="consent.withdrawspecimens" /></b>
-					<%		
-						}
-						else
-						{
-					%>	
-							<b><bean:message key="consent.withdrawquestion" /></b>
-					<%		
-						}
-					%>		
-					</td>
-				</tr>
+					if(withdrawAll.equals("false"))									
+					{
+					%>
+					<tr>
+						<td class="tabrightmostcell">
+							<b>
+								<bean:message key="consent.noaction" />
+							<b>
+						</td>
+						<td align="right" class="formField">
+							<input type="button" style="actionButton" value="<%=Constants.WITHDRAW_RESPONSE_RESET %>" style="width:100%" onclick="getButtonStatus(this)"/>
+						</td>
+					</tr>
+					<%
+					}
+					%>
+				</table>
+		<%
+		}
+		else
+		{
+		%>
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 				<tr>
 					<td class="tabrightmostcell">
 						<b>
-							<bean:message key="consent.discard" />
+							<bean:message key="consent.currentstatusonallspecimen" />
 						</b>	
 					</td>
 					<td align="right" class="formField">
-						<input type="button" style="actionButton" style="width:100%" value="<%=Constants.WITHDRAW_RESPONSE_DISCARD %>"  onclick="getButtonStatus(this)"/>
-					</td>
-				</tr>
-				<tr>
-					<td class="tabrightmostcell">
-						<b>
-							<bean:message key="consent.returntocollectionsite" />
-						<b>
-					</td>
-					<td align="right" class="formField">
-						<input type="button" style="actionButton" style="width:100%" value="<%=Constants.WITHDRAW_RESPONSE_RETURN%>"  onclick="getButtonStatus(this)"/>
-					</td>
-				</tr>
-				<%
-				if(withdrawAll.equals("false"))									
-				{
-				%>
-				<tr>
-					<td class="tabrightmostcell">
-						<b>
-							<bean:message key="consent.noaction" />
-						<b>
-					</td>
-					<td align="right" class="formField">
-						<input type="button" style="actionButton" value="<%=Constants.WITHDRAW_RESPONSE_RESET %>" style="width:100%" onclick="getButtonStatus(this)"/>
-					</td>
-				</tr>
-				<%
-				}
-				%>
+							<input type="button" style="actionButton" style="width:100%" value="<%=Constants.APPLY %>"  onclick="getButtonStatus(this)"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="tabrightmostcell">
+							<b>
+								<bean:message key="consent.currentstatusonnonconflictingspecimen" />
+							<b>
+						</td>
+						<td align="right" class="formField">
+							<input type="button" style="actionButton" style="width:100%" value="<%=Constants.APPLY_ALL%>"  onclick="getButtonStatus(this)"/>
+						</td>
+					</tr>
 			</table>
+		<%
+		}
+		%>
 		</body>
 </html>

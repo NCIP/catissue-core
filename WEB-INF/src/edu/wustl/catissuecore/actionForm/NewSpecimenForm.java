@@ -69,10 +69,18 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	protected String consentDate="";
 	
 	/**
-	 * Consent Date, Date on which Consent is Signed
+	 * This will be set in case of withdrawl popup
 	 */
 	protected String withdrawlButtonStatus = Constants.WITHDRAW_RESPONSE_NOACTION;
-	
+	/**
+	 * This will be set in case if there is any change in response.
+	 */
+	protected String applyChangesTo= Constants.APPLY_NONE;
+	/**
+	 * If user changes the response after submiting response then this string will have 
+	 * responseKeys for which response is changed .
+	 */
+	protected String stringOfResponseKeys="";
 	//Consent Tracking Module (Virender Mehta)
 
 	/**
@@ -1126,6 +1134,38 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	}
 	
 	/**
+	 * @param applyChangesTo 
+	 */
+	public String getApplyChangesTo()
+	{
+		return applyChangesTo;
+	}
+
+	/**
+	 * @param applyChangesTo 
+	 */
+	public void setApplyChangesTo(String applyChangesTo)
+	{
+		this.applyChangesTo = applyChangesTo;
+	}
+	
+	/**
+	 * @return stringOfResponseKeys
+	 */
+	public String getStringOfResponseKeys()
+	{
+		return stringOfResponseKeys;
+	}
+
+	/**
+	 * @param stringOfResponseKeys
+	 */
+	public void setStringOfResponseKeys(String stringOfResponseKeys)
+	{
+		this.stringOfResponseKeys = stringOfResponseKeys;
+	}
+	
+	/**
 	 * This function creates Array of String of keys and add them into the consentTiersList.
 	 * @return consentTiersList
 	 */
@@ -1157,5 +1197,4 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 		return "consentResponseForSpecimenValues(ConsentBean:`_specimenLevelResponse)";
 	}
 	//Consent Tracking Module Virender mehta	
-
 }

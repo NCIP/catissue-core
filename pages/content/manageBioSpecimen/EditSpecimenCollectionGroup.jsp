@@ -33,7 +33,8 @@
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value=""/>
-						
+						<html:hidden property="stringOfResponseKeys"/>
+						<html:hidden property="applyChangesTo"/>
 					</td>
 				 </tr>
 				 
