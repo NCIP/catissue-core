@@ -32,6 +32,13 @@ function getButtonStatus(element)
 	self.close();
 }
 
+function getStatus(element)
+{
+	parent.opener.document.forms[0].applyChangesTo.value=element.value;
+	parent.opener.document.forms[0].submit();
+	self.close();
+}
+
 </script>
 
 <html>
@@ -127,7 +134,7 @@ function getButtonStatus(element)
 						</b>	
 					</td>
 					<td align="right" class="formField">
-							<input type="button" style="actionButton" style="width:100%" value="<%=Constants.APPLY %>"  onclick="getButtonStatus(this)"/>
+							<input type="button" style="actionButton" style="width:100%" value="<%=Constants.APPLY %>"  onclick="getStatus(this)"/>
 						</td>
 					</tr>
 					<tr>
@@ -137,7 +144,7 @@ function getButtonStatus(element)
 							<b>
 						</td>
 						<td align="right" class="formField">
-							<input type="button" style="actionButton" style="width:100%" value="<%=Constants.APPLY_ALL%>"  onclick="getButtonStatus(this)"/>
+							<input type="button" style="actionButton" style="width:100%" value="<%=Constants.APPLY_ALL%>"  onclick="getStatus(this)"/>
 						</td>
 					</tr>
 			</table>
