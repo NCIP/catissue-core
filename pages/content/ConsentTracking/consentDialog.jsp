@@ -27,7 +27,6 @@ function getButtonStatus(element)
 		parent.opener.document.forms[0].onSubmit.value="<%=Constants.BIO_SPECIMEN%>";
 		parent.opener.document.forms[0].activityStatus.value="<%=Constants.ACTIVITY_STATUS_DISABLED%>" ;
 	}
-	parent.opener.document.forms[0].applyChangesTo.value=element.value;
 	parent.opener.document.forms[0].submit();
 	self.close();
 }
