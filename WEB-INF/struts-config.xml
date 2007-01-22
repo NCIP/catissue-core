@@ -438,7 +438,8 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="SpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef" />
-			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=12" />
+			<forward name="Specimen" path=".catissuecore.newSpecimenDef" />
+			<forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
 		<!--Suite-->
 
