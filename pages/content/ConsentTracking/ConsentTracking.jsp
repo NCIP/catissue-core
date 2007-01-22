@@ -439,7 +439,8 @@ function popupWindow(nofConsentTiers)
 									 String specimenKey ="ConsentBean:"+counter+"_specimenLevelResponse";
 									 String scgIDKey ="ConsentBean:"+counter+"_specimenCollectionGroupLevelResponseID";
 									 String specimenIDKey="ConsentBean:"+counter+"_specimenLevelResponseID";
-					
+									 
+
 									 Object formObject = form;
 									 String consentResponseDisplay="";
 									 String responseDisplay="";
@@ -450,7 +451,11 @@ function popupWindow(nofConsentTiers)
 									    {
 											consentResponseDisplay=(String)((SpecimenCollectionGroupForm)formObject).getConsentResponseForScgValue(consentStatementKey);
 											responseDisplay=(String)((SpecimenCollectionGroupForm)formObject).getConsentResponseForScgValue(participantKey);
-											idKey=((SpecimenCollectionGroupForm)formObject).getConsentResponseForScgValue(scgIDKey).toString();
+											Object tmpID = ((SpecimenCollectionGroupForm)formObject).getConsentResponseForScgValue(scgIDKey);
+                                            if(tmpID!=null)
+											{
+												idKey=tmpID.toString();
+											}
 										}
 										else if(formObject instanceof CollectionProtocolRegistrationForm)
 										{
@@ -460,7 +465,11 @@ function popupWindow(nofConsentTiers)
 										{
 											consentResponseDisplay=(String)((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(consentStatementKey);
 											responseDisplay=(String)((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(participantKey);
-											statusKey=((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(specimenIDKey).toString();
+											Object tmporaryID=((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(specimenIDKey);
+											if(tmporaryID!=null)
+											{
+												statusKey=tmporaryID.toString();
+											}
 										}
 										else if(formObject instanceof DistributionForm)
 										{
