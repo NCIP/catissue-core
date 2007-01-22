@@ -439,6 +439,7 @@ PUBLIC
 			scope="request">
 			<forward name="SpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef" />
 			<forward name="Specimen" path=".catissuecore.newSpecimenDef" />
+			<forward name="Participant" path=".catissuecore.participantDef" />
 			<forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
 		<!--Suite-->
