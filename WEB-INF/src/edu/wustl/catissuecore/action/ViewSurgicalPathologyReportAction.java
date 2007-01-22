@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -12,16 +13,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.security.SecurityManager;
@@ -55,7 +54,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		if(operation.equalsIgnoreCase(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
 		{
 			isAuthorized=isAuthorized(getSessionBean(request));
-			retrieveAndSetObject(pageOf,id,isAuthorized);
+			retrieveAndSetObject(pageOf,id,isAuthorized, request);
 		}
 		request.setAttribute(Constants.PAGEOF, pageOf);
 		request.setAttribute(Constants.OPERATION, Constants.VIEW_SURGICAL_PATHOLOGY_REPORT);
@@ -69,10 +68,11 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	/**
 	 * @param pageOf pageOf variable to find out domain object 
 	 * @param id Identifier of the domain object
+	 * @param request HttpServletRequest object
 	 * @throws DAOException exception occured while DB handling
 	 * This method retrives the appropriate SurgicalPathologyReport object and set values of ViewSurgicalPathologyReportForm object
 	 */
-	private void retrieveAndSetObject(String pageOf,long id,boolean isAuthorized) throws DAOException
+	private void retrieveAndSetObject(String pageOf,long id,boolean isAuthorized, HttpServletRequest request) throws DAOException
 	{
 		String className;
 		String colName=new String(Constants.SYSTEM_IDENTIFIER);
@@ -149,7 +149,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				viewSPR.setIdentifiedReport(new IdentifiedSurgicalPathologyReport());
 				viewSPR.setDeIdentifiedReport(new DeidentifiedSurgicalPathologyReport());
 			}
-			viewSPR.setReportId(getReportIdList(scgCollection));
+			request.setAttribute(Constants.REPORT_LIST, getReportIdList(scgCollection));
 		}
 	}
 	
@@ -160,34 +160,21 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 */
 	private List getReportIdList(Collection scgCollection)throws DAOException
 	{
-		Long[] scgIdList=null;
-		List reportIDList=null;
 		
-		String sourceObjectName=IdentifiedSurgicalPathologyReport.class.getName();
-		String[] displayNameFields=new String[] {Constants.SYSTEM_IDENTIFIER};
-		String valueField=new String(Constants.SYSTEM_IDENTIFIER);
-		String[] whereColumnName = new String[]{"specimenCollectionGroup"};
-		String[] whereColumnCondition = new String[]{"="};
-		Object[] whereColumnValue = null;
-		String joinCondition = null;
-		String separatorBetweenFields = Constants.SEPARATOR;
-		
+		List reportIDList=new ArrayList();		
 		if(scgCollection!=null)
 		{
 			Iterator iter=scgCollection.iterator();
 			SpecimenCollectionGroup scg;
-			scgIdList=new Long[scgCollection.size()];
-			int i=0;
 			while(iter.hasNext())
 			{
 				scg=(SpecimenCollectionGroup)iter.next();
-				scgIdList[i++]=scg.getId();
-			}
-			
-			whereColumnValue=scgIdList;
-			BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
-			IdentifiedSurgicalPathologyReportBizLogic bizLogic =(IdentifiedSurgicalPathologyReportBizLogic) bizLogicFactory.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
-			reportIDList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
+				if(scg.getIdentifiedSurgicalPathologyReport()!=null)
+				{
+					NameValueBean nb=new NameValueBean(scg.getIdentifiedSurgicalPathologyReport().getAccessionNumber(),scg.getIdentifiedSurgicalPathologyReport().getId());
+					reportIDList.add(nb);
+				}
+			}		
 		}
 		return reportIDList;
 	}
