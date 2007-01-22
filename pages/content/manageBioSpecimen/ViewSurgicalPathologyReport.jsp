@@ -136,8 +136,9 @@ function submitQuarantineComments()
 			<b>
 				<bean:message key="viewSPR.reportInfo.reportId"/> : 
 			</b>
-		
-				<input type="select" name="Report ID" />
+				<html:select property="identifiedReportId" styleClass="formFieldSized" styleId="identifiedReportId" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onChange(this)">
+					<html:options collection="<%=Constants.REPORT_LIST%>" labelProperty="name" property="value"/>
+				</html:select>
 		</td>
 	</tr>
 <%
