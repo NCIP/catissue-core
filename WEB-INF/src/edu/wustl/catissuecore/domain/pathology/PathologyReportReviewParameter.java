@@ -97,6 +97,8 @@ public class PathologyReportReviewParameter extends EventParameters
 	}
 	
 	/** 
+	 * @param abstractForm 
+	 * @exception AssignDataException
 	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
 	 * This method sets all values for the PathologyReportReviewParameter object.
 	 */
@@ -126,8 +128,8 @@ public class PathologyReportReviewParameter extends EventParameters
 			else if(form.getDeIdentifiedReportId()!=0)
 			{
 				className=DeidentifiedSurgicalPathologyReport.class.getName();
-				List DeisprList=defaultBizLogic.retrieve(className, colName, form.getDeIdentifiedReportId());
-				DeidentifiedSurgicalPathologyReport deReport=(DeidentifiedSurgicalPathologyReport)DeisprList.get(0);
+				List deisprList=defaultBizLogic.retrieve(className, colName, form.getDeIdentifiedReportId());
+				DeidentifiedSurgicalPathologyReport deReport=(DeidentifiedSurgicalPathologyReport)deisprList.get(0);
 				Set pathologyReportReviewParameterSetCollection=deReport.getPathologyReportReviewParameterSetCollection();
 				pathologyReportReviewParameterSetCollection.add(this);
 				deReport.setPathologyReportReviewParameterSetCollection(pathologyReportReviewParameterSetCollection);

@@ -6,5 +6,8 @@ package edu.wustl.catissuecore.reportloader;
  */
 public interface Observer
 {
-	public void notifyEvent(Object obj);
+	/**
+	 * @param obj object
+	 */
+	void notifyEvent(Object obj);
 }

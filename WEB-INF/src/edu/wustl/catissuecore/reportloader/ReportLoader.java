@@ -232,6 +232,7 @@ public class ReportLoader
 	}
 	/**
 	 * @return creates a new Specimen collection group. 
+	 * @throws Exception
 	 */
 	public SpecimenCollectionGroup createNewSpecimenCollectionGroup()throws Exception
 	{

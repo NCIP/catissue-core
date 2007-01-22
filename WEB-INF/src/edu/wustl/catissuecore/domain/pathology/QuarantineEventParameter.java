@@ -95,6 +95,8 @@ public class QuarantineEventParameter extends EventParameters
 	}
 	
 	/** 
+	 * @param abstractForm
+	 * @exception AssignDataException
 	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
 	 * This method sets all values for the QuarantineEventParameter object.
 	 */
@@ -162,7 +164,7 @@ public class QuarantineEventParameter extends EventParameters
 
 	/**
      * Returns quarantine comment status.
-     * @return String
+     * @param status of comment
      */
 	public void setStatus(String status)
 	{

@@ -42,8 +42,8 @@ public class HL7Parser extends Parser
 	private Site site=null;
 	
 	/**
-	 * @param reportMap 
-	 * @param p 
+	 * @param p
+	 * @param reportMap
 	 * This method processes the map structure of a report in a HL7 file.
 	 * It gets different sections in the map and creates different report sections from it. 
 	 */
@@ -312,9 +312,9 @@ public class HL7Parser extends Parser
 		}
 	}
 	
-	
 	/**
-	 * @param reportMap
+	 * @param set
+	 * @param reportText
 	 * This method processes the map structure of a report in a HL7 file.
 	 * It gets different sections in the map and creates different report sections from it. 
 	 */

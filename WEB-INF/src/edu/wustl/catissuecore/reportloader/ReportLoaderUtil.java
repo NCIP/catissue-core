@@ -27,7 +27,7 @@ public class ReportLoaderUtil
 	/**
 	 * @param participant
 	 * @return number of matching participants
-	 * @throws Exception throws exception
+	 * @throws Exception throws exception 
 	 */
 	public static Set checkForParticipant(Participant participant)throws Exception
 	{

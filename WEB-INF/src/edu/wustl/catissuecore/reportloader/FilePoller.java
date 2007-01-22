@@ -89,6 +89,7 @@ public class FilePoller implements Observable
 	
 	/** 
 	 * @see edu.wustl.catissuecore.reportloader.Observable#register(edu.wustl.catissuecore.reportloader.Observer)
+	 * @param o object of observer 
 	 */
 	public void register(Observer o)
 	{
@@ -105,8 +106,9 @@ public class FilePoller implements Observable
 	}
 
 	
+	
 	/**
-	 * @param obr 
+	 * @param obr object of observer
 	 */
 	public void setObr(Observer obr)
 	{

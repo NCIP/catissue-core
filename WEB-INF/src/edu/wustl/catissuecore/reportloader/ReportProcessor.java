@@ -92,7 +92,6 @@ public class ReportProcessor implements Observer
 		}	
 	}
 	
-	
 	/**
 	 * @param sourceFile
 	 * @param destinationFile
@@ -116,9 +115,9 @@ public class ReportProcessor implements Observer
 	}
 	
 	/**
+	 * Delete files
 	 * @param list
 	 * @throws Exception
-	 * Delete files
 	 */
 	private static void deleteFiles(List list)throws Exception
 	{
@@ -133,8 +132,5 @@ public class ReportProcessor implements Observer
 				 del=tempFile.delete();
 			}
 		}
-	}	
-	
-	
-	
+	}		
 }

@@ -28,16 +28,26 @@ public class ReportLoaderQueue
 	}
 
 	
+	/**
+	 * @param status
+	 */
 	public void setStatus(String status)
 	{
 		this.status = status;
 	}
 
+	/**
+	 * default Constructor
+	 */
 	public ReportLoaderQueue()
 	{
 		
 	}
 	
+	/**
+	 * @param text
+	 * Constructor with text as input
+	 */
 	public ReportLoaderQueue(String text)
 	{
 		//this.id=new Long(4);
@@ -56,6 +66,9 @@ public class ReportLoaderQueue
 		return id;
 	}
 	
+	/**
+	 * @param id
+	 */
 	public void setId(Long id)
 	{
 		this.id = id;
@@ -74,6 +87,10 @@ public class ReportLoaderQueue
 		return participantCollection;
 	}
 	
+	/**
+	 * @param collection
+	 * Assign set of participants to current object
+	 */
 	public void setParticipantCollection(Collection collection)
 	{
 		this.participantCollection = collection;
@@ -89,6 +106,9 @@ public class ReportLoaderQueue
 		return reportText;
 	}
 	
+	/**
+	 * @param reportText
+	 */
 	public void setReportText(String reportText)
 	{
 		this.reportText = reportText;

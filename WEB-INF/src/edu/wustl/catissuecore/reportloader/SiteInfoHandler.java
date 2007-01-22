@@ -127,7 +127,7 @@ public class SiteInfoHandler
 	/**
 	 * @param abbr
 	 * @return siteName name of the associted site
-	 * p>
+	 * <p>
 	 * Description:This method takes the property siteName as String argument and
 	 * returns the abbreviation value as String. 
 	 * </p>
