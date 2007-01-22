@@ -43,15 +43,12 @@ function changeInResponse(responseIdkey)
 function submitString()
 {
 	var str="";
-	for(i=0;i<consentIDArray.length;i++)
+	str=consentIDArray[0];
+	for(i=1;i<consentIDArray.length;i++)
 	{
-		if(i==consentIDArray.length-1)
+		if(consentIDArray[i]!=null)
 		{
-			str=str+consentIDArray[i];
-		}
-		else
-		{
-			str=str+consentIDArray[i]+",";
+			str=str+","+consentIDArray[i];
 		}
 	}
 	document.forms[0].stringOfResponseKeys.value=str;
