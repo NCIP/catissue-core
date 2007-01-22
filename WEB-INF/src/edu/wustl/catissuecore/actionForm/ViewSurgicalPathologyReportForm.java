@@ -47,7 +47,6 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	protected Map values = new HashMap();
 	private int counter=1;
 	private long id;
-	protected Collection reportId;
 	
 	/**
 	 * @return date of birth of particicpant
@@ -549,22 +548,6 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	public void setId(long id)
 	{
 		this.id = id;
-	}
-
-	/**
-	 * @return collection of Report ID (In case of Participant page)
-	 */
-	public Collection getReportId()
-	{
-		return reportId;
-	}
-
-	/**
-	 * @param reportId
-	 */
-	public void setReportId(Collection reportId)
-	{
-		this.reportId = reportId;
 	}
 
 	/**
