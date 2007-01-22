@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
@@ -46,7 +47,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		viewSPR=(ViewSurgicalPathologyReportForm)form;
 		String pageOf = request.getParameter(Constants.PAGEOF);
 		String operation = (String)request.getParameter(Constants.OPERATION);
-		String submittedFor="";
+		String submittedFor=(String)request.getParameter(Constants.SUBMITTED_FOR);
+		String forwardTo=(String)request.getParameter(Constants.FORWARD_TO);
 		Long id=new Long((String)request.getParameter(Constants.SYSTEM_IDENTIFIER));
 		viewSPR.setId(id);
 		boolean isAuthorized;
@@ -59,6 +61,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		request.setAttribute(Constants.OPERATION, Constants.VIEW_SURGICAL_PATHOLOGY_REPORT);
 		request.setAttribute(Constants.REQ_PATH, "");
 		request.setAttribute(Constants.SUBMITTED_FOR, submittedFor);
+		request.setAttribute(Constants.FORWARD_TO, forwardTo);
 		
 		return mapping.findForward(forward);
 	}
@@ -120,7 +123,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		// Also needs to retrieve a list of SurgicalPathologyReport objects (One-to-Many relationship)
 		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_PARTICIPANT))
 		{
-			forward=new String(Constants.SPECIMEN);
+			forward=new String(Constants.PARTICIPANT);
 			className=Participant.class.getName();
 			List participantList=defaultBizLogic.retrieve(className, colName, colValue);
 			Participant participant=(Participant)participantList.get(0);
@@ -130,10 +133,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			Iterator iter=scgCollection.iterator();
 			if(iter.hasNext())
 			{
-				colValue=(Long)iter.next();
-				className=SpecimenCollectionGroup.class.getName();
-				List scgList=defaultBizLogic.retrieve(className, colName, colValue);
-				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgList.get(0);
+				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)iter.next();
 				if(isAuthorized)
 				{
 					viewSPR.setAllValues(scg.getIdentifiedSurgicalPathologyReport());
@@ -143,6 +143,11 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 					viewSPR.setParticipant(scg.getParticipant());
 					viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 				}
+			}
+			else
+			{
+				viewSPR.setIdentifiedReport(new IdentifiedSurgicalPathologyReport());
+				viewSPR.setDeIdentifiedReport(new DeidentifiedSurgicalPathologyReport());
 			}
 			viewSPR.setReportId(getReportIdList(scgCollection));
 		}
@@ -155,7 +160,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 */
 	private List getReportIdList(Collection scgCollection)throws DAOException
 	{
-		Long[] scg=null;
+		Long[] scgIdList=null;
 		List reportIDList=null;
 		
 		String sourceObjectName=IdentifiedSurgicalPathologyReport.class.getName();
@@ -170,14 +175,16 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		if(scgCollection!=null)
 		{
 			Iterator iter=scgCollection.iterator();
-			scg=new Long[scgCollection.size()];
+			SpecimenCollectionGroup scg;
+			scgIdList=new Long[scgCollection.size()];
 			int i=0;
 			while(iter.hasNext())
 			{
-				scg[i++]=(Long)iter.next();
+				scg=(SpecimenCollectionGroup)iter.next();
+				scgIdList[i++]=scg.getId();
 			}
 			
-			whereColumnValue=scg;
+			whereColumnValue=scgIdList;
 			BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
 			IdentifiedSurgicalPathologyReportBizLogic bizLogic =(IdentifiedSurgicalPathologyReportBizLogic) bizLogicFactory.getBizLogic(IdentifiedSurgicalPathologyReport.class.getName());
 			reportIDList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);

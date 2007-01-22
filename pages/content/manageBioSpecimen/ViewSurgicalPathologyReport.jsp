@@ -126,7 +126,6 @@ function submitQuarantineComments()
 		<html:hidden property="deIdentifiedReportId" />
 		<html:hidden property="submittedFor"/>
 		<html:hidden property="onSubmit"/>
-		<html:hidden property="redirectTo" value="<%=reqPath%>"/>
 		</td>
 	</tr>
 <%if(pageOf.equalsIgnoreCase(Constants.PAGEOF_PARTICIPANT))

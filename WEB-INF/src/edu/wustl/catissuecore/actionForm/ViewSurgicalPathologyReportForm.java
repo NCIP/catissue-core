@@ -271,7 +271,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	protected void reset() 
 	{
-		this.firstName=null;
+/*		this.firstName=null;
 		this.lastName=null;
 		this.birthDate=null;
 		this.deathDate=null;
@@ -296,6 +296,8 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		this.counter=0;
 		this.comments=null;
 		this.id=0;	
+		
+*/
 	}
 
 	/** (non-Javadoc)
