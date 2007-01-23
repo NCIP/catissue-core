@@ -450,3 +450,12 @@ alter table CATISSUE_RETURN_EVENT_PARAM add index FKD8890A48BC7298A91 (IDENTIFIE
 INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'ReturnEventParameters','ReturnEventParameters Class','edu.wustl.catissuecore.domain.ReturnEventParameters',NULL,NULL,1,'2007-01-17' from CSM_PROTECTION_ELEMENT;
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='ReturnEventParameters'),'2006-11-27' from CSM_PG_PE;
 #------------------------New Table entry For ConsentWithdrawal ---------- Mandar : 18-Jan-07 -------------end
+
+insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction','edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction','edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction',1)
+insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction'))
+
+insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction','edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction','edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction',1)
+insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction'))
+
+insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.PathFinderAction','edu.wustl.catissuecore.action.querysuite.PathFinderAction','edu.wustl.catissuecore.action.querysuite.PathFinderAction',1)
+insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.PathFinderAction'))
