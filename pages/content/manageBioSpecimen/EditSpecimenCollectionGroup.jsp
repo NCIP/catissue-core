@@ -188,7 +188,7 @@
 					<td class="formField">
 						<html:text styleClass="formFieldSized" size="30"  maxlength="50" styleId="name" property="name" />
 						&nbsp;
-						<%String resetAction = "changeAction('SpecimenCollectionGroup.do?operation="+operation+"&pageOf=pageOfSpecimenCollectionGroup&resetName=Yes')"; %>
+						<%String resetAction = "changeAction('SpecimenCollectionGroup.do?operation="+operation+"&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&resetName=Yes')"; %>
 						<html:link href="#" styleId="resetName" onclick="<%=resetAction%>">
 							<bean:message key="link.resetName" />
 						</html:link>

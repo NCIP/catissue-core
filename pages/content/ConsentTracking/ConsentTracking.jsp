@@ -90,6 +90,7 @@ function popupWindow(nofConsentTiers)
 	}
 	else if(iCount==nofConsentTiers)
 	{	
+		
 		if(changeInStatus==false)
 		{
 			<%
@@ -435,15 +436,11 @@ function popupWindow(nofConsentTiers)
 									 String participantKey ="ConsentBean:"+counter+"_participantResponse";
 									 String specimenKey ="ConsentBean:"+counter+"_specimenLevelResponse";
 									 String scgIDKey ="ConsentBean:"+counter+"_specimenCollectionGroupLevelResponseID";
-									 String specimenIDKey="ConsentBean:"+counter+"_specimenLevelResponseID";
-									 
-
 									 Object formObject = form;
 									 String consentResponseDisplay="";
 									 String responseDisplay="";
 									 String specimenResponseDisplay="";
 									 String idKey="";
-									 String statusKey="";
 									 if (formObject instanceof SpecimenCollectionGroupForm)
 									    {
 											consentResponseDisplay=(String)((SpecimenCollectionGroupForm)formObject).getConsentResponseForScgValue(consentStatementKey);
@@ -462,11 +459,6 @@ function popupWindow(nofConsentTiers)
 										{
 											consentResponseDisplay=(String)((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(consentStatementKey);
 											responseDisplay=(String)((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(participantKey);
-											Object tmporaryID=((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(specimenIDKey);
-											if(tmporaryID!=null)
-											{
-												statusKey=tmporaryID.toString();
-											}
 										}
 										else if(formObject instanceof DistributionForm)
 										{
@@ -538,16 +530,11 @@ function popupWindow(nofConsentTiers)
 									}
 									else if(pageOf.equals("pageOfNewSpecimen"))
 									{
-										String keyValue=";";
-										if(operation.equals(Constants.EDIT))
-										{
-											keyValue="changeInResponse('"+statusKey+"')";
-										}
 									%>
 									<td align="left" class="formField" >
 										<html:hidden property="<%=responseIdKey%>"/>
 										<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
-											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=keyValue%>">
+											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
 											<html:options collection="<%=collection%>" labelProperty="name" property="value" />
 										</html:select>
 									</td>
