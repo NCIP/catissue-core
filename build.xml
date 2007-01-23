@@ -18,6 +18,7 @@
 	<property name="target.dir" value="${base.dir}/WEB-INF/classes" />
 	<property name="lib.dir" value="${base.dir}/WEB-INF/lib" />
 	<property name="applet.dir" value="${base.dir}/Applet" />
+	<property name="dagviewapplet.dir" value="${applet.dir}/DagViewApplet" />	
 	<property name="hbm.dir" value="${src.dir}/edu/wustl/catissuecore/hbm" />
 	<property name="extra_lib.dir" value="${base.dir}/extra_lib" />
 	<property name="generateforce" value="true" />
@@ -161,6 +162,17 @@
 			<fileset dir="${applet.dir}">
 				<exclude name="**/CVS*" />
 				<exclude name="**/java.policy.applet*" />
+				<exclude name="**/cab2bStandAlone.jar" />
+				<exclude name="**/commonpackage.jar" />
+				<exclude name="**/org-netbeans-graph.jar" />
+				<exclude name="**/org-netbeans-graph-vmd.jar" />
+				<exclude name="**/org-openide-util.jar" />
+				<exclude name="**/DynamicExtensions.jar" />		
+				<include name="**/swingx-2006_10_08.jar" />								
+				<include name="**/struts.jar" />								
+				<include name="**/hibernate2.1.7c.jar" />								
+				<include name="**/odmg.jar"/>	
+				<exclude name="**/dagViewApplet.jar" />		
 			</fileset>
 		</delete>
 
@@ -185,11 +197,11 @@
 				<include name="**/StorageContainerTreeNode.class" />
 			</fileset>
 		</copy>
-		<copy todir="${applet.dir}/edu/wustl/catissuecore/tissuesite">
+		<!--copy todir="${applet.dir}/edu/wustl/catissuecore/tissuesite">
 			<fileset dir="${target.dir}/edu/wustl/catissuecore/tissuesite">
 				<include name="**/TissueSiteTreeNode.class" />
 			</fileset>
-		</copy>
+		</copy-->
 		<copy todir="${applet.dir}/edu/wustl/catissuecore/util/global">
 			<fileset dir="${target.dir}/edu/wustl/catissuecore/util/global">
 				<include name="**/Constants.class" />
@@ -561,9 +573,11 @@
         </delete>
     </target>
 	
+	
+	
 	<!-- compilation using jdk1.3 -->
 	 <target name="build_catissue_applet_compile" depends="init">
-        <javac destdir="${target.dir}" includeAntRuntime="false" fork="yes" executable="D:/jdk1.3/bin/javac" compiler="javac1.3">
+		<javac destdir="${target.dir}" includeAntRuntime="false" fork="yes" executable="C:/Program Files/Java/jdk1.5.0_08/bin/javac" compiler="javac1.5">
             <src path="${src.dir}"/>
             <include name="**/edu/wustl/catissuecore/applet/**" />
             <include name="**/edu/wustl/catissuecore/util/global/Constants.java" />
@@ -672,4 +686,63 @@
 			</classpath>
 		</java>
 	</target>
+	
+	
+	<!-- Create the Applet JAR Begins-->
+		<target name="build_dagViewApplet_jar" depends="compile">
+			<delete dir="${dagviewapplet.dir}" />
+			<mkdir dir="${dagviewapplet.dir}" />
+			<copy todir="${applet.dir}">
+				<fileset dir="${lib.dir}">
+					<include name="**/cab2bStandAlone.jar" />
+					<include name="**/commonpackage.jar" />
+					<include name="**/org-netbeans-graph.jar" />
+					<include name="**/org-netbeans-graph-vmd.jar" />
+					<include name="**/org-openide-util.jar" />
+					<include name="**/DynamicExtensions.jar" />		
+					<include name="**/swingx-2006_10_08.jar" />								
+					<include name="**/struts.jar" />								
+					<include name="**/hibernate2.1.7c.jar" />								
+					<include name="**/odmg.jar"/>	
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/images">	
+	    		<fileset dir="${base.dir}/images/dagViewImages">
+		    	    <include name="**/*"/>
+	    		</fileset>
+	    	 </copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/applet/ui/querysuite">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/applet/ui/querysuite">
+					<include name="**/*.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/applet/ui">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/applet/ui">
+					<include name="**/BaseApplet.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/applet/model">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/applet/model">
+					<include name="**/BaseAppletModel.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/applet/model">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/applet/model">
+					<include name="**/AppletModelInterface.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/applet">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/applet">
+					<include name="**/AppletServerCommunicator.class" />
+				</fileset>
+			</copy>
+			<jar taskname="buildJar" jarfile="${applet.dir}/dagViewApplet.jar">
+				<fileset dir="${dagviewapplet.dir}">
+					<include name="**/**" />
+				</fileset>
+			</jar>
+			<delete dir="${dagviewapplet.dir}" />
+		</target>
+		<!-- Create the Applet JAR Ends-->
+
 </project>
