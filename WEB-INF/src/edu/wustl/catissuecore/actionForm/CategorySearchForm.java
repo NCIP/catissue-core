@@ -15,16 +15,45 @@ import org.apache.struts.action.ActionForm;
 
 public class CategorySearchForm extends ActionForm
 {
+	/**
+	 * String to store the text field value.
+	 */
 	private String textField = null;
+	/**
+	 * String to store the classChecked checkbox's  value.
+	 */
 	private String classChecked = null;
+	/**
+	 * String to store the attributeChecked checkbox's value.
+	 */
 	private String attributeChecked = null;
+	/**
+	 * String to store the permissibleValuesChecked checkbox's value.
+	 */
 	private String permissibleValuesChecked = null;
+	/**
+	 * String to store the radio button selected value.
+	 */
 	private String selected = null;
+	/**
+	 * String to store the entityName value.
+	 */
 	private String entityName = null;
+	/**
+	 * String to store the string used To Create Query Object.
+	 */
 	private String stringToCreateQueryObject = null;
-	private String tempStr = null;
+	/**
+	 * String to store the errors value.
+	 */
 	private List errors = null;
+	/**
+	 * String to store the searchButton value.
+	 */
 	private String searchButton = null;
+	/**
+	 * String to store the nextOperation value.
+	 */
 	private String nextOperation = null;
 
 	
@@ -36,7 +65,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		return nextOperation;
 	}
-
 	/**
 	 * @param nextOperation the nextOperation to set
 	 */
@@ -44,7 +72,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		this.nextOperation = nextOperation;
 	}
-
 	/**
 	 * @return the searchButton
 	 */
@@ -52,7 +79,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		return searchButton;
 	}
-
 	/**
 	 * @param searchButton the searchButton to set
 	 */
@@ -60,7 +86,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		this.searchButton = searchButton;
 	}
-
 	/**
 	 * @return the errors
 	 */
@@ -68,7 +93,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		return errors;
 	}
-
 	/**
 	 * @param errors the errors to set
 	 */
@@ -76,7 +100,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		this.errors = errors;
 	}
-
 	/**
 	 * @return the stringToCreateQueryObject
 	 */
@@ -84,7 +107,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		return stringToCreateQueryObject;
 	}
-
 	/**
 	 * @param stringToCreateQueryObject the stringToCreateQueryObject to set
 	 */
@@ -92,7 +114,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		this.stringToCreateQueryObject = stringToCreateQueryObject;
 	}
-
 	/**
 	 * @return the selected
 	 */
@@ -100,7 +121,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		return selected;
 	}
-
 	/**
 	 * @param selected the selected to set
 	 */
@@ -108,7 +128,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		this.selected = selected;
 	}
-
 	/**
 	 * @return the textField
 	 */
@@ -116,7 +135,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		return textField;
 	}
-
 	/**
 	 * @param textField the textField to set
 	 */
@@ -124,7 +142,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		this.textField = textField;
 	}
-
 	/**
 	 * @return the attributeChecked
 	 */
@@ -132,7 +149,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		return attributeChecked;
 	}
-
 	/**
 	 * @param attributeChecked the attributeChecked to set
 	 */
@@ -140,7 +156,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		this.attributeChecked = attributeChecked;
 	}
-
 	/**
 	 * @return the classChecked
 	 */
@@ -148,7 +163,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		return classChecked;
 	}
-
 	/**
 	 * @param classChecked the classChecked to set
 	 */
@@ -156,8 +170,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		this.classChecked = classChecked;
 	}
-
-
 	/**
 	 * @return the permissibleValuesChecked
 	 */
@@ -165,7 +177,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		return permissibleValuesChecked;
 	}
-
 	/**
 	 * @param permissibleValuesChecked the permissibleValuesChecked to set
 	 */
@@ -173,8 +184,6 @@ public class CategorySearchForm extends ActionForm
 	{
 		this.permissibleValuesChecked = permissibleValuesChecked;
 	}
-
-
 	/**
 	 * @return the entityName
 	 */
@@ -182,28 +191,11 @@ public class CategorySearchForm extends ActionForm
 	{
 		return entityName;
 	}
-
 	/**
 	 * @param entityName the entityName to set
 	 */
 	public void setEntityName(String entityName)
 	{
 		this.entityName = entityName;
-	}
-
-	/**
-	 * @return the tempStr
-	 */
-	public String getTempStr()
-	{
-		return tempStr;
-	}
-
-	/**
-	 * @param tempStr the tempStr to set
-	 */
-	public void setTempStr(String tempStr)
-	{
-		this.tempStr = tempStr;
 	}
 }
