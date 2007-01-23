@@ -13,16 +13,26 @@ import org.apache.struts.action.ActionMapping;
 import edu.common.dynamicextensions.domain.Entity;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 /**
- * When the Link representing the searched entity is clicked, the UI for Add Limits section is generated with help of GenerateHtmlForAddLimitsBizLogic.
+ * When the Link representing the searched entity is clicked, the UI for Add Limits section is generated with help of
+ * GenerateHtmlForAddLimitsBizLogic. The entity is taken from a map of user searched entities is already strored in session. 
  * @author deepti_shelar
  *
  */
 public class LoadDefineSearchRulesAction extends BaseAction
 {
 
-	@Override
+	/**
+	 * This method loads the html for addlimits section.This html is the replaced with the div data with the help of Ajax script.
+	 * @param mapping mapping
+	 * @param form form
+	 * @param request request
+	 * @param response response
+	 * @throws Exception Exception
+	 * @return ActionForward actionForward
+	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
@@ -31,7 +41,7 @@ public class LoadDefineSearchRulesAction extends BaseAction
 		GenerateHtmlForAddLimitsBizLogic searchProcessor = new GenerateHtmlForAddLimitsBizLogic();
 
 		String html = "";
-		Map searchedEntitiesMap = (Map) request.getSession().getAttribute("searchedEntitiesMap");
+		Map searchedEntitiesMap = (Map) request.getSession().getAttribute(Constants.SEARCHED_ENTITIES_MAP);
 		if (searchedEntitiesMap != null)
 		{
 			Entity entity = (Entity) searchedEntitiesMap.get(entityName);

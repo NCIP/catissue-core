@@ -1,15 +1,9 @@
 
 package edu.wustl.catissuecore.action.querysuite;
 
-/**
- * This class loads the data for ViewSearchResults screen.
- * 
- * @author Deepti Shelar
- */
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,21 +12,25 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
-import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.catissuecore.bizlogic.TreeBizLogic;
+import edu.wustl.catissuecore.action.BaseAppletAction;
+import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
-import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
-import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
+import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.util.logger.Logger;
 
-public class ViewSearchResultsAction extends BaseAction
+/**
+ * This action is a applet action called from DiagrammaticViewApplet class when user clicks on seach button of AddLimits.jsp.
+ * This class gets IQuery Object from the applet and also generates sql out of itwith the help of CreateQueryObjectBizLogic.
+ * This sql is then fired and the results are stored in session so that then they can be seen on ViewSeachResults jsp screen.
+ * An emplty map is sent back to the applet. 
+ * @author deepti_shelar
+ */
+public class ViewSearchResultsAction extends BaseAppletAction
 {
 	/**
-	 * This method loads the data required for ViewSearchResults.jsp
+	 * This method gets the input strings from the DiagrammaticViewApplet class.
+	 * A call to CreateQueryObjectBizLogic returns map which holds list of the result data for the rules added by user.
 	 * @param mapping mapping
 	 * @param form form
 	 * @param request request
@@ -40,48 +38,52 @@ public class ViewSearchResultsAction extends BaseAction
 	 * @throws Exception Exception
 	 * @return ActionForward actionForward
 	 */
-	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+	public ActionForward initData(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
 	{
-		setResultsForView(request);
-		return mapping.findForward("success");
+		Map inputDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
+		if (inputDataMap != null && !inputDataMap.isEmpty())
+		{
+			IQuery query = (IQuery) inputDataMap.get("queryObject");
+			String sql = SqlGeneratorFactory.getInstance().generateSQL(query);
+			System.out.println("**********************sql:  "+sql);
+			sql= "Select ParticipantMedicalIdentif_1.MEDICAL_RECORD_NUMBER From CATISSUE_PART_MEDICAL_ID ParticipantMedicalIdentif_1  left join CATISSUE_PARTICIPANT Participant_2 on (ParticipantMedicalIdentif_1.participant_id=Participant_2.Identifier)  Where (ParticipantMedicalIdentif_1.MEDICAL_RECORD_NUMBER is NOT NULL) And(Participant_2.GENDER like 'm%')";
+			sql = "Select User_1.ACTIVITY_STATUS, User_1.STATUS_COMMENT, User_1.LOGIN_NAME, User_1.START_DATE, User_1.EMAIL_ADDRESS, User_1.FIRST_NAME, User_1.CSM_USER_ID, User_1.LAST_NAME From CATISSUE_USER User_1 left join CATISSUE_INSTITUTION Institution_2 on (User_1.INSTITUTION_ID=Institution_2.IDENTIFIER) Where (User_1.FIRST_NAME like 'a%') And(Institution_2.NAME is NOT NULL)";
+			Logger.out.info(sql);
+			CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
+			Map outputData = bizLogic.fireQuery(sql);
+			request.getSession().setAttribute("treeData", outputData.get("treeData"));
+			request.getSession().setAttribute(Constants.SPREADSHEET_DATA_LIST, outputData.get(Constants.SPREADSHEET_DATA_LIST));
+			request.getSession().setAttribute(Constants.SPREADSHEET_COLUMN_LIST, outputData.get(Constants.SPREADSHEET_COLUMN_LIST));;
+			Map ruleDetailsMap = new HashMap();
+			writeMapToResponse(response, ruleDetailsMap);
+		}
+		return null;
 	}
 
 	/**
-	 * Gets the results by executing query on the database.
+	 * This is a overloaded method to call the actions method set bt applet class.
+	 * @param methodName String
+	 * @param mapping ActionMapping
+	 * @param form form
 	 * @param request request
-	 * @throws DAOException DAOException
-	 * @throws ClassNotFoundException ClassNotFoundException
-	 * @throws MultipleRootsException MultipleRootsException
-	 * @throws DynamicExtensionsApplicationException DynamicExtensionsApplicationException
-	 * @throws DynamicExtensionsSystemException DynamicExtensionsSystemException
+	 * @param response response
+	 * @throws Exception Exception
+	 * @return ActionForward actionForward
 	 */
-	public void setResultsForView(HttpServletRequest request) throws DAOException, ClassNotFoundException, DynamicExtensionsSystemException,
-	DynamicExtensionsApplicationException, MultipleRootsException
+	protected ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form, HttpServletRequest request,HttpServletResponse response) throws Exception
 	{
-		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-		dao.openSession(null);
-		String sql = "";
-		Vector treeData = new Vector();
-		List list = new ArrayList();
-		List<String> columnNames = new ArrayList<String>();
-		Logger.out.debug("SQL************" + sql);
-		sql = "Select Participant_1.ACTIVITY_STATUS, Participant_1.BIRTH_DATE, Participant_1.DEATH_DATE, Participant_1.ETHNICITY, Participant_1.FIRST_NAME, Participant_1.GENDER, Participant_1.IDENTIFIER, Participant_1.LAST_NAME, Participant_1.MIDDLE_NAME, Participant_1.GENOTYPE, Participant_1.SOCIAL_SECURITY_NUMBER, Participant_1.VITAL_STATUS From catissue_participant Participant_1 left join catissue_part_medical_id ParticipantMedicalIdentif_2 on (Participant_1.IDENTIFIER=ParticipantMedicalIdentif_2.PARTICIPANT_ID) Where (Participant_1.FIRST_NAME like 'A%') And(ParticipantMedicalIdentif_2.IDENTIFIER!=0)";
-		list = dao.executeQuery(sql, null, false, false, null);
-		if (list != null && list.size() != 0)
+		if (methodName.trim().length() > 0)
 		{
-			List row = (List) list.get(0);
-			for (int i = 0; i < row.size(); i++)
+			Method method = getMethod(methodName, this.getClass());
+			if (method != null)
 			{
-				columnNames.add("Column" + i);
+				Object args[] = {mapping, form, request, response};
+				return (ActionForward) method.invoke(this, args);
 			}
+			else
+				return null;
 		}
-		TreeBizLogic treeBizLogic = new TreeBizLogic();
-		treeData = treeBizLogic.getQueryTreeNode();
-
-		dao.closeSession();
-		request.setAttribute("treeData", treeData);
-		request.setAttribute(Constants.SPREADSHEET_DATA_LIST, list);
-		request.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, columnNames);
+		return null;
 	}
 }

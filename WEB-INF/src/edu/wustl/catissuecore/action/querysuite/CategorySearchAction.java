@@ -19,19 +19,18 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.cab2b.common.beans.MatchedClass;
+import edu.wustl.cab2b.common.util.Constants;
 import edu.wustl.cab2b.server.advancedsearch.AdvancedSearch;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.cab2b.common.util.Constants;
 /**
  * This class loads screen for categorySearch.When it loads the screen for the first time, default selctions for checkbox and radio buttons
  * will be shown.
  * When search button is clicked it checks for the input : Text , checkbox , radiobutton etc. And depending upon the selections made by user,
  * the list of entities is populated. This list is kept in session.
  * 
- * @author Mandar Shidhore
  * @author deepti_shelar
  */
 
@@ -81,13 +80,13 @@ public class CategorySearchAction extends BaseAction
 					searchedEntitiesMap.put(entityName, entity);
 				}
 			}
-			request.getSession().setAttribute("searchedEntitiesMap", searchedEntitiesMap);
+			request.getSession().setAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP, searchedEntitiesMap);
 			response.setContentType("text/html");
 			response.getWriter().write(entitiesString);
 			return null;
 		}
 
-		return mapping.findForward("success");
+		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}
 	/**
 	 * Prepares a String to be sent to AdvancedSearch logic.
@@ -113,7 +112,7 @@ public class CategorySearchAction extends BaseAction
 	 */
 	private int prepareBaseOn(String basedOnStr)
 	{
-		int basedOn = Constants.BASED_ON_TEXT; // if basedOnStr = "text_radioButton"
+		int basedOn = Constants.BASED_ON_TEXT; 
 		if(basedOnStr != null)
 		{
 			if(basedOnStr.equalsIgnoreCase("conceptCode_radioButton"))
@@ -147,7 +146,6 @@ public class CategorySearchAction extends BaseAction
 		{
 			target.add(new Integer(Constants.PV));
 		}
-
 		int [] searchTarget = new int[target.size()];
 		for(int i=0;i<target.size();i++)
 		{
@@ -176,7 +174,6 @@ public class CategorySearchAction extends BaseAction
 		}
 		//TODO check if null and then set the value of seleted.
 		actionForm.setSelected("text_radioButton");
-
 		return actionForm;
 	}
 }

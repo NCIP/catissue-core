@@ -1,7 +1,7 @@
 package edu.wustl.catissuecore.action.querysuite;
 
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -12,11 +12,17 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
-import edu.wustl.catissuecore.bizlogic.TreeBizLogic;
+import edu.wustl.catissuecore.bizlogic.querysuite.DefineAdvancedResultsView;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-//import edu.wustl.common.bizlogic.querySuite.DefineAdvancedResultsView;
-
+import edu.wustl.common.tree.QueryTreeNodeData;
+/**
+ * This is a action class to Define Search Results View.
+ * @author deepti_shelar
+ *
+ */
 public class DefineSearchResultsViewAction extends BaseAction
 {
 	/**
@@ -34,24 +40,16 @@ public class DefineSearchResultsViewAction extends BaseAction
 	throws Exception
 	{
 		CategorySearchForm actionForm = (CategorySearchForm)form;
-		Map<String, Vector<?>> treesMap = new HashMap<String, Vector<?>>();
-//		DefineAdvancedResultsView defineResults = new DefineAdvancedResultsView();
-		int categoryID = 14;
-		
-		TreeBizLogic treeBizLogic = new TreeBizLogic();
-//		Vector treeData = defineResults.getTreeForThisCategory(categoryID);
-		Vector treeData1 = treeBizLogic.getQueryTreeNode();
-		Vector treeData2 = treeBizLogic.getQueryTreeNodeForCategory2();
-		Vector treeData3 = treeBizLogic.getQueryTreeNodeForCategory3();
-//		treesMap.put("Category1",treeData);
-		treesMap.put("Category2",treeData2);
-		treesMap.put("Category3",treeData3);
+		List<EntityInterface> ListOfEntitiesInQuery = (List)request.getSession().getAttribute(Constants.LIST_OF_ENTITIES_IN_QUERY);
+		Map<String, Vector<QueryTreeNodeData>> treesMap = new HashMap<String, Vector<QueryTreeNodeData>>();
+		DefineAdvancedResultsView defineResults = new DefineAdvancedResultsView();
+		treesMap = defineResults.getTreeForThisCategory(ListOfEntitiesInQuery);
 		request.setAttribute("treesMap",treesMap);
 		if(actionForm.getNextOperation() != null && actionForm.getNextOperation().equalsIgnoreCase("BuildNewTree"))
 		{
 			return mapping.findForward("BuildNewTree");
 		} 
-		return mapping.findForward("success");
+		return mapping.findForward(Constants.SUCCESS);
 	}
-
 }
+

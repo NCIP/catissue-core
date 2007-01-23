@@ -1,8 +1,6 @@
-
 package edu.wustl.catissuecore.action.querysuite;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -13,20 +11,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.domain.Entity;
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.action.BaseAppletAction;
-import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.querysuite.queryengine.impl.CommonPathFinder;
 
-/**
- * This action is called when user clicks on Add Limits button of AddLimits.jsp.
- * This action is called from DiagrammaticViewApplet class.
- * This class creates Query Object and also generates validation messages with the help of CreateQueryObjectBizLogic. 
- * @author deepti_shelar
- */
-public class AddToLimitSetAction extends BaseAppletAction
+public class PathFinderAction extends BaseAppletAction
 {
-
 	/**
 	 * This method gets the input strings from the DiagrammaticViewApplet class.
 	 * A call to CreateQueryObjectBizLogic returns map which holds details for the rule added by user.
@@ -41,40 +32,18 @@ public class AddToLimitSetAction extends BaseAppletAction
 	public ActionForward initData(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		Map searchedEntitiesMap = (Map) request.getSession().getAttribute(Constants.SEARCHED_ENTITIES_MAP);
 		Map inputDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		if (inputDataMap != null && !inputDataMap.isEmpty())
 		{
-			String strToCreateQueryObject = (String) inputDataMap.get("strToCreateQueryObject");
-			String entityName = (String) inputDataMap.get("entityName");
-			Entity entity = (Entity) searchedEntitiesMap.get(entityName);
-			addEntityToSession(entity,request);
-			CreateQueryObjectBizLogic queryBizLogic = new CreateQueryObjectBizLogic();
-			if (!strToCreateQueryObject.equalsIgnoreCase(""))
-			{
-				Map ruleDetailsMap = queryBizLogic.getRuleDetailsMap(strToCreateQueryObject, entity);
-				writeMapToResponse(response, ruleDetailsMap);
-			}
+			List<EntityInterface> srcEntity = (List<EntityInterface>) inputDataMap.get("srcEntity");
+			EntityInterface destEntity = (EntityInterface) inputDataMap.get("destEntity");
+			CommonPathFinder pathFinder = new CommonPathFinder();
+			Map pathsMap = pathFinder.getAllPossiblePaths(srcEntity, destEntity);
+			System.out.println();
+			writeMapToResponse(response, pathsMap);
 		}
 		return null;
 	}
-	/**
-	 * This method first checks the wheather the list of entitites is present in session , if not then creates a new list and then
-	 * adds the entity to list and keeps the list again in the session. 
-	 * @param entity Entity
-	 * @param request HttpServletRequest
-	 */
-	private void addEntityToSession(Entity entity, HttpServletRequest request)
-	{
-		List<Entity> listOfEntitiesInQuery = (List)request.getSession().getAttribute(Constants.LIST_OF_ENTITIES_IN_QUERY);
-		if(listOfEntitiesInQuery == null || listOfEntitiesInQuery.isEmpty())
-		{
-			listOfEntitiesInQuery = new ArrayList<Entity>();
-		}
-		listOfEntitiesInQuery.add(entity);
-		request.getSession().setAttribute(Constants.LIST_OF_ENTITIES_IN_QUERY,listOfEntitiesInQuery);
-	}
-
 	/**
 	 * This is a overloaded method to call the actions method set bt applet class.
 	 * @param methodName String
