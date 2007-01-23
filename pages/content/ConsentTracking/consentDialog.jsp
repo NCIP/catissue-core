@@ -129,7 +129,7 @@ function getStatus(element)
 				<tr>
 					<td class="tabrightmostcell">
 						<b>
-							<bean:message key="consent.currentstatusonallspecimen" />
+							<bean:message key="consent.currentstatusonnonconflictingspecimen" />
 						</b>	
 					</td>
 					<td align="right" class="formField">
@@ -139,7 +139,7 @@ function getStatus(element)
 					<tr>
 						<td class="tabrightmostcell">
 							<b>
-								<bean:message key="consent.currentstatusonnonconflictingspecimen" />
+								<bean:message key="consent.currentstatusonallspecimen" />	
 							<b>
 						</td>
 						<td align="right" class="formField">
