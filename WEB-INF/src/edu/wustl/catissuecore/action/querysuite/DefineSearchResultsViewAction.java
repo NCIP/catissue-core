@@ -14,9 +14,9 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
-import edu.wustl.catissuecore.bizlogic.querysuite.DefineAdvancedResultsView;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.bizlogic.querysuite.DefineAdvancedResultsView;
 import edu.wustl.common.tree.QueryTreeNodeData;
 /**
  * This is a action class to Define Search Results View.
