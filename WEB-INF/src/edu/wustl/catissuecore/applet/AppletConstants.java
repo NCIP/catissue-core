@@ -111,7 +111,18 @@ public interface AppletConstants
 	 * Specify the SPECIMEN_ARRAY_APPLET_ACTION field 
 	 */
 	String SPECIMEN_ARRAY_APPLET_ACTION = "/SpecimenArrayAppletAction.do";
-
+	/**
+	 * Specify the ADD_TO_LIMIT_ACTION field 
+	 */
+	String ADD_TO_LIMIT_ACTION = "/addToLimitSet.do";
+	/**
+	 * Specify the GET_SEARCH_RESULTS field 
+	 */
+	String GET_SEARCH_RESULTS = "/ViewSearchResultsAction.do";
+	/**
+	 * Specify the PATH_FINDER field 
+	 */
+	String PATH_FINDER = "/PathFinderAction.do";
 	/**
 	 * Specimen Attributes Row Nos
 	 * */

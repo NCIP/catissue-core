@@ -28,9 +28,9 @@ var columns ;
 var colWidth;
 var colTypes 
 <%
-List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-Vector treeData = (Vector)request.getAttribute("treeData");
+List columnList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+List dataList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_DATA_LIST);
+Vector treeData = (Vector)request.getSession().getAttribute("treeData");
  %>
 
 
@@ -198,7 +198,7 @@ function tonclick(id)
 <% } %>
 <html:errors />
 <%
-	String formAction = Constants.ViewSearchResultsAction;
+	String formAction = Constants.DefineSearchResultsViewJSPAction;
 %>
 <html:form method="GET" action="<%=formAction%>">
 <html:hidden property="stringToCreateQueryObject" value="" />
@@ -291,7 +291,7 @@ function tonclick(id)
 						<td valign="center" width="75%"><html:button property="Button"><bean:message key="query.saveButton"/></html:button></td>
 				
 						<td  align="right" valign="center"><html:button property="Button"><bean:message key="query.perviousButton"/></html:button></td>
-						<td align="right" valign="center"><html:button property="Button" onclick="viewSearchResults()"><bean:message 		key="query.nextButton"/></html:button>
+						<td align="right" valign="center"><html:button property="Button" onclick=""><bean:message key="query.nextButton"/></html:button>
 						</td>
 						<td width="2%">&nbsp;</td>
 					</tr>

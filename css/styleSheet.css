@@ -1494,3 +1494,8 @@ td.queryModuleTabMenuItem{ /* for the off state of the tab menu (top) cells */
   white-space: nowrap;
   border-right:1px solid #5C5C5C; /* constant: dark gray */
  }
+  .standardTextQuery{ /* for stand-alone text not affected by any cascading text styles */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  color:#000000; /* constant: black */
+}

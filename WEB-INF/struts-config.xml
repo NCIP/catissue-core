@@ -394,7 +394,8 @@ PUBLIC
 		
 	<!--Added by Deepti -define array end-->
 	
-	<!-- Action code : Mandar Shidhore : 06/11/06 -->
+	<!-- Action code : Query Module Starts : 06/11/06 -->
+	
 		<action path="/SearchCategory"
 			type="edu.wustl.catissuecore.action.querysuite.CategorySearchAction"
 			name="categorySearchForm"
@@ -409,19 +410,12 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.searchCategory"/>
 		</action>
-		<action path="/ViewSearchResultsAction"
-			type="edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction"
+		<action path="/ViewSearchResultsJSPAction"
+			type="edu.wustl.catissuecore.action.querysuite.ViewSearchResultsJSPAction"
 			name="categorySearchForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.viewSearchResults"/>
-		</action>
-		<action path="/addToLimitSet"
-			type="edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction"
-			name="categorySearchForm"
-			validate="false"
-			scope="request">
-			<forward name="success" path=".catissuecore.searchCategory"/>
 		</action>
 		<action path="/DefineSearchResultsView"
 			type="edu.wustl.catissuecore.action.querysuite.DefineSearchResultsViewAction"
@@ -431,6 +425,23 @@ PUBLIC
 			<forward name="success" path=".catissuecore.defineSearchResultsView"/>
 			<forward name="BuildNewTree" path=".catissuecore.defineSearchResultsBuildNewTree"/>
 		</action>
+		<!-- Applet Action mapping for query Module -->
+		<action path="/ViewSearchResultsAction" 
+			type="edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction" 
+			parameter="method">
+		<forward name="success" path=".catissuecore.viewSearchResults"/>
+		</action>
+		<action path="/addToLimitSet" 
+			type="edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction" 
+			parameter="method">
+		</action>
+		<action path="/PathFinderAction" 
+			type="edu.wustl.catissuecore.action.querysuite.PathFinderAction" 
+			parameter="method">
+		</action>
+		
+		<!-- Action code : Query Module Ends : 06/11/06 -->
+		
 		
 		<action path="/ViewSurgicalPathologyReport"
 			type="edu.wustl.catissuecore.action.ViewSurgicalPathologyReportAction"

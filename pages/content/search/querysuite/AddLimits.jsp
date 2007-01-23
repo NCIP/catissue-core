@@ -26,7 +26,7 @@
 		<script type="text/javascript" src="jss/ajax.js"></script> 
 <html:errors />
 <%
-	String formAction = Constants.ViewSearchResultsAction;
+	String formAction = Constants.SearchCategory;
 	String defineSearchResultsViewAction = Constants.DefineSearchResultsViewAction;
 %>
 <html:form method="GET" action="<%=formAction%>">
@@ -37,10 +37,7 @@
 	<table border="1" width="100%" cellspacing="0" cellpadding="0" height="100%" id="table1">
 	<tr>
 		<td>
-		<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table2" >
-		<tr  height="2%">
-			<td height="2%" colspan="5" bgcolor="#000000"><font color="#FFFFFF">&nbsp;&nbsp;Search Data</font></td>
-		</tr>
+		<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table2" >		
 		<tr  height="5%" class="trStyle">
 			<td width="20%" height="5%" class="queryModuleTabMenuItem">
 				<bean:message key="query.chooseSearchCategory"/>
@@ -75,9 +72,8 @@
 					<td valign="top" height="60%">
 							<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" >
 							<tr>
-							<td height="80%">
+							<td height="60%">
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
-							
 								<tr>
 									<td><div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
 								</tr>
@@ -89,21 +85,30 @@
 								</td>
 								</tr>
 							<tr>
-							<td  height="20%">
-							<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
-							<tr>																						
-												<td height="4%" bgcolor="#EAEAEA" style="border:solid 1px"><font face="Arial" size="2" color="#000000"><b><bean:message key="query.limitSetHeader"/></b></font></td>
-											</tr>
-											<tr>
-											<td height="20%">													
-												<div id="queryTableTd" style="overflow:auto; height:100px;width:100%">
-																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												</div>
-												</td>
-											</tr>
-							</table>
+							<td  height="40%" valign="top">
+								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
+									<tr>																						
+										<td height="4%" bgcolor="#EAEAEA" style="border:solid 1px"><font face="Arial" size="2" color="#000000"><b><bean:message 	key="query.limitSetHeader"/></b></font></td>
+									</tr>
+									<tr>
+										<td height="36%">											
+											<div id="queryTableTd" style="overflow:auto;height:100%;width:100%"">
+												<APPLET
+													CODEBASE = "<%=Constants.APPLET_CODEBASE%>"
+													ARCHIVE = "dagViewApplet.jar, cab2bStandAlone.jar,commonpackage.jar,swingx-2006_10_08.jar,org-netbeans-graph-vmd.jar,org-netbeans-graph.jar,org-openide-util.jar,DynamicExtensions.jar,struts.jar,hibernate2.1.7c.jar,odmg.jar"
+													CODE = "<%=Constants.QUERY_DAG_VIEW_APPLET%>"
+													ALT = "Dag view Applet"
+													NAME = "<%=Constants.QUERY_DAG_VIEW_APPLET_NAME%>"
+													width="100%" height="100%" MAYSCRIPT>
+													<PARAM name="type" value="application/x-java-applet;jpi-version=1.5.0_08">
+													<PARAM name="name" value="<%=Constants.QUERY_DAG_VIEW_APPLET_NAME%>">
+													<PARAM name="session_id" value="<%=session.getId()%>">
+													<PARAM name = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" value="<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">
+												</APPLET>
+											</div>
+										</td>
+									</tr>
+								</table>
 							</td>
 							</tr>
 							</table>

@@ -27,6 +27,8 @@ function operatorChanged(rowId,dataType)
 
 var textBoxId = rowId+"_textBox1";
 var calendarId1 = rowId+"_calendar1";
+var textBoxId0 = rowId+"_textBox";
+var calendarId0 = "calendarImg";
 var opId =  rowId+"_combobox";
 if(document.all) {
 		// IE.
@@ -38,6 +40,22 @@ if(document.all) {
 		// Mozilla
 		op = document.forms['categorySearchForm'].elements[opId].value;
 	}	
+	if(op == "Is Null" || op== "Is Not Null")
+	{
+		document.getElementById(textBoxId0).value = "";
+			document.getElementById(textBoxId0).disabled = true;
+			if(dataType == "true")
+			{
+				document.getElementById(calendarId0).disabled = true;
+			}	
+	} else
+	{
+			document.getElementById(textBoxId0).disabled = false;
+			if(dataType == "true")
+			{
+				document.getElementById(calendarId0).disabled = false;
+			}	
+	}
 if(op == "Between")
 {
 	if(document.all) {
@@ -85,39 +103,268 @@ else
 	}	
 }
 }
+function expand()
+{			
+	switchObj = document.getElementById('image');
+	dataObj = document.getElementById('collapsableTable');
+	resultSetDivObj = document.getElementById('resultSetDiv');
 
-
-
-	function expand()
-	{			
-		switchObj = document.getElementById('image');
-		dataObj = document.getElementById('collapsableTable');
-		resultSetDivObj = document.getElementById('resultSetDiv');
-	
-		if(dataObj.style.display != 'none') //Clicked on - image
-		{
-			dataObj.style.display = 'none';				
-			switchObj.innerHTML = '<img src="images/nolines_plus.gif" border="0"/>';
-			resultSetDivObj.height = 400;
+	if(dataObj.style.display != 'none') //Clicked on - image
+	{
+		dataObj.style.display = 'none';				
+		switchObj.innerHTML = '<img src="images/nolines_plus.gif" border="0"/>';
+		resultSetDivObj.height = 400;
+	}
+	else  							   //Clicked on + image
+	{
+		if(navigator.appName == "Microsoft Internet Explorer")
+		{					
+			dataObj.style.display = 'block';
 		}
-		else  							   //Clicked on + image
+		else
 		{
-			if(navigator.appName == "Microsoft Internet Explorer")
-			{					
-				dataObj.style.display = 'block';
+			dataObj.style.display = 'table-row';
+			dataObj.style.display = 'block';
+		}
+		switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0"/>';
+		resultSetDivObj.height = 320;
+	}
+}
 
+function retriveSearchedEntities(url,nameOfFormToPost) 
+{
+	var request = newXMLHTTPReq();				
+	var actionURL;
+	var handlerFunction = getReadyStateHandler(request,onResponseUpdate,true);
+	
+	var textFieldValue = document.forms[0].textField.value;
+
+	var classCheckStatus = document.forms[0].classChecked.checked;
+	var attributeCheckStatus = document.forms[0].attributeChecked.checked;
+	var permissibleValuesCheckStatus = document.forms[0].permissibleValuesChecked.checked;
+	var radioCheckStatus;
+
+	request.onreadystatechange = handlerFunction;
+			
+	if(document.forms[0].selected[0].checked)
+		radioCheckStatus = "rb1";
+	if(document.forms[0].selected[1].checked)
+		radioCheckStatus = "rb2";
+
+	actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&selected=" + radioCheckStatus;
+
+	if(!(classCheckStatus || attributeCheckStatus || permissibleValuesCheckStatus) ) 
+	{
+		alert("Please select any of the checkbox ");
+		onResponseUpdate(" ");
+	}
+	else if(textFieldValue == "")
+	{
+		alert("Please Enter the String to search.");
+		onResponseUpdate(" ");
+	}
+	else if(radioCheckStatus == null)
+	{
+		alert("Please select any of the radio button : 'based on' criteria");
+		onResponseUpdate(" ");
+	}
+		
+	else
+	{
+		<!-- Open connection to servlet -->
+		request.open("POST",url,true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		request.send(actionURL);
+	}
+//	showEntityInformation("");
+	//onProduceQueryUpdate("");
+}
+
+function onResponseUpdate(text)
+{
+	if(text == "")
+	{
+	alert("No results found.");
+	}
+	var element = document.getElementById('resultSet');
+	var allElementsArray = text.split(";");
+	var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
+
+	for(i=0; i<allElementsArray.length; i++)
+	{
+		var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+allElementsArray[i]+"')";
+		row = row+'<tr><td class="standardTextQuery" bgcolor="#FFFFFF"><a href="javascript:'+functionCall+'">' +allElementsArray[i]+ '</a></td></tr>';
+
+	}
+	row = row+'</table>';
+	element.innerHTML =row;
+}
+function retriveEntityInformation(url,nameOfFormToPost,entityName) 
+{	
+	var request = newXMLHTTPReq();			
+	var actionURL;
+	var handlerFunction = getReadyStateHandler(request,showEntityInformation,true);	
+	request.onreadystatechange = handlerFunction;				
+	actionURL = "entityName=" + entityName;				
+	
+	<!-- Open connection to servlet -->
+	request.open("POST",url,true);	
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+	request.send(actionURL);		
+} 
+function showEntityInformation(text)
+{					
+	//onProduceQueryUpdate("");
+	var element = document.getElementById('addLimits');
+	element.innerHTML =text;
+}
+function produceQuery(url,nameOfFormToPost, entityName , attributesList) 
+{
+	//var element = document.getElementById('query');
+	var strToCreateQueyObject ="";
+	var attribute = attributesList.split(";");
+	var textThis = "";
+	queryString ="";
+	var stringQuery = "";
+	for(i=1; i<attribute.length; i++)
+	{
+		var opId =  attribute[i]+"_combobox";
+		var textBoxId = attribute[i]+"_textBox";
+		var textId = document.getElementById(textBoxId).value;
+		var textBoxId1 = attribute[i]+"_textBox1";
+		var textId1 = document.getElementById(textBoxId1).value;
+		if(navigator.appName == "Microsoft Internet Explorer")
+			{					
+				var op = document.getElementById(opId).value;
 			}
 			else
 			{
-				dataObj.style.display = 'table-row';
-				dataObj.style.display = 'block';
-
+				var op = document.forms[nameOfFormToPost].elements[opId].value;
+			}					
+		if(op != "Between")
+		{
+			if(textId != "")
+			{
+				strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +";";
 			}
-			switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0"/>';
-			resultSetDivObj.height = 320;
+		}
+		if(op == "Between")
+		{
+			if(textId != "" && textId1!= "")
+			{
+				strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +"!*=*!"+textId1+";";
+			}
+		}
+		if(op == "Is Null" || op == "Is Not Null")
+		{
+			strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op +";";
 		}
 	}
-	/*function expandSearchHeader()
+	document.applets[0].addExpression(strToCreateQueyObject,entityName);
+}
+
+
+function viewSearchResults()
+{
+	document.applets[0].getSearchResults();
+	document.forms['categorySearchForm'].action='ViewSearchResultsJSPAction.do';
+	document.forms['categorySearchForm'].submit();			
+}
+function defineSearchResultsView()
+{
+	document.forms['categorySearchForm'].action='DefineSearchResultsView.do';
+	document.forms['categorySearchForm'].submit();
+}
+function setFocusOnSearchButton()
+{
+	alert(document.forms[0].searchButton11.onclick);
+	document.getElementById(searchButton11).onclick();
+}
+		/*function viewAddLimitsPage()
+		{
+			document.forms['categorySearchForm'].action = "SearchCategory.do";
+			document.forms['categorySearchForm'].submit();
+		}
+		function onProduceQueryUpdate(expressionId)
+		{
+			document.applets[0].addExpression(expressionId);
+		}
+		function clearForm1(attributesList)
+		{
+			var a = attributesList.split(";");
+			for(i=1; i<a.length; i++)
+			{
+				var opId =  a[i]+"_combobox";
+				var textBoxId = a[i]+"_textBox";
+				var textId = document.getElementById(textBoxId).value="";
+				var textBoxId1 = a[i]+"_textBox1";
+				var textId1 = document.getElementById(textBoxId1).value="";
+				var op = document.forms['categorySearchForm'].elements[opId].value="";
+			}
+		}
+		function produceQuery(url,nameOfFormToPost, entityName , attributesList) 
+		{
+			//var element = document.getElementById('query');
+			var strToCreateQueyObject ="";
+			var attribute = attributesList.split(";");
+			var textThis = "";
+			queryString ="";
+			var stringQuery = "";
+			for(i=1; i<attribute.length; i++)
+			{
+				var opId =  attribute[i]+"_combobox";
+				var textBoxId = attribute[i]+"_textBox";
+				var textId = document.getElementById(textBoxId).value;
+				var textBoxId1 = attribute[i]+"_textBox1";
+				var textId1 = document.getElementById(textBoxId1).value;
+				if(navigator.appName == "Microsoft Internet Explorer")
+					{					
+						var op = document.getElementById(opId).value;
+					}
+					else
+					{
+						var op = document.forms[nameOfFormToPost].elements[opId].value;
+					}					
+				if(op != "Between")
+				{
+					if(textId != "")
+					{
+						if(i!=attribute.length-1)
+						{
+							textThis = textThis + " "+ attribute[i] + " " + op + " " + textId + ";  ";								
+						}
+						if(i==attribute.length-1)
+						{
+							textThis = textThis + " "+ attribute[i] + " " + op + " " + textId+ ";  ";			
+						}
+						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +";";
+					}
+				}
+				if(op == "Between")
+				{
+					if(textId != "" && textId1!= "")
+					{
+						if(i!=attribute.length-1)
+						{
+							textThis = textThis + " "+ attribute[i] + " " + op + " (" + textId +", "+textId1 +") ;  ";					
+						}
+						if(i==attribute.length-1)
+						{
+							textThis = textThis + " "+ attribute[i] + " " + op + " (" + textId +", "+textId1 +") ;  ";	
+						}
+							strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +"!*=*!"+textId1+";";
+					}
+				}
+				if(op == "Is Null" || op == "Is Not Null")
+				{
+					
+				}
+				
+			}
+		
+			document.applets[0].addExpression(strToCreateQueyObject,entityName);
+		}
+		function expandSearchHeader()
 			{			
 				switchObj = document.getElementById('imageCategorySearch');
 			//	collapsableHeaderObj = document.getElementById('collapsableHeader');
@@ -148,191 +395,3 @@ else
 					resultSetDivObj.height = 350;
 				}
 			}*/
-
-
-
-		function retriveSearchedEntities(url,nameOfFormToPost) 
-		{
-			var request = newXMLHTTPReq();				
-			var actionURL;
-			var handlerFunction = getReadyStateHandler(request,onResponseUpdate,true);
-			
-			var textFieldValue = document.forms[0].textField.value;
-
-			var classCheckStatus = document.forms[0].classChecked.checked;
-			var attributeCheckStatus = document.forms[0].attributeChecked.checked;
-			var permissibleValuesCheckStatus = document.forms[0].permissibleValuesChecked.checked;
-			var radioCheckStatus;
-
-			request.onreadystatechange = handlerFunction;
-					
-			if(document.forms[0].selected[0].checked)
-				radioCheckStatus = "rb1";
-			if(document.forms[0].selected[1].checked)
-				radioCheckStatus = "rb2";
-
-			actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&selected=" + radioCheckStatus;
-
-			if(!(classCheckStatus || attributeCheckStatus || permissibleValuesCheckStatus) ) 
-			{
-				alert("Please select any of the checkbox ");
-				onResponseUpdate(" ");
-			}
-			else if(textFieldValue == "")
-			{
-				alert("Please Enter the String to search.");
-				onResponseUpdate(" ");
-			}
-			else if(radioCheckStatus == null)
-			{
-				alert("Please select any of the radio button : 'based on' criteria");
-				onResponseUpdate(" ");
-			}
-				
-			else
-			{
-				<!-- Open connection to servlet -->
-				request.open("POST",url,true);	
-				request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-				request.send(actionURL);
-			}
-		//	showEntityInformation("");
-			//onProduceQueryUpdate("");
-		}
-
-		function onResponseUpdate(text)
-		{
-			if(text == "")
-		{
-			alert("No results found.");
-		}
-	
-			var element = document.getElementById('resultSet');
-			var allElementsArray = text.split(";");
-			var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
-
-			for(i=0; i<allElementsArray.length; i++)
-			{
-				var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+allElementsArray[i]+"')";
-				row = row+'<tr><td bgcolor="#FFFFFF"><a href="javascript:'+functionCall+'">' +allElementsArray[i]+ '</a></td></tr>';
-
-			}
-			row = row+'</table>';
-			element.innerHTML =row;
-		}
-		
-		function retriveEntityInformation(url,nameOfFormToPost,entityName) 
-		{	
-			var request = newXMLHTTPReq();			
-			var actionURL;
-			var handlerFunction = getReadyStateHandler(request,showEntityInformation,true);	
-			request.onreadystatechange = handlerFunction;				
-			actionURL = "entityName=" + entityName;				
-			
-			<!-- Open connection to servlet -->
-			request.open("POST",url,true);	
-			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-			request.send(actionURL);		
-		} 
-		
-		function showEntityInformation(text)
-		{					
-			
-			//onProduceQueryUpdate("");
-			var element = document.getElementById('addLimits');
-			element.innerHTML =text;
-		}
-		
-	
-		
-		function produceQuery(url,nameOfFormToPost, entityName , attributesList) 
-		{
-			//var element = document.getElementById('query');
-			var strToCreateQueyObject ="";
-			var a = attributesList.split(";");
-			var textThis = "";
-			queryString ="";
-			var stringQuery = "";
-			for(i=1; i<a.length; i++)
-			{
-				var opId =  a[i]+"_combobox";
-				var textBoxId = a[i]+"_textBox";
-				var textId = document.getElementById(textBoxId).value;
-				var textBoxId1 = a[i]+"_textBox1";
-				var textId1 = document.getElementById(textBoxId1).value;
-				if(navigator.appName == "Microsoft Internet Explorer")
-					{					
-						var op = document.getElementById(opId).value;
-					}
-					else
-					{
-						var op = document.forms[nameOfFormToPost].elements[opId].value;
-					}					
-				if(op != "Between")
-				{
-					if(textId != "")
-					{
-						if(i!=a.length-1)
-						{
-							textThis = textThis + " "+ a[i] + " " + op + " " + textId + ";  ";								
-						}
-						if(i==a.length-1)
-						{
-							textThis = textThis + " "+ a[i] + " " + op + " " + textId+ ";  ";			
-						}
-						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ a[i] + "!*=*!" + op + "!*=*!" + textId +";";
-					}
-				}
-				if(op == "Between")
-				{
-					if(textId != "" && textId1!= "")
-					{
-						if(i!=a.length-1)
-						{
-							textThis = textThis + " "+ a[i] + " " + op + " (" + textId +", "+textId1 +") ;  ";					
-						}
-						if(i==a.length-1)
-						{
-							textThis = textThis + " "+ a[i] + " " + op + " (" + textId +", "+textId1 +") ;  ";	
-						}
-							strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ a[i] + "!*=*!" + op + "!*=*!" + textId +"!*=*!"+textId1+";";
-					}
-		
-				}
-			}
-		
-			document.applets[0].addExpression(strToCreateQueyObject,entityName);
-		}
-
-	/*	function onProduceQueryUpdate(expressionId)
-		{
-			document.applets[0].addExpression(expressionId);
-		}*/
-		function clearForm1(attributesList)
-		{
-			var a = attributesList.split(";");
-			for(i=1; i<a.length; i++)
-			{
-				var opId =  a[i]+"_combobox";
-				var textBoxId = a[i]+"_textBox";
-				var textId = document.getElementById(textBoxId).value="";
-				var textBoxId1 = a[i]+"_textBox1";
-				var textId1 = document.getElementById(textBoxId1).value="";
-				var op = document.forms['categorySearchForm'].elements[opId].value="";
-			}
-		}
-
-		function viewSearchResults()
-		{
-			document.forms['categorySearchForm'].submit();
-		}
-		function defineSearchResultsView()
-		{
-			document.forms['categorySearchForm'].action='DefineSearchResultsView.do';
-			document.forms['categorySearchForm'].submit();
-		}
-		function viewAddLimitsPage()
-		{
-			document.forms['categorySearchForm'].action = "SearchCategory.do";
-			document.forms['categorySearchForm'].submit();
-		}

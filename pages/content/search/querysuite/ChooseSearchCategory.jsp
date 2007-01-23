@@ -20,12 +20,12 @@
 			<td valign="top"> 
 				<table border="0" width="208" valign="top" cellspacing="0" height="100%">
 					<tr valign="top" valign="top" bgcolor="#EAEAEA" width="100%">
-						<th height="5%"  valign="top" colspan="2">
+						<th height="5%"  valign="top" colspan="4">
 							<b><font face="Arial" size="2"><bean:message key="query.categorySearchHeader"/></font></b>									
 						</th>
-						<th valign="top" height="5%" width="20%" colspan="2">
+						<!--th valign="top" height="5%" width="20%" colspan="2">
 							<a id="imageCategorySearch" style="display:block"><img src="images/nolines_plus.gif" /></a>
-						</th>
+						</th-->
 					</tr>
 					<tr>
 						<td height="10px"></td>
@@ -56,21 +56,21 @@
 						<td colspan="2" valign="top">
 							<table valign="top" class="collapsableTable" style="display:none" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" id="collapsableTable">
 								<tr id="class_view">
-									<td><font face="Arial"><html:checkbox property="classChecked" value="on" ><font size="2">Class</font><font size="2">&nbsp;&nbsp;</font></html:checkbox></font></td>
+									<td class="standardTextQuery"><html:checkbox property="classChecked" value="on"> <bean:message key="query.class"/></html:checkbox></td>
 								</tr>
 								<tr id="attribute_view" >
-									<td><font face="Arial"><html:checkbox property="attributeChecked" value="on"><font size="2">Attribute&nbsp;&nbsp;</font></html:checkbox></font></td>
+									<td class="standardTextQuery"><html:checkbox property="attributeChecked" value="on" > <bean:message key="query.attribute"/></html:checkbox></td>
 								</tr>
 								<tr id="permissible_view" >
-									<td><font face="Arial"><html:checkbox property="permissibleValuesChecked" value="on"><font size="2">Permissible</font><font size="2">Values</font></html:checkbox></font></td>
+									<td class="standardTextQuery"><html:checkbox property="permissibleValuesChecked" value="on" > <bean:message key="query.permissibleValues"/></html:checkbox></td>
 								</tr>
 								<tr id="blank_view" >
 									<td>&nbsp;</td>
 								</tr>
 								<tr id="radio_view" >
-									<td>
-										<html:radio property="selected" value="text_radioButton" /><font face="Arial"><font size="2">Text&nbsp;&nbsp;&nbsp;&nbsp;</font></font>&nbsp;&nbsp;&nbsp;&nbsp;
-										<html:radio property="selected" value="conceptCode_radioButton"/><font face="Arial"><font size="2">Concept </font><font size="2">Code</font></font>
+									<td class="standardTextQuery">
+										<html:radio property="selected" value="text_radioButton" /><bean:message key="query.text"/>
+										<html:radio property="selected" value="conceptCode_radioButton"/><bean:message key="query.conceptCode"/>
 									</td>
 								</tr>											
 							</table>

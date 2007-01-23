@@ -23,7 +23,7 @@
 	String defineSearchResultsViewAction = Constants.DefineSearchResultsViewAction;
 	Map treesMap = (Map) request.getAttribute("treesMap");
 %>
-<html:form method="GET" action="<%=formAction%>">
+<html:form method="GET" action="<%=defineSearchResultsViewAction%>">
 <table bordercolor="#000000" border="0" width="100%" cellspacing="2" cellpadding="2"  height="100%">
 	<tr>
 		<td>
