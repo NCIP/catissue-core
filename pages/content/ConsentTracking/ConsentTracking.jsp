@@ -54,6 +54,11 @@ function submitString()
 	document.forms[0].stringOfResponseKeys.value=str;
 	//document.forms[0].submit();
 }
+/* Function to set the value of consentsUpdated in case of specimen. */
+function onConsentUpdated()
+{
+	document.forms[0].consentsUpdated.value=true;
+}
 
 
 <%-- On calling this function all the response dropdown value set to "Withdraw" --%>
@@ -530,11 +535,12 @@ function popupWindow(nofConsentTiers)
 									}
 									else if(pageOf.equals("pageOfNewSpecimen"))
 									{
+										String keyValue="onConsentUpdated()";
 									%>
 									<td align="left" class="formField" >
 										<html:hidden property="<%=responseIdKey%>"/>
 										<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
-											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" >
+											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=keyValue%>">
 											<html:options collection="<%=collection%>" labelProperty="name" property="value" />
 										</html:select>
 									</td>
