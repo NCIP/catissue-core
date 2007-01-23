@@ -224,7 +224,7 @@
 	<!-- Create the Applet JAR Ends-->
 
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="build_war" depends="init, compile, unpack_cacore_war,replace_database_type,common_build_war,build_client_jar,build_dagViewApplet_jar">
+	<target name="build_war" depends="init, compile, unpack_cacore_war,replace_database_type,build_dagViewApplet_jar,common_build_war,build_client_jar">
 	</target>
 	<!-- Create war file for installable zip file.Please us this target when creating installable zip. 
 		Note: database type is not replaced 
