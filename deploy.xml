@@ -366,8 +366,8 @@
 				  	value="${jboss.home.dir}/server/default/catissuecore-properties/ApplicationSecurityConfig.xml"/>
 		<replacefilter token="@@app-properties-file@@" 
 				  	value="${jboss.home.dir}/server/default/catissuecore-properties/caTissueCore_Properties.xml"/>
-		<!-- replacefilter token="@@app-dynamicuixml-file@@" 
-				  	value="${jboss.home.dir}/server/default/catissuecore-properties/dynamicUI.xml"/-->
+		<replacefilter token="@@app-dynamicuixml-file@@" 
+				  	value="${jboss.home.dir}/server/default/catissuecore-properties/dynamicUI.xml"/>
 
 		</replace>
 
