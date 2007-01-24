@@ -149,7 +149,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				viewSPR.setIdentifiedReport(new IdentifiedSurgicalPathologyReport());
 				viewSPR.setDeIdentifiedReport(new DeidentifiedSurgicalPathologyReport());
 			}
-			request.setAttribute(Constants.REPORT_LIST, getReportIdList(scgCollection));
+//			request.setAttribute(Constants.REPORT_LIST, getReportIdList(scgCollection));
+			viewSPR.setReportIdList(getReportIdList(scgCollection));
 		}
 	}
 	
