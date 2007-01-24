@@ -37,7 +37,7 @@
     </target>
 		
 	<!-- run TestClient java file -->
-	<target name="rundemo" depends="compile">		
+	<target name="runDemo" depends="compile">		
 		<java classname="ClientDemo" fork="true">
 			<classpath refid="cp"/>
 			<classpath>
