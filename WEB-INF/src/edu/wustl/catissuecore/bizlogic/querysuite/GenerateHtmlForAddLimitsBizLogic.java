@@ -90,7 +90,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		List<String> operatorsList = new ArrayList<String>();
 		AttributeTypeInformationInterface attrTypeInfo = attributeInterface.getAttributeTypeInformation();
 		String path = System.getProperty(Constants.APP_DYNAMIC_UI_XML);
-		path = "E:\\jboss-4.0.0\\server\\default\\catissuecore-properties\\dynamicUI.xml";
+		//path = "E:\\jboss-4.0.0\\server\\default\\catissuecore-properties\\dynamicUI.xml";
 		if (path != null)
 		{
 			ParseXMLFile parseFile = new ParseXMLFile(path);
