@@ -14,16 +14,21 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.common.security.SecurityManager;
 import gov.nih.nci.security.authorization.domainobjects.Role;
 
+/**
+ * This class is used to store the PathologyReportReviewParameter object to database
+ * @author vijay_pande
+ * 
+ */
 public class PathologyReportReviewParameterBizLogic extends IntegrationBizLogic
 {
 	/**
 	 * Saves the Pathology Report Review Parameter object in the database.
 	 * @param obj The storageType object to be saved.
 	 * @param session The session in which the object is saved.
-	 * @throws DAOException 
+	 * @throws DAOException
+	 * @throws UserNotAuthorizedException
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
@@ -35,10 +40,10 @@ public class PathologyReportReviewParameterBizLogic extends IntegrationBizLogic
 		List userList=dao.retrieve(className, colName, sessionDataBean.getUserId());
 		reviewParam.setUser((User)userList.get(0));
 		String reviewerRole;
-		SecurityManager sm=SecurityManager.getInstance(this.getClass());
+		SecurityManager securityManager=SecurityManager.getInstance(this.getClass());
 		try
 		{
-			Role role=sm.getUserRole(sessionDataBean.getUserId());
+			Role role=securityManager.getUserRole(sessionDataBean.getUserId());
 			reviewerRole=role.getName();
 			reviewParam.setReviewerRole(reviewerRole);
 		}

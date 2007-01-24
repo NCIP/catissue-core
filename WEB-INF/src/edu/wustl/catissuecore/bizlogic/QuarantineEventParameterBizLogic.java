@@ -15,6 +15,11 @@ import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 
 
+/**
+ * This class is used to store the QuarantineEventParameter object to database
+ * @author vijay_pande
+ * 
+ */
 public class QuarantineEventParameterBizLogic extends IntegrationBizLogic
 {
 	/**
@@ -22,6 +27,7 @@ public class QuarantineEventParameterBizLogic extends IntegrationBizLogic
 	 * @param obj The storageType object to be saved.
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
+	 * @throws UserNotAuthorizedException
 	 */
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
