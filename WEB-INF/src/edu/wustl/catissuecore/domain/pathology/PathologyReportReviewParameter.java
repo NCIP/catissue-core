@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -19,6 +21,11 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class PathologyReportReviewParameter extends EventParameters
 {
+
+	/**
+	 * Default serial version id for the class
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Reviewer role 
@@ -97,10 +104,11 @@ public class PathologyReportReviewParameter extends EventParameters
 	}
 	
 	/** 
+	 * This method sets all values for the PathologyReportReviewParameter object.
 	 * @param abstractForm 
 	 * @exception AssignDataException
 	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
-	 * This method sets all values for the PathologyReportReviewParameter object.
+	 * 
 	 */
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException 
 	{
@@ -108,7 +116,8 @@ public class PathologyReportReviewParameter extends EventParameters
     	
 		try
 		{
-			DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+			BizLogicFactory bizLogicFactory=BizLogicFactory.getInstance();
+			IBizLogic bizLogic=bizLogicFactory.getBizLogic(-1);
 			String className;
 			String colName=new String(Constants.SYSTEM_IDENTIFIER);
 			this.setComments(form.getComments());
@@ -118,32 +127,33 @@ public class PathologyReportReviewParameter extends EventParameters
 			if(form.getIdentifiedReportId()!=0)
 			{
 				className=IdentifiedSurgicalPathologyReport.class.getName();
-				List isprList=defaultBizLogic.retrieve(className, colName, form.getIdentifiedReportId());
-				IdentifiedSurgicalPathologyReport ispr=(IdentifiedSurgicalPathologyReport)isprList.get(0);
-				Set pathologyReportReviewParameterSetCollection=ispr.getPathologyReportReviewParameterSetCollection();
+				List isprList=bizLogic.retrieve(className, colName, form.getIdentifiedReportId());
+				IdentifiedSurgicalPathologyReport isprObj=(IdentifiedSurgicalPathologyReport)isprList.get(0);
+				Set pathologyReportReviewParameterSetCollection=isprObj.getPathologyReportReviewParameterSetCollection();
 				pathologyReportReviewParameterSetCollection.add(this);
-				ispr.setPathologyReportReviewParameterSetCollection(pathologyReportReviewParameterSetCollection);
-				this.setSurgicalPathologyReport(ispr);
+				isprObj.setPathologyReportReviewParameterSetCollection(pathologyReportReviewParameterSetCollection);
+				this.setSurgicalPathologyReport(isprObj);
 			}
 			else if(form.getDeIdentifiedReportId()!=0)
 			{
 				className=DeidentifiedSurgicalPathologyReport.class.getName();
-				List deisprList=defaultBizLogic.retrieve(className, colName, form.getDeIdentifiedReportId());
-				DeidentifiedSurgicalPathologyReport deReport=(DeidentifiedSurgicalPathologyReport)deisprList.get(0);
-				Set pathologyReportReviewParameterSetCollection=deReport.getPathologyReportReviewParameterSetCollection();
+				List deisprList=bizLogic.retrieve(className, colName, form.getDeIdentifiedReportId());
+				DeidentifiedSurgicalPathologyReport deidReportObj=(DeidentifiedSurgicalPathologyReport)deisprList.get(0);
+				Set pathologyReportReviewParameterSetCollection=deidReportObj.getPathologyReportReviewParameterSetCollection();
 				pathologyReportReviewParameterSetCollection.add(this);
-				deReport.setPathologyReportReviewParameterSetCollection(pathologyReportReviewParameterSetCollection);
-				this.setSurgicalPathologyReport(deReport);
+				deidReportObj.setPathologyReportReviewParameterSetCollection(pathologyReportReviewParameterSetCollection);
+				this.setSurgicalPathologyReport(deidReportObj);
 			}
 		}
-		catch(Exception e)
+		catch(Exception ex)
 		{
-			Logger.out.error(e.getMessage(),e);
+			Logger.out.error(ex.getMessage(),ex);
 			throw new AssignDataException();
 		}
 	}
 	
 	/**
+	 * Constructor for the class which takes AbstractActionForm object as an input
 	 * @param form AbstractActionForm
 	 * @throws AssignDataException object.
 	 */
@@ -164,6 +174,7 @@ public class PathologyReportReviewParameter extends EventParameters
 
 
 	/**
+	 * This is the method to get status
      * @return reviewe status 
      * @hibernate.property  name="status"
      * type="string" column="STATUS"
@@ -176,7 +187,8 @@ public class PathologyReportReviewParameter extends EventParameters
 
 
 	/**
-	 * @param status sets the review status.
+	 * This is the method to set the review status
+	 * @param status 
 	 */
 	public void setStatus(String status)
 	{
