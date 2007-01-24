@@ -209,9 +209,6 @@ function tonclick(id)
 	<tr>
 		<td>
 		<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table1" >
-		<tr  height="2%">
-			<td height="2%" colspan="5" bgcolor="#000000"><font color="#FFFFFF">&nbsp;&nbsp;Search Data</font></td>
-		</tr>
 		<tr  class="trStyle">
 			<td width="20%" height="5%" class="queryModuleTabMenuItem">
 				<bean:message key="query.chooseSearchCategory"/>
