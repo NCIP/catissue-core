@@ -302,7 +302,15 @@ public class WithdrawConsentUtil
 		else if(applyChangesTo.equalsIgnoreCase(Constants.APPLY))
 		{
 			// if oldSCG.c1 == S.c1 then update specimen with new SCG.c1
-			
+			Iterator itr = newConsentTierStatusCollection.iterator() ;
+			while(itr.hasNext() )
+			{
+				ConsentTierStatus consentTierStatus = (ConsentTierStatus)itr.next();
+				String statusValue = consentTierStatus.getStatus();
+				long consentTierID = consentTierStatus.getConsentTier().getId().longValue();
+				
+				updateSCGSpecimenCollection(specimenCollectionGroup, consentTierID, statusValue, newConsentTierStatusCollection, oldConsentTierStatusCollection);	
+			}
 		}
 	}
 //
@@ -324,14 +332,14 @@ public class WithdrawConsentUtil
 		specimenCollectionGroup.setSpecimenCollection(updatedSpecimenCollection );
 	}
 	
-	public static void updateSpecimenConsentStatus(Specimen specimen, String applyChangesTo, long consentTierID, String  statusValue, Collection newSCGConsentCollection, Collection oldSCGConsentCollection )
+	public static void updateSpecimenConsentStatus(Specimen specimen, String applyChangesTo, long consentTierID, String  statusValue, Collection newConsentCollection, Collection oldConsentCollection )
 	{
 		if(applyChangesTo.equalsIgnoreCase(Constants.APPLY_ALL))
 			updateSpecimenConsentStatus(specimen, consentTierID, statusValue, applyChangesTo );
 		else if(applyChangesTo.equalsIgnoreCase(Constants.APPLY))
 		{
 			//To pass both collections
-			checkConflictingConsents(newSCGConsentCollection, oldSCGConsentCollection, specimen );
+			checkConflictingConsents(newConsentCollection, oldConsentCollection, specimen );
 		}
 	}
 	
@@ -397,34 +405,34 @@ public class WithdrawConsentUtil
 	/*
 	 * This method verifies the consents of SCG and specimen for any conflicts.
 	 */
-	private static void checkConflictingConsents(Collection newSCGConsentCollection, Collection oldSCGConsentCollection, Specimen specimen )
+	private static void checkConflictingConsents(Collection newConsentCollection, Collection oldConsentCollection, Specimen specimen )
 	{
-//		 if oldSCG.c1 == S.c1 then update specimen with new SCG.c1
-		
-		
-		
-		Iterator oldSCGConsentItr = oldSCGConsentCollection.iterator();
-		while(oldSCGConsentItr.hasNext() )
+/*		 if oldSCG.c1 == S.c1 then update specimen with new SCG.c1
+ * 			OR
+ *		 if oldS.c1 == cS.c1 then update child specimen with new S.c1
+ */		
+		Iterator oldConsentItr = oldConsentCollection.iterator();
+		while(oldConsentItr.hasNext() )
 		{
-			ConsentTierStatus scgConsentStatus = (ConsentTierStatus)oldSCGConsentItr.next() ;
+			ConsentTierStatus oldConsentStatus = (ConsentTierStatus)oldConsentItr.next() ;
 			Collection specimenConsentStatusCollection =  specimen.getConsentTierStatusCollection();
 			Iterator specimenConsentStatusItr = specimenConsentStatusCollection.iterator() ;
 			Collection updatedSpecimenConsentStatusCollection = new HashSet();
 			while(specimenConsentStatusItr.hasNext() )
 			{
 				ConsentTierStatus specimenConsentStatus = (ConsentTierStatus)specimenConsentStatusItr.next() ;
-				if(scgConsentStatus.getConsentTier().getId().longValue() == specimenConsentStatus.getConsentTier().getId().longValue() )
+				if(oldConsentStatus.getConsentTier().getId().longValue() == specimenConsentStatus.getConsentTier().getId().longValue() )
 				{
-					if(scgConsentStatus.getStatus().equals(specimenConsentStatus.getStatus()))
+					if(oldConsentStatus.getStatus().equals(specimenConsentStatus.getStatus()))
 					{
 						//TODO : To set the consent status of new scg collection.
-						Iterator newSCGConsentItr = newSCGConsentCollection.iterator();
-						while(newSCGConsentItr.hasNext() )
+						Iterator newConsentItr = newConsentCollection.iterator();
+						while(newConsentItr.hasNext() )
 						{
-							ConsentTierStatus newSCGConsentStatus = (ConsentTierStatus)newSCGConsentItr.next() ;
-							if(newSCGConsentStatus.getConsentTier().getId().longValue() == specimenConsentStatus.getConsentTier().getId().longValue() )
+							ConsentTierStatus newConsentStatus = (ConsentTierStatus)newConsentItr.next() ;
+							if(newConsentStatus.getConsentTier().getId().longValue() == specimenConsentStatus.getConsentTier().getId().longValue() )
 							{
-								specimenConsentStatus.setStatus(newSCGConsentStatus.getStatus()); 
+								specimenConsentStatus.setStatus(newConsentStatus.getStatus()); 
 							}
 						}
 					}
@@ -440,7 +448,7 @@ public class WithdrawConsentUtil
 		while(childItr.hasNext() )
 		{
 			Specimen childSpecimen = (Specimen)childItr.next();
-			consentStatusUpdateForchildSpecimens(childSpecimen , newSCGConsentCollection, oldSCGConsentCollection);
+			consentStatusUpdateForchildSpecimens(childSpecimen , newConsentCollection, oldConsentCollection);
 		}
 	}
 	

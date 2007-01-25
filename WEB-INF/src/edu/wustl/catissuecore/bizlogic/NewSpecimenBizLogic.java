@@ -2020,13 +2020,23 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		if(!specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION ))
 		{
+			String consentWithdrawOption = specimen.getConsentWithdrawalOption();
 			Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
 			Iterator itr = consentTierStatusCollection.iterator();
 			while(itr.hasNext())
 			{
 				ConsentTierStatus status = (ConsentTierStatus)itr.next();
-				WithdrawConsentUtil.updateSpecimenStatus(specimen, specimen.getConsentWithdrawalOption(), status.getConsentTier().getId().longValue(), dao, sessionDataBean  );
-				break;
+				long consentTierID = status.getConsentTier().getId().longValue();
+				if(status.getStatus().equalsIgnoreCase(Constants.WITHDRAWN) )
+				{
+					Collection childSpecimens = specimen.getChildrenSpecimen();
+					Iterator childItr = childSpecimens.iterator();  
+					while(childItr.hasNext() )
+					{
+						Specimen childSpecimen = (Specimen)childItr.next();
+						WithdrawConsentUtil.updateSpecimenStatus(childSpecimen, consentWithdrawOption, consentTierID, dao, sessionDataBean  );
+					}
+				}
 			}
 		}
 	}
