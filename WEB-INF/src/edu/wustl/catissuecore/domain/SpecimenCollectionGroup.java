@@ -122,8 +122,20 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	 */
 	protected String consentWithdrawalOption=Constants.WITHDRAW_RESPONSE_NOACTION;
 	
+	//Mandar 19-jan-07 
+	/*
+	 * To apply changes to specimen based on consent status changes.
+	 * Default Apply none to allow normal behaviour. 
+	 */
+	protected String applyChangesTo=Constants.APPLY_NONE;
 
-
+	//Mandar 22-jan-07 
+	/*
+	 * To apply changes to specimen based on consent status changes.
+	 * Default empty. 
+	 */
+	
+	protected String stringOfResponseKeys="";
 	
 	/**
 	 * @return the consentTierStatusCollection
@@ -454,6 +466,9 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			
 			// ----------- Mandar --15-Jan-07
 			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();  
+			//Mandar: 19-Jan-07 :- For applying changes to specimen
+			this.applyChangesTo = form.getApplyChangesTo(); 
+			this.stringOfResponseKeys = form.getStringOfResponseKeys();
 		}
 		catch(Exception e)
 		{
@@ -564,6 +579,23 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 		this.consentWithdrawalOption = consentWithdrawalOption;
 	}
 	
+	//------------------------- Mandar 19-Jan-07
+	public String getApplyChangesTo() {
+		return applyChangesTo;
+	}
+	public void setApplyChangesTo(String applyChangesTo) {
+		this.applyChangesTo = applyChangesTo;
+	}
+	// ------------------- Mandar : - 22-Jan-07
 
+	public String getStringOfResponseKeys() {
+		return stringOfResponseKeys;
+	}
+
+	public void setStringOfResponseKeys(String stringOfResponseKeys) {
+		this.stringOfResponseKeys = stringOfResponseKeys;
+	}
+	
+	
 	
 }

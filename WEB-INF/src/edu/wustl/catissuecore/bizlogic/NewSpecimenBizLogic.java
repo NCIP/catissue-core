@@ -2025,7 +2025,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			while(itr.hasNext())
 			{
 				ConsentTierStatus status = (ConsentTierStatus)itr.next();
-				WithdrawConsentUtil.updateSpecimenStatus(specimen, specimen.getConsentWithdrawalOption(), status.getConsentTier().getId().longValue(), dao, sessionDataBean   );
+				WithdrawConsentUtil.updateSpecimenStatus(specimen, specimen.getConsentWithdrawalOption(), status.getConsentTier().getId().longValue(), dao, sessionDataBean  );
 				break;
 			}
 		}

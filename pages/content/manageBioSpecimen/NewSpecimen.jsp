@@ -531,7 +531,6 @@
 								<html:hidden property="withdrawlButtonStatus"/>
 								<html:hidden property="stringOfResponseKeys"/>
 								<html:hidden property="applyChangesTo"/>
-								<html:hidden property="consentsUpdated" />
 								
 							</td>
 							<td>

@@ -185,11 +185,6 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 	
 //	-------------Mandar AutoEvents ReceivedEvent parameters end
 	
-	/**
-	 * Are the consents updated for this specimen?
-	 */
-	protected boolean consentsUpdated = false;
-
 	
     /**
      * Returns an identifier of the Parent Speciemen.
@@ -419,10 +414,6 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 		Collection consentResponse = specimenCollectionGroup.getConsentTierStatusCollection();
 		Collection consentResponseParticipantlevel=specimenCollectionGroup.getCollectionProtocolRegistration().getConsentTierResponseCollection();
 		//this.consentResponseForSpecimenValues=prepareSCGResponseMap(consentResponse,consentResponseParticipantlevel);
-		
-//		Mandar: --------------23-Jan-07
-	//	this.consentsUpdated = specimen.getConsentsUpdated().booleanValue(); 
-		this.consentsUpdated = false;
     }
  
    /**
@@ -1207,18 +1198,4 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 		return "consentResponseForSpecimenValues(ConsentBean:`_specimenLevelResponse)";
 	}
 	//Consent Tracking Module Virender mehta
-
-	/**
-	 * This method returns true if the consent status are modified for the specimen.
-	 */
-	public boolean isConsentsUpdated() {
-		return consentsUpdated;
-	}
-
-	public void setConsentsUpdated(boolean consentsUpdated) {
-		this.consentsUpdated = consentsUpdated;
-	}
-
-//	Mandar: --------------23-Jan-07
-	
 }

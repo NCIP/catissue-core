@@ -25,7 +25,6 @@ import java.util.Vector;
 import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
@@ -173,13 +172,14 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, oldspecimenCollectionGroup);
 
-		//Mandar 15-Jan-07 To disable consents accordingly in SCG and Specimen(s) start
-		if(isConsentsChanged(specimenCollectionGroup,oldspecimenCollectionGroup ))
-		{
+		//Mandar 22-Jan-07 To disable consents accordingly in SCG and Specimen(s) start		
+		if(!specimenCollectionGroup.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION   ) )
 			verifyAndUpdateConsentWithdrawn(specimenCollectionGroup, dao,  sessionDataBean);
-		}
-		//Mandar 15-Jan-07 To disable consents accordingly in SCG and Specimen(s) end
-
+		//Mandar 22-Jan-07 To disable consents accordingly in SCG and Specimen(s) end
+		//Mandar 24-Jan-07 To update consents accordingly in SCG and Specimen(s) start
+		else if(!specimenCollectionGroup.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE ) )
+			WithdrawConsentUtil.updateSpecimenStatusInSCG(specimenCollectionGroup, oldspecimenCollectionGroup);
+		//Mandar 24-Jan-07 To update consents accordingly in SCG and Specimen(s) end
 		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
 		dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true, false);
 
@@ -685,34 +685,6 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	}
 	
 	//Mandar : 15-Jan-07 For Consent Tracking Withdrawal -------- start
-
-	/*
-	 * This method checks whether the consents are changed or not.
-	 */
-	private boolean isConsentsChanged(SpecimenCollectionGroup newObject, SpecimenCollectionGroup oldSCG)
-	{
-		/*
-		 * To be uncommented once CPR edit consent is working. 
-		 * Virender is working on it.
-
-		boolean result = false;
-		Collection newConsentTierStatusCollection = newObject.getConsentTierStatusCollection();
-		Collection oldConsentTierStatusCollection = oldSCG.getConsentTierStatusCollection();
-		
-		Iterator itr = newConsentTierStatusCollection.iterator() ;
-		while(itr.hasNext() )
-		{
-			Object obj = itr.next();
-			if(!oldConsentTierStatusCollection.contains(obj ))
-			{
-				result = true;
-			}
-		}
-		return result;
-*/
-		return true;
-	}
-	
 	/*
 	 * This method verifies and updates SCG and child elements for withdrawn consents
 	 */
@@ -732,5 +704,4 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			}
 		}
 	}
-
 }

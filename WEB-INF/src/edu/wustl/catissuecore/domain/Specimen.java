@@ -23,7 +23,6 @@ import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
-import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.util.SearchUtil;
@@ -182,6 +181,13 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 */
 	protected String consentWithdrawalOption=Constants.WITHDRAW_RESPONSE_NOACTION;
 	
+	//Mandar 23-jan-07 
+	/*
+	 * To apply changes to child specimen based on consent status changes.
+	 * Default Apply none to allow normal behaviour. 
+	 */
+	protected String applyChangesTo=Constants.APPLY_NONE;
+
 
 	
 	
@@ -960,8 +966,9 @@ public class Specimen extends AbstractDomainObject implements Serializable
 			this.consentTierStatusCollection = prepareParticipantResponseCollection(form);
 			// ----------- Mandar --16-Jan-07
 			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();  
+			// ----- Mandar : ---23-jan-07 For bug 3464.
+			this.applyChangesTo = form.getApplyChangesTo(); 
 		}
-
 	}
 	
 	/**
@@ -1241,6 +1248,13 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 	public void setConsentWithdrawalOption(String consentWithdrawalOption) {
 		this.consentWithdrawalOption = consentWithdrawalOption;
+	}
+	
+	public String getApplyChangesTo() {
+		return applyChangesTo;
+	}
+	public void setApplyChangesTo(String applyChangesTo) {
+		this.applyChangesTo = applyChangesTo;
 	}
 	
 

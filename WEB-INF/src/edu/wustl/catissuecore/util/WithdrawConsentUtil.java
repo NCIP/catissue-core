@@ -95,8 +95,14 @@ public class WithdrawConsentUtil
 			ConsentTierStatus consentTierstatus = (ConsentTierStatus)specimenStatusItr.next() ;
 			if(consentTierstatus.getConsentTier().getId().longValue() == consentTierID)
 			{
-				consentTierstatus.setStatus(Constants.WITHDRAWN );
-				withdrawResponse(specimen, consentWithdrawalOption,   dao,  sessionDataBean);
+				if(consentWithdrawalOption != null)
+				{					
+				//	if(!consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_RESET))
+//					{
+						consentTierstatus.setStatus(Constants.WITHDRAWN );
+						withdrawResponse(specimen, consentWithdrawalOption,   dao,  sessionDataBean);
+//					}
+				}
 			}
 			updatedSpecimenStatusCollection.add(consentTierstatus );
 		}
@@ -109,8 +115,6 @@ public class WithdrawConsentUtil
 	 */
 	private static void withdrawResponse(Specimen specimen, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean)
 	{
-		specimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
-		specimen.setAvailable(new Boolean(false) );
 		if(consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_DISCARD))
 		{
 			addDisposalEvent(specimen, dao, sessionDataBean);
@@ -119,40 +123,47 @@ public class WithdrawConsentUtil
 		{
 			addReturnEvent(specimen, dao, sessionDataBean);
 		}
-
-		if(specimen.getStorageContainer() !=null)		// locations cleared
+		//only if consentWithdrawalOption is not reset or noaction.
+		if(!consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_RESET) && !consentWithdrawalOption.equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION) )
 		{
-			Map containerMap = null;
-			try
+			specimen.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED);
+			specimen.setAvailable(new Boolean(false) );
+
+			if(specimen.getStorageContainer() !=null)		// locations cleared
 			{
-				containerMap = StorageContainerUtil.getContainerMapFromCache();
+				Map containerMap = null;
+				try
+				{
+					containerMap = StorageContainerUtil.getContainerMapFromCache();
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+				StorageContainerUtil.insertSinglePositionInContainerMap(specimen.getStorageContainer(),containerMap,specimen.getPositionDimensionOne().intValue(), specimen.getPositionDimensionTwo().intValue()    );
 			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
-			StorageContainerUtil.insertSinglePositionInContainerMap(specimen.getStorageContainer(),containerMap,specimen.getPositionDimensionOne().intValue(), specimen.getPositionDimensionTwo().intValue()    );
+			specimen.setPositionDimensionOne(null );
+			specimen.setPositionDimensionTwo(null );
+			specimen.setStorageContainer(null );
+			specimen.setAvailableQuantity(null );
+			specimen.setQuantity(null );
 		}
-		specimen.setPositionDimensionOne(null );
-		specimen.setPositionDimensionTwo(null );
-		specimen.setStorageContainer(null );
-		specimen.setAvailableQuantity(null );
-		specimen.setQuantity(null );
 	}
 	
-	//TODO
-	//method for return event.
 	private static void addReturnEvent(Specimen specimen, DAO dao, SessionDataBean sessionDataBean)
 	{
 		try
 		{
 			Collection eventCollection = specimen.getSpecimenEventCollection();
-			ReturnEventParameters returnEvent = new ReturnEventParameters();
-			returnEvent.setSpecimen(specimen );
-			dao.insert(returnEvent,sessionDataBean,true,true) ;
-			
-			eventCollection.add(returnEvent);
-			specimen.setSpecimenEventCollection(eventCollection);
+			if(!isEventAdded(eventCollection, "ReturnEventParameters"))
+			{
+				ReturnEventParameters returnEvent = new ReturnEventParameters();
+				returnEvent.setSpecimen(specimen );
+				dao.insert(returnEvent,sessionDataBean,true,true) ;
+				
+				eventCollection.add(returnEvent);
+				specimen.setSpecimenEventCollection(eventCollection);
+			}
 		}
 		catch(Exception excp)
 		{
@@ -168,14 +179,17 @@ public class WithdrawConsentUtil
 		try
 		{
 			Collection eventCollection = specimen.getSpecimenEventCollection();
-			DisposalEventParameters disposalEvent = new DisposalEventParameters();
-			disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED );
-			disposalEvent.setReason(Constants.WITHDRAW_RESPONSE_REASON);
-			disposalEvent.setSpecimen(specimen );
-			dao.insert(disposalEvent,sessionDataBean,true,true) ;
-			
-			eventCollection.add(disposalEvent);
-			specimen.setSpecimenEventCollection(eventCollection);
+			if(!isEventAdded(eventCollection, "DisposalEventParameters"))
+			{
+				DisposalEventParameters disposalEvent = new DisposalEventParameters();
+				disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_DISABLED );
+				disposalEvent.setReason(Constants.WITHDRAW_RESPONSE_REASON);
+				disposalEvent.setSpecimen(specimen );
+				dao.insert(disposalEvent,sessionDataBean,true,true) ;
+				
+				eventCollection.add(disposalEvent);
+				specimen.setSpecimenEventCollection(eventCollection);
+			}
 		}
 		catch(Exception excp)
 		{
@@ -232,4 +246,242 @@ public class WithdrawConsentUtil
 		}
 		specimen.setConsentTierStatusCollection( consentTierStatusCollection);
 	}
+	
+	/*
+	 * This method checks if the given event is already added to the specimen.
+	 */
+	private static boolean isEventAdded(Collection eventCollection, String eventType)
+	{
+		boolean result = false;
+		Iterator eventCollectionIterator = eventCollection.iterator();
+		while(eventCollectionIterator.hasNext() )
+		{
+			Object event = eventCollectionIterator.next();
+			if(event.getClass().getSimpleName().equals(eventType)  )
+			{
+				result= true;
+				break;
+			}
+		}
+		return result;
+	}
+	// ----------------WITHDRAW functionality end
+
+	
+	//--------Mandar : - 24-Jan-07 ------------------ApplyChanges Functionality start
+	
+	 
+	 
+	/**
+	 * This method updates the specimens status for the given SCG.
+	 * @param specimenCollectionGroup
+	 * @param oldSpecimenCollectionGroup
+	 * @param dao
+	 * @param sessionDataBean
+	 */
+	public static void updateSpecimenStatusInSCG(SpecimenCollectionGroup specimenCollectionGroup,SpecimenCollectionGroup oldSpecimenCollectionGroup)
+	{
+		Collection newConsentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
+		Collection oldConsentTierStatusCollection = oldSpecimenCollectionGroup.getConsentTierStatusCollection();
+		
+		String applyChangesTo =  specimenCollectionGroup.getApplyChangesTo();
+		
+		if(applyChangesTo.equalsIgnoreCase(Constants.APPLY_ALL))
+		{
+			Iterator itr = newConsentTierStatusCollection.iterator() ;
+			while(itr.hasNext() )
+			{
+				ConsentTierStatus consentTierStatus = (ConsentTierStatus)itr.next();
+				String statusValue = consentTierStatus.getStatus();
+				long consentTierID = consentTierStatus.getConsentTier().getId().longValue();
+				
+				updateSCGSpecimenCollection(specimenCollectionGroup, consentTierID, statusValue, newConsentTierStatusCollection, oldConsentTierStatusCollection);	
+			}
+		}
+//		//apply only nonconflicting changes.
+		else if(applyChangesTo.equalsIgnoreCase(Constants.APPLY))
+		{
+			// if oldSCG.c1 == S.c1 then update specimen with new SCG.c1
+			
+		}
+	}
+//
+	/*
+	 * This method updates the specimen consent status. 
+	 */
+	private static void updateSCGSpecimenCollection(SpecimenCollectionGroup specimenCollectionGroup, long consentTierID, String  statusValue, Collection newSCGConsentCollection, Collection oldSCGConsentCollection)
+	{
+		Collection specimenCollection = specimenCollectionGroup.getSpecimenCollection();
+		Collection updatedSpecimenCollection = new HashSet();
+		String applyChangesTo =  specimenCollectionGroup.getApplyChangesTo(); 
+		Iterator specimenItr = specimenCollection.iterator() ;
+		while(specimenItr.hasNext() )
+		{
+			Specimen specimen = (Specimen)specimenItr.next();
+			updateSpecimenConsentStatus(specimen, applyChangesTo, consentTierID, statusValue, newSCGConsentCollection, oldSCGConsentCollection );
+			updatedSpecimenCollection.add(specimen );
+		}
+		specimenCollectionGroup.setSpecimenCollection(updatedSpecimenCollection );
+	}
+	
+	public static void updateSpecimenConsentStatus(Specimen specimen, String applyChangesTo, long consentTierID, String  statusValue, Collection newSCGConsentCollection, Collection oldSCGConsentCollection )
+	{
+		if(applyChangesTo.equalsIgnoreCase(Constants.APPLY_ALL))
+			updateSpecimenConsentStatus(specimen, consentTierID, statusValue, applyChangesTo );
+		else if(applyChangesTo.equalsIgnoreCase(Constants.APPLY))
+		{
+			//To pass both collections
+			checkConflictingConsents(newSCGConsentCollection, oldSCGConsentCollection, specimen );
+		}
+	}
+	
+	/**
+	 * This method updates the Specimen instance by setting all the consenttierstatus to withdraw. 
+	 * @param specimen  Instance of Specimen to be updated. 
+	 * @param consentWithdrawalOption Action to be performed on the withdrawn specimen.
+	 * @param consentTierID Identifier of ConsentTier to be withdrawn.
+	 */
+	private static void updateSpecimenConsentStatus(Specimen specimen, long consentTierID, String statusValue, String applyChangesTo )
+	{
+		Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
+		Collection updatedSpecimenStatusCollection = new HashSet();
+		Iterator specimenStatusItr = consentTierStatusCollection.iterator() ;
+		while(specimenStatusItr.hasNext() )
+		{
+			ConsentTierStatus consentTierstatus = (ConsentTierStatus)specimenStatusItr.next() ;
+			if(consentTierstatus.getConsentTier().getId().longValue() == consentTierID)
+			{
+				consentTierstatus.setStatus(statusValue);
+			}
+			updatedSpecimenStatusCollection.add(consentTierstatus );
+		}
+		specimen.setConsentTierStatusCollection( updatedSpecimenStatusCollection);
+		//updateChildSpecimensStatus(specimen, consentTierID, dao, sessionDataBean, statusValue ,applyChangesTo );
+		
+		//to update child specimens
+		Collection childSpecimens = specimen.getChildrenSpecimen();
+		Iterator childItr = childSpecimens.iterator();  
+		while(childItr.hasNext() )
+		{
+			Specimen childSpecimen = (Specimen)childItr.next();
+			consentStatusUpdateForchildSpecimens(childSpecimen , consentTierID, statusValue ,applyChangesTo);
+		}
+	}
+
+//	private static void updateChildSpecimensStatus(Specimen specimen, long consentTierID, DAO dao, SessionDataBean sessionDataBean, String statusValue, String applyChangesTo)
+//	{
+//		Collection childSpecimens = specimen.getChildrenSpecimen();
+//		Iterator childItr = childSpecimens.iterator();  
+//		while(childItr.hasNext() )
+//		{
+//			Specimen childSpecimen = (Specimen)childItr.next();
+//			consentStatusUpdateForchildSpecimens(childSpecimen , dao,  sessionDataBean, consentTierID, statusValue ,applyChangesTo);
+//		}
+//	}
+	
+	private static void consentStatusUpdateForchildSpecimens(Specimen specimen, long consentTierID, String statusValue, String applyChangesTo)
+	{
+		if(specimen!=null)
+		{
+			updateSpecimenConsentStatus(specimen, consentTierID, statusValue, applyChangesTo );
+			Collection childSpecimens = specimen.getChildrenSpecimen();
+			Iterator itr = childSpecimens.iterator();  
+			while(itr.hasNext() )
+			{
+				Specimen childSpecimen = (Specimen)itr.next();
+				consentStatusUpdateForchildSpecimens(childSpecimen, consentTierID, statusValue, applyChangesTo );
+			}
+		}
+	}
+
+	/*
+	 * This method verifies the consents of SCG and specimen for any conflicts.
+	 */
+	private static void checkConflictingConsents(Collection newSCGConsentCollection, Collection oldSCGConsentCollection, Specimen specimen )
+	{
+//		 if oldSCG.c1 == S.c1 then update specimen with new SCG.c1
+		
+		
+		
+		Iterator oldSCGConsentItr = oldSCGConsentCollection.iterator();
+		while(oldSCGConsentItr.hasNext() )
+		{
+			ConsentTierStatus scgConsentStatus = (ConsentTierStatus)oldSCGConsentItr.next() ;
+			Collection specimenConsentStatusCollection =  specimen.getConsentTierStatusCollection();
+			Iterator specimenConsentStatusItr = specimenConsentStatusCollection.iterator() ;
+			Collection updatedSpecimenConsentStatusCollection = new HashSet();
+			while(specimenConsentStatusItr.hasNext() )
+			{
+				ConsentTierStatus specimenConsentStatus = (ConsentTierStatus)specimenConsentStatusItr.next() ;
+				if(scgConsentStatus.getConsentTier().getId().longValue() == specimenConsentStatus.getConsentTier().getId().longValue() )
+				{
+					if(scgConsentStatus.getStatus().equals(specimenConsentStatus.getStatus()))
+					{
+						//TODO : To set the consent status of new scg collection.
+						Iterator newSCGConsentItr = newSCGConsentCollection.iterator();
+						while(newSCGConsentItr.hasNext() )
+						{
+							ConsentTierStatus newSCGConsentStatus = (ConsentTierStatus)newSCGConsentItr.next() ;
+							if(newSCGConsentStatus.getConsentTier().getId().longValue() == specimenConsentStatus.getConsentTier().getId().longValue() )
+							{
+								specimenConsentStatus.setStatus(newSCGConsentStatus.getStatus()); 
+							}
+						}
+					}
+				}
+				updatedSpecimenConsentStatusCollection.add(specimenConsentStatus);
+			}
+			specimen.setConsentTierStatusCollection(updatedSpecimenConsentStatusCollection);
+		}
+
+		//to update child specimens
+		Collection childSpecimens = specimen.getChildrenSpecimen();
+		Iterator childItr = childSpecimens.iterator();  
+		while(childItr.hasNext() )
+		{
+			Specimen childSpecimen = (Specimen)childItr.next();
+			consentStatusUpdateForchildSpecimens(childSpecimen , newSCGConsentCollection, oldSCGConsentCollection);
+		}
+	}
+	
+	private static void consentStatusUpdateForchildSpecimens(Specimen specimen, Collection newSCGConsentCollection, Collection oldSCGConsentCollection)
+	{
+		if(specimen!=null)
+		{
+			checkConflictingConsents(newSCGConsentCollection, oldSCGConsentCollection, specimen );
+			Collection childSpecimens = specimen.getChildrenSpecimen();
+			Iterator itr = childSpecimens.iterator();  
+			while(itr.hasNext() )
+			{
+				Specimen childSpecimen = (Specimen)itr.next();
+				consentStatusUpdateForchildSpecimens(childSpecimen, newSCGConsentCollection, oldSCGConsentCollection);
+			}
+		}
+	}
+
+	// ------------------------ Mandar : 24-Jan-07 Apply changes --------- end
+//	
+//	private static long[] getArray(String str)
+//	{
+//		StringTokenizer strToken = new StringTokenizer(str,",");
+//		long array[] = new long[strToken.countTokens()];
+//		int i=0;
+//		while(strToken.hasMoreTokens() )
+//		{
+//			String s = strToken.nextToken();
+//			array[i++]=Integer.parseInt(s );
+//		}
+//		return array;
+//	}
+//	
+//	private static boolean isIDinArray(long[] iDArray, long id)
+//	{
+//		for(int i=0;i<iDArray.length; i++  )
+//		{
+//			if(iDArray[i] == id )
+//				return true;
+//		}
+//		return false;
+//	}
+//
 }

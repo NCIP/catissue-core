@@ -54,11 +54,6 @@ function submitString()
 	document.forms[0].stringOfResponseKeys.value=str;
 	//document.forms[0].submit();
 }
-/* Function to set the value of consentsUpdated in case of specimen. */
-function onConsentUpdated()
-{
-	document.forms[0].consentsUpdated.value=true;
-}
 
 
 <%-- On calling this function all the response dropdown value set to "Withdraw" --%>
@@ -542,10 +537,10 @@ function popupWindow(nofConsentTiers)
 									}
 									else if(pageOf.equals("pageOfNewSpecimen"))
 									{
-										String keyValue="onConsentUpdated()";
+										String keyValue=";";
 										if(operation.equals(Constants.EDIT))
 										{
-											keyValue="onConsentUpdated(),changeInResponse('"+statusKey+"')";
+											keyValue="changeInResponse('"+statusKey+"')";
 										}
 							
 									%>
