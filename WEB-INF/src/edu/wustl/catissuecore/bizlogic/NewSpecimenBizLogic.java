@@ -774,8 +774,13 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
 		}
 
+		if(!specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION   ) )
+			updateConsentWithdrawStatus(specimen, dao, sessionDataBean);
+		else if(!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE ) )
+			updateConsentStatus(specimen, specimenOld);
+
 		//Mandar: 16-Jan-07
-		updateConsentWithdrawStatus(specimen, dao, sessionDataBean);
+//		updateConsentWithdrawStatus(specimen, dao, sessionDataBean);
 		dao.update(specimen, sessionDataBean, true, false, false);//dao.update(specimen, sessionDataBean, true, true, false);
 
 		//Audit of Specimen.
@@ -2039,5 +2044,33 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				}
 			}
 		}
+	}
+	
+	/*
+	 * This method is used to update the consent staus of child specimens as per the option selected by the user.
+	 */
+	private void updateConsentStatus(Specimen specimen, Specimen oldSpecimen)
+	{
+		if(!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE ))
+		{
+			String applyChangesTo = specimen.getApplyChangesTo();
+			Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
+			Collection oldConsentTierStatusCollection = oldSpecimen.getConsentTierStatusCollection();
+			Iterator itr = consentTierStatusCollection.iterator();
+			while(itr.hasNext())
+			{
+				ConsentTierStatus status = (ConsentTierStatus)itr.next();
+				long consentTierID = status.getConsentTier().getId().longValue();
+				String statusValue = status.getStatus();
+				Collection childSpecimens = specimen.getChildrenSpecimen();
+				Iterator childItr = childSpecimens.iterator();  
+				while(childItr.hasNext() )
+				{
+					Specimen childSpecimen = (Specimen)childItr.next();
+					WithdrawConsentUtil.updateSpecimenConsentStatus(childSpecimen, applyChangesTo, consentTierID, statusValue, consentTierStatusCollection, oldConsentTierStatusCollection);
+				}
+			}
+		}
+		
 	}
 }
