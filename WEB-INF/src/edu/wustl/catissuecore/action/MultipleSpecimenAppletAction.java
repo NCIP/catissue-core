@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -720,6 +721,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				PermissibleValue specimenTypePV = (PermissibleValue) specimenTypeItr.next();
 				specimenType.add(specimenTypePV.getValue());
 			}
+			Collections.sort(specimenType); 
 			specimenClassTypeMap.put(pValue.getValue(), specimenType.toArray());
 		}
 		return specimenClassTypeMap;
