@@ -154,7 +154,7 @@ public class StorageContainerAction extends SecureAction
 		List siteList = new ArrayList();
 		if (storageContainerForm.getTypeId() != -1)
 		{
-			mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(storageContainerForm.getTypeId(),exceedingMaxLimit);
+			mapSiteList = bizLogic.getAllocatedContaienrMapForContainer(storageContainerForm.getTypeId(),exceedingMaxLimit,null);
 			containerMap = (TreeMap) mapSiteList.get(0);
 			siteList = (List) mapSiteList.get(1);
 

@@ -2393,7 +2393,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-	public List getAllocatedContaienrMapForContainer(long type_id, String exceedingMaxLimit) throws DAOException
+	public List getAllocatedContaienrMapForContainer(long type_id, String exceedingMaxLimit, String selectedContainerName) throws DAOException
 	{
 		List mapSiteList = new ArrayList();
 		//		List list = retrieve(StorageContainer.class.getName());
@@ -2433,19 +2433,26 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-
+		boolean flag = true;
 		if (containerMapFromCache != null)
 		{
 			int i = 1;
 			Iterator itr = list.iterator();
 			while (itr.hasNext())
 			{
-
-				List list1 = (List) itr.next();
-				String Id = (String) list1.get(0);
-				String Name = (String) list1.get(1);
-				String siteName = (String) list1.get(2);
-				NameValueBean nvb = new NameValueBean(Name, Id, true);
+				    List list1 = (List)itr.next();
+	                String Id = (String)list1.get(0);
+	                String name = (String)list1.get(1);
+	                String siteName = (String)list1.get(2);
+	                NameValueBean nvb = new NameValueBean(name, Id, true);
+	                if(selectedContainerName != null && flag)
+	                {
+	                    if(!name.equalsIgnoreCase(selectedContainerName.trim()))
+	                    {
+	                        continue;
+	                    }
+	                    flag = false;
+	                }
 
 				try
 				{
