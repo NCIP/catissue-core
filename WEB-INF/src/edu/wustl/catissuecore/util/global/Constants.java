@@ -63,6 +63,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DEFINEDARRAY_REQUESTS_LIST = "DefinedRequestDetailsMapList";
 	public static final String ITEM_STATUS_LIST="itemsStatusList";
 	public static final String ITEM_STATUS_LIST_WO_DISTRIBUTE="itemsStatusListWithoutDistribute";
+	public static final String ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY="itemsStatusListForItemsInArray";
+	public static final String REQUEST_FOR_LIST="requestForList";
 	
 	//Constants for Order Status
 	public static final String ORDER_STATUS_NEW = "New";
@@ -79,6 +81,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE = "Rejected - Specimen Unavailable";
 	public static final String ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE = "Rejected - Unable to Create";
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED = "Distributed";
+	public static final String ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION = "Ready For Array Preparation";
 	
  //	 Report Loader 
 	public static final String MAX_PARTICIPANT_MATCHING_PERCENTAGE="maxParticipantMatchingPercentage";	
