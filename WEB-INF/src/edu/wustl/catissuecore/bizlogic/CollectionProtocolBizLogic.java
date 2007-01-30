@@ -341,7 +341,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 				.getId()));
 		userGroupRoleProtectionGroupBean = new SecurityDataBean();
 		userGroupRoleProtectionGroupBean.setUser(userId);
-		userGroupRoleProtectionGroupBean.setRoleName(READ_ONLY);
+		userGroupRoleProtectionGroupBean.setRoleName(COORDINATOR);
 		userGroupRoleProtectionGroupBean.setGroupName(Constants
 				.getCollectionProtocolCoordinatorGroupName(collectionProtocol.getId()));
 		userGroupRoleProtectionGroupBean.setProtectionGroupName(protectionGroupName);
