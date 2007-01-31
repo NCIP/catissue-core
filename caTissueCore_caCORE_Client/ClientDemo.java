@@ -1023,7 +1023,7 @@ public class ClientDemo
 				specimenArrayObj = (SpecimenArray) api.initSpecimenArray();
 				setLogger(specimenArrayObj);
 				Logger.out.info("Inserting domain object------->"+specimenArrayObj);
-				specimenArrayObj.setPositionDimensionOne(null);
+				specimenArrayObj.setStorageContainer(null);
 				specimenArrayObj =  (SpecimenArray) appService.createObject(specimenArrayObj);
 				writeFailureOperationsToReport("SpecimenArray",insertValidateOperation + " testAddSpecimenArrayWithWrongData");
 				//dataModelObjectMap.put("SpecimenArray",specimenArrayObj);				
