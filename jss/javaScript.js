@@ -1,3 +1,6 @@
+var formTitleStyle = "font-family:arial,helvetica,verdana,sans-serif;  font-size:0.6em;  font-weight:bold;  padding-left:0.8em;  background-color:#5C5C5C;  color:#FFFFFF;   border-top:1px solid #5C5C5C;   border-left:1px solid #5C5C5C;  border-right:1px solid #5C5C5C; "
+var formSubTableTitleStyle = "font-family:arial,helvetica,verdana,sans-serif; font-size:0.7em;  font-weight:bold;  background-color:#CCCCCC;  color:#000000;   border-bottom:1px solid #5C5C5C;   border-left:1px solid #5C5C5C;   border-right:1px solid #5C5C5C;   text-align:left;";
+
 /* section for outer block start */
 function replaceSpeChar(div,d1,searchChar)
 {
@@ -797,4 +800,118 @@ function onRadioButtonGroupClick(element)
    		
     	}
 
-		
+//Added by Preeti for DE Integration
+
+function initializeGridForGroups(groupsXML)
+{
+	gridForGroups= new dhtmlXGridObject('divForGroups');
+	gridForGroups.setImagePath("dhtml_comp/imgs/");
+	gridForGroups.enableAutoHeigth(true);
+	gridForGroups.setHeader("#,Group");
+	gridForGroups.setInitWidthsP("15,85");
+	gridForGroups.setColAlign("left,left")
+	gridForGroups.setColTypes("ch,ed");
+	gridForGroups.enableMultiselect(true)
+	gridForGroups.setOnRowSelectHandler(groupSelected);
+	gridForGroups.init();
+	//gridForGroups.setStyle(formTitleStyle);
+	gridForGroups.loadXMLString(groupsXML);
+	if(gridForGroups.getRowsNum()>0)
+	{
+		gridForGroups.selectRow(0,true,false);	
+	}
+}
+
+function initializeGridForEntities()
+{
+	gridForEntities= new dhtmlXGridObject('gridForEnities');
+	gridForEntities.setImagePath("dhtml_comp/imgs/");
+	gridForEntities.enableAutoHeigth(true);
+	gridForEntities.setHeader("#,Form Title,Attached With,Date,Created By,Status");
+	gridForEntities.setInitWidthsP("5,23,17,15,15,25");
+	gridForEntities.setColAlign("left,left,left,left,left,left")
+	gridForEntities.setColTypes("ch,link,ro,ro,ro,ro");
+	//gridForEntities.setStyle(formSubTableTitleStyle);
+	gridForEntities.init();
+}
+
+function groupSelected(groupid)
+{
+	var request = newXMLHTTPReq();
+	var handlerFunction = getReadyStateHandler(request,groupChangedResponse,true);
+
+	//no brackets after the function name and no parameters are passed because we are assigning a reference to the function and not actually calling it
+	request.onreadystatechange = handlerFunction;
+	//send data to ActionServlet
+	
+	//Open connection to servlet
+	request.open("POST","DefineAnnotations.do",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	request.send("&operation=selectGroup&groupId="+groupid);
+}
+function groupChangedResponse(entitiesXML)
+{
+	gridForEntities.clearAll(false);
+	if(entitiesXML!=null)
+	{
+		gridForEntities.loadXMLString(entitiesXML);
+	}	
+}
+
+function onButtonClick(itemId,itemValue)
+{
+	var form =  document.getElementById('annotationForm');
+	if(form!=null)
+	{
+		var selectedStaticEntityId = document.getElementById("selectedStaticEntityId");
+		if(selectedStaticEntityId!=null)
+		{
+			selectedStaticEntityId.value = itemId;
+		}
+		form.action="/catissuecore/BuildDynamicEntity.do";
+		form.submit();
+	}
+}
+
+function initAnnotationGrid()
+{
+	annotationsGrid = new dhtmlXGridObject('definedAnnotationsGrid');
+	annotationsGrid.setImagePath("dhtml_comp/imgs/");
+	annotationsGrid.setHeader("#,Annotation,Last Updated,Updated By,Edit");
+	annotationsGrid.setInitWidthsP("5,30,30,30,5")
+	annotationsGrid.setColAlign("center,left,left,left,left")
+	annotationsGrid.setColTypes("ch,link,ed,ed,link");
+	annotationsGrid.init();
+	var annotationXMLFld = document.getElementById('definedAnnotationsDataXML');
+	annotationsGrid.loadXMLString(annotationXMLFld.value);
+}
+function displayAnnotationsPage()
+{
+	var form = document.forms[0];
+	if(form!=null)
+	{
+		var entityRecordID = document.getElementById('id');
+		form.action = "LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=" + entityRecordID.value;
+		form.submit();
+	}
+}
+function loadDynamicExtDataEntryPage()
+{
+	document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do";
+	document.forms[0].submit();
+}
+
+function initializeTabs(tabIds, tabNames, tabPageRefs)
+{
+	if((tabIds!=null)&&(tabNames!=null)&&(tabPageRefs!=null))
+	{
+		var noOfTabs = tabIds.length;
+		for(var i=0;i<noOfTabs;i++)
+		{
+			tabbar.addTab(tabIds[i],tabNames[i],"");		
+			tabbar.setContentHref(tabIds[i],tabPageRefs[i]);			
+		}
+	
+	}
+	tabbar.setTabActive(tabIds[0]);
+}

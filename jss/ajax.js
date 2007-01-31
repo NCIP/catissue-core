@@ -54,11 +54,15 @@ function getReadyStateHandler(request,responseXmlHandler,isText)
 		{
 			if(request.status == 200)
 			{
-		        if(isText==true)
-		        	responseXmlHandler(request.responseText);
+				if(isText==true)
+				{
+					responseXmlHandler(request.responseText);
+				}
 				else
-		        	responseXmlHandler(request.responseXml);
-			}
+				{
+					responseXmlHandler(request.responseXml);
+			        }
+		       }
 		}
     }
 }
