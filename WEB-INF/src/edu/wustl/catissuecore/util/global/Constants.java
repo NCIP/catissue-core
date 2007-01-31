@@ -53,7 +53,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String REQUESTED_ITEMS_STATUS_LIST="requestedItemsStatusList";
 	public static final String ARRAY_STATUS_LIST="arrayStatusList";
 	
-	
 	public static final String REQUEST_OBJECT="requestObjectList";
 	public static final String REQUEST_DETAILS_LIST="requestDetailsList";
 	public static final String ARRAY_REQUESTS_BEAN_LIST="arrayRequestsBeanList";
@@ -76,6 +75,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ITEM_STATUS_LIST_WO_DISTRIBUTE="itemsStatusListWithoutDistribute";
 	public static final String ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY="itemsStatusListForItemsInArray";
 	public static final String REQUEST_FOR_LIST="requestForList";
+	//Used for tree display in RequestDetails page
+	public static final String TREE_DATA_LIST = "treeDataList";
 	
 	//Constants for Order Status
 	public static final String ORDER_STATUS_NEW = "New";
