@@ -23,7 +23,7 @@ public class TestRollBack
 {
     public static void main(String[] args) throws Exception 
     {
-    	System.out.println("Head");
+    	System.out.println("Head TEST");
         Variables.applicationHome = System.getProperty("user.dir");
 		Logger.out = org.apache.log4j.Logger.getLogger("");
 		PropertyConfigurator.configure(Variables.applicationHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
