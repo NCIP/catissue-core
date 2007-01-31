@@ -647,5 +647,14 @@ public class Utility extends edu.wustl.common.util.Utility
 		}
 		return listOfResponces;  	
 	}
+   
+   public static Long toLong(String string) throws NumberFormatException
+   {
+	   if((string!=null)&&(string.trim()!=""))
+	   {
+		   return new Long(string);
+	   }
+	   return null;
+   }
 // Consent tracking(Virender Mehta) 
 }
