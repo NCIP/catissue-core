@@ -958,7 +958,7 @@
 	</definition>
 	
 	<definition name=".catissuecore.orderingsystem.orderMain" extends=".catissuecore.searchHomeDef">
-		<put name="content" value="/pages/content/orderingsystem/OrderingSystemMain.jsp" />
+		<put name="content" value="/pages/content/orderingsystem/OrderingSystemMain.jsp" />		
 	</definition>
 	
 	<definition name=".catissuecore.orderingsystem.definearray" extends=".catissuecore.searchHomeDef">
@@ -984,8 +984,9 @@
 		<put name="content" value="/pages/content/orderingsystem/ArrayRequests.jsp" />
 	</definition>
 
-	<!--Added By Ramya.Specimen tree view -->
-	<definition name=".catissuecore.requestDetailsTreeViewDef" path="/pages/content/search/TreeView.jsp">
+	<!--Added By Ramya.Specimen tree view for Ordering System.-->
+	<!-- definition name=".catissuecore.requestDetailsTreeViewDef" path="/pages/content/search/TreeView.jsp" -->
+	<definition name=".catissuecore.requestDetailsTreeViewDef" path="/pages/content/orderingsystem/SpecimenTreeView.jsp">
 	</definition>
 	
 	 <!-- Definition code : Mandar Shidhore : 06/11/06 -->
