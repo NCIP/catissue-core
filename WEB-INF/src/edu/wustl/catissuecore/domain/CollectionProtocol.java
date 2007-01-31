@@ -62,6 +62,12 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * The unsigned document URL for the collection protocol.
 	 */
 	protected String unsignedConsentDocumentURL;
+	
+	/**
+	 * whether consents are waived?
+	 */
+	protected Boolean consentsWaived = new Boolean(false);
+	
 	/**
 	 * @return the unsignedConsentDocumentURL
 	 * @hibernate.property name="unsignedConsentDocumentURL" type="string" length="1000" column="UNSIGNED_CONSENT_DOC_URL"
@@ -244,7 +250,10 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	        //Setting the unsigned doc url.
 	        this.unsignedConsentDocumentURL = cpForm.getUnsignedConsentURLName();
 	        //Setting the consent tier collection.
-	        this.consentTierCollection = prepareConsentTierCollection(cpForm.getConsentValues()); 
+	        this.consentTierCollection = prepareConsentTierCollection(cpForm.getConsentValues());
+	        
+	        //Mandar : 25-Jan-07
+	        consentsWaived = new Boolean(cpForm.isConsentWaived());
         }
         catch (Exception excp)
         {
@@ -350,5 +359,20 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	{
 		this.aliqoutInSameContainer = aliqoutInSameContainer;
 	}
+
+	//-Mandar : 25-Jan-07 ---------- start
+	/**
+	 * @return Returns the consentsWaived.
+	 * @hibernate.property name="consentsWaived" type="boolean" column="CONSENTS_WAIVED"
+	 */
+	public Boolean getConsentsWaived() {
+		return consentsWaived;
+	}
+	public void setConsentsWaived(Boolean consentsWaived) {
+		this.consentsWaived = consentsWaived;
+	}
+	
+	//-Mandar : 25-Jan-07 ---------- end
+	
 
 }

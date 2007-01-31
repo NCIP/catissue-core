@@ -217,6 +217,14 @@
             column="ALIQUOT_IN_SAME_CONTAINER"
         />
 
+        <property
+            name="consentsWaived"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="CONSENTS_WAIVED"
+        />
+
         </joined-subclass>
         <joined-subclass
             name="edu.wustl.catissuecore.domain.DistributionProtocol"

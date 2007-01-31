@@ -293,3 +293,8 @@ INSERT into CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'ReturnEv
 INSERT INTO CSM_PG_PE select CSM_PG_PE_PG_PE_ID_SEQ.NEXTVAL,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='ReturnEventParameters'),to_date('2006-01-18','yyyy-mm-dd') from dual;
 
 /* ------------------------New Table entry For ConsentWithdrawal ---------- Mandar : 18-Jan-07 -------------end	 */
+
+#------------------------New Column Entry For ConsentWaived ---------- Mandar : 25-Jan-07 -------------start
+alter table CATISSUE_COLLECTION_PROTOCOL add CONSENTS_WAIVED number(1,0);
+update CATISSUE_COLLECTION_PROTOCOL set CONSENTS_WAIVED=0 where CONSENTS_WAIVED is null;
+#------------------------New Column Entry For ConsentWaived ---------- Mandar : 25-Jan-07 -------------end

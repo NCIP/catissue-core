@@ -64,7 +64,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 
 		setPrincipalInvestigator(dao, collectionProtocol);
 		setCoordinatorCollection(dao, collectionProtocol);
-
+		verifyConsentsWaived(collectionProtocol);
 		dao.insert(collectionProtocol, sessionDataBean, true, true);
 
 		Iterator it = collectionProtocol.getCollectionProtocolEventCollection().iterator();
@@ -144,6 +144,8 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 
 		checkForChangedStatus(collectionProtocol, collectionProtocolOld);
+		//consenttracking
+		verifyConsentsWaived(collectionProtocol);
 		dao.update(collectionProtocol, sessionDataBean, true, true, false);
 
 		//Audit of Collection Protocol.
@@ -826,5 +828,15 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 		
 		
+	}
+	
+	//mandar : 31-Jan-07 ----------- consents tracking
+	private void verifyConsentsWaived(CollectionProtocol collectionProtocol)
+	{
+		//check for consentswaived
+		if(collectionProtocol.getConsentsWaived() == null )
+		{
+			collectionProtocol.setConsentsWaived(new Boolean(false) );
+		}
 	}
 }

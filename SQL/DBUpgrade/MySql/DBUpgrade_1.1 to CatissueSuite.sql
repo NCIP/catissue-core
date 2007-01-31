@@ -459,3 +459,8 @@ insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(se
 
 insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.PathFinderAction','edu.wustl.catissuecore.action.querysuite.PathFinderAction','edu.wustl.catissuecore.action.querysuite.PathFinderAction',1);
 insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.PathFinderAction'));
+
+#------------------------New Column Entry For ConsentWaived ---------- Mandar : 25-Jan-07 -------------start
+alter table CATISSUE_COLLECTION_PROTOCOL add column CONSENTS_WAIVED bit;
+update catissue_collection_protocol set  CONSENTS_WAIVED='0' where  CONSENTS_WAIVED is null;
+#------------------------New Column Entry For ConsentWaived ---------- Mandar : 25-Jan-07 -------------end
