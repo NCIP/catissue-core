@@ -75,7 +75,7 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 		//Retrieve the Specimen instance for that particular id.
 		IBizLogic defaultBizLogic = BizLogicFactory.getInstance().getBizLogic(-1);
 		
-		Vector specimenTreeVector = new Vector();
+		Vector  allNodes = new Vector(); 
 		
 		//If specimenId is sent (Incase of biospecimen in orderlist or in defined array)
 		if(specimenCollGroup == false) 
@@ -84,8 +84,7 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 			
 			//The list consists of only one element that is:- specimen instance
 			Specimen specimenObj = (Specimen) specimen.get(0);
-			SpecimenTreeNode rootNode = formTreeNode(specimenObj);
-			specimenTreeVector.add(rootNode);
+			allNodes = formTreeNode(specimenObj);
 		}
 		else //If specimenCollectiongroupId is sent(Incase of pathological case)
 		{
@@ -94,18 +93,16 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 			//The list consists of only one element that is:- specimencollecitongroup instance
 			SpecimenCollectionGroup specimenCollGrpObj = (SpecimenCollectionGroup) specimenCollGrp.get(0);
 			
-			//Get the list of specimens for this group
+			//Get the list of specimens for this group(SCG)
 			Set specimenSet = (Set)specimenCollGrpObj.getSpecimenCollection();
 			Iterator specimenSetItr = specimenSet.iterator();
 			while(specimenSetItr.hasNext())
 			{
-				Specimen specimenObj = (Specimen)specimenSetItr.next();
-				SpecimenTreeNode rootNode = formTreeNode(specimenObj);
-				specimenTreeVector.add(rootNode);
+				Specimen specimenObj = (Specimen)specimenSetItr.next();				
+				allNodes = formTreeNode(specimenObj);
 			}
 		}
-		
-		return specimenTreeVector;
+		return allNodes;
 	}
 	
 	/**
@@ -113,9 +110,10 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 	 * @param specimenObj
 	 * @return rootNode SpecimentreeNode object
 	 */
-	private SpecimenTreeNode formTreeNode(Specimen specimenObj)
+	private Vector formTreeNode(Specimen specimenObj)
 	{
 		Collection specimenSet = new HashSet();
+		Vector specimenTreeVector = new Vector();
 		
 		SpecimenTreeNode rootNode = new SpecimenTreeNode();
 		rootNode.setIdentifier(specimenObj.getId());
@@ -123,16 +121,20 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 		rootNode.setValue(specimenObj.getLabel());
 		rootNode.setSpecimenClass(specimenObj.getClassName());
 		
+		rootNode.setParentIdentifier("0");
+		rootNode.setParentValue("");
+		
+		specimenTreeVector.add(rootNode);
 		//Get the list of specimens derived from this specimen.
 		specimenSet = (Set)specimenObj.getChildrenSpecimen();
 		
-		//formSpecimenTree() constructs tree form of specimens and returns the nodes in vectoe form.
-		Vector allNodes = formSpecimenTree(rootNode,specimenSet);
+		//formSpecimenTree() constructs tree form of specimens and returns the nodes in vector form.
+		Vector allNodes = formSpecimenTree(specimenTreeVector,rootNode,specimenSet);
 		
 		if(allNodes != null)
 			rootNode.setChildNodes(allNodes);
-		
-		return rootNode; 
+				
+		return allNodes;
 	}
 
 	/**
@@ -141,16 +143,13 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 	 * @param childNodes Vector
 	 * @return Vector
 	 */
-	private Vector formSpecimenTree(SpecimenTreeNode parent,Collection childNodes)
+	private Vector formSpecimenTree(Vector specimenTreeVector,SpecimenTreeNode parent,Collection childNodes)
 	{
-		Vector specimenTreeNodeVector = new Vector();
-		
 		//If no childNodes present then tree will contain only the root node.
 		if(childNodes == null)
 		{
 			return null;
 		}
-		
 		//Otherwise
 		Iterator specimenItr = childNodes.iterator();
 		while(specimenItr.hasNext())
@@ -163,14 +162,18 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 			treeNode.setValue(specimen.getLabel());
 			treeNode.setSpecimenClass(specimen.getClassName());
 			
-			Vector subChildNodesVector = formSpecimenTree(treeNode,specimen.getChildrenSpecimen());
+			treeNode.setParentIdentifier(parent.getIdentifier().toString());
+			treeNode.setParentValue(parent.getValue());
+			
+			specimenTreeVector.add(treeNode);
+			
+			Vector subChildNodesVector = formSpecimenTree(specimenTreeVector,treeNode,specimen.getChildrenSpecimen());
 			
 			if(subChildNodesVector != null)
 				treeNode.setChildNodes(subChildNodesVector);
 			
-			specimenTreeNodeVector.add(treeNode);
 		}
-		return specimenTreeNodeVector;
+		return specimenTreeVector;
 	}
 
 	public Vector getTreeViewData(SessionDataBean arg0, Map arg1, List arg2) throws DAOException, ClassNotFoundException {
