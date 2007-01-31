@@ -4,6 +4,7 @@
  * from User Add/Edit webpage. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
+ * @author Mandar Deshmukh
  * @author Gautam Shetty
  * @version 1.00
  * Created on Mar 3, 2005
@@ -26,6 +27,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -40,8 +42,9 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * CollectionProtocolForm Class is used to encapsulate all the request
- * parameters passed from User Add/Edit webpage.
+ * parameters passed from collection protocol Add/Edit webpage.
  * 
+ * @author Mandar Deshmukh
  * @author gautam_shetty
  */
 public class CollectionProtocolForm extends SpecimenProtocolForm
@@ -82,7 +85,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * CheckBox for consent is checked or not
 	 */
-	private boolean consentChecked = false;
+	private boolean consentWaived = false;
 	//Consent tracking(Virender Mehta)
 	/**
 	 * No argument constructor for CollectionProtocolForm class.
@@ -289,8 +292,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		}
 		
 		//For Consent Tracking 
-		this.unsignedConsentURLName = cProtocol.getUnsignedConsentDocumentURL();		
-		this.consentValues = prepareConsentTierMap(cProtocol.getConsentTierCollection());
+		this.unsignedConsentURLName = cProtocol.getUnsignedConsentDocumentURL();
+		this.consentWaived = cProtocol.getConsentsWaived().booleanValue();   
+		//this.consentValues = prepareConsentTierMap(cProtocol.getConsentTierCollection());
 	}
 	/**
 	 * For Consent Tracking
@@ -309,10 +313,10 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			{
 				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
 				String statement = "ConsentBean:"+i+"_statement";
-				//String predefinedConsents = "ConsentBean:"+i+"_predefinedConsents";
+				String preDefinedStatementkey = "ConsentBean:"+i+"_predefinedConsents";
 				String statementkey = "ConsentBean:"+i+"_consentTierID";
 				tempMap.put(statement, consent.getStatement());
-				//tempMap.put(predefinedConsents, consent.getStatement());
+				tempMap.put(preDefinedStatementkey, consent.getStatement());
 				tempMap.put(statementkey, consent.getId());
 				i++;
 			}
@@ -710,23 +714,27 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	public void setConsentTierCounter(int consentTierCounter)
 	{
 		this.consentTierCounter = consentTierCounter;
-	}	
+	}
+	
 	/**
-	 * Get the status of consent Checkbox
-	 * @return consentChecked
+	 * If consent waived is true then no need to check consents prior to distribution
+	 * @return consentWaived;
 	 */
-	public boolean getConsentChecked()
+	public boolean isConsentWaived()
 	{
-		return consentChecked;
+		return consentWaived;
 	}
 
 	/**
-	 * Get the status of consent Checkbox
-	 * @param consentChecked Get the status of consent Checkbox
+	 * If consent waived is true then no need to check consents prior to distribution
+	 * @param consentWaived
 	 */
-	public void setConsentChecked(boolean consentChecked)
+	public void setConsentWaived(boolean consentWaived)
 	{
-		this.consentChecked = consentChecked;
+		this.consentWaived = consentWaived;
 	}
-//	For Consent Tracking End
+
+
+	//	For Consent Tracking End
+	
 }

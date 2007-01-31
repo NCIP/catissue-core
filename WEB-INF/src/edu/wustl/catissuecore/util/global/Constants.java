@@ -22,9 +22,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	//Consent tracking
 	public static final String 	SHOW_CONSENTS="showConsents";
+	public static final String 	SPECIMEN_CONSENTS="specimenConsents";
 	public static final String 	YES="yes";
 	public static final String 	CP_ID="cpID";
 	public static final String 	BARCODE_LABLE="barcodelabel";
+	public static final String  DISTRIBUTION_ON="labelBarcode";
 	public static final String 	POPUP="popup";
 	public static final String 	ERROR="error";
 	public static final String 	ERROR_SHOWCONSENTS="errorShowConsent";
@@ -33,7 +35,16 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String 	APPLY="Apply";
 	public static final String 	APPLY_ALL="ApplyAll";
 	public static final String 	APPLY_NONE="ApplyNone";
+	public static final String 	PREDEFINED_CADSR_CONSENTS="predefinedConsentsList";
+	public static final String 	DISABLED="disabled";
+	public static final String 	VIEWAll="ViewAll";
+	public static final String 	BARCODE_DISTRIBUTION="1";
+	public static final String 	CONSENT_WAIVED="Consent Waived";
+	public static final String 	NO_CONSENTS="No Consents";
+	public static final String 	INVALID="Invalid";
+	public static final String 	VALID="valid";
 	
+		
 	//Ordering System Status
 	public static final String CDE_NAME_REQUEST_STATUS="Request Status";
 	public static final String CDE_NAME_REQUESTED_ITEMS_STATUS="Requested Items Status";

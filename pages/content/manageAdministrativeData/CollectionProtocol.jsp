@@ -18,7 +18,7 @@
 	List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	List pathologyStatusList = (List) request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST);
-	
+	List predefinedConsentsList =(List)request.getAttribute(Constants.PREDEFINED_CADSR_CONSENTS);
     String operation = (String) request.getAttribute(Constants.OPERATION);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
     
@@ -262,12 +262,10 @@ function insRow(subdivtag,iCounter,blockCounter)
 		createCheckBox.className="formField";
 		createCheckBox.setAttribute('align','center');
 		createTextArea.className="formField";
-		
 		var sname = "<input type='hidden' id='" + consentKey + "'>";				
-		
 		createSerialNo.innerHTML=rowCount+".";
-		createCheckBox.innerHTML="<input type='checkbox' name='consentcheckBoxs' id='check"+iCount+"'>";
-		createTextArea.innerHTML=sname+"<textarea rows='2'class='formFieldSized' style='width:90%;' name="+consentName+">";
+		createCheckBox.innerHTML="<input type='checkbox' name='consentcheckBoxs'id='check"+iCount+"'>";
+		createTextArea.innerHTML= sname+"<textarea rows='2'class='formFieldSized' style='width:90%;' name="+consentName+"></textarea>";
 	}
 	
 	//On selecting Select All CheckBox all the associted check box wiil be selected
@@ -383,16 +381,16 @@ function insRow(subdivtag,iCounter,blockCounter)
 	function consentPage()
 	{
 		
-		var checkboxObject=document.getElementById('consentChecked');
-		if(checkboxObject.checked)
-		{
-			document.forms[0].consentChecked.value = true;
+		//var checkboxObject=document.getElementById('consentChecked');
+		//if(checkboxObject.checked)
+		//{
+			//document.forms[0].consentChecked.value = true;
 			switchToTab("consentTab");
-		}
-		else
-		{
-			alert("Consent checkbox is not checked");
-		}
+		//}
+	//	else
+		//{
+			//alert("Consent checkbox is not checked");
+		//}
 	}
 //	Consent Tracking Module Virender Mehta (End)
 
@@ -631,18 +629,25 @@ if(pageView.equals("add") || pageView.equals("edit"))
 						 </td>
 					</tr>
 				</logic:equal>
-<!-- Consent Check box -->
+<!-- Consent waived radio button -->
 				<tr>
 						<td class="formRequiredNotice" width="5">&nbsp;</td>
 						<td class="formLabel">
-							<label for="consentChecked">
-								<bean:message key="consent.consentcheckedmessage" />
+							<label for="consentWaived">
+								<bean:message key="consent.consentwaived" />		
+   						    </label>
+						</td>
+						<td class="formLabel">
+							<label for="consentWaived">
+								<bean:message key="consent.consentwaivedyes" />		
 							</label>
+							<html:radio property="consentWaived" styleId="consentWaived" value="true"/>
+							<label for="consentWaived">
+								<bean:message key="consent.consentwaivedno" />		
+							</label>
+							<html:radio property="consentWaived" styleId="consentWaived" value="false"/>
 						</td>
-						<td class="formField" colspan=2>
-							<html:checkbox property="consentChecked" styleId="consentChecked" />
-						</td>
-					</tr>
+				</tr>
 
 <!-- no of participants -->						
 					<tr>
