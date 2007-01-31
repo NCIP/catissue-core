@@ -192,17 +192,22 @@
 											<bean:define id="specimenObjIdInArray" name="defineArrayDetailsBeanObj" property="speicmenId" type="java.lang.String"/>
 											<bean:define id="specimenCollGrpIdInArray" name="defineArrayDetailsBeanObj" property="specimenCollGroupId" type="java.lang.String"/>
 											<%
+												String urlInArray = "";
 									 			if(!specimenObjIdInArray.equals(""))
-										 			session.setAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID,specimenObjIdInArray);
+												{
+													urlInArray = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&propertyName=" + requestForArray + "&type=" + specimenTypeInArray + "&specimenClass=" + specimenClassInArray + "&" + Constants.SPECIMEN_TREE_SPECIMEN_ID + "=" + specimenObjIdInArray;
+													//session.setAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID,specimenObjId);
+												}
 										 		else
-										 			session.setAttribute(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID,specimenCollGrpIdInArray);	
-												
-												String url = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&propertyName=" + requestForArray + "&type=" + specimenTypeInArray + "&specimenClass=" + specimenClassInArray;
+												{
+													urlInArray = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&propertyName=" + requestForArray + "&type=" + specimenTypeInArray + "&specimenClass=" + specimenClassInArray + "&" + Constants.SPECIMEN_TREE_SPECCOLLGRP_ID + "=" + specimenCollGrpIdInArray;
+										 			//session.setAttribute(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID,specimenCollGrpId);
+												}	
 												String appletWindow = "";
 												if(disableArrayOrderItemRow == false)
-													appletWindow = "javascript:NewWindow('"+url+"','name','375','330','yes');return false";
+													appletWindow = "javascript:NewWindow('"+urlInArray+"','name','375','330','yes');return false";
 											%>
-											<a href="#" onclick="">
+											<a href="#" onclick=" <%= appletWindow %>">
 												<img src="images\Tree.gif" border="0" width="24" height="18" title="<%= ApplicationProperties.getValue("requestdetails.tooltip.specimenTreeTooltip") %>">
 											</a>
 							 		</td>

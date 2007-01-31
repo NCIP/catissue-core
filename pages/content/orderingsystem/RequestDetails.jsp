@@ -225,20 +225,24 @@
 											<bean:define id="specimenObjId" name="requestDetailsBeanObj" property="specimenId" type="java.lang.String"/>
 											<bean:define id="specimenCollGrpId" name="requestDetailsBeanObj" property="specimenCollGroupId" type="java.lang.String" />
 									 		<%
-									 		
+									 		String url ="";
 									 			if(!specimenObjId.equals(""))
-										 			session.setAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID,specimenObjId);
+												{
+													url = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&propertyName=" + requestFor + "&type=" + specimenType + "&specimenClass=" + specimenClass + "&" + Constants.SPECIMEN_TREE_SPECIMEN_ID + "=" + specimenObjId;
+													//session.setAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID,specimenObjId);
+												}
 										 		else
-										 			session.setAttribute(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID,specimenCollGrpId);
-										 			
-												String url = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&propertyName=" + requestFor + "&type=" + specimenType + "&specimenClass=" + specimenClass;
+												{
+													url = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&propertyName=" + requestFor + "&type=" + specimenType + "&specimenClass=" + specimenClass + "&" + Constants.SPECIMEN_TREE_SPECCOLLGRP_ID + "=" + specimenCollGrpId;
+										 			//session.setAttribute(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID,specimenCollGrpId);
+												}
+												
 												String appletVar = "";
 												if(disableRow == false)
 													appletVar = "javascript:NewWindow('"+url+"','name','375','330','yes');return false";
 											%>
-											
 											<a href="#" onclick="<%= appletVar %>">
-												<img src="images\Tree.gif" border="0" width="24" height="18" title="<%= ApplicationProperties.getValue("requestdetails.tooltip.specimenTreeTooltip") %>">
+												<img src="images\Tree.gif" border="0" width="24" height="18" title="<%= ApplicationProperties.getValue("requestdetails.tooltip.specimenTreeTooltip") %>" />
 											</a>
 									 	</td>
 									 	<%
