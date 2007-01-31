@@ -31,7 +31,7 @@
 			%>	
 
 			<%		
-				if(barcodeLabelStatus.equalsIgnoreCase("invalid"))
+				if(barcodeLabelStatus.equalsIgnoreCase(Constants.INVALID))//"Invalid"
 				{
 			%>		
 					alert("Please enter valid value");
@@ -42,7 +42,7 @@
 			</script>
 			<script language="JavaScript">
 			<%
-			if(barcodeLabelStatus.equalsIgnoreCase("valid"))
+			if(barcodeLabelStatus.equalsIgnoreCase(Constants.VALID))//valid
 			{
 			%>	
 			<!-- This function will check if the verifyCheck box is checked or not -->			
@@ -52,7 +52,7 @@
 					var checkboxInstance = document.getElementById('verifyAllCheckBox');
 					if(checkboxInstance.checked)
 					{
-						var parentId=parent.opener.document.getElementById('<%=request.getParameter("barcodeId")%>');
+						var parentId=parent.opener.document.getElementById('<%=request.getParameter("barcodelableId")%>');
 						var theId = '<%=request.getParameter("verificationKey")%>';
 						parentId.innerHTML="Complete"+"<input type='hidden' name='" + theId + "' value='Complete' id='" + theId + "'/>";
 						window.close ();
@@ -80,24 +80,25 @@
 		String pageOf=(String)request.getParameter(Constants.PAGEOF);
 		String operation = (String)request.getParameter(Constants.OPERATION);
 		String signedConsentDate="";
-				
 	%>
-			<html:form action="Distribution.do">
+		<html:form action="Distribution.do">
 			<%
-				if(form.getConsentTierCounter() > 0)
+				if(form.getConsentTierCounter()>0)
 				{
 		    %>
 					<%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %> 
 			<%
 				}
-				else
+				else			
 				{
 			%>
-				<script language="JavaScript">alert("No Consents available"); </script>
+					<script language="JavaScript">
+						alert("No Consents available");
+					</script>
 			<%
 				}
-			%></html:form>
-
+			%>
+		</html:form>
 	</body>
 </html>
 

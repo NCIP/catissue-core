@@ -2130,6 +2130,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfDistribution" path=".catissuecore.distributionDef" />
 			<forward name="popup" path=".catissuecore.DistributingConsentsDef" />
+			<forward name="ViewAll" path=".catissuecore.ViewAllConsentsDef" />
 			<forward name="failure" path=".catissuecore.distributionDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -3784,7 +3785,14 @@ PUBLIC
 			 type="edu.wustl.catissuecore.action.CheckConsents"		 
 			 scope="request">	 
 		</action>
-	
+		
+	<action path="/GetConsents" 
+			 type="edu.wustl.catissuecore.action.GetConsents"		 
+			 name="collectionProtocolRegistrationForm"
+			 validate="false"
+			 scope="request">	 
+			 <forward name="success" path="/pages/content/ConsentTracking/ShowConsents.jsp" />
+		</action>
 	
 	</action-mappings>
 	

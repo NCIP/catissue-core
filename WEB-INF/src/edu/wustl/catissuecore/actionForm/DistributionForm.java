@@ -71,7 +71,6 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
 
 	//private String fromSite;
 	private String toSite;
-	
 	private int counter=0;
 	private String distributionProtocolId;
 	private boolean idChange = false;
@@ -535,19 +534,23 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
         }
     }
 
-	public Integer getDistributionBasedOn() {
+	public Integer getDistributionBasedOn()
+	{
 		return distributionBasedOn;
 	}
 
-	public void setDistributionBasedOn(Integer distributionBasedOn) {
+	public void setDistributionBasedOn(Integer distributionBasedOn) 
+	{
 		this.distributionBasedOn = distributionBasedOn;
 	}
 
-	public Integer getDistributionType() {
+	public Integer getDistributionType() 
+	{
 		return distributionType;
 	}
 
-	public void setDistributionType(Integer distributionType) {
+	public void setDistributionType(Integer distributionType) 
+	{
 		this.distributionType = distributionType;
 	}
 

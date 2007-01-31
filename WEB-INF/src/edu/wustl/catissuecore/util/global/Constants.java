@@ -39,10 +39,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String 	DISABLED="disabled";
 	public static final String 	VIEWAll="ViewAll";
 	public static final String 	BARCODE_DISTRIBUTION="1";
+	public static final String 	LABLE_DISTRIBUTION="2";
 	public static final String 	CONSENT_WAIVED="Consent Waived";
 	public static final String 	NO_CONSENTS="No Consents";
 	public static final String 	INVALID="Invalid";
 	public static final String 	VALID="valid";
+	public static final String 	FALSE="false";
 	
 		
 	//Ordering System Status
