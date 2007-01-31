@@ -39,7 +39,7 @@ public class DefineSearchResultsViewAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
 	{
-		CategorySearchForm actionForm = (CategorySearchForm)form;
+		CategorySearchForm actionForm = (CategorySearchForm)form;		
 		List<EntityInterface> ListOfEntitiesInQuery = (List)request.getSession().getAttribute(Constants.LIST_OF_ENTITIES_IN_QUERY);
 		Map<String, Vector<QueryTreeNodeData>> treesMap = new HashMap<String, Vector<QueryTreeNodeData>>();
 		DefineAdvancedResultsView defineResults = new DefineAdvancedResultsView();
@@ -47,6 +47,7 @@ public class DefineSearchResultsViewAction extends BaseAction
 		request.setAttribute("treesMap",treesMap);
 		if(actionForm.getNextOperation() != null && actionForm.getNextOperation().equalsIgnoreCase("BuildNewTree"))
 		{
+			request.getSession().setAttribute("nextOperation",actionForm.getNextOperation());
 			return mapping.findForward("BuildNewTree");
 		} 
 		return mapping.findForward(Constants.SUCCESS);

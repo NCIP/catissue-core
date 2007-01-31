@@ -23,6 +23,7 @@ import edu.wustl.cab2b.common.util.Constants;
 import edu.wustl.cab2b.server.advancedsearch.AdvancedSearch;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
+import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHTMLForBuildNewTree;
 import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.action.BaseAction;
 /**
@@ -70,14 +71,28 @@ public class CategorySearchAction extends BaseAction
 			String entitiesString = "";
 			if (entityCollection != null && !entityCollection.isEmpty())
 			{
-				Iterator iter = entityCollection.iterator();
-				while(iter.hasNext())
+				if(((String)request.getSession().getAttribute("nextOperation")).equals("BuildNewTree"))
 				{
-					EntityInterface entity = (EntityInterface)iter.next();
-					int lastIndex = entity.getName().lastIndexOf(".");
-					String entityName = entity.getName().substring(lastIndex + 1);
-					entitiesString = entitiesString + ";" + entityName;
-					searchedEntitiesMap.put(entityName, entity);
+					entitiesString= "true";
+					GenerateHTMLForBuildNewTree buildNewTree = new GenerateHTMLForBuildNewTree();
+					String selectTagName =edu.wustl.catissuecore.util.global.Constants.SEARCH_CATEGORY_LIST_SELECT_TAG_NAME;				
+					String functionName =edu.wustl.catissuecore.util.global.Constants.SEARCH_CATEGORY_LIST_FUNCTION_NAME;					
+					entitiesString = buildNewTree.generateHTMLToDisplayList(entityCollection, selectTagName, functionName);
+				}
+				else
+				{
+					entitiesString= "false";
+				
+					Iterator iter = entityCollection.iterator();
+					while(iter.hasNext())
+					{
+						EntityInterface entity = (EntityInterface)iter.next();
+						int lastIndex = entity.getName().lastIndexOf(".");
+						String entityName = entity.getName().substring(lastIndex + 1);
+						entitiesString = entitiesString + ";" + entityName;
+						searchedEntitiesMap.put(entityName, entity);
+					}
+				
 				}
 			}
 			request.getSession().setAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP, searchedEntitiesMap);

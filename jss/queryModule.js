@@ -171,7 +171,7 @@ function retriveSearchedEntities(url,nameOfFormToPost)
 		
 	else
 	{
-		<!-- Open connection to servlet -->
+		//<!-- Open connection to servlet -->
 		request.open("POST",url,true);	
 		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
 		request.send(actionURL);
@@ -181,25 +181,35 @@ function retriveSearchedEntities(url,nameOfFormToPost)
 }
 
 function onResponseUpdate(text)
-{
-	if(text == "")
-	{
-	alert("No results found.");
-	}
-	var element = document.getElementById('resultSet');
-	var allElementsArray = text.split(";");
-	var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
-
-	for(i=0; i<allElementsArray.length; i++)
-	{
-		var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+allElementsArray[i]+"')";
-		row = row+'<tr><td class="standardTextQuery" bgcolor="#FFFFFF"><a href="javascript:'+functionCall+'">' +allElementsArray[i]+ '</a></td></tr>';
-
-	}
-	row = row+'</table>';
-	element.innerHTML =row;
-}
-function retriveEntityInformation(url,nameOfFormToPost,entityName) 
+		{
+			if(text == "")
+		{
+			alert("No results found.");
+		}
+	
+			var element = document.getElementById('resultSet');
+			var allElementsArray = text.split(";");
+			var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
+								
+			var isBuildNewTree=allElementsArray[0];			
+			if(isBuildNewTree=="false")
+			{
+				for(i=1; i<allElementsArray.length; i++)
+				{
+					var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+allElementsArray[i]+"')";					
+					row = row+'<tr><td bgcolor="#FFFFFF"><a href="javascript:'+functionCall+'">' +allElementsArray[i]+ '</a></td></tr>';
+				}
+			
+			}
+			else
+			{
+				row = row + '<tr>' + text + '</tr>';
+			}
+			
+			row = row+'</table>';		
+			element.innerHTML =row;
+		}
+		function retriveEntityInformation(url,nameOfFormToPost,entityName) 
 {	
 	var request = newXMLHTTPReq();			
 	var actionURL;
@@ -395,3 +405,5 @@ function setFocusOnSearchButton()
 					resultSetDivObj.height = 350;
 				}
 			}*/
+					
+

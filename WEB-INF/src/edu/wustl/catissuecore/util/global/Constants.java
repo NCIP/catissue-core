@@ -1601,4 +1601,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String WITHDRAW_RESPONSE_RESET= "Reset";
 	public static final String WITHDRAW_RESPONSE_REASON= "Specimen consents withdrawn";
 
+	public static final String SEARCH_CATEGORY_LIST_SELECT_TAG_NAME="selectCategoryList";
+	public static final String SEARCH_CATEGORY_LIST_FUNCTION_NAME="getSelectedEntities";
 }

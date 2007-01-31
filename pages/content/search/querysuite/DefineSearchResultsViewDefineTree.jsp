@@ -38,7 +38,7 @@ function showTree(parentsNode)
 							{
 								img = "plus.GIF";
 							}				
-							%>
+					%>
 							tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>",0,"","","","");
 							tree.setUserData("<%=nodeId%>","<%=nodeId%>","<%=data%>");	
 							<%	
@@ -89,10 +89,14 @@ function showDefaultTree()
 }
 function BuildNewTree()
 {
-	alert("dfds");
+	//alert("dfds");
+	
 	document.forms['categorySearchForm'].nextOperation.value = "BuildNewTree";
+
 	document.forms['categorySearchForm'].action='DefineSearchResultsView.do';
+
 	document.forms['categorySearchForm'].submit();
+	
 }
 </script>
 <html>
