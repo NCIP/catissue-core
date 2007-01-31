@@ -21,7 +21,7 @@
 	
 	
 	<definition name=".catissuecore.reportProblemDef" extends=".catissuecore.homePageDef">
-		<put name="content" value="/pages/content/common/ReportProblem.jsp" />
+		<put name="content"  value="/pages/content/common/ReportProblem.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.reportProblemSuccessDef" extends=".catissuecore.homePageDef">
@@ -127,7 +127,15 @@
 	<definition name=".catissuecore.problemDetailsDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/ProblemDetails.jsp" />
 	</definition>
-
+	
+	<!--Annotation defs-->
+	<definition name=".catissuecore.annotationDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/DefineAnnotations.jsp" />
+	</definition>
+	<definition name=".catissuecore.dynamicFormDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/manageAdministrativeData/DynamicExtensionsHome.jsp" />
+	</definition>
+	
 	<!-- Storage Type -->
 	<definition name=".catissuecore.storageTypeDef" extends=".catissuecore.manageAdminDataHomeDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/StorageType.jsp" />
@@ -272,7 +280,7 @@
 	</definition>
 
 	<definition name=".catissuecore.participantDef" extends=".catissuecore.manageBioSpecimenHomeDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/ParicipantTabsPage.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.participantAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
@@ -285,6 +293,20 @@
 	
 	<definition name=".catissuecore.viewParticipantSurgicalPathologyReportDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/ViewParticipantSPR.jsp" />
+	</definition>
+
+	<!-- Annotation def -->
+	<definition name=".catissuecore.annotationDataEntryPage" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/AnnotationDataEntryPage.jsp" />
+	</definition>
+	
+	<!--<definition name=".catissuecore.annotationDataEntryPage" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />-->
+	<!--<definition name=".catissuecore.annotationDynExtDataEntryPage" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/DynamicExtenstionsDataEntryPage.jsp" />
+	</definition>-->
+	<definition name=".catissuecore.annotationDynExtDataEntryPage" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/DynamicExtenstionsDataEntryPage.jsp" />
 	</definition>
 
 	<!--Ajay For collection protocol reg-->
@@ -697,7 +719,7 @@
 
 	<!-- Query edit pages definitions begin -->
 	<definition name=".catissuecore.queryParticipantViewDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/ParicipantTabsPage.jsp" />
 	</definition>
 	<definition name=".catissuecore.queryCollectionProtocolViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
@@ -728,7 +750,7 @@
 	</definition>
 	
 	<definition name=".catissuecore.participantEditDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/ParicipantTabsPage.jsp" />
 	</definition>
 	
 	<definition name=".catissuecore.collectionProtocolEditDef" extends=".catissuecore.queryDataViewDef">

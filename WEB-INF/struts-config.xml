@@ -7,7 +7,6 @@ PUBLIC
 <struts-config>
 	
 	<form-beans>
-		
 		<!--Suite-->		
 		<form-bean name="orderForm" type="edu.wustl.catissuecore.actionForm.OrderForm"/>
 		<form-bean name="OrderSpecimenForm" type="edu.wustl.catissuecore.actionForm.OrderSpecimenForm"/>
@@ -20,7 +19,8 @@ PUBLIC
 		<form-bean name="baseOrderItemForm" type="edu.wustl.catissuecore.actionForm.BaseOrderItemForm"/>
 		<form-bean name="viewSurgicalPathologyReportForm" type="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"/>    
 		<!--Suite-->
-
+		<form-bean name="annotationForm" type="edu.wustl.catissuecore.actionForm.AnnotationForm"/>
+		<form-bean name="annotationDataEntryForm" type="edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm"/>
 		<form-bean name="userForm" type="edu.wustl.catissuecore.actionForm.UserForm"/>
 		<form-bean name="reportedProblemForm" type="edu.wustl.catissuecore.actionForm.ReportedProblemForm"/>
 		<form-bean name="domainObjectListForm" type="edu.wustl.catissuecore.actionForm.DomainObjectListForm"/>		
@@ -583,6 +583,22 @@ PUBLIC
 		</action>
 		<!-- Participant Actions Ends -->
 		
+		<!-- Annotation add -->
+		<action path="/LoadAnnotationDataEntryPage"
+			type="edu.wustl.catissuecore.action.annotations.LoadAnnotationDataEntryPageAction"
+			name="annotationDataEntryForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/pages/content/manageBioSpecimen/AnnotationDataEntryPage.jsp"/>
+		</action>
+		<action path="/LoadDynamicExtentionsDataEntryPage"
+			type="edu.wustl.catissuecore.action.annotations.LoadDynamicExtentionsDataEntryPageAction"
+			name="annotationDataEntryForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/pages/content/manageBioSpecimen/DynamicExtenstionsDataEntryPage.jsp"/>
+		</action>
+		
 		<!-- Collection Protocol Registration Actions Begins -->
         <action path="/CollectionProtocolRegistration"
 			type="edu.wustl.catissuecore.action.CollectionProtocolRegistrationAction"
@@ -861,8 +877,26 @@ PUBLIC
 			<forward name="pageOfCancerResearchGroup" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4"/>
 			<forward name="failure" path="/CancerResearchGroup.do?operation=edit&amp;pageOf=pageOfCancerResearchGroup&amp;menuSelected=4"/>
 		</action>    
+		
 		<!-- CancerResearchGroup Actions Ends-->
+	    
 
+		<!-- Annotation actions start -->
+		<action path="/DefineAnnotations"
+			type="edu.wustl.catissuecore.action.annotations.LoadAnnotationDefinitionAction"
+			name="annotationForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.annotationDef"></forward>
+		</action>
+		<action path="/BuildDynamicEntity"
+			type="edu.wustl.catissuecore.action.annotations.LoadDynamicExtensionsAction"
+			name="annotationForm"
+			validate="false"
+			scope="request">
+			<forward name="success" redirect="true" path=".catissuecore.dynamicFormDef"></forward>
+		</action>
+		<!-- Annotation actions end -->
 			<!-- CollectionProtocol Actions Begins-->
 	    <action path="/DummyCollectionProtocol"
 			type="edu.wustl.catissuecore.action.CollectionProtocolAction"
