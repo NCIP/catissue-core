@@ -344,7 +344,10 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			}
 
 			//Set protectionObjects = new HashSet();
-			specimen.setLineage(Constants.NEW_SPECIMEN);
+			if(specimen.getLineage() == null)
+			{
+			    specimen.setLineage(Constants.NEW_SPECIMEN);
+			}
 			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
 			if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
 			{
