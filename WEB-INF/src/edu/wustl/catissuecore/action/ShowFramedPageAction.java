@@ -9,6 +9,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.List;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,9 +20,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bizlogic.SpecimenTreeBizLogic;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 
 /**
  * ShowFramedPageAction is used to display the query results view
@@ -46,7 +49,7 @@ public class ShowFramedPageAction extends Action
         String pageOf  = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageOf);
         HttpSession session = request.getSession();
-        
+       
         //Aniruddha : For removing hardcoded names of html component
         session.setAttribute(Constants.CONTAINER_STYLEID,request.getParameter(Constants.CONTAINER_STYLEID));
         System.out.println(request.getParameter(Constants.CONTAINER_STYLEID));
@@ -58,8 +61,6 @@ public class ShowFramedPageAction extends Action
         session.setAttribute(Constants.CONTAINERID,request.getParameter(Constants.CONTAINERID));
         session.setAttribute(Constants.POS1,request.getParameter(Constants.POS1));
         session.setAttribute(Constants.POS2,request.getParameter(Constants.POS2));
-        
-        
 
         session.removeAttribute(Constants.CAN_HOLD_CONTAINER_TYPE);
      	session.removeAttribute(Constants.CAN_HOLD_COLLECTION_PROTOCOL);
@@ -124,19 +125,28 @@ public class ShowFramedPageAction extends Action
         //Added By Ramya for orderingsystem module.
         else if(pageOf.equals(Constants.PAGEOF_SPECIMEN_TREE))
         {
-        	String propertyName = request.getParameter(Constants.PROPERTY_NAME);
-        	request.setAttribute(Constants.PROPERTY_NAME,propertyName);
+        	session = request.getSession();
+        	IBizLogic bizLogic = null;
         	
-        	//Get the Specimen type and set it in request object.
-        	String specimenType = request.getParameter(Constants.SPECIMEN_TYPE);
-        	request.setAttribute(Constants.SPECIMEN_TYPE,specimenType);
-        	
-        	//Get the Class of Specimen and set it in request object.
-        	String specimenClass = request.getParameter(Constants.SPECIMEN_CLASS);
-        	request.setAttribute(Constants.SPECIMEN_CLASS,specimenClass);
-        	
+        	if(request.getParameter(Constants.SPECIMEN_TREE_SPECIMEN_ID) != null)
+        	{
+        		String strSpecimenId = request.getParameter(Constants.SPECIMEN_TREE_SPECIMEN_ID);
+        		//String strSpecimenId = (String) session.getAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID);
+        		Long specimenId = new Long(strSpecimenId);
+        		bizLogic = new SpecimenTreeBizLogic(specimenId,false);
+        	}
+        	//SCG Id is set in case of Pathology Case
+        	if(request.getParameter(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID) != null)
+        	{
+        		String strSpecimenCollgrpId = request.getParameter(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID);
+        		Long specimenCollgrpId = new Long(strSpecimenCollgrpId);
+        		bizLogic = new SpecimenTreeBizLogic(specimenCollgrpId,true);
+        	}
+        	//Obtain the tree nodes in a vector format.
+        	Vector dataList = ((SpecimenTreeBizLogic) bizLogic).getTreeViewData();
+        	//Set the vector in request scope to be accessed in SpecimenTreeView.jsp
+        	request.setAttribute(Constants.TREE_DATA_LIST,dataList);
         }
-        
         return mapping.findForward(pageOf);
     }
 }
