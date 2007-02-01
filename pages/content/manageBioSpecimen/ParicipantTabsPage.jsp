@@ -10,7 +10,7 @@
 	{
 			queryString = queryString  + "operation=edit&pageOf=pageOfParticipant";
 	}
-	queryString = queryString  +"&id="+id;
+	queryString = queryString + "&pageOf=pageOfParticipant&id="+id;
 	Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
 	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+id;
 	
@@ -36,7 +36,7 @@
 <div id="a_tabbar" style="width:800;height:600" ></div>
 <script>
 			var opr = '<%=operation%>';
-			if(opr == "afetAdd")
+			if(opr == "afterAdd")
 			{
 				top.location.href="<%=request.getContextPath()%>/LoadParticipantPage.do?operation=edit&id=<%=id%>";
 			}
