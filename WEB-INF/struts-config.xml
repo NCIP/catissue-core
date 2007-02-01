@@ -519,7 +519,7 @@ PUBLIC
 			input="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12"
 			scope="request">
 			<!-- forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" /-->
-			<forward name="success" path="/LoadParticipantPage.do?operation=edit&amp;pageOf=pageOfParticipant" />
+			<forward name="success" path="/LoadParticipantPage.do?operation=afetAdd&amp;pageOf=pageOfParticipant" />
 			<forward name="pageOfSCGParticipant" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 			<forward name="failure" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
@@ -534,7 +534,7 @@ PUBLIC
 			validate="true"
 			input="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12"
 			scope="request">
-			<forward name="success" path="/LoadParticipantPage.do?operation=add&amp;pageOf=pageOfParticipant" />
+			<forward name="success" path="/Participant.do?&amp;pageOf=pageOfParticipant" />
 			<forward name="participantAdd" path="/ParticipantAdd.do"/>
 			<forward name="createParticipantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
 			<forward name="participantSelect" path="/ParticipantSelect.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />			
