@@ -1507,3 +1507,11 @@ td.queryModuleTabMenuItem{ /* for the off state of the tab menu (top) cells */
   border-right:1px solid #000000; /* constant: dark gray */
 
 }
+/* style for Participant.jsp  */
+ <style>
+.active-column-0 {width:30px}
+tr#hiddenCombo
+{
+ display:none;
+}
+</style>
