@@ -134,6 +134,7 @@ public class ShowFramedPageAction extends Action
         		//String strSpecimenId = (String) session.getAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID);
         		Long specimenId = new Long(strSpecimenId);
         		bizLogic = new SpecimenTreeBizLogic(specimenId,false);
+        		
         	}
         	//SCG Id is set in case of Pathology Case
         	if(request.getParameter(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID) != null)
@@ -142,7 +143,16 @@ public class ShowFramedPageAction extends Action
         		Long specimenCollgrpId = new Long(strSpecimenCollgrpId);
         		bizLogic = new SpecimenTreeBizLogic(specimenCollgrpId,true);
         	}
-        	//Obtain the tree nodes in a vector format.
+        	
+        	String propertyName = request.getParameter(Constants.PROPERTY_NAME);
+    		String specimentype = request.getParameter(Constants.SPECIMEN_TYPE);
+    		String specimenClass = request.getParameter(Constants.SPECIMEN_CLASS);
+        	
+    		request.setAttribute(Constants.PROPERTY_NAME,propertyName);
+    		request.setAttribute(Constants.SPECIMEN_TYPE,specimentype);
+    		request.setAttribute(Constants.SPECIMEN_CLASS,specimenClass);
+    		
+    		//Obtain the tree nodes in a vector format.
         	Vector dataList = ((SpecimenTreeBizLogic) bizLogic).getTreeViewData();
         	//Set the vector in request scope to be accessed in SpecimenTreeView.jsp
         	request.setAttribute(Constants.TREE_DATA_LIST,dataList);
