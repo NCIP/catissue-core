@@ -8,7 +8,7 @@
 	{
 			queryString = queryString  + "operation=edit&pageOf=pageOfParticipant";
 	}
-	queryString = queryString  +"&id="+id;
+	queryString = queryString + "&pageOf=pageOfParticipant&id="+id;
 	
 	
 %>
@@ -31,23 +31,22 @@
 <body>
 <div id="a_tabbar" style="width:800;height:600" ></div>
 <script>
-			/*if(top.location!=location)
-			{
-				top.location.href = location.href;
-
-			}*/
-			
 			var opr = '<%=operation%>';
-			alert(opr);
-			alert("Quesry String " +'<%=queryString%>');
-			if((opr == 'null')||(opr=="add"))
-			{	
-				initiallizeAddParticipantTabs('<%=request.getContextPath()%>');
+			if(opr == "afetAdd")
+			{
+				top.location.href="<%=request.getContextPath()%>/LoadParticipantPage.do?operation=edit&id=<%=id%>";
 			}
 			else
 			{
-				initiallizeEditParticipantTabs('<%=request.getContextPath()%>','<%=queryString%>');
-			} 
+				if((opr == 'null')||(opr=="add"))
+				{	
+					initiallizeAddParticipantTabs('<%=request.getContextPath()%>');
+				}
+				else
+				{
+					initiallizeEditParticipantTabs('<%=request.getContextPath()%>','<%=queryString%>');
+				} 
+			}
 </script>
 </body>
 </html>

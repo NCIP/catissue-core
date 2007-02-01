@@ -96,9 +96,12 @@
 		boolean isSpecimenData = false;
 	
 		int IDCount = 0;
+		String opr=(String)request.getAttribute("operation");
 	%>
 	
 	<script language="JavaScript">
+		
+		
 		//function to insert a row in the inner block
 		function insRow(subdivtag)
 		{
@@ -172,7 +175,7 @@
 			{%>
 			document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
 			<%}%>
-				document.forms[0].target="_top";
+//				document.forms[0].target="_top";
 			document.forms[0].submit();
 		}
 		
@@ -204,7 +207,7 @@
 						{%>
 						document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_LOOKUP_ACTION%>";
 						<%}%>	
-						document.forms[0].target="_top";
+	//					document.forms[0].target="_top";
 						document.forms[0].submit();
 					}
 				}		
@@ -215,13 +218,13 @@
 	    var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
 		if (go==true)
 		{
-			document.forms[0].target="_top";
+//			document.forms[0].target="_top";
 			document.forms[0].submit();
 		}
 	} 
 	else
 	{
-			document.forms[0].target="_top";
+//			document.forms[0].target="_top";
 			document.forms[0].submit();		
 	}
 }
