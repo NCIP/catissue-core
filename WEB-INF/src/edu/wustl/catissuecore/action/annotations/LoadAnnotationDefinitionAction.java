@@ -33,7 +33,6 @@ import edu.common.dynamicextensions.ui.webui.util.WebUIManagerConstants;
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.domain.EntityMap;
-import edu.wustl.catissuecore.domain.annotations.DynamicEntityLinkMetadata;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
@@ -362,33 +361,6 @@ public class LoadAnnotationDefinitionAction extends BaseAction
 		return "";
 	}
 
-
-	/**
-	 * @param name
-	 * @return
-	 * @throws DAOException 
-	 */
-	private DynamicEntityLinkMetadata getMetadataInfForEntityLink(Long dynEntityId) throws DAOException
-	{
-		DynamicEntityLinkMetadata dynEntityLinkMetadata = null;
-		if(dynEntityId!=null)
-		{
-			String sourceObjectName = DynamicEntityLinkMetadata.class.getName();
-			String columnName = "dynamicEntityContainerId";
-			Object colValue = dynEntityId;
-			IBizLogic defaultBizLogic = BizLogicFactory.getDefaultBizLogic();
-			List dynamicEntityLinkMetadatInfList = defaultBizLogic.retrieve(sourceObjectName,columnName,colValue);
-			if(dynamicEntityLinkMetadatInfList!=null)
-			{
-				Iterator iter = dynamicEntityLinkMetadatInfList.iterator();
-				while(iter.hasNext())
-				{
-					dynEntityLinkMetadata = (DynamicEntityLinkMetadata)iter.next();
-				}
-			}
-		}
-		return dynEntityLinkMetadata;
-	}
 	/**
 	 * @throws IOException 
 	 * 
