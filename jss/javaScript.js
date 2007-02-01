@@ -915,3 +915,303 @@ function initializeTabs(tabIds, tabNames, tabPageRefs)
 	}
 	tabbar.setTabActive(tabIds[0]);
 }
+
+//<!-- JavaScript for Participant.jsp  start -->
+
+function initializeTabs(tabIds, tabNames, tabPageRefs)
+{
+	if((tabIds!=null)&&(tabNames!=null)&&(tabPageRefs!=null))
+	{
+		var noOfTabs = tabIds.length;
+		for(var i=0;i<noOfTabs;i++)
+		{
+			tabbar.addTab(tabIds[i],tabNames[i],"");  
+			tabbar.setContentHref(tabIds[i],tabPageRefs[i]);   
+		}
+		 
+	}
+	tabbar.setTabActive(tabIds[0]);
+	tabbar.setSkinColors("#FFFFFF","#C9C9CD");
+}
+
+
+function textLimit(field) 
+{
+	if(field.value.length>0) 
+		field.value = field.value.replace(/[^\d]+/g, '');
+		
+	/*if (element.value.length > maxlen + 1)
+		alert('your input has been truncated!');*/
+	/*if (field.value.length > maxlen)
+	{
+		//field.value = field.value.substring(0, maxlen);
+		field.value = field.value.replace(/[^\d]+/g, '');
+	}*/
+}
+function intOnly(field) 
+{
+	if(field.value.length>0) 
+	{
+		field.value = field.value.replace(/[^\d]+/g, ''); 
+	}
+}
+//this function is called when participant clicks on radiao button 
+function onParticipantClick(participant_id)
+{
+	//mandar for grid
+	var cl = mygrid.cells(participant_id,mygrid.getColumnCount()-1);
+	var pid = cl.getValue();
+	//alert(pid);
+	//participant_id = pid;
+	//------------
+	//document.forms[0].participantId.value=participant_id;
+	document.forms[0].participantId.value=pid;
+	document.forms[0].id.value=pid;
+	document.forms[0].submitPage.disabled=true;
+	document.forms[0].registratioPage.disabled=false;
+
+
+}
+//This function is called when user clicks on 'Use Selected Participant' Button
+function UseSelectedParticipant()
+{
+
+	if(document.forms[0].participantId.value=="" || document.forms[0].participantId.value=="0")
+	{
+		alert("Please select the Participant from the list");
+	}
+	else
+	{
+	
+		document.forms[0].action="ParticipantSelect.do?operation=add&id="+document.forms[0].participantId.value;
+		alert(document.forms[0].action);
+		document.forms[0].submit();
+		//window.location.href="ParticipantSelect.do?operation=add&participantId="+document.forms[0].participantId.value+"&submittedFor="+document.forms[0].submittedFor.value+"&forwardTo="+document.forms[0].forwardTo.value;
+	}
+	
+}
+
+function onVitalStatusRadioButtonClick(element)
+{
+	if(element.value == "Dead")
+	{
+		document.forms[0].deathDate.disabled = false;				
+	}
+	else
+	{
+		document.forms[0].deathDate.disabled = true;
+	}
+}
+function LookupAgain(submittedFor)
+{
+	
+	document.forms[0].submitPage.disabled=false;
+	document.forms[0].registratioPage.disabled=true;
+	if(submittedFor!=null && submittedFor=="AddNew")
+	{
+		document.forms[0].submitPage.disabled=true;
+		document.forms[0].registratioPage.disabled=false;
+	}
+	document.forms[0].radioValue.value="Lookup";
+}
+function CreateNewClick(pageOf, submittedFor, participantAddAction, pageOfParticipantCPQuery, cpQueryParticipantAddAction)
+		{
+			document.forms[0].submitPage.disabled=false;
+			document.forms[0].registratioPage.disabled=false;
+			if(submittedFor!=null && submittedFor.equals("AddNew"))
+			{
+				document.forms[0].submitPage.disabled=true;
+			}
+			document.forms[0].radioValue.value="Add";
+			document.forms[0].action="participantAddAction";
+			if(pageOf.equals(pageOfParticipantCPQuery))
+			{
+				document.forms[0].action="cpQueryParticipantAddAction";
+			}
+		}
+
+//<!-- JavaScript for Participant.jsp  end -->
+
+//<!-- JavaScript for ViewSurigicalPathologyReport.jsp  start -->
+
+	
+//<!-- function collapse or expand the participant information table   -->
+function switchStyle(action)
+{
+	imageObj = document.getElementById('image');	
+	if(action== 'hide') //Clicked on - image
+	{
+		hide('paricipantInformation');				
+		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
+		imageObj.href="javascript:switchStyle('show');";
+	}
+	else  							   //Clicked on + image
+	{
+		show('paricipantInformation');
+		imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
+		imageObj.href="javascript:switchStyle('hide');";
+	}
+}
+//<!--function to show object on UI -->
+function show(obj)
+{
+	switchObj=document.getElementById(obj);
+	if(navigator.appName == "Microsoft Internet Explorer")
+	{					
+		switchObj.style.display = 'block';
+	}
+	else
+	{
+		switchObj.style.display = 'table-row';
+	}
+}
+//<!--function to hide object from UI -->
+function hide(obj)
+{
+	switchObj=document.getElementById(obj);
+	switchObj.style.display='none'
+}
+//<!--function to display deidentified report table on UI -->
+function clickOnLinkShowDeidReport()
+{
+
+	if(document.getElementById('showDeReportChkbox').checked==true)
+	{
+		hide('identifiedReportInfo');
+		switchStyle('hide');
+		show('deidReportInfo');
+
+	}
+	else
+	{
+		hide('deidReportInfo');
+		show('identifiedReportInfo');
+		switchStyle('show');
+	}
+}
+//<!--function to display default view  -->
+function clickOnLinkReport()
+{
+	hide('deidReportInfo');
+	show('reportTable');
+	show('categoryHighlighter');
+	show('identifiedReportInfo');
+	switchStyle('show');
+}
+//<!--function to display identified and de-identified report compare view  -->
+function clickOnLinkCompareReport()
+{
+	switchStyle('hide')
+	show('reportTable');
+	show('identifiedReportInfo');
+	show('deidReportInfo');
+	show('categoryHighlighter');
+}
+//<!--function to display user requests table  -->
+function clickOnLinkMyRequests()
+{
+	
+}
+//<!--function to display dialog box for confirmation of submitting comments-->
+function confirmSubmit()
+{
+	if (confirm('Are you sure you want to Submit Comments?'))
+  {
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+}
+//<!--function to submit rview comments-->
+function submitReviewComments()
+{
+	if(confirmSubmit())
+	{
+		document.forms[0].submittedFor.value='review';
+		var action="SurgicalPathologyReportEventParam.do?operation=add&pageOf=<%=pageOf%>"
+		document.forms[0].action=action;
+		document.forms[0].submit();
+	}
+}
+//<!--function to submit quarantine comments-->
+function submitQuarantineComments()
+{
+	if(confirmSubmit())
+	{
+		document.forms[0].submittedFor.value='quarantine';
+		var action="SurgicalPathologyReportEventParam.do?operation=add&pageOf=<%=pageOf%>"
+		document.forms[0].action=action;
+		document.forms[0].submit();
+	}
+}
+
+ function viewSPR()
+        {
+			alert("Here");
+			var tempId=document.forms[0].id.value;
+        	//var action="<%=Constants.SPR_VIEW_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&id="+tempId;
+			//document.forms[0].action=action;
+			//document.forms[0].submit();
+        }
+
+// AJAX code start
+	function getReport()
+	{
+		var identifier=document.getElementById('identifiedReportId').value;
+		var url="FetchReport.do?reportId="+identifier;
+		ajaxCall(url);
+	}
+// function to send request to server	
+	function ajaxCall(url)
+	{
+		var request = newXMLHTTPReq();
+		request.onreadystatechange=function(){setReport(request)};
+		alert(url);
+		//send data to ActionServlet
+		//Open connection to servlet
+		request.open("POST",url,true);
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+		request.send();
+	}
+//To set the values of form that are fetched using AJAX call
+	function setReport(request)
+	{
+		if(request.readyState==4 && request.status == 200)
+		{
+			var responseString = request.responseText;
+			alert(responseString);
+		}
+	}
+//AJAX code end
+
+//<!-- JavaScript for ViewSurigicalPathologyReport.jsp  end -->
+
+
+function initiallizeAddParticipantTabs(contextPath)
+{
+		tabbar= new dhtmlXTabBar("a_tabbar","top");
+		tabbar.setImagePath(contextPath + "/dhtml_comp/imgs/");
+		tabbar.setHrefMode("iframes-on-demand");
+		var tabIds = ["addTab"];
+		var tabNames = ["Add Partitipant"];
+		var tabHREFs = [contextPath + "/Participant.do?operation=add&pageOf=pageOfParticipant&menuSelected=12"];
+		initializeTabs(tabIds,tabNames,tabHREFs);
+}
+
+function initiallizeEditParticipantTabs(contextPath,queryString)
+{
+		alert("in init edit tabs");
+		tabbar= new dhtmlXTabBar("a_tabbar","top");
+		alert(tabbar);
+		alert(contextPath);
+		tabbar.setImagePath("dhtml_comp/imgs/");
+		tabbar.setHrefMode("iframes-on-demand");
+		var tabIds = ["editTab","viewSPRTab","annotationsTab"];
+		var tabNames = ["Edit Partitipant" , "View SPR", "Annotations"];
+		alert("Query String = " + queryString);
+		var tabHREFs = [contextPath + "/ParticipantSearch.do?" + queryString , contextPath + "/ViewSurgicalPathologyReport.do?operation=viewSPR&" + queryString ,contextPath + "/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1"];
+		initializeTabs(tabIds,tabNames,tabHREFs);
+}
+
