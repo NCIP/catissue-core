@@ -809,7 +809,6 @@
 						<!-- Change Added for Consent Tracking -->
 						<%
 							String verificationStatus=(String)formBean.getValue("DistributedItem:" + i + "_verificationKey");
-							System.out.println(verificationStatus);
 							if(verificationStatus==null||verificationStatus.equals(Constants.VIEW_CONSENTS))
 							{
 						%>
@@ -822,7 +821,7 @@
 									<logic:empty name="distributionForm" property="<%=verificationStatusKey%>">
 										<%=Constants.VIEW_CONSENTS %>
 									</logic:empty>
-									<html:hidden property="<%=verificationStatusKey%>" styleId="<%=verificationStatusKey%>"  value="View"/>
+									<html:hidden property="<%=verificationStatusKey%>" styleId="<%=verificationStatusKey%>"  value="<%=verificationStatus%>"/>
 									</a>
 								</span>
 							</td>
@@ -832,6 +831,7 @@
 							{
 						%>
 							<td class="formField" colspan="2">
+							<html:hidden property="<%=verificationStatusKey%>" styleId="<%=verificationStatusKey%>"  value="<%=verificationStatus%>"/>
 								<span id="<%=barcodelabelStatus%>">													
 									<lable>	
 										<%=verificationStatus%>

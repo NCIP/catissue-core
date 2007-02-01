@@ -86,7 +86,7 @@ public class CheckConsents extends BaseAction
 	        {
 	        	out.print(Constants.DISABLED);//disabled
 	        }
-	        else if(collectionProtocol.getConsentsWaived())
+	        else if(collectionProtocol.getConsentsWaived().booleanValue())
 	        {
 	        	out.print(Constants.CONSENT_WAIVED);//Consent Waived
 	        }
