@@ -26,7 +26,7 @@
 		//If strUserData contains more than one checked nodes
 		if(strUserData.indexOf(',') != -1)
 		{
-			alert("Select only one node");
+			alert("Select only one specimen");
 		}
 		else
 		{
@@ -71,10 +71,14 @@
 	        			var propertyValue = "<%= propertyValue %>";
 	        			setDropDownValue(propertyName,propertyValue,data);
 	        		}
+	        		else
+	        		{
+	        			alert("Selected specimen is not of given specimen class or type");
+	        		}
 	        	}
 	        	else
 	        	{
-	        		alert("Parent node cannot be selected");	        			
+	        		alert("Parent specimen cannot be selected");	        			
 	        	}
         	}//End If
         <%        	
