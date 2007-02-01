@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -40,7 +41,6 @@ import edu.wustl.common.util.logger.Logger;
  * from Participant Add/Edit webpage.
  * @author gautam_shetty
  */
-
 public class ParticipantForm extends AbstractActionForm implements Serializable
 {
     
@@ -112,6 +112,38 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	 * Counter that contains number of rows in the 'Add More' functionality.
 	 */
 	private int counter=1;
+	/**
+	 * List to handle values of site
+	 */
+	private List siteList=null;
+	/**
+	 * String that contains participant id
+	 */
+	private String participantId="";
+	/**
+	 * List to handle values of gender
+	 */
+	private List genderList=null;
+	/**
+	 * List to handle values of ethnicity
+	 */
+	private List ethnicityList=null;
+	/**
+	 * List to handle values of race
+	 */
+	private List raceList=null;
+	/**
+	 * List to handle values of sex genotype
+	 */
+	private List genotypeList=null;
+	/**
+	 * List to handle values of vital status
+	 */
+	private List vitalStatusList=null;
+	/**
+	 * String array to handle values of activity status
+	 */
+	private String[] activityStatusList=null;
 	
 	
 	private long cpId = -1; 
@@ -675,5 +707,165 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	public void setCpId(long cpId)
 	{
 		this.cpId = cpId;
+	}
+
+	
+	/**
+	 * Returns the site list of participant
+	 * @return siteList
+	 */
+	public List getSiteList()
+	{
+		return siteList;
+	}
+
+	
+	/**
+	 * Sets the site list of participant
+	 * @param siteList
+	 */
+	public void setSiteList(List siteList)
+	{
+		this.siteList = siteList;
+	}
+
+	
+	/**
+	 * Returns the Particioant id
+	 * @return participantId
+	 */
+	public String getParticipantId()
+	{
+		return participantId;
+	}
+
+	
+	/**
+	 * Sets the Participant Id
+	 * @param participantId
+	 */
+	public void setParticipantId(String participantId)
+	{
+		this.participantId = participantId;
+	}
+
+	
+	/**
+	 * Returns the gender list of participant
+	 * @return genderList
+	 */
+	public List getGenderList()
+	{
+		return genderList;
+	}
+
+	
+	/**
+	 * Sets the gender list of participant
+	 * @param genderList
+	 */
+	public void setGenderList(List genderList)
+	{
+		this.genderList = genderList;
+	}
+
+	
+	/**
+	 * Returnd ethnicity list of participant
+	 * @return ethnicityList
+	 */
+	public List getEthnicityList()
+	{
+		return ethnicityList;
+	}
+
+	
+	/**
+	 * Sets the ethnicity list of participant
+	 * @param ethnicityList
+	 */
+	public void setEthnicityList(List ethnicityList)
+	{
+		this.ethnicityList = ethnicityList;
+	}
+
+	
+	/**
+	 * Returns the sex genotype list of participant
+	 * @return genotypeList
+	 */
+	public List getGenotypeList()
+	{
+		return genotypeList;
+	}
+
+	
+	/**
+	 * Sets the sex genotype list of participant
+	 * @param genotypeList
+	 */
+	public void setGenotypeList(List genotypeList)
+	{
+		this.genotypeList = genotypeList;
+	}
+
+	
+	/**
+	 * Returns the sex race list of participant
+	 * @return raceList
+	 */
+	public List getRaceList()
+	{
+		return raceList;
+	}
+
+	
+	/**
+	 * Sets the race list of participant
+	 * @param raceList
+	 */
+	public void setRaceList(List raceList)
+	{
+		this.raceList = raceList;
+	}
+
+	
+	/**
+	 * Returns the activity status list of participant
+	 * @return activityStatusList
+	 */
+	public String[] getActivityStatusList()
+	{
+		return activityStatusList;
+	}
+
+	
+	/**
+	 * Sets the activity status list of participant
+	 * @param activityStatusList
+	 */
+	public void setActivityStatusList(String[] activityStatusList)
+	{
+		this.activityStatusList = activityStatusList;
+	}
+
+	
+	/**
+	 * Returns the vital status list of participant
+	 * @return vitalStatusList
+	 */
+	public List getVitalStatusList()
+	{
+		return vitalStatusList;
+	}
+
+	
+	/**
+	 * Sets the vital status list of participant
+	 * @param vitalStatusList
+	 */
+	public void setVitalStatusList(List vitalStatusList)
+	{
+		this.vitalStatusList = vitalStatusList;
 	}
 }
