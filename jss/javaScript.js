@@ -911,7 +911,6 @@ function initializeTabs(tabIds, tabNames, tabPageRefs)
 			tabbar.addTab(tabIds[i],tabNames[i],"");		
 			tabbar.setContentHref(tabIds[i],tabPageRefs[i]);			
 		}
-	
 	}
 	tabbar.setTabActive(tabIds[0]);
 }
@@ -1188,7 +1187,7 @@ function submitQuarantineComments()
 
 //<!-- JavaScript for ViewSurigicalPathologyReport.jsp  end -->
 
-
+//Java Script for ParticipantTabPage.jsp
 function initiallizeAddParticipantTabs(contextPath)
 {
 		tabbar= new dhtmlXTabBar("a_tabbar","top");
@@ -1202,15 +1201,11 @@ function initiallizeAddParticipantTabs(contextPath)
 
 function initiallizeEditParticipantTabs(contextPath,queryString)
 {
-		alert("in init edit tabs");
 		tabbar= new dhtmlXTabBar("a_tabbar","top");
-		alert(tabbar);
-		alert(contextPath);
 		tabbar.setImagePath("dhtml_comp/imgs/");
 		tabbar.setHrefMode("iframes-on-demand");
 		var tabIds = ["editTab","viewSPRTab","annotationsTab"];
 		var tabNames = ["Edit Partitipant" , "View SPR", "Annotations"];
-		alert("Query String = " + queryString);
 		var tabHREFs = [contextPath + "/ParticipantSearch.do?" + queryString , contextPath + "/ViewSurgicalPathologyReport.do?operation=viewSPR&" + queryString ,contextPath + "/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1"];
 		initializeTabs(tabIds,tabNames,tabHREFs);
 }
