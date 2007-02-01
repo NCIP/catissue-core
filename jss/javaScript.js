@@ -1206,7 +1206,6 @@ function initiallizeEditParticipantTabs(contextPath,queryString)
 		tabbar.setHrefMode("iframes-on-demand");
 		var tabIds = ["editTab","viewSPRTab","annotationsTab"];
 		var tabNames = ["Edit Partitipant" , "View SPR", "Annotations"];
-		var tabHREFs = [contextPath + "/ParticipantSearch.do?" + queryString , contextPath + "/ViewSurgicalPathologyReport.do?operation=viewSPR&" + queryString ,contextPath + "/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1"];
+		var tabHREFs = [contextPath + "/ParticipantSearch.do?"+queryString ,contextPath + "/ViewSurgicalPathologyReport.do?operation=viewSPR&" + queryString ,contextPath + "/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1"];
 		initializeTabs(tabIds,tabNames,tabHREFs);
 }
-
