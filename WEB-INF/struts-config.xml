@@ -448,9 +448,7 @@ PUBLIC
 			name="viewSurgicalPathologyReportForm"
 			validate="false"
 			scope="request">
-			<forward name="SpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef" />
-			<forward name="Specimen" path=".catissuecore.newSpecimenDef" />
-			<forward name="Participant" path=".catissuecore.participantDef" />
+			<forward name="success" path="/pages/content/manageBioSpecimen/ViewSurgicalPathologyReport.jsp" />
 			<forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
 		<!--Suite-->
@@ -493,12 +491,20 @@ PUBLIC
         <!-- Login Module Actions End -->
             
         <!-- Participant Actions Begins -->
+        <action path="/LoadParticipantPage"
+			type="edu.wustl.catissuecore.action.LoadParticipantPage"
+			name="annotationDataEntryForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.participantDef"/>
+		</action>
+		
         <action path="/Participant"
 			type="edu.wustl.catissuecore.action.ParticipantAction"
 			name="participantForm"
 			validate="false"
 			scope="request">
-			<forward name="pageOfParticipant" path=".catissuecore.participantDef" />
+			<forward name="pageOfParticipant" path="/pages/content/manageBioSpecimen/Participant.jsp" />
 			<forward name="pageOfSCGParticipant" path=".catissuecore.participantDef" />
 			<forward name="pageOfParticipantQuery" path=".catissuecore.participantEditDef" />
 			<forward name="pageOfParticipantCPQuery" path=".catissuecore.participantEditDef" />
@@ -513,7 +519,7 @@ PUBLIC
 			input="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12"
 			scope="request">
 			<!-- forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" /-->
-			<forward name="success" path="/ParticipantSearch.do?pageOf=pageOfParticipant" />
+			<forward name="success" path="/LoadParticipantPage.do?operation=edit&amp;pageOf=pageOfParticipant" />
 			<forward name="pageOfSCGParticipant" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 			<forward name="failure" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
@@ -528,7 +534,7 @@ PUBLIC
 			validate="true"
 			input="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12"
 			scope="request">
-			<forward name="success" path="/Participant.do?pageOf=pageOfParticipant" />
+			<forward name="success" path="/LoadParticipantPage.do?operation=add&amp;pageOf=pageOfParticipant" />
 			<forward name="participantAdd" path="/ParticipantAdd.do"/>
 			<forward name="createParticipantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
 			<forward name="participantSelect" path="/ParticipantSelect.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />			
@@ -2470,7 +2476,8 @@ PUBLIC
 			<forward name="pageOfSite" path="/SiteSearch.do?pageOf=pageOfSite"/>
 			<forward name="pageOfBioHazard" path="/BiohazardSearch.do"/>
 			<forward name="pageOfUserAdmin" path="/UserSearch.do"/>
-			<forward name="pageOfParticipant" path="/ParticipantSearch.do"/>
+			<!--<forward name="pageOfParticipant" path="/ParticipantSearch.do"/>-->
+			<forward name="pageOfParticipant" path=".catissuecore.participantDef"/>
 			<forward name="pageOfCollectionProtocolRegistration" path="/CollectionProtocolRegistrationSearch.do"/>
 			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen"/>
 			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroup"/>
