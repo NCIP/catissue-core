@@ -71,7 +71,7 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 
 var columns = <%="\""%><%int col;%><%for(col=0;col<(columnList.size()-1);col++){%><%=columnList.get(col)%>,<%}%><%=columnList.get(col)%><%="\""%>;
 
-var colWidth = <%="\""%><%for(col=0;col<(columnList.size()-1);col++){%><%=100%>,<%}%><%=100%><%="\""%>;
+var colWidth = "<%=Utility.getColumnWidth(columnList)%>";
 var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList,true)%><%="\""%>;
 
 var colDataTypes = colTypes;
