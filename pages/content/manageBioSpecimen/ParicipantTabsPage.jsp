@@ -1,3 +1,5 @@
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%
 	String annotationLink = request.getContextPath() + "/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1";
 	String operation = (String)request.getParameter("operation");
@@ -8,7 +10,9 @@
 	{
 			queryString = queryString  + "operation=edit&pageOf=pageOfParticipant";
 	}
-	queryString = queryString + "&pageOf=pageOfParticipant&id="+id;
+	queryString = queryString  +"&id="+id;
+	Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
+	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+id;
 	
 	
 %>
@@ -44,7 +48,7 @@
 				}
 				else
 				{
-					initiallizeEditParticipantTabs('<%=request.getContextPath()%>','<%=queryString%>');
+					initiallizeEditParticipantTabs('<%=request.getContextPath()%>','<%=queryString%>','<%=participantAnnotationsQueryString%>');
 				} 
 			}
 </script>

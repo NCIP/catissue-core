@@ -21,6 +21,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.common.dynamicextensions.entitymanager.EntityManager;
+import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
+import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
+import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -656,5 +661,26 @@ public class Utility extends edu.wustl.common.util.Utility
 	   }
 	   return null;
    }
+   
+   /**
+	 * @param entity_name_participant
+	 * @return
+	 * @throws DynamicExtensionsApplicationException 
+	 * @throws DynamicExtensionsSystemException 
+	 */
+	public static Long getEntityId(String entityName) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
+	{
+		if(entityName!=null)
+		{
+			EntityManagerInterface entityManager = EntityManager.getInstance();
+			EntityInterface entity;
+			entity = entityManager.getEntityByName(entityName);
+			if(entity!=null)
+			{
+				return entity.getId();
+			}
+		}
+		return new Long(0);
+	}
 // Consent tracking(Virender Mehta) 
 }

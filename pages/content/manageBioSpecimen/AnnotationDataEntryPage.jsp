@@ -3,8 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="java.util.List"%>
-<%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
-<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
+
 
 <html>
 <!-- Initializations START-->

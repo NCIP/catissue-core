@@ -1199,13 +1199,13 @@ function initiallizeAddParticipantTabs(contextPath)
 		initializeTabs(tabIds,tabNames,tabHREFs);
 }
 
-function initiallizeEditParticipantTabs(contextPath,queryString)
+function initiallizeEditParticipantTabs(contextPath,queryString,annotationQueryString)
 {
 		tabbar= new dhtmlXTabBar("a_tabbar","top");
 		tabbar.setImagePath("dhtml_comp/imgs/");
 		tabbar.setHrefMode("iframes-on-demand");
 		var tabIds = ["editTab","viewSPRTab","annotationsTab"];
 		var tabNames = ["Edit Partitipant" , "View SPR", "Annotations"];
-		var tabHREFs = [contextPath + "/ParticipantSearch.do?"+queryString ,contextPath + "/ViewSurgicalPathologyReport.do?operation=viewSPR&" + queryString ,contextPath + "/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1"];
+		var tabHREFs = [contextPath + "/ParticipantSearch.do?" + queryString , contextPath + "/ViewSurgicalPathologyReport.do?operation=viewSPR&" + queryString ,contextPath + "/LoadAnnotationDataEntryPage.do"+annotationQueryString];
 		initializeTabs(tabIds,tabNames,tabHREFs);
 }

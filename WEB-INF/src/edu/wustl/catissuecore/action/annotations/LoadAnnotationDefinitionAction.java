@@ -20,7 +20,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.bizlogic.BizLogicFactory;
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
@@ -38,7 +37,6 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -189,7 +187,7 @@ public class LoadAnnotationDefinitionAction extends BaseAction
 	{
 		//TODO change ths with new api
 		//String dynamicExtensionsEditEntityURL = "/dynamicExtensions/LoadGroupDefinitionAction.do?containerIdentifier="+containerId + "^_self";
-		String dynamicExtensionsEditEntityURL = "LoadDynamicExtentionsDataEntryPageAction?selectedAnnotation="+containerId + "^_self";
+		String dynamicExtensionsEditEntityURL = "LoadDynamicExtentionsDataEntryPage.do?selectedAnnotation="+containerId + "^_self";
 		return dynamicExtensionsEditEntityURL;
 	}
 
@@ -398,33 +396,13 @@ public class LoadAnnotationDefinitionAction extends BaseAction
 	private List getSystemEntityList() throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
 		List<NameValueBean> systemEntityList = new ArrayList<NameValueBean>();
-		systemEntityList.add(new NameValueBean(AnnotationConstants.PARTICIPANT,getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT)));
-		systemEntityList.add(new NameValueBean(AnnotationConstants.SPECIMEN,getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN)));
-		systemEntityList.add(new NameValueBean(AnnotationConstants.SPECIMEN_COLLN_GROUP,getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP)));
+		systemEntityList.add(new NameValueBean(AnnotationConstants.PARTICIPANT,Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT)));
+		systemEntityList.add(new NameValueBean(AnnotationConstants.SPECIMEN,Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN)));
+		systemEntityList.add(new NameValueBean(AnnotationConstants.SPECIMEN_COLLN_GROUP,Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP)));
 		return systemEntityList;
 	}
 
-	/**
-	 * @param entity_name_participant
-	 * @return
-	 * @throws DynamicExtensionsApplicationException 
-	 * @throws DynamicExtensionsSystemException 
-	 */
-	private Long getEntityId(String entityName) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
-	{
-		if(entityName!=null)
-		{
-			EntityManagerInterface entityManager = EntityManager.getInstance();
-			EntityInterface entity;
-			entity = entityManager.getEntityByName(entityName);
-			if(entity!=null)
-			{
-				return entity.getId();
-			}
-		}
-		return new Long(0);
-	}
-
+	
 	/**
 	 * @param annotationForm 
 	 * @throws DynamicExtensionsApplicationException 
