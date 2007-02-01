@@ -228,12 +228,12 @@
 									 		String url ="";
 									 			if(!specimenObjId.equals(""))
 												{
-													url = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&propertyName=" + requestFor + "&type=" + specimenType + "&specimenClass=" + specimenClass + "&" + Constants.SPECIMEN_TREE_SPECIMEN_ID + "=" + specimenObjId;
+													url = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&" + Constants.PROPERTY_NAME + "=" + requestFor + "&" + Constants.SPECIMEN_TYPE + "=" + specimenType + "&" + Constants.SPECIMEN_CLASS + "=" + specimenClass + "&" + Constants.SPECIMEN_TREE_SPECIMEN_ID + "=" + specimenObjId;
 													//session.setAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID,specimenObjId);
 												}
 										 		else
 												{
-													url = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&propertyName=" + requestFor + "&type=" + specimenType + "&specimenClass=" + specimenClass + "&" + Constants.SPECIMEN_TREE_SPECCOLLGRP_ID + "=" + specimenCollGrpId;
+													url = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&" + Constants.PROPERTY_NAME + "=" + requestFor + "&" + Constants.SPECIMEN_TYPE + "=" + specimenType + "&" + Constants.SPECIMEN_CLASS + "=" + specimenClass + "&" + Constants.SPECIMEN_TREE_SPECCOLLGRP_ID + "=" + specimenCollGrpId;
 										 			//session.setAttribute(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID,specimenCollGrpId);
 												}
 												

@@ -195,12 +195,12 @@
 												String urlInArray = "";
 									 			if(!specimenObjIdInArray.equals(""))
 												{
-													urlInArray = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&propertyName=" + requestForArray + "&type=" + specimenTypeInArray + "&specimenClass=" + specimenClassInArray + "&" + Constants.SPECIMEN_TREE_SPECIMEN_ID + "=" + specimenObjIdInArray;
+													urlInArray = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&" + Constants.PROPERTY_NAME + "=" + requestForArray + "&" + Constants.SPECIMEN_TYPE + "=" + specimenTypeInArray + "&" + Constants.SPECIMEN_CLASS +"=" + specimenClassInArray + "&" + Constants.SPECIMEN_TREE_SPECIMEN_ID + "=" + specimenObjIdInArray;
 													//session.setAttribute(Constants.SPECIMEN_TREE_SPECIMEN_ID,specimenObjId);
 												}
 										 		else
 												{
-													urlInArray = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&propertyName=" + requestForArray + "&type=" + specimenTypeInArray + "&specimenClass=" + specimenClassInArray + "&" + Constants.SPECIMEN_TREE_SPECCOLLGRP_ID + "=" + specimenCollGrpIdInArray;
+													urlInArray = "ShowFramedPage.do?pageOf=pageOfSpecimenTree&" + Constants.PROPERTY_NAME + "=" + requestForArray + "&" + Constants.SPECIMEN_TYPE + "=" + specimenTypeInArray + "&" + Constants.SPECIMEN_CLASS + "=" + specimenClassInArray + "&" + Constants.SPECIMEN_TREE_SPECCOLLGRP_ID + "=" + specimenCollGrpIdInArray;
 										 			//session.setAttribute(Constants.SPECIMEN_TREE_SPECCOLLGRP_ID,specimenCollGrpId);
 												}	
 												String appletWindow = "";
