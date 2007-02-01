@@ -102,6 +102,7 @@
 	    window.close();
 	}
 
+	//Function to display the Specimen Tree
 	function displayTree()
 	{		
 		document.getElementById("treebox").innerHTML ="";
@@ -142,7 +143,7 @@
 			<div id="treebox" style="width:400; height:250; overflow:auto;"/>
 		</td></tr>	
 		<tr><td>
-			<input type="button" name="btnShowInDdropDown" id="btnShowInDdropDown" value="OK" onclick="obtainUserData();" />
+			<input type="button" name="btnShowInDdropDown" class="actionButton" id="btnShowInDdropDown" value="OK" onclick="obtainUserData();" />
 		</td></tr>	
 	</table>
 </body>
