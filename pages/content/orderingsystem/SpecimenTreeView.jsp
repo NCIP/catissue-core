@@ -21,19 +21,10 @@
 	function obtainUserData()
 	{			
 		var strUserData = "";		
-		strUserData = tree.getAllChecked();
-
-		//If strUserData contains more than one checked nodes
-		if(strUserData.indexOf(',') != -1)
-		{
-			alert("Select only one specimen");
-		}
-		else
-		{
-			var len = strUserData.length;
-			data = strUserData.substring(0,len-2);
-			chkDataClassType(data);
-		}		
+		strUserData = tree.getSelectedItemId();
+		var len = strUserData.length;
+		data = strUserData.substring(0,len-2);
+		chkDataClassType(data);
 	}
 	
 	//Function to check the specimenclass and type of the selected node to set it in the dropdown.
@@ -71,14 +62,6 @@
 	        			var propertyValue = "<%= propertyValue %>";
 	        			setDropDownValue(propertyName,propertyValue,data);
 	        		}
-	        		else
-	        		{
-	        			alert("Selected specimen is not of given specimen class or type");
-	        		}
-	        	}
-	        	else
-	        	{
-	        		alert("Parent specimen cannot be selected");	        			
 	        	}
         	}//End If
         <%        	
@@ -110,30 +93,43 @@
 	function displayTree()
 	{		
 		document.getElementById("treebox").innerHTML ="";
+
 		tree=new dhtmlXTreeObject("treebox","100%","100%",0);
-		tree.setImagePath("dhtml_comp/imgs/");
-		tree.enableCheckBoxes(true);	
-		//tree.setOnDblClickHandler(obtainUserData);	
+		tree.setImagePath("dhtml_comp/imgs/");		
+		//Call function obtainUserData() when any node is double clicked.
+		tree.setOnDblClickHandler(obtainUserData);	
 		<% 
+		//Obtain from request object
+		String strNodeType = (String)request.getAttribute(Constants.SPECIMEN_TYPE);
+		String strNodeClass = (String)request.getAttribute(Constants.SPECIMEN_CLASS);
+       
         for (Iterator iter = dataList.iterator(); iter.hasNext();) 
         {
-					if(dataList != null && dataList.size() != 0)
-					{									
-							SpecimenTreeNode data = (SpecimenTreeNode) iter.next();
-							String parentId = "0";
-							String img = "Specimen.GIF";
-							//If the node is not a parent node
-							if(!data.getParentIdentifier().equals("0"))
-							{
-								parentId = data.getParentValue() + "_"+ data.getParentIdentifier().toString();		
-								img = "Distribution.GIF";
-							}
-							String nodeId = data.getValue() + "_"+ data.getIdentifier().toString();									
+				if(dataList != null && dataList.size() != 0)
+				{									
+						SpecimenTreeNode data = (SpecimenTreeNode) iter.next();
+						
+						String parentId = "0";
+						String img = "Specimen.GIF";
+						String nodeColor="gray";
+						
+						//If the node is not a parent node
+						if(!data.getParentIdentifier().equals("0"))
+						{
+							parentId = data.getParentValue() + "_"+ data.getParentIdentifier().toString();		
+							img = "Distribution.GIF";
+						}
+						String nodeId = data.getValue() + "_"+ data.getIdentifier().toString();		
+						if(data.getType().equals(strNodeType) && data.getSpecimenClass().equals(strNodeClass) && !data.getParentIdentifier().equals("0"))
+						{
+							nodeColor="";
+						}							
 		%>
-							tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getValue()%>",0,"<%=img%>","<%=img%>","<%=img%>","");
-							tree.setUserData("<%=nodeId%>","<%=nodeId%>","<%=data%>");	
+						tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getValue()%>",0,"<%=img%>","<%=img%>","<%=img%>","");
+						tree.setUserData("<%=nodeId%>","<%=nodeId%>","<%=data%>");	
+						tree.setItemColor("<%=nodeId%>","<%=nodeColor%>","<%=nodeColor%>");
 		<%	
-					}//End If 
+				}//End If 
 		   }//End for
 	 	 %>	
 	}//End Function
@@ -145,9 +141,6 @@
 	<table>
 		<tr><td>
 			<div id="treebox" style="width:400; height:250; overflow:auto;"/>
-		</td></tr>	
-		<tr><td>
-			<input type="button" name="btnShowInDdropDown" class="actionButton" id="btnShowInDdropDown" value="OK" onclick="obtainUserData();" />
 		</td></tr>	
 	</table>
 </body>
