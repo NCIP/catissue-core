@@ -188,7 +188,8 @@ public class LoadAnnotationDefinitionAction extends BaseAction
 	private String getDynamicExtentionsEditURL(Long containerId)
 	{
 		//TODO change ths with new api
-		String dynamicExtensionsEditEntityURL = "/dynamicExtensions/LoadGroupDefinitionAction.do?containerIdentifier="+containerId + "^_self";
+		//String dynamicExtensionsEditEntityURL = "/dynamicExtensions/LoadGroupDefinitionAction.do?containerIdentifier="+containerId + "^_self";
+		String dynamicExtensionsEditEntityURL = "LoadDynamicExtentionsDataEntryPageAction?selectedAnnotation="+containerId + "^_self";
 		return dynamicExtensionsEditEntityURL;
 	}
 

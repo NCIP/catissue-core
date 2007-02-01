@@ -5,18 +5,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
-<%
 
-	String entityId = null,entityRecordId = null;
-
-	CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
-	if(cacheManager!=null)
-	{
-		entityId = (String) cacheManager.getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITYID);
-		entityRecordId = (String) cacheManager.getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
-	}
-	String parentURL = "LoadAnnotationDataEntryPage.do?entityId="+entityId + "&entityRecordId="+entityRecordId ;
-%>
 <html>
 <!-- Initializations START-->
 
@@ -87,13 +76,13 @@
 					</script>
 				</td>
 			</tr>
-			<tr valign="bottom">
+			<!-- <tr valign="bottom">
 				<td align="left" class="formLabelAllBorder">
 					<html:button property="deleteAnnotationData" styleClass="actionButton" onclick="featureNotSupported()" >
 							Delete
 					</html:button>
 				</td>
-			</tr>
+			</tr>--> 
 		</table>
 </html:form>
 </html>
