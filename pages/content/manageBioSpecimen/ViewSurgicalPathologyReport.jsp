@@ -2,132 +2,68 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@ taglib uri="/WEB-INF/c.tld" prefix="c" %>
 
-<script>
-function expand(action)
-{
-	switchObj = document.getElementById('paricipantInformation');
-	imageObj = document.getElementById('image');
-	
-	if(action== 'hide') //Clicked on - image
-	{
-		switchObj.style.display = 'none';				
+<%@ page import="java.util.*"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+
+<script src="jss/ajax.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<LINK href="css/styleSheet.css" type=text/css rel=stylesheet>
+
+<c:set var="operation" value="${viewSurgicalPathologyReportForm.operation}"/>
+<jsp:useBean id="operation" type="java.lang.String"/>
+<c:set var="submittedFor" value="${viewSurgicalPathologyReportForm.submittedFor}" scope="session"/>
+<jsp:useBean id="submittedFor" class="java.lang.String"/>
+<c:set var="forwardTo" value="${viewSurgicalPathologyReportForm.forwardTo}"/>
+<jsp:useBean id="forwardTo" type="java.lang.String"/>
+<c:set var="pageOf" value="${viewSurgicalPathologyReportForm.pageOf}"/>
+<jsp:useBean id="pageOf" type="java.lang.String"/>
+
+
+<%
+		int noOfRows=0;
+		Map map = null;
+		String formName=null;
+		ViewSurgicalPathologyReportForm viewSurgicalPathologyReportForm=null;
 		
-		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
-		imageObj.href="javascript:expand('show');";
-	}
-	else  							   //Clicked on + image
-	{
-		if(navigator.appName == "Microsoft Internet Explorer")
-		{					
-			switchObj.style.display = 'block';
-		}
-		else
-		{
-			switchObj.style.display = 'table-row';
-		}
-		imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
-		imageObj.href="javascript:expand('hide');";
-	}
-}
-
-function show(obj)
-{
-	switchObj=document.getElementById(obj);
-	if(navigator.appName == "Microsoft Internet Explorer")
-	{					
-		switchObj.style.display = 'block';
-	}
-	else
-	{
-		switchObj.style.display = 'table-row';
-	}
-}
-function hide(obj)
-{
-	switchObj=document.getElementById(obj);
-	switchObj.style.display='none'
-}
-
-function showDeidReport()
-{
-
-	if(document.getElementById('showDeReportChkbox').checked==true)
-	{
-		hide('identifiedReportInfo');
-		expand('hide');
-		show('deidReportInfo');
-
-	}
-	else
-	{
-		hide('deidReportInfo');
-		show('identifiedReportInfo');
-		expand('show');
-	}
-}
-function report()
-{
-	hide('deidReportInfo');
-	show('reportTable');
-	show('categoryHighlighter');
-	show('identifiedReportInfo');
-	expand('show');
-}
-function compareReport()
-{
-	expand('hide')
-	show('reportTable');
-	show('identifiedReportInfo');
-	show('deidReportInfo');
-	show('categoryHighlighter');
-}
-function myRequests()
-{
+			
 	
-}
-function confirmSubmit()
-{
-	if (confirm('Are you sure you want to Submit Comments?'))
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
-}
-function submitReviewComments()
-{
-	if(confirmSubmit())
-	{
-		document.forms[0].submittedFor.value='review';
-		var action="SurgicalPathologyReportEventParam.do?operation=add&pageOf=<%=pageOf%>"
-		document.forms[0].action=action;
-		document.forms[0].submit();
-	}
-}
-function submitQuarantineComments()
-{
-	if(confirmSubmit())
-	{
-		document.forms[0].submittedFor.value='quarantine';
-		var action="SurgicalPathologyReportEventParam.do?operation=add&pageOf=<%=pageOf%>"
-		document.forms[0].action=action;
-		document.forms[0].submit();
-	}
-}
-</script>
-<% readOnlyForAll=true; %>
+ViewSurgicalPathologyReportForm formSPR=viewSurgicalPathologyReportForm;
+
+	Object obj = request.getAttribute("viewSurgicalPathologyReportForm");
+		
+		if(obj != null && obj instanceof ViewSurgicalPathologyReportForm)
+		{
+			formSPR = (ViewSurgicalPathologyReportForm)obj;
+			map = formSPR.getValues();
+			noOfRows = formSPR.getCounter();
+		}
+%>
+<head>
+
+</head>
+
+<html:errors />
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
+
+<html:form action="ViewSurgicalPathologyReport">
+<!-- Main table start -->
 <table id="reportTable" summary="" cellspacing="5" cellpadding="0" border="0"  style="table-layout:fixed" width="750" >
 	 <tr>
-		<td><html:hidden property="id" />
-		<html:hidden property="identifiedReportId" />
-		<html:hidden property="deIdentifiedReportId" />
-		<html:hidden property="submittedFor"/>
-		<html:hidden property="onSubmit"/>
+		<td>
+			<html:hidden property="id" />
+			<html:hidden property="identifiedReportId" />
+			<html:hidden property="deIdentifiedReportId" />
+			<html:hidden property="submittedFor"/>
+			<html:hidden property="onSubmit"/>
 		</td>
 	</tr>
+<!-- if pageOf is pageOfParticipant then display drop down list of report accession number -->
 <%if(pageOf.equalsIgnoreCase(Constants.PAGEOF_PARTICIPANT))
 {
 %>
@@ -136,9 +72,19 @@ function submitQuarantineComments()
 			<b>
 				<bean:message key="viewSPR.reportInfo.reportId"/> : 
 			</b>
-				<html:select property="identifiedReportId" styleClass="formFieldSized" styleId="identifiedReportId" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onChange(this)">
-					<html:options collection="<%=Constants.REPORT_LIST%>" labelProperty="name" property="value"/>
-				</html:select>
+			<% if(formSPR.getReportIdList()!=null)
+			{
+			%>
+						<c:set var="reportIdElt" value="${viewSurgicalPathologyReportForm.reportIdList}"/>
+						<jsp:useBean id="reportIdElt" type="java.util.List"/>
+				     	<html:select property="reportIdList" styleClass="formFieldSized" styleId="reportId" size="1"
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+							<html:options collection="reportIdElt" labelProperty="name" property="value"/>
+						</html:select>
+
+			<%
+				}
+			%>
 		</td>
 	</tr>
 <%
@@ -146,27 +92,28 @@ function submitQuarantineComments()
 %>	
 	<tr>
 		<td colspan="3">
-		<table width="100%">
-			<tr>
-				<td class="formFieldNoBordersBold" width="60%">
-					<a href="javascript:report()">
-						<bean:message key="viewSPR.report" />
-					</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-			
-					<a href="javascript:compareReport()">
-						<bean:message key="viewSPR.compareReports" />
-					</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-			
-					<a href="javascript:myRequests()">
-						<bean:message key="viewSPR.myRequests" />
-					</a>
-				</td>
-				<td class="formFieldNoBordersBold"  align="right" width="40%">
-					<input type="checkbox" id="showDeReportChkbox" selected="false" onclick="showDeidReport()">
-					<bean:message key="viewSPR.showDeIdenfiedReport" />
-				</td>
-			</tr>
-		</table>
+		<!-- block to diaply default links -->
+			<table width="100%">
+				<tr>
+					<td class="formFieldNoBordersBold" width="60%">
+						<a href="javascript:clickOnLinkReport()">
+							<bean:message key="viewSPR.report" />
+						</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+				
+						<a href="javascript:clickOnLinkCompareReport()">
+							<bean:message key="viewSPR.compareReports" />
+						</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+				
+						<a href="javascript:clickOnLinkMyRequests()">
+							<bean:message key="viewSPR.myRequests" />
+						</a>
+					</td>
+					<td class="formFieldNoBordersBold"  align="right" width="40%">
+						<input type="checkbox" id="showDeReportChkbox" selected="false" onclick="clickOnLinkShowDeidReport()">
+						<bean:message key="viewSPR.showDeIdenfiedReport" />
+					</td>
+				</tr>
+			</table>
 		</td>
 	</tr>
 	<tr>
@@ -197,7 +144,7 @@ function submitQuarantineComments()
 				</td>
 				
 				<td class="formFieldAllBorders" align="right" width="1%">
-					<a id="image" style="text-decoration:none" href="javascript:expand('hide');">  
+					<a id="image" style="text-decoration:none" href="javascript:switchStyle('hide');">  
 					<img src="images/nolines_minus.gif" border="0" width="18" height="18"/>
 				</td> 
 			</tr>
@@ -331,7 +278,8 @@ if (formSPR.getRace() != null)
 				{
 					String siteName = "ParticipantMedicalIdentifier:"+i+"_Site_id";
 					String medicalRecordNumber = "ParticipantMedicalIdentifier:"+i+"_medicalRecordNumber";
-					
+					if(!((String)formSPR.getValue(siteName)).startsWith("--"))
+					{
 				%>
 				 <tr>
 				 	<td class="formFieldWithNoTopBorder" width="5"><%=i%>.
@@ -346,6 +294,7 @@ if (formSPR.getRace() != null)
 				    </td>
 				 </tr>
 				 <%
+				 	}
 				}
 				%>
 				 </tbody>  					
@@ -500,3 +449,4 @@ else
 	</td>
 	</tr>
 </table>
+</html:form>

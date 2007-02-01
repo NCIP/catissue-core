@@ -44,25 +44,23 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		viewSPR=(ViewSurgicalPathologyReportForm)form;
-		String pageOf = request.getParameter(Constants.PAGEOF);
-		String operation = (String)request.getParameter(Constants.OPERATION);
-		String submittedFor=(String)request.getParameter(Constants.SUBMITTED_FOR);
-		String forwardTo=(String)request.getParameter(Constants.FORWARD_TO);
+		String pageOf = viewSPR.getPageOf();
+		String operation = viewSPR.getOperation();
+		String submittedFor=viewSPR.getSubmittedFor();
+		String forwardTo=viewSPR.getForwardTo();
 		Long id=new Long((String)request.getParameter(Constants.SYSTEM_IDENTIFIER));
 		viewSPR.setId(id);
 		boolean isAuthorized;
-		if(operation.equalsIgnoreCase(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
+		if(id!=0 && operation.equalsIgnoreCase(Constants.VIEW_SURGICAL_PATHOLOGY_REPORT))
 		{
 			isAuthorized=isAuthorized(getSessionBean(request));
 			retrieveAndSetObject(pageOf,id,isAuthorized, request);
 		}
-		request.setAttribute(Constants.PAGEOF, pageOf);
-		request.setAttribute(Constants.OPERATION, Constants.VIEW_SURGICAL_PATHOLOGY_REPORT);
-		request.setAttribute(Constants.REQ_PATH, "");
-		request.setAttribute(Constants.SUBMITTED_FOR, submittedFor);
-		request.setAttribute(Constants.FORWARD_TO, forwardTo);
-		
-		return mapping.findForward(forward);
+		viewSPR.setPageOf(pageOf);
+		viewSPR.setOperation(operation);
+		viewSPR.setSubmittedFor(submittedFor);
+		viewSPR.setForwardTo(forwardTo);
+		return mapping.findForward(Constants.SUCCESS);
 	}
 	
 	/**
@@ -202,8 +200,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			if(role.getName().equalsIgnoreCase(Constants.ROLE_ADMINISTRATOR))
 			{
 				return true;
-			}
-			
+			}		
 		}
 		catch(SMException ex)
 		{

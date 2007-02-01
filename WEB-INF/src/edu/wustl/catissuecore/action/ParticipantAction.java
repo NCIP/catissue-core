@@ -54,11 +54,13 @@ public class ParticipantAction extends SecureAction
 		if (request.getAttribute("participantSelect") != null)
 		{
 			participantForm = (ParticipantForm) request.getAttribute("participantForm1");
-			request.setAttribute("participantForm", participantForm);
+//			request.setAttribute("participantForm", participantForm);
+			
 		}
 		if (participantForm.getOperation().equals(Constants.EDIT))
 		{
-			request.setAttribute("participantId", new Long(participantForm.getId()).toString());
+//			request.setAttribute("participantId", new Long(participantForm.getId()).toString());
+			participantForm.setParticipantId(new Long(participantForm.getId()).toString());
 		}
 		//Bug- setting the default Gender
 //		if (participantForm.getGender() == null)
@@ -81,21 +83,24 @@ public class ParticipantAction extends SecureAction
 		//Calling DeleteRow of BaseAction class
 		MapDataParser.deleteRow(key, map, request.getParameter("status"));
 		//Gets the value of the operation parameter.
-		String operation = request.getParameter(Constants.OPERATION);
+		String operation = participantForm.getOperation();
 
 		//Sets the operation attribute to be used in the Add/Edit Participant Page. 
-		request.setAttribute(Constants.OPERATION, operation);
+//		request.setAttribute(Constants.OPERATION, operation);
+		participantForm.setOperation(operation);
 
 		//Sets the pageOf attribute (for Add,Edit or Query Interface)
-		String pageOf = request.getParameter(Constants.PAGEOF);
+		String pageOf = participantForm.getPageOf();
 
-		request.setAttribute(Constants.PAGEOF, pageOf);
-
+//		request.setAttribute(Constants.PAGEOF, pageOf);
+		participantForm.setPageOf(pageOf);
 		//Sets the genderList attribute to be used in the Add/Edit Participant Page.
 		List genderList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_GENDER, null);
 		genderList.remove(0);
-		request.setAttribute(Constants.GENDER_LIST, genderList);
+		
+//		request.setAttribute(Constants.GENDER_LIST, genderList);
+		participantForm.setGenderList(genderList);
 		if (participantForm.getGender() == null || participantForm.getGender().equals(""))
 		{
 			Iterator itr = genderList.iterator();
@@ -112,8 +117,8 @@ public class ParticipantAction extends SecureAction
 		//NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
 		List genotypeList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_GENOTYPE, null);
-		request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);	
-		
+//		request.setAttribute(Constants.GENOTYPE_LIST, genotypeList);	
+		participantForm.setGenotypeList(genotypeList);
 		//Bug- setting the default Genotype
 //		if(participantForm.getGenotype() == null)
 //		{
@@ -123,7 +128,8 @@ public class ParticipantAction extends SecureAction
 		//Sets the ethnicityList attribute to be used in the Add/Edit Participant Page.
 		List ethnicityList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_NAME_ETHNICITY, null);
-		request.setAttribute(Constants.ETHNICITY_LIST, ethnicityList);
+//		request.setAttribute(Constants.ETHNICITY_LIST, ethnicityList);
+		participantForm.setEthnicityList(ethnicityList);
 		//Bug- setting the default ethnicity
 //		if (participantForm.getEthnicity() == null)
 //		{
@@ -133,7 +139,8 @@ public class ParticipantAction extends SecureAction
 		//Sets the raceList attribute to be used in the Add/Edit Participant Page.
 		List raceList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RACE,
 				null);
-		request.setAttribute(Constants.RACELIST, raceList);		
+//		request.setAttribute(Constants.RACELIST, raceList);	
+		participantForm.setRaceList(raceList);
 		//Bug- setting the default raceTypes
 //		if (participantForm.getRaceTypes() == null || participantForm.getRaceTypes().length == 0)
 //		{
@@ -145,7 +152,8 @@ public class ParticipantAction extends SecureAction
 		List vitalStatusList = CDEManager.getCDEManager().getPermissibleValueList(
 				Constants.CDE_VITAL_STATUS, null);
 		vitalStatusList.remove(0);
-		request.setAttribute(Constants.VITAL_STATUS_LIST, vitalStatusList);
+//		request.setAttribute(Constants.VITAL_STATUS_LIST, vitalStatusList);
+		participantForm.setVitalStatusList(vitalStatusList);
 		if (participantForm.getVitalStatus() == null || participantForm.getVitalStatus().equals(""))
 		{
 			Iterator itr = vitalStatusList.iterator();
@@ -158,8 +166,8 @@ public class ParticipantAction extends SecureAction
 
 		}
 		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
-		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
-
+//		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
+		participantForm.setActivityStatusList(Constants.ACTIVITY_STATUS_VALUES);
 		ParticipantBizLogic bizlogic = (ParticipantBizLogic) BizLogicFactory.getInstance()
 				.getBizLogic(Constants.PARTICIPANT_FORM_ID);
 
@@ -169,8 +177,8 @@ public class ParticipantAction extends SecureAction
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 
 		List siteList = bizlogic.getList(sourceObjectName, displayNameFields, valueField, true);
-
-		request.setAttribute(Constants.SITELIST, siteList);
+		participantForm.setSiteList(siteList);
+//		request.setAttribute(Constants.SITELIST, siteList);
 		Logger.out.debug("pageOf :---------- " + pageOf);
 
 		return mapping.findForward(pageOf);
