@@ -1,5 +1,16 @@
 <%
 	String annotationLink = request.getContextPath() + "/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1";
+	String operation = (String)request.getParameter("operation");
+	Long id = (Long)request.getAttribute("id");
+	String queryString = request.getQueryString();
+
+	if(queryString==null)
+	{
+			queryString = queryString  + "operation=edit&pageOf=pageOfParticipant";
+	}
+	queryString = queryString  +"&id="+id;
+	
+	
 %>
 <html>
 <head>
@@ -15,17 +26,28 @@
 		<script  src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXGrid.js"></script>
 		<script  src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXGridCell.js"></script>
 		<script src="<%=request.getContextPath()%>/jss/javaScript.js" type="text/javascript"></script>
-</head>
-<div id="a_tabbar" style="width:600;height:500;background-color:white;overflow:auto" ></div>
+		
+</head>  
+<body>
+<div id="a_tabbar" style="width:800;height:600" ></div>
 <script>
-            tabbar= new dhtmlXTabBar("a_tabbar","top");
-			tabbar.setImagePath("<%=request.getContextPath()%>/dhtml_comp/imgs/");
-			tabbar.setHrefMode("iframes-on-demand");
-			var tabIds = ["addTab","viewSPRTab","annotationsTab"];
-			var tabNames = ["Add Partitipant" , "View SPR", "Annotations"];
-			var tabHREFs = ["<%=request.getContextPath()%>/pages/content/manageBioSpecimen/EditParticipant.jsp","<%=request.getContextPath()%>/pages/content/manageBioSpecimen/ViewSurgicalPathologyReport.jsp","<%=request.getContextPath()%>/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1"];
-			initializeTabs(tabIds,tabNames,tabHREFs);
+			/*if(top.location!=location)
+			{
+				top.location.href = location.href;
+
+			}*/
+			
+			var opr = '<%=operation%>';
+			alert(opr);
+			alert("Quesry String " +'<%=queryString%>');
+			if((opr == 'null')||(opr=="add"))
+			{	
+				initiallizeAddParticipantTabs('<%=request.getContextPath()%>');
+			}
+			else
+			{
+				initiallizeEditParticipantTabs('<%=request.getContextPath()%>','<%=queryString%>');
+			} 
 </script>
-
-
+</body>
 </html>
