@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<data-type-control>
+	<enumerated>
+		<string>
+			<conditions>
+				<in>
+					<displayname>IN</displayname>
+				</in>
+				<notin>
+					<displayname>Not IN</displayname>
+				</notin>
+			</conditions>
+			<record-count>
+				<components1>main.Components2</components1>
+				<components2>main.Components2</components2>
+			</record-count>
+		</string>
+		<number>
+			<conditions>
+				<in>
+					<displayname>IN</displayname>
+				</in>
+				<notin>
+					<displayname>Not IN</displayname>
+				</notin>
+			</conditions>
+			<record-count>
+				<components1>wrapper-class</components1>
+				<components2>wrapper-class</components2>
+			</record-count>
+		</number>
+		<boolean>
+			<conditions>
+				<equals>
+					<displayname>Equals</displayname>
+				</equals>
+				<notequals>
+					<displayname>Not Equals</displayname>
+				</notequals>
+			</conditions>
+			<components>main.Components</components>
+			<values>
+				<yes>Yes</yes>
+				<no>No</no>
+			</values>
+		</boolean>
+	</enumerated>
+	<non-enumerated>
+		<string>
+			<conditions>
+				<startswith>
+					<displayname>Starts With</displayname>
+				</startswith>
+				<endswith>
+					<displayname>Ends With</displayname>
+				</endswith>
+				<contains>
+					<displayname>Contains</displayname>
+				</contains>
+				<equals>
+					<displayname>Equals</displayname>
+				</equals>
+				<notequals>
+					<displayname>Not Equals</displayname>
+				</notequals>
+				<isnull>
+					<displayname>Is Null</displayname>
+				</isnull>
+				<isnotnull>
+					<displayname>Is Not Null</displayname>
+				</isnotnull>
+			</conditions>
+			<components>edu.wustl.cab2b.client.ui.main.Components</components>
+		</string>
+		<number>
+			<conditions>
+				<equals>
+					<displayname>Equals</displayname>
+				</equals>
+				<notequals>
+					<displayname>Not Equals</displayname>
+				</notequals>
+				<between>
+					<displayname>Between</displayname>
+				</between>
+				<lessthan>
+					<displayname>Less than</displayname>
+				</lessthan>
+				<lessthanorequalto>
+					<displayname>Less than or Equal to</displayname>
+				</lessthanorequalto>
+				<greaterthan>
+					<displayname>Greater than</displayname>
+				</greaterthan>
+				<greaterthanorequalto>
+					<displayname>Greater than or Equal to</displayname>
+				</greaterthanorequalto>
+				<isnull>
+					<displayname>Is Null</displayname>
+				</isnull>
+				<isnotnull>
+					<displayname>Is Not Null</displayname>
+				</isnotnull>
+			</conditions>
+			<components>edu.wustl.cab2b.client.ui.main.Components</components>
+		</number>
+		<date>
+			<conditions>
+				<equals>
+					<displayname>Equals</displayname>
+				</equals>
+				<notequals>
+					<displayname>Not Equals</displayname>
+				</notequals>
+				<between>
+					<displayname>Between</displayname>
+				</between>
+				<lessthan>
+					<displayname>Less than</displayname>
+				</lessthan>
+				<lessthanorequalto>
+					<displayname>Less than or Equal to</displayname>
+				</lessthanorequalto>
+				<greaterthan>
+					<displayname>Greater than</displayname>
+				</greaterthan>
+				<greaterthanorequalto>
+					<displayname>Greater than or Equal to</displayname>
+				</greaterthanorequalto>
+				<isnull>
+					<displayname>Is Null</displayname>
+				</isnull>
+				<isnotnull>
+					<displayname>Is Not Null</displayname>
+				</isnotnull>
+			</conditions>
+			<components>edu.wustl.cab2b.client.ui.main.Components3</components>
+		</date>
+	</non-enumerated>	
+</data-type-control>
