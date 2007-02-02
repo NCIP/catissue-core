@@ -193,7 +193,7 @@ public class SimilarContainerBizLogic extends StorageContainerBizLogic implement
 
 	}
 
-	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	synchronized public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		StorageContainer container = (StorageContainer) obj;
 		try

@@ -400,7 +400,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 	}
 
-	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	synchronized public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Map containerMap = null;
 		try

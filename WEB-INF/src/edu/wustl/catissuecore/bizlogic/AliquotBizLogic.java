@@ -483,7 +483,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		throw new DAOException("The container you specified does not have enough space to allocate storage position for Aliquot Number " + specimenNumber);
 	}
 
-	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	synchronized public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Specimen aliquot = (Specimen) obj;
 		String specimenKey = "Specimen:";
