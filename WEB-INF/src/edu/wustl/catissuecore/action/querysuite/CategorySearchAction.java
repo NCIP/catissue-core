@@ -71,7 +71,8 @@ public class CategorySearchAction extends BaseAction
 			String entitiesString = "";
 			if (entityCollection != null && !entityCollection.isEmpty())
 			{
-				if(((String)request.getSession().getAttribute("nextOperation")).equals("BuildNewTree"))
+				String nextOperation = ((String)request.getSession().getAttribute("nextOperation"));
+				if(nextOperation!=null && nextOperation.equals("BuildNewTree"))
 				{
 					entitiesString= "true";
 					GenerateHTMLForBuildNewTree buildNewTree = new GenerateHTMLForBuildNewTree();
