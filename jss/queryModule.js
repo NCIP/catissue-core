@@ -203,7 +203,7 @@ function onResponseUpdate(text)
 			}
 			else
 			{
-				row = row + '<tr>' + text + '</tr>';
+				row = row + '<tr><td>' + text + ' </td></tr>';
 			}
 			
 			row = row+'</table>';		

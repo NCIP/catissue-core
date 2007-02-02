@@ -423,8 +423,17 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.defineSearchResultsView"/>
-			<forward name="BuildNewTree" path=".catissuecore.defineSearchResultsBuildNewTree"/>
+			<forward name="BuildNewTree" path=".catissuecore.defineSearchResultsViewBNT"/>
 		</action>
+		
+		<action path="/BuildCustomizeTree"
+			type="edu.wustl.catissuecore.action.querysuite.BuildCustomizeTreeAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
+		</action>
+		
 		<!-- Applet Action mapping for query Module -->
 		<action path="/ViewSearchResultsAction" 
 			type="edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction" 
@@ -439,6 +448,8 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.querysuite.PathFinderAction" 
 			parameter="method">
 		</action>
+		
+		
 		
 		<!-- Action code : Query Module Ends : 06/11/06 -->
 		

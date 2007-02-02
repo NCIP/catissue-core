@@ -15,36 +15,61 @@
 function moveNodeUp()
 {
 
-	var selectedNode = tree.getSelectedItemId();	
-	tree.moveItem(selectedNode, "up");
+	var selectedNode = tree.getSelectedItemId().split(",");	
+	var length= selectedNode.length;
+	var i=0;	
+	for(i=0; i<length; i++)
+	{
+		tree.moveItem(selectedNode[i], "up");
+	}
 }
 
 function moveNodeDown()
 {
 
-	var selectedNode = tree.getSelectedItemId();	
-	tree.moveItem(selectedNode, "left");
+	var selectedNode = tree.getSelectedItemId().split(",");		
+	var length= selectedNode.length;
+	var i=0;	
+	for(i=0; i<length; i++)
+	{
+		tree.moveItem(selectedNode[i], "down");
+	}
 }
 
 function moveNodeLeft()
 {
-
-	var selectedNode = tree.getSelectedItemId();	
-	tree.moveItem(selectedNode, "left");
+	var selectedNode = tree.getSelectedItemId().split(",");	
+	var length= selectedNode.length;
+	var i=0;	
+	for(i=0; i<length; i++)
+		tree.moveItem(selectedNode[i], "left");
 }
 
 function moveNodeRight()
 {
 
 	var selectedNode = tree.getSelectedItemId();	
-	tree.moveItem(selectedNode, "left");
+	
+	var subItems = tree.getAllSubItems(0).split(",");
+	
+	var subItemsLength = subItems.length;
+	
+	var i=0;	
+	for(i=0; i<subItemsLength ; i++)
+	{
+		if(subItems[i]==selectedNode)
+		{
+				tree.moveItem(selectedNode, "item_child", subItems[i-1]);
+				
+		}
+	}	
 }
 
 function onAutogenerate()
 {
 
 	var selectedNode = tree.getSelectedItemId();	
-	tree.moveItem(selectedNode, "left");
+	
 }
 
 </script>
@@ -64,7 +89,7 @@ function onAutogenerate()
 			<td valign="top" colspan="7" > 
 				<table border="0" width="208" valign="top" cellspacing="0" height="100%">		
 					<td width="500" style="border:solid 1px;" valign="top">
-						<div id="treebox" style="width:400; height:250; overflow:auto;"/>
+						<div id="treebox" style="width:400; height:500; overflow:auto;"/>
 					</td>						
 				</table>
 			</td>
@@ -94,7 +119,7 @@ function onAutogenerate()
 
 		<td width="25%" valign="center"  >
 				<html:button property="Right" onclick="moveNodeRight()">							
-					<bean:message key="query.moveNodeUp"/>
+					<bean:message key="query.moveNodeRight"/>
 				</html:button>			
 		</td>
 		
@@ -109,12 +134,14 @@ function onAutogenerate()
 		</td>
 
 		
-		</tr>
-		
-		
+		</tr>	
 		
 	</table>
 </html:form>
 </html>
-<script> var tree=new dhtmlXTreeObject("treebox","100%","100%",0);
+<script> 
+	var tree=new dhtmlXTreeObject("treebox","100%","100%",0);
+	var itemID =1;
+	tree.enableTreeLines(false);
+	tree.enableMultiselection(true);
 </script>

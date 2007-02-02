@@ -12,21 +12,61 @@
 <script>
 
 
-function showTree(selectedCategories)
+function showTree(selectedCategories, flag)
 {
 	 var selLength = selectedCategories.length;     
+	 var updatedList = new Array();
 	 tree.setImagePath("dhtml_comp/imgs/");
-	 var i;				
-	 for(i=0; i <selLength; i++)
+	 var i, j=0;				
+	 
+	 if(flag)
 	 {
-		if(selectedCategories.options[i].selected)
-		{
-			tree.insertNewChild(0,selectedCategories.options[i].text,selectedCategories.options[i].text,0,"","","","");	
+		 for(i=0; i <selLength; i++)
+		 {
+			if(selectedCategories.options[i].selected)
+			{
+				tree.insertNewChild(0,itemID ,selectedCategories.options[i].text,0,"","","","");					
+				itemID++;
+			 }	
+			 else
+			 {
+			 	var newOpt = new Option(selectedCategories.options[i].text, selectedCategories.options[i].text); 
+			 	updatedList[j]=newOpt;			
+			 	j++;
+	 	
+			 }
+	
 		 }
-		    
-		    
+		 
+		for(i=0; i <selLength; i++)
+		{
+			selectedCategories.options[i]=null; 		
+		}
+
+		 for(i=0; i<j; i++)
+		 {
+			selectedCategories.options[i] = updatedList[i];
+			
+		 }		 
+	
 	 }
-	    
+	 else
+	 {
+	 	
+	 	var selectedItemText= tree.getSelectedItemText().split(",");
+	 	var selectedItem = tree.getSelectedItemId().split(",");	
+	 	var removeItemLength = selectedItem.length;
+	 	
+	  	var k=0;
+	 	for(k=0; k<removeItemLength ; k++)
+	 	{
+		 	var newOpt = new Option(selectedItemText[k], selectedItemText[k]); 
+		 	selLength = selectedCategories.length;    	
+		 	selectedCategories.options[selLength]= newOpt;	 	
+		 	tree.deleteItem(selectedItem[k] , false);
+	 	
+	 	}
+	 }	    
 	  
 }
 
@@ -56,14 +96,14 @@ function showTree(selectedCategories)
 						<%@ include file="/pages/content/search/querysuite/ChooseSearchCategory.jsp" %>
 						</td>
 						
-						<td height="1%"  valign="center" height="2%" width="100%">
-							<html:button property="addEntities" onclick="showTree(document.forms[0].selectCategoryList)">							
+						<td align="center" valign="middle">
+							<html:button property="addEntities" onclick="showTree(document.forms[0].selectCategoryList, true)">							
 							<bean:message key="query.addEntities"/>
 							</html:button>
-						</td>
 						
-						<td height="1%"  valign="center" height="2%" width="100%">
-							<html:button property="removeEntities" onclick="showTree()">
+						 <br/><br/>
+						
+							<html:button property="removeEntities" onclick="showTree(document.forms[0].selectCategoryList, false)">
 							<bean:message key="query.removeEntities"/>
 							</html:button>
 						</td>
