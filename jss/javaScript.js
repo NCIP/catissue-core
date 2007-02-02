@@ -930,9 +930,7 @@ function initializeTabs(tabIds, tabNames, tabPageRefs)
 		 
 	}
 	tabbar.setTabActive(tabIds[0]);
-	tabbar.setSkinColors("#FFFFFF","#C9C9CD");
 }
-
 
 function textLimit(field) 
 {

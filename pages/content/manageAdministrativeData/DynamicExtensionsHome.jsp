@@ -1,6 +1,5 @@
 <%@
 	page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"
-	import ="edu.common.dynamicextensions.ui.webui.util.WebUIManager"
 %>
 <%
 	String dynamicExtensionsURL =(String) request.getAttribute(AnnotationConstants.DYNAMIC_EXTN_URL_ATTRIB);

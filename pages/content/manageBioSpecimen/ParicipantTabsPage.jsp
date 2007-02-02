@@ -3,6 +3,7 @@
 <%
 	String annotationLink = request.getContextPath() + "/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1";
 	String operation = (String)request.getParameter("operation");
+	String participantId = request.getParameter("id");
 	Long id = (Long)request.getAttribute("id");
 	String queryString = request.getQueryString();
 
@@ -12,9 +13,9 @@
 	}
 	queryString = queryString + "&pageOf=pageOfParticipant&id="+id;
 	Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
-	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+id;
-	
-	
+	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+participantId;
+
+
 %>
 <html>
 <head>
@@ -30,8 +31,8 @@
 		<script  src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXGrid.js"></script>
 		<script  src="<%=request.getContextPath()%>/dhtml_comp/jss/dhtmlXGridCell.js"></script>
 		<script src="<%=request.getContextPath()%>/jss/javaScript.js" type="text/javascript"></script>
-		
-</head>  
+
+</head>
 <body>
 <div id="a_tabbar" style="width:800;height:600" ></div>
 <script>
@@ -43,13 +44,13 @@
 			else
 			{
 				if((opr == 'null')||(opr=="add"))
-				{	
+				{
 					initiallizeAddParticipantTabs('<%=request.getContextPath()%>');
 				}
 				else
 				{
 					initiallizeEditParticipantTabs('<%=request.getContextPath()%>','<%=queryString%>','<%=participantAnnotationsQueryString%>');
-				} 
+				}
 			}
 </script>
 </body>

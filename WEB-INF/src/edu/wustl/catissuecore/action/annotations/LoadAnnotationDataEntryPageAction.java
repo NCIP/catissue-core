@@ -74,9 +74,6 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		}
 		Logger.out.info("Updating for Entity Id " + staticEntityId);
 		initializeDataEntryForm(request,staticEntityId,staticEntityRecordId,entityIdForCondition,entityRecordIdForCondition,annotationDataEntryForm);
-		request.setAttribute(Constants.OPERATION,"DefineAnnotations");
-		//request.setAttribute("participantForm",annotationDataEntryForm);
-		//System.out.println();
 		return mapping.findForward(Constants.SUCCESS);
 	}
 

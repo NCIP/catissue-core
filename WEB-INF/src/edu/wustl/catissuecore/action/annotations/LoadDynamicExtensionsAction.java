@@ -54,8 +54,13 @@ public class LoadDynamicExtensionsAction extends BaseAction
 	{
 		//Get Dynamic extensions URL
 		String dynamicExtensionsURL = WebUIManager.getCreateContainerURL();
+		//append container id if any
+		if(request.getParameter("containerId")!=null)
+		{
+			dynamicExtensionsURL = dynamicExtensionsURL + "?" + WebUIManager.CONATINER_IDENTIFIER_PARAMETER_NAME +"=" +request.getParameter("containerId");
+		}
 		//append callback parameter
-		dynamicExtensionsURL = dynamicExtensionsURL + "?" + WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath() + AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN;
+		dynamicExtensionsURL = dynamicExtensionsURL + "&" + WebUIManager.getCallbackURLParamName() + "=" + request.getContextPath() + AnnotationConstants.CALLBACK_URL_PATH_ANNOTATION_DEFN;
 		return dynamicExtensionsURL;
 	}
 }
