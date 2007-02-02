@@ -90,7 +90,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	 */
 	protected String consentDate="";
 	/**
-	 * Consent Date, Date on which Consent is Signed
+	 * This will be set in case of withdrawl popup
 	 */
 	protected String withdrawlButtonStatus= Constants.WITHDRAW_RESPONSE_NOACTION;
 	
