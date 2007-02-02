@@ -16,15 +16,14 @@
 <%
 		
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
-	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
+	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute(Constants.NEWSPECIMEN_FORM);
 	String nodeId="";
 	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 	boolean isAddNew = false;
 	String signedConsentDate = "";
 	String selectProperty="";
-	//String showConsents = (String)request.getAttribute("showConsents");
-	String tab = (String)request.getAttribute("tabSelected");
+	String tab = (String)request.getAttribute(Constants.TAB_SELECTED);
 	String operation = (String)request.getAttribute(Constants.OPERATION);
 	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 	String appendingPath = "/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
@@ -230,20 +229,6 @@
 			}
 			
 		}
-		function submitform()
-		{
-		 // resetVirtualLocated();
-		  var indexId=document.getElementById('specimenCollectionGroupId');
-		  var indexValue=indexId.value;
-  		  var selectedIndex=indexId.selectedIndex;
-		  if(selectedIndex!=0)
-		  {
-			  var action ="NewSpecimen.do?pageOf=pageOfNewSpecimen&showConsents=yes&tableId4=disable&id="+indexValue;
-			  document.forms[0].action = action;
-			  document.forms[0].submit();
-		  }		 
-		}
-		
 		function onCollOrClassChange()
 		{
 			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupId");
@@ -252,7 +237,7 @@
 			if(specimenCollGroupElement.value != "-1" || classNameElement.value != "-1")
 			{
 				<%
-				String actionOnCollOrClassChange = "NewSpecimen.do?pageOf=pageOfNewSpecimen&virtualLocated=false&showConsents=yes&tableId4=disable";
+				String actionOnCollOrClassChange = "NewSpecimen.do?pageOf=pageOfNewSpecimen&virtualLocated=false&tab=newSpecimenForm&showConsents=yes&tableId4=disable";
 				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 				{
 					actionOnCollOrClassChange = "CPQueryNewSpecimen.do?pageOf=pageOfNewSpecimenCPQuery&virtualLocated=false";
@@ -428,13 +413,13 @@
 	  function showConsents()
 	  {
 		var showConsents = "<%=tab%>";
-		if(showConsents=="consent")
+		if(showConsents=="<%=Constants.NULL%>" || showConsents=="<%=Constants.NEWSPECIMEN_FORM%>")
 		{
-			consentPage();
+			newspecimenPage();
 		}
 		else
 		{
-			newspecimenPage();
+			consentPage();			
 		}
 	  }
 // Consent Tracking Module Virender mehta	 
@@ -1386,7 +1371,7 @@
 							<!-- Insert Consent Tracking Code -->
 <!--  Consent Tracking Module Virender mehta	 -->														
 							<%
-							List requestParticipantResponse = (List)request.getAttribute("specimenResponseList");						 	
+							List requestParticipantResponse = (List)request.getAttribute(Constants.SPECIMEN_RESPONSELIST);						 	
 							if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
 							{
 							%>
