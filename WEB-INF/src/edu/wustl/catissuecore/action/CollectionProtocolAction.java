@@ -47,6 +47,8 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionProtocolAction extends SpecimenProtocolAction 
 {
+	//This will keep track of no of consents for a particular participant
+	int consentCounter=0;	
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in CollectionProtocol Add/Edit webpage.
@@ -76,7 +78,8 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 			Collection consentTierCollection=collectionProtocol.getConsentTierCollection();
 			Map tempMap= prepareConsentMap(consentTierCollection);
 	    	collectionProtocolForm.setConsentValues(tempMap);
-	    	collectionProtocolForm.setConsentTierCounter(consentTierCollection.size());
+	    	collectionProtocolForm.setConsentTierCounter(consentCounter);
+	    	
     	}
     	//Name of delete button clicked
         String button = request.getParameter("button");
@@ -179,6 +182,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 				tempMap.put(statementkey, consent.getId());
 				i++;
 			}
+			consentCounter=i;
 			return tempMap;
 		}
 		else
@@ -187,13 +191,4 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 		}
 		
 	}
-//	public List consentsList()
-//	{
-//		List listOfResponces=new ArrayList();
-//		listOfResponces.add(new NameValueBean("DNA","DNA"));
-//		listOfResponces.add(new NameValueBean("AIDS","AIDS"));
-//		listOfResponces.add(new NameValueBean("RNA","RNA"));
-//		listOfResponces.add(new NameValueBean("Viral","Viral"));
-//		return listOfResponces;  	
-//	}
 }
