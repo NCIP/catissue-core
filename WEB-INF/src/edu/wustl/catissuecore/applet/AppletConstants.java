@@ -198,4 +198,17 @@ public interface AppletConstants
 	public static final char MULTIPLE_SPECIMEN_DELETE_LAST_ACCESSKEY='D';
 
 	public static final String MULTIPLE_SPECIMEN_CHECKBOX_LABEL="Specimen ";
+	// Dagviewapplet constants
+	public static final String QUERY_OBJECT = "queryObject";
+	public static final String SESSION_ID = "session_id";
+	public static final String STR_TO_CREATE_QUERY_OBJ = "strToCreateQueryObject";
+	public static final String ENTITY_NAME = "entityName";
+	public static final String INIT_DATA = "initData";
+	public static final String ATTRIBUTES = "Attributes";
+	public static final String ATTRIBUTE_OPERATORS = "AttributeOperators";
+	public static final String FIRST_ATTR_VALUES = "FirstAttributeValues";
+	public static final String SECOND_ATTR_VALUES = "SecondAttributeValues";
+	public static final String SHOW_ENTITY_INFO = "showEntityInformation";
+	//public static final String ATTRIBUTES = "Attributes";
+	
 }
