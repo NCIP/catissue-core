@@ -114,6 +114,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SEARCHED_ENTITIES_MAP = "searchedEntitiesMap";
 	public static final String SUCCESS = "success";
 	public static final String LIST_OF_ENTITIES_IN_QUERY = "ListOfEntitiesInQuery";
+	public static final String DYNAMIC_UI_XML = "dynamicUI.xml";
 	
 	//Surgical Pathology Report UI constants
 	public static final String SPR_VIEW_ACTION="ViewSurgicalPathologyReport.do";
