@@ -119,6 +119,7 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
         {
         	dForm.setDistributionBasedOn(new Integer(0));
         }
+        
          /* If forwarded from speciman page**/
         HashMap forwardToHashMap = (HashMap) request.getAttribute(
                 "forwardToHashMap");
@@ -316,7 +317,7 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 		dForm.setValue(keyPrefix + "availableQty", specimen.getAvailableQuantity());
 
 		dForm.setCounter(dForm.getCounter() + 1);
-		dForm.setDistributionBasedOn(new Integer(0));
+		dForm.setDistributionBasedOn(new Integer(2));
 	}
 
 	private void setSpecimenCharateristics(DistributionForm dForm, HttpServletRequest request) throws DAOException
