@@ -128,32 +128,28 @@ public class NewSpecimenAction extends SecureAction
 
 		//Consent Tracking Virender Mehta
 		//Adding name,value pair in NameValueBean 
-     	String tableStatus="";
      	String scg_id=String.valueOf(specimenForm.getSpecimenCollectionGroupId());
-     	
-		if(!scg_id.equals("-1"))
+     	if(!scg_id.equals(Constants.SCG_ID))
 		{
 			String showConsents = request.getParameter(Constants.SHOW_CONSENTS);
 			if(showConsents!=null && showConsents.equalsIgnoreCase(Constants.YES))
 			{
-				if(scg_id.equalsIgnoreCase("null")||scg_id.trim().length()==0)
+				if(scg_id.equalsIgnoreCase(Constants.NULL)||scg_id.trim().length()==0)
 				{
 					Map forwardToHashMap = (Map)request.getAttribute("forwardToHashMap");
 					scg_id=(String)forwardToHashMap.get("specimenCollectionGroupId");
 				}
-				String tabSelected = request.getParameter("tab");
+				String tabSelected = request.getParameter(Constants.SELECTED_TAB);
 				if(tabSelected!=null)
 				{
-					request.setAttribute("tabSelected",tabSelected);	
+					request.setAttribute(Constants.TAB_SELECTED,tabSelected);
 				}
-				
-				tableStatus = request.getParameter("tableId4");
-				if(tableStatus.equals("disable"))
+				String tableStatus = request.getParameter(Constants.CONSENT_TABLE);
+				if(tableStatus!=null ||tableStatus.equals(Constants.DISABLE))
 				{
-					request.setAttribute("tableStatus",tableStatus);
+					request.setAttribute(Constants.CONSENT_TABLE_SHOWHIDE,tableStatus);
 				}
 				SpecimenCollectionGroup specimenCollectionGroup = getSCGObj(scg_id);
-				//CollectionProtocolRegistration collectionProtocolRegistration = getcollectionProtocolRegistrationObj(scg_id);
 				User witness= specimenCollectionGroup.getCollectionProtocolRegistration().getConsentWitness();
 				if(witness==null||witness.getFirstName()==null)
 				{
@@ -192,7 +188,7 @@ public class NewSpecimenAction extends SecureAction
 				}
 				List specimenResponseList = new ArrayList();
 				specimenResponseList=Utility.responceList(operation);
-				request.setAttribute("specimenResponseList", specimenResponseList);
+				request.setAttribute(Constants.SPECIMEN_RESPONSELIST, specimenResponseList);
 			}
 		}
 		//Consent Tracking Virender Mehta		
@@ -758,23 +754,9 @@ public class NewSpecimenAction extends SecureAction
 
 	//Consent Tracking (Virender Mehta)	
 	/**
-	 * This function will return CollectionProtocolRegistration object 
+	 * This function will return SpecimenCollectionGroup object 
 	 * @param scg_id Selected SpecimenCollectionGroup ID
-	 * @return collectionProtocolRegistration
-	 */
-	private CollectionProtocolRegistration getcollectionProtocolRegistrationObj(String scg_id) throws DAOException
-	{
-		SpecimenCollectionGroupBizLogic specimenCollectionBizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-		String colName = "id";			
-		List getSCGIdFromDB = specimenCollectionBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), colName, scg_id);		
-		SpecimenCollectionGroup specimenCollectionGroupObject = (SpecimenCollectionGroup)getSCGIdFromDB.get(0);
-		CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroupObject.getCollectionProtocolRegistration();
-		return collectionProtocolRegistration;
-	}
-	/**
-	 * This function will return CollectionProtocolRegistration object 
-	 * @param scg_id Selected SpecimenCollectionGroup ID
-	 * @return collectionProtocolRegistration
+	 * @return specimenCollectionGroupObject
 	 */
 	private SpecimenCollectionGroup getSCGObj(String scg_id) throws DAOException
 	{

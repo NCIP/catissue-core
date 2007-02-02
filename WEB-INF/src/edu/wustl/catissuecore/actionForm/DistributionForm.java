@@ -78,7 +78,7 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
 	
 	private Integer distributionType = new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE);
 
-	private Integer distributionBasedOn = new Integer(Constants.BARCODE_BASED_DISTRIBUTION);
+	private Integer distributionBasedOn = new Integer(Constants.LABEL_BASED_DISTRIBUTION);
 	
 	/**
 	 * Map to handle values of all Events

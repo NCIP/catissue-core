@@ -45,8 +45,15 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String 	INVALID="Invalid";
 	public static final String 	VALID="valid";
 	public static final String 	FALSE="false";
-	
-		
+	public static final String 	NULL="null";
+	public static final String 	CONSENT_TABLE="tableId4";
+	public static final String 	DISABLE="disable";
+	public static final String 	SCG_ID="-1";
+	public static final String 	SELECTED_TAB="tab";
+	public static final String 	TAB_SELECTED="tabSelected";
+	public static final String 	NEWSPECIMEN_FORM="newSpecimenForm";
+	public static final String 	CONSENT_TABLE_SHOWHIDE="tableStatus";
+	public static final String 	SPECIMEN_RESPONSELIST="specimenResponseList";
 	//Ordering System Status
 	public static final String CDE_NAME_REQUEST_STATUS="Request Status";
 	public static final String CDE_NAME_REQUESTED_ITEMS_STATUS="Requested Items Status";
