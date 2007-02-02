@@ -156,6 +156,7 @@ public class LoadAnnotationDefinitionAction extends BaseAction
 		if(cacheManager!=null)
 		{
 			staticEntityId = (String)cacheManager.getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITYID);
+			cacheManager.removeObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITYID);
 		}
 		return staticEntityId;
 	}
