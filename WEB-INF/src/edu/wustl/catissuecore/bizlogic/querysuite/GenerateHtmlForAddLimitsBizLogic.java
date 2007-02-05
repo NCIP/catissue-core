@@ -3,8 +3,10 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import edu.common.dynamicextensions.domain.BooleanAttributeTypeInformation;
 import edu.common.dynamicextensions.domain.DateAttributeTypeInformation;
@@ -17,14 +19,12 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeTypeInformationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.util.ParseXMLFile;
-import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.logger.Logger;
 
 /**
- * This is used to generate UI for 'Add limits' section for categorySearch.
- * This is called from CategorySearchAction.
+ * This generates UI for 'Add limits' and 'Edit Limits' section.
  * 
  * @author deepti_shelar
  *
@@ -32,20 +32,21 @@ import edu.wustl.common.util.logger.Logger;
 public class GenerateHtmlForAddLimitsBizLogic
 {
 	/**
-	 * This method generates the html for Add Limits section.
+	 * This method generates the html for Add Limits and Edit Limits section.
 	 * This internally calls methods to generate other UI components like text, Calendar, Combobox etc.
 	 * @param entity entity to be presented on UI.
+	 * @param conditions List of conditions , These are required in case of edit limits, For adding linits this parameter is null
 	 * @return String html generated for Add Limits section.
 	 */
-	public String generateHTML(EntityInterface entity)
+	public String generateHTML(EntityInterface entity, List<ICondition> conditions)
 	{
 		StringBuffer generatedHTML = new StringBuffer();
-		String nameOfTheEntity = entity.getName(); 
+		String nameOfTheEntity = entity.getName();
 		int lastIndex = nameOfTheEntity.lastIndexOf(".");
 		String entityName = nameOfTheEntity.substring(lastIndex + 1);
 		Collection attributeCollection = entity.getAttributeCollection();
-		
-		String header = ApplicationProperties.getValue("query.defineSearchRulesFor");
+		boolean isEditLimits = false;
+		String header = "Define Search Rules For";//ApplicationProperties.getValue("query.defineSearchRulesFor");
 		String attributesList = "";
 		generatedHTML.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"0\" cellpadding=\"0\">");
 		generatedHTML.append("\n<tr>");
@@ -65,19 +66,58 @@ public class GenerateHtmlForAddLimitsBizLogic
 				generatedHTML.append("\n<tr id=\"" + attrName + "\" height=\"3%\">\n<td class=\"standardTextQuery\" width=\"10%\">");
 				generatedHTML.append(attrName + "</td>\n");
 				List<String> operatorsList = populateAttributeUIInformation(attribute);
-				generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList));
 				boolean isBetween = false;
 				if (!operatorsList.isEmpty() && operatorsList.get(0).equalsIgnoreCase(RelationalOperator.Between.toString()))
 				{
 					isBetween = true;
 				}
-				generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween));
+				if (conditions != null)
+				{
+					Map<String, ICondition> attributeNameConditionMap = getMapOfConditions(conditions);
+					isEditLimits = true;
+					if (attributeNameConditionMap.containsKey(attrName))
+					{
+						ICondition condition = attributeNameConditionMap.get(attrName);
+						ArrayList<String> values = (ArrayList<String>) condition.getValues();
+						String operator = condition.getRelationalOperator().toString();
+						generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList, operator));
+						if (operator.equalsIgnoreCase(RelationalOperator.Between.toString()))
+						{
+							isBetween = true;
+						}
+						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, values));
+					}
+					else
+					{
+						generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList, null));
+						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null));
+					}
+				}
+				if (conditions == null)
+				{
+					generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList, null));
+					generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null));
+				}
 				generatedHTML.append("\n</tr>");
 			}
 		}
-		generatedHTML.append(generateHTMLForButton(entityName, attributesList));
+		generatedHTML.append(generateHTMLForButton(entityName, attributesList, isEditLimits));
 		generatedHTML.append("</table>");
 		return generatedHTML.toString();
+	}
+	/**
+	 * Returns the map of name of the attribute and condition obj as its value.
+	 * @param conditions list of conditions user had applied in case of edit limits
+	 * @return Map name of the attribute and condition obj 
+	 */
+	private Map<String, ICondition> getMapOfConditions(List<ICondition> conditions)
+	{
+		Map<String, ICondition> attributeNameConditionMap = new HashMap<String, ICondition>();
+		for (int i = 0; i < conditions.size(); i++)
+		{
+			attributeNameConditionMap.put(conditions.get(i).getAttribute().getName(), conditions.get(i));
+		}
+		return attributeNameConditionMap;
 	}
 
 	/**
@@ -89,42 +129,35 @@ public class GenerateHtmlForAddLimitsBizLogic
 	{
 		List<String> operatorsList = new ArrayList<String>();
 		AttributeTypeInformationInterface attrTypeInfo = attributeInterface.getAttributeTypeInformation();
-		String path = System.getProperty(Constants.APP_DYNAMIC_UI_XML);
-		//path = "E:\\jboss-4.0.0\\server\\default\\catissuecore-properties\\dynamicUI.xml";
-		if (path != null)
+		ParseXMLFile parseFile = new ParseXMLFile(Constants.DYNAMIC_UI_XML);
+		Object[] strObj = null;
+		if (attributeInterface != null)
 		{
-			ParseXMLFile parseFile = new ParseXMLFile(path);
-			Object[] strObj = null;
-			if (attributeInterface != null)
+			if (attrTypeInfo instanceof StringAttributeTypeInformation)
 			{
-				if (attrTypeInfo instanceof StringAttributeTypeInformation)
-				{
-					strObj = parseFile.getNonEnumStr();
-					
-				}
-				else if (attrTypeInfo instanceof BooleanAttributeTypeInformation)
-				{
-					strObj = parseFile.getNonEnumStr();
-					
-				}
-				else if (attrTypeInfo instanceof DateAttributeTypeInformation)
-				{
-					strObj = parseFile.getNonEnumDate();
-					
-				}
-				else if (attrTypeInfo instanceof DoubleAttributeTypeInformation || attrTypeInfo instanceof LongAttributeTypeInformation
-						|| attrTypeInfo instanceof ShortAttributeTypeInformation || attrTypeInfo instanceof IntegerAttributeTypeInformation)
-				{
-					strObj = parseFile.getNonEnumNum();
-					
-				}
-				for (int i = 0; i < strObj.length; i++)
-				{
-					operatorsList.add((String) strObj[i]);
-				}
+				strObj = parseFile.getNonEnumStr();
+
 			}
-		} else {
-			Logger.out.debug("Path for dynamicUI.xml is NULL");
+			else if (attrTypeInfo instanceof BooleanAttributeTypeInformation)
+			{
+				strObj = parseFile.getNonEnumStr();
+
+			}
+			else if (attrTypeInfo instanceof DateAttributeTypeInformation)
+			{
+				strObj = parseFile.getNonEnumDate();
+
+			}
+			else if (attrTypeInfo instanceof DoubleAttributeTypeInformation || attrTypeInfo instanceof LongAttributeTypeInformation
+					|| attrTypeInfo instanceof ShortAttributeTypeInformation || attrTypeInfo instanceof IntegerAttributeTypeInformation)
+			{
+				strObj = parseFile.getNonEnumNum();
+
+			}
+			for (int i = 0; i < strObj.length; i++)
+			{
+				operatorsList.add((String) strObj[i]);
+			}
 		}
 		return operatorsList;
 	}
@@ -135,7 +168,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param operatorsList list of operators for each attribute
 	 * @return String HTMLForOperators
 	 */
-	private String generateHTMLForOperators(AttributeInterface attribute, List operatorsList)
+	private String generateHTMLForOperators(AttributeInterface attribute, List operatorsList, String op)
 	{
 		StringBuffer html = new StringBuffer();
 		String attributeName = attribute.getName();
@@ -143,10 +176,11 @@ public class GenerateHtmlForAddLimitsBizLogic
 		{
 			html.append("\n<td width=\"20%\">");
 			AttributeTypeInformationInterface attrTypeInfo = attribute.getAttributeTypeInformation();
-			if(attrTypeInfo instanceof DateAttributeTypeInformation)
+			if (attrTypeInfo instanceof DateAttributeTypeInformation)
 			{
 				html.append("\n<select name=\"" + attributeName + "_combobox\" onChange=\"operatorChanged('" + attributeName + "','true')\">");
-			} else
+			}
+			else
 			{
 				html.append("\n<select name=\"" + attributeName + "_combobox\" onChange=\"operatorChanged('" + attributeName + "','false')\">");
 			}
@@ -155,7 +189,15 @@ public class GenerateHtmlForAddLimitsBizLogic
 			while (iter.hasNext())
 			{
 				String operator = iter.next().toString();
-				html.append("\n<option value=\"" + operator + "\">" + operator + "</option>");
+				String op1 = operator.replace(" ", "");
+				if (op1.equalsIgnoreCase(op))
+				{
+					html.append("\n<option value=\"" + operator + "\" SELECTED>" + operator + "</option>");
+				}
+				else
+				{
+					html.append("\n<option value=\"" + operator + "\">" + operator + "</option>");
+				}
 			}
 			html.append("\n</select>");
 			html.append("\n</td>");
@@ -169,14 +211,20 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param isBetween boolean 
 	 * @return String HTMLForTextBox
 	 */
-	private String generateHTMLForTextBox(AttributeInterface attributeInterface, boolean isBetween)
+	private String generateHTMLForTextBox(AttributeInterface attributeInterface, boolean isBetween, ArrayList<String> values)
 	{
 		String textBoxId = attributeInterface.getName() + "_textBox";
 		String textBoxId1 = attributeInterface.getName() + "_textBox1";
 		StringBuffer html = new StringBuffer();
 		html.append("<td width=\"20%\" class=\"\">\n");
-		html.append("<input type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\">");
-
+		if (values == null || values.isEmpty())
+		{
+			html.append("<input type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\">");
+		}
+		else
+		{
+			html.append("<input type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\" value=\"" + values.get(0) + "\">");
+		}
 		html.append("\n</td>");
 		if (attributeInterface.getAttributeTypeInformation() instanceof DateAttributeTypeInformation)
 		{
@@ -189,7 +237,15 @@ public class GenerateHtmlForAddLimitsBizLogic
 		html.append("\n<td width=\"20%\">");
 		if (isBetween)
 		{
-			html.append("<input type=\"text\" name=\"" + textBoxId1 + "\" id=\"" + textBoxId1 + "\" style=\"display:block\">");
+			if (values == null)
+			{
+				html.append("<input type=\"text\" name=\"" + textBoxId1 + "\" id=\"" + textBoxId1 + "\" style=\"display:block\">");
+			}
+			else
+			{
+				html.append("<input type=\"text\" name=\"" + textBoxId1 + "\" id=\"" + textBoxId1 + "\" value=\"" + values.get(1)
+						+ "\" style=\"display:block\">");
+			}
 		}
 		else
 		{
@@ -214,14 +270,20 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param attributesStr attributesStr
 	 * @return String HTMLForButton
 	 */
-	private String generateHTMLForButton(String entityName, String attributesStr)
+	private String generateHTMLForButton(String entityName, String attributesStr, boolean isEditLimits)
 	{
 		String buttonId = "addLimit";
 		StringBuffer html = new StringBuffer();
+		String buttonCaption = "Add Limit";
 		html.append("\n<tr>");
 		html.append("\n<td valign=\"bottom\">");
+		if (isEditLimits)
+		{
+			buttonCaption = "Edit Limit";
+		}
+
 		html.append("\n<input type=\"button\" name=\"" + buttonId + "\" onClick=\"produceQuery('addToLimitSet.do', 'categorySearchForm', '"
-				+ entityName + "','" + attributesStr + "')\" value=\"Add Limit\"></input>");
+				+ entityName + "','" + attributesStr + "')\" value=\"" + buttonCaption + "\"></input>");
 		html.append("\n</td>");
 		html.append("\n</tr>");
 		return html.toString();
@@ -244,11 +306,8 @@ public class GenerateHtmlForAddLimitsBizLogic
 		{
 			String textBoxId = attributeName + "_textBox";
 			String calendarId = attributeName + "_calendar";
-			innerStr = "<td width=\"3%\" id=\"" + calendarId + "\">"
-			+ divStr
-			+ "<a href=\"javascript:show_calendar('categorySearchForm." + textBoxId + "',null,null,'MM-DD-YYYY');\">"
-			+ imgStr
-			+ "</a>";
+			innerStr = "<td width=\"3%\" id=\"" + calendarId + "\">" + divStr + "<a href=\"javascript:show_calendar('categorySearchForm." + textBoxId
+			+ "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
 		}
 		else
 		{
@@ -263,11 +322,8 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				style = "display:none";
 			}
-			innerStr = "<td width=\"3%\" id=\"" + calendarId1 + "\" style=\"" + style + "\">"
-			+ divStr
-			+ "<a href=\"javascript:show_calendar('categorySearchForm." + textBoxId1 + "',null,null,'MM-DD-YYYY');\">"
-			+ imgStr
-			+ "</a>";
+			innerStr = "<td width=\"3%\" id=\"" + calendarId1 + "\" style=\"" + style + "\">" + divStr
+			+ "<a href=\"javascript:show_calendar('categorySearchForm." + textBoxId1 + "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
 		}
 		innerStr = innerStr + "</td>";
 		return innerStr.toString();
