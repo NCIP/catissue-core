@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -15,6 +16,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domain.Entity;
 import edu.wustl.catissuecore.action.BaseAppletAction;
+import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 
@@ -45,8 +47,8 @@ public class AddToLimitSetAction extends BaseAppletAction
 		Map inputDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		if (inputDataMap != null && !inputDataMap.isEmpty())
 		{
-			String strToCreateQueryObject = (String) inputDataMap.get("strToCreateQueryObject");
-			String entityName = (String) inputDataMap.get("entityName");
+			String strToCreateQueryObject = (String) inputDataMap.get(AppletConstants.STR_TO_CREATE_QUERY_OBJ);
+			String entityName = (String) inputDataMap.get(AppletConstants.ENTITY_NAME);
 			Entity entity = (Entity) searchedEntitiesMap.get(entityName);
 			addEntityToSession(entity,request);
 			CreateQueryObjectBizLogic queryBizLogic = new CreateQueryObjectBizLogic();
@@ -66,13 +68,14 @@ public class AddToLimitSetAction extends BaseAppletAction
 	 */
 	private void addEntityToSession(Entity entity, HttpServletRequest request)
 	{
-		List<Entity> listOfEntitiesInQuery = (List)request.getSession().getAttribute(Constants.LIST_OF_ENTITIES_IN_QUERY);
-		if(listOfEntitiesInQuery == null || listOfEntitiesInQuery.isEmpty())
+		HttpSession session = request.getSession();
+		List listOfEntitiesInQuery = (List)session.getAttribute(Constants.LIST_OF_ENTITIES_IN_QUERY);
+		if(listOfEntitiesInQuery == null)
 		{
 			listOfEntitiesInQuery = new ArrayList<Entity>();
 		}
 		listOfEntitiesInQuery.add(entity);
-		request.getSession().setAttribute(Constants.LIST_OF_ENTITIES_IN_QUERY,listOfEntitiesInQuery);
+		session.setAttribute(Constants.LIST_OF_ENTITIES_IN_QUERY,listOfEntitiesInQuery);
 	}
 
 	/**
