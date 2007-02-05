@@ -335,10 +335,15 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
     	}
     	return 0;
 	}
+	/**
+	 * Method overridden to return hashcode of Id if available.
+	 */
 	public int hashCode()
 	{
 		if(this.getId() != null)
+		{
 			return this.getId().hashCode();
+		}
 		return super.hashCode();
 	}
 
@@ -365,13 +370,18 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * @return Returns the consentsWaived.
 	 * @hibernate.property name="consentsWaived" type="boolean" column="CONSENTS_WAIVED"
 	 */
-	public Boolean getConsentsWaived() {
+	public Boolean getConsentsWaived() 
+	{
 		return consentsWaived;
 	}
-	public void setConsentsWaived(Boolean consentsWaived) {
+	/**
+	 * Sets the consent waived value.
+	 * @param consentsWaived Value to be set to the consentsWaived attribute.
+	 */
+	public void setConsentsWaived(Boolean consentsWaived)
+	{
 		this.consentsWaived = consentsWaived;
 	}
-	
 	//-Mandar : 25-Jan-07 ---------- end
 	
 

@@ -27,7 +27,6 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -397,11 +396,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					}
 				}
 			// ---------END-----------------------------------------
-				
-     	// Mandar 10-apr-06 : bugid :353 
-    	// Error messages should be in the same sequence as the sequence of fields on the page.
-
-				
+      	// Mandar 10-apr-06 : bugid :353 :- Error messages should be in the same sequence as the sequence of fields on the page.
 			//Check for PI can not be coordinator of the protocol.
 			if(this.protocolCoordinatorIds != null && this.principalInvestigatorId!=-1)
 			{
@@ -414,7 +409,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				 	}
 				}
 			}
-				
 			Logger.out.debug("Protocol Coordinators : " + protocolCoordinatorIds); 
 			
 			boolean bClinicalStatus = false;
@@ -459,7 +453,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						}
 					}
 				}
-				
 				if(!bSpecimenClass)
 				{
 					if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption(value))
@@ -468,7 +461,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						bSpecimenClass = true;
 					}
 				}
-				
 				if(!bSpecimenType)
 				{
 					if(key.indexOf("specimenType")!=-1 && !validator.isValidOption(value))
@@ -477,7 +469,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						bSpecimenType = true;
 					}
 				}				
-
 				if(!bTissueSite)
 				{
 					if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption(value))
@@ -486,7 +477,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						bTissueSite = true;
 					}
 				}
-
 				if(!bPathologyStatus)
 				{
 					if(key.indexOf("pathologyStatus")!=-1 && !validator.isValidOption(value))
@@ -495,25 +485,20 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						bPathologyStatus = true; 
 					}
 				}
-				
 				int ind = key.indexOf("_quantity_value");
 				if((key.indexOf("_quantity_value"))!=-1)
 				{
 					if(!validator.isEmpty(value))
 					{
-						String classKey = key.substring(0,key.lastIndexOf("_quantity_value") );
+						String classKey = key.substring(0,key.lastIndexOf("_quantity_value"));
 						classKey = classKey + "_specimenClass";
-						String classValue = (String)getValue(classKey );
+						String classValue = (String)getValue(classKey);
 						try
 						{
 							value = new BigDecimal(value).toPlainString();
 							if (classValue.trim().equals("Cell"))
 							{
-//								if(validator.isEmpty(value))
-//								{
-//									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-//								}else
-								if(!validator.isNumeric(value,0 ))
+								if(!validator.isNumeric(value,0))
 		        				{
 		        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
 		        				}
@@ -521,28 +506,20 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 							else
 							{
 								// -------Mandar: 19-12-2005
-								String typeKey = key.substring(0,key.lastIndexOf("_quantity_value") );
+								String typeKey = key.substring(0,key.lastIndexOf("_quantity_value"));
 								typeKey = typeKey + "_specimenType";
-								String typeValue = (String)getValue(typeKey );
-								Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );							
-								if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) || typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE) )
+								String typeValue = (String)getValue(typeKey);
+								Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue);							
+								if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) || typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE))
 								{
-//									if(validator.isEmpty(value))
-//									{
-//										errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-//									}else 
-			        				if(!validator.isNumeric(value,0 ))
+			        				if(!validator.isNumeric(value,0))
 			        				{
 			        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
 			        				}
 								}
 								else
 								{
-//									if(validator.isEmpty(value))
-//									{
-//										errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-//									}else
-									if(!validator.isDouble(value,true ))
+									if(!validator.isDouble(value,true))
 			        				{
 			        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
 			        				}
@@ -733,8 +710,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		this.consentWaived = consentWaived;
 	}
-
-
 	//	For Consent Tracking End
 	
 }
