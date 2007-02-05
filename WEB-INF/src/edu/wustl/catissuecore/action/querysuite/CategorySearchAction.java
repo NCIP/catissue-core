@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.action.querysuite;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -61,7 +63,12 @@ public class CategorySearchAction extends BaseAction
 			searchString = prepareSearchString(textfieldValue);
 		}
 		Set<EntityInterface> entityCollection = new HashSet<EntityInterface>();
-		Map<String, EntityInterface> searchedEntitiesMap = new HashMap<String, EntityInterface>();
+		HttpSession session = request.getSession();
+		Map<String, EntityInterface> searchedEntitiesMap = (Map<String, EntityInterface>)session.getAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP);
+		if(searchedEntitiesMap == null )
+		{
+			searchedEntitiesMap = new HashMap<String, EntityInterface>();
+		}
 		if (textfieldValue != null && !textfieldValue.equals(""))
 		{
 			EntityCache cache = EntityCacheFactory.getInstance();
@@ -88,12 +95,12 @@ public class CategorySearchAction extends BaseAction
 					while(iter.hasNext())
 					{
 						EntityInterface entity = (EntityInterface)iter.next();
-						int lastIndex = entity.getName().lastIndexOf(".");
+						String fullyQualifiedEntityName = entity.getName();
+						int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
 						String entityName = entity.getName().substring(lastIndex + 1);
-						entitiesString = entitiesString + ";" + entityName;
-						searchedEntitiesMap.put(entityName, entity);
+						entitiesString = entitiesString + ";" + fullyQualifiedEntityName;
+						searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
 					}
-				
 				}
 			}
 			request.getSession().setAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP, searchedEntitiesMap);

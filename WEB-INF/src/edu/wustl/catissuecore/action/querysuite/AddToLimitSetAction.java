@@ -42,14 +42,15 @@ public class AddToLimitSetAction extends BaseAppletAction
 	 * @return ActionForward actionForward
 	 */
 	public ActionForward initData(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	throws Exception
 	{
 		Map inputDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		if (inputDataMap != null && !inputDataMap.isEmpty())
 		{
 			String strToCreateQueryObject = (String) inputDataMap.get(AppletConstants.STR_TO_CREATE_QUERY_OBJ);
 			String entityName = (String) inputDataMap.get(AppletConstants.ENTITY_NAME);
-			EntityInterface entity = EntityManager.getInstance().getEntityByName(entityName);
+			Map searchedEntitiesMap = (Map) request.getSession().getAttribute(Constants.SEARCHED_ENTITIES_MAP);
+			EntityInterface entity = (Entity) searchedEntitiesMap.get(entityName);
 			addEntityToSession(entity,request);
 			CreateQueryObjectBizLogic queryBizLogic = new CreateQueryObjectBizLogic();
 			if (!strToCreateQueryObject.equalsIgnoreCase(""))
@@ -90,7 +91,7 @@ public class AddToLimitSetAction extends BaseAppletAction
 	 */
 	protected ActionForward invokeMethod(String methodName, ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception
-	{
+			{
 		if (methodName.trim().length() > 0)
 		{
 			Method method = getMethod(methodName, this.getClass());
@@ -101,5 +102,5 @@ public class AddToLimitSetAction extends BaseAppletAction
 			}
 		}
 		return null;
-	}
+			}
 }
