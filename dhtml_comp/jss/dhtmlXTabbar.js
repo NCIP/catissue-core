@@ -32,7 +32,7 @@ function dhtmlXTabBar(parentObject,mode,height)
  this._margin=1;
  this._height=parseInt(height||20);
  this._bMode=(mode=="right"||mode=="bottom");
- this._tabSize='150';
+ this._tabSize='200';
  this._content=new Array();
  this._tbst="win_text";
  this._styles={
