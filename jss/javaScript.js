@@ -916,22 +916,6 @@ function initializeTabs(tabIds, tabNames, tabPageRefs)
 }
 
 //<!-- JavaScript for Participant.jsp  start -->
-
-function initializeTabs(tabIds, tabNames, tabPageRefs)
-{
-	if((tabIds!=null)&&(tabNames!=null)&&(tabPageRefs!=null))
-	{
-		var noOfTabs = tabIds.length;
-		for(var i=0;i<noOfTabs;i++)
-		{
-			tabbar.addTab(tabIds[i],tabNames[i],"");  
-			tabbar.setContentHref(tabIds[i],tabPageRefs[i]);   
-		}
-		 
-	}
-	tabbar.setTabActive(tabIds[0]);
-}
-
 function textLimit(field) 
 {
 	if(field.value.length>0) 
@@ -1203,7 +1187,30 @@ function initiallizeEditParticipantTabs(contextPath,queryString,annotationQueryS
 		tabbar.setImagePath("dhtml_comp/imgs/");
 		tabbar.setHrefMode("iframes-on-demand");
 		var tabIds = ["editTab","viewSPRTab","annotationsTab"];
-		var tabNames = ["Edit Partitipant" , "View SPR", "Annotations"];
+		var tabNames = ["Edit Partitipant" , "View Surgical Pathology Report", "Annotations"];
 		var tabHREFs = [contextPath + "/ParticipantSearch.do?" + queryString , contextPath + "/ViewSurgicalPathologyReport.do?operation=viewSPR&" + queryString ,contextPath + "/LoadAnnotationDataEntryPage.do"+annotationQueryString];
+		initializeTabs(tabIds,tabNames,tabHREFs);
+}
+
+//Java Script for SpecimenCollGroupTabPage.jsp
+function initiallizeAddSCGTabs(contextPath)
+{
+		tabbar= new dhtmlXTabBar("a_tabbar","top");
+		tabbar.setImagePath(contextPath + "/dhtml_comp/imgs/");
+		tabbar.setHrefMode("iframes-on-demand");
+		var tabIds = ["addTab"];
+		var tabNames = ["Add Specimen Collection Group"];
+		var tabHREFs = [contextPath + "/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup&menuSelected=14"];
+		initializeTabs(tabIds,tabNames,tabHREFs);
+}
+
+function initiallizeEditSCGTabs(contextPath,queryString,annotationQueryString)
+{
+		tabbar= new dhtmlXTabBar("a_tabbar","top");
+		tabbar.setImagePath("dhtml_comp/imgs/");
+		tabbar.setHrefMode("iframes-on-demand");
+		var tabIds = ["editTab","viewSPRTab","annotationsTab"];
+		var tabNames = ["Edit Specimen Collection Group" , "View Surgical Pathology Report", "Annotations"];
+		var tabHREFs = [contextPath + "/SpecimenCollectionGroupSearch.do?" + queryString , contextPath + "/ViewSurgicalPathologyReport.do?operation=viewSPR&" + queryString ,contextPath + "/LoadAnnotationDataEntryPage.do"+annotationQueryString];
 		initializeTabs(tabIds,tabNames,tabHREFs);
 }
