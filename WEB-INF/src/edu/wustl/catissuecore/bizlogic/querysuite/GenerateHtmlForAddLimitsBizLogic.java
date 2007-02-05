@@ -52,7 +52,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		generatedHTML.append("\n<tr>");
 		generatedHTML
 		.append("<td height=\"4%\" colspan=\"6\" bgcolor=\"#EAEAEA\" style=\"border:solid 1px\"><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
-		generatedHTML.append(header + " '" + entityName + "'</b></font>");
+		generatedHTML.append(header + " '" + nameOfTheEntity + "'</b></font>");
 		generatedHTML.append("\n</td></tr>");
 		generatedHTML.append("\n<tr><td height=\"3%\" colspan=\"4\" bgcolor=\"#FFFFFF\">&nbsp;</td></tr>");
 		if (!attributeCollection.isEmpty())
@@ -101,7 +101,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				generatedHTML.append("\n</tr>");
 			}
 		}
-		generatedHTML.append(generateHTMLForButton(entityName, attributesList, isEditLimits));
+		generatedHTML.append(generateHTMLForButton(nameOfTheEntity, attributesList, isEditLimits));
 		generatedHTML.append("</table>");
 		return generatedHTML.toString();
 	}
@@ -129,6 +129,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	{
 		List<String> operatorsList = new ArrayList<String>();
 		AttributeTypeInformationInterface attrTypeInfo = attributeInterface.getAttributeTypeInformation();
+		String xmlFile = "E:\\jboss-4.0.0\\server\\default\\catissuecore-properties\\dynamicUI.xml";
 		ParseXMLFile parseFile = new ParseXMLFile(Constants.DYNAMIC_UI_XML);
 		Object[] strObj = null;
 		if (attributeInterface != null)
