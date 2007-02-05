@@ -1,7 +1,6 @@
 <script>
 	function setTarget()
 		{
-			alert("hi");
 			document.forms[0].target="_top";
 			<%=forwardToSubmit%>;
 			alert("hi");
