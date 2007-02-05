@@ -736,6 +736,21 @@
 					<include name="**/AppletServerCommunicator.class" />
 				</fileset>
 			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/bizlogic/querysuite">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/bizlogic/querysuite">
+					<include name="**/GenerateHtmlForAddLimitsBizLogic.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/applet/util">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/applet/util">
+					<include name="**/CommonAppletUtil.class" />
+				</fileset>
+			</copy>
+			<copy todir="${dagviewapplet.dir}">
+				<fileset dir="${target.dir}">
+					<include name="**/dynamicUI.xml" />
+				</fileset>
+			</copy>
 			<jar taskname="buildJar" jarfile="${applet.dir}/dagViewApplet.jar">
 				<fileset dir="${dagviewapplet.dir}">
 					<include name="**/**" />
