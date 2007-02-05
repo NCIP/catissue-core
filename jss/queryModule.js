@@ -194,8 +194,10 @@ function onResponseUpdate(text)
 	{
 		for(i=1; i<allElementsArray.length; i++)
 		{
+			var lastIndex = allElementsArray[i].lastIndexOf(".");
+			var entityName = allElementsArray[i].substring(lastIndex + 1);
 			var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+allElementsArray[i]+"')";					
-			row = row+'<tr><td bgcolor="#FFFFFF"><a href="javascript:'+functionCall+'">' +allElementsArray[i]+ '</a></td></tr>';
+			row = row+'<tr><td bgcolor="#FFFFFF"><a href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
 		}			
 	}
 	else
@@ -266,7 +268,13 @@ function produceQuery(url,nameOfFormToPost, entityName , attributesList)
 			strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op +";";
 		}
 	}
-	var isEditLimit = document.getElementById("addLimit").value;
+	if(navigator.appName == "Microsoft Internet Explorer")
+	{
+		var isEditLimit = document.getElementById('addLimit').value;
+	}else
+	{
+		var isEditLimit = document.forms[nameOfFormToPost].elements["addLimit"].value;
+	}
 	if(isEditLimit == 'Add Limit')
 	{	
 		document.applets[0].addExpression(strToCreateQueyObject,entityName);
@@ -371,8 +379,7 @@ function setFocusOnSearchButton()
 				if(op == "Is Null" || op == "Is Not Null")
 				{
 					
-				}
-				
+				}				
 			}
 		
 			document.applets[0].addExpression(strToCreateQueyObject,entityName);
