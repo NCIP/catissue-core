@@ -14,6 +14,7 @@ import edu.common.dynamicextensions.domain.Attribute;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.TreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.dao.DAOFactory;
@@ -53,7 +54,7 @@ public class CreateQueryObjectBizLogic
 			{
 				Attribute attr = (Attribute) iterAttributes.next();
 				String[] params = (String[]) conditionsMap.get(attr.getName());
-				if (params != null && params.length != 0)
+				if (params != null)
 				{
 					attributes.add(attr);
 					attributeOperators.add(params[0]);
@@ -61,10 +62,10 @@ public class CreateQueryObjectBizLogic
 					secondAttributeValues.add(params[2]);
 				}
 			}
-			ruleDetailsMap.put("Attributes", attributes);
-			ruleDetailsMap.put("AttributeOperators", attributeOperators);
-			ruleDetailsMap.put("FirstAttributeValues", firstAttributeValues);
-			ruleDetailsMap.put("SecondAttributeValues", secondAttributeValues);
+			ruleDetailsMap.put(AppletConstants.ATTRIBUTES, attributes);
+			ruleDetailsMap.put(AppletConstants.ATTRIBUTE_OPERATORS, attributeOperators);
+			ruleDetailsMap.put(AppletConstants.FIRST_ATTR_VALUES, firstAttributeValues);
+			ruleDetailsMap.put(AppletConstants.SECOND_ATTR_VALUES, secondAttributeValues);
 		}
 		return ruleDetailsMap;
 	}
@@ -128,7 +129,7 @@ public class CreateQueryObjectBizLogic
 	 * @throws DynamicExtensionsApplicationException  DynamicExtensionsApplicationException
 	 * @throws DynamicExtensionsSystemException DynamicExtensionsSystemException
 	 */
-	private Map createConditionsMap(String queryString) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
+	private Map<String, String[]> createConditionsMap(String queryString) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
 		Map<String, String[]> conditionsMap = new HashMap<String, String[]>();
 		String[] conditions = queryString.split(Constants.QUERY_CONDITION_DELIMITER);
