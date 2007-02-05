@@ -15,6 +15,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domain.Entity;
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.wustl.catissuecore.action.BaseAppletAction;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
@@ -28,7 +30,6 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class AddToLimitSetAction extends BaseAppletAction
 {
-
 	/**
 	 * This method gets the input strings from the DiagrammaticViewApplet class.
 	 * A call to CreateQueryObjectBizLogic returns map which holds details for the rule added by user.
@@ -43,13 +44,12 @@ public class AddToLimitSetAction extends BaseAppletAction
 	public ActionForward initData(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		Map searchedEntitiesMap = (Map) request.getSession().getAttribute(Constants.SEARCHED_ENTITIES_MAP);
 		Map inputDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		if (inputDataMap != null && !inputDataMap.isEmpty())
 		{
 			String strToCreateQueryObject = (String) inputDataMap.get(AppletConstants.STR_TO_CREATE_QUERY_OBJ);
 			String entityName = (String) inputDataMap.get(AppletConstants.ENTITY_NAME);
-			Entity entity = (Entity) searchedEntitiesMap.get(entityName);
+			EntityInterface entity = EntityManager.getInstance().getEntityByName(entityName);
 			addEntityToSession(entity,request);
 			CreateQueryObjectBizLogic queryBizLogic = new CreateQueryObjectBizLogic();
 			if (!strToCreateQueryObject.equalsIgnoreCase(""))
@@ -66,7 +66,7 @@ public class AddToLimitSetAction extends BaseAppletAction
 	 * @param entity Entity
 	 * @param request HttpServletRequest
 	 */
-	private void addEntityToSession(Entity entity, HttpServletRequest request)
+	private void addEntityToSession(EntityInterface entity, HttpServletRequest request)
 	{
 		HttpSession session = request.getSession();
 		List listOfEntitiesInQuery = (List)session.getAttribute(Constants.LIST_OF_ENTITIES_IN_QUERY);
