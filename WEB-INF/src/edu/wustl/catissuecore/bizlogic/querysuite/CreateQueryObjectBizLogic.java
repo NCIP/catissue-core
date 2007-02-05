@@ -42,30 +42,33 @@ public class CreateQueryObjectBizLogic
 	{
 		Map ruleDetailsMap = new HashMap();
 		Map conditionsMap = createConditionsMap(strToCreateQueryObject);
-		Collection attrCollection = entity.getAttributeCollection();
-		if (conditionsMap != null && !conditionsMap.isEmpty() && attrCollection != null && !attrCollection.isEmpty())
+		if(entity != null)
 		{
-			List<Attribute> attributes = new ArrayList<Attribute>();
-			List<String> attributeOperators = new ArrayList<String>();
-			List<String> firstAttributeValues = new ArrayList<String>();
-			List<String> secondAttributeValues = new ArrayList<String>();
-			Iterator iterAttributes = (Iterator) attrCollection.iterator();
-			while (iterAttributes.hasNext())
+			Collection attrCollection = entity.getAttributeCollection();
+			if (conditionsMap != null && !conditionsMap.isEmpty() && attrCollection != null && !attrCollection.isEmpty())
 			{
-				Attribute attr = (Attribute) iterAttributes.next();
-				String[] params = (String[]) conditionsMap.get(attr.getName());
-				if (params != null)
+				List<Attribute> attributes = new ArrayList<Attribute>();
+				List<String> attributeOperators = new ArrayList<String>();
+				List<String> firstAttributeValues = new ArrayList<String>();
+				List<String> secondAttributeValues = new ArrayList<String>();
+				Iterator iterAttributes = (Iterator) attrCollection.iterator();
+				while (iterAttributes.hasNext())
 				{
-					attributes.add(attr);
-					attributeOperators.add(params[0]);
-					firstAttributeValues.add(params[1]);
-					secondAttributeValues.add(params[2]);
+					Attribute attr = (Attribute) iterAttributes.next();
+					String[] params = (String[]) conditionsMap.get(attr.getName());
+					if (params != null)
+					{
+						attributes.add(attr);
+						attributeOperators.add(params[0]);
+						firstAttributeValues.add(params[1]);
+						secondAttributeValues.add(params[2]);
+					}
 				}
+				ruleDetailsMap.put(AppletConstants.ATTRIBUTES, attributes);
+				ruleDetailsMap.put(AppletConstants.ATTRIBUTE_OPERATORS, attributeOperators);
+				ruleDetailsMap.put(AppletConstants.FIRST_ATTR_VALUES, firstAttributeValues);
+				ruleDetailsMap.put(AppletConstants.SECOND_ATTR_VALUES, secondAttributeValues);
 			}
-			ruleDetailsMap.put(AppletConstants.ATTRIBUTES, attributes);
-			ruleDetailsMap.put(AppletConstants.ATTRIBUTE_OPERATORS, attributeOperators);
-			ruleDetailsMap.put(AppletConstants.FIRST_ATTR_VALUES, firstAttributeValues);
-			ruleDetailsMap.put(AppletConstants.SECOND_ATTR_VALUES, secondAttributeValues);
 		}
 		return ruleDetailsMap;
 	}
@@ -74,7 +77,7 @@ public class CreateQueryObjectBizLogic
 	 * @param sql String sql
 	 * @return Map list of results. 
 	 */
-	
+
 	public Map fireQuery(String sql)
 	{
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
