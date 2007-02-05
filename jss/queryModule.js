@@ -181,35 +181,31 @@ function retriveSearchedEntities(url,nameOfFormToPost)
 }
 
 function onResponseUpdate(text)
+{
+	if(text == "")
+	{
+		alert("No results found.");
+	}
+	var element = document.getElementById('resultSet');
+	var allElementsArray = text.split(";");
+	var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
+	var isBuildNewTree=allElementsArray[0];			
+	if(isBuildNewTree=="false")
+	{
+		for(i=1; i<allElementsArray.length; i++)
 		{
-			if(text == "")
-		{
-			alert("No results found.");
-		}
-	
-			var element = document.getElementById('resultSet');
-			var allElementsArray = text.split(";");
-			var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
-								
-			var isBuildNewTree=allElementsArray[0];			
-			if(isBuildNewTree=="false")
-			{
-				for(i=1; i<allElementsArray.length; i++)
-				{
-					var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+allElementsArray[i]+"')";					
-					row = row+'<tr><td bgcolor="#FFFFFF"><a href="javascript:'+functionCall+'">' +allElementsArray[i]+ '</a></td></tr>';
-				}
-			
-			}
-			else
-			{
-				row = row + '<tr><td>' + text + ' </td></tr>';
-			}
-			
-			row = row+'</table>';		
-			element.innerHTML =row;
-		}
-		function retriveEntityInformation(url,nameOfFormToPost,entityName) 
+			var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+allElementsArray[i]+"')";					
+			row = row+'<tr><td bgcolor="#FFFFFF"><a href="javascript:'+functionCall+'">' +allElementsArray[i]+ '</a></td></tr>';
+		}			
+	}
+	else
+	{
+		row = row + '<tr><td>' + text + ' </td></tr>';
+	}
+	row = row+'</table>';		
+	element.innerHTML =row;
+}
+function retriveEntityInformation(url,nameOfFormToPost,entityName) 
 {	
 	var request = newXMLHTTPReq();			
 	var actionURL;
@@ -270,7 +266,14 @@ function produceQuery(url,nameOfFormToPost, entityName , attributesList)
 			strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op +";";
 		}
 	}
-	document.applets[0].addExpression(strToCreateQueyObject,entityName);
+	var isEditLimit = document.getElementById("addLimit").value;
+	if(isEditLimit == 'Add Limit')
+	{	
+		document.applets[0].addExpression(strToCreateQueyObject,entityName);
+	} else if(isEditLimit == 'Edit Limit')
+	{
+		document.applets[0].editExpression(strToCreateQueyObject,entityName);
+	}
 }
 
 
