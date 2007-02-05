@@ -4,14 +4,19 @@ package edu.wustl.catissuecore.bizlogic.querysuite;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
+import edu.common.dynamicextensions.domain.databaseproperties.ColumnProperties;
+import edu.common.dynamicextensions.domain.databaseproperties.TableProperties;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.common.dynamicextensions.domaininterface.databaseproperties.ColumnPropertiesInterface;
+import edu.common.dynamicextensions.domaininterface.databaseproperties.TablePropertiesInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
@@ -156,13 +161,6 @@ public class QueryOutputTreeBizLogic
 			idAndAttributeMap.put(attr.getId(), attr);
 		}
 		entity = addAttributesToEntity(entity, attributeIndexMap, idAndAttributeMap);
-		System.out.println(entity.getAttributeCollection());
-
-		Collection<AttributeInterface> attrCol = entity.getAttributeCollection();
-		for (AttributeInterface a : attrCol)
-		{
-			System.out.println("\n" + a.getId());
-		}
 		return entity;
 	}
 
@@ -219,4 +217,32 @@ public class QueryOutputTreeBizLogic
 		}
 		return all;
 	}
+	/**
+	 * This method takes a map as an input , key : Attribute AND value : columnName.
+	 * One by one these attributes are cloned and added to entity along with their tableproperties and column properties are also set. 
+	 * @param entity EntityInterface obj to which the attributes are added
+	 * @param tableName this name is then set as tableproperties for this entity
+	 * @param attributeColumnNameMap Map of attribute and its columnname.
+	 * @return EntityInterface the entity with all the attributes and their properties added with it. 
+	 */
+	EntityInterface addAttributesToEntity1(EntityInterface entity, String tableName ,HashMap<AttributeInterface, String> attributeColumnNameMap)
+	{
+		TablePropertiesInterface tableProperty = new TableProperties();
+		tableProperty.setName(tableName);
+		entity.setTableProperties(tableProperty);
+		Iterator iter = attributeColumnNameMap.entrySet().iterator();
+		while(iter.hasNext())
+		{
+			Map.Entry<AttributeInterface,String> entry = (Map.Entry)iter.next();
+			AttributeInterface attribute = entry.getKey();
+			String columnName = entry.getValue();
+			AttributeInterface attrCopy = (AttributeInterface)QueryObjectProcessor.getObjectCopy(attribute);
+			ColumnPropertiesInterface columnProperty = new ColumnProperties();
+			columnProperty.setName(columnName);
+			attrCopy.setColumnProperties(columnProperty);
+			entity.addAttribute(attrCopy);
+		}
+		return entity;
+	}
+
 }
