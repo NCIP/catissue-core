@@ -47,7 +47,7 @@ public class LoadDefineSearchRulesAction extends BaseAction
 			Entity entity = (Entity) searchedEntitiesMap.get(entityName);
 			if (entity != null)
 			{
-				html = searchProcessor.generateHTML(entity);
+				html = searchProcessor.generateHTML(entity,null);
 			}
 		}
 		response.setContentType("text/html");
