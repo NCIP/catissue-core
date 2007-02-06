@@ -1111,7 +1111,7 @@ function submitReviewComments()
 	if(confirmSubmit())
 	{
 		document.forms[0].submittedFor.value='review';
-		var action="SurgicalPathologyReportEventParam.do?operation=add&pageOf=<%=pageOf%>"
+		var action="SurgicalPathologyReportEventParam.do?operation=add"
 		document.forms[0].action=action;
 		document.forms[0].submit();
 	}
@@ -1122,21 +1122,11 @@ function submitQuarantineComments()
 	if(confirmSubmit())
 	{
 		document.forms[0].submittedFor.value='quarantine';
-		var action="SurgicalPathologyReportEventParam.do?operation=add&pageOf=<%=pageOf%>"
+		var action="SurgicalPathologyReportEventParam.do?operation=add"
 		document.forms[0].action=action;
 		document.forms[0].submit();
 	}
 }
-
- function viewSPR()
-        {
-			alert("Here");
-			var tempId=document.forms[0].id.value;
-        	//var action="<%=Constants.SPR_VIEW_ACTION%>?operation=viewSPR&pageOf=<%=pageOf%>&id="+tempId;
-			//document.forms[0].action=action;
-			//document.forms[0].submit();
-        }
-
 // AJAX code start
 	function getReport()
 	{
