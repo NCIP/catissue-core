@@ -10,10 +10,14 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+
 import edu.common.dynamicextensions.domain.Attribute;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.wustl.cab2b.common.beans.IAttribute;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.TreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -21,6 +25,9 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * Creates Query Object as per the data filled by the user on AddLimits section.
@@ -170,36 +177,6 @@ public class CreateQueryObjectBizLogic
 		}
 		return conditionsMap;
 	}
-	/*
-	 *//**
-	 * Initialises the resource bundle.
-	 * @return new Resource bundle
-	 */
-	/*
-	 private ResourceBundle initializeResourceBundle()
-	 {
-	 ResourceBundle resourceBundle = ResourceBundle.getBundle("ApplicationResources");
-	 return resourceBundle;
-	 }
-	 */
-	/**
-	 * Gets the message from properties file.
-	 * @param resourceBundle : Resource bundle name
-	 * @param captionKey : key for the caption in the resource bundle
-	 * @return Value for caption key in the resource bundle
-	 */
-	/*
-	 private String getErrorMessageFromResourceBundle(ResourceBundle resourceBundle, String captionKey)
-	 {
-	 if ((captionKey != null) && (resourceBundle != null))
-	 {
-	 return resourceBundle.getString(captionKey);
-	 }
-	 else
-	 {
-	 return null;
-	 }
-	 }*/
 
 	/**
 	 * Validates the user input and populates the list of messages to be shown to the user on the screen.
@@ -208,64 +185,63 @@ public class CreateQueryObjectBizLogic
 	 * @return String message
 	 */
 	//TODO use ApplicationProperties.getValue("query.defineSearchRulesFor");
-	/*
-	 private String validateAttributeValues(IAttribute attr, List<String> attrvalues)
-	 {
-	 ActionErrors errors = new ActionErrors();
-	 Validator validator = new Validator();
-	 ResourceBundle resourceBundle = initializeResourceBundle();
-	 String errorMessages = "";
-	 String dataType = attr.getDataType().toString();
-	 Iterator valuesIter = (Iterator) attrvalues.iterator();
-	 while (valuesIter.hasNext())
-	 {
-	 String enteredValue = (String) valuesIter.next();
-	 if ((dataType.trim().equalsIgnoreCase("bigint") || dataType.trim().equalsIgnoreCase("integer"))
-	 || dataType.trim().equalsIgnoreCase("Long"))
-	 {
-	 Logger.out.debug(" Check for integer");
-	 if (validator.convertToLong(enteredValue) == null)
-	 {
-	 errorMessages = errorMessages + getErrorMessageFromResourceBundle(resourceBundle, "simpleQuery.intvalue.required");
-	 Logger.out.debug(enteredValue + " is not a valid integer");
-	 }
-	 else if (!validator.isPositiveNumeric(enteredValue, 0))
-	 {
-	 errorMessages = errorMessages + getErrorMessageFromResourceBundle(resourceBundle, "simpleQuery.intvalue.poisitive.required");
-	 Logger.out.debug(enteredValue + " is not a positive integer");
-	 }
 
-	 }//integer         
-	 else if ((dataType.trim().equalsIgnoreCase("double")) && !validator.isDouble(enteredValue, false))
-	 {
-	 errorMessages = errorMessages + getErrorMessageFromResourceBundle(resourceBundle, "simpleQuery.decvalue.required");
-	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
-	 } // double
-	 else if (dataType.trim().equalsIgnoreCase("tinyint"))
-	 {
-	 if (!enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_YES) && !enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_NO))
-	 {
-	 errorMessages = errorMessages + getErrorMessageFromResourceBundle(resourceBundle, "simpleQuery.tinyint.format");
-	 }
-	 }
-	 else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME))
-	 {
-	 if (!validator.isValidTime(enteredValue, Constants.TIME_PATTERN_HH_MM_SS))
-	 {
-	 errorMessages = errorMessages + getErrorMessageFromResourceBundle(resourceBundle, "simpleQuery.time.format");
-	 }
-	 }
-	 else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_DATE)
-	 || dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_DATE))
-	 {
-	 if (!validator.checkDate(enteredValue))
-	 {
-	 errorMessages = errorMessages + getErrorMessageFromResourceBundle(resourceBundle, "simpleQuery.date.format");
-	 }
-	 }
-	 }
+	private String validateAttributeValues(IAttribute attr, List<String> attrvalues)
+	{
+		ActionErrors errors = new ActionErrors();
+		Validator validator = new Validator();
+		String errorMessages = "";
+		String dataType = attr.getDataType().toString();
+		Iterator valuesIter = (Iterator) attrvalues.iterator();
+		while (valuesIter.hasNext())
+		{
+			String enteredValue = (String) valuesIter.next();
+			if ((dataType.trim().equalsIgnoreCase("bigint") || dataType.trim().equalsIgnoreCase("integer"))
+					|| dataType.trim().equalsIgnoreCase("Long"))
+			{
+				Logger.out.debug(" Check for integer");
+				if (validator.convertToLong(enteredValue) == null)
+				{
+					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.intvalue.required");
+					Logger.out.debug(enteredValue + " is not a valid integer");
+				}
+				else if (!validator.isPositiveNumeric(enteredValue, 0))
+				{
+					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.intvalue.poisitive.required");
+					Logger.out.debug(enteredValue + " is not a positive integer");
+				}
 
-	 return errorMessages;
-	 }
-	 */
+			}//integer         
+			else if ((dataType.trim().equalsIgnoreCase("double")) && !validator.isDouble(enteredValue, false))
+			{
+				errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.decvalue.required");
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
+			} // double
+			else if (dataType.trim().equalsIgnoreCase("tinyint"))
+			{
+				if (!enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_YES) && !enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_NO))
+				{
+					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.tinyint.format");
+				}
+			}
+			else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME))
+			{
+				if (!validator.isValidTime(enteredValue, Constants.TIME_PATTERN_HH_MM_SS))
+				{
+					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.time.format");
+				}
+			}
+			else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_DATE)
+					|| dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_DATE))
+			{
+				if (!validator.checkDate(enteredValue))
+				{
+					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.date.format");
+				}
+			}
+		}
+
+		return errorMessages;
+	}
+
 }
