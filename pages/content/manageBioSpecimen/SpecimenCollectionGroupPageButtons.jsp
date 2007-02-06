@@ -1,9 +1,9 @@
 <script>
 	function setTarget()
 		{
+			alert('<%=forwardToSubmit%>');
 			document.forms[0].target="_top";
 			<%=forwardToSubmit%>;
-			alert("hi");
 		}
 </script>
 <!-- action buttons begins -->
