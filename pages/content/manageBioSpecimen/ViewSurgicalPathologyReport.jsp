@@ -61,7 +61,6 @@ ViewSurgicalPathologyReportForm formSPR=viewSurgicalPathologyReportForm;
 			<html:hidden property="deIdentifiedReportId" />
 			<html:hidden property="submittedFor"/>
 			<html:hidden property="forwardTo"/>
-			<html:hidden property="commentType"/>
 			<html:hidden property="pageOf"/>
 		</td>
 	</tr>
