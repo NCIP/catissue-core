@@ -60,7 +60,9 @@ ViewSurgicalPathologyReportForm formSPR=viewSurgicalPathologyReportForm;
 			<html:hidden property="identifiedReportId" />
 			<html:hidden property="deIdentifiedReportId" />
 			<html:hidden property="submittedFor"/>
-			<html:hidden property="onSubmit"/>
+			<html:hidden property="forwardTo"/>
+			<html:hidden property="commentType"/>
+			<html:hidden property="pageOf"/>
 		</td>
 	</tr>
 <!-- if pageOf is pageOfParticipant then display drop down list of report accession number -->
