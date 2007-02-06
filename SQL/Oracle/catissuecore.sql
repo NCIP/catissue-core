@@ -899,7 +899,7 @@ alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop constraint FKC5C92CCBCE5FBC3A;
 alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop constraint FKC5C92CCBBC7298A9;
 
 
-
+#-------- Consent Tracking alter scripts
 alter table CATISSUE_CONSENT_TIER_RESPONSE drop constraint FKFB1995FD4AD77FCB;
 alter table CATISSUE_CONSENT_TIER_RESPONSE drop constraint FKFB1995FD17B9953;
 alter table CATISSUE_CONSENT_TIER_STATUS drop constraint FKF74E94AEF69249F7;
@@ -995,14 +995,14 @@ alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBCE5FBC3A fore
 alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBBC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
 alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY (IDENTIFIER);
 
-
+#------ Consent Tracking related drop, create and add foreign key scripts.
 drop table CATISSUE_CONSENT_TIER_RESPONSE;
 drop table CATISSUE_CONSENT_TIER_STATUS;
 drop table CATISSUE_CONSENT_TIER;
 
 create table CATISSUE_CONSENT_TIER_RESPONSE (
    IDENTIFIER number(19,0) not null,
-   RESPONSE varchar(10),
+   RESPONSE varchar(255),
    CONSENT_TIER_ID number(19,0),
    COLL_PROT_REG_ID number(19,0),
    primary key (IDENTIFIER)
