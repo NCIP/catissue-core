@@ -198,7 +198,7 @@ drop table CATISSUE_CONSENT_TIER;
 
 create table CATISSUE_CONSENT_TIER_RESPONSE (
    IDENTIFIER number(19,0) not null,
-   RESPONSE varchar(10),
+   RESPONSE varchar(255),
    CONSENT_TIER_ID number(19,0),
    COLL_PROT_REG_ID number(19,0),
    primary key (IDENTIFIER)
