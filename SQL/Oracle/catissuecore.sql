@@ -263,8 +263,10 @@ create table CATISSUE_COLLECTION_PROTOCOL (
    IDENTIFIER number(19,0) not null,
    ALIQUOT_IN_SAME_CONTAINER number(1,0),
    UNSIGNED_CONSENT_DOC_URL varchar2(500),
+   CONSENTS_WAIVED number(1,0),
    primary key (IDENTIFIER)
 );
+
 create table CATISSUE_EVENT_PARAM (
    IDENTIFIER number(19,0) not null,
    primary key (IDENTIFIER)
@@ -1180,13 +1182,4 @@ create sequence CATISSUE_REVIEW_PARAMS_SEQ;
 create sequence CATISSUE_REPORT_CONTENT_SEQ;
 create sequence CATISSUE_REPORT_QUEUE_SEQ;
 /****caTIES Realated Tables - end**********/
-
-#------------------------New Column Entry For ConsentWaived ---------- Mandar : -------------start
-alter table CATISSUE_COLLECTION_PROTOCOL add CONSENTS_WAIVED number(1,0);
-update CATISSUE_COLLECTION_PROTOCOL set CONSENTS_WAIVED=0 where CONSENTS_WAIVED is null;
-#------------------------New Column Entry For ConsentWaived ---------- Mandar :  -------------end
-
-
-
-
 

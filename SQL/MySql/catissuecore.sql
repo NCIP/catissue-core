@@ -279,8 +279,10 @@ create table CATISSUE_COLLECTION_PROTOCOL (
    IDENTIFIER bigint not null,
    UNSIGNED_CONSENT_DOC_URL text,
    ALIQUOT_IN_SAME_CONTAINER bit,
+   CONSENTS_WAIVED bit,
    primary key (IDENTIFIER)
 );
+
 create table CATISSUE_EVENT_PARAM (
    IDENTIFIER bigint not null,
    primary key (IDENTIFIER)
@@ -1133,10 +1135,3 @@ alter table CATISSUE_CONSENT_TIER_STATUS add index FKF74E94AEF69249F7 (SPECIMEN_
 alter table CATISSUE_CONSENT_TIER_STATUS add index FKF74E94AE60773DB2 (SPECIMEN_ID), add constraint FKF74E94AE60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
 alter table CATISSUE_CONSENT_TIER_STATUS add index FKF74E94AE17B9953 (CONSENT_TIER_ID), add constraint FKF74E94AE17B9953 foreign key (CONSENT_TIER_ID) references CATISSUE_CONSENT_TIER (IDENTIFIER);
 alter table CATISSUE_CONSENT_TIER add index FK51725303E36A4B4F (COLL_PROTOCOL_ID), add constraint FK51725303E36A4B4F foreign key (COLL_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
-
-#------------------------New Column Entry For ConsentWaived ---------- Mandar : -------------start
-alter table CATISSUE_COLLECTION_PROTOCOL add column CONSENTS_WAIVED bit;
-update catissue_collection_protocol set  CONSENTS_WAIVED='0' where  CONSENTS_WAIVED is null;
-#------------------------New Column Entry For ConsentWaived ---------- Mandar : -------------end
-
- 
