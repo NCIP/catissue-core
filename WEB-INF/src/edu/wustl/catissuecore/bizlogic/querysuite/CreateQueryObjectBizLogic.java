@@ -55,7 +55,8 @@ public class CreateQueryObjectBizLogic
 				while (iterAttributes.hasNext())
 				{
 					Attribute attr = (Attribute) iterAttributes.next();
-					String[] params = (String[]) conditionsMap.get(attr.getName());
+					String componentId = attr.getName()+attr.getId().toString();
+					String[] params = (String[]) conditionsMap.get(componentId);
 					if (params != null)
 					{
 						attributes.add(attr);

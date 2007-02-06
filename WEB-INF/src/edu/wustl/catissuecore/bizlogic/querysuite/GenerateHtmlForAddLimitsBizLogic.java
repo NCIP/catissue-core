@@ -62,8 +62,9 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				AttributeInterface attribute = (AttributeInterface) iter.next();
 				String attrName = attribute.getName();
-				attributesList = attributesList + ";" + attrName;
-				generatedHTML.append("\n<tr id=\"" + attrName + "\" height=\"3%\">\n<td class=\"standardTextQuery\" width=\"10%\">");
+				String componentId = attrName + attribute.getId().toString();
+				attributesList = attributesList + ";" + componentId;
+				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"3%\">\n<td class=\"standardTextQuery\" width=\"10%\">");
 				generatedHTML.append(attrName + "</td>\n");
 				List<String> operatorsList = populateAttributeUIInformation(attribute);
 				boolean isBetween = false;
@@ -129,7 +130,6 @@ public class GenerateHtmlForAddLimitsBizLogic
 	{
 		List<String> operatorsList = new ArrayList<String>();
 		AttributeTypeInformationInterface attrTypeInfo = attributeInterface.getAttributeTypeInformation();
-		String xmlFile = "E:\\jboss-4.0.0\\server\\default\\catissuecore-properties\\dynamicUI.xml";
 		ParseXMLFile parseFile = new ParseXMLFile(Constants.DYNAMIC_UI_XML);
 		Object[] strObj = null;
 		if (attributeInterface != null)
@@ -173,17 +173,18 @@ public class GenerateHtmlForAddLimitsBizLogic
 	{
 		StringBuffer html = new StringBuffer();
 		String attributeName = attribute.getName();
+		String componentId = attributeName + attribute.getId().toString();
 		if (operatorsList != null && operatorsList.size() != 0)
 		{
 			html.append("\n<td width=\"20%\">");
 			AttributeTypeInformationInterface attrTypeInfo = attribute.getAttributeTypeInformation();
 			if (attrTypeInfo instanceof DateAttributeTypeInformation)
 			{
-				html.append("\n<select name=\"" + attributeName + "_combobox\" onChange=\"operatorChanged('" + attributeName + "','true')\">");
+				html.append("\n<select name=\"" + componentId + "_combobox\" onChange=\"operatorChanged('" + componentId + "','true')\">");
 			}
 			else
 			{
-				html.append("\n<select name=\"" + attributeName + "_combobox\" onChange=\"operatorChanged('" + attributeName + "','false')\">");
+				html.append("\n<select name=\"" + componentId + "_combobox\" onChange=\"operatorChanged('" + componentId + "','false')\">");
 			}
 			Iterator iter = operatorsList.iterator();
 
@@ -214,8 +215,9 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 */
 	private String generateHTMLForTextBox(AttributeInterface attributeInterface, boolean isBetween, ArrayList<String> values)
 	{
-		String textBoxId = attributeInterface.getName() + "_textBox";
-		String textBoxId1 = attributeInterface.getName() + "_textBox1";
+		String componentId = attributeInterface.getName()+attributeInterface.getId().toString();
+		String textBoxId = componentId + "_textBox";
+		String textBoxId1 = componentId + "_textBox1";
 		StringBuffer html = new StringBuffer();
 		html.append("<td width=\"20%\" class=\"\">\n");
 		if (values == null || values.isEmpty())
@@ -229,7 +231,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		html.append("\n</td>");
 		if (attributeInterface.getAttributeTypeInformation() instanceof DateAttributeTypeInformation)
 		{
-			html.append("\n" + generateHTMLForCalendar(attributeInterface.getName(), true, false));
+			html.append("\n" + generateHTMLForCalendar(attributeInterface, true, false));
 		}
 		else
 		{
@@ -255,7 +257,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		html.append("\n</td>");
 		if (attributeInterface.getAttributeTypeInformation() instanceof DateAttributeTypeInformation)
 		{
-			html.append("\n" + generateHTMLForCalendar(attributeInterface.getName(), false, isBetween));
+			html.append("\n" + generateHTMLForCalendar(attributeInterface, false, isBetween));
 		}
 		else
 		{
@@ -297,23 +299,24 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param isBetween boolean 
 	 * @return String HTMLForCalendar
 	 */
-	private String generateHTMLForCalendar(String attributeName, boolean isFirst, boolean isBetween)
+	private String generateHTMLForCalendar(AttributeInterface attribute, boolean isFirst, boolean isBetween)
 	{
+		String componentId = attribute.getName()+attribute.getId().toString();
 		String innerStr = "";
 		//String divId = "overDiv" + (i + 1);
 		String divStr = "<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
 		String imgStr = "<img id=\"calendarImg\" src=\"images\\calendar.gif\" width=\"24\" height=\"22\" border=\"0\">";
 		if (isFirst)
 		{
-			String textBoxId = attributeName + "_textBox";
-			String calendarId = attributeName + "_calendar";
+			String textBoxId = componentId + "_textBox";
+			String calendarId = componentId + "_calendar";
 			innerStr = "<td width=\"3%\" id=\"" + calendarId + "\">" + divStr + "<a href=\"javascript:show_calendar('categorySearchForm." + textBoxId
 			+ "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
 		}
 		else
 		{
-			String textBoxId1 = attributeName + "_textBox1";
-			String calendarId1 = attributeName + "_calendar1";
+			String textBoxId1 = componentId + "_textBox1";
+			String calendarId1 = componentId + "_calendar1";
 			String style = "";
 			if (isBetween)
 			{
