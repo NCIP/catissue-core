@@ -14,32 +14,29 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Set;
-
 import java.util.HashSet;
 import java.util.Iterator;
+
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import edu.wustl.catissuecore.actionForm.DefineArrayForm;
+import edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
 import edu.wustl.catissuecore.actionForm.OrderSpecimenForm;
-import edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm;
 import edu.wustl.catissuecore.actionForm.RequestDetailsForm;
 import edu.wustl.catissuecore.bean.DefinedArrayDetailsBean;
 import edu.wustl.catissuecore.bean.DefinedArrayRequestBean;
 import edu.wustl.catissuecore.bean.ExistingArrayDetailsBean;
-import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 import edu.wustl.catissuecore.bean.OrderSpecimenBean;
 import edu.wustl.catissuecore.bean.RequestDetailsBean;
-
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
-
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.MapDataParser;
-
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -276,7 +273,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 
 	/**
 	 * This function inserts order data to order table  
-	 * @param abstractActionForm
+	 * @param abstractActionForm object
 	 */
 	private void insertOrderDetails(AbstractActionForm abstractActionForm)
 	{
@@ -343,11 +340,13 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 							NewSpecimenArrayOrderItem newSpecimenArrayObj=(NewSpecimenArrayOrderItem)it.next();
 							if(newSpecimenArrayObj.getName().equals(orderSpecimenBean.getArrayName()))
 							{
-								Collection orderItemCollection=(Set)newSpecimenArrayObj.getSpecimenOrderItemCollection();
-								if(orderItemCollection==null)
-									orderItemCollection=new HashSet();
+								Collection orderItemCollection = (Set)newSpecimenArrayObj.getSpecimenOrderItemCollection();
+								if(orderItemCollection == null)
+								{
+									orderItemCollection = new HashSet();
+								}
 								specimenOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayObj);
-								orderItem=specimenOrderItem;
+								orderItem = specimenOrderItem;
 								orderItemCollection.add(orderItem);
 								newSpecimenArrayObj.setSpecimenOrderItemCollection(orderItemCollection);
 							}
@@ -376,7 +375,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 							{
 								Collection orderItemCollection=(Set)newSpecimenArrayObj.getSpecimenOrderItemCollection();
 								if(orderItemCollection==null)
+								{
 									orderItemCollection=new HashSet();
+								}
 								specimenOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayObj);
 								orderItem=specimenOrderItem;
 								orderItemCollection.add(orderItem);
@@ -390,9 +391,13 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			{
 				orderItem=getOrderArrayItem(orderSpecimenBean,orderItem);
 				if((orderSpecimenBean.getTypeOfItem().equals("specimenArray"))&&(orderSpecimenBean.getSpecimenClass().equals("Tissue"))&& (orderSpecimenBean.getSpecimenType().equals("unblock")))
+				{
 					reqQty.setValue(new Double("1"));
+				}
 				else
+				{
 					reqQty.setValue(new Double(orderSpecimenBean.getRequestedQuantity()));
+				}
 				orderItem.setRequestedQuantity(reqQty);
 				orderItem.setDescription(orderSpecimenBean.getDescription());
 				orderItem.setStatus("New");
@@ -416,7 +421,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	
 	/**
 	 * Thsi function sets the Bio Specimen Order Item
-	 * @param orderSpecimenBean
+	 * @param orderSpecimenBean object
 	 * @return specimenOrderItem SpecimenOrderItem instance
 	 */
 	private SpecimenOrderItem setBioSpecimen(OrderSpecimenBean orderSpecimenBean)
@@ -445,7 +450,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	
 	/**
 	 * This function sets the pathology case order item
-	 * @param orderSpecimenBean
+	 * @param orderSpecimenBean object 
 	 * @return specimenOrderItem SpecimenOrderItem instance
 	 */
 	private SpecimenOrderItem setPathologyCase(OrderSpecimenBean orderSpecimenBean)
@@ -474,7 +479,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	
 	/**
 	 * This funciton sets the existingSpecimen orderitem with the values from OrderSpecimenBean
-	 * @param orderSpecimenBean
+	 * @param orderSpecimenBean object
 	 * @return ExistingSpecimenOrderItem object
 	 */
 	private ExistingSpecimenOrderItem setExistingSpecimenOrderItem(OrderSpecimenBean orderSpecimenBean)
@@ -490,7 +495,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	
 	/**
 	 * This funciton sets the derivedspecimen orderitem with the values from OrderSpecimenBean
-	 * @param orderSpecimenBean 
+	 * @param orderSpecimenBean object
 	 * @return derivedSpecimenOrderItem DerivedSpecimenOrderItem object
 	 */
 	private DerivedSpecimenOrderItem setDerivedSpecimenOrderItem(OrderSpecimenBean orderSpecimenBean)
@@ -544,6 +549,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		return derivedOrderItem;
 	}
 	
+	/**
+	 * @param orderBiospecimenArrayForm object
+	 * @return HashMap object
+	 */
 	private HashMap putOrderDetailsForArray(OrderBiospecimenArrayForm orderBiospecimenArrayForm)
 	{
 		HashMap orderItemsMap=null;
@@ -562,6 +571,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		return orderItemsMap;
 	}
 	
+	/**
+	 * @param orderSpecimenForm object
+	 * @return HashMap object
+	 */
 	private HashMap putOrderDetailsForSpecimen(OrderSpecimenForm orderSpecimenForm)
 	{
 		HashMap orderItemsMap=null;
@@ -580,6 +593,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		return orderItemsMap;
 	}
 	
+	/**
+	 * @param orderPathologyCaseForm object
+	 * @return HashMap object
+	 */
 	private HashMap putOrderDetailsForPathologyCase(OrderPathologyCaseForm orderPathologyCaseForm)
 	{
 		HashMap orderItemsMap=null;
@@ -598,6 +615,11 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		return orderItemsMap;
 	}
 	
+	/**
+	 * @param orderSpecimenBean object
+	 * @param orderItem object
+	 * @return OrderItem object
+	 */
 	private OrderItem getOrderArrayItem(OrderSpecimenBean orderSpecimenBean,OrderItem orderItem)
 	{
 		SpecimenArray specimenArray = new SpecimenArray();
@@ -611,6 +633,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		return orderItem;
 	}
 	
+	/**
+	 * @param newArrayOrderItems object
+	 * @return List object
+	 */
 	private List putnewArrayDetailsforArray(List newArrayOrderItems)
 	{
 		List newOrderItems=null;
@@ -628,7 +654,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				SpecimenArrayType specimenArrayTypeObj=new SpecimenArrayType();
 				
 				//specimenArrayTypeObj.setName(defineArrayObj.getArraytype());
-				specimenArrayTypeObj.setId( new Long(defineArrayObj.getArraytype()));
+				specimenArrayTypeObj.setId(new Long(defineArrayObj.getArraytype()));
 				newSpecimenArrayOrderItem.setArrayType(specimenArrayTypeObj);
 				newOrderItems.add(newSpecimenArrayOrderItem);
 			}
@@ -715,11 +741,11 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		this.setOrderItemCollection(domainObjSet);	
 	}
 	/**
-	 * @param orderItem
-	 * @param distributedItem
-	 * @param distribution
-	 * @param distributedItemCollection
-	 * @return
+	 * @param orderItem object
+	 * @param distributedItem object
+	 * @param distribution object
+	 * @param distributedItemCollection object
+	 * @return Distribution object
 	 */
 	private Distribution setDistributedItemCollectionInDistribution(OrderItem orderItem,DistributedItem distributedItem,Distribution distribution,Collection<DistributedItem> distributedItemCollection)
 	{
@@ -730,7 +756,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	}
 	
 	/**
-	 * @return the distributionCollection
+	 * @return the distributionCollection object
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.Distribution" cascade="save-update" lazy="false"
 	 * @hibernate.set name="distributionCollection" table="CATISSUE_DISTRIBUTION"
 	 * @hibernate.collection-key column="ORDER_ID" 
@@ -751,7 +777,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 
 	 /**
      * Returns message label to display on success add or edit
-     * @return String
+     * @return String object
      */
 	public String getMessageLabel()
 	{
@@ -766,9 +792,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		}
 	}
 	/**
-	 * @param distribution
-	 * @param requestDetailsForm
-	 * @return
+	 * @param distribution object
+	 * @param requestDetailsForm object
+	 * @return Distribution object
 	 */
 	private Distribution setDistributionProtocolInDistribution(Distribution distribution,RequestDetailsForm requestDetailsForm)
 	{
@@ -777,13 +803,15 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		distribution.setDistributionProtocol(distributionProtocol);
 		return distribution;
 	}
+	
 	/**
-	 * @param requestDetailsBean
-	 * @param orderId
-	 * @param distributedItemCollection
-	 * @param distribution
-	 * @param requestDetailsForm
-	 * @return
+	 * @param requestDetailsBean object
+	 * @param order object
+	 * @param distributedItemCollection object
+	 * @param distribution object
+	 * @param requestDetailsForm object
+	 * @param distributionObjectCollection object
+	 * @return OrderItem object
 	 */
 	private OrderItem populateOrderItemForSpecimenOrderItems(RequestDetailsBean requestDetailsBean,OrderDetails order,Collection distributedItemCollection,Distribution distribution,RequestDetailsForm requestDetailsForm,Collection distributionObjectCollection)
 	{
@@ -831,9 +859,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		return orderItem;
 	}
 	/**
-	 * @param distribution
-	 * @param requestDetailsForm
-	 * @return
+	 * @param distribution object
+	 * @param requestDetailsForm object
+	 * @return Distribution object
 	 */
 	private Distribution setSiteInDistribution(Distribution distribution,RequestDetailsForm requestDetailsForm)
 	{
@@ -843,9 +871,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		return distribution;
 	}
 	/**
-	 * @param order
-	 * @param definedArrayDetailsBean
-	 * @return
+	 * @param order object
+	 * @param definedArrayDetailsBean object
+	 * @return OrderItem object
 	 */
 	private OrderItem setOrderForDefineArrayDetails(OrderDetails order,DefinedArrayDetailsBean definedArrayDetailsBean)
 	{
@@ -860,8 +888,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		return orderItem;
 	}
 	/**
-	 * @param orderId
-	 * @return
+	 * @param orderId object
+	 * @return OrderDetails object
 	 */
 	private OrderDetails setOrderId(Long orderId)
 	{
@@ -870,13 +898,15 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		return order;
 		
 	}
+	
 	/**
-	 * @param definedArrayRequestBean
-	 * @param order
-	 * @param distributedItemCollection
-	 * @param distribution
-	 * @param requestDetailsForm
-	 * @return
+	 * @param definedArrayRequestBean object 
+	 * @param order object
+	 * @param distributedItemCollection object
+	 * @param distribution object
+	 * @param requestDetailsForm object
+	 * @param distributionObjectCollection object
+	 * @return OrderItem object
 	 */
 	private OrderItem populateOrderItemForArrayHeader(DefinedArrayRequestBean definedArrayRequestBean,OrderDetails order,Collection distributedItemCollection,Distribution distribution,RequestDetailsForm requestDetailsForm,Collection distributionObjectCollection)
 	{
@@ -915,12 +945,13 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		return orderItem;
 	}
 	/**
-	 * @param existingArrayDetailsBean
-	 * @param order
-	 * @param distributedItemCollection
-	 * @param distribution
-	 * @param requestDetailsForm
-	 * @return
+	 * @param existingArrayDetailsBean object
+	 * @param order object
+	 * @param distributedItemCollection object
+	 * @param distribution object
+	 * @param requestDetailsForm object
+	 * @param distributionObjectCollection object
+	 * @return OrderItem object
 	 */
 	private OrderItem populateOrderItemForExistingArray(ExistingArrayDetailsBean existingArrayDetailsBean,OrderDetails order,Collection distributedItemCollection,Distribution distribution,RequestDetailsForm requestDetailsForm,Collection distributionObjectCollection)
 	{
@@ -960,8 +991,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		return orderItem;
 	}
 	/**
-	 * @param map
-	 * @return
+	 * @param map object
+	 * @return Collection object
 	 */
 	private Collection parseValuesMap(Map map)
 	{
