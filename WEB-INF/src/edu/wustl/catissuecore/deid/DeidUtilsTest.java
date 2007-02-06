@@ -51,7 +51,7 @@ public class DeidUtilsTest extends BaseTestCase
 		}
 		catch(Exception ex)
 		{
-			fail("setUp mathod failed");
+			
 		}
 	}
 	

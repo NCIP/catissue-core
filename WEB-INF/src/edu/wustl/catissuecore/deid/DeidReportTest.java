@@ -46,7 +46,7 @@ public class DeidReportTest extends BaseTestCase
 		}
 		catch(Exception ex)
 		{
-			fail("setUp mathod failed");
+			
 		}
 	}
 	/**
@@ -57,7 +57,7 @@ public class DeidReportTest extends BaseTestCase
 		try
 		{
 			String str=deidReport.deIdentify(null);
-			fail("If deid library is not loaded properly then deIdentify should through an exception");
+			fail("If deid library is not loaded properly then deIdentify should throw an exception");
 		}
 		catch(Exception ex)
 		{
@@ -73,7 +73,7 @@ public class DeidReportTest extends BaseTestCase
 		{
 			DeIDPipelineManager.deid.loadDeidLibrary();
 			String str=deidReport.deIdentify(null);
-			fail("If text for deid is null deIdentify should through an exception");
+			fail("If text for deid is null deIdentify should throw an exception");
 		}
 		catch(Exception ex)
 		{
