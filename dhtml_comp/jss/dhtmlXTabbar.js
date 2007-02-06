@@ -32,7 +32,7 @@ function dhtmlXTabBar(parentObject,mode,height)
  this._margin=1;
  this._height=parseInt(height||20);
  this._bMode=(mode=="right"||mode=="bottom");
- this._tabSize='200';
+ this._tabSize='150';
  this._content=new Array();
  this._tbst="win_text";
  this._styles={
@@ -671,7 +671,7 @@ dhtmlXTabBar.prototype.loadXMLString=function(xmlString,afterCall){
  var z=document.createElement("DIV");
  z.style.width='100%';
  z.style.height='100%';
- z.innerHTML="<iframe frameborder='0' width='100%' height='100%' src='"+this._imgPath+"blank.html'></iframe>";
+ z.innerHTML="<iframe frameborder='0' width='100%' height='100%' src=''></iframe>";
  this._glframe=z.childNodes[0];
  this._conZone.appendChild(this._glframe);
 }
@@ -682,7 +682,7 @@ dhtmlXTabBar.prototype.loadXMLString=function(xmlString,afterCall){
  z.style.width='100%';
  z.style.height='100%';
  z.style.display='none';
- z.innerHTML="<iframe frameborder='0' width='100%' height='100%' src='"+this._imgPath+"blank.html'></iframe>";
+ z.innerHTML="<iframe frameborder='0' width='100%' height='100%' src=''></iframe>";
  if(this._hrfmode=="iframes")
  z.childNodes[0].src=href;
  this.setContent(id,z);
