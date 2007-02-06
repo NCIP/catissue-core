@@ -337,6 +337,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	}
 	/**
 	 * Method overridden to return hashcode of Id if available.
+	 * @return hashcode
 	 */
 	public int hashCode()
 	{

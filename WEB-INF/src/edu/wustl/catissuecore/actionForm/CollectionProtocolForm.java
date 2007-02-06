@@ -695,7 +695,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	
 	/**
 	 * If consent waived is true then no need to check consents prior to distribution
-	 * @return consentWaived;
+	 * @return consentWaived
 	 */
 	public boolean isConsentWaived()
 	{
@@ -704,12 +704,11 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 	/**
 	 * If consent waived is true then no need to check consents prior to distribution
-	 * @param consentWaived
+	 * @param consentWaived If consent waived is true then no need to check consents prior to distribution
 	 */
 	public void setConsentWaived(boolean consentWaived)
 	{
 		this.consentWaived = consentWaived;
 	}
 	//	For Consent Tracking End
-	
 }
