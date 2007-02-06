@@ -1108,7 +1108,7 @@ drop table if exists CATISSUE_CONSENT_TIER;
 
 create table CATISSUE_CONSENT_TIER_RESPONSE (
    IDENTIFIER bigint not null auto_increment,
-   RESPONSE varchar(20),
+   RESPONSE varchar(255),
    CONSENT_TIER_ID bigint,
    COLL_PROT_REG_ID bigint,
    primary key (IDENTIFIER)
