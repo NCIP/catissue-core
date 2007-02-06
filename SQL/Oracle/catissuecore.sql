@@ -1179,5 +1179,14 @@ create sequence CATISSUE_REPORT_SECTION_SEQ;
 create sequence CATISSUE_REVIEW_PARAMS_SEQ;
 create sequence CATISSUE_REPORT_CONTENT_SEQ;
 create sequence CATISSUE_REPORT_QUEUE_SEQ;
-
 /****caTIES Realated Tables - end**********/
+
+#------------------------New Column Entry For ConsentWaived ---------- Mandar : -------------start
+alter table CATISSUE_COLLECTION_PROTOCOL add CONSENTS_WAIVED number(1,0);
+update CATISSUE_COLLECTION_PROTOCOL set CONSENTS_WAIVED=0 where CONSENTS_WAIVED is null;
+#------------------------New Column Entry For ConsentWaived ---------- Mandar :  -------------end
+
+
+
+
+
