@@ -111,7 +111,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	/**
 	 * int counter for map size
 	 */
-	private int counter=1;
+	private int counter=0;
 	/**
 	 * long id of domain object of the page from which this page is accessed
 	 */
