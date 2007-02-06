@@ -1,6 +1,7 @@
 /*
 Copyright Scand LLC http://www.scbr.com
-This version of Software is under GNU GPL. For non-GNU GPL usage please contact info@scbr.com to obtain Commercial/Enterprise license (Professional Edition included)
+To use this component please contact info@scbr.com to obtain license
+
 */ 
 
  
@@ -30,8 +31,16 @@ dhtmlXGridObject.prototype._createDragNode=function(htmlObject){
  htmlObject.parentObject.treeNod=this;
 
  var z=new Array();
-
- z[z.length]=htmlObject.parentNode.idd;
+ 
+ 
+ z=(this.getSelectedId()||"").split(",");
+ var exst=false;
+ for(var i=0;i<z.length;i++)
+ if(z[i]==htmlObject.parentNode.idd)exst=true;
+ if(!exst)
+ 
+ 
+ z[this.selMultiRows?z.length:0]=htmlObject.parentNode.idd;
 
 
  this._dragged=new Array();
@@ -40,8 +49,6 @@ dhtmlXGridObject.prototype._createDragNode=function(htmlObject){
  this._dragged[this._dragged.length]=this.rowsAr[z[i]];
  this.rowsAr[z[i]].treeNod=this;
 }
-
-
 
  htmlObject.parentObject.parentNode=htmlObject.parentNode;
 
@@ -129,18 +136,24 @@ dragContext.prototype.pid=function(){
  
 dragContext.prototype.ind=function(){
  if(this.tid==window.unknown)return 0;
- var ind=this.tobj.rowsCol._dhx_find(this.tobj.rowsAr[this.tid]);
  if((this.dropmode=="child")&&(this.target=="treeGrid"))
  this.tobj.openItem(this.tid);
+ var ind=this.tobj.rowsCol._dhx_find(this.tobj.rowsAr[this.tid]);
 
  return(ind+((this.target=="treeGrid")?this.tobj._countBranchLength(ind):1));
+}
+ 
+dragContext.prototype.img=function(){
+ if(this.target!="grid")
+ return this.sobj.getItemImage(this.sid);
+ else return null;
 }
 
  
 dragContext.prototype.slist=function(){
  var res=new Array();
  for(var i=0;i<this.sid.length;i++)
- res[res.length]=this.sid[i].idd;
+ res[res.length]=this.sid[i][(this.source=="tree")?"id":"idd"];
 
  return res.join(",");
 }
@@ -171,13 +184,20 @@ dhtmlXGridObject.prototype._drag=function(sourceHtmlObject,dhtmlObject,targetHtm
  c.set("target","treeGrid");
  c.set("tobj",r1.grid).set("tid",r1.idd);
 
-
+ 
+ 
+ 
+ if((c.tobj.dadmode==2)&&(c.tobj.dadmodec==1)&&(c.tobj.dadmodefix<0))
+ if(c.tobj.obj._rows(0).idd!=c.tid)c.tid=r1.previousSibling.idd;
+ else c.tid=window.unknown;
+ 
+ 
 
 
  if(c.sobj.dpcpy)c.set("mode","copy");
  c.tobj._clearMove();
 
- if((c.tobj.dragFunc)&&(c.tobj.dragFunc(c.slist(),c.tid,c.sobj,c.tobj)))return;
+ if((c.tobj.dragFunc)&&(!c.tobj.dragFunc(c.slist(),c.tid,c.sobj,c.tobj)))return;
 
  
  var result=new Array();
@@ -202,7 +222,7 @@ dhtmlXGridObject.prototype._drag=function(sourceHtmlObject,dhtmlObject,targetHtm
 
  
 dhtmlXGridObject.prototype._dragRoutine=function(c){
- c.uid().tobj.addRow(c.nid,c.data(),c.ind(),c.pid());
+ c.uid().tobj.addRow(c.nid,c.data(),c.ind(),c.pid(),c.img());
 
  if(c.source=="tree"){
  var sn=c.sobj._globalIdStorageFind(c.sid);
@@ -271,8 +291,8 @@ dhtmlXGridObject.prototype._dragIn=function(htmlObject,shtmlObject,x,y){
 
  if((tree)&&((this.checkParentLine(htmlObject.parentNode,shtmlObject.parentNode.idd))))
  return 0;
-
- if((this.dragInFunc)&&(!this.dragInFunc(shtmlObject.parentNode.idd,htmlObject.parentNode.idd,shtmlObject.parentNode.grid,htmlObject.parentNode.grid)))
+ var obj=shtmlObject.parentObject?shtmlObject.parentObject:shtmlObject.parentNode;
+ if((this.dragInFunc)&&(!this.dragInFunc(obj.idd||obj.id,htmlObject.parentNode.idd,obj.grid||obj.treeNod,htmlObject.parentNode.grid)))
  return 0;
 
  this._setMove(htmlObject,x,y);
@@ -399,7 +419,72 @@ dhtmlXGridObject.prototype.moveRow=function(rowId,mode,targetId,targetGrid){
 dhtmlXGridObject.prototype.setDragHandler=function(func){if(typeof(func)=="function")this.dragFunc=func;else this.dragFunc=eval(func);}
 
 
+ 
+ 
+
+ 
+dhtmlXGridObject.prototype._nonTrivialNode=function(tree,targetObject,beforeNode,itemObject,z2)
+{
+ if((tree.dragFunc)&&(!z2))
+ if(!tree.dragFunc(itemObject.parentNode.idd,targetObject.id,(beforeNode?beforeNode.id:null),this,tree))return false;
+
+ var gridRowId = itemObject.idd;
+ var treeNodeId = gridRowId+(new Date()).getMilliseconds();
+
+ var img=(this.isTreeGrid()?this.getItemImage(gridRowId):"")
+ var newone=tree._attachChildNode(targetObject,treeNodeId,this.gridToTreeElement(tree,treeNodeId,gridRowId),"",img,img,img,"","",beforeNode);
+ if(this.loadedKidsHash){
+ var akids=this.loadedKidsHash.get(gridRowId);
+ if(akids)
+ for(var i=0;i<akids.length;i++){
+ this._nonTrivialNode(tree,newone,0,akids[i],1);
+ if(!this.dpcpy)i--;
+}
+}
+
+ if(!this.dpcpy)this.deleteRow(gridRowId);
+
+ if((tree.dropFunc)&&(!z2))
+ tree.dropFunc(treeNodeId,targetObject.id,(beforeNode?beforeNode.id:null),this,tree);
+}
+
+ 
+dhtmlXGridObject.prototype.gridToTreeElement = function(treeObj,treeNodeId,gridRowId){
+ return this.cells(gridRowId,0).getValue();
+}
+
+ 
+dhtmlXGridObject.prototype.treeToGridElement = function(treeObj,treeNodeId,gridRowId){
+ var w=new Array();
+ var z=this.cellType._dhx_find("tree");
+ if(z==-1)z=0;
+ for(var i=0;i<this.getColumnCount();i++)
+ w[w.length]=(i!=z)?(treeObj.getUserData(treeNodeId,this.getColumnId(i))||""):treeObj.getItemText(treeNodeId);
+ return w;
+}
+
+ 
+dhtmlXGridObject.prototype.moveRowTo=function(srowId,trowId,mode,dropmode,sourceGrid,targetGrid){
+ var c=new dragContext("grid","grid",mode,dropmode||"sibling",srowId,trowId,sourceGrid||grid,targetGrid||grid);
+ c.tobj._dragRoutine(c);
+ c.close();
+}
 
 
+
+
+ 
+dhtmlXGridObject.prototype.setDropHandler=function(func){if(typeof(func)=="function")this.dropFunc=func;else this.dropFunc=eval(func);};
+
+
+ 
+dhtmlXGridObject.prototype.setDragInHandler=function(func){if(typeof(func)=="function")this.dragInFunc=func;else this.dragInFunc=eval(func);};
+
+
+
+ 
+dhtmlXGridObject.prototype.enableMercyDrag=function(mode){this.dpcpy=convertStringToBoolean(mode);};
+ 
+ 
 
 

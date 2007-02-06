@@ -1,6 +1,7 @@
 /*
 Copyright Scand LLC http://www.scbr.com
-This version of Software is under GNU GPL. For non-GNU GPL usage please contact info@scbr.com to obtain Commercial/Enterprise license (Professional Edition included)
+To use this component please contact info@scbr.com to obtain license
+
 */ 
 
 document.write("<script src='"+_js_prefix+"calendar/YAHOO.js'></script>");
@@ -20,7 +21,7 @@ function eXcell_calendar(cell){
  if(!window._grid_calendar)_grid_calendar_init();
  var arPos = this.grid.getPosition(this.cell);
  var pval=this._date2str2(this.cell.val||new Date());
- window._grid_calendar.render(arPos[0]-this.grid.objBox.scrollLeft,arPos[1]+this.cell.offsetHeight-this.grid.objBox.scrollTop,this,pval);
+ window._grid_calendar.render(arPos[0],arPos[1]+this.cell.offsetHeight,this,pval);
  this.cell._cediton=true;
  this.val=this.cell.val;
 }
@@ -38,7 +39,7 @@ function eXcell_calendar(cell){
  if(!z.getFullYear())return;
 
  this.cell.val=new Date(z.valueOf());
- this.cell.innerHTML = this._date2str(z);
+ this.setCValue(this._date2str(z),z);
  return this.val.valueOf()!=z.valueOf();
 }
  this._2dg=function(val){
@@ -61,11 +62,10 @@ eXcell_calendar.prototype.setValue = function(val){
 
  if((this.cell.val=="NaN")||(this.cell.val=="Invalid Date")){
  this.cell.val="";
- this.cell.innerHTML="&nbsp;";
+ this.setCValue("&nbsp;",0);
 }
  else
- this.cell.innerHTML = this._date2str(this.cell.val);
+ this.setCValue(this._date2str(this.cell.val),this.cell.val);
 }
-
 
 

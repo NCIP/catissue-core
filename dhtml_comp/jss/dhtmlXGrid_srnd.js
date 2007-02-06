@@ -1,6 +1,7 @@
 /*
 Copyright Scand LLC http://www.scbr.com
-This version of Software is under GNU GPL. For non-GNU GPL usage please contact info@scbr.com to obtain Commercial/Enterprise license (Professional Edition included)
+To use this component please contact info@scbr.com to obtain license
+
 */
  
  dhtmlXGridObject.prototype.enableSmartRendering = function(mode,totalRows,bufferSize){
@@ -8,11 +9,13 @@ This version of Software is under GNU GPL. For non-GNU GPL usage please contact 
  this._dload = true;
  if(!this._srdh)this._srdh=20;
 
+ if(!this.deleteRow_WSRD){
  this.deleteRow_WSRD=this.deleteRow;
  this.deleteRow=this.deleteRow_WSRDA;
 
  this._insertRowAt_WSRD=this._insertRowAt;
  this._insertRowAt=this._insertRowAt_WSRDA;
+}
 
 
  this._dInc=12;
@@ -22,7 +25,11 @@ This version of Software is under GNU GPL. For non-GNU GPL usage please contact 
  this.multiLine=false;
  this._dloadSize=Math.floor(parseInt(this.entBox.style.height)/this._srdh)+2;
  this.obj.className+=" row20px";
-
+ 
+ 
+ this._dpref=bufferSize||this._dloadSize;
+ 
+ 
  if(this.hdr.childNodes[1])
  this._initD();
  else
@@ -46,13 +53,92 @@ This version of Software is under GNU GPL. For non-GNU GPL usage please contact 
  
  dhtmlXGridObject.prototype.enableDOMLimit = function(mode,limit){
  if(!convertStringToBoolean(mode))return;
- this._dom_limit=0;
- this._dom_limit=limit||100;
+ this._dom_limit=limit||1000;
 }
 
+ 
+ 
+
+ 
+ dhtmlXGridObject.prototype._checkPref=function(start,direction){
+ if(_isKHTML)return start;
+ var i=1;
+ for(i;i<=this._dpref;i++)
+ if(((i*direction+start)<0)||((i*direction+start)>this.limit)||(this.rowsCol[i*direction+start])||(this.rowsBuffer[i*direction+start]))break;
+ return start+(i-1)*direction;
+}
+ 
+ 
+
+ 
+ 
+ 
+ dhtmlXGridObject.prototype._simplifyDom=function(a,b,c){
+ var count=0;
+
+ for(var i=0;i<this.obj._rowslength();i++)
+ if((i<a)||(i>b)){
+ var z=this.obj._rows(i);
+ if((!z._rLoad)&&(!z._sRow)){
+
+ if((z.previousSibling)&&((z.previousSibling._sRow)||(z.previousSibling._rLoad)))
+{
+ 
+ var ind=this.rowsCol._dhx_find(z);
+ var zprev=z.previousSibling;
 
 
+ this.rowsBuffer[1][ind]=z;
 
+ zprev._sRow=true;
+ z.parentNode.removeChild(z);
+ this.rowsAr[this.rowsCol[ind].idd]=null;
+
+ this.rowsCol[ind].idd=id;
+ this.rowsCol[ind]=null;
+
+ this._fixHeight(zprev,-this._srdh);
+ i--;
+}else
+ if((z.nextSibling)&&((z.nextSibling._sRow)||(z.nextSibling._rLoad)))
+{
+ 
+ var ind=this.rowsCol._dhx_find(z);
+ var zprev=z.nextSibling;
+
+
+ this.rowsBuffer[1][ind]=z;
+
+ zprev._sRow=true;
+ z.parentNode.removeChild(z);
+ this.rowsAr[this.rowsCol[ind].idd]=null;
+
+ this.rowsCol[ind].idd=id;
+ this.rowsCol[ind]=null;
+
+ this._fixHeight(zprev,-this._srdh);
+ i--;
+}
+ else{
+ var ind=this.rowsCol._dhx_find(z);
+ this.rowsBuffer[1][ind]=z;
+ 
+
+ var id='temp_dLoad_'+this._dInc;
+ this._dInc++;
+ var zn=this._fastAddRow(id,ind,true,ind);
+
+ z.parentNode.removeChild(z);
+ zn._sRow=true;
+ this._fixHeight(zn,0);
+
+}
+ if(this.obj._rowslength()<=this._dom_limit)return;
+}
+}
+}
+ 
+ 
  
  dhtmlXGridObject.prototype._addFromBufferSR=function(j){
  if((!this.rowsCol[j])||(this.rowsCol[j]._sRow))
@@ -71,9 +157,8 @@ This version of Software is under GNU GPL. For non-GNU GPL usage please contact 
  if(j%2==1)this.rowsCol[j].className=this._cssUnEven;
  else this.rowsCol[j].className=this._cssEven;
 }
- this._fillRowFromXML(this.rowsCol[j],this.rowsBuffer[1][j],-1);
-
  this.changeRowId(this.rowsCol[j].idd,this.rowsBuffer[1][j].getAttribute("id"));
+ this._fillRowFromXML(this.rowsCol[j],this.rowsBuffer[1][j],-1);
 }
  else{
  this.rowsAr[this.rowsBuffer[1][j].idd]=this.rowsBuffer[1][j];
@@ -92,12 +177,17 @@ This version of Software is under GNU GPL. For non-GNU GPL usage please contact 
  this._dl_start[0]=[0,this._dloadSize];
  var loader = new dtmlXMLLoaderObject(this._askRealRows2,this);
  loader.loadXML(this._dload+((this._dload.indexOf("?")!=-1)?"&":"?")+"posStart="+0+"&sn="+(new Date()).valueOf());
+ 
  return true;
 }
  var gi=pos||Math.floor(this.objBox.scrollTop/this._srdh);
  if((this._dom_limit)&&(this.obj._rowslength()>this._dom_limit))
 {
-
+ 
+ 
+ this._simplifyDom(gi,gi+this._dloadSize);
+ 
+ 
 }
  
  if(gi>(this.limit-this._dloadSize))gi=this.limit-this._dloadSize;
@@ -113,7 +203,15 @@ This version of Software is under GNU GPL. For non-GNU GPL usage please contact 
 }
  else
 {
-
+ 
+ 
+ if(this._dpref){
+ start=this._checkPref(gi,-1);
+ count=this._checkPref(size,1)-start;
+}
+ else
+ 
+ 
 {count=size-gi;start=gi;}
  this._dl_start[start]=[gi-start,size-gi];
  var loader = new dtmlXMLLoaderObject(this._askRealRows2,this);
@@ -123,13 +221,25 @@ This version of Software is under GNU GPL. For non-GNU GPL usage please contact 
 }
 }
 }
+
+
  dhtmlXGridObject.prototype._askRealRows2=function(obj,xml,c,d,e){
  var top=e.getXMLTopNode("rows");
  var rows=e.doXPath("//rows/row",top);
-
+ var z_t=top.getAttribute("total_count");
+ if((z_t)&&(!obj._limitC)){
+ obj._limitC=obj.limit=parseInt(z_t);
+ 
+}
 
  if(obj._initDrF){
-
+ 
+ 
+ var hheadCol = e.doXPath("//rows/head",top);
+ if(hheadCol.length)
+ obj._parseHead(hheadCol);
+ 
+ 
  obj._initD();
 }
 
@@ -137,10 +247,29 @@ This version of Software is under GNU GPL. For non-GNU GPL usage please contact 
  var llim=(obj._dl_start[j]||[0])[0];
  var tlim=llim+(obj._dl_start[j]||[0,rows.length])[1];
 
-
+ 
+ 
+ if(!obj.limit){
+ obj.limit=rows.length;
+ obj._fastAddRowSpacer(0,obj.limit*obj._srdh);
+ if(obj._ahgr)window.setTimeout(function(){obj._askRealRows();},1);
+}
+ 
+ 
 
  for(var i=0;i<rows.length;i++){
-
+ 
+ 
+ if((i<llim)||(i>tlim))
+{
+ if(!_isKHTML){
+ obj.rowsBuffer[1][j+i]=rows[i];
+ obj.rowsBuffer[0][j+i]=rows[i].getAttribute("id");
+}
+}
+ else
+ 
+ 
 {
  if((!obj.rowsCol[i+j])||(obj.rowsCol[i+j]._sRow))
  obj._splitRowAt(i+j);
@@ -151,10 +280,9 @@ This version of Software is under GNU GPL. For non-GNU GPL usage please contact 
  if((j+i)%2==1)obj.rowsCol[i+j].className=obj._cssUnEven;
  else obj.rowsCol[i+j].className=obj._cssEven;
 }
- obj._fillRowFromXML(obj.rowsCol[i+j],rows[i],-1);
-
- obj.rowsCol[i+j]._rLoad=false;
  obj.changeRowId(obj.rowsCol[i+j].idd,rows[i].getAttribute("id"));
+ obj._fillRowFromXML(obj.rowsCol[i+j],rows[i],-1);
+ obj.rowsCol[i+j]._rLoad=false;
 }
 }
 }
@@ -215,7 +343,6 @@ This version of Software is under GNU GPL. For non-GNU GPL usage please contact 
 }
  
  dhtmlXGridObject.prototype._fastAddRowSpacer=function(ind,height){
-
  var id='temp_dLoad_'+this._dInc;
  this._dInc++;
 
@@ -351,5 +478,4 @@ dhtmlXGridObject.prototype.deleteRow_WSRDA = function(row_id,node){
 }
  return true;
 }
-
 

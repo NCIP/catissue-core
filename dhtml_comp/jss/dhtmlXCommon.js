@@ -1,6 +1,7 @@
 /*
 Copyright Scand LLC http://www.scbr.com
-This version of Software is under GNU GPL. For non-GNU GPL usage please contact info@scbr.com to obtain Commercial/Enterprise license (Professional Edition included)
+To use this component please contact info@scbr.com to obtain license
+
 */ 
  
 function dtmlXMLLoaderObject(funcObject,dhtmlObject,async,rSeed){
@@ -36,8 +37,10 @@ function dtmlXMLLoaderObject(funcObject,dhtmlObject,async,rSeed){
  var z=temp[0];
 }else
  var z=this.xmlDoc.documentElement;
- if(z)
+ if(z){
+ this._retry=false;
  return z;
+}
 
  if((_isIE)&&(!this._retry)){
  
@@ -49,7 +52,7 @@ function dtmlXMLLoaderObject(funcObject,dhtmlObject,async,rSeed){
 
  return this.getXMLTopNode(tagName);
 }
- dhtmlxError.throwError("LoadXML","Incorrect XML",[this.xmlDoc])
+ dhtmlxError.throwError("LoadXML","Incorrect XML",[this.xmlDoc,this.mainObject]);
  return document.createElement("DIV");
 };
  
@@ -72,8 +75,8 @@ function dtmlXMLLoaderObject(funcObject,dhtmlObject,async,rSeed){
  dtmlXMLLoaderObject.prototype.loadXML=function(filePath,postMode,postVars){
  if(this.rSeed)filePath+=((filePath.indexOf("?")!=-1)?"&":"?")+"a_dhx_rSeed="+(new Date()).valueOf();
  this.filePath=filePath;
- try
-{
+
+ if(window.XMLHttpRequest){
  this.xmlDoc = new XMLHttpRequest();
  this.xmlDoc.open(postMode?"POST":"GET",filePath,this.async);
  if(postMode)
@@ -81,7 +84,7 @@ function dtmlXMLLoaderObject(funcObject,dhtmlObject,async,rSeed){
  this.xmlDoc.onreadystatechange=new this.waitLoadFunction(this);
  this.xmlDoc.send(null||postVars);
 }
- catch(e){
+ else{
 
  if(document.implementation && document.implementation.createDocument)
 {
@@ -270,7 +273,10 @@ function dhtmlDragAndDropObject(){
  this.lastLanding=htmlObject;this.lastLanding=this.lastLanding.dragLanding._dragIn(this.lastLanding,this.dragStartNode,x,y);}
  else{
  if((htmlObject)&&(htmlObject.tagName!="BODY"))this.checkLanding(htmlObject.parentNode,x,y);
- else{if(this.lastLanding)this.lastLanding.dragLanding._dragOut(this.lastLanding,x,y);this.lastLanding=0;}
+ else{
+ if(this.lastLanding)this.lastLanding.dragLanding._dragOut(this.lastLanding,x,y);this.lastLanding=0;
+ if(this._onNotFound)this._onNotFound();
+}
 }
 }
  dhtmlDragAndDropObject.prototype.stopDrag=function(e,mode){
@@ -358,9 +364,11 @@ function isIE(){
 dtmlXMLLoaderObject.prototype.doXPath = function(xpathExp,docObj){
  if((_isOpera)||(_isKHTML))return this.doXPathOpera(xpathExp,docObj);
  if(_isIE){
- if(!docObj){
- docObj = this.xmlDoc
-}
+ if(!docObj)
+ if(!this.xmlDoc.nodeName)
+ docObj = this.xmlDoc.responseXML
+ else
+ docObj = this.xmlDoc;
  return docObj.selectNodes(xpathExp);
 }else{
  var nodeObj = docObj;
@@ -469,5 +477,15 @@ dtmlXMLLoaderObject.prototype._getAllNamedChilds = function(a,b){
  return c;
 }
 
-
+function dhtmlXHeir(a,b){
+ for(c in b)
+ if(typeof(b[c])=="function")a[c]=b[c];
+ return a;
+}
+function dhtmlxEvent(el,event,handler){
+ if(el.addEventListener)
+ el.addEventListener(event,handler,false);
+ else if(el.attachEvent)
+ el.attachEvent("on"+event,handler);
+}
 
