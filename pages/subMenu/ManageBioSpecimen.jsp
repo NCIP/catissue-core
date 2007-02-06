@@ -72,7 +72,7 @@
 				<b> <bean:message key="app.specimencollectiongroup" /></b>
 		</div>
 		<div>
-		<a class="subMenuPrimary" href="SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&menuSelected=14"><bean:message key="app.add" /></a> | 
+		<a class="subMenuPrimary" href="LoadSpecimenCollGroupPage.do"><bean:message key="app.add" /></a> | 
 		<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSpecimenCollectionGroup&aliasName=SpecimenCollectionGroup&menuSelected=14" >
 			<bean:message key="app.edit" />
 		</a>
