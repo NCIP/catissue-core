@@ -116,15 +116,18 @@ public class QueryOutputTreeBizLogic
 			}
 		}
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
-		Iterator dataListIterator = dataList.iterator();
-		List rowList = new ArrayList();
-		IOutputTreeNode root = query.getRootOutputClass();
-		List<IOutputTreeNode> allChildNodes = new ArrayList<IOutputTreeNode>();
-		List<IOutputTreeNode> childNodes = getAllChildNodes(root, allChildNodes);
-		while (dataListIterator.hasNext())
+		if(dataList != null)
 		{
-			rowList = (List) dataListIterator.next();
-			treeDataVector = addNodeToTree(rowList, childNodes, treeDataVector, nodeAttributeColumnNameMap);
+			Iterator dataListIterator = dataList.iterator();
+			List rowList = new ArrayList();
+			IOutputTreeNode root = query.getRootOutputClass();
+			List<IOutputTreeNode> allChildNodes = new ArrayList<IOutputTreeNode>();
+			List<IOutputTreeNode> childNodes = getAllChildNodes(root, allChildNodes);
+			while (dataListIterator.hasNext())
+			{
+				rowList = (List) dataListIterator.next();
+				treeDataVector = addNodeToTree(rowList, childNodes, treeDataVector, nodeAttributeColumnNameMap);
+			}
 		}
 		return treeDataVector;
 			}
@@ -160,15 +163,28 @@ public class QueryOutputTreeBizLogic
 						treeNode = (QueryTreeNodeData)iterTreeData.next();
 						if(treeNode.getIdentifier().equals(nodeId))
 						{
-							isNodeAlreadyPresentInTree = true;
+							String nodeParentId = node.getParent().getId()+"_"+treeNodeId;
+							String treeNodeParentId = "";
+							if(treeNode.getParentTreeNode().getIdentifier() != null)
+							{
+								treeNodeParentId = 	treeNode.getParentTreeNode().getIdentifier().toString();
+							}
+							if(nodeParentId.equalsIgnoreCase(treeNodeParentId))
+							{
+								isNodeAlreadyPresentInTree = true;
+							}
 						}
 					}
 					if(!isNodeAlreadyPresentInTree)
 					{
 						treeNode = new QueryTreeNodeData();
 						treeNode.setIdentifier(nodeId);
-						treeNode.setObjectName(nodeId);
-						treeNode.setDisplayName(nodeId);
+						treeNode.setObjectName(node.toString());
+						String fullyQualifiedEntityName = node.getOutputEntity().getDynamicExtensionsEntity().getName();
+						int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
+						String entityName = fullyQualifiedEntityName.substring(lastIndex + 1);
+						String displayName = entityName +"_"+treeNodeId;
+						treeNode.setDisplayName(displayName);
 						IOutputTreeNode parentNode = node.getParent();
 						if(parentNode != null)
 						{
@@ -185,7 +201,7 @@ public class QueryOutputTreeBizLogic
 									treeNodeId = (String)rowList.get(index);
 									String parentNodeId = parentNode.getId()+"_"+treeNodeId;
 									treeNode.setParentIdentifier(parentNodeId);
-									treeNode.setParentObjectName(parentNodeId);
+									treeNode.setParentObjectName(parentNode.toString());
 								}
 							}
 						}
