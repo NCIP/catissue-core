@@ -186,7 +186,7 @@ public class CreateQueryObjectBizLogic
 	 */
 	//TODO use ApplicationProperties.getValue("query.defineSearchRulesFor");
 
-	private String validateAttributeValues(IAttribute attr, List<String> attrvalues)
+	/*private String validateAttributeValues(IAttribute attr, List<String> attrvalues)
 	{
 		ActionErrors errors = new ActionErrors();
 		Validator validator = new Validator();
@@ -242,6 +242,6 @@ public class CreateQueryObjectBizLogic
 		}
 
 		return errorMessages;
-	}
+	}*/
 
 }
