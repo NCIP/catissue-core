@@ -115,11 +115,6 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
      * */
 	protected Collection collectionProtocolRegistrationCollection = new HashSet();
 	
-	/**
-	* Collection of Specimen collection group 
-	*/
-	protected Collection specimenCollectionGroupCollection;
-	
 	//Default Constructor
 	public Participant()
 	{		
@@ -594,29 +589,5 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 			return this.firstName;
 		}		
 		return null; 
-	}
-	
-	
-	/** 
-    * @return collection of specimen collection group 
-    * @hibernate.set
-	* inverse="true" 	table="CATISSUE_SPECIMEN_COLL_GROUP"
-	* lazy="false" cascade="all"
-	* @hibernate.collection-key
-	* column="PARTICIPANT_ID"
-	* @hibernate.collection-one-to-many
-	* class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-	*/
-	public Collection getSpecimenCollectionGroupCollection() {
-		return specimenCollectionGroupCollection;
-	}
-
-    /**
-	* @param specimenCollectionGroupCollection sets specimen collection group 
-	*/
-
-	public void setSpecimenCollectionGroupCollection(
-			Collection specimenCollectionGroupCollection) {
-		this.specimenCollectionGroupCollection = specimenCollectionGroupCollection;
 	}
 }
