@@ -29,7 +29,7 @@
             table="CATISSUE_CONSENT_TIER_STATUS"
             lazy="false"
             inverse="false"
-            cascade="save-update"
+            cascade="none"
             sort="unsorted"
         >
 
@@ -113,7 +113,7 @@
             table="CATISSUE_SPECIMEN"
             lazy="false"
             inverse="true"
-            cascade="save-update"
+            cascade="none"
             sort="unsorted"
         >
 
@@ -134,34 +134,6 @@
             update="true"
             insert="true"
             column="COLLECTION_PROTOCOL_REG_ID"
-        />
-
-        <one-to-one
-            name="deIdentifiedSurgicalPathologyReport"
-            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
-            cascade="save-update"
-            outer-join="auto"
-            constrained="false"
-	     property-ref="specimenCollectionGroup"
-        />
-
-        <one-to-one
-            name="identifiedSurgicalPathologyReport"
-            class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
-            cascade="save-update"
-            outer-join="auto"
-            constrained="false"
-	     property-ref="specimenCollectionGroup"
-        />
-
-        <many-to-one
-            name="participant"
-            class="edu.wustl.catissuecore.domain.Participant"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="PARTICIPANT_ID"
         />
 
         <!--
