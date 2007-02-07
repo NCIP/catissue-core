@@ -12,6 +12,9 @@ import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
@@ -639,7 +642,20 @@ public class APIDemo
 	public CollectionProtocol initCollectionProtocol()
 	{
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
-
+//		Setting consent tiers for this protocol.
+		Collection consentTierColl = new HashSet();
+		
+		ConsentTier c1 = new ConsentTier();
+		c1.setStatement("Consent for aids research");
+		consentTierColl.add(c1);
+		ConsentTier c2 = new ConsentTier();
+		c2.setStatement("Consent for cancer research");
+		consentTierColl.add(c2);		
+		ConsentTier c3 = new ConsentTier();
+		c3.setStatement("Consent for Tb research");
+		consentTierColl.add(c3);
+		
+		collectionProtocol.setConsentTierCollection(consentTierColl);
 		collectionProtocol.setAliqoutInSameContainer(new Boolean(true));
 		collectionProtocol.setDescriptionURL("");
 		collectionProtocol.setActivityStatus("Active");
@@ -803,6 +819,31 @@ public class APIDemo
 		biohazardCollection.add(biohazard);
 		molecularSpecimen.setBiohazardCollection(biohazardCollection);
 		System.out.println(" -------- end -----------");
+//		Setting Consent Tier Response
+		Collection consentTierStatusCollection = new HashSet();
+		
+		ConsentTierStatus  consentTierStatus = new ConsentTierStatus();		
+		ConsentTier consentTier = new ConsentTier();
+		consentTier.setId(new Long(21));
+		consentTierStatus.setConsentTier(consentTier);
+		consentTierStatus.setStatus("No");
+		consentTierStatusCollection.add(consentTierStatus);
+		
+		ConsentTierStatus  consentTierStatus1 = new ConsentTierStatus();		
+		ConsentTier consentTier1 = new ConsentTier();
+		consentTier1.setId(new Long(22));
+		consentTierStatus1.setConsentTier(consentTier1);
+		consentTierStatus1.setStatus("No");
+		consentTierStatusCollection.add(consentTierStatus1);
+		
+		ConsentTierStatus  consentTierStatus2 = new ConsentTierStatus();		
+		ConsentTier consentTier2 = new ConsentTier();
+		consentTier2.setId(new Long(23));
+		consentTierStatus2.setConsentTier(consentTier2);
+		consentTierStatus2.setStatus("No");
+		consentTierStatusCollection.add(consentTierStatus2);
+		
+		molecularSpecimen.setConsentTierStatusCollection(consentTierStatusCollection);
 
 		return molecularSpecimen;
 	}
@@ -855,7 +896,33 @@ public class APIDemo
 		clinicalReport.setSurgicalPathologyNumber("");
 		//clinicalReport.setId(new Long(1));
 		specimenCollectionGroup.setClinicalReport(clinicalReport);
-
+		
+//		Setting Consent Tier Status.
+		Collection consentTierStatusCollection = new HashSet();
+		
+		ConsentTierStatus  consentTierStatus = new ConsentTierStatus();		
+		ConsentTier consentTier = new ConsentTier();
+		consentTier.setId(new Long(21));
+		consentTierStatus.setConsentTier(consentTier);
+		consentTierStatus.setStatus("Yes");
+		consentTierStatusCollection.add(consentTierStatus);
+		
+		ConsentTierStatus  consentTierStatus1 = new ConsentTierStatus();		
+		ConsentTier consentTier1 = new ConsentTier();
+		consentTier1.setId(new Long(22));
+		consentTierStatus1.setConsentTier(consentTier1);
+		consentTierStatus1.setStatus("Yes");
+		consentTierStatusCollection.add(consentTierStatus1);
+		
+		ConsentTierStatus  consentTierStatus2 = new ConsentTierStatus();		
+		ConsentTier consentTier2 = new ConsentTier();
+		consentTier2.setId(new Long(23));
+		consentTierStatus2.setConsentTier(consentTier2);
+		consentTierStatus2.setStatus("Yes");
+		consentTierStatusCollection.add(consentTierStatus2);
+		
+		specimenCollectionGroup.setConsentTierStatusCollection(consentTierStatusCollection);
+		
 		return specimenCollectionGroup;
 	}
 
@@ -923,7 +990,7 @@ public class APIDemo
 		return distribution;
 	}
 
-	/**
+/**
 	 * @return Distribution
 	 */
 	public Distribution initDistribution(Specimen specimen)
@@ -964,7 +1031,7 @@ public class APIDemo
 		*/
 		distributionProtocol.setPrincipalInvestigator(principalInvestigator);
 		distributionProtocol.setTitle("DP"+ UniqueKeyGeneratorUtil.getUniqueKey());
-		distributionProtocol.setShortTitle("DP1");
+		distributionProtocol.setShortTitle("DP12");
 		distributionProtocol.setIrbIdentifier("55555");
 		
 		try
@@ -995,7 +1062,7 @@ public class APIDemo
 		Collection specimenRequirementCollection = new HashSet();
 		specimenRequirementCollection.add(specimenRequirement);
 		distributionProtocol.setSpecimenRequirementCollection(specimenRequirementCollection);
-
+        distributionProtocol.setId(new Long(2));
 		distributionProtocol.setActivityStatus("Active");
 		return distributionProtocol;
 	}
@@ -1030,6 +1097,45 @@ public class APIDemo
 			e.printStackTrace();
 		}
 		*/
+//		Setting Consent Tier Responses.
+		try
+		{
+			collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
+		}
+		catch (ParseException e)
+		{			
+			e.printStackTrace();
+		}
+		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
+		
+		User user = new User();
+		user.setId(new Long(1));
+		collectionProtocolRegistration.setConsentWitness(user);
+		
+		Collection consentTierResponseCollection = new HashSet();
+		
+		ConsentTierResponse r1 = new ConsentTierResponse();
+		ConsentTier consentTier = new ConsentTier();
+		consentTier.setId(new Long(20));
+		r1.setConsentTier(consentTier);
+		r1.setResponse("Yes");
+		consentTierResponseCollection.add(r1);
+		
+		ConsentTierResponse r2 = new ConsentTierResponse();
+		ConsentTier consentTier2 = new ConsentTier();
+		consentTier2.setId(new Long(22));
+		r2.setConsentTier(consentTier2);
+		r2.setResponse("Yes");
+		consentTierResponseCollection.add(r2);
+		
+		ConsentTierResponse r3 = new ConsentTierResponse();
+		ConsentTier consentTier3 = new ConsentTier();
+		consentTier3.setId(new Long(23));
+		r3.setConsentTier(consentTier3);
+		r3.setResponse("No");
+		consentTierResponseCollection.add(r3);
+		
+		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 		return collectionProtocolRegistration;
 	}
 	
