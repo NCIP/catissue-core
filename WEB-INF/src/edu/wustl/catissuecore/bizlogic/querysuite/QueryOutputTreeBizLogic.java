@@ -51,15 +51,16 @@ import edu.wustl.common.util.logger.Logger;
 public class QueryOutputTreeBizLogic
 {
 	Map<Long, String> nodeColumnIdMap = new HashMap<Long, String>();
+
 	/**
 	 * This method is called from ViewSearchResultsAction. It first creates a temp table for output tree.
 	 * Then it creates a dynamic extensions entity which represents the newly created table.
 	 * @param query IQuery , this object has tree associated with it
 	 */
-	public String createOutputTree(IQuery query, SessionDataBean sessionData)
+	public Vector createOutputTree(IQuery query, SessionDataBean sessionData)
 	{
 		ISqlGenerator sqlGenerator = SqlGeneratorFactory.getInstance();
-		String  selectSql = "";
+		String selectSql = "";
 		try
 		{
 			selectSql = sqlGenerator.generateSQL(query);
@@ -73,11 +74,11 @@ public class QueryOutputTreeBizLogic
 		{
 			e.printStackTrace();
 		}
-		Map<Long, Map<AttributeInterface, String>>  nodeAttributeColumnNameMap = sqlGenerator.getColumnMap();
+		Map<Long, Map<AttributeInterface, String>> nodeAttributeColumnNameMap = sqlGenerator.getColumnMap();
 		String tableName = createOutputTreeTable(query);
-	//	Vector treeDataVector = createOutputTreeDataVector(tableName, query, sessionData,nodeAttributeColumnNameMap);
-	//	System.out.println(treeDataVector);
-		return selectSql;
+		Vector treeDataVector = createOutputTreeDataVector(tableName, query, sessionData, nodeAttributeColumnNameMap);
+		System.out.println(treeDataVector);
+		return treeDataVector;
 	}
 
 	/**
@@ -88,8 +89,9 @@ public class QueryOutputTreeBizLogic
 	 * @param nodeAttributeColumnNameMap
 	 * @return
 	 */
-	Vector<QueryTreeNodeData> createOutputTreeDataVector(String tableName, IQuery query, SessionDataBean sessionData,Map<Long, Map<AttributeInterface, String>>  nodeAttributeColumnNameMap)
-	{
+	Vector<QueryTreeNodeData> createOutputTreeDataVector(String tableName, IQuery query, SessionDataBean sessionData,
+			Map<Long, Map<AttributeInterface, String>> nodeAttributeColumnNameMap)
+			{
 		JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		List dataList = null;
 		try
@@ -122,10 +124,11 @@ public class QueryOutputTreeBizLogic
 		while (dataListIterator.hasNext())
 		{
 			rowList = (List) dataListIterator.next();
-			treeDataVector = addNodeToTree(rowList,childNodes,treeDataVector,nodeAttributeColumnNameMap);
+			treeDataVector = addNodeToTree(rowList, childNodes, treeDataVector, nodeAttributeColumnNameMap);
 		}
 		return treeDataVector;
-	}
+			}
+
 	/**
 	 * Adds the nodes one by one to the vector.
 	 * @param rowList
@@ -141,49 +144,62 @@ public class QueryOutputTreeBizLogic
 		{
 			Map<AttributeInterface, String> map = nodeAttributeColumnNameMap.get(node.getId());
 			Set<AttributeInterface> set1 = map.keySet();
-            for (Iterator<AttributeInterface> iterator = set1.iterator(); iterator.hasNext();)
-            {
-                    AttributeInterface attr = iterator.next();
-                    if(attr.getName().equalsIgnoreCase(Constants.ID))
-                    {
-                    	String idColumnName = map.get(attr);
-            			int index = Integer.parseInt(idColumnName.substring("Column".length(),idColumnName.length()));
-            			System.out.println(index);
-            			String treeNodeId = (String)rowList.get(index);
-            			Iterator iterTreeData = treeDataVector.iterator();
-            			while(iterTreeData.hasNext())
-            			{
-            				treeNode = (QueryTreeNodeData)iterTreeData.next();
-            				if(treeNode.getIdentifier().equals(treeNodeId))
-            				{
-            					isNodeAlreadyPresentInTree = true;
-            				}
-            			}
-            			if(!isNodeAlreadyPresentInTree)
-            			{
-            				treeNode = new QueryTreeNodeData();
-            				treeNode.setIdentifier(treeNodeId);
-            				treeNode.setObjectName(node.toString());
-            				treeNode.setDisplayName(node.toString());
-            				IOutputTreeNode parentNode = node.getParent();
-            				if(parentNode != null)
-            				{
-            					idColumnName = nodeColumnIdMap.get(parentNode);
-            					treeNodeId = (String)rowList.get(rowList.indexOf(idColumnName));
-            					treeNode.setParentIdentifier(treeNodeId);
-            					treeNode.setParentObjectName(parentNode.toString());
-            				}
-            				else
-            				{
-            					treeNode.setParentIdentifier(null);
-            					treeNode.setParentObjectName("");
-            				}
-            				treeDataVector.add(treeNode);
-            			}
-                    }
-                    System.out.println(attr.getName()+":"+map.get(attr));
-            }
-			
+			for (Iterator<AttributeInterface> iterator = set1.iterator(); iterator.hasNext();)
+			{
+				AttributeInterface attr = iterator.next();
+				if(attr.getName().equalsIgnoreCase(Constants.ID))
+				{
+					String idColumnName = map.get(attr);
+					int index = Integer.parseInt(idColumnName.substring("Column".length(),idColumnName.length()));
+					System.out.println(index);
+					String treeNodeId = (String)rowList.get(index);
+					String nodeId = node.getId()+"_"+treeNodeId;
+					Iterator iterTreeData = treeDataVector.iterator();
+					while(iterTreeData.hasNext())
+					{
+						treeNode = (QueryTreeNodeData)iterTreeData.next();
+						if(treeNode.getIdentifier().equals(nodeId))
+						{
+							isNodeAlreadyPresentInTree = true;
+						}
+					}
+					if(!isNodeAlreadyPresentInTree)
+					{
+						treeNode = new QueryTreeNodeData();
+						treeNode.setIdentifier(nodeId);
+						treeNode.setObjectName(nodeId);
+						treeNode.setDisplayName(nodeId);
+						IOutputTreeNode parentNode = node.getParent();
+						if(parentNode != null)
+						{
+							Map<AttributeInterface, String> map1 = nodeAttributeColumnNameMap.get(parentNode.getId());
+							Set<AttributeInterface> set2 = map1.keySet();
+							for (Iterator<AttributeInterface> iterator1 = set2.iterator(); iterator1.hasNext();)
+							{
+								AttributeInterface attr1 = iterator1.next();
+								if(attr1.getName().equalsIgnoreCase(Constants.ID))
+								{
+									idColumnName = map1.get(attr1);
+									index = Integer.parseInt(idColumnName.substring("Column".length(),idColumnName.length()));
+									System.out.println(index);
+									treeNodeId = (String)rowList.get(index);
+									String parentNodeId = parentNode.getId()+"_"+treeNodeId;
+									treeNode.setParentIdentifier(parentNodeId);
+									treeNode.setParentObjectName(parentNodeId);
+								}
+							}
+						}
+						else
+						{
+							treeNode.setParentIdentifier("0");
+							treeNode.setParentObjectName("");
+						}
+						treeDataVector.add(treeNode);
+					}
+				}
+				System.out.println(attr.getName()+":"+map.get(attr));
+			}
+
 		}
 		return treeDataVector;
 			}
@@ -195,7 +211,7 @@ public class QueryOutputTreeBizLogic
 	String createOutputTreeTable(IQuery query)
 	{
 		ISqlGenerator sqlGenerator = SqlGeneratorFactory.getInstance();
-		String  selectSql = "";
+		String selectSql = "";
 		try
 		{
 			selectSql = sqlGenerator.generateSQL(query);
@@ -291,7 +307,7 @@ public class QueryOutputTreeBizLogic
 		ISqlGenerator sqlGenerator = SqlGeneratorFactory.getInstance();
 		try
 		{
-			String  str = sqlGenerator.generateSQL(query);
+			String str = sqlGenerator.generateSQL(query);
 		}
 		catch (MultipleRootsException e)
 		{
@@ -303,8 +319,8 @@ public class QueryOutputTreeBizLogic
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		IOutputTreeNode root =query.getRootOutputClass();
-		Map<Long, Map<AttributeInterface, String>>  map = sqlGenerator.getColumnMap();
+		IOutputTreeNode root = query.getRootOutputClass();
+		Map<Long, Map<AttributeInterface, String>> map = sqlGenerator.getColumnMap();
 		EntityInterface entity = DomainObjectFactory.getInstance().createEntity();
 		List<IOutputTreeNode> allChildNodes = new ArrayList<IOutputTreeNode>();
 		List<IOutputTreeNode> childNodes = getAllChildNodes(root, allChildNodes);
