@@ -1092,7 +1092,7 @@ if(pageView.equals("add") || pageView.equals("edit"))
 </td></tr></tbody></table>
 <!-- outermosttable  -->
 
-<table cellpadding="0" cellspacing="0" border="0" width = "100%" style="margin-left:5%;" id="submittable">
+<table cellpadding="0" cellspacing="0" border="0" width = "80%" style="margin-left:5%;" id="submittable">
 		<tr><td>&nbsp;&nbsp;</td></tr>		
 			<tr>
 				<td class="formLabelNoBackGround" style="font-size:12;" bgcolor="#F4F4F5" width="50%">
