@@ -59,7 +59,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 		queryObject = new ClientQueryBuilder();
 		Map<DagImageConstants, Image> imagePathsMap = getImagePathsMap();
 		UpdateAddLimitUI updateAddLimitUI = new UpdateAddLimitUI(this);
-		PathFinderAppletServerCommunicator pathFinder = new PathFinderAppletServerCommunicator();
+		PathFinderAppletServerCommunicator pathFinder = new PathFinderAppletServerCommunicator(serverURL);
 		panel = new MainDagPanel(updateAddLimitUI, imagePathsMap, pathFinder);
 		panel.setQueryObject(queryObject);
 		this.getContentPane().add(panel);
