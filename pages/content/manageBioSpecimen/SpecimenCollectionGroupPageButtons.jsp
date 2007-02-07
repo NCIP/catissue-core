@@ -1,11 +1,3 @@
-<script>
-	function setTarget()
-		{
-			alert('<%=forwardToSubmit%>');
-			document.forms[0].target="_top";
-			<%=forwardToSubmit%>;
-		}
-</script>
 <!-- action buttons begins -->
 							<table cellpadding="4" cellspacing="0" border="0">
 								<tr>
@@ -59,7 +51,7 @@
 															title="Submit and Add Specimen"
 															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][0]%>" 
 															disabled="<%=isAddNew%>" 
-															onclick="setTarget()">
+															onclick="<%=forwardToSubmit%>">
 						  				     	    
 											     	</html:button>
 												</td>
