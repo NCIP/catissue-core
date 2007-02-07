@@ -29,7 +29,7 @@
             table="CATISSUE_CONSENT_TIER_STATUS"
             lazy="false"
             inverse="false"
-            cascade="none"
+            cascade="save-update"
             sort="unsorted"
         >
 
@@ -113,7 +113,7 @@
             table="CATISSUE_SPECIMEN"
             lazy="false"
             inverse="true"
-            cascade="none"
+            cascade="save-update"
             sort="unsorted"
         >
 
