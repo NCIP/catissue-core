@@ -12,10 +12,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.action.BaseAppletAction;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
+import edu.wustl.common.querysuite.queryengine.ISqlGenerator;
+import edu.wustl.common.querysuite.queryobject.IOutputTreeNode;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.util.logger.Logger;
 
@@ -46,13 +51,12 @@ public class ViewSearchResultsAction extends BaseAppletAction
 		{
 			IQuery query = (IQuery) inputDataMap.get("queryObject");
 			QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
-			outputTreeBizLogic.createOutputTree(query);
-			String sql= "Select ParticipantMedicalIdentif_1.MEDICAL_RECORD_NUMBER From CATISSUE_PART_MEDICAL_ID ParticipantMedicalIdentif_1  left join CATISSUE_PARTICIPANT Participant_2 on (ParticipantMedicalIdentif_1.participant_id=Participant_2.Identifier)  Where (ParticipantMedicalIdentif_1.MEDICAL_RECORD_NUMBER is NOT NULL) And(Participant_2.GENDER like 'm%')";
-			sql = "Select User_1.ACTIVITY_STATUS, User_1.STATUS_COMMENT, User_1.LOGIN_NAME, User_1.START_DATE, User_1.EMAIL_ADDRESS, User_1.FIRST_NAME, User_1.CSM_USER_ID, User_1.LAST_NAME From CATISSUE_USER User_1 left join CATISSUE_INSTITUTION Institution_2 on (User_1.INSTITUTION_ID=Institution_2.IDENTIFIER) Where (User_1.FIRST_NAME like 'a%') And(Institution_2.NAME is NOT NULL)";
+			SessionDataBean sessionData = getSessionData(request);
+			String sql = outputTreeBizLogic.createOutputTree(query,sessionData);
 			Logger.out.info(sql);
 			CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
 			Map outputData = bizLogic.fireQuery(sql);
-			request.getSession().setAttribute("treeData", outputData.get("treeData"));
+			request.getSession().setAttribute(Constants.TREE_DATA, outputData.get("treeData"));
 			request.getSession().setAttribute(Constants.SPREADSHEET_DATA_LIST, outputData.get(Constants.SPREADSHEET_DATA_LIST));
 			request.getSession().setAttribute(Constants.SPREADSHEET_COLUMN_LIST, outputData.get(Constants.SPREADSHEET_COLUMN_LIST));;
 			Map ruleDetailsMap = new HashMap();
