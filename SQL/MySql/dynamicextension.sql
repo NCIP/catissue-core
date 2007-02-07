@@ -102,8 +102,8 @@ drop table if exists DYEXTN_FILE_TYPE_INFO;
 drop table if exists DYEXTN_FILE_EXTENSIONS;
 drop table if exists DYEXTN_LONG_TYPE_INFO;
 drop table if exists DYEXTN_FLOAT_CONCEPT_VALUE;
-drop table if exists DYEXTN_TEXTFIELD;
 drop table if exists DYEXTN_ROLE;
+drop table if exists DYEXTN_TEXTFIELD;
 drop table if exists DYEXTN_RULE;
 drop table if exists DYEXTN_DATE_TYPE_INFO;
 drop table if exists DYEXTN_ATTRIBUTE_TYPE_INFO;
@@ -225,6 +225,9 @@ create table DYEXTN_ENTITY (
    DATA_TABLE_STATE integer,
    IS_ABSTRACT bit,
    PARENT_ENTITY_ID bigint,
+   INHERITANCE_STRATEGY integer,
+   DISCRIMINATOR_COLUMN_NAME varchar(255),
+   DISCRIMINATOR_VALUE varchar(255),
    primary key (IDENTIFIER)
 );
 create table DYEXTN_INTEGER_TYPE_INFO (
@@ -303,19 +306,19 @@ create table DYEXTN_FLOAT_CONCEPT_VALUE (
    VALUE float,
    primary key (IDENTIFIER)
 );
-create table DYEXTN_TEXTFIELD (
-   IDENTIFIER bigint not null,
-   NO_OF_COLUMNS integer,
-   IS_PASSWORD bit,
-   IS_URL bit,
-   primary key (IDENTIFIER)
-);
 create table DYEXTN_ROLE (
    IDENTIFIER bigint not null auto_increment,
    ASSOCIATION_TYPE varchar(255),
    MAX_CARDINALITY integer,
    MIN_CARDINALITY integer,
    NAME varchar(255),
+   primary key (IDENTIFIER)
+);
+create table DYEXTN_TEXTFIELD (
+   IDENTIFIER bigint not null,
+   NO_OF_COLUMNS integer,
+   IS_PASSWORD bit,
+   IS_URL bit,
    primary key (IDENTIFIER)
 );
 create table DYEXTN_RULE (
