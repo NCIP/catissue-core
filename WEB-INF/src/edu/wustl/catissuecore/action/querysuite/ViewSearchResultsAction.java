@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.action.querysuite;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,15 +13,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.action.BaseAppletAction;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
+import edu.wustl.common.querysuite.exceptions.SqlException;
 import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
 import edu.wustl.common.querysuite.queryengine.ISqlGenerator;
-import edu.wustl.common.querysuite.queryobject.IOutputTreeNode;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.util.logger.Logger;
 
@@ -52,11 +53,26 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			IQuery query = (IQuery) inputDataMap.get("queryObject");
 			QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
 			SessionDataBean sessionData = getSessionData(request);
-			String sql = outputTreeBizLogic.createOutputTree(query,sessionData);
-			Logger.out.info(sql);
+			Vector treeData = outputTreeBizLogic.createOutputTree(query,sessionData);
+			ISqlGenerator sqlGenerator = SqlGeneratorFactory.getInstance();
+			String selectSql = "";
+			try
+			{
+				selectSql = sqlGenerator.generateSQL(query);
+				System.out.println(selectSql);
+			}
+			catch (MultipleRootsException e)
+			{
+				e.printStackTrace();
+			}
+			catch (SqlException e)
+			{
+				e.printStackTrace();
+			}
+			Logger.out.info(selectSql);
 			CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
-			Map outputData = bizLogic.fireQuery(sql);
-			request.getSession().setAttribute(Constants.TREE_DATA, outputData.get("treeData"));
+			Map outputData = bizLogic.fireQuery(selectSql);
+			request.getSession().setAttribute(Constants.TREE_DATA, treeData);
 			request.getSession().setAttribute(Constants.SPREADSHEET_DATA_LIST, outputData.get(Constants.SPREADSHEET_DATA_LIST));
 			request.getSession().setAttribute(Constants.SPREADSHEET_COLUMN_LIST, outputData.get(Constants.SPREADSHEET_COLUMN_LIST));;
 			Map ruleDetailsMap = new HashMap();
