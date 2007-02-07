@@ -13,6 +13,9 @@
 	queryString = queryString + "&pageOf=pageOfParticipant&id="+id;
 	Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
 	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+id;	
+	
+	
+
 %>
 <html>
 <head>
@@ -34,21 +37,35 @@
 <div id="a_tabbar" style="width:800;height:600" ></div>
 <script>
 			var opr = '<%=operation%>';
-			if(opr == "afterAdd")
+			if(opr=="createMultipleSpecimen")
 			{
-				top.location.href="<%=request.getContextPath()%>/LoadSpecimenCollGroupPage.do?operation=edit&id=<%=id%>";
+				top.location.href="<%=request.getContextPath()%>/InitMultipleSpecimen.do?operation=add&menuSelected=15";
 			}
 			else
 			{
-				if((opr == 'null')||(opr=="add"))
-				{	
-					initiallizeAddSCGTabs('<%=request.getContextPath()%>');
+				if(opr == "createNewSpecimen")
+				{
+					top.location.href="<%=request.getContextPath()%>/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen&menuSelected=15&virtualLocated=true&showConsents=yes&tableId4=disable";
 				}
 				else
 				{
-					initiallizeEditSCGTabs('<%=request.getContextPath()%>','<%=queryString%>','<%=participantAnnotationsQueryString%>');
+					if(opr == "afterAdd")
+					{
+						top.location.href="<%=request.getContextPath()%>/LoadSpecimenCollGroupPage.do?operation=edit&id=<%=id%>";
+					}
+					else
+					{
+						if((opr == 'null')||(opr=="add"))
+						{	
+							initiallizeAddSCGTabs('<%=request.getContextPath()%>');
+						}
+						else
+						{
+							initiallizeEditSCGTabs('<%=request.getContextPath()%>','<%=queryString%>','<%=participantAnnotationsQueryString%>');
+						}
+					}
 				}
-			} 
+			}
 </script>
 </body>
 </html>
