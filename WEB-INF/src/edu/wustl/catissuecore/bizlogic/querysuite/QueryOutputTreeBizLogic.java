@@ -75,8 +75,8 @@ public class QueryOutputTreeBizLogic
 		}
 		Map<Long, Map<AttributeInterface, String>>  nodeAttributeColumnNameMap = sqlGenerator.getColumnMap();
 		String tableName = createOutputTreeTable(query);
-		Vector treeDataVector = createOutputTreeDataVector(tableName, query, sessionData,nodeAttributeColumnNameMap);
-		System.out.println(treeDataVector);
+	//	Vector treeDataVector = createOutputTreeDataVector(tableName, query, sessionData,nodeAttributeColumnNameMap);
+	//	System.out.println(treeDataVector);
 		return selectSql;
 	}
 
