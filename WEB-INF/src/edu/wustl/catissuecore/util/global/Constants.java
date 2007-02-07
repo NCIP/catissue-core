@@ -122,6 +122,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SUCCESS = "success";
 	public static final String LIST_OF_ENTITIES_IN_QUERY = "ListOfEntitiesInQuery";
 	public static final String DYNAMIC_UI_XML = "dynamicUI.xml";
+	public static final String TREE_DATA = "treeData";
 	
 	//Surgical Pathology Report UI constants
 	public static final String SPR_VIEW_ACTION="ViewSurgicalPathologyReport.do";
