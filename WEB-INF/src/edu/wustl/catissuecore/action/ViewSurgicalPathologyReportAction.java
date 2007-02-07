@@ -122,11 +122,11 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_PARTICIPANT))
 		{
 			forward=new String(Constants.PARTICIPANT);
-			className=Participant.class.getName();
+		/*	className=Participant.class.getName();
 			List participantList=defaultBizLogic.retrieve(className, colName, colValue);
 			Participant participant=(Participant)participantList.get(0);
 			viewSPR.setParticipant(participant);
-			Collection scgCollection=participant.getSpecimenCollectionGroupCollection();
+			Collection scgCollection=null;//=participant.getSpecimenCollectionGroupCollection();
 			
 			Iterator iter=scgCollection.iterator();
 			if(iter.hasNext())
@@ -141,6 +141,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 					viewSPR.setParticipant(scg.getParticipant());
 					viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 				}
+				
 			}
 			else
 			{
@@ -149,7 +150,9 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			}
 //			request.setAttribute(Constants.REPORT_LIST, getReportIdList(scgCollection));
 			viewSPR.setReportIdList(getReportIdList(scgCollection));
+			*/
 		}
+		
 	}
 	
 	/**
