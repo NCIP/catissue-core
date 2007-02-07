@@ -2,7 +2,10 @@ package edu.wustl.catissuecore.reportloader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -10,7 +13,9 @@ import java.util.regex.Pattern;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -184,4 +189,29 @@ public class ReportLoaderUtil
     	return validSSN;
     }
     
+    /**
+     * This method returns the list of all the SCGs associated with the given participant
+     * @param participant Participant object
+     * @return scgList SpecimenCollectionGroup list
+     */
+    public static List getSCGList(Participant participant)
+    {
+    	List scgList=new ArrayList();
+    	Collection cprCollection=participant.getCollectionProtocolRegistrationCollection();
+		
+		CollectionProtocolRegistration cpr;
+		Iterator cprIter=cprCollection.iterator();
+		while(cprIter.hasNext())
+		{
+			cpr=(CollectionProtocolRegistration)cprIter.next();
+			Collection tempSCGCollection=cpr.getSpecimenCollectionGroupCollection();
+			Iterator scgIter=tempSCGCollection.iterator();
+			while(scgIter.hasNext())
+			{
+				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgIter.next();
+				scgList.add(scg);
+			}
+		}
+    	return scgList;
+    } 
 }
