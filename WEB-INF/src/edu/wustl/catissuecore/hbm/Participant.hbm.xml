@@ -76,24 +76,7 @@
             column="GENOTYPE"
             length="50"
         />
-  		 <set
-            name="specimenCollectionGroupCollection"
-            table="CATISSUE_SPECIMEN_COLL_GROUP"
-            lazy="false"
-            inverse="false"
-            cascade="all"
-            sort="unsorted"
-        >
 
-              <key
-                  column="PARTICIPANT_ID"
-              />
-
-              <one-to-many
-                  class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
-              />
-        </set>
-        
         <set
             name="raceCollection"
             table="CATISSUE_RACE"
@@ -106,7 +89,6 @@
               <key
                   column="PARTICIPANT_ID"
               />
-		
 			<element column="RACE_NAME" type="string" length="50"/>
         </set>
 
