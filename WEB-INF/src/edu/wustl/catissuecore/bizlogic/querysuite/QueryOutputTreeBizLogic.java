@@ -128,83 +128,88 @@ public class QueryOutputTreeBizLogic
 		QueryTreeNodeData treeNode = null;
 		for (IOutputTreeNode node : childNodes)
 		{
+			isNodeAlreadyPresentInTree = false;
 			Map<AttributeInterface, String> map = nodeAttributeColumnNameMap.get(node.getId());
 			Set<AttributeInterface> set1 = map.keySet();
+			String idColumnName = null;
 			for (Iterator<AttributeInterface> iterator = set1.iterator(); iterator.hasNext();)
 			{
 				AttributeInterface attr = iterator.next();
 				if(attr.getName().equalsIgnoreCase(Constants.ID))
 				{
-					String idColumnName = map.get(attr);
-					int index = Integer.parseInt(idColumnName.substring("Column".length(),idColumnName.length()));
-					String treeNodeId = (String)rowList.get(index);
-					String nodeId = node.getId()+"_"+treeNodeId;
-					Iterator iterTreeData = treeDataVector.iterator();
-					IOutputTreeNode parentNode = node.getParent();
-					String parentNodeId ="";
-					if(parentNode != null)
+					idColumnName = map.get(attr);
+					break;
+				}
+			}
+			int index = Integer.parseInt(idColumnName.substring("Column".length(),idColumnName.length()));
+			String treeNodeId = (String)rowList.get(index);
+			String nodeId = node.getId()+"_"+treeNodeId;
+			Iterator iterTreeData = treeDataVector.iterator();
+			IOutputTreeNode parentNode = node.getParent();
+			String parentNodeId ="0";
+			if(parentNode != null)
+			{
+				Map<AttributeInterface, String> map1 = nodeAttributeColumnNameMap.get(parentNode.getId());
+				Set<AttributeInterface> set2 = map1.keySet();
+				for (Iterator<AttributeInterface> iterator1 = set2.iterator(); iterator1.hasNext();)
+				{
+					AttributeInterface attr1 = iterator1.next();
+					if(attr1.getName().equalsIgnoreCase(Constants.ID))
 					{
-						Map<AttributeInterface, String> map1 = nodeAttributeColumnNameMap.get(parentNode.getId());
-						Set<AttributeInterface> set2 = map1.keySet();
-						for (Iterator<AttributeInterface> iterator1 = set2.iterator(); iterator1.hasNext();)
-						{
-							AttributeInterface attr1 = iterator1.next();
-							if(attr1.getName().equalsIgnoreCase(Constants.ID))
-							{
-								idColumnName = map1.get(attr1);
-								index = Integer.parseInt(idColumnName.substring("Column".length(),idColumnName.length()));
-								System.out.println(index);
-								String parentTreeNodeId = (String)rowList.get(index);
-								parentNodeId = parentNode.getId()+"_"+parentTreeNodeId;
-							}
-						}
-					}
-					while(iterTreeData.hasNext())
-					{
-						treeNode = (QueryTreeNodeData)iterTreeData.next();
-						if(treeNode.getIdentifier().equals(nodeId))
-						{
-							
-							String treeNodeParentId = "";
-							if(treeNode.getParentTreeNode().getIdentifier() != null)
-							{
-								treeNodeParentId = 	treeNode.getParentTreeNode().getIdentifier().toString();
-							}
-							if(parentNodeId.equalsIgnoreCase(treeNodeParentId))
-							{
-								isNodeAlreadyPresentInTree = true;
-							}
-						}
-					}
-					if(!isNodeAlreadyPresentInTree)
-					{
-						treeNode = new QueryTreeNodeData();
-						treeNode.setIdentifier(nodeId);
-						treeNode.setObjectName(node.toString());
-						String fullyQualifiedEntityName = node.getOutputEntity().getDynamicExtensionsEntity().getName();
-						int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
-						String entityName = fullyQualifiedEntityName.substring(lastIndex + 1);
-						String displayName = entityName +"_"+treeNodeId;
-						treeNode.setDisplayName(displayName);
-						if(parentNode != null)
-						{
-							treeNode.setParentIdentifier(parentNodeId);
-							treeNode.setParentObjectName(parentNode.toString());
-						}
-						else
-						{
-							treeNode.setParentIdentifier("0");
-							treeNode.setParentObjectName("");
-						}
-						treeDataVector.add(treeNode);
+						idColumnName = map1.get(attr1);
+						index = Integer.parseInt(idColumnName.substring("Column".length(),idColumnName.length()));
+						System.out.println(index);
+						String parentTreeNodeId = (String)rowList.get(index);
+						parentNodeId = parentNode.getId()+"_"+parentTreeNodeId;
 					}
 				}
-				System.out.println(attr.getName()+":"+map.get(attr));
+			}
+			while(iterTreeData.hasNext())
+			{
+				treeNode = (QueryTreeNodeData)iterTreeData.next();
+				if(treeNode.getIdentifier().equals(nodeId))
+				{
+					
+					String treeNodeParentId = "";
+					if(treeNode.getParentIdentifier() != null)
+					{
+						treeNodeParentId = 	treeNode.getParentIdentifier().toString();
+					}
+					if(parentNodeId.equalsIgnoreCase(treeNodeParentId))
+					{
+						isNodeAlreadyPresentInTree = true;
+					}
+				}
+			}
+			if(!isNodeAlreadyPresentInTree)
+			{
+				treeNode = new QueryTreeNodeData();
+				treeNode.setIdentifier(nodeId);
+				treeNode.setObjectName(node.toString());
+				String fullyQualifiedEntityName = node.getOutputEntity().getDynamicExtensionsEntity().getName();
+				int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
+				String entityName = fullyQualifiedEntityName.substring(lastIndex + 1);
+				String displayName = entityName +"_"+treeNodeId;
+				treeNode.setDisplayName(displayName);
+				if(parentNode != null)
+				{
+					treeNode.setParentIdentifier(parentNodeId);
+					treeNode.setParentObjectName(parentNode.toString());
+				}
+				else
+				{
+					treeNode.setParentIdentifier("0");
+					treeNode.setParentObjectName("");
+				}
+				treeDataVector.add(treeNode);
+			
+		
+				
 			}
 
 		}
 		return treeDataVector;
-			}
+	}
 
 	/**
 	 * Creates new table which has the same structure and also same data , as the output tree structurs has.  
