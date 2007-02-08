@@ -223,6 +223,14 @@ a:link.contentLink,a:visited.contentLink,a:active.contentLink{ /* for the text l
         white-space: nowrap;
 	font-size:0.8em;	
 }
+
+a:link.normalLink,a:visited.normalLink,a:active.normalLink{ /* for the text links in the Search category page */
+	font-family:arial,helvetica,verdana,sans-serif;
+	font-size:0.8em;
+	color:#5C5C5C; /* constant: dark gray */
+	text-decoration:underline;	
+    white-space: nowrap;
+}
 a:hover.contentLink{
 	color:#A90101; /* constant: red */
 }
@@ -260,6 +268,7 @@ a:hover.dataPagingLink{
 	color:#A90101; /* constant: red */
 	text-decoration:underline;
 }
+
 
 /*############### 
 FORM BEGINS 
