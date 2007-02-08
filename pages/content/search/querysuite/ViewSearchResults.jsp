@@ -157,27 +157,34 @@ function initGridView()
 				if(treeData != null && treeData.size() != 0)
 				{
 					Iterator itr  = treeData.iterator();
+					String nodeColapseCode = "";
 					while(itr.hasNext())
 					{
 						QueryTreeNodeData data = (QueryTreeNodeData) itr.next();
 						String parentId = "0";	
 						if(!data.getParentIdentifier().equals("0"))
 						{
-							parentId = data.getParentObjectName() + "_"+ data.getParentIdentifier().toString();		
+							parentId = data.getParentIdentifier().toString();		
 						}
-						String nodeId = data.getObjectName() + "_"+data.getIdentifier().toString();
+						String nodeId = data.getIdentifier().toString();
 						String img = "plus.GIF";
 						if(data.getObjectName().equals(Constants.SPECIMEN_COLLECTION_GROUP))
 						{
 							img = "plus.GIF";
 						}
-
-				
+						
+						if (parentId.equals("0"))
+						{
+							nodeColapseCode += "tree.closeAllItems('" + nodeId + "');";
+						}
 			%>
 					tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>",0,"","","","");
 					tree.setUserData("<%=nodeId%>","<%=nodeId%>","<%=data%>");	
 			<%	
 					}
+			%>
+					<%=nodeColapseCode%>
+			<%
 				}
 }
 			%>	
@@ -238,7 +245,7 @@ function tonclick(id)
 						<td valign="top" width="20%" height="100%">
 							<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" >
 								<tr>
-									<td valign="top"><div id="treebox" width="100%" height="100%" style="background-color:white;overflow:hidden">
+									<td valign="top"><div id="treebox"  style="background-color:white;overflow:auto;width:200; height:520;">
 								<%	if(treeData != null && treeData.size() == 0)
 										{ %>
 											<bean:message key="simpleQuery.noRecordsFound"/>
@@ -252,7 +259,7 @@ function tonclick(id)
 							<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" id="table11">
 								<tr>
 								<td valign="top" height="100%" colspan="2">
-									<div id="gridbox" width="100%" height="100%" style="background-color:white;overflow:hidden">
+									<div id="gridbox" width="100%" height="95%" style="background-color:white;overflow:auto">
 									<% if (dataList != null && dataList.size() == 0)
 										{ %>
 									<bean:message key="simpleQuery.noRecordsFound"/>
