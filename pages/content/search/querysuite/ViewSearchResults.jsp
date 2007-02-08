@@ -161,7 +161,7 @@ function initGridView()
 					{
 						QueryTreeNodeData data = (QueryTreeNodeData) itr.next();
 						String parentId = "0";	
-						if(data.getParentIdentifier() != null)
+						if(!data.getParentIdentifier().equals("0"))
 						{
 							parentId = data.getParentObjectName() + "_"+ data.getParentIdentifier().toString();		
 						}
