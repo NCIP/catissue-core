@@ -8,9 +8,9 @@
 
 	if(queryString==null)
 	{
-			queryString = queryString  + "operation=edit&pageOf=pageOfParticipant";
+			queryString = queryString  + "operation=edit&pageOf=pageOfSpecimenCollectionGroup";
 	}
-	queryString = queryString + "&pageOf=pageOfParticipant&id="+id;
+	queryString = queryString + "&pageOf=pageOfSpecimenCollectionGroup&id="+id;
 	Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
 	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+id;	
 	
