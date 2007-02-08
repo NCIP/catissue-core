@@ -179,6 +179,24 @@
 			document.forms[0].submit();
 		}
 		
+		function CreateNewClick()
+		{
+			document.forms[0].submitPage.disabled=false;
+			document.forms[0].registratioPage.disabled=false;
+			<%if(request.getAttribute(Constants.SUBMITTED_FOR)!=null && request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")){%>
+				document.forms[0].submitPage.disabled=true;
+			<%}%>
+			
+			document.forms[0].radioValue.value="Add";
+			
+			document.forms[0].action="<%=Constants.PARTICIPANT_ADD_ACTION%>";
+			<%if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
+			{%>
+			document.forms[0].action="<%=Constants.CP_QUERY_PARTICIPANT_ADD_ACTION%>";
+			<%}%>
+			
+			
+		}
 		
 		function setSubmittedForParticipant(submittedFor,forwardTo)
 		{
