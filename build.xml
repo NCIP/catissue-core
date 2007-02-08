@@ -494,6 +494,39 @@
 		</delete>
 	</target>
 	
+	<!--  Added by Vijay Pande for CaTIES -->
+	<target name="gen_simple_report_junit_testcases_caties" depends="compile">
+		<delete dir="${junit.report.dir}" />
+		<mkdir dir="${junit.report.dir}" />
+		<junit printsummary="yes" haltonfailure="no" fork="yes">
+			<!--formatter type="plain" usefile="false"/-->
+			<formatter type="xml" />
+			<batchtest todir="${junit.report.dir}">
+				<fileset dir="${src.dir}">
+					<include name="**/TestAllCaTIES.java" />
+				</fileset>
+			</batchtest>
+			<classpath>
+				<!--  <pathelement location="${junit.classes.dir}"/> -->
+				<pathelement location="${target.dir}" />
+				<fileset dir="${lib.dir}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>
+		</junit>
+		<junitreport todir="${junit.report.dir}">
+			<fileset dir="${junit.report.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report todir="${junit.report.dir}" />
+		</junitreport>
+		<delete>
+			<fileset dir="${junit.report.dir}">
+				<include name="**/**/*.xml" />
+			</fileset>
+		</delete>
+	</target>
+	
 	<!-- =================================================================== -->
 	<!-- Cobertura code coverage report                                      -->
 	<!-- =================================================================== -->
