@@ -995,21 +995,6 @@ function LookupAgain(submittedFor)
 	}
 	document.forms[0].radioValue.value="Lookup";
 }
-function CreateNewClick(pageOf, submittedFor, participantAddAction, pageOfParticipantCPQuery, cpQueryParticipantAddAction)
-		{
-			document.forms[0].submitPage.disabled=false;
-			document.forms[0].registratioPage.disabled=false;
-			if(submittedFor!=null && submittedFor.equals("AddNew"))
-			{
-				document.forms[0].submitPage.disabled=true;
-			}
-			document.forms[0].radioValue.value="Add";
-			document.forms[0].action="participantAddAction";
-			if(pageOf.equals(pageOfParticipantCPQuery))
-			{
-				document.forms[0].action="cpQueryParticipantAddAction";
-			}
-		}
 
 //<!-- JavaScript for Participant.jsp  end -->
 
@@ -1183,14 +1168,14 @@ function initiallizeEditParticipantTabs(contextPath,queryString,annotationQueryS
 }
 
 //Java Script for SpecimenCollGroupTabPage.jsp
-function initiallizeAddSCGTabs(contextPath)
+function initiallizeAddSCGTabs(contextPath, str)
 {
 		tabbar= new dhtmlXTabBar("a_tabbar","top");
 		tabbar.setImagePath(contextPath + "/dhtml_comp/imgs/");
 		tabbar.setHrefMode("iframes-on-demand");
 		var tabIds = ["addTab"];
 		var tabNames = ["Add Specimen Collection Group"];
-		var tabHREFs = [contextPath + "/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup&menuSelected=14"];
+		var tabHREFs = [contextPath + "/SpecimenCollectionGroup.do?operation=add&pageOf=pageOfSpecimenCollectionGroup&menuSelected=14"+str];
 		initializeTabs(tabIds,tabNames,tabHREFs);
 }
 
