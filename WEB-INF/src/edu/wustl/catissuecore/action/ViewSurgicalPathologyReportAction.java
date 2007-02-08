@@ -18,6 +18,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -36,7 +37,6 @@ import gov.nih.nci.security.authorization.domainobjects.Role;
 public class ViewSurgicalPathologyReportAction extends BaseAction
 {
 
-	private String forward;
 	private ViewSurgicalPathologyReportForm viewSPR;
 	/**
 	 * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
@@ -79,7 +79,6 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		//if page is of Specimen Collection group then the domain object is SpecimenCollectionGroup
 		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN_COLLECTION_GROUP))
 		{
-			forward=new String(Constants.SPECIMEN_COLLECTION_GROUP);
 			className=SpecimenCollectionGroup.class.getName();
 			List scgList=defaultBizLogic.retrieve(className, colName, colValue);
 			SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgList.get(0);
@@ -99,7 +98,6 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		//if page is of Specimen then the domain object is Specimen
 		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN))
 		{
-			forward=new String(Constants.SPECIMEN);
 			className=Specimen.class.getName();
 			List specimenList=defaultBizLogic.retrieve(className, colName, colValue);
 			Specimen specimen=(Specimen)specimenList.get(0);
@@ -121,17 +119,14 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		// Also needs to retrieve a list of SurgicalPathologyReport objects (One-to-Many relationship)
 		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_PARTICIPANT))
 		{
-			forward=new String(Constants.PARTICIPANT);
-		/*	className=Participant.class.getName();
+			className=Participant.class.getName();
 			List participantList=defaultBizLogic.retrieve(className, colName, colValue);
 			Participant participant=(Participant)participantList.get(0);
 			viewSPR.setParticipant(participant);
-			Collection scgCollection=null;//=participant.getSpecimenCollectionGroupCollection();
-			
-			Iterator iter=scgCollection.iterator();
-			if(iter.hasNext())
+			List scgList=ReportLoaderUtil.getSCGList(participant);
+			if(scgList.size()>0)
 			{
-				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)iter.next();
+				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgList.get(0);
 				if(isAuthorized)
 				{
 					viewSPR.setAllValues(scg.getIdentifiedSurgicalPathologyReport());
@@ -141,18 +136,14 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 					viewSPR.setParticipant(scg.getParticipant());
 					viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 				}
-				
 			}
 			else
 			{
 				viewSPR.setIdentifiedReport(new IdentifiedSurgicalPathologyReport());
 				viewSPR.setDeIdentifiedReport(new DeidentifiedSurgicalPathologyReport());
 			}
-//			request.setAttribute(Constants.REPORT_LIST, getReportIdList(scgCollection));
-			viewSPR.setReportIdList(getReportIdList(scgCollection));
-			*/
+			viewSPR.setReportIdList(getReportIdList(scgList));
 		}
-		
 	}
 	
 	/**
@@ -181,6 +172,11 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		return reportIDList;
 	}
 	
+	/**
+	 * This method is to retrieve sessionDataBean from request object
+	 * @param request HttpServletRequest object
+	 * @return sessionBean SessionDataBean object
+	 */
 	private SessionDataBean getSessionBean(HttpServletRequest request)
 	{
 		try
@@ -194,6 +190,12 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		}
 	}
 	
+	/**
+	 * This method verifies wthere the user is 
+	 * @param sessionBean
+	 * @return
+	 * @throws Exception
+	 */
 	private boolean isAuthorized(SessionDataBean sessionBean) throws Exception
 	{
 		SecurityManager sm=SecurityManager.getInstance(this.getClass());
@@ -211,7 +213,6 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		}
 		return false;
 	}
-	
 }
 
 

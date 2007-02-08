@@ -2,7 +2,6 @@ package edu.wustl.catissuecore.reportloader;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -186,7 +185,7 @@ public class ReportLoader
 		boolean isExists=false;
 		try
 		{
-			scgSet=(Set)this.participant.getSpecimenCollectionGroupCollection();
+			scgSet=(Set)ReportLoaderUtil.getSCGList(this.participant);
 			if(scgSet!=null && scgSet.size()>0)
 			{
 				scgIterator=scgSet.iterator();
@@ -207,7 +206,7 @@ public class ReportLoader
 			}
 			else
 			{
-				this.participant.setSpecimenCollectionGroupCollection(new HashSet());
+//				this.participant.setSpecimenCollectionGroupCollection(new HashSet());
 				scg=createNewSpecimenCollectionGroup();
 			}
 		}
@@ -244,7 +243,7 @@ public class ReportLoader
 		scg.setSite(this.site); 
 		scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport);
 		this.identifiedReport.setSpecimenCollectionGroup(scg);
-		((Set)this.participant.getSpecimenCollectionGroupCollection()).add(scg);
+	
 		scg.setName("caties_"+ this.identifiedReport.getAccessionNumber().toString());
 		
 		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
@@ -262,7 +261,7 @@ public class ReportLoader
 		collProtocolReg.setRegistrationDate(new Date());
 		collProtocolReg.setParticipant(this.participant);		
 		collProtocolReg.setCollectionProtocol(collProtocolEvent.getCollectionProtocol());
-		
+		((Set)this.participant.getCollectionProtocolRegistrationCollection()).add(collProtocolReg);
 		try
 		{
 			ReportLoaderUtil.saveObject(collProtocolReg);
