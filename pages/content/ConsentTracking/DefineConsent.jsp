@@ -99,6 +99,7 @@
 								{		
 									String consentName="consentValue(ConsentBean:"+counter+"_statement)";
 									String consentKey="consentValue(ConsentBean:"+counter+"_consentTierID)";
+									boolean readonly=false;
 								%>
 								<tr>
 									<td class="tabrightmostcell" width="3%" align="right" width="5%">
@@ -108,6 +109,7 @@
 									<%
 									if(operation.equals(Constants.EDIT))
 									{
+										readonly=true;
 									%>
 									<input type="checkbox" name="consentcheckBoxs" Id="check1" disabled="disabled"/>	
 									<%
@@ -122,7 +124,7 @@
 									</td>
 									<html:hidden property="<%=consentKey%>"/>
 									<td class="formField" width="90%">
-										<html:textarea styleClass="formFieldSized" style="width:90%;" rows="2" property="<%=consentName%>"/>
+										<html:textarea styleClass="formFieldSized"  style="width:90%;" rows="2" property="<%=consentName%>" readonly="<%=readonly%>"/>
 									</td>
 								</tr>
 								<%

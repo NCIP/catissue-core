@@ -421,14 +421,14 @@ function insRow(subdivtag,iCounter,blockCounter)
 if(pageView.equals("add") || pageView.equals("edit"))
 {
 %>
- <table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="90%">
+ <table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" width="700">
 	<tr>
  		<td height="20" width="9%" nowrap class="tabMenuItemSelected" onclick="collectionProtocolPage()" id="collectionProtocolTab">CollectionProtocol</td>
 
         <td height="20" width="10%" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">
 		    <bean:message key="consents.consents" />        
         </td>								
-     <td width="*" class="tabMenuSeparator" colspan="2">&nbsp;</td>
+     <td width="600" class="tabMenuSeparator" colspan="1">&nbsp;</td>
    </tr>
    <tr>
 	<td class="tabField" colspan="4">
@@ -1092,9 +1092,10 @@ if(pageView.equals("add") || pageView.equals("edit"))
 </td></tr></tbody></table>
 <!-- outermosttable  -->
 
-<table cellpadding="0" cellspacing="0" border="0" width = "80%" style="margin-left:5%;" id="submittable">
+<table cellpadding="0" cellspacing="0" border="0" width = "85%" id="submittable">
 		<tr><td>&nbsp;&nbsp;</td></tr>		
 			<tr>
+			<td>&nbsp;&nbsp;</td>
 				<td class="formLabelNoBackGround" style="font-size:12;" bgcolor="#F4F4F5" width="50%">
 					<html:checkbox property="aliqoutInSameContainer">
 						<bean:message key="aliquots.storeAllAliquotes" />
