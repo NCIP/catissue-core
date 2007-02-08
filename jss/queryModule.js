@@ -197,7 +197,7 @@ function onResponseUpdate(text)
 			var lastIndex = allElementsArray[i].lastIndexOf(".");
 			var entityName = allElementsArray[i].substring(lastIndex + 1);
 			var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+allElementsArray[i]+"')";					
-			row = row+'<tr><td bgcolor="#FFFFFF"><a href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
+			row = row+'<tr><td bgcolor="#FFFFFF"><a class="dataPagingLink" href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
 		}			
 	}
 	else
