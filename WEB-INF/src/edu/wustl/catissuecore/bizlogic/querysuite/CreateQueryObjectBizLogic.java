@@ -2,32 +2,29 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-
 import edu.common.dynamicextensions.domain.Attribute;
+import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.cab2b.common.beans.IAttribute;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.TreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
+import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Validator;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * Creates Query Object as per the data filled by the user on AddLimits section.
@@ -83,10 +80,11 @@ public class CreateQueryObjectBizLogic
 	/**
 	 * This methods gets the resultset by firing the sql passed to it.
 	 * @param sql String sql
+	 * @param columnMap The column Map, which contains the mapping of output entity mapping to the column name.
 	 * @return Map list of results. 
 	 */
 
-	public Map fireQuery(String sql)
+	public Map fireQuery(String sql, Map<Long, Map<AttributeInterface, String>> columnMap)
 	{
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		try
@@ -116,12 +114,13 @@ public class CreateQueryObjectBizLogic
 		if (list != null && list.size() != 0)
 		{
 			List row = (List) list.get(0);
-			int i = 1;
-			columnNames.add("Column" + i++);
-			for (; i <= row.size()+1; i++)
-			{
-				columnNames.add("Column" + i);
-			}
+			columnNames = createColumnNameList(columnMap,row.size());
+//			int i = 1;
+//			columnNames.add("Column" + i++);
+//			for (; i <= row.size()+1; i++)
+//			{
+//				columnNames.add("Column" + i);
+//			}
 		}
 		TreeBizLogic treeBizLogic = new TreeBizLogic();
 		treeData = treeBizLogic.getQueryTreeNode();
@@ -132,6 +131,36 @@ public class CreateQueryObjectBizLogic
 		return outputData;
 	}
 
+	/**
+	 * To create ColumnNames list for all the Attributes present in the result.
+	 * @param columnMap The columnMap.
+	 * @param totalColumns The total number of columns.
+	 * @return The List of Column Names that will be displayed in spreadsheet.
+	 */
+	private List<String> createColumnNameList(Map<Long, Map<AttributeInterface, String>> columnMap, int totalColumns)
+	{
+		Collection<Map<AttributeInterface,String>> values = columnMap.values();
+		String[] columns = new String[totalColumns+1]; // creating one extra column for Check box column.
+		columns[0]=""; // the Column name for the Check box column.
+		for (Iterator<Map<AttributeInterface,String>> iter = values.iterator(); iter.hasNext();)
+		{
+			Map<AttributeInterface,String> map = iter.next();
+			 
+			Set<AttributeInterface> set = map.keySet();	
+			for (Iterator<AttributeInterface> iterator = set.iterator(); iterator.hasNext();)
+			{
+				AttributeInterface attribute = iterator.next();
+				String className = attribute.getEntity().getName();
+				className = className.substring(className.lastIndexOf('.')+1, className.length());
+				String sqlColumnName = map.get(attribute);
+				sqlColumnName = sqlColumnName.substring(SqlGenerator.COLUMN_NAME.length(),sqlColumnName.length());
+				int index = Integer.parseInt(sqlColumnName) + 1;
+				columns[index] = attribute.getName() + " : " + className;
+			}
+		}
+		
+		return Arrays.asList(columns);
+	}
 
 	/**
 	 * Craetes Map of condition Objects.

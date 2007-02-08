@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.action.BaseAppletAction;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
@@ -56,9 +57,12 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			Vector treeData = outputTreeBizLogic.createOutputTree(query,sessionData);
 			ISqlGenerator sqlGenerator = SqlGeneratorFactory.getInstance();
 			String selectSql = "";
+			Map<Long, Map<AttributeInterface, String>>  columnMap=null;
 			try
 			{
 				selectSql = sqlGenerator.generateSQL(query);
+				columnMap = sqlGenerator.getColumnMap();
+				
 				System.out.println(selectSql);
 			}
 			catch (MultipleRootsException e)
@@ -71,7 +75,7 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			}
 			Logger.out.info(selectSql);
 			CreateQueryObjectBizLogic bizLogic = new CreateQueryObjectBizLogic();
-			Map outputData = bizLogic.fireQuery(selectSql);
+			Map outputData = bizLogic.fireQuery(selectSql, columnMap);
 			request.getSession().setAttribute(Constants.TREE_DATA, treeData);
 			request.getSession().setAttribute(Constants.SPREADSHEET_DATA_LIST, outputData.get(Constants.SPREADSHEET_DATA_LIST));
 			request.getSession().setAttribute(Constants.SPREADSHEET_COLUMN_LIST, outputData.get(Constants.SPREADSHEET_COLUMN_LIST));;
