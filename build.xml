@@ -229,7 +229,7 @@
 	<!-- Create war file for installable zip file.Please us this target when creating installable zip. 
 		Note: database type is not replaced 
 	-->
-	<target name="installable_build_war" depends="init, compile, unpack_cacore_war,common_build_war,build_client_jar">
+	<target name="installable_build_war" depends="init, compile, unpack_cacore_war,build_dagViewApplet_jar,common_build_war,build_client_jar">
 	</target>
 	
 	<!-- build catissuecore war file which is common to above both targets -->
