@@ -245,7 +245,7 @@
 		<div>
 
 			<!--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /-->
-				<b><bean:message key="app.annotationForms" /></b>
+				<b><bean:message key="app.localExtn" /></b>
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="DefineAnnotations.do">
