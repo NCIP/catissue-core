@@ -66,6 +66,11 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
 	 * Consent Date, Date on which Consent is Signed
 	 */
 	protected String consentDate="";
+	/**
+	 * Counter for sequence no
+	 */
+	private int outerCounter=0;
+	
 	
 	//Consent Tracking Module---(Virender Mehta)
 
@@ -556,6 +561,23 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
 
 	//Consent Tracking Module---(Virender Mehta)	
 	/**
+	 * For Sequence no
+	 * @return outerCounter
+	 */
+	public int getOuterCounter()
+	{
+		return outerCounter;
+	}
+	
+	/**
+	 * For Sequence no
+	 * @param outerCounter For Sequence no
+	 */
+		public void setOuterCounter(int outerCounter)
+	{
+		this.outerCounter = outerCounter;
+	}
+	/**
 	 * @return consentDate The Date on Which Consent is Signed
 	 */
 	public String getConsentDate()
@@ -694,4 +716,5 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
 		return "";
 	}
     //Consent Tracking Module---(Virender Mehta)	
+	
 }

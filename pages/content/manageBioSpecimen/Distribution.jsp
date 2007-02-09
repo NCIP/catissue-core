@@ -152,9 +152,13 @@
 		function insRow(subdivtag)
 		{
 			var val = parseInt(document.forms[0].counter.value);
-			
 			val = val + 1;
 			document.forms[0].counter.value = val;
+			
+			var sequenceNo = parseInt(document.forms[0].outerCounter.value);	
+			sequenceNo = sequenceNo + 1;
+			document.forms[0].outerCounter.value=sequenceNo;
+			
 			var sname = "";
 		    var barcodeDisabled = "";
 			var labelDisabled = "";
@@ -196,7 +200,7 @@
 
 			}
     		var cell1 = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-			spreqno.innerHTML="" + cell1+  rowno ;
+			spreqno.innerHTML="" + cell1+  sequenceNo ;
 
 
 			//Second Cell
@@ -416,6 +420,7 @@
 					<td><html:hidden property="operation" value="<%=operation%>" /> <html:hidden
 						property="submittedFor" value="<%=submittedFor%>" /></td>
 					<td><html:hidden property="counter" /></td>
+					<td><html:hidden property="outerCounter" /></td>
 					<td><html:hidden property="id" /></td>
 					<td><html:hidden property="idChange" /></td>
 					<td><html:hidden property="onSubmit" /></td>
