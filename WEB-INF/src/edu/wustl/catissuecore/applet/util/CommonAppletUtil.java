@@ -178,6 +178,40 @@ public final class CommonAppletUtil
 		return String.valueOf(row)+AppletConstants.MULTIPLE_SPECIMEN_ROW_COLUMN_SEPARATOR+String.valueOf(col );	
 	}
 
+	
+	/**
+	 * This method returns the HashMap of data of selected cells.
+	 * @param table Table to get the selected cells.
+	 * @return HashMap containing data of selected cells.
+	 */
+	public static HashMap getAllDataOnPage(JTable table)
+	{
+		int numberOfColumns = table.getColumnCount();
+		int numberOfRows = table.getRowCount();		
+		
+		HashMap map = new HashMap();
+		for(int rowIndex=1;rowIndex<AppletConstants.SPECIMEN_COMMENTS_ROW_NO; rowIndex++  )
+		{
+			for(int columnIndex=0; columnIndex<numberOfColumns; columnIndex++)
+			{
+				String key = CommonAppletUtil.getDataKey(rowIndex, columnIndex);
+				//commented to check the values from cell editor
+//				Object value = table.getValueAt(selectedRows[rowIndex],selectedColumns[columnIndex] );
+				//--------
+				TableColumnModel columnModel = table.getColumnModel();
+				SpecimenColumnModel scm = (SpecimenColumnModel)columnModel.getColumn(columnIndex).getCellEditor();
+				JComponent component = ((JComponent)scm.getTableCellEditorComponent(table,null,true,rowIndex,columnIndex));
+				Object value =scm.getCellEditorValue();
+				
+				getMultipleSpecimenTableModel(table).setValueAt(value,rowIndex,columnIndex);
+				// -------
+				map.put(key,value );
+			}
+		}
+		System.out.println("Returning Map from getAllDataOnPage-------------------------\n");
+		System.out.println(map);
+		return map;
+	}
 	/**
 	 * This method returns the HashMap of data of selected cells.
 	 * @param table Table to get the selected cells.

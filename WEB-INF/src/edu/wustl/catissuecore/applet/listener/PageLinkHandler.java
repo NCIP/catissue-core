@@ -83,6 +83,6 @@ public class PageLinkHandler extends ButtonHandler
 	protected void preActionPerformed(ActionEvent event)
 	{
 		//commented by mandar to check handling of selected data.
-		CommonAppletUtil.getSelectedData(table);
+		CommonAppletUtil.getAllDataOnPage(table);
 	}
 }
