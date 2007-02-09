@@ -214,3 +214,12 @@ function validateAny(element)
 	}
 	return true;
 }
+//This function submits JSP page to AddNewAction with passed action
+function addNewActionToTop(action)
+{
+	var action = action;
+	document.forms[0].target="_top";
+	document.forms[0].action = action;
+
+	document.forms[0].submit();
+}
