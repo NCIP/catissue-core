@@ -54,7 +54,6 @@
 <script>
 			var opr = '<%=operation%>';
 			var str= '<%=str%>';
-			alert(str);
 			if(opr=="createMultipleSpecimen")
 			{
 				top.location.href="<%=request.getContextPath()%>/InitMultipleSpecimen.do?operation=add&menuSelected=15";
