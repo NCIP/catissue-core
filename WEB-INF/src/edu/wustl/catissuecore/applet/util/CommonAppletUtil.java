@@ -208,8 +208,8 @@ public final class CommonAppletUtil
 				map.put(key,value );
 			}
 		}
-		System.out.println("Returning Map from getAllDataOnPage-------------------------\n");
-		System.out.println(map);
+	//	System.out.println("Returning Map from getAllDataOnPage-------------------------\n");
+	//	System.out.println(map);
 		return map;
 	}
 	/**
