@@ -637,7 +637,7 @@ PUBLIC
 			<forward name="success" path="/CollectionProtocolRegistrationSearch.do?pageOf=pageOfCollectionProtocolRegistration" />
 			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13&amp;showConsents=yes" />
 			<forward name="createSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes" />
-			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes" />
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupTabsPage&amp;menuSelected=14&amp;showConsents=yes" />
 		</action>
 		
 		<action path="/CollectionProtocolRegistrationEdit"
@@ -932,6 +932,7 @@ PUBLIC
 			<forward name="pageOfCollectionProtocolQuery" path=".catissuecore.collectionProtocolEditDef" />
 			<forward name="failure" path=".catissuecore.collectionProtocolDef" />
 			<forward name="access_denied" path="/ManageAdministrativeData.do" />
+			
 		</action>
 
 		<action path="/CollectionProtocolAdd"
@@ -943,7 +944,7 @@ PUBLIC
 			<forward name="success" path="/CollectionProtocolSearch.do?pageOf=pageOfCollectionProtocol" />
 			<forward name="failure" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9" />
 			<forward name="participantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;showConsents=yes&amp;errorShowConsent=yes" />
-			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupTabsPage" />
 		</action>
 
 		<action path="/CollectionProtocolEdit"
@@ -1105,6 +1106,8 @@ PUBLIC
 			<forward name="pageOfSpecimenCollectionGroupQuery" path=".catissuecore.specimenCollectionGroupEditDef" />
 			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.specimenCollectionGroupEditDef" />			
 			<forward name="failure" path=".catissuecore.specimenCollectionGroupDef" />
+			<forward name="pageOfSpecimenCollectionGroupTabsPage" path=".catissuecore.specimenCollectionGroupDef" />
+
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 
@@ -1451,7 +1454,7 @@ PUBLIC
 			<forward name="success" path="/SiteSearch.do?pageOf=pageOfSite" />
 			<forward name="failure" path="/Site.do?operation=add&amp;pageOf=pageOfSite&amp;menuSelected=5" />
 			<forward name="storageContainer" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer" />
-			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupTabsPage" />
 			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 		</action>
 		
@@ -2952,7 +2955,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="collectionProtocol" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9" />
-			<forward name="participant" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
+			<forward name="participant" path="/LoadParticipantPage.do?operation=add" />
 		</action>
 		<action path="/SpecimenCollectionGroupAddNew"
 			type="edu.wustl.common.action.AddNewAction"
