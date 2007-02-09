@@ -1,11 +1,25 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%
 	String annotationLink = request.getContextPath() + "/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1";
-	String operation = (String)request.getParameter("operation");
+	String operation = (String)request.getParameter(Constants.OPERATION);
 	Long id = (Long)request.getAttribute("id");
 	String queryString = request.getQueryString();
-
+	SpecimenCollectionGroupForm scgForm=(SpecimenCollectionGroupForm)request.getAttribute("specimenCollectionGroupForm");
+	String submittedFor=(String)request.getParameter(Constants.SUBMITTED_FOR);
+	Long collectionProtocolId=new  Long(0);
+	Long siteId=new  Long(0);
+	Long ParticipantId=new  Long(0);
+	String protocolParticipantIdentifier="";
+	if(scgForm!=null)
+	{
+		collectionProtocolId=scgForm.getCollectionProtocolId();
+		siteId=scgForm.getSiteId();
+		ParticipantId=scgForm.getParticipantId();
+		protocolParticipantIdentifier=scgForm.getProtocolParticipantIdentifier();
+	}
 	if(queryString==null)
 	{
 			queryString = queryString  + "operation=edit&pageOf=pageOfSpecimenCollectionGroup";
@@ -13,7 +27,9 @@
 	queryString = queryString + "&pageOf=pageOfSpecimenCollectionGroup&id="+id;
 	Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
 	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+id;	
-	
+	String str="&collectionProtocolId="+ collectionProtocolId.toString()+"&siteId="+siteId.toString()+"&participantId="+ParticipantId.toString()+"&protocolParticipantIdentifier="+protocolParticipantIdentifier;
+	str=str+"&"+Constants.SUBMITTED_FOR+"="+submittedFor;
+	queryString=queryString+"&"+Constants.SUBMITTED_FOR+"="+submittedFor;
 	
 
 %>
@@ -37,6 +53,8 @@
 <div id="a_tabbar" style="width:800;height:600" ></div>
 <script>
 			var opr = '<%=operation%>';
+			var str= '<%=str%>';
+			alert(str);
 			if(opr=="createMultipleSpecimen")
 			{
 				top.location.href="<%=request.getContextPath()%>/InitMultipleSpecimen.do?operation=add&menuSelected=15";
@@ -57,7 +75,7 @@
 					{
 						if((opr == 'null')||(opr=="add"))
 						{	
-							initiallizeAddSCGTabs('<%=request.getContextPath()%>');
+							initiallizeAddSCGTabs('<%=request.getContextPath()%>','<%=str%>');
 						}
 						else
 						{

@@ -22,6 +22,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.Globals;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -249,6 +250,10 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		Logger.out.debug("Participant ID in SCG Action=====>"+specimenCollectionGroupForm.getParticipantId()+"  "+specimenCollectionGroupForm.getProtocolParticipantIdentifier());
 		
 		// -------called from Collection Protocol Registration start-------------------------------
+		if (request.getParameter(Constants.SUBMITTED_FOR) != null && request.getParameter(Constants.SUBMITTED_FOR).trim().length() != 0)
+		{
+			request.setAttribute(Constants.SUBMITTED_FOR, request.getParameter(Constants.SUBMITTED_FOR));
+		}
 		if( (request.getAttribute(Constants.SUBMITTED_FOR) !=null) &&(request.getAttribute(Constants.SUBMITTED_FOR).equals("Default")))
 		{
 			Logger.out.debug("Populating CP and Participant in SCG ====  AddNew operation loop");

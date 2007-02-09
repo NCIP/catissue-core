@@ -186,7 +186,7 @@
 							<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 						&nbsp;
-						<html:link href="#" styleId="newCollectionProtocol" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=collectionProtocol&forwardTo=specimenCollectionGroup&addNewFor=collectionProtocol')">
+						<html:link href="#" styleId="newCollectionProtocol" onclick="addNewActionToTop('SpecimenCollectionGroupAddNew.do?addNewForwardTo=collectionProtocol&forwardTo=specimenCollectionGroup&addNewFor=collectionProtocol')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
 		        	</td>
@@ -207,7 +207,7 @@
   							<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
 						</html:select>
 						&nbsp;
-						<html:link href="#" styleId="newSite" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=site&forwardTo=specimenCollectionGroup&addNewFor=site')">
+						<html:link href="#" styleId="newSite" onclick="addNewActionToTop('SpecimenCollectionGroupAddNew.do?addNewForwardTo=site&forwardTo=specimenCollectionGroup&addNewFor=site')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
 		        	</td>
@@ -244,7 +244,7 @@
 						
 						&nbsp;
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-						<html:link href="#" styleId="newParticipant" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=participant')">
+						<html:link href="#" styleId="newParticipant" onclick="addNewActionToTop('SpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=participant')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
  						</logic:notEqual>
@@ -286,7 +286,7 @@
 					
 						&nbsp;
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
- 						<html:link href="#" styleId="newParticipant" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=protocolParticipantIdentifier')">
+ 						<html:link href="#" styleId="newParticipant" onclick="addNewActionToTop('SpecimenCollectionGroupAddNew.do?addNewForwardTo=participantRegistration&forwardTo=specimenCollectionGroup&addNewFor=protocolParticipantIdentifier')">
 							<bean:message key="buttons.addNew" />
 						</html:link>
 	 					</logic:notEqual>
