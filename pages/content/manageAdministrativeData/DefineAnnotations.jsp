@@ -102,7 +102,7 @@
 				<table  class = "tbBordersAllbordersBlack" border="1" valign="top" width="100%" height="100%">
 					<tr valign="top">
 						<td colspan="2" align="left">
-							<html:button styleClass="actionButton" property = "delete" onclick="featureNotSupported()" >Delete</html:button>
+							<html:button disabled = "true" styleClass="actionButton" property = "delete" onclick="featureNotSupported()" >Delete</html:button>
 						</td>
 					</tr>
 

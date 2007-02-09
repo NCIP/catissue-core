@@ -37,17 +37,24 @@ public class AnnotationBizLogic extends DefaultBizLogic
      * eg: returns all dynamic entity id from a Participant,Specimen etc
      */
     public List getListOfDynamicEntitiesIds(long staticEntityId) {
-        List dynamicList = new ArrayList();
+        List<EntityMap> dynamicList = new ArrayList<EntityMap>();
         
-        String[] selectColumnName = {"containerId"};
+        String[] selectColumnName = {"id"};
     	String[] whereColumnName ={"staticEntityId"};;
     	String[] whereColumnCondition = {"="};
     	Object[] whereColumnValue = {new Long(staticEntityId)};
     	String joinCondition = null;
-    	
+    	List list = new ArrayList();
         try
         {
-            dynamicList= retrieve(EntityMap.class.getName(),selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,joinCondition);
+            dynamicList= retrieve(EntityMap.class.getName(),"staticEntityId",new Long(staticEntityId));
+            if (dynamicList != null && !dynamicList.isEmpty())
+            {
+                for (EntityMap entityMap : dynamicList)
+                {
+                    list.add(entityMap.getContainerId());
+                }
+            }
         }
         catch (DAOException e)
         {
@@ -55,7 +62,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
             e.printStackTrace();
         }
         
-        return dynamicList;
+        return list;
     }
     
     

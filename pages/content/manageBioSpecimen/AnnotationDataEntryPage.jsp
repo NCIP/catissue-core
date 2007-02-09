@@ -63,11 +63,7 @@
 					&nbsp;
 				</td>
 			</tr>
-			<tr valign="top">
-				<td align="left" >
-					&nbsp;
-				</td>
-			</tr>
+
 			<tr valign="top">
 				<td align="left" class="formTitle">
 					<bean:message key="app.listOfAnnotationsAddedTitle"/>
