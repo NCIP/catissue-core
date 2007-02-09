@@ -33,7 +33,13 @@
 <html:hidden property = "definedAnnotationsDataXML"></html:hidden>
 	<!-- Actual HTML Code Start -->
 	<br>
-		<table class="tbBordersAllbordersBlack" valign="top" height="93%" align='left' width='100%' cellspacing="0" cellpadding="3">
+	
+		<table  valign="top"   width='63%' border ="0" height="93%"  cellspacing="0" cellpadding="3">
+		<tr>
+		    <td width="1%"></td>
+		<td>
+		<table class="tbBordersAllbordersBlack" border ="0" height="100%" summary="" cellpadding="3" cellspacing="0" border="0">
+
 			<tr valign="top">
 				<td align="left" class="formTitle">
 					<bean:message key="app.annotationDataEntryPageTitle"/>
@@ -41,7 +47,7 @@
 			</tr>
 			<tr valign="top" >
 				<td align="left" >
-					<label class="formRequiredLabelWithoutBorder"><bean:message key="app.annotationFormsList"/> :</label>
+					<label class="formRequiredLabelWithoutBackgrnd"><bean:message key="app.annotationFormsList"/> :</label>
 					<html:select property="selectedAnnotation" styleClass="formFieldVerySmallSized">
 						<html:options collection="annotationsList" labelProperty="name" property="value" />
 					</html:select>
@@ -66,6 +72,7 @@
 				<td align="left" class="formTitle">
 					<bean:message key="app.listOfAnnotationsAddedTitle"/>
 				</td>
+				
 			</tr>
 			<tr height="100%" valign="top">
 				<td align="left" >
@@ -83,5 +90,7 @@
 				</td>
 			</tr>--> 
 		</table>
+
+		</td></tr></table>
 </html:form>
 </html>
