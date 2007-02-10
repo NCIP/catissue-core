@@ -85,13 +85,13 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			if(isAuthorized)
 			{
 				viewSPR.setAllValues(scg.getIdentifiedSurgicalPathologyReport());
-				viewSPR.setParticipant(scg.getParticipant());
+				viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
 				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 			}
 			else
 			{
 				viewSPR.setIdentifiedReportTextContent("You are not authorized to view this report");
-				viewSPR.setParticipant(scg.getParticipant());
+				viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
 				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 			}
 		}
@@ -106,12 +106,12 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			if(isAuthorized)
 			{
 				viewSPR.setAllValues(scg.getIdentifiedSurgicalPathologyReport());
-				viewSPR.setParticipant(scg.getParticipant());
+				viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
 				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 			}
 			else
 			{
-				viewSPR.setParticipant(scg.getParticipant());
+				viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
 				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 			}
 		}
@@ -133,7 +133,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				}
 				else
 				{
-					viewSPR.setParticipant(scg.getParticipant());
+					viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
 					viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 				}
 			}

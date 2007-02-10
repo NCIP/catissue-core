@@ -385,7 +385,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		if(ispr!=null && ispr.getSpecimenCollectionGroup()!=null)
 		{
 			setDeIdentifiedReport(ispr.getDeidentifiedSurgicalPathologyReport());
-			setParticipant(ispr.getSpecimenCollectionGroup().getParticipant());
+			setParticipant(ispr.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant());
 		}
 		else
 		{
