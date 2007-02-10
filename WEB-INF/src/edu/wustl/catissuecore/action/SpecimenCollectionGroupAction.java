@@ -159,15 +159,17 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 					String getSignedConsentURL=Utility.toString(collectionProtocolRegistration.getSignedConsentDocumentURL());
 					specimenCollectionGroupForm.setSignedConsentUrl(getSignedConsentURL);
 					//Set witnessName,ConsentDate and SignedConsentURL				
-					
 					Set participantResponseSet = (Set)collectionProtocolRegistration.getConsentTierResponseCollection();
 					List participantResponseList= new ArrayList(participantResponseSet);
-					
 					if(operation.equalsIgnoreCase(Constants.ADD))
 					{
-						Map tempMap=prepareConsentMap(participantResponseList);
-						specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
-						specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size()) ;
+						String protocolEventID = request.getParameter("protocolEventId");
+						if(protocolEventID==null||protocolEventID.equalsIgnoreCase(Constants.FALSE))
+						{
+							Map tempMap=prepareConsentMap(participantResponseList);
+							specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
+						}
+						specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size());
 					}
 					else
 					{
@@ -179,6 +181,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 						specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
 						specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size()) ;
 					}
+					
 				}
 				//Setting the participant responses
 				//Adding name,value pair in NameValueBean 

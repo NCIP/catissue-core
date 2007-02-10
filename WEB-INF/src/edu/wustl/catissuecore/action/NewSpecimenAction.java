@@ -37,6 +37,7 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
@@ -51,12 +52,16 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.security.SecurityManager;
+import gov.nih.nci.security.authorization.domainobjects.Role;
 
 /**
  * NewSpecimenAction initializes the fields in the New Specimen page.
@@ -150,30 +155,100 @@ public class NewSpecimenAction extends SecureAction
 					request.setAttribute(Constants.CONSENT_TABLE_SHOWHIDE,tableStatus);
 				}
 				SpecimenCollectionGroup specimenCollectionGroup = getSCGObj(scg_id);
-				User witness= specimenCollectionGroup.getCollectionProtocolRegistration().getConsentWitness();
+				
+				//PHI Data
+				String initialURLValue="";
+				String initialWitnessValue="";
+				String initialSignedConsentDateValue="";
+				
+				CollectionProtocolRegistration collectionProtocolRegistration = specimenCollectionGroup.getCollectionProtocolRegistration();
+				if(collectionProtocolRegistration.getSignedConsentDocumentURL()==null)
+				{
+					initialURLValue=Constants.NULL;
+				}
+				User consentWitness= collectionProtocolRegistration.getConsentWitness();
+				if(consentWitness==null)
+				{
+					initialWitnessValue=Constants.NULL;
+				}
+				if(collectionProtocolRegistration.getConsentSignatureDate()==null)
+				{
+					initialSignedConsentDateValue=Constants.NULL;
+				}
+				List cprObjectList=new ArrayList();
+				cprObjectList.add(collectionProtocolRegistration);
+				SessionDataBean sessionDataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+				CaCoreAppServicesDelegator caCoreAppServicesDelegator = new CaCoreAppServicesDelegator();
+				String userName = Utility.toString(sessionDataBean.getUserName());	
+				List collProtObject = caCoreAppServicesDelegator.delegateSearchFilter(userName,cprObjectList);
+				CollectionProtocolRegistration cprObject = (CollectionProtocolRegistration)collProtObject.get(0);
+				//
+				String witnessName="";
+				String getConsentDate="";
+				String getSignedConsentURL="";
+				User witness= cprObject.getConsentWitness();
 				if(witness==null||witness.getFirstName()==null)
 				{
-					String witnessName="";
+					if(initialWitnessValue.equals(Constants.NULL))
+					{
+						witnessName=initialWitnessValue;
+					}
+					else
+					{
+						witnessName=Constants.HASHED_OUT;
+					}
 					specimenForm.setWitnessName(witnessName);
 				}
 				else
 				{
 					specimenForm.setWitnessName(witness.getFirstName());
 				}
-				String getConsentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+				if(cprObject.getConsentSignatureDate()==null)
+				{
+					if(initialSignedConsentDateValue.equals(Constants.NULL))
+					{
+						getConsentDate="";
+					}
+					else
+					{
+						getConsentDate=Constants.HASHED_OUT;
+					}
+				}
+				else
+				{
+					getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+				}
+				
+				if(cprObject.getSignedConsentDocumentURL()==null)
+				{
+					if(initialURLValue.equals(Constants.NULL))
+					{
+						getSignedConsentURL="";
+					}
+					else
+					{
+						getSignedConsentURL=Constants.HASHED_OUT;
+					}
+				}
+				else
+				{
+					getSignedConsentURL=Utility.toString(cprObject.getSignedConsentDocumentURL());
+				}
+				
 				specimenForm.setConsentDate(getConsentDate);
-				String getSignedConsentURL=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
 				specimenForm.setSignedConsentUrl(getSignedConsentURL);
 				
 				Set participantResponseSet =(Set)specimenCollectionGroup.getCollectionProtocolRegistration().getConsentTierResponseCollection();
 				List participantResponseList= new ArrayList(participantResponseSet);
-				
-				
 				if(operation.equalsIgnoreCase(Constants.ADD))
 				{
-					Collection consentResponseStatuslevel= specimenCollectionGroup.getConsentTierStatusCollection();
-					Map tempMap=prepareConsentMap(participantResponseList,consentResponseStatuslevel);
-					specimenForm.setConsentResponseForSpecimenValues(tempMap);
+					String scgDropDown = request.getParameter(Constants.SCG_DROPDOWN);
+					if(scgDropDown==null||scgDropDown.equalsIgnoreCase(Constants.TRUE))
+					{
+						Collection consentResponseStatuslevel= specimenCollectionGroup.getConsentTierStatusCollection();
+						Map tempMap=prepareConsentMap(participantResponseList,consentResponseStatuslevel);
+						specimenForm.setConsentResponseForSpecimenValues(tempMap);
+					}
 					specimenForm.setConsentTierCounter(participantResponseList.size());
 				}
 				else

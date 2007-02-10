@@ -56,6 +56,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String 	SPECIMEN_RESPONSELIST="specimenResponseList";
 	public static final String 	PROTOCOL_EVENT_ID="protocolEventId";
 	public static final String 	SCG_DROPDOWN="value";
+	public static final String 	HASHED_OUT="####";
 	//Ordering System Status
 	public static final String CDE_NAME_REQUEST_STATUS="Request Status";
 	public static final String CDE_NAME_REQUESTED_ITEMS_STATUS="Requested Items Status";

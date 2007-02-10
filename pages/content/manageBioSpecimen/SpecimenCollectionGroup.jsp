@@ -99,8 +99,17 @@
 			}
 			else
 			{       	
-	        	var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&" +
+	        	if(element=='collectionProtocolEventId')
+				{
+					var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&protocolEventId=true&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&" +
 	        			"isOnChange=true&cpID="+cpID;        			
+				}
+				else
+				{
+					var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&protocolEventId=false&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&" +
+	        			"isOnChange=true&cpID="+cpID;        			
+
+				}
 	        	changeAction(action);
 	        }
 		}

@@ -229,20 +229,30 @@
 			}
 			
 		}
-		function onCollOrClassChange()
+		function onCollOrClassChange(element)
 		{
 			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupId");
-//	  	    var indexValue=specimenCollGroupElement.value;
 			var classNameElement = document.getElementById("className");
+			var value;
+			
 			if(specimenCollGroupElement.value != "-1" || classNameElement.value != "-1")
 			{
+				if(element=='1')
+				{
+					value=true;
+				}
+				else
+				{
+					value=false;						
+				}
 				<%
 				String actionOnCollOrClassChange = "NewSpecimen.do?pageOf=pageOfNewSpecimen&virtualLocated=false&tab=newSpecimenForm&showConsents=yes&tableId4=disable";
+				System.out.println(actionOnCollOrClassChange);
 				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 				{
 					actionOnCollOrClassChange = "CPQueryNewSpecimen.do?pageOf=pageOfNewSpecimenCPQuery&virtualLocated=false";
 				}%>
-				var action = "<%=actionOnCollOrClassChange%>";
+				var action = "<%=actionOnCollOrClassChange%>"+"&value="+value;
 				document.forms[0].action = action + "&onCollOrClassChange=true";
 				document.forms[0].submit();
 			}	
@@ -262,11 +272,7 @@
 			}
 			else
 			{
-				onCollOrClassChange();
-				/*containerName.disabled = false;
-				pos1.disabled = false;;
-				pos2.disabled = false;;
-				document.forms[0].mapButton.disabled = false;*/
+				onCollOrClassChange('0');
 			}
 		}
 		function resetVirtualLocated()
@@ -647,7 +653,7 @@
 										<!-- Mandar : 434 : for tooltip -->
 							     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
 							     				styleId="specimenCollectionGroupId" size="1" 
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onCollOrClassChange()" >
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onCollOrClassChange('1')" >
 											<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
 												labelProperty="name" property="value"/>		
 										</html:select>
@@ -738,7 +744,7 @@
 								    </td>
 								    <td class="formField">
 <!-- Mandar : 434 : for tooltip -->
-						     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);onCollOrClassChange()" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);onCollOrClassChange('0')" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								     	<%
 											String classValue = form.getClassName();
 											if(operation.equals(Constants.EDIT))

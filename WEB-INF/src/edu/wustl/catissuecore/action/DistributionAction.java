@@ -21,8 +21,6 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -31,6 +29,7 @@ import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
@@ -42,6 +41,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -252,24 +252,93 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 	 */
 	private void showConsents(DistributionForm dForm ,Specimen specimen, HttpServletRequest request, String barcodeLable)
 	{
+		
+		String initialURLValue="";
+		String initialWitnessValue="";
+		String initialSignedConsentDateValue="";
+		
 		//Getting CollectionProtocolRegistration object
         CollectionProtocolRegistration collectionProtocolRegistration=specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
-        
+        if(collectionProtocolRegistration.getSignedConsentDocumentURL()==null)
+		{
+			initialURLValue=Constants.NULL;
+		}
+		User consentWitness= collectionProtocolRegistration.getConsentWitness();
+		if(consentWitness==null)
+		{
+			initialWitnessValue=Constants.NULL;
+		}
+		if(collectionProtocolRegistration.getConsentSignatureDate()==null)
+		{
+			initialSignedConsentDateValue=Constants.NULL;
+		}
+		List cprObjectList=new ArrayList();
+		cprObjectList.add(collectionProtocolRegistration);
+		SessionDataBean sessionDataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+		CaCoreAppServicesDelegator caCoreAppServicesDelegator = new CaCoreAppServicesDelegator();
+		String userName = Utility.toString(sessionDataBean.getUserName());	
+		List collProtObject=null;
+		try
+		{
+			collProtObject = caCoreAppServicesDelegator.delegateSearchFilter(userName,cprObjectList);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		CollectionProtocolRegistration cprObject = (CollectionProtocolRegistration)collProtObject.get(0);
         //Getting WitnessName,Consent Date,Signed Url using collectionProtocolRegistration object
-        User witness= collectionProtocolRegistration.getConsentWitness();
-        String witnessName="";
+		String witnessName="";
+		String getConsentDate="";
+		String getSignedConsentURL="";
+		User witness= cprObject.getConsentWitness();
 		if(witness==null||witness.getFirstName()==null)
 		{
+			if(initialWitnessValue.equals(Constants.NULL))
+			{
+				witnessName=initialWitnessValue;
+			}
+			else
+			{
+				witnessName=Constants.HASHED_OUT;
+			}
 			dForm.setWitnessName(witnessName);
 		}
 		else
 		{
-			witnessName=witness.getFirstName();
-			dForm.setWitnessName(witnessName);
+			dForm.setWitnessName(witness.getFirstName());
 		}
-        String getConsentDate=Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
-		String getSignedConsentURL=Utility.toString(collectionProtocolRegistration.getSignedConsentDocumentURL());
+		if(cprObject.getConsentSignatureDate()==null)
+		{
+			if(initialSignedConsentDateValue.equals(Constants.NULL))
+			{
+				getConsentDate="";
+			}
+			else
+			{
+				getConsentDate=Constants.HASHED_OUT;
+			}
+		}
+		else
+		{
+			getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+		}
 		
+		if(cprObject.getSignedConsentDocumentURL()==null)
+		{
+			if(initialURLValue.equals(Constants.NULL))
+			{
+				getSignedConsentURL="";
+			}
+			else
+			{
+				getSignedConsentURL=Constants.HASHED_OUT;
+			}
+		}
+		else
+		{
+			getSignedConsentURL=Utility.toString(cprObject.getSignedConsentDocumentURL());
+		}
 		//Setting WitnessName,ConsentDate and Signed Consent Url				
 		dForm.setConsentDate(getConsentDate);
 		dForm.setSignedConsentUrl(getSignedConsentURL);
