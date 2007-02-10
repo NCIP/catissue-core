@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.client;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -392,7 +393,10 @@ public class CaCoreAppServicesDelegator
 	{
 	    CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) object;
 	    collectionProtocolRegistration.setRegistrationDate(null);
-	    if (collectionProtocolRegistration.getParticipant() != null)
+	    collectionProtocolRegistration.setSignedConsentDocumentURL(null);
+	    collectionProtocolRegistration.setConsentSignatureDate(null);
+	    collectionProtocolRegistration.setConsentWitness(null);	    
+	    if (collectionProtocolRegistration.getParticipant()!= null)
 	    {	
 	    	removeParticipantIdentifiedData(collectionProtocolRegistration.getParticipant());
 	    }	
