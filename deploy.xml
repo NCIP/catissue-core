@@ -1,7 +1,7 @@
 <?xml version ="1.0"?>
 <!--Ant Script for create Build for caTISSUE Core-->
 
-<project name="caTissue Core Installation" default="deploy_app">
+<project name="caTissue Suite Installation" default="deploy_app">
 	
 	<!--define require dir and Properties -->	
 	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
