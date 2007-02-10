@@ -786,11 +786,19 @@ public class AliquotAction extends SecureAction
 			distributedQuantity = String.valueOf(dQuantity);
 			availableQuantity = availableQuantity - Double.parseDouble(dFormat.format((dQuantity * aliquotCount)));
 
-			if (availableQuantity < 0)
+			/**
+			 *  Fixed bug 3656
+			 */
+			double precision = Double.parseDouble("-0.01");
+			if (availableQuantity < precision)    
 			{
 				return false;
 			}
 
+			if(availableQuantity < 0)
+			{
+				availableQuantity = 0;
+			}
 			form.setAvailableQuantity(String.valueOf(availableQuantity));
 		}
 		else
