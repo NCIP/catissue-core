@@ -636,8 +636,8 @@ PUBLIC
 			<!-- forward name="success" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" /-->
 			<forward name="success" path="/CollectionProtocolRegistrationSearch.do?pageOf=pageOfCollectionProtocolRegistration" />
 			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13&amp;showConsents=yes" />
-			<forward name="createSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes" />
-			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupTabsPage&amp;submittedFor=Default&amp;menuSelected=14&amp;showConsents=yes" />
+			<forward name="createSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupTabsPage&amp;submittedFor=Default" />
+			<forward name="specimenCollectionGroup" path="/LoadSpecimenCollGroupPage.do?operation=add" />
 		</action>
 		
 		<action path="/CollectionProtocolRegistrationEdit"
@@ -648,7 +648,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13&amp;showConsents=yes" />
 			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13&amp;showConsents=yes" />
-			<forward name="createSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes" />
+			<forward name="createSpecimenCollectionGroup" path="/LoadSpecimenCollGroupPage.do?operation=add" />
 		</action>
 		
 		<action path="/CollectionProtocolRegistrationSearch"
