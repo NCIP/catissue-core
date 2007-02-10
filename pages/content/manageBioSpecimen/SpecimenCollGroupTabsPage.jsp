@@ -27,7 +27,7 @@
 	queryString = queryString + "&pageOf=pageOfSpecimenCollectionGroup&id="+id;
 	Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
 	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+id;	
-	String str="&collectionProtocolId="+ collectionProtocolId.toString()+"&siteId="+siteId.toString()+"&participantId="+ParticipantId.toString()+"&protocolParticipantIdentifier="+protocolParticipantIdentifier;
+	String str="&collectionProtocolId="+ collectionProtocolId.toString()+"&siteId="+siteId.toString()+"&participantId="+ParticipantId.toString()+"&protocolParticipantIdentifier="+protocolParticipantIdentifier+"&"+Constants.SHOW_CONSENTS+"=yes";
 	str=str+"&"+Constants.SUBMITTED_FOR+"="+submittedFor;
 	if(collectionProtocolId!=0)
 	{
