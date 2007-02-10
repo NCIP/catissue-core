@@ -135,7 +135,25 @@
             insert="true"
             column="COLLECTION_PROTOCOL_REG_ID"
         />
+		
+		<one-to-one
+            name="deIdentifiedSurgicalPathologyReport"
+            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+            cascade="save-update"
+            outer-join="auto"
+            constrained="false"
+	     property-ref="specimenCollectionGroup"
+        />
 
+        <one-to-one
+            name="identifiedSurgicalPathologyReport"
+            class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
+            cascade="save-update"
+            outer-join="auto"
+            constrained="false"
+	     property-ref="specimenCollectionGroup"
+        />
+        
         <!--
             To add non XDoclet property mappings, create a file named
                 hibernate-properties-SpecimenCollectionGroup.xml
