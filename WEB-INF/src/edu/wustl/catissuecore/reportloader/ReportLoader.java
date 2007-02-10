@@ -237,7 +237,7 @@ public class ReportLoader
 	{
 		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
 		scg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		scg.setParticipant(this.participant);
+//		scg.setParticipant(this.participant);
 		scg.setClinicalDiagnosis(Constants.NOT_SPECIFIED);
 		scg.setClinicalStatus(Constants.NOT_SPECIFIED);
 		scg.setSite(this.site); 

@@ -58,13 +58,13 @@ public class DeidReport extends Thread
 		{
 			org.jdom.Document currentRequestDocument = new org.jdom.Document(new Element("Dataset"));
 			SpecimenCollectionGroup scg=ispr.getSpecimenCollectionGroup();
-			Participant p=scg.getParticipant();
+			Participant participant=scg.getCollectionProtocolRegistration().getParticipant();
 			
 			TextContent tc=ispr.getTextContent();
 			tc.setData(synthesizeSPRText(ispr));
 			ispr.setTextContent(tc);
 			
-			Element reportElement = DeidUtils.buildReportElement(p, ispr, ispr.getTextContent().getData());
+			Element reportElement = DeidUtils.buildReportElement(participant, ispr, ispr.getTextContent().getData());
 			currentRequestDocument.getRootElement().addContent(reportElement);
 	        
 	        String deidRequest = DeidUtils.convertDocumentToString(currentRequestDocument, Format.getPrettyFormat()); 
