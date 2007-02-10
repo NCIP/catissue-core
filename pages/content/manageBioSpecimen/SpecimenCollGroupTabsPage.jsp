@@ -29,7 +29,14 @@
 	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+id;	
 	String str="&collectionProtocolId="+ collectionProtocolId.toString()+"&siteId="+siteId.toString()+"&participantId="+ParticipantId.toString()+"&protocolParticipantIdentifier="+protocolParticipantIdentifier;
 	str=str+"&"+Constants.SUBMITTED_FOR+"="+submittedFor;
-	queryString=queryString+"&"+Constants.SUBMITTED_FOR+"="+submittedFor;
+	if(collectionProtocolId!=0)
+	{
+		queryString=queryString+str; 
+	}
+	else
+	{
+		queryString=queryString+"&"+Constants.SUBMITTED_FOR+"="+submittedFor;
+	}
 	
 
 %>
@@ -53,7 +60,7 @@
 <div id="a_tabbar" style="width:800;height:600" ></div>
 <script>
 			var opr = '<%=operation%>';
-			var str= '<%=str%>';
+			var str= '<%=queryString%>';
 			if(opr=="createMultipleSpecimen")
 			{
 				top.location.href="<%=request.getContextPath()%>/InitMultipleSpecimen.do?operation=add&menuSelected=15";
