@@ -64,13 +64,12 @@
 
 	<tr>
 		<td height="100%" valign="top">
-		<table summary="" cellpadding="0" cellspacing="0" border="0"
-			height="100%">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" height="100%">
 			<!-- application hdr begins -->
-			<tr>
+			<!--tr>
 				<td colspan="2" height="50"><tiles:insert
 					attribute="applicationheader"></tiles:insert></td>
-			</tr>
+			</tr-->
 			<!-- application hdr ends -->
 
 			<tr>
