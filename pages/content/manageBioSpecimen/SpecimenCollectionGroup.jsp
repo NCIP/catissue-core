@@ -117,6 +117,13 @@
         }
 		
 		//Consent Tracking Module Virender mehta
+	function setSubmittedForSCG(submittedFor,forwardTo)
+	{
+		document.forms[0].target="_top";
+		document.forms[0].submittedFor.value = submittedFor;
+		document.forms[0].forwardTo.value    = forwardTo;
+	}
+
 	</script>
 </head>
 
@@ -129,7 +136,7 @@
 			
 	<%
 			String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
-			String forwardToSubmitFuctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";									
+			String forwardToSubmitFuctionName = "setSubmittedForSCG('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";									
 			String forwardToSubmitFunctionNameForMultipleSpecimen = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][1]+"')";									
 			String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 			String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
