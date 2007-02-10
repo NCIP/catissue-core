@@ -89,11 +89,6 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * A registration of a Participant to a Collection Protocol.
      */
     protected CollectionProtocolRegistration collectionProtocolRegistration;
-
-    /**
-     * A Participant for a specimen collection group.
-     */
-    protected Participant participant;
     
     /**
      * An identified surgical pathology report associated with 
@@ -554,21 +549,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 		this.identifiedSurgicalPathologyReport = identifiedSurgicalPathologyReport;
 	}
 
-	/**
-     * Returns particiant of the current specimen collection group  
-     * @hibernate.many-to-one column="PARTICIPANT_ID" 
-     * class="edu.wustl.catissuecore.domain.Participant" constrained="true"
-     * @return the physical location associated with biospecimen collection, 
-     * storage, processing, or utilization.
-     * @see #setSite(Site)
-     */
-    public Participant getParticipant() {
-		return participant;
-	}
 
-	public void setParticipant(Participant participant) {
-		this.participant = participant;
-	}
 
 	//----------------------------Mandar 15-jan-07
 	public String getConsentWithdrawalOption() {
