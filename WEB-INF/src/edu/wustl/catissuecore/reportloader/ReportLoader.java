@@ -179,13 +179,13 @@ public class ReportLoader
 	 */
 	public SpecimenCollectionGroup checkForSpecimenCollectionGroup()throws Exception
 	{
-		Set scgSet=null;
+		List scgSet=null;
 		SpecimenCollectionGroup scg=null;
 		Iterator scgIterator=null;
 		boolean isExists=false;
 		try
 		{
-			scgSet=(Set)ReportLoaderUtil.getSCGList(this.participant);
+			scgSet=ReportLoaderUtil.getSCGList(this.participant);
 			if(scgSet!=null && scgSet.size()>0)
 			{
 				scgIterator=scgSet.iterator();
@@ -259,7 +259,7 @@ public class ReportLoader
 		
 		collProtocolReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 		collProtocolReg.setRegistrationDate(new Date());
-		collProtocolReg.setParticipant(this.participant);		
+		collProtocolReg.setParticipant(this.participant);	
 		collProtocolReg.setCollectionProtocol(collProtocolEvent.getCollectionProtocol());
 		((Set)this.participant.getCollectionProtocolRegistrationCollection()).add(collProtocolReg);
 		try
