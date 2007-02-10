@@ -1,8 +1,11 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%
 	String annotationLink = request.getContextPath() + "/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1";
-	String operation = (String)request.getParameter("operation");
+	String operation = (String)request.getParameter(Constants.OPERATION);
+	String submittedFor=(String)request.getParameter(Constants.SUBMITTED_FOR);
+	String forwardTo=(String)request.getParameter(Constants.FORWARD_TO);
 	String participantId = request.getParameter("id");
 	Long id = (Long)request.getAttribute("id");
 	String queryString = request.getQueryString();
@@ -14,7 +17,7 @@
 	queryString = queryString + "&pageOf=pageOfParticipant&id="+id;
 	Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
 	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+participantId;
-
+	queryString=queryString+"&"+Constants.SUBMITTED_FOR+"="+submittedFor+"&"+Constants.FORWARD_TO+"="+forwardTo;
 
 %>
 <html>
@@ -37,6 +40,7 @@
 <div id="a_tabbar" style="width:800;height:600" ></div>
 <script>
 			var opr = '<%=operation%>';
+			var queryString = '<%=queryString%>';
 			if(opr == "afterAdd")
 			{
 				top.location.href="<%=request.getContextPath()%>/LoadParticipantPage.do?operation=edit&id=<%=id%>";
