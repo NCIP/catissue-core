@@ -33,7 +33,7 @@ public class ExistingArrayDetailsBean implements Serializable
 	/**
 	 * String containing the description entered by admin
 	 */
-	private String addDescription;
+	private String addDescription="";
 	
 	/**
 	 * List to store the statuses of individual existingarray order items
@@ -57,7 +57,10 @@ public class ExistingArrayDetailsBean implements Serializable
 	 * String containing the assigned quantity of number of slides for the derived array
 	 */
 	private String assignedQuantity;
-	
+	/**
+	 * If array is distributed, it will have a distributedItemId.
+	 */
+	private String distributedItemId;
 	/**
 	 * @return the arrayId
 	 */
@@ -211,5 +214,27 @@ public class ExistingArrayDetailsBean implements Serializable
 	public void setAssignedQuantity(String assignedQuantity)
 	{
 		this.assignedQuantity = assignedQuantity;
+	}
+
+
+
+	
+	/**
+	 * @return the distributedItemId
+	 */
+	public String getDistributedItemId()
+	{
+		return distributedItemId;
+	}
+
+
+
+	
+	/**
+	 * @param distributedItemId the distributedItemId to set
+	 */
+	public void setDistributedItemId(String distributedItemId)
+	{
+		this.distributedItemId = distributedItemId;
 	}
 }

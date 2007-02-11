@@ -77,6 +77,18 @@ public class RequestDetailsBean implements Serializable
 	 * Specimen Coll group id associated with the Specimen Collection Group. 
 	 */
 	private String specimenCollGroupId = "";
+	/**
+	 * To indicate whether the orderItem is distributed.
+	 */
+	private String distributedItemId = "";
+	/**
+	 * The class of specimen.
+	 */
+	private String actualSpecimenClass;
+	/**
+	 * The type of specimen.
+	 */
+	private String actualSpecimenType;
 	
 	/**
 	 * @return the className
@@ -333,6 +345,60 @@ public class RequestDetailsBean implements Serializable
 	public void setSpecimenCollGroupId(String specimenCollGroupId) 
 	{
 		this.specimenCollGroupId = specimenCollGroupId;
+	}
+
+	
+	/**
+	 * @return the distributedItemId
+	 */
+	public String getDistributedItemId()
+	{
+		return distributedItemId;
+	}
+
+	
+	/**
+	 * @param distributedItemId the distributedItemId to set
+	 */
+	public void setDistributedItemId(String distributedItemId)
+	{
+		this.distributedItemId = distributedItemId;
+	}
+
+	
+	/**
+	 * @return the actualSpecimenClass
+	 */
+	public String getActualSpecimenClass()
+	{
+		return actualSpecimenClass;
+	}
+
+	
+	/**
+	 * @param actualSpecimenClass the actualSpecimenClass to set
+	 */
+	public void setActualSpecimenClass(String actualSpecimenClass)
+	{
+		this.actualSpecimenClass = actualSpecimenClass;
+	}
+
+	
+	/**
+	 * @return the actualSpecimenType
+	 */
+	public String getActualSpecimenType()
+	{
+		return actualSpecimenType;
+	}
+
+	
+	/**
+	 * @param actualSpecimenType the actualSpecimenType to set
+	 */
+	public void setActualSpecimenType(String actualSpecimenType)
+	{
+		this.actualSpecimenType = actualSpecimenType;
 	}
 	
 }

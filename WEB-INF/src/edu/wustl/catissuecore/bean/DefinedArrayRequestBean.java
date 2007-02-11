@@ -21,6 +21,10 @@ public class DefinedArrayRequestBean implements Serializable
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
+	 * To determine when to enable or disable create array button.
+	 */
+	private String createArrayButtonDisabled;
+	/**
 	 * String containing the name of the user who requested for the array
 	 */
 	private String arrayName;
@@ -68,7 +72,10 @@ public class DefinedArrayRequestBean implements Serializable
 	 * String containing the userId who had requested for the array
 	 */
 	private Long userId;
-	
+	/**
+	 * If the array is distributed, it will have a distributed item id.
+	 */
+	private String distributedItemId;
 	 /**
      * String returning the id of the user who created the array
      * @return userId
@@ -278,6 +285,42 @@ public class DefinedArrayRequestBean implements Serializable
 	public void setArrayTypeId(String arrayTypeId)
 	{
 		this.arrayTypeId = arrayTypeId;
+	}
+
+	
+	/**
+	 * @return the createArrayButtonDisabled
+	 */
+	public String isCreateArrayButtonDisabled()
+	{
+		return createArrayButtonDisabled;
+	}
+
+	
+	/**
+	 * @param createArrayButtonDisabled the createArrayButtonDisabled to set
+	 */
+	public void setCreateArrayButtonDisabled(String createArrayButtonDisabled)
+	{
+		this.createArrayButtonDisabled = createArrayButtonDisabled;
+	}
+
+	
+	/**
+	 * @return the distributedItemId
+	 */
+	public String getDistributedItemId()
+	{
+		return distributedItemId;
+	}
+
+	
+	/**
+	 * @param distributedItemId the distributedItemId to set
+	 */
+	public void setDistributedItemId(String distributedItemId)
+	{
+		this.distributedItemId = distributedItemId;
 	}
 	
 }

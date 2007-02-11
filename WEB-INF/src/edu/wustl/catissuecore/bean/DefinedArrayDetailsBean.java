@@ -24,7 +24,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	/**
 	 * String containing the specimen id
 	 */
-	private String speicmenId="";
+	private String specimenId="";
 	
 	/**
 	 * Specimen Coll group id associated with the Specimen Collection Group. 
@@ -98,7 +98,50 @@ public class DefinedArrayDetailsBean implements Serializable
 	 * The specimen associated with the order item.
 	 */
 	//private String specimenId = "";
+	/**
+	 * The class of specimen.
+	 */
+	private String actualSpecimenClass;
+	/**
+	 * The type of specimen.
+	 */
+	private String actualSpecimenType;
 	
+	/**
+	 * @return the actualSpecimenClass
+	 */
+	public String getActualSpecimenClass()
+	{
+		return actualSpecimenClass;
+	}
+
+	
+	/**
+	 * @param actualSpecimenClass the actualSpecimenClass to set
+	 */
+	public void setActualSpecimenClass(String actualSpecimenClass)
+	{
+		this.actualSpecimenClass = actualSpecimenClass;
+	}
+
+	
+	/**
+	 * @return the actualSpecimenType
+	 */
+	public String getActualSpecimenType()
+	{
+		return actualSpecimenType;
+	}
+
+	
+	/**
+	 * @param actualSpecimenType the actualSpecimenType to set
+	 */
+	public void setActualSpecimenType(String actualSpecimenType)
+	{
+		this.actualSpecimenType = actualSpecimenType;
+	}
+
 	/**
 	 * @return description
 	 */
@@ -273,7 +316,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	
 	/**
 	 * Returns the item requested for
-	 * @return requestfor
+	 * @return requestFor
 	 */
 	public String getRequestFor()
 	{
@@ -282,7 +325,7 @@ public class DefinedArrayDetailsBean implements Serializable
 	
 	/**
 	 * Sets the item requested for
-	 * @param requestfor String indicating whether specimen derivative is requested or it is requested as is by the user
+	 * @param requestFor String indicating whether specimen derivative is requested or it is requested as is by the user
 	 */
 	public void setRequestFor(String requestFor)
 	{
@@ -326,19 +369,19 @@ public class DefinedArrayDetailsBean implements Serializable
 	}
 
 	/**
-	 * @return speicmenId
+	 * @return specimenId
 	 */
-	public String getSpeicmenId()
+	public String getSpecimenId()
 	{
-		return speicmenId;
+		return specimenId;
 	}
 	
 	/**
-	 * @param speicmenId String containing the id of specimen whose derivatives are to be retrieved
+	 * @param specimenId String containing the id of specimen whose derivatives are to be retrieved
 	 */
-	public void setSpeicmenId(String speicmenId)
+	public void setSpecimenId(String specimenId)
 	{
-		this.speicmenId = speicmenId;
+		this.specimenId = specimenId;
 	}
 
 	/**
