@@ -29,7 +29,6 @@ import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -63,7 +62,7 @@ public class RequestListAction extends SecureAction
         if(!validator.isEmpty(pageNumStr))
         {
         	pageNum = Integer.parseInt(pageNumStr);
-        	session.setAttribute(Constants.PAGE_NUMBER,pageNumStr);
+        	request.setAttribute(Constants.PAGE_NUMBER,pageNumStr);
         }
 		//The start index in the list of users to be approved/rejected.
         int startIndex = Constants.ZERO;        
@@ -153,8 +152,8 @@ public class RequestListAction extends SecureAction
 		return requestList;
 	}
 	/**
-	 * @param orderListFromDB
-	 * @return
+	 * @param orderListFromDB object 
+	 * @return List object
 	 */
 	private List populateRequestViewBeanList(List orderListFromDB)
 	{
@@ -178,8 +177,8 @@ public class RequestListAction extends SecureAction
 		return requestList;
 	}
 	/**
-	 * @param requestListFilterationForm
-	 * @throws DAOException
+	 * @param requestListFilterationForm object
+	 * @throws DAOException object
 	 */
 	private void setNumberOfNewAndPendingRequests(RequestListFilterationForm requestListFilterationForm) throws DAOException
 	{
