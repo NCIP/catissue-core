@@ -101,8 +101,8 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		if (specimenCollectionGroup.getClinicalReport() != null)
 			dao.insert(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true);
 		
-		if(!Variables.isLoadFromCaties)
-		{
+//		if(!Variables.isLoadFromCaties)
+//		{
 			try
 			{
 				SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(specimenCollectionGroup),
@@ -112,7 +112,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			{
 				throw handleSMException(e);
 			}
-		}
+//		}
 	}
 
 	private Set getProtectionObjects(AbstractDomainObject obj)
@@ -348,7 +348,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 		Validator validator = new Validator();
 		String message = "";
-		if (!Variables.isLoadFromCaties && group.getCollectionProtocolRegistration() == null)
+		if (group.getCollectionProtocolRegistration() == null)//!Variables.isLoadFromCaties && 
 		{
 			message = ApplicationProperties.getValue("errors.specimenCollectionGroup.collectionprotocolregistration");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
@@ -360,14 +360,14 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			message = ApplicationProperties.getValue("errors.specimenCollectionGroup.collectionprotocol");
 			throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
 		}
-
-		if (!Variables.isLoadFromCaties && (group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier() == null && (group.getCollectionProtocolRegistration()
+//!Variables.isLoadFromCaties && 
+		if ((group.getCollectionProtocolRegistration().getProtocolParticipantIdentifier() == null && (group.getCollectionProtocolRegistration()
 				.getParticipant() == null || group.getCollectionProtocolRegistration().getParticipant().getId() == null)))
 		{
 			throw new DAOException(ApplicationProperties.getValue("errors.collectionprotocolregistration.atleast"));
 		}
-
-		if (!Variables.isLoadFromCaties && group.getSite() == null || group.getSite().getId() == null)
+//!Variables.isLoadFromCaties && 
+		if (group.getSite() == null || group.getSite().getId() == null)
 		{
 			message = ApplicationProperties.getValue("specimenCollectionGroup.site");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
