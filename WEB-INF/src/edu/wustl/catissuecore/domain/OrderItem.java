@@ -100,7 +100,7 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 
 	/**
 	 * Sets the description entered by User. 
-	 * @param description
+	 * @param description object
 	 * @see #getDescription()
 	 */
 	public void setDescription(String description)
