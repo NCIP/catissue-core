@@ -10,8 +10,10 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -30,6 +32,10 @@ import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.OrderItem;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenArray;
+import edu.wustl.catissuecore.domain.SpecimenOrderItem;
+import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -41,6 +47,10 @@ import edu.wustl.common.util.logger.Logger;
 public class RequestDetailsForm extends AbstractActionForm
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// The status which the user wants to update in one go.
 	private String status ;
 	// The Map containg submitted values for 'assigned quantity', 'assigned status' and 'request for'. 
@@ -55,7 +65,40 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * The distribution protocol associated with that order.
 	 */
 	private String distributionProtocolId;
+	/**
+	 * The tab page which should be visible to the user.
+	 */
+	private int tabIndex;
+	/**
+	 * The map to display the list of specimens in request For drop down.
+	 */
+	private Map requestForDropDownMap = new HashMap();
+	/**
+	 * 
+	 */
+	private String specimenId;
+	/** Associates the specified object with the specified key in the map.
+	 * @param key the key to which the object is mapped.
+	 * @param value the object which is mapped.
+	 */
 	
+	public void setRequestFor(String key, Object value)
+	{
+		if (isMutable())
+		{
+			requestForDropDownMap.put(key, value);
+		}
+	}
+
+	/**
+	 * Returns the object to which this map maps the specified key.
+	 * @param key the required key.
+	 * @return the object to which this map maps the specified key.
+	 */
+	public List getRequestFor(String key)
+	{
+		return ((List)(requestForDropDownMap.get(key)));
+	}
 	
 	/**
 	 * @return the site
@@ -179,9 +222,8 @@ public class RequestDetailsForm extends AbstractActionForm
 	/**
 	 * @param abstractDomain object
 	 */
-	public void setAllValues(AbstractDomainObject abstractDomain)
+	public void setAllValuesForOrder(AbstractDomainObject abstractDomain,HttpServletRequest request)
 	{
-		values = new HashMap();
 		int requestDetailsBeanCounter = 0;
 		int arrayRequestBeanCounter = 0;
 		int arrayDetailsBeanCounter = 0;
@@ -189,43 +231,274 @@ public class RequestDetailsForm extends AbstractActionForm
 		OrderDetails order = (OrderDetails)abstractDomain;
 		Collection orderItemColl = order.getOrderItemCollection();
 		Iterator iter = orderItemColl.iterator();
+		List totalSpecimenListInRequestForDropDown = new ArrayList();
 		while(iter.hasNext())
 		{		
 			OrderItem orderItem = (OrderItem)iter.next();
-			//Making keys
-	//		String requestFor = "RequestDetailsBean:"+i+"_requestFor"; 
-	//	 	String assignQty = "RequestDetailsBean:"+i+"_assignedQty";
+			//Making keys	
 			String assignStatus = "";
 			String description = "";
-			if(((orderItem instanceof ExistingSpecimenOrderItem) || (orderItem instanceof DerivedSpecimenOrderItem) || (orderItem instanceof PathologicalCaseOrderItem)) && (orderItem.getOrder().getId() != null))
+		
+			String requestedItem = "";
+			String requestedQty = "";
+			String availableQty = "";
+			String specimenClass = "";
+			String specimenType = "";
+			
+			String orderItemId = "";
+			String requestFor = "";
+			String assignQty = "";
+			String instanceOf = "";
+			String specimenId = "";
+			String distributedItemId = "";
+			String specimenList = "";
+			String specimenCollGrpId = "";
+			
+			String actualSpecimenClass = "";
+			String actualSpecimenType = "";
+			//For array
+			String arrayId = "";
+			
+			if(((orderItem instanceof ExistingSpecimenOrderItem) || (orderItem instanceof DerivedSpecimenOrderItem) || (orderItem instanceof PathologicalCaseOrderItem)))
 			{
-			 	assignStatus = "RequestDetailsBean:"+requestDetailsBeanCounter+"_assignedStatus"; 	
-				description = "RequestDetailsBean:"+requestDetailsBeanCounter+"_description";
-				requestDetailsBeanCounter++;
+				SpecimenOrderItem specimenOrderItem = (SpecimenOrderItem)orderItem;
+				if(specimenOrderItem.getNewSpecimenArrayOrderItem() == null)
+				{
+				 	assignStatus = "RequestDetailsBean:"+requestDetailsBeanCounter+"_assignedStatus"; 	
+					description = "RequestDetailsBean:"+requestDetailsBeanCounter+"_description";
+					requestedQty = "RequestDetailsBean:"+requestDetailsBeanCounter+"_requestedQty";
+							
+					orderItemId = "RequestDetailsBean:"+requestDetailsBeanCounter+"_orderItemId";
+					
+					requestedItem = "RequestDetailsBean:"+requestDetailsBeanCounter+"_requestedItem";					
+					availableQty = "RequestDetailsBean:"+requestDetailsBeanCounter+"_availableQty";
+					specimenClass = "RequestDetailsBean:"+requestDetailsBeanCounter+"_className";
+					specimenType = "RequestDetailsBean:"+requestDetailsBeanCounter+"_type";
+					
+					requestFor = "RequestDetailsBean:"+requestDetailsBeanCounter+"_requestFor";					
+					specimenId = "RequestDetailsBean:"+requestDetailsBeanCounter+"_specimenId";
+					assignQty = "RequestDetailsBean:"+requestDetailsBeanCounter+"_assignedQty";
+					instanceOf = "RequestDetailsBean:"+requestDetailsBeanCounter+"_instanceOf";
+					distributedItemId = "RequestDetailsBean:"+requestDetailsBeanCounter+"_distributedItemId";
+					specimenCollGrpId = "RequestDetailsBean:"+requestDetailsBeanCounter+"_specimenCollGroupId";
+					specimenList = "RequestForDropDownList:"+requestDetailsBeanCounter;
+					
+					actualSpecimenClass = "RequestDetailsBean:"+requestDetailsBeanCounter+"_actualSpecimenClass";
+					actualSpecimenType = "RequestDetailsBean:"+requestDetailsBeanCounter+"_actualSpecimenType";
+					
+					populateValuesMap(orderItem,requestedItem,availableQty,specimenClass,specimenType,requestFor,specimenId,assignQty,instanceOf,specimenList,specimenCollGrpId,totalSpecimenListInRequestForDropDown,actualSpecimenClass,actualSpecimenType);
+					requestDetailsBeanCounter++;
+				}				
+				else
+				{
+					assignStatus = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_assignedStatus"; 	
+					description = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_description";
+					requestedQty = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_requestedQuantity";
+					orderItemId = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_orderItemId";
+					
+					requestedItem = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_requestedItem";					
+					availableQty = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_availableQuantity";
+					specimenClass = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_className";
+					specimenType = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_type";
+					
+					requestFor = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_requestFor";					
+					specimenId = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_specimenId";
+					assignQty = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_assignedQuantity";
+					instanceOf = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_instanceOf";
+					//distributedItemId = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_distributedItemId";
+					specimenList = "RequestForDropDownListArray:"+arrayDetailsBeanCounter;
+					specimenCollGrpId = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_specimenCollGroupId";
+					
+					actualSpecimenClass = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_actualSpecimenClass";
+					actualSpecimenType = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_actualSpecimenType";
+					
+					populateValuesMap(orderItem,requestedItem,availableQty,specimenClass,specimenType,requestFor,specimenId,assignQty,instanceOf,specimenList,specimenCollGrpId,totalSpecimenListInRequestForDropDown,actualSpecimenClass,actualSpecimenType);
+					arrayDetailsBeanCounter++;
+				}
 			}
 			else if(orderItem instanceof ExistingSpecimenArrayOrderItem)
 			{
 				assignStatus = "ExistingArrayDetailsBean:"+existingArrayBeanCounter+"_assignedStatus"; 	
-				description = "ExistingArrayDetailsBean:"+existingArrayBeanCounter+"_description";
+				description = "ExistingArrayDetailsBean:"+existingArrayBeanCounter+"_description";				
+				requestedQty = "ExistingArrayDetailsBean:"+existingArrayBeanCounter+"_requestedQuantity";
+				orderItemId = "ExistingArrayDetailsBean:"+existingArrayBeanCounter+"_orderItemId";
+				
+				requestedItem = "ExistingArrayDetailsBean:"+existingArrayBeanCounter+"_bioSpecimenArrayName";
+				arrayId = "ExistingArrayDetailsBean:"+existingArrayBeanCounter+"_arrayId";
+				assignQty = "ExistingArrayDetailsBean:"+existingArrayBeanCounter+"_assignedQuantity";
+				distributedItemId = "ExistingArrayDetailsBean:"+existingArrayBeanCounter+"_distributedItemId";
+				
+				ExistingSpecimenArrayOrderItem existingSpecimenArrayOrderItem = (ExistingSpecimenArrayOrderItem)orderItem;
+				values.put(requestedItem, existingSpecimenArrayOrderItem.getSpecimenArray().getName());
+				values.put(arrayId, existingSpecimenArrayOrderItem.getSpecimenArray().getId().toString());
+				values.put(assignQty, "0.0");
+								
 				existingArrayBeanCounter++;
 			}
 			else if(orderItem instanceof NewSpecimenArrayOrderItem)
 			{
 				assignStatus = "DefinedArrayRequestBean:"+arrayRequestBeanCounter+"_assignedStatus";
-				arrayRequestBeanCounter++;
-			}
-			// ArrayDetailsBean if order id in null for order items.
-			else if(orderItem.getOrder().getId() == null)
-			{
-				assignStatus = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_assignedStatus"; 	
-				description = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_description";
-				arrayDetailsBeanCounter++;
-			}				
+				orderItemId = "DefinedArrayRequestBean:"+arrayRequestBeanCounter+"_orderItemId";
+				
+				requestedItem = "DefinedArrayRequestBean:"+arrayRequestBeanCounter+"_arrayName";
+				specimenClass = "DefinedArrayRequestBean:"+arrayRequestBeanCounter+"_arrayClass";
+				specimenType = "DefinedArrayRequestBean:"+arrayRequestBeanCounter+"_arrayType";
+				String positionDimensionOne = "DefinedArrayRequestBean:"+arrayRequestBeanCounter+"_oneDimensionCapacity";
+				String positionDimensionTwo = "DefinedArrayRequestBean:"+arrayRequestBeanCounter+"_twoDimensionCapacity";
+				
+				arrayId = "DefinedArrayRequestBean:"+arrayRequestBeanCounter+"_arrayId";
+				distributedItemId = "DefinedArrayRequestBean:"+arrayRequestBeanCounter+"_distributedItemId";
+				String createArrayCondition = "DefinedArrayRequestBean:"+arrayRequestBeanCounter+"_createArrayButtonDisabled";
+				
+				NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)orderItem;
+				values.put(requestedItem, newSpecimenArrayOrderItem.getName());
+				values.put(positionDimensionOne, newSpecimenArrayOrderItem.getArrayType().getCapacity().getOneDimensionCapacity().toString());
+				values.put(positionDimensionTwo, newSpecimenArrayOrderItem.getArrayType().getCapacity().getTwoDimensionCapacity().toString());
+				values.put(specimenClass, newSpecimenArrayOrderItem.getArrayType().getSpecimenClass());
+				values.put(specimenType, newSpecimenArrayOrderItem.getArrayType().getName());
+				
+				SpecimenArray specimenArrayObj = newSpecimenArrayOrderItem.getSpecimenArray();
+				if(specimenArrayObj != null)
+				{
+					values.put(arrayId, specimenArrayObj.getId().toString());
+				}
+				Collection specimenOrderItemCollection = newSpecimenArrayOrderItem.getSpecimenOrderItemCollection();		
+				//Calculating the condition to enable or disable "Create Array Button"
+				String condition = OrderingSystemUtil.determineCreateArrayCondition(specimenOrderItemCollection);
+						
+				if(orderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
+				{
+					condition = "true"; 
+				}
+				values.put(createArrayCondition, condition);
+				
+				arrayRequestBeanCounter++;				
+			}						
 			values.put(assignStatus,orderItem.getStatus());
-			values.put(description, orderItem.getDescription());			
+			values.put(description, orderItem.getDescription());	
+			if(orderItem.getRequestedQuantity() != null)
+			{//condition is for define array
+				values.put(requestedQty, orderItem.getRequestedQuantity().getValue().toString());	
+			}
+			values.put(orderItemId,orderItem.getId());
+			if(orderItem.getDistributedItem() != null)
+			{
+				values.put(distributedItemId, orderItem.getDistributedItem().getId().toString());
+			}
+			else
+			{
+				values.put(distributedItemId, "");
+			}
+		}
+		request.getSession().removeAttribute("finalSpecimenList");
+		request.getSession().setAttribute("finalSpecimenList",totalSpecimenListInRequestForDropDown);
+	}
+	/**
+	 * @param orderItem
+	 * @param requestedItem
+	 * @param availableQty
+	 * @param specimenClass
+	 * @param specimenType
+	 */
+	private void populateValuesMap(OrderItem orderItem,String requestedItem,String availableQty,String specimenClass,String specimenType,String requestFor,String specimenId,String assignQty,String instanceOf,String specimenList,String specimenCollGrpId,List totalSpecimenListInRequestForDropDown,String actualSpecimenClass,String actualSpecimenType)
+	{
+		if(orderItem instanceof ExistingSpecimenOrderItem)
+		{
+			ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem)orderItem;
+			values.put(requestedItem, existingSpecimenOrderItem.getSpecimen().getLabel());
+			values.put(availableQty, existingSpecimenOrderItem.getSpecimen().getAvailableQuantity().getValue());
+			values.put(specimenClass, existingSpecimenOrderItem.getSpecimen().getClassName());
+			values.put(specimenType, existingSpecimenOrderItem.getSpecimen().getType());			
+			values.put(specimenId,existingSpecimenOrderItem.getSpecimen().getId().toString());
+			values.put(instanceOf, "Existing");
+			if(existingSpecimenOrderItem.getDistributedItem() != null)
+		  	{		  	
+				values.put(assignQty, existingSpecimenOrderItem.getDistributedItem().getQuantity().toString());	
+		  	}
+			values.put(actualSpecimenClass,existingSpecimenOrderItem.getSpecimen().getClassName());
+			values.put(actualSpecimenType, existingSpecimenOrderItem.getSpecimen().getType());
+		}
+		else if(orderItem instanceof DerivedSpecimenOrderItem)
+		{
+			DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)orderItem;
+			values.put(requestedItem, derivedSpecimenOrderItem.getSpecimen().getLabel());
+			
+		
+			Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getSpecimen(),derivedSpecimenOrderItem.getSpecimen().getChildrenSpecimen());
+		    List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList,derivedSpecimenOrderItem.getSpecimenClass(),derivedSpecimenOrderItem.getSpecimenType());
+		    Iterator i = finalChildrenSpecimenList.iterator();
+		    while(i.hasNext())
+		    {//	Ajax  conditions
+		    	totalSpecimenListInRequestForDropDown.add(i.next());
+		    }
+		    List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(finalChildrenSpecimenList);
+			if(childrenSpecimenListToDisplay.size() != 0)
+		  	{
+				values.put(availableQty, (((Specimen)finalChildrenSpecimenList.get(0)).getAvailableQuantity().getValue().toString()));
+			}
+		  	else
+		  	{
+		  		values.put(availableQty, "NA");//derivedSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString()	  		
+		  	}			
+			values.put(specimenClass, derivedSpecimenOrderItem.getSpecimenClass());
+			values.put(specimenType, derivedSpecimenOrderItem.getSpecimenType());			
+			values.put(specimenId,derivedSpecimenOrderItem.getSpecimen().getId().toString());
+			values.put(instanceOf, "Derived");
+			if(derivedSpecimenOrderItem.getDistributedItem() != null)
+		  	{		  	
+				values.put(assignQty, derivedSpecimenOrderItem.getDistributedItem().getQuantity().toString());
+				values.put(requestFor, derivedSpecimenOrderItem.getDistributedItem().getSpecimen().getId());				
+		  	}
+			values.put(actualSpecimenClass,derivedSpecimenOrderItem.getSpecimen().getClassName());
+			values.put(actualSpecimenType, derivedSpecimenOrderItem.getSpecimen().getType());
+			requestForDropDownMap.put(specimenList, childrenSpecimenListToDisplay);			
+		}	
+		else if(orderItem instanceof PathologicalCaseOrderItem)
+		{
+			PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem)orderItem;
+			values.put(requestedItem, pathologicalCaseOrderItem.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport().getAccessionNumber());
+			//Fetching requestFor list
+			List totalChildrenSpecimenColl = OrderingSystemUtil.getRequestForListForPathologicalCases(pathologicalCaseOrderItem.getSpecimenCollectionGroup(), pathologicalCaseOrderItem);
+			Iterator i = totalChildrenSpecimenColl.iterator();
+			while(i.hasNext())
+			{//	Ajax  conditions
+				totalSpecimenListInRequestForDropDown.add(i.next());
+			}
+			List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(totalChildrenSpecimenColl);
+			requestForDropDownMap.put(specimenList, childrenSpecimenListToDisplay);
+			values.put(specimenCollGrpId,pathologicalCaseOrderItem.getSpecimenCollectionGroup().getId().toString());	
+			
+			
+			if(childrenSpecimenListToDisplay.size() != 0)
+		  	{
+				values.put(availableQty, (((Specimen)totalChildrenSpecimenColl.get(0)).getAvailableQuantity().getValue().toString()));
+			}
+		  	else
+		  	{
+		  		values.put(availableQty, "NA");//derivedSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString()	  		
+		  	}			
+			
+			if(childrenSpecimenListToDisplay.isEmpty()
+				|| (pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null && !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("") && !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase("")))
+		    {
+		    	values.put(instanceOf, "DerivedPathological");
+		    }
+		    else
+		    {
+		    	values.put(instanceOf, "Pathological");
+		    }			
+			if(pathologicalCaseOrderItem.getDistributedItem() != null)
+		  	{		  	
+				values.put(assignQty, pathologicalCaseOrderItem.getDistributedItem().getQuantity().toString());
+				values.put(requestFor, pathologicalCaseOrderItem.getDistributedItem().getSpecimen().getId());				
+		  	}		
+			
+			values.put(specimenClass, pathologicalCaseOrderItem.getSpecimenClass());
+			values.put(specimenType, pathologicalCaseOrderItem.getSpecimenType());	
+			values.put(actualSpecimenClass,pathologicalCaseOrderItem.getSpecimenClass());
+			values.put(actualSpecimenType, pathologicalCaseOrderItem.getSpecimenType());
 		}
 	}
-
 	
 	/**
 	 * @return the status
@@ -264,7 +537,11 @@ public class RequestDetailsForm extends AbstractActionForm
 		this.distributionProtocolId = distributionProtocolId;
 	}
 	
-	
+	/**
+	 * @return ActionErrors object
+	 * @param mapping ActionMapping
+	 * @param request HttpServletRequest
+	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
 	{
 		ActionErrors errors = new ActionErrors();
@@ -286,7 +563,7 @@ public class RequestDetailsForm extends AbstractActionForm
 		}
 		catch (Exception e)
 		{
-			Logger.out.debug(""+e);			
+			Logger.out.debug("in request details form: map data parser exception:"+e);			
 		}
 		Iterator iter = beanObjSet.iterator();		
 		
@@ -331,6 +608,71 @@ public class RequestDetailsForm extends AbstractActionForm
 			}
 		}
 		return errors;
+	}
+
+
+	
+	/**
+	 * @return the tabIndex
+	 */
+	public int getTabIndex()
+	{
+		return tabIndex;
+	}
+
+
+	
+	/**
+	 * @param tabIndex the tabIndex to set
+	 */
+	public void setTabIndex(int tabIndex)
+	{
+		this.tabIndex = tabIndex;
+	}
+
+
+	
+	/**
+	 * @return the requestForDropDownMap
+	 */
+	public Map getRequestForDropDownMap()
+	{
+		return requestForDropDownMap;
+	}
+
+
+	
+	/**
+	 * @param requestForDropDownMap the requestForDropDownMap to set
+	 */
+	public void setRequestForDropDownMap(Map requestForDropDownMap)
+	{
+		this.requestForDropDownMap = requestForDropDownMap;
+	}
+
+	
+	/**
+	 * @return the specimenId
+	 */
+	public String getSpecimenId()
+	{
+		return specimenId;
+	}
+
+	
+	/**
+	 * @param specimenId the specimenId to set
+	 */
+	public void setSpecimenId(String specimenId)
+	{
+		this.specimenId = specimenId;
+	}
+
+	@Override
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
+		
+		
 	}
 	
 }

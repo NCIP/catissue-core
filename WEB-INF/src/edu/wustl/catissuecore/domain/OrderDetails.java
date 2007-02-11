@@ -345,8 +345,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 								{
 									orderItemCollection = new HashSet();
 								}
-								specimenOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayObj);
+								specimenOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayObj);								
 								orderItem = specimenOrderItem;
+								//Test Line
+								orderItemsSet.add(orderItem);
 								orderItemCollection.add(orderItem);
 								newSpecimenArrayObj.setSpecimenOrderItemCollection(orderItemCollection);
 							}
@@ -380,6 +382,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 								}
 								specimenOrderItem.setNewSpecimenArrayOrderItem(newSpecimenArrayObj);
 								orderItem=specimenOrderItem;
+//								Test Line
+								orderItemsSet.add(orderItem);
 								orderItemCollection.add(orderItem);
 								newSpecimenArrayObj.setSpecimenOrderItemCollection(orderItemCollection);
 							}
@@ -426,7 +430,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 */
 	private SpecimenOrderItem setBioSpecimen(OrderSpecimenBean orderSpecimenBean)
 	{
-		SpecimenOrderItem  specimenOrderItem=null;
+		SpecimenOrderItem  specimenOrderItem = null;
 		Quantity reqQty = new Quantity();
 		
 		if (orderSpecimenBean.getIsDerived().equals("false")) // Existing specimen.
@@ -831,15 +835,19 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			DistributedItem distributedItem = new DistributedItem();
 			
 			Specimen specimen = new Specimen();
-			if(requestDetailsBean.getRequestFor() == null || requestDetailsBean.getRequestFor().trim().equalsIgnoreCase(""))
+			if(!requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("DerivedPathological"))
 			{
-				//for existing Specimen.
-				specimen.setId(new Long(requestDetailsBean.getSpecimenId()));
-			}
-			else
-			{
-				//For derived specimen.
-				specimen.setId(new Long(requestDetailsBean.getRequestFor()));
+				if(requestDetailsBean.getRequestFor() == null || requestDetailsBean.getRequestFor().trim().equalsIgnoreCase(""))
+				{//for existing Specimen.
+					if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Existing"))
+					{
+						specimen.setId(new Long(requestDetailsBean.getSpecimenId()));
+					}
+				}
+				else
+				{//For derived specimen.
+					specimen.setId(new Long(requestDetailsBean.getRequestFor()));
+				}
 			}
 			distributedItem.setSpecimen(specimen);
 	
@@ -978,8 +986,10 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			distributedItem.setSpecimenArray(specimenArray);
 			
 			//For setting assigned quantity in Distribution.	
-			
-			distributedItem.setQuantity(new Double("1"));					
+			if(existingArrayDetailsBean.getRequestedQuantity().equals("0.0"))
+				distributedItem.setQuantity(new Double("1"));
+			else
+				distributedItem.setQuantity(new Double(existingArrayDetailsBean.getRequestedQuantity()));
 			
 			distribution = setDistributedItemCollectionInDistribution(orderItem,distributedItem,distribution,distributedItemCollection);
 			

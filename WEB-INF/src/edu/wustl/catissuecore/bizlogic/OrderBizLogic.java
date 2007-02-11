@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,19 +25,19 @@ import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.OrderItem;
 import edu.wustl.catissuecore.domain.PathologicalCaseOrderItem;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
-import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.logger.Logger;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 public class OrderBizLogic extends DefaultBizLogic
 {
@@ -64,11 +65,13 @@ public class OrderBizLogic extends DefaultBizLogic
 		mailOnSuccessfulSave(sessionDataBean,order,dao);
 	}
 
+	 
 	/**
 	 * This function send mail to the Administrator and Scientist if items ordered by scientist is placed successfully.
-	 * @param sessionDataBean Instance of SessionDataBean
-	 * @return void
-	 * @throws DAOException
+	 * @param sessionDataBean object
+	 * @param order object
+	 * @param dao object
+	 * @throws DAOException object
 	 */
 	private void mailOnSuccessfulSave(SessionDataBean sessionDataBean,OrderDetails order,DAO dao) throws DAOException
 	{
@@ -181,19 +184,23 @@ public class OrderBizLogic extends DefaultBizLogic
 					throw new DAOException(ApplicationProperties.getValue("orderdistribution.quantity.format.errmsg"));
 				}
 			}	
-//			Collection oldOrderItemColl = oldOrder.getOrderItemCollection();
-//			Iterator oldOrderItemCollIter = oldOrderItemColl.iterator();
-//			while(oldOrderItemCollIter.hasNext())
-//			{
-//				OrderItem oldorderItem = (OrderItem)oldOrderItemCollIter.next();
-//				if(oldorderItem.getId().compareTo(orderItem.getId()) == 0)
-//				{
-//					//If requestFor drop down is null, do not allow distribution of that order item
-//					if(orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
-//					{
-//						if(oldorderItem instanceof DerivedSpecimenOrderItem)
-//						{
-//							DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)oldorderItem;
+			Collection oldOrderItemColl = oldOrder.getOrderItemCollection();
+			Iterator oldOrderItemCollIter = oldOrderItemColl.iterator();
+			while(oldOrderItemCollIter.hasNext())
+			{
+				OrderItem oldorderItem = (OrderItem)oldOrderItemCollIter.next();
+				if(oldorderItem.getId().compareTo(orderItem.getId()) == 0)
+				{
+					//If requestFor drop down is null, do not allow distribution of that order item
+					if(orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED) || orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
+					{
+						if(oldorderItem instanceof DerivedSpecimenOrderItem)
+						{
+							DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)oldorderItem;
+							if(orderItem.getDistributedItem().getSpecimen().getId() == null)
+							{
+								throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.notpossible.errmsg"));
+							}
 //							List childrenSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(orderItem.getDistributedItem().getSpecimen(),orderItem.getDistributedItem().getSpecimen().getChildrenSpecimen());
 //							List finalChildrenSpecimenCollection = null;
 //							if(childrenSpecimenCollection != null)
@@ -202,20 +209,81 @@ public class OrderBizLogic extends DefaultBizLogic
 //							}
 //							if(finalChildrenSpecimenCollection == null || finalChildrenSpecimenCollection.isEmpty())
 //							{
-//								throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.notpossible.errmsg"));
+//								if(orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
+//								{
+//									throw new DAOException(ApplicationProperties.getValue("orderdistribution.arrayPrep.notpossible.errmsg"));
+//								}
+//								else
+//								{
+//									throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.notpossible.errmsg"));
+//								}
 //							}
-//						}
-//						else if(oldorderItem instanceof NewSpecimenArrayOrderItem)
-//						{
-//							NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)oldorderItem;
-//							if(newSpecimenArrayOrderItem.getSpecimenArray() == null)
-//							{
-//								throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.arrayNotCreated.errmsg"));
-//							}
-//						}
-//					}
-//				}				
-//			}
+						}
+						else if(oldorderItem instanceof NewSpecimenArrayOrderItem)
+						{
+							NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)oldorderItem;
+							if(newSpecimenArrayOrderItem.getSpecimenArray() == null)
+							{
+								throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.arrayNotCreated.errmsg"));
+							}
+						}
+						else if(oldorderItem instanceof PathologicalCaseOrderItem)
+						{
+							PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem)oldorderItem;
+							if(pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSpecimenCollection() == null || pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSpecimenCollection().size() == 0)
+							{
+								if(orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
+								{
+									throw new DAOException(ApplicationProperties.getValue("orderdistribution.arrayPrep.notpossibleForPatho.errmsg"));
+								}
+								else
+								{
+									throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.notpossibleForPatho.errmsg"));
+								}
+							}
+							if(pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSpecimenCollection() != null)
+							{
+								Collection specimenColl = pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSpecimenCollection();
+								Iterator specimenCollIter = specimenColl.iterator();
+								List totalChildrenSpecimenColl = null;
+								while(specimenCollIter.hasNext())
+								{
+									Specimen specimen = (Specimen)specimenCollIter.next();
+						    		List childSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(specimen,specimen.getChildrenSpecimen());
+						    		List finalChildrenSpecimenCollection = null;
+						    		if(pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null && !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("") && !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase(""))
+						    	    {	//"Derived"	   
+						    			finalChildrenSpecimenCollection = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childSpecimenCollection,pathologicalCaseOrderItem.getSpecimenClass(),pathologicalCaseOrderItem.getSpecimenType());						    			
+						    	    }	    	
+								    else
+								    {  	//"Block" . Specimen class = "Tissue" , Specimen Type = "Block".
+								    	finalChildrenSpecimenCollection = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childSpecimenCollection,"Tissue","Block");
+								    }
+						    		if(finalChildrenSpecimenCollection!=null)
+						    		{
+						    			Iterator finalChildrenSpecimenCollectionIterator = finalChildrenSpecimenCollection.iterator();
+						    			while(finalChildrenSpecimenCollectionIterator.hasNext())
+						    			{	    		
+						    				totalChildrenSpecimenColl.add((Specimen)(finalChildrenSpecimenCollectionIterator.next()));
+						    			}	    			
+						    		}
+								}
+						    	if(totalChildrenSpecimenColl == null)
+						    	{
+						    		if(orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
+									{
+										throw new DAOException(ApplicationProperties.getValue("orderdistribution.arrayPrep.notpossible.errmsg"));
+									}
+									else
+									{
+										throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.notpossible.errmsg"));
+									}
+						    	}
+							}
+						}
+					}// END DISTRIBUTED					
+				}				
+			}
 		}
 		
 		
@@ -238,6 +306,31 @@ public class OrderBizLogic extends DefaultBizLogic
 		//Getting OrderItems Collection.
 		Collection oldOrderItemSet = orderOld.getOrderItemCollection();
 		Collection newOrderItemSet = order.getOrderItemCollection();
+//		Adding items inside New Defined Array in oldOrderItemColl
+		Collection tempOldOrderItemSet = new HashSet();
+		Iterator tempOldItemIter = oldOrderItemSet.iterator();
+		while(tempOldItemIter.hasNext())
+		{
+			OrderItem tempOldOrderItem = (OrderItem) tempOldItemIter.next();
+			
+			if(tempOldOrderItem instanceof NewSpecimenArrayOrderItem)
+			{				
+				NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)tempOldOrderItem;
+				Collection specimenOrderItemColl = newSpecimenArrayOrderItem.getSpecimenOrderItemCollection();
+				if(specimenOrderItemColl != null)
+				{
+					Iterator tempIter = specimenOrderItemColl.iterator();
+					while(tempIter.hasNext())
+					{
+						tempOldOrderItemSet.add((OrderItem)tempIter.next());
+					}
+				}
+			}
+		}
+		if(tempOldOrderItemSet.size() > 0)
+		{
+			oldOrderItemSet.addAll(tempOldOrderItemSet);
+		}
 		//Iterating over OrderItems collection.
 		Iterator oldSetIter = oldOrderItemSet.iterator();			
 		numberItemsUpdated = 0;
@@ -325,7 +418,7 @@ public class OrderBizLogic extends DefaultBizLogic
 		EmailHandler emailHandler = new EmailHandler();
 		String toEmailAddress = order.getDistributionProtocol().getPrincipalInvestigator().getEmailAddress();
 		String fromEmailAddress = sessionDataBean.getUserName();
-		String subject = "Update on Order" + order.getName();
+		String subject = "Update on Order " + order.getName();
 		String body = makeEmailBodyForOrderUpdate(order);
 		emailHandler.sendEmailForOrderDistribution(body, toEmailAddress, fromEmailAddress, subject);
 	}
@@ -336,6 +429,11 @@ public class OrderBizLogic extends DefaultBizLogic
 	private String makeEmailBodyForOrderUpdate(OrderDetails order)
 	{
 		Collection orderItemColl = order.getOrderItemCollection();
+		String emailFormat = "";
+		String emailBodyHeader = "Hello "+order.getDistributionProtocol().getPrincipalInvestigator().getLastName()+", "+order.getDistributionProtocol().getPrincipalInvestigator().getFirstName()
+									+"\n"+"Following is the update on the order placed by you."+"\n"
+									+"#"+"\t"+"OrderItemName"+"\t"+"Previous Status"+"\t"+"\t"+"Current Status"+"\t"+"\t"+"Description"+"\n";
+
 		Iterator iter = orderItemColl.iterator();
 		int serialNo = 1;
 		String emailBody = "";
@@ -375,8 +473,11 @@ public class OrderBizLogic extends DefaultBizLogic
 			}
 			serialNo++;
 		}
-		  
-			return emailBody;
+		String emailMsgFooterRegards = "\n" + "Regards, ";
+		String emailMsgFooterSign = "\n" + "caTissueSuite Administrator";
+		String emailMsgFooter = emailMsgFooterRegards + emailMsgFooterSign;
+		emailFormat = emailBodyHeader + emailBody + emailMsgFooter;
+		return emailFormat;
 	}
 	/**
 	 * @param oldOrderItem object
@@ -384,8 +485,8 @@ public class OrderBizLogic extends DefaultBizLogic
 	private void calculateOrderStatus(OrderItem oldOrderItem)
 	{
 		//Order id is null for specimen orderItems associated with NewSpecimenArrayOrderItem
-//		if(oldOrderItem.getOrder().getId() != null)
-//		{
+		if(oldOrderItem.getOrder() != null)
+		{
 //			For order status
 			if (oldOrderItem.getStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_NEW))
 			{
@@ -403,7 +504,7 @@ public class OrderBizLogic extends DefaultBizLogic
 			{
 				orderStatusRejected++;
 			}
-//		}
+		}
 	}
 	/**
 	 * @param orderOld object
@@ -436,8 +537,9 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * This function prepares email body for the Order Placement Mail
 	 * @param userObj  User object containing the logged in user info
 	 * @param order OrderDetails instance containing details of the requested order and order items under that order
+	 * @param dao object
 	 * @return emailBody String containing the email message body
-	 * @throws DAOException 
+	 * @throws DAOException object
 	 */
 	private String makeEmailBodyForOrderPlacement(User userObj,OrderDetails order,DAO dao) throws DAOException
 	{
