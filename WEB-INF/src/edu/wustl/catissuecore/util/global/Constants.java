@@ -107,6 +107,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED = "Distributed";
 	public static final String ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION = "Ready For Array Preparation";
 	
+	public static final String SPREADSHEET_DATA_LIST_FOR_PATHOLOGICAL_CASES = "spreadsheetDataListForPathologicalCases";
+	public static final String SPREADSHEET_DATA_LIST_FOR_ARRAY = "spreadsheetDataListForArray";
  //	 Report Loader 
 	public static final String MAX_PARTICIPANT_MATCHING_PERCENTAGE="maxParticipantMatchingPercentage";	
 /////	
@@ -951,6 +953,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String [] SHOPPING_CART_COLUMNS = {"","Identifier", 
 													"Type", "Subtype", "Tissue Site", "Tissue Side", "Pathological Status"}; 
+	
+	public static final String [] SHOPPING_CART_COLUMNS_FOR_PATHOLOGICAL_CASES = {"", 
+		 "Accession No.","Specimen Collection Group","Source","Report Status"};
+	
+	public static final String [] SHOPPING_CART_COLUMNS_FOR_ARRAY = {"", 
+		"Name", "Barcode", "Type"};
 	
 	//Constants required in AssignPrivileges.jsp
 	public static final String ASSIGN = "assignOperation";
