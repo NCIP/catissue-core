@@ -18,7 +18,7 @@
 		{
 			document.forms[0].action="RequestListView.do?pageNum=1&menuSelected=17";
 			document.forms[0].submit();
-		}
+		}		
 	</script>
 </head>
 <body>
@@ -57,7 +57,7 @@
 					  <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" >
 					  <!-- paging begins -->
 					  <%
-						  int pageNum = Integer.parseInt((String)session.getAttribute(Constants.PAGE_NUMBER));
+						  int pageNum = Integer.parseInt((String)request.getAttribute(Constants.PAGE_NUMBER));
 						  int totalResults = Integer.parseInt((String)session.getAttribute(Constants.TOTAL_RESULTS));
 						  int numResultsPerPage = Constants.NUMBER_RESULTS_PER_PAGE;
 					   %>
@@ -105,7 +105,7 @@
 										<bean:write name="rowDataString" property="serialNo"/>
 								    </td>												
 									<td class="dataCellText">
-										 <a href="RequestDetails.do?id=<bean:write name='rowDataString' property='requestId'/>&menuSelected=17"><bean:write name="rowDataString" property="orderName"/></a>
+										<a href="RequestDetails.do?id=<bean:write name='rowDataString' property='requestId'/>&menuSelected=17"><bean:write name="rowDataString" property="orderName"/></a>
 									</td>
 									<td class="dataCellText">
 										 <bean:write name="rowDataString" property="distributionProtocol"/>
