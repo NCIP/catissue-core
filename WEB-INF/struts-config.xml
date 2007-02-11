@@ -188,6 +188,22 @@ PUBLIC
 		<forward name="success" path=".catissuecore.arrayRequestsDef" />
 	</action>
 
+	<action path="/createDerivedSpecimen"
+		type="edu.wustl.catissuecore.action.CreateDerivedSpecimenAction"
+		name="createSpecimenForm"
+		validate="false"
+		scope="request">
+		<forward name="derivedSpecimen" path="/OrderingSystemAddNew.do?addNewForwardTo=deriveSpecimen&amp;forwardTo=orderDetails&amp;addNewFor=specimenId" />		
+	</action>
+	
+	<action path="/createSpecimenFromOrder"
+		type="edu.wustl.catissuecore.action.CreateSpecimenFromOrderAction"
+		name="newSpecimenForm"
+		validate="false"
+		scope="request">		
+		<forward name="pathological" path="/OrderingSystemAddNew.do?addNewForwardTo=specimen&amp;forwardTo=orderDetails&amp;addNewFor=specimenId" />
+	</action>
+	
 	<action path="/SubmitRequestDetails"
 		type="edu.wustl.common.action.CommonAddEditAction"
 		name="requestDetailsForm"
@@ -296,6 +312,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path="/InsertOrderItems.do"/>
 		<forward name="failure" path="/ShoppingCart.do" />
+		<!--forward name="failure" path="/MyListTab.do" /-->
 	</action>
 
 	
@@ -508,6 +525,14 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.participantDef"/>
+		</action>
+		<!-- For displaying tab on MyList Page -->
+		<action path="/MyListTab"
+			type="edu.wustl.catissuecore.action.LoadParticipantPage"
+			name="annotationDataEntryForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.myListTabDef"/>
 		</action>
 		
         <action path="/Participant"
@@ -1195,7 +1220,7 @@ PUBLIC
 			name="listSpecimenEventParametersForm"
 			scope="request">
 			<forward name="pageOfListSpecimenEventParameters" path=".catissuecore.newSpecimenEventParametersDef" />
-			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />
+			<forward name="failure" path=".catissuecore.newSpecimenEventParametersDef" />			
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		<!-- New Specimen Event Parameters Action End-->
@@ -1228,6 +1253,7 @@ PUBLIC
 			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
 			<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15" />
 			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
+			<forward name="orderDetails" path="/RequestDetails.do" />
 		</action>
 				
 		<action path="/NewSpecimenEdit"
@@ -1244,6 +1270,7 @@ PUBLIC
 			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
 			<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15" />
 			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
+			<forward name="orderDetails" path="/RequestDetails.do" />
 		</action>
 		
 		<action path="/NewSpecimenSearch"
@@ -1283,7 +1310,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.createSpecimenDef" />
-			<forward name="failure" path=".catissuecore.createSpecimenDef" />
+			<forward name="failure" path=".catissuecore.createSpecimenDef" />			
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
 		
@@ -1321,6 +1348,7 @@ PUBLIC
 			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=15" />
 			<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15" />
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
+			<forward name="orderDetails" path="/RequestDetails.do" />
 		</action>
 		
 		<action path="/CreateSpecimenEdit"
@@ -2670,6 +2698,8 @@ PUBLIC
 			<forward name="shoppingCartAdd" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="success" path=".catissuecore.shoppingCartDef" />
 			<forward name="failure" path=".catissuecore.shoppingCartDef" />
+			<!--forward name="success" path="/pages/content/search/ShoppingCart.jsp" />
+			<forward name="failure" path="/pages/content/search/ShoppingCart.jsp" /-->
 			<forward name="duplicateSpecimen" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="requestToOrder" path="/RequestToOrder.do"/>
 		</action>
@@ -2984,6 +3014,17 @@ PUBLIC
 			<forward name="distributionProtocol" path="/DistributionProtocol.do?operation=add&amp;pageOf=pageOfDistributionProtocol&amp;menuSelected=10" />
 			<forward name="distributedBy" path="/User.do?operation=add&amp;pageOf=pageOfUserAdmin&amp;menuSelected=1" />
 			<forward name="toSite" path="/Site.do?operation=add&amp;pageOf=pageOfSite&amp;menuSelected=5" />
+		</action>
+		
+		<!-- Ordering System Add New -->
+		<action path="/OrderingSystemAddNew"
+			type="edu.wustl.common.action.AddNewAction"
+			name="requestDetailsForm"
+			validate="false"
+			scope="request">
+			<forward name="deriveSpecimen" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15&amp;virtualLocated=true" />
+			<forward name="specimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;virtualLocated=true" />
+			
 		</action>
 
 	<!-- AddNew Actions Ends -->
@@ -3467,6 +3508,7 @@ PUBLIC
 		<forward name="distribution" path="/CPQueryDistribution.do?operation=add&amp;pageOf=pageOfDistributionCPQuery&amp;menuSelected=15" />
 		<forward name="pageOfAliquot" path="/CPQueryAliquots.do?pageOf=pageOfAliquot&amp;CPQuery=true&amp;menuSelected=15" />
 		<forward name="sameCollectionGroup" path="/QuerySpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15" />
+		<forward name="orderDetails" path="/RequestDetails.do" />
 	</action>
 
 	<action path="/CPQueryAddSpecimen"
