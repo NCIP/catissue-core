@@ -39,6 +39,29 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class AdvanceSearchForm extends ActionForm
 {
+//	Added by Ashish for showing tabs on this page.
+	/**
+	 * tabIndex = 1 for Biospecimen Tab
+	 * tabIndex = 2 for Pathological Case Tab
+	 * tabIndex = 3 for Biospecimen Array Tab
+	 */
+	private int tabIndex = 1;
+	
+	/**
+	 * @return the tabIndex
+	 */
+	public int getTabIndex()
+	{
+		return tabIndex;
+	}	
+	/**
+	 * @param tabIndex the tabIndex to set
+	 */
+	public void setTabIndex(int tabIndex)
+	{
+		this.tabIndex = tabIndex;
+	}
+	
 	/**
 	 * @return Returns the columnNames.
 	 */
