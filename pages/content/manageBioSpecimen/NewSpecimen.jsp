@@ -16,7 +16,8 @@
 <%
 		
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
-	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute(Constants.NEWSPECIMEN_FORM);
+		NewSpecimenForm form = (NewSpecimenForm)request.getAttribute(Constants.NEWSPECIMEN_FORM);
+	String frdTo = form.getForwardTo();
 	String nodeId="";
 	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
@@ -173,13 +174,21 @@
 			   checked = document.forms[0].checkedButton.checked;
 			}
 			var operation = document.forms[0].operation.value;
-			
+			var temp = "<%=frdTo%>";
 			if(checked)
 			{
 			<% String actionToCall = null;%>
+				
 				if(operation == "add")
-				{
-					setSubmittedFor('ForwardTo','pageOfAliquot');
+				{								
+					if(temp == "orderDetails")
+					{
+						setSubmittedFor('ForwardTo','orderDetails');
+					}
+					else
+					{
+						setSubmittedFor('ForwardTo','pageOfAliquot');
+					}
 					<%
 					actionToCall = "NewSpecimenAdd.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
@@ -190,8 +199,14 @@
 				}
 				else
 				{
-				
-					setSubmittedFor('ForwardTo','pageOfAliquot');
+					if(temp == "orderDetails")
+					{
+						setSubmittedFor('ForwardTo','orderDetails');
+					}
+					else
+					{
+						setSubmittedFor('ForwardTo','pageOfAliquot');
+					}
 					<%
 					actionToCall = "NewSpecimenEdit.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
@@ -204,8 +219,15 @@
 			else
 			{
 				if(operation == "add")
-				{
-					setSubmittedFor('null','success');
+				{				
+					if(temp == "orderDetails")
+					{
+					   	setSubmittedFor('ForwardTo','orderDetails');
+					}
+					else
+					{
+						setSubmittedFor('null','success');
+					}
 					<%
 					actionToCall = "NewSpecimenAdd.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
@@ -216,7 +238,14 @@
 				}
 				else
 				{
-					setSubmittedFor('null','success');
+					if(temp == "orderDetails")
+					{
+						setSubmittedFor('ForwardTo','orderDetails');
+					}
+					else
+					{
+						setSubmittedFor('null','success');
+					}
 					<%
 					actionToCall = "NewSpecimenEdit.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
@@ -512,7 +541,14 @@
 							<td>
 								<html:hidden property="operation" value="<%=operation%>"/>
 								<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
-								<html:hidden property="forwardTo" value=""/>
+								<%						
+								if(form.getForwardTo().equalsIgnoreCase("orderDetails"))
+								{%>
+								 	<html:hidden property="forwardTo" value="orderDetails"/>								
+						 	  <%}else
+						    	{ %>
+									<html:hidden property="forwardTo" value=""/>
+							  <%} %>
 								<html:hidden property="virtuallyLocated"/>
 								<html:hidden property="containerId" styleId="containerId"/>
 								<html:hidden property="withdrawlButtonStatus"/>
@@ -530,7 +566,14 @@
 								<html:hidden property="onSubmit"/>
 							</td>
 							<td>
-								<html:hidden property="id"/>
+							<%						
+								if(form.getForwardTo().equalsIgnoreCase("orderDetails"))
+								{%>
+								 									
+						 	  <%}else
+						    	{ %>
+									<html:hidden property="id"/>
+								<%} %>
 								<html:hidden property="positionInStorageContainer" />
 								<html:hidden property="parentPresent" />
 							</td>

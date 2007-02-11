@@ -1,3 +1,4 @@
+
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
@@ -11,7 +12,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-
+<%@ page import="edu.wustl.catissuecore.actionForm.RequestDetailsForm"%>
 
 
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
@@ -68,11 +69,14 @@
 		CreateSpecimenForm form = null;
 		String unitSpecimen = "";
 		Map map = null;
+		String frdTo = "";
 		if(obj != null && obj instanceof CreateSpecimenForm)
 		{
 			form = (CreateSpecimenForm)obj;
 			map = form.getExternalIdentifier();
 			exIdRows = form.getExIdCounter();
+			frdTo = form.getForwardTo();
+
 			if(form.getUnit() != null)
 				unitSpecimen = form.getUnit();
 		}
@@ -268,8 +272,16 @@
 			
 			}
 			else
-			{
-				setSubmittedFor('ForwardTo','eventParameters');
+			{	
+				var temp = "<%=frdTo%>";				
+				if(temp == "orderDetails")
+				{
+					setSubmittedFor('ForwardTo','orderDetails');
+				}
+				else
+				{
+					setSubmittedFor('ForwardTo','eventParameters');
+				}
 				confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 			
 			}
@@ -456,7 +468,15 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="ForwardTo"/>
-						<html:hidden property="forwardTo" value="eventParameters"/>
+						<!-- While coming from Ordering System----Added by Ashish 1/2/07 -->
+						<%						
+						if(form.getForwardTo().equalsIgnoreCase("orderDetails"))
+							{%>
+								 <html:hidden property="forwardTo" value="orderDetails"/>								
+						  <%}else
+						    { %>
+								 <html:hidden property="forwardTo" value="eventParameters"/>
+						   <%} %>
 						<html:hidden property="multipleSpecimen" value="<%=multipleSpecimen%>"/>
 						<html:hidden property="containerId" styleId="containerId"/>
 						<td></td>
