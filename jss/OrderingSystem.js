@@ -271,6 +271,7 @@
 	 */
 	function gotoArrayRequestTab()
 	{
+		document.getElementById("tabIndexId").value=2;
 		pageDisplayed=2;
 		//Hide the table containing biospecimen  order items
 		document.getElementById('table3_specimenDataTab').style.display="none";
@@ -295,6 +296,7 @@
 	 */
 	function gotoSpecimenRequestTab()
 	{
+		document.getElementById("tabIndexId").value=1;
 		pageDisplayed=1;
 		//Hide the table containing ArrayRequests.jsp
 		document.getElementById('table5_arrayDataTable').style.display="none";
