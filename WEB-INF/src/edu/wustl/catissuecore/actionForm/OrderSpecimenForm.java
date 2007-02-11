@@ -4,8 +4,8 @@ package edu.wustl.catissuecore.actionForm;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -18,7 +18,6 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.catissuecore.actionForm.DefineArrayForm;
 
 /**
  * orderSpecimenForm for placing an order
