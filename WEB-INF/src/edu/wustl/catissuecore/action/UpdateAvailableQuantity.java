@@ -48,7 +48,7 @@ public class UpdateAvailableQuantity extends BaseAction
 		//The row number.
 		String finalSpecimenListId = (String)request.getParameter("finalSpecimenListId");
 		//The list containing Specimen Objects.
-		List specimenList = (ArrayList)request.getSession().getAttribute("finalSpecimenList"+finalSpecimenListId);
+		List specimenList = (ArrayList)request.getSession().getAttribute("finalSpecimenList");
 		
 		Iterator iter = specimenList.iterator();
 		String quantity = "";
