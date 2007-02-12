@@ -426,7 +426,7 @@ if (formSPR.getRace() != null)
 <%}
 else 
 {%>
-					<html:button property="action1" styleClass="actionButton" onclick="submitReviewComments()" >
+					<html:button property="action1" styleClass="actionButton" onclick="submitReviewComments()" disabled="true">
 					<bean:message key="viewSPR.requestForReview.button.cation" />
 					</html:button>
 <%}%>
@@ -434,7 +434,7 @@ else
 
 <%if(formSPR.getDeIdentifiedReportId()!=0)
 {%>
-					<html:button property="action2" styleClass="actionButton" onclick="submitQuarantineComments()">
+					<html:button property="action2" styleClass="actionButton" onclick="submitQuarantineComments()" disabled="true">
 						<bean:message key="viewSPR.requestForQuarantine.button.cation" />
 					</html:button>
 <%}
