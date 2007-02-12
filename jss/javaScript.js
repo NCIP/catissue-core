@@ -1096,6 +1096,7 @@ function submitReviewComments()
 	if(confirmSubmit())
 	{
 		document.forms[0].submittedFor.value='review';
+		document.forms[0].forwardTo.value='success';
 		var action="SurgicalPathologyReportEventParam.do?operation=add"
 		document.forms[0].action=action;
 		document.forms[0].submit();
@@ -1107,6 +1108,7 @@ function submitQuarantineComments()
 	if(confirmSubmit())
 	{
 		document.forms[0].submittedFor.value='quarantine';
+		document.forms[0].forwardTo.value='success';
 		var action="SurgicalPathologyReportEventParam.do?operation=add"
 		document.forms[0].action=action;
 		document.forms[0].submit();
