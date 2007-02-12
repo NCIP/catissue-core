@@ -151,7 +151,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 	 * @return List of SurgicalPathologyReport Id
 	 * @throws DAOException Exception occured while handling DB
 	 */
-	private List getReportIdList(Collection scgCollection)throws DAOException
+	private List getReportIdList(List scgCollection)throws DAOException
 	{
 		
 		List reportIDList=new ArrayList();		
@@ -164,7 +164,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				scg=(SpecimenCollectionGroup)iter.next();
 				if(scg.getIdentifiedSurgicalPathologyReport()!=null)
 				{
-					NameValueBean nb=new NameValueBean(scg.getIdentifiedSurgicalPathologyReport().getAccessionNumber(),scg.getIdentifiedSurgicalPathologyReport().getId());
+					NameValueBean nb=new NameValueBean(scg.getIdentifiedSurgicalPathologyReport().getAccessionNumber(),scg.getIdentifiedSurgicalPathologyReport().getId().toString());
 					reportIDList.add(nb);
 				}
 			}		
