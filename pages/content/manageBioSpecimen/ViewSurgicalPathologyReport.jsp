@@ -78,7 +78,7 @@ ViewSurgicalPathologyReportForm formSPR=viewSurgicalPathologyReportForm;
 			%>
 						<c:set var="reportIdElt" value="${viewSurgicalPathologyReportForm.reportIdList}"/>
 						<jsp:useBean id="reportIdElt" type="java.util.List"/>
-				     	<html:select property="reportIdList" styleClass="formFieldSized" styleId="reportId" size="1"
+				     	<html:select property="reportId" styleClass="formFieldSized" styleId="reportId" size="1"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 							<html:options collection="reportIdElt" labelProperty="name" property="value"/>
 						</html:select>
@@ -426,7 +426,7 @@ if (formSPR.getRace() != null)
 <%}
 else 
 {%>
-					<html:button property="action1" styleClass="actionButton" onclick="submitReviewComments()" disabled="true">
+					<html:button property="action1" styleClass="actionButton" onclick="submitReviewComments()" >
 					<bean:message key="viewSPR.requestForReview.button.cation" />
 					</html:button>
 <%}%>
@@ -434,7 +434,7 @@ else
 
 <%if(formSPR.getDeIdentifiedReportId()!=0)
 {%>
-					<html:button property="action2" styleClass="actionButton" onclick="submitQuarantineComments()" disabled="true">
+					<html:button property="action2" styleClass="actionButton" onclick="submitQuarantineComments()" >
 						<bean:message key="viewSPR.requestForQuarantine.button.cation" />
 					</html:button>
 <%}
