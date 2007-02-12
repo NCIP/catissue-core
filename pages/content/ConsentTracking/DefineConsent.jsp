@@ -73,13 +73,29 @@
 										</div>
 									</td>	
 									
-									<%-- Title CheckBox --%>												
+									<%-- Title CheckBox --%>	
+									<%
+									if(operation.equals(Constants.EDIT))
+									{
+									%>
+									<td class="formLeftSubTableTitle" width="5%">
+										<div align="center">
+											<input type=checkbox name="selectAll" onclick="checkAll(this)" disabled="disabled"/>
+										</div>	
+									</td>	
+									<%
+									}
+									else
+									{
+									%>
 									<td class="formLeftSubTableTitle" width="5%">
 										<div align="center">
 											<input type=checkbox name="selectAll" onclick="checkAll(this)"/>
 										</div>	
 									</td>	
-									
+									<%
+									}
+									%>
 									<%-- Title Statements --%>
 									<td class="formLeftSubTableTitle" width="90%">
 										<html:hidden property="consentTierCounter"/>
