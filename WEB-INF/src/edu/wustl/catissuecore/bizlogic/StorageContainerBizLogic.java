@@ -443,10 +443,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Integer newContainerDimOne = container.getCapacity().getOneDimensionCapacity();
 		Integer newContainerDimTwo = container.getCapacity().getTwoDimensionCapacity();
 
-		// If any size of reduced, throw error
-		if ((oldContainerDimOne.compareTo(newContainerDimOne) > 0) || (oldContainerDimTwo.compareTo(newContainerDimTwo) > 0))
+		// If any size is  reduced, object was present at any of the deleted positions throw error
+		if (oldContainerDimOne.intValue() > newContainerDimOne.intValue() || oldContainerDimTwo.intValue() > newContainerDimTwo.intValue())
 		{
-			throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.cannotReduce"));
+			boolean canReduceDimension = StorageContainerUtil.checkCanReduceDimension(oldContainer,container); 
+			if(!canReduceDimension)
+			{
+			  throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.cannotReduce"));
+			}
 		}
 
 		//Check for closed Site
@@ -524,6 +528,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
+
 	private void addEntriesInDisabledMap(StorageContainer container, List disabledConts)
 	{
 		String contNameKey = "StorageContName";
@@ -567,9 +572,9 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			int xNew = currentContainer.getCapacity().getOneDimensionCapacity().intValue();
 			int yOld = oldContainer.getCapacity().getTwoDimensionCapacity().intValue();
 			int yNew = currentContainer.getCapacity().getTwoDimensionCapacity().intValue();
-			if (xNew > xOld || yNew > yOld)
+			if (xNew != xOld || yNew != yOld)
 			{
-				StorageContainerUtil.insertIncreasedCapacities(containerMap, currentContainer, oldContainer);
+				StorageContainerUtil.updateStoragePositions(containerMap, currentContainer, oldContainer);
 
 			}
 			//finish 
@@ -666,19 +671,26 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Collection spArrayTypeCollNew = newContainer.getHoldsSpArrayTypeCollection();
 		Collection spArrayTypeCollOld = oldContainer.getHoldsSpArrayTypeCollection();
 
-		if (cpCollNew.size() != cpCollOld.size())
-			return true;
+	/*	if (cpCollNew.size() != cpCollOld.size())
+			return true;*/
 
-		Iterator itrNew = cpCollNew.iterator();
-
-		while (itrNew.hasNext())
+		/**
+		 *  Bug 3612 - User should be able to change the restrictions if he specifies the 
+         *  superset of the old restrictions if container is not empty.  
+		 */
+		Iterator itrOld = cpCollOld.iterator();
+		while (itrOld.hasNext())
 		{
 			flag = 0;
-			CollectionProtocol cpNew = (CollectionProtocol) itrNew.next();
-			Iterator itrOld = cpCollOld.iterator();
-			while (itrOld.hasNext())
+			CollectionProtocol cpOld = (CollectionProtocol) itrOld.next();
+			Iterator itrNew = cpCollNew.iterator();
+			if(cpCollNew.size() == 0)
 			{
-				CollectionProtocol cpOld = (CollectionProtocol) itrOld.next();
+				break;
+			}
+			while (itrNew.hasNext())
+			{
+				CollectionProtocol cpNew = (CollectionProtocol) itrNew.next();
 				if (cpOld.getId().longValue() == cpNew.getId().longValue())
 				{
 					flag = 1;
@@ -689,21 +701,20 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				return true;
 		}
 
-		if (storTypeCollNew.size() != storTypeCollOld.size())
-			return true;
+	/*	if (storTypeCollNew.size() != storTypeCollOld.size())
+			return true;*/
 
-		itrNew = storTypeCollNew.iterator();
-
-		while (itrNew.hasNext())
+		
+		itrOld = storTypeCollOld.iterator();
+		while (itrOld.hasNext())
 		{
 			flag = 0;
-			StorageType storNew = (StorageType) itrNew.next();
-			Iterator itrOld = storTypeCollOld.iterator();
-			while (itrOld.hasNext())
+			StorageType storOld = (StorageType) itrOld.next();
+		    Iterator itrNew = storTypeCollNew.iterator();
+			while (itrNew.hasNext())
 			{
-				StorageType storOld = (StorageType) itrOld.next();
-
-				if (storNew.getId().longValue() == storOld.getId().longValue())
+				StorageType storNew = (StorageType) itrNew.next();
+				if (storNew.getId().longValue() == storOld.getId().longValue() || storNew.getId().longValue() == 1)
 				{
 					flag = 1;
 					break;
@@ -714,19 +725,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 
 		}
 
-		if (spClassCollNew.size() != spClassCollOld.size())
-			return true;
+		/* if (spClassCollNew.size() != spClassCollOld.size())
+			return true;*/ 
 
-		itrNew = spClassCollNew.iterator();
-
-		while (itrNew.hasNext())
+		itrOld = spClassCollOld.iterator();
+		while (itrOld.hasNext())
 		{
 			flag = 0;
-			String specimenNew = (String) itrNew.next();
-			Iterator itrOld = spClassCollOld.iterator();
-			while (itrOld.hasNext())
+			String specimenOld = (String) itrOld.next();
+			Iterator itrNew = spClassCollNew.iterator();
+			while (itrNew.hasNext())
 			{
-				String specimenOld = (String) itrOld.next();
+				String specimenNew = (String) itrNew.next();
 				if (specimenNew.equals(specimenOld))
 				{
 					flag = 1;
@@ -737,21 +747,22 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				return true;
 		}
 
-		if (spArrayTypeCollNew.size() != spArrayTypeCollOld.size())
-			return true;
+	/*	if (spArrayTypeCollNew.size() != spArrayTypeCollOld.size())
+			return true;*/
 
-		itrNew = spArrayTypeCollNew.iterator();
-
-		while (itrNew.hasNext())
+		
+		itrOld = spArrayTypeCollOld.iterator();
+		while (itrOld.hasNext())
 		{
 			flag = 0;
-			SpecimenArrayType spArrayTypeNew = (SpecimenArrayType) itrNew.next();
-			Iterator itrOld = spArrayTypeCollOld.iterator();
-			while (itrOld.hasNext())
+			SpecimenArrayType spArrayTypeOld = (SpecimenArrayType) itrOld.next();
+			
+			Iterator itrNew = spArrayTypeCollNew.iterator();
+			while (itrNew.hasNext())
 			{
-				SpecimenArrayType spArrayTypeOld = (SpecimenArrayType) itrOld.next();
+				SpecimenArrayType spArrayTypeNew = (SpecimenArrayType) itrNew.next();
 
-				if (spArrayTypeNew.getId().longValue() == spArrayTypeOld.getId().longValue())
+				if (spArrayTypeNew.getId().longValue() == spArrayTypeOld.getId().longValue() || spArrayTypeNew.getId().longValue() == 1)
 				{
 					flag = 1;
 					break;

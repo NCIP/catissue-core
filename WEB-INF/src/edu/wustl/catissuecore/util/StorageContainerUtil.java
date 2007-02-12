@@ -241,7 +241,7 @@ public class StorageContainerUtil
 		return map;
 	}
 
-	public static synchronized void insertIncreasedCapacities(Map containerMap, StorageContainer currentContainer, StorageContainer oldContainer)
+	public static synchronized void updateStoragePositions(Map containerMap, StorageContainer currentContainer, StorageContainer oldContainer)
 	{
 		int xOld = oldContainer.getCapacity().getOneDimensionCapacity().intValue();
 		int xNew = currentContainer.getCapacity().getOneDimensionCapacity().intValue();
@@ -295,6 +295,36 @@ public class StorageContainerUtil
 				else
 				{
 					yList.addAll(yPosList);
+				}
+
+			}
+		}
+		
+		if (xNew < xOld)
+		{
+			for (int i = xNew + 1; i <= xOld; i++)
+			{
+				NameValueBean xNvb = new NameValueBean(new Integer(i), new Integer(i));
+				storageContainerMap.remove(xNvb);
+			}
+		}
+		
+		if (yNew < yOld)
+		{
+			for (int i = 1; i <= xNew; i++)
+			{
+				NameValueBean xNvb = new NameValueBean(new Integer(i), new Integer(i));
+				List yPosList = new ArrayList();
+				for (int j = yNew + 1; j <= yOld; j++)
+				{
+					NameValueBean yNvb = new NameValueBean(new Integer(j), new Integer(j));
+
+					yPosList.add(yNvb);
+				}
+				List yList = (ArrayList) storageContainerMap.get(xNvb);
+				if (yList != null)
+				{
+					yList.removeAll(yPosList);
 				}
 
 			}
@@ -441,4 +471,94 @@ public class StorageContainerUtil
 		}
 		
 	}
+	
+	/**
+	 * 
+	 * Method which checks whether capacity of a container can be reduced
+	 * @param oldContainer
+	 * @param container
+	 * @return
+	 */
+		
+		public static boolean checkCanReduceDimension(StorageContainer oldContainer, StorageContainer container) {
+			Integer oldContainerDimOne = oldContainer.getCapacity().getOneDimensionCapacity();
+			Integer oldContainerDimTwo = oldContainer.getCapacity().getTwoDimensionCapacity();
+			Integer newContainerDimOne = container.getCapacity().getOneDimensionCapacity();
+			Integer newContainerDimTwo = container.getCapacity().getTwoDimensionCapacity();
+			
+			List deletedPositions = new ArrayList();
+			if(newContainerDimOne < oldContainerDimOne)
+			{
+				for(int i=newContainerDimOne+1;i<oldContainerDimOne+1;i++)
+				{
+					for(int j=1;j<oldContainerDimTwo+1;j++)
+					{
+						deletedPositions.add(i+"@"+j);
+					}
+				}
+			}
+			if(newContainerDimTwo < oldContainerDimTwo)
+			{
+				for(int i=newContainerDimTwo+1;i<oldContainerDimTwo+1;i++)
+				{
+					for(int j=1;j<oldContainerDimOne+1;j++)
+					{
+						if(!deletedPositions.contains(j+"@"+i))
+						{
+						   deletedPositions.add(j+"@"+i);
+						}
+					}
+				}
+			}
+			
+			
+			int count = 0;
+			Map containerMapFromCache = null;
+			try
+			{
+				containerMapFromCache = (TreeMap) StorageContainerUtil.getContainerMapFromCache();
+			}
+			catch (CacheException e)
+			{
+				e.printStackTrace();
+			}
+
+			if (containerMapFromCache != null)
+			{
+				Iterator itr = containerMapFromCache.keySet().iterator();
+				while (itr.hasNext())
+				{
+					NameValueBean nvb = (NameValueBean) itr.next();
+					if (nvb.getValue().toString().equals(container.getId().toString()))
+					{
+
+						Map tempMap = (Map) containerMapFromCache.get(nvb);
+						Iterator tempIterator = tempMap.keySet().iterator();
+						while(tempIterator.hasNext())
+						{
+							
+						NameValueBean nvb1 = (NameValueBean) tempIterator.next();
+						List list = (List) tempMap.get(nvb1);
+						for(int i=0;i<list.size();i++)
+						{
+						  NameValueBean nvb2 = (NameValueBean) list.get(i);
+						  String formatedPosition = nvb1.getValue() + "@" + nvb2.getValue();
+						  if(deletedPositions.contains(formatedPosition))
+						  {
+							  count++;
+						  }
+						}
+								
+						}
+					}
+
+				}
+			}
+			
+			if(count!=deletedPositions.size())
+			{
+		    	return false;
+			}
+			return true;
+		}
 }
