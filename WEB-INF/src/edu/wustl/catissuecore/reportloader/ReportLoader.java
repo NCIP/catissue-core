@@ -230,8 +230,9 @@ public class ReportLoader
 		catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS, participantMap);
 	}
 	/**
-	 * @return creates a new Specimen collection group. 
-	 * @throws Exception
+	 * Method to create new SCG
+	 * @return scg object of SpecimenColectionGroup 
+	 * @throws Exception generic exception
 	 */
 	public SpecimenCollectionGroup createNewSpecimenCollectionGroup()throws Exception
 	{

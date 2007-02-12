@@ -30,7 +30,7 @@ import edu.wustl.common.util.logger.Logger;
 public class ReportLoaderUtil
 {
 	/**
-	 * @param participant
+	 * @param participant object of Participant
 	 * @return number of matching participants
 	 * @throws Exception throws exception 
 	 */
@@ -130,9 +130,9 @@ public class ReportLoaderUtil
 	}
 	
 	/**
-	 * his method creates new directory.
+	 * This method creates new directory.
 	 * @param dirStr directory name  
-	 * @throws IOException
+	 * @throws IOException IOException occured while creating directories
 	 */
 	public static void createDir(String dirStr)throws IOException
 	{

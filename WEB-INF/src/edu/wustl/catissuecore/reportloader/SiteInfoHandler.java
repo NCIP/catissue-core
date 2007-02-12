@@ -37,8 +37,9 @@ public class SiteInfoHandler
 	private static Document document = null;
 	
 	/**
-	 * @param path
-	 * @throws Exception
+	 * Initialization method
+	 * @param path path of file name
+	 * @throws Exception generic exception
 	 */
 	public static void init(String path) throws Exception
 	{
@@ -72,12 +73,13 @@ public class SiteInfoHandler
 	}
 
 	/**
-	 * @param siteName
-	 * @return abrreviation name
+	 *
 	 * <p>
 	 * Description:This method takes the property siteName as String argument and
 	 * returns the abbreviation value as String. 
 	 * </p>
+	 * @param siteName name of the site
+	 * @return pValue currousponding abbreviated value
 	 */
 	public static String getSiteAbbriviation(String siteName)
 	{
@@ -125,12 +127,13 @@ public class SiteInfoHandler
 	}
 	
 	/**
-	 * @param abbr
-	 * @return siteName name of the associted site
+	 * 
 	 * <p>
 	 * Description:This method takes the property siteName as String argument and
 	 * returns the abbreviation value as String. 
 	 * </p>
+	 * @param abbr abbriviated site name
+	 * @return pValue associated site name
 	 */
 	public static String getSiteName(String abbr)
 	{

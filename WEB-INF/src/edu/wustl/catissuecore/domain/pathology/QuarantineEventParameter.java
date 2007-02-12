@@ -20,6 +20,11 @@ public class QuarantineEventParameter extends EventParameters
 {
 
 	/**
+	 * Serial version id of the class
+	 */
+	private static final long serialVersionUID = 1L;
+
+	/**
 	 * quarantine status of the associated deidentified report. 
 	 */
 	protected Boolean quarantineStatus;
@@ -77,7 +82,7 @@ public class QuarantineEventParameter extends EventParameters
 	}
 
 	 /**
-	  * @return quarantine status of the deidentified pathology report
+	  *  @return quarantine status of the deidentified pathology report
 	  *  @hibernate.property  name="quarantineStatus"
 	  *  type="boolean" column="IS_QUARANTINED"
 	  */
@@ -95,10 +100,11 @@ public class QuarantineEventParameter extends EventParameters
 	}
 	
 	/** 
-	 * @param abstractForm
-	 * @exception AssignDataException
-	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
 	 * This method sets all values for the QuarantineEventParameter object.
+	 * @param abstractForm Abstract action form
+	 * @throws AssignDataException exception occured while assigning data to form attributes
+	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
+	 * 
 	 */
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException 
 	{

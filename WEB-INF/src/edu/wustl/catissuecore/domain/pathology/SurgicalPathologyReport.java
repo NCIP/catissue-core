@@ -93,6 +93,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
+	 * Sets accession number of the report
 	 * @param accessionNumber sets accession number of the pathology report.
 	 */
 	public void setAccessionNumber(String accessionNumber)
@@ -112,6 +113,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
+	 * Sets activity status of the report
 	 * @param activityStatus sets activity status of the pathology report.
 	 */
 	public void setActivityStatus(String activityStatus)
@@ -131,6 +133,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
+	 * Sets binary text content
 	 * @param binaryContent sets binary content of the pathology report.
 	 */
 	public void setBinaryContent(BinaryContent binaryContent)
@@ -150,6 +153,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
+	 * Sets id
 	 * @param id sets system generated id
 	 */
 	public void setId(Long id)
@@ -169,6 +173,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 	
 	/**
+	 * Sets isFlagForReview
 	 * @param isFlagForReview Sets review flag for pathology report.
 	 */
 	public void setIsFlagForReview(Boolean isFlagForReview)
@@ -189,6 +194,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 	
 	/**
+	 * Sets a collection of pathology report review parameter
 	 * @param pathologyReportReviewParameterSetCollection sets collection of pathology report review parameters.
 	 */
 	public void setPathologyReportReviewParameterSetCollection(
@@ -209,6 +215,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
+	 * Sets source of the report
 	 * @param source sets source of the pathology report.
 	 */
 	public void setSource(Site source)
@@ -228,6 +235,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
+	 * Sets text content
 	 * @param textContent sets text content of the pathology report.
 	 */
 	public void setTextContent(TextContent textContent)
@@ -247,6 +255,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	}
 
 	/**
+	 * Set xml content
 	 * @param xmlContent sets xml content of the pathology report.
 	 */
 	public void setXmlContent(XMLContent xmlContent)
@@ -268,6 +277,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	
 	/**
+	 * Set status of the report
 	 * @param reportStatus sets report status of the pathology report.
 	 */
 	public void setReportStatus(String reportStatus)
@@ -288,7 +298,8 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	
 	/**
-	 * @param collectionDateTime return collection date and time of the report.
+	 * Sets collection date and time of the report
+	 * @param collectionDateTime collection date and time of the report.
 	 */
 	public void setCollectionDateTime(Date collectionDateTime)
 	{
@@ -298,6 +309,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 	/**
      * Copies all values from the AbstractForm object
      * @param abstractForm The AbstractForm object
+     * @throws AssignDataException exception occured while assigning data to form attributes
      */
     public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
     {

@@ -29,6 +29,7 @@ public class ReportLoaderQueue
 
 	
 	/**
+	 * Set the status of the queue record
 	 * @param status
 	 */
 	public void setStatus(String status)
@@ -45,8 +46,9 @@ public class ReportLoaderQueue
 	}
 	
 	/**
-	 * @param text
 	 * Constructor with text as input
+	 * @param text
+	 * 
 	 */
 	public ReportLoaderQueue(String text)
 	{
@@ -67,6 +69,7 @@ public class ReportLoaderQueue
 	}
 	
 	/**
+	 * Set id of the object
 	 * @param id
 	 */
 	public void setId(Long id)
@@ -107,6 +110,7 @@ public class ReportLoaderQueue
 	}
 	
 	/**
+	 * Set report text
 	 * @param reportText
 	 */
 	public void setReportText(String reportText)

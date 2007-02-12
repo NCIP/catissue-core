@@ -9,7 +9,6 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
@@ -105,8 +104,8 @@ public class PathologyReportReviewParameter extends EventParameters
 	
 	/** 
 	 * This method sets all values for the PathologyReportReviewParameter object.
-	 * @param abstractForm 
-	 * @exception AssignDataException
+	 * @param abstractForm Abstract action form
+	 * @throws AssignDataException exception occured while assigning data to form attributes
 	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
 	 * 
 	 */
@@ -188,7 +187,7 @@ public class PathologyReportReviewParameter extends EventParameters
 
 	/**
 	 * This is the method to set the review status
-	 * @param status 
+	 * @param status of the review parameter
 	 */
 	public void setStatus(String status)
 	{

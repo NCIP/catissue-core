@@ -93,10 +93,11 @@ public class ReportProcessor implements Observer
 	}
 	
 	/**
-	 * @param sourceFile
-	 * @param destinationFile
-	 * @throws Exception
 	 * Copy sourceFile to destinationFile location
+	 * @param sourceFile Source file name
+	 * @param destinationFile desinamtion file name
+	 * @throws Exception generic exception
+	 * 
 	 */
 	private static void copyFile(String sourceFile,String destinationFile)throws Exception
 	{
@@ -116,8 +117,8 @@ public class ReportProcessor implements Observer
 	
 	/**
 	 * Delete files
-	 * @param list
-	 * @throws Exception
+	 * @param list list of files to delete
+	 * @throws Exception generic exception
 	 */
 	private static void deleteFiles(List list)throws Exception
 	{
