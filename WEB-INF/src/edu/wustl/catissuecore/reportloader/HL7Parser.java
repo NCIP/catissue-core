@@ -42,10 +42,11 @@ public class HL7Parser extends Parser
 	private Site site=null;
 	
 	/**
-	 * @param p
-	 * @param reportMap
 	 * This method processes the map structure of a report in a HL7 file.
 	 * It gets different sections in the map and creates different report sections from it. 
+	 * @param p Object of participant
+	 * @param reportMap a report map containing sections to be processed
+	 * 
 	 */
 	public void process(Participant p,Map reportMap)
 	{
@@ -153,7 +154,7 @@ public class HL7Parser extends Parser
 	 * This is a mehod which parses report string from queue and process it. 
 	 * @param participant represents participant
 	 * @param str report string
-	 * @throws Exception
+	 * @throws Exception generic exception
 	 */
 	public void parseString(Participant participant , String str)throws Exception
 	{
@@ -187,8 +188,9 @@ public class HL7Parser extends Parser
 	}
 	
 	/**
+	 * This method parses the report
 	 * @param fileName HL7 file name 
-	 * @throws Exception
+	 * @throws Exception generic exception
 	 */
 	public void parse(String fileName)throws Exception
 	{
@@ -292,10 +294,10 @@ public class HL7Parser extends Parser
 	}
 
 	/**
-	 * @param participant
-	 * @param site
-	 * @throws Exception
 	 * Associate site object with respective participant object
+	 * @param participant object of Participant
+	 * @param site object of Site
+	 * @throws Exception generic exception
 	 */
 	private void setSiteToParticipant(Participant participant,Site site)throws Exception
 	{
@@ -313,10 +315,11 @@ public class HL7Parser extends Parser
 	}
 	
 	/**
-	 * @param set
-	 * @param reportText
 	 * This method processes the map structure of a report in a HL7 file.
 	 * It gets different sections in the map and creates different report sections from it. 
+	 * @param set a set of section
+	 * @param reportText plain text format report
+	 * 
 	 */
 	public void addReportToQueue(Set set,String reportText)
 	{
@@ -551,13 +554,19 @@ public class HL7Parser extends Parser
 		return participant;
 	}
 	
+	/**
+	 * This method parse the site information into site object
+	 * @param pidLine PID line (participant information)
+	 * @return Site object
+	 * @throws Exception generic exception
+	 */
 	public Site parseSiteInformation(String pidLine)throws Exception
 	{
 		StringTokenizer st=null;
 		String field=null;
 		String siteName=null;
 		List siteList=null;
-		Site site=null;
+		Site siteObj=null;
 		String newPidLine = pidLine.replace('|', '~');
 		newPidLine = newPidLine.replaceAll("~", "|~~");
 		st=new StringTokenizer(pidLine,"|");
@@ -594,7 +603,7 @@ public class HL7Parser extends Parser
 					siteList=ReportLoaderUtil.getObject(Site.class.getName(), "name", siteName);
 					if(siteList!=null && siteList.size()>0)
 					{
-						site=(Site)siteList.get(0);
+						siteObj=(Site)siteList.get(0);
 					}
 					else
 					{
@@ -604,7 +613,7 @@ public class HL7Parser extends Parser
 				break;
 			}
 		}
-		return site;
+		return siteObj;
 	}
 	
 	
@@ -718,10 +727,11 @@ public class HL7Parser extends Parser
 		return section;
 	}
 		
-	 /**
+	/**
+	 * Method to validate report map
 	 * @param reportMap report map representing map of different pathology reports 
 	 * @return boolean represents report is valid or not
-	 * @throws Exception
+	 * @throws Exception generic exception
 	 */
    public boolean validateReportMap(Map reportMap)throws Exception
    {
