@@ -1,7 +1,9 @@
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +53,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	/**
 	 * Collection for race of participant
 	 */
-	protected Collection race;
+	protected Collection race=new HashSet();
 	/**
 	 * String for gender of participant
 	 */
@@ -67,7 +69,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	/**
 	 * Collection for medical identifier numbers of participant
 	 */
-	protected Collection medicalIdentifierNumbers;
+	protected Collection medicalIdentifierNumbers=new HashSet();
 	/**
 	 * String for accession number of Identified Report
 	 */
@@ -77,7 +79,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	protected String identifiedReportSite;
 	/**
-	 * long for id of Identified Report
+	 * long for id of Identified Report*
 	 */
 	private long identifiedReportId;
 	/**
@@ -119,8 +121,12 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	/**
 	 * List to handle values of report Id if the domain object is Participant
 	 */
-	private List reportIdList=null;
+	private List reportIdList=new ArrayList();
 	
+	/**
+	 * String to handle values of current report id from report id list
+	 */
+	private String reportId="";
 	/**
 	 * This is the method to get date of birth of particicpant
 	 * @return birthDate
@@ -731,5 +737,23 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	public void setReportIdList(List reportIdList)
 	{
 		this.reportIdList = reportIdList;
+	}
+
+	/**
+	 * Returns the report id 
+	 * @return reportId
+	 */
+	public String getReportId()
+	{
+		return reportId;
+	}
+
+	/**
+	 * Sets the report id 
+	 * @param reportId
+	 */
+	public void setReportId(String reportId)
+	{
+		this.reportId = reportId;
 	}
 }
