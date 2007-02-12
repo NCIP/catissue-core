@@ -1297,7 +1297,7 @@ PUBLIC
 			name="viewSurgicalPathologyReportForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path="/ViewSurgicalPathologyReport.do?operation=viewSPR&amp;pageOfSpecimenCollectionGroup" />
+			<forward name="success" path="/ViewSurgicalPathologyReport.do?" />
 			<forward name="failure" path="/SearchObject.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=12" />
 		</action>
 	
