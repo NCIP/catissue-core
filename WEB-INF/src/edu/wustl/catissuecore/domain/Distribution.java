@@ -245,21 +245,23 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	        //Change for Consent tracking (Virender Mehta)
 	        Collection itemCollectionMap = parser.generateData(map);
 	        Collection finalItemCollecitonMap = new HashSet(); 
-	        Iterator itr = itemCollectionMap.iterator();
-	        while(itr.hasNext())
-	        {
-	        	DistributedItem distributedItem = (DistributedItem) itr.next();
-	        	if(distributedItem.getSpecimen() != null)
-	        		finalItemCollecitonMap.add(distributedItem);
+	        if(form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE)
+	        { 
+	        	Iterator itr = itemCollectionMap.iterator();
+		        while(itr.hasNext())
+		        {
+		        	DistributedItem distributedItem = (DistributedItem) itr.next();
+		        	if(distributedItem.getSpecimen() != null)
+		        		finalItemCollecitonMap.add(distributedItem);
+		        }
 	        }
-	        
 	        if (form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE ) 
 	        {
 		        distributedItemCollection = finalItemCollecitonMap;
 	        }
 	        else
-	        {
-	        	specimenArrayCollection = finalItemCollecitonMap;
+	        { 
+	        	specimenArrayCollection = itemCollectionMap;
 	        }
 	        Logger.out.debug("distributedItemCollection "+distributedItemCollection);
 	    }
