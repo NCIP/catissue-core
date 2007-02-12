@@ -239,7 +239,7 @@ public class CreateArrayInitAction extends BaseAction
 		while(definedArrayDetailsBeanListItr.hasNext())
 		{
 			DefinedArrayDetailsBean definedArrayDetailsBean = (DefinedArrayDetailsBean)definedArrayDetailsBeanListItr.next();
-			List specimenListFromDb=orderBizLogic.retrieve(Specimen.class.getName(),"id",new Long(definedArrayDetailsBean.getSpeicmenId()));
+			List specimenListFromDb=orderBizLogic.retrieve(Specimen.class.getName(),"id",new Long(definedArrayDetailsBean.getSpecimenId()));
 			//Set the specimen domain instances in the specimens object list.
 			specimensObjList.add(specimenListFromDb.get(0));
 		}
