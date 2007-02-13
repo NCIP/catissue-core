@@ -101,19 +101,32 @@ public class CollectionProtocolRegistrationAction extends SecureAction
             
 	        if(formBeanStack !=null)
 	        {
+	        	try
+				{
 	            AddNewSessionDataBean addNewSessionDataBean = (AddNewSessionDataBean)formBeanStack.peek();
 	            
 	            SpecimenCollectionGroupForm sessionFormBean =(SpecimenCollectionGroupForm)addNewSessionDataBean.getAbstractActionForm();
 	            
 	            ((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(sessionFormBean.getCollectionProtocolId());
+				}
+	        	catch(ClassCastException exp)
+				{
+	        		Logger.out.debug("Class cast Exception in CollectionProtocolRegistrationAction ~~~~~~~~~~~~~~~~~~~~~~~>"+exp);
+				}
 	        }
 		}
 		
 		if(request.getParameter(Constants.CP_SEARCH_CP_ID)!=null)
 		{
 			long cpSearchCpId = new Long(request.getParameter(Constants.CP_SEARCH_CP_ID)).longValue();
-			
+			try
+			{
 		    ((CollectionProtocolRegistrationForm)form).setCollectionProtocolID(cpSearchCpId);
+			}
+        	catch(ClassCastException exp)
+			{
+        		Logger.out.debug("Class cast Exception in CollectionProtocolRegistrationAction ~~~~~~~~~~~~~~~~~~~~~~~>"+exp);
+			}
 		}
 		
 		//get list of Participant's names
