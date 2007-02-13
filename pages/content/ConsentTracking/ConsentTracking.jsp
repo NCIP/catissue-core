@@ -64,7 +64,15 @@ function withdrawAll(element)
 	{
 		var withdrawId = withdraw.replace(/`/,i);
 		var withdrawObject = document.getElementById(withdrawId);
-		withdrawObject.selectedIndex=3; 
+		if(withdrawObject.options.length==1)
+		{
+			withdrawObject.selectedIndex=0; 
+		}
+		else
+		{
+			withdrawObject.selectedIndex=3; 
+		}
+	
 	}
 }
 
@@ -437,16 +445,19 @@ function popupWindow(nofConsentTiers)
 									 String specimenKey ="ConsentBean:"+counter+"_specimenLevelResponse";
 									 String scgIDKey ="ConsentBean:"+counter+"_specimenCollectionGroupLevelResponseID";
 									 String specimenIDKey="ConsentBean:"+counter+"_specimenLevelResponseID";
+									 String scgKey ="ConsentBean:"+counter+"_specimenCollectionGroupLevelResponse";
 									 Object formObject = form;
 									 String consentResponseDisplay="";
 									 String responseDisplay="";
 									 String specimenResponseDisplay="";
 									 String idKey="";
 									 String statusKey="";
+									 String statusDisplay="";
 									 if (formObject instanceof SpecimenCollectionGroupForm)
 									    {
 											consentResponseDisplay=(String)((SpecimenCollectionGroupForm)formObject).getConsentResponseForScgValue(consentStatementKey);
 											responseDisplay=(String)((SpecimenCollectionGroupForm)formObject).getConsentResponseForScgValue(participantKey);
+											statusDisplay=(String)((SpecimenCollectionGroupForm)formObject).getConsentResponseForScgValue(scgKey);
 											Object tmpID = ((SpecimenCollectionGroupForm)formObject).getConsentResponseForScgValue(scgIDKey);
                                             if(tmpID!=null)
 											{
@@ -456,11 +467,13 @@ function popupWindow(nofConsentTiers)
 										else if(formObject instanceof CollectionProtocolRegistrationForm)
 										{
 											consentResponseDisplay=(String)((CollectionProtocolRegistrationForm)formObject).getConsentResponseValue(consentStatementKey);
+											responseDisplay=(String)((CollectionProtocolRegistrationForm)formObject).getConsentResponseValue(participantKey);
 										}
 										else if(formObject instanceof NewSpecimenForm)
 										{
 											consentResponseDisplay=(String)((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(consentStatementKey);
 											responseDisplay=(String)((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(participantKey);
+											statusDisplay=(String)((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(specimenKey);
 											Object tmporaryID=((NewSpecimenForm)formObject).getConsentResponseForSpecimenValue(specimenIDKey);
 											if(tmporaryID!=null)
 											{
@@ -490,15 +503,30 @@ function popupWindow(nofConsentTiers)
 									<%
 									if(pageOf.equals("pageOfCollectionProtocolRegistration"))
 									{
-										
+										if(operation.equals(Constants.EDIT)&&responseDisplay.equals(Constants.WITHDRAWN))
+										{
 									%>
-									<td align="left" class="formField">
-										<html:hidden property="<%=participantResponseIDKey%>"/>
+										<td align="left" class="formField">
 										<html:select property="<%=participantResponseKey%>" styleClass="formFieldSized10" styleId="<%=participantResponseKey%>" size="1"
+													onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+											<html:option value="Withdrawn"><bean:message key="consent.withdrawn" /></html:option>
+										</html:select>
+										</td>
+									<%
+										}
+										else
+										{
+									%>
+										<td align="left" class="formField">
+											<html:hidden property="<%=participantResponseIDKey%>"/>
+											<html:select property="<%=participantResponseKey%>" styleClass="formFieldSized10" styleId="<%=participantResponseKey%>" size="1"
 											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 											<html:options collection="<%=collection%>" labelProperty="name" property="value"/>
-										</html:select>
-									</td>
+											</html:select>
+										</td>
+										<%
+										}
+										%>
 									<%-- If Page of SCG or New Specimen or Distribution then show participant Response. --%>																			
 									<%
 									}
@@ -525,13 +553,31 @@ function popupWindow(nofConsentTiers)
 											idKey=";";
 										}
 									%>
-									<td align="left" class="formField">
-										<html:hidden property="<%=responseIdKey%>"/>
+									<%
+										if(operation.equals(Constants.EDIT)&&statusDisplay.equals(Constants.WITHDRAWN))
+										{
+									%>
+										<td align="left" class="formField">
 										<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
-											onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=idKey%>">
-											<html:options collection="<%=collection%>" labelProperty="name" property="value" />
+													onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+												<html:option value="Withdrawn"><bean:message key="consent.withdrawn" /></html:option>
 										</html:select>
-									</td>
+										</td>
+									<%
+										}
+										else
+										{
+									%>
+										<td align="left" class="formField">
+											<html:hidden property="<%=responseIdKey%>"/>
+											<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
+												onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=idKey%>">
+												<html:options collection="<%=collection%>" labelProperty="name" property="value" />
+											</html:select>
+										</td>
+									<%
+										}
+									%>
 									<%-- If Page of New Specimen then show Specimen level Response dropdown --%>									
 									<%
 									}
@@ -544,6 +590,21 @@ function popupWindow(nofConsentTiers)
 										}
 							
 									%>
+									<%
+										if(operation.equals(Constants.EDIT)&&statusDisplay.equals(Constants.WITHDRAWN))
+										{
+									%>
+										<td align="left" class="formField">
+										<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
+													onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+												<html:option value="Withdrawn"><bean:message key="consent.withdrawn" /></html:option>
+										</html:select>
+										</td>
+									<%
+										}
+										else
+										{
+									%>
 									<td align="left" class="formField" >
 										<html:hidden property="<%=responseIdKey%>"/>
 										<html:select property="<%=responseKey%>" styleClass="formFieldSized10" styleId="<%=responseKey%>" size="1"
@@ -551,6 +612,9 @@ function popupWindow(nofConsentTiers)
 											<html:options collection="<%=collection%>" labelProperty="name" property="value" />
 										</html:select>
 									</td>
+									<%
+										}
+									%>
 									<%-- If Page of Distribution then show Specimen Level response --%>																											
 									<%
 									}
