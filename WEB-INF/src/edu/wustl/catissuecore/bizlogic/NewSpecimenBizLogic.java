@@ -24,6 +24,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import sun.security.krb5.internal.s;
+
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -935,6 +937,19 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
 
 				specimenCollectionGroupObj = (SpecimenCollectionGroup) spgList.get(0);
+				
+				Collection consentTierStatusCollection= specimenCollectionGroupObj.getConsentTierStatusCollection();
+				Collection consentTierStatusCollectionForSpecimen = new HashSet(); 
+				Iterator itr = consentTierStatusCollection.iterator();
+				while(itr.hasNext())
+				{
+					 ConsentTierStatus conentTierStatus = (ConsentTierStatus) itr.next();
+					 ConsentTierStatus consentTierStatusForSpecimen = new ConsentTierStatus();
+					 consentTierStatusForSpecimen.setStatus(conentTierStatus.getStatus());
+					 consentTierStatusForSpecimen.setConsentTier(conentTierStatus.getConsentTier());
+					 consentTierStatusCollectionForSpecimen.add(consentTierStatusForSpecimen);
+				}
+				specimen.setConsentTierStatusCollection(consentTierStatusCollectionForSpecimen);
 			}
 			else
 			{
