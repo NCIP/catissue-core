@@ -145,7 +145,7 @@ public class SurgicalPathologyReport extends AbstractDomainObject
     * @return system generated id 
     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
     * unsaved-value="null" generator-class="native" 
-    * @hibernate.generator-param name="sequence" value="CATISSUE_PATHOLOGYREPORT_SEQ"
+    * @hibernate.generator-param name="sequence" value="CATISSUE_PATHOLOGY_REPORT_SEQ"
     */
 	public Long getId()
 	{

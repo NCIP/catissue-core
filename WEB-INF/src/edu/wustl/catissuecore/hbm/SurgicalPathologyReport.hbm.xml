@@ -20,7 +20,7 @@
             unsaved-value="null"
         >
             <generator class="native">
-                <param name="sequence">CATISSUE_PATHOLOGYREPORT_SEQ</param>
+                <param name="sequence">CATISSUE_PATHOLOGY_REPORT_SEQ</param>
             </generator>
         </id>
 
