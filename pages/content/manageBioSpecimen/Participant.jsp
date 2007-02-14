@@ -17,6 +17,7 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+<script language="JavaScript" type="text/javascript" src="jss/script.js"></script>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <LINK href="css/styleSheet.css" type=text/css rel=stylesheet>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
@@ -230,19 +231,22 @@
 					}
 				}		
 			<%}%>	
-			
+			if (submittedFor != null && submittedFor== "ForwardTo")
+			{
+				document.forms[0].target = "_top";
+			}
 	if((document.forms[0].activityStatus != undefined) && (document.forms[0].activityStatus.value == "Disabled"))
    	{
 	    var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
 		if (go==true)
 		{
-			document.forms[0].target="_top";
+			
 			document.forms[0].submit();
 		}
 	} 
 	else
 	{
-			document.forms[0].target="_top";
+			
 			document.forms[0].submit();		
 	}
 }

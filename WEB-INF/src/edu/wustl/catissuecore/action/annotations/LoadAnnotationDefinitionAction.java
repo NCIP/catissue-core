@@ -7,6 +7,7 @@ package edu.wustl.catissuecore.action.annotations;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -205,7 +206,9 @@ public class LoadAnnotationDefinitionAction extends BaseAction
 		if(groupId!=null)
 		{
 			Long lGroupId = new Long(groupId);
-			Collection<ContainerInterface> entityContainerCollection  = EntityManager.getInstance().getAllContainersByEntityGroupId(lGroupId);
+			ContainerInterface mainContainer = EntityManager.getInstance().getMainContainer(lGroupId);
+            Collection<ContainerInterface> entityContainerCollection  = new ArrayList<ContainerInterface>();
+            entityContainerCollection.add(mainContainer);
 			if(entityContainerCollection!=null)
 			{
 				entitiesXML.append("<rows>");
@@ -396,10 +399,19 @@ public class LoadAnnotationDefinitionAction extends BaseAction
 	private List getSystemEntityList() throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
 	{
 		List<NameValueBean> systemEntityList = new ArrayList<NameValueBean>();
-		systemEntityList.add(new NameValueBean(AnnotationConstants.PARTICIPANT,Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT)));
-		systemEntityList.add(new NameValueBean(AnnotationConstants.SPECIMEN,Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN)));
-		systemEntityList.add(new NameValueBean(AnnotationConstants.SPECIMEN_COLLN_GROUP,Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP)));
-		return systemEntityList;
+		CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
+        if (cacheManager.getObjectFromCache(AnnotationConstants.STATIC_ENTITY_LIST) == null)
+        {
+            systemEntityList.add(new NameValueBean(AnnotationConstants.PARTICIPANT,Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT)));
+            systemEntityList.add(new NameValueBean(AnnotationConstants.SPECIMEN,Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN)));
+            systemEntityList.add(new NameValueBean(AnnotationConstants.SPECIMEN_COLLN_GROUP,Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP)));
+            cacheManager.addObjectToCache(AnnotationConstants.STATIC_ENTITY_LIST,(Serializable) systemEntityList);
+        }
+        else 
+        {
+            systemEntityList = (List<NameValueBean>) cacheManager.getObjectFromCache(AnnotationConstants.STATIC_ENTITY_LIST);
+        }
+        return systemEntityList;
 	}
 
 	

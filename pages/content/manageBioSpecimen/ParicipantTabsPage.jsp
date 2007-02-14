@@ -2,23 +2,27 @@
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%
-	String annotationLink = request.getContextPath() + "/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1";
+
 	String operation = (String)request.getParameter(Constants.OPERATION);
 	String submittedFor=(String)request.getParameter(Constants.SUBMITTED_FOR);
 	String forwardTo=(String)request.getParameter(Constants.FORWARD_TO);
 	String participantId = request.getParameter("id");
 	Long id = (Long)request.getAttribute("id");
 	String queryString = request.getQueryString();
-
+	
 	if(queryString==null)
 	{
-			queryString = queryString  + "operation=edit&pageOf=pageOfParticipant";
+
+			queryString = "operation="+operation+"&pageOf=pageOfParticipant&menuSelected=12";
 	}
-	queryString = queryString + "&pageOf=pageOfParticipant&id="+id;
+	else 
+	{
+		queryString = queryString  + "&operation="+operation+"&pageOf=pageOfParticipant&menuSelected=12";
+	}
+	queryString = queryString + "&id="+id+"&"+"submittedFor=AddNew"+"&"+Constants.FORWARD_TO+"="+forwardTo;
+
 	Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
 	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+participantId;
-	queryString=queryString+"&"+Constants.SUBMITTED_FOR+"="+submittedFor+"&"+Constants.FORWARD_TO+"="+forwardTo;
-
 %>
 <html>
 <head>

@@ -1147,14 +1147,14 @@ function submitQuarantineComments()
 //<!-- JavaScript for ViewSurigicalPathologyReport.jsp  end -->
 
 //Java Script for ParticipantTabPage.jsp
-function initiallizeAddParticipantTabs(contextPath)
+function initiallizeAddParticipantTabs(contextPath,queryString)
 {
 		tabbar= new dhtmlXTabBar("a_tabbar","top");
 		tabbar.setImagePath(contextPath + "/dhtml_comp/imgs/");
 		tabbar.setHrefMode("iframes-on-demand");
 		var tabIds = ["addTab"];
 		var tabNames = ["Add Partitipant"];
-		var tabHREFs = [contextPath + "/Participant.do?operation=add&pageOf=pageOfParticipant&menuSelected=12"];
+		var tabHREFs = [contextPath + "/Participant.do?"+queryString];
 		initializeTabs(tabIds,tabNames,tabHREFs);
 }
 

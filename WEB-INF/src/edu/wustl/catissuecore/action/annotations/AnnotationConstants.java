@@ -45,5 +45,5 @@ public class AnnotationConstants
 	
 	public static final String STATUS_ATTACHED = "Attached";
 	public static final String STATUS_DETACHED = "Detached";
-	
+    public static final String STATIC_ENTITY_LIST  = "staticEntityList";
 }

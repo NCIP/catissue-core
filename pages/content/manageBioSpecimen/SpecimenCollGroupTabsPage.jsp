@@ -3,7 +3,6 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%
-	String annotationLink = request.getContextPath() + "/LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=1";
 	String operation = (String)request.getParameter(Constants.OPERATION);
 	Long id = (Long)request.getAttribute("id");
 	String queryString = request.getQueryString();
@@ -25,7 +24,7 @@
 			queryString = queryString  + "operation=edit&pageOf=pageOfSpecimenCollectionGroup";
 	}
 	queryString = queryString + "&pageOf=pageOfSpecimenCollectionGroup&id="+id;
-	Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
+	Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
 	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+id;	
 	String str="&collectionProtocolId="+ collectionProtocolId.toString()+"&siteId="+siteId.toString()+"&participantId="+ParticipantId.toString()+"&protocolParticipantIdentifier="+protocolParticipantIdentifier;
 
