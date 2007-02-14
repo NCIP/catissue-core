@@ -177,6 +177,7 @@
 		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties"> 
 	  		<include name="upt.hibernate.cfg.xml"/>
 			<include name="catissuecore.hibernate.cfg.xml"/>
+			<include name="DynamicExtensionsHibernate.cfg.xml"/>
 			<replacefilter token="@@dialect@@" value="${mysql.dialect.string}"/>
 		</replace>
 		<!-- added for csm orm1.cfg.xml file-->
@@ -229,6 +230,7 @@
 		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties"> 
 	  		<include name="upt.hibernate.cfg.xml"/>
 			<include name="catissuecore.hibernate.cfg.xml"/>
+			<include name="DynamicExtensionsHibernate.cfg.xml"/>
 			<replacefilter token="@@dialect@@" value="${oracle.dialect.string}"/>
 		</replace>
 		
