@@ -1274,8 +1274,7 @@ public class APIDemo
 		User principalInvestigator = (User)ClientDemo.dataModelObjectMap.get("User");
 		collectionProtocol.setPrincipalInvestigator(principalInvestigator);
 		
-		User protocolCordinator = new User();
-		protocolCordinator.setId(new Long(principalInvestigator.getId().longValue()-1));
+		User protocolCordinator = (User)ClientDemo.dataModelObjectMap.get("User1");		
 		Collection protocolCordinatorCollection = new HashSet();
 		protocolCordinatorCollection.add(protocolCordinator);
 		collectionProtocol.setUserCollection(protocolCordinatorCollection);
