@@ -275,7 +275,10 @@ public class ReportLoader
 		
 		//((Set)collProtocolReg.getSpecimenCollectionGroupCollection()).add(scg);
 		scg.setCollectionProtocolRegistration(collProtocolReg);
-
+		
+		ClinicalReport clinicalReport=new ClinicalReport();
+		scg.setClinicalReport(clinicalReport);
+		
 		return scg;
 	}
 	
