@@ -43,7 +43,7 @@ public class ReportSection
     * @return system generated id
     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
     * unsaved-value="null" generator-class="native" 
-    * @hibernate.generator-param name="sequence" value="CATISSUE_REPORTSECTION_SEQ"
+    * @hibernate.generator-param name="sequence" value="CATISSUE_REPORT_SECTION_SEQ"
     */
 	public Long getId()
 	{

@@ -20,7 +20,7 @@
             unsaved-value="null"
         >
             <generator class="native">
-                <param name="sequence">CATISSUE_QUARANTINE_EVENT_PARAM_SEQ</param>
+                <param name="sequence">CATISSUE_QUARANTINE_PARAMS_SEQ</param>
             </generator>
         </id>
 

@@ -53,7 +53,7 @@ public class QuarantineEventParameter extends EventParameters
      * @see #setId(Integer)
      * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
      * unsaved-value="null" generator-class="native"
-     * @hibernate.generator-param name="sequence" value="CATISSUE_QUARANTINE_EVENT_PARAM_SEQ" 
+     * @hibernate.generator-param name="sequence" value="CATISSUE_QUARANTINE_PARAMS_SEQ" 
      */
 	public Long getId()
 	{

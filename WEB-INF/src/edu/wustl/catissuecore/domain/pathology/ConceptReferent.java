@@ -130,7 +130,7 @@ public class ConceptReferent
     * @return system generated id for concept referent
     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
     * unsaved-value="null" generator-class="native" 
-    * @hibernate.generator-param name="sequence" value="CATISSUE_CONTAINER_SEQ"
+    * @hibernate.generator-param name="sequence" value="CATISSUE_CONCEPT_REFERENT_SEQ"
     */
 	public Long getId()
 	{
