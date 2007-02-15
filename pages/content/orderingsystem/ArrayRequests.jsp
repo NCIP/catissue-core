@@ -151,7 +151,7 @@
 										<bean:message key='requestdetails.datatable.label.RequestFor'/>
 									</th>
 									<th class="dataTableHeader" scope="col" align="left" width="10%">
-										Type,Class
+										Class, Type
 									</th>
 								
 									<th class="dataTableHeader" scope="col" align="left" width="5%">
@@ -238,7 +238,7 @@
 									%>			
 										<%-- Display derivative icon for child specimens --%>								
 										<img src="images\Distribution.GIF" border="0"/>
-									<% }String toolTipTypeClass = "Type:"+((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenType")))+",Class:"+((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenClass"))); %>
+									<% }String toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenType"))); %>
 							 		<span title="<%= toolTipTypeClass %>">									
 										<bean:write name="requestDetailsForm" property="<%=rqstdItem %>" />
 									</span>
@@ -314,7 +314,7 @@
 									      <%}%> 
 							 		</td>
 								 	<td class="dataCellText" width="10%">
-									 		<bean:write name="requestDetailsForm" property="<%= spType %>" />,<bean:write name="requestDetailsForm" property="<%= spClass %>" />
+									 		<bean:write name="requestDetailsForm" property="<%= spClass %>" />, <bean:write name="requestDetailsForm" property="<%= spType %>" />
 									 </td>
 								 	<%
 									 	if(!(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)))
@@ -371,11 +371,11 @@
 								<td colspan='8'>
 								   	<table class="rowExpansionTable" width="100%"> 
 									   		<tr>
-									   			<td width="15%" nowrap>
+									   			<!--td width="15%" nowrap>
 									   				<label for="LabelType">
 									   					<bean:message key="specimen.type" />
 									   				</label> : <bean:write name="requestDetailsForm" property="<%=actualSpecimenClass %>" />
-									   			</td>
+									   			</td-->
 									   			<td width="10%" nowrap>
 									   				<label for="LabelDescription">
 									    				<bean:message key="orderingSystem.requestdetails.label.description" />
@@ -386,13 +386,13 @@
 													<html:textarea name="requestDetailsForm" styleId="description" styleClass="formFieldSized2"  property="<%= descriptionArray %>" cols='60' rows='2' disabled="<%= disableArrayOrderItemRow %>"/>
 												</td>
 									   		</tr>
-									   		<tr>
+									   		<!-- tr>
 									   			<td width="15%" nowrap>
 									   				<label for="LabelSubType">
 									    				<bean:message key="specimen.subType" />
 									   				</label> :  <bean:write name="requestDetailsForm" property="<%=actualSpecimenType %>" />
 									   			</td>									   												   			
-									   		</tr>	
+									   		</tr-->	
 								   	</table>									   		
 								</td> 
 							</tr>
@@ -589,11 +589,11 @@
 							</td>
 					 		
 					 		<td class="dataCellText" width="20%">					 		
-						 		<html:textarea name="requestDetailsForm" styleId="description" styleClass="formFieldSized" property="<%= description %>" cols='60' rows='2' readonly="true"/>
+						 		<html:textarea name="requestDetailsForm" styleId="description" styleClass="formFieldSized10" property="<%= description %>" cols='60' rows='2' readonly="true"/>
 					 		</td>
 					 		
 					 		<td class="dataCellText" width="15%">
-					 			<html:textarea name="requestDetailsForm" styleClass="formFieldSized" cols="60" rows="2" styleId="addDescription" property="<%=addDescription%>" disabled="<%=disableExistingArrayOrderItem%>"/>
+					 			<html:textarea name="requestDetailsForm" styleClass="formFieldSized10" cols="60" rows="2" styleId="addDescription" property="<%=addDescription%>" disabled="<%=disableExistingArrayOrderItem%>"/>
 					 		</td>
 					 		
 					 		<td class="dataCellText" width="25%">
@@ -603,10 +603,6 @@
 								</html:select>
 					 		</td>
 		
-					 		<%
-								//String arrayId = existingArrayRequestObj.getArrayId();
-								//String orderItemId = existingArrayRequestObj.getOrderItemId();
-							%>
 					 		<html:hidden name="requestDetailsForm" property="<%= existingArrayId %>"  />
 					 		<html:hidden name="requestDetailsForm" property="<%= existingArrayOrderItemId %>"  />
 					 		<html:hidden name="requestDetailsForm" property="<%= distributedItemId %>" />

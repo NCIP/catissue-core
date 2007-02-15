@@ -96,26 +96,9 @@ function tabToDisplay()
 					
 				</tr>
 				<tr>
-			   
-					<td class="formRequiredLabel" colspan="" style="border-left:1px solid #5C5C5C"><bean:message key='requestdetails.header.label.Comments'/> : <html:textarea name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" styleClass="formFieldSized15" cols="300" rows="2" property="comments"  readonly="true" /> <!-- <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>" property="comments" scope="request" /> </td> -->
-					
-				 	<td class="formRequiredLabel" align="right" width="30%">*
-						<bean:message key='requestlist.dataTabel.label.Site'/> : 
-						<html:select property="site" name="requestDetailsForm" styleClass="formFieldSized15" styleId="siteId" size="1" 
-						 			onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%= Constants.SITE_LIST_OBJECT  %>" labelProperty="name" property="value"/>		
-						</html:select> 						
-					</td>		
-					
-					<td class="formRequiredLabel" align="right" width="30%">
-						<bean:message key='requestlist.dataTabel.label.Status'/> : 
-						<html:select property="status" name="requestDetailsForm" styleClass="formFieldSized15" styleId="nextStatusId" size="1" 
-						 			onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%= Constants.REQUESTED_ITEMS_STATUS_LIST %>" labelProperty="name" property="value"/>		
-						</html:select> 
-						<html:button value="Update All" property="changeStatusButton" styleClass="actionButton" onclick="updateAllStatus()" title="<%= ApplicationProperties.getValue("requestdetails.tooltip.updateAllRequestStatus") %>">
-					</html:button>
-					</td>
+					<div>
+						<td class="formRequiredLabel" colspan="3" style="border-left:1px solid #5C5C5C" width="100%"><bean:message key='requestdetails.header.label.Comments'/> : <bean:write name="<%=  Constants.REQUEST_HEADER_OBJECT  %>"  property="comments"  scope="request" /> 
+					</div>
 					
 				</tr>
 				</table>
@@ -152,7 +135,7 @@ function tabToDisplay()
 								 	<th class="dataTableHeader" scope="col" align="center"  colspan='5'>
 								 	Requested
 								 	</th>
-								 	<th class="dataTableHeader" scope="col" align="left" width="5%" colspan="2" rowspan="2" scope="col">
+								 	<th class="dataTableHeader" scope="col" align="left" width="10%" colspan="2" rowspan="2" scope="col">
 										<bean:message key='requestdetails.datatable.label.AvailableQty'/>
 									</th>
 								
@@ -162,6 +145,13 @@ function tabToDisplay()
 								
 									<th class="dataTableHeader" scope="col" align="left" width="20%" rowspan="2" scope="col">
 										<bean:message key='requestdetails.datatable.label.AssignStatus'/>
+										<html:select property="status" name="requestDetailsForm" styleClass="formFieldSized15" styleId="nextStatusId" size="1" 
+						 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+											<html:options collection="<%= Constants.REQUESTED_ITEMS_STATUS_LIST %>" labelProperty="name" property="value"/>		
+										</html:select> 
+										<html:button value="All" property="changeStatusButton" styleClass="actionButton" onclick="updateAllStatus()" 
+										title="<%= ApplicationProperties.getValue("requestdetails.tooltip.updateAllRequestStatus") %>">
+										</html:button>
 									</th>		
 								 </tr>
 								 <tr>	
@@ -169,11 +159,11 @@ function tabToDisplay()
 										<bean:message key='requestdetails.datatable.label.RequestItem'/>
 									</th>
 								
-									<th class="dataTableHeader" scope="col" align="left" width="25%">
+									<th class="dataTableHeader" scope="col" align="left" width="20%">
 										<bean:message key='requestdetails.datatable.label.RequestFor'/>
 									</th>
-									<th class="dataTableHeader" scope="col" align="left" width="10%">
-										Type,Class
+									<th class="dataTableHeader" scope="col" align="left" width="15%">
+										Class, Type
 									</th>
 								
 									<th class="dataTableHeader" scope="col" align="left" width="5%">
@@ -266,7 +256,7 @@ function tabToDisplay()
 											
 											
 									 		<!-- bean:write name="requestDetailsBeanObj" property="requestedItem" /-->
-									 		<%} String toolTipTypeClass = "Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType")))+",Class:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenClass"))); %>
+									 		<%} String toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType"))); %>
 									 		<span title="<%= toolTipTypeClass %>">
 									 		<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />									 	
 									 		</span>
@@ -342,8 +332,8 @@ function tabToDisplay()
 												 	</span>
 										      <%}%> 
 									 	</td>
-									 	<td class="dataCellText" width="10%">
-									 		<bean:write name="requestDetailsForm" property="<%= spType %>" />,<bean:write name="requestDetailsForm" property="<%= spClass %>" />
+									 	<td class="dataCellText" width="15%">
+											<bean:write name="requestDetailsForm" property="<%= spClass %>" />, <bean:write name="requestDetailsForm" property="<%= spType %>" />
 									 	</td>
 									 	<%
 									 	if((((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Existing")
@@ -356,7 +346,7 @@ function tabToDisplay()
 									 		String className = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_className")));
 									 		String type = ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_type")));
 									 	%>
-									 	<td class="dataCellText">
+									 	<td class="dataCellText" width="5%">
 									 		<!-- bean:write name="requestDetailsBeanObj" property="requestedQty" /-->										 		
 									 		<bean:write name="requestDetailsForm" property="<%= requestedQty %>" />
 									 		<span>		
@@ -366,7 +356,7 @@ function tabToDisplay()
 												</script>
 											</span>	
 									 	</td>
-									 	<td class="dataCellText" style="border-right:0px">	
+									 	<td class="dataCellText" style="border-right:0px" width="5%">	
 										 	<div id="<%= updateAvaiQty %>">	
 										 		<!-- bean:write name="requestDetailsBeanObj" property="availableQty" /-->								 		
 										 		<bean:write name="requestDetailsForm" property="<%= availableQty %>" />
@@ -393,7 +383,7 @@ function tabToDisplay()
 											</span>	
 									 	</td>
 									 	
-									 	<td class="dataCellText" width="30%">									 											 		
+									 	<td class="dataCellText" width="20%">									 											 		
 									 		<html:select property="<%=assignStatus %>" name="requestDetailsForm" styleClass="formFieldSized15" styleId="<%=select%>"  
 					 								onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableRow %>">
 					 									
@@ -407,16 +397,16 @@ function tabToDisplay()
 									<!-- Block for row expansion starts here -->
 									
 									 <tr id="<%=data%>" style="display:none">
-									   <td colspan='8'>
+									   <td colspan='9'>
 									   	<table class="rowExpansionTable" width="100%"> 
 									   		
 									   		<tr>
-									   			<td width="15%" nowrap>
+									   			<!-- td width="15%" nowrap>
 									   				<label for="LabelType">
 									   					<bean:message key="specimen.type" />
-									   				</label> : <!-- bean:write name="requestDetailsBeanObj" property="className" /-->
+									   				</label> : <!-- bean:write name="requestDetailsBeanObj" property="className" />
 									   							<bean:write name="requestDetailsForm" property="<%= actualSpecimenClass %>" />
-									   			</td>
+									   			</td-->
 									   			<td width="10%" nowrap>
 									   				<label for="LabelDescription">
 									    				<bean:message key="orderingSystem.requestdetails.label.description" />
@@ -427,12 +417,12 @@ function tabToDisplay()
 												</td>
 									   		</tr>
 									   		<tr>
-									   			<td width="15%" nowrap>
+									   			<!-- td width="15%" nowrap>
 									   				<label for="LabelSubType">
 									    				<bean:message key="specimen.subType" />
-									   				</label> :  <!-- bean:write name="requestDetailsBeanObj" property="type" /-->
+									   				</label> :  <!-- bean:write name="requestDetailsBeanObj" property="type" />
 									   							<bean:write name="requestDetailsForm" property="<%= actualSpecimenType %>" />
-									   			</td>									   												   			
+									   			</td-->									   												   			
 									   		</tr>	
 
 									   	</table>									   		
@@ -472,9 +462,19 @@ function tabToDisplay()
  				<td class="formField" style="border-right:0px;border-bottom:0px ">
  					<html:textarea name="requestDetailsForm" styleClass="formFieldSized" cols="300" rows="2" property="administratorComments"  />
 		 		</td>
+				<td class="formLabel" width="10%" style="border-right:0px;border-bottom:0px " nowrap>
+ 					*<bean:message key='requestlist.dataTabel.label.Site'/> : 
+ 				</td>
+				<td class="formRequiredLabel" align="right" width="30%" style="border-right:0px;border-bottom:0px">
+						
+						<html:select property="site" name="requestDetailsForm" styleClass="formFieldSized10" styleId="siteId" size="1" 
+						 			onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+							<html:options collection="<%= Constants.SITE_LIST_OBJECT  %>" labelProperty="name" property="value"/>		
+						</html:select> 						
+				</td>
 		 		<td class="" align="right" >
 					<input type="button" value="Done" onclick="submitPage()"/>
-					
+				</td>	
 					<html:hidden name="requestDetailsForm" property="id" />
 					<%							
 						String operationUpdate = "update";
@@ -483,7 +483,7 @@ function tabToDisplay()
 					<html:hidden name="requestDetailsForm" property="operation" value="<%= operationUpdate %>"/>
 					<html:hidden name="requestDetailsForm" property="distributionProtocolId" value="<%= distributionProtocol %>"/>							
 					<html:hidden name="requestDetailsForm" property="tabIndex" styleId="tabIndexId"/>							
-				</td>
+				
 			</tr>
 			<tr></tr>
 			<tr></tr>

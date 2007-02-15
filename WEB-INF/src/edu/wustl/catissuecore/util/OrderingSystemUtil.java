@@ -105,7 +105,7 @@ public class OrderingSystemUtil
 		requestViewBean.setDistributionProtocol(order.getDistributionProtocol().getTitle());
 		requestViewBean.setDistributionProtocolId(order.getDistributionProtocol().getId().toString());
 		requestViewBean.setOrderName(order.getName());
-		requestViewBean.setRequestedBy(order.getDistributionProtocol().getPrincipalInvestigator().getLastName()+","+order.getDistributionProtocol().getPrincipalInvestigator().getFirstName());
+		requestViewBean.setRequestedBy(order.getDistributionProtocol().getPrincipalInvestigator().getLastName()+", "+order.getDistributionProtocol().getPrincipalInvestigator().getFirstName());
 		requestViewBean.setRequestedDate(Utility.parseDateToString(order.getRequestedDate(), Constants.DATE_PATTERN_MM_DD_YYYY));
 		requestViewBean.setEmail(order.getDistributionProtocol().getPrincipalInvestigator().getEmailAddress());
 		return requestViewBean;
@@ -113,7 +113,7 @@ public class OrderingSystemUtil
 	/**
 	 * @param rootNode Specimen
 	 * @param childNodes Collection
-	 * @return List. AyyayList of children Specimen objects.
+	 * @return List. ArrayList of children Specimen objects.
 	 */
 	public static List getAllChildrenSpecimen(Specimen rootNode,Collection childNodes)
 	{
