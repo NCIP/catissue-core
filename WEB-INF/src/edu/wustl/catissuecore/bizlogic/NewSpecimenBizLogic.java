@@ -24,8 +24,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import sun.security.krb5.internal.s;
-
 import net.sf.hibernate.HibernateException;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
