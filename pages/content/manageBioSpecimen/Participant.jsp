@@ -24,7 +24,7 @@
 
 <c:set var="operation" value="${participantForm.operation}"/>
 <jsp:useBean id="operation" type="java.lang.String"/>
-<c:set var="submittedFor" value="${participantForm.submittedFor}" scope="session"/>
+<c:set var="submittedFor" value="${participantForm.submittedFor}"/>
 <jsp:useBean id="submittedFor" class="java.lang.String"/>
 <c:set var="forwardTo" value="${participantForm.forwardTo}"/>
 <jsp:useBean id="forwardTo" type="java.lang.String"/>

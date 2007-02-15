@@ -19,7 +19,7 @@
 	{
 		queryString = queryString  + "&operation="+operation+"&pageOf=pageOfParticipant&menuSelected=12";
 	}
-	queryString = queryString + "&id="+id+"&"+"submittedFor=AddNew"+"&"+Constants.FORWARD_TO+"="+forwardTo;
+	queryString = queryString + "&id="+id+"&"+"submittedFor="+submittedFor+"&"+Constants.FORWARD_TO+"="+forwardTo;
 
 	Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
 	String participantAnnotationsQueryString = "?entityId="+participantEntityId+"&entityRecordId="+participantId;
@@ -53,7 +53,7 @@
 			{
 				if((opr == 'null')||(opr=="add"))
 				{
-					initiallizeAddParticipantTabs('<%=request.getContextPath()%>');
+					initiallizeAddParticipantTabs('<%=request.getContextPath()%>','<%=queryString%>');
 				}
 				else
 				{
