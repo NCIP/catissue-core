@@ -191,7 +191,7 @@ public class NewSpecimenAction extends SecureAction
 				{
 					if(initialWitnessValue.equals(Constants.NULL))
 					{
-						witnessName=initialWitnessValue;
+						witnessName="";
 					}
 					else
 					{
@@ -201,7 +201,8 @@ public class NewSpecimenAction extends SecureAction
 				}
 				else
 				{
-					specimenForm.setWitnessName(witness.getFirstName());
+					String witnessFullName = witness.getLastName()+", "+witness.getFirstName();
+					specimenForm.setWitnessName(witnessFullName);
 				}
 				if(cprObject.getConsentSignatureDate()==null)
 				{
@@ -242,12 +243,16 @@ public class NewSpecimenAction extends SecureAction
 				List participantResponseList= new ArrayList(participantResponseSet);
 				if(operation.equalsIgnoreCase(Constants.ADD))
 				{
-					String scgDropDown = request.getParameter(Constants.SCG_DROPDOWN);
-					if(scgDropDown==null||scgDropDown.equalsIgnoreCase(Constants.TRUE))
-					{
-						Collection consentResponseStatuslevel= specimenCollectionGroup.getConsentTierStatusCollection();
-						Map tempMap=prepareConsentMap(participantResponseList,consentResponseStatuslevel);
-						specimenForm.setConsentResponseForSpecimenValues(tempMap);
+					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+					if(errors == null)
+					{ 
+						String scgDropDown = request.getParameter(Constants.SCG_DROPDOWN);
+						if(scgDropDown==null||scgDropDown.equalsIgnoreCase(Constants.TRUE))
+						{
+							Collection consentResponseStatuslevel= specimenCollectionGroup.getConsentTierStatusCollection();
+							Map tempMap=prepareConsentMap(participantResponseList,consentResponseStatuslevel);
+							specimenForm.setConsentResponseForSpecimenValues(tempMap);
+						}
 					}
 					specimenForm.setConsentTierCounter(participantResponseList.size());
 				}

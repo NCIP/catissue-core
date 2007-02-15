@@ -306,7 +306,8 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 		}
 		else
 		{
-			dForm.setWitnessName(witness.getFirstName());
+			String witnessFullName = witness.getLastName()+", "+witness.getFirstName();
+			dForm.setWitnessName(witnessFullName);
 		}
 		if(cprObject.getConsentSignatureDate()==null)
 		{

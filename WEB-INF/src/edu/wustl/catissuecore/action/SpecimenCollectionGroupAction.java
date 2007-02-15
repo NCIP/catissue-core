@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.Globals;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -152,7 +153,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 					}
 					else
 					{
-						specimenCollectionGroupForm.setWitnessName(witness.getFirstName());
+						String witnessFullName = witness.getLastName()+", "+witness.getFirstName();
+						specimenCollectionGroupForm.setWitnessName(witnessFullName);
 					}
 					String getConsentDate=Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
 					specimenCollectionGroupForm.setConsentDate(getConsentDate);
@@ -163,11 +165,15 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 					List participantResponseList= new ArrayList(participantResponseSet);
 					if(operation.equalsIgnoreCase(Constants.ADD))
 					{
-						String protocolEventID = request.getParameter("protocolEventId");
-						if(protocolEventID==null||protocolEventID.equalsIgnoreCase(Constants.FALSE))
-						{
-							Map tempMap=prepareConsentMap(participantResponseList);
-							specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
+						ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+						if(errors == null)
+						{ 
+							String protocolEventID = request.getParameter("protocolEventId");
+							if(protocolEventID==null||protocolEventID.equalsIgnoreCase(Constants.FALSE))
+							{
+								Map tempMap=prepareConsentMap(participantResponseList);
+								specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
+							}
 						}
 						specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size());
 					}
@@ -179,12 +185,10 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 						Collection consentResponseStatuslevel= specimenCollectionGroup.getConsentTierStatusCollection();
 						Map tempMap=prepareSCGResponseMap(consentResponseStatuslevel, consentResponse);
 						specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
-						specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size()) ;
+						specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size());
+
 					}
-					
 				}
-				//Setting the participant responses
-				//Adding name,value pair in NameValueBean 
 				List specimenCollectionGroupResponseList =Utility.responceList(operation);
 				request.setAttribute("specimenCollectionGroupResponseList", specimenCollectionGroupResponseList);
 			}
@@ -445,7 +449,6 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				}
 			}
 		}
-		
 		request.setAttribute(Constants.PAGEOF,pageOf);
 		Logger.out.debug("page of in Specimen coll grp action:"+request.getParameter(Constants.PAGEOF));
 		// -------called from Collection Protocol Registration end -------------------------------

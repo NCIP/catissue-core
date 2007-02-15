@@ -68,7 +68,7 @@ public class GetConsents extends BaseAction
 				//Getting witness name list for CollectionProtocolID
 				List witnessList = witnessNameList(cp_id);
 				//Getting ResponseList if Operation=Edit then "Withdraw" is added to the List 
-				List responseList= Utility.responceList("add");
+				List responseList= Utility.responceList(Constants.ADD);
 				List requestConsentList = getConsentList(cp_id);
 				Map tempMap=prepareConsentMap(requestConsentList);
 				collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
@@ -77,7 +77,7 @@ public class GetConsents extends BaseAction
 				request.setAttribute("witnessList", witnessList);			
 				request.setAttribute("responseList", responseList);
 				request.setAttribute(Constants.PAGEOF,"pageOfCollectionProtocolRegistration");
-				request.setAttribute(Constants.OPERATION, "add");
+				request.setAttribute(Constants.OPERATION,Constants.ADD);
 			}		
 		} 
 	    return mapping.findForward("success");
@@ -97,6 +97,7 @@ private List witnessNameList(String collProtId) throws DAOException
 	List collProtList = bizLogic.retrieve(CollectionProtocol.class.getName(), colName, collProtId);		
 	CollectionProtocol collectionProtocol = (CollectionProtocol)collProtList.get(0);
 	//Setting the consent witness
+	String witnessFullName="";
 	List consentWitnessList = new ArrayList();
 	consentWitnessList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 	Collection userColl = collectionProtocol.getUserCollection();
@@ -104,11 +105,13 @@ private List witnessNameList(String collProtId) throws DAOException
 	while(iter.hasNext())
 	{
 		User user = (User)iter.next();
-		consentWitnessList.add(new NameValueBean(user.getFirstName(),user.getId()));
+		witnessFullName = user.getLastName()+", "+user.getFirstName();
+		consentWitnessList.add(new NameValueBean(witnessFullName,user.getId()));
 	}		
 	//Setting the PI
 	User principalInvestigator = collectionProtocol.getPrincipalInvestigator();
-	consentWitnessList.add(new NameValueBean(principalInvestigator.getFirstName(),principalInvestigator.getId()));
+	String piFullName=principalInvestigator.getLastName()+", "+principalInvestigator.getFirstName();
+	consentWitnessList.add(new NameValueBean(piFullName,principalInvestigator.getId()));
 	
 	return consentWitnessList;
 }	

@@ -9,6 +9,9 @@
  */
 
 package edu.wustl.catissuecore.action;
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionErrors;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -87,9 +90,16 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 				List requestConsentList = getConsentList(cp_id);
 				if(operation.equalsIgnoreCase(Constants.ADD))
 				{ 
-					Map tempMap=prepareConsentMap(requestConsentList);
-					collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
-					collectionProtocolRegistrationForm.setConsentTierCounter(requestConsentList.size()) ;
+
+					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+					if(errors == null)
+					{ 
+						Map tempMap=prepareConsentMap(requestConsentList);
+						collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
+					}
+						collectionProtocolRegistrationForm.setConsentTierCounter(requestConsentList.size()) ;		
+					
+					
 				}
 				else
 				{
@@ -467,6 +477,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		List collProtList = bizLogic.retrieve(CollectionProtocol.class.getName(), colName, collProtId);		
 		CollectionProtocol collectionProtocol = (CollectionProtocol)collProtList.get(0);
 		//Setting the consent witness
+		String witnessFullName="";
 		List consentWitnessList = new ArrayList();
 		consentWitnessList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
 		Collection userColl = collectionProtocol.getUserCollection();
@@ -474,12 +485,13 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		while(iter.hasNext())
 		{
 			User user = (User)iter.next();
-			consentWitnessList.add(new NameValueBean(user.getFirstName(),user.getId()));
-		}		
+			witnessFullName = user.getLastName()+", "+user.getFirstName();
+			consentWitnessList.add(new NameValueBean(witnessFullName,user.getId()));
+		}
 		//Setting the PI
 		User principalInvestigator = collectionProtocol.getPrincipalInvestigator();
-		consentWitnessList.add(new NameValueBean(principalInvestigator.getFirstName(),principalInvestigator.getId()));
-		
+		String piFullName=principalInvestigator.getLastName()+", "+principalInvestigator.getFirstName();
+		consentWitnessList.add(new NameValueBean(piFullName,principalInvestigator.getId()));
 		return consentWitnessList;
 	}	
 	//Consent Tracking Virender Mehta
