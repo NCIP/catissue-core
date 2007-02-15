@@ -2985,7 +2985,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="collectionProtocol" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9" />
-			<forward name="participant" path="/LoadParticipantPage.do?operation=add" />
+			<forward name="participant" path="/LoadParticipantPage.do?operation=add&amp;submittedFor=AddNew" />
 		</action>
 		<action path="/SpecimenCollectionGroupAddNew"
 			type="edu.wustl.common.action.AddNewAction"
