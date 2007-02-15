@@ -177,7 +177,6 @@
 		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties"> 
 	  		<include name="upt.hibernate.cfg.xml"/>
 			<include name="catissuecore.hibernate.cfg.xml"/>
-			<include name="DynamicExtensionsHibernate.cfg.xml"/>
 			<replacefilter token="@@dialect@@" value="${mysql.dialect.string}"/>
 		</replace>
 		<!-- added for csm orm1.cfg.xml file-->
@@ -222,6 +221,9 @@
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/hibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}"/>
 		</replace>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
+			<replacefilter token="${mysql.dialect.string}" value="${mysql.dialect.string}"/>
+		</replace>
 	</target>
 	
 	<!--Modify Configuration For Oracle-->
@@ -230,7 +232,6 @@
 		<replace dir="${temp.dir}/catissuecore-properties" propertyfile="caTissueInstall.properties"> 
 	  		<include name="upt.hibernate.cfg.xml"/>
 			<include name="catissuecore.hibernate.cfg.xml"/>
-			<include name="DynamicExtensionsHibernate.cfg.xml"/>
 			<replacefilter token="@@dialect@@" value="${oracle.dialect.string}"/>
 		</replace>
 		
@@ -278,6 +279,10 @@
 				token="${mysql.dialect.string}" 
 			  	value="${oracle.dialect.string}"/>
 		</replace>
+		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
+			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}"/>
+		</replace>
+
 	</target>
 	<!--Server clean-up-->
 	<target name="clean_server" description="deletes the WAR file and cache from server ">		
