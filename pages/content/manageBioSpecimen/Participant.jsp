@@ -88,9 +88,10 @@
 			strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 		}
 		String participantIdentifier="0";
-		List columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
-		List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-	
+		List columnList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+		List dataList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_DATA_LIST);
+		request.getSession().removeAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+		request.getSession().removeAttribute(Constants.SPREADSHEET_DATA_LIST);		
 			
 		String title = "ParticipantList";
 	

@@ -132,6 +132,15 @@
 		document.forms[0].submittedFor.value = submittedFor;
 		document.forms[0].forwardTo.value    = forwardTo;
 	}
+	function setSubmittedForConditional(submittedFor,forwardTo)
+	{
+		if (submittedFor != null && (submittedFor=="AddNew" || submittedFor == "ForwardTo"))
+		{
+			document.forms[0].target="_top";
+		}
+		document.forms[0].submittedFor.value = submittedFor;
+		document.forms[0].forwardTo.value    = forwardTo;
+	}
 
 	</script>
 </head>
@@ -144,9 +153,9 @@
 <html:form action="<%=formName%>" >
 			
 	<%
-			String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
+			String normalSubmitFunctionName = "setSubmittedForConditional('" + submittedFor+ "','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
 			String forwardToSubmitFuctionName = "setSubmittedForSCG('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";									
-			String forwardToSubmitFunctionNameForMultipleSpecimen = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][1]+"')";									
+			String forwardToSubmitFunctionNameForMultipleSpecimen = "setSubmittedForConditional('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][1]+"')";									
 			String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 			String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
 			String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
