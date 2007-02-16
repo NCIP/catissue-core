@@ -109,6 +109,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	public static final String SPREADSHEET_DATA_LIST_FOR_PATHOLOGICAL_CASES = "spreadsheetDataListForPathologicalCases";
 	public static final String SPREADSHEET_DATA_LIST_FOR_ARRAY = "spreadsheetDataListForArray";
+	public static final String SELECTED_ITEMS_MAP = "selectedItemsMap";
  //	 Report Loader 
 	public static final String MAX_PARTICIPANT_MATCHING_PERCENTAGE="maxParticipantMatchingPercentage";	
 /////	

@@ -11,27 +11,26 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import edu.wustl.common.action.BaseAction;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.DefineArrayForm;
-import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
 import edu.wustl.catissuecore.actionForm.OrderForm;
+import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.util.logger.Logger;
-
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
-import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 
 /**
  * Action for ordering specimen
@@ -156,7 +155,7 @@ public class OrderPathologyCaseAction extends BaseAction
 			subTypeMap.put(pv.getValue(), innerList);
 		} // class and values set
 
-		specimenClassList.remove(1);
+		//specimenClassList.remove(1);
 
 		// sets the Class list
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
@@ -226,27 +225,30 @@ public class OrderPathologyCaseAction extends BaseAction
 	 * @param request HttpServletRequest object
 	 * @return List of Pathology Case objects
 	 */
-	private List getDataFromDatabase(HttpServletRequest request) 
+	private List getDataFromDatabase(HttpServletRequest request) throws DAOException
 	{
 		// to get data from database when specimen id is given
-		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(
-				Constants.NEW_PATHOLOGY_FORM_ID);
-		HttpSession session = request.getSession(true);
-
-		try 
-		{
-
-			String sourceObjectName = IdentifiedSurgicalPathologyReport.class
-					.getName();
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.NEW_PATHOLOGY_FORM_ID);
+		
+//		List pathologicalCaseList = new ArrayList();
+//		//retriving the id list from session.
+//		if(request.getSession().getAttribute("pathologicalIdList") != null)
+//		{
+//			List idList = (List)request.getSession().getAttribute("pathologicalIdList");
+//	    	
+//			for(int i=0;i<idList.size();i++)
+//			{
+//				List pathologicalListFromDb = bizLogic.retrieve(IdentifiedSurgicalPathologyReport.class.getName(), "id", (String)idList.get(i));
+//				IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = (IdentifiedSurgicalPathologyReport)pathologicalListFromDb.get(0);
+//				pathologicalCaseList.add(identifiedSurgicalPathologyReport);
+//			}
+//		}
+//		return pathologicalCaseList;
+				
+			String sourceObjectName = IdentifiedSurgicalPathologyReport.class.getName();
 
 			List pathologyCaseList = bizLogic.retrieve(sourceObjectName);
 			return pathologyCaseList;
 
-		} 
-		catch (DAOException e) 
-		{
-			Logger.out.error(e.getMessage(), e);
-			return null;
-		}
 	}
 }

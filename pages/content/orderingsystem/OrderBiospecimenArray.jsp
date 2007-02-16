@@ -339,7 +339,7 @@ String onClassChangeFunctionName = "onTypeChange(this)";%>
 									</th>
 									
 									<th class="dataTableHeader" width="30%" align="left">
-										<bean:message key="requestdetails.datatable.label.RequestedQty" />
+										<bean:message key="orderingsystem.label.requestedQuantity" />
 									</th>
 									
 									<th class ="dataTableHeader"  align="left" width="70%">

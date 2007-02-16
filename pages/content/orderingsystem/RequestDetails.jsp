@@ -256,7 +256,12 @@ function tabToDisplay()
 											
 											
 									 		<!-- bean:write name="requestDetailsBeanObj" property="requestedItem" /-->
-									 		<%} String toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType"))); %>
+									 		<%}
+										else if(((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("DerivedPathological")
+												|| ((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_instanceOf"))).trim().equalsIgnoreCase("Pathological"))
+										{%>
+											<img src="images\Participant.GIF" border="0"/>
+										<%}String toolTipTypeClass = "Class:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenClass")))+", Type:"+((String)(requestDetailsForm.getValue("RequestDetailsBean:"+i+"_actualSpecimenType"))); %>
 									 		<span title="<%= toolTipTypeClass %>">
 									 		<bean:write name="requestDetailsForm" property="<%= requestedItem %>" />									 	
 									 		</span>

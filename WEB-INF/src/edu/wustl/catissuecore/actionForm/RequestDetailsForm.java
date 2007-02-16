@@ -422,8 +422,6 @@ public class RequestDetailsForm extends AbstractActionForm
 		{
 			DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)orderItem;
 			values.put(requestedItem, derivedSpecimenOrderItem.getSpecimen().getLabel());
-			
-		
 			Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getSpecimen(),derivedSpecimenOrderItem.getSpecimen().getChildrenSpecimen());
 		    List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList,derivedSpecimenOrderItem.getSpecimenClass(),derivedSpecimenOrderItem.getSpecimenType());
 		    Iterator i = finalChildrenSpecimenList.iterator();
@@ -466,9 +464,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			}
 			List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(totalChildrenSpecimenColl);
 			requestForDropDownMap.put(specimenList, childrenSpecimenListToDisplay);
-			values.put(specimenCollGrpId,pathologicalCaseOrderItem.getSpecimenCollectionGroup().getId().toString());	
-			
-			
+			values.put(specimenCollGrpId,pathologicalCaseOrderItem.getSpecimenCollectionGroup().getId().toString());
 			if(childrenSpecimenListToDisplay.size() != 0)
 		  	{
 				values.put(availableQty, (((Specimen)totalChildrenSpecimenColl.get(0)).getAvailableQuantity().getValue().toString()));
@@ -477,7 +473,6 @@ public class RequestDetailsForm extends AbstractActionForm
 		  	{
 		  		values.put(availableQty, "NA");//derivedSpecimenorderItem.getSpecimen().getAvailableQuantity().getValue().toString()	  		
 		  	}			
-			
 			if(childrenSpecimenListToDisplay.isEmpty()
 				|| (pathologicalCaseOrderItem.getSpecimenClass() != null && pathologicalCaseOrderItem.getSpecimenType() != null && !pathologicalCaseOrderItem.getSpecimenClass().trim().equalsIgnoreCase("") && !pathologicalCaseOrderItem.getSpecimenType().trim().equalsIgnoreCase("")))
 		    {
@@ -491,13 +486,16 @@ public class RequestDetailsForm extends AbstractActionForm
 		  	{		  	
 				values.put(assignQty, pathologicalCaseOrderItem.getDistributedItem().getQuantity().toString());
 				values.put(requestFor, pathologicalCaseOrderItem.getDistributedItem().getSpecimen().getId());				
-		  	}		
-			
+		  	}	
 			values.put(specimenClass, pathologicalCaseOrderItem.getSpecimenClass());
 			values.put(specimenType, pathologicalCaseOrderItem.getSpecimenType());	
 			values.put(actualSpecimenClass,pathologicalCaseOrderItem.getSpecimenClass());
 			values.put(actualSpecimenType, pathologicalCaseOrderItem.getSpecimenType());
 		}
+	}
+	private void populatePathologicalCaseOrderItem()
+	{
+		
 	}
 	
 	/**

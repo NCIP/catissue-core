@@ -304,7 +304,7 @@ String enable="false";
 									<td align="left" style="background-color:white" class="dataCellText">
 										<%if(orderSpecimenBeanObj.getTypeOfItem().equals("pathologyCase"))
 										{%>
-											<img src="images\Distribution.GIF" border="0"/>
+											<img src="images\Participant.GIF" border="0"/>
 										<%}
 										else
 										{%>
@@ -486,7 +486,7 @@ String enable="false";
 													  	<td align="left" class="dataCellText">
 														<%if(orderSpecimenBeanObj.getTypeOfItem().equals("pathologyCase"))
 														{%>
-															<img src="images\Distribution.GIF" border="0"/>
+															<img src="images\Participant.GIF" border="0"/>
 														<%}
 														else
 														{%>
