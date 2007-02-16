@@ -4,6 +4,10 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%
 	String operation = (String)request.getParameter(Constants.OPERATION);
+	if (operation == null)
+	{
+		operation = "add";
+	}
 	Long id = (Long)request.getAttribute("id");
 	String queryString = request.getQueryString();
 	SpecimenCollectionGroupForm scgForm=(SpecimenCollectionGroupForm)request.getAttribute("specimenCollectionGroupForm");
