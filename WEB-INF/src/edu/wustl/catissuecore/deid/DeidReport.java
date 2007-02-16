@@ -134,6 +134,7 @@ public class DeidReport extends Thread
         tc.setData(deidText);
         tc.setSurgicalPathologyReport(deidReport);
         
+        deidReport.setSource(ispr.getSource());
         deidReport.setTextContent(tc);
         deidReport.setIsFlagForReview(new Boolean(false));
         deidReport.setIsQuanrantined(new Boolean(false));
