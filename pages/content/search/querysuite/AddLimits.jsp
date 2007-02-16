@@ -75,7 +75,7 @@
 							<td height="60%">
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
 								<tr>
-									<td><div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
+									<td height="350" width="100%"><div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
 								</tr>
 								</table>
 							</td>
