@@ -2,10 +2,12 @@ package edu.wustl.catissuecore.applet.ui.querysuite;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.cab2b.common.ejb.path.PathFinderBusinessInterface;
 import edu.wustl.catissuecore.applet.AppletConstants;
@@ -65,6 +67,10 @@ public class PathFinderAppletServerCommunicator implements PathFinderBusinessInt
 	 * @param
 	 */
 	public List<IInterModelAssociation> getInterModelAssociations(Long arg0) throws RemoteException
+	{
+		return null;
+	}
+	public Collection<AssociationInterface> getIncomingIntramodelAssociations(Long entityId) throws RemoteException
 	{
 		return null;
 	}

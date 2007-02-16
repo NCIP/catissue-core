@@ -1,6 +1,8 @@
 
 package edu.wustl.catissuecore.applet.ui.querysuite;
 
+import java.awt.Container;
+import java.awt.Frame;
 import java.awt.Image;
 import java.io.IOException;
 import java.util.HashMap;
@@ -11,6 +13,7 @@ import javax.swing.ImageIcon;
 
 import edu.wustl.cab2b.client.ui.dag.MainDagPanel;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
+import edu.wustl.cab2b.client.ui.util.CommonUtils;
 import edu.wustl.cab2b.client.ui.util.CommonUtils.DagImageConstants;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
@@ -23,6 +26,7 @@ import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionId;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * This is applet class for Dag view. This renders the rule objects according to the user inputs for add/edit limits section.
@@ -56,6 +60,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 	protected void doInit()
 	{
 		super.doInit();
+		Logger.configure();
 		queryObject = new ClientQueryBuilder();
 		Map<DagImageConstants, Image> imagePathsMap = getImagePathsMap();
 		UpdateAddLimitUI updateAddLimitUI = new UpdateAddLimitUI(this);
@@ -66,6 +71,27 @@ public class DiagrammaticViewApplet extends BaseApplet
 		this.setSize(3500, 2000);
 		this.setVisible(true);
 	}
+	protected void postInit() {
+		//Initializing frame reference to parent frame. 
+		//This reference is used for showing ambiguity resolver
+		CommonUtils.FrameReference =  findParentFrame();
+	}
+	
+	/**
+	 * This method returns parent frame of this applet
+	 * @return
+	 */
+	private Frame findParentFrame(){ 
+	    Container c = this; 
+	   
+	    while(c != null){ 
+	      if (c instanceof Frame) 
+	        return (Frame)c; 
+
+	      c = c.getParent(); 
+	    } 
+	    return null; 
+	  } 
 
 	/**
 	 * This method is called from applet through javascript. It further calls ViewSearchResultsAction class to get the results, 

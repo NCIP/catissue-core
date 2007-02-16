@@ -95,7 +95,7 @@
 											<div id="queryTableTd" style="overflow:auto;height:100%;width:100%"">
 												<APPLET
 													CODEBASE = "<%=Constants.APPLET_CODEBASE%>"
-													ARCHIVE = "dagViewApplet.jar, cab2bStandAlone.jar,commonpackage.jar,swingx-2006_10_08.jar,org-netbeans-graph-vmd.jar,org-netbeans-graph.jar,org-openide-util.jar,DynamicExtensions.jar,struts.jar,hibernate2.1.7c.jar,odmg.jar"
+													ARCHIVE = "dagViewApplet.jar, cab2bStandAlone.jar,commonpackage.jar,swingx-2006_10_08.jar,org-netbeans-graph-vmd.jar,org-netbeans-graph.jar,org-openide-util.jar,DynamicExtensions.jar,struts.jar,hibernate2.1.7c.jar,odmg.jar,log4j-1.2.9.jar"
 													CODE = "<%=Constants.QUERY_DAG_VIEW_APPLET%>"
 													ALT = "Dag view Applet"
 													NAME = "<%=Constants.QUERY_DAG_VIEW_APPLET_NAME%>"
