@@ -736,7 +736,8 @@
 					<include name="**/swingx-2006_10_08.jar" />								
 					<include name="**/struts.jar" />								
 					<include name="**/hibernate2.1.7c.jar" />								
-					<include name="**/odmg.jar"/>	
+					<include name="**/odmg.jar"/>
+					<include name="**/log4j-1.2.9.jar"/>
 				</fileset>
 			</copy>
 			<copy todir="${dagviewapplet.dir}/images">	
