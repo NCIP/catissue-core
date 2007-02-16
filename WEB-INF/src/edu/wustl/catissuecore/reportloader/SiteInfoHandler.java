@@ -81,7 +81,7 @@ public class SiteInfoHandler
 	 * @param siteName name of the site
 	 * @return pValue currousponding abbreviated value
 	 */
-	public static String getSiteAbbriviation(String siteName)
+	public static String getSiteAbbriviation(String siteName) throws Exception
 	{
 		// it gives the rootNode of the xml file
 		Element root = document.getDocumentElement();
@@ -135,7 +135,7 @@ public class SiteInfoHandler
 	 * @param abbr abbriviated site name
 	 * @return pValue associated site name
 	 */
-	public static String getSiteName(String abbr)
+	public static String getSiteName(String abbr) throws Exception
 	{
 		// it gives the rootNode of the xml file
 		Element root = document.getDocumentElement();
