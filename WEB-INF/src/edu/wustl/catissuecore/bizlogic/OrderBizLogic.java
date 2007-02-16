@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -245,7 +246,7 @@ public class OrderBizLogic extends DefaultBizLogic
 							{
 								Collection specimenColl = pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSpecimenCollection();
 								Iterator specimenCollIter = specimenColl.iterator();
-								List totalChildrenSpecimenColl = null;
+								List totalChildrenSpecimenColl = new ArrayList();
 								while(specimenCollIter.hasNext())
 								{
 									Specimen specimen = (Specimen)specimenCollIter.next();
@@ -259,6 +260,11 @@ public class OrderBizLogic extends DefaultBizLogic
 								    {  	//"Block" . Specimen class = "Tissue" , Specimen Type = "Block".
 								    	finalChildrenSpecimenCollection = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childSpecimenCollection,"Tissue","Block");
 								    }
+//						    		adding specimen to the collection
+						    		if(specimen.getClassName().equalsIgnoreCase(pathologicalCaseOrderItem.getSpecimenClass()) && specimen.getType().equalsIgnoreCase(pathologicalCaseOrderItem.getSpecimenType()))
+									{
+						    			finalChildrenSpecimenCollection.add(specimen);
+									}
 						    		if(finalChildrenSpecimenCollection!=null)
 						    		{
 						    			Iterator finalChildrenSpecimenCollectionIterator = finalChildrenSpecimenCollection.iterator();

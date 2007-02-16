@@ -835,8 +835,8 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 			DistributedItem distributedItem = new DistributedItem();
 			
 			Specimen specimen = new Specimen();
-			if(!requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("DerivedPathological"))
-			{
+//			if(!requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("DerivedPathological"))
+//			{
 				if(requestDetailsBean.getRequestFor() == null || requestDetailsBean.getRequestFor().trim().equalsIgnoreCase(""))
 				{//for existing Specimen.
 					if(requestDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Existing"))
@@ -848,7 +848,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				{//For derived specimen.
 					specimen.setId(new Long(requestDetailsBean.getRequestFor()));
 				}
-			}
+			//}
 			distributedItem.setSpecimen(specimen);
 	
 			//For setting assigned quantity in Distribution.
