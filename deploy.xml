@@ -759,13 +759,14 @@ Thanking You,
 					<replacefilter token="@@hibernate-config-file@@" value="./catissuecore-properties/catissuecore.hibernate.cfg.xml"/>	
 				</replace>
 				<copy file="${base.dir}/CaTIES_conf/hibernate.cfg.xml" todir="${caties.installation.dir}/classes" overwrite="true"/>
+				<copy file="${base.dir}/CaTIES_conf/dbutil.properties" todir="${caties.installation.dir}/classes" overwrite="true"/>
 				<copy file="${base.dir}/CaTIES_conf/catissuecore.hibernate.cfg.xml" todir="${caties.installation.dir}/catissuecore-properties" overwrite="true"/>
 				<if>
 					<equals arg1="mysql" arg2="${database.type}"/>
 					<then>
 						<replace dir="${caties.installation.dir}" propertyfile="${basedir}/caTissueInstall.properties">
 							<include name="**/*.cfg.xml" />
-							<replacefilter token="@@DIALECT@@" value="MySQLDialect"/>
+							<replacefilter token="@@DRIVER@@" value="${mysql.driver.string}"/>
 							<replacefilter token="@@URL@@" value="jdbc:mysql://${database.host}/${database.name}" />
 						</replace>
 					</then>
@@ -774,7 +775,8 @@ Thanking You,
 					<then>
 						<replace dir="${caties.installation.dir}" propertyfile="${basedir}/caTissueInstall.properties">
 							<include name="**/*.cfg.xml" />
-							<replacefilter token="@@DIALECT@@" value="OracleDialect"/>
+							<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}"/>
+							<replacefilter token="@@DRIVER@@" value="${oracle.driver.string}"/>
 							<replacefilter token="@@URL@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}" />
 						</replace>
 					</then>
