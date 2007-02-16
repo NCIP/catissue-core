@@ -4,7 +4,12 @@
 <%
 
 	String operation = (String)request.getParameter(Constants.OPERATION);
+	if (operation == null)
+	{
+		operation="add";
+	}
 	String submittedFor=(String)request.getParameter(Constants.SUBMITTED_FOR);
+	System.out.println("************////////////"+submittedFor);
 	String forwardTo=(String)request.getParameter(Constants.FORWARD_TO);
 	String participantId = request.getParameter("id");
 	Long id = (Long)request.getAttribute("id");
