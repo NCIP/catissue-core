@@ -450,7 +450,7 @@ function enablePreviousCheckBox(element)
 								<html:option value="<%=Operator.GREATER_THAN_OR_EQUALS%>"><%=Operator.GREATER_THAN_OR_EQUALS%></html:option>
 							<%
 								}
-								else if (attributeType.equals(Constants.FIELD_TYPE_DATE))
+								else if (attributeType.equals(Constants.FIELD_TYPE_DATE) || attributeType.equals(Constants.FIELD_TYPE_TIMESTAMP_DATE))
 								{
 							%>
 								<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
