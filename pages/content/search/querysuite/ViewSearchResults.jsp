@@ -20,7 +20,7 @@
 	<script  src="dhtml_comp/jss/dhtmlXGridCell.js"></script>	
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/jss/dhtmXTreeCommon.js"></script>
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/jss/dhtmlXTree.js"></script>
-
+<script type="text/javascript" src="jss/ajax.js"></script> 
 	
 
 <script>
@@ -114,6 +114,7 @@ colDataTypes=colDataTypes.replace(/str/,"ro");
 
 
 <script>
+
 function initGridView()
 {<% if (columnList != null && columnList.size()!= 0 && dataList != null && dataList.size() != 0)
 { %>
@@ -124,7 +125,7 @@ function initGridView()
 	mygrid.enableAutoHeigth(false);
 
 	mygrid.setInitWidths(colWidth);
-	
+
 	mygrid.setColTypes(colDataTypes);
 	mygrid.enableMultiselect(true);
 //	mygrid.chNoState = "0";
@@ -151,7 +152,7 @@ function initGridView()
 //Tree component
 	tree=new dhtmlXTreeObject("treebox","100%","100%",0);
 	tree.setImagePath("dhtml_comp/imgs/");
-	tree.setOnClickHandler(tonclick);
+	tree.setOnClickHandler(treeNodeClicled);
 		<%
 			
 				if(treeData != null && treeData.size() != 0)
@@ -182,19 +183,108 @@ function initGridView()
 					tree.setUserData("<%=nodeId%>","<%=nodeId%>","<%=data%>");	
 			<%	
 					}
-			%>
-					<%=nodeColapseCode%>
-			<%
+		
 				}
 }
 			%>	
 }
-function tonclick(id)
+var addedNodes = "";
+function treeNodeClicled(id)
 {
 
-	
+var nodes = addedNodes.split(",");
+var isNodeAdded = false;
+if(nodes != "")
+	{
+	for(i=0; i<nodes.length; i++)
+		{
+			if(nodes[i] == id)
+			isNodeAdded = true;
+		}
+	}
+	if(!isNodeAdded)
+	{
+		addedNodes = addedNodes + ","+id;
+		var request = newXMLHTTPReq();			
+		var actionURL;
+		var handlerFunction = getReadyStateHandler(request,showChildNodes,true);	
+		request.onreadystatechange = handlerFunction;				
+		actionURL = "nodeId=" + id;				
+		var url = "BuildQueryOutputTree.do";
+		<!-- Open connection to servlet -->
+		request.open("POST",url,true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		request.send(actionURL);	
+	}
+	buildSpreadsheet(id);
 };
+function buildSpreadsheet(id)
+{
+		var request = newXMLHTTPReq();			
+		var actionURL;
+		var handlerFunction = getReadyStateHandler(request,showSpreadsheetData,true);	
+		request.onreadystatechange = handlerFunction;				
+		actionURL = "nodeId=" + id;				
+		var url = "BuildQueryOutputSpreadsheet.do";
+		<!-- Open connection to servlet -->
+		request.open("POST",url,true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		request.send(actionURL);	
+}
+function showChildNodes(outputTreeStr)
+{
+	var nodes = outputTreeStr.split("|");
+	for(i=0; i<nodes.length; i++)
+		{
+			var node = nodes[i];
+			if(node != "")
+			{
+				var treeValues = node.split(",");
+				var nodeId = treeValues[0];
+				var displayName = treeValues[1];
+				var objectname = treeValues[2];
+				var parentIdToSet = treeValues[3];
+				var parentObjectName = treeValues[4];
+				tree.insertNewChild(parentIdToSet,nodeId,displayName,0,"","","","");
+			}
+		}
+}
+function showSpreadsheetData(columnDataStr)
+{
+	var columnData = columnDataStr.split("&");
+	var columns = columnData[0];	
+	var data = columnData[1];	
+	var columnNames = columns.split(",");
+	var width =180 +",";
+	var colDataTypes1 = "ch,"
+	var colTypes1 = "ch,";
+	for(i=0; i<columnNames.length; i++)
+		{
+			var name = columnNames[i];
+			if(!name == "")
+			{
+				width = width + "180,"
+				colDataTypes1 = colDataTypes1 + "ro,";
+				colTypes1 = colTypes1 +"str,";
+			}		
+		}		
+	mygrid.clearAll();
+	mygrid.setHeader(columns);
+	mygrid.setInitWidths(width);
+	mygrid.setColTypes(colDataTypes1);
+	mygrid.setColSorting(colTypes1);
+	mygrid.init();
 
+	var myData = data.split("|");
+	for(var row=0;row<myData.length;row++)
+	{
+		if(row != "")
+		{
+			data = "0,"+myData[row];
+			mygrid.addRow(row+1,data,row+1);
+		}
+	}	
+}
 </script>
 
 <% if (columnList != null && columnList.size()!= 0 && dataList != null && dataList.size() != 0)
