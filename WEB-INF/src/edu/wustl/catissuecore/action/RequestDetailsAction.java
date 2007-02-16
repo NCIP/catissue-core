@@ -217,8 +217,7 @@ public class RequestDetailsAction extends BaseAction
 	{
 		Map valuesMap = requestDetailsForm.getValues();
 		Set keySet = valuesMap.keySet();
-		Iterator iter = keySet.iterator();
-		System.out.println("1 ketSet"+keySet.size());
+		Iterator iter = keySet.iterator();		
 		Map requestForMap = new HashMap();
 		while(iter.hasNext())
 		{		
@@ -227,9 +226,7 @@ public class RequestDetailsAction extends BaseAction
 			String orderItemId = "";
 			String specimenCollGrpId = "";
 			
-			String key = (String)iter.next();
-
-			
+			String key = (String)iter.next();			
 			if(key.endsWith("orderItemId"))
 			{
 				rowNumber = getRowNumber(key);
@@ -238,8 +235,7 @@ public class RequestDetailsAction extends BaseAction
 				List orderItemListFromDb = getOrderItemFromDB(orderItemId);
 				OrderItem orderItem = (OrderItem)orderItemListFromDb.get(0);
 				
-				Iterator specimenIdIter = keySet.iterator();
-				System.out.println("2 ketSet"+keySet.size());
+				Iterator specimenIdIter = keySet.iterator();				
 				while(specimenIdIter.hasNext())
 				{
 					String specimenIdKey = (String)specimenIdIter.next();
@@ -272,8 +268,7 @@ public class RequestDetailsAction extends BaseAction
 					{
 						PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem)orderItem;
 						finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList,pathologicalCaseOrderItem.getSpecimenClass(),pathologicalCaseOrderItem.getSpecimenType());					
-					}
-					
+					}					
 					List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(finalChildrenSpecimenList);
 					if((orderItem instanceof SpecimenOrderItem) && !(orderItem instanceof ExistingSpecimenOrderItem))
 					{
@@ -287,7 +282,6 @@ public class RequestDetailsAction extends BaseAction
 							requestForMap.put("RequestForDropDownListArray:"+rowNumber, childrenSpecimenListToDisplay);
 						}
 					}
-
 				}
 				else if(!specimenCollGrpId.equals(""))
 				{
