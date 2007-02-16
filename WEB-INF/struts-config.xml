@@ -557,7 +557,7 @@ PUBLIC
 			<!-- forward name="success" path="/Participant.do?operation=edit&amp;pageOf=pageOfParticipant&amp;menuSelected=12" /-->
 			<forward name="success" path="/LoadParticipantPage.do?operation=afterAdd&amp;pageOf=pageOfParticipant" />
 			<forward name="pageOfSCGParticipant" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
-			<forward name="failure" path="/Participant.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
+			<forward name="failure" path="/LoadParticipantPage.do?operation=add&amp;pageOf=pageOfParticipant&amp;menuSelected=12" />
 			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 			<forward name="redirectTo" path="" />
 			<forward name="createParticipantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" />
@@ -1140,7 +1140,7 @@ PUBLIC
 			type="edu.wustl.common.action.CommonAddEditAction"
 			name="specimenCollectionGroupForm"
 			validate="true"
-			input="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"
+			input="/LoadSpecimenCollGroupPage.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"
 			scope="request">
 			<!-- forward name="success" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" /-->
 			<forward name="success" path="/LoadSpecimenCollGroupPage.do?operation=afterAdd&amp;pageOf=pageOfSpecimenCollectionGroup" />
@@ -1148,7 +1148,7 @@ PUBLIC
 			<forward name="createNewSpecimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;virtualLocated=true&amp;showConsents=yes&amp;tableId4=disable" />
 			<forward name="createMultipleSpecimen" path="/LoadSpecimenCollGroupPage.do?operation=createMultipleSpecimen" />			
 		</action>
-
+		
 		<action path="/SpecimenCollectionGroupEdit"
 			type="edu.wustl.common.action.CommonAddEditAction"
 			name="specimenCollectionGroupForm"
@@ -3002,7 +3002,7 @@ PUBLIC
 			name="newSpecimenForm"
 			validate="false"
 			scope="request">
-			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
+			<forward name="specimenCollectionGroup" path="/LoadSpecimenCollGroupPage.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;submittedFor=AddNew" />
 			<forward name="specimenCollectionGroupCPQuery" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14" />			
 		</action>
 
