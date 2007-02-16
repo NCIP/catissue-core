@@ -281,6 +281,8 @@
 		</replace>
 		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/DynamicExtensionsHibernate.cfg.xml">
 			<replacefilter token="${mysql.dialect.string}" value="${oracle.dialect.string}"/>
+	        <replacefilter token="&lt;!--MySQL c3p properties start-->" value="&lt;!--MySQL c3p properties start"/>
+	        <replacefilter token="&lt;!--MySQL c3p properties end-->" value="MySQL c3p properties end-->"/>
 		</replace>
 
 	</target>

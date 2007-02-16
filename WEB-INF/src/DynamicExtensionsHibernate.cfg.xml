@@ -14,6 +14,7 @@
     	<property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
 		<property name="hibernate.jdbc.batch_size">0</property>    	
 
+<!--MySQL c3p properties start-->        
 		<property name="hibernate.c3p0.max_size">2</property>
 		<property name="hibernate.c3p0.min_size">2</property>
 		<property name="hibernate.c3p0.timeout">5000</property>
@@ -21,6 +22,7 @@
 		<property name="hibernate.c3p0.idle_test_period">3000</property>
 		<property name="hibernate.c3p0.acquire_increment">2</property>
 		<property name="hibernate.c3p0.validate">false</property>
+<!--MySQL c3p properties end-->        
 
 
         <!-- List of all Mapping files -->
