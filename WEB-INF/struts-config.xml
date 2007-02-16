@@ -463,8 +463,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
-		</action>
-		
+		</action>			
 		<!-- Applet Action mapping for query Module -->
 		<action path="/ViewSearchResultsAction" 
 			type="edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction" 
