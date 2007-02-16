@@ -55,7 +55,10 @@ public class CategorySearchForm extends ActionForm
 	 * String to store the nextOperation value.
 	 */
 	private String nextOperation = null;
-
+	/**
+	 * String to store the text field value.
+	 */
+	private String nodeId = null;
 	
 
 	/**
@@ -197,5 +200,19 @@ public class CategorySearchForm extends ActionForm
 	public void setEntityName(String entityName)
 	{
 		this.entityName = entityName;
+	}
+	/**
+	 * @return the nodeId
+	 */
+	public String getNodeId()
+	{
+		return nodeId;
+	}
+	/**
+	 * @param nodeId the nodeId to set
+	 */
+	public void setNodeId(String nodeId)
+	{
+		this.nodeId = nodeId;
 	}
 }
