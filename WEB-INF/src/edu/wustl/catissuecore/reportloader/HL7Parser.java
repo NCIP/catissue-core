@@ -249,13 +249,13 @@ public class HL7Parser extends Parser
 									}
 									catch(Exception ex)
 									{
-										Logger.out.error("Report section under process is not valid");
+										Logger.out.error("Report section under process is not valid"+ line);
 										reportMap=null;
 									}
 								}
 								else
 								{
-									Logger.out.error("Report section under process is not valid");
+									Logger.out.error("Report section under process is not valid"+line);
 									reportMap=null;
 								}
 							} 
@@ -596,8 +596,15 @@ public class HL7Parser extends Parser
 						siteName= st2.nextToken();
 					}	
 				}
+				try
+				{
+					siteName=SiteInfoHandler.getSiteName(siteName);
+				}
+				catch(Exception ex)
+				{
+					Logger.out.error("Site name not found"+siteName);
+				}
 				
-				siteName=SiteInfoHandler.getSiteName(siteName);
 				if(siteName!=null)
 				{
 					siteList=ReportLoaderUtil.getObject(Site.class.getName(), "name", siteName);
