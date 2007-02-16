@@ -450,6 +450,20 @@ PUBLIC
 			scope="request">
 			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
 		</action>
+		<action path="/BuildQueryOutputTree"
+			type="edu.wustl.catissuecore.action.querysuite.BuildQueryOutputTreeAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
+		</action>
+		<action path="/BuildQueryOutputSpreadsheet"
+			type="edu.wustl.catissuecore.action.querysuite.BuildQueryOutputSpreadsheetAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
+		</action>
 		
 		<!-- Applet Action mapping for query Module -->
 		<action path="/ViewSearchResultsAction" 
