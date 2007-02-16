@@ -36,16 +36,23 @@ public class ReportLoaderQueueProcessor extends Thread
 				{
 					for(int i=0;i<queue.size();i++)
 					{
-						reportLoaderQueue=(ReportLoaderQueue)queue.get(i);
-						participantSet=(Set)reportLoaderQueue.getParticipantCollection();
-						Iterator it = participantSet.iterator();
-						if(it.hasNext())
+						try
 						{
-							pMgr=ParserManager.getInstance();
-							parser=(HL7Parser)pMgr.getParser(Parser.HL7_PARSER);
-							parser.parseString((Participant)it.next(),reportLoaderQueue.getReportText());
-							ReportLoaderUtil.deleteObject(reportLoaderQueue);
-						}	
+							reportLoaderQueue=(ReportLoaderQueue)queue.get(i);
+							participantSet=(Set)reportLoaderQueue.getParticipantCollection();
+							Iterator it = participantSet.iterator();
+							if(it.hasNext())
+							{
+								pMgr=ParserManager.getInstance();
+								parser=(HL7Parser)pMgr.getParser(Parser.HL7_PARSER);
+								parser.parseString((Participant)it.next(),reportLoaderQueue.getReportText());
+								ReportLoaderUtil.deleteObject(reportLoaderQueue);
+							}
+						}
+						catch(Exception ex)
+						{
+							Logger.out.error("Error in parsing queue "+i);
+						}
 					}
 				}
 				Thread.sleep(Long.parseLong(XMLPropertyHandler.getValue(Parser.REPORTLOADER_QUEUE_SLEEP)));
