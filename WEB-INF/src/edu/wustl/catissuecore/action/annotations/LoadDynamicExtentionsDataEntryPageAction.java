@@ -123,7 +123,7 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		
 		//Append container id
 		Logger.out.info("Load data entry page for Dynamic Extension Entity [" + annotationDataEntryForm.getSelectedAnnotation() + "]");
-		dynExtDataEntryURL = dynExtDataEntryURL + "?" + WebUIManager.CONATINER_IDENTIFIER_PARAMETER_NAME + "="
+		dynExtDataEntryURL = dynExtDataEntryURL + "&" + WebUIManager.CONATINER_IDENTIFIER_PARAMETER_NAME + "="
 				+ annotationDataEntryForm.getSelectedAnnotation();
 		if (request.getParameter("recordId") != null)
 		{
