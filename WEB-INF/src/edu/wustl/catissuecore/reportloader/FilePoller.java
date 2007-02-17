@@ -78,7 +78,8 @@ public class FilePoller implements Observable
 				  {
 				    	poller.obr.notifyEvent(files);
 				  }
-				Thread.sleep(Long.parseLong(XMLPropertyHandler.getValue(Parser.POLLER_SLEEP)));
+				 Logger.out.info("Report Loader Server is going to sleep for "+XMLPropertyHandler.getValue(Parser.POLLER_SLEEP)+"ms");
+				 Thread.sleep(Long.parseLong(XMLPropertyHandler.getValue(Parser.POLLER_SLEEP)));
 			}
 		}
 		catch(Exception ex)
