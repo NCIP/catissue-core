@@ -55,7 +55,8 @@ public class ReportLoaderQueueProcessor extends Thread
 						}
 					}
 				}
-				Thread.sleep(Long.parseLong(XMLPropertyHandler.getValue(Parser.REPORTLOADER_QUEUE_SLEEP)));
+				Logger.out.info("Report Loader Queue is going to sleep for "+Parser.POLLER_SLEEP.toString()+"ms");
+				Thread.sleep(Long.parseLong(XMLPropertyHandler.getValue(Parser.POLLER_SLEEP)));
 			}
 			catch(Exception ex)
 			{
