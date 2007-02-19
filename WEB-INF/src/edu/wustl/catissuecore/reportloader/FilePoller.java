@@ -1,7 +1,14 @@
 package edu.wustl.catissuecore.reportloader;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 import org.apache.log4j.PropertyConfigurator;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -17,7 +24,11 @@ import edu.wustl.common.util.logger.Logger;
 public class FilePoller implements Observable
 {
 	private Observer obr;
-	
+	private static String[] files=null;
+	private static File inputDir=null;
+	private static File errorFileDir=null;
+	private static File fileDir=null;
+	private static FilePoller poller =null;
 
 
 	/**
@@ -45,20 +56,40 @@ public class FilePoller implements Observable
 	 */
 	public static void main(String[] args)
 	{
-		String[] files=null;
-		File inputDir=null;
-		File errorFileDir=null;
-		File fileDir=null;
-		FilePoller poller =null;
 		try
 		{
 			poller = new FilePoller();
 			poller.init();
 			Observer obr=new ReportProcessor();
-			poller.register(obr);
 			ReportLoaderUtil.createDir(XMLPropertyHandler.getValue(Parser.PROCESSED_FILE_DIR));
 			ReportLoaderUtil.createDir(XMLPropertyHandler.getValue(Parser.INPUT_DIR));
 			ReportLoaderUtil.createDir(XMLPropertyHandler.getValue(Parser.BAD_FILE_DIR));
+			Logger.out.info("debug3");
+			Thread th=new Thread(){
+				public void	run()
+				{
+					try
+					{
+						int PORT=Integer.parseInt(XMLPropertyHandler.getValue("filepollerport"));
+						ServerSocket serv = new ServerSocket(PORT);
+					  	BufferedReader r;
+				    	Socket sock = serv.accept();
+				    	r =new BufferedReader (new InputStreamReader (sock.getInputStream()) );
+				    	PrintWriter out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()),true);
+				    	String str=r.readLine();
+				    	System.out.println("Stopping server");
+				    	r.close();
+				    	sock.close(); 
+					    serv.close();
+					    System.exit(0);
+						}
+						catch(Exception e)
+						{
+							Logger.out.error("Error stopping server ",e);
+						}
+					}
+				};			
+				th.start();	     	      	
 		}
 		catch(IOException ex)
 		{
@@ -87,6 +118,8 @@ public class FilePoller implements Observable
 	  		Logger.out.error("Error while initializing parser manager ",ex);
 		}	
 	}
+	
+	
 	
 	/** 
 	 * @see edu.wustl.catissuecore.reportloader.Observable#register(edu.wustl.catissuecore.reportloader.Observer)

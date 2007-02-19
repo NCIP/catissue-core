@@ -4,6 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -52,14 +57,14 @@ public class DeIDPipelineManager
 	
 	/**
 	 * Default constructor of the class
-	 * This constructor call methods for performing deid-pipeline process
+	 * 
 	 */
 	public DeIDPipelineManager()
 	{
 		try
 		{
 			this.init();
-			this.processManager();
+			
 		}
 		catch(Exception ex)
 		{
@@ -87,9 +92,9 @@ public class DeIDPipelineManager
 		XMLPropertyHandler.init("./catissuecore-properties"+File.separator+"caTissueCore_Properties.xml");
 		ApplicationProperties.initBundle("ApplicationResources");
 
-		corePoolSize=Integer.parseInt(XMLPropertyHandler.getValue("threadPool.corePoolSize"));
+		corePoolSize=4;
 		maxPoolSize=Integer.parseInt(XMLPropertyHandler.getValue("threadPool.maxPoolSize"));
-		keepAliveSeconds=Integer.parseInt(XMLPropertyHandler.getValue("threadPool.keepAliveSeconds"));
+		keepAliveSeconds=100;
 				
 		pathToConfigFiles=new String(Variables.applicationHome + System.getProperty("file.separator")+"catissuecore-properties"+System.getProperty("file.separator"));
 		cacheConfigFileName();
@@ -271,5 +276,41 @@ public class DeIDPipelineManager
 	public static void main(String[] args)
 	{
 		DeIDPipelineManager de=new DeIDPipelineManager();
+		Thread th=new Thread(){
+			public void	run()
+			{
+				try
+				{
+					int PORT=Integer.parseInt(XMLPropertyHandler.getValue("deid.port"));
+					ServerSocket serv = new ServerSocket(PORT);
+				  	BufferedReader r;
+			    	Socket sock = serv.accept();
+			    	r =new BufferedReader (new InputStreamReader (sock.getInputStream()) );
+			    	PrintWriter out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()),true);
+			    	String str=r.readLine();
+			    	
+			    	System.out.println("Stopping server");
+			    	r.close();
+			    	sock.close(); 
+				    serv.close();
+				    
+				    System.exit(0);
+					}
+					catch(Exception e)
+					{
+						Logger.out.error("Error stopping server ",e);
+					}
+				}
+			};
+			th.start();
+			try
+			{
+				de.processManager();
+			}
+			catch(Exception ex)
+			{
+				Logger.out.error("Deidentification process manager failed");
+			}
 	}
+	
 }
