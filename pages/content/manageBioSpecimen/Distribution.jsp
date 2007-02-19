@@ -144,14 +144,17 @@
 					else
 					{
 						iCount=iCount+1;
-    					
-					}
+    				}
 				}
 				if(noOfRows>iCount)
 				{
 					var url ='Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&specimenConsents=yes&noOfRows='+noOfRows+'&labelBarcode='+distrinutionBasedOn+'&barcodelabel='
 					url+=barcodeLableValue;
-					window.open(url,'ConsentVerificationForm','height=200,width=800,scrollbars=1,resizable=1');
+					window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
+				}
+				else
+				{
+					alert("Consents for all specimens are verified");
 				}
 			}
 		}
@@ -348,7 +351,7 @@
 						if(onFocusChange=="<%=Constants.FALSE%>")//false
 						{
 							
-							window.open(url,'ConsentVerificationForm','height=200,width=800,scrollbars=1,resizable=1');
+							window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
 						}
 					}
 					else if(responseString=="<%=Constants.INVALID%>")//Invalid
