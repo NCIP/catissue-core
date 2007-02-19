@@ -28,12 +28,12 @@
 		<value>100000</value>
 	</property>
 	<property>
-		<name>reportloaderqueuesleep</name>
-		<value>100000</value>
-	</property>
-	<property>
 		<name>site.info.filename</name>
 		<value>./CaTIES_conf/sites_configuration.xml</value>
+	</property>
+	<property>
+		<name>filepollerport</name>
+		<value>3030</value>
 	</property>
 	
 	<!--Constants for ReportLoader end -->
@@ -75,16 +75,12 @@
 		<value>Dataset.dtd</value>
 	</property>
 	<property>
-		<name>threadPool.corePoolSize</name>
-		<value>4</value>
-	</property>
-	<property>
 		<name>threadPool.maxPoolSize</name>
 		<value>20</value>
 	</property>
 	<property>
-		<name>threadPool.keepAliveSeconds</name>
-		<value>100</value>
+		<name>deid.port</name>
+		<value>3040</value>
 	</property>
 	<!-- Constants for Deidentification of report  end -->
 
