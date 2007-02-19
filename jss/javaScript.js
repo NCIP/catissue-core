@@ -1153,7 +1153,7 @@ function initiallizeAddParticipantTabs(contextPath,queryString)
 		tabbar.setImagePath(contextPath + "/dhtml_comp/imgs/");
 		tabbar.setHrefMode("iframes-on-demand");
 		var tabIds = ["addTab"];
-		var tabNames = ["Add Partitipant"];
+		var tabNames = ["Add Participant"];
 		var tabHREFs = [contextPath + "/Participant.do?"+queryString];
 		initializeTabs(tabIds,tabNames,tabHREFs);
 }
