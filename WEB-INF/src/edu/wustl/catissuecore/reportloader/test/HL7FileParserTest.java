@@ -6,7 +6,6 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.reportloader.HL7Parser;
 import edu.wustl.catissuecore.reportloader.Parser;
-import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.reportloader.SiteInfoHandler;
 import edu.wustl.common.test.BaseTestCase;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -48,7 +47,7 @@ public class HL7FileParserTest extends BaseTestCase
 	 * This method tests the validation for null value in filename
 	 * as input to the HL parser.
 	 */
-	public void testNullFileForParse()
+	public void testPathRptLoadForNullFileForParse()
 	{
 		try
 		{
@@ -65,7 +64,7 @@ public class HL7FileParserTest extends BaseTestCase
 	 * HL7parser  
 	 *
 	 */
-	public void testNullForValidateReport()
+	public void testPathRptLoadForNullForValidateReport()
 	{
 		try
 		{
@@ -82,7 +81,7 @@ public class HL7FileParserTest extends BaseTestCase
 	 * information in pathology report. 
 	 *
 	 */
-	public void testForParticipantInformationExistance()
+	public void testPathRptLoadForParticipantInformationExistance()
 	{
 		Map reportMap=null;
 		boolean validReport=false;
@@ -110,7 +109,7 @@ public class HL7FileParserTest extends BaseTestCase
 	 * This method tests the validation check for existance of observations
 	 * in pathology report. 
 	 */
-	public void testForReportObservationsExistance()
+	public void testPathRptLoadForReportObservationsExistance()
 	{
 		Map reportMap=null;
 		boolean validReport=false;
@@ -138,7 +137,7 @@ public class HL7FileParserTest extends BaseTestCase
 	 * This method tests the validation check for existance of OBR
 	 * section in pathology report. 
 	 */
-	public void testForReportExistance()
+	public void testPathRptLoadForReportExistance()
 	{
 		Map reportMap=null;
 		boolean validReport=false;
@@ -166,7 +165,7 @@ public class HL7FileParserTest extends BaseTestCase
 	 * This method tests the validation check for existance of OBR
 	 * site in pathology report. 
 	 */
-	public void testForSiteExistance()
+	public void testPathRptLoadForSiteExistance()
 	{
 		Map reportMap=null;
 		boolean validReport=false;
