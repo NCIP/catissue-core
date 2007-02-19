@@ -57,7 +57,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 
 		}
 
-		public void testNullInputParametersInInsert()
+		public void testDeidBizLogicNullInputParametersInInsert()
 		{
 			hibDAO.expect("closeSession");
 			DeidentifiedSurgicalPathologyReportBizLogic deidentifiedSurgicalPathologyReportBizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
@@ -69,6 +69,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 			catch(NullPointerException e)
 			{
 				e.printStackTrace();
+				assertTrue("When null sessiondataBean is passes, it throws NullPointerException",true);
 			}
 			catch (BizLogicException e)
 			{
@@ -93,11 +94,13 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 			catch(NullPointerException e)
 			{
 				e.printStackTrace();
+				assertTrue("When null sessiondataBean is passes, it throws NullPointerException",true);
 			}
 			catch (BizLogicException e)
 			{
 			
 				e.printStackTrace();
+				assertTrue("When null sessiondataBean is passes, it throws NullPointerException",true);
 			}
 			catch (UserNotAuthorizedException e)
 			{
@@ -106,7 +109,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 		}
 		
 
-		public void testInsertWithEmptyObject()
+		public void testDeidBizLogicInsertWithEmptyObject()
 		{
 			DeidentifiedSurgicalPathologyReportBizLogic deidentifiedSurgicalPathologyReportBizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
 			
@@ -143,7 +146,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 		}
 
 
-		public void testInsert()
+		public void testDeidBizLogicInsert()
 		{
 			DeidentifiedSurgicalPathologyReportBizLogic deidentifiedSurgicalPathologyReportBizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
 			
@@ -183,7 +186,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 		
 
 		
-		public void testNullInputParametersInUpdate()
+		public void testDeidBizLogicNullInputParametersInUpdate()
 		{
 			hibDAO.expect("closeSession");
 			DeidentifiedSurgicalPathologyReportBizLogic deidentifiedSurgicalPathologyReportBizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
@@ -231,7 +234,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 			}
 		}
 		
-		public void testUpdate()
+		public void testDeidBizLogicUpdate()
 		{
 			DeidentifiedSurgicalPathologyReportBizLogic deidentifiedSurgicalPathologyReportBizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
 			

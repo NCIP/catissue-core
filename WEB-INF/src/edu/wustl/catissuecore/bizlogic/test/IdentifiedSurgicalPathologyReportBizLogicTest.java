@@ -57,7 +57,7 @@ public class IdentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCase
 
 			}
 
-			public void testNullInputParametersInInsert()
+			public void testPathRptLoadBizLogicNullInputParametersInInsert()
 			{
 				hibDAO.expect("closeSession");
 				IdentifiedSurgicalPathologyReportBizLogic identifiedSurgicalPathologyReportBizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
@@ -69,6 +69,7 @@ public class IdentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCase
 				catch(NullPointerException e)
 				{
 					e.printStackTrace();
+					assertTrue("When null sessiondataBean is passes, it throws NullPointerException",true);
 				}
 				catch (BizLogicException e)
 				{
@@ -93,6 +94,7 @@ public class IdentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCase
 				catch(NullPointerException e)
 				{
 					e.printStackTrace();
+					assertTrue("When null sessiondataBean is passes, it throws NullPointerException",true);
 				}
 				catch (BizLogicException e)
 				{
@@ -106,7 +108,7 @@ public class IdentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCase
 			}
 			
 
-			public void testInsertWithEmptyObject()
+			public void testPathRptLoadBizLogicInsertWithEmptyObject()
 			{
 				IdentifiedSurgicalPathologyReportBizLogic identifiedSurgicalPathologyReportBizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
 				
@@ -122,28 +124,25 @@ public class IdentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCase
 				
 				try
 				{
-					identifiedSurgicalPathologyReportBizLogic.insert(new StorageType(),sessionDataBean,edu.wustl.common.util.global.Constants.HIBERNATE_DAO);
-					assertTrue("Identified report  inserted successfully",true);
+					identifiedSurgicalPathologyReportBizLogic.insert(new IdentifiedSurgicalPathologyReport(),sessionDataBean,edu.wustl.common.util.global.Constants.HIBERNATE_DAO);
+					fail("Identified report  inserted successfully");
 					
 				}
 				catch (NullPointerException e) {
-						e.printStackTrace();
-						fail("Null Pointer Exception");
+						assertTrue("Null Pointer Exception",true);
 				}
 				catch (BizLogicException e)
 				{
-					e.printStackTrace();
 					fail(" Exception occured");
 				}
 				catch (UserNotAuthorizedException e)
 				{
-					e.printStackTrace();
 					fail(" Exception occured");
 				}
 			}
 
 
-			public void testInsert()
+			public void testPathRptLoadBizLogicInsert()
 			{
 				IdentifiedSurgicalPathologyReportBizLogic identifiedSurgicalPathologyReportBizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
 				
@@ -161,21 +160,18 @@ public class IdentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCase
 				try
 				{
 					identifiedSurgicalPathologyReportBizLogic.insert(identifiedSurgicalPathologyReport,sessionDataBean,edu.wustl.common.util.global.Constants.HIBERNATE_DAO);
-					assertTrue("Identified report inserted successfully",true);
+					fail("Identified report inserted successfully");
 					
 				}
 				catch (NullPointerException e) {
-						e.printStackTrace();
-						fail("Null Pointer Exception");
+						assertTrue("Null Pointer Exception",true);
 				}
 				catch (BizLogicException e)
 				{
-					e.printStackTrace();
 					fail(" Exception occured");
 				}
 				catch (UserNotAuthorizedException e)
 				{
-					e.printStackTrace();
 					fail(" Exception occured");
 				}
 			}
@@ -183,7 +179,7 @@ public class IdentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCase
 			
 
 			
-			public void testNullInputParametersInUpdate()
+			public void testPathRptLoadBizLogicNullInputParametersInUpdate()
 			{
 				hibDAO.expect("closeSession");
 				IdentifiedSurgicalPathologyReportBizLogic identifiedSurgicalPathologyReportBizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
@@ -231,7 +227,7 @@ public class IdentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCase
 				}
 			}
 			
-			public void testUpdate()
+			public void testPathRptLoadBizLogicUpdate()
 			{
 				IdentifiedSurgicalPathologyReportBizLogic identifiedSurgicalPathologyReportBizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
 				
