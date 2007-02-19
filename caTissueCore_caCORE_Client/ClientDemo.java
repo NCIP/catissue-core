@@ -26,6 +26,12 @@ import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.system.comm.client.ClientSession;
 
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
+import edu.wustl.catissuecore.domain.pathology.ReportSection;
+import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.TextContent;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -186,9 +192,10 @@ public class ClientDemo
 			testAddSpecimenArrayType();
 			testAddSpecimen();
 			testAddSpecimenArray();
-			testAddDistribution();
-<<<<<<< ClientDemo.java
+			testAddDistribution();	
 			
+			testAddOrderWithData();
+			testAddOrderWithWrongData();		
 			
 			testAddInstitutionWithWrongData();
 			testAddDepartmentWithWrongData();
@@ -214,9 +221,8 @@ public class ClientDemo
 			testAddDistributionWithClosedSpecimen();
 			testAddDistributionWithClosedSite();
 			testAddDistributionWithClosedDistributionProtocol();
-			
-			testAddOrderWithData();
-			testAddOrderWithWrongData();	
+						
+
 		}
 		catch(Exception ex)
 		{
@@ -2367,7 +2373,7 @@ public class ClientDemo
 		SendBuildReport report = SendBuildReport.getInstance();
 		String to = "catissue@persistent.co.in";
 		String from = "ashwin_gupta@persistent.co.in";
-		String cc = "munesh_gupta@persistent.co.in";
+		String cc = "ashish_gupta@persistent.co.in";
 		String host = "mail.persistent.co.in";
         String subject = "Nightly Build Report";
         String body = "nightly build report run for database MySQL";
@@ -2579,7 +2585,6 @@ public class ClientDemo
 				}*/
 			}
 		}
-	
 
 }
 
