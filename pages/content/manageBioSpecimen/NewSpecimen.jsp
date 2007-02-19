@@ -430,20 +430,29 @@
 		//This function will switch page to consentPage
 		function consentPage()
 		{	
-			<%
-			if(form.getConsentTierCounter()>0)			
+			var ind=document.getElementById('specimenCollectionGroupId');
+			var index=ind.selectedIndex;
+			if(index==0)
 			{
-			%>
-				switchToTab("consentTab");
-			<%
+				alert("Select Specimen Collection Group");
 			}
 			else
 			{
-			%>
-				alert("Select SCG or Consents not present for SCG");
-			<%
+				<%
+				if(form.getConsentTierCounter()>0)			
+				{
+				%>
+					switchToTab("consentTab");
+				<%
+				}
+				else
+				{
+				%>
+					alert("No consents available for selected Specimen Collection Group");
+				<%
+				}
+				%>
 			}
-			%>
 		}
 	  function showConsents()
 	  {
