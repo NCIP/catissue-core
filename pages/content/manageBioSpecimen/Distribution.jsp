@@ -100,6 +100,7 @@
 		//Consent tracking 
 		var validateBarcodeLable="<%=Constants.VALID%>";
 		var noOfRows=0;
+		var iCount=0;
 		var barcodeLableObject="";
 		var distrinutionBasedOn=2;
 		//This function will be called on clicking ViewAll
@@ -140,10 +141,18 @@
 							}
 						}
 					}
+					else
+					{
+						iCount=iCount+1;
+    					
+					}
 				}
-				var url ='Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&specimenConsents=yes&noOfRows='+noOfRows+'&labelBarcode='+distrinutionBasedOn+'&barcodelabel='
-				url+=barcodeLableValue;
-				window.open(url,'ConsentVerificationForm','height=200,width=800,scrollbars=1,resizable=1');
+				if(noOfRows>iCount)
+				{
+					var url ='Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&specimenConsents=yes&noOfRows='+noOfRows+'&labelBarcode='+distrinutionBasedOn+'&barcodelabel='
+					url+=barcodeLableValue;
+					window.open(url,'ConsentVerificationForm','height=200,width=800,scrollbars=1,resizable=1');
+				}
 			}
 		}
 		//Consent tracking
@@ -265,7 +274,6 @@
 			var anchorTag = document.createElement("a");
 			var barcodeStatus="barcodeStatus"+rowno;
 			anchorTag.setAttribute("id",barcodeStatus);
-			
 			
 			if (document.forms[0].distributionBasedOn[0].checked == true)  
 			{
@@ -683,7 +691,7 @@
 					</html:button></td>
 					<td class="formButtonField" align="Right"><html:button
 						property="deleteValue" styleClass="actionButton"
-						onclick="rearrangeIdsForDistribution();deleteCheckedNoSubmit('addMore','Distribution.do?operation=<%=operation%>&pageOf=pageOfDistribution&status=true',document.forms[0].counter,'chk_',false);disableDistributeOptions()"
+						onclick="deleteCheckedNoSubmit('addMore','Distribution.do?operation=<%=operation%>&pageOf=pageOfDistribution&status=true',document.forms[0].counter,'chk_',false);disableDistributeOptions()"
 						disabled="true">
 						<bean:message key="buttons.delete"/>
 					</html:button></td>
