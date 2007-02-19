@@ -33,4 +33,24 @@
 			<classpath refid="cp"/>
 		</java>
 	</target>
+	
+	<!-- stop Report Loader Server  -->
+		<target name="stop_report_loader_server">
+			<java classname="edu.wustl.catissuecore.reportloader.StopReportLoaderServer">
+				<classpath>
+					<pathelement location="caties.jar"/>
+				</classpath>
+				<classpath refid="cp"/>
+			</java>
+		</target>
+	
+	<!-- stop DeIDPipelineManager  -->
+	<target name="stop_deid_server">
+		<java classname="edu.wustl.catissuecore.deid.StopDeidServer">
+			<classpath>
+				<pathelement location="caties.jar"/>
+			</classpath>
+			<classpath refid="cp"/>
+		</java>
+	</target>
 </project>
