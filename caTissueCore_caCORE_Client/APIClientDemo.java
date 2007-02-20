@@ -197,8 +197,8 @@ public class APIClientDemo
 			testAddSpecimen();
 			testAddChildSpecimen();
 			testAddDerivedSpecimen();
-			//testAddOrderDetails();
-			//testAddOrderUpdate();
+			testAddOrderDetails();
+			testAddOrderUpdate();
 //			testAddParticipantWithNoRequiredFields();
   			
 //			
@@ -967,13 +967,13 @@ public class APIClientDemo
 				setLogger(specimenArrayType1);
 				Logger.out.info("Inserting domain object------->"+specimenArrayType1);
 				specimenArrayType1 =  (SpecimenArrayType) appService.createObject(specimenArrayType1);
-				dataModelObjectMap.put("SpecimenArrayType",specimenArrayType1);
+				dataGenerator.dataModelObjectMap.put("SPECIMEN_ARRAY_TYPE_1",specimenArrayType1);
 				
 				SpecimenArrayType specimenArrayType2 = (SpecimenArrayType) dataGenerator.dataModelObjectMap.get("SPECIMEN_ARRAY_TYPE_2");
 				setLogger(specimenArrayType2);
 				Logger.out.info("Inserting domain object------->"+specimenArrayType2);
 				specimenArrayType2 =  (SpecimenArrayType) appService.createObject(specimenArrayType2);
-				dataModelObjectMap.put("SpecimenArrayType",specimenArrayType2);
+				dataGenerator.dataModelObjectMap.put("SPECIMEN_ARRAY_TYPE_2",specimenArrayType2);
 				
 				writeSuccessfullOperationToReport(specimenArrayType1,insertOperation+"testAddSpecimenArrayType");
 				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenArrayType1.getId().toString());
