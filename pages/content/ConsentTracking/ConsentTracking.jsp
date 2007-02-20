@@ -591,7 +591,7 @@ function popupWindow(nofConsentTiers)
 							
 									%>
 									<%
-										if(operation.equals(Constants.EDIT)&&statusDisplay.equals(Constants.WITHDRAWN))
+										if(statusDisplay!=null&&operation.equals(Constants.EDIT)&&statusDisplay.equals(Constants.WITHDRAWN))
 										{
 									%>
 										<td align="left" class="formField">
