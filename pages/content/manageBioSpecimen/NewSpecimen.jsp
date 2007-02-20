@@ -421,6 +421,11 @@
 		tab2.onmouseout=function() {changeMenuStyle(this,'tabMenuItem'),hideCursor();};
 	}
 
+		//This function will Switch tab to newSpecimen page
+		function newspecimenPage()
+		{
+			switchToTab("newSpecimenTab");
+		}
 		//This function will switch page to consentPage
 		function consentPage()
 		{	
