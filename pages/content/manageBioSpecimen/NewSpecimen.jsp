@@ -421,24 +421,32 @@
 		tab2.onmouseout=function() {changeMenuStyle(this,'tabMenuItem'),hideCursor();};
 	}
 
-		//This function will Switch tab to newSpecimen page
-		function newspecimenPage()
-		{
-			switchToTab("newSpecimenTab");
-		}
-			
 		//This function will switch page to consentPage
 		function consentPage()
 		{	
 			var ind=document.getElementById('specimenCollectionGroupId');
-			var index=ind.selectedIndex;
-			if(index==0)
+			if(ind!=null)
 			{
-				alert("Select Specimen Collection Group");
+				var index=ind.selectedIndex;
+				if(index==0)
+				{
+					alert("Select Specimen Collection Group");
+				}
+				else
+				{
+					checkForConsents();
+				}
+				
 			}
 			else
 			{
-				<%
+				checkForConsents();
+			}
+		}
+		
+		function checkForConsents()
+		{
+			<%
 				if(form.getConsentTierCounter()>0)			
 				{
 				%>
@@ -452,8 +460,8 @@
 				<%
 				}
 				%>
-			}
 		}
+
 	  function showConsents()
 	  {
 		var showConsents = "<%=tab%>";
