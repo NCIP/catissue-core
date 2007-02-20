@@ -210,12 +210,15 @@ public class  OrderSpecimenInitAction  extends BaseAction
 	    	
 			List valueField=(List)session.getAttribute("specimenId");
 	    	List specimen=new ArrayList();
-			for(int i=0;i<valueField.size();i++)
-			{
-				List specimenList = bizLogic.retrieve(sourceObjectName, columnName, (String)valueField.get(i));
-				Specimen speclist=(Specimen)specimenList.get(0);
-				specimen.add(speclist);
-			}
+	    	if(valueField != null && valueField.size() >0)
+	    	{
+				for(int i=0;i<valueField.size();i++)
+				{
+					List specimenList = bizLogic.retrieve(sourceObjectName, columnName, (String)valueField.get(i));
+					Specimen speclist=(Specimen)specimenList.get(0);
+					specimen.add(speclist);
+				}
+	    	}
 			return specimen;
     	}
     	catch(DAOException e)

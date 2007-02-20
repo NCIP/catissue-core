@@ -175,14 +175,17 @@ public class OrderBizLogic extends DefaultBizLogic
 			OrderItem orderItem = (OrderItem)iter.next();
 			if(orderItem.getDistributedItem() != null)
 			{
-				if(orderItem.getDistributedItem().getQuantity() == null || orderItem.getDistributedItem().getQuantity().toString().equalsIgnoreCase(""))
+				if(orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_DISTRIBUTED))
 				{
-					throw new DAOException(ApplicationProperties.getValue("orderdistribution.quantity.required.errmsg"));
-				}
-//				Quantity cannot be characters and Quantity cannot be negative number.
-				if(!validator.isDouble(orderItem.getDistributedItem().getQuantity().toString()))
-				{
-					throw new DAOException(ApplicationProperties.getValue("orderdistribution.quantity.format.errmsg"));
+					if(orderItem.getDistributedItem().getQuantity() == null || orderItem.getDistributedItem().getQuantity().toString().equalsIgnoreCase(""))
+					{
+						throw new DAOException(ApplicationProperties.getValue("orderdistribution.quantity.required.errmsg"));
+					}
+	//				Quantity cannot be characters and Quantity cannot be negative number.
+					if(!validator.isDouble(orderItem.getDistributedItem().getQuantity().toString()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("orderdistribution.quantity.format.errmsg"));
+					}
 				}
 			}	
 			Collection oldOrderItemColl = oldOrder.getOrderItemCollection();
