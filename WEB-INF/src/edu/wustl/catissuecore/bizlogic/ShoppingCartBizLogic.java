@@ -30,6 +30,7 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
     {
 		if(cart!=null && obj!=null)
 		{
+			List specimenObjectList = new ArrayList();
 			for(int i=0;i<obj.length;i++)
 			{
 				List list = retrieve(Specimen.class.getName(),"id",obj[i].toString());
@@ -37,9 +38,10 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 				if (list!=null && list.size()!= 0)
 				{
 					Specimen specimen = (Specimen)list.get(0);
-					cart.add(specimen);
+					specimenObjectList.add(specimen);
 				}
 			}
+			cart.addToMyList(specimenObjectList);
 		}
     }
     
