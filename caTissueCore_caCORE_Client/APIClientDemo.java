@@ -117,7 +117,7 @@ public class APIClientDemo
 			ClientSession cs = ClientSession.getInstance();
 			try
 			{ 
-				cs.startSession("admin@admin.com", "Login123");
+				cs.startSession("admin@admin.com","Login123");
 			} 
 			catch (Exception ex) 
 			{ 
@@ -505,10 +505,7 @@ public class APIClientDemo
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
-	
+
 	private void testAddDistributionProtocol()
 	{
 		try
@@ -617,7 +614,7 @@ public class APIClientDemo
 			setLogger(collectionProtocolRegistrationObj5);
 	    	collectionProtocolRegistrationObj5=(CollectionProtocolRegistration)appService.createObject(collectionProtocolRegistrationObj5);
 	    	dataGenerator.dataModelObjectMap.put("CPR5",collectionProtocolRegistrationObj5);
-			writeSuccessfullOperationToReport(collectionProtocolRegistrationObj5,insertOperation+"testAddCollectionProtocolRegistration");
+	    	writeSuccessfullOperationToReport(collectionProtocolRegistrationObj5,insertOperation+"testAddCollectionProtocolRegistration");
 			Logger.out.info(" Domain Object is successfully added ---->   ID:: " + collectionProtocolRegistrationObj5.getId().toString());
 		
 		}
@@ -1031,7 +1028,7 @@ public class APIClientDemo
 				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenCollectionGroupObj1.getId().toString());
 				
 				setLogger(specimenCollectionGroupObj2);
-		    	Logger.out.info("Inserting domain object------->"+specimenCollectionGroupObj2);
+				Logger.out.info("Inserting domain object------->"+specimenCollectionGroupObj2);
 				specimenCollectionGroupObj2 =  (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroupObj2);
 				dataGenerator.dataModelObjectMap.put("SCG2",specimenCollectionGroupObj2);
 				writeSuccessfullOperationToReport(specimenCollectionGroupObj2,insertOperation+"testAddSpecimenCollectionGroup");
