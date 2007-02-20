@@ -1,11 +1,15 @@
 package edu.wustl.catissuecore.domain.pathology;
 
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
+
 /**
  * Represents the contents of surgical pathology reports.  
  * @hibernate.class
  * table="CATISSUE_REPORT_CONTENT"
  */
-public class ReportContent
+public class ReportContent extends AbstractDomainObject
 {
   
 	/**
@@ -61,6 +65,13 @@ public class ReportContent
 	public ReportContent()
 	{
 
+	}
+
+
+	public void setAllValues(AbstractActionForm arg0) throws AssignDataException
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }
