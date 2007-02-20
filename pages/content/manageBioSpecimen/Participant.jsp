@@ -90,6 +90,14 @@
 		String participantIdentifier="0";
 		List columnList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 		List dataList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_DATA_LIST);
+		if(dataList==null)
+		{
+			dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+		}
+		if(columnList==null)
+		{
+			columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
+		}
 		request.getSession().removeAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 		request.getSession().removeAttribute(Constants.SPREADSHEET_DATA_LIST);		
 			
