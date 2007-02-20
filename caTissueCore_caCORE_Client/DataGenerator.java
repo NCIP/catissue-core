@@ -1080,8 +1080,7 @@ public class DataGenerator
           }
           Collection orderItemCollection = new HashSet();       
   		  SpecimenArrayType specimenArrayType = (SpecimenArrayType)dataModelObjectMap.get("SPECIMEN_ARRAY_TYPE_1");
-  		  System.out.println(""+specimenArrayType.getId());
-  		  
+  		   		  
           NewSpecimenArrayOrderItem newSpOrderItem = new NewSpecimenArrayOrderItem();
           newSpOrderItem.setDescription("OrderDetails Item 1 of Order_Id ");
           newSpOrderItem.setStatus("Pending - For Protocol Review");           
@@ -1129,18 +1128,19 @@ public class DataGenerator
                   Logger.out.debug(""+e);
             }
             Collection orderItemCollection = new HashSet(); 
-            ExistingSpecimenOrderItem existingOrderItem =(ExistingSpecimenOrderItem) orderObj.getOrderItemCollection().iterator().next();
-            existingOrderItem.setDescription("Updated OrderDetails Item 1 of Order_Id ");
-            existingOrderItem.setStatus("Pending - For Specimen Distribution");          
+            NewSpecimenArrayOrderItem newSpOrderItem =(NewSpecimenArrayOrderItem) orderObj.getOrderItemCollection().iterator().next();
+            newSpOrderItem.setDescription("Updated OrderDetails Item 1 of Order_Id ");
+            newSpOrderItem.setStatus("Pending - For Specimen Distribution");          
 
             Quantity quantity = new Quantity();
             quantity.setValue(new Double(10));
-            existingOrderItem.setRequestedQuantity(quantity);
+            newSpOrderItem.setRequestedQuantity(quantity);
             
             //Obtain Specimen Object
-            Specimen specimen = (Specimen) dataModelObjectMap.get("SPECIMEN1");
-            existingOrderItem.setSpecimen(specimen);
-            orderItemCollection.add(existingOrderItem);
+            SpecimenArrayType specimenArrayType = (SpecimenArrayType)dataModelObjectMap.get("SPECIMEN_ARRAY_TYPE_1");
+            //Specimen specimen = (Specimen) dataModelObjectMap.get("SPECIMEN1");
+            newSpOrderItem.setArrayType(specimenArrayType);
+            orderItemCollection.add(newSpOrderItem);
             orderObj.setOrderItemCollection(orderItemCollection);
             
             dataModelObjectMap.put("ORDER_UPDATE",orderObj);
