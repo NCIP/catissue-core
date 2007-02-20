@@ -892,7 +892,27 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		orderItem.setDescription(definedArrayDetailsBean.getDescription());			
 		//Setting the order id 
 		orderItem.setOrder(order);
+//		For READY FOR ARRAY PREPARATION
+		if(definedArrayDetailsBean.getAssignedStatus().trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
+		{					
+			DistributedItem distributedItem = new DistributedItem();			
+			Specimen specimen = new Specimen();
+
+				if(definedArrayDetailsBean.getRequestFor() == null || definedArrayDetailsBean.getRequestFor().trim().equalsIgnoreCase(""))
+				{//for existing Specimen.
+					if(definedArrayDetailsBean.getInstanceOf().trim().equalsIgnoreCase("Existing"))
+					{
+						specimen.setId(new Long(definedArrayDetailsBean.getSpecimenId()));
+					}
+				}
+				else
+				{//For derived specimen.
+					specimen.setId(new Long(definedArrayDetailsBean.getRequestFor()));
+				}
 		
+			distributedItem.setSpecimen(specimen);				
+			orderItem.setDistributedItem(distributedItem);				
+		}	
 		return orderItem;
 	}
 	/**
