@@ -64,7 +64,6 @@ public class FilePoller implements Observable
 			ReportLoaderUtil.createDir(XMLPropertyHandler.getValue(Parser.PROCESSED_FILE_DIR));
 			ReportLoaderUtil.createDir(XMLPropertyHandler.getValue(Parser.INPUT_DIR));
 			ReportLoaderUtil.createDir(XMLPropertyHandler.getValue(Parser.BAD_FILE_DIR));
-			Logger.out.info("debug3");
 			Thread th=new Thread(){
 				public void	run()
 				{
