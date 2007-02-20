@@ -32,6 +32,7 @@
 	
 	<property name="mysql.lib" value="mysql-connector-java-3.0.16-ga-bin.jar"/>
 	<property name="oracle.lib" value="oracleDriver.jar"/>
+
 	
 	<!-- Check for required properties -->
 	<target name="assert">
@@ -41,90 +42,82 @@
 				<fail message="The property 'jboss.home.dir' can not be empty"/>
 			</then>
 		</if>
+	</target>
+	<target name="assertfordb">
 		<if>
-			<or>
-				<equals arg1="mysql" arg2="${database.type}"/>
-				<equals arg1="oracle" arg2="${database.type}"/>	
-			</or>
-			<then/>
-			<else>
-				<fail message="The value of property 'database.type' must be mysql or oracle"/>
-			</else>	
-		</if>
-		<if>
-			<equals arg1="" arg2="${database.host}"/>
-			<then>
-				<fail message="The property 'database.host' can not be empty"/>
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${database.port}"/>
-			<then>
-				<fail message="The property 'database.port' can not be empty. Default port for MySQL:3306 and for Oracle: 1521"/>
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${database.name}"/>
-			<then>
-				<fail message="The property 'database.name' can not be empty"/>
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${database.username}"/>
-			<then>
-				<fail message="The property 'database.username' can not be empty"/>
-			</then>
-		</if>			
-		<!-- Mandar 17May06 check for first user -->
-		<if>
-			<equals arg1="" arg2="${first.admin.department}"/>
-			<then>
-				<fail message="The property 'first.admin.department' can not be empty"/>
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${first.admin.institution}"/>
-			<then>
-				<fail message="The property 'first.admin.institution' can not be empty"/>
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${first.admin.cancerresearchgroup}"/>
-			<then>
-				<fail message="The property 'first.admin.cancerresearchgroup' can not be empty"/>
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${first.admin.emailAddress}"/>
-			<then>
-				<fail message="The property 'first.admin.emailAddress' can not be empty"/>
-			</then>
-		</if>
-		<if>
-			<equals arg1="" arg2="${first.admin.password}"/>
-			<then>
-				<fail message="The property 'first.admin.password' can not be empty"/>
-			</then>
-		</if>
-		
+				<or>
+					<equals arg1="mysql" arg2="${database.type}"/>
+					<equals arg1="oracle" arg2="${database.type}"/>	
+				</or>
+				<then/>
+				<else>
+					<fail message="The value of property 'database.type' must be mysql or oracle"/>
+				</else>	
+				</if>
+				<if>
+					<equals arg1="" arg2="${database.host}"/>
+					<then>
+						<fail message="The property 'database.host' can not be empty"/>
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${database.port}"/>
+					<then>
+						<fail message="The property 'database.port' can not be empty. Default port for MySQL:3306 and for Oracle: 1521"/>
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${database.name}"/>
+					<then>
+						<fail message="The property 'database.name' can not be empty"/>
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${database.username}"/>
+					<then>
+						<fail message="The property 'database.username' can not be empty"/>
+					</then>
+				</if>			
+				<!-- Mandar 17May06 check for first user -->
+				<if>
+					<equals arg1="" arg2="${first.admin.department}"/>
+					<then>
+						<fail message="The property 'first.admin.department' can not be empty"/>
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${first.admin.institution}"/>
+					<then>
+						<fail message="The property 'first.admin.institution' can not be empty"/>
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${first.admin.cancerresearchgroup}"/>
+					<then>
+						<fail message="The property 'first.admin.cancerresearchgroup' can not be empty"/>
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${first.admin.emailAddress}"/>
+					<then>
+						<fail message="The property 'first.admin.emailAddress' can not be empty"/>
+					</then>
+				</if>
+				<if>
+					<equals arg1="" arg2="${first.admin.password}"/>
+					<then>
+						<fail message="The property 'first.admin.password' can not be empty"/>
+					</then>
+				</if>
+		</target>
+	<target name="assertforcaties">
 		<if>
 			<equals arg1="" arg2="${caties.installation.dir}"/>
 			<then>
 				<fail message="The property 'caties.installation.dir' can not be empty"/>
 			</then>
 		</if>
-		<if>
-			<or>
-				<equals arg1="standAlone" arg2="${caties.installation.type}"/>
-				<equals arg1="webApplication" arg2="${caties.installation.type}"/>	
-			</or>
-			<then/>
-		<else>
-			<fail message="The value of property 'caties.installation.type' must be standAlone or webApplication" />
-		</else>	
-		</if>
 	</target>
-	
 	<!--Extrct WAR and copy Configuration files to temp directory--> 
 	<target name="init">
 		<echo message="Initializing installation..."/>
@@ -388,8 +381,10 @@
   		</copy>
 		<delete file="${jboss.home.dir}/server/default/lib/hibernate2.jar"/>
 	</target>
-		<target name="deploy_app">
+	
+	<target name="deploy_app">
 		<antcall target="assert"/>
+		<antcall target="assertfordb"/>
 		<delete dir="${temp.dir}"/>
 		<antcall target="init"/>
 		<antcall target="configure_war"/>
@@ -410,18 +405,46 @@
 		<antcall target="copy_files"/>
 		<antcall target="send_mail"/>
 	</target>
-
 	
+	<target name="deploy_caties" >
+		<antcall target="assertforcaties"/>
+		<antcall target="init"/>
+		<antcall target="deploy_caties_internal"/>
+		<delete dir="${temp.dir}" />
+	</target>
+	<!--Target call for both Deployment and Database Creation-->
+		<target name="deploy_all">
+			<antcall target="assert"/>
+			<antcall target="assertfordb"/>
+			<antcall target="assertforcaties"/>
+			<antcall target="deploy_app"/>
+			<antcall target="deploy_caties"/>
+			<antcall target="db_initialize"/>
+		</target>
+
 	<!--Target for Deployment with jboss config-->
 	<target name="deploy_app_with_config" >
 		<antcall target="deploy_app"/>
 		<antcall target="config_jboss_files"/>
 		<delete dir="${temp.dir}"/>
 	</target>
+	<target name="deploy_app_with_db" >
+			<antcall target="deploy_app"/>
+		<antcall target="db_initialize"/>
+			<delete dir="${temp.dir}"/>
+		</target>
+	<target name="deploy_caties_with_db" >
+		<antcall target="assertfordb"/>
+		<antcall target="assertforcaties"/>
+		<antcall target="init"/>	
+		<antcall target="deploy_caties_internal"/>
+		<antcall target="db_initialize"/>
+	</target>
 
 	<!--Target call for both Deployment and Database Creation-->
 	<target name="deploy_all_with_config">
 		<antcall target="deploy_app_with_config"/>
+		<antcall target="deploy_caties_internal"/>
 		<antcall target="db_initialize"/>
 	</target>
 		<!--Target for Database Creation-->
@@ -446,12 +469,7 @@
 	</target>
 	<!--Changes for v 1.0.1 - End-->
 
-	<!--Target call for both Deployment and Database Creation-->
-	<target name="deploy_all">
-		<antcall target="deploy_app"/>
-		<antcall target="db_initialize"/>
-	</target>
-
+	
 	<!--MySQL Database Creation -->
 	<target name="db_initialize_mysql">
 		<echo message="Initializing MySQL Database for caTISSUECore Application..."/>
@@ -746,11 +764,9 @@ Thanking You,
 		<delete dir="${temp.dir}"/>
 	</target>
 	
-	<target name="deploy_caties" >
-		<if>
-			<equals arg1="standAlone" arg2="${caties.installation.type}" />
-			<then>
-				<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
+	<target name="deploy_caties_internal" >
+		<antcall target="assertforcaties"/>
+						<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 				<copy todir="${caties.installation.dir}/classes">
 					<fileset dir="${temp.dir}/catissuecore/WEB-INF/classes" />
 				</copy>
@@ -806,11 +822,7 @@ Thanking You,
 				<copy file="JniDeID.dll" todir="${caties.installation.dir}" overwrite="true"/>
 				<copy file="${basedir}/CaTIES_conf/build.xml" todir="${caties.installation.dir}" overwrite="true"/>
 				<copy file="${basedir}/CaTIES_conf/sites_configuration.xml" todir="${caties.installation.dir}/CaTIES_conf" overwrite="true"/>
-				<delete dir="${temp.dir}" />
-			</then>	
-		<else>
-			<echo message="Oops! This task is for standAlone Application only....! Pleases check your catissueInstall.properties file." />
-		</else>
-		</if>
+				
+		
 	</target>
 </project>
