@@ -773,13 +773,13 @@ public class DataGenerator
 		Participant participant3 = (Participant)dataModelObjectMap.get("PARTICIPANT3");
 		Participant participant4 = (Participant)dataModelObjectMap.get("PARTICIPANT4");
 		User user = new User();
-		user.setId(new Long(1));
+		user.setId(new Long(9));
 		
 		CollectionProtocolRegistration collectionProtocolRegistration1 = initCommonCollectionProtocolRegistration(collectionProtocol3, participant1,null,null,null);
 		CollectionProtocolRegistration collectionProtocolRegistration2 = initCommonCollectionProtocolRegistration(collectionProtocol2, participant2,null,null,null);
 		CollectionProtocolRegistration collectionProtocolRegistration3 = initCommonCollectionProtocolRegistration(collectionProtocol2, participant1,null,null,null);
 		CollectionProtocolRegistration collectionProtocolRegistration4 = initCommonCollectionProtocolRegistration(collectionProtocol3, participant3,null,null,null);
-		CollectionProtocolRegistration collectionProtocolRegistration5 = initCommonCollectionProtocolRegistration(collectionProtocol1, participant4,"02/21/2006","mno.pdf",user);
+		CollectionProtocolRegistration collectionProtocolRegistration5 = initCommonCollectionProtocolRegistration(collectionProtocol1, participant4,"02/21/2006","E:\\sitename\\collectionProtocol_participant1.pdf",user);
 		
 		
 		dataModelObjectMap.put("CPR1",collectionProtocolRegistration1);
@@ -857,7 +857,7 @@ public class DataGenerator
 	}
 	
 	private void initCommonSpecimen(SpecimenCollectionGroup specimenCollectionGroup,String sType, String lableBarcode,
-			String pathStatus, User user,String date, Specimen specimen,Specimen parentSpecimen,String linegeType)
+			String pathStatus, User user,String date, Specimen specimen,Specimen parentSpecimen,String linegeType,CollectionProtocol cpObject)
 	{
 		
 		specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
@@ -938,22 +938,23 @@ public class DataGenerator
 
 		//Setting Consent Tier Response
 		Collection consentTierStatusCollection = new HashSet();
-		Collection consentTierCollection = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getConsentTierCollection();
+		Collection consentTierCollection = cpObject.getConsentTierCollection();
 		Collection consentStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
-		System.out.println("SCGID !!!!!!!!!!!!!!!!!"+specimenCollectionGroup.getId().toString());
+		
 		if(consentTierCollection != null)
 		{
+			System.out.println("consentTierCollection != null "+" consentTierCollection.size "+consentTierCollection.size());
 			Iterator itr = consentTierCollection.iterator();
 			Iterator itr1 = consentStatusCollection.iterator();
 			while(itr.hasNext())
 			{
+				System.out.println("consentTierCollection.size > 0");
 				ConsentTierStatus  consentTierStatus = new ConsentTierStatus();
 				ConsentTier consentTier = (ConsentTier) itr.next();
-				//ConsentTierResponse consentTierResponse = (ConsentTierResponse)itr.next();
 				ConsentTierStatus consentStatus=(ConsentTierStatus)itr1.next();
-				//ConsentTier consentTier=consentTierResponse.getConsentTier();
 				consentTierStatus.setConsentTier(consentTier);
-				consentTierStatus.setStatus(consentStatus.toString());
+				consentTierStatus.setStatus(consentStatus.getStatus());
+				System.out.println("consentStatus.getStatus()" + consentStatus.getStatus());
 				consentTierStatusCollection.add(consentTierStatus);
 			}	
 			specimen.setConsentTierStatusCollection(consentTierStatusCollection);
@@ -964,13 +965,13 @@ public class DataGenerator
 	 */
 	public void initSpecimen()
 	{
-		 
+		//without consents 
 		SpecimenCollectionGroup specimenCollectionGroup1 = (SpecimenCollectionGroup)dataModelObjectMap.get("SCG1");
-//		SpecimenCollectionGroup specimenCollectionGroup2 = (SpecimenCollectionGroup)dataModelObjectMap.get("SCG2");
-//		SpecimenCollectionGroup specimenCollectionGroup3 = (SpecimenCollectionGroup)dataModelObjectMap.get("SCG3");
-//		SpecimenCollectionGroup specimenCollectionGroup4 = (SpecimenCollectionGroup)dataModelObjectMap.get("SCG4");
+		//with consents
 		SpecimenCollectionGroup specimenCollectionGroup5 = (SpecimenCollectionGroup)dataModelObjectMap.get("SCG5");
 		
+		CollectionProtocol cpObject1 = (CollectionProtocol) dataModelObjectMap.get("COLLECTION_PROTOCOL1");
+		CollectionProtocol cpObject2 = (CollectionProtocol) dataModelObjectMap.get("COLLECTION_PROTOCOL2");
 		User linda = (User) dataModelObjectMap.get("SCIENTISTUSER1");
 		User lisa = (User) dataModelObjectMap.get("SCIENTISTUSER2");	
 		
@@ -984,15 +985,15 @@ public class DataGenerator
 		TissueSpecimen tissueSpecimen6 = new TissueSpecimen();
 		CellSpecimen cellSpecimen2 = new CellSpecimen();
 		
-		initCommonSpecimen(specimenCollectionGroup1,"Fixed Tissue","Sp1","Malignant",linda,"08/25/2005", tissueSpecimen1,null,"New");
-		initCommonSpecimen(specimenCollectionGroup1,"Microdissected","Sp2","Not Specified",lisa,"08/15/2000",tissueSpecimen2,null,"New");
-		initCommonSpecimen(specimenCollectionGroup1,"Fresh Tissue","Sp3","Malignant, Invasive",linda,"10/10/2001",tissueSpecimen3,null,"New");
-		initCommonSpecimen(specimenCollectionGroup1,"Cryopreserved Cells","Sp4","Not Specified",lisa,"08/18/2004",cellSpecimen1,null,"New");
+		initCommonSpecimen(specimenCollectionGroup1,"Fixed Tissue","Sp1","Malignant",linda,"08/25/2005", tissueSpecimen1,null,"New",cpObject2);
+		initCommonSpecimen(specimenCollectionGroup1,"Microdissected","Sp2","Not Specified",lisa,"08/15/2000",tissueSpecimen2,null,"New",cpObject2);
+		initCommonSpecimen(specimenCollectionGroup1,"Fresh Tissue","Sp3","Malignant, Invasive",linda,"10/10/2001",tissueSpecimen3,null,"New",cpObject2);
+		initCommonSpecimen(specimenCollectionGroup1,"Cryopreserved Cells","Sp4","Not Specified",lisa,"08/18/2004",cellSpecimen1,null,"New",cpObject2);
 		
-		initCommonSpecimen(specimenCollectionGroup5,"Fixed Tissue","Sp5","Malignant",linda,"08/25/2005", tissueSpecimen4,null,"New");
-		initCommonSpecimen(specimenCollectionGroup5,"Microdissected","Sp6","Not Specified",lisa,"08/15/2000",tissueSpecimen5,null,"New");
-		initCommonSpecimen(specimenCollectionGroup5,"Fresh Tissue","Sp7","Malignant, Invasive",linda,"10/10/2001",tissueSpecimen6,null,"New");
-		initCommonSpecimen(specimenCollectionGroup5,"Cryopreserved Cells","Sp8","Not Specified",lisa,"08/18/2004",cellSpecimen2,null,"New");
+		initCommonSpecimen(specimenCollectionGroup5,"Fixed Tissue","Sp5","Malignant",linda,"08/25/2005", tissueSpecimen4,null,"New",cpObject1);
+		initCommonSpecimen(specimenCollectionGroup5,"Microdissected","Sp6","Not Specified",lisa,"08/15/2000",tissueSpecimen5,null,"New",cpObject1);
+		initCommonSpecimen(specimenCollectionGroup5,"Fresh Tissue","Sp7","Malignant, Invasive",linda,"10/10/2001",tissueSpecimen6,null,"New",cpObject1);
+		initCommonSpecimen(specimenCollectionGroup5,"Cryopreserved Cells","Sp8","Not Specified",lisa,"08/18/2004",cellSpecimen2,null,"New",cpObject1);
 		
 		
 		dataModelObjectMap.put("SPECIMEN1",tissueSpecimen1);
@@ -1021,7 +1022,7 @@ public class DataGenerator
 		User linda = (User) dataModelObjectMap.get("SCIENTISTUSER1");
 		User lisa = (User) dataModelObjectMap.get("SCIENTISTUSER2");	
 		
-	
+		CollectionProtocol cpObject2 = (CollectionProtocol) dataModelObjectMap.get("COLLECTION_PROTOCOL2");
 		FluidSpecimen fluidSpecimen = new FluidSpecimen();
 		MolecularSpecimen molecularSpecimen1 = new MolecularSpecimen();
 		MolecularSpecimen molecularSpecimen2 = new MolecularSpecimen();
@@ -1030,13 +1031,13 @@ public class DataGenerator
 		MolecularSpecimen molecularSpecimen5 = new MolecularSpecimen();
 		CellSpecimen cellSpecimen = new CellSpecimen();
 		
-		initCommonSpecimen(specimenCollectionGroup1,"Serum","Sp1_Sp1","Malignant",linda,"08/25/2005", fluidSpecimen,specimen1,"Derived");
-		initCommonSpecimen(specimenCollectionGroup1,"cDNA","Sp2_Sp1","Not Specified",lisa,"08/15/2000",molecularSpecimen1,specimen2,"Derived");
-		initCommonSpecimen(specimenCollectionGroup1,"DNA","Sp2_Sp2","Malignant, Invasive",linda,"10/10/2001",molecularSpecimen2,specimen2,"Derived");
-		initCommonSpecimen(specimenCollectionGroup1,"DNA","Sp3_Sp1","Not Specified",lisa,"08/18/2004",molecularSpecimen3,specimen3,"Derived");
-		initCommonSpecimen(specimenCollectionGroup1,"protein","Sp3_Sp2","Not Specified",lisa,"08/18/2004",molecularSpecimen4,specimen3,"Derived");
-		initCommonSpecimen(specimenCollectionGroup1,"RNA","Sp3_Sp3","Not Specified",lisa,"08/18/2004",molecularSpecimen5,specimen3,"Derived");
-		initCommonSpecimen(specimenCollectionGroup1,"Cryopreserved Cells","Sp4_Sp1","Not Specified",lisa,"08/18/2004",cellSpecimen,specimen4,"Derived");
+		initCommonSpecimen(specimenCollectionGroup1,"Serum","Sp1_Sp1","Malignant",linda,"08/25/2005", fluidSpecimen,specimen1,"Derived",cpObject2);
+		initCommonSpecimen(specimenCollectionGroup1,"cDNA","Sp2_Sp1","Not Specified",lisa,"08/15/2000",molecularSpecimen1,specimen2,"Derived",cpObject2);
+		initCommonSpecimen(specimenCollectionGroup1,"DNA","Sp2_Sp2","Malignant, Invasive",linda,"10/10/2001",molecularSpecimen2,specimen2,"Derived",cpObject2);
+		initCommonSpecimen(specimenCollectionGroup1,"DNA","Sp3_Sp1","Not Specified",lisa,"08/18/2004",molecularSpecimen3,specimen3,"Derived",cpObject2);
+		initCommonSpecimen(specimenCollectionGroup1,"protein","Sp3_Sp2","Not Specified",lisa,"08/18/2004",molecularSpecimen4,specimen3,"Derived",cpObject2);
+		initCommonSpecimen(specimenCollectionGroup1,"RNA","Sp3_Sp3","Not Specified",lisa,"08/18/2004",molecularSpecimen5,specimen3,"Derived",cpObject2);
+		initCommonSpecimen(specimenCollectionGroup1,"Cryopreserved Cells","Sp4_Sp1","Not Specified",lisa,"08/18/2004",cellSpecimen,specimen4,"Derived",cpObject2);
 		
 		dataModelObjectMap.put("CHILD_SPECIMEN1",fluidSpecimen);
 		dataModelObjectMap.put("CHILD_SPECIMEN2",molecularSpecimen1);
@@ -1053,7 +1054,8 @@ public class DataGenerator
 		User linda = (User) dataModelObjectMap.get("SCIENTISTUSER1");
 		Specimen specimen= (Specimen)dataModelObjectMap.get("CHILD_SPECIMEN4");
 		MolecularSpecimen molecularSpecimen = new MolecularSpecimen();
-		initCommonSpecimen(specimenCollectionGroup,"DNA","Sp3_Sp1_Sp1","Malignant, Invasive",linda,"10/10/2001",molecularSpecimen,specimen,"Derived");
+		CollectionProtocol cpObject2 = (CollectionProtocol) dataModelObjectMap.get("COLLECTION_PROTOCOL2");
+		initCommonSpecimen(specimenCollectionGroup,"DNA","Sp3_Sp1_Sp1","Malignant, Invasive",linda,"10/10/2001",molecularSpecimen,specimen,"Derived",cpObject2);
 		dataModelObjectMap.put("DERIVED_SPECIMEN",molecularSpecimen);
 	}
 	
@@ -1081,7 +1083,8 @@ public class DataGenerator
           }
           Collection orderItemCollection = new HashSet();       
   		  SpecimenArrayType specimenArrayType = (SpecimenArrayType)dataModelObjectMap.get("SPECIMEN_ARRAY_TYPE_1");
-
+  		  System.out.println(""+specimenArrayType.getId());
+  		  
           NewSpecimenArrayOrderItem newSpOrderItem = new NewSpecimenArrayOrderItem();
           newSpOrderItem.setDescription("OrderDetails Item 1 of Order_Id ");
           newSpOrderItem.setStatus("Pending - For Protocol Review");           
