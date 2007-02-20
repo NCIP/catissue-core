@@ -136,6 +136,14 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String UNDERSCORE = "_";
 	public static final String ID_NODES_MAP = "idNodesMap";
 	public static final String ID_COLUMNS_MAP = "idColumnsMap";
+	public static final String COLUMN_NAME = "Column";
+	public static final String[] ATTRIBUTE_NAMES_FOR_TREENODE_LABEL = {
+		"firstName",
+		"lastName",
+		"middleName",
+		"name",
+		"label"
+	};
 	
 	//Surgical Pathology Report UI constants
 	public static final String SPR_VIEW_ACTION="ViewSurgicalPathologyReport.do";
