@@ -943,18 +943,15 @@ public class DataGenerator
 		
 		if(consentTierCollection != null)
 		{
-			System.out.println("consentTierCollection != null "+" consentTierCollection.size "+consentTierCollection.size());
 			Iterator itr = consentTierCollection.iterator();
 			Iterator itr1 = consentStatusCollection.iterator();
 			while(itr.hasNext())
 			{
-				System.out.println("consentTierCollection.size > 0");
 				ConsentTierStatus  consentTierStatus = new ConsentTierStatus();
 				ConsentTier consentTier = (ConsentTier) itr.next();
 				ConsentTierStatus consentStatus=(ConsentTierStatus)itr1.next();
 				consentTierStatus.setConsentTier(consentTier);
 				consentTierStatus.setStatus(consentStatus.getStatus());
-				System.out.println("consentStatus.getStatus()" + consentStatus.getStatus());
 				consentTierStatusCollection.add(consentTierStatus);
 			}	
 			specimen.setConsentTierStatusCollection(consentTierStatusCollection);
