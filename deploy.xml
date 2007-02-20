@@ -381,7 +381,7 @@
   		</copy>
 		<delete file="${jboss.home.dir}/server/default/lib/hibernate2.jar"/>
 	</target>
-	
+	<!--Target call for both Deployment of Core -->
 	<target name="deploy_app">
 		<antcall target="assert"/>
 		<antcall target="assertfordb"/>
@@ -406,13 +406,15 @@
 		<antcall target="send_mail"/>
 	</target>
 	
+	<!--Target call for both Deployment of caTIES -->
 	<target name="deploy_caties" >
 		<antcall target="assertforcaties"/>
 		<antcall target="init"/>
 		<antcall target="deploy_caties_internal"/>
 		<delete dir="${temp.dir}" />
 	</target>
-	<!--Target call for both Deployment and Database Creation-->
+	
+	<!--Target call for both Deployment of Core and  caTIES and Database Creation-->
 		<target name="deploy_all">
 			<antcall target="assert"/>
 			<antcall target="assertfordb"/>
@@ -428,11 +430,13 @@
 		<antcall target="config_jboss_files"/>
 		<delete dir="${temp.dir}"/>
 	</target>
+	<!--Target call for both Deployment of Core and Database Creation-->
 	<target name="deploy_app_with_db" >
 			<antcall target="deploy_app"/>
 		<antcall target="db_initialize"/>
 			<delete dir="${temp.dir}"/>
 		</target>
+	<!--Target call for both Deployment of  caTIES and Database Creation-->
 	<target name="deploy_caties_with_db" >
 		<antcall target="assertfordb"/>
 		<antcall target="assertforcaties"/>
@@ -441,13 +445,13 @@
 		<antcall target="db_initialize"/>
 	</target>
 
-	<!--Target call for both Deployment and Database Creation-->
+	<!--Target call for both Deployment of Core and  caTIES with jboss config-->
 	<target name="deploy_all_with_config">
 		<antcall target="deploy_app_with_config"/>
 		<antcall target="deploy_caties_internal"/>
 		<antcall target="db_initialize"/>
 	</target>
-		<!--Target for Database Creation-->
+	<!--Target for Database Creation-->
 	<target name="db_initialize">
 		<antcall target="firstUser"/>
 		
