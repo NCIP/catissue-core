@@ -422,6 +422,7 @@
 			<antcall target="deploy_app"/>
 			<antcall target="deploy_caties"/>
 			<antcall target="db_initialize"/>
+			<ant dir="${caties.installation.dir}" inheritAll="false" antfile="build.xml" target="addcp" />
 		</target>
 
 	<!--Target for Deployment with jboss config-->
@@ -443,6 +444,7 @@
 		<antcall target="init"/>	
 		<antcall target="deploy_caties_internal"/>
 		<antcall target="db_initialize"/>
+		<ant dir="${caties.installation.dir}" inheritAll="false" antfile="build.xml" target="addcp" />
 	</target>
 
 	<!--Target call for both Deployment of Core and  caTIES with jboss config-->
@@ -450,6 +452,7 @@
 		<antcall target="deploy_app_with_config"/>
 		<antcall target="deploy_caties_internal"/>
 		<antcall target="db_initialize"/>
+		<ant dir="${caties.installation.dir}" inheritAll="false" antfile="build.xml" target="addcp" />
 	</target>
 	<!--Target for Database Creation-->
 	<target name="db_initialize">
@@ -828,20 +831,4 @@ Thanking You,
 				<copy file="${basedir}/CaTIES_conf/sites_configuration.xml" todir="${caties.installation.dir}/CaTIES_conf" overwrite="true"/>	
 	</target>
 	
-	<!-- class path required to run addcp target -->
-	<path id="cp">
-		<fileset dir="${caties.installation.dir}/lib">
-			<include name="**/*.jar"/>
-		</fileset>	
-	</path>
-	
-	<!-- task to add default CollectionProtocol for caTIES -->
-	<target name="addcp" >		
-		<java classname="edu.wustl.catissuecore.reportloader.test.AddCollectionProtocol" fork="true">
-			<classpath>
-				<pathelement location="${caties.installation.dir}/caties.jar"/>
-			</classpath>
-			<classpath refid="cp"/>
-		</java>
-	</target>	
 </project>
