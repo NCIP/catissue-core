@@ -7,13 +7,16 @@
 package edu.wustl.catissuecore.action.annotations;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,12 +24,17 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
+import edu.common.dynamicextensions.exception.DataTypeFactoryInitializationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
@@ -468,26 +476,26 @@ public class LoadAnnotationDefinitionAction extends BaseAction
             DynamicExtensionsApplicationException
     {
         List<NameValueBean> systemEntityList = new ArrayList<NameValueBean>();
+        List<NameValueBean> staticEntityInformationList = populateStaticEntityList("StaticEntityInformation.xml");
         CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager
                 .getInstance();
         if (cacheManager
                 .getObjectFromCache(AnnotationConstants.STATIC_ENTITY_LIST) == null)
         {
-            systemEntityList
+            if (staticEntityInformationList != null && !staticEntityInformationList.isEmpty()) 
+            {
+                Iterator listIterator = staticEntityInformationList.iterator();
+                while (listIterator.hasNext())
+                {
+                    NameValueBean nameValueBean = (NameValueBean) listIterator.next();
+                    systemEntityList
                     .add(new NameValueBean(
-                            AnnotationConstants.PARTICIPANT,
+                            nameValueBean.getName() ,
                             Utility
-                                    .getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT)));
-            systemEntityList
-                    .add(new NameValueBean(
-                            AnnotationConstants.SPECIMEN,
-                            Utility
-                                    .getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN)));
-            systemEntityList
-                    .add(new NameValueBean(
-                            AnnotationConstants.SPECIMEN_COLLN_GROUP,
-                            Utility
-                                    .getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP)));
+                                    .getEntityId(nameValueBean.getValue())));
+                }
+            }
+            
             cacheManager.addObjectToCache(
                     AnnotationConstants.STATIC_ENTITY_LIST,
                     (Serializable) systemEntityList);
@@ -499,6 +507,53 @@ public class LoadAnnotationDefinitionAction extends BaseAction
         }
         return systemEntityList;
     }
+    
+    /**
+     * This method updates module map by parsing xml file
+     * @param xmlFileName file to be parsed
+     * @return dataType Map
+     * @throws DataTypeFactoryInitializationException on Exception
+     */
+    public final List<NameValueBean> populateStaticEntityList(String xmlFileName)
+            throws DataTypeFactoryInitializationException
+    {
+        List list = new ArrayList();
+
+        SAXReader saxReader = new SAXReader();
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(xmlFileName);
+
+        Document document = null;
+
+        try
+        {
+            document = saxReader.read(inputStream);
+            Element className = null;
+            Element displayName = null;
+
+            Element primitiveAttributesElement = document.getRootElement();
+            Iterator primitiveAttributeElementIterator = primitiveAttributesElement
+                    .elementIterator("static-entity");
+
+            Element primitiveAttributeElement = null;
+
+            while (primitiveAttributeElementIterator.hasNext())
+            {
+                primitiveAttributeElement = (Element) primitiveAttributeElementIterator.next();
+
+                className = primitiveAttributeElement.element("name");
+                displayName = primitiveAttributeElement.element("displayName");
+                list.add(new NameValueBean(displayName.getStringValue(),className.getStringValue()));
+               
+            }
+        }
+        catch (DocumentException documentException)
+        {
+            throw new DataTypeFactoryInitializationException(documentException);
+        }
+
+        return list;
+    }
+
 
     /**
      * @param annotationForm 
