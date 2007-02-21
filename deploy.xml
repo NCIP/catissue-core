@@ -825,8 +825,23 @@ Thanking You,
 				<copy file="Dataset.dtd" todir="${caties.installation.dir}" overwrite="true"/>
 				<copy file="JniDeID.dll" todir="${caties.installation.dir}" overwrite="true"/>
 				<copy file="${basedir}/CaTIES_conf/build.xml" todir="${caties.installation.dir}" overwrite="true"/>
-				<copy file="${basedir}/CaTIES_conf/sites_configuration.xml" todir="${caties.installation.dir}/CaTIES_conf" overwrite="true"/>
-				
-		
+				<copy file="${basedir}/CaTIES_conf/sites_configuration.xml" todir="${caties.installation.dir}/CaTIES_conf" overwrite="true"/>	
 	</target>
+	
+	<!-- class path required to run addcp target -->
+	<path id="cp">
+		<fileset dir="${caties.installation.dir}/lib">
+			<include name="**/*.jar"/>
+		</fileset>	
+	</path>
+	
+	<!-- task to add default CollectionProtocol for caTIES -->
+	<target name="addcp" >		
+		<java classname="edu.wustl.catissuecore.reportloader.test.AddCollectionProtocol" fork="true">
+			<classpath>
+				<pathelement location="${caties.installation.dir}/caties.jar"/>
+			</classpath>
+			<classpath refid="cp"/>
+		</java>
+	</target>	
 </project>
