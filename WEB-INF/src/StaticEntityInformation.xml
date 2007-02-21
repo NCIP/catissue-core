@@ -1,0 +1,14 @@
+<static-entities>
+	<static-entity>
+	<name>edu.wustl.catissuecore.domain.Participant</name>
+	<displayName>Participant</displayName>
+	</static-entity>
+	<static-entity>
+	<name>edu.wustl.catissuecore.domain.Specimen</name>
+	<displayName>Specimen</displayName>	
+	</static-entity>
+	<static-entity>
+	<name>edu.wustl.catissuecore.domain.SpecimenCollectionGroup</name>
+	<displayName>Specimen Collection Group</displayName>
+	</static-entity>
+</static-entities>
