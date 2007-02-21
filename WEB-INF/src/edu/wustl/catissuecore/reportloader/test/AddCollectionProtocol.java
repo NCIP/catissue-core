@@ -16,6 +16,7 @@ import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.reportloader.Parser;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -50,9 +51,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 
 /**
-	* ClientDemo.java demonstartes various ways to execute searches with and without
-      * using Application Service Layer (convenience layer that abstracts building criteria
-      * Uncomment different scenarios below to demonstrate the various types of searches
+	Program to add default Collection Protocol for caTIES
 */
 
 public class AddCollectionProtocol
@@ -293,7 +292,7 @@ public class AddCollectionProtocol
 		collectionProtocol.setEndDate(null);
 		collectionProtocol.setEnrollment(null);
 		collectionProtocol.setIrbIdentifier("1111");
-		collectionProtocol.setTitle("Generic Collection Protocol52");
+		collectionProtocol.setTitle("Generic Collection Protocol");
 		collectionProtocol.setShortTitle("gcp");
 				
 		try
@@ -525,7 +524,7 @@ public class AddCollectionProtocol
 			BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
 			IBizLogic bizLogic = bizLogicFactory.getBizLogic(obj.getClass().getName());
 			SessionDataBean sessionDataBean = new SessionDataBean();
-			sessionDataBean.setUserName("admin@admin.com");
+			sessionDataBean.setUserName(XMLPropertyHandler.getValue(Parser.SESSION_DATA));
 			bizLogic.insert(obj,sessionDataBean,Constants.HIBERNATE_DAO);
 		}
 	
