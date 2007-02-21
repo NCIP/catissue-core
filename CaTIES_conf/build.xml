@@ -53,4 +53,15 @@
 			<classpath refid="cp"/>
 		</java>
 	</target>
+	
+	<!-- task to add default CollectionProtocol for caTIES -->
+	<target name="addcp" >	
+		<echo message="addcp trget started" />
+		<java classname="edu.wustl.catissuecore.reportloader.test.AddCollectionProtocol" fork="true">
+			<classpath>
+				<pathelement location="caties.jar"/>
+			</classpath>
+			<classpath refid="cp"/>
+		</java>
+	</target>	
 </project>
