@@ -53,15 +53,4 @@
 			<classpath refid="cp"/>
 		</java>
 	</target>
-	
-	<!-- program for saving generic protocol -->
-	<target name="rundemo" >		
-		<java classname="edu.wustl.catissuecore.reportloader.test.AddCollectionProtocol" fork="true">
-			<classpath>
-				<pathelement location="caties.jar"/>
-			</classpath>
-			<classpath refid="cp"/>
-		</java>
-	</target>	
-	
 </project>
