@@ -143,7 +143,7 @@ public class RequestListAction extends SecureAction
 		{
 			String[] whereColumnName = {"status","status"};
 			String[] whereColumnCondition = {"=","="};
-			String[] whereColumnValue = {"pending","new"};			
+			String[] whereColumnValue = {"Pending","New"};			
 			
 			orderListFromDB = orderBizLogic.retrieve(OrderDetails.class.getName(), whereColumnName, whereColumnCondition, whereColumnValue, Constants.OR_JOIN_CONDITION);
 		}
