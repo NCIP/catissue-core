@@ -84,7 +84,7 @@ public class DeidReport extends Thread
 	    	try
 	    	{
 	    		ReportLoaderUtil.saveObject(pathologyReport);
-	        	ispr.setReportStatus(Parser.IDENTIFIED);
+	        	ispr.setReportStatus(Parser.DEIDENTIFIED);
 	        	ispr.setDeidentifiedSurgicalPathologyReport(pathologyReport);
 	        	ReportLoaderUtil.updateObject(ispr);
 	    	}
