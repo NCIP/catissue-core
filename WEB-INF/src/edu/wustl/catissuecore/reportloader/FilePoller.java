@@ -69,14 +69,14 @@ public class FilePoller implements Observable
 				{
 					try
 					{
-						int PORT=Integer.parseInt(XMLPropertyHandler.getValue("filepollerport"));
-						ServerSocket serv = new ServerSocket(PORT);
+						int port=Integer.parseInt(XMLPropertyHandler.getValue("filepollerport"));
+						ServerSocket serv = new ServerSocket(port);
 					  	BufferedReader r;
 				    	Socket sock = serv.accept();
-				    	r =new BufferedReader (new InputStreamReader (sock.getInputStream()) );
+				    	r =new BufferedReader (new InputStreamReader (sock.getInputStream()));
 				    	PrintWriter out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()),true);
 				    	String str=r.readLine();
-				    	System.out.println("Stopping server");
+				    	Logger.out.info("Stopping server");
 				    	r.close();
 				    	sock.close(); 
 					    serv.close();
