@@ -80,6 +80,7 @@ public class SiteInfoHandler
 	 * </p>
 	 * @param siteName name of the site
 	 * @return pValue currousponding abbreviated value
+	 * @throws Exception generic exception
 	 */
 	public static String getSiteAbbriviation(String siteName) throws Exception
 	{
@@ -134,6 +135,7 @@ public class SiteInfoHandler
 	 * </p>
 	 * @param abbr abbriviated site name
 	 * @return pValue associated site name
+	 * @throws Exception generic exception
 	 */
 	public static String getSiteName(String abbr) throws Exception
 	{
