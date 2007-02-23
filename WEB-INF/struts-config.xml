@@ -478,7 +478,10 @@ PUBLIC
 			type="edu.wustl.catissuecore.action.querysuite.PathFinderAction" 
 			parameter="method">
 		</action>
-		
+		<action path="/getDagViewDataAction" 
+			type="edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction" 
+			parameter="method">
+		</action>
 		
 		
 		<!-- Action code : Query Module Ends : 06/11/06 -->
