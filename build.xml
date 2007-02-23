@@ -780,6 +780,11 @@
 					<include name="**/CommonAppletUtil.class" />
 				</fileset>
 			</copy>
+			<copy todir="${dagviewapplet.dir}/edu/wustl/catissuecore/util/querysuite">
+				<fileset dir="${target.dir}/edu/wustl/catissuecore/util/querysuite">
+					<include name="**/QueryModuleUtil.class" />
+				</fileset>
+			</copy>
 			<copy todir="${dagviewapplet.dir}">
 				<fileset dir="${target.dir}">
 					<include name="**/dynamicUI.xml" />
