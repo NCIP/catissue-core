@@ -9,13 +9,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+
 import edu.common.dynamicextensions.domain.Attribute;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.wustl.cab2b.common.beans.IAttribute;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 /**
  * Creates Query Object as per the data filled by the user on AddLimits section.
@@ -33,11 +40,13 @@ public class CreateQueryObjectBizLogic
 	 * @throws DynamicExtensionsSystemException DynamicExtensionsSystemException
 	 * @throws DynamicExtensionsApplicationException DynamicExtensionsApplicationException
 	 */
-	public Map getRuleDetailsMap(String strToCreateQueryObject ,EntityInterface entity) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
+	public Map getRuleDetailsMap(String strToCreateQueryObject, EntityInterface entity) throws DynamicExtensionsSystemException,
+			DynamicExtensionsApplicationException
 	{
+		String errorMessage = "";
 		Map ruleDetailsMap = new HashMap();
 		Map conditionsMap = createConditionsMap(strToCreateQueryObject);
-		if(entity != null)
+		if (entity != null)
 		{
 			Collection attrCollection = entity.getAttributeCollection();
 			if (conditionsMap != null && !conditionsMap.isEmpty() && attrCollection != null && !attrCollection.isEmpty())
@@ -46,11 +55,12 @@ public class CreateQueryObjectBizLogic
 				List<String> attributeOperators = new ArrayList<String>();
 				List<String> firstAttributeValues = new ArrayList<String>();
 				List<String> secondAttributeValues = new ArrayList<String>();
+				
 				Iterator iterAttributes = (Iterator) attrCollection.iterator();
 				while (iterAttributes.hasNext())
 				{
 					Attribute attr = (Attribute) iterAttributes.next();
-					String componentId = attr.getName()+attr.getId().toString();
+					String componentId = attr.getName() + attr.getId().toString();
 					String[] params = (String[]) conditionsMap.get(componentId);
 					if (params != null)
 					{
@@ -58,60 +68,21 @@ public class CreateQueryObjectBizLogic
 						attributeOperators.add(params[0]);
 						firstAttributeValues.add(params[1]);
 						secondAttributeValues.add(params[2]);
+						List<String> attributeValues = new ArrayList<String>();
+						attributeValues.add(params[1]);
+						attributeValues.add(params[2]);
+						errorMessage = errorMessage + validateAttributeValues(attr,attributeValues);
 					}
+					System.out.println(errorMessage);
 				}
 				ruleDetailsMap.put(AppletConstants.ATTRIBUTES, attributes);
 				ruleDetailsMap.put(AppletConstants.ATTRIBUTE_OPERATORS, attributeOperators);
 				ruleDetailsMap.put(AppletConstants.FIRST_ATTR_VALUES, firstAttributeValues);
 				ruleDetailsMap.put(AppletConstants.SECOND_ATTR_VALUES, secondAttributeValues);
+				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
 			}
 		}
 		return ruleDetailsMap;
-	}
-
-	/**
-	 * Craetes Map of condition Objects.
-	 * @param queryString queryString
-	 * @return Map conditions map
-	 * @throws DynamicExtensionsApplicationException  DynamicExtensionsApplicationException
-	 * @throws DynamicExtensionsSystemException DynamicExtensionsSystemException
-	 */
-	private Map<String, String[]> createConditionsMap(String queryString) throws DynamicExtensionsSystemException, DynamicExtensionsApplicationException
-	{
-		Map<String, String[]> conditionsMap = new HashMap<String, String[]>();
-		String[] conditions = queryString.split(Constants.QUERY_CONDITION_DELIMITER);
-		final int LENGTH = 3;
-
-		for (int i = 0; i < conditions.length; i++)
-		{
-			String[] attrParams = new String[LENGTH];
-			String condition = conditions[i];
-			if (!condition.equals(""))
-			{
-				condition = condition.substring(0, condition.indexOf(";"));
-				String attrName = "";
-				StringTokenizer tokenizer = new StringTokenizer(condition, Constants.QUERY_OPERATOR_DELIMITER);
-				while (tokenizer.hasMoreTokens())
-				{
-					attrName = tokenizer.nextToken();
-					if (tokenizer.hasMoreTokens())
-					{
-						String operator = tokenizer.nextToken();
-						attrParams[0] = operator;
-						if (tokenizer.hasMoreTokens())
-						{
-							attrParams[1] = tokenizer.nextToken();
-							if (operator.equalsIgnoreCase(RelationalOperator.Between.toString()))
-							{
-								attrParams[2] = tokenizer.nextToken();
-							}
-						}
-					}
-				}
-				conditionsMap.put(attrName, attrParams);
-			}
-		}
-		return conditionsMap;
 	}
 
 	/**
@@ -120,9 +91,7 @@ public class CreateQueryObjectBizLogic
 	 * @param attrvalues List<String>
 	 * @return String message
 	 */
-	//TODO use ApplicationProperties.getValue("query.defineSearchRulesFor");
-
-	/*private String validateAttributeValues(IAttribute attr, List<String> attrvalues)
+	private String validateAttributeValues(Attribute attr, List<String> attrvalues)
 	{
 		ActionErrors errors = new ActionErrors();
 		Validator validator = new Validator();
@@ -132,6 +101,8 @@ public class CreateQueryObjectBizLogic
 		while (valuesIter.hasNext())
 		{
 			String enteredValue = (String) valuesIter.next();
+			if(enteredValue != null)
+			{
 			if ((dataType.trim().equalsIgnoreCase("bigint") || dataType.trim().equalsIgnoreCase("integer"))
 					|| dataType.trim().equalsIgnoreCase("Long"))
 			{
@@ -176,8 +147,53 @@ public class CreateQueryObjectBizLogic
 				}
 			}
 		}
-
+		}
 		return errorMessages;
-	}*/
+	}
 
+	/**
+	 * Craetes Map of condition Objects.
+	 * @param queryString queryString
+	 * @return Map conditions map
+	 * @throws DynamicExtensionsApplicationException  DynamicExtensionsApplicationException
+	 * @throws DynamicExtensionsSystemException DynamicExtensionsSystemException
+	 */
+	private Map<String, String[]> createConditionsMap(String queryString) throws DynamicExtensionsSystemException,
+			DynamicExtensionsApplicationException
+	{
+		Map<String, String[]> conditionsMap = new HashMap<String, String[]>();
+		String[] conditions = queryString.split(Constants.QUERY_CONDITION_DELIMITER);
+		final int LENGTH = 3;
+
+		for (int i = 0; i < conditions.length; i++)
+		{
+			String[] attrParams = new String[LENGTH];
+			String condition = conditions[i];
+			if (!condition.equals(""))
+			{
+				condition = condition.substring(0, condition.indexOf(";"));
+				String attrName = "";
+				StringTokenizer tokenizer = new StringTokenizer(condition, Constants.QUERY_OPERATOR_DELIMITER);
+				while (tokenizer.hasMoreTokens())
+				{
+					attrName = tokenizer.nextToken();
+					if (tokenizer.hasMoreTokens())
+					{
+						String operator = tokenizer.nextToken();
+						attrParams[0] = operator;
+						if (tokenizer.hasMoreTokens())
+						{
+							attrParams[1] = tokenizer.nextToken();
+							if (operator.equalsIgnoreCase(RelationalOperator.Between.toString()))
+							{
+								attrParams[2] = tokenizer.nextToken();
+							}
+						}
+					}
+				}
+				conditionsMap.put(attrName, attrParams);
+			}
+		}
+		return conditionsMap;
+	}
 }
