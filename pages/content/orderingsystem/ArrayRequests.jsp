@@ -366,7 +366,7 @@
 								 	</td-->
 								 	<td class="dataCellText" width="30%">
 							 				<html:select property="<%=assignStatusArray%>" name="requestDetailsForm" styleClass="formFieldSized15"  
-								 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableArrayOrderItemRow %>">
+								 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" ><!-- disabled="<%= disableArrayOrderItemRow %>" -->
 								 			 	<html:options collection="<%=Constants.ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY%>" labelProperty="name" property="value"/>											 				   
 											</html:select>
 								 	</td>
@@ -409,7 +409,7 @@
 							%>
 							<html:hidden name="requestDetailsForm" property="<%= instanceOfArray %>" />
 							<html:hidden name="requestDetailsForm" property="<%= orderItemIdArray %>"  />
-
+							
 
 							
 							<% rowNumber++; %>
