@@ -38,7 +38,7 @@ public class LoadDefineSearchRulesAction extends BaseAction
 	{
 		CategorySearchForm searchForm = (CategorySearchForm) form;
 		String entityName = searchForm.getEntityName();
-		GenerateHtmlForAddLimitsBizLogic searchProcessor = new GenerateHtmlForAddLimitsBizLogic();
+		GenerateHtmlForAddLimitsBizLogic addLimitsBizLogic = new GenerateHtmlForAddLimitsBizLogic();
 
 		String html = "";
 		Map searchedEntitiesMap = (Map) request.getSession().getAttribute(Constants.SEARCHED_ENTITIES_MAP);
@@ -47,7 +47,7 @@ public class LoadDefineSearchRulesAction extends BaseAction
 			Entity entity = (Entity) searchedEntitiesMap.get(entityName);
 			if (entity != null)
 			{
-				html = searchProcessor.generateHTML(entity,null);
+				html = addLimitsBizLogic.generateHTML(entity,null);
 			}
 		}
 		response.setContentType("text/html");
