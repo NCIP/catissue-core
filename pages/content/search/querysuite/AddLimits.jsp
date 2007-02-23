@@ -1,5 +1,6 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.cab2b.client.ui.query.ClientQueryBuilder"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
@@ -26,6 +27,7 @@
 		<script type="text/javascript" src="jss/ajax.js"></script> 
 <html:errors />
 <%
+
 	String formAction = Constants.SearchCategory;
 	String defineSearchResultsViewAction = Constants.DefineSearchResultsViewAction;
 %>
@@ -71,11 +73,15 @@
 
 					<td valign="top" height="60%">
 							<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" >
+								
 							<tr>
 							<td height="60%">
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
+								<tr style="display:none;" id="validationMessagesRow" >
+									<td height="50" " width="100%" id="validationMessagesSection" ><div id="validationMessages"   style="overflow:auto; height:100%;width:100%"></div></td>
+								</tr>
 								<tr>
-									<td height="350" width="100%"><div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
+									<td height="350" width="100%" id="addLimitsSection"><div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
 								</tr>
 								</table>
 							</td>
@@ -103,6 +109,8 @@
 													<PARAM name="type" value="application/x-java-applet;jpi-version=1.5.0_08">
 													<PARAM name="name" value="<%=Constants.QUERY_DAG_VIEW_APPLET_NAME%>">
 													<PARAM name="session_id" value="<%=session.getId()%>">
+
+													
 													<PARAM name = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" value="<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">
 												</APPLET>
 											</div>
@@ -131,7 +139,7 @@
 					 <td width="2%" valign="center">&nbsp;</td>
 						<td valign="center" width="75%"><html:button property="Button"><bean:message key="query.saveButton"/></html:button></td>
 						<td  valign="center" align="right"><html:button property="Button" onclick="viewSearchResults()"><bean:message key="query.searchButton"/></html:button></td>
-						<td  align="right" valign="center"><html:button property="Button"><bean:message key="query.perviousButton"/></html:button></td>
+						<td  align="right" valign="center"><html:button property="Button"><bean:message key="query.previousButton"/></html:button></td>
 						<td align="right" valign="center"><html:button property="Button" onclick="defineSearchResultsView()"><bean:message key="query.nextButton"/></html:button>
 						</td>
 						<td width="2%">&nbsp;</td>
