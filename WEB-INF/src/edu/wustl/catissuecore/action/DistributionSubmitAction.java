@@ -85,8 +85,8 @@ public class DistributionSubmitAction extends CommonAddEditAction {
 			Map tempMap = new HashMap();
 
 			for (int i = 1; i <= dform.getCounter(); i++) {
-				String specimenArraykey = "SpecimenArray:" + i + "_id";
-
+				//String specimenArraykey = "SpecimenArray:" + i + "_id";
+				String specimenArraykey = "DistributedItem:" + i + "_SpecimenArray_id";
 				if (dform.getValue(specimenArraykey) != null
 						&& !dform.getValue(specimenArraykey).equals("")) {
 					tempMap.put(specimenArraykey, dform
@@ -104,10 +104,9 @@ public class DistributionSubmitAction extends CommonAddEditAction {
 				String barcodeLabel = (String) dform.getValue(barcodeKey);
 				Long specimenArrayId = bizLogic.getSpecimenArrayId(
 						barcodeLabel, dform.getDistributionBasedOn());
-				if (bizLogic.isSpecimenArrayDistributed(specimenArrayId)) {
-					throw new DAOException(
-							"errors.distribution.arrayAlreadyDistributed");
-
+				if (bizLogic.isSpecimenArrayDistributed(specimenArrayId))
+				{
+					throw new DAOException("errors.distribution.arrayAlreadyDistributed");
 				}
 
 				tempMap.put(specimenArraykey, specimenArrayId.toString());

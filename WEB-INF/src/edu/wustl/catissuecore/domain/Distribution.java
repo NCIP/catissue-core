@@ -244,25 +244,29 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        //Change for Consent tracking (Virender Mehta)
 	        Collection itemCollectionMap = parser.generateData(map);
-	        Collection finalItemCollecitonMap = new HashSet(); 
-	        if(form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE)
-	        { 
-	        	Iterator itr = itemCollectionMap.iterator();
+	        Collection finalItemCollecitonMap = new HashSet();
+//	        if(form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE)
+//	        {  
+		        Iterator itr = itemCollectionMap.iterator();
 		        while(itr.hasNext())
 		        {
 		        	DistributedItem distributedItem = (DistributedItem) itr.next();
 		        	if(distributedItem.getSpecimen() != null)
 		        		finalItemCollecitonMap.add(distributedItem);
+		        	//Added by Ashish
+		        	if(distributedItem.getSpecimenArray() != null)
+		        		finalItemCollecitonMap.add(distributedItem);
 		        }
-	        }
-	        if (form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE ) 
-	        {
+//	        }
+	        
+//	        if (form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE ) 
+//	        {
 		        distributedItemCollection = finalItemCollecitonMap;
-	        }
-	        else
-	        { 
-	        	specimenArrayCollection = itemCollectionMap;
-	        }
+//	        }
+//	        else
+//	        {
+//	        	specimenArrayCollection = finalItemCollecitonMap;
+//	        }
 	        Logger.out.debug("distributedItemCollection "+distributedItemCollection);
 	    }
 	    //Change for Consent tracking (Virender Mehta)	    

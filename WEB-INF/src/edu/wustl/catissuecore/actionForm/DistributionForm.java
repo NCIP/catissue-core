@@ -110,7 +110,8 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
 			populateMapForSpecimen(distributionObject.getDistributedItemCollection());
 		} else {
 			this.distributionType = new Integer(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE);
-			populateMapForArray(distributionObject.getSpecimenArrayCollection());
+			//populateMapForArray(distributionObject.getSpecimenArrayCollection());
+			populateMapForArray(distributionObject.getDistributedItemCollection());
 		}
 
 		Logger.out.debug("Display Map Values"+values); 
@@ -130,16 +131,18 @@ public class DistributionForm extends SpecimenEventParametersForm implements Con
 			while(it.hasNext())
 			{
 				
-				String key1 = "SpecimenArray:"+i+"_id";
+				//String key1 = "SpecimenArray:"+i+"_id";
+				String key1 = "DistributedItem:"+i+"_SpecimenArray_id";
 				String key2 = "DistributedItem:"+i+"_Specimen_barcode";
 				String key3 = "DistributedItem:"+i+"_Specimen_label";
 				
 				String key4 = "DistributedItem:"+i+"_quantity";
 				
-				SpecimenArray array = (SpecimenArray) it.next();
-				values.put(key1,array.getId().toString());
-				values.put(key2,array.getBarcode());
-				values.put(key3,array.getName());
+				//SpecimenArray array = (SpecimenArray) it.next();
+				DistributedItem distributedItem = (DistributedItem)it.next();
+				values.put(key1,distributedItem.getSpecimenArray().getId().toString());
+				values.put(key2,distributedItem.getSpecimenArray().getBarcode());
+				values.put(key3,distributedItem.getSpecimenArray().getName());
 				values.put(key4,"1");
 				i++;
 			}

@@ -183,7 +183,14 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	
 	public String toString()
 	{
-		return id+" "+quantity+" "+specimen.getId();		
+		if(specimen != null)
+		{
+			return id+" "+quantity+" "+specimen.getId();
+		}
+		else
+		{
+			return id+" "+quantity+" "+specimenArray.getId();
+		}
 	}
 	
 	/**

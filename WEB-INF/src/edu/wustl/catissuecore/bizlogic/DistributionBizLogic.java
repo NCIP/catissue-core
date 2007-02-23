@@ -9,6 +9,7 @@
  */
 
 package edu.wustl.catissuecore.bizlogic;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -118,16 +119,25 @@ public class DistributionBizLogic extends DefaultBizLogic
 	{
 		boolean distributed = true;
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-		List list = null;
-		String queryStr = "select array.distribution_id from catissue_specimen_array array where array.identifier ="
-				+ specimenArrayId;
-
+		List list = new ArrayList();
+		//String queryStr = "select array.distribution_id from catissue_specimen_array array where array.identifier ="
+		//		+ specimenArrayId;
+		String queryStr = "select item.identifier from catissue_distributed_item item where item.specimen_array_id ="
+			+ specimenArrayId;
 		try
 		{
 			dao.openSession(null);
 			list = dao.executeQuery(queryStr, null, false, null);
-			String distributionId = (String) ((List) list.get(0)).get(0);
-			if (distributionId.equals(""))
+			
+			if(list.size() > 0)
+			{
+//				String distributionId = (String) ((List) list.get(0)).get(0);
+//				if (distributionId.equals(""))
+//				{
+					distributed = true;
+//				}
+			}
+			else
 			{
 				distributed = false;
 			}
@@ -523,26 +533,29 @@ public class DistributionBizLogic extends DefaultBizLogic
 				while(itr.hasNext())
 				{
 					DistributedItem distributedItem = (DistributedItem) itr.next();
-					Specimen specimen = distributedItem.getSpecimen();
-					Double quantity = distributedItem.getQuantity();
-					if(specimen == null || specimen.getId() == null)
+					if(distributedItem.getSpecimenArray() == null)
 					{
-						message = ApplicationProperties.getValue("errors.distribution.item.specimen");
-						throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
-					}
-					if(quantity == null)
-					{
-						message = ApplicationProperties.getValue("errors.distribution.item.quantity");
-						throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
-					}					
-					Object specimenObj = dao.retrieve(Specimen.class.getName(), specimen.getId());
-					if(specimenObj == null)
-					{					
-						throw new DAOException( ApplicationProperties.getValue("errors.distribution.specimenNotFound"));
-					}
-					else if(!((Specimen)specimenObj).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
-					{
-						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimen"));
+						Specimen specimen = distributedItem.getSpecimen();
+						Double quantity = distributedItem.getQuantity();
+						if(specimen == null || specimen.getId() == null)
+						{
+							message = ApplicationProperties.getValue("errors.distribution.item.specimen");
+							throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
+						}
+						if(quantity == null)
+						{
+							message = ApplicationProperties.getValue("errors.distribution.item.quantity");
+							throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
+						}					
+						Object specimenObj = dao.retrieve(Specimen.class.getName(), specimen.getId());
+						if(specimenObj == null)
+						{					
+							throw new DAOException( ApplicationProperties.getValue("errors.distribution.specimenNotFound"));
+						}
+						else if(!((Specimen)specimenObj).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+						{
+							throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimen"));
+						}
 					}
 				}
 			}

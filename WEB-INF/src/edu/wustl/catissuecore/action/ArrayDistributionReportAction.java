@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
+import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -209,10 +210,13 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	protected List getListOfArrayDataForSave(Distribution dist,ConfigureResultViewForm configForm,SessionDataBean sessionData,String[] arrayColumns,String[] specimenColumns) throws Exception {
 		List arrayEntries = new ArrayList();	
 		
-		Iterator itr = dist.getSpecimenArrayCollection().iterator();
+		//Iterator itr = dist.getSpecimenArrayCollection().iterator();
+		Iterator itr = dist.getDistributedItemCollection().iterator();
 		while(itr.hasNext())
 		{
-			SpecimenArray array = (SpecimenArray) itr.next();
+			//SpecimenArray array = (SpecimenArray) itr.next();
+			DistributedItem distributedItem = (DistributedItem)itr.next();
+			SpecimenArray array = distributedItem.getSpecimenArray();
 			ArrayDistributionReportEntry arrayEntry = new ArrayDistributionReportEntry();
 			arrayEntry.setArrayInfo(getArrayDetails(array,arrayColumns,sessionData));
 			getSpecimenDetails(array,specimenColumns,sessionData,arrayEntry);
@@ -234,10 +238,12 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	protected List getListOfArrayData(Distribution dist,ConfigureResultViewForm configForm,SessionDataBean sessionData,String[] arrayColumns,String[] specimenColumns) throws Exception {
 		List arrayEntries = new ArrayList();	
 		
-		Iterator itr = dist.getSpecimenArrayCollection().iterator();
+		//Iterator itr = dist.getSpecimenArrayCollection().iterator();
+		Iterator itr = dist.getDistributedItemCollection().iterator();
 		while(itr.hasNext())
 		{
-			SpecimenArray array = (SpecimenArray) itr.next();			
+			DistributedItem distributedItem = (DistributedItem) itr.next();	
+			SpecimenArray array = distributedItem.getSpecimenArray();
 			List arrayEntry = new ArrayList();
 			arrayEntry.add(getArrayDetails(array,arrayColumns,sessionData));
 			arrayEntries.add(arrayEntry);
