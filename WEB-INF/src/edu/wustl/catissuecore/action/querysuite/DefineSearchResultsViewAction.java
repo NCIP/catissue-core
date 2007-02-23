@@ -16,7 +16,7 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.bizlogic.querysuite.DefineAdvancedResultsView;
+//import edu.wustl.common.bizlogic.querySuite.DefineAdvancedResultsView;
 import edu.wustl.common.tree.QueryTreeNodeData;
 /**
  * This is a action class to Define Search Results View.
@@ -39,7 +39,7 @@ public class DefineSearchResultsViewAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
 	{
-		CategorySearchForm actionForm = (CategorySearchForm)form;		
+		/*CategorySearchForm actionForm = (CategorySearchForm)form;		
 		List<EntityInterface> ListOfEntitiesInQuery = (List)request.getSession().getAttribute(Constants.LIST_OF_ENTITIES_IN_QUERY);
 		Map<String, Vector<QueryTreeNodeData>> treesMap = new HashMap<String, Vector<QueryTreeNodeData>>();
 		DefineAdvancedResultsView defineResults = new DefineAdvancedResultsView();
@@ -49,7 +49,7 @@ public class DefineSearchResultsViewAction extends BaseAction
 		{
 			request.getSession().setAttribute("nextOperation",actionForm.getNextOperation());
 			return mapping.findForward("BuildNewTree");
-		} 
+		} */
 		return mapping.findForward(Constants.SUCCESS);
 	}
 }
