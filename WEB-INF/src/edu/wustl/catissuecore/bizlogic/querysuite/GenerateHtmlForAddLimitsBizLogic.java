@@ -22,6 +22,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.util.ParseXMLFile;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 
 /**
  * This generates UI for 'Add limits' and 'Edit Limits' section.
@@ -31,6 +32,20 @@ import edu.wustl.common.util.ParseXMLFile;
  */
 public class GenerateHtmlForAddLimitsBizLogic
 {
+	/**
+	 * Object which holds data operators fro attributes.
+	 */
+	ParseXMLFile parseFile = null;
+	/**
+	 * Constructor for GenerateHtmlForAddLimitsBizLogic
+	 */
+	public GenerateHtmlForAddLimitsBizLogic()
+	{
+		if(parseFile == null)
+		{
+			parseFile = new ParseXMLFile(Constants.DYNAMIC_UI_XML);
+		}
+	}
 	/**
 	 * This method generates the html for Add Limits and Edit Limits section.
 	 * This internally calls methods to generate other UI components like text, Calendar, Combobox etc.
@@ -60,10 +75,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				AttributeInterface attribute = (AttributeInterface) iter.next();
 				String attrName = attribute.getName();
+				QueryModuleUtil util = new QueryModuleUtil();
+				String attrLabel = util.getAttributeLabel(attrName);
 				String componentId = attrName + attribute.getId().toString();
 				attributesList = attributesList + ";" + componentId;
-				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"3%\">\n<td class=\"standardTextQuery\" width=\"10%\">");
-				generatedHTML.append(attrName + "</td>\n");
+				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"3%\">\n<td class=\"standardTextQuery\" width=\"15%\">");
+				generatedHTML.append(attrLabel + "</td>\n");
 				List<String> operatorsList = populateAttributeUIInformation(attribute);
 				boolean isBetween = false;
 				if (!operatorsList.isEmpty() && operatorsList.get(0).equalsIgnoreCase(RelationalOperator.Between.toString()))
@@ -128,7 +145,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	{
 		List<String> operatorsList = new ArrayList<String>();
 		AttributeTypeInformationInterface attrTypeInfo = attributeInterface.getAttributeTypeInformation();
-		ParseXMLFile parseFile = new ParseXMLFile(Constants.DYNAMIC_UI_XML);
+
 		Object[] strObj = null;
 		if (attributeInterface != null)
 		{
@@ -174,7 +191,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String componentId = attributeName + attribute.getId().toString();
 		if (operatorsList != null && operatorsList.size() != 0)
 		{
-			html.append("\n<td width=\"20%\">");
+			html.append("\n<td width=\"22%\">");
 			AttributeTypeInformationInterface attrTypeInfo = attribute.getAttributeTypeInformation();
 			if (attrTypeInfo instanceof DateAttributeTypeInformation)
 			{
@@ -330,5 +347,4 @@ public class GenerateHtmlForAddLimitsBizLogic
 		innerStr = innerStr + "</td>";
 		return innerStr.toString();
 	}
-
 }
