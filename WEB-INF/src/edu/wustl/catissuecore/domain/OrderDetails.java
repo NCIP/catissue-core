@@ -828,7 +828,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		orderItem.setOrder(order);	
 		
 		//For Distribution.
-		if(requestDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed"))
+		if(requestDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && requestDetailsBean.getDistributedItemId().equals(""))
 		{	
 			//Setting the Site for distribution.
 			distribution = setSiteInDistribution(distribution,requestDetailsForm);			
@@ -946,7 +946,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		orderItem.setOrder(order);	
 		
 		//For Distribution.
-		if(definedArrayRequestBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed"))
+		if(definedArrayRequestBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && definedArrayRequestBean.getDistributedItemId().equals(""))
 		{	
 			//Setting the Site for distribution.
 			distribution = setSiteInDistribution(distribution,requestDetailsForm);
@@ -991,7 +991,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		//Setting the order id 
 		orderItem.setOrder(order);			
 		//For Distribution.
-		if(existingArrayDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed"))
+		if(existingArrayDetailsBean.getAssignedStatus().trim().equalsIgnoreCase("Distributed") && existingArrayDetailsBean.getDistributedItemId().equals(""))
 		{	
 			//Setting the Site for distribution.
 			distribution = setSiteInDistribution(distribution,requestDetailsForm);
