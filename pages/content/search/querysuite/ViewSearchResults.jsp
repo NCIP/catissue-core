@@ -21,7 +21,7 @@
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/jss/dhtmXTreeCommon.js"></script>
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/jss/dhtmlXTree.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script> 
-	
+	<script src="jss/queryModule.js"></script>
 
 <script>
 var columns ;
@@ -384,7 +384,7 @@ function showSpreadsheetData(columnDataStr)
 					 <td width="2%" valign="center">&nbsp;</td>
 						<td valign="center" width="75%"><html:button property="Button"><bean:message key="query.saveButton"/></html:button></td>
 				
-						<td  align="right" valign="center"><html:button property="Button"><bean:message key="query.perviousButton"/></html:button></td>
+						<td  align="right" valign="center"><html:button property="Button" onclick="showAddLimitsPage()"><bean:message key="query.previousButton" /></html:button></td>
 						<td align="right" valign="center"><html:button property="Button" onclick=""><bean:message key="query.nextButton"/></html:button>
 						</td>
 						<td width="2%">&nbsp;</td>
