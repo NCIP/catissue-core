@@ -10,9 +10,8 @@ import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.IOutputTreeNode;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -34,11 +33,12 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @param isFirstLevel whether data is getting loaded for first level tree or on click of a node
 	 * @param parentNodeId the id of the parent 
 	 * @return map having data for column headers and data records.
+	 * @throws DAOException 
 	 */
 	public Map<String, List<String>> createSpreadsheetData(String tableName, IOutputTreeNode node, Map<Long, Map<AttributeInterface, String>> idColumnMap,
-			boolean isFirstLevel, String parentNodeId,SessionDataBean sessionData)
-	{
-		Map<String, List<String>> spreadSheetDataMap = new HashMap<String, List<String>>();
+			boolean isFirstLevel, String parentNodeId,SessionDataBean sessionData) throws DAOException, ClassNotFoundException
+			{
+		Map spreadSheetDataMap = new HashMap();
 		Map<AttributeInterface, String> columnsMap = null;
 		String parentIdColumnName = null;
 		columnsMap = idColumnMap.get(node.getId());
@@ -73,7 +73,9 @@ public class QueryOutputSpreadsheetBizLogic
 			String sqlColumnName = columnsMap.get(attribute);
 			selectSql = selectSql + sqlColumnName + ",";
 			sqlColumnName = sqlColumnName.substring(SqlGenerator.COLUMN_NAME.length(), sqlColumnName.length());
-			columnsList.add(attribute.getName() + " : " + className);
+			QueryModuleUtil util = new QueryModuleUtil();
+			String attrLabel = util.getAttributeLabel(attribute.getName());
+			columnsList.add(attrLabel + " : " + className);
 		}
 		spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
 		selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
@@ -82,37 +84,11 @@ public class QueryOutputSpreadsheetBizLogic
 		{
 			selectSql = selectSql + " where " + parentIdColumnName + " = '" + parentNodeId + "'";
 		}
-		List<String> recordsList = getRecordsForNode(selectSql,sessionData);
-		spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, recordsList);
+		QueryModuleUtil util = new QueryModuleUtil();
+		List spreadsheetDataList = util.executeQuery(selectSql, sessionData);
+		spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, spreadsheetDataList);
 		return spreadSheetDataMap;
-	}
-
-	/**
-	 * Fires the sql and returns the resulted records. 
-	 * @param selectSql String sql to be fired
-	 * @return list of records
-	 */
-	public List<String> getRecordsForNode(String selectSql,SessionDataBean sessionData)
-	{
-		List<String> recordslist = new ArrayList<String>();
-		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-		try
-		{
-			dao.openSession(sessionData);
-			recordslist = dao.executeQuery(selectSql, null, false, false, null);
-			dao.closeSession();
-		}
-		catch (DAOException e)
-		{
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		return recordslist;
-	}
-
+			}
 	/**
 	 * Returns all immediate child nodes for the root node passed to it.
 	 * @param node IOutputTreeNode ,

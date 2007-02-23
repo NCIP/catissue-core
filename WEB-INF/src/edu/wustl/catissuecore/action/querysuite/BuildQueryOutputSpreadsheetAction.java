@@ -46,7 +46,7 @@ public class BuildQueryOutputSpreadsheetAction extends BaseAction
 		SessionDataBean sessionData = getSessionData(request);
 		CategorySearchForm actionForm = (CategorySearchForm)form;
 		String nodeId = actionForm.getNodeId();		
-		String tableName  = (String)request.getSession().getAttribute(Constants.TEMP_OUPUT_TREE_TABLE_NAME); 
+		String tableName  = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId(); 
 		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 		Map spreadSheetDatamap = null;
 		if (nodeId.equalsIgnoreCase(Constants.ALL))
@@ -57,7 +57,8 @@ public class BuildQueryOutputSpreadsheetAction extends BaseAction
 		}
 		else
 		{
-			String[] nodeIds = nodeId.split(Constants.UNDERSCORE);
+			String actualParentNodeId = nodeId.substring(nodeId.lastIndexOf("::")+2,nodeId.length());
+			String[] nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
 			Long id = new Long(nodeIds[0]); 
 			String parentNodeId = nodeIds[1];
 			IOutputTreeNode parentNode = idNodesMap.get(id);
@@ -75,10 +76,10 @@ public class BuildQueryOutputSpreadsheetAction extends BaseAction
 	 */
 	String prepareOutputSpreadsheetDataString(Map spreadSheetDatamap)
 	{
-		List<List<String>> dataList = (List<List<String>>) spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
+		List<List<String>> dataList = (List)spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
 		String outputSpreadsheetDataStr = "";
 		String dataStr = "";
-		for(List row : dataList)
+		for(List<String> row : dataList)
 		{
 			String rowStr = row.toString(); 
 			rowStr = rowStr.replace("[","");
