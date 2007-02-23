@@ -103,6 +103,9 @@ else
 	}	
 }
 }
+function expandCollapseDag()
+{
+}
 function expand()
 {			
 	switchObj = document.getElementById('image');
@@ -187,23 +190,19 @@ function onResponseUpdate(text)
 		alert("No results found.");
 	}
 	var element = document.getElementById('resultSet');
-	var allElementsArray = text.split(";");
+	var listOfEntities = text.split(";");
 	var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
-	var isBuildNewTree=allElementsArray[0];			
-	if(isBuildNewTree=="false")
-	{
-		for(i=1; i<allElementsArray.length; i++)
+
+		for(i=1; i<listOfEntities.length; i++)
 		{
-			var lastIndex = allElementsArray[i].lastIndexOf(".");
-			var entityName = allElementsArray[i].substring(lastIndex + 1);
-			var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+allElementsArray[i]+"')";					
-			row = row+'<tr><td><a class="normalLink" href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
+			var nameDescription = listOfEntities[i].split("|");
+			var name = nameDescription[0];
+			var description = nameDescription[1];
+			var lastIndex = name.lastIndexOf(".");
+			var entityName = name.substring(lastIndex + 1);
+			var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+name+"')";					
+			row = row+'<tr><td><a class="normalLink" title='+description+' href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
 		}			
-	}
-	else
-	{
-		row = row + '<tr><td>' + text + ' </td></tr>';
-	}
 	row = row+'</table>';		
 	element.innerHTML =row;
 }
@@ -225,6 +224,32 @@ function showEntityInformation(text)
 	//onProduceQueryUpdate("");
 	var element = document.getElementById('addLimits');
 	element.innerHTML =text;
+}
+function showValidationMessages(text)
+{
+	var element = document.getElementById('validationMessages');
+	var row = document.getElementById('validationMessagesRow');
+	element.innerHTML = "";
+	if(text == "")
+	{
+		if(document.all)
+		{
+			document.getElementById("validationMessagesRow").style.display="none";		
+		} 
+		else if(document.layers) 
+		{
+			document.elements['validationMessagesRow'].visibility="none";
+		}
+		else 
+		{
+			row.style.display="none";
+		}	
+	}
+	else
+	{
+		row.style.display = 'block';
+		element.innerHTML = text;
+	}	
 }
 function produceQuery(url,nameOfFormToPost, entityName , attributesList) 
 {
@@ -301,6 +326,13 @@ function setFocusOnSearchButton()
 	alert(document.forms[0].searchButton11.onclick);
 	document.getElementById(searchButton11).onclick();
 }
+function showAddLimitsPage()
+{
+	document.forms['categorySearchForm'].action='SearchCategory.do';
+	document.forms['categorySearchForm'].submit();
+}
+
+
 		/*function viewAddLimitsPage()
 		{
 			document.forms['categorySearchForm'].action = "SearchCategory.do";
