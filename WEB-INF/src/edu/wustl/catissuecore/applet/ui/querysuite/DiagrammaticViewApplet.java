@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.ui.BaseApplet;
+import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.IExpression;
@@ -61,6 +62,9 @@ public class DiagrammaticViewApplet extends BaseApplet
 	{
 		super.doInit();
 		Logger.configure();
+		Map inputDataMap = new HashMap();
+		Map outputMap = doAppletServletCommunication(AppletConstants.GET_DAG_VIEW_DATA, inputDataMap);
+		IQuery dagViewQueryObject = (IQuery)outputMap.get(AppletConstants.QUERY_OBJECT);
 		queryObject = new ClientQueryBuilder();
 		Map<DagImageConstants, Image> imagePathsMap = getImagePathsMap();
 		UpdateAddLimitUI updateAddLimitUI = new UpdateAddLimitUI(this);
@@ -100,7 +104,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 	public void getSearchResults()
 	{
 		BaseAppletModel appletModel = new BaseAppletModel();
-		Map<String, IQuery> inputMap = new HashMap<String, IQuery>();
+		Map<String,IQuery> inputMap = new HashMap<String,IQuery>();
 		IQuery query = queryObject.getQuery();
 		inputMap.put(AppletConstants.QUERY_OBJECT, query);
 		appletModel.setData(inputMap);
@@ -109,7 +113,10 @@ public class DiagrammaticViewApplet extends BaseApplet
 				+ AppletConstants.APPLET_ACTION_PARAM_NAME + "=" + AppletConstants.INIT_DATA + "";
 		try
 		{
-			AppletServerCommunicator.doAppletServerCommunication(urlString, appletModel);
+			AppletModelInterface outputModel = AppletServerCommunicator.doAppletServerCommunication(urlString, appletModel);
+			Map outputMap = outputModel.getData();
+			String errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
+			showValidationMessagesToUser(errorMessage);			
 		}
 		catch (IOException e)
 		{
@@ -138,11 +145,24 @@ public class DiagrammaticViewApplet extends BaseApplet
 			List attributeOperators = (List) outputMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
 			List firstAttributeValues = (List) outputMap.get(AppletConstants.FIRST_ATTR_VALUES);
 			List secondAttributeValues = (List) outputMap.get(AppletConstants.SECOND_ATTR_VALUES);
-			IExpressionId expressionId = queryObject.addRule(attributes, attributeOperators, firstAttributeValues, secondAttributeValues);
-			panel.updateGraph(expressionId);
+			String errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
+			showValidationMessagesToUser(errorMessage);
+			if(errorMessage.equalsIgnoreCase(""))
+			{
+				IExpressionId expressionId = queryObject.addRule(attributes, attributeOperators, firstAttributeValues, secondAttributeValues);
+				panel.updateGraph(expressionId);	
+			}			
 		}
 	}
-
+	/**
+	 * Calls javascript function to show validation messages
+	 * @param errorMessage string message
+	 */
+	void showValidationMessagesToUser(String errorMessage)
+	{
+		Object[] paramArray = {errorMessage};
+		CommonAppletUtil.callJavaScriptFunction(this, AppletConstants.SHOW_VALIDATION_MESSAGES, paramArray);
+	}
 	/**
 	 * This method is called from a javascript when user clicks on Edit Limit button of AddLimits.jsp.
 	 * This again calls a action class which returns a map which holds the details to create a rule and then we get the expression which is to be edited , remove all conditions of the associated rule and
@@ -224,6 +244,25 @@ public class DiagrammaticViewApplet extends BaseApplet
 		icon = new ImageIcon(getClass().getClassLoader().getResource("images/parenthesis_icon.gif"));
 		imagePathsMap.put(DagImageConstants.ParenthesisIcon, icon.getImage());
 		return imagePathsMap;
+	}
+	Map doAppletServletCommunication(String url , Map inputMap)
+	{
+		BaseAppletModel appletModel = new BaseAppletModel();
+		appletModel.setData(inputMap);
+		try
+		{
+			String session_id = getParameter(AppletConstants.SESSION_ID);
+			String urlString = serverURL + url + ";jsessionid=" + session_id + "?"
+					+ AppletConstants.APPLET_ACTION_PARAM_NAME + "=" + AppletConstants.INIT_DATA + "";
+			AppletModelInterface outputModel = AppletServerCommunicator.doAppletServerCommunication(urlString, appletModel);
+			Map outputMap = outputModel.getData();
+			return outputMap;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	/**
