@@ -4,7 +4,6 @@ package edu.wustl.catissuecore.action.querysuite;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -96,9 +95,8 @@ public class CategorySearchAction extends BaseAction
 					{
 						EntityInterface entity = (EntityInterface)iter.next();
 						String fullyQualifiedEntityName = entity.getName();
-						int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
-						String entityName = entity.getName().substring(lastIndex + 1);
-						entitiesString = entitiesString + ";" + fullyQualifiedEntityName;
+						String description = entity.getDescription();
+						entitiesString = entitiesString + ";" + fullyQualifiedEntityName + "|"+ description ;
 						searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
 					}
 				}
