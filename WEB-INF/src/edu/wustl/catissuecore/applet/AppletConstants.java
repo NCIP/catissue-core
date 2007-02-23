@@ -124,6 +124,14 @@ public interface AppletConstants
 	 */
 	String PATH_FINDER = "/PathFinderAction.do";
 	/**
+	 * Specify the ADD_TO_LIMIT_ACTION field 
+	 */
+	String GET_DAG_VIEW_DATA = "/getDagViewDataAction.do";
+	/**
+	 * Specify the ADD_TO_LIMIT_ACTION field 
+	 */
+	String DAG_VIEW_DATA = "dagViewData";
+	/**
 	 * Specimen Attributes Row Nos
 	 * */
 	short SPECIMEN_CHECKBOX_ROW_NO = 0;		//	FOR CHECKBOXES
@@ -211,6 +219,8 @@ public interface AppletConstants
 	public static final String SHOW_ENTITY_INFO = "showEntityInformation";
 	public static final String SRC_ENTITY = "srcEntity";
 	public static final String DEST_ENTITY = "destEntity";
+	public static final String ERROR_MESSAGE = "errorMessage";
+	public static final String SHOW_VALIDATION_MESSAGES = "showValidationMessages";
 	//public static final String ATTRIBUTES = "Attributes";
 	
 }
