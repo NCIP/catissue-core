@@ -30,23 +30,46 @@
 			//This function will check if the verifyCheck box is checked or not
 			function submitAllResponses()
 				{
+			
+					var addMore=parent.opener.document.getElementById("addMore");
+					var tableRows=addMore.rows;
+					var barcodelabelStatus;
+					var parentId;
+					var verificationStatusKey;
 					<%
 						List mapSize = (List)request.getAttribute("listOfMap");
+						List listOfString = (List)request.getAttribute("listOfStringArray");
+						for(int i=0;i<mapSize.size();i++)
+						{
+							String[] specimenValues=(String[])listOfString.get(i);				
+							String labelBarcode=specimenValues[4];
 					%>
-					var rowCount = <%=mapSize.size()%>;
-					for(i=1;i<=rowCount;i++)
-					{
-						var checkboxKey="verifyAllCheckBox"+(i-1);
+						var checkboxKey="verifyAllCheckBox"+<%=i%>;
 						var checkboxInstance=document.getElementById(checkboxKey);
 						if(checkboxInstance.checked)
 						{						
-							var barcodelabelStatus="barcodelabel"+i;
-							var verificationStatusKey = "value(DistributedItem:"+i+"_verificationKey)";
-							var parentId=parent.opener.document.getElementById(barcodelabelStatus);
-							var theId = verificationStatusKey;
-							parentId.innerHTML="Complete"+"<input type='hidden' name='" + theId + "' value='Complete' id='" + theId + "'/>";
+							for(j=1;j<=tableRows.length;j++)
+							{	
+								var lable = "value(DistributedItem:" + j + "_Specimen_label)";
+								var barcode = "value(DistributedItem:" + j + "_Specimen_barcode)";
+								var lableBarcodeObj=parent.opener.document.getElementById(lable);
+								if(lableBarcodeObj.value=="")
+								{
+									lableBarcodeObj=parent.opener.document.getElementById(barcode);
+								}
+								if(lableBarcodeObj.value=="<%=labelBarcode%>")
+								{
+									var barcodelabelStatus="barcodeStatus"+j;
+									verificationStatusKey = "value(DistributedItem:"+j+"_verificationKey)";
+									var parentId=parent.opener.document.getElementById(barcodelabelStatus);
+									parentId.innerHTML="Verified"+"<input type='hidden' name='" + verificationStatusKey + "' value='Verified' id='" + verificationStatusKey + "'/>";
+									break;
+								}
+							}
 						}
+					<%
 					}
+					%>
 					window.close ();
 				}
 			</script>
@@ -57,6 +80,15 @@
 			<%-- Main table Start --%>
 			<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" id="table4" >
 			  	<%
+				String verifiedRows=request.getParameter("verifiedRows");
+				StringTokenizer stringToken = new StringTokenizer(verifiedRows,",");
+				List verifiedList=new ArrayList();
+				while (stringToken.hasMoreTokens()) 
+				{
+					String rowNo=stringToken.nextToken();
+					verifiedList.add(rowNo);
+				}
+				System.out.println(verifiedList.size());
 				List listOfStringArray = (List)request.getAttribute("listOfStringArray");
 				List listOfMap = (List)request.getAttribute("listOfMap");
 				for(int counter=0;counter<listOfMap.size();counter++)
@@ -245,11 +277,39 @@
 							%>
 							<tr>
 							<%
-								 String checkboxID="verifyAllCheckBox"+counter;
+								String checkboxID="verifyAllCheckBox"+counter;
+								if(verifiedList.size()!=0)
+								{
+									String iCount=""+counter;
+									String status="";
+									if(verifiedList.contains(iCount))
+									{								
+										status="checked=checked";
 							%>
-								<td class="tabrightmostcell">
-									<input type="checkbox" name="verifyAllCheckBox" id="<%=checkboxID%>"/>
-								</td>
+									
+									<%	
+									}
+									else
+									{
+										status="";
+									}
+									%>
+									<td class="tabrightmostcell">
+											<input type="checkbox" name="verifyAllCheckBox" id="<%=checkboxID%>" <%=status%>/>
+									</td>
+
+							<%
+								}
+								else
+								{
+							%>
+								
+										<td class="tabrightmostcell">
+											<input type="checkbox" name="verifyAllCheckBox" id="<%=checkboxID%>"/>
+										</td>
+							<%
+								}
+							%>
 								<td class="formField" colspan="3">
 									<label><b><bean:message key="consent.verificationmessage" /><b></label>
 								</td>
