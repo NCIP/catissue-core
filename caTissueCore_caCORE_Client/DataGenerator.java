@@ -317,9 +317,9 @@ public class DataGenerator
 		c3.setStatement("Consent for Tb research");
 		consentTierColl1.add(c3);
 		
-		CollectionProtocol cp1 = initCommonCollectionProtocol("Aids Study Collection Protocol", consentTierColl1);
+		CollectionProtocol cp1 = initCommonCollectionProtocol("Generic Collection Protocol",null);
 		CollectionProtocol cp2 = initCommonCollectionProtocol("Cancer Study Collection Protocol",null);
-		CollectionProtocol cp3 = initCommonCollectionProtocol("Generic Collection Protocol",null);
+		CollectionProtocol cp3 = initCommonCollectionProtocol("Aids Study Collection Protocol",consentTierColl1);
 		
 		dataModelObjectMap.put("COLLECTION_PROTOCOL1",cp1);
 		dataModelObjectMap.put("COLLECTION_PROTOCOL2",cp2);
@@ -775,11 +775,11 @@ public class DataGenerator
 		User user = new User();
 		user.setId(new Long(9));
 		
-		CollectionProtocolRegistration collectionProtocolRegistration1 = initCommonCollectionProtocolRegistration(collectionProtocol3, participant1,null,null,null);
+		CollectionProtocolRegistration collectionProtocolRegistration1 = initCommonCollectionProtocolRegistration(collectionProtocol1, participant1,null,null,null);
 		CollectionProtocolRegistration collectionProtocolRegistration2 = initCommonCollectionProtocolRegistration(collectionProtocol2, participant2,null,null,null);
 		CollectionProtocolRegistration collectionProtocolRegistration3 = initCommonCollectionProtocolRegistration(collectionProtocol2, participant1,null,null,null);
-		CollectionProtocolRegistration collectionProtocolRegistration4 = initCommonCollectionProtocolRegistration(collectionProtocol3, participant3,null,null,null);
-		CollectionProtocolRegistration collectionProtocolRegistration5 = initCommonCollectionProtocolRegistration(collectionProtocol1, participant4,"02/21/2006","E:\\sitename\\collectionProtocol_participant1.pdf",user);
+		CollectionProtocolRegistration collectionProtocolRegistration4 = initCommonCollectionProtocolRegistration(collectionProtocol1, participant3,null,null,null);
+		CollectionProtocolRegistration collectionProtocolRegistration5 = initCommonCollectionProtocolRegistration(collectionProtocol3, participant4,"02/21/2006","E:\\sitename\\collectionProtocol_participant1.pdf",user);
 		
 		
 		dataModelObjectMap.put("CPR1",collectionProtocolRegistration1);
@@ -967,8 +967,9 @@ public class DataGenerator
 		//with consents
 		SpecimenCollectionGroup specimenCollectionGroup5 = (SpecimenCollectionGroup)dataModelObjectMap.get("SCG5");
 		
-		CollectionProtocol cpObject1 = (CollectionProtocol) dataModelObjectMap.get("COLLECTION_PROTOCOL1");
+		CollectionProtocol cpObject1 = (CollectionProtocol) dataModelObjectMap.get("COLLECTION_PROTOCOL3");
 		CollectionProtocol cpObject2 = (CollectionProtocol) dataModelObjectMap.get("COLLECTION_PROTOCOL2");
+		
 		User linda = (User) dataModelObjectMap.get("SCIENTISTUSER1");
 		User lisa = (User) dataModelObjectMap.get("SCIENTISTUSER2");	
 		
@@ -1063,7 +1064,6 @@ public class DataGenerator
     {           
           OrderDetails order = new OrderDetails();  
           order.setComment("Comment");
-          
           //Obtain Distribution Protocol
           DistributionProtocol distributionProtocolObj = (DistributionProtocol)dataModelObjectMap.get("DISTRIBUTION_PROTOCOL1");
           order.setDistributionProtocol(distributionProtocolObj);
@@ -1092,8 +1092,17 @@ public class DataGenerator
           newSpOrderItem.setArrayType(specimenArrayType);
           
           Collection specimenOrderItemCollection = new HashSet();
-          SpecimenOrderItem specimenOrderItem = new SpecimenOrderItem();
-         
+          ExistingSpecimenOrderItem specimenOrderItem = new ExistingSpecimenOrderItem();
+          //setting details of specimen order item
+          specimenOrderItem.setDescription("Order Details");
+          specimenOrderItem.setStatus("Pending");
+          Quantity quantity1 = new Quantity();
+          quantity1.setValue(new Double(20));
+          specimenOrderItem.setRequestedQuantity(quantity1);
+          specimenOrderItem.setOrder(order);         
+          Specimen specimen1= (Specimen)dataModelObjectMap.get("SPECIMEN1");
+          specimenOrderItem.setSpecimen(specimen1);
+          
           specimenOrderItem.setNewSpecimenArrayOrderItem(newSpOrderItem);
           specimenOrderItemCollection.add(specimenOrderItem);
 
@@ -1101,50 +1110,5 @@ public class DataGenerator
           orderItemCollection.add(newSpOrderItem);
           order.setOrderItemCollection(orderItemCollection);
           dataModelObjectMap.put("ORDER_DETAILS",order);
-
     }
-	
-	/**
-	 * This function is to update the Order domain object.
-	 */
-		public void initUpdateOrderDetails()
-		{
-			
-			OrderDetails orderObj = (OrderDetails) dataModelObjectMap.get("ORDER_DETAILS");
-			orderObj.setComment("UpdatedComment");
-			
-			//Obtain Distribution Protocol
-	        DistributionProtocol distributionProtocolObj = (DistributionProtocol)dataModelObjectMap.get("DISTRIBUTION_PROTOCOL1");
-			
-            orderObj.setDistributionProtocol(distributionProtocolObj);
-            orderObj.setName("Updated Request Name");
-            orderObj.setStatus("Pending");
-            try
-            {
-            	orderObj.setRequestedDate(Utility.parseDate("05-02-1984", Constants.DATE_PATTERN_MM_DD_YYYY));
-            }
-            catch (ParseException e)
-            {
-                  Logger.out.debug(""+e);
-            }
-            Collection orderItemCollection = new HashSet(); 
-            NewSpecimenArrayOrderItem newSpOrderItem =(NewSpecimenArrayOrderItem) orderObj.getOrderItemCollection().iterator().next();
-            newSpOrderItem.setDescription("Updated OrderDetails Item 1 of Order_Id ");
-            newSpOrderItem.setStatus("Pending - For Specimen Distribution");          
-
-            Quantity quantity = new Quantity();
-            quantity.setValue(new Double(10));
-            newSpOrderItem.setRequestedQuantity(quantity);
-            
-            //Obtain Specimen Object
-            SpecimenArrayType specimenArrayType = (SpecimenArrayType)dataModelObjectMap.get("SPECIMEN_ARRAY_TYPE_1");
-            //Specimen specimen = (Specimen) dataModelObjectMap.get("SPECIMEN1");
-            newSpOrderItem.setArrayType(specimenArrayType);
-            orderItemCollection.add(newSpOrderItem);
-            orderObj.setOrderItemCollection(orderItemCollection);
-            
-            dataModelObjectMap.put("ORDER_UPDATE",orderObj);
-
-	}
-
 }
