@@ -80,29 +80,31 @@ public class DiagrammaticViewApplet extends BaseApplet
 		//This reference is used for showing ambiguity resolver
 		CommonUtils.FrameReference =  findParentFrame();
 	}
-	
+
 	/**
 	 * This method returns parent frame of this applet
 	 * @return
 	 */
 	private Frame findParentFrame(){ 
-	    Container c = this; 
-	   
-	    while(c != null){ 
-	      if (c instanceof Frame) 
-	        return (Frame)c; 
+		Container c = this; 
 
-	      c = c.getParent(); 
-	    } 
-	    return null; 
-	  } 
+		while(c != null){ 
+			if (c instanceof Frame) 
+				return (Frame)c; 
+
+			c = c.getParent(); 
+		} 
+		return null; 
+	} 
 
 	/**
-	 * This method is called from applet through javascript. It further calls ViewSearchResultsAction class to get the results, 
-	 * of the query generated.
+	 * This method is called from applet through javascript. 
+	 * It further calls ViewSearchResultsAction class to get the results,of the query generated.
+	 * Error message if any is shown to user through javascript.
 	 */
-	public void getSearchResults()
+	public String getSearchResults()
 	{
+		String errorMessage = "";
 		BaseAppletModel appletModel = new BaseAppletModel();
 		Map<String,IQuery> inputMap = new HashMap<String,IQuery>();
 		IQuery query = queryObject.getQuery();
@@ -110,13 +112,16 @@ public class DiagrammaticViewApplet extends BaseApplet
 		appletModel.setData(inputMap);
 		String session_id = getParameter(AppletConstants.SESSION_ID);
 		String urlString = serverURL + AppletConstants.GET_SEARCH_RESULTS + ";jsessionid=" + session_id + "?"
-				+ AppletConstants.APPLET_ACTION_PARAM_NAME + "=" + AppletConstants.INIT_DATA + "";
+		+ AppletConstants.APPLET_ACTION_PARAM_NAME + "=" + AppletConstants.INIT_DATA + "";
 		try
 		{
 			AppletModelInterface outputModel = AppletServerCommunicator.doAppletServerCommunication(urlString, appletModel);
 			Map outputMap = outputModel.getData();
-			String errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
-			showValidationMessagesToUser(errorMessage);			
+			errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
+			if(errorMessage != null)
+			{
+				errorMessage = "<li><font color=\"red\">"+errorMessage+"</font></li>";
+			}
 		}
 		catch (IOException e)
 		{
@@ -126,6 +131,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 		{
 			e.printStackTrace();
 		}
+		return errorMessage;
 	}
 
 	/**
@@ -208,7 +214,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 		{
 			String session_id = getParameter(AppletConstants.SESSION_ID);
 			String urlString = serverURL + AppletConstants.ADD_TO_LIMIT_ACTION + ";jsessionid=" + session_id + "?"
-					+ AppletConstants.APPLET_ACTION_PARAM_NAME + "=" + AppletConstants.INIT_DATA + "";
+			+ AppletConstants.APPLET_ACTION_PARAM_NAME + "=" + AppletConstants.INIT_DATA + "";
 			AppletModelInterface outputModel = AppletServerCommunicator.doAppletServerCommunication(urlString, appletModel);
 			Map outputMap = outputModel.getData();
 			return outputMap;
@@ -253,7 +259,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 		{
 			String session_id = getParameter(AppletConstants.SESSION_ID);
 			String urlString = serverURL + url + ";jsessionid=" + session_id + "?"
-					+ AppletConstants.APPLET_ACTION_PARAM_NAME + "=" + AppletConstants.INIT_DATA + "";
+			+ AppletConstants.APPLET_ACTION_PARAM_NAME + "=" + AppletConstants.INIT_DATA + "";
 			AppletModelInterface outputModel = AppletServerCommunicator.doAppletServerCommunication(urlString, appletModel);
 			Map outputMap = outputModel.getData();
 			return outputMap;

@@ -225,32 +225,7 @@ function showEntityInformation(text)
 	var element = document.getElementById('addLimits');
 	element.innerHTML =text;
 }
-function showValidationMessages(text)
-{
-	var element = document.getElementById('validationMessages');
-	var row = document.getElementById('validationMessagesRow');
-	element.innerHTML = "";
-	if(text == "")
-	{
-		if(document.all)
-		{
-			document.getElementById("validationMessagesRow").style.display="none";		
-		} 
-		else if(document.layers) 
-		{
-			document.elements['validationMessagesRow'].visibility="none";
-		}
-		else 
-		{
-			row.style.display="none";
-		}	
-	}
-	else
-	{
-		row.style.display = 'block';
-		element.innerHTML = text;
-	}	
-}
+
 function produceQuery(url,nameOfFormToPost, entityName , attributesList) 
 {
 	//var element = document.getElementById('query');
@@ -312,7 +287,18 @@ function produceQuery(url,nameOfFormToPost, entityName , attributesList)
 
 function viewSearchResults()
 {
-	document.applets[0].getSearchResults();
+	var errorMessage = document.applets[0].getSearchResults();
+	if(errorMessage == null)
+	{
+		 showViewSearchResultsJsp();
+	}
+	else {
+		showValidationMessages(errorMessage);
+	}
+}
+
+function showViewSearchResultsJsp()
+{
 	document.forms['categorySearchForm'].action='ViewSearchResultsJSPAction.do';
 	document.forms['categorySearchForm'].submit();			
 }
