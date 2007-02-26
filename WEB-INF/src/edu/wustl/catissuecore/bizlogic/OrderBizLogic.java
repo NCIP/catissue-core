@@ -77,7 +77,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	private void mailOnSuccessfulSave(SessionDataBean sessionDataBean,OrderDetails order,DAO dao) throws DAOException
 	{
 		boolean emailSent = false;
-		List userList = dao.retrieve(User.class.getName(), "id", sessionDataBean.getUserId());
+		List userList = dao.retrieve(User.class.getName(), "emailAddress", sessionDataBean.getUserName());
 		if(userList != null && !userList.isEmpty())
 		{
 			User userObj = (User)userList.get(0);
