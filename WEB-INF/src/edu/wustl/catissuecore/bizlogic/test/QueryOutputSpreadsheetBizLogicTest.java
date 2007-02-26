@@ -90,19 +90,6 @@ public class QueryOutputSpreadsheetBizLogicTest extends BaseTestCase
 	}
 
 	/**
-	 * test case for GetChildNodes.
-	 *
-	 */
-	public void testGetChildNodes()
-	{
-		IOutputTreeNode rootNode = getDummyTreeNodes();
-		QueryOutputSpreadsheetBizLogic SpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
-		List<IOutputTreeNode> children = SpreadsheetBizLogic.getChildNodes(rootNode);
-		assertNotNull(children);
-		assertEquals(children.size(), 1);
-	}
-
-	/**
 	 * Gets dummy tree. And returns the parent node.
 	 * @return IOutputTreeNode
 	 */
@@ -170,7 +157,7 @@ public class QueryOutputSpreadsheetBizLogicTest extends BaseTestCase
 		try
 		{
 			spreadSheetDataMap = SpreadsheetBizLogic.createSpreadsheetData(tableName, rootNode, nodeAttributeColumnNameMap,
-					isFirstLevel, parentNodeId, sessionData);
+					 parentNodeId, sessionData);
 		}
 		catch (DAOException e)
 		{
@@ -202,7 +189,7 @@ public class QueryOutputSpreadsheetBizLogicTest extends BaseTestCase
 		try
 		{
 			spreadSheetDataMap = SpreadsheetBizLogic.createSpreadsheetData(tableName, rootNode, nodeAttributeColumnNameMap,
-					isFirstLevel, parentNodeId, sessionData);
+					 parentNodeId, sessionData);
 		}
 		catch (DAOException e)
 		{

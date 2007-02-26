@@ -61,19 +61,6 @@ public class QueryOutputTreeBizLogicTest extends BaseTestCase
 	}
 
 	/**
-	 * test case for GetChildNodes.
-	 *
-	 */
-	public void testGetChildNodes()
-	{
-		IOutputTreeNode rootNode = getDummyTreeNodes();
-		QueryOutputTreeBizLogic treeBizLogic = new QueryOutputTreeBizLogic();
-		List<IOutputTreeNode> children = treeBizLogic.getChildNodes(rootNode);
-		assertNotNull(children);
-		assertEquals(children.size(), 1);
-	}
-
-	/**
 	 * Gets dummy tree. And returns the parent node.
 	 * @return IOutputTreeNode
 	 */
@@ -247,7 +234,7 @@ public class QueryOutputTreeBizLogicTest extends BaseTestCase
 		String outputTreeStr = null;
 		try
 		{
-			outputTreeStr = treeBizLogic.buildTreeForNode("1_1", idNodeMap, nodeAttributeColumnNameMap, sessionData);
+			outputTreeStr = treeBizLogic.buildTreeForNode("1_1::1_1", idNodeMap, nodeAttributeColumnNameMap, sessionData);
 		}
 		catch (ClassNotFoundException e)
 		{
@@ -259,7 +246,9 @@ public class QueryOutputTreeBizLogicTest extends BaseTestCase
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String expectedTreeStr = "10_1,CollectionProtocolRegistration_1,edu.wustl.catissuecore.domain.CollectionProtocolRegistration,1_1,edu.wustl.catissuecore.domain.Participant|";
+		System.out.println(outputTreeStr);
+		String expectedTreeStr = "1_1::1_1::10_1,CollectionProtocolRegistration_1,edu.wustl.catissuecore.domain.CollectionProtocolRegistration,1_1::1_1,edu.wustl.catissuecore.domain.Participant|";
+		System.out.println(expectedTreeStr);
 		assertEquals(outputTreeStr, expectedTreeStr);
 		assertNotNull(outputTreeStr);
 	}
