@@ -4,7 +4,7 @@
     <Attribute name = "firstName" displayName = "First Name"/>
     <Attribute name = "middleName" displayName = "Middle Name"/>
     <Attribute name = "lastName" displayName = "Last Name"/>
-      <CategorialClass name="edu.wustl.catissuecore.domain.CollectionProtocolRegistration" IdOfPathFromParentToThis="135">
+      <CategorialClass name="edu.wustl.catissuecore.domain.CollectionProtocolRegistration" IdOfPathFromParentToThis="2469">
          <Attribute name = "registrationDate" displayName = "Registration Date"/>          
       </CategorialClass>       
   </CategorialClass>
