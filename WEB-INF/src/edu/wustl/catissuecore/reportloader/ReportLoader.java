@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Set;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.domain.ClinicalReport;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
@@ -21,6 +23,7 @@ import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.lookup.DefaultLookupResult;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -247,38 +250,49 @@ public class ReportLoader
 	
 		scg.setName("caties_"+ this.identifiedReport.getAccessionNumber().toString());
 		
-		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-		String className;
-		String colName=new String(Constants.SYSTEM_IDENTIFIER);
+		String className=CollectionProtocol.class.getName();
+		String colName=new String("title");
+		String colValue=XMLPropertyHandler.getValue("collectionProtocolTitle");
 			
-		className=CollectionProtocolEvent.class.getName();
-		List collProtocolEventList=defaultBizLogic.retrieve(className, colName, new Long(1));
-		CollectionProtocolEvent collProtocolEvent=(CollectionProtocolEvent)collProtocolEventList.get(0);
-		scg.setCollectionProtocolEvent(collProtocolEvent);
-
-		CollectionProtocolRegistration collProtocolReg=new CollectionProtocolRegistration();
+		BizLogicFactory bizLogicFactory=BizLogicFactory.getInstance();
+		CollectionProtocolBizLogic cpBizLogic=(CollectionProtocolBizLogic)bizLogicFactory.getBizLogic(CollectionProtocol.class.getName());
+		List cpList=cpBizLogic.retrieve(className, colName, colValue);
+		CollectionProtocol collectionProtocol=(CollectionProtocol)cpList.get(0);
+		Set collProtocolEventList=(Set)collectionProtocol.getCollectionProtocolEventCollection();
+		Iterator cpEventIterator=collProtocolEventList.iterator();
 		
-		collProtocolReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-		collProtocolReg.setRegistrationDate(new Date());
-		collProtocolReg.setParticipant(this.participant);	
-		collProtocolReg.setCollectionProtocol(collProtocolEvent.getCollectionProtocol());
-		((Set)this.participant.getCollectionProtocolRegistrationCollection()).add(collProtocolReg);
-		try
+		if(!cpEventIterator.hasNext())
 		{
-			ReportLoaderUtil.saveObject(collProtocolReg);
+			Logger.out.info("Associated Collection Protocol Event not found for "+ collectionProtocol.getTitle());
 		}
-		catch(Exception ex)
+		else
 		{
-			Logger.out.error("Error: Could not save object of CollectionProtocolRegistration",ex);
+			CollectionProtocolEvent collProtocolEvent=(CollectionProtocolEvent)cpEventIterator.next();
+			scg.setCollectionProtocolEvent(collProtocolEvent);
+			CollectionProtocolRegistration collProtocolReg=new CollectionProtocolRegistration();
+			
+			collProtocolReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+			collProtocolReg.setRegistrationDate(new Date());
+			collProtocolReg.setParticipant(this.participant);	
+			collProtocolReg.setCollectionProtocol(collProtocolEvent.getCollectionProtocol());
+			((Set)this.participant.getCollectionProtocolRegistrationCollection()).add(collProtocolReg);
+			try
+			{
+				ReportLoaderUtil.saveObject(collProtocolReg);
+			}
+			catch(Exception ex)
+			{
+				Logger.out.error("Error: Could not save object of CollectionProtocolRegistration",ex);
+			}
+			
+			
+			//((Set)collProtocolReg.getSpecimenCollectionGroupCollection()).add(scg);
+			scg.setCollectionProtocolRegistration(collProtocolReg);
+			
+			ClinicalReport clinicalReport=new ClinicalReport();
+			scg.setClinicalReport(clinicalReport);
 		}
-		
-		
-		//((Set)collProtocolReg.getSpecimenCollectionGroupCollection()).add(scg);
-		scg.setCollectionProtocolRegistration(collProtocolReg);
-		
-		ClinicalReport clinicalReport=new ClinicalReport();
-		scg.setClinicalReport(clinicalReport);
-		
+			
 		return scg;
 	}
 	
