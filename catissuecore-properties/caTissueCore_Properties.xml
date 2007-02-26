@@ -35,7 +35,10 @@
 		<name>filepollerport</name>
 		<value>3030</value>
 	</property>
-	
+	<property>
+		<name>collectionProtocolTitle</name>
+		<value>Generic Collection Protocol</value>
+	</property>
 	<!--Constants for ReportLoader end -->
 	
 	<!-- Constants for Deidentification of report start -->
