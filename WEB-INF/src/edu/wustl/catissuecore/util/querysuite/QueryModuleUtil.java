@@ -34,8 +34,15 @@ public abstract class QueryModuleUtil
 			int asciiValue = attrChar;
 			if (i == 0)
 			{
-				int capitalAsciiValue = asciiValue - 32;
-				attrLabel = attrLabel + (char) capitalAsciiValue;
+				if (asciiValue >= 65 && asciiValue <= 90)
+				{
+					attrLabel = attrLabel + attrChar;
+				} 
+				else
+				{
+					int capitalAsciiValue = asciiValue - 32;
+					attrLabel = attrLabel + (char) capitalAsciiValue;
+				}
 			}
 			else
 			{
@@ -51,6 +58,7 @@ public abstract class QueryModuleUtil
 							if (isPreviousLetterLowerCase)
 							{
 								attrLabel = attrLabel + " " + attrChar;
+								isPreviousLetterLowerCase = false;
 							}
 							else
 							{
@@ -126,5 +134,9 @@ public abstract class QueryModuleUtil
 		{
 			jdbcDao.closeSession();
 		}
+	}
+	public static void main(String args[])
+	{
+		System.out.println(QueryModuleUtil.getAttributeLabel("FirstMiddleURL"));
 	}
 }

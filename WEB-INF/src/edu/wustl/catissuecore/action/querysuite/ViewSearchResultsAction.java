@@ -15,7 +15,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
-import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.catissuecore.action.BaseAppletAction;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
@@ -70,7 +69,7 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			String selectSql = "";
 			String tableName = "";
 			Map<Long, Map<AttributeInterface, String>> columnMap = null;
-			Map ruleDetailsMap = new HashMap();
+			Map<String,String> ruleDetailsMap = new HashMap<String,String>();
 			try
 			{
 				selectSql = sqlGenerator.generateSQL(query);
@@ -84,28 +83,29 @@ public class ViewSearchResultsAction extends BaseAppletAction
 				session.setAttribute(Constants.TREE_DATA, treeData);
 				QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 				String parentNodeId = null;
-				boolean isFirstLevel = true;
-				Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(tableName, root, columnMap, isFirstLevel, parentNodeId,sessionData);
+				Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(tableName, root, columnMap, parentNodeId,sessionData);
 				session.setAttribute(Constants.SPREADSHEET_DATA_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST));
 				session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));;
-				
 			}
 			catch (MultipleRootsException e)
 			{
 				Logger.out.error(e);
 				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, e.getMessage());
-				throw e;
 			}
 			catch (SqlException e)
 			{
 				Logger.out.error(e);
-				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, e.getMessage());
-				throw e;
+				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, Constants.SHOW_ERROR_PAGE);
 			} 
+			catch (ClassNotFoundException e)
+			{
+				Logger.out.error(e);
+				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE,  Constants.SHOW_ERROR_PAGE);
+			}
 			catch (DAOException e)
 			{
 				Logger.out.error(e);
-				throw e;
+				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE,  Constants.SHOW_ERROR_PAGE);
 			}
 			finally
 			{

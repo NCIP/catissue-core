@@ -11,14 +11,12 @@ import java.util.Vector;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.querysuite.queryobject.IOutputTreeNode;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 
 /**
  * Creates QueryOutputTree Object as per the data filled by the user on AddLimits section.
@@ -40,23 +38,7 @@ public class QueryOutputTreeBizLogic
 	{
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
 		String createTableSql = Constants.CREATE_TABLE + tableName + " " + Constants.AS + " " + selectSql;
-		JDBCDAO jdbcDao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-		try
-		{
-			jdbcDao.openSession(sessionData);
-			jdbcDao.delete(tableName);
-			jdbcDao.executeUpdate(createTableSql);
-			jdbcDao.commit();			
-		}
-		catch (DAOException e)
-		{
-			e.printStackTrace();
-			throw e;
-		}
-		finally
-		{
-			jdbcDao.closeSession();	
-		}
+		QueryModuleUtil.executeCreateTable(tableName, createTableSql, sessionData);
 		return tableName;
 	}
 	/**
@@ -148,8 +130,7 @@ public class QueryOutputTreeBizLogic
 		}
 		columnNames = columnNames.substring(0,columnNames.lastIndexOf(";"));
 		String selectSql = "select "+columnNames+" from "+tableName;
-		QueryModuleUtil util = new QueryModuleUtil();
-		List dataList = util.executeQuery(selectSql, sessionData);
+		List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
 		if (dataList != null)
 		{
@@ -166,7 +147,7 @@ public class QueryOutputTreeBizLogic
 			}
 
 	/**
-	 * This method adds the node to tree.
+	 * This method adds the node to tree.The id for new node is set as 'Id of OutputTreeNode _id value of that node in newly created table'
 	 * @param dataList all records in database satisfying the criteria.
 	 * @param parentNode parent node of tree data
 	 * @param node the node to be added of IOutputTreeNode.
@@ -231,7 +212,9 @@ public class QueryOutputTreeBizLogic
 	 * @param idNodeMap map which stores id and nodes already added to tree.
 	 * @param columnMap map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @param sessionData sessionData session data to get the user id.
-	 * @return String outputTreeStr which is then parsed and then sent to client to form tree.
+	 * @return String outputTreeStr which is then parsed and then sent to client to form tree. 
+	 * String for one node is comma seperated for its id, display name, object name , parentId, parent Object name.
+	 * Such string elements for child nodes are seperated by "|".
 	 */
 	public String buildTreeForNode(String nodeId, Map<Long, IOutputTreeNode> idNodeMap, Map<Long, Map<AttributeInterface, String>> columnMap,
 			SessionDataBean sessionData) throws ClassNotFoundException, DAOException
@@ -252,7 +235,7 @@ public class QueryOutputTreeBizLogic
 				break;
 			}
 		}
-		List<IOutputTreeNode> children = getChildNodes(parentNode);
+		List<IOutputTreeNode> children = parentNode.getChildren();
 		if(children.isEmpty())
 		{
 			return "";
@@ -263,7 +246,7 @@ public class QueryOutputTreeBizLogic
 		{
 			columnNames = getColumnNamesForSelectpart(childNode, columnMap);
 			String indexStr = columnNames.substring(columnNames.lastIndexOf(";")+1,columnNames.length());
-			
+
 			if(!indexStr.equalsIgnoreCase("null"))
 			{
 				index = new Integer(indexStr);
@@ -275,8 +258,7 @@ public class QueryOutputTreeBizLogic
 		String selectSql = "select distinct " + columnNames;
 		selectSql = selectSql + " from " + tableName + " where " + parentIdColumnName + " = '" + nodeIds[1]+"'";
 		System.out.println(selectSql);
-		QueryModuleUtil util = new QueryModuleUtil();
-		List dataList = util.executeQuery(selectSql, sessionData);
+		List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 		String outputTreeStr = buildOutputTreeString(index,dataList, children, nodeId, parentNode, idNodeMap);
 		return outputTreeStr;
 			}
@@ -288,8 +270,10 @@ public class QueryOutputTreeBizLogic
 	 * @param nodeId String id which will be parent id for the new nodes added to tree. 
 	 * @param parentNode parent node 
 	 * @param idNodeMap map which stores id and nodes already added to tree.
-	 * @return String outputTreeStr which is then parsed and then sent to client to form tree.
-	 */
+	 * @return String outputTreeStr which is then parsed and then sent to client to form tree. 
+	 * String for one node is comma seperated for its id, display name, object name , parentId, parent Object name.
+	 * Such string elements for child nodes are seperated by "|".
+	 **/
 	String buildOutputTreeString(int index,List dataList, List<IOutputTreeNode> children, String nodeId, IOutputTreeNode parentNode,
 			Map<Long, IOutputTreeNode> idNodeMap)
 	{
@@ -307,7 +291,7 @@ public class QueryOutputTreeBizLogic
 				int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
 				String entityName = fullyQualifiedEntityName.substring(lastIndex + 1);
 				String nodeIdToSet = nodeId + "::" + childNode.getId() + Constants.UNDERSCORE + treeNodeId;
-			//	String nodeIdToSet = childNode.getId() + Constants.UNDERSCORE + treeNodeId;
+				//	String nodeIdToSet = childNode.getId() + Constants.UNDERSCORE + treeNodeId;
 				String displayName = entityName + "_" + treeNodeId;
 				if(index != -1)
 				{
@@ -331,21 +315,4 @@ public class QueryOutputTreeBizLogic
 		}
 		return outputTreeStr;
 	}
-	/**
-	 * Returns all immediate child nodes for the root node passed to it.
-	 * @param node IOutputTreeNode ,
-	 * @param allChildNodes list of nodes
-	 * @return List of IOutputTreeNode all child nodes
-	 */
-	public List<IOutputTreeNode> getChildNodes(IOutputTreeNode node)
-	{
-		List<IOutputTreeNode> childNodes = new ArrayList<IOutputTreeNode>();
-		if (!node.isLeaf())
-		{
-			childNodes = (node.getChildren());
-		}
-		return childNodes;
-	}
-
-
 }

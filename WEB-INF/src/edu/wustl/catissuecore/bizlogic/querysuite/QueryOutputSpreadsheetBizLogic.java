@@ -36,14 +36,14 @@ public class QueryOutputSpreadsheetBizLogic
 	 * @throws DAOException 
 	 */
 	public Map<String, List<String>> createSpreadsheetData(String tableName, IOutputTreeNode node, Map<Long, Map<AttributeInterface, String>> idColumnMap,
-			boolean isFirstLevel, String parentNodeId,SessionDataBean sessionData) throws DAOException, ClassNotFoundException
+			String parentNodeId,SessionDataBean sessionData) throws DAOException, ClassNotFoundException
 			{
 		Map spreadSheetDataMap = new HashMap();
 		Map<AttributeInterface, String> columnsMap = null;
 		String parentIdColumnName = null;
 		columnsMap = idColumnMap.get(node.getId());
-		Set<AttributeInterface> set = columnsMap.keySet();
-		for (Iterator<AttributeInterface> iterator = set.iterator(); iterator.hasNext();)
+		Set<AttributeInterface> setForParent = columnsMap.keySet();
+		for (Iterator<AttributeInterface> iterator = setForParent.iterator(); iterator.hasNext();)
 		{
 			AttributeInterface attr = iterator.next();
 			if (attr.getName().equalsIgnoreCase(Constants.ID))
@@ -52,9 +52,9 @@ public class QueryOutputSpreadsheetBizLogic
 				break;
 			}
 		}
-		if (!isFirstLevel)
+		if (parentNodeId != null)
 		{
-			List<IOutputTreeNode> children = getChildNodes(node);
+			List<IOutputTreeNode> children = node.getChildren();
 			for (IOutputTreeNode childNode : children)
 			{
 				columnsMap = idColumnMap.get(childNode.getId());
@@ -64,8 +64,8 @@ public class QueryOutputSpreadsheetBizLogic
 		String selectSql = "select distinct ";
 		List<String> columnsList = new ArrayList<String>();
 		columnsList.add("");
-		Set<AttributeInterface> set1 = columnsMap.keySet();
-		for (Iterator<AttributeInterface> iterator = set1.iterator(); iterator.hasNext();)
+		Set<AttributeInterface> set = columnsMap.keySet();
+		for (Iterator<AttributeInterface> iterator = set.iterator(); iterator.hasNext();)
 		{
 			AttributeInterface attribute = iterator.next();
 			String className = attribute.getEntity().getName();
@@ -73,35 +73,19 @@ public class QueryOutputSpreadsheetBizLogic
 			String sqlColumnName = columnsMap.get(attribute);
 			selectSql = selectSql + sqlColumnName + ",";
 			sqlColumnName = sqlColumnName.substring(SqlGenerator.COLUMN_NAME.length(), sqlColumnName.length());
-			QueryModuleUtil util = new QueryModuleUtil();
-			String attrLabel = util.getAttributeLabel(attribute.getName());
+			String attrLabel = QueryModuleUtil.getAttributeLabel(attribute.getName());
 			columnsList.add(attrLabel + " : " + className);
 		}
 		spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
 		selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
 		selectSql = selectSql + " from " + tableName;
-		if (!isFirstLevel && parentNodeId != null)
+		if (parentNodeId != null)
 		{
 			selectSql = selectSql + " where " + parentIdColumnName + " = '" + parentNodeId + "'";
 		}
-		QueryModuleUtil util = new QueryModuleUtil();
-		List spreadsheetDataList = util.executeQuery(selectSql, sessionData);
+		List spreadsheetDataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 		spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, spreadsheetDataList);
 		return spreadSheetDataMap;
 			}
-	/**
-	 * Returns all immediate child nodes for the root node passed to it.
-	 * @param node IOutputTreeNode ,
-	 * @param allChildNodes list of nodes
-	 * @return List of IOutputTreeNode all child nodes
-	 */
-	public List<IOutputTreeNode> getChildNodes(IOutputTreeNode node)
-	{
-		List<IOutputTreeNode> childNodes = new ArrayList<IOutputTreeNode>();
-		if (!node.isLeaf())
-		{
-			childNodes = (node.getChildren());
-		}
-		return childNodes;
-	}
+	
 }

@@ -8,6 +8,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
@@ -32,6 +33,12 @@ public class ViewSearchResultsJSPAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
+		CategorySearchForm actionForm = (CategorySearchForm)form;
+		String nextOperation = actionForm.getNextOperation();
+		if(nextOperation != null && nextOperation.equalsIgnoreCase(Constants.SHOW_ERROR_PAGE))
+		{
+			return mapping.findForward(Constants.FAILURE);
+		}
 		return mapping.findForward(Constants.SUCCESS);
 	}
 }

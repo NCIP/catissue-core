@@ -30,7 +30,8 @@ public class BuildQueryOutputSpreadsheetAction extends BaseAction
 	/**
 	 * This method loads the data required for Query Output spreadsheet. 
 	 * With the help of QueryOutputSpreadsheetBizLogic it generates a string which will be then passed to client side and spreadsheet
-	 * is formed accordingly. 
+	 * is formed accordingly.String outputTreeStr consists of all nodes with comma seperated string for its id, display name, object name , 
+	 * parentId, parent Object name.Such string elements for child nodes are seperated by "|".
 	 * @param mapping mapping
 	 * @param form form
 	 * @param request request
@@ -53,7 +54,7 @@ public class BuildQueryOutputSpreadsheetAction extends BaseAction
 		{
 			IQuery query = (IQuery)request.getSession().getAttribute(AppletConstants.QUERY_OBJECT);
 			IOutputTreeNode defaultRootNode = query.getRootOutputClass();
-			spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(tableName,defaultRootNode,columnMap,true,null,sessionData);
+			spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(tableName,defaultRootNode,columnMap,null,sessionData);
 		}
 		else
 		{
@@ -62,7 +63,7 @@ public class BuildQueryOutputSpreadsheetAction extends BaseAction
 			Long id = new Long(nodeIds[0]); 
 			String parentNodeId = nodeIds[1];
 			IOutputTreeNode parentNode = idNodesMap.get(id);
-			spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(tableName,parentNode,columnMap,false,parentNodeId,sessionData);		
+			spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(tableName,parentNode,columnMap,parentNodeId,sessionData);		
 		}
 		String outputSpreadsheetDataStr = prepareOutputSpreadsheetDataString(spreadSheetDatamap);
 		response.setContentType("text/html");
@@ -72,11 +73,12 @@ public class BuildQueryOutputSpreadsheetAction extends BaseAction
 	/**
 	 * Takes data from the map and generates out put data accordingly so that spreadsheet will be updated.
 	 * @param spreadSheetDatamap map which holds data for columns and records.
-	 * @return
+	 * @return this string consists of two strings seperated by '&', first part is for column names to be displayed in spreadsheet 
+	 * and the second part is data in the spreadsheet.
 	 */
 	String prepareOutputSpreadsheetDataString(Map spreadSheetDatamap)
 	{
-		List<List<String>> dataList = (List)spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
+		List<List<String>> dataList = (List<List<String>>)spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
 		String outputSpreadsheetDataStr = "";
 		String dataStr = "";
 		for(List<String> row : dataList)
@@ -85,7 +87,6 @@ public class BuildQueryOutputSpreadsheetAction extends BaseAction
 			rowStr = rowStr.replace("[","");
 			rowStr = rowStr.replace("]","");
 			dataStr = dataStr + "|" + rowStr;
-			System.out.println(row);
 		}
 		List columnsList = (List)spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST);
 		String columns = columnsList.toString();
