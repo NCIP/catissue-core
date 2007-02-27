@@ -56,6 +56,7 @@ function showValidationMessages(text)
 %>
 <html:form method="GET" action="<%=formAction%>">
 <html:hidden property="stringToCreateQueryObject" value="" />
+<html:hidden property="nextOperation" value="" />
 <table bordercolor="#000000" border="0" width="100%" cellspacing="2" cellpadding="2"  height="100%">
 	<tr>
 	<td>

@@ -298,7 +298,7 @@ function viewSearchResults()
 	{
 		 showViewSearchResultsJsp();
 	}
-	else if (errorMessage == "showErrorPage")
+	else if (errorMessage == "<li><font color=\"red\">showErrorPage</font></li>")
 	{
 		showErrorPage();
 	}
@@ -309,7 +309,7 @@ function viewSearchResults()
 function showErrorPage()
 {
 	document.forms['categorySearchForm'].action='ViewSearchResultsJSPAction.do';
-	document.forms['categorySearchForm'].nextOperation = "showErrorPage";
+	document.forms['categorySearchForm'].nextOperation.value = "showErrorPage";
 	document.forms['categorySearchForm'].submit();	
 }
 function showViewSearchResultsJsp()
