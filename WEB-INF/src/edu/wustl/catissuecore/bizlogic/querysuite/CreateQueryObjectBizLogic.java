@@ -41,7 +41,7 @@ public class CreateQueryObjectBizLogic
 	 * @throws DynamicExtensionsApplicationException DynamicExtensionsApplicationException
 	 */
 	public Map getRuleDetailsMap(String strToCreateQueryObject, EntityInterface entity) throws DynamicExtensionsSystemException,
-			DynamicExtensionsApplicationException
+	DynamicExtensionsApplicationException
 	{
 		String errorMessage = "";
 		Map ruleDetailsMap = new HashMap();
@@ -55,7 +55,8 @@ public class CreateQueryObjectBizLogic
 				List<String> attributeOperators = new ArrayList<String>();
 				List<String> firstAttributeValues = new ArrayList<String>();
 				List<String> secondAttributeValues = new ArrayList<String>();
-				
+				ArrayList<ArrayList<String>>  conditionValues = new ArrayList<ArrayList<String>>();
+
 				Iterator iterAttributes = (Iterator) attrCollection.iterator();
 				while (iterAttributes.hasNext())
 				{
@@ -67,11 +68,18 @@ public class CreateQueryObjectBizLogic
 						attributes.add(attr);
 						attributeOperators.add(params[0]);
 						firstAttributeValues.add(params[1]);
-						secondAttributeValues.add(params[2]);
-						List<String> attributeValues = new ArrayList<String>();
-						attributeValues.add(params[1]);
-						attributeValues.add(params[2]);
+						secondAttributeValues.add(params[2]);						
+						ArrayList<String> attributeValues = new ArrayList<String>();
+						if(params[1] != null)
+						{
+							attributeValues.add(params[1]);
+						}
+						if(params[2] != null)
+						{
+							attributeValues.add(params[2]);
+						}
 						errorMessage = errorMessage + validateAttributeValues(attr,attributeValues);
+						conditionValues.add(attributeValues);
 					}
 					System.out.println(errorMessage);
 				}
@@ -79,6 +87,7 @@ public class CreateQueryObjectBizLogic
 				ruleDetailsMap.put(AppletConstants.ATTRIBUTE_OPERATORS, attributeOperators);
 				ruleDetailsMap.put(AppletConstants.FIRST_ATTR_VALUES, firstAttributeValues);
 				ruleDetailsMap.put(AppletConstants.SECOND_ATTR_VALUES, secondAttributeValues);
+				ruleDetailsMap.put(AppletConstants.ATTR_VALUES, conditionValues);
 				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
 			}
 		}
@@ -101,53 +110,50 @@ public class CreateQueryObjectBizLogic
 		while (valuesIter.hasNext())
 		{
 			String enteredValue = (String) valuesIter.next();
-			if(enteredValue != null)
-			{
-			if ((dataType.trim().equalsIgnoreCase("bigint") || dataType.trim().equalsIgnoreCase("integer"))
-					|| dataType.trim().equalsIgnoreCase("Long"))
-			{
-				Logger.out.debug(" Check for integer");
-				if (validator.convertToLong(enteredValue) == null)
+				if ((dataType.trim().equalsIgnoreCase("bigint") || dataType.trim().equalsIgnoreCase("integer"))
+						|| dataType.trim().equalsIgnoreCase("Long"))
 				{
-					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.intvalue.required");
-					Logger.out.debug(enteredValue + " is not a valid integer");
-				}
-				else if (!validator.isPositiveNumeric(enteredValue, 0))
-				{
-					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.intvalue.poisitive.required");
-					Logger.out.debug(enteredValue + " is not a positive integer");
-				}
+					Logger.out.debug(" Check for integer");
+					if (validator.convertToLong(enteredValue) == null)
+					{
+						errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.intvalue.required");
+						Logger.out.debug(enteredValue + " is not a valid integer");
+					}
+					else if (!validator.isPositiveNumeric(enteredValue, 0))
+					{
+						errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.intvalue.poisitive.required");
+						Logger.out.debug(enteredValue + " is not a positive integer");
+					}
 
-			}//integer         
-			else if ((dataType.trim().equalsIgnoreCase("double")) && !validator.isDouble(enteredValue, false))
-			{
-				errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.decvalue.required");
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
-			} // double
-			else if (dataType.trim().equalsIgnoreCase("tinyint"))
-			{
-				if (!enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_YES) && !enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_NO))
+				}//integer         
+				else if ((dataType.trim().equalsIgnoreCase("double")) && !validator.isDouble(enteredValue, false))
 				{
-					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.tinyint.format");
+					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.decvalue.required");
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
+				} // double
+				else if (dataType.trim().equalsIgnoreCase("tinyint"))
+				{
+					if (!enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_YES) && !enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_NO))
+					{
+						errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.tinyint.format");
+					}
+				}
+				else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME))
+				{
+					if (!validator.isValidTime(enteredValue, Constants.TIME_PATTERN_HH_MM_SS))
+					{
+						errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.time.format");
+					}
+				}
+				else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_DATE)
+						|| dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_DATE))
+				{
+					if (!validator.checkDate(enteredValue))
+					{
+						errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.date.format");
+					}
 				}
 			}
-			else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME))
-			{
-				if (!validator.isValidTime(enteredValue, Constants.TIME_PATTERN_HH_MM_SS))
-				{
-					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.time.format");
-				}
-			}
-			else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_DATE)
-					|| dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_DATE))
-			{
-				if (!validator.checkDate(enteredValue))
-				{
-					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.date.format");
-				}
-			}
-		}
-		}
 		return errorMessages;
 	}
 
@@ -159,7 +165,7 @@ public class CreateQueryObjectBizLogic
 	 * @throws DynamicExtensionsSystemException DynamicExtensionsSystemException
 	 */
 	private Map<String, String[]> createConditionsMap(String queryString) throws DynamicExtensionsSystemException,
-			DynamicExtensionsApplicationException
+	DynamicExtensionsApplicationException
 	{
 		Map<String, String[]> conditionsMap = new HashMap<String, String[]>();
 		String[] conditions = queryString.split(Constants.QUERY_CONDITION_DELIMITER);

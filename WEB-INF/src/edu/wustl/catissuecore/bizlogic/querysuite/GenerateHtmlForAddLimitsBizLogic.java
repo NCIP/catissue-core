@@ -43,16 +43,18 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * Object which holds data operators fro attributes.
 	 */
 	ParseXMLFile parseFile = null;
+
 	/**
 	 * Constructor for GenerateHtmlForAddLimitsBizLogic
 	 */
 	public GenerateHtmlForAddLimitsBizLogic()
 	{
-		if(parseFile == null)
+		if (parseFile == null)
 		{
 			parseFile = new ParseXMLFile(Constants.DYNAMIC_UI_XML);
 		}
 	}
+
 	/**
 	 * This method generates the html for Add Limits and Edit Limits section.
 	 * This internally calls methods to generate other UI components like text, Calendar, Combobox etc.
@@ -71,7 +73,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		generatedHTML.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"0\" cellpadding=\"0\">");
 		generatedHTML.append("\n<tr>");
 		generatedHTML
-		.append("<td height=\"4%\" colspan=\"6\" bgcolor=\"#EAEAEA\" style=\"border:solid 1px\"><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
+				.append("<td height=\"4%\" colspan=\"6\" bgcolor=\"#EAEAEA\" style=\"border:solid 1px\"><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
 		generatedHTML.append(header + " '" + nameOfTheEntity + "'</b></font>");
 		generatedHTML.append("\n</td></tr>");
 		generatedHTML.append("\n<tr><td height=\"3%\" colspan=\"4\" bgcolor=\"#FFFFFF\">&nbsp;</td></tr>");
@@ -112,44 +114,42 @@ public class GenerateHtmlForAddLimitsBizLogic
 					else
 					{
 						generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList, null));
-						
+						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null));
+
 					}
 				}
 				if (conditions == null)
 				{
 					generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList, null));
-					
-					UserDefinedDE userDefineDE = (UserDefinedDE)attribute.getAttributeTypeInformation().getDataElement();
-					
-					
-					if(userDefineDE!=null&&userDefineDE.getPermissibleValueCollection()!=null)
+
+					UserDefinedDE userDefineDE = (UserDefinedDE) attribute.getAttributeTypeInformation().getDataElement();
+
+					if (userDefineDE != null && userDefineDE.getPermissibleValueCollection() != null)
 					{
-						List<String>permissibleValues=new ArrayList<String>();
-						Iterator< PermissibleValueInterface> permissibleValueInterface = userDefineDE.getPermissibleValueCollection().iterator();
+						List<String> permissibleValues = new ArrayList<String>();
+						Iterator<PermissibleValueInterface> permissibleValueInterface = userDefineDE.getPermissibleValueCollection().iterator();
 						while (permissibleValueInterface.hasNext())
 						{
-							PermissibleValue permValue = (PermissibleValue)permissibleValueInterface.next();
+							PermissibleValue permValue = (PermissibleValue) permissibleValueInterface.next();
 							//permissibleValues.add(((PermissibleValue)permissibleValueInterface.next()).getDescription());
-							
-							if(permValue instanceof StringValueInterface)								
-								permissibleValues.add(((StringValueInterface)permValue).getValue());
-							
-							if(permValue instanceof ShortValueInterface)								
-								permissibleValues.add(((ShortValueInterface)permValue).getValue().toString());
 
-							if(permValue instanceof LongValueInterface)								
-								permissibleValues.add(((LongValueInterface)permValue).getValue().toString());
-							
-							if(permValue instanceof DateValueInterface)								
-								permissibleValues.add(((DateValueInterface)permValue).getValue().toString());
+							if (permValue instanceof StringValueInterface)
+								permissibleValues.add(((StringValueInterface) permValue).getValue());
 
-							
+							if (permValue instanceof ShortValueInterface)
+								permissibleValues.add(((ShortValueInterface) permValue).getValue().toString());
+
+							if (permValue instanceof LongValueInterface)
+								permissibleValues.add(((LongValueInterface) permValue).getValue().toString());
+
+							if (permValue instanceof DateValueInterface)
+								permissibleValues.add(((DateValueInterface) permValue).getValue().toString());
+
 						}
-						generatedHTML.append("\n" + generateHTMLForEnumeratedValues(attribute,permissibleValues, null));
+						generatedHTML.append("\n" + generateHTMLForEnumeratedValues(attribute, permissibleValues, null));
 					}
 					else
 						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null));
-					
 
 				}
 				generatedHTML.append("\n</tr>");
@@ -159,6 +159,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		generatedHTML.append("</table>");
 		return generatedHTML.toString();
 	}
+
 	/**
 	 * Returns the map of name of the attribute and condition obj as its value.
 	 * @param conditions list of conditions user had applied in case of edit limits
@@ -268,7 +269,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 */
 	private String generateHTMLForTextBox(AttributeInterface attributeInterface, boolean isBetween, ArrayList<String> values)
 	{
-		String componentId = attributeInterface.getName()+attributeInterface.getId().toString();
+		String componentId = attributeInterface.getName() + attributeInterface.getId().toString();
 		String textBoxId = componentId + "_textBox";
 		String textBoxId1 = componentId + "_textBox1";
 		StringBuffer html = new StringBuffer();
@@ -354,7 +355,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 */
 	private String generateHTMLForCalendar(AttributeInterface attribute, boolean isFirst, boolean isBetween)
 	{
-		String componentId = attribute.getName()+attribute.getId().toString();
+		String componentId = attribute.getName() + attribute.getId().toString();
 		String innerStr = "";
 		//String divId = "overDiv" + (i + 1);
 		String divStr = "<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
@@ -364,7 +365,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			String textBoxId = componentId + "_textBox";
 			String calendarId = componentId + "_calendar";
 			innerStr = "<td width=\"3%\" id=\"" + calendarId + "\">" + divStr + "<a href=\"javascript:show_calendar('categorySearchForm." + textBoxId
-			+ "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
+					+ "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
 		}
 		else
 		{
@@ -380,13 +381,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 				style = "display:none";
 			}
 			innerStr = "<td width=\"3%\" id=\"" + calendarId1 + "\" style=\"" + style + "\">" + divStr
-			+ "<a href=\"javascript:show_calendar('categorySearchForm." + textBoxId1 + "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
+					+ "<a href=\"javascript:show_calendar('categorySearchForm." + textBoxId1 + "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
 		}
 		innerStr = innerStr + "</td>";
 		return innerStr.toString();
 	}
-	
-	
+
 	/**
 	 * This function generates the HTML for enumerated values.
 	 * @param attribute
@@ -403,22 +403,22 @@ public class GenerateHtmlForAddLimitsBizLogic
 		{
 			html.append("\n<td width=\"20%\">");
 			AttributeTypeInformationInterface attrTypeInfo = attribute.getAttributeTypeInformation();
-		
+
 			html.append("\n<select name=\"" + componentId + "_enumeratedvaluescombobox\"\">");
-			
+
 			Iterator iter = enumeratedValuesList.iterator();
 
 			while (iter.hasNext())
 			{
 				String operator = iter.next().toString();
 				String op1 = operator.replace(" ", "");
-//				if (op1.equalsIgnoreCase(op))
-//				{
-//					html.append("\n<option value=\"" + operator + "\" SELECTED>" + operator + "</option>");
-//				}
-//				else
-//				{
-					html.append("\n<option value=\"" + operator + "\">" + operator + "</option>");
+				//				if (op1.equalsIgnoreCase(op))
+				//				{
+				//				html.append("\n<option value=\"" + operator + "\" SELECTED>" + operator + "</option>");
+				//				}
+				//				else
+				//				{
+				html.append("\n<option value=\"" + operator + "\">" + operator + "</option>");
 				//}
 			}
 			html.append("\n</select>");
@@ -426,5 +426,5 @@ public class GenerateHtmlForAddLimitsBizLogic
 		}
 		return html.toString();
 	}
-	
+
 }
