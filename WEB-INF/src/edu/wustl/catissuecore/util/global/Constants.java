@@ -137,7 +137,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ID_NODES_MAP = "idNodesMap";
 	public static final String ID_COLUMNS_MAP = "idColumnsMap";
 	public static final String COLUMN_NAME = "Column";
-	public static final String SHOW_ERROR_PAGE = "showErrorPage";
 	public static final String[] ATTRIBUTE_NAMES_FOR_TREENODE_LABEL = {
 		"firstName",
 		"lastName",

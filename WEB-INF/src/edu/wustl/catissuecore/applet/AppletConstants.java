@@ -222,6 +222,8 @@ public interface AppletConstants
 	public static final String ERROR_MESSAGE = "errorMessage";
 	public static final String SHOW_VALIDATION_MESSAGES = "showValidationMessages";
 	public static final String SHOW_RESULTS_PAGE = "showViewSearchResultsJsp";
+	public static final String ATTR_VALUES = "AttributeValues";
+	public static final String SHOW_ERROR_PAGE = "showErrorPage";
 	//public static final String ATTRIBUTES = "Attributes";
 	
 }
