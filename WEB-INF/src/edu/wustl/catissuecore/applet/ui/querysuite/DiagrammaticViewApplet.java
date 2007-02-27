@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Image;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,11 +152,13 @@ public class DiagrammaticViewApplet extends BaseApplet
 			List attributeOperators = (List) outputMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
 			List firstAttributeValues = (List) outputMap.get(AppletConstants.FIRST_ATTR_VALUES);
 			List secondAttributeValues = (List) outputMap.get(AppletConstants.SECOND_ATTR_VALUES);
+			ArrayList<ArrayList<String>> conditionValues = (ArrayList<ArrayList<String>>) outputMap.get(AppletConstants.ATTR_VALUES);
 			String errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
 			showValidationMessagesToUser(errorMessage);
 			if(errorMessage.equalsIgnoreCase(""))
 			{
-				IExpressionId expressionId = queryObject.addRule(attributes, attributeOperators, firstAttributeValues, secondAttributeValues);
+				//IExpressionId expressionId = queryObject.addRule(attributes, attributeOperators, firstAttributeValues, secondAttributeValues);
+				IExpressionId expressionId = queryObject.addRule(attributes, attributeOperators, conditionValues);
 				panel.updateGraph(expressionId);	
 			}			
 		}
@@ -186,10 +189,11 @@ public class DiagrammaticViewApplet extends BaseApplet
 			List attributeOperators = (List) outputMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
 			List firstAttributeValues = (List) outputMap.get(AppletConstants.FIRST_ATTR_VALUES);
 			List secondAttributeValues = (List) outputMap.get(AppletConstants.SECOND_ATTR_VALUES);
+			ArrayList<ArrayList<String>> conditionValues = (ArrayList<ArrayList<String>>) outputMap.get(AppletConstants.ATTR_VALUES);
 			//queryObject.getQuery().getConstraints().getExpression(arg0)
 			Rule rule = ((Rule) (expression.getOperand(0)));
 			rule.removeAllConditions();
-			List<ICondition> conditionsList = queryObject.getConditions(attributes, attributeOperators, firstAttributeValues, secondAttributeValues);
+			List<ICondition> conditionsList = queryObject.getConditions(attributes, attributeOperators,conditionValues);
 			for (ICondition condition : conditionsList)
 			{
 				rule.addCondition(condition);
