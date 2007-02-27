@@ -19,8 +19,12 @@ import edu.common.dynamicextensions.domain.StringAttributeTypeInformation;
 import edu.common.dynamicextensions.domain.UserDefinedDE;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeTypeInformationInterface;
+import edu.common.dynamicextensions.domaininterface.BooleanValueInterface;
 import edu.common.dynamicextensions.domaininterface.DateValueInterface;
+import edu.common.dynamicextensions.domaininterface.DoubleValueInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.common.dynamicextensions.domaininterface.FloatValueInterface;
+import edu.common.dynamicextensions.domaininterface.IntegerValueInterface;
 import edu.common.dynamicextensions.domaininterface.LongValueInterface;
 import edu.common.dynamicextensions.domaininterface.PermissibleValueInterface;
 import edu.common.dynamicextensions.domaininterface.ShortValueInterface;
@@ -83,7 +87,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			while (iter.hasNext())
 			{
 				AttributeInterface attribute = (AttributeInterface) iter.next();
-				String attrName = attribute.getName();
+				String attrName = attribute.getName();				
 				String attrLabel = QueryModuleUtil.getAttributeLabel(attrName);
 				String componentId = attrName + attribute.getId().toString();
 				attributesList = attributesList + ";" + componentId;
@@ -115,6 +119,8 @@ public class GenerateHtmlForAddLimitsBizLogic
 					{
 						generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList, null));
 						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null));
+						
+						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null));
 
 					}
 				}
@@ -130,21 +136,8 @@ public class GenerateHtmlForAddLimitsBizLogic
 						Iterator<PermissibleValueInterface> permissibleValueInterface = userDefineDE.getPermissibleValueCollection().iterator();
 						while (permissibleValueInterface.hasNext())
 						{
-							PermissibleValue permValue = (PermissibleValue) permissibleValueInterface.next();
-							//permissibleValues.add(((PermissibleValue)permissibleValueInterface.next()).getDescription());
-
-							if (permValue instanceof StringValueInterface)
-								permissibleValues.add(((StringValueInterface) permValue).getValue());
-
-							if (permValue instanceof ShortValueInterface)
-								permissibleValues.add(((ShortValueInterface) permValue).getValue().toString());
-
-							if (permValue instanceof LongValueInterface)
-								permissibleValues.add(((LongValueInterface) permValue).getValue().toString());
-
-							if (permValue instanceof DateValueInterface)
-								permissibleValues.add(((DateValueInterface) permValue).getValue().toString());
-
+							PermissibleValue permValue = (PermissibleValue)permissibleValueInterface.next();							
+							addPermissibleValueToThePermissibleValueList(permValue, permissibleValues);						
 						}
 						generatedHTML.append("\n" + generateHTMLForEnumeratedValues(attribute, permissibleValues, null));
 					}
@@ -159,7 +152,46 @@ public class GenerateHtmlForAddLimitsBizLogic
 		generatedHTML.append("</table>");
 		return generatedHTML.toString();
 	}
+	
+	/**
+	 * This method adds the permissible values to the permissible value list.
+	 * 
+	 * @param permValue
+	 * @param permissibleValues
+	 */
+	private void  addPermissibleValueToThePermissibleValueList(PermissibleValue permValue, List permissibleValues)
+	{
+		if(permValue instanceof StringValueInterface)								
+			permissibleValues.add(((StringValueInterface)permValue).getValue());
+		
+		if(permValue instanceof ShortValueInterface)								
+			permissibleValues.add(((ShortValueInterface)permValue).getValue().toString());
 
+		if(permValue instanceof LongValueInterface)								
+			permissibleValues.add(((LongValueInterface)permValue).getValue().toString());
+		
+		if(permValue instanceof DateValueInterface)								
+			permissibleValues.add(((DateValueInterface)permValue).getValue().toString());
+	
+		if(permValue instanceof BooleanValueInterface)								
+			permissibleValues.add(((BooleanValueInterface)permValue).getValue().toString());
+		
+		if(permValue instanceof IntegerValueInterface)								
+			permissibleValues.add(((IntegerValueInterface)permValue).getValue().toString());
+
+		
+		if(permValue instanceof DoubleValueInterface)								
+			permissibleValues.add((String)((DoubleValueInterface)permValue).getValue().toString());
+		
+		if(permValue instanceof FloatValueInterface)								
+			permissibleValues.add(((FloatValueInterface)permValue).getValue().toString());
+		
+		if(permValue instanceof FloatValueInterface)								
+			permissibleValues.add(((FloatValueInterface)permValue).getValue().toString());
+		
+		
+	}
+	
 	/**
 	 * Returns the map of name of the attribute and condition obj as its value.
 	 * @param conditions list of conditions user had applied in case of edit limits
@@ -188,30 +220,57 @@ public class GenerateHtmlForAddLimitsBizLogic
 		Object[] strObj = null;
 		if (attributeInterface != null)
 		{
-			if (attrTypeInfo instanceof StringAttributeTypeInformation)
+			UserDefinedDE userDefineDE = (UserDefinedDE)attributeInterface.getAttributeTypeInformation().getDataElement();
+			if(userDefineDE ==null)
 			{
-				strObj = parseFile.getNonEnumStr();
-
+				if (attrTypeInfo instanceof StringAttributeTypeInformation)
+				{
+					strObj = parseFile.getNonEnumStr();
+	
+				}
+				else if (attrTypeInfo instanceof BooleanAttributeTypeInformation)
+				{
+					strObj = parseFile.getNonEnumStr();
+	
+				}
+				else if (attrTypeInfo instanceof DateAttributeTypeInformation)
+				{
+					strObj = parseFile.getNonEnumDate();
+	
+				}
+				else if (attrTypeInfo instanceof DoubleAttributeTypeInformation || attrTypeInfo instanceof LongAttributeTypeInformation
+						|| attrTypeInfo instanceof ShortAttributeTypeInformation || attrTypeInfo instanceof IntegerAttributeTypeInformation)
+				{
+					strObj = parseFile.getNonEnumNum();
+	
+				}
 			}
-			else if (attrTypeInfo instanceof BooleanAttributeTypeInformation)
+			else
 			{
-				strObj = parseFile.getNonEnumStr();
-
-			}
-			else if (attrTypeInfo instanceof DateAttributeTypeInformation)
-			{
-				strObj = parseFile.getNonEnumDate();
-
-			}
-			else if (attrTypeInfo instanceof DoubleAttributeTypeInformation || attrTypeInfo instanceof LongAttributeTypeInformation
-					|| attrTypeInfo instanceof ShortAttributeTypeInformation || attrTypeInfo instanceof IntegerAttributeTypeInformation)
-			{
-				strObj = parseFile.getNonEnumNum();
-
+				if (attrTypeInfo instanceof StringAttributeTypeInformation)
+				{
+					strObj = parseFile.getEnumStr();
+	
+				}
+				else if (attrTypeInfo instanceof BooleanAttributeTypeInformation)
+				{
+					strObj = parseFile.getEnumStr();
+	
+				}		
+				else if (attrTypeInfo instanceof DoubleAttributeTypeInformation || attrTypeInfo instanceof LongAttributeTypeInformation
+						|| attrTypeInfo instanceof ShortAttributeTypeInformation || attrTypeInfo instanceof IntegerAttributeTypeInformation)
+				{
+					strObj = parseFile.getEnumNum();
+				
+				}
+				
+				
 			}
 			for (int i = 0; i < strObj.length; i++)
 			{
-				operatorsList.add((String) strObj[i]);
+				//Add the string object only if it is not null
+				if(strObj[i]!=null)
+					operatorsList.add((String) strObj[i]);
 			}
 		}
 		return operatorsList;
@@ -403,22 +462,24 @@ public class GenerateHtmlForAddLimitsBizLogic
 		{
 			html.append("\n<td width=\"20%\">");
 			AttributeTypeInformationInterface attrTypeInfo = attribute.getAttributeTypeInformation();
-
-			html.append("\n<select name=\"" + componentId + "_enumeratedvaluescombobox\"\">");
-
+		
+			html.append("\n<select class='formFieldSmallSized' styleId='country' size ='2' multiple name=\"" + componentId + "_enumeratedvaluescombobox\"\">");
+			
 			Iterator iter = enumeratedValuesList.iterator();
 
 			while (iter.hasNext())
 			{
 				String operator = iter.next().toString();
 				String op1 = operator.replace(" ", "");
-				//				if (op1.equalsIgnoreCase(op))
-				//				{
-				//				html.append("\n<option value=\"" + operator + "\" SELECTED>" + operator + "</option>");
-				//				}
-				//				else
-				//				{
-				html.append("\n<option value=\"" + operator + "\">" + operator + "</option>");
+//				if (op1.equalsIgnoreCase(op))
+//				{
+//					html.append("\n<option value=\"" + operator + "\" SELECTED>" + operator + "</option>");
+//				}
+//				else
+//				{
+					html.append("\n<option  value=\"" + operator + "\">" + operator + "</option>");
+				
+				
 				//}
 			}
 			html.append("\n</select>");
