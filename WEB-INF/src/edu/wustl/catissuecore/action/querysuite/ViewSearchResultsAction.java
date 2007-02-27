@@ -95,17 +95,17 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			catch (SqlException e)
 			{
 				Logger.out.error(e);
-				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, Constants.SHOW_ERROR_PAGE);
+				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, AppletConstants.SHOW_ERROR_PAGE);
 			} 
 			catch (ClassNotFoundException e)
 			{
 				Logger.out.error(e);
-				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE,  Constants.SHOW_ERROR_PAGE);
+				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE,  AppletConstants.SHOW_ERROR_PAGE);
 			}
 			catch (DAOException e)
 			{
 				Logger.out.error(e);
-				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE,  Constants.SHOW_ERROR_PAGE);
+				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE,  AppletConstants.SHOW_ERROR_PAGE);
 			}
 			finally
 			{

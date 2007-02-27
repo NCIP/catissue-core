@@ -9,6 +9,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
+import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 
@@ -35,7 +36,7 @@ public class ViewSearchResultsJSPAction extends BaseAction
 	{
 		CategorySearchForm actionForm = (CategorySearchForm)form;
 		String nextOperation = actionForm.getNextOperation();
-		if(nextOperation != null && nextOperation.equalsIgnoreCase(Constants.SHOW_ERROR_PAGE))
+		if(nextOperation != null && nextOperation.equalsIgnoreCase(AppletConstants.SHOW_ERROR_PAGE))
 		{
 			return mapping.findForward(Constants.FAILURE);
 		}
