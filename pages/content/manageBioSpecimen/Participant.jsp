@@ -10,6 +10,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
 <script src="jss/script.js"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes --> 
@@ -631,11 +632,13 @@ tr#hiddenCombo
 						<label for="genotype"><bean:message key="participant.genotype"/></label>
 					</td>
 				     <td class="formField" colspan="2">
-<!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="genotype" styleClass="formFieldSized" styleId="genotype" size="1" disabled="<%=readOnlyForAll%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%=Constants.GENOTYPE_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
+					 
+					  <autocomplete:AutoCompleteTag property="genotype"
+										  optionsList = "<%=request.getAttribute(Constants.GENOTYPE_LIST)%>"
+										  initialValue="<%=form.getGenotype()%>"
+										  styleClass="formFieldSized"
+									    />
+
 		        	  </td>
 				 </tr>
 				 <tr>
@@ -659,11 +662,13 @@ tr#hiddenCombo
 				     	</label>
 				     </td>
 				     <td class="formField" colspan="2">
-<!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="ethnicity" styleClass="formFieldSized" styleId="ethnicity" size="1" disabled="<%=readOnlyForAll%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%=Constants.ETHNICITY_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
+					 
+					   <autocomplete:AutoCompleteTag property="ethnicity"
+										  optionsList = "<%=request.getAttribute(Constants.ETHNICITY_LIST)%>"
+										  initialValue="<%=form.getEthnicity()%>"
+										  styleClass="formFieldSized"
+									    />
+
 		        	  </td>
 				 </tr>
 				 <tr>

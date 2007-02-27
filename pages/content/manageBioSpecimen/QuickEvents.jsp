@@ -11,6 +11,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.QuickEventsForm"%>
 <%@ page import="java.util.*"%>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
 
 <head>
@@ -81,10 +82,13 @@
 			<bean:message key="quickEvents.eventparameters"/>
 		</td>
 		<td class="formField" colspan="2">
-			<html:select property="specimenEventParameter" styleClass="formFieldSized15" styleId="className" size="1" disabled="false"
-			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-				<html:options name="<%=Constants.EVENT_PARAMETERS_LIST%>" labelName="<%=Constants.EVENT_PARAMETERS_LIST%>"/>
-			</html:select>
+		
+		 <autocomplete:AutoCompleteTag property="specimenEventParameter"
+										  optionsList = "<%=request.getAttribute(Constants.EVENT_PARAMETERS_LIST)%>"
+										  initialValue="<%=request.getParameter("specimenEventParameter")%>"
+			
+									    />
+			
 		</td>
 
 	</tr>

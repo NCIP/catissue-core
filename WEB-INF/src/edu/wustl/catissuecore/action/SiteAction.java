@@ -139,9 +139,16 @@ public class SiteAction  extends SecureAction
 		Long coordinatorId = null;
 		String coordinatorIdStr = request.getParameter("coordinatorId");
 		Validator validator = new Validator(); 
+		try
+		{
 		if(!validator.isEmpty(coordinatorIdStr))
 		{
 			coordinatorId = new Long(coordinatorIdStr);
+		}
+		}
+		catch(Exception e)
+		{
+			coordinatorId = null;
 		}
 		return coordinatorId;
 	}

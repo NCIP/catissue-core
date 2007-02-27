@@ -3,9 +3,13 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ taglib uri="/WEB-INF/AutoCompleteTag.tld" prefix="autocomplete" %>
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <script src="jss/script.js" type="text/javascript"></script>
+
+
 
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
@@ -235,11 +239,15 @@
 					</td>
 					
 					<td class="formField">
-<!-- Mandar : 434 : for tooltip -->					
-				     	<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" disabled="<%=readOnlyForAll%>"
-				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-  							<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
-						</html:select>
+					 <autocomplete:AutoCompleteTag property="siteId"
+										  optionsList = "<%=request.getAttribute(Constants.SITELIST)%>"
+										  initialValue="<%=form.getSiteId()%>"
+										  styleClass="formFieldSized"
+										  staticField="false"
+										 
+									    />
+					
+
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">
 						&nbsp;
 						<html:link href="#" styleId="newSite" onclick="addNewAction('SpecimenCollectionGroupAddNew.do?addNewForwardTo=site&forwardTo=specimenCollectionGroup&addNewFor=site')">
@@ -388,11 +396,13 @@
 						</label>
 					 </td>
 				     <td class="formField">
-<!-- Mandar : 434 : for tooltip -->				     
-						<html:select property="clinicalDiagnosis" styleClass="formFieldSized" styleId="clinicalDiagnosis" size="1" 
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%=Constants.CLINICAL_DIAGNOSIS_LIST%>" labelProperty="name" property="value"/>				     					     					     	
-						</html:select>
+                             <autocomplete:AutoCompleteTag property="clinicalDiagnosis"
+										  optionsList = "<%=request.getAttribute(Constants.CLINICAL_DIAGNOSIS_LIST)%>"
+										  initialValue="<%=form.getClinicalDiagnosis()%>"
+										  styleClass="formFieldSized"
+										  size="30"
+					        />
+							
 						<%
 						String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";			
 						%>
@@ -411,11 +421,14 @@
 					 </td>
 					 
 				     <td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="clinicalStatus" styleClass="formFieldSized" styleId="clinicalStatus" size="1" disabled="<%=readOnlyForAll%>"
-				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%=Constants.CLINICAL_STATUS_LIST%>" labelProperty="name" property="value"/>		
-						</html:select>
+					 
+					 			 <autocomplete:AutoCompleteTag property="clinicalStatus"
+										  optionsList = "<%=request.getAttribute(Constants.CLINICAL_STATUS_LIST)%>"
+										  initialValue="<%=form.getClinicalStatus()%>"
+										  styleClass="formFieldSized"
+										 
+									    />
+
 		        	  </td>
 				 </tr>
 				 

@@ -8,6 +8,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
 <%!private String changeUnit(String specimenType, String subType) {
 		if (specimenType == null)
@@ -424,13 +425,16 @@
 					<td class="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel"><label for="type"> <bean:message
 						key="distribution.toSite" /> </label></td>
-					<td class="formField"><!-- Mandar : 434 : for tooltip --> <html:select
-						property="toSite" styleClass="formFieldSized" styleId="toSite"
-						size="1" onmouseover="showTip(this.id)"
-						onmouseout="hideTip(this.id)">
-						<html:options collection="<%=Constants.TO_SITE_LIST%>"
-							labelProperty="name" property="value" />
-					</html:select> &nbsp; 
+					<td class="formField">
+					
+					 <autocomplete:AutoCompleteTag property="toSite"
+										  optionsList = "<%=request.getAttribute(Constants.TO_SITE_LIST)%>"
+										  initialValue="<%=formBean.getToSite()%>"
+										  styleClass="formFieldSized"
+										  staticField="false"
+									    />
+										
+					&nbsp; 
 					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_DISTRIBUTION_CP_QUERY%>">
 					<html:link href="#" styleId="newSite"
 						onclick="addNewAction('DistributionAddNew.do?addNewForwardTo=toSite&forwardTo=distribution&addNewFor=toSite')">

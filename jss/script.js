@@ -118,13 +118,21 @@ function changeUrl(element,str)
 		
 		function checkActivityStatus(element,url)
 		{
-			var str = element.options[element.selectedIndex].text;
+		  var str;
+		  if (element.type!=null && element.type == "text") {
+		      str = element.value;
+		  } 
+		   else
+		   {
+		       str = element.options[element.selectedIndex].text;
+	       }
 			if(str == "Disabled")
 			{
 				document.forms[0].onSubmit.value=url;
 			}
 		}
-
+		
+	
 		function changeSubmitTo(url)
 		{
 			var str = document.forms[0].onSubmit.value;
