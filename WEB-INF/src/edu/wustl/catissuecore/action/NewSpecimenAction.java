@@ -10,7 +10,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Calendar; 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -272,7 +272,7 @@ public class NewSpecimenAction extends SecureAction
 			{
 				specimenForm.setPathologicalStatus(Constants.NOTSPECIFIED);
 			}
-		}
+		} 
 
 		//get the Specimen class and type from the cde
 		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
@@ -360,13 +360,16 @@ public class NewSpecimenAction extends SecureAction
 					{
 						specimenForm.setVirtuallyLocated(false);
 					}
+					
+					if(specimenForm.getStContSelection() == 2)
+					{
 					//Logger.out.debug("calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 					SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, true);
 					//Logger.out.debug("exceedingMaxLimit in action for Boolean:"+exceedingMaxLimit);
 					Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
 					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-					if (containerMap.isEmpty())
+					if (containerMap.isEmpty()) 
 					{
 						
 						if (errors == null || errors.size() == 0)
@@ -391,6 +394,7 @@ public class NewSpecimenAction extends SecureAction
 						initialValues.add(startingPoints);
 					}
 					Logger.out.debug("finish ---calling checkForInitialValues() function from NewSpecimenAction---");
+				}
 				}
 			}
 		}
@@ -525,8 +529,15 @@ public class NewSpecimenAction extends SecureAction
 		{
 			String user = sessionData.getLastName() + ", " + sessionData.getFirstName();
 			long collectionEventUserId = getIdFromCollection(userCollection, user);
-			specimenForm.setCollectionEventUserId(collectionEventUserId);
-			specimenForm.setReceivedEventUserId(collectionEventUserId);
+			
+			if(specimenForm.getCollectionEventUserId() == 0)
+			{
+			 specimenForm.setCollectionEventUserId(collectionEventUserId);
+			}
+			if(specimenForm.getReceivedEventUserId() == 0)
+			{
+			  specimenForm.setReceivedEventUserId(collectionEventUserId);
+			}
 		}
 
 		// set the procedure lists

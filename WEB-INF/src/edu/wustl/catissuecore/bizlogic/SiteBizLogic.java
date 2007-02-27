@@ -165,7 +165,7 @@ public class SiteBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));			
 		}
 		
-		if (site.getCoordinator()== null || site.getCoordinator().getId() ==null || site.getCoordinator().getId().longValue() == -1L)
+		if (site.getCoordinator()== null || site.getCoordinator().getId() ==null || site.getCoordinator().getId() ==0 || site.getCoordinator().getId().longValue() == -1L)
 		{
 			message = ApplicationProperties.getValue("site.coordinator");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));

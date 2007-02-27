@@ -161,7 +161,7 @@ public class CreateSpecimenAction extends SecureAction
 						{
 							createForm.setVirtuallyLocated(false);
 						}
-						if(spClass!=null)
+						if(spClass!=null && createForm.getStContSelection() == 2)
 						{
 						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
 								spClass, 0,exceedingMaxLimit,sessionData,true);

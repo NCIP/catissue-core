@@ -1188,7 +1188,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		//Logger.out.debug("Start-Inside validate method of specimen bizlogic");
 		if (specimen == null)
 		{
-			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "Specimen"));
+			throw new DAOException(ApplicationProperties.getValue("specimen.object.null.err.msg", "Specimen"));
 		}
 
 		Validator validator = new Validator();
