@@ -82,8 +82,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				AttributeInterface attribute = (AttributeInterface) iter.next();
 				String attrName = attribute.getName();
-				QueryModuleUtil util = new QueryModuleUtil();
-				String attrLabel = util.getAttributeLabel(attrName);
+				String attrLabel = QueryModuleUtil.getAttributeLabel(attrName);
 				String componentId = attrName + attribute.getId().toString();
 				attributesList = attributesList + ";" + componentId;
 				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"3%\">\n<td class=\"standardTextQuery\" width=\"15%\">");
