@@ -228,6 +228,7 @@ function showEntityInformation(text)
 
 function produceQuery(url,nameOfFormToPost, entityName , attributesList) 
 {
+	
 	//var element = document.getElementById('query');
 	var strToCreateQueyObject ="";
 	var attribute = attributesList.split(";");
@@ -236,25 +237,47 @@ function produceQuery(url,nameOfFormToPost, entityName , attributesList)
 	var stringQuery = "";
 	for(i=1; i<attribute.length; i++)
 	{
+		
 		var opId =  attribute[i]+"_combobox";
 		var textBoxId = attribute[i]+"_textBox";
-		var textId = document.getElementById(textBoxId).value;
+		var textId
+		if(document.getElementById(textBoxId))
+			textId = document.getElementById(textBoxId).value;
 		var textBoxId1 = attribute[i]+"_textBox1";
-		var textId1 = document.getElementById(textBoxId1).value;
+		
+		var textId1;
+		
+		if(document.getElementById(textBoxId1))
+			textId1 = document.getElementById(textBoxId1).value;
+
+		var enumBox = attribute[i]+"_enumeratedvaluescombobox";
+		var enumValue;
+		
 		if(navigator.appName == "Microsoft Internet Explorer")
 			{					
 				var op = document.getElementById(opId).value;
+				enumValue = document.getElementById(enumBox).value;
+				
 			}
 			else
 			{
 				var op = document.forms[nameOfFormToPost].elements[opId].value;
-			}					
+				if(document.forms[nameOfFormToPost].elements[enumBox])
+				{
+					enumValue = document.forms[nameOfFormToPost].elements[enumBox].value;	
+					
+					
+				}
+			}	
+					
+				
 		if(op != "Between")
 		{
 			if(textId != "")
 			{
 				strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +";";
 			}
+			
 			else
 			{
 				var element = document.getElementById('validationMessages');
@@ -371,14 +394,21 @@ function showAddLimitsPage()
 				var textId = document.getElementById(textBoxId).value;
 				var textBoxId1 = attribute[i]+"_textBox1";
 				var textId1 = document.getElementById(textBoxId1).value;
+				var enumBox = attribute[i]+"_enumeratedvaluescombobox";
+				
+				
 				if(navigator.appName == "Microsoft Internet Explorer")
 					{					
 						var op = document.getElementById(opId).value;
+						var enumValue = document.getElementById(enumBox).value;
 					}
 					else
 					{
 						var op = document.forms[nameOfFormToPost].elements[opId].value;
-					}					
+						var enumValue = document.forms[nameOfFormToPost].elements[enumBox].value;
+					}	
+					
+					
 				if(op != "Between")
 				{
 					if(textId != "")
