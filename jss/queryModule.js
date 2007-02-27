@@ -255,6 +255,12 @@ function produceQuery(url,nameOfFormToPost, entityName , attributesList)
 			{
 				strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +";";
 			}
+			else
+			{
+				var element = document.getElementById('validationMessages');
+				var row = document.getElementById('validationMessagesRow');
+				element.innerHTML = "";
+			}
 		}
 		if(op == "Between")
 		{
@@ -292,11 +298,20 @@ function viewSearchResults()
 	{
 		 showViewSearchResultsJsp();
 	}
+	else if (errorMessage == "showErrorPage")
+	{
+		showErrorPage();
+	}
 	else {
 		showValidationMessages(errorMessage);
 	}
 }
-
+function showErrorPage()
+{
+	document.forms['categorySearchForm'].action='ViewSearchResultsJSPAction.do';
+	document.forms['categorySearchForm'].nextOperation = "showErrorPage";
+	document.forms['categorySearchForm'].submit();	
+}
 function showViewSearchResultsJsp()
 {
 	document.forms['categorySearchForm'].action='ViewSearchResultsJSPAction.do';
