@@ -77,28 +77,14 @@ public class CategorySearchAction extends BaseAction
 			String entitiesString = "";
 			if (entityCollection != null && !entityCollection.isEmpty())
 			{
-				String nextOperation = ((String)request.getSession().getAttribute("nextOperation"));
-				if(nextOperation!=null && nextOperation.equals("BuildNewTree"))
+				Iterator iter = entityCollection.iterator();
+				while(iter.hasNext())
 				{
-					entitiesString= "true";
-					GenerateHTMLForBuildNewTree buildNewTree = new GenerateHTMLForBuildNewTree();
-					String selectTagName =edu.wustl.catissuecore.util.global.Constants.SEARCH_CATEGORY_LIST_SELECT_TAG_NAME;				
-					String functionName =edu.wustl.catissuecore.util.global.Constants.SEARCH_CATEGORY_LIST_FUNCTION_NAME;					
-					entitiesString = buildNewTree.generateHTMLToDisplayList(entityCollection, selectTagName, functionName);
-				}
-				else
-				{
-					entitiesString= "false";
-				
-					Iterator iter = entityCollection.iterator();
-					while(iter.hasNext())
-					{
-						EntityInterface entity = (EntityInterface)iter.next();
-						String fullyQualifiedEntityName = entity.getName();
-						String description = entity.getDescription();
-						entitiesString = entitiesString + ";" + fullyQualifiedEntityName + "|"+ description ;
-						searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
-					}
+					EntityInterface entity = (EntityInterface)iter.next();
+					String fullyQualifiedEntityName = entity.getName();
+					String description = entity.getDescription();
+					entitiesString = entitiesString + ";" + fullyQualifiedEntityName + "|"+ description ;
+					searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
 				}
 			}
 			request.getSession().setAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP, searchedEntitiesMap);
