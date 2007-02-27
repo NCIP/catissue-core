@@ -433,6 +433,8 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.viewSearchResults"/>
+			<forward name="failure" path=".catissuecore.errorPageDef"/>
+	
 		</action>
 		<action path="/DefineSearchResultsView"
 			type="edu.wustl.catissuecore.action.querysuite.DefineSearchResultsViewAction"
