@@ -29,6 +29,7 @@ import edu.wustl.common.querysuite.queryobject.IOutputTreeNode;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 /* This action is an applet action called from DiagrammaticViewApplet class when user clicks on seach button of AddLimits.jsp.
@@ -90,22 +91,26 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			catch (MultipleRootsException e)
 			{
 				Logger.out.error(e);
-				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, e.getMessage());
+				String errorMessage = ApplicationProperties.getValue("errors.executeQuery.multipleRoots");
+				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
 			}
 			catch (SqlException e)
 			{
 				Logger.out.error(e);
-				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, AppletConstants.SHOW_ERROR_PAGE);
+				String errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
+				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
 			} 
 			catch (ClassNotFoundException e)
 			{
 				Logger.out.error(e);
-				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE,  AppletConstants.SHOW_ERROR_PAGE);
+				String errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
+				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
 			}
 			catch (DAOException e)
 			{
 				Logger.out.error(e);
-				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE,  AppletConstants.SHOW_ERROR_PAGE);
+				String errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
+				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
 			}
 			finally
 			{

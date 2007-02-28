@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.action.querysuite;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,6 +20,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.wustl.cab2b.client.ui.controls.EntityInterfaceComparator;
 import edu.wustl.cab2b.common.beans.MatchedClass;
 import edu.wustl.cab2b.common.util.Constants;
 import edu.wustl.cab2b.server.advancedsearch.AdvancedSearch;
@@ -27,6 +29,7 @@ import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHTMLForBuildNewTree;
 import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.action.BaseAction;
+
 /**
  * This class loads screen for categorySearch.When it loads the screen for the first time, default selctions for checkbox and radio buttons
  * will be shown.
@@ -48,14 +51,14 @@ public class CategorySearchAction extends BaseAction
 	 * @return ActionForward actionForward
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-	throws Exception
+			throws Exception
 	{
 		CategorySearchForm searchForm = (CategorySearchForm) form;
 		String textfieldValue = searchForm.getTextField();
 		searchForm = setDefaultSelections(searchForm);
-		String [] searchString = null;
+		String[] searchString = null;
 
-		int [] searchTarget = prepareSearchTarget(searchForm);
+		int[] searchTarget = prepareSearchTarget(searchForm);
 		int basedOn = prepareBaseOn(searchForm.getSelected());
 		if (textfieldValue != null && !textfieldValue.equals(""))
 		{
@@ -63,29 +66,28 @@ public class CategorySearchAction extends BaseAction
 		}
 		Set<EntityInterface> entityCollection = new HashSet<EntityInterface>();
 		HttpSession session = request.getSession();
-		Map<String, EntityInterface> searchedEntitiesMap = (Map<String, EntityInterface>)session.getAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP);
-		if(searchedEntitiesMap == null )
+		Map<String, EntityInterface> searchedEntitiesMap = (Map<String, EntityInterface>) session
+				.getAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP);
+		if (searchedEntitiesMap == null)
 		{
 			searchedEntitiesMap = new HashMap<String, EntityInterface>();
 		}
+		String entitiesString = "";
 		if (textfieldValue != null && !textfieldValue.equals(""))
 		{
 			EntityCache cache = EntityCacheFactory.getInstance();
 			AdvancedSearch advancedSearch = new AdvancedSearch(cache);
 			MatchedClass matchedClass = advancedSearch.search(searchTarget, searchString, basedOn);
 			entityCollection = matchedClass.getEntityCollection();
-			String entitiesString = "";
-			if (entityCollection != null && !entityCollection.isEmpty())
+			Object[] resultArray = entityCollection.toArray();
+			Arrays.sort(resultArray, new EntityInterfaceComparator());
+			for (int i = 0; i < resultArray.length; i++)
 			{
-				Iterator iter = entityCollection.iterator();
-				while(iter.hasNext())
-				{
-					EntityInterface entity = (EntityInterface)iter.next();
-					String fullyQualifiedEntityName = entity.getName();
-					String description = entity.getDescription();
-					entitiesString = entitiesString + ";" + fullyQualifiedEntityName + "|"+ description ;
-					searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
-				}
+				EntityInterface entity = (EntityInterface) resultArray[i];
+				String fullyQualifiedEntityName = entity.getName();
+				String description = entity.getDescription();
+				entitiesString = entitiesString + ";" + fullyQualifiedEntityName + "|" + description;
+				searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
 			}
 			request.getSession().setAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP, searchedEntitiesMap);
 			response.setContentType("text/html");
@@ -95,6 +97,7 @@ public class CategorySearchAction extends BaseAction
 
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}
+
 	/**
 	 * Prepares a String to be sent to AdvancedSearch logic.
 	 * @param textfieldValue String
@@ -105,13 +108,14 @@ public class CategorySearchAction extends BaseAction
 		int counter = 0;
 		StringTokenizer tokenizer = new StringTokenizer(textfieldValue);
 		String[] searchString = new String[tokenizer.countTokens()];
-		while (tokenizer.hasMoreTokens()) 
+		while (tokenizer.hasMoreTokens())
 		{
 			searchString[counter] = tokenizer.nextToken();
 			counter++;
 		}
 		return searchString;
 	}
+
 	/**
 	 * Returns a int constant for radil option selected by user which represents Based on.
 	 * @param basedOnStr String
@@ -119,16 +123,17 @@ public class CategorySearchAction extends BaseAction
 	 */
 	private int prepareBaseOn(String basedOnStr)
 	{
-		int basedOn = Constants.BASED_ON_TEXT; 
-		if(basedOnStr != null)
+		int basedOn = Constants.BASED_ON_TEXT;
+		if (basedOnStr != null)
 		{
-			if(basedOnStr.equalsIgnoreCase("conceptCode_radioButton"))
+			if (basedOnStr.equalsIgnoreCase("conceptCode_radioButton"))
 			{
-				basedOn = Constants.BASED_ON_CONCEPT_CODE;			
+				basedOn = Constants.BASED_ON_CONCEPT_CODE;
 			}
 		}
 		return basedOn;
 	}
+
 	/**
 	 * Prepares the int [] for search targets from the checkbox values selected by user.
 	 * @param searchForm action form
@@ -141,25 +146,26 @@ public class CategorySearchAction extends BaseAction
 		String permissiblevaluesCheckBoxChecked = searchForm.getPermissibleValuesChecked();
 		List<Integer> target = new ArrayList<Integer>();
 
-		if(classCheckBoxChecked.equalsIgnoreCase("on") || classCheckBoxChecked.equalsIgnoreCase("true"))
+		if (classCheckBoxChecked.equalsIgnoreCase("on") || classCheckBoxChecked.equalsIgnoreCase("true"))
 		{
 			target.add(new Integer(Constants.CLASS));
 		}
-		if(attributeCheckBoxChecked.equalsIgnoreCase("on") || attributeCheckBoxChecked.equalsIgnoreCase("true"))
+		if (attributeCheckBoxChecked.equalsIgnoreCase("on") || attributeCheckBoxChecked.equalsIgnoreCase("true"))
 		{
 			target.add(new Integer(Constants.ATTRIBUTE));
 		}
-		if(permissiblevaluesCheckBoxChecked.equalsIgnoreCase("on") || permissiblevaluesCheckBoxChecked.equalsIgnoreCase("true"))
+		if (permissiblevaluesCheckBoxChecked.equalsIgnoreCase("on") || permissiblevaluesCheckBoxChecked.equalsIgnoreCase("true"))
 		{
 			target.add(new Integer(Constants.PV));
 		}
-		int [] searchTarget = new int[target.size()];
-		for(int i=0;i<target.size();i++)
+		int[] searchTarget = new int[target.size()];
+		for (int i = 0; i < target.size(); i++)
 		{
-			searchTarget[i] = ((Integer)(target.get(i))).intValue();
+			searchTarget[i] = ((Integer) (target.get(i))).intValue();
 		}
 		return searchTarget;
 	}
+
 	/**
 	 * This is used to set the default selections for the UI components when the screen is loaded for the first time.
 	 * @param actionForm form bean
