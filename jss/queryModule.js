@@ -182,12 +182,18 @@ function retriveSearchedEntities(url,nameOfFormToPost)
 //	showEntityInformation("");
 	//onProduceQueryUpdate("");
 }
-
+/*function showtip(a,event,text)
+{
+		alert("sda  "+text);
+}
+function hidetip()
+{
+}*/
 function onResponseUpdate(text)
 {
 	if(text == "")
 	{
-		alert("No results found.");
+		alert("Zero Entitites found.");
 	}
 	var element = document.getElementById('resultSet');
 	var listOfEntities = text.split(";");
@@ -195,13 +201,15 @@ function onResponseUpdate(text)
 
 		for(i=1; i<listOfEntities.length; i++)
 		{
-			var nameDescription = listOfEntities[i].split("|");
-			var name = nameDescription[0];
+			var e = listOfEntities[i];			
+			var nameDescription = e.split("|");		
+			var name = nameDescription[0];				
 			var description = nameDescription[1];
 			var lastIndex = name.lastIndexOf(".");
 			var entityName = name.substring(lastIndex + 1);
 			var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+name+"')";					
-			row = row+'<tr><td><a class="normalLink" title='+description+' href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
+row = row+'<tr><td><a class="normalLink" title='+description+' href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
+		//	row =row+ '<tr><td><a href=href="javascript:'+functionCall+'" onMouseover="showtip(this,event,'+functionCall+'")" onMouseout="hidetip()">' +entityName+ '</a></td></tr>';
 		}			
 	row = row+'</table>';		
 	element.innerHTML =row;
@@ -221,63 +229,63 @@ function retriveEntityInformation(url,nameOfFormToPost,entityName)
 } 
 function showEntityInformation(text)
 {					
-	//onProduceQueryUpdate("");
 	var element = document.getElementById('addLimits');
 	element.innerHTML =text;
 }
 
 function produceQuery(url,nameOfFormToPost, entityName , attributesList) 
 {
-	
-	//var element = document.getElementById('query');
 	var strToCreateQueyObject ="";
 	var attribute = attributesList.split(";");
-	var textThis = "";
-	queryString ="";
-	var stringQuery = "";
 	for(i=1; i<attribute.length; i++)
 	{
-		
 		var opId =  attribute[i]+"_combobox";
 		var textBoxId = attribute[i]+"_textBox";
-		var textId
-		if(document.getElementById(textBoxId))
-			textId = document.getElementById(textBoxId).value;
 		var textBoxId1 = attribute[i]+"_textBox1";
-		
-		var textId1;
-		
-		if(document.getElementById(textBoxId1))
-			textId1 = document.getElementById(textBoxId1).value;
-
 		var enumBox = attribute[i]+"_enumeratedvaluescombobox";
-		var enumValue;
-		
+
 		if(navigator.appName == "Microsoft Internet Explorer")
-			{					
-				var op = document.getElementById(opId).value;
-				enumValue = document.getElementById(enumBox).value;
-				
-			}
-			else
+		{					
+			var op = document.getElementById(opId).value;
+			if(document.forms[nameOfFormToPost].elements[enumBox])
 			{
-				var op = document.forms[nameOfFormToPost].elements[opId].value;
-				if(document.forms[nameOfFormToPost].elements[enumBox])
-				{
-					enumValue = document.forms[nameOfFormToPost].elements[enumBox].value;	
-					
-					
-				}
-			}	
-					
-				
+				enumValue = document.getElementById(enumBox).value;
+			}
+		}
+		else
+		{
+			var op = document.forms[nameOfFormToPost].elements[opId].value;
+			if(document.forms[nameOfFormToPost].elements[enumBox])
+			{
+				enumValue = document.forms[nameOfFormToPost].elements[enumBox].value;	
+			}
+		}		
 		if(op != "Between")
 		{
-			if(textId != "")
+			if (document.getElementById(textBoxId))
 			{
-				strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +";";
+				textId = document.getElementById(textBoxId).value;		
+				if(textId != "")
+				{
+					strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +";";
+				}
 			}
-			
+			var ob = document.forms[nameOfFormToPost].elements[enumBox];
+			if(ob)
+			{
+				if(ob.value != "")
+				{
+					var arSelected = new Array();			
+					while(ob.selectedIndex != -1)
+					{
+						var selectedValue = ob.options[ob.selectedIndex].value;
+						arSelected.push(selectedValue);
+						ob.options[ob.selectedIndex].selected = false;
+					}
+					var values = arSelected.toString();
+					strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + values +";";
+				}
+			}
 			else
 			{
 				var element = document.getElementById('validationMessages');
@@ -287,9 +295,17 @@ function produceQuery(url,nameOfFormToPost, entityName , attributesList)
 		}
 		if(op == "Between")
 		{
+			if(document.getElementById(textBoxId1))
+			{
+				textId1 = document.getElementById(textBoxId1).value;
+			}
 			if(textId != "" && textId1!= "")
 			{
 				strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +"!*=*!"+textId1+";";
+			}
+			else
+			{
+				alert("Please enter two values to add limit for operator between");
 			}
 		}
 		if(op == "Is Null" || op == "Is Not Null")
@@ -312,8 +328,6 @@ function produceQuery(url,nameOfFormToPost, entityName , attributesList)
 		document.applets[0].editExpression(strToCreateQueyObject,entityName);
 	}
 }
-
-
 function viewSearchResults()
 {
 	var errorMessage = document.applets[0].getSearchResults();
@@ -394,21 +408,14 @@ function showAddLimitsPage()
 				var textId = document.getElementById(textBoxId).value;
 				var textBoxId1 = attribute[i]+"_textBox1";
 				var textId1 = document.getElementById(textBoxId1).value;
-				var enumBox = attribute[i]+"_enumeratedvaluescombobox";
-				
-				
 				if(navigator.appName == "Microsoft Internet Explorer")
 					{					
 						var op = document.getElementById(opId).value;
-						var enumValue = document.getElementById(enumBox).value;
 					}
 					else
 					{
 						var op = document.forms[nameOfFormToPost].elements[opId].value;
-						var enumValue = document.forms[nameOfFormToPost].elements[enumBox].value;
-					}	
-					
-					
+					}					
 				if(op != "Between")
 				{
 					if(textId != "")
