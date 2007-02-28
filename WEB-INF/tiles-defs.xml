@@ -280,7 +280,7 @@
 	</definition>
 
 	<definition name=".catissuecore.participantDef" extends=".catissuecore.manageBioSpecimenHomeDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/ParicipantTabsPage.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
 	</definition>
 
 	<definition name=".catissuecore.participantAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
@@ -719,7 +719,7 @@
 
 	<!-- Query edit pages definitions begin -->
 	<definition name=".catissuecore.queryParticipantViewDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/ParicipantTabsPage.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
 	</definition>
 	<definition name=".catissuecore.queryCollectionProtocolViewDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageAdministrativeData/CollectionProtocol.jsp" />
@@ -750,7 +750,7 @@
 	</definition>
 	
 	<definition name=".catissuecore.participantEditDef" extends=".catissuecore.queryDataViewDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/ParicipantTabsPage.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/Participant.jsp" />
 	</definition>
 	
 	<definition name=".catissuecore.collectionProtocolEditDef" extends=".catissuecore.queryDataViewDef">

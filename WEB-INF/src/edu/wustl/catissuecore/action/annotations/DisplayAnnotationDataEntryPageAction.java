@@ -41,7 +41,7 @@ import edu.wustl.common.util.logger.Logger;
  * To change the template for this generated type comment go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class LoadAnnotationDataEntryPageAction extends BaseAction
+public class DisplayAnnotationDataEntryPageAction extends BaseAction
 {
 
 	/* (non-Javadoc)
@@ -51,31 +51,10 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
 	{
-		AnnotationDataEntryForm annotationDataEntryForm = (AnnotationDataEntryForm)form;
-		String staticEntityId = null,staticEntityRecordId = null,entityIdForCondition=null,entityRecordIdForCondition = null;
-		if(request.getParameter(WebUIManager.getOperationStatusParameterName())!=null)
-		{
-			//Return from dynamic extensions
-			processResponseFromDynamicExtensions(request);
-			staticEntityId = (String)getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITYID);
-			staticEntityRecordId = (String)getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
-
-			entityIdForCondition = (String)getObjectFromCache(AnnotationConstants.ENTITY_ID_IN_CONDITION);
-			entityRecordIdForCondition = (String)getObjectFromCache(AnnotationConstants.ENTITY_RECORDID_IN_CONDITION);
-		}
-		else
-		{
-			staticEntityId = request.getParameter(AnnotationConstants.REQST_PARAM_ENTITY_ID);
-			staticEntityRecordId = request.getParameter(AnnotationConstants.REQST_PARAM_ENTITY_RECORD_ID);
-
-			entityIdForCondition = request.getParameter(AnnotationConstants.REQST_PARAM_CONDITION_ENTITY_ID);
-			entityRecordIdForCondition = request.getParameter(AnnotationConstants.REQST_PARAM_CONDITION_ENTITY_RECORD_ID);
-			updateCache(request);
-		}
-		Logger.out.info("Updating for Entity Id " + staticEntityId);
-		initializeDataEntryForm(request,staticEntityId,staticEntityRecordId,entityIdForCondition,entityRecordIdForCondition,annotationDataEntryForm);
-		String pageOf = request.getParameter(Constants.PAGEOF);
-        return mapping.findForward(Constants.SUCCESS);
+		request.setAttribute("entityId",request.getParameter("entityId"));
+        request.setAttribute("entityRecordId",request.getParameter("entityRecordId"));
+        
+        return mapping.findForward(request.getParameter("pageOf"));
 	}
 
 	/**
