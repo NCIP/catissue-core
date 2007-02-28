@@ -102,7 +102,11 @@ public class CatissueCoreCacheManager
 	{
 		Element element = null;
 		element = cache.get(key);
-		return element.getValue();
+		if (element != null)
+		{
+		   return element.getValue();
+		}		
+	    return null;
 	}
 
 	public void shutdown() throws CacheException
