@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,6 +30,8 @@ import edu.common.dynamicextensions.domaininterface.LongValueInterface;
 import edu.common.dynamicextensions.domaininterface.PermissibleValueInterface;
 import edu.common.dynamicextensions.domaininterface.ShortValueInterface;
 import edu.common.dynamicextensions.domaininterface.StringValueInterface;
+import edu.wustl.cab2b.client.ui.controls.AttributeInterfaceComparator;
+import edu.wustl.cab2b.client.ui.controls.PermissibleValueComparator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
@@ -82,15 +85,16 @@ public class GenerateHtmlForAddLimitsBizLogic
 		generatedHTML.append("\n<tr><td height=\"3%\" colspan=\"4\" bgcolor=\"#FFFFFF\">&nbsp;</td></tr>");
 		if (!attributeCollection.isEmpty())
 		{
-			Iterator iter = attributeCollection.iterator();
-			while (iter.hasNext())
-			{
-				AttributeInterface attribute = (AttributeInterface) iter.next();
+			Object[] attributes = attributeCollection.toArray();
+        	Arrays.sort(attributes, new AttributeInterfaceComparator());
+        	for(int i=0;i<attributes.length;i++)
+        	{
+				AttributeInterface attribute = (AttributeInterface) attributes[i];
 				String attrName = attribute.getName();
 				String attrLabel = QueryModuleUtil.getAttributeLabel(attrName);
 				String componentId = attrName + attribute.getId().toString();
 				attributesList = attributesList + ";" + componentId;
-				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"4%\">\n<td valign=\"bottom\" class=\"standardTextQuery\" width=\"25%\">");
+				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"6%\">\n<td class=\"standardTextQuery\" width=\"25%\">");
 				generatedHTML.append(attrLabel + "</td>\n");
 				List<String> operatorsList = populateAttributeUIInformation(attribute);
 				boolean isBetween = false;
@@ -98,7 +102,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				{
 					isBetween = true;
 				}
-				List<String> permissibleValues = getPermissibleValuesList(attribute);
+				List<PermissibleValueInterface> permissibleValues = getPermissibleValuesList(attribute);
 				if (conditions != null)
 				{
 					Map<String, ICondition> attributeNameConditionMap = getMapOfConditions(conditions);
@@ -160,10 +164,10 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param attribute AttributeInterface
 	 * @return List of permissible values for the passed attribute
 	 */
-	private List<String> getPermissibleValuesList(AttributeInterface attribute)
+	private List<PermissibleValueInterface> getPermissibleValuesList(AttributeInterface attribute)
 	{
 		UserDefinedDE userDefineDE = (UserDefinedDE) attribute.getAttributeTypeInformation().getDataElement();
-		List<String> permissibleValues = new ArrayList<String>();
+		List<PermissibleValueInterface> permissibleValues = new ArrayList<PermissibleValueInterface>();
 		if (userDefineDE != null && userDefineDE.getPermissibleValueCollection() != null)
 		{
 			Iterator<PermissibleValueInterface> permissibleValueInterface = userDefineDE.getPermissibleValueCollection().iterator();
@@ -171,31 +175,31 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				PermissibleValue permValue = (PermissibleValue) permissibleValueInterface.next();
 				if (permValue instanceof StringValueInterface)
-					permissibleValues.add(((StringValueInterface) permValue).getValue());
+					permissibleValues.add(((StringValueInterface) permValue));
 
 				if (permValue instanceof ShortValueInterface)
-					permissibleValues.add(((ShortValueInterface) permValue).getValue().toString());
+					permissibleValues.add(((ShortValueInterface) permValue));
 
 				if (permValue instanceof LongValueInterface)
-					permissibleValues.add(((LongValueInterface) permValue).getValue().toString());
+					permissibleValues.add(((LongValueInterface) permValue));
 
 				if (permValue instanceof DateValueInterface)
-					permissibleValues.add(((DateValueInterface) permValue).getValue().toString());
+					permissibleValues.add(((DateValueInterface) permValue));
 
 				if (permValue instanceof BooleanValueInterface)
-					permissibleValues.add(((BooleanValueInterface) permValue).getValue().toString());
+					permissibleValues.add(((BooleanValueInterface) permValue));
 
 				if (permValue instanceof IntegerValueInterface)
-					permissibleValues.add(((IntegerValueInterface) permValue).getValue().toString());
+					permissibleValues.add(((IntegerValueInterface) permValue));
 
 				if (permValue instanceof DoubleValueInterface)
-					permissibleValues.add((String) ((DoubleValueInterface) permValue).getValue().toString());
+					permissibleValues.add((DoubleValueInterface) permValue);
 
 				if (permValue instanceof FloatValueInterface)
-					permissibleValues.add(((FloatValueInterface) permValue).getValue().toString());
+					permissibleValues.add(((FloatValueInterface) permValue));
 
 				if (permValue instanceof FloatValueInterface)
-					permissibleValues.add(((FloatValueInterface) permValue).getValue().toString());
+					permissibleValues.add(((FloatValueInterface) permValue));
 			}
 		}
 		return permissibleValues;
@@ -285,7 +289,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String componentId = attributeName + attribute.getId().toString();
 		if (operatorsList != null && operatorsList.size() != 0)
 		{
-			html.append("\n<td valign=\"bottom\" width=\"25%\">");
+			html.append("\n<td width=\"25%\">");
 			AttributeTypeInformationInterface attrTypeInfo = attribute.getAttributeTypeInformation();
 			if (attrTypeInfo instanceof DateAttributeTypeInformation)
 			{
@@ -449,21 +453,24 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param list values values' list in case of edit limits
 	 * @return String html for enumerated value dropdown
 	 */
-	private String generateHTMLForEnumeratedValues(AttributeInterface attribute, List enumeratedValuesList, List<String> values)
+	private String generateHTMLForEnumeratedValues(AttributeInterface attribute, List permissibleValues, List<String> editLimitPermissibleValues)
 	{
 		StringBuffer html = new StringBuffer();
 		String attributeName = attribute.getName();
 		String componentId = attributeName + attribute.getId().toString();
-		if (enumeratedValuesList != null && enumeratedValuesList.size() != 0)
+		if (permissibleValues != null && permissibleValues.size() != 0)
 		{
+			
 			html.append("\n<td width=\"25%\">");
 			html.append("\n<select style=\"width:150px; display:block;\" MULTIPLE class='enumeratedListBox' styleId='country' size ='2' name=\"" + componentId
 					+ "_enumeratedvaluescombobox\"\">");
-			Iterator iter = enumeratedValuesList.iterator();
-			while (iter.hasNext())
+			Object[] values = permissibleValues.toArray();
+			Arrays.sort(values, new PermissibleValueComparator());
+			for(int i=0; i<values.length; i++)
 			{
-				String value = (String) iter.next();
-				if (values != null && values.contains(value))
+				PermissibleValueInterface perValue = (PermissibleValueInterface)values[i];
+				String value = perValue.getValueAsObject().toString();
+				if (editLimitPermissibleValues != null && editLimitPermissibleValues.contains(value))
 				{
 					html.append("\n<option title=\""+value+"\" value=\"" + value + "\" SELECTED>" + value + "</option>");
 					
