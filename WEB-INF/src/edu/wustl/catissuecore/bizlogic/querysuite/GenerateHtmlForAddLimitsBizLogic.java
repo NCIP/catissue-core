@@ -99,6 +99,17 @@ public class GenerateHtmlForAddLimitsBizLogic
 				{
 					isBetween = true;
 				}
+				UserDefinedDE userDefineDE = (UserDefinedDE) attribute.getAttributeTypeInformation().getDataElement();
+				List<String> permissibleValues = new ArrayList<String>();
+				if (userDefineDE != null && userDefineDE.getPermissibleValueCollection() != null)
+				{
+					Iterator<PermissibleValueInterface> permissibleValueInterface = userDefineDE.getPermissibleValueCollection().iterator();
+					while (permissibleValueInterface.hasNext())
+					{
+						PermissibleValue permValue = (PermissibleValue)permissibleValueInterface.next();							
+						addPermissibleValueToThePermissibleValueList(permValue, permissibleValues);						
+					}
+				}
 				if (conditions != null)
 				{
 					Map<String, ICondition> attributeNameConditionMap = getMapOfConditions(conditions);
@@ -113,36 +124,41 @@ public class GenerateHtmlForAddLimitsBizLogic
 						{
 							isBetween = true;
 						}
-						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, values));
+					
+						if (userDefineDE != null && userDefineDE.getPermissibleValueCollection() != null)
+						{
+							generatedHTML.append("\n" + generateHTMLForEnumeratedValues(attribute, permissibleValues, values));
+						}
+						else
+						{
+							generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, values));
+						}
 					}
 					else
 					{
 						generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList, null));
-						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null));
-						
-						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null));
+				
+						if (userDefineDE != null && userDefineDE.getPermissibleValueCollection() != null)
+						{
+							generatedHTML.append("\n" + generateHTMLForEnumeratedValues(attribute, permissibleValues, null));
+						} else
+						{
+							generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null));
+						}
 
 					}
 				}
 				if (conditions == null)
 				{
 					generatedHTML.append("\n" + generateHTMLForOperators(attribute, operatorsList, null));
-
-					UserDefinedDE userDefineDE = (UserDefinedDE) attribute.getAttributeTypeInformation().getDataElement();
-
 					if (userDefineDE != null && userDefineDE.getPermissibleValueCollection() != null)
 					{
-						List<String> permissibleValues = new ArrayList<String>();
-						Iterator<PermissibleValueInterface> permissibleValueInterface = userDefineDE.getPermissibleValueCollection().iterator();
-						while (permissibleValueInterface.hasNext())
-						{
-							PermissibleValue permValue = (PermissibleValue)permissibleValueInterface.next();							
-							addPermissibleValueToThePermissibleValueList(permValue, permissibleValues);						
-						}
 						generatedHTML.append("\n" + generateHTMLForEnumeratedValues(attribute, permissibleValues, null));
 					}
 					else
+					{
 						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null));
+					}
 
 				}
 				generatedHTML.append("\n</tr>");
@@ -453,7 +469,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param op
 	 * @return
 	 */
-	private String generateHTMLForEnumeratedValues(AttributeInterface attribute, List enumeratedValuesList, String op)
+	private String generateHTMLForEnumeratedValues(AttributeInterface attribute, List enumeratedValuesList, List<String> values)
 	{
 		StringBuffer html = new StringBuffer();
 		String attributeName = attribute.getName();
@@ -461,26 +477,19 @@ public class GenerateHtmlForAddLimitsBizLogic
 		if (enumeratedValuesList != null && enumeratedValuesList.size() != 0)
 		{
 			html.append("\n<td width=\"20%\">");
-			AttributeTypeInformationInterface attrTypeInfo = attribute.getAttributeTypeInformation();
-		
-			html.append("\n<select class='formFieldSmallSized' styleId='country' size ='2' multiple name=\"" + componentId + "_enumeratedvaluescombobox\"\">");
-			
+			html.append("\n<select MULTIPLE class='enumeratedListBox' styleId='country' size ='4' name=\"" + componentId + "_enumeratedvaluescombobox\"\">");
 			Iterator iter = enumeratedValuesList.iterator();
-
 			while (iter.hasNext())
-			{
-				String operator = iter.next().toString();
-				String op1 = operator.replace(" ", "");
-//				if (op1.equalsIgnoreCase(op))
-//				{
-//					html.append("\n<option value=\"" + operator + "\" SELECTED>" + operator + "</option>");
-//				}
-//				else
-//				{
-					html.append("\n<option  value=\"" + operator + "\">" + operator + "</option>");
-				
-				
-				//}
+			{				
+				String value = (String)iter.next();
+				if(values != null && values.contains(value))
+				{
+					html.append("\n<option value=\"" + value + "\" SELECTED>" + value + "</option>");
+				}
+				else
+				{
+					html.append("\n<option value=\"" + value + "\">" + value + "</option>");
+				}
 			}
 			html.append("\n</select>");
 			html.append("\n</td>");

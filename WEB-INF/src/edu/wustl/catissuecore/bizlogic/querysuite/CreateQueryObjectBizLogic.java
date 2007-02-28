@@ -72,7 +72,18 @@ public class CreateQueryObjectBizLogic
 						ArrayList<String> attributeValues = new ArrayList<String>();
 						if(params[1] != null)
 						{
-							attributeValues.add(params[1]);
+							if(params[1].contains(","))
+							{
+								String[] values = params[1].split(",");
+								for(int i=0;i<values.length;i++)
+								{
+									attributeValues.add(values[i]);
+								}
+							}
+							else
+							{
+								attributeValues.add(params[1]);
+							}
 						}
 						if(params[2] != null)
 						{
