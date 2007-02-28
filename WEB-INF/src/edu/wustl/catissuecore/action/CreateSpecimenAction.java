@@ -157,7 +157,9 @@ public class CreateSpecimenAction extends SecureAction
 						long cpId = ((Long)spList.get(0)).longValue();
 						String spClass = createForm.getClassName();
 						
-						if(virtuallyLocated!=null && virtuallyLocated.equals("false"))
+						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
+						request.setAttribute(Constants.SPECIMEN_CLASS_NAME, spClass);
+						if(virtuallyLocated!=null && virtuallyLocated.equals("false")) 
 						{
 							createForm.setVirtuallyLocated(false);
 						}
@@ -178,8 +180,7 @@ public class CreateSpecimenAction extends SecureAction
 									"storageposition.not.available"));
 							saveErrors(request, errors);
 						}
-						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
-						request.setAttribute(Constants.SPECIMEN_CLASS_NAME, spClass);
+						
 					
 						if (errors == null || errors.size() == 0)
 						{
