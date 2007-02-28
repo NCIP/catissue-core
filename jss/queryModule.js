@@ -48,7 +48,11 @@ if(document.all) {
 			{
 				document.getElementById(calendarId0).disabled = true;
 			}	
-	} else
+	} 	if(op == "In" || op== "Not In")
+	{
+		
+	}
+	else
 	{
 			document.getElementById(textBoxId0).disabled = false;
 			if(dataType == "true")
@@ -79,6 +83,10 @@ if(op == "Between")
 		}
 	}	
 }
+if(op == "In" || op== "Not In")
+	{
+		
+	}	
 else 
 {
 	if(document.all) {
@@ -271,28 +279,38 @@ function produceQuery(url,nameOfFormToPost, entityName , attributesList)
 					strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +";";
 				}
 			}
-			var ob = document.forms[nameOfFormToPost].elements[enumBox];
-			if(ob)
-			{
-				if(ob.value != "")
+			if(navigator.appName == "Microsoft Internet Explorer")
 				{
-					var arSelected = new Array();			
-					while(ob.selectedIndex != -1)
-					{
-						var selectedValue = ob.options[ob.selectedIndex].value;
-						arSelected.push(selectedValue);
-						ob.options[ob.selectedIndex].selected = false;
-					}
-					var values = arSelected.toString();
-					strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + values +";";
+					if(document.getElementById(enumBox))
+						var ob =  document.getElementById(enumBox);
 				}
-			}
-			else
-			{
-				var element = document.getElementById('validationMessages');
-				var row = document.getElementById('validationMessagesRow');
-				element.innerHTML = "";
-			}
+				else
+				{
+					if(document.forms[nameOfFormToPost].elements[enumBox])
+						var ob = document.forms[nameOfFormToPost].elements[enumBox];
+				}	
+
+				if(ob)
+				{
+					if(ob.value != "")
+					{
+						var arSelected = new Array();			
+						while(ob.selectedIndex != -1)
+						{
+							var selectedValue = ob.options[ob.selectedIndex].value;
+							arSelected.push(selectedValue);
+							ob.options[ob.selectedIndex].selected = false;
+						}
+						var values = arSelected.toString();
+						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + values +";";
+					}
+				}
+				else
+				{
+					var element = document.getElementById('validationMessages');
+					var row = document.getElementById('validationMessagesRow');
+					element.innerHTML = "";
+				}
 		}
 		if(op == "Between")
 		{
