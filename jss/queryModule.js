@@ -205,11 +205,12 @@ function onResponseUpdate(text)
 			var nameDescription = e.split("|");		
 			var name = nameDescription[0];				
 			var description = nameDescription[1];
+			
 			var lastIndex = name.lastIndexOf(".");
 			var entityName = name.substring(lastIndex + 1);
 			var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+name+"')";					
-row = row+'<tr><td><a class="normalLink" title='+description+' href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
-		//	row =row+ '<tr><td><a href=href="javascript:'+functionCall+'" onMouseover="showtip(this,event,'+functionCall+'")" onMouseout="hidetip()">' +entityName+ '</a></td></tr>';
+			row = row+'<tr><td><a class="normalLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
+			//row =row+ '<tr><td><a href=href="javascript:'+functionCall+'" onMouseover="showtip(this,event,'description  wds')" onMouseout="hidetip()">' +entityName+ '</a></td></tr>';
 		}			
 	row = row+'</table>';		
 	element.innerHTML =row;
