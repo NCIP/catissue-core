@@ -63,9 +63,6 @@ public class DiagrammaticViewApplet extends BaseApplet
 	{
 		super.doInit();
 		Logger.configure();
-		Map inputDataMap = new HashMap();
-		Map outputMap = doAppletServletCommunication(AppletConstants.GET_DAG_VIEW_DATA, inputDataMap);
-		IQuery dagViewQueryObject = (IQuery)outputMap.get(AppletConstants.QUERY_OBJECT);
 		queryObject = new ClientQueryBuilder();
 		Map<DagImageConstants, Image> imagePathsMap = getImagePathsMap();
 		UpdateAddLimitUI updateAddLimitUI = new UpdateAddLimitUI(this);
@@ -255,6 +252,12 @@ public class DiagrammaticViewApplet extends BaseApplet
 		imagePathsMap.put(DagImageConstants.ParenthesisIcon, icon.getImage());
 		return imagePathsMap;
 	}
+	/**
+	 * Calls server from applet and gets the required data back.
+	 * @param url url of the server class
+	 * @param inputMap input data 
+	 * @return out put data 
+	 */
 	Map doAppletServletCommunication(String url , Map inputMap)
 	{
 		BaseAppletModel appletModel = new BaseAppletModel();
@@ -292,5 +295,13 @@ public class DiagrammaticViewApplet extends BaseApplet
 	{
 		this.expression = expression;
 	}
-
+	/**
+	 * Calls server to get the query object.This object was already stored in session when user had created it. 
+	 */
+	public void getQueryObjectFromServer()
+	{
+		Map inputDataMap = new HashMap();
+		Map outputMap = doAppletServletCommunication(AppletConstants.GET_DAG_VIEW_DATA, inputDataMap);
+		IQuery dagViewQueryObject = (IQuery)outputMap.get(AppletConstants.QUERY_OBJECT);
+	}
 }
