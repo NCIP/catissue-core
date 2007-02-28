@@ -73,7 +73,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		boolean isEditLimits = false;
 		String header = "Define Search Rules For";//ApplicationProperties.getValue("query.defineSearchRulesFor");
 		String attributesList = "";
-		generatedHTML.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"0\" cellpadding=\"0\">");
+		generatedHTML.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"1\" cellpadding=\"1\">");
 		generatedHTML.append("\n<tr>");
 		generatedHTML
 				.append("<td height=\"4%\" colspan=\"6\" bgcolor=\"#EAEAEA\" style=\"border:solid 1px\"><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
@@ -90,7 +90,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				String attrLabel = QueryModuleUtil.getAttributeLabel(attrName);
 				String componentId = attrName + attribute.getId().toString();
 				attributesList = attributesList + ";" + componentId;
-				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"3%\">\n<td class=\"standardTextQuery\" width=\"15%\">");
+				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"4%\">\n<td valign=\"bottom\" class=\"standardTextQuery\" width=\"25%\">");
 				generatedHTML.append(attrLabel + "</td>\n");
 				List<String> operatorsList = populateAttributeUIInformation(attribute);
 				boolean isBetween = false;
@@ -285,15 +285,15 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String componentId = attributeName + attribute.getId().toString();
 		if (operatorsList != null && operatorsList.size() != 0)
 		{
-			html.append("\n<td width=\"22%\">");
+			html.append("\n<td valign=\"bottom\" width=\"25%\">");
 			AttributeTypeInformationInterface attrTypeInfo = attribute.getAttributeTypeInformation();
 			if (attrTypeInfo instanceof DateAttributeTypeInformation)
 			{
-				html.append("\n<select name=\"" + componentId + "_combobox\" onChange=\"operatorChanged('" + componentId + "','true')\">");
+				html.append("\n<select style=\"width:150px; display:block;\" name=\"" + componentId + "_combobox\" onChange=\"operatorChanged('" + componentId + "','true')\">");
 			}
 			else
 			{
-				html.append("\n<select name=\"" + componentId + "_combobox\" onChange=\"operatorChanged('" + componentId + "','false')\">");
+				html.append("\n<select style=\"width:150px; display:block;\" name=\"" + componentId + "_combobox\" onChange=\"operatorChanged('" + componentId + "','false')\">");
 			}
 			Iterator iter = operatorsList.iterator();
 
@@ -328,14 +328,14 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String textBoxId = componentId + "_textBox";
 		String textBoxId1 = componentId + "_textBox1";
 		StringBuffer html = new StringBuffer();
-		html.append("<td width=\"20%\" class=\"\">\n");
+		html.append("<td width=\"25%\" class=\"\">\n");
 		if (values == null || values.isEmpty())
 		{
-			html.append("<input type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\">");
+			html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\">");
 		}
 		else
 		{
-			html.append("<input type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\" value=\"" + values.get(0) + "\">");
+			html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\" value=\"" + values.get(0) + "\">");
 		}
 		html.append("\n</td>");
 		if (attributeInterface.getAttributeTypeInformation() instanceof DateAttributeTypeInformation)
@@ -456,8 +456,8 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String componentId = attributeName + attribute.getId().toString();
 		if (enumeratedValuesList != null && enumeratedValuesList.size() != 0)
 		{
-			html.append("\n<td width=\"20%\">");
-			html.append("\n<select MULTIPLE class='enumeratedListBox' styleId='country' size ='4' name=\"" + componentId
+			html.append("\n<td width=\"25%\">");
+			html.append("\n<select style=\"width:150px; display:block;\" MULTIPLE class='enumeratedListBox' styleId='country' size ='2' name=\"" + componentId
 					+ "_enumeratedvaluescombobox\"\">");
 			Iterator iter = enumeratedValuesList.iterator();
 			while (iter.hasNext())
@@ -465,11 +465,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 				String value = (String) iter.next();
 				if (values != null && values.contains(value))
 				{
-					html.append("\n<option value=\"" + value + "\" SELECTED>" + value + "</option>");
+					html.append("\n<option title=\""+value+"\" value=\"" + value + "\" SELECTED>" + value + "</option>");
+					
 				}
 				else
 				{
-					html.append("\n<option value=\"" + value + "\">" + value + "</option>");
+					html.append("\n<option title=\""+value+"\" value=\"" + value + "\">" + value + "</option>");
 				}
 			}
 			html.append("\n</select>");
