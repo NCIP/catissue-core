@@ -35,7 +35,7 @@
 				<b> <bean:message key="app.participant" /> </b>
 		</div>		
 		<div>
-			<a class="subMenuPrimary" href="LoadParticipantPage.do"><bean:message key="app.add" /></a> | 
+			<a class="subMenuPrimary" href="Participant.do?operation=add&pageOf=pageOfParticipant&menuSelected=12"><bean:message key="app.add" /></a> | 
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfParticipant&aliasName=Participant&menuSelected=12" >
 				<bean:message key="app.edit" />
 			</a>
