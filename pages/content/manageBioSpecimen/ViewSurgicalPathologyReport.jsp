@@ -13,35 +13,10 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <LINK href="css/styleSheet.css" type=text/css rel=stylesheet>
 
-<c:set var="operation" value="${viewSurgicalPathologyReportForm.operation}"/>
-<jsp:useBean id="operation" type="java.lang.String"/>
-<c:set var="submittedFor" value="${viewSurgicalPathologyReportForm.submittedFor}" scope="session"/>
-<jsp:useBean id="submittedFor" class="java.lang.String"/>
-<c:set var="forwardTo" value="${viewSurgicalPathologyReportForm.forwardTo}"/>
-<jsp:useBean id="forwardTo" type="java.lang.String"/>
-<c:set var="pageOf" value="${viewSurgicalPathologyReportForm.pageOf}"/>
-<jsp:useBean id="pageOf" type="java.lang.String"/>
 
 
-<%
-		int noOfRows=0;
-		Map map = null;
-		String formName=null;
-		ViewSurgicalPathologyReportForm viewSurgicalPathologyReportForm=null;
-		
-			
-	
-ViewSurgicalPathologyReportForm formSPR=viewSurgicalPathologyReportForm;
 
-	Object obj = request.getAttribute("viewSurgicalPathologyReportForm");
-		
-		if(obj != null && obj instanceof ViewSurgicalPathologyReportForm)
-		{
-			formSPR = (ViewSurgicalPathologyReportForm)obj;
-			map = formSPR.getValues();
-			noOfRows = formSPR.getCounter();
-		}
-%>
+
 <head>
 
 </head>
