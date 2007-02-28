@@ -5,15 +5,19 @@
  */
 package edu.wustl.catissuecore.actionForm;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
+
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
  * @author preeti_munot
  *
  */
-public class AnnotationForm extends ActionForm
+public class AnnotationForm extends AbstractActionForm implements Serializable
 {
 
 	/**
@@ -58,4 +62,22 @@ public class AnnotationForm extends ActionForm
 	{
 		this.annotationGroupsXML = annotationGroupsXML;
 	}
+
+    public int getFormId()
+    {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    public void setAllValues(AbstractDomainObject abstractDomain)
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    protected void reset()
+    {
+        // TODO Auto-generated method stub
+        
+    }
 }
