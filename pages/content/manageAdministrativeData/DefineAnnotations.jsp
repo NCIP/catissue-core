@@ -82,10 +82,10 @@
 
 	<html:form styleId='annotationForm' action='/DefineAnnotations'>
 	<body onload = "initializeAnnotationsForm()">
-	<br>
 	
-<table >
-     <tr >
+	
+<table height = "90%">
+     <tr height = "10%" >
 		 <td  width="5%"></td>	
 		 <td>
 		 
@@ -116,7 +116,7 @@
     </tr>
 
    <tr></tr>
-	<tr valign="top">
+	<tr valign="top" height = "90%">
 	 <td  width="5%"></td>	
        <td>
 
@@ -154,8 +154,7 @@
 
 	   </td>	 
 	</tr>
-
-	
+		
 </table>
 
 
