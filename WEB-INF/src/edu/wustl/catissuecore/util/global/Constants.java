@@ -19,6 +19,14 @@ package edu.wustl.catissuecore.util.global;
 public class Constants extends edu.wustl.common.util.global.Constants
 {
 //// suite constants
+	//caTies
+	public static final String REPORT_QUEUE_LIST = "ReportQueueList";
+	public static final String BUTTON_NAME = "button";
+	public static final String CREATE_PARTICIPANT_BUTTON = "createParticipant";
+	public static final String ASSOCIATE_PARTICIPANT_BUTTON = "associateParticipant";
+	public static final String REPORT_PARTICIPANT_OBJECT = "reportParticipantObject";
+	public static final String REPORT_ID = "reportQueueId";
+	public static final String PARTICIPANT_ID_TO_ASSOCIATE = "participantIdToAssociate";
 	
 	//Consent tracking
 	public static final String 	SHOW_CONSENTS="showConsents";
@@ -110,6 +118,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPREADSHEET_DATA_LIST_FOR_PATHOLOGICAL_CASES = "spreadsheetDataListForPathologicalCases";
 	public static final String SPREADSHEET_DATA_LIST_FOR_ARRAY = "spreadsheetDataListForArray";
 	public static final String SELECTED_ITEMS_MAP = "selectedItemsMap";
+	
+	public static final String [] CONFLICT_LIST_HEADER = {"Identifier", "Accession No", "Status"};
+	
  //	 Report Loader 
 	public static final String MAX_PARTICIPANT_MATCHING_PERCENTAGE="maxParticipantMatchingPercentage";	
 /////	
@@ -663,22 +674,21 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int SPECIMEN_ARRAY_ALIQUOT_FORM_ID = 51;
 	public static final int ASSIGN_PRIVILEGE_FORM_ID = 52;
 	public static final int CDE_FORM_ID = 53;
-	public static final int MULTIPLE_SPECIMEN_STOGAGE_LOCATION_FORM_ID = 54;
-	//Misc
-	public static final String SEPARATOR = " : ";
-	
-	
-	//	CATIES
-	public static final int SURGICAL_PATHOLOGY_REPORT_FORM_ID=60;
-	public static final int DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID=61;
-	
-	//Ordering System
-	public static final int REQUEST_DETAILS_FORM_ID = 54;
+	public static final int MULTIPLE_SPECIMEN_STOGAGE_LOCATION_FORM_ID = 54;	
 	public static final int REQUEST_LIST_FILTERATION_FORM_ID = 55;
 	public static final int ORDER_FORM_ID = 56;
 	public static final int ORDER_ARRAY_FORM_ID = 57;	
 	public static final int ORDER_PATHOLOGY_FORM_ID = 58;
 	public static final int NEW_PATHOLOGY_FORM_ID=59;
+	public static final int SURGICAL_PATHOLOGY_REPORT_FORM_ID=60;
+	public static final int DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID=61;
+	public static final int REQUEST_DETAILS_FORM_ID = 62;
+	public static final int CONFLICT_DETAILS_FORM_ID = 63;
+
+	
+	
+	//Misc
+	public static final String SEPARATOR = " : ";
 	
 	//Identifiers for JDBC DAO.
 	public static final int QUERY_RESULT_TREE_JDBC_DAO = 1;
