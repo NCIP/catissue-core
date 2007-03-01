@@ -30,6 +30,7 @@ var calendarId1 = rowId+"_calendar1";
 var textBoxId0 = rowId+"_textBox";
 var calendarId0 = "calendarImg";
 var opId =  rowId+"_combobox";
+var dateFormatLabel = rowId+"_dateFormatLabel2";
 if(document.all) {
 		// IE.
 		var op = document.getElementById(opId).value;
@@ -48,7 +49,8 @@ if(document.all) {
 			{
 				document.getElementById(calendarId0).disabled = true;
 			}	
-	} 	if(op == "In" || op== "Not In")
+	} 	
+	if(op == "In" || op== "Not In")
 	{
 		
 	}
@@ -68,6 +70,7 @@ if(op == "Between")
 		if(dataType == "true")
 		{
 			document.getElementById(calendarId1).style.display="block";		
+			document.getElementById(dateFormatLabel).style.display="block";		
 		}
 	} else if(document.layers) {
 		// Netspace 4
@@ -79,11 +82,13 @@ if(op == "Between")
 		if(dataType == "true")
 		{
 			var calId = document.getElementById(calendarId1);
+			var dateFormatLabelId = document.getElementById(dateFormatLabel);
 			calId.style.display="block";
+			dateFormatLabelId.style.display="block";
 		}
 	}	
 }
-if(op == "In" || op== "Not In")
+else if(op == "In" || op== "Not In")
 	{
 		
 	}	
@@ -107,6 +112,8 @@ else
 		{
 			var calId = document.getElementById(calendarId1);
 			calId.style.display="none";
+			var dateFormatLabelId = document.getElementById(dateFormatLabel);
+			dateFormatLabelId.style.display="none";
 		}
 	}	
 }
@@ -187,8 +194,6 @@ function retriveSearchedEntities(url,nameOfFormToPost)
 		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
 		request.send(actionURL);
 	}
-//	showEntityInformation("");
-	//onProduceQueryUpdate("");
 }
 /*function showtip(a,event,text)
 {
@@ -205,7 +210,7 @@ function onResponseUpdate(text)
 	}
 	var element = document.getElementById('resultSet');
 	var listOfEntities = text.split(";");
-	var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
+	var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="2">';
 
 		for(i=1; i<listOfEntities.length; i++)
 		{
@@ -318,14 +323,28 @@ function produceQuery(url,nameOfFormToPost, entityName , attributesList)
 			{
 				textId1 = document.getElementById(textBoxId1).value;
 			}
+			if (document.getElementById(textBoxId))
+			{
+				textId = document.getElementById(textBoxId).value;		
+			}
+			if(textId != "")
+			{
+				strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +"!*=*!"+"missingTwoValues"+";";
+			}
+			if(textId1 != "")
+			{
+				strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + "missingTwoValues" +"!*=*!"+"textId1"+";";
+			}
 			if(textId != "" && textId1!= "")
 			{
 				strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +"!*=*!"+textId1+";";
 			}
-			else
+		/*	else if ( textId1 == "" || textId == "" )
 			{
 				alert("Please enter two values to add limit for operator between");
-			}
+				strToCreateQueyObject = "";
+				i = attribute.length;
+			}*/
 		}
 		if(op == "Is Null" || op == "Is Not Null")
 		{

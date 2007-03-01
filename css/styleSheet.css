@@ -1534,3 +1534,27 @@ tr#hiddenCombo
  display:none;
 }
 </style>
+input.enumeratedListBox
+{
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:1em;
+  width:10em;
+}
+queryLink{ /* for the text links in the Search category page */
+ font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.2em;
+  color:#5C5C5C; /* constant: black */
+	text-decoration:underline;	
+    white-space: nowrap;
+}
+ .PermissibleValuesQuery{ /* for stand-alone text not affected by any cascading text styles */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.9em;
+  color:#000000; /* constant: black */
+}
+.dropdownQuery{ /* for stand-alone text not affected by any cascading text styles */
+   font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.9em;
+  color:#000000; /* constant: black */
+}
