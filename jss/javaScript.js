@@ -831,7 +831,7 @@ function initializeGridForEntities()
 	gridForEntities.setInitWidthsP("5,23,17,15,15,25");
 	gridForEntities.setColAlign("left,left,left,left,left,left")
 	gridForEntities.setColTypes("ch,link,ro,ro,ro,ro");
-	//gridForEntities.setStyle(formSubTableTitleStyle);
+//	gridForEntities.setStyle(formSubTableTitleStyle);
 	gridForEntities.init();
 }
 
@@ -1190,4 +1190,43 @@ function initiallizeEditSCGTabs(contextPath,queryString,annotationQueryString)
 		var tabNames = ["Edit Specimen Collection Group" , "View Surgical Pathology Report", "Annotations"];
 		var tabHREFs = [contextPath + "/SpecimenCollectionGroupSearch.do?" + queryString , contextPath + "/ViewSurgicalPathologyReport.do?operation=viewSPR&" + queryString ,contextPath + "/LoadAnnotationDataEntryPage.do"+annotationQueryString];
 		initializeTabs(tabIds,tabNames,tabHREFs);
+}
+
+
+
+//Javav Script for Collection Protocol Registration 
+function initiallizeAddCpRegTabs(contextPath)
+{
+		tabbar= new dhtmlXTabBar("a_tabbar","top");
+		tabbar.setImagePath(contextPath + "/dhtml_comp/imgs/");
+		tabbar.setHrefMode("iframes-on-demand");
+		var tabIds = ["addTab"];
+		var tabNames = ["Collection Protocol Registration"];
+		var tabHREFs = [contextPath + "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration&menuSelected=13"];
+		initializeTabs(tabIds,tabNames,tabHREFs);
+}
+
+function initiallizeEditCpRegTabs(contextPath,queryString,annotationQueryString)
+{
+		tabbar= new dhtmlXTabBar("a_tabbar","top");
+		tabbar.setImagePath("dhtml_comp/imgs/");
+		tabbar.setHrefMode("iframes-on-demand");
+		var tabIds = ["editTab","annotationsTab"];
+		var tabNames = ["Edit Partitipant Registration" , "Annotations"];
+		var tabHREFs = [contextPath + "/CollectionProtocolRegistrationSearch.do?" + queryString , contextPath + "/LoadAnnotationDataEntryPage.do"+annotationQueryString];
+		initializeTabs(tabIds,tabNames,tabHREFs);
+}
+
+
+function submitForm()
+{
+
+		var form =  document.getElementById('annotationForm');	
+	    var selectBox = document.getElementById('optionSelect');	
+	    var destination = selectBox.options[selectBox.selectedIndex].value;			
+		if(destination != "-1")
+		{
+			form.action="/catissuecore/BuildDynamicEntity.do";
+			form.submit();
+		}
 }
