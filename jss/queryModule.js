@@ -108,6 +108,7 @@ else
 		// Mozilla
 		var textBoxId1 = document.getElementById(textBoxId);
 		textBoxId1.style.display="none";
+
 		if(dataType == "true")
 		{
 			var calId = document.getElementById(calendarId1);
@@ -210,7 +211,7 @@ function onResponseUpdate(text)
 	}
 	var element = document.getElementById('resultSet');
 	var listOfEntities = text.split(";");
-	var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="2">';
+	var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="1">';
 
 		for(i=1; i<listOfEntities.length; i++)
 		{
@@ -312,9 +313,9 @@ function produceQuery(url,nameOfFormToPost, entityName , attributesList)
 				}
 				else
 				{
-					var element = document.getElementById('validationMessages');
+					//var element = document.getElementById('validationMessages');
 					var row = document.getElementById('validationMessagesRow');
-					element.innerHTML = "";
+					row.innerHTML = "";
 				}
 		}
 		if(op == "Between")
@@ -380,6 +381,41 @@ function viewSearchResults()
 	else {
 		showValidationMessages(errorMessage);
 	}
+}
+function showValidationMessages(text)
+{
+	var rowId= 'validationMessagesRow';
+	var textBoxId1 = document.getElementById("rowMsg");
+		
+	var element = document.getElementById('validationMessages');
+	var row = document.getElementById(rowId);
+	row.innerHTML = "";
+	if(text == "")
+	{
+
+		if(document.all)
+		{
+			//	textBoxId1.style.display= "none";
+			document.getElementById("validationMessagesRow").style.display="none";		
+
+		} 
+		else if(document.layers) 
+		{
+			document.elements['validationMessagesRow'].visibility="none";
+		}
+		else 
+		{
+			//	textBoxId1.style.display= "none";
+			row.style.display = 'none';		
+
+		}	
+	}
+	else
+	{
+	//	textBoxId1.style.display= "block";
+		row.style.display = 'block';
+		row.innerHTML = text;
+	}	
 }
 function showErrorPage()
 {

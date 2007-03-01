@@ -168,7 +168,7 @@ function initGridView()
 							parentId = data.getParentIdentifier().toString();		
 						}
 						String nodeId = data.getIdentifier().toString();
-						String img = "plus.GIF";
+						String img = "item.GIF";
 						
 						if (parentId.equals("0"))
 						{

@@ -341,16 +341,6 @@ FORM BEGINS
   text-align:left;
 }
 
-.formRequiredLabelWithoutBackgrnd{ /* for the required form labels without border*/
-  font-family:arial,helvetica,verdana,sans-serif;
-  font-size:0.7em;
-  font-weight:bold;
- /* background-color:#F4F4F5; /* constant: light gray */
- /* color:#000000; /* constant: black	*/
-  /*border-bottom:1px solid #5C5C5C; /* constant: dark gray */
-  text-align:left;
-}
-
 .formRequiredLabelLeft{ /* for the required form labels */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.7em;
@@ -1513,12 +1503,16 @@ td.queryModuleTabMenuItem{ /* for the off state of the tab menu (top) cells */
   white-space: nowrap;
   border-right:1px solid #5C5C5C; /* constant: dark gray */
  }
-  .standardTextQuery{ /* for stand-alone text not affected by any cascading text styles */
+ .standardTextQuery{ /* for stand-alone text not affected by any cascading text styles */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.8em;
   color:#000000; /* constant: black */
 }
-
+.dropdownQuery{ /* for stand-alone text not affected by any cascading text styles */
+   font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.9em;
+  color:#000000; /* constant: black */
+}
 .tbBordersAllbordersBlack{ /* for block table with border 1 */
   border-bottom:1px solid #000000; /* constant: dark gray */
   border-top:1px  solid #000000;/* constant: dark gray */
@@ -1526,14 +1520,14 @@ td.queryModuleTabMenuItem{ /* for the off state of the tab menu (top) cells */
   border-right:1px solid #000000; /* constant: dark gray */
 
 }
-/* style for Participant.jsp  */
+style for Participant.jsp 
  <style>
 .active-column-0 {width:30px}
 tr#hiddenCombo
 {
  display:none;
 }
-</style>
+</style> 
 input.enumeratedListBox
 {
   font-family:arial,helvetica,verdana,sans-serif;
@@ -1550,11 +1544,6 @@ queryLink{ /* for the text links in the Search category page */
 }
  .PermissibleValuesQuery{ /* for stand-alone text not affected by any cascading text styles */
   font-family:arial,helvetica,verdana,sans-serif;
-  font-size:0.9em;
-  color:#000000; /* constant: black */
-}
-.dropdownQuery{ /* for stand-alone text not affected by any cascading text styles */
-   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.9em;
   color:#000000; /* constant: black */
 }

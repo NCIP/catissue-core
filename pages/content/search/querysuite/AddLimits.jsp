@@ -12,45 +12,7 @@
 <script src="jss/queryModule.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script> 
 </head>
-
-
-    <script type="text/javascript">
-   
-function showValidationMessages(text)
-{
-	var rowId= 'validationMessagesRow';
-	var textBoxId1 = document.getElementById(rowId);
-		
-	var element = document.getElementById('validationMessages');
-	var row = document.getElementById('validationMessagesRow');
-	element.innerHTML = "";
-	if(text == "")
-	{
-
-		if(document.all)
-		{
-			document.getElementById("validationMessagesRow").style.display="none";		
-		} 
-		else if(document.layers) 
-		{
-			document.elements['validationMessagesRow'].visibility="none";
-		}
-		else 
-		{
-			document.getElementById("validationMessagesRow").className = "display: none;";
-	//	textBoxId1.style.display="none";
-		}	
-	}
-	else
-	{
-		row.style.display = 'block';
-		element.innerHTML = text;
-	}	
-}
-    </script>
-
-	<body>
-	
+<body>
 <html:errors />
 <%
 
@@ -100,9 +62,13 @@ function showValidationMessages(text)
 							<tr>
 							<td height="60%">
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
-								<tr style="display:none;" id="validationMessagesRow" >
-									<td id="validationMessagesSection" ><div id="validationMessages"   style="overflow:auto; width:820; height:50;"></div></td>
-								</tr>
+							
+												<tr  id="rowMsg">
+													<td id="validationMessagesSection" >
+														<div id="validationMessagesRow"   style="overflow:auto; width:820; height:50;display:none"></div>
+													</td>
+												</tr>
+									
 								<tr>
 									<td height="350" width="100%" id="addLimitsSection"><div id="addLimits" style="overflow:auto; height:100%;width:100%"></div></td>
 								</tr>
