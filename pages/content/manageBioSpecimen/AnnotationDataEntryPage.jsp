@@ -35,11 +35,11 @@
 	<!-- Actual HTML Code Start -->
 	<br>
 
-		<table  valign="top" id = "test" class= "contentPage" width='100%' border ="0" height="400"  cellspacing="0" cellpadding="3">
+		<table  valign="top" id = "test" class= "contentPage" width='100%' border ="0" height="100%"  cellspacing="0" cellpadding="3">
 		<tr>
 		    <td width="1%"></td>
 		<td>
-			<table class="tbBordersAllbordersBlack" border ="0" height="100%" summary="" cellpadding="3" cellspacing="0" border="0">
+			<table class="tbBordersAllbordersBlack"  height="100%" summary="" cellpadding="3" cellspacing="0" >
 
 				<tr valign="top">
 					<td align="left" class="formTitle">
@@ -59,11 +59,7 @@
 					</td>
 				</tr>
 
-				<tr valign="top">
-					<td align="left" >
-						&nbsp;
-					</td>
-				</tr>
+				
 
 				<tr valign="top">
 					<td align="left" class="formTitle">
@@ -79,13 +75,7 @@
 						</script>
 					</td>
 				</tr>
-				 <tr valign="bottom">
-					<td align="left" class="formLabelAllBorder">
-						<html:button property="deleteAnnotationData" styleClass="actionButton" onclick="featureNotSupported()" >
-								Delete
-						</html:button>
-					</td>
-				</tr> 
+				
 			</table>
 
 		</td></tr>
