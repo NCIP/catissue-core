@@ -67,5 +67,10 @@
 		<mapping resource="edu/wustl/common/hbm/PermissibleValueImpl.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/QueryColumnData.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/QueryTableData.hbm.xml"/>
+
+		<!--List of classes required for Query module-->
+		<mapping resource="edu/wustl/common/hbm/CategorialAttribute.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/CategorialClass.hbm.xml"/>
+		<mapping resource="edu/wustl/common/hbm/Category.hbm.xml"/>
 	</session-factory>  
 </hibernate-configuration>
