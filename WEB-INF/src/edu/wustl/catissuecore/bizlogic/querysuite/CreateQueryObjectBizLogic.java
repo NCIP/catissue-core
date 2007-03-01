@@ -16,7 +16,6 @@ import edu.common.dynamicextensions.domain.Attribute;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
-import edu.wustl.cab2b.common.beans.IAttribute;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
@@ -121,50 +120,56 @@ public class CreateQueryObjectBizLogic
 		while (valuesIter.hasNext())
 		{
 			String enteredValue = (String) valuesIter.next();
-				if ((dataType.trim().equalsIgnoreCase("bigint") || dataType.trim().equalsIgnoreCase("integer"))
-						|| dataType.trim().equalsIgnoreCase("Long"))
-				{
-					Logger.out.debug(" Check for integer");
-					if (validator.convertToLong(enteredValue) == null)
-					{
-						errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.intvalue.required");
-						Logger.out.debug(enteredValue + " is not a valid integer");
-					}
-					else if (!validator.isPositiveNumeric(enteredValue, 0))
-					{
-						errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.intvalue.poisitive.required");
-						Logger.out.debug(enteredValue + " is not a positive integer");
-					}
+			if (enteredValue.equalsIgnoreCase(Constants.MISSING_TWO_VALUES))
+			{
+				errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.twovalues.required");
+				Logger.out.debug(enteredValue + " two values required for 'Between' operator ");
+			}
+			else if ((dataType.trim().equalsIgnoreCase("bigint") || dataType.trim().equalsIgnoreCase("integer"))
+					|| dataType.trim().equalsIgnoreCase("Long"))
+			{
+				Logger.out.debug(" Check for integer");
 
-				}//integer         
-				else if ((dataType.trim().equalsIgnoreCase("double")) && !validator.isDouble(enteredValue, false))
+				if (validator.convertToLong(enteredValue) == null)
 				{
-					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.decvalue.required");
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
-				} // double
-				else if (dataType.trim().equalsIgnoreCase("tinyint"))
-				{
-					if (!enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_YES) && !enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_NO))
-					{
-						errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.tinyint.format");
-					}
+					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.intvalue.required");
+					Logger.out.debug(enteredValue + " is not a valid integer");
 				}
-				else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME))
+				else if (!validator.isPositiveNumeric(enteredValue, 0))
 				{
-					if (!validator.isValidTime(enteredValue, Constants.TIME_PATTERN_HH_MM_SS))
-					{
-						errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.time.format");
-					}
+					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.intvalue.poisitive.required");
+					Logger.out.debug(enteredValue + " is not a positive integer");
 				}
-				else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_DATE)
-						|| dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_DATE))
+
+			}//integer         
+			else if ((dataType.trim().equalsIgnoreCase("double")) && !validator.isDouble(enteredValue, false))
+			{
+				errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.decvalue.required");
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("simpleQuery.decvalue.required"));
+			} // double
+			else if (dataType.trim().equalsIgnoreCase("tinyint"))
+			{
+				if (!enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_YES) && !enteredValue.trim().equalsIgnoreCase(Constants.BOOLEAN_NO))
 				{
-					if (!validator.checkDate(enteredValue))
-					{
-						errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.date.format");
-					}
+					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.tinyint.format");
 				}
 			}
+			else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_TIME))
+			{
+				if (!validator.isValidTime(enteredValue, Constants.TIME_PATTERN_HH_MM_SS))
+				{
+					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.time.format");
+				}
+			}
+			else if (dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_DATE)
+					|| dataType.trim().equalsIgnoreCase(Constants.FIELD_TYPE_TIMESTAMP_DATE))
+			{
+				if (!validator.checkDate(enteredValue))
+				{
+					errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.date.format");
+				}
+			}
+		}
 		return errorMessages;
 	}
 
