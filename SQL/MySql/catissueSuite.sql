@@ -2492,23 +2492,25 @@ insert into `dyextn_constraint_properties` (`IDENTIFIER`,`SOURCE_ENTITY_KEY`,`TA
 DROP TABLE IF EXISTS `dyextn_container`;
 
 CREATE TABLE `dyextn_container` (
-  `IDENTIFIER` bigint(20) NOT NULL auto_increment,
-  `BUTTON_CSS` varchar(255) default NULL,
-  `CAPTION` varchar(255) default NULL,
-  `ENTITY_ID` bigint(20) default NULL,
-  `MAIN_TABLE_CSS` varchar(255) default NULL,
-  `REQUIRED_FIELD_INDICATOR` varchar(255) default NULL,
-  `REQUIRED_FIELD_WARNING_MESSAGE` varchar(255) default NULL,
-  `TITLE_CSS` varchar(255) default NULL,
-  `BASE_CONTAINER_ID` bigint(20) default NULL,
-  `VIEW_ID` bigint(20) default NULL,
-  PRIMARY KEY  (`IDENTIFIER`),
+     IDENTIFIER bigint not null auto_increment,
+   BUTTON_CSS varchar(255),
+   CAPTION varchar(255),
+   ENTITY_ID bigint,
+   MAIN_TABLE_CSS varchar(255),
+   REQUIRED_FIELD_INDICATOR varchar(255),
+   REQUIRED_FIELD_WARNING_MESSAGE varchar(255),
+   TITLE_CSS varchar(255),
+   BASE_CONTAINER_ID bigint,
+   ENTITY_GROUP_ID bigint,
+   VIEW_ID bigint,
+   primary key (IDENTIFIER),
   KEY `FK1EAB84E4A1257067` (`BASE_CONTAINER_ID`),
   KEY `FK1EAB84E479F466F7` (`ENTITY_ID`),
   KEY `FK1EAB84E445DEFCF5` (`VIEW_ID`),
   CONSTRAINT `FK1EAB84E445DEFCF5` FOREIGN KEY (`VIEW_ID`) REFERENCES `dyextn_view` (`IDENTIFIER`),
   CONSTRAINT `FK1EAB84E479F466F7` FOREIGN KEY (`ENTITY_ID`) REFERENCES `dyextn_entity` (`IDENTIFIER`),
-  CONSTRAINT `FK1EAB84E4A1257067` FOREIGN KEY (`BASE_CONTAINER_ID`) REFERENCES `dyextn_container` (`IDENTIFIER`)
+  CONSTRAINT `FK1EAB84E4A1257067` FOREIGN KEY (`BASE_CONTAINER_ID`) REFERENCES `dyextn_container` (`IDENTIFIER`),
+  CONSTRAINT `FK1EAB84E4992A67D7` FOREIGN KEY (`ENTITY_GROUP_ID`) REFERENCES `DYEXTN_ENTITY_GROUP` (`IDENTIFIER`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `dyextn_container` */
@@ -3406,18 +3408,15 @@ CREATE TABLE `dyextn_entity_group` (
   `LONG_NAME` varchar(255) default NULL,
   `SHORT_NAME` varchar(255) default NULL,
   `VERSION` varchar(255) default NULL,
-  `MAIN_CONTAINER_ID` bigint(20) default NULL,
   PRIMARY KEY  (`IDENTIFIER`),
   KEY `FK105DE7A0BC7298A9` (`IDENTIFIER`),
-  KEY `FK105DE7A086ABEA7F` (`MAIN_CONTAINER_ID`),
-  CONSTRAINT `FK105DE7A086ABEA7F` FOREIGN KEY (`MAIN_CONTAINER_ID`) REFERENCES `dyextn_container` (`IDENTIFIER`),
   CONSTRAINT `FK105DE7A0BC7298A9` FOREIGN KEY (`IDENTIFIER`) REFERENCES `dyextn_abstract_metadata` (`IDENTIFIER`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 /*Data for the table `dyextn_entity_group` */
 
-insert into `dyextn_entity_group` (`IDENTIFIER`,`LONG_NAME`,`SHORT_NAME`,`VERSION`,`MAIN_CONTAINER_ID`) values (1,'caTissue_Core','caTissueCore',NULL,NULL);
-insert into `dyextn_entity_group` (`IDENTIFIER`,`LONG_NAME`,`SHORT_NAME`,`VERSION`,`MAIN_CONTAINER_ID`) values (453,'CategoryEntityGroup','CategoryEntityGroup',NULL,NULL);
+insert into `dyextn_entity_group` (`IDENTIFIER`,`LONG_NAME`,`SHORT_NAME`,`VERSION`) values (1,'caTissue_Core','caTissueCore',NULL);
+insert into `dyextn_entity_group` (`IDENTIFIER`,`LONG_NAME`,`SHORT_NAME`,`VERSION`) values (453,'CategoryEntityGroup','CategoryEntityGroup',NULL);
 
 /*Table structure for table `dyextn_entity_group_rel` */
 
