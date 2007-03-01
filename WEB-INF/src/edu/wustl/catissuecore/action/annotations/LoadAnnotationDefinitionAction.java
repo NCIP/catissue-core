@@ -221,7 +221,6 @@ public class LoadAnnotationDefinitionAction extends BaseAction
      */
     private String getDynamicExtentionsEditURL(Long containerId)
     {
-        //TODO change ths with new api
         String dynamicExtensionsEditEntityURL = "BuildDynamicEntity.do?containerId="
                 + containerId + "^_self";
         return dynamicExtensionsEditEntityURL;
@@ -243,10 +242,9 @@ public class LoadAnnotationDefinitionAction extends BaseAction
         if (groupId != null)
         {
             Long lGroupId = new Long(groupId);
-            NameValueBean mainContainer = EntityManager.getInstance()
-                    .getMainContainer(lGroupId);
-            Collection<NameValueBean> entityContainerCollection = new ArrayList<NameValueBean>();
-            entityContainerCollection.add(mainContainer);
+            Collection<NameValueBean> entityContainerCollection = EntityManager.getInstance()
+            .getMainContainer(lGroupId);
+            
             if (entityContainerCollection != null)
             {
                 entitiesXML.append("<rows>");

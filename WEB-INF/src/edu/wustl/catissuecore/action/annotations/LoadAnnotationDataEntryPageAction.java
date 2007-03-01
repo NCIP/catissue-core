@@ -400,11 +400,8 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 		if(deContainerId!=null)
 		{
 			EntityManagerInterface entityManager = EntityManager.getInstance();
-			ContainerInterface container = entityManager.getContainerByIdentifier(deContainerId+"");
-			if(container!=null)
-			{
-				containerName = container.getCaption();
-			}
+            containerName = entityManager.getContainerCaption(deContainerId);
+			
 		}
 		return containerName;
 	}
