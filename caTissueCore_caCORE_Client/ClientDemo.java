@@ -14,20 +14,26 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.util.logger.Logger;
+import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.system.comm.client.ClientSession;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Restrictions;
 /*
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -1089,7 +1095,7 @@ public class ClientDemo
     {
 		reportContents.append(newLine);
     	api = new APIDemo();
-    	testSearchInstitution();
+   	    testSearchInstitution();
     	testSearchDepartment();
     	testSearchCancerResearchGroup();
     	testSearchBioHazard();
@@ -1103,9 +1109,16 @@ public class ClientDemo
     	testSearchParticipant();
     	testSearchCollectionProtocolRegistration();
     	testSearchSpecimenCollectionGroup();
-    	testSearchSpecimen();
+     	testSearchSpecimen();
     	testSearchSpecimenArray();
-    	//testSearchDistribution();
+    	testSearchDistribution();
+   	    testQuerySpecimenForIdLessThanTen();
+    	testQueryParicipant();
+    	testQuerySpecimenRequirementUsingHQLCriteria();
+    	testSearchSpecimenAndGetCollections();
+    	testQuerySpecimenEventParameters();
+    	testQueryGetCollectionProtocolRegistrationFromCollectionProtocol();
+    
     	
 /*    	Department department = api.initDepartment();
     	department.setId(new Long(2));
@@ -1227,6 +1240,9 @@ public class ClientDemo
     
     /////////////////// Start default data insertion ///////
     /////////////////////////// ----------------------- Start test Search operation
+    
+   
+
     
     private void testSearchDepartment()
     {
@@ -1532,6 +1548,7 @@ public class ClientDemo
         	 List resultList = appService.search(Specimen.class,specimen);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 Specimen returnedspecimen = (Specimen) resultsIterator.next();
+        		// System.out.println("here-->" + returnedspecimen.getSpecimenEventCollection());
         		 writeSuccessfullOperationToReport(returnedspecimen,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedspecimen.getLabel());
              }
@@ -1543,6 +1560,243 @@ public class ClientDemo
           }
 
     }
+    /**
+     *  This will search all the specimens in the system
+     *
+     */
+    
+    private void testQuerySpecimenForIdLessThanTen()
+    {
+        Specimen specimen = new Specimen();
+        DetachedCriteria criteria = DetachedCriteria.forClass(Specimen.class);
+        criteria.add(Restrictions.lt("id", new Long(4)));
+                  
+       try {
+        	  List resultList = 
+            	appService.query(criteria, Specimen.class
+                    .getName());
+            
+            System.out.println("No of specimens found: " + resultList.size());
+            for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+                Specimen returnedspecimen = (Specimen) resultsIterator.next();
+                System.out.println("Label: "+returnedspecimen.getLabel() + "Type: " + returnedspecimen.getType() + " ");
+                System.out.println("\tQuantity: " + returnedspecimen.getQuantity().getValue() + " " );
+                System.out.println("\tEventColl: " + returnedspecimen.getSpecimenEventCollection() + " " );
+                System.out.println("\tBiohazard: " + returnedspecimen.getBiohazardCollection() + " " );
+                System.out.println("\tExternal: " + returnedspecimen.getExternalIdentifierCollection() + " " );
+                System.out.println("\tSCG: " + returnedspecimen.getSpecimenCollectionGroup().getName() + " " );
+                Collection external = returnedspecimen.getSpecimenEventCollection();
+                Iterator itr = external.iterator();
+                while(itr.hasNext())
+                {
+                	SpecimenEventParameters eventParam = (SpecimenEventParameters) itr.next();
+                	System.out.println("TimeStampOfEvent --> " + eventParam.getTimestamp());
+                }
+            }
+            
+            writeSuccessfullOperationToReport(new Specimen(),searchOperation + "testQuerySpecimenForIdLessThanTen");
+        } 
+        catch (Exception e) {
+              System.out.println(e.getMessage());
+              writeFailureOperationsToReport("Specimen",searchOperation + "testQuerySpecimenForIdLessThanTen");
+             e.printStackTrace();
+        }
+    }
+    
+    /**
+     *  This will search all the specimens in the system
+     *
+     */
+    
+    private void testQuerySpecimenRequirementUsingHQLCriteria()
+    {
+     HQLCriteria hqlCriteria = new HQLCriteria("from edu.wustl.catissuecore.domain.SpecimenRequirement specimenRequirement where specimenRequirement.id in (select specimenRequirement.id from edu.wustl.catissuecore.domain.SpecimenRequirement specimenRequirement)");
+    // HQLCriteria hqlCriteria = new HQLCriteria("from edu.wustl.catissuecore.domain.SpecimenRequirement specimenRequirement");
+    	String targetClassName = null;
+       try {
+        	  List resultList = 
+            	appService.query(hqlCriteria, SpecimenRequirement.class
+                    .getName());
+            
+            System.out.println("No of SpecimenRequirement found: " + resultList.size());
+          /*  for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+                Specimen returnedspecimen = (Specimen) resultsIterator.next();
+                System.out.println("Label: "+returnedspecimen.getLabel() + "Type: " + returnedspecimen.getType() + " ");
+                System.out.println("\tQuantity: " + returnedspecimen.getQuantity().getValue() + " " );
+                System.out.println("\tEventColl: " + returnedspecimen.getSpecimenEventCollection() + " " );
+                System.out.println("\tBiohazard: " + returnedspecimen.getBiohazardCollection() + " " );
+                System.out.println("\tExternal: " + returnedspecimen.getExternalIdentifierCollection() + " " );
+                System.out.println("\tSCG: " + returnedspecimen.getSpecimenCollectionGroup().getName() + " " );
+                Collection external = returnedspecimen.getSpecimenEventCollection();
+                Iterator itr = external.iterator();
+                while(itr.hasNext())
+                {
+                	SpecimenEventParameters eventParam = (SpecimenEventParameters) itr.next();
+                	System.out.println("TimeStampOfEvent --> " + eventParam.getTimestamp());
+                }
+            }*/
+            
+            writeSuccessfullOperationToReport(new Specimen(),searchOperation + "testQuerySpecimenForIdLessThanTen");
+        } 
+        catch (Exception e) {
+              System.out.println(e.getMessage());
+              writeFailureOperationsToReport("Specimen",searchOperation + "testQuerySpecimenForIdLessThanTen");
+             e.printStackTrace();
+        }
+    }
+    
+    /**
+     *  This will search all the specimens in the system
+     *
+     */
+    
+    private void testQueryParicipant()
+    {
+        Participant participant = new Participant();
+        DetachedCriteria criteria = DetachedCriteria.forClass(Participant.class);
+        criteria.add(Restrictions.lt("id", new Long(4)));
+       
+
+        try {
+        	  List resultList = 
+            	appService.query(criteria, Participant.class
+                    .getName());
+            
+            System.out.println("No of Participants found: " + resultList.size());
+            for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+            	Participant participant1 = (Participant) resultsIterator.next();
+              
+                Collection raceCollection = participant1.getRaceCollection();
+                Iterator itr = raceCollection.iterator();
+                while(itr.hasNext())
+                {
+                	System.out.println("Race --> " + itr.next());
+                }
+                
+                Collection medicalIdentifierCollection = participant1.getParticipantMedicalIdentifierCollection();
+                Iterator medicalIterator = medicalIdentifierCollection.iterator();
+                while(medicalIterator.hasNext())
+                {
+                	System.out.println("Medical Identifier--> " + medicalIterator.next());
+                }
+                
+                Collection cpRegistration = participant1.getCollectionProtocolRegistrationCollection();
+                Iterator cpr = cpRegistration.iterator();
+                while(cpr.hasNext())
+                {
+                	System.out.println("CPR --> " + cpr.next());
+                }
+            }
+            
+            writeSuccessfullOperationToReport(new Participant(),searchOperation + "testQueryParicipant");
+        } 
+        catch (Exception e) {
+              System.out.println(e.getMessage());
+              writeFailureOperationsToReport("Participant",searchOperation + "testQueryParicipant");
+             e.printStackTrace();
+        }
+    }
+    
+    private void testQuerySpecimenEventParameters()
+    {
+        Specimen specimen = new Specimen();
+        specimen.setId(new Long(1));
+        DetachedCriteria criteria = DetachedCriteria
+        .forClass(SpecimenEventParameters.class);
+        criteria.add(Restrictions.like("specimen", specimen));
+  
+        try {
+        	  List resultList = 
+            	appService.query(criteria, SpecimenEventParameters.class
+                    .getName());
+            
+            System.out.println("No of Events found ---> " + resultList.size());
+            for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+            	SpecimenEventParameters returnedspecimenEventParam = (SpecimenEventParameters) resultsIterator.next();
+                System.out.println("returnedspecimenEventParam-->"+ returnedspecimenEventParam);
+               System.out.println("Specimen--> "+ returnedspecimenEventParam.getSpecimen().getSpecimenCollectionGroup());
+              
+            }
+            
+            writeSuccessfullOperationToReport(new Specimen(),searchOperation + "testQuerySpecimenEventParameters");
+        } 
+        catch (Exception e) {
+              System.out.println(e.getMessage());
+              writeFailureOperationsToReport("Specimen",searchOperation + "testQuerySpecimenEventParameters");
+             e.printStackTrace();
+        }
+    }
+    
+    
+    private void testQueryGetCollectionProtocolRegistrationFromCollectionProtocol()
+    {
+    	CollectionProtocol cp = new CollectionProtocol();
+    	cp.setId(new Long(15));
+        DetachedCriteria criteria = DetachedCriteria
+        .forClass(CollectionProtocolRegistration.class);
+        criteria.add(Restrictions.like("collectionProtocol", cp));
+ 
+        try {
+        	  List resultList = 
+            	appService.query(criteria, CollectionProtocolRegistration.class
+                    .getName());
+            
+            System.out.println("No of CPR found ---> " + resultList.size());
+            for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+            	CollectionProtocolRegistration cpr = (CollectionProtocolRegistration) resultsIterator.next();
+                System.out.println("CPR--> "+ cpr);
+            
+            }
+            
+            writeSuccessfullOperationToReport(new CollectionProtocol(),searchOperation + "testQueryGetCollectionProtocolRegistrationFromCollectionProtocol");
+        } 
+        catch (Exception e) {
+              System.out.println(e.getMessage());
+              writeFailureOperationsToReport("CollectionProtocol",searchOperation + "testQueryGetCollectionProtocolRegistrationFromCollectionProtocol");
+             e.printStackTrace();
+        }
+    }
+    
+    private void testSearchSpecimenAndGetCollections()
+    {
+    	
+    	Specimen specimen = new Specimen();
+     	setLogger(specimen);
+    	Logger.out.info(" searching domain object");
+    	specimen.setId(new Long(1));
+         try {
+        	 List resultList = appService.search(Specimen.class,specimen);
+        	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
+        		 Specimen returnedspecimen = (Specimen) resultsIterator.next();
+        		 
+        		 System.out.println("Label: "+returnedspecimen.getLabel() + "Type: " + returnedspecimen.getType() + " ");
+                 System.out.println("\tQuantity: " + returnedspecimen.getQuantity().getValue() + " " );
+                 System.out.println("\tEventColl: " + returnedspecimen.getSpecimenEventCollection() + " " );
+                 System.out.println("\tBiohazard: " + returnedspecimen.getBiohazardCollection() + " " );
+                 System.out.println("\tExternal: " + returnedspecimen.getExternalIdentifierCollection() + " " );
+        		 
+                 Collection specimenEventCollection = returnedspecimen.getSpecimenEventCollection();
+                 Iterator itr = specimenEventCollection.iterator();
+                 while(itr.hasNext())
+                 {
+                	SpecimenEventParameters event =  (SpecimenEventParameters) itr.next();
+                 	System.out.println("specimenEventCollection --> " + event.getTimestamp());
+                 }
+        		// System.out.println("here-->" + returnedspecimen.getSpecimenEventCollection());
+        		 writeSuccessfullOperationToReport(returnedspecimen,searchOperation);
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedspecimen.getLabel());
+             }
+          } 
+          catch (Exception e) {
+        	  writeFailureOperationsToReport("Specimen",searchOperation);  
+          	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+          }
+
+    }
+    
+    
+    
     private void testSearchSpecimenArrayType()
     {
     	SpecimenArrayType cachedspecimenArrayType =(SpecimenArrayType)dataModelObjectMap.get("SpecimenArrayType");
@@ -1593,7 +1847,9 @@ public class ClientDemo
     	SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
      	setLogger(specimenCollectionGroup);
     	Logger.out.info(" searching domain object");
+    	System.out.println("Here1");
     	specimenCollectionGroup.setId(cachedspecimenCollectionGroup.getId());
+    	System.out.println("Here2");
          try {
         	 List resultList = appService.search(SpecimenCollectionGroup.class,specimenCollectionGroup);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
