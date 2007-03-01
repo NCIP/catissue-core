@@ -169,17 +169,13 @@ function initGridView()
 						}
 						String nodeId = data.getIdentifier().toString();
 						String img = "plus.GIF";
-						if(data.getObjectName().equals(Constants.SPECIMEN_COLLECTION_GROUP))
-						{
-							img = "plus.GIF";
-						}
 						
 						if (parentId.equals("0"))
 						{
 							nodeColapseCode += "tree.closeAllItems('" + nodeId + "');";
 						}
 			%>
-					tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>",0,"","","","");
+					tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>",0,"<%=img%>","<%=img%>","<%=img%>","");
 					tree.setUserData("<%=nodeId%>","<%=nodeId%>","<%=data%>");	
 			<%	
 					}
@@ -307,28 +303,24 @@ function showSpreadsheetData(columnDataStr)
 		<td>
 		<table border="0" width="100%" cellspacing="0" cellpadding="0" height="100%" bordercolor="#000000" id="table1" >
 		<tr  class="trStyle">
-			<td width="20%" height="5%" class="queryModuleTabMenuItem">
-				<bean:message key="query.chooseSearchCategory"/>
-			</td>
-
-			<td width="20%" height="5%" class="queryModuleTabMenuItem" >
+			<td width="25%" height="5%" class="queryModuleTabMenuItem" >
 				<bean:message key="query.addLimits"/>
 			</td>
 
-			<td width="20%" height="5%" class="queryModuleTabMenuItem" >
+			<td width="25%" height="5%" class="queryModuleTabMenuItem" >
 				<bean:message key="query.defineSearchResultsViews"/>
 			</td>
 
-			<td width="20%" height="5%" class="queryTabMenuItemSelected">
+			<td width="25%" height="5%" class="queryTabMenuItemSelected">
 				<bean:message key="query.viewSearchResults"/>
 			</td>
 
-			<td width="20%" height="5%" class="queryModuleTabMenuItem">
+			<td width="25%" height="5%" class="queryModuleTabMenuItem">
 				<bean:message key="query.dataList"/>
 			</td>			
 		</tr>
 		<tr>
-			<td height="500" width="100%" colspan="5">
+			<td height="500" width="100%" colspan="4">
 
 				<table border="0"  height="100%" width="100%" cellpadding="1" cellspacing="3">
 					<tr>
@@ -378,7 +370,7 @@ function showSpreadsheetData(columnDataStr)
 				</td>
 					</tr>
 					<tr bgcolor="#DFE9F3">
-					<td colspan="5" valign="bottom" height="30">
+					<td colspan="4" valign="bottom" height="30">
 					<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#EAEAEA" height="100%" bordercolorlight="#000000" >
 					<tr height="35" valign="center">
 					 <td width="2%" valign="center">&nbsp;</td>
