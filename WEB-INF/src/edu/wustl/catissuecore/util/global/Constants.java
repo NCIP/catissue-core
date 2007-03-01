@@ -155,7 +155,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 		"name",
 		"label"
 	};
-	
+	public static final String MISSING_TWO_VALUES = "missingTwoValues";
+	public static final String DATE = "date";
 	//Surgical Pathology Report UI constants
 	public static final String SPR_VIEW_ACTION="ViewSurgicalPathologyReport.do";
 	public static final String VIEW_SURGICAL_PATHOLOGY_REPORT="viewSPR";
