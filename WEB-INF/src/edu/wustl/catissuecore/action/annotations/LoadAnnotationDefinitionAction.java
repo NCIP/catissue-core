@@ -329,7 +329,7 @@ public class LoadAnnotationDefinitionAction extends BaseAction
             entityMapXML.append("<cell>" + staticEntityName + "</cell>");
             entityMapXML.append("<cell>"
                     + Utility.parseDateToString(entityMapObj.getCreatedDate(),
-                            Constants.TIMESTAMP_PATTERN) + "</cell>");
+                            Constants.DATE_PATTERN_MM_DD_YYYY) + "</cell>");
             entityMapXML.append("<cell>" + entityMapObj.getCreatedBy()
                     + "</cell>");
             entityMapXML.append("<cell>" + entityMapObj.getLinkStatus()
@@ -433,6 +433,11 @@ public class LoadAnnotationDefinitionAction extends BaseAction
         {
             return AnnotationConstants.SPECIMEN_COLLN_GROUP;
         }
+     /*   else if (AnnotationConstants.ENTITY_NAME_COLLECTION_PROTOCOL_REGISTRATION
+                .equals(entityName))
+        {
+            return AnnotationConstants.COLLECTION_PROTOCOL_REGISTRATION;
+        }*/
         return "";
     }
 
@@ -482,6 +487,8 @@ public class LoadAnnotationDefinitionAction extends BaseAction
         if (cacheManager
                 .getObjectFromCache(AnnotationConstants.STATIC_ENTITY_LIST) == null)
         {
+            systemEntityList.add(new NameValueBean(Constants.SELECT_OPTION,
+                    Constants.SELECT_OPTION_VALUE));
             if (staticEntityInformationList != null && !staticEntityInformationList.isEmpty()) 
             {
                 Iterator listIterator = staticEntityInformationList.iterator();

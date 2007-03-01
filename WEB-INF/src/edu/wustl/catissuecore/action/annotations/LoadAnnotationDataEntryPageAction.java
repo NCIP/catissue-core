@@ -51,7 +51,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
 	{
-		AnnotationDataEntryForm annotationDataEntryForm = (AnnotationDataEntryForm)form;
+	    AnnotationDataEntryForm annotationDataEntryForm = (AnnotationDataEntryForm)form;
 		String staticEntityId = null,staticEntityRecordId = null,entityIdForCondition=null,entityRecordIdForCondition = null;
 		if(request.getParameter(WebUIManager.getOperationStatusParameterName())!=null)
 		{
@@ -62,7 +62,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 
 			entityIdForCondition = (String)getObjectFromCache(AnnotationConstants.ENTITY_ID_IN_CONDITION);
 			entityRecordIdForCondition = (String)getObjectFromCache(AnnotationConstants.ENTITY_RECORDID_IN_CONDITION);
-		}
+       	}
 		else
 		{
 			staticEntityId = request.getParameter(AnnotationConstants.REQST_PARAM_ENTITY_ID);
@@ -71,7 +71,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 			entityIdForCondition = request.getParameter(AnnotationConstants.REQST_PARAM_CONDITION_ENTITY_ID);
 			entityRecordIdForCondition = request.getParameter(AnnotationConstants.REQST_PARAM_CONDITION_ENTITY_RECORD_ID);
 			updateCache(request);
-		}
+      	}
 		Logger.out.info("Updating for Entity Id " + staticEntityId);
 		initializeDataEntryForm(request,staticEntityId,staticEntityRecordId,entityIdForCondition,entityRecordIdForCondition,annotationDataEntryForm);
 		String pageOf = request.getParameter(Constants.PAGEOF);
@@ -248,7 +248,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 				entityMapRecordXML.append("<cell>" + "0" +  "</cell>");
 				//entityMapRecordXML.append("<cell>" + entityMapRecord.getId() +  "</cell>");
 				entityMapRecordXML.append("<cell>" + dynamicEntity.getValue()+"^"+strURLForEditRecord+"</cell>");
-				entityMapRecordXML.append("<cell>" + Utility.parseDateToString(entityMapRecord.getCreatedDate(),Constants.TIMESTAMP_PATTERN) + "</cell>");
+				entityMapRecordXML.append("<cell>" + Utility.parseDateToString(entityMapRecord.getCreatedDate(),Constants.DATE_PATTERN_MM_DD_YYYY) + "</cell>");
 				entityMapRecordXML.append("<cell>" + entityMapRecord.getCreatedBy() + "</cell>");
 				entityMapRecordXML.append("<cell>" + "Edit" +"^"+ strURLForEditRecord+"</cell>");
 				entityMapRecordXML.append("</row>");
