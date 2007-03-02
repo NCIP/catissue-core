@@ -120,6 +120,8 @@ drop table  CATISSUE_DISTRIBUTION_SPE_REQ;
 drop table  CATISSUE_SITE;
 drop table  CATISSUE_EMBEDDED_EVENT_PARAM;
 drop table  CATISSUE_IN_OUT_EVENT_PARAM;
+drop table  CATISSUE_ENTITY_MAP;
+drop table  CATISSUE_ENTITY_MAP_RECORD;
 drop table  CATISSUE_COLL_DISTRIBUTION_REL;
 drop table  CATISSUE_DISPOSAL_EVENT_PARAM;
 drop table  CATISSUE_SPECIMEN_REQUIREMENT;
@@ -194,6 +196,8 @@ drop   sequence CATISSUE_STORAGE_CONTAINER_SEQ;
 drop   sequence CATISSUE_PART_MEDICAL_ID_SEQ;
 drop   sequence CATISSUE_COLL_PROT_EVENT_SEQ;
 drop   sequence CATISSUE_BIOHAZARD_SEQ;
+drop   sequence CATISSUE_ENTITY_MAP_SEQ;
+drop   sequence CATISSUE_ENTITY_MAP_RECORD_SEQ
 drop   sequence CATISSUE_INSTITUTION_SEQ;
 drop   sequence CATISSUE_SPECIMEN_REQ_SEQ;
 drop   sequence CATISSUE_CLINICAL_REPORT_SEQ;
@@ -337,6 +341,28 @@ create table CATISSUE_DISTRIBUTION_SPE_REQ (
    DISTRIBUTION_PROTOCOL_ID number(19,0) not null,
    SPECIMEN_REQUIREMENT_ID number(19,0) not null,
    primary key (DISTRIBUTION_PROTOCOL_ID, SPECIMEN_REQUIREMENT_ID)
+);
+create table CATISSUE_ENTITY_MAP (
+   IDENTIFIER number(19,0) not null,
+   CONTAINER_ID number(19,0),
+   STATIC_RECORD_ID number(19,0),
+   STATIC_ENTITY_ID number(19,0),
+   CREATED_DATE date,
+   CREATED_BY varchar2(255),
+   STATUS varchar2(10),
+   TYPE_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_ENTITY_MAP_RECORD (
+   IDENTIFIER number(19,0) not null,
+   ENTITY_MAP_ID number(19,0),
+   STATIC_ENTITY_RECORD_ID number(19,0),
+   DYNAMIC_ENTITY_RECORD_ID number(19,0),
+   CREATED_DATE date,
+   MODIFIED_DATE date,
+   CREATED_BY varchar2(255),
+   STATUS varchar2(10),
+   primary key (IDENTIFIER)
 );
 create table CATISSUE_SITE (
    IDENTIFIER number(19,0) not null ,

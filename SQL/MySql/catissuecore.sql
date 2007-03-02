@@ -168,6 +168,8 @@ drop table if exists CATISSUE_DISTRIBUTION_SPE_REQ;
 drop table if exists CATISSUE_SITE;
 drop table if exists CATISSUE_EMBEDDED_EVENT_PARAM;
 drop table if exists CATISSUE_IN_OUT_EVENT_PARAM;
+drop table if exists CATISSUE_ENTITY_MAP;
+drop table if exists CATISSUE_ENTITY_MAP_RECORD;
 drop table if exists CATISSUE_COLL_DISTRIBUTION_REL;
 drop table if exists CATISSUE_DISPOSAL_EVENT_PARAM;
 drop table if exists CATISSUE_SPECIMEN_REQUIREMENT;
@@ -372,6 +374,28 @@ create table CATISSUE_EMBEDDED_EVENT_PARAM (
 create table CATISSUE_IN_OUT_EVENT_PARAM (
    IDENTIFIER bigint not null,
    STORAGE_STATUS varchar(100) not null,
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_ENTITY_MAP (
+   IDENTIFIER bigint not null auto_increment,
+   CONTAINER_ID bigint,
+   STATIC_RECORD_ID bigint,
+   STATIC_ENTITY_ID bigint,
+   CREATED_DATE date,
+   CREATED_BY varchar(255),
+   STATUS varchar(10),
+   TYPE_ID bigint,
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_ENTITY_MAP_RECORD (
+   IDENTIFIER bigint not null auto_increment,
+   ENTITY_MAP_ID bigint,
+   STATIC_ENTITY_RECORD_ID bigint,
+   DYNAMIC_ENTITY_RECORD_ID bigint,
+   CREATED_DATE date,
+   MODIFIED_DATE date,
+   CREATED_BY varchar(255),
+   STATUS varchar(10),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_COLL_DISTRIBUTION_REL (
