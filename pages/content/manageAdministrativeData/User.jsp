@@ -444,6 +444,7 @@ function handleStatus(status)
 										  optionsList = "<%=request.getAttribute("roleList")%>"
 										  initialValue="<%=userForm.getRole()%>"
 										  styleClass="formFieldSized"
+										  staticField="false"
 										  readOnly="<%=roleStatus + ""%>"
 									    />
 						</td>
@@ -481,6 +482,7 @@ function handleStatus(status)
 										  optionsList = "<%=request.getAttribute("roleList")%>"
 										  initialValue="<%=userForm.getRole()%>"
 										  styleClass="formFieldSized"
+										  staticField="false"
 										  readOnly="<%=roleStatus + ""%>"
 									    />
 						</td>
@@ -499,6 +501,7 @@ function handleStatus(status)
 										  optionsList = "<%=request.getAttribute("roleList")%>"
 										  initialValue="<%=userForm.getRole()%>"
 										  styleClass="formFieldSized"
+                                          staticField="false"
 										  readOnly="<%=roleStatus + ""%>"
 									    />
 						</td>
