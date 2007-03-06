@@ -495,9 +495,9 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.participantDef" />
-			<forward name="SpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef" />
-			<forward name="Specimen" path=".catissuecore.newSpecimenDef" />
-			<forward name="Participant" path=".catissuecore.participantDef" />
+			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef" />
+			<forward name="pageOfSpecimen" path=".catissuecore.newSpecimenDef" />
+			<forward name="pageOfParticipant" path=".catissuecore.participantDef" />
 			<forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
 		<!--Suite-->
@@ -655,6 +655,8 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/pages/content/manageBioSpecimen/DisplayAnnotationDataEntryPage.jsp"/>
 			<forward name="pageOfParticipant" path="/Participant.do?operation=viewAnnotations"/>
+			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=viewAnnotations"/>
+			
 		</action>
 		<action path="/LoadAnnotationDataEntryPage"
 			type="edu.wustl.catissuecore.action.annotations.LoadAnnotationDataEntryPageAction"
@@ -692,8 +694,8 @@ PUBLIC
 			<!-- forward name="success" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13" /-->
 			<forward name="success" path="/CollectionProtocolRegistrationSearch.do?pageOf=pageOfCollectionProtocolRegistration" />
 			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13&amp;showConsents=yes" />
-			<forward name="createSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupTabsPage&amp;submittedFor=Default" />
-			<forward name="specimenCollectionGroup" path="/LoadSpecimenCollGroupPage.do?operation=add" />
+			<forward name="createSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;showConsents=yes" />
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes" />
 		</action>
 		
 		<action path="/CollectionProtocolRegistrationEdit"
@@ -704,7 +706,7 @@ PUBLIC
 			scope="request">
 			<forward name="success" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13&amp;showConsents=yes" />
 			<forward name="failure" path="/CollectionProtocolRegistration.do?operation=edit&amp;pageOf=pageOfCollectionProtocolRegistration&amp;menuSelected=13&amp;showConsents=yes" />
-			<forward name="createSpecimenCollectionGroup" path="/LoadSpecimenCollGroupPage.do?operation=add" />
+			<forward name="createSpecimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes" />
 		</action>
 		
 		<action path="/CollectionProtocolRegistrationSearch"
@@ -1000,7 +1002,7 @@ PUBLIC
 			<forward name="success" path="/CollectionProtocolSearch.do?pageOf=pageOfCollectionProtocol" />
 			<forward name="failure" path="/CollectionProtocol.do?operation=add&amp;pageOf=pageOfCollectionProtocol&amp;menuSelected=9" />
 			<forward name="participantRegistration" path="/CollectionProtocolRegistration.do?operation=add&amp;pageOf=pageOfCollectionProtocolRegistration&amp;showConsents=yes&amp;errorShowConsent=yes" />
-			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupTabsPage&amp;submittedFor=Default" />
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
 		</action>
 
 		<action path="/CollectionProtocolEdit"
@@ -1158,26 +1160,24 @@ PUBLIC
 			name="specimenCollectionGroupForm"
 			validate="false"
 			scope="request">
-			<forward name="pageOfSpecimenCollectionGroup" path="/pages/content/manageBioSpecimen/SpecimenCollectionGroup.jsp" />
+			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef" />
 			<forward name="pageOfSpecimenCollectionGroupQuery" path=".catissuecore.specimenCollectionGroupEditDef" />
 			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.specimenCollectionGroupEditDef" />			
 			<forward name="failure" path=".catissuecore.specimenCollectionGroupDef" />
-			<forward name="pageOfSpecimenCollectionGroupTabsPage" path=".catissuecore.specimenCollectionGroupDef" />
-
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
-
+		
 		<action path="/SpecimenCollectionGroupAdd"
 			type="edu.wustl.common.action.CommonAddEditAction"
 			name="specimenCollectionGroupForm"
 			validate="true"
-			input="/LoadSpecimenCollGroupPage.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"
+			input="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes"
 			scope="request">
 			<!-- forward name="success" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" /-->
-			<forward name="success" path="/LoadSpecimenCollGroupPage.do?operation=afterAdd&amp;pageOf=pageOfSpecimenCollectionGroup" />
+			<forward name="success" path="/SpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroup" />
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes" />
 			<forward name="createNewSpecimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;virtualLocated=true&amp;showConsents=yes&amp;tableId4=disable" />
-			<forward name="createMultipleSpecimen" path="/LoadSpecimenCollGroupPage.do?operation=createMultipleSpecimen" />			
+			<forward name="createMultipleSpecimen" path="/InitMultipleSpecimen.do?operation=add&amp;menuSelected=15" />			
 		</action>
 		
 		<action path="/SpecimenCollectionGroupEdit"
@@ -1190,7 +1190,7 @@ PUBLIC
 			<forward name="query" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupQuery&amp;menuSelected=12" />
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;showConsents=yes" />
 			<forward name="createNewSpecimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;virtualLocated=true&amp;showConsents=yes&amp;tableId4=disable" />
-			<forward name="createMultipleSpecimen" path="/LoadSpecimenCollGroupPage.do?operation=createMultipleSpecimen" />			
+			<forward name="createMultipleSpecimen" path="/InitMultipleSpecimen.do?operation=add&amp;menuSelected=15" />			
 		</action>
 
 		<action path="/SpecimenCollectionGroupSearch"
@@ -1513,7 +1513,7 @@ PUBLIC
 			<forward name="success" path="/SiteSearch.do?pageOf=pageOfSite" />
 			<forward name="failure" path="/Site.do?operation=add&amp;pageOf=pageOfSite&amp;menuSelected=5" />
 			<forward name="storageContainer" path="/StorageContainer.do?operation=add&amp;pageOf=pageOfStorageContainer" />
-			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupTabsPage" />
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup" />
 			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=16" />
 		</action>
 		
@@ -2561,8 +2561,8 @@ PUBLIC
 			<forward name="pageOfParticipant" path="/ParticipantSearch.do"/>
 			<forward name="pageOfCollectionProtocolRegistration" path="/CollectionProtocolRegistrationSearch.do"/>
 			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen"/>
-			<!--<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroup"/>-->
-			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef"/>
+			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroup"/>
+			<!--<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef"/>-->
 			<forward name="pageOfCellSpecimenReviewParameters" path="/CellSpecimenReviewParametersSearch.do"/>
 			<forward name="pageOfCheckInCheckOutEventParameters" path="/CheckInCheckOutEventParametersSearch.do"/>
 			<forward name="pageOfCollectionEventParameters" path="/CollectionEventParametersSearch.do"/>
@@ -3033,7 +3033,7 @@ PUBLIC
 			name="newSpecimenForm"
 			validate="false"
 			scope="request">
-			<forward name="specimenCollectionGroup" path="/LoadSpecimenCollGroupPage.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14&amp;submittedFor=AddNew" />
+			<forward name="specimenCollectionGroup" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 			<forward name="specimenCollectionGroupCPQuery" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=14" />			
 		</action>
 
