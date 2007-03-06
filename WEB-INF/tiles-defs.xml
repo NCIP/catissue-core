@@ -377,7 +377,7 @@
 	
 	<!-- SpecimenCollectionGroup Parameters -->
 	<definition name=".catissuecore.specimenCollectionGroupDef" extends=".catissuecore.manageBioSpecimenHomeDef">
-		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenCollGroupTabsPage.jsp" />
+		<put name="content" value="/pages/content/manageBioSpecimen/SpecimenCollectionGroup.jsp" />
 	</definition>
 	
 	<definition name=".catissuecore.specimenCollectionGroupAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">

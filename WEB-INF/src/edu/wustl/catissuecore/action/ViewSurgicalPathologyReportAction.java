@@ -61,7 +61,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         request.setAttribute(Constants.SUBMITTED_FOR, submittedFor);
         request.setAttribute(Constants.FORWARD_TO, forwardTo);
         
-        return mapping.findForward(Constants.SUCCESS);
+        return mapping.findForward(pageOf);
 
 	}
 	
