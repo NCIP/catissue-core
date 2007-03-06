@@ -302,7 +302,7 @@ public class ParticipantLookupLogic implements LookupLogic
 					participants.add(result);
 					if (participants.size() == 100) // Return when matching participant list size becomes 100
 					{
-						break;
+						return participants;
 					}
 				}
 			}
