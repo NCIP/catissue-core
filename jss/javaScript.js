@@ -885,8 +885,16 @@ function initAnnotationGrid()
 	var annotationXMLFld = document.getElementById('definedAnnotationsDataXML');
 	annotationsGrid.loadXMLString(annotationXMLFld.value);
 }
-
-
+function displayAnnotationsPage()
+{
+	var form = document.forms[0];
+	if(form!=null)
+	{
+		var entityRecordID = document.getElementById('id');
+		form.action = "LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=" + entityRecordID.value;
+		form.submit();
+	}
+}
 function loadDynamicExtDataEntryPage()
 {
 	document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do";
@@ -1222,3 +1230,12 @@ function submitForm()
 			form.submit();
 		}
 }
+
+
+function viewAnnotations(specimenEntityId,ID)
+	{
+		
+		var action="DisplayAnnotationDataEntryPage.do?entityId="+specimenEntityId+"&entityRecordId="+ID+"&pageOf=pageOfNewSpecimen&operation=viewAnnotations";
+		document.forms[0].action=action;
+		document.forms[0].submit();
+	}
