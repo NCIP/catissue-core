@@ -11,6 +11,7 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
+<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%
@@ -31,6 +32,15 @@
 	
 	String currentReceivedDate = "";
 	String currentCollectionDate = "";
+
+
+
+	Long specimenEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+		
+
+
+
+
 	if (form != null) 
 	{
 		currentReceivedDate = form.getReceivedEventDateOfEvent();
@@ -346,9 +356,11 @@
 						
 				formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15";				
 			}			
-
 			confirmDisable(formName,document.forms[0].activityStatus);
 		}
+
+
+
 		
 // Consent Tracking Module Virender mehta	
 	function switchToTab(selectedTab)
@@ -470,7 +482,7 @@
 	  function showConsents()
 	  {
 		var showConsents = "<%=tab%>";
-		if(showConsents=="<%=Constants.NULL%>" || showConsents=="<%=Constants.NEWSPECIMEN_FORM%>")
+		if(showConsents=="<%=Constants.NULL%>" || showConsents=="specimen" || showConsents=="<%=Constants.NEWSPECIMEN_FORM%>")
 		{
 			newspecimenPage();
 		}
@@ -480,6 +492,10 @@
 		}
 	  }
 // Consent Tracking Module Virender mehta	 
+
+
+    
+
 
 	</script>
 </head>
@@ -626,7 +642,7 @@
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value)">
 					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
 				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">
@@ -641,6 +657,10 @@
 	<%
 	}
 	%>
+	
+	
+	
+	
 
 <!--  Consent Tracking Module Virender mehta	 -->
 	<%
