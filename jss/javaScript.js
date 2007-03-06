@@ -877,24 +877,16 @@ function initAnnotationGrid()
 {
 	annotationsGrid = new dhtmlXGridObject('definedAnnotationsGrid');
 	annotationsGrid.setImagePath("dhtml_comp/imgs/");
-	annotationsGrid.setHeader("#,Annotation,Last Updated,Updated By,Edit");
-	annotationsGrid.setInitWidthsP("5,30,30,30,5")
+	annotationsGrid.setHeader("#,Annotation,Last Updated,Updated By");
+	annotationsGrid.setInitWidthsP("5,32,31,32")
 	annotationsGrid.setColAlign("center,left,left,left,left")
-	annotationsGrid.setColTypes("ch,link,ed,ed,link");
+	annotationsGrid.setColTypes("ch,link,ed,ed");
 	annotationsGrid.init();
 	var annotationXMLFld = document.getElementById('definedAnnotationsDataXML');
 	annotationsGrid.loadXMLString(annotationXMLFld.value);
 }
-function displayAnnotationsPage()
-{
-	var form = document.forms[0];
-	if(form!=null)
-	{
-		var entityRecordID = document.getElementById('id');
-		form.action = "LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=" + entityRecordID.value;
-		form.submit();
-	}
-}
+
+
 function loadDynamicExtDataEntryPage()
 {
 	document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do";
