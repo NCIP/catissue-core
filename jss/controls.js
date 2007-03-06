@@ -449,6 +449,7 @@ Autocompleter.Local.prototype = Object.extend(new Autocompleter.Base(), {
             }			
 			else
             {			
+			     instance.options.choices = 10; 
 				 var spacePresent = false;
 				 if(initialEntry.indexOf(" ")!=-1)
 				 {
