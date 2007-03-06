@@ -8,7 +8,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.ListSpecimenEventParametersForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-
+<%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 
 
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
@@ -33,9 +33,19 @@
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	Integer identifierFieldIndex = new Integer(0);
-	String specimenIdentifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
+	String specimenIdentifier = (String)request.getAttribute(Constants.ID);
 	if(specimenIdentifier == null || specimenIdentifier.equals("0"))
-		specimenIdentifier = (String)request.getParameter(Constants.SPECIMEN_ID);
+		specimenIdentifier = (String)request.getParameter(Constants.ID);
+
+	if(specimenIdentifier != null && !specimenIdentifier.equals("0"))
+	           session.setAttribute(Constants.SPECIMEN_ID,specimenIdentifier);
+
+	if(specimenIdentifier == null || specimenIdentifier.equals("0"))
+	{
+ 		specimenIdentifier= (String)session.getAttribute(Constants.SPECIMEN_ID);//,specimenIdentifier);
+ 	//	session.removeAttribute(Constants.SPECIMEN_ID); 		
+	}
+
 
 
 	//------------- Mandar 04-july-06 QuickEvents
@@ -55,8 +65,10 @@
 			iframeSrc = getEventAction(eventSelected, specimenIdentifier);
 			formAction = Constants.QUICKEVENTSPARAMETERS_ACTION;
 		}
-//		System.out.println("iframeSrc : "+ iframeSrc);
+//		System.out.println("iframeSrcEvent : "+ specimenIdentifier);
 	//------------- Mandar 04-july-06 QuickEvents
+
+	Long specimenEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
 
 %>
 
@@ -149,7 +161,7 @@
 					<%=Constants.SURGICAL_PATHOLOGY_REPORT %>
 				</td>
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()"  onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>)">
 					<%=Constants.CLINICAL_ANNOTATIONS %>
 				</td>
 				</td>
