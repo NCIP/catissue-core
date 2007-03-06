@@ -356,6 +356,12 @@
 	<definition name=".catissuecore.newSpecimenEditSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
+
+	<definition name=".catissuecore.viewSpecimenAnnotation" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenAnnotation.jsp" />
+	</definition>
+
+
 	<!-- NEW SPECIMEN -->
 	
 	
