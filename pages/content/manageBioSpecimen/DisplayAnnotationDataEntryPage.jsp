@@ -18,15 +18,20 @@
 
 
 
-	<html:hidden property="id" /><html:hidden property="pageOf"/>
+	
 	<%
-	pageOf = (String) request.getAttribute("pageOf");
-	id = (String) request.getAttribute("id");
+	
+	String pageOf1 = (String) request.getAttribute("pageOf");
+	String id1 = (String) request.getAttribute("id");
 	String participantEntityId1 = (String) request.getAttribute("entityId");
 	String entityRecordId = (String) request.getAttribute("entityRecordId");
-	String url = "LoadAnnotationDataEntryPage.do?pageOf="+pageOf+"&id="+id+"&entityId="+participantEntityId1+"&entityRecordId="+entityRecordId;
+	String url = "LoadAnnotationDataEntryPage.do?pageOf="+pageOf1+"&id="+id1+"&entityId="+participantEntityId1+"&entityRecordId="+entityRecordId;
+
+	
 	%>
 	<iframe src = "<%=url%>" style = "overflow-y:auto" height = 100% width = "100%" name = "dynamicExtensionsFrame" id = "dynamicExtensionsFrame" frameborder="0">
 	</iframe>
+
+	<html:hidden property="id" /><html:hidden property="pageOf"/>
 </html:form>
 </html>
