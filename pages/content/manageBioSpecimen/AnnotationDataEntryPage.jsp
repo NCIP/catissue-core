@@ -35,7 +35,7 @@
 	<!-- Actual HTML Code Start -->
 	<br>
 
-		<table  valign="top" id = "test" class= "contentPage" width='100%' border ="0" height="100%"  cellspacing="0" cellpadding="3">
+		<table  valign="top" id = "test" class= "contentPage" width='100%' border ="0" height="95%"  cellspacing="0" cellpadding="3">
 		<tr>
 		    <td width="1%"></td>
 		<td>
