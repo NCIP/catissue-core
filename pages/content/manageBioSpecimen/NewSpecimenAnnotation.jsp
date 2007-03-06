@@ -84,7 +84,7 @@ function showEvent()
 
 <html:form action="<%=formAction%>">
 <!-- Mandar 05-July-06 Code for tabs start -->
-	 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="100%" class="tabPage" width="87%">  
+	 	<table summary="" cellpadding="0" cellspacing="0" border="0" height="400" class="tabPage" width="87%">  
 			<tr>
 				<td height="20" class="tabMenuItem"  onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onclick="addNewAction(<%= specimenPath %>)">
 					<bean:message key="tab.specimen.details"/>
@@ -95,12 +95,13 @@ function showEvent()
 				</td>
 
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
-					<%=Constants.SURGICAL_PATHOLOGY_REPORT %>
+					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				
 				<td height="20" class="tabMenuItemSelected"  onClick="">
-					<%=Constants.CLINICAL_ANNOTATIONS %>
+					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
+				
 				</td>
 				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="addNewAction(<%= consentTab %>)" id="consentTab">
 					<bean:message key="consents.consents"/>            
@@ -109,7 +110,7 @@ function showEvent()
 				<td width="350" class="tabMenuSeparator" colspan="1">&nbsp;</td>
 			</tr>
 			<tr>
-				<td class="tabField" colspan="6">
+				<td class="tabField" colspan="6"  width = "100%" height = "100%">
 					<%@ include file="DisplayAnnotationDataEntryPage.jsp" %>				
 				</td>
 			</tr>
