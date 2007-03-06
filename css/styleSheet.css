@@ -1547,3 +1547,12 @@ queryLink{ /* for the text links in the Search category page */
   font-size:0.9em;
   color:#000000; /* constant: black */
 }
+.formRequiredLabelWithoutBackgrnd{ /* for the required form labels without border*/
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  font-weight:bold;
+ /* background-color:#F4F4F5; /* constant: light gray */
+ /* color:#000000; /* constant: black	*/
+  /*border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
