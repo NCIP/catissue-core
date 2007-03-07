@@ -200,7 +200,7 @@
 	%>
 		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">
 			<tr>
-				<td height="20" class="tabMenuItemSelected" onclick="document.location.href='ManageAdministrativeData.do'">Edit</td>
+				<td height="20" class="tabMenuItemSelected">Edit</td>
 
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
