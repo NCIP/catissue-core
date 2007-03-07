@@ -15,9 +15,8 @@
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%
-		
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
-		NewSpecimenForm form = (NewSpecimenForm)request.getAttribute(Constants.NEWSPECIMEN_FORM);
+	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute(Constants.NEWSPECIMEN_FORM);
 	String frdTo = form.getForwardTo();
 	String nodeId="";
 	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
@@ -32,15 +31,7 @@
 	
 	String currentReceivedDate = "";
 	String currentCollectionDate = "";
-
-
-
 	Long specimenEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
-		
-
-
-
-
 	if (form != null) 
 	{
 		currentReceivedDate = form.getReceivedEventDateOfEvent();
@@ -332,6 +323,7 @@
                
 			  // Clear the value of onSubmit 
 		    document.forms[0].onSubmit.value="";
+			var consentTier=document.forms[0].consentTierCounter.value;
 			var answer = confirm("Do you want to submit any changes?");
 			var formName;;
 			<% String formNameAction = null;%>
@@ -343,7 +335,7 @@
 				{
 					formNameAction = "CPQueryNewSpecimenEdit.do";
 				}%>
-				formName = "<%=formNameAction%>";
+				formName = "<%=formNameAction%>?consentTierCounter="+consentTier;
 			}
 			else{
 				var id = document.forms[0].id.value;			
@@ -354,7 +346,7 @@
 					formNameAction = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery";
 				}%>
 						
-				formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15";				
+				formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15&consentTierCounter="+consentTier;				
 			}			
 			confirmDisable(formName,document.forms[0].activityStatus);
 		}
@@ -397,15 +389,18 @@
 			
 		var display3=document.getElementById('bioHazards'); 
 		display3.style.display=tabSelected;
-			
+	
 		var displayConsentTable=document.getElementById('table4');
 		if(displayConsentTable!=null)
 		{
 			displayConsentTable.style.display=displayTable;	
 		}
+		
 		var display5=document.getElementById('specimenPageButton');
 		display5.style.display=showAlways;
 		
+		var aliquotTable=document.getElementById('aliquotId');
+		aliquotTable.style.display=tabSelected;
 				
 		var collectionTab=document.getElementById('newSpecimenTab');
 		var consentTab=document.getElementById('consentTab');
@@ -466,17 +461,17 @@
 			<%
 				if(form.getConsentTierCounter()>0)			
 				{
-				%>
+			%>
 					switchToTab("consentTab");
-				<%
+			<%
 				}
 				else
 				{
-				%>
+			%>
 					alert("No consents available for selected Specimen Collection Group");
-				<%
+			<%
 				}
-				%>
+			%>
 		}
 
 	  function showConsents()
@@ -491,12 +486,18 @@
 			consentPage();			
 		}
 	  }
+	  
+	  //For View Surgical Pathology Report
+		function viewSPR()
+        {
+			var tempId=document.forms[0].id.value;
+			var consentTierCounter=document.forms[0].consentTierCounter.value;
+        	var action="<%=Constants.SPR_VIEW_ACTION%>?operation=viewSPR&pageOf=pageOfNewSpecimen&id="+tempId+"&consentTierCounter="+consentTierCounter;
+			document.forms[0].action=action;
+			document.forms[0].submit();
+        }
+
 // Consent Tracking Module Virender mehta	 
-
-
-    
-
-
 	</script>
 </head>
 <body onLoad="showConsents()">
@@ -525,7 +526,6 @@
 					{
 						unitSpecimen = Constants.UNIT_GM;
 					}
-						
 				}
 				if(form.getClassName().equals("Fluid"))
 				{
@@ -539,12 +539,22 @@
 				{
 					unitSpecimen = Constants.UNIT_MG;
 				}
-				
 		}
-		
-		
 
-
+		Map mapValues = null;
+		int noOfRows=0;
+		ViewSurgicalPathologyReportForm formSPR=null;
+		if(operation.equals("viewSPR"))
+		{
+			Object obj = request.getAttribute("viewSurgicalPathologyReportForm");
+			if(obj != null && obj instanceof ViewSurgicalPathologyReportForm)
+			{
+				formName=Constants.SPR_VIEW_ACTION;
+				formSPR=(ViewSurgicalPathologyReportForm)obj;
+				mapValues = formSPR.getValues();
+				noOfRows = formSPR.getCounter();
+			}
+		}
 %>
 
 
@@ -592,7 +602,7 @@
 								<html:hidden property="withdrawlButtonStatus"/>
 								<html:hidden property="stringOfResponseKeys"/>
 								<html:hidden property="applyChangesTo"/>
-								
+								<html:hidden property="consentTierCounter"/>
 							</td>
 							<td>
 
@@ -642,7 +652,7 @@
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value)">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value,document.forms[0].consentTierCounter.value)">
 					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
 				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">
@@ -657,11 +667,6 @@
 	<%
 	}
 	%>
-	
-	
-	
-	
-
 <!--  Consent Tracking Module Virender mehta	 -->
 	<%
 	if(pageView.equals("add"))
@@ -1474,17 +1479,22 @@
 
 							<!--specimenPageButton-->
 			 				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id ="specimenPageButton">
-							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
-							<tr>					
-								<td class="formFieldNoBordersBold" height="20" colspan="5">
-									<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
-										&nbsp; <bean:message key="specimen.aliquot.message"/>
-									</html:checkbox>
-							    </td>
-							</tr>								
-							</logic:notEqual>
-							 
-							 <!-- Bio-hazards End here -->	
+								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
+									<tr>
+										<td>
+											<table id="aliquotId">
+												<tr>					
+													<td class="formFieldNoBordersBold" height="20" colspan="5">
+														<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
+															&nbsp; <bean:message key="specimen.aliquot.message"/>
+														</html:checkbox>
+													</td>
+												</tr>	
+											</table>
+										</td>
+									</tr>
+								</logic:notEqual>
+								<!-- Bio-hazards End here -->	
 						   	 	<tr>
 							  		<td align="left" colspan="6">
 										<%
