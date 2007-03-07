@@ -23,6 +23,7 @@
 .active-column-1 {width:200px}
 </style>
 <%
+	String consentTierCounter =(String)request.getParameter("consentTierCounter");
 	String[] columnList1 = Constants.EVENT_PARAMETERS_COLUMNS;
 	List columnList = new ArrayList();
 	for(int i=0;i<columnList1.length;i++)
@@ -83,7 +84,31 @@
 	<%}%>
 
 <script language="JavaScript">
+	
+	function viewSPR(specimenId)
+    {
+		var action="<%=Constants.SPR_VIEW_ACTION%>?operation=viewSPR&pageOf=pageOfNewSpecimen&id="+specimenId+"&consentTierCounter=<%=consentTierCounter%>";
+		document.forms[0].action=action;
+		document.forms[0].submit();
+    }
 
+	function showConsents()
+	{
+	<%
+		if(consentTierCounter.equals("0"))			
+		{
+	%>
+			alert("No consents available for selected Specimen Collection Group");		
+	<%
+		}
+		else
+		{
+	%>
+			addNewAction(<%= consentTab %>)			
+	<%
+		}
+	%>
+}
 	function onParameterChange(element)
 	{
 		var action = "";
@@ -161,11 +186,11 @@
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()"  onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>)">
-				<bean:message key="edit.tab.clinicalannotation"/>
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()"  onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,<%=consentTierCounter%>)">
+					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
 				</td>
-				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="addNewAction(<%= consentTab %>)" id="consentTab">
+				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="showConsents()" id="consentTab">
 					<bean:message key="consents.consents"/>            
 				</td>
 
