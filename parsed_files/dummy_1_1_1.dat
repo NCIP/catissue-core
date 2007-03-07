@@ -1,0 +1,276 @@
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004328|P|2.3
+PID|1||307005^^^RF|tst2883394|BEDFORD^BOB||19761224|M|||||||||||103-07-2005|||||||||||N
+PV1|1||BMOP||||505078^PLANET^URANUS||||||||||pmc97361^PLANET^MARS|BMC|072005066|||||||||||||||||||||||||200503071314
+ORC|RE||PHS05-1^CoPathPlus||CM||||200503151618|z41^LOSOS^FRANK||505078^PLANET^URANUS
+OBR|1||PHS05-1^CoPathPlus^tst5846183|PHSP^PH Surgical Pathology|||200503151617|||||||200503151617|COBX|505078||||^28^Y|-1|200512290858||SP|F|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+OBX|1|CE|ANT|tst5846183.1|COBX^Biopsy Colon^L||||||F||1^1
+OBX|2|TX|FIN|tst5846183|\.br\testing\.br\more testing\.br\||||||F
+OBR|2||tst5846183^CoPathPlus^tst5846183.A1|ADD^Addendum||||||||||200506271514|||||||1|200506271514||SP|F||||||||z491^NESTLER^RICK
+OBX|1|TX|ADX|tst5846183|A section of the sixth rib shows no significant pathologic abnormality.\.br\||||||F
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004329|P|2.3
+PID|1||423565852^^^RD|tst0264394|BDK^POWERCHART||19730510|M||W|200 MEDIPAC DRIVE^APARTMENT 701^PITTSBURGH^PA^15206^United States||(412)555-1212|(412)828-1300|||||423-56-5852|||||||||||N
+PV1|1||D2W^203||||002103^TULSKY^ASHER|||||||||||I|0058924815081|P||||||||||||||||||||||||200503221417
+ORC|RE||BDS05-1^CoPathPlus||CM||||200503231152|z491^NESTLER^RICK||002103^TULSKY^ASHER
+OBR|1||BDS05-1^CoPathPlus^tst8356183|^BD Histology|||200503231152|||||||200503231152|ABS|002103||||^31^Y|-1|200503231154||SP|F|||||||987654^PATHOID^DOCTOR|z491^NESTLER^RICK
+OBX|1|CE|ANT|tst8356183.1|ABS^Abscess^L||||||F||1^1
+OBX|2|TX|GDT|tst8356183|It consists of a 2.0 x 1.8 x 1.1 cm. specimen of soft tissue containing a 1.5 x 1.3 x 1.0 cm. nodule.  The external surface of the specimen is inked.  On section, the cut surface has a 0.7 x 0.5 cm. soft, dark pink moderately well circumscribed nodule.  One section is submitted for frozen section procedure and labeled 1A.  An additional section is submitted for permanent sections and labeled 1B.  The remaining specimen is totally embedded in three sections, which are labeled 1C.  Also received is a separate well-circumscribed nodular segment of soft tissue, measuring 0.6 x 0.5 x 0.3 cm.  It is totally embedded and labeled 1D.\.br\||||||F
+OBX|3|TX|MDT|tst8356183|Microscopic examination substantiates the above diagnosis.\.br\||||||F
+OBX|4|TX|FIN|tst8356183|SUPERFICIAL PAROTID GLAND, EXCISION:\.br\A.REACTIVE LYMPHOID FOLLICULAR HYPERPLASIA OF LYMPH NODE INSIDE THE PAROTID GLAND (See Comment).\.br\B.SMALL, SEPARATE, DISCRETE HYPERPLASTIC LYMPH NODE.\.br\||||||F
+OBX|5|CE|IMP|tst8356183|M72200^^SNO||||||||1||A
+OBX|6|CE|IMP|tst8356183|P1100^^SNO||||||||1||A
+OBX|7|CE|IMP|tst8356183|T08000^^SNO||||||||1||A
+OBX|8|CE|IMP|tst8356183|T08140^^SNO||||||||1||A
+OBX|9|CE|IMP|tst8356183|T55100^^SNO||||||||1||A
+OBX|10|CE|IMP|tst8356183|T55101^^SNO||||||||1||A
+OBX|11|CE|IMP|tst8356183|000^^ICD||||||||1
+OBR|2||tst8356183^CoPathPlus^tst8356183.A1|ADD^Addendum||||||||||200503231718|||||||1|200503231718||SP|F|||||||987654^PATHOID^DOCTOR|z41^LOSOS^FRANK
+OBX|1|TX|ADX|tst8356183|Results for serum asphalt are NEGATIVE.  Patient can hit the road.\.br\||||||F
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004332|P|2.3
+PID|1||N0000022^^^RV|tpmc0921494|ADMYOST^LOIS||19500101|F||PVW|STREET^^PITTSBURGH^PA^15237^United States||412-367-6700 X5416|800-433-7300|||||555-66-3321|||||||||||N
+PV1|1||PVED||||EDMD^Emergency^Physicians|||||||||||PVER|N00000001909|PVMAHMO||||||||||||||||||||||||200601101853
+ORC|RE||PVS06-1^CoPathPlus||CM||||200601111504|z41^LOSOS^FRANK||EDMD^Emergency^Physicians
+OBR|1||PVS06-1^CoPathPlus^tpmc3387183|PVAP^PV Pathology|||200601111503|||||||200601111503|COLONBIO|EDMD||||^56^Y|-1|200601111544||SP|F|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+OBX|1|CE|ANT|tpmc3387183.1|COLONBIO^Colon Biopsy/Polyp^L||||||F||1^1
+OBX|2|CE|ANT|tpmc3387183.2|COLONBIO^Colon Biopsy/Polyp^L||||||F||2^2
+OBX|3|CE|ANT|tpmc3387183.3|CRYS^CRYSTALS (PVSP)^L||||||F||3^3
+OBX|4|ST|BLOCK|tpmc3387183.1.1|A||||||||1^A|200601111503
+OBX|5|ST|BLOCK|tpmc3387183.2.2|A||||||||1^A|200601111503
+OBX|6|ST|BLOCK|tpmc3387183.3.3|A||||||||1^A|200601310955
+OBX|7|CE|PROCESS|tpmc3387183.1.1.1|$hinit^Initial H&E^L||||||||1^H&E L1|200601111503
+OBX|8|CE|PROCESS|tpmc3387183.1.1.2|pmc5553^HH&E (HISTO)^L||||||||2^H&E L2|200601111503
+OBX|9|CE|PROCESS|tpmc3387183.1.1.3|pmc5553^HH&E (HISTO)^L||||||||3^H&E L3|200601111503
+OBX|10|CE|PROCESS|tpmc3387183.2.2.4|$hinit^Initial H&E^L||||||||1^H&E L1|200601111503
+OBX|11|CE|PROCESS|tpmc3387183.2.2.5|pmc5553^HH&E (HISTO)^L||||||||2^H&E L2|200601111503
+OBX|12|CE|PROCESS|tpmc3387183.2.2.6|pmc5553^HH&E (HISTO)^L||||||||3^H&E L3|200601111503
+OBX|13|CE|PROCESS|tpmc3387183.3.3.7|$hinit^Initial H&E^L||||||||1^H&E|200601310955
+OBX|14|CE|PROCESS|tpmc3387183.3.3.8|pmc5553^HH&E (HISTO)^L||||||||2^HHE|200601310955
+OBX|15|CE|PROCESS|tpmc3387183.3.3.9|pmc4873^Blank Slide (HISTO) (WLO)^L||||||||3^HBNKNC|200601310955
+OBX|16|TX|GDT|tpmc3387183|\.br\The specimen is received in formalin in two parts.\.br\\.br\Part 1 is labeled with the patient' s name, initials AID and "anastomotic polyp".  It consists of multiple fragments of tan-yellow soft tissue measuring in aggregate 0.7 x 0.4 x 0.2 cm.  The specimen is wrapped in lens paper and totally submitted in one cassette labeled 1A.\.br\1A x multiple, totally submitted. \.br\\.br\Part 2 is labeled with the patient' s name, initials AID and "rectal polyp at 10 cm".  It consists of a fragment of reddish-tan, soft tissue measuring 0.4 cm in greatest dimension.  The specimen is wrapped in lens paper and totally submitted in one cassette labeled 2A.\.br\2A x 1, totally submitted.  \.br\||||||F
+OBX|17|TX|MDT|tpmc3387183|\.br\The microscopic findings substantiate the diagnosis.\.br\||||||F
+OBX|18|TX|FIN|tpmc3387183|PART 1:COLON, ANASTOMOTIC POLYP, POLYPECTOMY-\.br\   FRAGMENTS OF HYPERPLASTIC POLYP.\.br\\.br\PART 2:RECTUM, POLYP AT 10 CM, POLYPECTOMY-\.br\HYPERPLASTIC POLYP WITH THERMAL ARTIFACT.\.br\||||||F
+OBX|19|CE|IMP|tpmc3387183|M18200^^SNO||||||||1||A
+OBX|20|CE|IMP|tpmc3387183|M72040^^SNO||||||||1||A
+OBX|21|CE|IMP|tpmc3387183|M76800^^SNO||||||||1||A
+OBX|22|CE|IMP|tpmc3387183|T67000^^SNO||||||||1||A
+OBX|23|CE|IMP|tpmc3387183|M09030^^SNO||||||||1||A
+OBX|24|CE|IMP|tpmc3387183|M76800^^SNO||||||||1||A
+OBX|25|CE|IMP|tpmc3387183|T68000^^SNO||||||||1||A
+OBR|2||tpmc3387183^CoPathPlus^tpmc3387183.A1|ADD^Addendum||||||||||200601111542|||||||1|200601111542||SP|F|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+OBX|1|TX|ADX|tpmc3387183|Serum asphalt on this patient 5,500 ng/L  indicating long term exposure to the open road.\.br\||||||F
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004333|P|2.3
+PID|1||999551-00^^^RG|tst8604394|TESTONE^SYNOPTIC^O||19490303|F||W|||||||||999-55-9876|||||||||||N
+PV1|1||MWV||||^PLANET^KAHOUTEK||||||||||tst20263^PLANET^KAHOUTEK|MWC|0001999559876|||||||||||||||||||||||||200503081729
+ORC|RE||MWS05-1^CoPathPlus||CM||||200503081733|z32^PICCOLI^ANTHONY||^PLANET^KAHOUTEK
+OBR|1||MWS05-1^CoPathPlus^tst6546183|MWSP^MW Pathology|||200503081732|||||||200503081732|LN|||||^56^Y|-1|200511040706||SP|F|||||||987654^PATHOID^DOCTOR|z491^NESTLER^RICK
+OBX|1|CE|ANT|tst6546183.1|LN^Lymph Node, Left Peritoneal^L||||||F||1^1
+OBX|2|CE|ANT|tst6546183.2|YPRTBX^Peritoneum Biopsy, Left Wall^L||||||F||2^2
+OBX|3|CE|ANT|tst6546183.3|OVMAL^Left Ovary^L||||||F||3^3
+OBX|4|ST|BLOCK|tst6546183.1.1|A||||||||1^A|200508311407
+OBX|5|ST|BLOCK|tst6546183.1.2|B||||||||2^B|200508311407
+OBX|6|ST|BLOCK|tst6546183.2.3|A||||||||1^A|200507221753
+OBX|7|ST|BLOCK|tst6546183.3.4|A||||||||1^A|200507221753
+OBX|8|ST|BLOCK|tst6546183.3.5|B||||||||2^B|200507221753
+OBX|9|ST|BLOCK|tst6546183.3.6|C||||||||3^C|200507221753
+OBX|10|ST|BLOCK|tst6546183.3.7|D||||||||4^D|200507221753
+OBX|11|CE|PROCESS|tst6546183.1.1.1|$hinit^Initial H&E^L||||||||1^H&E|200512121431
+OBX|12|CE|PROCESS|tst6546183.1.2.2|$hinit^Initial H&E^L||||||||2^H&E|200512121431
+OBX|13|CE|PROCESS|tst6546183.2.3.3|$hinit^Initial H&E^L||||||||1^H&E|200512121431
+OBX|14|CE|PROCESS|tst6546183.3.4.4|$hinit^Initial H&E^L||||||||1^H&E|200512121431
+OBX|15|CE|PROCESS|tst6546183.3.5.5|$hinit^Initial H&E^L||||||||2^H&E|200512121431
+OBX|16|CE|PROCESS|tst6546183.3.6.6|$hinit^Initial H&E^L||||||||3^H&E|200512121431
+OBX|17|CE|PROCESS|tst6546183.3.7.7|$hinit^Initial H&E^L||||||||4^H&E|200512121431
+OBX|18|TX|GDT|tst6546183|Specimen is received in 3 parts all labeled with the patient's name.\.br\\.br\Part 1 is received in formalin labeled "lymph node" and consists of an unoriented 1.0 x 0.5 x 0.4 cm portion of pink tan fibromembranous tissue.  Cut section reveals pink tan, membranous tissue.  The specimen is bisected and totally submitted in cassette labeled 1A.\.br\\.br\Part 2 is received in formalin labeled "left peritoneal biopsy" and consists of......\.br\\.br\Part 3 is received fresh for intraoperative consultation labeled "left adnexal mass" and consists of a previously opened from the OR 9.5 x 8.0 x 2.1 cm ovary.  The serosal surface is pink tan and wrinkled and focally roughened.  Cut section reveals ovarian parenchyma with a 5.5 cm multiloculated cystic structure.  The inner lining of the cystic structure is pink tan and wrinkled and focally yellow.  Also identified is a 9.0 x 1.2 x 1.1 cm fallopian tube.  The serosal surface is pink tan and smooth with extensive tubo-ovarian adhesions.  Also received with the specimen is a separate spherical portion of, cauliflower like structure of soft to firm irregular tan yellow tissue 5.5 x 3.8 x 2.7 cm.  Representative sections are submitted as follows:\.br\2A  2Eovarian tissue is cystic structure\.br\2Ffallopian tube\.br\2G  2Pseparate portion of tan yellow spherical tissue with portion sent for frozen section\.br\2FSfrozen section\.br\||||||F
+OBX|19|TX|MDT|tst6546183|1.  Lymph Node, Left Peritoneal:   \.br\\.br\\.br\2.  Peritoneum Biopsy, Left Wall:   \.br\\.br\\.br\3.  Left Ovary:   \.br\Microscopic examination substantiates the above diagnosis.\.br\||||||F
+OBX|20|TX|FIN|tst6546183|PART 2: LEFT ADNEXAL MASS:\.br\    OVARY AND FALLOPIAN TUBE, LEFT, SALPINGO-OOPHORECTOMY \.br\A.MODERATELY DIFFERENTIATED ENDOMETRIOID ADENOCARCINOMA OF LEFT OVARY WITH SEROUS FEATURES, 9.5 CM (see comment).\.br\B.ANGIOLYMPHATIC PERMEATION ARE PRESENT.\.br\C.LEFT OVARY WITH ENDOMETRIOSIS, ENDOMETRIOMA AND ADENOFIBROMA WITH CALCIFICATIONS.\.br\D.MULTIPLE FOCI OF ATYPICAL HYPERPLASIA AND FOCI OF ENDOMETRIOID ADENOCARCINOMA ARISING IN THE ENDOMETRIOTIC CYST LINING OF THE OVARY.\.br\E.FOCI OF HEMORRHAGE, HEMOSIDEROSIS AND OSSEOUS METAPLASIA AND CALCIFICATIONS.\.br\F.EXTENSIVE PARA OVARIAN ADHESIONS.\.br\G.LEFT FALLOPIAN TUBE WITH CHRONIC SALPINGITIS ,ENDOMETRIOSIS AND TUBO-OVARIAN ADHESIONS.\.br\||||||F
+OBR|2||tst6546183^CoPathPlus^tst6546183.P1|FISH^FISH (PCL)||||||||||200511040704|||||||1|200511040704||SP|F|||||||987654^PATHOID^DOCTOR|z491^NESTLER^RICK
+OBX|1|TX|PIN|tst6546183|Interpretation for Fish testing to see if procedure appears on working drafts for other specimens.\.br\||||||F
+OBX|2|TX|PRC|tst6546183|\.br\Results for Fish testing to see if procedure appears on working drafts for other specimens.\.br\||||||F
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004334|P|2.3
+PID|1||307005^^^RF|tst2883394|BEDFORD^BOB||19761224|M|||||||||||103-07-2005|||||||||||N
+PV1|1||BMOP||||505078^PLANET^URANUS||||||||||pmc97361^PLANET^MARS|BMC|072005066|||||||||||||||||||||||||200503071314
+ORC|RE||BMS05-1^CoPathPlus||CM||||200503071321|z41^LOSOS^FRANK||505078^PLANET^URANUS
+OBR|1||BMS05-1^CoPathPlus^tst7346183|BMSP^BM Pathology|||200503071320|||||||200503071320|COLTUM|505078||||^28^Y|-1|200503151656||SP|F|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+OBX|1|CE|ANT|tst7346183.1|COLTUM^Colon^L||||||F||1^1
+OBX|2|CE|PROCESS|tst7346183.1.0.1|pmc7904^Alcian Blue pH 1.0 (Histo)^L||||||||1^AlBlue1.0|200503151217
+OBX|3|TX|GDT|tst7346183|This is the Gross Description\.br\||||||F
+OBX|4|TX|MDT|tst7346183|This is the Microscopic Description     \.br\||||||F
+OBX|5|TX|FIN|tst7346183|THIS IS THE FINAL DIAGNOSIS\.br\||||||F
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004335|P|2.3
+PID|1||124649765^^^RM|tst0064394|HARRIS^PA||19730510|M||W|200 MEDIPAC DRIVE^APARTMENT 701^PITTSBURGH^PA^15206^United States||(412)555-1212|(412)828-1300|||||124-64-9765|||||||||||N
+PV1|1||M3CR^0389||||012931^DERAMO^MARK|002103^TULSKY^ASHER|||||||||pmc21703^DERAMO^MARK|I|0058922875081|P||||||||||||||||||||||||200503221045
+ORC|RE||MHS05-2^CoPathPlus||CM||||200503211216|z32^PICCOLI^ANTHONY||012931^DERAMO^MARK
+OBR|1||MHS05-2^CoPathPlus^tst7156183|MHHS^MH Histology|||200503211030|||||||200503211214||012931||||^31^Y|-1|200503221104||SP|C|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+OBX|1|CE|ANT|tst7156183.1|^Left Knee Bone/Soft Tissue, TKR^L||||||C||1^1
+OBX|2|ST|BLOCK|tst7156183.1.1|A||||||||1^A|200503211214
+OBX|3|ST|BLOCK|tst7156183.1.2|B||||||||2^B|200503211214
+OBX|4|CE|PROCESS|tst7156183.1.1.1|$hinit^Initial H&E^L||||||||1^H&E|200508311427
+OBX|5|CE|PROCESS|tst7156183.1.1.2|pmc7453^Decal Routine (Surg)^L||||||||2^Decal|200503211214
+OBX|6|CE|PROCESS|tst7156183.1.2.3|$hinit^Initial H&E^L||||||||2^H&E|200508311427
+OBX|7|TX|GDT|tst7156183|The specimen is received fresh, identified with the patients name with the initials "PH", and labeled as "bone/tissue left knee". It consists of multiple pieces of bone, which range from 3.0 x 1.5 x 1.0 cm to 11.0 x 7.5 x 2.5 cm. The largest, represents the tibial plateau, and has a small amount of grossly unremarkable soft tissue attached to it. All of the pieces of bone are covered in cartilage, which is irregular, granular with well-demarcated eburnation. Representative sections are submitted as follows:\.br\1A - Bone with cartilage for decalcification\.br\1B - Soft tissue\.br\||||||C
+OBX|8|TX|MDT|tst7156183|Microscopic examination substantiates the above diagnosis.\.br\||||||C
+OBX|9|TX|FIN|tst7156183|BONE AND TISSUE, KNEE, LEFT, TOTAL KNEE ARTHROPLASTY  \.br\NEGATIVE FOR DEGENERATIVE JOINT DISEASE.\.br\||||||C
+OBX|10|CE|IMP|tst7156183|D3150^^SNO||||||||1||A
+OBX|11|CE|IMP|tst7156183|P1400^^SNO||||||||1||A
+OBX|12|CE|IMP|tst7156183|T1X500^^SNO||||||||1||A
+OBX|13|CE|IMP|tst7156183|TY9220^^SNO||||||||1||A
+OBX|14|CE|IMP|tst7156183|000^^ICD||||||||1
+OBR|2||tst7156183^CoPathPlus^tst7156183.P1|PRE^Provisional Report||||||||||200503211216|||||||1|200503211216||SP|F|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004336|P|2.3
+PID|1||242326258^^^RD|tst3264394|BDK^PSYCH||19730510|M||W|200 MEDIPAC DRIVE^APARTMENT 701^PITTSBURGH^PA^15206^United States||(412)555-1212|(412)828-1300|||||242-32-6258|||||||||||N
+PV1|1||D3E^328||||002103^TULSKY^ASHER|||||||||||IM|0058925385081|P||||||||||||||||1||||||||200503221425|200503231519
+ORC|RE||BDS05-2^CoPathPlus||CM||||200503231720|z41^LOSOS^FRANK||002103^TULSKY^ASHER
+OBR|1||BDS05-2^CoPathPlus^tst9356183|^BD Histology|||200503231720|||||||200503231720||002103||||^31^Y|-1|200503231727||SP|F|||||||987654^PATHOID^DOCTOR|z41^LOSOS^FRANK
+OBX|1|CE|ANT|tst9356183.1|^Biopsy Colon^L||||||F||1^1
+OBX|2|TX|GDT|tst9356183|\.br\The specimen is received in formalin labeled with the patient's name and\.br\initials MB.  Specimen designated as " left colon polyps times two" and\.br\consists of two, tan, irregular, rubbery, tissue biopsies each measuring 0.25\.br\cm in greatest dimension.  Totally submitted in a cassette labeled A.\.br\||||||F
+OBX|3|TX|MDT|tst9356183|Microscopic examination substantiates the above diagnosis.\.br\\.br\\.br\||||||F
+OBX|4|TX|FIN|tst9356183|COLON, LEFT, POLYPS, ENDOSCOPIC BIOPSY \.br\COLONIC MUCOSA WITH FOCAL HYPERPLASTIC CHANGES.\.br\||||||F
+OBX|5|CE|IMP|tst9356183|M72001^^SNO||||||||1||A
+OBX|6|CE|IMP|tst9356183|M76800^^SNO||||||||1||A
+OBX|7|CE|IMP|tst9356183|P1140^^SNO||||||||1||A
+OBX|8|CE|IMP|tst9356183|T67010^^SNO||||||||1||A
+OBX|9|CE|IMP|tst9356183|T67995^^SNO||||||||1||A
+OBX|10|CE|IMP|tst9356183|000^^ICD||||||||1
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004337|P|2.3
+PID|1||001234567^^^SY|tst2457394|FLINTSTONE^WILMA||19560103|F|||33 Winter St^^PITTSBURGH^PA^15213^United States||4123334444||||||001-23-4567|||||||||||N
+PV1|1||I3MT||||^PLANET^VENUS||||||||||pmc77361^PLANET^VENUS|SYB|0001001234567|||||||||||||||||||||||||200505270731
+ORC|RE||CHS05-2^CoPathPlus||CM||||200506021117|z33^LAPE^DIANE||^PLANET^VENUS
+OBR|1||CHS05-2^CoPathPlus^tst2307183|^CHP Histology|||200506020000|||||||200506021116|CUBBX|||||^49^Y|-1|200512071604||SP|F|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+OBX|1|CE|ANT|tst2307183.1|CUBBX^Urinary bladder biopsy^L||||||F||1^1
+OBX|2|ST|BLOCK|tst2307183.1.1|A||||||||1^A|200507141634
+OBX|3|CE|PROCESS|tst2307183.1.1.1|pmc2154^H&E (CHP)^L||||||||1^H&E|200510141024
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004338|P|2.3
+PID|1||001202426^^^CHPADT|tpmc9980405|FUN^PAM||20050106|F||O|159 NEWKIDONTHEBLOCK PLACE^^PITTSBURGH^PA^15213^United States||4126927676||||||123-45-7894|||||||||||N
+PV1|1||CH7NTH^7608|||||||||||||||CHQ|1030001851|||||||||||||||||||||||||200601031241|200601271234
+ORC|RE||CHS06-2^CoPathPlus||CM||||200601051117|z40^KOKAL^ELLEN||C022376^WU^HAIS-YANG
+OBR|1||CHS06-2^CoPathPlus^tpmc6977183|^CHP Histology|||200601050000|||||||200601051113|CUCLC|C022376||||^364^D|-1|200601101134||SP|C|||||||^OZOLEK^JOHN|z40^KOKAL^ELLEN
+OBX|1|CE|ANT|tpmc6977183.1|CUCLC^Renal calculus, left ureter^L||||||C||1^1
+OBX|2|ST|BLOCK|tpmc6977183.1.1|A||||||||1^A|200601051115
+OBX|3|ST|BLOCK|tpmc6977183.1.2|B||||||||2^B|200601051115
+OBX|4|CE|PROCESS|tpmc6977183.1.1.1|pmc2154^H&E (CHP)^L||||||||1^H&E|200601131529
+OBX|5|CE|PROCESS|tpmc6977183.1.2.2|pmc2154^H&E (CHP)^L||||||||2^H&E|200601131529
+OBX|6|CE|PROCESS|tpmc6977183.1.1.3|pmc3354^PAS (CHP)^L||||||||2^PAS|200601131530
+OBX|7|CE|PROCESS|tpmc6977183.1.2.4|pmc1433^Grocott Stain (Histo)^L||||||||3^Grocott|200601131530
+OBX|8|TX|GDT|tpmc6977183|The specimen is received fresh, labeled with the patient's name, and is designated "ureteral and renal calculi, left."  It consists of two irregular and deep tan and firm calculi, which measure 0.3 cm in greatest diameter.  The specimen is sent for chemical analysis.  No tissue is submitted for paraffin block.  Gross diagnosis only.\.br\||||||C
+OBX|9|TX|MDT|tpmc6977183|Gross diagnosis only.\.br\||||||C
+OBX|10|TX|FIN|tpmc6977183|GROSS DIAGNOSIS:  Calculi, renal, left, excision:  CALCULI FOR ANALYSIS.\.br\NO PATHOLOGIC DIAGNOSIS.\.br\||||||C
+OBX|11|CE|IMP|tpmc6977183|M30000^^SNO||||||||1||A
+OBX|12|CE|IMP|tpmc6977183|P1100^^SNO||||||||1||A
+OBX|13|CE|IMP|tpmc6977183|T71000^^SNO||||||||1||A
+OBR|2||tpmc6977183^CoPathPlus^tpmc6977183.P1|CHADD^CHP Addendum||||||||||200601171304|||||||1|200601171304||SP|F|||||||^OZOLEK^JOHN|z40^KOKAL^ELLEN
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004339|P|2.3
+PID|1||220003131^^^RD|tst1605394|BDK^TOM||19730510|M||W|200 MEDIPAC DRIVE^APARTMENT 701^PITTSBURGH^PA^15206^United States||(412)555-1212|(412)828-1300|||||220-00-3131|||||||||||N
+PV1|1||DERD||||002103^TULSKY^ASHER|||||||||||E|0058948165097|P||||||||||||||||||||||||200504070935
+ORC|RE||BDS05-3^CoPathPlus||CM||||200504071303|z491^NESTLER^RICK||002103^TULSKY^ASHER
+OBR|1||BDS05-3^CoPathPlus^tst9276183|^BD Histology|||200504071303|||||||200504071303|ABS|002103||||^31^Y|-1|200504071304||SP|F|||||||987654^PATHOID^DOCTOR|z491^NESTLER^RICK
+OBX|1|CE|ANT|tst9276183.1|ABS^Abscess^L||||||F||1^1
+OBX|2|TX|GDT|tst9276183|Testing for Cerner\.br\\.br\||||||F
+OBX|3|TX|MDT|tst9276183|Testing for Cerner\.br\||||||F
+OBX|4|TX|FIN|tst9276183|Testing for Cerner\.br\\.br\||||||F
+OBX|5|CE|IMP|tst9276183|000^^ICD||||||||1
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004340|P|2.3
+PID|1||204544381^^^RZ|tst2507394|SYNOPTEST^HORIZON^THREE||19441231|F||W|||||||||204-54-4381|||||||||||N
+PV1|1||Z2WE^0212||||505071^PLANET^MERCURY||||||||||pmc07361^PLANET^MERCURY|I|0001204544381|||||||||||||||||||||||||200503181748
+ORC|RE||HHS05-3^CoPathPlus||CM||||200506131231|987654^PATHOID^DOCTOR||505071^PLANET^MERCURY
+OBR|1||HHS05-3^CoPathPlus^tst6507183|^HH Histology|||200506131230|||||||200506131230||505071||||^60^Y|-1|200506131246||SP|F|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+OBX|1|CE|ANT|tst6507183.1|^Breast Mass^L||||||F||1^1
+OBX|2|ST|BLOCK|tst6507183.1.1|A||||||||1^A|200601132338
+OBX|3|CE|PROCESS|tst6507183.1.1.1|$hinit^Initial H&E^L||||||||1^H&E|200512191416
+OBX|4|CE|PROCESS|tst6507183.1.1.2|pmc5553^HH&E (HISTO)^L||||||||2^HHE|200512191416
+OBX|5|TX|GDT|tst6507183|\.br\RECEIVED IN ONE PART LABELED WITH PATIENT NAME AND FRESH\.br\\.br\\.br\PART 1 IS LABELED RIGHT BREAST TISSUE AND CONSISTS OF A BROWNISH-YELLOW FIBROADIPOSE AND  BREAST TISSUE MEASRING 11.0 X 3.0 X 2.0 CM.\.br\||||||F
+OBX|6|TX|MDT|tst6507183|     SYNOPTIC - PRIMARY INVASIVE CARCINOMA OF BREAST\.br\LATERALITY:      Right\.br\PROCEDURE:      Segmental\.br\LOCATION:      Upper inner quadrant\.br\SIZE OF TUMOR:      Maximum dimension invasive component:  2 cm\.br\MULTICENTRICITY/MULTIFOCALITY OF INVASIVE FOCI:      Yes\.br\TUMOR TYPE (invasive component):      Metaplastic carcinoma\.br\HISTOLOGIC TYPE:      Classical\.br\NOTTINGHAM SCORE\.br\     Nuclear grade: 2\.br\     Tubule formation: 0\.br\     Mitotic activity score: 2\.br\     Total Nottingham score: 2\.br\     Nottingham grade (1, 2, 3): 2\.br\ANGIOLYMPHATIC INVASION:      Yes\.br\DERMAL LYMPHATIC INVASION:      No\.br\CALCIFICATION:      No\.br\TUMOR TYPE, IN SITU:      Papillary\.br\SURGICAL MARGINS INVOLVED BY INVASIVE COMPONENT:      Yes, focal\.br\SURG MARGINS INVOLVED BY IN SITU COMPONENT:      No\.br\PAGET'S DISEASE OF NIPPLE:      No\.br\LYMPH NODES POSITIVE:      2\.br\LYMPH NODES EXAMINED:      4\.br\METHOD(S) OF LYMPH NODE EXAMINATION:      H/E stain, H/E levels\.br\SENTINEL NODE METASTASIS:      No\.br\ONLY KERATIN POSITIVE CELLS ARE PRESENT:      Yes\.br\SIZE OF NODAL METASTASES:      Diameter of largest lymph node metastasis: 2 mm\.br\LYMPH NODE METASTASIS(-ES) WITH\.br\METASTASES TO IPSILATERAL INTERNAL\.br\SKIN INVOLVED (ULCERATION): \.br\T STAGE, PATHOLOGIC:      pT2\.br\N STAGE, PATHOLOGIC:      pN0(i-)\.br\M STAGE, PATHOLOGIC:      pM0\.br\ESTROGEN RECEPTORS:      unknown\.br\PROGESTERONE RECEPTORS:      unknown\.br\HER2/NEU:      unknown\.br\--------------------------------------------------------\.br\ \.br\\.br\||||||F
+OBX|7|TX|FIN|tst6507183|\.br\PRIMARY INVASIVE CARCINOMA OF THE RIGHT BREAST\.br\||||||F
+OBX|8|CE|IMP|tst6507183|M80103^^SNO||||||||1||A
+OBX|9|CE|IMP|tst6507183|T04020^^SNO||||||||1||A
+OBX|10|CE|IMP|tst6507183|000^^ICD||||||||1
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004341|P|2.3
+PID|1||213156489^^^RM|tst2954394|GREGORY^TAMMY||19681015|F|||||||||||213-15-6489|||||||||||N
+PV1|1||MEDR|||||||||||||||E|0058922285081|P||||||||||||||||||||||||200503221023
+ORC|RE||MHS05-3^CoPathPlus||CM||||200503211527|z32^PICCOLI^ANTHONY||^PLANET^KAHOUTEK
+OBR|1||MHS05-3^CoPathPlus^tst6256183|MHHS^MH Histology|||200503211527|||||||200503211527|GB|||||^36^Y|-1|200503211531||SP|F|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+OBX|1|CE|ANT|tst6256183.1|GB^Gallbladder + Stones^L||||||F||1^1
+OBX|2|ST|BLOCK|tst6256183.1.1|A||||||||1^A|200503211527
+OBX|3|CE|PROCESS|tst6256183.1.1.1|$hinit^Initial H&E^L||||||||1^H&E|200508311427
+OBX|4|TX|GDT|tst6256183|Specimen is labeled 3gallbladder and stones4 and consists of a previously opened gallbladder measuring 7.5 x 2 x 1 cm, and approximately sixty to seventy (60-70) brownish stones measuring up to 0.5 cm.  The mucosa is brownish and velvety.  The wall measures 0.2 cm in greatest thickness.  Sections are submitted labeled A.\.br\||||||F
+OBX|5|TX|FIN|tst6256183|GALLBLADDER, LAPAROSCOPIC CHOLECYSTECTOMY:\.br\   -CHRONIC CHOLECYSTITIS WITH CHOLELITHIASIS.\.br\||||||F
+OBX|6|CE|IMP|tst6256183|M30010^^SNO||||||||1||A
+OBX|7|CE|IMP|tst6256183|M43000^^SNO||||||||1||A
+OBX|8|CE|IMP|tst6256183|P1100^^SNO||||||||1||A
+OBX|9|CE|IMP|tst6256183|T57000^^SNO||||||||1||A
+OBX|10|CE|IMP|tst6256183|000^^ICD||||||||1
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004342|P|2.3
+PID|1||000012346^^^RL|tst7464394|test3^lee||19840515|F||||||||||||||||||||||N
+PV1|1||OB||||||||||||||pmc87452^DHARBHAMULLA^ANURADHA|LROB|0000123460|||||||||||||||||||||||||200503231131
+ORC|RE||LRS05-3^CoPathPlus||CM||||200503281248|^MEYER^JEFFREY||LR000398^MCKINLEY^DONALD
+OBR|1||LRS05-3^CoPathPlus^tst6856183|LRAP^LR Pathology|||200503281247|||||||200503281247||LR000398||||^20^Y|-1|200505261214||SP|F|||||||^YERGER^JOHN|^YERGER^JOHN
+OBX|1|CE|ANT|tst6856183.1|^Placenta^L||||||F||1^1
+OBX|2|CE|ANT|tst6856183.2|^LEFT FALLOPIAN TUBE^L||||||F||2^2
+OBX|3|CE|ANT|tst6856183.3|^RIGHT FALLOPIAN TUBE^L||||||F||3^3
+OBX|4|ST|BLOCK|tst6856183.2.1|A||||||||1^A|200503301400
+OBX|5|ST|BLOCK|tst6856183.3.2|A||||||||1^A|200503301400
+OBX|6|CE|PROCESS|tst6856183.2.1.1|$hinit^Initial H&E^L||||||||1^H&E|200503301408
+OBX|7|CE|PROCESS|tst6856183.3.2.2|$hinit^Initial H&E^L||||||||1^H&E|200503301408
+OBX|8|CE|PROCESS|tst6856183.3.2.3|pmc0653^Hematoxylin & Eosin Recut (Histo)^L||||||||2^H&E Recut|200503301408
+OBX|9|TX|GDT|tst6856183|\.br\1.          The specimen is received fresh labeled test3,lee placenta and cord.  The umbilical cord measures 36 x 3.5 cm., inserts 6 cm from the placental margin and is trivascular.  The fetal membranes are gray and translucent with rupture site 5 cm from the placental margin.  After removal of the fetal membranes and umbilical cord, the placental disc weighs 506 gms. and measures 21 x 18 x 9 cm.  The fetal surface is blue-gray and glistening.  The maternal surface is composed of intact pink-tan cotyledons.  Cut surface reveals maroon spongy tissue with no gross abnormalities.  Representative sections are submitted in three blocks.\.br\\.br\2.          The specimen is received in formalin labeled test3,lee right tube and consists of a pink-tan tubular structure measuring 0.5 x 0.4 cm.  The specimen is serially sectioned and entirely submitted in one block.\.br\\.br\     3.     The specimen is received in formalin labeled test3,lee left tube and consists of a pink-tan tubular structure measuring 0.5 x 0.4 cm.  The specimen is serially sectioned and entirely submitted in one block.\.br\||||||F
+OBX|10|TX|MDT|tst6856183|\.br\Microscopic examination substantiates the diagnosis indicated above.\.br\||||||F
+OBX|11|TX|FIN|tst6856183|\.br\1.     PLACENTA, NO SIGNIFICANT ABNORMALITY IDENTIFIED (GROSS ONLY).\.br\\.br\2\T\3.     TUBAL LIGATION, RIGHT AND LEFT FALLOPIAN TUBES:\.br\     COMPLETE CROSS-SECTIONS OF FALLOPIAN TUBES.\.br\||||||F
+OBX|12|CE|IMP|tst6856183|M00100^^SNO||||||||1||A
+OBX|13|CE|IMP|tst6856183|T88100^^SNO||||||||1||A
+OBX|14|CE|IMP|tst6856183|P1107^^SNO||||||||1||A
+OBX|15|CE|IMP|tst6856183|T86800^^SNO||||||||1||A
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004343|P|2.3
+PID|1||001234567^^^SY|tst2457394|FLINTSTONE^WILMA||19560103|F|||33 Winter St^^PITTSBURGH^PA^15213^United States||4123334444||||||001-23-4567|||||||||||N
+PV1|1||I3MT||||^PLANET^VENUS||||||||||pmc77361^PLANET^VENUS|SYB|0001001234567|||||||||||||||||||||||||200505270731
+ORC|RE||CHS05-3^CoPathPlus||CM||||200506021119|z33^LAPE^DIANE||^PLANET^VENUS
+OBR|1||CHS05-3^CoPathPlus^tst3307183|^CHP Histology|||200506020000|||||||200506021117||||||^49^Y|-1|200512071613||SP|F|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+OBX|1|CE|ANT|tst3307183.1|^Consult block and slides^L||||||F||1^1
+OBX|2|ST|BLOCK|tst3307183.1.1|A||||||||1^A|200507141634
+OBX|3|ST|BLOCK|tst3307183.1.2|B||||||||2^B|200507141634
+OBX|4|CE|PROCESS|tst3307183.1.1.1|$hinit^Initial H&E^L||||||||1^H&E|200510141024
+OBX|5|CE|PROCESS|tst3307183.1.2.2|$hinit^Initial H&E^L||||||||1^H&E|200510141024
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004344|P|2.3
+PID|1||216461646^^^RM|tst5264394|GREGORY^TOMMY||19730510|M||W|413 SATURN DRIVE^APARTMENT 2B^PITTSBURGH^PA^15236^United States||(412)823-4568|(412)828-1300|||||216-46-1646|||||||||||N
+PV1|1||M4MN^0408||||000479^MARKLE^WILLIAM|002103^TULSKY^ASHER|||||||||pmc0933^MARKLE^WILLIAM|I|0058925545081|UH||||||||||||||||6||||||||200503231101|200503231335
+ORC|RE||MHS05-4^CoPathPlus||CM||||200503221005|z41^LOSOS^FRANK||000479^MARKLE^WILLIAM
+OBR|1||MHS05-4^CoPathPlus^tst0356183|MHHS^MH Histology|||200503221005|||||||200503221005|COLOBX|000479||||^31^Y|-1|200503221014||SP|F|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+OBX|1|CE|ANT|tst0356183.1|COLOBX^Biopsy Colon^L||||||F||1^1
+OBX|2|TX|GDT|tst0356183|The specimen is received in formalin labeled with the patient's name and\.br\initials MB.  Specimen designated as " left colon polyps times two" and\.br\consists of two, tan, irregular, rubbery, tissue biopsies each measuring 0.25\.br\cm in greatest dimension.  Totally submitted in a cassette labeled A\.br\||||||F
+OBX|3|TX|MDT|tst0356183|Microscopic examination substantiates the above diagnosis.\.br\||||||F
+OBX|4|TX|FIN|tst0356183|\.br\COLON, LEFT, POLYPS, ENDOSCOPIC BIOPSY \.br\COLONIC MUCOSA WITH FOCAL HYPERPLASTIC CHANGES\.br\||||||F
+OBX|5|CE|IMP|tst0356183|M72001^^SNO||||||||1||A
+OBX|6|CE|IMP|tst0356183|M76800^^SNO||||||||1||A
+OBX|7|CE|IMP|tst0356183|P1140^^SNO||||||||1||A
+OBX|8|CE|IMP|tst0356183|T67010^^SNO||||||||1||A
+OBX|9|CE|IMP|tst0356183|T67995^^SNO||||||||1||A
+OBX|10|CE|IMP|tst0356183|000^^ICD||||||||1
+OBR|2||tst0356183^CoPathPlus^tst0356183.A1|ADD^Addendum||||||||||200503221201|||||||1|200503221201||SP|F|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+OBX|1|TX|ADX|tst0356183|Acqua Velva stain Positive for ubiquitous bifurcations\.br\||||||F
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004345|P|2.3
+PID|1||001201906^^^CHPADT|tst5757394|CDI^TEST||19950822|M||W|123 ADDRESS^^PITTSBURGH^PA^15220^United States||2423343333||||||234-23-4234|||||||||||N
+PV1|1||CH10NT^0656||||||||||||||pmc79212^NECHES^WILLIAM|CHQ|1021250384|||||||||||||||||||||||||200506011623|200508171157
+ORC|RE||CHS05-4^CoPathPlus||CM||||200506021245|z40^KOKAL^ELLEN||C001990^NECHES^WILLIAM
+OBR|1||CHS05-4^CoPathPlus^tst9307183|^CHP Histology|||200506020000|||||||200506021245|CLIVA|C001990||||^9^Y|-1|200506021304||SP|F|||||||C006429^JAFFE^RONALD|z40^KOKAL^ELLEN
+OBX|1|CE|ANT|tst9307183.1|CLIVA^Allograft liver^L||||||F||1^1
+OBX|2|ST|BLOCK|tst9307183.1.1|A||||||||1^A|200507141634
+OBX|3|CE|PROCESS|tst9307183.1.1.1|pmc2154^H&E (CHP)^L||||||||1^H&E|200510141024
+OBX|4|TX|GDT|tst9307183|The specimen is received in formalin, labeled with the patient' s name and designated "liver biopsy."  Received is one core of pink, soft tissue, 2 cm in greatest dimension.  The specimen is entirely submitted in one cassette labeled 1A for rapid processing.  \.br\||||||F
+OBX|5|TX|MDT|tst9307183| (3 H\T\E)\.br\\.br\This case was discussed by telephone with Dr. Michaels at 3:00 p.m. on June 1, 2005.\.br\||||||F
+OBX|6|TX|FIN|tst9307183|Allograft liver biopsy (#):  Liver cell adenoma.\.br\||||||F
+OBX|7|CE|IMP|tst9307183|M81400^^SNO||||||||1||A
+OBX|8|CE|IMP|tst9307183|M81700^^SNO||||||||1||A
+OBX|9|CE|IMP|tst9307183|P1140^^SNO||||||||1||A
+OBX|10|CE|IMP|tst9307183|T56000^^SNO||||||||1||A

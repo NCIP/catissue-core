@@ -341,7 +341,7 @@ create table CATISSUE_REPORT_SECTION (
 );
 create table CATISSUE_DEIDENTIFIED_REPORT (
    IDENTIFIER bigint not null,
-   STATUS varchar(100),
+   IS_QUARANTINED bit,
    SCG_ID bigint,
    primary key (IDENTIFIER)
 );

@@ -1,0 +1,30 @@
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004328|P|2.3
+PID|1||307005^^^RF|tst2883394|BEDFORD^BOB||19761224|M|||||||||||103-07-2005|||||||||||N
+PV1|1||BMOP||||505078^PLANET^URANUS||||||||||pmc97361^PLANET^MARS|BMC|072005066|||||||||||||||||||||||||200503071314
+ORC|RE||PHS05-1^CoPathPlus||CM||||200503151618|z41^LOSOS^FRANK||505078^PLANET^URANUS
+OBR|1||PHS05-1^CoPathPlus^tst5846183|PHSP^PH Surgical Pathology|||200503151617|||||||200503151617|COBX|505078||||^28^Y|-1|200512290858||SP|F|||||||987654^PATHOID^DOCTOR|987654^PATHOID^DOCTOR
+OBX|1|CE|ANT|tst5846183.1|COBX^Biopsy Colon^L||||||F||1^1
+OBX|2|TX|FIN|tst5846183|\.br\testing\.br\more testing\.br\||||||F
+OBR|2||tst5846183^CoPathPlus^tst5846183.A1|ADD^Addendum||||||||||200506271514|||||||1|200506271514||SP|F||||||||z491^NESTLER^RICK
+OBX|1|TX|ADX|tst5846183|A section of the sixth rib shows no significant pathologic abnormality.\.br\||||||F
+
+MSH|^~\&|CoPathPlus|X|caBIG||20060210135109||ORU^R01|1000000004329|P|2.3
+PID|1||423565852^^^RD|tst0264394|BDK^POWERCHART||19730510|M||W|200 MEDIPAC DRIVE^APARTMENT 701^PITTSBURGH^PA^15206^United States||(412)555-1212|(412)828-1300|||||423-56-5852|||||||||||N
+PV1|1||D2W^203||||002103^TULSKY^ASHER|||||||||||I|0058924815081|P||||||||||||||||||||||||200503221417
+ORC|RE||BDS05-1^CoPathPlus||CM||||200503231152|z491^NESTLER^RICK||002103^TULSKY^ASHER
+OBR|1||BDS05-1^CoPathPlus^tst8356183|^BD Histology|||200503231152|||||||200503231152|ABS|002103||||^31^Y|-1|200503231154||SP|F|||||||987654^PATHOID^DOCTOR|z491^NESTLER^RICK
+OBX|1|CE|ANT|tst8356183.1|ABS^Abscess^L||||||F||1^1
+OBX|2|TX|GDT|tst8356183|It consists of a 2.0 x 1.8 x 1.1 cm. specimen of soft tissue containing a 1.5 x 1.3 x 1.0 cm. nodule.  The external surface of the specimen is inked.  On section, the cut surface has a 0.7 x 0.5 cm. soft, dark pink moderately well circumscribed nodule.  One section is submitted for frozen section procedure and labeled 1A.  An additional section is submitted for permanent sections and labeled 1B.  The remaining specimen is totally embedded in three sections, which are labeled 1C.  Also received is a separate well-circumscribed nodular segment of soft tissue, measuring 0.6 x 0.5 x 0.3 cm.  It is totally embedded and labeled 1D.\.br\||||||F
+OBX|3|TX|MDT|tst8356183|Microscopic examination substantiates the above diagnosis.\.br\||||||F
+OBX|4|TX|FIN|tst8356183|SUPERFICIAL PAROTID GLAND, EXCISION:\.br\A.REACTIVE LYMPHOID FOLLICULAR HYPERPLASIA OF LYMPH NODE INSIDE THE PAROTID GLAND (See Comment).\.br\B.SMALL, SEPARATE, DISCRETE HYPERPLASTIC LYMPH NODE.\.br\||||||F
+OBX|5|CE|IMP|tst8356183|M72200^^SNO||||||||1||A
+OBX|6|CE|IMP|tst8356183|P1100^^SNO||||||||1||A
+OBX|7|CE|IMP|tst8356183|T08000^^SNO||||||||1||A
+OBX|8|CE|IMP|tst8356183|T08140^^SNO||||||||1||A
+OBX|9|CE|IMP|tst8356183|T55100^^SNO||||||||1||A
+OBX|10|CE|IMP|tst8356183|T55101^^SNO||||||||1||A
+OBX|11|CE|IMP|tst8356183|000^^ICD||||||||1
+OBR|2||tst8356183^CoPathPlus^tst8356183.A1|ADD^Addendum||||||||||200503231718|||||||1|200503231718||SP|F|||||||987654^PATHOID^DOCTOR|z41^LOSOS^FRANK
+OBX|1|TX|ADX|tst8356183|Results for serum asphalt are NEGATIVE.  Patient can hit the road.\.br\||||||F
+
+MSH

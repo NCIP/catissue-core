@@ -1,0 +1,21 @@
+MSH|^~\&|CoPathPlus|X|caBIG||20070111875925||ORU^R01|22890000326360|P|2.3
+PID|1||2673004^^^BJH|bhc6809177|STILTS^VERONICA^D||19470619|F||1|100 10TH ST^^WOODSON^IL^610462210^United States||(618)252-0221||||||342449124|||||||||||N
+PV1|1||BWCD^BWCD|||||||||||||||OPALL|126851183|||||||||||||||||||||||||200610050000
+ORC|RE||S06-30110^CoPathPlus|06|CM||||200610040921|^KEZEE^JAYNA||G45553^MANLY^CARL
+OBR|1||S06-30110^CoPathPlus^bjc3335712|^Surgical Pathology|||200610030000|||||||200610040834|SKIN P&SKIN, RIGHT BREAST|G48531||||^57^Y|-1|200610091732||SP|F|||||||^LU^DONGY|^LU^DONGY
+OBX|1|CE|ANT|bjc3335711.1|SKIN P^SKIN, RIGHT BREAST^L||||||F||1^A
+OBX|2|CE|ANT|bjc3335711.2|SKIN P^SKIN, LEFT SHOULDER^L||||||F||2^B
+OBX|3|TX|GRO|bjc3335711|The specimens are received in two formalin-filled containers, each labeled "Stilts, Veronica D."  The first container is labeled "right breast."  It contains a punch biopsy of non-pigmented skin, measuring 0.3 x 0.3 x 0.4 cm.  Inked.  Submitted without sectioning.  Labeled A1.  Jar 0.\.br\\.br\The second container is labeled "left shoulder."  It contains a punch biopsy of non-pigmented skin, measuring 0.4 x 0.4 x 0.5 cm.  Inked.  Bisected.  Labeled B1.  Jar 0.\.br\||||||F
+OBX|4|TX|CDX|bjc3335711|The patient is a 57 year old woman with hyperpigmented plaque with atrophic center on shoulder for \R\ 6 months.  Clinical diagnosis:  Lichen sclerosis et atrophicus vs morphea.  The patient also has a pink plaque on right breast for \R\four weeks.  Clinical diagnosis:  Inflammatory stage of morphea.  Operative procedure:  Punch biopsy X2.||||||F
+OBX|5|TX|MCR|bjc3335711|Multiple tissue levels of the skin from the right breast show a normal appearing epidermis overlying a non-sclerotic dermis. There is a predominantly perivascular lymphocytic infiltrates in the superficial and deep dermis with scattered associated plasma cells.  There is also increased number of mixed inflammatory infiltrate in the interstitium, composed of lymphocytes, mast cells and fibroblasts.  The eccrine glands as well as the peri-adnexal fat is preserved.  These features are not diagnostic for morphea, however, they do not preclude such a diagnosis as in the very early stage before the dermal collagen changes. (D10-5-06 16:03;T17:15)LH||||||F
+OBX|6|TX|FIN|bjc3335711|SKIN, RIGHT BREAST, PUNCH BIOPSY\.br\     - PERIVASCULAR AND INTERSTITIAL MIXED INFLAMMATORY INFILTRATE (SEE COMMENT)\.br\\.br\SKIN, LEFT SHOULDER, PUNCH BIOPSY\.br\     - LICHEN SCLEROSIS ET ATROPHICUS\.br\||||||F
+OBX|7|CE|IMP|bjc3335711|M43151^^SNO||||||||1||A
+OBX|8|CE|IMP|bjc3335711|M46166^^SNO||||||||1||A
+OBX|9|CE|IMP|bjc3335711|P1088^^SNO||||||||1||A
+OBX|10|CE|IMP|bjc3335711|T02333^^SNO||||||||1||A
+OBX|11|CE|IMP|bjc3335711|T04710^^SNO||||||||1||A
+OBX|12|CE|IMP|bjc3335711|M57340^^SNO||||||||1||A
+OBX|13|CE|IMP|bjc3335711|P1148^^SNO||||||||1||A
+OBX|14|CE|IMP|bjc3335711|T12320^^SNO||||||||1||A
+
+MSH
