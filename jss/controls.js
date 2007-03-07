@@ -400,7 +400,7 @@ Object.extend(Object.extend(Ajax.Autocompleter.prototype, Autocompleter.Base.pro
 // option, if you prefer to write your own autocompletion logic.
 // In that case, the other options above will not apply unless
 // you support them.
-
+var setChoices = false;
 Autocompleter.Local = Class.create();
 Autocompleter.Local.prototype = Object.extend(new Autocompleter.Base(), {
   initialize: function(element, update, array, options) {
@@ -412,6 +412,7 @@ Autocompleter.Local.prototype = Object.extend(new Autocompleter.Base(), {
     this.updateChoices(this.options.selector(this));
   },
 
+  
   setOptions: function(options) {
   
     this.options = Object.extend({
@@ -446,10 +447,14 @@ Autocompleter.Local.prototype = Object.extend(new Autocompleter.Base(), {
                 foundPos=0;
 				instance.options.choices = 25;
 				entry="";
+				setChoices = true;
             }			
 			else
             {			
-			     instance.options.choices = 10; 
+			     if(setChoices)
+				 {
+			         instance.options.choices = 10; 
+				 }
 				 var spacePresent = false;
 				 if(initialEntry.indexOf(" ")!=-1)
 				 {
