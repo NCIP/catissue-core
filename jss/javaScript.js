@@ -810,8 +810,8 @@ function initializeGridForGroups(groupsXML)
 	gridForGroups.setHeader("#,Group");
 	gridForGroups.setInitWidthsP("15,85");
 	gridForGroups.setColAlign("left,left")
-	gridForGroups.setColTypes("ch,ed");
-	gridForGroups.enableMultiselect(true)
+	gridForGroups.setColTypes("ch,ro");
+	gridForGroups.enableMultiselect(true);
 	gridForGroups.setOnRowSelectHandler(groupSelected);
 	gridForGroups.init();
 	//gridForGroups.setStyle(formTitleStyle);
@@ -880,7 +880,7 @@ function initAnnotationGrid()
 	annotationsGrid.setHeader("#,Annotation,Last Updated,Updated By");
 	annotationsGrid.setInitWidthsP("5,32,31,32")
 	annotationsGrid.setColAlign("center,left,left,left,left")
-	annotationsGrid.setColTypes("ch,link,ed,ed");
+	annotationsGrid.setColTypes("ch,link,ro,ro");
 	annotationsGrid.init();
 	var annotationXMLFld = document.getElementById('definedAnnotationsDataXML');
 	annotationsGrid.loadXMLString(annotationXMLFld.value);
@@ -1231,11 +1231,9 @@ function submitForm()
 		}
 }
 
-
-function viewAnnotations(specimenEntityId,ID)
+function viewAnnotations(specimenEntityId,ID,consentTierCounter)
 	{
-		
-		var action="DisplayAnnotationDataEntryPage.do?entityId="+specimenEntityId+"&entityRecordId="+ID+"&pageOf=pageOfNewSpecimen&operation=viewAnnotations";
+		var action="DisplayAnnotationDataEntryPage.do?entityId="+specimenEntityId+"&entityRecordId="+ID+"&pageOf=pageOfNewSpecimen&operation=viewAnnotations&consentTierCounter="+consentTierCounter;
 		document.forms[0].action=action;
 		document.forms[0].submit();
 	}
