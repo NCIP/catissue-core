@@ -500,7 +500,7 @@ Autocompleter.Local.prototype = Object.extend(new Autocompleter.Base(), {
          }		 
 		}	
           while (foundPos != -1) {
-            if (foundPos == 0 && elem.length != entry.length) { 
+            if (foundPos == 0) { 
               ret.push("<li><strong>" + elem.substr(0, entry.length) + "</strong>" + 
                 elem.substr(entry.length) + "</li>");
               break;
