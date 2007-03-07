@@ -21,10 +21,9 @@
 .active-column-1 {width:200px}
 </style>
 <%
-	
-	
 	String title = null;
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+	String consentTierCounter =(String)request.getParameter("consentTierCounter");
 	Integer identifierFieldIndex = new Integer(0);
 	String specimenIdentifier = (String)request.getAttribute(Constants.ID);
 	if(specimenIdentifier == null || specimenIdentifier.equals("0"))
@@ -59,7 +58,29 @@
 
 
 <script>
-
+function viewSPR(specimenId)
+{
+	var action="<%=Constants.SPR_VIEW_ACTION%>?operation=viewSPR&pageOf=pageOfNewSpecimen&id="+specimenId+"&consentTierCounter=<%=consentTierCounter%>";
+	document.forms[0].action=action;
+	document.forms[0].submit();
+}
+function showConsents()
+{
+	<%
+		if(consentTierCounter.equals("0"))			
+		{
+	%>
+			alert("No consents available for selected Specimen Collection Group");		
+	<%
+		}
+		else
+		{
+	%>
+			addNewAction(<%= consentTab %>)			
+	<%
+		}
+	%>
+}
 function showEvent()
 {
 		var id = <%=specimenIdentifier%>;
@@ -71,7 +92,7 @@ function showEvent()
 					formNameAction = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery";
 				}%>
 						
-				var formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15";		
+				var formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15&consentTierCounter=<%=consentTierCounter%>";		
 				document.forms[0].action=formName;
 				document.forms[0].submit();
 }
@@ -79,8 +100,6 @@ function showEvent()
 
 
 </script>
-
-
 
 <html:form action="<%=formAction%>">
 <!-- Mandar 05-July-06 Code for tabs start -->
@@ -101,9 +120,8 @@ function showEvent()
 				<td height="20" class="tabMenuItemSelected"  onClick="">
 					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
-				
 				</td>
-				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="addNewAction(<%= consentTab %>)" id="consentTab">
+				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="showConsents()" id="consentTab">
 					<bean:message key="consents.consents"/>            
 				</td>
 
