@@ -47,7 +47,17 @@ tr#hiddenCombo
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-		Long participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
+		Long participantEntityId = null;
+			if (request.getSession().getAttribute("participantEntityId") == null)
+		{
+			participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
+			request.getSession().setAttribute("participantEntityId", participantEntityId);
+		}
+		else
+		{
+			participantEntityId = (Long) request.getSession().getAttribute("participantEntityId");				
+		}
+		
 		String id = request.getParameter("id");
 
 		 pageView=operation;
