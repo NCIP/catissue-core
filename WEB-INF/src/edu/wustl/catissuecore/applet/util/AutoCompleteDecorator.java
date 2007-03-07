@@ -1,5 +1,5 @@
 /*
- * $Id: AutoCompleteDecorator.java,v 1.1.2.1 2007/02/27 10:32:49 santosh_chandak Exp $
+ * $Id: AutoCompleteDecorator.java,v 1.1.2.2 2007/03/07 08:12:15 santosh_chandak Exp $
  *
  * Copyright 2004 Sun Microsystems, Inc., 4150 Network Circle,
  * Santa Clara, California 95054, U.S.A. All rights reserved.
@@ -141,7 +141,7 @@ public class AutoCompleteDecorator {
         // has to be editable
         comboBox.setEditable(true);
         // fix the popup location
-     //   AquaFix.install(comboBox);
+        AquaFix.install(comboBox);  
           
          // configure the text component=editor component
         JTextComponent editorComponent = (JTextComponent) comboBox.getEditor().getEditorComponent();
