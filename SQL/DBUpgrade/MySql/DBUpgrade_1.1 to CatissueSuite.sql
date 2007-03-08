@@ -452,13 +452,16 @@ INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,3,(select PROTECTION_ELEMENT_ID fro
 #------------------------New Table entry For ConsentWithdrawal ---------- Mandar : 18-Jan-07 -------------end
 
 insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction','edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction','edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction',1);
-insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction'));
+insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select MAX(PROTECTION_ELEMENT_ID) from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.AddToLimitSetAction'));
 
 insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction','edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction','edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction',1);
-insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction'));
+insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select MAX(PROTECTION_ELEMENT_ID) from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.ViewSearchResultsAction'));
 
 insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.PathFinderAction','edu.wustl.catissuecore.action.querysuite.PathFinderAction','edu.wustl.catissuecore.action.querysuite.PathFinderAction',1);
-insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select PROTECTION_ELEMENT_ID from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.PathFinderAction'));
+insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select MAX(PROTECTION_ELEMENT_ID) from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.PathFinderAction'));
+
+insert into csm_protection_element (PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,APPLICATION_ID)values('edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction','edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction','edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction',1);
+insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(select MAX(PROTECTION_ELEMENT_ID) from csm_protection_element where OBJECT_ID='edu.wustl.catissuecore.action.querysuite.GetDagViewDataAction'));
 
 #------------------------New Column Entry For ConsentWaived ---------- Mandar : 25-Jan-07 -------------start
 alter table CATISSUE_COLLECTION_PROTOCOL add column CONSENTS_WAIVED bit;
