@@ -81,7 +81,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		.append("<td valign='top' height=\"4%\" colspan=\"8\" bgcolor=\"#EAEAEA\" style=\"border:solid 1px\"><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
 		generatedHTML.append(header + " '" + nameOfTheEntity + "'</b></font>");
 		generatedHTML.append("\n</td></tr>");
-		generatedHTML.append("\n<tr><td valign='top' height=\"3%\" colspan=\"8\" bgcolor=\"#FFFFFF\">&nbsp;</td></tr>");
+		//generatedHTML.append("\n<tr><td valign='top' height=\"3%\" colspan=\"8\" bgcolor=\"#FFFFFF\">&nbsp;</td></tr>");
 		if(conditions != null)
 		{
 			isEditLimits = true;
@@ -99,7 +99,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				String attrLabel = QueryModuleUtil.getAttributeLabel(attrName);
 				String componentId = attrName + attribute.getId().toString();
 				attributesList = attributesList + ";" + componentId;
-				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"6%\">\n<td valign='top' class=\"standardTextQuery\" nowrap='nowrap' width=\"10%\">");
+				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"6%\">\n<td valign='top' class=\"standardTextQuery\" nowrap='nowrap' width=\"5%\">");
 				generatedHTML.append(attrLabel+" ");
 				if(attribute.getDataType().equalsIgnoreCase(Constants.DATE))
 				{
