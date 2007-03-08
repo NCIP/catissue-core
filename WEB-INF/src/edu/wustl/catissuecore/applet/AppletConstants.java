@@ -128,9 +128,21 @@ public interface AppletConstants
 	 */
 	String GET_DAG_VIEW_DATA = "/getDagViewDataAction.do";
 	/**
+	 * 
+	 */
+	public static final String DefineSearchResultsViewAction = "/DefineSearchResultsView.do";
+	/**
 	 * Specify the ADD_TO_LIMIT_ACTION field 
 	 */
 	String DAG_VIEW_DATA = "dagViewData";
+	/**
+	 * Specify the ADD_TO_LIMIT_ACTION field 
+	 */
+	String ENTITY_MAP = "entity_map";
+	/**
+	 * Specify the ADD_TO_LIMIT_ACTION field 
+	 */
+	String ENTITY_STR = "entity_str";
 	/**
 	 * Specimen Attributes Row Nos
 	 * */
@@ -224,6 +236,9 @@ public interface AppletConstants
 	public static final String SHOW_RESULTS_PAGE = "showViewSearchResultsJsp";
 	public static final String ATTR_VALUES = "AttributeValues";
 	public static final String SHOW_ERROR_PAGE = "showErrorPage";
+	public static final String GET_DATA = "getData";
+	public static final String SET_DATA = "setData";
+	
 	//public static final String ATTRIBUTES = "Attributes";
 	
 }
