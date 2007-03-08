@@ -27,6 +27,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String REPORT_PARTICIPANT_OBJECT = "reportParticipantObject";
 	public static final String REPORT_ID = "reportQueueId";
 	public static final String PARTICIPANT_ID_TO_ASSOCIATE = "participantIdToAssociate";
+	public static final String SCG_ID_TO_ASSOCIATE = "scgIdToAssociate";
 	
 	//Consent tracking
 	public static final String 	SHOW_CONSENTS="showConsents";
