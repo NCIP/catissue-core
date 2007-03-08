@@ -914,6 +914,31 @@ function initializeTabs(tabIds, tabNames, tabPageRefs)
 	}
 	tabbar.setTabActive(tabIds[0]);
 }
+//function initializeTabsForOrderingSystem(tabIds, tabNames, tabPageRefs)
+//{
+//	if((tabIds!=null)&&(tabNames!=null)&&(tabPageRefs!=null))
+//	{
+//		var noOfTabs = tabIds.length;
+//		for(var i=0;i<noOfTabs;i++)
+//		{
+//			tabbar.addTab(tabIds[i],tabNames[i],"");		
+			//tabbar.setContentHref(tabIds[i],tabPageRefs[i]);	
+//			tabbar.setOnSelectHandler(addToOrderList);
+//		}
+//	}
+//	tabbar.setTabActive(tabIds[0]);
+			
+//}
+//function submitForm(tabId,action)
+//{
+//tabId="shoppingCartForm";
+//for(i=0;i<document.elements.length;i++)
+//	alert(window.frames[0].document.forms[0].action);
+	//document.getElementsByTagName("form").length
+
+//	window.frames[1].document.forms[0].action="/ShoppingCart.do?tabIndex=3";		
+//	window.frames[1].document.forms[0].submit(); 
+//}
 
 //<!-- JavaScript for Participant.jsp  start -->
 function textLimit(field) 
@@ -1164,7 +1189,7 @@ function initiallizeEditParticipantTabs(contextPath,queryString,annotationQueryS
 		tabbar.setImagePath("dhtml_comp/imgs/");
 		tabbar.setHrefMode("iframes-on-demand");
 		var tabIds = ["editTab","viewSPRTab","annotationsTab"];
-		var tabNames = ["Edit Partitipant" , "View Surgical Pathology Report", "Annotations"];
+		var tabNames = ["Edit Participant" , "View Surgical Pathology Report", "Annotations"];
 		var tabHREFs = [contextPath + "/ParticipantSearch.do?" + queryString , contextPath + "/ViewSurgicalPathologyReport.do?operation=viewSPR&" + queryString ,contextPath + "/LoadAnnotationDataEntryPage.do"+annotationQueryString];
 		initializeTabs(tabIds,tabNames,tabHREFs);
 }
