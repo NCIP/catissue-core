@@ -59,8 +59,25 @@ public class CategorySearchForm extends ActionForm
 	 * String to store the text field value.
 	 */
 	private String nodeId = null;
-	
+	/**
+	 * String to store the text field value.
+	 */
+	private String currentPage = null;
 
+	/**
+	 * @return the currentPage
+	 */
+	public String getCurrentPage()
+	{
+		return currentPage;
+	}
+	/**
+	 * @param currentPage the currentPage to set
+	 */
+	public void setCurrentPage(String currentPage)
+	{
+		this.currentPage = currentPage;
+	}
 	/**
 	 * @return the nextOperation
 	 */

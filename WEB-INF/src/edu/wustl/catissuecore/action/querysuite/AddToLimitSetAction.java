@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.action.BaseAppletAction;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.querysuite.CreateQueryObjectBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.querysuite.queryobject.IQuery;
 
 /**
  * This action is called when user clicks on Add Limits button of AddLimits.jsp.
@@ -46,9 +47,12 @@ public class AddToLimitSetAction extends BaseAppletAction
 		Map inputDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		if (inputDataMap != null && !inputDataMap.isEmpty())
 		{
+			IQuery query = (IQuery) inputDataMap.get(AppletConstants.QUERY_OBJECT);
+			HttpSession session = request.getSession();
+			session.setAttribute(AppletConstants.QUERY_OBJECT, query);
 			String strToCreateQueryObject = (String) inputDataMap.get(AppletConstants.STR_TO_CREATE_QUERY_OBJ);
 			String entityName = (String) inputDataMap.get(AppletConstants.ENTITY_NAME);
-			Map searchedEntitiesMap = (Map) request.getSession().getAttribute(Constants.SEARCHED_ENTITIES_MAP);
+			Map searchedEntitiesMap = (Map)session.getAttribute(Constants.SEARCHED_ENTITIES_MAP);
 			EntityInterface entity = (Entity) searchedEntitiesMap.get(entityName);
 			addEntityToSession(entity,request);
 			CreateQueryObjectBizLogic queryBizLogic = new CreateQueryObjectBizLogic();

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,7 +25,6 @@ import edu.wustl.cab2b.common.util.Constants;
 import edu.wustl.cab2b.server.advancedsearch.AdvancedSearch;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
-import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHTMLForBuildNewTree;
 import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.action.BaseAction;
 
@@ -51,51 +49,84 @@ public class CategorySearchAction extends BaseAction
 	 * @return ActionForward actionForward
 	 */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
-			throws Exception
+	throws Exception
 	{
-		CategorySearchForm searchForm = (CategorySearchForm) form;
-		String textfieldValue = searchForm.getTextField();
-		searchForm = setDefaultSelections(searchForm);
-		String[] searchString = null;
-
-		int[] searchTarget = prepareSearchTarget(searchForm);
-		int basedOn = prepareBaseOn(searchForm.getSelected());
-		if (textfieldValue != null && !textfieldValue.equals(""))
-		{
-			searchString = prepareSearchString(textfieldValue);
-		}
-		Set<EntityInterface> entityCollection = new HashSet<EntityInterface>();
 		HttpSession session = request.getSession();
-		Map<String, EntityInterface> searchedEntitiesMap = (Map<String, EntityInterface>) session
-				.getAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP);
+		CategorySearchForm searchForm = (CategorySearchForm) form;
+		String currentPage = searchForm.getCurrentPage();
+		String textfieldValue = searchForm.getTextField();
+		Map<String, EntityInterface> searchedEntitiesMap = (Map<String, EntityInterface>) session.getAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP);
 		if (searchedEntitiesMap == null)
 		{
 			searchedEntitiesMap = new HashMap<String, EntityInterface>();
 		}
-		String entitiesString = "";
+		if(currentPage != null && currentPage.equalsIgnoreCase("prevToAddLimits"))
+		{
+			textfieldValue = "";
+		}
 		if (textfieldValue != null && !textfieldValue.equals(""))
 		{
+			int[] searchTarget = prepareSearchTarget(searchForm);
+			int basedOn = prepareBaseOn(searchForm.getSelected());
+			Set<EntityInterface> entityCollection = new HashSet<EntityInterface>();
+			String[] searchString = null;
+			searchString = prepareSearchString(textfieldValue);
+			String entitiesString = "";
 			EntityCache cache = EntityCacheFactory.getInstance();
 			AdvancedSearch advancedSearch = new AdvancedSearch(cache);
 			MatchedClass matchedClass = advancedSearch.search(searchTarget, searchString, basedOn);
 			entityCollection = matchedClass.getEntityCollection();
 			Object[] resultArray = entityCollection.toArray();
 			Arrays.sort(resultArray, new EntityInterfaceComparator());
-			for (int i = 0; i < resultArray.length; i++)
+			if(currentPage != null && currentPage.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.DEFINE_RESULTS_VIEW))
 			{
-				EntityInterface entity = (EntityInterface) resultArray[i];
-				String fullyQualifiedEntityName = entity.getName();
-				String description = entity.getDescription();
-				entitiesString = entitiesString + ";" + fullyQualifiedEntityName + "|" + description;
-				searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
+				entitiesString = generateHTMLToDisplayList(resultArray,searchedEntitiesMap);
+			}
+			else if(currentPage != null && currentPage.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.ADD_LIMITS))
+			{
+				for (int i = 0; i < resultArray.length; i++)
+				{
+					EntityInterface entity = (EntityInterface) resultArray[i];
+					String fullyQualifiedEntityName = entity.getName();
+					String description = entity.getDescription();
+					entitiesString = entitiesString + ";" + fullyQualifiedEntityName + "|" + description;
+					searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
+				}
 			}
 			request.getSession().setAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP, searchedEntitiesMap);
 			response.setContentType("text/html");
 			response.getWriter().write(entitiesString);
 			return null;
 		}
-
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
+	}
+	/**
+	 * Generates HTML for entities to be displayed on define results page.
+	 * These entities will be shown in a Listbox.
+	 * @param resultArray array of entities in ascending alphabetical order 
+	 * @param searchedEntitiesMap map to store the entities found for given criteria
+	 * @return String representing html for a listbox 
+	 */
+	String generateHTMLToDisplayList(Object[] resultArray,Map<String, EntityInterface> searchedEntitiesMap)
+	{
+		String selectTagName =edu.wustl.catissuecore.util.global.Constants.SEARCH_CATEGORY_LIST_SELECT_TAG_NAME;				
+		StringBuffer html = new StringBuffer();		
+		int size = resultArray.length;
+		if ( size != 0)
+		{
+			html.append("\n<select id='"+selectTagName+"' name='"+ selectTagName + "' MULTIPLE size = '"+size+"'>");
+			for(int i=0;i<size;i++)
+			{
+				EntityInterface entity = (EntityInterface)resultArray[i];
+				String fullyQualifiedEntityName = entity.getName();
+				int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
+				String entityName = fullyQualifiedEntityName.substring(lastIndex + 1);				
+				searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
+				html.append("\n<option class=\"dropdownQuery\" value=\"" + entity.getName() + "\">" + entityName + "</option>");
+			}
+			html.append("\n</select>");
+		}
+		return html.toString();
 	}
 
 	/**
@@ -146,15 +177,15 @@ public class CategorySearchAction extends BaseAction
 		String permissiblevaluesCheckBoxChecked = searchForm.getPermissibleValuesChecked();
 		List<Integer> target = new ArrayList<Integer>();
 
-		if (classCheckBoxChecked.equalsIgnoreCase("on") || classCheckBoxChecked.equalsIgnoreCase("true"))
+		if (classCheckBoxChecked != null && (classCheckBoxChecked.equalsIgnoreCase("on") || classCheckBoxChecked.equalsIgnoreCase("true")))
 		{
 			target.add(new Integer(Constants.CLASS));
 		}
-		if (attributeCheckBoxChecked.equalsIgnoreCase("on") || attributeCheckBoxChecked.equalsIgnoreCase("true"))
+		if (attributeCheckBoxChecked != null && (attributeCheckBoxChecked.equalsIgnoreCase("on") || attributeCheckBoxChecked.equalsIgnoreCase("true")))
 		{
 			target.add(new Integer(Constants.ATTRIBUTE));
 		}
-		if (permissiblevaluesCheckBoxChecked.equalsIgnoreCase("on") || permissiblevaluesCheckBoxChecked.equalsIgnoreCase("true"))
+		if (permissiblevaluesCheckBoxChecked != null && (permissiblevaluesCheckBoxChecked.equalsIgnoreCase("on") || permissiblevaluesCheckBoxChecked.equalsIgnoreCase("true")))
 		{
 			target.add(new Integer(Constants.PV));
 		}
@@ -166,27 +197,5 @@ public class CategorySearchAction extends BaseAction
 		return searchTarget;
 	}
 
-	/**
-	 * This is used to set the default selections for the UI components when the screen is loaded for the first time.
-	 * @param actionForm form bean
-	 * @return CategorySearchForm formbean
-	 */
-	private CategorySearchForm setDefaultSelections(CategorySearchForm actionForm)
-	{
-		if (actionForm.getClassChecked() == null)
-		{
-			actionForm.setClassChecked("on");
-		}
-		if (actionForm.getAttributeChecked() == null)
-		{
-			actionForm.setAttributeChecked("on");
-		}
-		if (actionForm.getPermissibleValuesChecked() == null)
-		{
-			actionForm.setPermissibleValuesChecked("off");
-		}
-		//TODO check if null and then set the value of seleted.
-		actionForm.setSelected("text_radioButton");
-		return actionForm;
-	}
+	
 }
