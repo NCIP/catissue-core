@@ -64,8 +64,8 @@
 								<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000">
 							
 												<tr  id="rowMsg">
-													<td id="validationMessagesSection" >
-														<div id="validationMessagesRow"   style="overflow:auto; width:820; height:50;display:none"></div>
+													<td id="validationMessagesSection"  class='validationMessageCss'>
+														<div id="validationMessagesRow"   class='validationMessageCss' style="overflow:auto; width:820; height:50;display:none"></div>
 													</td>
 												</tr>
 									
@@ -129,7 +129,7 @@
 						<td valign="center" width="75%"><html:button property="Button"><bean:message key="query.saveButton"/></html:button></td>
 						<td  valign="center" align="right"><html:button property="Button" onclick="viewSearchResults()"><bean:message key="query.searchButton"/></html:button></td>
 						<td  align="right" valign="center"><html:button property="Button"><bean:message key="query.previousButton"/></html:button></td>
-						<td align="right" valign="center"><html:button property="Button" onclick="defineSearchResultsView()"><bean:message key="query.nextButton"/></html:button>
+						<td align="right" valign="center"><html:button property="Button" onclick="saveClientQueryToServer()"><bean:message key="query.nextButton"/></html:button>
 						</td>
 						<td width="2%">&nbsp;</td>
 					</tr>

@@ -24,6 +24,7 @@
 	Map treesMap = (Map) request.getAttribute("treesMap");
 %>
 <html:form method="GET" action="<%=defineSearchResultsViewAction%>">
+<html:hidden property="currentPage" value="prevToAddLimits"/>
 <table bordercolor="#000000" border="0" width="100%" cellspacing="2" cellpadding="2"  height="100%">
 	<tr>
 		<td>
@@ -55,11 +56,11 @@
 							<tr height="1">
 								<td></td>
 							</tr>
-							<tr>
-								<td colspan="5">
-									<table border="1" cellspacing="0" cellpadding="0" >
-									<tr>
-										<td valign="top" height="450" colspan="5" width="100%">
+							<tr valign="top"  height="100%" width="100%">
+								<td colspan="5" valign="top" height="100%" width="100%">
+									<table border="1" cellspacing="0" cellpadding="0" valign="top"  height="100%" width="100%">
+									<tr valign="top">
+										<td valign="top" height="500" colspan="5" width="100%">
 											<!--		tiles insert -->
 											<tiles:insert attribute="content"></tiles:insert>
 										</td>
@@ -77,8 +78,8 @@
 							<tr height="35" valign="center">
 								<td width="2%" valign="center">&nbsp;</td>
 								<td valign="center" width="75%"><html:button property="Button"><bean:message key="query.saveButton"/></html:button></td>
-								<td  valign="center" align="right"><html:button property="Button" ><bean:message key="query.searchButton"/></html:button></td>
-								<td  align="right" valign="center"><html:button property="Button"><bean:message key="query.perviousButton"/></html:button></td>
+								<td  valign="center" align="right"><html:button property="Button"  onclick="viewSearchResults()"><bean:message key="query.searchButton"/></html:button></td>
+								<td  align="right" valign="center"><html:button property="Button" onclick="previousFromDefineResults()"><bean:message key="query.previousButton"/></html:button></td>
 								<td align="right" valign="center"><html:button property="Button"><bean:message key="query.nextButton"/></html:button>
 								</td>
 								<td width="2%">&nbsp;</td>

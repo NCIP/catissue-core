@@ -151,7 +151,7 @@ function initGridView()
 
 //Tree component
 	tree=new dhtmlXTreeObject("treebox","100%","100%",0);
-	tree.setImagePath("dhtml_comp/imgs/");
+	tree.setImagePath("./dhtml_comp/imgs/");
 	tree.setOnClickHandler(treeNodeClicled);
 		<%
 			
@@ -168,8 +168,8 @@ function initGridView()
 							parentId = data.getParentIdentifier().toString();		
 						}
 						String nodeId = data.getIdentifier().toString();
-						String img = "item.GIF";
-						
+						String img = "/dhtml_comp/imgs/item.GIF";
+					
 						if (parentId.equals("0"))
 						{
 							nodeColapseCode += "tree.closeAllItems('" + nodeId + "');";
@@ -294,6 +294,7 @@ function showSpreadsheetData(columnDataStr)
 	String formAction = Constants.DefineSearchResultsViewJSPAction;
 %>
 <html:form method="GET" action="<%=formAction%>">
+<html:hidden property="currentPage" value=""/>
 <html:hidden property="stringToCreateQueryObject" value="" />
 <table bordercolor="#000000" border="0" width="100%" cellspacing="2" cellpadding="2"  height="100%">
 	<tr>
@@ -340,8 +341,8 @@ function showSpreadsheetData(columnDataStr)
 						<td valign="top" height="100%">
 							<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" id="table11">
 								<tr>
-								<td valign="top" height="100%" colspan="2">
-									<div id="gridbox" width="100%" height="95%" style="background-color:white;overflow:auto">
+								<td valign="top" colspan="2">
+									<div id="gridbox"  height="100%" style="background-color:white;">
 									<% if (dataList != null && dataList.size() == 0)
 										{ %>
 									<bean:message key="simpleQuery.noRecordsFound"/>

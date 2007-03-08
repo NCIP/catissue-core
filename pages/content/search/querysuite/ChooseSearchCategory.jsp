@@ -8,6 +8,26 @@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <script src="jss/queryModule.js"></script>
 <script type="text/javascript" src="jss/ajax.js"></script> 
+<script>
+<%
+String height = "";
+String currentPage = (String)request.getAttribute(Constants.CURRENT_PAGE);
+
+System.out.println("currentPage         "+currentPage);
+%>
+	if(navigator.appName == "Microsoft Internet Explorer")
+		{
+			<%
+				height = "60%";
+			%>
+		}
+		else
+		{
+			<%
+				height ="400" ;
+			%>
+		}
+</script>
 </head>
 <html:errors />
 <%
@@ -15,10 +35,11 @@
 	String SearchCategory = Constants.SearchCategory ;
 %>
 <html:form method="GET" action="SearchCategory.do">
-	<table border="1" width="20%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" id="table11">
+<html:hidden property="currentPage" value=""/>
+	<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" id="table11">
 		<tr>
 			<td valign="top"> 
-				<table border="0" width="208" valign="top" cellspacing="0" height="100%">
+				<table border="0" width="100%" valign="top" cellspacing="0" height="100%">
 					<tr valign="top" valign="top" bgcolor="#EAEAEA" width="100%">
 						<th height="5%"  valign="top" colspan="4">
 							<b><font face="Arial" size="2"><bean:message key="query.categorySearchHeader"/></font></b>									
@@ -34,7 +55,9 @@
 						<td>&nbsp;</td>
 						<td width="75%" valign="top" ><html:text property="textField"/></td>
 						<td width="25%" valign="top">
-							<input type="button" value="Search" name="searchButton" onclick="retriveSearchedEntities('<%= SearchCategory %>','<%=formName%>');"/>
+					
+							<input type="button" value="Search" name="searchButton" onclick="retriveSearchedEntities('<%= SearchCategory %>','<%=formName%>','<%=currentPage%>');"/>
+					
 						</td>
 						<td valign="top">&nbsp;</td>
 					</tr>
@@ -89,12 +112,12 @@
 					</tr>
 					<tr valign="top" class="row" width="100%">
 						<td width="100%">&nbsp;</td>
-						<td height="400"  width="100%" colspan="2" id='resultSetDiv'  style="border:solid 1px;bordercolorlight:#EAEAEA">
+						<td height=<%=height%>  width="100%" colspan="2" id='resultSetDiv'  style="border:solid 1px;bordercolorlight:#EAEAEA">
 							<div id="resultSet" style="overflow:auto;height:100%;width:100%"></div>
 						</td>
 						<td>&nbsp;</td>
 					</tr>
-					<tr valign="top" class="row" width="98%" height="1">						
+					<tr valign="top" class="row" width="100%" height="1">						
 						<td height="3" colspan="4"></td>								
 					</tr>
 			</table>

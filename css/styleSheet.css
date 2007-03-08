@@ -1535,7 +1535,7 @@ input.enumeratedListBox
   font-size:1em;
   width:10em;
 }
-queryLink{ /* for the text links in the Search category page */
+.queryLink{ /* for the text links in the Search category page */
  font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.2em;
   color:#5C5C5C; /* constant: black */
@@ -1555,4 +1555,20 @@ queryLink{ /* for the text links in the Search category page */
  /* color:#000000; /* constant: black	*/
   /*border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   text-align:left;
+}
+.entityLink
+{
+    font-family:arial,helvetica,verdana,sans-serif;
+	font-size:0.8em;
+	color:#5C5C5C; /* constant: dark gray */
+	text-decoration:underline;	
+    white-space: nowrap;
+	width:20;
+	display:block;
+}
+.validationMessageCss
+{
+ font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.9em;
+  color:#000000; /* constant: black */
 }
