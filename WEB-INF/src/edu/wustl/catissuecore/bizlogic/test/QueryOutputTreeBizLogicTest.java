@@ -43,6 +43,7 @@ import edu.wustl.common.util.dbManager.DAOException;
 public class QueryOutputTreeBizLogicTest extends BaseTestCase
 {
 	Mock jdbcDAO;
+	SessionDataBean sessionData = null;
 
 	public QueryOutputTreeBizLogicTest(String name)
 	{
@@ -99,6 +100,8 @@ public class QueryOutputTreeBizLogicTest extends BaseTestCase
 	 */
 	void initJunitForJDBC()
 	{
+		sessionData = new SessionDataBean();
+		sessionData.setUserId(new Long(1));
 		Constraint[] constraints = {new IsInstanceOf(SessionDataBean.class)};
 		FullConstraintMatcher fullConstraintMatcher = new FullConstraintMatcher(constraints);
 		Constraint[] selectConstraints = {new IsAnything(), new IsInstanceOf(SessionDataBean.class), new IsAnything(), new IsAnything(), new IsAnything()};
@@ -196,8 +199,7 @@ public class QueryOutputTreeBizLogicTest extends BaseTestCase
 		treeDataVector.add(treeNode);
 		QueryOutputTreeBizLogic treeBizLogic = new QueryOutputTreeBizLogic();
 
-		SessionDataBean sessionData = new SessionDataBean();
-		sessionData.setUserId(new Long(1));
+		
 		Long userId = sessionData.getUserId();
 		String expectedTableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + userId;
 		Vector treeVector = null;
@@ -224,8 +226,6 @@ public class QueryOutputTreeBizLogicTest extends BaseTestCase
 	public void testBuildTreeForNode()
 	{
 		initJunitForJDBC();
-		SessionDataBean sessionData = new SessionDataBean();
-		sessionData.setUserId(new Long(1));
 		Map<Long, Map<AttributeInterface, String>> nodeAttributeColumnNameMap = getNodeAttributeColumnNameMap();
 		Map<Long, IOutputTreeNode> idNodeMap = new HashMap<Long, IOutputTreeNode>();
 		IOutputTreeNode root = getDummyTreeNodes();
@@ -238,17 +238,13 @@ public class QueryOutputTreeBizLogicTest extends BaseTestCase
 		}
 		catch (ClassNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		catch (DAOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(outputTreeStr);
 		String expectedTreeStr = "1_1::1_1::10_1,CollectionProtocolRegistration_1,edu.wustl.catissuecore.domain.CollectionProtocolRegistration,1_1::1_1,edu.wustl.catissuecore.domain.Participant|";
-		System.out.println(expectedTreeStr);
 		assertEquals(outputTreeStr, expectedTreeStr);
 		assertNotNull(outputTreeStr);
 	}
