@@ -412,7 +412,13 @@ PUBLIC
 	<!--Added by Deepti -define array end-->
 	
 	<!-- Action code : Query Module Starts : 06/11/06 -->
-	
+		<action path="/QueryWizard"
+			type="edu.wustl.catissuecore.action.querysuite.QueryWizardAction"
+			name="categorySearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.searchCategory"/>
+		</action>
 		<action path="/SearchCategory"
 			type="edu.wustl.catissuecore.action.querysuite.CategorySearchAction"
 			name="categorySearchForm"
