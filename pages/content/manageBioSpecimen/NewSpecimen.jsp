@@ -31,7 +31,19 @@
 	
 	String currentReceivedDate = "";
 	String currentCollectionDate = "";
-	Long specimenEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+
+
+		Long specimenEntityId = null;
+			if (request.getSession().getAttribute("specimenEntityId") == null)
+		{
+			specimenEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+			request.getSession().setAttribute("specimenEntityId", specimenEntityId);
+		}
+		else
+		{
+			specimenEntityId = (Long) request.getSession().getAttribute("specimenEntityId");				
+		}
+	
 	if (form != null) 
 	{
 		currentReceivedDate = form.getReceivedEventDateOfEvent();
@@ -461,17 +473,17 @@
 			<%
 				if(form.getConsentTierCounter()>0)			
 				{
-			%>
+				%>
 					switchToTab("consentTab");
-			<%
+				<%
 				}
 				else
 				{
-			%>
+				%>
 					alert("No consents available for selected Specimen Collection Group");
-			<%
+				<%
 				}
-			%>
+				%>
 		}
 
 	  function showConsents()
@@ -1479,22 +1491,17 @@
 
 							<!--specimenPageButton-->
 			 				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id ="specimenPageButton">
-								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
-									<tr>
-										<td>
-											<table id="aliquotId">
-												<tr>					
-													<td class="formFieldNoBordersBold" height="20" colspan="5">
-														<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
-															&nbsp; <bean:message key="specimen.aliquot.message"/>
-														</html:checkbox>
-													</td>
-												</tr>	
-											</table>
-										</td>
-									</tr>
-								</logic:notEqual>
-								<!-- Bio-hazards End here -->	
+							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
+							<tr>					
+								<td class="formFieldNoBordersBold" height="20" colspan="5">
+									<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
+										&nbsp; <bean:message key="specimen.aliquot.message"/>
+									</html:checkbox>
+							    </td>
+							</tr>								
+							</logic:notEqual>
+							 
+							 <!-- Bio-hazards End here -->	
 						   	 	<tr>
 							  		<td align="left" colspan="6">
 										<%
