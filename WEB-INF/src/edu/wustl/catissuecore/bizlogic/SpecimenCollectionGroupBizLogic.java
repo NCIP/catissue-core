@@ -348,10 +348,10 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.collectionprotocolregistration.atleast"));
 		}
 
-		if (group.getSite() == null || group.getSite().getId() == null)
+		if (group.getSite() == null || group.getSite().getId() == null || group.getSite().getId() == 0)
 		{
 			message = ApplicationProperties.getValue("specimenCollectionGroup.site");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			throw new DAOException(ApplicationProperties.getValue("errors.item.invalid", message));
 		}
 
 		// Check what user has selected Participant Name / Participant Number

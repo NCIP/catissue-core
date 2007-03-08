@@ -2,7 +2,8 @@
 	This function automatically handles all the client side events on custom
 	list boxes. If onChange event occurs on a list then this function empties
 	all the succeeding list boxes & automatically populates the immediate next
-	list with appropriate data.*/
+	list with appropriate data.
+*/
 function onCustomListBoxChange(element)
 {
 	//Get the element identifier
@@ -76,6 +77,8 @@ function onCustomListBoxChange(element)
 
 			for(var i=0;i<keys.length;i++)
 			{
+			  	var temp =  parseInt(keys[i]);  // Added by Santosh to cut down non-numeric values
+				if(temp.toString() != "NaN")
 				handleToListBox.options[i+1] = new Option(keys[i],keys[i]);
 			}
 		}

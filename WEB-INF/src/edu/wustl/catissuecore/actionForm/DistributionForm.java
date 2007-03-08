@@ -192,10 +192,10 @@ public class DistributionForm extends SpecimenEventParametersForm
 //			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.fromSite")));
 //		}
 		
-		if(!validator.isValidOption(toSite))
+		if(validator.isEmpty(toSite) || toSite.equalsIgnoreCase("undefined"))
 		{
 			Logger.out.debug("to site");
-			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("distribution.toSite")));
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",ApplicationProperties.getValue("distribution.toSite")));
 		}
 		
 		//Validations for Add-More Block

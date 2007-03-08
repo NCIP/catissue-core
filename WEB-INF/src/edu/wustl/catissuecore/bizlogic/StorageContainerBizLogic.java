@@ -1991,14 +1991,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
 		}
 
-		/*if (container.container.getSite() == null)
+		if(container.getParent() == null)
+		{
+		if (container.getSite() == null || container.getSite().getId() == null || container.getSite().getId() <= 0)
 		 {
 		 message = ApplicationProperties.getValue("storageContainer.site");
-		 throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-
+		 throw new DAOException(ApplicationProperties.getValue("errors.item.invalid", message));
 		 }
-
-		 if (!validator.isNumeric(String.valueOf(container.getPositionDimensionOne()), 1)
+		}
+	/*	 if (!validator.isNumeric(String.valueOf(container.getPositionDimensionOne()), 1)
 		 || !validator.isNumeric(String.valueOf(container.getPositionDimensionTwo()), 1)
 		 || !validator.isNumeric(String.valueOf(container.getParent().getId()), 1))
 		 {
