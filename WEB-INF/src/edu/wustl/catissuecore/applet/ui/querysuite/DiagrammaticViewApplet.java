@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 
+import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.cab2b.client.ui.dag.MainDagPanel;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
 import edu.wustl.cab2b.client.ui.util.CommonUtils;
@@ -63,7 +64,13 @@ public class DiagrammaticViewApplet extends BaseApplet
 	{
 		super.doInit();
 		Logger.configure();
+		IQuery query = getQueryObjectFromServer();
+		System.out.println("Query from server    "+query);
 		queryObject = new ClientQueryBuilder();
+		if(query != null)
+		{
+			queryObject.setQuery(query);
+		}
 		Map<DagImageConstants, Image> imagePathsMap = getImagePathsMap();
 		UpdateAddLimitUI updateAddLimitUI = new UpdateAddLimitUI(this);
 		PathFinderAppletServerCommunicator pathFinder = new PathFinderAppletServerCommunicator(serverURL);
@@ -77,6 +84,8 @@ public class DiagrammaticViewApplet extends BaseApplet
 		//Initializing frame reference to parent frame. 
 		//This reference is used for showing ambiguity resolver
 		CommonUtils.FrameReference =  findParentFrame();
+		panel.updateGraph();
+		System.out.println();
 	}
 
 	/**
@@ -116,10 +125,6 @@ public class DiagrammaticViewApplet extends BaseApplet
 			AppletModelInterface outputModel = AppletServerCommunicator.doAppletServerCommunication(urlString, appletModel);
 			Map outputMap = outputModel.getData();
 			errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
-			if(errorMessage != null)
-			{
-				errorMessage = "<li><font color=\"red\">"+errorMessage+"</font></li>";
-			}
 		}
 		catch (IOException e)
 		{
@@ -187,7 +192,8 @@ public class DiagrammaticViewApplet extends BaseApplet
 			List firstAttributeValues = (List) outputMap.get(AppletConstants.FIRST_ATTR_VALUES);
 			List secondAttributeValues = (List) outputMap.get(AppletConstants.SECOND_ATTR_VALUES);
 			ArrayList<ArrayList<String>> conditionValues = (ArrayList<ArrayList<String>>) outputMap.get(AppletConstants.ATTR_VALUES);
-			//queryObject.getQuery().getConstraints().getExpression(arg0)
+			String errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
+			showValidationMessagesToUser(errorMessage);
 			Rule rule = ((Rule) (expression.getOperand(0)));
 			rule.removeAllConditions();
 			List<ICondition> conditionsList = queryObject.getConditions(attributes, attributeOperators,conditionValues);
@@ -207,9 +213,11 @@ public class DiagrammaticViewApplet extends BaseApplet
 	public Map callAddToLimiteSetAction(String strToCreateQueryObject, String entityName)
 	{
 		BaseAppletModel appletModel = new BaseAppletModel();
-		Map<String, String> inputMap = new HashMap<String, String>();
+		Map inputMap = new HashMap();
 		inputMap.put(AppletConstants.STR_TO_CREATE_QUERY_OBJ, strToCreateQueryObject);
 		inputMap.put(AppletConstants.ENTITY_NAME, entityName);
+		IQuery query = queryObject.getQuery();
+		inputMap.put(AppletConstants.QUERY_OBJECT, query);
 		appletModel.setData(inputMap);
 		try
 		{
@@ -258,7 +266,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 	 * @param inputMap input data 
 	 * @return out put data 
 	 */
-	Map doAppletServletCommunication(String url , Map inputMap)
+	Map doAppletServletCommunication(String url , Map inputMap,String methodName)
 	{
 		BaseAppletModel appletModel = new BaseAppletModel();
 		appletModel.setData(inputMap);
@@ -266,7 +274,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 		{
 			String session_id = getParameter(AppletConstants.SESSION_ID);
 			String urlString = serverURL + url + ";jsessionid=" + session_id + "?"
-			+ AppletConstants.APPLET_ACTION_PARAM_NAME + "=" + AppletConstants.INIT_DATA + "";
+			+ AppletConstants.APPLET_ACTION_PARAM_NAME + "=" + methodName + "";
 			AppletModelInterface outputModel = AppletServerCommunicator.doAppletServerCommunication(urlString, appletModel);
 			Map outputMap = outputModel.getData();
 			return outputMap;
@@ -298,10 +306,56 @@ public class DiagrammaticViewApplet extends BaseApplet
 	/**
 	 * Calls server to get the query object.This object was already stored in session when user had created it. 
 	 */
-	public void getQueryObjectFromServer()
+	public IQuery getQueryObjectFromServer()
 	{
 		Map inputDataMap = new HashMap();
-		Map outputMap = doAppletServletCommunication(AppletConstants.GET_DAG_VIEW_DATA, inputDataMap);
-		IQuery dagViewQueryObject = (IQuery)outputMap.get(AppletConstants.QUERY_OBJECT);
+		Map outputMap = doAppletServletCommunication(AppletConstants.GET_DAG_VIEW_DATA, inputDataMap,AppletConstants.INIT_DATA);
+		IQuery query = (IQuery)outputMap.get(AppletConstants.QUERY_OBJECT);
+		return query;
+	}
+	/**
+	 * This method is called from a javascript when user clicks on Add To View button of define search results jsp.
+	 * It adds the selected entityExpression to the graph and updates the graph. 
+	 * @param strToCreateQueryObject String to create query obj
+	 * @param entityName name of the entity
+	 * @throws MultipleRootsException 
+	 * @throws MultipleRootsException MultipleRootsException
+	 */
+	public void addNodeToView(String nodesStr) throws MultipleRootsException
+	{
+		if (!nodesStr.equalsIgnoreCase(""))
+		{
+			if(nodesStr.indexOf("~")!= -1)
+			{
+				String[] nodes = nodesStr.split("~");
+				Map<String,String[]> inputDataMap = new HashMap<String,String[]>();
+				inputDataMap.put(AppletConstants.ENTITY_STR, nodes);
+				Map outputMap = doAppletServletCommunication(AppletConstants.GET_DAG_VIEW_DATA, inputDataMap,AppletConstants.GET_DATA);
+				int len = nodes.length;
+				System.out.println(len);
+				for(int i=0; i<len; i++)
+				{
+					String node = nodes[i];
+					EntityInterface entity = (EntityInterface)outputMap.get(node);
+					IExpressionId id = queryObject.addExpression(entity);
+					panel.updateGraphForViewExpression(id);
+				}
+			}
+		}
+	}
+	/**
+	 * This method is called from a javascript when user clicks on Next button of AddLimits.jsp.
+	 * This again calls a action class to set the query object in session.
+	 * @param strToCreateQueryObject String to create query obj
+	 * @param entityName name of the entity
+	 * @throws MultipleRootsException 
+	 * @throws MultipleRootsException MultipleRootsException
+	 */
+	public void defineResultsView() throws MultipleRootsException
+	{
+		Map<String,IQuery> inputDataMap = new HashMap<String,IQuery>();
+		IQuery query = queryObject.getQuery();
+		inputDataMap.put(AppletConstants.QUERY_OBJECT, query);
+		doAppletServletCommunication(AppletConstants.GET_DAG_VIEW_DATA, inputDataMap,AppletConstants.SET_DATA);
 	}
 }
