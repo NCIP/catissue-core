@@ -22,6 +22,64 @@ if(dateCombo.options[dateCombo.selectedIndex].value != "Any")
 	}
 }
 }
+function goToAddLimitsPage()
+{
+
+}
+
+function addToView()
+{
+	var selectTag = document.getElementById('selectCategoryList');
+	var len = selectTag.length;
+	var items = "";
+	for(i=0;i<len;i++)
+	{
+		if(selectTag[i].selected)
+		{
+			items += selectTag[i].value + "~";
+		}
+	}
+	document.applets[0].addNodeToView(items);
+}
+
+
+function expand()
+{			
+	switchObj = document.getElementById('image');
+	dataObj = document.getElementById('collapsableTable');
+	resultSetDivObj = document.getElementById('resultSetDiv');
+
+	if(dataObj.style.display != 'none') //Clicked on - image
+	{
+		dataObj.style.display = 'none';				
+		switchObj.innerHTML = '<img src="images/nolines_plus.gif" border="0"/>';
+		if(navigator.appName == "Microsoft Internet Explorer")
+		{					
+				resultSetDivObj.height = "400";
+		}
+		else
+		{
+				resultSetDivObj.height = "400";
+		}
+	}
+	else  							   //Clicked on + image
+	{
+		if(navigator.appName == "Microsoft Internet Explorer")
+		{					
+			dataObj.style.display = 'block';
+			resultSetDivObj.height = "320";
+		}
+		else
+		{
+			dataObj.style.display = 'table-row';
+			dataObj.style.display = 'block';
+			resultSetDivObj.height = "320";
+		}
+		switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0"/>';
+
+	}
+}
+
 function operatorChanged(rowId,dataType)
 {
 
@@ -97,9 +155,11 @@ else
 	if(document.all) {
 		// IE.
 		document.getElementById(textBoxId).style.display="none";		
-			if(dataType == "true")
+		if(dataType == "true")
 		{
-		document.getElementById(calendarId1).style.display="none";		
+		document.getElementById(calendarId1).style.display="none";	
+		var dateFormatLabelId = document.getElementById(dateFormatLabel);
+			dateFormatLabelId.style.display="none";
 		}
 	} else if(document.layers) {
 		// Netspace 4
@@ -122,46 +182,31 @@ else
 function expandCollapseDag()
 {
 }
-function expand()
-{			
-	switchObj = document.getElementById('image');
-	dataObj = document.getElementById('collapsableTable');
-	resultSetDivObj = document.getElementById('resultSetDiv');
 
-	if(dataObj.style.display != 'none') //Clicked on - image
-	{
-		dataObj.style.display = 'none';				
-		switchObj.innerHTML = '<img src="images/nolines_plus.gif" border="0"/>';
-		resultSetDivObj.height = 400;
-	}
-	else  							   //Clicked on + image
-	{
-		if(navigator.appName == "Microsoft Internet Explorer")
-		{					
-			dataObj.style.display = 'block';
-		}
-		else
-		{
-			dataObj.style.display = 'table-row';
-			dataObj.style.display = 'block';
-		}
-		switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0"/>';
-		resultSetDivObj.height = 320;
-	}
-}
 
-function retriveSearchedEntities(url,nameOfFormToPost) 
+function retriveSearchedEntities(url,nameOfFormToPost,currentPage) 
 {
-	var request = newXMLHTTPReq();				
-	var actionURL;
-	var handlerFunction = getReadyStateHandler(request,onResponseUpdate,true);
-	
+	var request = newXMLHTTPReq();		
 	var textFieldValue = document.forms[0].textField.value;
-
 	var classCheckStatus = document.forms[0].classChecked.checked;
 	var attributeCheckStatus = document.forms[0].attributeChecked.checked;
 	var permissibleValuesCheckStatus = document.forms[0].permissibleValuesChecked.checked;
 	var radioCheckStatus;
+	var actionURL;
+	if(currentPage == 'null')
+	{
+		var handlerFunction = getReadyStateHandler(request,onResponseUpdate,true);
+		actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&selected=" + radioCheckStatus+"&currentPage=AddLimits";
+	}
+	else
+	{
+		//document.forms['categorySearchForm'].currentPage.value = "DefineResultsView";
+	//	url = url+"?currentPage=DefineResultsView";
+		actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&selected=" + radioCheckStatus +"&currentPage=DefineResultsView";
+		var handlerFunction = getReadyStateHandler(request,showEntityList,true);
+	}
+	
+
 
 	request.onreadystatechange = handlerFunction;
 			
@@ -170,7 +215,7 @@ function retriveSearchedEntities(url,nameOfFormToPost)
 	if(document.forms[0].selected[1].checked)
 		radioCheckStatus = "rb2";
 
-	actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&selected=" + radioCheckStatus;
+
 
 	if(!(classCheckStatus || attributeCheckStatus || permissibleValuesCheckStatus) ) 
 	{
@@ -196,6 +241,18 @@ function retriveSearchedEntities(url,nameOfFormToPost)
 		request.send(actionURL);
 	}
 }
+function showEntityList(text)
+{
+	if(text == "")
+	{
+		alert("No results found.");
+	}
+	var element = document.getElementById('resultSet');
+	var row ='<table border="1" width="20%" height="60%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
+	row = row + '<tr>' + text + '</tr>';
+	row = row+'</table>';		
+	element.innerHTML =row;
+}
 /*function showtip(a,event,text)
 {
 		alert("sda  "+text);
@@ -205,10 +262,18 @@ function hidetip()
 }*/
 function onResponseUpdate(text)
 {
+
 	if(text == "")
 	{
 		alert("Zero Entitites found.");
 	}
+	if(text.indexOf("##") != -1)
+	{
+		var currentPageText = text.split("##");
+		var currentPage = currentPageText[0];
+		text = currentPageText[1];
+	}
+
 	var element = document.getElementById('resultSet');
 	var listOfEntities = text.split(";");
 	var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="1">';
@@ -222,9 +287,17 @@ function onResponseUpdate(text)
 			
 			var lastIndex = name.lastIndexOf(".");
 			var entityName = name.substring(lastIndex + 1);
+			if(currentPage != "DefineResultsView")
+			{
 			var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+name+"')";					
-			row = row+'<tr><td><a class="normalLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
+			row = row+'<tr><td><a class="entityLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
+			}
+			else
+			{
+				row = row + '<tr><td class="entityLink" title="'+description+'">' + entityName + ' </td></tr>';
+			}
 			//row =row+ '<tr><td><a href=href="javascript:'+functionCall+'" onMouseover="showtip(this,event,'description  wds')" onMouseout="hidetip()">' +entityName+ '</a></td></tr>';
+			
 		}			
 	row = row+'</table>';		
 	element.innerHTML =row;
@@ -248,7 +321,7 @@ function showEntityInformation(text)
 	element.innerHTML =text;
 }
 
-function produceQuery(url,nameOfFormToPost, entityName , attributesList) 
+function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributesList) 
 {
 	var strToCreateQueyObject ="";
 	var attribute = attributesList.split(";");
@@ -354,10 +427,23 @@ function produceQuery(url,nameOfFormToPost, entityName , attributesList)
 	}
 	if(navigator.appName == "Microsoft Internet Explorer")
 	{
-		var isEditLimit = document.getElementById('addLimit').value;
+		if(isTopButton)
+		{
+			var isEditLimit = document.getElementById('TopAddLimitButton').value;
+		}else 
+		{
+			var isEditLimit = document.getElementById('BottomAddLimitButton').value;
+		}
+
 	}else
 	{
-		var isEditLimit = document.forms[nameOfFormToPost].elements["addLimit"].value;
+	if(isTopButton)
+		{
+			var isEditLimit = document.forms[nameOfFormToPost].elements["TopAddLimitButton"].value;
+		}else 
+		{
+			var isEditLimit = document.forms[nameOfFormToPost].elements["BottomAddLimitButton"].value;
+		}
 	}
 	if(isEditLimit == 'Add Limit')
 	{	
@@ -428,6 +514,11 @@ function showViewSearchResultsJsp()
 	document.forms['categorySearchForm'].action='ViewSearchResultsJSPAction.do';
 	document.forms['categorySearchForm'].submit();			
 }
+function saveClientQueryToServer()
+{
+	document.applets[0].defineResultsView();
+	defineSearchResultsView();
+}
 function defineSearchResultsView()
 {
 	document.forms['categorySearchForm'].action='DefineSearchResultsView.do';
@@ -441,9 +532,15 @@ function setFocusOnSearchButton()
 function showAddLimitsPage()
 {
 	document.forms['categorySearchForm'].action='SearchCategory.do';
+	document.forms['categorySearchForm'].currentPage.value = "AddLimits222";
 	document.forms['categorySearchForm'].submit();
 }
-
+function previousFromDefineResults()
+{
+	document.forms['categorySearchForm'].action='SearchCategory.do';
+	document.forms['categorySearchForm'].currentPage.value = "prevToAddLimits";
+	document.forms['categorySearchForm'].submit();
+}
 
 		/*function viewAddLimitsPage()
 		{

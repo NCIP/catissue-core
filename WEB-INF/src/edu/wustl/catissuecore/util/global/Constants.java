@@ -152,7 +152,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String[] ATTRIBUTE_NAMES_FOR_TREENODE_LABEL = {
 		"firstName",
 		"lastName",
-		"middleName",
+		"title",
 		"name",
 		"label"
 	};
