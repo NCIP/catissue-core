@@ -40,10 +40,8 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 
 /**
- * This generates UI for 'Add limits' and 'Edit Limits' section.
- * 
+ * This class generates UI for 'Add Limits' and 'Edit Limits' section.
  * @author deepti_shelar
- *
  */
 public class GenerateHtmlForAddLimitsBizLogic
 {
@@ -80,10 +78,16 @@ public class GenerateHtmlForAddLimitsBizLogic
 		generatedHTML.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"1\" cellpadding=\"1\">");
 		generatedHTML.append("\n<tr>");
 		generatedHTML
-		.append("<td height=\"4%\" colspan=\"8\" bgcolor=\"#EAEAEA\" style=\"border:solid 1px\"><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
+		.append("<td valign='top' height=\"4%\" colspan=\"8\" bgcolor=\"#EAEAEA\" style=\"border:solid 1px\"><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
 		generatedHTML.append(header + " '" + nameOfTheEntity + "'</b></font>");
 		generatedHTML.append("\n</td></tr>");
-		generatedHTML.append("\n<tr><td height=\"3%\" colspan=\"8\" bgcolor=\"#FFFFFF\">&nbsp;</td></tr>");
+		generatedHTML.append("\n<tr><td valign='top' height=\"3%\" colspan=\"8\" bgcolor=\"#FFFFFF\">&nbsp;</td></tr>");
+		if(conditions != null)
+		{
+			isEditLimits = true;
+		}
+		boolean isTopButton = true;
+		generatedHTML.append(generateHTMLForButton(nameOfTheEntity, getAttributesString(attributeCollection), isEditLimits,isTopButton));
 		if (!attributeCollection.isEmpty())
 		{
 			Object[] attributes = attributeCollection.toArray();
@@ -95,8 +99,21 @@ public class GenerateHtmlForAddLimitsBizLogic
 				String attrLabel = QueryModuleUtil.getAttributeLabel(attrName);
 				String componentId = attrName + attribute.getId().toString();
 				attributesList = attributesList + ";" + componentId;
-				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"6%\">\n<td class=\"standardTextQuery\" width=\"10%\">");
-				generatedHTML.append(attrLabel + "</td>\n");
+				generatedHTML.append("\n<tr id=\"" + componentId + "\" height=\"6%\">\n<td valign='top' class=\"standardTextQuery\" nowrap='nowrap' width=\"10%\">");
+				generatedHTML.append(attrLabel+" ");
+				if(attribute.getDataType().equalsIgnoreCase(Constants.DATE))
+				{
+					String dateFormat = ApplicationProperties.getValue("query.date.format");
+				//	generatedHTML.append("<td  valign='top' class=\"standardDateQuery\" nowrap='nowrap' width=\"10%\">");
+					generatedHTML.append("\n("+dateFormat+")");
+				//	generatedHTML.append("</td>\n");
+				}
+				/*else
+				{
+					generatedHTML.append("\n<td valign='top' class='standardTextQuery' nowrap='nowrap' width='8'>&nbsp</td>");	
+				}*/
+				generatedHTML.append("</td>\n");
+				
 				List<String> operatorsList = populateAttributeUIInformation(attribute);
 				boolean isBetween = false;
 				if (!operatorsList.isEmpty() && operatorsList.get(0).equalsIgnoreCase(RelationalOperator.Between.toString()))
@@ -155,7 +172,8 @@ public class GenerateHtmlForAddLimitsBizLogic
 				generatedHTML.append("\n</tr>");
 			}
 		}
-		generatedHTML.append(generateHTMLForButton(nameOfTheEntity, attributesList, isEditLimits));
+		isTopButton = false;
+		generatedHTML.append(generateHTMLForButton(nameOfTheEntity, attributesList, isEditLimits,isTopButton));
 		generatedHTML.append("</table>");
 		return generatedHTML.toString();
 	}
@@ -269,6 +287,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 					strObj = parseFile.getEnumNum();
 				}
 			}
+			Arrays.sort(strObj);
 			for (int i = 0; i < strObj.length; i++)
 			{
 				if (strObj[i] != null)
@@ -290,7 +309,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String componentId = attributeName + attribute.getId().toString();
 		if (operatorsList != null && operatorsList.size() != 0)
 		{
-			html.append("\n<td class=\"dropdownQuery\" width=\"10%\">");
+			html.append("\n<td width='1%' class=\"dropdownQuery\" valign='top' >");
 			AttributeTypeInformationInterface attrTypeInfo = attribute.getAttributeTypeInformation();
 			if (attrTypeInfo instanceof DateAttributeTypeInformation)
 			{
@@ -335,9 +354,9 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String dateFormatLabelId1 = componentId + "_dateFormatLabel1";
 		String dateFormatLabelId2 = componentId + "_dateFormatLabel2";
 		String dataType = attributeInterface.getDataType();
-		String dateFormat = ApplicationProperties.getValue("query.date.format");
+		//String dateFormat = ApplicationProperties.getValue("query.date.format");
 		StringBuffer html = new StringBuffer();
-		html.append("<td width=\"10%\" class=\"standardTextQuery\">\n");
+		html.append("<td width='1%' valign='top' class=\"standardTextQuery\">\n");
 		if (values == null || values.isEmpty())
 		{
 			html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\">");
@@ -349,15 +368,15 @@ public class GenerateHtmlForAddLimitsBizLogic
 		html.append("\n</td>");
 		if (dataType.equalsIgnoreCase(Constants.DATE))
 		{
-			html.append("\n<td id=\"" +dateFormatLabelId1+ "\" class=\"standardTextQuery\" width=\"10%\">"+dateFormat+"</td>");
 			html.append("\n" + generateHTMLForCalendar(attributeInterface, true, false));
+		//	html.append("\n<td valign='top' nowrap='nowrap' id=\"" +dateFormatLabelId1+ "\" class=\"standardTextQuery\" width=\"8%\">"+dateFormat+"</td>");
 		}
 		else
 		{
-			html.append("\n<td width=\"10%\">&nbsp</td>");
-			html.append("\n<td width=\"3%\">&nbsp</td>");
+			html.append("\n<td valign='top' />");
+		//	html.append("\n<td valign='top' />");
 		}
-		html.append("<td width=\"10%\" class=\"standardTextQuery\">\n");
+		html.append("<td width='1%'  valign='top' class=\"standardTextQuery\">\n");
 		if (isBetween)
 		{
 			if (values == null)
@@ -375,19 +394,24 @@ public class GenerateHtmlForAddLimitsBizLogic
 			html.append("<input type=\"text\" name=\"" + textBoxId1 + "\" id=\"" + textBoxId1 + "\" style=\"display:none\">");
 		}
 		html.append("\n</td>");
-		if (attributeInterface.getAttributeTypeInformation() instanceof DateAttributeTypeInformation)
+		if (dataType.equalsIgnoreCase(Constants.DATE))
 		{
-
-			html.append("\n<td id=\"" +dateFormatLabelId2+ "\" class=\"standardTextQuery\" style=\"display:none\" width=\"10%\">"+dateFormat+"</td>");				
 			html.append("\n" + generateHTMLForCalendar(attributeInterface, false, isBetween));
+		/*	if(!isBetween)
+			{
+				html.append("\n<td valign='top' nowrap='nowrap' id=\"" +dateFormatLabelId2+ "\" class=\"standardTextQuery\" style=\"display:none\" width=\"8%\">"+dateFormat+"</td>");
+			}
+			else
+			{
+				html.append("\n<td valign='top' nowrap='nowrap' id=\"" +dateFormatLabelId2+ "\" class=\"standardTextQuery\" style=\"display:block\" width=\"8%\">"+dateFormat+"</td>");
+			}*/
 		}
 		else
 		{
-			html.append("\n<td width=\"10%\">&nbsp</td>");
-			html.append("\n<td width=\"3%\">&nbsp</td>");
+			html.append("\n<td valign='top' />");
+			//html.append("\n<td valign='top' />");
 		}
-
-		return html.toString();
+	return html.toString();
 	}
 
 	/**
@@ -396,19 +420,28 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param attributesStr attributesStr
 	 * @return String HTMLForButton
 	 */
-	private String generateHTMLForButton(String entityName, String attributesStr, boolean isEditLimits)
+	private String generateHTMLForButton(String entityName, String attributesStr, boolean isEditLimits,boolean isTopButton)
 	{
-		String buttonId = "addLimit";
+		String buttonName = "addLimit";
+		String buttonId = "";
 		StringBuffer html = new StringBuffer();
-		String buttonCaption = "Add Limit";
 		html.append("\n<tr>");
-		html.append("\n<td valign=\"bottom\">");
+		if(isTopButton)
+		{
+			buttonId = "TopAddLimitButton";
+			html.append("\n<td valign=\"top\">");
+		}
+		else
+		{
+			buttonId = "BottomAddLimitButton";
+			html.append("\n<td valign=\"bottom\">");
+		}
+		String buttonCaption = "Add Limit";
 		if (isEditLimits)
 		{
 			buttonCaption = "Edit Limit";
 		}
-
-		html.append("\n<input type=\"button\" name=\"" + buttonId + "\" onClick=\"produceQuery('addToLimitSet.do', 'categorySearchForm', '"
+		html.append("\n<input id=\""+buttonId+"\" type=\"button\" name=\"" + buttonName + "\" onClick=\"produceQuery('"+buttonId+"', 'addToLimitSet.do', 'categorySearchForm', '"
 				+ entityName + "','" + attributesStr + "')\" value=\"" + buttonCaption + "\"></input>");
 		html.append("\n</td>");
 		html.append("\n</tr>");
@@ -427,13 +460,13 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String componentId = attribute.getName() + attribute.getId().toString();
 		String innerStr = "";
 		//String divId = "overDiv" + (i + 1);
-		String divStr = "\n<div id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
+		String divStr = "\n<div width='3%' id='overDiv' style='position:absolute; visibility:hidden; z-index:1000;'></div>";
 		String imgStr = "\n<img id=\"calendarImg\" src=\"images\\calendar.gif\" width=\"24\" height=\"22\" border=\"0\">";
 		if (isFirst)
 		{
 			String textBoxId = componentId + "_textBox";
 			String calendarId = componentId + "_calendar";
-			innerStr = "\n<td width=\"3%\" id=\"" + calendarId + "\">" + divStr + "<a href=\"javascript:show_calendar('categorySearchForm." + textBoxId
+			innerStr = "\n<td width='3%' valign='top' id=\"" + calendarId + "\">" + divStr + "\n<a href=\"javascript:show_calendar('categorySearchForm." + textBoxId
 			+ "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
 		}
 		else
@@ -449,10 +482,10 @@ public class GenerateHtmlForAddLimitsBizLogic
 			{
 				style = "display:none";
 			}
-			innerStr = "\n<td width=\"3%\" id=\"" + calendarId1 + "\" style=\"" + style + "\">" + divStr
+			innerStr = "\n<td width='3%' valign='top' id=\"" + calendarId1 + "\" style=\"" + style + "\">" + divStr
 			+ "\n<a href=\"javascript:show_calendar('categorySearchForm." + textBoxId1 + "',null,null,'MM-DD-YYYY');\">" + imgStr + "</a>";
 		}
-		innerStr = innerStr + "</td>";
+		innerStr = innerStr + "\n</td>";
 		return innerStr.toString();
 	}
 
@@ -471,7 +504,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		if (permissibleValues != null && permissibleValues.size() != 0)
 		{
 
-			html.append("\n<td class=\"PermissibleValuesQuery\" width=\"10%\">");
+			html.append("\n<td width='1%' valign='top' class=\"PermissibleValuesQuery\" >");
 			html.append("\n<select style=\"width:150px; display:block;\" MULTIPLE styleId='country' size ='2' name=\"" + componentId
 					+ "_enumeratedvaluescombobox\"\">");
 			Object[] values = permissibleValues.toArray();
@@ -494,5 +527,27 @@ public class GenerateHtmlForAddLimitsBizLogic
 			html.append("\n</td>");
 		}
 		return html.toString();
+	}
+	/**
+	 * 
+	 * @param attributeCollection
+	 * @return
+	 */
+	String getAttributesString(Collection attributeCollection)
+	{
+		String attributesList = "";
+		if (!attributeCollection.isEmpty())
+		{
+			Object[] attributes = attributeCollection.toArray();
+			Arrays.sort(attributes, new AttributeInterfaceComparator());
+			for(int i=0;i<attributes.length;i++)
+			{
+				AttributeInterface attribute = (AttributeInterface) attributes[i];
+				String attrName = attribute.getName();
+				String componentId = attrName + attribute.getId().toString();
+				attributesList = attributesList + ";" + componentId;
+			}
+		}
+		return attributesList;
 	}
 }

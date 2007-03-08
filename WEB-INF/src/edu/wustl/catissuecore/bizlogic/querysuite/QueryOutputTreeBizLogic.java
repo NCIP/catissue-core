@@ -22,7 +22,6 @@ import edu.wustl.common.util.dbManager.DAOException;
  * Creates QueryOutputTree Object as per the data filled by the user on AddLimits section.
  * Creates QueryOutputTree Table.
  * @author deepti_shelar
- *
  */
 public class QueryOutputTreeBizLogic
 {
@@ -61,18 +60,18 @@ public class QueryOutputTreeBizLogic
 			{
 				AttributeInterface attr = iterator.next();
 				String columnName = columns.get(attr);
+				if(idColumnName != null && displayNameColumnName != null)
+				{
+					break;
+				}
 				if (attr.getName().equalsIgnoreCase(Constants.ID))
 				{
 					idColumnName = columnName;
 				}
-				if(ifAttributeIsDisplayName(attr.getName()))
+				else if(ifAttributeIsDisplayName(attr.getName()))
 				{
 					index = columnName.substring(Constants.COLUMN_NAME.length(),columnName.length());
 					displayNameColumnName = columnName;
-				}
-				else
-				{
-					columnNames = columnNames + columnName + " , ";
 				}
 			}
 		}
@@ -128,7 +127,10 @@ public class QueryOutputTreeBizLogic
 		{
 			index = new Integer(indexStr);
 		}
-		columnNames = columnNames.substring(0,columnNames.lastIndexOf(";"));
+		if(columnNames.lastIndexOf(";") != -1)
+		{
+			columnNames = columnNames.substring(0,columnNames.lastIndexOf(";"));
+		}
 		String selectSql = "select "+columnNames+" from "+tableName;
 		List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
@@ -253,7 +255,10 @@ public class QueryOutputTreeBizLogic
 			}
 			columnNames = columnNames.substring(0,columnNames.lastIndexOf(";"));
 		}
-		columnNames = columnNames.substring(0, columnNames.lastIndexOf(","));
+		/*if(columnNames.lastIndexOf(",") != -1)
+		{
+			columnNames = columnNames.substring(0, columnNames.lastIndexOf(","));
+		}*/
 		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
 		String selectSql = "select distinct " + columnNames;
 		selectSql = selectSql + " from " + tableName + " where " + parentIdColumnName + " = '" + nodeIds[1]+"'";

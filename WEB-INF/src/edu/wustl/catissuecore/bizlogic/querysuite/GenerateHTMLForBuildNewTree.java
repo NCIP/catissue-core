@@ -1,15 +1,11 @@
 
 package edu.wustl.catissuecore.bizlogic.querysuite;
 
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-
-import edu.common.dynamicextensions.domain.DateAttributeTypeInformation;
-import edu.common.dynamicextensions.domaininterface.AttributeTypeInformationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
-import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.cab2b.client.ui.controls.EntityInterfaceComparator;
 
 
 
@@ -20,24 +16,26 @@ public class GenerateHTMLForBuildNewTree {
 	{
 		
 		StringBuffer html = new StringBuffer();		
+		int size = entityCollection.size();
+		
 		if (!entityCollection.isEmpty())
 		{
-			html.append("\n<td width=\"100%\">");			
+			Object[] resultArray = entityCollection.toArray();
+			Arrays.sort(resultArray, new EntityInterfaceComparator());
+			//html.append("\n<td height=\"100%\" width=\"100%\">");			
 			
 			//html.append("\n<select name='"+ selectTagName + "' multiple ='true' size='10' onblur='" + Constants.SEARCH_CATEGORY_LIST_FUNCTION_NAME + "()' >");
-			html.append("\n<select name='"+ selectTagName + "' multiple ='true' size='10'>");
+			html.append("\n<select id='"+selectTagName+"' name='"+ selectTagName + "' MULTIPLE size = '"+size+"'>");
 			
-			Iterator iter = entityCollection.iterator();
-
-			while (iter.hasNext())
+			for(int i=0;i<size;i++)
 			{
-				EntityInterface entity = (EntityInterface)iter.next();
+				EntityInterface entity = (EntityInterface)resultArray[i];
 				int lastIndex = entity.getName().lastIndexOf(".");
 				String entityName = entity.getName().substring(lastIndex + 1);				
-				html.append("\n<option value=\"" + entityName + "\">" + entityName + "</option>");
+				html.append("\n<option class=\"dropdownQuery\" value=\"" + entity.getName() + "\">" + entityName + "</option>");
 			}
 			html.append("\n</select>");
-			html.append("\n</td>");
+		//	html.append("\n</td>");
 			
 		}
 		return html.toString();
