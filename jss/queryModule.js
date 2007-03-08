@@ -88,7 +88,7 @@ var calendarId1 = rowId+"_calendar1";
 var textBoxId0 = rowId+"_textBox";
 var calendarId0 = "calendarImg";
 var opId =  rowId+"_combobox";
-var dateFormatLabel = rowId+"_dateFormatLabel2";
+//var dateFormatLabel = rowId+"_dateFormatLabel2";
 if(document.all) {
 		// IE.
 		var op = document.getElementById(opId).value;
@@ -120,6 +120,14 @@ if(document.all) {
 				document.getElementById(calendarId0).disabled = false;
 			}	
 	}
+	if(op == "Is Null" || op== "Is Not Null")
+	{
+		document.getElementById(textBoxId0).disabled= true;
+	} 
+	else
+	{
+		document.getElementById(textBoxId0).disabled= false;
+	}
 if(op == "Between")
 {
 	if(document.all) {
@@ -128,7 +136,7 @@ if(op == "Between")
 		if(dataType == "true")
 		{
 			document.getElementById(calendarId1).style.display="block";		
-			document.getElementById(dateFormatLabel).style.display="block";		
+		//	document.getElementById(dateFormatLabel).style.display="block";		
 		}
 	} else if(document.layers) {
 		// Netspace 4
@@ -140,9 +148,9 @@ if(op == "Between")
 		if(dataType == "true")
 		{
 			var calId = document.getElementById(calendarId1);
-			var dateFormatLabelId = document.getElementById(dateFormatLabel);
+		//	var dateFormatLabelId = document.getElementById(dateFormatLabel);
 			calId.style.display="block";
-			dateFormatLabelId.style.display="block";
+	//		dateFormatLabelId.style.display="block";
 		}
 	}	
 }
@@ -158,8 +166,8 @@ else
 		if(dataType == "true")
 		{
 		document.getElementById(calendarId1).style.display="none";	
-		var dateFormatLabelId = document.getElementById(dateFormatLabel);
-			dateFormatLabelId.style.display="none";
+		//var dateFormatLabelId = document.getElementById(dateFormatLabel);
+			//dateFormatLabelId.style.display="none";
 		}
 	} else if(document.layers) {
 		// Netspace 4
@@ -173,8 +181,8 @@ else
 		{
 			var calId = document.getElementById(calendarId1);
 			calId.style.display="none";
-			var dateFormatLabelId = document.getElementById(dateFormatLabel);
-			dateFormatLabelId.style.display="none";
+		//	var dateFormatLabelId = document.getElementById(dateFormatLabel);
+			//dateFormatLabelId.style.display="none";
 		}
 	}	
 }
@@ -316,7 +324,10 @@ function retriveEntityInformation(url,nameOfFormToPost,entityName)
 	request.send(actionURL);		
 } 
 function showEntityInformation(text)
-{					
+{				
+	var row = document.getElementById('validationMessagesRow');
+	row.innerHTML = "";	
+	row.style.display = 'none';		
 	var element = document.getElementById('addLimits');
 	element.innerHTML =text;
 }
