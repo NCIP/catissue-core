@@ -1,3 +1,4 @@
+
 /*----Ashish: Ordering System-----*/
 insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID) values ( 76, 'CATISSUE_ORDER', 'Order', 'OrderDetails', 2);
 
@@ -379,7 +380,7 @@ create table CATISSUE_REPORT_SECTION (
 );
 create table CATISSUE_DEIDENTIFIED_REPORT (
    IDENTIFIER number(19,0) not null,
-   IS_QUARANTINED number(1),
+   STATUS varchar(100),
    SCG_ID number(19,0),
    primary key (IDENTIFIER)
 );
