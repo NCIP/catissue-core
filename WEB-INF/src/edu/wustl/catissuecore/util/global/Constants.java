@@ -714,12 +714,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int ORDER_ARRAY_FORM_ID = 57;	
 	public static final int ORDER_PATHOLOGY_FORM_ID = 58;
 	public static final int NEW_PATHOLOGY_FORM_ID=59;
-	public static final int SURGICAL_PATHOLOGY_REPORT_FORM_ID=60;
-	public static final int DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID=61;
-	public static final int REQUEST_DETAILS_FORM_ID = 62;
+	public static final int DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID=60;
+	public static final int PATHOLOGY_REPORT_REVIEW_FORM_ID=61;
+	public static final int QUARANTINE_EVENT_PARAMETER_FORM_ID=62;
 	public static final int CONFLICT_DETAILS_FORM_ID = 63;
-
-	
+	public static final int REQUEST_DETAILS_FORM_ID = 64;
 	
 	//Misc
 	public static final String SEPARATOR = " : ";
