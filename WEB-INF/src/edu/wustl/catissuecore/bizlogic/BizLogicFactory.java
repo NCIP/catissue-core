@@ -9,6 +9,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -204,10 +205,13 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     			bizLogic = new OrderBizLogic();
     			break;
 //				View Surgical Pathology Report
-    		case Constants.SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+    		case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+    			bizLogic=new DeidentifiedSurgicalPathologyReportBizLogic();
+    			break;	
+    		case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID:
     			bizLogic=new PathologyReportReviewParameterBizLogic();
     			break;	
-    		case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+    		case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID:
     			bizLogic=new QuarantineEventParameterBizLogic();
     			break;	
     		//END
