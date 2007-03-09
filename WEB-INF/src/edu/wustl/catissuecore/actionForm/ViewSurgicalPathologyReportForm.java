@@ -83,6 +83,14 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	private long identifiedReportId;
 	/**
+	 * long for report Identifier
+	 */
+	private long requestIdentifier=-1;
+	/**
+	 * This variable is to identify if the request is quarantined or Dequarantined 
+	 */
+	private long acceptReject;
+	/**
 	 * String for report text of Identified Report
 	 */
 	protected String identifiedReportTextContent;
@@ -106,6 +114,15 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * String for comments of event parameters
 	 */
 	protected String comments;
+	/**
+	 * String for comments of User
+	 */
+	protected String userComments;
+	/**
+	 * String for User name
+	 */
+	protected String userName;
+	
 	/**
 	 * Map for medical identifier numbers
 	 */
@@ -522,9 +539,9 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	{	
 		if(this.submittedFor.equalsIgnoreCase("quarantine"))
 		{
-			return Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID;
+			return Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID;
 		}
-		return Constants.SURGICAL_PATHOLOGY_REPORT_FORM_ID;
+		return Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID;
 	}
 	
 	/**
@@ -755,5 +772,77 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	public void setReportId(String reportId)
 	{
 		this.reportId = reportId;
+	}
+
+	/**
+	 * This is the method to set comments of Users is the status is Pending (Either review or quarantine event parameter)
+	 * @return userComments
+	 */
+	public String getUserComments()
+	{
+		return userComments;
+	}
+
+	/**
+	 * This is the method to set comments of Users is the status is Pending (Either review or quarantine event parameter)
+	 * @param userComments
+	 */
+	public void setUserComments(String userComments)
+	{
+		this.userComments = userComments;
+	}
+
+	/**
+	 * Unique Identifier for a report
+	 * @return requestIdentifier
+	 */
+	public long getRequestIdentifier()
+	{
+		return requestIdentifier;
+	}
+
+	/**
+	 * Unique Identifier for a report
+	 * @param requestIdentifier Unique Identifier for a report
+	 */
+	public void setRequestIdentifier(long requestIdentifier)
+	{
+		this.requestIdentifier = requestIdentifier;
+	}
+	
+	/**
+	 * This variable is to identify if the request is quarantined or Dequarantined
+	 * @return  acceptReject
+	 */
+	public long getAcceptReject()
+	{
+		return acceptReject;
+	}
+	
+	/**
+	 * This variable is to identify if the request is quarantined or Dequarantined
+	 * @param acceptReject If acceptReject=1 then request for accept if acceptReject =2 then req for dequarantine
+	 */
+	public void setAcceptReject(long acceptReject)
+	{
+		this.acceptReject = acceptReject;
+	}
+
+	/**
+	 * String for User name
+	 * @return userName
+	 */
+	public String getUserName()
+	{
+		return userName;
+	}
+
+	/**
+	 * String for User name
+	 * @param userName Full name of the User
+	 */
+	public void setUserName(String userName)
+	{
+		this.userName = userName;
 	}
 }
