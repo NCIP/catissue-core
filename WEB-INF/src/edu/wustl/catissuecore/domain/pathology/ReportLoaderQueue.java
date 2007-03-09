@@ -1,6 +1,14 @@
 package edu.wustl.catissuecore.domain.pathology;
 
+import java.awt.JobAttributes;
 import java.util.Collection;
+
+import sun.security.krb5.internal.j;
+
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
 
 
 /**
@@ -8,13 +16,14 @@ import java.util.Collection;
  * @hibernate.class
  * table="CATISSUE_REPORT_QUEUE"
  */
-public class ReportLoaderQueue
+public class ReportLoaderQueue extends AbstractDomainObject
 {
 
 	protected Long id;
 	protected String reportText;
 	protected Collection participantCollection;
 	protected String status;
+	protected SpecimenCollectionGroup specimenCollectionGroup;
 	
 	/**
 	 * @return status information. 
@@ -116,5 +125,28 @@ public class ReportLoaderQueue
 	public void setReportText(String reportText)
 	{
 		this.reportText = reportText;
+	}
+
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{		
+		
+	}
+	
+	/**
+	 * @return the specimenCollectionGroup
+	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"  column="SPECIMEN_COLL_GRP_ID" cascade="save-update"
+	 *
+	 */
+	public SpecimenCollectionGroup getSpecimenCollectionGroup()
+	{
+		return specimenCollectionGroup;
+	}
+	
+	/**
+	 * @param specimenCollectionGroup the specimenCollectionGroup to set
+	 */
+	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
+	{
+		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
 }

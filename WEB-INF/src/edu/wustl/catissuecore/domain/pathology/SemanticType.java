@@ -1,9 +1,17 @@
+/**
+ * <p>Title: SemanticType Class>
+ * <p>Description:  SemanticType domain object.</p>
+ * Copyright:    Copyright (c) year
+ * Company: Washington University, School of Medicine, St. Louis.
+ * @author Ashish Gupta
+ * @version 1.00
+ * Created on March 07,2007
+ */
 package edu.wustl.catissuecore.domain.pathology;
 
 
 /**
- * @version 1.0
- * @created 26-Sep-2006 4:07:35 PM
+ * @hibernate.class table="CATISSUE_SEMANTIC_TYPE"
  * Represents sematic type
  */
 public class SemanticType
@@ -12,31 +20,34 @@ public class SemanticType
 	/**
 	 * identifier
 	 */
-	protected String identifier;
+	protected Long id;
 	
 	/**
 	 * label
 	 */
 	protected String label;
-
+	
 	/**
 	 * @return identifier
+	 * @hibernate.id type="long" length="30" column="IDENTIFIER" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_SEMANTIC_TYPE_SEQ"
 	 */
-	public String getIdentifier()
+	public Long getId()
 	{
-		return identifier;
+		return id;
 	}
 
 	/**
 	 * @param identifier sets identifier
 	 */
-	public void setIdentifier(String identifier)
+	public void setId(Long id)
 	{
-		this.identifier = identifier;
+		this.id = id;
 	}
 
 	/**
 	 * @return label
+	 * @hibernate.property type="string" length="500" column="LABEL"
 	 */
 	public String getLabel()
 	{
