@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -118,7 +120,15 @@ public class QuarantineEventParameter extends EventParameters
 			this.setComments(form.getComments());
 			this.setTimestamp(new Date());
 			this.setStatus(Constants.COMMENT_STATUS_RENDING);
+			if(form.getAcceptReject()==1)
+			{
+				this.setStatus(Constants.COMMENT_STATUS_QUARANTINED);
+			}
 			
+			if(form.getAcceptReject()==2)
+			{
+				this.setStatus(Constants.COMMENT_STATUS_NOT_QUARANTINED);
+			}
 			if(form.getDeIdentifiedReportId()!=0)
 			{
 				className=DeidentifiedSurgicalPathologyReport.class.getName();
