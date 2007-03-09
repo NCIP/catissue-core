@@ -494,10 +494,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 			throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
 		}
 		
-		Collection specimenArrayCollection = distribution.getSpecimenArrayCollection();
+//		Collection specimenArrayCollection = distribution.getSpecimenArrayCollection();
 		Collection distributedItemCollection = distribution.getDistributedItemCollection();
 		
-		if( (specimenArrayCollection== null || specimenArrayCollection.isEmpty()) && (distributedItemCollection == null ||
+		if( (distributedItemCollection == null ||
 				distributedItemCollection.isEmpty()))
 		{
 			message = ApplicationProperties.getValue("distribution.distributedItem");
@@ -505,25 +505,29 @@ public class DistributionBizLogic extends DefaultBizLogic
 		}
 		else
 		{
-			if(specimenArrayCollection != null && !specimenArrayCollection.isEmpty())
+			if(distributedItemCollection != null && !distributedItemCollection.isEmpty())
 			{
-				Iterator itr = specimenArrayCollection.iterator();
+				Iterator itr = distributedItemCollection.iterator();
 				while(itr.hasNext())
 				{
-					SpecimenArray specimenArray = (SpecimenArray) itr.next();
+					DistributedItem distributedItem = (DistributedItem) itr.next();
+					SpecimenArray specimenArray = distributedItem.getSpecimenArray();
 					if(specimenArray==null || specimenArray.getId() == null)
 					{
 						message = ApplicationProperties.getValue("errors.distribution.item.specimenArray");
 						throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
 					}
-					Object object = dao.retrieve(SpecimenArray.class.getName(), specimenArray.getId());
-					if(object == null)
-					{						
-						throw new DAOException( ApplicationProperties.getValue("errors.distribution.specimenArrayNotFound"));
-					}
-					else if(!((SpecimenArray)object).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+					if(specimenArray != null)
 					{
-						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimenArray"));
+						Object object = dao.retrieve(SpecimenArray.class.getName(), specimenArray.getId());
+						if(object == null)
+						{						
+							throw new DAOException( ApplicationProperties.getValue("errors.distribution.specimenArrayNotFound"));
+						}
+						else if(!((SpecimenArray)object).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+						{
+							throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimenArray"));
+						}
 					}
 				}
 			}
