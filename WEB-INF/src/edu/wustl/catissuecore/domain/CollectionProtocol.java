@@ -31,15 +31,11 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 {
 	private static final long serialVersionUID = 1234567890L;
 	
-	/**
-	 * Collection of studies associated with the CollectionProtocol.
-	 */
-	protected Collection distributionProtocolCollection = new HashSet();
-	
+		
 	/**
 	 * Collection of users associated with the CollectionProtocol.
 	 */
-	protected Collection userCollection = new HashSet();
+	protected Collection coordinatorCollection = new HashSet();
 	
 	/**
 	 * Collection of CollectionProtocolEvents associated with the CollectionProtocol.
@@ -124,27 +120,6 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	}
 	
 	/**
-	 * Returns the collection of Studies for this Protocol.
-	 * @hibernate.set name="distributionProtocolCollection" table="CATISSUE_COLL_DISTRIBUTION_REL" 
-	 * cascade="save-update" inverse="false" lazy="false"
-	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
-	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.DistributionProtocol" column="DISTRIBUTION_PROTOCOL_ID"
-	 * @return Returns the collection of Studies for this Protocol.
-	 */
-	public Collection getDistributionProtocolCollection()
-	{
-		return distributionProtocolCollection;
-	}
-
-	/**
-	 * @param distributionProtocolCollection The studyCollection to set.
-	 */
-	public void setDistributionProtocolCollection(Collection distributionProtocolCollection)
-	{
-		this.distributionProtocolCollection = distributionProtocolCollection;
-	}
-
-	/**
 	 * Returns the collection of Users(ProtocolCoordinators) for this Protocol.
 	 * @hibernate.set name="userCollection" table="CATISSUE_COLL_COORDINATORS" 
 	 * cascade="none" inverse="false" lazy="false"
@@ -152,17 +127,17 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.User" column="USER_ID"
 	 * @return The collection of Users(ProtocolCoordinators) for this Protocol.
 	 */
-	public Collection getUserCollection()
+	public Collection getCoordinatorCollection()
 	{
-		return userCollection;
+		return coordinatorCollection;
 	}
 
 	/**
 	 * @param userCollection The userCollection to set.
 	 */
-	public void setUserCollection(Collection userCollection)
+	public void setCoordinatorCollection(Collection coordinatorCollection)
 	{
-		this.userCollection = userCollection;
+		this.coordinatorCollection = coordinatorCollection;
 	}
 
 
@@ -222,7 +197,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	
         	CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
         	
-        	userCollection.clear();
+        	coordinatorCollection.clear();
         	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
         	if(coordinatorsArr!=null)
         	{
@@ -232,7 +207,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	        		{
 		        		User coordinator = new User();
 		        		coordinator.setId(new Long(coordinatorsArr[i]));
-		        		userCollection.add(coordinator);
+		        		coordinatorCollection.add(coordinator);
 	        		}
 				}
         	}
@@ -384,6 +359,6 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 		this.consentsWaived = consentsWaived;
 	}
 	//-Mandar : 25-Jan-07 ---------- end
-	
+
 
 }

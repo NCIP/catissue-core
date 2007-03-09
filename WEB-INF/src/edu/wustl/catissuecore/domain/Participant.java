@@ -103,7 +103,11 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * Defines the vital status of the participant like 'Dead', 'Alive' or 'Unknown'.
 	 */
 	protected String vitalStatus;
-	
+
+	/**
+	 * Defines the Marital status of the participant like 'Single', 'Married' or 'Unknown'.
+	 */
+	protected String maritalStatus;
 	
 	/**
      * A collection of medical record identification number that refers to a Participant. 
@@ -589,5 +593,23 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 			return this.firstName;
 		}		
 		return null; 
+	}
+	/**
+     * Returns the Marital Status of the Participant.
+     * @return String representing the Marital Status of the Participant.
+     * @see #setMaritalStatus(String)
+     * @hibernate.property name="maritalStatus" type="string"
+     * column="MARITAL_STATUS" length="50"
+     */
+	public String getMaritalStatus() {
+		return maritalStatus;
+	}
+	/**
+     * Sets the Marital Status of a participant.
+     * @param maritalStatus the gender of a participant.
+     * @see #getMaritalStatus()
+     */
+	public void setMaritalStatus(String maritalStatus) {
+		this.maritalStatus = maritalStatus;
 	}
 }

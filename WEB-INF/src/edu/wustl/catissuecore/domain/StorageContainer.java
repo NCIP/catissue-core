@@ -42,7 +42,7 @@ public class StorageContainer extends Container
 
 	protected Collection holdsSpecimenClassCollection = new HashSet();
 
-	protected Collection holdsSpArrayTypeCollection = new HashSet();
+	protected Collection holdsSpecimenArrayTypeCollection = new HashSet();
 
 	/**
 	 * Number of containers
@@ -87,7 +87,7 @@ public class StorageContainer extends Container
 		this.setCollectionProtocolCollection(oldContainer.getCollectionProtocolCollection());
 		this.setHoldsStorageTypeCollection(oldContainer.getHoldsStorageTypeCollection());
 		this.setHoldsSpecimenClassCollection(oldContainer.getHoldsSpecimenClassCollection());
-		this.setHoldsSpArrayTypeCollection(oldContainer.getHoldsSpArrayTypeCollection());
+		this.setHoldsSpecimenArrayTypeCollection(oldContainer.getHoldsSpecimenArrayTypeCollection());
 	}
 
 	public StorageContainer(AbstractActionForm abstractActionForm) throws AssignDataException
@@ -238,22 +238,22 @@ public class StorageContainer extends Container
 	/**
 	 * @return Returns the holdsSpArrayTypeCollection.
 	 * Returns the collection of specimen array types associated with container 
-	 * @hibernate.set name="holdsSpArrayTypeCollection" table="CATISSUE_CONT_HOLDS_SPARRTYPE"
+	 * @hibernate.set name="holdsSpecimenArrayTypeCollection" table="CATISSUE_CONT_HOLDS_SPARRTYPE"
 	 * cascade="none" inverse="false" lazy="false"
 	 * @hibernate.collection-key column="STORAGE_CONTAINER_ID"
 	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.SpecimenArrayType" column="SPECIMEN_ARRAY_TYPE_ID"
 	 */
-	public Collection getHoldsSpArrayTypeCollection()
+	public Collection getHoldsSpecimenArrayTypeCollection()
 	{
-		return holdsSpArrayTypeCollection;
+		return holdsSpecimenArrayTypeCollection;
 	}
 
 	/**
-	 * @param holdsSpArratTypeCollection The holdsSpArrayTypeCollection to set.
+	 * @param holdsSpecimenArrayTypeCollection The holdsSpArrayTypeCollection to set.
 	 */
-	public void setHoldsSpArrayTypeCollection(Collection holdsSpArrayTypeCollection)
+	public void setHoldsSpecimenArrayTypeCollection(Collection holdsSpecimenArrayTypeCollection)
 	{
-		this.holdsSpArrayTypeCollection = holdsSpArrayTypeCollection;
+		this.holdsSpecimenArrayTypeCollection = holdsSpecimenArrayTypeCollection;
 	}
 
 	/**
@@ -498,7 +498,7 @@ public class StorageContainer extends Container
 					}
 				}
 			}
-			holdsSpArrayTypeCollection.clear();
+			holdsSpecimenArrayTypeCollection.clear();
 			if (form.getSpecimenOrArrayType().equals("SpecimenArray"))
 			{
 				long[] specimenArrayTypeArr = form.getHoldsSpecimenArrTypeIds();
@@ -511,7 +511,7 @@ public class StorageContainer extends Container
 						{
 							SpecimenArrayType spArrayType = new SpecimenArrayType();
 							spArrayType.setId(new Long(specimenArrayTypeArr[i]));
-							holdsSpArrayTypeCollection.add(spArrayType);
+							holdsSpecimenArrayTypeCollection.add(spArrayType);
 						}
 					}
 				}

@@ -34,10 +34,6 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 	 */
 	protected Collection specimenRequirementCollection = new HashSet();
 	
-	/**
-	 * Collection of protocols(CollectionProtocols) associated with the DistributionProtocol.
-	 */
-	protected Collection collectionProtocolCollection = new HashSet();
 	
 	public DistributionProtocol()
 	{
@@ -71,27 +67,7 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
 		this.specimenRequirementCollection = specimenRequirementCollection;
 	}
 
-	/**
-	 * Returns the collection of Collectionprotocols for this DistributionProtocol.
-	 * @hibernate.set name="collectionProtocolCollection" table="CATISSUE_COLL_DISTRIBUTION_REL" 
-	 * cascade="save-update" inverse="true" lazy="false"
-	 * @hibernate.collection-key column="DISTRIBUTION_PROTOCOL_ID"
-	 * @hibernate.collection-many-to-many class="edu.wustl.catissuecore.domain.CollectionProtocol" column="COLLECTION_PROTOCOL_ID"
-	 * @return Returns the collection of Collectionprotocols for this DistributionProtocol.
-	 */
-	public Collection getCollectionProtocolCollection()
-	{
-		return collectionProtocolCollection;
-	}
 
-	/**
-	 * @param collectionProtocolCollection
-	 *  The collectionProtocolCollection to set.
-	 */
-	public void setCollectionProtocolCollection(Collection protocolCollection)
-	{
-		this.collectionProtocolCollection = protocolCollection;
-	}
 	
 	   /**
      * This function Copies the data from an CollectionProtocolForm object to a CollectionProtocol object.

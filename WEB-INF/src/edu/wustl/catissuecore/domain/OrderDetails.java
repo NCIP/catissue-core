@@ -508,7 +508,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		//Set Parent specimen 
 		Specimen specimen=new Specimen();
 		specimen.setId(new Long(orderSpecimenBean.getSpecimenId()));
-		derivedSpecimenOrderItem.setSpecimen(specimen);
+		derivedSpecimenOrderItem.setParentSpecimen(specimen);
 		derivedSpecimenOrderItem.setSpecimenClass(orderSpecimenBean.getSpecimenClass());
 		derivedSpecimenOrderItem.setSpecimenType(orderSpecimenBean.getSpecimenType());
 		
@@ -659,7 +659,7 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 				
 				//specimenArrayTypeObj.setName(defineArrayObj.getArraytype());
 				specimenArrayTypeObj.setId(new Long(defineArrayObj.getArraytype()));
-				newSpecimenArrayOrderItem.setArrayType(specimenArrayTypeObj);
+				newSpecimenArrayOrderItem.setSpecimenArrayType(specimenArrayTypeObj);
 				newOrderItems.add(newSpecimenArrayOrderItem);
 			}
 		}

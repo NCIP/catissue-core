@@ -77,7 +77,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	/**
 	 * Comments on specimen.
 	 */
-	protected String comments;
+	protected String comment;
 
 	/**
 	 * Defines whether this Specimen record can be queried (Active) 
@@ -154,7 +154,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	/**
 	 * The quantity of a specimen.
 	 */
-	protected Quantity quantity;
+	protected Quantity initialquantity;
 
 	//Change for API Search   --- Ashwin 04/10/2006
 	/**
@@ -358,21 +358,21 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 * Returns the comments on the specimen.
 	 * @hibernate.property name="comments" type="string" column="COMMENTS" length="2000"
 	 * @return the comments on the specimen.
-	 * @see #setComments(String)
+	 * @see #setComment(String)
 	 */
-	public String getComments()
+	public String getComment()
 	{
-		return comments;
+		return comment;
 	}
 
 	/**
 	 * Sets the comments on the specimen.
 	 * @param comments The comments to set.
-	 * @see #getComments()
+	 * @see #getComment()
 	 */
-	public void setComments(String comments)
+	public void setComment(String comment)
 	{
-		this.comments = comments;
+		this.comment = comment;
 	}
 
 	/**
@@ -626,9 +626,9 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		}
 
 		//Change for API Search   --- Ashwin 04/10/2006
-		if (SearchUtil.isNullobject(quantity))
+		if (SearchUtil.isNullobject(initialquantity))
 		{
-			quantity = new Quantity();
+			initialquantity = new Quantity();
 		}
 
 		//Change for API Search   --- Ashwin 04/10/2006
@@ -661,14 +661,14 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		{
 			String qty = ((SpecimenForm) abstractForm).getQuantity();
 			if(qty != null && qty.trim().length() > 0   )
-				this.quantity = new Quantity(((SpecimenForm) abstractForm).getQuantity());
+				this.initialquantity = new Quantity(((SpecimenForm) abstractForm).getQuantity());
 			else
-				this.quantity = new Quantity("0");
+				this.initialquantity = new Quantity("0");
 			this.label = ((SpecimenForm) abstractForm).getLabel();
 
 			if (abstractForm.isAddOperation())
 			{
-				this.availableQuantity = new Quantity(this.quantity);
+				this.availableQuantity = new Quantity(this.initialquantity);
 			}
 			else
 			{
@@ -689,7 +689,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					else
 						this.barcode = null;
 
-					this.comments = form.getComments();
+					this.comment = form.getComments();
 					this.type = form.getType();
 
 					if (form.isAddOperation())
@@ -886,7 +886,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					else
 						this.barcode = null;
 
-					this.comments = form.getComments();
+					this.comment = form.getComments();
 					//this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 					//this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
 					this.type = form.getType();
@@ -1087,21 +1087,21 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 * Returns the quantity of a specimen.
 	 * @return The quantity of a specimen.
 	 * @hibernate.component class="edu.wustl.catissuecore.domain.Quantity"
-	 * @see #setQuantity(Quantity)
+	 * @see #setInitialquantity(Quantity)
 	 */
-	public Quantity getQuantity()
+	public Quantity getInitialquantity()
 	{
-		return quantity;
+		return initialquantity;
 	}
 
 	/**
 	 * Sets the quantity of a specimen.
 	 * @param quantity The quantity of a specimen.
-	 * @see #getQuantity()
+	 * @see #getInitialquantity()
 	 */
-	public void setQuantity(Quantity quantity)
+	public void setInitialquantity(Quantity initialquantity)
 	{
-		this.quantity = quantity;
+		this.initialquantity = initialquantity;
 	}
 
 	/**

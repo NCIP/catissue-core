@@ -30,7 +30,7 @@ public class DerivedSpecimenOrderItem extends NewSpecimenOrderItem
 	/**
 	 * Specimen associated with the particular order item.
 	 */
-	protected Specimen specimen;
+	protected Specimen parentSpecimen;
 	/**
 	 * Returns the specimen class of the requested new/derived specimen
 	 * @hibernate.property  name="specimenClass" type="string" length="100" column="SPECIMEN_CLASS"
@@ -74,11 +74,11 @@ public class DerivedSpecimenOrderItem extends NewSpecimenOrderItem
 	 * The specimen associated with the order item in SpecimenOrderItem.
 	 * @hibernate.many-to-one column="SPECIMEN_ID" class="edu.wustl.catissuecore.domain.Specimen"
 	 * constrained="true"
-	 * @return the specimen
+	 * @return the parentSpecimen
 	 */
-	public Specimen getSpecimen()
+	public Specimen getParentSpecimen()
 	{
-		return specimen;
+		return parentSpecimen;
 	}
 
 	
@@ -86,8 +86,8 @@ public class DerivedSpecimenOrderItem extends NewSpecimenOrderItem
 	 * @param specimen the specimen to get.
 	 * @see #getSpecimen()
 	 */
-	public void setSpecimen(Specimen specimen)
+	public void setParentSpecimen(Specimen parentSpecimen)
 	{
-		this.specimen = specimen;
+		this.parentSpecimen = parentSpecimen;
 	}
 }

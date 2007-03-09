@@ -67,18 +67,12 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * A physical location associated with biospecimen collection, 
      * storage, processing, or utilization.
      */
-	protected Site site;
+	protected Site specimenCollectionSite;
 
     /**
      * A required specimen collection event associated with a Collection Protocol.
      */
     protected CollectionProtocolEvent collectionProtocolEvent;
-
-    /**
-     * A clinical report associated with the participant at the 
-     * time of the SpecimenCollection Group receipt.
-     */
-    protected ClinicalReport clinicalReport;
 
     /**
      * The Specimens in this SpecimenCollectionGroup.
@@ -281,11 +275,11 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * class="edu.wustl.catissuecore.domain.Site" constrained="true"
      * @return the physical location associated with biospecimen collection, 
      * storage, processing, or utilization.
-     * @see #setSite(Site)
+     * @see #setSpecimenCollectionSite(Site)
      */
-    public Site getSite()
+    public Site getSpecimenCollectionSite()
     {
-        return site;
+        return specimenCollectionSite;
     }
 
     /**
@@ -293,11 +287,11 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * storage, processing, or utilization.
      * @param site physical location associated with biospecimen collection, 
      * storage, processing, or utilization.
-     * @see #getSite()
+     * @see #getSpecimenCollectionSite()
      */
-    public void setSite(Site site)
+    public void setSpecimenCollectionSite(Site site)
     {
-        this.site = site;
+        this.specimenCollectionSite = site;
     }
 
     /**
@@ -326,33 +320,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
         this.collectionProtocolEvent = collectionProtocolEvent;
     }
 
-    /**
-     * Returns the clinical report associated with the participant at the 
-     * time of the SpecimenCollection Group receipt.
-     * @hibernate.many-to-one column="CLINICAL_REPORT_ID" 
-	 * class="edu.wustl.catissuecore.domain.ClinicalReport" constrained="true"
-     * @return the clinical report associated with the participant at the 
-     * time of the SpecimenCollection Group receipt.
-     * @see #setClinicalReport(ClinicalReport)
-     */
-    public ClinicalReport getClinicalReport()
-    {
-        return clinicalReport;
-    }
-
-    /**
-     * Sets the clinical report associated with the participant at the 
-     * time of the SpecimenCollection Group receipt.
-     * @param clinicalReport the clinical report associated with the participant at the 
-     * time of the SpecimenCollection Group receipt.
-     * @see #getClinicalReport()
-     */
-    public void setClinicalReport(ClinicalReport clinicalReport)
-    {
-        this.clinicalReport = clinicalReport;
-    }
-
-    /**
+     /**
      * Returns the collection Specimens in this SpecimenCollectionGroup.
      * @hibernate.set name="specimenCollection" table="CATISSUE_SPECIMEN"
 	 * cascade="none" inverse="true" lazy="false"
@@ -413,18 +381,18 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	        this.setClinicalStatus(form.getClinicalStatus());
 	        this.setActivityStatus(form.getActivityStatus());
 			this.setName(form.getName());
-			site = new Site();
-			site.setId(new Long(form.getSiteId()));
+			specimenCollectionSite = new Site();
+			specimenCollectionSite.setId(new Long(form.getSiteId()));
 			
 			collectionProtocolEvent= new CollectionProtocolEvent();
 			collectionProtocolEvent.setId(new Long(form.getCollectionProtocolEventId()));
 
 			Logger.out.debug("form.getParticipantsMedicalIdentifierId() "+form.getParticipantsMedicalIdentifierId());
 			
-			if(abstractForm.isAddOperation())
-				clinicalReport = new ClinicalReport();
-			
-			clinicalReport.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
+//			if(abstractForm.isAddOperation())
+//				clinicalReport = new ClinicalReport();
+//			
+//			clinicalReport.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
 
 			collectionProtocolRegistration = new CollectionProtocolRegistration();
 			if(form.getCheckedButton() == 1)
@@ -438,10 +406,10 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 				ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
 				participantMedicalIdentifier.setId(new Long(form.getParticipantsMedicalIdentifierId()));
 				
-				if(form.getParticipantsMedicalIdentifierId()!=-1)
-					clinicalReport.setParticipantMedicalIdentifier(participantMedicalIdentifier);
-				else
-					clinicalReport.setParticipantMedicalIdentifier(null);
+//				if(form.getParticipantsMedicalIdentifierId()!=-1)
+//					clinicalReport.setParticipantMedicalIdentifier(participantMedicalIdentifier);
+//				else
+//					clinicalReport.setParticipantMedicalIdentifier(null);
 			}
 			else
 			{

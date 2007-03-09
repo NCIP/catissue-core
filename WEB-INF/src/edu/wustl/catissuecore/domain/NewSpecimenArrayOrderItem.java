@@ -25,7 +25,7 @@ public class NewSpecimenArrayOrderItem extends SpecimenArrayOrderItem
 	/**
 	 * The Specimen Array type of the new specimen array ordered.
 	 */
-	protected SpecimenArrayType arrayType;
+	protected SpecimenArrayType specimenArrayType;
 	/**
 	 * The specimens associated with the Array.
 	 */
@@ -60,17 +60,17 @@ public class NewSpecimenArrayOrderItem extends SpecimenArrayOrderItem
 	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.SpecimenArrayType" column="ARRAY_TYPE_ID" constrained="true"
 	 * @return SpecimenArrayType.
 	 */
-	public SpecimenArrayType getArrayType()
+	public SpecimenArrayType getSpecimenArrayType()
 	{
-		return arrayType;
+		return specimenArrayType;
 	}
 	
 	/**
 	 * @param arrayType the arrayType to set
 	 */
-	public void setArrayType(SpecimenArrayType arrayType)
+	public void setSpecimenArrayType(SpecimenArrayType specimenArrayType)
 	{
-		this.arrayType = arrayType;
+		this.specimenArrayType = specimenArrayType;
 	}
 	
 	/**
