@@ -1,4 +1,4 @@
-/**
+		  /**
  * <p>Title: Constants Class>
  * <p>Description:  This class stores the constants used in the operations in the application.</p>
  * Copyright:    Copyright (c) year
@@ -28,7 +28,21 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String REPORT_ID = "reportQueueId";
 	public static final String PARTICIPANT_ID_TO_ASSOCIATE = "participantIdToAssociate";
 	public static final String SCG_ID_TO_ASSOCIATE = "scgIdToAssociate";
-	
+ 
+    //Admin View
+	public static final String 	IDENTIFIER_NO="#";
+	public static final String 	REQUEST_DATE="Request Date";
+	public static final String 	USER_NAME="User Name";
+	public static final String 	SCG_NAME="Specimen Collection Group";
+	public static final String 	ACCESSION_NO="Accession Number";
+	public static final String  REVIEW_SPR="reviewSPR";
+	public static final String  QUARANTINE_SPR="quarantineSPR";
+	public static final String  SITE="Site";
+	public static final String  REQUEST_FOR="requestFor";
+	public static final String  REPORT_ACTION="reportAction";
+	public static final String  STATUS="status";
+	public static final String  REPORT_STATUS_LIST="reportStatusList";
+	public static final String  COLUMN_LIST="columnList";
 	//Consent tracking
 	public static final String 	SHOW_CONSENTS="showConsents";
 	public static final String 	SPECIMEN_CONSENTS="specimenConsents";
@@ -54,6 +68,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String 	INVALID="Invalid";
 	public static final String 	VALID="valid";
 	public static final String 	FALSE="false";
+	public static final String 	TRUE="true";
 	public static final String 	NULL="null";
 	public static final String 	CONSENT_TABLE="tableId4";
 	public static final String 	DISABLE="disable";
@@ -66,6 +81,18 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String 	PROTOCOL_EVENT_ID="protocolEventId";
 	public static final String 	SCG_DROPDOWN="value";
 	public static final String 	HASHED_OUT="####";
+	public static final String 	VERIFIED="Verified";
+	public static final String 	NOT_APPLICABLE="Not Applicable";
+	public static final String 	WITHDRAW_ALL="withrawall";
+	public static final String 	RESPONSE="response";
+	public static final String 	WITHDRAW="withdraw";
+	public static final String 	VIRTUALLY_LOCATED="Virtually Located";
+	public static final String 	LABLE="Lable";
+	public static final String 	STORAGE_CONTAINER_LOCATION="Storage Container Location";
+	public static final String 	CLASS_NAME="Class Name";
+	public static final String 	SPECIMEN_LIST="specimenDetails";
+	public static final String 	COLUMNLIST="columnList";
+	
 	//Ordering System Status
 	public static final String CDE_NAME_REQUEST_STATUS="Request Status";
 	public static final String CDE_NAME_REQUESTED_ITEMS_STATUS="Requested Items Status";
@@ -171,11 +198,13 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String QUARANTINE="QUARANTINE";
 	public static final String COMMENT_STATUS_RENDING="PENDING";
 	public static final String COMMENT_STATUS_REVIEWED="REVIEWED";
+	public static final String COMMENT_STATUS_REPLIED="REPLIED";
 	public static final String COMMENT_STATUS_NOT_REVIEWED="NOT_REVIEWED";
 	public static final String COMMENT_STATUS_QUARANTINED="QUARANTINED";
-	public static final String COMMENT_STATUS_NOT_QUARANTINED="NOT_QUARANTINED";
+	public static final String COMMENT_STATUS_NOT_QUARANTINED="DEQUARANTINED";
 	public static final String ROLE_ADMINISTRATOR="Administrator";
 	public static final String REPORT_LIST="reportIdList";
+	public static final String QUARANTINE_REQUEST="QUARANTINEREQUEST";
 
 	public static final String MAX_IDENTIFIER = "maxIdentifier";
     public static final String AND_JOIN_CONDITION = "AND";
