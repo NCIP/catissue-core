@@ -1,4 +1,4 @@
-var formTitleStyle = "font-family:arial,helvetica,verdana,sans-serif;  font-size:0.6em;  font-weight:bold;  padding-left:0.8em;  background-color:#5C5C5C;  color:#FFFFFF;   border-top:1px solid #5C5C5C;   border-left:1px solid #5C5C5C;  border-right:1px solid #5C5C5C; "
+ var formTitleStyle = "font-family:arial,helvetica,verdana,sans-serif;  font-size:0.6em;  font-weight:bold;  padding-left:0.8em;  background-color:#5C5C5C;  color:#FFFFFF;   border-top:1px solid #5C5C5C;   border-left:1px solid #5C5C5C;  border-right:1px solid #5C5C5C; "
 var formSubTableTitleStyle = "font-family:arial,helvetica,verdana,sans-serif; font-size:0.7em;  font-weight:bold;  background-color:#CCCCCC;  color:#000000;   border-bottom:1px solid #5C5C5C;   border-left:1px solid #5C5C5C;   border-right:1px solid #5C5C5C;   text-align:left;";
 
 /* section for outer block start */
@@ -1116,25 +1116,26 @@ function confirmSubmit()
   }
 }
 //<!--function to submit rview comments-->
-function submitReviewComments()
+function submitReviewComments(consentTierCounter)
 {
+	
 	if(confirmSubmit())
 	{
 		document.forms[0].submittedFor.value='review';
 		document.forms[0].forwardTo.value='success';
-		var action="SurgicalPathologyReportEventParam.do?operation=add"
+		var action="SurgicalPathologyReportEventParam.do?operation=add&consentTierCounter="+consentTierCounter;
 		document.forms[0].action=action;
 		document.forms[0].submit();
 	}
 }
 //<!--function to submit quarantine comments-->
-function submitQuarantineComments()
+function submitQuarantineComments(consentTierCounter)
 {
 	if(confirmSubmit())
 	{
 		document.forms[0].submittedFor.value='quarantine';
 		document.forms[0].forwardTo.value='success';
-		var action="SurgicalPathologyReportEventParam.do?operation=add"
+		var action="SurgicalPathologyReportEventParam.do?operation=add&consentTierCounter="+consentTierCounter;
 		document.forms[0].action=action;
 		document.forms[0].submit();
 	}
@@ -1258,6 +1259,7 @@ function submitForm()
 
 function viewAnnotations(specimenEntityId,ID,consentTierCounter)
 	{
+		
 		var action="DisplayAnnotationDataEntryPage.do?entityId="+specimenEntityId+"&entityRecordId="+ID+"&pageOf=pageOfNewSpecimen&operation=viewAnnotations&consentTierCounter="+consentTierCounter;
 		document.forms[0].action=action;
 		document.forms[0].submit();
