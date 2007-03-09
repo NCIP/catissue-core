@@ -555,6 +555,7 @@ create table CATISSUE_PARTICIPANT (
    ACTIVITY_STATUS varchar(50),
    DEATH_DATE date,
    VITAL_STATUS varchar(50),
+   MARITAL_STATUS varchar(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_CHAR (
