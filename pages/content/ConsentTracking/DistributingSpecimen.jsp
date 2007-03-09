@@ -54,7 +54,7 @@
 					{
 						var parentId=parent.opener.document.getElementById('<%=request.getParameter("barcodelableId")%>');
 						var theId = '<%=request.getParameter("verificationKey")%>';
-						parentId.innerHTML="Verified"+"<input type='hidden' name='" + theId + "' value='Verified' id='" + theId + "'/>";
+						parentId.innerHTML="<%=Constants.VERIFIED%>"+"<input type='hidden' name='" + theId + "' value='Verified' id='" + theId + "'/>";
 						window.close ();
 					}
 					else
