@@ -21,7 +21,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.lookup.DefaultLookupResult;
 import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.logger.Logger;
+import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * @author sandeep_ranade
@@ -111,21 +111,16 @@ public class ReportLoaderUtil
 	 * @return list of requested object from the datastore 
 	 * @throws Exception throws exception
 	 */
-	public static List getObject(String objName,String property,String val)throws Exception
+	public static List getObject(String objName,String property,String val) throws DAOException
 	{
 		List l=null;
-		try
-		{
+		
 			BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
 			IBizLogic bizLogic = bizLogicFactory.getBizLogic(objName);
 			SessionDataBean sessionDataBean = new SessionDataBean();
 			sessionDataBean.setUserName(XMLPropertyHandler.getValue(Parser.SESSION_DATA));
 			l = bizLogic.retrieve(objName,property,val);
-		}
-		catch(Exception ex)
-		{
-			Logger.out.error("Error while getObject ",ex);
-		}
+		
 		return l;
 	}
 	
@@ -214,4 +209,21 @@ public class ReportLoaderUtil
 		}
     	return scgList;
     } 
+    /**
+	 * @param reportText
+	 * @return
+	 */
+	public static String getLineFromReport(String reportText,String lineToExtract)
+	{
+		String[] lines = reportText.split("\n");		
+		for(int i = 0; i < lines.length ; i++)
+		{
+			String line = lines[i];
+			if(line.startsWith(lineToExtract))
+			{				
+				return line;
+			}
+		}	
+		return "";
+	}
 }

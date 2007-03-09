@@ -226,12 +226,12 @@ public class HL7Parser extends Parser
 										
 										participantList=ReportLoaderUtil.checkForParticipant(participant);
 										reportText=this.getReportText(reportMap);
-										if(participantList!=null)
-										{
+										if((participantList!=null) && (participantList.size() > 1))
+										{//Conflict
 											addReportToQueue(participantList,reportText);
 										}
 										else
-										{
+										{//No Conflict
 											this.setSiteToParticipant(participant, site);
 											ReportLoaderUtil.saveObject(participant);
 											participantList = new HashSet();
@@ -299,7 +299,7 @@ public class HL7Parser extends Parser
 	 * @param site object of Site
 	 * @throws Exception generic exception
 	 */
-	private void setSiteToParticipant(Participant participant,Site site)throws Exception
+	public static Participant setSiteToParticipant(Participant participant,Site site)throws Exception
 	{
 		Collection collection= participant.getParticipantMedicalIdentifierCollection();
 		ParticipantMedicalIdentifier medicalId=null; 
@@ -312,6 +312,7 @@ public class HL7Parser extends Parser
 				medicalId.setSite(site);
 			}
 		}
+		return participant;
 	}
 	
 	/**
@@ -328,7 +329,7 @@ public class HL7Parser extends Parser
 				ReportLoaderQueue queue= new ReportLoaderQueue(reportText);
 				if(set.size()>1)
 				{
-					queue.setStatus(Parser.PENDING);
+					queue.setStatus(Parser.CONFLICT);
 				}
 				else
 				{
@@ -441,7 +442,7 @@ public class HL7Parser extends Parser
      * @return Participant from the participant information text
      * @throws Exception exception while parsing the participant information 
      */
-	public Participant parserParticipantInformation(String pidLine)throws Exception
+	public static Participant parserParticipantInformation(String pidLine)throws Exception
 	{
 		Participant participant = new Participant();
 		participant.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
@@ -560,7 +561,7 @@ public class HL7Parser extends Parser
 	 * @return Site object
 	 * @throws Exception generic exception
 	 */
-	public Site parseSiteInformation(String pidLine)throws Exception
+	public static Site parseSiteInformation(String pidLine)throws Exception
 	{
 		StringTokenizer st=null;
 		String field=null;
@@ -624,60 +625,7 @@ public class HL7Parser extends Parser
 	}
 	
 	
-	/**
-	 * @param obrLine report information text
-	 * @return Identified surgical pathology report from report text
-	 * @throws Exception while parsing the report text information
-	 */
-	public IdentifiedSurgicalPathologyReport extractOBRSegment(String obrLine)throws Exception
-	{
-	        String newObrLine = obrLine.replace('|', '~');
-	        newObrLine = newObrLine.replaceAll("~", "|~~");
-	        IdentifiedSurgicalPathologyReport report = new IdentifiedSurgicalPathologyReport();
-	        report.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
-	        report.setIsFlagForReview(new Boolean(false));
-	        StringTokenizer st = new StringTokenizer(newObrLine, "|");
-
-	        for (int x = 0; st.hasMoreTokens(); x++)
-	        {
-
-	            String field = st.nextToken();
-
-	            if (field.equals("~~"))
-	            {
-	                continue;
-	            }
-
-	            else
-	            {
-	                field = field.replaceAll("~~", "");
-	            } 
-
-	            if (x == Parser.REPORT_ACCESSIONNUMBER_INDEX) // Getting MRN
-	            {
-	                StringTokenizer st2 = new StringTokenizer(field, "^");
-	                String accNum = st2.nextToken();
-
-	                report.setAccessionNumber(accNum);
-	            }
-	            if (x == Parser.REPORT_DATE_INDEX)
-	            {
-	                String year = field.substring(0, 4);
-	                String month = field.substring(4, 6);
-	                String day = field.substring(6, 8);
-	                String hours = field.substring(8, 10);
-	                String seconds = field.substring(10, 12);
-
-	                GregorianCalendar gc = new GregorianCalendar(Integer
-	                        .parseInt(year), Integer.parseInt(month)-1, Integer
-	                        .parseInt(day), Integer.parseInt(hours), Integer
-	                        .parseInt(seconds));
-
-	                report.setCollectionDateTime(gc.getTime());
-	            }
-	        }
-	        return report;
-	    }
+	
 	/**
 	 * This method parses each observations in the report (OBX section) and returns report section.  
 	 * @param obxLine observation text of the pathology report
@@ -766,6 +714,69 @@ public class HL7Parser extends Parser
 	   }
 	   return isValid;
    }
+   /**
+	 * @param obrLine report information text
+	 * @return Identified surgical pathology report from report text
+	 * @throws Exception while parsing the report text information
+	 */
+	public static IdentifiedSurgicalPathologyReport extractOBRSegment(String obrLine)
+	{
+		IdentifiedSurgicalPathologyReport report = new IdentifiedSurgicalPathologyReport();
+		try
+		{
+	        String newObrLine = obrLine.replace('|', '~');
+	        newObrLine = newObrLine.replaceAll("~", "|~~");
+	        
+	        report.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+	        report.setIsFlagForReview(new Boolean(false));
+	        StringTokenizer st = new StringTokenizer(newObrLine, "|");
+
+	        for (int x = 0; st.hasMoreTokens(); x++)
+	        {
+
+	            String field = st.nextToken();
+
+	            if (field.equals("~~"))
+	            {
+	                continue;
+	            }
+
+	            else
+	            {
+	                field = field.replaceAll("~~", "");
+	            } 
+
+	            if (x == Parser.REPORT_ACCESSIONNUMBER_INDEX) // Getting MRN
+	            {
+	                StringTokenizer st2 = new StringTokenizer(field, "^");
+	                String accNum = st2.nextToken();
+
+	                report.setAccessionNumber(accNum);
+	            }
+	            if (x == Parser.REPORT_DATE_INDEX)
+	            {
+	                String year = field.substring(0, 4);
+	                String month = field.substring(4, 6);
+	                String day = field.substring(6, 8);
+	                String hours = field.substring(8, 10);
+	                String seconds = field.substring(10, 12);
+
+	                GregorianCalendar gc = new GregorianCalendar(Integer
+	                        .parseInt(year), Integer.parseInt(month)-1, Integer
+	                        .parseInt(day), Integer.parseInt(hours), Integer
+	                        .parseInt(seconds));
+
+	                report.setCollectionDateTime(gc.getTime());
+	            }
+	        }
+	        
+		}
+		catch(Exception e)
+		{
+			Logger.out.error("Error while parsing the report map",e);
+		}
+		return report;
+	}
   
 	
 }
