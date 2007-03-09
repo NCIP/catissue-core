@@ -184,7 +184,7 @@
         />
         
         <many-to-one
-            name="specimen"
+            name="parentSpecimen"
             class="edu.wustl.catissuecore.domain.Specimen"
             cascade="none"
             outer-join="auto"
@@ -261,7 +261,7 @@
         />
         
         <many-to-one
-            name="arrayType"
+            name="specimenArrayType"
             class="edu.wustl.catissuecore.domain.SpecimenArrayType"
             cascade="none"
             outer-join="auto"
