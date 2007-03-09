@@ -480,7 +480,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		String witnessFullName="";
 		List consentWitnessList = new ArrayList();
 		consentWitnessList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-		Collection userColl = collectionProtocol.getUserCollection();
+		Collection userColl = collectionProtocol.getCoordinatorCollection();
 		Iterator iter = userColl.iterator();
 		while(iter.hasNext())
 		{

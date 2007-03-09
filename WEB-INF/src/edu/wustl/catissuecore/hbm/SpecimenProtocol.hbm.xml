@@ -150,28 +150,7 @@
         </set>
 
         <set
-            name="distributionProtocolCollection"
-            table="CATISSUE_COLL_DISTRIBUTION_REL"
-            lazy="false"
-            inverse="false"
-            cascade="save-update"
-            sort="unsorted"
-        >
-
-              <key
-                  column="COLLECTION_PROTOCOL_ID"
-              />
-
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.DistributionProtocol"
-                  column="DISTRIBUTION_PROTOCOL_ID"
-                  outer-join="auto"
-              />
-
-        </set>
-
-        <set
-            name="userCollection"
+            name="coordinatorCollection"
             table="CATISSUE_COLL_COORDINATORS"
             lazy="false"
             inverse="false"
@@ -252,27 +231,6 @@
               <many-to-many
                   class="edu.wustl.catissuecore.domain.SpecimenRequirement"
                   column="SPECIMEN_REQUIREMENT_ID"
-                  outer-join="auto"
-              />
-
-        </set>
-
-        <set
-            name="collectionProtocolCollection"
-            table="CATISSUE_COLL_DISTRIBUTION_REL"
-            lazy="false"
-            inverse="true"
-            cascade="save-update"
-            sort="unsorted"
-        >
-
-              <key
-                  column="DISTRIBUTION_PROTOCOL_ID"
-              />
-
-              <many-to-many
-                  class="edu.wustl.catissuecore.domain.CollectionProtocol"
-                  column="COLLECTION_PROTOCOL_ID"
                   outer-join="auto"
               />
 
