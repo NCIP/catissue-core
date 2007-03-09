@@ -312,56 +312,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 			}
 			this.signedConsentUrl=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
 			this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
-			Collection consentResponse = specimenCollectionGroup.getConsentTierStatusCollection();
-			Collection consentResponseParticipantlevel=specimenCollectionGroup.getCollectionProtocolRegistration().getConsentTierResponseCollection();
-			//this.consentResponseForScgValues=prepareSCGResponseMap(consentResponse,consentResponseParticipantlevel);
 	}
 
-	/**
-	* For ConsentTracking Preparing consentResponseForScgValues for populating Dynamic contents on the UI  
-	* @param partiResponseCollection This Containes the collection of ConsentTier Response at CPR level
-	* @param statusResponseCollection This Containes the collection of ConsentTier Response at SCG level 
-	* @return tempMap
-	*/
-	private Map prepareSCGResponseMap(Collection statusResponseCollection, Collection partiResponseCollection)
-	   {
-	    	Map tempMap = new HashMap();
-			if(partiResponseCollection!=null||statusResponseCollection!=null)
-			{
-				int i = 0;
-				Iterator statusResponsIter = statusResponseCollection.iterator();			
-				Iterator participantResponseIter = partiResponseCollection.iterator();
-				while(statusResponsIter.hasNext())
-				{
-					ConsentTierStatus consentTierstatus=(ConsentTierStatus)statusResponsIter.next();
-					ConsentTierResponse consentTierResponse=(ConsentTierResponse)participantResponseIter.next();
-					ConsentTier consent = consentTierResponse.getConsentTier();
-					String idKey="ConsentBean:"+i+"_consentTierID";
-					String statementKey="ConsentBean:"+i+"_statement";
-					String participantResponsekey = "ConsentBean:"+i+"_participantResponse";
-					String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
-					String scgResponsekey  = "ConsentBean:"+i+"_specimenCollectionGroupLevelResponse";
-					String scgResponseIDkey ="ConsentBean:"+i+"_specimenCollectionGroupLevelResponseID";
-					
-					tempMap.put(idKey, consent.getId());
-					tempMap.put(statementKey,consent.getStatement());
-					tempMap.put(participantResponsekey, consentTierResponse.getResponse());
-					tempMap.put(participantResponceIdKey, consentTierResponse.getId());
-					tempMap.put(scgResponsekey, consentTierstatus.getStatus());
-					tempMap.put(scgResponseIDkey, consentTierstatus.getId());
-					i++;
-				}
-				consentTierCounter = statusResponseCollection.size();
-				return tempMap;
-			}		
-			else
-			{
-				return null;
-			}
-			
-	   }
-	
-	  
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
 	 */

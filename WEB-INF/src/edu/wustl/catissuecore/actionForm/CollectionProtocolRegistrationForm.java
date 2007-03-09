@@ -184,52 +184,8 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm imple
 	  	}
 	  	this.signedConsentUrl=Utility.toString(registration.getSignedConsentDocumentURL());
 	  	this.consentDate=Utility.parseDateToString(registration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
-	  	//this.consentResponseValues=prepareParticipantResponseMap(registration.getConsentTierResponseCollection());
-	  
-	  	
     }
-    
-   /**
-	* For ConsentTracking Preparing consentValueMap for populating Dynamic contents on the UI  
-	* @param consentTierResponseCollection This Containes the collection of ConsentTier Response
-	* @return tempMap
-	*/
-    private Map prepareParticipantResponseMap(Collection consentTierResponseCollection)
-    {
-    	Map tempMap = new HashMap();
-		if(consentTierResponseCollection!=null)
-		{
-			int i = 0;
-			Iterator consentTierResponseIter = consentTierResponseCollection.iterator();			
-			String idKey=null;
-			String statementKey=null;
-			String responsekey=null;
-			String participantResponceIdKey=null;
-			while(consentTierResponseIter.hasNext())
-			{
-				ConsentTierResponse consentTierResponse=(ConsentTierResponse)consentTierResponseIter.next();
-				ConsentTier consent = consentTierResponse.getConsentTier();
-				idKey="ConsentBean:"+i+"_consentTierID";
-				statementKey="ConsentBean:"+i+"_statement";
-				responsekey = "ConsentBean:"+i+"_participantResponse";
-				participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
-				
-				tempMap.put(idKey, consent.getId());
-				tempMap.put(statementKey,consent.getStatement());
-				tempMap.put(responsekey, consentTierResponse.getResponse());
-				tempMap.put(participantResponceIdKey, consentTierResponse.getId());
-				i++;
-			}
-			consentTierCounter = consentTierResponseCollection.size();
-			return tempMap;
-		}
-		else
-		{
-			return null;
-		}
-   }
-    
-	/**
+ 	/**
 	* @return Returns the id assigned to form bean
 	*/
 	public int getFormId()

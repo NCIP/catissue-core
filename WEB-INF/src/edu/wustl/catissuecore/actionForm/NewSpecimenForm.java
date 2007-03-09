@@ -343,10 +343,10 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
-        super.setAllValues(abstractDomain);
-        
+       
+    	super.setAllValues(abstractDomain);
     	Specimen specimen = (Specimen) abstractDomain;
-    	
+    	id = specimen.getId().longValue();
     	this.parentPresent = false;
     	SpecimenCollectionGroup specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
     	if(specimenCollectionGroup!=null)
@@ -411,55 +411,9 @@ public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 		}
 		this.signedConsentUrl=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
 		this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
-		Collection consentResponse = specimenCollectionGroup.getConsentTierStatusCollection();
-		Collection consentResponseParticipantlevel=specimenCollectionGroup.getCollectionProtocolRegistration().getConsentTierResponseCollection();
-		//this.consentResponseForSpecimenValues=prepareSCGResponseMap(consentResponse,consentResponseParticipantlevel);
     }
  
-   /**
-	* For ConsentTracking Preparing consentResponseForScgValues for populating Dynamic contents on the UI  
-	* @param partiResponseCollection This Containes the collection of ConsentTier Response at CPR level
-	* @param statusResponseCollection This Containes the collection of ConsentTier Response at Specimen level 
-	* @return tempMap
-	*/
-    private Map prepareSCGResponseMap(Collection statusResponseCollection, Collection partiResponseCollection)
-	   {
-	    	Map tempMap = new HashMap();
-			if(partiResponseCollection!=null ||statusResponseCollection!=null)
-			{
-				int i = 0;
-				Iterator statusResponsIter = statusResponseCollection.iterator();			
-				Iterator participantResponseIter = partiResponseCollection.iterator();
-				while(statusResponsIter.hasNext())
-				{
-					ConsentTierStatus consentTierstatus=(ConsentTierStatus)statusResponsIter.next();
-					ConsentTierResponse consentTierResponse=(ConsentTierResponse)participantResponseIter.next();
-					ConsentTier consent = consentTierResponse.getConsentTier();
-					String idKey="ConsentBean:"+i+"_consentTierID";
-					String statementKey="ConsentBean:"+i+"_statement";
-					String participantResponsekey = "ConsentBean:"+i+"_participantResponse";
-					String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
-					String specimenResponsekey  = "ConsentBean:"+i+"_specimenLevelResponse";
-					String specimenResponseIDkey ="ConsentBean:"+i+"_specimenLevelResponseID";
-					
-					tempMap.put(idKey, consent.getId());
-					tempMap.put(statementKey,consent.getStatement());
-					tempMap.put(participantResponsekey, consentTierResponse.getResponse());
-					tempMap.put(participantResponceIdKey, consentTierResponse.getId());
-					tempMap.put(specimenResponsekey, consentTierstatus.getStatus());
-					tempMap.put(specimenResponseIDkey, consentTierstatus.getId());
-					i++;
-				}
-				consentTierCounter = statusResponseCollection.size();
-				return tempMap;
-			}		
-			else
-			{
-				return null;
-			}
-	   }
-
-	/**
+   	/**
 	 * @return Returns the biohazardType.
 	 */
 	public String getBiohazardType()
