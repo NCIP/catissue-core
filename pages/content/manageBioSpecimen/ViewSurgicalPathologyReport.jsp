@@ -12,10 +12,47 @@
 <script src="jss/ajax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <LINK href="css/styleSheet.css" type=text/css rel=stylesheet>
+<script language="JavaScript">
 
+function finishReview()
+{
+	if(confirmSubmit())
+	{
+		document.forms[0].submittedFor.value='review';
+		document.forms[0].forwardTo.value='success';
+		var action="SurgicalPathologyReportEventParam.do?operation=edit&requestFor=REVIEW"
+		document.forms[0].action=action;
+		document.forms[0].submit();
+	}
+}
 
-
-
+function submitAcceptComments()
+{
+	if(confirmSubmit())
+	{
+		document.forms[0].submittedFor.value='quarantine';
+		document.forms[0].forwardTo.value='success';
+		var action="SurgicalPathologyReportEventParam.do?operation=edit&requestFor=ACCEPT"
+		document.forms[0].acceptReject.value=1;
+		document.forms[0].action=action;
+		document.forms[0].submit();
+	}
+}
+//<!--function to submit quarantine comments-->
+function submitRejectComments()
+{
+	if(confirmSubmit())
+	{
+		document.forms[0].submittedFor.value='quarantine';
+		document.forms[0].forwardTo.value='success';
+		var action="SurgicalPathologyReportEventParam.do?operation=edit&requestFor=REJECT"
+		document.forms[0].acceptReject.value=2;
+		document.forms[0].action=action;
+		document.forms[0].submit();
+		
+	}
+}
+</script>
 
 <head>
 
@@ -37,6 +74,7 @@
 			<html:hidden property="submittedFor"/>
 			<html:hidden property="forwardTo"/>
 			<html:hidden property="pageOf"/>
+			<html:hidden property="acceptReject"/>
 		</td>
 	</tr>
 <!-- if pageOf is pageOfParticipant then display drop down list of report accession number -->
@@ -89,6 +127,30 @@
 						<bean:message key="viewSPR.showDeIdenfiedReport" />
 					</td>
 				</tr>
+				<%
+				String requestFor=(String)request.getParameter(Constants.REQUEST_FOR);
+				if(requestFor!=null||pageOf.equals(Constants.REVIEW_SPR)||pageOf.equals(Constants.QUARANTINE_SPR)||requestFor!=null)
+				{
+				%>
+					<tr>
+					<td width="80%" colspan="2" class="formTitle" height="20">
+						<% if(formSPR.getUserName()!=null||requestFor!=null)
+							{
+						%>
+								<%=formSPR.getUserName()%> <bean:message key="requestdetails.header.label.Comments"/>
+						<%
+							}
+						%>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<html:textarea property="userComments" rows="2" cols="89" readonly="true"/>
+					</td>
+				</tr>
+				<%
+				}
+				%>
 			</table>
 		</td>
 	</tr>
@@ -393,15 +455,42 @@ if (formSPR.getRace() != null)
 			<tr>
 				
 				<td colspan="2" align="right">
-<%if(!(formSPR.getIdentifiedReportId()!=0 || formSPR.getDeIdentifiedReportId()!=0)) 
+<%
+	pageOf=request.getParameter(Constants.PAGEOF);
+	if(pageOf.equals(Constants.REVIEW_SPR))
+	{
+%>
+		<input type="button" name="doneButton" style="actionButton" value="Finish Review " onclick="finishReview()"/>
+		
+<%					
+	}
+	else if(pageOf.equals(Constants.QUARANTINE_SPR))
+	{
+%>
+		
+		<input type="button" name="doneButton" style="actionButton" value="Accept" onclick="submitAcceptComments()"/>
+		
+		<input type="button" name="doneButton" style="actionButton" value="Reject" onclick="submitRejectComments()"/>
+		
+<%
+	}
+	else
+	{
+%>
+
+<%
+	String consentTier =(String)request.getParameter("consentTierCounter");
+	String submitReviewComments = "submitReviewComments('"+ consentTier+"')";
+	String submitQuarantineComments = "submitQuarantineComments('"+ consentTier+"')";
+	if(!(formSPR.getIdentifiedReportId()!=0 || formSPR.getDeIdentifiedReportId()!=0)) 
 {%>
-					<html:button property="action1" styleClass="actionButton" onclick="submitReviewComments()" disabled="true">
+					<html:button property="action1" styleClass="actionButton" onclick="<%=submitReviewComments%>" disabled="true">
 						<bean:message key="viewSPR.requestForReview.button.cation" />
 					</html:button>
 <%}
 else 
 {%>
-					<html:button property="action1" styleClass="actionButton" onclick="submitReviewComments()" >
+					<html:button property="action1" styleClass="actionButton" onclick="<%=submitReviewComments%>" >
 					<bean:message key="viewSPR.requestForReview.button.cation" />
 					</html:button>
 <%}%>
@@ -409,16 +498,23 @@ else
 
 <%if(formSPR.getDeIdentifiedReportId()!=0)
 {%>
-					<html:button property="action2" styleClass="actionButton" onclick="submitQuarantineComments()" >
+					<html:button property="action2" styleClass="actionButton" onclick="<%=submitQuarantineComments%>" >
 						<bean:message key="viewSPR.requestForQuarantine.button.cation" />
 					</html:button>
 <%}
 else 
 {%>
-					<html:button property="action2" styleClass="actionButton" onclick="submitQuarantineComments()" disabled="true">
+					<html:button property="action2" styleClass="actionButton" onclick="<%=submitQuarantineComments%>" disabled="true">
 						<bean:message key="viewSPR.requestForQuarantine.button.cation" />
 					</html:button>
 <%}%>
+
+				
+<%
+	}
+%>
+
+
 				</td>
 			</tr>	
 		</table>
