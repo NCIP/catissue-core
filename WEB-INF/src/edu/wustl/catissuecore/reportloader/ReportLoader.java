@@ -9,7 +9,6 @@ import java.util.Set;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
-import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -244,7 +243,7 @@ public class ReportLoader
 //		scg.setParticipant(this.participant);
 		scg.setClinicalDiagnosis(Constants.NOT_SPECIFIED);
 		scg.setClinicalStatus(Constants.NOT_SPECIFIED);
-		scg.setSite(this.site); 
+		scg.setSpecimenCollectionSite(this.site); 
 		scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport);
 		this.identifiedReport.setSpecimenCollectionGroup(scg);
 	
@@ -289,8 +288,6 @@ public class ReportLoader
 			//((Set)collProtocolReg.getSpecimenCollectionGroupCollection()).add(scg);
 			scg.setCollectionProtocolRegistration(collProtocolReg);
 			
-			ClinicalReport clinicalReport=new ClinicalReport();
-			scg.setClinicalReport(clinicalReport);
 		}
 			
 		return scg;
