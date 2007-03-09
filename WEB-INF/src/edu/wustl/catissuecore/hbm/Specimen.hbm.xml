@@ -96,7 +96,7 @@
         />
 
         <property
-            name="comments"
+            name="comment"
             type="string"
             update="true"
             insert="true"
@@ -252,7 +252,7 @@
         </component>
 
         <component
-            name="quantity"
+            name="initialquantity"
             class="edu.wustl.catissuecore.domain.Quantity"
         >
 
