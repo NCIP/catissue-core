@@ -1077,6 +1077,10 @@ alter table CATISSUE_PATHOLOGY_REPORT drop constraint FK904EC9F040DCD7BF;
 alter table CATISSUE_REPORT_XMLCONTENT drop constraint FK4597C9F1BC7298A9;
 alter table CATISSUE_REPORT_XMLCONTENT drop constraint FK4597C9F191092806;
 
+alter table CATISSUE_REPORT_QUEUE drop constraint FK214246228CA560D1;
+alter table CATISSUE_CONCEPT_REFERENT drop constraint FK799CCA7EA9816272;
+alter table CATISSUE_CONCEPT_REFERENT drop constraint FK799CCA7E72C371DD;
+
 drop table CATISSUE_REPORT_TEXTCONTENT;
 drop table CATISSUE_IDENTIFIED_REPORT;
 drop table CATISSUE_CONCEPT_REFERENT;
@@ -1104,7 +1108,13 @@ create table CATISSUE_IDENTIFIED_REPORT (
 );
 create table CATISSUE_CONCEPT_REFERENT (
    IDENTIFIER number(19,0) not null,
+   CONCEPT_ID number(19,0),
+   CONCEPT_CLASSIFICATION_ID number(19,0),
    DEIDENTIFIED_REPORT_ID number(19,0),
+   END_OFFSET number(19,0),
+   IS_MODIFIER number(1,0),
+   IS_NEGATED number(1,0),
+   START_OFFSET number(19,0),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REPORT_CONTENT (
@@ -1169,8 +1179,9 @@ create table CATISSUE_REPORT_XMLCONTENT (
 );
 create table CATISSUE_REPORT_QUEUE (
    IDENTIFIER number(19,0) not null,
-   REPORT_TEXT varchar2(4000),
    STATUS varchar(10),
+   REPORT_TEXT varchar2(4000),
+   SPECIMEN_COLL_GRP_ID number(19,0),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_REPORT_PARTICIP_REL(
@@ -1196,6 +1207,8 @@ alter table CATISSUE_PATHOLOGY_REPORT add constraint FK904EC9F040DCD7BF foreign 
 alter table CATISSUE_REPORT_XMLCONTENT add constraint FK4597C9F1BC7298A9 foreign key (IDENTIFIER) references CATISSUE_REPORT_CONTENT (IDENTIFIER);
 alter table CATISSUE_REPORT_XMLCONTENT add constraint FK4597C9F191092806 foreign key (REPORT_ID) references CATISSUE_PATHOLOGY_REPORT (IDENTIFIER);
 
+alter table CATISSUE_REPORT_QUEUE add constraint FK214246228CA560D1 foreign key (SPECIMEN_COLL_GRP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
+
 create sequence CATISSUE_CONCEPT_REFERENT_SEQ;
 create sequence CATISSUE_PATHOLOGY_REPORT_SEQ;
 create sequence CATISSUE_QUARANTINE_PARAMS_SEQ;
@@ -1203,5 +1216,42 @@ create sequence CATISSUE_REPORT_SECTION_SEQ;
 create sequence CATISSUE_REVIEW_PARAMS_SEQ;
 create sequence CATISSUE_REPORT_CONTENT_SEQ;
 create sequence CATISSUE_REPORT_QUEUE_SEQ;
+
+/* caTies tables for Concept HighLighting  -- Ashish -- 8 March,07 */
+
+alter table CATISSUE_CONCEPT drop constraint FKC1A3C8CC7F0C2C7;
+
+drop table  CATISSUE_CONCEPT;
+drop table  CATISSUE_SEMANTIC_TYPE;
+drop table  CATISSUE_CONCEPT_CLASSIFICATN;
+
+create table CATISSUE_CONCEPT (
+   IDENTIFIER number(19,0) not null,
+   CONCEPT_UNIQUE_ID varchar(30),
+   NAME varchar2(500),
+   SEMANTIC_TYPE_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+
+create table CATISSUE_SEMANTIC_TYPE (
+   IDENTIFIER number(19,0) not null,
+   LABEL varchar2(500),
+   primary key (IDENTIFIER)
+);
+
+create table CATISSUE_CONCEPT_CLASSIFICATN (
+   IDENTIFIER number(19,0) not null,
+   NAME varchar2(500),
+   primary key (IDENTIFIER)
+);
+
+alter table CATISSUE_CONCEPT add constraint FKC1A3C8CC7F0C2C7 foreign key (SEMANTIC_TYPE_ID) references CATISSUE_SEMANTIC_TYPE (IDENTIFIER);
+alter table CATISSUE_CONCEPT_REFERENT add constraint FK799CCA7EA9816272 foreign key (CONCEPT_ID) references CATISSUE_CONCEPT (IDENTIFIER);
+alter table CATISSUE_CONCEPT_REFERENT add constraint FK799CCA7E72C371DD foreign key (CONCEPT_CLASSIFICATION_ID) references CATISSUE_CONCEPT_CLASSIFICATN (IDENTIFIER);
+
+create sequence CATISSUE_SEMANTIC_TYPE_SEQ;
+create sequence CATISSUE_CONCEPT_SEQ;
+create sequence CATISSUE_CONCEPT_CLASSFCTN_SEQ;
+
 /****caTIES Realated Tables - end**********/
 
