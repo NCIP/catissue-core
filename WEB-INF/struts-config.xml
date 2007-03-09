@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+					  <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE struts-config
 PUBLIC
 "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
@@ -500,9 +500,10 @@ PUBLIC
 			name="viewSurgicalPathologyReportForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path=".catissuecore.participantDef" />
+			<forward name="reviewSPR" path=".catissuecore.ViewSPR" />
+			<forward name="quarantineSPR" path=".catissuecore.ViewSPR" />
 			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef" />
-			<forward name="pageOfSpecimen" path=".catissuecore.newSpecimenDef" />
+			<forward name="pageOfNewSpecimen" path=".catissuecore.newSpecimenViewSPRDef" />
 			<forward name="pageOfParticipant" path=".catissuecore.participantDef" />
 			<forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
@@ -3906,6 +3907,22 @@ PUBLIC
 			 <forward name="success" path="/pages/content/ConsentTracking/ShowConsents.jsp" />
 		</action>
 	
+	<!-- Added for Admin View -->	
+	<action path="/ReviewRequests" 
+			 name="viewSurgicalPathologyReportForm"
+			 type="edu.wustl.catissuecore.action.ReportReviewQuarantineAction"		 
+			 validate="false"
+			 scope="request">	 
+			 <forward name="success" path=".catissuecore.ReviewQuarantineRequests"/>
+	</action>
+	<action path="/QuarantineRequests" 
+			 name="viewSurgicalPathologyReportForm"
+			 type="edu.wustl.catissuecore.action.ReportReviewQuarantineAction"		 
+			 validate="false"
+			 scope="request">	 
+			 <forward name="success" path=".catissuecore.ReviewQuarantineRequests" />
+	</action>
+	<!-- Added for Admin View -->	
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

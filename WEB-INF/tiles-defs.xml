@@ -1053,7 +1053,20 @@
 	
 	<definition name=".catissuecore.ViewAllConsentsDef" path="/pages/content/ConsentTracking/ViewAllConsents.jsp"> 
 	</definition>
-	
 	<!--Change By Virender -->	
+	
+	<!-- For Administrator View -->
+	
+	<definition name=".catissuecore.ReviewQuarantineRequests" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/administratorView/ReviewQuarantineRequests.jsp" />
+	</definition>
+	<definition name=".catissuecore.ViewSPR" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/administratorView/AdministratorViewSPR.jsp" />
+	</definition>
+	<!-- For Administrator View -->
+	<!-- For ViewSpr in Specimen Page -->
+	<definition name=".catissuecore.newSpecimenViewSPRDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenViewSPR.jsp" />
+	</definition>
 
 </tiles-definitions>
