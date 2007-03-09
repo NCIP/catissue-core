@@ -1,9 +1,7 @@
 package edu.wustl.catissuecore.domain.pathology;
 
-import java.awt.JobAttributes;
-import java.util.Collection;
 
-import sun.security.krb5.internal.j;
+import java.util.Collection;
 
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.common.actionForm.AbstractActionForm;
