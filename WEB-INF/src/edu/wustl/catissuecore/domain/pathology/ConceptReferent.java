@@ -1,11 +1,24 @@
+/**
+ * <p>Title: ConceptReferent Class>
+ * <p>Description:  ConceptReferent domain object.</p>
+ * Copyright:    Copyright (c) year
+ * Company: Washington University, School of Medicine, St. Louis.
+ * @author Ashish Gupta
+ * @version 1.00
+ * Created on March 07,2007
+ */
 package edu.wustl.catissuecore.domain.pathology;
+
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
 
 /**
  * Represents the concept referent of the pathology report.
  * @hibernate.class
  * table="CATISSUE_CONCEPT_REFERENT"
  */
-public class ConceptReferent
+public class ConceptReferent extends AbstractDomainObject
 {
 
 	/**
@@ -58,6 +71,7 @@ public class ConceptReferent
 
 	/**
 	 * @return concept associated with current concept referent.
+	 * @hibernate.many-to-one column="CONCEPT_ID" class="edu.wustl.catissuecore.domain.pathology.Concept.java" cascade="save-update"
 	 */
 	public Concept getConcept()
 	{
@@ -74,6 +88,7 @@ public class ConceptReferent
 
 	/**
 	 * @return concept referent classification
+	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification" column="CONCEPT_CLASSIFICATION_ID" cascade="save-update"
 	 */
 	public ConceptReferentClassification getConceptReferentClassification()
 	{
@@ -112,6 +127,7 @@ public class ConceptReferent
 
 	/**
 	 * @return end offset
+	 * @hibernate.property type="long" column="END_OFFSET" length="30" 
 	 */
 	public Long getEndOffset()
 	{
@@ -147,6 +163,7 @@ public class ConceptReferent
 
 	/**
 	 * @return modifier flag
+	 * @hibernate.property type="int" length="30" column="IS_MODIFIER"
 	 */
 	public Boolean getIsModifier()
 	{
@@ -163,6 +180,7 @@ public class ConceptReferent
 
 	/**
 	 * @return negated flag
+	 * @hibernate.property type="int" length="30" column="IS_NEGATED"
 	 */
 	public Boolean getIsNegated()
 	{
@@ -179,6 +197,7 @@ public class ConceptReferent
 
 	/**
 	 * @return start offset
+	 * @hibernate.property type="long" length="30" column="START_OFFSET"
 	 */
 	public Long getStartOffset()
 	{
@@ -191,6 +210,13 @@ public class ConceptReferent
 	public void setStartOffset(Long startOffset)
 	{
 		this.startOffset = startOffset;
+	}
+
+
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

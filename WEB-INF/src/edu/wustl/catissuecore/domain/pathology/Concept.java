@@ -1,12 +1,27 @@
+/**
+ * <p>Title: Concept Class>
+ * <p>Description:  Concept domain object.</p>
+ * Copyright:    Copyright (c) year
+ * Company: Washington University, School of Medicine, St. Louis.
+ * @author Ashish Gupta
+ * @version 1.00
+ * Created on March 07,2007
+ */
 package edu.wustl.catissuecore.domain.pathology;
+
+import java.util.Collection;
+import java.util.HashSet;
+
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
 
 
 /**
- * @version 1.0
- * @created 26-Sep-2006 4:07:10 PM
+ * @hibernate.class table="CATISSUE_CONCEPT"
  * Represents Concept associated with pathology report.
  */
-public class Concept 
+public class Concept extends AbstractDomainObject
 {
 
 	/**
@@ -32,7 +47,7 @@ public class Concept
 	/**
 	 * Concept referent collection
 	 */
-	protected ConceptReferent conceptReferentCollection;
+	protected Collection conceptReferentCollection = new HashSet();
 
 	/**
 	 * Constructor
@@ -44,8 +59,11 @@ public class Concept
 
 	/**
 	 * @return collection of concept referent collection.
+	 * @hibernate.set cascade="save-update" table="CATISSUE_CONCEPT_REFERENT" lazy="false"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.pathology.ConceptReferent"
+	 * @hibernate.collection-key column="CONCEPT_ID"
 	 */
-	public ConceptReferent getConceptReferentCollection()
+	public Collection getConceptReferentCollection()
 	{
 		return conceptReferentCollection;
 	}
@@ -53,13 +71,14 @@ public class Concept
 	/**
 	 * @param conceptReferentCollection sets collection of concept referent
 	 */
-	public void setConceptReferentCollection(ConceptReferent conceptReferentCollection)
+	public void setConceptReferentCollection(Collection conceptReferentCollection)
 	{
 		this.conceptReferentCollection = conceptReferentCollection;
 	}
 
 	/**
 	 * @return concept unique identifier.
+	 * @hibernate.property type="string" length="30" column="CONCEPT_UNIQUE_ID"
 	 */
 	public String getConceptUniqueIdentifier()
 	{
@@ -76,6 +95,9 @@ public class Concept
 
 	/**
 	 * @return system generated id for the concept
+	 * @hibernate.id type="long" length="30" column="IDENTIFIER" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_CONCEPT_SEQ"
+	 * 
 	 */
 	public Long getId()
 	{
@@ -92,6 +114,7 @@ public class Concept
 
 	/**
 	 * @return name of the concept
+	 * @hibernate.property type="string" length="500" column="NAME" 
 	 */
 	public String getName()
 	{
@@ -108,6 +131,7 @@ public class Concept
 
 	/**
 	 * @return symantice type for the concept
+	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.pathology.SemanticType" column="SEMANTIC_TYPE_ID" cascade="save-update" 
 	 */
 	public SemanticType getSemanticType()
 	{
@@ -120,6 +144,13 @@ public class Concept
 	public void setSemanticType(SemanticType semanticType)
 	{
 		this.semanticType = semanticType;
+	}
+
+	@Override
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
