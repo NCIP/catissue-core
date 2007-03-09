@@ -284,7 +284,7 @@
         </set>
 
         <set
-            name="holdsSpArrayTypeCollection"
+            name="holdsSpecimenArrayTypeCollection"
             table="CATISSUE_CONT_HOLDS_SPARRTYPE"
             lazy="false"
             inverse="false"

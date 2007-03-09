@@ -176,7 +176,7 @@
               />
         </set>
         <set
-            name="holdsSpArrayTypeCollection"
+            name="holdsSpecimenArrayTypeCollection"
             table="CATISSUE_STORTY_HOLDS_SPARRTY"
             lazy="false"
             inverse="false"
