@@ -47,7 +47,6 @@ var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList)%><%="\""%>;
 	</tr>
 </table>
 
-
 <script>
 /*	function rowClick(id)
 	{
@@ -58,6 +57,7 @@ var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList)%><%="\""%>;
 		window.location.href = url;
 	}
 */
+
 // function modified to display distribution array.
 // problem in query data.
 	function rowClick(id)
@@ -99,7 +99,10 @@ var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList)%><%="\""%>;
 		colWidth = "130,130,130,130,0";
 	}
 //	document.write("<hr>"+colWidth+"<hr>");
-
+	if(useFunction == "viewSPR")
+	{
+		colWidth="130,130,130,130,0,130,130";
+	}
 	mygrid.setInitWidths(colWidth);
 
 	//mygrid.setColAlign("left,left")
@@ -120,16 +123,13 @@ var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList)%><%="\""%>;
 	{
 		mygrid.addRow(row+1,myData[row],row+1);
 	}
-
+	
 	if(useFunction == "eventParametersGrid" || useFunction == "derivedSpecimenGrid")
 	{
 		mygrid.setHeaderCol(4,"");
 		mygrid.setColumnHidden(4,true);
 	}
-
 	//mygrid.setOnRowSelectHandler(funcName);
 	mygrid.setOnRowDblClickedHandler(funcName);
 	mygrid.setSizes();
-
-
 </script>
