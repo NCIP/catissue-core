@@ -1,4 +1,4 @@
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+	<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
@@ -660,7 +660,7 @@
 					<bean:message key="tab.specimen.eventparameters"/>
 				</td>
 
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewSPR()">
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				
@@ -1493,12 +1493,18 @@
 			 				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id ="specimenPageButton">
 							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
 							<tr>					
+										<td>
+											<table id="aliquotId">
+												<tr>					
 								<td class="formFieldNoBordersBold" height="20" colspan="5">
 									<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
 										&nbsp; <bean:message key="specimen.aliquot.message"/>
 									</html:checkbox>
 							    </td>
 							</tr>								
+											</table>
+										</td>
+									</tr>
 							</logic:notEqual>
 							 
 							 <!-- Bio-hazards End here -->	
