@@ -76,6 +76,14 @@
             column="GENOTYPE"
             length="50"
         />
+        <property
+            name="maritalStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="MARITAL_STATUS"
+            length="50"
+        />
 
         <set
             name="raceCollection"
