@@ -79,7 +79,7 @@
         />
 
         <many-to-one
-            name="site"
+            name="specimenCollectionSite"
             class="edu.wustl.catissuecore.domain.Site"
             cascade="none"
             outer-join="auto"
@@ -98,17 +98,7 @@
             column="COLLECTION_PROTOCOL_EVENT_ID"
         />
 
-        <many-to-one
-            name="clinicalReport"
-            class="edu.wustl.catissuecore.domain.ClinicalReport"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="CLINICAL_REPORT_ID"
-        />
-
-        <set
+         <set
             name="specimenCollection"
             table="CATISSUE_SPECIMEN"
             lazy="false"
