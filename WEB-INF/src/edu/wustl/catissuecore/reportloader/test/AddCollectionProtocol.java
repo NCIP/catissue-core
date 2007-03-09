@@ -344,7 +344,7 @@ public class AddCollectionProtocol
 		User protocolCordinator = (User)AddCollectionProtocol.dataModelObjectMap.get("User1");
 		Collection protocolCordinatorCollection = new HashSet();
 		protocolCordinatorCollection.add(protocolCordinator);
-		collectionProtocol.setUserCollection(protocolCordinatorCollection);
+		collectionProtocol.setCoordinatorCollection(protocolCordinatorCollection);
 		
 		return collectionProtocol;
 	}

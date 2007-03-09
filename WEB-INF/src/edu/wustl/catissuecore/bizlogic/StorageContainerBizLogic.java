@@ -663,8 +663,8 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Collection spClassCollNew = newContainer.getHoldsSpecimenClassCollection();
 		Collection spClassCollOld = oldContainer.getHoldsSpecimenClassCollection();
 
-		Collection spArrayTypeCollNew = newContainer.getHoldsSpArrayTypeCollection();
-		Collection spArrayTypeCollOld = oldContainer.getHoldsSpArrayTypeCollection();
+		Collection spArrayTypeCollNew = newContainer.getHoldsSpecimenArrayTypeCollection();
+		Collection spArrayTypeCollOld = oldContainer.getHoldsSpecimenArrayTypeCollection();
 
 		if (cpCollNew.size() != cpCollOld.size())
 			return true;

@@ -15,7 +15,6 @@ import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
-import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -881,17 +880,17 @@ public class ConsentTrackingTest extends BaseTestCase
 		collectionProtocol.setTitle("Collection Protocol1234513");
 		collectionProtocol.setShortTitle("CP!12");
 		
-		Collection distributionProtocolCollection = new HashSet();
-		DistributionProtocol distributionProtocol = new DistributionProtocol();
-		distributionProtocol.setId(new Long(2));
-		distributionProtocolCollection.add(distributionProtocol);		
-		collectionProtocol.setDistributionProtocolCollection(distributionProtocolCollection);
+//		Collection distributionProtocolCollection = new HashSet();
+//		DistributionProtocol distributionProtocol = new DistributionProtocol();
+//		distributionProtocol.setId(new Long(2));
+//		distributionProtocolCollection.add(distributionProtocol);		
+//		collectionProtocol.setDistributionProtocolCollection(distributionProtocolCollection);
 		
 		Collection userCollection = new HashSet();
 		User user = new User();
 		user.setId(new Long(1));
 		userCollection.add(user);
-		collectionProtocol.setUserCollection(userCollection);
+		collectionProtocol.setCoordinatorCollection(userCollection);
 				
 		try
 		{
@@ -1007,7 +1006,7 @@ public class ConsentTrackingTest extends BaseTestCase
 
 		Site site = new Site();
 		site.setId(new Long(1));
-		specimenCollectionGroup.setSite(site);
+		specimenCollectionGroup.setSpecimenCollectionSite(site);
 
 		specimenCollectionGroup.setClinicalDiagnosis("Abdominal fibromatosis");
 		specimenCollectionGroup.setClinicalStatus("Operative");
@@ -1031,10 +1030,6 @@ public class ConsentTrackingTest extends BaseTestCase
 
 		specimenCollectionGroup.setName("Collection Protocol1_1_1.1.1");
 
-		ClinicalReport clinicalReport = new ClinicalReport();
-		clinicalReport.setSurgicalPathologyNumber("");
-		//clinicalReport.setId(new Long(1));
-		specimenCollectionGroup.setClinicalReport(clinicalReport);
 		
 		//Setting Consent Tier Status.
 		Collection consentTierStatusCollection = new HashSet();
@@ -1090,10 +1085,10 @@ public class ConsentTrackingTest extends BaseTestCase
 
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(10));
-		molecularSpecimen.setQuantity(quantity);
+		molecularSpecimen.setInitialquantity(quantity);
 
 		molecularSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
-		molecularSpecimen.setComments("");
+		molecularSpecimen.setComment("");
 		// Is virtually located
 		molecularSpecimen.setStorageContainer(null);
 		molecularSpecimen.setPositionDimensionOne(null);

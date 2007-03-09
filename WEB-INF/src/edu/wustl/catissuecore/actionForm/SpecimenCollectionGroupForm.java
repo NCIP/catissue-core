@@ -22,7 +22,6 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
@@ -248,11 +247,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
 		activityStatus = Utility.toString(specimenCollectionGroup.getActivityStatus());
 			
-		ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
-		surgicalPathologyNumber = Utility.toString(clinicalReport.getSurgicalPathologyNumber());
-		
-		if(clinicalReport.getParticipantMedicalIdentifier()!=null)
-			participantsMedicalIdentifierId = clinicalReport.getParticipantMedicalIdentifier().getId().longValue();
+
 			
 		collectionProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
 		collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent().getId().longValue();
@@ -301,7 +296,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
 		Logger.out.debug("participantId.................................."+participantId);
 		Logger.out.debug("protocolParticipantIdentifier........................."+protocolParticipantIdentifier);
 		Logger.out.debug("SCgForm --------- checkButton : -- " + checkedButton );
-		siteId = specimenCollectionGroup.getSite().getId().longValue();
+		siteId = specimenCollectionGroup.getSpecimenCollectionSite().getId().longValue();
 		
 		/**
 	  	 * For Consent tracking setting UI attributes

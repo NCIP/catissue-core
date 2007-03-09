@@ -324,7 +324,7 @@ public class StorageContainerForm extends AbstractActionForm
 			}
 		}
 //      Populating the specimen array type-id array
-		Collection specimenArrayTypeCollection = container.getHoldsSpArrayTypeCollection();
+		Collection specimenArrayTypeCollection = container.getHoldsSpecimenArrayTypeCollection();
 		
 		if(specimenArrayTypeCollection != null)
 		{

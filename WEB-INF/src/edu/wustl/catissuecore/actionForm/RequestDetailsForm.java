@@ -352,10 +352,10 @@ public class RequestDetailsForm extends AbstractActionForm
 				
 				NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)orderItem;
 				values.put(requestedItem, newSpecimenArrayOrderItem.getName());
-				values.put(positionDimensionOne, newSpecimenArrayOrderItem.getArrayType().getCapacity().getOneDimensionCapacity().toString());
-				values.put(positionDimensionTwo, newSpecimenArrayOrderItem.getArrayType().getCapacity().getTwoDimensionCapacity().toString());
-				values.put(specimenClass, newSpecimenArrayOrderItem.getArrayType().getSpecimenClass());
-				values.put(specimenType, newSpecimenArrayOrderItem.getArrayType().getName());
+				values.put(positionDimensionOne, newSpecimenArrayOrderItem.getSpecimenArrayType().getCapacity().getOneDimensionCapacity().toString());
+				values.put(positionDimensionTwo, newSpecimenArrayOrderItem.getSpecimenArrayType().getCapacity().getTwoDimensionCapacity().toString());
+				values.put(specimenClass, newSpecimenArrayOrderItem.getSpecimenArrayType().getSpecimenClass());
+				values.put(specimenType, newSpecimenArrayOrderItem.getSpecimenArrayType().getName());
 				
 				SpecimenArray specimenArrayObj = newSpecimenArrayOrderItem.getSpecimenArray();
 				if(specimenArrayObj != null)
@@ -421,8 +421,8 @@ public class RequestDetailsForm extends AbstractActionForm
 		else if(orderItem instanceof DerivedSpecimenOrderItem)
 		{
 			DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)orderItem;
-			values.put(requestedItem, derivedSpecimenOrderItem.getSpecimen().getLabel());
-			Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getSpecimen(),derivedSpecimenOrderItem.getSpecimen().getChildrenSpecimen());
+			values.put(requestedItem, derivedSpecimenOrderItem.getParentSpecimen().getLabel());
+			Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen(),derivedSpecimenOrderItem.getParentSpecimen().getChildrenSpecimen());
 		    List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList,derivedSpecimenOrderItem.getSpecimenClass(),derivedSpecimenOrderItem.getSpecimenType());
 		    Iterator i = finalChildrenSpecimenList.iterator();
 		    while(i.hasNext())
@@ -440,15 +440,15 @@ public class RequestDetailsForm extends AbstractActionForm
 		  	}			
 			values.put(specimenClass, derivedSpecimenOrderItem.getSpecimenClass());
 			values.put(specimenType, derivedSpecimenOrderItem.getSpecimenType());			
-			values.put(specimenId,derivedSpecimenOrderItem.getSpecimen().getId().toString());
+			values.put(specimenId,derivedSpecimenOrderItem.getParentSpecimen().getId().toString());
 			values.put(instanceOf, "Derived");
 			if(derivedSpecimenOrderItem.getDistributedItem() != null)
 		  	{		  	
 				values.put(assignQty, derivedSpecimenOrderItem.getDistributedItem().getQuantity().toString());
 				values.put(requestFor, derivedSpecimenOrderItem.getDistributedItem().getSpecimen().getId());				
 		  	}
-			values.put(actualSpecimenClass,derivedSpecimenOrderItem.getSpecimen().getClassName());
-			values.put(actualSpecimenType, derivedSpecimenOrderItem.getSpecimen().getType());
+			values.put(actualSpecimenClass,derivedSpecimenOrderItem.getParentSpecimen().getClassName());
+			values.put(actualSpecimenType, derivedSpecimenOrderItem.getParentSpecimen().getType());
 			requestForDropDownMap.put(specimenList, childrenSpecimenListToDisplay);			
 		}	
 		else if(orderItem instanceof PathologicalCaseOrderItem)

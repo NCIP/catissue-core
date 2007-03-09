@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.domain.ClinicalReport;
+
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
@@ -70,13 +70,13 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 
-		Object siteObj = dao.retrieve(Site.class.getName(), specimenCollectionGroup.getSite().getId());
+		Object siteObj = dao.retrieve(Site.class.getName(), specimenCollectionGroup.getSpecimenCollectionSite().getId());
 		if (siteObj != null)
 		{
 			// check for closed Site
-			checkStatus(dao, specimenCollectionGroup.getSite(), "Site");
+			checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
 
-			specimenCollectionGroup.setSite((Site) siteObj);
+			specimenCollectionGroup.setSpecimenCollectionSite((Site) siteObj);
 		}
 		
 		if(!Variables.isLoadFromCaties)
@@ -92,14 +92,12 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		
 				specimenCollectionGroup.setCollectionProtocolEvent(cpe);
 			}
-			setClinicalReport(dao, specimenCollectionGroup);
+
 			setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
 		}
 		
 
 		dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
-		if (specimenCollectionGroup.getClinicalReport() != null)
-			dao.insert(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true);
 		
 //		if(!Variables.isLoadFromCaties)
 //		{
@@ -150,9 +148,9 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		SpecimenCollectionGroup oldspecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
 
 		// Check for different closed site
-		if (!specimenCollectionGroup.getSite().getId().equals(oldspecimenCollectionGroup.getSite().getId()))
+		if (!specimenCollectionGroup.getSpecimenCollectionSite().getId().equals(oldspecimenCollectionGroup.getSpecimenCollectionSite().getId()))
 		{
-			checkStatus(dao, specimenCollectionGroup.getSite(), "Site");
+			checkStatus(dao, specimenCollectionGroup.getSpecimenCollectionSite(), "Site");
 		}
 		//site check complete
 
@@ -181,12 +179,12 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			WithdrawConsentUtil.updateSpecimenStatusInSCG(specimenCollectionGroup, oldspecimenCollectionGroup);
 		//Mandar 24-Jan-07 To update consents accordingly in SCG and Specimen(s) end
 		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
-		dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true, false);
+		//dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true, false);
 
 		//Audit.
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		SpecimenCollectionGroup oldSpecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
-		dao.audit(specimenCollectionGroup.getClinicalReport(), oldspecimenCollectionGroup.getClinicalReport(), sessionDataBean, true);
+		//dao.audit(specimenCollectionGroup.getClinicalReport(), oldspecimenCollectionGroup.getClinicalReport(), sessionDataBean, true);
 
 		//Disable the related specimens to this specimen group
 		Logger.out.debug("specimenCollectionGroup.getActivityStatus() " + specimenCollectionGroup.getActivityStatus());
@@ -270,19 +268,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		}
 	}
 
-	private void setClinicalReport(DAO dao, SpecimenCollectionGroup specimenCollectionGroup) throws DAOException
-	{
-		ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
-		ParticipantMedicalIdentifier participantMedicalIdentifier = clinicalReport.getParticipantMedicalIdentifier();
-		if (participantMedicalIdentifier != null)
-		{
-			List list = dao.retrieve(ParticipantMedicalIdentifier.class.getName(), Constants.SYSTEM_IDENTIFIER, participantMedicalIdentifier.getId());
-			if (!list.isEmpty())
-			{
-				specimenCollectionGroup.getClinicalReport().setParticipantMedicalIdentifier((ParticipantMedicalIdentifier) list.get(0));
-			}
-		}
-	}
+
 
 	public void disableRelatedObjects(DAO dao, Long collProtRegIDArr[]) throws DAOException
 	{
@@ -367,7 +353,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.collectionprotocolregistration.atleast"));
 		}
 //!Variables.isLoadFromCaties && 
-		if (group.getSite() == null || group.getSite().getId() == null)
+		if (group.getSpecimenCollectionSite() == null || group.getSpecimenCollectionSite().getId() == null)
 		{
 			message = ApplicationProperties.getValue("specimenCollectionGroup.site");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));

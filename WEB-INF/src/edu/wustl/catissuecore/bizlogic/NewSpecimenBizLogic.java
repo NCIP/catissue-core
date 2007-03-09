@@ -571,9 +571,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			TissueSpecimen tissueSpecimenObj = (TissueSpecimen) obj;
 			TissueSpecimen tissueSpecimenOldObj = (TissueSpecimen) oldObj;
 			// get new qunatity modifed by user
-			double newQty = Double.parseDouble(tissueSpecimenObj.getQuantity().toString());//tissueSpecimenObj.getQuantityInGram().doubleValue();
+			double newQty = Double.parseDouble(tissueSpecimenObj.getInitialquantity().toString());//tissueSpecimenObj.getQuantityInGram().doubleValue();
 			// get old qunatity from database
-			double oldQty = Double.parseDouble(tissueSpecimenOldObj.getQuantity().toString());//tissueSpecimenOldObj.getQuantityInGram().doubleValue();
+			double oldQty = Double.parseDouble(tissueSpecimenOldObj.getInitialquantity().toString());//tissueSpecimenOldObj.getQuantityInGram().doubleValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
 			double oldAvailableQty = Double.parseDouble(tissueSpecimenOldObj.getAvailableQuantity().toString());//tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
@@ -604,9 +604,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			MolecularSpecimen molecularSpecimenObj = (MolecularSpecimen) obj;
 			MolecularSpecimen molecularSpecimenOldObj = (MolecularSpecimen) oldObj;
 			// get new qunatity modifed by user
-			double newQty = Double.parseDouble(molecularSpecimenObj.getQuantity().toString());//molecularSpecimenObj.getQuantityInMicrogram().doubleValue();
+			double newQty = Double.parseDouble(molecularSpecimenObj.getInitialquantity().toString());//molecularSpecimenObj.getQuantityInMicrogram().doubleValue();
 			// get old qunatity from database
-			double oldQty = Double.parseDouble(molecularSpecimenOldObj.getQuantity().toString());//molecularSpecimenOldObj.getQuantityInMicrogram().doubleValue();
+			double oldQty = Double.parseDouble(molecularSpecimenOldObj.getInitialquantity().toString());//molecularSpecimenOldObj.getQuantityInMicrogram().doubleValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
 			double oldAvailableQty = Double.parseDouble(molecularSpecimenOldObj.getAvailableQuantity().toString());//molecularSpecimenOldObj.getAvailableQuantityInMicrogram().doubleValue();
@@ -636,9 +636,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			CellSpecimen cellSpecimenObj = (CellSpecimen) obj;
 			CellSpecimen cellSpecimenOldObj = (CellSpecimen) oldObj;
 			// get new qunatity modifed by user
-			long newQty = (long) Double.parseDouble(cellSpecimenObj.getQuantity().toString());//cellSpecimenObj.getQuantityInCellCount().intValue();
+			long newQty = (long) Double.parseDouble(cellSpecimenObj.getInitialquantity().toString());//cellSpecimenObj.getQuantityInCellCount().intValue();
 			// get old qunatity from database
-			long oldQty = (long) Double.parseDouble(cellSpecimenOldObj.getQuantity().toString());//cellSpecimenOldObj.getQuantityInCellCount().intValue();
+			long oldQty = (long) Double.parseDouble(cellSpecimenOldObj.getInitialquantity().toString());//cellSpecimenOldObj.getQuantityInCellCount().intValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
 			long oldAvailableQty = (long) Double.parseDouble(cellSpecimenOldObj.getAvailableQuantity().toString());//cellSpecimenOldObj.getAvailableQuantityInCellCount().intValue();
@@ -668,9 +668,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			FluidSpecimen fluidSpecimenObj = (FluidSpecimen) obj;
 			FluidSpecimen fluidSpecimenOldObj = (FluidSpecimen) oldObj;
 			// get new qunatity modifed by user
-			double newQty = Double.parseDouble(fluidSpecimenObj.getQuantity().toString());//fluidSpecimenObj.getQuantityInMilliliter().doubleValue();
+			double newQty = Double.parseDouble(fluidSpecimenObj.getInitialquantity().toString());//fluidSpecimenObj.getQuantityInMilliliter().doubleValue();
 			// get old qunatity from database
-			double oldQty = Double.parseDouble(fluidSpecimenOldObj.getQuantity().toString());//fluidSpecimenOldObj.getQuantityInMilliliter().doubleValue();
+			double oldQty = Double.parseDouble(fluidSpecimenOldObj.getInitialquantity().toString());//fluidSpecimenOldObj.getQuantityInMilliliter().doubleValue();
 			Logger.out.debug("New Qty: " + newQty + " Old Qty: " + oldQty);
 			// get Available qty
 			double oldAvailableQty = Double.parseDouble(fluidSpecimenOldObj.getAvailableQuantity().toString());//fluidSpecimenOldObj.getAvailableQuantityInMilliliter().doubleValue();
@@ -1495,7 +1495,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", labelString));
 		}
 
-		if (specimen.getQuantity() == null || specimen.getQuantity().getValue() == null)
+		if (specimen.getInitialquantity() == null || specimen.getInitialquantity().getValue() == null)
 		{
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));

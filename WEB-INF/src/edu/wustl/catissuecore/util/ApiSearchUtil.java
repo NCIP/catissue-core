@@ -134,9 +134,9 @@ public class ApiSearchUtil
     		specimen.setSpecimenCharacteristics(new SpecimenCharacteristics());
     	}		
 		
-    	if (SearchUtil.isNullobject(specimen.getQuantity()))
+    	if (SearchUtil.isNullobject(specimen.getInitialquantity()))
     	{
-    		specimen.setQuantity(new Quantity());
+    		specimen.setInitialquantity(new Quantity());
     	}		
 		
     	if (SearchUtil.isNullobject(specimen.getAvailableQuantity()))

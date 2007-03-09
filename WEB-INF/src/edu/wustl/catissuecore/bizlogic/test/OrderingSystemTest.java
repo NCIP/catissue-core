@@ -1323,7 +1323,7 @@ public class OrderingSystemTest extends BaseTestCase
 		
 		DerivedSpecimenOrderItem orderItem =(DerivedSpecimenOrderItem) initOrderItem(drSpOrderItem);
 		Specimen specimen = setSpecimenId();
-		orderItem.setSpecimen(specimen);
+		orderItem.setParentSpecimen(specimen);
 		
 		orderItem.setSpecimenClass("Tissue");
 		orderItem.setSpecimenType("DNA");
@@ -1418,7 +1418,7 @@ public class OrderingSystemTest extends BaseTestCase
 		NewSpecimenArrayOrderItem orderItem =(NewSpecimenArrayOrderItem) initOrderItem(newSpArOrderItem);
 		SpecimenArrayType specimenArrayType = new SpecimenArrayType();
 		specimenArrayType.setId(new Long(3));
-		orderItem.setArrayType(specimenArrayType);	
+		orderItem.setSpecimenArrayType(specimenArrayType);	
 		orderItem.setName("Array Order");
 		
 		Collection specimenOrderItemCollection = new HashSet();

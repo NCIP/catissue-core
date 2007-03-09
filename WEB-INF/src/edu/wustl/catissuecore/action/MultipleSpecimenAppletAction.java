@@ -320,7 +320,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		{
 			Specimen specimen = (Specimen) specimenCollectionIterator.next();
 			specimen.setAvailable(new Boolean(true));
-			specimen.setAvailableQuantity(specimen.getQuantity());
+			specimen.setAvailableQuantity(specimen.getInitialquantity());
 
 			List derivedFormBeans = null;
 			//Associate derived specimens.

@@ -458,7 +458,7 @@ public class OrderBizLogic extends DefaultBizLogic
 			else if(orderItem instanceof DerivedSpecimenOrderItem)
 			{
 				DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)orderItem;
-				emailBody = emailBody+serialNo+". "+derivedSpecimenOrderItem.getSpecimen().getLabel()
+				emailBody = emailBody+serialNo+". "+derivedSpecimenOrderItem.getParentSpecimen().getLabel()
 							+"--"+derivedSpecimenOrderItem.getSpecimenClass()+"--"+derivedSpecimenOrderItem.getSpecimenType()
 							+"--"+derivedSpecimenOrderItem.getStatus()+"\n";
 			}

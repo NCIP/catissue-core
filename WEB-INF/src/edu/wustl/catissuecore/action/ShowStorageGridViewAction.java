@@ -403,7 +403,7 @@ public class ShowStorageGridViewAction  extends BaseAction
 	private boolean canHoldSpecimenArrayType(int specimenArrayTypeId, StorageContainer storageContainer)
 	{
 		boolean canHold = true;
-		Collection specimenArrayTypes = storageContainer.getHoldsSpArrayTypeCollection();
+		Collection specimenArrayTypes = storageContainer.getHoldsSpecimenArrayTypeCollection();
 //		if (!specimenArrayTypes.isEmpty())
 		{
 			Iterator itr = specimenArrayTypes.iterator();

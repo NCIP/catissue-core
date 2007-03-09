@@ -436,11 +436,11 @@ public class RequestDetailsAction extends BaseAction
 	private DefinedArrayRequestBean populateArrayRequestBean(DefinedArrayRequestBean arrayRequestBean,NewSpecimenArrayOrderItem newSpecimenArrayOrderItem)
 	{
 		arrayRequestBean.setArrayName(newSpecimenArrayOrderItem.getName());
-		arrayRequestBean.setArrayClass(newSpecimenArrayOrderItem.getArrayType().getSpecimenClass());
-		arrayRequestBean.setOneDimensionCapacity((newSpecimenArrayOrderItem.getArrayType().getCapacity().getOneDimensionCapacity()).toString());
-		arrayRequestBean.setTwoDimensionCapacity((newSpecimenArrayOrderItem.getArrayType().getCapacity().getTwoDimensionCapacity()).toString());
-		arrayRequestBean.setArrayType(newSpecimenArrayOrderItem.getArrayType().getName());
-		arrayRequestBean.setArrayTypeId(newSpecimenArrayOrderItem.getArrayType().getId().toString());
+		arrayRequestBean.setArrayClass(newSpecimenArrayOrderItem.getSpecimenArrayType().getSpecimenClass());
+		arrayRequestBean.setOneDimensionCapacity((newSpecimenArrayOrderItem.getSpecimenArrayType().getCapacity().getOneDimensionCapacity()).toString());
+		arrayRequestBean.setTwoDimensionCapacity((newSpecimenArrayOrderItem.getSpecimenArrayType().getCapacity().getTwoDimensionCapacity()).toString());
+		arrayRequestBean.setArrayType(newSpecimenArrayOrderItem.getSpecimenArrayType().getName());
+		arrayRequestBean.setArrayTypeId(newSpecimenArrayOrderItem.getSpecimenArrayType().getId().toString());
 		arrayRequestBean.setAssignedStatus(newSpecimenArrayOrderItem.getStatus());
 		arrayRequestBean.setOrderItemId(newSpecimenArrayOrderItem.getId().toString());
 		
@@ -485,17 +485,17 @@ public class RequestDetailsAction extends BaseAction
 	private DefinedArrayDetailsBean populateDerivedSpecimensForArrayDetails(DefinedArrayDetailsBean arrayDetailsBean,SpecimenOrderItem specimenOrderItem)
 	{
 		DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)specimenOrderItem;
-		arrayDetailsBean.setRequestedItem(derivedSpecimenOrderItem.getSpecimen().getLabel());
-		arrayDetailsBean.setSpecimenId(derivedSpecimenOrderItem.getSpecimen().getId().toString());
+		arrayDetailsBean.setRequestedItem(derivedSpecimenOrderItem.getParentSpecimen().getLabel());
+		arrayDetailsBean.setSpecimenId(derivedSpecimenOrderItem.getParentSpecimen().getId().toString());
 		//Obtain all children specimens
-		Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getSpecimen(),derivedSpecimenOrderItem.getSpecimen().getChildrenSpecimen());
+		Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenOrderItem.getParentSpecimen(),derivedSpecimenOrderItem.getParentSpecimen().getChildrenSpecimen());
 		//Obtain only those specimens of this class and type from the above list
 	    List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList,derivedSpecimenOrderItem.getSpecimenClass(),derivedSpecimenOrderItem.getSpecimenType());
 	    List childrenSpecimenListToDisplay = OrderingSystemUtil.getNameValueBeanList(finalChildrenSpecimenList);
 	    arrayDetailsBean.setSpecimenList(childrenSpecimenListToDisplay);
 	    
 		arrayDetailsBean.setRequestedQuantity(derivedSpecimenOrderItem.getRequestedQuantity().getValue().toString());
-		arrayDetailsBean.setAvailableQuantity(derivedSpecimenOrderItem.getSpecimen().getAvailableQuantity().getValue().toString());
+		arrayDetailsBean.setAvailableQuantity(derivedSpecimenOrderItem.getParentSpecimen().getAvailableQuantity().getValue().toString());
 		arrayDetailsBean.setAssignedStatus(derivedSpecimenOrderItem.getStatus());
 		arrayDetailsBean.setClassName(derivedSpecimenOrderItem.getSpecimenClass());
 		arrayDetailsBean.setType(derivedSpecimenOrderItem.getSpecimenType());
@@ -711,9 +711,9 @@ public class RequestDetailsAction extends BaseAction
 	 */
 	private RequestDetailsBean populateRequestDetailsBeanForDerivedSpecimen(RequestDetailsBean requestDetailsBean,DerivedSpecimenOrderItem derivedSpecimenorderItem,HttpServletRequest request,int finalSpecimenListId)
 	{
-		requestDetailsBean.setRequestedItem(derivedSpecimenorderItem.getSpecimen().getLabel());
-		Long specimenId = derivedSpecimenorderItem.getSpecimen().getId();
-		Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenorderItem.getSpecimen(),derivedSpecimenorderItem.getSpecimen().getChildrenSpecimen());
+		requestDetailsBean.setRequestedItem(derivedSpecimenorderItem.getParentSpecimen().getLabel());
+		Long specimenId = derivedSpecimenorderItem.getParentSpecimen().getId();
+		Collection childrenSpecimenList = OrderingSystemUtil.getAllChildrenSpecimen(derivedSpecimenorderItem.getParentSpecimen(),derivedSpecimenorderItem.getParentSpecimen().getChildrenSpecimen());
 	    List finalChildrenSpecimenList = OrderingSystemUtil.getChildrenSpecimenForClassAndType(childrenSpecimenList,derivedSpecimenorderItem.getSpecimenClass(),derivedSpecimenorderItem.getSpecimenType());
 	    //	  removing final specimen List from session
 		request.getSession().removeAttribute("finalSpecimenList"+finalSpecimenListId);
