@@ -51,6 +51,7 @@ public abstract class Parser
 	public static final String PENDING="PENDING";
 	public static final String NEW="NEW";
 	public static final String FAILURE="FAILURE";
+	public static final String CONFLICT = "CONFLICT";
 	
 	//dir constants
 	public static final String INPUT_DIR="inputDir";
