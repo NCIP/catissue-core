@@ -1,4 +1,4 @@
-					  <?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE struts-config
 PUBLIC
 "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN"
@@ -18,6 +18,8 @@ PUBLIC
 		<form-bean name="categorySearchForm" type="edu.wustl.catissuecore.actionForm.CategorySearchForm"/>
 		<form-bean name="baseOrderItemForm" type="edu.wustl.catissuecore.actionForm.BaseOrderItemForm"/>
 		<form-bean name="viewSurgicalPathologyReportForm" type="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"/>    
+		<form-bean name="conflictViewForm" type="edu.wustl.catissuecore.actionForm.ConflictViewForm"/>    
+		<form-bean name="conflictDetailsForm" type="edu.wustl.catissuecore.actionForm.ConflictDetailsForm"/>
 		<!--Suite-->
 		<form-bean name="annotationForm" type="edu.wustl.catissuecore.actionForm.AnnotationForm"/>
 		<form-bean name="annotationDataEntryForm" type="edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm"/>
@@ -323,6 +325,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path="/InsertOrderArrayItems.do"/>
 		<forward name="failure" path="/ShoppingCart.do" />
+		<!--forward name="failure" path="/MyListTab.do" /-->
 	</action>
 	
 	<action path="/SaveOrderPathologyItems"
@@ -332,6 +335,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path="/InsertOrderPathologyItems.do"/>
 		<forward name="failure" path="/ShoppingCart.do" />
+		<!-- forward name="failure" path="/MyListTab.do" /-->
 	</action>
 	
 	
@@ -341,6 +345,7 @@ PUBLIC
 		validate="false"
 		scope="request">
 		<forward name="success" path="/ShoppingCart.do"/>
+		<!-- forward name="success" path="/MyListTab.do" /-->
 	</action>
 
 	<action path="/InsertOrderArrayItems"
@@ -349,6 +354,7 @@ PUBLIC
 		validate="false"
 		scope="request">
 		<forward name="success" path="/ShoppingCart.do"/>
+		<!-- forward name="success" path="/MyListTab.do" /-->
 	</action>
 
 	<action path="/InsertOrderPathologyItems"
@@ -357,6 +363,7 @@ PUBLIC
 		validate="false"
 		scope="request">
 		<forward name="success" path="/ShoppingCart.do"/>
+		<!-- forward name="success" path="/MyListTab.do" /-->
 	</action>
 	
 	
@@ -494,7 +501,7 @@ PUBLIC
 		
 		<!-- Action code : Query Module Ends : 06/11/06 -->
 		
-		
+		<!-- caTIES -->
 		<action path="/ViewSurgicalPathologyReport"
 			type="edu.wustl.catissuecore.action.ViewSurgicalPathologyReportAction"
 			name="viewSurgicalPathologyReportForm"
@@ -555,13 +562,13 @@ PUBLIC
 			<forward name="success" path=".catissuecore.participantDef"/>
 		</action>
 		<!-- For displaying tab on MyList Page -->
-		<action path="/MyListTab"
+		<!-- action path="/MyListTab"
 			type="edu.wustl.catissuecore.action.LoadParticipantPage"
 			name="annotationDataEntryForm"
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.myListTabDef"/>
-		</action>
+		</action-->
 		
         <action path="/Participant"
 			type="edu.wustl.catissuecore.action.ParticipantAction"
@@ -1333,6 +1340,7 @@ PUBLIC
 			<forward name="success" path=".catissuecore.viewSurgicalPathologyReportDef"/>
 		</action>
 		
+		<!-- caTIES -->
 		<action path="/SurgicalPathologyReportEventParam"
 			type="edu.wustl.common.action.CommonAddEditAction"
 			name="viewSurgicalPathologyReportForm"
@@ -1341,6 +1349,33 @@ PUBLIC
 			<forward name="success" path="/ViewSurgicalPathologyReport.do?operation=viewSPR" />
 			<forward name="failure" path="/SearchObject.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=12" />
 		</action>
+		
+		<!-- Added by Ashish -->
+		<action path="/ConflictView"
+			type="edu.wustl.catissuecore.action.ConflictViewAction"
+			name="conflictViewForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.conflictViewDef" />			
+		</action>
+		
+		
+		<action path="/ConflictDetails"
+			type="edu.wustl.catissuecore.action.ConflictDetailsAction"
+			name="conflictDetailsForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.conflictDetailsViewDef" />			
+		</action>
+		
+		<action path="/ConflictResolver"
+			type="edu.wustl.catissuecore.action.ConflictResolverAction"
+			name="conflictDetailsForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/ConflictView.do" />			
+		</action>
+		<!-- Added by Ashish end -->
 	
 		<!--New Specimen Actions Ends-->
 		
@@ -2739,7 +2774,7 @@ PUBLIC
 			<forward name="shoppingCartAdd" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="success" path=".catissuecore.shoppingCartDef" />
 			<forward name="failure" path=".catissuecore.shoppingCartDef" />
-			<!--forward name="success" path="/pages/content/search/ShoppingCart.jsp" />
+			<!-- forward name="success" path="/pages/content/search/ShoppingCart.jsp" />
 			<forward name="failure" path="/pages/content/search/ShoppingCart.jsp" /-->
 			<forward name="duplicateSpecimen" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="requestToOrder" path="/RequestToOrder.do"/>

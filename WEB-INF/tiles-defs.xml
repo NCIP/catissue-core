@@ -1067,6 +1067,15 @@
 	<!-- For ViewSpr in Specimen Page -->
 	<definition name=".catissuecore.newSpecimenViewSPRDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenViewSPR.jsp" />
+	</definition>	
+	
+	<!-- caTies added by Ashish -->
+	<definition name=".catissuecore.conflictViewDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/caTies/ConflictView.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.conflictDetailsViewDef" extends=".catissuecore.manageAdminDataHomeDef">
+		<put name="content" value="/pages/content/caTies/ConflictDetailsView.jsp" />
 	</definition>
 
 </tiles-definitions>
