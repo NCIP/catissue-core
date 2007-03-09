@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * @author vijay_pande
@@ -128,7 +129,7 @@ public class DeidReport extends Thread
        	deidReport.setAccessionNumber(ispr.getAccessionNumber());
        	deidReport.setActivityStatus(ispr.getActivityStatus()); 
        	deidReport.setReportStatus(Parser.PENDING_FOR_XML);
-        
+       	deidReport.setIsQuanrantined(Constants.ACTIVITY_STATUS_ACTIVE);
         deidReport.setSpecimenCollectionGroup(ispr.getSpecimenCollectionGroup());
         TextContent tc=new TextContent();
         tc.setData(deidText);
@@ -137,7 +138,7 @@ public class DeidReport extends Thread
         deidReport.setSource(ispr.getSource());
         deidReport.setTextContent(tc);
         deidReport.setIsFlagForReview(new Boolean(false));
-        deidReport.setIsQuanrantined(new Boolean(false));
+        
         return deidReport;
     }
 	
