@@ -123,7 +123,7 @@
 					var verificationStatusKey="value(DistributedItem:"+(i+1)+"_verificationKey)";
 					var status=document.getElementById(verificationStatusKey);
 					barcodeLableStatus=status.value;
-					if(barcodeLableStatus=="<%=Constants.VIEW_CONSENTS%>"||barcodeLableStatus=="Verified")
+					if(barcodeLableStatus=="<%=Constants.VIEW_CONSENTS%>"||barcodeLableStatus=="<%=Constants.VERIFIED%>")
 					{
 						if(distrinutionOn==1)
 						{
@@ -145,7 +145,7 @@
 								barcodeLableValue=barcodeLableValue+"|";
 							}
 						}
-						if(barcodeLableStatus=="Verified")
+						if(barcodeLableStatus=="<%=Constants.VERIFIED%>")
 						{
 							verifiedRows=verifiedRows+(i-iCount)+",";
 						}
@@ -155,7 +155,6 @@
 						iCount=iCount+1;
 					}
 				}
-
 				var url ='Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+noOfRows+'&labelBarcode='+distrinutionOn+'&barcodelabel='
 				url+=barcodeLableValue;
 				window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
@@ -303,7 +302,7 @@
 			{
 				//Create spanTag
 				var spanTag=document.createElement("span");
-				spanTag.innerHTML="Not Applicable";
+				spanTag.innerHTML="<%=Constants.NOT_APPLICABLE%>";
 				consent.appendChild(spanTag);
 
 			}
@@ -344,7 +343,6 @@
 			request.open("POST","CheckConsents.do",true);
 			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
 			request.send(dataToSend);
-
 		}
 
 		function checkForConsents(request, url, barcodeId,verificationKey,onFocusChange,barcodelabelStatus)
@@ -848,7 +846,7 @@
 							if(formBean.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE)
 							{
 								String verificationStatus=(String)formBean.getValue("DistributedItem:" + i + "_verificationKey");
-								if(verificationStatus==null||verificationStatus.equals(Constants.VIEW_CONSENTS)||verificationStatus.equals("Verified"))
+								if(verificationStatus==null||verificationStatus.equals(Constants.VIEW_CONSENTS)||verificationStatus.equals(Constants.VERIFIED))
 								{
 						%>
 								<td class="formField" colspan="2">
@@ -860,8 +858,13 @@
 										<logic:empty name="distributionForm" property="<%=verificationStatusKey%>">
 											<%=Constants.VIEW_CONSENTS %>
 										</logic:empty>
-										<html:hidden property="<%=verificationStatusKey%>" styleId="<%=verificationStatusKey%>"  value="<%=verificationStatus%>"/>
 										</a>
+										<logic:notEmpty name="distributionForm" property="<%=verificationStatusKey%>">
+											<html:hidden property="<%=verificationStatusKey%>" styleId="<%=verificationStatusKey%>"  value="<%=verificationStatus%>"/>
+										</logic:notEmpty>
+										<logic:empty name="distributionForm" property="<%=verificationStatusKey%>">
+											<html:hidden property="<%=verificationStatusKey%>" styleId="<%=verificationStatusKey%>"  value="<%=Constants.VIEW_CONSENTS %>"/>
+										</logic:empty>
 									</span>
 								</td>
 							<%
@@ -886,7 +889,7 @@
 							<td class="formField" colspan="2">
 								<span id="<%=barcodelabelStatus%>">													
 										<lable>	
-											Not Applicable
+											<%=Constants.NOT_APPLICABLE%>
 										</lable>
 								</span>
 							</td>	
