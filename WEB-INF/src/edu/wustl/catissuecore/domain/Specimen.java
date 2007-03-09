@@ -1242,18 +1242,22 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		return this.label;
 	}
 	//----------------------------Mandar 16-jan-07
-	public String getConsentWithdrawalOption() {
+	public String getConsentWithdrawalOption()
+	{
 		return consentWithdrawalOption;
 	}
 
-	public void setConsentWithdrawalOption(String consentWithdrawalOption) {
+	public void setConsentWithdrawalOption(String consentWithdrawalOption) 
+	{
 		this.consentWithdrawalOption = consentWithdrawalOption;
 	}
 	
-	public String getApplyChangesTo() {
+	public String getApplyChangesTo() 
+	{
 		return applyChangesTo;
 	}
-	public void setApplyChangesTo(String applyChangesTo) {
+	public void setApplyChangesTo(String applyChangesTo) 
+	{
 		this.applyChangesTo = applyChangesTo;
 	}
 	
