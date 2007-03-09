@@ -358,7 +358,7 @@ public class StorageContainerAction extends SecureAction
 					{
 						storageContainerForm.setSpecimenOrArrayType("Specimen");
 					}
-					if (type.getHoldsSpArrayTypeCollection().size() > 0)
+					if (type.getHoldsSpecimenArrayTypeCollection().size() > 0)
 					{
 						storageContainerForm.setSpecimenOrArrayType("SpecimenArray");
 					}
@@ -536,8 +536,8 @@ public class StorageContainerAction extends SecureAction
 	{
 		//Populating the storage type-id array
 
-		Logger.out.info("Storage type size:" + type.getHoldsSpArrayTypeCollection().size());
-		Collection spcimenArrayTypeCollection = type.getHoldsSpArrayTypeCollection();
+		Logger.out.info("Storage type size:" + type.getHoldsSpecimenArrayTypeCollection().size());
+		Collection spcimenArrayTypeCollection = type.getHoldsSpecimenArrayTypeCollection();
 
 		if (spcimenArrayTypeCollection != null)
 		{
