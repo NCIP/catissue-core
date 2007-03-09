@@ -161,10 +161,10 @@
 
         <property
             name="isQuanrantined"
-            type="boolean"
+            type="string"
             update="true"
             insert="true"
-            column="IS_QUARANTINED"
+            column="STATUS"
         />
 
         <set
