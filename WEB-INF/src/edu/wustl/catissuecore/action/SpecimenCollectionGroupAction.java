@@ -186,7 +186,6 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 						Map tempMap=prepareSCGResponseMap(consentResponseStatuslevel, consentResponse);
 						specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
 						specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size());
-
 					}
 				}
 				List specimenCollectionGroupResponseList =Utility.responceList(operation);
@@ -734,11 +733,15 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				String statementKey="ConsentBean:"+i+"_statement";
 				String responseKey="ConsentBean:"+i+"_participantResponse";
 				String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
-														
+				String scgResponsekey  = "ConsentBean:"+i+"_specimenCollectionGroupLevelResponse";
+				String scgResponseIDkey ="ConsentBean:"+i+"_specimenCollectionGroupLevelResponseID";
+				
 				tempMap.put(idKey, consent.getId());
 				tempMap.put(statementKey,consent.getStatement());
 				tempMap.put(responseKey,consentTierResponse.getResponse());
 				tempMap.put(participantResponceIdKey, consentTierResponse.getId());
+				tempMap.put(scgResponsekey, consentTierResponse.getResponse());
+				tempMap.put(scgResponseIDkey,null);
 				i++;
 			}
 		}
