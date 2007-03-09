@@ -19,8 +19,8 @@
             length="30"
             unsaved-value="null"
         >
-            <generator class="increment">
-              
+            <generator class="native">
+                <param name="sequence">CATISSUE_REPORT_QUEUE_SEQ</param>
             </generator>
         </id>
 
@@ -61,6 +61,16 @@
             insert="true"
             column="REPORT_TEXT"
             length="4000"
+        />
+
+        <many-to-one
+            name="specimenCollectionGroup"
+            class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+            cascade="save-update"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_COLL_GRP_ID"
         />
 
         <!--

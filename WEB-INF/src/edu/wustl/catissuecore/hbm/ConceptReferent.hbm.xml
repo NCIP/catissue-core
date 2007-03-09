@@ -25,6 +25,26 @@
         </id>
 
         <many-to-one
+            name="concept"
+            class="edu.wustl.catissuecore.domain.pathology.Concept"
+            cascade="save-update"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="CONCEPT_ID"
+        />
+
+        <many-to-one
+            name="conceptReferentClassification"
+            class="edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification"
+            cascade="save-update"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="CONCEPT_CLASSIFICATION_ID"
+        />
+
+        <many-to-one
             name="deidentifiedSurgicalPathologyReport"
             class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
             cascade="none"
@@ -33,6 +53,42 @@
             insert="true"
             column="DEIDENTIFIED_REPORT_ID"
             not-null="false"
+        />
+
+        <property
+            name="endOffset"
+            type="long"
+            update="true"
+            insert="true"
+            column="END_OFFSET"
+            length="30"
+        />
+
+        <property
+            name="isModifier"
+            type="int"
+            update="true"
+            insert="true"
+            column="IS_MODIFIER"
+            length="30"
+        />
+
+        <property
+            name="isNegated"
+            type="int"
+            update="true"
+            insert="true"
+            column="IS_NEGATED"
+            length="30"
+        />
+
+        <property
+            name="startOffset"
+            type="long"
+            update="true"
+            insert="true"
+            column="START_OFFSET"
+            length="30"
         />
 
         <!--
