@@ -190,10 +190,10 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 			case Constants.ORDER_PATHOLOGY_FORM_ID:
             	className = OrderDetails.class.getName();
 				break;
-			case Constants.SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+			case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID:
 				className = PathologyReportReviewParameter.class.getName();
 				break;
-			case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+			case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID:
 				className = QuarantineEventParameter.class.getName();
 				break;
 
@@ -395,10 +395,10 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 			case Constants.ORDER_PATHOLOGY_FORM_ID:
 				abstractDomain = new OrderDetails(form);
 				break;
-			case Constants.SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+			case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID:
 				abstractDomain = new PathologyReportReviewParameter(form);
 				break;
-			case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+			case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID:
 				abstractDomain = new QuarantineEventParameter(form);
 				break;
 				
