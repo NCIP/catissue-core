@@ -64,7 +64,7 @@ public class ConceptReferentClassification extends AbstractDomainObject
 	 */
 	public void setConceptReferentCollection(Collection conceptReferentCollection)
 	{
-		conceptReferentCollection = conceptReferentCollection;
+		this.conceptReferentCollection = conceptReferentCollection;
 	}
 
 	/**
