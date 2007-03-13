@@ -516,4 +516,6 @@ insert into csm_pg_pe (PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID) values (24,(se
 alter table CATISSUE_COLLECTION_PROTOCOL add column CONSENTS_WAIVED bit;
 update catissue_collection_protocol set  CONSENTS_WAIVED='0' where  CONSENTS_WAIVED is null;
 #------------------------New Column Entry For ConsentWaived ---------- Mandar : 25-Jan-07 -------------end
-
+#------------------------New Column Entry For Participant ---------- Sachin : 13-Mar-07 -------------start
+alter table CATISSUE_PARTICIPANT add column MARITAL_STATUS varchar(50);
+#------------------------New Column Entry For Participant ---------- Sachin : 13-Mar-07 -------------end
