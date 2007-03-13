@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.actionForm.UserForm"%>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
@@ -56,12 +57,12 @@
 
             readOnlyValue = false;
         }
-
+        UserForm userForm = new UserForm();
 		Object obj = request.getAttribute("userForm");
 		if(obj != null && obj instanceof UserForm)
 		{
 		
-			UserForm userForm = (UserForm)obj;
+			userForm = (UserForm)obj;
 			if (pageOf.equals(Constants.PAGEOF_APPROVE_USER) &&
 			   (userForm.getStatus().equals(Constants.APPROVE_USER_PENDING_STATUS) || 
 				userForm.getStatus().equals(Constants.APPROVE_USER_REJECT_STATUS) ||
@@ -297,11 +298,13 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="state" styleClass="formFieldSized" styleId="state" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.STATELIST%>" labelProperty="name" property="value"/>
-							</html:select>
+						
+							 <autocomplete:AutoCompleteTag property="state"
+										  optionsList = "<%=request.getAttribute(Constants.STATELIST)%>"
+										  initialValue="<%=userForm.getState()%>"
+										  styleClass="formFieldSized"
+									    />
+
 						</td>
 					</tr>
 					
@@ -326,11 +329,13 @@ function handleStatus(status)
 						</td>
 
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="country" styleClass="formFieldSized" styleId="country" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.COUNTRYLIST%>" labelProperty="name" property="value"/>
-							</html:select>
+						
+						 <autocomplete:AutoCompleteTag property="country"
+										  optionsList = "<%=request.getAttribute(Constants.COUNTRYLIST)%>"
+										  initialValue="<%=userForm.getCountry()%>"
+										  styleClass="formFieldSized"
+									    />
+
 						</td>
 					</tr>
 					
@@ -434,11 +439,14 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="role" styleClass="formFieldSized" styleId="role" size="1" disabled="<%=roleStatus%>"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="roleList" labelProperty="name" property="value"/>
-							</html:select>
+						
+								 <autocomplete:AutoCompleteTag property="role"
+										  optionsList = "<%=request.getAttribute("roleList")%>"
+										  initialValue="<%=userForm.getRole()%>"
+										  styleClass="formFieldSized"
+										  staticField="false"
+										  readOnly="<%=roleStatus + ""%>"
+									    />
 						</td>
 					</tr>
 						
@@ -470,11 +478,13 @@ function handleStatus(status)
 								</label>
 							</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="status" styleClass="formFieldSized" styleId="status" size="1" onchange="javascript:handleStatus(this)" 
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options name="statusList" labelName="statusList" />
-							</html:select>
+                                        <autocomplete:AutoCompleteTag property="role"
+										  optionsList = "<%=request.getAttribute("roleList")%>"
+										  initialValue="<%=userForm.getRole()%>"
+										  styleClass="formFieldSized"
+										  staticField="false"
+										  readOnly="<%=roleStatus + ""%>"
+									    />
 						</td>
 					</tr>
 					</logic:equal>
@@ -487,11 +497,13 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="role" styleClass="formFieldSized" styleId="role" size="1" disabled="<%=roleStatus%>"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="roleList" labelProperty="name" property="value"/>
-							</html:select>
+                                        <autocomplete:AutoCompleteTag property="role"
+										  optionsList = "<%=request.getAttribute("roleList")%>"
+										  initialValue="<%=userForm.getRole()%>"
+										  styleClass="formFieldSized"
+                                          staticField="false"
+										  readOnly="<%=roleStatus + ""%>"
+									    />
 						</td>
 					</tr>
 					
@@ -519,11 +531,14 @@ function handleStatus(status)
 								</label>
 							</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="activityStatus" styleClass="formFieldSized" styleId="activityStatus" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options name="activityStatusList" labelName="activityStatusList" />
-							</html:select>
+						
+						 <autocomplete:AutoCompleteTag property="activityStatus"
+										  optionsList = "<%=request.getAttribute("activityStatusList")%>"
+										  initialValue="<%=userForm.getActivityStatus()%>"
+										  styleClass="formFieldSized"
+				 
+									    />
+
 						</td>
 					</tr>
 					</logic:equal>

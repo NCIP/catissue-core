@@ -352,6 +352,8 @@
 									{
 										document.writeln('width="100%" height="150" MAYSCRIPT>');
 									}
+									
+									var url = location.protocol + '//' + location.hostname + ':' + location.port + location.pathname + '/../';
 									document.writeln('<PARAM name="type" value="application/x-java-applet;jpi-version=1.3">\n' +
 													'<PARAM name="name" value="<%=Constants.SPECIMEN_ARRAY_APPLET_NAME%>">\n'+
 													'<PARAM name="rowCount" value="<%=form.getOneDimensionCapacity()%>">\n'+
@@ -359,7 +361,7 @@
 													'<PARAM name="enterSpecimenBy" value="<%=form.getEnterSpecimenBy()%>">\n'+
 													'<PARAM name="specimenClass" value="<%=form.getSpecimenClass()%>">\n'+
 													'<PARAM name="session_id" value="<%=session.getId()%>">\n'+
-													'<PARAM name = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" value="<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">\n'+
+													'<PARAM name = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" value= "' + url + '">\n'+ 
 													'</APPLET>'
 												    );
 							</script>

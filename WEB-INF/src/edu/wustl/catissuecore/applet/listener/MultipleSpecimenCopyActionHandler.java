@@ -52,7 +52,7 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 	 */
 	protected void doActionPerformed(ActionEvent event)
 	{
-		CommonAppletUtil.getSelectedData(table);
+		CommonAppletUtil.getAllDataOnPage(table); 
 		
 		super.doActionPerformed(event);
 		paste.setEnabled(true);

@@ -414,7 +414,12 @@ INSERT INTO CSM_PG_PE (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,
 /* Mandar 05Dec06 - MultipleSpecimen action entries end */
 
 
+/* changes for making cpbasedSearchAction a secureAction - by vaishali*/
+INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (323,19,292,'0000-00-00');
 /* changes done */
+
+INSERT INTO `CSM_PG_PE` (`PG_PE_ID`,`PROTECTION_GROUP_ID`,`PROTECTION_ELEMENT_ID`,`UPDATE_DATE`) VALUES (324,19,293,'0000-00-00');
+
 /* Table Objects for table csm_privilege*/
 
 
@@ -771,7 +776,12 @@ INSERT into `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMEN
 /* Mandar 05Dec06 - MultipleSpecimen action entries end */
 
 
+/* cpBasedSearchResult changes  - vaishali*/
+INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (292,'edu.wustl.catissuecore.action.CPBasedSearchAction','edu.wustl.catissuecore.action.CPBasedSearchAction','edu.wustl.catissuecore.action.CPBasedSearchAction',NULL,NULL,1,'2007-01-15');
 /* changes finish */
+
+INSERT INTO `CSM_PROTECTION_ELEMENT` (`PROTECTION_ELEMENT_ID`,`PROTECTION_ELEMENT_NAME`,`PROTECTION_ELEMENT_DESCRIPTION`,`OBJECT_ID`,`ATTRIBUTE`,`PROTECTION_ELEMENT_TYPE_ID`,`APPLICATION_ID`,`UPDATE_DATE`) VALUES (293,'edu.wustl.catissuecore.action.SpecimenArrayAliquotAction','edu.wustl.catissuecore.action.SpecimenArrayAliquotAction','edu.wustl.catissuecore.action.SpecimenArrayAliquotAction',NULL,NULL,1,'2007-01-15');
+
 /* Table Objects for table csm_protection_group*/
 
 /*-----Ordering System------*/
@@ -879,6 +889,7 @@ INSERT INTO `CSM_ROLE` (`ROLE_ID`,`ROLE_NAME`,`ROLE_DESCRIPTION`,`APPLICATION_ID
 
 
 INSERT INTO `CSM_ROLE` (`ROLE_ID`,`ROLE_NAME`,`ROLE_DESCRIPTION`,`APPLICATION_ID`,`ACTIVE_FLAG`,`UPDATE_DATE`) VALUES (10,'READ_DENIED','Read Denied Role',1,0,'0000-00-00');
+INSERT INTO `CSM_ROLE` (`ROLE_ID`,`ROLE_NAME`,`ROLE_DESCRIPTION`,`APPLICATION_ID`,`ACTIVE_FLAG`,`UPDATE_DATE`) VALUES (11,'Coordinator','Role for Coordinator',1,0,'0000-00-00');
 
 
 /* Table Objects for table csm_role_privilege*/
@@ -934,6 +945,9 @@ INSERT INTO `CSM_ROLE_PRIVILEGE` (`ROLE_PRIVILEGE_ID`,`ROLE_ID`,`PRIVILEGE_ID`,`
 /*Gautam : Added the relationship between READ_DENIED privilege and role.*/
 
 INSERT INTO `CSM_ROLE_PRIVILEGE` (`ROLE_PRIVILEGE_ID`,`ROLE_ID`,`PRIVILEGE_ID`,`UPDATE_DATE`) VALUES (27,10,12,'0000-00-00');
+INSERT INTO `CSM_ROLE_PRIVILEGE` (`ROLE_PRIVILEGE_ID`,`ROLE_ID`,`PRIVILEGE_ID`,`UPDATE_DATE`) VALUES (28,11,3,'0000-00-00');
+INSERT INTO `CSM_ROLE_PRIVILEGE` (`ROLE_PRIVILEGE_ID`,`ROLE_ID`,`PRIVILEGE_ID`,`UPDATE_DATE`) VALUES (29,11,11,'0000-00-00');
+
 
 
 /* Table Objects for table csm_user*/

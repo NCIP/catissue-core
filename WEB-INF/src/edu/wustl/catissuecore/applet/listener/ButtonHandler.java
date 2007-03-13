@@ -100,7 +100,7 @@ public class ButtonHandler extends BaseActionHandler
 	protected void preActionPerformed(ActionEvent event)
 	{
 		// Mandar --- changes for focus handling (16/10/2006)
-		CommonAppletUtil.getSelectedData(table);
+		CommonAppletUtil.getAllDataOnPage(table);
 	}
 	
 	

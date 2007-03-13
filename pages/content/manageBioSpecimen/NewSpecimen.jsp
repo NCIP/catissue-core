@@ -14,6 +14,7 @@
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <%
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute(Constants.NEWSPECIMEN_FORM);
@@ -69,12 +70,6 @@
 	Map map = form.getExternalIdentifier();
 %>
 <head>
-<style>
-	.hidden
-	{
-	 display:none;
-	}
-</style>
 
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <%
@@ -114,8 +109,10 @@
 	
 %>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
-<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-	<%if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+
+	<%
+	
+	if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
 	{
 		strCheckStatus= "checkActivityStatus(this,'" + Constants.CP_QUERY_BIO_SPECIMEN + "')";
 		%>
@@ -274,10 +271,16 @@
 		function onCollOrClassChange(element)
 		{
 			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupId");
-			var classNameElement = document.getElementById("className");
+			var classNameElement = document.getElementById("className").value;
+			classNameElement = trim(classNameElement);
+			var classSet = false;
+			if(classNameElement == "Fluid" || classNameElement == "Cell"||classNameElement == "Tissue"||classNameElement == "Molecular")
+			{
+			    classSet = true;
+			}
 			var value;
 			
-			if(specimenCollGroupElement.value != "-1" || classNameElement.value != "-1")
+			if(specimenCollGroupElement.value != "-1" && classSet)
 			{
 				if(element=='1')
 				{
@@ -755,7 +758,7 @@
 										<!-- Mandar : 434 : for tooltip -->
 							     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
 							     				styleId="specimenCollectionGroupId" size="1" 
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onCollOrClassChange('1')" >
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onCollOrClassChange('1');resetVirtualLocated()" >
 											<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
 												labelProperty="name" property="value"/>		
 										</html:select>
@@ -845,22 +848,22 @@
 								     	</label>
 								    </td>
 								    <td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-						     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>" onchange="onTypeChange(this);onCollOrClassChange('0')" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+
 								     	<%
-											String classValue = form.getClassName();
+									String classReadOnly = "false";
 											if(operation.equals(Constants.EDIT))
 											{
-										%>
-												<html:option value="<%=classValue%>"><%=classValue%></html:option>
-										<%
-											}else{
-										%>
-												<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
-										<%
+									    classReadOnly = "true";
 											}
 										%>
-										</html:select>
+							    <autocomplete:AutoCompleteTag property="className"
+										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
+										  initialValue="<%=form.getClassName()%>"
+										  onChange="onTypeChange(this);resetVirtualLocated()"
+										  readOnly="<%=classReadOnly%>"
+									    />
+				 			   
+							
 						        	</td>
 						 
 								 	<td class="formRequiredNotice" width="5">*</td>
@@ -892,15 +895,21 @@
 												pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 												
 												String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')"; 
+										
+										String readOnlyForAliquot = "false";
+										if(Constants.ALIQUOT.equals(form.getLineage())&&operation.equals(Constants.EDIT)) {
+										      readOnlyForAliquot = "true";
+										}
 									%>
-								    <!-- --------------------------------------- -->
-				   <!-- Mandar : 434 : for tooltip --> 
-								     	<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1"
-								     	  disabled="<%=subListEnabled%>"
-								     	  onchange="<%=subTypeFunctionName%>" 
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-											<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
-										</html:select>
+						  
+						   <autocomplete:AutoCompleteTag property="type"
+										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
+										  initialValue="<%=form.getType()%>"
+										  onChange="<%=subTypeFunctionName%>"
+										  readOnly="<%=readOnlyForAliquot%>"
+										  dependsOn="<%=form.getClassName()%>"
+					        />
+			
 						        	</td>
 								</tr>				 
 				 
@@ -916,11 +925,14 @@
 										</label>
 									</td>
 								    <td class="formField" >
-<!-- Mandar : 434 : for tooltip -->
-								     	<html:select property="tissueSite" styleClass="formFieldSized15" styleId="tissueSite" size="1" disabled="<%=readOnlyForAll%>"
-											 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-											<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
-										</html:select>
+					
+                                       <autocomplete:AutoCompleteTag property="tissueSite"
+										  size="150"
+										  optionsList = "<%=request.getAttribute(Constants.TISSUE_SITE_LIST)%>"
+										  initialValue="<%=form.getTissueSite()%>"
+										  readOnly="<%=readOnlyForAliquot%>"
+									    />
+								
 										<%
 											String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
 										%>
@@ -939,11 +951,13 @@
 										</label>
 									</td>
 								     <td class="formField" >
-<!-- Mandar : 434 : for tooltip -->
-								     	<html:select property="tissueSide" styleClass="formFieldSized15" styleId="tissueSide" size="1" disabled="<%=readOnlyForAll%>"
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-											<html:options collection="<%=Constants.TISSUE_SIDE_LIST%>" labelProperty="name" property="value"/>
-										</html:select>
+							 
+							  <autocomplete:AutoCompleteTag property="tissueSide"
+										  optionsList = "<%=request.getAttribute(Constants.TISSUE_SIDE_LIST)%>"
+										  initialValue="<%=form.getTissueSide()%>"
+										  readOnly="<%=readOnlyForAliquot%>"
+									    />
+
 						        	  </td>
 								</tr>
 				 
@@ -960,23 +974,23 @@
 									</td>
 									<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 								    <td colspan="4" class="formField" >
-									<!-- Mandar : 434 : for tooltip -->
-								     	<html:select property="pathologicalStatus" styleClass="formFieldSized15" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>"
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-											<%--html:options name="pathologicalStatusList" labelName="pathologicalStatusList"/--%>
-											<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
-										</html:select>
+							
+							<autocomplete:AutoCompleteTag property="pathologicalStatus"
+										  optionsList = "<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
+										  initialValue="<%=form.getPathologicalStatus()%>"
+										  readOnly="<%=readOnlyForAliquot%>"
+							/>
+							
 						        	</td>
 									</logic:notEqual>
 							     	
 									<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 									<td class="formField" >
-									<!-- Mandar : 434 : for tooltip -->
-								     	<html:select property="pathologicalStatus" styleClass="formFieldSized15" styleId="pathologicalStatus" size="1" disabled="<%=readOnlyForAll%>"
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-											<%--html:options name="pathologicalStatusList" labelName="pathologicalStatusList"/--%>
-											<html:options collection="<%=Constants.PATHOLOGICAL_STATUS_LIST%>" labelProperty="name" property="value"/>
-										</html:select>
+							<autocomplete:AutoCompleteTag property="pathologicalStatus"
+										  optionsList = "<%=request.getAttribute(Constants.PATHOLOGICAL_STATUS_LIST)%>"
+										  initialValue="<%=form.getPathologicalStatus()%>"
+										  readOnly="<%=readOnlyForAliquot%>"
+							/>
 						        	</td>	
 									<!-- activitystatus -->
 									<td class="formRequiredNotice" width="5">*</td>
@@ -986,11 +1000,13 @@
 										</label>
 									</td>
 									<td class="formField">
-									<!-- Mandar : 434 : for tooltip -->
-										<html:select property="activityStatus" styleClass="formFieldSized10" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>"
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-											<html:options name="<%=Constants.ACTIVITYSTATUSLIST%>" labelName="<%=Constants.ACTIVITYSTATUSLIST%>" />
-										</html:select>
+							
+							<autocomplete:AutoCompleteTag property="activityStatus"
+										  optionsList = "<%=request.getAttribute(Constants.ACTIVITYSTATUSLIST)%>"
+										  initialValue="<%=form.getActivityStatus()%>"
+										  onChange="<%=strCheckStatus%>"
+							/>
+							
 									</td>					
 									</logic:equal>
 								</tr>
@@ -1540,5 +1556,7 @@ if(pageView.equals("edit")||pageView.equals("add"))
 </td>
 </tr>
 </table>
+
 </html:form>
+
 </body>

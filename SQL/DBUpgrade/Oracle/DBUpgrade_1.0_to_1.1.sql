@@ -1,3 +1,10 @@
+# ------ Create unique key for catissue_related_tables_map and catissue_search_display_data----
+#--Remove duplicate entries first
+alter table CATISSUE_SEARCH_DISPLAY_DATA add column DEFAULT_VIEW_ATTRIBUTE bit default 0;
+delete from CATISSUE_RELATED_TABLES_MAP where FIRST_TABLE_ID=38 and SECOND_TABLE_ID=19;
+alter table CATISSUE_RELATED_TABLES_MAP add constraint RELATED_TABLES_KEY unique (FIRST_TABLE_ID,SECOND_TABLE_ID);
+alter table CATISSUE_SEARCH_DISPLAY_DATA add constraint SEARCH_DATA_KEY unique (RELATIONSHIP_ID,COL_ID);
+
 # ------ 'Death date' and 'Vital status' attribute addition to Participant table ------
 # ---------- 23 May 2006 -------------
 ALTER TABLE catissue_participant ADD COLUMN DEATH_DATE DATE;
@@ -86,7 +93,7 @@ update catissue_storage_type set type='Any',activity_status='Disabled' where ide
 insert into catissue_storage_type (select * from catissue_temp_type);
 update catissue_storage_container set storage_type_id=(select identifier from catissue_temp_type) where storage_type_id=1;
 
-insert into catissue_storage_type (type,activity_status,identifier) values ('Any','Disabled',1);
+#-- insert into catissue_storage_type (type,activity_status,identifier) values ('Any','Disabled',1);
 
 drop table catissue_temp_type;
 #----------Chnages finish
@@ -109,7 +116,7 @@ create table CATISSUE_CONTAINER_TYPE (
    COMMENTS varchar2(500),
    primary key (IDENTIFIER)
    );
-alter table CATISSUE_CONTAINER_TYPE change column COMMENT COMMENTS varchar2(500);
+#-- alter table CATISSUE_CONTAINER_TYPE change column COMMENT COMMENTS varchar2(500);
 #-- altering table catissue_storage_type
 #--alter table catissue_capacity Engine = INNODB;
 alter table CATISSUE_CONTAINER_TYPE add index FKCBBC9954DAC76C0 (CAPACITY_ID);
@@ -165,7 +172,7 @@ create table CATISSUE_CONTAINER (
    POSITION_DIMENSION_TWO integer,
    primary key (IDENTIFIER)
 );
-alter table CATISSUE_CONTAINER change column COMMENT COMMENTS varchar2(500);
+#--alter table CATISSUE_CONTAINER change column COMMENT COMMENTS varchar2(500);
 #--update catissue_storage_container set container_name = identifier;
 insert into CATISSUE_CONTAINER(IDENTIFIER,ACTIVITY_STATUS,BARCODE,CAPACITY_ID,PARENT_CONTAINER_ID,FULL,NAME,POSITION_DIMENSION_ONE,POSITION_DIMENSION_TWO) (SELECT IDENTIFIER,ACTIVITY_STATUS,BARCODE,STORAGE_CONTAINER_CAPACITY_ID,PARENT_CONTAINER_ID,IS_CONTAINER_FULL,CONTAINER_NAME,POSITION_DIMENSION_ONE,POSITION_DIMENSION_TWO FROM CATISSUE_STORAGE_CONTAINER);
 
@@ -199,9 +206,9 @@ create table CATISSUE_ST_CONT_COLL_PROT_REL (
 
 alter table CATISSUE_ST_CONT_COLL_PROT_REL  add constraint FK3AE9FCA7B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER ;
 alter table CATISSUE_ST_CONT_COLL_PROT_REL  add constraint FK3AE9FCA748304401 foreign key (COLLECTION_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL ;
-alter table CATISSUE_ST_CONT_COLL_PROT_REL rename to CATISSUE_ST_CONT_COLL_PROT_REL;
+#--alter table CATISSUE_ST_CONT_COLL_PROT_REL rename to CATISSUE_ST_CONT_COLL_PROT_REL;
 
-drop table  CATISSUE_STORAGE_CONT_COLL_PROT_REL;
+#--drop table  CATISSUE_STORAGE_CONT_COLL_PROT_REL;
 
 
 create table CATISSUE_STOR_CONT_SPEC_CLASS (
@@ -219,8 +226,8 @@ create table CATISSUE_ST_CONT_ST_TYPE_REL (
 );
 alter table CATISSUE_ST_CONT_ST_TYPE_REL  add constraint FK703B902159A3CE5C foreign key (STORAGE_TYPE_ID) references CATISSUE_STORAGE_TYPE ;
 alter table CATISSUE_ST_CONT_ST_TYPE_REL  add constraint FK703B9021B3DFB11D foreign key (STORAGE_CONTAINER_ID) references CATISSUE_STORAGE_CONTAINER ;
-alter table CATISSUE_ST_CONT_ST_TYPE_REL rename to CATISSUE_ST_CONT_ST_TYPE_REL;
-drop table CATISSUE_STOR_CONT_STOR_TYPE_REL;
+#--alter table CATISSUE_ST_CONT_ST_TYPE_REL rename to CATISSUE_ST_CONT_ST_TYPE_REL;
+#--drop table CATISSUE_STOR_CONT_STOR_TYPE_REL;
 
 #--update csm_protection_element set PROTECTION_ELEMENT_NAME='Capacity_systemIdentifier','PROTECTION_ELEMENT_DESCRIPTION'='Capacity systemIdentifier attribute','OBJECT_ID'='edu.wustl.catissuecore.domain.Capacity','ATTRIBUTE'='systemIdentifier','PROTECTION_ELEMENT_TYPE_ID'=NULL,'APPLICATION_ID'='1','UPDATE_DATE'='0000-00-00' where 'PROTECTION_ELEMENT_ID'='184';
 #--update csm_protection_element set PROTECTION_ELEMENT_NAME='Capacity_oneDimensionCapacity','PROTECTION_ELEMENT_DESCRIPTION'='Capacity oneDimensionCapacity attribute','OBJECT_ID'='edu.wustl.catissuecore.domain.Capacity','ATTRIBUTE'='oneDimensionCapacity','PROTECTION_ELEMENT_TYPE_ID'=NULL,'APPLICATION_ID'='1','UPDATE_DATE'='0000-00-00' where 'PROTECTION_ELEMENT_ID'='185';
@@ -257,7 +264,8 @@ alter table catissue_specimen_requirement add QUANTITY_ID number(19,0) ;
 
 alter table catissue_specimen_requirement add constraint FK39AFE96861A1C94F foreign key (QUANTITY_ID) references catissue_quantity ;
 
-update catissue_specimen_requirement set quantity_id=(select identifier from catissue_quantity) where quantity_id='';
+update catissue_specimen_requirement set quantity_id=identifier;
+#--update catissue_specimen_requirement set quantity_id=(select identifier from catissue_quantity) where quantity_id='';
 
 #-- Changes for Specimen Array functionality
 create table CATISSUE_SPECIMEN_ARRAY (
@@ -413,10 +421,15 @@ insert into catissue_temp_type (select * from catissue_container_type where iden
 update catissue_temp_type set identifier=(select max(identifier)+1 from catissue_container_type);
 update catissue_container_type set name='Any',activity_status='Disabled' where identifier=2;
 insert into catissue_container_type (select * from catissue_temp_type);
+
+alter table catissue_storage_container drop foreign key FK28429D0159A3CE5C; 
 update catissue_storage_type set identifier=(select identifier from catissue_temp_type) where identifier=2;
 update catissue_storage_container set storage_type_id = (select identifier from catissue_temp_type) where storage_type_id = 2 ;
+alter table catissue_storage_container add constraint FK28429D0159A3CE5C foreign key (STORAGE_TYPE_ID) references catissue_storage_type (IDENTIFIER);
 
-insert into catissue_container_type (name,activity_status,identifier) values ('Any','Disabled',2);
+#-- insert into catissue_container_type (name,activity_status,identifier) values ('Any','Disabled',2);
+insert into catissue_storage_type (identifier, default_temperature) values (2,0);
+
 insert into catissue_specimen_array_type (IDENTIFIER) values ( '2');
 drop table catissue_temp_type;
 
@@ -443,6 +456,8 @@ alter table CATISSUE_USER add FIRST_TIME_LOGIN number(1,0) default 1;
 /* storage type unique changes */
 update catissue_container_type set name = 'All' where identifier = 1;
 alter table CATISSUE_container_type add constraint NAME unique (NAME);
+
+update catissue_container set Name=Identifier where Name = '';
 alter table CATISSUE_container add constraint NAME unique (NAME);
 
 /*Poornima -26/09/06-Added unspecified value to Vital status and NOT SPECIFIED value in Tissue Site- */
@@ -590,4 +605,36 @@ alter table CATISSUE_PROCEDURE_EVENT_PARAM modify NAME varchar(255);
 alter table CATISSUE_DISPOSAL_EVENT_PARAM modify REASON null;
 
 /*Jitendra: End:- 17dec06: Bug-3141*/
+
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_Biohazard', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_Biohazard', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_Biohazard' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_Biohazard';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_CancerResearchGroup', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_CancerResearchGroup', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_CancerResearchGroup' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_CancerResearchGroup';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_CollectionProtocol', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_CollectionProtocol', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_CollectionProtocol' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_CollectionProtocol';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_CollectionProtReg', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_CollectionProtReg', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_CollectionProtReg' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_CollectionProtReg';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_Department', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_Department', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_Department' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_Department';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_Distribution', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_Distribution', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_Distribution' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_Distribution';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_DistributionProtocol', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_DistributionProtocol', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_DistributionProtocol' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_DistributionProtocol';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_Institution', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_Institution', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_Institution' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_Institution';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_Participant', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_Participant', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_Participant' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_Participant';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_Site', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_Site', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_Site' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_Site';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_Specimen', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_Specimen', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_Specimen' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_Specimen';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_SpecimenCollectionGroup', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_SpecimenCollectionGroup', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_SpecimenCollectionGroup' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_SpecimenCollectionGroup';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageContainer', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageContainer', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageContainer' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_StorageContainer';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageType', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageType', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_StorageType' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_StorageType';
+update CSM_PROTECTION_ELEMENT set PROTECTION_ELEMENT_NAME='edu.wustl.common.action.SimpleQueryInterfaceAction_User', PROTECTION_ELEMENT_DESCRIPTION='edu.wustl.common.action.SimpleQueryInterfaceAction_User', OBJECT_ID='edu.wustl.common.action.SimpleQueryInterfaceAction_User' where OBJECT_ID='edu.wustl.catissuecore.action.SimpleQueryInterfaceAction_User';
+
+/* changes for making cpbasedSearchAction a secureAction - by vaishali*/
+DELETE FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.CPBasedSearchAction';
+INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE_ID,APPLICATION_ID,UPDATE_DATE) VALUES (CSM_PROTECTIO_PROTECTION_E_SEQ.nextval,'edu.wustl.catissuecore.action.CPBasedSearchAction','edu.wustl.catissuecore.action.CPBasedSearchAction','edu.wustl.catissuecore.action.CPBasedSearchAction',NULL,NULL,1,to_date('2007-01-15','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (CSM_PG_PE_PG_PE_ID_SEQ.nextval,19,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.CPBasedSearchAction'),to_date('0001-01-01','yyyy-mm-dd'));
+
+DELETE FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.SpecimenArrayAliquotAction';
+INSERT INTO CSM_PROTECTION_ELEMENT (PROTECTION_ELEMENT_ID,PROTECTION_ELEMENT_NAME,PROTECTION_ELEMENT_DESCRIPTION,OBJECT_ID,ATTRIBUTE,PROTECTION_ELEMENT_TYPE_ID,APPLICATION_ID,UPDATE_DATE) VALUES (CSM_PROTECTIO_PROTECTION_E_SEQ.nextval,'edu.wustl.catissuecore.action.SpecimenArrayAliquotAction','edu.wustl.catissuecore.action.SpecimenArrayAliquotAction','edu.wustl.catissuecore.action.SpecimenArrayAliquotAction',NULL,NULL,1,to_date('2007-01-15','yyyy-mm-dd'));
+INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (CSM_PG_PE_PG_PE_ID_SEQ.nextval,19,(SELECT PROTECTION_ELEMENT_ID FROM CSM_PROTECTION_ELEMENT WHERE OBJECT_ID = 'edu.wustl.catissuecore.action.SpecimenArrayAliquotAction'),to_date('2007-01-15','yyyy-mm-dd'));
+
+/* changes for role of coordinator - by Santosh */
+INSERT INTO CSM_ROLE (ROLE_ID,ROLE_NAME,ROLE_DESCRIPTION,APPLICATION_ID,ACTIVE_FLAG,UPDATE_DATE) VALUES  (11,'Coordinator','Role for Coordinator',1,0,to_date('0001-01-01','yyyy-mm-dd'));
+INSERT INTO CSM_ROLE_PRIVILEGE (ROLE_PRIVILEGE_ID,ROLE_ID,PRIVILEGE_ID,UPDATE_DATE) VALUES (28,11,3,to_date('0001-01-01','yyyy-mm-dd'));
+INSERT INTO CSM_ROLE_PRIVILEGE (ROLE_PRIVILEGE_ID,ROLE_ID,PRIVILEGE_ID,UPDATE_DATE) VALUES (29,11,11,to_date('0001-01-01','yyyy-mm-dd'));
+
 

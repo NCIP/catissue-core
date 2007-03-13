@@ -16,15 +16,15 @@
 
 
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
-<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
 <script src="runtime/lib/grid.js"></script>
 <script src="runtime/formats/date.js"></script>
 <script src="runtime/formats/string.js"></script>
 <script src="runtime/formats/number.js"></script>
-<link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
+
 
 <% 
         String[] columnList1 = Constants.DERIVED_SPECIMEN_COLUMNS;
@@ -114,6 +114,8 @@
 		}		 
 		function resetVirtualLocated()
 		{
+		    try
+			{
 			var radioArray = document.getElementsByName("stContSelection");	
 			radioArray[0].checked= true;
 			document.forms[0].selectedContainerName.disabled = true;
@@ -124,6 +126,10 @@
 			document.forms[0].customListBox_1_0.disabled = true;
 			document.forms[0].customListBox_1_1.disabled = true;
 			document.forms[0].customListBox_1_2.disabled = true;
+			}
+			catch(e)
+			{
+			}
 		}
 		
 		function isLabelBarcodeOrClassChange()
@@ -525,7 +531,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 					<td class="formField" colspan="2">
 						
 					<logic:equal name="createSpecimenForm" property="checkedButton" value="1">
-				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" onblur="isLabelBarcodeOrClassChange()"/>
+				     <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenLabel" property="parentSpecimenLabel" disabled="false" />
 			        </logic:equal>
 			
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
@@ -552,7 +558,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 			        </logic:equal>
 			
 			        <logic:equal name="createSpecimenForm" property="checkedButton" value="2">
-				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" onblur="isLabelBarcodeOrClassChange()"/>
+				    <html:text styleClass="formFieldSized15"  maxlength="50"  size="30" styleId="parentSpecimenBarcode" property="parentSpecimenBarcode" disabled="false" />
 			        </logic:equal>
 										
 		        	</td>
@@ -581,11 +587,14 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				     	</label>
 				    </td>
 				    <td class="formField" colspan="2">
-<!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="className" styleClass="formFieldSized15" styleId="className" size="1" disabled="<%=readOnlyForAll%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onTypeChange(this);isLabelBarcodeOrClassChange()">
-							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
+					
+					 <autocomplete:AutoCompleteTag property="className"
+										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
+										  initialValue="<%=form.getClassName()%>"
+										  onChange="onTypeChange(this);resetVirtualLocated()"
+										  readOnly="<%=readOnlyForAll + ""%>"
+									    />
+
 		        	</td>
 				 </tr>
 				 
@@ -613,13 +622,16 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 								String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')";
 					%>
 				    <!-- --------------------------------------- -->
-<!-- Mandar : 434 : for tooltip -->
-				     	<html:select property="type" styleClass="formFieldSized15" styleId="type"
-				     	 size="1" disabled="<%=subListEnabled%>"
-				     	 onchange="<%=subTypeFunctionName%>"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-							<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
-						</html:select>
+					
+					  <autocomplete:AutoCompleteTag property="type"
+										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
+										  initialValue="<%=form.getType()%>"
+										  onChange="<%=subTypeFunctionName%>"
+										  readOnly="<%=subListEnabled + ""%>"
+										  dependsOn="<%=form.getClassName()%>"
+					        />
+					
+					
 		        	</td>
 				 </tr>
 				 

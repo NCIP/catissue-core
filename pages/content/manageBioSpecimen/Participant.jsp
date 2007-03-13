@@ -13,6 +13,7 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <script src="jss/script.js"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes --> 
 <script src="jss/calendarComponent.js"></script>

@@ -310,7 +310,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 */
 	public boolean equals(Object object)
     {
-		Logger.out.info("-----------------1--------------");
+		
     	
     	if(this.getClass().getName().equals(object.getClass().getName()))
     	{
@@ -329,7 +329,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	 */
 	public int compareTo(Object object)
 	{
-		Logger.out.info("-----------------2--------------");
+		
     	if(this.getClass().getName().equals(object.getClass().getName()))
     	{
     		CollectionProtocol collectionProtocol = (CollectionProtocol)object;

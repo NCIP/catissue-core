@@ -771,22 +771,27 @@ public class AliquotAction extends SecureAction
 				return false;
 			}
 			double dQuantity;
-			DecimalFormat dFormat = new DecimalFormat("#.000");
+			DecimalFormat dFormat = new DecimalFormat("#.00");
 
 			if (form.getQuantityPerAliquot() == null || form.getQuantityPerAliquot().trim().length() == 0)
 			{
 				dQuantity = availableQuantity / aliquotCount;
-				dQuantity = Double.parseDouble(dFormat.format(dQuantity));
+				BigDecimal bg = new BigDecimal(dQuantity);
+				dQuantity = bg.setScale(2,BigDecimal.ROUND_FLOOR).doubleValue();
+				/**
+				 *  Fixed bug 3656
+				 */
+				availableQuantity = 0;
 			}
 			else
 			{
 				dQuantity = Double.parseDouble(form.getQuantityPerAliquot());
+				availableQuantity = availableQuantity - Double.parseDouble(dFormat.format((dQuantity * aliquotCount)));
 			}
 
 			distributedQuantity = String.valueOf(dQuantity);
-			availableQuantity = availableQuantity - Double.parseDouble(dFormat.format((dQuantity * aliquotCount)));
-
-			if (availableQuantity < 0)
+			
+	    	if (availableQuantity < 0)    
 			{
 				return false;
 			}

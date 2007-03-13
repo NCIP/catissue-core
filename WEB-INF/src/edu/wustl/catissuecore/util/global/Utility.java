@@ -683,4 +683,34 @@ public class Utility extends edu.wustl.common.util.Utility
 		return new Long(0);
 	}
 // Consent tracking(Virender Mehta) 
+
+
+ /**
+     * This method creates a comma separated string of numbers representing column width.
+     *
+     */
+        public static String getColumnWidth(List columnNames)
+        {
+        	String colWidth=getColumnWidth((String)columnNames.get(0));
+
+        	for(int col=1; col<columnNames.size(); col++)
+        	{
+        		String columnName=(String)columnNames.get(col);
+       			colWidth = colWidth +","+ getColumnWidth(columnName);
+        	}
+        	return colWidth;
+        }
+
+        private static String getColumnWidth(String columnName)
+        {
+    		if (columnName.trim().equals("ID"))
+    		{
+    			return "0";
+    		}
+    		else
+    		{
+    			return "100";
+    		}
+        }
+
 }

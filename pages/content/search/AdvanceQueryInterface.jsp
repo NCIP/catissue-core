@@ -3,7 +3,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %> 
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-
+<%@ page import="java.util.Random"%>
 <head>
     <script language="JavaScript">
 
@@ -41,11 +41,19 @@
 	String height2 = "100%";	
 	if(mac)
 	{
-	  height1="200";
-	  height2="90";
+	  height1="140";
+	  height2="150";
 	}
 	
 	%>
+
+<%
+	String actionName="AdvanceQueryView.do";
+	Random random = new Random();
+    int dummyParameter = random.nextInt();
+    actionName = actionName + "?dummyParameter="+dummyParameter;
+	
+%>
 </head>
 
 <html:form action="<%=Constants.ADVANCED_SEARCH_RESULTS_ACTION%>">
@@ -65,7 +73,7 @@
     </tr>
     
      <tr width="100%">
-       <td height="65%">
+       <td height="50%">
        		<table width="100%" height="100%"> 
 			<tr>
 				<td width="100%">
@@ -78,11 +86,11 @@
      </tr>
 
     <tr width="100%">
-        <td height="25%">
+        <td height="40%"> 
 			<table width="100%" height="100%"> 
 			<tr>
 				<td width="100%">
-		            <iframe name="queryFrame" id="queryFrame" src="AdvanceQueryView.do" width="80%" height="<%=height2%>"frameborder="0" scrolling="auto">
+		            <iframe name="queryFrame" id="queryFrame" src="<%=actionName%>" width="80%" height="<%=height2%>"frameborder="0" scrolling="auto">
         		    </iframe>
 				</td>
 			</tr>

@@ -330,6 +330,11 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 				}
 			}
 			aliquotSpecimen.setBiohazardCollection(set);
+			
+			if(aliquotSpecimen.getAvailableQuantity().getValue().doubleValue() == 0)
+			{
+				aliquotSpecimen.setAvailable(new Boolean(false));
+			}
 							
 			//Inserting an aliquot in the database
 			dao.insert(aliquotSpecimen, sessionDataBean, true, false);//NEEDS TO BE FIXED FOR SECURE INSERT
@@ -482,7 +487,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		throw new DAOException("The container you specified does not have enough space to allocate storage position for Aliquot Number " + specimenNumber);
 	}
 
-	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	synchronized public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Specimen aliquot = (Specimen) obj;
 		String specimenKey = "Specimen:";

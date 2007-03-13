@@ -1,3 +1,4 @@
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
 <table summary="" cellpadding="3" cellspacing="0" id="collectionEvent" border="0" width="100%">					
 					<!-- Mandar AutoEvents start -->		
@@ -23,11 +24,13 @@
 							</label>
 						</td>						
 						<td class="formField">
-							<!-- Mandar : 434 : for tooltip -->
-							<html:select property="collectionEventUserId" styleClass="formFieldSized15" styleId="collectionEventUserId" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
-							</html:select>
+						
+							<autocomplete:AutoCompleteTag property="collectionEventUserId"
+										  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
+										  initialValue="<%=form.getCollectionEventUserId()%>"
+        								  staticField="false"
+							/>			  
+							
 						</td>		
 
 						<!-- RecievedEvent fields -->
@@ -40,11 +43,11 @@
 							</label>
 						</td>
 						<td class="formField">
-							<!-- Mandar : 434 : for tooltip -->
-							<html:select property="receivedEventUserId" styleClass="formFieldSized15" styleId="receivedEventUserId" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.USERLIST%>" labelProperty="name" property="value"/>
-							</html:select>
+						<autocomplete:AutoCompleteTag property="receivedEventUserId"
+										  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
+										  initialValue="<%=form.getReceivedEventUserId()%>"
+										  staticField="false"
+					    />	
 						</td>
 						
 					</tr>
@@ -199,12 +202,10 @@
 							</label>
 						</td>
 						<td class="formField">
-								<!-- Mandar : 434 : for tooltip -->
-								<html:select property="collectionEventCollectionProcedure" styleClass="formFieldSized15" styleId="collectionEventCollectionProcedure" size="1"
-									onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-									<!--html:options name="<%=Constants.PROCEDURE_LIST%>" labelName="<%=Constants.PROCEDURE_LIST%>" /-->
-									<html:options collection="<%=Constants.PROCEDURE_LIST%>" labelProperty="name" property="value"/>
-								</html:select>							
+								<autocomplete:AutoCompleteTag property="collectionEventCollectionProcedure"
+										  optionsList = "<%=request.getAttribute(Constants.PROCEDURE_LIST)%>"
+										  initialValue="<%=form.getCollectionEventCollectionProcedure()%>"
+						/>							
 						</td>						
 						
 						<!-- RecievedEvent fields -->
@@ -216,11 +217,10 @@
 						</td>						
 						<!-- receivedeventparameters.receivedquality -->
 						<td class="formField"rowspan="2">
-							<!-- Mandar : 434 : for tooltip -->
-							<html:select property="receivedEventReceivedQuality" styleClass="formFieldSized15" styleId="receivedEventReceivedQuality" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.RECEIVED_QUALITY_LIST%>" labelProperty="name" property="value"/>
-							</html:select>
+							<autocomplete:AutoCompleteTag property="receivedEventReceivedQuality"
+										  optionsList = "<%=request.getAttribute(Constants.RECEIVED_QUALITY_LIST)%>"
+										  initialValue="<%=form.getReceivedEventReceivedQuality()%>"
+						/>
 						</td>
 					</tr>
 					
@@ -233,11 +233,10 @@
 								</label>
 							</td>
 							<td class="formField">
-								<html:select property="collectionEventContainer" styleClass="formFieldSized15" styleId="collectionEventContainer" size="1"
-									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-										<!--html:options name="<%=Constants.CONTAINER_LIST%>" labelName="<%=Constants.CONTAINER_LIST%>" /-->
-										<html:options collection="<%=Constants.CONTAINER_LIST%>" labelProperty="name" property="value"/>
-								</html:select>
+								<autocomplete:AutoCompleteTag property="collectionEventContainer"
+										  optionsList = "<%=request.getAttribute(Constants.CONTAINER_LIST)%>"
+										  initialValue="<%=form.getCollectionEventContainer()%>"
+						    />
 							</td>
 					</tr>	
 					

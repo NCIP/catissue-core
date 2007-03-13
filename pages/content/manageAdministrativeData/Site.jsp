@@ -6,6 +6,7 @@
 
 
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
 		String pageOf = (String) request.getAttribute(Constants.PAGEOF);
@@ -25,6 +26,12 @@
             formName = Constants.SITE_ADD_ACTION;
             readOnlyValue = false;
         }
+		SiteForm form = new SiteForm();
+		Object obj = request.getAttribute("siteForm");
+		if(obj != null && obj instanceof SiteForm)
+			{
+				form = (SiteForm)obj;
+		}
     
 //****************  Delete below commented code later  ***********************
     // ----------- add new    
@@ -143,11 +150,13 @@
 						</td>
 
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="type" styleClass="formFieldSized" styleId="type" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.SITETYPELIST%>" labelProperty="name" property="value"/>
-							</html:select>
+						
+							 <autocomplete:AutoCompleteTag property="type"
+										  optionsList = "<%=request.getAttribute(Constants.SITETYPELIST)%>"
+										  initialValue="<%=form.getType()%>"
+										  styleClass="formFieldSized"
+									    />
+							
 						</td>
 					</tr>
 			
@@ -159,11 +168,13 @@
 							</label>
 						</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
+						
 							<html:select property="coordinatorId" styleClass="formFieldSized" styleId="coordinatorId" size="1" onchange="onCoordinatorChange()"
 							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 								<html:options collection="userList" labelProperty="name" property="value"/>
 							</html:select>
+						
+							
 							&nbsp;
 							<html:link href="#" styleId="newCoordinator" onclick="addNewAction('SiteAddNew.do?addNewForwardTo=coordinator&forwardTo=site&addNewFor=coordinator')">
 								<bean:message key="buttons.addNew" />
@@ -215,11 +226,13 @@
 							</label>
 						</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="state" styleClass="formFieldSized" styleId="state" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.STATELIST%>" labelProperty="name" property="value"/>
-							</html:select>
+						
+						 <autocomplete:AutoCompleteTag property="state"
+										  optionsList = "<%=request.getAttribute(Constants.STATELIST)%>"
+										  initialValue="<%=form.getState()%>"
+										  styleClass="formFieldSized"
+									    />
+
 						</td>
 					</tr>
 					
@@ -232,11 +245,13 @@
 						</td>
 
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="country" styleClass="formFieldSized" styleId="country" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="<%=Constants.COUNTRYLIST%>" labelProperty="name" property="value"/>
-							</html:select>
+						
+						 <autocomplete:AutoCompleteTag property="country"
+										  optionsList = "<%=request.getAttribute(Constants.COUNTRYLIST)%>"
+										  initialValue="<%=form.getCountry()%>"
+										  styleClass="formFieldSized"
+									    />
+
 						</td>
 					</tr>
 					
@@ -286,11 +301,14 @@
 								</label>
 							</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="activityStatus" styleClass="formFieldSized" styleId="activityStatus" size="1" onchange="<%=strCheckStatus%>" 
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options name="activityStatusList" labelName="activityStatusList" />
-							</html:select>
+						
+						<autocomplete:AutoCompleteTag property="activityStatus"
+										  optionsList = "<%=request.getAttribute("activityStatusList")%>"
+										  initialValue="<%=form.getActivityStatus()%>"
+										  styleClass="formFieldSized"
+										  onChange="<%=strCheckStatus%>"
+									    />
+
 						</td>
 					</tr>
 					</logic:equal>

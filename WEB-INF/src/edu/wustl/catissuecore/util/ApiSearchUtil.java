@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.SpecimenProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.Constants;
 
 
 /**
@@ -89,6 +90,11 @@ public class ApiSearchUtil
     	if (SearchUtil.isNullobject(user.getFirstTimeLogin()))
     	{
     		user.setFirstTimeLogin(new Boolean(true));
+    	}	
+    	
+    	if (SearchUtil.isNullobject(user.getActivityStatus()))
+    	{
+    		user.setActivityStatus(Constants.ACTIVITY_STATUS_NEW);
     	}	
 	}
 	public static void setSpecimenRequirementDefault(SpecimenRequirement specimenRequirement)

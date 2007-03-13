@@ -33,7 +33,8 @@
 	{
 		SimpleQueryInterfaceForm form = (SimpleQueryInterfaceForm)obj;
 		noOfRows = form.getCounter();		
-		objectChanged = request.getParameter("objectChanged");			
+		objectChanged = request.getParameter("objectChanged");
+       	
 		if(objectChanged != null && !objectChanged.equals(""))
 		{
 			form.setValue("SimpleConditionsNode:"+Integer.parseInt(noOfRows)+"_Condition_DataElement_field",null);		
@@ -402,8 +403,9 @@ function enablePreviousCheckBox(element)
 							String attributeNameKey = "SimpleConditionsNode:"+i+"_Condition_DataElement_field";
 							String attributeNameValue = (String)form.getValue(attributeNameKey);
 							String attributeType = null;	
-							List columnNameValueBeanList = (List) request.getAttribute(attributeNameList);							
-							if(columnNameValueBeanList != null && !columnNameValueBeanList.isEmpty() && i==Integer.parseInt(noOfRows) && objectChanged != null && !objectChanged.equals(""))
+							List columnNameValueBeanList = (List) request.getAttribute(attributeNameList);		
+							System.out.println("---------"+objectChanged);
+							if(columnNameValueBeanList != null && !columnNameValueBeanList.isEmpty() && i==Integer.parseInt(noOfRows) && (objectChanged == null || !objectChanged.equals("")))
 							{								
 								NameValueBean nameValueBean = (NameValueBean) columnNameValueBeanList.get(0);
 								attributeNameValue = nameValueBean.getValue();
@@ -419,7 +421,7 @@ function enablePreviousCheckBox(element)
 									if(tokenCount == 3) break;
 									tokenCount++;
 								}
-															
+								System.out.println("attributeType-----------"+attributeType);							
 								if(attributeType.equals("varchar") || attributeType.equals("text"))
 								{
 							%>
@@ -437,7 +439,7 @@ function enablePreviousCheckBox(element)
 								<html:option value="<%=Operator.NOT_EQUALS%>">Not Equals</html:option>
 							<%
 								}
-								else if (attributeType.equals(Constants.FIELD_TYPE_BIGINT))
+								else if (attributeType.equals(Constants.FIELD_TYPE_BIGINT) || attributeType.equals("double"))
 								{
 							%>
 								<html:option value="<%=Operator.EQUAL%>">Equals</html:option>
@@ -448,7 +450,7 @@ function enablePreviousCheckBox(element)
 								<html:option value="<%=Operator.GREATER_THAN_OR_EQUALS%>"><%=Operator.GREATER_THAN_OR_EQUALS%></html:option>
 							<%
 								}
-								else if (attributeType.equals(Constants.FIELD_TYPE_DATE))
+								else if (attributeType.equals(Constants.FIELD_TYPE_DATE) || attributeType.equals(Constants.FIELD_TYPE_TIMESTAMP_DATE))
 								{
 							%>
 								<html:option value="<%=Operator.EQUAL%>">Equals</html:option>

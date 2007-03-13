@@ -71,7 +71,7 @@ var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 
 var columns = <%="\""%><%int col;%><%for(col=0;col<(columnList.size()-1);col++){%><%=columnList.get(col)%>,<%}%><%=columnList.get(col)%><%="\""%>;
 
-var colWidth = <%="\""%><%for(col=0;col<(columnList.size()-1);col++){%><%=100%>,<%}%><%=100%><%="\""%>;
+var colWidth = "<%=Utility.getColumnWidth(columnList)%>";
 var colTypes = <%="\""%><%=Variables.prepareColTypes(dataList,true)%><%="\""%>;
 
 var colDataTypes = colTypes;
@@ -84,6 +84,25 @@ document.write("<hr>columns : "+columns+"<hr>");
 document.write("<hr>colDataTypes : "+colDataTypes+"<hr>");
 document.write("<hr>colWidth : "+colWidth+"<hr>");
 */
+
+function getIDColumns()
+{
+	var hiddenColumnNumbers = new Array();
+	var i=0;
+	<%
+		int cols = 0;
+		
+		for(col=0;col<columnList.size();col++)
+		{
+			if (columnList.get(col).toString().trim().equals("ID"))
+			{%>
+				hiddenColumnNumbers[i] = <%=col%>;
+				i++;
+			<%}
+		}
+	%>
+	return hiddenColumnNumbers;
+}
 </script>
 
 <table width="100%">
@@ -169,6 +188,14 @@ document.write("<hr>colWidth : "+colWidth+"<hr>");
 	if(useFunction == "participant")
 	{
 		mygrid.setColumnHidden(mygrid.getColumnCount()-1,true);
+	}
+
+	// Mandar : 30-Jan-07 :To hide ID columns
+	var hideCols = getIDColumns();
+	for(x in hideCols)
+	{
+		mygrid.setHeaderCol(hideCols[x],"");
+		mygrid.setColumnHidden(hideCols[x],true);
 	}
 
 	//fix for grid display on IE for first time.

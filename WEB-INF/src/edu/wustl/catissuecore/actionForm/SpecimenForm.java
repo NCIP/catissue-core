@@ -433,6 +433,10 @@ public class SpecimenForm extends AbstractActionForm
 	 */
 	public void setClassName(String className)
 	{
+		if (className != null) 
+		{
+     		className = className.trim();
+		}
 		this.className = className;
 	}
 
@@ -712,13 +716,13 @@ public class SpecimenForm extends AbstractActionForm
 							ApplicationProperties.getValue("specimen.label")));
 				}
 
-				if (!validator.isValidOption(className))
+				if (validator.isEmpty(className))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.type")));
 				}
 
-				if (!validator.isValidOption(type))
+				if (validator.isEmpty(type))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.subType")));

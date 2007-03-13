@@ -19,6 +19,7 @@ import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.global.Validator;
 
 /**
@@ -98,6 +99,11 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 					new String[]{"Specimen Array Type"});*/
 		}
 		Validator validator = new Validator();
+		
+		if(specimenArrayType.getActivityStatus() == null)
+		{
+			specimenArrayType.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		}
 		if (validator.isEmpty(specimenArrayType.getName()))
 		{
 			message = ApplicationProperties.getValue("arrayType.name");

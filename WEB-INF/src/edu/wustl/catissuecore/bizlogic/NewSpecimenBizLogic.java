@@ -1,4 +1,4 @@
-/**
+								  /**
  * <p>Title: NewSpecimenHDAO Class>
  * <p>Description:	NewSpecimenBizLogicHDAO is used to add new specimen information into the database using Hibernate.</p>
  * Copyright:    Copyright (c) year
@@ -346,8 +346,15 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			}
 
 			//Set protectionObjects = new HashSet();
+			if(specimen.getLineage() == null)
+			{
 			specimen.setLineage(Constants.NEW_SPECIMEN);
+			}
 			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
+			if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
+			{
+				specimen.setAvailable(new Boolean(false));
+			}
 			dao.insert(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true);
 			dao.insert(specimen, sessionDataBean, true, true);
 			//protectionObjects.add(specimen);
@@ -395,7 +402,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 	}
 
-	public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
+	synchronized public void postInsert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Map containerMap = null;
 		try
@@ -781,6 +788,24 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 		//Mandar: 16-Jan-07
 //		updateConsentWithdrawStatus(specimen, dao, sessionDataBean);
+		/**
+		 * Refer bug 3269 
+		 * 1. If quantity of old object > 0 and it is unavailable, it was marked 
+         *    unavailale by user. 
+         * 2. If quantity of old object = 0, we can assume that it is unavailable because its quantity 
+         *    has become 0.
+		 */
+		
+		if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
+		{
+			specimen.setAvailable(new Boolean(false));
+		}
+		else if(specimenOld.getAvailableQuantity().getValue().doubleValue()==0)
+		{
+			// quantity of old object is zero and that of current is nonzero
+			specimen.setAvailable(new Boolean(true));
+		}
+		
 		dao.update(specimen, sessionDataBean, true, false, false);//dao.update(specimen, sessionDataBean, true, true, false);
 
 		//Audit of Specimen.
@@ -1199,7 +1224,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		//Logger.out.debug("Start-Inside validate method of specimen bizlogic");
 		if (specimen == null)
 		{
-			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "Specimen"));
+			throw new DAOException(ApplicationProperties.getValue("specimen.object.null.err.msg", "Specimen"));
 		}
 
 		Validator validator = new Validator();

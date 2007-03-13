@@ -628,6 +628,11 @@ catch (Exception e)
 		}
 
 		Validator validator = new Validator();
+		
+		if(specimenArray.getActivityStatus() == null)
+		{
+			specimenArray.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		}
 		String message = "";
 		if (specimenArray.getSpecimenArrayType() == null || specimenArray.getSpecimenArrayType().getId() == null
 				|| specimenArray.getSpecimenArrayType().getId().longValue() == -1)

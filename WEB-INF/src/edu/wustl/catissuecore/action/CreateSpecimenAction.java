@@ -157,11 +157,13 @@ public class CreateSpecimenAction extends SecureAction
 						long cpId = ((Long)spList.get(0)).longValue();
 						String spClass = createForm.getClassName();
 						
-						if(virtuallyLocated!=null && virtuallyLocated.equals("false"))
+						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
+						request.setAttribute(Constants.SPECIMEN_CLASS_NAME, spClass);
+						if(virtuallyLocated!=null && virtuallyLocated.equals("false")) 
 						{
 							createForm.setVirtuallyLocated(false);
 						}
-						if(spClass!=null)
+						if(spClass!=null && createForm.getStContSelection() == 2)
 						{
 						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
 								spClass, 0,exceedingMaxLimit,sessionData,true);
@@ -178,8 +180,7 @@ public class CreateSpecimenAction extends SecureAction
 									"storageposition.not.available"));
 							saveErrors(request, errors);
 						}
-						request.setAttribute(Constants.COLLECTION_PROTOCOL_ID, cpId + "");
-						request.setAttribute(Constants.SPECIMEN_CLASS_NAME, spClass);
+						
 					
 						if (errors == null || errors.size() == 0)
 						{

@@ -353,7 +353,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.collectionprotocolregistration.atleast"));
 		}
 //!Variables.isLoadFromCaties && 
-		if (group.getSpecimenCollectionSite() == null || group.getSpecimenCollectionSite().getId() == null)
+		if (group.getSpecimenCollectionSite() == null || group.getSpecimenCollectionSite().getId() == null|| group.getSpecimenCollectionSite().getId() == 0)
 		{
 			message = ApplicationProperties.getValue("specimenCollectionGroup.site");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));

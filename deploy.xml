@@ -149,9 +149,9 @@
 			  	value="&lt;session-timeout>${session.timeout}&lt;/session-timeout>"/>
 		</replace>
 		
-		<replace file="${temp.dir}/catissuecore/WEB-INF/classes/remoteService.xml"> 
+		<!--<replace file="${temp.dir}/catissuecore/WEB-INF/classes/remoteService.xml"> 
 			<replacefilter token="@@server.port@@" value="${jboss.server.port}"/>
-		</replace>
+		</replace>-->
 	</target>
 	
 	

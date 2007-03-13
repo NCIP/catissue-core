@@ -846,6 +846,7 @@ public class APIDemo
 		molecularSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		collectionEventParameters.setComments("");
+		collectionEventParameters.setSpecimen(molecularSpecimen);
 //		User user = new User();
 //		user.setId(new Long(1));
 	 //	collectionEventParameters.setId(new Long(0));
@@ -884,6 +885,7 @@ public class APIDemo
 		
 		receivedEventParameters.setReceivedQuality("Acceptable");
 		receivedEventParameters.setComments("");
+		receivedEventParameters.setSpecimen(molecularSpecimen);
 		Collection specimenEventCollection = new HashSet();
 		specimenEventCollection.add(collectionEventParameters);
 		specimenEventCollection.add(receivedEventParameters);
@@ -1306,7 +1308,7 @@ public class APIDemo
 		specimenArrayContent.setPositionDimensionOne(new Integer(1));
 		specimenArrayContent.setPositionDimensionTwo(new Integer(1));
 		Quantity quantity = new Quantity();
-		quantity.setValue(new Double(2));
+		quantity.setValue(new Double(1));
 		specimenArrayContent.setInitialQuantity(quantity);
 		specimenArrayContentCollection.add(specimenArrayContent);
 		specimenArray.setSpecimenArrayContentCollection(specimenArrayContentCollection);
@@ -1565,8 +1567,7 @@ public class APIDemo
 		User principalInvestigator = (User)ClientDemo.dataModelObjectMap.get("User");
 		collectionProtocol.setPrincipalInvestigator(principalInvestigator);
 		
-		User protocolCordinator = new User();
-		protocolCordinator.setId(new Long(principalInvestigator.getId().longValue()-1));
+		User protocolCordinator = (User)ClientDemo.dataModelObjectMap.get("User1");		
 		Collection protocolCordinatorCollection = new HashSet();
 		protocolCordinatorCollection.add(protocolCordinator);
 		collectionProtocol.setUserCollection(protocolCordinatorCollection);
