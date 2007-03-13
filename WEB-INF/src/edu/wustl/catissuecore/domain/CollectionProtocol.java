@@ -65,6 +65,10 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	protected Boolean consentsWaived = new Boolean(false);
 	
 	/**
+     * A collection of registration of a Participant to a Collection Protocol. 
+     * */
+	protected Collection collectionProtocolRegistrationCollection = new HashSet();
+	/**
 	 * @return the unsignedConsentDocumentURL
 	 * @hibernate.property name="unsignedConsentDocumentURL" type="string" length="1000" column="UNSIGNED_CONSENT_DOC_URL"
 	 */
@@ -164,6 +168,29 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 		this.collectionProtocolEventCollection = collectionProtocolEventCollection;
 	}
 	
+	/**
+	 * Returns collection of collection protocol registrations of this collection protocol.
+	 * @return collection of collection protocol registrations of this collection protocol.
+	 * @hibernate.set name="collectionProtocolRegistrationCollection" table="CATISSUE_COLL_PROT_REG"
+	 * @hibernate.collection-key column="COLLECTION_PROTOCOL_ID"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+	 * @see setCollectionProtocolRegistrationCollection(Collection)
+	 */
+	public Collection getCollectionProtocolRegistrationCollection()
+	{
+
+		return collectionProtocolRegistrationCollection;
+	}
+
+	/**
+	 * Sets the collection protocol registrations of this participant.
+	 * @param protocolRegistrationCollection collection of collection protocol registrations of this participant.
+	 * @see #getCollectionProtocolRegistrationCollection()
+	 */
+	public void setCollectionProtocolRegistrationCollection(Collection collectionProtocolRegistrationCollection)
+	{
+		this.collectionProtocolRegistrationCollection = collectionProtocolRegistrationCollection;
+	}
 	/*
 	 * Returns the collection of Containers for this Protocol.
 	 * @hibernate.set name="storageContainerCollection" table="CATISSUE_CONTAINER_CP_REL" 

@@ -187,6 +187,23 @@
                   class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
               />
         </set>
+		 <set
+            name="collectionProtocolRegistrationCollection"
+            table="CATISSUE_COLL_PROT_REG"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="COLLECTION_PROTOCOL_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
+              />
+        </set>
 
         <property
             name="aliqoutInSameContainer"
