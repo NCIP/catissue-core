@@ -20,6 +20,7 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ConceptReferentClassification.hbm.xml"/>
 		<mapping resource="edu/wustl/catissuecore/hbm/EntityMapRecord.hbm.xml"/>
         <mapping resource="edu/wustl/catissuecore/hbm/EntityMap.hbm.xml"/>
+        <mapping resource="edu/wustl/catissuecore/hbm/EntityMapCondition.hbm.xml"/>        
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderItem.hbm.xml" />
 		<mapping resource="edu/wustl/catissuecore/hbm/OrderDetails.hbm.xml" />	
 		<mapping resource="edu/wustl/catissuecore/hbm/ConceptReferent.hbm.xml"/>
