@@ -71,15 +71,16 @@ public class GenerateHtmlForAddLimitsBizLogic
 	{
 		StringBuffer generatedHTML = new StringBuffer();
 		String nameOfTheEntity = entity.getName();
+		String entityName = nameOfTheEntity.substring(nameOfTheEntity.lastIndexOf(".")+1,nameOfTheEntity.length());
 		Collection attributeCollection = entity.getAttributeCollection();
 		boolean isEditLimits = false;
-		String header = "\nDefine Search Rules For";//ApplicationProperties.getValue("query.defineSearchRulesFor");
+		String header = ApplicationProperties.getValue("query.defineSearchRulesFor");//"\nDefine Search Rules For";//
 		String attributesList = "";
 		generatedHTML.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"1\" cellpadding=\"1\">");
 		generatedHTML.append("\n<tr>");
 		generatedHTML
 		.append("<td valign='top' height=\"4%\" colspan=\"8\" bgcolor=\"#EAEAEA\" style=\"border:solid 1px\"><font face=\"Arial\" size=\"2\" color=\"#000000\"><b>");
-		generatedHTML.append(header + " '" + nameOfTheEntity + "'</b></font>");
+		generatedHTML.append(header + " '" + entityName + "'</b></font>");
 		generatedHTML.append("\n</td></tr>");
 		//generatedHTML.append("\n<tr><td valign='top' height=\"3%\" colspan=\"8\" bgcolor=\"#FFFFFF\">&nbsp;</td></tr>");
 		if(conditions != null)

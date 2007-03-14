@@ -10,7 +10,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 /**
- * This is a action class to Define Search Results View.
+ * This is a action class to load Define Search Results View screen.
  * @author deepti_shelar
  *
  */

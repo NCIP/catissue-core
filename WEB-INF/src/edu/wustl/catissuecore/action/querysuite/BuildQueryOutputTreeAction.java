@@ -15,7 +15,7 @@ import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.querysuite.queryobject.IOutputTreeNode;
+import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 
 /**
  * This class is invoked when user clicks on a node from the tree. It loads the data required for tree formation.
@@ -37,13 +37,27 @@ public class BuildQueryOutputTreeAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
 	{
-		Map<Long,IOutputTreeNode> idNodesMap = (Map<Long,IOutputTreeNode>)request.getSession().getAttribute(Constants.ID_NODES_MAP);
+		Map<Long,OutputTreeDataNode> idNodesMap = (Map<Long,OutputTreeDataNode>)request.getSession().getAttribute(Constants.ID_NODES_MAP);
 		Map<Long, Map<AttributeInterface, String>>  columnMap = (Map<Long, Map<AttributeInterface, String>> )request.getSession().getAttribute(Constants.ID_COLUMNS_MAP);
 		CategorySearchForm actionForm = (CategorySearchForm)form;
+		SessionDataBean sessionData = getSessionData(request);
+		String outputTreeStr = "";
 		String id = actionForm.getNodeId();		
 		QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
-		SessionDataBean sessionData = getSessionData(request);
-		String outputTreeStr = outputTreeBizLogic.buildTreeForNode(id,idNodesMap,columnMap,sessionData);
+		String actualParentNodeId = id.substring(id.lastIndexOf(Constants.NODE_SEPARATOR)+2,id.length());
+		String[] nodeIds = id.split(Constants.NODE_SEPARATOR);
+		if(id.endsWith(Constants.LABEL_TREE_NODE))
+		{
+			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(id,idNodesMap,columnMap,sessionData);
+		}
+		else
+		{
+			nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
+			Long idLong = new Long(nodeIds[0]); 
+			String parentNodeId = nodeIds[1];
+			OutputTreeDataNode parentNode = idNodesMap.get(idLong);
+			outputTreeStr = outputTreeBizLogic.updateTree(id,parentNode, columnMap, parentNodeId, sessionData);	
+		}
 		response.setContentType("text/html");
 		response.getWriter().write(outputTreeStr);
 		return null;

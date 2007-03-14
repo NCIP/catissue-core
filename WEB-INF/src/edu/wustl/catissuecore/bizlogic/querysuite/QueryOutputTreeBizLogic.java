@@ -13,8 +13,8 @@ import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.querysuite.queryobject.IOutputTreeNode;
-import edu.wustl.common.querysuite.queryobject.IQuery;
+import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
+import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.tree.QueryTreeNodeData;
 import edu.wustl.common.util.dbManager.DAOException;
 
@@ -31,7 +31,7 @@ public class QueryOutputTreeBizLogic
 	 * @param String selectSql , from this sql , new table will be created .
 	 * @param sessionData to be added to tablename to have unique table for each session user.
 	 * @param String tableName 
-	 * @throws Exception 
+	 * @throws Exception Exception
 	 */
 	public String createOutputTreeTable(String selectSql, SessionDataBean sessionData) throws DAOException
 	{
@@ -40,72 +40,30 @@ public class QueryOutputTreeBizLogic
 		QueryModuleUtil.executeCreateTable(tableName, createTableSql, sessionData);
 		return tableName;
 	}
-	/**
-	 * Forms select part of the query.
-	 * @param node Node of Uotput tree .
-	 * @param columnMap map which strores all node ids  with their information like attributes and actual column names in database.
-	 * @return String having all columnnames for select part.
-	 */
-	String getColumnNamesForSelectpart(IOutputTreeNode node,Map<Long, Map<AttributeInterface, String>> columnMap)
-	{
-		String columnNames = "";
-		String idColumnName = null;
-		String displayNameColumnName = null;
-		String index = null;
-		Map<AttributeInterface, String> columns = columnMap.get(node.getId());
-		if(columns != null)
-		{
-			Set<AttributeInterface> setColumns = columns.keySet();
-			for (Iterator<AttributeInterface> iterator = setColumns.iterator(); iterator.hasNext();)
-			{
-				AttributeInterface attr = iterator.next();
-				String columnName = columns.get(attr);
-				if(idColumnName != null && displayNameColumnName != null)
-				{
-					break;
-				}
-				if (attr.getName().equalsIgnoreCase(Constants.ID))
-				{
-					idColumnName = columnName;
-				}
-				else if(ifAttributeIsDisplayName(attr.getName()))
-				{
-					index = columnName.substring(Constants.COLUMN_NAME.length(),columnName.length());
-					displayNameColumnName = columnName;
-				}
-			}
-		}
-		if(displayNameColumnName != null)
-		{
-			columnNames = idColumnName + " , " + displayNameColumnName + " , " + columnNames;
-		} 
-		else
-		{
-			columnNames = idColumnName + " , " + columnNames;
-		}
-		columnNames = columnNames.substring(0, columnNames.lastIndexOf(","));
-		columnNames = columnNames + ";" + index;
-		return columnNames; 
 
-	}
+	
+
 	/**
 	 * Returns true if the attribute name can be used to form label for tree node.
+	 * Label can be formed from attributes like 'first name', 'last name', 'title', 'label' ,'name' etc.
 	 * @param attrName String
 	 * @return true if the attribute name can be used to form label for tree node otherwise returns false
 	 */
 	boolean ifAttributeIsDisplayName(String attrName)
 	{
-		String [] attrNamesForLabel = Constants.ATTRIBUTE_NAMES_FOR_TREENODE_LABEL;
-		for(int i=0;i<attrNamesForLabel.length;i++)
+		String[] attrNamesForLabel = Constants.ATTRIBUTE_NAMES_FOR_TREENODE_LABEL;
+		for (int i = 0; i < attrNamesForLabel.length; i++)
 		{
 			String name = attrNamesForLabel[i];
-			if(attrName.equalsIgnoreCase(name))
+			if (attrName.equalsIgnoreCase(name))
 			{
-				return true;					
+				return true;
 			}
 		}
 		return false;
 	}
+	
+
 	/**
 	 * This method creates first level(Default) output tree data.
 	 * @param tableName name fo the table created
@@ -113,33 +71,32 @@ public class QueryOutputTreeBizLogic
 	 * @param sessionData session data to get the user id.
 	 * @param nodeAttributeColumnNameMap map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @return Vector<QueryTreeNodeData> data structure to form tree out of it.
-	 * @throws DAOException 
-	 * @throws ClassNotFoundException 
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	public Vector<QueryTreeNodeData> createDefaultOutputTreeData(String tableName, IQuery query, SessionDataBean sessionData,
+	public Vector<QueryTreeNodeData> createDefaultOutputTreeData(OutputTreeDataNode root, SessionDataBean sessionData,
 			Map<Long, Map<AttributeInterface, String>> nodeAttributeColumnNameMap) throws DAOException, ClassNotFoundException
 			{
-		IOutputTreeNode root = query.getRootOutputClass();
-		String columnNames = getColumnNamesForSelectpart(root, nodeAttributeColumnNameMap);
-		String indexStr = columnNames.substring(columnNames.lastIndexOf(";")+1,columnNames.length());
-		int index = -1;
-		if(!indexStr.equalsIgnoreCase("null"))
-		{
-			index = new Integer(indexStr);
-		}
-		if(columnNames.lastIndexOf(";") != -1)
-		{
-			columnNames = columnNames.substring(0,columnNames.lastIndexOf(";"));
-		}
-		String selectSql = "select "+columnNames+" from "+tableName;
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME+sessionData.getUserId();
+		String selectSql = QueryModuleUtil.getSQLForRootNode(root, tableName, nodeAttributeColumnNameMap);
+		String[] sqlIndex = selectSql.split(Constants.NODE_SEPARATOR);
+		selectSql = sqlIndex[0];
+		int index = Integer.parseInt(sqlIndex[1]);
+
 		List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
 		Vector<QueryTreeNodeData> treeDataVector = new Vector<QueryTreeNodeData>();
 		if (dataList != null)
 		{
 			QueryTreeNodeData treeNode = new QueryTreeNodeData();
-			treeNode.setIdentifier(Constants.ALL);
-			treeNode.setObjectName(Constants.ALL);
-			treeNode.setDisplayName(Constants.ALL);
+			String name = root.getOutputEntity().getDynamicExtensionsEntity().getName();
+			name = name.substring(name.lastIndexOf(".") + 1, name.length());
+			String displayName = name + " (" + dataList.size() + ")";
+		//	String parentNodeId = name + root.getId() + Constants.UNDERSCORE + Constants.LABEL_TREE_NODE;
+			String nodeId = Constants.NULL_ID + Constants.NODE_SEPARATOR + root.getId() + Constants.UNDERSCORE + name + Constants.LABEL_TREE_NODE;
+			displayName = Constants.TREE_NODE_FONT+displayName+Constants.TREE_NODE_FONT_CLOSE;
+			treeNode.setIdentifier(nodeId);
+			treeNode.setObjectName(name);
+			treeNode.setDisplayName(displayName);
 			treeNode.setParentIdentifier(Constants.ZERO_ID);
 			treeNode.setParentObjectName("");
 			treeDataVector.add(treeNode);
@@ -152,12 +109,12 @@ public class QueryOutputTreeBizLogic
 	 * This method adds the node to tree.The id for new node is set as 'Id of OutputTreeNode _id value of that node in newly created table'
 	 * @param dataList all records in database satisfying the criteria.
 	 * @param parentNode parent node of tree data
-	 * @param node the node to be added of IOutputTreeNode.
+	 * @param node the node to be added of OutputTreeDataNode.
 	 * @param treeDataVector  data structure to form tree out of it.
 	 * @param nodeAttributeColumnNameMap map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @return treeDataVector  data structure to form tree out of it.
 	 */
-	Vector<QueryTreeNodeData> addNodeToTree(int index,List dataList, QueryTreeNodeData parentNode, IOutputTreeNode node,
+	Vector<QueryTreeNodeData> addNodeToTree(int index, List dataList, QueryTreeNodeData parentNode, OutputTreeDataNode node,
 			Vector<QueryTreeNodeData> treeDataVector, Map<Long, Map<AttributeInterface, String>> nodeAttributeColumnNameMap)
 			{
 		Iterator dataListIterator = dataList.iterator();
@@ -169,7 +126,7 @@ public class QueryOutputTreeBizLogic
 			boolean isNodeAlreadyPresentInTree = false;
 			QueryTreeNodeData treeNode = null;
 			String treeNodeId = (String) rowList.get(0);
-			String nodeId = parentNode.getIdentifier().toString() + "::" + outputTreeNodeId + Constants.UNDERSCORE + treeNodeId;
+			String nodeId = parentNode.getIdentifier().toString() + Constants.NODE_SEPARATOR + outputTreeNodeId + Constants.UNDERSCORE + treeNodeId;
 			//String nodeId = outputTreeNodeId + Constants.UNDERSCORE + treeNodeId;
 			Iterator iterTreeData = treeDataVector.iterator();
 			while (iterTreeData.hasNext())
@@ -190,15 +147,16 @@ public class QueryOutputTreeBizLogic
 				int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
 				String entityName = fullyQualifiedEntityName.substring(lastIndex + 1);
 				treeNode.setObjectName(fullyQualifiedEntityName);
-				String displayName = entityName + "_" + treeNodeId;
-				if(index != -1)
+				String displayName = entityName + Constants.UNDERSCORE + treeNodeId;
+				if (index != -1)
 				{
-					displayName = (String)rowList.get(1);
+					displayName = (String) rowList.get(1);
 				}
-				if(displayName.equalsIgnoreCase(""))
+				if (displayName.equalsIgnoreCase(""))
 				{
-					displayName = entityName + "_" + treeNodeId;
+					displayName = entityName + Constants.UNDERSCORE + treeNodeId;
 				}
+				//displayName = Constants.TREE_NODE_FONT+displayName+Constants.TREE_NODE_FONT_CLOSE;
 				treeNode.setDisplayName(displayName);
 				treeNode.setParentIdentifier(parentNode.getIdentifier().toString());
 				treeNode.setParentObjectName(parentNode.getObjectName());
@@ -206,6 +164,71 @@ public class QueryOutputTreeBizLogic
 			}
 		}
 		return treeDataVector;
+			}
+
+	/**
+	 * Updates tree when user clicks on any of the nodes.
+	 * @param id string id of the node 
+	 * @param node node cicked
+	 * @param idColumnMap map which strores all node ids  with their information like attributes and actual column names in database.
+	 * @param parentNodeId string id of parent
+	 * @param sessionData SessionDataBean to be sent for execute query
+	 * @return string representing tree node structure
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 * @throws DAOException DAOException
+	 */
+	public String updateTree(String id, OutputTreeDataNode node,  Map<Long, Map<AttributeInterface, String>> idColumnMap,
+			String parentNodeId, SessionDataBean sessionData) throws ClassNotFoundException, DAOException
+			{
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME+sessionData.getUserId();
+		Map<AttributeInterface, String> columnsMap = null;
+		String parentIdColumnName = null;
+		columnsMap = idColumnMap.get(node.getId());
+		Set<AttributeInterface> setForParent = columnsMap.keySet();
+		for (Iterator<AttributeInterface> iterator = setForParent.iterator(); iterator.hasNext();)
+		{
+			AttributeInterface attr = iterator.next();
+			if (attr.getName().equalsIgnoreCase(Constants.ID))
+			{
+				parentIdColumnName = columnsMap.get(attr);
+				break;
+			}
+		}
+		List<OutputTreeDataNode> children = node.getChildren();
+		String outputTreeStr = "";
+		for (OutputTreeDataNode childNode : children)
+		{
+			columnsMap = idColumnMap.get(childNode.getId());
+			String selectSql = "select distinct ";
+			Set<AttributeInterface> set = columnsMap.keySet();
+			for (Iterator<AttributeInterface> iterator = set.iterator(); iterator.hasNext();)
+			{
+				AttributeInterface attribute = iterator.next();
+				String sqlColumnName = columnsMap.get(attribute);
+				selectSql = selectSql + sqlColumnName + ",";
+				sqlColumnName = sqlColumnName.substring(SqlGenerator.COLUMN_NAME.length(), sqlColumnName.length());
+			}
+			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
+			selectSql = selectSql + " from " + tableName;
+			if (parentNodeId != null)
+			{
+				selectSql = selectSql + " where " + parentIdColumnName + " = '" + parentNodeId + "'";
+			}
+			String name = childNode.getOutputEntity().getDynamicExtensionsEntity().getName();
+			name = name.substring(name.lastIndexOf(".") + 1, name.length());
+			List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
+			int size = dataList.size();
+			String parId = id.substring(id.lastIndexOf(Constants.NODE_SEPARATOR) + 2, id.length());
+			String nodeId = parId + Constants.NODE_SEPARATOR + childNode.getId() + Constants.UNDERSCORE + name + Constants.LABEL_TREE_NODE;
+			String displayName = name + " (" + size + ")";
+			displayName = Constants.TREE_NODE_FONT+displayName+Constants.TREE_NODE_FONT_CLOSE;
+			String objectName = name;
+			String parentId = id;
+			String fullName = node.getOutputEntity().getDynamicExtensionsEntity().getName();
+			String parentObjectName = fullName.substring(fullName.lastIndexOf(".") + 1, fullName.length());
+			outputTreeStr = outputTreeStr + "|" + nodeId + "," + displayName + "," + objectName + "," + parentId + "," + parentObjectName;
+		}
+		return outputTreeStr;
 			}
 
 	/**
@@ -218,60 +241,62 @@ public class QueryOutputTreeBizLogic
 	 * String for one node is comma seperated for its id, display name, object name , parentId, parent Object name.
 	 * Such string elements for child nodes are seperated by "|".
 	 */
-	public String buildTreeForNode(String nodeId, Map<Long, IOutputTreeNode> idNodeMap, Map<Long, Map<AttributeInterface, String>> columnMap,
+	public String updateTreeForLabelNode(String nodeId, Map<Long, OutputTreeDataNode> idNodeMap, Map<Long, Map<AttributeInterface, String>> columnMap,
 			SessionDataBean sessionData) throws ClassNotFoundException, DAOException
 			{
-		String actualParentNodeId = nodeId.substring(nodeId.lastIndexOf("::")+2,nodeId.length());
+		String id1 = nodeId.substring(nodeId.lastIndexOf(Constants.NODE_SEPARATOR) + 2, nodeId.length());
+		id1 = id1.substring(0, id1.indexOf(Constants.UNDERSCORE));
+		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
+		String selectSql = "";
+		int index = -1;
+		String actualParentNodeId = nodeId.substring(0, nodeId.indexOf(Constants.NODE_SEPARATOR));//+2,nodeId.length());
 		String[] nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
 		Long id = new Long(nodeIds[0]);
 		String parentIdColumnName = null;
-		IOutputTreeNode parentNode = idNodeMap.get(id);
-		Map<AttributeInterface, String> columns1 = columnMap.get(parentNode.getId());
-		Set<AttributeInterface> setColumns = columns1.keySet();
-		for (Iterator<AttributeInterface> iterator = setColumns.iterator(); iterator.hasNext();)
+		OutputTreeDataNode parentNode = idNodeMap.get(new Long(id));
+		OutputTreeDataNode currentNode = idNodeMap.get(new Long(id1));
+		if (!actualParentNodeId.equalsIgnoreCase(Constants.NULL_ID))
 		{
-			AttributeInterface attr = iterator.next();
-			if (attr.getName().equalsIgnoreCase(Constants.ID))
+			Map<AttributeInterface, String> columns1 = columnMap.get(parentNode.getId());
+			Set<AttributeInterface> setColumns = columns1.keySet();
+			for (Iterator<AttributeInterface> iterator = setColumns.iterator(); iterator.hasNext();)
 			{
-				parentIdColumnName = columns1.get(attr);
-				break;
+				AttributeInterface attr = iterator.next();
+				if (attr.getName().equalsIgnoreCase(Constants.ID))
+				{
+					parentIdColumnName = columns1.get(attr);
+					break;
+				}
 			}
-		}
-		List<IOutputTreeNode> children = parentNode.getChildren();
-		if(children.isEmpty())
-		{
-			return "";
-		}
-		String columnNames = "";
-		int index = -1;
-		for (IOutputTreeNode childNode : children)
-		{
-			columnNames = getColumnNamesForSelectpart(childNode, columnMap);
-			String indexStr = columnNames.substring(columnNames.lastIndexOf(";")+1,columnNames.length());
-
-			if(!indexStr.equalsIgnoreCase("null"))
+			List<OutputTreeDataNode> children = parentNode.getChildren();
+			if (children.isEmpty())
+			{
+				return "";
+			}
+			String columnNames = "";
+			columnNames = QueryModuleUtil.getColumnNamesForSelectpart(currentNode, columnMap);
+			String indexStr = columnNames.substring(columnNames.lastIndexOf(";") + 1, columnNames.length());
+			if (!indexStr.equalsIgnoreCase("null"))
 			{
 				index = new Integer(indexStr);
 			}
-			columnNames = columnNames.substring(0,columnNames.lastIndexOf(";"));
+			columnNames = columnNames.substring(0, columnNames.lastIndexOf(";"));
+			selectSql = "select distinct " + columnNames;
+			selectSql = selectSql + " from " + tableName + " where " + parentIdColumnName + " = '" + nodeIds[1] + "'";
 		}
-		/*if(columnNames.lastIndexOf(",") != -1)
+		if (actualParentNodeId.equalsIgnoreCase(Constants.NULL_ID))
 		{
-			columnNames = columnNames.substring(0, columnNames.lastIndexOf(","));
-		}*/
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
-		String selectSql = "select distinct " + columnNames;
-		selectSql = selectSql + " from " + tableName + " where " + parentIdColumnName + " = '" + nodeIds[1]+"'";
-		System.out.println(selectSql);
+			selectSql = QueryModuleUtil.getSQLForRootNode(currentNode, tableName, columnMap);
+		}
 		List dataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
-		String outputTreeStr = buildOutputTreeString(index,dataList, children, nodeId, parentNode, idNodeMap);
+		String outputTreeStr = buildOutputTreeString(index, dataList, currentNode, nodeId, parentNode, idNodeMap);
 		return outputTreeStr;
 			}
 
 	/**
 	 * This method builds a string from the input data , based on this string tree will be formed.
 	 * @param dataList List of result records
-	 * @param children List<IOutputTreeNode> child nodes 
+	 * @param children List<OutputTreeDataNode> child nodes 
 	 * @param nodeId String id which will be parent id for the new nodes added to tree. 
 	 * @param parentNode parent node 
 	 * @param idNodeMap map which stores id and nodes already added to tree.
@@ -279,8 +304,8 @@ public class QueryOutputTreeBizLogic
 	 * String for one node is comma seperated for its id, display name, object name , parentId, parent Object name.
 	 * Such string elements for child nodes are seperated by "|".
 	 **/
-	String buildOutputTreeString(int index,List dataList, List<IOutputTreeNode> children, String nodeId, IOutputTreeNode parentNode,
-			Map<Long, IOutputTreeNode> idNodeMap)
+	String buildOutputTreeString(int index, List dataList, OutputTreeDataNode currentNode, String nodeId, OutputTreeDataNode parentNode,
+			Map<Long, OutputTreeDataNode> idNodeMap)
 	{
 		Iterator dataListIterator = dataList.iterator();
 		List<String> existingNodesList = new ArrayList<String>();
@@ -289,33 +314,31 @@ public class QueryOutputTreeBizLogic
 		while (dataListIterator.hasNext())
 		{
 			rowList = (List) dataListIterator.next();
-			for (IOutputTreeNode childNode : children)
+			String treeNodeId = (String) rowList.get(0);
+			String fullyQualifiedEntityName = currentNode.getOutputEntity().getDynamicExtensionsEntity().getName();
+			int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
+			String entityName = fullyQualifiedEntityName.substring(lastIndex + 1);
+			String nodeIdToSet = nodeId + Constants.NODE_SEPARATOR + currentNode.getId() + Constants.UNDERSCORE + treeNodeId;
+			//	String nodeIdToSet = childNode.getId() + Constants.UNDERSCORE + treeNodeId;
+			String displayName = entityName + Constants.UNDERSCORE + treeNodeId;
+			if (index != -1)
 			{
-				String treeNodeId = (String) rowList.get(0);
-				String fullyQualifiedEntityName = childNode.getOutputEntity().getDynamicExtensionsEntity().getName();
-				int lastIndex = fullyQualifiedEntityName.lastIndexOf(".");
-				String entityName = fullyQualifiedEntityName.substring(lastIndex + 1);
-				String nodeIdToSet = nodeId + "::" + childNode.getId() + Constants.UNDERSCORE + treeNodeId;
-				//	String nodeIdToSet = childNode.getId() + Constants.UNDERSCORE + treeNodeId;
-				String displayName = entityName + "_" + treeNodeId;
-				if(index != -1)
-				{
-					displayName = (String)rowList.get(1);
-				}
-				if(displayName.equalsIgnoreCase(""))
-				{
-					displayName = entityName + "_" + treeNodeId;
-				}
-				String objectname = fullyQualifiedEntityName;
-				String parentIdToSet = nodeId;
-				String parentObjectName = parentNode.getOutputEntity().getDynamicExtensionsEntity().getName();
-				if (!existingNodesList.contains(nodeIdToSet))
-				{
-					existingNodesList.add(nodeIdToSet);
-					idNodeMap.put(childNode.getId(), childNode);
-					outputTreeStr = outputTreeStr + nodeIdToSet + "," + displayName + "," + objectname + "," + parentIdToSet + "," + parentObjectName
-					+ "|";
-				}
+				displayName = (String) rowList.get(1);
+			}
+			if (displayName.equalsIgnoreCase(""))
+			{
+				displayName = entityName + Constants.UNDERSCORE + treeNodeId;
+			}
+			//displayName = Constants.TREE_NODE_FONT+displayName+Constants.TREE_NODE_FONT_CLOSE;
+			String objectname = fullyQualifiedEntityName;
+			String parentIdToSet = nodeId;
+			String parentObjectName = parentNode.getOutputEntity().getDynamicExtensionsEntity().getName();
+			if (!existingNodesList.contains(nodeIdToSet))
+			{
+				existingNodesList.add(nodeIdToSet);
+				idNodeMap.put(currentNode.getId(), currentNode);
+				outputTreeStr = outputTreeStr + nodeIdToSet + "," + displayName + "," + objectname + "," + parentIdToSet + "," + parentObjectName
+				+ "|";
 			}
 		}
 		return outputTreeStr;

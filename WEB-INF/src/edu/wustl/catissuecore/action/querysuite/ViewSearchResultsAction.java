@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.action.querysuite;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,15 +25,16 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
 import edu.wustl.common.querysuite.exceptions.SqlException;
 import edu.wustl.common.querysuite.factory.SqlGeneratorFactory;
-import edu.wustl.common.querysuite.queryengine.ISqlGenerator;
-import edu.wustl.common.querysuite.queryobject.IOutputTreeNode;
+import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.IQuery;
+import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.querysuite.queryobject.util.QueryObjectProcessor;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
-/* This action is an applet action called from DiagrammaticViewApplet class when user clicks on seach button of AddLimits.jsp.
+/**
+ * This action is an applet action called from DiagrammaticViewApplet class when user clicks on seach button of AddLimits.jsp.
  * This class gets IQuery Object from the applet and also generates sql out of it with the help of sqlGenerator.
  * This sql is then fired and each time a new table is created in database for each session user with the help of QueryOutputTreeBizLogic .
  * Then data for first level (default) tree and spreadsheet is generated and returned back from QueryOutputTreeBizLogic and QueryOutputSpreadsheetBizLogic.
@@ -66,25 +68,26 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			session.setAttribute(AppletConstants.QUERY_OBJECT, query);
 			QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
 			SessionDataBean sessionData = getSessionData(request);
-			ISqlGenerator sqlGenerator = SqlGeneratorFactory.getInstance();
+			SqlGenerator sqlGenerator = (SqlGenerator)SqlGeneratorFactory.getInstance();
 			String selectSql = "";
-			String tableName = "";
 			Map<Long, Map<AttributeInterface, String>> columnMap = null;
 			Map<String,String> ruleDetailsMap = new HashMap<String,String>();
 			try
 			{
 				selectSql = sqlGenerator.generateSQL(query);
-				tableName = outputTreeBizLogic.createOutputTreeTable(selectSql, sessionData);
-				columnMap = sqlGenerator.getColumnMap();
+				outputTreeBizLogic.createOutputTreeTable(selectSql, sessionData);
+				Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap = sqlGenerator.getOutputTreeMap();
+				Set<OutputTreeDataNode> keys = outputTreeMap.keySet();
+				OutputTreeDataNode root = keys.iterator().next();
+				columnMap = outputTreeMap.get(root);
 				session.setAttribute(Constants.ID_COLUMNS_MAP, columnMap);
-				IOutputTreeNode root = query.getRootOutputClass();
-				Map<Long, IOutputTreeNode> idNodesMap = QueryObjectProcessor.getAllChildrenNodes(root);
+				Map<Long, OutputTreeDataNode> idNodesMap = QueryObjectProcessor.getAllChildrenNodes(root);
 				session.setAttribute(Constants.ID_NODES_MAP, idNodesMap);
-				Vector treeData = outputTreeBizLogic.createDefaultOutputTreeData(tableName, query, sessionData, columnMap);
+				Vector treeData = outputTreeBizLogic.createDefaultOutputTreeData(root, sessionData, columnMap);
 				session.setAttribute(Constants.TREE_DATA, treeData);
 				QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 				String parentNodeId = null;
-				Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(tableName, root, columnMap, parentNodeId,sessionData);
+				Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(null,root, columnMap, parentNodeId,sessionData);
 				session.setAttribute(Constants.SPREADSHEET_DATA_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST));
 				session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));;
 			}
@@ -121,7 +124,7 @@ public class ViewSearchResultsAction extends BaseAppletAction
 	}
 
 	/**
-	 * This is a overloaded method to call the actions method set bt applet class.
+	 * This is a overloaded method to call the actions method set by applet class.
 	 * @param methodName String
 	 * @param mapping ActionMapping
 	 * @param form form

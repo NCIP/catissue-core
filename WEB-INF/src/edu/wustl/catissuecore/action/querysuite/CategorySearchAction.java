@@ -29,11 +29,9 @@ import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.action.BaseAction;
 
 /**
- * This class loads screen for categorySearch.When it loads the screen for the first time, default selctions for checkbox and radio buttons
- * will be shown.
+ * This class loads screen for categorySearch.
  * When search button is clicked it checks for the input : Text , checkbox , radiobutton etc. And depending upon the selections made by user,
  * the list of entities is populated. This list is kept in session.
- * 
  * @author deepti_shelar
  */
 
