@@ -1,7 +1,9 @@
 package edu.wustl.catissuecore.domain;
 
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -20,15 +22,11 @@ public class EntityMap extends AbstractDomainObject implements java.io.Serializa
 {
     
     /**Unique id of the object.*/
-	private Long id;
-	
+	private Long id;	
 	private Long containerId;
-	
-	private Long typeId;
-	
-	private Long staticRecordId;
-	
 	private Long staticEntityId;
+    
+     private Collection entityMapConditionCollection = new HashSet();
 	
 	/**
 	 * Status of the link as attached detached.
@@ -112,38 +110,7 @@ public class EntityMap extends AbstractDomainObject implements java.io.Serializa
 		this.linkStatus = linkStatus;
 	}
   
-    /**
-     * @return
-     * @hibernate.property name="staticRecordId" column="STATIC_RECORD_ID" type="long" length="30"
-     * 
-     */
-    public Long getStaticRecordId()
-    {
-        return staticRecordId;
-    }
-    /**
-     * @param collectionProtocol The collectionProtocol to set.
-     */
-    public void setStaticRecordId(
-            Long collectionProtocol)
-    {
-        this.staticRecordId = collectionProtocol;
-    }
-    /**
-     * @return Returns the typeId.
-     *  @hibernate.property name="typeId" column="TYPE_ID" type="long" length="30"
-     */
-    public Long getTypeId()
-    {
-        return typeId;
-    }
-    /**
-     * @param typeId The typeId to set.
-     */
-    public void setTypeId(Long typeId)
-    {
-        this.typeId = typeId;
-    }
+   
     /**
      * @return Returns the staticEntityId.
      *  @hibernate.property name="staticEntityId" column="STATIC_ENTITY_ID" type="long" length="30"
@@ -188,5 +155,25 @@ public class EntityMap extends AbstractDomainObject implements java.io.Serializa
     public void setCreatedBy(String createdBy)
     {
         this.createdBy = createdBy;
+    }
+    
+    
+    /**
+     * @return Returns the entityMapConditionCollection.
+     * @hibernate.set name="entityMapConditionCollection" table="CATISSUE_ENTITY_MAP_CONDITIONS" cascade="save-update"
+     * inverse="true" lazy="false"
+     * @hibernate.collection-key column="ENTITY_MAP_ID"
+     * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.EntityMapCondition"
+     */
+    
+    public Collection getEntityMapConditionCollection()
+    {
+        return entityMapConditionCollection;
+    }
+    
+    public void setEntityMapConditionCollection(
+            Collection entityMapConditionCollection)
+    {
+        this.entityMapConditionCollection = entityMapConditionCollection;
     }
 }
