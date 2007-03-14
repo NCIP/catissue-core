@@ -137,11 +137,11 @@ public class QueryOutputSpreadsheetBizLogicTest extends BaseTestCase
 	/*	List dataList = SpreadsheetBizLogic.getRecordsForNode(sql, sessionData);
 		assertNotNull(dataList);*/
 	}
-
-	/**
+/*
+	*//**
 	 * test for CreateSpreadsheetData For FirstLevel tree node
 	 *
-	 */
+	 *//*
 	public void testCreateSpreadsheetDataForFirstLevelTreeNode()
 	{
 		IOutputTreeNode rootNode = getDummyTreeNodes();
@@ -149,14 +149,12 @@ public class QueryOutputSpreadsheetBizLogicTest extends BaseTestCase
 		initJunitForJDBC();
 		SessionDataBean sessionData = new SessionDataBean();
 		sessionData.setUserId(new Long("1"));
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
 		Map<Long, Map<AttributeInterface, String>> nodeAttributeColumnNameMap = getNodeAttributeColumnNameMap();
-		boolean isFirstLevel = true;
 		String parentNodeId = "1_1";
 		Map<String, List<String>> spreadSheetDataMap = null;
 		try
 		{
-			spreadSheetDataMap = SpreadsheetBizLogic.createSpreadsheetData(tableName, rootNode, nodeAttributeColumnNameMap,
+			spreadSheetDataMap = SpreadsheetBizLogic.createSpreadsheetData(rootNode, nodeAttributeColumnNameMap,
 					 parentNodeId, sessionData);
 		}
 		catch (DAOException e)
@@ -168,12 +166,12 @@ public class QueryOutputSpreadsheetBizLogicTest extends BaseTestCase
 			e.printStackTrace();
 		}
 		assertNotNull(spreadSheetDataMap);
-	}
+	}*/
 
 	/**
 	 * test for CreateSpreadsheetData On NodeClick
 	 *
-	 */
+	 *//*
 	public void testCreateSpreadsheetDataOnNodeClick()
 	{
 		IOutputTreeNode rootNode = getDummyTreeNodes();
@@ -181,28 +179,24 @@ public class QueryOutputSpreadsheetBizLogicTest extends BaseTestCase
 		initJunitForJDBC();
 		SessionDataBean sessionData = new SessionDataBean();
 		sessionData.setUserId(new Long("1"));
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
 		Map<Long, Map<AttributeInterface, String>> nodeAttributeColumnNameMap = getNodeAttributeColumnNameMap();
-		boolean isFirstLevel = false;
 		String parentNodeId = "1_1";
 		Map<String, List<String>> spreadSheetDataMap = null;
 		try
 		{
-			spreadSheetDataMap = SpreadsheetBizLogic.createSpreadsheetData(tableName, rootNode, nodeAttributeColumnNameMap,
+			spreadSheetDataMap = SpreadsheetBizLogic.createSpreadsheetData(rootNode, nodeAttributeColumnNameMap,
 					 parentNodeId, sessionData);
 		}
 		catch (DAOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		assertNotNull(spreadSheetDataMap);
-	}
+	}*/
 
 	/**
 	 * Returns the map for each node with its attribute and column names mapped.
