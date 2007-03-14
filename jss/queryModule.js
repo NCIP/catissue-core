@@ -26,9 +26,64 @@ function goToAddLimitsPage()
 {
 
 }
+function showSpreadsheetData(columnDataStr)
+{
+	var columnData = columnDataStr.split("&");
+	var columns = columnData[0];	
+	var data = columnData[1];	
+	var columnNames = columns.split(",");
+	var width ="";
+	var colDataTypes1 = ""
+	var colTypes1 = "";
+	if(columns != 'Entity Name, Count')
+	
+	{
+	var width =180 +",";
+	var colDataTypes1 = "ch,"
+	var colTypes1 = "ch,";
+	
+	}
+	for(i=0; i<columnNames.length; i++)
+		{
+			var name = columnNames[i];
+			if(!name == "")
+			{
+				width = width + "180,"
+				colDataTypes1 = colDataTypes1 + "ro,";
+				colTypes1 = colTypes1 +"str,";
+			}		
+		}		
+	mygrid.clearAll();
+	mygrid.setHeader(columns);
+	mygrid.setInitWidths(width);
+	mygrid.setColTypes(colDataTypes1);
+	mygrid.setColSorting(colTypes1);
+//	mygrid.enableAutoHeigth(true);
 
+	mygrid.init();
+
+	var myData = data.split("|");
+	for(var row=0;row<myData.length;row++)
+	{
+		if(row != "")
+		{
+			if(columns == 'Entity Name, Count')
+			{
+					data = myData[row];
+			}
+			else
+			{
+				data = "0,"+myData[row];
+			}
+			mygrid.addRow(row+1,data,row+1);
+		}
+	}	
+}
 function addToView()
 {
+	var row = document.getElementById('validationMessagesRow');
+	row.innerHTML = "";	
+	row.style.display = 'none';		
 	var selectTag = document.getElementById('selectCategoryList');
 	var len = selectTag.length;
 	var items = "";
@@ -548,6 +603,7 @@ function showAddLimitsPage()
 }
 function previousFromDefineResults()
 {
+	document.applets[0].defineResultsView();
 	document.forms['categorySearchForm'].action='SearchCategory.do';
 	document.forms['categorySearchForm'].currentPage.value = "prevToAddLimits";
 	document.forms['categorySearchForm'].submit();

@@ -132,7 +132,8 @@ function initGridView()
 
 	//mygrid.setColAlign("left,left")
 	mygrid.setColSorting(colTypes);
-	//mygrid.enableMultiselect(true)
+
+//	mygrid.enableAutoHeigth(true);
 	mygrid.init();
 
 /*
@@ -151,7 +152,7 @@ function initGridView()
 
 //Tree component
 	tree=new dhtmlXTreeObject("treebox","100%","100%",0);
-	tree.setImagePath("./dhtml_comp/imgs/");
+	tree.setImagePath("dhtml_comp/imgs/");
 	tree.setOnClickHandler(treeNodeClicled);
 		<%
 			
@@ -168,8 +169,11 @@ function initGridView()
 							parentId = data.getParentIdentifier().toString();		
 						}
 						String nodeId = data.getIdentifier().toString();
-						String img = "/dhtml_comp/imgs/item.GIF";
-					
+						String img = "results.gif";
+						if(nodeId.endsWith(Constants.LABEL_TREE_NODE))
+						{
+							 img = "folder.gif";
+						}
 						if (parentId.equals("0"))
 						{
 							nodeColapseCode += "tree.closeAllItems('" + nodeId + "');";
@@ -188,6 +192,11 @@ var addedNodes = "";
 function treeNodeClicled(id)
 {
 
+var aa = id.split("::");
+if(aa.size == 2)
+	{
+	addedNodes = addedNodes + ","+id;
+	}
 var nodes = addedNodes.split(",");
 var isNodeAdded = false;
 if(nodes != "")
@@ -241,46 +250,20 @@ function showChildNodes(outputTreeStr)
 				var objectname = treeValues[2];
 				var parentIdToSet = treeValues[3];
 				var parentObjectName = treeValues[4];
-				tree.insertNewChild(parentIdToSet,nodeId,displayName,0,"","","","");
+			    var img = "results.gif";
+			    var totalLen= nodeId.length;
+			    var labelLen = 'labelTreeNode'.length;
+			    var diff= totalLen - labelLen;
+			    var lab = nodeId.substring(diff);
+                if(lab == 'labelTreeNode')
+				{
+					 img = "folder.gif";
+				}
+				tree.insertNewChild(parentIdToSet,nodeId,displayName,0,img,img,img,"");
 			}
 		}
 }
-function showSpreadsheetData(columnDataStr)
-{
-	var columnData = columnDataStr.split("&");
-	var columns = columnData[0];	
-	var data = columnData[1];	
-	var columnNames = columns.split(",");
-	var width =180 +",";
-	var colDataTypes1 = "ch,"
-	var colTypes1 = "ch,";
-	for(i=0; i<columnNames.length; i++)
-		{
-			var name = columnNames[i];
-			if(!name == "")
-			{
-				width = width + "180,"
-				colDataTypes1 = colDataTypes1 + "ro,";
-				colTypes1 = colTypes1 +"str,";
-			}		
-		}		
-	mygrid.clearAll();
-	mygrid.setHeader(columns);
-	mygrid.setInitWidths(width);
-	mygrid.setColTypes(colDataTypes1);
-	mygrid.setColSorting(colTypes1);
-	mygrid.init();
 
-	var myData = data.split("|");
-	for(var row=0;row<myData.length;row++)
-	{
-		if(row != "")
-		{
-			data = "0,"+myData[row];
-			mygrid.addRow(row+1,data,row+1);
-		}
-	}	
-}
 </script>
 
 <% if (columnList != null && columnList.size()!= 0 && dataList != null && dataList.size() != 0)
@@ -377,7 +360,7 @@ function showSpreadsheetData(columnDataStr)
 					 <td width="2%" valign="center">&nbsp;</td>
 						<td valign="center" width="75%"><html:button property="Button"><bean:message key="query.saveButton"/></html:button></td>
 				
-						<td  align="right" valign="center"><html:button property="Button" onclick="showAddLimitsPage()"><bean:message key="query.previousButton" /></html:button></td>
+						<td  align="right" valign="center"><html:button property="Button" onclick="defineSearchResultsView()"><bean:message key="query.previousButton" /></html:button></td>
 						<td align="right" valign="center"><html:button property="Button" onclick=""><bean:message key="query.nextButton"/></html:button>
 						</td>
 						<td width="2%">&nbsp;</td>
@@ -386,7 +369,6 @@ function showSpreadsheetData(columnDataStr)
 				
 			</td>
 		</tr>
-	
 			</table>
 			</td>
 			</tr>

@@ -74,7 +74,13 @@ public class DiagrammaticViewApplet extends BaseApplet
 		Map<DagImageConstants, Image> imagePathsMap = getImagePathsMap();
 		UpdateAddLimitUI updateAddLimitUI = new UpdateAddLimitUI(this);
 		PathFinderAppletServerCommunicator pathFinder = new PathFinderAppletServerCommunicator(serverURL);
-		panel = new MainDagPanel(updateAddLimitUI, imagePathsMap, pathFinder);
+		boolean isForView = false;
+		String isForViewStr = getParameter("isForView");
+		if(isForViewStr.equalsIgnoreCase("true"))
+		{
+			isForView = true;
+		}
+		panel = new MainDagPanel(updateAddLimitUI, imagePathsMap, pathFinder,isForView);
 		panel.setQueryObject(queryObject);
 		this.getContentPane().add(panel);
 		this.setSize(3500, 2000);
@@ -90,7 +96,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 
 	/**
 	 * This method returns parent frame of this applet
-	 * @return
+	 * @return Frame
 	 */
 	private Frame findParentFrame(){ 
 		Container c = this; 
@@ -107,7 +113,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 	/**
 	 * This method is called from applet through javascript. 
 	 * It further calls ViewSearchResultsAction class to get the results,of the query generated.
-	 * Error message if any is shown to user through javascript.
+	 * @return String Error message if any is shown to user through javascript.
 	 */
 	public String getSearchResults()
 	{
@@ -139,7 +145,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 
 	/**
 	 * This method is called from a javascript when user clicks on Add Limit button of AddLimits.jsp.
-	 * This again calls a action class which returns a map which holds the details to create a rule and then we add this rule to query obj.
+	 * This again calls a action class which returns a map holding the details to create a rule and then we add this rule to query obj.
 	 * and update the graph. 
 	 * @param strToCreateQueryObject String to create query obj
 	 * @param entityName name of the entity
@@ -152,14 +158,11 @@ public class DiagrammaticViewApplet extends BaseApplet
 			Map outputMap = callAddToLimiteSetAction(strToCreateQueryObject, entityName);
 			List attributes = (List) outputMap.get(AppletConstants.ATTRIBUTES);
 			List attributeOperators = (List) outputMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
-			List firstAttributeValues = (List) outputMap.get(AppletConstants.FIRST_ATTR_VALUES);
-			List secondAttributeValues = (List) outputMap.get(AppletConstants.SECOND_ATTR_VALUES);
 			ArrayList<ArrayList<String>> conditionValues = (ArrayList<ArrayList<String>>) outputMap.get(AppletConstants.ATTR_VALUES);
 			String errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
 			showValidationMessagesToUser(errorMessage);
 			if(errorMessage.equalsIgnoreCase(""))
 			{
-				//IExpressionId expressionId = queryObject.addRule(attributes, attributeOperators, firstAttributeValues, secondAttributeValues);
 				IExpressionId expressionId = queryObject.addRule(attributes, attributeOperators, conditionValues);
 				panel.updateGraph(expressionId);	
 			}			
@@ -189,8 +192,6 @@ public class DiagrammaticViewApplet extends BaseApplet
 			Map outputMap = callAddToLimiteSetAction(strToCreateQueryObject, entityName);
 			List attributes = (List) outputMap.get(AppletConstants.ATTRIBUTES);
 			List attributeOperators = (List) outputMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
-			List firstAttributeValues = (List) outputMap.get(AppletConstants.FIRST_ATTR_VALUES);
-			List secondAttributeValues = (List) outputMap.get(AppletConstants.SECOND_ATTR_VALUES);
 			ArrayList<ArrayList<String>> conditionValues = (ArrayList<ArrayList<String>>) outputMap.get(AppletConstants.ATTR_VALUES);
 			String errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
 			showValidationMessagesToUser(errorMessage);
@@ -237,7 +238,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 
 	/**
 	 * This method returns the map of all the required imgaes with its path.
-	 * @return
+	 * @return Map<DagImageConstants, Image> map of images
 	 */
 	private Map<DagImageConstants, Image> getImagePathsMap()
 	{
@@ -262,9 +263,9 @@ public class DiagrammaticViewApplet extends BaseApplet
 	}
 	/**
 	 * Calls server from applet and gets the required data back.
-	 * @param url url of the server class
+	 * @param url of the server class
 	 * @param inputMap input data 
-	 * @return out put data 
+	 * @return output data 
 	 */
 	Map doAppletServletCommunication(String url , Map inputMap,String methodName)
 	{
@@ -305,6 +306,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 	}
 	/**
 	 * Calls server to get the query object.This object was already stored in session when user had created it. 
+	 * @return IQuery query object
 	 */
 	public IQuery getQueryObjectFromServer()
 	{

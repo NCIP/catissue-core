@@ -98,6 +98,8 @@
 													<PARAM name="type" value="application/x-java-applet;jpi-version=1.5.0_08">
 													<PARAM name="name" value="<%=Constants.QUERY_DAG_VIEW_APPLET_NAME%>">
 													<PARAM name="session_id" value="<%=session.getId()%>">
+													<PARAM name="isForView" value="false">">
+													
 
 													
 													<PARAM name = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" value="<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">

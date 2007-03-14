@@ -33,10 +33,7 @@
 					<td>
 						<table border="0" width="100%" cellspacing="0" cellpadding="4" height="100%" bordercolor="#000000" id="table2" >
 							<tr  height="10" class="trStyle">
-								<td width="20%" class="queryModuleTabMenuItem">
-									<bean:message key="query.chooseSearchCategory"/>
-								</td>
-
+								
 								<td width="20%" class="queryModuleTabMenuItem" >
 									<bean:message key="query.addLimits"/>
 								</td>
@@ -57,10 +54,10 @@
 								<td></td>
 							</tr>
 							<tr valign="top"  height="100%" width="100%">
-								<td colspan="5" valign="top" height="100%" width="100%">
+								<td colspan="4" valign="top" height="100%" width="100%">
 									<table border="1" cellspacing="0" cellpadding="0" valign="top"  height="100%" width="100%">
 									<tr valign="top">
-										<td valign="top" height="500" colspan="5" width="100%">
+										<td valign="top" height="500" colspan="4" width="100%">
 											<!--		tiles insert -->
 											<tiles:insert attribute="content"></tiles:insert>
 										</td>
@@ -73,7 +70,7 @@
 				</tr>
 		
 				<tr bgcolor="#DFE9F3">
-					<td colspan="5">
+					<td colspan="4">
 						<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#EAEAEA" height="100%" bordercolorlight="#000000" >
 							<tr height="35" valign="center">
 								<td width="2%" valign="center">&nbsp;</td>

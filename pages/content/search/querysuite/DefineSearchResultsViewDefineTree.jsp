@@ -6,6 +6,11 @@
 <tr  valign="top">
 	<td  valign="top" width="20%">
 		<table border="0"  height="100%" width="100%" cellpadding="1" cellspacing="3" valign="top">
+		<tr  id="rowMsg" class='validationMessageCss'  >
+		<td id="validationMessagesSection"  width="80%" class='validationMessageCss' style="display:none">
+			&nbsp;
+		</td>
+	</tr>
 			<tr valign="top" width="100%" height="80%" align="left">
 				<td valign="top" height="100%" align="left" >
 					<%@ include file="/pages/content/search/querysuite/ChooseSearchCategory.jsp" %>
@@ -39,6 +44,7 @@
 					<PARAM name="name" value="<%=Constants.QUERY_DAG_VIEW_APPLET_NAME%>">
 					<PARAM name="session_id" value="<%=session.getId()%>">					
 					<PARAM name = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" value="<%=Constants.APPLET_SERVER_HTTP_START_STR%><%=request.getServerName()%>:<%=request.getServerPort()%><%=request.getContextPath()%>">
+					<PARAM name="isForView" value="true">">
 				</APPLET>
 			</div>
 		</td>
