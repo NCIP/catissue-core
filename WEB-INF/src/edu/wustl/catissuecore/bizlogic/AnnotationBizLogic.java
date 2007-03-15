@@ -12,13 +12,19 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.common.dynamicextensions.entitymanager.EntityManager;
+import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
+import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
+import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.wustl.catissuecore.domain.EntityMap;
 import edu.wustl.catissuecore.domain.EntityMapCondition;
 import edu.wustl.catissuecore.domain.EntityMapRecord;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.dao.DAO;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Constants;
 
 
@@ -385,7 +391,35 @@ public class AnnotationBizLogic extends DefaultBizLogic
         }
     }
     
+    public void deleteAnnotationRecords(Long containerId, List<Long>recordIdList) throws BizLogicException
+    {
+        EntityManagerInterface entityManagerInterface = EntityManager.getInstance(); 
+        try
+        {
+            entityManagerInterface.deleteRecords(containerId, recordIdList);
+        }
+        catch (Exception e)
+        {
+           throw new BizLogicException(ApplicationProperties.getValue("app.annotatations.errors.deleteRecord"),e);
+        }
+    }
     
+    /**
+     * Deletes an object from the database.
+     * @param obj The object to be deleted.
+     * @throws DAOException
+     * @throws UserNotAuthorizedException TODO
+     */
+    protected void delete(Object obj, DAO dao) throws DAOException, UserNotAuthorizedException
+    {
+        dao.delete(obj);
+    }
+    
+    /**
+     * @param dynEntitiesList
+     * @param cpIdList
+     * @return
+     */
     public List getAnnotationIdsBasedOnCondition(List dynEntitiesList,List cpIdList)
     {
         List dynEntitiesIdList = new ArrayList();        
@@ -408,6 +442,11 @@ public class AnnotationBizLogic extends DefaultBizLogic
         return dynEntitiesIdList;      
     }
     
+    /**
+     * @param entityMapConditionCollection
+     * @param cpIdList
+     * @return
+     */
     private boolean  checkStaticRecId(Collection entityMapConditionCollection,List cpIdList)
     {        
         Iterator entityMapCondIterator = entityMapConditionCollection.iterator();
@@ -425,4 +464,5 @@ public class AnnotationBizLogic extends DefaultBizLogic
     }
     
     
+       
 }
