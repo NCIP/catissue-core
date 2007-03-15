@@ -23,6 +23,17 @@
 
 	<script src="<%=request.getContextPath()%>/jss/javaScript.js" type="text/javascript"></script>
 	<script src="<%=request.getContextPath()%>/jss/script.js" type="text/javascript"></script>
+	<script>
+	function deleteSelectedRecords()
+	{
+	 var selectedRows =	annotationsGrid.getCheckedRows(0);
+	 document.getElementById('operation').value = "deleteRecords";
+	 document.getElementById('selectedRecords').value = selectedRows;
+	 document.forms[0].action = "LoadAnnotationDataEntryPage.do";
+	 document.forms[0].submit();
+	}
+	</script>
+	
 </head>
 
 <html:form action="LoadDynamicExtentionsDataEntryPage">
@@ -30,7 +41,12 @@
 	<jsp:useBean id="annotationsList" type="java.util.List"/>
 
 <html:hidden property = "parentEntityId"></html:hidden>
+<html:hidden property = "selectedStaticEntityId"></html:hidden>
+<html:hidden property = "selectedStaticEntityRecordId"></html:hidden>
+
+<html:hidden property = "operation" styleId = "operation"></html:hidden>
 <html:hidden property = "definedAnnotationsDataXML"></html:hidden>
+<input type= "hidden" name = "selectedRecords" id = "selectedRecords"/>
 <html:hidden property="id" /><html:hidden property="pageOf"/>
 	<!-- Actual HTML Code Start -->
 	<br>
@@ -75,7 +91,13 @@
 						</script>
 					</td>
 				</tr>
-				
+				<tr valign="bottom">
+					<td align="left" class="formLabelAllBorder">
+						<html:button property="deleteAnnotationData" styleClass="actionButton" onclick="deleteSelectedRecords();" >
+								Delete
+						</html:button>
+					</td>
+				</tr> 
 			</table>
 
 		</td></tr>
