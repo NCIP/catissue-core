@@ -21,6 +21,9 @@
 		boolean isAddNew = false;	
 		String signedConsentDate = "";
 		Long scgEntityId = null;
+		String staticEntityName=null;
+		staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP;
+		
 		if (request.getSession().getAttribute("scgId") == null)
 		{
 			scgEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
@@ -95,7 +98,7 @@
      <script language="JavaScript">
      		function showAnnotations()
 		{
-			var action="DisplayAnnotationDataEntryPage.do?entityId=<%=scgEntityId%>&entityRecordId=<%=id%>&pageOf=pageOfSpecimenCollectionGroup&operation=viewAnnotations";
+			var action="DisplayAnnotationDataEntryPage.do?entityId=<%=scgEntityId%>&entityRecordId=<%=id%>&staticEntityName=<%=staticEntityName%>&pageOf=pageOfSpecimenCollectionGroup&operation=viewAnnotations";
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}

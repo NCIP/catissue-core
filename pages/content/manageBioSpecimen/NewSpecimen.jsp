@@ -1,4 +1,4 @@
-	<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
@@ -29,6 +29,10 @@
 	String operation = (String)request.getAttribute(Constants.OPERATION);
 	String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 	String appendingPath = "/NewSpecimen.do?operation=add&pageOf=pageOfNewSpecimen";
+	
+	String staticEntityName=null;
+	staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN;
+	
 	
 	String currentReceivedDate = "";
 	String currentCollectionDate = "";
@@ -70,6 +74,12 @@
 	Map map = form.getExternalIdentifier();
 %>
 <head>
+<style>
+	.hidden
+	{
+	 display:none;
+	}
+</style>
 
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <%
@@ -667,7 +677,7 @@
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value,document.forms[0].consentTierCounter.value)">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="viewAnnotations(<%=specimenEntityId%>,document.forms[0].id.value,document.forms[0].consentTierCounter.value,<%=staticEntityName%>)">
 					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
 				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">

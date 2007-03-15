@@ -48,6 +48,10 @@ tr#hiddenCombo
 		String formName, pageView=operation,editViewButton="buttons."+Constants.EDIT;
 		boolean readOnlyValue=false,readOnlyForAll=false;
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
+		
+		String staticEntityName=null;
+		staticEntityName = AnnotationConstants.ENTITY_NAME_PARTICIPANT;
+		
 		Long participantEntityId = null;
 			if (request.getSession().getAttribute("participantEntityId") == null)
 		{
@@ -376,7 +380,7 @@ tr#hiddenCombo
 		}
 		function showAnnotations()
 		{
-			var action="DisplayAnnotationDataEntryPage.do?entityId=<%=participantEntityId%>&entityRecordId=<%=id%>&pageOf=pageOfParticipant&operation=viewAnnotations";
+			var action="DisplayAnnotationDataEntryPage.do?entityId=<%=participantEntityId%>&entityRecordId=<%=id%>&staticEntityName=<%=staticEntityName%>&pageOf=pageOfParticipant&operation=viewAnnotations";
 			document.forms[0].action=action;
 			document.forms[0].submit();
 		}
@@ -451,8 +455,7 @@ tr#hiddenCombo
 
 			<tr>
 				<td class="tabField" colspan="6">
-				<%@ include file="ViewSurgicalPathologyReport.jsp" %>
-				
+				<%@ include file="ViewSurgicalPathologyReport.jsp" %>	
 				
 				</td>
 			</tr>
