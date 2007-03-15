@@ -29,8 +29,20 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
 	private String annotationEntitiesXML;
 	private List systemEntitiesList;
 	private String selectedStaticEntityId;
+    private List  conditionalInstancesList;
+    private String[] conditionVal;
 	
-	public String getSelectedStaticEntityId()
+	
+    public String[] getConditionVal()
+    {
+        return conditionVal;
+    }
+    
+    public void setConditionVal(String[] conditionVal)
+    {
+        this.conditionVal = conditionVal;
+    }
+    public String getSelectedStaticEntityId()
 	{
 		return this.selectedStaticEntityId;
 	}
@@ -79,5 +91,15 @@ public class AnnotationForm extends AbstractActionForm implements Serializable
     {
         // TODO Auto-generated method stub
         
+    }
+    
+    public List getConditionalInstancesList()
+    {
+        return conditionalInstancesList;
+    }
+    
+    public void setConditionalInstancesList(List conditionalInstancesList)
+    {
+        this.conditionalInstancesList = conditionalInstancesList;
     }
 }
