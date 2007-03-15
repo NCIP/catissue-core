@@ -97,7 +97,7 @@ System.out.println("containerId:"+containerId);
 
 
 
-<table id="tableID" >
+<table id="tableID" width="600" cellspacing="0" cellpadding="0">
       <tr height = 10>
       	   <td></td>
       	   <td></td>
@@ -106,7 +106,7 @@ System.out.println("containerId:"+containerId);
 	  <tr>	 
   	   	  <td width = "2%"></td>
 		  <td>        
-          	  <table summary="" cellpadding="3" cellspacing="0" border="0" width="400">			
+          	  <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">			
 
 				 <tr>
 					   <td class="formTitle" height="20" colspan="3">
@@ -176,28 +176,19 @@ System.out.println("containerId:"+containerId);
 			</td>
       </tr>
   </table>
-
-
-
-
-
-
-
-
-
-
-
-   <table valign="top" border="0" height = "75%">
+<br>
+   <table valign="top" border="0" height = "75%" width = "600" cellspacing="0" cellpadding="0">
 
    	<%if (link==null){ %>
+
 	<tr valign="top" height = "90%">
-	 <td  width="1%"></td>	
+	 <td  width="2%"></td>	
        <td>
-				<table valign="top" width="90%"     border='0' height="85%" cellspacing="0" cellpadding="0" >
+				<table valign="top" width="100%"     border='0' height="85%" cellspacing="0" cellpadding="0" >
 			<!-- Main Page heading -->				
 					<tr valign="top" width="100%" height="100%">
 						<td  align="left">
-							<table  class = "tbBordersAllbordersBlack" border="1" valign="top" width="100%" height="100%">						
+							<table  class = "tbBordersAllbordersBlack" border="1" cellspacing="0" cellpadding="0" valign="top" width="100%" height="100%">						
 								<tr height="100%" valign="top">
 								
 									<td align="left" width="18%" height="100%" valign="top" rowspan="2">
