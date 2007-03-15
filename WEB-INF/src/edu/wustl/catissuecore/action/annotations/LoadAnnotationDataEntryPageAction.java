@@ -81,6 +81,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
             }
             entityIdForCondition = (String) getObjectFromCache(AnnotationConstants.ENTITY_ID_IN_CONDITION);
             entityRecordIdForCondition = (String) getObjectFromCache(AnnotationConstants.ENTITY_RECORDID_IN_CONDITION);
+            
         }
         else
         {
@@ -385,7 +386,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
             {
                 String strURLForEditRecord = getURLForEditEntityMapRecord(
                         request, dynamicEntity.getName(), entityMapRecord
-                                .getDynamicEntityRecordId());
+                                );
                 entityMapRecordXML.append("<row id='"
                         + entityMapRecord.getId().toString() + "' >");
                 entityMapRecordXML.append("<cell>" + "0" + "</cell>");
@@ -412,13 +413,26 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
      * @return
      */
     private String getURLForEditEntityMapRecord(HttpServletRequest request,
-            String containerId, Long dynExtensionEntityRecordId)
+            String containerId, EntityMapRecord entityMapRecord)
     {
-        String urlForEditRecord = request.getContextPath()
+        String urlForEditRecord = "";
+        try
+        {
+            EntityMap entityMap = (EntityMap)(new AnnotationBizLogic().retrieve(EntityMap.class.getName(),"id",entityMapRecord.getEntityMapId())).get(0);
+        
+       
+        urlForEditRecord = request.getContextPath()
                 + "/LoadDynamicExtentionsDataEntryPage.do?selectedAnnotation="
-                + containerId + "&amp;recordId=" + dynExtensionEntityRecordId
-                + "^_self";
+                + containerId + "&amp;recordId=" + entityMapRecord.getDynamicEntityRecordId()+"&amp;selectedStaticEntityId="+ entityMap.getStaticEntityId()+
+                "&amp;selectedStaticEntityRecordId="+entityMapRecord.getStaticEntityRecordId() + "^_self";
+        }
+        catch (DAOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         return urlForEditRecord;
+        
     }
 
     /**

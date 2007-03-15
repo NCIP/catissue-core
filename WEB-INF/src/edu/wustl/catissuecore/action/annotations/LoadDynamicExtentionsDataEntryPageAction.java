@@ -67,6 +67,8 @@ public class LoadDynamicExtentionsDataEntryPageAction extends BaseAction
 		{
 			Long entityMapId = getEntityMapId(Utility.toLong(staticEntityId), Utility.toLong(dynEntContainerId));
 			cacheManager.addObjectToCache(AnnotationConstants.SELECTED_ENTITY_MAP_ID, entityMapId);
+            cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_ENTITYID,annotationDataEntryForm.getSelectedStaticEntityId());
+            cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID,annotationDataEntryForm.getSelectedStaticEntityRecordId());
 		}
 	}
 
