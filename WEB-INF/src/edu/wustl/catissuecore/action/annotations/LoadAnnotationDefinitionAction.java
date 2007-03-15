@@ -297,7 +297,7 @@ public class LoadAnnotationDefinitionAction extends BaseAction
                 .getSession().getAttribute(Constants.SESSION_DATA);
         if (sessionDataBean != null)
         {
-            entityMapObj.setCreatedBy(sessionDataBean.getLastName() + ","
+            entityMapObj.setCreatedBy(sessionDataBean.getLastName() + ", "
                     + sessionDataBean.getFirstName());
             entityMapObj.setCreatedDate(new Date());
         }
