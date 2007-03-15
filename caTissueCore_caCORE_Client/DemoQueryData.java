@@ -8,7 +8,6 @@ import java.util.Random;
 import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -19,6 +18,7 @@ import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
@@ -43,15 +43,16 @@ public class DemoQueryData
 {
 	private static boolean DEBUG = false;
 	// Constants to configure.
-	static final int NO_OF_COLLECTION_PROTOCOL = 20;
+	static final int NO_OF_COLLECTION_PROTOCOL = 4;
 
-	static final int NO_OF_PARTICIPANT = 10000;
-	static final int NO_OF_SCG_PER_PARTICIPANT = 20;
-	static final int MIN_SCG_PER_PARTICIPANT = 3;
-	static final int NO_OF_SPECIMEN_PER_SCG = 50;
-	static final int MIN_SPECIMEN_PER_SCG = 3;
-	static final int MAX_CHILD_SPECIMEN = 4;
+	static final int NO_OF_PARTICIPANT = 15;
+	static final int NO_OF_SCG_PER_PARTICIPANT = 5;
+	static final int MIN_SCG_PER_PARTICIPANT = 2;
+	static final int NO_OF_SPECIMEN_PER_SCG = 5;
+	static final int MIN_SPECIMEN_PER_SCG = 2;
+	static final int MAX_CHILD_SPECIMEN = 3;
 	static final int NO_OF_SITES = 5;
+	static final int MAX_PARTICIPANT_MEDICAL_IDS = 3;
 	
 	private CollectionProtocol[] collectionProtocols = new CollectionProtocol[NO_OF_COLLECTION_PROTOCOL];
 	private Site[] sites = new Site[NO_OF_SITES];
@@ -92,7 +93,7 @@ public class DemoQueryData
 	private boolean openSession() throws ApplicationException
 	{
 		ClientSession cs = ClientSession.getInstance();
-		return cs.startSession("admin@admin.com", "admin");
+		return cs.startSession("admin@admin.com", "Login123");
 	}
 	
 	
@@ -213,7 +214,7 @@ public class DemoQueryData
 	{
 		int noOfSpecimens = getNumber(NO_OF_SPECIMEN_PER_SCG-MIN_SPECIMEN_PER_SCG)+MIN_SPECIMEN_PER_SCG;
 		for (int index = 0;index<noOfSpecimens;index++)
-		{
+ 		{
 			Specimen specimen = createSpecimen(specimenCollectionGroup);
 			SpecimenCharacteristics specimenCharacteristics = (SpecimenCharacteristics)appService.createObject(specimen.getSpecimenCharacteristics());
 			specimen.setSpecimenCharacteristics(specimenCharacteristics);
@@ -273,9 +274,9 @@ public class DemoQueryData
 
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(10));
-		specimen.setQuantity(quantity);
+		specimen.setInitialquantity(quantity);
 		specimen.setAvailableQuantity(quantity);
-		specimen.setComments("");
+		specimen.setComment("");
 //		specimen.setLineage("Aliquot");
 
 		// Is virtually located
@@ -391,15 +392,12 @@ public class DemoQueryData
 		specimenCollectionGroup.setActivityStatus("Active");
 
 		Site site = sites[getNumber(sites.length)];
-		specimenCollectionGroup.setSite(site);
+		specimenCollectionGroup.setSpecimenCollectionSite(site);
 
 		CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)collectionProtocolRegistration.getCollectionProtocol().getCollectionProtocolEventCollection().iterator().next();
 		specimenCollectionGroup.setCollectionProtocolEvent(collectionProtocolEvent);
 		specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 
-		ClinicalReport clinicalReport = new ClinicalReport();
-		clinicalReport.setSurgicalPathologyNumber("");
-		specimenCollectionGroup.setClinicalReport(clinicalReport);
 		return specimenCollectionGroup;
 	}
 
@@ -587,7 +585,7 @@ public class DemoQueryData
 //		User protocolCordinator = insertAdminUser();
 		Collection protocolCordinatorCollection = new HashSet();
 		protocolCordinatorCollection.add(protocolCoordinator);
-		collectionProtocol.setUserCollection(protocolCordinatorCollection);
+		collectionProtocol.setCoordinatorCollection(protocolCordinatorCollection);
 		
 		collectionProtocol = (CollectionProtocol)appService.createObject(collectionProtocol);
 		return collectionProtocol;
@@ -670,9 +668,16 @@ public class DemoQueryData
 		participant.setEthnicity("Hispanic or Latino");
 
 //		Collection participantMedicalIdentifierCollection = new HashSet();
-//		/*participantMedicalIdentifierCollection.add("Washington University School of Medicine");
-//		 participantMedicalIdentifierCollection.add("1111");
-//		 */
+//		int medicalIdNo = getNumber(MAX_PARTICIPANT_MEDICAL_IDS);
+//		for (int i=0;i<=medicalIdNo;i++)
+//		{
+//			ParticipantMedicalIdentifier pm = new ParticipantMedicalIdentifier();
+//			pm.setMedicalRecordNumber("RN:"+UniqueKeyGeneratorUtil.getUniqueKey());
+//			pm.setSite(sites[getNumber(sites.length)]);
+//			participantMedicalIdentifierCollection.add(pm);
+//			pm.setParticipant(participant);
+//		}
+//		
 //		participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
 		return participant;
 	}
