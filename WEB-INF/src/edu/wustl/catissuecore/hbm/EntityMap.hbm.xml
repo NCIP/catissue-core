@@ -8,6 +8,8 @@
     <class
         name="edu.wustl.catissuecore.domain.EntityMap"
         table="CATISSUE_ENTITY_MAP"
+        dynamic-update="false"
+        dynamic-insert="false"
     >
 
         <id
@@ -30,41 +32,7 @@
             column="CONTAINER_ID"
             length="30"
         />
-        
-        <property
-            name="staticRecordId"
-            type="long"
-            update="true"
-            insert="true"
-            column="STATIC_RECORD_ID"
-            length="30"
-        />
-        
-        <property
-            name="staticEntityId"
-            type="long"
-            update="true"
-            insert="true"
-            column="STATIC_ENTITY_ID"
-            length="30"
-        />
-        
-        <property
-            name="createdDate"
-            type="date"
-            update="true"
-            insert="true"
-            column="CREATED_DATE"
-        />
-        
-        <property
-            name="createdBy"
-            type="string"
-            update="true"
-            insert="true"
-            column="CREATED_BY"
-        />
-        
+
         <property
             name="linkStatus"
             type="string"
@@ -73,17 +41,51 @@
             column="STATUS"
             length="10"
         />
-        
+
         <property
-            name="typeId"
+            name="staticEntityId"
             type="long"
             update="true"
             insert="true"
-            column="TYPE_ID"
+            column="STATIC_ENTITY_ID"
             length="30"
         />
 
-		
+        <property
+            name="createdDate"
+            type="date"
+            update="true"
+            insert="true"
+            column="CREATED_DATE"
+        />
+
+        <property
+            name="createdBy"
+            type="string"
+            update="true"
+            insert="true"
+            column="CREATED_BY"
+            length="255"
+        />
+
+        <set
+            name="entityMapConditionCollection"
+            table="CATISSUE_ENTITY_MAP_CONDITIONS"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="ENTITY_MAP_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.EntityMapCondition"
+              />
+        </set>
+
         <!--
             To add non XDoclet property mappings, create a file named
                 hibernate-properties-EntityMap.xml
