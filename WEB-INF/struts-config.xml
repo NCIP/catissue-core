@@ -980,14 +980,33 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.annotationDef"></forward>
+			
 		</action>
 		<action path="/BuildDynamicEntity"
 			type="edu.wustl.catissuecore.action.annotations.LoadDynamicExtensionsAction"
 			name="annotationForm"
 			validate="false"
 			scope="request">
-			<forward name="success" redirect="true" path=".catissuecore.dynamicFormDef"></forward>
+			<forward name="success" redirect="true" path=".catissuecore.dynamicFormDef"></forward>		
 		</action>
+		
+		<action path="/EditAnnotationConditions"
+			type="edu.wustl.catissuecore.action.annotations.EditAnnotationConditionsAction"
+			name="annotationForm"
+			validate="false"
+			scope="request">
+			<forward name="success" redirect="true" path=".catissuecore.annotationDef"></forward>			
+		</action>	
+		
+		<action path="/SaveAnnotationsConditions"
+			type="edu.wustl.catissuecore.action.annotations.SaveAnnotationsConditionsAction"
+			name="annotationForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/DefineAnnotations.do"></forward>			
+		</action>	
+			
+		
 		<!-- Annotation actions end -->
 			<!-- CollectionProtocol Actions Begins-->
 	    <action path="/DummyCollectionProtocol"
