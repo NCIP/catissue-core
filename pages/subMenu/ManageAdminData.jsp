@@ -249,7 +249,7 @@
 		</div>
 		<div>
 			<a class="subMenuPrimary" href="DefineAnnotations.do">
-					<bean:message key="app.add" />
+					<bean:message key="anno.define" />
 			</a>
 		</div>
 	</td>
