@@ -77,10 +77,8 @@ public class LoadAnnotationDefinitionAction extends BaseAction
         try
         {
             AnnotationForm annotationForm = (AnnotationForm) form;
-            annotationForm.setSelectedStaticEntityId(null);
-            
-            //annotationForm.setConditionVal(null);
-            
+            annotationForm.setSelectedStaticEntityId(null);            
+            //annotationForm.setConditionVal(null);            
             //Ajax Code
             if (request.getParameter(AnnotationConstants.AJAX_OPERATION) != null)
             {
@@ -321,6 +319,8 @@ public class LoadAnnotationDefinitionAction extends BaseAction
         if(conditions!=null)    
         for (int i = 0; i < conditions.length; i++)
         {
+           boolean check =checkForAll(conditions);
+           if(!check)
             if (!conditions[i]
                     .equals(new Integer(Constants.SELECT_OPTION_VALUE)
                             .toString())
@@ -335,6 +335,18 @@ public class LoadAnnotationDefinitionAction extends BaseAction
         }
         return entityMapConditionCollection;
 
+    }
+    
+    private boolean checkForAll(String[] conditions)
+    {
+        if(conditions!=null)    
+            for (int i = 0; i < conditions.length; i++)
+            {
+                if (conditions[i].equals(Constants.ALL))
+                    return true;
+            }
+        
+        return false;
     }
 
     /**
