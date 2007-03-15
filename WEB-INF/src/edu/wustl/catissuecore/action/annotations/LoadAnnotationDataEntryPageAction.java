@@ -61,7 +61,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
             HttpServletResponse response) throws Exception
     {
         AnnotationDataEntryForm annotationDataEntryForm = (AnnotationDataEntryForm) form;
-        String staticEntityId = null, staticEntityRecordId = null, entityIdForCondition = null, entityRecordIdForCondition = null;
+        String staticEntityId = null,staticEntityName=null, staticEntityRecordId = null, entityIdForCondition = null, entityRecordIdForCondition = null;
         if (request
                 .getParameter(WebUIManager.getOperationStatusParameterName()) != null)
         {
@@ -118,7 +118,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         }
         Logger.out.info("Updating for Entity Id " + staticEntityId);
         initializeDataEntryForm(request, staticEntityId, staticEntityRecordId,
-                entityIdForCondition, entityRecordIdForCondition,
+                entityIdForCondition, entityRecordIdForCondition,staticEntityName,
                 annotationDataEntryForm);
         String pageOf = request.getParameter(Constants.PAGEOF);
         return mapping.findForward(Constants.SUCCESS);
@@ -303,7 +303,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
      */
     private void initializeDataEntryForm(HttpServletRequest request,
             String staticEntityId, String staticEntityRecordId,
-            String entityIdForCondition, String entityRecordIdForCondition,
+            String entityIdForCondition, String entityRecordIdForCondition,String staticEntityName,
             AnnotationDataEntryForm annotationDataEntryForm)
             throws DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException
@@ -312,7 +312,7 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         if (staticEntityId != null)
         {
             List annotationList = getAnnotationList(staticEntityId,
-                    entityIdForCondition, entityRecordIdForCondition);
+                    entityIdForCondition, entityRecordIdForCondition,staticEntityName,staticEntityRecordId);
             annotationDataEntryForm.setAnnotationsList(annotationList);
             annotationDataEntryForm.setParentEntityId(staticEntityId);
         }
@@ -503,30 +503,34 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
      * @throws DynamicExtensionsSystemException 
      */
     private List getAnnotationList(String entityId,
-            String entityIdForCondition, String entityRecordIdForCondition)
+            String entityIdForCondition, String entityRecordIdForCondition,String staticEntityName,String staticEntityRecordId)
             throws DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException
     {
         List<NameValueBean> annotationsList = new ArrayList<NameValueBean>();
         AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-        List dynEntitiesList = null;
-        if ((entityIdForCondition == null)
-                || (entityIdForCondition.trim().equals("")))
+        List dynEntitiesList = null;      
+        List cpIdList = new ArrayList();
+        if(staticEntityName != null && staticEntityRecordId != null )
         {
-            dynEntitiesList = annotationBizLogic
-                    .getListOfDynamicEntitiesIds(Utility.toLong(entityId));
-        }
-        else
+            ICPCondition annoCondn=getConditionInvoker(staticEntityName,staticEntityRecordId);
+            if(annoCondn!=null)            
+                cpIdList=annoCondn.getCollectionProtocolList(new Long(staticEntityRecordId));                         
+        }             
+       /* if(cpIdList==null || cpIdList.isEmpty())        
+            dynEntitiesList=  annotationBizLogic.getListOfDynamicEntitiesIds(Utility.toLong(entityId));        
+        else*/
         {
-            dynEntitiesList = annotationBizLogic.getListOfDynamicEntitiesIds(
-                    Utility.toLong(entityId), Utility
-                            .toLong(entityIdForCondition), Utility
-                            .toLong(entityRecordIdForCondition));
+            dynEntitiesList = annotationBizLogic.getListOfDynamicEntities(Utility.toLong(entityId));
+            dynEntitiesList = annotationBizLogic.getAnnotationIdsBasedOnCondition(dynEntitiesList,cpIdList);
         }
+        
+       
+      //  getConditionalDEId(dynEntitiesList,cpIdList);
         if (dynEntitiesList != null)
         {
             Iterator<Long> dynEntitiesIterator = dynEntitiesList.iterator();
-            NameValueBean annotationBean = null;
+           NameValueBean annotationBean = null;
             while (dynEntitiesIterator.hasNext())
             {
                 annotationBean = getNameValueBeanForDE(dynEntitiesIterator
@@ -536,7 +540,12 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
                     annotationsList.add(annotationBean);
                 }
             }
+            
+            
+            
         }
+       
+        
         return annotationsList;
     }
 
@@ -577,5 +586,45 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
 
         }
         return containerName;
+    }
+    
+    private ICPCondition getConditionInvoker(String staticEntityName,String entityInstanceId)
+    {
+        //read StaticInformation.xml and get ConditionInvoker
+        try
+        {
+            //ICPCondition annoCondn; 
+            
+            LoadAnnotationDefinitionAction action = new LoadAnnotationDefinitionAction();
+            action
+                    .populateStaticEntityList("StaticEntityInformation.xml",
+                            staticEntityName);
+            String conditionInvoker = (String) action.map.get("conditionInvoker");
+          
+            ICPCondition annoCondn =(ICPCondition) Class.forName(conditionInvoker).newInstance();           
+         /*   
+            Class[] parameterTypes = new Class[]{Long.class};
+            Object[] parameterValues = new Object[]{new Long(entityInstanceId)};         
+       
+            Method getBizLogicMethod = annotaionConditionClass.getMethod("getCollectionProtocolList", parameterTypes);
+            annoCondn = (ICPCondition)getBizLogicMethod.invoke(annotaionConditionClass,parameterValues);*/
+               return annoCondn;
+            
+        }
+        catch (DataTypeFactoryInitializationException e)
+        {
+        }
+        catch (ClassNotFoundException e)
+        {
+        }
+        catch (InstantiationException e)
+        {
+        }
+        
+        catch (IllegalAccessException e)
+        {
+        }
+        return null;
+
     }
 }
