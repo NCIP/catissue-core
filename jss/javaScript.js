@@ -804,14 +804,15 @@ function onRadioButtonGroupClick(element)
 
 function initializeGridForGroups(groupsXML)
 {
+	//alert('ho2:'+groupsXML);
 	gridForGroups= new dhtmlXGridObject('divForGroups');
 	gridForGroups.setImagePath("dhtml_comp/imgs/");
 	gridForGroups.enableAutoHeigth(true);
-	gridForGroups.setHeader("#,Group");
-	gridForGroups.setInitWidthsP("15,85");
-	gridForGroups.setColAlign("left,left")
-	gridForGroups.setColTypes("ch,ro");
-	gridForGroups.enableMultiselect(true);
+	gridForGroups.setHeader("Group");
+	gridForGroups.setInitWidthsP("100");
+	gridForGroups.setColAlign("left");
+	gridForGroups.setColTypes("ro");
+	//gridForGroups.enableMultiselect(true);
 	gridForGroups.setOnRowSelectHandler(groupSelected);
 	gridForGroups.init();
 	//gridForGroups.setStyle(formTitleStyle);
@@ -822,18 +823,44 @@ function initializeGridForGroups(groupsXML)
 	}
 }
 
+
+function initializeGridForSelectedEntities(groupsXML)
+{
+//	alert('ho1:'+groupsXML);
+	gridForEntities= new dhtmlXGridObject('gridForEnities');
+	gridForEntities.setImagePath("dhtml_comp/imgs/");
+	gridForEntities.enableAutoHeigth(true);
+	gridForEntities.setHeader("#,Form Title,Entity,Date,Created By,Conditions");
+	gridForEntities.setInitWidthsP("5,23,17,12,15,15,13");
+	gridForEntities.setColAlign("left,left,left,left,left,left,left")
+	gridForEntities.setColTypes("ch,link,ro,ro,ro,ro,link");
+	gridForEntities.setColSorting("str,str,str,date,str,str,str");
+
+   
+	gridForEntities.init();
+	
+	gridForEntities.loadXMLString(groupsXML);
+	if(gridForEntities.getRowsNum()>0)
+	{
+		gridForEntities.selectRow(0,true,false);	
+	}
+}
+
+
+
 function initializeGridForEntities()
 {
 	gridForEntities= new dhtmlXGridObject('gridForEnities');
 	gridForEntities.setImagePath("dhtml_comp/imgs/");
 	gridForEntities.enableAutoHeigth(true);
-	gridForEntities.setHeader("#,Form Title,Attached With,Date,Created By,Status");
-	gridForEntities.setInitWidthsP("5,23,17,15,15,25");
-	gridForEntities.setColAlign("left,left,left,left,left,left")
-	gridForEntities.setColTypes("ch,link,ro,ro,ro,ro");
-//	gridForEntities.setStyle(formSubTableTitleStyle);
+	gridForEntities.setHeader("Form Title,Entity,Date,Created By,Conditions");
+	gridForEntities.setInitWidthsP("27,18,15,18,22");
+	gridForEntities.setColAlign("left,left,left,left,left")
+	gridForEntities.setColTypes("link,ro,ro,ro,link");
+	gridForEntities.setColSorting("str,str,date,str,str");
 	gridForEntities.init();
 }
+
 
 function groupSelected(groupid)
 {
@@ -1257,10 +1284,10 @@ function submitForm()
 		}
 }
 
-function viewAnnotations(specimenEntityId,ID,consentTierCounter)
+function viewAnnotations(specimenEntityId,ID,consentTierCounter,staticEntityName)
 	{
 		
-		var action="DisplayAnnotationDataEntryPage.do?entityId="+specimenEntityId+"&entityRecordId="+ID+"&pageOf=pageOfNewSpecimen&operation=viewAnnotations&consentTierCounter="+consentTierCounter;
+		var action="DisplayAnnotationDataEntryPage.do?entityId="+specimenEntityId+"&entityRecordId="+ID+"&pageOf=pageOfNewSpecimen&operation=viewAnnotations&consentTierCounter="+consentTierCounter+"&staticEntityName="+staticEntityName;
 		document.forms[0].action=action;
 		document.forms[0].submit();
 	}	   
