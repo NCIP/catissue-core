@@ -5,8 +5,6 @@
 
 package edu.wustl.catissuecore.action.annotations;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -431,40 +429,23 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
     {
         List<NameValueBean> annotationsList = new ArrayList<NameValueBean>();
         AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-        List dynEntitiesList = null;
-        if ((entityIdForCondition == null)
-                || (entityIdForCondition.trim().equals("")))
-        {
-            dynEntitiesList = annotationBizLogic
-                    .getListOfDynamicEntitiesIds(Utility.toLong(entityId));
-        //    dynEntitiesList=  annotationBizLogic.getListOfDynamicEntities(Utility.toLong(entityId));
-        }
-        else
-        {
-            dynEntitiesList = annotationBizLogic.getListOfDynamicEntitiesIds(
-                    Utility.toLong(entityId), Utility
-                            .toLong(entityIdForCondition), Utility
-                            .toLong(entityRecordIdForCondition));
-        }  
-        
+        List dynEntitiesList = null;      
         List cpIdList = new ArrayList();
         if(staticEntityName != null && staticEntityRecordId != null )
         {
-            ICPCondition annoCondn=getConditionInvoker( staticEntityName,staticEntityRecordId);
-            if(annoCondn!=null)
-            {
-                cpIdList=annoCondn.getCollectionProtocolList(new Long(staticEntityRecordId));
-                if(cpIdList != null && !cpIdList.isEmpty())
-                {
-                    System.out.println("***********Got It!!!!");
-                }
-                else
-                {
-                    System.out.println("**********Didn't Get It!!!!");
-                }
-            }
-        }      
+            ICPCondition annoCondn=getConditionInvoker(staticEntityName,staticEntityRecordId);
+            if(annoCondn!=null)            
+                cpIdList=annoCondn.getCollectionProtocolList(new Long(staticEntityRecordId));                         
+        }             
+       /* if(cpIdList==null || cpIdList.isEmpty())        
+            dynEntitiesList=  annotationBizLogic.getListOfDynamicEntitiesIds(Utility.toLong(entityId));        
+        else*/
+        {
+            dynEntitiesList = annotationBizLogic.getListOfDynamicEntities(Utility.toLong(entityId));
+            dynEntitiesList = annotationBizLogic.getAnnotationIdsBasedOnCondition(dynEntitiesList,cpIdList);
+        }
         
+       
       //  getConditionalDEId(dynEntitiesList,cpIdList);
         if (dynEntitiesList != null)
         {
