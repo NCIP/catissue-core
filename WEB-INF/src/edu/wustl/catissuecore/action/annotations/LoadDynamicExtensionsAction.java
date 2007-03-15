@@ -31,19 +31,23 @@ public class LoadDynamicExtensionsAction extends BaseAction
 	@Override
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
+       
 		AnnotationForm annotationForm = (AnnotationForm)form;
 		//Get static entity id and store in cache
 		String staticEntityId = annotationForm.getSelectedStaticEntityId();
+        String[] conditions = annotationForm.getConditionVal();
+        
 		CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager.getInstance();
 		if(cacheManager!=null)
 		{
 			cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_ENTITYID, staticEntityId);
+            cacheManager.addObjectToCache(AnnotationConstants.SELECTED_STATIC_RECORDID, conditions);          
 		}
 		//Get Dynamic extensions URL
 		String dynamicExtensionsURL =getDynamicExtensionsURL(request);
 		//Set as request attribute
-		request.setAttribute(AnnotationConstants.DYNAMIC_EXTN_URL_ATTRIB, dynamicExtensionsURL);
-		return mapping.findForward(Constants.SUCCESS);
+		request.setAttribute(AnnotationConstants.DYNAMIC_EXTN_URL_ATTRIB, dynamicExtensionsURL);           
+        return mapping.findForward(Constants.SUCCESS);
 	}
 
 	/**
