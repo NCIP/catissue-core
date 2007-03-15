@@ -25,7 +25,9 @@
 	String id1 = (String) request.getAttribute("id");
 	String participantEntityId1 = (String) request.getAttribute("entityId");
 	String entityRecordId = (String) request.getAttribute("entityRecordId");
-	String url = "LoadAnnotationDataEntryPage.do?pageOf="+pageOf1+"&id="+id1+"&entityId="+participantEntityId1+"&entityRecordId="+entityRecordId;
+	String staticEntityName1 = (String) request.getAttribute("staticEntityName");
+
+	String url = "LoadAnnotationDataEntryPage.do?pageOf="+pageOf1+"&id="+id1+"&entityId="+participantEntityId1+"&entityRecordId="+entityRecordId+"&staticEntityName="+staticEntityName1;
 
 	
 	%>
