@@ -16,6 +16,9 @@ public class AnnotationConstants
 	public static final String SELECTED_STATIC_ENTITYID = "selectedStaticEntityId";
 	public static final String SELECTED_STATIC_ENTITY_RECORDID = "selectedStaticEntityRecordId";
 	
+    public static final String SELECTED_STATIC_RECORDID = "selectedStaticRecordId";
+    public static final String TYPEID = "typeId";
+    
 	public static final String ENTITY_ID_IN_CONDITION = "entityIdInCondition";
 	public static final String ENTITY_RECORDID_IN_CONDITION = "entityRecordIdInCondition";
 	
@@ -32,10 +35,14 @@ public class AnnotationConstants
 	public static final String ENTITY_NAME_PARTICIPANT = "edu.wustl.catissuecore.domain.Participant";
 	public static final String ENTITY_NAME_SPECIMEN = "edu.wustl.catissuecore.domain.Specimen";
 	public static final String ENTITY_NAME_SPECIMEN_COLLN_GROUP = "edu.wustl.catissuecore.domain.SpecimenCollectionGroup";
+  //  public static final String ENTITY_NAME_COLLECTION_PROTOCOL_REGISTRATION = "edu.wustl.catissuecore.domain.CollectionProtocolRegistration";
+    
 	
 	public static final String PARTICIPANT = "Participant";
 	public static final String SPECIMEN = "Specimen";
 	public static final String SPECIMEN_COLLN_GROUP = "Specimen Collection Group";
+   // public static final String COLLECTION_PROTOCOL_REGISTRATION = "Collection Protocol Registration";
+    
 	
 	public static final String REQST_PARAM_ENTITY_ID = "entityId";
 	public static final String REQST_PARAM_ENTITY_RECORD_ID = "entityRecordId";
