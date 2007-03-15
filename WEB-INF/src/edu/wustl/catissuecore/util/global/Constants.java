@@ -1,4 +1,4 @@
-		  /**
+/**
  * <p>Title: Constants Class>
  * <p>Description:  This class stores the constants used in the operations in the application.</p>
  * Copyright:    Copyright (c) year
@@ -1693,4 +1693,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 
 	public static final String SEARCH_CATEGORY_LIST_SELECT_TAG_NAME="selectCategoryList";
 	public static final String SEARCH_CATEGORY_LIST_FUNCTION_NAME="getSelectedEntities";
+    
+    
+    public static final String EDIT_CONDN = "Add/Edit Condition";
 }
