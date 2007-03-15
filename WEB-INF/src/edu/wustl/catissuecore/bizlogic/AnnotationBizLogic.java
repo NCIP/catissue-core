@@ -8,10 +8,12 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.EntityMap;
+import edu.wustl.catissuecore.domain.EntityMapCondition;
 import edu.wustl.catissuecore.domain.EntityMapRecord;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.exception.BizLogicException;
@@ -147,6 +149,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
         
         return dynamicList;
     }
+    
     
     /**
      * 
@@ -381,4 +384,45 @@ public class AnnotationBizLogic extends DefaultBizLogic
             }
         }
     }
+    
+    
+    public List getAnnotationIdsBasedOnCondition(List dynEntitiesList,List cpIdList)
+    {
+        List dynEntitiesIdList = new ArrayList();        
+        if(dynEntitiesList!=null && !dynEntitiesList.isEmpty())
+        {
+            Iterator dynEntitiesIterator = dynEntitiesList.iterator();            
+            while(dynEntitiesIterator.hasNext())
+            {
+                EntityMap entityMap= (EntityMap)dynEntitiesIterator.next();
+                if(entityMap.getEntityMapConditionCollection() != null && !entityMap.getEntityMapConditionCollection().isEmpty())
+                {
+                    boolean check = checkStaticRecId(entityMap.getEntityMapConditionCollection(),cpIdList);
+                    if(check)
+                        dynEntitiesIdList.add(entityMap.getContainerId());               
+                }
+                else
+                    dynEntitiesIdList.add(entityMap.getContainerId());     
+            }            
+        }       
+        return dynEntitiesIdList;      
+    }
+    
+    private boolean  checkStaticRecId(Collection entityMapConditionCollection,List cpIdList)
+    {        
+        Iterator entityMapCondIterator = entityMapConditionCollection.iterator();
+        
+        if(cpIdList!=null && !cpIdList.isEmpty())
+        while(entityMapCondIterator.hasNext())
+        {
+            EntityMapCondition entityMapCond= (EntityMapCondition)entityMapCondIterator.next();
+            if(cpIdList.contains(entityMapCond.getStaticRecordId()))
+                 return true;
+        }
+                    
+        
+        return false;
+    }
+    
+    
 }
