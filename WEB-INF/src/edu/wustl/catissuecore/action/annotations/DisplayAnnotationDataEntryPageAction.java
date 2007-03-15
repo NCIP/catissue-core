@@ -53,6 +53,9 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 	{
 		request.setAttribute("entityId",request.getParameter("entityId"));
         request.setAttribute("entityRecordId",request.getParameter("entityRecordId"));
+        request.setAttribute(Constants.ID,request.getParameter(Constants.ID));
+        request.setAttribute("staticEntityName",request.getParameter("staticEntityName"));
+        
         
         return mapping.findForward(request.getParameter("pageOf"));
 	}
