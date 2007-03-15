@@ -399,6 +399,13 @@ create table CATISSUE_ENTITY_MAP_RECORD (
    STATUS varchar(10),
    primary key (IDENTIFIER)
 );
+create table CATISSUE_ENTITY_MAP_CONDITIONS (
+   IDENTIFIER bigint not null auto_increment,
+   STATIC_RECORD_ID bigint,
+   TYPE_ID bigint,
+   ENTITY_MAP_ID bigint,
+   primary key (IDENTIFIER)
+);
 create table CATISSUE_COLL_DISTRIBUTION_REL (
    COLLECTION_PROTOCOL_ID bigint not null,
    DISTRIBUTION_PROTOCOL_ID bigint not null,
