@@ -71,7 +71,7 @@ public class ConceptReferent extends AbstractDomainObject
 
 	/**
 	 * @return concept associated with current concept referent.
-	 * @hibernate.many-to-one column="CONCEPT_ID" class="edu.wustl.catissuecore.domain.pathology.Concept.java" cascade="save-update"
+	 * @hibernate.many-to-one column="CONCEPT_ID" class="edu.wustl.catissuecore.domain.pathology.Concept" cascade="save-update"
 	 */
 	public Concept getConcept()
 	{
