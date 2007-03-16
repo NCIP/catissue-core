@@ -74,4 +74,16 @@
 						value="${conf.dir}/client_log4j.properties"/>
 		</java>
 	</target>	
+
+	<!--To insert some logical data to the database-->
+	<target name="insertDummyData" depends="compile">		
+		<java classname="APIClientDemo" fork="true">
+			<classpath refid="cp"/>
+			<classpath>
+				<pathelement location="${src.dir}"/>
+			</classpath>
+			<sysproperty key="log4j.configuration"
+						value="${conf.dir}/client_log4j.properties"/>
+		</java>
+	</target>	
 </project>

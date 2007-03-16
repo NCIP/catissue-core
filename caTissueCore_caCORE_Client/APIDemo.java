@@ -8,7 +8,6 @@ import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Capacity;
-import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -95,7 +94,7 @@ public class APIDemo
           quantity.setValue(new Double(10));
           newSpOrderItem.setRequestedQuantity(quantity);
           newSpOrderItem.setName("Array Order");
-          newSpOrderItem.setArrayType(specimenArrayType);
+          newSpOrderItem.setSpecimenArrayType(specimenArrayType);
           
          /* SpecimenArrayType specimenArrayType = new SpecimenArrayType();
           specimenArrayType.setId(new Long(3));*/
@@ -333,7 +332,7 @@ public class APIDemo
 	public Biohazard initBioHazard()
 	{
 		Biohazard bioHazard = new Biohazard();
-		bioHazard.setComments("NueroToxicProtein");
+		bioHazard.setComment("NueroToxicProtein");
 		bioHazard.setName("bh" + UniqueKeyGeneratorUtil.getUniqueKey());
 		bioHazard.setType("Toxic");
 		return bioHazard;
@@ -607,7 +606,7 @@ public class APIDemo
 		SpecimenArrayType specimenArrayType = (SpecimenArrayType) ClientDemo.dataModelObjectMap.get("SpecimenArrayType");
 		Collection holdsSpecimenArrayTypeCollection = new HashSet();		
 		holdsSpecimenArrayTypeCollection.add(specimenArrayType);
-		storageContainer.setHoldsSpArrayTypeCollection(holdsSpecimenArrayTypeCollection);
+		storageContainer.setHoldsSpecimenArrayTypeCollection(holdsSpecimenArrayTypeCollection);
 
 		storageContainer.setPositionDimensionOne(new Integer(1));
 		storageContainer.setPositionDimensionTwo(new Integer(2));
@@ -790,7 +789,7 @@ public class APIDemo
 		User protocolCordinator = (User)ClientDemo.dataModelObjectMap.get("User1");
 		Collection protocolCordinatorCollection = new HashSet();
 		protocolCordinatorCollection.add(protocolCordinator);
-		collectionProtocol.setUserCollection(protocolCordinatorCollection);
+		collectionProtocol.setCoordinatorCollection(protocolCordinatorCollection);
 		
 		return collectionProtocol;
 	}
@@ -822,10 +821,10 @@ public class APIDemo
 
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(10));
-		molecularSpecimen.setQuantity(quantity);
+		molecularSpecimen.setInitialquantity(quantity);
 		molecularSpecimen.setAvailableQuantity(quantity);
 		molecularSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
-		molecularSpecimen.setComments("");
+		molecularSpecimen.setComment("");
 		molecularSpecimen.setLineage("Aliquot");
 		// Is virtually located
 		
@@ -939,7 +938,7 @@ public class APIDemo
 //		Site site = new Site();
 //		site.setId(new Long(1));
 		Site site = (Site)ClientDemo.dataModelObjectMap.get("Site");
-		specimenCollectionGroup.setSite(site);
+		specimenCollectionGroup.setSpecimenCollectionSite(site);
 
 		specimenCollectionGroup.setClinicalDiagnosis("Abdominal fibromatosis");
 		specimenCollectionGroup.setClinicalStatus("Operative");
@@ -970,11 +969,6 @@ public class APIDemo
 
 		specimenCollectionGroup.setName("scg" + UniqueKeyGeneratorUtil.getUniqueKey());
 
-		ClinicalReport clinicalReport = new ClinicalReport();
-		clinicalReport.setSurgicalPathologyNumber("");
-		//clinicalReport.setId(new Long(1));
-		specimenCollectionGroup.setClinicalReport(clinicalReport);
-		
 //		Setting Consent Tier Status.
 		Collection consentTierStatusCollection = new HashSet();
 		
@@ -1362,7 +1356,7 @@ public class APIDemo
 	
 	public void updateBiohazard(Biohazard bioHazard)
 	{
-		bioHazard.setComments("Radioactive");
+		bioHazard.setComment("Radioactive");
 		bioHazard.setName("bh" + UniqueKeyGeneratorUtil.getUniqueKey());
 		bioHazard.setType("Radioactive"); //Toxic
 	}
@@ -1397,7 +1391,7 @@ public class APIDemo
 	public void updateSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
 	{
 		Site site = (Site)ClientDemo.dataModelObjectMap.get("Site");
-		specimenCollectionGroup.setSite(site);
+		specimenCollectionGroup.setSpecimenCollectionSite(site);
 		specimenCollectionGroup.setClinicalDiagnosis("Dentinoma");//Abdominal fibromatosis
 		specimenCollectionGroup.setClinicalStatus("New Diagnosis"); //Operative
 		specimenCollectionGroup.setActivityStatus("Active");
@@ -1410,11 +1404,6 @@ public class APIDemo
 		specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 
 		specimenCollectionGroup.setName("scg" + UniqueKeyGeneratorUtil.getUniqueKey());
-		
-		//clinicalReport = new ClinicalReport();
-		//clinicalReport.setSurgicalPathologyNumber("123");
-		specimenCollectionGroup.getClinicalReport().setSurgicalPathologyNumber("1234");
-
 	}	
 	
 	
@@ -1570,7 +1559,7 @@ public class APIDemo
 		User protocolCordinator = (User)ClientDemo.dataModelObjectMap.get("User1");		
 		Collection protocolCordinatorCollection = new HashSet();
 		protocolCordinatorCollection.add(protocolCordinator);
-		collectionProtocol.setUserCollection(protocolCordinatorCollection);
+		collectionProtocol.setCoordinatorCollection(protocolCordinatorCollection);
 		
 	}
 	public void updateSpecimen(Specimen updateSpecimen)
@@ -1591,7 +1580,7 @@ public class APIDemo
 		
 		//updateSpecimen.setAvailableQuantity(quantity);
 		//updateSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
-		updateSpecimen.setComments("");
+		updateSpecimen.setComment("");
 		
 		updateSpecimen.setStorageContainer(null); 
 		updateSpecimen.setPositionDimensionOne(null);

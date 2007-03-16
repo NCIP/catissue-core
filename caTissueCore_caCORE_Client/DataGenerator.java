@@ -10,7 +10,6 @@ import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CellSpecimen;
-import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -36,7 +35,6 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenOrderItem;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
@@ -115,7 +113,7 @@ public class DataGenerator
 	{
 		Biohazard bioHazard = new Biohazard();
 		bioHazard.setName("Toxic Biohazard");
-		bioHazard.setComments("NueroToxicProtein");		
+		bioHazard.setComment("NueroToxicProtein");		
 		bioHazard.setType("Toxic");		
 		
 		dataModelObjectMap.put("BIOHAZARD",bioHazard);
@@ -370,7 +368,7 @@ public class DataGenerator
 		User gunther = (User) dataModelObjectMap.get("SCIENTISTUSER4");
 		Collection protocolCordinatorCollection = new HashSet();
 		protocolCordinatorCollection.add(gunther);		
-		collectionProtocol.setUserCollection(protocolCordinatorCollection);
+		collectionProtocol.setCoordinatorCollection(protocolCordinatorCollection);
 		
 		return collectionProtocol;
 	}
@@ -519,7 +517,7 @@ public class DataGenerator
 		SpecimenArrayType specimenArrayType  = new SpecimenArrayType();
 		specimenArrayType.setId(new Long(2));
 		holdsSpArrayTypeCollection.add(specimenArrayType);
-		storageContainer.setHoldsSpArrayTypeCollection(holdsSpArrayTypeCollection);		
+		storageContainer.setHoldsSpecimenArrayTypeCollection(holdsSpArrayTypeCollection);		
 		return storageContainer;		
 	}
 	
@@ -795,7 +793,7 @@ public class DataGenerator
 		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
 		Site site= (Site) dataModelObjectMap.get("SITE1");
 		
-		specimenCollectionGroup.setSite(site);
+		specimenCollectionGroup.setSpecimenCollectionSite(site);
 		specimenCollectionGroup.setClinicalDiagnosis(cDiagnosis);
 		specimenCollectionGroup.setClinicalStatus(cStatus);
 		specimenCollectionGroup.setActivityStatus("Active");
@@ -808,10 +806,6 @@ public class DataGenerator
 		
 		specimenCollectionGroup.setName("scg"+iCount);
 		
-		ClinicalReport clinicalReport = new ClinicalReport();
-		clinicalReport.setSurgicalPathologyNumber("");
-		//clinicalReport.setId(new Long(1));
-		specimenCollectionGroup.setClinicalReport(clinicalReport);
 		Collection consentTierStatusCollection = new HashSet();
 		Collection consentTierCollection = collectionProtocolRegistration.getCollectionProtocol().getConsentTierCollection();
 		if(consentTierCollection != null)
@@ -875,9 +869,9 @@ public class DataGenerator
 		specimen.setPathologicalStatus(pathStatus);
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(10));
-		specimen.setQuantity(quantity);
+		specimen.setInitialquantity(quantity);
 		specimen.setAvailableQuantity(quantity);		
-		specimen.setComments("");
+		specimen.setComment("");
 		specimen.setLineage(linegeType);
 				
 		specimen.setStorageContainer(null); 
@@ -1089,7 +1083,7 @@ public class DataGenerator
           quantity.setValue(new Double(10));
           newSpOrderItem.setRequestedQuantity(quantity);
           newSpOrderItem.setName("Array Order");
-          newSpOrderItem.setArrayType(specimenArrayType);
+          newSpOrderItem.setSpecimenArrayType(specimenArrayType);
           
           Collection specimenOrderItemCollection = new HashSet();
           ExistingSpecimenOrderItem specimenOrderItem = new ExistingSpecimenOrderItem();
