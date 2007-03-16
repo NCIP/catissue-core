@@ -74,7 +74,8 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String entityName = nameOfTheEntity.substring(nameOfTheEntity.lastIndexOf(".")+1,nameOfTheEntity.length());
 		Collection attributeCollection = entity.getAttributeCollection();
 		boolean isEditLimits = false;
-		String header = ApplicationProperties.getValue("query.defineSearchRulesFor");//"\nDefine Search Rules For";//
+		String header = Constants.DEFINE_SEARCH_RULES;
+		//ApplicationProperties.getValue("query.defineSearchRulesFor");//"\nDefine Search Rules For";//
 		String attributesList = "";
 		generatedHTML.append("<table border=\"0\" width=\"100%\" height=\"100%\" callspacing=\"1\" cellpadding=\"1\">");
 		generatedHTML.append("\n<tr>");
@@ -104,7 +105,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				generatedHTML.append(attrLabel+" ");
 				if(attribute.getDataType().equalsIgnoreCase(Constants.DATE))
 				{
-					String dateFormat = ApplicationProperties.getValue("query.date.format");
+					String dateFormat = Constants.DATE_FORMAT;//ApplicationProperties.getValue("query.date.format");
 				//	generatedHTML.append("<td  valign='top' class=\"standardDateQuery\" nowrap='nowrap' width=\"10%\">");
 					generatedHTML.append("\n("+dateFormat+")");
 				//	generatedHTML.append("</td>\n");

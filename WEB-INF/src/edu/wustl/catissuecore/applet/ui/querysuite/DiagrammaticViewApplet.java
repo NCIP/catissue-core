@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Image;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,7 @@ import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionId;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -64,6 +66,10 @@ public class DiagrammaticViewApplet extends BaseApplet
 	{
 		super.doInit();
 		Logger.configure();
+		/*URL codeBase = getCodeBase();
+		String path = codeBase.getPath();
+		path = path + AppletConstants.RESOURCE_BUNDLE_PATH;
+		ApplicationProperties.initBundle(path);*/
 		IQuery query = getQueryObjectFromServer();
 		System.out.println("Query from server    "+query);
 		queryObject = new ClientQueryBuilder();

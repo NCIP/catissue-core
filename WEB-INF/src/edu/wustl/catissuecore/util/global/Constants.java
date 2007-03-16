@@ -195,7 +195,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String TREE_NODE_FONT_CLOSE = "</i></font>";  
 	public static final String NULL_ID = "NULL";
 	public static final String NODE_SEPARATOR = "::";
-	
+	public static final String DEFINE_SEARCH_RULES = "Define Search Rules For";
+	public static final String DATE_FORMAT = "MM-dd-yyyy";
 	
 	//Surgical Pathology Report UI constants
 	public static final String SPR_VIEW_ACTION="ViewSurgicalPathologyReport.do";

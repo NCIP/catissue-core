@@ -130,6 +130,7 @@ public interface AppletConstants
 	/**
 	 * 
 	 */
+	public static final String RESOURCE_BUNDLE_PATH = "dagViewApplet.jar/ApplicationResources.properties"; 
 	public static final String DefineSearchResultsViewAction = "/DefineSearchResultsView.do";
 	/**
 	 * Specify the ADD_TO_LIMIT_ACTION field 
