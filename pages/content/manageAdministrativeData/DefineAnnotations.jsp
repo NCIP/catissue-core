@@ -106,7 +106,7 @@ System.out.println("containerId:"+containerId);
 	  <tr>	 
   	   	  <td width = "2%"></td>
 		  <td>        
-          	  <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">			
+          	  <table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">			
 
 				 <tr>
 					   <td class="formTitle" height="20" colspan="3">
@@ -118,7 +118,7 @@ System.out.println("containerId:"+containerId);
 		
 					<td class ="formRequiredNotice" width="5">*</td>
 					<td class="formRequiredLabel" >
-					   Entity
+					   <bean:message key="anno.Entity"/> 
 					</td>
 					<td class="formField" >
 						<html:select property="selectedStaticEntityId" styleId="optionSelect" styleClass="formFieldSized15" >
@@ -127,11 +127,19 @@ System.out.println("containerId:"+containerId);
 					</td>
 				</tr>
 
+				 <tr>
+				         <td class="formRequiredNotice" height="20"  width="5">&nbsp;</td>
+					   <td class="formField" height="20" colspan="3">
+						   <b> <bean:message key="anno.condn"/>  </b>
+						</td>
+				 </tr>
+				
+
 				<tr>
 		
 					<td class ="formRequiredNotice" width="5">&nbsp;</td>
 					<td class="formLabel">
-					   Title
+					   <bean:message key="collectionprotocol.protocoltitle" />
 					</td>
 					<td class="formField" >
 						<html:select property="conditionVal" styleClass="formFieldSized20" multiple ="true" 
@@ -176,38 +184,43 @@ System.out.println("containerId:"+containerId);
 			</td>
       </tr>
   </table>
-<br>
-   <table valign="top" border="0" height = "75%" width = "600" cellspacing="0" cellpadding="0">
+
+   <table valign="top" border="0" height="80%" width = "600" cellspacing="0" cellpadding="3">
 
    	<%if (link==null){ %>
 
-	<tr valign="top" height = "90%">
+	<tr valign="top" height = "80%">
 	 <td  width="2%"></td>	
        <td>
-				<table valign="top" width="100%"     border='0' height="85%" cellspacing="0" cellpadding="0" >
-			<!-- Main Page heading -->				
+				<table valign="top" width="100%" border='1' height="80%" cellspacing="0" cellpadding="0" >
+			<!-- Main Page heading -->				    
+				 <tr height="2%">
+					   <td class="formTitle" height="25" colspan="3">
+						  <bean:message key="app.availableGrp"/> 
+						</td>
+				 </tr>
 					<tr valign="top" width="100%" height="100%">
 						<td  align="left">
-							<table  class = "tbBordersAllbordersBlack" border="1" cellspacing="0" cellpadding="0" valign="top" width="100%" height="100%">						
-								<tr height="100%" valign="top">
-								
+							<table  class = "tbBordersAllbordersBlack" border="1" cellspacing="0" cellpadding="0" valign="top" width="100%" height="80%">						
+								<tr height="100%" valign="top">								
 									<td align="left" width="18%" height="100%" valign="top" rowspan="2">
 										<!--Groups list-->
 										<div id="divForGroups" width="100%" height="100%" style="background-color:white;overflow:hidden"/>
-									</td>
-								
+									</td>								
 									<td align="left" valign="top">
 										<!--List of entities-->
 										<div id="gridForEnities" width="100%" height="100%" style="background-color:white;overflow:hidden"/>
-									</td>
-									
+									</td>									
 								</tr>
 							</table>
 						</td>
-					</tr>
+					</tr>	
+					
+					<tr></tr>
 			  </table>
 	   </td>	 
 	</tr>
+	
 	<%}%>
 		
 </table>
