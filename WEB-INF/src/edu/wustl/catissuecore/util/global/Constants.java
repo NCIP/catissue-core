@@ -1696,5 +1696,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SEARCH_CATEGORY_LIST_FUNCTION_NAME="getSelectedEntities";
     
     
-    public static final String EDIT_CONDN = "Add/Edit Condition";
+    public static final String EDIT_CONDN = "Add/Edit";
 }
