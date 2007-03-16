@@ -96,7 +96,7 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
        {
 			super.setAllValues(abstractDomain);
 			SpunEventParameters spunEventParametersObject = (SpunEventParameters)abstractDomain ;
-			this.gravityForce = spunEventParametersObject.getGForce().doubleValue() ;
+			this.gravityForce = spunEventParametersObject.getGravityForce().doubleValue() ;
 			this.durationInMinutes = spunEventParametersObject.getDurationInMinutes().intValue() ; 
 	    }
 	    catch(Exception excp)
