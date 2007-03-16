@@ -161,7 +161,7 @@ drop table if exists CATISSUE_COLL_EVENT_PARAM;
 drop table if exists CATISSUE_PASSWORD;
 drop table if exists CATISSUE_SPECIMEN_BIOHZ_REL;
 drop table if exists CATISSUE_MOL_SPE_REVIEW_PARAM;
-drop table if exists CATISSUE_STOR_TYPE_HOLDS_TYPE;;
+drop table if exists CATISSUE_STOR_TYPE_HOLDS_TYPE;
 drop table if exists CATISSUE_STORAGE_TYPE;
 drop table if exists CATISSUE_CONTAINER;
 drop table if exists CATISSUE_DISTRIBUTION_SPE_REQ;
