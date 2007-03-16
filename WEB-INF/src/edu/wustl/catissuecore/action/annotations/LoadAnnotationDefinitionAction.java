@@ -39,6 +39,7 @@ import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManagerConstants;
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
+import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.domain.EntityMap;
 import edu.wustl.catissuecore.domain.EntityMapCondition;
@@ -288,6 +289,7 @@ public class LoadAnnotationDefinitionAction extends BaseAction
     private EntityMap getEntityMap(HttpServletRequest request,
             String staticEntityId, String dynExtContainerId, String[] conditions)
     {
+        AnnotationUtil util = new AnnotationUtil();
         Collection entityMapConditionCollection = new HashSet();
 
         EntityMap entityMapObj = new EntityMap();
@@ -302,9 +304,10 @@ public class LoadAnnotationDefinitionAction extends BaseAction
             entityMapObj.setCreatedDate(new Date());
         }
         entityMapObj.setLinkStatus(AnnotationConstants.STATUS_ATTACHED);
+        
 
         if (conditions != null)
-            entityMapConditionCollection = getEntityMapConditionsCollection(
+            entityMapConditionCollection =util.getEntityMapConditionsCollection(
                     conditions, entityMapObj);
         entityMapObj
                 .setEntityMapConditionCollection(entityMapConditionCollection);
@@ -312,43 +315,8 @@ public class LoadAnnotationDefinitionAction extends BaseAction
         return entityMapObj;
     }
 
-    public Collection getEntityMapConditionsCollection(String[] conditions,
-            EntityMap entityMapObj)
-    {
-        Collection entityMapConditionCollection = new HashSet();
-        if(conditions!=null)    
-        for (int i = 0; i < conditions.length; i++)
-        {
-           boolean check =checkForAll(conditions);
-           if(!check)
-            if (!conditions[i]
-                    .equals(new Integer(Constants.SELECT_OPTION_VALUE)
-                            .toString())
-                    && !conditions[i].equals(Constants.ALL))
-            {
-                EntityMapCondition entityMapCondition = new EntityMapCondition();
-                entityMapCondition.setEntityMap(entityMapObj);
-                entityMapCondition.setStaticRecordId(new Long(conditions[i]));
-                entityMapCondition.setTypeId(new Long(4));
-                entityMapConditionCollection.add(entityMapCondition);
-            }
-        }
-        return entityMapConditionCollection;
-
-    }
-    
-    private boolean checkForAll(String[] conditions)
-    {
-        if(conditions!=null)    
-            for (int i = 0; i < conditions.length; i++)
-            {
-                if (conditions[i].equals(Constants.ALL))
-                    return true;
-            }
-        
-        return false;
-    }
-
+   
+  
     /**
      * @return
      */
@@ -738,7 +706,8 @@ public class LoadAnnotationDefinitionAction extends BaseAction
             DynamicExtensionsApplicationException
     {
         List<NameValueBean> systemEntityList = new ArrayList<NameValueBean>();
-        List<NameValueBean> staticEntityInformationList = populateStaticEntityList("StaticEntityInformation.xml",null);
+        AnnotationUtil util = new AnnotationUtil();
+        List<NameValueBean> staticEntityInformationList = util.populateStaticEntityList("StaticEntityInformation.xml",null);
         CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager
                 .getInstance();
         if (cacheManager
@@ -772,68 +741,9 @@ public class LoadAnnotationDefinitionAction extends BaseAction
         return systemEntityList;
     }
 
-    /**
-     * This method updates module map by parsing xml file
-     * @param xmlFileName file to be parsed
-     * @return dataType Map
-     * @throws DataTypeFactoryInitializationException on Exception
-     */
-    public static Map map= new HashMap();
+
     
-    public final List<NameValueBean> populateStaticEntityList(String xmlFileName,String displayNam)
-            throws DataTypeFactoryInitializationException
-    {
-        List list = new ArrayList();
-
-        SAXReader saxReader = new SAXReader();
-        InputStream inputStream = this.getClass().getClassLoader()
-                .getResourceAsStream(xmlFileName);
-
-        Document document = null;
-
-        try
-        {
-            document = saxReader.read(inputStream);
-            Element className = null;
-            Element displayName = null;
-            Element conditionInvoker = null;
-
-            Element primitiveAttributesElement = document.getRootElement();
-            Iterator primitiveAttributeElementIterator = primitiveAttributesElement
-                    .elementIterator("static-entity");
-
-            Element primitiveAttributeElement = null;
-
-            while (primitiveAttributeElementIterator.hasNext())
-            {
-                primitiveAttributeElement = (Element) primitiveAttributeElementIterator
-                        .next();
-
-                className = primitiveAttributeElement.element("name");
-                displayName = primitiveAttributeElement.element("displayName");
-                conditionInvoker = primitiveAttributeElement.element("conditionInvoker");
-                list.add(new NameValueBean(displayName.getStringValue(),
-                        className.getStringValue()));
-                
-                if(displayNam!=null )
-                {
-                    if(className.getText().equals(displayNam))
-                    {
-                        map.put("name",className.getText());
-                        map.put("displayName",displayName.getText());
-                        map.put("conditionInvoker",conditionInvoker.getText());
-                    }
-                }
-
-            }
-        }
-        catch (DocumentException documentException)
-        {
-            throw new DataTypeFactoryInitializationException(documentException);
-        }
-
-        return list;
-    }
+    
 
     /**
      * @param annotationForm 
