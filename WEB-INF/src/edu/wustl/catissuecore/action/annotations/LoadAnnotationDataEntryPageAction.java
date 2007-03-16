@@ -85,6 +85,8 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         }
         else
         {
+            staticEntityName= (String)request.getParameter("staticEntityName");
+            
             staticEntityId = request
                     .getParameter(AnnotationConstants.REQST_PARAM_ENTITY_ID);
             staticEntityRecordId = request
