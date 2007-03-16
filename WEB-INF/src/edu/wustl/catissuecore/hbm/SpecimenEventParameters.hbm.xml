@@ -169,7 +169,7 @@
                 column="IDENTIFIER"
             />
         <property
-            name="GForce"
+            name="gForce"
             type="double"
             update="true"
             insert="true"
