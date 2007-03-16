@@ -78,7 +78,7 @@
 								<td valign="center" width="75%"><html:button property="Button"><bean:message key="query.saveButton"/></html:button></td>
 								<td  valign="center" align="right"><html:button property="Button"  onclick="viewSearchResults()"><bean:message key="query.searchButton"/></html:button></td>
 								<td  align="right" valign="center"><html:button property="Button" onclick="previousFromDefineResults()"><bean:message key="query.previousButton"/></html:button></td>
-								<td align="right" valign="center"><html:button property="Button"><bean:message key="query.nextButton"/></html:button>
+								<td align="right" valign="center"><html:button property="Button" onclick="viewSearchResults()"><bean:message key="query.nextButton"/></html:button>
 								</td>
 								<td width="2%">&nbsp;</td>
 							</tr>

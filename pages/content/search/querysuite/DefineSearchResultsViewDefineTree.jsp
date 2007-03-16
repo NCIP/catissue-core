@@ -1,13 +1,14 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-
+<html>
+<body>
 <table border="0"  height="100%" width="100%" cellpadding="1" cellspacing="3" valign="top">
 	
 <tr  valign="top">
 	<td  valign="top" width="20%">
 		<table border="0"  height="100%" width="100%" cellpadding="1" cellspacing="3" valign="top">
-			<tr  id="rowMsg" class='validationMessageCss'  >
-				<td id="validationMessagesSection"  width="80%" class='validationMessageCss' style="display:none">
+			<tr  class='validationMessageCss'  >
+				<td width="80%" class='validationMessageCss' style="display:none">
 					&nbsp;
 				</td>
 			</tr>
@@ -24,7 +25,7 @@
 		</table>
 	</td>
 	<td>
-	<table border="0"  height="100%" width="100%" cellpadding="1" cellspacing="3" valign="top">
+	    <table border="0"  height="100%" width="100%" cellpadding="1" cellspacing="3" valign="top">
 			<tr  id="rowMsg" class='validationMessageCss'>
 				<td id="validationMessagesSection"  width="80%" class='validationMessageCss'>
 					<div id="validationMessagesRow"   style="overflow:auto; width:820; height:50;display:none"></div>
@@ -49,7 +50,9 @@
 					</div>
 				</td>
 			</tr>
-		<table>
+		</table>
 	</td>
 </tr>
 </table>
+</body>
+</html>
