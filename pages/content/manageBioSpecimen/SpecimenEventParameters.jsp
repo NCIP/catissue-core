@@ -1,5 +1,4 @@
-
-						<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 
@@ -47,6 +46,9 @@
  		specimenIdentifier= (String)session.getAttribute(Constants.SPECIMEN_ID);//,specimenIdentifier);
  	//	session.removeAttribute(Constants.SPECIMEN_ID); 		
 	}
+	String staticEntityName=null;
+	staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN;
+	
 
 
 
@@ -187,7 +189,7 @@
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
 				</td>
 				
-				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()"  onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,<%=consentTierCounter%>)">
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()"  onClick="viewAnnotations(<%=specimenEntityId%>,<%=specimenIdentifier%>,<%=consentTierCounter%>,<%=staticEntityName%>)">
 					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
 				</td>
