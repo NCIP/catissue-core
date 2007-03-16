@@ -29,15 +29,14 @@ function goToAddLimitsPage()
 var addedNodes = "";
 function treeNodeClicled(id)
 {
-
-var aa = id.split("::");
-if(aa.length == 2 && aa[0] == 'NULL')
+	var aa = id.split("::");
+	if(aa.length == 2 && aa[0] == 'NULL')
 	{
 	addedNodes = addedNodes + ","+id;
 	}
-var nodes = addedNodes.split(",");
-var isNodeAdded = false;
-if(nodes != "")
+	var nodes = addedNodes.split(",");
+	var isNodeAdded = false;
+	if(nodes != "")
 	{
 	for(i=0; i<nodes.length; i++)
 		{
@@ -66,43 +65,43 @@ if(nodes != "")
 };
 function buildSpreadsheet(id)
 {
-		var request = newXMLHTTPReq();			
-		var actionURL;
-		var handlerFunction = getReadyStateHandler(request,showSpreadsheetData,true);	
-		request.onreadystatechange = handlerFunction;				
-		actionURL = "nodeId=" + id;				
-		var url = "BuildQueryOutputSpreadsheet.do";
-		<!-- Open connection to servlet -->
-		request.open("POST",url,true);	
-		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-		request.send(actionURL);	
+	var request = newXMLHTTPReq();			
+	var actionURL;
+	var handlerFunction = getReadyStateHandler(request,showSpreadsheetData,true);	
+	request.onreadystatechange = handlerFunction;				
+	actionURL = "nodeId=" + id;				
+	var url = "BuildQueryOutputSpreadsheet.do";
+	<!-- Open connection to servlet -->
+	request.open("POST",url,true);	
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+	request.send(actionURL);	
 }
 function showChildNodes(outputTreeStr)
 {
 	var nodes = outputTreeStr.split("|");
 	for(i=0; i<nodes.length; i++)
+	{
+		var node = nodes[i];
+		if(node != "")
 		{
-			var node = nodes[i];
-			if(node != "")
+			var treeValues = node.split(",");
+			var nodeId = treeValues[0];
+			var displayName = treeValues[1];
+			var objectname = treeValues[2];
+			var parentIdToSet = treeValues[3];
+			var parentObjectName = treeValues[4];
+			var img = "results.gif";
+			var totalLen= nodeId.length;
+			var labelLen = 'labelTreeNode'.length;
+			var diff= totalLen - labelLen;
+			var lab = nodeId.substring(diff);
+			if(lab == 'labelTreeNode')
 			{
-				var treeValues = node.split(",");
-				var nodeId = treeValues[0];
-				var displayName = treeValues[1];
-				var objectname = treeValues[2];
-				var parentIdToSet = treeValues[3];
-				var parentObjectName = treeValues[4];
-			    var img = "results.gif";
-			    var totalLen= nodeId.length;
-			    var labelLen = 'labelTreeNode'.length;
-			    var diff= totalLen - labelLen;
-			    var lab = nodeId.substring(diff);
-                if(lab == 'labelTreeNode')
-				{
-					 img = "folder.gif";
-				}
-				tree.insertNewChild(parentIdToSet,nodeId,displayName,0,img,img,img,"");
+				 img = "folder.gif";
 			}
+			tree.insertNewChild(parentIdToSet,nodeId,displayName,0,img,img,img,"");
 		}
+	}
 }
 function showSpreadsheetData(columnDataStr)
 {
@@ -114,32 +113,28 @@ function showSpreadsheetData(columnDataStr)
 	var colDataTypes1 = ""
 	var colTypes1 = "";
 	if(columns != 'Entity Name, Count')
-	
 	{
-	var width =180 +",";
-	var colDataTypes1 = "ch,"
-	var colTypes1 = "ch,";
-	
+		var width =180 +",";
+		var colDataTypes1 = "ch,"
+		var colTypes1 = "ch,";
 	}
 	for(i=0; i<columnNames.length; i++)
+	{
+		var name = columnNames[i];
+		if(!name == "")
 		{
-			var name = columnNames[i];
-			if(!name == "")
-			{
-				width = width + "180,"
-				colDataTypes1 = colDataTypes1 + "ro,";
-				colTypes1 = colTypes1 +"str,";
-			}		
+			width = width + "180,"
+			colDataTypes1 = colDataTypes1 + "ro,";
+			colTypes1 = colTypes1 +"str,";
 		}		
+	}		
 	mygrid.clearAll();
 	mygrid.setHeader(columns);
 	mygrid.setInitWidths(width);
 	mygrid.setColTypes(colDataTypes1);
 	mygrid.setColSorting(colTypes1);
 //	mygrid.enableAutoHeigth(true);
-
 	mygrid.init();
-
 	var myData = data.split("|");
 	for(var row=0;row<myData.length;row++)
 	{
@@ -147,7 +142,7 @@ function showSpreadsheetData(columnDataStr)
 		{
 			if(columns == 'Entity Name, Count')
 			{
-					data = myData[row];
+				data = myData[row];
 			}
 			else
 			{
@@ -181,18 +176,17 @@ function expand()
 	switchObj = document.getElementById('image');
 	dataObj = document.getElementById('collapsableTable');
 	resultSetDivObj = document.getElementById('resultSetDiv');
-
 	if(dataObj.style.display != 'none') //Clicked on - image
 	{
 		dataObj.style.display = 'none';				
 		switchObj.innerHTML = '<img src="images/nolines_plus.gif" border="0"/>';
 		if(navigator.appName == "Microsoft Internet Explorer")
 		{					
-				resultSetDivObj.height = "400";
+			resultSetDivObj.height = "400";
 		}
 		else
 		{
-				resultSetDivObj.height = "400";
+			resultSetDivObj.height = "400";
 		}
 	}
 	else  							   //Clicked on + image
@@ -209,7 +203,6 @@ function expand()
 			resultSetDivObj.height = "320";
 		}
 		switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0"/>';
-
 	}
 }
 
@@ -222,10 +215,11 @@ var textBoxId0 = rowId+"_textBox";
 var calendarId0 = "calendarImg";
 var opId =  rowId+"_combobox";
 //var dateFormatLabel = rowId+"_dateFormatLabel2";
-if(document.all) {
-		// IE.
-		var op = document.getElementById(opId).value;
-	} else if(document.layers) {
+if(document.all)
+{
+	// IE.
+	var op = document.getElementById(opId).value;
+} else if(document.layers) {
 		// Netspace 4
 	var op = document.getElementById(opId).value;
 	} else {
@@ -235,11 +229,11 @@ if(document.all) {
 	if(op == "Is Null" || op== "Is Not Null")
 	{
 		document.getElementById(textBoxId0).value = "";
-			document.getElementById(textBoxId0).disabled = true;
-			if(dataType == "true")
-			{
-				document.getElementById(calendarId0).disabled = true;
-			}	
+		document.getElementById(textBoxId0).disabled = true;
+		if(dataType == "true")
+		{
+			document.getElementById(calendarId0).disabled = true;
+		}	
 	} 	
 	if(op == "In" || op== "Not In")
 	{
@@ -247,11 +241,11 @@ if(document.all) {
 	}
 	else
 	{
-			document.getElementById(textBoxId0).disabled = false;
-			if(dataType == "true")
-			{
-				document.getElementById(calendarId0).disabled = false;
-			}	
+		document.getElementById(textBoxId0).disabled = false;
+		if(dataType == "true")
+		{
+			document.getElementById(calendarId0).disabled = false;
+		}	
 	}
 	if(op == "Is Null" || op== "Is Not Null")
 	{
@@ -389,18 +383,12 @@ function showEntityList(text)
 		alert("No results found.");
 	}
 	var element = document.getElementById('resultSet');
-	var row ='<table border="1" width="20%" height="60%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
+	var row ='<table width="100%" height="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
 	row = row + '<tr>' + text + '</tr>';
 	row = row+'</table>';		
 	element.innerHTML =row;
 }
-/*function showtip(a,event,text)
-{
-		alert("sda  "+text);
-}
-function hidetip()
-{
-}*/
+
 function onResponseUpdate(text)
 {
 
@@ -419,27 +407,26 @@ function onResponseUpdate(text)
 	var listOfEntities = text.split(";");
 	var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="1">';
 
-		for(i=1; i<listOfEntities.length; i++)
+	for(i=1; i<listOfEntities.length; i++)
+	{
+		var e = listOfEntities[i];			
+		var nameDescription = e.split("|");		
+		var name = nameDescription[0];				
+		var description = nameDescription[1];
+		
+		var lastIndex = name.lastIndexOf(".");
+		var entityName = name.substring(lastIndex + 1);
+		if(currentPage != "DefineResultsView")
 		{
-			var e = listOfEntities[i];			
-			var nameDescription = e.split("|");		
-			var name = nameDescription[0];				
-			var description = nameDescription[1];
-			
-			var lastIndex = name.lastIndexOf(".");
-			var entityName = name.substring(lastIndex + 1);
-			if(currentPage != "DefineResultsView")
-			{
-			var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+name+"')";					
-			row = row+'<tr><td><a class="entityLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
-			}
-			else
-			{
-				row = row + '<tr><td class="entityLink" title="'+description+'">' + entityName + ' </td></tr>';
-			}
-			//row =row+ '<tr><td><a href=href="javascript:'+functionCall+'" onMouseover="showtip(this,event,'description  wds')" onMouseout="hidetip()">' +entityName+ '</a></td></tr>';
-			
-		}			
+		var functionCall = "retriveEntityInformation('loadDefineSearchRules.do','categorySearchForm','"+name+"')";					
+		row = row+'<tr><td><a class="entityLink" title="'+description+'"  href="javascript:'+functionCall+'">' +entityName+ '</a></td></tr>';
+		}
+		else
+		{
+			row = row + '<tr><td class="entityLink" title="'+description+'">' + entityName + ' </td></tr>';
+		}
+		//row =row+ '<tr><td><a href=href="javascript:'+functionCall+'" onMouseover="showtip(this,event,'description  wds')" onMouseout="hidetip()">' +entityName+ '</a></td></tr>';
+	}			
 	row = row+'</table>';		
 	element.innerHTML =row;
 }

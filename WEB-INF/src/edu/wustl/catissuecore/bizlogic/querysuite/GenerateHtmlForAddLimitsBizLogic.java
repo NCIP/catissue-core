@@ -353,10 +353,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		String componentId = attributeInterface.getName() + attributeInterface.getId().toString();
 		String textBoxId = componentId + "_textBox";
 		String textBoxId1 = componentId + "_textBox1";
-		String dateFormatLabelId1 = componentId + "_dateFormatLabel1";
-		String dateFormatLabelId2 = componentId + "_dateFormatLabel2";
 		String dataType = attributeInterface.getDataType();
-		//String dateFormat = ApplicationProperties.getValue("query.date.format");
 		StringBuffer html = new StringBuffer();
 		html.append("<td width='1%' valign='top' class=\"standardTextQuery\">\n");
 		if (values == null || values.isEmpty())
@@ -381,7 +378,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		html.append("<td width='1%'  valign='top' class=\"standardTextQuery\">\n");
 		if (isBetween)
 		{
-			if (values == null)
+			if (values == null || values.isEmpty())
 			{
 				html.append("<input type=\"text\" name=\"" + textBoxId1 + "\" id=\"" + textBoxId1 + "\" style=\"display:block\">");
 			}
