@@ -2,16 +2,12 @@
  * @author
  *
  */
-
 package edu.wustl.catissuecore.action.annotations;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,7 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
+
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DataTypeFactoryInitializationException;
@@ -29,6 +25,7 @@ import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManagerConstants;
 import edu.common.dynamicextensions.util.global.Constants;
 import edu.wustl.catissuecore.actionForm.AnnotationDataEntryForm;
+import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.annotations.ICPCondition;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.domain.EntityMap;
@@ -38,8 +35,6 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.exception.BizLogicException;
-import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -63,9 +58,11 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         AnnotationDataEntryForm annotationDataEntryForm = (AnnotationDataEntryForm) form;
         String staticEntityId = null,staticEntityName=null, staticEntityRecordId = null, entityIdForCondition = null, entityRecordIdForCondition = null;
         if (request
+                
                 .getParameter(WebUIManager.getOperationStatusParameterName()) != null)
         {
             //Return from dynamic extensions
+            
             processResponseFromDynamicExtensions(request);
             staticEntityId = (String) getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITYID);
             staticEntityRecordId = (String) getObjectFromCache(AnnotationConstants.SELECTED_STATIC_ENTITY_RECORDID);
@@ -79,13 +76,28 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
                 annotationDataEntryForm
                         .setSelectedStaticEntityRecordId(staticEntityRecordId);
             }
+            staticEntityName = request.getParameter("staticEntityName");
+            
+            if(staticEntityName != null )
+                request.getSession().setAttribute("staticEntityName",staticEntityName);
+            
+            if(staticEntityName == null )
+                staticEntityName=(String)request.getSession().getAttribute("staticEntityName");
+            
             entityIdForCondition = (String) getObjectFromCache(AnnotationConstants.ENTITY_ID_IN_CONDITION);
             entityRecordIdForCondition = (String) getObjectFromCache(AnnotationConstants.ENTITY_RECORDID_IN_CONDITION);
-            
         }
         else
         {
-            staticEntityName= (String)request.getParameter("staticEntityName");
+            staticEntityName =(String) request.getParameter("staticEntityName");
+            
+            if(staticEntityName != null )
+                request.getSession().setAttribute("staticEntityName",staticEntityName);
+            
+            if(staticEntityName == null )
+                staticEntityName=(String)request.getSession().getAttribute("staticEntityName");
+            
+            
             
             staticEntityId = request
                     .getParameter(AnnotationConstants.REQST_PARAM_ENTITY_ID);
@@ -603,19 +615,17 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         }
         return containerName;
     }
-    
+
     private ICPCondition getConditionInvoker(String staticEntityName,String entityInstanceId)
     {
         //read StaticInformation.xml and get ConditionInvoker
         try
-        {
-            //ICPCondition annoCondn; 
-            
-            LoadAnnotationDefinitionAction action = new LoadAnnotationDefinitionAction();
-            action
-                    .populateStaticEntityList("StaticEntityInformation.xml",
+        {           
+           AnnotationUtil util = new AnnotationUtil();
+           
+           util.populateStaticEntityList("StaticEntityInformation.xml",
                             staticEntityName);
-            String conditionInvoker = (String) action.map.get("conditionInvoker");
+            String conditionInvoker = (String) util.map.get("conditionInvoker");
           
             ICPCondition annoCondn =(ICPCondition) Class.forName(conditionInvoker).newInstance();           
          /*   
@@ -628,17 +638,21 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
             
         }
         catch (DataTypeFactoryInitializationException e)
-        {
+        {          
+            Logger.out.debug(e.getMessage(), e);   
         }
         catch (ClassNotFoundException e)
         {
+            Logger.out.debug(e.getMessage(), e);
         }
         catch (InstantiationException e)
         {
+            Logger.out.debug(e.getMessage(), e);
         }
         
         catch (IllegalAccessException e)
         {
+            Logger.out.debug(e.getMessage(), e);
         }
         return null;
 
