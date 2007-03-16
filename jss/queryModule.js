@@ -26,6 +26,84 @@ function goToAddLimitsPage()
 {
 
 }
+var addedNodes = "";
+function treeNodeClicled(id)
+{
+
+var aa = id.split("::");
+if(aa.length == 2 && aa[0] == 'NULL')
+	{
+	addedNodes = addedNodes + ","+id;
+	}
+var nodes = addedNodes.split(",");
+var isNodeAdded = false;
+if(nodes != "")
+	{
+	for(i=0; i<nodes.length; i++)
+		{
+			if(nodes[i] == id)
+			{
+				isNodeAdded = true;
+				break;
+			}
+		}
+	}
+	if(!isNodeAdded)
+	{
+		addedNodes = addedNodes + ","+id;
+		var request = newXMLHTTPReq();			
+		var actionURL;
+		var handlerFunction = getReadyStateHandler(request,showChildNodes,true);	
+		request.onreadystatechange = handlerFunction;				
+		actionURL = "nodeId=" + id;				
+		var url = "BuildQueryOutputTree.do";
+		<!-- Open connection to servlet -->
+		request.open("POST",url,true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		request.send(actionURL);	
+	}
+	buildSpreadsheet(id);
+};
+function buildSpreadsheet(id)
+{
+		var request = newXMLHTTPReq();			
+		var actionURL;
+		var handlerFunction = getReadyStateHandler(request,showSpreadsheetData,true);	
+		request.onreadystatechange = handlerFunction;				
+		actionURL = "nodeId=" + id;				
+		var url = "BuildQueryOutputSpreadsheet.do";
+		<!-- Open connection to servlet -->
+		request.open("POST",url,true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		request.send(actionURL);	
+}
+function showChildNodes(outputTreeStr)
+{
+	var nodes = outputTreeStr.split("|");
+	for(i=0; i<nodes.length; i++)
+		{
+			var node = nodes[i];
+			if(node != "")
+			{
+				var treeValues = node.split(",");
+				var nodeId = treeValues[0];
+				var displayName = treeValues[1];
+				var objectname = treeValues[2];
+				var parentIdToSet = treeValues[3];
+				var parentObjectName = treeValues[4];
+			    var img = "results.gif";
+			    var totalLen= nodeId.length;
+			    var labelLen = 'labelTreeNode'.length;
+			    var diff= totalLen - labelLen;
+			    var lab = nodeId.substring(diff);
+                if(lab == 'labelTreeNode')
+				{
+					 img = "folder.gif";
+				}
+				tree.insertNewChild(parentIdToSet,nodeId,displayName,0,img,img,img,"");
+			}
+		}
+}
 function showSpreadsheetData(columnDataStr)
 {
 	var columnData = columnDataStr.split("&");

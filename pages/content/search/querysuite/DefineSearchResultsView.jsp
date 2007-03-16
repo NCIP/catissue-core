@@ -15,6 +15,7 @@
 <script language="JavaScript" type="text/javascript" src="dhtml_comp/jss/dhtmlXTree.js"></script>
 
 </head>
+<body>
 <!-- Make the Ajax javascript available -->
 <script type="text/javascript" src="jss/ajax.js"></script> 
 <html:errors />
@@ -69,7 +70,7 @@
 					</td>
 				</tr>
 		
-				<tr bgcolor="#DFE9F3">
+				<tr bgcolor="#EAEAEA">
 					<td colspan="4">
 						<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#EAEAEA" height="100%" bordercolorlight="#000000" >
 							<tr height="35" valign="center">
