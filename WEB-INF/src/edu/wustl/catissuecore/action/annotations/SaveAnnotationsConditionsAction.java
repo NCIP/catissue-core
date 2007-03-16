@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AnnotationForm;
+import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.AnnotationBizLogic;
 import edu.wustl.catissuecore.domain.EntityMap;
 import edu.wustl.catissuecore.domain.EntityMapCondition;
@@ -65,12 +66,12 @@ public class SaveAnnotationsConditionsAction extends BaseAction
             Collection entityMapConditionCollectionPrev = new HashSet();
             Iterator it = collPrev.iterator();
 
-            LoadAnnotationDefinitionAction act = new LoadAnnotationDefinitionAction();
+            AnnotationUtil util = new AnnotationUtil();
             Collection entityMapConditionCollectionCurr = new HashSet();
             
             if(annotationForm
                     .getConditionVal()!=null) 
-            entityMapConditionCollectionCurr = act
+            entityMapConditionCollectionCurr = util
                     .getEntityMapConditionsCollection(annotationForm
                             .getConditionVal(), entityMap);
 
