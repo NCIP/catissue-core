@@ -1,8 +1,8 @@
-// script.aculo.us controls.js v1.7.0, Fri Jan 19 19:16:36 CET 2007
+// script.aculo.us controls.js v1.7.1_beta1, Mon Mar 12 14:40:50 +0100 2007
 
-// Copyright (c) 2005, 2006 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
-//           (c) 2005, 2006 Ivan Krstic (http://blogs.law.harvard.edu/ivan)
-//           (c) 2005, 2006 Jon Tirsen (http://www.tirsen.com)
+// Copyright (c) 2005-2007 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
+//           (c) 2005-2007 Ivan Krstic (http://blogs.law.harvard.edu/ivan)
+//           (c) 2005-2007 Jon Tirsen (http://www.tirsen.com)
 // Contributors:
 //  Richard Livsey
 //  Rahul Bhargava
@@ -39,8 +39,6 @@
 if(typeof Effect == 'undefined')
   throw("controls.js requires including script.aculo.us' effects.js library");
 
-var globalKeyPress;  
-var elemStartsWithEntry;
 var Autocompleter = {}
 Autocompleter.Base = function() {};
 Autocompleter.Base.prototype = {
@@ -87,13 +85,17 @@ Autocompleter.Base.prototype = {
 
     Event.observe(this.element, "blur", this.onBlur.bindAsEventListener(this));
     Event.observe(this.element, "keypress", this.onKeyPress.bindAsEventListener(this));
+	Event.observe(this.update, "blur", this.onBlur.bindAsEventListener(this)); 
+    Event.observe(this.element, "focus", this.onFocus.bindAsEventListener(this)); 
+    Event.observe(this.update, "focus", this.onFocus.bindAsEventListener(this)); 
+    //Event.observe(this.element, "keypress", this.onKeyPress.bindAsEventListener(this)); 
+    Event.observe(this.update, "keypress", this.onKeyPress.bindAsEventListener(this)); 
   },
 
   show: function() {
     if(Element.getStyle(this.update, 'display')=='none') this.options.onShow(this.element, this.update);
     if(!this.iefix && 
-      (navigator.appVersion.indexOf('MSIE')>0) &&
-      (navigator.userAgent.indexOf('Opera')<0) &&
+      (Prototype.Browser.IE) &&
       (Element.getStyle(this.update, 'position')=='absolute')) {
       new Insertion.After(this.update, 
        '<iframe id="' + this.update.id + '_iefix" '+
@@ -126,11 +128,8 @@ Autocompleter.Base.prototype = {
   },
 
   onKeyPress: function(event) {
-  
-    globalKeyPress = event.keyCode;	
     if(this.active)
       switch(event.keyCode) {
-	      
        case Event.KEY_TAB:
        case Event.KEY_RETURN:
          this.selectEntry();
@@ -146,17 +145,17 @@ Autocompleter.Base.prototype = {
        case Event.KEY_UP:
          this.markPrevious();
          this.render();
-         if(navigator.appVersion.indexOf('AppleWebKit')>0) Event.stop(event);
+         if(Prototype.Browser.WebKit) Event.stop(event);
          return;
        case Event.KEY_DOWN:
          this.markNext();
          this.render();
-         if(navigator.appVersion.indexOf('AppleWebKit')>0) Event.stop(event);
+         if(Prototype.Browser.WebKit) Event.stop(event);
          return;
       }
      else 
        if(event.keyCode==Event.KEY_TAB || event.keyCode==Event.KEY_RETURN || 
-         (navigator.appVersion.indexOf('AppleWebKit') > 0 && event.keyCode == 0)) return;
+         (Prototype.Browser.WebKit > 0 && event.keyCode == 0)) return;
 
     this.changed = true;
     this.hasFocus = true;
@@ -167,9 +166,11 @@ Autocompleter.Base.prototype = {
   },
 
   activate: function() {
+    clearTimeout(this.hideTimeout); 
     this.changed = false;
     this.hasFocus = true;
     this.getUpdatedChoices();
+	
   },
 
   onHover: function(event) {
@@ -181,17 +182,24 @@ Autocompleter.Base.prototype = {
     }
     Event.stop(event);
   },
-  
+    
   onClick: function(event) {
     var element = Event.findElement(event, 'LI');
     this.index = element.autocompleteIndex;
     this.selectEntry();
     this.hide();
   },
+  onFocus: function(event) { 
+         if (this.hideTimeout) clearTimeout(this.hideTimeout); 
+ 	    this.changed = false; 
+ 	    this.hasFocus = true; 
+ 	    //this.getUpdatedChoices(); 
+   }, 
+  
   
   onBlur: function(event) {
     // needed to make click events working
-    setTimeout(this.hide.bind(this), 250);
+    this.hideTimeout = setTimeout(this.hide.bind(this), 250); 
     this.hasFocus = false;
     this.active = false;     
   }, 
@@ -285,12 +293,9 @@ Autocompleter.Base.prototype = {
       }
 
       this.stopIndicator();
-      this.index = 0;  
-    
-	//  globalKeyPress = 8 indicates that it is a backspace key and do not autocomplete -- Santosh
-	// To autocomplete element should start with entry 	 
-	 	 
-      if(this.entryCount==1 && this.options.autoSelect && globalKeyPress != 8 && elemStartsWithEntry) {
+      this.index = 0;
+      
+      if(this.entryCount==1 && this.options.autoSelect) {
         this.selectEntry();
         this.hide();
       } else {
@@ -400,7 +405,7 @@ Object.extend(Object.extend(Ajax.Autocompleter.prototype, Autocompleter.Base.pro
 // option, if you prefer to write your own autocompletion logic.
 // In that case, the other options above will not apply unless
 // you support them.
-var setChoices = false;
+
 Autocompleter.Local = Class.create();
 Autocompleter.Local.prototype = Object.extend(new Autocompleter.Base(), {
   initialize: function(element, update, array, options) {
@@ -412,9 +417,7 @@ Autocompleter.Local.prototype = Object.extend(new Autocompleter.Base(), {
     this.updateChoices(this.options.selector(this));
   },
 
-  
   setOptions: function(options) {
-  
     this.options = Object.extend({
       choices: 10,
       partialSearch: true,
@@ -426,81 +429,17 @@ Autocompleter.Local.prototype = Object.extend(new Autocompleter.Base(), {
         var partial   = []; // Inside matches
         var entry     = instance.getToken();
         var count     = 0;
-        var intialToken = instance.getToken(); 
-		elemStartsWithEntry = false; 
-		 
+
         for (var i = 0; i < instance.options.array.length &&  
           ret.length < instance.options.choices ; i++) { 
 
           var elem = instance.options.array[i];
-		  entry     = instance.getToken();
-        /*  var foundPos = instance.options.ignoreCase ? 
+          var foundPos = instance.options.ignoreCase ? 
             elem.toLowerCase().indexOf(entry.toLowerCase()) : 
-            elem.indexOf(entry);*/ // Commented and added code as per requirement -- Santosh
-			
-				 var elem1 = elem.toLowerCase();
-				 var initialEntry = entry.toLowerCase();
-				 initialEntry = trim(initialEntry);
-				  var foundPos = -1;
-			if(initialEntry=="*")
-            {
-                foundPos=0;
-				instance.options.choices = 25;
-				entry="";
-				setChoices = true;
-            }			
-			else
-            {			
-			     if(setChoices)
-				 {
-			         instance.options.choices = 10; 
-				 }
-				 var spacePresent = false;
-				 if(initialEntry.indexOf(" ")!=-1)
-				 {
-				      spacePresent = true;
-				 }
-				 
-				 foundPos = elem.toLowerCase().indexOf(entry.toLowerCase());
-				 
-				 if(foundPos==-1 && spacePresent)
-				 {
-				   var entry1 = "(" + initialEntry.replace(/ /g,")+[^#]*( ") +")"+"+";
-				   try
-				   {
-				   var regexp = new RegExp(entry1);
-				   var foundPos = elem1.match(regexp,"gi");
-				   
-				   if(foundPos!=null && foundPos.length > 0)
-				   {
-				     entry = foundPos[0];
-					 foundPos = elem.toLowerCase().indexOf(entry.toLowerCase());
-					 entry = elem.substr(foundPos,entry.length);
-				   }
-				    
-					}
-					catch(e)
-					{
-					}
-				 } 
-				 
-				 if(foundPos == null)
-				 {
-				     foundPos = -1;
-				 }	
-							
-            }
-			
-		if(foundPos != -1)	
-		{
-		
-		 if(elem.toLowerCase().indexOf(intialToken.toLowerCase()) == 0)
-         {
-		   elemStartsWithEntry = true;
-         }		 
-		}	
+            elem.indexOf(entry);
+
           while (foundPos != -1) {
-            if (foundPos == 0) { 
+            if (foundPos == 0 && elem.length != entry.length) { 
               ret.push("<li><strong>" + elem.substr(0, entry.length) + "</strong>" + 
                 elem.substr(entry.length) + "</li>");
               break;
@@ -551,9 +490,14 @@ Ajax.InPlaceEditor.prototype = {
     this.options = Object.extend({
       paramName: "value",
       okButton: true,
+      okLink: false,
       okText: "ok",
+      cancelButton: false,
       cancelLink: true,
       cancelText: "cancel",
+      textBeforeControls: '',
+      textBetweenControls: '',
+      textAfterControls: '',
       savingText: "Saving...",
       clickToEditText: "Click to edit",
       okText: "ok",
@@ -641,23 +585,52 @@ Ajax.InPlaceEditor.prototype = {
       var br = document.createElement("br");
       this.form.appendChild(br);
     }
+    
+    if (this.options.textBeforeControls)
+      this.form.appendChild(document.createTextNode(this.options.textBeforeControls));
 
     if (this.options.okButton) {
-      okButton = document.createElement("input");
+      var okButton = document.createElement("input");
       okButton.type = "submit";
       okButton.value = this.options.okText;
       okButton.className = 'editor_ok_button';
       this.form.appendChild(okButton);
     }
+    
+    if (this.options.okLink) {
+      var okLink = document.createElement("a");
+      okLink.href = "#";
+      okLink.appendChild(document.createTextNode(this.options.okText));
+      okLink.onclick = this.onSubmit.bind(this);
+      okLink.className = 'editor_ok_link';
+      this.form.appendChild(okLink);
+    }
+    
+    if (this.options.textBetweenControls && 
+      (this.options.okLink || this.options.okButton) && 
+      (this.options.cancelLink || this.options.cancelButton))
+      this.form.appendChild(document.createTextNode(this.options.textBetweenControls));
+      
+    if (this.options.cancelButton) {
+      var cancelButton = document.createElement("input");
+      cancelButton.type = "submit";
+      cancelButton.value = this.options.cancelText;
+      cancelButton.onclick = this.onclickCancel.bind(this);
+      cancelButton.className = 'editor_cancel_button';
+      this.form.appendChild(cancelButton);
+    }
 
     if (this.options.cancelLink) {
-      cancelLink = document.createElement("a");
+      var cancelLink = document.createElement("a");
       cancelLink.href = "#";
       cancelLink.appendChild(document.createTextNode(this.options.cancelText));
       cancelLink.onclick = this.onclickCancel.bind(this);
-      cancelLink.className = 'editor_cancel';      
+      cancelLink.className = 'editor_cancel editor_cancel_link';      
       this.form.appendChild(cancelLink);
     }
+    
+    if (this.options.textAfterControls)
+      this.form.appendChild(document.createTextNode(this.options.textAfterControls));
   },
   hasHTMLLineBreaks: function(string) {
     if (!this.options.handleLineBreaks) return false;
@@ -907,25 +880,3 @@ Form.Element.DelayedObserver.prototype = {
     this.callback(this.element, $F(this.element));
   }
 };
-
-function trim(inputString) {
-   // Removes leading and trailing spaces from the passed string. Also removes
-   // consecutive spaces and replaces it with one space. If something besides
-   // a string is passed in (null, custom object, etc.) then return the input.
-   if (typeof inputString != "string") { return inputString; }
-   var retValue = inputString;
-   var ch = retValue.substring(0, 1);
-   while (ch == " ") { // Check for spaces at the beginning of the string
-      retValue = retValue.substring(1, retValue.length);
-      ch = retValue.substring(0, 1);
-   }
-   ch = retValue.substring(retValue.length-1, retValue.length);
-   while (ch == " ") { // Check for spaces at the end of the string
-      retValue = retValue.substring(0, retValue.length-1);
-      ch = retValue.substring(retValue.length-1, retValue.length);
-   }
-   while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
-      retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
-   }
-   return retValue; // Return the trimmed string back to the user
-} // Ends the "trim" function

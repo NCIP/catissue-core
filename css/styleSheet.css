@@ -1347,6 +1347,7 @@ div.autocomplete {
       border:1px solid #888;
       margin:0px;
       padding:0px;
+      overflow:auto; 
     }
     div.autocomplete ul {
       list-style-type:none;
@@ -1361,3 +1362,27 @@ div.autocomplete {
 	  cursor:pointer;
 	  overflow:auto;
     }
+    
+   
+.formLabelBorderlessLeftAndBold{ /* for the non-required form labels */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  font-weight:bold;
+  background-color:#F4F4F5; /* constant: light gray */
+  color:#000000; /* constant: black */
+  text-align:left;
+}
+
+.formRightSubTableTitleWithBorder{ /* for subtitles in the table */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  font-weight:bold;
+  background-color:#CCCCCC; /* constant: medium gray */
+  color:#000000; /* constant: black */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
+
+

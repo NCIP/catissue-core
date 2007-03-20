@@ -101,7 +101,7 @@ function handleStatus(status)
 	<%=messageKey%>
 </html:messages>
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="620">
 	
 	<html:form action="<%=formName%>">
 	
@@ -371,11 +371,16 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="institutionId" styleClass="formFieldSized" styleId="institutionId" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="institutionList" labelProperty="name" property="value"/>
-							</html:select>
+						
+						
+                                        <autocomplete:AutoCompleteTag property="institutionId"
+										  optionsList = "<%=request.getAttribute("institutionList")%>"
+										  initialValue="<%=userForm.getInstitutionId()%>"
+										  styleClass="formFieldSized"
+                                          staticField="false"
+										  
+									    />
+					
 							&nbsp;
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
 							<html:link href="#" styleId="newInstitution" onclick="addNewAction('UserAddNew.do?addNewForwardTo=institution&forwardTo=user&addNewFor=institution')">
@@ -394,11 +399,16 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="departmentId" styleClass="formFieldSized" styleId="departmentId" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="departmentList" labelProperty="name" property="value"/>
-							</html:select>
+						
+						
+                                        <autocomplete:AutoCompleteTag property="departmentId"
+										  optionsList = "<%=request.getAttribute("departmentList")%>"
+										  initialValue="<%=userForm.getDepartmentId()%>"
+										  styleClass="formFieldSized"
+                                          staticField="false"
+										  
+									    />
+
 							&nbsp;
 							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
 							<html:link href="#" styleId="newDepartment" onclick="addNewAction('UserAddNew.do?addNewForwardTo=department&forwardTo=user&addNewFor=department')">
@@ -416,11 +426,14 @@ function handleStatus(status)
 							</label>
 						</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="cancerResearchGroupId" styleClass="formFieldSized" styleId="cancerResearchGroupId" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options collection="cancerResearchGroupList" labelProperty="name" property="value"/>
-							</html:select>
+						
+						    <autocomplete:AutoCompleteTag property="cancerResearchGroupId"
+										  optionsList = "<%=request.getAttribute("cancerResearchGroupList")%>"
+										  initialValue="<%=userForm.getCancerResearchGroupId()%>"
+										  styleClass="formFieldSized"
+                                          staticField="false"
+										  
+									    />
 							&nbsp;
 							<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
 							<html:link href="#" styleId="newCancerResearchGroup" onclick="addNewAction('UserAddNew.do?addNewForwardTo=cancerResearchGroup&forwardTo=user&addNewFor=cancerResearchGroup')">
@@ -459,7 +472,7 @@ function handleStatus(status)
 		 	<tr>
 			  <td>
 			    <br>
-				<table summary="" cellpadding="3" cellspacing="0" border="0" width="440">
+				<table summary="" cellpadding="3" cellspacing="0" border="0" width="480">
 					
 					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_SIGNUP%>">
 					<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGEOF_USER_PROFILE%>">
