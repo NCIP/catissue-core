@@ -575,5 +575,6 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		Map disabledconts = (TreeMap) catissueCoreCacheManager.getObjectFromCache(Constants.MAP_OF_CONTAINER_FOR_DISABLED_SPECIEN);
 		return disabledconts;
 	}
+		
 
 }

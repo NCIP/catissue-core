@@ -60,9 +60,17 @@
 			if(AutoC!=null)
 			{
 				AutoC.getUpdatedChoices=function(){};
+				AutoC.getAllChoices=function(){};
 	            AutoC=null;
 			}
-			AutoC = new Autocompleter.Local("type","divFortype",arrayName,  { tokens: new Array(), fullSearch: true, partialSearch: true, autoSelect:true});
+			
+			var tmpArray = new Array();
+			for(i=1;i<arrayName.length;i++)
+			{
+					tmpArray[i-1] = arrayName[i];
+			}  
+			//autoCompleteResult += "new Autocompleter.Combobox(\"" + property + "\",\"" + div + "\",'nameofarrow',valuesInList,  { tokens: new Array(), fullSearch: true, partialSearch: true,defaultArray:" + "valuesInList" + ",choices: " + numberOfResults + ",autoSelect:true, minChars: "+ numberOfCharacters +" });";
+			AutoC = new Autocompleter.Combobox("type","divFortype","typearrow",tmpArray,  { tokens: new Array(), fullSearch: true, partialSearch: true,defaultArray: tmpArray,autoSelect:true});
 			
 		}
 

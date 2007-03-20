@@ -1,4 +1,4 @@
-/**
+								  /**
  * <p>Title: Specimen Class>
  * <p>Description:  A single unit of tissue, body fluid, or derivative 
  * biological macromolecule that is collected or created from a Participant </p>
@@ -166,7 +166,10 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 	private transient int noOfAliquots;
 
-	private transient Map aliqoutMap = new HashMap();
+	private transient Map aliqoutMap = new HashMap();	
+
+
+protected transient boolean disposeParentSpecimen = false;
 	
 	//-----For Consent Tracking. Ashish 21/11/06
 	/**
@@ -640,6 +643,8 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		if (abstractForm instanceof AliquotForm)
 		{
 			AliquotForm form = (AliquotForm) abstractForm;
+			// Dispose parent specimen Bug 3773
+			this.setDisposeParentSpecimen(form.getDisposeParentSpecimen());
 			Validator validator = new Validator();
 
 			this.aliqoutMap = form.getAliquotMap();
@@ -1259,7 +1264,23 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	public void setApplyChangesTo(String applyChangesTo) 
 	{
 		this.applyChangesTo = applyChangesTo;
+	}	  
+
+
+/**
+	 * @return Returns the disposeParentSpecimen.
+	 */
+	public boolean getDisposeParentSpecimen() {
+		return disposeParentSpecimen;
 	}
+
+	/**
+	 * @param disposeParentSpecimen The disposeParentSpecimen to set.
+	 */
+	public void setDisposeParentSpecimen(boolean disposeParentSpecimen) {
+		this.disposeParentSpecimen = disposeParentSpecimen;
+	}
+
 	
 
 }

@@ -121,6 +121,11 @@ public class AliquotForm extends AbstractActionForm
     private boolean aliqoutInSameContainer = false;
     
     /**
+     * decides whether to dispose Parent Specimen when its quantity becomes zero
+     */
+    private boolean disposeParentSpecimen = false;
+    
+    /**
      * identifies the button clicked
      */
     private String buttonClicked = "";
@@ -578,5 +583,19 @@ public class AliquotForm extends AbstractActionForm
 	public void setButtonClicked(String buttonClicked)
 	{
 		this.buttonClicked = buttonClicked;
+	}
+
+	/**
+	 * @return Returns the disposeParentSpecimen.
+	 */
+	public boolean getDisposeParentSpecimen() {
+		return disposeParentSpecimen;
+	}
+
+	/**
+	 * @param disposeParentSpecimen The disposeParentSpecimen to set.
+	 */
+	public void setDisposeParentSpecimen(boolean disposeParentSpecimen) {
+		this.disposeParentSpecimen = disposeParentSpecimen;
 	}
 }

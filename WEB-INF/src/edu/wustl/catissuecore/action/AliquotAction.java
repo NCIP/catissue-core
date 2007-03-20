@@ -606,9 +606,21 @@ public class AliquotAction extends SecureAction
 
 			return Constants.PAGEOF_ALIQUOT;
 		}
+		
 		else
 		{
 			Specimen specimen = (Specimen) specimenList.get(0);
+			
+			if(specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
+			{
+				ActionErrors errors = getActionErrors(request);
+
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.closed" , "Specimen"));
+				saveErrors(request, errors);
+
+				return Constants.PAGEOF_ALIQUOT;
+			}
+			
 			/**
 			 * set the value of aliquotInSameContainer which was set while creation of collection protocol
 			 * required for Bug 2309
@@ -766,7 +778,7 @@ public class AliquotAction extends SecureAction
 		{
 			double availableQuantity = Double.parseDouble(form.getAvailableQuantity());
 			// Bug no 560
-			if (availableQuantity <= 0)
+			if (availableQuantity < 0)
 			{
 				return false;
 			}
@@ -802,7 +814,7 @@ public class AliquotAction extends SecureAction
 		{
 			int availableQuantity = (int) Double.parseDouble(form.getAvailableQuantity());
 			// Bug no 560
-			if (availableQuantity <= 0)
+			if (availableQuantity < 0)
 			{
 				return false;
 			}

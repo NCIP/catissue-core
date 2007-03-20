@@ -23,6 +23,7 @@ String buttonKey = "";
 String parentSPId = "-1";
 String CPQuery= (String)request.getAttribute(Constants.CP_QUERY);
 String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
+AliquotForm form = (AliquotForm)request.getAttribute("aliquotForm");
 if(Constants.PAGEOF_ALIQUOT.equals(pageOf))
 {
 	buttonKey = "buttons.submit";
@@ -41,6 +42,8 @@ if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
 <script src="jss/Hashtable.js" type="text/javascript"></script>
 <script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
+
+
 <%if(CPQuery!= null)
 {
 	String nodeId="Specimen_";
@@ -305,7 +308,7 @@ if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
 
 <%
 String operation = Utility.toString(Constants.OPERATION);
-AliquotForm form = (AliquotForm)request.getAttribute("aliquotForm");
+
 String unit = "";
 
 if(form != null)
@@ -320,152 +323,141 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 
 <tr>
 <td>
-<table summary="" cellpadding="3" cellspacing="0" border="0" width="660">
-<tr>
-	<td>
-		<html:hidden property="id"/>
+        <html:hidden property="id"/>
 		<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 		<html:hidden property="submittedFor"/>
-	</td>
-</tr>
+<table summary="" cellpadding="5" cellspacing="0" border="0" width="660">
 
-<%--tr>
-	<td class="formMessage" colspan="3">* indicates a required field</td>
-</tr--%>
 
 <tr>
-	<td class="formTitle" height="20" colspan="3">
+	<td class="formTitle" height="20" colspan="4" >
 		<bean:message key="aliquots.title"/>
 	</td>
 </tr>
 
-<%--tr>
-	<td class="formRequiredNotice" width="5">*</td>
-	<td class="formRequiredLabel">
-		<label for="spCollectionGroupId">
-			<bean:message key="specimen.specimenCollectionGroupId"/> 
-		</label>
-	</td>
-	<td class="formField">
-		<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="spCollectionGroupId" property="spCollectionGroupId" readonly="true"/>
-	</td>
-</tr--%>
 
 <tr>
-	<td class="formRequiredNotice" width="5">*</td>
-	<td class="formRequiredLabel">
+	
+	<td class="formLabelBorderlessLeftAndBold">
 		<label for="type">
 			<bean:message key="specimen.type"/> 
 		</label>
 	</td>
-	<td class="formField">
-		<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="specimenClass" property="specimenClass" readonly="true"/>
+	<td class="formLabelBorderlessLeft"> <%=form.getSpecimenClass()%>
+		<html:hidden property="specimenClass" />
 	</td>
-</tr>
-
-<tr>
-	<td class="formRequiredNotice" width="5">*</td>
-	<td class="formRequiredLabel">
+	
+	
+	<td class="formLabelBorderlessLeftAndBold">
 		<label for="subType">
 			<bean:message key="specimen.subType"/> 
 		</label>
 	</td>
-	<td class="formField">
-		<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="type" property="type" readonly="true"/>
+	
+	<td class="formLabelBorderlessLeft"> <%=form.getType()%>
+		<html:hidden property="type" />
 	</td>
 </tr>
 
+
+
 <tr>
-	<td class="formRequiredNotice" width="5">*</td>
-	<td class="formRequiredLabel">
+	
+	<td class="formLabelBorderlessLeftAndBold">
 		<label for="tissueSite">
 			<bean:message key="specimen.tissueSite"/> 
 		</label>
 	</td>
-	<td class="formField">
-		<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="tissueSite" property="tissueSite" readonly="true"/>
-	</td>
+	    <td class="formLabelBorderlessLeft" colspan="3"> <%=form.getTissueSite()%>
+		<html:hidden property="tissueSite" />
+	    </td>
+		
 </tr>
 
 <tr>
-	<td class="formRequiredNotice" width="5">*</td>
-	<td class="formRequiredLabel">
+	
+	<td class="formLabelBorderlessLeftAndBold">
 		<label for="tissueSide">
 			<bean:message key="specimen.tissueSide"/> 
 		</label>
 	</td>
-	<td class="formField">
-		<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="tissueSide" property="tissueSide" readonly="true"/>
+	
+	<td class="formLabelBorderlessLeft"> <%=form.getTissueSide()%>
+		<html:hidden property="tissueSide" />
 	</td>
-</tr>
+		
 
-<tr>
-	<td class="formRequiredNotice" width="5">*</td>
-	<td class="formRequiredLabel">
+	<td class="formLabelBorderlessLeftAndBold">
 		<label for="pathologicalStatus">
 			<bean:message key="specimen.pathologicalStatus"/> 
 		</label>
 	</td>
-	<td class="formField">
-		<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="pathologicalStatus" property="pathologicalStatus" readonly="true"/>
+	
+	<td class="formLabelBorderlessLeft"> <%=form.getPathologicalStatus()%>
+		<html:hidden property="pathologicalStatus" />
 	</td>
+	
 </tr>
 
 <tr>
-	<td class="formRequiredNotice" width="5">*</td>
-	<td class="formRequiredLabel">
+	
+	<td class="formLabelBorderlessLeftAndBold">
 		<label for="availableQuantity">
 			<bean:message key="aliquots.initialAvailableQuantity"/> 
 		</label>
 	</td>
-	<td class="formField">
-		<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="initialAvailableQuantity" property="initialAvailableQuantity" readonly="true"/>
+	
+	<td class="formLabelBorderlessLeft"> <%=form.getInitialAvailableQuantity()%>
+		<html:hidden property="initialAvailableQuantity" />
 		&nbsp; <%=unit%>
 	</td>
-</tr>
 
-<tr>
-	<td class="formRequiredNotice" width="5">*</td>
-	<td class="formRequiredLabel">
+	
+	<td class="formLabelBorderlessLeftAndBold">
 		<label for="availableQuantity">
 			<bean:message key="aliquots.currentAvailableQuantity"/> 
 		</label>
 	</td>
-	<td class="formField">
-		<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="availableQuantity" property="availableQuantity" readonly="true"/>
+	
+	<td class="formLabelBorderlessLeft"> <%=form.getAvailableQuantity()%>
+		<html:hidden property="availableQuantity" />
 		&nbsp; <%=unit%>
 	</td>
 </tr>
 
 <tr>
-	<td class="formRequiredNotice" width="5">*</td>
-	<td class="formRequiredLabel">
+	
+	<td class="formLabelBorderlessLeftAndBold">
 		<label for="concentration">
 			<bean:message key="specimen.concentration"/> 
 		</label>
 	</td>
-	<td class="formField">
-		<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="concentration" property="concentration" readonly="true"/>
+	
+	<td class="formLabelBorderlessLeft" colspan="3">
+        <%if(form.getConcentration()!=null) {%>
+     	<%=form.getConcentration()%>
+		<html:hidden property="concentration" />
 		&nbsp;<bean:message key="specimen.concentrationUnit"/>
+		<%}%>
 	</td>
 </tr>
 </table>
 
 <table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
 <tr>
-	<td class="formLeftSubTableTitle" width="5">
+	<td class="formRightSubTableTitleWithBorder" width="5">
      	#
     </td>
-    <td class="formRightSubTableTitle">*
+    <td class="formRightSubTableTitleWithBorder">*
 		<bean:message key="specimen.label"/>
 	</td>
-	<td class="formRightSubTableTitle">*
+	<td class="formRightSubTableTitleWithBorder">*
 		<bean:message key="specimen.quantity"/>
 	</td>
-	<td class="formRightSubTableTitle">&nbsp;
+	<td class="formRightSubTableTitleWithBorder">&nbsp;
 		<bean:message key="specimen.barcode"/>
 	</td>
-	<td class="formRightSubTableTitle">*
+	<td class="formRightSubTableTitleWithBorder">*
 		<bean:message key="aliquots.location"/>
 	</td>
 </tr>
@@ -675,8 +667,10 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 		<bean:message key="aliquots.storeAllAliquotes" />
 		</html:checkbox>
 	</td>
-	<td width="50%">
-		&nbsp;
+	<td colspan="3" class="formLabelNoBackGround" width="40%">
+		<html:checkbox property="disposeParentSpecimen" >
+		<bean:message key="aliquots.disposeParentSpecimen" />
+		</html:checkbox>
 	</td>
 	<td align="right">
 		<html:button styleClass="actionButton" property="submitButton" onclick="onCreate()">
@@ -691,6 +685,7 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 		</html:reset>
 	</td--%> 
 </tr>
+	
 </table>				
 <!-- action buttons end -->
 </td>

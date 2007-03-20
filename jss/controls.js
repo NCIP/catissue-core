@@ -39,6 +39,11 @@
 if(typeof Effect == 'undefined')
   throw("controls.js requires including script.aculo.us' effects.js library");
 
+
+
+
+
+
 var globalKeyPress;  
 var elemStartsWithEntry;
 var Autocompleter = {}
@@ -87,6 +92,10 @@ Autocompleter.Base.prototype = {
 
     Event.observe(this.element, "blur", this.onBlur.bindAsEventListener(this));
     Event.observe(this.element, "keypress", this.onKeyPress.bindAsEventListener(this));
+    Event.observe(this.update, "blur", this.onBlur.bindAsEventListener(this)); 
+    Event.observe(this.element, "focus", this.onFocus.bindAsEventListener(this)); 
+ 	Event.observe(this.update, "focus", this.onFocus.bindAsEventListener(this)); 
+	Event.observe(this.update, "keypress", this.onKeyPress.bindAsEventListener(this)); 
   },
 
   show: function() {
@@ -167,6 +176,7 @@ Autocompleter.Base.prototype = {
   },
 
   activate: function() {
+    clearTimeout(this.hideTimeout); 
     this.changed = false;
     this.hasFocus = true;
     this.getUpdatedChoices();
@@ -191,10 +201,17 @@ Autocompleter.Base.prototype = {
   
   onBlur: function(event) {
     // needed to make click events working
-    setTimeout(this.hide.bind(this), 250);
+    this.hideTimeout = setTimeout(this.hide.bind(this), 250); 
     this.hasFocus = false;
     this.active = false;     
   }, 
+  
+  onFocus: function(event) { 
+ 	        if (this.hideTimeout) clearTimeout(this.hideTimeout); 
+ 	        this.changed = false; 
+ 		    this.hasFocus = true; 
+ 		    //this.getUpdatedChoices(); 
+ 		  }, 
   
   render: function() {
     if(this.entryCount > 0) {
@@ -202,6 +219,23 @@ Autocompleter.Base.prototype = {
         this.index==i ? 
           Element.addClassName(this.getEntry(i),"selected") : 
           Element.removeClassName(this.getEntry(i),"selected");
+		  
+		    // added this
+      var item=this.getEntry(this.index);
+       
+      //get default size , done for scrolling -- Santosh
+      var size = this.entryCount;
+      var scrollSize = 15;
+	  if(size>scrollSize)
+	  {
+	     item.parentNode.style.height = "21em";
+		 item.parentNode.style.overflow = "auto";
+	  }
+      		  
+		  if (this.index == i) {
+          var element = this.getEntry(i);
+          element.scrollIntoView(false);
+        } 
         
       if(this.hasFocus) { 
         this.show();
@@ -401,6 +435,7 @@ Object.extend(Object.extend(Ajax.Autocompleter.prototype, Autocompleter.Base.pro
 // In that case, the other options above will not apply unless
 // you support them.
 var setChoices = false;
+
 Autocompleter.Local = Class.create();
 Autocompleter.Local.prototype = Object.extend(new Autocompleter.Base(), {
   initialize: function(element, update, array, options) {
@@ -442,10 +477,10 @@ Autocompleter.Local.prototype = Object.extend(new Autocompleter.Base(), {
 				 var initialEntry = entry.toLowerCase();
 				 initialEntry = trim(initialEntry);
 				  var foundPos = -1;
-			if(initialEntry=="*")
+			if(initialEntry=="*"||initialEntry=="?")
             {
                 foundPos=0;
-				instance.options.choices = 25;
+				instance.options.choices = instance.options.array.length;
 				entry="";
 				setChoices = true;
             }			
@@ -526,6 +561,203 @@ Autocompleter.Local.prototype = Object.extend(new Autocompleter.Base(), {
       }
     }, options || {});
   }
+});
+
+/*
+	The combobox control.  This is very simililar to the local array
+	autocompleter but with the addition that if a specified control
+	(like an image) is clicked it will show a default list.
+	Otherwise it behaves exactly like the local array autocompleter.
+
+	The constructor is the same as the local array autocompleter.
+	
+	To specify a different array for the 'show default' control,
+	add the option 'defaultArray', and pass to it a valid javascript array.
+	This control won't work so well if the two arrays you pass in are 
+	wildly different.  Generally you need to have the defaultArray be a 
+	subset of the main array.
+	
+	I've commented in-line to help explain some of the choices.
+	
+	One last thing:  a 'super' would be *really* nice for stuff like this.
+	There is a lot of dup code because I can't call super; or super.onBlur().
+	I guess I could name the methods something different, and we can do that
+	to keep the code DRY, but I left the dupe lines in to make it clear as to
+	what is going on.
+	
+	An example (in html) is:
+	<script type="text/javascript">
+		//*horrible* baby names (first names!  try and guess which ones are for 
+		// boys and girls.  ugh)
+		var all_options = ['Ambrosia','Attica','Autumn Night','Avellana','Bow Hunter',
+		'Brielle','Brooklynn','Cash','Cinsere','Crisiant','Cyndee','Delphine','Donte',
+		'Drudwen','Dusk','Electra','Emmaleigh','Enfys','Enobi','Eurwen','Faerin',
+		'Faleiry','Francessca','Franka','Fritha','Gage','Gaiety','Gennavieve','Gibson'];
+		// the worst.  Ok, couldn't cull it down enough, so any 5
+		var default_options = ['Avellana','Enobi','Eurwen','Faleiry','Gage'];
+
+	</script> 
+	TEST:<input type="text" id="name-field"/>
+	<image id='name-arrow' src="/images/combo_box_arrow.png"/>
+	<div class="auto_complete" id="lookup_auto_complete"></div> 
+	<%= javascript_tag("new Autocompleter.Combobox('name-field',
+	'lookup_auto_complete', 'name-arrow',
+ 	all_options,{partialChars:1, ignoreCase:true, fullSearch:true, frequency:0.1, 
+							 choices:6, defaultArray:default_options, tokens: ',' });") %>
+*/
+
+Autocompleter.Combobox = Class.create();
+Object.extend(Object.extend(Autocompleter.Combobox.prototype, Autocompleter.Local.prototype), {
+
+	initialize: function(element, update, selectDefault, array, options) {
+		this.baseInitialize(element, update, options);
+		this.selectDefault = selectDefault;
+		//this keeps track of whether or not the click is currently over the 'selectDefault'.  See
+		// below for more detail.
+		this.overSelectDefault = false;
+		this.clickedSelectDefault = 0;
+		
+		this.options.array           = this.options.array || array;
+		this.options.defaultArray    = this.options.defaultArray || this.options.array;
+		this.options.defaultChoices  = this.options.defaultChoices || this.options.defaultArray.length;
+		
+		Event.observe(this.selectDefault, 'click', this.click.bindAsEventListener(this));		
+
+		// these events are all in place to coordinate between te onBlur event for the input
+		// field and the click event for the selectDefault.  See below for more detail.
+    Event.observe(this.selectDefault, "mouseover", this.onMouseover.bindAsEventListener(this));
+    Event.observe(this.selectDefault, "mouseout", this.onMouseout.bindAsEventListener(this));
+    Event.observe(this.element, "keypress", this.resetClick.bindAsEventListener(this));
+	},
+
+/*
+The one issue I had (and hence the extra Event.observers and this.overSelectDefault and this.clickedSelectDefault)
+was that if you had the input field highlighted and clicked _anywhere_ outside the input field, the
+'onBlur' method would be called.  This makes sense except in the case where you hit the 'selectDefault'
+element, in which case you don't want to hide the dropdown but show it!
+
+I first tried to see if the events were called in any particular order (deterministic).  I didn't
+think this would work but I thought it was worth a shot.  The answer depends on the browser, but
+most are non-deterministic.  Because they aren't called in a pre-defined order, that also meant
+that you can't set a state flag in one (like 'I just clicked the selectDefault element!'), and expect
+to check it in the other event ('hide me IF the selectDefault was not clicked!').
+
+The other hope was that the event could give me information about either which element was
+*active* when the event was triggered (this is different than asking which element is tied to the
+event, which is given to you by prototype's Event.element), or the X,Y coordinates of the event to
+see if I could compare that to the location of the selectDefault element (prototype's Position.within).
+
+Neither of those worked.  Firefox has an attribute for events that tell you what element you were on
+when the event was triggered.  IE supposedly has something similar, but opera and safari do not.  So
+that won't work.  And, the onBlur event doesn't set the X and Y coordinates (or any of the numerous
+position attributes) in either firefox or safari.  doah!
+
+So the end solution was to set a flag on a mouseover and mouseout on the selectDefault element. 
+The idea is that this will occur before a click and there will be time to set the flag before
+the 'onClick' and 'onBlur' events are triggered simultaneously.  This works really well, but leaves one
+last catch: sometimes when you click the selectDefault you *want* the default menu to disappear.  Hence
+the reason to keep track of the state of the selectDefault element (previously clicked or not clicked).
+*/
+
+	onMouseover: function(event){
+		this.overSelectDefault = true;
+	},
+
+	onMouseout: function(event){
+		this.overSelectDefault = false;
+	},
+	
+	resetClick :function(event) {
+		this.clickedSelectDefault = 0;
+	},
+	
+	onBlur: function(event, force) {
+		if (this.overSelectDefault) // Santosh - removed force
+		{
+			//no need to blur
+			return;
+		}
+		// this is where you can call super.onBlur();
+	  
+    // needed to make click events working  Because of scrollbar, dont hide the div when "blur" happens when the user on "div" clicks 
+	/*alert(event.x - parseInt(this.update.style.left));
+	alert(parseInt(this.update.style.left));
+	alert(parseInt(this.update.style.width));
+	alert(event.y - parseInt(this.update.style.top));
+	alert(parseInt(this.update.style.height));*/ 
+	
+   // if((event.x == undefined) |/*event.y - parseInt(this.update.style.top)<0|event.y - parseInt(this.update.style.top)>0  |*/event.x - parseInt(this.update.style.left)<0 |(event.x - parseInt(this.update.style.left)) > parseInt(this.update.style.width) | (event.y - parseInt(this.update.style.top)) > parseInt(this.update.style.height)) 
+      
+	  this.hideTimeout = setTimeout(this.hide.bind(this), 250); 
+       // setTimeout(this.hide.bind(this), 250); 
+		this.hasFocus = false; 
+		this.active = false;
+	    this.clickedSelectDefault = false;
+
+	},
+
+	click: function(event) {
+		this.clickedSelectDefault = Math.abs(this.clickedSelectDefault - 1);
+		this.element.focus();
+		this.changed = false;
+		this.hasFocus = true;
+		this.getAllChoices();
+		if ( Element.getStyle(this.update, 'display') != 'none' && this.clickedSelectDefault != 1) {
+			this.onBlur(event, true);
+		}
+	},
+
+  // this is *almost* exactly the same as Autocompleter.local.selector method
+  // there can definitely be some refactoring done in the control.js file
+  // to keep it DRY
+  // What I changed was that if the user hits the defaultSelect element, I 
+  // *always* want to show all the elements in the defaultSelect 'dropdown'.
+  // that way there is some consistency about what is shown when the user
+  // hits that element.  
+  // but to recognize that they might have already typed something in the 
+  // input field, this function (like the one in Autocomplete.local) highlights
+  // the matching chars, if there are any.
+	getAllChoices: function(e) {
+		  var ret       = []; // Beginning matches
+      var partial   = []; // Inside matches
+      var entry     = this.getToken();
+      var count     = 0;
+      for (var i = 0; i < this.options.defaultArray.length &&  
+        ret.length < this.options.defaultChoices; i++) { 
+        var elem = this.options.defaultArray[i];
+        var foundPos = this.options.ignoreCase ? 
+          elem.toLowerCase().indexOf(entry.toLowerCase()) : 
+          elem.indexOf(entry);
+				if (entry == "" || foundPos == -1)
+				{
+					ret.push("<li>" + elem + "</li>");
+					continue;					
+				}
+        while (foundPos != -1) {
+          if (foundPos == 0 ) { 
+            ret.push("<li><strong>" + elem.substr(0, entry.length) + "</strong>" + 
+              elem.substr(entry.length) + "</li>");
+            break;
+          } else if (entry.length >= this.options.partialChars && 
+            this.options.partialSearch && foundPos != -1) {
+            if (this.options.fullSearch || /\s/.test(elem.substr(foundPos-1,1))) {
+              partial.push("<li>" + elem.substr(0, foundPos) + "<strong>" +
+                elem.substr(foundPos, entry.length) + "</strong>" + elem.substr(
+                foundPos + entry.length) + "</li>");
+              break;
+            }
+          }
+
+          foundPos = this.options.ignoreCase ? 
+            elem.toLowerCase().indexOf(entry.toLowerCase(), foundPos + 1) : 
+            elem.indexOf(entry, foundPos + 1);
+
+        }
+      }
+      if (partial.length)
+      ret = ret.concat(partial.slice(0, this.options.defaultChoices - ret.length))
+		this.updateChoices("<ul>" + ret.join('') + "</ul>");
+	}
 });
 
 // AJAX in-place editor
@@ -929,3 +1161,103 @@ function trim(inputString) {
    }
    return retValue; // Return the trimmed string back to the user
 } // Ends the "trim" function
+
+var ComboBox = Class.create();
+
+ComboBox.Autocompleter = Autocompleter.Local;
+
+ComboBox.Autocompleter.prototype.onBlur = function(event) {
+	if (Element.getStyle(this.update, 'display') == 'none') { return; }
+	setTimeout(this.hide.bind(this), 250);
+	this.hasFocus = false;
+	this.active = false;
+}
+
+
+ComboBox.prototype = {
+	initialize: function(textElement, resultsElement, array, options) {
+		this.textElement = $(textElement);
+        
+        // the first text box inside the container
+        this.textBox = $A( this.textElement.getElementsByTagName('INPUT') ).findAll( function(input) {
+            return (input.getAttribute('type') == 'text');
+        })[0];
+	
+        this.results = $(resultsElement);
+        this.textBox.paddingRight = '20px';
+        this.textElement.style.width = (this.textBox.offsetWidth) + 'px';
+        this.textElement.style.position = 'relative';
+
+		// we dynamically insert a SPAN that will serve as the drop-down 'arrow'
+        this.arrow = Element.extend(Builder.node('span'));
+        Object.extend(this.arrow.style, {
+            cursor: 'default',
+            backgroundColor: '#ddd',
+            color: '#000',
+            width: '20px',
+            position: 'absolute',
+            top: '0',
+			right: '0px',
+			textAlign: 'center',
+			fontSize: 'xx-small',
+			height: (this.textElement.offsetHeight - 2) + 'px'
+        });
+
+		if (document.all) {
+			this.arrow.setStyle({ padding: '2px 0 0 3px', width: '18px', height: '17px'});
+
+		}
+        this.arrow.innerHTML = '&darr;';
+        this.textElement.appendChild(this.arrow);
+	    this.array = array;
+
+		this.results.style.display 	= 'none';
+		
+		this.events = {
+			showChoices: 	    this.showChoices.bindAsEventListener(this),
+			hideChoices: 	    this.hideChoices.bindAsEventListener(this),
+			click:				this.click.bindAsEventListener(this),
+			keyDown:			this.keyDown.bindAsEventListener(this)
+		}
+		
+		this.autocompleter = new ComboBox.Autocompleter(this.textBox, this.results, this.array, options);
+				
+		Event.observe(this.arrow, 'click', this.events.click);
+		Event.observe(this.textBox, 'keydown', this.events.keyDown);
+	},
+	
+	getAllChoices: function(e) {
+		var choices = this.array.collect( function(choice) { return '<li>' + choice + '</li>'; } );
+		var html = '<ul>' + choices.join('') + '</ul>';
+		this.autocompleter.updateChoices(html);
+	},
+	
+	keyDown: function(e) {
+		if (e.keyCode == Event.KEY_DOWN && this.choicesVisible() ) {
+			this.showChoices();
+		}
+	},
+	
+	// returns boolean indicating whether the choices are displayed
+	choicesVisible: function() { return (Element.getStyle(this.autocompleter.update, 'display') == 'none'); },
+	
+	click: function() {
+		if (this.choicesVisible() ) {
+			this.showChoices();
+		} else {
+			this.hideChoices();
+		}
+	},
+		
+	showChoices: function() {
+		this.textBox.focus();
+    this.autocompleter.changed = false;
+    this.autocompleter.hasFocus = true;
+    this.getAllChoices();
+	},
+	
+	hideChoices: function() {
+		this.autocompleter.onBlur();
+	}
+}
+ 
