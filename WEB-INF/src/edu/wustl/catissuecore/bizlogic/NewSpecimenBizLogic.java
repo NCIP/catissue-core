@@ -35,10 +35,7 @@ import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.QuantityInCount;
-import edu.wustl.catissuecore.domain.QuantityInGram;
-import edu.wustl.catissuecore.domain.QuantityInMicrogram;
-import edu.wustl.catissuecore.domain.QuantityInMilliliter;
+import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
@@ -601,7 +598,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			else
 			{
 				// set new available quantity
-				tissueSpecimenObj.setAvailableQuantity(new QuantityInGram(newAvailableQty));//tissueSpecimenObj.setAvailableQuantityInGram(new Double(newAvailableQty));
+				tissueSpecimenObj.setAvailableQuantity(new Quantity(String.valueOf(newAvailableQty)));//tissueSpecimenObj.setAvailableQuantityInGram(new Double(newAvailableQty));
 			}
 
 		}
@@ -634,7 +631,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			else
 			{
 				// set new available quantity
-				molecularSpecimenObj.setAvailableQuantity(new QuantityInMicrogram(newAvailableQty));//molecularSpecimenObj.setAvailableQuantityInMicrogram(new Double(newAvailableQty));
+				molecularSpecimenObj.setAvailableQuantity(new Quantity(String.valueOf(newAvailableQty)));//molecularSpecimenObj.setAvailableQuantityInMicrogram(new Double(newAvailableQty));
 			}
 		}
 		else if (obj instanceof CellSpecimen)
@@ -666,7 +663,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			else
 			{
 				// set new available quantity
-				cellSpecimenObj.setAvailableQuantity(new QuantityInCount(newAvailableQty));//cellSpecimenObj.setAvailableQuantityInCellCount(new Integer(newAvailableQty));
+				cellSpecimenObj.setAvailableQuantity(new Quantity(String.valueOf(newAvailableQty)));//cellSpecimenObj.setAvailableQuantityInCellCount(new Integer(newAvailableQty));
 			}
 		}
 		else if (obj instanceof FluidSpecimen)
@@ -697,7 +694,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			}
 			else
 			{
-				fluidSpecimenObj.setAvailableQuantity(new QuantityInMilliliter(newAvailableQty));//fluidSpecimenObj.setAvailableQuantityInMilliliter(new Double(newAvailableQty));
+				fluidSpecimenObj.setAvailableQuantity(new Quantity(String.valueOf(newAvailableQty)));//fluidSpecimenObj.setAvailableQuantityInMilliliter(new Double(newAvailableQty));
 			}
 		}
 	}

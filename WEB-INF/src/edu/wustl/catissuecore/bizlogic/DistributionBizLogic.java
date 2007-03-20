@@ -23,10 +23,7 @@ import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
-import edu.wustl.catissuecore.domain.QuantityInCount;
-import edu.wustl.catissuecore.domain.QuantityInGram;
-import edu.wustl.catissuecore.domain.QuantityInMicrogram;
-import edu.wustl.catissuecore.domain.QuantityInMilliliter;
+import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -334,7 +331,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			{
 				availabeQty = availabeQty - quantity;
 				Logger.out.debug("TissueAvailabeQty after deduction" + availabeQty);
-				tissueSpecimen.setAvailableQuantity(new QuantityInGram(availabeQty));//tissueSpecimen.setAvailableQuantityInGram(new Double(availabeQty));
+				tissueSpecimen.setAvailableQuantity(new Quantity(String.valueOf(availabeQty)));//tissueSpecimen.setAvailableQuantityInGram(new Double(availabeQty));
 			}
 		}
 		else if (specimen instanceof CellSpecimen)
@@ -346,7 +343,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			else
 			{
 				availabeQty = availabeQty - (int) quantity;
-				cellSpecimen.setAvailableQuantity(new QuantityInCount(availabeQty));//cellSpecimen.setAvailableQuantityInCellCount(new Integer(availabeQty));
+				cellSpecimen.setAvailableQuantity(new Quantity(String.valueOf(availabeQty)));//cellSpecimen.setAvailableQuantityInCellCount(new Integer(availabeQty));
 			}
 		}
 		else if (specimen instanceof MolecularSpecimen)
@@ -359,7 +356,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			else
 			{
 				availabeQty = availabeQty - quantity;
-				molecularSpecimen.setAvailableQuantity(new QuantityInMicrogram(availabeQty));//molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
+				molecularSpecimen.setAvailableQuantity(new Quantity(String.valueOf(availabeQty)));//molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
 			}
 		}
 		else if (specimen instanceof FluidSpecimen)
@@ -372,7 +369,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			else
 			{
 				availabeQty = availabeQty - quantity;
-				fluidSpecimen.setAvailableQuantity(new QuantityInMilliliter(availabeQty));//fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
+				fluidSpecimen.setAvailableQuantity(new Quantity(String.valueOf(availabeQty)));//fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
 			}
 		}
 		return true;
@@ -630,14 +627,14 @@ public class DistributionBizLogic extends DefaultBizLogic
 			Logger.out.debug("TissueAvailabeQty" + availabeQty);
 			availabeQty = availabeQty + quantity;
 			Logger.out.debug("TissueAvailabeQty after addition" + availabeQty);
-			tissueSpecimen.setAvailableQuantity(new QuantityInGram(availabeQty));//tissueSpecimen.setAvailableQuantityInGram(new Double(availabeQty));
+			tissueSpecimen.setAvailableQuantity(new Quantity(String.valueOf(availabeQty)));//tissueSpecimen.setAvailableQuantityInGram(new Double(availabeQty));
 		}
 		else if (specimen instanceof CellSpecimen)
 		{
 			CellSpecimen cellSpecimen = (CellSpecimen) specimen;
 			int availabeQty = (int) Double.parseDouble(cellSpecimen.getAvailableQuantity().toString());//cellSpecimen.getAvailableQuantityInCellCount().intValue();
 			availabeQty = availabeQty + (int) quantity;
-			cellSpecimen.setAvailableQuantity(new QuantityInCount(availabeQty));//cellSpecimen.setAvailableQuantityInCellCount(new Integer(availabeQty));
+			cellSpecimen.setAvailableQuantity(new Quantity(String.valueOf(availabeQty)));//cellSpecimen.setAvailableQuantityInCellCount(new Integer(availabeQty));
 		}
 		else if (specimen instanceof MolecularSpecimen)
 		{
@@ -645,7 +642,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			double availabeQty = Double.parseDouble(molecularSpecimen.getAvailableQuantity()
 					.toString());//molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
 			availabeQty = availabeQty + quantity;
-			molecularSpecimen.setAvailableQuantity(new QuantityInMicrogram(availabeQty));//molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
+			molecularSpecimen.setAvailableQuantity(new Quantity(String.valueOf(availabeQty)));//molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
 		}
 		else if (specimen instanceof FluidSpecimen)
 		{
@@ -653,7 +650,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			double availabeQty = Double
 					.parseDouble(fluidSpecimen.getAvailableQuantity().toString());//fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
 			availabeQty = availabeQty + quantity;
-			fluidSpecimen.setAvailableQuantity(new QuantityInMilliliter(availabeQty));//fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
+			fluidSpecimen.setAvailableQuantity(new Quantity(String.valueOf(availabeQty)));//fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
 		}
 
 	}
