@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -21,21 +22,25 @@ import java.util.TreeMap;
 
 import net.sf.ehcache.CacheException;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -57,10 +62,11 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		Specimen aliquot = (Specimen) obj;
 		String specimenKey = "Specimen:";
 		Map aliquotMap = aliquot.getAliqoutMap();
-
+        
 		List positionsToBeAllocatedList = new ArrayList();
 		List usedPositionsList = new ArrayList();
-
+        boolean disposeParentSpecimen = aliquot.getDisposeParentSpecimen();
+		
 		for (int i = 1; i <= aliquot.getNoOfAliquots(); i++)
 		{
 			String radioButonKey = "radio_" + i;
@@ -386,6 +392,26 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			if (availableQuantity <= 0)
 			{
 				parentSpecimen.setAvailable(new Boolean(false));
+				
+			}
+			
+       // dispose the parent specimen based on user's selection Bug - 3773
+			if(disposeParentSpecimen)
+			{
+				
+				DisposalEventParameters disposalEvent = new DisposalEventParameters();
+				disposalEvent.setSpecimen(parentSpecimen);
+				disposalEvent.setReason("Specimen is Aliquoted");
+				disposalEvent.setTimestamp(new Date(System.currentTimeMillis()));
+				User user = new User();
+				user.setId(sessionDataBean.getUserId());
+				disposalEvent.setUser(user);
+				disposalEvent.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
+				SpecimenEventParametersBizLogic specimenEventParametersBizLogic = new SpecimenEventParametersBizLogic();
+				specimenEventParametersBizLogic.insert(disposalEvent,dao,sessionDataBean);
+				specimenEventParametersBizLogic.postInsert(disposalEvent,dao,sessionDataBean);
+				parentSpecimen.setAvailable(new Boolean(false));
+				parentSpecimen.setActivityStatus(Constants.ACTIVITY_STATUS_CLOSED);
 			}
 
 			//dao.update(parentSpecimen,sessionDataBean,Constants.IS_AUDITABLE_TRUE,Constants.IS_SECURE_UPDATE_TRUE, Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);

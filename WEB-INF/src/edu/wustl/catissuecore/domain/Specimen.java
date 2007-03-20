@@ -166,6 +166,8 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	private transient int noOfAliquots;
 
 	private transient Map aliqoutMap = new HashMap();
+	
+	protected transient boolean disposeParentSpecimen = false;
 
 	public Specimen()
 	{
@@ -596,6 +598,8 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		if (abstractForm instanceof AliquotForm)
 		{
 			AliquotForm form = (AliquotForm) abstractForm;
+			// Dispose parent specimen Bug 3773
+			this.setDisposeParentSpecimen(form.getDisposeParentSpecimen());
 			Validator validator = new Validator();
 
 			this.aliqoutMap = form.getAliquotMap();
@@ -1148,5 +1152,19 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	public String getMessageLabel()
 	{
 		return this.label;
+	}
+
+	/**
+	 * @return Returns the disposeParentSpecimen.
+	 */
+	public boolean getDisposeParentSpecimen() {
+		return disposeParentSpecimen;
+	}
+
+	/**
+	 * @param disposeParentSpecimen The disposeParentSpecimen to set.
+	 */
+	public void setDisposeParentSpecimen(boolean disposeParentSpecimen) {
+		this.disposeParentSpecimen = disposeParentSpecimen;
 	}
 }
