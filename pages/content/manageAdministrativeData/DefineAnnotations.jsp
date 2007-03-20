@@ -167,6 +167,10 @@ System.out.println("containerId:"+containerId);
 								<html:button   styleClass="actionButton" property = "delete" onclick="editCondition()" >
 								  <bean:message key="buttons.submit"/>
 								</html:button>	
+								
+								<html:button   styleClass="actionButton" property = "delete" onclick="javascript:history.go(-1);" >
+								  <bean:message key="buttons.cancel"/>
+								</html:button>								
 								<%} %>
 
 								</td>
