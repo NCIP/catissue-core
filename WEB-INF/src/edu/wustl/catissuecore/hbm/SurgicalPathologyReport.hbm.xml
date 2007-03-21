@@ -25,15 +25,6 @@
         </id>
 
         <property
-            name="accessionNumber"
-            type="string"
-            update="true"
-            insert="true"
-            column="ACCESSION_NUM"
-            length="100"
-        />
-
-        <property
             name="activityStatus"
             type="string"
             update="true"
@@ -63,7 +54,7 @@
 
         <set
             name="pathologyReportReviewParameterSetCollection"
-            table="CATISSUE_REVIEWREPORT_PARAM"
+            table="CATISSUE_REVIEW_PARAMS"
             lazy="false"
             inverse="false"
             cascade="all"
