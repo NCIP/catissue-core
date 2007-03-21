@@ -127,6 +127,10 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	protected String stringOfResponseKeys="";
 	
 	/**
+	 * Surgical Pathology Number of the associated pathology report, erlier was Present in Clinical Report
+	 */
+	protected String surgicalPathologyNumber;
+	/**
 	 * @return the consentTierStatusCollection
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierStatus" lazy="false" cascade="save-update"
 	 * @hibernate.set table="CATISSUE_CONSENT_TIER_STATUS" name="consentTierStatusCollection"
@@ -543,6 +547,28 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 
 	public void setStringOfResponseKeys(String stringOfResponseKeys) {
 		this.stringOfResponseKeys = stringOfResponseKeys;
+	}
+
+	/**
+     * Returns the surgicalPathologyNumber of the report at the time of specimen collection. 
+     * @hibernate.property name="surgicalPathologyNumber" type="string" 
+     * column="SURGICAL_PATHOLOGY_NUMBER" length="50"
+     * @return surgical pathology number of the report at the time of specimen collection.
+     * @see #setSurgicalPathologyNumber(String)
+     */
+	public String getSurgicalPathologyNumber() 
+	{
+		return surgicalPathologyNumber;
+	}
+
+	/**
+     * Sets the surgical pathology number of the report at the time of specimen collection. 
+     * @param surgicalPathologyNumber the surgical pathology report of the report at the time of specimen collection.
+     * @see #getSurgicalPathologyNumber()
+     */
+	public void setSurgicalPathologyNumber(String surgicalPathologyNumber) 
+	{
+		this.surgicalPathologyNumber = surgicalPathologyNumber;
 	}
 	
 	
