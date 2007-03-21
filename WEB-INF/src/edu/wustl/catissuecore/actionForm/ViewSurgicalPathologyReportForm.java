@@ -427,7 +427,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		try
 		{
 			this.deIdentifiedReportId=deidentifiedSurgicalPathologyReport.getId();
-			this.deIdentifiedReportAccessionNumber=deidentifiedSurgicalPathologyReport.getAccessionNumber();
+			this.deIdentifiedReportAccessionNumber="";
 			this.deIdentifiedReportTextContent=deidentifiedSurgicalPathologyReport.getTextContent().getData();
 			this.deIdentifiedReportSite=deidentifiedSurgicalPathologyReport.getSource().getName();
 		}
@@ -451,7 +451,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		try
 		{
 			this.identifiedReportId=ispr.getId();
-			this.identifiedReportAccessionNumber=ispr.getAccessionNumber();
+			this.identifiedReportAccessionNumber="";
 			this.identifiedReportTextContent=ispr.getTextContent().getData();	
 			this.identifiedReportSite=ispr.getSource().getName();
 		}

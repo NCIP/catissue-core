@@ -454,7 +454,7 @@ public class RequestDetailsForm extends AbstractActionForm
 		else if(orderItem instanceof PathologicalCaseOrderItem)
 		{
 			PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem)orderItem;
-			values.put(requestedItem, pathologicalCaseOrderItem.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport().getAccessionNumber());
+			values.put(requestedItem, pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
 			//Fetching requestFor list
 			List totalChildrenSpecimenColl = OrderingSystemUtil.getRequestForListForPathologicalCases(pathologicalCaseOrderItem.getSpecimenCollectionGroup(), pathologicalCaseOrderItem);
 			Iterator i = totalChildrenSpecimenColl.iterator();

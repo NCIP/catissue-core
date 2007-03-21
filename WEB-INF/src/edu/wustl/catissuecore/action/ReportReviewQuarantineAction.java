@@ -100,7 +100,7 @@ public class ReportReviewQuarantineAction extends BaseAction
 			dataList.add(witnessFullName);
 			dataList.add(scgName);
 			dataList.add(reportObject.getId());
-			dataList.add(surgicalPathologyReport.getAccessionNumber());
+			//dataList.add(surgicalPathologyReport.getAccessionNumber());
 			dataList.add(surgicalPathologyReport.getSource().getName());
 			finalDataList.add(dataList);
 		}

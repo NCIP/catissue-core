@@ -514,7 +514,7 @@ public class RequestDetailsAction extends BaseAction
 	{
 		PathologicalCaseOrderItem pathologicalCaseOrderItem = (PathologicalCaseOrderItem)specimenOrderItem;
 		boolean isDerived = false;
-		arrayDetailsBean.setRequestedItem(pathologicalCaseOrderItem.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport().getAccessionNumber());
+		arrayDetailsBean.setRequestedItem(pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
 		Collection childrenSpecimenList = pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSpecimenCollection();
 //		 Removing distributed option if no specimens are present in that SCG. ie. childrenSpecimenList.size() == 0
 		//TODO
@@ -763,7 +763,7 @@ public class RequestDetailsAction extends BaseAction
 	private RequestDetailsBean populateRequestDetailsBeanForPathologicalCase(RequestDetailsBean requestDetailsBean,PathologicalCaseOrderItem pathologicalCaseOrderItem,HttpServletRequest request,int finalSpecimenListId)
 	{
 		boolean isDerived = false;
-		requestDetailsBean.setRequestedItem(pathologicalCaseOrderItem.getSpecimenCollectionGroup().getIdentifiedSurgicalPathologyReport().getAccessionNumber());
+		requestDetailsBean.setRequestedItem(pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSurgicalPathologyNumber());
 	    
 		Collection childrenSpecimenList = pathologicalCaseOrderItem.getSpecimenCollectionGroup().getSpecimenCollection();
 		// Removing distributed option if no specimens are present in that SCG. ie. childrenSpecimenList.size() == 0

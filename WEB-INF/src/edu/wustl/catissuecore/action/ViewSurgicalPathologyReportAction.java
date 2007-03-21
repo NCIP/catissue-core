@@ -227,7 +227,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				scg=(SpecimenCollectionGroup)iter.next();
 				if(scg.getIdentifiedSurgicalPathologyReport()!=null)
 				{
-					NameValueBean nb=new NameValueBean(scg.getIdentifiedSurgicalPathologyReport().getAccessionNumber(),scg.getIdentifiedSurgicalPathologyReport().getId().toString());
+					NameValueBean nb=new NameValueBean(scg.getSurgicalPathologyNumber(),scg.getIdentifiedSurgicalPathologyReport().getId().toString());
 					reportIDList.add(nb);
 				}
 			}		
