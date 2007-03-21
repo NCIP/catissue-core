@@ -765,6 +765,7 @@ create table CATISSUE_SPECIMEN_COLL_GROUP (
    COLLECTION_PROTOCOL_EVENT_ID bigint,
    CLINICAL_REPORT_ID bigint,
    COLLECTION_PROTOCOL_REG_ID bigint,
+   SURGICAL_PATHOLOGY_NUMBER varchar(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_TYPE (
@@ -996,7 +997,6 @@ create table CATISSUE_QUARANTINE_PARAMS (
 );
 create table CATISSUE_PATHOLOGY_REPORT (
    IDENTIFIER bigint not null auto_increment,
-   ACCESSION_NUM varchar(100),
    ACTIVITY_STATUS varchar(100),
    REVIEW_FLAG bit,
    SOURCE_ID bigint,
