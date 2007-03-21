@@ -1,13 +1,16 @@
 
 package edu.wustl.catissuecore.applet.listener;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.JApplet;
 import javax.swing.JButton;
 import javax.swing.JTable;
+import javax.swing.JViewport;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
@@ -33,7 +36,7 @@ public class SpecimenSubmitButtonHandler extends ButtonHandler
 		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel) table.getModel();
 
 		BaseAppletModel appletModel = new BaseAppletModel();
-
+		(table.getParent().getFocusCycleRootAncestor()).setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
 		appletModel.setData(model.getMap());
 		model.getMap().put(AppletConstants.NO_OF_SPECIMENS,
 				String.valueOf(model.getTotalColumnCount()));
@@ -98,6 +101,7 @@ public class SpecimenSubmitButtonHandler extends ButtonHandler
 			System.out.println("\n ***********************************\n"); 
 //			 ----------------------- data map end
 
+			(table.getParent().getFocusCycleRootAncestor()).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			
 			if(target.equals(Constants.SUCCESS)) {
 				Object[] parameters = new Object[]{target};
