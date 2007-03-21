@@ -751,7 +751,7 @@ public class HL7Parser extends Parser
 	                StringTokenizer st2 = new StringTokenizer(field, "^");
 	                String accNum = st2.nextToken();
 
-	                report.setAccessionNumber(accNum);
+//	                report.setAccessionNumber(accNum);
 	            }
 	            if (x == Parser.REPORT_DATE_INDEX)
 	            {

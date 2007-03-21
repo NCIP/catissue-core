@@ -126,7 +126,7 @@ public class DeidReport extends Thread
             deidReport.setCollectionDateTime(deidCollectedDate);
         }
 		  
-       	deidReport.setAccessionNumber(ispr.getAccessionNumber());
+//       	deidReport.setAccessionNumber(ispr.getAccessionNumber());
        	deidReport.setActivityStatus(ispr.getActivityStatus()); 
        	deidReport.setReportStatus(Parser.PENDING_FOR_XML);
        	deidReport.setIsQuanrantined(Constants.ACTIVITY_STATUS_ACTIVE);

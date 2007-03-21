@@ -69,7 +69,7 @@ public class DeidUtils
 			}
 
 			reportHeaderElement.addContent(buildHeaderPersonElement(Parser.PARTICIPANT_MRN, mrn, Parser.PARTICIPANT_ROLE));
-			reportHeaderElement.addContent(buildHeaderDataElement(Parser.REPORT_ACCESSION_NUMBER, ispr.getAccessionNumber()));
+//			reportHeaderElement.addContent(buildHeaderDataElement(Parser.REPORT_ACCESSION_NUMBER, ispr.getAccessionNumber()));
 
 			Element reportTextElement = new Element(Parser.REPORT_TEXT);
 			sprText = DeidUtils.removeIllegalXmlCharacters(sprText);

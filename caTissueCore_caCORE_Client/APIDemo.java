@@ -162,7 +162,7 @@ public class APIDemo
 		public IdentifiedSurgicalPathologyReport initIdentifiedSurgicalPathologyReport()
 		{
 			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = new IdentifiedSurgicalPathologyReport();
-			identifiedSurgicalPathologyReport.setAccessionNumber("12345");
+//			identifiedSurgicalPathologyReport.setAccessionNumber("12345");
 			identifiedSurgicalPathologyReport.setActivityStatus("Active");
 			
 			TextContent textContent = new TextContent();
