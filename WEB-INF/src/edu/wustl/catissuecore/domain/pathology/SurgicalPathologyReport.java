@@ -18,11 +18,6 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 {
 
 	/**
-	 * Accession number of a pathology report.
-	 */
-	protected String accessionNumber;
-	
-	/**
 	 * Activity status of a pathology report.
 	 */
 	protected String activityStatus;
@@ -81,26 +76,6 @@ public class SurgicalPathologyReport extends AbstractDomainObject
 
 	}
 		
-	/**
-	 * @return the accession number of current pathology report.
-     * @hibernate.property name="accessionNumber"
-     * type="string" column="ACCESSION_NUM" 
-     * length="100"
-     */
-	public String getAccessionNumber()
-	{
-		return accessionNumber;
-	}
-
-	/**
-	 * Sets accession number of the report
-	 * @param accessionNumber sets accession number of the pathology report.
-	 */
-	public void setAccessionNumber(String accessionNumber)
-	{
-		this.accessionNumber = accessionNumber;
-	}
-
 	/**
 	 * @return activity status of the pathology report.
      * @hibernate.property name="activityStatus"
