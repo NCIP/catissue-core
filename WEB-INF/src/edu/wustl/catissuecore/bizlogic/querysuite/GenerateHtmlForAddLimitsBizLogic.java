@@ -33,11 +33,10 @@ import edu.common.dynamicextensions.domaininterface.StringValueInterface;
 import edu.wustl.cab2b.client.ui.controls.AttributeInterfaceComparator;
 import edu.wustl.cab2b.client.ui.controls.PermissibleValueComparator;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.util.ParseXMLFile;
-import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 
 /**
  * This class generates UI for 'Add Limits' and 'Edit Limits' section.
@@ -48,7 +47,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	/**
 	 * Object which holds data operators fro attributes.
 	 */
-	ParseXMLFile parseFile = null;
+	static ParseXMLFile parseFile = null;
 
 	/**
 	 * Constructor for GenerateHtmlForAddLimitsBizLogic
