@@ -247,7 +247,7 @@ public class ReportLoader
 		scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport);
 		this.identifiedReport.setSpecimenCollectionGroup(scg);
 	
-		scg.setName("caties_"+ this.identifiedReport.getAccessionNumber().toString());
+		scg.setName("caties_"+ new Date().getTime());
 		
 		String className=CollectionProtocol.class.getName();
 		String colName=new String("title");
@@ -308,7 +308,7 @@ public class ReportLoader
 		IdentifiedSurgicalPathologyReport report=specimenCollectionGroup.getIdentifiedSurgicalPathologyReport();
 		if(report !=null)
 		{
-			if(report.getAccessionNumber().equals(this.identifiedReport.getAccessionNumber()))
+			if(false)//report.getAccessionNumber().equals(this.identifiedReport.getAccessionNumber()))
 			{	isExists = checkForTextContent(report);
 				if(!isExists)
 				{
