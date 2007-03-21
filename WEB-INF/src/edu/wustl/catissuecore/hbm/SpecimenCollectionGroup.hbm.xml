@@ -77,6 +77,15 @@
             column="ACTIVITY_STATUS"
             length="50"
         />
+        
+        <property
+            name="surgicalPathologyNumber"
+            type="string"
+            update="true"
+            insert="true"
+            column="SURGICAL_PATHOLOGY_NUMBER"
+            length="50"
+        />
 
         <many-to-one
             name="specimenCollectionSite"
