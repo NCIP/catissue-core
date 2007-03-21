@@ -196,7 +196,7 @@ System.out.println("containerId:"+containerId);
 	<tr valign="top" height = "80%">
 	 <td  width="2%"></td>	
        <td>
-				<table valign="top" width="100%" border='1' height="80%" cellspacing="0" cellpadding="0" >
+				<table valign="top" width="100%" border='0' height="80%" cellspacing="0" cellpadding="0" >
 			<!-- Main Page heading -->				    
 				 <tr height="2%">
 					   <td class="formTitle" height="25" colspan="3">
