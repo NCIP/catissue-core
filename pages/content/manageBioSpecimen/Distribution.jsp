@@ -156,9 +156,16 @@
 						iCount=iCount+1;
 					}
 				}
-				var url ='Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+noOfRows+'&labelBarcode='+distrinutionOn+'&barcodelabel='
-				url+=barcodeLableValue;
-				window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
+				if(noOfRows==iCount)
+				{
+					alert("No consents available");
+				}
+				else
+				{
+					var url ='Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+noOfRows+'&labelBarcode='+distrinutionOn+'&barcodelabel='
+					url+=barcodeLableValue;
+					window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
+				}
 			}
 		}
 		//Consent tracking
