@@ -1,8 +1,6 @@
 
-#------- participant 
-ALTER TABLE CATISSUE_SPECIMEN_COLL_GROUP ADD COLUMN PARTICIPANT_ID bigint NOT NULL; 
-ALTER TABLE CATISSUE_SPECIMEN_COLL_GROUP ADD COLUMN DEIDENTIFIED_REPORT_ID bigint; 
-ALTER TABLE CATISSUE_SPECIMEN_COLL_GROUP ADD COLUMN IDENTIFIED_REPORT_ID bigint; 
+/************Vijay Pande: column added since Clinical Report is now removed from System ***********/ 
+ALTER TABLE CATISSUE_SPECIMEN_COLL_GROUP ADD COLUMN SURGICAL_PATHOLOGY_NUMBER varchar(50); 
 
 /*----Ashish: Ordering System-----*/
 insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID) values ( 76, 'CATISSUE_ORDER', 'Order', 'OrderDetails', 2);
@@ -369,7 +367,6 @@ create table CATISSUE_QUARANTINE_PARAMS (
 );
 create table CATISSUE_PATHOLOGY_REPORT (
    IDENTIFIER bigint not null auto_increment,
-   ACCESSION_NUM varchar(100),
    ACTIVITY_STATUS varchar(100),
    REVIEW_FLAG bit,
    SOURCE_ID bigint,

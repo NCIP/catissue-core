@@ -743,6 +743,7 @@ create table CATISSUE_SPECIMEN_COLL_GROUP (
    COLLECTION_PROTOCOL_EVENT_ID number(19,0),
    CLINICAL_REPORT_ID number(19,0),
    COLLECTION_PROTOCOL_REG_ID number(19,0),
+   SURGICAL_PATHOLOGY_NUMBER varchar(50),
    primary key (IDENTIFIER)
 );
 create table CATISSUE_SPECIMEN_TYPE (
@@ -1164,7 +1165,6 @@ create table CATISSUE_QUARANTINE_PARAMS (
 );
 create table CATISSUE_PATHOLOGY_REPORT (
    IDENTIFIER number(19,0) not null,
-   ACCESSION_NUM varchar(100),
    ACTIVITY_STATUS varchar(100),
    REVIEW_FLAG number(1),
    SOURCE_ID number(19,0),
