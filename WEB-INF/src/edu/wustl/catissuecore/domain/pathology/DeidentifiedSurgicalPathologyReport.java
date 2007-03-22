@@ -1,4 +1,5 @@
 package edu.wustl.catissuecore.domain.pathology;
+import java.util.Collection;
 import java.util.Set;
 
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
@@ -27,7 +28,7 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	/**
 	 * collection of concept referents.
 	 */
-	protected Set conceptReferentCollection;
+	protected Collection conceptReferentCollection;
 	
 	/**
 	 * Specimen collection group of the current report.
@@ -51,7 +52,7 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	* @hibernate.collection-one-to-many
 	* class="edu.wustl.catissuecore.domain.pathology.ConceptReferent"
 	*/
-	public Set getConceptReferentCollection()
+	public Collection getConceptReferentCollection()
 	{
 		return conceptReferentCollection;
 	}
@@ -60,7 +61,7 @@ public class DeidentifiedSurgicalPathologyReport extends SurgicalPathologyReport
 	 * @param conceptReferentCollection sets concept referent collection.
 	 */
 	public void setConceptReferentCollection(
-			Set conceptReferentCollection)
+			Collection conceptReferentCollection)
 	{
 		this.conceptReferentCollection = conceptReferentCollection;
 	}
