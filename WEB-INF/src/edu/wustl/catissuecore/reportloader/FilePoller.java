@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import org.apache.log4j.PropertyConfigurator;
+
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -24,8 +25,6 @@ import edu.wustl.common.util.logger.Logger;
 public class FilePoller implements Observable
 {
 	private Observer obr;
-	
-
 
 	/**
 	 * @throws Exception
@@ -33,16 +32,26 @@ public class FilePoller implements Observable
 	 */
 	public void init()throws Exception
 	{
+		//Initialization methods
 		Variables.applicationHome = System.getProperty("user.dir");
-		Logger.out = org.apache.log4j.Logger.getLogger("");
-		Logger.configure(Variables.applicationHome + File.separator+"ApplicationResources.properties");
-		PropertyConfigurator.configure(Variables.applicationHome + File.separator+"ApplicationResources.properties");
+		//Logger.out = org.apache.log4j.Logger.getLogger("");
+		//Configuring common logger
+		Logger.configure("general");
+		// Configuring CSV logger
+		CSVLogger.configure("csv");
+		//Configuring logger properties
+		PropertyConfigurator.configure(Variables.applicationHome + File.separator+"logger.properties");
+		// Setting properties for UseImplManager
 		System.setProperty("gov.nih.nci.security.configFile",
 				"./catissuecore-properties"+File.separator+"ApplicationSecurityConfig.xml");
+		// initializing cache manager
 		CDEManager.init();
+		//initializing XMLPropertyHandler to read properties from caTissueCore_Properties.xml file
 		XMLPropertyHandler.init("./catissuecore-properties"+File.separator+"caTissueCore_Properties.xml");
+		// initializing SiteInfoHandler to read site names from site configuration file
 		SiteInfoHandler.init(XMLPropertyHandler.getValue("site.info.filename"));
 		ApplicationProperties.initBundle("ApplicationResources");
+		// required for valdation in bizLogic
 		edu.wustl.catissuecore.util.global.Variables.isLoadFromCaties=true;
 	}
 	
@@ -55,16 +64,25 @@ public class FilePoller implements Observable
 		String[] files=null;
 		File inputDir=null;
 		FilePoller poller =null;
+		
 		try
 		{
 			poller = new FilePoller();
+			// Initializing file poller
 			poller.init();
+			CSVLogger.out.info("Thread, Date/Time, FileName, Report Loder Queue ID, Status, Message");
+			CSVLogger.out.info("");
+			
 			Observer obr=new ReportProcessor();
+			// registering poller to the object obr
 			poller.register(obr);
+			// Create new directories if does not exists
 			ReportLoaderUtil.createDir(XMLPropertyHandler.getValue(Parser.PROCESSED_FILE_DIR));
 			ReportLoaderUtil.createDir(XMLPropertyHandler.getValue(Parser.INPUT_DIR));
 			ReportLoaderUtil.createDir(XMLPropertyHandler.getValue(Parser.BAD_FILE_DIR));
-			Thread th=new Thread(){
+			// Thread for stopping file poller server
+			Thread th=new Thread()
+			{
 				public void	run()
 				{
 					try
@@ -100,14 +118,17 @@ public class FilePoller implements Observable
 		}
 		try
 		{	
+			// Loop to contineusly poll on directory for new incoming files
 			while(true)
 			{
 				inputDir = new File(XMLPropertyHandler.getValue(Parser.INPUT_DIR)); 
 				files=	inputDir.list();
 				 if(files.length>0)
-				  {
-				    	poller.obr.notifyEvent(files);
-				  }
+				 {
+					 Logger.out.info("Invoking parser to parse input file");
+					 // this invokes ReportProcessor thread
+					 poller.obr.notifyEvent(files);
+				 }
 				 Logger.out.info("Report Loader Server is going to sleep for "+XMLPropertyHandler.getValue(Parser.POLLER_SLEEP)+"ms");
 				 Thread.sleep(Long.parseLong(XMLPropertyHandler.getValue(Parser.POLLER_SLEEP)));
 			}
@@ -118,8 +139,6 @@ public class FilePoller implements Observable
 		}	
 	}
 	
-	
-	
 	/** 
 	 * @see edu.wustl.catissuecore.reportloader.Observable#register(edu.wustl.catissuecore.reportloader.Observer)
 	 * @param o object of observer 
@@ -128,7 +147,6 @@ public class FilePoller implements Observable
 	{
 		this.obr=o;
 	}
-
 	
 	/**
 	 * @return obr object of Observer
@@ -137,8 +155,6 @@ public class FilePoller implements Observable
 	{
 		return obr;
 	}
-
-	
 	
 	/**
 	 * @param obr object of observer
@@ -146,7 +162,5 @@ public class FilePoller implements Observable
 	public void setObr(Observer obr)
 	{
 		this.obr = obr;
-	}
-   
-	
+	}	
 }
