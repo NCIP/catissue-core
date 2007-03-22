@@ -16,6 +16,7 @@ import java.util.Set;
 import org.jdom.Element;
 import org.jdom.output.Format;
 
+
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
@@ -57,36 +58,42 @@ public class DeidReport extends Thread
 	{
 		try
 		{
+			
+			Logger.out.info("De-identification process started for "+ispr.getId().toString());
 			org.jdom.Document currentRequestDocument = new org.jdom.Document(new Element("Dataset"));
 			SpecimenCollectionGroup scg=ispr.getSpecimenCollectionGroup();
 			Participant participant=scg.getCollectionProtocolRegistration().getParticipant();
 			
 			TextContent tc=ispr.getTextContent();
 			tc.setData(synthesizeSPRText(ispr));
+			Logger.out.info("ReportText is synthesized for report "+ispr.getId().toString());
 			ispr.setTextContent(tc);
 			
 			Element reportElement = DeidUtils.buildReportElement(participant, ispr, ispr.getTextContent().getData());
 			currentRequestDocument.getRootElement().addContent(reportElement);
 	        
 	        String deidRequest = DeidUtils.convertDocumentToString(currentRequestDocument, Format.getPrettyFormat()); 
-	        
+	        Logger.out.info("Calling native call for report "+ispr.getId().toString());
 	        String deidReport=deIdentify(deidRequest);
-	        
+	        Logger.out.info("Calling native finished successfully for report "+ispr.getId().toString());
 	        String deidText="";
-	        
+	        Logger.out.info("Extracting report text for report "+ispr.getId().toString());
 	        deidText=DeidUtils.extractReport(deidReport, XMLPropertyHandler.getValue("deid.dtd.filename"));
-	        
+	        Logger.out.info("Extracting report text finished for report "+ispr.getId().toString());
 	        Date deidCollectionDate=null;
 	   
 	        deidCollectionDate=DeidUtils.extractDate(deidText);	
-	    
+	        Logger.out.info("Creating deidentified report for identified report id="+ispr.getId().toString());
 	        DeidentifiedSurgicalPathologyReport pathologyReport = createPathologyReport(ispr, deidText, deidCollectionDate);
-	        
+	        Logger.out.info("De-identification process finished for "+ispr.getId().toString());
 	    	try
 	    	{
+	    		Logger.out.info("Saving deidentified report for identified report id="+ispr.getId().toString());
 	    		ReportLoaderUtil.saveObject(pathologyReport);
+	    		Logger.out.info("deidentified report saved for identified report id="+ispr.getId().toString());
 	        	ispr.setReportStatus(Parser.DEIDENTIFIED);
 	        	ispr.setDeidentifiedSurgicalPathologyReport(pathologyReport);
+	        	Logger.out.info("Updating identified report report id="+ispr.getId().toString());
 	        	ReportLoaderUtil.updateObject(ispr);
 	    	}
 	    	catch(DAOException daoEx)
@@ -179,7 +186,7 @@ public class DeidReport extends Thread
 			{
 				String sectionText = (String) nameToText.get(abbr);
 
-				docText += "[" + sectionHeader + "]" + "\n\n" + sectionText + "\n\n\n";
+				docText += "\n[" + sectionHeader + "]" + "\n\n" + sectionText + "\n\n";
 			}
 		}
 		return docText.trim();
