@@ -313,6 +313,32 @@
 			}	
 		}
 		
+		function onCollectionGroupChange(element)
+		{
+			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupId");
+			
+			if(specimenCollGroupElement.value != "-1")
+			{
+				if(element=='1')
+				{
+					value=true;
+				}
+				else
+				{
+					value=false;						
+				}
+				<%
+				actionOnCollOrClassChange = "NewSpecimen.do?pageOf=pageOfNewSpecimen&virtualLocated=false&tab=newSpecimenForm&showConsents=yes&tableId4=disable";
+				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
+				{
+					actionOnCollOrClassChange = "CPQueryNewSpecimen.do?pageOf=pageOfNewSpecimenCPQuery&virtualLocated=false";
+				}%>
+				var action = "<%=actionOnCollOrClassChange%>"+"&value="+value;
+				document.forms[0].action = action + "&onCollOrClassChange=true";
+				document.forms[0].submit();
+			}	
+		}
+		
 		function setVirtuallyLocated(element)
 		{
 			var containerName = document.getElementById("customListBox_1_0");
@@ -768,7 +794,7 @@
 										<!-- Mandar : 434 : for tooltip -->
 							     		<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
 							     				styleId="specimenCollectionGroupId" size="1" 
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onCollOrClassChange('1');resetVirtualLocated()" >
+										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="onCollectionGroupChange('1');resetVirtualLocated()" >
 											<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
 												labelProperty="name" property="value"/>		
 										</html:select>
