@@ -35,8 +35,10 @@ public class ReportProcessor implements Observer
 	public ReportProcessor()
 	{
 		parserManager = ParserManager.getInstance();
+		// get instance of parser
 		parser = parserManager.getParser(Parser.HL7_PARSER);
 		ReportLoaderQueueProcessor queueProcessor = new ReportLoaderQueueProcessor();
+		// Starts ReportLoaderQueueProcessor thread
 		queueProcessor.start();
 	}
 	
@@ -60,30 +62,37 @@ public class ReportProcessor implements Observer
 		List fileToDelete=null;
 		try
 		{	
-				files=	(String[])obj;
-				fileToDelete = new ArrayList();
-				for(int i=0;i<files.length;i++)
-				{	
-					try
-					{
-						parser.parse(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
-						
-					}
-					catch(IOException ex)
-					{
-						Logger.out.error("Error while reading file ",ex);
-					}
-					catch(Exception ex)
-					{     
-				  	    copyFile("./"+files[i],XMLPropertyHandler.getValue(Parser.BAD_FILE_DIR)+File.separator+files[i]);
-				  	    fileToDelete.add(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
-						Logger.out.error("Bad File ",ex);
-					}
-					fileToDelete.add(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
-					copyFile(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i],XMLPropertyHandler.getValue(Parser.PROCESSED_FILE_DIR)+"/"+files[i]);
+			files=	(String[])obj;
+			// variable to store list of files that has to be deleted from input directory after processing
+			fileToDelete = new ArrayList();
+			// Loop to process all incoming files
+			for(int i=0;i<files.length;i++)
+			{	
+				try
+				{
+					Logger.out.info("parsing file "+files[i]);
+					// Initializing SiteInfoHandler to avoid restart of server to get new site names added to file at run time
+					SiteInfoHandler.init(XMLPropertyHandler.getValue("site.info.filename"));
+					// calling parser to parse file
+					parser.parse(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
+					Logger.out.info("parsing of file "+files[i]+" finished");
+					
 				}
-				files=null;
-				deleteFiles(fileToDelete);
+				catch(IOException ex)
+				{
+					Logger.out.error("Error while reading file ",ex);
+				}
+				catch(Exception ex)
+				{     
+			  	    copyFile("./"+files[i],XMLPropertyHandler.getValue(Parser.BAD_FILE_DIR)+File.separator+files[i]);
+			  	    fileToDelete.add(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
+					Logger.out.error("Bad File ",ex);
+				}
+				fileToDelete.add(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
+				copyFile(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i],XMLPropertyHandler.getValue(Parser.PROCESSED_FILE_DIR)+"/"+files[i]);
+			}
+			files=null;
+			deleteFiles(fileToDelete);
 				
 		}
 		catch(Exception ex)

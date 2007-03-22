@@ -1,5 +1,6 @@
 package edu.wustl.catissuecore.reportloader;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +17,6 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ReportLoaderQueueProcessor extends Thread
 {
-
 	/**
 	 * @see java.lang.Thread#run()
 	 */
@@ -31,26 +31,48 @@ public class ReportLoaderQueueProcessor extends Thread
 		{	
 			try
 			{
+				// retrieve records from report queue for processing
 				queue=ReportLoaderUtil.getObject(ReportLoaderQueue.class.getName(),"status" ,Parser.NEW);
+				Logger.out.info("Processing report Queue: Total "+queue.size()+" Reports found in queue");
+				CSVLogger.out.info("Processing report Queue: Total "+queue.size()+" Reports found in queue");
+				CSVLogger.out.info("Thread, Date/Time, Report Loder Queue ID, Status, Message");
 				if(queue!=null && queue.size()>0)
 				{
+					//	Initializing SiteInfoHandler to avoid restart of server to get new site names added to file at run time
+					SiteInfoHandler.init(XMLPropertyHandler.getValue("site.info.filename"));
 					for(int i=0;i<queue.size();i++)
 					{
 						try
 						{
 							reportLoaderQueue=(ReportLoaderQueue)queue.get(i);
+							Logger.out.info("Processing report from Queue with serial no="+reportLoaderQueue.getId());
 							participantSet=(Set)reportLoaderQueue.getParticipantCollection();
 							Iterator it = participantSet.iterator();
 							if(it.hasNext())
 							{
+								// get instance  of parser
 								pMgr=ParserManager.getInstance();
 								parser=(HL7Parser)pMgr.getParser(Parser.HL7_PARSER);
-								parser.parseString((Participant)it.next(),reportLoaderQueue.getReportText());
-								ReportLoaderUtil.deleteObject(reportLoaderQueue);
+								try
+								{
+									// parse report text 
+									parser.parseString((Participant)it.next(),reportLoaderQueue.getReportText(), reportLoaderQueue.getSpecimenCollectionGroup());
+									// delete record from queue
+									ReportLoaderUtil.deleteObject(reportLoaderQueue);
+									CSVLogger.out.info("Report Queue Processor, "+new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ");
+									Logger.out.info("Processed report from Queue with serial no="+reportLoaderQueue.getId());
+								}
+								catch(Exception ex)
+								{
+									CSVLogger.out.info("Report Queue Processor, "+new Date().toString()+","+reportLoaderQueue.getId()+","+","+"FAILED"+","+ex.getMessage());
+									reportLoaderQueue.setStatus(Parser.FAILURE);
+									ReportLoaderUtil.updateObject(reportLoaderQueue);
+								}
 							}
 						}
 						catch(Exception ex)
 						{
+							reportLoaderQueue.setStatus(Parser.FAILURE);
 							Logger.out.error("Error in parsing queue "+i);
 						}
 					}
@@ -61,10 +83,7 @@ public class ReportLoaderQueueProcessor extends Thread
 			catch(Exception ex)
 			{
 				Logger.out.error("Error while adding report data",ex);
-			}
-			
+			}			
 		}	
-	}
-	
-	
+	}	
 }
