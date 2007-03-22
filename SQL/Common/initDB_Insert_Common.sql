@@ -1339,4 +1339,9 @@ insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME ,
 INSERT INTO CATISSUE_TABLE_RELATION (RELATIONSHIP_ID, PARENT_TABLE_ID, CHILD_TABLE_ID) values (130,21,1);
 INSERT INTO CATISSUE_SEARCH_DISPLAY_DATA (RELATIONSHIP_ID, COL_ID, DISPLAY_NAME) VALUES (130, 260 , 'Default Temperature In Centigrade');
 
+/* Inserting Concept Referent Classifications for Concept Highlighting */
+insert into catissue_concept_classificatn (identifier,name) values (1,'Diagnosis');
+insert into catissue_concept_classificatn (identifier,name) values (2,'Organ');
+insert into catissue_concept_classificatn (identifier,name) values (3,'Procedure');
+
 commit;
