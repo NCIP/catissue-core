@@ -105,16 +105,16 @@ public class GenerateHtmlForAddLimitsBizLogic
 				if(attribute.getDataType().equalsIgnoreCase(Constants.DATE))
 				{
 					String dateFormat = Constants.DATE_FORMAT;//ApplicationProperties.getValue("query.date.format");
-				//	generatedHTML.append("<td  valign='top' class=\"standardDateQuery\" nowrap='nowrap' width=\"10%\">");
+					//	generatedHTML.append("<td  valign='top' class=\"standardDateQuery\" nowrap='nowrap' width=\"10%\">");
 					generatedHTML.append("\n("+dateFormat+")");
-				//	generatedHTML.append("</td>\n");
+					//	generatedHTML.append("</td>\n");
 				}
 				/*else
 				{
 					generatedHTML.append("\n<td valign='top' class='standardTextQuery' nowrap='nowrap' width='8'>&nbsp</td>");	
 				}*/
 				generatedHTML.append("</td>\n");
-				
+
 				List<String> operatorsList = populateAttributeUIInformation(attribute);
 				boolean isBetween = false;
 				if (!operatorsList.isEmpty() && operatorsList.get(0).equalsIgnoreCase(RelationalOperator.Between.toString()))
@@ -217,9 +217,6 @@ public class GenerateHtmlForAddLimitsBizLogic
 
 				if (permValue instanceof FloatValueInterface)
 					permissibleValues.add(((FloatValueInterface) permValue));
-
-				if (permValue instanceof FloatValueInterface)
-					permissibleValues.add(((FloatValueInterface) permValue));
 			}
 		}
 		return permissibleValues;
@@ -260,7 +257,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 				}
 				else if (attrTypeInfo instanceof BooleanAttributeTypeInformation)
 				{
-					strObj = parseFile.getNonEnumStr();
+					strObj = parseFile.getEnumBool();
 				}
 				else if (attrTypeInfo instanceof DateAttributeTypeInformation)
 				{
@@ -367,12 +364,12 @@ public class GenerateHtmlForAddLimitsBizLogic
 		if (dataType.equalsIgnoreCase(Constants.DATE))
 		{
 			html.append("\n" + generateHTMLForCalendar(attributeInterface, true, false));
-		//	html.append("\n<td valign='top' nowrap='nowrap' id=\"" +dateFormatLabelId1+ "\" class=\"standardTextQuery\" width=\"8%\">"+dateFormat+"</td>");
+			//	html.append("\n<td valign='top' nowrap='nowrap' id=\"" +dateFormatLabelId1+ "\" class=\"standardTextQuery\" width=\"8%\">"+dateFormat+"</td>");
 		}
 		else
 		{
 			html.append("\n<td valign='top' />");
-		//	html.append("\n<td valign='top' />");
+			//	html.append("\n<td valign='top' />");
 		}
 		html.append("<td width='1%'  valign='top' class=\"standardTextQuery\">\n");
 		if (isBetween)
@@ -395,7 +392,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		if (dataType.equalsIgnoreCase(Constants.DATE))
 		{
 			html.append("\n" + generateHTMLForCalendar(attributeInterface, false, isBetween));
-		/*	if(!isBetween)
+			/*	if(!isBetween)
 			{
 				html.append("\n<td valign='top' nowrap='nowrap' id=\"" +dateFormatLabelId2+ "\" class=\"standardTextQuery\" style=\"display:none\" width=\"8%\">"+dateFormat+"</td>");
 			}
@@ -409,7 +406,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 			html.append("\n<td valign='top' />");
 			//html.append("\n<td valign='top' />");
 		}
-	return html.toString();
+		return html.toString();
 	}
 
 	/**
