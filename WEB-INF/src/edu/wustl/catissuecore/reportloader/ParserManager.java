@@ -53,12 +53,13 @@ public final class ParserManager
 	 */
 	private void initialize()
 	{
-		
+		// participant map for cache manager
 		Map participantMap = null;
 		ParticipantBizLogic bizlogic = (ParticipantBizLogic) BizLogicFactory.getInstance()
 				.getBizLogic(Participant.class.getName());
 		try
 		{
+			// get all participant list to set to chache manager
 			participantMap = bizlogic.getAllParticipants();
 			Iterator it = participantMap.keySet().iterator();
 			while (it.hasNext())
@@ -73,8 +74,10 @@ public final class ParserManager
 		// getting instance of catissueCoreCacheManager and adding participantMap to cache
 		try
 		{
+			// get instance of catissueCoreCacheManager
 			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
 			.getInstance();
+			// add objects to cacheManager
 			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS, (HashMap) participantMap);
 		}
 		catch (CacheException e)
