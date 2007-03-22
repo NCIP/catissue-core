@@ -88,7 +88,7 @@ public class ConceptReferent extends AbstractDomainObject
 
 	/**
 	 * @return concept referent classification
-	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification" column="CONCEPT_CLASSIFICATION_ID" cascade="save-update"
+	 * @hibernate.many-to-one class="edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification" column="CONCEPT_CLASSIFICATION_ID" cascade="none"
 	 */
 	public ConceptReferentClassification getConceptReferentClassification()
 	{
@@ -163,7 +163,7 @@ public class ConceptReferent extends AbstractDomainObject
 
 	/**
 	 * @return modifier flag
-	 * @hibernate.property type="int" length="30" column="IS_MODIFIER"
+	 * @hibernate.property type="boolean" length="30" column="IS_MODIFIER"
 	 */
 	public Boolean getIsModifier()
 	{
@@ -180,7 +180,7 @@ public class ConceptReferent extends AbstractDomainObject
 
 	/**
 	 * @return negated flag
-	 * @hibernate.property type="int" length="30" column="IS_NEGATED"
+	 * @hibernate.property type="boolean" length="30" column="IS_NEGATED"
 	 */
 	public Boolean getIsNegated()
 	{
