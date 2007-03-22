@@ -1,8 +1,13 @@
-			  package edu.wustl.catissuecore.action;
+package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,10 +17,15 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
+import edu.wustl.catissuecore.bean.ConceptHighLightingBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.pathology.Concept;
+import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
+import edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
@@ -23,6 +33,7 @@ import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -33,7 +44,6 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.security.authorization.domainobjects.Role;
-
 /**
  * @author vijay_pande
  * Action class to show Surgical Pathology  Report
@@ -72,6 +82,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         {
             isAuthorized=isAuthorized(getSessionBean(request));
             retrieveAndSetObject(pageOf,id,isAuthorized, request);
+            //retrieveAndSetObject(pageOf,id,request);
         }
         request.setAttribute(Constants.PAGEOF, pageOf);
         request.setAttribute(Constants.OPERATION, Constants.VIEW_SURGICAL_PATHOLOGY_REPORT);
@@ -83,7 +94,59 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
         	request.setAttribute(Constants.ID,id.toString());
         }
         return mapping.findForward(pageOf);
-
+        
+	}
+	/**
+	 * @param request
+	 * @param deidentifiedSurgicalPathologyReport
+	 */
+	private void prepareCategoryPage(HttpServletRequest request,DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)//DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport
+	{		
+		if(deidentifiedSurgicalPathologyReport != null)
+		{
+			Collection conceptReferentColl = deidentifiedSurgicalPathologyReport.getConceptReferentCollection();
+			//temporary map to make a list of concept referent classification objects
+			Map tempMap = new HashMap();
+			if(conceptReferentColl != null)
+			{
+				Iterator iter = conceptReferentColl.iterator();
+				while(iter.hasNext())
+				{
+					ConceptReferent conceptReferent = (ConceptReferent)iter.next();
+					ConceptReferentClassification conceptReferentClassification = conceptReferent.getConceptReferentClassification();
+					ConceptHighLightingBean conceptHighLightingBean = null;
+					if(tempMap.get(conceptReferentClassification.getId()) == null)
+					{	// if concept classification obj is not present in the list						
+						conceptHighLightingBean = new ConceptHighLightingBean();
+						conceptHighLightingBean.setClassificationName(conceptReferentClassification.getName());
+						conceptHighLightingBean.setConceptName(conceptReferent.getConcept().getName());
+						conceptHighLightingBean.setStartOffsets(conceptReferent.getStartOffset().toString());
+						conceptHighLightingBean.setEndOffsets(conceptReferent.getEndOffset().toString());
+						
+						tempMap.put(conceptReferentClassification.getId(), conceptHighLightingBean);
+					}
+					else
+					{
+						conceptHighLightingBean =(ConceptHighLightingBean) tempMap.get(conceptReferentClassification.getId());
+						
+						conceptHighLightingBean.setConceptName(conceptHighLightingBean.getConceptName() + "," + conceptReferent.getConcept().getName());
+						conceptHighLightingBean.setStartOffsets(conceptHighLightingBean.getStartOffsets() + "," + conceptReferent.getStartOffset());
+						conceptHighLightingBean.setEndOffsets(conceptHighLightingBean.getEndOffsets() + "," + conceptReferent.getEndOffset());
+						
+						tempMap.put(conceptReferentClassification.getId(), conceptHighLightingBean);
+					}
+				}
+				
+				Set keySet = tempMap.keySet();
+				Iterator keySetIter = keySet.iterator();
+				List conceptBeanList = new ArrayList();
+				while(keySetIter.hasNext())
+				{
+					conceptBeanList.add(tempMap.get(keySetIter.next()));
+				}
+				request.setAttribute(Constants.CONCEPT_BEAN_LIST, conceptBeanList);
+			}
+		}		
 	}
 	
 	/**
@@ -99,11 +162,29 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		String colName=new String(Constants.SYSTEM_IDENTIFIER);
 		long colValue=id;	
 		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();		
+		
+		//For PHI
+		//SessionDataBean sessionDataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+		//CaCoreAppServicesDelegator caCoreAppServicesDelegator = new CaCoreAppServicesDelegator();
+		//String userName = Utility.toString(sessionDataBean.getUserName());		
+		
 		//if page is of Specimen Collection group then the domain object is SpecimenCollectionGroup
 		if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN_COLLECTION_GROUP))
 		{
 			className=SpecimenCollectionGroup.class.getName();
 			List scgList=defaultBizLogic.retrieve(className, colName, colValue);
+			
+			//Passing scg list to the filter
+			//List scgObjList = new ArrayList();
+			//try
+			//{
+			//	scgObjList = caCoreAppServicesDelegator.delegateSearchFilter(userName,scgList);
+			//}
+			//catch (Exception e)
+			//{
+			//	Logger.out.debug(""+e);
+			//}
+			//SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgObjList.get(0);
 			SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgList.get(0);
 			if(isAuthorized)
 			{
@@ -117,12 +198,37 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
 				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
 			}
+			//IdentifiedSurgicalPathologyReport identifiedReport = scg.getIdentifiedSurgicalPathologyReport();			
+			//if(identifiedReport.getId() == null)
+			//{
+			//	Participant participant = identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant();
+			//	participant.setId(null);
+			//	identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().setParticipant(participant);												
+			//}
+			
+			//viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
+			//viewSPR.setAllValues(identifiedReport);
+						
+			// For Category HighLighter
+			  prepareCategoryPage(request,scg.getDeIdentifiedSurgicalPathologyReport());
 		}
 		//if page is of Specimen then the domain object is Specimen
 		else if(pageOf.equalsIgnoreCase(Constants.PAGEOF_SPECIMEN))
 		{
 			className=Specimen.class.getName();
 			List specimenList=defaultBizLogic.retrieve(className, colName, colValue);
+			//For PHI
+			//List specimenObjList = new ArrayList();
+			//try
+			//{
+			//	specimenObjList = caCoreAppServicesDelegator.delegateSearchFilter(userName,specimenList);
+			//}
+			//catch (Exception e)
+			//{
+			//	Logger.out.debug(""+e);
+			//}
+			
+			//Specimen specimen=(Specimen)specimenObjList.get(0);
 			Specimen specimen=(Specimen)specimenList.get(0);
 			SpecimenCollectionGroup scg=specimen.getSpecimenCollectionGroup();
 			viewSPR.setAllValues(scg.getIdentifiedSurgicalPathologyReport());
@@ -136,7 +242,20 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			{
 				viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
 				viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
-			}
+			}			
+			//IdentifiedSurgicalPathologyReport identifiedReport = scg.getIdentifiedSurgicalPathologyReport();			
+			//if(identifiedReport.getId() == null)
+			//{
+			//	Participant participant = identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant();
+			//	participant.setId(null);
+			//	identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().setParticipant(participant);												
+			//}			
+			
+			//viewSPR.setAllValues(identifiedReport);
+			//viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
+			
+//			 For Category HighLighter
+			  prepareCategoryPage(request,scg.getDeIdentifiedSurgicalPathologyReport());			
 		}
 		// if page is of Participant then the domain object is Participant
 		// Also needs to retrieve a list of SurgicalPathologyReport objects (One-to-Many relationship)
@@ -147,6 +266,21 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 			Participant participant=(Participant)participantList.get(0);
 			viewSPR.setParticipant(participant);
 			List scgList=ReportLoaderUtil.getSCGList(participant);
+			
+			//For PHI
+			//List scgObjList = new ArrayList();
+			//try
+			//{
+			//	scgObjList = caCoreAppServicesDelegator.delegateSearchFilter(userName,scgList);
+			//}
+			//catch (Exception e)
+			//{
+			//	Logger.out.debug(""+e);
+			//}
+						
+//			if(scgObjList.size()>0)
+//			{
+//				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgObjList.get(0);
 			if(scgList.size()>0)
 			{
 				SpecimenCollectionGroup scg=(SpecimenCollectionGroup)scgList.get(0);
@@ -158,7 +292,21 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 				{
 					viewSPR.setParticipant(scg.getCollectionProtocolRegistration().getParticipant());
 					viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
-				}
+				}				
+				//IdentifiedSurgicalPathologyReport identifiedReport = scg.getIdentifiedSurgicalPathologyReport();				
+				//if(identifiedReport.getId() == null)
+				//{
+				//	Participant participantFrmScg = identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant();
+				//	participantFrmScg.setId(null);
+				//	identifiedReport.getSpecimenCollectionGroup().getCollectionProtocolRegistration().setParticipant(participantFrmScg);												
+				//}			
+				
+				//viewSPR.setAllValues(identifiedReport);
+				//viewSPR.setDeIdentifiedReport(scg.getDeIdentifiedSurgicalPathologyReport());
+				
+//				 For Category HighLighter
+				  prepareCategoryPage(request,scg.getDeIdentifiedSurgicalPathologyReport());
+				
 			}
 			else
 			{
@@ -323,5 +471,8 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 		}
 	}
 }
+
+
+
 
 
