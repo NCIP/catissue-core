@@ -944,8 +944,8 @@ create table CATISSUE_CONCEPT_REFERENT (
    CONCEPT_CLASSIFICATION_ID bigint,
    DEIDENTIFIED_REPORT_ID bigint,
    END_OFFSET bigint,
-   IS_MODIFIER integer,
-   IS_NEGATED integer,
+   IS_MODIFIER bit,
+   IS_NEGATED bit,
    START_OFFSET bigint,
    primary key (IDENTIFIER)
 );
