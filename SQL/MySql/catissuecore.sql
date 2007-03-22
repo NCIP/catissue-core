@@ -1013,7 +1013,7 @@ create table CATISSUE_REPORT_XMLCONTENT (
 /* Ashish 8/3/07*/
 create table CATISSUE_REPORT_QUEUE (
    IDENTIFIER bigint not null auto_increment,
-   STATUS varchar(10),
+   STATUS varchar(50),
    REPORT_TEXT text,
    SPECIMEN_COLL_GRP_ID bigint,
    primary key (IDENTIFIER)

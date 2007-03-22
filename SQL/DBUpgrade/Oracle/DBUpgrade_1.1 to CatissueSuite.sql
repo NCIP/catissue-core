@@ -424,7 +424,7 @@ create table CATISSUE_REPORT_XMLCONTENT (
 );
 create table CATISSUE_REPORT_QUEUE (
    IDENTIFIER number(19,0) not null,
-   STATUS varchar(10),
+   STATUS varchar(50),
    REPORT_TEXT varchar2(4000),
    SPECIMEN_COLL_GRP_ID number(19,0),
    primary key (IDENTIFIER)
