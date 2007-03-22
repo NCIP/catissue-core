@@ -28,6 +28,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String REPORT_ID = "reportQueueId";
 	public static final String PARTICIPANT_ID_TO_ASSOCIATE = "participantIdToAssociate";
 	public static final String SCG_ID_TO_ASSOCIATE = "scgIdToAssociate";
+	public static final String CONCEPT_REFERENT_CLASSIFICATION_LIST = "conceptRefernetClassificationList";
+	public static final String CONCEPT_LIST = "conceptList";
+	public static final String[] CATEGORY_HIGHLIGHTING_COLOURS = {"yellow","green","red","pink","blue"};
+	public static final String CONCEPT_BEAN_LIST = "conceptBeanList";
  
     //Admin View
 	public static final String 	IDENTIFIER_NO="#";
