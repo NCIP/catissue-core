@@ -318,7 +318,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	 */
 	protected boolean validate(Object obj, DAO dao, String operation) throws DAOException
 	{
-		SpecimenCollectionGroup group = (SpecimenCollectionGroup) obj;
+		SpecimenCollectionGroup group = (SpecimenCollectionGroup) obj; 
 
 		//Added by Ashish	
 
@@ -329,6 +329,13 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 		Validator validator = new Validator();
 		String message = "";
+		
+		if (group.getClinicalReport() == null)
+		{
+			message = "ClinicalReport";  
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+		}
+		
 		if (group.getCollectionProtocolRegistration() == null)
 		{
 			message = ApplicationProperties.getValue("errors.specimenCollectionGroup.collectionprotocolregistration");
