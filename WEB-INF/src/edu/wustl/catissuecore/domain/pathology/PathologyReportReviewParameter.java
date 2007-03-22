@@ -123,7 +123,7 @@ public class PathologyReportReviewParameter extends EventParameters
 			this.setTimestamp(new Date());
 			this.setStatus(Constants.COMMENT_STATUS_RENDING);
 			
-			if(form.getIdentifiedReportId()!=0)
+			if(!form.getIdentifiedReportId().equals(""))
 			{
 				className=IdentifiedSurgicalPathologyReport.class.getName();
 				List isprList=bizLogic.retrieve(className, colName, form.getIdentifiedReportId());
