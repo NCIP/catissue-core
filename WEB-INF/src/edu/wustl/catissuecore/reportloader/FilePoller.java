@@ -36,9 +36,9 @@ public class FilePoller implements Observable
 		Variables.applicationHome = System.getProperty("user.dir");
 		//Logger.out = org.apache.log4j.Logger.getLogger("");
 		//Configuring common logger
-		Logger.configure("general");
+		Logger.configure(Parser.LOGGER_GENERAL);
 		// Configuring CSV logger
-		CSVLogger.configure("csv");
+		CSVLogger.configure(Parser.LOGGER_FILE_POLLER);
 		//Configuring logger properties
 		PropertyConfigurator.configure(Variables.applicationHome + File.separator+"logger.properties");
 		// Setting properties for UseImplManager
@@ -70,8 +70,8 @@ public class FilePoller implements Observable
 			poller = new FilePoller();
 			// Initializing file poller
 			poller.init();
-			CSVLogger.out.info("Thread, Date/Time, FileName, Report Loder Queue ID, Status, Message");
-			CSVLogger.out.info("");
+			CSVLogger.info(Parser.LOGGER_FILE_POLLER,"Thread, Date/Time, FileName, Report Loder Queue ID, Status, Message");
+			CSVLogger.info(Parser.LOGGER_FILE_POLLER,"");
 			
 			Observer obr=new ReportProcessor();
 			// registering poller to the object obr
