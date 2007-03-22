@@ -7,17 +7,14 @@
 package edu.wustl.catissuecore.action.annotations;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,15 +22,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 
 import edu.common.dynamicextensions.domaininterface.userinterface.ContainerInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
-import edu.common.dynamicextensions.exception.DataTypeFactoryInitializationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
 import edu.common.dynamicextensions.ui.webui.util.WebUIManager;
@@ -46,7 +38,7 @@ import edu.wustl.catissuecore.domain.EntityMapCondition;
 import edu.wustl.catissuecore.domain.SpecimenProtocol;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -63,16 +55,15 @@ import edu.wustl.common.util.logger.Logger;
 /**
  * This class is responsible for loading the annotation information
  */
-public class LoadAnnotationDefinitionAction extends BaseAction
+public class LoadAnnotationDefinitionAction extends SecureAction
 {
 
     /* (non-Javadoc)
      * @see edu.wustl.common.action.BaseAction#executeAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
     @Override
-    protected ActionForward executeAction(ActionMapping mapping,
-            ActionForm form, HttpServletRequest request,
-            HttpServletResponse response) throws Exception
+    protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws Exception
     {
         ActionForward actionfwd = null;
         try
@@ -806,4 +797,25 @@ public class LoadAnnotationDefinitionAction extends BaseAction
                 .getAllEntityGroupBeans();
         return entityGroups;
     }
+    
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.action.SecureAction#isAuthorizedToExecute(javax.servlet.http.HttpServletRequest)
+     */
+    protected boolean isAuthorizedToExecute(HttpServletRequest request)
+            throws Exception
+    {
+        
+            return super.isAuthorizedToExecute(request);
+        
+    }
+    /* (non-Javadoc)
+     * @see edu.wustl.catissuecore.action.BaseAction#getSessionData(javax.servlet.http.HttpServletRequest)
+     */
+    protected SessionDataBean getSessionData(HttpServletRequest request)
+    {
+       
+            return super.getSessionData(request);
+      
+    }
+
 }
