@@ -87,5 +87,11 @@ public abstract class Parser
 	public static final String REPORT_ACCESSION_NUMBER="accession_number";
 	
 	public static final String REPORT_TYPE_VALUE="SP";
-
+	
+	//constants for logger
+	public static final String LOGGER_GENERAL="general";
+	public static final String LOGGER_FILE_POLLER="filePoller";
+	public static final String LOGGER_QUEUE_PROCESSOR="queuProcessor";
+	public static final String LOGGER_DEID_SERVER="deidServer";
+	public static final String LOGGER_CONCEPT_CODER="conceptCoder";
 }
