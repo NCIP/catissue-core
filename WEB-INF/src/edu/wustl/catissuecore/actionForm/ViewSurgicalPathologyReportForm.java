@@ -81,7 +81,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	/**
 	 * long for id of Identified Report*
 	 */
-	private long identifiedReportId;
+	private String identifiedReportId = "";
 	/**
 	 * long for report Identifier
 	 */
@@ -427,7 +427,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		try
 		{
 			this.deIdentifiedReportId=deidentifiedSurgicalPathologyReport.getId();
-			this.deIdentifiedReportAccessionNumber="";
+			this.deIdentifiedReportAccessionNumber=deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getSurgicalPathologyNumber();
 			this.deIdentifiedReportTextContent=deidentifiedSurgicalPathologyReport.getTextContent().getData();
 			this.deIdentifiedReportSite=deidentifiedSurgicalPathologyReport.getSource().getName();
 		}
@@ -436,7 +436,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			Logger.out.error("viewSPR:De-identified Report information is null");
 			if(this.deIdentifiedReportTextContent==null)
 			{
-				this.deIdentifiedReportTextContent="De-Identified Report Not Found !";
+				this.deIdentifiedReportTextContent="";//De-Identified Report Not Found !
 			}
 		}
 	}
@@ -448,10 +448,12 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public void setIdentifiedReport(IdentifiedSurgicalPathologyReport ispr)
 	{
-		try
+//		if(ispr.getId() != null)
+//		{
+			try
 		{
-			this.identifiedReportId=ispr.getId();
-			this.identifiedReportAccessionNumber="";
+			this.identifiedReportId=ispr.getId().toString();
+			this.identifiedReportAccessionNumber=ispr.getSpecimenCollectionGroup().getSurgicalPathologyNumber();
 			this.identifiedReportTextContent=ispr.getTextContent().getData();	
 			this.identifiedReportSite=ispr.getSource().getName();
 		}
@@ -463,6 +465,14 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 				this.identifiedReportTextContent="Identified Report Not Found !";
 			}
 		}
+//		}
+//		else
+//		{
+//			this.identifiedReportId=Constants.HASHED_OUT;
+//			this.identifiedReportAccessionNumber=Constants.HASHED_OUT;
+//			this.identifiedReportTextContent=Constants.HASHED_OUT;	
+//			this.identifiedReportSite=Constants.HASHED_OUT;
+//		}
 	}
 
 	/**
@@ -471,6 +481,8 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public void setParticipant(final Participant participant)
 	{
+//		if(participant.getId() != null)
+//		{
 		try
 		{
 			this.firstName=participant.getFirstName();
@@ -527,7 +539,76 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 		{
 			Logger.out.error("viewSPR:Participant information is null");
 		}
+//		}
+//		else
+//		{
+//			this.firstName=Constants.HASHED_OUT;
+//			this.lastName=Constants.HASHED_OUT;
+//			this.birthDate = Constants.HASHED_OUT;
+//			this.deathDate = Constants.HASHED_OUT;
+//			this.ethinicity=Constants.HASHED_OUT;
+//			Collection raceColl = new HashSet();
+//			raceColl.add(Constants.HASHED_OUT);
+//			this.race=raceColl;
+//			this.gender=Constants.HASHED_OUT;
+//			this.sexGenotype=Constants.HASHED_OUT;
+//			this.socialSecurityNumber=Constants.HASHED_OUT;
+//			
+//			Collection medicalIdentifierColl = participant.getParticipantMedicalIdentifierCollection();
+//			Collection tempColl = new HashSet();
+//			if(medicalIdentifierColl != null)
+//			{
+//				Iterator iter = medicalIdentifierColl.iterator();
+//				
+//				while(iter.hasNext())
+//				{
+//					ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)iter.next();
+//					ParticipantMedicalIdentifier tempParticipantMedicalIdentifier = participantMedicalIdentifier;
+//					tempParticipantMedicalIdentifier.getSite().setName(Constants.HASHED_OUT);
+//					tempParticipantMedicalIdentifier.setMedicalRecordNumber(Constants.HASHED_OUT);
+//					
+//					tempColl.add(tempParticipantMedicalIdentifier);					
+//				}
+//			}
+//			this.medicalIdentifierNumbers=tempColl;
+//			makeMapForMedicalIdentifier();
+//		}
 	}
+//	private void makeMapForMedicalIdentifier()
+//	{		
+//		if(medicalIdentifierNumbers != null)
+//        {
+//        	values = new HashMap();
+//        	int i = 1;
+//        	
+//        	Iterator it = medicalIdentifierNumbers.iterator();
+//        	while(it.hasNext())
+//        	{
+//        		ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)it.next();
+//        		
+//        		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_id";
+//				String key2 = "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
+//				String key3 = "ParticipantMedicalIdentifier:" + i  +"_id";
+//
+//				Site site = participantMedicalIdentifier.getSite();
+//				
+//				if(site!=null)
+//				{
+//					values.put(key1,Utility.toString(site.getName()));
+//				}
+//				else
+//				{
+//					values.put(key1,Utility.toString(Constants.SELECT_OPTION));
+//				}
+//				
+//				values.put(key2,Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
+//				values.put(key3,Utility.toString(participantMedicalIdentifier.getId()));
+//				
+//				i++;
+//        	}
+//        	counter = medicalIdentifierNumbers.size();
+//        }
+//	}
 	
 	/** 
 	 * On the basis of Request for submitting comments different form ID will be returned to save two different kind of comments
@@ -668,7 +749,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * This is the method to get report id of Identified Report
 	 * @return identifiedReportId
 	 */
-	public long getIdentifiedReportId()
+	public String getIdentifiedReportId()
 	{
 		return identifiedReportId;
 	}
@@ -677,7 +758,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * This is the method to set report id of Identified Report
 	 * @param identifiedReportId
 	 */
-	public void setIdentifiedReportId(long identifiedReportId)
+	public void setIdentifiedReportId(String identifiedReportId)
 	{
 		this.identifiedReportId = identifiedReportId;
 	}

@@ -8,6 +8,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="edu.wustl.catissuecore.domain.pathology.ConceptReferent"%>
+<%@ page import="edu.wustl.catissuecore.domain.pathology.Concept"%>
 
 <script src="jss/ajax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -51,6 +53,52 @@ function submitRejectComments()
 		document.forms[0].submit();
 		
 	}
+}
+
+//Added by Ashish
+function selectByOffset(checkbox,start,end,colour,conceptName)
+{
+	var innerHtml = document.getElementById("deidentifiedReportText").innerHTML;
+	var i = ReplaceTags(innerHtml);
+
+	var startArr = start.split(",");
+	var endArr = end.split(",");
+	var conceptNameArr = conceptName.split(",");
+	var newtext = "";
+	var count = 0;
+	for(var x=0;x<startArr.length;x++)
+	{		
+		var subStr = i.substring(startArr[x],endArr[x]);
+		
+		var textBeforeString = i.substring(0,startArr[x]);
+		var textAfterString = i.substring(endArr[x]);
+		
+		if(checkbox.checked==false)
+		{
+			colour='white';
+			//conceptName="";
+		}
+		var text = "<span title="+conceptName[x]+" style='background-color:"+colour+"'>"+subStr+"</span>";
+			
+		if(count == 0)
+		{
+			newtext = innerHtml.replace(subStr,text);
+			count++;
+		}
+		else
+		{
+			newtext = newtext.replace(subStr,text);
+		}	
+		
+		//newtext = 	textBeforeString + text + textAfterString;
+	}
+	document.getElementById("deidentifiedReportText").innerHTML=newtext;
+}
+var regExp = /<\/?[^>]+>/gi;
+function ReplaceTags(xStr)
+{
+  xStr = xStr.replace(regExp,"");
+  return xStr;
 }
 </script>
 
@@ -162,16 +210,44 @@ function submitRejectComments()
 					<bean:message key="viewSurgicalPathologyReport.categoryHighlighter.title"/>
 				</td>
 			</tr>
-			<tr>
+			<!-- tr>
 				<td class="formLeftSubTableTitle" width="20%"><input type="checkbox" id="selectAll" selected="false"></td>
 				<td class="formRightSubTableTitle">
 					<bean:message key="app.selectAll" />
 				</td>
-			</tr>
+			</tr-->		
+			
+			<%
+			  List conceptClassificationList = (List)request.getAttribute(Constants.CONCEPT_BEAN_LIST);
+			  int chkBoxNo = 0;			  
+			  if(conceptClassificationList.size() > 0)
+			  {%>
+			<logic:iterate id="referentClassificationObj" collection="<%= conceptClassificationList %>" type="edu.wustl.catissuecore.bean.ConceptHighLightingBean">
+			
+			<%				
+				String conceptName = referentClassificationObj.getConceptName();
+				String startOff = referentClassificationObj.getStartOffsets();
+				String endOff = referentClassificationObj.getEndOffsets();				
+				String[] colours = Constants.CATEGORY_HIGHLIGHTING_COLOURS;
+			%>
+			
 			<tr>
-				<td class="formFieldWithNoTopBorder">&nbsp;</td>
-				<td class="formRequiredLabel">&nbsp;</td>
+				<td class="formFieldWithNoTopBorder">
+					<% String chkBoxId = "select"+chkBoxNo; 
+					   String onClickArgument = "selectByOffset(this,'"+startOff+"','"+endOff+"','"+colours[chkBoxNo]+"','"+conceptName+"')";	
+					%>
+					<input type="checkbox" id="<%=chkBoxId %>" onclick="<%=onClickArgument %>" />
+				</td>
+				<td class="formRequiredLabel">
+				<% String spanStyle = "background-color:"+colours[chkBoxNo];%>
+					<span id="classificationName" style="<%=spanStyle %>">
+						<%=referentClassificationObj.getClassificationName() %>	
+					</span>		
+				</td>
 			</tr>
+			<% chkBoxNo++;%>
+			</logic:iterate>
+		<%} %>
 		</table>
 		</td>
 		<td colspan="2" width="85%" >
@@ -358,7 +434,7 @@ if (formSPR.getRace() != null)
 					<b>
 						<bean:message key="viewSPR.reportInfo.reportId"/> : 
 					</b>
-				    	<% if(formSPR.getIdentifiedReportId()!=0) {%>
+				    	<% if(!formSPR.getIdentifiedReportId().equals("")) {%>
 				     		<%=formSPR.getIdentifiedReportId()%>
 						<%}%>
 				</td>
@@ -382,11 +458,7 @@ if (formSPR.getRace() != null)
 			<tr>
 				<td  class="formFieldWithNoTopBorder" colspan="3" >
 				
-				<div id="identifiedReportText" style="overflow:auto;height:200px;width:100%">
-					<% if(formSPR.getIdentifiedReportTextContent()!=null) {%>
-				     		<%=formSPR.getIdentifiedReportTextContent()%>
-						<%}%>
-				</div>
+				<div id="identifiedReportText" style="overflow:auto;height:200px;width:100%"><%if(formSPR.getIdentifiedReportTextContent()!=null){%><%=formSPR.getIdentifiedReportTextContent()%><%}%></div>
 				</td>
 			</tr>
 		</table>
@@ -428,11 +500,7 @@ if (formSPR.getRace() != null)
 			<tr>
 				<td  class="formFieldWithNoTopBorder" colspan="3" >
 				
-				<div id="identifiedReportText" style="overflow:auto;height:200px;width:100%">
-					<% if(formSPR.getDeIdentifiedReportTextContent()!=null) {%>
-				     		<%=formSPR.getDeIdentifiedReportTextContent()%>
-						<%}%>
-				</div>
+				<div id="deidentifiedReportText" style="overflow:auto;height:200px;width:100%"><%if(formSPR.getDeIdentifiedReportTextContent()!=null){%><%=formSPR.getDeIdentifiedReportTextContent()%><%}%></div>
 				</td>
 			</tr>
 		</table>
