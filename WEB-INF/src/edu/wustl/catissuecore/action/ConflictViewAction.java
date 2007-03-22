@@ -89,7 +89,7 @@ public class ConflictViewAction extends BaseAction
 	{
 		String obrLine = ReportLoaderUtil.getLineFromReport(reportText, Parser.OBR);
 		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = HL7Parser.extractOBRSegment(obrLine);
-		String accessionNo = ""; //identifiedSurgicalPathologyReport.getAccessionNumber();
+		String accessionNo = identifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getSurgicalPathologyNumber(); //identifiedSurgicalPathologyReport.getAccessionNumber();
 		return accessionNo;
 	}
 

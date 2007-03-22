@@ -505,9 +505,9 @@ function onCheck()
 								</td> <!--for chk box -->
 
 									<td class="dataCellText" width="30%">
-											<%=obj.getAccessionNumber()%>
+											<%=obj.getSpecimenCollectionGroup().getSurgicalPathologyNumber()%>
 
-										<html:hidden property="<%=specimenName%>" value="<%=obj.getAccessionNumber()%>"/>
+										<html:hidden property="<%=specimenName%>" value="<%=obj.getSpecimenCollectionGroup().getSurgicalPathologyNumber()%>"/>
 										<html:hidden property="<%=specimenId%>" value="<%=obj.getId().toString()%>"/>
 										<html:hidden property="<%=typeOfItem%>" value="pathologyCase"/>
 										<html:hidden property="<%=specimenCollectionGroup%>" value="<%=speccollgrp.getId().toString()%>"/>
