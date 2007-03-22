@@ -44,9 +44,14 @@ import edu.wustl.catissuecore.domain.OrderDetails;
 
 import edu.wustl.catissuecore.domain.SpecimenOrderItem;
 import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
+import edu.wustl.catissuecore.domain.pathology.Concept;
+import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
+import edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.domain.pathology.ReportSection;
+import edu.wustl.catissuecore.domain.pathology.SemanticType;
 import edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.common.util.logger.Logger;
@@ -56,6 +61,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class APIDemo
 {
+	
 	/**
 	 * This funciton initializes data into Order domain object
 	 */
@@ -157,16 +163,17 @@ public class APIDemo
             return orderObj;
 		}
 		/**
-		 * @return IdentifiedSurgicalPathologyReport object
+		 * @return
 		 */
-		public IdentifiedSurgicalPathologyReport initIdentifiedSurgicalPathologyReport()
+		public DeidentifiedSurgicalPathologyReport initDeidentifiedSurgicalPathologyReport()
 		{
-			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = new IdentifiedSurgicalPathologyReport();
-//			identifiedSurgicalPathologyReport.setAccessionNumber("12345");
-			identifiedSurgicalPathologyReport.setActivityStatus("Active");
+			
+			DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = new DeidentifiedSurgicalPathologyReport();
+			deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().setSurgicalPathologyNumber("123456666888888");
+			deidentifiedSurgicalPathologyReport.setActivityStatus("Active");
 			
 			TextContent textContent = new TextContent();
-			textContent.setData("New Data");
+			textContent.setData("FROM API SKIN, RIGHT SCALP, BIOPSY (OSC SSM2005-9415) - ATYPICAL LYMPHOID INFILTRATE, FAVOR REACTIVE PROCESS (SEE COMMENT)");
 			
 			ReportSection reportSection = new ReportSection();
 			reportSection.setDocumentFragment("new documnet");
@@ -178,6 +185,145 @@ public class APIDemo
 			Set reportSectionCollection = new HashSet();
 			reportSectionCollection.add(reportSection);
 			textContent.setReportSectionCollection(reportSectionCollection);
+			
+			textContent.setSurgicalPathologyReport(deidentifiedSurgicalPathologyReport);
+			
+			deidentifiedSurgicalPathologyReport.setTextContent(textContent);
+			
+			try
+			{
+				deidentifiedSurgicalPathologyReport.setCollectionDateTime(Utility.parseDate("04-02-1984", Constants.DATE_PATTERN_MM_DD_YYYY));
+			}
+			catch (ParseException e)
+			{
+				e.printStackTrace();
+			}
+			deidentifiedSurgicalPathologyReport.setIsFlagForReview(false);
+			
+			PathologyReportReviewParameter pathologyReportReviewParameter = new PathologyReportReviewParameter();
+			pathologyReportReviewParameter.setComments("Comment from Api");
+			pathologyReportReviewParameter.setReviewerRole("Administrator");
+			pathologyReportReviewParameter.setStatus("PENDING");		
+			try
+			{
+				pathologyReportReviewParameter.setTimestamp(Utility.parseDate("04-02-1984", Constants.DATE_PATTERN_MM_DD_YYYY));
+			}
+			catch (ParseException e)
+			{			
+				e.printStackTrace();
+			}
+			
+			User user = new User();
+			user.setId(new Long(1));
+			pathologyReportReviewParameter.setUser(user);
+			
+			Set pathologyReportReviewParameterSetCollection = new HashSet();
+			pathologyReportReviewParameterSetCollection.add(pathologyReportReviewParameter);		
+			deidentifiedSurgicalPathologyReport.setPathologyReportReviewParameterSetCollection(pathologyReportReviewParameterSetCollection);
+					
+			Site source = new Site();
+			source.setId(new Long(1));
+			deidentifiedSurgicalPathologyReport.setSource(source);
+			deidentifiedSurgicalPathologyReport.setReportStatus("IDENTIFIED");
+			//For Concept HighLighter
+			Collection conceptReferentCollection = new HashSet();
+			ConceptReferent conceptReferent = new ConceptReferent();
+			conceptReferent.setEndOffset(new Long(10));
+			conceptReferent.setStartOffset(new Long(5));
+			conceptReferent.setIsModifier(true);
+			conceptReferent.setIsNegated(false);
+			
+			Concept concept = new Concept();
+			concept.setConceptUniqueIdentifier("2");
+			concept.setName("Concept 1");
+			SemanticType semanticType = new SemanticType();
+			semanticType.setLabel("Semantic Type 1");
+			concept.setSemanticType(semanticType);
+			conceptReferent.setConcept(concept);
+			
+			ConceptReferentClassification conceptReferentClassification = new ConceptReferentClassification();
+			conceptReferentClassification.setName("Diagnosis");
+			conceptReferent.setConceptReferentClassification(conceptReferentClassification);
+			
+			conceptReferentCollection.add(conceptReferent);
+			//2nd object
+			ConceptReferentClassification conceptReferentClassification1 = new ConceptReferentClassification();
+			conceptReferentClassification1.setName("Negated Concept");
+
+			Concept concept1 = new Concept();
+			concept1.setName("C00_002");
+			
+			ConceptReferent conceptRef2 = new ConceptReferent();
+			conceptRef2.setEndOffset(new Long(11));
+			conceptRef2.setStartOffset(new Long(8));
+			conceptRef2.setConcept(concept1);
+			conceptRef2.setConceptReferentClassification(conceptReferentClassification1);
+			
+			ConceptReferent conceptRef3 = new ConceptReferent();
+			conceptRef3.setEndOffset(new Long(30));
+			conceptRef3.setStartOffset(new Long(22));
+			conceptRef3.setConcept(concept1);
+			conceptRef3.setConceptReferentClassification(conceptReferentClassification1);
+			
+			conceptReferentCollection.add(conceptRef2);
+			conceptReferentCollection.add(conceptRef3);
+					
+			//3rd  Object
+			ConceptReferentClassification conceptReferentClassification2 = new ConceptReferentClassification();
+			conceptReferentClassification2.setName("Organ");
+
+			Concept concept2 = new Concept();
+			concept2.setName("C00_003");
+			
+			ConceptReferent conceptRef4 = new ConceptReferent();
+			//conceptRef.setConcept(concept);
+			conceptRef4.setEndOffset(new Long(36));
+			conceptRef4.setStartOffset(new Long(32));
+			conceptRef4.setConcept(concept2);
+			conceptRef4.setConceptReferentClassification(conceptReferentClassification2);
+			
+			ConceptReferent conceptRef5 = new ConceptReferent();
+			conceptRef5.setEndOffset(new Long(41));
+			conceptRef5.setStartOffset(new Long(38));
+			conceptRef5.setConcept(concept2);
+			conceptRef5.setConceptReferentClassification(conceptReferentClassification2);
+		
+			conceptReferentCollection.add(conceptRef4);
+			conceptReferentCollection.add(conceptRef5);				
+			
+			deidentifiedSurgicalPathologyReport.setConceptReferentCollection(conceptReferentCollection);
+			
+			SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+			specimenCollectionGroup.setId(new Long(13));
+			deidentifiedSurgicalPathologyReport.setSpecimenCollectionGroup(specimenCollectionGroup);
+			
+		
+			return deidentifiedSurgicalPathologyReport;
+		}
+		
+		/**
+		 * @return IdentifiedSurgicalPathologyReport object
+		 */
+		public IdentifiedSurgicalPathologyReport initIdentifiedSurgicalPathologyReport()
+		{		
+			IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = new IdentifiedSurgicalPathologyReport();
+			identifiedSurgicalPathologyReport.getSpecimenCollectionGroup().setSurgicalPathologyNumber("123456666677777");
+			identifiedSurgicalPathologyReport.setActivityStatus("Active");
+			
+			TextContent textContent = new TextContent();
+			textContent.setData("FROM API SKIN, RIGHT SCALP, BIOPSY (OSC SSM2005-9415) - ATYPICAL LYMPHOID INFILTRATE, FAVOR REACTIVE PROCESS (SEE COMMENT)");
+			
+			ReportSection reportSection = new ReportSection();
+			reportSection.setDocumentFragment("new documnet");
+			reportSection.setEndOffSet(new Integer(10));
+			reportSection.setName("Report 1");
+			reportSection.setStartOffSet(new Integer(0));
+			reportSection.setTextContent(textContent);
+			
+			Set reportSectionCollection = new HashSet();
+			reportSectionCollection.add(reportSection);
+			textContent.setReportSectionCollection(reportSectionCollection);
+			textContent.setSurgicalPathologyReport(identifiedSurgicalPathologyReport);
 			identifiedSurgicalPathologyReport.setTextContent(textContent);
 			
 			try
@@ -186,13 +332,12 @@ public class APIDemo
 			}
 			catch (ParseException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			identifiedSurgicalPathologyReport.setIsFlagForReview(false);
 			
 			PathologyReportReviewParameter pathologyReportReviewParameter = new PathologyReportReviewParameter();
-			pathologyReportReviewParameter.setComments("Comment1");
+			pathologyReportReviewParameter.setComments("Comment from Api");
 			pathologyReportReviewParameter.setReviewerRole("Administrator");
 			pathologyReportReviewParameter.setStatus("PENDING");		
 			try
@@ -200,8 +345,7 @@ public class APIDemo
 				pathologyReportReviewParameter.setTimestamp(Utility.parseDate("04-02-1984", Constants.DATE_PATTERN_MM_DD_YYYY));
 			}
 			catch (ParseException e)
-			{
-				// TODO Auto-generated catch block
+			{			
 				e.printStackTrace();
 			}
 			
@@ -212,18 +356,20 @@ public class APIDemo
 			Set pathologyReportReviewParameterSetCollection = new HashSet();
 			pathologyReportReviewParameterSetCollection.add(pathologyReportReviewParameter);		
 			identifiedSurgicalPathologyReport.setPathologyReportReviewParameterSetCollection(pathologyReportReviewParameterSetCollection);
-			
-			SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
-			specimenCollectionGroup.setId(new Long(1));
-			identifiedSurgicalPathologyReport.setSpecimenCollectionGroup(specimenCollectionGroup);
-			
+					
 			Site source = new Site();
 			source.setId(new Long(1));
 			identifiedSurgicalPathologyReport.setSource(source);
 			identifiedSurgicalPathologyReport.setReportStatus("IDENTIFIED");
 			
+			SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
+			specimenCollectionGroup.setId(new Long(1));
+			identifiedSurgicalPathologyReport.setSpecimenCollectionGroup(specimenCollectionGroup);
+			
 			return identifiedSurgicalPathologyReport;
 		}
+		
+		
 	
 	/**
 	 * @param args
@@ -936,7 +1082,7 @@ public class APIDemo
 		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
 
 //		Site site = new Site();
-//		site.setId(new Long(1));
+//		site.setId(new Long(3));
 		Site site = (Site)ClientDemo.dataModelObjectMap.get("Site");
 		specimenCollectionGroup.setSpecimenCollectionSite(site);
 
@@ -998,6 +1144,9 @@ public class APIDemo
 		//For caTIES SPR
 		IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport = initIdentifiedSurgicalPathologyReport();
 		specimenCollectionGroup.setIdentifiedSurgicalPathologyReport(identifiedSurgicalPathologyReport);
+		
+		DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport = initDeidentifiedSurgicalPathologyReport();
+		specimenCollectionGroup.setDeIdentifiedSurgicalPathologyReport(deIdentifiedSurgicalPathologyReport);
 		
 		return specimenCollectionGroup;
 	}
