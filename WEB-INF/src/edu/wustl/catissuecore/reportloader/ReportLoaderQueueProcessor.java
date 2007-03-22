@@ -22,6 +22,7 @@ public class ReportLoaderQueueProcessor extends Thread
 	 */
 	public void run()
 	{
+		CSVLogger.configure(Parser.LOGGER_QUEUE_PROCESSOR);
 		List queue=null;
 		Set participantSet=null;
 		ReportLoaderQueue reportLoaderQueue=null;
@@ -34,8 +35,8 @@ public class ReportLoaderQueueProcessor extends Thread
 				// retrieve records from report queue for processing
 				queue=ReportLoaderUtil.getObject(ReportLoaderQueue.class.getName(),"status" ,Parser.NEW);
 				Logger.out.info("Processing report Queue: Total "+queue.size()+" Reports found in queue");
-				CSVLogger.out.info("Processing report Queue: Total "+queue.size()+" Reports found in queue");
-				CSVLogger.out.info("Thread, Date/Time, Report Loder Queue ID, Status, Message");
+				CSVLogger.info(Parser.LOGGER_QUEUE_PROCESSOR,"Processing report Queue: Total "+queue.size()+" Reports found in queue");
+				CSVLogger.info(Parser.LOGGER_QUEUE_PROCESSOR,"Thread, Date/Time, Report Loder Queue ID, Status, Message");
 				if(queue!=null && queue.size()>0)
 				{
 					//	Initializing SiteInfoHandler to avoid restart of server to get new site names added to file at run time
@@ -59,12 +60,12 @@ public class ReportLoaderQueueProcessor extends Thread
 									parser.parseString((Participant)it.next(),reportLoaderQueue.getReportText(), reportLoaderQueue.getSpecimenCollectionGroup());
 									// delete record from queue
 									ReportLoaderUtil.deleteObject(reportLoaderQueue);
-									CSVLogger.out.info("Report Queue Processor, "+new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ");
+									CSVLogger.info(Parser.LOGGER_QUEUE_PROCESSOR,"Report Queue Processor, "+new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ");
 									Logger.out.info("Processed report from Queue with serial no="+reportLoaderQueue.getId());
 								}
 								catch(Exception ex)
 								{
-									CSVLogger.out.info("Report Queue Processor, "+new Date().toString()+","+reportLoaderQueue.getId()+","+","+"FAILED"+","+ex.getMessage());
+									CSVLogger.info(Parser.LOGGER_QUEUE_PROCESSOR,"Report Queue Processor, "+new Date().toString()+","+reportLoaderQueue.getId()+","+","+"FAILED"+","+ex.getMessage());
 									reportLoaderQueue.setStatus(Parser.FAILURE);
 									ReportLoaderUtil.updateObject(reportLoaderQueue);
 								}
