@@ -9,14 +9,19 @@
  */
 package edu.wustl.catissuecore.domain.pathology;
 
+import java.io.Serializable;
+
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
+
 
 /**
  * @hibernate.class table="CATISSUE_SEMANTIC_TYPE"
  * Represents sematic type
  */
-public class SemanticType
+public class SemanticType extends AbstractDomainObject 
 {
-
 	/**
 	 * identifier
 	 */
@@ -68,6 +73,12 @@ public class SemanticType
 	public SemanticType()
 	{
 
+	}
+
+
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{		
+		
 	}
 
 }
