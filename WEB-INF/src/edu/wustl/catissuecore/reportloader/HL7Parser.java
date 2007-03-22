@@ -77,9 +77,11 @@ public class HL7Parser extends Parser
 			Logger.out.debug("Creating report section from report text");
 			reportSet = this.getReportSectionDataFromReportMap(reportMap, Parser.OBX);
 			textContent=new TextContent();
+			// Create report section using reportMap. Only OBX section will be stored into report section
 			if(reportSet!=null && reportSet.size()>0)
 			{
 				reportIterator=reportSet.iterator();
+				// Iterate on the reportSet to create report section
 				while (reportIterator.hasNext())
 				{
 					reportSection = extractOBXSegment((String)reportIterator.next(), textContent);
@@ -93,6 +95,7 @@ public class HL7Parser extends Parser
 			Logger.out.debug("Associating report sections to report");
 			if (participant != null && report != null)
 			{
+				// set textContent to report
 				report.setTextContent(textContent);
 				textContent.setSurgicalPathologyReport(report);
 				if (reportSectionSet != null && reportSectionSet.size() > 1)
@@ -102,6 +105,7 @@ public class HL7Parser extends Parser
 				}
 				if(this.site!=null)
 				{
+					// create instance of ReportLoader to load report into the DB
 					Logger.out.debug("Instantiating report loader to load report");
 					reportLoader = new ReportLoader(participant, report,this.site, scg, surgicalPathologyNumber);
 				}
@@ -111,6 +115,7 @@ public class HL7Parser extends Parser
 //					reportLoader = new ReportLoader(participant, report,createNewSite(), scg);
 					throw new Exception("Site not found!");
 				}
+				// initiate reportLoader to load report
 				reportLoader.process();
 			}
 		}
@@ -124,10 +129,10 @@ public class HL7Parser extends Parser
 	/**
 	 * This is a mehod which parses report string from queue and process it. 
 	 * @param participant represents participant
-	 * @param str report string
+	 * @param reportText report string
 	 * @throws Exception generic exception
 	 */
-	public void parseString(Participant participant , String str, SpecimenCollectionGroup scg)throws Exception
+	public void parseString(Participant participant , String reportText, SpecimenCollectionGroup scg)throws Exception
 	{
 		Logger.out.info("Inside parseString method");
 		String[] lines=null;
@@ -136,9 +141,10 @@ public class HL7Parser extends Parser
 		Map reportMap=null;
 		try
 		{
-			lines=str.split("\n");
+			lines=reportText.split("\n");
 			String line = "";
 			reportMap = new HashMap();
+			//create reportMap using reportText
 			for (int i=0;i<lines.length;i++)
 			{
 				line=lines[i];
@@ -149,6 +155,7 @@ public class HL7Parser extends Parser
 					addToReportMap(reportMap,token,line);
 				}
 			}	
+			// function call to process the reportMap 
 			process(participant,reportMap, scg);
 		}
 		catch(Exception ex)
@@ -260,7 +267,7 @@ public class HL7Parser extends Parser
 							reportText=this.getReportText(reportMap);
 							addReportToQueue(participantList,reportText,scg);
 							counter++;
-							CSVLogger.out.info("File Poller, "+new Date().toString()+","+fileName+","+counter+","+this.status);
+							CSVLogger.info(Parser.LOGGER_FILE_POLLER,"File Poller, "+new Date().toString()+","+fileName+","+counter+","+this.status);
 							Logger.out.info("Report is added to queue. Current Count is="+counter);
 							// reinitialize variables to null to process next report
 							scg=null;
@@ -280,7 +287,7 @@ public class HL7Parser extends Parser
 				}	
 			}
 			Logger.out.info("Parsing File "+fileName+": Finished at "+new Date().toString());
-			CSVLogger.out.info("Total "+counter+" reports are added to report queue from file "+fileName);
+			CSVLogger.info(Parser.LOGGER_FILE_POLLER,"Total "+counter+" reports are added to report queue from file "+fileName);
 		}
 		catch(Exception ex)
 		{
@@ -762,11 +769,11 @@ public class HL7Parser extends Parser
 		{
 	        String newObrLine = obrLine.replace('|', '~');
 	        newObrLine = newObrLine.replaceAll("~", "|~~");
-	        
+	        //set default values to report
 	        report.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
 	        report.setIsFlagForReview(new Boolean(false));
 	        StringTokenizer st = new StringTokenizer(newObrLine, "|");
-
+	        // iterate over token to create report
 	        for (int x = 0; st.hasMoreTokens(); x++)
 	        {
 	            String field = st.nextToken();
@@ -779,7 +786,7 @@ public class HL7Parser extends Parser
 	            {
 	                field = field.replaceAll("~~", "");
 	            } 
-
+	            // token for accession number
 	            if (x == Parser.REPORT_ACCESSIONNUMBER_INDEX) 
 	            {
 	                StringTokenizer st2 = new StringTokenizer(field, "^");
