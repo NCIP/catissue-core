@@ -49,9 +49,12 @@ public abstract class Parser
 	
 	//constans for report queue
 	public static final String PENDING="PENDING";
-	public static final String NEW="NEW";
+	public static final String NEW="ADDED_TO_QUEUE";
 	public static final String FAILURE="FAILURE";
 	public static final String CONFLICT = "CONFLICT";
+	public static final String SITE_NOT_FOUND="SITE_NOT_FOUND";
+	public static final String INVALID_REPORT_SECTION="INVALID_REPORT_SECTION";
+	public static final String DB_ERROR="DB_ERROR";
 	
 	//dir constants
 	public static final String INPUT_DIR="inputDir";
@@ -84,5 +87,5 @@ public abstract class Parser
 	public static final String REPORT_ACCESSION_NUMBER="accession_number";
 	
 	public static final String REPORT_TYPE_VALUE="SP";
-	
+
 }
