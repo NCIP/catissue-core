@@ -61,7 +61,8 @@ public class ConflictDetailsAction extends BaseAction
 		//Participant Object		
 		Participant participant = HL7Parser.parserParticipantInformation(pidLine);
 		Site site = HL7Parser.parseSiteInformation(pidLine);
-		participant = HL7Parser.setSiteToParticipant(participant, site);
+		//TODO find alternative for this method 
+		//participant = HL7Parser.setSiteToParticipant(participant, site);
 		
 		HttpSession session = request.getSession();
 		session.setAttribute(Constants.REPORT_PARTICIPANT_OBJECT, participant);		
