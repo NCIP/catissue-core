@@ -23813,3 +23813,7 @@ insert into `path` (`PATH_ID`,`FIRST_ENTITY_ID`,`INTERMEDIATE_PATH`,`LAST_ENTITY
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+
+alter table dyextn_entity_group add  IS_SYSTEM_GENERATED bit;
+update dyextn_entity_group set IS_SYSTEM_GENERATED=1;
+
