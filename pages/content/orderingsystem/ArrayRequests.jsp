@@ -420,7 +420,7 @@
 								<table width="100%" style="border-bottom:1px solid #5C5C5C;">
 									<tr> 
 										<td align="right">
-										<% if((((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_assignedStatus"))).equals("false")))
+										<% if((((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_createArrayButtonDisabled"))).equals("false")))
 											{
 										 %>
 											<input type="button" id="btnCreateArray" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>')" />

@@ -91,8 +91,8 @@ public class CreateArrayInitAction extends BaseAction
 			//The Set has only one element(i.e,defineArrayRequestBean instance)
 			DefinedArrayRequestBean definedArrayRequestBean = (DefinedArrayRequestBean)defineArrayKeySetItr.next();
 			
-			if(definedArrayRequestBean.getArrayName().equals(arrayName))
-			{
+//			if(definedArrayRequestBean.getArrayName().equals(arrayName))
+//			{
 				SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm)form;
 				
 				//Set Specimen Class in request attribute to be displayed in SpecimenArray.jsp
@@ -219,7 +219,7 @@ public class CreateArrayInitAction extends BaseAction
 		    	request.setAttribute("initValues", initialValues);
 				
 				break;
-			}//End if(definedArrayRequestBean.getArrayName().equals(arrayName))
+//			}//End if(definedArrayRequestBean.getArrayName().equals(arrayName))
 		}//End Outer While
 		return mapping.findForward("success");
 	}
