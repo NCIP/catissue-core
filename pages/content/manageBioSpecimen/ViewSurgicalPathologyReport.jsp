@@ -220,7 +220,7 @@ function ReplaceTags(xStr)
 			<%
 			  List conceptClassificationList = (List)request.getAttribute(Constants.CONCEPT_BEAN_LIST);
 			  int chkBoxNo = 0;			  
-			  if(conceptClassificationList.size() > 0)
+			  if(conceptClassificationList != null && conceptClassificationList.size() > 0)
 			  {%>
 			<logic:iterate id="referentClassificationObj" collection="<%= conceptClassificationList %>" type="edu.wustl.catissuecore.bean.ConceptHighLightingBean">
 			
@@ -550,7 +550,7 @@ if (formSPR.getRace() != null)
 	String consentTier =(String)request.getParameter("consentTierCounter");
 	String submitReviewComments = "submitReviewComments('"+ consentTier+"')";
 	String submitQuarantineComments = "submitQuarantineComments('"+ consentTier+"')";
-	if(!(formSPR.getIdentifiedReportId()!=0 || formSPR.getDeIdentifiedReportId()!=0)) 
+	if(!(formSPR.getIdentifiedReportId().equals("") || formSPR.getDeIdentifiedReportId()!=0)) 
 {%>
 					<html:button property="action1" styleClass="actionButton" onclick="<%=submitReviewComments%>" disabled="true">
 						<bean:message key="viewSPR.requestForReview.button.cation" />
