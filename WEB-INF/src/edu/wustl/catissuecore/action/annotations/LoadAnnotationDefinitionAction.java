@@ -665,7 +665,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
             DefaultBizLogic bizLogic = new DefaultBizLogic();
             String[] displayNames = {"title"};
             conditionalInstancesList = bizLogic.getList(SpecimenProtocol.class
-                    .getName(), displayNames, "id", false);
+                    .getName(), displayNames, "id", true);
 
          /*   if (conditionalInstancesList != null
                     && conditionalInstancesList.size() > 0)*/
