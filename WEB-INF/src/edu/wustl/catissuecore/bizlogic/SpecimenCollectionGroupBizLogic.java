@@ -332,8 +332,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		
 		if (group.getClinicalReport() == null)
 		{
-			message = "ClinicalReport";  
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			group.setClinicalReport(new ClinicalReport());
 		}
 		
 		if (group.getCollectionProtocolRegistration() == null)
