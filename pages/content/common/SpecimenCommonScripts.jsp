@@ -41,19 +41,22 @@
         function typeChange(arrayName)
 		{ 
 		
-		   
-		/* ele = document.getElementById(specimenTypeCombo);
+		    try {
+			var specimenTypeCombo = "type";
+			ele = document.getElementById(specimenTypeCombo);
 			//To Clear the Combo Box
 			ele.options.length = 0;
-			
-			ele.options[0] = new Option('-- Select --','-1');
+			arrayName.sort();
+			//ele.options[0] = new Option('-- Select --','-1');
 			var j=0;
 			//Populating the corresponding Combo Box
 			for(i=0;i<arrayName.length;i++)
 			{
 					ele.options[j++] = new Option(arrayName[i],arrayName[i]);
-			}  */
-			
+			}
+			}
+			catch(e)
+			{
 			arrayName.sort();
 			// TODO change this code as per generated HTML of tag -- Santosh
 			/*  This variable is used to clear previous autocompleter as it was creating some problem -- Santosh*/
@@ -71,24 +74,10 @@
 			}  
 			//autoCompleteResult += "new Autocompleter.Combobox(\"" + property + "\",\"" + div + "\",'nameofarrow',valuesInList,  { tokens: new Array(), fullSearch: true, partialSearch: true,defaultArray:" + "valuesInList" + ",choices: " + numberOfResults + ",autoSelect:true, minChars: "+ numberOfCharacters +" });";
 			AutoC = new Autocompleter.Combobox("type","divFortype","typearrow",tmpArray,  { tokens: new Array(), fullSearch: true, partialSearch: true,defaultArray: tmpArray,autoSelect:true});
-			
+			}
 		}
 
-		function getValuesInList(valuesInList)
-		{ 
-			var specimenTypeCombo = "type";
-		//	ele = document.getElementById(specimenTypeCombo);
-			//To Clear the Combo Box
-		//	ele.options.length = 0;
-			arrayName.sort();
-			//ele.options[0] = new Option('-- Select --','-1');
-			var j=0;
-			//Populating the corresponding Combo Box
-	/*		for(i=0;i<arrayName.length;i++)
-			{
-					ele.options[j++] = new Option(arrayName[i],arrayName[i]);
-			}*/
-		}
+	
 	// Mandar 25-apr-06 : bug 1414 : Tissue type changed.
 	var subTypeData1 = "<%=Constants.FROZEN_TISSUE_SLIDE%>";
 	var subTypeData2 = "<%=Constants.FIXED_TISSUE_BLOCK%>";
@@ -119,9 +108,22 @@
 	{
 	  
 		var classList = document.getElementById(typeList);
-		var className = document.getElementById("className").value;
-		//alert(className);
-		var selectedOption = document.getElementById("type").value;
+        var className;
+		var selectedOption ;
+
+       // temporary fix
+        try
+		{
+		 className = document.getElementById("className").value;
+		 selectedOption  = document.getElementById("type").value;
+        }
+		catch(e)
+		{
+           className = classList.options[classList.selectedIndex].text;
+		   selectedOption = element.options[element.selectedIndex].text
+		}
+
+
 	// Mandar 25-apr-06 : bug 1414 : Tissue type changed.
 		if(className == "Tissue" && (selectedOption == subTypeData1 || selectedOption == subTypeData2 || selectedOption == subTypeData3 || selectedOption == subTypeData4 || selectedOption == subTypeData6))
 		{
