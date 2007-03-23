@@ -738,7 +738,7 @@ public class HL7Parser extends Parser
 			   {
 				   if(reportMap.containsKey(Parser.OBX) && reportMap.get(Parser.OBX)!=null)
 				   {
-					   this.status="NEW";
+					   this.status=Parser.NEW;
 					   isValid=true;
 				   }
 			   }
