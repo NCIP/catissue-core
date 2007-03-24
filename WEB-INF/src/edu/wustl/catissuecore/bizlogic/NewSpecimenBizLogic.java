@@ -285,7 +285,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @param sessionDataBean
 	 * @param partOfMulipleSpecimen
 	 * @throws DAOException
-	 * @throws UserNotAuthorizedException
+	 * @throws UserNotAuthorizedException 
 	 */
 	private void insertSingleSpecimen(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, boolean partOfMulipleSpecimen)
 			throws DAOException, UserNotAuthorizedException
@@ -301,7 +301,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
 			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 			 */
-			ApiSearchUtil.setSpecimenDefault(specimen);
+			ApiSearchUtil.setSpecimenDefault(specimen); 
 			//End:- Change for API Search
 
 			Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
@@ -1186,7 +1186,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		//Added by Ashish		
 		//Logger.out.debug("Start-Inside validate method of specimen bizlogic");
-		if (specimen == null)
+		if (specimen == null) 
 		{
 			throw new DAOException(ApplicationProperties.getValue("specimen.object.null.err.msg", "Specimen"));
 		}
@@ -1487,6 +1487,12 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		if (specimen.getQuantity() == null || specimen.getQuantity().getValue() == null)
 		{
 			String quantityString = ApplicationProperties.getValue("specimen.quantity");
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
+		}
+		
+		if (specimen.getAvailableQuantity() == null || specimen.getAvailableQuantity().getValue() == null)
+		{
+			String quantityString = ApplicationProperties.getValue("specimen.availableQuantity");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", quantityString));
 		}
 
