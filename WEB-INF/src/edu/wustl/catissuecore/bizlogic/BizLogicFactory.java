@@ -243,7 +243,7 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     	{
     		bizLogic = new NewSpecimenBizLogic();
     	}
-    	else if(className.equals("edu.wustl.catissuecore.domain.MolecularSpecimen"))
+    	else if(className.equals("edu.wustl.catissuecore.domain.MolecularSpecimen")|className.equals("edu.wustl.catissuecore.domain.CellSpecimen")|className.equals("edu.wustl.catissuecore.domain.TissueSpecimen")|className.equals("edu.wustl.catissuecore.domain.FluidSpecimen"))
     	{
     		bizLogic = new NewSpecimenBizLogic();
     	}
