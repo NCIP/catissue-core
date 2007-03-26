@@ -1,4 +1,4 @@
- var formTitleStyle = "font-family:arial,helvetica,verdana,sans-serif;  font-size:0.6em;  font-weight:bold;  padding-left:0.8em;  background-color:#5C5C5C;  color:#FFFFFF;   border-top:1px solid #5C5C5C;   border-left:1px solid #5C5C5C;  border-right:1px solid #5C5C5C; "
+var formTitleStyle = "font-family:arial,helvetica,verdana,sans-serif;  font-size:0.6em;  font-weight:bold;  padding-left:0.8em;  background-color:#5C5C5C;  color:#FFFFFF;   border-top:1px solid #5C5C5C;   border-left:1px solid #5C5C5C;  border-right:1px solid #5C5C5C; "
 var formSubTableTitleStyle = "font-family:arial,helvetica,verdana,sans-serif; font-size:0.7em;  font-weight:bold;  background-color:#CCCCCC;  color:#000000;   border-bottom:1px solid #5C5C5C;   border-left:1px solid #5C5C5C;   border-right:1px solid #5C5C5C;   text-align:left;";
 
 /* section for outer block start */
@@ -922,10 +922,15 @@ function displayAnnotationsPage()
 		form.submit();
 	}
 }
+
 function loadDynamicExtDataEntryPage()
-{
-	document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do";
-	document.forms[0].submit();
+{	
+	    var selectBox = document.getElementById('selectedAnnotation');	
+		if(selectBox.selectedIndex != "-1")
+		{	 
+			document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do";
+			document.forms[0].submit();
+		}
 }
 
 function initializeTabs(tabIds, tabNames, tabPageRefs)
