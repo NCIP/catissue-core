@@ -65,7 +65,7 @@
 				<tr valign="top" >
 					<td align="left" >
 						<label class="formRequiredLabelWithoutBackgrnd"><bean:message key="app.annotationFormsList"/> :</label>
-						<html:select property="selectedAnnotation" styleClass="formFieldVerySmallSized">
+						<html:select property="selectedAnnotation" styleId= "selectedAnnotation" styleClass="formFieldVerySmallSized">
 							<html:options collection="annotationsList" labelProperty="name" property="value" />
 						</html:select>
 						<html:button property="getDataForAnnotation" styleClass="actionButton" onclick="loadDynamicExtDataEntryPage()" >
