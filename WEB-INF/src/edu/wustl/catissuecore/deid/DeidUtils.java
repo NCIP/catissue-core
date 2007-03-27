@@ -48,38 +48,49 @@ public class DeidUtils
 		String mrn="";
 		try 
 		{
+			// create element as REPORT
 			reportElement = new Element(Parser.REPORT);
-
+			// set participant id
 			Element patientIdElement = new Element(Parser.PATIENT_ID);
 			patientIdElement.addContent(participant.getId().toString());
 
+			// set report type
 			Element reportTypeElement = new Element(Parser.REPORT_TYPE);
 			reportTypeElement.addContent(Parser.REPORT_TYPE_VALUE);
 
+			// create report header
 			Element reportHeaderElement = new Element(Parser.REPORT_HEADER);
 			reportHeaderElement.addContent(buildHeaderPersonElement(Parser.PARTICIPANT_NAME, participant.getLastName(), Parser.PARTICIPANT_ROLE));
+			// get participant medical identifier collection
 			Collection mic=participant.getParticipantMedicalIdentifierCollection();
 			Iterator iter=mic.iterator();
 			ParticipantMedicalIdentifier pmi=null;
+			//iterate over participant medical identifier collection
 			while(iter.hasNext())
 			{
 				mrn+=" ";
 				pmi=(ParticipantMedicalIdentifier)iter.next();
 				mrn+=pmi.getMedicalRecordNumber();
 			}
-
+			// add above processed collection string to header element
 			reportHeaderElement.addContent(buildHeaderPersonElement(Parser.PARTICIPANT_MRN, mrn, Parser.PARTICIPANT_ROLE));
-//			reportHeaderElement.addContent(buildHeaderDataElement(Parser.REPORT_ACCESSION_NUMBER, ispr.getAccessionNumber()));
+			// accession number is removed now from SPR
+			//	reportHeaderElement.addContent(buildHeaderDataElement(Parser.REPORT_ACCESSION_NUMBER, ispr.getAccessionNumber()));
 
+			// create and report text to textElement
 			Element reportTextElement = new Element(Parser.REPORT_TEXT);
 			sprText = DeidUtils.removeIllegalXmlCharacters(sprText);
 			sprText += "\n||-"+ DateFormat.getDateTimeInstance().format(ispr.getCollectionDateTime()) + "-||";
 			CDATA reportCDATA = new CDATA(sprText);
 			reportTextElement.addContent(reportCDATA);
 
+			// add patientId element to root element
 			reportElement.addContent(patientIdElement);
+			//add report type element to root element
 			reportElement.addContent(reportTypeElement);
+			// add report header element to root element
 			reportElement.addContent(reportHeaderElement);
+			// add report text element to root element
 			reportElement.addContent(reportTextElement);
 		}
 		catch (Exception ex) 
@@ -102,14 +113,21 @@ public class DeidUtils
 	protected static Element buildHeaderPersonElement(final String variable, final String value, final String role) throws Exception
 	{
 		Element headerPersonElement = null;
-		
+		// create element person
 		headerPersonElement = new Element(Parser.HEADER_PERSON);
+		// set role
 		headerPersonElement.setAttribute(Parser.ROLE, role);
+		// create element variable
 		Element variableElement = new Element(Parser.VARIABLE);
+		// create element value
 		Element valueElement = new Element(Parser.VALUE);
+		// set variable
 		variableElement.addContent(variable);
+		// set value
 		valueElement.addContent(value);
+		// add variable element to person element
 		headerPersonElement.addContent(variableElement);
+		// add value element to person element
 		headerPersonElement.addContent(valueElement);
 		
 		return headerPersonElement;
@@ -126,13 +144,19 @@ public class DeidUtils
 	protected static Element buildHeaderDataElement(final String variable, final String value) throws Exception
 	{
 		Element headerDataElement = null;
-		
+		// create element data
 		headerDataElement = new Element(Parser.HEADER_DATA);
+		// create element variable
 		Element variableElement = new Element(Parser.VARIABLE);
+		//create element value
 		Element valueElement = new Element(Parser.VALUE);
+		// set variable
 		variableElement.addContent(variable);
+		// set value
 		valueElement.addContent(value);
+		// add variable element to data element
 		headerDataElement.addContent(variableElement);
+		// add value element to data element
 		headerDataElement.addContent(valueElement);
 		
 		return headerDataElement;
@@ -152,17 +176,20 @@ public class DeidUtils
 
 		try 
 		{
+			// search pattern
 			String sentinal = "**DATE[";
-			
+			// extract text containing date
 			String dateText = deidText.substring(deidText.lastIndexOf("||-") + new String("||-").length(), deidText.lastIndexOf("-||"));
-
+			// separate text preceding date
 			String preDate = dateText.substring(0, dateText.lastIndexOf(sentinal));
+			//separate text that is appended to date
 			String postDate = dateText.substring(dateText.lastIndexOf(sentinal)
 					+ sentinal.length(), dateText.length());
 			postDate = postDate.replaceAll("]", "");
 
 			StringTokenizer st = new StringTokenizer(preDate + postDate);
 			String date = "";
+			// parse date
 			for (int x = 0; st.hasMoreTokens(); x++) 
 			{
 				String token = st.nextToken();
@@ -172,7 +199,8 @@ public class DeidUtils
 				}
 				date += token + " ";
 			}
-
+			
+			// convert string into date object
 			DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM,DateFormat.MEDIUM);
 			deidDate = df.parse(date.trim());
 
@@ -193,16 +221,19 @@ public class DeidUtils
 	 */
 	public static String removeIllegalXmlCharacters(String sprText) 
 	{
+		// illegal XML character
 		char illegalChar=0x1d;
 		String result = sprText;
 		try 
 		{
 			StringBuffer sb = new StringBuffer(sprText);
+			// loop to check each character
 			for (int idx = 0; idx < sb.length(); idx++) 
 			{
+				// check for illegal character
 				if (sb.charAt(idx) == illegalChar) 
 				{
-					Logger.out.error("Found the bad character.");
+					Logger.out.error("Found bad character.");
 					sb.setCharAt(idx, ' ');
 				}
 			}
@@ -228,13 +259,18 @@ public class DeidUtils
 	public static String convertDocumentToString(final org.jdom.Document doc, final  Format format) throws Exception
 	{
 		String result = "" ;
+		// instnatiate XMLOutputter 
 		XMLOutputter outputDocument = new XMLOutputter() ;
 		if (format != null) 
 		{
+			// set format to XMLOutputter
 			outputDocument.setFormat(format) ;
 		}
+		// instantiate ByteArrayOutputStream 
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream() ;
+		// convert doc to byte array
 		outputDocument.output(doc, byteArrayOutputStream) ;
+		// convert byte array to string
 		result = byteArrayOutputStream.toString() ;
 		
 		return result ;
@@ -255,30 +291,43 @@ public class DeidUtils
         
         try 
         {
+        	// check for valid deid responce text
             if (deIDResponse != null && deIDResponse.trim().length() > 0)
             {
+            	// instantiate SAXBuilder
                 SAXBuilder builder = new SAXBuilder();
+                // set EntityResolver to use local dtd file instead of the one that is specified in the xml document
                 builder.setEntityResolver(new EntityResolver()
                 {
                     public InputSource resolveEntity(String publicId, String systemId)
                     {
+                    	// local dtd file name that has to be used
 						return new InputSource(dtdFilename);
                     }
                 });
    
+                // set default feature values to sax builder
                 builder.setFeature("http://apache.org/xml/features/validation/schema",true);
                 builder.setFeature("http://xml.org/sax/features/namespaces",true);
 
+                // convert string to byte array
                 byte[] byteArray = deIDResponse.getBytes();
+                // convert byte array to ByteArrayInputStream
                 ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
+                // create document using ByteArrayInputStream
                 Document deIDResponseDocument = builder.build(byteArrayInputStream);
  
+                // set XPath to query on XML document
                 XPath xpath = XPath.newInstance("//Report");
+                // fire query on the document
                 List deIdResults = xpath.selectNodes(deIDResponseDocument);
                 Iterator deIdIterator = deIdResults.iterator();
+                // iterate to extract report text
                 while (deIdIterator.hasNext()) 
                 {
+                	// get next element
                     Element deIdReportElement = (Element) deIdIterator.next();
+                    // get report text
                     deidSprText = deIdReportElement.getChild(Parser.REPORT_TEXT).getText();
                 }
             } 
