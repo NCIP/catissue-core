@@ -421,62 +421,6 @@ public class ReportLoaderUtil
 	}
 	
 	/**
-	 * Saves participant object and add it to cache
-	 * @param participant Object of Participant to save
-	 * @throws Exception generic exception
-	 */
-	public static void saveParticipant(Participant participant)throws Exception
-	{
-		Logger.out.info("Inside saveParticipant");
-		try
-		{
-			ReportLoaderUtil.saveObject(participant);
-		}
-		catch(Exception ex)
-		{
-			Logger.out.error("Error while saving new Participant", ex);
-		}
-		
-		
-		// code to add participant to the cache
-		Map participantMap = null;
-		ParticipantBizLogic bizlogic = (ParticipantBizLogic) BizLogicFactory.getInstance()
-				.getBizLogic(Participant.class.getName());
-		Map cpMap = null;
-		BizLogicFactory bizFactory=BizLogicFactory.getInstance();
-		CollectionProtocolRegistrationBizLogic cpbizlogic= (CollectionProtocolRegistrationBizLogic) bizFactory.getBizLogic(CollectionProtocolRegistration.class.getName());
-		List cprList=null;
-		try
-		{
-			cprList=cpbizlogic.getAllParticipantRegistrationInfo();
-			participantMap = bizlogic.getAllParticipants();
-			Iterator it = participantMap.keySet().iterator();
-			while (it.hasNext())
-			{
-				Long str = (Long) it.next();
-			}
-		}
-		catch (Exception ex)
-		{
-			Logger.out.error("Exception occured getting List of Participants " ,ex);
-		}
-		// getting instance of catissueCoreCacheManager and adding participantMap to cache
-		try
-		{
-			Logger.out.info("Adding participant object to cache");
-			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
-			catissueCoreCacheManager.addObjectToCache(edu.wustl.catissuecore.util.global.Constants.MAP_OF_PARTICIPANTS, (HashMap) participantMap);
-			catissueCoreCacheManager.addObjectToCache(edu.wustl.catissuecore.util.global.Constants.LIST_OF_REGISTRATION_INFO, (Vector)cprList);
-			Logger.out.info("Added participant to cache");
-		}
-		catch (CacheException e)
-		{
-			Logger.out
-					.error("Exception occured while creating instance of CatissueCoreCacheManager" , e);
-		}	
-	}
-	
-	/**
 	 * @return specimen collection group
 	 * @throws Exception throws exception
 	 */
