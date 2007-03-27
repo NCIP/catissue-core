@@ -5,8 +5,8 @@ import com.mockobjects.constraint.IsAnything;
 import com.mockobjects.constraint.IsInstanceOf;
 import com.mockobjects.dynamic.FullConstraintMatcher;
 import com.mockobjects.dynamic.Mock;
+
 import edu.wustl.catissuecore.bizlogic.IdentifiedSurgicalPathologyReportBizLogic;
-import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.test.MockDAOFactory;
