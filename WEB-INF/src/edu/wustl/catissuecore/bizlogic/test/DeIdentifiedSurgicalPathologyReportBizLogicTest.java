@@ -7,7 +7,6 @@ import com.mockobjects.dynamic.FullConstraintMatcher;
 import com.mockobjects.dynamic.Mock;
 
 import edu.wustl.catissuecore.bizlogic.DeidentifiedSurgicalPathologyReportBizLogic;
-import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.test.MockDAOFactory;
@@ -63,7 +62,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 			DeidentifiedSurgicalPathologyReportBizLogic deidentifiedSurgicalPathologyReportBizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
 			try
 			{
-				deidentifiedSurgicalPathologyReportBizLogic.insert(new DeidentifiedSurgicalPathologyReportBizLogic(),null,Constants.HIBERNATE_DAO);
+				deidentifiedSurgicalPathologyReportBizLogic.insert(new DeidentifiedSurgicalPathologyReport(),null,Constants.HIBERNATE_DAO);
 				fail("When null sessiondataBean is passes, it should throw NullPointerException");
 			}
 			catch(NullPointerException e)
@@ -79,6 +78,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 			{
 				e.printStackTrace();
 			}
+			
 			
 			hibDAO.expect("closeSession");
 			
@@ -100,7 +100,7 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 			{
 			
 				e.printStackTrace();
-				assertTrue("When null sessiondataBean is passes, it throws NullPointerException",true);
+				
 			}
 			catch (UserNotAuthorizedException e)
 			{
@@ -125,13 +125,13 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 			
 			try
 			{
-				deidentifiedSurgicalPathologyReportBizLogic.insert(new StorageType(),sessionDataBean,edu.wustl.common.util.global.Constants.HIBERNATE_DAO);
-				assertTrue("deindentified report inserted successfully",true);
+				deidentifiedSurgicalPathologyReportBizLogic.insert(new DeidentifiedSurgicalPathologyReport(),sessionDataBean,edu.wustl.common.util.global.Constants.HIBERNATE_DAO);
+				fail("deindentified report inserted successfully");
 				
 			}
 			catch (NullPointerException e) {
 					e.printStackTrace();
-					fail("Null Pointer Exception");
+					assertTrue("Null Pointer Exception", true);
 			}
 			catch (BizLogicException e)
 			{
@@ -164,12 +164,13 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 			try
 			{
 				deidentifiedSurgicalPathologyReportBizLogic.insert(deidentifiedSurgicalPathologyReport,sessionDataBean,edu.wustl.common.util.global.Constants.HIBERNATE_DAO);
-				assertTrue("Deidentified report inserted successfully",true);
+				fail("Deidentified report inserted successfully");
 				
 			}
-			catch (NullPointerException e) {
+			catch (NullPointerException e) 
+			{
 					e.printStackTrace();
-					fail("Null Pointer Exception");
+					assertTrue("Null Pointer Exception",true);
 			}
 			catch (BizLogicException e)
 			{
@@ -263,7 +264,8 @@ public class DeidentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCas
 				assertTrue("Deidentified report updated successfully",true);
 				
 			}
-			catch (NullPointerException e) {
+			catch (NullPointerException e)
+			{
 					e.printStackTrace();
 					fail("Null Pointer Exception");
 			}
