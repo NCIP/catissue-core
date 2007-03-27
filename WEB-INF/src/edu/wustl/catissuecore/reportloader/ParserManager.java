@@ -1,13 +1,15 @@
 package edu.wustl.catissuecore.reportloader;
 
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import net.sf.ehcache.CacheException;
-
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -57,15 +59,15 @@ public final class ParserManager
 		Map participantMap = null;
 		ParticipantBizLogic bizlogic = (ParticipantBizLogic) BizLogicFactory.getInstance()
 				.getBizLogic(Participant.class.getName());
+		Map cpMap = null;
+		List cprList=null;
 		try
 		{
+			BizLogicFactory bizFactory=BizLogicFactory.getInstance();
+			CollectionProtocolRegistrationBizLogic cpbizlogic= (CollectionProtocolRegistrationBizLogic) bizFactory.getBizLogic(CollectionProtocolRegistration.class.getName());
+			cprList=cpbizlogic.getAllParticipantRegistrationInfo();
 			// get all participant list to set to chache manager
 			participantMap = bizlogic.getAllParticipants();
-			Iterator it = participantMap.keySet().iterator();
-			while (it.hasNext())
-			{
-				Long str = (Long) it.next();
-			}
 		}
 		catch (Exception ex)
 		{
@@ -79,6 +81,7 @@ public final class ParserManager
 			.getInstance();
 			// add objects to cacheManager
 			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS, (HashMap) participantMap);
+			catissueCoreCacheManager.addObjectToCache(edu.wustl.catissuecore.util.global.Constants.LIST_OF_REGISTRATION_INFO, (Vector)cprList);
 		}
 		catch (CacheException e)
 		{
