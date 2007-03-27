@@ -475,4 +475,55 @@ public class ReportLoaderUtil
 					.error("Exception occured while creating instance of CatissueCoreCacheManager" , e);
 		}	
 	}
+	
+	/**
+	 * @return specimen collection group
+	 * @throws Exception throws exception
+	 */
+	public static SpecimenCollectionGroup checkForSpecimenCollectionGroup(Participant participant, Site site, String surgicalPathologyNumber)throws Exception
+	{
+		List scgSet=null;
+		SpecimenCollectionGroup existingSCG=null;
+		Iterator scgIterator=null;
+		boolean isMatching=false;
+		try
+		{
+			// het list of all the scg associated with participant
+			scgSet=ReportLoaderUtil.getSCGList(participant);
+			if(scgSet!=null && scgSet.size()>0)
+			{
+				scgIterator=scgSet.iterator();
+				while(scgIterator.hasNext())
+				{
+					// check for mathcing scg
+					existingSCG=(SpecimenCollectionGroup)scgIterator.next();
+					if((surgicalPathologyNumber).equals(existingSCG.getSurgicalPathologyNumber())&& (site.getName()).equals(existingSCG.getSpecimenCollectionSite().getName()))
+					{
+						return existingSCG;
+					}
+					
+				}
+			}
+			scgSet=ReportLoaderUtil.getSCGList(participant);
+			if(scgSet!=null && scgSet.size()>0)
+			{
+				scgIterator=scgSet.iterator();
+				while(scgIterator.hasNext())
+				{
+					// check for mathcing scg
+					existingSCG=(SpecimenCollectionGroup)scgIterator.next();
+					if((existingSCG.getSurgicalPathologyNumber().equalsIgnoreCase(null)) && ((existingSCG.getSpecimenCollectionSite().getName()).equalsIgnoreCase(site.getName())))
+					{
+						return existingSCG;
+					}
+				}
+			}
+		}
+		catch(Exception ex)
+		{
+			Logger.out.error("Error while checking specimen collection group ",ex);
+			throw ex;
+		}
+		return null;
+	}
 }
