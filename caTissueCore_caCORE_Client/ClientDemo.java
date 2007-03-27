@@ -188,7 +188,10 @@ public class ClientDemo
 			testAddStorageType();
 			testAddStorageContainer();
 			testAddSpecimenArrayType();
-			testAddSpecimen();
+			testAddMolecularSpecimen();
+			testAddTissueSpecimen();
+			testAddFluidSpecimen();
+			testAddCellSpecimen();
 			testAddSpecimenArray();
 			testAddDistribution();
 			
@@ -909,23 +912,89 @@ public class ClientDemo
 	}
 
 	
-	 private void testAddSpecimen()
+	 private void testAddMolecularSpecimen()
 		{
 			try
 			{
-				Specimen specimenObj = (Specimen) api.initSpecimen();				
+				Specimen specimenObj = (Specimen) api.initMolecularSpecimen();				
 				setLogger(specimenObj);
 				Logger.out.info("Inserting domain object------->"+specimenObj);
 				specimenObj =  (Specimen) appService.createObject(specimenObj);
 				dataModelObjectMap.put("Specimen",specimenObj);
-				writeSuccessfullOperationToReport(specimenObj,insertOperation+"testAddSpecimen");
+				writeSuccessfullOperationToReport(specimenObj,insertOperation+"testAddMolecularSpecimen");
 				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
 				Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
-				//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + specimenObj.getId().longValue() + " ::  Name :: " + specimenObj.getLabel());
+				
 			}
 			catch(Exception e)
 			{
-				writeFailureOperationsToReport("Specimen",insertOperation+"testAddSpecimen");
+				writeFailureOperationsToReport("Specimen",insertOperation+"testAddMolecularSpecimen");
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+			}
+		}	 
+	 
+	 private void testAddTissueSpecimen()
+		{
+			try
+			{
+				Specimen specimenObj = (Specimen) api.initTissueSpecimen();				
+				setLogger(specimenObj);
+				Logger.out.info("Inserting domain object------->"+specimenObj);
+				specimenObj =  (Specimen) appService.createObject(specimenObj);
+				dataModelObjectMap.put("TissueSpecimen",specimenObj);
+				writeSuccessfullOperationToReport(specimenObj,insertOperation+"testAddTissueSpecimen");
+				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
+				Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
+				
+			}
+			catch(Exception e)
+			{
+				writeFailureOperationsToReport("Specimen",insertOperation+"testAddTissueSpecimen");
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+			}
+		}	 
+	 
+	 private void testAddFluidSpecimen()
+		{
+			try
+			{
+				Specimen specimenObj = (Specimen) api.initFluidSpecimen();				
+				setLogger(specimenObj);
+				Logger.out.info("Inserting domain object------->"+specimenObj);
+				specimenObj =  (Specimen) appService.createObject(specimenObj);
+				dataModelObjectMap.put("FluidSpecimen",specimenObj);
+				writeSuccessfullOperationToReport(specimenObj,insertOperation+"testAddFluidSpecimen");
+				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
+				Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
+				
+			}
+			catch(Exception e)
+			{
+				writeFailureOperationsToReport("Specimen",insertOperation+"testAddFluidSpecimen");
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+			}
+		}	 
+	 
+	 private void testAddCellSpecimen()
+		{
+			try
+			{
+				Specimen specimenObj = (Specimen) api.initCellSpecimen();				
+				setLogger(specimenObj);
+				Logger.out.info("Inserting domain object------->"+specimenObj);
+				specimenObj =  (Specimen) appService.createObject(specimenObj);
+				dataModelObjectMap.put("CellSpecimen",specimenObj);
+				writeSuccessfullOperationToReport(specimenObj,insertOperation+"testAddCellSpecimen");
+				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
+				Logger.out.info(" Domain Object is successfully added ---->    Name:: " + specimenObj.getLabel());
+				
+			}
+			catch(Exception e)
+			{
+				writeFailureOperationsToReport("Specimen",insertOperation+"testAddCellSpecimen");
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
 			}
@@ -936,15 +1005,13 @@ public class ClientDemo
 	 		Specimen specimenObj = null;
 			try
 			{
-				specimenObj = (Specimen) api.initSpecimen();				
+				specimenObj = (Specimen) api.initMolecularSpecimen();				
 				setLogger(specimenObj);
 				Logger.out.info("Inserting domain object------->"+specimenObj);				
 				specimenObj.setPathologicalStatus("wrongData");
 				specimenObj =  (Specimen) appService.createObject(specimenObj);
 				writeFailureOperationsToReport("Specimen",insertValidateOperation + " testAddSpecimenWithWrongData");				
-				//dataModelObjectMap.put("Specimen",specimenObj);
-				//Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenObj.getId().toString());
-				//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + specimenObj.getId().longValue() + " ::  Name :: " + specimenObj.getLabel());
+			
 			}
 			catch(Exception e)
 			{
@@ -1420,6 +1487,7 @@ public class ClientDemo
         		 writeSuccessfullOperationToReport(returneddistribution,searchOperation);
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returneddistribution.getId());        		 
         		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returneddistribution.getMessageLabel());
+        		 break;
              }
           } 
           catch (Exception e) {
@@ -1825,7 +1893,9 @@ public class ClientDemo
     	SpecimenArray specimenArray = new SpecimenArray();
      	setLogger(specimenArray);
     	Logger.out.info(" searching domain object");
+    	
 		specimenArray.setId(cachedspecimenArray.getId());
+		
          try {
         	 List resultList = appService.search(SpecimenArray.class,specimenArray);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
@@ -1847,9 +1917,9 @@ public class ClientDemo
     	SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
      	setLogger(specimenCollectionGroup);
     	Logger.out.info(" searching domain object");
-    	System.out.println("Here1");
+    	
     	specimenCollectionGroup.setId(cachedspecimenCollectionGroup.getId());
-    	System.out.println("Here2");
+    	
          try {
         	 List resultList = appService.search(SpecimenCollectionGroup.class,specimenCollectionGroup);
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
@@ -2635,7 +2705,7 @@ public class ClientDemo
 		Distribution distributionObj = null;		
 		try
 		{    	
-	    	Specimen insertspecimen = (Specimen) api.initSpecimen();						
+	    	Specimen insertspecimen = (Specimen) api.initMolecularSpecimen();						
 	    	insertspecimen =  (Specimen) appService.createObject(insertspecimen);
 	    	insertspecimen.setActivityStatus("Closed");
 	    	Specimen updatespecimen =  (Specimen) appService.updateObject(insertspecimen);		
@@ -2739,7 +2809,7 @@ public class ClientDemo
 	 		SpecimenArray specimenArrayObj = null;
 			try
 			{				
-				Specimen insertspecimen = (Specimen) api.initSpecimen();						
+				Specimen insertspecimen = (Specimen) api.initMolecularSpecimen();						
 		    	insertspecimen =  (Specimen) appService.createObject(insertspecimen);
 		    	insertspecimen.setActivityStatus("Closed");
 		    	Specimen updatespecimen =  (Specimen) appService.updateObject(insertspecimen);

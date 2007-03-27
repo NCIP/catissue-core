@@ -7,6 +7,7 @@ import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
 import edu.wustl.catissuecore.domain.Capacity;
+import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -17,6 +18,7 @@ import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
+import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Participant;
@@ -32,6 +34,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
+import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Constants;
@@ -598,12 +601,10 @@ public class APIDemo
 	/**
 	 * @return Specimen
 	 */
-	public Specimen initSpecimen()
+	public Specimen initMolecularSpecimen()
 	{
 		MolecularSpecimen molecularSpecimen = new MolecularSpecimen();
 
-//		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
-//		specimenCollectionGroup.setId(new Long(2));
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)ClientDemo.dataModelObjectMap.get("SpecimenCollectionGroup");
 		molecularSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 		
@@ -612,10 +613,7 @@ public class APIDemo
 		molecularSpecimen.setType("DNA");
 		molecularSpecimen.setAvailable(new Boolean(true));
 		molecularSpecimen.setActivityStatus("Active");
-//		SpecimenCharacteristics specimenCharacteristics = new SpecimenCharacteristics();
-//		specimenCharacteristics.setTissueSide("Left");
-//		specimenCharacteristics.setTissueSite("Placenta");
-//		specimenCharacteristics.setId(new Long(1));
+
 		SpecimenCharacteristics specimenCharacteristics = (SpecimenCharacteristics)ClientDemo.dataModelObjectMap.get("SpecimenCharacteristics");
 		molecularSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
 		molecularSpecimen.setPathologicalStatus("Malignant");
@@ -629,8 +627,7 @@ public class APIDemo
 		molecularSpecimen.setLineage("Aliquot");
 		// Is virtually located
 		
-//		StorageContainer sto = new StorageContainer();
-//		sto.setId(new Long("1"));
+
 		
 		molecularSpecimen.setStorageContainer(null); 
 		molecularSpecimen.setPositionDimensionOne(null);
@@ -647,9 +644,7 @@ public class APIDemo
 		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 		collectionEventParameters.setComments("");
 		collectionEventParameters.setSpecimen(molecularSpecimen);
-//		User user = new User();
-//		user.setId(new Long(1));
-	 //	collectionEventParameters.setId(new Long(0));
+
 		User user = (User)ClientDemo.dataModelObjectMap.get("User");	
 		collectionEventParameters.setUser(user);
 		
@@ -669,8 +664,7 @@ public class APIDemo
 		collectionEventParameters.setCollectionProcedure("Needle Core Biopsy");
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		receivedEventParameters.setUser(user);
-		//receivedEventParameters.setId(new Long(0));
-		
+				
 		try
 		{
 			System.out.println("--- Start ---- 10");
@@ -691,10 +685,6 @@ public class APIDemo
 		specimenEventCollection.add(receivedEventParameters);
 		molecularSpecimen.setSpecimenEventCollection(specimenEventCollection);
 
-//		Biohazard biohazard = new Biohazard();
-//		biohazard.setName("Biohazard1");
-//		biohazard.setType("Toxic");
-//		biohazard.setId(new Long(1));
 		Biohazard biohazard = (Biohazard)ClientDemo.dataModelObjectMap.get("Biohazard");
 		Collection biohazardCollection = new HashSet();
 		biohazardCollection.add(biohazard);
@@ -702,6 +692,293 @@ public class APIDemo
 		System.out.println(" -------- end -----------");
 
 		return molecularSpecimen;
+	}
+	
+	/**
+	 * @return Specimen
+	 */
+	public Specimen initTissueSpecimen()
+	{
+		TissueSpecimen tissueSpecimen = new TissueSpecimen();
+
+		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)ClientDemo.dataModelObjectMap.get("SpecimenCollectionGroup");
+		tissueSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+		
+		tissueSpecimen.setLabel("spec" + UniqueKeyGeneratorUtil.getUniqueKey());
+		tissueSpecimen.setBarcode("bar" + UniqueKeyGeneratorUtil.getUniqueKey());
+		tissueSpecimen.setType("Fixed Tissue Block");
+		tissueSpecimen.setAvailable(new Boolean(true));
+		tissueSpecimen.setActivityStatus("Active");
+
+		SpecimenCharacteristics specimenCharacteristics = (SpecimenCharacteristics)ClientDemo.dataModelObjectMap.get("SpecimenCharacteristics");
+		tissueSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
+		tissueSpecimen.setPathologicalStatus("Malignant");
+
+		Quantity quantity = new Quantity();
+		quantity.setValue(new Double(10));
+		tissueSpecimen.setQuantity(quantity);
+		tissueSpecimen.setAvailableQuantity(quantity);
+		
+		tissueSpecimen.setComments("");
+		tissueSpecimen.setLineage("Aliquot");
+		// Is virtually located
+		
+
+		
+		tissueSpecimen.setStorageContainer(null); 
+		tissueSpecimen.setPositionDimensionOne(null);
+		tissueSpecimen.setPositionDimensionTwo(null);
+		
+		Collection externalIdentifierCollection = new HashSet();
+		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
+		externalIdentifier.setName("eid" + UniqueKeyGeneratorUtil.getUniqueKey());
+		externalIdentifier.setValue("11");
+		externalIdentifier.setSpecimen(tissueSpecimen);
+		
+		externalIdentifierCollection.add(externalIdentifier);
+		tissueSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
+		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		collectionEventParameters.setComments("");
+		collectionEventParameters.setSpecimen(tissueSpecimen);
+
+		User user = (User)ClientDemo.dataModelObjectMap.get("User");	
+		collectionEventParameters.setUser(user);
+		
+		try
+		{
+			collectionEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+					
+		}
+		catch (ParseException e1)
+		{
+			System.out.println(" exception in APIDemo");
+			e1.printStackTrace();
+		}
+		
+		collectionEventParameters.setContainer("No Additive Vacutainer");
+		collectionEventParameters.setCollectionProcedure("Needle Core Biopsy");
+		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		receivedEventParameters.setUser(user);
+				
+		try
+		{
+			System.out.println("--- Start ---- 10");
+			receivedEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+		}
+		catch (ParseException e)
+		{
+			System.out.println("APIDemo");
+			e.printStackTrace();
+		}
+		
+		receivedEventParameters.setReceivedQuality("Acceptable");
+		receivedEventParameters.setComments("");
+		receivedEventParameters.setSpecimen(tissueSpecimen);
+		Collection specimenEventCollection = new HashSet();
+		specimenEventCollection.add(collectionEventParameters);
+		specimenEventCollection.add(receivedEventParameters);
+		tissueSpecimen.setSpecimenEventCollection(specimenEventCollection);
+
+		Biohazard biohazard = (Biohazard)ClientDemo.dataModelObjectMap.get("Biohazard");
+		Collection biohazardCollection = new HashSet();
+		biohazardCollection.add(biohazard);
+		tissueSpecimen.setBiohazardCollection(biohazardCollection);
+		System.out.println(" -------- end -----------");
+
+		return tissueSpecimen;
+	}
+	
+	/**
+	 * @return Specimen
+	 */
+	public Specimen initFluidSpecimen()
+	{
+		FluidSpecimen fluidSpecimen = new FluidSpecimen();
+
+		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)ClientDemo.dataModelObjectMap.get("SpecimenCollectionGroup");
+		fluidSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+		
+		fluidSpecimen.setLabel("spec" + UniqueKeyGeneratorUtil.getUniqueKey());
+		fluidSpecimen.setBarcode("bar" + UniqueKeyGeneratorUtil.getUniqueKey());
+		fluidSpecimen.setType("Urine");
+		fluidSpecimen.setAvailable(new Boolean(true));
+		fluidSpecimen.setActivityStatus("Active");
+
+		SpecimenCharacteristics specimenCharacteristics = (SpecimenCharacteristics)ClientDemo.dataModelObjectMap.get("SpecimenCharacteristics");
+		fluidSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
+		fluidSpecimen.setPathologicalStatus("Malignant");
+
+		Quantity quantity = new Quantity();
+		quantity.setValue(new Double(10));
+		fluidSpecimen.setQuantity(quantity);
+		fluidSpecimen.setAvailableQuantity(quantity);
+		
+		fluidSpecimen.setComments("");
+		fluidSpecimen.setLineage("Aliquot");
+		// Is virtually located
+		
+
+		
+		fluidSpecimen.setStorageContainer(null); 
+		fluidSpecimen.setPositionDimensionOne(null);
+		fluidSpecimen.setPositionDimensionTwo(null);
+		
+		Collection externalIdentifierCollection = new HashSet();
+		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
+		externalIdentifier.setName("eid" + UniqueKeyGeneratorUtil.getUniqueKey());
+		externalIdentifier.setValue("11");
+		externalIdentifier.setSpecimen(fluidSpecimen);
+		
+		externalIdentifierCollection.add(externalIdentifier);
+		fluidSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
+		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		collectionEventParameters.setComments("");
+		collectionEventParameters.setSpecimen(fluidSpecimen);
+
+		User user = (User)ClientDemo.dataModelObjectMap.get("User");	
+		collectionEventParameters.setUser(user);
+		
+		try
+		{
+			collectionEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+					
+		}
+		catch (ParseException e1)
+		{
+			System.out.println(" exception in APIDemo");
+			e1.printStackTrace();
+		}
+		
+		collectionEventParameters.setContainer("No Additive Vacutainer");
+		collectionEventParameters.setCollectionProcedure("Needle Core Biopsy");
+		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		receivedEventParameters.setUser(user);
+				
+		try
+		{
+			System.out.println("--- Start ---- 10");
+			receivedEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+		}
+		catch (ParseException e)
+		{
+			System.out.println("APIDemo");
+			e.printStackTrace();
+		}
+		
+		receivedEventParameters.setReceivedQuality("Acceptable");
+		receivedEventParameters.setComments("");
+		receivedEventParameters.setSpecimen(fluidSpecimen);
+		Collection specimenEventCollection = new HashSet();
+		specimenEventCollection.add(collectionEventParameters);
+		specimenEventCollection.add(receivedEventParameters);
+		fluidSpecimen.setSpecimenEventCollection(specimenEventCollection);
+
+		Biohazard biohazard = (Biohazard)ClientDemo.dataModelObjectMap.get("Biohazard");
+		Collection biohazardCollection = new HashSet();
+		biohazardCollection.add(biohazard);
+		fluidSpecimen.setBiohazardCollection(biohazardCollection);
+		System.out.println(" -------- end -----------");
+
+		return fluidSpecimen;
+	}
+	
+	/**
+	 * @return Specimen
+	 */
+	public Specimen initCellSpecimen()
+	{
+		CellSpecimen cellSpecimen = new CellSpecimen();
+
+		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)ClientDemo.dataModelObjectMap.get("SpecimenCollectionGroup");
+		cellSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
+		
+		cellSpecimen.setLabel("spec" + UniqueKeyGeneratorUtil.getUniqueKey());
+		cellSpecimen.setBarcode("bar" + UniqueKeyGeneratorUtil.getUniqueKey());
+		cellSpecimen.setType("Fixed Cell Block");
+		cellSpecimen.setAvailable(new Boolean(true));
+		cellSpecimen.setActivityStatus("Active");
+
+		SpecimenCharacteristics specimenCharacteristics = (SpecimenCharacteristics)ClientDemo.dataModelObjectMap.get("SpecimenCharacteristics");
+		cellSpecimen.setSpecimenCharacteristics(specimenCharacteristics);
+		cellSpecimen.setPathologicalStatus("Malignant");
+
+		Quantity quantity = new Quantity();
+		quantity.setValue(new Double(10));
+		cellSpecimen.setQuantity(quantity);
+		cellSpecimen.setAvailableQuantity(quantity);
+		cellSpecimen.setComments("");
+		cellSpecimen.setLineage("Aliquot");
+		// Is virtually located
+		
+
+		
+		cellSpecimen.setStorageContainer(null); 
+		cellSpecimen.setPositionDimensionOne(null);
+		cellSpecimen.setPositionDimensionTwo(null);
+		
+		Collection externalIdentifierCollection = new HashSet();
+		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
+		externalIdentifier.setName("eid" + UniqueKeyGeneratorUtil.getUniqueKey());
+		externalIdentifier.setValue("11");
+		externalIdentifier.setSpecimen(cellSpecimen);
+		
+		externalIdentifierCollection.add(externalIdentifier);
+		cellSpecimen.setExternalIdentifierCollection(externalIdentifierCollection);
+		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		collectionEventParameters.setComments("");
+		collectionEventParameters.setSpecimen(cellSpecimen);
+
+		User user = (User)ClientDemo.dataModelObjectMap.get("User");	
+		collectionEventParameters.setUser(user);
+		
+		try
+		{
+			collectionEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+					
+		}
+		catch (ParseException e1)
+		{
+			System.out.println(" exception in APIDemo");
+			e1.printStackTrace();
+		}
+		
+		collectionEventParameters.setContainer("No Additive Vacutainer");
+		collectionEventParameters.setCollectionProcedure("Needle Core Biopsy");
+		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		receivedEventParameters.setUser(user);
+				
+		try
+		{
+			System.out.println("--- Start ---- 10");
+			receivedEventParameters.setTimestamp(Utility.parseDate("08/15/1975", Utility
+					.datePattern("08/15/1975")));
+		}
+		catch (ParseException e)
+		{
+			System.out.println("APIDemo");
+			e.printStackTrace();
+		}
+		
+		receivedEventParameters.setReceivedQuality("Acceptable");
+		receivedEventParameters.setComments("");
+		receivedEventParameters.setSpecimen(cellSpecimen);
+		Collection specimenEventCollection = new HashSet();
+		specimenEventCollection.add(collectionEventParameters);
+		specimenEventCollection.add(receivedEventParameters);
+		cellSpecimen.setSpecimenEventCollection(specimenEventCollection);
+
+		Biohazard biohazard = (Biohazard)ClientDemo.dataModelObjectMap.get("Biohazard");
+		Collection biohazardCollection = new HashSet();
+		biohazardCollection.add(biohazard);
+		cellSpecimen.setBiohazardCollection(biohazardCollection);
+		System.out.println(" -------- end -----------");
+
+		return cellSpecimen;
 	}
 
 	/**
