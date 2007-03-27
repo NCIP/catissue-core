@@ -38,6 +38,8 @@ public abstract class Parser
 	//Parser Types
 	public static final String HL7_PARSER="HL7";
 	
+	// Constant for input file extension
+	public static final String INPUT_FILE_EXTENSION=".dat";
 	
 	//Constants for report status
 	public static final String PENDING_FOR_DEID="PENDING_FOR_DEID";
@@ -91,7 +93,7 @@ public abstract class Parser
 	//constants for logger
 	public static final String LOGGER_GENERAL="general";
 	public static final String LOGGER_FILE_POLLER="filePoller";
-	public static final String LOGGER_QUEUE_PROCESSOR="queuProcessor";
+	public static final String LOGGER_QUEUE_PROCESSOR="queueProcessor";
 	public static final String LOGGER_DEID_SERVER="deidServer";
 	public static final String LOGGER_CONCEPT_CODER="conceptCoder";
 }
