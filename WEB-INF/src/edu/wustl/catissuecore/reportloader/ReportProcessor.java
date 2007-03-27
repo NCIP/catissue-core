@@ -69,13 +69,23 @@ public class ReportProcessor implements Observer
 			for(int i=0;i<files.length;i++)
 			{	
 				try
-				{
-					Logger.out.info("parsing file "+files[i]);
-					// Initializing SiteInfoHandler to avoid restart of server to get new site names added to file at run time
-					SiteInfoHandler.init(XMLPropertyHandler.getValue("site.info.filename"));
-					// calling parser to parse file
-					parser.parse(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
-					Logger.out.info("parsing of file "+files[i]+" finished");
+				{		
+					if(isValidFile(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]))
+					{
+						Logger.out.info("parsing file "+files[i]);
+						// Initializing SiteInfoHandler to avoid restart of server to get new site names added to file at run time
+						SiteInfoHandler.init(XMLPropertyHandler.getValue("site.info.filename"));
+						// calling parser to parse file
+						parser.parse(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
+						Logger.out.info("parsing of file "+files[i]+" finished");
+					}
+					else
+					{
+						Logger.out.info("Bad file found. Moving file to bad files directory. Filename:"+XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
+						CSVLogger.info(Parser.LOGGER_FILE_POLLER,"Bad file found "+XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
+						fileToDelete.add(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
+						copyFile(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i],XMLPropertyHandler.getValue(Parser.BAD_FILE_DIR)+"/"+files[i]);
+					}
 					
 				}
 				catch(IOException ex)
@@ -142,5 +152,19 @@ public class ReportProcessor implements Observer
 				 del=tempFile.delete();
 			}
 		}
-	}		
+	}	
+	
+	/**
+	 * This is the function to validate the input file 
+	 * @param fileName nae of the input file
+	 * @return boolean result of validation
+	 */
+	public boolean isValidFile(String fileName)
+	{
+		if(fileName.endsWith(Parser.INPUT_FILE_EXTENSION))
+		{
+			return true;
+		}
+		return false;
+	}
 }
