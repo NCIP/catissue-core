@@ -21,6 +21,10 @@ public class DefinedArrayRequestBean implements Serializable
 	 */
 	private static final long serialVersionUID = 1L;
 	/**
+	 * 
+	 */
+	private String noOfItems;
+	/**
 	 * To determine when to enable or disable create array button.
 	 */
 	private String createArrayButtonDisabled;
@@ -321,6 +325,24 @@ public class DefinedArrayRequestBean implements Serializable
 	public void setDistributedItemId(String distributedItemId)
 	{
 		this.distributedItemId = distributedItemId;
+	}
+
+	
+	/**
+	 * @return the noOfItems
+	 */
+	public String getNoOfItems()
+	{
+		return noOfItems;
+	}
+
+	
+	/**
+	 * @param noOfItems the noOfItems to set
+	 */
+	public void setNoOfItems(String noOfItems)
+	{
+		this.noOfItems = noOfItems;
 	}
 	
 }

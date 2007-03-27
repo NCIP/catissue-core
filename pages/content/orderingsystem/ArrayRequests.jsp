@@ -21,6 +21,9 @@
 				int arrayRowCounter = 0;
 				session.setAttribute(Constants.DEFINEDARRAY_REQUESTS_LIST,definedArrayRequestMapList);
 		%>
+		<%							
+							int rowNumber =0 ;
+						%>
 			<!-- Iterate the list -->
 		<logic:iterate id="defineArrayMap" collection="<%=definedArrayRequestMapList%>" type="java.util.Map">
 		 <%
@@ -41,6 +44,10 @@
 					String specimenType = "value(DefinedArrayRequestBean:"+arrayRowCounter+"_arrayType)";
 					String distributedItemId = "value(DefinedArrayRequestBean:"+arrayRowCounter+"_distributedItemId)";
 					String createArrayCondition = "value(DefinedArrayRequestBean:"+arrayRowCounter+"_createArrayButtonDisabled)";
+					String noOfItemsString = "value(DefinedArrayRequestBean:"+arrayRowCounter+"_noOfItems)";
+					String noOfItemsValue = ((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_noOfItems")));
+					Integer items = new Integer(noOfItemsValue);
+					int noOfItems = items.intValue();
 					
 					String arrayId = "array_" + arrayRowCounter;
 					boolean disableDefineArray = false;
@@ -61,6 +68,7 @@
 							<html:hidden name="requestDetailsForm" property="<%=specimenClass%>" /> 
 							<html:hidden name="requestDetailsForm" property="<%=specimenType%>" /> 
 							<html:hidden name="requestDetailsForm" property="<%=distributedItemId%>" /> 
+							<html:hidden name="requestDetailsForm" property="<%=noOfItemsString%>" /> 
 							</td>
 							<td nowrap style="font-size:0.9em;">
 								<label for="dimensions">
@@ -162,11 +170,10 @@
 			
 					<!-- Block to display the order items in the array-->			
 					<%-- Iterate the list for each definedArrayBean Object --%>
-						<%							
-							int rowNumber =0 ;
-						%>
-						<logic:iterate id="defineArrayDetailsBeanObj" collection="<%=arrayDetailsBeanList%>" type="edu.wustl.catissuecore.bean.DefinedArrayDetailsBean">				
-						<%
+						
+						
+						<% for(int i=0; i<noOfItems; i++)
+						{
 							//Variables required to set the id of each row.It is used in expandOrderItemsInArray() Js function for expand/collapse purpose.
 							String switchDefinedArray = "switchdefineArray" + rowNumber + "_array" + arrayRowCounter;
 							String dataDefinedArray = "dataDefinedArray" + rowNumber + "_array" + arrayRowCounter;
@@ -190,16 +197,16 @@
 							String specimenCollGrpId = "value(DefinedArrayDetailsBean:"+rowNumber+"_specimenCollGroupId)";
 							String actualSpecimenType = "value(DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenType)";
 							String actualSpecimenClass = "value(DefinedArrayDetailsBean:"+rowNumber+"_actualSpecimenClass)";
-							
+						
 							boolean disableArrayOrderItemRow = false;
 
 							if(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)) 								
 							{
-								disableArrayOrderItemRow = true;
+								//disableArrayOrderItemRow = true;
 						%>
-						<html:hidden name="requestDetailsForm" property="<%=assignStatusArray%>" /> 
+						<!-- <html:hidden name="requestDetailsForm" property="<%=assignStatusArray%>" /> 
 						<html:hidden name="requestDetailsForm" property="<%= requestForArray %>" />
-						<html:hidden name="requestDetailsForm" property="<%= descriptionArray %>" />
+						<html:hidden name="requestDetailsForm" property="<%= descriptionArray %>" />  -->
 						
 						<%
 							}
@@ -250,16 +257,16 @@
 								 	</td>
 								 	
 								 	<%
-									 		if(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
-									 		{
-									 			disableArrayOrderItemRow=true;
-									 		}
+									 		//if(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
+									 		//{
+									 		//	disableArrayOrderItemRow=true;
+									 		//}
 									%>
 								 	<td class="formField">
 								 	<%if(!((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_instanceOf"))).trim().equalsIgnoreCase("Existing"))
 									 			{%>
 								 			<html:select property="<%= requestForArray %>" name="requestDetailsForm" styleClass="formFieldSized10" styleId="<%= requestForIdInArray %>" onchange="<%= onChangeValueForRequestForInArray %>"				 								
-												disabled="<%= disableArrayOrderItemRow %>" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" > 
+												disabled="<%= disableDefineArray %>" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" > 
 											 	<html:optionsCollection property="<%=specimenList %>" name="requestDetailsForm" label="name" value="value"/>
 											</html:select>
 		
@@ -322,10 +329,10 @@
 									 		<bean:write name="requestDetailsForm" property="<%= spClass %>" />, <bean:write name="requestDetailsForm" property="<%= spType %>" />
 									 </td>
 								 	<%
-									 	if(!(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)))
-									 	{
-									 		disableArrayOrderItemRow=false;												
-									 	}
+									 	//if(!(((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_assignedStatus"))).trim().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION)))
+									 	//{
+									 	//	disableArrayOrderItemRow=false;												
+									 	//}
 									 	String orderItemClassNameInArray = ((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_className")));
 									 	String orderItemtypeInArray = ((String)(requestDetailsForm.getValue("DefinedArrayDetailsBean:"+rowNumber+"_type")));
 									 %>
@@ -366,7 +373,7 @@
 								 	</td-->
 								 	<td class="dataCellText" width="30%">
 							 				<html:select property="<%=assignStatusArray%>" name="requestDetailsForm" styleClass="formFieldSized15"  
-								 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" ><!-- disabled="<%= disableArrayOrderItemRow %>" -->
+								 				onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%= disableDefineArray %>" ><!-- disabled="<%= disableArrayOrderItemRow %>" -->
 								 			 	<html:options collection="<%=Constants.ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY%>" labelProperty="name" property="value"/>											 				   
 											</html:select>
 								 	</td>
@@ -388,7 +395,7 @@
 									   			</td>
 												<td rowspan='2' width="60%" nowrap>
 												 
-													<html:textarea name="requestDetailsForm" styleId="description" styleClass="formFieldSized2"  property="<%= descriptionArray %>" cols='60' rows='2' disabled="<%= disableArrayOrderItemRow %>"/>
+													<html:textarea name="requestDetailsForm" styleId="description" styleClass="formFieldSized2"  property="<%= descriptionArray %>" cols='60' rows='2' disabled="<%= disableDefineArray %>"/>
 												</td>
 									   		</tr>
 									   		<!-- tr>
@@ -412,8 +419,10 @@
 							
 
 							
-							<% rowNumber++; %>
-						</logic:iterate>
+							<% rowNumber++;
+							}
+							%>
+						
 							<!-- Create Array Button -->								
 						<tr id="<%=btnCreateArrayId%>">
 							<td colspan='7'>
@@ -429,9 +438,11 @@
 											<input type="button" id="btnCreateArray" name="btnCreateArray" class="actionButton" value="Create Array" onClick="gotoCreateArrayPage('<%= arrayRowCounter %>')" disabled/>
 										<% }
 											String defineArrayName = "defineArrayName_" + arrayRowCounter; 
+											String nameOfArray =((String)(requestDetailsForm.getValue("DefinedArrayRequestBean:"+arrayRowCounter+"_arrayName")));
 										%>
-											<!-- input type="hidden" name="defineArrayName" id="<%=defineArrayName%>" value="<%=definedArrayRequestBean.getArrayName()%>" /-->
+											<input type="hidden" name="defineArrayName" id="<%=defineArrayName%>" value="<%=nameOfArray%>" />
 											<html:hidden name="requestDetailsForm" property="<%= createArrayCondition %>"  />
+											<!-- html:hidden name="requestDetailsForm" styleId="<%=defineArrayName%>" property="<%=requestedItem%>"  /-->
 										</td>&nbsp;
 									</tr>
 								</table>
