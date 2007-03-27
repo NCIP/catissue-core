@@ -60,7 +60,7 @@ public class HL7Parser extends Parser
 		reportSectionSet = new HashSet();
 		Set reportSet=null;
 		Iterator reportIterator=null;
-		String surgicalPathologyNumber=null;
+		String spn=null;
 		
 		try
 		{
@@ -73,7 +73,7 @@ public class HL7Parser extends Parser
 			Logger.out.debug("Creating report");
 			report = extractOBRSegment(line);
 			Logger.out.debug("Report Created Successfully");
-			surgicalPathologyNumber=ReportLoaderUtil.getSurgicalPathologyNumber(this.getReportDataFromReportMap(reportMap, Parser.OBR));
+			spn=ReportLoaderUtil.getSurgicalPathologyNumber(this.getReportDataFromReportMap(reportMap, Parser.OBR));
 			Logger.out.debug("Creating report section from report text");
 			reportSet = this.getReportSectionDataFromReportMap(reportMap, Parser.OBX);
 			textContent=new TextContent();
@@ -107,7 +107,7 @@ public class HL7Parser extends Parser
 				{
 					// create instance of ReportLoader to load report into the DB
 					Logger.out.debug("Instantiating report loader to load report");
-					reportLoader = new ReportLoader(participant, report,this.site, scg, surgicalPathologyNumber);
+					reportLoader = new ReportLoader(participant, report,this.site, scg, spn);
 				}
 				else
 				{
@@ -226,7 +226,13 @@ public class HL7Parser extends Parser
 											{
 												Logger.out.info("Checking for Matching SCG");
 //												check for matching scg here
-											
+												String pidLine=this.getParticipantDataFromReportMap(reportMap, Parser.PID);
+												String obrLine=this.getReportDataFromReportMap(reportMap, Parser.OBR);
+												scg=ReportLoaderUtil.checkForSpecimenCollectionGroup(participant, parseSiteInformation(pidLine), ReportLoaderUtil.getSurgicalPathologyNumber(obrLine));
+												if(scg!=null && scg.getSurgicalPathologyNumber().equalsIgnoreCase(null))
+												{
+													this.status=Parser.CONFLICT;
+												}
 											}
 										}
 										else
@@ -267,7 +273,7 @@ public class HL7Parser extends Parser
 							reportText=this.getReportText(reportMap);
 							addReportToQueue(participantList,reportText,scg);
 							counter++;
-							CSVLogger.info(Parser.LOGGER_FILE_POLLER,"File Poller, "+new Date().toString()+","+fileName+","+counter+","+this.status);
+							CSVLogger.info(Parser.LOGGER_FILE_POLLER,new Date().toString()+","+fileName+","+counter+","+this.status);
 							Logger.out.info("Report is added to queue. Current Count is="+counter);
 							// reinitialize variables to null to process next report
 							scg=null;

@@ -95,9 +95,18 @@ public class ReportLoader
 				// use existing scg
 				if(this.scg.getIdentifiedSurgicalPathologyReport()!=null)
 				{
-					this.scg.setIdentifiedSurgicalPathologyReport(identifiedReport);
-					ReportLoaderUtil.updateObject(scg);
+					boolean isExists = checkForTextContent(this.scg.getIdentifiedSurgicalPathologyReport());
+					if(!isExists)
+					{
+						// if report text is null then set report text
+						this.scg.getIdentifiedSurgicalPathologyReport().setTextContent(this.identifiedReport.getTextContent());
+					}	
 				}
+				else
+				{
+					this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport); 
+				}
+				ReportLoaderUtil.updateObject(scg);
 			}	
 			Logger.out.info("Processing finished for Report ");
 		}
@@ -106,75 +115,6 @@ public class ReportLoader
 			Logger.out.error("Failed to process report ");
 			throw new Exception(ex.getMessage());
 		}
-	}
-
-	/**
-	 * @return specimen collection group
-	 * @throws Exception throws exception
-	 */
-	public SpecimenCollectionGroup checkForSpecimenCollectionGroup(Participant participant)throws Exception
-	{
-		List scgSet=null;
-		SpecimenCollectionGroup existingSCG=null;
-		Iterator scgIterator=null;
-		boolean isExists=false;
-		try
-		{
-			// het list of all the scg associated with participant
-			scgSet=ReportLoaderUtil.getSCGList(participant);
-			if(scgSet!=null && scgSet.size()>0)
-			{
-				scgIterator=scgSet.iterator();
-				while(scgIterator.hasNext())
-				{
-					// check for mathcing scg
-					existingSCG=(SpecimenCollectionGroup)scgIterator.next();
-					isExists=checkForReport(existingSCG);
-					if(isExists)
-					{
-						return existingSCG;
-					}
-				}
-			}
-		}
-		catch(Exception ex)
-		{
-			Logger.out.error("Error while checking specimen collection group ",ex);
-			throw ex;
-		}
-		return null;
-	}
-		
-	/**
-	 * @param specimenCollectionGroup specimen collection group 
-	 * @return boolean value which represents existance of the report
-	 * for a given specimen collection group.
-	 * @throws Exception throws exception
-	 * 
-	 */
-	
-	public boolean checkForReport(SpecimenCollectionGroup specimenCollectionGroup)throws Exception
-	{
-		Logger.out.info("Inside checkFOrReport function");
-		boolean isExists=false;
-		IdentifiedSurgicalPathologyReport report=specimenCollectionGroup.getIdentifiedSurgicalPathologyReport();
-		if(report !=null)
-		{
-			// checking for matching scg
-			if((specimenCollectionGroup.getSurgicalPathologyNumber()).equals(this.scg.getSurgicalPathologyNumber())&& (specimenCollectionGroup.getSpecimenCollectionSite().getName()).equals(this.scg.getSpecimenCollectionSite().getName()))
-			{	isExists = checkForTextContent(report);
-				if(!isExists)
-				{
-					// if report text is not null then set report text
-					report.setTextContent(this.identifiedReport.getTextContent());
-					this.identifiedReport.getTextContent().setSurgicalPathologyReport(report);
-					ReportLoaderUtil.updateObject(report);
-				}
-				return true;
-			}
-			return false;
-		}
-		return false;
 	}
 	
 	/**
