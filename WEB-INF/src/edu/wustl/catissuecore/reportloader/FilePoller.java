@@ -70,7 +70,7 @@ public class FilePoller implements Observable
 			poller = new FilePoller();
 			// Initializing file poller
 			poller.init();
-			CSVLogger.info(Parser.LOGGER_FILE_POLLER,"Thread, Date/Time, FileName, Report Loder Queue ID, Status, Message");
+			CSVLogger.info(Parser.LOGGER_FILE_POLLER," Date/Time, FileName, Report Loder Queue ID, Status, Message");
 			CSVLogger.info(Parser.LOGGER_FILE_POLLER,"");
 			
 			Observer obr=new ReportProcessor();
