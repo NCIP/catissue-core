@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
@@ -15,6 +16,7 @@ import edu.wustl.catissuecore.applet.AppletServerCommunicator;
 import edu.wustl.catissuecore.applet.model.AppletModelInterface;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.common.querysuite.metadata.associations.IInterModelAssociation;
+import edu.wustl.common.querysuite.metadata.path.ICuratedPath;
 import edu.wustl.common.querysuite.metadata.path.IPath;
 /**
  * Returns all the possible paths between the source entity and destination entity.
@@ -71,6 +73,18 @@ public class PathFinderAppletServerCommunicator implements PathFinderBusinessInt
 		return null;
 	}
 	public Collection<AssociationInterface> getIncomingIntramodelAssociations(Long entityId) throws RemoteException
+	{
+		return null;
+	}
+	public Set<ICuratedPath> autoConnect(Set<EntityInterface> entitySet) throws RemoteException
+	{
+		return null;
+	}
+	public Set<ICuratedPath> findPath(EntityInterface source, EntityInterface destination) throws RemoteException
+	{
+		return null;
+	}
+	public List<IPath> getAllPossiblePaths(EntityInterface source, EntityInterface destination) throws RemoteException
 	{
 		return null;
 	}
