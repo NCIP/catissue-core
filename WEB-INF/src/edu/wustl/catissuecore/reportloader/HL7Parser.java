@@ -248,7 +248,7 @@ public class HL7Parser extends Parser
 										Logger.out.info("No conflicts found. Creating new Participant "+counter);
 										// this.setSiteToParticipant(participant, site);
 										Logger.out.info("Creating new Participant");
-										ReportLoaderUtil.saveParticipant(participant);
+										ReportLoaderUtil.saveObject(participant);
 										Logger.out.info("New Participant Created");
 										participantList = new HashSet();
 										participantList.add(participant);
