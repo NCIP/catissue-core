@@ -106,10 +106,6 @@ function ReplaceTags(xStr)
 
 </head>
 
-<html:errors />
-<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
-	<%=messageKey%>
-</html:messages>
 
 <html:form action="ViewSurgicalPathologyReport">
 <!-- Main table start -->
@@ -132,7 +128,7 @@ function ReplaceTags(xStr)
 	<tr>
 		<td class="formFieldNoBordersSimple" colspan="3">
 			<b>
-				<bean:message key="viewSPR.reportInfo.reportId"/> : 
+				<bean:message key="viewSPR.reportInfo.spn"/> : 
 			</b>
 			<% if(formSPR.getReportIdList()!=null)
 			{
@@ -430,17 +426,17 @@ if (formSPR.getRace() != null)
 				</td>
 			</tr>
 			<tr>
-				<td class="formFieldWithNoTopBorder"  height="20" >
+			<!--	<td class="formFieldWithNoTopBorder"  height="20" >
 					<b>
 						<bean:message key="viewSPR.reportInfo.reportId"/> : 
 					</b>
 				    	<% if(!formSPR.getIdentifiedReportId().equals("")) {%>
 				     		<%=formSPR.getIdentifiedReportId()%>
 						<%}%>
-				</td>
-				<td class="formField"  height="20" >
+				</td> -->
+				<td class="formFieldWithNoTopBorder"  height="20" >
 					<b>
-						<bean:message key="viewSPR.reportInfo.accessionNumber" /> : 
+						<bean:message key="viewSPR.reportInfo.spn" /> : 
 					</b>
 						<% if(formSPR.getIdentifiedReportAccessionNumber()!=null) {%>
 				     		<%=formSPR.getIdentifiedReportAccessionNumber()%>
@@ -471,7 +467,7 @@ if (formSPR.getRace() != null)
 					<bean:message key="viewSurgicalPathologyReport.deIdentifiedReportInformation.title"/>
 				</td>
 			</tr>
-			<tr>
+		<!--	<tr>
 				<td class="formFieldWithNoTopBorder"  height="20" >
 					<b>
 						<bean:message key="viewSPR.reportInfo.reportId"/> : 
@@ -496,7 +492,7 @@ if (formSPR.getRace() != null)
 				     		<%=formSPR.getDeIdentifiedReportSite()%>
 						<%}%>
 				</td>
-			</tr>
+			</tr>  -->
 			<tr>
 				<td  class="formFieldWithNoTopBorder" colspan="3" >
 				
