@@ -1317,13 +1317,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 						String message = ApplicationProperties.getValue("specimen.recieved.event.date");
 						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 					}
-					// checks the collectionProcedure
-					if (!validator.isValidOption(receivedEventParameters.getReceivedQuality()))
-					{
-						String message = ApplicationProperties.getValue("collectioneventparameters.receivedquality");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-
+			
 					List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
 					if (!Validator.isEnumeratedValue(qualityList, receivedEventParameters.getReceivedQuality()))
 					{
