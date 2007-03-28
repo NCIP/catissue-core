@@ -63,7 +63,7 @@ function onCustomListBoxChange(element)
 	if(dataTable != null)
 	{
 		var handleToListBox = document.getElementById(customListBoxName + (parseInt(serialNo)+1));
-
+       
 		if(dataTable instanceof Array)
 		{
 			for(var i=0;i<dataTable.length;i++)
@@ -74,13 +74,20 @@ function onCustomListBoxChange(element)
 		else
 		{
 			var keys = dataTable.keys();
-
+            var  j=0;
 			for(var i=0;i<keys.length;i++)
 			{
 			  	var temp =  parseInt(keys[i]);  // Added by Santosh to cut down non-numeric values
+				
 				if(temp.toString() != "NaN")
-				handleToListBox.options[i+1] = new Option(keys[i],keys[i]);
+				{
+				
+				  handleToListBox.options[j+1] = new Option(keys[i],keys[i]);
+				  j++;
+				}
+			
 			}
+			
 		}
 	}
 }
