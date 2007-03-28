@@ -2,6 +2,7 @@ package edu.wustl.catissuecore.applet.ui.querysuite;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -86,7 +87,10 @@ public class PathFinderAppletServerCommunicator implements PathFinderBusinessInt
 	}
 	public List<IPath> getAllPossiblePaths(EntityInterface source, EntityInterface destination) throws RemoteException
 	{
-		return null;
+		System.out.println("hi");
+		List<EntityInterface> srcEntities = new ArrayList<EntityInterface>();
+		srcEntities.add(source);
+		return  getAllPossiblePaths(srcEntities, destination).get(source);
 	}
 	
 
