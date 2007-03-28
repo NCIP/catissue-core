@@ -250,13 +250,16 @@
 			{
 				document.forms[0].submitAndDistributeButton.disabled=true;
 				document.forms[0].moreButton.disabled=true;
-				
+				document.forms[0].noOfAliquots.disabled=false;
+				document.forms[0].quantityPerAliquot.disabled=false;
 				
 			}
 			else
 			{
 				document.forms[0].submitAndDistributeButton.disabled=false;
 				document.forms[0].moreButton.disabled=false;
+				document.forms[0].noOfAliquots.disabled=true;
+				document.forms[0].quantityPerAliquot.disabled=true;
 			}
 		}
 		function onNormalSubmit()
@@ -864,6 +867,18 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						&nbsp; <bean:message key="specimen.aliquot.message"/>
 						</html:checkbox>--%>
 						<input type="checkbox" name="aliCheckedButton" onclick="onCheckboxButtonClick(this)" /> &nbsp; <bean:message key="specimen.aliquot.message"/>
+							&nbsp;&nbsp;&nbsp;
+		                <bean:message key="aliquots.noOfAliquots"/>
+	                    &nbsp;
+                        <input type="text" id="noOfAliquots"
+				        name="noOfAliquots" class = "formFieldSized5" disabled="true"
+				         />						
+						&nbsp;&nbsp;&nbsp;
+		                <bean:message key="aliquots.qtyPerAliquot"/>
+	                    &nbsp;
+                        <input type="text" id="quantityPerAliquot"
+				        name="quantityPerAliquot" class = "formFieldSized5" disabled="true"
+				         />
 	    				</td>
 					</tr>								
 					
