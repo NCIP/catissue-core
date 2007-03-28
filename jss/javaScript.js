@@ -176,12 +176,16 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 		function hideTip(objId)
 		{
 			var obj = document.getElementById(objId);
-			obj.title = "";
+			
 			
 			var browser=navigator.appName;
 			if(browser=="Microsoft Internet Explorer")
 			{
 				showStatus(' ');
+			}
+			else
+			{
+			    obj.title = "";
 			}
 			interval = window.clearInterval(interval);
 		}	
@@ -205,12 +209,17 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 					else
 						tip = obj.options[obj.selectedIndex].text;
 						
-					obj.title = tip;
+					
 
 					var browser=navigator.appName;
 					if(browser=="Microsoft Internet Explorer")
 					{
 						showStatus(tip);
+					}
+					else
+					{
+					   
+						obj.title = tip;
 					}
 				}
 			}
