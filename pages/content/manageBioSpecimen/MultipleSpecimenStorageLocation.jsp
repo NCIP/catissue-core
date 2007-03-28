@@ -267,6 +267,10 @@
 				String locationMapKey = collectionProtocolId+Constants.MULTIPLE_SPECIMEN_STORAGE_LOCATION_KEY_SEPARATOR+className;  
 			//	System.out.println("\n>>>>>>>>>location map key : " + locationMapKey);
 				Map dataMap = (Map) locationDataMap.get(locationMapKey);
+				if(dataMap == null)
+				{
+					dataMap = new HashMap();
+				}
 				//System.out.println("\n\n--------------\nLocation Map :\n "+dataMap+"\n\n--------------\n");
 
 	%>
@@ -330,7 +334,15 @@
 		
 		if(specimenMap.get(rbKey)==null)
 		{
-		  specimenMap.put(rbKey,"2");
+		  Boolean virtuallyLocated = (Boolean) request.getSession().getAttribute(edu.wustl.catissuecore.applet.AppletConstants.VIRTUALLY_LOCATED_CHECKBOX);
+		  if(virtuallyLocated!=null && virtuallyLocated.booleanValue() == true)
+		  {
+			  specimenMap.put(rbKey,"1");
+		  }
+		  else
+		  {
+		    specimenMap.put(rbKey,"2");
+		  }
 		}
 		
 		int radioSelected = Integer.parseInt(specimenMap.get(rbKey).toString());
@@ -473,7 +485,10 @@
 				//System.out.println("\n>>>>>>>>>dlocation map key : " + dlocationMapKey);
 				dataMap = (Map) locationDataMap.get(dlocationMapKey);
 			
-
+				if(dataMap == null)
+				{
+					dataMap = new HashMap();
+				}
 					String fdlabelKey = fieldName+dlabelKey+")";
 					String fdtypeKey = fieldName+dtypeKey+")";
 					String fdbarKey = fieldName+dbarKey+")";
@@ -540,7 +555,15 @@
 		 rbKey = "radio_" + newCount ;
 		 if(buttonClicked==null)
 		{
-		specimenMap.put(rbKey,"2");
+				Boolean virtuallyLocated = (Boolean) request.getSession().getAttribute(edu.wustl.catissuecore.applet.AppletConstants.VIRTUALLY_LOCATED_CHECKBOX);
+				  if(virtuallyLocated!=null && virtuallyLocated.booleanValue() == true)
+				  {
+					  specimenMap.put(rbKey,"1");
+				  }
+				  else
+				  {
+				    specimenMap.put(rbKey,"2");
+				  }
 		}
 		
 		  radioSelected = Integer.parseInt(specimenMap.get(rbKey).toString());
