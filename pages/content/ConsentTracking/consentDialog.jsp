@@ -1,7 +1,10 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-
+<%@ page import="java.util.*"%>
+<%@ page import="java.util.List,edu.wustl.catissuecore.util.global.Constants,edu.wustl.catissuecore.util.global.Utility"%>
+<%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
+<%@ page import="java.util.ArrayList"%>
 
 <!-- 
 	 @author Virender Mehta 
@@ -14,39 +17,60 @@
 
 
 <%
-	String withdrawAll = request.getParameter("withrawall");
-	String getConsentResponse = request.getParameter("response");
+	String withdrawAll = request.getParameter(Constants.WITHDRAW_ALL);
+	String getConsentResponse = request.getParameter(Constants.RESPONSE);
+	Integer identifierFieldIndex = 4;
+	String pageOf="";
 %>
 <script language="JavaScript">
 
 function getButtonStatus(element)
 {
-	parent.opener.document.forms[0].withdrawlButtonStatus.value=element.value;
-	if(parent.opener.document.forms[0].name == "newSpecimenForm")
+	var answer;
+	if(element.value=="<%=Constants.WITHDRAW_RESPONSE_DISCARD %>")
 	{
-		if(element.value != "<%=Constants.WITHDRAW_RESPONSE_RESET %>")
-		{
-			parent.opener.document.forms[0].activityStatus.value="<%=Constants.ACTIVITY_STATUS_DISABLED%>" ;
-			parent.opener.document.forms[0].onSubmit.value="<%=Constants.BIO_SPECIMEN%>";
-		}
+		answer= confirm("Are you sure you want to discard the Specimen and all Sub Specimen(disable)?");
 	}
-	parent.opener.document.forms[0].submit();
-	self.close();
+	else
+	{
+		answer= confirm("Are you sure you want to return Specimen to Collection Site?");	
+	}
+	if(answer)
+	{
+		parent.opener.document.forms[0].withdrawlButtonStatus.value=element.value;
+		if(parent.opener.document.forms[0].name == "<%=Constants.NEWSPECIMEN_FORM%>")
+		{
+			if(element.value != "<%=Constants.WITHDRAW_RESPONSE_RESET %>")
+			{
+				parent.opener.document.forms[0].activityStatus.value="<%=Constants.ACTIVITY_STATUS_DISABLED%>" ;
+				parent.opener.document.forms[0].onSubmit.value="<%=Constants.BIO_SPECIMEN%>";
+			}
+		}
+		parent.opener.document.forms[0].submit();
+		self.close();
+	}
+
 }
 
 function getStatus(element)
 {
-	parent.opener.document.forms[0].applyChangesTo.value=element.value;
-	parent.opener.document.forms[0].submit();
-	self.close();
+	var answer= confirm("Are you sure you want to Perform no action on the Specimens");
+	if(answer)
+	{
+		parent.opener.document.forms[0].applyChangesTo.value=element.value;
+		parent.opener.document.forms[0].submit();
+		self.close();
+	}
 }
+var useDefaultRowClickHandler=2;
+var useFunction = "derivedSpecimenGrid";	
 
 </script>
 
 <html>
 	<head>
 		<%
-			if(withdrawAll.equals("true"))
+			if(withdrawAll.equals(Constants.TRUE))
 			{
 		%>	
 				<title><bean:message key="consent.withdrawconsents"/></title>	 
@@ -59,18 +83,36 @@ function getStatus(element)
 		<%		
 			}	
 		%>	
-		<link rel="stylesheet" type="text/css" href="../../../css/styleSheet.css" />
+		
 	</head>
 		<body class="formRequiredNotice">
+		<link rel="stylesheet" type="text/css" href="../../../css/styleSheet.css" />
+		<link rel="STYLESHEET" type="text/css" href="../../../dhtml_comp/css/dhtmlXGrid.css"/>
+		<script  src="../../../dhtml_comp/js/dhtmlXCommon.js"></script>
+		<script  src="../../../dhtml_comp/js/dhtmlXGrid.js"></script>		
+		<script  src="../../../dhtml_comp/js/dhtmlXGridCell.js"></script>	
+		<script  src="../../../dhtml_comp/js/dhtmlXGrid_mcol.js"></script>	
 		<%
-		if(getConsentResponse.equals("withdraw"))
+			List dataList = (List)session.getAttribute(Constants.SPECIMEN_LIST);
+			List columnList = (List)session.getAttribute(Constants.COLUMNLIST);
+			if(dataList!=null&&dataList.size()>0)
+			{
+			%>
+	
+				<%@ include file="/pages/content/search/GridPage.jsp" %>
+
+		<%
+			}
+		%>
+		<%
+		if(getConsentResponse.equals(Constants.WITHDRAW))
 		{
 		%>
 			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 					<tr>
 						<td class="formTitle" height="20%" colspan="2">
 						<%
-							if(withdrawAll.equals("true"))
+							if(withdrawAll.equals(Constants.TRUE))
 							{
 						%>	
 								<b><bean:message key="consent.withdrawspecimens" /></b>
@@ -106,7 +148,7 @@ function getStatus(element)
 						</td>
 					</tr>
 					<%
-					if(withdrawAll.equals("false"))									
+					if(withdrawAll.equals(Constants.FALSE))									
 					{
 					%>
 					<tr>

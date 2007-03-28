@@ -94,7 +94,7 @@ function popupWindow(nofConsentTiers)
 	if(iCount==0)
 	{
 		var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true&response=withdraw";
-		window.open(url,'WithdrawAll','height=40,width=400');
+		window.open(url,'WithdrawAll','height=200,width=550,scrollbars=1,resizable=1');
 	}
 	else if(iCount==nofConsentTiers)
 	{	
@@ -121,14 +121,14 @@ function popupWindow(nofConsentTiers)
 		{
 			submitString();
 			var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=true&response=nowithdraw";
-			window.open(url,'WithdrawAll','height=40,width=400');
+			window.open(url,'WithdrawAll','height=200,width=550,scrollbars=1,resizable=1');
 		}
 		
 	}	
 	else
 	{
 		var url="pages/content/ConsentTracking/consentDialog.jsp?withrawall=false&response=withdraw";
-		window.open(url,'Withdraw','height=110,width=400');
+		window.open(url,'Withdraw','height=200,width=550,scrollbars=1,resizable=1');
 	}
 }	
 
@@ -639,10 +639,10 @@ function popupWindow(nofConsentTiers)
 								<%--Verification Message --%>													
 								<tr>
 									<%
-										String verificationKeyValue = request.getParameter("status");
+										String verificationKeyValue = request.getParameter(Constants.STATUS);
 										String status="";
 										String buttonStatus="";
-										if(verificationKeyValue.equals("Verified"))
+										if(verificationKeyValue.equals(Constants.VERIFIED))
 										{
 											status="checked=checked";
 											buttonStatus="disabled=true";
