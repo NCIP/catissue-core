@@ -148,19 +148,27 @@
 							</label>
 						</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="collectionEventTimeInHours" styleClass="formFieldSized5" styleId="collectionEventTimeInHours" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
-							</html:select>&nbsp;
+						
+					
+							<autocomplete:AutoCompleteTag property="collectionEventTimeInHours"
+										  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
+										  initialValue="<%=form.getCollectionEventTimeInHours()%>"
+										  styleClass="formFieldSized5"
+										  staticField="false"
+					    />	
+							
+							&nbsp;
 							<label for="eventparameters.timeinhours">
 								<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 							</label>
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="collectionEventTimeInMinutes" styleClass="formFieldSized5" styleId="collectionEventTimeInMinutes" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
-							</html:select>
+							
+							<autocomplete:AutoCompleteTag property="collectionEventTimeInMinutes"
+										  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
+										  initialValue="<%=form.getCollectionEventTimeInMinutes()%>"
+										  styleClass="formFieldSized5"
+										  staticField="false"
+					    />	
+
 							<label for="eventparameters.timeinhours">
 								&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
 							</label>
@@ -173,19 +181,26 @@
 							</label>
 						</td>
 						<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="receivedEventTimeInHours" styleClass="formFieldSized5" styleId="receivedEventTimeInHours" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
-							</html:select>&nbsp;
+						
+						<autocomplete:AutoCompleteTag property="receivedEventTimeInHours"
+										  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
+										  initialValue="<%=form.getReceivedEventTimeInHours()%>"
+										  styleClass="formFieldSized5"
+										  staticField="false"
+					    />	
+
+
 							<label for="eventparameters.timeinhours">
 								<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 							</label>
-<!-- Mandar : 434 : for tooltip -->
-							<html:select property="receivedEventTimeInMinutes" styleClass="formFieldSized5" styleId="receivedEventTimeInMinutes" size="1"
-							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-								<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
-							</html:select>
+							
+							<autocomplete:AutoCompleteTag property="receivedEventTimeInMinutes"
+										  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
+										  initialValue="<%=form.getReceivedEventTimeInMinutes()%>"
+										  styleClass="formFieldSized5"
+										  staticField="false"
+					    />	
+
 							<label for="eventparameters.timeinhours">
 								&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
 							</label>

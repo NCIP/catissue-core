@@ -177,6 +177,18 @@ public abstract class EventParametersForm extends AbstractActionForm
            	{
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.dateofevent")));
            	}
+           	
+         	if (!validator.isNumeric( timeInMinutes,0 ) )
+           	{
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",ApplicationProperties.getValue("eventparameters.timeinminutes")));
+           	}
+         	
+         	if (!validator.isNumeric( timeInHours,0 ) )
+           	{
+           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",ApplicationProperties.getValue("eventparameters.timeinhours")));
+           	}
+           	
+           	
          }
          catch(Exception excp)
          {

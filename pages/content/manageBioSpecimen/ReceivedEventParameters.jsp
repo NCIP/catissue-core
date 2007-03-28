@@ -5,6 +5,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+
 
 <head>
 <!-- Mandar : 434 : for tooltip -->
@@ -39,9 +41,10 @@
 
 		Object obj = request.getAttribute("receivedEventParametersForm");
 		String currentEventParametersDate = ""; 
+		ReceivedEventParametersForm form = null;
 		if(obj != null && obj instanceof ReceivedEventParametersForm)
 		{
-			ReceivedEventParametersForm form = (ReceivedEventParametersForm)obj;
+		form = (ReceivedEventParametersForm)obj;
 		currentEventParametersDate = form.getDateOfEvent();
 		if(currentEventParametersDate == null)
 			currentEventParametersDate = "";
@@ -164,19 +167,23 @@ if(currentEventParametersDate.trim().length() > 0)
 				</label>
 			</td>
 			<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
-				</html:select>&nbsp;
+			
+			<autocomplete:AutoCompleteTag property="timeInHours"
+										  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
+										  initialValue="<%=form.getTimeInHours()%>"
+										  styleClass="formFieldSized5"
+										  staticField="false"
+					    />	
+            &nbsp;
 				<label for="eventparameters.timeinhours">
 					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 				</label>
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
-				</html:select>
+                         <autocomplete:AutoCompleteTag property="timeInMinutes"
+										  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
+										  initialValue="<%=form.getTimeInMinutes()%>"
+										  styleClass="formFieldSized5"
+										  staticField="false"
+					    />	
 				<label for="eventparameters.timeinhours">
 					&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
 				</label>
@@ -192,11 +199,12 @@ if(currentEventParametersDate.trim().length() > 0)
 				</label>
 			</td>
 			<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="receivedQuality" styleClass="formFieldSized15" styleId="receivedQuality" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options collection="<%=Constants.RECEIVED_QUALITY_LIST%>" labelProperty="name" property="value"/>
-				</html:select>
+			
+			<autocomplete:AutoCompleteTag property="receivedQuality"
+										  optionsList = "<%=request.getAttribute(Constants.RECEIVED_QUALITY_LIST)%>"
+										  initialValue="<%=form.getReceivedQuality()%>"
+			/>
+
 			</td>
 		</tr>
 
