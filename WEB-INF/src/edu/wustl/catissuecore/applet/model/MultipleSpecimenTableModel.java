@@ -81,6 +81,8 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	/**/
 	private int currentPageIndex = 1;
 	private String specimenCollectionGroupName = null;
+	
+	boolean virtuallyLocatedCheckBox = false;
 /*	private String specimenClass = null;
 	private String specimenType = null;
 	private String pathologicalStatus = null;
@@ -920,6 +922,21 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		String key = ""+column;
 		specimenCheckBoxMap.remove(key);
 	}
+
+	/**
+	 * @return Returns the virtuallyLocatedCheckBox.
+	 */
+	public boolean getVirtuallyLocatedCheckBox() {
+		return virtuallyLocatedCheckBox;
+	}
+
+	/**
+	 * @param virtuallyLocatedCheckBox The virtuallyLocatedCheckBox to set.
+	 */
+	public void setVirtuallyLocatedCheckBox(boolean virtuallyLocatedCheckBox) {
+		this.virtuallyLocatedCheckBox = virtuallyLocatedCheckBox;
+		specimenMap.put(AppletConstants.VIRTUALLY_LOCATED_CHECKBOX,new Boolean(virtuallyLocatedCheckBox));
+ }
 
 //	****************** Mandar : 22Dec06 For Specimen CheckBox end
 	

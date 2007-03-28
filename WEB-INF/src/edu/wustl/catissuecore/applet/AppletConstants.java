@@ -61,6 +61,8 @@ public interface AppletConstants
 	 */
 	String ARRAY_CONTENT_QUANTITY_ID_PREFIX = "initialQuantity_id";
 	
+	String VIRTUALLY_LOCATED_CHECKBOX = "virtuallyLocatedCheckBox";
+	
 	/**
 	 * array attributes name
 	 */

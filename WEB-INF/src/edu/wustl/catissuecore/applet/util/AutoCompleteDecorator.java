@@ -1,5 +1,5 @@
 /*
- * $Id: AutoCompleteDecorator.java,v 1.1.2.2 2007/03/07 08:12:15 santosh_chandak Exp $
+ * $Id: AutoCompleteDecorator.java,v 1.1.2.3 2007/03/28 05:36:52 santosh_chandak Exp $
  *
  * Copyright 2004 Sun Microsystems, Inc., 4150 Network Circle,
  * Santa Clara, California 95054, U.S.A. All rights reserved.
@@ -38,8 +38,6 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.TextAction;
@@ -152,13 +150,14 @@ public class AutoCompleteDecorator {
         // show the popup list when the user presses a key
         final KeyListener keyListener = new KeyAdapter() {
             public void keyPressed(KeyEvent keyEvent) {
+            	
                 // don't popup on action keys (cursor movements, etc...)
-                if (keyEvent.isActionKey() || keyEvent.getKeyCode() == 9) return; 
+                if (keyEvent.isActionKey()) return; 
                 // don't popup if the combobox isn't visible anyway 
                 if (comboBox.isDisplayable() && !comboBox.isPopupVisible()) {
                     int keyCode = keyEvent.getKeyCode();
                     // don't popup when the user hits shift,ctrl or alt
-                    if (keyCode==keyEvent.VK_SHIFT || keyCode==keyEvent.VK_CONTROL) return;
+                    if (keyCode==keyEvent.VK_SHIFT || keyCode==keyEvent.VK_CONTROL ||  keyCode==keyEvent.VK_ALT) return;
                     // don't popup when the user hits escape (see issue #311)
                     if (keyCode==keyEvent.VK_ESCAPE) return;
                     comboBox.setPopupVisible(true);
@@ -208,12 +207,12 @@ public class AutoCompleteDecorator {
         
         // mark entire text when the text component gains focus
         // otherwise the last mark would have been retained which is quiet confusing
-       /* textComponent.addFocusListener(new FocusAdapter() {
+        textComponent.addFocusListener(new FocusAdapter() {
             public void focusGained(FocusEvent e) {
                 JTextComponent textComponent = (JTextComponent) e.getSource();
                 adaptor.markEntireText();
             }
-        });*/
+        });
        
         // Tweak some key bindings
         InputMap editorInputMap = textComponent.getInputMap();

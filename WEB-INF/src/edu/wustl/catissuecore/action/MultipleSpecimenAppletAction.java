@@ -167,8 +167,16 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			Map specimenMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 
 			Logger.out.debug("Submitting the specimen : " + specimenMap);
-			String pageOf = request.getParameter("pageOf");
-			preprocessSpecimanMap(specimenMap);
+			String pageOf = request.getParameter("pageOf"); 
+			
+			Boolean virtuallyLocated = (Boolean) specimenMap.get(AppletConstants.VIRTUALLY_LOCATED_CHECKBOX);
+			specimenMap.remove(AppletConstants.VIRTUALLY_LOCATED_CHECKBOX);
+			if(virtuallyLocated==null)
+			{
+				virtuallyLocated = new Boolean(false);
+			}
+			request.getSession().setAttribute(AppletConstants.VIRTUALLY_LOCATED_CHECKBOX,virtuallyLocated);
+			preprocessSpecimanMap(specimenMap); 
 			Map fixedSpecimenMap = appendClassValue(specimenMap);
 			Map multipleSpecimenSessionMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
 
@@ -932,6 +940,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 			TreeMap containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen((Long.parseLong(split[0])), split[1], 0, "",sessionData, true);
 			//mandar : to test for null container 
+			 			
 			if(containerMap == null || containerMap.isEmpty() )
 			{
 				List specimenList = (List)tempSpecimenMap.get( key);
@@ -958,7 +967,9 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 						message = message + "ParentSpecimen : "+parentId;
 					}
 				}
-				throw (new Exception("No storage container available for  specimen(s) with " + message +". System failed to auto allocate the position." ));
+				request.getSession().setAttribute(AppletConstants.VIRTUALLY_LOCATED_CHECKBOX,new Boolean(true));
+				return new TreeMap();
+			//	throw (new Exception("No storage container available for  specimen(s) with " + message +". System failed to auto allocate the position." ));
 			}
 				
 

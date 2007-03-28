@@ -44,7 +44,7 @@ public class BaseFocusHandler implements FocusListener {
 		
 		tablemodel.setLastCellColumn(table.getSelectedColumn()  );
 		tablemodel.setLastCellRow(table.getSelectedRow()  );
-		
+		//table.getcomp
 		System.out.println("In BaseFocusHandler Gained - Last Selected Col Set as : " + tablemodel.getLastCellColumn()+"  | Last Selected Row Set as : "+tablemodel.getLastCellRow()+"\n Value present in model : "+tablemodel.getValueAt(tablemodel.getLastCellColumn(),tablemodel.getLastCellRow())  );
 		
 		if (e.getSource() instanceof JTextField )

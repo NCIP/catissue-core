@@ -7,6 +7,7 @@
 
 package edu.wustl.catissuecore.action;
 
+import java.applet.Applet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.MultipleSpecimenStorageLocationForm;
+import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
@@ -72,6 +74,8 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 			throws Exception
 
 	{
+		request.getSession().setAttribute(AppletConstants.VIRTUALLY_LOCATED_CHECKBOX,new Boolean(false)); 
+	
 		Logger.out.debug("Inside : MultipleSpecimenSubmitAction");
 		MultipleSpecimenStorageLocationForm aForm = (MultipleSpecimenStorageLocationForm) form;
 		Logger.out.debug("\naForm.getSpecimenOnUIMap():\n---------------\n" + aForm.getSpecimenOnUIMap() + "\n-----------\n");

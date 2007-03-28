@@ -1,21 +1,32 @@
 package edu.wustl.catissuecore.applet.ui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
@@ -31,6 +42,7 @@ import edu.wustl.catissuecore.applet.listener.SpecimenSubmitButtonHandler;
 import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
+import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
  * This applet displays main UI for multiple specimen page.
@@ -40,7 +52,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 
 	/**
 	 * Default Serial Version ID
-	 */
+	 */					
 	private static final long serialVersionUID = 1L;
 	private MultipleSpecimenTable table;
 	private JPanel buttonPanel;
@@ -53,24 +65,24 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	public void doInit()
     {
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));		
-		MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());
+		final MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());
 				
 		table = new MultipleSpecimenTable(model);
         table.getTableHeader().setReorderingAllowed(false);
         
         //****** Remove columnHeaders
         table.setTableHeader(null );
-
+       
 		//to set the focus to the editor. Mandar: 16Oct06.
         	//not in jdk1.3 so commented.
-        //table.setSurrendersFocusOnKeystroke(true );
+        //table.setSurrendersFocusOnKeystroke(true ); 
 
         table.addKeyListener(new MultipleSpecimenTableKeyHandler(table));
 
 		// Creating Layout
 		//getContentPane().setLayout(new FlowLayout(FlowLayout.LEFT ));
 		this.getContentPane().setLayout(new VerticalLayout(0,0));
-		
+		 
 		buttonPanel = new JPanel( new FlowLayout(FlowLayout.LEFT ) );
 		linkPanel = new JPanel( new FlowLayout(FlowLayout.LEFT ) );
 		
@@ -81,6 +93,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	    System.out.println("Applet size :- W : "+getWidth()+ " ,H : "+getHeight() );
 	    getContentPane().add(buttonPanel);
 	    getContentPane().add(linkPanel);
+	    
+
 		// --------------------
 
     //    table.getModel().addTableModelListener(new TableModelChangeHandler(table));
@@ -98,8 +112,112 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		for(int cnt = 0; cnt < model.getColumnCount()  ; cnt++)
 		{
 			new SpecimenColumnModel(table, cnt);
+			
 		}
 		table.setAutoCreateColumnsFromModel(false);
+		
+		 InputMap im = table.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		 
+	        //  Have the enter key work the same as the tab key
+	 
+	        KeyStroke tab = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
+	
+	 
+	        //  Override the default tab behaviour
+	        //  Tab across a column and not across columns
+	 
+	        /**
+	         *  Following code is added for proper TAB ordering on multiple specimen applet -- Santosh
+	         */
+	        final Action oldTabAction1 = table.getActionMap().get(im.get(tab));
+	        
+	        Action tabAction1 = new AbstractAction() 
+						        {
+						        	int lastSelectedRow;
+						        	int lastSelectedColumn;
+						        	
+						            public void actionPerformed(ActionEvent e)
+						            {
+						            	oldTabAction1.actionPerformed( e );
+					 	                JTable table = (JTable)e.getSource();
+						                int rowCount = table.getRowCount();
+						                int columnCount = table.getColumnCount();
+						                
+						             /*   int row = model.getLastCellRow();
+						                int column = model.getLastCellColumn();*/
+						                
+						                int row = table.getSelectedRow();
+						                int column = table.getSelectedColumn();
+						                
+						                boolean flag = true; 
+						                 
+						                if(Math.abs(lastSelectedRow - row)>1)
+						                {
+						                	flag = false;
+						                }
+						                
+						                
+						                if (columnCount != 1)  
+						                {
+						                 if(lastSelectedColumn == columnCount-1 && flag)
+						                 {						                	 
+						                	column = columnCount-1;
+						                 }
+						                 else
+						                 {
+											    row += 1;
+												column -= 1;
+						
+												if (row == rowCount) 
+												{
+													row = 0;
+													column += 1;
+												}
+						                 }
+						                }
+						                
+						               if(column==-1)
+						               {
+						            	   row-=1;
+						            	   column = columnCount-1;
+						               }
+						           
+						               table.changeSelection(row, column, false, false);
+						               setLastSelectedRow(row);
+						               setLastSelectedColumn(column);
+						             
+						            }
+
+									/**
+									 * @return Returns the lastSelectedColumn.
+									 */
+									public int getLastSelectedColumn() {
+										return lastSelectedColumn;
+									}
+
+									/**
+									 * @param lastSelectedColumn The lastSelectedColumn to set.
+									 */
+									public void setLastSelectedColumn(int lastSelectedColumn) {
+										this.lastSelectedColumn = lastSelectedColumn;
+									}
+
+									/**
+									 * @return Returns the lastSelectedRow.
+									 */
+									public int getLastSelectedRow() {
+										return lastSelectedRow;
+									}
+
+									/**
+									 * @param lastSelectedRow The lastSelectedRow to set.
+									 */
+									public void setLastSelectedRow(int lastSelectedRow) {
+										this.lastSelectedRow = lastSelectedRow;
+									}
+						        };
+	        table.getActionMap().put(im.get(tab), tabAction1); 
+		
 //		JScrollPane scrollPane = new JScrollPane( table );
 		JScrollPane scrollPane= new FixedColumnScrollPane(table);
 		System.out.println("Table Size : "+table.getWidth()+","+table.getHeight());
@@ -120,22 +238,64 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		setBackground(appletColor);
 		//not in jdk1.3
 //		getContentPane().setFocusable(true );
+	/*	table.setFocusCycleRoot(true);
+		table.setFocusable(true);
+		table.setFocusTraversalPolicy(new MyOwnFocusTraversalPolicyForJTable(table));*/
 		this.requestFocus(); 
 		table.requestDefaultFocus(); 
 		
-    }
+    } 
     
     private void createButtonPanel(JPanel panel)
     {
     	JButton copy = new JButton(AppletConstants.MULTIPLE_SPECIMEN_COPY  );
-    	JButton paste = new JButton(AppletConstants.MULTIPLE_SPECIMEN_PASTE);
+    	
+    	JButton temp = new JButton(" "); 
+    //	temp = new JButton(new ImageIcon("images/plain.bmp"));
+    //	temp.setBorderPainted(false);
+    	Border  empty = BorderFactory.createEmptyBorder();
+        // Border empty = new EmptyBorder(temp.getBorder().getBorderInsets(temp));
+         temp.setPreferredSize(new Dimension(20,20));    
+    
+       // BevelBorder bLevel = new BevelBorder(BevelBorder.LOWERED); 
+       // temp.setBorder(bLevel);
+      temp.setBackground(panel.getBackground());
+        temp.setForeground(panel.getBackground());  
+    
+      
+       // temp.setco(panel.getForeground());
+        BevelBorder bLevel = new BevelBorder(BevelBorder.LOWERED,panel.getBackground(),panel.getBackground(),panel.getBackground(),panel.getBackground());
+      //  bLevel.paintBorder(temp,new Graphics(),temp.getBounds().x,temp.getBounds().y,temp.getBounds().width,temp.getBounds().height);
+    //    temp.setBorder(new CompoundBorder(empty,bLevel));  
+        temp.setPreferredSize(new Dimension(20,20));   
+     
+       
+    //   temp.
+        
+      
+       JButton paste = new JButton(AppletConstants.MULTIPLE_SPECIMEN_PASTE);
     	copy.setMnemonic(AppletConstants.MULTIPLE_SPECIMEN_COPY_ACCESSKEY);
     	paste.setMnemonic(AppletConstants.MULTIPLE_SPECIMEN_PASTE_ACCESSKEY);
     	//copy.setEnabled(false);
     	paste.setEnabled(false);
     	copy.addActionListener(new MultipleSpecimenCopyActionHandler(table, paste));
     	paste.addActionListener(new MultipleSpecimenPasteActionHandler(table));
-    	
+    	/**
+    	 *  This button is purposely added to adjust the focus
+    	 */
+    //    temp.setPreferredSize(new Dimension(10,10));   
+    	temp.addFocusListener(new FocusListener(){ 
+    		public void focusGained(FocusEvent e) {
+    			
+    			Component temp = table.getComponentAt(table.getSelectedRow(),table.getSelectedColumn());
+    			if (temp != null)
+    			{
+    			   temp.requestFocus();
+    			}
+			}
+
+			public void focusLost(FocusEvent e) {   
+			}});
     	JButton addSpecimen = new JButton(AppletConstants.MULTIPLE_SPECIMEN_ADD_SPECIMEN);
     	addSpecimen.addActionListener(new AddColumnHandler(table,this) );
     	
@@ -146,21 +306,53 @@ public class MultipleSpecimenApplet extends BaseApplet {
 
     	
     	JLabel placeHolder = new JLabel("     ");
-    	panel.add(copy);panel.add(placeHolder );panel.add(paste );
-    	panel.add(placeHolder );panel.add(addSpecimen);
-    	panel.add(placeHolder );panel.add(deleteLast);
-    	int usedWidth = copy.getPreferredSize().width+ paste.getPreferredSize().width + deleteLast.getPreferredSize().width + (3 * placeHolder.getPreferredSize().width) ;
-    	usedWidth = usedWidth + placeHolder.getPreferredSize().width + addSpecimen.getPreferredSize().width ;  
-    	
-    	//Temporary added till adjusting height
-    	JPanel submitButtonPanel = new JPanel( new FlowLayout(FlowLayout.RIGHT  ) );
-    	JButton submit = new JButton(AppletConstants.MULTIPLE_SPECIMEN_SUBMIT);
-    	submit.addActionListener(new SpecimenSubmitButtonHandler(table));
-    	placeHolder = new JLabel("                         ");
-    	int submitButtonPanelWidth = getWidth()-usedWidth-20;
-    	System.out.println("submitButtonPanelWidth : "+ submitButtonPanelWidth + " usedWidth: "+usedWidth);
-    	submitButtonPanel.setPreferredSize(new Dimension(submitButtonPanelWidth,(int) submit.getPreferredSize().height+5  ) );
-    	submitButtonPanel.add(placeHolder );submitButtonPanel.add(submit );panel.add(submitButtonPanel );
+		panel.add(temp);
+		panel.add(copy);
+		panel.add(placeHolder);
+		panel.add(paste);
+		panel.add(placeHolder);  
+		panel.add(addSpecimen);
+		panel.add(placeHolder);
+		panel.add(deleteLast);
+		panel.add(placeHolder);
+		JCheckBox chk = new JCheckBox("Virtually Locate All The Specimens");
+		// chk.setBackground(panel.getBackground());
+		panel.add(chk);
+		JButton submit = new JButton(AppletConstants.MULTIPLE_SPECIMEN_SUBMIT);
+		submit.addActionListener(new SpecimenSubmitButtonHandler(table));
+		placeHolder = new JLabel("                                     ");  
+		panel.add(placeHolder);
+		panel.add(submit);
+		
+		chk.addActionListener(new ActionListener() 
+				{
+		public void actionPerformed(ActionEvent e) {  
+			MultipleSpecimenTableModel multipleSpecimenTableModel = CommonAppletUtil.getMultipleSpecimenTableModel(table);
+			multipleSpecimenTableModel.setVirtuallyLocatedCheckBox(((JCheckBox)e.getSource()).isSelected());
+			}
+		}
+		);
+		
+		//chk.setOpaque(true);
+    /*
+	 * int usedWidth = copy.getPreferredSize().width+
+	 * paste.getPreferredSize().width + deleteLast.getPreferredSize().width + (3 *
+	 * placeHolder.getPreferredSize().width) ; usedWidth = usedWidth +
+	 * placeHolder.getPreferredSize().width +
+	 * addSpecimen.getPreferredSize().width ;
+	 * 
+	 * //Temporary added till adjusting height JPanel submitButtonPanel = new
+	 * JPanel( new FlowLayout(FlowLayout.RIGHT ) ); JButton submit = new
+	 * JButton(AppletConstants.MULTIPLE_SPECIMEN_SUBMIT);
+	 * submit.addActionListener(new SpecimenSubmitButtonHandler(table));
+	 * placeHolder = new JLabel(" "); int submitButtonPanelWidth =
+	 * getWidth()-usedWidth-20; System.out.println("submitButtonPanelWidth : "+
+	 * submitButtonPanelWidth + " usedWidth: "+usedWidth);
+	 * submitButtonPanel.setPreferredSize(new
+	 * Dimension(submitButtonPanelWidth,(int) submit.getPreferredSize().height+5 ) );
+	 * submitButtonPanel.add(placeHolder );submitButtonPanel.add(submit
+	 * );panel.add(submitButtonPanel );
+	 */
     	appletColor = panel.getBackground(); 
     }
     
@@ -354,5 +546,6 @@ public class MultipleSpecimenApplet extends BaseApplet {
 					SwingUtilities.updateComponentTreeUI(linkPanel);
 				}
 	}
-
+	
+	
 }
