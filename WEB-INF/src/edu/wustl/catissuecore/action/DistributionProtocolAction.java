@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -32,7 +34,7 @@ import edu.wustl.common.util.logger.Logger;
  * @author Mandar Deshmukh
  */
 public class DistributionProtocolAction extends SpecimenProtocolAction 
-{
+{ 
 
     /**
      * Overrides the execute method of Action class.
@@ -44,6 +46,11 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
     {     
     	DistributionProtocolForm distributionProtocolForm = (DistributionProtocolForm) form;
     	
+    	
+    	if(distributionProtocolForm.getStartDate() == null)
+    	{
+    		distributionProtocolForm.setStartDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+    	}
     	//List of keys used in map of ActionForm
 		List key = new ArrayList();
     	key.add("SpecimenRequirement:i_specimenClass");
@@ -65,7 +72,7 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
 		Logger.out.debug("DP Action reqPath : ---- " + reqPath );
 		
 		// Mandar : code for Addnew Coordinator data 24-Jan-06
-		String coordinatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID);
+		String coordinatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID); 
 		if(coordinatorID != null && coordinatorID.trim().length() > 0 )
 		{
 			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in DP : "+ coordinatorID  );

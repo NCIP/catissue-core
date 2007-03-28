@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
@@ -31,6 +32,7 @@ import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.AddNewSessionDataBean;
@@ -57,9 +59,14 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 		//Sets the operation attribute to be used in the Add/Edit User Page. 
 		request.setAttribute(Constants.OPERATION, operation);
-        if(operation.equalsIgnoreCase(Constants.ADD ) )
+        if(operation.equalsIgnoreCase(Constants.ADD ) ) 
         {
-        	((CollectionProtocolRegistrationForm)form).setId(0);
+        	CollectionProtocolRegistrationForm cpform = (CollectionProtocolRegistrationForm)form;
+        	cpform.setId(0);
+        	if(cpform.getRegistrationDate() == null)
+        	{
+        		cpform.setRegistrationDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+        	}
         }
 
 		//Sets the pageOf attribute

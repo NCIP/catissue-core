@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
@@ -56,6 +58,11 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	
     	CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form; 
     	
+    	
+    	if(collectionProtocolForm.getStartDate() == null)
+    	{
+    		collectionProtocolForm.setStartDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+    	}
     	//Name of delete button clicked
         String button = request.getParameter("button");
          
