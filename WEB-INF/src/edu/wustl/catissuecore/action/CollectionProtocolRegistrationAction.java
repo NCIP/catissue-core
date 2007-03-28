@@ -41,6 +41,8 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -106,11 +108,17 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 					String cprID = String.valueOf(collectionProtocolRegistrationForm.getId());
 					//getcprObj
 					CollectionProtocolRegistration collectionProtocolRegistration = getcprObj(cprID);
-					//Collection consentCollection = collectionProtocolRegistration.getConsentTierResponseCollection().getConsentTierCollection();
+//					List added for grid
+					List specimenDetails= new ArrayList();
+					getSpecimenDetails(collectionProtocolRegistration,specimenDetails);
+					List columnList=columnNames();
 					Collection consentResponse = collectionProtocolRegistration.getConsentTierResponseCollection();
 					Map tempMap=prepareMap(consentResponse);
 					collectionProtocolRegistrationForm.setConsentResponseValues(tempMap);
 					collectionProtocolRegistrationForm.setConsentTierCounter(consentCounter) ;
+					HttpSession session =request.getSession();
+					session.setAttribute(Constants.SPECIMEN_LIST,specimenDetails);
+					session.setAttribute(Constants.COLUMNLIST,columnList);
 				}
 				request.setAttribute("witnessList", witnessList);			
 				request.setAttribute("responseList", responseList);
@@ -508,4 +516,65 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		return consentWitnessList;
 	}	
 	//Consent Tracking Virender Mehta
+	/**
+	 * This function is used for retriving Specimen collection group  from Collection protocol registration Object
+	 * @param specimenObj
+	 * @param finalDataList
+	 */
+	private void getSpecimenDetails(CollectionProtocolRegistration collectionProtocolRegistration, List finalDataList)
+	{
+		Collection specimencollectionGroup = collectionProtocolRegistration.getSpecimenCollectionGroupCollection();
+		Iterator specimenCollGroupIterator = specimencollectionGroup.iterator();
+		while(specimenCollGroupIterator.hasNext())
+		{
+			SpecimenCollectionGroup specimenCollectionGroupObj =(SpecimenCollectionGroup)specimenCollGroupIterator.next(); 
+			getDetailsOfSpecimen(specimenCollectionGroupObj, finalDataList);
+		}		
+	}
+	/**
+	 * This function is used for retriving specimen and sub specimen's attributes.
+	 * @param specimenObj
+	 * @param finalDataList
+	 */
+	private void getDetailsOfSpecimen(SpecimenCollectionGroup specimenCollGroupObj, List finalDataList)
+	{
+		Collection specimenCollection = specimenCollGroupObj.getSpecimenCollection();
+		Iterator specimenIterator = specimenCollection.iterator();
+		while(specimenIterator.hasNext())
+		{
+			Specimen specimenObj =(Specimen)specimenIterator.next();
+			List specimenDetailList=new ArrayList();
+			if(specimenObj.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+			{
+				specimenDetailList.add(specimenObj.getLabel());
+				specimenDetailList.add(specimenObj.getType());
+				if(specimenObj.getStorageContainer()==null)
+				{
+					specimenDetailList.add(Constants.VIRTUALLY_LOCATED);
+				}
+				else
+				{
+					String storageLocation=specimenObj.getStorageContainer().getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
+					specimenDetailList.add(storageLocation);
+				}
+				specimenDetailList.add(specimenObj.getClassName());
+				finalDataList.add(specimenDetailList);
+			}
+		}
+		
+	}
+	/**
+	 * This function adds the columns to the List
+	 * @return columnList 
+	 */
+	public List columnNames()
+	{
+		List columnList = new ArrayList();
+		columnList.add(Constants.LABLE);
+		columnList.add(Constants.TYPE);
+		columnList.add(Constants.STORAGE_CONTAINER_LOCATION);
+		columnList.add(Constants.CLASS_NAME);
+		return columnList; 
+	}
+
 }

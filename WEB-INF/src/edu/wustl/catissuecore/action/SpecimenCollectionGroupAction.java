@@ -21,6 +21,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionErrors;
@@ -42,6 +43,7 @@ import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -181,11 +183,18 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 					{
 						String scgID = String.valueOf(specimenCollectionGroupForm.getId());
 						SpecimenCollectionGroup specimenCollectionGroup = getSCGObj(scgID);
+						//List added for grid
+						List specimenDetails= new ArrayList();
+						getSpecimenDetails(specimenCollectionGroup,specimenDetails);
+						List columnList=columnNames();
 						Collection consentResponse = specimenCollectionGroup.getCollectionProtocolRegistration().getConsentTierResponseCollection();
 						Collection consentResponseStatuslevel= specimenCollectionGroup.getConsentTierStatusCollection();
 						Map tempMap=prepareSCGResponseMap(consentResponseStatuslevel, consentResponse);
 						specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
 						specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size());
+						HttpSession session =request.getSession();
+						session.setAttribute(Constants.SPECIMEN_LIST,specimenDetails);
+						session.setAttribute(Constants.COLUMNLIST,columnList);
 					}
 				}
 				List specimenCollectionGroupResponseList =Utility.responceList(operation);
@@ -761,6 +770,60 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		SpecimenCollectionGroup specimenCollectionGroupObject = (SpecimenCollectionGroup)getSCGIdFromDB.get(0);
 		return specimenCollectionGroupObject;
 	}
-	
 	//Consent Tracking Virender Mehta
+	
+	/**
+	 * This function is used for retriving specimen from Specimen collection group Object
+	 * @param specimenObj
+	 * @param finalDataList
+	 */
+	private void getSpecimenDetails(SpecimenCollectionGroup specimenCollectionGroupObj, List finalDataList)
+	{
+		Collection specimen = specimenCollectionGroupObj.getSpecimenCollection();
+		Iterator specimenIterator = specimen.iterator();
+		while(specimenIterator.hasNext())
+		{
+			Specimen specimenObj =(Specimen)specimenIterator.next(); 
+			getDetailsOfSpecimen(specimenObj, finalDataList);
+		}		
+	}
+	/**
+	 * This function is used for retriving specimen and sub specimen's attributes.
+	 * @param specimenObj
+	 * @param finalDataList
+	 */
+	private void getDetailsOfSpecimen(Specimen specimenObj, List finalDataList)
+	{
+		List specimenDetailList=new ArrayList();
+		if(specimenObj.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+		{
+			specimenDetailList.add(specimenObj.getLabel());
+			specimenDetailList.add(specimenObj.getType());
+			if(specimenObj.getStorageContainer()==null)
+			{
+				specimenDetailList.add(Constants.VIRTUALLY_LOCATED);
+			}
+			else
+			{
+				String storageLocation=specimenObj.getStorageContainer().getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
+				specimenDetailList.add(storageLocation);
+			}
+			specimenDetailList.add(specimenObj.getClassName());
+			finalDataList.add(specimenDetailList);
+		}
+		
+	}
+	/**
+	 * This function adds the columns to the List
+	 * @return columnList 
+	 */
+	public List columnNames()
+	{
+		List columnList = new ArrayList();
+		columnList.add(Constants.LABLE);
+		columnList.add(Constants.TYPE);
+		columnList.add(Constants.STORAGE_CONTAINER_LOCATION);
+		columnList.add(Constants.CLASS_NAME);
+		return columnList; 
+	}
 }

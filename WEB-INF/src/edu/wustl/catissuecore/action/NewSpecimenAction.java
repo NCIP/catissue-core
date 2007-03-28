@@ -23,6 +23,7 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
@@ -260,11 +261,18 @@ public class NewSpecimenAction extends SecureAction
 				{
 					String specimenID = String.valueOf(specimenForm.getId());
 					Specimen specimenObject = getSpecimenObj(specimenID);
+					//List added for grid
+					List specimenDetails= new ArrayList();
+					getSpecimenDetails(specimenObject,specimenDetails);
+					List columnList=columnNames();
 					Collection consentResponse = specimenObject.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getConsentTierResponseCollection();
 					Collection consentResponseStatuslevel= specimenObject.getConsentTierStatusCollection();
 					Map tempMap=prepareSCGResponseMap(consentResponseStatuslevel, consentResponse);
 					specimenForm.setConsentResponseForSpecimenValues(tempMap);
 					specimenForm.setConsentTierCounter(participantResponseList.size()) ;
+					HttpSession session =request.getSession();
+					session.setAttribute(Constants.SPECIMEN_LIST,specimenDetails);
+					session.setAttribute(Constants.COLUMNLIST,columnList);
 				}
 				List specimenResponseList = new ArrayList();
 				specimenResponseList=Utility.responceList(operation);
@@ -994,5 +1002,50 @@ public class NewSpecimenAction extends SecureAction
 		specimenForm.setPositionDimensionTwo("");
 		specimenForm.setStorageContainer("");
 
+	}
+	/**
+	 * This function is used for retriving specimen and sub specimen's attributes
+	 * @param specimenObj
+	 * @param finalDataList
+	 */
+	private void getSpecimenDetails(Specimen specimenObj, List finalDataList)
+	{
+		List specimenDetailList=new ArrayList();
+		specimenDetailList.add(specimenObj.getLabel());
+		specimenDetailList.add(specimenObj.getType());
+		if(specimenObj.getStorageContainer()==null)
+		{
+			specimenDetailList.add(Constants.VIRTUALLY_LOCATED);
+		}
+		else
+		{
+			String storageLocation=specimenObj.getStorageContainer().getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
+			specimenDetailList.add(storageLocation);
+		}
+		specimenDetailList.add(specimenObj.getClassName());
+		finalDataList.add(specimenDetailList);
+		if(specimenObj.getChildrenSpecimen().size()>0)
+		{
+			Collection childSpecimenCollection = specimenObj.getChildrenSpecimen();
+			Iterator itr = childSpecimenCollection.iterator();
+			while(itr.hasNext())
+			{
+				Specimen childSpecimen = (Specimen) itr.next();
+				getSpecimenDetails(childSpecimen,finalDataList);
+			}			
+		}		
+	}
+	/**
+	 * This function adds the columns to the List
+	 * @return columnList 
+	 */
+	public List columnNames()
+	{
+		List columnList = new ArrayList();
+		columnList.add(Constants.LABLE);
+		columnList.add(Constants.TYPE);
+		columnList.add(Constants.STORAGE_CONTAINER_LOCATION);
+		columnList.add(Constants.CLASS_NAME);
+		return columnList; 
 	}
 }
