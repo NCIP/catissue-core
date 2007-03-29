@@ -80,21 +80,24 @@ public class CategorySearchAction extends BaseAction
 			{
 				entitiesString = generateHTMLToDisplayList(resultArray,searchedEntitiesMap);
 			}
-			else if(currentPage != null && currentPage.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.ADD_LIMITS))
+			else if(currentPage != null)
 			{
-				for (int i = 0; i < resultArray.length; i++)
+				if(currentPage.equalsIgnoreCase("") || currentPage.equalsIgnoreCase(edu.wustl.catissuecore.util.global.Constants.ADD_LIMITS))
 				{
-					EntityInterface entity = (EntityInterface) resultArray[i];
-					String fullyQualifiedEntityName = entity.getName();
-					String description = entity.getDescription();
-					entitiesString = entitiesString + ";" + fullyQualifiedEntityName + "|" + description;
-					searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
+					for (int i = 0; i < resultArray.length; i++)
+					{
+						EntityInterface entity = (EntityInterface) resultArray[i];
+						String fullyQualifiedEntityName = entity.getName();
+						String description = entity.getDescription();
+						entitiesString = entitiesString + ";" + fullyQualifiedEntityName + "|" + description;
+						searchedEntitiesMap.put(fullyQualifiedEntityName, entity);
+					}
 				}
+				request.getSession().setAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP, searchedEntitiesMap);
+				response.setContentType("text/html");
+				response.getWriter().write(entitiesString);
+				return null;
 			}
-			request.getSession().setAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP, searchedEntitiesMap);
-			response.setContentType("text/html");
-			response.getWriter().write(entitiesString);
-			return null;
 		}
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}
@@ -195,5 +198,5 @@ public class CategorySearchAction extends BaseAction
 		return searchTarget;
 	}
 
-	
+
 }
