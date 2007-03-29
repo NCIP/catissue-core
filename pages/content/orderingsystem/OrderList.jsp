@@ -268,6 +268,30 @@ String enable="false";
 					List orderItemsList=(List)orderItemsMap.get("None");
 					if(orderItemsList.size()>0)
 						enable="true";
+					if(session.getAttribute("DefineArrayFormObjects") != null)
+					{
+					 	List defineArrayObjList = (ArrayList)session.getAttribute("DefineArrayFormObjects");					 	
+					 	Iterator iter = defineArrayObjList.iterator();
+					 	while(iter.hasNext())
+					 	{
+					 		DefineArrayForm daF = (DefineArrayForm)iter.next();
+					 		if(orderItemsMap.containsKey(daF.getArrayName()))
+					 		{	
+					 			List itemsInArrayList = (ArrayList)orderItemsMap.get(daF.getArrayName());					 			
+					 			if(itemsInArrayList.size() < 1)
+					 			{
+					 				enable = "false";
+					 				break;
+					 			}
+					 		}
+					 		else
+					 		{
+					 			enable = "false";
+				 				break;
+					 		}					 			
+					 	}
+					}
+					
 
 					for(Iterator listItr = orderItemsList.iterator();listItr.hasNext();)
 					{
