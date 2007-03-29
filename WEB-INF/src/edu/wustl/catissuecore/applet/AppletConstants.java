@@ -239,6 +239,8 @@ public interface AppletConstants
 	public static final String SHOW_ERROR_PAGE = "showErrorPage";
 	public static final String GET_DATA = "getData";
 	public static final String SET_DATA = "setData";
+	public static final String EMPTY_LIMIT_ERROR_MESSAGE = "<li><font color='red'>Please enter at least one condition to add a limit to limit set.</font></li>";
+	public static final String EMPTY_DAG_ERROR_MESSAGE = "<li><font color='red'>Limit set should contain at least one limit.</font></li>";
 	
 	//public static final String ATTRIBUTES = "Attributes";
 	

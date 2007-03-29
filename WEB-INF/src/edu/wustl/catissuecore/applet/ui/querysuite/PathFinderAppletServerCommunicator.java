@@ -87,10 +87,14 @@ public class PathFinderAppletServerCommunicator implements PathFinderBusinessInt
 	}
 	public List<IPath> getAllPossiblePaths(EntityInterface source, EntityInterface destination) throws RemoteException
 	{
-		System.out.println("hi");
 		List<EntityInterface> srcEntities = new ArrayList<EntityInterface>();
 		srcEntities.add(source);
 		return  getAllPossiblePaths(srcEntities, destination).get(source);
+	}
+	public Set<ICuratedPath> getCuratedPaths(EntityInterface arg0, EntityInterface arg1) throws RemoteException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 
