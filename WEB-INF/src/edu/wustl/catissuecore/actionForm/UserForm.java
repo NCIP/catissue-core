@@ -575,7 +575,8 @@ public class UserForm extends AbstractActionForm
 		this.street = null;
 		this.city = null;
 		this.state = null;
-		this.country = null;
+		//Setting Default country as United States
+		this.country = Constants.DEFAULT_COUNTRY_NAME;
 		this.zipCode = null;
 		this.phoneNumber = null;
 		this.faxNumber = null;

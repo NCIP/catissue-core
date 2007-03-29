@@ -347,13 +347,14 @@ public class SiteForm extends AbstractActionForm
      * */
     protected void reset()
     {
-//        this.name			= null;
+    	//Default Country Name United States  
+    	  this.country = Constants.DEFAULT_COUNTRY_NAME;
+//    	  this.name			= null;
 //        this.type			= null;
 //        this.emailAddress	= null;
 //        this.street			= null;
 //        this.city			= null;
 //        this.state			= null;
-//        this.country		= null;
 //        this.zipCode		= null;
 //        this.phoneNumber	= null;
 //        this.faxNumber		= null;
