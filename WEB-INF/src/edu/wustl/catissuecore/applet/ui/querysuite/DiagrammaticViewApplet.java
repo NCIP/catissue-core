@@ -5,8 +5,8 @@ import java.awt.Container;
 import java.awt.Frame;
 import java.awt.Image;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,11 +26,12 @@ import edu.wustl.catissuecore.applet.ui.BaseApplet;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 import edu.wustl.common.querysuite.exceptions.MultipleRootsException;
 import edu.wustl.common.querysuite.queryobject.ICondition;
+import edu.wustl.common.querysuite.queryobject.IConstraints;
 import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionId;
 import edu.wustl.common.querysuite.queryobject.IQuery;
+import edu.wustl.common.querysuite.queryobject.impl.Expression;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
-import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -124,27 +125,46 @@ public class DiagrammaticViewApplet extends BaseApplet
 	public String getSearchResults()
 	{
 		String errorMessage = "";
+		boolean isRulePresentInDag = false;
 		BaseAppletModel appletModel = new BaseAppletModel();
 		Map<String,IQuery> inputMap = new HashMap<String,IQuery>();
 		IQuery query = queryObject.getQuery();
-		inputMap.put(AppletConstants.QUERY_OBJECT, query);
-		appletModel.setData(inputMap);
-		String session_id = getParameter(AppletConstants.SESSION_ID);
-		String urlString = serverURL + AppletConstants.GET_SEARCH_RESULTS + ";jsessionid=" + session_id + "?"
-		+ AppletConstants.APPLET_ACTION_PARAM_NAME + "=" + AppletConstants.INIT_DATA + "";
-		try
+		IConstraints constraints = query.getConstraints();
+		Enumeration<IExpressionId> expressionIds = constraints.getExpressionIds();
+		while(expressionIds.hasMoreElements())
 		{
-			AppletModelInterface outputModel = AppletServerCommunicator.doAppletServerCommunication(urlString, appletModel);
-			Map outputMap = outputModel.getData();
-			errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
+			IExpressionId id = expressionIds.nextElement();
+			if(((Expression)constraints.getExpression(id)).containsRule())
+			{
+				isRulePresentInDag = true;
+				break;
+			}
 		}
-		catch (IOException e)
+		if(isRulePresentInDag)
 		{
-			e.printStackTrace();
+			inputMap.put(AppletConstants.QUERY_OBJECT, query);
+			appletModel.setData(inputMap);
+			String session_id = getParameter(AppletConstants.SESSION_ID);
+			String urlString = serverURL + AppletConstants.GET_SEARCH_RESULTS + ";jsessionid=" + session_id + "?"
+			+ AppletConstants.APPLET_ACTION_PARAM_NAME + "=" + AppletConstants.INIT_DATA + "";
+			try
+			{
+				AppletModelInterface outputModel = AppletServerCommunicator.doAppletServerCommunication(urlString, appletModel);
+				Map outputMap = outputModel.getData();
+				errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			catch (ClassNotFoundException e)
+			{
+				e.printStackTrace();
+			}
 		}
-		catch (ClassNotFoundException e)
+		else
 		{
-			e.printStackTrace();
+			errorMessage = AppletConstants.EMPTY_DAG_ERROR_MESSAGE;
 		}
 		return errorMessage;
 	}
@@ -159,19 +179,29 @@ public class DiagrammaticViewApplet extends BaseApplet
 	 */
 	public void addExpression(String strToCreateQueryObject, String entityName) throws MultipleRootsException
 	{
-		if (!strToCreateQueryObject.equalsIgnoreCase(""))
+		String errorMessage = "";
+		if (strToCreateQueryObject.equalsIgnoreCase(""))
+		{
+			errorMessage = AppletConstants.EMPTY_LIMIT_ERROR_MESSAGE;
+			showValidationMessagesToUser(errorMessage);
+		}
+		else
 		{
 			Map outputMap = callAddToLimiteSetAction(strToCreateQueryObject, entityName);
 			List attributes = (List) outputMap.get(AppletConstants.ATTRIBUTES);
 			List attributeOperators = (List) outputMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
 			ArrayList<ArrayList<String>> conditionValues = (ArrayList<ArrayList<String>>) outputMap.get(AppletConstants.ATTR_VALUES);
-			String errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
-			showValidationMessagesToUser(errorMessage);
-			if(errorMessage.equalsIgnoreCase(""))
+			errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
+			if(errorMessage != null && errorMessage.equalsIgnoreCase(""))
 			{
 				IExpressionId expressionId = queryObject.addRule(attributes, attributeOperators, conditionValues);
 				panel.updateGraph(expressionId);	
-			}			
+				showValidationMessagesToUser(errorMessage);
+			}
+			else
+			{
+				showValidationMessagesToUser(errorMessage);
+			}
 		}
 	}
 	/**
@@ -193,20 +223,33 @@ public class DiagrammaticViewApplet extends BaseApplet
 	 */
 	public void editExpression(String strToCreateQueryObject, String entityName) throws MultipleRootsException
 	{
-		if (!strToCreateQueryObject.equalsIgnoreCase(""))
+		String errorMessage = "";
+		if (strToCreateQueryObject.equalsIgnoreCase(""))
+		{
+			errorMessage = AppletConstants.EMPTY_LIMIT_ERROR_MESSAGE;
+			showValidationMessagesToUser(errorMessage);
+		}
+		else
 		{
 			Map outputMap = callAddToLimiteSetAction(strToCreateQueryObject, entityName);
 			List attributes = (List) outputMap.get(AppletConstants.ATTRIBUTES);
 			List attributeOperators = (List) outputMap.get(AppletConstants.ATTRIBUTE_OPERATORS);
 			ArrayList<ArrayList<String>> conditionValues = (ArrayList<ArrayList<String>>) outputMap.get(AppletConstants.ATTR_VALUES);
-			String errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
-			showValidationMessagesToUser(errorMessage);
-			Rule rule = ((Rule) (expression.getOperand(0)));
-			rule.removeAllConditions();
-			List<ICondition> conditionsList = queryObject.getConditions(attributes, attributeOperators,conditionValues);
-			for (ICondition condition : conditionsList)
+			errorMessage = (String)outputMap.get(AppletConstants.ERROR_MESSAGE);
+			if(!errorMessage.equalsIgnoreCase(""))
 			{
-				rule.addCondition(condition);
+				showValidationMessagesToUser(errorMessage);
+			}
+			else
+			{
+				Rule rule = ((Rule) (expression.getOperand(0)));
+				rule.removeAllConditions();
+				List<ICondition> conditionsList = queryObject.getConditions(attributes, attributeOperators,conditionValues);
+				for (ICondition condition : conditionsList)
+				{
+					rule.addCondition(condition);
+				}
+				showValidationMessagesToUser(errorMessage);
 			}
 		}
 	}

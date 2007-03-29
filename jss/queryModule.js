@@ -22,10 +22,7 @@ if(dateCombo.options[dateCombo.selectedIndex].value != "Any")
 	}
 }
 }
-function goToAddLimitsPage()
-{
 
-}
 var addedNodes = "";
 function treeNodeClicled(id)
 {
@@ -169,8 +166,6 @@ function addToView()
 	}
 	document.applets[0].addNodeToView(items);
 }
-
-
 function expand()
 {			
 	switchObj = document.getElementById('image');
@@ -317,8 +312,17 @@ else
 function expandCollapseDag()
 {
 }
-
-
+function setFocusOnSearchButton(e)
+{
+	if (!e) var e = window.event
+	if (e.keyCode) code = e.keyCode;
+	else if (e.which) code = e.which;
+	if(code == 13)
+	{
+		document.getElementById('searchButton').focus();
+	//	document.getElementById('searchButton').onclick();
+	}
+}
 function retriveSearchedEntities(url,nameOfFormToPost,currentPage) 
 {
 	var request = newXMLHTTPReq();		
@@ -335,26 +339,19 @@ function retriveSearchedEntities(url,nameOfFormToPost,currentPage)
 	}
 	else
 	{
-		//document.forms['categorySearchForm'].currentPage.value = "DefineResultsView";
-	//	url = url+"?currentPage=DefineResultsView";
 		actionURL = "textField=" + textFieldValue + "&attributeChecked=" + attributeCheckStatus + "&classChecked=" + classCheckStatus + "&permissibleValuesChecked=" + permissibleValuesCheckStatus + "&selected=" + radioCheckStatus +"&currentPage=DefineResultsView";
 		var handlerFunction = getReadyStateHandler(request,showEntityList,true);
 	}
 	
-
-
 	request.onreadystatechange = handlerFunction;
 			
 	if(document.forms[0].selected[0].checked)
 		radioCheckStatus = "rb1";
 	if(document.forms[0].selected[1].checked)
 		radioCheckStatus = "rb2";
-
-
-
 	if(!(classCheckStatus || attributeCheckStatus || permissibleValuesCheckStatus) ) 
 	{
-		alert("Please select any of the checkbox ");
+		alert("Please select advanced search options ");
 		onResponseUpdate(" ");
 	}
 	else if(textFieldValue == "")
@@ -367,10 +364,8 @@ function retriveSearchedEntities(url,nameOfFormToPost,currentPage)
 		alert("Please select any of the radio button : 'based on' criteria");
 		onResponseUpdate(" ");
 	}
-		
 	else
 	{
-		//<!-- Open connection to servlet -->
 		request.open("POST",url,true);	
 		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
 		request.send(actionURL);
@@ -380,7 +375,7 @@ function showEntityList(text)
 {
 	if(text == "")
 	{
-		alert("No results found.");
+		alert("Zero Entitites found.");
 	}
 	var element = document.getElementById('resultSet');
 	var row ='<table width="100%" height="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="0">';
@@ -391,7 +386,6 @@ function showEntityList(text)
 
 function onResponseUpdate(text)
 {
-
 	if(text == "")
 	{
 		alert("Zero Entitites found.");
@@ -402,7 +396,6 @@ function onResponseUpdate(text)
 		var currentPage = currentPageText[0];
 		text = currentPageText[1];
 	}
-
 	var element = document.getElementById('resultSet');
 	var listOfEntities = text.split(";");
 	var row ='<table width="100%" border="0" bordercolor="#FFFFFF" cellspacing="0" cellpadding="1">';
@@ -425,7 +418,6 @@ function onResponseUpdate(text)
 		{
 			row = row + '<tr><td class="entityLink" title="'+description+'">' + entityName + ' </td></tr>';
 		}
-		//row =row+ '<tr><td><a href=href="javascript:'+functionCall+'" onMouseover="showtip(this,event,'description  wds')" onMouseout="hidetip()">' +entityName+ '</a></td></tr>';
 	}			
 	row = row+'</table>';		
 	element.innerHTML =row;
@@ -603,16 +595,13 @@ function showValidationMessages(text)
 {
 	var rowId= 'validationMessagesRow';
 	var textBoxId1 = document.getElementById("rowMsg");
-		
 	var element = document.getElementById('validationMessages');
 	var row = document.getElementById(rowId);
 	row.innerHTML = "";
 	if(text == "")
 	{
-
 		if(document.all)
 		{
-			//	textBoxId1.style.display= "none";
 			document.getElementById("validationMessagesRow").style.display="none";		
 
 		} 
@@ -622,14 +611,11 @@ function showValidationMessages(text)
 		}
 		else 
 		{
-			//	textBoxId1.style.display= "none";
 			row.style.display = 'none';		
-
 		}	
 	}
 	else
 	{
-	//	textBoxId1.style.display= "block";
 		row.style.display = 'block';
 		row.innerHTML = text;
 	}	
@@ -655,11 +641,6 @@ function defineSearchResultsView()
 	document.forms['categorySearchForm'].action='DefineSearchResultsView.do';
 	document.forms['categorySearchForm'].submit();
 }
-function setFocusOnSearchButton()
-{
-	alert(document.forms[0].searchButton11.onclick);
-	document.getElementById(searchButton11).onclick();
-}
 function showAddLimitsPage()
 {
 	document.forms['categorySearchForm'].action='SearchCategory.do';
@@ -673,120 +654,3 @@ function previousFromDefineResults()
 	document.forms['categorySearchForm'].currentPage.value = "prevToAddLimits";
 	document.forms['categorySearchForm'].submit();
 }
-
-		/*function viewAddLimitsPage()
-		{
-			document.forms['categorySearchForm'].action = "SearchCategory.do";
-			document.forms['categorySearchForm'].submit();
-		}
-		function onProduceQueryUpdate(expressionId)
-		{
-			document.applets[0].addExpression(expressionId);
-		}
-		function clearForm1(attributesList)
-		{
-			var a = attributesList.split(";");
-			for(i=1; i<a.length; i++)
-			{
-				var opId =  a[i]+"_combobox";
-				var textBoxId = a[i]+"_textBox";
-				var textId = document.getElementById(textBoxId).value="";
-				var textBoxId1 = a[i]+"_textBox1";
-				var textId1 = document.getElementById(textBoxId1).value="";
-				var op = document.forms['categorySearchForm'].elements[opId].value="";
-			}
-		}
-		function produceQuery(url,nameOfFormToPost, entityName , attributesList) 
-		{
-			//var element = document.getElementById('query');
-			var strToCreateQueyObject ="";
-			var attribute = attributesList.split(";");
-			var textThis = "";
-			queryString ="";
-			var stringQuery = "";
-			for(i=1; i<attribute.length; i++)
-			{
-				var opId =  attribute[i]+"_combobox";
-				var textBoxId = attribute[i]+"_textBox";
-				var textId = document.getElementById(textBoxId).value;
-				var textBoxId1 = attribute[i]+"_textBox1";
-				var textId1 = document.getElementById(textBoxId1).value;
-				if(navigator.appName == "Microsoft Internet Explorer")
-					{					
-						var op = document.getElementById(opId).value;
-					}
-					else
-					{
-						var op = document.forms[nameOfFormToPost].elements[opId].value;
-					}					
-				if(op != "Between")
-				{
-					if(textId != "")
-					{
-						if(i!=attribute.length-1)
-						{
-							textThis = textThis + " "+ attribute[i] + " " + op + " " + textId + ";  ";								
-						}
-						if(i==attribute.length-1)
-						{
-							textThis = textThis + " "+ attribute[i] + " " + op + " " + textId+ ";  ";			
-						}
-						strToCreateQueyObject = strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +";";
-					}
-				}
-				if(op == "Between")
-				{
-					if(textId != "" && textId1!= "")
-					{
-						if(i!=attribute.length-1)
-						{
-							textThis = textThis + " "+ attribute[i] + " " + op + " (" + textId +", "+textId1 +") ;  ";					
-						}
-						if(i==attribute.length-1)
-						{
-							textThis = textThis + " "+ attribute[i] + " " + op + " (" + textId +", "+textId1 +") ;  ";	
-						}
-							strToCreateQueyObject =  strToCreateQueyObject + "@#condition#@"+ attribute[i] + "!*=*!" + op + "!*=*!" + textId +"!*=*!"+textId1+";";
-					}
-				}
-				if(op == "Is Null" || op == "Is Not Null")
-				{
-					
-				}				
-			}
-		
-			document.applets[0].addExpression(strToCreateQueyObject,entityName);
-		}
-		function expandSearchHeader()
-			{			
-				switchObj = document.getElementById('imageCategorySearch');
-			//	collapsableHeaderObj = document.getElementById('collapsableHeader');
-				collapsableTableObj = document.getElementById('collapsableTable');
-				resultSetDivObj = document.getElementById('resultSetDiv');
-			
-				if(collapsableTableObj.style.display != 'none') //Clicked on - image
-				{
-				//	collapsableHeaderObj.style.display = 'none';	
-					collapsableTableObj.style.display= 'none';
-					switchObj.innerHTML = '<img src="images/nolines_plus.gif" border="0"/>';
-					resultSetDivObj.height = 450;
-				}
-				else  							   //Clicked on + image
-				{
-					if(navigator.appName == "Microsoft Internet Explorer")
-					{					
-					//	collapsableHeaderObj.style.display = 'block';
-						collapsableTableObj.style.display= 'block';
-					}
-					else
-					{
-					//	collapsableHeaderObj.style.display = 'table-row';
-						collapsableTableObj.style.display = 'table-row';
-
-					}
-					switchObj.innerHTML = '<img src="images/nolines_minus.gif" border="0"/>';
-					resultSetDivObj.height = 350;
-				}
-			}*/
-					
-
