@@ -62,6 +62,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DEPARTMENTLIST = "departmentList";
 	public static final String STATELIST = "stateList";
 	public static final String COUNTRYLIST = "countryList";
+	public static final String DEFAULT_COUNTRY_NAME = "United States";
 	public static final String ROLELIST = "roleList";
 	public static final String ROLEIDLIST = "roleIdList";
 	public static final String CANCER_RESEARCH_GROUP_LIST = "cancerResearchGroupList";
