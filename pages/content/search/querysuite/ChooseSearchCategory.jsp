@@ -27,8 +27,10 @@ System.out.println("currentPage         "+currentPage);
 				height ="400" ;
 			%>
 		}
+
 </script>
 </head>
+<body>
 <html:errors />
 <%
 	String formName = Constants.categorySearchForm ;
@@ -53,10 +55,10 @@ System.out.println("currentPage         "+currentPage);
 					</tr>
 					<tr bordercolorlight="#000000">
 						<td>&nbsp;</td>
-						<td width="75%" valign="top" ><html:text property="textField"/></td>
+						<td width="75%" valign="top" ><html:text property="textField" onkeydown="setFocusOnSearchButton(event)"/></td>
 						<td width="25%" valign="top">
 					
-							<input type="button" value="Search" name="searchButton" onclick="retriveSearchedEntities('<%= SearchCategory %>','<%=formName%>','<%=currentPage%>');"/>
+							<input type="button" value="Search" name="searchButton" id="searchButton" onclick="retriveSearchedEntities('<%= SearchCategory %>','<%=formName%>','<%=currentPage%>');"/>
 					
 						</td>
 						<td valign="top">&nbsp;</td>
@@ -125,4 +127,5 @@ System.out.println("currentPage         "+currentPage);
 	</tr>														
 </table>
 </html:form>
+</body>
 </html>

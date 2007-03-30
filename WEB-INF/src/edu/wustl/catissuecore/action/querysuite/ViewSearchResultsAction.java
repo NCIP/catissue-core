@@ -34,8 +34,8 @@ import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * This action is an applet action called from DiagrammaticViewApplet class when user clicks on seach button of AddLimits.jsp.
- * This class gets IQuery Object from the applet and also generates sql out of it with the help of sqlGenerator.
+ * This action is an applet action called from DiagrammaticViewApplet class when user clicks on seach button of AddLimits.jsp 
+ * and defineresultsView.jsp.This class gets IQuery Object from the applet and generates sql out of it with the help of sqlGenerator.
  * This sql is then fired and each time a new table is created in database for each session user with the help of QueryOutputTreeBizLogic .
  * Then data for first level (default) tree and spreadsheet is generated and returned back from QueryOutputTreeBizLogic and QueryOutputSpreadsheetBizLogic.
  * These results are stored in session so that they can be retrived at the time of loading of result's screen.
@@ -49,7 +49,7 @@ public class ViewSearchResultsAction extends BaseAppletAction
 	 * This sql is then fired and each time a new table is created in database for each session user with the help of QueryOutputTreeBizLogic .
 	 * Then data for first level (default) tree and spreadsheet is generated and returned back from QueryOutputTreeBizLogic and QueryOutputSpreadsheetBizLogic.
 	 * These results are stored in session so that they can be retirved at the time of loading of result's screen.
-	 * An emplty map is sent back to the applet. 
+	 * An empty map is sent back to the applet. 
 	 * @param mapping mapping
 	 * @param form form
 	 * @param request request

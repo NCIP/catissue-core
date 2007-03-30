@@ -18,9 +18,10 @@ import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
+import edu.wustl.common.util.dbManager.DAOException;
 
 /**
- * This class is called when user clicks on a node of out put tree, it updates spreadsheet.
+ * This class is called when user clicks on a node of out put tree, it updates spreadsheet view for results.
  * @author deepti_shelar
  */
 public class BuildQueryOutputSpreadsheetAction extends BaseAction
@@ -46,44 +47,16 @@ public class BuildQueryOutputSpreadsheetAction extends BaseAction
 		SessionDataBean sessionData = getSessionData(request);
 		CategorySearchForm actionForm = (CategorySearchForm) form;
 		String nodeId = actionForm.getNodeId();
-		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 		Map spreadSheetDatamap = null;
 		String actualParentNodeId = nodeId.substring(nodeId.lastIndexOf(Constants.NODE_SEPARATOR) + 2, nodeId.length());
-		String[] nodeIds = nodeId.split(Constants.NODE_SEPARATOR);
 		if (nodeId.endsWith(Constants.LABEL_TREE_NODE))
 		{
-			String idParent = nodeIds[0];
-			nodeIds = nodeIds[1].split(Constants.UNDERSCORE);
-			Long id = new Long(nodeIds[0]);
-			String parentNodeId = "";
-			if (idParent.equalsIgnoreCase(Constants.NULL_ID))
-			{
-				parentNodeId = null;
-			}
-			else
-			{
-				parentNodeId = (idParent.split(Constants.UNDERSCORE))[1];
-				id = new Long((idParent.split(Constants.UNDERSCORE))[0]);
-			}
-			nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
-			Long curentNodeId = new Long(nodeIds[0]);
-			OutputTreeDataNode parentNode = idNodesMap.get(id);
-			spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(curentNodeId,parentNode, columnMap, parentNodeId, sessionData);
+			String[] nodeIds = nodeId.split(Constants.NODE_SEPARATOR);
+			spreadSheetDatamap = processSpreadsheetForLabelNode(idNodesMap, columnMap, sessionData, actualParentNodeId, nodeIds);
 		}
 		else
 		{
-			nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
-			Long id = new Long(nodeIds[0]);
-			String parentNodeId = nodeIds[1];
-			OutputTreeDataNode parentNode = idNodesMap.get(id);
-			if (parentNode.getChildren().isEmpty())
-			{
-				spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(id,parentNode, columnMap, parentNodeId, sessionData);
-			}
-			else
-			{
-				spreadSheetDatamap = outputSpreadsheetBizLogic.updateSpreadsheet(parentNode, columnMap, parentNodeId, sessionData);
-			}
+			spreadSheetDatamap = processSpreadsheetForDataNode(idNodesMap, columnMap, sessionData, actualParentNodeId);
 		}
 		String outputSpreadsheetDataStr = QueryModuleUtil.prepareOutputSpreadsheetDataString(spreadSheetDatamap);
 		response.setContentType("text/html");
@@ -91,5 +64,68 @@ public class BuildQueryOutputSpreadsheetAction extends BaseAction
 		return null;
 	}
 
-	
+	/**
+	 * Processes spreadsheet data for data node which user has clicked.
+	 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
+	 * @param columnMap map for column names for attributes for each node in query
+	 * @param sessionData session data bean
+	 * @param actualParentNodeId string id of parent
+	 * @return Map of spreadsheet data 
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
+	private Map processSpreadsheetForDataNode(Map<Long, OutputTreeDataNode> idNodesMap, Map<Long, Map<AttributeInterface, String>> columnMap, SessionDataBean sessionData, String actualParentNodeId) throws DAOException, ClassNotFoundException
+	{
+		Map spreadSheetDatamap;
+		String[] nodeIds;
+		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
+		nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
+		Long id = new Long(nodeIds[0]);
+		String parentNodeId = nodeIds[1];
+		OutputTreeDataNode parentNode = idNodesMap.get(id);
+		if (parentNode.getChildren().isEmpty())
+		{
+			spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(id,parentNode, columnMap, parentNodeId, sessionData);
+		}
+		else
+		{
+			spreadSheetDatamap = outputSpreadsheetBizLogic.updateSpreadsheet(id,parentNode, columnMap, parentNodeId, sessionData);
+		}
+		return spreadSheetDatamap;
+	}
+
+	/**
+	 * Processes spreadsheet data for label node which user has clicked.
+	 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
+	 * @param columnMap map for column names for attributes for each node in query
+	 * @param sessionData session data bean
+	 * @param actualParentNodeId string id of parent
+	 * @param nodeIds string array of node ids
+	 * @return Map of spreadsheet data 
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
+	private Map processSpreadsheetForLabelNode(Map<Long, OutputTreeDataNode> idNodesMap, Map<Long, Map<AttributeInterface, String>> columnMap, SessionDataBean sessionData, String actualParentNodeId, String[] nodeIds) throws DAOException, ClassNotFoundException
+	{
+		Map spreadSheetDatamap;
+		String idParent = nodeIds[0];
+		nodeIds = nodeIds[1].split(Constants.UNDERSCORE);
+		Long id = new Long(nodeIds[0]);
+		String parentNodeId = "";
+		if (idParent.equalsIgnoreCase(Constants.NULL_ID))
+		{
+			parentNodeId = null;
+		}
+		else
+		{
+			parentNodeId = (idParent.split(Constants.UNDERSCORE))[1];
+			id = new Long((idParent.split(Constants.UNDERSCORE))[0]);
+		}
+		nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
+		Long curentNodeId = new Long(nodeIds[0]);
+		OutputTreeDataNode parentNode = idNodesMap.get(id);
+		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
+		spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(curentNodeId,parentNode, columnMap, parentNodeId, sessionData);
+		return spreadSheetDatamap;
+	}
 }

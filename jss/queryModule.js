@@ -351,7 +351,7 @@ function retriveSearchedEntities(url,nameOfFormToPost,currentPage)
 		radioCheckStatus = "rb2";
 	if(!(classCheckStatus || attributeCheckStatus || permissibleValuesCheckStatus) ) 
 	{
-		alert("Please select advanced search options ");
+		alert("Please choose at least one option for metadata search from advanced options ");
 		onResponseUpdate(" ");
 	}
 	else if(textFieldValue == "")

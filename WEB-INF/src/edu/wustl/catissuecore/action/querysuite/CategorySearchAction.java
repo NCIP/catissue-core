@@ -94,10 +94,10 @@ public class CategorySearchAction extends BaseAction
 					}
 				}
 				request.getSession().setAttribute(edu.wustl.catissuecore.util.global.Constants.SEARCHED_ENTITIES_MAP, searchedEntitiesMap);
-				response.setContentType("text/html");
-				response.getWriter().write(entitiesString);
-				return null;
 			}
+			response.setContentType("text/html");
+			response.getWriter().write(entitiesString);
+			return null;
 		}
 		return mapping.findForward(edu.wustl.catissuecore.util.global.Constants.SUCCESS);
 	}
