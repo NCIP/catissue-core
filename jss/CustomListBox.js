@@ -70,6 +70,7 @@ function onCustomListBoxChange(element)
 			{
 				handleToListBox.options[i+1] = new Option(dataTable[i],dataTable[i]);
 			}
+			handleToListBox.value = handleToListBox[1].value; // Added by Santosh to set first available position
 		}
 		else
 		{
@@ -88,7 +89,14 @@ function onCustomListBoxChange(element)
 			
 			}
 			
+			if(handleToListBox.value == "-1") // Added by Santosh to set first available position
+			{
+			  handleToListBox.value = handleToListBox[1].value;
+			  onCustomListBoxChange(handleToListBox);
+		    }
+			
 		}
+			
 	}
 }
 
