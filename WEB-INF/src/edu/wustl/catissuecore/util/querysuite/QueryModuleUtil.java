@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
+import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
@@ -257,5 +258,28 @@ public abstract class QueryModuleUtil
 			}
 		}
 		return false;
+	}
+	/**
+	 * This is used to set the default selections for the UI components when the screen is loaded for the first time.
+	 * @param actionForm form bean
+	 * @return CategorySearchForm formbean
+	 */
+	public static CategorySearchForm setDefaultSelections(CategorySearchForm actionForm)
+	{
+		if (actionForm.getClassChecked() == null)
+		{
+			actionForm.setClassChecked("on");
+		}
+		if (actionForm.getAttributeChecked() == null)
+		{
+			actionForm.setAttributeChecked("on");
+		}
+		if (actionForm.getPermissibleValuesChecked() == null)
+		{
+			actionForm.setPermissibleValuesChecked("off");
+		}
+		//TODO check if null and then set the value of seleted.
+		actionForm.setSelected("text_radioButton");
+		return actionForm;
 	}
 }
