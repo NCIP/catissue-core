@@ -210,6 +210,10 @@ var textBoxId0 = rowId+"_textBox";
 var calendarId0 = "calendarImg";
 var opId =  rowId+"_combobox";
 //var dateFormatLabel = rowId+"_dateFormatLabel2";
+if(document.getElementById(textBoxId0))
+{
+	document.getElementById(textBoxId0).value = "";
+}
 if(document.all)
 {
 	// IE.
@@ -248,12 +252,17 @@ if(document.all)
 	} 
 	else
 	{
-		document.getElementById(textBoxId0).disabled= false;
+		if(document.getElementById(textBoxId0))
+{
+	document.getElementById(textBoxId0).disabled= false;
+}
+		
 	}
 if(op == "Between")
 {
 	if(document.all) {
 		// IE.
+		document.getElementById(textBoxId0).value = "";
 		document.getElementById(textBoxId).style.display="block";		
 		if(dataType == "true")
 		{
@@ -262,9 +271,11 @@ if(op == "Between")
 		}
 	} else if(document.layers) {
 		// Netspace 4
+		document.elements[textBoxId0].value = "";
 		document.elements[textBoxId].visibility="visible";
 	} else {
 		// Mozilla
+		document.getElementById(textBoxId0).value = "";
 		var textBoxId1 = document.getElementById(textBoxId);
 		textBoxId1.style.display="block";
 		if(dataType == "true")
@@ -278,36 +289,58 @@ if(op == "Between")
 }
 else if(op == "In" || op== "Not In")
 	{
-		
-	}	
-else 
-{
-	if(document.all) {
-		// IE.
-		document.getElementById(textBoxId).style.display="none";		
-		if(dataType == "true")
+		if(document.all)
 		{
-		document.getElementById(calendarId1).style.display="none";	
-		//var dateFormatLabelId = document.getElementById(dateFormatLabel);
-			//dateFormatLabelId.style.display="none";
+			document.getElementById(textBoxId).style.display="none";		
+			if(dataType == "true")
+			{
+				document.getElementById(calendarId1).style.display="none";	
+			}
 		}
-	} else if(document.layers) {
-		// Netspace 4
-		document.elements[textBoxId].visibility="none";
-	} else {
-		// Mozilla
-		var textBoxId1 = document.getElementById(textBoxId);
-		textBoxId1.style.display="none";
+		else if(document.layers)
+		{
+			document.elements[textBoxId].visibility="none";
+		}
+		else
+		{
+			var textBoxId1 = document.getElementById(textBoxId);
+			if(textBoxId1)
+				textBoxId1.style.display="none";
+			if(dataType == "true")
+			{
+				var calId = document.getElementById(calendarId1);
+				calId.style.display="none";
+			}
+		}	
+	}	
+	else 
+	{
+		if(document.all) {
+			// IE.
+			document.getElementById(textBoxId).style.display="none";		
+			if(dataType == "true")
+			{
+			document.getElementById(calendarId1).style.display="none";	
+			//var dateFormatLabelId = document.getElementById(dateFormatLabel);
+				//dateFormatLabelId.style.display="none";
+			}
+		} else if(document.layers) {
+			// Netspace 4
+			document.elements[textBoxId].visibility="none";
+		} else {
+			// Mozilla
+			var textBoxId1 = document.getElementById(textBoxId);
+			textBoxId1.style.display="none";
 
-		if(dataType == "true")
-		{
-			var calId = document.getElementById(calendarId1);
-			calId.style.display="none";
-		//	var dateFormatLabelId = document.getElementById(dateFormatLabel);
-			//dateFormatLabelId.style.display="none";
-		}
-	}	
-}
+			if(dataType == "true")
+			{
+				var calId = document.getElementById(calendarId1);
+				calId.style.display="none";
+			//	var dateFormatLabelId = document.getElementById(dateFormatLabel);
+				//dateFormatLabelId.style.display="none";
+			}
+		}	
+	}
 }
 function expandCollapseDag()
 {
