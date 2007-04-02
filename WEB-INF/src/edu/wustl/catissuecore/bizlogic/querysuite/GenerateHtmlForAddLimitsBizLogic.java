@@ -9,14 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import edu.common.dynamicextensions.domain.BooleanAttributeTypeInformation;
 import edu.common.dynamicextensions.domain.DateAttributeTypeInformation;
-import edu.common.dynamicextensions.domain.DoubleAttributeTypeInformation;
-import edu.common.dynamicextensions.domain.IntegerAttributeTypeInformation;
-import edu.common.dynamicextensions.domain.LongAttributeTypeInformation;
 import edu.common.dynamicextensions.domain.PermissibleValue;
-import edu.common.dynamicextensions.domain.ShortAttributeTypeInformation;
-import edu.common.dynamicextensions.domain.StringAttributeTypeInformation;
 import edu.common.dynamicextensions.domain.UserDefinedDE;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.common.dynamicextensions.domaininterface.AttributeTypeInformationInterface;
@@ -32,6 +26,7 @@ import edu.common.dynamicextensions.domaininterface.ShortValueInterface;
 import edu.common.dynamicextensions.domaininterface.StringValueInterface;
 import edu.wustl.cab2b.client.ui.controls.AttributeInterfaceComparator;
 import edu.wustl.cab2b.client.ui.controls.PermissibleValueComparator;
+import edu.wustl.cab2b.common.exception.CheckedException;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.querysuite.queryobject.ICondition;
@@ -51,12 +46,21 @@ public class GenerateHtmlForAddLimitsBizLogic
 
 	/**
 	 * Constructor for GenerateHtmlForAddLimitsBizLogic
+	 * @throws CheckedException 
 	 */
-	public GenerateHtmlForAddLimitsBizLogic()
+	public GenerateHtmlForAddLimitsBizLogic() 
 	{
 		if (parseFile == null)
 		{
-			parseFile = new ParseXMLFile(Constants.DYNAMIC_UI_XML);
+			try
+			{
+				parseFile = ParseXMLFile.getInstance(Constants.DYNAMIC_UI_XML);
+			}
+			catch (CheckedException e)
+			{
+				System.out.println("Exception has occured while parsing dynamicUI.xml");
+				e.printStackTrace();
+			}
 		}
 	}
 	/**
@@ -105,17 +109,10 @@ public class GenerateHtmlForAddLimitsBizLogic
 				if(attribute.getDataType().equalsIgnoreCase(Constants.DATE))
 				{
 					String dateFormat = Constants.DATE_FORMAT;//ApplicationProperties.getValue("query.date.format");
-					//	generatedHTML.append("<td  valign='top' class=\"standardDateQuery\" nowrap='nowrap' width=\"10%\">");
 					generatedHTML.append("\n("+dateFormat+")");
-					//	generatedHTML.append("</td>\n");
 				}
-				/*else
-				{
-					generatedHTML.append("\n<td valign='top' class='standardTextQuery' nowrap='nowrap' width='8'>&nbsp</td>");	
-				}*/
 				generatedHTML.append("</td>\n");
-
-				List<String> operatorsList = populateAttributeUIInformation(attribute);
+				List<String> operatorsList = getConditionsList(attribute);
 				boolean isBetween = false;
 				if (!operatorsList.isEmpty() && operatorsList.get(0).equalsIgnoreCase(RelationalOperator.Between.toString()))
 				{
@@ -136,13 +133,17 @@ public class GenerateHtmlForAddLimitsBizLogic
 						{
 							isBetween = true;
 						}
+						else
+						{
+							isBetween = false;
+						}
 						if (!permissibleValues.isEmpty())
 						{
 							generatedHTML.append("\n" + generateHTMLForEnumeratedValues(attribute, permissibleValues, values));
 						}
 						else
 						{
-							generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, values));
+							generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, values,operator));
 						}
 					}
 					else
@@ -154,7 +155,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 						}
 						else
 						{
-							generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null));
+							generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null,null));
 						}
 					}
 				}
@@ -167,7 +168,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 					}
 					else
 					{
-						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null));
+						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null,null));
 					}
 				}
 				generatedHTML.append("\n</tr>");
@@ -241,50 +242,54 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param attributeInterface attributeInterface
 	 * @return List listOf operators.
 	 */
-	private List<String> populateAttributeUIInformation(AttributeInterface attributeInterface)
+	private List<String> getConditionsList(AttributeInterface attributeInterface)
 	{
 		List<String> operatorsList = new ArrayList<String>();
-		AttributeTypeInformationInterface attrTypeInfo = attributeInterface.getAttributeTypeInformation();
 		Object[] strObj = null;
 		if (attributeInterface != null)
 		{
+			String dataType = attributeInterface.getDataType();
 			UserDefinedDE userDefineDE = (UserDefinedDE) attributeInterface.getAttributeTypeInformation().getDataElement();
-			if (userDefineDE == null)
+			if (userDefineDE != null)
 			{
-				if (attrTypeInfo instanceof StringAttributeTypeInformation)
+				if (dataType.equalsIgnoreCase("long") || dataType.equalsIgnoreCase("double") || dataType.equalsIgnoreCase("short") || dataType.equalsIgnoreCase("integer"))
 				{
-					strObj = parseFile.getNonEnumStr();
+					operatorsList = parseFile.getEnumConditionList("number");
 				}
-				else if (attrTypeInfo instanceof BooleanAttributeTypeInformation)
+				else if (dataType.equalsIgnoreCase("string"))
 				{
-					strObj = parseFile.getEnumBool();
+					operatorsList = parseFile.getEnumConditionList("string");
 				}
-				else if (attrTypeInfo instanceof DateAttributeTypeInformation)
+				else if (dataType.equalsIgnoreCase("boolean"))
 				{
-					strObj = parseFile.getNonEnumDate();
+					operatorsList = parseFile.getEnumConditionList("boolean");
 				}
-				else if (attrTypeInfo instanceof DoubleAttributeTypeInformation || attrTypeInfo instanceof LongAttributeTypeInformation
-						|| attrTypeInfo instanceof ShortAttributeTypeInformation || attrTypeInfo instanceof IntegerAttributeTypeInformation)
+				else if (dataType.equalsIgnoreCase("date"))
 				{
-					strObj = parseFile.getNonEnumNum();
+					operatorsList = parseFile.getEnumConditionList("date");
 				}
 			}
 			else
 			{
-				if (attrTypeInfo instanceof StringAttributeTypeInformation)
+				if (dataType.equalsIgnoreCase("long") || dataType.equalsIgnoreCase("double") || dataType.equalsIgnoreCase("short") || dataType.equalsIgnoreCase("integer"))
 				{
-					strObj = parseFile.getEnumStr();
+					operatorsList = parseFile.getNonEnumConditionList("number");
 				}
-				else if (attrTypeInfo instanceof BooleanAttributeTypeInformation)
+				else if (dataType.equalsIgnoreCase("string"))
 				{
-					strObj = parseFile.getEnumStr();
+					operatorsList = parseFile.getNonEnumConditionList("string");
 				}
-				else if (attrTypeInfo instanceof DoubleAttributeTypeInformation || attrTypeInfo instanceof LongAttributeTypeInformation
-						|| attrTypeInfo instanceof ShortAttributeTypeInformation || attrTypeInfo instanceof IntegerAttributeTypeInformation)
+				else if (dataType.equalsIgnoreCase("boolean"))
 				{
-					strObj = parseFile.getEnumNum();
+					operatorsList = parseFile.getNonEnumConditionList("boolean");
+				}
+				else if (dataType.equalsIgnoreCase("date"))
+				{
+					operatorsList = parseFile.getNonEnumConditionList("date");
 				}
 			}
+			strObj = operatorsList.toArray();
+			operatorsList = new ArrayList<String>();
 			Arrays.sort(strObj);
 			for (int i = 0; i < strObj.length; i++)
 			{
@@ -294,6 +299,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		}
 		return operatorsList;
 	}
+	
 	/**
 	 * This method generates the combobox's html to show the operators valid for the attribute passed to it.
 	 * @param attribute AttributeInterface 
@@ -344,7 +350,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	 * @param isBetween boolean 
 	 * @return String HTMLForTextBox
 	 */
-	private String generateHTMLForTextBox(AttributeInterface attributeInterface, boolean isBetween, ArrayList<String> values)
+	private String generateHTMLForTextBox(AttributeInterface attributeInterface, boolean isBetween, ArrayList<String> values,String op)
 	{
 		String componentId = attributeInterface.getName() + attributeInterface.getId().toString();
 		String textBoxId = componentId + "_textBox";
@@ -358,7 +364,18 @@ public class GenerateHtmlForAddLimitsBizLogic
 		}
 		else
 		{
-			html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\" value=\"" + values.get(0) + "\">");
+			String valueStr = "";
+			if(op.equalsIgnoreCase("In") || op.equalsIgnoreCase("Not In"))
+			{
+				valueStr = values.toString();
+				valueStr = valueStr.replace("[", "");
+				valueStr = valueStr.replace("]", "");
+				html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\" value=\"" + valueStr + "\">");
+			}
+			else
+			{
+				html.append("<input style=\"width:150px; display:block;\" type=\"text\" name=\"" + textBoxId + "\" id=\"" + textBoxId + "\" value=\"" + values.get(0) + "\">");
+			}
 		}
 		html.append("\n</td>");
 		if (dataType.equalsIgnoreCase(Constants.DATE))

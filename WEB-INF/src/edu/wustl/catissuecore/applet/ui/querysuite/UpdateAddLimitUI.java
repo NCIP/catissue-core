@@ -55,13 +55,6 @@ public class UpdateAddLimitUI implements IUpdateAddLimitUIInterface
 		List<ICondition> conditions = rule.getConditions();
 		String html = generateHTMLBizLogic.generateHTML(entity, conditions);
 		Object[] paramArray = {html};
-		try
-		{
-			CommonAppletUtil.callJavaScriptFunction(dagApplet, AppletConstants.SHOW_ENTITY_INFO, paramArray);
-		}
-		catch (Exception me)
-		{
-			me.printStackTrace();
-		}
+		CommonAppletUtil.callJavaScriptFunction(dagApplet, AppletConstants.SHOW_ENTITY_INFO, paramArray);
 	}
 }

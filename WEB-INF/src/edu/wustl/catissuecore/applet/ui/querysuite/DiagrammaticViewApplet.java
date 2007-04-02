@@ -31,6 +31,7 @@ import edu.wustl.common.querysuite.queryobject.IExpression;
 import edu.wustl.common.querysuite.queryobject.IExpressionId;
 import edu.wustl.common.querysuite.queryobject.IQuery;
 import edu.wustl.common.querysuite.queryobject.impl.Expression;
+import edu.wustl.common.querysuite.queryobject.impl.JoinGraph;
 import edu.wustl.common.querysuite.queryobject.impl.Rule;
 import edu.wustl.common.util.logger.Logger;
 
@@ -249,6 +250,8 @@ public class DiagrammaticViewApplet extends BaseApplet
 				{
 					rule.addCondition(condition);
 				}
+				errorMessage = AppletConstants.EDIT_LIMITS;
+				System.out.println(errorMessage);
 				showValidationMessagesToUser(errorMessage);
 			}
 		}
@@ -402,11 +405,22 @@ public class DiagrammaticViewApplet extends BaseApplet
 	 * @throws MultipleRootsException 
 	 * @throws MultipleRootsException MultipleRootsException
 	 */
-	public void defineResultsView() throws MultipleRootsException
+	public String defineResultsView() throws MultipleRootsException
 	{
 		Map<String,IQuery> inputDataMap = new HashMap<String,IQuery>();
+		String errorMessage = "";
 		IQuery query = queryObject.getQuery();
-		inputDataMap.put(AppletConstants.QUERY_OBJECT, query);
-		doAppletServletCommunication(AppletConstants.GET_DAG_VIEW_DATA, inputDataMap,AppletConstants.SET_DATA);
+		int roots = ((JoinGraph)(query.getConstraints().getJoinGraph())).getAllRoots().size();
+		if(roots > 1)
+		{
+			errorMessage = AppletConstants.MULTIPLE_ROOTS_EXCEPTION;
+		//	showValidationMessagesToUser(errorMessage);
+		}
+		else
+		{
+			inputDataMap.put(AppletConstants.QUERY_OBJECT, query);
+			doAppletServletCommunication(AppletConstants.GET_DAG_VIEW_DATA, inputDataMap,AppletConstants.SET_DATA);
+		}
+		return errorMessage;
 	}
 }

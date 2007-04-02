@@ -120,6 +120,7 @@ public class CreateQueryObjectBizLogic
 		while (valuesIter.hasNext())
 		{
 			String enteredValue = (String) valuesIter.next();
+			enteredValue = enteredValue.trim();
 			if (enteredValue.equalsIgnoreCase(Constants.MISSING_TWO_VALUES))
 			{
 				errorMessages = errorMessages + ApplicationProperties.getValue("simpleQuery.twovalues.required");
