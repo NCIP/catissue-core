@@ -1,4 +1,4 @@
-package edu.wustl.catissuecore.bizlogic.test;
+/*package edu.wustl.catissuecore.bizlogic.test;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,11 +12,11 @@ import edu.common.dynamicextensions.domaininterface.databaseproperties.ColumnPro
 import edu.wustl.catissuecore.bizlogic.querysuite.GenerateHtmlForAddLimitsBizLogic;
 import edu.wustl.common.test.BaseTestCase;
 
-/**
+*//**
  * Test case for GenerateHtmlForAddLimitsBizLogic.
  * @author deepti_shelar
  *
- */
+ *//*
 public class QueryModuleSearchProcessorTest extends BaseTestCase
 {
 	DomainObjectFactory factory = DomainObjectFactory.getInstance();
@@ -26,9 +26,9 @@ public class QueryModuleSearchProcessorTest extends BaseTestCase
 	{
 		super(name);		
 	}
-	/**
+	*//**
 	 * Test if the entity passed to generateHTML method is Participant with no attributes,
-	 */	
+	 *//*	
 	public void testGenerateHTMLForParticipant()
 	{
 		StringBuffer generatedHTML = new StringBuffer();
@@ -50,9 +50,9 @@ public class QueryModuleSearchProcessorTest extends BaseTestCase
 		assertEquals(html,generatedHTML.toString());
 		
 	}
-	/**
+	*//**
 	 * Test if the entity passed to generateHTML method is Participant with no attributes,
-	 */	
+	 *//*	
 	public void testGenerateHTMLForParticipantWithNoAttribute()
 	{
 		StringBuffer generatedHTML = new StringBuffer();
@@ -70,12 +70,12 @@ public class QueryModuleSearchProcessorTest extends BaseTestCase
 		String html = qmp.generateHTML(entity,null);
 		assertEquals(html,generatedHTML.toString());
 	}
-	/**
+	*//**
 	 * Generates html for button.
 	 * @param name button's name
 	 * @param attributesStr attributesStr
 	 * @return
-	 */
+	 *//*
 	private String generateHTMLForButton(String entityName, String attributesStr)
 	{
 		String buttonId = "addLimit";
@@ -88,10 +88,10 @@ public class QueryModuleSearchProcessorTest extends BaseTestCase
 		html.append("\n</tr>");
 		return html.toString();
 	}
-	/**
+	*//**
 	 * Test if the entity passed to generateHTML method is null, it will return a empty string. 
 	 *
-	 */	
+	 *//*	
 	public void testGenerateHTMLForNullEntity()
 	{
 		GenerateHtmlForAddLimitsBizLogic qmp = new GenerateHtmlForAddLimitsBizLogic();
@@ -99,11 +99,11 @@ public class QueryModuleSearchProcessorTest extends BaseTestCase
 		assertEquals(html,"");
 		
 	}
-	/*
+	
 	 * @param name
 	 * Creates a participant entity, sets the attributes collection and
 	 * table properties for the entity.
-	 */
+	 
 	private EntityInterface createParticipantEntity()
 	{
 		EntityInterface e = factory.createEntity();
@@ -115,11 +115,11 @@ public class QueryModuleSearchProcessorTest extends BaseTestCase
 		((Entity)e).setAbstractAttributeCollection(getParticipantAttributes());
 		return e;
 	}
-	/*
+	
 	 * @param name
 	 * Creates a participant entity, sets the attributes collection and
 	 * table properties for the entity.
-	 */
+	 
 	private EntityInterface createParticipantEntityWithNoAttribute()
 	{
 		EntityInterface e = factory.createEntity();
@@ -131,11 +131,11 @@ public class QueryModuleSearchProcessorTest extends BaseTestCase
 		//((Entity)e).setAbstractAttributeCollection(getParticipantAttributes());
 		return e;
 	}
-	/*
+	
 	 * Creates attributes for participant entity, creates and sets a 
 	 * column property for each attribute and adds all the attributes to
 	 * a collection.
-	 */
+	 
 	private ArrayList getParticipantAttributes()
 	{
 		ArrayList<AttributeInterface> participantAttributes = new ArrayList<AttributeInterface>();
@@ -147,7 +147,7 @@ public class QueryModuleSearchProcessorTest extends BaseTestCase
 		c1.setName("ACTIVITY_STATUS");
 		((Attribute)att1).setColumnProperties(c1);
 
-		/*AttributeInterface att2 = factory.createDateAttribute();
+		AttributeInterface att2 = factory.createDateAttribute();
 		//att2.setDefaultValue(new Date(12 - 03 - 1995));
 		att2.setName("birthDate");
 		ColumnPropertiesInterface c2 = factory.createColumnProperties();
@@ -224,10 +224,10 @@ public class QueryModuleSearchProcessorTest extends BaseTestCase
 		att12.setName("vitalStatus");
 		ColumnPropertiesInterface c12 = factory.createColumnProperties();
 		c12.setName("VITAL_STATUS");
-		((Attribute)att12).setColumnProperties(c12);*/
+		((Attribute)att12).setColumnProperties(c12);
 
 		participantAttributes.add(0, att1);
-		/*participantAttributes.add(1, att2);
+		participantAttributes.add(1, att2);
 		participantAttributes.add(2, att3);
 		participantAttributes.add(3, att4);
 		participantAttributes.add(4, att5);
@@ -237,7 +237,7 @@ public class QueryModuleSearchProcessorTest extends BaseTestCase
 		participantAttributes.add(8, att9);
 		participantAttributes.add(9, att10);
 		participantAttributes.add(10, att11);
-		participantAttributes.add(11, att12);*/
+		participantAttributes.add(11, att12);
 
 		return participantAttributes;
 	}
@@ -254,3 +254,4 @@ public class QueryModuleSearchProcessorTest extends BaseTestCase
 
 
 }
+*/
