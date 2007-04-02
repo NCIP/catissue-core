@@ -574,6 +574,7 @@ function produceQuery(isTopButton, url,nameOfFormToPost, entityName , attributes
 	} else if(isEditLimit == 'Edit Limit')
 	{
 		document.applets[0].editExpression(strToCreateQueyObject,entityName);
+		
 	}
 }
 function viewSearchResults()
@@ -633,8 +634,15 @@ function showViewSearchResultsJsp()
 }
 function saveClientQueryToServer()
 {
-	document.applets[0].defineResultsView();
-	defineSearchResultsView();
+	var message = document.applets[0].defineResultsView();
+	if(message != "")
+	{
+		showValidationMessages(message);
+	}
+	else
+	{
+		defineSearchResultsView();
+	}
 }
 function defineSearchResultsView()
 {
