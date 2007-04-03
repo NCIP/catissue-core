@@ -93,7 +93,7 @@ PUBLIC
 		
 		<action path="/Home"
 					type="edu.wustl.catissuecore.action.ForwardAction">
-					<forward name="success" path=".catissuecore.homePageDef" />
+		 			<forward name="success" path=".catissuecore.homePageDef" /> 
 		</action>
 		
 		<action path="/RedirectHome"
@@ -102,7 +102,7 @@ PUBLIC
 		
 		<action path="/ManageBioSpecimen"
 					type="edu.wustl.catissuecore.action.ForwardAction">
-					<forward name="success" path=".catissuecore.manageBioSpecimenHomeDef" />
+					<forward name="success" path="/CpBasedSearch.do?menuSelected=22" />
 		</action>
 		<action path="/QueryManageBioSpecimen"
 					type="edu.wustl.catissuecore.action.ForwardAction">
@@ -156,6 +156,10 @@ PUBLIC
 			input=".catissuecore.homePageDef"
 			scope="request">
 			<forward name="success" path="/Home.do" />
+			<forward name="pageOfAdministrator" path="/ManageAdministrativeData.do" />
+			<forward name="pageOfSupervisor" path="/CpBasedSearch.do?menuSelected=22" />
+			<forward name="pageOfTechnician" path="/CpBasedSearch.do?menuSelected=22" />
+			<forward name="pageOfScientist" path="/AdvanceQueryInterfaceDefaultPage.do?pageOf=pageOfAdvanceQueryInterface&amp;menuSelected=17" />
 			<forward name="access_denied" path=".catissuecore.changePasswordDef"/>
 			<forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
