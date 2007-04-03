@@ -67,7 +67,36 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	
 	//For AddNew functionality
 	private long collectionProtocolRegistrationId;
+	/**
+ * Name : Ashish Gupta
+ * Reviewer Name : Sachin Lale 
+ * Bug ID: <BUG #>
+ * Patch ID: <BUG #>_3 
+ * See also: 1-8
+ * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+	*/
+	private int numberOfSpecimens = 1;
 	
+	
+	/**
+	 * @return the numberOfSpecimens
+	 */
+	public int getNumberOfSpecimens()
+	{
+		return numberOfSpecimens;
+	}
+
+
+	
+	/**
+	 * @param numberOfSpecimens the numberOfSpecimens to set
+	 */
+	public void setNumberOfSpecimens(int numberOfSpecimens)
+	{
+		this.numberOfSpecimens = numberOfSpecimens;
+	}
+
+
 	/**
 	 * No argument constructor for SpecimenCollectionGroupForm class 
 	 */
@@ -435,6 +464,25 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			{
 				// here this field will be alltogether disabled
 				// No need of any condition.
+			}
+			
+			//Added by Ashish for Multiple Specimens
+			/**
+ * Name : Ashish Gupta
+ * Reviewer Name : Sachin Lale 
+ * Bug ID: <BUG #>
+ * Patch ID: <BUG #>_4 
+ * See also: 1-8
+ * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+	*/
+			String buttonName = request.getParameter("button");
+
+			if(buttonName != null && !buttonName.equals(""))
+			{
+				if(numberOfSpecimens < 1)
+		        {
+		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.multiplespecimen.minimumspecimen"));
+		        }
 			}
 		}
 		catch (Exception excp)
