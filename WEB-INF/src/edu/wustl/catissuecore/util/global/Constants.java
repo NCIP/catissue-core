@@ -18,6 +18,13 @@ package edu.wustl.catissuecore.util.global;
 
 public class Constants extends edu.wustl.common.util.global.Constants
 {
+	//Constants added for Catissuecore V1.2
+	public static final String PAGE_OF_ADMINISTRATOR = "pageOfAdministrator";
+	public static final String PAGE_OF_SUPERVISOR = "pageOfSupervisor";
+	public static final String PAGE_OF_TECHNICIAN = "pageOfTechnician";
+	public static final String PAGE_OF_SCIENTIST = "pageOfScientist";
+   //Constants added for Catissuecore V1.2
+	
 	public static final String MAX_IDENTIFIER = "maxIdentifier";
     public static final String AND_JOIN_CONDITION = "AND";
 	public static final String OR_JOIN_CONDITION = "OR";
