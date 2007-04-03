@@ -46,9 +46,11 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -246,9 +248,24 @@ public class NewSpecimenAction extends SecureAction
 			List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE, null);
 			request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
 
+			/**
+		     * Name : Virender Mehta
+		     * Reviewer: Sachin Lale
+		     * Bug ID: TissueSiteCombo_BugID
+		     * Patch ID:TissueSiteCombo_BugID_1
+		     * See also:TissueSiteCombo_BugID_#
+		     * Description: Setting TissueList with only Leaf node
+			 */
 			//Setting tissue site list
-			List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
-			request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
+			//List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
+			//request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
+			CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_TISSUE_SITE);
+	    	CDEBizLogic cdeBizLogic = (CDEBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
+	    	List tissueSiteList = new ArrayList(); 
+	    	tissueSiteList.add(new NameValueBean(Constants.SELECT_OPTION,""+Constants.SELECT_OPTION_VALUE));
+	    	cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(),tissueSiteList);
+	    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
+	    	
 			//Bug- setting the default tissue site
 			if (specimenForm.getTissueSite() == null)
 			{
