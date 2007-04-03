@@ -35,11 +35,20 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			"concentrationInMicrogramPerMicroliter", "comments", "specimenEventCollection", "externalIdentifierCollection",
 			"biohazardCollection", "derive"};
 
+/**
+ * Name : Ashish Gupta
+ * Reviewer Name : Sachin Lale
+ * Bug ID: 3262
+ * Patch ID: 3262_1 
+ * See also: 1-4
+ * Description: Default Event population for multiple specimen
+ */
+
 	/**
 	 * Row headers for the attributes. This corrosponds to display value for each of the  specimenAttribute in that order.
 	 */
 	private static final String[] rowHeaders = {"","* Specimen Group Name", "* Parent", "* Label", "Barcode", "* Class", "* Type", "* Tissue Site",
-			"* Tissue Side", "* Pathological Status", "Quantity", "Concentration", "Comments", "* Events",
+			"* Tissue Side", "* Pathological Status", "Quantity", "Concentration", "Comments", "Events",
 			"External Identifier(s)", "Biohazards", "Derive"};
 
 	/**

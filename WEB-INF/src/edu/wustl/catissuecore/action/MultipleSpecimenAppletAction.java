@@ -748,11 +748,21 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			Specimen specimen = (Specimen) specimenCollectionIterator.next();
 			// use specimen.getId() as part of key... here id indicates column no.
 			NewSpecimenForm form = (NewSpecimenForm) multipleSpecimenFormBeanMap.get("Specimen:" + specimen.getId().longValue() + "_specimenEventCollection");
-			if (form == null)
-			{
-				throw new Exception("Please enter Events" + " " + ApplicationProperties.getValue("multiplespecimen.error.forspecimen") + " " + specimen.getId());
-			}
-			else
+			
+/**
+ * Name : Ashish Gupta
+ * Reviewer Name : Sachin Lale
+ * Bug ID: 3262
+ * Patch ID: 3262_2 
+ * See also: 1-4
+ * Description: Default Event population for multiple specimen
+ */
+//			if (form == null)
+//			{
+//				throw new Exception("Please enter Events" + " " + ApplicationProperties.getValue("multiplespecimen.error.forspecimen") + " " + specimen.getId());
+//			}
+//			else
+			if(form != null)
 			{
 				Collection specimenEventCollection = new HashSet();
 
