@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.LineBorder;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
@@ -117,12 +120,8 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		table.setAutoCreateColumnsFromModel(false);
 		
 		 InputMap im = table.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		 KeyStroke tab = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
 		 
-	        //  Have the enter key work the same as the tab key
-	 
-	        KeyStroke tab = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
-	
-	 
 	        //  Override the default tab behaviour
 	        //  Tab across a column and not across columns
 	 
@@ -247,37 +246,29 @@ public class MultipleSpecimenApplet extends BaseApplet {
     } 
     
     private void createButtonPanel(JPanel panel)
-    {
+    { 
     	JButton copy = new JButton(AppletConstants.MULTIPLE_SPECIMEN_COPY  );
     	
-    	JButton temp = new JButton(" "); 
-    //	temp = new JButton(new ImageIcon("images/plain.bmp"));
-    //	temp.setBorderPainted(false);
-    	Border  empty = BorderFactory.createEmptyBorder();
-        // Border empty = new EmptyBorder(temp.getBorder().getBorderInsets(temp));
-         temp.setPreferredSize(new Dimension(20,20));    
+    	final JButton temp = new JButton(" "); 
+       	Border  empty = BorderFactory.createEmptyBorder();
+        temp.setPreferredSize(new Dimension(20,20));    
     
        // BevelBorder bLevel = new BevelBorder(BevelBorder.LOWERED); 
-       // temp.setBorder(bLevel);
-      temp.setBackground(panel.getBackground());
-        temp.setForeground(panel.getBackground());  
-    
-      
+       
+        final Color c = this.getForeground();   
+        temp.setBackground(c);
+        temp.setForeground(c);
        // temp.setco(panel.getForeground());
         BevelBorder bLevel = new BevelBorder(BevelBorder.LOWERED,panel.getBackground(),panel.getBackground(),panel.getBackground(),panel.getBackground());
       //  bLevel.paintBorder(temp,new Graphics(),temp.getBounds().x,temp.getBounds().y,temp.getBounds().width,temp.getBounds().height);
-    //    temp.setBorder(new CompoundBorder(empty,bLevel));  
+        temp.setBorder(new CompoundBorder(empty,bLevel));  
         temp.setPreferredSize(new Dimension(20,20));   
-     
-       
-    //   temp.
-        
-      
-       JButton paste = new JButton(AppletConstants.MULTIPLE_SPECIMEN_PASTE);
+          
+        JButton paste = new JButton(AppletConstants.MULTIPLE_SPECIMEN_PASTE);
     	copy.setMnemonic(AppletConstants.MULTIPLE_SPECIMEN_COPY_ACCESSKEY);
     	paste.setMnemonic(AppletConstants.MULTIPLE_SPECIMEN_PASTE_ACCESSKEY);
     	//copy.setEnabled(false);
-    	paste.setEnabled(false);
+    	paste.setEnabled(false); 
     	copy.addActionListener(new MultipleSpecimenCopyActionHandler(table, paste));
     	paste.addActionListener(new MultipleSpecimenPasteActionHandler(table));
     	/**
@@ -294,8 +285,24 @@ public class MultipleSpecimenApplet extends BaseApplet {
     			}
 			}
 
+    		
 			public void focusLost(FocusEvent e) {   
 			}});
+    	
+    	
+    	temp.setBackground(null);
+    	temp.setForeground(null);
+    	
+    	temp.addMouseListener(new MouseListener() {
+			public void mouseClicked(MouseEvent e) {}
+			public void mousePressed(MouseEvent e) {}
+			public void mouseReleased(MouseEvent e) {}
+			public void mouseEntered(MouseEvent e) {
+				temp.setOpaque(true);
+}
+			public void mouseExited(MouseEvent e) {}
+		});
+    	
     	JButton addSpecimen = new JButton(AppletConstants.MULTIPLE_SPECIMEN_ADD_SPECIMEN);
     	addSpecimen.addActionListener(new AddColumnHandler(table,this) );
     	
@@ -315,13 +322,13 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		panel.add(placeHolder);
 		panel.add(deleteLast);
 		panel.add(placeHolder);
+		
 		JCheckBox chk = new JCheckBox("Virtually Locate All The Specimens");
-		// chk.setBackground(panel.getBackground());
-		panel.add(chk);
+	    panel.add(chk);
 		JButton submit = new JButton(AppletConstants.MULTIPLE_SPECIMEN_SUBMIT);
 		submit.addActionListener(new SpecimenSubmitButtonHandler(table));
 		placeHolder = new JLabel("                                     ");  
-		panel.add(placeHolder);
+	//	panel.add(placeHolder);
 		panel.add(submit);
 		
 		chk.addActionListener(new ActionListener() 
@@ -333,26 +340,6 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		}
 		);
 		
-		//chk.setOpaque(true);
-    /*
-	 * int usedWidth = copy.getPreferredSize().width+
-	 * paste.getPreferredSize().width + deleteLast.getPreferredSize().width + (3 *
-	 * placeHolder.getPreferredSize().width) ; usedWidth = usedWidth +
-	 * placeHolder.getPreferredSize().width +
-	 * addSpecimen.getPreferredSize().width ;
-	 * 
-	 * //Temporary added till adjusting height JPanel submitButtonPanel = new
-	 * JPanel( new FlowLayout(FlowLayout.RIGHT ) ); JButton submit = new
-	 * JButton(AppletConstants.MULTIPLE_SPECIMEN_SUBMIT);
-	 * submit.addActionListener(new SpecimenSubmitButtonHandler(table));
-	 * placeHolder = new JLabel(" "); int submitButtonPanelWidth =
-	 * getWidth()-usedWidth-20; System.out.println("submitButtonPanelWidth : "+
-	 * submitButtonPanelWidth + " usedWidth: "+usedWidth);
-	 * submitButtonPanel.setPreferredSize(new
-	 * Dimension(submitButtonPanelWidth,(int) submit.getPreferredSize().height+5 ) );
-	 * submitButtonPanel.add(placeHolder );submitButtonPanel.add(submit
-	 * );panel.add(submitButtonPanel );
-	 */
     	appletColor = panel.getBackground(); 
     }
     
