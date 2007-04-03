@@ -70,8 +70,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	/**
  * Name : Ashish Gupta
  * Reviewer Name : Sachin Lale 
- * Bug ID: <BUG #>
- * Patch ID: <BUG #>_3 
+ * Bug ID: Multiple Specimen Bug
+ * Patch ID: Multiple Specimen Bug_3 
  * See also: 1-8
  * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
 	*/
@@ -470,8 +470,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			/**
  * Name : Ashish Gupta
  * Reviewer Name : Sachin Lale 
- * Bug ID: <BUG #>
- * Patch ID: <BUG #>_4 
+ * Bug ID: Multiple Specimen Bug
+ * Patch ID: Multiple Specimen Bug_4 
  * See also: 1-8
  * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
 	*/

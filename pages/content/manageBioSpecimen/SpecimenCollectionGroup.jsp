@@ -177,8 +177,8 @@
 			/**
  			* Name : Ashish Gupta
  			* Reviewer Name : Sachin Lale 
- 			* Bug ID: <BUG #>
- 			* Patch ID: <BUG #>_2 
+ 			* Bug ID: Multiple Specimen Bug
+ 			* Patch ID: Multiple Specimen Bug_2 
  			* See also: 1-8
  			* Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
 			*/
@@ -520,8 +520,8 @@
 	<!--
  * Name : Ashish Gupta
  * Reviewer Name : Sachin Lale 
- * Bug ID: <BUG #>
- * Patch ID: <BUG #>_1 
+ * Bug ID: Multiple Specimen Bug
+ * Patch ID: Multiple Specimen Bug_1 
  * See also: 1-8
  * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
 	-->

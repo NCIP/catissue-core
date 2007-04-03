@@ -756,12 +756,8 @@ PUBLIC
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 			<forward name="createNewSpecimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;virtualLocated=true" />
 <!--
- * Name : Ashish Gupta
- * Reviewer Name : Sachin Lale 
- * Bug ID: <BUG #>
- * Patch ID: <BUG #>_7 
- * See also: 1-10
- * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+ * Bug ID: Multiple Specimen Bug
+ * Patch ID: Multiple Specimen Bug_7  
 	-->
 			<!-- forward name="createMultipleSpecimen" path="/InitMultipleSpecimen.do?operation=add&amp;menuSelected=15" /-->			
 			<forward name="createMultipleSpecimen" path="/NewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			
@@ -778,12 +774,8 @@ PUBLIC
 			<forward name="failure" path="/SpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroup&amp;menuSelected=14" />
 			<forward name="createNewSpecimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;virtualLocated=true" />
 <!--
- * Name : Ashish Gupta
- * Reviewer Name : Sachin Lale 
  * Bug ID: Multiple Specimen Bug
- * Patch ID: <BUG #>_8 
- * See also: 1-10
- * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+ * Patch ID: Multiple Specimen Bug_8  
 	-->
 			<!-- forward name="createMultipleSpecimen" path="/InitMultipleSpecimen.do?operation=add&amp;menuSelected=15" /-->			
 			<forward name="createMultipleSpecimen" path="/NewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			
@@ -3222,12 +3214,8 @@ PUBLIC
 		<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 <!--
- * Name : Ashish Gupta
- * Reviewer Name : Sachin Lale 
- * Bug ID: <BUG #>
- * Patch ID: <BUG #>_9
- * See also: 1-10
- * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+ * Bug ID: Multiple Specimen Bug
+ * Patch ID: Multiple Specimen Bug_9
 	-->
 		<!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->
 				<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			
@@ -3303,12 +3291,8 @@ PUBLIC
 		<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
 		<!--
- * Name : Ashish Gupta
- * Reviewer Name : Sachin Lale 
- * Bug ID: <BUG #>
- * Patch ID: <BUG #>_10 
- * See also: 1-10
- * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+ * Bug ID: Multiple Specimen Bug
+ * Patch ID: Multiple Specimen Bug_10  
 	-->
 <!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->			
 		<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			
