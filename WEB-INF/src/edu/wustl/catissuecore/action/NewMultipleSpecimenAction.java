@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
+import edu.wustl.catissuecore.actionForm.MultipleSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
@@ -81,6 +82,46 @@ public class NewMultipleSpecimenAction extends SecureAction
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, new HashMap());
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY, new HashMap());
 
+		//Added by Ashish
+		/**
+ * Name : Ashish Gupta
+ * Reviewer Name : Sachin Lale 
+ * Bug ID: <BUG #>
+ * Patch ID: <BUG #>_5 
+ * See also: 1-8
+ * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+	*/
+		MultipleSpecimenForm multipleSpForm = (MultipleSpecimenForm)form;
+		String buttonName = request.getParameter("button");
+		if(buttonName != null)
+		{
+			String noOfSp = request.getParameter("numberOfSpecimens");
+			Integer temp = new Integer(noOfSp);
+			multipleSpForm.setNumberOfSpecimen(temp.intValue());
+		}
+//		*************  ForwardTo implementation *************
+		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
+  
+		if (forwardToHashMap != null)
+		{
+			String specimenCollectionGroupName = (String) forwardToHashMap
+					.get("specimenCollectionGroupName");
+			
+			if (specimenCollectionGroupName != null)
+			{
+				//Setting the specimenCollectionGroup 
+				request.getSession().setAttribute("specimenCollectionGroupName" , specimenCollectionGroupName);
+			}
+			String specimenCollectionGroupId = (String) forwardToHashMap
+			.get("specimenCollectionGroupId");
+			if(specimenCollectionGroupId != null)
+			{
+				request.getSession().setAttribute("specimenCollectionGroupId" , specimenCollectionGroupId);
+			}
+			
+		}
+		//*************  ForwardTo implementation *************
+		
 		return mapping.findForward("specimen");
 	}
 

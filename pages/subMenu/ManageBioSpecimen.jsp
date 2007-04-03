@@ -93,7 +93,15 @@
 			<a class="subMenuPrimary" href="NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&menuSelected=15&virtualLocated=true">
 				<bean:message key="specimen.menu.singleAdd" />
 			</a> | 
-			<a class="subMenuPrimary" href="InitMultipleSpecimen.do?menuSelected=15">
+<!--
+ * Name : Ashish Gupta
+ * Reviewer Name : Sachin Lale 
+ * Bug ID: <BUG #>
+ * Patch ID: <BUG #>_6 
+ * See also: 1-8
+ * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+	-->
+			<a class="subMenuPrimary" href="NewMultipleSpecimenAction.do?method=showMultipleSpecimen&menuSelected=15">
 				<bean:message key="specimen.menu.multipleAdd" />			
 			</a> |
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&aliasName=Specimen&menuSelected=15" >

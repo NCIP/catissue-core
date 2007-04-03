@@ -174,7 +174,17 @@
 			String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 			String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
 			String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
-			String forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncName;
+			/**
+ 			* Name : Ashish Gupta
+ 			* Reviewer Name : Sachin Lale 
+ 			* Bug ID: <BUG #>
+ 			* Patch ID: <BUG #>_2 
+ 			* See also: 1-8
+ 			* Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+			*/
+			String confirmDisableFuncNameForMultipleSpecimen =  "confirmDisable('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
+			String forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
+
 	%>
 		
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
@@ -506,6 +516,42 @@
 			</table>
 		</td></tr>
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION ENDS-->
+	</table>
+	<!--
+ * Name : Ashish Gupta
+ * Reviewer Name : Sachin Lale 
+ * Bug ID: <BUG #>
+ * Patch ID: <BUG #>_1 
+ * See also: 1-8
+ * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+	-->
+
+	<!-- For Multiple Specimen-----Ashish -->
+		<table summary="" cellpadding="0" cellspacing="0" border="0"
+		class="contentPage" width="600">
+		<tr>
+			<td>
+			<table summary="" cellpadding="3" cellspacing="0" border="0"
+				width="100%">
+				
+				<tr>
+					<td class="formTitle" " colspan="6" height="20">
+						<bean:message key="multipleSpecimen.mainTitle" />
+					</td>
+				</tr>
+				<tr>
+					
+					<td class="formLabel" colspan="2">
+						<bean:message key="multipleSpecimen.numberOfSpecimen" />
+					</td>
+					<td class="formField" colspan="3">
+						<!-- html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimen"  /-->
+						<html:text  styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimens" />
+					</td>
+				</tr>			
+			</table>
+			</td>
+		</tr>
 	</table>
 	
 	<%@ include file="SpecimenCollectionGroupPageButtons.jsp" %>
