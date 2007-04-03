@@ -66,13 +66,20 @@
 		<td height="100%" valign="top">
 		<table summary="" cellpadding="0" cellspacing="0" border="0"
 			height="100%">
+			<!-- 
+				 Name : Virender Mehta
+		       	 Reviewer: Sachin Lale
+				 Bug ID: MoveLogoBugId
+				 Patch ID: MoveLogoBugId_2
+				 See also: MoveLogoBugId_1
+				 Description: Commented code because catissueLogo is moved to upper left position of the page
+			 -->	
 			<!-- application hdr begins -->
-			<tr>
+			<!--tr>
 				<td colspan="2" height="50"><tiles:insert
 					attribute="applicationheader"></tiles:insert></td>
-			</tr>
+			</tr-->
 			<!-- application hdr ends -->
-
 			<tr>
 				<td width="190" valign="top" class="subMenu"><!-- submenu begins -->
 				<tiles:insert attribute="commonmenu">
