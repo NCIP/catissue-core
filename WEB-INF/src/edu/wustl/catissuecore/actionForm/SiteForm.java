@@ -62,9 +62,15 @@ public class SiteForm extends AbstractActionForm
     private String state;
 
     /**
-     * The Country where the site is.
-     */
-    private String country;
+      *  Name : Virender Mehta
+      *  Reviewer: Sachin Lale
+	  *  Bug ID: DefaultCountry BugID
+	  *  Patch ID: DefaultNameCountry BugID_1
+	  *  See also: Reset method of UserForm.java 
+	  *  Description: The Country where the site is
+	  *  Default country Name United States 
+	  */
+    private String country = Constants.DEFAULT_COUNTRY_NAME;;
 
     /**
      * The zip code of city where the site is.
@@ -347,8 +353,8 @@ public class SiteForm extends AbstractActionForm
      * */
     protected void reset()
     {
-    	//Default Country Name United States  
-    	  this.country = Constants.DEFAULT_COUNTRY_NAME;
+    	  
+//    	  this.country = Constants.DEFAULT_COUNTRY_NAME;
 //    	  this.name			= null;
 //        this.type			= null;
 //        this.emailAddress	= null;
