@@ -169,7 +169,7 @@
 										  staticField="false"
 					    />	
 
-							<label for="eventparameters.timeinhours">
+							<label for="eventparameters.timeinminutes">
 								&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
 							</label>
 						</td>
@@ -201,7 +201,7 @@
 										  staticField="false"
 					    />	
 
-							<label for="eventparameters.timeinhours">
+							<label for="eventparameters.timeinminutes">
 								&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
 							</label>
 						</td>

@@ -4,9 +4,8 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.FixedEventParametersForm"%>
-
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
-
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <head>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
@@ -38,9 +37,10 @@
         }
 		Object obj = request.getAttribute("fixedEventParametersForm");
 		String currentEventParametersDate = ""; 
+		FixedEventParametersForm form = null;
 		if(obj != null && obj instanceof FixedEventParametersForm)
 		{
-			FixedEventParametersForm form = (FixedEventParametersForm)obj;
+			form = (FixedEventParametersForm)obj;
 		currentEventParametersDate = form.getDateOfEvent();
 		if(currentEventParametersDate == null)
 			currentEventParametersDate = "";
@@ -152,7 +152,12 @@ if(currentEventParametersDate.trim().length() > 0)
 		</tr>
 		
 		
-		<!-- hours & minutes -->		
+		<!-- hours & minutes -->	
+		<!-- 
+			 Bug ID:  AutocompleteBugID
+			 Patch ID: AutocompleteBugID_6
+			 Description:<html:select> tag is replaced by Autocomplete
+	   -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
@@ -161,20 +166,23 @@ if(currentEventParametersDate.trim().length() > 0)
 				</label>
 			</td>
 			<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
-				</html:select>&nbsp;
+				 <autocomplete:AutoCompleteTag property="timeInHours"
+					  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
+					  initialValue="<%=form.getTimeInHours()%>"
+					  styleClass="formFieldSized5"
+					  staticField="false"
+			    />	
+				&nbsp;
 				<label for="eventparameters.timeinhours">
 					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 				</label>
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
-				</html:select>
-				<label for="eventparameters.timeinhours">
+                   <autocomplete:AutoCompleteTag property="timeInMinutes"
+						  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
+						  initialValue="<%=form.getTimeInMinutes()%>"
+						  styleClass="formFieldSized5"
+						  staticField="false"
+				    />	
+				<label for="eventparameters.timeinminutes">
 					&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
 				</label>
 			</td>
@@ -190,11 +198,11 @@ if(currentEventParametersDate.trim().length() > 0)
 				</label>
 			</td>
 			<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="fixationType" styleClass="formFieldSized" styleId="fixationType" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options collection="<%=Constants.FIXATION_LIST%>" labelProperty="name" property="value"/>
-				</html:select>
+				<autocomplete:AutoCompleteTag property="fixationType"
+					  optionsList = "<%=request.getAttribute(Constants.FIXATION_LIST)%>"
+					  initialValue="<%=form.getFixationType()%>"
+					  styleClass="formFieldSized"
+			    />	
 			</td>
 		</tr>
 

@@ -154,6 +154,11 @@
 		
 		
 		<!-- hours & minutes -->		
+		<!-- 
+			 Bug ID:  AutocompleteBugID
+			 Patch ID: AutocompleteBugID_3
+			 Description:<html:select> tag is replaced by Autocomplete
+	   -->	
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
@@ -182,7 +187,7 @@
 										  staticField="false"
 					    />	
 
-				<label for="eventparameters.timeinhours">
+				<label for="eventparameters.timeinminutes">
 					&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
 				</label>
 			</td>

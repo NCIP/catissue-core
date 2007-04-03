@@ -201,9 +201,10 @@
 			Object obj = request.getAttribute("distributionForm");
 			int noOfRows = 1;
 			Map map = null;
+			DistributionForm form = null;
 
 			if (obj != null && obj instanceof DistributionForm) {
-				DistributionForm form = (DistributionForm) obj;
+				form = (DistributionForm) obj;
 				noOfRows = form.getCounter();
 				map = form.getValues();
 				currentDistributionDate = form.getDateOfEvent();
@@ -366,7 +367,12 @@
 				%> <bean:message key="page.dateFormat" />&nbsp;</td>
 				</tr>
 				
-				<!-- hours & minutes -->		
+				<!-- hours & minutes -->	
+				<!-- 
+			 Bug ID:  AutocompleteBugID
+			 Patch ID: AutocompleteBugID_16
+			 Description:<html:select> tag is replaced by Autocomplete
+	   -->		
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
 			<td class="formRequiredLabel">
@@ -375,20 +381,23 @@
 				</label>
 			</td>
 			<td class="formField">
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="timeInHours" styleClass="formFieldSized5" styleId="timeInHours" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options name="<%=Constants.HOUR_LIST%>" labelName="<%=Constants.HOUR_LIST%>" />
-				</html:select>&nbsp;
+				<autocomplete:AutoCompleteTag property="timeInHours"
+					  optionsList = "<%=request.getAttribute(Constants.HOUR_LIST)%>"
+					  initialValue="<%=form.getTimeInHours()%>"
+					  styleClass="formFieldSized5"
+					  staticField="false"
+			    />	
+				&nbsp;
 				<label for="eventparameters.timeinhours">
 					<bean:message key="eventparameters.timeinhours"/>&nbsp; 
 				</label>
-<!-- Mandar : 434 : for tooltip -->
-				<html:select property="timeInMinutes" styleClass="formFieldSized5" styleId="timeInMinutes" size="1"
-				 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<html:options name="<%=Constants.MINUTES_LIST%>" labelName="<%=Constants.MINUTES_LIST%>" />
-				</html:select>
-				<label for="eventparameters.timeinhours">
+                   <autocomplete:AutoCompleteTag property="timeInMinutes"
+						  optionsList = "<%=request.getAttribute(Constants.MINUTES_LIST)%>"
+						  initialValue="<%=form.getTimeInMinutes()%>"
+						  styleClass="formFieldSized5"
+						  staticField="false"
+				    />	
+				<label for="eventparameters.timeinminutes">
 					&nbsp;<bean:message key="eventparameters.timeinminutes"/> 
 				</label>
 			</td>
