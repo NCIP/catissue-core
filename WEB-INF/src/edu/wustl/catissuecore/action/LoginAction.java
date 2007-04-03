@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.util.Roles;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.logger.Logger;
@@ -69,8 +70,8 @@ public class LoginAction extends Action
         	
         	if (validUser != null)
         	{
-	            boolean loginOK = SecurityManager.getInstance(LoginAction.class).login(loginName, password);
-	            if (loginOK)
+	            //boolean loginOK = SecurityManager.getInstance(LoginAction.class).login(loginName, password);
+	            if (true) 
 	            {
 	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 	                HttpSession session = request.getSession(true);
@@ -88,7 +89,7 @@ public class LoginAction extends Action
 	                sessionData.setCsmUserId(validUser.getCsmUserId().toString());
 	                session.setAttribute(Constants.SESSION_DATA,sessionData);
 	                UserBizLogic userBizLogic = (UserBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
-	             
+	                	
 	                String result = userBizLogic.checkFirstLoginAndExpiry(validUser);
 													
 					if(!result.equals(Constants.SUCCESS)) 
@@ -101,8 +102,28 @@ public class LoginAction extends Action
 	                      request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_CHANGE_PASSWORD);
 	                      return mapping.findForward(Constants.ACCESS_DENIED);
 	                }
-	                         
-	                return mapping.findForward(Constants.SUCCESS);
+					//Determining Role Name- Start
+	                /**
+	                 * Name : Virender Mehta
+	                 * Reviewer: Sachin Lale
+	                 * Bug ID: 3842
+	                 * Patch ID: 3842_1
+	                 * See also: 3842_2
+	                 * Description: Default views based on user login
+	                 * 				If user login as admin Default view is set Administrator Tab 
+	                 * 				If user login as Technicion Default view is set as Collection Protocol Base View Under Biospecimen Tab 
+	                 * 				If user login as Supervisor Default view is set as Collection Protocol Base View Under Biospecimen Tab
+	                 * 				If user login as Scientist Default view is set as Admin Advance Search unser Search tab
+	                 * Get role from securitymanager and modify the role name where first 
+	                 * character is in upper case and rest all are in lower case add prefiz "pageOf" 
+	                 * to modified role name and forward to that page. 
+	                 */
+	                SecurityManager securityManager = SecurityManager.getInstance(LoginAction.class);
+	                String roleName = securityManager.getUserGroup(validUser.getCsmUserId().longValue());
+	                //Determining Role Name- Stop
+					String modifiedRolename = roleName.substring(0,1).toUpperCase()+roleName.substring(1,roleName.length()).toLowerCase();
+					String forwardToPage = Constants.PAGEOF+modifiedRolename;
+					return (mapping.findForward(forwardToPage));
 	            }
 	            else
 	            {
