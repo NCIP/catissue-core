@@ -2,6 +2,7 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
 <head>
 <!-- Mandar : 434 : for tooltip -->
@@ -89,10 +90,15 @@
 		
 			<td class="formField">
 <!-- Mandar : 434 : for tooltip -->
-				<html:select property="type" styleClass="formFieldSized15" styleId="type" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-					<%--html:options name="biohazardTypeList" labelName="biohazardTypeList" /--%>
-					<html:options collection="<%=Constants.BIOHAZARD_TYPE_LIST%>" labelProperty="name" property="value"/>
-				</html:select>
+	 	<!-- 
+			 Bug ID:  AutocompleteBugID
+			 Patch ID: AutocompleteBugID_17
+			 Description:html:select tag is replaced by Autocomplete
+	   -->	
+				<autocomplete:AutoCompleteTag property="type"
+									  optionsList = "<%=request.getAttribute(Constants.BIOHAZARD_TYPE_LIST)%>"
+									  initialValue=""
+			    />
 			</td>
 		</tr>
 

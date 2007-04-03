@@ -154,7 +154,7 @@
 			 Bug ID:  AutocompleteBugID
 			 Patch ID: AutocompleteBugID_1
 			 See also: AutocompleteBugID_1 to 15
-			 Description:<html:select> tag is replaced by Autocomplete
+			 Description: html:select tag is replaced by Autocomplete
 	   -->
 	
 		<tr>

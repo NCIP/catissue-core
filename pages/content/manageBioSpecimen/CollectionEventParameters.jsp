@@ -157,7 +157,7 @@
 		<!-- 
 			 Bug ID:  AutocompleteBugID
 			 Patch ID: AutocompleteBugID_3
-			 Description:<html:select> tag is replaced by Autocomplete
+			 Description:html:select tag is replaced by Autocomplete
 	   -->	
 		<tr>
 			<td class="formRequiredNotice" width="5">*</td>
