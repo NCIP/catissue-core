@@ -802,4 +802,15 @@
 		</target>
 		<!-- Create the Applet JAR Ends-->
 
+	<target name="build_DomainObject_jar" depends="compile" description="To create jar which contains domain object along with its hbm file. This is required for Query Metedata loading.">
+		<jar taskname="buildJar" jarfile="${base.dir}/catissueDomain.jar">
+			<fileset dir="${target.dir}">
+				<include name="**/*.hbm.xml" />
+				<include name="**/edu/wustl/catissuecore/domain/**" />
+				<include name="**/edu/wustl/catissuecore/actionForm/**" />
+				<include name="**/edu/wustl/catissuecore/bean/**" />
+			</fileset>
+		</jar>
+	</target>
+	
 </project>
