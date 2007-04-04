@@ -415,7 +415,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * Patch ID: 3052_2
      * Seea also: 1-4
 	 * Returns the Specimen Collection Group comment .
-	 * @hibernate.property name="comment" type="string" column="COMMENT" length="2000"
+	 * @hibernate.property name="comment" type="string" column="COMMENTS" length="500"
 	 * @return comment.
 	 * @see #setComment(String)
 	 */
