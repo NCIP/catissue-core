@@ -15,8 +15,8 @@
 															property="submitPage" 
 															title="Submit Only"
 															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>" 
-															onclick="<%=normalSubmit%>">
-						  				     	    
+															onclick="<%=normalSubmit%>"
+						  				     	    		styleId = "submitOnly">
 											     	</html:button>
 												</td>
 											
@@ -27,8 +27,8 @@
 															title="Submit and Add Specimen"
 															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][0]%>" 
 															disabled="<%=isAddNew%>" 
-															onclick="<%=forwardToSubmit%>">
-						  				     	    
+															onclick="<%=forwardToSubmit%>"
+						  				     	    		styleId = "submitAndAdd">
 											     	</html:button>
 												</td>
 												<td nowrap class="formFieldNoBorders">

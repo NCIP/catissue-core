@@ -130,7 +130,30 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
         }
-
+        /**
+ 			* Name : Ashish Gupta
+ 			* Reviewer Name : Sachin Lale 
+ 			* Bug ID: Multiple Specimen Bug
+ 			* Patch ID: Multiple Specimen Bug_2 
+ 			* See also: 1-8
+ 			* Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+			*/
+		function disablebuttons()
+		{
+			var enteredValue = document.getElementById("numberOfSpecimen").value;
+			var submitButton = document.getElementById("submitOnly");
+			var submitAndAddButton = document.getElementById("submitAndAdd");
+			if(enteredValue > 1)
+			{			
+				submitButton.disabled = true;
+				submitAndAddButton.disabled = true;
+			}
+			else
+			{			
+				submitButton.disabled = false;
+				submitAndAddButton.disabled = false;
+			}
+		}
 		
 	</script>
 </head>
@@ -546,7 +569,7 @@
 					</td>
 					<td class="formField" colspan="3">
 						<!-- html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimen"  /-->
-						<html:text  styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimens" />
+						<html:text  styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimens" onkeyup="disablebuttons()"/>
 					</td>
 				</tr>			
 			</table>
