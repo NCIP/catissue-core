@@ -67,6 +67,23 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	
 	//For AddNew functionality
 	private long collectionProtocolRegistrationId;
+    
+    
+    /**
+     * Comments given by user.
+     */
+    
+    /**
+     * Name: Shital Lawhale
+     * Reviewer Name : Sachin Lale 
+     * Bug ID: 3052
+     * Patch ID: 3052_1_2
+     * See also: 1_1 to 1_5
+     * Description : A comment field at the Specimen Collection Group.
+     */
+    private String comment;
+    
+    
 	/**
  * Name : Ashish Gupta
  * Reviewer Name : Sachin Lale 
@@ -227,6 +244,16 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		clinicalDiagnosis = Utility.toString(specimenCollectionGroup.getClinicalDiagnosis());
 		clinicalStatus = Utility.toString(specimenCollectionGroup.getClinicalStatus());
 		activityStatus = Utility.toString(specimenCollectionGroup.getActivityStatus());
+        
+         /**
+         * Name: Shital Lawhale
+         * Reviewer Name : Sachin Lale 
+         * Bug ID: 3052
+         * Patch ID: 3052_1_4
+         * See also: 1_1 to 1_5
+         * Description : Get comment field from database and set it to form bean.
+         */  
+        comment = specimenCollectionGroup.getComment();
 			
 		ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
 		surgicalPathologyNumber = Utility.toString(clinicalReport.getSurgicalPathologyNumber());
@@ -521,5 +548,33 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 //            setProtocolParticipantIdentifier(addObjectIdentifier.toString());
             setCheckedButton(2);
         }
+    }
+
+
+    /**
+     * Name: Shital Lawhale
+     * Reviewer Name : Sachin Lale 
+     * Bug ID: 3052
+     * Patch ID: 3052_1_3
+     * See also: 1_1 to 1_5
+     * Description : A comment field at the Specimen Collection Group.
+     */    
+    
+    /**
+     * returns comment
+     */
+    public String getComment()
+    {
+        return comment;
+    }
+
+    /**
+     * 
+     * @param comment : user comment to set
+     */
+    
+    public void setComment(String comment)
+    {
+        this.comment = comment;
     }
 }
