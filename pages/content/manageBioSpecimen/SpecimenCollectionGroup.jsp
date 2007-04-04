@@ -508,6 +508,26 @@
 				    </td>
 				
 				 </tr>
+				 <!--comments -->
+				 <!-- 
+				 * Name: Shital Lawhale
+			     * Bug ID: 3052
+			     * Patch ID: 3052_1_1
+			     * See also: 1_1 to 1_5
+				 * Description : Added <TR> for comment field .				 
+				-->	 
+				 <tr>
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">
+						<label for="comments">
+							<bean:message key="app.comments"/>
+						</label>
+					</td>					
+				   <td class="formField" colspan="4">
+				    		<html:textarea styleClass="formFieldSized" rows="3"  property="comment"/>
+			    	</td>
+				 </tr>
+				 
 
 				<!-- activitystatus -->	
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
