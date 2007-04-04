@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -45,6 +46,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -128,6 +130,27 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			Specimen specimen = (Specimen) specimenIterator.next();
 
 			/**
+			 * Name : Ashish Gupta
+			 * Reviewer's Name: Sachin Lale
+			 * Bug ID: 3262
+			 * Patch ID: 3262_3
+			 * See also: 1-4
+			 * Description: Default Event population for multiple specimen
+			 */
+			if(specimen.getSpecimenEventCollection() == null || specimen.getSpecimenEventCollection().isEmpty())
+			{
+				Collection specimenEventColl = new HashSet();
+				User user = new User();
+				user.setId(sessionDataBean.getUserId());
+				CollectionEventParameters collectionEventParameters = populateCollectionEventParameters(specimen,user);				
+				specimenEventColl.add(collectionEventParameters);
+				
+				ReceivedEventParameters receivedEventParameters = populateReceivedEventParameters(specimen,user);								
+				specimenEventColl.add(receivedEventParameters);
+				
+				specimen.setSpecimenEventCollection(specimenEventColl);
+			}
+			/**
 			 * Start: Change for API Search   --- Jitendra 06/10/2006
 			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
 			 * on domain object. For example in User object, it was initialized as protected String lastName=""; 
@@ -204,6 +227,39 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			}
 
 		}
+	}
+	/**
+	 * @param specimen
+	 * @param user
+	 * @return
+	 */
+	private CollectionEventParameters populateCollectionEventParameters(Specimen specimen,User user)
+	{
+//		Collection Events
+		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		collectionEventParameters.setSpecimen(specimen);
+		collectionEventParameters.setUser(user);
+		collectionEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+		collectionEventParameters.setCollectionProcedure("Not Specified");
+		collectionEventParameters.setComments("");
+		collectionEventParameters.setContainer("Not Specified");
+		return collectionEventParameters;
+	}
+	/**
+	 * @param specimen
+	 * @param user
+	 * @return
+	 */
+	private ReceivedEventParameters populateReceivedEventParameters(Specimen specimen,User user)
+	{
+//		Received Events
+		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		receivedEventParameters.setComments("");
+		receivedEventParameters.setReceivedQuality("Not Specified");
+		receivedEventParameters.setSpecimen(specimen);
+		receivedEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+		receivedEventParameters.setUser(user);
+		return receivedEventParameters;
 	}
 
 	/**
@@ -1325,7 +1381,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 					}
 				}
 			}
-		}
+		}		
 
 		//Validations for Biohazard Add-More Block
 		Collection bioHazardCollection = specimen.getBiohazardCollection();
