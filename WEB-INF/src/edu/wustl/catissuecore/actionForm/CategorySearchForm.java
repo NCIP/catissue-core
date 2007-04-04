@@ -63,7 +63,11 @@ public class CategorySearchForm extends ActionForm
 	 * String to store the text field value.
 	 */
 	private String currentPage = null;
-
+	/**
+	 * 
+	 */
+    private String booleanAttribute = null;
+    
 	/**
 	 * @return the currentPage
 	 */
@@ -231,5 +235,19 @@ public class CategorySearchForm extends ActionForm
 	public void setNodeId(String nodeId)
 	{
 		this.nodeId = nodeId;
+	}
+	/**
+	 * @return the booleanAttribute
+	 */
+	public String getBooleanAttribute()
+	{
+		return booleanAttribute;
+	}
+	/**
+	 * @param booleanAttribute the booleanAttribute to set
+	 */
+	public void setBooleanAttribute(String booleanAttribute)
+	{
+		this.booleanAttribute = booleanAttribute;
 	}
 }

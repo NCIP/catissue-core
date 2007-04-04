@@ -143,7 +143,14 @@ public class GenerateHtmlForAddLimitsBizLogic
 						}
 						else
 						{
-							generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, values,operator));
+							if(attribute.getDataType().equalsIgnoreCase("boolean"))
+							{
+								generatedHTML.append("\n" + generateHTMLForRadioButton(attribute,values));	
+							}
+							else
+							{
+								generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, values,operator));
+							}
 						}
 					}
 					else
@@ -155,7 +162,14 @@ public class GenerateHtmlForAddLimitsBizLogic
 						}
 						else
 						{
-							generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null,null));
+							if(attribute.getDataType().equalsIgnoreCase("boolean"))
+							{
+								generatedHTML.append("\n" +generateHTMLForRadioButton(attribute,null));	
+							}
+							else
+							{
+								generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null,null));
+							}
 						}
 					}
 				}
@@ -168,7 +182,14 @@ public class GenerateHtmlForAddLimitsBizLogic
 					}
 					else
 					{
-						generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null,null));
+						if(attribute.getDataType().equalsIgnoreCase("boolean"))
+						{
+							generatedHTML.append("\n" +generateHTMLForRadioButton(attribute,null));	
+						}
+						else
+						{
+							generatedHTML.append("\n" + generateHTMLForTextBox(attribute, isBetween, null,null));
+						}
 					}
 				}
 				generatedHTML.append("\n</tr>");
@@ -299,7 +320,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 		}
 		return operatorsList;
 	}
-	
+
 	/**
 	 * This method generates the combobox's html to show the operators valid for the attribute passed to it.
 	 * @param attribute AttributeInterface 
@@ -561,5 +582,36 @@ public class GenerateHtmlForAddLimitsBizLogic
 			}
 		}
 		return attributesList;
+	}
+	private String generateHTMLForRadioButton(AttributeInterface attribute,ArrayList<String> values)
+	{
+		StringBuffer html = new StringBuffer();
+		String attributeName = attribute.getName();
+		
+		String componentId = attributeName + attribute.getId().toString()+"_radioButton";
+		String componentName = componentId+"_booleanAttribute";
+		System.out.println(componentName);
+		html.append("\n<td>");
+		if(values == null)
+		{
+			html.append("\n<input type='radio' id = '"+componentId+"_true' value='true' name='"+componentName+"'><font class='standardTextQuery'>True</font>");
+			html.append("\n<input type='radio' id = '"+componentId+"_false' value='false' name='"+componentName+"'><font class='standardTextQuery'>False</font>");
+		}
+		else
+		{
+			if(values.get(0).equalsIgnoreCase("true"))
+			{
+				html.append("\n<input type='radio' id = '"+componentId+"_true' value='true' name='"+componentName+"' checked><font class='standardTextQuery'>True</font>");
+				html.append("\n<input type='radio' id = '"+componentId+"_false' value='false' name='"+componentName+"'><font class='standardTextQuery'>False</font>");
+			}
+			else
+			{
+				html.append("\n<input type='radio' id = '"+componentId+"_true' value='true' name='"+componentName+"' ><font class='standardTextQuery'>True</font>");
+				html.append("\n<input type='radio' id = '"+componentId+"_false' value='false' name='"+componentName+"' checked><font class='standardTextQuery'>False</font>");
+			}
+		}
+		html.append("\n</td>");
+		System.out.println(html.toString());
+		return html.toString();
 	}
 }
