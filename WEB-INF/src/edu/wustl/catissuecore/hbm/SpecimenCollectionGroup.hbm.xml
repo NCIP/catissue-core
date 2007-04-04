@@ -63,7 +63,14 @@
             column="ACTIVITY_STATUS"
             length="50"
         />
-
+		<property
+            name="comment"
+            type="string"
+            update="true"
+            insert="true"
+            column="COMMENTS"
+            length="500"
+        />
         <many-to-one
             name="site"
             class="edu.wustl.catissuecore.domain.Site"

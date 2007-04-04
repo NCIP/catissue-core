@@ -80,6 +80,15 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
     protected Collection specimenCollection = new HashSet();
 
     /**
+     * Name: Sachin Lale 
+     * Bug ID: 3052
+     * Patch ID: 3052_1
+     * See also: 1-4 
+     * Description : A comment field at the Specimen Collection Group level.
+     */
+    protected String comment;
+
+    /**
      * A registration of a Participant to a Collection Protocol.
      */
     protected CollectionProtocolRegistration collectionProtocolRegistration;
@@ -398,5 +407,25 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      */
 	public String getMessageLabel() {		
 		return this.name;
+	}
+	
+	/**
+	 * Name: Sachin Lale 
+     * Bug ID: 3052
+     * Patch ID: 3052_2
+     * Seea also: 1-4
+	 * Returns the Specimen Collection Group comment .
+	 * @hibernate.property name="comment" type="string" column="COMMENT" length="2000"
+	 * @return comment.
+	 * @see #setComment(String)
+	 */
+	public String getComment() {
+		return comment;
+	}
+	/**
+	 * @param name The name to set.
+	 */
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 }
