@@ -253,7 +253,7 @@ public class NewSpecimenAction extends SecureAction
 		     * Reviewer: Sachin Lale
 		     * Bug ID: TissueSiteCombo_BugID
 		     * Patch ID:TissueSiteCombo_BugID_1
-		     * See also:TissueSiteCombo_BugID_#
+		     * See also:TissueSiteCombo_BugID_2
 		     * Description: Setting TissueList with only Leaf node
 			 */
 			//Setting tissue site list
