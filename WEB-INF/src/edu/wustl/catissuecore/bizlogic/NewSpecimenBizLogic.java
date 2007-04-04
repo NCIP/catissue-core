@@ -240,9 +240,9 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		collectionEventParameters.setSpecimen(specimen);
 		collectionEventParameters.setUser(user);
 		collectionEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
-		collectionEventParameters.setCollectionProcedure("Not Specified");
+		collectionEventParameters.setCollectionProcedure(Constants.NOT_SPECIFIED);
 		collectionEventParameters.setComments("");
-		collectionEventParameters.setContainer("Not Specified");
+		collectionEventParameters.setContainer(Constants.NOT_SPECIFIED);
 		return collectionEventParameters;
 	}
 	/**
@@ -255,7 +255,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 //		Received Events
 		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 		receivedEventParameters.setComments("");
-		receivedEventParameters.setReceivedQuality("Not Specified");
+		receivedEventParameters.setReceivedQuality(Constants.NOT_SPECIFIED);
 		receivedEventParameters.setSpecimen(specimen);
 		receivedEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
 		receivedEventParameters.setUser(user);
