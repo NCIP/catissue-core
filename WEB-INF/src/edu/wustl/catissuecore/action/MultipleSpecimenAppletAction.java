@@ -43,6 +43,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
@@ -108,10 +109,29 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		specimenClassList.add(Constants.SELECT_OPTION);
 		specimenClassList.addAll(specimenClassTypeMap.keySet());
 		specimenClassTypeMap.put(Constants.SELECT_OPTION, new String[]{Constants.SELECT_OPTION});
-
+		
+		/**
+	     * Name : Virender Mehta
+	     * Reviewer: Sachin Lale
+	     * Bug ID: TissueSiteCombo_BugID
+	     * Patch ID:TissueSiteCombo_BugID_2
+	     * See also:TissueSiteCombo_BugID_1
+	     * Description: Setting TissueList with only Leaf node
+		 */
+		CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_TISSUE_SITE);
+    	CDEBizLogic cdeBizLogic = (CDEBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
+    	List tissueSiteList = new ArrayList(); 
+    	cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(),tissueSiteList);
+    	List finalTissueSiteList = new ArrayList();
+    	finalTissueSiteList.add(Constants.SELECT_OPTION);
+    	for(int i=0;i<tissueSiteList.size();i++) 
+    	{
+    		NameValueBean nvb = (NameValueBean) tissueSiteList.get(i);
+    		finalTissueSiteList.add(nvb.getName());
+    	}
 		DataListsMap.put(Constants.SPECIMEN_TYPE_MAP, specimenClassTypeMap);
 		DataListsMap.put(Constants.SPECIMEN_CLASS_LIST, specimenClassList.toArray());
-		DataListsMap.put(Constants.TISSUE_SITE_LIST, Utility.getListForCDE(Constants.CDE_NAME_TISSUE_SITE).toArray());
+		DataListsMap.put(Constants.TISSUE_SITE_LIST, finalTissueSiteList.toArray());
 		DataListsMap.put(Constants.TISSUE_SIDE_LIST, Utility.getListForCDE(Constants.CDE_NAME_TISSUE_SIDE).toArray());
 		DataListsMap.put(Constants.PATHOLOGICAL_STATUS_LIST, Utility.getListForCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS).toArray());
 
