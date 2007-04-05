@@ -357,6 +357,15 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			site = new Site();
 			site.setId(new Long(form.getSiteId()));
 			
+			/**
+             * Name: Sachin Lale
+             * Bug ID: 3052
+             * Patch ID: 3052_1
+             * See also: 1_1 to 1_5
+             * Description : A comment field is set from form bean to domain object.
+             */  
+            this.setComment(form.getComment());
+            
 			collectionProtocolEvent= new CollectionProtocolEvent();
 			collectionProtocolEvent.setId(new Long(form.getCollectionProtocolEventId()));
 			
@@ -393,15 +402,6 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			CollectionProtocol collectionProtocol = new CollectionProtocol();
 			collectionProtocol.setId(new Long(form.getCollectionProtocolId()));
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
-			 /**
-             * Name: Sachin Lale
-             * Bug ID: 3052
-             * Patch ID: 3052_1
-             * See also: 1_1 to 1_5
-             * Description : A comment field is set from form bean to domain object.
-             */  
-            this.setComment(form.getComment());
-
 		}
 		catch(Exception e)
 		{
@@ -424,7 +424,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * Patch ID: 3052_2
      * Seea also: 1-4 and 1_1 to 1_5
 	 * Returns the Specimen Collection Group comment .
-	 * @hibernate.property name="comment" type="string" column="COMMENTS" length="500"
+	 * @hibernate.property name="comment" type="string" column="COMMENTS" length="2000"
 	 * @return comment.
 	 * @see #setComment(String)
 	 */
