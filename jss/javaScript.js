@@ -937,16 +937,19 @@ function newSpecimenInit()
 		imageObj = document.getElementById('imageBH');	
 		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
 	}
-	if(document.getElementById('crDispType').value=="show")
-	{
-		show('collRecTable','crDispType');
-		imageObj = document.getElementById('imageCR');	
-		imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
-	}
-	else
-	{
-		hide('collRecTable','crDispType');
-		imageObj = document.getElementById('imageCR');	
-		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
+	if(document.getElementById('crDispType')!=null)
+	{	
+		if(document.getElementById('crDispType').value=="show")
+		{
+			show('collRecTable','crDispType');
+			imageObj = document.getElementById('imageCR');	
+			imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
+		}
+		else
+		{
+			hide('collRecTable','crDispType');
+			imageObj = document.getElementById('imageCR');	
+			imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
+		}
 	}
 }
