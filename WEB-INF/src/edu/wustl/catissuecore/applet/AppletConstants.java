@@ -231,6 +231,7 @@ public interface AppletConstants
 	public static final String SECOND_ATTR_VALUES = "SecondAttributeValues";
 	public static final String SHOW_ENTITY_INFO = "showEntityInformation";
 	public static final String SRC_ENTITY = "srcEntity";
+	public static final String PATHS = "paths";
 	public static final String DEST_ENTITY = "destEntity";
 	public static final String ERROR_MESSAGE = "errorMessage";
 	public static final String SHOW_VALIDATION_MESSAGES = "showValidationMessages";

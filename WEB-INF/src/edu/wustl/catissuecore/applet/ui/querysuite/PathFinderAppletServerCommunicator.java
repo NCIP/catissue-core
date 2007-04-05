@@ -2,7 +2,6 @@ package edu.wustl.catissuecore.applet.ui.querysuite;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -36,35 +35,7 @@ public class PathFinderAppletServerCommunicator implements PathFinderBusinessInt
 	{
 		this.serverURL = serverURL ;
 	}
-	/**
-	 * Returns all the possible paths between the source entity and destination entity.
-	 * @param srcEntity List of EntityInterface
-	 * @param destEntity EntityInterface
-	 */
-	public Map<EntityInterface, List<IPath>> getAllPossiblePaths(List<EntityInterface> srcEntity, EntityInterface destEntity) throws RemoteException
-	{
-		Map<EntityInterface, List<IPath>> pathsMap = null;
-		String urlString = serverURL + AppletConstants.PATH_FINDER + "?" +AppletConstants.APPLET_ACTION_PARAM_NAME + "=initData";
-		BaseAppletModel appletModel = new BaseAppletModel();
-		Map inputMap = new HashMap(); 
-		inputMap.put(AppletConstants.SRC_ENTITY, srcEntity);
-		inputMap.put(AppletConstants.DEST_ENTITY, destEntity);
-		appletModel.setData(inputMap);
-		try
-		{
-			AppletModelInterface outputModel = AppletServerCommunicator.doAppletServerCommunication(urlString, appletModel);
-			pathsMap = outputModel.getData();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		catch (ClassNotFoundException e)
-		{
-			e.printStackTrace();
-		}
-		return pathsMap;
-	}
+
 	/**
 	 * retuens Inter Model Associations
 	 * @param
@@ -85,11 +56,34 @@ public class PathFinderAppletServerCommunicator implements PathFinderBusinessInt
 	{
 		return null;
 	}
+	/**
+	 * Returns all the possible paths between the source entity and destination entity.
+	 * @param source source entity reference.
+	 * @param destination Target Entity reference.
+	 */
 	public List<IPath> getAllPossiblePaths(EntityInterface source, EntityInterface destination) throws RemoteException
 	{
-		List<EntityInterface> srcEntities = new ArrayList<EntityInterface>();
-		srcEntities.add(source);
-		return  getAllPossiblePaths(srcEntities, destination).get(source);
+		List<IPath> paths = null;
+		String urlString = serverURL + AppletConstants.PATH_FINDER + "?" +AppletConstants.APPLET_ACTION_PARAM_NAME + "=initData";
+		BaseAppletModel appletModel = new BaseAppletModel();
+		Map inputMap = new HashMap(); 
+		inputMap.put(AppletConstants.SRC_ENTITY, source);
+		inputMap.put(AppletConstants.DEST_ENTITY, destination);
+		appletModel.setData(inputMap);
+		try
+		{
+			AppletModelInterface outputModel = AppletServerCommunicator.doAppletServerCommunication(urlString, appletModel);
+			paths = (List<IPath>)outputModel.getData().get(AppletConstants.PATHS);
+		}
+		catch (IOException e)
+		{
+			throw new RuntimeException("Exception while getting all paths:", e);
+		}
+		catch (ClassNotFoundException e)
+		{
+			throw new RuntimeException("Exception while getting all paths:", e);
+		}
+		return paths;
 	}
 	public Set<ICuratedPath> getCuratedPaths(EntityInterface arg0, EntityInterface arg1) throws RemoteException
 	{
