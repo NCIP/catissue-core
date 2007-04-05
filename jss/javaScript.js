@@ -75,8 +75,10 @@ function enableButton(formButton,countElement,checkName)
 	else
 		formButton.disabled = true;
 }
-
-function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
+// function to delete biHazards and external identifiers from UI and to call respective action
+// Patch-Id: Improve_Space_Usability_On_Specimen_Page_1
+// Description: pageOf variable is added as an argument to function. If pageOf=pageOfNewSpecimenPage then do not call action.
+function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pageOf)
 {
 	var r = new Array(); 
 	
@@ -149,6 +151,12 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable)
 		/** setting number of rows present in form   **/
 		countElement.value = (countElement.value - delCounts);
 	
+	// Patch-Id: Improve_Space_Usability_On_Specimen_Page_1 
+	// Description: if page of pageOfNewSpecimen then no need to call action
+	if(pageOf=='pageOfNewSpecimen')
+	{
+		status=false;
+	}
 	if(status){
 		/** set action when checkbox is clicked **/
 		document.forms[0].action = action;
@@ -505,9 +513,12 @@ function submitBioHazards()
   form.action =  form.action + "?method=submitBioHazards";
   form.submit();
 }
-function deleteExternalIdentifiers()
+// function to delete External identifiers
+// Patch-Id: Improve_Space_Usability_On_Specimen_Page_1
+// Description: pageOf variable is added as an argument to function. If pageOf=pageOfNewSpecimenPage then do not call action.
+function deleteExternalIdentifiers(pageOf)
 {
-    deleteChecked('addExternalIdentifier','NewMultipleSpecimenAction.do?method=deleteExternalIdentifiers&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false)
+	deleteChecked('addExternalIdentifier','NewMultipleSpecimenAction.do?method=deleteExternalIdentifiers&status=true&button=deleteExId',document.forms[0].exIdCounter,'chk_ex_',false,pageOf)
 }
 
 function submitEvents() 
@@ -516,9 +527,12 @@ function submitEvents()
   form.action =  form.action + "?method=submitEvents&operation=addMultipleSpecimen";
   form.submit();
 }
-function deleteBioHazards()
+// function to delete bioHazards
+// Patch-Id: Improve_Space_Usability_On_Specimen_Page_1
+// Description: pageOf variable is added as an argument to function. If pageOf=pageOfNewSpecimenPage then do not call action.
+function deleteBioHazards(pageOf)
 {
-	deleteChecked('addBiohazardRow','NewMultipleSpecimenAction.do?method=deleteBioHazards&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false);
+	deleteChecked('addBiohazardRow','NewMultipleSpecimenAction.do?method=deleteBioHazards&status=true&button=deleteBiohazard',document.forms[0].bhCounter,'chk_bio_',false,pageOf);
 }
 
 
@@ -858,4 +872,81 @@ function trimByAutoTagAndSetIdInForm(object) {
 	// alert(idObject.id + idObject.value);
 
 }
-		
+
+// /** Name : Vijay_Pande
+// * Reviewer : Santosh_Chandak
+// * Bug ID: Improve_Space_Usability_On_Specimen_Page
+// * Patch ID: Improve_Space_Usability_On_Specimen_Page_1 
+// * See also: 1-5
+// * Description: To improve space usability on specimen page, the table which are rarely used are kept invisible by default. 
+// * Following script is used to toggle between the show and hide the table. (Collected/recieved Events, External identifiers, And Biohazard table)
+// */
+// This function collapse or expand the table  
+function switchStyle(image,dispVar, object)
+{
+	imageObj = document.getElementById(image);	
+	if(document.getElementById(dispVar).value== 'hide') //Clicked on + image
+	{
+		show(object,dispVar);
+		imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
+	}
+	else  							   //Clicked on - image
+	{
+		hide(object,dispVar);				
+		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
+	}
+}
+// This function is to show object on UI 
+function show(obj,dispVar)
+{
+	switchObj=document.getElementById(obj);
+	switchObj.style.display = 'block';
+	document.getElementById(dispVar).value='show';
+}
+// This function is to hide object from UI 
+function hide(obj,dispVar)
+{
+	switchObj=document.getElementById(obj);
+	switchObj.style.display='none';
+	document.getElementById(dispVar).value='hide';
+}
+// function that will run after the new specimen page is loaded to set tables in collapsed form
+function newSpecimenInit()
+{
+	if(document.getElementById('eiDispType').value=="show")
+	{
+		show('externalIdentifiers','eiDispType');
+		imageObj = document.getElementById('imageEI');	
+		imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
+	}
+	else
+	{
+		hide('externalIdentifiers','eiDispType');
+		imageObj = document.getElementById('imageEI');	
+		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
+	}
+	if(document.getElementById('bhDispType').value=="show")
+	{
+		show('biohazards','bhDispType');
+		imageObj = document.getElementById('imageBH');	
+		imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
+	}
+	else
+	{
+		hide('biohazards','bhDispType');
+		imageObj = document.getElementById('imageBH');	
+		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
+	}
+	if(document.getElementById('crDispType').value=="show")
+	{
+		show('collRecTable','crDispType');
+		imageObj = document.getElementById('imageCR');	
+		imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
+	}
+	else
+	{
+		hide('collRecTable','crDispType');
+		imageObj = document.getElementById('imageCR');	
+		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
+	}
+}
