@@ -326,7 +326,12 @@
 
 			confirmDisable(formName,document.forms[0].activityStatus);
 		}
-
+			/**
+			* Patch ID: Improve_Space_Usability_On_Specimen_Page_5
+			* See also: 1-5
+			* Description: Following function is provided to display tables (Collected/recieved Events table, external identifier table, biohazard table) in collapse style on new specimen page.
+			*/   	
+			window.onload=newSpecimenInit;
 	</script>
 </head>
 
