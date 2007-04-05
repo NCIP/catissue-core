@@ -7,10 +7,10 @@
 	String storageContainerID = null;
 	String position = null;
 	String propertyName = null, cdeName=null;
-	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) ||
-	     pageOf.equals(Constants.PAGEOF_SPECIMEN) || pageOf.equals(Constants.PAGEOF_ALIQUOT))
+	
+	if (pageOf.equals(Constants.PAGEOF_STORAGE_LOCATION) || pageOf.equals(Constants.PAGEOF_SPECIMEN)|| pageOf.equals(Constants.PAGEOF_ALIQUOT))
 	{
-	   // For all storage container maps...
+		//For all storage container maps...
 		storageContainerType = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TYPE);
 		storageContainerID = (String)request.getAttribute(Constants.STORAGE_CONTAINER_TO_BE_SELECTED);
 		position = (String)request.getAttribute(Constants.STORAGE_CONTAINER_POSITION);
@@ -45,37 +45,40 @@
 				}
 		    }
 		}
-
 	}
-									platform = navigator.platform.toLowerCase();
-									document.writeln('<APPLET\n' +
-													'CODEBASE = "<%=Constants.APPLET_CODEBASE%>"\n'+
-													'ARCHIVE = "TreeApplet.jar"\n'+
-													'CODE = "<%=Constants.QUERY_TREE_APPLET%>"\n'+
-													'ALT = "Tree Applet"\n'+
-													'NAME = "<%=Constants.TREE_APPLET_NAME%>"'
-													);
-									if (platform.indexOf("mac") != -1)
-									{
-										document.writeln('width="400" height="500" MAYSCRIPT>');
-									} 
-									else
-									{
-										document.writeln('width="100%" height="500" MAYSCRIPT>');
-									}
-									document.writeln('<PARAM name="type" value="application/x-java-applet;jpi-version=1.3">\n' +
-													'<PARAM name="name" value="<%=Constants.TREE_APPLET_NAME%>">\n'+
-													'<PARAM name="<%=Constants.PROPERTY_NAME%>" value="<%=propertyName%>">\n'+
-													'<PARAM name="<%=Constants.CDE_NAME%>" value="<%=cdeName%>">\n'+
-													'<PARAM name="<%=Constants.PAGEOF%>" value="<%=pageOf%>">\n'+
-													'<PARAM name="<%=Constants.STORAGE_CONTAINER%>" value="<%=containerName%>">\n'+
-													'<PARAM name="<%=Constants.STORAGE_CONTAINER_TYPE%>" value="<%=storageContainerType%>">\n'+
-													'<PARAM name="session_id" value="<%=session.getId()%>">\n'+
-													'<PARAM name = "<%=Constants.STORAGE_CONTAINER_TO_BE_SELECTED%>" value="<%=storageContainerID%>">\n'+
-													'<PARAM name = "<%=Constants.STORAGE_CONTAINER_POSITION%>" value="<%=position%>">\n'+
-													'</APPLET>'
-												    );
-							</script>
+	
+	platform = navigator.platform.toLowerCase();
+	document.writeln('<APPLET\n' +
+					'CODEBASE = "<%=Constants.APPLET_CODEBASE%>"\n'+
+					'ARCHIVE = "TreeApplet.jar"\n'+
+					'CODE = "<%=Constants.QUERY_TREE_APPLET%>"\n'+
+					'ALT = "Tree Applet"\n'+
+					'NAME = "<%=Constants.TREE_APPLET_NAME%>"'
+					);
+					
+	if (platform.indexOf("mac") != -1)
+	{
+		document.writeln('width="375" height="500" MAYSCRIPT>');
+	}
+	else
+	{
+		document.writeln('width="100%" height="100%" MAYSCRIPT>');
+	}
+	
+	document.writeln('<PARAM name="type" value="application/x-java-applet;jpi-version=1.3">\n' +
+					'<PARAM name="name" value="<%=Constants.TREE_APPLET_NAME%>">\n'+
+					'<PARAM name="<%=Constants.PROPERTY_NAME%>" value="<%=propertyName%>">\n'+
+					'<PARAM name="<%=Constants.CDE_NAME%>" value="<%=cdeName%>">\n'+
+					'<PARAM name="<%=Constants.PAGEOF%>" value="<%=pageOf%>">\n'+
+					'<PARAM name="<%=Constants.STORAGE_CONTAINER%>" value="<%=containerName%>">\n'+
+					'<PARAM name="<%=Constants.STORAGE_CONTAINER_TYPE%>" value="<%=storageContainerType%>">\n'+
+					'<PARAM name="session_id" value="<%=session.getId()%>">\n'+
+					'<PARAM name = "<%=Constants.STORAGE_CONTAINER_TO_BE_SELECTED%>" value="<%=storageContainerID%>">\n'+
+					'<PARAM name = "<%=Constants.STORAGE_CONTAINER_POSITION%>" value="<%=position%>">\n'+
+					'</APPLET>'
+				    );
+</script>
+
 <!-- 
 <APPLET
     CODEBASE = "<%=Constants.APPLET_CODEBASE%>"

@@ -139,8 +139,9 @@
 			<a class="subMenuPrimary" href="StorageContainer.do?operation=add&pageOf=pageOfStorageContainer&menuSelected=7"><bean:message key="app.add" /></a> | 
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfStorageContainer&aliasName=StorageContainer&menuSelected=7" >
 				<bean:message key="app.edit" />
-			</a> | 
-			<a class="subMenuPrimary" href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1','name','810','320','yes');return false" >
+			</a>
+			<!-- Patch ID: Bug#3090_30 -->
+			<a class="subMenuPrimary" href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1','name','800','600','no');return false" >
 				<bean:message key="app.viewmap" />
 			</a>	
 		</div>

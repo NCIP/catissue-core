@@ -36,7 +36,8 @@
 	{
 	   	var storageContainer = document.getElementById('selectedContainerName').value;
 		frameUrl+="&storageContainerName="+storageContainer;
-		NewWindow(frameUrl,'name','810','320','yes');
+		// Patch ID: Bug#3090_20
+		NewWindow(frameUrl,'name','800','600','no');
 		
     }
 		
@@ -185,7 +186,7 @@
 							+ "&" + Constants.CAN_HOLD_SPECIMEN_ARRAY_TYPE +"=" + arrayTypeId;
 							
 					String buttonOnClicked = "mapButtonClickedOnSpecimen('"+frameUrl+"')";  		
-					// String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
+					// String buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false";
 					String noOfEmptyCombos = "3";
 					
 					int radioSelected = form.getStContSelection();

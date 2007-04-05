@@ -10,10 +10,8 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.catissuecore.domain.CollectionProtocol"%>
 
-
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
 <head>
-
 <%
 	List tissueSiteList = (List) request.getAttribute(Constants.TISSUE_SITE_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
@@ -51,15 +49,12 @@
         readOnlyValue = false;
 		if(pageOf.equals(Constants.QUERY))
 			formName = Constants.QUERY_COLLECTION_PROTOCOL_EDIT_ACTION + "?pageOf="+pageOf;
-
     }
     else
     {
         formName = Constants.COLLECTIONPROTOCOL_ADD_ACTION;
         readOnlyValue = false;
     }
-    
-
 %>
 
 <%@ include file="/pages/content/common/CommonScripts.jsp" %>
@@ -73,8 +68,6 @@
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 	// functions for add more
-
-	
 
 // variable to count the outer blocks
 var insno=1;
@@ -196,7 +189,19 @@ function insRow(subdivtag,iCounter,blockCounter)
 	sname = sname + "</select>"
 	var url = "ShowFramedPage.do?pageOf=pageOfTissueSite&cdeName=Tissue%20Site&propertyName="+objname;
 	
-	sname = sname + "<a href='#' onclick=javascript:NewWindow('" + url + "','name','250','330','no');return false>";
+	/**
+	 * Name: Chetan Patil
+	 * Reviewer: Sachin Lale
+	 * Bug ID: Bug#3090
+	 * Patch ID: Bug#3090_1
+	 * See also: 2-31
+	 * Description: The size of the popup window is increased to be greater than the applet to be embedded in it. Also 
+	 				the scrollbars of the popup window are made invisible by setting scrollbars value as 'no'.
+	 				As the the size of the popup window is bigger than the applet to be embedded in it, no external 
+	 				scrollbars are required (also they are disabled in case if applet is made bigger than the popup window).
+	 				Only scrollbars of applets will be visible.
+	 */
+	sname = sname + "<a href='#' onclick=javascript:NewWindow('" + url + "','name','400','525','no');return false>";
 	sname = sname + "<img src='images\\Tree.gif' border='0' width='26' height='22' title='Tissue Site Selector'></a>";
 	spreqtissuesite.innerHTML="" + sname;
 	
@@ -817,7 +822,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 			        	<%
 							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&cdeName=Tissue%20Site&propertyName="+fName;
 						%>
-				        <a href="#" onclick="javascript:NewWindow('<%=url%>','name','375','330','yes');return false">
+				        <a href="#" onclick="javascript:NewWindow('<%=url%>','name','400','525','no');return false">
 							<img src="images\Tree.gif" border="0" width="26" height="22" title='Tissue Site Selector'>
 						</a>
 					</td>
@@ -1085,7 +1090,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			<!-- ****************************************  -->
-				        <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&cdeName=Tissue%20Site&propertyName=value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)','name','250','330','no');return false">
+				        <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&cdeName=Tissue%20Site&propertyName=value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)','name','400','525','no');return false">
 							<img src="images\Tree.gif" border="0" width="26" height="22" title='Tissue Site Selector'>
 						</a>
 				     <%--   <a href="#">

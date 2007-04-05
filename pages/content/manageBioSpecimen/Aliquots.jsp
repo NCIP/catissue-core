@@ -206,7 +206,8 @@ if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
 	   	var storageContainer = document.getElementById("container_" + count + "_0").value;
 		frameUrl+="&storageContainerName="+storageContainer;
 		//alert(frameUrl);
-		NewWindow(frameUrl,'name','810','320','yes');
+		// Patch ID: Bug#3090_15
+		NewWindow(frameUrl,'name','800','600','no');
 		
     }
 	
@@ -568,8 +569,7 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 			+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId ;
 			System.out.println("frameUrl:"+frameUrl);				
 	
-
-		  String buttonOnClicked = "mapButtonClickedInAliquot('"+frameUrl+"','"+i+"')"; //javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
+		String buttonOnClicked = "mapButtonClickedInAliquot('"+frameUrl+"','"+i+"')"; //javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false";
 		
 
 %>

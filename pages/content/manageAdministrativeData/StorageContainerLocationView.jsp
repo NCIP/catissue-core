@@ -35,25 +35,31 @@
 			    mac = true;
 			}
 	
-	String height = "100%";
+	String height = "99%";
 	if(mac)
-   {	
-        height = "320";
-   }
+   	{	
+        // Patch ID: Bug#3090_12
+        // Description: The height value is increased to elemenate the empty space that
+        //				appears below the tree applet. 
+        height = "580";
+   	}
 %>
 
 <table border="0" height="100%" width="100%">
 	<tr height="100%">
-		<td width="25%">
-			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeViewAction%>" scrolling="yes" frameborder="1" width="100%" height="<%=height%>">
+		<td width="30%">
+			<!-- 
+				Patch ID: Bug#3090_13
+				Description: The scrolling is set to value 'no' inorder to disable the outer scrollbar.
+			-->
+			<iframe id="<%=Constants.APPLET_VIEW_FRAME%>" src="<%=treeViewAction%>" scrolling="no" frameborder="1" width="99%" height="<%=height%>">
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
-		<td width="74%">
-			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" scrolling="yes" frameborder="1" width="100%" height="<%=height%>">
+		<td width="70%">
+			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" scrolling="yes" frameborder="1" width="99%" height="<%=height%>">
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
 	</tr>
 </table>
-

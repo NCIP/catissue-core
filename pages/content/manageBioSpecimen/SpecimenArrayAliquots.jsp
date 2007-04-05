@@ -100,7 +100,8 @@ function mapButtonClickedInAliquot(frameUrl,count)
 	   	var storageContainer = document.getElementById("container_" + count + "_0").value;
 		frameUrl+="&storageContainerName="+storageContainer;
 		//alert(frameUrl);
-		NewWindow(frameUrl,'name','810','320','yes');
+		// Patch ID: Bug#3090_21
+		NewWindow(frameUrl,'name','800','600','no');
 		
     }	
 		
@@ -373,7 +374,7 @@ function mapButtonClickedInAliquot(frameUrl,count)
 		    	System.out.println("frameUrl:"+frameUrl);				
 	     	  String buttonOnClicked = "mapButtonClickedInAliquot('"+frameUrl+"','"+i+"')";		
 				
-  	     	//	String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimenArray&amp;containerStyleId=" + containerIdStyle + "&amp;xDimStyleId=" + pos1Style + "&amp;containerStyle=" + containerStyle + "&amp;yDimStyleId=" + pos2Style + "','name','810','320','yes');return false";
+  	     	//	String buttonOnClicked = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimenArray&amp;containerStyleId=" + containerIdStyle + "&amp;xDimStyleId=" + pos1Style + "&amp;containerStyle=" + containerStyle + "&amp;yDimStyleId=" + pos2Style + "','name','800','600','no');return false";
 				%>
 				<%=ScriptGenerator.getJSEquivalentFor(dataMap,rowNumber)%>
 					<tr>

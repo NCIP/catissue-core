@@ -646,14 +646,27 @@ public class Utility extends edu.wustl.common.util.Utility
 
         private static String getColumnWidth(String columnName)
         {
-    		if (columnName.trim().equals("ID"))
+        	/*
+        	 *  Patch ID: Bug#3090_31
+			 *	Description: The first column which is just a checkbox, used to select the rows, was always given
+			 *				 a width of 100. Now width of 20 is set for the first column.
+			 *				 Also, width of 100 was being applied to each column of the grid, which increasing the total width
+			 *				 of the grid. Now the width of each column is set to 80.
+			 */
+        	String columnWidth = null;
+        	if (columnName.trim().equals("ID"))
     		{
-    			return "0";
+        		columnWidth= "0";
+    		}
+        	else if(columnName.trim().equals(""))
+    		{
+    			columnWidth="20";
     		}
     		else
     		{
-    			return "100";
+    			columnWidth= "80";
     		}
+        	return columnWidth;
         }
 
 }

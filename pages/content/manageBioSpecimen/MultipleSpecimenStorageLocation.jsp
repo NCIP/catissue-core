@@ -109,7 +109,8 @@
 	   	var storageContainer = document.getElementById("container_" + count + "_0").value;
 		frameUrl+="&storageContainerName="+storageContainer;
 		//alert(frameUrl);
-		NewWindow(frameUrl,'name','810','320','yes');
+		// Patch ID: Bug#3090_17
+		NewWindow(frameUrl,'name','800','600','no');
 		
     }
 	
@@ -604,7 +605,7 @@
 				+ "&amp;" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+dclassName
 				+ "&amp;" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + dcollectionProtocolId;
 			
-			// buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
+			// buttonOnClicked = "javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false";
             buttonOnClicked = "mapButtonClickedInMultipleSpecimen('"+frameUrl+"','"+newCount+"')";
 			//System.out.println("\n\n--------------\nData Map For NLevelCombo Derived Specimen :\n "+dataMap+"\n\n--------------\n");
 	 %>

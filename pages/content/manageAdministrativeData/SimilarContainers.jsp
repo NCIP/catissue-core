@@ -320,7 +320,8 @@
 	   	var storageContainer = document.getElementById("container_" + count + "_0").value;
 		frameUrl+="&storageContainerName="+storageContainer;
 		//alert(frameUrl);
-		NewWindow(frameUrl,'name','810','320','yes');
+		// Patch ID: Bug#3090_10
+		NewWindow(frameUrl,'name','800','600','no');
 		
     }	
 		
@@ -586,7 +587,7 @@
 
 							//String onChange = "onCustomListBoxChange(this);onParentContainerChange(this)";
 							//boolean buttonDisabled = true;
-							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";
+							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','800','600','no');return false";
 	 	                    //String buttonOnClicked = "StorageMapWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&amp;containerStyleId=customListBox_1_0&amp;xDimStyleId=customListBox_1_1&amp;yDimStyleId=customListBox_1_2&amp;storageType=','name','810','320','yes');return false";
 							
 							
@@ -654,7 +655,7 @@
 			                   + "&amp;containerStyle=" + containerStyle + "&amp;storageType=" + storageType ;
 			        System.out.println("frameUrl:"+frameUrl);				
 	
-		       String buttonOnClicked = "mapButtonClickedInAliquot('"+frameUrl+"','"+i+"')"; //javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
+		       String buttonOnClicked = "mapButtonClickedInAliquot('"+frameUrl+"','"+i+"')"; //javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false";
 		
 		
 	    if(similarContainersMap.get(rbKey)==null)

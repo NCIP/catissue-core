@@ -678,9 +678,10 @@ function onEditChange()
 							onChange = "onCustomListBoxChange(this),onParentContainerChange(this)";
 							//String onChange = "onCustomListBoxChange(this);onParentContainerChange()";
 							boolean buttonDisabled = true;
-							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";							
+							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','800','600','no');return false";							
 							String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId&amp;storageContainer=true&amp;storageType=";							
-							String buttonOnClicked = "javascript:StorageMapWindow('"+frameUrl+"','name','810','320','yes');return false";
+							// Patch ID: Bug#3090_11
+							String buttonOnClicked = "javascript:StorageMapWindow('"+frameUrl+"','name','800','600','no');return false";
 							
 							String noOfEmptyCombos = "3";
 							

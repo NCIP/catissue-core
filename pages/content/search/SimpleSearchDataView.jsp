@@ -171,8 +171,13 @@ tr#hiddenCombo
 		else if(dataList != null && dataList.size() != 0)
 		{
 	%>
-		<tr height="5%">
-			 <td class="formTitle" width="100%">
+		<!-- 
+			Patch ID: Bug#3090_28
+			Description: The width of <td> are adjusted to fit into the iframe. 
+			These changes were made to remove the extra white space on the data view/spreadsheet view page. 
+		-->
+		<tr height="3%">
+			 <td  class="formTitle" width="100%">
 				<bean:message key="<%=title%>"/>
 			 </td>
 		</tr>	
@@ -190,7 +195,7 @@ tr#hiddenCombo
 			String []selectedColumns=form.getSelectedColumnNames();
 		%>
 		
-		<tr id="hiddenCombo" rowspan="4" height="1%">
+		<tr id="hiddenCombo" rowspan="4" height="2%">
 			<td class="formField" colspan="4">
 	<!-- Mandar : 434 : for tooltip -->
 	   			<html:select property="selectedColumnNames" styleClass="selectedColumnNames"  size="1" styleId="selectedColumnNames" multiple="true"
@@ -209,8 +214,8 @@ tr#hiddenCombo
 		<% } 
 		%>
 		
-		<tr height="85%">
-			<td width="100%">
+		<tr height="85%" valign="top" width="100%">
+			<td  width="100%">
 <!--  **************  Code for New Grid  *********************** -->
 				<script>
 					/* 
@@ -226,68 +231,59 @@ tr#hiddenCombo
 			</td>
 		</tr>
 
-		<tr height="5%">
-			<td width="100%">
-				<table cellpadding="5" cellspacing="0" border="0" width="100%">
-				<tr>
-					<td width="10%" nowrap>
-						<input type='checkbox' name='checkAll2' id='checkAll2' onClick='checkAll(this)'>
-						<span class="formLabelNoBackGround"><bean:message key="buttons.checkAll" /></span>
+		<tr height="5%" width="100%">
+		<td>
+			<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+			<tr>
+					<td width="5%" nowrap>
+						<input type='checkbox' name='checkAll2' id='checkAll2' onClick='checkAll(this)'><span class="formLabelNoBackGroundWithSize6"><bean:message key="buttons.checkAll" /></span>&nbsp;
 					</td>
 					<%
 						Object obj = session.getAttribute(Constants.SPECIMENT_VIEW_ATTRIBUTE);
 						boolean isDefaultView = (obj!=null);
 					%>
-					<td width="10%" nowrap>
+					<td nowrap width="5%">
 					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
-						<input type='checkbox' <%if (isDefaultView){%>checked='checked' <%}%>name='checkDefaultSpecimenView' id='checkDefaultSpecimenView' onClick='setDefaultView(this)'>
-						<span class="formLabelNoBackGround"><bean:message key="buttons.defaultSpecimenView" /></span>
+						<input type='checkbox' <%if (isDefaultView){%>checked='checked' <%}%>name='checkDefaultSpecimenView' id='checkDefaultSpecimenView' onClick='setDefaultView(this)'><span class="formLabelNoBackGroundWithSize6"><bean:message key="buttons.defaultSpecimenView" /></span>&nbsp;
 					<%}else{%>
 						&nbsp;
 					<%}%>
 					</td>
-					<td width="70%">
+					<td width="70%" align="right">
 						&nbsp;
 					</td>
-					
-					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
 					<td width="5%" nowrap align="right">
+					<%if(pageOf.equals(Constants.PAGEOF_QUERY_RESULTS)){%>
 						<html:button styleClass="actionButton" property="addToCart" onclick="onAddToCart()">
 							<bean:message key="buttons.addToCart"/>
 						</html:button>&nbsp;
-					</td>
 					<%}else{%>
-					<td width="5%" nowrap align="right">
 						&nbsp;
-					</td>
 					<%}%>
-					
+					</td>
 					<td width="5%" nowrap align="right">
 						<html:button styleClass="actionButton" property="exportCart" onclick="onExport()">
 							<bean:message key="buttons.export"/>
-						</html:button>
+						</html:button>&nbsp;
 					</td>
-					<td>
+					<td width="5%" nowrap align="right">
 						<html:button styleClass="actionButton" property="configureButton" onclick="<%=configAction%>">
 							<bean:message  key="buttons.configure" />
-						</html:button>
+						</html:button>&nbsp;
 					</td>
-					<td>
+					<td width="5%" nowrap align="right">
 						<html:button styleClass="actionButton" property="redefineButton" onclick="<%=redefineQueryAction%>">
 							<bean:message  key="buttons.redefineQuery" />
-						</html:button>
+						</html:button>&nbsp;
 					</td>
-					<td>
-					
-				</tr>
-				</table>
+			</tr>
+			</table>
 			</td>
 		</tr>
 	<% } %>
 
 	<tr>
 		<td><html:hidden property="operation" value=""/></td>
-		
 	</tr>
 </html:form>
 </table>

@@ -425,12 +425,16 @@ function showCommentsDialog(operation,key) {
 
 function showExtenalIdentifierDialog(operation,key) {
 	   var url ='NewMultipleSpecimenAction.do?method=showExtenalIdentifierDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
-        NewWindow(url,'name','810','320','yes');
+        // Patch ID: Bug#3090_2
+        NewWindow(url,'name','800','600','no');
 }
+
 function showBioHazardDialog(operation,key) {
 	   var url ='NewMultipleSpecimenAction.do?method=showBioHazardDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
-        NewWindow(url,'name','810','320','yes');
+        // Patch ID: Bug#3090_3
+        NewWindow(url,'name','800','600','no');
 }
+
 function showDerivedSpecimenDialog(operation,key,derivedSpecimenCollectionGroup,derivedSpecimenClass,derivedParentSpecimenLabel,derivedParentSpecimenBarcode,derivedSpecimenType) {
         
 	 if(derivedSpecimenCollectionGroup==null || derivedSpecimenCollectionGroup=="null" || derivedSpecimenCollectionGroup==""||derivedSpecimenCollectionGroup=="-- Select --")
@@ -438,13 +442,15 @@ function showDerivedSpecimenDialog(operation,key,derivedSpecimenCollectionGroup,
             alert("You have to give Specimen Group Name or valid Parent Specimen before creating derived Specimen");
        }
   else {
+        // Patch ID: Bug#3090_4
         var url ='NewMultipleSpecimenAction.do?deriveButtonClicked=true&method=showDerivedSpecimenDialog&specimenAttributeKey=' + key + '&operation=' + operation + '&derivedSpecimenCollectionGroup=' + derivedSpecimenCollectionGroup + '&derivedSpecimenClass=' + derivedSpecimenClass + '&derivedParentSpecimenLabel=' + derivedParentSpecimenLabel + '&derivedParentSpecimenBarcode=' + derivedParentSpecimenBarcode + '&derivedSpecimenType=' + derivedSpecimenType + '&isMultipleSpecimenCall=true';
-	    NewWindow(url,'name','600','600','yes');
+	    NewWindow(url,'name','600','600','no');
 		}
 }
 function showEventsDialog(operation,key) {
 	   var url ='NewMultipleSpecimenAction.do?method=showEventsDialog&operation=' + operation+ '&specimenAttributeKey=' + key;
-        NewWindow(url,'name','810','320','yes');
+       // Patch ID: Bug#3090_5
+        NewWindow(url,'name','800','600','no');
 }
 function submitComments() 
 {
@@ -459,7 +465,8 @@ function showTreeMap(column)
 //	alert("TissueSite TreeMap : column"+column);
 	var pName = "MultipleSpecimen:"+column+"_tissueSite";
 //	alert(pName);
-	NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName='+pName+'&cdeName=Tissue Site','name','375','330','yes');
+	// Patch ID: Bug#3090_6
+	NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName='+pName+'&cdeName=Tissue Site','name','400','525','no');
 }
 //to delete since locations will be auto allocated.
 function setStoragePosition(specimenMapKey,storageId,storageType,xPos,yPos) {
@@ -477,7 +484,8 @@ function showStoragePositionMap(specimenAttributeKey,collectionGroup,specimenCla
 	url = url + "&specimenClass=" + specimenClass;
 	url = url + "&specimenCallBackFunction=" + "setStoragePosition";
 
-    NewWindow(url,'name','810','320','yes');
+	// Patch ID: Bug#3090_7
+    NewWindow(url,'name','800','600','no');
 }
 
 function getSpecimenSubmitResult(target) {

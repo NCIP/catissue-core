@@ -135,7 +135,8 @@
 	   	var storageContainer = document.getElementById('selectedContainerName').value;
 		frameUrl+="&storageContainerName="+storageContainer;
 		//alert(frameUrl);
-		NewWindow(frameUrl,'name','810','320','yes');
+		// Patch ID: Bug#3090_18
+		NewWindow(frameUrl,'name','800','600','no');
 		
     }
 		
@@ -694,7 +695,8 @@
 								<%
 									String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
 								%>
-								<a href="#" onclick="javascript:NewWindow('<%=url%>','name','375','330','yes');return false">
+								<!-- Patch ID: Bug#3090_19 -->
+								<a href="#" onclick="javascript:NewWindow('<%=url%>','name','400','525','no');return false">
 									<img src="images\Tree.gif" border="0" width="24" height="18" title='Tissue Site Selector'>
 								</a>
 				        	  </td>
@@ -883,8 +885,8 @@
 								System.out.println(frameUrl);
 								String buttonOnClicked = "mapButtonClickedOnSpecimen('"+frameUrl+"')";  
 								
-								//"javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false"; 
-								//javascript:NewWindow('"+frameUrl+"','name','810','320','yes');return false";
+								//"javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false"; 
+								//javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false";
 								String noOfEmptyCombos = "3";
 
 								boolean disabled = false;

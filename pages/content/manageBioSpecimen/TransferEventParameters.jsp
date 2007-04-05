@@ -23,7 +23,8 @@
 	{
 	   	var storageContainer = document.getElementById('selectedContainerName').value;
 		frameUrl+="&storageContainerName="+storageContainer;
-		window.open(frameUrl,'','scrollbars=yes,menubar=no,height=320,width=810,resizable=yes,toolbar=no,location=no,status=no');
+		// Patch ID: Bug#3090_24
+		window.open(frameUrl,'','scrollbars=no,menubar=no,height=600,width=800,resizable=yes,toolbar=no,location=no,status=no');
 		
     }
 	</script>
@@ -268,6 +269,7 @@ if(currentEventParametersDate.trim().length() > 0)
 					if(operation.equals("add"))
 					{
 				%>
+					<!-- Patch ID: Bug#3090_23 -->
 					<html:button property="mapButton" styleClass="actionButton" styleId="Map"
 								onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false" >
 						<bean:message key="buttons.map"/>

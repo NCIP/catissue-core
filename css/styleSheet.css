@@ -1385,4 +1385,11 @@ div.autocomplete {
   text-align:left;
 }
 
+.formLabelNoBackGroundWithSize6{ /* for the non-required form labels */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.6em;
+  color:#000000; /* constant: black */
+} 
+
+
 
