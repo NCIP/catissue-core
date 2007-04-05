@@ -549,7 +549,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
  * Bug ID: 3262
  * Patch ID: 3262_4 
  * See also: 1-4
- * Description: Default Event population for multiple specimen
+ * Description: Changed button name to "EDIT"
  */
 			label = AppletConstants.EDIT ;//AppletConstants.ADD
 		}

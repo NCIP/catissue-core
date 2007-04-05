@@ -41,7 +41,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
  * Bug ID: 3262
  * Patch ID: 3262_1 
  * See also: 1-4
- * Description: Default Event population for multiple specimen
+ * Description: Removed " * Events "
  */
 
 	/**

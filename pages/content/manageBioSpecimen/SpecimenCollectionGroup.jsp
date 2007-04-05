@@ -136,7 +136,7 @@
  			* Bug ID: Multiple Specimen Bug
  			* Patch ID: Multiple Specimen Bug_2 
  			* See also: 1-8
- 			* Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+ 			* Description: Function to disable "Submit" and "Add Specimen" buttons if number of specimens entered  > 1
 			*/
 		function disablebuttons()
 		{
@@ -203,7 +203,7 @@
  			* Bug ID: Multiple Specimen Bug
  			* Patch ID: Multiple Specimen Bug_2 
  			* See also: 1-8
- 			* Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+ 			* Description: passing "button=multipleSpecimen"with the url so that validation is done only on click of "Add Multiple Specimen" button
 			*/
 			String confirmDisableFuncNameForMultipleSpecimen =  "confirmDisable('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
 			String forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
@@ -566,7 +566,7 @@
  * Bug ID: Multiple Specimen Bug
  * Patch ID: Multiple Specimen Bug_1 
  * See also: 1-8
- * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+ * Description: Table to display number of specimens text field
 	-->
 
 	<!-- For Multiple Specimen-----Ashish -->

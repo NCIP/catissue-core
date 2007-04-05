@@ -775,7 +775,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
  * Bug ID: 3262
  * Patch ID: 3262_2 
  * See also: 1-4
- * Description: Default Event population for multiple specimen
+ * Description: Removing validation for mandatory filling the events
  */
 //			if (form == null)
 //			{

@@ -99,7 +99,7 @@
  * Bug ID: Multiple Specimen Bug
  * Patch ID: Multiple Specimen Bug_6 
  * See also: 1-8
- * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+ * Description: going directly to newmultiplespecimenaction class.
 	-->
 			<a class="subMenuPrimary" href="NewMultipleSpecimenAction.do?method=showMultipleSpecimen&menuSelected=15">
 				<bean:message key="specimen.menu.multipleAdd" />			

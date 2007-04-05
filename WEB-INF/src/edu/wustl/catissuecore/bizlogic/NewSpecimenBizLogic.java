@@ -135,7 +135,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			 * Bug ID: 3262
 			 * Patch ID: 3262_3
 			 * See also: 1-4
-			 * Description: Default Event population for multiple specimen
+			 * Description: Adding Default Events if user has not entered them
 			 */
 			if(specimen.getSpecimenEventCollection() == null || specimen.getSpecimenEventCollection().isEmpty())
 			{

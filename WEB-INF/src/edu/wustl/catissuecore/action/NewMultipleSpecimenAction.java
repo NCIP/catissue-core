@@ -89,7 +89,7 @@ public class NewMultipleSpecimenAction extends SecureAction
  * Bug ID: Multiple Specimen Bug
  * Patch ID: Multiple Specimen Bug_5 
  * See also: 1-8
- * Description: Remove the page on which number of multiple specimens are entered while going to multiple specimen page.
+ * Description: Passing the number of specimens and scg id to multiple specimen page.
 	*/
 		MultipleSpecimenForm multipleSpForm = (MultipleSpecimenForm)form;
 		String buttonName = request.getParameter("button");
