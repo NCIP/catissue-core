@@ -1,7 +1,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -81,16 +80,16 @@ public class NewMultipleSpecimenAction extends SecureAction
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY, new HashMap());
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, new HashMap());
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY, new HashMap());
-
+		
 		//Added by Ashish
 		/**
- * Name : Ashish Gupta
- * Reviewer Name : Sachin Lale 
- * Bug ID: Multiple Specimen Bug
- * Patch ID: Multiple Specimen Bug_5 
- * See also: 1-8
- * Description: Passing the number of specimens and scg id to multiple specimen page.
-	*/
+		 * Name : Ashish Gupta
+		 * Reviewer Name : Sachin Lale 
+		 * Bug ID: Multiple Specimen Bug
+		 * Patch ID: Multiple Specimen Bug_5 
+		 * See also: 1-8
+		 * Description: Passing the number of specimens and scg id to multiple specimen page.
+	     */
 		MultipleSpecimenForm multipleSpForm = (MultipleSpecimenForm)form;
 		String buttonName = request.getParameter("button");
 		if(buttonName != null)
@@ -99,30 +98,33 @@ public class NewMultipleSpecimenAction extends SecureAction
 			Integer temp = new Integer(noOfSp);
 			multipleSpForm.setNumberOfSpecimen(temp.intValue());
 		}
-//		*************  ForwardTo implementation *************
+		// Putting the scg object in session to propagate it to the multiple specimen page.
+		setSCGInSession(request);
+		
+		return mapping.findForward("specimen");
+	}
+	/**
+	 * This method sets the scg in session scope so that it is accessible on multiple specimen page.
+	 * @param request
+	 */
+	private void setSCGInSession(HttpServletRequest request)
+	{
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
-  
+		  
 		if (forwardToHashMap != null)
 		{
-			String specimenCollectionGroupName = (String) forwardToHashMap
-					.get("specimenCollectionGroupName");
+			String specimenCollectionGroupName = (String) forwardToHashMap.get("specimenCollectionGroupName");
 			
 			if (specimenCollectionGroupName != null)
-			{
-				//Setting the specimenCollectionGroup 
+			{	//Setting the specimenCollectionGroup 
 				request.getSession().setAttribute("specimenCollectionGroupName" , specimenCollectionGroupName);
 			}
-			String specimenCollectionGroupId = (String) forwardToHashMap
-			.get("specimenCollectionGroupId");
+			String specimenCollectionGroupId = (String) forwardToHashMap.get("specimenCollectionGroupId");
 			if(specimenCollectionGroupId != null)
 			{
 				request.getSession().setAttribute("specimenCollectionGroupId" , specimenCollectionGroupId);
-			}
-			
-		}
-		//*************  ForwardTo implementation *************
-		
-		return mapping.findForward("specimen");
+			}			
+		}	
 	}
 
 	/**
