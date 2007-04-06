@@ -157,7 +157,16 @@
 		
 	</script>
 </head>
-
+			<!-- 
+ 			* Name : Ashish Gupta
+ 			* Reviewer Name : Sachin Lale 
+ 			* Bug ID: Multiple Specimen Bug
+ 			* Patch ID: Multiple Specimen Bug_2 
+ 			* See also: 1-8
+ 			* Description: Call to function to disable "Submit" and "Add Specimen" buttons if number of specimens entered  > 1 on body refreshing
+			*/
+			-->
+<body onload="disablebuttons()">
 <html:errors />
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
@@ -611,3 +620,4 @@
 	}
 	%>
 </html:form>
+</body>
