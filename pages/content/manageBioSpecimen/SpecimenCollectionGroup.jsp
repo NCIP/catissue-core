@@ -594,7 +594,7 @@
 				</tr>
 				<tr>
 					
-					<td class="formLabel" colspan="2">
+					<td class="formLabel" colspan="2" style="border-left:1px solid #5C5C5C;">
 						<bean:message key="multipleSpecimen.numberOfSpecimen" />
 					</td>
 					<td class="formField" colspan="3">
