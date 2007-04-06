@@ -23,6 +23,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.Roles;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.PasswordManager;
@@ -71,7 +72,7 @@ public class LoginAction extends Action
         	if (validUser != null)
         	{
 	            boolean loginOK = SecurityManager.getInstance(LoginAction.class).login(loginName, password);
-	            if (true) 
+	            if (loginOK) 
 	            {
 	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
 	                HttpSession session = request.getSession(true);
@@ -114,15 +115,9 @@ public class LoginAction extends Action
 	                 * 				If user login as Technicion Default view is set as Collection Protocol Base View Under Biospecimen Tab 
 	                 * 				If user login as Supervisor Default view is set as Collection Protocol Base View Under Biospecimen Tab
 	                 * 				If user login as Scientist Default view is set as Admin Advance Search unser Search tab
-	                 * Get role from securitymanager and modify the role name where first 
-	                 * character is in upper case and rest all are in lower case add prefiz "pageOf" 
-	                 * to modified role name and forward to that page. 
+	                 * Forwarding to default page depending on user role
 	                 */
-	                SecurityManager securityManager = SecurityManager.getInstance(LoginAction.class);
-	                String roleName = securityManager.getUserGroup(validUser.getCsmUserId().longValue());
-	                //Determining Role Name- Stop
-					String modifiedRolename = roleName.substring(0,1).toUpperCase()+roleName.substring(1,roleName.length()).toLowerCase();
-					String forwardToPage = Constants.PAGEOF+modifiedRolename;
+					String forwardToPage = getForwardToPageOnLogin(validUser.getCsmUserId().longValue());
 					return (mapping.findForward(forwardToPage));
 	            }
 	            else
@@ -145,6 +140,24 @@ public class LoginAction extends Action
             handleError(request, "errors.incorrectLoginNamePassword");
             return (mapping.findForward(Constants.FAILURE));
         }
+    }
+    /**
+     * Patch ID: 3842_2
+     * This function will take LoginID for user and return the appropriate default page.
+     * Get role from securitymanager and modify the role name where first 
+     * character is in upper case and rest all are in lower case add prefix "pageOf" 
+     * to modified role name and forward to that page.  
+     * @param loginId
+     * @return
+     * @throws SMException
+     */
+    
+    private String getForwardToPageOnLogin(Long loginId) throws SMException
+    {
+    	SecurityManager securityManager = SecurityManager.getInstance(LoginAction.class);
+        String roleName = securityManager.getUserGroup(loginId);
+     	String modifiedRolename = roleName.substring(0,1).toUpperCase()+roleName.substring(1,roleName.length()).toLowerCase();
+		return (Constants.PAGEOF+modifiedRolename);
     }
     
     private void handleError(HttpServletRequest request, String errorKey)
