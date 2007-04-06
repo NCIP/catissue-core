@@ -450,7 +450,7 @@
 			</classpath> 
 		</sql>
   	</target>
-  	<!--Target for Database Upgrade from 1.0 to 1.1-->
+  	<!--Target for Database Upgrade from 1.1 to 1.2-->
 	<target name="db_upgrade">
 		<if>
 			<equals arg1="mysql" arg2="${database.type}"/>		
@@ -470,16 +470,14 @@
 	</target>
 		<!--MySQL Database Upgradation -->
 	<target name="db_upgrade_mysql">
-		<echo message="Upgrading MySQL Database for caTISSUECore Application 1.1..."/>
+		<echo message="Upgrading MySQL Database for caTISSUECore Application 1.2..."/>
 		<sql
 			driver="${mysql.driver.string}"
 		    url="jdbc:mysql://${database.host}:${database.port}/${database.name}"
 		    userid="${database.username}"
 		    password="${database.password}" 
 			onerror="continue">
-			<transaction  src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.0_to_1.1.sql"/>
-			<transaction  src="${common.sql.dir}/initDB_Insert_Common.sql"/>
-			<transaction  src="${common.sql.dir}/indexes.sql"/>
+			<transaction  src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.1_to_1.2.sql"/>
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -490,7 +488,7 @@
   	</target>
   	<!--MySQL Database Upgradation -->
 	<target name="db_upgrade_oracle">
-		<echo message="Upgrading Oracle Database for caTISSUECore Application 1.1..."/>
+		<echo message="Upgrading Oracle Database for caTISSUECore Application 1.2..."/>
 		<sql 
 			driver="${oracle.driver.string}"
 		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
@@ -498,9 +496,7 @@
 		    password="${database.password}" 
     		onerror="continue"
     		rdbms="oracle">
-			<transaction  src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.0_to_1.1.sql"/>
-			<transaction  src="${common.sql.dir}/initDB_Insert_Common.sql"/>
-			<transaction  src="${common.sql.dir}/indexes.sql"/>
+			<transaction  src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.1_to_1.2.sql"/>
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
