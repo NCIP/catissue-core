@@ -70,7 +70,7 @@ public class LoginAction extends Action
         	
         	if (validUser != null)
         	{
-	            //boolean loginOK = SecurityManager.getInstance(LoginAction.class).login(loginName, password);
+	            boolean loginOK = SecurityManager.getInstance(LoginAction.class).login(loginName, password);
 	            if (true) 
 	            {
 	                Logger.out.info(">>>>>>>>>>>>> SUCESSFUL LOGIN A <<<<<<<<< ");
