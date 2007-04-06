@@ -112,8 +112,12 @@
 				Patch ID: Bug#3090_25
 				Description: The height of the gridbox is increased to eliminate the blank space
 							 when there are less records to be shown.
+							
+							 The height of the pixel is reduced, because in lower resolution
+							 screen, the div runs out of the frame, and there was no way to scroll
+							 down, as we had disabled the scrollbar.
 			-->
-			<div id="gridbox" width="100%" height="500px" style="background-color:white;overflow:hidden"></div>
+			<div id="gridbox" width="100%" height="300px" style="background-color:white;overflow:hidden"></div>
 		</td>
 	</tr>
 </table>
