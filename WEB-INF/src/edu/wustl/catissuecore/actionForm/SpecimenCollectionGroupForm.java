@@ -253,7 +253,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
          * See also: 1_1 to 1_5
          * Description : Get comment field from database and set it to form bean.
          */  
-        comment = specimenCollectionGroup.getComment();
+        comment = Utility.toString(specimenCollectionGroup.getComment());
 			
 		ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
 		surgicalPathologyNumber = Utility.toString(clinicalReport.getSurgicalPathologyNumber());
