@@ -118,11 +118,9 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	     * See also:TissueSiteCombo_BugID_1
 	     * Description: Setting TissueList with only Leaf node
 		 */
-		CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_TISSUE_SITE);
-    	CDEBizLogic cdeBizLogic = (CDEBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
-    	List tissueSiteList = new ArrayList(); 
-    	cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(),tissueSiteList);
-    	List finalTissueSiteList = new ArrayList();
+		List tissueSiteList = Utility.tissueSiteList();
+		//Converting list object from NameValue to String
+		List finalTissueSiteList = new ArrayList();
     	finalTissueSiteList.add(Constants.SELECT_OPTION);
     	for(int i=0;i<tissueSiteList.size();i++) 
     	{

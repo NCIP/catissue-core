@@ -256,14 +256,7 @@ public class NewSpecimenAction extends SecureAction
 		     * See also:TissueSiteCombo_BugID_2
 		     * Description: Setting TissueList with only Leaf node
 			 */
-			//Setting tissue site list
-			//List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
-			//request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
-			CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_TISSUE_SITE);
-	    	CDEBizLogic cdeBizLogic = (CDEBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
-	    	List tissueSiteList = new ArrayList(); 
-	    	tissueSiteList.add(new NameValueBean(Constants.SELECT_OPTION,""+Constants.SELECT_OPTION_VALUE));
-	    	cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(),tissueSiteList);
+			List tissueSiteList = Utility.tissueSiteList();
 	    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 	    	
 			//Bug- setting the default tissue site

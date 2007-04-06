@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.CDEBizLogic;
@@ -114,13 +115,13 @@ public class SpecimenProtocolAction  extends SecureAction
 	    	
 	    	// set the map to subtype
 	    	request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
-	    	
 //	    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-	    	CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_TISSUE_SITE);
-	    	CDEBizLogic cdeBizLogic = (CDEBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
-	    	List tissueSiteList = new ArrayList(); 
-	    	tissueSiteList.add(new NameValueBean(Constants.SELECT_OPTION,""+Constants.SELECT_OPTION_VALUE));
-	    	cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(),tissueSiteList);
+
+	    	/**
+	    	 * Patch ID:TissueSiteCombo_BugID_3
+		     * Description: Setting TissueList with only Leaf node. 
+	    	 */
+	    	List tissueSiteList = Utility.tissueSiteList();
 	    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
 	    	
 	    	List pathologyStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS,null);

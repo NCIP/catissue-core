@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
@@ -39,6 +40,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
@@ -668,5 +670,19 @@ public class Utility extends edu.wustl.common.util.Utility
     		}
         	return columnWidth;
         }
-
+        /**
+         * This method set TissueList with only Leaf node.
+         * @return tissueList
+         */
+       public static List tissueSiteList()
+       {
+    	   	CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_TISSUE_SITE);
+	    	CDEBizLogic cdeBizLogic = (CDEBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
+	    	List tissueList = new ArrayList(); 
+	    	// set first index as --select-- option to display  in combo.
+	    	tissueList.add(new NameValueBean(Constants.SELECT_OPTION,""+Constants.SELECT_OPTION_VALUE));
+	    	// get the filtered tissue list which is a leaf node
+	    	cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(),tissueList);
+	    	return tissueList;
+       }
 }
