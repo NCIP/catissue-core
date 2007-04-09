@@ -90,9 +90,11 @@ function handleStatus(status)
 {
 	document.forms[0].role.value=<%=Constants.SELECT_OPTION_VALUE%>;
 	document.forms[0].role.disabled=true;
+	document.getElementById("displayrole").disabled=true;
 	if (status.value == "<%=Constants.APPROVE_USER_APPROVE_STATUS%>")
 	{
-		document.forms[0].role.disabled=false;
+    	document.forms[0].role.disabled=false;
+	   	document.getElementById("displayrole").disabled=false;
 	}
 }
 </script>
@@ -491,13 +493,10 @@ function handleStatus(status)
 								</label>
 							</td>
 						<td class="formField">
-                                        <autocomplete:AutoCompleteTag property="role"
-										  optionsList = "<%=request.getAttribute("roleList")%>"
-										  initialValue="<%=userForm.getRole()%>"
-										  styleClass="formFieldSized"
-										  staticField="false"
-										  readOnly="<%=roleStatus + ""%>"
-									    />
+                              	<html:select property="status" styleClass="formFieldSized" styleId="status" size="1" onchange="javascript:handleStatus(this)" 
+						    	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options name="statusList" labelName="statusList" />
+							</html:select>
 						</td>
 					</tr>
 					</logic:equal>
@@ -515,7 +514,7 @@ function handleStatus(status)
 										  initialValue="<%=userForm.getRole()%>"
 										  styleClass="formFieldSized"
                                           staticField="false"
-										  readOnly="<%=roleStatus + ""%>"
+										  disabled="<%=roleStatus + ""%>"
 									    />
 						</td>
 					</tr>
