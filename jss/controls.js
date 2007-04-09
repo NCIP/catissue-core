@@ -722,6 +722,9 @@ the reason to keep track of the state of the selectDefault element (previously c
       var partial   = []; // Inside matches
       var entry     = this.getToken();
       var count     = 0;
+	  
+	  if(this.element.disabled==true || this.element.readOnly==true )
+	  return;
       for (var i = 0; i < this.options.defaultArray.length &&  
         ret.length < this.options.defaultChoices; i++) { 
         var elem = this.options.defaultArray[i];
