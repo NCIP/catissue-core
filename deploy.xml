@@ -478,6 +478,7 @@
 		    password="${database.password}" 
 			onerror="continue">
 			<transaction  src="${dbupgrade.sql.dir}/MySql/DBUpgrade_1.1_to_1.2.sql"/>
+			<transaction  src="${dbupgrade.sql.dir}/Common/initDB_Common.sql"/>
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -497,6 +498,7 @@
     		onerror="continue"
     		rdbms="oracle">
 			<transaction  src="${dbupgrade.sql.dir}/Oracle/DBUpgrade_1.1_to_1.2.sql"/>
+			<transaction  src="${dbupgrade.sql.dir}/Common/initDB_Common.sql"/>
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
