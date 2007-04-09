@@ -11,7 +11,6 @@
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 
 <%@ include file="/pages/content/common/AdminCommonCode.jsp" %>
-<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <%
 		//StorageContainerForm form = (StorageContainerForm)request.getAttribute("storageContainerForm");
 		
@@ -134,8 +133,8 @@
 			if(element.value == 1)
 			{
 			  
-				document.forms[0].displaysiteId.disabled = false;
-            //    document.forms[0].displaysiteId.readOnly = false;
+				document.forms[0].siteId.disabled = false;
+
 				document.forms[0].customListBox_1_0.disabled = true;
 				document.forms[0].customListBox_1_1.disabled = true;
 				document.forms[0].customListBox_1_2.disabled = true;				
@@ -152,7 +151,7 @@
 			else //if parent container radio button is selected.
 			{
 			
-				document.forms[0].displaysiteId.disabled = true;
+				document.forms[0].siteId.disabled = true;
 				document.forms[0].stContSelection[0].disabled=false;
 				document.forms[0].stContSelection[1].disabled=false;
 
@@ -206,14 +205,14 @@
 		function onSiteChange()
 		{
 			var typeElement = document.getElementById("typeId");
-			var siteElement = document.getElementById("displaysiteId");
+			var siteElement = document.getElementById("siteId");
 			var containerNameElement = document.getElementById("containerName");
 			if(typeElement.value != "-1" && siteElement.value != "-1" && containerNameElement.value == "")
 			{
 				//Poornima:Max length of site name is 50 and Max length of container type name is 100, in Oracle the name does not truncate 
 				//and it is giving error. So these fields are truncated in case it is longer than 40.
 				//It also solves Bug 2829:System fails to create a default unique storage container name
-				var maxSiteName = siteElement.value;
+				var maxSiteName = siteElement.options[siteElement.selectedIndex].text;
 				var maxTypeName = typeElement.options[typeElement.selectedIndex].text;
 				if(maxSiteName.length>40)
 				{
@@ -607,27 +606,18 @@ function onEditChange()
 						</td>
 						<td class="formField" colspan="2">
 							<logic:equal name="storageContainerForm" property="checkedButton" value="1">
-
-								 <autocomplete:AutoCompleteTag property="siteId"
-										  optionsList = "<%=request.getAttribute(Constants.SITELIST)%>"
-										  initialValue="<%=form.getSiteId()%>"
-										  styleClass="formFieldSized15"
-										  staticField="false"
-										  onChange="onSiteChange()"
-									    />
- 
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="siteId" styleClass="formFieldSized" styleId="siteId" size="1" onchange="onSiteChange()"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
+							</html:select>
 							</logic:equal>
 							<logic:equal name="storageContainerForm" property="checkedButton" value="2">
-							
-							 <autocomplete:AutoCompleteTag property="siteId"
-										  optionsList = "<%=request.getAttribute(Constants.SITELIST)%>"
-										  initialValue="<%=form.getSiteId()%>"
-										  styleClass="formFieldSized15"
-										  staticField="false"
-										  onChange="onSiteChange()"
-										  disabled="true"
-									    />
-													
+<!-- Mandar : 434 : for tooltip -->
+							<html:select property="siteId" styleClass="formFieldSized15" styleId="siteId" size="1" onchange="onSiteChange()" disabled="true"
+							 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+								<html:options collection="<%=Constants.SITELIST%>" labelProperty="name" property="value"/>
+							</html:select>
 							</logic:equal>
 							&nbsp;
 							<html:link href="#" styleId="newSite" onclick="addNewAction('StorageContainerAddNew.do?addNewForwardTo=site&forwardTo=storageContainer&addNewFor=site')">
@@ -678,7 +668,7 @@ function onEditChange()
 							onChange = "onCustomListBoxChange(this),onParentContainerChange(this)";
 							//String onChange = "onCustomListBoxChange(this);onParentContainerChange()";
 							boolean buttonDisabled = true;
-							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','800','600','no');return false";							
+							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";							
 							String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId&amp;storageContainer=true&amp;storageType=";							
 							// Patch ID: Bug#3090_11
 							String buttonOnClicked = "javascript:StorageMapWindow('"+frameUrl+"','name','800','600','no');return false";
