@@ -1535,7 +1535,7 @@ input.enumeratedListBox
   font-size:1em;
   width:10em;
 }
-.queryLink{ /* for the text links in the Search category page */
+queryLink{ /* for the text links in the Search category page */
  font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.2em;
   color:#5C5C5C; /* constant: black */
@@ -1556,6 +1556,7 @@ input.enumeratedListBox
   /*border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   text-align:left;
 }
+
 .entityLink
 {
     font-family:arial,helvetica,verdana,sans-serif;
@@ -1620,4 +1621,9 @@ div.autocomplete {
   text-align:left;
 }
 
-
+.message{ /* for the non-required form labels */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  color:#000000; /* constant: black */
+  text-align:left;
+}
