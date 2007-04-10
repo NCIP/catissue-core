@@ -214,7 +214,16 @@
  			* See also: 1-8
  			* Description: passing "button=multipleSpecimen"with the url so that validation is done only on click of "Add Multiple Specimen" button
 			*/
-			String confirmDisableFuncNameForMultipleSpecimen =  "confirmDisable('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
+			String confirmDisableFuncNameForMultipleSpecimen = "";
+			if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+			{
+				confirmDisableFuncNameForMultipleSpecimen =  "confirmDisable('" + formName +"&button=multipleSpecimen',document.forms[0].activityStatus)";
+			}
+			else
+			{
+				confirmDisableFuncNameForMultipleSpecimen =  "confirmDisable('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
+			}
+			
 			String forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
 
 	%>
