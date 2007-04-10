@@ -192,7 +192,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DEFINE_RESULTS_VIEW = "DefineResultsView";
 	public static final String CURRENT_PAGE = "currentPage"; 
 	public static final String ADD_LIMITS = "AddLimits";
-	public static final String LABEL_TREE_NODE = "labelTreeNode";
+	public static final String LABEL_TREE_NODE = "Label";
 	public static final String ENTITY_NAME = "Entity Name";
 	public static final String COUNT = "Count";
 	public static final String TREE_NODE_FONT = "<font color='#FF9BFF' face='Verdana'><i>";  
@@ -201,7 +201,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String NODE_SEPARATOR = "::";
 	public static final String DEFINE_SEARCH_RULES = "Define Search Rules For";
 	public static final String DATE_FORMAT = "MM-dd-yyyy";
-	
+	public static final String OUTPUT_TREE_MAP = "outputTreeMap";
 	//Surgical Pathology Report UI constants
 	public static final String SPR_VIEW_ACTION="ViewSurgicalPathologyReport.do";
 	public static final String VIEW_SURGICAL_PATHOLOGY_REPORT="viewSPR";
