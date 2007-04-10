@@ -519,6 +519,17 @@ td.formSerialNumberField{ /* for the cell that contains the Serial Number */
   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
   text-align:left;
 }
+
+/* Added to use lable with out border on NewSpecimen.jsp page */
+.formLabelWithoutBorder{ /* for the form labels without border*/
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  background-color:#F4F4F5; /* constant: light gray */
+  color:#000000; /* constant: black */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
+
 td.formFieldLogin{ /* for the cell that contains the form elements */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:0.7em;
