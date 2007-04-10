@@ -26,7 +26,7 @@
 			</iframe>
 		</td>
 		<td width="75%">
-			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" src="<%=Constants.DATA_VIEW_ACTION+Constants.ROOT%>&<%=Constants.VIEW_TYPE%>=<%=Constants.SPREADSHEET_VIEW%>" scrolling="no" frameborder="1" width="99%" height="<%=height%>">
+			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" src="<%=Constants.DATA_VIEW_ACTION+Constants.ROOT%>&<%=Constants.VIEW_TYPE%>=<%=Constants.SPREADSHEET_VIEW%>" scrolling="auto" frameborder="1" width="99%" height="<%=height%>">
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
