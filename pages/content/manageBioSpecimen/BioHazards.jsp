@@ -202,7 +202,7 @@
 								<td class="formSerialNumberField" width="5"><%=i%>.
 									<html:hidden property="<%=biohzId%>" />
 								</td>
-								<td class="formField">
+								<td class="formField" width="365">
 		<!-- Mandar : 434 : for tooltip -->
 									<html:select property="<%=bhType%>" styleClass="formFieldSized15" styleId="<%=bhType%>" size="1" onchange="onBiohazardTypeSelected(this)"
 									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">

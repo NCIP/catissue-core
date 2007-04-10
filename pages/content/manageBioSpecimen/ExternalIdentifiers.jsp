@@ -147,7 +147,7 @@
 				 	<td class="formSerialNumberField" width="5"><%=i%>.
 					 			<html:hidden property="<%=exIdentifier%>" />
 			 		</td>
-				    <td class="formField">
+				    <td class="formField" width="365" >
 			     		<html:text styleClass="formFieldSized15" maxlength="255"  styleId="<%=exName%>" property="<%=exName%>" readonly="<%=readOnlyForAll%>"/>
 			    	</td>
 			    	<td class="formField" colspan="2">

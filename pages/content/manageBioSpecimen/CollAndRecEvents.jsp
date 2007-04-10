@@ -25,10 +25,10 @@
 							<input type="hidden" name="crDispType" value="<%=crDispType1%>" id="crDispType" />
 						</td> 
 						<!-- Patch ends here -->
-						<td colspan="3" width="500" class="formTitle">
+						<td colspan="3" width="550" class="formTitle">
 							<bean:message key="specimen.collectedevents.title"/>	
 						</td>
-						<td colspan="2" width="500" class="formTitle">
+						<td colspan="2" width="450" class="formTitle">
 							<bean:message key="specimen.receivedevents.title"/>						
 						</td>
 					</tr>
@@ -45,12 +45,12 @@
 						<html:hidden property="collectionEventId" />
 						<html:hidden property="collectionEventSpecimenId" />
 						<td class="formRequiredNotice" width="5">*</td>
-	 					<td width="100" class="formRequiredLabel"> 
+	 					<td width="130" class="formRequiredLabel"> 
 							<label for="user">
 								<bean:message key="specimen.collectedevents.username"/> 
 							</label>
 						</td>						
-						<td width="300" class="formField">
+						<td width="340" class="formField">
 						
 							<autocomplete:AutoCompleteTag property="collectionEventUserId"
 										  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
@@ -64,12 +64,12 @@
 						<html:hidden property="receivedEventId" />
 						<html:hidden property="receivedEventSpecimenId" />
 						<td class="formRequiredNotice" width="5">*</td>
-						<td width="100" class="formRequiredLabel">
+						<td width="110" class="formRequiredLabel">
 							<label for="type">
 								<bean:message key="specimen.receivedevents.username"/> 
 							</label>
 						</td>
-						<td width="300" class="formField">
+						<td width="220" class="formField">
 						<autocomplete:AutoCompleteTag property="receivedEventUserId"
 										  optionsList = "<%=request.getAttribute(Constants.USERLIST)%>"
 										  initialValue="<%=form.getReceivedEventUserId()%>"
