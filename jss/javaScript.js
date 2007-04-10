@@ -947,17 +947,17 @@ function newSpecimenInit()
 	}
 	if(document.getElementById('crDispType')!=null)
 	{	
-		if(document.getElementById('crDispType').value=="show")
-		{
-			show('collRecTable','crDispType');
-			imageObj = document.getElementById('imageCR');	
-			imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
-		}
-		else
+		if(document.getElementById('crDispType').value=="hide")
 		{
 			hide('collRecTable','crDispType');
 			imageObj = document.getElementById('imageCR');	
 			imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
+		}
+		else
+		{		
+			show('collRecTable','crDispType');
+			imageObj = document.getElementById('imageCR');	
+			imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
 		}
 	}
 }
