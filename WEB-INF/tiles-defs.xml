@@ -27,6 +27,10 @@
 	<definition name=".catissuecore.reportProblemSuccessDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/success.jsp" />
 	</definition>
+	
+		<definition name=".catissuecore.titliSearchResultPage" extends=".catissuecore.homePageDef">
+		<put name="content" value="/pages/content/common/TitliResultUpdatable.jsp" />
+	</definition>
 
 	<definition name=".catissuecore.forgotPasswordDef" extends=".catissuecore.homePageDef">
 		<put name="content" value="/pages/content/common/ForgotPassword.jsp" />
