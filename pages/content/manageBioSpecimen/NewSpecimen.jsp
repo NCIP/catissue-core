@@ -505,8 +505,11 @@
 									specimenColSpan="4";
 								}
 							%>
+							<!-- To remove horizontal line between label column and text box column label with out border is used.
+							style class formRequiredLabel is replaced with formRequiredLableWithoutBorder and formLabel is replaced with formLableWithoutBorder.
+							For this formLableWithoutBorder styleclass is added to css/styleSheet.jss file-->
 							<logic:equal name="newSpecimenForm" property="parentPresent" value="false">
-							<td class="formRequiredLabel">
+							<td class="formRequiredLabelWithoutBorder">
 								<label for="specimenCollectionGroupName">
 									<bean:message key="specimenCollectionGroup.groupName"/>
 								</label>
@@ -544,7 +547,7 @@
 							</logic:equal>
 		        	
 							<logic:equal name="newSpecimenForm" property="parentPresent" value="true">
-				        	<td class="formRequiredLabel" >
+				        	<td class="formRequiredLabelWithoutBorder" >
 								<label for="parentSpecimenId">
 									<bean:message key="createSpecimen.parentLabel"/>
 								</label>
@@ -562,7 +565,7 @@
 							
 							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 							<td class="formRequiredNotice">*</td>
-							<td class="formRequiredLabel">
+							<td class="formRequiredLabelWithoutBorder">
 								<label for="lineage">
 									<bean:message key="specimen.lineage"/>
 								</label>
@@ -580,7 +583,7 @@
 						     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
 						     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 						    </td>
-						    <td class="formRequiredLabel" >
+						    <td class="formRequiredLabelWithoutBorder" >
 								<label for="label">
 									<bean:message key="specimen.label"/>
 								</label>
@@ -589,7 +592,7 @@
 						     	<html:text styleClass="formFieldSized15" size="30" maxlength="255"  styleId="label" property="label" readonly="<%=readOnlyForAll%>"/>
 						    </td>							
 							<td class="formRequiredNotice" width="5">&nbsp;</td>
-						    <td class="formLabel">							
+						    <td class="formLabelWithoutBorder">							
 						    	<label for="barcode">
 									<bean:message key="specimen.barcode"/>
 								</label>								
@@ -601,7 +604,7 @@
 				 
 						<tr>
 						 	<td class="formRequiredNotice" width="5">*</td>
-						    <td class="formRequiredLabel">
+						    <td class="formRequiredLabelWithoutBorder">
 						     	<label for="className">
 						     		<bean:message key="specimen.type"/>
 						     	</label>
@@ -626,7 +629,7 @@
 				        	</td>
 						 
 						    <td class="formRequiredNotice" width="5">*</td>
-						    <td class="formRequiredLabel">
+						    <td class="formRequiredLabelWithoutBorder">
 						     	<label for="type">
 						     		<bean:message key="specimen.subType"/>
 						     	</label>
@@ -678,7 +681,7 @@
 						     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
 						     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 						     </td>
-						     <td class="formRequiredLabel">
+						     <td class="formRequiredLabelWithoutBorder">
 								<label for="tissueSite">
 									<bean:message key="specimen.tissueSite"/>
 								</label>
@@ -705,7 +708,7 @@
 						     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
 						     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 						     </td>
-						     <td class="formRequiredLabel">
+						     <td class="formRequiredLabelWithoutBorder">
 								<label for="tissueSide">
 									<bean:message key="specimen.tissueSide"/>
 								</label>
@@ -727,7 +730,7 @@
 						     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
 						     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 						    </td>
-						    <td class="formRequiredLabel">
+						    <td class="formRequiredLabelWithoutBorder">
 								<label for="pathologicalStatus">
 									<bean:message key="specimen.pathologicalStatus"/>
 								</label>
@@ -754,7 +757,7 @@
 				        	</td>	
 							<!-- activitystatus -->
 							<td class="formRequiredNotice" width="5">*</td>
-							<td class="formRequiredLabel" >
+							<td class="formRequiredLabelWithoutBorder" >
 								<label for="activityStatus">
 									<bean:message key="participant.activityStatus" />
 								</label>
@@ -776,7 +779,7 @@
 						     	<logic:notEqual name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">*</logic:notEqual>
 						     	<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.VIEW%>">&nbsp;</logic:equal>
 						    </td>
-						    <td class="formRequiredLabel">
+						    <td class="formRequiredLabelWithoutBorder">
 								<label for="quantity">
 									<bean:message key="specimen.quantity"/>
 								</label>
@@ -789,7 +792,7 @@
 							<td class="formRequiredNotice" width="5">
 						     	&nbsp;
 						    </td>
-						    <td class="formLabel">
+						    <td class="formLabelWithoutBorder">
 								<label for="concentration">
 									<bean:message key="specimen.concentration"/>
 								</label>
@@ -812,7 +815,7 @@
 						<tr>
 							<!-- Available -->
 							<td class="formRequiredNotice" width="5">&nbsp;</td>
-							<td class="formLabel">
+							<td class="formLabelWithoutBorder">
 								<label for="available">
 									<bean:message key="specimen.available" />
 								</label>
@@ -823,7 +826,7 @@
 							</td>	
 							<!-- Available Quantity -->							
 							<td class="formRequiredNotice" width="5">&nbsp;</td>
-							<td class="formLabel" >
+							<td class="formLabelWithoutBorder" >
 								<label for="availableQuantity">
 									<bean:message key="specimen.availableQuantity" />
 								</label>
@@ -838,7 +841,7 @@
 						
 						<tr>
 						 	<td class="formRequiredNotice" width="5">*</td>
-							<td class="formRequiredLabel">
+							<td class="formRequiredLabelWithoutBorder">
 							   <label for="className">
 							   		<bean:message key="specimen.positionInStorageContainer"/>
 							   </label>
@@ -1014,7 +1017,7 @@
 					<!--%}%-->				 				 
 						<tr>
 					     	<td class="formRequiredNotice" width="5">&nbsp;</td>
-						    <td class="formLabel">
+						    <td class="formLabelWithoutBorder">
 								<label for="comments">
 									<bean:message key="specimen.comments"/>
 								</label>
