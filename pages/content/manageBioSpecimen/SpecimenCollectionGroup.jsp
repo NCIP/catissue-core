@@ -217,6 +217,8 @@
 			String confirmDisableFuncNameForMultipleSpecimen = "";
 			if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
 			{
+				// In case of CP based view query, formName variable already has 
+				// some parameter appended to the url. hence appending the button parameter by "&"
 				confirmDisableFuncNameForMultipleSpecimen =  "confirmDisable('" + formName +"&button=multipleSpecimen',document.forms[0].activityStatus)";
 			}
 			else
