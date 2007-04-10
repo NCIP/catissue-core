@@ -52,6 +52,14 @@
                 	<bean:message key="app.help" />
                 </html:link>
               </td>
+              
+               <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>	
+			  <td height="20" class="mainMenuItem mainMenuLink" >
+                <input style = "font-size:0.9em" value = "TiTLi Search" onclick = "this.value = ''" onblur = "if(this.value=='') {this.value = 'TiTLi Search';}" type ="text" name = "searchString" id = "searchString"/>
+				<a class = "mainMenuLink" href ="TitliInitialiseSearch.do" onclick = "this.href= this.href + '?searchString='+document.getElementById('searchString').value">Go</a>	
+              </td>
+              
+              
               <!-- link 5 ends -->
               <td>
               	<img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" />
