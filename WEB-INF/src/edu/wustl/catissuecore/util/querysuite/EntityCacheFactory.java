@@ -9,20 +9,11 @@ import edu.wustl.cab2b.server.cache.EntityCache;
 public class EntityCacheFactory
 {
 	/**
-	 * private instance of EntityCache.
-	 */
-	private static EntityCache entityCache = null;
-	
-	/**
-	 * Returns the same instance if not null.
+	 * Returns the instance of EntityCache.
 	 * @return EntityCache EntityCacheInstance 
 	 */
 	public static EntityCache getInstance()
 	{
-		if(entityCache == null)
-		{
-			entityCache = EntityCache.getInstance();
-		}
-		return entityCache;
+		return EntityCache.getInstance();
 	}
 }
