@@ -1,0 +1,227 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 2.0//EN" 
+    "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+
+<hibernate-mapping>
+    <class
+        name="edu.wustl.catissuecore.domain.pathology.SurgicalPathologyReport"
+        table="CATISSUE_PATHOLOGY_REPORT"
+        dynamic-update="false"
+        dynamic-insert="false"
+    >
+
+        <id
+            name="id"
+            column="IDENTIFIER"
+            type="long"
+            length="30"
+            unsaved-value="null"
+        >
+            <generator class="native">
+                <param name="sequence">CATISSUE_PATHOLOGY_REPORT_SEQ</param>
+            </generator>
+        </id>
+
+        <property
+            name="activityStatus"
+            type="string"
+            update="true"
+            insert="true"
+            column="ACTIVITY_STATUS"
+            length="100"
+        />
+
+        <one-to-one
+            name="binaryContent"
+            class="edu.wustl.catissuecore.domain.pathology.BinaryContent"
+            cascade="save-update"
+            outer-join="auto"
+            constrained="false"
+            property-ref="surgicalPathologyReport"
+        />
+
+        <property
+            name="isFlagForReview"
+            type="java.lang.Boolean"
+            update="true"
+            insert="true"
+            column="REVIEW_FLAG"
+            length="10"
+            not-null="false"
+        />
+
+        <set
+            name="pathologyReportReviewParameterSetCollection"
+            table="CATISSUE_REVIEW_PARAMS"
+            lazy="false"
+            inverse="false"
+            cascade="all"
+            sort="unsorted"
+        >
+
+              <key
+                  column="REPORT_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter"
+              />
+        </set>
+
+        <many-to-one
+            name="source"
+            class="edu.wustl.catissuecore.domain.Site"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SOURCE_ID"
+            not-null="false"
+        />
+
+        <one-to-one
+            name="textContent"
+            class="edu.wustl.catissuecore.domain.pathology.TextContent"
+            cascade="save-update"
+            outer-join="auto"
+            constrained="false"
+            property-ref="surgicalPathologyReport"
+        />
+
+        <one-to-one
+            name="xmlContent"
+            class="edu.wustl.catissuecore.domain.pathology.XMLContent"
+            cascade="save-update"
+            outer-join="auto"
+            constrained="false"
+            property-ref="surgicalPathologyReport"
+        />
+        
+        <property
+	    name="reportStatus"
+	    type="string"
+	    update="true"
+	    insert="true"
+	    column="REPORT_STATUS"
+	    length="100"
+	 />
+	        
+	 <property
+	    name="collectionDateTime"
+	    type="date"
+	    update="true"
+	    insert="true"
+	    column="COLLECTION_DATE_TIME"
+        />
+
+        <!--
+            To add non XDoclet property mappings, create a file named
+                hibernate-properties-SurgicalPathologyReport.xml
+            containing the additional properties and place it in your merge dir.
+        -->
+
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+            table="CATISSUE_DEIDENTIFIED_REPORT"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+
+        <set
+            name="conceptReferentCollection"
+            table="CATISSUE_CONCEPT_REFERENT"
+            lazy="false"
+            inverse="false"
+            cascade="all"
+            sort="unsorted"
+        >
+
+              <key
+                  column="DEIDENTIFIED_REPORT_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.pathology.ConceptReferent"
+              />
+        </set>
+
+        <property
+            name="isQuanrantined"
+            type="string"
+            update="true"
+            insert="true"
+            column="STATUS"
+        />
+
+        <set
+            name="quarantinEventParameterSetCollection"
+            table="CATISSUE_QUARANTINE_PARAMS"
+            lazy="false"
+            inverse="false"
+            cascade="all"
+            sort="unsorted"
+        >
+
+              <key
+                  column="DEID_REPORT_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter"
+              />
+        </set>
+
+        <many-to-one
+            name="specimenCollectionGroup"
+            class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SCG_ID"
+            not-null="false"
+        />
+
+        </joined-subclass>
+        <joined-subclass
+            name="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
+            table="CATISSUE_IDENTIFIED_REPORT"
+            dynamic-update="false"
+            dynamic-insert="false"
+        >
+        <key
+            column="IDENTIFIER"
+        />
+
+        <many-to-one
+            name="deidentifiedSurgicalPathologyReport"
+            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="DEID_REPORT"
+            not-null="false"
+        />
+
+        <many-to-one
+            name="specimenCollectionGroup"
+            class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SCG_ID"
+            not-null="false"
+        />
+
+        </joined-subclass>
+
+    </class>
+
+</hibernate-mapping>

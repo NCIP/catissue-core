@@ -1,0 +1,67 @@
+<?xml version ="1.0"?>
+
+<!--Ant Script for caTIES-->
+
+<project name="caTIES">
+	
+	<!--define require dir and Properties -->	
+	<property name="base.dir" value="."/>	
+	<property name="lib.dir" value="lib" />
+	<property name="src.dir" value="." />
+	<path id="cp">
+		<fileset dir="${base.dir}/lib">
+			<include name="**/*.jar"/>
+		</fileset>	
+	</path>
+    
+	<!-- run FilePoller java file -->
+	<target name="run_report_loader_server">
+		<java classname="edu.wustl.catissuecore.reportloader.FilePoller">
+			<classpath>
+				<pathelement location="caties.jar"/>
+			</classpath>
+			<classpath refid="cp"/>
+		</java>
+	</target>
+	
+	<!-- run DeIDPipelineManager java file -->
+	<target name="run_deid_server">
+		<java classname="edu.wustl.catissuecore.deid.DeIDPipelineManager">
+			<classpath>
+				<pathelement location="caties.jar"/>
+			</classpath>
+			<classpath refid="cp"/>
+		</java>
+	</target>
+	
+	<!-- stop Report Loader Server  -->
+		<target name="stop_report_loader_server">
+			<java classname="edu.wustl.catissuecore.reportloader.StopReportLoaderServer">
+				<classpath>
+					<pathelement location="caties.jar"/>
+				</classpath>
+				<classpath refid="cp"/>
+			</java>
+		</target>
+	
+	<!-- stop DeIDPipelineManager  -->
+	<target name="stop_deid_server">
+		<java classname="edu.wustl.catissuecore.deid.StopDeidServer">
+			<classpath>
+				<pathelement location="caties.jar"/>
+			</classpath>
+			<classpath refid="cp"/>
+		</java>
+	</target>
+	
+	<!-- task to add default CollectionProtocol for caTIES -->
+	<target name="addcp" >	
+		<echo message="addcp trget started" />
+		<java classname="edu.wustl.catissuecore.reportloader.test.AddCollectionProtocol" fork="true">
+			<classpath>
+				<pathelement location="caties.jar"/>
+			</classpath>
+			<classpath refid="cp"/>
+		</java>
+	</target>	
+</project>

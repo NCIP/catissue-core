@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<Category name="Participant Demographics" description="Demographics includes the name, gender, date of birth, and medical record numbers of a participant.">
+  <CategorialClass name="edu.wustl.catissuecore.domain.Participant" IdOfPathFromParentToThis="-1"> <!-- root -->
+    <Attribute name = "firstName" displayName = "Participant First Name"/>
+    <Attribute name = "middleName" displayName = "Partcipant Middle Name"/>
+    <Attribute name = "lastName" displayName = "Participant Last Name"/>
+      <CategorialClass name="edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier" IdOfPathFromParentToThis="2395">
+         <Attribute name = "medicalRecordNumber" displayName = "Participant Medical Record Number"/>
+          <CategorialClass name="edu.wustl.catissuecore.domain.Site" IdOfPathFromParentToThis="641"> 
+               <Attribute name = "name" displayName = "Site Name"/>
+          </CategorialClass>
+      </CategorialClass>       
+  </CategorialClass>
+</Category>
+    
+    
+    
+    
+    
+
+
+
