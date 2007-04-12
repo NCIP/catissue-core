@@ -44,6 +44,9 @@ import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -685,4 +688,28 @@ public class Utility extends edu.wustl.common.util.Utility
 	    	cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(),tissueList);
 	    	return tissueList;
        }
+       
+       /**
+         * Method to check type and class compatibility of specimen as a part of validation process. 
+	     * @param specimen object of specimen to validate
+	     * @return boolean depending on type class compatible or not
+	     * @throws DAOException 
+	     */
+	    public static boolean validateSpecimenTypeClass(Specimen specimen) throws DAOException
+	   {
+	   		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
+	   		String specimenClass = Utility.getSpecimenClassName(specimen);
+	
+	   		if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
+	   		{
+	   			throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
+	   		}
+	
+	   		if (!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass), specimen.getType()))
+	   		{
+	   			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
+	   		}
+	   		/* Patch ends here  */
+	   		return true;
+	   }
 }

@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
@@ -83,6 +84,21 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		 * If storage position is given it validates the storage position 
 		 **/
 		StorageContainerUtil.validateStorageLocationForSpecimen(specimen);
+		
+		/**
+		* Name : Vijay_Pande
+		* Reviewer : Sachin_Lale
+		* Bug ID: 4042
+		* Patch ID: 4042_1
+		* See also: -
+		* Description: Validation for specimen class + type missing
+		* Following code is provided to validate the compatibility of derived specimen class and type.
+		*/ 
+		if(!Utility.validateSpecimenTypeClass(specimen))
+		{
+			return false;
+		}
+		/* Patch ends here  */
 		return true;
 	}
 
