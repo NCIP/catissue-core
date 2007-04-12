@@ -677,6 +677,19 @@
 <tr>
 	<td colspan="4">&nbsp;</td>
 </tr>
+ <!--	/**
+		* Name : Vijay_Pande
+		* Reviewer : Sachin_Lale
+		* Bug ID: 4026
+		* Patch ID: 4026_1
+		* See also: -
+		* Description: After submit from multiple specimen the logos at footer get left aligned. This was because of the imbalanced table tag.
+		* Following three lines added to remove imbalancing of tags.
+		*/   -->	
+	</td>
+	</tr>
+	</table>
+	<!--  Patch ends here -->
 
 </table>
 <%
