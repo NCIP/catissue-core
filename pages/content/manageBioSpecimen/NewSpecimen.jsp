@@ -397,6 +397,9 @@
 				String addEventsSubmit = addEventsSubmitFunctionName + ","+confirmDisableFuncName;
 				String addMoreSubmit = addMoreSubmitFunctionName + ","+confirmDisableFuncName;		
 				String submitAndDistribute = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[4][1]+"')," + confirmDisableFuncName;
+				
+				String specimenCollectionGroupId = (String)request.getAttribute("SpecimenCollectionGroupId");
+				String specimenCollectionGroupName = (String)request.getAttribute("SpecimenCollectionGroupName");
 	%>
 
 	<%
@@ -515,15 +518,30 @@
 								</label>
 							</td>							
 							<td class="formField" colspan="<%=specimenColSpan%>">
-							
-							<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" 
-					     				styleId="specimenCollectionGroupId" size="1" 
-										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="resetVirtualLocated()">
-									<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" 
-										labelProperty="name" property="value"/>		
-							</html:select>
-							
-								
+								<!--
+									Patch ID: Bug#3184_4
+									Description: The following change shows read-only textbox on specimen page, if specimen is being added
+									from specimen collection group page, otherwise combobox having names of specimen collection group is displayed.
+								-->
+								<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" styleId="specimenCollectionGroupId" 
+									size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="resetVirtualLocated()">
+								<%
+									if((specimenCollectionGroupId != null && !specimenCollectionGroupId.equals("")) &&
+										(specimenCollectionGroupName != null && !specimenCollectionGroupName.equals("")))
+									{
+								%>
+										<html:option value="<%=specimenCollectionGroupId%>"><%=specimenCollectionGroupName%></html:option>		
+								<%
+									}
+									else
+									{
+								%>
+										<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" labelProperty="name" property="value"/>
+								<%
+									}
+								%>
+								</html:select>
+																
 								&nbsp;
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 		   						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SPECIMEN_CP_QUERY%>">

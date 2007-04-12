@@ -13,12 +13,19 @@
 <SCRIPT LANGUAGE="JavaScript">
 
 <%
-
-	Iterator specimenTypeIterator = specimenTypeMap.keySet().iterator();
-	int classCount=0;
-	for(classCount=1;classCount<specimenClassList.size();classCount++  )
+	/**
+	 * Patch ID: Bug#3184_3
+	 * Description: Previously, the code below was trying to find value for "-- Select --" as key in the 
+	 * specimenTypeMap which was throwing nulling pointer exception. The code has been changed to skip that value.
+	 */
+	for(int classCount=0; classCount < specimenClassList.size(); classCount++)
 	{
-		String keyObj = (String)((NameValueBean)specimenClassList.get(classCount)).getName() ;
+		String keyObj = (String)((NameValueBean)specimenClassList.get(classCount)).getName();
+		if(keyObj.equals(Constants.SELECT_OPTION))
+		{
+			continue;
+		}
+
 		List subList = (List)specimenTypeMap.get(keyObj);
 		String arrayData = "";
 		for(int listSize=0;listSize<subList.size();listSize++ )
