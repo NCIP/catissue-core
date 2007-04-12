@@ -69,6 +69,7 @@ PUBLIC
 		<form-bean name="multipleSpecimenForm" type="edu.wustl.catissuecore.actionForm.MultipleSpecimenForm"/>
 		<form-bean name="multipleSpecimenStorageLocationForm" type="edu.wustl.catissuecore.actionForm.MultipleSpecimenStorageLocationForm"/>
 		<form-bean name="cpSearchForm" type="edu.wustl.catissuecore.actionForm.CPSearchForm"/>
+		<form-bean name="titliSearchForm" type="edu.wustl.common.actionForm.TitliSearchForm"/>
 	</form-beans>
 	
 	<!-- Global Exception Definitions -->
@@ -83,6 +84,32 @@ PUBLIC
 	</global-exceptions>
 	
 	<action-mappings>
+	
+		<action path="/TitliInitialiseSearch"
+			type="edu.wustl.common.action.TitliInitialiseSearchAction"
+			name="titliSearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/TitliSearch.do" />
+		</action>
+	
+		<action path="/TitliSearch"
+			type="edu.wustl.common.action.TitliSearchAction"
+			name="titliSearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.titliSearchResultPage" />
+		</action>
+				
+		<action path="/TitliFetch"
+			type="edu.wustl.common.action.TitliFetchAction"
+			name="titliSearchForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/SpreadsheetView.do" />
+		</action>
+		
+	
 		<action path="/viewErrorDetails" forward=".catissuecore.error.details"
 			validate="false" />
 		
