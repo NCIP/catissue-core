@@ -890,18 +890,20 @@ function trimByAutoTagAndSetIdInForm(object) {
 // * Following script is used to toggle between the show and hide the table. (Collected/recieved Events, External identifiers, And Biohazard table)
 // */
 // This function collapse or expand the table  
-function switchStyle(image,dispVar, object)
+function switchStyle(image,dispVar, object, buttonId)
 {
 	imageObj = document.getElementById(image);	
 	if(document.getElementById(dispVar).value== 'hide') //Clicked on + image
 	{
 		show(object,dispVar);
 		imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
+		document.getElementById(buttonId).disabled=false;
 	}
 	else  							   //Clicked on - image
 	{
 		hide(object,dispVar);				
 		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
+		document.getElementById(buttonId).disabled=true;
 	}
 }
 // This function is to show object on UI 
@@ -921,30 +923,8 @@ function hide(obj,dispVar)
 // function that will run after the new specimen page is loaded to set tables in collapsed form
 function newSpecimenInit()
 {
-	if(document.getElementById('eiDispType').value=="show")
-	{
-		show('externalIdentifiers','eiDispType');
-		imageObj = document.getElementById('imageEI');	
-		imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
-	}
-	else
-	{
-		hide('externalIdentifiers','eiDispType');
-		imageObj = document.getElementById('imageEI');	
-		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
-	}
-	if(document.getElementById('bhDispType').value=="show")
-	{
-		show('biohazards','bhDispType');
-		imageObj = document.getElementById('imageBH');	
-		imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
-	}
-	else
-	{
-		hide('biohazards','bhDispType');
-		imageObj = document.getElementById('imageBH');	
-		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
-	}
+	switchStyle('imageEI','eiDispType','externalIdentifiers','addExId');
+	switchStyle('imageBH','bhDispType','biohazards','addBiohazard');
 	if(document.getElementById('crDispType')!=null)
 	{	
 		if(document.getElementById('crDispType').value=="hide")
