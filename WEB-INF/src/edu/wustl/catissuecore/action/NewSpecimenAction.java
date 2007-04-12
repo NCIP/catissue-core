@@ -10,7 +10,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
-import java.util.Calendar; 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,26 +32,27 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
-import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
-import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -138,25 +139,6 @@ public class NewSpecimenAction extends SecureAction
 				 *  Bug no -- 2623
 				 */
 				setFormValues(specimenForm, specimenCollectionGroupId);
-				/* removedspecimenForm.setSpecimenCollectionGroupId(specimenCollectionGroupId);
-				 specimenForm.setParentSpecimenId("");
-				 specimenForm.setLabel("");
-				 specimenForm.setBarcode("");
-				 specimenForm.setPositionInStorageContainer("");*/
-
-				/*specimenForm.setQuantity("");
-				 specimenForm.setClassName("");
-				 specimenForm.setTissueSide("");
-				 specimenForm.setTissueSite("");
-				 specimenForm.setPathologicalStatus("");*/
-
-				/* removed specimenForm.setPositionDimensionOne("");
-				 specimenForm.setPositionDimensionTwo("");
-				 specimenForm.setStorageContainer("");*/
-
-				/*clearCollectionEvent(specimenForm);
-				 clearReceivedEvent(specimenForm);*/
-
 			}
 		}
 		else
@@ -164,7 +146,7 @@ public class NewSpecimenAction extends SecureAction
 			if (request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID) != null)
 			{
 				String specimenCollectionGroupId = request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID);
-				//setFormValues(specimenForm,specimenCollectionGroupId);
+				setFormValues(specimenForm,specimenCollectionGroupId);
 			}
 		}
 		//*************  ForwardTo implementation *************
@@ -225,106 +207,169 @@ public class NewSpecimenAction extends SecureAction
 		request.setAttribute(Constants.BIOHAZARD_NAME_LIST, bhNameArray);
 		request.setAttribute(Constants.BIOHAZARD_ID_LIST, bhIdArray);
 		request.setAttribute(Constants.BIOHAZARD_TYPES_LIST, bhTypeArray);
-
+		
+		/**
+		 * Name: Chetan Patil
+		 * Reviewer: Sachin Lale
+		 * Bug ID: Bug#_3184
+		 * Patch ID: Bug#3184_1
+		 * Also See: 2-6
+		 * Description: Here the older code has been integrated again inorder to restrict the specimen values based on
+		 * requirements of study calendar event point.
+		 */
 		//Setting Secimen Collection Group
-		String sourceObjectName = SpecimenCollectionGroup.class.getName();
-		String[] displayNameFields = {"name"};
-		String valueField = Constants.SYSTEM_IDENTIFIER;
+		initializeAndSetSpecimenCollectionGroupIdList(bizLogic,request);
+		
+		List<NameValueBean> specimenClassList = new ArrayList<NameValueBean>();
+		List<NameValueBean> specimenTypeList = new ArrayList<NameValueBean>();
+		List<NameValueBean> tissueSiteList = new ArrayList<NameValueBean>();
+		List<NameValueBean> tissueSideList = new ArrayList<NameValueBean>();
+		List<NameValueBean> pathologicalStatusList = new ArrayList<NameValueBean>();
 
-		List specimenCollectionGroupList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
-		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenCollectionGroupList);
-
-		//Setting the specimen class list
-		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
-		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
-
-		if (Constants.ALIQUOT.equals(specimenForm.getLineage()))
+		if (!Constants.ALIQUOT.equals(specimenForm.getLineage())) 
 		{
-			populateListBoxes(specimenForm, request);
+			initializeAllLists(specimenClassList, specimenTypeList, tissueSiteList, tissueSideList, pathologicalStatusList);
+		}
+		
+		Map<String, List<NameValueBean>> subTypeMap = new HashMap<String, List<NameValueBean>>();
+		if (specimenForm.getSpecimenCollectionGroupId() != null && !specimenForm.getSpecimenCollectionGroupId().equals("")) 
+		{	// If specimen is being added form specimen collection group page or a specimen is being edited.
+			
+			if (Constants.ALIQUOT.equals(specimenForm.getLineage()))
+			{
+				populateListBoxes(specimenForm, request);
+			}
+			else
+			{
+				// Get SpecimenCollectionGroup given a SpecimenCollectionGroupId
+				SpecimenCollectionGroup scg = getSpecimenCollectionGroup(specimenForm.getSpecimenCollectionGroupId());
+				request.setAttribute("SpecimenCollectionGroupId", specimenForm.getSpecimenCollectionGroupId());
+				request.setAttribute("SpecimenCollectionGroupName", scg.getName());
+				if (operation.equals(Constants.EDIT)) 
+				{
+					request.setAttribute("scgName", scg.getName());
+				}
+				
+				Map<String,String> tempMap = new HashMap<String,String>();
+				
+				CollectionProtocolEvent collectionProtocolEvent = scg.getCollectionProtocolEvent();
+				Collection<SpecimenRequirement> specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+				for(SpecimenRequirement specimenRequirement : specimenRequirementCollection)
+				{
+					String specimenClass = specimenRequirement.getSpecimenClass();
+					if (tempMap.get(specimenClass + Constants.SPECIMEN_CLASS) == null) 
+					{
+						specimenClassList.add(new NameValueBean(specimenClass, specimenClass));
+						tempMap.put(specimenClass + Constants.SPECIMEN_CLASS, specimenClass);
+					}
+
+					String specimenType = specimenRequirement.getSpecimenType();
+					if (tempMap.get(specimenClass + specimenType + Constants.SPECIMEN_TYPE) == null) 
+					{
+						populateSpecimenTypeLists(tempMap, subTypeMap, specimenClass, specimenType);
+					}
+
+					// Collections.sort(innerList);
+					String tissueSite = specimenRequirement.getTissueSite();
+					if (tempMap.get(tissueSite + Constants.TISSUE_SITE) == null) 
+					{
+						tissueSiteList.add(new NameValueBean(tissueSite, tissueSite));
+						tempMap.put(tissueSite + Constants.TISSUE_SITE, tissueSite);
+					}
+
+					String pathologicalStatus = specimenRequirement.getPathologyStatus();
+					if (tempMap.get(pathologicalStatus + Constants.CDE_NAME_PATHOLOGICAL_STATUS) == null) 
+					{
+						pathologicalStatusList.add(new NameValueBean(pathologicalStatus, pathologicalStatus));
+						tempMap.put(pathologicalStatus + Constants.CDE_NAME_PATHOLOGICAL_STATUS, pathologicalStatus);
+					}
+										
+					if ((request.getParameter("classChange") != null)&& (!specimenForm.getClassName().equals(specimenClass))) 
+					{
+						continue;
+					}
+				}
+
+				// Setting tissue side list
+				tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null);
+			}
 		}
 		else
-		{
-			//Setting the specimen type list
-			List specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE, null);
-			request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-
+		{	// On adding a new specimen independently.
+			
+			//Getting the specimen type list
+			specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE, null);
+			
 			/**
 		     * Name : Virender Mehta
 		     * Reviewer: Sachin Lale
 		     * Bug ID: TissueSiteCombo_BugID
 		     * Patch ID:TissueSiteCombo_BugID_1
 		     * See also:TissueSiteCombo_BugID_2
-		     * Description: Setting TissueList with only Leaf node
+		     * Description: Getting TissueList with only Leaf node
 			 */
-			List tissueSiteList = Utility.tissueSiteList();
-	    	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
+			tissueSiteList = Utility.tissueSiteList();
 	    	
-			//Bug- setting the default tissue site
-			if (specimenForm.getTissueSite() == null)
+			//Getting tissue side list
+			tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null);
+			
+			//Getting pathological status list
+			pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
+						
+			specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+			specimenForm.setClassName(Constants.SELECT_OPTION);
+			// get the Specimen class and type from the cde
+			CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
+			Set<PermissibleValue> setPV = specimenClassCDE.getPermissibleValues();
+			for (PermissibleValue pv : setPV)
 			{
-				specimenForm.setTissueSite(Constants.NOTSPECIFIED);
-			}
+				String tmpStr = pv.getValue();
+				Logger.out.debug(tmpStr);
+				specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
 
-			//Setting tissue side list
-			List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null);
-			request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
-			//Bug- setting the default tissue side
-			if (specimenForm.getTissueSide() == null)
-			{
-				specimenForm.setTissueSide(Constants.NOTSPECIFIED);
-			}
-
-			//Setting pathological status list
-			List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
-			request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
-			//Bug- setting the default pathological status
-			if (specimenForm.getPathologicalStatus() == null)
-			{
-				specimenForm.setPathologicalStatus(Constants.NOTSPECIFIED);
-			}
-		} 
-
-		//get the Specimen class and type from the cde
-		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-		Set setPV = specimenClassCDE.getPermissibleValues();
-		Iterator itr = setPV.iterator();
-
-		specimenClassList = new ArrayList();
-		Map subTypeMap = new HashMap();
-
-		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-
-		while (itr.hasNext())
+				List<NameValueBean> innerList = new ArrayList<NameValueBean>();
+				innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+				
+				Set<PermissibleValue> list1 = pv.getSubPermissibleValues();
+				Logger.out.debug("list1 " + list1);
+				for (PermissibleValue pv1 : list1)
+				{
+					// set specimen type
+					String tmpInnerStr = pv1.getValue();
+					Logger.out.debug("\t\t" + tmpInnerStr);
+					innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
+				}
+				Collections.sort(innerList);
+				subTypeMap.put(tmpStr, innerList);
+			} // class and values set
+			Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
+		}
+		
+		// Setting the default values
+		if (specimenForm.getTissueSide() == null || specimenForm.getTissueSide().equals("-1")) 
 		{
-			List innerList = new ArrayList();
-			Object obj = itr.next();
-			PermissibleValue pv = (PermissibleValue) obj;
-			String tmpStr = pv.getValue();
-			Logger.out.debug(tmpStr);
-			specimenClassList.add(new NameValueBean(tmpStr, tmpStr));
-
-			Set list1 = pv.getSubPermissibleValues();
-			Logger.out.debug("list1 " + list1);
-			Iterator itr1 = list1.iterator();
-			innerList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-			while (itr1.hasNext())
-			{
-				Object obj1 = itr1.next();
-				PermissibleValue pv1 = (PermissibleValue) obj1;
-				// set specimen type
-				String tmpInnerStr = pv1.getValue();
-				Logger.out.debug("\t\t" + tmpInnerStr);
-				innerList.add(new NameValueBean(tmpInnerStr, tmpInnerStr));
-			}
-			Collections.sort(innerList);
-			subTypeMap.put(pv.getValue(), innerList);
-		} // class and values set
-		Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
-
-		// sets the Class list
+			specimenForm.setTissueSide(Constants.NOTSPECIFIED);
+		}
+		if (specimenForm.getTissueSite() == null)
+		{
+			specimenForm.setTissueSite(Constants.NOTSPECIFIED);
+		}
+		if (specimenForm.getPathologicalStatus() == null)
+		{
+			specimenForm.setPathologicalStatus(Constants.NOTSPECIFIED);
+		}
+		
+		// sets the Specimen Class list
 		request.setAttribute(Constants.SPECIMEN_CLASS_LIST, specimenClassList);
-
-		// set the map to subtype
+		// sets the Specimen Type list
+		request.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+		// sets the Tissue Site list
+		request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
+		// sets the PathologicalStatus list
+		request.setAttribute(Constants.PATHOLOGICAL_STATUS_LIST, pathologicalStatusList);
+		// sets the Side list
+		request.setAttribute(Constants.TISSUE_SIDE_LIST, tissueSideList);
+		// set the map of subtype
 		request.setAttribute(Constants.SPECIMEN_TYPE_MAP, subTypeMap);
 
 		//Setting biohazard list
@@ -712,6 +757,92 @@ public class NewSpecimenAction extends SecureAction
 		specimenForm.setPositionDimensionTwo("");
 		specimenForm.setStorageContainer("");
 
+	}
+	
+	/**
+	 * Patch ID: Bug#3184_2
+	 */
+	/**
+	 * This method initializes the List of SpecimenCollectionGroup in the system and sets the list as an
+	 * attribute in the request.
+	 * @param bizLogic NewSpecimenBizLogic to fetch the SpecimenCollectionGroup list
+	 * @param request HttpServletRequest in which the list is set as an attribute
+	 * @throws DAOException on failure to initialize the list
+	 */
+	private void initializeAndSetSpecimenCollectionGroupIdList(NewSpecimenBizLogic bizLogic, HttpServletRequest request) throws DAOException 
+	{
+		String sourceObjectName = SpecimenCollectionGroup.class.getName();
+		String[] displayNameFields = {"name"};
+		String valueField = Constants.SYSTEM_IDENTIFIER;
+		
+		List specimenCollectionGroupList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
+		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenCollectionGroupList);
+	}
+
+	/**
+	 * This method adds an initial value of -- Select -- into all the lists.
+	 * @param specimenClassList list of Specimen Class
+	 * @param specimenTypeList list of Specimen Type
+	 * @param tissueSiteList list of Tissue Site
+	 * @param tissueSideList list of Tissue Side
+	 * @param pathologicalStatusList list of Pathological Status
+	 */
+	private void initializeAllLists(List<NameValueBean> specimenClassList, List<NameValueBean> specimenTypeList, 
+			List<NameValueBean> tissueSiteList, List<NameValueBean> tissueSideList, List<NameValueBean> pathologicalStatusList) 
+	{
+		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+		specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+		tissueSiteList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+		tissueSideList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+		pathologicalStatusList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+	}
+	
+	/**
+	 * This method generates Map of SpecimenClass and the List of the corresponding Types. 
+	 * @param tempMap a temporary Map for avoiding duplication of values.
+	 * @param subTypeMap the Map of SpecimenClass and the List of the corresponding Types
+	 * @param specimenClass Class of Speciment
+	 * @param specimenType Type of Specimen
+	 */
+	private void populateSpecimenTypeLists(Map<String, String> tempMap, Map<String, List<NameValueBean>> subTypeMap, 
+			String specimenClass, String specimenType) 
+	{
+		List<NameValueBean> tempList = subTypeMap.get(specimenClass);
+		if (tempList == null)
+		{
+			tempList = new ArrayList<NameValueBean>();
+			tempList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
+			tempList.add(new NameValueBean(specimenType, specimenType));
+			
+			subTypeMap.put(specimenClass, tempList);
+			tempMap.put(specimenClass + specimenType + Constants.SPECIMEN_TYPE, specimenType);
+		}
+		else
+		{
+			tempList = subTypeMap.get(specimenClass);
+			tempList.add(new NameValueBean(specimenType, specimenType));
+			Collections.sort(tempList);
+			
+			subTypeMap.put(specimenClass, tempList);
+			tempMap.put(specimenClass + specimenType + Constants.SPECIMEN_TYPE, specimenType);
+		}
+	}
+	
+	/**
+	 * This method returns the SpecimenCollectionGroup given a SpecimenCollectionGroup identifier.
+	 * @param specimenCollectionGroupId SpecimenCollectionGroup identifier.
+	 * @return SpecimenCollectionGroup
+	 * @throws DAOException on failure to fetch SpecimenCollectionGroup
+	 */
+	private SpecimenCollectionGroup getSpecimenCollectionGroup(String specimenCollectionGroupId) throws DAOException {
+		String sourceObjectName = SpecimenCollectionGroup.class.getName();
+		String valueField = Constants.SYSTEM_IDENTIFIER;
+		
+		SpecimenCollectionGroupBizLogic scgbizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+		List specimenCollectionObjectGroupList = scgbizLogic.retrieve(sourceObjectName, valueField, specimenCollectionGroupId);
+		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionObjectGroupList.get(0);
+		
+		return specimenCollectionGroup;
 	}
 
 }

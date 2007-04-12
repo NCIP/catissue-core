@@ -138,6 +138,10 @@ public class NewSpecimenForm extends SpecimenForm
 	
 //	-------------Mandar AutoEvents ReceivedEvent parameters end
 	
+	// Patch ID: Bug#3184_5
+	// Also See: Bug#_3184_6
+	private String specimenCollectionGroupName;
+	
     /**
      * Returns an identifier of the Parent Speciemen.
      * @return String an identifier of the Parent Speciemen.
@@ -903,6 +907,23 @@ public class NewSpecimenForm extends SpecimenForm
 	public void setLineage(String lineage)
 	{
 		this.lineage = lineage;
+	}
+
+	// Patch ID: Bug#_3184_6
+	/**
+	 * This method returns the name of SpecimenCollectionGroup
+	 * @return the specimenCollectionGroupName
+	 */
+	public String getSpecimenCollectionGroupName() {
+		return specimenCollectionGroupName;
+	}
+
+	/**
+	 * This method sets the name of SpecimenCollectionGroup
+	 * @param specimenCollectionGroupName the specimenCollectionGroupName to set
+	 */
+	public void setSpecimenCollectionGroupName(String specimenCollectionGroupName) {
+		this.specimenCollectionGroupName = specimenCollectionGroupName;
 	}
 	
 }
