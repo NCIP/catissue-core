@@ -36,8 +36,6 @@
 
 %>	
 
-/*  This variable is used to clear previous autocompleter as it was creating some problem -- Santosh*/
-        var AutoC=null;   
         function typeChange(arrayName)
 		{ 
 		
