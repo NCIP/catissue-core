@@ -56,13 +56,13 @@
 		
 		if(validateAny(document.forms[0].holdsStorageTypeIds)==false)
 		{
-			alert("Selecting other options with 'Any' option is not allowed");
+			alert("Selecting other options with 'All' option is not allowed");
 		}
 		else
 		{
 			if(validateAny(document.forms[0].holdsSpecimenClassTypes)==false)
 			{
-				alert("Selecting other options with 'Any' option is not allowed");
+				alert("Selecting other options with 'All' option is not allowed");
 			}
 			else
 			{
