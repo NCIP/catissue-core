@@ -131,7 +131,7 @@
  						* Following image is provided to toggle between the show and hide the table. (Biohazard table).
 						*/   -->	
 					<td class="formFieldAllBorders" align="right" width="1%">
-						<a id="imageBH" style="text-decoration:none" href="javascript:switchStyle('imageBH','bhDispType','biohazards');" >  
+						<a id="imageBH" style="text-decoration:none" href="javascript:switchStyle('imageBH','bhDispType','biohazards','addBiohazard');" >  
 						<img src="images/nolines_minus.gif" border="0" width="18" height="18"/>
 						</a>
 						<input type="hidden" name="bhDispType" value="<%=bhDispType1%>" id="bhDispType" />
@@ -141,7 +141,7 @@
 				     	<bean:message key="specimen.biohazards"/>
 				     </td>
 				     <td class="formButtonField" width="300" colspan="2">
-				     	<html:button property="addBiohazard" styleClass="actionButton" onclick="insBhRow('addBiohazardRow')">
+				     	<html:button property="addBiohazard" styleClass="actionButton" styleId="addBiohazard" onclick="insBhRow('addBiohazardRow')">
 				     		<bean:message key="buttons.addMore"/>
 				     	</html:button>
 				    </td>

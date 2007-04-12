@@ -81,7 +81,7 @@
  						* Following image is provided to toggle between the show and hide the table (External identifiers table).
 						*/   -->		
 			<td class="formFieldAllBorders" align="right" width="1%">
-				<a id="imageEI" style="text-decoration:none" href="javascript:switchStyle('imageEI','eiDispType','externalIdentifiers');">  
+				<a id="imageEI" style="text-decoration:none" href="javascript:switchStyle('imageEI','eiDispType','externalIdentifiers','addExId');">  
 				<img src="images/nolines_minus.gif" border="0" width="18" height="18"/>
 				</a>
 				<input type="hidden" name="eiDispType" value="<%=eiDispType1%>" id="eiDispType" />
@@ -91,7 +91,7 @@
 		     	<bean:message key="specimen.externalIdentifier"/>
 		     </td>
 		     <td class="formButtonField" width="300" colspan="2">
-		     	<html:button property="addExId" styleClass="actionButton" onclick="insExIdRow('addExternalIdentifier')">
+		     	<html:button property="addExId" styleClass="actionButton" styleId="addExId" onclick="insExIdRow('addExternalIdentifier')">
 		     		<bean:message key="buttons.addMore"/>
 		     	</html:button>
 		    </td>
