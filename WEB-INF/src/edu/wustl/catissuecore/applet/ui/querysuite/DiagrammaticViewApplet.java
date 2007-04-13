@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.wustl.cab2b.client.ui.dag.MainDagPanel;
 import edu.wustl.cab2b.client.ui.query.ClientQueryBuilder;
+import edu.wustl.cab2b.client.ui.query.IPathFinder;
 import edu.wustl.cab2b.client.ui.util.CommonUtils;
 import edu.wustl.cab2b.client.ui.util.CommonUtils.DagImageConstants;
 import edu.wustl.catissuecore.applet.AppletConstants;
@@ -81,7 +82,7 @@ public class DiagrammaticViewApplet extends BaseApplet
 		}
 		Map<DagImageConstants, Image> imagePathsMap = getImagePathsMap();
 		UpdateAddLimitUI updateAddLimitUI = new UpdateAddLimitUI(this);
-		PathFinderAppletServerCommunicator pathFinder = new PathFinderAppletServerCommunicator(serverURL);
+		IPathFinder pathFinder = new PathFinderAppletServerCommunicator(serverURL);
 		boolean isForView = false;
 		String isForViewStr = getParameter("isForView");
 		if(isForViewStr.equalsIgnoreCase("true"))

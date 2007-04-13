@@ -2,14 +2,18 @@ package edu.wustl.catissuecore.applet.ui.querysuite;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
+import edu.wustl.cab2b.client.ui.query.IPathFinder;
 import edu.wustl.cab2b.common.ejb.path.PathFinderBusinessInterface;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.AppletServerCommunicator;
@@ -23,7 +27,7 @@ import edu.wustl.common.querysuite.metadata.path.IPath;
  * @author deepti_shelar
  *
  */
-public class PathFinderAppletServerCommunicator implements PathFinderBusinessInterface
+public class PathFinderAppletServerCommunicator implements IPathFinder
 {
 
 	String serverURL = "";
@@ -36,32 +40,13 @@ public class PathFinderAppletServerCommunicator implements PathFinderBusinessInt
 		this.serverURL = serverURL ;
 	}
 
-	/**
-	 * retuens Inter Model Associations
-	 * @param
-	 */
-	public List<IInterModelAssociation> getInterModelAssociations(Long arg0) throws RemoteException
-	{
-		return null;
-	}
-	public Collection<AssociationInterface> getIncomingIntramodelAssociations(Long entityId) throws RemoteException
-	{
-		return null;
-	}
-	public Set<ICuratedPath> autoConnect(Set<EntityInterface> entitySet) throws RemoteException
-	{
-		return null;
-	}
-	public Set<ICuratedPath> findPath(EntityInterface source, EntityInterface destination) throws RemoteException
-	{
-		return null;
-	}
+
 	/**
 	 * Returns all the possible paths between the source entity and destination entity.
 	 * @param source source entity reference.
 	 * @param destination Target Entity reference.
 	 */
-	public List<IPath> getAllPossiblePaths(EntityInterface source, EntityInterface destination) throws RemoteException
+	public List<IPath> getAllPossiblePaths(EntityInterface source, EntityInterface destination)
 	{
 		List<IPath> paths = null;
 		String urlString = serverURL + AppletConstants.PATH_FINDER + "?" +AppletConstants.APPLET_ACTION_PARAM_NAME + "=initData";
@@ -85,11 +70,31 @@ public class PathFinderAppletServerCommunicator implements PathFinderBusinessInt
 		}
 		return paths;
 	}
-	public Set<ICuratedPath> getCuratedPaths(EntityInterface arg0, EntityInterface arg1) throws RemoteException
+
+
+	public Set<ICuratedPath> autoConnect(Set<EntityInterface> arg0)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return new HashSet<ICuratedPath>();
 	}
+
+
+	public Set<ICuratedPath> getCuratedPaths(EntityInterface arg0, EntityInterface arg1)
+	{
+		return new HashSet<ICuratedPath>();
+	}
+
+
+	public Collection<AssociationInterface> getIncomingIntramodelAssociations(Long arg0)
+	{
+		return new Vector<AssociationInterface>();
+	}
+
+
+	public List<IInterModelAssociation> getInterModelAssociations(Long arg0)
+	{
+		return new Vector<IInterModelAssociation>();
+	}
+	
 	
 
 }
