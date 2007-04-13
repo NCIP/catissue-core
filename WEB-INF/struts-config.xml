@@ -99,6 +99,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="success" path=".catissuecore.titliSearchResultPage" />
+			
 		</action>
 				
 		<action path="/TitliFetch"
