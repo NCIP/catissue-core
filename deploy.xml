@@ -511,9 +511,8 @@
 			<transaction  src="${common.sql.dir}/createUser.sql"/>
 			<transaction  src="${common.sql.dir}/insert_default_data.sql"/>
 			<transaction  src="${common.sql.dir}/indexes.sql"/>
-			<transaction  src="${mysql.sql.dir}/caB2B Table Generation Script.sql"/>
-			<transaction  src="${mysql.sql.dir}/dynamicextension.sql"/>	
-			<transaction  src="${mysql.sql.dir}/catissueSuite.sql"/>	
+			
+		
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
@@ -620,6 +619,11 @@
 		  <transaction  src="${oracle.sql.dir}/createUser.sql"/>
 	      <transaction  src="${oracle.sql.dir}/insert_default_data.sql"/>	
 	      <transaction  src="${common.sql.dir}/indexes.sql"/>
+		  <transaction  src="${oracle.sql.dir}/cab2b_CreateTable.sql"/>	
+		  <transaction  src="${oracle.sql.dir}/dynamicextension_CreateTable.sql"/>	
+		  <transaction  src="${oracle.sql.dir}/catissueSuite.sql"/>	
+		  <transaction  src="${oracle.sql.dir}/cab2b_AddConstraints.sql"/>	
+		  <transaction  src="${oracle.sql.dir}/dynamicextension_AddConstraints.sql"/>				
 		  <transaction>commit;</transaction>	
     	  <classpath>
             <fileset dir="${lib.dir}">
