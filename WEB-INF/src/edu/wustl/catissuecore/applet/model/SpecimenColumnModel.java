@@ -437,23 +437,52 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 		// Barcode
 		barCode = new ModifiedTextField(10);
+//		 Concentration
+		concentration = new ModifiedTextField(10);
+//		 Quantity
+		quantity = new ModifiedTextField("0", 17);
+		unit = new JLabel();
+		quantity.setPreferredSize(new Dimension(110, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
+		quantityUnitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
+
+		quantityUnitPanel.add(quantity);
+		quantityUnitPanel.add(unit);
 
 		//Specimen Class
 		classList = new ModifiedComboBox(model.getSpecimenClassValues());
+		/**
+	     * Name : Virender Mehta
+	     * Reviewer: Sachin Lale
+	     * Bug ID: defaultValueConfiguration_BugID
+	     * Patch ID:defaultValueConfiguration_BugID_MultipleSpecimen_4
+	     * See also:defaultValueConfiguration_BugID_MultipleSpecimen_1,2,3
+	     * Description: Setting default value for TissueSite, TissueSite, PathologicalStatus,Specimen Type and Specimen Class
+	     */
+		if(model.getSpecimenClass()!=null)
+		{
+			//To display defaultValue form CatissueCore_Properties.xml
+			classList.setSelectedItem(model.getSpecimenClass());
+		}
 
 		String type[] = {Constants.SELECT_OPTION};
 		//Specimen Type
 		typeList = new ModifiedComboBox(model.getSpecimenTypeValues(null));
-
+		specimenClassUpdated(model.getSpecimenClass());
+	
+		if(model.getSpecimenType()!=null)
+		{
+			//To display defaultValue form CatissueCore_Properties.xml
+			typeList.setSelectedItem(model.getSpecimenType());
+		}
+		
 		//TissueSite
 		tissueSiteList = new ModifiedComboBox(model.getTissueSiteValues());
 		tissueSiteList.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
-		//to display notspecified by default
-		if (model.getSpecimenCollectionGroupName() == null)
+		if(model.getTissueSite()!=null)
 		{
-			tissueSiteList.setSelectedItem(Constants.NOTSPECIFIED);
+			//To display defaultValue form CatissueCore_Properties.xml
+			tissueSiteList.setSelectedItem(model.getTissueSite());
 		}
-
 		//Mandar : 30Oct06 : To display Tissue Site Tree
 		System.out.println("ImagePath : " + getClass().getClassLoader().getResource("images/Tree.gif"));
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("images/Tree.gif"));
@@ -469,13 +498,19 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 		//TissueSide
 		tissueSideList = new ModifiedComboBox(model.getTissueSideValues());
-		//to display notspecified by default
-		tissueSideList.setSelectedItem(Constants.NOTSPECIFIED);
-
+		if(model.getTissueSide()!=null)
+		{
+			//To display defaultValue form CatissueCore_Properties.xml
+			tissueSideList.setSelectedItem(model.getTissueSide());
+		}
 		//PathologicalStatus 
 		pathologicalStatusList = new ModifiedComboBox(model.getPathologicalStatusValues());
-		//to display notspecified by default
-		pathologicalStatusList.setSelectedItem(Constants.NOTSPECIFIED);
+		
+		if(model.getPathologicalStatus()!=null)
+		{
+			//To display defaultValue form CatissueCore_Properties.xml
+			pathologicalStatusList.setSelectedItem(model.getPathologicalStatus());
+		}
 	/*	if (model.getSpecimenCollectionGroupName() == null)
 		{
 			pathologicalStatusList.setSelectedItem(Constants.NOTSPECIFIED);
@@ -484,18 +519,6 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		{
 			pathologicalStatusList.setSelectedItem(model.getPathologicalStatus());
 		}*/
-
-		// Quantity
-		quantity = new ModifiedTextField("0", 17);
-		unit = new JLabel();
-		quantity.setPreferredSize(new Dimension(110, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
-		quantityUnitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
-
-		quantityUnitPanel.add(quantity);
-		quantityUnitPanel.add(unit);
-
-		// Concentration
-		concentration = new ModifiedTextField(10);
 
 //		if (model.getSpecimenCollectionGroupName() != null)
 //		{
@@ -1143,7 +1166,6 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel) table.getModel();
 		//	int col = table.getSelectedColumn() ;
 		this.concentration.setEnabled(model.getConcentrationStatus(columnIndex));
-
 		System.out.println("IN SCM enableConcentration concentration refreshed");
 	}
 
@@ -1436,11 +1458,11 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				break;
 			//TissueSide
 			case AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO :
-				value = tissueSideList.getSelectedItem().toString();
+				value =	tissueSideList.getSelectedItem().toString();
 				break;
 			//PathologicalStatus 
 			case AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO :
-				value = pathologicalStatusList.getSelectedItem().toString();
+				value =	pathologicalStatusList.getSelectedItem().toString();
 				break;
 			// Quantity
 			case AppletConstants.SPECIMEN_QUANTITY_ROW_NO :

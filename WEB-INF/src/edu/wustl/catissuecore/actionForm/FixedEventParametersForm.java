@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValue;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -33,9 +34,17 @@ import edu.wustl.common.util.logger.Logger;
 public class FixedEventParametersForm extends SpecimenEventParametersForm
 {
 	/**
+     * Name : Virender Mehta
+     * Reviewer: Sachin Lale
+     * Bug ID: defaultValueConfiguration_BugID
+     * Patch ID:defaultValueConfiguration_BugID_13
+     * Description: Configuration for default value for Fixation Type
+     */
+	
+	/**
 	 * Type of the fixation.
 	 */
-	protected String fixationType = Constants.NOTSPECIFIED;
+	protected String fixationType = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_FIXATION_TYPE);
 
 	/**
 	 * Duration, measured in minutes, for which fixation is performed on specimen.

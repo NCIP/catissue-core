@@ -44,6 +44,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValue;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -317,7 +318,6 @@ public class NewSpecimenAction extends SecureAction
 			pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
 						
 			specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-			specimenForm.setClassName(Constants.SELECT_OPTION);
 			// get the Specimen class and type from the cde
 			CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
 			Set<PermissibleValue> setPV = specimenClassCDE.getPermissibleValues();
@@ -345,18 +345,26 @@ public class NewSpecimenAction extends SecureAction
 			Logger.out.debug("\n\n\n\n**********MAP DATA************\n");
 		}
 		
+		/**
+         * Name : Virender Mehta
+         * Reviewer: Sachin Lale
+         * Bug ID: defaultValueConfiguration_BugID
+         * Patch ID:defaultValueConfiguration_BugID_10
+         * See also:defaultValueConfiguration_BugID_9,11
+         * Description: Configuration of default value for TissueSite, TissueSite, PathologicalStatus
+         */
 		// Setting the default values
 		if (specimenForm.getTissueSide() == null || specimenForm.getTissueSide().equals("-1")) 
 		{
-			specimenForm.setTissueSide(Constants.NOTSPECIFIED);
+			specimenForm.setTissueSide((String)DefaultValue.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE));
 		}
 		if (specimenForm.getTissueSite() == null)
 		{
-			specimenForm.setTissueSite(Constants.NOTSPECIFIED);
+			specimenForm.setTissueSite((String)DefaultValue.getDefaultValue(Constants.DEFAULT_TISSUE_SITE));
 		}
 		if (specimenForm.getPathologicalStatus() == null)
 		{
-			specimenForm.setPathologicalStatus(Constants.NOTSPECIFIED);
+			specimenForm.setPathologicalStatus((String)DefaultValue.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS));
 		}
 		
 		// sets the Specimen Class list
@@ -595,13 +603,22 @@ public class NewSpecimenAction extends SecureAction
 			}
 		}
 
+		/**
+         * Name : Virender Mehta
+         * Reviewer: Sachin Lale
+         * Bug ID: defaultValueConfiguration_BugID
+         * Patch ID:defaultValueConfiguration_BugID_11
+         * See also:defaultValueConfiguration_BugID_9,10,11
+         * Description: Configuration for default value for Collection Procedure, Container and Quality
+         */
+		
 		// set the procedure lists
 		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
 		request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
 		//Bug- setting the default collection event procedure
 		if (specimenForm.getCollectionEventCollectionProcedure() == null)
 		{
-			specimenForm.setCollectionEventCollectionProcedure("Not Specified");
+			specimenForm.setCollectionEventCollectionProcedure((String)DefaultValue.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
 		}
 
 		// set the container lists
@@ -610,7 +627,7 @@ public class NewSpecimenAction extends SecureAction
 		//Bug- setting the default collection event container
 		if (specimenForm.getCollectionEventContainer() == null)
 		{
-			specimenForm.setCollectionEventContainer("Not Specified");
+			specimenForm.setCollectionEventContainer((String)DefaultValue.getDefaultValue(Constants.DEFAULT_CONTAINER));
 		}
 
 	}
@@ -631,7 +648,7 @@ public class NewSpecimenAction extends SecureAction
 		//Bug- setting the default recieved event quality
 		if (specimenForm.getReceivedEventReceivedQuality() == null)
 		{
-			specimenForm.setReceivedEventReceivedQuality("Not Specified");
+			specimenForm.setReceivedEventReceivedQuality((String)DefaultValue.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
 		}
 	}
 

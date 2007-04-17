@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValue;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -32,15 +33,23 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionEventParametersForm extends SpecimenEventParametersForm
 {
+	/**
+     * Name : Virender Mehta
+     * Reviewer: Sachin Lale
+     * Bug ID: defaultValueConfiguration_BugID
+     * Patch ID:defaultValueConfiguration_BugID_12
+     * Description: Configuration for default value for CollectionProcedure
+     */
+	
 	/**	
 	 *	Method of specimen collection from participant (e.g. needle biopsy, central venous line, bone marrow aspiration)
 	 */
-	protected String collectionProcedure;
+	protected String collectionProcedure=(String)DefaultValue.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
 	
 	/**
 	 * Container type in which specimen is collected (e.g. clot tube, KEDTA, ACD, sterile specimen cup)
 	 */
-	protected String container;
+	protected String container=(String)DefaultValue.getDefaultValue(Constants.DEFAULT_CONTAINER);
 
 	/**
 	 * Returns the procedure of collection.

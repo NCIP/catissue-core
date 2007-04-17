@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValue;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -37,11 +38,6 @@ public class SiteForm extends AbstractActionForm
     private String name;
     
     /**
-     * A string containing the type of the storage.
-     */
-    private String type;
-
-    /**
      * EmailAddress Address of the site.
      */
     private String emailAddress;
@@ -57,21 +53,22 @@ public class SiteForm extends AbstractActionForm
     private String city;
 
     /**
-     * The State where the site is.
+     * Name : Virender Mehta
+     * Reviewer: Sachin Lale
+     * Bug ID: defaultValueConfiguration_BugID
+     * Patch ID:defaultValueConfiguration_BugID_4
+     * Description: Configuration for default value for Type, State and country
      */
-    private String state;
-
+    
     /**
-      *  Name : Virender Mehta
-      *  Reviewer: Sachin Lale
-	  *  Bug ID: DefaultCountry BugID
-	  *  Patch ID: DefaultNameCountry BugID_1
-	  *  See also: Reset method of UserForm.java 
-	  *  Description: The Country where the site is
-	  *  Default country Name United States 
-	  */
-    private String country = Constants.DEFAULT_COUNTRY_NAME;;
+     * A string containing the type of the storage.
+     */
+    private String type = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_SITE_TYPE);
+    
+    private String state =(String)DefaultValue.getDefaultValue(Constants.DEFAULT_STATES);
 
+    private String country =(String)DefaultValue.getDefaultValue(Constants.DEFAULT_COUNTRY); 
+    
     /**
      * The zip code of city where the site is.
      */

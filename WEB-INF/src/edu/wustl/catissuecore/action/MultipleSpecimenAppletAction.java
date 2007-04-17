@@ -40,10 +40,10 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValue;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
@@ -121,7 +121,6 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		List tissueSiteList = Utility.tissueSiteList();
 		//Converting list object from NameValue to String
 		List finalTissueSiteList = new ArrayList();
-    	finalTissueSiteList.add(Constants.SELECT_OPTION);
     	for(int i=0;i<tissueSiteList.size();i++) 
     	{
     		NameValueBean nvb = (NameValueBean) tissueSiteList.get(i);
@@ -148,6 +147,42 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		{
 			DataListsMap.put(Constants.SPECIMEN_COLL_GP_NAME, request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME));
 			request.getSession().removeAttribute(Constants.SPECIMEN_COLL_GP_NAME);
+		}
+		
+		/**
+         * Name : Virender Mehta
+         * Reviewer: Sachin Lale
+         * Bug ID: defaultValueConfiguration_BugID
+         * Patch ID:defaultValueConfiguration_BugID_MultipleSpecimen_1
+         * See also:defaultValueConfiguration_BugID_MultipleSpecimen_2,3,4
+         * Description: Configuration for default value for TissueSite, TissueSite, PathologicalStatus
+         * 				Specimen Class and Specimen type
+         */
+		//For setting default Value
+		if((String)DefaultValue.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE)!=null)
+		{
+			String defaultTissueSide = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE);
+			DataListsMap.put(Constants.DEFAULT_TISSUE_SIDE,defaultTissueSide);
+		}
+		if((String)DefaultValue.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)!=null)
+		{
+			String defaultPathologicalStatus = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS);
+			DataListsMap.put(Constants.DEFAULT_PATHOLOGICAL_STATUS,defaultPathologicalStatus);
+		}
+		if((String)DefaultValue.getDefaultValue(Constants.DEFAULT_TISSUE_SITE)!=null)
+		{
+			String defaultTissueSite = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_TISSUE_SITE);
+			DataListsMap.put(Constants.DEFAULT_TISSUE_SITE,defaultTissueSite);
+		}
+		if((String)DefaultValue.getDefaultValue(Constants.DEFAULT_SPECIMEN)!=null)
+		{
+			String defaultSpecimenClass = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_SPECIMEN);
+			DataListsMap.put(Constants.DEFAULT_SPECIMEN,defaultSpecimenClass);
+		}
+		if((String)DefaultValue.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE)!=null)
+		{
+			String defaultSpecimenType = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE);
+			DataListsMap.put(Constants.DEFAULT_SPECIMEN_TYPE,defaultSpecimenType);
 		}
 		// ------------------------------------
 

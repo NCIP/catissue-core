@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.EmbeddedEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValue;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -31,8 +32,14 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 {
-	
-	private String embeddingMedium = Constants.NOTSPECIFIED;
+	/**
+     * Name : Virender Mehta
+     * Reviewer: Sachin Lale
+     * Bug ID: defaultValueConfiguration_BugID
+     * Patch ID:defaultValueConfiguration_BugID_15
+     * Description: Configuration for default value for Embedding Medium
+     */
+	private String embeddingMedium = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_EMBEDDING_MEDIUM);
 
 	
 	public String getEmbeddingMedium()

@@ -696,7 +696,7 @@ public class Utility extends edu.wustl.common.util.Utility
 	     * @throws DAOException 
 	     */
 	    public static boolean validateSpecimenTypeClass(Specimen specimen) throws DAOException
-	   {
+	    {
 	   		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
 	   		String specimenClass = Utility.getSpecimenClassName(specimen);
 	
@@ -711,5 +711,15 @@ public class Utility extends edu.wustl.common.util.Utility
 	   		}
 	   		/* Patch ends here  */
 	   		return true;
-	   }
+	    }
+	  /**
+	   * This method will return Permissible Value List from CDE depending on the listType 
+	   * @param listType
+	   * @return
+	   */
+       public static List getListFromCDE(String listType)
+       {
+    	   List CDEList = CDEManager.getCDEManager().getPermissibleValueList(listType, null);
+    	   return CDEList;
+       }
 }

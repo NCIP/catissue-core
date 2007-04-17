@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValue;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -62,14 +63,22 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     protected String middleName = "";
 
     /**
+     * Name : Virender Mehta
+     * Reviewer: Sachin Lale
+     * Bug ID: defaultValueConfiguration_BugID
+     * Patch ID:defaultValueConfiguration_BugID_6
+     * Description: Configuration for default value for Gender, Genotype, Race, Ethnicity, VitalStatus
+     */
+    
+    /**
      * The gender of a participant.
      */
-    protected String gender = Constants.UNSPECIFIED;
+    protected String gender = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_GENDER);
     
     /**
      * The genotype of a participant.
      */
-    protected String genotype = Constants.UNKNOWN;
+    protected String genotype = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_GENOTYPE);
 
     /**
      * Social Security Number of the Participant.
@@ -86,12 +95,12 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     /**
      * The race to which the Participant belongs.
      */
-    protected String[] raceTypes = {Constants.NOTSPECIFIED};
+    protected String[] raceTypes = {(String)DefaultValue.getDefaultValue(Constants.DEFAULT_RACE)};
     
     /**
      * Participant's ethnicity status.
      */
-	protected String ethnicity = Constants.NOTSPECIFIED;
+	protected String ethnicity = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_ETHNICITY);
 	
 	/**
 	 * The Date of Death of the Participant.
@@ -101,7 +110,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	/**
 	 * Vital status of the Participant.
 	 */
-	protected String vitalStatus = Constants.UNKNOWN;
+	protected String vitalStatus = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_VITAL_STATUS);
 	
     /**
 	 * Map to handle values of all the Participant Medical Identifiers

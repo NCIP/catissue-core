@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValue;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -33,10 +34,17 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class SpecimenCollectionGroupForm extends AbstractActionForm
 {
- 
-	private String clinicalDiagnosis = Constants.NOTSPECIFIED;
+	/**
+     * Name : Virender Mehta
+     * Reviewer: Sachin Lale
+     * Bug ID: defaultValueConfiguration_BugID
+     * Patch ID:defaultValueConfiguration_BugID_7
+     * Description: Configuration for default value for clinicalDiagnosis and clinicalStatus
+     *
+     */
+	private String clinicalDiagnosis = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS);
     
-	private String clinicalStatus = Constants.NOTSPECIFIED;
+	private String clinicalStatus = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS);
 	
 	private String surgicalPathologyNumber;
 	

@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValue;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -33,7 +34,7 @@ public class ReceivedEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * Grossly evaluated quality of the received specimen.
 	 */
-	protected String receivedQuality;
+	protected String receivedQuality=(String)DefaultValue.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
 
 	/**
 	 * Returns the receivedQuality of the specimen.

@@ -23,6 +23,56 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGE_OF_SUPERVISOR = "pageOfSupervisor";
 	public static final String PAGE_OF_TECHNICIAN = "pageOfTechnician";
 	public static final String PAGE_OF_SCIENTIST = "pageOfScientist";
+	//Constants added for Validation
+	public static final String DEFAULT_TISSUE_SITE ="defaultTissueSite";
+	public static final String DEFAULT_CLINICAL_STATUS ="defaultClinicalStatus"; 
+	public static final String DEFAULT_GENDER = "defaultGender";
+	public static final String DEFAULT_GENOTYPE = "defaultGenotype";
+	public static final String DEFAULT_SPECIMEN = "defaultSpecimen";
+	public static final String DEFAULT_TISSUE_SIDE = "defaultTissueSide";
+	public static final String DEFAULT_PATHOLOGICAL_STATUS = "defaultPathologicalStatus";
+	public static final String DEFAULT_RECEIVED_QUALITY= "defaultReceivedQuality";
+	public static final String DEFAULT_FIXATION_TYPE = "defaultFixationType";
+	public static final String DEFAULT_COLLECTION_PROCEDURE="defaultCollectionProcedure";
+	public static final String DEFAULT_CONTAINER= "defaultContainer";
+	public static final String DEFAULT_METHOD= "defaultMethod";
+	public static final String DEFAULT_EMBEDDING_MEDIUM="defaultEmbeddingMedium";
+	public static final String DEFAULT_BIOHAZARD="defaultBiohazard";
+	public static final String DEFAULT_SITE_TYPE ="defaultSiteType";
+	public static final String DEFAULT_SPECIMEN_TYPE ="defaultSpecimenType";
+	public static final String DEFAULT_ETHNICITY ="defaultEthnicity";
+	public static final String DEFAULT_RACE ="defaultRace";
+	public static final String DEFAULT_CLINICAL_DIAGNOSIS = "defaultClinicalDiagnosis";
+	public static final String DEFAULT_STATES ="defaultStates";
+	public static final String DEFAULT_COUNTRY ="defaultCountry";
+	public static final String DEFAULT_HISTOLOGICAL_QUALITY="defaultHistologicalQuality";
+	public static final String DEFAULT_VITAL_STATUS ="defaultVitalStatus";
+	
+	public static final String [][] defaultValueKeys= {
+		{Constants.DEFAULT_TISSUE_SITE, Constants.CDE_NAME_TISSUE_SITE},
+		{Constants.DEFAULT_CLINICAL_STATUS, Constants.CDE_NAME_CLINICAL_STATUS},
+		{Constants.DEFAULT_GENDER, Constants.CDE_NAME_GENDER},
+		{Constants.DEFAULT_GENOTYPE, Constants.CDE_NAME_GENOTYPE},
+		{Constants.DEFAULT_SPECIMEN, Constants.CDE_NAME_SPECIMEN_CLASS},
+		{Constants.DEFAULT_TISSUE_SIDE, Constants.CDE_NAME_TISSUE_SIDE},
+		{Constants.DEFAULT_PATHOLOGICAL_STATUS, Constants.CDE_NAME_PATHOLOGICAL_STATUS},
+		{Constants.DEFAULT_RECEIVED_QUALITY, Constants.CDE_NAME_RECEIVED_QUALITY},
+		{Constants.DEFAULT_FIXATION_TYPE, Constants.CDE_NAME_FIXATION_TYPE},
+		{Constants.DEFAULT_COLLECTION_PROCEDURE, Constants.CDE_NAME_COLLECTION_PROCEDURE},
+		{Constants.DEFAULT_CONTAINER, Constants.CDE_NAME_CONTAINER},
+		{Constants.DEFAULT_METHOD, Constants.CDE_NAME_METHOD},
+		{Constants.DEFAULT_EMBEDDING_MEDIUM,Constants.CDE_NAME_EMBEDDING_MEDIUM},
+		{Constants.DEFAULT_BIOHAZARD, Constants.CDE_NAME_BIOHAZARD},
+		{Constants.DEFAULT_SITE_TYPE, Constants.CDE_NAME_SITE_TYPE},
+		{Constants.DEFAULT_SPECIMEN_TYPE, Constants.CDE_NAME_SPECIMEN_TYPE},
+		{Constants.DEFAULT_ETHNICITY, Constants.CDE_NAME_ETHNICITY},
+		{Constants.DEFAULT_RACE, Constants.CDE_NAME_RACE},
+		{Constants.DEFAULT_CLINICAL_DIAGNOSIS, Constants.CDE_NAME_CLINICAL_DIAGNOSIS},
+		{Constants.DEFAULT_STATES, Constants.CDE_NAME_STATE_LIST},
+		{Constants.DEFAULT_COUNTRY, Constants.CDE_NAME_COUNTRY_LIST},
+		{Constants.DEFAULT_HISTOLOGICAL_QUALITY, Constants.CDE_NAME_HISTOLOGICAL_QUALITY},
+		{Constants.DEFAULT_VITAL_STATUS, Constants.CDE_VITAL_STATUS}
+   };
    //Constants added for Catissuecore V1.2
 	
 	public static final String MAX_IDENTIFIER = "maxIdentifier";
@@ -69,7 +119,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DEPARTMENTLIST = "departmentList";
 	public static final String STATELIST = "stateList";
 	public static final String COUNTRYLIST = "countryList";
-	public static final String DEFAULT_COUNTRY_NAME = "United States";
 	public static final String ROLELIST = "roleList";
 	public static final String ROLEIDLIST = "roleIdList";
 	public static final String CANCER_RESEARCH_GROUP_LIST = "cancerResearchGroupList";

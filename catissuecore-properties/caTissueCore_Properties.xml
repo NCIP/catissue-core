@@ -231,4 +231,123 @@
 		<value>200</value>
 	</property>
 <!-- Constant for limiting number of storage containers shown in dropdowns on UI-->		
+
+<!-- Constant for Setting Default Country Name on UI-->		
+
+	<property>
+		<name>defaultTissueSite</name>
+		<value>Abdominal esophagus</value>
+	</property>
+	
+	<property>
+		<name>defaultClinicalStatus</name>
+		<value>Not Specified</value>
+	</property>
+	
+	<property>
+		<name>defaultGender</name>
+		<value>Unspecified</value>
+	</property>
+	
+	<property>
+		<name>defaultGenotype</name>
+		<value>Unknown</value>
+	</property>
+	
+	<property>
+		<name>defaultSpecimen</name>
+		<value>Tissue</value>
+	</property>
+	
+	<property>
+		<name>defaultTissueSide</name>
+		<value>Left</value>
+	</property>
+	
+	<property>
+		<name>defaultPathologicalStatus</name>
+		<value>Malignant</value>
+	</property>
+	
+	<property>
+		<name>defaultReceivedQuality</name>
+		<value>Acceptable</value>
+	</property>
+	
+	<property>
+		<name>defaultFixationType</name>
+		<value>Formaldehyde</value>
+	</property>
+	
+	<property>
+		<name>defaultCollectionProcedure</name>
+		<value>Needle Aspirate</value>
+	</property>
+	
+	<property>
+		<name>defaultContainer</name>
+		<value>Citrate Vacutainer</value>
+	</property>
+	
+	<property>
+		<name>defaultMethod</name>
+		<value>Aerosol Spray</value>
+	</property>
+	
+	<property>
+		<name>defaultEmbeddingMedium</name>
+		<value>Low Melting Point Paraffin</value>
+	</property>
+	
+	<property>
+		<name>defaultBiohazard</name>
+		<value>Toxic</value>
+	</property>
+	
+	<property>
+		<name>defaultSiteType</name>
+		<value>Collection Site</value>
+	</property>
+	
+	<property>
+		<name>defaultSpecimenType</name>
+		<value>Fixed Tissue</value>
+	</property>
+	
+	<property>
+		<name>defaultEthnicity</name>
+		<value>Not Specified</value>
+	</property>
+	
+	<property>
+		<name>defaultRace</name>
+		<value>Unknown</value>
+	</property>
+	
+	<property>
+		<name>defaultClinicalDiagnosis</name>
+		<value>Not Specified</value>
+	</property>
+	
+	<property>
+		<name>defaultStates</name>
+		<value>California</value>
+	</property>
+	
+	<property>
+		<name>defaultCountry</name>
+		<value>Albania</value>
+	</property>
+	
+	<property>
+		<name>defaultHistologicalQuality</name>
+		<value>Poor- No Definable Features</value>
+	</property>
+	
+	<property>
+		<name>defaultVitalStatus</name>
+		<value>Unknown</value>
+	</property>
+	
+	
 </properties>

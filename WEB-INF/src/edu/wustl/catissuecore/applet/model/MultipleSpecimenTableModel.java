@@ -8,6 +8,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValue;
 
 /**
  * This is table model for multiple specimen functionality.
@@ -92,11 +93,12 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	private String specimenCollectionGroupName = null;
 	
 	boolean virtuallyLocatedCheckBox = false;
-/*	private String specimenClass = null;
-	private String specimenType = null;
+	private String tissueSide = null;
 	private String pathologicalStatus = null;
-	private String tissueSite = null;*/
-	
+	private String tissueSite = null;
+	private String specimenClass = null;
+	private String specimenType = null;
+		
 	/**
 	 * set default map. 
 	 * @param specimenAttributeOptions  initialzation map.
@@ -122,21 +124,60 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		if (specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME) != null)
 		{
 			setSpecimenCollectionGroupName(specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME).toString());
-//			setSpecimenClass();
-//			setSpecimenType();
-//			setPathologicalStatus();
-//			setTissueSite();
-					
 			for(int count=1;count<=initialColumnCount; count++)
 			{
 				setCollectionGroupInModel(count);
-			/*	setDataInModel(count,AppletConstants.SPECIMEN_CLASS_ROW_NO,specimenClass);
-				setDataInModel(count,AppletConstants.SPECIMEN_TYPE_ROW_NO,specimenType);
-				setDataInModel(count,AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO,pathologicalStatus);
-				setDataInModel(count,AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO,tissueSite);*/
 			}	
 		}
-		
+		/**
+         * Name : Virender Mehta
+         * Reviewer: Sachin Lale
+         * Bug ID: defaultValueConfiguration_BugID
+         * Patch ID:defaultValueConfiguration_BugID_MultipleSpecimen_2
+         * See also:defaultValueConfiguration_BugID_MultipleSpecimen_1,3,4
+         * Description: Configuration of default value for TissueSite, TissueSite, PathologicalStatus
+         * 				Specimen Type and Specimen Class	
+         */
+		if(specimenAttributeOptions.get(Constants.DEFAULT_TISSUE_SIDE) != null)
+		{
+			setTissueSide();
+			for(int count=1;count<=initialColumnCount; count++)
+			{
+				setDataInModel(count,AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO,tissueSide);
+			}
+		}
+		if(specimenAttributeOptions.get(Constants.DEFAULT_PATHOLOGICAL_STATUS) != null)
+		{
+			setPathologicalStatus();
+			for(int count=1;count<=initialColumnCount; count++)
+			{
+				setDataInModel(count,AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO,pathologicalStatus);
+			}
+		}
+		if(specimenAttributeOptions.get(Constants.DEFAULT_TISSUE_SIDE) != null)
+		{
+			setTissueSite();
+			for(int count=1;count<=initialColumnCount; count++)
+			{
+				setDataInModel(count,AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO,tissueSite);
+			}
+		}
+		if(specimenAttributeOptions.get(Constants.DEFAULT_SPECIMEN) != null)
+		{
+			setSpecimenClass();
+			for(int count=1;count<=initialColumnCount; count++)
+			{
+				setDataInModel(count,AppletConstants.SPECIMEN_CLASS_ROW_NO,specimenClass);
+			}
+		}
+		if(specimenAttributeOptions.get(Constants.DEFAULT_SPECIMEN_TYPE) != null)
+		{
+			setSpecimenType();
+			for(int count=1;count<=initialColumnCount; count++)
+			{
+				setDataInModel(count,AppletConstants.SPECIMEN_TYPE_ROW_NO,specimenType);
+			}
+		}
 		//mandar: to set columns per page
 		this.columnsPerPage = Integer.parseInt(specimenAttributeOptions.get(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE).toString()) ;
 		System.out.println("Columns per page set to : "+this.columnsPerPage);
@@ -680,23 +721,25 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		}
 	}
 	
-/*	private void setDataInModel(int column, short rowNo, String value)
+	/**
+     * Name : Virender Mehta
+     * Reviewer: Sachin Lale
+     * Bug ID: defaultValueConfiguration_BugID
+     * Patch ID:defaultValueConfiguration_BugID_MultipleSpecimen_3
+     * See also:defaultValueConfiguration_BugID_MultipleSpecimen_1,2,4
+     * Description: Set in Model default value for TissueSite, TissueSite, PathologicalStatus,Specimen Type and Specimen Class
+     */
+	private void setDataInModel(int column, short rowNo, String value)
 	{//todo
-		if(specimenCollectionGroupName != null)
-		{
-			String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[rowNo];
-			specimenMap.put(specimenKey,value);	
-		}
+		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[rowNo];
+		specimenMap.put(specimenKey,value);	
 	}
 	
 	private void removeDataFromModel(int column, short rowNo)
 	{
-		if(specimenCollectionGroupName != null)
-		{
-			String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[rowNo];
-			specimenMap.remove(specimenKey);	
-		}
-	}*/
+		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[rowNo];
+		specimenMap.remove(specimenKey);	
+	}
 
 	//-------------- For ParentSpecimen - CollectionGroup identification start
 	HashMap collectionGroupRadioButtonMap = new HashMap();
@@ -754,10 +797,11 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	{
 		removeIdFromMap(columnCount);
 		removeCollectionGroupFromModel(columnCount);
-	/*	removeDataFromModel(columnCount,AppletConstants.SPECIMEN_CLASS_ROW_NO);
+		removeDataFromModel(columnCount,AppletConstants.SPECIMEN_CLASS_ROW_NO);
 		removeDataFromModel(columnCount,AppletConstants.SPECIMEN_TYPE_ROW_NO);
 		removeDataFromModel(columnCount,AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO);
-		removeDataFromModel(columnCount,AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO);*/
+		removeDataFromModel(columnCount,AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO);
+		removeDataFromModel(columnCount,AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO);
 		removeActualColumnCollectionGroupRadioButtonValue(columnCount);
 		removeDataValues(columnCount);
 		// ---------------------
@@ -798,74 +842,98 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	{
 		//pathological status
 		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO];
-		specimenMap.put(specimenKey, Constants.NOT_SPECIFIED);
+		specimenMap.put(specimenKey, ((String)DefaultValue.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)));
 		
 		//tissueside
 		specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO];
-		specimenMap.put(specimenKey, Constants.NOT_SPECIFIED);	
+		specimenMap.put(specimenKey, ((String)DefaultValue.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)));	
 
 		//tissuesite
 		specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO];
-		specimenMap.put(specimenKey, Constants.NOT_SPECIFIED);	
+		specimenMap.put(specimenKey, ((String)DefaultValue.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)));
+		
+//		Specimen Class
+		specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_CLASS_ROW_NO];
+		specimenMap.put(specimenKey, ((String)DefaultValue.getDefaultValue(Constants.DEFAULT_SPECIMEN)));	
+
+//		Specimen Type
+		specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_TYPE_ROW_NO];
+		specimenMap.put(specimenKey, ((String)DefaultValue.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE)));	
+
 
 	}
-//	/**
-//	 * @return Returns the pathologicalStatus.
-//	 */
-//	public String getPathologicalStatus()
-//	{
-//		return pathologicalStatus;
-//	}
-//	/**
-//	 * @param pathologicalStatus The pathologicalStatus to set.
-//	 */
-//	public void setPathologicalStatus()
-//	{
-//		this.pathologicalStatus = specimenAttributeOptions.get(Constants.CDE_NAME_PATHOLOGICAL_STATUS).toString();
-//	}
-//	/**
-//	 * @return Returns the specimenClass.
-//	 */
-//	public String getSpecimenClass()
-//	{
-//		return specimenClass;
-//	}
-//	/**
-//	 * @param specimenClass The specimenClass to set.
-//	 */
-//	public void setSpecimenClass()
-//	{
-//		this.specimenClass = specimenAttributeOptions.get(Constants.SPECIMEN_CLASS).toString();
-//	}
-//	/**
-//	 * @return Returns the specimenType.
-//	 */
-//	public String getSpecimenType()
-//	{
-//		return specimenType;
-//	}
-//	/**
-//	 * @param specimenType The specimenType to set.
-//	 */
-//	public void setSpecimenType()
-//	{
-//		this.specimenType = specimenAttributeOptions.get(Constants.SPECIMEN_TYPE).toString();
-//	}
-//	/**
-//	 * @return Returns the tissueSite.
-//	 */
-//	public String getTissueSite()
-//	{
-//		return tissueSite;
-//	}
-//	/**
-//	 * @param tissueSite The tissueSite to set.
-//	 */
-//	public void setTissueSite()
-//	{
-//		this.tissueSite = specimenAttributeOptions.get(Constants.TISSUE_SITE).toString();
-//	}
-//	
+	/**
+	 * @return Returns the pathologicalStatus.
+	 */
+	public String getPathologicalStatus()
+	{
+		return pathologicalStatus;
+	}
+	/**
+	 * @param pathologicalStatus The pathologicalStatus to set.
+	 */
+	public void setPathologicalStatus()
+	{
+		this.pathologicalStatus = specimenAttributeOptions.get(Constants.DEFAULT_PATHOLOGICAL_STATUS).toString();
+	}
+	/**
+	 * @return Returns the specimenClass.
+	 */
+	public String getSpecimenClass()
+	{
+		return specimenClass;
+	}
+	/**
+	 * @param specimenClass The specimenClass to set.
+	 */
+	public void setSpecimenClass()
+	{
+		this.specimenClass = specimenAttributeOptions.get(Constants.DEFAULT_SPECIMEN).toString();
+	}
+	/**
+	 * @return Returns the specimenType.
+	 */
+	public String getSpecimenType()
+	{
+		return specimenType;
+	}
+	/**
+	 * @param specimenType The specimenType to set.
+	 */
+	public void setSpecimenType()
+	{
+		this.specimenType = specimenAttributeOptions.get(Constants.DEFAULT_SPECIMEN_TYPE).toString();
+	}
+	
+	/**
+	 * @return Returns the tissueSite.
+	 */
+	public String getTissueSite()
+	{
+		return tissueSite;
+	}
+	/**
+	 * @param tissueSite The tissueSite to set.
+	 */
+	public void setTissueSite()
+	{
+		this.tissueSite = specimenAttributeOptions.get(Constants.DEFAULT_TISSUE_SITE).toString();
+	}
+
+	/**
+	 * @return Returns the tissueSide.
+	 */
+	public String getTissueSide()
+	{
+		return tissueSide;
+	}
+	/**
+	 * @param tissueSide The tissueSide to set.
+	 */
+	public void setTissueSide()
+	{
+		this.tissueSide = specimenAttributeOptions.get(Constants.DEFAULT_TISSUE_SIDE).toString();
+	}
 
 	/**
 	 * @return Returns the buttonStatusMap.

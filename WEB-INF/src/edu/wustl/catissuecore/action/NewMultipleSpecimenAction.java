@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValue;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -747,7 +748,7 @@ public class NewMultipleSpecimenAction extends SecureAction
 	}
 
 	/*
-	 * This method sets the default selection of list boxes to Not Specified.
+	 * This method sets the default selection of list boxes to Default values.
 	 * @author mandar_deshmukh
 	 *
 	 */
@@ -755,14 +756,23 @@ public class NewMultipleSpecimenAction extends SecureAction
 	{
 		if(form!=null)
 		{
+			/**
+	         * Patch ID:defaultValueConfiguration_BugID_5
+	         * See also:defaultValueConfiguration_BugID_1,2,3,4
+	         * Description: Configuration for default value for Collection Procedure, Container and Quality
+	         */
+			String collectionProcedure = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
+			String container = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_CONTAINER);
+			String receivedQuantity=(String)DefaultValue.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
+			
 			if(((NewSpecimenForm) form).getCollectionEventCollectionProcedure() == null)
-				((NewSpecimenForm) form).setCollectionEventCollectionProcedure(Constants.NOT_SPECIFIED);
+				((NewSpecimenForm) form).setCollectionEventCollectionProcedure(collectionProcedure);
 			
 			if(((NewSpecimenForm) form).getCollectionEventContainer() == null)
-				((NewSpecimenForm) form).setCollectionEventContainer(Constants.NOT_SPECIFIED);
+				((NewSpecimenForm) form).setCollectionEventContainer(container);
 			
 			if(((NewSpecimenForm) form).getReceivedEventReceivedQuality() == null)
-				((NewSpecimenForm) form).setReceivedEventReceivedQuality(Constants.NOT_SPECIFIED);
+				((NewSpecimenForm) form).setReceivedEventReceivedQuality(receivedQuantity);
 		}
 	}
 	
