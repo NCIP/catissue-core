@@ -448,6 +448,7 @@
                 <include name="**/edu/wustl/catissuecore/applet/**" />
                 <include name="**/edu/wustl/catissuecore/util/global/Constants.class" />
                 <include name="**/edu/wustl/common/util/global/Validator.class" />
+	           	<include name="**/edu/wustl/catissuecore/util/global/DefaultValue.class" />
             </fileset>
         </copy>
         <jar taskname="buildJar" jarfile="${applet.dir}/CaTissueApplet.jar">
@@ -471,6 +472,7 @@
             <include name="**/edu/wustl/catissuecore/applet/**" />
             <include name="**/edu/wustl/catissuecore/util/global/Constants.java" />
         	<include name="**/edu/wustl/common/util/global/Validator.java" />
+        	<include name="**/edu/wustl/catissuecore/util/global/DefaultValue.java" />
             <classpath>
               <fileset dir="${lib.dir}">
                   <include name="*.jar"/>
