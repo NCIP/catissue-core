@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.ContainerComparator;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -422,10 +423,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			try
 			{
 				//check for all validations on the storage container.
-				if(container.getParent()!=null)
+				if (container.getParent() != null)
 				{
-				checkContainer(dao, container.getParent().getId().toString(), container.getPositionDimensionOne().toString(), container
-						.getPositionDimensionTwo().toString(), sessionDataBean, false);
+					checkContainer(dao, container.getParent().getId().toString(), container.getPositionDimensionOne().toString(), container
+							.getPositionDimensionTwo().toString(), sessionDataBean, false);
 				}
 			}
 			catch (SMException sme)
@@ -446,10 +447,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		// If any size is  reduced, object was present at any of the deleted positions throw error
 		if (oldContainerDimOne.intValue() > newContainerDimOne.intValue() || oldContainerDimTwo.intValue() > newContainerDimTwo.intValue())
 		{
-			boolean canReduceDimension = StorageContainerUtil.checkCanReduceDimension(oldContainer,container); 
-			if(!canReduceDimension)
+			boolean canReduceDimension = StorageContainerUtil.checkCanReduceDimension(oldContainer, container);
+			if (!canReduceDimension)
 			{
-			  throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.cannotReduce"));
+				throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.cannotReduce"));
 			}
 		}
 
@@ -527,7 +528,6 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 		}
 	}
-
 
 	private void addEntriesInDisabledMap(StorageContainer container, List disabledConts)
 	{
@@ -671,12 +671,12 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Collection spArrayTypeCollNew = newContainer.getHoldsSpArrayTypeCollection();
 		Collection spArrayTypeCollOld = oldContainer.getHoldsSpArrayTypeCollection();
 
-	/*	if (cpCollNew.size() != cpCollOld.size())
-			return true;*/
+		/*	if (cpCollNew.size() != cpCollOld.size())
+		 return true;*/
 
 		/**
 		 *  Bug 3612 - User should be able to change the restrictions if he specifies the 
-         *  superset of the old restrictions if container is not empty.  
+		 *  superset of the old restrictions if container is not empty.  
 		 */
 		Iterator itrOld = cpCollOld.iterator();
 		while (itrOld.hasNext())
@@ -684,7 +684,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			flag = 0;
 			CollectionProtocol cpOld = (CollectionProtocol) itrOld.next();
 			Iterator itrNew = cpCollNew.iterator();
-			if(cpCollNew.size() == 0)
+			if (cpCollNew.size() == 0)
 			{
 				break;
 			}
@@ -701,16 +701,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				return true;
 		}
 
-	/*	if (storTypeCollNew.size() != storTypeCollOld.size())
-			return true;*/
+		/*	if (storTypeCollNew.size() != storTypeCollOld.size())
+		 return true;*/
 
-		
 		itrOld = storTypeCollOld.iterator();
 		while (itrOld.hasNext())
 		{
 			flag = 0;
 			StorageType storOld = (StorageType) itrOld.next();
-		    Iterator itrNew = storTypeCollNew.iterator();
+			Iterator itrNew = storTypeCollNew.iterator();
 			while (itrNew.hasNext())
 			{
 				StorageType storNew = (StorageType) itrNew.next();
@@ -726,7 +725,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 
 		/* if (spClassCollNew.size() != spClassCollOld.size())
-			return true;*/ 
+		 return true;*/
 
 		itrOld = spClassCollOld.iterator();
 		while (itrOld.hasNext())
@@ -747,16 +746,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				return true;
 		}
 
-	/*	if (spArrayTypeCollNew.size() != spArrayTypeCollOld.size())
-			return true;*/
+		/*	if (spArrayTypeCollNew.size() != spArrayTypeCollOld.size())
+		 return true;*/
 
-		
 		itrOld = spArrayTypeCollOld.iterator();
 		while (itrOld.hasNext())
 		{
 			flag = 0;
 			SpecimenArrayType spArrayTypeOld = (SpecimenArrayType) itrOld.next();
-			
+
 			Iterator itrNew = spArrayTypeCollNew.iterator();
 			while (itrNew.hasNext())
 			{
@@ -1991,15 +1989,15 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			throw new DAOException(ApplicationProperties.getValue("errors.item.format", message));
 		}
 
-		if(container.getParent() == null)
+		if (container.getParent() == null)
 		{
-		if (container.getSite() == null || container.getSite().getId() == null || container.getSite().getId() <= 0)
-		 {
-		 message = ApplicationProperties.getValue("storageContainer.site");
-		 throw new DAOException(ApplicationProperties.getValue("errors.item.invalid", message));
-		 }
+			if (container.getSite() == null || container.getSite().getId() == null || container.getSite().getId() <= 0)
+			{
+				message = ApplicationProperties.getValue("storageContainer.site");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.invalid", message));
+			}
 		}
-	/*	 if (!validator.isNumeric(String.valueOf(container.getPositionDimensionOne()), 1)
+		/*	 if (!validator.isNumeric(String.valueOf(container.getPositionDimensionOne()), 1)
 		 || !validator.isNumeric(String.valueOf(container.getPositionDimensionTwo()), 1)
 		 || !validator.isNumeric(String.valueOf(container.getParent().getId()), 1))
 		 {
@@ -2409,6 +2407,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	{
 		List mapSiteList = new ArrayList();
 		//		List list = retrieve(StorageContainer.class.getName());
+
 		TreeMap containerMap = new TreeMap();
 		List siteList = new ArrayList();
 		siteList.add(new NameValueBean("---", "---"));
@@ -2452,19 +2451,19 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			Iterator itr = list.iterator();
 			while (itr.hasNext())
 			{
-				    List list1 = (List)itr.next();
-	                String Id = (String)list1.get(0);
-	                String name = (String)list1.get(1);
-	                String siteName = (String)list1.get(2);
-	                NameValueBean nvb = new NameValueBean(name, Id, true);
-	                if(selectedContainerName != null && flag)
-	                {
-	                    if(!name.equalsIgnoreCase(selectedContainerName.trim()))
-	                    {
-	                        continue;
-	                    }
-	                    flag = false;
-	                }
+				List list1 = (List) itr.next();
+				String Id = (String) list1.get(0);
+				String name = (String) list1.get(1);
+				String siteName = (String) list1.get(2);
+				NameValueBean nvb = new NameValueBean(name, Id, new Long(Id));
+				if (selectedContainerName != null && flag)
+				{
+					if (!name.equalsIgnoreCase(selectedContainerName.trim()))
+					{
+						continue;
+					}
+					flag = false;
+				}
 
 				try
 				{
@@ -2509,36 +2508,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			SessionDataBean sessionData, boolean closeSession) throws DAOException
 	{
 
+		ContainerComparator comparator = new ContainerComparator();
 		Logger.out.debug("method : getAllocatedContaienrMapForSpecimen()---getting containers for specimen--------------");
-		TreeMap containerMap = new TreeMap();
-		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
-		dao.openSession(null);
-
-		String queryStr = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1 WHERE "
-				+ "t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 " + "WHERE t2.COLLECTION_PROTOCOL_ID = '"
-				+ cpId + "') and t1.IDENTIFIER IN " + "(SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3 WHERE "
-				+ "t3.SPECIMEN_CLASS = '" + specimenClass + "') AND t1.ACTIVITY_STATUS='Active') UNION "
-				+ "(SELECT t4.IDENTIFIER, t4.NAME FROM CATISSUE_CONTAINER t4 WHERE "
-				+ "t4.IDENTIFIER NOT IN (SELECT t5.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t5) " + " and t4.IDENTIFIER IN "
-				+ "(SELECT t6.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t6 WHERE " + "t6.SPECIMEN_CLASS = '" + specimenClass
-				+ "') AND t4.ACTIVITY_STATUS='Active') order by IDENTIFIER";
-
-		Logger.out.debug("Storage Container query......................" + queryStr);
-		List list = new ArrayList();
-
-		try
-		{
-			list = dao.executeQuery(queryStr, null, false, null);
-		}
-		catch (Exception ex)
-		{
-			throw new DAOException(ex.getMessage());
-		}
-
-		if (closeSession)
-		{
-			dao.closeSession();
-		}
+		TreeMap containerMap = new TreeMap(comparator);
+				List list = getRelevantContainerList(cpId, specimenClass, closeSession);
 		Logger.out.debug("getAllocatedContaienrMapForSpecimen()----- Size of list--------:" + list.size());
 		Map containerMapFromCache = null;
 		try
@@ -2554,13 +2527,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		if (containerMapFromCache != null)
 		{
 			int i = 1;
+			int relevenceCounter = 1;
 			Iterator itr = list.iterator();
 			while (itr.hasNext())
 			{
 				List list1 = (List) itr.next();
 				String Id = (String) list1.get(0);
 				String Name = (String) list1.get(1);
-				NameValueBean nvb = new NameValueBean(Name, Id, true);
+				NameValueBean nvb = new NameValueBean(Name, Id, new Long(relevenceCounter));
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
@@ -2569,16 +2543,16 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					boolean hasAccess = true;
 					try
 					{
-						hasAccess = validateContainerAccess(sc,sessionData);
+						hasAccess = validateContainerAccess(sc, sessionData);
 					}
 					catch (SMException sme)
 					{
 						sme.printStackTrace();
 						throw handleSMException(sme);
 					}
-					if(!hasAccess)
+					if (!hasAccess)
 						continue;
-				
+
 					if (i > containersMaxLimit)
 					{
 						Logger.out.debug("CONTAINERS_MAX_LIMIT reached");
@@ -2602,7 +2576,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					}
 					i++;
 				}
-
+				relevenceCounter++;
 			}
 			Logger.out.debug("getAllocatedContaienrMapForSpecimen()----Size of containerMap:" + containerMap.size());
 		}
@@ -2613,6 +2587,138 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	}
 
 	/**
+	 * This function gets the list of container in order of there relvance.
+	 * @param cpId collection protocol Id
+	 * @param specimenClass class of the specimen
+	 * @param closeSession
+	 * @return list of containers in order of there relevence.
+	 * @throws DAOException
+	 */
+	public List getRelevantContainerList(long cpId, String specimenClass, boolean closeSession) throws DAOException
+	{
+		List list = new ArrayList();
+		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+		dao.openSession(null);
+
+		// category # 1
+		//Gets all container which stores just specified collection protocol and specified specimen class
+		String queryStr1 = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1" + " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
+				+ " FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 WHERE t2.COLLECTION_PROTOCOL_ID = '" + cpId + "')"
+				+ " and (select count(*) from CATISSUE_ST_CONT_COLL_PROT_REL t4 where t4.STORAGE_CONTAINER_ID = t1.IDENTIFIER) = 1"
+				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3" + " WHERE t3.SPECIMEN_CLASS = '"
+				+ specimenClass + "')"
+				+ " and (select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t5 where t5.STORAGE_CONTAINER_ID = t1.IDENTIFIER) = 1"
+				+ " AND t1.ACTIVITY_STATUS='Active')";
+
+		List list1 = executeStorageContQuery(queryStr1, dao);
+
+		Logger.out.debug("Storage Container query......................" + queryStr1);
+		list.addAll(list1);
+
+		// category # 2
+		//Gets all containers which holds just specified container and any specimen class 
+		String queryStr2 = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1" + " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
+				+ " FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 WHERE t2.COLLECTION_PROTOCOL_ID = '" + cpId + "')"
+				+ " and (select count(*) from CATISSUE_ST_CONT_COLL_PROT_REL t4 where t4.STORAGE_CONTAINER_ID = t1.IDENTIFIER) = 1"
+				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3" + " WHERE t3.SPECIMEN_CLASS = '"
+				+ specimenClass + "')"
+				+ " and (select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t5 where t5.STORAGE_CONTAINER_ID = t1.IDENTIFIER) > 1"
+				+ " AND t1.ACTIVITY_STATUS='Active')";
+
+		List list2 = executeStorageContQuery(queryStr2, dao);
+
+		Logger.out.debug("Storage Container query......................" + queryStr2);
+		list.addAll(list2);
+		// catgory # 3
+		//Gets all the containers which holds other than specified collection protocol and only specified specimen class
+		String queryStr3 = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1" + " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
+				+ " FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 WHERE t2.COLLECTION_PROTOCOL_ID = '" + cpId + "')"
+				+ " and (select count(*) from CATISSUE_ST_CONT_COLL_PROT_REL t4 where t4.STORAGE_CONTAINER_ID = t1.IDENTIFIER) > 1"
+				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3" + " WHERE t3.SPECIMEN_CLASS = '"
+				+ specimenClass + "')"
+				+ " and (select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t5 where t5.STORAGE_CONTAINER_ID = t1.IDENTIFIER) = 1"
+				+ " AND t1.ACTIVITY_STATUS='Active') ";
+
+		List list3 = executeStorageContQuery(queryStr3, dao);
+
+		Logger.out.debug("Storage Container query......................" + queryStr3);
+		list.addAll(list3);
+		// catgory # 4
+		//Gets all the containers which holds specified cp and other than specified collection protocol and specified specimen class and other than specified specimen class
+		
+		String queryStr4 = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1" + " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
+				+ " FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 WHERE t2.COLLECTION_PROTOCOL_ID = '" + cpId + "')"
+				+ " and (select count(*) from CATISSUE_ST_CONT_COLL_PROT_REL t4 where t4.STORAGE_CONTAINER_ID = t1.IDENTIFIER) > 1"
+				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3" + " WHERE t3.SPECIMEN_CLASS = '"
+				+ specimenClass + "')"
+				+ " and (select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t5 where t5.STORAGE_CONTAINER_ID = t1.IDENTIFIER) > 1"
+				+ " AND t1.ACTIVITY_STATUS='Active') ";
+
+		List list4 = executeStorageContQuery(queryStr4, dao);
+
+		Logger.out.debug("Storage Container query......................" + queryStr4);
+		list.addAll(list4);
+
+		// catgory # 5
+		//Gets all the containers which holds any collection protocol and specified specimen class and other than specified specimen class
+		
+		String queryStr5 = "(SELECT t4.IDENTIFIER, t4.NAME FROM CATISSUE_CONTAINER t4"
+				+ " WHERE t4.IDENTIFIER NOT IN (SELECT t5.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t5)"
+				+ " and t4.IDENTIFIER IN (SELECT t6.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t6" + " WHERE t6.SPECIMEN_CLASS = '"
+				+ specimenClass + "') "
+				+ " and (select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t6 where t6.STORAGE_CONTAINER_ID = t4.IDENTIFIER) != 4"
+				+ " AND t4.ACTIVITY_STATUS='Active') order by IDENTIFIER ";
+
+		List list5 = executeStorageContQuery(queryStr5, dao);
+		list.addAll(list5);
+		Logger.out.debug("Storage Container query......................" + queryStr5);
+		// catgory # 6
+		//Gets all the containers which holds any collection protocol and any specimen class
+		
+		String queryStr6 = "(SELECT t4.IDENTIFIER, t4.NAME FROM CATISSUE_CONTAINER t4"
+				+ " WHERE t4.IDENTIFIER NOT IN (SELECT t5.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t5)"
+				+ " and t4.IDENTIFIER IN (SELECT t6.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t6" + " WHERE t6.SPECIMEN_CLASS = '"
+				+ specimenClass + "') "
+				+ " and (select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t6 where t6.STORAGE_CONTAINER_ID = t4.IDENTIFIER) = 4"
+				+ " AND t4.ACTIVITY_STATUS='Active') order by IDENTIFIER ";
+
+		List list6 = executeStorageContQuery(queryStr6, dao);
+
+		Logger.out.debug("Storage Container query......................" + queryStr6);
+		list.addAll(list6);
+
+		if (closeSession)
+		{
+			dao.closeSession();
+		}
+		return list;
+	}
+
+	/**
+	 * This function executes the query
+	 * @param query
+	 * @param dao
+	 * @return
+	 * @throws DAOException
+	 */
+	public List executeStorageContQuery(String query, JDBCDAO dao) throws DAOException
+	{
+		Logger.out.debug("Storage Container query......................" + query);
+		List list = new ArrayList();
+
+		try
+		{
+			list = dao.executeQuery(query, null, false, null);
+		}
+		catch (Exception ex)
+		{
+			throw new DAOException(ex.getMessage());
+		}
+
+		return list;
+	}
+
+	/**
 	 * Gets allocated container map for specimen array.
 	 * @param specimen_array_type_id specimen array type id
 	 * @param noOfAliqoutes No. of aliquotes
@@ -2620,10 +2726,11 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 * @throws DAOException -- throws DAO Exception
 	 * @see edu.wustl.common.dao.JDBCDAOImpl
 	 */
-	public TreeMap getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id, int noOfAliqoutes, SessionDataBean sessionData,String exceedingMaxLimit)
-			throws DAOException
+	public TreeMap getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id, int noOfAliqoutes, SessionDataBean sessionData,
+			String exceedingMaxLimit) throws DAOException
 	{
-		TreeMap containerMap = new TreeMap();
+		ContainerComparator contComp = new ContainerComparator();
+		TreeMap containerMap = new TreeMap(contComp);
 
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		dao.openSession(null);
@@ -2666,13 +2773,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 			int i = 1;
 			Iterator itr = list.iterator();
+			
 			while (itr.hasNext())
 			{
 				List list1 = (List) itr.next();
 				String Id = (String) list1.get(0);
 
 				String Name = (String) list1.get(1);
-				NameValueBean nvb = new NameValueBean(Name, Id, true);
+				NameValueBean nvb = new NameValueBean(Name, Id, new Long(Id));
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
@@ -2684,14 +2792,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					boolean hasAccess = true;
 					try
 					{
-						hasAccess = validateContainerAccess(sc,sessionData);
+						hasAccess = validateContainerAccess(sc, sessionData);
 					}
 					catch (SMException sme)
 					{
 						sme.printStackTrace();
 						throw handleSMException(sme);
 					}
-					if(!hasAccess)
+					if (!hasAccess)
 						continue;
 					if (i > containersMaxLimit)
 					{
@@ -2704,7 +2812,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					}
 					i++;
 				}
-
+				
 			}
 		}
 
@@ -2885,20 +2993,24 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Map positionMap1 = new TreeMap();
 		Set keySet = positionMap.keySet();
 		Iterator itr = keySet.iterator();
+		
 		while (itr.hasNext())
 		{
 			NameValueBean key = (NameValueBean) itr.next();
-			NameValueBean key1 = new NameValueBean(key.getName(), key.getValue(),true);
+			NameValueBean key1 = new NameValueBean(key.getName(), key.getValue(), new Long(key.getValue()));
 			List value = (ArrayList) positionMap.get(key);
 			List value1 = new ArrayList();
 			Iterator itr1 = value.iterator();
+			
 			while (itr1.hasNext())
 			{
 				NameValueBean ypos = (NameValueBean) itr1.next();
-				NameValueBean ypos1 = new NameValueBean(ypos.getName(), ypos.getValue(),true);
+				NameValueBean ypos1 = new NameValueBean(ypos.getName(), ypos.getValue(), new Long(ypos.getValue()));
 				value1.add(ypos1);
+				
 			}
 			positionMap1.put(key1, value1);
+			
 		}
 		return positionMap1;
 	}
@@ -2913,13 +3025,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			NameValueBean key = (NameValueBean) itr.next();
 			List value = (ArrayList) positionMap.get(key);
 			count = count + value.size();
-			/*Iterator itr1 = value.iterator();
-			 while (itr1.hasNext())
-			 {
-			 itr1.next();
-			 count++;
 
-			 }*/
 		}
 		return count;
 	}
