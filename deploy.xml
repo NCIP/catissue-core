@@ -511,8 +511,7 @@
 			<transaction  src="${common.sql.dir}/createUser.sql"/>
 			<transaction  src="${common.sql.dir}/insert_default_data.sql"/>
 			<transaction  src="${common.sql.dir}/indexes.sql"/>
-			
-		
+			<transaction  src="${mysql.sql.dir}/SuiteQueryMetadataInsertScript.sql"/>	
 			<transaction>commit;</transaction>
 			<classpath>
 			<fileset dir="${lib.dir}">
