@@ -146,7 +146,7 @@ public class NewSpecimenAction extends SecureAction
 			if (request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID) != null)
 			{
 				String specimenCollectionGroupId = request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID);
-				setFormValues(specimenForm,specimenCollectionGroupId);
+//				setFormValues(specimenForm,specimenCollectionGroupId);
 			}
 		}
 		//*************  ForwardTo implementation *************
