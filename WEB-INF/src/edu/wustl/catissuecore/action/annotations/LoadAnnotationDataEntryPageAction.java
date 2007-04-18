@@ -15,7 +15,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-
+import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DataTypeFactoryInitializationException;
@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -270,7 +271,16 @@ public class LoadAnnotationDataEntryPageAction extends BaseAction
         if (entityMapRecord != null)
         {
             AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-            annotationBizLogic.insertEntityRecord(entityMapRecord);
+            try
+            {
+                annotationBizLogic.insertEntityRecord(entityMapRecord);
+            }
+            catch (DAOException e)
+            {
+                // TODO ERROR HANDLING STILL REMAINING 
+                Logger.out.debug("Got exception while creating entity map record....");
+                e.printStackTrace();
+            }
         }
     }
 

@@ -12,15 +12,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.sf.hibernate.Session;
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
+import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
 import edu.common.dynamicextensions.domaininterface.RoleInterface;
+import edu.common.dynamicextensions.domaininterface.databaseproperties.ConstraintPropertiesInterface;
 import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
@@ -30,8 +34,11 @@ import edu.common.dynamicextensions.util.global.Constants.AssociationType;
 import edu.common.dynamicextensions.util.global.Constants.Cardinality;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.cab2b.server.path.PathConstants;
+import edu.wustl.cab2b.server.path.PathFinder;
+import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
+import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.Constants;
 
@@ -50,10 +57,9 @@ public class AnnotationUtil
             DynamicExtensionsApplicationException
     {
         EntityManagerInterface entityManager = EntityManager.getInstance();
-        EntityInterface staticEntity = entityManager
-                .getEntityByIdentifier(staticEntityId);
+        EntityInterface staticEntity = EntityCacheFactory.getInstance().getEntityById(staticEntityId);
         EntityInterface dynamicEntity = (entityManager
-                .getContainerByIdentifier(staticEntityId.toString()))
+                .getContainerByIdentifier(dynamicEntityId.toString()))
                 .getEntity();
         dynamicEntity.addEntityGroupInterface((EntityGroupInterface) staticEntity.getEntityGroupCollection().iterator().next());
         String roleName = staticEntityId.toString().concat("_").concat(
@@ -65,16 +71,27 @@ public class AnnotationUtil
         AssociationInterface association = getAssociation(dynamicEntity,
                 AssociationDirection.SRC_DESTINATION, roleName, sourceRole,
                 targetRole);
+        ConstraintPropertiesInterface constraintProperties = getConstraintProperties(staticEntity,dynamicEntity);
+        association.setConstraintProperties(constraintProperties);
         staticEntity.addAssociation(association);
-        EntityManager.getInstance().persistEntity(staticEntity);
-        staticEntity = EntityManager.getInstance().getEntityByIdentifier(
-                staticEntity.getId());
-        association = (AssociationInterface) EntityManager.getInstance()
-                .getAssociation(staticEntity.getName(), roleName);
-        association = (AssociationInterface) EntityManager.getInstance()
-                .getAssociation(staticEntity.getName(), roleName);
-
+        Long start = new Long(System.currentTimeMillis());
+        staticEntity = EntityManager.getInstance().persistEntityMetadata(staticEntity,true);
+        Long end = new Long(System.currentTimeMillis());
+        System.out.println("Time required to persist one entity is " + (end - start)/1000 + "seconds");
+        EntityManager.getInstance().addAssociationColumn(association);
+        Collection collection = EntityManager.getInstance()
+        .getAssociation(staticEntity.getName(), roleName);
+         association = (AssociationInterface) collection.iterator().next();
+         AnnotationUtil.addPathsForQuery(staticEntityId, dynamicEntity.getId(),association.getId());
         return association.getId();
+    }
+
+    private static ConstraintPropertiesInterface getConstraintProperties(EntityInterface staticEntity, EntityInterface dynamicEntity)
+    {
+        ConstraintPropertiesInterface cp = DomainObjectFactory.getInstance().createConstraintProperties();
+        cp.setName(dynamicEntity.getTableProperties().getName());
+        cp.setTargetEntityKey("DYEXTN_AS_"+staticEntity.getId().toString()+"_"+dynamicEntity.getId().toString());
+        return cp;
     }
 
     /**
@@ -138,7 +155,7 @@ public class AnnotationUtil
     {
         StringBuffer query = new StringBuffer();
         Long intraModelAssociationId = getMaxId("ASSOCIATION_ID",
-                "INTRA_MODEL_ASSOCIATION");
+                "ASSOCIATION");
         intraModelAssociationId += 1;
         Session session;
         try
@@ -157,21 +174,21 @@ public class AnnotationUtil
                     + ","
                     + staticEntityId
                     + ","
-                    + deAssociationID.toString() + "," + dynamicEntityId + ")";
+                    + intraModelAssociationId + "," + dynamicEntityId + ")";
 
             List<String> list = new ArrayList<String>();
             list.add(associationQuery);
             list.add(intraModelQuery);
             list.add(directPathQuery);
-
+            
             executeQuery(conn, list);
             maxPathId += 1;
             addIndirectPaths(maxPathId, staticEntityId, dynamicEntityId,
                     intraModelAssociationId, conn);
-            EntityCache.getInstance().refreshCache();
-            //TODO PathFinder.getInstance().
             conn.commit();
-
+            start = new Long(System.currentTimeMillis());
+            EntityCache.getInstance().refreshCache();
+            PathFinder.getInstance().refreshCache();
         }
         catch (Exception e)
         {
@@ -240,12 +257,12 @@ public class AnnotationUtil
     private static void executeQuery(Connection conn, List<String> queryList)
             throws SQLException
     {
+        Statement statement = conn.createStatement();
         for (String query : queryList)
         {
-            java.sql.PreparedStatement statement = conn.prepareStatement(query);
-            ResultSet resultSet = statement.executeQuery();
+           statement.execute(query);
         }
-
+        statement.close();
     }
 
     /**
@@ -265,7 +282,7 @@ public class AnnotationUtil
             java.sql.PreparedStatement statement = conn.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            Long maxId = resultSet.getLong(0);
+            Long maxId = resultSet.getLong(1);
             return maxId;
         }
         catch (Exception e)

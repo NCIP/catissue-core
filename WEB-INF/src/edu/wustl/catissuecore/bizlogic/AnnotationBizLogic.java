@@ -35,6 +35,7 @@ import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.domain.EntityMap;
 import edu.wustl.catissuecore.domain.EntityMapCondition;
 import edu.wustl.catissuecore.domain.EntityMapRecord;
+import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
@@ -68,7 +69,6 @@ public class AnnotationBizLogic extends DefaultBizLogic
 
         String[] selectColumnName = {"id"};
         String[] whereColumnName = {"staticEntityId"};
-        ;
         String[] whereColumnCondition = {"="};
         Object[] whereColumnValue = {new Long(staticEntityId)};
         String joinCondition = null;
@@ -219,12 +219,17 @@ public class AnnotationBizLogic extends DefaultBizLogic
      * 
      * @param entityRecord
      * Inserts a new EntityRecord record in Database
+     * @throws DAOException 
      */
-    public void insertEntityRecord(EntityMapRecord entityRecord)
+    public void insertEntityRecord(EntityMapRecord entityRecord) throws DAOException
     {
         try
         {
             insert(entityRecord, Constants.HIBERNATE_DAO);
+            Long entityMapId = entityRecord.getEntityMapId();
+            Long staticEntityRecordId = entityRecord.getStaticEntityRecordId();
+            Long dynExtRecordId = entityRecord.getDynamicEntityRecordId();
+            associateRecords(entityMapId,new Long (staticEntityRecordId), new Long(dynExtRecordId));
         }
         catch (BizLogicException e)
         {
@@ -235,6 +240,42 @@ public class AnnotationBizLogic extends DefaultBizLogic
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
+        }
+    }
+    /**
+     * @param entityMapId
+     * @param long1
+     * @param long2
+     * @throws DAOException 
+     */
+    private void associateRecords(Long entityMapId, Long staticEntityRecordId, Long dynamicEntityRecordId) throws DAOException
+    {
+        List entityMapList = new DefaultBizLogic().retrieve(EntityMap.class.getName(),edu.wustl.catissuecore.util.global.Constants.ID,entityMapId);
+        EntityManagerInterface entityManager = EntityManager.getInstance();
+        if (entityMapList != null && !entityMapList.isEmpty())
+        {
+            try
+            {
+                EntityMap entityMap = (EntityMap) entityMapList.get(0);
+                Long dynamicEntityId = entityManager.getEntityIdByContainerId(entityMap.getContainerId());
+                EntityInterface dynamicEntity = EntityCache.getInstance().getEntityById(dynamicEntityId);
+                EntityInterface staticEntity = EntityCache.getInstance().getEntityById(entityMap.getStaticEntityId());
+                Collection<AssociationInterface> associationCollection = staticEntity.getAssociationCollection();
+                AssociationInterface associationInterface = null;
+                for (AssociationInterface association : associationCollection)
+                {
+                    if (association.getTargetEntity().equals(dynamicEntity))
+                    {
+                        associationInterface = association;
+                        break;
+                    }
+                }
+                entityManager.associateEntityRecords(associationInterface,staticEntityRecordId,dynamicEntityRecordId);
+            }
+            catch (DynamicExtensionsSystemException e)
+            {
+                throw new DAOException("Can not associate static and dynamic records",e);
+            }
         }
     }
 
@@ -274,8 +315,7 @@ public class AnnotationBizLogic extends DefaultBizLogic
             insert(entityMap, Constants.HIBERNATE_DAO);
             Long staticEntityId = entityMap.getStaticEntityId();
             Long dynamicEntityId = entityMap.getContainerId();
-//            Long deAssociationID = AnnotationUtil.addAssociation(staticEntityId, dynamicEntityId);
-//            AnnotationUtil.addPathsForQuery(staticEntityId, dynamicEntityId,deAssociationID);
+            Long deAssociationID = AnnotationUtil.addAssociation(staticEntityId, dynamicEntityId);
         }
         catch (Exception e)
         {

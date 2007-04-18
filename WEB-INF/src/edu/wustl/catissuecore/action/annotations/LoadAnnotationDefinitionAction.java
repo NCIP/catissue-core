@@ -115,8 +115,8 @@ public class LoadAnnotationDefinitionAction extends SecureAction
                     annotationForm.setSelectedStaticEntityId(request.getParameter("selectedStaticEntityId"));
                     
                     EntityManagerInterface entityManager = EntityManager.getInstance();
-                    ContainerInterface container = entityManager.getContainerByIdentifier(containerId);
-                    request.setAttribute("containerName",container.getCaption());
+                    String  containerCaption = entityManager.getContainerCaption(new Long(containerId));
+                    request.setAttribute("containerName",containerCaption);
                     
                     getCPConditions(annotationForm,containerId);
                 }
@@ -634,7 +634,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
         if (annotationForm != null)
         {
             //load list of system entities
-            List systemEntitiesList = getSystemEntityList();
+            List systemEntitiesList = AnnotationUtil.getSystemEntityList();
             annotationForm.setSystemEntitiesList(systemEntitiesList);
             //Load list of groups
             loadGroupList(annotationForm);
@@ -687,50 +687,7 @@ public class LoadAnnotationDefinitionAction extends SecureAction
         return conditionalInstancesList;
     }
 
-    /**
-     * @param annotationForm 
-     * @throws DynamicExtensionsApplicationException 
-     * @throws DynamicExtensionsSystemException 
-     * 
-     */
-    private List getSystemEntityList() throws DynamicExtensionsSystemException,
-            DynamicExtensionsApplicationException
-    {
-        List<NameValueBean> systemEntityList = new ArrayList<NameValueBean>();
-        AnnotationUtil util = new AnnotationUtil();
-        List<NameValueBean> staticEntityInformationList = util.populateStaticEntityList("StaticEntityInformation.xml",null);
-        CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager
-                .getInstance();
-        if (cacheManager
-                .getObjectFromCache(AnnotationConstants.STATIC_ENTITY_LIST) == null)
-        {
-            systemEntityList.add(new NameValueBean(Constants.SELECT_OPTION,
-                    Constants.SELECT_OPTION_VALUE));
-            if (staticEntityInformationList != null
-                    && !staticEntityInformationList.isEmpty())
-            {
-                Iterator listIterator = staticEntityInformationList.iterator();
-                while (listIterator.hasNext())
-                {
-                    NameValueBean nameValueBean = (NameValueBean) listIterator
-                            .next();
-                    systemEntityList.add(new NameValueBean(nameValueBean
-                            .getName(), Utility.getEntityId(nameValueBean
-                            .getValue())));
-                }
-            }
 
-            cacheManager.addObjectToCache(
-                    AnnotationConstants.STATIC_ENTITY_LIST,
-                    (Serializable) systemEntityList);
-        }
-        else
-        {
-            systemEntityList = (List<NameValueBean>) cacheManager
-                    .getObjectFromCache(AnnotationConstants.STATIC_ENTITY_LIST);
-        }
-        return systemEntityList;
-    }
 
 
     

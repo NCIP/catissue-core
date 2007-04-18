@@ -9,6 +9,7 @@
 package edu.wustl.catissuecore.annotations;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,8 +24,13 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import edu.common.dynamicextensions.exception.DataTypeFactoryInitializationException;
+import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
+import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
 import edu.wustl.catissuecore.domain.EntityMap;
 import edu.wustl.catissuecore.domain.EntityMapCondition;
+import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.util.global.Constants;
 
@@ -132,6 +138,49 @@ public class AnnotationUtil
             }
         
         return false;
+    }
+    /**
+     * @param annotationForm 
+     * @throws DynamicExtensionsApplicationException 
+     * @throws DynamicExtensionsSystemException 
+     * 
+     */
+    public static List getSystemEntityList() throws DynamicExtensionsSystemException,
+            DynamicExtensionsApplicationException
+    {
+        List<NameValueBean> systemEntityList = new ArrayList<NameValueBean>();
+        AnnotationUtil util = new AnnotationUtil();
+        List<NameValueBean> staticEntityInformationList = util.populateStaticEntityList("StaticEntityInformation.xml",null);
+        CatissueCoreCacheManager cacheManager = CatissueCoreCacheManager
+                .getInstance();
+        if (cacheManager
+                .getObjectFromCache(AnnotationConstants.STATIC_ENTITY_LIST) == null)
+        {
+            systemEntityList.add(new NameValueBean(Constants.SELECT_OPTION,
+                    Constants.SELECT_OPTION_VALUE));
+            if (staticEntityInformationList != null
+                    && !staticEntityInformationList.isEmpty())
+            {
+                Iterator listIterator = staticEntityInformationList.iterator();
+                while (listIterator.hasNext())
+                {
+                    NameValueBean nameValueBean = (NameValueBean) listIterator
+                            .next();
+                    systemEntityList.add(new NameValueBean(nameValueBean
+                            .getName(), Utility.getEntityId(nameValueBean
+                            .getValue())));
+                }
+            }
+            cacheManager.addObjectToCache(
+                    AnnotationConstants.STATIC_ENTITY_LIST,
+                    (Serializable) systemEntityList);
+        }
+        else
+        {
+            systemEntityList = (List<NameValueBean>) cacheManager
+                    .getObjectFromCache(AnnotationConstants.STATIC_ENTITY_LIST);
+        }
+        return systemEntityList;
     }
 
     
