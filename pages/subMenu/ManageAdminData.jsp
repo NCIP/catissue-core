@@ -129,6 +129,21 @@
 <%
 	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 7, normalMenuClass , selectedMenuClass , hoverMenuClass);
 %>
+<!-- Patch ID: Bug#3090_31 -->
+<script>
+	function showStorageContainerMap()
+	{
+		platform = navigator.platform.toLowerCase();
+		if (platform.indexOf("mac") != -1)
+		{
+			NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1','name',screen.width,screen.height,'no');
+		}
+		else
+		{
+			NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1','name','800','600','no');
+		}
+	}
+</script>
 <tr>
 	<%=strMouseOut%>
 		<div>
@@ -141,7 +156,7 @@
 				<bean:message key="app.edit" />
 			</a> |
 			<!-- Patch ID: Bug#3090_30 -->
-			<a class="subMenuPrimary" href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1','name','800','600','no');return false" >
+			<a class="subMenuPrimary" href="#" onclick="showStorageContainerMap()" >
 				<bean:message key="app.viewmap" />
 			</a>	
 		</div>
@@ -218,7 +233,7 @@
 		<div>
 			<a class="subMenuPrimary" href="DistributionProtocol.do?operation=add&pageOf=pageOfDistributionProtocol&menuSelected=10"><bean:message key="app.add" /></a> | 
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDistributionProtocol&aliasName=DistributionProtocol&menuSelected=10" >
-				<bean:message key="app.edit" /> 
+				<bean:message key="app.edit" />
 			</a>
 		</div>
 	</td>
