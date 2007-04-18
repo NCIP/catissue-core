@@ -12,7 +12,7 @@
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
-
+<%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <%
@@ -39,16 +39,15 @@
 
 
 		Long specimenEntityId = null;
-			if (request.getSession().getAttribute("specimenEntityId") == null)
+				if (CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId") != null)
 		{
-			specimenEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
-			request.getSession().setAttribute("specimenEntityId", specimenEntityId);
+			specimenEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("specimenEntityId");
 		}
 		else
 		{
-			specimenEntityId = (Long) request.getSession().getAttribute("specimenEntityId");				
+			specimenEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+			CatissueCoreCacheManager.getInstance().addObjectToCache("specimenEntityId",specimenEntityId);		
 		}
-	
 	if (form != null) 
 	{
 		currentReceivedDate = form.getReceivedEventDateOfEvent();

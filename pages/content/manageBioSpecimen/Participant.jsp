@@ -11,9 +11,12 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"%>
+<%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
+
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+
 <script src="jss/script.js"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes --> 
 <script src="jss/calendarComponent.js"></script>
@@ -53,14 +56,14 @@ tr#hiddenCombo
 		staticEntityName = AnnotationConstants.ENTITY_NAME_PARTICIPANT;
 		
 		Long participantEntityId = null;
-			if (request.getSession().getAttribute("participantEntityId") == null)
+				if (CatissueCoreCacheManager.getInstance().getObjectFromCache("participantEntityId") != null)
 		{
-			participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
-			request.getSession().setAttribute("participantEntityId", participantEntityId);
+			participantEntityId = (Long) CatissueCoreCacheManager.getInstance().getObjectFromCache("participantEntityId");
 		}
 		else
 		{
-			participantEntityId = (Long) request.getSession().getAttribute("participantEntityId");				
+			participantEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
+			CatissueCoreCacheManager.getInstance().addObjectToCache("participantEntityId",participantEntityId);		
 		}
 		
 		String id = request.getParameter("id");

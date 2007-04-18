@@ -8,7 +8,7 @@
 <%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="edu.wustl.catissuecore.action.annotations.AnnotationConstants"%>
-
+<%@ page import="edu.wustl.catissuecore.util.CatissueCoreCacheManager"%>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
 
@@ -24,14 +24,14 @@
 		String staticEntityName=null;
 		staticEntityName = AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP;
 		
-		if (request.getSession().getAttribute("scgId") == null)
+				if (CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId") != null)
 		{
-			scgEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
-			request.getSession().setAttribute("scgId", scgEntityId);
+			scgEntityId = (Long)CatissueCoreCacheManager.getInstance().getObjectFromCache("scgEntityId");
 		}
 		else
 		{
-			scgEntityId = (Long) request.getSession().getAttribute("scgId");				
+			scgEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
+			CatissueCoreCacheManager.getInstance().addObjectToCache("scgEntityId",scgEntityId);		
 		}
 
 		String id = request.getParameter("id");
