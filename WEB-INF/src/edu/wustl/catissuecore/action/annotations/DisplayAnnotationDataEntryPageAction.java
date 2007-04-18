@@ -33,6 +33,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -122,7 +123,15 @@ public class DisplayAnnotationDataEntryPageAction extends BaseAction
 		if(entityMapRecord!=null)
 		{
 			AnnotationBizLogic annotationBizLogic = new AnnotationBizLogic();
-			annotationBizLogic.insertEntityRecord(entityMapRecord);
+			try
+            {
+                annotationBizLogic.insertEntityRecord(entityMapRecord);
+            }
+            catch (DAOException e)
+            {
+                // TODO ERROR HANDLING STILL REMAINING
+                e.printStackTrace();
+            }
 		}
 	}
 

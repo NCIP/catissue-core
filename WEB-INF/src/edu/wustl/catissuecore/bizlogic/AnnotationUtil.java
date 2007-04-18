@@ -186,7 +186,7 @@ public class AnnotationUtil
             addIndirectPaths(maxPathId, staticEntityId, dynamicEntityId,
                     intraModelAssociationId, conn);
             conn.commit();
-            start = new Long(System.currentTimeMillis());
+            
             EntityCache.getInstance().refreshCache();
             PathFinder.getInstance().refreshCache();
         }
