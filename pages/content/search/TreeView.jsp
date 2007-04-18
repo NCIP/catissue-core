@@ -58,7 +58,7 @@
 					
 	if (platform.indexOf("mac") != -1)
 	{
-		document.writeln('width="375" height="500" MAYSCRIPT>');
+		document.writeln('width="335" height="500" MAYSCRIPT>');
 	}
 	else
 	{

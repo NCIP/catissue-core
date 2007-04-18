@@ -24,7 +24,15 @@
 	   	var storageContainer = document.getElementById('selectedContainerName').value;
 		frameUrl+="&storageContainerName="+storageContainer;
 		// Patch ID: Bug#3090_24
-		window.open(frameUrl,'','scrollbars=no,menubar=no,height=600,width=800,resizable=yes,toolbar=no,location=no,status=no');
+		platform = navigator.platform.toLowerCase();
+	    if (platform.indexOf("mac") != -1)
+		{
+	    	window.open(frameUrl,'','scrollbars=no,menubar=no,height=screen.height,width=screen.width,resizable=yes,toolbar=no,location=no,status=no');
+	    }
+	    else
+	    {
+	    	window.open(frameUrl,'','scrollbars=no,menubar=no,height=600,width=800,resizable=yes,toolbar=no,location=no,status=no');
+	    }
 		
     }
 	</script>

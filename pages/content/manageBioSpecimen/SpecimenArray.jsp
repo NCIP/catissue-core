@@ -37,7 +37,15 @@
 	   	var storageContainer = document.getElementById('selectedContainerName').value;
 		frameUrl+="&storageContainerName="+storageContainer;
 		// Patch ID: Bug#3090_20
-		NewWindow(frameUrl,'name','800','600','no');
+		platform = navigator.platform.toLowerCase();
+	    if (platform.indexOf("mac") != -1)
+		{
+	    	NewWindow(frameUrl,'name',screen.width,screen.height,'no');
+	    }
+	    else
+	    {
+	    	NewWindow(frameUrl,'name','800','600','no');
+	    }
 		
     }
 		

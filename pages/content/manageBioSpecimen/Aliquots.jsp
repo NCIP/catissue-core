@@ -207,7 +207,15 @@ if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
 		frameUrl+="&storageContainerName="+storageContainer;
 		//alert(frameUrl);
 		// Patch ID: Bug#3090_15
-		NewWindow(frameUrl,'name','800','600','no');
+		platform = navigator.platform.toLowerCase();
+	    if (platform.indexOf("mac") != -1)
+		{
+	    	NewWindow(frameUrl,'name',screen.width,screen.height,'no');
+	    }
+	    else
+	    {
+	    	NewWindow(frameUrl,'name','800','600','no');
+	    }
 		
     }
 	

@@ -16,7 +16,7 @@
 %>
 <table border="0" height="100%" width="100%">
 	<tr height="100%">
-		<td width="25%">
+		<td width="30%">
 			<!-- 
 				Patch ID: Bug#3090_27
 				Description: The scrolling is set to value 'no' inorder to disable the outer scrollbar.
@@ -25,7 +25,7 @@
 				Your Browser doesn't support IFrames.
 			</iframe>
 		</td>
-		<td width="75%">
+		<td width="70%">
 			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" src="<%=Constants.DATA_VIEW_ACTION+Constants.ROOT%>&<%=Constants.VIEW_TYPE%>=<%=Constants.SPREADSHEET_VIEW%>" scrolling="auto" frameborder="1" width="99%" height="<%=height%>">
 				Your Browser doesn't support IFrames.
 			</iframe>

@@ -201,7 +201,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 	 				scrollbars are required (also they are disabled in case if applet is made bigger than the popup window).
 	 				Only scrollbars of applets will be visible.
 	 */
-	sname = sname + "<a href='#' onclick=javascript:NewWindow('" + url + "','name','400','525','no');return false>";
+	sname = sname + "<a href='#' onclick=javascript:NewWindow('" + url + "','name','360','525','no');return false>";
 	sname = sname + "<img src='images\\Tree.gif' border='0' width='26' height='22' title='Tissue Site Selector'></a>";
 	spreqtissuesite.innerHTML="" + sname;
 	
@@ -822,7 +822,10 @@ function insRow(subdivtag,iCounter,blockCounter)
 			        	<%
 							String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&cdeName=Tissue%20Site&propertyName="+fName;
 						%>
-				        <a href="#" onclick="javascript:NewWindow('<%=url%>','name','400','525','no');return false">
+				        <!--
+				        	Patch ID: Bug#3090_25
+				        -->
+				        <a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
 							<img src="images\Tree.gif" border="0" width="26" height="22" title='Tissue Site Selector'>
 						</a>
 					</td>
@@ -1090,7 +1093,10 @@ function insRow(subdivtag,iCounter,blockCounter)
 							<html:options collection="<%=Constants.TISSUE_SITE_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			<!-- ****************************************  -->
-				        <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&cdeName=Tissue%20Site&propertyName=value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)','name','400','525','no');return false">
+				        <!--
+				        	Patch ID: Bug#3090_24
+				        -->
+				        <a href="#" onclick="javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfTissueSite&cdeName=Tissue%20Site&propertyName=value(CollectionProtocolEvent:`_SpecimenRequirement:1_tissueSite)','name','360','525','no');return false">
 							<img src="images\Tree.gif" border="0" width="26" height="22" title='Tissue Site Selector'>
 						</a>
 				     <%--   <a href="#">

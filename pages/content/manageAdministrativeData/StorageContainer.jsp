@@ -670,8 +670,6 @@ function onEditChange()
 							boolean buttonDisabled = true;
 							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";							
 							String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId&amp;storageContainer=true&amp;storageType=";							
-							// Patch ID: Bug#3090_11
-							String buttonOnClicked = "javascript:StorageMapWindow('"+frameUrl+"','name','800','600','no');return false";
 							
 							String noOfEmptyCombos = "3";
 							
@@ -723,13 +721,28 @@ function onEditChange()
 											</table>
 									</td>
 								</tr>
+								<script>
+									// Patch ID: Bug#3090_11
+									function mapButtonClicked()
+									{
+										var platform = navigator.platform.toLowerCase();
+										if (platform.indexOf("mac") != -1)
+										{
+										   	StorageMapWindow('<%=frameUrl%>','name',screen.width,screen.height,'no');
+										}
+										else
+										{
+										   	StorageMapWindow('<%=frameUrl%>','name','800','600','no');
+										}
+									}
+								</script>
 								<tr>
 									<td ><html:radio value="2" onclick="onStorageRadioButtonClick(this)" styleId="stContSelection" property="stContSelection" disabled= "<%=containerRadioDisable%>"/></td>
 									<td class="formLabelBorderlessLeft">
 										<html:text styleClass="formFieldSized10"  size="30" styleId="selectedContainerName" property="selectedContainerName" disabled= "<%=textBoxDisable%>"/>
 										<html:text styleClass="formFieldSized3"  size="5" styleId="pos1" property="pos1" disabled= "<%=textBoxDisable%>"/>
 										<html:text styleClass="formFieldSized3"  size="5" styleId="pos2" property="pos2" disabled= "<%=textBoxDisable%>"/>
-										<html:button styleClass="actionButton" property="containerMap" onclick="<%=buttonOnClicked%>" disabled= "<%=textBoxDisable%>">
+										<html:button styleClass="actionButton" property="containerMap" onclick="mapButtonClicked()" disabled= "<%=textBoxDisable%>">
 											<bean:message key="buttons.map"/>
 										</html:button>
 									</td>
