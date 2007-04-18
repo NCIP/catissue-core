@@ -16,7 +16,7 @@
 	<property name="temp.dir" value="./tempCatissuecore"/>
 	<property name="csm.dir" value="${temp.dir}/tempcsm"/>
 	<property name="lib.dir" value="${base.dir}/lib"/>
-	
+
     <property name="mysql.sql.dir" value="${base.dir}/SQL/MySql"/>
     <property name="dbupgrade.sql.dir" value="${base.dir}/SQL/DBUpgrade"/>
 	<property name="oracle.sql.dir" value="${base.dir}/SQL/Oracle"/>
@@ -230,6 +230,7 @@
 			<replacefilter token="@@pasword@@" value="${database.password}"/>
 			<replacefilter token="@@databasedriver@@" value="${oracle.driver.string}"/>
 		</replace>
+		
 		<!-- change ${csm.dir} to {catissuecore} because using one war only -->
 		<!-- Configuring CSM hibernate property File-->
 		<!--
@@ -360,7 +361,7 @@
   		</copy>
 		<delete file="${jboss.home.dir}/server/default/lib/hibernate2.jar"/>
 	</target>
-		<target name="deploy_app">
+	<target name="deploy_app">
 		<antcall target="assert"/>
 		<delete dir="${temp.dir}"/>
 		<antcall target="init"/>
@@ -378,6 +379,8 @@
 				</then>
 			</elseif>
 		</if>
+		<!-- configure titli.properties -->
+		<antcall target="configure_titli"/>
 		<antcall target="build_war"/>
 		<antcall target="copy_files"/>
 		<antcall target="send_mail"/>
@@ -655,7 +658,7 @@ Thanking You,
 			</copy>	
 		<delete dir="${temp.dir}"/>
 	</target>
-		<target name="mysqlFirstUser">
+	<target name="mysqlFirstUser">
 		<echo message="Encoding Password..."/>
 		<unwar src="${base.dir}/catissuecore.war" dest="${temp.dir}/catissuecore"/>
 	
@@ -691,6 +694,38 @@ Thanking You,
 				</fileset>
 			</copy>	
 		<delete dir="${temp.dir}"/>
+	</target>
+	
+	<!-- Configure titli.properties according to properties in caTissueInstall.properties and other set properties -->
+	<target name="configure_titli">
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+			<include name="titli.properties"/>
+			<replacefilter token="@@username@@" value="${database.username}"/>
+			<replacefilter token="@@password@@" value="${database.password}"/>
+			<replacefilter token="@@titliindexlocation@@" value="${jboss.home.dir}/server/default/data/titli-index"/>
+			<replacefilter token="@@databasename@@" value="${database.name}"/>
+		</replace>
+		<!-- conditional configuration of database url and driver names -->
+		<if>
+			<equals arg1="mysql" arg2="${database.type}"/>		
+			<then>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+					<include name="titli.properties"/>
+					<replacefilter token="@@databasedriver@@" value="${mysql.driver.string}"/>
+					<replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
+				</replace>
+			</then>
+			<elseif>	
+				<equals arg1="oracle" arg2="${database.type}"/>		
+				<then>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+						<include name="titli.properties"/>
+						<replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
+						<replacefilter token="@@databasedriver@@" value="${oracle.driver.string}"/>
+					</replace>
+				</then>
+			</elseif>
+		</if>
 	</target>
 	
 </project>
