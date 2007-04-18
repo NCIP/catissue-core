@@ -132,7 +132,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				//Populate the number of Specimen Requirements.
 				int numberOfSpecimen = specimenRequirementCollection.size();
 				specimenCollectionGroupForm.setNumberOfSpecimens(numberOfSpecimen);
-				request.setAttribute("numberOfSpecimen", numberOfSpecimen);
+				request.setAttribute(Constants.NUMBER_OF_SPECIMEN, numberOfSpecimen);
 				//Set checkbox status
 				specimenCollectionGroupForm.setRestrictSCGCheckbox("true");
 			}

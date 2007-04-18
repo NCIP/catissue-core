@@ -1412,6 +1412,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_PROTOCOL_SHORT_TITLE ="SHORT_TITLE";
 	public static final String SPECIMEN_COLLECTION_GROUP_NAME ="NAME";
 	public static final String SPECIMEN_LABEL = "LABEL";
+	// Patch ID: Bug#3184_18
+	public static final String NUMBER_OF_SPECIMEN = "numberOfSpecimen";
 	
 	//Constants required for max limit on no. of containers in the drop down
 	public static final String CONTAINERS_MAX_LIMIT = "containers_max_limit";

@@ -9,6 +9,18 @@
 													isAddNew=true;
 												%>
 											</logic:equal>
+											<!--
+												Patch ID: Bug_3184_13
+												Description: Added restrict checkbox
+											-->
+											<tr>
+												<td class="formFieldNoBorders" colspan="3" valign="center">
+													&nbsp;<html:checkbox styleId="restrictSCGCheckbox" property="restrictSCGCheckbox" value="true" onchange="disableButtonsOnCheck(this)">
+														<bean:message key="specimen.checkboxLabel"/>
+													</html:checkbox>
+												</td>
+											</tr>
+											<tr><td>&nbsp;</td></tr>
 											<tr>
 												<td nowrap class="formFieldNoBorders">
 													<html:button styleClass="actionButton" 
