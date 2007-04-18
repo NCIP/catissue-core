@@ -136,7 +136,15 @@
 		frameUrl+="&storageContainerName="+storageContainer;
 		//alert(frameUrl);
 		// Patch ID: Bug#3090_18
-		NewWindow(frameUrl,'name','800','600','no');
+		platform = navigator.platform.toLowerCase();
+	    if (platform.indexOf("mac") != -1)
+		{
+	    	NewWindow(frameUrl,'name',screen.width,screen.height,'no');
+	    }
+	    else
+	    {
+	    	NewWindow(frameUrl,'name','800','600','no');
+	    }
 		
     }
 		
@@ -717,7 +725,7 @@
 									String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=tissueSite&cdeName=Tissue Site";
 								%>
 								<!-- Patch ID: Bug#3090_19 -->
-								<a href="#" onclick="javascript:NewWindow('<%=url%>','name','400','525','no');return false">
+								<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
 									<img src="images\Tree.gif" border="0" width="24" height="18" title='Tissue Site Selector'>
 								</a>
 				        	  </td>
@@ -1105,4 +1113,8 @@ if(pageView.equals("edit"))
 %>
 <html:hidden property="stContSelection"/>
 <html:hidden property="lineage"/>
+<!--
+	Patch ID: Bug#3184_8
+-->
+<html:hidden property="restrictSCGCheckbox"/>
 </html:form>

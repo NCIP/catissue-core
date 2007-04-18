@@ -143,18 +143,60 @@
 			var enteredValue = document.getElementById("numberOfSpecimen").value;
 			var submitButton = document.getElementById("submitOnly");
 			var submitAndAddButton = document.getElementById("submitAndAdd");
+			
+			/**
+			 * Patch ID: Bug#3184_10
+			 * Description: The Add Specimen button must be enabled if the restrict checkbox is checked.
+			 */
+			var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
+			
 			if(enteredValue > 1)
 			{			
 				submitButton.disabled = true;
 				submitAndAddButton.disabled = true;
 			}
-			else
+			else if(restrictCheckbox.checked)
+			{
+				submitButton.disabled = true;
+				submitAndAddButton.disabled = false;
+			}
+			else 
 			{			
 				submitButton.disabled = false;
 				submitAndAddButton.disabled = false;
 			}
 		}
 		
+		/**
+		 * Patch ID: Bug#3184_11
+		 * Description: The following functions enables and disables the Submit and Add Specimen buttons as and when
+		 * needed.
+		 */
+		function disableButtonsOnCheck(restrictCheckbox)
+		{
+			var submitButton = document.getElementById("submitOnly");
+			var addSpecimenButton = document.getElementById("submitAndAdd");
+			
+			var numberOfSpecimenBox = document.getElementById("numberOfSpecimen");
+			if(restrictCheckbox.checked)
+			{
+				submitButton.disabled = true;
+			}
+			else
+			{
+				disablebuttons();
+			}
+		}
+				
+		function initializeSCGForm()
+		{
+			var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
+			var valueForCheckbox = <%=form.getRestrictSCGCheckbox()%>
+			if(valueForCheckbox!=null && valueForCheckbox)
+			{
+				disableButtonsOnCheck(restrictCheckbox);
+			}
+		}
 	</script>
 </head>
 			<!-- 
@@ -166,7 +208,11 @@
  			* Description: Call to function to disable "Submit" and "Add Specimen" buttons if number of specimens entered  > 1 on body refreshing
 			*/
 			-->
-<body onload="disablebuttons()">
+
+<!--
+	Patch ID: Bug#3184_12
+-->
+<body onload="disablebuttons();initializeSCGForm()">
 <html:errors />
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
@@ -460,7 +506,7 @@
 						String url = "ShowFramedPage.do?pageOf=pageOfTissueSite&propertyName=clinicalDiagnosis&cdeName=Clinical%20Diagnosis";			
 						%>
 						<!-- // Patch ID: Bug#3090_22 -->
-						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','400','525','no');return false">
+						<a href="#" onclick="javascript:NewWindow('<%=url%>','name','360','525','no');return false">
 							<img src="images\Tree.gif" border="0" width="26" height="22" title='CLinical Diagnosis Selector'>
 					</a>
 		        	 </td>
