@@ -90,7 +90,6 @@
 		<tr>
 			
 			<td>
-			<html:errors />
 			<span class = "message">
 				<font size="3"><b>
 				<c:out value="Search String : "/> <bold><c:out value="${titliSearchForm.searchString}" /></bold></br>
