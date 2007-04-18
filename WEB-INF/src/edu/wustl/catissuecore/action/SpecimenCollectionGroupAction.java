@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -121,6 +122,20 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		{
 			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
 			specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
+			
+			/**
+			 * Patch ID: Bug#3184_9
+			 */
+			Collection specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+			if((specimenRequirementCollection != null) && (!specimenRequirementCollection.isEmpty()))
+			{
+				//Populate the number of Specimen Requirements.
+				int numberOfSpecimen = specimenRequirementCollection.size();
+				specimenCollectionGroupForm.setNumberOfSpecimens(numberOfSpecimen);
+				request.setAttribute("numberOfSpecimen", numberOfSpecimen);
+				//Set checkbox status
+				specimenCollectionGroupForm.setRestrictSCGCheckbox("true");
+			}
 		}
 		
 		

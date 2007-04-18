@@ -142,7 +142,23 @@ public class NewSpecimenForm extends SpecimenForm
 	// Also See: Bug#_3184_6
 	private String specimenCollectionGroupName;
 	
+	private String restrictSCGCheckbox;
+	
     /**
+	 * @return the restrictSCGCheckbox
+	 */
+	public String getRestrictSCGCheckbox() {
+		return restrictSCGCheckbox;
+	}
+
+	/**
+	 * @param restrictSCGCheckbox the restrictSCGCheckbox to set
+	 */
+	public void setRestrictSCGCheckbox(String restrictSCGCheckbox) {
+		this.restrictSCGCheckbox = restrictSCGCheckbox;
+	}
+
+	/**
      * Returns an identifier of the Parent Speciemen.
      * @return String an identifier of the Parent Speciemen.
      * @see #setParentSpecimenId(String)

@@ -585,4 +585,25 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
     {
         this.comment = comment;
     }
+
+	/**
+	 * Patch ID: Bug#3184_7
+	 */
+    private String restrictSCGCheckbox;
+	
+	/**
+	 * This method returns the value of the checkbox
+	 * @return the restrictSCGCheckbox
+	 */
+	public String getRestrictSCGCheckbox() {
+		return restrictSCGCheckbox;
+	}
+
+	/**
+	 * This method sets the value of Checkbox
+	 * @param restrictSCGCheckbox the restrictSCGCheckbox to set
+	 */
+	public void setRestrictSCGCheckbox(String restrictSCGCheckbox) {
+		this.restrictSCGCheckbox = restrictSCGCheckbox;
+	}
 }
