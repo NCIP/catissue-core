@@ -41,6 +41,10 @@
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect" />
 	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect" />
 	
+	<!-- required for configure_titli -->
+	<property name="oracle.driver.string" value="oracle.jdbc.driver.OracleDriver"/>
+	<property name="mysql.driver.string" value="org.gjt.mm.mysql.Driver"/>
+	
 	<!--JUnit related Properties -->
 	<property name="junit.dir" value="${base.dir}/junit"/>
 	<property name="junit.report.dir" value="${junit.dir}/reports"/>
@@ -224,7 +228,7 @@
 	<!-- Create the Applet JAR Ends-->
 
 	<!-- Creates the WAR (Web Application Archive) file of the application -->
-	<target name="build_war" depends="init, compile, unpack_cacore_war,replace_database_type,build_dagViewApplet_jar,common_build_war,build_client_jar">
+	<target name="build_war" depends="init, compile, configure_titli, unpack_cacore_war,replace_database_type,build_dagViewApplet_jar,common_build_war,build_client_jar">
 	</target>
 	<!-- Create war file for installable zip file.Please us this target when creating installable zip. 
 		Note: database type is not replaced 
@@ -811,6 +815,38 @@
 				<include name="**/edu/wustl/catissuecore/bean/**" />
 			</fileset>
 		</jar>
+	</target>
+	
+	<!-- Configure titli.properties according to properties in caTissueInstall.properties and other set properties -->
+	<target name="configure_titli">
+		<replace dir="${target.dir}" propertyfile="caTissueInstall.properties"> 
+			<include name="titli.properties"/>
+			<replacefilter token="@@username@@" value="${database.username}"/>
+			<replacefilter token="@@password@@" value="${database.password}"/>
+			<replacefilter token="@@titliindexlocation@@" value="${jboss.home.dir}/server/default/data/titli-index"/>
+			<replacefilter token="@@databasename@@" value="${database.name}"/>
+		</replace>
+		<!-- conditional configuration of database url and driver names -->
+		<if>
+			<equals arg1="mysql" arg2="${database.type}"/>		
+			<then>
+				<replace dir="${target.dir}" propertyfile="caTissueInstall.properties"> 
+					<include name="titli.properties"/>
+					<replacefilter token="@@databasedriver@@" value="${mysql.driver.string}"/>
+					<replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
+				</replace>
+			</then>
+			<elseif>	
+				<equals arg1="oracle" arg2="${database.type}"/>		
+				<then>
+					<replace dir="${target.dir}" propertyfile="caTissueInstall.properties"> 
+						<include name="titli.properties"/>
+						<replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
+						<replacefilter token="@@databasedriver@@" value="${oracle.driver.string}"/>
+					</replace>
+				</then>
+			</elseif>
+		</if>
 	</target>
 	
 </project>

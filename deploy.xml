@@ -417,6 +417,8 @@
 				</then>
 			</elseif>
 		</if>
+		<!-- configure titli.properties -->
+		<antcall target="configure_titli"/>
 		<antcall target="build_war"/>
 		<antcall target="copy_files"/>
 		<antcall target="send_mail"/>
@@ -849,6 +851,38 @@ Thanking You,
 				<copy file="JniDeID.dll" todir="${caties.installation.dir}" overwrite="true"/>
 				<copy file="${basedir}/CaTIES_conf/build.xml" todir="${caties.installation.dir}" overwrite="true"/>
 				<copy file="${basedir}/CaTIES_conf/sites_configuration.xml" todir="${caties.installation.dir}/CaTIES_conf" overwrite="true"/>	
+	</target>
+	
+	<!-- Configure titli.properties according to caTissueInstall.properties and other set properties -->
+	<target name="configure_titli">
+		<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+			<include name="titli.properties"/>
+			<replacefilter token="@@username@@" value="${database.username}"/>
+			<replacefilter token="@@password@@" value="${database.password}"/>
+			<replacefilter token="@@titliindexlocation@@" value="${jboss.home.dir}/server/default/data/titli-index"/>
+			<replacefilter token="@@databasename@@" value="${database.name}"/>
+		</replace>
+		<!-- conditional configuration of database url and driver names -->
+		<if>
+			<equals arg1="mysql" arg2="${database.type}"/>		
+			<then>
+				<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+					<include name="titli.properties"/>
+					<replacefilter token="@@databasedriver@@" value="${mysql.driver.string}"/>
+					<replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
+				</replace>
+			</then>
+			<elseif>	
+				<equals arg1="oracle" arg2="${database.type}"/>		
+				<then>
+					<replace dir="${temp.dir}/catissuecore/WEB-INF/classes" propertyfile="caTissueInstall.properties"> 
+						<include name="titli.properties"/>
+						<replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
+						<replacefilter token="@@databasedriver@@" value="${oracle.driver.string}"/>
+					</replace>
+				</then>
+			</elseif>
+		</if>
 	</target>
 	
 </project>
