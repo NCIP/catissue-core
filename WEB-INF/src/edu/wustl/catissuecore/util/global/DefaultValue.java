@@ -110,14 +110,14 @@ public class DefaultValue
     			NameValueBean nvb = (NameValueBean)permissibleValueList.get(i);
     			finalPermissibleValueList.add(nvb.getName());
     		}
-    		//If List contain default value then key,Value pair is set in defaultvalue map else null is set for that key
+    		//If List contain default value then key,Value pair is set in default value map else empty string is set for that key
     		if(finalPermissibleValueList.contains(defaultValue))
     		{
     		 		DefaultValue.setDefaultValue(Constants.defaultValueKeys[iCount][0],defaultValue);
     		}
     		else
     		{
-    		 		DefaultValue.setDefaultValue(Constants.defaultValueKeys[iCount][0],null);
+    		 		DefaultValue.setDefaultValue(Constants.defaultValueKeys[iCount][0],"");
     		   		Logger.out.error("Default Value set for '"+Constants.defaultValueKeys[iCount][0]+"' is not in the CDEList");
     		}
     	}
