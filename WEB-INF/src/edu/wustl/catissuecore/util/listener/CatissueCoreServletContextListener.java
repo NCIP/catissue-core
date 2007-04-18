@@ -1,5 +1,5 @@
 /*
- * $Name: 1.44 $
+ * $Name: 1.45 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -20,6 +20,8 @@ import titli.model.Titli;
 import titli.model.TitliException;
 import titli.model.util.IndexUtility;
 import edu.wustl.cab2b.server.cache.EntityCache;
+import edu.wustl.catissuecore.action.annotations.AnnotationConstants;
+import edu.wustl.catissuecore.annotations.AnnotationUtil;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
@@ -43,8 +45,8 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
-import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.CVSTagReader;
@@ -275,10 +277,9 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		
 		
 		// getting instance of catissueCoreCacheManager and adding participantMap to cache
-	 
+        CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
 		try
 		{
-			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager.getInstance();
 			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS,(HashMap) participantMap);
 			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_STORAGE_CONTAINERS,(TreeMap)storageContainersMap);
 			catissueCoreCacheManager.addObjectToCache(Constants.LIST_OF_REGISTRATION_INFO,(Vector)participantRegInfoList);
@@ -291,8 +292,18 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 //		 Initialising Entity cache
 		try
 		{
-			EntityCache entityCache = EntityCacheFactory.getInstance();
-			Logger.out.debug("Entity Cache is initialised");
+            EntityCache entityCache = EntityCache.getInstance();
+            Logger.out.debug("Entity Cache is initialised");
+            //Stores the list of system entities into the cache.-- Vishvesh.
+            AnnotationUtil.getSystemEntityList();
+            //Stores the ids in the cache
+            Long participantId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_PARTICIPANT);
+            catissueCoreCacheManager.addObjectToCache("participantEntityId",participantId);
+            Long scgId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN_COLLN_GROUP);
+            catissueCoreCacheManager.addObjectToCache("scgEntityId",scgId);
+            Long specimenEntityId = Utility.getEntityId(AnnotationConstants.ENTITY_NAME_SPECIMEN);
+            catissueCoreCacheManager.addObjectToCache("specimenEntityId",specimenEntityId);
+            
 		}
 		catch (Exception e)
 		{
