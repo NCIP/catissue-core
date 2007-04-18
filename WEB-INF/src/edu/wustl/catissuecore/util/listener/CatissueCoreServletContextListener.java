@@ -1,5 +1,5 @@
 /*
- * $Name: 1.43 $
+ * $Name: 1.44 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -15,9 +15,12 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
+import titli.controller.interfaces.TitliInterface;
+import titli.model.Titli;
+import titli.model.TitliException;
+import titli.model.util.IndexUtility;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
@@ -296,6 +299,29 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			Logger.out.debug("Exception occured while initialising entity cache");
 			e.printStackTrace();
 		}
+		
+		//initialise TiTLi index
+		//create the index if it does not exist
+		try
+		{
+			TitliInterface titli = Titli.getInstance();
+			
+			String dbName = titli.getDatabases().keySet().toArray(new String[0])[0];
+			
+			File dbIndexLocation = IndexUtility.getIndexDirectoryForDatabase(dbName);
+			
+			if(!dbIndexLocation.exists())
+			{
+				titli.index();
+			}
+				
+		}
+		catch (TitliException e)
+		{
+			Logger.out.debug("Exception occured while initialising TiTLi Search");
+			e.printStackTrace();
+		}
+		
 		
     }
     
