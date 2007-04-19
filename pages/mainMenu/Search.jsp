@@ -1,20 +1,24 @@
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
-
+<!--
+ Kapil: For splitter UI. A dummy parameter added to the URL to have forcefully execution of the JSP, otherwise browser uses
+ page from cache. This is required to do since becuase of chache splitter was not working correctly. 
+ This is added to main menu pages.
+-->
 	<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20">
             <tr>
               <td width="1"><!-- anchor to skip main menu --><a href="#content"><img src="images/shim.gif" alt="Skip Menu" width="1" height="1" border="0" /></a></td>
               <!-- link 1 begins -->
-              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='Home.do'">
-                <html:link styleClass="mainMenuLink" page="/Home.do">
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='Home.do?dummy=dummy'">
+                <html:link styleClass="mainMenuLink" page="/Home.do?dummy=dummy">
 					<bean:message key="app.home" />
 				</html:link>
               </td>
               <!-- link 1 ends -->
 			   <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  <!-- link 2 begins -->
-              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageAdministrativeData.do'">
-                <html:link styleClass="mainMenuLink" page="/ManageAdministrativeData.do">
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageAdministrativeData.do?dummy=dummy'">
+                <html:link styleClass="mainMenuLink" page="/ManageAdministrativeData.do?dummy=dummy">
                 	<bean:message key="app.administrativeData" />
                 </html:link>
               </td>
@@ -22,8 +26,8 @@
 			 <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  
               <!-- link 3 begins -->
-              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageBioSpecimen.do'">
-                <html:link styleClass="mainMenuLink" page="/ManageBioSpecimen.do">
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageBioSpecimen.do?dummy=dummy'">
+                <html:link styleClass="mainMenuLink" page="/ManageBioSpecimen.do?dummy=dummy">
                 	<bean:message key="app.biospecimen" />
                 </html:link>
               </td>
@@ -39,16 +43,16 @@
               <!-- link 4 ends -->
               <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  <!-- link 2 begins -->
-              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='LoggedInSummary.do'">
-                <html:link styleClass="mainMenuLink" page="/LoggedInSummary.do">
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='LoggedInSummary.do?dummy=dummy'">
+                <html:link styleClass="mainMenuLink" page="/LoggedInSummary.do?dummy=dummy">
                 	<bean:message key="app.summary" />
                 </html:link>
               </td>
               <!-- link 2 ends -->
 			  <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>	
   		      <!-- link 5 begins -->
-              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='LoggedInHelp.do'">
-                <html:link styleClass="mainMenuLink" page="/LoggedInHelp.do">
+              <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='LoggedInHelp.do?dummy=dummy'">
+                <html:link styleClass="mainMenuLink" page="/LoggedInHelp.do?dummy=dummy">
                 	<bean:message key="app.help" />
                 </html:link>
               </td>

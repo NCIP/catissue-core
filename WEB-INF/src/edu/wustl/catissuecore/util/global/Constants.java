@@ -1501,4 +1501,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_QUERY_COLLECTION_PROTOCOL_REGISTRATION_EDIT_ACTION = "CPQueryCollectionProtocolRegistrationEdit.do";
 	public static final String CP_QUERY_PARTICIPANT_LOOKUP_ACTION= "CPQueryParticipantLookup.do";
 	public static final String CP_QUERY_BIO_SPECIMEN = "/QueryManageBioSpecimen.do";
+	
+	public static final String SPLITTER_STATUS_REQ_PARAM = "SPLITTER_STATUS";
 }

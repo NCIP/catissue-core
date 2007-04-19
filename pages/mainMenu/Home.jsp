@@ -2,6 +2,11 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<!--
+ Kapil: For splitter UI. A dummy parameter added to the URL to have forcefully execution of the JSP, otherwise browser uses
+ page from cache. This is required to do since becuase of chache splitter was not working correctly. 
+ This is added to main menu pages.
+-->
 
 	<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20">
@@ -12,8 +17,8 @@
              
               <!-- link 1 begins -->
 			  <td height="20" class="mainMenuItemOver" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
-				onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='Home.do'">
-				<html:link styleClass="mainMenuLink" page="/Home.do">
+				onmouseout="changeMenuStyle(this,'mainMenuItemOver'),hideCursor()" onclick="document.location.href='Home.do?dummy=dummy'">
+				<html:link styleClass="mainMenuLink" page="/Home.do?dummy=dummy">
 					<bean:message key="app.home" />
 				</html:link>
 			  </td>
@@ -26,8 +31,8 @@
 				   
 			  <!-- link 2 begins -->
 			  <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
-				onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageAdministrativeData.do'">
-				<html:link styleClass="mainMenuLink" page="/ManageAdministrativeData.do">
+				onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageAdministrativeData.do?dummy=dummy'">
+				<html:link styleClass="mainMenuLink" page="/ManageAdministrativeData.do?dummy=dummy">
 					<bean:message key="app.administrativeData" />
 				</html:link>
 			  </td>
@@ -36,8 +41,8 @@
 			  <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  <!-- link 3 begins -->
 			  <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()"
-				onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageBioSpecimen.do'">
-				<html:link styleClass="mainMenuLink" page="/ManageBioSpecimen.do">
+				onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='ManageBioSpecimen.do?dummy=dummy'">
+				<html:link styleClass="mainMenuLink" page="/ManageBioSpecimen.do?dummy=dummy">
 					<bean:message key="app.biospecimen" />
 				</html:link>
 			  </td>
@@ -60,8 +65,8 @@
 				alt="" /></td>
 			
 			 <!-- link 5 begins -->
-			 <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='LoggedInSummary.do'">
-                <html:link styleClass="mainMenuLink" page="/LoggedInSummary.do">
+			 <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='LoggedInSummary.do?dummy=dummy'">
+                <html:link styleClass="mainMenuLink" page="/LoggedInSummary.do?dummy=dummy">
                 	<bean:message key="app.summary" />
                 </html:link>
              </td>
@@ -70,8 +75,8 @@
 			 <td><img src="images/mainMenuSeparator.gif" width="1" height="16" alt="" /></td>
 			  
              <!-- link 6 begins -->
-             <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='LoggedInHelp.do'">
-               <html:link styleClass="mainMenuLink" page="/LoggedInHelp.do">
+             <td height="20" class="mainMenuItem" onmouseover="changeMenuStyle(this,'mainMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'mainMenuItem'),hideCursor()" onclick="document.location.href='LoggedInHelp.do?dummy=dummy'">
+               <html:link styleClass="mainMenuLink" page="/LoggedInHelp.do?dummy=dummy">
                		<bean:message key="app.help" />
                </html:link>
              </td>

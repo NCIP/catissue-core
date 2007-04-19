@@ -109,7 +109,12 @@ PUBLIC
 			<forward name="success" path="/SpreadsheetView.do" />
 		</action>
 		
-	
+		<action path="/UpdateSpillterStatus"
+			type="edu.wustl.catissuecore.action.UpdateSpillterStatusAction"
+			scope="request">
+			<forward name="success" path="/UpdateSpillterStatus.do" />
+		</action>
+		
 		<action path="/viewErrorDetails" forward=".catissuecore.error.details"
 			validate="false" />
 		

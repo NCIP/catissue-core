@@ -18,14 +18,35 @@
 <script src="jss/script.js" type="text/javascript"></script>
 <script src="jss/overlib_mini.js" type="text/javascript"></script>
 <script src="jss/calender.js" type="text/javascript"></script>
+<script src="jss/splitter.js" type="text/javascript" ></script>
+<script src="jss/ajax.js" type="text/javascript"></script>
 
+<%
+	/*
+     * Name : Kapil Kaveeshwar
+     * Reviewer: Sachin Lale
+     * Bug ID: Menu_Splitter
+     * Patch ID: Menu_Splitter_1
+     * See also: All Menu_Splitter
+     * Description: Last state of menu splitter is recorded in the session of the user, sot that next time user
+     * navigates to the page the state can be preserved. This part of the code the reads the menu status from 
+     * session. 
+     */
+	Object splitterOpenStatusObj = request.getSession().getAttribute(Constants.SPLITTER_STATUS_REQ_PARAM);
+	String splitterOpenStatus = "true";
+	if(splitterOpenStatusObj!=null)
+	{
+		splitterOpenStatus = (String)splitterOpenStatusObj;		
+	}
+%>
+		
 <!--Jitendra -->
 <script language="JavaScript">
 	var timeOut;
 	<%
 		int timeOut = request.getSession().getMaxInactiveInterval() ;		
 		timeOut = timeOut*1000;
-		System.out.println("Session timeout in milliseconds is " + new Integer(timeOut));			
+		//System.out.println("Session timeout in milliseconds is " + new Integer(timeOut));	
 	%>
 	timeOut = "<%= timeOut%>";	
 	function sendToHomePage()
@@ -81,10 +102,36 @@
 			</tr-->
 			<!-- application hdr ends -->
 			<tr>
-				<td width="190" valign="top" class="subMenu"><!-- submenu begins -->
-				<tiles:insert attribute="commonmenu">
-					<tiles:put name="submenu" beanName="submenu" />
-				</tiles:insert> <!-- submenu ends --></td>
+				<td width="180" valign="top" class="subMenu" id="sideMenuTd">
+					<!-- submenu begins -->				
+					<tiles:insert attribute="commonmenu">
+						<tiles:put name="submenu" beanName="submenu" />
+					</tiles:insert> 
+					<!-- submenu ends -->
+				</td>
+				
+				<!--
+		         * Name : Kapil Kaveeshwar
+		         * Reviewer: Sachin Lale
+		         * Bug ID: Menu_Splitter
+		         * Patch ID: Menu_Splitter_3
+		         * See also: All Menu_Splitter
+		         * Description: A TD tag which holds the splitter. On click on this, it calls the JS method
+		         * toggleMenuStatus() which toggles the state of menu status
+		         -->
+				<logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
+					<TD id=menucontainer width="2" class="subMenuPrimaryTitle" valign="center" align="center" 	
+						onmouseover="changeMenuStyle(this,'subMenuSecondaryTitleOver'),showCursor()" 
+						onmouseout="changeMenuStyle(this,'subMenuPrimaryTitle'),hideCursor()" onclick="toggleSplitterStatus()">
+						<SPAN id="splitter">&lt;</SPAN>
+					</TD>
+					
+					<!-- initialize the menu state -->
+					<script>
+						initSplitterOpenStatus(<%=Boolean.valueOf(splitterOpenStatus)%>);
+					</script>
+				</logic:notEmpty>
+				
 				<td valign="top" width="100%">
 				<table summary="" cellpadding="0" cellspacing="0" border="0"
 					width="100%" height="100%">
