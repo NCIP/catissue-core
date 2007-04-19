@@ -904,7 +904,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 <table width="100%">	
 	<!-- to keep -->
 		<tr>
-			<td align="right" colspan="3">
+			<td align="left" colspan="3">
 				<!-- action buttons begins -->
 				<!-- table 6 -->
 				<table cellpadding="4" cellspacing="0" border="0">
@@ -915,17 +915,15 @@ function insRow(subdivtag,iCounter,blockCounter)
 							</html:submit>
 							</td-->
 							
-						   <td class="formLabelNoBackGround" width="30%">
-			               <html:checkbox property="aliqoutInSameContainer">
-			               <bean:message key="aliquots.storeAllAliquotes" />
-			                </html:checkbox>
-	 	                   </td>
-						   
-						   <td width="55%">
+						<td class="formLabelNoBackGround" width="500" >
+							<html:checkbox property="aliqoutInSameContainer" >
+								<bean:message key="aliquots.storeAllAliquotes" />
+							 </html:checkbox>
+	 	                </td>
+						<td colspan="2" width="350">
 						   &nbsp;
-						   </td>
-						
-						<td width="15%">
+						</td>
+						<td width="150" align="right">
 						<%
 						   	String action = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
 						%>
