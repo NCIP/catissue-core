@@ -171,6 +171,19 @@ public class SpecimenForm extends AbstractActionForm
 	 * Storage Id selected from map
 	 */
 	private String containerId;
+    
+    
+    /**
+     * Patch ID: 3835_1_29
+     * See also: 1_1 to 1_5
+     * Description : Added createdDate in form for domain object's createdOn field 
+     */
+    
+    private String createdDate;
+    
+    
+    
+    
 	/**
 	 * Returns the concentration. 
 	 * @return String the concentration.
@@ -550,6 +563,14 @@ public class SpecimenForm extends AbstractActionForm
 		this.concentration = "";
 		this.comments = specimen.getComments();
 		this.activityStatus = specimen.getActivityStatus();
+          
+        /**
+         * Patch ID: 3835_1_30
+         * See also: 1_1 to 1_5
+         * Description : set createdOn date from database object
+         */ 
+        this.createdDate = Utility.parseDateToString(specimen.getCreatedOn(),Constants.DATE_PATTERN_MM_DD_YYYY);       
+        
 
 		if (specimen.getAvailable() != null)
 			this.available = specimen.getAvailable().booleanValue();
@@ -720,6 +741,21 @@ public class SpecimenForm extends AbstractActionForm
 		{
 			if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
 			{
+                /**
+                     * Patch ID: 3835_1_31
+                     * See also: 1_1 to 1_5
+                     * Description : Validated the createdOn date field. 
+                     */ 
+                if (!validator.isEmpty(createdDate) )
+                {
+                   
+                    String errorKeyForCreatedDate = validator.validateDate(createdDate,true );
+                    if(errorKeyForCreatedDate.trim().length() > 0)
+                    {
+                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForCreatedDate,ApplicationProperties.getValue("specimen.createdDate")));
+                    }
+                }
+                
 				if (validator.isEmpty(label))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
@@ -1034,4 +1070,20 @@ public class SpecimenForm extends AbstractActionForm
 	{
 		this.multipleSpecimen = multipleSpecimen;
 	}
+    
+        /**
+         * Patch ID: 3835_1_32
+         * See also: 1_1 to 1_5
+         * Description : getter setter methods  for createdOn date.
+         */ 
+        public String getCreatedDate()
+        {
+            return createdDate;
+        }
+
+        
+        public void setCreatedDate(String createdDate)
+        {
+            this.createdDate = createdDate;
+        }
 }

@@ -130,6 +130,15 @@ public class AliquotForm extends AbstractActionForm
      */
     private String buttonClicked = "";
     /**
+     * Patch ID: 3835_1_8
+     * See also: 1_1 to 1_5
+     * Description : Added createdOn in formbean 
+     */
+    
+    private String createdDate;
+    
+    
+    /**
 	 * Returns the map that contains distinguished fields per aliquots.
 	 * @return The map that contains distinguished fields per aliquots.
 	 * @see #setAliquotMap(Map)
@@ -399,14 +408,30 @@ public class AliquotForm extends AbstractActionForm
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
          ActionErrors errors = new ActionErrors();
+         Validator validator = new Validator();
          
          if(Constants.PAGEOF_ALIQUOT_SUMMARY.equals(request.getParameter(Constants.PAGEOF)))
          {
+             /**
+               * Patch ID: 3835_1_9
+               * See also: 1_1 to 1_5
+               * Description : Validated createdOn date field from form bean 
+               */ 
+             if (!validator.isEmpty(createdDate) )
+             {
+                 
+                 String errorKeyForCreatedDate = validator.validateDate(createdDate,true );
+                 if(errorKeyForCreatedDate.trim().length() > 0)
+                 {
+                     errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForCreatedDate,ApplicationProperties.getValue("specimen.createdDate")));
+                 }
+             }
+             
          	Iterator keyIterator = aliquotMap.keySet().iterator();
          	
          	while(keyIterator.hasNext())
          	{
-         		Validator validator = new Validator();
+         		
          		String key = (String)keyIterator.next();
          		
          		if(key.endsWith("_quantity"))
@@ -598,4 +623,20 @@ public class AliquotForm extends AbstractActionForm
 	public void setDisposeParentSpecimen(boolean disposeParentSpecimen) {
 		this.disposeParentSpecimen = disposeParentSpecimen;
 	}
+    
+    /**   
+      * Patch ID: 3835_1_10
+      * See also: 1_1 to 1_5
+      * Description : Getter , setter methods for createdOn date
+      */ 
+     public String getCreatedDate()
+     {
+         return createdDate;
+     }
+
+     
+     public void setCreatedDate(String createdDate)
+     {
+         this.createdDate = createdDate;
+     }
 }
