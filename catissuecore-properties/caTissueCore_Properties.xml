@@ -236,7 +236,7 @@
 
 	<property>
 		<name>defaultTissueSite</name>
-		<value>Abdominal esophagus</value>
+		<value>Not Specified</value>
 	</property>
 	
 	<property>
@@ -256,67 +256,67 @@
 	
 	<property>
 		<name>defaultSpecimen</name>
-		<value>Tissue</value>
+		<value></value>
 	</property>
 	
 	<property>
 		<name>defaultTissueSide</name>
-		<value>Left</value>
+		<value>Not Specified</value>
 	</property>
 	
 	<property>
 		<name>defaultPathologicalStatus</name>
-		<value>Malignant</value>
+		<value>Not Specified</value>
 	</property>
 	
 	<property>
 		<name>defaultReceivedQuality</name>
-		<value>Acceptable</value>
+		<value>Not Specified</value>
 	</property>
 	
 	<property>
 		<name>defaultFixationType</name>
-		<value>Formaldehyde</value>
+		<value>Not Specified</value>
 	</property>
 	
 	<property>
 		<name>defaultCollectionProcedure</name>
-		<value>Needle Aspirate</value>
+		<value>Not Specified</value>
 	</property>
 	
 	<property>
 		<name>defaultContainer</name>
-		<value>Citrate Vacutainer</value>
+		<value>Not Specified</value>
 	</property>
 	
 	<property>
 		<name>defaultMethod</name>
-		<value>Aerosol Spray</value>
+		<value>Not Specified</value>
 	</property>
 	
 	<property>
 		<name>defaultEmbeddingMedium</name>
-		<value>Low Melting Point Paraffin</value>
+		<value>Not Specified</value>
 	</property>
 	
 	<property>
 		<name>defaultBiohazard</name>
-		<value>Toxic</value>
+		<value></value>
 	</property>
 	
 	<property>
 		<name>defaultSiteType</name>
-		<value>Collection Site</value>
+		<value></value>
 	</property>
 	
 	<property>
 		<name>defaultSpecimenType</name>
-		<value>Fixed Tissue</value>
+		<value></value>
 	</property>
 	
 	<property>
 		<name>defaultEthnicity</name>
-		<value>Not Specified</value>
+		<value>Unknown</value>
 	</property>
 	
 	<property>
@@ -331,17 +331,17 @@
 	
 	<property>
 		<name>defaultStates</name>
-		<value>California</value>
+		<value></value>
 	</property>
 	
 	<property>
 		<name>defaultCountry</name>
-		<value>Albania</value>
+		<value>United States</value>
 	</property>
 	
 	<property>
 		<name>defaultHistologicalQuality</name>
-		<value>Poor- No Definable Features</value>
+		<value>Not Specified</value>
 	</property>
 	
 	<property>
