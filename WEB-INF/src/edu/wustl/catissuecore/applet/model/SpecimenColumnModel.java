@@ -5,6 +5,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 import javax.swing.AbstractCellEditor;
@@ -107,7 +110,14 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	//PathologicalStatus 
 	ModifiedComboBox pathologicalStatusList;
 
-	// Quantity
+    /**
+     * Patch ID: 3835_1_34
+     * See also: 1_1 to 1_5
+     * Description : Added created On field . 
+     */ 
+    ModifiedTextField createdOn; 
+    
+   	// Quantity
 	ModifiedTextField quantity;
 	JLabel unit;
 	JPanel quantityUnitPanel;
@@ -171,9 +181,14 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 			{
 				table.setRowHeight(rowno, 25);
 			}
+            /**
+             * Patch ID: 3835_1_35
+             * See also: 1_1 to 1_5
+             * Description :Added SPECIMEN_CREATED_DATE_ROW_NO in following condition.
+             */
 			//for textfield
 			else if (rowno == AppletConstants.SPECIMEN_LABEL_ROW_NO || rowno == AppletConstants.SPECIMEN_BARCODE_ROW_NO
-					|| rowno == AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO)
+					|| rowno == AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO || rowno == AppletConstants.SPECIMEN_CREATED_DATE_ROW_NO)
 			{
 				table.setRowHeight(rowno, 20);
 			}
@@ -311,6 +326,17 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 			case AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO :
 				comp = pathologicalStatusList;
 				break;
+                
+                /**
+                 * Patch ID: 3835_1_36
+                 * See also: 1_1 to 1_5
+                 * Description : Added created date entry. 
+                 */
+            case AppletConstants.SPECIMEN_CREATED_DATE_ROW_NO :
+                comp = createdOn;
+                break;
+                
+                
 			// Quantity
 			case AppletConstants.SPECIMEN_QUANTITY_ROW_NO :
 				comp = quantityUnitPanel;
@@ -511,6 +537,16 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 			//To display defaultValue form CatissueCore_Properties.xml
 			pathologicalStatusList.setSelectedItem(model.getPathologicalStatus());
 		}
+        
+        
+		  /**
+         * Patch ID: 3835_1_37
+         * See also: 1_1 to 1_5
+         * Description : Intialised cretedOn date . 
+         */        
+        createdOn = new ModifiedTextField(10);
+		createdOn.setEnabled(false);
+        
 	/*	if (model.getSpecimenCollectionGroupName() == null)
 		{
 			pathologicalStatusList.setSelectedItem(Constants.NOTSPECIFIED);
@@ -812,6 +848,15 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 		//PathologicalStatus 
 		pathologicalStatusList.addActionListener(comboBoxHandler);
+
+        //craeted on date
+           /**
+         *  Patch ID: 3835_1_38
+          * See also: 1_1 to 1_5
+          * Description : Added createdOn date entry.
+          */ 
+        createdOn.addActionListener(textHandler);
+        createdOn.addFocusListener(baseFocusHandler);
 
 		// Quantity
 		quantity.addActionListener(textHandler);
@@ -1168,6 +1213,38 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		this.concentration.setEnabled(model.getConcentrationStatus(columnIndex));
 		System.out.println("IN SCM enableConcentration concentration refreshed");
 	}
+    /**
+     * 
+     * @param flag
+     */
+    public void setCreatedOnStatus(boolean flag)
+    {
+        this.createdOn.setEnabled(flag);
+        
+        if(flag)
+            createdOn.setText(parseDateToString(Calendar.getInstance().getTime(),Constants.DATE_PATTERN_MM_DD_YYYY));
+        else
+            createdOn.setText("");
+                
+    }
+    /**
+     * 
+     * @param date
+     * @param pattern
+     * @return
+     */
+    public static String parseDateToString(Date date, String pattern)
+    {
+        String d = "";
+        //TODO Check for null
+        if(date!=null)
+        {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+            d = dateFormat.format(date);
+        }
+        return d;
+    }
+    
 
 	/**
 	 * This method is used to update the columns as per the data in the model.
@@ -1190,11 +1267,23 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				//			Mandar: 30Oct06: commented as buttons are enabled by default.
 				//			updateButtons();
 			}
-
+            /**
+              * Patch ID: 3835_1_39
+              * See also: 1_1 to 1_5
+              * Description : Disabled createdOn date according to the radiobutton when pageLink button is pressed
+              */ 
+            
+            this.createdOn.setEnabled(false);
 		}
 		else
 		{
 			setRbparentSpecimen(true);
+            /**
+              * Patch ID: 3835_1_40
+              * See also: 1_1 to 1_5
+              * Description : Enabled createdOn date according to the radiobutton when pageLink button is pressed
+              */ 
+              this.createdOn.setEnabled(true);             
 		}
 		//Parent Specimen 
 		value = (String) model.getValueAt(AppletConstants.SPECIMEN_PARENT_ROW_NO, columnIndex);
@@ -1261,6 +1350,18 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		{
 			setPathologicalStatusList(value);
 		}
+        
+//       created date
+           /**
+          * Patch ID: 3835_1_41
+          * See also: 1_1 to 1_5
+          * Description : Added createdOn date entry .
+          */ 
+        value = (String) model.getValueAt(AppletConstants.SPECIMEN_CREATED_DATE_ROW_NO, columnIndex);
+        if (!isNull(value))
+        {
+            setCreatedOn(value);
+        }
 
 		// Quantity
 		value = (String) model.getValueAt(AppletConstants.SPECIMEN_QUANTITY_ROW_NO, columnIndex);
@@ -1335,8 +1436,16 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		tissueSideList.setNextFocusableComponent(pathologicalStatusList);
 
 		//PathologicalStatus 
-		pathologicalStatusList.setNextFocusableComponent(quantity);
+		pathologicalStatusList.setNextFocusableComponent(createdOn);
 
+           /**
+          * Patch ID: 3835_1_42
+          * See also: 1_1 to 1_5
+          * Description : Added createdOn date field.
+          */ 
+        //created date
+        createdOn.setNextFocusableComponent(quantity);
+        
 		// Quantity
 		quantity.setNextFocusableComponent(concentration);
 
@@ -1464,6 +1573,16 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 			case AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO :
 				value =	pathologicalStatusList.getSelectedItem().toString();
 				break;
+                   /**
+                  * Patch ID: 3835_1_43
+                  * See also: 1_1 to 1_5
+                  * Description : Added createdOn date entry.
+                  */ 
+                //created date
+            case AppletConstants.SPECIMEN_CREATED_DATE_ROW_NO :
+                value = createdOn.getText();
+                break;
+                
 			// Quantity
 			case AppletConstants.SPECIMEN_QUANTITY_ROW_NO :
 				value = quantity.getText();
@@ -1583,6 +1702,18 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 				pathologicalStatusList.setSelectedItem(value);
 				comp = pathologicalStatusList;
 				break;
+                
+                   /**
+                    * Patch ID: 3835_1_44
+                  * See also: 1_1 to 1_5
+                  * Description : Added createdOn date entry.
+                  */ 
+                //created date
+            case AppletConstants.SPECIMEN_CREATED_DATE_ROW_NO :
+                createdOn.setText(value);
+                comp = createdOn;
+                break;
+                
 			// Quantity
 			case AppletConstants.SPECIMEN_QUANTITY_ROW_NO :
 				quantity.setText(value);
@@ -1655,6 +1786,17 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 			case AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO :
 				comp = pathologicalStatusList;
 				break;
+                
+                   /**
+                  * Patch ID: 3835_1_45
+                  * See also: 1_1 to 1_5
+                  * Description : Added createdOn date entry.
+                  */ 
+                //created on date
+            case AppletConstants.SPECIMEN_CREATED_DATE_ROW_NO :
+                comp = createdOn;
+                break;
+                
 			// Quantity
 			case AppletConstants.SPECIMEN_QUANTITY_ROW_NO :
 				comp = quantity;
@@ -1737,6 +1879,22 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		System.out.println("Row is enabled : " + result);
 		return result;
 	}
+
+       /**
+      * Patch ID: 3835_1_46
+      * See also: 1_1 to 1_5
+      * Description : getter setter for createdOn field.
+      */ 
+    public String getCreatedOn()
+    {
+        return createdOn.getText();
+    }
+
+    
+    public void setCreatedOn(String createdOn)
+    {
+        this.createdOn.setText(createdOn);
+    }
 
 	// -------------------Mandar For Focus Handling 11-Dec-06 start
 	/*	
