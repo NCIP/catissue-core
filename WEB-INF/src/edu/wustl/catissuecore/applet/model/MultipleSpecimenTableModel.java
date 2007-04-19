@@ -28,13 +28,19 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	private int lastCellColumn = 0;
 	private int lastCellRow = 0;
 
-	/**
-	 * attributes of the specimen for which user can specify the values. 
-	 */
-	String[] specimenAttribute = {"","SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
-			"SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "Quantity_value",
-			"concentrationInMicrogramPerMicroliter", "comments", "specimenEventCollection", "externalIdentifierCollection",
-			"biohazardCollection", "derive"};
+    /**
+     * Patch ID: 3835_1_20
+     * See also: 1_1 to 1_5
+     * Description : Added created date field in specimenAttribute and rowHeaders. 
+     */
+    
+    /**
+     * attributes of the specimen for which user can specify the values. 
+     */
+    String[] specimenAttribute = {"","SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
+            "SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "createdOn","Quantity_value",
+            "concentrationInMicrogramPerMicroliter", "comments", "specimenEventCollection", "externalIdentifierCollection",
+            "biohazardCollection", "derive"};
 
 /**
  * Name : Ashish Gupta
@@ -45,12 +51,13 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
  * Description: Removed " * Events "
  */
 
-	/**
-	 * Row headers for the attributes. This corrosponds to display value for each of the  specimenAttribute in that order.
-	 */
-	private static final String[] rowHeaders = {"","* Specimen Group Name", "* Parent", "* Label", "Barcode", "* Class", "* Type", "* Tissue Site",
-			"* Tissue Side", "* Pathological Status", "Quantity", "Concentration", "Comments", "Events",
-			"External Identifier(s)", "Biohazards", "Derive"};
+    /**
+     * Row headers for the attributes. This corrosponds to display value for each of the  specimenAttribute in that order.
+     */
+    private static final String[] rowHeaders = {"","* Specimen Group Name", "* Parent", "* Label", "Barcode", "* Class", "* Type", "* Tissue Site",
+            "* Tissue Side", "* Pathological Status", "Created On [MM-DD-YYYY]","Quantity", "Concentration", "Comments", "Events",
+            "External Identifier(s)", "Biohazards", "Derive"};
+
 
 	/**
 	 * Data structure maintianed by the model. Its key format is as follows:
