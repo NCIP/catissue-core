@@ -1503,4 +1503,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_QUERY_BIO_SPECIMEN = "/QueryManageBioSpecimen.do";
 	
 	public static final String SPLITTER_STATUS_REQ_PARAM = "SPLITTER_STATUS";
+     
+    //mulltiple specimen Applet constants
+    public static final int VALIDATE_TEXT =1;
+    public static final int VALIDATE_COMBO =2;
+    public static final int VALIDATE_DATE =3;   
+    
 }
