@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.2 $
+ * $Name: 1.41.2.3 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -42,7 +42,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ProtectionGroups;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValue;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDEManager;
@@ -217,8 +217,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
              * Description: Configuration for default value for enumerated dropdowns
              *
              */
-        	DefaultValue.validateDefaultValues();
-        	
+        	DefaultValueManager.validateAndInitDefaultValueMap();
         	File propetiesDirPath = new File(path);
         	Variables.propertiesDirPath = propetiesDirPath.getParent();
         	Logger.out.debug("propetiesDirPath "+Variables.propertiesDirPath);
