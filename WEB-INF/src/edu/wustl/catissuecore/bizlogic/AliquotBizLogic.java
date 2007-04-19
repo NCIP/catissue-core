@@ -46,6 +46,7 @@ import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
+import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 public class AliquotBizLogic extends NewSpecimenBizLogic
@@ -60,7 +61,7 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Specimen aliquot = (Specimen) obj;
-		String specimenKey = "Specimen:";
+        String specimenKey = "Specimen:";
 		Map aliquotMap = aliquot.getAliqoutMap();
         
 		List positionsToBeAllocatedList = new ArrayList();
@@ -337,6 +338,12 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			{
 				aliquotSpecimen.setAvailable(new Boolean(false));
 			}
+             /**
+             * Patch ID: 3835_1_7
+             * See also: 1_1 to 1_5
+             * Description : Set createdOn date in domain object. 
+             */
+            aliquotSpecimen.setCreatedOn(aliquot.getCreatedOn());
 							
 			//Inserting an aliquot in the database
 			dao.insert(aliquotSpecimen, sessionDataBean, true, false);//NEEDS TO BE FIXED FOR SECURE INSERT
