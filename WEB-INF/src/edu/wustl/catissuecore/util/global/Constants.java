@@ -1005,7 +1005,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String [][] SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST = {
 			{"Submit",				"success"},
 			{"Add Specimen",			"createNewSpecimen"},
-			{"Add Multiple Specimen", "createMultipleSpecimen"}
+			{"Add Multiple Specimens", "createMultipleSpecimen"}
 	};
 	
 	public static final String [][] PROTOCOL_REGISTRATION_FORWARD_TO_LIST = {
