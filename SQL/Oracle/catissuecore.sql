@@ -660,6 +660,7 @@ create table CATISSUE_SPECIMEN (
    AVAILABLE_QUANTITY double precision,
    QUANTITY double precision,
    CONCENTRATION double precision,
+   CREATED_ON_DATE date,
    primary key (IDENTIFIER)
 );
 create table CATISSUE_USER (
