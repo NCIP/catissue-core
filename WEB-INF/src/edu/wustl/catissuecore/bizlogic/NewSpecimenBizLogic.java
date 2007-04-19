@@ -165,6 +165,28 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			Long parentSpecimenId = specimen.getId();
 
 			resetId(specimen);
+            
+            /**
+              * Patch ID: 3835_1_21
+              * See also: 1_1 to 1_5
+              * Description : set created date to collected event date if this specimen is not derived one in case of multiple specimen.
+              */
+            
+            if((specimen.getParentSpecimen() == null ))
+            {              
+                Collection specimenEventsCollection = specimen.getSpecimenEventCollection();
+                Iterator specimenEventsCollectionIterator = specimenEventsCollection.iterator();
+                while (specimenEventsCollectionIterator.hasNext())
+                {               
+                      Object eventObject = specimenEventsCollectionIterator.next();
+                      if (eventObject instanceof CollectionEventParameters)
+                      {
+                          CollectionEventParameters collEventParam=(CollectionEventParameters)eventObject;
+                          specimen.setCreatedOn(collEventParam.getTimestamp());
+                      }
+                }               
+            }
+            
 
 			try
 			{
