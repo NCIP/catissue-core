@@ -27,7 +27,7 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValue;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -761,9 +761,9 @@ public class NewMultipleSpecimenAction extends SecureAction
 	         * See also:defaultValueConfiguration_BugID_1,2,3,4
 	         * Description: Configuration for default value for Collection Procedure, Container and Quality
 	         */
-			String collectionProcedure = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
-			String container = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_CONTAINER);
-			String receivedQuantity=(String)DefaultValue.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
+			String collectionProcedure = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
+			String container = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER);
+			String receivedQuality=(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
 			
 			if(((NewSpecimenForm) form).getCollectionEventCollectionProcedure() == null)
 				((NewSpecimenForm) form).setCollectionEventCollectionProcedure(collectionProcedure);
@@ -772,7 +772,7 @@ public class NewMultipleSpecimenAction extends SecureAction
 				((NewSpecimenForm) form).setCollectionEventContainer(container);
 			
 			if(((NewSpecimenForm) form).getReceivedEventReceivedQuality() == null)
-				((NewSpecimenForm) form).setReceivedEventReceivedQuality(receivedQuantity);
+				((NewSpecimenForm) form).setReceivedEventReceivedQuality(receivedQuality);
 		}
 	}
 	

@@ -19,7 +19,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValue;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -178,7 +178,7 @@ public class BiohazardForm extends AbstractActionForm
 	     * Patch ID:defaultValueConfiguration_BugID_8
 	     * Description: Configuration for default value Biohazard type
 	     */
-        this.type = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_BIOHAZARD);
+        this.type = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_BIOHAZARD);
         this.comments = null;
     }
 

@@ -19,7 +19,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValue;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -63,11 +63,11 @@ public class SiteForm extends AbstractActionForm
     /**
      * A string containing the type of the storage.
      */
-    private String type = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_SITE_TYPE);
+    private String type = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SITE_TYPE);
     
-    private String state =(String)DefaultValue.getDefaultValue(Constants.DEFAULT_STATES);
+    private String state =(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_STATES);
 
-    private String country =(String)DefaultValue.getDefaultValue(Constants.DEFAULT_COUNTRY); 
+    private String country =(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY); 
     
     /**
      * The zip code of city where the site is.

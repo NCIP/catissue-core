@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValue;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -64,7 +64,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	/**
      * Histological Quality of the specimen.
      */
-	protected String histologicalQuality = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_HISTOLOGICAL_QUALITY);
+	protected String histologicalQuality = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_HISTOLOGICAL_QUALITY);
 
 	/**
      * Returns the percentage of histologically evident neoplastic cells present in the tissue specimen. 

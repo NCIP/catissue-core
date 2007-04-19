@@ -31,7 +31,7 @@ import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValue;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -59,12 +59,12 @@ public class SpecimenForm extends AbstractActionForm
 	/**
 	 * Type of specimen. e.g. Tissue, Molecular, Cell, Fluid
 	 */
-	protected String className=(String)DefaultValue.getDefaultValue(Constants.DEFAULT_SPECIMEN);
+	protected String className=(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN);
 
 	/**
 	 * Sub Type of specimen. e.g. Serum, Plasma, Blood, Fresh Tissue etc.
 	 */
-	protected String type=(String)DefaultValue.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE);
+	protected String type=(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE);
 
 	/**
 	 * Concentration of specimen.

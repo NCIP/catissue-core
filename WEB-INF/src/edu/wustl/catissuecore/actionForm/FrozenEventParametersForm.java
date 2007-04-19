@@ -19,7 +19,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.FrozenEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValue;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -44,7 +44,7 @@ public class FrozenEventParametersForm extends SpecimenEventParametersForm
 	/**
      * Method applied on specimen to freeze it.
      */
-	private String method = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_METHOD);
+	private String method = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_METHOD);
 
 	/**
 	 * @return Returns the method applied on specimen to freeze it.

@@ -44,7 +44,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValue;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
@@ -280,7 +280,7 @@ public class NewSpecimenAction extends SecureAction
 		// Setting the default values
 		if (specimenForm.getTissueSide() == null || specimenForm.getTissueSide().equals("-1")) 
 		{
-			specimenForm.setTissueSide((String)DefaultValue.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE));
+			specimenForm.setTissueSide((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE));
 		}
 				
 		// sets the Specimen Class list
@@ -534,7 +534,7 @@ public class NewSpecimenAction extends SecureAction
 		//Bug- setting the default collection event procedure
 		if (specimenForm.getCollectionEventCollectionProcedure() == null)
 		{
-			specimenForm.setCollectionEventCollectionProcedure((String)DefaultValue.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
+			specimenForm.setCollectionEventCollectionProcedure((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
 		}
 
 		// set the container lists
@@ -543,7 +543,7 @@ public class NewSpecimenAction extends SecureAction
 		//Bug- setting the default collection event container
 		if (specimenForm.getCollectionEventContainer() == null)
 		{
-			specimenForm.setCollectionEventContainer((String)DefaultValue.getDefaultValue(Constants.DEFAULT_CONTAINER));
+			specimenForm.setCollectionEventContainer((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER));
 		}
 
 	}
@@ -564,7 +564,7 @@ public class NewSpecimenAction extends SecureAction
 		//Bug- setting the default recieved event quality
 		if (specimenForm.getReceivedEventReceivedQuality() == null)
 		{
-			specimenForm.setReceivedEventReceivedQuality((String)DefaultValue.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
+			specimenForm.setReceivedEventReceivedQuality((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
 		}
 	}
 
@@ -842,11 +842,11 @@ public class NewSpecimenAction extends SecureAction
 		// Setting the default values
 		if (specimenForm.getTissueSite() == null)
 		{
-			specimenForm.setTissueSite((String)DefaultValue.getDefaultValue(Constants.DEFAULT_TISSUE_SITE));
+			specimenForm.setTissueSite((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SITE));
 		}
 		if (specimenForm.getPathologicalStatus() == null)
 		{
-			specimenForm.setPathologicalStatus((String)DefaultValue.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS));
+			specimenForm.setPathologicalStatus((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS));
 		}
 	}
 	

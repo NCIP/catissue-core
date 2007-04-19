@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.FixedEventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValue;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -44,7 +44,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	/**
 	 * Type of the fixation.
 	 */
-	protected String fixationType = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_FIXATION_TYPE);
+	protected String fixationType = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_FIXATION_TYPE);
 
 	/**
 	 * Duration, measured in minutes, for which fixation is performed on specimen.

@@ -19,7 +19,7 @@ import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValue;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -42,9 +42,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
      * Description: Configuration for default value for clinicalDiagnosis and clinicalStatus
      *
      */
-	private String clinicalDiagnosis = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS);
+	private String clinicalDiagnosis = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CLINICAL_DIAGNOSIS);
     
-	private String clinicalStatus = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS);
+	private String clinicalStatus = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CLINICAL_STATUS);
 	
 	private String surgicalPathologyNumber;
 	

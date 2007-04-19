@@ -8,7 +8,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValue;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 
 /**
  * This is table model for multiple specimen functionality.
@@ -842,23 +842,23 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	{
 		//pathological status
 		String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO];
-		specimenMap.put(specimenKey, ((String)DefaultValue.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)));
+		specimenMap.put(specimenKey, ((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)));
 		
 		//tissueside
 		specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO];
-		specimenMap.put(specimenKey, ((String)DefaultValue.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)));	
+		specimenMap.put(specimenKey, ((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)));	
 
 		//tissuesite
 		specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO];
-		specimenMap.put(specimenKey, ((String)DefaultValue.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)));
+		specimenMap.put(specimenKey, ((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)));
 		
 //		Specimen Class
 		specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_CLASS_ROW_NO];
-		specimenMap.put(specimenKey, ((String)DefaultValue.getDefaultValue(Constants.DEFAULT_SPECIMEN)));	
+		specimenMap.put(specimenKey, ((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN)));	
 
 //		Specimen Type
 		specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_TYPE_ROW_NO];
-		specimenMap.put(specimenKey, ((String)DefaultValue.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE)));	
+		specimenMap.put(specimenKey, ((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE)));	
 
 
 	}

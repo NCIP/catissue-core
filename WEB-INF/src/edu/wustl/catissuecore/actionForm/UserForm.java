@@ -19,7 +19,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValue;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
@@ -582,8 +582,8 @@ public class UserForm extends AbstractActionForm
 	     * Patch ID:defaultValueConfiguration_BugID_5
 	     * Description: Configuration for default value for State and country
 	    */
-		this.state = (String)DefaultValue.getDefaultValue(Constants.DEFAULT_STATES);
-		this.country =(String)DefaultValue.getDefaultValue(Constants.DEFAULT_COUNTRY);
+		this.state = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_STATES);
+		this.country =(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COUNTRY);
 		this.zipCode = null;
 		this.phoneNumber = null;
 		this.faxNumber = null;

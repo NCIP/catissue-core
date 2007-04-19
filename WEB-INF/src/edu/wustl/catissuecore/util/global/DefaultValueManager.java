@@ -26,7 +26,7 @@ import edu.wustl.common.util.logger.Logger;
  * Patch ID:defaultValueConfiguration_BugID_3
  * See also:defaultValueConfiguration_BugID_1,2
  */
-public class DefaultValue
+public class DefaultValueManager
 {
 	
     private static HashMap defaultValueMap = new HashMap();
@@ -38,7 +38,14 @@ public class DefaultValue
      */
     public static Object getDefaultValue(String defaultConstant)
 	{
-		return defaultValueMap.get(defaultConstant);
+		if(defaultValueMap.get(defaultConstant)==null)
+		{
+			return defaultValueMap.get(defaultConstant);
+		}
+		else
+		{
+			return "";
+		}
 	}
     
     /**
@@ -47,7 +54,7 @@ public class DefaultValue
      * @param key
      * @param value
      */
-	public static void setDefaultValue(String key, String value)
+	private static void setDefaultValue(String key, String value)
 	{
 		defaultValueMap.put(key, value);
 	}
@@ -55,70 +62,41 @@ public class DefaultValue
 	/**
      * Description: Validate and Configure default value for enumerated dropdowns.
      */
-	public static void validateDefaultValues()
+	public static void validateAndInitDefaultValueMap()
     {
-    	String className = null;
+    	String specimenClassName = null;
     	List permissibleValueList = new ArrayList();
-    	List finalPermissibleValueList = new ArrayList();
     	for(int iCount=0;iCount<Constants.defaultValueKeys.length;iCount++)
     	{
     		String defaultValue = XMLPropertyHandler.getValue(Constants.defaultValueKeys[iCount][0]);
+    		NameValueBean defaultValueBean=null; 
+    		//converting defaultValue into NameValue object.
+    		if(defaultValue!=null)
+    		{
+    			defaultValueBean = new NameValueBean(defaultValue,defaultValue);
+    		}
     		if((Constants.defaultValueKeys[iCount][0]).equals(Constants.DEFAULT_SPECIMEN))
     		{
-    			className = defaultValue;
+    			specimenClassName = defaultValue;
     		}
     		if((Constants.defaultValueKeys[iCount][0]).equals(Constants.DEFAULT_SPECIMEN_TYPE))
     		{
-    			//get the Specimen class and type from the cde
-    			CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
-    			Set setPV = specimenClassCDE.getPermissibleValues();
-    			Iterator itr = setPV.iterator();
-    			while (itr.hasNext())
-    			{
-    				Object obj = itr.next();
-    				PermissibleValue pv = (PermissibleValue) obj;
-    				String tmpStr = pv.getValue();
-    				// if current Permissible value is of selected class name
-    				if(className.equalsIgnoreCase(tmpStr))
-    				{
-    					Logger.out.debug(tmpStr);
-    					// get specimen sub type permissible values of selected specimen class 
-        				Set subTypelist = pv.getSubPermissibleValues();
-        				Logger.out.debug("list1 " + subTypelist);
-        				Iterator itr1 = subTypelist.iterator();
-        				while (itr1.hasNext())
-        				{
-        					Object obj1 = itr1.next();
-        					PermissibleValue subTypeValue = (PermissibleValue) obj1;
-        					// set specimen type
-        					permissibleValueList.add(new NameValueBean(subTypeValue.getValue(), subTypeValue.getValue()));
-        				}
-        				Collections.sort(permissibleValueList);
-    				}
-    				
-    			} // class and values set
+    			//Get the Specimen Type List. 
+    			permissibleValueList = Utility.getSpecimenTypes(specimenClassName);
     		}
     		else
     		{
     			permissibleValueList = Utility.getListFromCDE(Constants.defaultValueKeys[iCount][1]);
     		}
-    		//permissibleValueList is Namevalue list.
-    		//Converting Namevalue List into Value List.
-    		finalPermissibleValueList.add(Constants.SELECT_OPTION);
-    		for(int i=0;i<permissibleValueList.size();i++) 
-    		{
-    			NameValueBean nvb = (NameValueBean)permissibleValueList.get(i);
-    			finalPermissibleValueList.add(nvb.getName());
-    		}
     		//If List contain default value then key,Value pair is set in default value map else empty string is set for that key
-    		if(finalPermissibleValueList.contains(defaultValue))
+    		if(permissibleValueList!=null&&permissibleValueList.contains(defaultValueBean))
     		{
-    		 		DefaultValue.setDefaultValue(Constants.defaultValueKeys[iCount][0],defaultValue);
+    		 	DefaultValueManager.setDefaultValue(Constants.defaultValueKeys[iCount][0],defaultValueBean.getValue());
     		}
     		else
     		{
-    		 		DefaultValue.setDefaultValue(Constants.defaultValueKeys[iCount][0],"");
-    		   		Logger.out.error("Default Value set for '"+Constants.defaultValueKeys[iCount][0]+"' is not in the CDEList");
+    		 	DefaultValueManager.setDefaultValue(Constants.defaultValueKeys[iCount][0],"");
+    		   	Logger.out.error("Default Value set for '"+Constants.defaultValueKeys[iCount][0]+"' is not in the CDEList");
     		}
     	}
     }
