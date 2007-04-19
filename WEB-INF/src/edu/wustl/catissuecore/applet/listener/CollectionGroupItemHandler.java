@@ -11,7 +11,9 @@ import java.awt.event.ItemEvent;
 
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
+import javax.swing.table.TableColumnModel;
 
+import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
 
 /**
@@ -39,7 +41,28 @@ public class CollectionGroupItemHandler extends BaseItemHandler {
 		System.out.println("In CollectionGroupItemHandler");
 		if(table.getSelectedColumn() != -1)
 		{
-			CommonAppletUtil.getMultipleSpecimenTableModel(table).setCollectionGroupRadioButtonValueAt(table.getSelectedColumn(),((JRadioButton)event.getSource()).isSelected()  ); 
+			CommonAppletUtil.getMultipleSpecimenTableModel(table).setCollectionGroupRadioButtonValueAt(table.getSelectedColumn(),((JRadioButton)event.getSource()).isSelected()  );
+            
+               /**
+              * Patch ID: 3835_1_33
+              * See also: 1_1 to 1_5
+              * Description :If Specimen group name checkbox is enabled then createdOn should be disabled  
+              */   
+
+             TableColumnModel columnModel = table.getColumnModel();
+
+             SpecimenColumnModel scm = (SpecimenColumnModel) columnModel.getColumn(table.getSelectedColumn()).getCellEditor();
+
+             if(scm.getRbspecimenGroup())
+             {
+                 //made createdon readonly and blank                 
+                 scm.setCreatedOnStatus(false);
+             }
+             else
+             {
+                 //set creted on current date.
+                 scm.setCreatedOnStatus(true); 
+             }                               
 		}
 	}
 
