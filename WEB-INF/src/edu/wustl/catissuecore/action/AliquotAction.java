@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.action;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -71,6 +72,17 @@ public class AliquotAction extends SecureAction
 		{
 			methodName = "executeAliquotAction";
 		}
+        
+         /**
+          * Patch ID: 3835_1_6
+          * See also: 1_1 to 1_5
+          * Description : set current date to aliquot
+          */ 
+         if(((AliquotForm)form).getCreatedDate() == null)
+         {
+             ((AliquotForm)form).setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+         }      
+        
 		return invokeMethod(methodName, mapping, form, request, response);
 
 	}

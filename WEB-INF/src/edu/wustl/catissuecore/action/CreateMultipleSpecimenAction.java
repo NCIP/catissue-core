@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CreateSpecimenBizLogic;
@@ -31,6 +33,7 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDE;
@@ -73,6 +76,18 @@ public class CreateMultipleSpecimenAction extends BaseAction
 			}
 		}
 
+        /**
+          * Patch ID: 3835_1_15
+          * See also: 1_1 to 1_5
+          * Description :Set current date to created date on derived specimen page of multiple specimen.
+          */ 
+         if(createForm.getCreatedDate() == null)
+         {
+             createForm.setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+         }
+            
+        
+        
 		List key = new ArrayList();
 		key.add("ExternalIdentifier:i_name");
 		key.add("ExternalIdentifier:i_value");

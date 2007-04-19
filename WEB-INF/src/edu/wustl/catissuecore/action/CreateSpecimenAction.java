@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -35,6 +36,7 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -87,6 +89,17 @@ public class CreateSpecimenAction extends SecureAction
 		{
 			createForm.setVirtuallyLocated(true);
 		}
+        
+         /**
+          * Patch ID: 3835_1_16
+          * See also: 1_1 to 1_5
+          * Description : CreatedOn date by default should be current date.
+          */ 
+    
+         createForm.setCreatedDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+    
+        
+        
 		String pageOf = request.getParameter(Constants.PAGEOF);
 		SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 		/*
