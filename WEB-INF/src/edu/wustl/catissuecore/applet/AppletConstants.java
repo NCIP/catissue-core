@@ -126,14 +126,22 @@ public interface AppletConstants
 	short SPECIMEN_TYPE_ROW_NO = 6;
 	short SPECIMEN_TISSUE_SITE_ROW_NO = 7;
 	short SPECIMEN_TISSUE_SIDE_ROW_NO = 8;
+    
+    /**
+     * Patch ID: 3835_1_14
+     * See also: 1_1 to 1_5
+     * Description : Added created date row and changed below row no accordingly. 
+     */
+    
 	short SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO = 9;
-	short SPECIMEN_QUANTITY_ROW_NO = 10;
-	short SPECIMEN_CONCENTRATION_ROW_NO = 11;
-	short SPECIMEN_COMMENTS_ROW_NO = 12;
-	short SPECIMEN_EVENTS_ROW_NO = 13;
-	short SPECIMEN_EXTERNAL_IDENTIFIERS_ROW_NO = 14;
-	short SPECIMEN_BIOHAZARDS_ROW_NO = 15;
-	short SPECIMEN_DERIVE_ROW_NO = 16;
+    short SPECIMEN_CREATED_DATE_ROW_NO = 10;
+	short SPECIMEN_QUANTITY_ROW_NO = 11;
+	short SPECIMEN_CONCENTRATION_ROW_NO = 12;
+	short SPECIMEN_COMMENTS_ROW_NO = 13;
+	short SPECIMEN_EVENTS_ROW_NO = 14;
+	short SPECIMEN_EXTERNAL_IDENTIFIERS_ROW_NO = 15;
+	short SPECIMEN_BIOHAZARDS_ROW_NO = 16;
+	short SPECIMEN_DERIVE_ROW_NO = 17;
 
 //	Mandar: 06Nov06: location removed since auto allocation will take place.
 //	short SPECIMEN_STORAGE_LOCATION_ROW_NO = 11;
