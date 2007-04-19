@@ -32,14 +32,7 @@ public class DefaultValueManager
      */
     public static Object getDefaultValue(String defaultConstant)
 	{
-		if(defaultValueMap.get(defaultConstant)==null)
-		{
-			return defaultValueMap.get(defaultConstant);
-		}
-		else
-		{
-			return "";
-		}
+		return defaultValueMap.get(defaultConstant);
 	}
     
     /**
