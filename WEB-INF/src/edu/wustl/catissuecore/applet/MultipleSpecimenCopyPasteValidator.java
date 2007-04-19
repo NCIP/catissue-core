@@ -112,12 +112,18 @@ public class MultipleSpecimenCopyPasteValidator extends BaseCopyPasteValidator
 						return "The Object should be of same type when you do copy-paste on button";
 					}
 
+                    /**
+                     * Patch ID: 3835_1_19
+                     * See also: 1_1 to 1_5
+                     * Description : Added created date row in following condition
+                     */
+                    
 					/**
 					 *  This condtion is to check whether row at which data is to be pasted is text
 					 */
 					if (rowToBePasted == AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO || rowToBePasted == AppletConstants.SPECIMEN_PARENT_ROW_NO
 							|| rowToBePasted == AppletConstants.SPECIMEN_LABEL_ROW_NO || rowToBePasted == AppletConstants.SPECIMEN_BARCODE_ROW_NO
-							|| rowToBePasted == AppletConstants.SPECIMEN_QUANTITY_ROW_NO
+							|| rowToBePasted == AppletConstants.SPECIMEN_QUANTITY_ROW_NO  || rowToBePasted == AppletConstants.SPECIMEN_CREATED_DATE_ROW_NO
 							|| rowToBePasted == AppletConstants.SPECIMEN_CONCENTRATION_ROW_NO)
 					{
 						continue;
