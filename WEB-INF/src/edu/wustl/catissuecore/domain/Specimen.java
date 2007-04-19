@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,6 +27,7 @@ import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.MapDataParser;
@@ -168,6 +170,15 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	private transient Map aliqoutMap = new HashMap();
 	
 	protected transient boolean disposeParentSpecimen = false;
+    
+     /**
+     * Name: Sachin Lale 
+     * Bug ID: 3835
+     * Patch ID: 3835_1
+     * See also: 1-4 
+     * Description : Addeed createdOn field for derived and aliqut Specimen.
+     */
+    protected Date createdOn;
 
 	public Specimen()
 	{
@@ -594,6 +605,8 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		{
 			availableQuantity = new Quantity();
 		}
+        
+        
 
 		if (abstractForm instanceof AliquotForm)
 		{
@@ -605,6 +618,22 @@ public class Specimen extends AbstractDomainObject implements Serializable
 			this.aliqoutMap = form.getAliquotMap();
 			this.noOfAliquots = Integer.parseInt(form.getNoOfAliquots());
 			this.parentSpecimen = new Specimen();
+            
+             /**            
+             * Patch ID: 3835_1_2
+             * See also: 1_1 to 1_5
+             * Description : Set createdOn date for aliquot.  
+             */
+            
+            try
+            {
+                this.createdOn = Utility.parseDate(form.getCreatedDate(),
+                    Constants.DATE_PATTERN_MM_DD_YYYY);     
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();         
+            }
 
 			if (!validator.isEmpty(form.getSpecimenLabel())) // TODO
 			{
@@ -682,6 +711,14 @@ public class Specimen extends AbstractDomainObject implements Serializable
 								isParentChanged = true;
 							}
 						}
+                        
+                        /**                         
+                         * Patch ID: 3835_1_3
+                         * See also: 1_1 to 1_5
+                         * Description : Set createdOn date in edit mode for new specimen 
+                         */
+                        this.createdOn = Utility.parseDate(form.getCreatedDate(),
+                                Constants.DATE_PATTERN_MM_DD_YYYY); 
 					}
 
 					Logger.out.debug("isParentChanged " + isParentChanged);
@@ -736,6 +773,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					//Getting the Map of Biohazards
 					parser = new MapDataParser("edu.wustl.catissuecore.domain");
 					Collection bioCollection = parser.generateData(bioMap);
+                    
 					Logger.out.debug("BIO-COL : " + bioCollection);
 
 					this.biohazardCollection = bioCollection;
@@ -780,6 +818,15 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 						receivedEventParameters.setAllValues(receivedEvent);
 						receivedEventParameters.setSpecimen(this);
+                        
+                         /**                         
+                         * Patch ID: 3835_1_4
+                         * See also: 1_1 to 1_5
+                         * Description :createdOn should be collection event date for new specimen. 
+                         */
+                        this.createdOn = Utility.parseDate(form.getCollectionEventdateOfEvent(),
+                                Constants.DATE_PATTERN_MM_DD_YYYY); 
+                        
 
 						Logger.out.debug("Before specimenEventCollection.size(): " + specimenEventCollection.size());
 						specimenEventCollection.add(receivedEventParameters);
@@ -819,6 +866,9 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					}
 					else
 					{
+                        
+                        
+                        
 						if(!validator.isEmpty(form.getSelectedContainerName()))
 						{
 							this.storageContainer.setName(form.getSelectedContainerName());							
@@ -850,6 +900,23 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					//this.positionDimensionOne = new Integer(form.getPositionDimensionOne());
 					//this.positionDimensionTwo = new Integer(form.getPositionDimensionTwo());
 					this.type = form.getType();
+                    
+                     /**                  
+                     * Patch ID: 3835_1_5
+                     * See also: 1_1 to 1_5
+                     * Description : Set createdOn date for derived specimen . 
+                     */
+                    
+                    try
+                    {
+                        this.createdOn = Utility.parseDate(form.getCreatedDate(),
+                                Constants.DATE_PATTERN_MM_DD_YYYY);     
+                    }
+                    catch(Exception e)
+                    {
+                        e.printStackTrace();
+                       //throw new Exception ();   
+                    }
 
 					if (form.isAddOperation())
 					{
@@ -1167,4 +1234,32 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	public void setDisposeParentSpecimen(boolean disposeParentSpecimen) {
 		this.disposeParentSpecimen = disposeParentSpecimen;
 	}
+    /**
+     * Name: Sachin Lale 
+     * Bug ID: 3835
+     * Patch ID: 3835_2
+     * See also: 1-4 
+     * Description : Addeed createdOn field for derived and aliqut Specimen.
+     * Returns the date on which the Participant is 
+     * registered to the Collection Protocol.
+     * @hibernate.property name="createdOn" column="CREATED_ON_DATE" type="date"
+     * @return the date on which the Dervive/aliqut Specimen is created 
+     * @see #setCreatedOn(Date)
+     */
+    public Date getCreatedOn()
+    {
+        return createdOn;
+    }
+
+    /**
+     * Sets the date on which the Participant is 
+     * registered to the Collection Protocol.
+     * @param registrationDate the date on which the Participant is 
+     * registered to the Collection Protocol.
+     * @see #getRegistrationDate()
+     */
+    public void setCreatedOn(Date createdOn)
+    {
+        this.createdOn = createdOn;
+    }
 }
