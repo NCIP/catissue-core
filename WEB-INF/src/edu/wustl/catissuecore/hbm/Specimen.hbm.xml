@@ -94,7 +94,14 @@
             column="ACTIVITY_STATUS"
             length="50"
         />
-
+        
+		<property
+            name="createdOn"
+            type="date"
+            update="true"
+            insert="true"
+            column="CREATED_ON_DATE"
+        />
         <many-to-one
             name="parentSpecimen"
             class="edu.wustl.catissuecore.domain.Specimen"
