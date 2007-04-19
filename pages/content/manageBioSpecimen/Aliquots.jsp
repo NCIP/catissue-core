@@ -7,7 +7,7 @@ Date   : May 12, 2006
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+
 
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
@@ -207,15 +207,7 @@ if(request.getAttribute(Constants.PARENT_SPECIMEN_ID) != null )
 		frameUrl+="&storageContainerName="+storageContainer;
 		//alert(frameUrl);
 		// Patch ID: Bug#3090_15
-		platform = navigator.platform.toLowerCase();
-	    if (platform.indexOf("mac") != -1)
-		{
-	    	NewWindow(frameUrl,'name',screen.width,screen.height,'no');
-	    }
-	    else
-	    {
-	    	NewWindow(frameUrl,'name','800','600','no');
-	    }
+		NewWindow(frameUrl,'name','800','600','no');
 		
     }
 	
@@ -347,23 +339,24 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 
 <tr>
 	
-	<td class="formLabelBorderlessLeftAndBold">
+
+	<td class="formRequiredLabelWithLeftBottomBorder">
 		<label for="type">
-			<bean:message key="specimen.type"/> 
+		<b>	<bean:message key="specimen.type"/> </b>
 		</label>
 	</td>
-	<td class="formLabelBorderlessLeft"> <%=form.getSpecimenClass()%>
+	<td class="formField"> <%=form.getSpecimenClass()%>
 		<html:hidden property="specimenClass" />
 	</td>
 	
-	
-	<td class="formLabelBorderlessLeftAndBold">
+
+	<td class="formRequiredLabelWithLeftBottomBorder">
 		<label for="subType">
-			<bean:message key="specimen.subType"/> 
+			<b><bean:message key="specimen.subType"/> </b>
 		</label>
 	</td>
 	
-	<td class="formLabelBorderlessLeft"> <%=form.getType()%>
+	<td class="formField"> <%=form.getType()%>
 		<html:hidden property="type" />
 	</td>
 </tr>
@@ -372,84 +365,111 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 
 <tr>
 	
-	<td class="formLabelBorderlessLeftAndBold">
+	<td class="formRequiredLabelWithLeftBottomBorder">
 		<label for="tissueSite">
-			<bean:message key="specimen.tissueSite"/> 
+			<b><bean:message key="specimen.tissueSite"/></b> 
 		</label>
 	</td>
-	    <td class="formLabelBorderlessLeft" colspan="3"> <%=form.getTissueSite()%>
+	    <td class="formField" > <%=form.getTissueSite()%>
 		<html:hidden property="tissueSite" />
 	    </td>
-		
-</tr>
 
-<tr>
-	
-	<td class="formLabelBorderlessLeftAndBold">
+		<td class="formRequiredLabelWithLeftBottomBorder">
 		<label for="tissueSide">
-			<bean:message key="specimen.tissueSide"/> 
+			<b><bean:message key="specimen.tissueSide"/> </b>
 		</label>
 	</td>
 	
-	<td class="formLabelBorderlessLeft"> <%=form.getTissueSide()%>
+	<td class="formField"> <%=form.getTissueSide()%>
 		<html:hidden property="tissueSide" />
 	</td>
 		
+</tr>
 
-	<td class="formLabelBorderlessLeftAndBold">
+<tr>
+
+	<td class="formRequiredLabelWithLeftBottomBorder">
 		<label for="pathologicalStatus">
-			<bean:message key="specimen.pathologicalStatus"/> 
+			<b><bean:message key="specimen.pathologicalStatus"/> </b>
 		</label>
 	</td>
 	
-	<td class="formLabelBorderlessLeft"> <%=form.getPathologicalStatus()%>
+	<td class="formField"> <%=form.getPathologicalStatus()%>
 		<html:hidden property="pathologicalStatus" />
 	</td>
 	
+	<td class="formRequiredLabelWithLeftBottomBorder">
+		<label for="concentration">
+		<b>	<bean:message key="specimen.concentration"/> </b>
+		</label>
+	</td>
+
+	<td class="formField" >
+        <%if(form.getConcentration()!=null) {%>
+     	<%=form.getConcentration()%>
+		<html:hidden property="concentration" />
+		&nbsp;<bean:message key="specimen.concentrationUnit"/>
+		<%}else{%>
+		&nbsp;
+		<%}%>
+	</td>
 </tr>
 
 <tr>
 	
-	<td class="formLabelBorderlessLeftAndBold">
+	<td class="formRequiredLabelWithLeftBottomBorder">
 		<label for="availableQuantity">
-			<bean:message key="aliquots.initialAvailableQuantity"/> 
+			<b><bean:message key="aliquots.initialAvailableQuantity"/> </b>
 		</label>
 	</td>
 	
-	<td class="formLabelBorderlessLeft"> <%=form.getInitialAvailableQuantity()%>
+	<td class="formField"> <%=form.getInitialAvailableQuantity()%>
 		<html:hidden property="initialAvailableQuantity" />
 		&nbsp; <%=unit%>
 	</td>
 
 	
-	<td class="formLabelBorderlessLeftAndBold">
+	<td class="formRequiredLabelWithLeftBottomBorder">
 		<label for="availableQuantity">
-			<bean:message key="aliquots.currentAvailableQuantity"/> 
+			<b><bean:message key="aliquots.currentAvailableQuantity"/> </b>
 		</label>
 	</td>
 	
-	<td class="formLabelBorderlessLeft"> <%=form.getAvailableQuantity()%>
+	<td class="formField"> <%=form.getAvailableQuantity()%>
 		<html:hidden property="availableQuantity" />
 		&nbsp; <%=unit%>
 	</td>
 </tr>
 
-<tr>
+ 							<!-- 
+							 * Name: Shital Lawhale
+							 * Reviewer Name: Sachin Lale
+							 * Bug ID: 3835
+							 * Patch ID: 3835_1_12
+							 * See also: 1_1 to 1_5
+							 * Description : Added <TR> for createdOn field .				 
+							-->	 
+
+<tr>			
 	
-	<td class="formLabelBorderlessLeftAndBold">
-		<label for="concentration">
-			<bean:message key="specimen.concentration"/> 
-		</label>
-	</td>
-	
-	<td class="formLabelBorderlessLeft" colspan="3">
-        <%if(form.getConcentration()!=null) {%>
-     	<%=form.getConcentration()%>
-		<html:hidden property="concentration" />
-		&nbsp;<bean:message key="specimen.concentrationUnit"/>
-		<%}%>
+	<td class="formRequiredLabelWithLeftBottomBorder" >
+	  <label for="createdDate">
+		<bean:message key="specimen.createdDate"/>
+	  </label>								
+	 </td>
+	 
+	<td class="formField" colspan="3" >
+		<%
+		String createdDate = form.getCreatedDate();
+		String nameOfForm ="aliquotForm";
+		String dateFormName = "createdDate";
+		%>
+			<%@ include file="/pages/content/common/CommonDateComponent.jsp" %>
 	</td>
 </tr>
+
+
+
 </table>
 
 <table summary="" cellpadding="3" cellspacing="0" border="0" width="600">
@@ -680,18 +700,18 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 		<bean:message key="aliquots.disposeParentSpecimen" />
 		</html:checkbox>
 	</td>
-</tr>	
+	<td align="right">
+		<html:button styleClass="actionButton" property="submitButton" onclick="onCreate()">
+			<bean:message key="buttons.create"/>
+		</html:button>
+	</td>
+	
+	
 	<%--td>
 		<html:reset styleClass="actionButton">
 			<bean:message key="buttons.reset"/>
 		</html:reset>
 	</td--%> 
-<tr>
-	<td colspan="5" align="right">
-		<html:button styleClass="actionButton" property="submitButton" onclick="onCreate()">
-			<bean:message key="buttons.submit"/>
-		</html:button>
-	</td>
 </tr>
 	
 </table>				

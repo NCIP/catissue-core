@@ -74,6 +74,13 @@
 <tr>
 <td>
 	<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+	
+	 						<!-- 							
+							 * Patch ID: 3835_1_12
+							 * See also: 1_1 to 1_5
+							 * Description : Changed readonly text to labels
+							-->	 
+	
 		
 	<tr>
 		<td class="formTitle" height="20" colspan="3">
@@ -100,8 +107,9 @@
 				<bean:message key="specimen.type"/> 
 			</label>
 		</td>
-		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="specimenClass" property="specimenClass" readonly="true"/>
+
+		<td class="formField"> <%=form.getSpecimenClass()%>
+			<html:hidden styleId="specimenClass" property="specimenClass" />
 		</td>
 	</tr>
 	
@@ -112,8 +120,8 @@
 				<bean:message key="specimen.subType"/> 
 			</label>
 		</td>
-		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="type" property="type" readonly="true"/>
+		<td class="formField"> <%=form.getType()%>
+			<html:hidden styleId="type" property="type" />
 		</td>
 	</tr>
 	
@@ -124,8 +132,9 @@
 				<bean:message key="specimen.tissueSite"/> 
 			</label>
 		</td>
-		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="tissueSite" property="tissueSite" readonly="true"/>
+
+		<td class="formField"> <%=form.getTissueSite()%>
+			<html:hidden styleId="tissueSite" property="tissueSite" />
 		</td>
 	</tr>
 	
@@ -136,8 +145,8 @@
 				<bean:message key="specimen.tissueSide"/> 
 			</label>
 		</td>
-		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="tissueSide" property="tissueSide" readonly="true"/>
+		<td class="formField"> <%=form.getTissueSide()%>
+			<html:hidden styleId="tissueSide" property="tissueSide" />
 		</td>
 	</tr>
 	
@@ -148,8 +157,8 @@
 				<bean:message key="specimen.pathologicalStatus"/> 
 			</label>
 		</td>
-		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="pathologicalStatus" property="pathologicalStatus" readonly="true"/>
+		<td class="formField"> <%=form.getPathologicalStatus()%>
+			<html:hidden styleId="pathologicalStatus" property="pathologicalStatus" />
 		</td>
 	</tr>
 	
@@ -160,9 +169,8 @@
 				<bean:message key="specimen.availableQuantity"/> 
 			</label>
 		</td>
-		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="availableQuantity" property="availableQuantity" readonly="true"/>
-			&nbsp; <%=unit%>
+		<td class="formField"><%=form.getAvailableQuantity()%>&nbsp; <%=unit%>
+			<html:hidden styleId="availableQuantity" property="availableQuantity" />
 		</td>
 	</tr>
 	
@@ -173,12 +181,29 @@
 				<bean:message key="specimen.concentration"/> 
 			</label>
 		</td>
-		<td class="formField">
-			<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="concentration" property="concentration" readonly="true"/>
-			&nbsp;<bean:message key="specimen.concentrationUnit"/>
+		<td class="formField"><%=form.getConcentration()%>&nbsp;<bean:message key="specimen.concentrationUnit"/>
+			<html:hidden styleId="concentration" property="concentration" />		
 		</td>
 	</tr>
-	</table>
+	 						<!-- 							
+							 * Patch ID: 3835_1_13
+							 * See also: 1_1 to 1_5
+							 * Description : Added <TR> for createdOn date field .				 
+							-->	 
+
+
+	<tr>
+		<td class="formRequiredNotice" width="5">&nbsp;</td>
+		<td class="formRequiredLabel">
+			<label for="createdDate">
+				<bean:message key="specimen.createdDate"/>
+			</label>
+		</td>
+		<td class="formField"><%=form.getCreatedDate()%>&nbsp;<bean:message key="scecimen.dateformat"/>
+			<html:hidden styleId="createdDate" property="createdDate" />	
+		</td>
+	</tr>
+</table>
 	
 	<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 	<tr>
@@ -227,6 +252,15 @@
 			{
 				onClickSpecimenFunction = "CPQueryAliquot('QuerySpecimenSearch.do?pageOf=pageOfNewSpecimenCPQuery&id=" + id + "')";
 			}
+
+			String specimenQtyKey = "Specimen:" + i + "_quantity";
+			String specimenBarKey = "Specimen:" + i + "_barcode";
+
+			String specimenContainerNameKey = "Specimen:" + i + "_stContainerName";
+			String specimenPos1Key = "Specimen:" + i + "_positionDimensionOne";
+			String specimenPos2Key = "Specimen:" + i + "_positionDimensionTwo";
+			
+
 	%>
 		<tr>
 			<td class="formSerialNumberField" width="5">
@@ -240,21 +274,35 @@
 			     <html:hidden property="<%=labelKey%>"/>	
 		    </td>
 		    <td class="formField" nowrap>
-				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="quantity" property="<%=qtyKey%>" readonly="true"/>
-				&nbsp; <%=unit%>
+				<%=aliquotMap.get(specimenQtyKey)%>		
+					&nbsp; <%=unit%>
+				<html:hidden  styleId="quantity" property="<%=qtyKey%>"/>	
 			</td>
 			<td class="formField">
-				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" styleId="barcodes" property="<%=barKey%>" readonly="true"/>
+				<%=aliquotMap.get(specimenBarKey)%>	&nbsp;					
+				<html:hidden  styleId="barcodes" property="<%=barKey%>"/>
 			</td>
 			<td class="formField" nowrap>
 				<%if(aliquotMap.get(virtuallyLocatedKey) != null){%>
 				Virtually Located
-				<%}else{%>
-				<html:text styleClass="formFieldSized10"  maxlength="50"  size="30" property="<%=containerNameKey%>" readonly="true"/>
-					&nbsp;
-				<html:text styleClass="formFieldSized5"  maxlength="50"  size="30" property="<%=pos1Key%>" readonly="true"/>
-					&nbsp;
-				<html:text styleClass="formFieldSized5"  maxlength="50"  size="30" property="<%=pos2Key%>" readonly="true"/>
+				<%}else{ %>
+				      <%if(aliquotMap.get(specimenContainerNameKey) != null){  %>
+					<%=aliquotMap.get(specimenContainerNameKey)%>
+					<%}%>
+					&nbsp;						
+					<html:hidden   property="<%=containerNameKey%>"/>
+
+					<%if(aliquotMap.get(specimenPos1Key) != null ){  %>
+					<%=aliquotMap.get(specimenPos1Key)%>
+					<%}%>
+					&nbsp;					
+					<html:hidden   property="<%=pos1Key%>"/>
+
+					<%if(aliquotMap.get(specimenPos2Key) != null ){  %>
+					<%=aliquotMap.get(specimenPos2Key)%>
+					<%}%>
+					&nbsp;				
+					<html:hidden   property="<%=pos2Key%>"/>
 				<%}%>
 			</td>
 		</tr>
