@@ -56,6 +56,7 @@
 				<tr width="100%" height="100%">
 				<td width="100%" height="100%">
 							<script language="JavaScript" type="text/javascript">
+							
 									platform = navigator.platform.toLowerCase();
 									
 									document.writeln('<APPLET\n' +
@@ -66,14 +67,21 @@
 													'tabindex=0\n'+
 													'NAME = "<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>"\n'+
 													'id="msa"'
-													);
+													);											
+													
+								
+									/*									
+									 * Patch ID: 3835_1_17
+									 * See also: 1_1 to 1_5
+									 * Description : Changed height as cretedOn date field is added on applet.
+									*/					
 									if (platform.indexOf("mac") != -1)
 									{
-										document.writeln('width="1000" height="550" MAYSCRIPT>');
+										document.writeln('width="1000" height="575" MAYSCRIPT>');
 									}
 									else
 									{
-										document.writeln('width="100%" height="550" MAYSCRIPT>');
+										document.writeln('width="100%" height="575" MAYSCRIPT>');
 									} 
 									var url = location.protocol + '//' + location.hostname + ':' + location.port + location.pathname + '/../';
 	                                								
