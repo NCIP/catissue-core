@@ -628,6 +628,32 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				 </tr>
 				 
 				 <tr>
+				 
+ 						   <!-- 
+							 * Patch ID: 3835_1_24
+							 * See also: 1_1 to 1_5
+							 * Description : Added <TR> for createdOn date field.				 
+							-->	 
+
+					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formLabel">							
+						<label for="createdDate">
+							<bean:message key="specimen.createdDate"/>
+						</label>								
+					</td>
+					<td class="formField" colspan="2" >
+						<%
+						String createdDate = form.getCreatedDate();
+						String nameOfForm ="createSpecimenForm";
+						String dateFormName = "createdDate";
+						%>
+
+							<%@ include file="/pages/content/common/CommonDateComponent.jsp" %>
+					</td>
+				</tr>
+				 
+				 
+				 <tr>
 			     	<td class="formRequiredNotice" width="5">
 				     	&nbsp;
 				    </td>

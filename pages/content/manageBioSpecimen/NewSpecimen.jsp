@@ -14,6 +14,12 @@
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+
+<script src="jss/script.js"></script>
+<script src="jss/calendarComponent.js"></script>
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
+
 <%
 	//System.out.println("Start of specimen jsp");
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
@@ -392,6 +398,7 @@
 
 
 <html:form action="<%=Constants.SPECIMEN_ADD_ACTION%>">
+	<html:errors />
 	<%
 				String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_FORWARD_TO_LIST[0][1]+"')";
 				String deriveNewSubmitFunctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_FORWARD_TO_LIST[1][1]+"')";									
@@ -454,7 +461,7 @@
 					<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
 						<tr>
 							<td colspan="6">
-								<html:errors />
+
 								<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 									<%=messageKey%>
 								</html:messages>
@@ -782,22 +789,34 @@
 							/>
 				        	</td>	
 							<!-- activitystatus -->
-							<td class="formRequiredNotice" width="5">*</td>
-							<td class="formRequiredLabelWithoutBorder" >
-								<label for="activityStatus">
-									<bean:message key="participant.activityStatus" />
-								</label>
-							</td>
-							<td class="formField">
-							
-							<autocomplete:AutoCompleteTag property="activityStatus"
-										  optionsList = "<%=request.getAttribute(Constants.ACTIVITYSTATUSLIST)%>"
-										  initialValue="<%=form.getActivityStatus()%>"
-										  onChange="<%=strCheckStatus%>"
-							/>
-							
-							</td>					
 							</logic:equal>
+
+			
+							 <!--
+							 * Patch ID: 3835_1_22
+							 * See also: 1_1 to 1_5
+							 * Description : show CreatedOn date field if operation is edit.				 
+							-->	 
+					<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+							<td class="formRequiredNotice" width="5">&nbsp;</td>
+						    <td class="formLabelWithoutBorder">							
+						    	<label for="createdDate">
+									<bean:message key="specimen.createdDate"/>
+								</label>								
+							</td>
+						   <td class="formField" >
+							<%								
+								String createdDate = form.getCreatedDate();
+								String nameOfForm ="newSpecimenForm";
+								String dateFormName = "createdDate";
+							%>
+								<%@ include file="/pages/content/common/CommonDateComponent.jsp" %>
+        				   </td>
+        	     </logic:equal>
+
+
+
+
 						</tr>
 						
 						<tr>					
@@ -1048,9 +1067,46 @@
 									<bean:message key="specimen.comments"/>
 								</label>
 							</td>
-						    <td class="formField" colspan="4">
+
+						 <!-- 
+										 * Patch ID: 3835_1_23
+										 * See also: 1_1 to 1_5
+										 * Description : just manipulated the TD according to operation	
+										 * and activity status is made after commnets.		 
+							-->	 
+
+							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+						    <td class="formField" >
+							</logic:equal>
+
+							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.ADD%>">
+							<td class="formField" colspan="4">
+							</logic:equal>
+
 						    	<html:textarea styleClass="formFieldSized"  rows="3" styleId="comments" property="comments" readonly="<%=readOnlyForAll%>"/>
 						    </td>
+
+
+							<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
+							<td class="formRequiredNotice" width="5">*</td>
+							<td class="formRequiredLabel" >
+								<label for="activityStatus">
+									<bean:message key="participant.activityStatus" />
+								</label>
+							</td>
+							<td class="formField">
+							
+							<autocomplete:AutoCompleteTag property="activityStatus"
+										  optionsList = "<%=request.getAttribute(Constants.ACTIVITYSTATUSLIST)%>"
+										  initialValue="<%=form.getActivityStatus()%>"
+										  onChange="<%=strCheckStatus%>"
+							/>
+							
+							</td>					
+							</logic:equal>
+
+							<!--End -->
+
 						</tr>
 				</table>	
 				
