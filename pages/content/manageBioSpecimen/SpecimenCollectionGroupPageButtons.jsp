@@ -15,7 +15,7 @@
 											-->
 											<tr>
 												<td class="formFieldNoBorders" colspan="3" valign="center">
-													&nbsp;<html:checkbox styleId="restrictSCGCheckbox" property="restrictSCGCheckbox" value="true" onchange="disableButtonsOnCheck(this)">
+													&nbsp;<html:checkbox styleId="restrictSCGCheckbox" property="restrictSCGCheckbox" value="true" onclick="disableButtonsOnCheck(this)">
 														<bean:message key="specimen.checkboxLabel"/>
 													</html:checkbox>
 												</td>
