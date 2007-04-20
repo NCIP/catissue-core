@@ -11,13 +11,19 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -29,7 +35,17 @@ import edu.wustl.common.util.logger.Logger;
 public class SpecimenCollectionGroup extends AbstractDomainObject implements Serializable
 {
     private static final long serialVersionUID = 1234567890L;
-
+/**
+	 * Name : Ashish Gupta
+	 * Reviewer Name : Sachin Lale 
+	 * Bug ID: 2741
+	 * Patch ID: 2741_1	 
+	 * Description: Condition indicating whether to propagate collection events and received events to specimens under this scg
+	*/
+    /**
+     * Condition indicating whether to propagate collection events and received events to specimens under this scg
+     */
+    protected transient boolean applyEventsToSpecimens = false;
      /**
      * System generated unique id.
      */
@@ -92,8 +108,40 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * A registration of a Participant to a Collection Protocol.
      */
     protected CollectionProtocolRegistration collectionProtocolRegistration;
+    /**
+	 * Name : Ashish Gupta
+	 * Reviewer Name : Sachin Lale 
+	 * Bug ID: 2741
+	 * Patch ID: 2741_2	 
+	 * Description: 1 to many Association between SCG and SpecimenEventParameters
+	*/
+    /**
+     * Collection and Received events associated with this SCG
+     */
+    protected Collection specimenEventParametersCollection = new HashSet();
 
-    public SpecimenCollectionGroup()
+    
+	/**
+	 * @return the specimenEventParametersCollection
+	 * @hibernate.set cascade="save-update" inverse="true" table="CATISSUE_SPECIMEN_EVENT_PARAM" lazy="false"
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenEventParameters"  
+	 * @hibernate.collection-key column="SPECIMEN_COLL_GRP_ID" 
+	 */
+	public Collection getSpecimenEventParametersCollection()
+	{
+		return specimenEventParametersCollection;
+	}
+
+	
+	/**
+	 * @param specimenEventParametersCollection the specimenEventParametersCollection to set
+	 */
+	public void setSpecimenEventParametersCollection(Collection specimenEventParametersCollection)
+	{
+		this.specimenEventParametersCollection = specimenEventParametersCollection;
+	}
+
+	public SpecimenCollectionGroup()
     {
     
     }
@@ -402,6 +450,20 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			CollectionProtocol collectionProtocol = new CollectionProtocol();
 			collectionProtocol.setId(new Long(form.getCollectionProtocolId()));
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+			/**
+	 * Name : Ashish Gupta
+	 * Reviewer Name : Sachin Lale 
+	 * Bug ID: 2741
+	 * Patch ID: 2741_3	 
+	 * Description: Populating events in SCG
+	*/			
+			//Adding Events
+			setEventsFromForm(form,form.getOperation());
+			//Adding events to Specimens
+			if(form.isApplyEventsToSpecimens())
+			{
+				applyEventsToSpecimens = true;
+			}
 		}
 		catch(Exception e)
 		{
@@ -409,7 +471,120 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			throw new AssignDataException();
 		}
 	}
+	/**
+	 * Name : Ashish Gupta
+	 * Reviewer Name : Sachin Lale 
+	 * Bug ID: 2741
+	 * Patch ID: 2741_4	 
+	 * Description: Method to populate Events in SCG
+	*/
+	/**
+	 * @param form
+	 * This function populates all events for the given scg
+	 */
+	private void setEventsFromForm(SpecimenCollectionGroupForm form,String operation)
+	{
+		CollectionEventParameters collectionEventParameters = null;
+		ReceivedEventParameters receivedEventParameters = null;
+		Collection tempColl = new HashSet();
 	
+		//Collection Events
+		if(operation.equals(Constants.ADD))
+		{
+			collectionEventParameters = new CollectionEventParameters();
+			receivedEventParameters = new ReceivedEventParameters();
+		}
+		else
+		{
+			Iterator iter = specimenEventParametersCollection.iterator();
+			while(iter.hasNext())
+			{
+				Object temp = iter.next();
+				if(temp instanceof CollectionEventParameters)
+				{
+					collectionEventParameters = (CollectionEventParameters)temp;
+				}
+				else if(temp instanceof ReceivedEventParameters)
+				{
+					receivedEventParameters = (ReceivedEventParameters)temp;
+				}
+			}
+			collectionEventParameters.setId(new Long(form.getCollectionEventId()));
+			receivedEventParameters.setId(new Long(form.getReceivedEventId()));
+		}		
+		setEventParameters(collectionEventParameters,receivedEventParameters,form);				
+		
+		tempColl.add(collectionEventParameters);
+		tempColl.add(receivedEventParameters);
+		if(operation.equals(Constants.ADD))
+		{
+			this.specimenEventParametersCollection.add(collectionEventParameters);
+			this.specimenEventParametersCollection.add(receivedEventParameters);
+		}
+		else
+		{
+			this.specimenEventParametersCollection = tempColl;
+		}		
+	}
+	/**
+	 * @param collectionEventParameters
+	 * @param receivedEventParameters
+	 * @param form
+	 */
+	private void setEventParameters(CollectionEventParameters collectionEventParameters,ReceivedEventParameters receivedEventParameters,SpecimenCollectionGroupForm form)
+	{
+		collectionEventParameters.setCollectionProcedure(form.getCollectionEventCollectionProcedure());
+		collectionEventParameters.setComments(form.getCollectionEventComments());
+		collectionEventParameters.setContainer(form.getCollectionEventContainer());		
+		Date timestamp = setTimeStamp(form.getCollectionEventdateOfEvent(),form.getCollectionEventTimeInHours(),form.getCollectionEventTimeInMinutes());
+		collectionEventParameters.setTimestamp(timestamp);
+		User user = new User();
+		user.setId(new Long(form.getCollectionEventUserId()));
+		collectionEventParameters.setUser(user);	
+		collectionEventParameters.setSpecimenCollectionGroup(this);	
+		
+		//Received Events		
+		receivedEventParameters.setComments(form.getReceivedEventComments());
+		User receivedUser = new User();
+		receivedUser.setId(new Long(form.getReceivedEventUserId()));
+		receivedEventParameters.setUser(receivedUser);
+		receivedEventParameters.setReceivedQuality(form.getReceivedEventReceivedQuality());		
+		Date receivedTimestamp = setTimeStamp(form.getReceivedEventDateOfEvent(),form.getReceivedEventTimeInHours(),form.getReceivedEventTimeInMinutes());
+		receivedEventParameters.setTimestamp(receivedTimestamp);		
+		receivedEventParameters.setSpecimenCollectionGroup(this);
+	}
+	/**
+	 * @param dateOfEvent
+	 * @param timeInHrs
+	 * @param timeInMinutes
+	 * @return
+	 */
+	private Date setTimeStamp(String dateOfEvent,String timeInHrs,String timeInMinutes)
+	{
+		Date timestamp = null;
+		if (dateOfEvent != null && dateOfEvent.trim().length()!=0  )
+		{
+			Calendar calendar = Calendar.getInstance();			
+			try
+			{
+				Date date = Utility.parseDate(dateOfEvent,Utility.datePattern(dateOfEvent));
+				calendar.setTime(date);
+				timestamp = calendar.getTime();  
+				calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timeInHrs));
+				calendar.set(Calendar.MINUTE,Integer.parseInt(timeInMinutes));
+				timestamp = calendar.getTime();		
+			}
+			catch (ParseException e)
+			{
+				Logger.out.debug("Exception in Parsing Date" + e);
+			}			
+		}
+		else
+		{
+			timestamp = Calendar.getInstance().getTime();
+		}
+		return timestamp;
+	}
 	 /**
      * Returns message label to display on success add or edit
      * @return String
@@ -436,5 +611,19 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	 */
 	public void setComment(String comment) {
 		this.comment = comment;
+	}	
+	/**
+	 * @return the applyEventsToSpecimens
+	 */
+	public boolean isApplyEventsToSpecimens()
+	{
+		return applyEventsToSpecimens;
+	}	
+	/**
+	 * @param applyEventsToSpecimens the applyEventsToSpecimens to set
+	 */
+	public void setApplyEventsToSpecimens(boolean applyEventsToSpecimens)
+	{
+		this.applyEventsToSpecimens = applyEventsToSpecimens;
 	}
 }

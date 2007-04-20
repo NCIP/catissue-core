@@ -27,7 +27,15 @@
               --> 
             </generator>
         </id>
-
+   <many-to-one
+            name="specimenCollectionGroup"
+            class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_COLL_GRP_ID"
+        />
         <many-to-one
             name="specimen"
             class="edu.wustl.catissuecore.domain.Specimen"

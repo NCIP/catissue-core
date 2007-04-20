@@ -28,6 +28,24 @@
             </generator>
         </id>
 
+        <set
+            name="specimenEventParametersCollection"
+            table="CATISSUE_SPECIMEN_EVENT_PARAM"
+            lazy="false"
+            inverse="true"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_COLL_GRP_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenEventParameters"
+              />
+        </set>
+
         <property
             name="name"
             type="string"
@@ -63,7 +81,7 @@
             column="ACTIVITY_STATUS"
             length="50"
         />
-		<property
+		 <property
             name="comment"
             type="string"
             update="true"
@@ -110,14 +128,14 @@
             sort="unsorted"
         >
 
-            <key
-                column="SPECIMEN_COLLECTION_GROUP_ID"
-            >
-            </key>
+              <key
+                  column="SPECIMEN_COLLECTION_GROUP_ID"
+              >
+              </key>
 
-            <one-to-many
+              <one-to-many
                   class="edu.wustl.catissuecore.domain.Specimen"
-            />
+              />
 
         </set>
 

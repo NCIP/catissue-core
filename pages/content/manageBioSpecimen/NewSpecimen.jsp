@@ -62,7 +62,7 @@
 <head>
 
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
-
+<script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 
 <%
 	String[] columnList = (String[]) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
@@ -309,6 +309,142 @@
 			document.forms[0].customListBox_1_1.disabled = true;
 			document.forms[0].customListBox_1_2.disabled = true;
 		}
+		/**
+ 			* Name : Ashish Gupta
+ 			* Reviewer Name : Sachin Lale 
+ 			* Bug ID: 2741
+ 			* Patch ID: 2741_20 			
+ 			* Description: Function to make ajax call to server to get all events associated with the selected scg
+			*/
+		
+	/**
+	 *  This function updates the events for selected scg (Added by Ashish)
+	 */
+		var url,request;
+		function getEventsFromSCG()
+		{		
+			var scgId = document.getElementById("specimenCollectionGroupId123").value;			
+			url = "GetEventsFromScg.do?scgId="+scgId;
+			sendRequestForEvents();	
+		}
+	
+	
+	
+	/**
+	 * This function sends 'GET' request to the server for updating quantity (Added by Ashish)
+	 */
+	function sendRequestForEvents()
+	{
+		request = newXMLHTTPReq();
+		
+		if(request)
+		{  					
+			request.onreadystatechange = handleResponseForEvents; 	
+			try
+			{		
+				request.open("GET", url, true);
+				request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				request.send("");
+			}
+			catch(e)
+			{}			
+		}
+	}
+	function handleResponseForEvents()
+	{
+		if(request.readyState == 4)
+		{  
+			//Response is ready
+			if(request.status == 200)
+			{
+				/* Response contains required output.
+				 * Get the response from server.
+				 */				
+				var responseString = request.responseText;
+						
+				var xmlDocument = getDocumentElementForXML(responseString); 
+				
+				var collectionUserId = xmlDocument.getElementsByTagName('CollectorId')[0].firstChild.nodeValue;	
+				var collectorName = xmlDocument.getElementsByTagName('CollectorName')[0].firstChild.nodeValue;			
+				var collectionDate = xmlDocument.getElementsByTagName('CollectionDate')[0].firstChild.nodeValue;
+				var collectionTimeHrs = xmlDocument.getElementsByTagName('CollectionTimeHours')[0].firstChild.nodeValue;
+				var collectionTimeMinutes = xmlDocument.getElementsByTagName('CollectionTimeMinutes')[0].firstChild.nodeValue;
+				var collectionProcedure = xmlDocument.getElementsByTagName('CollectionProcedure')[0].firstChild.nodeValue;			
+				var collectionContainer = xmlDocument.getElementsByTagName('CollectionContainer')[0].firstChild.nodeValue;
+				
+				var tempCollComments = xmlDocument.getElementsByTagName('CollectionComments')[0].firstChild;
+				if(tempCollComments != null)
+				{
+					var collectionComments = tempCollComments.nodeValue;
+					document.getElementById("collectionEventComments").value = collectionComments;
+				}
+				else
+				{
+					document.getElementById("collectionEventComments").value = " ";
+				}				
+				
+				var receivedDate = xmlDocument.getElementsByTagName('ReceivedDate')[0].firstChild.nodeValue;
+				var receivedUserId = xmlDocument.getElementsByTagName('ReceiverId')[0].firstChild.nodeValue;
+				var receiverName = xmlDocument.getElementsByTagName('ReceiverName')[0].firstChild.nodeValue;
+				var receivedTimeHrs = xmlDocument.getElementsByTagName('ReceivedTimeHours')[0].firstChild.nodeValue;
+				var receivedTimeMinutes = xmlDocument.getElementsByTagName('ReceivedTimeMinutes')[0].firstChild.nodeValue;
+				var receivedQuality = xmlDocument.getElementsByTagName('ReceivedQuality')[0].firstChild.nodeValue;
+				var tempRecComments = xmlDocument.getElementsByTagName('ReceivedComments')[0].firstChild;
+				
+				if(tempRecComments != null)
+				{
+					var receivedComments = tempRecComments.nodeValue;
+					document.getElementById("receivedEventComments").value = receivedComments;
+				}
+				else
+				{
+					document.getElementById("receivedEventComments").value = " ";
+				}				
+				
+				document.getElementById("collectionEventdateOfEvent").value = collectionDate;
+				document.getElementById("collectionEventUserId").value = collectionUserId;
+				document.getElementById("displaycollectionEventUserId").value = collectorName;
+				document.getElementById("displaycollectionEventTimeInHours").value = collectionTimeHrs;
+				document.getElementById("displaycollectionEventTimeInMinutes").value = collectionTimeMinutes;
+				document.getElementById("collectionEventCollectionProcedure").value = collectionProcedure;
+			    document.getElementById("collectionEventContainer").value = collectionContainer;
+			    
+				var recDate = document.getElementById("receivedEventdateOfEvent");
+				if(recDate != null)
+				{
+					recDate.value = receivedDate;
+				}
+				document.getElementById("receivedEventUserId").value = receivedUserId;
+				document.getElementById("displayreceivedEventUserId").value = receiverName;
+				document.getElementById("displayreceivedEventTimeInHours").value = receivedTimeHrs;
+				document.getElementById("displayreceivedEventTimeInMinutes").value = receivedTimeMinutes;
+				document.getElementById("receivedEventReceivedQuality").value = receivedQuality;
+				
+				
+			}//End if(request.status == 200)
+		}//End if(request.readyState == 4)	
+	}
+		
+				     
+
+	function getDocumentElementForXML(xmlString)
+	{
+	    var document = null;
+	    if (window.ActiveXObject) // code for IE
+	    {
+	                document = new ActiveXObject("Microsoft.XMLDOM");
+	                document.async="false";
+	                document.loadXML(xmlString);
+	    }
+	    else // code for Mozilla, Firefox, Opera, etc.
+	    {
+	                var parser = new DOMParser();
+	                document = parser.parseFromString(xmlString,"text/xml");
+	    }           
+	return document;
+	}	
+		
+		
 		function eventClicked()
 		{		
                
@@ -538,8 +674,8 @@
 									Description: The following change shows read-only textbox on specimen page, if specimen is being added
 									from specimen collection group page, otherwise combobox having names of specimen collection group is displayed.
 								-->
-								<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" styleId="specimenCollectionGroupId" 
-									size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="resetVirtualLocated()">
+								<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" styleId="specimenCollectionGroupId123" 
+									size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="resetVirtualLocated();getEventsFromSCG()">
 								<%
 									if((specimenCollectionGroupId != null && !specimenCollectionGroupId.equals("")) &&
 										(specimenCollectionGroupName != null && !specimenCollectionGroupName.equals("")))

@@ -26,6 +26,50 @@ function addDiv(div,adstr)
 	
 }
 
+var request;
+function getEventsFromSCGForMultiple(scgName,key)
+{
+	//alert(scgName,key);
+	var url = "NewMultipleSpecimenAction.do?scgName="+scgName+"&key="+key+"&method=setEventsInEventsHashMap";
+	sendRequestForEventsInHashMap(url);
+	
+}
+	/**
+	 * This function sends 'GET' request to the server for updating quantity (Added by Ashish)
+	 */
+	function sendRequestForEventsInHashMap(url)
+	{
+		request = newXMLHTTPReq();
+		
+		if(request)
+		{  					
+			request.onreadystatechange = handleResponseForEventsInHashMap; 	
+			try
+			{		
+				request.open("GET", url, true);
+				request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				request.send("");
+			}
+			catch(e)
+			{}			
+		}
+	}
+	function handleResponseForEventsInHashMap()
+	{
+		if(request.readyState == 4)
+		{  
+			//Response is ready
+			if(request.status == 200)
+			{
+				/* Response contains required output.
+				 * Get the response from server.
+				 */				
+			//	var responseString = request.responseText;					
+				
+			}//End if(request.status == 200)
+		}//End if(request.readyState == 4)	
+	}
+
 function confirmDisable(action,formField)
 {
 	if((formField != undefined) && (formField.value == "Disabled"))

@@ -1,4 +1,5 @@
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+
+<jsp:directive.page import="edu.wustl.common.util.global.ApplicationProperties"/><%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
@@ -7,6 +8,9 @@
 
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+
 <script src="jss/script.js" type="text/javascript"></script>
 
 
@@ -72,6 +76,29 @@
 			readOnlyValue=false;
 		}
 		long idToTree = form.getId();
+		
+
+/**
+ 			* Name : Ashish Gupta
+ 			* Reviewer Name : Sachin Lale 
+ 			* Bug ID: 2741
+ 			* Patch ID: 2741_20			
+ 			* Description: Default Date to show in events
+			*/
+		String currentReceivedDate = "";
+		String currentCollectionDate = "";
+		if (form != null) 
+		{
+			currentReceivedDate = form.getReceivedEventDateOfEvent();
+			if(currentReceivedDate == null)
+					currentReceivedDate = "";
+			currentCollectionDate = form.getCollectionEventdateOfEvent();
+			if(currentCollectionDate == null)
+					currentCollectionDate = "";
+		}
+		
+		String formNameForCal = "specimenCollectionGroupForm"; 
+								
 %>
 <head>
 
@@ -130,6 +157,115 @@
 			document.forms[0].action = action;
 			document.forms[0].submit();
         }
+/**
+ 			* Name : Ashish Gupta
+ 			* Reviewer Name : Sachin Lale 
+ 			* Bug ID: 2741
+ 			* Patch ID: 2741_21 			
+ 			* Description: Function to check whether user has entered any data in events and to prompt him whether he wants to propagate it to all specimens under this scg
+			*/
+		var applyToSpecimen;
+		function checkForChanges()
+		{
+			//alert("in check for changes");
+			//user entered values
+			var collectionEventdateOfEvent = document.getElementById("collectionEventdateOfEvent").value;
+			var collectionEventUserId = document.getElementById("collectionEventUserId").value;
+			var collectionEventTimeInHours = document.getElementById("displaycollectionEventTimeInHours").value;
+			var collectionEventTimeInMinutes = document.getElementById("displaycollectionEventTimeInMinutes").value;
+			var collectionEventCollectionProcedure = document.getElementById("collectionEventCollectionProcedure").value;
+		    var collectionEventContainer = document.getElementById("collectionEventContainer").value;
+		    var collectionEventComments = document.getElementById("collectionEventComments").value;
+			
+			var receivedEventdateOfEvent;
+			var currentReceivedDateForm;
+			var recDate = document.getElementById("receivedEventdateOfEvent");
+			if(recDate != null)
+			{
+				receivedEventdateOfEvent = recDate.value;
+				 currentReceivedDateForm = document.getElementById("currentReceivedDateForm").value;
+			}
+			var receivedEventUserId = document.getElementById("receivedEventUserId").value;
+			var receivedEventTimeInHours = document.getElementById("displayreceivedEventTimeInHours").value;
+			var receivedEventTimeInMinutes = document.getElementById("displayreceivedEventTimeInMinutes").value;
+			var receivedEventReceivedQuality = document.getElementById("receivedEventReceivedQuality").value;
+			var receivedEventComments = document.getElementById("receivedEventComments").value;
+			
+			//Values from form
+			var collectionEventdateOfEventForm = document.getElementById("collectionEventdateOfEventForm").value;
+			var collectionEventUserIdForm = document.getElementById("collectionEventUserIdForm").value;
+			var collectionEventTimeInHoursForm = document.getElementById("collectionEventTimeInHoursForm").value;
+			var collectionEventTimeInMinutesForm = document.getElementById("collectionEventTimeInMinutesForm").value;
+			var collectionEventCollectionProcedureForm = document.getElementById("collectionEventCollectionProcedureForm").value;
+			var collectionEventContainerForm = document.getElementById("collectionEventContainerForm").value;
+			var collectionEventCommentsForm = document.getElementById("collectionEventCommentsForm").value;
+			
+			var receivedEventUserIdForm = document.getElementById("receivedEventUserIdForm").value;
+			
+			var receivedEventTimeInHoursForm = document.getElementById("receivedEventTimeInHoursForm").value;
+			var receivedEventTimeInMinutesForm = document.getElementById("receivedEventTimeInMinutesForm").value;
+			var receivedEventReceivedQualityForm = document.getElementById("receivedEventReceivedQualityForm").value;
+			var receivedEventCommentsForm = document.getElementById("receivedEventCommentsForm").value;
+			
+			//alert("collectionEventdateOfEvent "+collectionEventdateOfEvent+" collectionEventdateOfEventForm"+collectionEventdateOfEventForm);
+			//alert("collectionEventUserIdForm "+collectionEventUserIdForm+" collectionEventUserId"+collectionEventUserId);
+			//alert("collectionEventTimeInHoursForm"+collectionEventTimeInHoursForm+" collectionEventTimeInHours"+collectionEventTimeInHours);
+			//alert("collectionEventTimeInMinutesForm"+collectionEventTimeInMinutesForm+" collectionEventTimeInMinutes"+collectionEventTimeInMinutes);
+			//alert("collectionEventCollectionProcedureForm"+collectionEventCollectionProcedureForm+" collectionEventCollectionProcedure"+collectionEventCollectionProcedure);
+			//alert("collectionEventContainerForm"+collectionEventContainerForm+" collectionEventContainer"+collectionEventContainer);
+			//alert("receivedEventUserIdForm"+receivedEventUserIdForm+ " receivedEventUserId"+receivedEventUserId);
+			//alert("currentReceivedDateForm"+currentReceivedDateForm + " receivedEventdateOfEvent"+receivedEventdateOfEvent);
+			//alert("receivedEventTimeInHoursForm"+receivedEventTimeInHoursForm +" receivedEventTimeInHours"+receivedEventTimeInHours);
+			//alert("receivedEventTimeInMinutesForm"+receivedEventTimeInMinutesForm+" receivedEventTimeInMinutes"+receivedEventTimeInMinutes);
+			//alert("receivedEventReceivedQualityForm"+receivedEventReceivedQualityForm+" receivedEventReceivedQuality"+receivedEventReceivedQuality);
+			
+			
+			if((collectionEventdateOfEvent != collectionEventdateOfEventForm) 
+				|| (collectionEventUserId != collectionEventUserIdForm)
+				|| (collectionEventTimeInHours != collectionEventTimeInHoursForm)
+				|| (collectionEventTimeInMinutes != collectionEventTimeInMinutesForm)
+				|| (collectionEventCollectionProcedure != collectionEventCollectionProcedureForm)
+				|| (collectionEventContainer != collectionEventContainerForm)
+				|| (receivedEventUserId != receivedEventUserIdForm)
+				|| (receivedEventdateOfEvent != currentReceivedDateForm)
+				|| (receivedEventTimeInHours != receivedEventTimeInHoursForm)
+				|| (receivedEventTimeInMinutes != receivedEventTimeInMinutesForm)
+				|| (receivedEventReceivedQuality != receivedEventReceivedQualityForm)
+				|| (collectionEventComments != collectionEventCommentsForm)
+				|| (receivedEventComments != receivedEventCommentsForm))
+			{	
+				var appResources = '<%=ApplicationProperties.getValue("specimenCollectionGroup.changeEvents.confirm")%>';			
+				
+				var answer = confirm(appResources);
+				if(answer)
+				{
+				//alert("Confirm OK");
+					applyToSpecimen = 'true';	
+				}
+				else
+				{
+				//alert("Confirm CANCEL");
+					applyToSpecimen = 'false';	
+				}
+			}
+		}
+		function confirmDisableForSCG(action,formField)
+		{		
+			var temp = action+"?applyToSpecimenValue="+applyToSpecimen;		
+			if((formField != undefined) && (formField.value == "Disabled"))
+			{
+				var go = confirm("Disabling any data will disable ALL its associated data also. Once disabled you will not be able to recover any of the data back from the system. Please refer to the user manual for more details. \n Do you really want to disable?");
+				if (go==true)
+				{	document.forms[0].action = temp;
+					document.forms[0].submit();
+				}
+			}
+			else
+			{
+				document.forms[0].action = temp;
+				document.forms[0].submit();
+			}			
+		}
         /**
  			* Name : Ashish Gupta
  			* Reviewer Name : Sachin Lale 
@@ -164,7 +300,7 @@
 			{			
 				submitButton.disabled = false;
 				submitAndAddButton.disabled = false;
-			}
+			}			
 		}
 		
 		/**
@@ -246,34 +382,64 @@
 	%>
 	
 	<%
-			String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
-			String forwardToSubmitFuctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";									
-			String forwardToSubmitFunctionNameForMultipleSpecimen = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][1]+"')";									
-			String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
-			String normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
-			String forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;
-			/**
+/**
  			* Name : Ashish Gupta
  			* Reviewer Name : Sachin Lale 
- 			* Bug ID: Multiple Specimen Bug
- 			* Patch ID: Multiple Specimen Bug_2 
- 			* See also: 1-8
- 			* Description: passing "button=multipleSpecimen"with the url so that validation is done only on click of "Add Multiple Specimen" button
+ 			* Bug ID: 2741
+ 			* Patch ID: 2741_18 			
+ 			* Description: Adding check for changes function
 			*/
-			String confirmDisableFuncNameForMultipleSpecimen = "";
-			if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
-			{
-				// In case of CP based view query, formName variable already has 
-				// some parameter appended to the url. hence appending the button parameter by "&"
-				confirmDisableFuncNameForMultipleSpecimen =  "confirmDisable('" + formName +"&button=multipleSpecimen',document.forms[0].activityStatus)";
-			}
-			else
-			{
-				confirmDisableFuncNameForMultipleSpecimen =  "confirmDisable('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
-			}
-			
-			String forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
-
+	String normalSubmitFunctionName = "setSubmittedFor('" + submittedFor+ "','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][1]+"')";
+	String forwardToSubmitFuctionName = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][1]+"')";									
+	String forwardToSubmitFunctionNameForMultipleSpecimen = "setSubmittedFor('ForwardTo','" + Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][1]+"')";									
+	String confirmDisableFuncName = "confirmDisable('" + formName +"',document.forms[0].activityStatus)";
+	/**
+		* Name : Ashish Gupta
+		* Reviewer Name : Sachin Lale 
+		* Bug ID: Multiple Specimen Bug
+		* Patch ID: Multiple Specimen Bug_2 
+		* See also: 1-8
+		* Description: passing "button=multipleSpecimen"with the url so that validation is done only on click of "Add Multiple Specimen" button
+	*/
+	String confirmDisableFuncNameForMultipleSpecimen = "";
+	if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+	{
+		// In case of CP based view query, formName variable already has 
+		// some parameter appended to the url. hence appending the button parameter by "&"
+		confirmDisableFuncNameForMultipleSpecimen =  "confirmDisable('" + formName +"&button=multipleSpecimen',document.forms[0].activityStatus)";
+	}
+	else
+	{
+		confirmDisableFuncNameForMultipleSpecimen =  "confirmDisable('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
+	}
+	String normalSubmit = "";
+	String forwardToSubmit = "";
+	String forwardToSubmitForMultipleSpecimen = "";
+	if(operation.equals(Constants.EDIT))
+	{
+		confirmDisableFuncName = "confirmDisableForSCG('" + formName +"',document.forms[0].activityStatus)";
+		normalSubmit = "checkForChanges(),"+normalSubmitFunctionName + ","+confirmDisableFuncName;
+		forwardToSubmit = "checkForChanges(),"+ forwardToSubmitFuctionName + ","+confirmDisableFuncName;
+		
+		if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+		{
+			// In case of CP based view query, formName variable already has 
+			// some parameter appended to the url. hence appending the button parameter by "&"
+			confirmDisableFuncNameForMultipleSpecimen =  "confirmDisableForSCG('" + formName +"&button=multipleSpecimen',document.forms[0].activityStatus)";
+		}
+		else
+		{
+			confirmDisableFuncNameForMultipleSpecimen =  "confirmDisableForSCG('" + formName +"?button=multipleSpecimen',document.forms[0].activityStatus)";
+		}
+		
+		forwardToSubmitForMultipleSpecimen = "checkForChanges(),"+forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
+	}
+	else
+	{			
+		normalSubmit = normalSubmitFunctionName + ","+confirmDisableFuncName;
+		forwardToSubmit = forwardToSubmitFuctionName + ","+confirmDisableFuncName;			
+		forwardToSubmitForMultipleSpecimen = forwardToSubmitFunctionNameForMultipleSpecimen + ","+confirmDisableFuncNameForMultipleSpecimen;
+	}
 	%>
 		
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
@@ -627,6 +793,14 @@
 		</td></tr>
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION ENDS-->
 	</table>
+	<table summary="" cellpadding="0" cellspacing="0" border="0"
+		class="contentPage" width="600">
+		<tr>
+			<td>
+				<%@ include file="CollAndRecEvents.jsp" %>
+			</td>
+		</tr>
+	</table>
 	<!--
  * Name : Ashish Gupta
  * Reviewer Name : Sachin Lale 
@@ -661,6 +835,32 @@
 				</tr>			
 			</table>
 			</td>
+			<!-- Hidden fields for events 
+			/**
+ 			* Name : Ashish Gupta
+ 			* Reviewer Name : Sachin Lale 
+ 			* Bug ID: 2741
+ 			* Patch ID: 2741_19 			
+ 			* Description: Hidden fields for events
+			*/-->
+			<input type="hidden" id="collectionEventdateOfEventForm" value="<%=currentCollectionDate%>"  />
+			<input type="hidden" id="collectionEventUserIdForm" value="<%=form.getCollectionEventUserId()%>"  />
+			<input type="hidden" id="collectionEventTimeInHoursForm" value="<%=form.getCollectionEventTimeInHours()%>"  />
+			<input type="hidden" id="collectionEventTimeInMinutesForm" value="<%=form.getCollectionEventTimeInMinutes()%>"  />
+			<input type="hidden" id="collectionEventCollectionProcedureForm" value="<%=form.getCollectionEventCollectionProcedure()%>"  />
+			<input type="hidden" id="collectionEventContainerForm" value="<%=form.getCollectionEventContainer()%>"  />
+			<input type="hidden" id="collectionEventCommentsForm" value="<%=form.getCollectionEventComments()%>"  />
+			<html:hidden property="collectionEventId"/>
+			
+			<input type="hidden" id="receivedEventUserIdForm" value="<%=form.getReceivedEventUserId()%>"  />
+			<input type="hidden" id="currentReceivedDateForm" value="<%=currentReceivedDate%>"  />
+			<input type="hidden" id="receivedEventTimeInHoursForm" value="<%=form.getReceivedEventTimeInHours()%>"  />
+			<input type="hidden" id="receivedEventTimeInMinutesForm" value="<%=form.getReceivedEventTimeInMinutes()%>"  />
+			<input type="hidden" id="receivedEventReceivedQualityForm" value="<%=form.getReceivedEventReceivedQuality()%>"  />
+			<input type="hidden" id="receivedEventCommentsForm" value="<%=form.getReceivedEventComments()%>"  />
+			<html:hidden property="receivedEventId"/>
+			<!-- input type="hidden" id="applyToSpecimenValue"   /-->
+			
 		</tr>
 	</table>
 	

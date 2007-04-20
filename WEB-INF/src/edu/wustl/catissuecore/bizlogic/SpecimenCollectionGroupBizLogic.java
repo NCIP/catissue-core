@@ -15,19 +15,24 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.ClinicalReport;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -40,6 +45,7 @@ import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -163,7 +169,18 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
 		dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true, false);
-
+		/**
+	 * Name : Ashish Gupta
+	 * Reviewer Name : Sachin Lale 
+	 * Bug ID: 2741
+	 * Patch ID: 2741_6	 
+	 * Description: Method to update events in all specimens related to this scg
+	*/
+//		Populating Events in all specimens
+		if(specimenCollectionGroup.isApplyEventsToSpecimens())
+		{
+			updateEvents(specimenCollectionGroup,oldspecimenCollectionGroup,dao,sessionDataBean);
+		}
 		//Audit.
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		SpecimenCollectionGroup oldSpecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
@@ -179,6 +196,111 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 			bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao, specimenCollectionGroupIDArr);
 		}
+
+	}
+	/**
+	 * @param specimenCollectionGroup
+	 * @param oldspecimenCollectionGroup
+	 * @param dao
+	 * @param sessionDataBean
+	 * @throws UserNotAuthorizedException
+	 * @throws DAOException
+	 */
+	private void updateEvents(SpecimenCollectionGroup specimenCollectionGroup,SpecimenCollectionGroup oldspecimenCollectionGroup,DAO dao,SessionDataBean sessionDataBean) throws UserNotAuthorizedException,DAOException
+	{			
+		CollectionEventParameters scgCollectionEventParameters = null;
+		ReceivedEventParameters scgReceivedEventParameters = null;
+		Collection newEventColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
+		if(newEventColl != null && !newEventColl.isEmpty())
+		{
+			Iterator newEventCollIter = newEventColl.iterator();
+			while(newEventCollIter.hasNext())
+			{
+				Object newEventCollObj = newEventCollIter.next();
+				if(newEventCollObj instanceof CollectionEventParameters)
+				{
+					scgCollectionEventParameters = (CollectionEventParameters)newEventCollObj;
+					continue;
+				}
+				else if(newEventCollObj instanceof ReceivedEventParameters)
+				{
+					scgReceivedEventParameters = (ReceivedEventParameters)newEventCollObj;						
+				}
+			}
+		}			
+		//populateEventsInSpecimens(oldspecimenCollectionGroup,)
+		Collection specimenColl = oldspecimenCollectionGroup.getSpecimenCollection();
+		if(specimenColl != null && !specimenColl.isEmpty())
+		{
+			SpecimenEventParametersBizLogic specimenEventParametersBizLogic = (SpecimenEventParametersBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID);
+			Iterator iter = specimenColl.iterator();
+			while(iter.hasNext())
+			{
+				Specimen specimen = (Specimen)iter.next();
+				Collection eventColl = specimen.getSpecimenEventCollection();
+				if(eventColl != null && !eventColl.isEmpty())
+				{
+					Iterator eventIter = eventColl.iterator();
+					while(eventIter.hasNext())
+					{
+						Object eventObj = eventIter.next();
+						if(eventObj instanceof CollectionEventParameters)
+						{			
+							CollectionEventParameters collectionEventParameters = (CollectionEventParameters)eventObj;
+							CollectionEventParameters newcollectionEventParameters =populateCollectionEventParameters(eventObj,scgCollectionEventParameters,collectionEventParameters);
+							specimenEventParametersBizLogic.update(dao, newcollectionEventParameters, collectionEventParameters, sessionDataBean);
+							continue;
+						}
+						else if(eventObj instanceof ReceivedEventParameters)
+						{
+							ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)eventObj;
+							ReceivedEventParameters newReceivedEventParameters = populateReceivedEventParameters(receivedEventParameters,scgReceivedEventParameters);						
+							specimenEventParametersBizLogic.update(dao, newReceivedEventParameters, receivedEventParameters, sessionDataBean);
+						}
+					}
+				}
+			}
+		}		
+	}
+	
+	/**
+	 * @param eventObj
+	 * @param scgCollectionEventParameters
+	 */
+	private CollectionEventParameters populateCollectionEventParameters(Object eventObj,CollectionEventParameters scgCollectionEventParameters,CollectionEventParameters collectionEventParameters)
+	{		
+		//CollectionEventParameters newcollectionEventParameters = collectionEventParameters;
+		CollectionEventParameters newcollectionEventParameters = new CollectionEventParameters(); 
+		newcollectionEventParameters.setCollectionProcedure(scgCollectionEventParameters.getCollectionProcedure());
+		newcollectionEventParameters.setContainer(scgCollectionEventParameters.getContainer());
+		newcollectionEventParameters.setTimestamp(scgCollectionEventParameters.getTimestamp());
+		newcollectionEventParameters.setUser(scgCollectionEventParameters.getUser());		
+		
+		newcollectionEventParameters.setComments(scgCollectionEventParameters.getComments());
+		newcollectionEventParameters.setSpecimen(collectionEventParameters.getSpecimen());
+		newcollectionEventParameters.setSpecimenCollectionGroup(collectionEventParameters.getSpecimenCollectionGroup());
+		newcollectionEventParameters.setId(collectionEventParameters.getId());
+		
+		return newcollectionEventParameters;
+	}
+	/**
+	 * @param receivedEventParameters
+	 * @param scgReceivedEventParameters
+	 * @return
+	 */
+	private ReceivedEventParameters populateReceivedEventParameters(ReceivedEventParameters receivedEventParameters,ReceivedEventParameters scgReceivedEventParameters)
+	{
+		//ReceivedEventParameters newReceivedEventParameters = receivedEventParameters;
+		ReceivedEventParameters newReceivedEventParameters = new ReceivedEventParameters();
+		newReceivedEventParameters.setReceivedQuality(scgReceivedEventParameters.getReceivedQuality());
+		newReceivedEventParameters.setTimestamp(scgReceivedEventParameters.getTimestamp());
+		newReceivedEventParameters.setUser(scgReceivedEventParameters.getUser());	
+		
+		newReceivedEventParameters.setId(receivedEventParameters.getId());								
+		newReceivedEventParameters.setComments(scgReceivedEventParameters.getComments());
+		newReceivedEventParameters.setSpecimen(receivedEventParameters.getSpecimen());
+		newReceivedEventParameters.setSpecimenCollectionGroup(receivedEventParameters.getSpecimenCollectionGroup());
+		return newReceivedEventParameters;		
 	}
 
 	private void setCollectionProtocolRegistration(DAO dao, SpecimenCollectionGroup specimenCollectionGroup,

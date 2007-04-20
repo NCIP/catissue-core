@@ -25,6 +25,14 @@ public abstract class SpecimenEventParameters extends EventParameters implements
 	private static final long serialVersionUID = 1234567890L;
 	
 	protected Specimen specimen;
+	/**
+	 * Name : Ashish Gupta
+	 * Reviewer Name : Sachin Lale 
+	 * Bug ID: 2741
+	 * Patch ID: 2741_5	 
+	 * Description: Many to 1 association between SpecimenEventParameters and SCG
+	*/
+	protected SpecimenCollectionGroup specimenCollectionGroup;
 	
 	/**
      * Returns System generated unique id.
@@ -37,6 +45,23 @@ public abstract class SpecimenEventParameters extends EventParameters implements
 	public Long getId()
 	{
 		return id;
+	}
+	
+	/**
+	 * @return the specimenCollectionGroup
+	 * @hibernate.many-to-one column="SPECIMEN_COLL_GRP_ID" class="edu.wustl.catissuecore.domain.SpecimenCollectionGroup" 
+	 */
+	public SpecimenCollectionGroup getSpecimenCollectionGroup()
+	{
+		return specimenCollectionGroup;
+	}
+	
+	/**
+	 * @param specimenCollectionGroup the specimenCollectionGroup to set
+	 */
+	public void setSpecimenCollectionGroup(SpecimenCollectionGroup specimenCollectionGroup)
+	{
+		this.specimenCollectionGroup = specimenCollectionGroup;
 	}
 	/**
      * @hibernate.many-to-one column="SPECIMEN_ID"  class="edu.wustl.catissuecore.domain.Specimen" constrained="true"

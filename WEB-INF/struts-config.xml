@@ -3478,6 +3478,11 @@ PUBLIC
 		<forward name="failure" path=".catissuecore.specimenCollectionGroupTechDef" />
 		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 	</action>
+<!-- Bug Id 2741-->
+	<action path="/GetEventsFromScg" 
+			 type="edu.wustl.catissuecore.action.ScgEventsAction"		 
+			 scope="request">	 
+		</action>
 
 	</action-mappings>
 	
