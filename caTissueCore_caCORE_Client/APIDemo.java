@@ -502,7 +502,7 @@ public class APIDemo
 		}*/
 		
 		participant.setVitalStatus("Dead");
-		participant.setGender("Female");
+		participant.setGender("Female Gender");
 		participant.setSexGenotype("XX");
 
 		Collection raceCollection = new HashSet();
@@ -1436,7 +1436,7 @@ public class APIDemo
 		}*/
 		
 		participant.setVitalStatus("Alive"); //Dead
-		participant.setGender("Male"); //
+		participant.setGender("Male Gender"); //
 		participant.setSexGenotype(""); //XX
 
 		Collection raceCollection = new HashSet();
