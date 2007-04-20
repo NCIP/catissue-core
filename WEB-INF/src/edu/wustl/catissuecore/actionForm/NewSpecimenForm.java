@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -447,9 +448,9 @@ public class NewSpecimenForm extends SpecimenForm
              	if(operation.equalsIgnoreCase(Constants.ADD  ) )
              	{
              		//CollectionEvent validation.
-            		validateCollectionEvent(errors, validator);
+            		EventsUtil.validateCollectionEvent(errors,validator,collectionEventUserId,collectionEventdateOfEvent,collectionEventCollectionProcedure);
             		//ReceivedEvent validation
-            		validateReceivedEvent(errors, validator);
+            		EventsUtil.validateReceivedEvent(errors,validator,receivedEventUserId,receivedEventDateOfEvent,receivedEventReceivedQuality );
              	}
  
              	/*if(checkedButton)
@@ -762,24 +763,7 @@ public class NewSpecimenForm extends SpecimenForm
 	// Mandar: 10-july-06 AutoEvents : Collection Event end
 			
 	//Mandar : 11-July-06 AutoEvents : CollectionEvent validation
-			private void validateCollectionEvent(ActionErrors errors, Validator validator)
-			{
-	           	if ((collectionEventUserId) == -1L)
-	            {
-	           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection Event's user"));
-	            }
-	           	if (!validator.checkDate(collectionEventdateOfEvent) )
-	           	{
-	           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection Event's date"));
-	           	}
-
-	         	// checks the collectionProcedure
-	          	if (!validator.isValidOption( collectionEventCollectionProcedure ) )
-	            {
-	           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectioneventparameters.collectionprocedure")));
-	            }
-	
-			}
+			
 
 	//Mandar : 11-july-06 AutoEvents : ReceivedEvent start
 			
@@ -884,25 +868,7 @@ public class NewSpecimenForm extends SpecimenForm
 	}
 
 	//Mandar : 18-July-06 ReceivedEvent validation
-	private void validateReceivedEvent(ActionErrors errors, Validator validator)
-	{
-       	if ((receivedEventUserId) == -1L)
-        {
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received Event's user"));
-        }
-       	if (!validator.checkDate(receivedEventDateOfEvent) )
-       	{
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received Event's date"));
-       	}
-
-     	// checks the collectionProcedure
-      	if (!validator.isValidOption( receivedEventReceivedQuality ) )
-        {
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("receivedeventparameters.receivedquality")));
-        }
-
-				
-	}
+	
 	//Mandar : 11-july-06 AutoEvents : ReceivedEvent end
 	
 	/**
