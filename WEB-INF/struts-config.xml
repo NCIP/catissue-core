@@ -3480,7 +3480,7 @@ PUBLIC
 	</action>
 <!-- Bug Id 2741-->
 	<action path="/GetEventsFromScg" 
-			 type="edu.wustl.catissuecore.action.ScgEventsAction"		 
+			 type="edu.wustl.catissuecore.action.ScgEventsAjaxHandlerAction"		 
 			 scope="request">	 
 		</action>
 
