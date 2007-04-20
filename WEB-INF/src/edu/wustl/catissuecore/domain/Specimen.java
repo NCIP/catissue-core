@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -185,7 +186,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	}
 
 	//Constructor
-	public Specimen(AbstractActionForm form)
+	public Specimen(AbstractActionForm form) throws AssignDataException
 	{
 		setAllValues(form);
 	}
@@ -574,7 +575,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 * This function Copies the data from an NewSpecimenForm object to a Specimen object.
 	 * @param specimenForm A formbean object containing the information about the Specimen.  
 	 * */
-	public void setAllValues(AbstractActionForm abstractForm)
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
 	{
 		//Change for API Search   --- Ashwin 04/10/2006
 		if (SearchUtil.isNullobject(storageContainer))
@@ -606,7 +607,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 			availableQuantity = new Quantity();
 		}
         
-        
+       try{  
 
 		if (abstractForm instanceof AliquotForm)
 		{
@@ -623,18 +624,11 @@ public class Specimen extends AbstractDomainObject implements Serializable
              * Patch ID: 3835_1_2
              * See also: 1_1 to 1_5
              * Description : Set createdOn date for aliquot.  
-             */
-            
-            try
-            {
+             */            
+           
                 this.createdOn = Utility.parseDate(form.getCreatedDate(),
                     Constants.DATE_PATTERN_MM_DD_YYYY);     
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();         
-            }
-
+            
 			if (!validator.isEmpty(form.getSpecimenLabel())) // TODO
 			{
 				parentSpecimen.setLabel(form.getSpecimenLabel());
@@ -663,9 +657,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 			{
 				this.availableQuantity = new Quantity(((SpecimenForm) abstractForm).getAvailableQuantity());
 			}
-
-			try
-			{
+            
 				Validator validator = new Validator();
 				if (abstractForm instanceof NewSpecimenForm)
 				{
@@ -906,18 +898,9 @@ public class Specimen extends AbstractDomainObject implements Serializable
                      * See also: 1_1 to 1_5
                      * Description : Set createdOn date for derived specimen . 
                      */
-                    
-                    try
-                    {
-                        this.createdOn = Utility.parseDate(form.getCreatedDate(),
+                      this.createdOn = Utility.parseDate(form.getCreatedDate(),
                                 Constants.DATE_PATTERN_MM_DD_YYYY);     
-                    }
-                    catch(Exception e)
-                    {
-                        e.printStackTrace();
-                       //throw new Exception ();   
-                    }
-
+                  
 					if (form.isAddOperation())
 					{
 						this.available = new Boolean(true);
@@ -980,11 +963,11 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 				}
 			}
-
-			catch (Exception excp)
-			{
+        }
+	    catch (Exception excp)
+		{
 				Logger.out.error(excp.getMessage(), excp);
-			}
+                throw new AssignDataException();
 		}
 
 	}
