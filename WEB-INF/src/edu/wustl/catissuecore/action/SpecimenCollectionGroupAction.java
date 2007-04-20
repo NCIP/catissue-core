@@ -14,8 +14,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-
+import java.util.Calendar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,24 +24,30 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 
@@ -353,8 +360,131 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		request.setAttribute(Constants.PAGEOF,pageOf);
 		Logger.out.debug("page of in Specimen coll grp action:"+request.getParameter(Constants.PAGEOF));
 		// -------called from Collection Protocol Registration end -------------------------------
+		/**
+	 * Name : Ashish Gupta
+	 * Reviewer Name : Sachin Lale 
+	 * Bug ID: 2741
+	 * Patch ID: 2741_11	 
+	 * Description: Methods to set default events on SCG page
+	*/
+		setDefaultEvents(request,specimenCollectionGroupForm,operation);
+		
+		request.setAttribute("scgForm", specimenCollectionGroupForm);
+		
 		return mapping.findForward(pageOf);
+	}
+	/**
+	 * @param request
+	 * @param specimenCollectionGroupForm
+	 */
+	private void setDefaultEvents(HttpServletRequest request,SpecimenCollectionGroupForm specimenCollectionGroupForm,String operation) throws DAOException
+	{
+		setDateParameters(specimenCollectionGroupForm);	
+		if (specimenCollectionGroupForm.getCollectionEventCollectionProcedure() == null)
+		{
+			specimenCollectionGroupForm.setCollectionEventCollectionProcedure((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
+		}			
+		if (specimenCollectionGroupForm.getCollectionEventContainer() == null)
+		{
+			specimenCollectionGroupForm.setCollectionEventContainer((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER));
+		}
+		if (specimenCollectionGroupForm.getReceivedEventReceivedQuality() == null)
+		{
+			specimenCollectionGroupForm.setReceivedEventReceivedQuality((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
+		}
+		//setting the collector and receiver drop downs
+		setUserInForm(request,operation,specimenCollectionGroupForm);
+		//Setting the List for drop downs
+		setEventsListInRequest(request);
+	}
+	/**
+	 * @param request
+	 */
+	private void setEventsListInRequest(HttpServletRequest request)
+	{
+		//setting the procedure
+		List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
+		request.setAttribute(Constants.PROCEDURE_LIST, procedureList);
+//		set the container lists
+		List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
+		request.setAttribute(Constants.CONTAINER_LIST, containerList);	
+
+		//setting the quality for received events
+		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
+		request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
+		
+//		Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
+		request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
+		//Sets the minutesList attribute to be used in the Add/Edit FrozenEventParameters Page.
+		request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
+		
+	}
+	/**
+	 * @param request
+	 * @param operation
+	 * @param specimenCollectionGroupForm
+	 * @throws DAOException
+	 */
+	private void setUserInForm(HttpServletRequest request,String operation,SpecimenCollectionGroupForm specimenCollectionGroupForm) throws DAOException
+	{
+		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+		Collection userCollection = userBizLogic.getUsers(operation);
+
+		request.setAttribute(Constants.USERLIST, userCollection);
+
+		SessionDataBean sessionData = getSessionData(request);
+		if (sessionData != null)
+		{
+			String user = sessionData.getLastName() + ", " + sessionData.getFirstName();
+			long collectionEventUserId = EventsUtil.getIdFromCollection(userCollection, user);
+			
+			if(specimenCollectionGroupForm.getCollectionEventUserId() == 0)
+			{
+				specimenCollectionGroupForm.setCollectionEventUserId(collectionEventUserId);
 			}
+			if(specimenCollectionGroupForm.getReceivedEventUserId() == 0)
+			{
+				specimenCollectionGroupForm.setReceivedEventUserId(collectionEventUserId);
+			}
+		}
+	}
+	
+	/**
+	 * @param specimenForm
+	 */
+	private void setDateParameters(SpecimenCollectionGroupForm specimenForm)
+	{
+		// set the current Date and Time for the event.
+		Calendar cal = Calendar.getInstance();
+		//Collection Event fields
+		if (specimenForm.getCollectionEventdateOfEvent() == null)
+		{
+			specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+		}
+		if (specimenForm.getCollectionEventTimeInHours() == null)
+		{
+			specimenForm.setCollectionEventTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
+		}
+		if (specimenForm.getCollectionEventTimeInMinutes() == null)
+		{
+			specimenForm.setCollectionEventTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
+		}
+
+		//ReceivedEvent Fields
+		if (specimenForm.getReceivedEventDateOfEvent() == null)
+		{
+			specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
+		}
+		if (specimenForm.getReceivedEventTimeInHours() == null)
+		{
+			specimenForm.setReceivedEventTimeInHours(Integer.toString(cal.get(Calendar.HOUR_OF_DAY)));
+		}
+		if (specimenForm.getReceivedEventTimeInMinutes() == null)
+		{
+			specimenForm.setReceivedEventTimeInMinutes(Integer.toString(cal.get(Calendar.MINUTE)));
+		}
+
+	}
 	
 	private void loadPaticipants(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
