@@ -702,8 +702,9 @@ Thanking You,
 			<include name="titli.properties"/>
 			<replacefilter token="@@username@@" value="${database.username}"/>
 			<replacefilter token="@@password@@" value="${database.password}"/>
-			<replacefilter token="@@titliindexlocation@@" value="${jboss.home.dir}/server/default/data/titli-index"/>
+			<replacefilter token="@@titliindexlocation@@" value="${jboss.home.dir}/server/default/catissuecore-properties/titli-index"/>
 			<replacefilter token="@@databasename@@" value="${database.name}"/>
+			<replacefilter token="@@databasetype@@" value="${database.type}"/>
 		</replace>
 		<!-- conditional configuration of database url and driver names -->
 		<if>
@@ -714,6 +715,7 @@ Thanking You,
 					<replacefilter token="@@databasedriver@@" value="${mysql.driver.string}"/>
 					<replacefilter token="@@databaseurl@@" value="jdbc:mysql://${database.host}:${database.port}/${database.name}"/>
 				</replace>
+				<echo message="${database.type} ${database.name}"/>
 			</then>
 			<elseif>	
 				<equals arg1="oracle" arg2="${database.type}"/>		
@@ -723,6 +725,7 @@ Thanking You,
 						<replacefilter token="@@databaseurl@@" value="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"/>
 						<replacefilter token="@@databasedriver@@" value="${oracle.driver.string}"/>
 					</replace>
+					<echo message="${database.type} ${database.name}"/>
 				</then>
 			</elseif>
 		</if>
