@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.3 $
+ * $Name: 1.41.2.4 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -297,7 +297,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 			e.printStackTrace();
 		}
 		
-		
+		/*
 		//initialise TiTLi index
 		//create the index if it does not exist
 		try
@@ -318,7 +318,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		{
 			Logger.out.debug("Exception occured while initialising TiTLi Search");
 			e.printStackTrace();
-		}
+		}*/
 		
 		
     }
