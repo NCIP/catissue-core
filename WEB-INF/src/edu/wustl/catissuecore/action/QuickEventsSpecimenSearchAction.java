@@ -109,21 +109,13 @@ public class QuickEventsSpecimenSearchAction extends BaseAction {
 	//This method validates the formbean.
 	private String validate(HttpServletRequest request, QuickEventsForm form)
 	{
-        Validator validator = new Validator();
+		Validator validator = new Validator();
 		ActionErrors errors = (ActionErrors)request.getAttribute(Globals.ERROR_KEY);
-		
 		String pageOf = Constants.SUCCESS;
-		
 		if(errors == null)
 		{
 			errors = new ActionErrors();
 		}
-                 
-        if (!validator.isValidOption(form.getSpecimenEventParameter()))
-        {
-        	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("quickEvents.eventparameters")));
-        	pageOf = Constants.FAILURE;  
-        }
         if(form.getCheckedButton().equals("1" ) && !validator.isValidOption(form.getSpecimenLabel()) )
         {
         	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("quickEvents.specimenLabel")));
@@ -134,7 +126,20 @@ public class QuickEventsSpecimenSearchAction extends BaseAction {
         	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("quickEvents.barcode")));
         	pageOf = Constants.FAILURE;  
         }
-        
+        // resolved bug#4121
+        int errorCount=0;
+		for(int iCount=0;iCount<Constants.EVENT_PARAMETERS.length;iCount++)
+   		{
+   			if(!Constants.EVENT_PARAMETERS[iCount].equalsIgnoreCase(form.getSpecimenEventParameter()))
+   			{
+   				errorCount=errorCount+1;
+   			}
+   		}         
+		if(errorCount==Constants.EVENT_PARAMETERS.length)
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("valid.quickEvents.eventparameters")));
+	        pageOf = Constants.FAILURE;	
+		}
         saveErrors(request,errors);
         return pageOf;
 	}
