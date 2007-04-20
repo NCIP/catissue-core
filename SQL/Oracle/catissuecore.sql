@@ -529,7 +529,7 @@ create table CATISSUE_SPECIMEN_CHAR (
    TISSUE_SIDE varchar(50),
    primary key (IDENTIFIER)
 );
-#-- Ashish Gupta Bug id 2741---Added Association between SCG and Events
+/*Ashish Gupta Bug id 2741---Added Association between SCG and Events*/
 create table CATISSUE_SPECIMEN_EVENT_PARAM (
    IDENTIFIER number(19,0) not null ,
    SPECIMEN_COLL_GRP_ID number(19,0),
