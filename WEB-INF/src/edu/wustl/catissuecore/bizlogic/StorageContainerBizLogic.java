@@ -33,7 +33,6 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
-import edu.wustl.catissuecore.util.ContainerComparator;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -53,6 +52,8 @@ import edu.wustl.common.tree.StorageContainerTreeNode;
 import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.tree.TreeNode;
 import edu.wustl.common.tree.TreeNodeImpl;
+import edu.wustl.common.util.NameValueBeanRelevanceComparator;
+import edu.wustl.common.util.NameValueBeanValueComparator;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -2508,10 +2509,10 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			SessionDataBean sessionData, boolean closeSession) throws DAOException
 	{
 
-		ContainerComparator comparator = new ContainerComparator();
+		NameValueBeanRelevanceComparator comparator = new NameValueBeanRelevanceComparator();
 		Logger.out.debug("method : getAllocatedContaienrMapForSpecimen()---getting containers for specimen--------------");
 		TreeMap containerMap = new TreeMap(comparator);
-				List list = getRelevantContainerList(cpId, specimenClass, closeSession);
+		List list = getRelevantContainerList(cpId, specimenClass, closeSession);
 		Logger.out.debug("getAllocatedContaienrMapForSpecimen()----- Size of list--------:" + list.size());
 		Map containerMapFromCache = null;
 		try
@@ -2599,93 +2600,63 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		List list = new ArrayList();
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		dao.openSession(null);
-
+		String[] queryArray = new String[6];
 		// category # 1
 		//Gets all container which stores just specified collection protocol and specified specimen class
-		String queryStr1 = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1" + " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
-				+ " FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 WHERE t2.COLLECTION_PROTOCOL_ID = '" + cpId + "')"
-				+ " and (select count(*) from CATISSUE_ST_CONT_COLL_PROT_REL t4 where t4.STORAGE_CONTAINER_ID = t1.IDENTIFIER) = 1"
+		String equalToOne = " = 1";
+		String greaterThanOne = " > 1";
+
+		String equalToFour = " = 4";
+		String notEqualToFour = " !=4";
+
+		String cpRestrictionCountQuery = "(select count(*) from CATISSUE_ST_CONT_COLL_PROT_REL t4 where t4.STORAGE_CONTAINER_ID = t1.IDENTIFIER)";
+		String specimenClassRestrictionQuery = "(select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t5 where t5.STORAGE_CONTAINER_ID = t1.IDENTIFIER)";
+		String mainQuery = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1" + " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
+				+ " FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 WHERE t2.COLLECTION_PROTOCOL_ID = '" + cpId + "')" + " AND t1.ACTIVITY_STATUS='Active'"
 				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3" + " WHERE t3.SPECIMEN_CLASS = '"
-				+ specimenClass + "')"
-				+ " and (select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t5 where t5.STORAGE_CONTAINER_ID = t1.IDENTIFIER) = 1"
-				+ " AND t1.ACTIVITY_STATUS='Active')";
-
-		List list1 = executeStorageContQuery(queryStr1, dao);
-
-		Logger.out.debug("Storage Container query......................" + queryStr1);
-		list.addAll(list1);
-
-		// category # 2
-		//Gets all containers which holds just specified container and any specimen class 
-		String queryStr2 = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1" + " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
-				+ " FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 WHERE t2.COLLECTION_PROTOCOL_ID = '" + cpId + "')"
-				+ " and (select count(*) from CATISSUE_ST_CONT_COLL_PROT_REL t4 where t4.STORAGE_CONTAINER_ID = t1.IDENTIFIER) = 1"
+				+ specimenClass + "')" + " AND t1.ACTIVITY_STATUS='Active'";
+		String defaultRestrictionQuery = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1"
+				+ " WHERE t1.IDENTIFIER NOT IN (SELECT t2.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t2)"
 				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3" + " WHERE t3.SPECIMEN_CLASS = '"
-				+ specimenClass + "')"
-				+ " and (select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t5 where t5.STORAGE_CONTAINER_ID = t1.IDENTIFIER) > 1"
-				+ " AND t1.ACTIVITY_STATUS='Active')";
+				+ specimenClass + "') " + " AND t1.ACTIVITY_STATUS='Active'";
 
-		List list2 = executeStorageContQuery(queryStr2, dao);
+		String queryStr1 = mainQuery + " and " + cpRestrictionCountQuery + equalToOne + " and " + specimenClassRestrictionQuery + equalToOne + ")";
+		//		 category # 2
+		//Gets all containers which holds just specified container and any specimen class
+		String queryStr2 = mainQuery + " and " + cpRestrictionCountQuery + equalToOne + " and " + specimenClassRestrictionQuery + greaterThanOne
+				+ ")";
 
-		Logger.out.debug("Storage Container query......................" + queryStr2);
-		list.addAll(list2);
 		// catgory # 3
 		//Gets all the containers which holds other than specified collection protocol and only specified specimen class
-		String queryStr3 = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1" + " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
-				+ " FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 WHERE t2.COLLECTION_PROTOCOL_ID = '" + cpId + "')"
-				+ " and (select count(*) from CATISSUE_ST_CONT_COLL_PROT_REL t4 where t4.STORAGE_CONTAINER_ID = t1.IDENTIFIER) > 1"
-				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3" + " WHERE t3.SPECIMEN_CLASS = '"
-				+ specimenClass + "')"
-				+ " and (select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t5 where t5.STORAGE_CONTAINER_ID = t1.IDENTIFIER) = 1"
-				+ " AND t1.ACTIVITY_STATUS='Active') ";
+		String queryStr3 = mainQuery + " and " + cpRestrictionCountQuery + greaterThanOne + " and " + specimenClassRestrictionQuery + equalToOne
+				+ ")";
 
-		List list3 = executeStorageContQuery(queryStr3, dao);
-
-		Logger.out.debug("Storage Container query......................" + queryStr3);
-		list.addAll(list3);
 		// catgory # 4
 		//Gets all the containers which holds specified cp and other than specified collection protocol and specified specimen class and other than specified specimen class
-		
-		String queryStr4 = "(SELECT t1.IDENTIFIER, t1.NAME FROM CATISSUE_CONTAINER t1" + " WHERE t1.IDENTIFIER IN (SELECT t2.STORAGE_CONTAINER_ID"
-				+ " FROM CATISSUE_ST_CONT_COLL_PROT_REL t2 WHERE t2.COLLECTION_PROTOCOL_ID = '" + cpId + "')"
-				+ " and (select count(*) from CATISSUE_ST_CONT_COLL_PROT_REL t4 where t4.STORAGE_CONTAINER_ID = t1.IDENTIFIER) > 1"
-				+ " and t1.IDENTIFIER IN (SELECT t3.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t3" + " WHERE t3.SPECIMEN_CLASS = '"
-				+ specimenClass + "')"
-				+ " and (select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t5 where t5.STORAGE_CONTAINER_ID = t1.IDENTIFIER) > 1"
-				+ " AND t1.ACTIVITY_STATUS='Active') ";
-
-		List list4 = executeStorageContQuery(queryStr4, dao);
-
-		Logger.out.debug("Storage Container query......................" + queryStr4);
-		list.addAll(list4);
+		String queryStr4 = mainQuery + " and " + cpRestrictionCountQuery + greaterThanOne + " and " + specimenClassRestrictionQuery + greaterThanOne
+				+ ")";
 
 		// catgory # 5
 		//Gets all the containers which holds any collection protocol and specified specimen class and other than specified specimen class
-		
-		String queryStr5 = "(SELECT t4.IDENTIFIER, t4.NAME FROM CATISSUE_CONTAINER t4"
-				+ " WHERE t4.IDENTIFIER NOT IN (SELECT t5.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t5)"
-				+ " and t4.IDENTIFIER IN (SELECT t6.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t6" + " WHERE t6.SPECIMEN_CLASS = '"
-				+ specimenClass + "') "
-				+ " and (select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t6 where t6.STORAGE_CONTAINER_ID = t4.IDENTIFIER) != 4"
-				+ " AND t4.ACTIVITY_STATUS='Active') order by IDENTIFIER ";
 
-		List list5 = executeStorageContQuery(queryStr5, dao);
-		list.addAll(list5);
-		Logger.out.debug("Storage Container query......................" + queryStr5);
+		String queryStr5 = defaultRestrictionQuery + " and " + specimenClassRestrictionQuery + notEqualToFour + ")";
 		// catgory # 6
 		//Gets all the containers which holds any collection protocol and any specimen class
-		
-		String queryStr6 = "(SELECT t4.IDENTIFIER, t4.NAME FROM CATISSUE_CONTAINER t4"
-				+ " WHERE t4.IDENTIFIER NOT IN (SELECT t5.STORAGE_CONTAINER_ID FROM CATISSUE_ST_CONT_COLL_PROT_REL t5)"
-				+ " and t4.IDENTIFIER IN (SELECT t6.STORAGE_CONTAINER_ID FROM CATISSUE_STOR_CONT_SPEC_CLASS t6" + " WHERE t6.SPECIMEN_CLASS = '"
-				+ specimenClass + "') "
-				+ " and (select count(*) from CATISSUE_STOR_CONT_SPEC_CLASS t6 where t6.STORAGE_CONTAINER_ID = t4.IDENTIFIER) = 4"
-				+ " AND t4.ACTIVITY_STATUS='Active') order by IDENTIFIER ";
+		String queryStr6 = defaultRestrictionQuery + " and " + specimenClassRestrictionQuery + equalToFour + ")";
 
-		List list6 = executeStorageContQuery(queryStr6, dao);
+		queryArray[0] = queryStr1;
+		queryArray[1] = queryStr2;
+		queryArray[2] = queryStr3;
+		queryArray[3] = queryStr4;
+		queryArray[4] = queryStr5;
+		queryArray[5] = queryStr6;
 
-		Logger.out.debug("Storage Container query......................" + queryStr6);
-		list.addAll(list6);
+		for (int i = 0; i < 6; i++)
+		{
+			Logger.out.debug("Storage Container query......................" + queryArray[i]);
+			List queryResultList = executeStorageContQuery(queryArray[i], dao);
+			list.addAll(queryResultList);
+		}
 
 		if (closeSession)
 		{
@@ -2729,7 +2700,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	public TreeMap getAllocatedContaienrMapForSpecimenArray(long specimen_array_type_id, int noOfAliqoutes, SessionDataBean sessionData,
 			String exceedingMaxLimit) throws DAOException
 	{
-		ContainerComparator contComp = new ContainerComparator();
+		NameValueBeanValueComparator contComp = new NameValueBeanValueComparator();
 		TreeMap containerMap = new TreeMap(contComp);
 
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
@@ -2773,14 +2744,14 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		{
 			int i = 1;
 			Iterator itr = list.iterator();
-			
+
 			while (itr.hasNext())
 			{
 				List list1 = (List) itr.next();
 				String Id = (String) list1.get(0);
 
 				String Name = (String) list1.get(1);
-				NameValueBean nvb = new NameValueBean(Name, Id, new Long(Id));
+				NameValueBean nvb = new NameValueBean(Name, Id);
 				Map positionMap = (TreeMap) containerMapFromCache.get(nvb);
 				if (positionMap != null && !positionMap.isEmpty())
 				{
@@ -2812,7 +2783,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					}
 					i++;
 				}
-				
+
 			}
 		}
 
@@ -2993,24 +2964,24 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Map positionMap1 = new TreeMap();
 		Set keySet = positionMap.keySet();
 		Iterator itr = keySet.iterator();
-		
+
 		while (itr.hasNext())
 		{
 			NameValueBean key = (NameValueBean) itr.next();
-			NameValueBean key1 = new NameValueBean(key.getName(), key.getValue(), new Long(key.getValue()));
+			NameValueBean key1 = new NameValueBean(key.getName(), key.getValue());
 			List value = (ArrayList) positionMap.get(key);
 			List value1 = new ArrayList();
 			Iterator itr1 = value.iterator();
-			
+
 			while (itr1.hasNext())
 			{
 				NameValueBean ypos = (NameValueBean) itr1.next();
-				NameValueBean ypos1 = new NameValueBean(ypos.getName(), ypos.getValue(), new Long(ypos.getValue()));
+				NameValueBean ypos1 = new NameValueBean(ypos.getName(), ypos.getValue());
 				value1.add(ypos1);
-				
+
 			}
 			positionMap1.put(key1, value1);
-			
+
 		}
 		return positionMap1;
 	}
