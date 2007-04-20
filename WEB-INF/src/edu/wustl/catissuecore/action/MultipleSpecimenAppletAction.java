@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.actionForm.CollectionEventParametersForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
+import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CreateSpecimenBizLogic;
@@ -241,7 +242,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 
 			Map multipleSpecimenEventsFormBean = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
 			if (multipleSpecimenEventsFormBean != null)
-				processEvents(specimenCollection, multipleSpecimenEventsFormBean);
+				processEvents(specimenCollection, multipleSpecimenEventsFormBean,request);
 			Map finalMap = processFormBeansMap(specimenCollection, multipleSpecimenFormBeanMap);
 
 		
@@ -788,7 +789,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		return specimenClassTypeMap;
 	}
 
-	private void processEvents(Collection specimenCollection, Map multipleSpecimenFormBeanMap) throws Exception
+	private void processEvents(Collection specimenCollection, Map multipleSpecimenFormBeanMap,HttpServletRequest request) throws Exception
 	{
 
 		Iterator specimenCollectionIterator = specimenCollection.iterator();
@@ -820,14 +821,59 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				Collection specimenEventCollection = new HashSet();
 
 				CollectionEventParametersForm collectionEvent = new CollectionEventParametersForm();
-				collectionEvent.setCollectionProcedure(form.getCollectionEventCollectionProcedure());
-				collectionEvent.setComments(form.getCollectionEventComments());
-				collectionEvent.setContainer(form.getCollectionEventContainer());
-				collectionEvent.setTimeInHours(form.getCollectionEventTimeInHours());
-				collectionEvent.setTimeInMinutes(form.getCollectionEventTimeInMinutes());
-				collectionEvent.setDateOfEvent(form.getCollectionEventdateOfEvent());
-				collectionEvent.setUserId(form.getCollectionEventUserId());
-				collectionEvent.setOperation(form.getOperation());
+					/**
+	 * Name : Ashish Gupta
+	 * Reviewer Name : Sachin Lale 
+	 * Bug ID: 2741
+	 * Patch ID: 2741_17	 
+	 * Description: If User directly clicks on Submit button, without clicking on Events button, then populate events frm Events HashMap
+	*/
+				ReceivedEventParametersForm receivedEvent = new ReceivedEventParametersForm();
+				
+				Object scgForm = request.getSession().getAttribute("scgForm");
+				if(scgForm != null)
+				{
+					SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)scgForm;
+					
+					collectionEvent.setCollectionProcedure(specimenCollectionGroupForm.getCollectionEventCollectionProcedure());
+					collectionEvent.setComments(specimenCollectionGroupForm.getCollectionEventComments());
+					collectionEvent.setContainer(specimenCollectionGroupForm.getCollectionEventContainer());
+					collectionEvent.setTimeInHours(specimenCollectionGroupForm.getCollectionEventTimeInHours());
+					collectionEvent.setTimeInMinutes(specimenCollectionGroupForm.getCollectionEventTimeInMinutes());
+					collectionEvent.setDateOfEvent(specimenCollectionGroupForm.getCollectionEventdateOfEvent());
+					collectionEvent.setUserId(specimenCollectionGroupForm.getCollectionEventUserId());
+					collectionEvent.setOperation(specimenCollectionGroupForm.getOperation());				
+					
+					receivedEvent.setComments(specimenCollectionGroupForm.getReceivedEventComments());
+					receivedEvent.setDateOfEvent(specimenCollectionGroupForm.getReceivedEventDateOfEvent());
+					receivedEvent.setReceivedQuality(specimenCollectionGroupForm.getReceivedEventReceivedQuality());
+					receivedEvent.setUserId(specimenCollectionGroupForm.getReceivedEventUserId());
+					receivedEvent.setTimeInMinutes(specimenCollectionGroupForm.getReceivedEventTimeInMinutes());
+					receivedEvent.setTimeInHours(specimenCollectionGroupForm.getReceivedEventTimeInHours());
+					receivedEvent.setOperation(specimenCollectionGroupForm.getOperation());
+					
+					request.getSession().removeAttribute("scgForm");
+				}
+				else
+				{
+					collectionEvent.setCollectionProcedure(form.getCollectionEventCollectionProcedure());
+					collectionEvent.setComments(form.getCollectionEventComments());
+					collectionEvent.setContainer(form.getCollectionEventContainer());
+					collectionEvent.setTimeInHours(form.getCollectionEventTimeInHours());
+					collectionEvent.setTimeInMinutes(form.getCollectionEventTimeInMinutes());
+					collectionEvent.setDateOfEvent(form.getCollectionEventdateOfEvent());
+					collectionEvent.setUserId(form.getCollectionEventUserId());
+					collectionEvent.setOperation(form.getOperation());				
+					
+					receivedEvent.setComments(form.getReceivedEventComments());
+					receivedEvent.setDateOfEvent(form.getReceivedEventDateOfEvent());
+					receivedEvent.setReceivedQuality(form.getReceivedEventReceivedQuality());
+					receivedEvent.setUserId(form.getReceivedEventUserId());
+					receivedEvent.setTimeInMinutes(form.getReceivedEventTimeInMinutes());
+					receivedEvent.setTimeInHours(form.getReceivedEventTimeInHours());
+					receivedEvent.setOperation(form.getOperation());				
+				}
+				
 
 				CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
 				collectionEventParameters.setAllValues(collectionEvent);
@@ -836,14 +882,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				specimenEventCollection.add(collectionEventParameters);
 
 				//setting received event values
-				ReceivedEventParametersForm receivedEvent = new ReceivedEventParametersForm();
-				receivedEvent.setComments(form.getReceivedEventComments());
-				receivedEvent.setDateOfEvent(form.getReceivedEventDateOfEvent());
-				receivedEvent.setReceivedQuality(form.getReceivedEventReceivedQuality());
-				receivedEvent.setUserId(form.getReceivedEventUserId());
-				receivedEvent.setTimeInMinutes(form.getReceivedEventTimeInMinutes());
-				receivedEvent.setTimeInHours(form.getReceivedEventTimeInHours());
-				receivedEvent.setOperation(form.getOperation());
+				
 
 				ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
 				receivedEventParameters.setAllValues(receivedEvent);

@@ -43,6 +43,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -55,6 +56,8 @@ import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.actionForm.SpecimenForm;
 
 /**
  * NewSpecimenAction initializes the fields in the New Specimen page.
@@ -299,16 +302,31 @@ public class NewSpecimenAction extends SecureAction
 		//Setting biohazard list
 		biohazardList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_BIOHAZARD, null);
 		request.setAttribute(Constants.BIOHAZARD_TYPE_LIST, biohazardList);
-
-		//Mandar : 10-July-06 AutoEvents : CollectionEvent
-		setCollectionEventRequestParameters(request, specimenForm);
-
-		//Mandar : 11-July-06 AutoEvents : ReceivedEvent
-		setReceivedEventRequestParameters(request, specimenForm);
-
-		//Mandar : set default date and time too event fields
-		setDateParameters(specimenForm);
-
+		
+		/**
+	 * Name : Ashish Gupta
+	 * Reviewer Name : Sachin Lale 
+	 * Bug ID: 2741
+	 * Patch ID: 2741_12	 
+	 * Description: Propagating events from scg to multiple specimens
+	*/
+		Object scgForm = request.getAttribute("scgForm");
+		if(scgForm != null)
+		{
+			SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)scgForm;
+			populateEventsFromScg(specimenCollectionGroupForm,specimenForm);
+		}
+		else
+		{
+			//Mandar : 10-July-06 AutoEvents : CollectionEvent
+			setCollectionEventRequestParameters(request, specimenForm);
+	
+			//Mandar : 11-July-06 AutoEvents : ReceivedEvent
+			setReceivedEventRequestParameters(request, specimenForm);
+	
+			//Mandar : set default date and time too event fields
+			setDateParameters(specimenForm);
+		}
 		//    	 ---- chetan 15-06-06 ----
 		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 				Constants.STORAGE_CONTAINER_FORM_ID);
@@ -442,7 +460,7 @@ public class NewSpecimenAction extends SecureAction
 
 		return mapping.findForward(pageOf);
 	}
-
+	
 	/* This method populates the list boxes for type, tissue site, tissue side
 	 * and pathological status if this specimen is an aliquot.
 	 */
@@ -507,7 +525,7 @@ public class NewSpecimenAction extends SecureAction
 		if (sessionData != null)
 		{
 			String user = sessionData.getLastName() + ", " + sessionData.getFirstName();
-			long collectionEventUserId = getIdFromCollection(userCollection, user);
+			long collectionEventUserId = EventsUtil.getIdFromCollection(userCollection, user);
 			
 			if(specimenForm.getCollectionEventUserId() == 0)
 			{
@@ -658,26 +676,7 @@ public class NewSpecimenAction extends SecureAction
 		//request.setAttribute("initValues", initialValues);
 	}
 
-	/**
-	 * 
-	 * @param userList Collection
-	 * @param userName userName
-	 * @return long
-	 */
-	private long getIdFromCollection(Collection userList, String userName)
-	{
-		Iterator itr = userList.iterator();
-		for (int i = 0; itr.hasNext(); i++)
-		{
-			NameValueBean nameValueBean = (NameValueBean) itr.next();
-			if (nameValueBean.getName() != null && nameValueBean.getName().trim().equals(userName))
-			{
-				String id = nameValueBean.getValue();
-				return Long.valueOf(id).longValue();
-			}
-		}
-		return -1;
-	}
+	
 
 	private void setFormValues(NewSpecimenForm specimenForm, String specimenCollectionGroupId)
 	{
@@ -921,5 +920,29 @@ public class NewSpecimenAction extends SecureAction
 		// Setting tissue side list
 		tissueSideList.addAll(CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null));
 	}
-
+	 /**
+		 * Name : Ashish Gupta
+		 * Reviewer Name : Sachin Lale 
+		 * Bug ID: 2741
+		 * Patch ID: 2741_13 
+		 * Description: Method to propagate Events to multiple specimens from scg
+		*/
+		/**
+		 * @param specimenCollectionGroupForm
+		 * @param specimenForm
+		 */
+		public static void populateEventsFromScg(SpecimenCollectionGroupForm specimenCollectionGroupForm,NewSpecimenForm specimenForm)
+		{
+			specimenForm.setCollectionEventUserId(specimenCollectionGroupForm.getCollectionEventUserId());		
+			specimenForm.setReceivedEventUserId(specimenCollectionGroupForm.getReceivedEventUserId());	
+			specimenForm.setCollectionEventCollectionProcedure("Not Specified");	
+			specimenForm.setCollectionEventContainer("Not Specified");	
+			specimenForm.setReceivedEventReceivedQuality("Not Specified");	
+			specimenForm.setCollectionEventdateOfEvent(specimenCollectionGroupForm.getCollectionEventdateOfEvent());	
+			specimenForm.setCollectionEventTimeInHours(specimenCollectionGroupForm.getCollectionEventTimeInHours());	
+			specimenForm.setCollectionEventTimeInMinutes(specimenCollectionGroupForm.getCollectionEventTimeInMinutes());	
+			specimenForm.setReceivedEventDateOfEvent(specimenCollectionGroupForm.getReceivedEventDateOfEvent());	
+			specimenForm.setReceivedEventTimeInHours(specimenCollectionGroupForm.getReceivedEventTimeInHours());	
+			specimenForm.setReceivedEventTimeInMinutes(specimenCollectionGroupForm.getReceivedEventTimeInMinutes());		
+		}
 }

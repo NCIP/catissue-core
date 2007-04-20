@@ -22,10 +22,15 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.MultipleSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -537,18 +542,61 @@ public class NewMultipleSpecimenAction extends SecureAction
 		String keyInEventSpecimenMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
 		NewSpecimenForm specimenForm = (NewSpecimenForm) multipleSpecimenEventMap.get(keyInEventSpecimenMap);
 
-		if (specimenForm != null)
+			/**
+	 * Name : Ashish Gupta
+	 * Reviewer Name : Sachin Lale 
+	 * Bug ID: 2741
+	 * Patch ID: 2741_15	 
+	 * Description: If user has come from scg page, take events from scgform else populate default events
+	*/
+		Object scgForm = request.getSession().getAttribute("scgForm");
+		if(specimenForm==null && scgForm != null)
 		{
-
-			//NewSpecimenForm specimenForm = (NewSpecimenForm)collAndReceivedParameters.get("CollAndRecEvent");
+			SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)scgForm;
+			setEventsFromScg(form,specimenCollectionGroupForm);
+			//request.getSession().removeAttribute("scgForm");
+		}		
+		else if (specimenForm != null)
+		{	
+				//NewSpecimenForm specimenForm = (NewSpecimenForm)collAndReceivedParameters.get("CollAndRecEvent");
 			setCollectionEventParameters(form, specimenForm);
 			setRecievedEventParameters(form, specimenForm);
 		}
-		//to display default selection as NotSpecified
-		setDefaultListSelection(form);
+		else if(specimenForm==null && scgForm == null)
+		{
+//			to display default selection as NotSpecified
+			setDefaultListSelection(form);
+		}
+		
 		return mapping.findForward("events");
 	}
-
+	/**
+	 * @param form
+	 * @param specimenCollectionGroupForm
+	 */
+	private void setEventsFromScg(ActionForm form,SpecimenCollectionGroupForm specimenCollectionGroupForm)
+	{
+		NewSpecimenForm newSpecimenForm = (NewSpecimenForm)form;
+		
+		newSpecimenForm.setCollectionEventId(specimenCollectionGroupForm.getCollectionEventId());
+		newSpecimenForm.setCollectionEventSpecimenId(specimenCollectionGroupForm.getCollectionEventSpecimenId());
+		newSpecimenForm.setCollectionEventUserId(specimenCollectionGroupForm.getCollectionEventUserId());
+		newSpecimenForm.setCollectionEventdateOfEvent(specimenCollectionGroupForm.getCollectionEventdateOfEvent());
+		newSpecimenForm.setCollectionEventTimeInHours(specimenCollectionGroupForm.getCollectionEventTimeInHours());
+		newSpecimenForm.setCollectionEventTimeInMinutes(specimenCollectionGroupForm.getCollectionEventTimeInMinutes());
+		newSpecimenForm.setCollectionEventCollectionProcedure(specimenCollectionGroupForm.getCollectionEventCollectionProcedure());
+		newSpecimenForm.setCollectionEventContainer(specimenCollectionGroupForm.getCollectionEventContainer());
+		newSpecimenForm.setCollectionEventComments(specimenCollectionGroupForm.getCollectionEventComments());
+		
+		newSpecimenForm.setReceivedEventId(specimenCollectionGroupForm.getReceivedEventId());
+		newSpecimenForm.setReceivedEventSpecimenId(specimenCollectionGroupForm.getReceivedEventSpecimenId());
+		newSpecimenForm.setReceivedEventUserId(specimenCollectionGroupForm.getReceivedEventUserId());
+		newSpecimenForm.setReceivedEventDateOfEvent(specimenCollectionGroupForm.getReceivedEventDateOfEvent());
+		newSpecimenForm.setReceivedEventTimeInHours(specimenCollectionGroupForm.getReceivedEventTimeInHours());
+		newSpecimenForm.setReceivedEventTimeInMinutes(specimenCollectionGroupForm.getReceivedEventTimeInMinutes());
+		newSpecimenForm.setReceivedEventReceivedQuality(specimenCollectionGroupForm.getReceivedEventReceivedQuality());
+		newSpecimenForm.setReceivedEventComments(specimenCollectionGroupForm.getReceivedEventComments());
+	}
 	/**
 	 * @param mapping
 	 * @param form
@@ -794,6 +842,106 @@ public class NewMultipleSpecimenAction extends SecureAction
 			return invokeMethod(methodName, mapping, form, request, response);
 		}
 		return null;
+    }
+    	/**
+	 * Name : Ashish Gupta
+	 * Reviewer Name : Sachin Lale 
+	 * Bug ID: 2741
+	 * Patch ID: 2741_16	 
+	 * Description: Populate selected scg events in that multiple specimen
+	*/
+    /**
+     * @param mapping
+     * @param form
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     * This method retrieves collection and received events associated with the scg based on scg name.
+     */
+    public ActionForward setEventsInEventsHashMap(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
+			throws Exception
+	{
+    	//the scg selected from the drop down
+    	String scgName = request.getParameter("scgName");
+    	//the key against which the newSpecimen form will be stored in the events hashmap
+    	String key = request.getParameter("key");
+    	
+    	CollectionEventParameters collectionEventParameters = null;
+    	ReceivedEventParameters receivedEventParameters = null;
+    	
+    	if(scgName != null && !scgName.equals(""))
+    	{
+    		//retriving the scg
+    		SpecimenCollectionGroupBizLogic specimenCollectionGroupBizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+    		String colName = "name";	
+    		List scgListFromDB = specimenCollectionGroupBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), colName, scgName);
+    		if(scgListFromDB != null && !scgListFromDB.isEmpty())
+    		{
+    			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)scgListFromDB.get(0);
+    			Collection eventsColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
+    			if(eventsColl != null && !eventsColl.isEmpty())
+    			{
+    				Iterator iter = eventsColl.iterator();
+    				while(iter.hasNext())
+    				{
+    					Object temp = iter.next();
+    					if(temp instanceof CollectionEventParameters)
+    					{
+    						collectionEventParameters = (CollectionEventParameters)temp;
+    					}
+    					else if(temp instanceof ReceivedEventParameters)
+    					{
+    						receivedEventParameters = (ReceivedEventParameters)temp;
+    					}    					
+    				}
+    				//Populating the rerieved events in the NewSpecimenForm
+    				populateEvents(request,collectionEventParameters,receivedEventParameters,key);    				
+    			}
+    		}    		
+    	}
+    	return null;
+	}
+    /**
+     * @param request
+     * @param collectionEventParameters
+     * @param receivedEventParameters
+     * @param key
+     * This function populates the events in MultipleSpecimenForm and stores it in EvensHashMap in session
+     */
+    private void populateEvents(HttpServletRequest request,CollectionEventParameters collectionEventParameters,ReceivedEventParameters receivedEventParameters,String key)
+    {
+    	MultipleSpecimenForm multipleSpecimenForm = new MultipleSpecimenForm();
+    	
+    	Calendar calender = Calendar.getInstance();
+    	
+		calender.setTime(collectionEventParameters.getTimestamp());
+		//Populating Collection Events
+    	multipleSpecimenForm.setCollectionEventCollectionProcedure(collectionEventParameters.getCollectionProcedure());
+    	multipleSpecimenForm.setCollectionEventComments(collectionEventParameters.getComments());
+    	multipleSpecimenForm.setCollectionEventContainer(collectionEventParameters.getContainer());
+    	multipleSpecimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(collectionEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
+    	multipleSpecimenForm.setCollectionEventTimeInHours(Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY))));
+    	multipleSpecimenForm.setCollectionEventTimeInMinutes(Utility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
+    	multipleSpecimenForm.setCollectionEventUserId(collectionEventParameters.getUser().getId().longValue());
+    	    	
+    	calender.setTime(receivedEventParameters.getTimestamp());
+    	//Populating Received Events
+    	multipleSpecimenForm.setReceivedEventComments(receivedEventParameters.getComments());
+    	multipleSpecimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(receivedEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
+    	multipleSpecimenForm.setReceivedEventReceivedQuality(receivedEventParameters.getReceivedQuality());
+    	multipleSpecimenForm.setReceivedEventTimeInHours(Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY))));
+    	multipleSpecimenForm.setReceivedEventTimeInMinutes(Utility.toString(Integer.toString(calender.get(Calendar.MINUTE))));
+    	multipleSpecimenForm.setReceivedEventUserId(receivedEventParameters.getUser().getId().longValue());
+    	multipleSpecimenForm.setOperation(Constants.ADD);
+    	
+    	Object tempMap = request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
+    	if(tempMap != null)
+    	{
+    		//Storing the form in the hashmap
+    		HashMap eventsMap = (HashMap)tempMap;
+    		eventsMap.put(key, multipleSpecimenForm);
+    	}
     }
 
 }
