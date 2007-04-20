@@ -11,19 +11,11 @@
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.util.tag.ScriptGenerator" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Variables"%>
-
-
-
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <link href="runtime/styles/xp/grid.css" rel="stylesheet" type="text/css" ></link>
-<script src="runtime/lib/grid.js"></script>
-<script src="runtime/formats/date.js"></script>
-<script src="runtime/formats/string.js"></script>
-<script src="runtime/formats/number.js"></script>
-
 
 <% 
         String[] columnList1 = Constants.DERIVED_SPECIMEN_COLUMNS;
