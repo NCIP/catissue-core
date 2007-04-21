@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
@@ -239,9 +240,37 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 				map.put(key, valueList);
 			}
 		}
+		/**
+		* Patch ID: Entered_Events_Need_To_Be_Visible_13
+		* See also: 1-5
+		* Description: get event tool tip for given column and put it into the map
+		*/ 
+		for (int columnIndex = 0; columnIndex < selectedColumns.length; columnIndex++)
+		{
+			String key = CommonAppletUtil.getDataKey(AppletConstants.SPECIMEN_EVENTS_ROW_NO, selectedColumns[columnIndex]);
+			String value = getEventTooltip(selectedColumns[columnIndex]);
+			map.put(key, value);
+		}
 		return map;
 	}
 
+	/**
+	 * gets event tool tip for given column
+	 * @param columnIndex for which tool tip to retrieve
+	 * @return tooltip of event button for given column
+	 */
+	protected String getEventTooltip(int columnIndex)
+	{
+		TableColumnModel columnModel = table.getColumnModel();
+		
+		TableColumn tm = columnModel.getColumn(columnIndex);
+		SpecimenColumnModel scm = (SpecimenColumnModel) tm.getCellEditor();
+		if (scm.getToolTipToEventButton()==null)
+			return "";
+		else
+			return scm.getToolTipToEventButton();
+	}
+	/** -- patch ends here -- */
 	/**
 	 * @param rowIndex
 	 * @param columnIndex

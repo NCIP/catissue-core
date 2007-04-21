@@ -36,7 +36,10 @@
 
 			
 			String action = Constants.NEW_MULTIPLE_SPECIMEN_ACTION;
-			
+			/**
+			 * Get tool tip from the request to send it in the applets function call
+			 */
+			String toolTip=(String)request.getAttribute(Constants.TOOLTIP_TEXT);
 %>
 
 <html:errors />
@@ -57,7 +60,11 @@
 			var specimenAttributeKey = "<%=form.getSpecimenAttributeKey()%>";
 			if(specimenAttributeKey!=null)
 			{
-			    parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey);
+			    var toolTip="<%=toolTip%>";
+			    /**
+			     * Send toolTip as an argument to the function setButtonCaption() of MultipleSpecimenApplet
+			     */
+			    parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey,toolTip);
 				parent.window.opener.activateApplet();
 			}
 			self.close(); 

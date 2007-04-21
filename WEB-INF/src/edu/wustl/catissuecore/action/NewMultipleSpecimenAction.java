@@ -32,7 +32,6 @@ import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -86,6 +85,13 @@ public class NewMultipleSpecimenAction extends SecureAction
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY, new HashMap());
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, new HashMap());
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY, new HashMap());
+		/**
+		* Patch ID: Entered_Events_Need_To_Be_Visible_11
+		* See also: 1-5
+		* Description: Create map for tooltip text for event button and maitain it in session
+		*/ 
+		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY, new HashMap());
+		/** -- patch ends here -- */
 		
 		//Added by Ashish
 		/**
@@ -565,8 +571,16 @@ public class NewMultipleSpecimenAction extends SecureAction
 		else if(specimenForm==null && scgForm == null)
 		{
 //			to display default selection as NotSpecified
-			setDefaultListSelection(form);
+			Utility.setDefaultListSelection(form);
 		}
+		/**
+		* Patch ID: Entered_Events_Need_To_Be_Visible_12
+		* See also: 1-5
+		* Description: Get toolTip Text and set it to the request so that it can be retrieved on SpecimenPopup.jsp
+		*/ 
+		String toolTipText=Utility.getToolTipText((NewSpecimenForm)form);
+		request.setAttribute(Constants.TOOLTIP_TEXT, toolTipText);
+		/** --patch ends here -- */
 		
 		return mapping.findForward("events");
 	}
@@ -611,14 +625,39 @@ public class NewMultipleSpecimenAction extends SecureAction
 
 		//request.setAttribute("output", "success");
 		ActionErrors errors = validateEvents(request, form);
-		if (errors.isEmpty())
+		/**
+		 * Retrieve map from session
+		 */
+		Map toolTipMap=(HashMap)request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY);
+		if (errors.isEmpty()) 
 		{
 			request.setAttribute("output", "success");
 			Map multipleSpecimenEventMap = chkForEventsMap(request);
 			String keyInSpecimenEventMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
 
 			multipleSpecimenEventMap.put(keyInSpecimenEventMap, form);
-
+			
+			
+			
+			/**
+			* Patch ID: Entered_Events_Need_To_Be_Visible_13
+			* See also: 1-5
+			* Description: get toolTip and set it to the map in session
+			*/ 
+			String toolTipText=Utility.getToolTipText((NewSpecimenForm)form);
+			request.setAttribute(Constants.TOOLTIP_TEXT, toolTipText);
+		
+			char columnNo=keyInSpecimenEventMap.charAt(9);
+			toolTipMap.put("Specimen:"+columnNo+"_eventsToolTip", toolTipText);
+			request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY, toolTipMap);
+			/** -- patch ends here -- */
+			
+//			Map dataListsMap = new HashMap();
+//			String columns = XMLPropertyHandler.getValue(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE);
+//			dataListsMap.put(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE ,columns);
+//			MultipleSpecimenTableModel multipleSpecimenTableModel = new MultipleSpecimenTableModel(0, dataListsMap);
+//			multipleSpecimenTableModel.setEventsToolTipMap(toolTipMap);
+			
 			return mapping.findForward("events");
 		}
 		else
@@ -795,34 +834,6 @@ public class NewMultipleSpecimenAction extends SecureAction
 
 	}
 
-	/*
-	 * This method sets the default selection of list boxes to Default values.
-	 * @author mandar_deshmukh
-	 *
-	 */
-	private void setDefaultListSelection(ActionForm form)
-	{
-		if(form!=null)
-		{
-			/**
-	         * Patch ID:defaultValueConfiguration_BugID_5
-	         * See also:defaultValueConfiguration_BugID_1,2,3,4
-	         * Description: Configuration for default value for Collection Procedure, Container and Quality
-	         */
-			String collectionProcedure = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
-			String container = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER);
-			String receivedQuality=(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
-			
-			if(((NewSpecimenForm) form).getCollectionEventCollectionProcedure() == null)
-				((NewSpecimenForm) form).setCollectionEventCollectionProcedure(collectionProcedure);
-			
-			if(((NewSpecimenForm) form).getCollectionEventContainer() == null)
-				((NewSpecimenForm) form).setCollectionEventContainer(container);
-			
-			if(((NewSpecimenForm) form).getReceivedEventReceivedQuality() == null)
-				((NewSpecimenForm) form).setReceivedEventReceivedQuality(receivedQuality);
-		}
-	}
 	
 	// -----------------
 	// --------- Changes By  Mandar : 05Dec06 for Bug 2866 

@@ -512,8 +512,13 @@ function setStoragePosition(specimenMapKey,storageId,storageType,xPos,yPos) {
    parent.window.opener.document.applets[0].setStorageDetails(specimenMapKey,storageId,storageType,xPos,yPos);
 }
 
+/**
+* Patch ID: Entered_Events_Need_To_Be_Visible_18
+* See also: 1-5
+* Description: Since the signature of the method is changed empty string is passed to finction setButtonCaption
+*/ 
 function setCaptionInMapFromJS(specimenMapKey) {
-  parent.window.opener.document.applets[0].setButtonCaption(specimenMapKey);
+  parent.window.opener.document.applets[0].setButtonCaption(specimenMapKey,"");
 }
 
 function showStoragePositionMap(specimenAttributeKey,collectionGroup,specimenClass) {

@@ -1509,4 +1509,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final int VALIDATE_COMBO =2;
     public static final int VALIDATE_DATE =3;   
     
+    /**
+	 * Constants required for maintaining toolTipText for event button on multiple specimen page
+	 */
+	public static final String TOOLTIP_TEXT="TOOLTIPTEXT";
+	public static final String MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY="multipleSpecimenTooltipMapKey";
+	public static final String DEFAULT_TOOLTIP_TEXT="DEFAULTTOOLTIPTEXT";
 }

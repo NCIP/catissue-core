@@ -429,21 +429,27 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	}
 	
 	/**
-	 * This method is called from Javascript toset the value of the selected location in the applet.
-	 * @param specimenMapKey Identifier of the specimen.
-	 * @param storageId Identifier of the storageContainer.
-	 * @param storageType Label of storage type.
-	 * @param xPos Position (x-axis) in container.
-	 * @param yPos Position (y-axis) in container.
+	 * This method is called from Javascript to set the caption and tooltip  of the button
+	 * @param specimenMapKey Identifier of the specimen
+	 * @param toolTip toolTip to be set to event button
 	 */
-	public void setButtonCaption(String specimenMapKey) {
+	public void setButtonCaption(String specimenMapKey, String toolTip) 
+	{
 		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
 		String columnString = specimenMapKey.substring(AppletConstants.SPECIMEN_PREFIX.length(),specimenMapKey.indexOf("_"));
 		int actualColNo =  Integer.parseInt(columnString)-1;
 		int displayColNo = tableModel.getDisplayColumnNo(actualColNo); 
 	//	tableModel.setCaptionInMap(specimenMapKey,buttonType);
-			
+		
+		/**
+		* Patch ID: Entered_Events_Need_To_Be_Visible_3
+		* See also: 1-5
+		* Description: set the toolTipText for event button and update map in table model
+		*/  
 		SpecimenColumnModel columnModel =  (SpecimenColumnModel)table.getColumnModel().getColumn(displayColNo).getCellRenderer();
+		columnModel.setToolTipToEventButton(toolTip);
+		columnModel.setEventstToolTipText(toolTip);
+		tableModel.setEventsToolTipText(toolTip, actualColNo+1);
 		columnModel.setEditCaptionFromJS(specimenMapKey,AppletConstants.EDIT,tableModel);
 
 	}

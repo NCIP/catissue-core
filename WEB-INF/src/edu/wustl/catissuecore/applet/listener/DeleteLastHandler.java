@@ -146,6 +146,14 @@ public class DeleteLastHandler extends ButtonHandler
 		int beforeDeletePageCount = model.getTotalPageCount(); 
 		int columnCount = model.getTotalColumnCount();
 		model.removeLastColumn();
+		/**
+		* Patch ID: Entered_Events_Need_To_Be_Visible_12
+		* See also: 1-5
+		* Description: While deleteing column delete its respective tooltip from the map in model
+		*/ 
+		model.setEventsToolTipText(null, columnCount);
+		/** -- patch ends here -- */
+		System.out.println("deldeted:"+columnCount);
 		System.out.println("\n\n  .............   After remove last column  ...............  \n\n");
 		int afterDeletePageCount = model.getTotalPageCount();
 		int currentPage = model.getCurrentPageIndex(); 

@@ -107,6 +107,21 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	private String specimenType = null;
 		
 	/**
+	* Patch ID: Entered_Events_Need_To_Be_Visible_4
+	* See also: 1-5
+	* Description: events tooltip map, and events tooltip text variable to maintain tooltip for events button in each specimen column model
+	*/ 
+	/**
+	 * eventsToolTipMap HashMap to store toolTip of all the columns event button
+	 */
+	private Map eventsToolTipMap;
+	/**
+	 * eventsToolTipText tool tip text required for events button. 
+	 * To get and set toolTip from map this variable will be used.
+	 */
+	private String eventsToolTipText="";
+	/** -- patch ends here */
+	/**
 	 * set default map. 
 	 * @param specimenAttributeOptions  initialzation map.
 	 */
@@ -115,6 +130,7 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 
 		specimenMap = new HashMap();
 		buttonStatusMap = new HashMap();
+		eventsToolTipMap= new HashMap();
 		this.columnCount = initialColumnCount;
 		this.specimenAttributeOptions = specimenAttributeOptions;
 		for (int i = 1; i <= initialColumnCount; i++)
@@ -127,6 +143,30 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			//****For specimen checkbox
 			setActualColumnSpecimenCheckBoxValue(i);
 		}
+		/**
+		* Patch ID: Entered_Events_Need_To_Be_Visible_5
+		* See also: 1-5
+		* Description: sets the default events tip and events tooltip map
+		*/ 
+		/**
+		 * If init action then store the default tooltip for event button.
+		 */
+		if(specimenAttributeOptions.get(Constants.DEFAULT_TOOLTIP_TEXT) != null)
+        {
+			eventsToolTipText=specimenAttributeOptions.get(Constants.DEFAULT_TOOLTIP_TEXT).toString();
+            for(int count=1;count<=initialColumnCount; count++)
+            {
+            	setToolTipInModel(count,eventsToolTipText);
+            }
+        }
+		/**
+		 * If Map is passed in request then set this map to eventsToolTipMap.
+		 */
+		if(specimenAttributeOptions.get(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY) != null)
+        {
+			eventsToolTipMap=(HashMap)specimenAttributeOptions.get(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY);
+        }
+		/** -- patch ends here */
 		//Setting the specimen Collection group name if add multiple specimen came form add specimen collection group name
 		if (specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME) != null)
 		{
@@ -949,6 +989,51 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	{
 		return buttonStatusMap;
 	}
+	/**
+	* Patch ID: Entered_Events_Need_To_Be_Visible_6
+	* See also: 1-5
+	* Description: getter setter for  the eventsToolTipText and eventsToolTipMap
+	*/ 
+	/**
+	 * This method sets the setEventsToolTipMap for event button
+	 * @param eventsToolTipMap sets events tooltip map
+	 */
+	public void setEventsToolTipMap(Map eventsToolTipMap)
+	{
+		this.eventsToolTipMap=eventsToolTipMap;
+	}
+	/**
+	 * This method sets the setEventsToolTipText for event button
+	 * @param toolTip toolTip of button
+	 * @param column number of events button
+	 */
+	public void setEventsToolTipText(String toolTip, int column)
+	{
+		if(toolTip==null)
+		{
+			toolTip=(String)specimenAttributeOptions.get(Constants.DEFAULT_TOOLTIP_TEXT);
+		}
+		this.eventsToolTipMap.put(AppletConstants.SPECIMEN_PREFIX+ String.valueOf(column)+"_eventsToolTip", toolTip);
+	}
+	/**
+	 * @return Returns the eventsToolTipText for the given column number
+	 */
+	public String getEventsToolTipText(int column)
+	{
+		return (String)eventsToolTipMap.get(AppletConstants.SPECIMEN_PREFIX+String.valueOf(column)+"_eventsToolTip");
+	}
+	/**
+	 * Set the tooltip in the model map
+	 * @param column
+	 * @param value
+	 */
+	private void setToolTipInModel(int column, String value)
+	{
+		String toolTipKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_eventsToolTip";
+		eventsToolTipMap.put(toolTipKey,value);	
+		
+	}
+	/** -- patch ends here  --*/
 //****************** Mandar : 22Dec06 For Specimen CheckBox start
 	HashMap specimenCheckBoxMap = new HashMap();
 	

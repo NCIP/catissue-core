@@ -372,7 +372,12 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 				    var specimenAttributeKey = document.getElementById("specimenAttributeKey");
 					if(specimenAttributeKey!=null)
 					{
-			          parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey.value);
+					/**
+					* Patch ID: Entered_Events_Need_To_Be_Visible_19
+					* See also: 1-5
+					* Description: Since the signature of the method is changed empty string is passed to finction setButtonCaption
+					*/
+			          parent.window.opener.document.applets[0].setButtonCaption(specimenAttributeKey.value,"");
 					}
 					function derivedSpecimenGrid(id)
 					{

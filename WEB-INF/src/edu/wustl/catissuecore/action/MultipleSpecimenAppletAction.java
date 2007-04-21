@@ -102,7 +102,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	public ActionForward initData(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		Map DataListsMap = new HashMap();
+		Map dataListsMap = new HashMap();
 
 		Map specimenClassTypeMap = getSpecimenClassTypeMap();
 
@@ -127,11 +127,11 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
     		NameValueBean nvb = (NameValueBean) tissueSiteList.get(i);
     		finalTissueSiteList.add(nvb.getName());
     	}
-		DataListsMap.put(Constants.SPECIMEN_TYPE_MAP, specimenClassTypeMap);
-		DataListsMap.put(Constants.SPECIMEN_CLASS_LIST, specimenClassList.toArray());
-		DataListsMap.put(Constants.TISSUE_SITE_LIST, finalTissueSiteList.toArray());
-		DataListsMap.put(Constants.TISSUE_SIDE_LIST, Utility.getListForCDE(Constants.CDE_NAME_TISSUE_SIDE).toArray());
-		DataListsMap.put(Constants.PATHOLOGICAL_STATUS_LIST, Utility.getListForCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS).toArray());
+		dataListsMap.put(Constants.SPECIMEN_TYPE_MAP, specimenClassTypeMap);
+		dataListsMap.put(Constants.SPECIMEN_CLASS_LIST, specimenClassList.toArray());
+		dataListsMap.put(Constants.TISSUE_SITE_LIST, finalTissueSiteList.toArray());
+		dataListsMap.put(Constants.TISSUE_SIDE_LIST, Utility.getListForCDE(Constants.CDE_NAME_TISSUE_SIDE).toArray());
+		dataListsMap.put(Constants.PATHOLOGICAL_STATUS_LIST, Utility.getListForCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS).toArray());
 
 		//------------specimen collection group
 		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
@@ -143,11 +143,31 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		List specimenGroupList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		ArrayList specimenGroupArrayList = new ArrayList();
 		specimenGroupArrayList = getNameStringArray(specimenGroupList);
-		DataListsMap.put(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenGroupArrayList.toArray());
+		dataListsMap.put(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenGroupArrayList.toArray());
 		if (request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME) != null)
 		{
-			DataListsMap.put(Constants.SPECIMEN_COLL_GP_NAME, request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME));
+			dataListsMap.put(Constants.SPECIMEN_COLL_GP_NAME, request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME));
 			request.getSession().removeAttribute(Constants.SPECIMEN_COLL_GP_NAME);
+			/**
+			* Patch ID: Entered_Events_Need_To_Be_Visible_11
+			* See also: 1-5
+			* Description: If specimen form name is set means the control is coming from specimeCollectionGroup page
+			* Therefore set the events that are present in the scgForm and not default events in the specimenForm
+			*/ 
+			SpecimenCollectionGroupForm scgForm=(SpecimenCollectionGroupForm)request.getSession().getAttribute("scgForm");
+			NewSpecimenForm specimenForm=getSpecimenFormWithEventsInfo(scgForm);
+							
+			Map toolTipMap = (HashMap)(request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY));
+			dataListsMap.put(Constants.DEFAULT_TOOLTIP_TEXT,Utility.getToolTipText(specimenForm));
+		}
+		else
+		{
+			/**
+			 * If dpecimenCollecion group name is not set means this is the default flow for page.
+			 * set the default tool tip in datalist map. In specimen model same map is called as specimenAttributeOptionMap
+			 */
+			dataListsMap.put(Constants.DEFAULT_TOOLTIP_TEXT,Utility.getDefaultEventsToolTip());
+			/** -- patch ends here -- */
 		}
 		
 		/**
@@ -163,36 +183,36 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE)!=null)
 		{
 			String defaultTissueSide = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE);
-			DataListsMap.put(Constants.DEFAULT_TISSUE_SIDE,defaultTissueSide);
+			dataListsMap.put(Constants.DEFAULT_TISSUE_SIDE,defaultTissueSide);
 		}
 		if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)!=null)
 		{
 			String defaultPathologicalStatus = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS);
-			DataListsMap.put(Constants.DEFAULT_PATHOLOGICAL_STATUS,defaultPathologicalStatus);
+			dataListsMap.put(Constants.DEFAULT_PATHOLOGICAL_STATUS,defaultPathologicalStatus);
 		}
 		if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SITE)!=null)
 		{
 			String defaultTissueSite = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SITE);
-			DataListsMap.put(Constants.DEFAULT_TISSUE_SITE,defaultTissueSite);
+			dataListsMap.put(Constants.DEFAULT_TISSUE_SITE,defaultTissueSite);
 		}
 		if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN)!=null)
 		{
 			String defaultSpecimenClass = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN);
-			DataListsMap.put(Constants.DEFAULT_SPECIMEN,defaultSpecimenClass);
+			dataListsMap.put(Constants.DEFAULT_SPECIMEN,defaultSpecimenClass);
 		}
 		if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE)!=null)
 		{
 			String defaultSpecimenType = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE);
-			DataListsMap.put(Constants.DEFAULT_SPECIMEN_TYPE,defaultSpecimenType);
+			dataListsMap.put(Constants.DEFAULT_SPECIMEN_TYPE,defaultSpecimenType);
 		}
 		// ------------------------------------
 
 		// Mandar : to set columns per page ----- start
 		String columns = XMLPropertyHandler.getValue(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE);
-		DataListsMap.put(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE, columns);
+		dataListsMap.put(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE, columns);
 		// Mandar : to set columns per page ----- end
 
-		writeMapToResponse(response, DataListsMap);
+		writeMapToResponse(response, dataListsMap);  
 		return null;
 	}
 
@@ -1360,5 +1380,30 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		   return null;
 	   }
 //		 --------- Changes By  Mandar : 05Dec06 for Bug 2866. ---  Extending SecureAction.  end
+	   
+	   /**
+	    * This method populates NewSpecimenForm with collection and receieved events information
+	    * @param scgForm SpecimenCollectionGroupForm source of events
+	    * @return specimenForm with populated events values
+	    */
+	   protected NewSpecimenForm getSpecimenFormWithEventsInfo(SpecimenCollectionGroupForm scgForm)
+	   {
+		   NewSpecimenForm specimenForm=new NewSpecimenForm();
+		   specimenForm.setCollectionEventUserId(scgForm.getCollectionEventUserId());
+		   specimenForm.setCollectionEventdateOfEvent(scgForm.getCollectionEventdateOfEvent());
+		   specimenForm.setCollectionEventTimeInHours(scgForm.getCollectionEventTimeInHours());
+		   specimenForm.setCollectionEventTimeInMinutes(scgForm.getCollectionEventTimeInMinutes());
+		   specimenForm.setCollectionEventCollectionProcedure(scgForm.getCollectionEventCollectionProcedure());
+		   specimenForm.setCollectionEventContainer((scgForm.getCollectionEventContainer()));
+		   specimenForm.setCollectionEventComments((scgForm.getCollectionEventComments()));
 
+		   specimenForm.setReceivedEventUserId(scgForm.getReceivedEventUserId());
+		   specimenForm.setReceivedEventDateOfEvent(scgForm.getReceivedEventDateOfEvent());
+		   specimenForm.setReceivedEventTimeInHours(scgForm.getReceivedEventTimeInHours());
+		   specimenForm.setReceivedEventTimeInMinutes(scgForm.getReceivedEventTimeInMinutes());
+		   specimenForm.setReceivedEventReceivedQuality(scgForm.getReceivedEventReceivedQuality());
+		   specimenForm.setReceivedEventComments((scgForm.getReceivedEventComments()));
+		   
+		   return specimenForm;
+	   }
 }

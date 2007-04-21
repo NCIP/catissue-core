@@ -157,6 +157,8 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	// column no of this column
 	int columnIndex;
 
+	//eventstToolTipText for events button
+	String eventstToolTipText="";
 	/**
 	 * Constructs the SpecimenColumnModel object based on the parameters.
 	 * @param table Reference of the table.
@@ -615,8 +617,10 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 		eventsButton = new ModifiedButton(label);
 		eventsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
-		eventsPanel.add(eventsButton);
-
+		eventsPanel.add(eventsButton); 
+		
+		eventsPanel.setToolTipText("dsdsadsfdf"); 
+		
 		//External Identifier
 		label = (String) buttonStatusMap.get(actualPageNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
 				+ AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS_STRING);
@@ -659,7 +663,18 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 		// For holding component value
 		text = new String();
-
+		
+		/** 
+		 * Retrieve tooltip text for event button which is maitiained in MultiplesSpecimenTableModel. 
+		 */
+		eventstToolTipText=model.getEventsToolTipText(actualPageNo+1);
+		if(eventstToolTipText==null)
+		{
+			model.setEventsToolTipText(null, actualPageNo+1);
+			eventstToolTipText=model.getEventsToolTipText(actualPageNo+1);
+		}
+		setToolTipToEventButton(eventstToolTipText);
+		ToolTipManager.sharedInstance().registerComponent(eventsButton);
 		//AddFocus Traversal 11-Dec-06
 		//		collectionGroupPanel.setFocusTraversalPolicy( new MyOwnFocusTraversalPolicy(collectionGroupPanel) );
 		//		parentSpecimenPanel.setFocusTraversalPolicy( new MyOwnFocusTraversalPolicy(parentSpecimenPanel) );
@@ -1191,6 +1206,22 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		this.unit.setText(unit);
 	}
 
+	/**
+	 * @return defaultToolTipText
+	 */
+	public String getEventstToolTipText() 
+	{
+		return eventstToolTipText;
+	}
+
+	/**
+	 * @param eventstToolTipText The toolTip to set to events button.
+	 */
+	public void setEventstToolTipText(String eventstToolTipText) 
+	{
+		this.eventstToolTipText = eventstToolTipText;
+	}
+
 	private void setTypeListModel(String className)
 	{
 		System.out.println("IN SCM setTypeListModel b4 tableModel");
@@ -1596,6 +1627,15 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 			//			case AppletConstants.SPECIMEN_STORAGE_LOCATION_ROW_NO :
 			//				value = location.getText();
 			//				break;
+			// Events
+				/**
+				* Patch ID: Entered_Events_Need_To_Be_Visible_2
+				* See also: 1-5
+				* Description: If row is events row then returns SPECIMEN_EVENTS_ROW_NO to getTableCellRendererComponent function
+				*/  
+			case AppletConstants.SPECIMEN_EVENTS_ROW_NO :
+				value = eventsButton.getToolTipText();
+				break;
 			default :
 				value = "";
 		}
@@ -1856,7 +1896,35 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 			//		System.out.println(comptype + "set as Active Element.");	
 		}
 	}
-
+	
+	/**
+	 * Name : Vijay_Pande
+	 * Reviewer : Santosh_Chandak
+	 * Bug ID: Entered_Events_Need_To_Be_Visible 
+	 * Patch ID: Entered_Events_Need_To_Be_Visible_1
+	 * See also: 1-5
+	 * Description: Events on multiple specimen page should be visible for mouse over event on events button. 
+	 * User need not to click on events button evrytime to see the events on multiple specimen page.
+	 * For this tooltip is assigned to events button.
+	 */  
+	
+	/**
+	 * Sets toolTipText to event button
+	 * @param toolTip text to be set as toolTip
+	 */
+	public void setToolTipToEventButton(String toolTip)
+	{
+		eventsButton.setToolTipText(toolTip);
+	}
+	/**
+	 * Returns the current toolTip text of event button
+	 * @return toolTip of event button
+	 */
+	public String getToolTipToEventButton()
+	{
+		return eventsButton.getToolTipText();
+	}
+	
 	public boolean isCellEnabled(int rowNo)
 	{
 		System.out.println("IN SCM isCellEnabled : rowno:- " + rowNo);

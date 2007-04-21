@@ -15,10 +15,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
+import edu.wustl.catissuecore.actionForm.MultipleSpecimenForm;
 import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.applet.CopyPasteOperationValidatorModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
 
 public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
@@ -41,6 +43,12 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 		Map specimenMap = (HashMap) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
 		Map eventsMap = (HashMap) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
 		Map buttonsMap = new HashMap();
+		/**
+		* Patch ID: Entered_Events_Need_To_Be_Visible_14
+		* See also: 1-5
+		* Description: Get tooltip map from session, update tool tip and send it to response
+		*/ 
+		Map toolTipMap = (HashMap) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY); 
 
 		Map appletDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		CopyPasteOperationValidatorModel validatorModel = (CopyPasteOperationValidatorModel) appletDataMap.get(AppletConstants.VALIDATOR_MODEL);
@@ -74,6 +82,11 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 					{
 						value = eventsMap.get(multipleSpecimenTableModel.getKey(copiedRow, copiedColumn));
 						buttonsMap.put(key, value);
+						/**
+						 * update toolTip map with the coppied columns tooltip
+						 */
+						String toolTip=Utility.getToolTipText((MultipleSpecimenForm)value);
+						toolTipMap.put(AppletConstants.SPECIMEN_PREFIX+String.valueOf(copiedColumn+1)+"_eventsToolTip", toolTip);
 					}
 					else if (copiedRow == AppletConstants.SPECIMEN_DERIVE_ROW_NO)
 					{
@@ -84,8 +97,18 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 
 			}
 		}
+		/**
+		 * set toolTip map to the map in table model
+		 */
+		multipleSpecimenTableModel.setEventsToolTipMap(toolTipMap);
+
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_BUTTONS_MAP_KEY, buttonsMap);
-		writeMapToResponse(response, null);
+		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY,toolTipMap);
+		/**
+		 * send map in response for MultipleSpecimenCopyHandler
+		 */
+		writeMapToResponse(response, toolTipMap);
+		/** -- patch ends here -- */
 		return null;
 	}
 
@@ -109,7 +132,14 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 		Map specimenMap = (HashMap) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY);
 		Map eventsMap = (HashMap) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
 		Map buttonsMap = (HashMap) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_BUTTONS_MAP_KEY);
-
+		
+		/**
+		* Patch ID: Entered_Events_Need_To_Be_Visible_15
+		* See also: 1-5
+		* Description: Get tooltip map from session, update tool tip and send it to response
+		*/ 
+		HashMap toolTipMap=(HashMap)request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY);
+		
 		Map appletDataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		CopyPasteOperationValidatorModel validatorModel = (CopyPasteOperationValidatorModel) appletDataMap.get(AppletConstants.VALIDATOR_MODEL);
 		Map dataListsMap = new HashMap();
@@ -176,6 +206,11 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 					{
 						value = buttonsMap.get(key);
 						eventsMap.put(multipleSpecimenTableModel.getKey(pastedRow, pastedColumn), value);
+						/**
+						 * update toolTip map with the coppied columns tooltip
+						 */
+						String toolTip=(String)Utility.getToolTipText((MultipleSpecimenForm)value);
+						toolTipMap.put(AppletConstants.SPECIMEN_PREFIX+String.valueOf(pastedColumn+1)+"_eventsToolTip", toolTip);
 					}
 					else if (copiedRow == AppletConstants.SPECIMEN_DERIVE_ROW_NO)
 					{
@@ -196,11 +231,20 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 
 			}
 		}
-
+		/**
+		 * set toolTip map to the map in table model
+		 */
+		multipleSpecimenTableModel.setEventsToolTipMap(toolTipMap);
+		
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY, formBeanMap);
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_MAP_KEY, specimenMap);
 		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY, eventsMap);
-		writeMapToResponse(response, null);
+		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY,toolTipMap);
+		/**
+		 * send map in response for MultipleSpecimenCopyHandler
+		 */
+		writeMapToResponse(response, toolTipMap);
+		/** -- patch ends here -- */
 		return null;
 	}
 

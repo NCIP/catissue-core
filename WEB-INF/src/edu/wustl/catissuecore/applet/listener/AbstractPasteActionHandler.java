@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import edu.wustl.catissuecore.applet.AppletConstants;
@@ -243,14 +244,29 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 				//check for disabled rows
 				if (!isDisabledRow(selectedRow))
 				{
-					String key = CommonAppletUtil.getDataKey(copiedRow, copiedCol);
-					List valueList = (List) dataMap.get(key);
-					doPasteData(selectedRow, selectedColumnIndex, valueList);
+					/**
+					* Patch ID: Entered_Events_Need_To_Be_Visible_8
+					* See also: 1-5
+					* Description: If SPECIMEN_EVENTS_ROW_NO then dont retrive data in list
+					* will throw a ClassCastException since toolTip is stored as a string and not as List
+					* finally call doPasteTooltip method
+					*/ 
+					if(copiedRow!=AppletConstants.SPECIMEN_EVENTS_ROW_NO)
+					{
+						String key = CommonAppletUtil.getDataKey(copiedRow, copiedCol);
+						List valueList = (List) dataMap.get(key);
+						doPasteData(selectedRow, selectedColumnIndex, valueList);
+					}
 				}
 				selectedRow = selectedRow + 1;
 			}
 			selectedColumnIndex++;
 		}
+		/**
+		 * Update toolTip of pasted columns
+		 */
+		doPasteTooltip(validatorModel,dataMap);
+		/** -- patch ends here -- */
 		SwingUtilities.updateComponentTreeUI(table);
 	}
 
@@ -260,6 +276,40 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 	 * @param value value
 	 */
 	protected abstract void doPasteData(int selectedRow, int selectedCol, List valueList);
+
+	/**
+	 * This method updates the tool tip of event button on all pasted columns
+	 * @param validatorModel Copy paste operation validator model
+	 * @param dataMap map where toolTip is present of the coppied columns
+	 */
+	protected void doPasteTooltip(CopyPasteOperationValidatorModel validatorModel, HashMap dataMap)
+	{
+		List copiedCols = validatorModel.getSelectedCopiedCols();
+		List pastedCols = validatorModel.getSelectedPastedCols();
+		Collections.sort(pastedCols);
+		Collections.sort(copiedCols);
+		
+		/**
+		* Patch ID: Entered_Events_Need_To_Be_Visible_7
+		* See also: 1-5
+		* Description: Retrieve toolTip of copied column and paste it to selected pasted column
+		*/ 
+		for(int copiedColumnCount=0;copiedColumnCount<copiedCols.size();copiedColumnCount++)
+		{
+			int copiedCol = ((Integer) (copiedCols.get(copiedColumnCount))).intValue();
+			int pastedCol = ((Integer) (pastedCols.get(copiedColumnCount))).intValue();
+			
+			String key2 = CommonAppletUtil.getDataKey(AppletConstants.SPECIMEN_EVENTS_ROW_NO,copiedCol);
+			String toolTip=(String)dataMap.get(key2);
+			
+			TableColumnModel columnModel = table.getColumnModel();
+			TableColumn tm = columnModel.getColumn(pastedCol);
+			SpecimenColumnModel scm = (SpecimenColumnModel) tm.getCellEditor();
+			scm.setEventstToolTipText(toolTip);
+			scm.setToolTipToEventButton(toolTip);
+		}
+	}
+	/** -- patch ends here -- */
 
 	/**
 	 * get total no. of columns

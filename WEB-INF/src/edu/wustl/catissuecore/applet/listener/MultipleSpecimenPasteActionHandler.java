@@ -43,6 +43,13 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 	{
 		super.doActionPerformed(event);
 
+		/**
+		* Patch ID: Entered_Events_Need_To_Be_Visible_10
+		* See also: 1-5
+		* Description: Map for toolTip text on event buttom. Map is retrieved from response and set to table model.
+		*/ 
+		HashMap toolTipMap=null;
+
 		if (isValidateSuccess)
 		{
 			MultipleSpecimenTableModel multipleSpecimenTableModel = CommonAppletUtil.getMultipleSpecimenTableModel(table);
@@ -104,6 +111,10 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 					String url = applet.getServerURL() + "/MultipleSpecimenCopyPasteAction.do?method=paste";
 
 					appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(url, appletModel);
+					/**
+					 * get toolTipMap from the MultipleSpecimenPasteAction
+					 */
+					toolTipMap=(HashMap)appletModel.getData();
 
 				}
 				catch (Exception e)
@@ -193,6 +204,14 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 					}
 
 				}
+				/**
+				 * If toolTipMap is not null then set it to the map maintaianed in table model 
+				 */
+				if(toolTipMap!=null)
+				{
+					multipleSpecimenTableModel.setEventsToolTipMap(toolTipMap);
+				}
+				/** -- patch ends here -- */
 
 				/*	int actualColNo = 1;
 				 int displayColNo = multipleSpecimenTableModel.getDisplayColumnNo(actualColNo); 
@@ -223,6 +242,23 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 			}
 		}
 	}
+	/**
+	* Patch ID: Entered_Events_Need_To_Be_Visible_9
+	* See also: 1-5
+	* Description: Paste the tool tip to selected column
+	*/ 
+	/**
+	 * @param selectedCol column selected for paste
+	 * @param tooltip tool tip text to be assigned
+	 */
+	protected void doPasteTooltip(int selectedCol,String tooltip)
+	{
+		TableColumnModel columnModel = table.getColumnModel();
+		SpecimenColumnModel scm = (SpecimenColumnModel) columnModel.getColumn(selectedCol).getCellEditor();
+		scm.setToolTipToEventButton(tooltip);
+		scm.setEventstToolTipText(tooltip);
+	}
+	/** -- patch ends here -- */
 
 	protected boolean isDisabledRow(int rowNo)
 	{

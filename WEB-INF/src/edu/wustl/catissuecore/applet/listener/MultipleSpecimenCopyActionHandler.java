@@ -56,6 +56,10 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 		
 		super.doActionPerformed(event);
 		paste.setEnabled(true);
+		/**
+		 * Map for toolTip text for event button
+		 */
+		HashMap toolTipMap=null;
 	
 		if (isValidateSuccess)
 		{
@@ -101,7 +105,10 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 					String url = applet.getServerURL() + "/MultipleSpecimenCopyPasteAction.do?method=copy";
 
 					appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(url, appletModel);
-
+					/**
+					 * get tooltip map as response from from MultipleSpecimenPasteAction
+					 */
+					toolTipMap=(HashMap)appletModel.getData();
 				}
 				catch (Exception e)
 				{
@@ -109,6 +116,13 @@ public class MultipleSpecimenCopyActionHandler extends AbstractCopyActionHandler
 					System.out.println("Exception");
 				}
 				validatorModel.setSelectedCopiedCols(selectedCopiedCols);
+				/**
+				 * if toolTip map is not null then set it to the evnts toolTip map in table model
+				 */
+				if(toolTipMap!=null)
+				{
+					multipleSpecimenTableModel.setEventsToolTipMap(toolTipMap);
+				}
 			}
 		}
 
