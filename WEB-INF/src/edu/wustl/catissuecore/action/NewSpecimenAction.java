@@ -32,6 +32,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
@@ -56,8 +57,6 @@ import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
-import edu.wustl.catissuecore.actionForm.SpecimenForm;
 
 /**
  * NewSpecimenAction initializes the fields in the New Specimen page.
@@ -232,10 +231,10 @@ public class NewSpecimenAction extends SecureAction
 		List<NameValueBean> tissueSideList = new ArrayList<NameValueBean>();
 		List<NameValueBean> pathologicalStatusList = new ArrayList<NameValueBean>();
 
-		if (!Constants.ALIQUOT.equals(specimenForm.getLineage())) 
-		{
-			initializeAllLists(specimenClassList, specimenTypeList, tissueSiteList, tissueSideList, pathologicalStatusList);
-		}
+//		if (!Constants.ALIQUOT.equals(specimenForm.getLineage())) 
+//		{
+//			initializeAllLists(specimenClassList, specimenTypeList, tissueSiteList, tissueSideList, pathologicalStatusList);
+//		}
 		
 		Map<String, List<NameValueBean>> subTypeMap = new HashMap<String, List<NameValueBean>>();
 		String specimenCollectionGroupId = specimenForm.getSpecimenCollectionGroupId();
@@ -252,7 +251,6 @@ public class NewSpecimenAction extends SecureAction
 				specimenForm.setClassName("");
 				specimenForm.setType("");
 				specimenForm.setTissueSite("");
-				specimenForm.setTissueSide(Constants.SELECT_OPTION);
 				specimenForm.setPathologicalStatus("");
 				populateAllRestrictedLists(request, specimenForm, specimenCollectionGroupId,specimenClassList, specimenTypeList, tissueSiteList, 
 						tissueSideList, pathologicalStatusList, subTypeMap);
@@ -725,7 +723,6 @@ public class NewSpecimenAction extends SecureAction
 		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 		specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 		tissueSiteList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-		tissueSideList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 		pathologicalStatusList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
 	}
 	
@@ -794,7 +791,7 @@ public class NewSpecimenAction extends SecureAction
 			throws DAOException
 	{
 		// Getting the specimen type list
-		specimenTypeList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_TYPE, null);
+		specimenTypeList = Utility.getListFromCDE(Constants.CDE_NAME_SPECIMEN_TYPE);
 		
 		/**
 	     * Name : Virender Mehta
@@ -807,10 +804,10 @@ public class NewSpecimenAction extends SecureAction
 		tissueSiteList.addAll(Utility.tissueSiteList());
     	
 		//Getting tissue side list
-		tissueSideList.addAll(CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null));
+		tissueSideList.addAll(Utility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
 		
 		//Getting pathological status list
-		pathologicalStatusList.addAll(CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null));
+		pathologicalStatusList.addAll(Utility.getListFromCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS));
 					
 		// get the Specimen class and type from the cde
 		CDE specimenClassCDE = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_SPECIMEN_CLASS);
@@ -910,15 +907,10 @@ public class NewSpecimenAction extends SecureAction
 				pathologicalStatusList.add(new NameValueBean(pathologicalStatus, pathologicalStatus));
 				tempMap.put(pathologicalStatus + Constants.CDE_NAME_PATHOLOGICAL_STATUS, pathologicalStatus);
 			}
-								
-//			if ((request.getParameter("classChange") != null)&& (!specimenForm.getClassName().equals(specimenClass))) 
-//			{
-//				continue;
-//			}
 		}
 
 		// Setting tissue side list
-		tissueSideList.addAll(CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null));
+		tissueSideList.addAll(Utility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
 	}
 	 /**
 		 * Name : Ashish Gupta
