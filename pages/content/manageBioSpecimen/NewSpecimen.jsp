@@ -249,8 +249,7 @@
 
 		function onCollOrClassChange()
 		{
-		   
-			var specimenCollGroupElement = document.getElementById("specimenCollectionGroupId");
+		   	var specimenCollGroupElement = document.getElementById("specimenCollectionGroupId");
 			var classNameElement = document.getElementById("className").value;
 			classNameElement = trim(classNameElement);
 			var classSet = false;
@@ -261,7 +260,6 @@
 		
 			if(specimenCollGroupElement.value != "-1" && classSet)
 			{
-					
 				<%
 				String actionOnCollOrClassChange = "NewSpecimen.do?pageOf=pageOfNewSpecimen&virtualLocated=false";
 				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
