@@ -817,9 +817,19 @@
 				</td>
 			</tr>	
 			
-			</table>
+			<!--
+			/**
+			 * Name : Vijay_Pande
+			 * Reviewer Name : Sachin_Lale 
+			 * Bug ID: 4141
+			 * Patch ID: 4141_1 
+			 * See also: -
+			 * Description: Following three tags are commented to remove imbalancing os tags.
+	     	*/
+	     -->
+		<!--	</table>
 		</td>
-	</tr>	
+	</tr>	-->
 	
 		
 <%
