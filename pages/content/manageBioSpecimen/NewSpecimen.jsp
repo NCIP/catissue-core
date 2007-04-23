@@ -323,7 +323,7 @@
 		var url,request;
 		function getEventsFromSCG()
 		{		
-			var scgId = document.getElementById("specimenCollectionGroupId123").value;			
+			var scgId = document.getElementById("selectedSpecimenCollectionGroupId").value;			
 			url = "GetEventsFromScg.do?scgId="+scgId;
 			sendRequestForEvents();	
 		}
@@ -674,7 +674,7 @@
 									Description: The following change shows read-only textbox on specimen page, if specimen is being added
 									from specimen collection group page, otherwise combobox having names of specimen collection group is displayed.
 								-->
-								<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" styleId="specimenCollectionGroupId123" 
+								<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" styleId="selectedSpecimenCollectionGroupId" 
 									size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="resetVirtualLocated();getEventsFromSCG()">
 								<%
 									if((specimenCollectionGroupId != null && !specimenCollectionGroupId.equals("")) &&
