@@ -53,16 +53,15 @@
 	{		
 		document.forms[0].submittedFor.value = submittedFor;
 		document.forms[0].forwardTo.value    = forwardTo;
-		var errorMessage=document.getElementById("errormessage").innerHTML;
 		if(validateAny(document.forms[0].holdsStorageTypeIds)==false)
 		{
-			alert(errorMessage);
+			alert("<bean:message key="errmsg.storagetype"/>");
 		}
 		else
 		{
 			if(validateAny(document.forms[0].holdsSpecimenClassTypes)==false)
 			{
-				alert(errorMessage);
+				alert("<bean:message key="errmsg.storagetype"/>");
 			}
 			else
 			{
@@ -151,7 +150,6 @@
 <!-- NEW Institute REGISTRATION BEGINS-->
 	<tr>
 	<td>
-	<span id="errormessage"><bean:message key="errmsg.storagetype"/></span>
 	<table summary="" cellpadding="3" cellspacing="0" border="0">
 		<tr>
 			<td>
