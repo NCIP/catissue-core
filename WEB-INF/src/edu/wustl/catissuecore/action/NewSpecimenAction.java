@@ -246,15 +246,20 @@ public class NewSpecimenAction extends SecureAction
 			{
 				populateListBoxes(specimenForm, request);
 			}
-			else if(restrictSCGCheckbox != null && restrictSCGCheckbox.equals("true"))
-			{
-				specimenForm.setClassName("");
-				specimenForm.setType("");
-				specimenForm.setTissueSite("");
-				specimenForm.setPathologicalStatus("");
+			else if(restrictSCGCheckbox != null && restrictSCGCheckbox.equals(Constants.TRUE))
+            {
+				// TODO create constants and importantly test for all cases
+				String onCollOrClassChange = request.getParameter(Constants.ON_COLL_OR_CLASSCHANGE);
+				if(onCollOrClassChange == null || !onCollOrClassChange.equalsIgnoreCase(Constants.TRUE))
+				{
+					specimenForm.setClassName("");
+					specimenForm.setType("");
+					specimenForm.setTissueSite("");
+					specimenForm.setPathologicalStatus("");
+				}
 				populateAllRestrictedLists(request, specimenForm, specimenCollectionGroupId,specimenClassList, specimenTypeList, tissueSiteList, 
-						tissueSideList, pathologicalStatusList, subTypeMap);
-			}
+				tissueSideList, pathologicalStatusList, subTypeMap);
+            }
 			else
 			{
 				populateAllLists(specimenForm, specimenClassList, specimenTypeList, tissueSiteList, tissueSideList,	
