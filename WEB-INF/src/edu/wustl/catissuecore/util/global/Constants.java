@@ -1515,4 +1515,18 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String TOOLTIP_TEXT="TOOLTIPTEXT";
 	public static final String MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY="multipleSpecimenTooltipMapKey";
 	public static final String DEFAULT_TOOLTIP_TEXT="DEFAULTTOOLTIPTEXT";
+	
+	/**
+	 * Patch ID: Bug#3184_2 (for Multiple Specimen)
+	 * Description: The following constants are used as key in the Map
+	 */
+	public static final String KEY_SPECIMEN_CLASS = "SpecimenClass";
+	public static final String KEY_SPECIMEN_TYPE = "SpecimenType";
+	public static final String KEY_TISSUE_SITE = "TissueSite";
+	public static final String KEY_PATHOLOGICAL_STATUS = "PathologicalStatus";
+	public static final String KEY_SPECIMEN_REQUIREMENT_PREFIX = "SpecimenRequirement_";
+	public static final String KEY_RESTRICTED_VALUES = "RestictedValues";
+	
+	public static final String RESTRICT_SCG_CHECKBOX = "restrictSCGCheckbox";
+	public static final String ON_COLL_OR_CLASSCHANGE = "onCollOrClassChange";
 }
