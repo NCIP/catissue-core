@@ -49,6 +49,18 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 	{
 		Specimen specimen = (Specimen) obj;
 		
+		/**
+		* Patch ID: 4119_2 
+        * See also: 1-3
+        * Description: Following check is added for the valid class of specimen.
+        *  If invalid specimen class name is passed to DomainObjectFactory it returns null object.
+        */
+		if (specimen == null) 
+		{
+			throw new DAOException(ApplicationProperties.getValue("specimen.object.null.err.msg", "Specimen"));
+		}
+		/* Patch ends here  */
+		
 		if (specimen.getStorageContainer() != null
 				&& (specimen.getStorageContainer().getId() == null && specimen.getStorageContainer().getName() == null))
 		{
@@ -93,8 +105,14 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		* See also: -
 		* Description: Validation for specimen class + type missing
 		* Following code is provided to validate the compatibility of derived specimen class and type.
-		*/ 
-		if(!Utility.validateSpecimenTypeClass(specimen))
+		*/
+		/**
+		* Patch ID: 4119_3 
+        * See also: 1-3
+        * Description: Signature of the method validateSpecimenTypeClass is chaged and hence the input parameters.
+        * Now only class name and type of specimen are passed for validation, instead of passing NewSpecimen object.
+        */
+		if(!Utility.validateSpecimenTypeClass(Utility.getSpecimenClassName(specimen), specimen.getType()))
 		{
 			return false;
 		}

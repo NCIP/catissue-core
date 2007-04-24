@@ -695,22 +695,27 @@ public class Utility extends edu.wustl.common.util.Utility
        }
        
        /**
+        * Name : Vijay Pande
+        * Bug ID: 4119
+        * Patch ID: 4119_1 
+        * See also: 1-2
+        * Description: Signature of method is changed to pass only required parameters instread of whole object, so that the method become  more maintainable
+        */
+       /**
          * Method to check type and class compatibility of specimen as a part of validation process. 
-	     * @param specimen object of specimen to validate
-	     * @return boolean depending on type class compatible or not
+	     * @param specimenClass specimen class
+	     * @param specimenType type of specimen
+	     * @return boolean returns (true/false) depending on type and class are compatible or not
 	     * @throws DAOException 
 	     */
-	    public static boolean validateSpecimenTypeClass(Specimen specimen) throws DAOException
+	    public static boolean validateSpecimenTypeClass(String specimenClass, String specimenType) throws DAOException
 	    {
-	   		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);
-	   		String specimenClass = Utility.getSpecimenClassName(specimen);
-	
-	   		if (!Validator.isEnumeratedValue(specimenClassList, specimenClass))
+	   		List specimenClassList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_SPECIMEN_CLASS, null);	
+	   		if (specimenClass==null || !Validator.isEnumeratedValue(specimenClassList, specimenClass))
 	   		{
 	   			throw new DAOException(ApplicationProperties.getValue("protocol.class.errMsg"));
 	   		}
-	
-	   		if (!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass), specimen.getType()))
+	   		if (!Validator.isEnumeratedValue(Utility.getSpecimenTypes(specimenClass), specimenType))
 	   		{
 	   			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
 	   		}
