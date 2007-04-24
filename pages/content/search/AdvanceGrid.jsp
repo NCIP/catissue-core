@@ -197,14 +197,28 @@
 	if(useFunction == "participant")
 	{
 		mygrid.setColumnHidden(mygrid.getColumnCount()-1,true);
+		/** Patch ID: 4149_1 
+         * See also: 1-2
+         * Description: on participant page initialy grid displayed with some spacing between column header and column data.
+         * For this foloowing function is called which resizes the grid properly.
+         */
+		mygrid.setSizes();
 	}
 
+ 		/**
+        * Name : Vijay Pande
+        * Bug ID: 4149
+        * Patch ID: 4149_1 
+        * See also: 1-2
+        * Description: Javascript error on add participant page. If matching participant found then there was javaScript error.
+        * Instread of for each statement simple for loop is used.
+        */
 	// Mandar : 30-Jan-07 :To hide ID columns
 	var hideCols = getIDColumns();
-	for(x in hideCols)
+	for(i=0;i<hideCols.size();i++)
 	{
-		mygrid.setHeaderCol(hideCols[x],"");
-		mygrid.setColumnHidden(hideCols[x],true);
+		mygrid.setHeaderCol(hideCols[i],"");
+		mygrid.setColumnHidden(hideCols[i],true);
 	}
 
 	//fix for grid display on IE for first time.
