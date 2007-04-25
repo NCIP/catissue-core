@@ -131,8 +131,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
      * Description : A comment field at the Specimen Collection Group.
      */
     private String comment;
-    
-    
+        
 	/**
 	 * Name : Ashish Gupta
 	 * Reviewer Name : Sachin Lale 
@@ -143,6 +142,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	*/
 	private int numberOfSpecimens = 1;
 	
+	//Patch ID: Bug#3184_28
+	private String actualNumberOfSpecimen;
 	
 	/**
 	 * @return the numberOfSpecimens
@@ -634,6 +635,9 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 				applyEventsToSpecimens = true;
 			}
 			
+			// Patch ID: 3184_29
+			//Validate number of specimen entered against the number of actual number of specimen.
+			validateNumberOfSpecimenField(errors);
 		}
 		catch (Exception excp)
 		{
@@ -644,6 +648,22 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		return errors;
 	}
 	
+	// Patch ID: 3184_30
+	/**
+	 * This method validates the number of specimen entered by the user against the actual number of specimen requirements 
+	 * associated with the selected Study Calendar Event Point.
+	 * @param errors
+	 */
+	private void validateNumberOfSpecimenField(ActionErrors errors) 
+	{
+		if(restrictSCGCheckbox.equalsIgnoreCase(Constants.TRUE) && (numberOfSpecimens < Integer.parseInt(actualNumberOfSpecimen)))
+		{
+			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.multiplespecimen.invalidNumberOfSpecimen"));
+		}
+	}
+
+
+
 	/**
      * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
      * @param formBeanId - FormBean ID of the object inserted
@@ -1114,5 +1134,23 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public void setRestrictSCGCheckbox(String restrictSCGCheckbox) {
 		this.restrictSCGCheckbox = restrictSCGCheckbox;
+	}
+
+
+	// Patch ID: 3184_31
+	/**
+	 * @return the actualNumberOfSpecimen
+	 */
+	public String getActualNumberOfSpecimen() {
+		return actualNumberOfSpecimen;
+	}
+
+
+
+	/**
+	 * @param actualNumberOfSpecimen the actualNumberOfSpecimen to set
+	 */
+	public void setActualNumberOfSpecimen(String actualNumberOfSpecimen) {
+		this.actualNumberOfSpecimen = actualNumberOfSpecimen;
 	}
 }
