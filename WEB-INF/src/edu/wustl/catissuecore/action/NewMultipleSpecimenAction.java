@@ -929,7 +929,11 @@ public class NewMultipleSpecimenAction extends SecureAction
 		calender.setTime(collectionEventParameters.getTimestamp());
 		//Populating Collection Events
     	multipleSpecimenForm.setCollectionEventCollectionProcedure(collectionEventParameters.getCollectionProcedure());
-    	multipleSpecimenForm.setCollectionEventComments(collectionEventParameters.getComments());
+    	/* Bug Id: 4134
+	 	Patch ID: 4134_1			
+	 	Description: Added Utility.toString()
+		*/
+    	multipleSpecimenForm.setCollectionEventComments(Utility.toString(collectionEventParameters.getComments()));
     	multipleSpecimenForm.setCollectionEventContainer(collectionEventParameters.getContainer());
     	multipleSpecimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString(collectionEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
     	multipleSpecimenForm.setCollectionEventTimeInHours(Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY))));
@@ -938,7 +942,7 @@ public class NewMultipleSpecimenAction extends SecureAction
     	    	
     	calender.setTime(receivedEventParameters.getTimestamp());
     	//Populating Received Events
-    	multipleSpecimenForm.setReceivedEventComments(receivedEventParameters.getComments());
+    	multipleSpecimenForm.setReceivedEventComments(Utility.toString(receivedEventParameters.getComments()));
     	multipleSpecimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString(receivedEventParameters.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY));
     	multipleSpecimenForm.setReceivedEventReceivedQuality(receivedEventParameters.getReceivedQuality());
     	multipleSpecimenForm.setReceivedEventTimeInHours(Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY))));

@@ -144,7 +144,10 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("</CollectionContainer>");
 		
 		xmlData.append("<CollectionComments>");
-		xmlData.append(collectionEventParameters.getComments());
+		/* Bug Id: 4134
+		 Patch ID: 4134_2			
+		 Description: Added Utility.toString()		*/
+		xmlData.append(Utility.toString(collectionEventParameters.getComments()));
 		xmlData.append("</CollectionComments>");	
 		
 		return xmlData;
@@ -183,7 +186,11 @@ public class ScgEventsAjaxHandlerAction extends BaseAction
 		xmlData.append("</ReceivedQuality>");
 		
 		xmlData.append("<ReceivedComments>");
-		xmlData.append(receivedEventParameters.getComments());
+		/*Bug Id: 4134
+	 	Patch ID: 4134_1			
+	 	Description: Added Utility.toString()		
+		*/
+		xmlData.append(Utility.toString(receivedEventParameters.getComments()));
 		xmlData.append("</ReceivedComments>");	
 		
 		return xmlData;
