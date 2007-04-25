@@ -6,10 +6,12 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.DisposalEventParametersForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
+<%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
+<script src="jss/script.js" type="text/javascript"></script>
 
 <%
         String operation = (String) request.getAttribute(Constants.OPERATION);
-        String formName,specimenId=null;
+		String formName,specimenId=null;
 
         boolean readOnlyValue;
         if (operation.equals(Constants.EDIT))
@@ -55,6 +57,7 @@
 			if(confirm("Are you sure you want to disable the specimen ?"))
 			{
 				form.action="<%=formName%>";
+				form.target="_top";
 				form.submit();
 			}
 			else
@@ -62,7 +65,7 @@
 				return false;
 			}
 		}
-		else
+		if(form.activityStatus.value == "<%=Constants.ACTIVITY_STATUS_CLOSED%>")
 		{
 			if(confirm("Are you sure you want to close the specimen ?"))
 			{
@@ -75,7 +78,11 @@
 			}
 		
 		}
-		
+		else
+		{
+			form.action="<%=formName%>";
+			form.submit();
+		}
 	}
 </script>	
 </head>
@@ -98,6 +105,7 @@
 		</tr>
 		<tr>
 			<td><html:hidden property="id" /></td>
+			<td><html:hidden property="onSubmit" /></td>
 		</tr>
 
 		<tr>
@@ -231,6 +239,7 @@
 			<td class="formField">
 			 <autocomplete:AutoCompleteTag property="activityStatus"
 						  optionsList = "<%=request.getAttribute(Constants.ACTIVITYSTATUSLIST)%>"
+						  onChange="<%=strCheckStatus%>"
 						  initialValue="<%=form.getActivityStatus()%>"
 			 />	
 			</td>
