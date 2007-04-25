@@ -103,7 +103,7 @@
 	<tr>
 
 		<td class="formLabelBorderlessLeft">
-			<b>Participant :</b> Name (Protocol Id) 
+			<b>Participant :</b> Name (Protocol ID) 
 		</td>
 	</tr>	
 	
