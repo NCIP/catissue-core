@@ -11,12 +11,13 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Calendar;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -24,17 +25,19 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
@@ -370,8 +373,53 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		setDefaultEvents(request,specimenCollectionGroupForm,operation);
 		
 		request.setAttribute("scgForm", specimenCollectionGroupForm);
+		/* Bug ID: 4135
+	 	* Patch ID: 4135_2	 
+	 	* Description: Setting the ids in collection and received events associated with this scg
+		*/
+		//When opening in Edit mode, to set the ids of collection event parameters and received event parameters
+		if(specimenCollectionGroupForm.getId() != 0)
+		{
+			setEventsId(specimenCollectionGroupForm,bizLogic);
+		}
 		
 		return mapping.findForward(pageOf);
+	}
+	/**
+	 * @param specimenCollectionGroupForm
+	 * @param bizLogic
+	 * @throws DAOException
+	 */
+	private void setEventsId(SpecimenCollectionGroupForm specimenCollectionGroupForm,SpecimenCollectionGroupBizLogic bizLogic)throws DAOException
+	{
+		String scgId = ""+specimenCollectionGroupForm.getId();
+		List scglist = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(),"id",scgId);
+		if(scglist != null && !scglist.isEmpty())
+		{
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)scglist.get(0);
+			Collection eventsColl = scg.getSpecimenEventParametersCollection();
+			CollectionEventParameters collectionEventParameters = null;
+			ReceivedEventParameters receivedEventParameters = null;
+			if(eventsColl != null && !eventsColl.isEmpty())
+			{
+				Iterator iter = eventsColl.iterator();
+				while(iter.hasNext())
+				{
+					Object temp = iter.next();
+					if(temp instanceof CollectionEventParameters)
+					{
+						collectionEventParameters = (CollectionEventParameters)temp;
+					}
+					else if(temp instanceof ReceivedEventParameters)
+					{
+						receivedEventParameters = (ReceivedEventParameters)temp;
+					}
+				}
+			}
+			//Setting the ids
+			specimenCollectionGroupForm.setCollectionEventId(collectionEventParameters.getId().longValue());
+			specimenCollectionGroupForm.setReceivedEventId(receivedEventParameters.getId().longValue());
+		}
 	}
 	/**
 	 * @param request
