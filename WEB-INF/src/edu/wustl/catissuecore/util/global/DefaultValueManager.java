@@ -12,7 +12,7 @@ import edu.wustl.common.util.logger.Logger;
  * This class is the Setter class for hash map.
  * CatissueCoreServeletContextListener.java class call validateDefaultValues() method, this method will
  * validate default Values from Configuration file i.e caTissueCore_Properties.xml for enumerated dropdowns and populate
- * defaultValue map which will have key value pair if validation fails for some value then null will be mapped to corresponding key.
+ * defaultValue map which will have key value pair if validation fails for some value then empty String will be mapped to corresponding key.
  
  * @author virender_mehta
  * @Reviewer: Sachin Lale
