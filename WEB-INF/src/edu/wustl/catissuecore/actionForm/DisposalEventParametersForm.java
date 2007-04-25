@@ -98,7 +98,11 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
          
          try
          {
- 
+        	 //resolved bug# 4058	
+        	 if (validator.isEmpty(activityStatus) )
+             {
+         	   errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("disposaleventparameters.activityStatus")));
+             }
          	//Commented due to Bug:- 3106: No need to have Disposal Reason a required field
          	// checks the reason
 //           	if (validator.isEmpty(reason ) )
