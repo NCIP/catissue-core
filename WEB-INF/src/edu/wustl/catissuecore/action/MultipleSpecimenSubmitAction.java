@@ -7,7 +7,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.applet.Applet;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -91,10 +90,8 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 		{
 			specimenMap = setDataInSpecimens(aForm, request);
 		}
-
 		catch (DAOException e)
 		{
-
 			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 			if (errors == null || errors.size() == 0)
 			{
@@ -117,45 +114,42 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 			Specimen specimen = (Specimen) specimenOrderList.get(i);
 			if(specimen.getStorageContainer()!=null)
 			{
-			if (specimen.getPositionDimensionOne() == null || specimen.getPositionDimensionTwo() == null)
-			{
-				positionsToBeAllocatedList.add(specimen);
-			}
-			else
-			{
-				usedPositionsList.add(specimen.getStorageContainer().getId() + Constants.STORAGE_LOCATION_SAPERATOR
-						+ specimen.getPositionDimensionOne() + Constants.STORAGE_LOCATION_SAPERATOR + specimen.getPositionDimensionTwo());
-			}
+				if (specimen.getPositionDimensionOne() == null || specimen.getPositionDimensionTwo() == null)
+				{
+					positionsToBeAllocatedList.add(specimen);
+				}
+				else
+				{
+					usedPositionsList.add(specimen.getStorageContainer().getId() + Constants.STORAGE_LOCATION_SAPERATOR
+							+ specimen.getPositionDimensionOne() + Constants.STORAGE_LOCATION_SAPERATOR + specimen.getPositionDimensionTwo());
+				}
 			}
 
         	List listOfDerivedSpecimen = (List) specimenMap.get(specimen);
-
         	if(listOfDerivedSpecimen == null)
         	{
         		specimenMap.put(specimen,new ArrayList());
         	}
         	else
         	{
-			for (int j = 0; j < listOfDerivedSpecimen.size(); j++)
-			{
-				Specimen derivedSpecimen = (Specimen) listOfDerivedSpecimen.get(j);
-				if(derivedSpecimen.getStorageContainer()!=null)
+				for (int j = 0; j < listOfDerivedSpecimen.size(); j++)
 				{
-				if (derivedSpecimen.getPositionDimensionOne() == null || derivedSpecimen.getPositionDimensionTwo() == null)
-				{
-					positionsToBeAllocatedList.add(derivedSpecimen);
+					Specimen derivedSpecimen = (Specimen) listOfDerivedSpecimen.get(j);
+					if(derivedSpecimen.getStorageContainer()!=null)
+					{
+						if (derivedSpecimen.getPositionDimensionOne() == null || derivedSpecimen.getPositionDimensionTwo() == null)
+						{
+							positionsToBeAllocatedList.add(derivedSpecimen);
+						}
+						else
+						{
+							usedPositionsList.add(derivedSpecimen.getStorageContainer().getId() + Constants.STORAGE_LOCATION_SAPERATOR
+								+ derivedSpecimen.getPositionDimensionOne() + Constants.STORAGE_LOCATION_SAPERATOR
+								+ derivedSpecimen.getPositionDimensionTwo());
+						}
+					}
 				}
-				else
-				{
-
-					usedPositionsList.add(derivedSpecimen.getStorageContainer().getId() + Constants.STORAGE_LOCATION_SAPERATOR
-							+ derivedSpecimen.getPositionDimensionOne() + Constants.STORAGE_LOCATION_SAPERATOR
-							+ derivedSpecimen.getPositionDimensionTwo());
-				}
-				}
-			}
         	}
-
 		}
 
 		boolean isContainerFull = false;
@@ -446,9 +440,7 @@ public class MultipleSpecimenSubmitAction extends BaseAction
 	 */
 	private List insertSpecimens(HttpServletRequest request, Map specimenMap) throws Exception
 	{
-		IBizLogic bizLogic;
-
-		bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties.getValue("app.bizLogicFactory"), "getBizLogic",
+		IBizLogic bizLogic = AbstractBizLogicFactory.getBizLogic(ApplicationProperties.getValue("app.bizLogicFactory"), "getBizLogic",
 				Constants.NEW_SPECIMEN_FORM_ID);
 		SessionDataBean sessionBean = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 
