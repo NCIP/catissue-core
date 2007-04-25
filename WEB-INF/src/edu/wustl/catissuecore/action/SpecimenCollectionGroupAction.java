@@ -72,13 +72,13 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		
 		//	set the menu selection 
 		request.setAttribute(Constants.MENU_SELECTED, "14"  ); 
-		
+
 		//pageOf and operation attributes required for Advance Query Object view.
 		String pageOf = request.getParameter(Constants.PAGEOF);
-		
+
 		//Gets the value of the operation parameter.
 		String operation = (String)request.getParameter(Constants.OPERATION);
-		
+
 		//Sets the operation attribute to be used in the Edit/View Specimen Collection Group Page in Advance Search Object View. 
 		request.setAttribute(Constants.OPERATION,operation);
 		if(operation.equalsIgnoreCase(Constants.ADD ) )
@@ -86,7 +86,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			specimenCollectionGroupForm.setId(0);
 			Logger.out.debug("SCGA : set to 0 "+ specimenCollectionGroupForm.getId() );
 		}
-		
+
 		boolean isOnChange = false; 
 		String str = request.getParameter("isOnChange");
 		if(str!=null)
@@ -94,7 +94,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			if(str.equals("true"))
 				isOnChange = true; 
 		}
-		
+
 		// get list of Protocol title.
 		SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 		//populating protocolist bean.
@@ -103,80 +103,111 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 		List list = bizLogic.getList(sourceObjectName,displayNameFields,valueField, true);
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
-		
+
 		//Populating the Site Type bean
 		sourceObjectName = Site.class.getName();
 		String siteDisplaySiteFields[] = {"name"};
 		list = bizLogic.getList(sourceObjectName,siteDisplaySiteFields,valueField, true);
 		request.setAttribute(Constants.SITELIST, list);
-		
+
 		//Populating the participants registered to a given protocol
 		loadPaticipants(specimenCollectionGroupForm.getCollectionProtocolId() , bizLogic, request);
-		
+
 		//Populating the protocol participants id registered to a given protocol
 		loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-		
+
 		//Populating the Collection Protocol Events
 		loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-		
 
 		String protocolParticipantId = specimenCollectionGroupForm.getProtocolParticipantIdentifier();
 		//Populating the participants Medical Identifier for a given participant
 		loadParticipantMedicalIdentifier(specimenCollectionGroupForm.getParticipantId(),bizLogic, request);
-		
+
 		//Load Clinical status for a given study calander event point
-		List calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
+		String changeOn = request.getParameter(Constants.CHANGE_ON);
+		List calendarEventPointList = null;
+		if(changeOn != null && changeOn.equals(Constants.COLLECTION_PROTOCOL_ID))
+		{
+			calendarEventPointList = new ArrayList(); 
+		}
+		else
+		{
+			calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
 				Constants.SYSTEM_IDENTIFIER,
 				new Long(specimenCollectionGroupForm.getCollectionProtocolEventId()));
-		if(isOnChange && !calendarEventPointList.isEmpty())
-		{
-			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
-			specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
-			
-			/**
-			 * Patch ID: Bug#3184_9
-			 */
-			Collection specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
-			if((specimenRequirementCollection != null) && (!specimenRequirementCollection.isEmpty()))
-			{
-				//Populate the number of Specimen Requirements.
-				int numberOfSpecimen = specimenRequirementCollection.size();
-				specimenCollectionGroupForm.setNumberOfSpecimens(numberOfSpecimen);
-				request.setAttribute(Constants.NUMBER_OF_SPECIMEN, numberOfSpecimen);
-				//Set checkbox status
-				specimenCollectionGroupForm.setRestrictSCGCheckbox("true");
-			}
 		}
-		
-		
-		// populating clinical Diagnosis field 
-    	CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_CLINICAL_DIAGNOSIS);
-    	CDEBizLogic cdeBizLogic = (CDEBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
-    	List clinicalDiagnosisList = new ArrayList();
-    	clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION,""+Constants.SELECT_OPTION_VALUE));
-    	cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(),clinicalDiagnosisList);
-    	request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
+		// The values of restrict checkbox and the number of specimen must alos populate in edit mode.
+		if((isOnChange || operation.equalsIgnoreCase(Constants.EDIT)))
+		{
+			//Patch ID: Bug#3184_27
+			int numberOfSpecimen = 1;
+			if(!calendarEventPointList.isEmpty())
+			{
+				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
+				specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
 
-		
+				/**
+				 * Patch ID: Bug#3184_9
+				 */
+				Collection specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+				if((specimenRequirementCollection != null) && (!specimenRequirementCollection.isEmpty()))
+				{
+					//Populate the number of Specimen Requirements.
+					numberOfSpecimen = specimenRequirementCollection.size();
+					//Set checkbox status depending upon the days of study calendar event point. If it is zero, then unset the restrict
+					//checkbox, otherwise set the restrict checkbox
+					Double studyCalendarEventPoint = collectionProtocolEvent.getStudyCalendarEventPoint();
+					if(studyCalendarEventPoint.doubleValue() == 0)
+					{
+						specimenCollectionGroupForm.setRestrictSCGCheckbox("false");
+					}
+					else
+					{
+						specimenCollectionGroupForm.setRestrictSCGCheckbox("true");
+					}
+				}
+			}
+			else if(calendarEventPointList.isEmpty())
+			{
+				//Set checkbox status
+				specimenCollectionGroupForm.setRestrictSCGCheckbox("false");
+			}
+			//Sets the value for number of specimen field on the specimen collection group page. 
+			specimenCollectionGroupForm.setNumberOfSpecimens(numberOfSpecimen);
+			request.setAttribute(Constants.NUMBER_OF_SPECIMEN, numberOfSpecimen);
+			//Set the number of actual specimen requirements for validation purpose.
+			//This value is used in validate method of SpecimenCollectionGroupForm.java.
+			request.setAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS, numberOfSpecimen + "");
+		}
+
+		// populating clinical Diagnosis field 
+		CDE cde = CDEManager.getCDEManager().getCDE(Constants.CDE_NAME_CLINICAL_DIAGNOSIS);
+		CDEBizLogic cdeBizLogic = (CDEBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.CDE_FORM_ID);
+		List clinicalDiagnosisList = new ArrayList();
+		clinicalDiagnosisList.add(new NameValueBean(Constants.SELECT_OPTION,""+Constants.SELECT_OPTION_VALUE));
+		cdeBizLogic.getFilteredCDE(cde.getPermissibleValues(),clinicalDiagnosisList);
+		request.setAttribute(Constants.CLINICAL_DIAGNOSIS_LIST, clinicalDiagnosisList);
+
+
 		// populating clinical Status field
 		//		NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
 		List clinicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CLINICAL_STATUS,null);
 		request.setAttribute(Constants.CLINICAL_STATUS_LIST, clinicalStatusList);
-		
+
 		//Sets the activityStatusList attribute to be used in the Site Add/Edit Page.
 		request.setAttribute(Constants.ACTIVITYSTATUSLIST, Constants.ACTIVITY_STATUS_VALUES);
-		
-		
+
+
 		Logger.out.debug("CP ID in SCG Action======>"+specimenCollectionGroupForm.getCollectionProtocolId());
 		Logger.out.debug("Participant ID in SCG Action=====>"+specimenCollectionGroupForm.getParticipantId()+"  "+specimenCollectionGroupForm.getProtocolParticipantIdentifier());
-		
+
 		// -------called from Collection Protocol Registration start-------------------------------
 		if( (request.getAttribute(Constants.SUBMITTED_FOR) !=null) &&(request.getAttribute(Constants.SUBMITTED_FOR).equals("Default")))
 		{
 			Logger.out.debug("Populating CP and Participant in SCG ====  AddNew operation loop");
-			
+
 			Long cprId =new Long(specimenCollectionGroupForm.getCollectionProtocolRegistrationId());
-			
+
 			if(cprId != null)
 			{
 				List collectionProtocolRegistrationList = bizLogic.retrieve(CollectionProtocolRegistration.class.getName(),
@@ -185,19 +216,19 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				{
 					Object  obj = collectionProtocolRegistrationList.get(0 ); 
 					CollectionProtocolRegistration cpr = (CollectionProtocolRegistration)obj;
-					
+
 					long cpID = cpr.getCollectionProtocol().getId().longValue();
 					long pID = cpr.getParticipant().getId().longValue();
 					String ppID = cpr.getProtocolParticipantIdentifier();
-					
+
 					Logger.out.debug("cpID : "+ cpID + "   ||  pID : " + pID + "    || ppID : " + ppID );
-					
+
 					specimenCollectionGroupForm.setCollectionProtocolId(cpID);
-					
+
 					//Populating the participants registered to a given protocol
 					loadPaticipants(cpID , bizLogic, request);
 					loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-					
+
 					String firstName = Utility.toString(cpr.getParticipant().getFirstName());;
 					String lastName = Utility.toString(cpr.getParticipant().getLastName());
 					String birthDate = Utility.toString(cpr.getParticipant().getBirthDate());
@@ -208,16 +239,16 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 						specimenCollectionGroupForm.setCheckedButton(1); 
 					}	
 					//Populating the protocol participants id registered to a given protocol
-					
+
 					else if(cpr.getProtocolParticipantIdentifier() != null)
 					{
 						specimenCollectionGroupForm.setProtocolParticipantIdentifier(ppID );
 						specimenCollectionGroupForm.setCheckedButton(2); 
 					}
-					
+
 					//Populating the Collection Protocol Events
 					loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-					
+
 					//Load Clinical status for a given study calander event point
 					calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
 							Constants.SYSTEM_IDENTIFIER,
@@ -231,11 +262,11 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			}
 			request.setAttribute(Constants.SUBMITTED_FOR, "Default");
 		}
-		
-		
+
+
 		//*************  ForwardTo implementation *************
 		HashMap forwardToHashMap=(HashMap)request.getAttribute("forwardToHashMap");
-		
+
 		if(forwardToHashMap !=null)
 		{
 			Long collectionProtocolId = (Long)forwardToHashMap.get("collectionProtocolId");
@@ -243,29 +274,29 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			{
 				collectionProtocolId = new Long(request.getParameter("cpId"));
 			}
-			
+
 			Long participantId=(Long)forwardToHashMap.get("participantId");
 			String participantProtocolId = (String) forwardToHashMap.get("participantProtocolId");
-			
+
 			specimenCollectionGroupForm.setCollectionProtocolId(collectionProtocolId.longValue());
-			
+
 			if(participantId != null && participantId.longValue() != 0)
 			{    
 				//Populating the participants registered to a given protocol
 				loadPaticipants(collectionProtocolId.longValue(), bizLogic, request);
-				
+
 				loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-				
+
 				specimenCollectionGroupForm.setParticipantId(participantId.longValue());
 				specimenCollectionGroupForm.setCheckedButton(1);
 				request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID,participantId.toString());
-				
+
 			}
 			else if(participantProtocolId != null)
 			{
 				//Populating the participants registered to a given protocol
 				loadPaticipants(collectionProtocolId.longValue(), bizLogic, request);
-				
+
 				loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 				specimenCollectionGroupForm.setProtocolParticipantIdentifier(participantProtocolId);
 				specimenCollectionGroupForm.setCheckedButton(2);
@@ -278,7 +309,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			//Bug 1915:SpecimenCollectionGroup.Study Calendar Event Point not populated when page is loaded through proceedTo
 			//Populating the Collection Protocol Events
 			loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-			
+
 			//Load Clinical status for a given study calander event point
 			calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
 					Constants.SYSTEM_IDENTIFIER,
@@ -288,7 +319,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
 				specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
 			}
-			
+
 			Logger.out.debug("CollectionProtocolID found in forwardToHashMap========>>>>>>"+collectionProtocolId);
 			Logger.out.debug("ParticipantID found in forwardToHashMap========>>>>>>"+participantId);
 			Logger.out.debug("ParticipantProtocolID found in forwardToHashMap========>>>>>>"+participantProtocolId);
@@ -297,21 +328,21 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		//Populate the group name field with default value in the form of 
 		//<Collection Protocol Name>_<Participant ID>_<Group Id>
 		int groupNumber=bizLogic.getNextGroupNumber();
-		
+
 		//Get the collection protocol title for the collection protocol Id selected
 		String collectionProtocolTitle = "";
 		list = bizLogic.retrieve(CollectionProtocol.class.getName(),valueField,new Long(specimenCollectionGroupForm.getCollectionProtocolId()));
-		
+
 		if(!list.isEmpty())
 		{
 			CollectionProtocol collectionProtocol = (CollectionProtocol)list.get(0);
 			collectionProtocolTitle=collectionProtocol.getTitle();
 		}
-		
+
 		long groupParticipantId = specimenCollectionGroupForm.getParticipantId();
 		//check if the reset name link was clicked
 		String resetName = request.getParameter(Constants.RESET_NAME);
-		
+
 		//Set the name to default if reset name link was clicked or page is loading for first time 
 		//through add link or forward to link 
 		if(forwardToHashMap !=null || (specimenCollectionGroupForm.getName()!=null && specimenCollectionGroupForm.getName().equals(""))
@@ -348,8 +379,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 					if(groupParticipantId>0) 
 					{
 						specimenCollectionGroupForm.setName(maxCollTitle+"_"+groupParticipantId+"_"+
-											specimenCollectionGroupForm.getId());
-						
+								specimenCollectionGroupForm.getId());
+
 					}
 					else
 					{
@@ -359,17 +390,17 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				}
 			}
 		}
-		
+
 		request.setAttribute(Constants.PAGEOF,pageOf);
 		Logger.out.debug("page of in Specimen coll grp action:"+request.getParameter(Constants.PAGEOF));
 		// -------called from Collection Protocol Registration end -------------------------------
 		/**
-	 * Name : Ashish Gupta
-	 * Reviewer Name : Sachin Lale 
-	 * Bug ID: 2741
-	 * Patch ID: 2741_11	 
-	 * Description: Methods to set default events on SCG page
-	*/
+		 * Name : Ashish Gupta
+		 * Reviewer Name : Sachin Lale 
+		 * Bug ID: 2741
+		 * Patch ID: 2741_11	 
+		 * Description: Methods to set default events on SCG page
+		 */
 		setDefaultEvents(request,specimenCollectionGroupForm,operation);
 		
 		request.setAttribute("scgForm", specimenCollectionGroupForm);
@@ -460,12 +491,12 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		//setting the quality for received events
 		List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
 		request.setAttribute(Constants.RECEIVED_QUALITY_LIST, qualityList);
-		
+
 //		Sets the hourList attribute to be used in the Add/Edit FrozenEventParameters Page.
 		request.setAttribute(Constants.HOUR_LIST, Constants.HOUR_ARRAY);
 		//Sets the minutesList attribute to be used in the Add/Edit FrozenEventParameters Page.
 		request.setAttribute(Constants.MINUTES_LIST, Constants.MINUTES_ARRAY);
-		
+
 	}
 	/**
 	 * @param request
@@ -485,7 +516,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		{
 			String user = sessionData.getLastName() + ", " + sessionData.getFirstName();
 			long collectionEventUserId = EventsUtil.getIdFromCollection(userCollection, user);
-			
+
 			if(specimenCollectionGroupForm.getCollectionEventUserId() == 0)
 			{
 				specimenCollectionGroupForm.setCollectionEventUserId(collectionEventUserId);
@@ -496,7 +527,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			}
 		}
 	}
-	
+
 	/**
 	 * @param specimenForm
 	 */
@@ -533,7 +564,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		}
 
 	}
-	
+
 	private void loadPaticipants(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
@@ -554,15 +585,15 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			whereColumnCondition = new String[]{"=",Constants.IS_NOT_NULL};
 			whereColumnValue=new Object[]{new Long(protocolID),""};
 		}
-		
-		
+
+
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = ", ";
-		
+
 		List list = bizLogic.getList(sourceObjectName, displayParticipantFields, valueField, whereColumnName,
 				whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, true);
-		
-		
+
+
 		//get list of Participant's names
 		valueField = Constants.SYSTEM_IDENTIFIER;
 		sourceObjectName = Participant.class.getName();
@@ -581,13 +612,13 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			whereColumnCondition2 = new String[]{Constants.IS_NOT_NULL,Constants.IS_NOT_NULL,Constants.IS_NOT_NULL,Constants.IS_NOT_NULL};
 			whereColumnValue2=new String[]{"","","",""};
 		}
-		
+
 		String joinCondition2 = Constants.OR_JOIN_CONDITION;
 		String separatorBetweenFields2 = ", ";
-		
+
 		List listOfParticipants = bizLogic.getList(sourceObjectName, participantsFields, valueField, whereColumnName2,
 				whereColumnCondition2, whereColumnValue2, joinCondition2, separatorBetweenFields, false);
-		
+
 		// removing blank participants from the list of Participants
 		list=removeBlankParticipant(list, listOfParticipants);
 		//Mandar bug id:1628 :- sort participant dropdown list
@@ -595,26 +626,26 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		Logger.out.debug("Paticipants List"+list);
 		request.setAttribute(Constants.PARTICIPANT_LIST, list);
 	}
-	
+
 	private List removeBlankParticipant(List list, List listOfParticipants)
 	{
 		List listOfActiveParticipant=new ArrayList();
-		
+
 		for(int i=0; i<list.size(); i++)
 		{
 			NameValueBean nameValueBean =(NameValueBean)list.get(i);
-			
+
 			if(Long.parseLong(nameValueBean.getValue()) == -1)
 			{
 				listOfActiveParticipant.add(list.get(i));
 				continue;
 			}
-			
+
 			for(int j=0; j<listOfParticipants.size(); j++)
 			{
 				if(Long.parseLong(((NameValueBean)listOfParticipants.get(j)).getValue()) == -1)
 					continue;
-				
+
 				NameValueBean participantsBean = (NameValueBean)listOfParticipants.get(j);
 				if( nameValueBean.getValue().equals(participantsBean.getValue()) )
 				{
@@ -623,12 +654,12 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				}
 			}
 		}
-		
+
 		Logger.out.debug("No.Of Active Participants Registered with Protocol~~~~~~~~~~~~~~~~~~~~~~~>"+listOfActiveParticipant.size());
-		
+
 		return listOfActiveParticipant;
 	}
-	
+
 	private void loadPaticipantNumberList(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
@@ -648,10 +679,10 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		//			whereColumnCondition = new String[]{"=","!=null"};
 		//			whereColumnValue = new Object[]{new Long(protocolID),""};
 		//		}
-		
+
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = "";
-		
+
 		List list = bizLogic.getList(sourceObjectName, displayParticipantNumberFields, valueField, whereColumnName,
 				whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, true);
 		
