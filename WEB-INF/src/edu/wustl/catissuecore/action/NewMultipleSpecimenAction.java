@@ -106,9 +106,20 @@ public class NewMultipleSpecimenAction extends SecureAction
 		String buttonName = request.getParameter("button");
 		if(buttonName != null)
 		{
-			String noOfSp = request.getParameter("numberOfSpecimens");
-			Integer temp = new Integer(noOfSp);
-			multipleSpForm.setNumberOfSpecimen(temp.intValue());
+			/**
+			 * Patch ID: Bug#3184_17
+			 * Description: Setting the value for number of specimen field and the restrict checkbox on the specimen 
+			 * collection group page. Also setting the value of restrict checkbox in the session, which will be referred to
+			 * in the Applet classes at the client side.
+			 */
+			// Set number of specimens
+			String numberOfSpecimens = request.getParameter(Constants.NUMBER_OF_SPECIMENS);
+			multipleSpForm.setNumberOfSpecimen(Integer.parseInt(numberOfSpecimens));
+			// Set restrict checkbox
+			String restrictSCGCheckbox = request.getParameter(Constants.RESTRICT_SCG_CHECKBOX);
+			multipleSpForm.setRestrictSCGCheckbox(restrictSCGCheckbox);
+			// Set value of restrict checkbox in the session
+			request.getSession().setAttribute(Constants.RESTRICT_SCG_CHECKBOX , restrictSCGCheckbox);
 		}
 		// Putting the scg object in session to propagate it to the multiple specimen page.
 		setSCGInSession(request);

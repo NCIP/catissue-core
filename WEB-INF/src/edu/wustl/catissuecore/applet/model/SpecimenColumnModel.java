@@ -214,15 +214,11 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		// -------------Setting tab order-----------------------
 		//setTabOrder();
 
-		System.out.println("SpecimenColumnModel : Col no : " + column);
 		TableColumnModel columnModel = table.getColumnModel();
-		System.out.println("SpecimenColumnModel columnModel.getColumnCount() : " + columnModel.getColumnCount());
-		System.out.println("SpecimenColumnModel Table.getColumnCount() : " + table.getColumnCount());
 		columnModel.getColumn(column).setCellRenderer(this);
 		columnModel.getColumn(column).setCellEditor(this);
 		columnModel.getColumn(column).setResizable(false);
 		columnModel.getColumn(column).setPreferredWidth(175);
-
 	}
 
 	/**
@@ -250,8 +246,6 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	 */
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column)
 	{
-		System.out.println("getTableCellEditorComponent(table, value: " + value + " , isSelected: " + isSelected + " , row: " + row + " , column: "
-				+ column);
 		text = (value == null) ? "" : value.toString();
 		boolean hasFocus = isSelected;
 		Component component = getComponentAt(row, column, hasFocus, isSelected);
@@ -425,16 +419,30 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		specimenCheckBox.setActionCommand("" + (column + 1));
 		specimenCheckBox.setBackground(Color.lightGray  );
 		specimenCheckBox.setOpaque(true );
-
-		//Specimen Collection Group
-		specimenCollectionGroup = new ModifiedComboBox(model.getSpecimenCollectionGroupValues());
-		specimenCollectionGroup.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
-
-		if (model.getSpecimenCollectionGroupName() != null)
+		
+		// Patch ID: Bug#3184_22
+		// The value of numberOfSpecimenRequirements is used while setting the column values 
+		int numberOfSpecimenRequirements = 0;
+		Map specimenAttributeOptions = model.getSpecimenAttributeOptions();
+		
+		// Setting the Specimen Collection Group Name List and the selected value in the column
+		String restrictSCGCheckbox = (String)specimenAttributeOptions.get(Constants.RESTRICT_SCG_CHECKBOX);
+		if(restrictSCGCheckbox != null && restrictSCGCheckbox.equals(Constants.TRUE))
 		{
-			specimenCollectionGroup.setSelectedItem(model.getSpecimenCollectionGroupName());
-
+			numberOfSpecimenRequirements =  getNumberOfSpecimenRequirements(specimenAttributeOptions);
+			String specimenCollectionGroupList[] = new String[] {model.getSpecimenCollectionGroupName()};
+			specimenCollectionGroup = new ModifiedComboBox(specimenCollectionGroupList);
 		}
+		else
+		{
+			specimenCollectionGroup = new ModifiedComboBox(model.getSpecimenCollectionGroupValues());
+		}
+		specimenCollectionGroup.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
+		if (model.getSpecimenCollectionGroupName() != null)
+		{ // Set the specimen collection group name as selected
+			specimenCollectionGroup.setSelectedItem(model.getSpecimenCollectionGroupName());
+		}
+		
 		rbspecimenGroup = new JRadioButton();
 		collectionGroupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		rbspecimenGroup.setSelected(true);
@@ -476,45 +484,31 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		quantityUnitPanel.add(quantity);
 		quantityUnitPanel.add(unit);
 
-		//Specimen Class
-		classList = new ModifiedComboBox(model.getSpecimenClassValues());
-		/**
-	     * Name : Virender Mehta
-	     * Reviewer: Sachin Lale
-	     * Bug ID: defaultValueConfiguration_BugID
-	     * Patch ID:defaultValueConfiguration_BugID_MultipleSpecimen_4
-	     * See also:defaultValueConfiguration_BugID_MultipleSpecimen_1,2,3
-	     * Description: Setting default value for TissueSite, TissueSite, PathologicalStatus,Specimen Type and Specimen Class
-	     */
-		if(model.getSpecimenClass()!=null)
-		{
-			//To display defaultValue form CatissueCore_Properties.xml
-			classList.setSelectedItem(model.getSpecimenClass());
-		}
-
-		String type[] = {Constants.SELECT_OPTION};
-		//Specimen Type
-		typeList = new ModifiedComboBox(model.getSpecimenTypeValues(null));
-		specimenClassUpdated(model.getSpecimenClass());
-	
-		if(model.getSpecimenType()!=null)
-		{
-			//To display defaultValue form CatissueCore_Properties.xml
-			typeList.setSelectedItem(model.getSpecimenType());
-		}
-		
-		//TissueSite
-		tissueSiteList = new ModifiedComboBox(model.getTissueSiteValues());
+		// Patch ID: Bug#3184_23
+		// Set the default list in the Column
+		initializeTheAppletLists(model);
 		tissueSiteList.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
-		if(model.getTissueSite()!=null)
+		
+		//If the restrict checkbox on specimen collection group is checked, then set the restricted value as the selected;
+		//otherwise set the default values as selected
+		int actualColumnIndex = model.getActualColumnNo(column);
+		if(((restrictSCGCheckbox != null) && (restrictSCGCheckbox.equals(Constants.TRUE))) && (actualColumnIndex < numberOfSpecimenRequirements))
+		{
+			setRestrictedValuesToColumn(model, actualColumnIndex);
+		}
+		else
+		{
+			setDefaultValuesToColumn(model);
+		}
+		//Set the default Tissue Side as selected.
+		if(model.getTissueSide()!=null)
 		{
 			//To display defaultValue form CatissueCore_Properties.xml
-			tissueSiteList.setSelectedItem(model.getTissueSite());
+			tissueSideList.setSelectedItem(model.getTissueSide());
 		}
+						
 		//Mandar : 30Oct06 : To display Tissue Site Tree
-		System.out.println("ImagePath : " + getClass().getClassLoader().getResource("images/Tree.gif"));
 		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("images/Tree.gif"));
-		System.out.println("icon:" + icon);
 		//treeLabel = new JLabel(icon);
 		tissueSiteTreeButton = new JButton(icon);
 		tissueSiteTreeButton.setPreferredSize(new Dimension(20, 28));
@@ -524,24 +518,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		tissueSitePanel.add(tissueSiteTreeButton);
 		//		tissueSitePanel.add(treeLabel);
 
-		//TissueSide
-		tissueSideList = new ModifiedComboBox(model.getTissueSideValues());
-		if(model.getTissueSide()!=null)
-		{
-			//To display defaultValue form CatissueCore_Properties.xml
-			tissueSideList.setSelectedItem(model.getTissueSide());
-		}
-		//PathologicalStatus 
-		pathologicalStatusList = new ModifiedComboBox(model.getPathologicalStatusValues());
-		
-		if(model.getPathologicalStatus()!=null)
-		{
-			//To display defaultValue form CatissueCore_Properties.xml
-			pathologicalStatusList.setSelectedItem(model.getPathologicalStatus());
-		}
-        
-        
-		  /**
+		/**
          * Patch ID: 3835_1_37
          * See also: 1_1 to 1_5
          * Description : Intialised cretedOn date . 
@@ -1224,25 +1201,19 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 	private void setTypeListModel(String className)
 	{
-		System.out.println("IN SCM setTypeListModel b4 tableModel");
 		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel) table.getModel();
-		System.out.println("IN SCM setTypeListModel tableModel retrieved");
 		Object o[] = model.getSpecimenTypeValues(className);
 		if (o != null)
 		{
 			DefaultComboBoxModel typeComboModel = new DefaultComboBoxModel(o);
 			this.typeList.setModel(typeComboModel);
 		}
-		System.out.println("IN SCM setTypeListModel Type set");
 	}
 
 	private void setConcentrationStatus()
 	{
-		System.out.println("IN SCM enableConcentration b4 tableModel");
 		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel) table.getModel();
-		//	int col = table.getSelectedColumn() ;
 		this.concentration.setEnabled(model.getConcentrationStatus(columnIndex));
-		System.out.println("IN SCM enableConcentration concentration refreshed");
 	}
     /**
      * 
@@ -1505,7 +1476,6 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 
 	public void setLocationFromJS(String storageValue)
 	{
-		System.out.println("In setLocationFromJS : Column No : " + columnIndex);
 		//		Mandar: 06Nov06: location removed since auto allocation will take place.
 		//		setLocation(storageValue);
 
@@ -1671,7 +1641,6 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	 */
 	protected void fireEditingStopped()
 	{
-		System.out.println("SpecimenColumnModel in fireEditingStopped  doing nothing");
 		super.fireEditingStopped();
 	}
 
@@ -1682,7 +1651,6 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	 */
 	public void updateComponentValue(int row, String value)
 	{
-		System.out.println("\n\n\n<updateComponentValue : row : " + row + " , value : " + value + ">\n\n\n");
 		JComponent comp = null;
 		switch (row)
 		{
@@ -1773,7 +1741,6 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		}
 		if (comp != null)
 			refreshComponent(comp);
-		System.out.println(" Component at " + row + " Updated");
 	}
 
 	/**
@@ -1927,7 +1894,6 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	
 	public boolean isCellEnabled(int rowNo)
 	{
-		System.out.println("IN SCM isCellEnabled : rowno:- " + rowNo);
 		boolean result = false;
 		switch (rowNo)
 		{
@@ -1944,7 +1910,6 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 			default :
 				result = true;
 		}
-		System.out.println("Row is enabled : " + result);
 		return result;
 	}
 
@@ -1962,6 +1927,146 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
     public void setCreatedOn(String createdOn)
     {
         this.createdOn.setText(createdOn);
+    }
+    
+    public void specimenTypeUpdate(String specimenType)
+	{
+		String specimenTypeArray[] = new String[] {specimenType};
+		DefaultComboBoxModel typeComboModel = new DefaultComboBoxModel(specimenTypeArray);
+		this.typeList.setModel(typeComboModel);
+		
+		setConcentrationStatus();
+
+		MultipleSpecimenTableModel model = (MultipleSpecimenTableModel) table.getModel();
+		setUnit(model.getQuantityUnit(columnIndex));
+        
+		refreshComponent(unit);
+	}
+    
+    /**
+	 * This method sets all the default values to the dropdowns in column.
+	 * @param model
+	 */
+	private void setDefaultValuesToColumn(MultipleSpecimenTableModel model) 
+	{
+		/**
+	     * Name : Virender Mehta
+	     * Reviewer: Sachin Lale
+	     * Bug ID: defaultValueConfiguration_BugID
+	     * Patch ID:defaultValueConfiguration_BugID_MultipleSpecimen_4
+	     * See also:defaultValueConfiguration_BugID_MultipleSpecimen_1,2,3
+	     * Description: Setting default value for TissueSite, TissueSite, PathologicalStatus,Specimen Type and Specimen Class
+	     */
+		if(model.getSpecimenClass()!=null)
+		{
+			//To display defaultValue form CatissueCore_Properties.xml
+			classList.setSelectedItem(model.getSpecimenClass());
+		}
+		
+		if(model.getSpecimenType()!=null)
+		{
+			//To display defaultValue form CatissueCore_Properties.xml
+			typeList.setSelectedItem(model.getSpecimenType());
+		}
+		
+		if(model.getTissueSite()!=null)
+		{
+			//To display defaultValue form CatissueCore_Properties.xml
+			tissueSiteList.setSelectedItem(model.getTissueSite());
+		}
+		
+		if(model.getPathologicalStatus()!=null)
+		{
+			//To display defaultValue form CatissueCore_Properties.xml
+			pathologicalStatusList.setSelectedItem(model.getPathologicalStatus());
+		}
+	}
+	
+	private void initializeTheAppletLists(MultipleSpecimenTableModel model)
+	{
+		//Specimen Class
+		classList = new ModifiedComboBox(model.getSpecimenClassValues());
+		
+		//Specimen Type
+		typeList = new ModifiedComboBox(model.getSpecimenTypeValues(null));
+		specimenClassUpdated(model.getSpecimenClass());
+		
+		//Tissue Site
+		tissueSiteList = new ModifiedComboBox(model.getTissueSiteValues());
+		
+		//Tissue Side
+		tissueSideList = new ModifiedComboBox(model.getTissueSideValues());
+		
+		//Pathological Status 
+		pathologicalStatusList = new ModifiedComboBox(model.getPathologicalStatusValues());
+	}
+
+	/**
+	 * This method returns the number of specimen requirements form the specimenAttributeOptions
+	 * @param specimenAttributeOptions
+	 * @return number of specimen requirements
+	 */
+	private int getNumberOfSpecimenRequirements(Map specimenAttributeOptions) {
+		Map<String, Map<String, String>> restrictedValuesMap = (Map<String, Map<String, String>>)specimenAttributeOptions.get(Constants.KEY_RESTRICTED_VALUES);
+		Map<String, String> numnberOfSpecimenRequirementMap = restrictedValuesMap.get(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
+		String numberOfSpecimenRequirements = numnberOfSpecimenRequirementMap.get(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
+		
+		return Integer.parseInt(numberOfSpecimenRequirements);
+	}
+
+    // Patch ID: Bug#3184_24
+    /**
+     * This method returns the value form the Multiple Specimen Table model given the row and the column index
+     * @param model
+     * @param rowNameIndex
+     * @param column
+     * @return
+     */
+    private String getValueFromSpecimenMap(MultipleSpecimenTableModel model, short rowNameIndex, int column)
+    {
+    	Map specimenMap = model.specimenMap;
+    	String rowName = model.specimenAttribute[rowNameIndex];
+		String key = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + rowName;
+		String value = (String)specimenMap.get(key);
+		
+		if(value == null)
+		{
+			value = "";
+		}		
+		return value;
+    }
+    
+    /**
+     * This method sets the restricted values to the given column.
+     * @param model
+     * @param column
+     */
+    private void setRestrictedValuesToColumn(MultipleSpecimenTableModel model, int column)
+    {
+    	//Specimen Class
+		String specimenClass = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_CLASS_ROW_NO, column + 1);
+		//String specimenClassArray[] = new String[] {specimenClass};
+		//classList = new ModifiedComboBox(specimenClassArray);
+		classList.setSelectedItem(specimenClass);
+		
+		//Specimen Type
+		String specimenType = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_TYPE_ROW_NO, column + 1);
+		//String specimenTypeArray[] = new String[] {specimenType};
+		//typeList = new ModifiedComboBox(specimenTypeArray);
+		typeList.setSelectedItem(specimenType);
+		specimenTypeUpdate(specimenType);
+		
+		//TissueSite
+		String tissueSite = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO, column + 1);
+		//String tissueSiteArray[] = new String[] {tissueSite};
+		//tissueSiteList = new ModifiedComboBox(tissueSiteArray);
+		tissueSiteList.setSelectedItem(tissueSite);
+		
+		//PathologicalStatus 
+		String pathologicalStatus = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO, column + 1);
+		//String pathologicalStatusArray[] = new String[] {pathologicalStatus};
+		//pathologicalStatusList = new ModifiedComboBox(pathologicalStatusArray);
+		pathologicalStatusList.setSelectedItem(pathologicalStatus);
     }
 
 	// -------------------Mandar For Focus Handling 11-Dec-06 start

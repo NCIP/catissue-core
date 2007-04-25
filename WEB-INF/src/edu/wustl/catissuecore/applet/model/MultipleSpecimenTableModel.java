@@ -167,67 +167,20 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			eventsToolTipMap=(HashMap)specimenAttributeOptions.get(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY);
         }
 		/** -- patch ends here */
-		//Setting the specimen Collection group name if add multiple specimen came form add specimen collection group name
-		if (specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME) != null)
+				
+		// Patch ID: Bug#3184_20
+		// If the restrict checkbox on Specimen Collection Group is checked, then set restricted values in the specimenMap
+		int noOfSpecimenRequirments = 0;
+		String restrictSCGCheckbox = (String)specimenAttributeOptions.get(Constants.RESTRICT_SCG_CHECKBOX);
+		if(restrictSCGCheckbox != null && restrictSCGCheckbox.equals(Constants.TRUE))
 		{
-			setSpecimenCollectionGroupName(specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME).toString());
-			for(int count=1;count<=initialColumnCount; count++)
-			{
-				setCollectionGroupInModel(count);
-			}	
+			noOfSpecimenRequirments = initializeAppletWithRestrictedValues(initialColumnCount);
 		}
-		/**
-         * Name : Virender Mehta
-         * Reviewer: Sachin Lale
-         * Bug ID: defaultValueConfiguration_BugID
-         * Patch ID:defaultValueConfiguration_BugID_MultipleSpecimen_2
-         * See also:defaultValueConfiguration_BugID_MultipleSpecimen_1,3,4
-         * Description: Configuration of default value for TissueSite, TissueSite, PathologicalStatus
-         * 				Specimen Type and Specimen Class	
-         */
-		if(specimenAttributeOptions.get(Constants.DEFAULT_TISSUE_SIDE) != null)
-		{
-			setTissueSide();
-			for(int count=1;count<=initialColumnCount; count++)
-			{
-				setDataInModel(count,AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO,tissueSide);
-			}
-		}
-		if(specimenAttributeOptions.get(Constants.DEFAULT_PATHOLOGICAL_STATUS) != null)
-		{
-			setPathologicalStatus();
-			for(int count=1;count<=initialColumnCount; count++)
-			{
-				setDataInModel(count,AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO,pathologicalStatus);
-			}
-		}
-		if(specimenAttributeOptions.get(Constants.DEFAULT_TISSUE_SIDE) != null)
-		{
-			setTissueSite();
-			for(int count=1;count<=initialColumnCount; count++)
-			{
-				setDataInModel(count,AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO,tissueSite);
-			}
-		}
-		if(specimenAttributeOptions.get(Constants.DEFAULT_SPECIMEN) != null)
-		{
-			setSpecimenClass();
-			for(int count=1;count<=initialColumnCount; count++)
-			{
-				setDataInModel(count,AppletConstants.SPECIMEN_CLASS_ROW_NO,specimenClass);
-			}
-		}
-		if(specimenAttributeOptions.get(Constants.DEFAULT_SPECIMEN_TYPE) != null)
-		{
-			setSpecimenType();
-			for(int count=1;count<=initialColumnCount; count++)
-			{
-				setDataInModel(count,AppletConstants.SPECIMEN_TYPE_ROW_NO,specimenType);
-			}
-		}
+		// Set restricted values in the specimenMap
+		initializeAppletWithDefaultValues(initialColumnCount, noOfSpecimenRequirments);
+				
 		//mandar: to set columns per page
 		this.columnsPerPage = Integer.parseInt(specimenAttributeOptions.get(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE).toString()) ;
-		System.out.println("Columns per page set to : "+this.columnsPerPage);
 	}
 
 	/**
@@ -261,7 +214,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		 {
 		 specimenMap.put(getKey(row,column), value);
 		 }
-		 System.out.println("setValueAt " + row + " " + column + ": " + specimenMap.get(getKey(row,column)) + value);
 		 */
 		/* Code to check the calling method.
 		 try
@@ -271,8 +223,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		 catch(Exception e){ e.printStackTrace();}
 		 */
 		specimenMap.put(getKey(row, column), value);
-		System.out.println("In setValueAt : row : " + row + " Column : " + column);
-		System.out.println("setValueAt " + getKey(row, column) + ": " + specimenMap.get(getKey(row, column)) + " - " + value);
 	}
 
 	/**
@@ -405,7 +355,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 
 	public Object[] getSpecimenTypeValues(String specimenClass)
 	{
-		System.out.println("get type values called");
 		/*String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, column);*/
 		if (specimenClass == null)
 		{
@@ -620,7 +569,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getMessage());
 			return value;
 		}
 	}
@@ -694,15 +642,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	public Object[] getSpecimenCollectionGroupValues()
 	{
 		return (Object[]) specimenAttributeOptions.get(Constants.SPECIMEN_COLLECTION_GROUP_LIST);
-	}
-
-	//to remove after testing
-	public void showMapData()
-	{
-		System.out.println("---------------------------------");
-		System.out.println("in Model showMapData");
-		System.out.println(specimenMap);
-		System.out.println("---------------------------------");
 	}
 
 	/*
@@ -874,7 +813,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		for(int row = 0; row<specimenAttribute.length; row++  )
 		{
 			String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[row];
-			System.out.println("specimenKey: "+specimenKey);
 			if(specimenMap.containsKey(specimenKey))
 			{
 				specimenMap.remove(specimenKey); 
@@ -1109,4 +1047,126 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 
 //	****************** Mandar : 22Dec06 For Specimen CheckBox end
 	
+	//Patch ID: Bug#3184_21
+	/**
+	 * @return the specimenAttributeOptions
+	 */
+	public Map getSpecimenAttributeOptions() {
+		return specimenAttributeOptions;
+	}
+
+	/**
+	 * @param specimenAttributeOptions the specimenAttributeOptions to set
+	 */
+	public void setSpecimenAttributeOptions(Map specimenAttributeOptions) {
+		this.specimenAttributeOptions = specimenAttributeOptions;
+	}
+	
+	/**
+	 * This method set all the default values to be shown in the applet.
+	 * @param initialColumnCount the number of columns to be displayed
+	 * @param noOfSpecimenRequirments number of specimen requirements
+	 */
+	private void initializeAppletWithDefaultValues(int initialColumnCount, int noOfSpecimenRequirments)
+	{
+		/**
+         * Name : Virender Mehta
+         * Reviewer: Sachin Lale
+         * Bug ID: defaultValueConfiguration_BugID
+         * Patch ID:defaultValueConfiguration_BugID_MultipleSpecimen_2
+         * See also:defaultValueConfiguration_BugID_MultipleSpecimen_1,3,4
+         * Description: Configuration of default value for TissueSite, TissueSite, PathologicalStatus
+         * 				Specimen Type and Specimen Class	
+         */
+		if(specimenAttributeOptions.get(Constants.DEFAULT_TISSUE_SITE) != null)
+		{
+			setTissueSite();
+			for(int count = noOfSpecimenRequirments + 1; count <= initialColumnCount; count++)
+			{
+				setDataInModel(count, AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO, tissueSite);
+			}
+		}
+		if(specimenAttributeOptions.get(Constants.DEFAULT_PATHOLOGICAL_STATUS) != null)
+		{
+			setPathologicalStatus();
+			for(int count = noOfSpecimenRequirments + 1; count <= initialColumnCount; count++)
+			{
+				setDataInModel(count,AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO,pathologicalStatus);
+			}
+		}
+		if(specimenAttributeOptions.get(Constants.DEFAULT_SPECIMEN) != null)
+		{
+			setSpecimenClass();
+			for(int count = noOfSpecimenRequirments + 1; count <= initialColumnCount; count++)
+			{
+				setDataInModel(count,AppletConstants.SPECIMEN_CLASS_ROW_NO,specimenClass);
+			}
+		}
+		if(specimenAttributeOptions.get(Constants.DEFAULT_SPECIMEN_TYPE) != null)
+		{
+			setSpecimenType();
+			for(int count = noOfSpecimenRequirments + 1; count <= initialColumnCount; count++)
+			{
+				setDataInModel(count,AppletConstants.SPECIMEN_TYPE_ROW_NO,specimenType);
+			}
+		}
+		
+		//Set value of Tissue Side in the specimenMap
+		if(specimenAttributeOptions.get(Constants.DEFAULT_TISSUE_SIDE) != null)
+		{
+			setTissueSide();
+			for(int count = 1; count <= initialColumnCount; count++)
+			{
+				setDataInModel(count,AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO, this.tissueSide);
+			}
+		}
+	}
+	
+	/**
+	 * This method initializes the applet with the restricted values, gathered form the Specimen Requirements.
+	 * @param initialColumnCount the number of columns to be displayed
+	 * @return number of specimen requirements
+	 */
+	private int initializeAppletWithRestrictedValues(int initialColumnCount)
+	{
+		String specimenCollectionGroupName = (String)specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME);
+		if (specimenCollectionGroupName != null)
+		{
+			setSpecimenCollectionGroupName(specimenCollectionGroupName);
+			for(int count = 1; count <= initialColumnCount; count++)
+			{
+				setCollectionGroupInModel(count);
+			}
+		}
+		
+		int noOfSpecimenRequirments = 0;
+		Map<String, Map<String, String>> restrictedValuesMap = (Map<String, Map<String, String>>)specimenAttributeOptions.get(Constants.KEY_RESTRICTED_VALUES);
+		if(restrictedValuesMap != null)
+		{
+			Map<String, String> numberOfSpecimenRequirementMap = restrictedValuesMap.get(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
+			String numberOfSpecimenRequirements = numberOfSpecimenRequirementMap.get(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
+			noOfSpecimenRequirments = Integer.parseInt(numberOfSpecimenRequirements);
+			String specimenRequirementPrefix = Constants.KEY_SPECIMEN_REQUIREMENT_PREFIX;
+						
+			for(int index = 1; index <= noOfSpecimenRequirments; index++)
+			{
+				Map<String, String> specimenRequirementDataMap = restrictedValuesMap.get(specimenRequirementPrefix + index);
+				
+				String specimenClass = specimenRequirementDataMap.get(Constants.KEY_SPECIMEN_CLASS);
+				setDataInModel(index, AppletConstants.SPECIMEN_CLASS_ROW_NO, specimenClass);
+				
+				String specimenType = specimenRequirementDataMap.get(Constants.KEY_SPECIMEN_TYPE);
+				setDataInModel(index, AppletConstants.SPECIMEN_TYPE_ROW_NO, specimenType);
+				
+				String tissueSite = specimenRequirementDataMap.get(Constants.KEY_TISSUE_SITE);
+				setDataInModel(index, AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO, tissueSite);
+				
+				String pathologicalStatus = specimenRequirementDataMap.get(Constants.KEY_PATHOLOGICAL_STATUS);
+				setDataInModel(index, AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO, pathologicalStatus);
+			}
+		}
+		
+		return noOfSpecimenRequirments;
+	}
+
 }

@@ -1412,7 +1412,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SPECIMEN_PROTOCOL_SHORT_TITLE ="SHORT_TITLE";
 	public static final String SPECIMEN_COLLECTION_GROUP_NAME ="NAME";
 	public static final String SPECIMEN_LABEL = "LABEL";
-	// Patch ID: Bug#3184_18
+	// Patch ID: Bug#3184_14
 	public static final String NUMBER_OF_SPECIMEN = "numberOfSpecimen";
 	
 	//Constants required for max limit on no. of containers in the drop down
@@ -1517,7 +1517,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DEFAULT_TOOLTIP_TEXT="DEFAULTTOOLTIPTEXT";
 	
 	/**
-	 * Patch ID: Bug#3184_2 (for Multiple Specimen)
+	 * Patch ID: Bug#3184_15 (for Multiple Specimen)
 	 * Description: The following constants are used as key in the Map
 	 */
 	public static final String KEY_SPECIMEN_CLASS = "SpecimenClass";
@@ -1527,6 +1527,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String KEY_SPECIMEN_REQUIREMENT_PREFIX = "SpecimenRequirement_";
 	public static final String KEY_RESTRICTED_VALUES = "RestictedValues";
 	
+	// The following constants are used for multiple specimens applet classes
+	public static final String NUMBER_OF_SPECIMEN_REQUIREMENTS = "numberOfSpecimenRequirements";
 	public static final String RESTRICT_SCG_CHECKBOX = "restrictSCGCheckbox";
 	public static final String ON_COLL_OR_CLASSCHANGE = "onCollOrClassChange";
+	public static final String NUMBER_OF_SPECIMENS = "numberOfSpecimens";
+	public static final String CHANGE_ON = "changeOn";
 }

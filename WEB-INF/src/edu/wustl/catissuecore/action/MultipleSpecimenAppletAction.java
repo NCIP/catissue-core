@@ -33,11 +33,14 @@ import edu.wustl.catissuecore.applet.AppletConstants;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CreateSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -102,110 +105,31 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	public ActionForward initData(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
 	{
-		Map dataListsMap = new HashMap();
-
-		Map specimenClassTypeMap = getSpecimenClassTypeMap();
-
-		List specimenClassList = new ArrayList();
-		specimenClassList.add(Constants.SELECT_OPTION);
-		specimenClassList.addAll(specimenClassTypeMap.keySet());
-		specimenClassTypeMap.put(Constants.SELECT_OPTION, new String[]{Constants.SELECT_OPTION});
-		
 		/**
-	     * Name : Virender Mehta
-	     * Reviewer: Sachin Lale
-	     * Bug ID: TissueSiteCombo_BugID
-	     * Patch ID:TissueSiteCombo_BugID_2
-	     * See also:TissueSiteCombo_BugID_1
-	     * Description: Setting TissueList with only Leaf node
+		 * Patch ID: Bug#3184_18
+		 * See Also: Bug#3184_19
+		 * Description: The previous code has been cleaned. The code has been moved into a new method
+		 * populateValuesForMultipleSpecimen(), which will store/populate the default values into the
+		 * dataListsMap 
 		 */
-		List tissueSiteList = Utility.tissueSiteList();
-		//Converting list object from NameValue to String
-		List finalTissueSiteList = new ArrayList();
-    	for(int i=0;i<tissueSiteList.size();i++) 
-    	{
-    		NameValueBean nvb = (NameValueBean) tissueSiteList.get(i);
-    		finalTissueSiteList.add(nvb.getName());
-    	}
-		dataListsMap.put(Constants.SPECIMEN_TYPE_MAP, specimenClassTypeMap);
-		dataListsMap.put(Constants.SPECIMEN_CLASS_LIST, specimenClassList.toArray());
-		dataListsMap.put(Constants.TISSUE_SITE_LIST, finalTissueSiteList.toArray());
-		dataListsMap.put(Constants.TISSUE_SIDE_LIST, Utility.getListForCDE(Constants.CDE_NAME_TISSUE_SIDE).toArray());
-		dataListsMap.put(Constants.PATHOLOGICAL_STATUS_LIST, Utility.getListForCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS).toArray());
+		Map<String, Object> dataListsMap = new HashMap<String, Object>();
 
-		//------------specimen collection group
-		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-
-		String sourceObjectName = SpecimenCollectionGroup.class.getName();
-		String[] displayNameFields = {"name"};
-		String valueField = Constants.SYSTEM_IDENTIFIER;
-
-		List specimenGroupList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
-		ArrayList specimenGroupArrayList = new ArrayList();
-		specimenGroupArrayList = getNameStringArray(specimenGroupList);
-		dataListsMap.put(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenGroupArrayList.toArray());
-		if (request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME) != null)
-		{
-			dataListsMap.put(Constants.SPECIMEN_COLL_GP_NAME, request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME));
-			request.getSession().removeAttribute(Constants.SPECIMEN_COLL_GP_NAME);
-			/**
-			* Patch ID: Entered_Events_Need_To_Be_Visible_11
-			* See also: 1-5
-			* Description: If specimen form name is set means the control is coming from specimeCollectionGroup page
-			* Therefore set the events that are present in the scgForm and not default events in the specimenForm
-			*/ 
-			SpecimenCollectionGroupForm scgForm=(SpecimenCollectionGroupForm)request.getSession().getAttribute("scgForm");
-			NewSpecimenForm specimenForm=getSpecimenFormWithEventsInfo(scgForm);
-							
-			Map toolTipMap = (HashMap)(request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY));
-			dataListsMap.put(Constants.DEFAULT_TOOLTIP_TEXT,Utility.getToolTipText(specimenForm));
-		}
-		else
-		{
-			/**
-			 * If dpecimenCollecion group name is not set means this is the default flow for page.
-			 * set the default tool tip in datalist map. In specimen model same map is called as specimenAttributeOptionMap
-			 */
-			dataListsMap.put(Constants.DEFAULT_TOOLTIP_TEXT,Utility.getDefaultEventsToolTip());
-			/** -- patch ends here -- */
-		}
+		populateValuesForMultipleSpecimen(dataListsMap, request);
 		
-		/**
-         * Name : Virender Mehta
-         * Reviewer: Sachin Lale
-         * Bug ID: defaultValueConfiguration_BugID
-         * Patch ID:defaultValueConfiguration_BugID_MultipleSpecimen_1
-         * See also:defaultValueConfiguration_BugID_MultipleSpecimen_2,3,4
-         * Description: Configuration for default value for TissueSite, TissueSite, PathologicalStatus
-         * 				Specimen Class and Specimen type
-         */
-		//For setting default Value
-		if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE)!=null)
+		//If specimenCollectionGroup is selected then look for restrict checkbox value.
+		String specimenCollectionGroupId = (String) request.getSession().getAttribute(Constants.SPECIMEN_COLLECTION_GROUP_ID);
+		if(specimenCollectionGroupId != null && !specimenCollectionGroupId.equals("-1"))
 		{
-			String defaultTissueSide = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE);
-			dataListsMap.put(Constants.DEFAULT_TISSUE_SIDE,defaultTissueSide);
+			//Populate restricted values into dataListsMap if the restrict checkbox on specimen collection is checked.
+			String restrictSCGCheckbox = (String) request.getSession().getAttribute(Constants.RESTRICT_SCG_CHECKBOX);
+			if(restrictSCGCheckbox != null && restrictSCGCheckbox.equals(Constants.TRUE))
+			{
+				Map<String, Map<String, String>> restrictedValuesMap = populateRestrictedValues(specimenCollectionGroupId);
+				dataListsMap.put(Constants.KEY_RESTRICTED_VALUES, restrictedValuesMap);
+				dataListsMap.put(Constants.RESTRICT_SCG_CHECKBOX, restrictSCGCheckbox);
+				request.getSession().removeAttribute(Constants.RESTRICT_SCG_CHECKBOX);
+			}
 		}
-		if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)!=null)
-		{
-			String defaultPathologicalStatus = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS);
-			dataListsMap.put(Constants.DEFAULT_PATHOLOGICAL_STATUS,defaultPathologicalStatus);
-		}
-		if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SITE)!=null)
-		{
-			String defaultTissueSite = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SITE);
-			dataListsMap.put(Constants.DEFAULT_TISSUE_SITE,defaultTissueSite);
-		}
-		if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN)!=null)
-		{
-			String defaultSpecimenClass = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN);
-			dataListsMap.put(Constants.DEFAULT_SPECIMEN,defaultSpecimenClass);
-		}
-		if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE)!=null)
-		{
-			String defaultSpecimenType = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE);
-			dataListsMap.put(Constants.DEFAULT_SPECIMEN_TYPE,defaultSpecimenType);
-		}
-		// ------------------------------------
 
 		// Mandar : to set columns per page ----- start
 		String columns = XMLPropertyHandler.getValue(Constants.MULTIPLE_SPECIMEN_COLUMNS_PER_PAGE);
@@ -1269,7 +1193,6 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	{
 		Map dataMap = (Map) request.getAttribute(Constants.INPUT_APPLET_DATA);
 		Long specimenId = (Long)dataMap.get(Constants.MULTIPLE_SPECIMEN_DELETELAST_SPECIMEN_ID);
-		System.out.println("Associated objects to be deleted for Specimen ID: "+ specimenId );
 		//events map
 		Map eventsMap = (Map) request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_EVENT_MAP_KEY);
 		Logger.out.debug(">>>>>>>>>>>>>>>>>>>                Before Delete <<<<<<<<<<<<<<<<<");
@@ -1406,4 +1329,171 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		   
 		   return specimenForm;
 	   }
+	   
+		/**
+		 * Patch ID: Bug#3184_19
+		 */
+	   /**
+		 * This method populate all the values of the Specimen Requirements of a Collection Protocol Event set for the 
+		 * given Specimen Collection Group.
+		 * @param DataListsMap the Map in which the values are to be populated.
+		 * @param specimenCollectionGroupId the Identifier of a Specimen Collection Group
+		 * @throws DAOException on failure to populate the restricted values
+		 */
+		private Map<String, Map<String, String>> populateRestrictedValues(String specimenCollectionGroupId) throws DAOException
+		{
+			String sourceObjectName = SpecimenCollectionGroup.class.getName();
+			String valueField = Constants.SYSTEM_IDENTIFIER;
+			
+			SpecimenCollectionGroupBizLogic scgbizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+			List specimenCollectionObjectGroupList = scgbizLogic.retrieve(sourceObjectName, valueField, specimenCollectionGroupId);
+			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionObjectGroupList.get(0);
+			
+			CollectionProtocolEvent collectionProtocolEvent = specimenCollectionGroup.getCollectionProtocolEvent();
+			Collection<SpecimenRequirement> specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+			
+			Map<String, Map<String, String>> restrictedValuesMap = new HashMap<String, Map<String, String>>();
+			int index = 1;
+			for(SpecimenRequirement specimenRequirement : specimenRequirementCollection)
+			{
+				Map<String, String> specimenRequirementDataMap = new HashMap<String, String>();
+			   
+				specimenRequirementDataMap.put(Constants.KEY_SPECIMEN_CLASS, specimenRequirement.getSpecimenClass());
+				specimenRequirementDataMap.put(Constants.KEY_SPECIMEN_TYPE, specimenRequirement.getSpecimenType());
+				specimenRequirementDataMap.put(Constants.KEY_TISSUE_SITE, specimenRequirement.getTissueSite());
+				specimenRequirementDataMap.put(Constants.KEY_PATHOLOGICAL_STATUS, specimenRequirement.getPathologyStatus());
+				
+				restrictedValuesMap.put(Constants.KEY_SPECIMEN_REQUIREMENT_PREFIX + index++, specimenRequirementDataMap);
+			}
+			
+			// Add total number of specimen requirements to the Map
+			Map<String, String> numberOfSpecimenRequirementMap = new HashMap<String, String>(1);
+			numberOfSpecimenRequirementMap.put(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS, String.valueOf(index - 1));
+			restrictedValuesMap.put(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS, numberOfSpecimenRequirementMap);
+			return restrictedValuesMap;
+		}
+		
+		/**
+		 * This method populates the values to be displayed and required on the Multiple Specimen page.
+		 * @param DataListsMap the Map in which the default values are to be set.
+		 * @param request HttpServletRequest which is required to get some values form the request
+		 * @param restrictSCGCheckbox 
+		 * @throws Exception 
+		 */
+		private void populateValuesForMultipleSpecimen(Map<String, Object> dataListsMap, HttpServletRequest request) throws Exception
+		{
+			Map specimenClassTypeMap = getSpecimenClassTypeMap();
+
+			List specimenClassList = new ArrayList();
+			specimenClassList.add(Constants.SELECT_OPTION);
+			specimenClassList.addAll(specimenClassTypeMap.keySet());
+			specimenClassTypeMap.put(Constants.SELECT_OPTION, new String[]{Constants.SELECT_OPTION});
+			
+			/**
+		     * Name : Virender Mehta
+		     * Reviewer: Sachin Lale
+		     * Bug ID: TissueSiteCombo_BugID
+		     * Patch ID:TissueSiteCombo_BugID_2
+		     * See also:TissueSiteCombo_BugID_1
+		     * Description: Setting TissueList with only Leaf node
+			 */
+			List tissueSiteList = Utility.tissueSiteList();
+			//Converting list object from NameValue to String
+			List finalTissueSiteList = new ArrayList();
+	    	for(int i=0;i<tissueSiteList.size();i++) 
+	    	{
+	    		NameValueBean nvb = (NameValueBean) tissueSiteList.get(i);
+	    		finalTissueSiteList.add(nvb.getName());
+	    	}
+			dataListsMap.put(Constants.SPECIMEN_TYPE_MAP, specimenClassTypeMap);
+			dataListsMap.put(Constants.SPECIMEN_CLASS_LIST, specimenClassList.toArray());
+			dataListsMap.put(Constants.TISSUE_SITE_LIST, finalTissueSiteList.toArray());
+			dataListsMap.put(Constants.TISSUE_SIDE_LIST, Utility.getListForCDE(Constants.CDE_NAME_TISSUE_SIDE).toArray());
+			dataListsMap.put(Constants.PATHOLOGICAL_STATUS_LIST, Utility.getListForCDE(Constants.CDE_NAME_PATHOLOGICAL_STATUS).toArray());
+
+			//------------specimen collection group
+			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+
+			String sourceObjectName = SpecimenCollectionGroup.class.getName();
+			String[] displayNameFields = {"name"};
+			String valueField = Constants.SYSTEM_IDENTIFIER;
+
+			List specimenGroupList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
+			ArrayList specimenGroupArrayList = new ArrayList();
+			specimenGroupArrayList = getNameStringArray(specimenGroupList);
+			dataListsMap.put(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenGroupArrayList.toArray());
+			if (request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME) != null)
+			{
+				dataListsMap.put(Constants.SPECIMEN_COLL_GP_NAME, request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME));
+				request.getSession().removeAttribute(Constants.SPECIMEN_COLL_GP_NAME);
+				/**
+				* Patch ID: Entered_Events_Need_To_Be_Visible_11
+				* See also: 1-5
+				* Description: If specimen form name is set means the control is coming from specimeCollectionGroup page
+				* Therefore set the events that are present in the scgForm and not default events in the specimenForm
+				*/ 
+				SpecimenCollectionGroupForm scgForm=(SpecimenCollectionGroupForm)request.getSession().getAttribute("scgForm");
+				NewSpecimenForm specimenForm=getSpecimenFormWithEventsInfo(scgForm);
+							
+				Map toolTipMap = (HashMap)(request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY));
+				dataListsMap.put(Constants.DEFAULT_TOOLTIP_TEXT,Utility.getToolTipText(specimenForm));
+			}
+			else
+			{
+				/**
+				 * If dpecimenCollecion group name is not set means this is the default flow for page.
+				 * set the default tool tip in datalist map. In specimen model same map is called as specimenAttributeOptionMap
+				 */
+				dataListsMap.put(Constants.DEFAULT_TOOLTIP_TEXT,Utility.getDefaultEventsToolTip());
+				/** -- patch ends here -- */
+			}
+			
+			// Set the default values.
+			setDefaultValuesInMap(dataListsMap);
+		}
+		
+		/**
+		 * This method sets the defaults values in the given Map.
+		 * @param DataListsMap the Map in which the default values are to be set.
+		 */
+		private void setDefaultValuesInMap(Map<String, Object> DataListsMap)
+		{
+			/**
+	         * Name : Virender Mehta
+	         * Reviewer: Sachin Lale
+	         * Bug ID: defaultValueConfiguration_BugID
+	         * Patch ID:defaultValueConfiguration_BugID_MultipleSpecimen_1
+	         * See also:defaultValueConfiguration_BugID_MultipleSpecimen_2,3,4
+	         * Description: Configuration for default value for TissueSite, TissueSite, PathologicalStatus
+	         * 				Specimen Class and Specimen type
+	         */
+			//For setting default Value
+			if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS)!=null)
+			{
+				String defaultPathologicalStatus = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_PATHOLOGICAL_STATUS);
+				DataListsMap.put(Constants.DEFAULT_PATHOLOGICAL_STATUS,defaultPathologicalStatus);
+			}
+			if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SITE)!=null)
+			{
+				String defaultTissueSite = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SITE);
+				DataListsMap.put(Constants.DEFAULT_TISSUE_SITE,defaultTissueSite);
+			}
+			if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE)!=null)
+			{
+				String defaultTissueSide = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_TISSUE_SIDE);
+				DataListsMap.put(Constants.DEFAULT_TISSUE_SIDE,defaultTissueSide);
+			}
+			if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN)!=null)
+			{
+				String defaultSpecimenClass = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN);
+				DataListsMap.put(Constants.DEFAULT_SPECIMEN,defaultSpecimenClass);
+			}
+			if((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE)!=null)
+			{
+				String defaultSpecimenType = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_SPECIMEN_TYPE);
+				DataListsMap.put(Constants.DEFAULT_SPECIMEN_TYPE,defaultSpecimenType);
+			}
+			// ------------------------------------
+		}
+	   
 }
