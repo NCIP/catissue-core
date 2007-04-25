@@ -93,7 +93,6 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		createLinkPanel(linkPanel);
 
 		//--- gbl
-	    System.out.println("Applet size :- W : "+getWidth()+ " ,H : "+getHeight() );
 	    getContentPane().add(buttonPanel);
 	    getContentPane().add(linkPanel);
 	    
@@ -219,15 +218,14 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		
 //		JScrollPane scrollPane = new JScrollPane( table );
 		JScrollPane scrollPane= new FixedColumnScrollPane(table);
-		System.out.println("Table Size : "+table.getWidth()+","+table.getHeight());
 		table.setSize(WIDTH,getHeight());
 		Dimension dim = new Dimension(WIDTH,getHeight()-65) ;
 //		table.setPreferredSize( dim);
 //		table.setPreferredScrollableViewportSize(new Dimension(WIDTH,getHeight()));
-		System.out.println("Table Size after set : "+table.getWidth()+","+table.getHeight());
+
 //		scrollPane.setSize(table.getWidth(),table.getHeight());
 		scrollPane.setPreferredSize(dim );
-		System.out.println("\nscrollPane.getPreferredSize(): "+ scrollPane.getPreferredSize());
+
 		scrollPane.setSize(dim );   
 		
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER  );  
@@ -412,11 +410,10 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	 */
 	public void setStorageDetails(String specimenMapKey, String storageId,String storageType,String xPos,String yPos) {
 		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
-		System.out.println("setStorageDetails :-specimenMapKey "+ specimenMapKey+" | storageId " + storageId+ " | storageType " + storageType+ " | xPos " + xPos+ " | yPos " + yPos);
+		
 		int actualColNo =  Integer.parseInt(specimenMapKey);
 		int displayColNo = tableModel.getDisplayColumnNo(actualColNo); 
-		System.out.println("table.getColumnModel().getColumnCount() : " + table.getColumnModel().getColumnCount()); 
-		System.out.println("In applets storage details : display col no" + displayColNo + "actual col no" + actualColNo);
+
 		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(actualColNo).getCellRenderer();
 //		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(displayColNo).getCellRenderer();		
 		tableModel.setStorageDetails(specimenMapKey, storageId, storageType, xPos, yPos);
@@ -425,7 +422,6 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		String storageValue = null;
 		columnModel.setLocationFromJS(storageValue);
 // Mandar : 4oct06 : testing setting of storage location data in model.
-		System.out.println("Column : "+ displayColNo);
 	}
 	
 	/**
@@ -461,7 +457,6 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	 */
 	public void updateOnAddSpecimen()
 	{
-		System.out.println("Inside updateOnAddSpecimen()");
 				MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
 				if(totalPages< tableModel.getTotalPageCount()  )
 				{
@@ -475,7 +470,6 @@ public class MultipleSpecimenApplet extends BaseApplet {
 					     public void run()
 						 {
 					     	SwingUtilities.updateComponentTreeUI(linkPanel);
-					     	System.out.println("Applet link panel refreshed");
 						 }
 					 };
 					 SwingUtilities.invokeLater(panelUpdated);
@@ -489,15 +483,12 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	 */
 	public void setTissueSiteFromTreeMap(String specimenColumn, String value)
 	{
-		System.out.println("\n\n*******************     setTissueSiteFromTreeMap   ****************************\n\n");
 		MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
-		System.out.println("setTissueSiteFromTreeMap :-specimenColumn "+ specimenColumn);
 		int actualColNo =  Integer.parseInt(specimenColumn);
 		int displayColNo = tableModel.getDisplayColumnNo(actualColNo); 
-		System.out.println("In applets TissueSiteFromTreeMap : display col no" + displayColNo + "actual col no" + actualColNo);
+		
 		SpecimenColumnModel columnModel = (SpecimenColumnModel) table.getColumnModel().getColumn(actualColNo).getCellRenderer();
 		columnModel.updateComponentValue(AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO,value);
-		System.out.println("\n\n*******************     setTissueSiteFromTreeMap   ****************************\n\n");
 	}
 
 	// ------------------------- For Delete Last Column
@@ -506,11 +497,9 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	 */
 	public void updateOnDeleteLastSpecimen()
 	{
-		System.out.println("Inside updateOnDeleteLastSpecimen()");
 				MultipleSpecimenTableModel tableModel = (MultipleSpecimenTableModel) table.getModel();
 				
 				//jiitendra
-				System.out.println("totalPages-----"+totalPages + "tableModel.getTotalPageCount()--"+tableModel.getTotalPageCount());
 				if(totalPages > tableModel.getTotalPageCount()  )
 				{
 					totalPages--;
