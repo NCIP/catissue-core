@@ -762,7 +762,6 @@ public class UserForm extends AbstractActionForm
 							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item", errorMessage));
 						}
 					}
-
 				
 				}
 				else
@@ -912,8 +911,9 @@ public class UserForm extends AbstractActionForm
 
 					if (pageOf.equals(Constants.PAGEOF_USER_ADMIN) || pageOf.equals(Constants.PAGEOF_APPROVE_USER))
 					{
-						if (role != null)
+						if (role != null&&!role.equals("")&&role.equals("-1"))
 						{
+							
 							if (validator.isValidOption(role) == false)
 							{
 								errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
