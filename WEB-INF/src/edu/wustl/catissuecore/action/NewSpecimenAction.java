@@ -94,11 +94,6 @@ public class NewSpecimenAction extends SecureAction
 			specimenForm.setVirtuallyLocated(true);
 		}
 
-		//		if (operation != null && operation.equalsIgnoreCase(Constants.EDIT))
-		//		{
-		//			Logger.out.debug("virtuallylocated:"+specimenForm.getVirtuallyLocated());
-		//		}
-
 		//Name of button clicked
 		String button = request.getParameter("button");
 		Map map = null;
@@ -144,23 +139,8 @@ public class NewSpecimenAction extends SecureAction
 				setFormValues(specimenForm, specimenCollectionGroupId);
 			}
 		}
-		else
-		{
-			if (request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID) != null)
-			{
-				String specimenCollectionGroupId = request.getParameter(Constants.SPECIMEN_COLLECTION_GROUP_ID);
-//				setFormValues(specimenForm,specimenCollectionGroupId);
-			}
-		}
+		
 		//*************  ForwardTo implementation *************
-
-		// - set the specimen id
-		//       	String specimenID = (String)request.getAttribute(Constants.SPECIMEN_ID);
-		//       	if(specimenID !=null)
-		//       		specimenForm.setId(Long.parseLong(specimenID  )); 
-		//    	
-		//    	Logger.out.debug("SpecimenID in NewSpecimenAction : " + specimenID  );
-
 		String pageOf = request.getParameter(Constants.PAGEOF);
 		request.setAttribute(Constants.PAGEOF, pageOf);
 
@@ -214,7 +194,7 @@ public class NewSpecimenAction extends SecureAction
 		/**
 		 * Name: Chetan Patil
 		 * Reviewer: Sachin Lale
-		 * Bug ID: Bug#_3184
+		 * Bug ID: Bug#3184
 		 * Patch ID: Bug#3184_1
 		 * Also See: 2-6
 		 * Description: Here the older code has been integrated again inorder to restrict the specimen values based on
@@ -231,11 +211,6 @@ public class NewSpecimenAction extends SecureAction
 		List<NameValueBean> tissueSideList = new ArrayList<NameValueBean>();
 		List<NameValueBean> pathologicalStatusList = new ArrayList<NameValueBean>();
 
-//		if (!Constants.ALIQUOT.equals(specimenForm.getLineage())) 
-//		{
-//			initializeAllLists(specimenClassList, specimenTypeList, tissueSiteList, tissueSideList, pathologicalStatusList);
-//		}
-		
 		Map<String, List<NameValueBean>> subTypeMap = new HashMap<String, List<NameValueBean>>();
 		String specimenCollectionGroupId = specimenForm.getSpecimenCollectionGroupId();
 		String restrictSCGCheckbox = specimenForm.getRestrictSCGCheckbox();
@@ -248,17 +223,20 @@ public class NewSpecimenAction extends SecureAction
 			}
 			else if(restrictSCGCheckbox != null && restrictSCGCheckbox.equals(Constants.TRUE))
             {
-				// TODO create constants and importantly test for all cases
+				//Patch ID: Bug#3184_25
+				//Populate restricted values into the lists to be displayed. Also set the values selected in the list, if there is only
+				//one specimen requirement associated with the Collection Protocol Event; otherwise do not set any value as selected.
+				int numberOfSpecimens = populateAllRestrictedLists(request, specimenForm, specimenCollectionGroupId,specimenClassList, 
+						specimenTypeList, tissueSiteList, tissueSideList, pathologicalStatusList, subTypeMap);
+				//TODO create constants and importantly test for all cases
 				String onCollOrClassChange = request.getParameter(Constants.ON_COLL_OR_CLASSCHANGE);
-				if(onCollOrClassChange == null || !onCollOrClassChange.equalsIgnoreCase(Constants.TRUE))
+				if(((onCollOrClassChange == null) || !(onCollOrClassChange.equalsIgnoreCase(Constants.TRUE))) && (numberOfSpecimens > 1))
 				{
 					specimenForm.setClassName("");
 					specimenForm.setType("");
 					specimenForm.setTissueSite("");
 					specimenForm.setPathologicalStatus("");
 				}
-				populateAllRestrictedLists(request, specimenForm, specimenCollectionGroupId,specimenClassList, specimenTypeList, tissueSiteList, 
-				tissueSideList, pathologicalStatusList, subTypeMap);
             }
 			else
 			{
@@ -715,23 +693,6 @@ public class NewSpecimenAction extends SecureAction
 	}
 
 	/**
-	 * This method adds an initial value of -- Select -- into all the lists.
-	 * @param specimenClassList list of Specimen Class
-	 * @param specimenTypeList list of Specimen Type
-	 * @param tissueSiteList list of Tissue Site
-	 * @param tissueSideList list of Tissue Side
-	 * @param pathologicalStatusList list of Pathological Status
-	 */
-	private void initializeAllLists(List<NameValueBean> specimenClassList, List<NameValueBean> specimenTypeList, 
-			List<NameValueBean> tissueSiteList, List<NameValueBean> tissueSideList, List<NameValueBean> pathologicalStatusList) 
-	{
-		specimenClassList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-		specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-		tissueSiteList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-		pathologicalStatusList.add(new NameValueBean(Constants.SELECT_OPTION, "-1"));
-	}
-	
-	/**
 	 * This method generates Map of SpecimenClass and the List of the corresponding Types. 
 	 * @param tempMap a temporary Map for avoiding duplication of values.
 	 * @param subTypeMap the Map of SpecimenClass and the List of the corresponding Types
@@ -864,7 +825,7 @@ public class NewSpecimenAction extends SecureAction
 	 * @param subTypeMap Map of the Class and their corresponding Types
 	 * @throws DAOException on failure to populate values from the system
 	 */
-	 private void populateAllRestrictedLists(HttpServletRequest request, NewSpecimenForm specimenForm, String specimenCollectionGroupId, 
+	 private int populateAllRestrictedLists(HttpServletRequest request, NewSpecimenForm specimenForm, String specimenCollectionGroupId, 
 			List<NameValueBean> specimenClassList, List<NameValueBean> specimenTypeList, List<NameValueBean> tissueSiteList, 
 			List<NameValueBean> tissueSideList,	List<NameValueBean> pathologicalStatusList, Map<String, List<NameValueBean>> subTypeMap) 
 			throws DAOException
@@ -880,33 +841,37 @@ public class NewSpecimenAction extends SecureAction
 			request.setAttribute("scgName", scg.getName());
 		}
 		
+		String specimenClass = null;
+		String specimenType = null;
+		String tissueSite = null;
+		String pathologicalStatus = null; 
+		
 		Map<String,String> tempMap = new HashMap<String,String>();
 		CollectionProtocolEvent collectionProtocolEvent = scg.getCollectionProtocolEvent();
 		Collection<SpecimenRequirement> specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
 		for(SpecimenRequirement specimenRequirement : specimenRequirementCollection)
 		{
-			String specimenClass = specimenRequirement.getSpecimenClass();
+			specimenClass = specimenRequirement.getSpecimenClass();
 			if (tempMap.get(specimenClass + Constants.SPECIMEN_CLASS) == null) 
 			{
 				specimenClassList.add(new NameValueBean(specimenClass, specimenClass));
 				tempMap.put(specimenClass + Constants.SPECIMEN_CLASS, specimenClass);
 			}
 
-			String specimenType = specimenRequirement.getSpecimenType();
+			specimenType = specimenRequirement.getSpecimenType();
 			if (tempMap.get(specimenClass + specimenType + Constants.SPECIMEN_TYPE) == null) 
 			{
 				populateSpecimenTypeLists(tempMap, subTypeMap, specimenClass, specimenType);
 			}
 
-			// Collections.sort(innerList);
-			String tissueSite = specimenRequirement.getTissueSite();
+			tissueSite = specimenRequirement.getTissueSite();
 			if (tempMap.get(tissueSite + Constants.TISSUE_SITE) == null) 
 			{
 				tissueSiteList.add(new NameValueBean(tissueSite, tissueSite));
 				tempMap.put(tissueSite + Constants.TISSUE_SITE, tissueSite);
 			}
 
-			String pathologicalStatus = specimenRequirement.getPathologyStatus();
+			pathologicalStatus = specimenRequirement.getPathologyStatus();
 			if (tempMap.get(pathologicalStatus + Constants.CDE_NAME_PATHOLOGICAL_STATUS) == null) 
 			{
 				pathologicalStatusList.add(new NameValueBean(pathologicalStatus, pathologicalStatus));
@@ -914,8 +879,21 @@ public class NewSpecimenAction extends SecureAction
 			}
 		}
 
+		//Patch ID: Bug#3184_26
 		// Setting tissue side list
 		tissueSideList.addAll(Utility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
+		
+		//Set the values as selected only if one specimen requirement is present
+		int numberOfSpecimen = specimenRequirementCollection.size();
+		if(numberOfSpecimen == 1)
+		{
+			specimenForm.setClassName(specimenClass);
+			specimenForm.setType(specimenType);
+			specimenForm.setTissueSite(tissueSite);
+			specimenForm.setPathologicalStatus(pathologicalStatus);
+		}
+		
+		return numberOfSpecimen;
 	}
 	 /**
 		 * Name : Ashish Gupta
