@@ -141,8 +141,6 @@ public class DeleteLastHandler extends ButtonHandler
 	 */
 	private void deleteFromModel(MultipleSpecimenTableModel model)
 	{
-		System.out.println(" \n >>>>>>>>>>>>>   In deleteFromModel()  <<<<<<<<<<<<<<<<<<<\n");
-		model.showMapData();
 		int beforeDeletePageCount = model.getTotalPageCount(); 
 		int columnCount = model.getTotalColumnCount();
 		model.removeLastColumn();
@@ -153,21 +151,15 @@ public class DeleteLastHandler extends ButtonHandler
 		*/ 
 		model.setEventsToolTipText(null, columnCount);
 		/** -- patch ends here -- */
-		System.out.println("deldeted:"+columnCount);
-		System.out.println("\n\n  .............   After remove last column  ...............  \n\n");
 		int afterDeletePageCount = model.getTotalPageCount();
 		int currentPage = model.getCurrentPageIndex(); 
-		System.out.println("beforeDeletePageCount : "+ beforeDeletePageCount + " | afterDeletePageCount: " +afterDeletePageCount);
-		model.showMapData(); 
 	}
 	
 	private void deleteAssociatedObjects(int column)
 	{
-		System.out.println(" \n >>>>>>>>......... deleteAssociatedObjects   ............<<<<<<<<<<< \n");
-
 		BaseAppletModel appletModel = new BaseAppletModel();
 		HashMap map =new HashMap();
-		System.out.println("Specimen to be deleted : "+ column);
+
 		map.put(Constants.MULTIPLE_SPECIMEN_DELETELAST_SPECIMEN_ID, new Long(column));
 		appletModel.setData(map);
 		

@@ -53,7 +53,6 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 		if (isValidateSuccess)
 		{
 			MultipleSpecimenTableModel multipleSpecimenTableModel = CommonAppletUtil.getMultipleSpecimenTableModel(table);
-			multipleSpecimenTableModel.showMapData();
 
 			CopyPasteOperationValidatorModel validatorModel = multipleSpecimenTableModel.getCopyPasteOperationValidatorModel();
 			List selectedCopiedRows = validatorModel.getSelectedCopiedRows();
