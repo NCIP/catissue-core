@@ -89,12 +89,17 @@
 function handleStatus(status)
 {
 	document.forms[0].role.value=<%=Constants.SELECT_OPTION_VALUE%>;
-	document.forms[0].role.disabled=true;
-	document.getElementById("displayrole").disabled=true;
+	document.forms[0].role.readOnly=true;
+	document.getElementById("displayrole").readOnly=true;
 	if (status.value == "<%=Constants.APPROVE_USER_APPROVE_STATUS%>")
 	{
-    	document.forms[0].role.disabled=false;
-	   	document.getElementById("displayrole").disabled=false;
+    	document.forms[0].role.readOnly=false;
+	   	document.getElementById("displayrole").readOnly=false;
+	}
+	else
+	{
+		document.getElementById("displayrole").value="";
+		document.getElementById("role").value="";
 	}
 }
 </script>
@@ -514,7 +519,7 @@ function handleStatus(status)
 										  initialValue="<%=userForm.getRole()%>"
 										  styleClass="formFieldSized"
                                           staticField="false"
-										  disabled="<%=roleStatus + ""%>"
+										  readOnly="<%=roleStatus + ""%>"
 									    />
 						</td>
 					</tr>
