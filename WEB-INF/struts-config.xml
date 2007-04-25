@@ -2961,7 +2961,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path=".catissuecore.cpBasedSearchDef"/>
 		<forward name="failure" path=".catissuecore.cpBasedSearchDef"/>
-		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		<forward name="access_denied" path=".catissuecore.manageBioSpecimenHomeDef" />
 	</action>
 	
 	<action path="/showCpAndParticipants"
