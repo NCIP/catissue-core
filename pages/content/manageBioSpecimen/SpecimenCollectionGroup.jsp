@@ -12,7 +12,13 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 
 <script src="jss/script.js" type="text/javascript"></script>
-
+<!-- Bug Id: 4159
+	 Patch ID: 4159_1			
+	 Description: Including calenderComponent.js to show date in events
+-->
+<SCRIPT>var imgsrc="images/";</SCRIPT>
+<script src="jss/calendarComponent.js" type="text/javascript"></script>
+<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 
 
 <% 
@@ -523,7 +529,7 @@
 				 </tr>
 				 
 				 <tr>
-				 	<td class="formRequiredNoticeNoBottom">
+				 	<td class="formRequiredNoticeNoBottom">*
 				     	<html:radio styleClass=""  property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
   				     	    <label for="participantId">
 								<%--<bean:message key="specimenCollectionGroup.collectedByParticipant" />--%>
