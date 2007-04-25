@@ -104,7 +104,14 @@
 		}
 		
 		String formNameForCal = "specimenCollectionGroupForm"; 
-								
+		
+		//Patch ID: Bug#3184_32
+		//Description: Get the actual number of specimen collections
+		String numberOfSpecimenCollection = (String)request.getAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
+		if(numberOfSpecimenCollection == null)
+		{
+			numberOfSpecimenCollection = "0";
+		}
 %>
 <head>
 
@@ -149,8 +156,16 @@
 		
         function onChangeEvent(element)
 		{
-        	var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=<%=pageOf%>&" +
-        			"isOnChange=true";
+        	/*
+				Patch ID: Bug#3184_33
+			 	Description: Element Id is used in SpecimenCollectionGroupAction.java. This value
+					decides whether to set the value of checkbox and the number of specimens on the 
+					specimen collection group page to the default values or not. If of id is 
+					"collectionProtocolId" then values are set to default i.e. number of specimen to 1
+					and checkbox to false.
+			*/
+			var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=<%=pageOf%>&" +
+        			"isOnChange=true&changeOn=" + element.id;
         	<%if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
 			{%>
 				action = "QuerySpecimenCollectionGroup.do?pageOf=<%=pageOf%>&operation=<%=operation%>&"+
@@ -292,21 +307,27 @@
 			 */
 			var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
 			
+			// Patch ID: Bug#3184_34
+			var submitAndAddMultipleButton =  document.getElementById("submitAndAddMultiple");
+			
 			if(enteredValue > 1)
 			{			
 				submitButton.disabled = true;
 				submitAndAddButton.disabled = true;
+				submitAndAddMultipleButton.disabled = false;
 			}
-			else if(restrictCheckbox.checked)
+			else if(restrictCheckbox.checked && enteredValue == 1)
 			{
 				submitButton.disabled = true;
 				submitAndAddButton.disabled = false;
+				submitAndAddMultipleButton.disabled = true;
 			}
-			else 
+			else
 			{			
 				submitButton.disabled = false;
 				submitAndAddButton.disabled = false;
-			}			
+				submitAndAddMultipleButton.disabled = false;
+			}
 		}
 		
 		/**
@@ -318,10 +339,17 @@
 		{
 			var submitButton = document.getElementById("submitOnly");
 			var addSpecimenButton = document.getElementById("submitAndAdd");
+			// Patch ID: Bug#3184_35
+			var submitAndAddMultipleButton =  document.getElementById("submitAndAddMultiple");
 			
-			var numberOfSpecimenBox = document.getElementById("numberOfSpecimen");
+			var numberOfSpecimen = document.getElementById("numberOfSpecimen").value;
 			if(restrictCheckbox.checked)
 			{
+				if(numberOfSpecimen != null && numberOfSpecimen == 1)
+				{
+					addSpecimenButton = false;
+					submitAndAddMultipleButton.disabled = true;
+				}
 				submitButton.disabled = true;
 			}
 			else
@@ -865,7 +893,8 @@
 			<input type="hidden" id="receivedEventReceivedQualityForm" value="<%=form.getReceivedEventReceivedQuality()%>"  />
 			<input type="hidden" id="receivedEventCommentsForm" value="<%=form.getReceivedEventComments()%>"  />
 			<html:hidden property="receivedEventId"/>
-			<!-- input type="hidden" id="applyToSpecimenValue"   /-->
+			<!-- Patch ID: Bug#3184_36 -->
+			<input type="hidden" id="actualNumberOfSpecimen" name="actualNumberOfSpecimen" value="<%=numberOfSpecimenCollection%>"/>
 			
 		</tr>
 	</table>
