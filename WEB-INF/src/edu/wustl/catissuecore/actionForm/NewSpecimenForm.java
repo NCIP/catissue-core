@@ -140,7 +140,7 @@ public class NewSpecimenForm extends SpecimenForm
 //	-------------Mandar AutoEvents ReceivedEvent parameters end
 	
 	// Patch ID: Bug#3184_5
-	// Also See: Bug#_3184_6
+	// Also See: Bug#3184_6
 	private String specimenCollectionGroupName;
 	
 	private String restrictSCGCheckbox;
@@ -891,7 +891,7 @@ public class NewSpecimenForm extends SpecimenForm
 		this.lineage = lineage;
 	}
 
-	// Patch ID: Bug#_3184_6
+	// Patch ID: Bug#3184_6
 	/**
 	 * This method returns the name of SpecimenCollectionGroup
 	 * @return the specimenCollectionGroupName
