@@ -62,4 +62,36 @@ function getReadyStateHandler(request,responseXmlHandler,isText)
 		}
     }
 }
+/* Bug Id: 4152
+	 Patch ID: 4152_1			
+	 Description: Removed ajax specific functions from javascript.js and added to ajax.js
+*/
+function getEventsFromSCGForMultiple(scgName,key)
+{
+	//alert(scgName,key);
+	var url = "NewMultipleSpecimenAction.do?scgName="+scgName+"&key="+key+"&method=setEventsInEventsHashMap";
+	sendRequestForEventsInHashMap(url);
+	
+}
+var request;
 
+	/**
+	 * This function sends 'GET' request to the server for updating quantity (Added by Ashish)
+	 */
+	function sendRequestForEventsInHashMap(url)
+	{
+		request = newXMLHTTPReq();
+		
+		if(request)
+		{  					
+			request.onreadystatechange = getReadyStateHandler; 	
+			try
+			{		
+				request.open("GET", url, true);
+				request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				request.send("");
+			}
+			catch(e)
+			{}			
+		}
+	}
