@@ -1304,32 +1304,6 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	   }
 //		 --------- Changes By  Mandar : 05Dec06 for Bug 2866. ---  Extending SecureAction.  end
 	   
-	   /**
-	    * This method populates NewSpecimenForm with collection and receieved events information
-	    * @param scgForm SpecimenCollectionGroupForm source of events
-	    * @return specimenForm with populated events values
-	    */
-	   protected NewSpecimenForm getSpecimenFormWithEventsInfo(SpecimenCollectionGroupForm scgForm)
-	   {
-		   NewSpecimenForm specimenForm=new NewSpecimenForm();
-		   specimenForm.setCollectionEventUserId(scgForm.getCollectionEventUserId());
-		   specimenForm.setCollectionEventdateOfEvent(scgForm.getCollectionEventdateOfEvent());
-		   specimenForm.setCollectionEventTimeInHours(scgForm.getCollectionEventTimeInHours());
-		   specimenForm.setCollectionEventTimeInMinutes(scgForm.getCollectionEventTimeInMinutes());
-		   specimenForm.setCollectionEventCollectionProcedure(scgForm.getCollectionEventCollectionProcedure());
-		   specimenForm.setCollectionEventContainer((scgForm.getCollectionEventContainer()));
-		   specimenForm.setCollectionEventComments((scgForm.getCollectionEventComments()));
-
-		   specimenForm.setReceivedEventUserId(scgForm.getReceivedEventUserId());
-		   specimenForm.setReceivedEventDateOfEvent(scgForm.getReceivedEventDateOfEvent());
-		   specimenForm.setReceivedEventTimeInHours(scgForm.getReceivedEventTimeInHours());
-		   specimenForm.setReceivedEventTimeInMinutes(scgForm.getReceivedEventTimeInMinutes());
-		   specimenForm.setReceivedEventReceivedQuality(scgForm.getReceivedEventReceivedQuality());
-		   specimenForm.setReceivedEventComments((scgForm.getReceivedEventComments()));
-		   
-		   return specimenForm;
-	   }
-	   
 		/**
 		 * Patch ID: Bug#3184_19
 		 */
@@ -1426,28 +1400,15 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			{
 				dataListsMap.put(Constants.SPECIMEN_COLL_GP_NAME, request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME));
 				request.getSession().removeAttribute(Constants.SPECIMEN_COLL_GP_NAME);
-				/**
-				* Patch ID: Entered_Events_Need_To_Be_Visible_11
-				* See also: 1-5
-				* Description: If specimen form name is set means the control is coming from specimeCollectionGroup page
-				* Therefore set the events that are present in the scgForm and not default events in the specimenForm
-				*/ 
-				SpecimenCollectionGroupForm scgForm=(SpecimenCollectionGroupForm)request.getSession().getAttribute("scgForm");
-				NewSpecimenForm specimenForm=getSpecimenFormWithEventsInfo(scgForm);
-							
-				Map toolTipMap = (HashMap)(request.getSession().getAttribute(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY));
-				dataListsMap.put(Constants.DEFAULT_TOOLTIP_TEXT,Utility.getToolTipText(specimenForm));
 			}
-			else
-			{
-				/**
-				 * If dpecimenCollecion group name is not set means this is the default flow for page.
-				 * set the default tool tip in datalist map. In specimen model same map is called as specimenAttributeOptionMap
-				 */
-				dataListsMap.put(Constants.DEFAULT_TOOLTIP_TEXT,Utility.getDefaultEventsToolTip());
-				/** -- patch ends here -- */
-			}
-			
+
+			/**
+			 * Patch ID: Entered_Events_Need_To_Be_Visible_11
+			 * Retrieve the tool tip from session ans it to datalistMap
+			 * In specimen model same map is called as specimenAttributeOptionMap
+			 */
+			dataListsMap.put(Constants.DEFAULT_TOOLTIP_TEXT,request.getSession().getAttribute(Constants.DEFAULT_TOOLTIP_TEXT));
+			/** -- patch ends here -- */
 			// Set the default values.
 			setDefaultValuesInMap(dataListsMap);
 		}

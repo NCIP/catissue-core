@@ -4,6 +4,7 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +33,7 @@ import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -121,8 +123,21 @@ public class NewMultipleSpecimenAction extends SecureAction
 			// Set value of restrict checkbox in the session
 			request.getSession().setAttribute(Constants.RESTRICT_SCG_CHECKBOX , restrictSCGCheckbox);
 		}
+		else
+		{
+			request.getSession().removeAttribute("scgForm");
+		}
 		// Putting the scg object in session to propagate it to the multiple specimen page.
 		setSCGInSession(request);
+		
+		/**
+		* Patch ID: Entered_Events_Need_To_Be_Visible_11
+		* See also: 1-5
+		* Description: set default events to form and set default tooltip in session so that it can be accessed on MultipleSpecimenAppletAction 
+		*/ 
+		setEventsInSpecimenForm(multipleSpForm,request);
+		request.getSession().setAttribute(Constants.DEFAULT_TOOLTIP_TEXT, Utility.getToolTipText(multipleSpForm));
+		/** -- patch ends here -- */
 		
 		return mapping.findForward("specimen");
 	}
@@ -539,88 +554,18 @@ public class NewMultipleSpecimenAction extends SecureAction
 	{
 		request.setAttribute("output", "init");
 		request.setAttribute("type", Constants.EVENTS_TYPE);
-
-		setEventsRequestAttributes(request);
-
-		UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
-		Collection userCollection = userBizLogic.getUsers(Constants.ADD);
-
-		SessionDataBean sessionData = getSessionData(request);
-		if (sessionData != null)
-		{
-			String user = sessionData.getLastName() + ", " + sessionData.getFirstName();
-			long collectionEventUserId = getIdFromCollection(userCollection, user);
-			((NewSpecimenForm) form).setCollectionEventUserId(collectionEventUserId);
-			((NewSpecimenForm) form).setReceivedEventUserId(collectionEventUserId);
-		}
-		setDateParameters((NewSpecimenForm) form);
-
-		Map multipleSpecimenEventMap = chkForEventsMap(request);
-		String keyInEventSpecimenMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
-		NewSpecimenForm specimenForm = (NewSpecimenForm) multipleSpecimenEventMap.get(keyInEventSpecimenMap);
-
-			/**
-	 * Name : Ashish Gupta
-	 * Reviewer Name : Sachin Lale 
-	 * Bug ID: 2741
-	 * Patch ID: 2741_15	 
-	 * Description: If user has come from scg page, take events from scgform else populate default events
-	*/
-		Object scgForm = request.getSession().getAttribute("scgForm");
-		if(specimenForm==null && scgForm != null)
-		{
-			SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)scgForm;
-			setEventsFromScg(form,specimenCollectionGroupForm);
-			//request.getSession().removeAttribute("scgForm");
-		}		
-		else if (specimenForm != null)
-		{	
-				//NewSpecimenForm specimenForm = (NewSpecimenForm)collAndReceivedParameters.get("CollAndRecEvent");
-			setCollectionEventParameters(form, specimenForm);
-			setRecievedEventParameters(form, specimenForm);
-		}
-		else if(specimenForm==null && scgForm == null)
-		{
-//			to display default selection as NotSpecified
-			Utility.setDefaultListSelection(form);
-		}
 		/**
 		* Patch ID: Entered_Events_Need_To_Be_Visible_12
 		* See also: 1-5
-		* Description: Get toolTip Text and set it to the request so that it can be retrieved on SpecimenPopup.jsp
+		* Description: All the statements required to set default events are moved to setDefaultEvent method. 
+		* Also, Get toolTip Text and set it to the request so that it can be retrieved on SpecimenPopup.jsp
 		*/ 
+		setEventsInSpecimenForm(form, request);
 		String toolTipText=Utility.getToolTipText((NewSpecimenForm)form);
 		request.setAttribute(Constants.TOOLTIP_TEXT, toolTipText);
 		/** --patch ends here -- */
 		
 		return mapping.findForward("events");
-	}
-	/**
-	 * @param form
-	 * @param specimenCollectionGroupForm
-	 */
-	private void setEventsFromScg(ActionForm form,SpecimenCollectionGroupForm specimenCollectionGroupForm)
-	{
-		NewSpecimenForm newSpecimenForm = (NewSpecimenForm)form;
-		
-		newSpecimenForm.setCollectionEventId(specimenCollectionGroupForm.getCollectionEventId());
-		newSpecimenForm.setCollectionEventSpecimenId(specimenCollectionGroupForm.getCollectionEventSpecimenId());
-		newSpecimenForm.setCollectionEventUserId(specimenCollectionGroupForm.getCollectionEventUserId());
-		newSpecimenForm.setCollectionEventdateOfEvent(specimenCollectionGroupForm.getCollectionEventdateOfEvent());
-		newSpecimenForm.setCollectionEventTimeInHours(specimenCollectionGroupForm.getCollectionEventTimeInHours());
-		newSpecimenForm.setCollectionEventTimeInMinutes(specimenCollectionGroupForm.getCollectionEventTimeInMinutes());
-		newSpecimenForm.setCollectionEventCollectionProcedure(specimenCollectionGroupForm.getCollectionEventCollectionProcedure());
-		newSpecimenForm.setCollectionEventContainer(specimenCollectionGroupForm.getCollectionEventContainer());
-		newSpecimenForm.setCollectionEventComments(specimenCollectionGroupForm.getCollectionEventComments());
-		
-		newSpecimenForm.setReceivedEventId(specimenCollectionGroupForm.getReceivedEventId());
-		newSpecimenForm.setReceivedEventSpecimenId(specimenCollectionGroupForm.getReceivedEventSpecimenId());
-		newSpecimenForm.setReceivedEventUserId(specimenCollectionGroupForm.getReceivedEventUserId());
-		newSpecimenForm.setReceivedEventDateOfEvent(specimenCollectionGroupForm.getReceivedEventDateOfEvent());
-		newSpecimenForm.setReceivedEventTimeInHours(specimenCollectionGroupForm.getReceivedEventTimeInHours());
-		newSpecimenForm.setReceivedEventTimeInMinutes(specimenCollectionGroupForm.getReceivedEventTimeInMinutes());
-		newSpecimenForm.setReceivedEventReceivedQuality(specimenCollectionGroupForm.getReceivedEventReceivedQuality());
-		newSpecimenForm.setReceivedEventComments(specimenCollectionGroupForm.getReceivedEventComments());
 	}
 	/**
 	 * @param mapping
@@ -969,5 +914,94 @@ public class NewMultipleSpecimenAction extends SecureAction
     		eventsMap.put(key, multipleSpecimenForm);
     	}
     }
+    
+    /**
+	 * This method sets the default selection of list boxes to Default values.
+	 * @author mandar_deshmukh
+	 * @param form NewSpecimenForm
+	 */
+	private void setDefaultListSelection(ActionForm form)
+	{
+		if(form!=null)
+		{
+			/**
+	         * Patch ID:defaultValueConfiguration_BugID_5
+	         * See also:defaultValueConfiguration_BugID_1,2,3,4
+	         * Description: Configuration for default value for Collection Procedure, Container and Quality
+	         */
+			String collectionProcedure = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
+			String container = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER);
+			String receivedQuality=(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
+			
+			if(((NewSpecimenForm) form).getCollectionEventCollectionProcedure() == null)
+				((NewSpecimenForm) form).setCollectionEventCollectionProcedure(collectionProcedure);
+			
+			if(((NewSpecimenForm) form).getCollectionEventContainer() == null)
+				((NewSpecimenForm) form).setCollectionEventContainer(container);
+			
+			if(((NewSpecimenForm) form).getReceivedEventReceivedQuality() == null)
+				((NewSpecimenForm) form).setReceivedEventReceivedQuality(receivedQuality);
+		}
+	}
 
+    /**
+	* Patch ID: Entered_Events_Need_To_Be_Visible_11
+	* See also: 1-5
+	* Description: Method to set default events 
+	* Contents from showEventsDialog method is copied here here
+	*/ 
+    /**
+     * This method sets the default events to specimen form
+     * @param form actionForm for multiples specimen
+     * @param request object of HttpServletRequest
+     */
+    private void setEventsInSpecimenForm(ActionForm form, HttpServletRequest request) throws Exception
+    {
+    	setEventsRequestAttributes(request);
+    	UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
+    	Collection userCollection = userBizLogic.getUsers(Constants.ADD);
+    	SessionDataBean sessionData = getSessionData(request);
+    	if (sessionData != null)
+    	{
+    		String user = sessionData.getLastName() + ", " + sessionData.getFirstName();
+    		long eventUserId = getIdFromCollection(userCollection, user);
+    		((NewSpecimenForm) form).setCollectionEventUserId(eventUserId);
+    		((NewSpecimenForm) form).setReceivedEventUserId(eventUserId );
+    	}
+    	((NewSpecimenForm) form).setCollectionEventdateOfEvent(Utility.parseDateToString((new Date()),Constants.DATE_PATTERN_MM_DD_YYYY));
+    	((NewSpecimenForm) form).setReceivedEventDateOfEvent(Utility.parseDateToString((new Date()),Constants.DATE_PATTERN_MM_DD_YYYY));
+    	setDateParameters((NewSpecimenForm) form);
+    	
+    	
+    	Map multipleSpecimenEventMap = chkForEventsMap(request);
+		String keyInEventSpecimenMap = request.getParameter(Constants.SPECIMEN_ATTRIBUTE_KEY);
+		NewSpecimenForm specimenForm = (NewSpecimenForm) multipleSpecimenEventMap.get(keyInEventSpecimenMap);
+
+			/**
+	 * Name : Ashish Gupta
+	 * Reviewer Name : Sachin Lale 
+	 * Bug ID: 2741
+	 * Patch ID: 2741_15	 
+	 * Description: If user has come from scg page, take events from scgform else populate default events
+	*/
+		Object scgForm = request.getSession().getAttribute("scgForm");
+		if(specimenForm==null && scgForm != null)
+		{
+			SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)scgForm;
+			Utility.setEventsFromScg(form,specimenCollectionGroupForm);
+			//request.getSession().removeAttribute("scgForm");
+		}		
+		else if (specimenForm != null)
+		{	
+				//NewSpecimenForm specimenForm = (NewSpecimenForm)collAndReceivedParameters.get("CollAndRecEvent");
+			setCollectionEventParameters(form, specimenForm);
+			setRecievedEventParameters(form, specimenForm);
+		}
+		else if(specimenForm==null && scgForm == null)
+		{
+//			to display default selection as NotSpecified
+			setDefaultListSelection(form);
+		}
+    }
+    /** -- patch ends here -- */
 }

@@ -24,6 +24,7 @@ import java.util.StringTokenizer;
 import org.apache.struts.action.ActionForm;
 
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
+import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CellSpecimen;
@@ -746,29 +747,30 @@ public class Utility extends edu.wustl.common.util.Utility
         */
        public static String getToolTipText(NewSpecimenForm specimenForm)throws Exception
        {
-    	   String toolTipText="";
+    	   StringBuffer toolTipText=new StringBuffer("");
+    	  
     	   if(specimenForm!=null)
     	   {
-    		   toolTipText=new String("<HTML><table border='0'><tr><td colspan='2'><b>CollectedEvents</b></td></tr><tr><td>");
-    		   toolTipText+="Collector: <i>";
-    		   toolTipText+=Utility.getUserNameById(specimenForm.getCollectionEventUserId());
-    		   toolTipText+="</i></td><td>Date: <i>";
-    		   toolTipText+=specimenForm.getCollectionEventdateOfEvent();
-    		   toolTipText+="</i></td></tr><tr><td>Procedure: <i>";
-    		   toolTipText+=specimenForm.getCollectionEventCollectionProcedure();
-    		   toolTipText+="</i></td><td>Container: <i>";
-    		   toolTipText+=specimenForm.getCollectionEventContainer();
+    		   toolTipText.append("<HTML><table border='0'><tr><td colspan='2'><b>CollectedEvents</b></td></tr><tr><td>");
+    		   toolTipText.append("Collector: <i>");
+    		   toolTipText.append(Utility.getUserNameById(specimenForm.getCollectionEventUserId()));
+    		   toolTipText.append("</i></td><td>Date: <i>");
+    		   toolTipText.append(specimenForm.getCollectionEventdateOfEvent());
+    		   toolTipText.append("</i></td></tr><tr><td>Procedure: <i>");
+    		   toolTipText.append(specimenForm.getCollectionEventCollectionProcedure());
+    		   toolTipText.append("</i></td><td>Container: <i>");
+    		   toolTipText.append(specimenForm.getCollectionEventContainer());
 
-    		   toolTipText+="</i></td></tr><tr><td colspan='2'><b>Received Events</b></td></tr>";
-    		   toolTipText+="<tr><td>Reciever: <i>";
-    		   toolTipText+=Utility.getUserNameById(specimenForm.getReceivedEventUserId());
-    		   toolTipText+="</i></td><td>Date: <i>";
-    		   toolTipText+=specimenForm.getReceivedEventDateOfEvent();
-    		   toolTipText+="</i></td></tr><tr><td colspan='2'>Quality: <i>";
-    		   toolTipText+=specimenForm.getReceivedEventReceivedQuality();
-    		   toolTipText+="</td></tr></HTML>";
+    		   toolTipText.append("</i></td></tr><tr><td colspan='2'><b>Received Events</b></td></tr>");
+    		   toolTipText.append("<tr><td>Reciever: <i>");
+    		   toolTipText.append(Utility.getUserNameById(specimenForm.getReceivedEventUserId()));
+    		   toolTipText.append("</i></td><td>Date: <i>");
+    		   toolTipText.append(specimenForm.getReceivedEventDateOfEvent());
+    		   toolTipText.append("</i></td></tr><tr><td colspan='2'>Quality: <i>");
+    		   toolTipText.append(specimenForm.getReceivedEventReceivedQuality());
+    		   toolTipText.append("</td></tr></HTML>");
     	   }	
-    	   return toolTipText;
+    	   return toolTipText.toString();
        }
 
        /**
@@ -789,76 +791,38 @@ public class Utility extends edu.wustl.common.util.Utility
     	   {
     		   User user=(User)userList.get(0);
     		   userName=user.getLastName();
-    		   userName+=",";
+    		   userName+=", ";
     		   userName+=user.getFirstName();
     	   }
     	   return userName;
        }
-       
-       /**
-        * moved from NewMultipleSecimenAction class to Utility class
-        * @param form NewSpecimenForm
-        */
-       /*
-   	 * This method sets the default selection of list boxes to Default values.
-   	 * @author mandar_deshmukh
-   	 *
-   	 */
-   	public static void setDefaultListSelection(ActionForm form)
-   	{
-   		if(form!=null)
-   		{
-   			/**
-   	         * Patch ID:defaultValueConfiguration_BugID_5
-   	         * See also:defaultValueConfiguration_BugID_1,2,3,4
-   	         * Description: Configuration for default value for Collection Procedure, Container and Quality
-   	         */
-   			String collectionProcedure = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE);
-   			String container = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER);
-   			String receivedQuality=(String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY);
-   			
-   			if(((NewSpecimenForm) form).getCollectionEventCollectionProcedure() == null)
-   				((NewSpecimenForm) form).setCollectionEventCollectionProcedure(collectionProcedure);
-   			
-   			if(((NewSpecimenForm) form).getCollectionEventContainer() == null)
-   				((NewSpecimenForm) form).setCollectionEventContainer(container);
-   			
-   			if(((NewSpecimenForm) form).getReceivedEventReceivedQuality() == null)
-   				((NewSpecimenForm) form).setReceivedEventReceivedQuality(receivedQuality);
-   		}
-   	}
 
     /**
-     * This method generates the default toolTip text for event buttons when the NewSpecimenForm do not contains events information
-     * This is required in the init case only
-     * @return toolTip for event button
-     */
-    public static String getDefaultEventsToolTip()
-    {
- 	   NewSpecimenForm specimenForm=new NewSpecimenForm();
- 	   try
- 	   {	
- 		   long userId=0;
- 		   Utility.setDefaultListSelection(specimenForm);
- 		   UserBizLogic userBizLogic = (UserBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.USER_FORM_ID);
- 		   List userList = userBizLogic.getUsers(Constants.ADD);
- 		   if(userList!=null && userList.size()>1)
- 		   {
- 			   NameValueBean nvb=(NameValueBean)userList.get(1);
- 			   userId=new Long(nvb.getValue());
- 		   }
- 		   specimenForm.setCollectionEventUserId(userId);
- 		   specimenForm.setReceivedEventUserId(userId);
- 		   specimenForm.setCollectionEventdateOfEvent(Utility.parseDateToString((new Date()),Constants.DATE_PATTERN_MM_DD_YYYY));
- 		   specimenForm.setReceivedEventDateOfEvent(Utility.parseDateToString((new Date()),Constants.DATE_PATTERN_MM_DD_YYYY));
- 		   String toolTip=Utility.getToolTipText(specimenForm);
- 		   return toolTip;
- 	   }
- 	   catch(Exception ex)
- 	   {
- 		   Logger.out.error("Error in getEventsToolTip method of Applet:"+ex.getMessage());
- 	   }
- 	   return "null";
-    }
-    /** -- patch ends here -- */
+	 * @param form
+	 * @param specimenCollectionGroupForm
+	 */
+	public static void setEventsFromScg(ActionForm form,SpecimenCollectionGroupForm specimenCollectionGroupForm)
+	{
+		NewSpecimenForm newSpecimenForm = (NewSpecimenForm)form;
+		
+		newSpecimenForm.setCollectionEventId(specimenCollectionGroupForm.getCollectionEventId());
+		newSpecimenForm.setCollectionEventSpecimenId(specimenCollectionGroupForm.getCollectionEventSpecimenId());
+		newSpecimenForm.setCollectionEventUserId(specimenCollectionGroupForm.getCollectionEventUserId());
+		newSpecimenForm.setCollectionEventdateOfEvent(specimenCollectionGroupForm.getCollectionEventdateOfEvent());
+		newSpecimenForm.setCollectionEventTimeInHours(specimenCollectionGroupForm.getCollectionEventTimeInHours());
+		newSpecimenForm.setCollectionEventTimeInMinutes(specimenCollectionGroupForm.getCollectionEventTimeInMinutes());
+		newSpecimenForm.setCollectionEventCollectionProcedure(specimenCollectionGroupForm.getCollectionEventCollectionProcedure());
+		newSpecimenForm.setCollectionEventContainer(specimenCollectionGroupForm.getCollectionEventContainer());
+		newSpecimenForm.setCollectionEventComments(specimenCollectionGroupForm.getCollectionEventComments());
+		
+		newSpecimenForm.setReceivedEventId(specimenCollectionGroupForm.getReceivedEventId());
+		newSpecimenForm.setReceivedEventSpecimenId(specimenCollectionGroupForm.getReceivedEventSpecimenId());
+		newSpecimenForm.setReceivedEventUserId(specimenCollectionGroupForm.getReceivedEventUserId());
+		newSpecimenForm.setReceivedEventDateOfEvent(specimenCollectionGroupForm.getReceivedEventDateOfEvent());
+		newSpecimenForm.setReceivedEventTimeInHours(specimenCollectionGroupForm.getReceivedEventTimeInHours());
+		newSpecimenForm.setReceivedEventTimeInMinutes(specimenCollectionGroupForm.getReceivedEventTimeInMinutes());
+		newSpecimenForm.setReceivedEventReceivedQuality(specimenCollectionGroupForm.getReceivedEventReceivedQuality());
+		newSpecimenForm.setReceivedEventComments(specimenCollectionGroupForm.getReceivedEventComments());
+	}
+	
 }
