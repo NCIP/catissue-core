@@ -10,11 +10,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,25 +17,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
-import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.beans.NameValueBean;
-import edu.wustl.common.bizlogic.CDEBizLogic;
-import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.cde.CDE;
-import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.util.logger.Logger;
 
 /**
  * @author vaishali_khandelwal

@@ -595,7 +595,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 					<td class="formRequiredNoticeAddMore" width="5">*
 						<html:hidden property="<%=cpeIdentifier%>" />
 					</td>
-					<td class="formRequiredLabelAddMore" width="32%">
+					<td class="formRequiredLabelAddMore" width="32%" >
 					<%
 						String fldName = commonLabel + "_clinicalStatus)";
 					%>
@@ -604,7 +604,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 						</label>
 					</td>
 					
-					<td class="formFieldAddMore" colspan=2>
+					<td class="formFieldAddMore" colspan=5>
 <!-- Mandar : 434 : for tooltip -->
 						<html:select property="<%=fldName%>" styleClass="formField" styleId="<%=fldName%>" size="1"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -651,7 +651,32 @@ function insRow(subdivtag,iCounter,blockCounter)
 
 						%>
 						
-			    </tr>
+			   
+			     <!-- Deepti : For cp event label -->  
+		     
+				<td class="formRequiredNoticeAddMore" width="5">*</td>
+				<%
+					fldName="";
+					fldName = commonLabel + "_collectionPointLabel)";
+					String keyCollectionPointLabel = commonName + "_collectionPointLabel";
+					String valueCollectionPointLabel = (String)colForm.getValue(keyCollectionPointLabel);
+					if(valueCollectionPointLabel == null)
+						valueCollectionPointLabel = "";
+				%>
+		        <td colspan="1" class="formRequiredLabelAddMore">
+		        	<label for="<%=fldName%>">
+						<bean:message key="collectionprotocol.collectionpointlabel" />
+					</label>
+		        </td>
+		        <td colspan="2" class="formFieldAddMore">
+		        	<html:text styleClass="formFieldSized" size="30" 
+		        			styleId="<%=fldName%>"  maxlength="255" 
+		        			property="<%=fldName%>" 
+		        			readonly="<%=readOnlyValue%>"
+		        			value="<%=valueCollectionPointLabel%>" /> 
+				</td>
+			 </tr>
+			  <!-- End of Deepti : For cp event label -->  
 			</TABLE>
 		</td>
 		<td rowspan=2 class="tabrightmostcellAddMore">
@@ -970,7 +995,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 						</label>
 					</td>
 					
-					<td class="formFieldAddMore" colspan=2>
+					<td class="formFieldAddMore" colspan=5>
 						<html:select property="value(CollectionProtocolEvent:`_clinicalStatus)" 
 										styleClass="formField" styleId="value(CollectionProtocolEvent:`_clinicalStatus)" size="1"
 										 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
@@ -996,7 +1021,26 @@ function insRow(subdivtag,iCounter,blockCounter)
 			        	<bean:message key="collectionprotocol.studycalendarcomment"/>
 					</td>
 					
-			    </tr>
+			  
+			     <!--  Patch Id : FutureSCG_18
+			           Description : collectionPointLabel attribute added
+ 					 -->  
+		    
+				<td class="formRequiredNoticeAddMore" width="5">*</td>
+			    <td colspan="1" class="formRequiredLabelAddMore">
+		        	<label for="value(CollectionProtocolEvent:`_collectionPointLabel)">
+						<bean:message key="collectionprotocol.collectionpointlabel" />
+					</label>
+		        </td>
+		        <td colspan="2" class="formFieldAddMore">
+		        	<html:text styleClass="formFieldSized" size="30" 
+		        			styleId="value(CollectionProtocolEvent:`_collectionPointLabel)" maxlength="255" 
+		        			property="value(CollectionProtocolEvent:`_collectionPointLabel)"
+		        			readonly="<%=readOnlyValue%>"
+		        			value="" /> 
+				</td>
+				  <!-- End of Deepti : For cp event label -->  
+			 </tr>
 			</TABLE>
 		</td>
 		

@@ -40,8 +40,6 @@
 			var participantId = document.getElementById("participantId");
 			window.parent.frames[2].location = "QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=edit&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value+"&id="+participantId.value;
 			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location = "showTree.do?<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId.value+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value;			
-			
-			
 		}
 		
 		function RegisterParticipants()
@@ -71,16 +69,17 @@
 <html:form action="showCpAndParticipants.do">
 
 <table summary="" cellpadding="0" cellspacing="0" border="0">
-	<tr>
 
-		<td class="formLabelBorderlessLeft">
+	<tr valign='top'>
+
+		<td class="formLabelAllBorder" colspan="2" width="161">
 			<b>Collection Protocol :</b> <%if(access == null || !access.equals("Denied"))
 	{%> <html:link href="#" styleId="register" onclick="RegisterParticipants()">Register</html:link><%}%>
 		</td>
 	</tr>		
-	<tr>
+	<tr valign='top'>
 
-		<td class="formField" nowrap>
+		<td class="formField" nowrap valign='top'>
 			<html:select property="cpId" styleClass="formFieldSized15" styleId="cpId" size="1" onchange="onCpChange(this)"
 			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.CP_LIST%>" labelProperty="name" property="value"/>
@@ -89,13 +88,12 @@
 			
 		</td>
 	</tr>
-		
 	
 	 <%if(access != null && access.equals("Denied"))
 	{%>
 	<tr>
 
-		<td nowrap>
+		<td nowrap class="formLabelAllBorder" colspan="2" width="161">
 			<html:hidden property="participantId" styleId="participantId" value="-1"/>
 		</td>
 	</tr>
@@ -109,8 +107,8 @@
 	
 	<tr>
 
-		<td class="formField" nowrap>
-			<html:select property="participantId" styleClass="formFieldSized15" styleId="participantId" size="8" onchange="onParticipantChange(this)"
+		<td class="formField">
+			<html:select property="participantId" styleClass="formFieldSized15" styleId="participantId" size="10" onchange="onParticipantChange(this)"
 			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.REGISTERED_PARTICIPANT_LIST%>" labelProperty="name" property="value"/>
 			</html:select>

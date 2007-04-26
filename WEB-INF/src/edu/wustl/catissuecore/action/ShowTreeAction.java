@@ -35,7 +35,11 @@ public class ShowTreeAction extends BaseAction
 		{
 			SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(
 					Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-			treeData = bizLogic.getSCGandSpecimens(new Long(cpId), new Long(participantId));
+			/**
+			 * Patch Id : FutureSCG_2
+			 * Description : Calling method to create tree for future scgs
+			 */
+			treeData = bizLogic.getSCGTreeForCPBasedView(new Long(cpId), new Long(participantId));
 		}
 		request.setAttribute("treeData", treeData);
 		request.setAttribute(Constants.CP_SEARCH_CP_ID, cpId);

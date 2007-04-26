@@ -9,3 +9,7 @@ alter table CATISSUE_SPECIMEN add column CREATED_ON_DATE date;
 #-- Ashish Gupta Bug id 2741---Added Association between SCG and Events
 alter table CATISSUE_SPECIMEN_EVENT_PARAM add column SPECIMEN_COLL_GRP_ID bigint;
 alter table CATISSUE_SPECIMEN_EVENT_PARAM add index FK753F33AD8CA560D1 (SPECIMEN_COLL_GRP_ID), add constraint FK753F33AD8CA560D1 foreign key (SPECIMEN_COLL_GRP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
+
+#-- Deepti Shelar Bug -----In CP based view addFuture SCGs
+alter table CATISSUE_COLL_PROT_EVENT add column COLLECTION_POINT_LABEL VARCHAR(255);
+alter table CATISSUE_COLL_PROT_EVENT add constraint CPID_LABEL_KEY unique (COLLECTION_PROTOCOL_ID,COLLECTION_POINT_LABEL);

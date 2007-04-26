@@ -513,9 +513,11 @@ create table CATISSUE_STOR_TYPE_SPEC_CLASS (
 create table CATISSUE_COLL_PROT_EVENT (
    IDENTIFIER bigint not null auto_increment,
    CLINICAL_STATUS varchar(50),
+   COLLECTION_POINT_LABEL VARCHAR(255),
    STUDY_CALENDAR_EVENT_POINT double precision,
    COLLECTION_PROTOCOL_ID bigint,
-   primary key (IDENTIFIER)
+   primary key (IDENTIFIER),
+   unique key (COLLECTION_PROTOCOL_ID,COLLECTION_POINT_LABEL)
 );
 create table CATISSUE_CONTAINER_TYPE (
    IDENTIFIER bigint not null auto_increment,

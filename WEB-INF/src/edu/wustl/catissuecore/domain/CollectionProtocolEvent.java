@@ -26,27 +26,36 @@ import edu.wustl.common.exception.AssignDataException;
 public class CollectionProtocolEvent extends AbstractDomainObject implements java.io.Serializable, Comparable
 {
 	private static final long serialVersionUID = 1234567890L;
-	
+
 	/**
 	 * System generated unique id.
 	 */
 	protected Long id;
-	
+
 	/**
 	 * Defines the required clinical status of the participant at the time of specimen collection. e.g. Pre-Op, Post-op, Pre-RX etc.
 	 */
 	protected String clinicalStatus;
-	
+
+	/**
+	 * Patch Id : FutureSCG_13
+	 * Description : collectionPointLabel attribute added
+	 */
+	/**
+	 * Defines the required collectionPointLabel.
+	 */
+	protected String collectionPointLabel;
+
 	/**
 	 * Defines the relative time point in days, with respect to the registration date of participant on this protocol, when the specimen should be collected from participant.
 	 */
 	protected Double studyCalendarEventPoint;
-	
+
 	/**
 	 * Collection of SpecimenRequirements associated with the CollectionProtocolEvent.
 	 */
 	protected Collection specimenRequirementCollection = new LinkedHashSet();
-	
+
 	/**
 	 * CollectionProtocol associated with the CollectionProtocolEvent.
 	 */
@@ -151,21 +160,21 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 	{
 		this.collectionProtocol = collectionProtocol;
 	}
-	
+
 	public String toString()
 	{
 		return "CPE: "+clinicalStatus+" | "+studyCalendarEventPoint +" | "+ specimenRequirementCollection.toString();
 	}
 
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
-     */
-    public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
-    {
-        
-    }
-    
-    public int compareTo(Object obj)
+	/* (non-Javadoc)
+	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
+	 */
+	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	{
+
+	}
+
+	public int compareTo(Object obj)
 	{
 		if(obj instanceof CollectionProtocolEvent)
 		{
@@ -179,5 +188,26 @@ public class CollectionProtocolEvent extends AbstractDomainObject implements jav
 		}
 		return 0;
 	}
-   
+	/**
+	 * Patch Id : FutureSCG_14
+	 * Description : collectionPointLabel attribute added
+	 */
+	/**
+	 * Returns the collectionPointLabel
+	 * @hibernate.property name="collectionPointLabel" type="string"
+	 * column="COLLECTION_POINT_LABEL" length="255"
+	 * @return Returns the collectionPointLabel of the participant.
+	 * @see #setCollectionPointLabel(String)
+	 */
+	public String getCollectionPointLabel() {
+		return collectionPointLabel;
+	}
+	/**
+	 * Sets collectionPointLabel
+	 * @param collectionPointLabel
+	 * @see #getCollectionPointLabel()
+	 */
+	public void setCollectionPointLabel(String collectionPointLabel) {
+		this.collectionPointLabel = collectionPointLabel;
+	}
 }

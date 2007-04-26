@@ -13,7 +13,7 @@
 		String cpId=(String)request.getAttribute(Constants.CP_SEARCH_CP_ID);
 		String access = null;
 		access = (String)session.getAttribute("Access");
-		String divHeight = "170";
+		String divHeight = "200";
 		if(access != null && access.equals("Denied"))
 		{
 			divHeight = "280";		
@@ -55,7 +55,17 @@
 			//This function is called when any of the node is selected in tree 
 			function tonclick(id)
 			{
+				var index = id.indexOf(":");
+				var isFuture = "";
+				if(index != -1)
+				{
+					isFuture = id.substring(index+1);
+					var str = id.substring(0,index);
+				}
+				else
+				{
 				var str = id;
+				}
 				var name = tree.getItemText(id);
 				var i = str.indexOf('_');
 				var obj1 = str.substring(0,i);
@@ -66,7 +76,19 @@
 					{%>
 					window.parent.frames[2].location = "CPQuerySpecimenCollectionGroupForTech.do?pageOf=pageOfSpecimenCollectionGroupCPQuery&operation=edit&id="+id1+"&name="+name;
 					<%}else {%>
-					window.parent.frames[2].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&operation=edit&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+<%=participantId%>+"&<%=Constants.CP_SEARCH_CP_ID%>="+<%=cpId%>;
+					if(isFuture != "")
+					{
+					/**
+					 * Patch Id : FutureSCG_19
+					 * Description : collectionPointLabel attribute added
+	 				 */
+					var ind = isFuture.indexOf(":");
+					var eventId = isFuture.substring(0,ind);
+					window.parent.frames[2].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupAdd&operation=add&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+<%=participantId%>+"&<%=Constants.CP_SEARCH_CP_ID%>="+<%=cpId%>+"&<%=Constants.QUERY_RESULTS_COLLECTION_PROTOCOL_EVENT_ID%>="+eventId;
+					}else
+					{
+						window.parent.frames[2].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&operation=edit&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+<%=participantId%>+"&<%=Constants.CP_SEARCH_CP_ID%>="+<%=cpId%>;
+					}
 					<%}%>
 				}
 				else
@@ -77,8 +99,6 @@
 									
 			// Creating the tree object								
 			tree=new dhtmlXTreeObject("treeboxbox_tree","100%","100%",0);
-
-
 			tree.setImagePath("dhtml_comp/imgs/");
 			tree.setOnClickHandler(tonclick);
 			<%-- in this tree for root node parent node id is "0" --%>
@@ -90,23 +110,24 @@
 					while(itr.hasNext())
 					{
 						QueryTreeNodeData data = (QueryTreeNodeData) itr.next();
+						String tooltipText = data.getToolTipText();
 						String parentId = "0";	
+						String id = data.getIdentifier().toString();
 						if(!data.getParentIdentifier().equals("0"))
 						{
 							parentId = data.getParentObjectName() + "_"+ data.getParentIdentifier().toString();
 		
 						}
-						String nodeId = data.getObjectName() + "_"+data.getIdentifier().toString();
+						String nodeId = data.getObjectName() + "_"+id.toString();
 						String img = "Specimen.GIF";
 						if(data.getObjectName().equals(Constants.SPECIMEN_COLLECTION_GROUP))
 						{
 							img = "SpecimenCollectionGroup.GIF";
 						}
-
-				
 			%>
 					tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>",0,"<%=img%>","<%=img%>","<%=img%>","");
 					tree.setUserData("<%=nodeId%>","<%=nodeId%>","<%=data%>");	
+					tree.setItemText("<%=nodeId%>","<%=data.getDisplayName()%>","<%=data.getDisplayName()%>");
 			<%	
 					}
 				}
@@ -125,9 +146,6 @@
 			tree.openItem("<%=nodeId%>");
 			
 			<%}%>	
-										
-	
-			
 	</script>
 
 

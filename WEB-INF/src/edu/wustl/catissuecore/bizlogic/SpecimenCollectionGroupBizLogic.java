@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -32,7 +33,6 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -45,7 +45,6 @@ import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -170,12 +169,12 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
 		dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true, false);
 		/**
-	 * Name : Ashish Gupta
-	 * Reviewer Name : Sachin Lale 
-	 * Bug ID: 2741
-	 * Patch ID: 2741_6	 
-	 * Description: Method to update events in all specimens related to this scg
-	*/
+		 * Name : Ashish Gupta
+		 * Reviewer Name : Sachin Lale 
+		 * Bug ID: 2741
+		 * Patch ID: 2741_6	 
+		 * Description: Method to update events in all specimens related to this scg
+		 */
 //		Populating Events in all specimens
 		if(specimenCollectionGroup.isApplyEventsToSpecimens())
 		{
@@ -262,7 +261,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			}
 		}		
 	}
-	
+
 	/**
 	 * @param eventObj
 	 * @param scgCollectionEventParameters
@@ -275,12 +274,12 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		newcollectionEventParameters.setContainer(scgCollectionEventParameters.getContainer());
 		newcollectionEventParameters.setTimestamp(scgCollectionEventParameters.getTimestamp());
 		newcollectionEventParameters.setUser(scgCollectionEventParameters.getUser());		
-		
+
 		newcollectionEventParameters.setComments(scgCollectionEventParameters.getComments());
 		newcollectionEventParameters.setSpecimen(collectionEventParameters.getSpecimen());
 		newcollectionEventParameters.setSpecimenCollectionGroup(collectionEventParameters.getSpecimenCollectionGroup());
 		newcollectionEventParameters.setId(collectionEventParameters.getId());
-		
+
 		return newcollectionEventParameters;
 	}
 	/**
@@ -295,7 +294,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		newReceivedEventParameters.setReceivedQuality(scgReceivedEventParameters.getReceivedQuality());
 		newReceivedEventParameters.setTimestamp(scgReceivedEventParameters.getTimestamp());
 		newReceivedEventParameters.setUser(scgReceivedEventParameters.getUser());	
-		
+
 		newReceivedEventParameters.setId(receivedEventParameters.getId());								
 		newReceivedEventParameters.setComments(scgReceivedEventParameters.getComments());
 		newReceivedEventParameters.setSpecimen(receivedEventParameters.getSpecimen());
@@ -305,7 +304,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 	private void setCollectionProtocolRegistration(DAO dao, SpecimenCollectionGroup specimenCollectionGroup,
 			SpecimenCollectionGroup oldSpecimenCollectionGroup) throws DAOException
-	{
+			{
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
 		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER};
 		String[] whereColumnName = new String[2];
@@ -371,7 +370,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 			specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 		}
-	}
+			}
 
 	private void setClinicalReport(DAO dao, SpecimenCollectionGroup specimenCollectionGroup) throws DAOException
 	{
@@ -410,7 +409,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	 */
 	public void assignPrivilegeToRelatedObjects(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId, boolean assignToUser,
 			boolean assignOperation) throws SMException, DAOException
-	{
+			{
 		List listOfSubElement = super.getRelatedObjects(dao, SpecimenCollectionGroup.class, "collectionProtocolRegistration", objectIds);
 		if (!listOfSubElement.isEmpty())
 		{
@@ -421,19 +420,19 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 					assignOperation);
 		}
 
-	}
+			}
 
 	/**
 	 * @see edu.wustl.common.bizlogic.IBizLogic#setPrivilege(DAO, String, Class, Long[], Long, String, boolean)
 	 */
 	protected void setPrivilege(DAO dao, String privilegeName, Class objectType, Long[] objectIds, Long userId, String roleId, boolean assignToUser,
 			boolean assignOperation) throws SMException, DAOException
-	{
+			{
 		super.setPrivilege(dao, privilegeName, objectType, objectIds, userId, roleId, assignToUser, assignOperation);
 
 		NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
 		bizLogic.assignPrivilegeToRelatedObjectsForSCG(dao, privilegeName, objectIds, userId, roleId, assignToUser, assignOperation);
-	}
+			}
 
 	/**
 	 * Overriding the parent class's method to validate the enumerated attribute values
@@ -451,12 +450,12 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 		Validator validator = new Validator();
 		String message = "";
-		
+
 		if (group.getClinicalReport() == null)
 		{
 			group.setClinicalReport(new ClinicalReport());
 		}
-		
+
 		if (group.getCollectionProtocolRegistration() == null)
 		{
 			message = ApplicationProperties.getValue("errors.specimenCollectionGroup.collectionprotocolregistration");
@@ -604,7 +603,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			}
 
 			String identifiedPathologyReportIdQuery = "select IDENTIFIER from CATISSUE_IDENTIFIED_PATHOLOGY_REPORT where CLINICAL_REPORT_ID="
-					+ clinicalReportId;
+				+ clinicalReportId;
 
 			ResultSet identifiedPathologyReportResultSet = stmt.executeQuery(identifiedPathologyReportIdQuery);
 
@@ -675,94 +674,189 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 		return 1;
 	}
-
 	/**
-	 * This function gets the specimen coll group and specimens under that SCG.
-	 * @param cpId 
-	 * @param participantId
-	 * @return
-	 * @throws Exception
+	 * Patch Id : FutureSCG_8
+	 * Description : method to get SCGTree ForCPBasedView
 	 */
-	public Vector getSCGandSpecimens(Long cpId, Long participantId) throws Exception
-	{
-		String hql = null;
-		if (participantId.longValue() == -1)
-		{
-			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id ,scg.activityStatus,sp.activityStatus from " + Specimen.class.getName()
-					+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "
-					+ cpId.toString() + " and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
-
-		}
-		else
-		{
-			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id,scg.activityStatus,sp.activityStatus from " + Specimen.class.getName()
-					+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "
-					+ cpId.toString() + " and scg.collectionProtocolRegistration.participant.id= " + participantId.toString()
-					+ " and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
-
-		}
-		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
-		dao.openSession(null);
-
-		List list = dao.executeQuery(hql, null, false, null);
-		Logger.out.info("list size -----------:" + list.size());
-		dao.closeSession();
-		//Map map1 = new TreeMap();
+	/**
+	 * Creates tree which consists of SCG nodes and specimen nodes under each SCG if available.
+	 * For a CPR if there is any SCG created those are shown with its details like  '<# event day>_<Event point label>_<SCG_recv_date>'. 
+	 * When user clicks on this node ,Edit SCG page will be shown on right side panel of the screen, where now user can edit this SCG.
+	 * But if there are no SCGs present for a CPR , a future(dummy) SCG is shown in tree as  '<# event day>_<Event point label>'. 
+	 * When user clicks on this node , Add SCG page will be shown on right side panel of the screen, where now user can actually add new SCG 
+	 * and specimens for this CPR.
+	 * @param cpId id of collection protocol
+	 * @param participantId id of participant
+	 * @return Vector tree data structure
+	 * @throws DAOException daoException
+	 * @throws ClassNotFoundException classNotFoundException
+	 */
+	public Vector getSCGTreeForCPBasedView(Long cpId, Long participantId) throws DAOException, ClassNotFoundException {
 		Vector treeData = new Vector();
-		if (list != null)
+		String hql = "select  cpe.id, cpe.studyCalendarEventPoint,cpe.collectionPointLabel from " + CollectionProtocolEvent.class.getName()
+		+ " as cpe where cpe.collectionProtocol.id= "+ cpId.toString() +" order by cpe.studyCalendarEventPoint";
+		List cpeList = executeQuery(hql);
+		for(int count = 0; count < cpeList.size() ; count++)
 		{
-			for (int i = 0; i < list.size(); i++)
+			Object[] obj = (Object[]) cpeList.get(count);
+			Long eventId = (Long)obj[0];
+			Double eventPoint = (Double) obj[1];
+			String collectionPointLabel = (String)obj[2];
+			List scgList = getSCGsForCPRAndEventId(eventId, cpId,participantId);
+			if (scgList != null && !scgList.isEmpty())
 			{
-				//Getitng participants for a particular CP.
-				Object[] obj = (Object[]) list.get(i);
-				Long scgId = (Long) obj[0];
-				String scgName = (String) obj[1];
-				String scgActivityStatus = (String) obj[5];
-
-				setQueryTreeNode(scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, scgName, "0", null, null, null, scgActivityStatus, treeData);
-
-				for (int j = i; j < list.size(); j++, i++)
-				{
-					Object[] obj1 = (Object[]) list.get(j);
-					Long scgId1 = (Long) obj1[0];
-
-					if (scgId.longValue() == scgId1.longValue())
-					{
-						Long spId1 = (Long) obj1[2];
-						String spLabel1 = (String) obj1[3];
-						Long parentSpecimenId = (Long) obj1[4];
-						String spActivityStatus = (String) obj1[6];
-
-						if (spId1 != null)
-						{
-							if (parentSpecimenId != null)
-							{
-								setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, parentSpecimenId.toString(), Constants.SPECIMEN,
-										null, null, spActivityStatus, treeData);
-
-							}
-							else
-							{
-								setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, scgId1.toString(),
-										Constants.SPECIMEN_COLLECTION_GROUP, null, null, spActivityStatus, treeData);
-
-							}
-						}
-					}
-					else
-					{
-						i--;
-						break;
-					}
-				}
-
+				createTreeNodeForExistingSCG(treeData, eventPoint, collectionPointLabel, scgList);
+			}
+			else
+			{
+				createTreeNodeForFutureSCG(treeData, eventId, eventPoint, collectionPointLabel);
 			}
 		}
-
 		return treeData;
 	}
-
-
+	/**
+	 * Patch Id : FutureSCG_9
+	 * Description : method to create TreeNode For FutureSCG
+	 */
+	/**
+	 * Creates tree node for a SCG which does not exist in database, but user can create it by clicking on this node.
+	 * @param treeData data structure for tree data
+	 * @param eventId id of studyCalendarEvent
+	 * @param eventPoint event point in no of days
+	 * @param collectionPointLabel String label of collection event point
+	 */
+	private void createTreeNodeForFutureSCG(Vector treeData, Long eventId, Double eventPoint, String collectionPointLabel) {
+		Long futureSCGId = new Long(0);
+		String futureSCGName = eventPoint + "_" +collectionPointLabel;
+		String scgActivityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
+		String toolTipText = getToolTipText(eventPoint.toString(),collectionPointLabel,null);
+		setQueryTreeNode(futureSCGId.toString()+":"+eventId.toString()+":"+Constants.FUTURE_SCG, Constants.SPECIMEN_COLLECTION_GROUP, futureSCGName, "0", null, null, null, scgActivityStatus, toolTipText,treeData);
+	}
+	/**
+	 * Patch Id : FutureSCG_10
+	 * Description : method to create TreeNode For ExistingSCG
+	 */
+	/**
+	 * Creates a tree node for existing SCgs
+	 * @param treeData data structure for storing tree data
+	 * @param eventPoint event point in no of days
+	 * @param collectionPointLabel String label of collection event point
+	 * @param scgList list of scgs
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
+	private void createTreeNodeForExistingSCG(Vector treeData, Double eventPoint, String collectionPointLabel, List scgList) throws DAOException, ClassNotFoundException {
+		for (int i = 0; i < scgList.size(); i++)
+		{
+			Object[] obj1 = (Object[]) scgList.get(i);
+			Long scgId = (Long) obj1[0];
+			String scgNodeLabel = (String) obj1[1];
+			String scgActivityStatus = (String) obj1[2];
+			String colName = "id";	
+			List scgListFromDB = retrieve(SpecimenCollectionGroup.class.getName(), colName, scgId);
+			if(scgListFromDB != null && !scgListFromDB.isEmpty())
+			{
+				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)scgListFromDB.get(0);
+				Collection eventsColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
+				if(eventsColl != null && !eventsColl.isEmpty())
+				{
+					String receivedDate = "";
+					Iterator iter = eventsColl.iterator();
+					while(iter.hasNext())
+					{
+						Object temp = iter.next();
+						if(temp instanceof ReceivedEventParameters)
+						{
+							ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)temp;
+							receivedDate = Utility.parseDateToString(receivedEventParameters.getTimestamp(),"yyyy-MM-dd");
+							scgNodeLabel = eventPoint + "_" +collectionPointLabel + "_" + receivedDate; 
+						}    					
+					}
+					String toolTipText = getToolTipText(eventPoint.toString(),collectionPointLabel,receivedDate);
+					setQueryTreeNode(scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, scgNodeLabel, "0", null, null, null, scgActivityStatus, toolTipText,treeData);
+					addSpecimenNodesToSCGTree(treeData,scgId);
+				}
+			}
+		}
+	}
+	/**
+	 * Patch Id : FutureSCG_11
+	 * Description : method to get SCGs For CPR And EventId
+	 */
+	/**
+	 * Returns the list of SCGs present for given CPR and eventId.
+	 * @param eventId id of collection protocol event
+	 * @param cpId id of collection protocol
+	 * @param participantId id of participant
+	 * @return list of SCGs.
+	 * @throws DAOException daoException
+	 * @throws ClassNotFoundException classNotFoundException
+	 */
+	private List getSCGsForCPRAndEventId(Long eventId, Long cpId, Long participantId) throws DAOException, ClassNotFoundException
+	{
+		String hql = "select scg.id,scg.name,scg.activityStatus from "
+			+ SpecimenCollectionGroup.class.getName()
+			+ " as scg where scg.collectionProtocolRegistration.id = (select cpr.id from "
+			+ CollectionProtocolRegistration.class.getName() +" as cpr where cpr.collectionProtocol.id = "
+			+ cpId + " and cpr.participant.id = "+participantId 
+			+") and scg.collectionProtocolEvent.id = "+eventId ;
+		List list = executeQuery(hql);
+		return list;
+	}
+	/**
+	 * Patch Id : FutureSCG_12
+	 * Description : method to add SpecimenNodes To SCGTree
+	 */
+	/**
+	 * Adds specimen nodes to SCG node
+	 * @param treeData vector to store tree data
+	 * @param scgId id of specimen collection group
+	 */
+	private void addSpecimenNodesToSCGTree( Vector treeData, Long scgId) throws DAOException, ClassNotFoundException
+	{
+		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus from "
+			+ Specimen.class.getName()
+			+ " as sp where sp.specimenCollectionGroup.id = "+scgId;
+		List specimenList = executeQuery(hql);
+		for (int j = 0; j < specimenList.size(); j++)
+		{
+			Object[] obj = (Object[])specimenList.get(j);
+			Long spId1 = (Long) obj[0];
+			String spLabel1 = (String) obj[1];
+			Long parentSpecimenId = (Long) obj[2];
+			String spActivityStatus = (String) obj[3];
+			if (spId1 != null)
+			{
+				if (parentSpecimenId != null)
+				{
+					setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, parentSpecimenId.toString(), Constants.SPECIMEN,
+							null, null, spActivityStatus,spLabel1, treeData);
+				}
+				else
+				{
+					setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, scgId.toString(),
+							Constants.SPECIMEN_COLLECTION_GROUP, null, null, spActivityStatus,spLabel1, treeData);
+				}
+			}
+		}
+	}
+	/**
+	 * Patch Id : FutureSCG_13
+	 * Description : method to executeQuery
+	 */
+	/**
+	 * Executes hql Query and returns the results.
+	 * @param hql String hql
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
+	private List executeQuery(String hql) throws DAOException, ClassNotFoundException {
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		dao.openSession(null);
+		List list = dao.executeQuery(hql, null, false, null);
+		dao.closeSession();
+		return list;
+	}
 	/**
 	 * This function sets the data in QuertTreeNodeData object adds in a list of these nodes.
 	 * @param identifier
@@ -776,7 +870,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	 * @param vector
 	 */
 	private void setQueryTreeNode(String identifier, String objectName, String displayName, String parentIdentifier, String parentObjectName,
-			String combinedParentIdentifier, String combinedParentObjectName, String activityStatus, Vector vector)
+			String combinedParentIdentifier, String combinedParentObjectName, String activityStatus, String toolTipText ,Vector vector)
 	{
 		if (!activityStatus.equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
@@ -788,8 +882,34 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			treeNode.setParentObjectName(parentObjectName);
 			treeNode.setCombinedParentIdentifier(combinedParentIdentifier);
 			treeNode.setCombinedParentObjectName(combinedParentObjectName);
-
+			treeNode.setToolTipText(toolTipText);
 			vector.add(treeNode);
 		}
 	}
+	/**
+	 * Patch Id : FutureSCG_14
+	 * Description : method to getToolTipText
+	 */
+	/**
+	 * Generates tooltip for SCGs in c based views
+	 * @param eventDays no of days 
+	 * @param collectionPointLabel label of CPE
+	 * @param receivedDate received date for specimens
+	 * @return String Tooltip text
+	 */
+	private static String getToolTipText(String eventDays, String collectionPointLabel, String receivedDate)
+	{
+		StringBuffer toolTipText= new StringBuffer();
+		toolTipText.append("Event point : ");
+		toolTipText.append(eventDays);
+		toolTipText.append("\\n  Collection point label : ");
+		toolTipText.append(collectionPointLabel);
+		if(receivedDate != null)
+		{
+			toolTipText.append("\\n  Received date : ");
+			toolTipText.append(receivedDate);
+		}
+		return toolTipText.toString();
+	}
+
 }

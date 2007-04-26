@@ -1539,6 +1539,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String USER_NAME = "userName";
 	public static final String EVENT_DATE = "eventDate";
 	public static final String PAGE_OF = "pageOf";
+	/**
+	 * Patch ID: for Future SCG_15
+	 * Description: The following constants are used as id for future scg in tree
+	 */
+	public static final String FUTURE_SCG = "future";
+
 	
 	// Patch ID: SimpleSearchEdit_5 
 	// AliasName constants, used in Edit in Simple Search feature.

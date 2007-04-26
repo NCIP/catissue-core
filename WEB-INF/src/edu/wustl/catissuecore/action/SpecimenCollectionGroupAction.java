@@ -119,6 +119,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		//Populating the Collection Protocol Events
 		loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 
+
 		String protocolParticipantId = specimenCollectionGroupForm.getProtocolParticipantIdentifier();
 		//Populating the participants Medical Identifier for a given participant
 		loadParticipantMedicalIdentifier(specimenCollectionGroupForm.getParticipantId(),bizLogic, request);
@@ -291,6 +292,22 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				specimenCollectionGroupForm.setCheckedButton(1);
 				request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID,participantId.toString());
 
+ 				/**
+				 * Name : Deepti Shelar
+				 * Reviewer Name : Sachin Lale
+				 * Bug id : FutureSCG
+				 * Patch Id : FutureSCG_1
+				 * Description : setting participantProtocolId to form
+				 */
+				if(participantProtocolId == null)
+				{
+					participantProtocolId = getParticipantProtocolIdForCPAndParticipantId(participantId.toString(),collectionProtocolId.toString(),bizLogic);
+					if(participantProtocolId != null)
+					{
+						specimenCollectionGroupForm.setProtocolParticipantIdentifier(participantProtocolId);
+						specimenCollectionGroupForm.setCheckedButton(2);
+					}
+				}
 			}
 			else if(participantProtocolId != null)
 			{
@@ -304,6 +321,20 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				if(cpParticipantId != null)
 				{
 					request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID,cpParticipantId);
+				}
+			}
+			/**
+			 * Patch Id : FutureSCG_3
+			 * Description : Setting number of specimens and restricted checkbox
+			 */
+			Long cpeId = (Long)forwardToHashMap.get("COLLECTION_PROTOCOL_EVENT_ID");
+			if(cpeId != null)
+			{
+				specimenCollectionGroupForm.setCollectionProtocolEventId(cpeId);
+				List cpeList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),Constants.SYSTEM_IDENTIFIER,cpeId);
+				if(!cpeList.isEmpty())
+				{
+					setNumberOfSpecimens(request, specimenCollectionGroupForm, cpeList);
 				}
 			}
 			//Bug 1915:SpecimenCollectionGroup.Study Calendar Event Point not populated when page is loaded through proceedTo
@@ -402,7 +433,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		 * Description: Methods to set default events on SCG page
 		 */
 		setDefaultEvents(request,specimenCollectionGroupForm,operation);
-		
+
 		request.setAttribute("scgForm", specimenCollectionGroupForm);
 		/* Bug ID: 4135
 	 	* Patch ID: 4135_2	 
@@ -415,6 +446,28 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		}
 		
 		return mapping.findForward(pageOf);
+			}
+	/**
+	 * Patch Id : FutureSCG_4
+	 * Description : method to set Number Of Specimens
+	 */
+	/**
+	 * @param request
+	 * @param specimenCollectionGroupForm
+	 * @param calendarEventPointList
+	 */
+	private void setNumberOfSpecimens(HttpServletRequest request, SpecimenCollectionGroupForm specimenCollectionGroupForm, List calendarEventPointList) 
+	{
+		CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
+		specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
+		Collection specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+		if((specimenRequirementCollection != null) && (!specimenRequirementCollection.isEmpty()))
+		{
+			int numberOfSpecimen = specimenRequirementCollection.size();
+			specimenCollectionGroupForm.setNumberOfSpecimens(numberOfSpecimen);
+			request.setAttribute(Constants.NUMBER_OF_SPECIMEN, numberOfSpecimen);
+			specimenCollectionGroupForm.setRestrictSCGCheckbox("true");
+		}
 	}
 	/**
 	 * @param specimenCollectionGroupForm
@@ -685,30 +738,30 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 
 		List list = bizLogic.getList(sourceObjectName, displayParticipantNumberFields, valueField, whereColumnName,
 				whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, true);
-		
-		
-		
+
+
+
 		Logger.out.debug("Paticipant Number List"+list);
 		request.setAttribute(Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST, list);
 	}
-	
+
 	private void loadCollectionProtocolEvent(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		String sourceObjectName = CollectionProtocolEvent.class.getName();
-		String displayEventFields[] = {"studyCalendarEventPoint"};
+		String displayEventFields[] = {"studyCalendarEventPoint","collectionPointLabel"};
 		String valueField = "id";
 		String whereColumnName[] = {"collectionProtocol."+Constants.SYSTEM_IDENTIFIER};
 		String whereColumnCondition[] = {"="};
 		Object[] whereColumnValue = {new Long(protocolID)};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
-		String separatorBetweenFields = "";
-		
+		String separatorBetweenFields = ",";
+
 		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField, whereColumnName,
 				whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
-		
+
 		request.setAttribute(Constants.STUDY_CALENDAR_EVENT_POINT_LIST, list);
 	}
-	
+
 	private void loadParticipantMedicalIdentifier(long participantID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
@@ -720,13 +773,13 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		Object[] whereColumnValue = {new Long(participantID),"null"};
 		String joinCondition = Constants.AND_JOIN_CONDITION;
 		String separatorBetweenFields = "";
-		
+
 		List list = bizLogic.getList(sourceObjectName, displayEventFields, valueField, whereColumnName,
 				whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
-		
+
 		request.setAttribute(Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST, list);
 	}
-	
+
 	private String getParticipantIdForProtocolId(String participantProtocolId,IBizLogic bizLogic) throws Exception
 	{
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
@@ -737,10 +790,40 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		List participantList = bizLogic.retrieve(sourceObjectName,selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,Constants.AND_JOIN_CONDITION);
 		if(participantList != null && !participantList.isEmpty())
 		{
-			
+
 			String participantId = ((Long) participantList.get(0)).toString();
 			return participantId;
-			
+
+		}
+		return null;
+	}
+	/**
+	 * 
+	 * @param participantId
+	 * @param cpId
+	 * @param bizLogic
+	 * @return
+	 * @throws Exception
+	 */
+	private String getParticipantProtocolIdForCPAndParticipantId(String participantId,String cpId,IBizLogic bizLogic) throws Exception
+	{
+		String sourceObjectName = CollectionProtocolRegistration.class.getName();
+		String selectColumnName[] = {"protocolParticipantIdentifier"};
+		String whereColumnName[] = {"participant.id","collectionProtocol.id"};
+		String whereColumnCondition[] = {"=","="};
+		Object[] whereColumnValue = {participantId,cpId};
+		List list = bizLogic.retrieve(sourceObjectName,selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,Constants.AND_JOIN_CONDITION);
+		if(list != null && !list.isEmpty())
+		{
+			Iterator iter = list.iterator();
+			while(iter.hasNext())
+			{
+				Object id = (Object)iter.next();
+				if(id != null)
+				{
+					return id.toString();
+				}
+			}
 		}
 		return null;
 	}

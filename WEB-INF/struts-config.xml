@@ -2269,7 +2269,7 @@ PUBLIC
 			<forward name="failure" path=".catissuecore.querySpecimenCollectionGroupViewDef" />
 			<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
 		</action>
-		
+		<!-- Deepti for FutureSCG -->
 		<action path="/QuerySpecimenCollectionGroupSearch"
 		    type="edu.wustl.common.action.CommonSearchAction"
 			name="specimenCollectionGroupForm"
@@ -2277,6 +2277,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfSpecimenCollectionGroupQueryEdit" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=query"/>
 			<forward name="pageOfSpecimenCollectionGroupCPQueryEdit" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery"/>			
+			<forward name="pageOfSpecimenCollectionGroupAdd" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery"/>
 			<forward name="failure" path="/QuerySpecimenCollectionGroup.do?pageOf=query"/>
 		</action>
 		<action path="/QuerySpecimenCollectionGroupAdd"

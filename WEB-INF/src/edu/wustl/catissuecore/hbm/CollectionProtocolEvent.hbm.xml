@@ -36,7 +36,14 @@
             column="CLINICAL_STATUS"
             length="50"
         />
-
+         <property
+            name="collectionPointLabel"
+            type="string"
+            update="true"
+            insert="true"
+            column="COLLECTION_POINT_LABEL"
+            length="255"
+        />
         <property
             name="studyCalendarEventPoint"
             type="double"

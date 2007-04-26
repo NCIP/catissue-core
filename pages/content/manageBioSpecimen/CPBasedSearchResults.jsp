@@ -12,7 +12,7 @@
 	String frame1Ysize = "100%";
 	String frame2Ysize = "100%";
 	String frame3Ysize = "100%";
-	String cpAndParticipantViewFrameHeight="45%";
+	String cpAndParticipantViewFrameHeight="50%";
 	if(access != null && access.equals("Denied"))
 	{
 		cpAndParticipantViewFrameHeight="15%";
