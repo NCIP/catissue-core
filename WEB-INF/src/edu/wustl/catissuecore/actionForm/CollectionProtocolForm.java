@@ -175,10 +175,16 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				CollectionProtocolEvent cpEvent = (CollectionProtocolEvent)it.next();
 				
 				String keyClinicalStatus = "CollectionProtocolEvent:" + i + "_clinicalStatus";
+				/**
+				 * Patch Id : FutureSCG_5
+				 * Description : Setting attribute _collectionPointLabel 
+				 */
+				String keyCollectionPointLabel = "CollectionProtocolEvent:" + i + "_collectionPointLabel";
 				String keyStudyCalendarEventPoint = "CollectionProtocolEvent:" + i + "_studyCalendarEventPoint";
 				String keyCPEId = "CollectionProtocolEvent:" + i + "_id";
 				
 				values.put(keyClinicalStatus,Utility.toString(cpEvent.getClinicalStatus()));
+				values.put(keyCollectionPointLabel,Utility.toString(cpEvent.getCollectionPointLabel()));
 				values.put(keyStudyCalendarEventPoint, Utility.toString(cpEvent.getStudyCalendarEventPoint()));
 				values.put(keyCPEId,Utility.toString(cpEvent.getId()));
 				Logger.out.debug("In Form keyCPEId..............."+values.get(keyCPEId));
@@ -384,6 +390,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			boolean bSpecimenType = false;
 			boolean bTissueSite = false;
 			boolean bPathologyStatus = false;
+			boolean bCollectionPointlabel = false;
 			
 			Iterator it = this.values.keySet().iterator();
 			while (it.hasNext())
@@ -398,7 +405,19 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.clinicalstatus")));
 						bClinicalStatus = true;
 					}
-				}				
+				}	
+				// Deepti for FuruteSCG
+				if(!bCollectionPointlabel)
+				{
+					if(key.indexOf("collectionPointLabel")!=-1 )
+					{
+						if(validator.isEmpty(value))
+						{
+							errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.collectionpointlabel")));
+							bCollectionPointlabel = true;
+						}
+					}
+				}
 				if(!bStudyPoint)
 				{
 					if(key.indexOf("studyCalendarEventPoint")!=-1 )
