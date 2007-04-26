@@ -13,9 +13,12 @@ package edu.wustl.catissuecore.action;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -132,38 +135,45 @@ public class ListSpecimenEventParametersAction extends SecureAction
 				Specimen specimen = (Specimen) specimenList.get(0);
 
 				//Setting Specimen Event Parameters' Grid            
-				Collection specimenEventCollection = specimen.getSpecimenEventCollection();
+				Collection<EventParameters> specimenEventCollection = specimen.getSpecimenEventCollection();
 
+				/**
+				 * Name: Chetan Patil
+				 * Reviewer: Sachin Lale
+				 * Bug ID: Bug#4180
+				 * Patch ID: Bug#4180_1
+				 * Description: The values of event parameter is stored in a Map and in turn the Map is stored in a List.
+				 * This is then sorted chronologically, using a date value form the Map. After sorting the List of Map is 
+				 * converted into the List of List, which is used on the UI for displaying values form List on the grid.
+				 */
 				if (specimenEventCollection != null)
 				{
-					List gridData = new ArrayList();
-					Iterator it = specimenEventCollection.iterator();
-					//int i=1;
-
-					while (it.hasNext())
+					List<Map<String, Object>> gridData = new ArrayList<Map<String, Object>>();
+					
+					for(EventParameters eventParameters : specimenEventCollection)
 					{
-						List rowData = new ArrayList();
-						EventParameters eventParameters = (EventParameters) it.next();
-
+						Map<String, Object> rowDataMap = new HashMap<String, Object>();
 						if (eventParameters != null)
 						{
 							String[] events = getEvent(eventParameters);
-							rowData.add(String.valueOf(eventParameters.getId()));
-							rowData.add(events[0]);//Event Name
+							rowDataMap.put(Constants.ID, String.valueOf(eventParameters.getId()));
+							rowDataMap.put(Constants.EVENT_NAME, events[0]);//Event Name
 
 							User user = eventParameters.getUser();
+							rowDataMap.put(Constants.USER_NAME, user.getLastName() + ", " + user.getFirstName());
 
-							rowData.add(user.getLastName() + ", " + user.getFirstName());
-							rowData.add(Utility.parseDateToString(eventParameters.getTimestamp(), Constants.TIMESTAMP_PATTERN)); // Sri: Changed format for bug #463
-							rowData.add(events[1]);//pageOf
-							gridData.add(rowData);
+							//rowDataMap.put(Constants.EVENT_DATE, Utility.parseDateToString(eventParameters.getTimestamp(), Constants.TIMESTAMP_PATTERN)); // Sri: Changed format for bug #463
+							rowDataMap.put(Constants.EVENT_DATE, eventParameters.getTimestamp());
+							rowDataMap.put(Constants.PAGE_OF, events[1]);//pageOf
+							gridData.add(rowDataMap);
 						}
 					}
-
-					request.setAttribute(Constants.SPREADSHEET_DATA_LIST, gridData);
+					
+					List<List<String>> gridDataList = getSortedGridDataList(gridData);
+					request.setAttribute(Constants.SPREADSHEET_DATA_LIST, gridDataList);
 				}
 			}
-
+			
 			request.setAttribute(Constants.EVENT_PARAMETERS_LIST, Constants.EVENT_PARAMETERS);
 		}
 		catch (Exception e)
@@ -187,6 +197,78 @@ public class ListSpecimenEventParametersAction extends SecureAction
 		}
 
 		return mapping.findForward((String) request.getParameter(Constants.PAGEOF));
+	}
+
+	// Patch ID: Bug#4180_2
+	/**
+	 * This method sorts the List of the Map of grid data chronologically
+	 * @param gridData List of the Map
+	 * @return Sorted List of the List
+	 */
+	private List<List<String>> getSortedGridDataList(List<Map<String, Object>> gridData) 
+	{
+		//Comparator to sort the List of Map chronologically.
+		final Comparator EventDateComparator = new Comparator() 
+		{
+			public int compare(Object object1, Object object2)
+			{
+				Map<String, Object> rowDataMap1 = (Map<String, Object>)object1;
+				Date date1 = (Date)rowDataMap1.get(Constants.EVENT_DATE);
+								
+				Map<String, Object> rowDataMap2 = (Map<String, Object>)object2;
+				Date date2 = (Date)rowDataMap2.get(Constants.EVENT_DATE);
+				
+				int value = 0;
+				if (date1.before(date2))
+				{
+					value = -1;
+				}
+				else if (date1.after(date2))
+				{
+					value = 1;
+				}
+				
+				return value;
+		    }
+		};
+		
+		Collections.sort(gridData, EventDateComparator);
+		
+		List<List<String>> gridDataList = getListOfRowData(gridData);
+		return gridDataList;
+	}
+
+	/**
+	 * This method converts List of Map<key, value> into List of values
+	 * @param gridData List of Map
+	 * @return List of values
+	 */
+	private List<List<String>> getListOfRowData(List<Map<String, Object>> gridData) 
+	{
+		List<List<String>> gridDataList = new ArrayList<List<String>>();
+		for(Map<String, Object> rowDataMap : gridData)
+		{
+			List<String> rowData = new ArrayList<String>();
+			
+			String eventId = (String)rowDataMap.get(Constants.ID);
+			rowData.add(eventId);
+			
+			String eventName = (String)rowDataMap.get(Constants.EVENT_NAME);
+			rowData.add(eventName);
+			
+			String userName = (String)rowDataMap.get(Constants.USER_NAME);
+			rowData.add(userName);
+			
+			Date date = (Date)rowDataMap.get(Constants.EVENT_DATE);
+			String eventDate = Utility.parseDateToString(date, Constants.TIMESTAMP_PATTERN); // Sri: Changed format for bug #463
+			rowData.add(eventDate);
+			
+			String paggeOf = (String)rowDataMap.get(Constants.PAGE_OF);
+			rowData.add(paggeOf);
+			
+			gridDataList.add(rowData);
+		}
+		return gridDataList;
 	}
 
 	private String[] getEvent(EventParameters eventParameters)

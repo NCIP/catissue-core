@@ -1533,4 +1533,11 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ON_COLL_OR_CLASSCHANGE = "onCollOrClassChange";
 	public static final String NUMBER_OF_SPECIMENS = "numberOfSpecimens";
 	public static final String CHANGE_ON = "changeOn";
+	
+	// Patch ID: Bug#4180_3
+	public static final String EVENT_NAME = "eventName";
+	public static final String USER_NAME = "userName";
+	public static final String EVENT_DATE = "eventDate";
+	public static final String PAGE_OF = "pageOf";
+	
 }
