@@ -10,8 +10,10 @@ package edu.wustl.catissuecore.util.global;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -27,6 +29,9 @@ public class Variables extends edu.wustl.common.util.global.Variables
     public static String[] databasenames;
     public static String applicationCvsTag = new String();
 
+	// Patch ID: SimpleSearchEdit_7
+    public static Map<String, String> aliasAndPageOfMap = new HashMap<String, String>();
+    
     public static String prepareColTypes(List dataColl)
     {
     	return prepareColTypes(dataColl, false);

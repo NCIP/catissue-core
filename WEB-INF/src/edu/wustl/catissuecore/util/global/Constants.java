@@ -1540,4 +1540,43 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String EVENT_DATE = "eventDate";
 	public static final String PAGE_OF = "pageOf";
 	
-}
+	// Patch ID: SimpleSearchEdit_5 
+	// AliasName constants, used in Edit in Simple Search feature.
+	public static final String ALIAS_COLLECTION_PROTOCOL = "CollectionProtocol";
+	public static final String ALIAS_BIOHAZARD = "Biohazard";
+	public static final String ALIAS_CANCER_RESEARCH_GROUP = "CancerResearchGroup";
+	public static final String ALIAS_COLLECTION_PROTOCOL_REG = "CollectionProtReg";
+	public static final String ALIAS_DEPARTMENT = "Department";
+	public static final String ALIAS_DISTRIBUTION = "Distribution";
+	public static final String ALIAS_DISTRIBUTION_PROTOCOL = "DistributionProtocol";
+	public static final String ALIAS_DISTRIBUTION_ARRAY = "Distribution_array";
+	public static final String ALIAS_INSTITUTE = "Institution";
+	public static final String ALIAS_PARTICIPANT = "Participant";
+	public static final String ALIAS_SITE = "Site";
+	public static final String ALIAS_SPECIMEN = "Specimen";
+	public static final String ALIAS_SPECIMEN_ARRAY = "SpecimenArray";
+	public static final String ALIAS_SPECIMEN_ARRAY_TYPE = "SpecimenArrayType";
+	public static final String ALIAS_SPECIMEN_COLLECTION_GROUP = "SpecimenCollectionGroup";
+	public static final String ALIAS_STORAGE_CONTAINER = "StorageContainer";
+	public static final String ALIAS_STORAGE_TYPE= "StorageType";
+	public static final String ALIAS_USER= "User";
+	public static final String PAGE_OF_BIOHAZARD = "pageOfBioHazard";
+	public static final String PAGE_OF_CANCER_RESEARCH_GROUP = "pageOfCancerResearchGroup";
+	public static final String PAGE_OF_COLLECTION_PROTOCOL = "pageOfCollectionProtocol";
+	public static final String PAGE_OF_COLLECTION_PROTOCOL_REG = "pageOfCollectionProtocolRegistration";
+	public static final String PAGE_OF_DEPARTMENT = "pageOfDepartment";
+	public static final String PAGE_OF_DISTRIBUTION = "pageOfDistribution";
+	public static final String PAGE_OF_DISTRIBUTION_PROTOCOL = "pageOfDistributionProtocol";
+	public static final String PAGE_OF_DISTRIBUTION_ARRAY = "pageOfArrayDistribution";
+	public static final String PAGE_OF_INSTITUTE = "pageOfInstitution";
+	public static final String PAGE_OF_PARTICIPANT = "pageOfParticipant";
+	public static final String PAGE_OF_SITE = "pageOfSite";
+	public static final String PAGE_OF_SPECIMEN = "pageOfNewSpecimen";
+	public static final String PAGE_OF_SPECIMEN_ARRAY = "pageOfSpecimenArray";
+	public static final String PAGE_OF_SPECIMEN_ARRAY_TYPE = "pageOfSpecimenArrayType";
+	public static final String PAGE_OF_SPECIMEN_COLLECTION_GROUP = "pageOfSpecimenCollectionGroup";
+	public static final String PAGE_OF_STORAGE_CONTAINER = "pageOfStorageContainer";
+	public static final String PAGE_OF_STORAGE_TYPE = "pageOfStorageType";
+	public static final String PAGE_OF_USER = "pageOfUserAdmin";
+	
+	}

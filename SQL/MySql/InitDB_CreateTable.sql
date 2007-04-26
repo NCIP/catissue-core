@@ -47,3 +47,12 @@ CREATE TABLE CATISSUE_RELATED_TABLES_MAP
       FIRST_TABLE_JOIN_COLUMN varchar(50),
       SECOND_TABLE_JOIN_COLUMN varchar(50)
 );
+/*Patch ID: SimpleSearchEdit_13*/
+/*Adding Metadata table required for the Simple search edit feature.*/
+/*This table contains information about the columns to be hyperlinked for the given table.*/
+drop table if exists CATISSUE_QUERY_EDITLINK_COLS;
+CREATE TABLE CATISSUE_QUERY_EDITLINK_COLS
+(
+      TABLE_ID bigint not null, 
+      COL_ID bigint not null
+);

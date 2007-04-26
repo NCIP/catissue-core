@@ -2184,6 +2184,31 @@ PUBLIC
 			<forward name="pageOfSpecimenArray" path="/SpecimenArraySearch.do"/>
 			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
 		</action>
+		
+		<action path="/SimpleSearchEdit"
+		    type="edu.wustl.catissuecore.action.SimpleSearchEditAction"
+			scope="request">
+			<forward name="pageOfBioHazard" path="/BiohazardSearch.do"/>
+			<forward name="pageOfCancerResearchGroup" path="/CancerResearchGroupSearch.do"/>
+			<forward name="pageOfCollectionProtocol" path="/CollectionProtocolSearch.do"/>
+			<forward name="pageOfCollectionProtocolRegistration" path="/CollectionProtocolRegistrationSearch.do"/>
+			<forward name="pageOfDepartment" path="/DepartmentSearch.do"/>
+			<forward name="pageOfDistribution" path="/DistributionSearchFromMenu.do"/>
+			<forward name="pageOfDistributionProtocol" path="/DistributionProtocolSearch.do"/>
+			<forward name="pageOfArrayDistribution" path="/DistributionSearchFromMenu.do"/>
+			<forward name="pageOfInstitution" path="/InstitutionSearch.do"/>
+			<forward name="pageOfParticipant" path="/ParticipantSearch.do"/>
+			<forward name="pageOfSite" path="/SiteSearch.do?pageOf=pageOfSite"/>
+			<forward name="pageOfNewSpecimen" path="/NewSpecimenSearch.do?pageOf=pageOfNewSpecimen"/>
+			<forward name="pageOfSpecimenArray" path="/SpecimenArraySearch.do"/>
+			<forward name="pageOfSpecimenArrayType" path="/SpecimenArrayTypeSearch.do"/>
+			<forward name="pageOfSpecimenCollectionGroup" path="/SpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroup"/>
+			<forward name="pageOfStorageContainer" path="/StorageContainerSearch.do"/>
+			<forward name="pageOfStorageType" path="/StorageTypeSearch.do"/>
+			<forward name="pageOfUserAdmin" path="/UserSearch.do"/>
+
+			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
+		</action>
 		<!--Query Result View Actions End-->
 		
 		<!--Participant Object View Actions Begin-->

@@ -46,6 +46,7 @@ import edu.wustl.catissuecore.domain.TissueSpecimenReviewEventParameters;
 import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
@@ -639,6 +640,46 @@ public class Utility extends edu.wustl.common.util.Utility
  
         return obj;
     }
+    /**
+     * Changes the format of the string compatible to New Grid Format. Also create hyperlink for the columns that are to be shown as hyperlink.
+     * @param row The List representing row of that is to be shown in the Grid.
+     * @param hyperlinkColumnMap Map containing information about which column to be marked as Hyperlink. 
+     * 		It is map of the column index that are to be shown as hyperlink verses the QueryResultObjectData, which contain information of the aliasName of the Object to which this column belongs & the index of the associated Id column.
+     * @param index The index of the attribute in List whose format is to be changed. 
+     * @return The Formated object, Hypelink format if the Column is tobe marked as hyperlink.
+     * @see edu.wustl.catissuecore.util.global.Utility#toNewGridFormat(java.lang.Object)
+	 * Patch ID: SimpleSearchEdit_6 
+     */
+    public static Object toNewGridFormatWithHref(List<String> row, Map<Integer, QueryResultObjectData> hyperlinkColumnMap, int index)
+    {
+    	Object obj = row.get(index);
+    	
+    	
+    	
+    	if (obj instanceof String)
+    	{
+	    	obj = toNewGridFormat(obj);
+	    	
+	    	
+	    	QueryResultObjectData queryResultObjectData = hyperlinkColumnMap.get(index);
+	    	
+	    	if (queryResultObjectData!=null)// This column is to be shown as hyperlink.
+	    	{
+	    		if (obj==null || obj.equals(""))
+	        		obj="NA";
+	    		
+	    		String link = "SimpleSearchEdit.do?"+edu.wustl.common.util.global.Constants.TABLE_ALIAS_NAME + "="+queryResultObjectData.getAliasName()
+	    			+"&" + Constants.SYSTEM_IDENTIFIER + "="+row.get(queryResultObjectData.getIdentifierColumnId());
+	    		 
+	    		String onclickStr = " onclick=javascript:NewWindow('" + link + "','name','800','600','yes') ";
+				String hrefTag = "<a class='normalLink' href='#'"+ onclickStr + ">"+obj+"</a>"; 
+//				String hrefTag = "<a href='"+ link+ "'>"+obj+"</a>";
+				obj = hrefTag;
+	    	}
+    	}
+    	return obj;
+    }
+    
     /**
      * This method creates a comma separated string of numbers representing column width.
      *

@@ -48,3 +48,13 @@ CREATE TABLE CATISSUE_RELATED_TABLES_MAP
 );
 alter table CATISSUE_RELATED_TABLES_MAP add constraint RELATED_TABLES_KEY unique (FIRST_TABLE_ID,SECOND_TABLE_ID);
 alter table CATISSUE_SEARCH_DISPLAY_DATA add constraint SEARCH_DATA_KEY unique (RELATIONSHIP_ID,COL_ID);
+
+/*Patch ID: SimpleSearchEdit_14*/
+/*Adding Metadata table required for the Simple search edit feature.*/
+/*This table contains information about the columns to be hyperlinked for the given table.*/
+drop table CATISSUE_QUERY_EDITLINK_COLS;
+CREATE TABLE CATISSUE_QUERY_EDITLINK_COLS
+(
+      TABLE_ID number(30), 
+      COL_ID number(30)
+);

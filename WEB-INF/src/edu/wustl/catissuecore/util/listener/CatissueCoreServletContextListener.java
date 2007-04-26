@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.4 $
+ * $Name: 1.41.2.5 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -15,10 +15,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import net.sf.ehcache.CacheException;
-import titli.controller.interfaces.TitliInterface;
-import titli.model.Titli;
-import titli.model.TitliException;
-import titli.model.util.IndexUtility;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
@@ -191,6 +187,10 @@ public class CatissueCoreServletContextListener implements ServletContextListene
         {
         	Logger.out.error(ex.getMessage(), ex);
         }  
+
+        // Patch ID: SimpleSearchEdit_8 
+        // Creating Map of Alias verses Page of values. 
+        createAliasAndPageOfMap();
         
         //Initialize CDE Manager
         try
@@ -323,6 +323,33 @@ public class CatissueCoreServletContextListener implements ServletContextListene
 		
     }
     
+    /**
+     * TO create map of Alias verses corresponding pageOf values. 
+     * This is required in Simple Query Edit feature, It contains mapping of alias name for the query tables & the corresponding pageOf values.
+	 * Patch ID: SimpleSearchEdit_9
+     */
+    private void createAliasAndPageOfMap()
+    {
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_BIOHAZARD, Constants.PAGE_OF_BIOHAZARD);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_CANCER_RESEARCH_GROUP, Constants.PAGE_OF_CANCER_RESEARCH_GROUP);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_COLLECTION_PROTOCOL, Constants.PAGE_OF_COLLECTION_PROTOCOL);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_COLLECTION_PROTOCOL_REG, Constants.PAGE_OF_COLLECTION_PROTOCOL_REG);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_DEPARTMENT, Constants.PAGE_OF_DEPARTMENT);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_DISTRIBUTION, Constants.PAGE_OF_DISTRIBUTION);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_DISTRIBUTION_PROTOCOL, Constants.PAGE_OF_DISTRIBUTION_PROTOCOL);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_DISTRIBUTION_ARRAY, Constants.PAGE_OF_DISTRIBUTION_ARRAY);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_INSTITUTE, Constants.PAGE_OF_INSTITUTE);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_PARTICIPANT, Constants.PAGE_OF_PARTICIPANT);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_SITE, Constants.PAGE_OF_SITE);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_SPECIMEN, Constants.PAGE_OF_SPECIMEN);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_SPECIMEN_ARRAY,Constants.PAGE_OF_SPECIMEN_ARRAY);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_SPECIMEN_ARRAY_TYPE, Constants.PAGE_OF_SPECIMEN_ARRAY_TYPE);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_SPECIMEN_COLLECTION_GROUP, Constants.PAGE_OF_SPECIMEN_COLLECTION_GROUP);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_STORAGE_CONTAINER, Constants.PAGE_OF_STORAGE_CONTAINER);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_STORAGE_TYPE, Constants.PAGE_OF_STORAGE_TYPE);
+    	Variables.aliasAndPageOfMap.put(Constants.ALIAS_USER, Constants.PAGE_OF_USER);
+    	Logger.out.debug("Initialization of aliasAndPageOf Map completed...");
+    }
     /* (non-Javadoc)
      * @see javax.servlet.ServletContextListener#contextDestroyed(javax.servlet.ServletContextEvent)
      */

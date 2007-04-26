@@ -3,7 +3,7 @@
 <script  src="dhtml_comp/js/dhtmlXCommon.js"></script>
 <script  src="dhtml_comp/js/dhtmlXGrid.js"></script>		
 <script  src="dhtml_comp/js/dhtmlXGridCell.js"></script>	
-
+<%@ page import="java.util.HashMap,java.util.Map,edu.wustl.common.beans.QueryResultObjectData"%>
 <script>
 	// --------------------  FUNCTION SECTION
 	//checks or unchecks all the check boxes in the grid.
@@ -54,18 +54,31 @@
 		return isChecked;
 	}	
 	// ------------------------------  FUNCTION SECTION END
+	<%
+	// Patch ID: SimpleSearchEdit_9 
+	// Getting Hypelink map from the request that will be used for further processing.
+		Map<Integer, QueryResultObjectData> hyperlinkColumnMap = (Map<Integer, QueryResultObjectData>)request.getAttribute(Constants.HYPERLINK_COLUMN_MAP);
+		System.out.println("hyperlinkColumnMap:"+hyperlinkColumnMap);
+		if (hyperlinkColumnMap==null)
+			hyperlinkColumnMap = new HashMap<Integer, QueryResultObjectData>();
+			
+	%>
 	
 	var myData = [<%int i;%><%for (i=0;i<(dataList.size()-1);i++){%>
 					<%
-						List row = (List)dataList.get(i);
+	// Patch ID: SimpleSearchEdit_10
+	// Calling utility method by passing the hyperlink map. 
+	// Changing delimeter for the dhtml grid
+
+						List<String> row = (List<String>)dataList.get(i);
 					  	int j;
 					%>
-					<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=Utility.toNewGridFormat(row.get(j))%>,<%}%><%=Utility.toNewGridFormat(row.get(j))%><%="\""%>,<%}%>
+					<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=Utility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)+Constants.DHTMLXGRID_DELIMETER%><%}%><%=Utility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)%><%="\""%>,<%}%>
 					<%
-						List row = (List)dataList.get(i);
+						List<String> row = (List<String>)dataList.get(i);
 					  	int j;
 					%>
-					<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=Utility.toNewGridFormat(row.get(j))%>,<%}%><%=Utility.toNewGridFormat(row.get(j))%><%="\""%>
+					<%="\""%><%for (j=0;j < (row.size()-1);j++){%><%=Utility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)+Constants.DHTMLXGRID_DELIMETER%><%}%><%=Utility.toNewGridFormatWithHref(row,hyperlinkColumnMap,j)%><%="\""%>
 				];
 
 	var columns = <%="\""%><%int col;%><%for(col=0;col<(columnList.size()-1);col++){%><%=columnList.get(col)%>,<%}%><%=columnList.get(col)%><%="\""%>;
@@ -161,7 +174,7 @@
 	//clears the dummy data and refreshes the grid.
 	mygrid.clearAll();
 	*/
-	
+	mygrid.setDelimiter('<%=Constants.DHTMLXGRID_DELIMETER%>');
 	for(var row=0;row<myData.length;row++)
 	{
 		if(useFunction == "shopingcart" )
@@ -169,8 +182,11 @@
 			data = myData[row];
 		}
 		else 
-		{
-			data = "0,"+myData[row];
+		{ 
+			// Patch ID: SimpleSearchEdit_11
+			// Changing delimeter for the dhtml grid 
+
+			data = "0<%=Constants.DHTMLXGRID_DELIMETER%>"+myData[row];
 		}
 
 		mygrid.addRow(row+1,data,row+1);

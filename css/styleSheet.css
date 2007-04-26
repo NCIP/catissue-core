@@ -261,6 +261,17 @@ a:hover.dataPagingLink{
 	text-decoration:underline;
 }
 
+/*	Patch ID: SimpleSearchEdit_8 
+*  CSS entry for the hyperlink that will be shown in the Simple Search grid.
+*/
+a:link.normalLink,a:visited.normalLink,a:active.normalLink{ /* for the text links in the Search Search Result Grid*/
+	font-family:arial,helvetica,verdana,sans-serif;
+	font-size:0.9em;
+	color:#5C5C5C; /* constant: dark gray */
+	text-decoration:underline;	
+    white-space: nowrap;
+}
+
 /*############### 
 FORM BEGINS 
 ###############*/
