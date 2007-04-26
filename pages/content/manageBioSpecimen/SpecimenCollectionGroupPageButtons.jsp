@@ -44,8 +44,10 @@
 											     	</html:button>
 												</td>
 												<td nowrap class="formFieldNoBorders">
-													// Patch ID: Bug#3184_37
-													// Description: Added id to the button. Needed to enable and disable in the javascript
+													<!-- 
+														Patch ID: Bug#3184_37
+													 	Description: Added id to the button. Needed to enable and disable in the javascript
+													-->
 													<html:button styleClass="actionButton"  
 															property="submitPage" 
 															title="Submit and Add Multiple Specimen"
