@@ -100,7 +100,15 @@
 		var url = "SearchObject.do?pageOf=<%=pageOf%>&operation=search&id="+searchId;
 		window.location.href = url;
 	}
- 			
+	/**
+	 * Name : Vijay_Pande
+	 * Bug ID: Sachin_Lale
+	 * Patch ID: 4060_1 
+	 * See also: --
+	 * Description: Grid was appearindg disordered since it was not refreshed/resized.
+	 */
+function init_grid()
+{			
 	var funcName = "rowClick";
 	if(useDefaultRowClickHandler == 1)
 	{
@@ -152,4 +160,6 @@
 	//mygrid.setOnRowSelectHandler(funcName);
 	mygrid.setOnRowDblClickedHandler(funcName);
 	mygrid.setSizes();
+}
+window.onload=init_grid;
 </script>
