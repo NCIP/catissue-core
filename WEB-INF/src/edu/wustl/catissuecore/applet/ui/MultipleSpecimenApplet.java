@@ -443,9 +443,22 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		* Description: set the toolTipText for event button and update map in table model
 		*/  
 		SpecimenColumnModel columnModel =  (SpecimenColumnModel)table.getColumnModel().getColumn(displayColNo).getCellRenderer();
-		columnModel.setToolTipToEventButton(toolTip);
-		columnModel.setEventstToolTipText(toolTip);
-		tableModel.setEventsToolTipText(toolTip, actualColNo+1);
+		/**
+		 * Name : Vijay_Pande
+		 * Reviewer Name : Sachin_Lale
+		 * Bug ID: 4176
+		 * Patch ID: 4176_1 
+		 * See also: -
+		 * Description: On multiple specimen page, initially tooltip for Events Button is shown properly.
+		 * When any of the associated objects is submitted (eg. Comment), tooltip is shown as null.
+		 * When control come from objects other than events toolTip is null. To avoid setting this null as tooltip following check is provided.
+		 */
+		if(toolTip!=null && !toolTip.equalsIgnoreCase("null"))
+		{	
+			columnModel.setToolTipToEventButton(toolTip);
+			columnModel.setEventstToolTipText(toolTip);
+			tableModel.setEventsToolTipText(toolTip, actualColNo+1);
+		}
 		columnModel.setEditCaptionFromJS(specimenMapKey,AppletConstants.EDIT,tableModel);
 
 	}
