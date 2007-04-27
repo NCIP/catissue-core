@@ -16,3 +16,6 @@ alter table CATISSUE_COLL_PROT_EVENT add constraint CPID_LABEL_KEY unique (COLLE
 /*  Name: Shital Lawhale Bug ID: 3549 */
 /*  Description : A ATTRIBUTE ORDER field in CATISSUE_SEARCH_DISPLAY_DATA .*/
 alter table CATISSUE_SEARCH_DISPLAY_DATA add column ATTRIBUTE_ORDER number(5,0);
+
+#-- Aarti Assigning technician role to technicians on public data group
+INSERT INTO CSM_USER_GROUP_ROLE_PG (GROUP_ID,ROLE_ID,PROTECTION_GROUP_ID,UPDATE_DATE) VALUES (3,3,20,to_date('2005-08-24','yyyy-mm-dd'));

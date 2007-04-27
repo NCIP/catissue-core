@@ -1083,6 +1083,7 @@ INSERT INTO `CSM_USER_GROUP_ROLE_PG` (`USER_GROUP_ROLE_PG_ID`,`USER_ID`,`GROUP_I
 INSERT INTO `CSM_USER_GROUP_ROLE_PG` (`USER_GROUP_ROLE_PG_ID`,`USER_ID`,`GROUP_ID`,`ROLE_ID`,`PROTECTION_GROUP_ID`,`UPDATE_DATE`) VALUES (71,NULL,2,2,24,'2005-08-24');
 INSERT INTO `CSM_USER_GROUP_ROLE_PG` (`USER_GROUP_ROLE_PG_ID`,`USER_ID`,`GROUP_ID`,`ROLE_ID`,`PROTECTION_GROUP_ID`,`UPDATE_DATE`) VALUES (72,NULL,3,3,24,'2005-08-24');
 INSERT INTO `CSM_USER_GROUP_ROLE_PG` (`USER_GROUP_ROLE_PG_ID`,`USER_ID`,`GROUP_ID`,`ROLE_ID`,`PROTECTION_GROUP_ID`,`UPDATE_DATE`) VALUES (73,NULL,4,9,24,'2005-08-24');
+INSERT INTO `CSM_USER_GROUP_ROLE_PG` (`USER_GROUP_ROLE_PG_ID`,`USER_ID`,`GROUP_ID`,`ROLE_ID`,`PROTECTION_GROUP_ID`,`UPDATE_DATE`) VALUES (74,NULL,3,3,20,'2005-08-24');
 
 /* Gautam : Added for allowing supervisor to see identified data.*/
 INSERT INTO `CSM_USER_GROUP_ROLE_PG` (`USER_GROUP_ROLE_PG_ID`,`USER_ID`,`GROUP_ID`,`ROLE_ID`,`PROTECTION_GROUP_ID`,`UPDATE_DATE`) VALUES (74,NULL,2,2,20,'2006-01-18');
@@ -1204,3 +1205,41 @@ ALTER TABLE `CSM_USER_PE`
 /*/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS ;*/
 /*/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION ;*/
 
+#-- Aarti Sharma : updating all dates with value '0000-00-00' to '2005-01-01'
+update csm_group
+set update_date = '2005-01-01'
+where update_date = '0000-00-00';
+
+update csm_protection_element
+set update_date = '2005-01-01'
+where update_date = '0000-00-00';
+
+update CSM_PROTECTION_GROUP
+set update_date = '2005-01-01'
+where update_date = '0000-00-00';
+
+update CSM_ROLE
+set update_date = '2005-01-01'
+where update_date = '0000-00-00';
+
+update CSM_PG_PE
+set update_date = '2005-01-01'
+where update_date = '0000-00-00';
+
+update CSM_ROLE_PRIVILEGE
+set update_date = '2005-01-01'
+where update_date = '0000-00-00';
+
+update CSM_USER_GROUP_ROLE_PG
+set update_date = '2005-01-01'
+where update_date = '0000-00-00';
+
+#-- Remove unwanted protection groups 
+delete from csm_protection_group where 
+PROTECTION_GROUP_NAME like '%_ATTRIBUTES' or 
+PROTECTION_GROUP_NAME like 'ADMIN_DATA_USE_GROUP' or 
+PROTECTION_GROUP_NAME like 'COLLECTION_PROTOCOL_GROUP' or
+PROTECTION_GROUP_NAME like 'DISTRIBUTION_PROTOCOL_GROUP';
+
+#-- Remove unwanted protection elements
+delete from csm_protection_element where ATTRIBUTE IS NOT NULL;
