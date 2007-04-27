@@ -30,13 +30,18 @@ CREATE TABLE CATISSUE_TABLE_RELATION
       primary key (RELATIONSHIP_ID)
 );
 
+
+/*  Name: Shital Lawhale Bug ID: 3549 */
+/*  Description : A ATTRIBUTE_ORDER field in CATISSUE_SEARCH_DISPLAY_DATA .*/
+
 drop table if exists CATISSUE_SEARCH_DISPLAY_DATA;
 CREATE TABLE CATISSUE_SEARCH_DISPLAY_DATA
 (
       RELATIONSHIP_ID bigint not null,
       COL_ID bigint not null,
       DISPLAY_NAME varchar(50),
-      DEFAULT_VIEW_ATTRIBUTE bit DEFAULT 0
+      DEFAULT_VIEW_ATTRIBUTE bit DEFAULT 0,
+      ATTRIBUTE_ORDER int(5)
 );
 
 drop table if exists CATISSUE_RELATED_TABLES_MAP;
