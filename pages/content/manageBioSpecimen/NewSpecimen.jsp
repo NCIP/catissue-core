@@ -341,66 +341,69 @@
 				 * Get the response from server.
 				 */				
 				var responseString = request.responseText;
-						
-				var xmlDocument = getDocumentElementForXML(responseString); 
-				
-				var collectionUserId = xmlDocument.getElementsByTagName('CollectorId')[0].firstChild.nodeValue;	
-				var collectorName = xmlDocument.getElementsByTagName('CollectorName')[0].firstChild.nodeValue;			
-				var collectionDate = xmlDocument.getElementsByTagName('CollectionDate')[0].firstChild.nodeValue;
-				var collectionTimeHrs = xmlDocument.getElementsByTagName('CollectionTimeHours')[0].firstChild.nodeValue;
-				var collectionTimeMinutes = xmlDocument.getElementsByTagName('CollectionTimeMinutes')[0].firstChild.nodeValue;
-				var collectionProcedure = xmlDocument.getElementsByTagName('CollectionProcedure')[0].firstChild.nodeValue;			
-				var collectionContainer = xmlDocument.getElementsByTagName('CollectionContainer')[0].firstChild.nodeValue;
-				
-				var tempCollComments = xmlDocument.getElementsByTagName('CollectionComments')[0].firstChild;
-				if(tempCollComments != null)
-				{
-					var collectionComments = tempCollComments.nodeValue;
-					document.getElementById("collectionEventComments").value = collectionComments;
+				/* Bug Id: 4138 */
+				if(responseString != null && responseString != "")
+				{		
+					var xmlDocument = getDocumentElementForXML(responseString); 
+					
+					var collectionUserId = xmlDocument.getElementsByTagName('CollectorId')[0].firstChild.nodeValue;	
+					var collectorName = xmlDocument.getElementsByTagName('CollectorName')[0].firstChild.nodeValue;			
+					var collectionDate = xmlDocument.getElementsByTagName('CollectionDate')[0].firstChild.nodeValue;
+					var collectionTimeHrs = xmlDocument.getElementsByTagName('CollectionTimeHours')[0].firstChild.nodeValue;
+					var collectionTimeMinutes = xmlDocument.getElementsByTagName('CollectionTimeMinutes')[0].firstChild.nodeValue;
+					var collectionProcedure = xmlDocument.getElementsByTagName('CollectionProcedure')[0].firstChild.nodeValue;			
+					var collectionContainer = xmlDocument.getElementsByTagName('CollectionContainer')[0].firstChild.nodeValue;
+					
+					var tempCollComments = xmlDocument.getElementsByTagName('CollectionComments')[0].firstChild;
+					if(tempCollComments != null)
+					{
+						var collectionComments = tempCollComments.nodeValue;
+						document.getElementById("collectionEventComments").value = collectionComments;
+					}
+					else
+					{
+						document.getElementById("collectionEventComments").value = " ";
+					}				
+					
+					var receivedDate = xmlDocument.getElementsByTagName('ReceivedDate')[0].firstChild.nodeValue;
+					var receivedUserId = xmlDocument.getElementsByTagName('ReceiverId')[0].firstChild.nodeValue;
+					var receiverName = xmlDocument.getElementsByTagName('ReceiverName')[0].firstChild.nodeValue;
+					var receivedTimeHrs = xmlDocument.getElementsByTagName('ReceivedTimeHours')[0].firstChild.nodeValue;
+					var receivedTimeMinutes = xmlDocument.getElementsByTagName('ReceivedTimeMinutes')[0].firstChild.nodeValue;
+					var receivedQuality = xmlDocument.getElementsByTagName('ReceivedQuality')[0].firstChild.nodeValue;
+					var tempRecComments = xmlDocument.getElementsByTagName('ReceivedComments')[0].firstChild;
+					
+					if(tempRecComments != null)
+					{
+						var receivedComments = tempRecComments.nodeValue;
+						document.getElementById("receivedEventComments").value = receivedComments;
+					}
+					else
+					{
+						document.getElementById("receivedEventComments").value = " ";
+					}				
+					if(collectionUserId != null)
+					{
+						document.getElementById("collectionEventdateOfEvent").value = collectionDate;
+						document.getElementById("collectionEventUserId").value = collectionUserId;
+						document.getElementById("displaycollectionEventUserId").value = collectorName;
+						document.getElementById("displaycollectionEventTimeInHours").value = collectionTimeHrs;
+						document.getElementById("displaycollectionEventTimeInMinutes").value = collectionTimeMinutes;
+						document.getElementById("collectionEventCollectionProcedure").value = collectionProcedure;
+					    document.getElementById("collectionEventContainer").value = collectionContainer;
+					    
+						var recDate = document.getElementById("receivedEventdateOfEvent");
+						if(recDate != null)
+						{
+							recDate.value = receivedDate;
+						}
+						document.getElementById("receivedEventUserId").value = receivedUserId;
+						document.getElementById("displayreceivedEventUserId").value = receiverName;
+						document.getElementById("displayreceivedEventTimeInHours").value = receivedTimeHrs;
+						document.getElementById("displayreceivedEventTimeInMinutes").value = receivedTimeMinutes;
+						document.getElementById("receivedEventReceivedQuality").value = receivedQuality;
+					}
 				}
-				else
-				{
-					document.getElementById("collectionEventComments").value = " ";
-				}				
-				
-				var receivedDate = xmlDocument.getElementsByTagName('ReceivedDate')[0].firstChild.nodeValue;
-				var receivedUserId = xmlDocument.getElementsByTagName('ReceiverId')[0].firstChild.nodeValue;
-				var receiverName = xmlDocument.getElementsByTagName('ReceiverName')[0].firstChild.nodeValue;
-				var receivedTimeHrs = xmlDocument.getElementsByTagName('ReceivedTimeHours')[0].firstChild.nodeValue;
-				var receivedTimeMinutes = xmlDocument.getElementsByTagName('ReceivedTimeMinutes')[0].firstChild.nodeValue;
-				var receivedQuality = xmlDocument.getElementsByTagName('ReceivedQuality')[0].firstChild.nodeValue;
-				var tempRecComments = xmlDocument.getElementsByTagName('ReceivedComments')[0].firstChild;
-				
-				if(tempRecComments != null)
-				{
-					var receivedComments = tempRecComments.nodeValue;
-					document.getElementById("receivedEventComments").value = receivedComments;
-				}
-				else
-				{
-					document.getElementById("receivedEventComments").value = " ";
-				}				
-				
-				document.getElementById("collectionEventdateOfEvent").value = collectionDate;
-				document.getElementById("collectionEventUserId").value = collectionUserId;
-				document.getElementById("displaycollectionEventUserId").value = collectorName;
-				document.getElementById("displaycollectionEventTimeInHours").value = collectionTimeHrs;
-				document.getElementById("displaycollectionEventTimeInMinutes").value = collectionTimeMinutes;
-				document.getElementById("collectionEventCollectionProcedure").value = collectionProcedure;
-			    document.getElementById("collectionEventContainer").value = collectionContainer;
-			    
-				var recDate = document.getElementById("receivedEventdateOfEvent");
-				if(recDate != null)
-				{
-					recDate.value = receivedDate;
-				}
-				document.getElementById("receivedEventUserId").value = receivedUserId;
-				document.getElementById("displayreceivedEventUserId").value = receiverName;
-				document.getElementById("displayreceivedEventTimeInHours").value = receivedTimeHrs;
-				document.getElementById("displayreceivedEventTimeInMinutes").value = receivedTimeMinutes;
-				document.getElementById("receivedEventReceivedQuality").value = receivedQuality;
-				
-				
 			}//End if(request.status == 200)
 		}//End if(request.readyState == 4)	
 	}
