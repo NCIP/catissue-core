@@ -90,19 +90,19 @@
 			{
 				unitSpecimen = "<%=Constants.UNIT_GM%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_GM%>";
-				typeChange(TissueArray);
+				typeChangeGeneralized(TissueArray);
 			}
 			else if(element.value == "Fluid")
 			{
 				unitSpecimen = "<%=Constants.UNIT_ML%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_ML%>";
-				typeChange(FluidArray);
+				typeChangeGeneralized(FluidArray);
 			}
 			else if(element.value == "Cell")
 			{
 				unitSpecimen = "<%=Constants.UNIT_CC%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_CC%>";
-				typeChange(CellArray);
+				typeChangeGeneralized(CellArray);
 				
 				//subtype.options.length = 0;
 				//subtype.options[0] = new Option('<%=Constants.SELECT_OPTION%>','<%=Constants.SELECT_OPTION%>');
@@ -115,7 +115,7 @@
 			{
 				unitSpecimen = "<%=Constants.UNIT_MG%>";
 				document.forms[0].unit.value = "<%=Constants.UNIT_MG%>";
-				typeChange(MolecularArray);
+				typeChangeGeneralized(MolecularArray);
 				if(opClassCombo.options[opClassCombo.selectedIndex].text == "<%=Operator.EQUALS_CONDITION%>")
 					concCombo.disabled = false;
 			}
