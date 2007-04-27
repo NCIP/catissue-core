@@ -69,7 +69,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	private String collectionEventTimeInMinutes;
 	private String collectionEventCollectionProcedure;
 	private String collectionEventContainer;
-	private String collectionEventComments;
+	private String collectionEventComments = "";
 	
 	
 	private long receivedEventId;
@@ -79,7 +79,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	private String receivedEventTimeInHours;
 	private String receivedEventTimeInMinutes;
 	private String receivedEventReceivedQuality;
-	private String receivedEventComments;
+	private String receivedEventComments = "";
 	
 
 	
