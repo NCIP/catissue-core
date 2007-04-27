@@ -656,9 +656,12 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	private void validateNumberOfSpecimenField(ActionErrors errors) 
 	{
-		if(restrictSCGCheckbox.equalsIgnoreCase(Constants.TRUE) && (numberOfSpecimens < Integer.parseInt(actualNumberOfSpecimen)))
+		if(restrictSCGCheckbox != null)
 		{
-			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.multiplespecimen.invalidNumberOfSpecimen"));
+			if(restrictSCGCheckbox.equalsIgnoreCase(Constants.TRUE) && (numberOfSpecimens < Integer.parseInt(actualNumberOfSpecimen)))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.multiplespecimen.invalidNumberOfSpecimen"));
+			}
 		}
 	}
 
