@@ -499,10 +499,10 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 						receivedEventParameters = (ReceivedEventParameters)temp;
 					}
 				}
-			}
-			//Setting the ids
-			specimenCollectionGroupForm.setCollectionEventId(collectionEventParameters.getId().longValue());
-			specimenCollectionGroupForm.setReceivedEventId(receivedEventParameters.getId().longValue());
+//				Setting the ids
+				specimenCollectionGroupForm.setCollectionEventId(collectionEventParameters.getId().longValue());
+				specimenCollectionGroupForm.setReceivedEventId(receivedEventParameters.getId().longValue());
+			}			
 		}
 	}
 	/**
