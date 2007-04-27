@@ -1251,10 +1251,10 @@ PUBLIC
 			type="edu.wustl.common.action.CommonAddEditAction"
 			name="checkInCheckOutEventParametersForm"
 			validate="true"
-			input="/checkInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters"
+			input="/CheckInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters"
 			scope="request">
 			<forward name="success" path=".catissuecore.checkInCheckOutEventParametersEditSuccessDef" />
-			<forward name="failure" path="/checkInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters" />
+			<forward name="failure" path="/CheckInCheckOutEventParameters.do?operation=edit&amp;pageOf=pageOfCheckInCheckOutEventParameters" />
 		</action>
 		
 		<action path="/CheckInCheckOutEventParametersSearch"
