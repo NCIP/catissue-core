@@ -172,7 +172,7 @@
 			   checked = document.forms[0].checkedButton.checked;
 			}
 			var operation = document.forms[0].operation.value;
-			
+			//Bug ID: 4040(Virender)
 			if(checked)
 			{
 			<% String actionToCall = null;%>
