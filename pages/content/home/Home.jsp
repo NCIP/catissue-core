@@ -3,6 +3,16 @@
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants,edu.wustl.common.util.global.ApplicationProperties,edu.wustl.catissuecore.util.global.Variables,edu.wustl.common.beans.SessionDataBean;"%>
 
+<style type="text/css">
+table#browserDetailsContainer
+{
+	font-family:arial,helvetica,verdana,sans-serif;
+	font-size:0.7em;
+	padding-left:10px;
+}
+</style>
+
+
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
     <tr>
       <td height="100%">
@@ -62,9 +72,7 @@
                                  	<html:text styleClass="formField" property="loginName" size="14" />
                               </td>
                             </tr>
-
-
-                            <tr>
+	                         <tr>
                               <td class="sidebarLogin" align="right">
                               	<label for="password">
                               		<bean:message key="app.password"/>
@@ -75,8 +83,6 @@
                               	<html:password styleClass="formField" property="password" size="14" />
                               </td>
                             </tr>
-
-
                             <tr>
 								<td>&nbsp;</td>	
                               	<td>
@@ -85,8 +91,6 @@
                               		</html:submit>
                               	</td>
                             </tr>
-					
-
 						    <tr>
 						      <td>
 						      	<div>
@@ -96,7 +100,6 @@
 						      	</div>
 						      </td>	
 						    </tr>
-	
 						    <tr>
 						      <td colspan="2">
 						      	<a class="loginSignup" href="ForgotPassword.do">
@@ -104,7 +107,6 @@
 						      	</a>
 						      </td>
 						    </tr>	
-		
 						</html:form>
 						</logic:empty>
 						<logic:notEmpty scope="session"	name="<%=Constants.SESSION_DATA%>">
@@ -133,14 +135,32 @@
                   </td>
                 </tr>
                 <!-- login ends -->
-                
-                <!-- spacer cell begins (keep for dynamic expanding)-->
+				<!-- spacer cell begins (keep for dynamic expanding)-->
                 <tr>
-                <td valign="top" height="100%">
-                    <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" class="sidebarSection">
+                <td valign="top" height="100%" >
+                    <table summary="" cellpadding="10" cellspacing="0" border="0" width="100%" height="100%" class="sidebarSection">
                     	<tr>
                     		<td class="sidebarContent" valign="top">&nbsp;</td>
                     	</tr>
+						<tr>
+							<td class="sidebarContent">
+								<div>
+									<span class="formFieldNoBordersBold" style ="font-size:1.1em;"><bean:message key="app.certified.browsers"/></span>
+									<UL style="margin-top:0px;">
+										<li class="formFieldNoBordersSimpleLi"><bean:message key="app.certified.ie"/></li>
+										<li class="formFieldNoBordersSimpleLi"><bean:message key="app.certified.mozilla"/></li>
+										<li class="formFieldNoBordersSimpleLi"><bean:message key="app.certified.mac"/></li>
+									</UL>
+								</div>
+								<div>
+									<span class="formFieldNoBordersBold" style ="font-size:1.1em;"><bean:message key="app.optimal.resolutions"/></span>
+									<UL style="margin-top:0px;">
+										<li class="formFieldNoBordersSimpleLi"><bean:message key="app.optimal.resolutions.win"/></li>
+										<li class="formFieldNoBordersSimpleLi"><bean:message key="app.optimal.resolutions.mac"/></li>
+									</UL>
+								</div>
+							</td>
+						  </tr>	
                     </table>
 				</td>
 				</tr>
