@@ -700,20 +700,19 @@ if(!Constants.PAGEOF_ALIQUOT.equals(pageOf))
 		<bean:message key="aliquots.disposeParentSpecimen" />
 		</html:checkbox>
 	</td>
-	<td align="right">
-		<html:button styleClass="actionButton" property="submitButton" onclick="onCreate()">
-			<bean:message key="buttons.create"/>
-		</html:button>
-	</td>
-	
-	
+</tr>	
 	<%--td>
 		<html:reset styleClass="actionButton">
 			<bean:message key="buttons.reset"/>
 		</html:reset>
 	</td--%> 
-</tr>
-	
+<tr>
+	<td colspan="5" align="right">
+		<html:button styleClass="actionButton" property="submitButton" onclick="onCreate()">
+			<bean:message key="buttons.submit"/>
+		</html:button>
+	</td>
+</tr>	
 </table>				
 <!-- action buttons end -->
 </td>
