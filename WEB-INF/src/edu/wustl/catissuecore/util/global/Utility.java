@@ -792,22 +792,27 @@ public class Utility extends edu.wustl.common.util.Utility
     	  
     	   if(specimenForm!=null)
     	   {
+    		   /**
+    			* Patch ID: 4176_2
+    			* See also: 1-3
+    			* Description: Field name and field value was displayed in different style. Italics style for value is removed.
+    			*/  
     		   toolTipText.append("<HTML><table border='0'><tr><td colspan='2'><b>CollectedEvents</b></td></tr><tr><td>");
-    		   toolTipText.append("Collector: <i>");
+    		   toolTipText.append("Collector: ");
     		   toolTipText.append(Utility.getUserNameById(specimenForm.getCollectionEventUserId()));
-    		   toolTipText.append("</i></td><td>Date: <i>");
+    		   toolTipText.append("</td><td>Date: ");
     		   toolTipText.append(specimenForm.getCollectionEventdateOfEvent());
-    		   toolTipText.append("</i></td></tr><tr><td>Procedure: <i>");
+    		   toolTipText.append("</td></tr><tr><td>Procedure: ");
     		   toolTipText.append(specimenForm.getCollectionEventCollectionProcedure());
-    		   toolTipText.append("</i></td><td>Container: <i>");
+    		   toolTipText.append("</td><td>Container: ");
     		   toolTipText.append(specimenForm.getCollectionEventContainer());
 
-    		   toolTipText.append("</i></td></tr><tr><td colspan='2'><b>Received Events</b></td></tr>");
-    		   toolTipText.append("<tr><td>Reciever: <i>");
+    		   toolTipText.append("</td></tr><tr><td colspan='2'><b>Received Events</b></td></tr>");
+    		   toolTipText.append("<tr><td>Reciever: ");
     		   toolTipText.append(Utility.getUserNameById(specimenForm.getReceivedEventUserId()));
-    		   toolTipText.append("</i></td><td>Date: <i>");
+    		   toolTipText.append("</td><td>Date: ");
     		   toolTipText.append(specimenForm.getReceivedEventDateOfEvent());
-    		   toolTipText.append("</i></td></tr><tr><td colspan='2'>Quality: <i>");
+    		   toolTipText.append("</td></tr><tr><td colspan='2'>Quality: ");
     		   toolTipText.append(specimenForm.getReceivedEventReceivedQuality());
     		   toolTipText.append("</td></tr></HTML>");
     	   }	

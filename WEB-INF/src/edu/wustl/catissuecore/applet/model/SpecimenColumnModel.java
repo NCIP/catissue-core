@@ -236,6 +236,12 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		setActiveElement(component, "Renderer");
 		//to display tooltip
 		ToolTipManager.sharedInstance().setInitialDelay(0);
+		/**
+		* Patch ID: 4176_2
+		* See also: 1-3
+		* Description: default dismiss delay is 4 sec. To read complete toolTip for events dismiss delay is increased to 20 sec.
+		*/  
+		ToolTipManager.sharedInstance().setDismissDelay(20000);
 		((JComponent) component).setToolTipText(text);
 		return component;
 	}
