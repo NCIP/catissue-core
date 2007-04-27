@@ -19,11 +19,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -509,9 +510,18 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 					receivedEventParameters = (ReceivedEventParameters)temp;
 				}
 			}
-			collectionEventParameters.setId(new Long(form.getCollectionEventId()));
-			receivedEventParameters.setId(new Long(form.getReceivedEventId()));
-		}		
+			if(form.getCollectionEventId() != 0)
+			{
+				collectionEventParameters.setId(new Long(form.getCollectionEventId()));
+				receivedEventParameters.setId(new Long(form.getReceivedEventId()));
+			}
+		}
+		//creating new events when there are no events associated with the scg
+		if(collectionEventParameters == null && receivedEventParameters == null)
+		{
+			collectionEventParameters = new CollectionEventParameters();
+			receivedEventParameters = new ReceivedEventParameters();
+		}
 		setEventParameters(collectionEventParameters,receivedEventParameters,form);				
 		
 		tempColl.add(collectionEventParameters);
