@@ -123,7 +123,7 @@
 					<TD id=menucontainer width="2" class="subMenuPrimaryTitle" valign="center" align="center" 	
 						onmouseover="changeMenuStyle(this,'subMenuSecondaryTitleOver'),showCursor()" 
 						onmouseout="changeMenuStyle(this,'subMenuPrimaryTitle'),hideCursor()" onclick="toggleSplitterStatus()">
-						<SPAN id="splitter">&lt;</SPAN>
+						<SPAN id="splitter"><img src="leftPane_collapseButton.gif"/></SPAN>
 					</TD>
 					
 					<!-- initialize the menu state -->

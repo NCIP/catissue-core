@@ -67,7 +67,7 @@ function hideMenu()
 	splitterOpenStatus = false;
 
 	td.style.display = 'none';            
-	arrow.innerHTML = '&gt;';
+	arrow.innerHTML = '<img src="images/leftPane_expandButton.gif"/>';  
 }
 
 /*
@@ -84,7 +84,7 @@ function showMenu()
 	td.style.height = '100%';
 	td.style.display = 'block';
 
-	arrow.innerHTML = '&lt;';  
+	arrow.innerHTML = '<img src="images/leftPane_collapseButton.gif"/>';  
 }
 
 /***  code using ajax :Update the status of Menu open in session ***/
