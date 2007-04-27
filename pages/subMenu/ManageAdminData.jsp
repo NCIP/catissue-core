@@ -134,7 +134,16 @@
 	{
 		//Patch ID: Bug#4116_5
 		var frameUrl='ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1';
-		openPopupWindow(frameUrl);
+		//openPopupWindow(frameUrl);
+		platform = navigator.platform.toLowerCase();
+	    if (platform.indexOf("mac") != -1)
+		{
+	    	NewWindow(frameUrl,'name',screen.width,screen.height,'no');
+	    }
+	    else
+	    {
+	    	NewWindow(frameUrl,'name','800','600','no');
+	    }
 	}
 </script>
 <tr>
