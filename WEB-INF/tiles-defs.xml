@@ -295,7 +295,10 @@
 	<definition name=".catissuecore.collectionProtocolRegistrationDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CollectionProtocolRegistration.jsp" />
 	</definition>
-
+	<!--Deepti  For collection protocol reg from CP based view -->
+	<definition name=".catissuecore.collectionProtocolRegistrationDefCPBased" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/CollectionProtocolRegistration.jsp" />
+	</definition>
 
 	<definition name=".catissuecore.collectionProtocolRegistrationAddSuccessDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/common/success.jsp" />

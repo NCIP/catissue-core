@@ -810,7 +810,7 @@ tr#hiddenCombo
 						var pid = cl.getValue();
 						//alert(pid);
 						//------------
-						window.location.href = 'ParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+pid
+						window.location.href = 'CPQueryParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+pid
 					} 				
 
 					/* 

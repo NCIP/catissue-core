@@ -318,6 +318,7 @@ PUBLIC
 			validate="false"
 			scope="request">
 			<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.collectionProtocolRegistrationDef" />
+			<forward name="pageOfCollectionProtocolRegistrationCPBased" path=".catissuecore.collectionProtocolRegistrationDefCPBased" />
 			<forward name="failure" path=".catissuecore.collectionProtocolRegistrationDef" />
 			<forward name="access_denied" path="/ManageBioSpecimen.do" />
 		</action>
@@ -3408,6 +3409,7 @@ PUBLIC
 		<forward name="pageOfCollectionProtocolRegistrationCPQuery" path=".catissuecore.collectionProtocolRegistrationCPQueryDef" />
 		<forward name="failure" path=".catissuecore.collectionProtocolRegistrationDef" />
 		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
+		<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.collectionProtocolRegistrationCPQueryDef" />
 	</action>
 
 	<action path="/CPQueryCollectionProtocolRegistrationAdd"
