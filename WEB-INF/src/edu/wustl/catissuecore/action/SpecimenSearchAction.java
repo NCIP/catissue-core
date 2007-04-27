@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDE;
@@ -51,7 +52,14 @@ public class SpecimenSearchAction extends AdvanceSearchUIAction
     	
     	//Setting Tissue Site list
 //    	NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-    	List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE,null);
+    	/**
+	     * Name : Virender Mehta
+	     * Reviewer: Sachin Lale
+	     * Bug ID: 4062
+	     * Description: Getting TissueList with only Leaf node
+		 */
+    	List tissueSiteList =Utility.tissueSiteList(); 
+    	//CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE,null);
     	request.setAttribute(Constants.TISSUE_SITE_LIST, tissueSiteList);
     	
     	//Setting Tissue Side list
