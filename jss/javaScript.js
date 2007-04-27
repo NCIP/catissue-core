@@ -897,13 +897,25 @@ function switchStyle(image,dispVar, object, buttonId)
 	{
 		show(object,dispVar);
 		imageObj.innerHTML = '<img src="images/nolines_minus.gif" border="0" /> ';
-		document.getElementById(buttonId).disabled=false;
+//		/** Name : Vijay_Pande
+//		 * Reviewer : Sachin_Lale
+//		 * Bug ID: 4169
+//		 * Patch ID: 4169_1 
+//		 * See also: -
+//		 * Description: There was a java sript error while clicking on image to expand/colapse collected/recieved event table. 
+//		 * Error was because of the collection/recieved event table do not contain 'AddMore' button.
+//		 * Following check is added to check whether buttonId is provided or not.
+//		 */
+		if(document.getElementById(buttonId))
+		{		document.getElementById(buttonId).disabled=false; }
 	}
 	else  							   //Clicked on - image
 	{
 		hide(object,dispVar);				
 		imageObj.innerHTML = '<img src="images/nolines_plus.gif" border="0" /> ';
-		document.getElementById(buttonId).disabled=true;
+		if(document.getElementById(buttonId))
+		{	document.getElementById(buttonId).disabled=true;  }
+//		/**  -- patch ends here -- */
 	}
 }
 // This function is to show object on UI 
