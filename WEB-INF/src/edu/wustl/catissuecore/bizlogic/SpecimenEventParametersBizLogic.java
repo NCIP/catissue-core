@@ -325,6 +325,18 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 		ApiSearchUtil.setEventParametersDefault(eventParameter);
 		//End:-  Change for API Search 
 
+		/**
+		 * Name : Vijay_Pande
+		 * Reviewer Name: Sachin_Lale
+		 * Bug ID: 4041
+		 * Patch ID: 4041_1 
+		 * See also: 1-3
+		 * Description: Container field was not shown as mandatory on SpecimenEventsParameter page. 
+		 * Now container field is made mandatory. Also validation added for the same.
+		 */
+		Validator validator = new Validator();
+		/** -- patch ends here --*/
+		
 		switch (Utility.getEventParametersFormId(eventParameter))
 		{
 			case Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID :
@@ -349,6 +361,18 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 				{
 					throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
 				}
+				/**
+				 * Name : Vijay_Pande
+				 * Patch ID: 4041_2 
+				 * See also: 1-3
+				 * Description: Validation for container field.
+				 */
+				if (!validator.isValidOption(container))
+				{
+					String message = ApplicationProperties.getValue("collectioneventparameters.container");
+					throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+				}
+				/** -- patch ends here --*/
 				break;
 
 			case Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID :

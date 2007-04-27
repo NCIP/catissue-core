@@ -216,8 +216,15 @@
 
 <!-- container -->		
 		<tr>
-			<td class="formRequiredNotice" width="5">&nbsp;</td>
-			<td class="formLabel">
+		<!--	/**
+				 * Name : Vijay_Pande
+				 * Patch ID: 4041_3 
+				 * See also: 1-3
+				 * Description: Changes to display Container field as manadatory.
+				 */     -->
+			<td class="formRequiredNotice" width="5">*</td>
+			<td class="formRequiredLabel">
+			<!--  /** patch ends here-- */  -->
 				<label for="type">
 					<bean:message key="collectioneventparameters.container"/> 
 				</label>
