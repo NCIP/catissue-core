@@ -452,7 +452,7 @@ public class NewSpecimenForm extends SpecimenForm
             		//ReceivedEvent validation
             		EventsUtil.validateReceivedEvent(errors,validator,receivedEventUserId,receivedEventDateOfEvent,receivedEventReceivedQuality );
              	}
- 
+             	//Validation for aliquot quantity, resolved bug# 4040 (Virender)	
              	if(checkedButton)
              	{
              		if(!validator.isNumeric(noOfAliquots))
