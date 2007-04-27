@@ -3274,13 +3274,9 @@ PUBLIC
 		scope="request">
 		<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
-<!--
- * Bug ID: Multiple Specimen Bug
- * Patch ID: Multiple Specimen Bug_9
-	-->
 		<!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->
-				<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			
-		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
+		<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			
+		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=add&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 	</action>
 		
 	<action path="/CPQueryNewSpecimen"
@@ -3353,13 +3349,9 @@ PUBLIC
 		scope="request">
 		<forward name="success" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 		<forward name="createNewSpecimen" path="/CPQueryNewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimenCPQuery&amp;menuSelected=15&amp;virtualLocated=true" />
-		<!--
- * Bug ID: Multiple Specimen Bug
- * Patch ID: Multiple Specimen Bug_10  
-	-->
-<!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->			
+		<!-- forward name="createMultipleSpecimen" path="/CPQueryInitMultipleSpecimen.do?operation=add&amp;pageOf=pageOfMultipleSpecimenCPQuery&amp;menuSelected=15" /-->			
 		<forward name="createMultipleSpecimen" path="/CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&amp;menuSelected=15&amp;button=multipleSpecimen" />			
-		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupQuery&amp;menuSelected=12" />
+		<forward name="failure" path="/QuerySpecimenCollectionGroup.do?operation=edit&amp;pageOf=pageOfSpecimenCollectionGroupCPQuery&amp;menuSelected=12" />
 	</action>
 
 	<action path="/CPQueryAliquots"
