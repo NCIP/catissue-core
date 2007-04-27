@@ -1313,6 +1313,12 @@ td.formFieldNoBordersSimple{ /* for the cell that contains the form elements */
   color:#000000; /* constant: black */
 }
 
+.formFieldNoBordersSimpleLi{ /* for the cell that contains the form elements */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:1.1em;
+  color:#000000; /* constant: black */
+}
+
 .formRequiredNoticeLBRBorders{ /* for the autoevents cell */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:1em;
