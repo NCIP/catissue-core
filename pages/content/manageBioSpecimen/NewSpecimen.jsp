@@ -178,7 +178,7 @@
 			<% String actionToCall = null;%>
 				if(operation == "add")
 				{
-					setSubmittedFor('ForwardTo','pageOfAliquot');
+					setSubmittedFor('ForwardTo','pageOfCreateAliquot');
 					<%
 					actionToCall = "NewSpecimenAdd.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
@@ -190,7 +190,7 @@
 				else
 				{
 				
-					setSubmittedFor('ForwardTo','pageOfAliquot');
+					setSubmittedFor('ForwardTo','pageOfCreateAliquot');
 					<%
 					actionToCall = "NewSpecimenEdit.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){

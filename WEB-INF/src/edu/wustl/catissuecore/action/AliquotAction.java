@@ -592,6 +592,7 @@ public class AliquotAction extends SecureAction
 	//This method checks whether the specimen with given label exists or not.
 	private String checkForSpecimen(HttpServletRequest request, AliquotForm form) throws Exception
 	{
+		String pageOf = request.getParameter(Constants.PAGEOF);
 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		String specimenLabel = form.getSpecimenLabel();
 		List specimenList = new ArrayList();
@@ -626,11 +627,17 @@ public class AliquotAction extends SecureAction
 			if(specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
 			{
 				ActionErrors errors = getActionErrors(request);
-
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.closed" , "Specimen"));
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aliquots" , "Aliquot(s)"));
 				saveErrors(request, errors);
-
-				return Constants.PAGEOF_ALIQUOT;
+				if(pageOf.equalsIgnoreCase(Constants.PAGEOF_ALIQUOT))
+				{
+					return Constants.PAGEOF_ALIQUOT;
+				}
+				else
+				{
+					return Constants.PAGE_OF_SPECIMEN;
+				}
 			}
 			
 			/**
@@ -648,7 +655,7 @@ public class AliquotAction extends SecureAction
 			form.setSpecimenID("" + specimen.getId());
 			//	request.setAttribute(Constants.SPECIMEN_ID,specimen.getId());
 
-			String pageOf = checkQuantityPerAliquot(request, form);
+			pageOf = checkQuantityPerAliquot(request, form);
 
 			if (Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
 			{
