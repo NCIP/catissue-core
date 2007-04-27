@@ -393,7 +393,7 @@
 	if(pageView.equals("edit"))
 	{
 	%>
-		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="600">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="650">
 			<tr>
 				<td height="20" class="tabMenuItemSelected" onclick="document.location.href='ManageAdministrativeData.do'">Edit</td>
 
@@ -476,7 +476,7 @@
 	}
 	%>
 		
-	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="600">
+	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="650">
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
 		
 	    <tr><td>
@@ -495,11 +495,11 @@
 					<td><html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
 				 </tr>
 				 <tr>
-				 	<td class="formMessage" colspan="4">* indicates a required field</td>
+				 	<td class="formMessage" colspan="5">* indicates a required field</td>
 				 </tr>
 				 
 				<tr>
-					<td class="formTitle" height="20" colspan="4">
+					<td class="formTitle" height="20" colspan="5">
 						<%String title = "specimenCollectionGroup."+pageView+".title";%>
 							<bean:message key="<%=title%>"/>						
 					</td>
@@ -508,7 +508,7 @@
 				 
 				 <!--Collection Protocol -->
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">*</td>
+			     	<td class="formRequiredNotice" colspan="2" width="5">*</td>
 				    <td class="formRequiredLabel">
 						<label for="collectionProtocolId">
 							<bean:message key="specimenCollectionGroup.protocolTitle"/>
@@ -530,7 +530,7 @@
 				 </tr>
 
 				 <tr>
- 			     	<td class="formRequiredNotice" width="5">*</td>
+ 			     	<td class="formRequiredNotice" colspan="2" width="5">*</td>
 				    <td class="formRequiredLabel">
 						<label for="siteId">
 							<bean:message key="specimenCollectionGroup.site"/>
@@ -557,7 +557,8 @@
 				 </tr>
 				 
 				 <tr>
-				 	<td class="formRequiredNoticeNoBottom">*
+					 <td class="formRequiredNoticeNoBottom">*</td>
+					 <td class="formRequiredNoticeWithoutBorder">
 				     	<html:radio styleClass=""  property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
   				     	    <label for="participantId">
 								<%--<bean:message key="specimenCollectionGroup.collectedByParticipant" />--%>
@@ -604,8 +605,9 @@
 				 </tr>
 				 
 				 <tr>
-				    <td class="formRequiredNotice">
-				       	<html:radio styleClass="" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
+				    <td class="formRequiredNotice" align="right">&nbsp;</td>
+					<td class="formRequiredNoticeWithoutLeftBorder">
+					<html:radio styleClass="" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
   				       	    <label for="protocolParticipantIdentifier">
 								<%--<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />--%>
 							</label>
@@ -651,7 +653,7 @@
 		        	</td>
 				 </tr>
 				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredNotice" colspan="2" width="5">*</td>
 					<td class="formRequiredLabel" >
 						<label for="name">
 							<bean:message key="specimenCollectionGroup.groupName" />
@@ -670,7 +672,7 @@
 					</td>
 				</tr>
 				 <tr>
-				 	<td class="formRequiredNotice" width="5">*</td>
+				 	<td class="formRequiredNotice" colspan="2" width="5">*</td>
 				    
 				    <td class="formRequiredLabel">
 						<label for="collectionProtocolEventId">
@@ -688,7 +690,7 @@
 				 </tr>
 				 
 				 <tr>
-				     <td class="formRequiredNotice" width="5">*</td>
+				     <td class="formRequiredNotice" colspan="2" width="5">*</td>
 				     <td class="formRequiredLabel">
 						<label for="clinicalDiagnosis">
 							<bean:message key="specimenCollectionGroup.clinicalDiagnosis"/>
@@ -713,7 +715,7 @@
 				 </tr>
 				 
 				 <tr>
-				     <td class="formRequiredNotice" width="5">*</td>
+				     <td class="formRequiredNotice" colspan="2" width="5">*</td>
 				     <td class="formRequiredLabel">
 						<label for="clinicalStatus">
 							<bean:message key="specimenCollectionGroup.clinicalStatus"/>
@@ -733,7 +735,7 @@
 				 </tr>
 				 
 				 <tr>
-			     	<td class="formRequiredNotice" width="5">&nbsp;</td>
+			     	<td class="formRequiredNotice" colspan="2" width="5">&nbsp;</td>
 				    <td class="formLabel">
 						<label for="participantsMedicalIdentifierId">
 							<bean:message key="specimenCollectionGroup.medicalRecordNumber"/>
@@ -758,7 +760,7 @@
 				 </tr>
 				 
 				 <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formRequiredNotice" colspan="2" width="5">&nbsp;</td>
 					<td class="formLabel">
 						<label for="surgicalPathologyNumber">
 							<bean:message key="specimenCollectionGroup.surgicalPathologyNumber"/>
@@ -784,7 +786,7 @@
 				 * Description : Added <TR> for comment field .				 
 				-->	 
 				 <tr>
-					<td class="formRequiredNotice" width="5">&nbsp;</td>
+					<td class="formRequiredNotice" colspan="2" width="5">&nbsp;</td>
 					<td class="formLabel">
 						<label for="comments">
 							<bean:message key="app.comments"/>
@@ -799,7 +801,7 @@
 				<!-- activitystatus -->	
 				<logic:equal name="<%=Constants.OPERATION%>" value="<%=Constants.EDIT%>">
 				<tr>
-					<td class="formRequiredNotice" width="5">*</td>
+					<td class="formRequiredNotice" colspan="2" width="5">*</td>
 					<td class="formRequiredLabel" >
 						<label for="activityStatus">
 							<bean:message key="site.activityStatus" />
@@ -828,7 +830,7 @@
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION ENDS-->
 	</table>
 	<table summary="" cellpadding="0" cellspacing="0" border="0"
-		class="contentPage" width="600">
+		class="contentPage" width="650">
 		<tr>
 			<td>
 				<%@ include file="CollAndRecEvents.jsp" %>
@@ -846,7 +848,7 @@
 
 	<!-- For Multiple Specimen-----Ashish -->
 		<table summary="" cellpadding="0" cellspacing="0" border="0"
-		class="contentPage" width="600">
+		class="contentPage" width="650">
 		<tr>
 			<td>
 			<table summary="" cellpadding="3" cellspacing="0" border="0"
