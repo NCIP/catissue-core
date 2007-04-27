@@ -42,23 +42,29 @@
 	}
 
 %>	
-
-        function typeChange(arrayName)
+		  /**
+ 			* Name : Virender Mehta
+ 			* Reviewer Name : Sachin Lale 
+ 			* Bug ID: 4062
+ 			* Description: This function is used to populate Specimen Type ComboBox when a specimen Class is selected. 
+			*/
+		function typeChangeGeneralized(arrayName)
 		{ 
-		
-		   
-		/* ele = document.getElementById(specimenTypeCombo);
+			var specimenTypeCombo = "type";
+			ele = document.getElementById(specimenTypeCombo);
 			//To Clear the Combo Box
 			ele.options.length = 0;
-			
-			ele.options[0] = new Option('-- Select --','-1');
+			arrayName.sort();
+			//ele.options[0] = new Option('-- Select --','-1');
 			var j=0;
 			//Populating the corresponding Combo Box
 			for(i=0;i<arrayName.length;i++)
 			{
 					ele.options[j++] = new Option(arrayName[i],arrayName[i]);
-			}  */
-			
+			}
+		}
+        function typeChange(arrayName)
+		{ 
 			arrayName.sort();
 			// TODO change this code as per generated HTML of tag -- Santosh
 			/*  This variable is used to clear previous autocompleter as it was creating some problem -- Santosh*/
@@ -68,7 +74,6 @@
 				AutoC.getAllChoices=function(){};
 	            AutoC=null;
 			}
-			
 			var tmpArray = new Array();
 			for(i=1;i<arrayName.length;i++)
 			{
@@ -76,23 +81,6 @@
 			}  
 			//autoCompleteResult += "new Autocompleter.Combobox(\"" + property + "\",\"" + div + "\",'nameofarrow',valuesInList,  { tokens: new Array(), fullSearch: true, partialSearch: true,defaultArray:" + "valuesInList" + ",choices: " + numberOfResults + ",autoSelect:true, minChars: "+ numberOfCharacters +" });";
 			AutoC = new Autocompleter.Combobox("type","divFortype","typearrow",tmpArray,  { tokens: new Array(), fullSearch: true, partialSearch: true,defaultArray: tmpArray,autoSelect:true});
-			
-		}
-
-		function getValuesInList(valuesInList)
-		{ 
-			var specimenTypeCombo = "type";
-		//	ele = document.getElementById(specimenTypeCombo);
-			//To Clear the Combo Box
-		//	ele.options.length = 0;
-			arrayName.sort();
-			//ele.options[0] = new Option('-- Select --','-1');
-			var j=0;
-			//Populating the corresponding Combo Box
-	/*		for(i=0;i<arrayName.length;i++)
-			{
-					ele.options[j++] = new Option(arrayName[i],arrayName[i]);
-			}*/
 		}
 	// Mandar 25-apr-06 : bug 1414 : Tissue type changed.
 	var subTypeData1 = "<%=Constants.FROZEN_TISSUE_SLIDE%>";
