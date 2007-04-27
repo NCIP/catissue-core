@@ -950,7 +950,16 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 								<table cellpadding="4" cellspacing="0" width="100%">
 								<tr>
 						   			<td align="right">
-						   				<html:submit styleClass="actionButton" onclick="<%=changeAction%>">
+						   			<!-- 
+										 * Name: Vijay_PAnde
+										 * Reviewer Name: Sachin_Lale
+										 * Bug ID: 4218
+										 * Patch ID: 4218_1
+										 * See also: -
+										 * Description : Submit on Multiple specimen page was appearing with main application frames.
+									-->	 
+						   				<html:submit styleClass="actionButton" onclick="javaScript:<%=changeAction%>">
+						   			<!--  patch ends here -->	 
 						   					<bean:message key="buttons.submit"/>
 						   				</html:submit>
 						   			</td>
