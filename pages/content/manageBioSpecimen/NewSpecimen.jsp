@@ -136,24 +136,6 @@
 
 	}
 	
-	function mapButtonClickedOnSpecimen(frameUrl)
-	{
-	   	var storageContainer = document.getElementById('selectedContainerName').value;
-		frameUrl+="&storageContainerName="+storageContainer;
-		//alert(frameUrl);
-		// Patch ID: Bug#3090_18
-		platform = navigator.platform.toLowerCase();
-	    if (platform.indexOf("mac") != -1)
-		{
-	    	NewWindow(frameUrl,'name',screen.width,screen.height,'no');
-	    }
-	    else
-	    {
-	    	NewWindow(frameUrl,'name','800','600','no');
-	    }
-		
-    }
-		
 		function onCheckboxButtonClick(chkBox)
 		{
 			//var aliquotCountTextBox  = document.getElementById("noOfAliquots");
@@ -249,7 +231,7 @@
 
 		function onCollOrClassChange()
 		{
-		   	var specimenCollGroupElement = document.getElementById("specimenCollectionGroupId");
+		   	var specimenCollGroupElement = document.getElementById("selectedSpecimenCollectionGroupId");
 			var classNameElement = document.getElementById("className").value;
 			classNameElement = trim(classNameElement);
 			var classSet = false;

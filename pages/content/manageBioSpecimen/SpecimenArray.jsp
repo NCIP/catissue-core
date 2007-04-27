@@ -30,26 +30,6 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/CustomListBox.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
-<script language="JavaScript">
-	
-	function mapButtonClickedOnSpecimen(frameUrl)
-	{
-	   	var storageContainer = document.getElementById('selectedContainerName').value;
-		frameUrl+="&storageContainerName="+storageContainer;
-		// Patch ID: Bug#3090_20
-		platform = navigator.platform.toLowerCase();
-	    if (platform.indexOf("mac") != -1)
-		{
-	    	NewWindow(frameUrl,'name',screen.width,screen.height,'no');
-	    }
-	    else
-	    {
-	    	NewWindow(frameUrl,'name','800','600','no');
-	    }
-		
-    }
-		
-	</script>
 
 <html:form action="<%=formAction%>">
 <html:hidden property="id" />

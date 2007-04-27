@@ -17,25 +17,6 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <!-- Mandar 21-Aug-06 : calendar changes end -->
-<script language="JavaScript">
-		
-			function mapButtonClickedOnSpecimen(frameUrl)
-	{
-	   	var storageContainer = document.getElementById('selectedContainerName').value;
-		frameUrl+="&storageContainerName="+storageContainer;
-		// Patch ID: Bug#3090_24
-		platform = navigator.platform.toLowerCase();
-	    if (platform.indexOf("mac") != -1)
-		{
-	    	window.open(frameUrl,'','scrollbars=no,menubar=no,height=screen.height,width=screen.width,resizable=yes,toolbar=no,location=no,status=no');
-	    }
-	    else
-	    {
-	    	window.open(frameUrl,'','scrollbars=no,menubar=no,height=600,width=800,resizable=yes,toolbar=no,location=no,status=no');
-	    }
-		
-    }
-	</script>
 </head>
 
 <%

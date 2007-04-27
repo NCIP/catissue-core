@@ -132,15 +132,9 @@
 <script>
 	function showStorageContainerMap()
 	{
-		platform = navigator.platform.toLowerCase();
-		if (platform.indexOf("mac") != -1)
-		{
-			NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1','name',screen.width,screen.height,'no');
-		}
-		else
-		{
-			NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1','name','800','600','no');
-		}
+		//Patch ID: Bug#4116_5
+		var frameUrl='ShowFramedPage.do?pageOf=pageOfSpecimen&storageType=-1';
+		openPopupWindow(frameUrl);
 	}
 </script>
 <tr>
