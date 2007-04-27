@@ -604,7 +604,7 @@ function insRow(subdivtag,iCounter,blockCounter)
 						</label>
 					</td>
 					
-					<td class="formFieldAddMore" colspan=5>
+					<td class="formFieldAddMore" colspan=6>
 <!-- Mandar : 434 : for tooltip -->
 						<html:select property="<%=fldName%>" styleClass="formField" styleId="<%=fldName%>" size="1"
 						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">

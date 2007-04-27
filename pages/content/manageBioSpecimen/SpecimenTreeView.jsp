@@ -118,11 +118,19 @@
 							parentId = data.getParentObjectName() + "_"+ data.getParentIdentifier().toString();
 		
 						}
-						String nodeId = data.getObjectName() + "_"+id.toString();
+						String nodeId = data.getObjectName() + "_"+id;
 						String img = "Specimen.GIF";
 						if(data.getObjectName().equals(Constants.SPECIMEN_COLLECTION_GROUP))
 						{
-							img = "SpecimenCollectionGroup.GIF";
+							int index = id.indexOf(":");
+							if(index != -1)
+							{
+								img = "SpecimenCollectionGroupFuture.GIF";
+							}
+							else
+							{
+								img = "SpecimenCollectionGroup.GIF";
+							}
 						}
 			%>
 					tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>",0,"<%=img%>","<%=img%>","<%=img%>","");
