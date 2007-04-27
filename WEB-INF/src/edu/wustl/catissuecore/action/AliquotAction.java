@@ -626,6 +626,14 @@ public class AliquotAction extends SecureAction
 			
 			if(specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_CLOSED))
 			{
+				/**
+	 			* Name : Virender Mehta
+	 			* Reviewer Name : Sachin Lale 
+	 			* Bug ID: 4040
+	 			* Description: Added new error message and checg for pageOf flow, if user clicks directly aliquot 
+	 			* 			   link and specimen status is closed then validation is done at Aliquot.jsp else validation message will be shown 
+	 			* 			   is directed to NewSpecimen.jsp page		
+				*/
 				ActionErrors errors = getActionErrors(request);
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.parentobject.closed" , "Specimen"));
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aliquots" , "Aliquot(s)"));
