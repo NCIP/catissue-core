@@ -222,3 +222,25 @@ function validateAny(element)
 	}
 	return true;
 }
+// Name : Prafull_kadam
+// Bug ID: 3624
+// Patch ID: 3624_2
+// Description: Added code to handle hyperlinks String sorting in dhtml grid.
+
+// TO check whether the given String is Hyperlink or not.
+function isHyperLink(str)
+{
+	 var reg = new RegExp("^<[aA][ ].*</[aA]>$");
+	 return reg.test(str);
+}
+// TO get the Lable of the Hyperlink for the given hyperlink string, returns same string if its not hyperlink.
+function getHyperlinkLable(link)
+{
+	if (isHyperLink(link)==true)
+	{
+		var index = link.indexOf('>');
+		var lastIndex = link.lastIndexOf('</');
+		link = link.substring(index+1, lastIndex);
+	}
+	return link;
+}

@@ -1146,10 +1146,19 @@ function dhtmlXGridObject(id){
  
  if(type=='str'){
  this.rowsCol[sort](function(a,b){
+// Name : Prafull_kadam
+// Bug ID: 3624
+// Patch ID: 3624_1 
+// Description: Added code for case insensitive comparision & handle hyperlinks String sorting.
+ var astr = arrTS[a.idd];
+ var bstr = arrTS[b.idd];
+ astr = getHyperlinkLable(astr);
+ bstr = getHyperlinkLable(bstr);
+
  if(order=="asc")
- return arrTS[a.idd]>arrTS[b.idd]?1:-1
+ return astr.toLowerCase()>bstr.toLowerCase()?1:-1
  else
- return arrTS[a.idd]<arrTS[b.idd]?1:-1
+ return astr.toLowerCase()<bstr.toLowerCase()?1:-1
 });
 }else if(type=='int'){
  this.rowsCol[sort](function(a,b){
