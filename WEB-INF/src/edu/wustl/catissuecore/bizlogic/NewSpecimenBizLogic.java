@@ -415,7 +415,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			    specimen.setLineage(Constants.NEW_SPECIMEN);
 			}
 			//Setting the created on date = collection date if lineage = NEW_SPECIMEN
-			else if(specimen.getLineage().equalsIgnoreCase(Constants.NEW_SPECIMEN))
+			if(specimen.getLineage().equalsIgnoreCase(Constants.NEW_SPECIMEN))
 			{
 					setCreatedOnDate(specimen);
 			}
