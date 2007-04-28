@@ -15,10 +15,13 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationService;
@@ -221,7 +224,8 @@ public class ClientDemo
 			testAddDistributionWithClosedSite();
 			testAddDistributionWithClosedDistributionProtocol();
 			
-								
+			testAddSpecimenWithInvalidCreatedOnDate();
+			testAddSCGWithWrongEvents();					
 		}
 		catch(Exception ex)
 		{
@@ -1020,6 +1024,27 @@ public class ClientDemo
 				e.printStackTrace();
 			}
 		}	 
+	 	private void testAddSpecimenWithInvalidCreatedOnDate()
+	 	{
+	 		Specimen specimenObj = null;
+			try
+			{
+				specimenObj = (Specimen) api.initMolecularSpecimen();				
+				setLogger(specimenObj);
+				Logger.out.info("Inserting domain object------->"+specimenObj);				
+				specimenObj.setCreatedOn(Utility.parseDate("90/15/1975", Utility
+						.datePattern("08/15/1975")));
+				specimenObj =  (Specimen) appService.createObject(specimenObj);
+				writeFailureOperationsToReport("Specimen",insertValidateOperation + " testAddSpecimenWithInvalidCreatedOnDate");				
+			
+			}
+			catch(Exception e)
+			{
+				writeSuccessfullOperationToReport(specimenObj,insertValidateOperation + " testAddSpecimenWithInvalidCreatedOnDate");
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+			}
+	 	}
 	 
 	 
 	 private void testAddSpecimenArrayType()
@@ -1154,6 +1179,33 @@ public class ClientDemo
 				e.printStackTrace();
 			}
 		}
+	 	private void testAddSCGWithWrongEvents()
+	 	{
+	 		SpecimenCollectionGroup specimenCollectionGroupObj = null;
+			try
+			{
+				specimenCollectionGroupObj = (SpecimenCollectionGroup) api.initSpecimenCollectionGroup();
+		    	setLogger(specimenCollectionGroupObj);
+		    	Logger.out.info("Inserting domain object------->"+specimenCollectionGroupObj);
+		    	
+		    	
+		    	CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		    	(specimenCollectionGroupObj.getSpecimenEventParametersCollection()).add(collectionEventParameters);
+		    	
+		    	
+				specimenCollectionGroupObj =  (SpecimenCollectionGroup) appService.createObject(specimenCollectionGroupObj);
+				writeFailureOperationsToReport("SpecimenCollectionGroup",insertValidateOperation + " testAddSCGWithWrongEvents");
+				//dataModelObjectMap.put("SpecimenCollectionGroup",specimenCollectionGroupObj);
+				//Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenCollectionGroupObj.getId().toString());
+			//+ specimenCollectionGroupObj.getId().longValue() + " ::  Name :: " + specimenCollectionGroupObj.getName());
+			}
+			catch(Exception e)
+			{
+				writeSuccessfullOperationToReport(specimenCollectionGroupObj,insertValidateOperation + " testAddSCGWithWrongEvents");
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+			}
+	 	}
 	 	
 	 	
 ////////////////////////////////  End Add operation /////////////////	 	
@@ -1179,7 +1231,7 @@ public class ClientDemo
      	testSearchSpecimen();
     	testSearchSpecimenArray();
     	testSearchDistribution();
-   	    testQuerySpecimenForIdLessThanTen();
+   	    testQuerySpecimenForIdLessThanFour();
     	testQueryParicipant();
     	testQuerySpecimenRequirementUsingHQLCriteria();
     	testSearchSpecimenAndGetCollections();
@@ -1633,7 +1685,7 @@ public class ClientDemo
      *
      */
     
-    private void testQuerySpecimenForIdLessThanTen()
+    private void testQuerySpecimenForIdLessThanFour()
     {
         Specimen specimen = new Specimen();
         DetachedCriteria criteria = DetachedCriteria.forClass(Specimen.class);
@@ -1662,11 +1714,11 @@ public class ClientDemo
                 }
             }
             
-            writeSuccessfullOperationToReport(new Specimen(),searchOperation + "testQuerySpecimenForIdLessThanTen");
+            writeSuccessfullOperationToReport(new Specimen(),searchOperation + "testQuerySpecimenForIdLessThanFour");
         } 
         catch (Exception e) {
               System.out.println(e.getMessage());
-              writeFailureOperationsToReport("Specimen",searchOperation + "testQuerySpecimenForIdLessThanTen");
+              writeFailureOperationsToReport("Specimen",searchOperation + "testQuerySpecimenForIdLessThanFour");
              e.printStackTrace();
         }
     }

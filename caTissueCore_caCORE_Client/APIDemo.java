@@ -1,6 +1,8 @@
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.domain.Address;
@@ -36,6 +38,7 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Constants;
 
@@ -691,6 +694,9 @@ public class APIDemo
 		molecularSpecimen.setBiohazardCollection(biohazardCollection);
 		System.out.println(" -------- end -----------");
 
+//		Created on date is same as Collection Date
+		molecularSpecimen.setCreatedOn(collectionEventParameters.getTimestamp());
+		
 		return molecularSpecimen;
 	}
 	
@@ -786,6 +792,11 @@ public class APIDemo
 		biohazardCollection.add(biohazard);
 		tissueSpecimen.setBiohazardCollection(biohazardCollection);
 		System.out.println(" -------- end -----------");
+		
+		//Created on date is same as Collection Date
+		
+		tissueSpecimen.setCreatedOn(collectionEventParameters.getTimestamp());
+		
 
 		return tissueSpecimen;
 	}
@@ -883,6 +894,9 @@ public class APIDemo
 		fluidSpecimen.setBiohazardCollection(biohazardCollection);
 		System.out.println(" -------- end -----------");
 
+//		Created on date is same as Collection Date
+		fluidSpecimen.setCreatedOn(collectionEventParameters.getTimestamp());
+		
 		return fluidSpecimen;
 	}
 	
@@ -978,6 +992,9 @@ public class APIDemo
 		cellSpecimen.setBiohazardCollection(biohazardCollection);
 		System.out.println(" -------- end -----------");
 
+//		Created on date is same as Collection Date
+		cellSpecimen.setCreatedOn(collectionEventParameters.getTimestamp());
+		
 		return cellSpecimen;
 	}
 
@@ -1030,6 +1047,36 @@ public class APIDemo
 		//clinicalReport.setId(new Long(1));
 		specimenCollectionGroup.setClinicalReport(clinicalReport);
 
+		//Adding Events
+		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		collectionEventParameters.setCollectionProcedure("Not Specified");
+		collectionEventParameters.setComments("Default Comment");
+		collectionEventParameters.setContainer("Not Specified");
+		collectionEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
+		//Setting default system date and time
+		Calendar cal = Calendar.getInstance();
+		String dateOfEvent = Utility.parseDateToString(cal.getTime(), Constants.DATE_PATTERN_MM_DD_YYYY);
+		String timeInHrs = Integer.toString(cal.get(Calendar.HOUR_OF_DAY));
+		String timeInMinutes = Integer.toString(cal.get(Calendar.MINUTE));
+		
+		collectionEventParameters.setTimestamp(EventsUtil.setTimeStamp(dateOfEvent, timeInHrs, timeInMinutes));
+		//Setting collector and receiver
+		User user = (User)ClientDemo.dataModelObjectMap.get("User");
+		collectionEventParameters.setUser(user);
+		
+		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		receivedEventParameters.setComments("Default Comment");
+		receivedEventParameters.setReceivedQuality("Not Specified");
+		receivedEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
+		receivedEventParameters.setTimestamp(EventsUtil.setTimeStamp(dateOfEvent, timeInHrs, timeInMinutes));
+		
+		receivedEventParameters.setUser(user);		
+		
+		Collection specimenEventParamsColl = new HashSet();
+		specimenEventParamsColl.add(collectionEventParameters);
+		specimenEventParamsColl.add(receivedEventParameters);
+		
+		specimenCollectionGroup.setSpecimenEventParametersCollection(specimenEventParamsColl);
 		return specimenCollectionGroup;
 	}
 
@@ -1400,6 +1447,9 @@ public class APIDemo
 		//clinicalReport = new ClinicalReport();
 		//clinicalReport.setSurgicalPathologyNumber("123");
 		specimenCollectionGroup.getClinicalReport().setSurgicalPathologyNumber("1234");
+		
+		//Uncomment to set these collection and received events for all specimens associated with this scg.
+		//specimenCollectionGroup.isApplyEventsToSpecimens(true);
 
 	}	
 	
