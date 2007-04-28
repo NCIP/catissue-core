@@ -959,7 +959,6 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 										 * Description : Submit on Multiple specimen page was appearing with main application frames.
 									-->	 
 						   				<html:submit styleClass="actionButton" onclick="javaScript:<%=changeAction%>">
-						   			<!--  patch ends here -->	 
 						   					<bean:message key="buttons.submit"/>
 						   				</html:submit>
 						   			</td>
