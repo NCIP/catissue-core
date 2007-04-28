@@ -341,9 +341,9 @@
 			// Patch ID: Bug#3184_35
 			var submitAndAddMultipleButton = document.getElementById("submitAndAddMultiple");
 			
-			var numberOfSpecimen = document.getElementById("numberOfSpecimen").value;
 			if(restrictCheckbox.checked)
 			{
+				var numberOfSpecimen = document.getElementById("numberOfSpecimen").value;
 				if(numberOfSpecimen != null && numberOfSpecimen == 1)
 				{
 					addSpecimenButton = false;
@@ -368,7 +368,7 @@
 		}
 		//Patch ID: Bug#4227_4
 		//Description: This method sets the value of button id to the buttonType hidden variable.
-		//This method is called on the onkeydown or onmousedown of Add Multiple Specimen button.
+		//This method is called on the onkeydown or onmousedown of Add Specimen and Add Multiple Specimen button.
 		function setButtonType(addButton)
 		{
 			document.getElementById("buttonType").value = addButton.id;
