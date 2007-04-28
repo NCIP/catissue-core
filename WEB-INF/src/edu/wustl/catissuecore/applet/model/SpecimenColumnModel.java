@@ -490,14 +490,22 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		quantityUnitPanel.add(quantity);
 		quantityUnitPanel.add(unit);
 
+		/**
+		 * Name: Chetan Patil
+		 * Reviewer: Sachin Lale
+		 * Bug ID: Bug#4194
+		 * Patch ID: Bug#4194_1
+		 * Description: Calculate actualColumnIndex to fetch the appropriate specimen class. The class is used to get the corresponding
+		 * list of Types.
+		 */
 		// Patch ID: Bug#3184_23
 		// Set the default list in the Column
-		initializeTheAppletLists(model);
+		int actualColumnIndex = model.getActualColumnNo(column);		
+		initializeTheAppletLists(model, actualColumnIndex);
 		tissueSiteList.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
 		
 		//If the restrict checkbox on specimen collection group is checked, then set the restricted value as the selected;
 		//otherwise set the default values as selected
-		int actualColumnIndex = model.getActualColumnNo(column);
 		if(((restrictSCGCheckbox != null) && (restrictSCGCheckbox.equals(Constants.TRUE))) && (actualColumnIndex < numberOfSpecimenRequirements))
 		{
 			setRestrictedValuesToColumn(model, actualColumnIndex);
@@ -1937,9 +1945,10 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
     
     public void specimenTypeUpdate(String specimenType)
 	{
-		String specimenTypeArray[] = new String[] {specimenType};
-		DefaultComboBoxModel typeComboModel = new DefaultComboBoxModel(specimenTypeArray);
-		this.typeList.setModel(typeComboModel);
+    	//Patch ID: Bug#4194_4
+    	//String specimenTypeArray[] = new String[] {specimenType};
+		//DefaultComboBoxModel typeComboModel = new DefaultComboBoxModel(specimenTypeArray);
+		//this.typeList.setModel(typeComboModel);
 		
 		setConcentrationStatus();
 
@@ -1988,14 +1997,16 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		}
 	}
 	
-	private void initializeTheAppletLists(MultipleSpecimenTableModel model)
+	//Patch ID: Bug#4194_3
+	private void initializeTheAppletLists(MultipleSpecimenTableModel model, int actualColumnIndex)
 	{
 		//Specimen Class
 		classList = new ModifiedComboBox(model.getSpecimenClassValues());
 		
 		//Specimen Type
-		typeList = new ModifiedComboBox(model.getSpecimenTypeValues(null));
-		specimenClassUpdated(model.getSpecimenClass());
+		String specimenClass = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_CLASS_ROW_NO, actualColumnIndex + 1);
+		typeList = new ModifiedComboBox(model.getSpecimenTypeValues(specimenClass));
+		specimenClassUpdated(specimenClass);
 		
 		//Tissue Site
 		tissueSiteList = new ModifiedComboBox(model.getTissueSiteValues());
@@ -2012,7 +2023,8 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	 * @param specimenAttributeOptions
 	 * @return number of specimen requirements
 	 */
-	private int getNumberOfSpecimenRequirements(Map specimenAttributeOptions) {
+	private int getNumberOfSpecimenRequirements(Map specimenAttributeOptions)
+	{
 		Map<String, Map<String, String>> restrictedValuesMap = (Map<String, Map<String, String>>)specimenAttributeOptions.get(Constants.KEY_RESTRICTED_VALUES);
 		Map<String, String> numnberOfSpecimenRequirementMap = restrictedValuesMap.get(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
 		String numberOfSpecimenRequirements = numnberOfSpecimenRequirementMap.get(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
@@ -2051,27 +2063,19 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
     {
     	//Specimen Class
 		String specimenClass = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_CLASS_ROW_NO, column + 1);
-		//String specimenClassArray[] = new String[] {specimenClass};
-		//classList = new ModifiedComboBox(specimenClassArray);
 		classList.setSelectedItem(specimenClass);
 		
 		//Specimen Type
 		String specimenType = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_TYPE_ROW_NO, column + 1);
-		//String specimenTypeArray[] = new String[] {specimenType};
-		//typeList = new ModifiedComboBox(specimenTypeArray);
 		typeList.setSelectedItem(specimenType);
 		specimenTypeUpdate(specimenType);
 		
 		//TissueSite
 		String tissueSite = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO, column + 1);
-		//String tissueSiteArray[] = new String[] {tissueSite};
-		//tissueSiteList = new ModifiedComboBox(tissueSiteArray);
 		tissueSiteList.setSelectedItem(tissueSite);
 		
 		//PathologicalStatus 
 		String pathologicalStatus = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO, column + 1);
-		//String pathologicalStatusArray[] = new String[] {pathologicalStatus};
-		//pathologicalStatusList = new ModifiedComboBox(pathologicalStatusArray);
 		pathologicalStatusList.setSelectedItem(pathologicalStatus);
     }
 

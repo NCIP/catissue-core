@@ -196,12 +196,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public Object getValueAt(int row, int column)
 	{
-		/*		if (column == 0)
-		 {
-		 return rowHeaders[row];
-		 }
-		 System.out.println("getValueAt " + row + " " + column + ": " + getKey(row,column) + "  " + specimenMap.get(getKey(row,column)));
-		 */
 		return specimenMap.get(getKey(row, column));
 	}
 
@@ -355,13 +349,15 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 
 	public Object[] getSpecimenTypeValues(String specimenClass)
 	{
-		/*String specimenClass = (String) getValueAt(AppletConstants.SPECIMEN_CLASS_ROW_NO, column);*/
-		if (specimenClass == null)
+		// Patch ID: Bug#4194_2
+		if (specimenClass == null || specimenClass.equals(""))
 		{
 			specimenClass = Constants.SELECT_OPTION;
 		}
 		Map specimenTypeMap = (Map) specimenAttributeOptions.get(Constants.SPECIMEN_TYPE_MAP);
-		return (Object[]) specimenTypeMap.get(specimenClass);
+		
+		Object[] specimenTypeList = (Object[]) specimenTypeMap.get(specimenClass); 
+		return specimenTypeList;
 	}
 
 	/**
