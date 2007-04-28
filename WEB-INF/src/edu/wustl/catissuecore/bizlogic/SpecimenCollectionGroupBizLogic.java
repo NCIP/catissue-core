@@ -36,6 +36,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -53,6 +54,8 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.domain.User;
 
 /**
  * UserHDAO is used to add user information into the database using Hibernate.
@@ -142,7 +145,13 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) obj;
 		SpecimenCollectionGroup oldspecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
-
+		
+		//Adding default events if they are null from API
+		Collection spEventColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
+		if(spEventColl == null || spEventColl.isEmpty())
+		{
+			setDefaultEvents(specimenCollectionGroup,sessionDataBean);
+		}
 		// Check for different closed site
 		if (!specimenCollectionGroup.getSite().getId().equals(oldspecimenCollectionGroup.getSite().getId()))
 		{
@@ -196,6 +205,26 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			bizLogic.disableRelatedObjectsForSpecimenCollectionGroup(dao, specimenCollectionGroupIDArr);
 		}
 
+	}	
+	/**
+	 * @param specimenCollectionGroup
+	 * @param sessionDataBean
+	 * Sets the default events if they are not specified
+	 */
+	private void setDefaultEvents(SpecimenCollectionGroup specimenCollectionGroup,SessionDataBean sessionDataBean)
+	{
+		Collection specimenEventColl = new HashSet();
+		User user = new User();
+		user.setId(sessionDataBean.getUserId());
+		CollectionEventParameters collectionEventParameters = EventsUtil.populateCollectionEventParameters(user);
+		collectionEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
+		specimenEventColl.add(collectionEventParameters);
+		
+		ReceivedEventParameters receivedEventParameters = EventsUtil.populateReceivedEventParameters(user);	
+		receivedEventParameters.setSpecimenCollectionGroup(specimenCollectionGroup);
+		specimenEventColl.add(receivedEventParameters);
+		
+		specimenCollectionGroup.setSpecimenEventParametersCollection(specimenEventColl);
 	}
 	/**
 	 * @param specimenCollectionGroup
@@ -559,6 +588,20 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
 			}
 		}
+		/* Bug ID: 4165
+	 	 * Patch ID: 4165_11	 
+	 	 * Description: Validation added to check incorrect events added through API
+		 */
+//		Events Validation
+		if (group.getSpecimenEventParametersCollection() != null)
+		{
+			Iterator specimenEventCollectionIterator = group.getSpecimenEventParametersCollection().iterator();
+			while (specimenEventCollectionIterator.hasNext())
+			{				
+				Object eventObject = specimenEventCollectionIterator.next();
+				EventsUtil.validateEventsObject(eventObject,validator);
+			}
+		}	
 
 		return true;
 	}

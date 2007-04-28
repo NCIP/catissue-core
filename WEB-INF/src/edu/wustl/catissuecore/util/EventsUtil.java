@@ -10,17 +10,27 @@
  */
 package edu.wustl.catissuecore.util;
 
+import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
-import edu.wustl.catissuecore.action.NewSpecimenAction;
-import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
+import edu.wustl.catissuecore.domain.User;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.cde.CDEManager;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -84,5 +94,142 @@ public class EventsUtil
 		}
 		return -1;
 	}
+	/**
+	 * @param eventObject
+	 * @param validator
+	 * @throws DAOException
+	 * validating events from bizlogic
+	 */
+	public static void validateEventsObject(Object eventObject,Validator validator)throws DAOException
+	{
+		if (eventObject instanceof CollectionEventParameters)
+		{
+			CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
+			collectionEventParameters.getUser();
+			if (collectionEventParameters.getUser() == null || collectionEventParameters.getUser().getId() == null)
+			{
+				String message = ApplicationProperties.getValue("specimen.collection.event.user");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			}
+			if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
+			{
+
+				String message = ApplicationProperties.getValue("specimen.collection.event.date");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			}
+			// checks the collectionProcedure
+			if (!validator.isValidOption(collectionEventParameters.getCollectionProcedure()))
+			{
+				String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			}
+			List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
+			if (!Validator.isEnumeratedValue(procedureList, collectionEventParameters.getCollectionProcedure()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
+			}
+
+			if (!validator.isValidOption(collectionEventParameters.getContainer()))
+			{
+				String message = ApplicationProperties.getValue("collectioneventparameters.container");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			}
+
+			List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
+			if (!Validator.isEnumeratedValue(containerList, collectionEventParameters.getContainer()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
+			}
+
+		}
+		//ReceivedEvent validation
+		else if (eventObject instanceof ReceivedEventParameters)
+		{
+			ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
+			if (receivedEventParameters.getUser() == null || receivedEventParameters.getUser().getId() == null)
+			{
+				String message = ApplicationProperties.getValue("specimen.recieved.event.user");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			}
+			if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
+			{
+				String message = ApplicationProperties.getValue("specimen.recieved.event.date");
+				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+			}
 	
+			List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
+			if (!Validator.isEnumeratedValue(qualityList, receivedEventParameters.getReceivedQuality()))
+			{
+				throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
+			}
+		}
+	}
+	/**
+	 * @param dateOfEvent
+	 * @param timeInHrs
+	 * @param timeInMinutes
+	 * @return
+	 * Setting the timestamp
+	 */
+	public static Date setTimeStamp(String dateOfEvent,String timeInHrs,String timeInMinutes)
+	{
+		Date timestamp = null;
+		if (dateOfEvent != null && dateOfEvent.trim().length()!=0  )
+		{
+			Calendar calendar = Calendar.getInstance();			
+			try
+			{
+				Date date = Utility.parseDate(dateOfEvent,Utility.datePattern(dateOfEvent));
+				calendar.setTime(date);
+				timestamp = calendar.getTime();  
+				calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timeInHrs));
+				calendar.set(Calendar.MINUTE,Integer.parseInt(timeInMinutes));
+				timestamp = calendar.getTime();		
+			}
+			catch (ParseException e)
+			{
+				Logger.out.debug("Exception in Parsing Date" + e);
+			}			
+		}
+		else
+		{
+			timestamp = Calendar.getInstance().getTime();
+		}
+		return timestamp;
+	}
+	/**
+	 * @param specimen
+	 * @param user
+	 * @return
+	 * Populating default collection event parameters
+	 */
+	public static CollectionEventParameters populateCollectionEventParameters(User user)
+	{
+//		Collection Events
+		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+		
+		collectionEventParameters.setUser(user);
+		collectionEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+		collectionEventParameters.setCollectionProcedure(Constants.NOT_SPECIFIED);
+		collectionEventParameters.setComments("");
+		collectionEventParameters.setContainer(Constants.NOT_SPECIFIED);
+		return collectionEventParameters;
+	}
+	/**
+	 * @param specimen
+	 * @param user
+	 * @return
+	 * Populating default received event parameters
+	 */
+	public static ReceivedEventParameters populateReceivedEventParameters(User user)
+	{
+//		Received Events
+		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
+		receivedEventParameters.setComments("");
+		receivedEventParameters.setReceivedQuality(Constants.NOT_SPECIFIED);
+		
+		receivedEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
+		receivedEventParameters.setUser(user);
+		return receivedEventParameters;
+	}
 }

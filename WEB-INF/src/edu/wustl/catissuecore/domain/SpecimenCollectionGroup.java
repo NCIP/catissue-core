@@ -546,7 +546,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 		collectionEventParameters.setCollectionProcedure(form.getCollectionEventCollectionProcedure());
 		collectionEventParameters.setComments(form.getCollectionEventComments());
 		collectionEventParameters.setContainer(form.getCollectionEventContainer());		
-		Date timestamp = setTimeStamp(form.getCollectionEventdateOfEvent(),form.getCollectionEventTimeInHours(),form.getCollectionEventTimeInMinutes());
+		Date timestamp = EventsUtil.setTimeStamp(form.getCollectionEventdateOfEvent(),form.getCollectionEventTimeInHours(),form.getCollectionEventTimeInMinutes());
 		collectionEventParameters.setTimestamp(timestamp);
 		User user = new User();
 		user.setId(new Long(form.getCollectionEventUserId()));
@@ -559,42 +559,11 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 		receivedUser.setId(new Long(form.getReceivedEventUserId()));
 		receivedEventParameters.setUser(receivedUser);
 		receivedEventParameters.setReceivedQuality(form.getReceivedEventReceivedQuality());		
-		Date receivedTimestamp = setTimeStamp(form.getReceivedEventDateOfEvent(),form.getReceivedEventTimeInHours(),form.getReceivedEventTimeInMinutes());
+		Date receivedTimestamp = EventsUtil.setTimeStamp(form.getReceivedEventDateOfEvent(),form.getReceivedEventTimeInHours(),form.getReceivedEventTimeInMinutes());
 		receivedEventParameters.setTimestamp(receivedTimestamp);		
 		receivedEventParameters.setSpecimenCollectionGroup(this);
 	}
-	/**
-	 * @param dateOfEvent
-	 * @param timeInHrs
-	 * @param timeInMinutes
-	 * @return
-	 */
-	private Date setTimeStamp(String dateOfEvent,String timeInHrs,String timeInMinutes)
-	{
-		Date timestamp = null;
-		if (dateOfEvent != null && dateOfEvent.trim().length()!=0  )
-		{
-			Calendar calendar = Calendar.getInstance();			
-			try
-			{
-				Date date = Utility.parseDate(dateOfEvent,Utility.datePattern(dateOfEvent));
-				calendar.setTime(date);
-				timestamp = calendar.getTime();  
-				calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(timeInHrs));
-				calendar.set(Calendar.MINUTE,Integer.parseInt(timeInMinutes));
-				timestamp = calendar.getTime();		
-			}
-			catch (ParseException e)
-			{
-				Logger.out.debug("Exception in Parsing Date" + e);
-			}			
-		}
-		else
-		{
-			timestamp = Calendar.getInstance().getTime();
-		}
-		return timestamp;
-	}
+	
 	 /**
      * Returns message label to display on success add or edit
      * @return String

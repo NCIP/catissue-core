@@ -50,6 +50,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -139,17 +140,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			 */
 			if(specimen.getSpecimenEventCollection() == null || specimen.getSpecimenEventCollection().isEmpty())
 			{
-				Collection specimenEventColl = new HashSet();
-				User user = new User();
-				user.setId(sessionDataBean.getUserId());
-				CollectionEventParameters collectionEventParameters = populateCollectionEventParameters(specimen,user);				
-				specimenEventColl.add(collectionEventParameters);
-				
-				ReceivedEventParameters receivedEventParameters = populateReceivedEventParameters(specimen,user);								
-				specimenEventColl.add(receivedEventParameters);
-				
-				specimen.setSpecimenEventCollection(specimenEventColl);
-			}
+				setDefaultEventsToSpecimen(specimen,sessionDataBean);
+			}			
 			/**
 			 * Start: Change for API Search   --- Jitendra 06/10/2006
 			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -174,17 +166,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
             
             if((specimen.getParentSpecimen() == null ))
             {              
-                Collection specimenEventsCollection = specimen.getSpecimenEventCollection();
-                Iterator specimenEventsCollectionIterator = specimenEventsCollection.iterator();
-                while (specimenEventsCollectionIterator.hasNext())
-                {               
-                      Object eventObject = specimenEventsCollectionIterator.next();
-                      if (eventObject instanceof CollectionEventParameters)
-                      {
-                          CollectionEventParameters collEventParam=(CollectionEventParameters)eventObject;
-                          specimen.setCreatedOn(collEventParam.getTimestamp());
-                      }
-                }               
+                setCreatedOnDate(specimen);                
             }
             
 
@@ -250,39 +232,45 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 		}
 	}
+	
+	//This method sets the created on date = collection date
+	private void setCreatedOnDate(Specimen specimen)
+	{
+		Collection specimenEventsCollection = specimen.getSpecimenEventCollection();
+		if(specimenEventsCollection != null)
+		{
+			Iterator specimenEventsCollectionIterator = specimenEventsCollection.iterator();
+	        while (specimenEventsCollectionIterator.hasNext())
+	        {               
+	              Object eventObject = specimenEventsCollectionIterator.next();
+	              if (eventObject instanceof CollectionEventParameters)
+	              {
+	                  CollectionEventParameters collEventParam=(CollectionEventParameters)eventObject;
+	                  specimen.setCreatedOn(collEventParam.getTimestamp());
+	              }
+	        }
+		}
+	}
 	/**
 	 * @param specimen
-	 * @param user
-	 * @return
+	 * @param sessionDataBean
+	 * This method sets the default events to specimens if they are null
 	 */
-	private CollectionEventParameters populateCollectionEventParameters(Specimen specimen,User user)
-	{
-//		Collection Events
-		CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
+	private void setDefaultEventsToSpecimen(Specimen specimen,SessionDataBean sessionDataBean)
+	{		
+		Collection specimenEventColl = new HashSet();
+		User user = new User();
+		user.setId(sessionDataBean.getUserId());
+		CollectionEventParameters collectionEventParameters = EventsUtil.populateCollectionEventParameters(user);
 		collectionEventParameters.setSpecimen(specimen);
-		collectionEventParameters.setUser(user);
-		collectionEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
-		collectionEventParameters.setCollectionProcedure(Constants.NOT_SPECIFIED);
-		collectionEventParameters.setComments("");
-		collectionEventParameters.setContainer(Constants.NOT_SPECIFIED);
-		return collectionEventParameters;
-	}
-	/**
-	 * @param specimen
-	 * @param user
-	 * @return
-	 */
-	private ReceivedEventParameters populateReceivedEventParameters(Specimen specimen,User user)
-	{
-//		Received Events
-		ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
-		receivedEventParameters.setComments("");
-		receivedEventParameters.setReceivedQuality(Constants.NOT_SPECIFIED);
+		specimenEventColl.add(collectionEventParameters);
+		
+		ReceivedEventParameters receivedEventParameters = EventsUtil.populateReceivedEventParameters(user);	
 		receivedEventParameters.setSpecimen(specimen);
-		receivedEventParameters.setTimestamp(new Date(System.currentTimeMillis()));
-		receivedEventParameters.setUser(user);
-		return receivedEventParameters;
-	}
+		specimenEventColl.add(receivedEventParameters);
+		
+		specimen.setSpecimenEventCollection(specimenEventColl);		
+	}	
 
 	/**
 	 * By Rahul Ner
@@ -426,6 +414,12 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			{
 			    specimen.setLineage(Constants.NEW_SPECIMEN);
 			}
+			//Setting the created on date = collection date if lineage = NEW_SPECIMEN
+			else if(specimen.getLineage().equalsIgnoreCase(Constants.NEW_SPECIMEN))
+			{
+					setCreatedOnDate(specimen);
+			}
+			
 			setSpecimenAttributes(dao, specimen, sessionDataBean, partOfMulipleSpecimen);
 			if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
 			{
@@ -1333,75 +1327,14 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
 			}
 		}
-
+		//Events Validation
 		if (specimen.getSpecimenEventCollection() != null)
 		{
 			Iterator specimenEventCollectionIterator = specimen.getSpecimenEventCollection().iterator();
 			while (specimenEventCollectionIterator.hasNext())
-			{
-				//CollectionEvent validation.
+			{				
 				Object eventObject = specimenEventCollectionIterator.next();
-				if (eventObject instanceof CollectionEventParameters)
-				{
-					CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
-					collectionEventParameters.getUser();
-					if (collectionEventParameters.getUser() == null || collectionEventParameters.getUser().getId() == null)
-					{
-						String message = ApplicationProperties.getValue("specimen.collection.event.user");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-					if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
-					{
-
-						String message = ApplicationProperties.getValue("specimen.collection.event.date");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-					// checks the collectionProcedure
-					if (!validator.isValidOption(collectionEventParameters.getCollectionProcedure()))
-					{
-						String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-					List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
-					if (!Validator.isEnumeratedValue(procedureList, collectionEventParameters.getCollectionProcedure()))
-					{
-						throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
-					}
-
-					if (!validator.isValidOption(collectionEventParameters.getContainer()))
-					{
-						String message = ApplicationProperties.getValue("collectioneventparameters.container");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-
-					List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
-					if (!Validator.isEnumeratedValue(containerList, collectionEventParameters.getContainer()))
-					{
-						throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
-					}
-
-				}
-				//ReceivedEvent validation
-				else if (eventObject instanceof ReceivedEventParameters)
-				{
-					ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
-					if (receivedEventParameters.getUser() == null || receivedEventParameters.getUser().getId() == null)
-					{
-						String message = ApplicationProperties.getValue("specimen.recieved.event.user");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-					if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
-					{
-						String message = ApplicationProperties.getValue("specimen.recieved.event.date");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-			
-					List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
-					if (!Validator.isEnumeratedValue(qualityList, receivedEventParameters.getReceivedQuality()))
-					{
-						throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
-					}
-				}
+				EventsUtil.validateEventsObject(eventObject,validator);
 			}
 		}		
 
@@ -1525,6 +1458,16 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			}
 		}
 		//Logger.out.debug("End-Inside validate method of specimen bizlogic");
+		
+		//Validating createdOn date
+		if(specimen.getCreatedOn() != null && !specimen.getLineage().equalsIgnoreCase(Constants.NEW_SPECIMEN))
+		{
+			String tempDate = Utility.parseDateToString(specimen.getCreatedOn(),Constants.DATE_PATTERN_MM_DD_YYYY);
+			if(!validator.checkDate(tempDate))
+			{
+				throw new DAOException(ApplicationProperties.getValue("error.invalid.createdOnDate"));
+			}
+		}		
 		return true;
 	}
 
