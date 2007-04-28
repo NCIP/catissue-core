@@ -865,15 +865,4 @@ ALTER SEQUENCE CSM_USER_GROU_USER_GROUP_R_SEQ INCREMENT BY 1;
 
 -- CSM_PG_PE
 
-
-#-- Remove unwanted protection groups 
-delete from csm_protection_group where 
-PROTECTION_GROUP_NAME like '%_ATTRIBUTES' or 
-PROTECTION_GROUP_NAME like 'ADMIN_DATA_USE_GROUP' or 
-PROTECTION_GROUP_NAME like 'COLLECTION_PROTOCOL_GROUP' or
-PROTECTION_GROUP_NAME like 'DISTRIBUTION_PROTOCOL_GROUP';
-
-#-- Remove unwanted protection elements
-delete from csm_protection_element where ATTRIBUTE IS NOT NULL;
-
 COMMIT;
