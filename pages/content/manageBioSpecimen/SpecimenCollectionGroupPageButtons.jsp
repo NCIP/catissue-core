@@ -34,11 +34,14 @@
 											
 												<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 												<td nowrap class="formFieldNoBorders">
+													<!-- Patch ID: Bug#4227_7 -->
 													<html:button styleClass="actionButton"  
 															property="submitPage" 
 															title="Submit and Add Specimen"
 															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[1][0]%>" 
 															disabled="<%=isAddNew%>" 
+															onmousedown="setButtonType(this)" 
+															onkeydown="setButtonType(this)" 
 															onclick="<%=forwardToSubmit%>"
 						  				     	    		styleId = "submitAndAdd">
 											     	</html:button>

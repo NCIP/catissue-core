@@ -689,7 +689,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		// Patch ID: Bug#4227_2
 		if(restrictSCGCheckbox != null && (buttonType != null && buttonType.equals(Constants.SUBMIT_AND_ADD_MULTIPLE)))
 		{
-			if(restrictSCGCheckbox.equalsIgnoreCase(Constants.TRUE) && (numberOfSpecimens < Integer.parseInt(actualNumberOfSpecimen)))
+			if(restrictSCGCheckbox.equalsIgnoreCase(Constants.TRUE) && 
+					((numberOfSpecimens != 1) && (numberOfSpecimens < Integer.parseInt(actualNumberOfSpecimen))))
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.multiplespecimen.invalidNumberOfSpecimen"));
 			}
