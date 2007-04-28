@@ -197,7 +197,7 @@ public class ClientDemo
 			testAddCellSpecimen();
 			testAddSpecimenArray();
 			testAddDistribution();
-			
+		
 			
 			testAddInstitutionWithWrongData();
 			testAddDepartmentWithWrongData();
@@ -1032,14 +1032,13 @@ public class ClientDemo
 				specimenObj = (Specimen) api.initMolecularSpecimen();				
 				setLogger(specimenObj);
 				Logger.out.info("Inserting domain object------->"+specimenObj);				
-				specimenObj.setCreatedOn(Utility.parseDate("90/15/1975", Utility
-						.datePattern("08/15/1975")));
-				specimenObj =  (Specimen) appService.createObject(specimenObj);
+				specimenObj.setCreatedOn(new Date("90/15/1975"));
+				specimenObj =  (Specimen) appService.createObject(specimenObj);				
 				writeFailureOperationsToReport("Specimen",insertValidateOperation + " testAddSpecimenWithInvalidCreatedOnDate");				
 			
 			}
 			catch(Exception e)
-			{
+			{				
 				writeSuccessfullOperationToReport(specimenObj,insertValidateOperation + " testAddSpecimenWithInvalidCreatedOnDate");
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
