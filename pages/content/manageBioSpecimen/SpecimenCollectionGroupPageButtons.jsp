@@ -48,14 +48,16 @@
 														Patch ID: Bug#3184_37
 													 	Description: Added id to the button. Needed to enable and disable in the javascript
 													-->
+													<!-- Patch ID: Bug#4227_6 -->
 													<html:button styleClass="actionButton"  
 															property="submitPage" 
 															title="Submit and Add Multiple Specimen"
 															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[2][0]%>" 
 															disabled="<%=isAddNew%>" 
+															onmousedown="setButtonType(this)" 
+															onkeydown="setButtonType(this)" 
 															onclick="<%=forwardToSubmitForMultipleSpecimen%>" 
 															styleId="submitAndAddMultiple">
-						  				     	    
 											     	</html:button>
 												</td>
 												</logic:notEqual>		

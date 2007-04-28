@@ -339,7 +339,7 @@
 			var submitButton = document.getElementById("submitOnly");
 			var addSpecimenButton = document.getElementById("submitAndAdd");
 			// Patch ID: Bug#3184_35
-			var submitAndAddMultipleButton =  document.getElementById("submitAndAddMultiple");
+			var submitAndAddMultipleButton = document.getElementById("submitAndAddMultiple");
 			
 			var numberOfSpecimen = document.getElementById("numberOfSpecimen").value;
 			if(restrictCheckbox.checked)
@@ -365,6 +365,13 @@
 			{
 				disableButtonsOnCheck(restrictCheckbox);
 			}
+		}
+		//Patch ID: Bug#4227_4
+		//Description: This method sets the value of button id to the buttonType hidden variable.
+		//This method is called on the onkeydown or onmousedown of Add Multiple Specimen button.
+		function setButtonType(addButton)
+		{
+			document.getElementById("buttonType").value = addButton.id;
 		}
 	</script>
 </head>
@@ -865,7 +872,7 @@
 					</td>
 					<td class="formField" colspan="3">
 						<!-- html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimen"  /-->
-						<html:text  styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimens" onkeyup="disablebuttons()"/>
+						<html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimens" onkeyup="disablebuttons()"/>
 					</td>
 				</tr>			
 			</table>
@@ -896,6 +903,8 @@
 			<html:hidden property="receivedEventId"/>
 			<!-- Patch ID: Bug#3184_36 -->
 			<input type="hidden" id="actualNumberOfSpecimen" name="actualNumberOfSpecimen" value="<%=numberOfSpecimenCollection%>"/>
+			<!-- Patch ID: Bug#4227_4 -->
+			<html:hidden styleId="buttonType" property="buttonType"/>
 			
 		</tr>
 	</table>

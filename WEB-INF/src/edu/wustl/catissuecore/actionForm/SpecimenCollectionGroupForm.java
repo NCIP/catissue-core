@@ -140,11 +140,40 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 * See also: 1-8
 	 * Description: number of specimens field on scg form
 	*/
-	private int numberOfSpecimens = 1;
+	private int numberOfSpecimens;
 	
 	//Patch ID: Bug#3184_28
 	private String actualNumberOfSpecimen;
 	
+	/**
+	 * Name: Chetan Patil
+	 * Reviewer: Sachin Lale
+	 * Bug ID: Bug#4227
+	 * Patch ID: Bug#4227_1
+	 * Description: buttonType stores the id of the button only if button for Add Multiple Specimen
+	 * is clicked. If the value of this varaiable is null then the validation of number of specimen
+	 * against actual number of specimen requirements is skipped. 
+	 */
+	private String buttonType;
+	
+	/**
+	 * @return the buttonType
+	 */
+	public String getButtonType() {
+		return buttonType;
+	}
+
+
+
+	/**
+	 * @param buttonType the buttonType to set
+	 */
+	public void setButtonType(String buttonType) {
+		this.buttonType = buttonType;
+	}
+
+
+
 	/**
 	 * @return the numberOfSpecimens
 	 */
@@ -654,9 +683,11 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 * associated with the selected Study Calendar Event Point.
 	 * @param errors
 	 */
+	
 	private void validateNumberOfSpecimenField(ActionErrors errors) 
 	{
-		if(restrictSCGCheckbox != null)
+		// Patch ID: Bug#4227_2
+		if(restrictSCGCheckbox != null && (buttonType != null && buttonType.equals(Constants.SUBMIT_AND_ADD_MULTIPLE)))
 		{
 			if(restrictSCGCheckbox.equalsIgnoreCase(Constants.TRUE) && (numberOfSpecimens < Integer.parseInt(actualNumberOfSpecimen)))
 			{

@@ -1585,4 +1585,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGE_OF_STORAGE_TYPE = "pageOfStorageType";
 	public static final String PAGE_OF_USER = "pageOfUserAdmin";
 	
+	//Patch ID: Bug#4227_3
+	public static final String SUBMIT_AND_ADD_MULTIPLE = "submitAndAddMultiple";
+	
 	}
