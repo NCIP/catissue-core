@@ -1460,7 +1460,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		//Logger.out.debug("End-Inside validate method of specimen bizlogic");
 		
 		//Validating createdOn date
-		if(specimen.getCreatedOn() != null && !specimen.getLineage().equalsIgnoreCase(Constants.NEW_SPECIMEN))
+		if(specimen.getCreatedOn() != null && specimen.getLineage() != null && !specimen.getLineage().equalsIgnoreCase(Constants.NEW_SPECIMEN))
 		{
 			String tempDate = Utility.parseDateToString(specimen.getCreatedOn(),Constants.DATE_PATTERN_MM_DD_YYYY);
 			if(!validator.checkDate(tempDate))
