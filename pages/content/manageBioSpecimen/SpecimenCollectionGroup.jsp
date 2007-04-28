@@ -255,8 +255,7 @@
 				|| (collectionEventComments != collectionEventCommentsForm)
 				|| (receivedEventComments != receivedEventCommentsForm))
 			{	
-				var appResources = '<%=ApplicationProperties.getValue("specimenCollectionGroup.changeEvents.confirm")%>';			
-				
+				var appResources = "You have edited the event's data. Click OK to propagate this change to all the specimens of this Specimen Collection Group.";
 				var answer = confirm(appResources);
 				if(answer)
 				{
