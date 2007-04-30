@@ -16,3 +16,13 @@ alter table CATISSUE_COLL_PROT_EVENT add constraint CPID_LABEL_KEY unique (COLLE
 /*  Name: Shital Lawhale Bug ID: 3549 */
 /*  Description : A ATTRIBUTE ORDER field in CATISSUE_SEARCH_DISPLAY_DATA .*/
 alter table CATISSUE_SEARCH_DISPLAY_DATA add ATTRIBUTE_ORDER number(5,0);
+
+/*Patch ID: SimpleSearchEdit_17*/
+/*Adding Metadata table required for the Simple search edit feature.*/
+/*This table contains information about the columns to be hyperlinked for the given table.*/
+drop table CATISSUE_QUERY_EDITLINK_COLS;
+CREATE TABLE CATISSUE_QUERY_EDITLINK_COLS
+(
+      TABLE_ID number(30), 
+      COL_ID number(30)
+);

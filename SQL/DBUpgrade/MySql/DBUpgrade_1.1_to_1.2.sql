@@ -46,3 +46,13 @@ where update_date = '0000-00-00';
 update CSM_USER_GROUP_ROLE_PG
 set update_date = '2005-01-01'
 where update_date = '0000-00-00';
+
+/*Patch ID: SimpleSearchEdit_16*/
+/*Adding Metadata table required for the Simple search edit feature.*/
+/*This table contains information about the columns to be hyperlinked for the given table.*/
+drop table if exists CATISSUE_QUERY_EDITLINK_COLS;
+CREATE TABLE CATISSUE_QUERY_EDITLINK_COLS
+(
+      TABLE_ID bigint not null, 
+      COL_ID bigint not null
+);
