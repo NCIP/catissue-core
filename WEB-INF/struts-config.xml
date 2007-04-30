@@ -231,7 +231,7 @@ PUBLIC
 			<forward name="pageOfParticipantQuery" path=".catissuecore.participantEditDef" />
 			<forward name="pageOfParticipantCPQuery" path=".catissuecore.participantEditDef" />
 			<forward name="failure" path=".catissuecore.participantDef" />
-			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+			<forward name="access_denied" path=".catissuecore.manageBioSpecimenHomeDef" />
 		</action>
 		
 		<action path="/ParticipantAdd"
@@ -320,7 +320,7 @@ PUBLIC
 			<forward name="pageOfCollectionProtocolRegistration" path=".catissuecore.collectionProtocolRegistrationDef" />
 			<forward name="pageOfCollectionProtocolRegistrationCPBased" path=".catissuecore.collectionProtocolRegistrationDefCPBased" />
 			<forward name="failure" path=".catissuecore.collectionProtocolRegistrationDef" />
-			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+			<forward name="access_denied" path=".catissuecore.manageBioSpecimenHomeDef" />
 		</action>
 
 		<action path="/CollectionProtocolRegistrationAdd"
@@ -775,7 +775,7 @@ PUBLIC
 			<forward name="pageOfSpecimenCollectionGroupQuery" path=".catissuecore.specimenCollectionGroupEditDef" />
 			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.specimenCollectionGroupEditDef" />			
 			<forward name="failure" path=".catissuecore.specimenCollectionGroupDef" />
-			<forward name="access_denied" path="/ManageBioSpecimen.do" />
+			<forward name="access_denied" path=".catissuecore.manageBioSpecimenHomeDef" />
 		</action>
 
 		<action path="/SpecimenCollectionGroupAdd"
@@ -2209,8 +2209,7 @@ PUBLIC
 			<forward name="pageOfStorageContainer" path="/StorageContainerSearch.do"/>
 			<forward name="pageOfStorageType" path="/StorageTypeSearch.do"/>
 			<forward name="pageOfUserAdmin" path="/UserSearch.do"/>
-
-			<forward name="failure" path="/QueryParticipant.do?operation=view&amp;pageOf=query"/>
+			<forward name="access_denied" path="/SimpleQueryInterface.do" />
 		</action>
 		<!--Query Result View Actions End-->
 		
