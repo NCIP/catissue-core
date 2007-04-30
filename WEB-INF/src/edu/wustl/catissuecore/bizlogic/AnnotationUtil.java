@@ -16,10 +16,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import net.sf.hibernate.Session;
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
-import edu.common.dynamicextensions.domain.Entity;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
@@ -38,10 +35,13 @@ import edu.wustl.cab2b.server.path.PathFinder;
 import edu.wustl.catissuecore.util.querysuite.EntityCacheFactory;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.HibernateDAO;
-import edu.wustl.common.querysuite.metadata.path.IPath;
 import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.global.Constants;
 
+/**
+ * @author vishvesh_mulay
+ *
+ */
 public class AnnotationUtil
 {
 
@@ -52,16 +52,26 @@ public class AnnotationUtil
      * @throws DynamicExtensionsSystemException
      * @throws DynamicExtensionsApplicationException
      */
-    public static Long addAssociation(Long staticEntityId, Long dynamicEntityId)
+    public static synchronized Long addAssociation(Long staticEntityId, Long dynamicEntityId)
             throws DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException
     {
         EntityManagerInterface entityManager = EntityManager.getInstance();
-        EntityInterface staticEntity = EntityCacheFactory.getInstance().getEntityById(staticEntityId);
+        EntityInterface staticEntity = EntityCacheFactory.getInstance()
+                .getEntityById(staticEntityId);
         EntityInterface dynamicEntity = (entityManager
                 .getContainerByIdentifier(dynamicEntityId.toString()))
                 .getEntity();
-        dynamicEntity.addEntityGroupInterface((EntityGroupInterface) staticEntity.getEntityGroupCollection().iterator().next());
+        dynamicEntity
+                .addEntityGroupInterface((EntityGroupInterface) staticEntity
+                        .getEntityGroupCollection().iterator().next());
+        Collection<AssociationInterface> associationCollection = dynamicEntity
+        .getAssociationCollection();
+        for (AssociationInterface associationInteface : associationCollection)
+        {
+            associationInteface.getTargetEntity().addEntityGroupInterface((EntityGroupInterface) staticEntity
+                        .getEntityGroupCollection().iterator().next());
+        }
         String roleName = staticEntityId.toString().concat("_").concat(
                 dynamicEntityId.toString());
         RoleInterface sourceRole = getRole(AssociationType.ASSOCIATION,
@@ -71,26 +81,66 @@ public class AnnotationUtil
         AssociationInterface association = getAssociation(dynamicEntity,
                 AssociationDirection.SRC_DESTINATION, roleName, sourceRole,
                 targetRole);
-        ConstraintPropertiesInterface constraintProperties = getConstraintProperties(staticEntity,dynamicEntity);
+        ConstraintPropertiesInterface constraintProperties = getConstraintProperties(
+                staticEntity, dynamicEntity);
         association.setConstraintProperties(constraintProperties);
         staticEntity.addAssociation(association);
         Long start = new Long(System.currentTimeMillis());
-        staticEntity = EntityManager.getInstance().persistEntityMetadata(staticEntity,true);
+        staticEntity = EntityManager.getInstance().persistEntityMetadata(
+                staticEntity, true);
         Long end = new Long(System.currentTimeMillis());
-        System.out.println("Time required to persist one entity is " + (end - start)/1000 + "seconds");
+        System.out.println("Time required to persist one entity is "
+                + (end - start) / 1000 + "seconds");
         EntityManager.getInstance().addAssociationColumn(association);
-        Collection collection = EntityManager.getInstance()
-        .getAssociation(staticEntity.getName(), roleName);
-         association = (AssociationInterface) collection.iterator().next();
-         AnnotationUtil.addPathsForQuery(staticEntityId, dynamicEntity.getId(),association.getId());
+//        Collection collection = EntityManager.getInstance().getAssociation(
+//                staticEntity.getName(), roleName);
+//        association = (AssociationInterface) collection.iterator().next();
+        Collection<AssociationInterface> staticEntityAssociation = staticEntity.getAssociationCollection();
+        for (AssociationInterface tempAssociation : staticEntityAssociation)
+        {
+            if (tempAssociation.getName().equals(association.getName()))
+            {
+                association = tempAssociation;
+                break;
+            }
+        }
+        
+        start = new Long(System.currentTimeMillis());
+        AnnotationUtil.addPathsForQuery(staticEntityId, dynamicEntity.getId(),
+                association.getId());
+        associationCollection = dynamicEntity
+                .getAssociationCollection();
+        for (AssociationInterface associationInteface : associationCollection)
+        {
+            AnnotationUtil.addPathsForQuery(dynamicEntity.getId(),
+                    associationInteface.getTargetEntity().getId(),
+                    associationInteface.getId());
+        }
+        end = new Long(System.currentTimeMillis());
+        System.out.println("Time required to add complete paths is"
+                + (end - start) / 1000 + "seconds");
+        start = new Long(System.currentTimeMillis());
+        EntityCache.getInstance().refreshCache();
+        PathFinder.getInstance().refreshCache();
+        end = new Long(System.currentTimeMillis());
+        System.out.println("Time required to refresh cache is "
+                + (end - start) / 1000 + "seconds");
         return association.getId();
     }
 
-    private static ConstraintPropertiesInterface getConstraintProperties(EntityInterface staticEntity, EntityInterface dynamicEntity)
+    /**
+     * @param staticEntity
+     * @param dynamicEntity
+     * @return
+     */
+    private static ConstraintPropertiesInterface getConstraintProperties(
+            EntityInterface staticEntity, EntityInterface dynamicEntity)
     {
-        ConstraintPropertiesInterface cp = DomainObjectFactory.getInstance().createConstraintProperties();
+        ConstraintPropertiesInterface cp = DomainObjectFactory.getInstance()
+                .createConstraintProperties();
         cp.setName(dynamicEntity.getTableProperties().getName());
-        cp.setTargetEntityKey("DYEXTN_AS_"+staticEntity.getId().toString()+"_"+dynamicEntity.getId().toString());
+        cp.setTargetEntityKey("DYEXTN_AS_" + staticEntity.getId().toString()
+                + "_" + dynamicEntity.getId().toString());
         return cp;
     }
 
@@ -102,7 +152,7 @@ public class AnnotationUtil
      * @param targetRole
      * @return
      */
-    public static AssociationInterface getAssociation(
+    private static AssociationInterface getAssociation(
             EntityInterface targetEntity,
             AssociationDirection associationDirection, String assoName,
             RoleInterface sourceRole, RoleInterface targetRole)
@@ -124,7 +174,7 @@ public class AnnotationUtil
      * @param maxCard maxCard
      * @return  RoleInterface
      */
-    public static RoleInterface getRole(AssociationType associationType,
+    private static RoleInterface getRole(AssociationType associationType,
             String name, Cardinality minCard, Cardinality maxCard)
     {
         RoleInterface role = DomainObjectFactory.getInstance().createRole();
@@ -135,7 +185,12 @@ public class AnnotationUtil
         return role;
     }
 
-    public static void addPathsForQuery(Long staticEntityId,
+    /**
+     * @param staticEntityId
+     * @param dynamicEntityId
+     * @param deAssociationID
+     */
+    private static void addPathsForQuery(Long staticEntityId,
             Long dynamicEntityId, Long deAssociationID)
     {
         Long maxPathId = getMaxId("path_id", "path");
@@ -154,14 +209,11 @@ public class AnnotationUtil
             Long dynamicEntityId, Long deAssociationID)
     {
         StringBuffer query = new StringBuffer();
-        Long intraModelAssociationId = getMaxId("ASSOCIATION_ID",
-                "ASSOCIATION");
+        Long intraModelAssociationId = getMaxId("ASSOCIATION_ID", "ASSOCIATION");
         intraModelAssociationId += 1;
-        Session session;
         try
         {
-            session = DBUtil.currentSession();
-            Connection conn = session.connection();
+            Connection conn = DBUtil.getConnection();
 
             String associationQuery = "insert into ASSOCIATION (ASSOCIATION_ID, ASSOCIATION_TYPE) values ("
                     + intraModelAssociationId
@@ -180,15 +232,12 @@ public class AnnotationUtil
             list.add(associationQuery);
             list.add(intraModelQuery);
             list.add(directPathQuery);
-            
+
             executeQuery(conn, list);
             maxPathId += 1;
             addIndirectPaths(maxPathId, staticEntityId, dynamicEntityId,
                     intraModelAssociationId, conn);
             conn.commit();
-            
-            EntityCache.getInstance().refreshCache();
-            PathFinder.getInstance().refreshCache();
         }
         catch (Exception e)
         {
@@ -260,7 +309,7 @@ public class AnnotationUtil
         Statement statement = conn.createStatement();
         for (String query : queryList)
         {
-           statement.execute(query);
+            statement.execute(query);
         }
         statement.close();
     }
@@ -277,8 +326,7 @@ public class AnnotationUtil
                 .getDAO(Constants.HIBERNATE_DAO);
         try
         {
-            Session session = DBUtil.currentSession();
-            Connection conn = session.connection();
+            Connection conn = DBUtil.getConnection();
             java.sql.PreparedStatement statement = conn.prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
