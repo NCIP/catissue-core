@@ -39,7 +39,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class EventsUtil
 {
-	public static void validateCollectionEvent(ActionErrors errors, Validator validator, long collectionEventUserId, String collectionEventdateOfEvent,String collectionEventCollectionProcedure )
+	public static void validateCollectionEvent(ActionErrors errors, Validator validator, long collectionEventUserId, String collectionEventdateOfEvent,String collectionEventCollectionProcedure,String collectionTime )
 	{
        	if ((collectionEventUserId) == -1L)
         {
@@ -47,7 +47,7 @@ public class EventsUtil
         }
        	if (!validator.checkDate(collectionEventdateOfEvent) )
        	{
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Collection Event's date"));
+       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid","Collection Event's date"));
        	}
 
      	// checks the collectionProcedure
@@ -55,9 +55,17 @@ public class EventsUtil
         {
        		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectioneventparameters.collectionprocedure")));
         }
+        /* Bug id: 4179
+			patch id: 4179_1*/    
+      	if(!validator.isValidTime(collectionTime, Constants.TIME_PATTERN_HH_MM_SS))
+      	{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+					ApplicationProperties.getValue("collectionEvent.invalidTime")));
+      	}
+		
 
 	}
-	public static void validateReceivedEvent(ActionErrors errors, Validator validator,long receivedEventUserId,String receivedEventDateOfEvent, String receivedEventReceivedQuality )
+	public static void validateReceivedEvent(ActionErrors errors, Validator validator,long receivedEventUserId,String receivedEventDateOfEvent, String receivedEventReceivedQuality,String receivedTime )
 	{
        	if ((receivedEventUserId) == -1L)
         {
@@ -65,14 +73,21 @@ public class EventsUtil
         }
        	if (!validator.checkDate(receivedEventDateOfEvent) )
        	{
-       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required","Received Event's date"));
+       		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid","Received Event's date"));
        	}
 
      	// checks the collectionProcedure
       	if (!validator.isValidOption( receivedEventReceivedQuality ) )
         {
        		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("receivedeventparameters.receivedquality")));
-        }				
+        }
+        /* Bug id: 4179
+			patch id: 4179_2*/  
+      	if(!validator.isValidTime(receivedTime, Constants.TIME_PATTERN_HH_MM_SS))
+      	{
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
+					ApplicationProperties.getValue("receivedTime.invalidTime")));
+      	}
 	}
 	/**
 	 * 
@@ -106,11 +121,15 @@ public class EventsUtil
 		{
 			CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
 			collectionEventParameters.getUser();
-			if (collectionEventParameters.getUser() == null || collectionEventParameters.getUser().getId() == null)
+			/* Bug id: 4179
+			patch id: 4179_3*/  
+			//Collector validation
+			if (collectionEventParameters.getUser() == null || collectionEventParameters.getUser().getId() == null || collectionEventParameters.getUser().getId() == 0)
 			{
 				String message = ApplicationProperties.getValue("specimen.collection.event.user");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 			}
+			//Date validation
 			if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
 			{
 
@@ -122,19 +141,18 @@ public class EventsUtil
 			{
 				String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-			}
+			}			
 			List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
 			if (!Validator.isEnumeratedValue(procedureList, collectionEventParameters.getCollectionProcedure()))
 			{
 				throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
 			}
-
+			//Container validation
 			if (!validator.isValidOption(collectionEventParameters.getContainer()))
 			{
 				String message = ApplicationProperties.getValue("collectioneventparameters.container");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 			}
-
 			List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
 			if (!Validator.isEnumeratedValue(containerList, collectionEventParameters.getContainer()))
 			{
@@ -146,7 +164,9 @@ public class EventsUtil
 		else if (eventObject instanceof ReceivedEventParameters)
 		{
 			ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
-			if (receivedEventParameters.getUser() == null || receivedEventParameters.getUser().getId() == null)
+			/* Bug id: 4179
+			patch id: 4179_4*/  
+			if (receivedEventParameters.getUser() == null || receivedEventParameters.getUser().getId() == null || receivedEventParameters.getUser().getId() == 0)
 			{
 				String message = ApplicationProperties.getValue("specimen.recieved.event.user");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
