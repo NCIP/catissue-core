@@ -583,6 +583,9 @@ public class APIDemo
 		
 		collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 
+		//Setting collection point label
+		collectionProtocolEvent.setCollectionPointLabel("User entered value");
+		
 		collectionProtocolEventCollectionSet.add(collectionProtocolEvent);
 		collectionProtocol
 				.setCollectionProtocolEventCollection(collectionProtocolEventCollectionSet);
@@ -597,7 +600,7 @@ public class APIDemo
 		User protocolCordinator = (User)ClientDemo.dataModelObjectMap.get("User1");
 		Collection protocolCordinatorCollection = new HashSet();
 		protocolCordinatorCollection.add(protocolCordinator);
-		collectionProtocol.setUserCollection(protocolCordinatorCollection);
+		collectionProtocol.setUserCollection(protocolCordinatorCollection);		
 		return collectionProtocol;
 	}
 
