@@ -610,8 +610,6 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		eventsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		eventsPanel.add(eventsButton); 
 		
-		eventsPanel.setToolTipText("dsdsadsfdf"); 
-		
 		//External Identifier
 		label = (String) buttonStatusMap.get(actualPageNo + AppletConstants.MULTIPLE_SPECIMEN_BUTTON_MAP_KEY_SEPARATOR
 				+ AppletConstants.MULTIPLE_SPECIMEN_EXTERNAL_IDENTIFIERS_STRING);
