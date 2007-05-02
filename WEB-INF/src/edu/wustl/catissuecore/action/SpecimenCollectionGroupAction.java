@@ -280,12 +280,19 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			String participantProtocolId = (String) forwardToHashMap.get("participantProtocolId");
 
 			specimenCollectionGroupForm.setCollectionProtocolId(collectionProtocolId.longValue());
+			/**
+			 * Name : Deepti Shelar
+			 * Bug id : 4216
+			 * Patch id  : 4216_1
+			 * Description : populating list of ParticipantMedicalIdentifiers for given participant id 
+			 */
+			loadParticipantMedicalIdentifier(participantId,bizLogic, request);
 
 			if(participantId != null && participantId.longValue() != 0)
 			{    
 				//Populating the participants registered to a given protocol
 				loadPaticipants(collectionProtocolId.longValue(), bizLogic, request);
-
+				
 				loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 
 				specimenCollectionGroupForm.setParticipantId(participantId.longValue());
@@ -617,7 +624,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		}
 
 	}
-
+	
 	private void loadPaticipants(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
