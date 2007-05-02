@@ -447,10 +447,13 @@ public class NewSpecimenForm extends SpecimenForm
              	//Mandar 18-July-06: AutoEvents: 
              	if(operation.equalsIgnoreCase(Constants.ADD  ) )
              	{
+//             		Time validation
+        			String collectionTime = this.collectionEventTimeInHours+":"+this.collectionEventTimeInMinutes+":00";
+        			String receivedTime = this.receivedEventTimeInHours+":"+this.receivedEventTimeInMinutes+":00";
              		//CollectionEvent validation.
-            		EventsUtil.validateCollectionEvent(errors,validator,collectionEventUserId,collectionEventdateOfEvent,collectionEventCollectionProcedure);
+            		EventsUtil.validateCollectionEvent(errors,validator,collectionEventUserId,collectionEventdateOfEvent,collectionEventCollectionProcedure,collectionTime);
             		//ReceivedEvent validation
-            		EventsUtil.validateReceivedEvent(errors,validator,receivedEventUserId,receivedEventDateOfEvent,receivedEventReceivedQuality );
+            		EventsUtil.validateReceivedEvent(errors,validator,receivedEventUserId,receivedEventDateOfEvent,receivedEventReceivedQuality,receivedTime );
              	}
              	//Validation for aliquot quantity, resolved bug# 4040 (Virender)	
              	if(checkedButton)

@@ -632,11 +632,14 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 * Patch ID: 2741_4	 
 	 * Description: Methods for validation of events in scg
 	*/
+			//Time validation
+			String collectionTime = this.collectionEventTimeInHours+":"+this.collectionEventTimeInMinutes+":00";
+			String receivedTime = this.receivedEventTimeInHours+":"+this.receivedEventTimeInMinutes+":00";
 //			CollectionEvent validation.
-    		EventsUtil.validateCollectionEvent(errors,validator,collectionEventUserId,collectionEventdateOfEvent,collectionEventCollectionProcedure);
+    		EventsUtil.validateCollectionEvent(errors,validator,collectionEventUserId,collectionEventdateOfEvent,collectionEventCollectionProcedure,collectionTime);
     		//ReceivedEvent validation
-    		EventsUtil.validateReceivedEvent(errors,validator,receivedEventUserId,receivedEventDateOfEvent,receivedEventReceivedQuality );
-			
+    		EventsUtil.validateReceivedEvent(errors,validator,receivedEventUserId,receivedEventDateOfEvent,receivedEventReceivedQuality,receivedTime );	
+    		    		
 			//Added by Ashish for Multiple Specimens
 			/**
 			 * Name : Ashish Gupta
