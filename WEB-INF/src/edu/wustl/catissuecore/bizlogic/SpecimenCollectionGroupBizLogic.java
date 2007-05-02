@@ -768,9 +768,10 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	 * @param eventPoint event point in no of days
 	 * @param collectionPointLabel String label of collection event point
 	 */
-	private void createTreeNodeForFutureSCG(Vector treeData, Long eventId, Double eventPoint, String collectionPointLabel) {
+	private void createTreeNodeForFutureSCG(Vector treeData, Long eventId, Double eventPoint, String collectionPointLabel) 
+	{
 		Long futureSCGId = new Long(0);
-		String futureSCGName = eventPoint + "_" +collectionPointLabel;
+		String futureSCGName = "T"+eventPoint + ": " +collectionPointLabel;
 		String scgActivityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
 		String toolTipText = getToolTipText(eventPoint.toString(),collectionPointLabel,null);
 		setQueryTreeNode(futureSCGId.toString()+":"+eventId.toString()+":"+Constants.FUTURE_SCG, Constants.SPECIMEN_COLLECTION_GROUP, futureSCGName, "0", null, null, null, scgActivityStatus, toolTipText,treeData);
@@ -812,7 +813,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 						{
 							ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)temp;
 							receivedDate = Utility.parseDateToString(receivedEventParameters.getTimestamp(),"yyyy-MM-dd");
-							scgNodeLabel = eventPoint + "_" +collectionPointLabel + "_" + receivedDate; 
+							scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate; 
 						}    					
 					}
 					String toolTipText = getToolTipText(eventPoint.toString(),collectionPointLabel,receivedDate);
