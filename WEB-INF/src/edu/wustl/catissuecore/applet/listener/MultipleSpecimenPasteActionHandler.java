@@ -160,7 +160,15 @@ public class MultipleSpecimenPasteActionHandler extends AbstractPasteActionHandl
 										+ AppletConstants.MULTIPLE_SPECIMEN_EVENTS_STRING);
 								if (status == null)
 								{
-									status = AppletConstants.ADD;
+									/**
+									 * Name : Vijay_Pande
+									 * Reviewer Name : Sachin_Lale
+									 * Bug ID: 4241
+									 * Patch ID: 4241_1 
+									 * See also: 1-4
+									 * Description: Changed button name to "EDIT"
+									 */
+									status = AppletConstants.EDIT;
 								}
 								pastedColumnModel.setEditCaptionFromJS("events", status, multipleSpecimenTableModel);
 							}
