@@ -225,7 +225,9 @@ public class ClientDemo
 			testAddDistributionWithClosedDistributionProtocol();
 			
 			testAddSpecimenWithInvalidCreatedOnDate();
-			testAddSCGWithWrongEvents();					
+			testAddSCGWithWrongEvents();	
+			testAddCollectionProtocolWithWrongCollectionPointLabel();
+			testAddCollectionProtocolWithDuplicateCollectionPointLabel();
 		}
 		catch(Exception ex)
 		{
@@ -1201,6 +1203,63 @@ public class ClientDemo
 			catch(Exception e)
 			{
 				writeSuccessfullOperationToReport(specimenCollectionGroupObj,insertValidateOperation + " testAddSCGWithWrongEvents");
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+			}
+	 	}
+	 	private void testAddCollectionProtocolWithWrongCollectionPointLabel()
+	 	{
+	 		CollectionProtocol collectionProtocolObj = null;
+			try
+			{
+				collectionProtocolObj = (CollectionProtocol)api.initCollectionProtocol();
+				Collection collectioneventColl = collectionProtocolObj.getCollectionProtocolEventCollection();
+				Iterator iter = collectioneventColl.iterator();
+				while(iter.hasNext())
+				{
+					CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)iter.next();
+					collectionProtocolEvent.setCollectionPointLabel(null);
+				}				
+				setLogger(collectionProtocolObj);
+				Logger.out.info("Inserting domain object------->"+collectionProtocolObj);
+				collectionProtocolObj =  (CollectionProtocol) appService.createObject(collectionProtocolObj);
+				writeFailureOperationsToReport("CollectionProtocol",insertValidateOperation + " testAddCollectionProtocolWithWrongCollectionPointLabel");
+				//dataModelObjectMap.put("CollectionProtocol",collectionProtocolObj);
+				//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + collectionProtocolObj.getId().toString());
+			//+ collectionProtocolObj.getId().longValue() + " ::  Name :: " + collectionProtocolObj.getName());
+			}
+			catch(Exception e)
+			{
+				writeSuccessfullOperationToReport(collectionProtocolObj,insertValidateOperation + " testAddCollectionProtocolWithWrongCollectionPointLabel");
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+			}
+	 	}
+	 	private void testAddCollectionProtocolWithDuplicateCollectionPointLabel()
+	 	{
+	 		CollectionProtocol collectionProtocolObj = null;
+			try
+			{
+				collectionProtocolObj = (CollectionProtocol)api.initCollectionProtocol();
+				Collection collectioneventColl = collectionProtocolObj.getCollectionProtocolEventCollection();
+			
+				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)ClientDemo.dataModelObjectMap.get("CollectionProtocolEvent");
+				collectionProtocolEvent.setCollectionPointLabel("User entered value");
+						
+				collectioneventColl.add(collectionProtocolEvent);
+				collectionProtocolObj.setCollectionProtocolEventCollection(collectioneventColl);
+				
+				setLogger(collectionProtocolObj);
+				Logger.out.info("Inserting domain object------->"+collectionProtocolObj);
+				collectionProtocolObj =  (CollectionProtocol) appService.createObject(collectionProtocolObj);
+				writeFailureOperationsToReport("CollectionProtocol",insertValidateOperation + " testAddCollectionProtocolWithDuplicateCollectionPointLabel");
+				//dataModelObjectMap.put("CollectionProtocol",collectionProtocolObj);
+				//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + collectionProtocolObj.getId().toString());
+			//+ collectionProtocolObj.getId().longValue() + " ::  Name :: " + collectionProtocolObj.getName());
+			}
+			catch(Exception e)
+			{
+				writeSuccessfullOperationToReport(collectionProtocolObj,insertValidateOperation + " testAddCollectionProtocolWithDuplicateCollectionPointLabel");
 				Logger.out.error(e.getMessage(),e);
 				e.printStackTrace();
 			}
