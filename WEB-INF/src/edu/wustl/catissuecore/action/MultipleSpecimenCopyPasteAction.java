@@ -83,10 +83,21 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 						value = eventsMap.get(multipleSpecimenTableModel.getKey(copiedRow, copiedColumn));
 						buttonsMap.put(key, value);
 						/**
-						 * update toolTip map with the coppied columns tooltip
+						 * Name : Vijay_Pande
+						 * Reviewer Name : Sachin_Lale
+						 * Bug ID: 4191
+						 * Patch ID: 4191_1 
+						 * See also: 1-2
+						 * Description: If values in column model are not edited previously then we get null NewSpecimenForm. There fore following check is added.
 						 */
-						String toolTip=Utility.getToolTipText((MultipleSpecimenForm)value);
-						toolTipMap.put(AppletConstants.SPECIMEN_PREFIX+String.valueOf(copiedColumn+1)+"_eventsToolTip", toolTip);
+						if(value!=null)
+						{
+							/**
+							 * update toolTip map with the coppied columns tooltip
+							 */
+							String toolTip=Utility.getToolTipText((MultipleSpecimenForm)value);
+							toolTipMap.put(AppletConstants.SPECIMEN_PREFIX+String.valueOf(copiedColumn+1)+"_eventsToolTip", toolTip);
+						}
 					}
 					else if (copiedRow == AppletConstants.SPECIMEN_DERIVE_ROW_NO)
 					{
@@ -207,10 +218,21 @@ public class MultipleSpecimenCopyPasteAction extends BaseAppletAction
 						value = buttonsMap.get(key);
 						eventsMap.put(multipleSpecimenTableModel.getKey(pastedRow, pastedColumn), value);
 						/**
-						 * update toolTip map with the coppied columns tooltip
+						 * Name : Vijay_Pande
+						 * Reviewer Name : Sachin_Lale
+						 * Bug ID: 4191
+						 * Patch ID: 4191_2 
+						 * See also: 1-2
+						 * Description: If values in column model are not edited previously then we get null NewSpecimenForm. There fore following check is added.
 						 */
-						String toolTip=(String)Utility.getToolTipText((MultipleSpecimenForm)value);
-						toolTipMap.put(AppletConstants.SPECIMEN_PREFIX+String.valueOf(pastedColumn+1)+"_eventsToolTip", toolTip);
+						if(value!=null)
+						{
+							/**
+							 * update toolTip map with the coppied columns tooltip
+							 */
+							String toolTip=(String)Utility.getToolTipText((MultipleSpecimenForm)value);
+							toolTipMap.put(AppletConstants.SPECIMEN_PREFIX+String.valueOf(pastedColumn+1)+"_eventsToolTip", toolTip);
+						}
 					}
 					else if (copiedRow == AppletConstants.SPECIMEN_DERIVE_ROW_NO)
 					{
