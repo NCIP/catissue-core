@@ -47,6 +47,9 @@ update CSM_USER_GROUP_ROLE_PG
 set update_date = '2005-01-01'
 where update_date = '0000-00-00';
 
+#-- Aarti Assigning technician role to technicians on public data group
+INSERT INTO `CSM_USER_GROUP_ROLE_PG` (`GROUP_ID`,`ROLE_ID`,`PROTECTION_GROUP_ID`,`UPDATE_DATE`) VALUES (3,3,20,'2005-08-24');
+
 /*Patch ID: SimpleSearchEdit_16*/
 /*Adding Metadata table required for the Simple search edit feature.*/
 /*This table contains information about the columns to be hyperlinked for the given table.*/
