@@ -653,9 +653,7 @@ public class Utility extends edu.wustl.common.util.Utility
     public static Object toNewGridFormatWithHref(List<String> row, Map<Integer, QueryResultObjectData> hyperlinkColumnMap, int index)
     {
     	Object obj = row.get(index);
-    	
-    	
-    	
+
     	if (obj instanceof String)
     	{
 	    	obj = toNewGridFormat(obj);
@@ -668,8 +666,17 @@ public class Utility extends edu.wustl.common.util.Utility
 	    		if (obj==null || obj.equals(""))
 	        		obj="NA";
 	    		
-	    		String link = "SimpleSearchEdit.do?"+edu.wustl.common.util.global.Constants.TABLE_ALIAS_NAME + "="+queryResultObjectData.getAliasName()
-	    			+"&" + Constants.SYSTEM_IDENTIFIER + "="+row.get(queryResultObjectData.getIdentifierColumnId());
+				/**
+				 * Name : Prafull
+				 * Bug ID: 4223
+				 * Patch ID: 4223_1
+				 * Description: Edit User: password fields empty & error on submitting new password
+				 * 		Added PageOf Attribute as request parameter in the link.
+				 */
+	    		String aliasName = queryResultObjectData.getAliasName();
+				String link = "SimpleSearchEdit.do?"+edu.wustl.common.util.global.Constants.TABLE_ALIAS_NAME + "="+aliasName
+	    			+"&" + Constants.SYSTEM_IDENTIFIER + "="+row.get(queryResultObjectData.getIdentifierColumnId())
+	    			+"&" + Constants.PAGE_OF + "="+ Variables.aliasAndPageOfMap.get(aliasName);
 	    		 
 	    		String onclickStr = " onclick=javascript:NewWindow('" + link + "','name','800','600','yes') ";
 				String hrefTag = "<a class='normalLink' href='#'"+ onclickStr + ">"+obj+"</a>"; 
