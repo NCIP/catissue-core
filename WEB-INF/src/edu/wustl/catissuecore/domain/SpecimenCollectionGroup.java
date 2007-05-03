@@ -11,8 +11,6 @@
 package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
-import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -21,7 +19,6 @@ import java.util.Iterator;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
