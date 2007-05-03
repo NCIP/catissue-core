@@ -3494,6 +3494,7 @@ PUBLIC
 		<forward name="specimen" path=".catissuecore.multipleSpecimenCPQueryDef" />
 		
 	</action>
+	<!-- Patch ID: Bug#4129_3 -->
 	<action path="/CPQuerySpecimenCollectionGroupForTech"
 		type="edu.wustl.catissuecore.action.SpecimenCollectionGroupForTechAction"
 		name="specimenCollectionGroupForm"
@@ -3501,7 +3502,7 @@ PUBLIC
 		scope="request">
 		<forward name="success" path=".catissuecore.specimenCollectionGroupTechDef" />
 		<forward name="failure" path=".catissuecore.specimenCollectionGroupTechDef" />
-		<forward name="access_denied" path="/QueryManageBioSpecimen.do" />
+		<forward name="access_denied" path="/pages/content/manageBioSpecimen/Home.jsp" />
 	</action>
 <!-- Bug Id 2741-->
 	<action path="/GetEventsFromScg" 
