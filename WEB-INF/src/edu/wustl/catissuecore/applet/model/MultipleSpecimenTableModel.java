@@ -168,6 +168,17 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
         }
 		/** -- patch ends here */
 				
+		// Set the Specimen Collection Group name in to the Table Model.
+		String specimenCollectionGroupName = (String)specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME);
+		if (specimenCollectionGroupName != null)
+		{
+			setSpecimenCollectionGroupName(specimenCollectionGroupName);
+			for(int count = 1; count <= initialColumnCount; count++)
+			{
+				setCollectionGroupInModel(count);
+			}
+		}
+		
 		// Patch ID: Bug#3184_20
 		// If the restrict checkbox on Specimen Collection Group is checked, then set restricted values in the specimenMap
 		int noOfSpecimenRequirments = 0;
@@ -686,11 +697,11 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	// -----------------------POC for copy paste end
 	
 	private void setCollectionGroupInModel(int column)
-	{//todo
+	{
 		if(specimenCollectionGroupName != null)
 		{
 			String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO];
-			specimenMap.put(specimenKey, specimenCollectionGroupName );	
+			specimenMap.put(specimenKey, specimenCollectionGroupName);	
 		}
 	}
 	
@@ -1125,16 +1136,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	private int initializeAppletWithRestrictedValues(int initialColumnCount)
 	{
-		String specimenCollectionGroupName = (String)specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME);
-		if (specimenCollectionGroupName != null)
-		{
-			setSpecimenCollectionGroupName(specimenCollectionGroupName);
-			for(int count = 1; count <= initialColumnCount; count++)
-			{
-				setCollectionGroupInModel(count);
-			}
-		}
-		
 		int noOfSpecimenRequirments = 0;
 		Map<String, Map<String, String>> restrictedValuesMap = (Map<String, Map<String, String>>)specimenAttributeOptions.get(Constants.KEY_RESTRICTED_VALUES);
 		if(restrictedValuesMap != null)
@@ -1159,6 +1160,10 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 				
 				String pathologicalStatus = specimenRequirementDataMap.get(Constants.KEY_PATHOLOGICAL_STATUS);
 				setDataInModel(index, AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO, pathologicalStatus);
+				
+				// Patch ID: Bug#4245_7
+				String quantity = specimenRequirementDataMap.get(Constants.KEY_QUANTITY);
+				setDataInModel(index, AppletConstants.SPECIMEN_QUANTITY_ROW_NO, quantity);
 			}
 		}
 		
