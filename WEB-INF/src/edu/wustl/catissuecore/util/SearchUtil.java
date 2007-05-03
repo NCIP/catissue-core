@@ -266,6 +266,13 @@ public class SearchUtil
 				searchFieldData[5] = initSearchUIData(SearchUtil.NUMERIC, "specimen.concentration","Specimen","CONCENTRATION","concentration",Constants.DATE_NUMERIC_OPERATORS,"","");
 				searchFieldData[6] = initSearchUIData(SearchUtil.NUMERIC, "specimen.availableQuantity","Specimen","AVAILABLE_QUANTITY","availableQuantity",Constants.DATE_NUMERIC_OPERATORS,"","");
 				searchFieldData[7] = initSearchUIData(SearchUtil.NUMERIC, "specimen.quantity","Specimen","QUANTITY","quantity",Constants.DATE_NUMERIC_OPERATORS,"","");
+				/**
+				 * Name : Prafull
+				 * Bug ID: 4171
+				 * Patch ID: 4171_4
+				 * Description: Adding Specimen.createdOn attribute in the Advance Search.
+				 */
+		        searchFieldData[3] = initSearchUIData(SearchUtil.DATE,   "specimen.createdDate","Specimen","CREATED_ON_DATE","createdDate",Constants.DATE_NUMERIC_OPERATORS,"","");		        
 				searchFieldData[8] = initSearchUIData(SearchUtil.STRING, "specimen.biohazardType","Biohazard","TYPE","biohazardType",Constants.ENUMERATED_OPERATORS,Constants.BIOHAZARD_TYPE_LIST,"");
 				searchFieldData[9] = initSearchUIData(SearchUtil.STRING, "specimen.biohazardName","Biohazard","NAME","biohazardName",Constants.STRING_OPERATORS,"","");
 				/* END Bug#1496 */

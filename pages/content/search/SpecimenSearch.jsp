@@ -1,6 +1,7 @@
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"%>
@@ -55,6 +56,9 @@
 	<script src="jss/script.js" type="text/javascript"></script>
 	<script src="jss/Hashtable.js" type="text/javascript"></script>
 	<script src="jss/AdvancedSearchScripts.js" type="text/javascript"></script>
+	<script src="jss/calendarComponent.js"></script>
+	<SCRIPT>var imgsrc="images/";</SCRIPT>
+	<LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <!-- Mandar : 434 : for tooltip -->
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 		
@@ -815,6 +819,74 @@
 		<html:text styleClass="formFieldSized10" styleId="biohazardName" property="<%=biohazardName%>" disabled="<%=disabled%>"/>
 	</td>
 </tr>
+
+<!--
+ Name : Prafull
+ Bug ID: 4171
+ Patch ID: 4171_3 
+ Description: Adding Specimen.createdOn attribute in the Advance Search. 
+-->
+<%
+	String opCreatedDate = "value(Operator:Specimen:CREATED_ON_DATE)";
+	String createdDate = "value(Specimen:CREATED_ON_DATE)";
+	String createdDate2 = "value(Specimen:CREATED_ON_DATE:HLIMIT)";
+
+
+	String dateField1Click = "onDate('createdDateCombo','advanceSearchForm.createdDate" + 1 +"',false,event);";
+	String dateField2Click = "onDate('createdDateCombo','advanceSearchForm.createdDate" + 2 +"',true,event);";
+	String createdDateStr = "createdDate";
+	String formName = "advanceSearchForm";
+
+	String opCreatedDateVal = (String)specimenDataMap.get("Operator:Specimen:CREATED_ON_DATE");
+	String createdDateValue1 = (String)specimenDataMap.get("Specimen:CREATED_ON_DATE");
+	String createdDateValue2 = (String)specimenDataMap.get("Specimen:CREATED_ON_DATE:HLIMIT");
+	if(opCreatedDateVal != null && (opCreatedDateVal.equals(Operator.BETWEEN) || opCreatedDateVal.equals(Operator.NOT_BETWEEN)))
+	{
+		disabled = false;
+		disabled2 = false;
+	}
+	else if(opCreatedDateVal != null && !opCreatedDateVal.equals(Constants.ANY))
+	{
+		disabled = false;
+		disabled2 = true;
+	}
+
+%>
+<!-- Row for "Created on" attribute. -->
+<tr>
+	<td class="formSerialNumberField" nowrap>
+ 		<label for="createdDate">
+     		<b><bean:message key="specimen.createdDate"/>
+     	</label>
+	</td>
+
+	<td class="formField">
+		<html:select property="<%=opCreatedDate%>" styleClass="formFieldSized10" styleId="createdDateCombo" size="1" onchange="onDateOperatorChange(this,'createdDate1','createdDate2')"
+		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+			<html:options collection="<%=Constants.DATE_NUMERIC_OPERATORS%>" labelProperty="name" property="value"/>
+		</html:select>
+	</td>
+	<td class="formField" nowrap>
+
+			<ncombo:DateTimeComponent name="<%=createdDate%>"
+									  id="<%=createdDateStr + 1%>"
+ 									  formName="<%=formName%>"	
+									  value="<%=createdDateValue1%>"
+									  styleClass="formDateSized10" 
+									  disabled="<%=disabled%>"
+									  onClickImage="<%=dateField1Click %>"
+											 />	
+			&nbsp;Thru&nbsp;
+			<ncombo:DateTimeComponent name="<%=createdDate2%>"
+									  id="<%=createdDateStr + 2%>"
+ 									  formName="<%=formName%>"	
+									  value="<%=createdDateValue2%>"
+									  styleClass="formDateSized10" 
+									  disabled="<%=disabled2%>"
+									  onClickImage="<%=dateField2Click %>"
+											 />	
+	</td>
+</tr>			
 </table>
 
 <!--  SPECIMEN EVENT PARAMETERS -->
