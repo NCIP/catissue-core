@@ -26,6 +26,7 @@ import org.apache.struts.action.ActionForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CheckInCheckOutEventParameter;
@@ -39,6 +40,7 @@ import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
@@ -876,6 +878,27 @@ public class Utility extends edu.wustl.common.util.Utility
 		newSpecimenForm.setReceivedEventTimeInMinutes(specimenCollectionGroupForm.getReceivedEventTimeInMinutes());
 		newSpecimenForm.setReceivedEventReceivedQuality(specimenCollectionGroupForm.getReceivedEventReceivedQuality());
 		newSpecimenForm.setReceivedEventComments(specimenCollectionGroupForm.getReceivedEventComments());
+	}
+	
+	/**
+	 * This method returns the SpecimenCollectionGroup given a SpecimenCollectionGroup identifier.
+	 * @param specimenCollectionGroupId SpecimenCollectionGroup identifier.
+	 * @return SpecimenCollectionGroup
+	 * @throws DAOException on failure to fetch SpecimenCollectionGroup
+	 */
+	public static SpecimenCollectionGroup getSpecimenCollectionGroup(String specimenCollectionGroupId) throws DAOException {
+		String sourceObjectName = SpecimenCollectionGroup.class.getName();
+		String valueField = Constants.SYSTEM_IDENTIFIER;
+		
+		SpecimenCollectionGroupBizLogic scgbizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+		List specimenCollectionObjectGroupList = scgbizLogic.retrieve(sourceObjectName, valueField, specimenCollectionGroupId);
+		SpecimenCollectionGroup specimenCollectionGroup = null;
+		if(specimenCollectionObjectGroupList.size() > 0)
+		{
+			specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionObjectGroupList.get(0);
+		}
+		
+		return specimenCollectionGroup;
 	}
 	
 }
