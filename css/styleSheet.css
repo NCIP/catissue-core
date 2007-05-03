@@ -1313,12 +1313,6 @@ td.formFieldNoBordersSimple{ /* for the cell that contains the form elements */
   color:#000000; /* constant: black */
 }
 
-.formFieldNoBordersSimpleLi{ /* for the cell that contains the form elements */
-  font-family:arial,helvetica,verdana,sans-serif;
-  font-size:1.1em;
-  color:#000000; /* constant: black */
-}
-
 .formRequiredNoticeLBRBorders{ /* for the autoevents cell */
   font-family:arial,helvetica,verdana,sans-serif;
   font-size:1em;
@@ -1439,3 +1433,9 @@ div.autocomplete {
   text-align:left;
 }
 
+.formFieldSized22{ /* for the form elements themselves and with a constant width (on elements) */
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:1em;
+	width:22em;
+}

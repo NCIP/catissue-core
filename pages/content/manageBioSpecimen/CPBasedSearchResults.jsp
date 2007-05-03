@@ -20,8 +20,8 @@
 	
 	if(mac)
 	{
-		frame1Ysize = "200";
-		frame2Ysize = "200";
+		frame1Ysize = "180";
+		frame2Ysize = "180";
 		frame3Ysize = "400";
 		
 
@@ -36,8 +36,8 @@
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <table border="0" height="100%" width="100%" cellpadding="0" cellspacing="0">
 	<tr height="100%">
-		<td width="15%" valign="top">
-			<table border="0" width="175" height="100%">
+		<td width="22%" valign="top">
+			<table border="0" width="250" height="100%">
 				<tr height="<%=cpAndParticipantViewFrameHeight%>">
 					<td>				
 					<iframe id="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" name="<%=Constants.CP_AND_PARTICIPANT_VIEW%>" src="<%=Constants.SHOW_CP_AND_PARTICIPANTS_ACTION%>?pageOf=<%=Constants.PAGE_OF_CP_QUERY_RESULTS%>" scrolling="no" frameborder="0" width="100%" height="<%=frame1Ysize%>" marginheight=0 marginwidth=0>
@@ -57,7 +57,7 @@
 				</tr>	
 			</table>	
 		</td>
-		<td width="85%" height="100%" valign="top">
+		<td width="78%" height="100%" valign="top">
 			<iframe name="<%=Constants.DATA_DETAILS_VIEW%>" scrolling="yes" frameborder="1" width="100%" height="<%=frame3Ysize%>">
 				Your Browser doesn't support IFrames.
 			</iframe>

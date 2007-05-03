@@ -10,8 +10,6 @@
 <%
 	String access = null;
 	access = (String)session.getAttribute("Access");
-		
-
 %>
 
 <head>
@@ -72,15 +70,15 @@
 
 	<tr valign='top'>
 
-		<td class="formLabelAllBorder" colspan="2" width="161">
+		<td class="formLabelAllBorder" colspan="2" width="195">
 			<b>Collection Protocol :</b> <%if(access == null || !access.equals("Denied"))
 	{%> <html:link href="#" styleId="register" onclick="RegisterParticipants()">Register</html:link><%}%>
 		</td>
 	</tr>		
 	<tr valign='top'>
 
-		<td class="formField" nowrap valign='top'>
-			<html:select property="cpId" styleClass="formFieldSized15" styleId="cpId" size="1" onchange="onCpChange(this)"
+		<td class="formField" nowrap valign='top' width="195">
+			<html:select property="cpId" styleClass="formFieldSized22" styleId="cpId" size="1" onchange="onCpChange(this)"
 			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.CP_LIST%>" labelProperty="name" property="value"/>
 			</html:select>
@@ -93,22 +91,22 @@
 	{%>
 	<tr>
 
-		<td nowrap class="formLabelAllBorder" colspan="2" width="161">
+		<td nowrap class="formLabelAllBorder" colspan="2" width="25%">
 			<html:hidden property="participantId" styleId="participantId" value="-1"/>
 		</td>
 	</tr>
 	<%} else {%>	
 	<tr>
 
-		<td class="formLabelBorderlessLeft">
+		<td class="formLabelBorderlessLeft" width="25%">
 			<b>Participant :</b> Name (Protocol ID) 
 		</td>
 	</tr>	
 	
 	<tr>
 
-		<td class="formField">
-			<html:select property="participantId" styleClass="formFieldSized15" styleId="participantId" size="10" onchange="onParticipantChange(this)"
+		<td class="formField" width="25%">
+			<html:select property="participantId" styleClass="formFieldSized22" styleId="participantId" size="8" onchange="onParticipantChange(this)"
 			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.REGISTERED_PARTICIPANT_LIST%>" labelProperty="name" property="value"/>
 			</html:select>

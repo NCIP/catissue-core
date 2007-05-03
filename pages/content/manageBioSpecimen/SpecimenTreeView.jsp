@@ -13,7 +13,7 @@
 		String cpId=(String)request.getAttribute(Constants.CP_SEARCH_CP_ID);
 		String access = null;
 		access = (String)session.getAttribute("Access");
-		String divHeight = "200";
+		String divHeight = "150";
 		if(access != null && access.equals("Denied"))
 		{
 			divHeight = "280";		
@@ -32,18 +32,18 @@
 <body>
 <table border="0" cellpadding="0" cellspacing="0">
 		<tr>	
-			<td class="formLabelAllBorder" colspan="2" width="161">
+			<td class="formLabelAllBorder" colspan="2" width="240">
 				<b>Specimen Details :</b>
 			</td>
 		</tr>	
 		<tr>
 			<td align="left" colspan="2">
-				<div id="treeboxbox_tree" style="width:166; height:<%=divHeight%>;background-color:#f5f5f5;border :1px solid Silver;; overflow:auto;"/>
+				<div id="treeboxbox_tree" style="width:240; height:<%=divHeight%>;background-color:#f5f5f5;border :1px solid Silver;; overflow:auto;"/>
 			</td>
 			
 		</tr>
 		<tr>
-			<td colspan="2">
+			<td colspan="2" width="240">
 		
 			<input type="hidden" name="participantId" value="<%=participantId%>"/>
 			<input type="hidden" name="cpId" value="<%=cpId%>"/>
@@ -142,6 +142,7 @@
 
 			%>
 			tree.closeAllItems("0");
+			
 			<%if(request.getParameter("nodeId") != null)
 			{
 				String nodeId = request.getParameter("nodeId");
