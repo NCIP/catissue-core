@@ -1526,6 +1526,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String KEY_PATHOLOGICAL_STATUS = "PathologicalStatus";
 	public static final String KEY_SPECIMEN_REQUIREMENT_PREFIX = "SpecimenRequirement_";
 	public static final String KEY_RESTRICTED_VALUES = "RestictedValues";
+	public static final String KEY_QUANTITY = "Quantity";
 	
 	// The following constants are used for multiple specimens applet classes
 	public static final String NUMBER_OF_SPECIMEN_REQUIREMENTS = "numberOfSpecimenRequirements";
@@ -1588,4 +1589,4 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Patch ID: Bug#4227_3
 	public static final String SUBMIT_AND_ADD_MULTIPLE = "submitAndAddMultiple";
 	
-	}
+}

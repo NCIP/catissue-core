@@ -300,26 +300,23 @@
 			var submitButton = document.getElementById("submitOnly");
 			var submitAndAddButton = document.getElementById("submitAndAdd");
 			
-			/**
-			 * Patch ID: Bug#3184_10
-			 * Description: The Add Specimen button must be enabled if the restrict checkbox is checked.
-			 */
-			var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
-			
+			// Patch ID: Bug#4245_4
+			// Description: User is allowed to click the Add Multiple Specimen irrespective of state of restric checkbox.
 			// Patch ID: Bug#3184_34
 			var submitAndAddMultipleButton =  document.getElementById("submitAndAddMultiple");
 			
+			var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
 			if(enteredValue > 1)
 			{			
 				submitButton.disabled = true;
 				submitAndAddButton.disabled = true;
 				submitAndAddMultipleButton.disabled = false;
 			}
-			else if(restrictCheckbox.checked && enteredValue == 1)
+			else if(restrictCheckbox.checked)
 			{
 				submitButton.disabled = true;
 				submitAndAddButton.disabled = false;
-				submitAndAddMultipleButton.disabled = true;
+				submitAndAddMultipleButton.disabled = false;
 			}
 			else
 			{			
@@ -343,13 +340,9 @@
 			
 			if(restrictCheckbox.checked)
 			{
-				var numberOfSpecimen = document.getElementById("numberOfSpecimen").value;
-				if(numberOfSpecimen != null && numberOfSpecimen == 1)
-				{
-					addSpecimenButton = false;
-					submitAndAddMultipleButton.disabled = true;
-				}
 				submitButton.disabled = true;
+				addSpecimenButton = false;
+				submitAndAddMultipleButton.disabled = false;
 			}
 			else
 			{
@@ -901,8 +894,6 @@
 			<input type="hidden" id="receivedEventReceivedQualityForm" value="<%=form.getReceivedEventReceivedQuality()%>"  />
 			<input type="hidden" id="receivedEventCommentsForm" value="<%=form.getReceivedEventComments()%>"  />
 			<html:hidden property="receivedEventId"/>
-			<!-- Patch ID: Bug#3184_36 -->
-			<input type="hidden" id="actualNumberOfSpecimen" name="actualNumberOfSpecimen" value="<%=numberOfSpecimenCollection%>"/>
 			<!-- Patch ID: Bug#4227_4 -->
 			<html:hidden styleId="buttonType" property="buttonType"/>
 			
