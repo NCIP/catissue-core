@@ -57,8 +57,10 @@
 	<%
 	// Patch ID: SimpleSearchEdit_9 
 	// Getting Hypelink map from the request that will be used for further processing.
-		Map<Integer, QueryResultObjectData> hyperlinkColumnMap = (Map<Integer, QueryResultObjectData>)request.getAttribute(Constants.HYPERLINK_COLUMN_MAP);
-		System.out.println("hyperlinkColumnMap:"+hyperlinkColumnMap);
+	// Patch ID: 4270_2
+	// getting hyperlinkColumnMap from session instead of request, so that it will persiste when the records per page drop down changed or page number changed.
+	// Value for this map will be set in SimpleSearchAction
+		Map<Integer, QueryResultObjectData> hyperlinkColumnMap = (Map<Integer, QueryResultObjectData>)session.getAttribute(Constants.HYPERLINK_COLUMN_MAP);
 		if (hyperlinkColumnMap==null)
 			hyperlinkColumnMap = new HashMap<Integer, QueryResultObjectData>();
 			
