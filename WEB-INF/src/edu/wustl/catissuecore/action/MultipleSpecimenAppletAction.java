@@ -55,6 +55,7 @@ import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
+import edu.wustl.common.util.DomainBeanIdentifierComparator;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -1326,9 +1327,19 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			CollectionProtocolEvent collectionProtocolEvent = specimenCollectionGroup.getCollectionProtocolEvent();
 			Collection<SpecimenRequirement> specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
 			
+			/**
+			 * Name: Chetan Patil
+			 * Reviewer: Sachin Lale
+			 * Bug ID: Bug#4245
+			 * Patch ID: Bug#4245_1
+			 * Description: Added code to sort the specimen colletion before adding its data into the dataListsMap.
+			 */
+			// Get sorted list of the Specimen Requuirements
+			List<SpecimenRequirement> specimenRequirementList = sortSpecimenRequirementCollectionOnIdentifier(specimenRequirementCollection);
+			
 			Map<String, Map<String, String>> restrictedValuesMap = new HashMap<String, Map<String, String>>();
 			int index = 1;
-			for(SpecimenRequirement specimenRequirement : specimenRequirementCollection)
+			for(SpecimenRequirement specimenRequirement : specimenRequirementList)
 			{
 				Map<String, String> specimenRequirementDataMap = new HashMap<String, String>();
 			   
@@ -1336,6 +1347,9 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				specimenRequirementDataMap.put(Constants.KEY_SPECIMEN_TYPE, specimenRequirement.getSpecimenType());
 				specimenRequirementDataMap.put(Constants.KEY_TISSUE_SITE, specimenRequirement.getTissueSite());
 				specimenRequirementDataMap.put(Constants.KEY_PATHOLOGICAL_STATUS, specimenRequirement.getPathologyStatus());
+				//Populate quantity form specimen requirement.
+				String quantity = specimenRequirement.getQuantity().getValue().toString();
+				specimenRequirementDataMap.put(Constants.KEY_QUANTITY, quantity);
 				
 				restrictedValuesMap.put(Constants.KEY_SPECIMEN_REQUIREMENT_PREFIX + index++, specimenRequirementDataMap);
 			}
@@ -1347,6 +1361,25 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			return restrictedValuesMap;
 		}
 		
+		/**
+		 * This method returns the sorted list of the Specimen Requirement. Sorting is done on Idetifiers of the Specimen Requirements.
+		 * @param specimenRequirementCollection Collection of Specimen Requirements
+		 * @return Sorted List of Specimen Requirements
+		 */
+		private List<SpecimenRequirement> sortSpecimenRequirementCollectionOnIdentifier(Collection<SpecimenRequirement> specimenRequirementCollection) 
+		{
+			DomainBeanIdentifierComparator domainBeanIdentifierComparator = new DomainBeanIdentifierComparator();
+			
+			List<SpecimenRequirement> specimenRequirementList = new ArrayList<SpecimenRequirement>();
+			for(SpecimenRequirement specimenRequirement : specimenRequirementCollection)
+			{
+				specimenRequirementList.add(specimenRequirement);
+			}
+			Collections.sort(specimenRequirementList, domainBeanIdentifierComparator);
+			
+			return specimenRequirementList;
+		}
+
 		/**
 		 * This method populates the values to be displayed and required on the Multiple Specimen page.
 		 * @param DataListsMap the Map in which the default values are to be set.
