@@ -35,7 +35,6 @@ import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
@@ -205,15 +204,24 @@ public class NewSpecimenAction extends SecureAction
 		//Setting Secimen Collection Group
 		initializeAndSetSpecimenCollectionGroupIdList(bizLogic,request);
 		
+		/**
+		 * Patch ID: Bug#4245_2
+		 * 
+		 */
 		List<NameValueBean> specimenClassList = new ArrayList<NameValueBean>();
 		List<NameValueBean> specimenTypeList = new ArrayList<NameValueBean>();
 		List<NameValueBean> tissueSiteList = new ArrayList<NameValueBean>();
 		List<NameValueBean> tissueSideList = new ArrayList<NameValueBean>();
 		List<NameValueBean> pathologicalStatusList = new ArrayList<NameValueBean>();
-
 		Map<String, List<NameValueBean>> subTypeMap = new HashMap<String, List<NameValueBean>>();
-		String specimenCollectionGroupId = specimenForm.getSpecimenCollectionGroupId();
+		
 		String restrictSCGCheckbox = specimenForm.getRestrictSCGCheckbox();
+		if(restrictSCGCheckbox == null) 
+		{//If not form the form, get the value form request. Case of Technician accessing SCG to add specimen.
+			restrictSCGCheckbox = (String)request.getParameter(Constants.RESTRICT_SCG_CHECKBOX);
+		}
+		
+		String specimenCollectionGroupId = specimenForm.getSpecimenCollectionGroupId();
 		if (specimenCollectionGroupId != null && !specimenCollectionGroupId.equals("")) 
 		{	// If specimen is being added form specimen collection group page or a specimen is being edited.
 			
@@ -657,8 +665,6 @@ public class NewSpecimenAction extends SecureAction
 		//request.setAttribute("initValues", initialValues);
 	}
 
-	
-
 	private void setFormValues(NewSpecimenForm specimenForm, String specimenCollectionGroupId)
 	{
 		specimenForm.setSpecimenCollectionGroupId(specimenCollectionGroupId);
@@ -722,24 +728,6 @@ public class NewSpecimenAction extends SecureAction
 			tempMap.put(specimenClass + specimenType + Constants.SPECIMEN_TYPE, specimenType);
 		}
 	}
-	
-	/**
-	 * This method returns the SpecimenCollectionGroup given a SpecimenCollectionGroup identifier.
-	 * @param specimenCollectionGroupId SpecimenCollectionGroup identifier.
-	 * @return SpecimenCollectionGroup
-	 * @throws DAOException on failure to fetch SpecimenCollectionGroup
-	 */
-	private SpecimenCollectionGroup getSpecimenCollectionGroup(String specimenCollectionGroupId) throws DAOException {
-		String sourceObjectName = SpecimenCollectionGroup.class.getName();
-		String valueField = Constants.SYSTEM_IDENTIFIER;
-		
-		SpecimenCollectionGroupBizLogic scgbizLogic = (SpecimenCollectionGroupBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
-		List specimenCollectionObjectGroupList = scgbizLogic.retrieve(sourceObjectName, valueField, specimenCollectionGroupId);
-		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionObjectGroupList.get(0);
-		
-		return specimenCollectionGroup;
-	}
-	
 	
 	/**
 	 * This method populates all the values form the system for the respective lists. 
@@ -831,7 +819,7 @@ public class NewSpecimenAction extends SecureAction
 			throws DAOException
 	{
 		// Get SpecimenCollectionGroup given a SpecimenCollectionGroupId
-		SpecimenCollectionGroup scg = getSpecimenCollectionGroup(specimenCollectionGroupId);
+		SpecimenCollectionGroup scg = Utility.getSpecimenCollectionGroup(specimenCollectionGroupId);
 		request.setAttribute("SpecimenCollectionGroupId", specimenCollectionGroupId);
 		request.setAttribute("SpecimenCollectionGroupName", scg.getName());
 		
@@ -844,7 +832,8 @@ public class NewSpecimenAction extends SecureAction
 		String specimenClass = null;
 		String specimenType = null;
 		String tissueSite = null;
-		String pathologicalStatus = null; 
+		String pathologicalStatus = null;
+		String quantity = null;
 		
 		Map<String,String> tempMap = new HashMap<String,String>();
 		CollectionProtocolEvent collectionProtocolEvent = scg.getCollectionProtocolEvent();
@@ -877,6 +866,12 @@ public class NewSpecimenAction extends SecureAction
 				pathologicalStatusList.add(new NameValueBean(pathologicalStatus, pathologicalStatus));
 				tempMap.put(pathologicalStatus + Constants.CDE_NAME_PATHOLOGICAL_STATUS, pathologicalStatus);
 			}
+			
+			/**
+			 * Patch ID: Bug#4245_3
+			 * Description: Pre-population of quantity value in case of a single specimen and single specimen requirement.
+			 */
+			quantity = specimenRequirement.getQuantity().getValue().toString();
 		}
 
 		//Patch ID: Bug#3184_26
@@ -891,6 +886,8 @@ public class NewSpecimenAction extends SecureAction
 			specimenForm.setType(specimenType);
 			specimenForm.setTissueSite(tissueSite);
 			specimenForm.setPathologicalStatus(pathologicalStatus);
+			//Patch ID: Bug#4245_4
+			specimenForm.setQuantity(quantity);
 		}
 		
 		return numberOfSpecimen;
