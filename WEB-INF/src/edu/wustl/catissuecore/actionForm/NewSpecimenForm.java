@@ -145,7 +145,9 @@ public class NewSpecimenForm extends SpecimenForm
 	
 	private String restrictSCGCheckbox;
 	
-    /**
+	private int numberOfSpecimen;
+	
+	/**
 	 * @return the restrictSCGCheckbox
 	 */
 	public String getRestrictSCGCheckbox() {
@@ -908,6 +910,20 @@ public class NewSpecimenForm extends SpecimenForm
 	 */
 	public void setSpecimenCollectionGroupName(String specimenCollectionGroupName) {
 		this.specimenCollectionGroupName = specimenCollectionGroupName;
+	}
+
+	/**
+	 * @return the numberOfSpecimen
+	 */
+	public int getNumberOfSpecimen() {
+		return numberOfSpecimen;
+	}
+
+	/**
+	 * @param numberOfSpecimen the numberOfSpecimen to set
+	 */
+	public void setNumberOfSpecimen(int numberOfSpecimen) {
+		this.numberOfSpecimen = numberOfSpecimen;
 	}
 	
 }
