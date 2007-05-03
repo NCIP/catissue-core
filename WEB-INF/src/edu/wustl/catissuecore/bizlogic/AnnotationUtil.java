@@ -15,7 +15,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import edu.common.dynamicextensions.domain.DomainObjectFactory;
 import edu.common.dynamicextensions.domaininterface.AssociationInterface;
 import edu.common.dynamicextensions.domaininterface.EntityGroupInterface;
@@ -26,9 +29,11 @@ import edu.common.dynamicextensions.entitymanager.EntityManager;
 import edu.common.dynamicextensions.entitymanager.EntityManagerInterface;
 import edu.common.dynamicextensions.exception.DynamicExtensionsApplicationException;
 import edu.common.dynamicextensions.exception.DynamicExtensionsSystemException;
+import edu.common.dynamicextensions.util.DynamicExtensionsUtility;
 import edu.common.dynamicextensions.util.global.Constants.AssociationDirection;
 import edu.common.dynamicextensions.util.global.Constants.AssociationType;
 import edu.common.dynamicextensions.util.global.Constants.Cardinality;
+import edu.wustl.cab2b.common.util.Utility;
 import edu.wustl.cab2b.server.cache.EntityCache;
 import edu.wustl.cab2b.server.path.PathConstants;
 import edu.wustl.cab2b.server.path.PathFinder;
@@ -56,34 +61,51 @@ public class AnnotationUtil
             throws DynamicExtensionsSystemException,
             DynamicExtensionsApplicationException
     {
+        //Get instance of entity manager.
         EntityManagerInterface entityManager = EntityManager.getInstance();
+        
+        // Get instance of static entity from entity cache maintained by caB2B code
         EntityInterface staticEntity = EntityCacheFactory.getInstance()
                 .getEntityById(staticEntityId);
+        
+        //Get dynamic Entity from entity Manger
         EntityInterface dynamicEntity = (entityManager
                 .getContainerByIdentifier(dynamicEntityId.toString()))
                 .getEntity();
+        
+        //Get entitygroup that is used by caB2B for path finder purpose.
+        EntityGroupInterface entityGroupInterface = Utility.getEntityGroup(staticEntity);
+        
+        //Add the entity group to the dynamic entity and all it's associated entities.
         dynamicEntity
-                .addEntityGroupInterface((EntityGroupInterface) staticEntity
-                        .getEntityGroupCollection().iterator().next());
+                .addEntityGroupInterface(entityGroupInterface);
         Collection<AssociationInterface> associationCollection = dynamicEntity
         .getAssociationCollection();
+        
         for (AssociationInterface associationInteface : associationCollection)
         {
-            associationInteface.getTargetEntity().addEntityGroupInterface((EntityGroupInterface) staticEntity
-                        .getEntityGroupCollection().iterator().next());
+            associationInteface.getTargetEntity().addEntityGroupInterface(entityGroupInterface);
         }
+        
+        //Create source role and target role for the association
         String roleName = staticEntityId.toString().concat("_").concat(
                 dynamicEntityId.toString());
         RoleInterface sourceRole = getRole(AssociationType.ASSOCIATION,
                 roleName, Cardinality.ZERO, Cardinality.ONE);
         RoleInterface targetRole = getRole(AssociationType.ASSOCIATION,
                 roleName, Cardinality.ZERO, Cardinality.MANY);
+        
+        //Create association with the created source and target roles.
         AssociationInterface association = getAssociation(dynamicEntity,
                 AssociationDirection.SRC_DESTINATION, roleName, sourceRole,
                 targetRole);
+        
+        //Create constraint properties for the created association.
         ConstraintPropertiesInterface constraintProperties = getConstraintProperties(
                 staticEntity, dynamicEntity);
         association.setConstraintProperties(constraintProperties);
+        
+        //Add association to the static entity and save it. 
         staticEntity.addAssociation(association);
         Long start = new Long(System.currentTimeMillis());
         staticEntity = EntityManager.getInstance().persistEntityMetadata(
@@ -91,10 +113,9 @@ public class AnnotationUtil
         Long end = new Long(System.currentTimeMillis());
         System.out.println("Time required to persist one entity is "
                 + (end - start) / 1000 + "seconds");
+        
+        //Add the column related to the association to the entity table of the associated entities.
         EntityManager.getInstance().addAssociationColumn(association);
-//        Collection collection = EntityManager.getInstance().getAssociation(
-//                staticEntity.getName(), roleName);
-//        association = (AssociationInterface) collection.iterator().next();
         Collection<AssociationInterface> staticEntityAssociation = staticEntity.getAssociationCollection();
         for (AssociationInterface tempAssociation : staticEntityAssociation)
         {
@@ -120,7 +141,16 @@ public class AnnotationUtil
         System.out.println("Time required to add complete paths is"
                 + (end - start) / 1000 + "seconds");
         start = new Long(System.currentTimeMillis());
-        EntityCache.getInstance().refreshCache();
+        Set<EntityInterface> entitySet = new HashSet<EntityInterface>();
+        entitySet.add(dynamicEntity);
+        entitySet.add(staticEntity);
+        DynamicExtensionsUtility.getAssociatedEntities(dynamicEntity, entitySet);
+        for (EntityInterface entity : entitySet)
+        {
+        EntityCache.getInstance().addEntityToCache(entity);
+        }        
+        //EntityInterface cachedStaticEntityInterfaceEntityCache.getInstance().getEntityById(staticEntityId);
+        
         PathFinder.getInstance().refreshCache();
         end = new Long(System.currentTimeMillis());
         System.out.println("Time required to refresh cache is "
