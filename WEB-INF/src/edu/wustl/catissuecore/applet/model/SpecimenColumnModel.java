@@ -426,27 +426,16 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		specimenCheckBox.setBackground(Color.lightGray  );
 		specimenCheckBox.setOpaque(true );
 		
-		// Patch ID: Bug#3184_22
-		// The value of numberOfSpecimenRequirements is used while setting the column values 
-		int numberOfSpecimenRequirements = 0;
+		// Patch ID: Bug#4245_6
 		Map specimenAttributeOptions = model.getSpecimenAttributeOptions();
 		
-		// Setting the Specimen Collection Group Name List and the selected value in the column
-		String restrictSCGCheckbox = (String)specimenAttributeOptions.get(Constants.RESTRICT_SCG_CHECKBOX);
-		if(restrictSCGCheckbox != null && restrictSCGCheckbox.equals(Constants.TRUE))
-		{
-			numberOfSpecimenRequirements =  getNumberOfSpecimenRequirements(specimenAttributeOptions);
-			String specimenCollectionGroupList[] = new String[] {model.getSpecimenCollectionGroupName()};
-			specimenCollectionGroup = new ModifiedComboBox(specimenCollectionGroupList);
-		}
-		else
-		{
-			specimenCollectionGroup = new ModifiedComboBox(model.getSpecimenCollectionGroupValues());
-		}
+		specimenCollectionGroup = new ModifiedComboBox(model.getSpecimenCollectionGroupValues());
 		specimenCollectionGroup.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
-		if (model.getSpecimenCollectionGroupName() != null)
+		//Setting the Specimen Collection Group Name List and the selected value in the column
+		String specimenCollectionGroupName = model.getSpecimenCollectionGroupName();
+		if (specimenCollectionGroupName != null)
 		{ // Set the specimen collection group name as selected
-			specimenCollectionGroup.setSelectedItem(model.getSpecimenCollectionGroupName());
+			specimenCollectionGroup.setSelectedItem(specimenCollectionGroupName);
 		}
 		
 		rbspecimenGroup = new JRadioButton();
@@ -454,9 +443,9 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		rbspecimenGroup.setSelected(true);
 
 		//Parent Specimen 
-		parentSpecimen = new ModifiedTextField(10);
+		parentSpecimen = new ModifiedTextField(12);
 		rbparentSpecimen = new JRadioButton();
-		parentSpecimen.setPreferredSize(new Dimension(100, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
+		parentSpecimen.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
 		//rbparentSpecimen.setEnabled(false);
 		parentSpecimenPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		parentSpecimen.setEnabled(false);
@@ -481,15 +470,7 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		barCode = new ModifiedTextField(10);
 //		 Concentration
 		concentration = new ModifiedTextField(10);
-//		 Quantity
-		quantity = new ModifiedTextField("0", 17);
 		unit = new JLabel();
-		quantity.setPreferredSize(new Dimension(110, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
-		quantityUnitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
-
-		quantityUnitPanel.add(quantity);
-		quantityUnitPanel.add(unit);
-
 		/**
 		 * Name: Chetan Patil
 		 * Reviewer: Sachin Lale
@@ -506,6 +487,9 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		
 		//If the restrict checkbox on specimen collection group is checked, then set the restricted value as the selected;
 		//otherwise set the default values as selected
+		String restrictSCGCheckbox = (String)specimenAttributeOptions.get(Constants.RESTRICT_SCG_CHECKBOX);
+		//The value of numberOfSpecimenRequirements is used while setting the column values 
+		int numberOfSpecimenRequirements = getNumberOfSpecimenRequirements(specimenAttributeOptions);
 		if(((restrictSCGCheckbox != null) && (restrictSCGCheckbox.equals(Constants.TRUE))) && (actualColumnIndex < numberOfSpecimenRequirements))
 		{
 			setRestrictedValuesToColumn(model, actualColumnIndex);
@@ -897,6 +881,22 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		setUnit(model.getQuantityUnit(columnIndex));
         
 		refreshComponent(unit);
+	}
+	
+	// Patch ID: Bug#4245_8
+	/**
+	 * This method sets the quantity field on the applet with the specified value.
+	 * @param quantity value to be displayed.
+	 */
+	private void setQuantityField(String quantity)
+	{
+		//Quantity
+		this.quantity = new ModifiedTextField(quantity, 15);
+		this.quantity.setPreferredSize(new Dimension(110, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
+
+		this.quantityUnitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
+		this.quantityUnitPanel.add(this.quantity);
+		this.quantityUnitPanel.add(unit);
 	}
 
 	//--------------- GETTER SETTER ------------------------------------
@@ -1993,6 +1993,9 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 			//To display defaultValue form CatissueCore_Properties.xml
 			pathologicalStatusList.setSelectedItem(model.getPathologicalStatus());
 		}
+		
+		//Set value of quantity field.
+		setQuantityField("0");
 	}
 	
 	//Patch ID: Bug#4194_3
@@ -2023,11 +2026,15 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	 */
 	private int getNumberOfSpecimenRequirements(Map specimenAttributeOptions)
 	{
+		int noOfSpecimenRequirements = 0;
 		Map<String, Map<String, String>> restrictedValuesMap = (Map<String, Map<String, String>>)specimenAttributeOptions.get(Constants.KEY_RESTRICTED_VALUES);
-		Map<String, String> numnberOfSpecimenRequirementMap = restrictedValuesMap.get(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
-		String numberOfSpecimenRequirements = numnberOfSpecimenRequirementMap.get(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
-		
-		return Integer.parseInt(numberOfSpecimenRequirements);
+		if(restrictedValuesMap != null)
+		{
+			Map<String, String> numnberOfSpecimenRequirementMap = restrictedValuesMap.get(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
+			String numberOfSpecimenRequirements = numnberOfSpecimenRequirementMap.get(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS);
+			noOfSpecimenRequirements = Integer.parseInt(numberOfSpecimenRequirements);
+		}
+		return noOfSpecimenRequirements;
 	}
 
     // Patch ID: Bug#3184_24
@@ -2075,6 +2082,10 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		//PathologicalStatus 
 		String pathologicalStatus = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO, column + 1);
 		pathologicalStatusList.setSelectedItem(pathologicalStatus);
+		
+		//Quantity
+		String quantity = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_QUANTITY_ROW_NO, column + 1);
+		setQuantityField(quantity);
     }
 
 	// -------------------Mandar For Focus Handling 11-Dec-06 start
