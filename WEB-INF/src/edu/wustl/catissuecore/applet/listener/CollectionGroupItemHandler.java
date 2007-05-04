@@ -50,18 +50,30 @@ public class CollectionGroupItemHandler extends BaseItemHandler {
               */   
 
              TableColumnModel columnModel = table.getColumnModel();
-
+             
              SpecimenColumnModel scm = (SpecimenColumnModel) columnModel.getColumn(table.getSelectedColumn()).getCellEditor();
 
              if(scm.getRbspecimenGroup())
              {
                  //made createdon readonly and blank                 
-                 scm.setCreatedOnStatus(false);
+                 scm.setCreatedOnStatus(false);  
+                 /**
+                  * bug ID: 2989
+                  * Patch id: 2989_3
+                  * Description :if specimen collection group radio button is selected, enabling the Events button  
+                  */
+                 scm.setEventsButtonStatus(true);
              }
              else
              {
                  //set creted on current date.
-                 scm.setCreatedOnStatus(true); 
+                 scm.setCreatedOnStatus(true);
+                 /**
+                  * bug ID: 2989
+                  * Patch id: 2989_4
+                  * Description :if parent specimen radio button is selected, disabling the Events button  
+                  */
+                 scm.setEventsButtonStatus(false);
              }                               
 		}
 	}

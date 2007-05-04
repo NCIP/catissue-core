@@ -1242,6 +1242,19 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
                 
     }
     /**
+     * Bug Id: 2989
+     * Patch Id:2989_2
+     * Description: Disabling the events button when parent specimen radio button is selected.
+     */
+    /**
+     * @param condition
+     * This method disables Events button if parent specimen radio buttion is selected.
+     */
+    public void setEventsButtonStatus(boolean condition)
+    {    	
+    	this.eventsButton.setEnabled(condition);    	
+    }
+    /**
      * 
      * @param date
      * @param pattern
@@ -1288,6 +1301,9 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
               */ 
             
             this.createdOn.setEnabled(false);
+            
+            //Enabling  Events Button
+            this.eventsButton.setEnabled(true);
 		}
 		else
 		{
@@ -1297,7 +1313,9 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
               * See also: 1_1 to 1_5
               * Description : Enabled createdOn date according to the radiobutton when pageLink button is pressed
               */ 
-              this.createdOn.setEnabled(true);             
+              this.createdOn.setEnabled(true);  
+//            Disabling  Events Button
+              this.eventsButton.setEnabled(false);
 		}
 		//Parent Specimen 
 		value = (String) model.getValueAt(AppletConstants.SPECIMEN_PARENT_ROW_NO, columnIndex);
@@ -2372,4 +2390,3 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 //	 	});
 //	}
 //}
-

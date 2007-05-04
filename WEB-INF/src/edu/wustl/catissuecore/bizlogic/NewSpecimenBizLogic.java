@@ -16,7 +16,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -167,8 +166,20 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
             if((specimen.getParentSpecimen() == null ))
             {              
                 setCreatedOnDate(specimen);                
-            }
+            }            
             
+            /*
+             * Name:Ashish Gupta
+             * Reviewer: Santosh Chandak
+             * Bug ID: 2989
+             * Pathch ID:2989_1
+             * Description:If parent specimen is present, retriving its events and setting them to its child
+             * */
+            //Inserting parent specimens events if derived 
+            if(specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId() != null && specimen.getParentSpecimen().getId() > 0)
+            {            	
+            	setParentSpecimenEventsInChild(specimen,dao);
+            }            
 
 			try
 			{
@@ -194,7 +205,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				resetId(derivedSpecimen);
 				derivedSpecimen.setParentSpecimen(specimen);
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
-
+				
 				try
 				{
 					insertSingleSpecimen(derivedSpecimen, dao, sessionDataBean, true);
@@ -232,7 +243,32 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 		}
 	}
-	
+	/**
+	 * @param specimen
+	 * @param dao
+	 * @throws DAOException
+	 * This method retrieves the parent specimen events and sets them in the parent specimen
+	 */
+	private void setParentSpecimenEventsInChild(Specimen specimen,DAO dao) throws DAOException
+	{
+		Specimen parent =  specimen.getParentSpecimen();
+		if(parent.getSpecimenEventCollection() == null)
+    	{
+			parent.setSpecimenEventCollection(new HashSet());
+    	}
+    	if(parent.getSpecimenEventCollection().isEmpty())
+    	{
+    		//retrieving the parent specimen events
+    		String sourceObjectName = SpecimenEventParameters.class.getName();
+    		String columnName = "specimen";
+    		long whereColumnValue = parent.getId().longValue();
+    		List parentSpecimenEventColl = dao.retrieve(sourceObjectName, columnName, whereColumnValue);
+    		//Converting list to hashset
+    		Collection tempColl = new HashSet();    		
+        	tempColl.addAll(parentSpecimenEventColl);        		
+    		parent.setSpecimenEventCollection(tempColl);
+    	}
+	}
 	//This method sets the created on date = collection date
 	private void setCreatedOnDate(Specimen specimen)
 	{
