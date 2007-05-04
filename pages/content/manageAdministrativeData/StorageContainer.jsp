@@ -121,7 +121,21 @@
 				{
 					action = "<%=Constants.CREATE_SIMILAR_CONTAINERS_ACTION%>";
 					action = action + "?pageOf="+"<%=Constants.PAGEOF_CREATE_SIMILAR_CONTAINERS%>"+"&menuSelected=7";
+					/**
+					 * Name : Vijay_Pande
+					 * Bug ID: 4145
+					 * Patch ID: 4145_1 
+					 * See also: -
+					 * Description: There were two messages while adding storage container. One was an error message that container does not exists.
+					 * Error was id of Storage Type was set in the request parameter. Therefore id=0 is set in request parameter.
+					 */
+					action=action+"&id=0";
 				}
+				else
+				{
+					action=action+"?id=0";
+				}
+				/**-- Patch ends here --*/
 			}
 			confirmDisable(action,formField);
 		}
