@@ -37,6 +37,7 @@ import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -722,6 +723,24 @@ public class UserBizLogic extends DefaultBizLogic
 				message = ApplicationProperties.getValue("user.emailAddress");
 				throw new DAOException(ApplicationProperties.getValue("errors.item.format",message));	
 			}
+			/**
+			 * Name : Vijay_Pande
+			 * Reviewer : Sntosh_Chandak
+			 * Bug ID: 4185_2 
+			 * Patch ID: 1-2
+			 * See also: 1
+			 * Description: Wrong error meassage was dispayed while adding user with existing email address in use.
+			 * Following method is provided to verify whether the email address is already present in the system or not. 
+			 */
+			if(!isUniqueEmailAddress(user.getEmailAddress()))
+			{
+				String arguments[] = null;
+				arguments = new String[]{"User", ApplicationProperties.getValue("user.emailAddress")};
+				String errMsg = new DefaultExceptionFormatter().getErrorMessage("Err.ConstraintViolation", arguments);
+				Logger.out.debug("Unique Constraint Violated: " + errMsg);
+				throw new DAOException(errMsg);
+			}
+			/** -- patch ends here -- */
 		}
 		if (validator.isEmpty(user.getLastName()))
 		{
@@ -1015,7 +1034,45 @@ public class UserBizLogic extends DefaultBizLogic
 		}
 		return errMsg;
 	}
-
+	
+	/**
+	 * Name : Vijay_Pande
+	 * Reviewer : Sntosh_Chandak
+	 * Bug ID: 4185_2 
+	 * Patch ID: 1-2
+	 * See also: 1
+	 * Description: Wrong error meassage was dispayed while adding user with existing email address in use.
+	 * Following method is provided to verify whether the email address is already present in the system or not. 
+	 */
+	/**
+	 * Method to check whether email address already exist or not
+	 * @param emailAddress email address to be check
+	 * @return isUnique boolean value to indicate presence of similar email address
+	 * @throws DAOException database exception
+	 */
+	private boolean isUniqueEmailAddress(String emailAddress) throws DAOException
+	{
+		boolean isUnique=true;
+		
+		String sourceObjectName=User.class.getName();
+		String[] displayNameFields=new String[] {"id"};
+		String valueField=new String("id");
+		String[] whereColumnName = new String[]{"emailAddress"};
+		String[] whereColumnCondition = new String[]{"="};
+		Object[] whereColumnValue = new String[]{emailAddress};
+		String joinCondition = null;
+		String separatorBetweenFields = ", ";	
+		
+		BizLogicFactory bizFactory=BizLogicFactory.getInstance();
+		UserBizLogic userBizLogiv=(UserBizLogic)bizFactory.getBizLogic(User.class.getName());
+		List userList = userBizLogiv.getList(sourceObjectName, displayNameFields, valueField, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
+		
+		if (userList.size() > 1)
+		{
+			isUnique=false;
+		}
+		return isUnique;
+	}
 	//					     //method to return a comma seperated list of emails of administrators of a particular institute
 	//					     
 	//					     private String getInstitutionAdmins(Long instID) throws DAOException,SMException 
