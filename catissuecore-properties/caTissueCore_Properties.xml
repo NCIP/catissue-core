@@ -232,7 +232,7 @@
 	</property>
 <!-- Constant for limiting number of storage containers shown in dropdowns on UI-->		
 
-<!-- Constant for Setting Default Country Name on UI-->		
+<!-- Constants for setting default values for enumerated dropdowns-->
 
 	<property>
 		<name>defaultTissueSite</name>
