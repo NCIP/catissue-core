@@ -216,7 +216,8 @@ public class AliquotAction extends SecureAction
 		//is exceeding the max limit.
 		String exceedingMaxLimit = "false";
 		String specimenLabel = aliquotForm.getSpecimenLabel();
-
+		//For Storing Label/Barcode, Aliquot Count, Quantity per Aliquot
+		Map tempAliquotMap = new HashMap();
 		//Extracting the values of the operation & pageOf parameters.
 		String operation = request.getParameter(Constants.OPERATION);
 		String pageOf = request.getParameter(Constants.PAGEOF);
@@ -239,15 +240,6 @@ public class AliquotAction extends SecureAction
 		 */
 		if (aliquotForm.getButtonClicked().equalsIgnoreCase("submit"))
 		{
-			Map tempAliquotMap = new HashMap();
-			if (aliquotForm.getCheckedButton().equals("1"))
-			{
-				tempAliquotMap.put("label", aliquotForm.getSpecimenLabel());
-			}
-			else
-			{
-				tempAliquotMap.put("barcode", aliquotForm.getBarcode());
-			}
 			tempAliquotMap.put("aliquotcount", aliquotForm.getNoOfAliquots());
 			tempAliquotMap.put("quantityperaliquot", aliquotForm.getQuantityPerAliquot());
 			aliquotForm.setAliqoutInSameContainer(false);
@@ -257,7 +249,7 @@ public class AliquotAction extends SecureAction
 		{
 			// arePropertiesChanged is used to identify if any of  label/barcode,aliquot count, quantity per aliquot are changed
 			boolean arePropertiesChanged = false;
-			Map tempAliquotMap = (HashMap) request.getSession().getAttribute("tempAliquotMap");
+			tempAliquotMap = (HashMap) request.getSession().getAttribute("tempAliquotMap");
 			String label = (String) tempAliquotMap.get("label");
 			String barcode = (String) tempAliquotMap.get("barcode");
 			if (aliquotForm.getCheckedButton().equals("1"))
@@ -537,6 +529,15 @@ public class AliquotAction extends SecureAction
 		{
 			aliquotForm.setSpecimenLabel(specimenLabel);
 			aliquotForm.setCheckedButton("1");
+			//resolvede bug #4236 Virender Mehta
+			if (aliquotForm.getCheckedButton().equals("1"))
+			{
+				tempAliquotMap.put("label", aliquotForm.getSpecimenLabel());
+			}
+			else
+			{
+				tempAliquotMap.put("barcode", aliquotForm.getBarcode());
+			}
 		}
 
 		//Map containerMap = bizLogic.getAllocatedContainerMap();

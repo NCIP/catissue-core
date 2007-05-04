@@ -264,7 +264,7 @@
 			var checked = document.forms[0].aliCheckedButton.checked;
 			if(checked)
 			{
-				setSubmittedFor('ForwardTo','pageOfAliquot');
+				setSubmittedFor('ForwardTo','pageOfCreateAliquot');
 				confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 			
 			}

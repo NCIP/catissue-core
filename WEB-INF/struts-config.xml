@@ -987,6 +987,7 @@ PUBLIC
 			<forward name="eventParameters" path="/ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters&amp;menuSelected=15" />
 			<forward name="distribution" path="/Distribution.do?operation=add&amp;pageOf=pageOfDistribution&amp;menuSelected=15" />
 			<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15" />
+			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit" />
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
 		</action>
 		
@@ -2693,7 +2694,6 @@ PUBLIC
 		scope="request">
 		<forward name="pageOfCreateAliquot" path=".catissuecore.aliquotDef"/>
 		<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15"/>
-		<forward name="pageOfNewSpecimen" path="/NewSpecimen.do?operation=edit&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15"/>
 	    <forward name="commonAddEdit" path="/AliquotAdd.do?pageOf=pageOfAliquotSummary&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=none"/>
 		<forward name="failure" path=".catissuecore.aliquotDef" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
