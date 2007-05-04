@@ -138,13 +138,13 @@
 	
 		function onCheckboxButtonClick(chkBox)
 		{
-			//var aliquotCountTextBox  = document.getElementById("noOfAliquots");
-			//var qtyPerAliquotTextBox = document.getElementById("quantityPerAliquot");
+			var aliquotCountTextBox  = document.getElementById("noOfAliquots");
+			var qtyPerAliquotTextBox = document.getElementById("quantityPerAliquot");
 			
 			if(chkBox.checked)
 			{
-				//aliquotCountTextBox.disabled = false;
-				//qtyPerAliquotTextBox.disabled = false;				
+				aliquotCountTextBox.disabled = false;
+				qtyPerAliquotTextBox.disabled = false;				
 				document.forms[0].deriveButton.disabled=true;
 				document.forms[0].moreButton.disabled=true;
 				document.forms[0].submitAndDistributeButton.disabled=true;
@@ -154,8 +154,8 @@
 			}
 			else
 			{
-				//aliquotCountTextBox.disabled = true;
-				//qtyPerAliquotTextBox.disabled = true;				
+				aliquotCountTextBox.disabled = true;
+				qtyPerAliquotTextBox.disabled = true;				
 				document.forms[0].deriveButton.disabled=false;
 				document.forms[0].moreButton.disabled=false;
 				document.forms[0].submitAndDistributeButton.disabled=false;
@@ -1240,7 +1240,7 @@
 				<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">				 			
 				<tr>					
 					<td class="formFieldNoBordersBold" height="20" colspan="5">
-						<html:checkbox property="checkedButton" onclick="onCheckboxButtonClick(this)">
+						<html:checkbox styleId="aliquotChk" property="checkedButton" onclick="onCheckboxButtonClick(this)">
 							&nbsp; <bean:message key="specimen.aliquot.message"/>
 						</html:checkbox>
 						
@@ -1293,3 +1293,11 @@ if(pageView.equals("edit"))
 -->
 <html:hidden property="restrictSCGCheckbox"/>
 </html:form>
+<!-- 
+ Name : Virender Mehta
+ Reviewer: Sachin Lale
+ Bug ID: 4231
+-->
+<script language="JavaScript">
+	onCheckboxButtonClick(document.getElementById("aliquotChk"));
+</script>
