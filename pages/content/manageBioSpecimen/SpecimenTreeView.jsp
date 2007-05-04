@@ -32,18 +32,18 @@
 <body>
 <table border="0" cellpadding="0" cellspacing="0">
 		<tr>	
-			<td class="formLabelAllBorder" colspan="2" width="240">
+			<td class="formLabelAllBorder" colspan="2" width="170">
 				<b>Specimen Details :</b>
 			</td>
 		</tr>	
 		<tr>
 			<td align="left" colspan="2">
-				<div id="treeboxbox_tree" style="width:240; height:<%=divHeight%>;background-color:#f5f5f5;border :1px solid Silver;; overflow:auto;"/>
+				<div id="treeboxbox_tree" style="width:212; height:<%=divHeight%>;background-color:#f5f5f5;border :1px solid Silver;; overflow:auto;"/>
 			</td>
 			
 		</tr>
 		<tr>
-			<td colspan="2" width="240">
+			<td colspan="2" width="170">
 		
 			<input type="hidden" name="participantId" value="<%=participantId%>"/>
 			<input type="hidden" name="cpId" value="<%=cpId%>"/>

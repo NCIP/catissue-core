@@ -319,15 +319,18 @@ public class MultipleSpecimenApplet extends BaseApplet {
 		panel.add(addSpecimen);
 		panel.add(placeHolder);
 		panel.add(deleteLast);
-		panel.add(placeHolder);
+	
 		
-		JCheckBox chk = new JCheckBox("Virtually Locate All The Specimens");
-	    panel.add(chk);
+		
+	    
 		JButton submit = new JButton(AppletConstants.MULTIPLE_SPECIMEN_SUBMIT);
 		submit.addActionListener(new SpecimenSubmitButtonHandler(table));
-		placeHolder = new JLabel("                                     ");  
-	//	panel.add(placeHolder);
+	 	panel.add(placeHolder);
 		panel.add(submit);
+		placeHolder = new JLabel(" ");
+		panel.add(placeHolder);
+		JCheckBox chk = new JCheckBox("Virtually Locate Specimens");
+		panel.add(chk);
 		
 		chk.addActionListener(new ActionListener() 
 				{

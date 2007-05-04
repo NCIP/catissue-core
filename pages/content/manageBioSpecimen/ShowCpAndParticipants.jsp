@@ -70,14 +70,14 @@
 
 	<tr valign='top'>
 
-		<td class="formLabelAllBorder" colspan="2" width="195">
+		<td class="formLabelAllBorder" colspan="2" width="170">
 			<b>Collection Protocol :</b> <%if(access == null || !access.equals("Denied"))
 	{%> <html:link href="#" styleId="register" onclick="RegisterParticipants()">Register</html:link><%}%>
 		</td>
 	</tr>		
 	<tr valign='top'>
 
-		<td class="formField" nowrap valign='top' width="195">
+		<td class="formField" nowrap valign='top' width="150">
 			<html:select property="cpId" styleClass="formFieldSized22" styleId="cpId" size="1" onchange="onCpChange(this)"
 			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.CP_LIST%>" labelProperty="name" property="value"/>
