@@ -690,7 +690,10 @@ public class UserBizLogic extends DefaultBizLogic
 			}
 			
 			//Added by Ashish
-			apiValidate(user);
+			/**
+			 * Two more parameter 'dao' and 'operation' is added by Vijay Pande to use it in isUniqueEmailAddress method
+			 */
+			apiValidate(user, dao,operation);
 			//END
 		}
 		return true;
@@ -699,11 +702,13 @@ public class UserBizLogic extends DefaultBizLogic
 	//Added by Ashish
 	/**
 	 * @param user user
+	 * @param dao
+	 * @param operation
 	 * @return 
 	 * @throws DAOException
 	 */
 	
-	private boolean apiValidate(User user)
+	private boolean apiValidate(User user, DAO dao, String operation)
 					throws DAOException
 	{
 		Validator validator = new Validator();
@@ -732,7 +737,7 @@ public class UserBizLogic extends DefaultBizLogic
 			 * Description: Wrong error meassage was dispayed while adding user with existing email address in use.
 			 * Following method is provided to verify whether the email address is already present in the system or not. 
 			 */
-			if(!isUniqueEmailAddress(user.getEmailAddress()))
+			if(operation.equals(Constants.ADD) && !(isUniqueEmailAddress(user.getEmailAddress(),dao)))
 			{
 				String arguments[] = null;
 				arguments = new String[]{"User", ApplicationProperties.getValue("user.emailAddress")};
@@ -1047,27 +1052,24 @@ public class UserBizLogic extends DefaultBizLogic
 	/**
 	 * Method to check whether email address already exist or not
 	 * @param emailAddress email address to be check
+	 * @param dao an object of DAO
 	 * @return isUnique boolean value to indicate presence of similar email address
 	 * @throws DAOException database exception
 	 */
-	private boolean isUniqueEmailAddress(String emailAddress) throws DAOException
+	private boolean isUniqueEmailAddress(String emailAddress, DAO dao) throws DAOException
 	{
 		boolean isUnique=true;
 		
 		String sourceObjectName=User.class.getName();
-		String[] displayNameFields=new String[] {"id"};
-		String valueField=new String("id");
+		String[] selectColumnName=new String[] {"id"};
 		String[] whereColumnName = new String[]{"emailAddress"};
 		String[] whereColumnCondition = new String[]{"="};
 		Object[] whereColumnValue = new String[]{emailAddress};
 		String joinCondition = null;
-		String separatorBetweenFields = ", ";	
 		
-		BizLogicFactory bizFactory=BizLogicFactory.getInstance();
-		UserBizLogic userBizLogiv=(UserBizLogic)bizFactory.getBizLogic(User.class.getName());
-		List userList = userBizLogiv.getList(sourceObjectName, displayNameFields, valueField, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
+		List userList = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
 		
-		if (userList.size() > 1)
+		if (userList.size() > 0)
 		{
 			isUnique=false;
 		}
