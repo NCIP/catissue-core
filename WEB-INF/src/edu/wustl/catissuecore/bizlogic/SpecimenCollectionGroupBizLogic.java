@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
@@ -33,6 +32,7 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
@@ -54,8 +54,6 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.domain.SpecimenEventParameters;
-import edu.wustl.catissuecore.domain.User;
 
 /**
  * UserHDAO is used to add user information into the database using Hibernate.
@@ -718,6 +716,91 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		return 1;
 	}
 	/**
+	 * This function gets the specimen coll group and specimens under that SCG.
+	 * @param cpId 
+	 * @param participantId
+	 * @return
+	 * @throws Exception
+	 *//*
+	public Vector getSCGandSpecimens(Long cpId, Long participantId) throws Exception
+	{
+		String hql = null;
+		if (participantId.longValue() == -1)
+		{
+			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id ,scg.activityStatus,sp.activityStatus from " + Specimen.class.getName()
+					+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "
+					+ cpId.toString() + " and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
+
+		}
+		else
+		{
+			hql = "select scg.id,scg.name,sp.id,sp.label,sp.parentSpecimen.id,scg.activityStatus,sp.activityStatus from " + Specimen.class.getName()
+					+ " as sp right outer join sp.specimenCollectionGroup as scg where scg.collectionProtocolRegistration.collectionProtocol.id= "
+					+ cpId.toString() + " and scg.collectionProtocolRegistration.participant.id= " + participantId.toString()
+					+ " and scg.id = sp.specimenCollectionGroup.id order by scg.id,sp.id";
+
+		}
+		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
+		dao.openSession(null);
+
+		List list = dao.executeQuery(hql, null, false, null);
+		Logger.out.info("list size -----------:" + list.size());
+		dao.closeSession();
+		//Map map1 = new TreeMap();
+		Vector treeData = new Vector();
+		if (list != null)
+		{
+			for (int i = 0; i < list.size(); i++)
+			{
+				//Getitng participants for a particular CP.
+				Object[] obj = (Object[]) list.get(i);
+				Long scgId = (Long) obj[0];
+				String scgName = (String) obj[1];
+				String scgActivityStatus = (String) obj[5];
+
+				setQueryTreeNode(scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, scgName, "0", null, null, null, scgActivityStatus, treeData);
+
+				for (int j = i; j < list.size(); j++, i++)
+				{
+					Object[] obj1 = (Object[]) list.get(j);
+					Long scgId1 = (Long) obj1[0];
+
+					if (scgId.longValue() == scgId1.longValue())
+					{
+						Long spId1 = (Long) obj1[2];
+						String spLabel1 = (String) obj1[3];
+						Long parentSpecimenId = (Long) obj1[4];
+						String spActivityStatus = (String) obj1[6];
+
+						if (spId1 != null)
+						{
+							if (parentSpecimenId != null)
+							{
+								setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, parentSpecimenId.toString(), Constants.SPECIMEN,
+										null, null, spActivityStatus, treeData);
+
+							}
+							else
+							{
+								setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, scgId1.toString(),
+										Constants.SPECIMEN_COLLECTION_GROUP, null, null, spActivityStatus, treeData);
+
+							}
+						}
+					}
+					else
+					{
+						i--;
+						break;
+					}
+				}
+
+			}
+		}
+
+		return treeData;
+	}*/
+	/**
 	 * Patch Id : FutureSCG_8
 	 * Description : method to get SCGTree ForCPBasedView
 	 */
@@ -745,7 +828,15 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			Long eventId = (Long)obj[0];
 			Double eventPoint = (Double) obj[1];
 			String collectionPointLabel = (String)obj[2];
-			List scgList = getSCGsForCPRAndEventId(eventId, cpId,participantId);
+			List scgList = null;
+			if (participantId.longValue() == -1)
+			{
+				scgList = getSCGsForTechnicians(eventId, cpId);
+			}
+			else
+			{
+				scgList = getSCGsForCPRAndEventId(eventId, cpId,participantId);
+			}
 			if (scgList != null && !scgList.isEmpty())
 			{
 				createTreeNodeForExistingSCG(treeData, eventPoint, collectionPointLabel, scgList);
@@ -757,6 +848,21 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		}
 		return treeData;
 	}
+	private List getSCGsForTechnicians(Long eventId, Long cpId) throws DAOException, ClassNotFoundException 
+	{
+		/*String hql = "select scg.id,scg.name,scg.activityStatus from "
+			+ SpecimenCollectionGroup.class.getName()
+			+ " as scg where scg.collectionProtocolRegistration.id = (select cpr.id from "
+			+ CollectionProtocolRegistration.class.getName() +" as cpr where cpr.collectionProtocol.id = "
+			+ cpId + ") and scg.collectionProtocolEvent.id = "+eventId ;
+		*/
+		String hql = "select scg.id,scg.name,scg.activityStatus from "
+			+ SpecimenCollectionGroup.class.getName()
+			+ " as scg where scg.collectionProtocolEvent.id = "+eventId ;
+		List list = executeQuery(hql);
+		return list;
+	}
+
 	/**
 	 * Patch Id : FutureSCG_9
 	 * Description : method to create TreeNode For FutureSCG
