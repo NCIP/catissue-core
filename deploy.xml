@@ -133,7 +133,7 @@
 		<echo message="Modifying caTissueCore Configuration File..."/>
 		
 		<replace file="${temp.dir}/catissuecore/WEB-INF/web.xml"> 
-			<replacefilter token="&lt;session-timeout>10&lt;/session-timeout>" 
+			<replacefilter token="&lt;session-timeout>30&lt;/session-timeout>" 
 			  	value="&lt;session-timeout>${session.timeout}&lt;/session-timeout>"/>
 		</replace>
 		
