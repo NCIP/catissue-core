@@ -29,12 +29,8 @@
 			return false;
 		}
 		
-		if(validateNumberOfSpecimen())
-		{
-			document.forms[0].action = "CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&menuSelected=15&button=multipleSpecimen&operation=add&pageOf=pageOfMultipleSpecimenCPQuery&<%=Constants.SPECIMEN_COLLECTION_GROUP_ID%>=<%=scgId%>&numberOfSpecimens="+enteredValue;
-			//"CPQueryInitMultipleSpecimen.do?operation=add&pageOf=pageOfMultipleSpecimenCPQuery&<%=Constants.SPECIMEN_COLLECTION_GROUP_ID%>=<%=scgId%>";
-			document.forms[0].submit();
-		}
+		document.forms[0].action = "CPQueryNewMultipleSpecimenAction.do?method=showMultipleSpecimen&menuSelected=15&button=multipleSpecimen&operation=add&pageOf=pageOfMultipleSpecimenCPQuery&<%=Constants.SPECIMEN_COLLECTION_GROUP_ID%>=<%=scgId%>&numberOfSpecimens="+enteredValue;
+		document.forms[0].submit();
 	}
 	function disablebuttons()
 	{
