@@ -135,7 +135,7 @@
 			%>
 					tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>",0,"<%=img%>","<%=img%>","<%=img%>","");
 					tree.setUserData("<%=nodeId%>","<%=nodeId%>","<%=data%>");	
-					tree.setItemText("<%=nodeId%>","<%=data.getDisplayName()%>","<%=data.getDisplayName()%>");
+					tree.setItemText("<%=nodeId%>","<%=data.getDisplayName()%>","<%=tooltipText%>");
 			<%	
 					}
 				}
