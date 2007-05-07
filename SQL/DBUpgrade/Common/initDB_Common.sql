@@ -336,3 +336,6 @@ UPDATE CATISSUE_SEARCH_DISPLAY_DATA SET ATTRIBUTE_ORDER = 9 WHERE RELATIONSHIP_I
 /*********************** Sachin: Setting the column/attribute order ENDS ************************/
 commit;
 
+/* Virender: Bug#4290- If technician log in then by default no storage  position is allowed */
+DELETE FROM `CSM_ROLE_PRIVILEGE` where `ROLE_PRIVILEGE_ID`=15;
+
