@@ -55,6 +55,7 @@ import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -833,7 +834,7 @@ public class NewSpecimenAction extends SecureAction
 		String specimenType = null;
 		String tissueSite = null;
 		String pathologicalStatus = null;
-		String quantity = null;
+		Double quantity = null;
 		
 		Map<String,String> tempMap = new HashMap<String,String>();
 		CollectionProtocolEvent collectionProtocolEvent = scg.getCollectionProtocolEvent();
@@ -871,7 +872,7 @@ public class NewSpecimenAction extends SecureAction
 			 * Patch ID: Bug#4245_3
 			 * Description: Pre-population of quantity value in case of a single specimen and single specimen requirement.
 			 */
-			quantity = specimenRequirement.getQuantity().getValue().toString();
+			quantity = specimenRequirement.getQuantity().getValue();
 		}
 
 		//Patch ID: Bug#3184_26
@@ -887,7 +888,15 @@ public class NewSpecimenAction extends SecureAction
 			specimenForm.setTissueSite(tissueSite);
 			specimenForm.setPathologicalStatus(pathologicalStatus);
 			//Patch ID: Bug#4245_4
-			specimenForm.setQuantity(quantity);
+			if(Utility.isQuantityDouble(specimenClass, specimenType))
+			{						
+				specimenForm.setQuantity(quantity.toString());
+			}
+			else
+			{        				
+				int qty = quantity.intValue();
+				specimenForm.setQuantity(Integer.toString(qty));
+			}
 		}
 		
 		return numberOfSpecimen;
