@@ -848,6 +848,19 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		}
 		return treeData;
 	}
+	/**
+	 * Name : Deepti Shelar
+	 * Bug id : 4268
+	 * Patch id : 4268_1
+	 */
+	/**
+	 * Gets all scgs under given cp for all participants.
+	 * @param eventId studycalendareventpoint
+	 * @param cpId collection protocol id
+	 * @return List of scgs
+	 * @throws DAOException DAOException
+	 * @throws ClassNotFoundException ClassNotFoundException
+	 */
 	private List getSCGsForTechnicians(Long eventId, Long cpId) throws DAOException, ClassNotFoundException 
 	{
 		/*String hql = "select scg.id,scg.name,scg.activityStatus from "
@@ -879,7 +892,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		Long futureSCGId = new Long(0);
 		String futureSCGName = "T"+eventPoint + ": " +collectionPointLabel;
 		String scgActivityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
-		String toolTipText = getToolTipText(eventPoint.toString(),collectionPointLabel,null);
+		String toolTipText = futureSCGName;//getToolTipText(eventPoint.toString(),collectionPointLabel,null);
 		setQueryTreeNode(futureSCGId.toString()+":"+eventId.toString()+":"+Constants.FUTURE_SCG, Constants.SPECIMEN_COLLECTION_GROUP, futureSCGName, "0", null, null, null, scgActivityStatus, toolTipText,treeData);
 	}
 	/**
@@ -900,7 +913,8 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		{
 			Object[] obj1 = (Object[]) scgList.get(i);
 			Long scgId = (Long) obj1[0];
-			String scgNodeLabel = (String) obj1[1];
+			String scgNodeLabel = "";
+			String scgName = (String) obj1[1];
 			String scgActivityStatus = (String) obj1[2];
 			String colName = "id";	
 			List scgListFromDB = retrieve(SpecimenCollectionGroup.class.getName(), colName, scgId);
@@ -922,7 +936,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 							scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate; 
 						}    					
 					}
-					String toolTipText = getToolTipText(eventPoint.toString(),collectionPointLabel,receivedDate);
+					String toolTipText = scgNodeLabel+ ": "+scgName;//getToolTipText(eventPoint.toString(),collectionPointLabel,receivedDate);
 					setQueryTreeNode(scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, scgNodeLabel, "0", null, null, null, scgActivityStatus, toolTipText,treeData);
 					addSpecimenNodesToSCGTree(treeData,scgId);
 				}
