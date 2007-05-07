@@ -175,10 +175,10 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
              * Pathch ID:2989_1
              * Description:If parent specimen is present, retriving its events and setting them to its child
              * */
-            //Inserting parent specimens events if derived 
+            //Setting parent specimens events if derived 
             if(specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId() != null && specimen.getParentSpecimen().getId() > 0)
             {            	
-            	setParentSpecimenEventsInChild(specimen,dao);
+            	setParentSpecimenEvents(specimen,dao);
             }            
 
 			try
@@ -249,7 +249,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @throws DAOException
 	 * This method retrieves the parent specimen events and sets them in the parent specimen
 	 */
-	private void setParentSpecimenEventsInChild(Specimen specimen,DAO dao) throws DAOException
+	private void setParentSpecimenEvents(Specimen specimen,DAO dao) throws DAOException
 	{
 		Specimen parent =  specimen.getParentSpecimen();
 		if(parent.getSpecimenEventCollection() == null)
