@@ -962,24 +962,24 @@ function newSpecimenInit()
  * Description: The following two functions are commonly used across many JSPs;
  * hence made them reusable by moving them to this shared file.
  */
-function openPopupWindow(frameUrl)
+function openPopupWindow(frameUrl,name)
 {
 	platform = navigator.platform.toLowerCase();
     if (platform.indexOf("mac") != -1)
 	{
-    	NewWindow(frameUrl,'name',screen.width,screen.height,'no');
+    	NewWindow(frameUrl,name,screen.width,screen.height,'no');
     }
     else
     {
-    	NewWindow(frameUrl,'name','800','600','no');
+    	NewWindow(frameUrl,name,'800','600','no');
     }
 }
 
-function mapButtonClickedOnSpecimen(frameUrl)
+function mapButtonClickedOnSpecimen(frameUrl,name)
 {
    	var storageContainer = document.getElementById('selectedContainerName').value;
 	frameUrl+="&storageContainerName="+storageContainer;
-	openPopupWindow(frameUrl);
+	openPopupWindow(frameUrl,name);
 }
 
 // Patch ID: Bug#4129_4

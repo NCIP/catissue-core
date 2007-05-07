@@ -729,7 +729,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 						+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 						+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;				
 				  //  String buttonOnClicked  = "window.open('"+url+"','','scrollbars=yes,menubar=no,height=320,width=810,resizable=yes,toolbar=no,location=no,status=no');return false";
-    				String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"')";  
+    				String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"','createSpecimen')";  
 					String noOfEmptyCombos = "3";
 					boolean disabled = false;
 					if(request.getAttribute("disabled") != null && request.getAttribute("disabled").equals("true"))

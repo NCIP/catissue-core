@@ -100,7 +100,7 @@ function mapButtonClickedInAliquot(frameUrl,count)
 	   	var storageContainer = document.getElementById("container_" + count + "_0").value;
 		frameUrl+="&storageContainerName="+storageContainer;
 		//Patch ID: Bug#4116_4
-		openPopupWindow(frameUrl);
+		openPopupWindow(frameUrl,'aliquotPage');
     }	
 		
 	</script>

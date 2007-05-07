@@ -679,8 +679,12 @@ public class Utility extends edu.wustl.common.util.Utility
 				String link = "SimpleSearchEdit.do?"+edu.wustl.common.util.global.Constants.TABLE_ALIAS_NAME + "="+aliasName
 	    			+"&" + Constants.SYSTEM_IDENTIFIER + "="+row.get(queryResultObjectData.getIdentifierColumnId())
 	    			+"&" + Constants.PAGE_OF + "="+ Variables.aliasAndPageOfMap.get(aliasName);
-	    		 
-	    		String onclickStr = " onclick=javascript:NewWindow('" + link + "','name','800','600','yes') ";
+	    		/**
+                  * bug ID: 4225
+                  * Patch id: 4225_1
+                  * Description : Passing a different name to the popup window
+                  */ 
+	    		String onclickStr = " onclick=javascript:NewWindow('" + link + "','simpleSearch','800','600','yes') ";
 				String hrefTag = "<a class='normalLink' href='#'"+ onclickStr + ">"+obj+"</a>"; 
 //				String hrefTag = "<a href='"+ link+ "'>"+obj+"</a>";
 				obj = hrefTag;

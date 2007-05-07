@@ -304,7 +304,7 @@ if(currentEventParametersDate.trim().length() > 0)
 						+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 						+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;		
 
-                String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"')";						
+                String buttonOnClicked = "mapButtonClickedOnSpecimen('"+url+"','transferEvents')";						
 				// String buttonOnClicked  = "javascript:NewWindow('"+url+"','name','810','320','yes');return false";
 				String noOfEmptyCombos = "3";
 				

@@ -1050,7 +1050,12 @@
 									+ "&" + Constants.CAN_HOLD_SPECIMEN_CLASS+"="+className
 									+ "&" + Constants.CAN_HOLD_COLLECTION_PROTOCOL +"=" + collectionProtocolId;
 								System.out.println(frameUrl);
-								String buttonOnClicked = "mapButtonClickedOnSpecimen('"+frameUrl+"')";  
+								/**
+                  				* bug ID: 4225
+                 				* Patch id: 4225_2
+                  				* Description : Passing a different name to the popup window
+                 				 */
+								String buttonOnClicked = "mapButtonClickedOnSpecimen('"+frameUrl+"','newSpecimenPage')";  
 								
 								//"javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false"; 
 								//javascript:NewWindow('"+frameUrl+"','name','800','600','no');return false";

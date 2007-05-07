@@ -109,7 +109,7 @@
 	   	var storageContainer = document.getElementById("container_" + count + "_0").value;
 		frameUrl+="&storageContainerName="+storageContainer;
 		//Patch ID: Bug#4116_3
-		openPopupWindow(frameUrl);
+		openPopupWindow(frameUrl,'multipleSpecimenPage');
     }
 	
 
