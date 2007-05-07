@@ -176,7 +176,7 @@ public class CreateSpecimenAction extends SecureAction
 						{
 							createForm.setVirtuallyLocated(false);
 						}
-						if(spClass!=null && createForm.getStContSelection() == 2)
+						if(spClass!=null && createForm.getStContSelection() != Constants.RADIO_BUTTON_VIRTUALLY_LOCATED)
 						{
 						containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId,
 								spClass, 0,exceedingMaxLimit,sessionData,true);
@@ -210,7 +210,20 @@ public class CreateSpecimenAction extends SecureAction
 						}
 					
 						}
-
+						/**
+						 * Name : Vijay_Pande
+						 * Patch ID: 4283_2 
+						 * See also: 1-3
+						 * Description: If radio button is clicked for map then clear values in the drop down list for storage position
+						 */
+						if(spClass!=null && createForm.getStContSelection() == Constants.RADIO_BUTTON_FOR_MAP)
+						{
+							String[] startingPoints = new String[]{"-1", "-1", "-1"};
+							initialValues = new Vector();
+							initialValues.add(startingPoints);
+							request.setAttribute("initValues", initialValues);
+						}
+						/** -- patch ends here  --*/
 					}
 					else
 					{
@@ -360,6 +373,24 @@ public class CreateSpecimenAction extends SecureAction
 				containerMap = getContainerMap(createForm.getParentSpecimenId(), createForm
 						.getClassName(), dao, scbizLogic,exceedingMaxLimit,request);
 				initialValues = checkForInitialValues(containerMap);
+				/**
+				 * Name : Vijay_Pande
+				 * Reviewer Name : Sachin_Lale
+				 * Bug ID: 4283
+				 * Patch ID: 4283_1 
+				 * See also: 1-3
+				 * Description: Proper Storage location of derived specimen was not populated while coming from newly created parent specimen page.
+				 * Initial value were generated but not set to form variables.
+				 */
+				if(initialValues!=null)
+				{
+					initialValues = checkForInitialValues(containerMap);
+					String[] startingPoints=(String[])initialValues.get(0);
+					createForm.setStorageContainer(startingPoints[0]);
+					createForm.setPos1(startingPoints[1]);
+					createForm.setPos2(startingPoints[2]);		
+				}
+				/**  --patch ends here -- */
 			}
 		}
 		//*************  ForwardTo implementation *************
