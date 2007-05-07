@@ -1589,4 +1589,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//Patch ID: Bug#4227_3
 	public static final String SUBMIT_AND_ADD_MULTIPLE = "submitAndAddMultiple";
 	
+	//constants for Storage container map radio button identification  Patch id: 4283_3
+	public static final int RADIO_BUTTON_VIRTUALLY_LOCATED=1;
+	public static final int RADIO_BUTTON_FOR_MAP=3;
 }
