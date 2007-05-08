@@ -4,7 +4,6 @@
 <logic:notEmpty scope="session" name="<%=Constants.SESSION_DATA%>">
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 
-<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">		
 <tr>
 	<td class="subMenuPrimaryTitle" height="22">
 		<a href="#content">
@@ -29,8 +28,6 @@
 			</a>			
 		</div>
 	</td>
-</tr>
-
 </tr>
 <tr>
 	<td class="subMenuPrimaryItemsWithBorder" onmouseover="changeMenuStyle(this,'subMenuPrimaryItemsWithBorderOver')" onmouseout="changeMenuStyle(this,'subMenuPrimaryItemsWithBorder')">				
