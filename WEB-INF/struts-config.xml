@@ -133,8 +133,9 @@ PUBLIC
 					parameter=".catissuecore.homePageDef" />
 		
 		<action path="/ManageBioSpecimen"
-					type="edu.wustl.catissuecore.action.ForwardAction">
+					type="edu.wustl.catissuecore.action.RoleBasedForwardAction">
 					<forward name="success" path="/CpBasedSearch.do?menuSelected=22" />
+					<forward name="access_denied" path="/SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&amp;aliasName=Specimen&amp;menuSelected=15"/>
 		</action>
 		<action path="/QueryManageBioSpecimen"
 					type="edu.wustl.catissuecore.action.ForwardAction">
@@ -190,7 +191,8 @@ PUBLIC
 			<forward name="success" path="/Home.do" />
 			<forward name="pageOfAdministrator" path="/ManageAdministrativeData.do" />
 			<forward name="pageOfSupervisor" path="/CpBasedSearch.do?menuSelected=22" />
-			<forward name="pageOfTechnician" path="/CpBasedSearch.do?menuSelected=22" />
+			<!--forward name="pageOfTechnician" path="/CpBasedSearch.do?menuSelected=22" /-->
+			<forward name="pageOfTechnician" path="/SimpleQueryInterface.do?pageOf=pageOfNewSpecimen&amp;aliasName=Specimen&amp;menuSelected=15"/>
 			<forward name="pageOfScientist" path="/AdvanceQueryInterfaceDefaultPage.do?pageOf=pageOfAdvanceQueryInterface&amp;menuSelected=17" />
 			<forward name="access_denied" path=".catissuecore.changePasswordDef"/>
 			<forward name="failure" path=".catissuecore.homePageDef" />
