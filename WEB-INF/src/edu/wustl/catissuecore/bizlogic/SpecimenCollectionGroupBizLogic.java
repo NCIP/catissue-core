@@ -828,15 +828,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			Long eventId = (Long)obj[0];
 			Double eventPoint = (Double) obj[1];
 			String collectionPointLabel = (String)obj[2];
-			List scgList = null;
-			if (participantId.longValue() == -1)
-			{
-				scgList = getSCGsForTechnicians(eventId, cpId);
-			}
-			else
-			{
-				scgList = getSCGsForCPRAndEventId(eventId, cpId,participantId);
-			}
+			List scgList = getSCGsForCPRAndEventId(eventId, cpId,participantId);
 			if (scgList != null && !scgList.isEmpty())
 			{
 				createTreeNodeForExistingSCG(treeData, eventPoint, collectionPointLabel, scgList);
@@ -852,29 +844,29 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	 * Name : Deepti Shelar
 	 * Bug id : 4268
 	 * Patch id : 4268_1
-	 */
-	/**
+	 *//*
+	*//**
 	 * Gets all scgs under given cp for all participants.
 	 * @param eventId studycalendareventpoint
 	 * @param cpId collection protocol id
 	 * @return List of scgs
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
-	 */
+	 *//*
 	private List getSCGsForTechnicians(Long eventId, Long cpId) throws DAOException, ClassNotFoundException 
 	{
-		/*String hql = "select scg.id,scg.name,scg.activityStatus from "
+		String hql = "select scg.id,scg.name,scg.activityStatus from "
 			+ SpecimenCollectionGroup.class.getName()
 			+ " as scg where scg.collectionProtocolRegistration.id = (select cpr.id from "
 			+ CollectionProtocolRegistration.class.getName() +" as cpr where cpr.collectionProtocol.id = "
 			+ cpId + ") and scg.collectionProtocolEvent.id = "+eventId ;
-		*/
+		
 		String hql = "select scg.id,scg.name,scg.activityStatus from "
 			+ SpecimenCollectionGroup.class.getName()
 			+ " as scg where scg.collectionProtocolEvent.id = "+eventId ;
 		List list = executeQuery(hql);
 		return list;
-	}
+	}*/
 
 	/**
 	 * Patch Id : FutureSCG_9
