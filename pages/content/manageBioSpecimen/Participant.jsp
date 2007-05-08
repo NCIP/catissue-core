@@ -809,8 +809,13 @@ tr#hiddenCombo
 						var cl = mygrid.cells(id,mygrid.getColumnCount()-1);
 						var pid = cl.getValue();
 						//alert(pid);
-						//------------
-						window.location.href = 'CPQueryParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+pid
+						/* 
+							 Resolved bug# 4240
+	                    	 Name: Virender Mehta
+	                    	 Reviewer: Sachin Lale
+	                    	 Description: removed URL On  onclick
+	                     */
+						//window.location.href = 'CPQueryParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+pid
 					} 				
 
 					/* 
