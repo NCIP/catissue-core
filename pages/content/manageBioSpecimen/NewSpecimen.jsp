@@ -1248,21 +1248,19 @@
 						<html:checkbox styleId="aliquotChk" property="checkedButton" onclick="onCheckboxButtonClick(this)">
 							&nbsp; <bean:message key="specimen.aliquot.message"/>
 						</html:checkbox>
-						
-						
 						&nbsp;&nbsp;&nbsp;
 		                <bean:message key="aliquots.noOfAliquots"/>
 	                    &nbsp;
-                        <input type="text" id="noOfAliquots"
-				        name="noOfAliquots" class = "formFieldSized5" disabled="true"
-				         />						
+	                    <!-- Resolved bug# 4287
+	                    	 Name: Virender Mehta
+	                    	 Reviewer: Sachin Lale
+	                    	 Description: replaced input type with html:text
+	                     -->
+						<html:text styleClass="formFieldSized5" styleId="noOfAliquots" property="noOfAliquots" disabled="true" />
 						&nbsp;&nbsp;&nbsp;
 		                <bean:message key="aliquots.qtyPerAliquot"/>
 	                    &nbsp;
-                        <input type="text" id="quantityPerAliquot"
-				        name="quantityPerAliquot" class = "formFieldSized5" disabled="true"
-				         />
-						
+						<html:text styleClass="formFieldSized5" styleId="quantityPerAliquot" property="quantityPerAliquot" disabled="true" />
 				    </td>
 				</tr>								
 				</logic:notEqual>
