@@ -638,7 +638,9 @@ INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE
 /* Mandar 05Dec06 - MultipleSpecimen action entries end */
 
 /* changes for making cpbasedSearchAction a secureAction - by vaishali*/
-INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (323,19,292,to_date('0001-01-01','yyyy-mm-dd'));
+/* changing this cpbasedSearchAction element from SECURED_TECHNICIAN_ACTIONS to SECURED_SUPERVISORY_ACTIONS for making cpbasedSearchAction a secureAction - by Deepti*/
+/*INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (323,19,292,to_date('0001-01-01','yyyy-mm-dd'));*/
+INSERT INTO CSM_PG_PE (PG_PE_ID,PROTECTION_GROUP_ID,PROTECTION_ELEMENT_ID,UPDATE_DATE) VALUES (323,18,292,to_date('0001-01-01','yyyy-mm-dd'));
 /* done */
 
 /* Changes made to make SpecimenArrayAliquotAction a secureAction - by Jitendra*/

@@ -59,3 +59,8 @@ CREATE TABLE CATISSUE_QUERY_EDITLINK_COLS
       TABLE_ID bigint not null, 
       COL_ID bigint not null
 );
+
+/* Bug id :4278 Deepti technicians can not access cp based view*/
+update CSM_PG_PE
+set PROTECTION_GROUP_ID = '18'
+where PROTECTION_ELEMENT_ID = '292';
