@@ -53,6 +53,7 @@ tr#hiddenCombo
 				formName = Constants.QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
 			if(pageOf.equals(Constants.PAGE_OF_PARTICIPANT_CP_QUERY))
 			{
+			
 				formName = Constants.CP_QUERY_PARTICIPANT_EDIT_ACTION + "?pageOf="+pageOf;
 			}
 		}
@@ -717,7 +718,7 @@ tr#hiddenCombo
 						</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','Participant.do?operation=<%=operation%>&pageOf=pageOfParticipant&status=true',document.forms[0].counter,'chk_',false)"  disabled="true">
+						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true',document.forms[0].counter,'chk_',false)"  disabled="true">
 							<bean:message key="buttons.delete"/>
 						</html:button>
 					</td>
