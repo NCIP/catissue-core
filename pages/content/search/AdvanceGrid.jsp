@@ -233,7 +233,7 @@
         */
 	// Mandar : 30-Jan-07 :To hide ID columns
 	var hideCols = getIDColumns();
-	for(i=0;i<hideCols.size();i++)
+	for(i=0;i<hideCols.length;i++)
 	{
 		mygrid.setHeaderCol(hideCols[i],"");
 		mygrid.setColumnHidden(hideCols[i],true);
