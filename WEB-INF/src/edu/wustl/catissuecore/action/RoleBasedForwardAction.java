@@ -1,0 +1,54 @@
+package edu.wustl.catissuecore.action;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.security.SecurityManager;
+import edu.wustl.common.security.exceptions.SMException;
+import edu.wustl.common.util.Roles;
+/**
+ * This class is called when user clicks on BioSpecimen tab.
+ * Technicians can not access cp based view. But other users can access , so this class checks if the logged user is a technician .If yes then 
+ * default page shown is specimen search. For users other than technician default page is CP based view.  
+ * @author deepti_shelar
+ * 
+ * 
+ * Bug id :4278
+ * Patch id : 4278_1
+ */
+public class RoleBasedForwardAction extends BaseAction
+{
+	/**
+	 * Overrides the executeACtion method of BaseAction class.Checks if the logged user is a technician then access is denied for cp based view.
+	 */
+	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception 
+	{
+		String roleName = getRoleNameForUser(request);
+		if(roleName.equalsIgnoreCase(Roles.TECHNICIAN))
+		{
+			return mapping.findForward(Constants.ACCESS_DENIED);
+		}
+		return mapping.findForward(Constants.SUCCESS);
+	}
+
+	/**
+	 * @param request HttpServletRequest
+	 * @return String rolename
+	 * @throws NumberFormatException NumberFormatException
+	 * @throws SMException SMException
+	 */
+	private String getRoleNameForUser(HttpServletRequest request) throws NumberFormatException, SMException {
+		SessionDataBean sessionData = getSessionData(request);
+		Long userId = new Long(sessionData.getCsmUserId());
+		SecurityManager securityManager = SecurityManager.getInstance(LoginAction.class);
+		String roleName = securityManager.getUserGroup(userId);
+		return roleName;
+	}
+}
