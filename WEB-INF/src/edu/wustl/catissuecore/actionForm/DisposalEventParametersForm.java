@@ -95,14 +95,14 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
      {
      	ActionErrors errors = super.validate(mapping, request);
          Validator validator = new Validator();
-         
+        
          try
          {
         	 //resolved bug# 4058	
-        	 if (validator.isEmpty(activityStatus) )
-             {
-         	   errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("disposaleventparameters.activityStatus")));
-             }
+        	 if(!activityStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[2])&&!activityStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_VALUES[3]))
+         	 {
+         	    	 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("disposaleventparameters.activityStatus")));
+         	 }
          	//Commented due to Bug:- 3106: No need to have Disposal Reason a required field
          	// checks the reason
 //           	if (validator.isEmpty(reason ) )

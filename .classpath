@@ -2,6 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="WEB-INF/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/lib"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Catissuecore1.1"/>
+	<classpathentry kind="lib" path="/CommonPackageV11/lib/lucene-core-2.0.0.jar"/>
+	<classpathentry kind="lib" path="/CommonPackageV11/lib/titli-washu-1.0.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

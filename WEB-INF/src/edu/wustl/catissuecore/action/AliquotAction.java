@@ -448,9 +448,11 @@ public class AliquotAction extends SecureAction
 						else
 							totalQuantity += Double.parseDouble(value);
 					}
-
 				}
-
+				//Resolved bug# 4314 Virender
+				DecimalFormat dFormat = new DecimalFormat("#.000");
+				totalQuantity = Double.parseDouble(dFormat.format(totalQuantity));
+				
 				if (totalQuantity > Double.parseDouble(aliquotForm.getInitialAvailableQuantity()))
 				{
 					errors = getActionErrors(request);
@@ -631,7 +633,7 @@ public class AliquotAction extends SecureAction
 	 			* Name : Virender Mehta
 	 			* Reviewer Name : Sachin Lale 
 	 			* Bug ID: 4040
-	 			* Description: Added new error message and checg for pageOf flow, if user clicks directly aliquot 
+	 			* Description: Added new error message and check for pageOf flow, if user clicks directly aliquot 
 	 			* 			   link and specimen status is closed then validation is done at Aliquot.jsp else validation message will be shown 
 	 			* 			   is directed to NewSpecimen.jsp page		
 				*/

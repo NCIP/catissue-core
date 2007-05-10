@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -394,12 +395,15 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 		if (parentSpecimen != null)
 		{
 			double availableQuantity = parentSpecimen.getAvailableQuantity().getValue().doubleValue();
+            //Resolved bug# 4339 Virender
+			DecimalFormat dFormat = new DecimalFormat("#.000");
 			availableQuantity = availableQuantity - dQuantity;
+			availableQuantity = Double.parseDouble(dFormat.format(availableQuantity));
 			parentSpecimen.setAvailableQuantity(new Quantity(String.valueOf(availableQuantity)));
 			if (availableQuantity <= 0)
 			{
 				parentSpecimen.setAvailable(new Boolean(false));
-				
+				parentSpecimen.setAvailableQuantity(new Quantity("0"));
 			}
 			
        // dispose the parent specimen based on user's selection Bug - 3773
