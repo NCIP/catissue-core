@@ -37,7 +37,7 @@
 			var cpId = document.getElementById("cpId");
 			var participantId = document.getElementById("participantId");
 			window.parent.frames[2].location = "QueryParticipantSearch.do?pageOf=pageOfParticipantCPQueryEdit&operation=edit&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value+"&id="+participantId.value;
-			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location = "showTree.do?<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId.value+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value;			
+			window.parent.frames['<%=Constants.CP_TREE_VIEW%>'].location = "showTree.do?<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+participantId.value+"&<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value+"&particiantChnaged=true";			
 		}
 		
 		function RegisterParticipants()

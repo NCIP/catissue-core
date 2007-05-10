@@ -7,6 +7,7 @@
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
 <%@ page import="edu.wustl.common.tree.QueryTreeNodeData"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
+<%@ page import="java.util.*"%>
 
 <%
 		String participantId=(String)request.getAttribute(Constants.CP_SEARCH_PARTICIPANT_ID);
@@ -84,10 +85,10 @@
 	 				 */
 					var ind = isFuture.indexOf(":");
 					var eventId = isFuture.substring(0,ind);
-					window.parent.frames[2].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupAdd&operation=add&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+<%=participantId%>+"&<%=Constants.CP_SEARCH_CP_ID%>="+<%=cpId%>+"&<%=Constants.QUERY_RESULTS_COLLECTION_PROTOCOL_EVENT_ID%>="+eventId;
+					window.parent.frames[2].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupAdd&operation=add&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+<%=participantId%>+"&<%=Constants.CP_SEARCH_CP_ID%>="+<%=cpId%>+"&<%=Constants.QUERY_RESULTS_COLLECTION_PROTOCOL_EVENT_ID%>="+eventId+"&clickedNodeId="+id;
 					}else
 					{
-						window.parent.frames[2].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&operation=edit&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+<%=participantId%>+"&<%=Constants.CP_SEARCH_CP_ID%>="+<%=cpId%>;
+						window.parent.frames[2].location = "QuerySpecimenCollectionGroupSearch.do?pageOf=pageOfSpecimenCollectionGroupCPQueryEdit&operation=edit&id="+id1+"&<%=Constants.CP_SEARCH_PARTICIPANT_ID%>="+<%=participantId%>+"&<%=Constants.CP_SEARCH_CP_ID%>="+<%=cpId%>+"&clickedNodeId="+id;
 					}
 					<%}%>
 				}
@@ -139,16 +140,12 @@
 			<%	
 					}
 				}
-
 			%>
 			tree.closeAllItems("0");
-			
-			<%if(request.getParameter("nodeId") != null)
+			<%if( request.getSession().getAttribute("nodeId") != null)
 			{
-				String nodeId = request.getParameter("nodeId");
-				
+				String nodeId = (String)request.getSession().getAttribute("nodeId");
 			%>
-			<%-- opening and selecting the node which is selected by user --%>
 			var parentId = tree.getParentId("<%=nodeId%>");
 			tree.openItem(parentId);
 			tree.selectItem("<%=nodeId%>",false);
@@ -156,8 +153,5 @@
 			
 			<%}%>	
 	</script>
-
-
 </body>
-
 </html>
