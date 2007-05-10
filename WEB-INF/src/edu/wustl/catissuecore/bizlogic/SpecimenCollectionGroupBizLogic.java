@@ -885,7 +885,8 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		String futureSCGName = "T"+eventPoint + ": " +collectionPointLabel;
 		String scgActivityStatus = Constants.ACTIVITY_STATUS_ACTIVE;
 		String toolTipText = futureSCGName;//getToolTipText(eventPoint.toString(),collectionPointLabel,null);
-		setQueryTreeNode(futureSCGId.toString()+":"+eventId.toString()+":"+Constants.FUTURE_SCG, Constants.SPECIMEN_COLLECTION_GROUP, futureSCGName, "0", null, null, null, scgActivityStatus, toolTipText,treeData);
+		String nodeId = futureSCGId.toString()+":"+eventId.toString()+":"+Constants.FUTURE_SCG;
+		setQueryTreeNode(nodeId, Constants.SPECIMEN_COLLECTION_GROUP, futureSCGName, "0", null, null, null, scgActivityStatus, toolTipText,treeData);
 	}
 	/**
 	 * Patch Id : FutureSCG_10
