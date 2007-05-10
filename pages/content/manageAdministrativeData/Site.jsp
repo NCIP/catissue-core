@@ -12,7 +12,7 @@
 		String pageOf = (String) request.getAttribute(Constants.PAGEOF);
 
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
-
+		
         String formName;
 
         boolean readOnlyValue;
@@ -60,12 +60,16 @@
     /***  code using ajax :gets the emailAddress of the coordinator without refreshing the whole page  ***/
 	function onCoordinatorChange()
 	{
+		//Bug 4250
+		var submittedForValue = document.forms[0].submittedFor.value;
+		
 		var request = newXMLHTTPReq();
 		var handlerFunction = getReadyStateHandler(request,onResponseUpdate,true);
 		
 		//no brackets after the function name and no parameters are passed because we are assigning a reference to the function and not actually calling it
 		request.onreadystatechange = handlerFunction;
-		var action = "operation="+document.forms[0].operation.value+"&pageOf=pageOfSite&isOnChange=true&coordinatorId="+document.getElementById("coordinatorId").value;
+		//Bug 4250
+		var action = "operation="+document.forms[0].operation.value+"&pageOf=pageOfSite&isOnChange=true&coordinatorId="+document.getElementById("coordinatorId").value+"&submittedFor="+submittedForValue;
 		
 		//Open connection to servlet
 		request.open("POST","Site.do",true);	
