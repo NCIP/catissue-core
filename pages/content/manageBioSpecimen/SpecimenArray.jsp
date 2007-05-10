@@ -215,7 +215,7 @@
 										formLabelStyle="formLabelBorderless"
 										disabled = "<%=dropDownDisable%>"
 										noOfEmptyCombos = "<%=noOfEmptyCombos%>"/>
-										</tr>
+										</tr>										
 										</table>
 								</td>
 							</tr>							
@@ -351,11 +351,12 @@
 												    );
 							</script>
 							</td>
-							</tr>
-						</table>
+							</tr>				
+						<%}%>
+					<!-- Bug 4251-->
+					</table>
 				</td>
 			</tr>
-			<%}%>
 			<tr>
 				<td align="right" colspan="6">
 				<!-- action buttons begins -->
