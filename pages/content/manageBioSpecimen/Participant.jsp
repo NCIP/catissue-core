@@ -816,7 +816,16 @@ tr#hiddenCombo
 	                    	 Reviewer: Sachin Lale
 	                    	 Description: removed URL On  onclick
 	                     */
-						//window.location.href = 'CPQueryParticipantSelect.do?pageOf=<%=pageOf%>&operation=add&participantId='+pid
+						 document.forms[0].submittedFor.value = "AddNew";
+						 var pageOf = "<%=pageOf%>";
+						if(pageOf == "<%=Constants.PAGE_OF_PARTICIPANT_CP_QUERY%>")
+						{
+							window.location.href = 'CPQueryParticipantSelect.do?submittedFor=AddNew&operation=add&participantId='+pid
+						}
+						else
+						{
+							window.location.href = 'ParticipantLookup.do?submittedFor=AddNew&operation=add&participantId='+pid
+						}						
 					} 				
 
 					/* 
