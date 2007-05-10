@@ -855,12 +855,21 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	}
 
 	//-----Mandar : for validation of non associated data           start
-
+	/**
+	 * Name : Vijay Pande
+	 * Reviewer Name : Sachin Lale
+	 * Bug ID: 4189
+	 * Patch ID: 4189_1 
+	 * See also: -
+	 * Description: Bug was reopened due to missing validation.
+	 * Validation was already there but new entry for "createOn" date was not made in the specimenAttribute array. Hence getKey function was returning wrong key.
+	 * "createOn" is added to specimenAttribute array.
+	 */
 	private String getKey(int row, int col)
 	{
 		// attributes of the specimen.
 		String[] specimenAttribute = {"","SpecimenCollectionGroup_name", "ParentSpecimen_label", "label", "barcode", "class", "type",
-				"SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "Quantity_value",
+				"SpecimenCharacteristics_tissueSite", "SpecimenCharacteristics_tissueSide", "pathologicalStatus", "createdOn","Quantity_value",
 				"concentrationInMicrogramPerMicroliter", "StorageContainer_temp", "comments", "specimenEventCollection",
 				"externalIdentifierCollection", "biohazardCollection", "derive"};
 		String key = AppletConstants.SPECIMEN_PREFIX + col + "_" + specimenAttribute[row];
