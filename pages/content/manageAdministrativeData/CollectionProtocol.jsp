@@ -526,7 +526,9 @@ function insRow(subdivtag,iCounter,blockCounter)
 			<html:hidden property="outerCounter"/>	
 	</td>
 	<td class="formTitle" align="Right">
-		<html:button property="deleteCollectionProtocolEvents" styleClass="actionButton" onclick="deleteChecked('outerdiv','CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteCollectionProtocolEvents',document.forms[0].outerCounter,'chk_proto_',true)" disabled="true">
+	<!-- Bug 4296 -->
+	<%String deleteEvents = "deleteChecked('outerdiv','CollectionProtocol.do?operation="+operation+"&pageOf=pageOfCollectionProtocol&status=true&button=deleteCollectionProtocolEvents',document.forms[0].outerCounter,'chk_proto_',true)"; %>
+		<html:button property="deleteCollectionProtocolEvents" styleClass="actionButton" onclick="<%=deleteEvents %>" disabled="true">
 			<bean:message key="buttons.delete"/>
 		</html:button>
 	</td>
@@ -1066,7 +1068,9 @@ function insRow(subdivtag,iCounter,blockCounter)
 			     		<html:hidden styleId="<%=hiddenCounter%>" property="<%=hiddenCounter%>" value="1"/>
 			        </td>
 			        <td class="formSubTitle" align="Right">
-							<html:button property="deleteSpecimenReq" styleClass="actionButton" onclick="deleteChecked('value(CollectionProtocolEvent:`','CollectionProtocol.do?operation=<%=operation%>&pageOf=pageOfCollectionProtocol&status=true&button=deleteSpecimenReq&blockCounter=`','ivl(`)','chk_spec_`_',false)">
+						<!-- Bug 4296 -->
+			        <%String deleteSpecimenRequirements = "deleteChecked('value(CollectionProtocolEvent:`','CollectionProtocol.do?operation="+ operation +"&pageOf=pageOfCollectionProtocol&status=true&button=deleteSpecimenReq&blockCounter=`','ivl(`)','chk_spec_`_',false)"; %>
+							<html:button property="deleteSpecimenReq" styleClass="actionButton" onclick="<%= deleteSpecimenRequirements %>">
 								<bean:message key="buttons.delete"/>
 							</html:button>
 					</td>
