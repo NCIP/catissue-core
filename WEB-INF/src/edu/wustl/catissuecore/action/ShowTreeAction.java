@@ -28,8 +28,27 @@ public class ShowTreeAction extends BaseAction
 			throws Exception
 	{
 		//CPSearchForm cpsearchForm = (CPSearchForm) form;
-		String cpId = request.getParameter(Constants.CP_SEARCH_CP_ID);
+		String cpId = request.getParameter(Constants.CP_SEARCH_CP_ID);		
 		String participantId = request.getParameter(Constants.CP_SEARCH_PARTICIPANT_ID);
+		/**
+		 * Name : Deepti Shelar
+		 * Reviewer's Name : Sachin Lale
+		 * Bug id : 4213
+		 * Patch id  : 4213_1
+		 * Description : getting parameters from request and keeping them in seesion to keep the node in tree selected. 
+		 */
+		String isParticipantChanged = request.getParameter("particiantChnaged");
+		if(isParticipantChanged != null && isParticipantChanged.equalsIgnoreCase("true"))
+		{
+			request.getSession().setAttribute("nodeId",null);
+		}
+		if(request.getParameter("nodeId") != null)
+		{
+			String nodeId = request.getParameter("nodeId");
+			if(!nodeId.equalsIgnoreCase("SpecimenCollectionGroup_0"))
+				request.getSession().setAttribute("nodeId",nodeId);
+		}
+		System.out.println();
 		Vector treeData = null;
 		if (cpId != null && participantId != null && !cpId.equals("") && !participantId.equals(""))
 		{
@@ -39,7 +58,7 @@ public class ShowTreeAction extends BaseAction
 			 * Patch Id : FutureSCG_2
 			 * Description : Calling method to create tree for future scgs
 			 */
-			treeData = bizLogic.getSCGTreeForCPBasedView(new Long(cpId), new Long(participantId));
+			treeData = bizLogic.getSCGTreeForCPBasedView(new Long(cpId), new Long(participantId)); 
 		}
 		request.setAttribute("treeData", treeData);
 		request.setAttribute(Constants.CP_SEARCH_CP_ID, cpId);

@@ -69,8 +69,17 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			{
 		SpecimenCollectionGroupForm  specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;
 		Logger.out.debug("SCGA : " + specimenCollectionGroupForm.getId() );
-		
-		//	set the menu selection 
+		String nodeId = null;
+		/**
+		 * Bug id : 4213
+		 * Patch id  : 4213_2
+		 * Description : getting parameters from request and keeping them in seesion to keep the node in tree selected.
+		 */
+		if( request.getParameter("clickedNodeId") != null)
+		{
+			nodeId = request.getParameter("clickedNodeId");
+			request.getSession().setAttribute("nodeId",nodeId);
+		}
 		request.setAttribute(Constants.MENU_SELECTED, "14"  ); 
 
 		//pageOf and operation attributes required for Advance Query Object view.
