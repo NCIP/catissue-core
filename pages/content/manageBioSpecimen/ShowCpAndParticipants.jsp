@@ -106,7 +106,7 @@
 	<tr>
 
 		<td class="formField" width="25%">
-			<html:select property="participantId" styleClass="formFieldSized22" styleId="participantId" size="8" onchange="onParticipantChange(this)"
+			<html:select property="participantId" styleClass="formFieldSized22" styleId="participantId" size="8" onchange="onParticipantChange(this)" onclick="onParticipantChange(this)"
 			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
 			<html:options collection="<%=Constants.REGISTERED_PARTICIPANT_LIST%>" labelProperty="name" property="value"/>
 			</html:select>
