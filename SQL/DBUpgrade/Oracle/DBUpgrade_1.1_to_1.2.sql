@@ -30,4 +30,8 @@ CREATE TABLE CATISSUE_QUERY_EDITLINK_COLS
 #-- Aarti Assigning technician role to technicians on public data group
 INSERT INTO CSM_USER_GROUP_ROLE_PG (USER_GROUP_ROLE_PG_ID,GROUP_ID,ROLE_ID,PROTECTION_GROUP_ID,UPDATE_DATE) VALUES (CSM_USER_GROU_USER_GROUP_R_SEQ.NEXTVAL,3,3,20,TO_DATE('2005-08-24','yyyy-mm-dd'));
 
+/* Bug id :4278 Deepti technicians can not access cp based view*/
+update CSM_PG_PE
+set PROTECTION_GROUP_ID = '18'
+where PROTECTION_ELEMENT_ID = '292';
  
