@@ -442,10 +442,22 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		collectionGroupPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		rbspecimenGroup.setSelected(true);
 
-		//Parent Specimen 
-		parentSpecimen = new ModifiedTextField(12);
-		rbparentSpecimen = new JRadioButton();
-		parentSpecimen.setPreferredSize(new Dimension(150, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
+		// bug id 4340
+		//Parent specimen
+		String platformName = (String)model.getEventsToolTipMap().get("platformName");		
+		if(platformName != null && platformName.indexOf("mac") != -1)
+		{
+			parentSpecimen = new ModifiedTextField(10);
+			parentSpecimen.setPreferredSize(new Dimension(135, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
+		}
+		else
+		{
+			parentSpecimen = new ModifiedTextField(18);
+			parentSpecimen.setPreferredSize(new Dimension(170, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
+		}		
+		
+		//Parent Specimen		
+		rbparentSpecimen = new JRadioButton();		
 		//rbparentSpecimen.setEnabled(false);
 		parentSpecimenPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		parentSpecimen.setEnabled(false);
@@ -888,16 +900,25 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 	 * This method sets the quantity field on the applet with the specified value.
 	 * @param quantity value to be displayed.
 	 */
-	private void setQuantityField(String quantity)
+	private void setQuantityField(String quantity,Map eventsToolTipMap)
 	{
-		//Quantity
-		this.quantity = new ModifiedTextField(quantity, 15);
-		this.quantity.setPreferredSize(new Dimension(110, (int) specimenCollectionGroup.getPreferredSize().getHeight()));
-
+		//bug id 4340
+		String platformName = (String)eventsToolTipMap.get("platformName");
+		//Quantity		
+		if(platformName != null && platformName.indexOf("mac") != -1)
+		{
+			this.quantity = new ModifiedTextField(quantity, 6);
+			this.quantity.setPreferredSize(new Dimension(60, (int) specimenCollectionGroup.getPreferredSize().getHeight()+2));
+		}
+		else
+		{
+			this.quantity = new ModifiedTextField(quantity, 15);
+			this.quantity.setPreferredSize(new Dimension(110, (int) specimenCollectionGroup.getPreferredSize().getHeight()+2));
+		}
 		this.quantityUnitPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, HGAP, VGAP));
 		this.quantityUnitPanel.add(this.quantity);
 		this.quantityUnitPanel.add(unit);
-	}
+	}	
 
 	//--------------- GETTER SETTER ------------------------------------
 	/**
@@ -2013,7 +2034,8 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		}
 		
 		//Set value of quantity field.
-		setQuantityField("0");
+		//bug id: 4340
+		setQuantityField("0",model.getEventsToolTipMap());
 	}
 	
 	//Patch ID: Bug#4194_3
@@ -2103,7 +2125,8 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		
 		//Quantity
 		String quantity = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_QUANTITY_ROW_NO, column + 1);
-		setQuantityField(quantity);
+		//bug id: 4340
+		setQuantityField(quantity,model.getEventsToolTipMap());
     }
 
 	// -------------------Mandar For Focus Handling 11-Dec-06 start

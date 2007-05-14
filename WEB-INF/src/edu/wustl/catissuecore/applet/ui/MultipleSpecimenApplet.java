@@ -66,12 +66,17 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	
 	Color appletColor;
 	public void doInit()
-    {
+    {		
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));		
 		final MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());
-				
-		table = new MultipleSpecimenTable(model);
+		
+		table = new MultipleSpecimenTable(model);		
         table.getTableHeader().setReorderingAllowed(false);
+        
+        //bug id: 4340
+        String platFormName = this.getParameter("platformName");  		
+		Map eventsToolTipMap = ((MultipleSpecimenTableModel)(table.getModel())).getEventsToolTipMap();
+		eventsToolTipMap.put("platformName", platFormName);
         
         //****** Remove columnHeaders
         table.setTableHeader(null );
@@ -145,7 +150,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 						                int column = model.getLastCellColumn();*/
 						                
 						                int row = table.getSelectedRow();
-						                int column = table.getSelectedColumn();
+						                int column = table.getSelectedColumn();  
 						                
 						                boolean flag = true; 
 						                 

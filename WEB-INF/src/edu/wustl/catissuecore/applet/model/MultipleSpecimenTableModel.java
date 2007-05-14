@@ -1170,4 +1170,13 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		return noOfSpecimenRequirments;
 	}
 
+	//bug id: 4340
+	/**
+	 * @return the eventsToolTipMap
+	 */
+	public Map getEventsToolTipMap()
+	{
+		return eventsToolTipMap;
+	}
+
 }

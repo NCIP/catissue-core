@@ -86,15 +86,16 @@
 										document.writeln('width="100%" height="575" MAYSCRIPT>');
 									} 
 									var url = location.protocol + '//' + location.hostname + ':' + location.port + location.pathname + '/../';
-	                                								
+	                                //bug id: 4340								
 									document.writeln('<PARAM name="type" value="application/x-java-applet;jpi-version=1.3">\n' +
+													 '<PARAM name="platformName" value="'+platform+'">\n'+
 							                        '<PARAM name="name" value="<%=Constants.MULTIPLE_SPECIMEN_APPLET_NAME%>">\n'+
 													'<PARAM name="session_id" value="<%=session.getId()%>">\n'+
 													'<PARAM name="noOfSpecimen" value="<%=form.getNumberOfSpecimen()%>">\n'+
 													'<PARAM name = "<%=Constants.APPLET_SERVER_URL_PARAM_NAME%>" value= "' + url + '">\n'+ 
 													'</APPLET>'
 												    );
-													
+									
 												
 							</script>
 				</td>
