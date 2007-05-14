@@ -8,8 +8,10 @@
 <%@ page import="edu.wustl.common.vo.AdvanceSearchUI"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.SearchUtil"%>
+<%@ page import="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"%>
 
 <%
+	AdvanceSearchForm form = (AdvanceSearchForm)request.getAttribute("advanceSearchForm");
 	AdvanceSearchUI advSearch = (AdvanceSearchUI)request.getAttribute("AdvanceSearchUI");
 	SearchFieldData[] searchFieldData = advSearch.getSearchFieldData();
 	int div = 0;
@@ -139,7 +141,24 @@
 <%
 	String dateField1Click = "onDate('"+searchFieldData[i].getOprationField().getId()+"','"+(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 1)+"',false,event);";
 	String dateField2Click = "onDate('"+searchFieldData[i].getOprationField().getId()+"','"+(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 2)+"',true,event);";
-	Boolean isDisabled = new Boolean("true");
+	String operationOnBirthDate = (String)form.getValue("Operator:Participant:BIRTH_DATE");
+	String operationOnDeathDate = (String)form.getValue("Operator:Participant:DEATH_DATE");
+	//Resolved bug# 4330 Virender Mehta
+	Boolean isDisabled=new Boolean(Constants.FALSE);
+	if(searchFieldData[i].getLabelKey().equals("participant.birthDate"))
+	{
+		if(operationOnBirthDate==null||operationOnBirthDate.equals(Constants.ANY))
+		{
+		   isDisabled = new Boolean(Constants.TRUE);
+		}
+	}
+	else if(searchFieldData[i].getLabelKey().equals("participant.deathDate"))
+	{
+		if(operationOnDeathDate==null||operationOnDeathDate.equals(Constants.ANY))
+		{
+		   isDisabled = new Boolean(Constants.TRUE);
+		}
+	}
  %>
 			<ncombo:DateTimeComponent name="<%=searchFieldData[i].getValueField().getName()%>"
 									  id="<%=searchFieldData[i].getValueField().getId() + 1%>"
