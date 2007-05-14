@@ -162,10 +162,10 @@
 		</div>	
 		<div>
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution&menuSelected=16">
-				<bean:message key="app.specimen.report" />
+				<bean:message key="app.specimenreport" />
 			</a> |
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfArrayDistribution&aliasName=Distribution_array&menuSelected=16">
-				<bean:message key="app.array.report" />
+				<bean:message key="app.arrayreport" />
 			</a>
 		</div>
 	</td>
