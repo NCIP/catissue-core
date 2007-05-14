@@ -133,7 +133,9 @@
         <div>
             <a class="subMenuPrimary" href="SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20">
                         <bean:message key="app.add" />
-            </a> |
+            </a>
+        </div>    
+        <div>
             <a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSpecimenArray&amp;aliasName=SpecimenArray&amp;menuSelected=20">
                         <bean:message key="app.edit"/>
             </a> |  
@@ -156,10 +158,12 @@
 				<b><bean:message key="app.distribution" /></b>
 		</div>
 		<div>
-			<a class="subMenuPrimary" href="Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16"><bean:message key="app.add" /></a> | Report&nbsp; 
+			<a class="subMenuPrimary" href="Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16"><bean:message key="app.add" /></a>
+		</div>	
+		<div>
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfDistribution&aliasName=Distribution&menuSelected=16">
 				<bean:message key="app.specimen.report" />
-			</a> &nbsp;
+			</a> |
 			<a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfArrayDistribution&aliasName=Distribution_array&menuSelected=16">
 				<bean:message key="app.array.report" />
 			</a>
