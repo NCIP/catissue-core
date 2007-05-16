@@ -159,8 +159,9 @@ public class DistributionForm extends SpecimenEventParametersForm
 
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
 	{
-		//ActionErrors errors = super.validate(mapping, request);
-		ActionErrors errors = new ActionErrors();
+		//resolved bug# 4352
+		ActionErrors errors = super.validate(mapping, request);
+		//ActionErrors errors = new ActionErrors();
 		Validator validator = new Validator();
 		Logger.out.debug("Inside validate function");
 
