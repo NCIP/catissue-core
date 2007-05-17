@@ -353,8 +353,9 @@
 		function initializeSCGForm()
 		{
 			var restrictCheckbox = document.getElementById("restrictSCGCheckbox");
-			var valueForCheckbox = <%=form.getRestrictSCGCheckbox()%>
-			if(valueForCheckbox!=null && valueForCheckbox)
+			//bug id: 4333
+			var valueForCheckbox = '<%=form.getRestrictSCGCheckbox()%>';
+			if(valueForCheckbox!=null && valueForCheckbox == 'true')
 			{
 				disableButtonsOnCheck(restrictCheckbox);
 			}
