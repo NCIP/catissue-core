@@ -1364,7 +1364,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			}
 		}
 		//Events Validation
-		if (specimen.getSpecimenEventCollection() != null)
+		if (specimen.getSpecimenEventCollection() != null && !specimen.getSpecimenEventCollection().isEmpty())
 		{
 			Iterator specimenEventCollectionIterator = specimen.getSpecimenEventCollection().iterator();
 			while (specimenEventCollectionIterator.hasNext())
@@ -1372,7 +1372,11 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				Object eventObject = specimenEventCollectionIterator.next();
 				EventsUtil.validateEventsObject(eventObject,validator);
 			}
-		}		
+		}
+		else
+		{
+			throw new DAOException(ApplicationProperties.getValue("error.specimen.noevents"));
+		}
 
 		//Validations for Biohazard Add-More Block
 		Collection bioHazardCollection = specimen.getBiohazardCollection();

@@ -591,7 +591,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	 	 * Description: Validation added to check incorrect events added through API
 		 */
 //		Events Validation
-		if (group.getSpecimenEventParametersCollection() != null)
+		if (group.getSpecimenEventParametersCollection() != null && !group.getSpecimenEventParametersCollection().isEmpty())
 		{
 			Iterator specimenEventCollectionIterator = group.getSpecimenEventParametersCollection().iterator();
 			while (specimenEventCollectionIterator.hasNext())
@@ -599,7 +599,11 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 				Object eventObject = specimenEventCollectionIterator.next();
 				EventsUtil.validateEventsObject(eventObject,validator);
 			}
-		}	
+		}
+		else
+		{
+			throw new DAOException(ApplicationProperties.getValue("error.specimenCollectionGroup.noevents"));
+		}
 
 		return true;
 	}
