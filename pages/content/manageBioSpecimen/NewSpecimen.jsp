@@ -280,14 +280,19 @@
 		{			
 			var radioArray = document.getElementsByName("stContSelection");	
 			radioArray[0].checked= true;
-			document.forms[0].selectedContainerName.disabled = true;
-			document.forms[0].pos1.disabled = true;
-			document.forms[0].pos2.disabled = true;
-			document.forms[0].containerMap.disabled = true;
-
-			document.forms[0].customListBox_1_0.disabled = true;
-			document.forms[0].customListBox_1_1.disabled = true;
-			document.forms[0].customListBox_1_2.disabled = true;
+			document.forms[0].selectedContainerName.readonly = true;
+			if(document.forms[0].pos1 != null)
+				document.forms[0].pos1.disabled = true;
+			if(document.forms[0].pos2 != null)
+				document.forms[0].pos2.disabled = true;
+			if(document.forms[0].containerMap != null)
+				document.forms[0].containerMap.disabled = true;
+			if(document.forms[0].customListBox_1_0 != null)
+				document.forms[0].customListBox_1_0.disabled = true;
+			if(document.forms[0].customListBox_1_1 != null)
+				document.forms[0].customListBox_1_1.disabled = true;
+			if(document.forms[0].customListBox_1_2 != null)
+				document.forms[0].customListBox_1_2.disabled = true;
 		}
 		/**
  			* Name : Ashish Gupta
@@ -657,8 +662,15 @@
 									Description: The following change shows read-only textbox on specimen page, if specimen is being added
 									from specimen collection group page, otherwise combobox having names of specimen collection group is displayed.
 								-->
+								<%
+								String onSCGChange = "resetVirtualLocated()";
+								if(operation.equals(Constants.ADD))
+								{
+									onSCGChange = onSCGChange+";getEventsFromSCG()";
+								}								
+								%>
 								<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" styleId="selectedSpecimenCollectionGroupId" 
-									size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="resetVirtualLocated();getEventsFromSCG()">
+									size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=onSCGChange %>">									
 								<%
 									if((specimenCollectionGroupId != null && !specimenCollectionGroupId.equals("")) &&
 										(specimenCollectionGroupName != null && !specimenCollectionGroupName.equals("")))
@@ -1156,7 +1168,7 @@
 													<bean:message key="buttons.map"/>
 												</html:button>
 											</td>
-										</tr>
+										</tr>										
 									<%
 									}
 									
