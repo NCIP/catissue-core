@@ -313,10 +313,19 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				}
 				Logger.out.debug("Loading ParentContainer: " + container.getParent().getId());
 
-				StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), container.getParent().getId());
+				/**
+				 * Name : Vijay_Pande
+				 * Reviewer : Sntosh_Chandak
+				 * Bug ID: 4038 
+				 * Patch ID: 4038_1
+				 * See also: 1-3
+				 * Description: In the edit mode while updating parent container there was a hibernet session error
+				 * Since we were retrieving parent container it was retriving all child containers as well. Hence only required filed of parent containcer is retrieved. 
+				 */
+//				StorageContainer pc = (StorageContainer) dao.retrieve(StorageContainer.class.getName(), container.getParent().getId());
 
 				/* Check if position specified is within the parent container's capacity*/
-				if (false == validatePosition(pc, container))
+				if (false == validatePosition(dao, container))
 				{
 					throw new DAOException(ApplicationProperties.getValue("errors.storageContainer.dimensionOverflow"));
 				}
@@ -331,13 +340,17 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				// Mandar : code added for validation bug id 666. 24-11-2005 end
 
 				//check for closed ParentContainer
-				checkStatus(dao, pc, "Parent Container");
+				checkStatus(dao, container.getParent(), "Parent Container");
 
-				container.setParent(pc);
+//				container.setParent(pc);
+				
+				Site site=getSite(dao,container.getParent().getId());
+				
 				//check for closed Site
-				checkStatus(dao, pc.getSite(), "Parent Site");
+				checkStatus(dao, site, "Parent Site");
 
-				container.setSite(pc.getSite());
+				container.setSite(site);		
+				/** -- patch ends here -- */
 			}
 		}
 		// Mandar : code added for validation 25-11-05-----------
@@ -1617,6 +1630,52 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		Logger.out.debug("validatePosition P : " + posOneCapacity + " : " + posTwoCapacity);
 
 		if ((positionDimensionOne > posOneCapacity) || (positionDimensionTwo > posTwoCapacity))
+		{
+			Logger.out.debug("validatePosition false");
+			return false;
+		}
+		Logger.out.debug("validatePosition true");
+		return true;
+	}
+	/**
+	 * Bug ID: 4038 
+	 * Patch ID: 4038_2
+	 * See also: 1-3
+	 */
+	/**
+	 * This method is to validae position based on parent container id
+	 * @param dao Object DAO
+	 * @param container current container
+	 * @return boolean value based on validation
+	 * @throws DAOException exception occured while DB handling
+	 */
+	private boolean validatePosition(DAO dao, StorageContainer container)throws DAOException
+	{
+		String sourceObjectName = StorageContainer.class.getName();
+		String[] selectColumnName = {"id", "capacity.oneDimensionCapacity", "capacity.twoDimensionCapacity"};
+		String[] whereColumnName = {"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+		String[] whereColumnCondition = {"="};
+		Object[] whereColumnValue = {container.getParent().getId()};
+		String joinCondition = null;
+	
+		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+		Integer pcCapacityOne=0;
+		Integer pcCapacityTwo=0;
+		if (!list.isEmpty())
+		{
+			Object[] obj1 = (Object[]) list.get(0);
+			pcCapacityOne = (Integer) obj1[1];
+			pcCapacityTwo = (Integer) obj1[2];
+
+		}
+		
+		int positionDimensionOne = container.getPositionDimensionOne().intValue();
+		int positionDimensionTwo = container.getPositionDimensionTwo().intValue();
+
+		Logger.out.debug("validatePosition C : " + positionDimensionOne + " : " + positionDimensionTwo);
+		Logger.out.debug("validatePosition P : " + pcCapacityOne + " : " + pcCapacityTwo);
+
+		if ((positionDimensionOne > pcCapacityOne) || (positionDimensionTwo > pcCapacityTwo))
 		{
 			Logger.out.debug("validatePosition false");
 			return false;
@@ -3000,5 +3059,33 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 		return count;
 	}
-
+	/**
+	 * Bug ID: 4038 
+	 * Patch ID: 4038_3
+	 * See also: 1-3
+	 */
+	/**
+	 * 
+	 * @param dao Object of DAO
+	 * @param containerId id of container whose site is to be retrieved
+	 * @return Site object belongs to container with given id
+	 * @throws DAOException Exception occured while DB handling
+	 */
+	private Site getSite(DAO dao,Long containerId)throws DAOException
+	{
+		String sourceObjectName = StorageContainer.class.getName();
+		String[] selectColumnName =new String[] {"site"};
+		String[] whereColumnName = new String[]{"id"}; //"storageContainer."+Constants.SYSTEM_IDENTIFIER
+		String[] whereColumnCondition =new String[] {"="};
+		Object[] whereColumnValue =new Long[]{containerId};
+		String joinCondition = null;
+		
+		List list = dao.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+		
+		if (!list.isEmpty())
+		{
+			return((Site)list.get(0));
+		}
+		return null;
+	}
 }
