@@ -31,6 +31,7 @@ import edu.wustl.catissuecore.bizlogic.AdvanceQueryBizlogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.bizlogic.SimpleQueryBizLogic;
@@ -178,6 +179,13 @@ public class AdvanceSearchResultsAction extends BaseAction
 				
 				//Remove select columnList from Session
 				session.setAttribute(Constants.SELECT_COLUMN_LIST,null);
+				
+				/**
+				 * Name : Aarti Sharma
+				 * Bug ID: 4359
+				 * Description: Setting hyperlinkColumnMap to null so that no hyperlinks appear in spreadsheet of advance query interface 
+				 */
+				session.setAttribute(Constants.HYPERLINK_COLUMN_MAP, null);
 			}
 			else
 			{
