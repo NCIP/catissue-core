@@ -101,8 +101,10 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 					rowList = new ArrayList();
 					
 					String str = obj[i].toString();
-		        	int index = str.indexOf("_") + 1;
-		        	String key = str.substring(index).trim();
+					int index = str.indexOf("_") + 1;
+					//resolved bug# 4385
+					int index1 = str.indexOf(" |");
+					String key = str.substring(index,index1).trim();
 					Specimen specimen = (Specimen)table.get(key);
 					
 					rowList.add(String.valueOf(specimen.getId()));
