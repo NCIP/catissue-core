@@ -1,6 +1,9 @@
 /*
- * $Name: 1.2 $
+ * $Name:  (RC2)
  * $Log: ApplicationVersionInfo.txt,v $
+ * Revision 1.2.8.1  2007/05/21 05:58:32  sachin_lale
+ * Change version info to RC2
+ *
  * Revision 1.2  2006/07/04 10:51:09  Kapil
  * File to keep cvs tag information
  *
