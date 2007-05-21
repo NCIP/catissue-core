@@ -2013,8 +2013,8 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		{
 			//To display defaultValue form CatissueCore_Properties.xml
 			classList.setSelectedItem(model.getSpecimenClass());
+			specimenClassUpdated(model.getSpecimenClass());
 		}
-		
 		if(model.getSpecimenType()!=null)
 		{
 			//To display defaultValue form CatissueCore_Properties.xml
