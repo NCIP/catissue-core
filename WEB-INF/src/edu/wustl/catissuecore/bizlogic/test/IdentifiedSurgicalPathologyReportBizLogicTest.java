@@ -253,22 +253,20 @@ public class IdentifiedSurgicalPathologyReportBizLogicTest extends BaseTestCase
 				try
 				{
 					identifiedSurgicalPathologyReportBizLogic.update(identifiedSurgicalPathologyReport,identifiedSurgicalPathologyReport,edu.wustl.common.util.global.Constants.HIBERNATE_DAO,sessionDataBean);
-					assertTrue("Text Content updated successfully",true);
+					fail("identified pathology report successfully");
 					
 				}
-				catch (NullPointerException e) {
+				catch (NullPointerException e) 
+				{
 						e.printStackTrace();
-						fail("Null Pointer Exception");
 				}
 				catch (BizLogicException e)
 				{
 					e.printStackTrace();
-					fail("Biz Logic Exception occured");
 				}
 				catch (UserNotAuthorizedException e)
 				{
 					e.printStackTrace();
-					fail(" User Not Authorised Exception occured");
 				}
 			}
 
