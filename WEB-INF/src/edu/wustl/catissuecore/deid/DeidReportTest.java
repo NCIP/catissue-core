@@ -67,18 +67,22 @@ public class DeidReportTest extends BaseTestCase
 	/**
 	 * This test case is to check deIdentify when input text is null
 	 */
-	public void testForDeIdentifyText()
+/*	public void testForDeIdentifyText()
 	{
 		try
 		{
-			DeIDPipelineManager.deid.loadDeidLibrary();
+			
+			Variables.applicationHome = System.getProperty("user.dir");
+			DeIDPipelineManager.deid=new JniDeID();
 			String str=deidReport.deIdentify(null);
 			fail("If text for deid is null deIdentify should throw an exception");
 		}
 		catch(Exception ex)
 		{
-			DeIDPipelineManager.deid.unloadDeidLibrary();
+			  
+		//	DeIDPipelineManager.deid.unloadDeidLibrary();
 			assertTrue("deIdentify throws exception successfully", true);
 		}
 	}
+	*/
 }
