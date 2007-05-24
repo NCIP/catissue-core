@@ -277,7 +277,7 @@ public class AdvanceSearchForm extends ActionForm
         					{
         						if(!validator.checkDate(value)) //IF the start date is improper
         						{
-									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(labelName)));
+									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.date.format",ApplicationProperties.getValue(labelName)));
         						}
         						else
         						{
@@ -292,7 +292,7 @@ public class AdvanceSearchForm extends ActionForm
         							{
         								if(value!= null && !validator.checkDate(value)) //IF the end date is improper
                 						{
-        									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue(labelName)));
+        									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.date.format",ApplicationProperties.getValue(labelName)));
                 						}
         							}
         						}

@@ -9,11 +9,15 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.SearchUtil"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.AdvanceSearchForm"%>
+<%@ page import="edu.wustl.common.query.Operator"%>
 
 <%
 	AdvanceSearchForm form = (AdvanceSearchForm)request.getAttribute("advanceSearchForm");
 	AdvanceSearchUI advSearch = (AdvanceSearchUI)request.getAttribute("AdvanceSearchUI");
 	SearchFieldData[] searchFieldData = advSearch.getSearchFieldData();
+	Boolean isDisabled=new Boolean(Constants.TRUE);
+	Boolean isDisabled1=new Boolean(Constants.TRUE);
+	String operation="";
 	int div = 0;
 	String tempDiv = "overDiv";
 	String overDiv = tempDiv;
@@ -33,7 +37,7 @@
 		actionName = "AdvanceSearchSCG.do";
 	}
 
-	
+
 %>
 
 <head>
@@ -141,30 +145,66 @@
 <%
 	String dateField1Click = "onDate('"+searchFieldData[i].getOprationField().getId()+"','"+(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 1)+"',false,event);";
 	String dateField2Click = "onDate('"+searchFieldData[i].getOprationField().getId()+"','"+(advSearch.getFormName() +"." + searchFieldData[i].getValueField().getId() + 2)+"',true,event);";
-	String operationOnBirthDate = (String)form.getValue("Operator:Participant:BIRTH_DATE");
-	String operationOnDeathDate = (String)form.getValue("Operator:Participant:DEATH_DATE");
-	//Resolved bug# 4330 Virender Mehta
-	Boolean isDisabled=new Boolean(Constants.FALSE);
+	
+	String firstDate="";
+	String secondDate="";
+	
+	//Resolved bug# 4330, bug# 4406 and bug# 2844 Virender Mehta
+	
 	if(searchFieldData[i].getLabelKey().equals("participant.birthDate"))
 	{
-		if(operationOnBirthDate==null||operationOnBirthDate.equals(Constants.ANY))
-		{
-		   isDisabled = new Boolean(Constants.TRUE);
-		}
+		operation  = (String)form.getValue("Operator:Participant:BIRTH_DATE");
+		firstDate  = (String)form.getValue("Participant:BIRTH_DATE");
+        secondDate = (String)form.getValue("Participant:BIRTH_DATE:HLIMIT");	
 	}
 	else if(searchFieldData[i].getLabelKey().equals("participant.deathDate"))
 	{
-		if(operationOnDeathDate==null||operationOnDeathDate.equals(Constants.ANY))
-		{
-		   isDisabled = new Boolean(Constants.TRUE);
-		}
+		operation  = (String)form.getValue("Operator:Participant:DEATH_DATE");
+		firstDate  = (String)form.getValue("Participant:DEATH_DATE");
+	    secondDate = (String)form.getValue("Participant:DEATH_DATE:HLIMIT");
+	}
+	else if(searchFieldData[i].getLabelKey().equals("collectionProtocolReg.participantRegistrationDate"))
+	{
+		 operation  = (String)form.getValue("Operator:CollectionProtReg:REGISTRATION_DATE");	
+		 firstDate  = (String)form.getValue("CollectionProtReg:REGISTRATION_DATE");
+		 secondDate = (String)form.getValue("CollectionProtReg:REGISTRATION_DATE:HLIMIT");
+		
+	}
+	else if(searchFieldData[i].getLabelKey().equals("advanceQuery.collectionprotocol.startdate"))
+	{
+		operation  = (String)form.getValue("Operator:SpecimenProtocol:START_DATE");
+		firstDate  = (String)form.getValue("SpecimenProtocol:START_DATE");
+		secondDate = (String)form.getValue("SpecimenProtocol:START_DATE:HLIMIT");
+		
+	}
+	else if(searchFieldData[i].getLabelKey().equals("advanceQuery.collectionprotocol.enddate"))
+	{
+		operation  = (String)form.getValue("Operator:SpecimenProtocol:END_DATE");
+  	    firstDate  = (String)form.getValue("SpecimenProtocol:END_DATE");
+		secondDate = (String)form.getValue("SpecimenProtocol:END_DATE:HLIMIT");
+	}
+	else if(searchFieldData[i].getLabelKey().equals("specimenCollectionGroup.studyCalendarEventPoint"))
+	{
+		operation  = (String)form.getValue("Operator:CollectionProtocolEvent:STUDY_CALENDAR_EVENT_POINT");
+	}
+	
+	if(operation!=null && (operation.equals(Operator.BETWEEN) || operation.equals(Operator.NOT_BETWEEN)))
+	{
+	   isDisabled = new Boolean(Constants.FALSE);
+	   isDisabled1=new Boolean(Constants.FALSE);
+	}
+	else if(operation!=null && !operation.equals(Constants.ANY))
+	{
+		isDisabled = new Boolean(Constants.FALSE);
+		isDisabled1=new Boolean(Constants.TRUE);
 	}
  %>
 			<ncombo:DateTimeComponent name="<%=searchFieldData[i].getValueField().getName()%>"
 									  id="<%=searchFieldData[i].getValueField().getId() + 1%>"
  									  formName="<%=advSearch.getFormName()%>"	
 									  styleClass="formDateSized10" 
-									  disabled="<%= isDisabled %>"
+									  disabled="<%=isDisabled  %>" 
+									  value = "<%= firstDate %>"
 									  onClickImage="<%=dateField1Click %>"
 											 />	
 			&nbsp;Thru&nbsp;
@@ -172,7 +212,8 @@
 									  id="<%=searchFieldData[i].getValueField().getId() + 2%>"
  									  formName="<%=advSearch.getFormName()%>"	
 									  styleClass="formDateSized10" 
-									  disabled="<%= isDisabled %>"
+									  disabled="<%=isDisabled1 %>"
+									  value = "<%= secondDate %>"
 									  onClickImage="<%=dateField2Click %>"
 											 />	
 			</td>
@@ -183,12 +224,41 @@
 		}
 		else if((searchFieldData[i].getDataType()).equals(SearchUtil.NUMERIC))
 		{
+			if(searchFieldData[i].getLabelKey().equals("specimenCollectionGroup.studyCalendarEventPoint"))
+			{
+				operation  = (String)form.getValue("Operator:CollectionProtocolEvent:STUDY_CALENDAR_EVENT_POINT");
+			}
+			
+			if(operation!=null && (operation.equals(Operator.BETWEEN) || operation.equals(Operator.NOT_BETWEEN)))
+			{
+			   isDisabled = new Boolean(Constants.FALSE);
+			   isDisabled1=new Boolean(Constants.FALSE);
+			}
+			else if(operation!=null && !operation.equals(Constants.ANY))
+			{
+				isDisabled = new Boolean(Constants.FALSE);
+				isDisabled1=new Boolean(Constants.TRUE);
+			}
+						
 		%>
 			<td class="formField" nowrap>
-				<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId() + 1%>" property="<%=searchFieldData[i].getValueField().getName() + 1%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/> 
+				<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId() + 1%>" property="<%=searchFieldData[i].getValueField().getName() + 1%>" disabled="<%=isDisabled%>"/> 
 								&nbsp;To&nbsp;
-				<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId() + 2%>" property="<%=searchFieldData[i].getValueField().getName() + 2%>" disabled="<%=searchFieldData[i].getValueField().isDisabled()%>"/> 
+			<%
+			if(isDisabled1)
+			{
+			%>
+				<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId() + 2%>" property="<%=searchFieldData[i].getValueField().getName() + 2%>" disabled="<%=isDisabled1%>" value="" /> 
+			<%
+			}
+			else
+			{
+			%>
+				<html:text styleClass="formFieldSized10" styleId="<%=searchFieldData[i].getValueField().getId() + 2%>" property="<%=searchFieldData[i].getValueField().getName() + 2%>" disabled="<%=isDisabled1%>"/> 
 				<!--bean:message key="<%=searchFieldData[i].getUnitFieldKey()%>"/-->
+            <%
+			}
+			%>
 			</td>
 		<%
 		}
