@@ -817,13 +817,22 @@ public class AliquotAction extends SecureAction
 
 			if (form.getQuantityPerAliquot() == null || form.getQuantityPerAliquot().trim().length() == 0)
 			{
-				dQuantity = availableQuantity / aliquotCount;
-				BigDecimal bg = new BigDecimal(dQuantity);
-				dQuantity = bg.setScale(2,BigDecimal.ROUND_FLOOR).doubleValue();
+				//Resolved bug# 4403
+//				dQuantity = availableQuantity / aliquotCount;
+//				dQuantity = Double.parseDouble(dFormat.format(dQuantity));
+				BigDecimal bgAvailTemp = new BigDecimal(availableQuantity);
+				BigDecimal bgCntTemp = new BigDecimal(aliquotCount);
+				BigDecimal bgAvail = bgAvailTemp.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+				BigDecimal bgCnt  = bgCntTemp.setScale(2,BigDecimal.ROUND_HALF_EVEN);
+				BigDecimal bgQuantity = bgAvail.divide(bgCnt,2,BigDecimal.ROUND_FLOOR); 
+				dQuantity = bgQuantity.doubleValue();
 				/**
 				 *  Fixed bug 3656
 				 */
-				availableQuantity = 0;
+				//availableQuantity = 0;
+				availableQuantity = availableQuantity - Double.parseDouble(dFormat.format((dQuantity * aliquotCount)));
+				availableQuantity = Double.parseDouble(dFormat.format(availableQuantity));
+				
 			}
 			else
 			{
