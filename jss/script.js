@@ -199,7 +199,7 @@ function setSubmittedFor(submittedFor,forwardTo)
 //this function is used in Specimen and Events page for non functional tabs 
 function featureNotSupported()
 {
-	alert("This feature is not supported in version 1.1 and will be supported in the next release of caTissue.");
+	alert("This feature is not supported in version 1.2 and will be supported in the next release of caTissue.");
 }
 
 function validateAny(element)
