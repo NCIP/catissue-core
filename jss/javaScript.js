@@ -335,7 +335,7 @@ function checkDistributionBasedOn() {
 
 	 	var distributionForm1 =  document.forms[0];
 	 	if (distributionForm1.distributionBasedOn[0].checked == false && distributionForm1.distributionBasedOn[1].checked == false) {
-		 	 alert("Please select 'distribution based on'");
+		 	 alert("Please select 'Distribution Based On'");
 		 	 return false;
         }
         
