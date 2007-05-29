@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Set;
 
 import edu.common.dynamicextensions.domaininterface.EntityInterface;
-import edu.wustl.cab2b.client.ui.controls.EntityInterfaceComparator;
+import edu.wustl.cab2b.common.util.EntityInterfaceComparator;
 
 
 
