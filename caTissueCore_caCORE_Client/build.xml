@@ -2,7 +2,7 @@
 
 <!--Ant Script for create Build for caTISSUE Core-->
 
-<project name="caTissue Core v 1.1 Client" default="compile">
+<project name="caTissue Core v 1.2 Client" default="compile">
 	
 	<!--define require dir and Properties -->	
 	<property name="base.dir" value="."/>	
