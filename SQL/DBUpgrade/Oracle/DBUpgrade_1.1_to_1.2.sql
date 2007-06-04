@@ -34,4 +34,55 @@ INSERT INTO CSM_USER_GROUP_ROLE_PG (USER_GROUP_ROLE_PG_ID,GROUP_ID,ROLE_ID,PROTE
 update CSM_PG_PE
 set PROTECTION_GROUP_ID = '18'
 where PROTECTION_ELEMENT_ID = '292';
+
+/*associate new events to SCG start*/
+insert all into catissue_specimen_event_param (identifier, specimen_coll_grp_id, event_timestamp, user_id )
+values (catissue_spec_event_param_seq.nextval, specimen_collection_group_id,
+        least_timestamp, user_id
+        )
+into catissue_coll_event_param (
+    identifier, collection_procedure, container
+    )
+values (catissue_spec_event_param_seq.currval, collection_procedure, container
+    )
+select specimen_collection_group_id, least_timestamp, user_id, collection_procedure, container from ( select  specimen_collection_group_id , user_id, event_timestamp,
+        collection_procedure, container,
+        min(event_timestamp) over(partition by specimen_collection_group_id order by specimen_id) least_timestamp,
+        row_number() over(partition by specimen_collection_group_id order by
+specimen_id) rn
+from    catissue_specimen join
+        (select     specimen_id, event_timestamp, user_id, 
+collection_procedure, container
+         from       catissue_specimen_event_param
+                    join catissue_coll_event_param  using(identifier)
+        )
+        on (identifier=specimen_id and parent_specimen_id is null)
+)
+where rn = 1;
+
+insert all
+into catissue_specimen_event_param (
+    identifier, specimen_coll_grp_id, event_timestamp, user_id
+)
+values (catissue_spec_event_param_seq.nextval, specimen_collection_group_id,
+        least_timestamp, user_id
+        )
+into catissue_received_event_param (
+    identifier, received_quality
+    )
+values (catissue_spec_event_param_seq.currval, received_quality
+    )
+select specimen_collection_group_id, least_timestamp, user_id, received_quality from ( select  specimen_collection_group_id , user_id, event_timestamp, received_quality,
+        min(event_timestamp) over(partition by specimen_collection_group_id order by specimen_id) least_timestamp,
+        row_number() over(partition by specimen_collection_group_id order by
+specimen_id) rn
+from    catissue_specimen join
+        (select     specimen_id, event_timestamp, user_id, received_quality
+         from       catissue_specimen_event_param
+                    join catissue_received_event_param  using(identifier)
+        )
+        on (identifier=specimen_id and parent_specimen_id is null)
+)
+where rn = 1;
+/*associate new events to SCG start end*/
  

@@ -64,3 +64,36 @@ CREATE TABLE CATISSUE_QUERY_EDITLINK_COLS
 update CSM_PG_PE
 set PROTECTION_GROUP_ID = '18'
 where PROTECTION_ELEMENT_ID = '292';
+
+/*associate new events to SCG start*/
+
+create table CATISSUE_SCG_EVENT_PARAM (
+   SPECIMEN_EVENT_IDENTIFIER bigint,
+   SCG_EVENT_IDENTIFIER bigint,
+   SPECIMEN_COLL_GRP_ID bigint,
+   EVENT_TIMESTAMP datetime,
+   USER_ID bigint,
+   COMMENTS text,
+   COLLECTION_PROCEDURE varchar(50),
+   CONTAINER varchar(50),
+   RECEIVED_QUALITY varchar(255),
+   TYPE text,
+   primary key(SPECIMEN_EVENT_IDENTIFIER)
+);
+
+insert into CATISSUE_SCG_EVENT_PARAM (SPECIMEN_EVENT_IDENTIFIER,SPECIMEN_COLL_GRP_ID,USER_ID,EVENT_TIMESTAMP) select b.identifier, specimen_collection_group_id, user_id, min(event_timestamp) from catissue_specimen a join catissue_specimen_event_param b on (a.identifier = specimen_id) join catissue_coll_event_param c on (b.identifier = c.identifier) group by specimen_collection_group_id;
+update CATISSUE_SCG_EVENT_PARAM set type = 'COLL' where type is null;
+insert into catissue_specimen_event_param(specimen_coll_grp_id,user_id,event_timestamp) select specimen_collection_group_id, user_id, min(event_timestamp) from catissue_specimen a join catissue_specimen_event_param b on (a.identifier = specimen_id) join catissue_coll_event_param c on (b.identifier = c.identifier) group by specimen_collection_group_id;
+update CATISSUE_SCG_EVENT_PARAM a,catissue_specimen_event_param b set a.SCG_EVENT_IDENTIFIER = b.IDENTIFIER where b.SPECIMEN_COLL_GRP_ID=a.SPECIMEN_COLL_GRP_ID and a.type='COLL';
+update CATISSUE_SCG_EVENT_PARAM a,catissue_coll_event_param b set a.COLLECTION_PROCEDURE = b.COLLECTION_PROCEDURE where a.SPECIMEN_EVENT_IDENTIFIER=b.identifier and a.type='COLL';
+update CATISSUE_SCG_EVENT_PARAM a,catissue_coll_event_param b set a.CONTAINER = b.CONTAINER where a.SPECIMEN_EVENT_IDENTIFIER=b.identifier and a.type='COLL';
+insert into catissue_coll_event_param (IDENTIFIER,COLLECTION_PROCEDURE,CONTAINER) select SCG_EVENT_IDENTIFIER,COLLECTION_PROCEDURE,CONTAINER from CATISSUE_SCG_EVENT_PARAM  where type='COLL';
+
+insert into CATISSUE_SCG_EVENT_PARAM (SPECIMEN_EVENT_IDENTIFIER,SPECIMEN_COLL_GRP_ID,USER_ID,EVENT_TIMESTAMP) select b.identifier, specimen_collection_group_id, user_id, min(event_timestamp) from catissue_specimen a join catissue_specimen_event_param b on (a.identifier = specimen_id) join catissue_received_event_param c on (b.identifier = c.identifier) group by specimen_collection_group_id;
+update CATISSUE_SCG_EVENT_PARAM set type = 'REC' where type is null;
+insert into catissue_specimen_event_param(specimen_coll_grp_id,user_id,event_timestamp) select specimen_collection_group_id, user_id, min(event_timestamp) from catissue_specimen a join catissue_specimen_event_param b on (a.identifier = specimen_id) join catissue_received_event_param c on (b.identifier = c.identifier) group by specimen_collection_group_id;
+update CATISSUE_SCG_EVENT_PARAM a,catissue_specimen_event_param b set a.SCG_EVENT_IDENTIFIER =b.IDENTIFIER where b.SPECIMEN_COLL_GRP_ID=a.SPECIMEN_COLL_GRP_ID and b.identifier not in (select identifier from catissue_coll_event_param) and a.type='REC';
+update CATISSUE_SCG_EVENT_PARAM a,catissue_received_event_param b set a.RECEIVED_QUALITY= b.RECEIVED_QUALITY where a.SPECIMEN_EVENT_IDENTIFIER=b.identifier and a.type='REC';
+insert into catissue_received_event_param (IDENTIFIER,RECEIVED_QUALITY) select SCG_EVENT_IDENTIFIER,RECEIVED_QUALITY from CATISSUE_SCG_EVENT_PARAM  where type='REC';
+drop table CATISSUE_SCG_EVENT_PARAM;
+/*associate new events to SCG start end*/
