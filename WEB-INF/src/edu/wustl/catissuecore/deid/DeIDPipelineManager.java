@@ -213,8 +213,7 @@ public class DeIDPipelineManager
 						Thread th = new DeidReport(ispr);
 						// add thread to thread pool manager
 						deidExecutor.execute(th);
-					}
-					
+					}					
 				}
 				catch(Exception ex)
 				{
@@ -370,13 +369,13 @@ public class DeIDPipelineManager
 				    serv.close();
 				    // stop server
 				    System.exit(0);
-					}
-					catch(Exception e)
-					{
-						Logger.out.error("Error stopping server ",e);
-					}
 				}
-			};
-			th.start();
+				catch(Exception e)
+				{
+					Logger.out.error("Error stopping server ",e);
+				}
+			}
+		};
+		th.start();
 	}	
 }
