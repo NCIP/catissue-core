@@ -1,13 +1,25 @@
 package edu.wustl.catissuecore.reportloader;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
+import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -87,7 +99,7 @@ public class ReportLoader
 			{
 				// if scg is null create new scg
 				Logger.out.info("Null SCG found in ReportLoader, Creating New SCG");
-				this.scg=ReportLoaderUtil.createNewSpecimenCollectionGroup(this.participant, this.identifiedReport,this.site, this.surgicalPathologyNumber);
+				this.scg=createNewSpecimenCollectionGroup(this.participant, this.identifiedReport,this.site, this.surgicalPathologyNumber);
 				ReportLoaderUtil.saveObject(scg);
 			}
 			else
@@ -115,6 +127,141 @@ public class ReportLoader
 			Logger.out.error("Failed to process report ");
 			throw new Exception(ex.getMessage());
 		}
+	}
+
+	/**
+	 * Method to create new SCG
+	 * @return scg object of SpecimenColectionGroup 
+	 * @param participant Participant object
+	 * @param identifiedReport object of IdentifiedSurgicalPathologyReport
+	 * @param surgicalPathologyNumber String containing surgicalPathologyNumber for scg
+	 * @throws Exception generic exception
+	 */
+	public static SpecimenCollectionGroup createNewSpecimenCollectionGroup(Participant participant, IdentifiedSurgicalPathologyReport identifiedReport, Site site, String surgicalPathologyNumber)throws Exception
+	{
+		// set default values for scg
+		Logger.out.info("Creating New Specimen Collection Group");
+		SpecimenCollectionGroup scg = new SpecimenCollectionGroup();
+		scg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+		//SCG Particpant direct relationship is removed
+//		scg.setParticipant(this.participant);
+		scg.setClinicalDiagnosis(Constants.NOT_SPECIFIED);
+		scg.setClinicalStatus(Constants.NOT_SPECIFIED);
+		scg.setSpecimenCollectionSite(site); 
+		scg.setSurgicalPathologyNumber(surgicalPathologyNumber);
+		scg.setIdentifiedSurgicalPathologyReport(identifiedReport);
+		identifiedReport.setSpecimenCollectionGroup(scg);
+			 
+		// Retrieve collection generic protocol
+		String className=CollectionProtocol.class.getName();
+		String colName=new String("title");
+		String colValue=XMLPropertyHandler.getValue("collectionProtocolTitle");
+		BizLogicFactory bizLogicFactory=BizLogicFactory.getInstance();
+		CollectionProtocolBizLogic cpBizLogic=(CollectionProtocolBizLogic)bizLogicFactory.getBizLogic(CollectionProtocol.class.getName());
+		List cpList=cpBizLogic.retrieve(className, colName, colValue);
+		CollectionProtocol collectionProtocol=null;
+		if(cpList!=null && cpList.size()>0)
+		{
+			collectionProtocol=(CollectionProtocol)cpList.get(0);
+		}
+		else
+		{
+			throw new Exception("CP not found with specified Titile in DB");
+		}
+		
+		//Autogeneration of SCG name
+		// SPR_<CollectionProtocol_Title>_<Participant_ID>_<Group_ID>
+		int groupId=0;
+		SpecimenCollectionGroupBizLogic scgBizLogic=(SpecimenCollectionGroupBizLogic)bizLogicFactory.getBizLogic(SpecimenCollectionGroup.class.getName());
+		groupId=scgBizLogic.getNextGroupNumber();
+		String collProtocolTitle=collectionProtocol.getTitle();
+		if(collProtocolTitle.length()>30)
+		{
+			collProtocolTitle=collProtocolTitle.substring(0,29);
+		}
+		String scgName="SPR_"+collProtocolTitle+"_"+participant.getId()+"_"+groupId; //this.identifiedReport.getAccessionNumber().toString());
+		scg.setName(scgName);
+		Logger.out.info("SCG name is =====>"+scgName);
+		
+		// retrieve collection protocol event list
+		Set collProtocolEventList=(Set)collectionProtocol.getCollectionProtocolEventCollection();
+		Iterator cpEventIterator=collProtocolEventList.iterator();
+		
+		if(!cpEventIterator.hasNext())
+		{
+			Logger.out.info("Associated Collection Protocol Event not found for "+ collectionProtocol.getTitle());
+		}
+		else
+		{
+			CollectionProtocolEvent collProtocolEvent=(CollectionProtocolEvent)cpEventIterator.next();
+			scg.setCollectionProtocolEvent(collProtocolEvent);
+			
+			// check for existing CollectionProtocolRegistration, if exists then use existing
+			CollectionProtocolRegistration collProtocolReg=isCPRExists(participant, collectionProtocol);
+			if(collProtocolReg==null)
+			{	
+				// otherwise create new CollectionProtocolRegistration
+				Logger.out.info("Creating New CollectionProtocolRegistration object");
+				collProtocolReg=new CollectionProtocolRegistration();
+				collProtocolReg.setActivityStatus(Constants.ACTIVITY_STATUS_ACTIVE);
+				collProtocolReg.setRegistrationDate(new Date());
+				collProtocolReg.setParticipant(participant);	
+				collProtocolReg.setCollectionProtocol(collProtocolEvent.getCollectionProtocol());
+				((Set)participant.getCollectionProtocolRegistrationCollection()).add(collProtocolReg);
+				try
+				{
+					ReportLoaderUtil.saveObject(collProtocolReg);
+				}
+				catch(Exception ex)
+				{
+					Logger.out.error("Error: Could not save object of CollectionProtocolRegistration",ex);
+					throw new Exception("Could not save object of CollectionProtocolRegistration :"+ex.getMessage());
+				}		
+			}
+//			((Set)collProtocolReg.getSpecimenCollectionGroupCollection()).add(scg);
+			// set CollectionProtocolRegistration to scg
+			scg.setCollectionProtocolRegistration(collProtocolReg);
+		}
+			
+		return scg;
+	}	
+	
+	/**
+	 * Method to check for existing collectionProtocolRegistration
+	 * @param participant object of Participant
+	 * @param collectionProtocol object of CollectionProtocol
+	 * @return object of CollectionProtocolRegistration
+	 * @throws Exception generic exception
+	 */
+	public static CollectionProtocolRegistration isCPRExists(Participant participant, CollectionProtocol collectionProtocol) throws Exception
+	{
+		try
+		{
+			// retrive CollectionProtocolRegistration with current participant and collectionProtocol
+			String sourceObjectName=new String(CollectionProtocolRegistration.class.getName());
+			String[] selectColumnName=new String[]{"participant", "collectionProtocol"};
+			String[] whereColumnCondition=new String[]{"=","="};
+			String[] whereColumnValue=new String[]{participant.getId().toString(), collectionProtocol.getId().toString()};
+			String joinCondition=Constants.AND_JOIN_CONDITION;
+			
+			BizLogicFactory bizLogicFactory=BizLogicFactory.getInstance();
+			CollectionProtocolRegistrationBizLogic collProtRegBizLogic=(CollectionProtocolRegistrationBizLogic)bizLogicFactory.getBizLogic(CollectionProtocolRegistration.class.getName());
+			List cprList=collProtRegBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnCondition, whereColumnValue,joinCondition);
+			
+			// check for existence
+			if(cprList!=null && cprList.size()>0)
+			{
+				// cpr exist then return existing cpr
+				Logger.out.info("Existing CPR found for participant id="+participant.getId()+" collectionProtocol id="+collectionProtocol.getId());
+				return (CollectionProtocolRegistration)cprList.get(0);
+			}
+		}
+		catch(DAOException ex)
+		{
+			Logger.out.error("DAOException occured in isCPRExists method");
+			Logger.out.debug(ex.getMessage());
+		}
+		return null;
 	}
 	
 	/**
