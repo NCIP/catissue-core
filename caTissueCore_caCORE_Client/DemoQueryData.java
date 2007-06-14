@@ -4,9 +4,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import edu.wustl.catissuecore.domain.Address;
+import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.Capacity;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -26,6 +29,8 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.util.global.Constants;
@@ -38,24 +43,47 @@ import gov.nih.nci.system.comm.client.ClientSession;
 /**
  * @author prafull_kadam
  * To insert the bulk Specimen data for Participant to Specimen Heirarchy. 
+ * It will create Following data:
+ * - Collection protocols
+ * - User: protocolCoordinator & Principle Investigator for all Collection Protocol
+ * - Institution, Department, Cancer Research centre for each user
+ * - Sites
+ * - Storage Container heirarchy as Freezer>Rack>Box
+ * - Biohazards
+ * - Participants along with few Partcipant Medical ids
+ * - CollectionProtocolRegistration one for each participant
+ * - SpecimenCollectionGroups for each CollectionProtocolRegistration
+ * - Specimens & children specimens for each SpecimenCollectionGroup
  */
 public class DemoQueryData
 {
 	private static boolean DEBUG = false;
 	// Constants to configure.
-	static final int NO_OF_COLLECTION_PROTOCOL = 4;
+	static final int NO_OF_COLLECTION_PROTOCOL = 10;
 
-	static final int NO_OF_PARTICIPANT = 15;
-	static final int NO_OF_SCG_PER_PARTICIPANT = 5;
+	static final int NO_OF_PARTICIPANT = 10;
+	static final int NO_OF_SCG_PER_PARTICIPANT = 10;
 	static final int MIN_SCG_PER_PARTICIPANT = 2;
-	static final int NO_OF_SPECIMEN_PER_SCG = 5;
+	static final int NO_OF_SPECIMEN_PER_SCG = 10;
 	static final int MIN_SPECIMEN_PER_SCG = 2;
 	static final int MAX_CHILD_SPECIMEN = 3;
-	static final int NO_OF_SITES = 5;
+	static final int NO_OF_SITES = 10;
 	static final int MAX_PARTICIPANT_MEDICAL_IDS = 3;
+	static final int NO_OF_BIOHAZARDS = 10;
+	static final int BIOHAZARDS_PER_SPECIMEN = 3;
 	
 	private CollectionProtocol[] collectionProtocols = new CollectionProtocol[NO_OF_COLLECTION_PROTOCOL];
 	private Site[] sites = new Site[NO_OF_SITES];
+	private Biohazard[] biohazards = new Biohazard[NO_OF_BIOHAZARDS];
+	
+	static final int NO_OF_STORAGE_CONTAINER_FREEZERS = 5;
+	static final int DIMENTION_ONE = 5;
+	static final int DIMENTION_TWO = 8;
+	static final int MIN_NO_OF_CHILD_CONTAINERS = 2;
+	
+	private List<Long> boxContainerIds = new ArrayList<Long>(); // Stores container which can hold specimens.
+	private int[]boxContainerEmptyPositions = null;// Stores count of empty position in each container. size of this array will be equal to boxContainers list.
+	private Set<Long> nonEmptyContainerIds = new HashSet<Long>();// when containers become empty will be removed from this set...once this set becomes empty all specimens added after it will get virtual located.
 	
 	private List<User> userList = new ArrayList<User>();
 	private User protocolCoordinator, principleInvestigator;
@@ -65,6 +93,7 @@ public class DemoQueryData
 	private final static String clinicalStatus[] = {"Post-Operative", "Operative", "Pre-Operative", "New Diagnosis", "Post-Therapy","Pre-Therapy"};
 	private final static String clinicalDiagnosis[] = {"GERM CELL NEOPLASMS","LYMPHOSARCOMA CELL LEUKEMIA","MONOCYTIC LEUKEMIAS", "FIBROMATOUS NEOPLASMS", "PLASMA CELL TUMORS", "ODONTOGENIC TUMORS"};
 	private final static String vitalStatus[] = {"Alive","Dead"};
+	private final static String biohazardTypes[] = {"Toxic","Carcinogen","Mutagen","Not Specified","Radioactive"};
 	
 	private final static int molecularSpecimen = 0;
 	private final static int tissueSpecimen = 1;
@@ -81,7 +110,7 @@ public class DemoQueryData
 	private ApplicationService appService;
 	Random randomGenerator;
 	
-	private long participantCount,cpCount, scgCount, specimenCount,childSpecimenCount;
+	private long participantCount,cpCount, scgCount, specimenCount,childSpecimenCount,freezerCount,rackCount,boxCount;
 	Date startTime, endTime;
 	String appender = "";
 	public DemoQueryData()
@@ -93,7 +122,7 @@ public class DemoQueryData
 	private boolean openSession() throws ApplicationException
 	{
 		ClientSession cs = ClientSession.getInstance();
-		return cs.startSession("admin@admin.com", "Login123");
+		return cs.startSession("admin@admin.com", "admin");
 	}
 	
 	
@@ -149,6 +178,7 @@ public class DemoQueryData
 		System.out.println("Minimum number Of Specimen per SCG To add:"+MIN_SPECIMEN_PER_SCG);
 		System.out.println("Maximum number of Child specimen To add:"+MAX_CHILD_SPECIMEN);
 		System.out.println("Number Of Sites To add:"+NO_OF_SITES);
+		System.out.println("Number Of Freezers To add:"+NO_OF_STORAGE_CONTAINER_FREEZERS);
 		System.out.println("-----------------------------------------------------------------------");
 		System.out.println("Inserted record summary:");
 		System.out.println("Participants:"+participantCount);
@@ -158,6 +188,11 @@ public class DemoQueryData
 		System.out.println("Child Specimens:"+childSpecimenCount);
 		System.out.println("Total Specimens:"+(specimenCount+childSpecimenCount));
 		
+		System.out.println("\nStorage Containers Data:");
+		System.out.println("Freezers:"+freezerCount);
+		System.out.println("Racks:"+rackCount);
+		System.out.println("Boxes:"+boxCount);
+		System.out.println("Total No. Of Containers:"+(freezerCount+rackCount+boxCount));
 		System.out.println("Start Time:"+startTime);
 		System.out.println("End Time:"+new Date());
 		System.out.println("-----------------------------------------------------------------------");
@@ -170,6 +205,8 @@ public class DemoQueryData
 	{
 		insertCollectionProtocols();
 		insertSites();
+		insertStorageContainers();
+		insertBiohazards();
 		println("Collection Protocol Insertion completed....inserting Participant");
 		for (int participantCnt = 0 ; participantCnt < NO_OF_PARTICIPANT;participantCnt++)
 		{
@@ -187,6 +224,145 @@ public class DemoQueryData
 		endTime =new Date();
 	}
 	
+	/**
+	 * Will insert StorageTypes & Storage Containers.
+	 * It will create container heirarchy as: Freezer>Rack>Box
+	 * where:
+	 * -Freezer can hold Rack
+	 * - Rack can hold Box
+	 * - Box can hold all types of specimen.i.e. Tissue,Molecular,Cell,Fluid
+	 * @throws ApplicationException
+	 */
+	private void insertStorageContainers() throws ApplicationException
+	{
+		// creating box Type which can hold all specimen classes.
+		StorageType boxType = createStorageType(generateUniqueName("BOX"), DIMENTION_ONE, DIMENTION_TWO);
+		Collection holdsSpecimenClassCollection = new HashSet();
+		holdsSpecimenClassCollection.add("Tissue");
+		holdsSpecimenClassCollection.add("Fluid");
+		holdsSpecimenClassCollection.add("Molecular");
+		holdsSpecimenClassCollection.add("Cell");
+		boxType.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
+		boxType = (StorageType)appService.createObject(boxType);
+		
+		//creating Rack type which can hold box type.
+		StorageType rackType = createStorageType(generateUniqueName("RACK"), DIMENTION_ONE, DIMENTION_TWO);
+		rackType.getHoldsStorageTypeCollection().add(boxType);
+		rackType = (StorageType)appService.createObject(rackType);
+		
+		// creating Freezer type which can hold Rack type.
+		StorageType freezerType = createStorageType(generateUniqueName("FREEZER"), DIMENTION_ONE, DIMENTION_TWO);
+		freezerType.getHoldsStorageTypeCollection().add(rackType);
+		freezerType = (StorageType)appService.createObject(freezerType);
+		
+		// creating Storage Containers & their heirarchy.
+		// Each container will contains minimum MIN_NO_OF_CHILD_CONTAINERS containers.
+		int containerCapacity = DIMENTION_ONE * DIMENTION_TWO;
+		for (int freezerCnt=0;freezerCnt<NO_OF_STORAGE_CONTAINER_FREEZERS;freezerCnt++)
+		{
+			StorageContainer freezer = createStorageContainer(generateUniqueName("F"), freezerType, null, sites[getNumber(sites.length)]);
+			freezer = (StorageContainer)appService.createObject(freezer);
+			freezerCount++;
+			int racksToBeAdded = getNumber(containerCapacity-MIN_NO_OF_CHILD_CONTAINERS)+MIN_NO_OF_CHILD_CONTAINERS;
+			System.out.println("inserted Freezer:" + freezerCnt+"/"+NO_OF_STORAGE_CONTAINER_FREEZERS);
+			
+			for (int rackCnt=0;rackCnt<racksToBeAdded;rackCnt++)
+			{
+				StorageContainer rack = createStorageContainer(generateUniqueName("R"), rackType, freezer, freezer.getSite());
+				rack = (StorageContainer)appService.createObject(rack);
+				rackCount++;
+				int boxToBeAdded = getNumber(containerCapacity-MIN_NO_OF_CHILD_CONTAINERS)+MIN_NO_OF_CHILD_CONTAINERS;
+				
+				for (int boxCnt=0;boxCnt<boxToBeAdded;boxCnt++)
+				{
+					boxCount++;
+					StorageContainer box = createStorageContainer(generateUniqueName("B"), boxType, rack, freezer.getSite());
+					box = (StorageContainer)appService.createObject(box);
+					boxContainerIds.add(box.getId());
+					nonEmptyContainerIds.add(box.getId());
+					println("Box--StorageContainers:"+freezerCnt+"/"+NO_OF_STORAGE_CONTAINER_FREEZERS+":"+rackCnt+"/"+racksToBeAdded+":"+boxCnt+"/"+boxToBeAdded);
+				}
+			}
+		}
+		println("Created total Boxes:"+boxContainerIds.size());
+		boxContainerEmptyPositions = new int[boxContainerIds.size()];
+		for (int index=0;index<boxContainerEmptyPositions.length;index++)
+		{
+			boxContainerEmptyPositions[index] = containerCapacity;
+		}
+	}
+	
+	/**
+	 * To generate the unique name by appending appender & unique key to the given name.
+	 * @param name String that will be appended at the begining of the name.
+	 * @return The unique name.
+	 */
+	private String generateUniqueName(String name)
+	{
+		return name + appender + UniqueKeyGeneratorUtil.getUniqueKey();
+	}
+	/**
+	 * To create Storage Type object by initializing with values passed to the method.
+	 * @param name The name of the Storage type.
+	 * @param oneDimensionCapacity One dimension capacity.
+	 * @param twoDimensionCapacity Sencond dimention capacity.
+	 * @return The reference to the Storage Type object.
+	 */
+	private StorageType createStorageType(String name, int oneDimensionCapacity, int twoDimensionCapacity)
+	{
+		StorageType storageTypeObj = new StorageType();
+		Capacity capacity = new Capacity();
+
+		storageTypeObj.setName(name);
+		storageTypeObj.setDefaultTempratureInCentigrade(new Double(-10));
+		storageTypeObj.setActivityStatus("Active");
+		storageTypeObj.setOneDimensionLabel("Dimension1");
+		storageTypeObj.setTwoDimensionLabel("Dimension2");
+
+		capacity.setOneDimensionCapacity(oneDimensionCapacity);
+		capacity.setTwoDimensionCapacity(twoDimensionCapacity);
+		storageTypeObj.setCapacity(capacity);		
+
+		return storageTypeObj;
+	}
+	
+	/**
+	 * To create Storage Container object by initilizing with values passed to the method.
+	 * @param name The name of the Storage Container.
+	 * @param storageType The type of the Container.
+	 * @param parentStorageContainer The Parent container to set for the Container.
+	 * @param site The Site where the container is present.
+	 * @return The Storage Container object.
+	 */
+	private StorageContainer createStorageContainer(String name,StorageType storageType, StorageContainer parentStorageContainer, Site site)
+	{
+		StorageContainer storageContainer = new StorageContainer();
+		storageContainer.setName(name);
+
+		storageContainer.setStorageType(storageType);		
+		storageContainer.setSite(site);
+
+		storageContainer.setTempratureInCentigrade(storageType.getDefaultTempratureInCentigrade());
+		storageContainer.setBarcode(name);
+
+		Capacity capacity = new Capacity();
+		capacity.setOneDimensionCapacity(storageType.getCapacity().getOneDimensionCapacity());
+		capacity.setTwoDimensionCapacity(storageType.getCapacity().getTwoDimensionCapacity());
+		storageContainer.setCapacity(capacity);				
+		
+		storageContainer.setParent(parentStorageContainer);
+		
+		storageContainer.setActivityStatus("Active");
+		storageContainer.setFull(Boolean.valueOf(false));		
+		
+		Collection holdsStorageTypeCollection = new HashSet(storageType.getHoldsStorageTypeCollection());
+		storageContainer.setHoldsStorageTypeCollection(holdsStorageTypeCollection);
+		
+		Collection holdsSpecimenClassCollection = new HashSet(storageType.getHoldsSpecimenClassCollection());
+		storageContainer.setHoldsSpecimenClassCollection(holdsSpecimenClassCollection);
+		
+		return storageContainer;
+	}
 	/**
 	 * will insert minimum MIN_SCG_PER_PARTICIPANT SCG for participant.
 	 * @param collectionProtocolRegistration
@@ -251,6 +427,7 @@ public class DemoQueryData
 			}
 		}
 	}
+	private static long pmCnt = 0;
 	/**
 	 * Create specimen object.
 	 * @return Specimen
@@ -261,8 +438,8 @@ public class DemoQueryData
 		Specimen specimen = getSpecimenInstance();
 		specimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 		
-		specimen.setLabel("spec" + appender + UniqueKeyGeneratorUtil.getUniqueKey());
-		specimen.setBarcode("bar" + appender + UniqueKeyGeneratorUtil.getUniqueKey());
+		specimen.setLabel(generateUniqueName("spec"));
+		specimen.setBarcode(generateUniqueName("bar"));
 		
 		specimen.setAvailable(new Boolean(true));
 		specimen.setActivityStatus("Active");
@@ -279,14 +456,43 @@ public class DemoQueryData
 		specimen.setComment("");
 //		specimen.setLineage("Aliquot");
 
-		// Is virtually located
-		specimen.setStorageContainer(null); 
-		specimen.setPositionDimensionOne(null);
-		specimen.setPositionDimensionTwo(null);
+		// Setting storage Container, the storage positions will be automatically allocated by bizLogic.
+		// just need to  maintain the no of empty positions in the Containers.
+		if (!nonEmptyContainerIds.isEmpty())
+		{
+			// means there are some non empty container. so it can be stored at some location.
+			int boxIndex;
+			while (true) // looping till get empty storage container position. 
+			{
+				boxIndex = getNumber(boxContainerEmptyPositions.length);
+				if (boxContainerEmptyPositions[boxIndex]>0)
+				{
+					boxContainerEmptyPositions[boxIndex]--;
+					StorageContainer container = new StorageContainer();
+					Long containerId = boxContainerIds.get(boxIndex);
+					container.setId(containerId);
+					specimen.setStorageContainer(container);
+					
+					if (boxContainerEmptyPositions[boxIndex]==0)
+					{
+						// container become empty...so Remove it from nonEmptyContainers set.
+						nonEmptyContainerIds.remove(containerId);
+					}
+					break;
+				}
+			} 
+		}
+		else
+		{
+			// Is virtually located
+			specimen.setStorageContainer(null); 
+			specimen.setPositionDimensionOne(null);
+			specimen.setPositionDimensionTwo(null);
+		}
 		
 		Collection externalIdentifierCollection = new HashSet();
 		ExternalIdentifier externalIdentifier = new ExternalIdentifier();
-		externalIdentifier.setName("eid" + appender + UniqueKeyGeneratorUtil.getUniqueKey());
+		externalIdentifier.setName(generateUniqueName("eid"));
 		externalIdentifier.setValue(externalIdentifier.getName());
 		externalIdentifier.setSpecimen(specimen);
 		
@@ -338,15 +544,31 @@ public class DemoQueryData
 		specimenEventCollection.add(receivedEventParameters);
 		specimen.setSpecimenEventCollection(specimenEventCollection);
 
-//		Biohazard biohazard = new Biohazard();
-//		biohazard.setName("Biohazard1");
-//		biohazard.setType("Toxic");
-//		biohazardCollection.add(biohazard);
 		Collection biohazardCollection = new HashSet();
+		int numberOfBiohazard = getNumber(BIOHAZARDS_PER_SPECIMEN);
+		
+		for (int index=0;index< numberOfBiohazard ;index++)
+		{
+			biohazardCollection.add(biohazards[getNumber(biohazards.length)]);
+		}
 		specimen.setBiohazardCollection(biohazardCollection);
 		return specimen;
 	}
 	
+	private void insertBiohazards() throws ApplicationException
+	{
+		println("Inserting biohazards.."+NO_OF_BIOHAZARDS);
+		for (int i = 0; i < NO_OF_BIOHAZARDS; i++)
+		{
+			Biohazard biohazard = new Biohazard();
+			String name= generateUniqueName("BIO");
+			biohazard.setName(name);
+			biohazard.setComment("");
+			String type = biohazardTypes[getNumber(biohazardTypes.length)];
+			biohazard.setType(type);
+			biohazards[i] = (Biohazard) appService.createObject(biohazard);
+		}
+	}
 	/**
 	 * To create empty instance of specimen of type molecular/tissue/cell/fluid.
 	 * @return
@@ -386,7 +608,7 @@ public class DemoQueryData
 	{
 		SpecimenCollectionGroup specimenCollectionGroup = new SpecimenCollectionGroup();
 
-		specimenCollectionGroup.setName("scg" + appender + UniqueKeyGeneratorUtil.getUniqueKey());
+		specimenCollectionGroup.setName(generateUniqueName("scg"));
 		specimenCollectionGroup.setClinicalDiagnosis(clinicalDiagnosis[getNumber(clinicalDiagnosis.length)]);
 		specimenCollectionGroup.setClinicalStatus(clinicalStatus[getNumber(clinicalStatus.length)]);
 		specimenCollectionGroup.setActivityStatus("Active");
@@ -414,7 +636,7 @@ public class DemoQueryData
 		collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
 		collectionProtocolRegistration.setParticipant(participant);
 
-		collectionProtocolRegistration.setProtocolParticipantIdentifier("cpReg"+appender + UniqueKeyGeneratorUtil.getUniqueKey());
+		collectionProtocolRegistration.setProtocolParticipantIdentifier(generateUniqueName("cpReg"));
 		collectionProtocolRegistration.setActivityStatus("Active");
 		/*
 		try
@@ -476,8 +698,8 @@ public class DemoQueryData
 //		userObj.setId(new Long(1));
 		User userObj = userList.get(getNumber(userList.size()));
 
-		siteObj.setEmailAddress(appender + UniqueKeyGeneratorUtil.getUniqueKey()+"@admin.com");
-		siteObj.setName("sit" + appender + UniqueKeyGeneratorUtil.getUniqueKey());
+		siteObj.setEmailAddress(generateUniqueName("")+"@admin.com");
+		siteObj.setName(generateUniqueName("sit"));
 		siteObj.setType("Laboratory");
 		siteObj.setActivityStatus("Active");
 		siteObj.setCoordinator(userObj);
@@ -511,7 +733,7 @@ public class DemoQueryData
 		collectionProtocol.setEndDate(null);
 		collectionProtocol.setEnrollment(null);
 		collectionProtocol.setIrbIdentifier("77777"+appender);
-		collectionProtocol.setTitle("cp"+appender + UniqueKeyGeneratorUtil.getUniqueKey());
+		collectionProtocol.setTitle(generateUniqueName("cp"));
 		collectionProtocol.setShortTitle(collectionProtocol.getTitle());
 		
 //		try
@@ -599,25 +821,25 @@ public class DemoQueryData
 	{
 		// creating institution.
 		Institution institution = new Institution();
-		institution.setName("inst"+ appender+ UniqueKeyGeneratorUtil.getUniqueKey());
+		institution.setName(generateUniqueName("inst"));
     	institution =  (Institution) appService.createObject(institution);
     			
     	// creating Department.
     	Department department = new Department();
-		department.setName("dpt" + appender + UniqueKeyGeneratorUtil.getUniqueKey());
+		department.setName(generateUniqueName("dpt"));
 		department = (Department) appService.createObject(department);
 		
 		// creating cancerResearchGroup
 		CancerResearchGroup cancerResearchGroup = new CancerResearchGroup();
-		cancerResearchGroup.setName("crg" + appender + UniqueKeyGeneratorUtil.getUniqueKey());
+		cancerResearchGroup.setName(generateUniqueName("crg"));
 		cancerResearchGroup = (CancerResearchGroup)appService.createObject(cancerResearchGroup);
 		
 		// creating User.
 		User userObj = new User();
-		userObj.setEmailAddress(appender+UniqueKeyGeneratorUtil.getUniqueKey()+ "@admin.com");
+		userObj.setEmailAddress(generateUniqueName("")+ "@admin.com");
 		userObj.setLoginName(userObj.getEmailAddress());
-		userObj.setLastName("last" +appender+ UniqueKeyGeneratorUtil.getUniqueKey());
-		userObj.setFirstName("name" + appender + UniqueKeyGeneratorUtil.getUniqueKey());
+		userObj.setLastName(generateUniqueName("last"));
+		userObj.setFirstName(generateUniqueName("name"));
 
 		Address address = new Address();
 		address.setStreet("Main street");
@@ -648,9 +870,9 @@ public class DemoQueryData
 	private Participant createParticipant()
 	{
 		Participant participant = new Participant();
-		participant.setLastName("last" + appender + UniqueKeyGeneratorUtil.getUniqueKey());
-		participant.setFirstName("frst" + appender + UniqueKeyGeneratorUtil.getUniqueKey());
-		participant.setMiddleName("mdl" + appender + UniqueKeyGeneratorUtil.getUniqueKey());
+		participant.setLastName(generateUniqueName("last"));
+		participant.setFirstName(generateUniqueName("frst" ));
+		participant.setMiddleName(generateUniqueName("mdl"));
 
 		String vitalSatus = vitalStatus[getNumber(vitalStatus.length)];
 		participant.setVitalStatus(vitalSatus);
@@ -667,18 +889,18 @@ public class DemoQueryData
 		participant.setActivityStatus("Active");
 		participant.setEthnicity("Hispanic or Latino");
 
-//		Collection participantMedicalIdentifierCollection = new HashSet();
-//		int medicalIdNo = getNumber(MAX_PARTICIPANT_MEDICAL_IDS);
-//		for (int i=0;i<=medicalIdNo;i++)
-//		{
-//			ParticipantMedicalIdentifier pm = new ParticipantMedicalIdentifier();
-//			pm.setMedicalRecordNumber("RN:"+UniqueKeyGeneratorUtil.getUniqueKey());
-//			pm.setSite(sites[getNumber(sites.length)]);
-//			participantMedicalIdentifierCollection.add(pm);
-//			pm.setParticipant(participant);
-//		}
-//		
-//		participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
+		Collection participantMedicalIdentifierCollection = new HashSet();
+		int medicalIdNo = getNumber(MAX_PARTICIPANT_MEDICAL_IDS);
+		for (int i=0;i<=medicalIdNo;i++)
+		{
+			ParticipantMedicalIdentifier pm = new ParticipantMedicalIdentifier();
+			pm.setMedicalRecordNumber("pm"+pmCnt++);
+			pm.setSite(sites[getNumber(sites.length)]);
+			participantMedicalIdentifierCollection.add(pm);
+			pm.setParticipant(participant);
+		}
+		
+		participant.setParticipantMedicalIdentifierCollection(participantMedicalIdentifierCollection);
 		return participant;
 	}
 	
