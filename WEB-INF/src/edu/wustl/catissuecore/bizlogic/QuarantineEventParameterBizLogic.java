@@ -6,7 +6,6 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
 import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
@@ -15,6 +14,7 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -63,7 +63,8 @@ public class QuarantineEventParameterBizLogic extends IntegrationBizLogic
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		try{
+		try
+		{
 			QuarantineEventParameter oldquarantineParam = (QuarantineEventParameter) oldObj;
 			QuarantineEventParameter newquarantineParam = (QuarantineEventParameter) obj;
 			if(newquarantineParam.getUser().getId()==null){
@@ -83,8 +84,10 @@ public class QuarantineEventParameterBizLogic extends IntegrationBizLogic
 			dao.update(oldquarantineParam, sessionDataBean, true, false, false);
 			newquarantineParam.setStatus(Constants.COMMENT_STATUS_REPLIED);
 			dao.insert(newquarantineParam, sessionDataBean, false, false);
-		}catch(Exception ex){
-			ex.printStackTrace();
+		}
+		catch(Exception ex)
+		{
+			Logger.out.error("Error occured while updating object of QuarantineEventParameter"+ex);
 		}
 	}
 }

@@ -17,9 +17,19 @@ import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
 
+/**
+ * This class is to provide method to stop deid server 
+ * @author vijay_pande
+ *
+ */
 public class StopDeidServer
 {
-	 public static void main( String args[] )throws Exception
+	/**
+	 * Main method to stop deid server
+	 * @param args Comman line arguments
+	 * @throws Exception Generic exception
+	 */
+	 public static void main(String args[])throws Exception
 	 {
 	
 	    try 
@@ -44,9 +54,18 @@ public class StopDeidServer
 	        s.close();
 	        Logger.out.info("Message sent to stop server");
 	        
-	    } catch (UnknownHostException e2) {
-	    } catch (SocketTimeoutException ex1) {
-	    } catch (IOException exc) {
+	    } 
+	    catch (UnknownHostException ex1) 
+	    {
+	    	Logger.out.error("Host not found"+ex1);
+	    }
+	    catch (SocketTimeoutException ex2) 
+	    {
+	    	Logger.out.error("Socket timed out"+ex2);
+	    } 
+	    catch (IOException ex3) 
+	    {
+	    	Logger.out.error("IO exception"+ex3);
 	    }
 	 }
 

@@ -358,7 +358,7 @@ public class DeIDPipelineManager
 					ServerSocket serv = new ServerSocket(port);
 				  	BufferedReader r;
 			    	Socket sock = serv.accept();
-			    	r =new BufferedReader (new InputStreamReader (sock.getInputStream()) );
+			    	r =new BufferedReader (new InputStreamReader (sock.getInputStream()));
 			    	PrintWriter out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()),true);
 			    	String str=r.readLine();
 			    	

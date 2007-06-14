@@ -73,7 +73,8 @@ public class PathologyReportReviewParameterBizLogic extends IntegrationBizLogic
 	 */
 	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		try{
+		try
+		{
 			PathologyReportReviewParameter oldreviewParam = (PathologyReportReviewParameter) oldObj;
 			PathologyReportReviewParameter newreviewParam = (PathologyReportReviewParameter) obj;
 			if(newreviewParam.getUser().getId()==null){
@@ -83,8 +84,10 @@ public class PathologyReportReviewParameterBizLogic extends IntegrationBizLogic
 			dao.update(oldreviewParam, sessionDataBean, true, false, false);
 			newreviewParam.setStatus(Constants.COMMENT_STATUS_REPLIED);
 			dao.insert(newreviewParam, sessionDataBean, false, false);
-		}catch(Exception ex){
-			ex.printStackTrace();
+		}
+		catch(Exception ex)
+		{
+			Logger.out.error("Error occured while updating object of PathologyReportReviewParameter"+ex);
 		}
 	}
 }

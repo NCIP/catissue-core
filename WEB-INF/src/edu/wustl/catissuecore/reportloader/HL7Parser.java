@@ -46,14 +46,14 @@ public class HL7Parser extends Parser
 	 * It gets different sections in the map and creates different report sections from it. 
 	 * @param p Object of participant
 	 * @param reportMap a report map containing sections to be processed
-	 * 
+	 * @param scg object of SpecimenCollectionGroup
+	 * @throws Exception generic exception
 	 */
-	public void process(Participant p,Map reportMap, SpecimenCollectionGroup scg) throws Exception
+	public void process(Participant participant,Map reportMap, SpecimenCollectionGroup scg) throws Exception
 	{
 		Logger.out.info("Procesing report");
 		ReportSection reportSection = null;
 		TextContent textContent = null;
-		Participant participant = null;
 		Set reportSectionSet = null;
 		ReportLoader reportLoader = null;
 		IdentifiedSurgicalPathologyReport report = null;
@@ -68,7 +68,6 @@ public class HL7Parser extends Parser
 			line=this.getParticipantDataFromReportMap(reportMap, Parser.PID);
 			//participant = parserParticipantInformation(line);
 			this.site=parseSiteInformation(line);
-			participant =p;
 			line=this.getReportDataFromReportMap(reportMap, Parser.OBR);
 			Logger.out.debug("Creating report");
 			report = extractOBRSegment(line);
@@ -130,6 +129,7 @@ public class HL7Parser extends Parser
 	 * This is a mehod which parses report string from queue and process it. 
 	 * @param participant represents participant
 	 * @param reportText report string
+	 * @param scg object of SpecimenCollectionGroup
 	 * @throws Exception generic exception
 	 */
 	public void parseString(Participant participant , String reportText, SpecimenCollectionGroup scg)throws Exception
@@ -327,7 +327,7 @@ public class HL7Parser extends Parser
 	 * It gets different sections in the map and creates different report sections from it. 
 	 * @param set a set of section
 	 * @param reportText plain text format report
-	 * 
+	 * @param scg object of SpecimenCollectionGroup
 	 */
 	public void addReportToQueue(Set set,String reportText, SpecimenCollectionGroup scg)
 	{
@@ -352,9 +352,10 @@ public class HL7Parser extends Parser
 	}	
 	 
    /**
-	 * @param reportMap report map representing map of different pathology reports 
-	 * @return String represents report text
-	 */
+    * Method to create report text from reportMap
+	* @param reportMap report map representing map of different pathology reports 
+	* @return String represents report text
+	*/
   private String getReportText(Map reportMap)
   {
 	  StringBuffer reportTxt=new StringBuffer();
@@ -375,6 +376,7 @@ public class HL7Parser extends Parser
   }
   
    /**
+    * Method to add report section to report map
     * @param tempMap temporary map
     * @param key key of the map
     * @param value value
@@ -399,6 +401,7 @@ public class HL7Parser extends Parser
    }
 
    /**
+    * Method to retrieve participant information from report map
     * @param reportMap report map
     * @param key key of the report map
     * @return participant information from the report map 
@@ -415,6 +418,7 @@ public class HL7Parser extends Parser
    }
 	
    /**
+    * Method to retrieve report data from report map
     * @param reportMap report map
     * @param key key of the report map
     * @return raport data information from the report map
@@ -431,6 +435,7 @@ public class HL7Parser extends Parser
    }
 	
    /**
+    * Method to retrieve specific report section from reportMap
     * @param reportMap report map
     * @param key key of the report map
     * @return collection of report section data from the report map
@@ -442,6 +447,7 @@ public class HL7Parser extends Parser
    }
    
     /**
+     * Method to create participant object using HL7 format report section for participant (PID)
      * @param pidLine participant information text
      * @return Participant from the participant information text
      * @throws Exception exception while parsing the participant information 
@@ -764,10 +770,11 @@ public class HL7Parser extends Parser
 	   return isValid;
    }
    /**
-	 * @param obrLine report information text
-	 * @return Identified surgical pathology report from report text
-	 * @throws Exception while parsing the report text information
-	 */
+    * Method to extract information from OBR segment
+	* @param obrLine report information text
+	* @return Identified surgical pathology report from report text
+	* @throws Exception while parsing the report text information
+	*/
 	public static IdentifiedSurgicalPathologyReport extractOBRSegment(String obrLine)
 	{
 		IdentifiedSurgicalPathologyReport report = new IdentifiedSurgicalPathologyReport();

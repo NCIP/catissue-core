@@ -56,10 +56,11 @@ public class ReportLoader
 	private String surgicalPathologyNumber;
 	
 	/**
+	 * Constructor
 	 * @param p participant 
 	 * @param report identified report
 	 * @param s site
-	 * Constructor
+	 * 
 	 */
 	public ReportLoader(Participant p,IdentifiedSurgicalPathologyReport report,Site s)
 	{
@@ -68,10 +69,13 @@ public class ReportLoader
 		this.site=s;
 	}
 	/**
+	 * Constructor
 	 * @param p participant 
 	 * @param report identified report
 	 * @param s site
-	 * Constructor
+	 * @param scg specimenCollectionGroup
+	 * @param surgicalPathologyNumber surgicalPathologyNumber of report
+	 * 
 	 */
 	public ReportLoader(Participant p,IdentifiedSurgicalPathologyReport report,Site s, SpecimenCollectionGroup scg, String surgicalPathologyNumber)
 	{
@@ -83,9 +87,10 @@ public class ReportLoader
 	}
 			
 	/**
-	 * @throws Exception
-	 * processes the reporting data. Validats for participant,site and and report
-	 * existance. It also stores data to the datastore.   
+	 * processes the report data. Validats for participant,site and and report
+	 * existance. It also stores data to the datastore.
+	 * @throws Exception generic exception
+	 *    
 	 */
 	public void process()throws Exception
 	{
@@ -265,6 +270,7 @@ public class ReportLoader
 	}
 	
 	/**
+	 * Method to check for the existence of textContent
 	 * @param report identified surgical pathology report
 	 * @return boolean value which indicates text content is present or not
 	 */

@@ -146,7 +146,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	private String reportId="";
 	/**
 	 * This is the method to get date of birth of particicpant
-	 * @return birthDate
+	 * @return birthDate Date of Birth of participant
 	 */
 	public String getBirthDate()
 	{
@@ -155,7 +155,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set date of birth of particicpant
-	 * @param dateOfBirth 
+	 * @param dateOfBirth Date of Birth of participant
 	 */
 	public void setBirthDate(String dateOfBirth)
 	{
@@ -164,7 +164,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get death date of particicpant
-	 * @return deathDate 
+	 * @return deathDate Death date of participant
 	 */
 	public String getDeathDate()
 	{
@@ -173,7 +173,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set death date of particicpant
-	 * @param dateOfDeath 
+	 * @param dateOfDeath Death date of participant
 	 */
 	public void setDeathDate(String dateOfDeath)
 	{
@@ -182,7 +182,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get ethinicity of particicpant
-	 * @return ethinicity 
+	 * @return ethinicity Ethinicity participant
 	 */
 	public String getEthinicity()
 	{
@@ -191,7 +191,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set ethinicity of particicpant
-	 * @param ethinicity 
+	 * @param ethinicity Ethinicity participant
 	 */
 	public void setEthinicity(String ethinicity)
 	{
@@ -200,7 +200,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get first name of particicpant
-	 * @return firstName 
+	 * @return firstName First name of participant
 	 */
 	public String getFirstName()
 	{
@@ -209,7 +209,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set first name of particicpant
-	 * @param firstName 
+	 * @param firstName First name of participant
 	 */
 	public void setFirstName(String firstName)
 	{
@@ -218,7 +218,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get gender of particicpant
-	 * @return gender of particicpant
+	 * @return gender Gender of particicpant
 	 */
 	public String getGender()
 	{
@@ -227,7 +227,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set gender of particicpant
-	 * @param gender
+	 * @param gender Gender of particicpant
 	 */
 	public void setGender(String gender)
 	{
@@ -236,7 +236,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get last name of particicpant
-	 * @return lastName
+	 * @return lastName Last name of participant
 	 */
 	public String getLastName()
 	{
@@ -245,7 +245,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set last name of particicpant
-	 * @param lastName
+	 * @param lastName Last name of participant
 	 */
 	public void setLastName(String lastName)
 	{
@@ -254,7 +254,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get collection of MedicalIdentifierNumbers of particicpant
-	 * @return medicalIdentifierNumbers
+	 * @return medicalIdentifierNumbers Medical Identifier Number of Participant
 	 */
 	public Collection getMedicalIdentifierNumbers()
 	{
@@ -263,7 +263,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set collection of MedicalIdentifierNumbers of particicpant
-	 * @param medicalIdentifierNumbers
+	 * @param medicalIdentifierNumbers Medical Identifier Number of Participant
 	 */
 	public void setMedicalIdentifierNumbers(Collection medicalIdentifierNumbers)
 	{
@@ -272,7 +272,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get collection of race of particicpant
-	 * @return race 
+	 * @return race Race of participant
 	 */
 	public Collection getRace()
 	{
@@ -281,7 +281,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set collection of race of particicpant
-	 * @param race
+	 * @param race Race of participant
 	 */
 	public void setRace(Collection race)
 	{
@@ -290,7 +290,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get sex genotype of particicpant
-	 * @return sex genotype of particicpant
+	 * @return sexGenotype Sex genotype of particicpant
 	 */
 	public String getSexGenotype()
 	{
@@ -299,7 +299,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set sex genotype of particicpant
-	 * @param sexGenotype
+	 * @param sexGenotype Sex genotype of particicpant
 	 */
 	public void setSexGenotype(String sexGenotype)
 	{
@@ -308,7 +308,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get Social Security Number of particicpant
-	 * @return socialSecurityNumber
+	 * @return socialSecurityNumber Social Security Number (SSN) of participant
 	 */
 	public String getSocialSecurityNumber()
 	{
@@ -317,7 +317,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 
 	/**
 	 * This is the method to set Social Security Number of particicpant
-	 * @param socialsecurityNumber
+	 * @param socialsecurityNumber Social Security Number (SSN) of participant
 	 */
 	public void setSocialSecurityNumber(String socialsecurityNumber)
 	{
@@ -326,7 +326,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get Accession Number of Identified Report
-	 * @return identifiedReportAccessionNumber
+	 * @return identifiedReportAccessionNumber Accession Number of identified report
 	 */
 	public String getIdentifiedReportAccessionNumber()
 	{
@@ -335,7 +335,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set Accession Number of Identified Report
-	 * @param accessionNumber
+	 * @param accessionNumber Accession Number of identified report
 	 */
 	public void setIdentifiedReportAccessionNumber(String accessionNumber)
 	{
@@ -344,7 +344,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get comments of Evevnt Parameter (Either review or quarantine event parameter)
-	 * @return comments 
+	 * @return comments Comments text
 	 */
 	public String getComments()
 	{
@@ -353,7 +353,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set comments of Evevnt Parameter (Either review or quarantine event parameter)
-	 * @param comments
+	 * @param comments Comments text
 	 */
 	public void setComments(String comments)
 	{
@@ -371,7 +371,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set site of Identified Report
-	 * @param site
+	 * @param site of Identified Report
 	 */
 	public void setIdentifiedReportSite(String site)
 	{
@@ -399,7 +399,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	/** 
 	 * Set values of all variables of form
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
-	 * 
+	 * @param abstractDomain Object of AbstractDomainObject which is IdentifiedSurgicalPathologyReport object in this case
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain) 
 	{
@@ -420,7 +420,6 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	/**
 	 * set values of De-Identified report related variables
 	 * @param deidentifiedSurgicalPathologyReport DeidentifiedSurgicalPathologyReport Object
-	 * set values of De-Identified report related variables
 	 */
 	public void setDeIdentifiedReport(DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
 	{
@@ -476,8 +475,8 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	}
 
 	/**
-	 * @param participant Participant Object
 	 *  set values of participant related variables
+	 * @param participant Participant Object 
 	 */
 	public void setParticipant(final Participant participant)
 	{
@@ -614,7 +613,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * On the basis of Request for submitting comments different form ID will be returned to save two different kind of comments
 	 * review comment and quarantine comments
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
-	 * 
+	 * @return identifier of Form
 	 */
 	public int getFormId()
 	{	
@@ -627,7 +626,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get report text content of Deidentified Report
-	 * @return deIdentifiedReportTextContent 
+	 * @return deIdentifiedReportTextContent text of textContent for deIdentifiedReport
 	 */
 	public String getDeIdentifiedReportTextContent()
 	{
@@ -636,7 +635,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set report text content of Deidentified Report
-	 * @param deIdentifiedReportTextContent
+	 * @param deIdentifiedReportTextContent text of textContent for deIdentifiedReport
 	 */
 	public void setDeIdentifiedReportTextContent(String deIdentifiedReportTextContent)
 	{
@@ -645,7 +644,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get report text content of Identified Report
-	 * @return identifiedReportTextContent 
+	 * @return identifiedReportTextContent text of textContent for identifiedReport
 	 */
 	public String getIdentifiedReportTextContent()
 	{
@@ -654,7 +653,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set report text content of Identified Report
-	 * @param identifiedReportTextContent
+	 * @param identifiedReportTextContent text of textContent for identifiedReport
 	 */
 	public void setIdentifiedReportTextContent(String identifiedReportTextContent)
 	{
@@ -663,7 +662,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get counter that is size of map for medical identifier numbers
-	 * @return counter
+	 * @return counter Counter for the number of elemets in MedicalIdentifierMap
 	 */
 	public int getCounter()
 	{
@@ -672,7 +671,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set counter that is size of map for medical identifier numbers
-	 * @param counter
+	 * @param counter Counter for the number of elemets in MedicalIdentifierMap
 	 */
 	public void setCounter(int counter)
 	{
@@ -681,8 +680,8 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to add a key value pair to map for medical identifier numbers
-	 * @param key
-	 * @param value
+	 * @param key key to set value in map
+	 * @param value object to be set as value in map
 	 */
 	public void setValue(String key, Object value) 
     {
@@ -691,8 +690,8 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 
 	/**
 	 * This is the method to retrieve a value for given key from map for medical identifier numbers
-	 * @param key
-	 * @return object
+	 * @param key key to retrieve object from map
+	 * @return object retrieved object from map
 	 */
 	public Object getValue(String key) 
     {
@@ -701,7 +700,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
       
  	/**
  	 * This is the method to retrieve all values for all keys from map for medical identifier numbers
- 	 * @return collection
+ 	 * @return collection Returns all the objects stored in map
  	 */
  	public Collection getAllValues() 
  	{
@@ -710,7 +709,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 
  	/**
  	 * This is the method to add multiple key value pair to map for medical identifier numbers
- 	 * @param values
+ 	 * @param values map of object
  	 */
  	public void setValues(Map values)
  	{
@@ -719,7 +718,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
  
  	/**
  	 * This is the method to retrieve multiple values from map for medical identifier numbers
- 	 * @return map
+ 	 * @return map map of object
  	 */
  	public Map getValues()
  	{
@@ -739,6 +738,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	/** 
 	 * This is the overriden method to set the id of the domain object of the page from which this age is accessed 
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setId(long)
+	 * @param id identifier of current domain object
 	 */
 	public void setId(long id)
 	{
@@ -747,7 +747,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 
 	/**
 	 * This is the method to get report id of Identified Report
-	 * @return identifiedReportId
+	 * @return identifiedReportId id of the identifiedReport
 	 */
 	public String getIdentifiedReportId()
 	{
@@ -756,7 +756,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set report id of Identified Report
-	 * @param identifiedReportId
+	 * @param identifiedReportId id of the identifiedReport
 	 */
 	public void setIdentifiedReportId(String identifiedReportId)
 	{
@@ -765,7 +765,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get accession number of Deidentified Report
-	 * @return deIdentifiedReportAccessionNumber
+	 * @return deIdentifiedReportAccessionNumber accession number of deidentifiedReport
 	 */
 	public String getDeIdentifiedReportAccessionNumber()
 	{
@@ -774,7 +774,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to set accession number of Deidentified Report
-	 * @param deIdentifiedReportAccessionNumber
+	 * @param deIdentifiedReportAccessionNumber accession number of deidentifiedReport
 	 */
 	public void setDeIdentifiedReportAccessionNumber(String deIdentifiedReportAccessionNumber)
 	{
@@ -783,7 +783,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 
 	/**
 	 * This is the method to get report id of Deidentified Report
-	 * @return deIdentifiedReportId
+	 * @return deIdentifiedReportId id of deidentifiedReport
 	 */
 	public long getDeIdentifiedReportId()
 	{
@@ -792,7 +792,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 *  This is the method to set report id of Deidentified Report
-	 * @param deIdentifiedReportId
+	 * @param deIdentifiedReportId id of deidentifiedReport
 	 */
 	public void setDeIdentifiedReportId(long deIdentifiedReportId)
 	{
@@ -810,7 +810,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This is the method to get site Deidentified Report
-	 * @param deIdentifiedReportSite
+	 * @param deIdentifiedReportSite site of de-identified report
 	 */
 	public void setDeIdentifiedReportSite(String deIdentifiedReportSite)
 	{
@@ -820,7 +820,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * Returns the report id list
-	 * @return reportIdList
+	 * @return reportIdList list of report ids
 	 */
 	public List getReportIdList()
 	{
@@ -830,7 +830,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * Sets the report id list
-	 * @param reportIdList
+	 * @param reportIdList list of report ids
 	 */
 	public void setReportIdList(List reportIdList)
 	{
@@ -839,7 +839,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 
 	/**
 	 * Returns the report id 
-	 * @return reportId
+	 * @return reportId current report id
 	 */
 	public String getReportId()
 	{
@@ -848,7 +848,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 
 	/**
 	 * Sets the report id 
-	 * @param reportId
+	 * @param reportId current report id
 	 */
 	public void setReportId(String reportId)
 	{
@@ -857,7 +857,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 
 	/**
 	 * This is the method to set comments of Users is the status is Pending (Either review or quarantine event parameter)
-	 * @return userComments
+	 * @return userComments user comments text
 	 */
 	public String getUserComments()
 	{
@@ -866,7 +866,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 
 	/**
 	 * This is the method to set comments of Users is the status is Pending (Either review or quarantine event parameter)
-	 * @param userComments
+	 * @param userComments user comments text
 	 */
 	public void setUserComments(String userComments)
 	{
@@ -875,7 +875,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 
 	/**
 	 * Unique Identifier for a report
-	 * @return requestIdentifier
+	 * @return requestIdentifier Unique Identifier for a report
 	 */
 	public long getRequestIdentifier()
 	{
@@ -893,7 +893,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	
 	/**
 	 * This variable is to identify if the request is quarantined or Dequarantined
-	 * @return  acceptReject
+	 * @return  acceptReject If acceptReject=1 then request for accept if acceptReject =2 then req for dequarantine
 	 */
 	public long getAcceptReject()
 	{
@@ -911,7 +911,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 
 	/**
 	 * String for User name
-	 * @return userName
+	 * @return userName Full name of user
 	 */
 	public String getUserName()
 	{

@@ -1,7 +1,6 @@
 package edu.wustl.catissuecore.bizlogic;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,9 +16,10 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.logger.Logger;
 
 /**
- * Userd to store identified pathology report to the database 
+ * Used to store identified pathology report to the database 
  *
  */
 
@@ -64,7 +64,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends IntegrationBizLo
 				dao.update(report, sessionDataBean, true, false, false);
 				
 			}catch(Exception ex){
-				ex.printStackTrace();
+				Logger.out.error("Error occured while updating IdentifiedSurgicalPathologyReport domain object"+ex);
 			}
 		}
 
@@ -94,7 +94,7 @@ public class IdentifiedSurgicalPathologyReportBizLogic  extends IntegrationBizLo
 		 * This function takes identifier as parameter and returns corresponding IdentifiedSurgicalPathologyReport
 		 * @param identifier system generated unique id for report
 		 * @return Identified pathology report of given identifier
-		 * @throws Exception
+		 * @throws Exception Generic exception
 		 */
 		public IdentifiedSurgicalPathologyReport getReportById(Long identifier) throws Exception
 		{

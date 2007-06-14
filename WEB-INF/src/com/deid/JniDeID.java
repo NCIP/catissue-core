@@ -43,7 +43,8 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class JniDeID 
 {
-   /** unLoadDeidLibrary maps the DeID6 library into the applications addressspace via the Windows API function LoadLibrary
+   /** 
+    * loadDeidLibrary maps the DeID6 library into the applications addressspace via the Windows API function LoadLibrary
     *  @return boolean 
     */
    public native static boolean loadDeidLibrary();
@@ -94,8 +95,9 @@ public class JniDeID
 	}
 	
 	/**
-	 * @param str
 	 * main method for the JniDeID
+	 * @param str array CommandLine arguments
+	 * 
 	 */
 	public static void main(String[] str)
 	{
@@ -136,6 +138,7 @@ public class JniDeID
   
   
    /**
+    * This method call the native method CreateDeidentifierEx which is in DeID6.dll
     * @sa CreateDeidentifier
     * @param inputStr input string for deindentification
     * @param outputStr deidentified output string

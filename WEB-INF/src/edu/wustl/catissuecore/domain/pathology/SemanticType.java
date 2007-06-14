@@ -9,8 +9,6 @@
  */
 package edu.wustl.catissuecore.domain.pathology;
 
-import java.io.Serializable;
-
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
@@ -43,7 +41,8 @@ public class SemanticType extends AbstractDomainObject
 	}
 
 	/**
-	 * @param identifier sets identifier
+	 * Set identifier of the sematic type
+	 * @param id sets identifier
 	 */
 	public void setId(Long id)
 	{
@@ -51,7 +50,8 @@ public class SemanticType extends AbstractDomainObject
 	}
 
 	/**
-	 * @return label
+	 * Returns label of the sematic type
+	 * @return label label of the sematic type
 	 * @hibernate.property type="string" length="500" column="LABEL"
 	 */
 	public String getLabel()
@@ -60,6 +60,7 @@ public class SemanticType extends AbstractDomainObject
 	}
 
 	/**
+	 * Set label of the sematic type
 	 * @param label sets label
 	 */
 	public void setLabel(String label)
@@ -68,7 +69,7 @@ public class SemanticType extends AbstractDomainObject
 	}
 
 	/**
-	 * Constructor
+	 * Default Constructor of the class
 	 */
 	public SemanticType()
 	{
@@ -76,6 +77,13 @@ public class SemanticType extends AbstractDomainObject
 	}
 
 
+	
+	/**
+	 * Method to populate abstractForm from domain Object
+	 *  (non-Javadoc)
+	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
+	 * @param abstractForm abstract form
+	 */
 	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
 	{		
 		
