@@ -40,7 +40,7 @@
 				<pathelement location="${src.dir}"/>
 			</classpath>
 		</javac>
-		<java classname="DemoQueryData" fork="true">
+		<java classname="DemoQueryData" fork="true" maxmemory="256m">
 			<arg value="${param1}"/>
 			<classpath refid="cp"/>
 			<classpath>
