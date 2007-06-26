@@ -19,10 +19,14 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -133,97 +137,7 @@ public class MultipleSpecimenStorageLocationForm extends AbstractActionForm
 		this.specimenOnUIMap = specimenOnUIMap;
 	}
 
-	public void populateSpecimenOnUIMap(HttpServletRequest request)
-	{
-		if (specimenMap != null)
-		{
-			Iterator specimenKeys = specimenMap.keySet().iterator();
-			int cnt = 1;
-			while (specimenKeys.hasNext())
-			{
-				Specimen specimen = (Specimen) specimenKeys.next();
-				//hold order of specimen
-				specimenList.add(specimen);
-				String labelKey = "Specimen:" + cnt + "_Label";
-				String typeKey = "Specimen:" + cnt + "_Type";
-				String barKey = "Specimen:" + cnt + "_Barcode";
-				String storageContainerKey = "Specimen:" + cnt + "_StorageContainer";
-				String positionOneKey = "Specimen:" + cnt + "_PositionOne";
-				String positionTwoKey = "Specimen:" + cnt + "_PositionTwo";
-
-				//key for location map
-				String classKey = "Specimen:" + cnt + "_ClassName";
-				String collectionProtocolKey = "Specimen:" + cnt + "_CollectionProtocol";
-				specimenOnUIMap.put(classKey, specimen.getClassName());
-				specimenOnUIMap.put(collectionProtocolKey, specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-						.getCollectionProtocol().getId().toString());
-
-				specimenOnUIMap.put(labelKey, specimen.getLabel());
-				specimenOnUIMap.put(typeKey, specimen.getType());
-				specimenOnUIMap.put(barKey, specimen.getBarcode());
-				if (specimen.getStorageContainer() != null)
-					specimenOnUIMap.put(storageContainerKey, specimen.getStorageContainer().getId().toString());
-				if (specimen.getPositionDimensionOne() != null)
-					specimenOnUIMap.put(positionOneKey, specimen.getPositionDimensionOne().toString());
-				if (specimen.getPositionDimensionTwo() != null)
-					specimenOnUIMap.put(positionTwoKey, specimen.getPositionDimensionTwo().toString());
-				addDerivedSpecimens(specimen, cnt);
-				cnt++;
-			}
-			String specimenCountKey = "Specimen_Count";
-			specimenOnUIMap.put(specimenCountKey, new Integer(specimenMap.size()));
-		}
-		else
-		{
-			String specimenCountKey = "Specimen_Count";
-			specimenOnUIMap.put(specimenCountKey, new Integer(0));
-		}
-		Logger.out.debug("specimenOnUIMap after population : \n------------\n" + specimenOnUIMap + "\n-------\n");
-		request.getSession().setAttribute(Constants.MULTIPLE_SPECIMEN_SPECIMEN_ORDER_LIST, specimenList);
-		Logger.out.debug("\n---------------\n List set in session.\n---------------\n");
-	}
-
-	private void addDerivedSpecimens(Specimen mainSpecimen, int specimenID)
-	{
-		List derivedList = (List) specimenMap.get(mainSpecimen);
-		String parentKey = "Specimen:" + specimenID + "_";
-		if (derivedList != null && !derivedList.isEmpty())
-		{
-			for (int cnt = 1; cnt <= derivedList.size(); cnt++)
-			{
-				String derivedPrefix = parentKey + "DerivedSpecimen:";
-				Specimen specimen = (Specimen) derivedList.get(cnt - 1);
-				String labelKey = derivedPrefix + cnt + "_Label";
-				String typeKey = derivedPrefix + cnt + "_Type";
-				String barKey = derivedPrefix + cnt + "_Barcode";
-				String storageContainerKey = derivedPrefix + cnt + "_StorageContainer";
-				String positionOneKey = derivedPrefix + cnt + "_PositionOne";
-				String positionTwoKey = derivedPrefix + cnt + "_PositionTwo";
-				//key for location map
-				String classKey = derivedPrefix + cnt + "_ClassName";
-				String collectionProtocolKey = derivedPrefix + cnt + "_CollectionProtocol";
-				specimenOnUIMap.put(classKey, specimen.getClassName());
-				specimenOnUIMap.put(collectionProtocolKey, specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-						.getCollectionProtocol().getId().toString());
-
-				specimenOnUIMap.put(labelKey, specimen.getLabel());
-				specimenOnUIMap.put(typeKey, specimen.getType());
-				specimenOnUIMap.put(barKey, specimen.getBarcode());
-				if (specimen.getStorageContainer() != null)
-					specimenOnUIMap.put(storageContainerKey, specimen.getStorageContainer().getId().toString());
-				if (specimen.getPositionDimensionOne() != null)
-					specimenOnUIMap.put(positionOneKey, specimen.getPositionDimensionOne().toString());
-				if (specimen.getPositionDimensionTwo() != null)
-					specimenOnUIMap.put(positionTwoKey, specimen.getPositionDimensionTwo().toString());
-			}
-			specimenOnUIMap.put(parentKey + "DeriveCount", new Integer(derivedList.size()));
-		}
-		else
-		{
-			specimenOnUIMap.put(parentKey + "DeriveCount", new Integer(0));
-		}
-
-	}
+	
 
 	/* (non-Javadoc)
 	 * @see org.apache.struts.action.ActionForm#validate(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
@@ -264,5 +178,23 @@ public class MultipleSpecimenStorageLocationForm extends AbstractActionForm
 			}
 		}
 		return errors;
+	}
+
+	
+	/**
+	 * @return the specimenList
+	 */
+	public List getSpecimenList()
+	{
+		return specimenList;
+	}
+
+	
+	/**
+	 * @param specimenList the specimenList to set
+	 */
+	public void setSpecimenList(List specimenList)
+	{
+		this.specimenList = specimenList;
 	}
 }

@@ -133,9 +133,7 @@
         <div>
             <a class="subMenuPrimary" href="SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20">
                         <bean:message key="app.add" />
-            </a>
-        </div>    
-        <div>
+            </a> |
             <a class="subMenuPrimary" href="SimpleQueryInterface.do?pageOf=pageOfSpecimenArray&amp;aliasName=SpecimenArray&amp;menuSelected=20">
                         <bean:message key="app.edit"/>
             </a> |  

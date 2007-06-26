@@ -17,6 +17,7 @@ import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.BiohazardForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 
@@ -186,7 +187,7 @@ public class Biohazard extends AbstractDomainObject implements Serializable
      * This function Copies the data from an BiohazardForm object to a Biohazard object.
      * @param siteForm An SiteForm object containing the information about the site.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

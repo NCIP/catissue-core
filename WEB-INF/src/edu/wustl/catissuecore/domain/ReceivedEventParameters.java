@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -54,14 +55,14 @@ public class ReceivedEventParameters extends SpecimenEventParameters
 //	Parameterized constructor
 	public ReceivedEventParameters(AbstractActionForm abstractForm)
 	{
-		setAllValues(abstractForm);
+		setAllValues((IValueObject)abstractForm);
 	}
 	
 	/**
      * This function Copies the data from an ReceivedEventParametersForm object to a ReceivedEventParameters object.
      * @param receivedEventParametersForm An ReceivedEventParametersForm object containing the information about the ReceivedEventParameters.  
      */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

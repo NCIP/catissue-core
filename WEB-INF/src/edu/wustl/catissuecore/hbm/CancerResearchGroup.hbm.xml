@@ -9,6 +9,7 @@
     <class
         name="edu.wustl.catissuecore.domain.CancerResearchGroup"
         table="CATISSUE_CANCER_RESEARCH_GROUP"
+		lazy="true"
     >
 
         <id

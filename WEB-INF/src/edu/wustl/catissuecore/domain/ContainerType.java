@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -164,7 +165,7 @@ public class ContainerType extends AbstractDomainObject
     /* (non-Javadoc)
      * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
      */
-    public void setAllValues(AbstractActionForm arg0)
+    public void setAllValues(IValueObject arg0)
             throws AssignDataException
     {
         // Change for API Search   --- Ashwin 04/10/2006

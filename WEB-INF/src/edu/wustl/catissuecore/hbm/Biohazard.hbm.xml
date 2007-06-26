@@ -9,6 +9,7 @@
     <class
         name="edu.wustl.catissuecore.domain.Biohazard"
         table="CATISSUE_BIOHAZARD"
+		lazy="false"
     >
 
         <id
@@ -60,7 +61,7 @@
         <set
             name="specimenCollection"
             table="CATISSUE_SPECIMEN_BIOHZ_REL"
-            lazy="false"
+            lazy="true"
             inverse="true"
             cascade="save-update"
             sort="unsorted"

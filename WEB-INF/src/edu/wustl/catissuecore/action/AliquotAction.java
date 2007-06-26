@@ -40,12 +40,14 @@ import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.global.AbstractSpecimenLabelGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 
@@ -655,19 +657,26 @@ public class AliquotAction extends SecureAction
 			 * set the value of aliquotInSameContainer which was set while creation of collection protocol
 			 * required for Bug 2309
 			 */
-			Boolean aliquotInSameContainer = specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getCollectionProtocol()
-					.getAliqoutInSameContainer();
+			
+			/**
+			 * Name: Virender Mehta
+			 * Reviewer name: Aarti Sharma
+			 * Description: Resolved Performance Issue 
+			 * For retrive specimen.getSpecimenCollectionGroup().getCollectionProtocolEvent().getCollectionProtocol().getAliqoutInSameContainer();
+			 *  fired hql.
+			 */
+			Boolean aliquotInSameContainer = null;
+			aliquotInSameContainer =(Boolean)bizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"specimenCollectionGroup.collectionProtocolEvent.collectionProtocol.aliqoutInSameContainer");
 			if (aliquotInSameContainer != null)
 			{
 				form.setAliqoutInSameContainer(aliquotInSameContainer.booleanValue());
 			}
-			populateParentSpecimenData(form, specimen);
-
+			populateParentSpecimenData(form, specimen, bizLogic);
+			
 			form.setSpecimenID("" + specimen.getId());
-			//	request.setAttribute(Constants.SPECIMEN_ID,specimen.getId());
-
+			
 			pageOf = checkQuantityPerAliquot(request, form);
-
+			
 			if (Constants.PAGEOF_CREATE_ALIQUOT.equals(pageOf))
 			{
 				boolean isDouble = Utility.isQuantityDouble(form.getSpecimenClass(), form.getType());
@@ -750,8 +759,10 @@ public class AliquotAction extends SecureAction
 	}
 
 	//This method populates parent specimen's data in formbean
-	private void populateParentSpecimenData(AliquotForm form, Specimen specimen)
+	private void populateParentSpecimenData(AliquotForm form, Specimen specimen, IBizLogic bizLogic) throws DAOException
 	{
+		//SpecimenCharacteristics chars= null;
+		Long cpID=null;
 		form.setSpecimenClass(specimen.getClassName());
 		form.setType(specimen.getType());
 		SpecimenCharacteristics chars = specimen.getSpecimenCharacteristics();
@@ -760,8 +771,15 @@ public class AliquotAction extends SecureAction
 		form.setPathologicalStatus(specimen.getPathologicalStatus());
 		form.setInitialAvailableQuantity(getAvailableQuantity(specimen));
 		form.setAvailableQuantity(getAvailableQuantity(specimen));
-		form.setSpCollectionGroupId(specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId()
-				.longValue());
+		/**
+		 * Name: Virender Mehta
+		 * Reviewer name: Aarti Sharma
+		 * Description: Resolved Performance Issue 
+		 * For retrive specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId(),
+		 * fired hql.
+		 */
+		cpID = (Long)bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(), "specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id" );
+		form.setSpCollectionGroupId(cpID);
 		if (specimen instanceof MolecularSpecimen)
 		{
 			String concentration = Utility.toString(((MolecularSpecimen) specimen).getConcentrationInMicrogramPerMicroliter());
@@ -817,7 +835,7 @@ public class AliquotAction extends SecureAction
 
 			if (form.getQuantityPerAliquot() == null || form.getQuantityPerAliquot().trim().length() == 0)
 			{
-				//Resolved bug# 4403
+				//Resolved bug# 4403 
 //				dQuantity = availableQuantity / aliquotCount;
 //				dQuantity = Double.parseDouble(dFormat.format(dQuantity));
 				BigDecimal bgAvailTemp = new BigDecimal(availableQuantity);
@@ -881,14 +899,21 @@ public class AliquotAction extends SecureAction
 
 		Map aliquotMap = form.getAliquotMap();
 		AliquotBizLogic bizLogic = (AliquotBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.ALIQUOT_FORM_ID);
-		long nextAvailablenumber = bizLogic.getNextAvailableNumber("CATISSUE_SPECIMEN");
-
+		//long nextAvailablenumber = bizLogic.getNextAvailableNumber("CATISSUE_SPECIMEN");
+		/**
+    	 * Name : Virender Mehta
+         * Reviewer: Sachin Lale
+         * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and set. 
+    	 */
+		AbstractSpecimenLabelGenerator abstractSpecimenGenerator  = AbstractSpecimenLabelGenerator.getSpecimenLabelGeneratorInstance();
+		String aliquotStartLabel = abstractSpecimenGenerator.getNextAvailableAliquotSpecimenlabel(form.getSpecimenID());
+		long aliquotChildCount = Long.parseLong(aliquotStartLabel); 
 		for (int i = 1; i <= aliquotCount; i++)
 		{
 			String qtyKey = "Specimen:" + i + "_quantity";
 			aliquotMap.put(qtyKey, distributedQuantity);
 			String labelKey = "Specimen:" + i + "_label";
-			String aliquotLabel = form.getSpecimenLabel() + "_" + (nextAvailablenumber + i - 1);
+			String aliquotLabel = form.getSpecimenLabel() + "_" + (aliquotChildCount++);
 			aliquotMap.put(labelKey, aliquotLabel);
 		}
 

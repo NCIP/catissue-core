@@ -9,6 +9,7 @@
     <class
         name="edu.wustl.catissuecore.domain.Specimen"
         table="CATISSUE_SPECIMEN"
+		lazy="true"
     >
 
         <id
@@ -106,7 +107,7 @@
             name="parentSpecimen"
             class="edu.wustl.catissuecore.domain.Specimen"
             cascade="none"
-            outer-join="auto"
+            outer-join="false"
             update="true"
             insert="true"
             column="PARENT_SPECIMEN_ID"
@@ -137,7 +138,7 @@
         <set
             name="specimenEventCollection"
             table="CATISSUE_SPECIMEN_EVENT"
-            lazy="false"
+            lazy="true"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
@@ -157,7 +158,7 @@
         <set
             name="childrenSpecimen"
             table="CATISSUE_SPECIMEN"
-            lazy="false"
+            lazy="true"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
@@ -178,7 +179,7 @@
             name="storageContainer"
             class="edu.wustl.catissuecore.domain.StorageContainer"
             cascade="none"
-            outer-join="auto"
+            outer-join="false"
             update="true"
             insert="true"
             column="STORAGE_CONTAINER_IDENTIFIER"
@@ -187,7 +188,7 @@
         <set
             name="externalIdentifierCollection"
             table="CATISSUE_EXTERNAL_IDENTIFIER"
-            lazy="false"
+            lazy="true"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
@@ -291,6 +292,7 @@
         <subclass
             name="edu.wustl.catissuecore.domain.FluidSpecimen"
             discriminator-value="Fluid"
+			lazy="true"
         >
 
 	    <!--
@@ -303,6 +305,7 @@
         <subclass
             name="edu.wustl.catissuecore.domain.CellSpecimen"
             discriminator-value="Cell"
+			lazy="true"
         >
 
 	    <!--
@@ -315,6 +318,7 @@
         <subclass
             name="edu.wustl.catissuecore.domain.MolecularSpecimen"
             discriminator-value="Molecular"
+			lazy="true"
         >
         <property
             name="concentrationInMicrogramPerMicroliter"
@@ -335,6 +339,7 @@
         <subclass
             name="edu.wustl.catissuecore.domain.TissueSpecimen"
             discriminator-value="Tissue"
+			lazy="true"
         >
 
 	    <!--

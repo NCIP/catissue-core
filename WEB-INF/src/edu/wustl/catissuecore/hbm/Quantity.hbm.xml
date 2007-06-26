@@ -9,6 +9,7 @@
     <class
         name="edu.wustl.catissuecore.domain.Quantity"
         table="CATISSUE_QUANTITY"
+        lazy="false"
     >
 
         <id

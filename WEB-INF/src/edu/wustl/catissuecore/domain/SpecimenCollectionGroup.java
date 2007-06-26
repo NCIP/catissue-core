@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
@@ -390,9 +391,9 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
 	 */
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException 
+	public void setAllValues(IValueObject valueObject) throws AssignDataException 
 	{
-		
+		AbstractActionForm abstractForm = (AbstractActionForm)valueObject;
 		SpecimenCollectionGroupForm form = (SpecimenCollectionGroupForm)abstractForm;
 		try
 		{
@@ -423,10 +424,18 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			clinicalReport.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
 
 			collectionProtocolRegistration = new CollectionProtocolRegistration();
-			if(form.getCheckedButton() == 1)
+			/**
+			* Name: Vijay Pande
+			* Reviewer Name: Aarti Sharma
+			* Variable checkedButton name is changed to radioButton hence its getter method name is changed
+			*/
+			if(form.getRadioButtonForParticipant() == 1)
 			{    
 				//value of radio button is 2 when participant name is selected
 				Participant participant = new Participant();
+				/**For Migration Start**/
+//				form.setParticipantId(Utility.getParticipantId(form.getParticipantName()));
+				/**For Migration End**/
 				participant.setId(new Long(form.getParticipantId()));
 				collectionProtocolRegistration.setParticipant(participant);
 				collectionProtocolRegistration.setProtocolParticipantIdentifier(null);

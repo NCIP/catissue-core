@@ -11,7 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 
-import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 
 /*
@@ -93,7 +93,7 @@ public class Quantity extends AbstractDomainObject implements Serializable
     /**
      * Overrides the method of parent class.  
      */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
     	
     }

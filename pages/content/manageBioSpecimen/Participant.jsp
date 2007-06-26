@@ -78,7 +78,7 @@ tr#hiddenCombo
 		{
 			ParticipantForm form = (ParticipantForm)obj;
 			map = form.getValues();
-			noOfRows = form.getCounter();
+			noOfRows = form.getValueCounter();
 			currentBirthDate = form.getBirthDate(); 
 			currentDeathDate = form.getDeathDate(); 
 		}
@@ -108,9 +108,9 @@ tr#hiddenCombo
 		//function to insert a row in the inner block
 		function insRow(subdivtag)
 		{
-			var val = parseInt(document.forms[0].counter.value);
+			var val = parseInt(document.forms[0].valueCounter.value);
 			val = val + 1;
-			document.forms[0].counter.value = val;
+			document.forms[0].valueCounter.value = val;
 			
 			var r = new Array(); 
 			r = document.getElementById(subdivtag).rows;
@@ -164,7 +164,7 @@ tr#hiddenCombo
 			checkb.colSpan=2;
 			sname="";
 			var name = "chk_"+(q+1);
-			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')\">";
+			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"enableButton(document.forms[0].deleteValue,document.forms[0].valueCounter,'chk_')\">";
 			checkb.innerHTML=""+sname;
 		}
 		
@@ -423,7 +423,7 @@ tr#hiddenCombo
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value="<%=forwardTo%>"/>
 					</td>
-					<td><html:hidden property="counter"/></td>
+					<td><html:hidden property="valueCounter"/></td>
 					<td><html:hidden property="onSubmit" /></td>
 					<td><html:hidden property="id" /><html:hidden property="redirectTo"/></td>
 					<td><html:hidden property="pageOf" value="<%=pageOf%>"/></td>
@@ -718,7 +718,7 @@ tr#hiddenCombo
 						</html:button>
 				    </td>
 				    <td class="formTitle" align="Right">
-						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true',document.forms[0].counter,'chk_',false)"  disabled="true">
+						<html:button property="deleteValue" styleClass="actionButton" onclick="deleteChecked('addMore','Participant.do?operation=<%=operation%>&pageOf=<%=pageOf%>&status=true',document.forms[0].valueCounter,'chk_',false)"  disabled="true">
 							<bean:message key="buttons.delete"/>
 						</html:button>
 					</td>
@@ -772,7 +772,7 @@ tr#hiddenCombo
 
 						%>
 						<td class="formField" width="5">
-							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].counter,'chk_')">		
+							<input type=checkbox name="<%=check %>" id="<%=check %>" <%=condition%> onClick="enableButton(document.forms[0].deleteValue,document.forms[0].valueCounter,'chk_')">		
 						</td>
 				    
 				 </tr>

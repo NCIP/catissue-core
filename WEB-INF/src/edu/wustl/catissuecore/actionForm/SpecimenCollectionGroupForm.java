@@ -93,15 +93,27 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	private long collectionProtocolEventId;
 		
 	/**
+	 * Nmae: Vijay Pande
+	 * Reviewer Name: Aarti Sharma
+	 * Name of the variable changed from checkedButton to radionButton since this name was conflicting with the same name used on specimen page and creating problem (Wrong value was set) in CP based view
+	 * Please check all the references of the variable radioButtonForParticipant
+	 */
+	/**
      * Radio button to choose participantName/participantNumber.
      */
-    private int checkedButton = 1;
+    private int radioButtonForParticipant = 1;
     
 	/**
      * unique name for Specimen Collection Group 
      */
     private String name ;
-	
+
+	/**For Migration Start**/	
+    /**
+	 * participantName 
+     */
+    private String participantName;
+    
 	private long participantId;
 	
 	private String protocolParticipantIdentifier;
@@ -272,20 +284,20 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	}
 	
 	/**
-	 * @return Returns the checkedButton.
+	 * @return Returns the radioButtonForParticipant value.
 	 */
-	public int getCheckedButton()
+	public int getRadioButtonForParticipant()
 	{
-		return checkedButton;
+		return radioButtonForParticipant;
 	}
 
 	/**
-	 * @param checkedButton The checkedButton to set.
+	 * @param radioButtonForParticipant The radioButtonForParticipant to set.
 	 */
-	public void setCheckedButton(int checkedButton)
+	public void setRadioButtonForParticipant(int radioButton)
 	{
 			if(isMutable())
-				this.checkedButton = checkedButton;
+				this.radioButtonForParticipant = radioButton;
 	}
 
 	/**
@@ -301,7 +313,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 //		this.surgicalPathologyNumber = null;
 //		
 //		this.protocolParticipantIdentifier =  null;
-//		checkedButton = 1;
+//		radioButtonForParticipant = 1;
 	}
 	/**
 	   * This function Copies the data from an storage type object to a StorageTypeForm object.
@@ -341,6 +353,10 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent().getId().longValue();
 		
 		Participant participant = specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant();
+		/**For Migration Start**/	
+		
+		participantId=participant.getId();
+		/**For Migration End**/	
 		Logger.out.debug("SCgForm --------- Participant : -- "+ participant.toString() );
 		//if(participant!=null)
 		String firstName = null;
@@ -358,6 +374,8 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		else
 			lastName = participant.getLastName();
 		
+		participantName=lastName+", "+firstName;
+		
 		if(participant.getBirthDate()==null)
 			birthDate ="";
 		else
@@ -372,17 +390,17 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 		if(firstName.length()>0 || lastName.length()>0 || birthDate.length()>0 || ssn.length()>0)
 		{
 				participantId = participant.getId().longValue();
-				checkedButton = 1;
+				radioButtonForParticipant = 1;
 		}
 		else
 		{
 			protocolParticipantIdentifier =  Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getProtocolParticipantIdentifier());
-			checkedButton = 2;
+			radioButtonForParticipant = 2;
 		}
 		
 		Logger.out.debug("participantId.................................."+participantId);
 		Logger.out.debug("protocolParticipantIdentifier........................."+protocolParticipantIdentifier);
-		Logger.out.debug("SCgForm --------- checkButton : -- " + checkedButton );
+		Logger.out.debug("SCgForm --------- checkButton : -- " + radioButtonForParticipant );
 		siteId = specimenCollectionGroup.getSite().getId().longValue();
 		
 		/**
@@ -560,23 +578,27 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 								ApplicationProperties.getValue("specimenCollectionGroup.site")));
 			}
 			
-			
+			/**
+			 * Name: Vijay Pande
+			 * Reviewer Name: Aarti Sharma
+			 * Validation for participant name and participantProtocolIdentifier added
+			 */
 			// Check what user has selected Participant Name / Participant Number
-			if(this.checkedButton == 1 )
+			if(this.radioButtonForParticipant == 1 )
 			{   
 				//if participant name field is checked.
-				if(this.participantId == -1)
+				/**For Migration Start**/	
+				if(this.participantName==null || validator.isEmpty(this.participantName))  // || Utility.this.participantName.trim().equals(""))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-									ApplicationProperties.getValue("specimenCollectionGroup.collectedByParticipant")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimenCollectionGroup.collectedByParticipant")));
 				}
+			/**For Migration End**/	
 			}
 			else
 			{
-				if(!validator.isValidOption(this.protocolParticipantIdentifier))
+				if (validator.isEmpty(this.protocolParticipantIdentifier))
 				{
-					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",
-									ApplicationProperties.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber")));
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties.getValue("specimenCollectionGroup.collectedByProtocolParticipantNumber")));	
 				}
 			}
 			if(this.name.equals(""))
@@ -607,7 +629,7 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 			}
 			
 			//Condition for medical Record Number.
-			if(this.checkedButton == 1 )
+			if(this.radioButtonForParticipant == 1 )
 			{   
 				//if participant name field is checked.
 				// here medical record number field should be enabled and must have some value selected.
@@ -692,13 +714,13 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
         {
 //            setParticipantId(addObjectIdentifier.longValue());
             setCollectionProtocolRegistrationId(addObjectIdentifier.longValue());
-            setCheckedButton(1);
+            setRadioButtonForParticipant(1);
         }
         else if(addNewFor.equals("protocolParticipantIdentifier"))
         {
             setCollectionProtocolRegistrationId(addObjectIdentifier.longValue());
 //            setProtocolParticipantIdentifier(addObjectIdentifier.toString());
-            setCheckedButton(2);
+            setRadioButtonForParticipant(2);
         }
     }
 
@@ -1143,6 +1165,26 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm
 	 */
 	public void setRestrictSCGCheckbox(String restrictSCGCheckbox) {
 		this.restrictSCGCheckbox = restrictSCGCheckbox;
+	}
+/**For Migration Start**/
+
+	/**
+	 * This method returns the value of the participantName
+	 * @return the participantName
+	 */
+	public String getParticipantName() 
+	{
+		return participantName;
+	}
+
+
+	/**
+	 * This method sets the participantName
+	 * @param participantName the participantName to set
+	 */
+	public void setParticipantName(String participantName) 
+	{
+		this.participantName = participantName;
 	}
 
 }

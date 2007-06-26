@@ -946,6 +946,11 @@
 	<definition name=".catissuecore.specimenCollectionGroupTechDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/CPQuerySCGForTechnician.jsp" />
 	</definition>
+	<!--P.G. - Start 24May07:Bug 4291-->
+	<definition name=".catissuecore.bioBlankDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/blank.jsp" />
+	</definition>
+	<!--P.G. - End -->
 
 
 </tiles-definitions>

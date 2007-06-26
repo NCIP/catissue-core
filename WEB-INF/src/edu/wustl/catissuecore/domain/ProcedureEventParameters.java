@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.ProcedureEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -88,14 +89,14 @@ public class ProcedureEventParameters extends SpecimenEventParameters
 	 */
 	public ProcedureEventParameters(AbstractActionForm abstractForm)
 	{
-		setAllValues(abstractForm);
+		setAllValues((IValueObject)abstractForm);
 	}
 	
 	/**
      * This function Copies the data from an ProcedureEventParametersForm object to a ProcedureEventParameters object.
      * @param ProcedureEventParametersForm An ProcedureEventParametersForm object containing the information about the ProcedureEventParameters.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

@@ -9,6 +9,7 @@
     <class
         name="edu.wustl.catissuecore.domain.SpecimenCollectionGroup"
         table="CATISSUE_SPECIMEN_COLL_GROUP"
+		lazy="true"
     >
 
         <id
@@ -122,7 +123,7 @@
         <set
             name="specimenCollection"
             table="CATISSUE_SPECIMEN"
-            lazy="false"
+            lazy="true"
             inverse="true"
             cascade="none"
             sort="unsorted"

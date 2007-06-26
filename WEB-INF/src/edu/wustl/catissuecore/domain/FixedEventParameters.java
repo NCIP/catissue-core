@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.FixedEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -92,7 +93,7 @@ public class FixedEventParameters extends SpecimenEventParameters implements jav
      * This function Copies the data from an FixedEventParametersForm object to a FixedEventParameters object.
      * @param FixedEventParametersForm An FixedEventParametersForm object containing the information about the FixedEventParameters.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

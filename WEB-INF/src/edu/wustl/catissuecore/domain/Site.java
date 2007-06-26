@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 import edu.wustl.catissuecore.actionForm.SiteForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 
@@ -68,7 +69,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
 	//Parameterized constructor
 	public Site(AbstractActionForm abstractForm)
 	{
-		setAllValues(abstractForm);
+		setAllValues((IValueObject)abstractForm);
 	}
 	
 	/**
@@ -228,7 +229,7 @@ public class Site extends AbstractDomainObject implements java.io.Serializable
      * This function Copies the data from an SiteForm object to a Site object.
      * @param siteForm An SiteForm object containing the information about the site.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

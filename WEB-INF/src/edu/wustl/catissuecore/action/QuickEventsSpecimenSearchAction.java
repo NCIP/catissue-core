@@ -65,9 +65,10 @@ public class QuickEventsSpecimenSearchAction extends BaseAction {
   	 		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
   	 		String specimenFound="0";
   	 		String errorString="";
+  	 		String specimenLabel="";
   	        if(qEForm.getCheckedButton().equals("1" ))
   	        {
-  	        	String specimenLabel = qEForm.getSpecimenLabel();
+  	        	specimenLabel = qEForm.getSpecimenLabel();
   	        	specimenFound = isExistingSpecimen(Constants.SYSTEM_LABEL,specimenLabel ,bizLogic  );
   	      	    errorString = ApplicationProperties.getValue("quickEvents.specimenLabel");
   	        }
@@ -81,7 +82,7 @@ public class QuickEventsSpecimenSearchAction extends BaseAction {
   	        if(!specimenFound.equalsIgnoreCase("0" ))
   	        {
   	        	request.setAttribute(Constants.SPECIMEN_ID, specimenFound );
-  	        	
+  	        	request.setAttribute(Constants.SPECIMEN_LABEL, specimenLabel);
   	        	String selectedEvent = qEForm.getSpecimenEventParameter();  
   	        	request.setAttribute(Constants.EVENT_SELECTED, selectedEvent );
   	        	

@@ -14,6 +14,7 @@ import java.io.Serializable;
 
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -100,7 +101,7 @@ public class TissueSpecimen extends Specimen implements Serializable
      * This function Copies the data from an NewSpecimenForm object to a TissueSpecimen object.
      * @param siteForm An SiteForm object containing the information about the site.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

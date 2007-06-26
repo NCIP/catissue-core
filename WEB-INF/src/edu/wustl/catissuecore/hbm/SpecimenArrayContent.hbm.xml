@@ -9,6 +9,7 @@
     <class
         name="edu.wustl.catissuecore.domain.SpecimenArrayContent"
         table="CATISSUE_SPECI_ARRAY_CONTENT"
+		lazy="true"
     >
 
         <id

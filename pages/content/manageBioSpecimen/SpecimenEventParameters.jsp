@@ -31,6 +31,9 @@
 	}
 	String title = null;
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+	String label=(String)request.getAttribute(Constants.SPECIMEN_LABEL);
+
+	System.out.println("Sachiuhn:"+label);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	Integer identifierFieldIndex = new Integer(0);
 	String specimenIdentifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
@@ -40,8 +43,9 @@
 
 	//------------- Mandar 04-july-06 QuickEvents
 	String eventSelected = (String)request.getAttribute(Constants.EVENT_SELECTED);
-
-		String iframeSrc="";
+		//P.G. - Start 24May07:Bug 4291:Added source as initial action for blank screen
+		String iframeSrc="blankScreenAction.do";
+		//P.G. - End 
 		String formAction = Constants.SPECIMEN_ADD_ACTION;
 		String specimenPath ="'NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
 		if(pageOf.equals(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY))
@@ -116,7 +120,7 @@
 		
 		if(element.value == "<%=Constants.SELECT_OPTION%>")
 		{
-			iFrame.src = "";
+			iFrame.src = "blankScreenAction.do";
 			//addNew.href = "#";
 			//addNew.target="_parent";
 		}
@@ -171,7 +175,8 @@
 	if(dataList!=null && dataList.size() != 0)
 	{
 //		title = "Specimen Event Parameters List for Identifier : " + specimenIdentifier;
-		title = Constants.EVENTS_TITLE_MESSAGE;
+//		title = Constants.EVENTS_TITLE_MESSAGE;
+		title = java.text.MessageFormat.format(Constants.EVENTS_TITLE_MESSAGE,new String[]{"'"+label+"'"});
 %>
 
    	 	<tr>

@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.DisposalEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -63,14 +64,14 @@ public class DisposalEventParameters extends SpecimenEventParameters
 	 */
 	public DisposalEventParameters(AbstractActionForm abstractForm)
 	{
-		setAllValues(abstractForm);
+		setAllValues((IValueObject)abstractForm);
 	}
 	
 	/**
      * This function Copies the data from an DisposalEventParametersForm object to a DisposalEventParameters object.
      * @param DisposalEventParametersForm An DisposalEventParametersForm object containing the information about the DisposalEventParameters.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

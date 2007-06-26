@@ -588,6 +588,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	}
 
 	/**
+	 * Name: Vijay Pande
+	 * Reviewer Name: Sachin Lale
+	 * Bug id: 4477
+	 * Method updated sicene earlier implemetation was not including CP having no registerd participant. Also short tille is also fetched from DB.
+	 */
+	/**
 	 * This function finds out all the registerd participants for a particular collection protocol.
 	 * @return List of ParticipantRegInfo
 	 * @throws DAOException
@@ -595,19 +601,18 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	 */
 	public List getAllParticipantRegistrationInfo() throws DAOException, ClassNotFoundException
 	{
-
 		List participantRegistrationInfoList = new Vector();
 
-		String hql = "select cpr.collectionProtocol.id ,ccp.title,cpr.participant.id,cpr.protocolParticipantIdentifier,ccp.activityStatus,cpr.participant.activityStatus from "
-				+ CollectionProtocolRegistration.class.getName()
-				+ " as cpr right outer join cpr.collectionProtocol as ccp where ccp.id = cpr.collectionProtocol.id order by ccp.id";
+		// Getting all the CollectionProtocol those do not have activaityStatus as 'Disabled'.
+		String hql = "select cp.id ,cp.title, cp.shortTitle from "+ CollectionProtocol.class.getName()+ " as cp where  cp.activityStatus != '"+Constants.ACTIVITY_STATUS_DISABLED+"'";
 
 		HibernateDAO dao = (HibernateDAO) DAOFactory.getInstance().getDAO(Constants.HIBERNATE_DAO);
 		dao.openSession(null);
 
 		List list = dao.executeQuery(hql, null, false, null);
 		Logger.out.info("list size -----------:" + list.size());
-		dao.closeSession();
+		
+		// Iterating over each Collection Protocol and finding out all its registerd participant 
 		if (list != null)
 		{
 			for (int i = 0; i < list.size(); i++)
@@ -616,59 +621,44 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				Object[] obj = (Object[]) list.get(i);
 				Long cpId = (Long) obj[0];
 				String cpTitle = (String) obj[1];
-				Long participantID = (Long) obj[2];
-				String protocolParticipantId = (String) obj[3];
-				String cpStatus = (String) obj[4];
-				String participantStatus = (String) obj[5];
-
+				String cpShortTitle = (String) obj[2];
+				
+				// Getting all active participant registered with CP
+				hql = "select p.id, cpr.protocolParticipantIdentifier from "
+					+ CollectionProtocolRegistration.class.getName()
+					+ " as cpr right outer join cpr.participant as p where cpr.participant.id = p.id and cpr.collectionProtocol.id = "+cpId+" and p.activityStatus != '"+Constants.ACTIVITY_STATUS_DISABLED+"' order by p.id";
+				
+				List participantList = dao.executeQuery(hql, null, false, null);
+				
 				List participantInfoList = new ArrayList();
-
-				if (participantID != null && !participantStatus.equals(Constants.ACTIVITY_STATUS_DISABLED))
+				// If registered participant found then add them to participantInfoList
+				for(int j=0;j<participantList.size();j++)
 				{
-					String participantInfo = participantID.toString() + ":";
-					if (protocolParticipantId != null && !protocolParticipantId.equals(""))
-						participantInfo = participantInfo + protocolParticipantId;
-					participantInfoList.add(participantInfo);
-
-				}
-
-				for (int j = i + 1; j < list.size(); j++, i++)
-				{
-					Object[] obj1 = (Object[]) list.get(j);
-					Long cpId1 = (Long) obj1[0];
-					Long participantID1 = (Long) obj1[2];
-					String protocolParticipantId1 = (String) obj1[3];
-					String participantStatus1 = (String) obj1[5];
-
-					if (cpId1.longValue() == cpId.longValue())
+					Object[] participantObj = (Object[]) participantList.get(j);
+					
+					Long participantID = (Long) participantObj[0];
+					String protocolParticipantId = (String) participantObj[1];
+					
+					if (participantID != null)
 					{
-						if (participantID1 != null && !participantStatus1.equals(Constants.ACTIVITY_STATUS_DISABLED))
-						{
-							String participantInfo = participantID1.toString() + ":";
-							if (protocolParticipantId1 != null && !protocolParticipantId1.equals(""))
-								participantInfo = participantInfo + protocolParticipantId1;
-							participantInfoList.add(participantInfo);
-						}
-					}
-					else
-					{
-						break;
+						String participantInfo = participantID.toString() + ":";
+						if (protocolParticipantId != null && !protocolParticipantId.equals(""))
+							participantInfo = participantInfo + protocolParticipantId;
+						participantInfoList.add(participantInfo);
+	
 					}
 				}
 
 				//Creating ParticipanrRegistrationInfo object and storing in a vector participantRegistrationInfoList.
-				if (!cpStatus.equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED))
-				{
-					ParticipantRegistrationInfo prInfo = new ParticipantRegistrationInfo();
-					prInfo.setCpId(cpId);
-					prInfo.setCpTitle(cpTitle);
-					prInfo.setParticipantInfoCollection(participantInfoList);
-					participantRegistrationInfoList.add(prInfo);
-				}
+				ParticipantRegistrationInfo prInfo = new ParticipantRegistrationInfo();
+				prInfo.setCpId(cpId);
+				prInfo.setCpTitle(cpTitle);
+//				prInfo.setCpShortTitle(cpShortTitle);
+				prInfo.setParticipantInfoCollection(participantInfoList);
+				participantRegistrationInfoList.add(prInfo);			
 			}
 		}
-
+		dao.closeSession();
 		return participantRegistrationInfoList;
 	}
-
 }

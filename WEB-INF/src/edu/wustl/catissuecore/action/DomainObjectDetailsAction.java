@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
@@ -66,7 +67,14 @@ public class DomainObjectDetailsAction extends SecureAction
         }
         
         AbstractActionForm abstractActionForm = (AbstractActionForm)form;
-        abstractActionForm.setAllValues(currentDomainObject);
+        /**
+    	 * Name: Vijay Pande
+    	 * Reviewer Name: Aarti Sharma
+    	 * Instead of setAllValues() method retrieveForEditMode() method is called to bypass lazy loading error in domain object
+    	 */	
+        //abstractActionForm.setAllValues(currentDomainObject);
+        DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+        defaultBizLogic.populateUIBean(currentDomainObject.getClass().getName(),currentDomainObject.getId(), abstractActionForm);
         
         request.setAttribute(Constants.PREVIOUS_PAGE,prevIdentifier);
         request.setAttribute(Constants.NEXT_PAGE,nextIdentifier);

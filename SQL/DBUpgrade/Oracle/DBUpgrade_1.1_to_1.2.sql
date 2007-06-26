@@ -34,7 +34,7 @@ INSERT INTO CSM_USER_GROUP_ROLE_PG (USER_GROUP_ROLE_PG_ID,GROUP_ID,ROLE_ID,PROTE
 update CSM_PG_PE
 set PROTECTION_GROUP_ID = '18'
 where PROTECTION_ELEMENT_ID = '292';
-
+ 
 /*associate new events to SCG start*/
 insert all into catissue_specimen_event_param (identifier, specimen_coll_grp_id, event_timestamp, user_id )
 values (catissue_spec_event_param_seq.nextval, specimen_collection_group_id,
@@ -85,4 +85,3 @@ from    catissue_specimen join
 )
 where rn = 1;
 /*associate new events to SCG start end*/
- 

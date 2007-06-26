@@ -39,6 +39,7 @@ public class ShowFramedPageAction extends Action
         //Sets the pageOf attribute (for Add,Edit or Query Interface)
         String pageOf  = request.getParameter(Constants.PAGEOF);
         request.setAttribute(Constants.PAGEOF,pageOf);
+        //String rowNo = (String)request.getParameter("rowNo");
         HttpSession session = request.getSession();
         
         //Aniruddha : For removing hardcoded names of html component
@@ -52,6 +53,7 @@ public class ShowFramedPageAction extends Action
         session.setAttribute(Constants.CONTAINERID,request.getParameter(Constants.CONTAINERID));
         session.setAttribute(Constants.POS1,request.getParameter(Constants.POS1));
         session.setAttribute(Constants.POS2,request.getParameter(Constants.POS2));
+        //session.setAttribute("rowNo", rowNo);
         
         
 

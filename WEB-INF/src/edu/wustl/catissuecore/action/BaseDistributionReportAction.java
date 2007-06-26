@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.bizlogic.SimpleQueryBizLogic;
@@ -72,7 +73,14 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	{
 		//For a given Distribution object set the values for Distribution report.
 		DistributionReportForm distributionReportForm = new DistributionReportForm();
-		distributionReportForm.setAllValues(dist);
+		/**
+		 * Name : Virender
+		 * Reviewer: Prafull
+		 * Calling retrieveForEditMode method from DefaultBizlogic, this method will call setAllvalue of the Abstract form.
+		 * removed 	distributionReportForm.setAllValues(dist)
+		 */
+		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		defaultBizLogic.populateUIBean(Distribution.class.getName(),dist.getId(),distributionReportForm);
 		return distributionReportForm;
 	}
 	
@@ -90,8 +98,15 @@ public abstract class BaseDistributionReportAction extends BaseAction
 	{
     	//Get the list of data for Distributed items data for the report.
     	List listOfData = new ArrayList();
-    	Collection distributedItemCollection = dist.getDistributedItemCollection();		
-    	//Specimen Ids which are getting distributed.
+    	/**
+		 * Name : Virender
+		 * Reviewer: Prafull
+		 * Retriving collection of Distributed Items.
+		 * dist.getDistributedItemCollection(); 
+		 */
+    	IBizLogic bizLogicObj = BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+    	Collection distributedItemCollection = (Collection)bizLogicObj.retrieveAttribute(Distribution.class.getName(),dist.getId(),"elements(distributedItemCollection)"); 
+       	//Specimen Ids which are getting distributed.
     	String []specimenIds = new String[distributedItemCollection.size()];
     	int i=0;
     	Iterator itr = distributedItemCollection.iterator();
@@ -100,8 +115,8 @@ public abstract class BaseDistributionReportAction extends BaseAction
     	{
     		DistributedItem item = (DistributedItem)itr.next();
     		Specimen specimen = item.getSpecimen();
-    		Logger.out.debug("Specimen "+specimen);
-    		Logger.out.debug("Specimen "+specimen.getId());
+    		//Logger.out.debug("Specimen "+specimen);
+    		//Logger.out.debug("Specimen "+specimen.getId());
     		specimenIds[i] = specimen.getId().toString();
     		i++;
     	}

@@ -257,9 +257,9 @@
 		function onNormalSubmit()
 		{
 			<% String actionToCall = null;
-				actionToCall = "AddSpecimen.do";
+				actionToCall = "AddSpecimen.do?isQuickEvent=true";
 				if(pageOf != null && pageOf.equals(Constants.PAGE_OF_CREATE_SPECIMEN_CP_QUERY)){
-				actionToCall = Constants.CP_QUERY_CREATE_SPECIMEN_ADD_ACTION;
+				actionToCall = Constants.CP_QUERY_CREATE_SPECIMEN_ADD_ACTION+"?isQuickEvent=true";
 			}%>
 			var checked = document.forms[0].aliCheckedButton.checked;
 			if(checked)

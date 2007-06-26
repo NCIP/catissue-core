@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.FluidSpecimenReviewEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -67,14 +68,14 @@ public class FluidSpecimenReviewEventParameters extends ReviewEventParameters
 	 */
 	public FluidSpecimenReviewEventParameters(AbstractActionForm abstractForm)
 	{
-		setAllValues(abstractForm);
+		setAllValues((IValueObject)abstractForm);
 	}
 	
 	/**
      * This function Copies the data from an FluidSpecimenReviewEventParametersForm object to a FluidSpecimenReviewEventParameters object.
      * @param fluidSpecimenReviewEventParametersForm An FluidSpecimenReviewEventParametersForm object containing the information about the fluidSpecimenReviewEventParameters.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.FrozenEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -57,14 +58,14 @@ public class FrozenEventParameters extends SpecimenEventParameters implements ja
 //	Parameterized constructor
 	public FrozenEventParameters(AbstractActionForm abstractForm)
 	{
-		setAllValues(abstractForm);
+		setAllValues((IValueObject)abstractForm);
 	}
 	
 	/**
      * This function Copies the data from an FrozenEventParametersForm object to a FrozenEventParameters object.
      * @param frozenEventParametersForm An FrozenEventParametersForm object containing the information about the frozenEventParameters.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

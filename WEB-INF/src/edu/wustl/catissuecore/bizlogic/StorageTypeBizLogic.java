@@ -11,11 +11,15 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
@@ -177,5 +181,61 @@ public class StorageTypeBizLogic extends DefaultBizLogic
 		return true;
 	}
 	//END
+	
+	/**
+	 * To get the ids of the StorageType that the given StorageType can hold. 
+	 * @param type The reference to StorageType object.
+	 * @return The array of ids of StorageType that the given StorageType can hold.
+	 * @throws DAOException
+	 */
+	public long[] getDefaultHoldStorageTypeList(StorageType type) throws DAOException
+	{
+		Collection spcimenArrayTypeCollection = (Collection) retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsStorageTypeCollection)");
+		return Utility.getobjectIds(spcimenArrayTypeCollection);
+	}
+	/**
+	 * To get the Specimen Class types that the given StorageType can hold. 
+	 * @param type The reference to StorageType object.
+	 * @return The array of String representing Specimen Class types that the given StorageType can hold.
+	 * @throws DAOException
+	 */
+	public String[] getDefaultHoldsSpecimenClasstypeList(StorageType type)
+	{
+		String[] holdsSpecimenClasses = null;
+		Collection specimenClassTypeCollection = type.getHoldsSpecimenClassCollection();
 
+		if (specimenClassTypeCollection != null)
+		{
+			if (specimenClassTypeCollection.size() == Utility.getSpecimenClassTypes().size())
+			{
+				holdsSpecimenClasses =  new String[] {"-1"};
+			}
+			else
+			{
+				holdsSpecimenClasses = new String[specimenClassTypeCollection.size()];
+				
+				Iterator it = specimenClassTypeCollection.iterator();
+				int i = 0;
+				while (it.hasNext())
+				{
+					String specimenClassType = (String) it.next();
+					holdsSpecimenClasses[i] = specimenClassType;
+					i++;
+				}
+			}
+		}
+		return holdsSpecimenClasses;
+	}
+	
+	/**
+	 * To get the ids of the SpecimenArrayType that the given StorageType can hold. 
+	 * @param type The reference to StorageType object.
+	 * @return The array of ids of SpecimenArrayType that the given StorageType can hold.
+	 * @throws DAOException
+	 */
+	public long[] getDefaultHoldSpecimenArrayTypeList(StorageType type) throws DAOException
+	{
+		Collection spcimenArrayTypeCollection = (Collection) retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsSpArrayTypeCollection)");
+		return Utility.getobjectIds(spcimenArrayTypeCollection);
+	}
 }

@@ -13,7 +13,6 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -42,7 +41,6 @@ import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -80,6 +78,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			nodeId = request.getParameter("clickedNodeId");
 			request.getSession().setAttribute("nodeId",nodeId);
 		}
+		//	set the menu selection 
 		request.setAttribute(Constants.MENU_SELECTED, "14"  ); 
 
 		//pageOf and operation attributes required for Advance Query Object view.
@@ -120,8 +119,9 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		request.setAttribute(Constants.SITELIST, list);
 
 		//Populating the participants registered to a given protocol
-		loadPaticipants(specimenCollectionGroupForm.getCollectionProtocolId() , bizLogic, request);
-
+		/**For Migration Start**/
+//		loadPaticipants(specimenCollectionGroupForm.getCollectionProtocolId() , bizLogic, request);
+		/**For Migration End**/
 		//Populating the protocol participants id registered to a given protocol
 		loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 
@@ -211,8 +211,13 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		Logger.out.debug("CP ID in SCG Action======>"+specimenCollectionGroupForm.getCollectionProtocolId());
 		Logger.out.debug("Participant ID in SCG Action=====>"+specimenCollectionGroupForm.getParticipantId()+"  "+specimenCollectionGroupForm.getProtocolParticipantIdentifier());
 
+		/**
+		 * Name: Vijay Pande
+		 * check for SUBMITTED_FOR with "AddNew" is added since while coming from specimen->scg->AddNew link for participant-> Register participant -> submit then  the SUBMITTED_FOR is equal to "AddNew"
+		 * If the flow is  scg->AddNew link for participant-> Register participant -> submit then  the SUBMITTED_FOR is equal to "Default"
+		 */
 		// -------called from Collection Protocol Registration start-------------------------------
-		if( (request.getAttribute(Constants.SUBMITTED_FOR) !=null) &&(request.getAttribute(Constants.SUBMITTED_FOR).equals("Default")))
+		if( (request.getAttribute(Constants.SUBMITTED_FOR) !=null) &&((request.getAttribute(Constants.SUBMITTED_FOR).equals("Default"))||(request.getAttribute(Constants.SUBMITTED_FOR).equals(Constants.ADDNEW_LINK))))
 		{
 			Logger.out.debug("Populating CP and Participant in SCG ====  AddNew operation loop");
 
@@ -236,24 +241,38 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 					specimenCollectionGroupForm.setCollectionProtocolId(cpID);
 
 					//Populating the participants registered to a given protocol
-					loadPaticipants(cpID , bizLogic, request);
+					/**For Migration Start**/
+//					loadPaticipants(cpID , bizLogic, request);
+					/**For Migration Start**/
 					loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-
-					String firstName = Utility.toString(cpr.getParticipant().getFirstName());;
-					String lastName = Utility.toString(cpr.getParticipant().getLastName());
-					String birthDate = Utility.toString(cpr.getParticipant().getBirthDate());
-					String ssn = Utility.toString(cpr.getParticipant().getSocialSecurityNumber());
+					
+					/**
+					 * Name: Vijay Pande
+					 * Reviewer Name: Aarti Sharma
+					 * participant associated with collection protocol is explicitly retrived from DB since its lazy load property is true
+					 */
+					Participant cprParticipant=(Participant)bizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(), cpr.getId(), Constants.COLUMN_NAME_PARTICIPANT);
+					// set participant id in request. This is required only in CP based View since SpecimenTreeView.jsp is retrieveing participant id from request
+					if(cprParticipant.getId()!=null)
+					{
+						request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID, cprParticipant.getId().toString());
+					}
+					String firstName = Utility.toString(cprParticipant.getFirstName());;
+					String lastName = Utility.toString(cprParticipant.getLastName());
+					String birthDate = Utility.toString(cprParticipant.getBirthDate());
+					String ssn = Utility.toString(cprParticipant.getSocialSecurityNumber());
 					if(firstName.trim().length()>0 || lastName.trim().length()>0 || birthDate.trim().length()>0 || ssn.trim().length()>0)
 					{
 						specimenCollectionGroupForm.setParticipantId(pID );
-						specimenCollectionGroupForm.setCheckedButton(1); 
+						specimenCollectionGroupForm.setRadioButtonForParticipant(1); 
+						specimenCollectionGroupForm.setParticipantName(lastName+", "+firstName);
 					}	
 					//Populating the protocol participants id registered to a given protocol
 
 					else if(cpr.getProtocolParticipantIdentifier() != null)
 					{
 						specimenCollectionGroupForm.setProtocolParticipantIdentifier(ppID );
-						specimenCollectionGroupForm.setCheckedButton(2); 
+						specimenCollectionGroupForm.setRadioButtonForParticipant(2); 
 					}
 
 					//Populating the Collection Protocol Events
@@ -300,14 +319,46 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			if(participantId != null && participantId.longValue() != 0)
 			{    
 				//Populating the participants registered to a given protocol
-				loadPaticipants(collectionProtocolId.longValue(), bizLogic, request);
-				
+				/**For Migration Start**/
+//				loadPaticipants(collectionProtocolId.longValue(), bizLogic, request);
+				/**For Migration End**/
 				loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 
 				specimenCollectionGroupForm.setParticipantId(participantId.longValue());
-				specimenCollectionGroupForm.setCheckedButton(1);
+				specimenCollectionGroupForm.setRadioButtonForParticipant(1);
 				request.setAttribute(Constants.CP_SEARCH_PARTICIPANT_ID,participantId.toString());
-
+				/**For Migration Start**/
+				
+				List participantList=bizLogic.retrieve(Participant.class.getName(), Constants.SYSTEM_IDENTIFIER, Utility.toString(participantId));
+				if(participantList!=null)
+				{
+					
+					Participant participant=(Participant)participantList.get(0);
+					String firstName="";
+					String lastName="";
+					if(participant.getFirstName()!=null)
+					{
+						firstName=participant.getFirstName();
+					}
+					if(participant.getLastName()!=null)
+					{
+						lastName=participant.getLastName();
+					}
+					if(!firstName.equals("")&& !lastName.equals(""))
+					{
+						specimenCollectionGroupForm.setParticipantName(lastName+", "+firstName);
+					}
+					else if(lastName.equals("")&&!firstName.equals(""))
+					{
+						specimenCollectionGroupForm.setParticipantName(participant.getFirstName());
+					}
+					else if(firstName.equals("")&&!lastName.equals(""))
+					{
+						specimenCollectionGroupForm.setParticipantName(participant.getLastName());
+					}
+					
+				}
+				/**For Migration End**/
  				/**
 				 * Name : Deepti Shelar
 				 * Reviewer Name : Sachin Lale
@@ -321,18 +372,19 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 					if(participantProtocolId != null)
 					{
 						specimenCollectionGroupForm.setProtocolParticipantIdentifier(participantProtocolId);
-						specimenCollectionGroupForm.setCheckedButton(2);
+						specimenCollectionGroupForm.setRadioButtonForParticipant(2);
 					}
 				}
 			}
 			else if(participantProtocolId != null)
 			{
 				//Populating the participants registered to a given protocol
-				loadPaticipants(collectionProtocolId.longValue(), bizLogic, request);
-
+				/**For Migration Start**/
+//				loadPaticipants(collectionProtocolId.longValue(), bizLogic, request);
+				/**For Migration End**/
 				loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 				specimenCollectionGroupForm.setProtocolParticipantIdentifier(participantProtocolId);
-				specimenCollectionGroupForm.setCheckedButton(2);
+				specimenCollectionGroupForm.setRadioButtonForParticipant(2);
 				String cpParticipantId = getParticipantIdForProtocolId(participantProtocolId,bizLogic);
 				if(cpParticipantId != null)
 				{
@@ -633,8 +685,8 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		}
 
 	}
-	
-	private void loadPaticipants(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
+	/**For Migration Start**/
+/*	private void loadPaticipants(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
@@ -728,7 +780,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 
 		return listOfActiveParticipant;
 	}
-
+*/
 	private void loadPaticipantNumberList(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names

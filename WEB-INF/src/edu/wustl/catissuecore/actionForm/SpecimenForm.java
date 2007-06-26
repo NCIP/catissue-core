@@ -767,13 +767,12 @@ public class SpecimenForm extends AbstractActionForm
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.type")));
 				}
-
 				if (validator.isEmpty(type))
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
 							ApplicationProperties.getValue("specimen.subType")));
 				}
-
+				boolean isQuantityValid = true; 
 				if (!validator.isEmpty(quantity))
 				{					
 					try
@@ -796,6 +795,7 @@ public class SpecimenForm extends AbstractActionForm
 					}
 					catch (NumberFormatException exp)
 			        {    		  
+						isQuantityValid=false;
 						errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.quantity")));
 					}
 					
@@ -803,6 +803,45 @@ public class SpecimenForm extends AbstractActionForm
 				{
 					quantity="0";
 				}
+				if(this instanceof NewSpecimenForm && operation.equalsIgnoreCase(Constants.EDIT))
+				{
+					if (!validator.isEmpty(availableQuantity))
+					{					
+						try
+						{
+							availableQuantity = new BigDecimal(availableQuantity).toPlainString();
+							if(isQuantityValid && 1 == new BigDecimal(availableQuantity).compareTo(new BigDecimal(quantity)))
+							{
+								errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.availablequantity",ApplicationProperties.getValue("specimen.availableQuantity")));
+							}
+							if(Utility.isQuantityDouble(className,type))
+		        			{						
+		        		        if(!validator.isDouble(availableQuantity,true))
+		        		        {
+		        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.availableQuantity")));        		        	
+		        		        }
+		        			}
+		        			else
+		        			{        				
+		        				if(!validator.isNumeric(quantity,0))
+		        		        {
+		        		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.availableQuantity")));        		        	
+		        		        }
+		        			}
+						}
+						catch (NumberFormatException exp)
+				        {    		  
+							errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.availableQuantity")));
+						}
+					}
+					else
+					{
+						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",
+								ApplicationProperties.getValue("specimen.availableQuantity")));
+					}
+				}
+				
+				
 				// If not multiple specimen then validate storage container
 				if(!multipleSpecimen.equals("1")) 
 				{

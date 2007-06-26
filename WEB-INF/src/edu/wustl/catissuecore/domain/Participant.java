@@ -18,6 +18,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.Utility;
@@ -498,7 +499,7 @@ public class Participant extends AbstractDomainObject implements java.io.Seriali
 	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
 	 * @param storageTypeForm A StorageTypeForm object containing the information about the StorageType.  
 	 * */
-	public void setAllValues(AbstractActionForm abstractForm)
+	public void setAllValues(IValueObject abstractForm)
 	{
 	    try
 	    {

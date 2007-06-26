@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
@@ -64,7 +65,16 @@ public class AliquotSummaryAction extends BaseAction
 				Object obj = list.get(0);
 				Specimen specimen = (Specimen) obj;
 				Map forwardToHashMap = new HashMap();
-				forwardToHashMap.put("specimenCollectionGroupId", specimen.getSpecimenCollectionGroup().getId().toString());
+				/**
+				 * Name: Virender Mehta
+				 * Reviewer name: Prafull
+				 * Description: Resolved Performance Issue,retrive SpecimenCollectionGroup Object  
+				 * 				 forwardToHashMap.put("specimenCollectionGroupId", specimen.getSpecimenCollectionGroup().getId().toString());
+				 *				 forwardToHashMap.put("specimenCollectionGroupName", specimen.getSpecimenCollectionGroup().getName());
+				 */
+				SpecimenCollectionGroup scgObj = (SpecimenCollectionGroup)bizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"specimenCollectionGroup");
+				forwardToHashMap.put("specimenCollectionGroupId", scgObj.getId().toString());
+				forwardToHashMap.put("specimenCollectionGroupName", scgObj.getName());
 				request.setAttribute("forwardToHashMap", forwardToHashMap);
 				target= aliquotForm.getForwardTo();
 			}

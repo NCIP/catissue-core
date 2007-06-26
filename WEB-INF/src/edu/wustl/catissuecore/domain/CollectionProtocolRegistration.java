@@ -17,6 +17,7 @@ import java.util.HashSet;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.Utility;
@@ -229,7 +230,7 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
 	 * Set all values from CollectionProtocolRegistrationForm to the member variables of class
 	 * @param CollectionProtocolRegistrationForm object  
 	 */
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		CollectionProtocolRegistrationForm form = (CollectionProtocolRegistrationForm) abstractForm;
 		try
@@ -276,26 +277,33 @@ public class CollectionProtocolRegistration extends AbstractDomainObject impleme
      * Returns message label to display on success add or edit
      * @return String
      */
-	public String getMessageLabel() {
+	public String getMessageLabel() 
+	{
+		/**
+		 * Name: Vijay Pande
+		 * Reviewer Name: Aarti Sharma
+		 * Instead of directly accessing private variables their getter methods are called.
+		 * Direct access of variables was returning null value.
+		 */
 		
         // Change for API Search   --- Ashwin 04/10/2006
     	if (SearchUtil.isNullobject(collectionProtocol))
     	{
     		collectionProtocol = new CollectionProtocol();
     	}
-		String message = this.collectionProtocol.title + " ";
+		String message = this.collectionProtocol.getTitle() + " ";
 		if (this.participant != null) {
-			if (this.participant.lastName!= null && !this.participant.lastName.equals("") && this.participant.firstName != null && !this.participant.firstName.equals("")) 
+			if (this.participant.getLastName()!= null && !this.participant.getLastName().equals("") && this.participant.getFirstName() != null && !this.participant.getFirstName().equals("")) 
 			{
-				message = message + this.participant.lastName + "," + this.participant.firstName;
+				message = message + this.participant.getLastName() + "," + this.participant.getFirstName();
 			} 
-			else if(this.participant.lastName!= null && !this.participant.lastName.equals(""))
+			else if(this.participant.getLastName()!= null && !this.participant.getLastName().equals(""))
 			{
-				message = message + this.participant.lastName;
+				message = message + this.participant.getLastName();
 			}
-			else if(this.participant.firstName!= null && !this.participant.firstName.equals(""))
+			else if(this.participant.getFirstName()!= null && !this.participant.getFirstName().equals(""))
 			{
-				message = message + this.participant.firstName;
+				message = message + this.participant.getFirstName();
 			}		
 		} 		
 		else if (this.protocolParticipantIdentifier != null)

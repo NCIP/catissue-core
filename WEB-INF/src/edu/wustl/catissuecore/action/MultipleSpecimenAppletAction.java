@@ -46,8 +46,10 @@ import edu.wustl.catissuecore.util.MultipleSpecimenValidationUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
@@ -296,16 +298,17 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		Boolean isParentPresent = new Boolean(false);
 		Map resultMap = new HashMap();
 		String parentSpecimenLabel = (String) specimenMap.get("parentSpecimenLabel");
-		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
+		CreateSpecimenBizLogic bizLogic = (CreateSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
 		String collectionGroupName="";
 		if (parentSpecimenLabel != null && !parentSpecimenLabel.equals("null") && !parentSpecimenLabel.equals(""))
 		{
-			List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, parentSpecimenLabel.trim());
+			List spList = bizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, parentSpecimenLabel.trim());
 			if (spList != null && !spList.isEmpty())
 			{
 				isParentPresent = new Boolean(true);
 				Specimen specimen = (Specimen)spList.get(0);
-				collectionGroupName = specimen.getSpecimenCollectionGroup().getName();  
+				//collectionGroupName = specimen.getSpecimenCollectionGroup().getName(); 
+				collectionGroupName = getSCGNameFromSpecimen(specimen.getId(),bizLogic);
 			}
 		}
 
@@ -314,7 +317,27 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		writeMapToResponse(response, resultMap);
 		return null;
 	}
-
+	/**
+	 * @param specimenId
+	 * @param bizLogic
+	 * @return
+	 * @throws DAOException
+	 * retriving the scg name from the specimen.
+	 */
+	private String getSCGNameFromSpecimen(Long specimenId, IBizLogic bizLogic) throws DAOException
+	{
+		String[] selectColumnName = {Constants.COLUMN_NAME_SCG_NAME};
+		String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+		String[] whereColumnCondition = {Constants.EQUALS};
+		Object[] whereColumnValue = {specimenId};
+		String sourceObjectName = Specimen.class.getName();
+		
+		List scgCollection = bizLogic.retrieve(sourceObjectName,selectColumnName,
+	            whereColumnName, whereColumnCondition,
+	            whereColumnValue,Constants.AND_JOIN_CONDITION );
+		String scgName = (String)scgCollection.get(0);
+		return scgName;
+	}
 	private Map processFormBeansMap(Collection specimenCollection, Map multipleSpecimenFormBeanMap) throws Exception
 	{
 		Map finalSpecimenMap = new HashMap();
@@ -508,7 +531,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			//			 Mandar:20Nov06 : enable Parent Specimen ----------------------- start
 			String radiokey = "Specimen:"+i+"_collectionGroupRadioSelected";
 			boolean iscollectionGroupSelected = ((Boolean)radioMap.get(radiokey)).booleanValue();
-			
+						
 			//if collection group selected remove any parent specimen entry
 			//else remove any collection group entry
 			if(iscollectionGroupSelected)
@@ -552,14 +575,17 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			//			Specimen Type
 			validateField(AppletConstants.SPECIMEN_TYPE_ROW_NO, i, specimenMap, "Type", 2);
 
-			//			TissueSite
-			validateField(AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO, i, specimenMap, "TissueSite", 2);
-
-			//			TissueSide
-			validateField(AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO, i, specimenMap, "TissueSide", 2);
-
-			//			PathologicalStatus
-			validateField(AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO, i, specimenMap, "Pathological Status", 2);
+			if(iscollectionGroupSelected)
+			{
+				//			TissueSite
+				validateField(AppletConstants.SPECIMEN_TISSUE_SITE_ROW_NO, i, specimenMap, "TissueSite", 2);
+	
+				//			TissueSide
+				validateField(AppletConstants.SPECIMEN_TISSUE_SIDE_ROW_NO, i, specimenMap, "TissueSide", 2);
+	
+				//			PathologicalStatus
+				validateField(AppletConstants.SPECIMEN_PATHOLOGICAL_STATUS_ROW_NO, i, specimenMap, "Pathological Status", 2);
+			}
 
 			//			Quantity
 			String quantityKey = getKey(AppletConstants.SPECIMEN_QUANTITY_ROW_NO, i);
@@ -821,7 +847,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				
 
 				CollectionEventParameters collectionEventParameters = new CollectionEventParameters();
-				collectionEventParameters.setAllValues(collectionEvent);
+				collectionEventParameters.setAllValues((IValueObject)collectionEvent);
 				collectionEventParameters.setSpecimen(specimen);
 				
 				specimenEventCollection.add(collectionEventParameters);
@@ -830,7 +856,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				
 
 				ReceivedEventParameters receivedEventParameters = new ReceivedEventParameters();
-				receivedEventParameters.setAllValues(receivedEvent);
+				receivedEventParameters.setAllValues((IValueObject)receivedEvent);
 				
 				receivedEventParameters.setSpecimen(specimen);
 				specimenEventCollection.add(receivedEventParameters);
@@ -1267,11 +1293,11 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 	private void verifyParent(String parentLabel, Map specimenMap, int count) throws Exception
 	{
 		//String parentSpecimenLabel = (String) specimenMap.get("parentSpecimenLabel");
-		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
+		CreateSpecimenBizLogic bizLogic = (CreateSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
 
 		if (parentLabel != null && !parentLabel.equals("null") && !parentLabel.equals(""))
 		{
-			List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, parentLabel.trim());
+			List spList = bizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, parentLabel.trim());
 			if (spList != null && !spList.isEmpty())
 			{
 				Specimen specimen = (Specimen)spList.get(0);
@@ -1282,7 +1308,9 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 				String collectionGroupKey  = getKey(AppletConstants.SPECIMEN_COLLECTION_GROUP_ROW_NO,count  ); 
 				
 				specimenMap.put(key,specimen.getId());
-				specimenMap.put(collectionGroupKey,specimen.getSpecimenCollectionGroup().getName());
+				//Ashish - 6/6/07 - retriving scg name for performance improvement
+				String scgName = getSCGNameFromSpecimen(specimen.getId(),bizLogic);
+				specimenMap.put(collectionGroupKey,scgName);
 			}
 			else
 			{
@@ -1291,7 +1319,7 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 						+ count);
 			}
 		}
-	}
+	}		
 //   Mandar:20Nov06 : enable Parent Specimen ----------------------- end
 	
 	//================================
@@ -1334,7 +1362,14 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionObjectGroupList.get(0);
 			
 			CollectionProtocolEvent collectionProtocolEvent = specimenCollectionGroup.getCollectionProtocolEvent();
-			Collection<SpecimenRequirement> specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+			DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+			/**
+			 * Name: Vijay Pande
+			 * Reviewer Name: Aarti Sharma
+			 * specimenRequirementCollection is explicitly retrived from DB since its lazy load property is true
+			 */
+			Collection<SpecimenRequirement> specimenRequirementCollection=(Collection)defaultBizLogic.retrieveAttribute(CollectionProtocolEvent.class.getName(), collectionProtocolEvent.getId(), Constants.COLUMN_NAME_SPECIEMEN_REQUIREMENT_COLLECTION);
+//			Collection<SpecimenRequirement> specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
 			
 			/**
 			 * Name: Chetan Patil

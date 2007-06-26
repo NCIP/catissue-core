@@ -89,7 +89,7 @@ public final class MultipleSpecimenValidationUtil
 				derivedSpecimen.setSpecimenCharacteristics(specimen.getSpecimenCharacteristics());
 				derivedSpecimen.setSpecimenCollectionGroup(specimen.getSpecimenCollectionGroup());
 				derivedSpecimen.setPathologicalStatus(specimen.getPathologicalStatus());
-
+				derivedSpecimen.getParentSpecimen().setId(specimen.getId());
 				try
 				{
 					result = validateSingleSpecimen(derivedSpecimen, bizLogic, operation, false);
@@ -222,105 +222,7 @@ public final class MultipleSpecimenValidationUtil
 			throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
 		}
 		*/
-		if (specimen.getSpecimenEventCollection() != null)
-		{
-			Iterator specimenEventCollectionIterator = specimen.getSpecimenEventCollection().iterator();
-			while (specimenEventCollectionIterator.hasNext())
-			{
-				//CollectionEvent validation.
-				Object eventObject = specimenEventCollectionIterator.next();
-				if (eventObject instanceof CollectionEventParameters)
-				{
-					CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
-					collectionEventParameters.getUser();
-					if (collectionEventParameters.getUser() == null || collectionEventParameters.getUser().getId() == null)
-					{
-						String message = ApplicationProperties.getValue("specimen.collection.event.user");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-					if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
-					{
-
-						String message = ApplicationProperties.getValue("specimen.collection.event.date");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-					// checks the collectionProcedure
-					if (!validator.isValidOption(collectionEventParameters.getCollectionProcedure()))
-					{
-						String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-					List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
-					if (!Validator.isEnumeratedValue(procedureList, collectionEventParameters.getCollectionProcedure()))
-					{
-						throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
-					}
-
-					if (!validator.isValidOption(collectionEventParameters.getContainer()))
-					{
-						String message = ApplicationProperties.getValue("collectioneventparameters.container");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-
-					List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
-					if (!Validator.isEnumeratedValue(containerList, collectionEventParameters.getContainer()))
-					{
-						throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
-					}
-
-				}
-				//ReceivedEvent validation
-				else if (eventObject instanceof ReceivedEventParameters)
-				{
-					ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
-					if (receivedEventParameters.getUser() == null || receivedEventParameters.getUser().getId() == null)
-					{
-						String message = ApplicationProperties.getValue("specimen.recieved.event.user");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-					if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
-					{
-						String message = ApplicationProperties.getValue("specimen.recieved.event.date");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-					// checks the collectionProcedure
-					if (!validator.isValidOption(receivedEventParameters.getReceivedQuality()))
-					{
-						String message = ApplicationProperties.getValue("collectioneventparameters.receivedquality");
-						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-					}
-
-					List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
-					if (!Validator.isEnumeratedValue(qualityList, receivedEventParameters.getReceivedQuality()))
-					{
-						throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
-					}
-				}
-			}
-		}
-
-		//Validations for Biohazard Add-More Block
-		Collection bioHazardCollection = specimen.getBiohazardCollection();
-		Biohazard biohazard = null;
-		if (bioHazardCollection != null && !bioHazardCollection.isEmpty())
-		{
-			Iterator itr = bioHazardCollection.iterator();
-			while (itr.hasNext())
-			{
-				biohazard = (Biohazard) itr.next();
-				if (!validator.isValidOption(biohazard.getType()))
-				{
-					String message = ApplicationProperties.getValue("newSpecimen.msg");
-					throw new DAOException(ApplicationProperties.getValue("errors.newSpecimen.biohazard.missing", message));
-				}
-				if (biohazard.getId() == null || biohazard.getId().toString().equals("-1"))
-				{
-					String message = ApplicationProperties.getValue("newSpecimen.msg");
-					throw new DAOException(ApplicationProperties.getValue("errors.newSpecimen.biohazard.missing", message));
-				}
-			}
-		}
-
+		
 		//validations for external identifiers
 		Collection extIdentifierCollection = specimen.getExternalIdentifierCollection();
 		ExternalIdentifier extIdentifier = null;
@@ -364,41 +266,141 @@ public final class MultipleSpecimenValidationUtil
 			throw new DAOException(ApplicationProperties.getValue("protocol.type.errMsg"));
 		}
 
-		SpecimenCharacteristics characters = specimen.getSpecimenCharacteristics();
-
-		if (characters == null)
+		
+		if(specimen.getParentSpecimen()!=null)
 		{
-			throw new DAOException(ApplicationProperties.getValue("specimen.characteristics.errMsg"));
-		}
-		else
-		{
-			if (specimen.getSpecimenCollectionGroup() != null)
+			if (specimen.getSpecimenEventCollection() != null)
 			{
-				//				NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
-				List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
-
-				if (!Validator.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
+				Iterator specimenEventCollectionIterator = specimen.getSpecimenEventCollection().iterator();
+				while (specimenEventCollectionIterator.hasNext())
 				{
-					throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
+					//CollectionEvent validation.
+					Object eventObject = specimenEventCollectionIterator.next();
+					if (eventObject instanceof CollectionEventParameters)
+					{
+						CollectionEventParameters collectionEventParameters = (CollectionEventParameters) eventObject;
+						collectionEventParameters.getUser();
+						if (collectionEventParameters.getUser() == null || collectionEventParameters.getUser().getId() == null)
+						{
+							String message = ApplicationProperties.getValue("specimen.collection.event.user");
+							throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+						}
+						if (!validator.checkDate(Utility.parseDateToString(collectionEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
+						{
+
+							String message = ApplicationProperties.getValue("specimen.collection.event.date");
+							throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+						}
+						// checks the collectionProcedure
+						if (!validator.isValidOption(collectionEventParameters.getCollectionProcedure()))
+						{
+							String message = ApplicationProperties.getValue("collectioneventparameters.collectionprocedure");
+							throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+						}
+						List procedureList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_COLLECTION_PROCEDURE, null);
+						if (!Validator.isEnumeratedValue(procedureList, collectionEventParameters.getCollectionProcedure()))
+						{
+							throw new DAOException(ApplicationProperties.getValue("events.collectionProcedure.errMsg"));
+						}
+
+						if (!validator.isValidOption(collectionEventParameters.getContainer()))
+						{
+							String message = ApplicationProperties.getValue("collectioneventparameters.container");
+							throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+						}
+
+						List containerList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_CONTAINER, null);
+						if (!Validator.isEnumeratedValue(containerList, collectionEventParameters.getContainer()))
+						{
+							throw new DAOException(ApplicationProperties.getValue("events.container.errMsg"));
+						}
+					}
+					//ReceivedEvent validation
+					else if (eventObject instanceof ReceivedEventParameters)
+					{
+						ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters) eventObject;
+						if (receivedEventParameters.getUser() == null || receivedEventParameters.getUser().getId() == null)
+						{
+							String message = ApplicationProperties.getValue("specimen.recieved.event.user");
+							throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+						}
+						if (!validator.checkDate(Utility.parseDateToString(receivedEventParameters.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY)))
+						{
+							String message = ApplicationProperties.getValue("specimen.recieved.event.date");
+							throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+						}
+						// checks the collectionProcedure
+						if (!validator.isValidOption(receivedEventParameters.getReceivedQuality()))
+						{
+							String message = ApplicationProperties.getValue("collectioneventparameters.receivedquality");
+							throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+						}
+
+						List qualityList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_RECEIVED_QUALITY, null);
+						if (!Validator.isEnumeratedValue(qualityList, receivedEventParameters.getReceivedQuality()))
+						{
+							throw new DAOException(ApplicationProperties.getValue("events.receivedQuality.errMsg"));
+						}
+					}
 				}
-
-				//		    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
-				List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null);
-
-				if (!Validator.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
+			}
+			//Validations for Biohazard Add-More Block
+			Collection bioHazardCollection = specimen.getBiohazardCollection();
+			Biohazard biohazard = null;
+			if (bioHazardCollection != null && !bioHazardCollection.isEmpty())
+			{
+				Iterator itr = bioHazardCollection.iterator();
+				while (itr.hasNext())
 				{
-					throw new DAOException(ApplicationProperties.getValue("specimen.tissueSide.errMsg"));
+					biohazard = (Biohazard) itr.next();
+					if (!validator.isValidOption(biohazard.getType()))
+					{
+						String message = ApplicationProperties.getValue("newSpecimen.msg");
+						throw new DAOException(ApplicationProperties.getValue("errors.newSpecimen.biohazard.missing", message));
+					}
+					if (biohazard.getId() == null || biohazard.getId().toString().equals("-1"))
+					{
+						String message = ApplicationProperties.getValue("newSpecimen.msg");
+						throw new DAOException(ApplicationProperties.getValue("errors.newSpecimen.biohazard.missing", message));
+					}
 				}
-
-				List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
-
-				if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen.getPathologicalStatus()))
+			}
+			SpecimenCharacteristics characters = specimen.getSpecimenCharacteristics();
+	
+			if (characters == null)
+			{
+				throw new DAOException(ApplicationProperties.getValue("specimen.characteristics.errMsg"));
+			}
+			else
+			{
+				if (specimen.getSpecimenCollectionGroup() != null)
 				{
-					throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+					//				NameValueBean undefinedVal = new NameValueBean(Constants.UNDEFINED,Constants.UNDEFINED);
+					List tissueSiteList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SITE, null);
+	
+					if (!Validator.isEnumeratedValue(tissueSiteList, characters.getTissueSite()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("protocol.tissueSite.errMsg"));
+					}
+	
+					//		    	NameValueBean unknownVal = new NameValueBean(Constants.UNKNOWN,Constants.UNKNOWN);
+					List tissueSideList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_TISSUE_SIDE, null);
+	
+					if (!Validator.isEnumeratedValue(tissueSideList, characters.getTissueSide()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("specimen.tissueSide.errMsg"));
+					}
+	
+					List pathologicalStatusList = CDEManager.getCDEManager().getPermissibleValueList(Constants.CDE_NAME_PATHOLOGICAL_STATUS, null);
+	
+					if (!Validator.isEnumeratedValue(pathologicalStatusList, specimen.getPathologicalStatus()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("protocol.pathologyStatus.errMsg"));
+					}
 				}
 			}
 		}
-
+		
 		if (operation.equals(Constants.ADD))
 		{
 			if (!specimen.getAvailable().booleanValue())

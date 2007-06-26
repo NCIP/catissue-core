@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.util.global;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +54,7 @@ import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
@@ -904,5 +906,51 @@ public class Utility extends edu.wustl.common.util.Utility
 		
 		return specimenCollectionGroup;
 	}
+	public static String getSCGId(String scgName)throws Exception
+    {
+          String scgId=Utility.toString(null);
+          String sourceObjectName=SpecimenCollectionGroup.class.getName();
+          String[] selectColumnName=new String[] {"id"};
+          String[] whereColumnName = new String[]{"name"};
+          String[] whereColumnCondition = new String[]{"="};
+          Object[] whereColumnValue = new String[]{scgName};
+          String joinCondition = null;
+          BizLogicFactory bizLogic = BizLogicFactory.getInstance();
+          SpecimenCollectionGroupBizLogic scgBizLogic=(SpecimenCollectionGroupBizLogic)bizLogic.getBizLogic(SpecimenCollectionGroup.class.getName());
+          List scgList = scgBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+          if(scgList.size()>0)
+          {
+                scgId=Utility.toString((Long)scgList.get(0));
+          }
+          return scgId;
+    }
 	
+	/**
+	 *  Generates key for ParticipantMedicalIdentifierMap
+	 * @param i  serial number
+	 * @param keyFor atribute based on which rspective key is to generate
+	 * @return key for map attribute
+	 */
+	public static String getParticipantMedicalIdentifierKeyFor(int i, String keyFor)
+	{
+		return (Constants.PARTICIPANT_MEDICAL_IDENTIFIER+i+keyFor);
+	}
+	
+	/**
+	 * To get the array of ids from the given DomainObject collection.
+	 * @param domainObjectCollection The collectio of domain objects.
+	 * @return The array of ids from the given DomainObject collection.
+	 */
+	public static long[] getobjectIds(Collection domainObjectCollection) {
+		long ids[] = new long[domainObjectCollection.size()];
+		int i = 0;
+		Iterator it = domainObjectCollection.iterator();
+		while (it.hasNext())
+		{
+			AbstractDomainObject domainObject = (AbstractDomainObject) it.next();
+			ids[i] = domainObject.getId().longValue();
+			i++;
+		}
+		return ids;
+	}
 }

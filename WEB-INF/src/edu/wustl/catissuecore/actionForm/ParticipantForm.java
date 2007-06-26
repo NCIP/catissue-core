@@ -120,7 +120,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	/**
 	 * Counter that contains number of rows in the 'Add More' functionality.
 	 */
-	private int counter=1;
+	private int valueCounter;
 	
 	
 	private long cpId = -1; 
@@ -204,9 +204,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         	{
         		ParticipantMedicalIdentifier participantMedicalIdentifier = (ParticipantMedicalIdentifier)it.next();
         		
-        		String key1 = "ParticipantMedicalIdentifier:" + i +"_Site_id";
-				String key2 = "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
-				String key3 = "ParticipantMedicalIdentifier:" + i +"_id";
+        		String key1 = Utility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_SITE_ID); // "ParticipantMedicalIdentifier:" + i +"_Site_id";
+				String key2 = Utility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_MEDICAL_NUMBER); // "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
+				String key3 = Utility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_ID); // "ParticipantMedicalIdentifier:" + i +"_id";
 
 				Site site = participantMedicalIdentifier.getSite();
 				
@@ -224,12 +224,12 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 				
 				i++;
         	}
-        	counter = medicalIdentifierCollection.size();
+        	valueCounter = medicalIdentifierCollection.size();
         }
         
         //At least one row should be displayed in ADD MORE therefore
-		if(counter == 0)
-			counter = 1;
+		if(valueCounter == 0)
+			valueCounter = 1;
    }
     
     /**
@@ -569,9 +569,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      * @return int the counter.
      * @see #setCounter(int)
      */
-	public int getCounter()
+	public int getValueCounter()
 	{
-		return counter;
+		return valueCounter;
 	}
 	
 	/**
@@ -579,9 +579,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      * @param counter The counter.
      * @see #getCounter()
      */
-	public void setCounter(int counter)
+	public void setValueCounter(int counter)
 	{
-		this.counter = counter;
+		this.valueCounter = counter;
 	}
 	
 	/**

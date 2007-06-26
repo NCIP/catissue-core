@@ -10,7 +10,7 @@
 
 package edu.wustl.catissuecore.domain;
 
-import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
@@ -219,7 +219,7 @@ public class Address extends AbstractDomainObject implements java.io.Serializabl
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
      */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
 
     }

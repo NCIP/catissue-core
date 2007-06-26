@@ -15,7 +15,7 @@ import java.util.HashSet;
 
 import edu.wustl.catissuecore.actionForm.ContainerForm;
 import edu.wustl.catissuecore.util.SearchUtil;
-import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.global.Validator;
@@ -255,7 +255,7 @@ public class Container extends AbstractDomainObject implements Serializable
      * (non-Javadoc)
      * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
      */
-    public void setAllValues(AbstractActionForm actionForm)
+    public void setAllValues(IValueObject actionForm)
             throws AssignDataException
     {
     	if (actionForm instanceof ContainerForm)

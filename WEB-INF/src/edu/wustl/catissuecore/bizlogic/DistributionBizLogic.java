@@ -44,6 +44,7 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -178,8 +179,13 @@ public class DistributionBizLogic extends DefaultBizLogic
 				{
 					((Specimen)specimenObj).setAvailable(new Boolean(false));
 				}
-				dao
-						.update(specimenObj, sessionDataBean, Constants.IS_AUDITABLE_TRUE,
+				/**
+				 * Name : Virender
+				 * Reviewer: Prafull
+				 * Calling Domain object from Proxy Object
+				 */
+				Specimen specimenObjImpl = (Specimen)HibernateMetaData.getProxyObjectImpl(specimenObj);
+				dao.update(specimenObjImpl, sessionDataBean, Constants.IS_AUDITABLE_TRUE,
 								Constants.IS_SECURE_UPDATE_TRUE,
 								Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
 			}
@@ -310,8 +316,14 @@ public class DistributionBizLogic extends DefaultBizLogic
 		// Mandar : 04-Apr-06 end
 	}
 
-	private boolean checkAvailableQty(Specimen specimen, double quantity)
+	private boolean checkAvailableQty(Specimen specimenObj, double quantity)
 	{
+		/**
+		 * Name : Virender
+		 * Reviewer: Sachin lale
+		 * Calling Domain object from Proxy Object
+		 */
+		Specimen specimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimenObj);
 		if (specimen instanceof TissueSpecimen)
 		{
 			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;

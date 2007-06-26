@@ -73,7 +73,10 @@ public class Constants extends edu.wustl.common.util.global.Constants
 		{Constants.DEFAULT_HISTOLOGICAL_QUALITY, Constants.CDE_NAME_HISTOLOGICAL_QUALITY},
 		{Constants.DEFAULT_VITAL_STATUS, Constants.CDE_VITAL_STATUS}
    };
-   //Constants added for Catissuecore V1.2
+   
+	//Constants added for Catissuecore V1.2
+	public static final String MYSQL_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION= "cast(label as signed)";
+	public static final String ORACLE_NUM_TO_STR_FUNCTION_NAME_FOR_LABEL_GENRATION = "catissue_label_to_num(label)";
 	
 	public static final String MAX_IDENTIFIER = "maxIdentifier";
     public static final String AND_JOIN_CONDITION = "AND";
@@ -914,7 +917,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DISTRIBUTION_REPORT_SAVE_ACTION="DistributionReportSave.do";
 	public static final String ARRAY_DISTRIBUTION_REPORT_SAVE_ACTION="ArrayDistributionReportSave.do";
 	
-	public static final String SELECTED_COLUMNS[] = {"Specimen.IDENTIFIER.Identifier : Specimen",
+	public static final String SELECTED_COLUMNS[] = {"Specimen.LABEL.Lable : Specimen",
 													"Specimen.TYPE.Type : Specimen",
 													"SpecimenCharacteristics.TISSUE_SITE.Tissue Site : Specimen",
 													"SpecimenCharacteristics.TISSUE_SIDE.Tissue Side : Specimen",
@@ -1183,7 +1186,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String EVENT_SELECTED = "eventSelected";
 	
 	//Constant for SpecimenEvents page.
-	public static final String EVENTS_TITLE_MESSAGE = "Existing events for this specimen";
+	public static final String EVENTS_TITLE_MESSAGE = "Existing events for the specimen with label {0}";
 	public static final String SURGICAL_PATHOLOGY_REPORT = "Surgical Pathology Report";
 	public static final String CLINICAL_ANNOTATIONS = "Clinical Annotations";
 	
@@ -1592,4 +1595,26 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	//constants for Storage container map radio button identification  Patch id: 4283_3
 	public static final int RADIO_BUTTON_VIRTUALLY_LOCATED=1;
 	public static final int RADIO_BUTTON_FOR_MAP=3;
+//	constant for putting blank screen in the framed pages
+	public static final String BLANK_SCREEN_ACTION="blankScreenAction.do";
+	
+	
+	public static final String COLUMN_NAME_SPECIMEN_ID = "specimen.id";
+	public static final String PARTICIPANT_MEDICAL_IDENTIFIER="ParticipantMedicalIdentifier:";
+	public static final String PARTICIPANT_MEDICAL_IDENTIFIER_SITE_ID="_Site_id";
+	public static final String PARTICIPANT_MEDICAL_IDENTIFIER_MEDICAL_NUMBER="_medicalRecordNumber";
+	public static final String PARTICIPANT_MEDICAL_IDENTIFIER_ID="_id";
+	public static final String COLUMN_NAME_SPECIEMEN_REQUIREMENT_COLLECTION="elements(specimenRequirementCollection)";
+	public static final String COLUMN_NAME_PARTICIPANT="participant";
+	public static final String ADDNEW_LINK="AddNew";
+	public static final String COLUMN_NAME_STORAGE_CONTAINER = "storageContainer";
+	public static final String COLUMN_NAME_SCG_CPR_CP_ID = "specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id";
+	public static final String COLUMN_NAME_CPR_CP_ID = "collectionProtocolRegistration.collectionProtocol.id";
+	public static final String EQUALS = "=";
+	public static final String COLUMN_NAME_SCG_NAME = "specimenCollectionGroup.name";
+	public static final String COLUMN_NAME_SPECIMEN = "specimen";
+	public static final String COLUMN_NAME_SCG = "specimenCollectionGroup";
+	public static final String COLUMN_NAME_CHILDREN = "elements(children)";
+	public static final String COLUMN_NAME_SCG_ID="specimenCollectionGroup.id";
+	
 }

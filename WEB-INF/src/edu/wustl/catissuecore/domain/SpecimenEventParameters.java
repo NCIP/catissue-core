@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.SpecimenEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -84,8 +85,9 @@ public abstract class SpecimenEventParameters extends EventParameters implements
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.EventParameters#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
 	 */
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	public void setAllValues(IValueObject valueObject) throws AssignDataException
 	{
+		AbstractActionForm abstractForm = (AbstractActionForm)valueObject;
 		super.setAllValues(abstractForm);
 			
 		// TODO need to discuss why CellSpecimen is created -- Santosh

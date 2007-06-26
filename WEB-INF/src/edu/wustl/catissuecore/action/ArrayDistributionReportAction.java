@@ -14,14 +14,19 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.ConfigureResultViewForm;
 import edu.wustl.catissuecore.actionForm.DistributionReportForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
+import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.vo.ArrayDistributionReportEntry;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * This is the action class for displaying the Distribution report
@@ -125,8 +130,9 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	 * @param sessionData
 	 * @param arrayEntry
 	 * @param fillerList
+	 * @throws DAOException 
 	 */
-	private void getSpecimenDetails(SpecimenArray array, String[] specimenColumns, SessionDataBean sessionData,ArrayDistributionReportEntry arrayEntry) {
+	private void getSpecimenDetails(SpecimenArray array, String[] specimenColumns, SessionDataBean sessionData,ArrayDistributionReportEntry arrayEntry) throws DAOException {
 		List specimensDetails = new ArrayList();
 		List gridInfo = new ArrayList();
 		int dimensionOne = array.getCapacity().getOneDimensionCapacity().intValue();
@@ -141,12 +147,26 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 			
 			gridInfo.add(i,temp);
 		}
-		
-		Iterator itr = array.getSpecimenArrayContentCollection().iterator();
+		/**
+		 * Name : Virender
+		 * Reviewer: Prafull
+		 * Retriving collection of Specimen Type.
+		 * Replaced array.getSpecimenArrayContentCollection().iterator();
+		 */
+		DefaultBizLogic bizLogic = (DefaultBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		Collection specimenArrayContentCollection = (Collection)bizLogic.retrieveAttribute(SpecimenArray.class.getName(),array.getId(),"elements(specimenArrayContentCollection)");
+		Iterator itr = specimenArrayContentCollection.iterator();
 		
 		while(itr.hasNext()) {
 			SpecimenArrayContent arrayContent = (SpecimenArrayContent) itr.next();
-			Specimen specimen = arrayContent.getSpecimen();
+			/**
+			 * Name : Virender
+			 * Reviewer: Prafull
+			 * Retriving specimenObject
+			 * replaced arrayContent.getSpecimen()
+			 */
+			Specimen specimen = null;
+			specimen = (Specimen)bizLogic.retrieveAttribute(SpecimenArrayContent.class.getName(),arrayContent.getId(),"specimen");
 			List specimenDetails = new ArrayList();
 			
 
@@ -185,13 +205,30 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		List arrayDetails = new ArrayList();		
 		arrayDetails.add(array.getName());
 		arrayDetails.add(Utility.toString(array.getBarcode()));
-		arrayDetails.add(Utility.toString(array.getSpecimenArrayType().getName()));
+		/**
+		 * Name : Virender
+		 * Reviewer: Prafull
+		 * Retriving collection of Distributed Items.
+		 * array.getSpecimenArrayType().getname()
+		 * array.getSpecimenArrayType().getSpecimenClass()
+		 * array.getSpecimenArrayType().getSpecimenTypeCollection()
+		 */
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_TYPE_FORM_ID);
+		SpecimenArrayType specimenArrayType = (SpecimenArrayType)bizLogic.retrieveAttribute(SpecimenArray.class.getName(),array.getId(),"specimenArrayType");
+		arrayDetails.add(Utility.toString(specimenArrayType.getName()));
 		arrayDetails.add(Utility.toString(array.getPositionDimensionOne()));
 		arrayDetails.add(Utility.toString(array.getPositionDimensionTwo()));
 		arrayDetails.add(Utility.toString(array.getCapacity().getOneDimensionCapacity()));
 		arrayDetails.add(Utility.toString(array.getCapacity().getTwoDimensionCapacity()));
-		arrayDetails.add(Utility.toString(array.getSpecimenArrayType().getSpecimenClass()));
-		arrayDetails.add(Utility.toString(array.getSpecimenArrayType().getSpecimenTypeCollection()));
+		arrayDetails.add(Utility.toString(specimenArrayType.getSpecimenClass()));
+		/**
+		 * Name : Virender
+		 * Reviewer: Prafull
+		 * Retriving collection of Specimen Type.
+		 * specimenArrayType.getSpecimenTypeCollection();
+		 */
+		Collection specimenTypeCollection = (Collection)bizLogic.retrieveAttribute(SpecimenArrayType.class.getName(),specimenArrayType.getId(),"elements(specimenTypeCollection)");
+		arrayDetails.add(Utility.toString(specimenTypeCollection));
 		arrayDetails.add(Utility.toString(array.getComment()));
 		return arrayDetails;
 	}
@@ -208,8 +245,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	 */
 	protected List getListOfArrayDataForSave(Distribution dist,ConfigureResultViewForm configForm,SessionDataBean sessionData,String[] arrayColumns,String[] specimenColumns) throws Exception {
 		List arrayEntries = new ArrayList();	
-		
-		Iterator itr = dist.getSpecimenArrayCollection().iterator();
+		Iterator itr = getSpecimenArrayCollection(dist).iterator(); 
 		while(itr.hasNext())
 		{
 			SpecimenArray array = (SpecimenArray) itr.next();
@@ -233,8 +269,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 	 */
 	protected List getListOfArrayData(Distribution dist,ConfigureResultViewForm configForm,SessionDataBean sessionData,String[] arrayColumns,String[] specimenColumns) throws Exception {
 		List arrayEntries = new ArrayList();	
-		
-		Iterator itr = dist.getSpecimenArrayCollection().iterator();
+		Iterator itr = getSpecimenArrayCollection(dist).iterator();
 		while(itr.hasNext())
 		{
 			SpecimenArray array = (SpecimenArray) itr.next();			
@@ -244,4 +279,18 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		}
 		return arrayEntries;
     }
+	
+	/**
+	 * Name: Virender Mehta
+	 * Reviewer: Prafull
+	 * Retrive SpecimenArrayCollection from parent Specimen
+	 * Replaced Iterator itr = dist.getSpecimenArrayCollection().iterator();
+	 * @throws DAOException 
+	 */
+	private Collection getSpecimenArrayCollection(Distribution dist) throws DAOException
+	{
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
+		Collection specimenArrayCollection = (Collection)bizLogic.retrieveAttribute(Distribution.class.getName(),dist.getId(),"elements(specimenArrayCollection)");
+		return specimenArrayCollection;
+	}
 }

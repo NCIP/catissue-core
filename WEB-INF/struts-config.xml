@@ -3512,7 +3512,13 @@ PUBLIC
 			 type="edu.wustl.catissuecore.action.ScgEventsAjaxHandlerAction"		 
 			 scope="request">	 
 		</action>
-
+<!--P.G. - Start 24May07:Bug 4291-->
+	<action path="/blankScreenAction"
+			 type="edu.wustl.catissuecore.action.ForwardAction"		 
+			 scope="request">	
+			 <forward name="success" path=".catissuecore.bioBlankDef" /> 
+		</action>
+<!--P.G. - End -->
 	</action-mappings>
 	
 	<controller processorClass="edu.wustl.common.struts.ApplicationRequestProcessor" />

@@ -16,6 +16,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.DistributionProtocolForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -97,7 +98,7 @@ public class DistributionProtocol extends SpecimenProtocol implements java.io.Se
      * This function Copies the data from an CollectionProtocolForm object to a CollectionProtocol object.
      * @param CollectionProtocol An CollectionProtocolForm object containing the information about the CollectionProtocol.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

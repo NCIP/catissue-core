@@ -4,18 +4,18 @@ package edu.wustl.catissuecore.actionForm;
 
 import java.util.Calendar;
 
-import org.apache.struts.action.ActionForm;
-
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
   *
  * Description:  This Class handles the Distribution Report Data..
  */
-public class DistributionReportForm extends ActionForm
+public class DistributionReportForm extends AbstractActionForm
 {
 	
 	/**
@@ -63,10 +63,11 @@ public class DistributionReportForm extends ActionForm
 		this.distributionType = distributionType;
 	}
 
-	public void setAllValues(Distribution distribution) throws Exception
+	public void setAllValues(AbstractDomainObject abstractDomainObject)
 	{
+
+		Distribution distribution = (Distribution)abstractDomainObject;
 		this.distributionProtocolTitle = String.valueOf(distribution.getDistributionProtocol().getTitle());
-		
 		String lName = (String)distribution.getUser().getLastName();
  		String fName = (String)distribution.getUser().getFirstName();
  		Logger.out.debug("User's name"+lName+" "+fName );
@@ -222,5 +223,20 @@ public class DistributionReportForm extends ActionForm
 		this.distributionId = distributionId;
 	}
 
+	@Override
+	public int getFormId()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
+	
+	@Override
+	protected void reset()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

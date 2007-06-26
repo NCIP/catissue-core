@@ -40,7 +40,6 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
@@ -253,9 +252,11 @@ public class SimilarContainersAction extends SecureAction
 				if (!containerList.isEmpty())
 				{
 					StorageContainer container = (StorageContainer) containerList.get(0);
-					similarContainersForm.setSiteName(container.getSite().getName());
-					siteName = container.getSite().getName();
-					siteId = container.getSite().getId().longValue();
+					
+					Site site = (Site)bizLogic.retrieveAttribute(StorageContainer.class.getName(), container.getId(), "site");//container.getSite();
+					similarContainersForm.setSiteName(site.getName());
+					siteName = site.getName();
+					siteId = site.getId().longValue();
 					Logger.out.debug("Site Name :" + similarContainersForm.getSiteName());
 				}
 			}

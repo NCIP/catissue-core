@@ -17,6 +17,7 @@ import edu.wustl.catissuecore.actionForm.StorageTypeForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -42,7 +43,7 @@ public class StorageType extends ContainerType
 
 	public StorageType(AbstractActionForm abstractActionForm) throws AssignDataException
 	{
-		setAllValues(abstractActionForm);
+		setAllValues((IValueObject)abstractActionForm);
 	}
 
 	/**
@@ -128,7 +129,7 @@ public class StorageType extends ContainerType
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.ContainerType#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
 	 */
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		try
 		{
@@ -156,7 +157,8 @@ public class StorageType extends ContainerType
 			capacity
 					.setTwoDimensionCapacity(new Integer(storageTypeForm.getTwoDimensionCapacity()));
 
-			holdsStorageTypeCollection.clear();
+//			holdsStorageTypeCollection.clear();
+			holdsStorageTypeCollection = new HashSet();
 			long[] storageTypeArr = storageTypeForm.getHoldsStorageTypeIds();
 			if (storageTypeArr != null)
 			{
@@ -172,7 +174,8 @@ public class StorageType extends ContainerType
 				}
 			}
 
-			holdsSpecimenClassCollection.clear();
+//			holdsSpecimenClassCollection.clear();
+			holdsSpecimenClassCollection = new HashSet();
 			if (storageTypeForm.getSpecimenOrArrayType().equals("Specimen"))
 			{
 				String[] specimenClassTypeArr = storageTypeForm.getHoldsSpecimenClassTypes();
@@ -194,7 +197,8 @@ public class StorageType extends ContainerType
 					}
 				}
 			}
-			holdsSpArrayTypeCollection.clear();
+//			holdsSpArrayTypeCollection.clear();
+			holdsSpArrayTypeCollection = new HashSet();
 			if (storageTypeForm.getSpecimenOrArrayType().equals("SpecimenArray"))
 			{
 				long[] specimenArrayTypeArr = storageTypeForm.getHoldsSpecimenArrTypeIds();
@@ -222,8 +226,8 @@ public class StorageType extends ContainerType
 	
 	public boolean equals(Object object)
     {
-    	
-    	if(this.getClass().getName().equals(object.getClass().getName()))
+		
+    	if(object!=null && object instanceof StorageType)
     	{
     		StorageType storageType = (StorageType)object;
     		if(this.getId().longValue() == storageType.getId().longValue())

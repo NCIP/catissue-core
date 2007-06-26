@@ -14,7 +14,7 @@ import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.SpecimenProtocolForm;
 import edu.wustl.catissuecore.util.SearchUtil;
-import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
@@ -273,7 +273,7 @@ public abstract class SpecimenProtocol extends AbstractDomainObject implements j
 		this.activityStatus = activityStatus;
 	}
 	
-	public void setAllValues(AbstractActionForm abstractForm)
+	public void setAllValues(IValueObject abstractForm)
 	{
 		Logger.out.debug("SpecimenProtocol: setAllValues ");
         try

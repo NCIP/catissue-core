@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -822,10 +823,12 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	 * @throws ClassNotFoundException classNotFoundException
 	 */
 	public Vector getSCGTreeForCPBasedView(Long cpId, Long participantId) throws DAOException, ClassNotFoundException {
+		Logger.out.debug("Start of getSCGTreeForCPBasedView");
 		Vector treeData = new Vector();
 		String hql = "select  cpe.id, cpe.studyCalendarEventPoint,cpe.collectionPointLabel from " + CollectionProtocolEvent.class.getName()
 		+ " as cpe where cpe.collectionProtocol.id= "+ cpId.toString() +" order by cpe.studyCalendarEventPoint";
 		List cpeList = executeQuery(hql);
+		Logger.out.debug("After executeQuery");
 		for(int count = 0; count < cpeList.size() ; count++)
 		{
 			Object[] obj = (Object[]) cpeList.get(count);
@@ -905,39 +908,56 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	 * @throws DAOException DAOException
 	 * @throws ClassNotFoundException ClassNotFoundException
 	 */
-	private void createTreeNodeForExistingSCG(Vector treeData, Double eventPoint, String collectionPointLabel, List scgList) throws DAOException, ClassNotFoundException {
+	private void createTreeNodeForExistingSCG(Vector treeData, Double eventPoint, String collectionPointLabel, List scgList) throws DAOException, ClassNotFoundException 
+	{
 		for (int i = 0; i < scgList.size(); i++)
 		{
 			Object[] obj1 = (Object[]) scgList.get(i);
 			Long scgId = (Long) obj1[0];
+			 
 			String scgNodeLabel = "";
-			String scgName = (String) obj1[1];
 			String scgActivityStatus = (String) obj1[2];
-			String colName = "id";	
-			List scgListFromDB = retrieve(SpecimenCollectionGroup.class.getName(), colName, scgId);
-			if(scgListFromDB != null && !scgListFromDB.isEmpty())
+			
+			/**
+			 * Name: Vijay Pande
+			 * Reviewer Name: Aarti Sharma
+			 * recievedEvent related to scg is trieved from db and, proper receivedDate and scgNodeLabel are set to set toolTip of the node
+			 */
+			String receivedDate = "";
+			if(scgId != null  && scgId>0)
 			{
-				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)scgListFromDB.get(0);
-				Collection eventsColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
+				String sourceObjName=ReceivedEventParameters.class.getName();
+				String columnName=Constants.COLUMN_NAME_SCG_ID;
+				Long ColumnValue=scgId;
+				Collection eventsColl=retrieve(sourceObjName, columnName, ColumnValue);
+//				Collection eventsColl = specimenCollectionGroup.getSpecimenEventParametersCollection();
 				if(eventsColl != null && !eventsColl.isEmpty())
 				{
-					String receivedDate = "";
+					receivedDate = "";
 					Iterator iter = eventsColl.iterator();
 					while(iter.hasNext())
 					{
-						Object temp = iter.next();
-						if(temp instanceof ReceivedEventParameters)
-						{
-							ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)temp;
-							receivedDate = Utility.parseDateToString(receivedEventParameters.getTimestamp(),"yyyy-MM-dd");
-							scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate; 
-						}    					
+						ReceivedEventParameters receivedEventParameters = (ReceivedEventParameters)iter.next();
+						receivedDate = Utility.parseDateToString(receivedEventParameters.getTimestamp(),"yyyy-MM-dd");
+						scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate; 
+						break;
 					}
-					String toolTipText = scgNodeLabel+ ": "+scgName;//getToolTipText(eventPoint.toString(),collectionPointLabel,receivedDate);
-					setQueryTreeNode(scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, scgNodeLabel, "0", null, null, null, scgActivityStatus, toolTipText,treeData);
-					addSpecimenNodesToSCGTree(treeData,scgId);
+				}
+				if(scgNodeLabel.equalsIgnoreCase("")&&receivedDate.equalsIgnoreCase(""))
+				{
+					receivedDate = Utility.parseDateToString(new Date(System.currentTimeMillis()),"yyyy-MM-dd");
+					//String toolTipText = scgNodeLabel+ ": "+scgName;//
+					scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate;
 				}
 			}
+			String toolTipText=getToolTipText(eventPoint.toString(),collectionPointLabel,receivedDate);
+//			String receivedDate = Utility.parseDateToString(new Date(System.currentTimeMillis()),"yyyy-MM-dd");
+//			scgNodeLabel = "T"+eventPoint + ": " +collectionPointLabel + ": " + receivedDate;
+			setQueryTreeNode(scgId.toString(), Constants.SPECIMEN_COLLECTION_GROUP, 
+			   		scgNodeLabel, "0", null, null, null, scgActivityStatus, 
+			   		toolTipText,treeData);
+				addSpecimenNodesToSCGTree(treeData,scgId);
+			
 		}
 	}
 	/**

@@ -51,7 +51,7 @@
 			{
 				form = (SpecimenCollectionGroupForm)obj;
 		   		appendingPath = "/SpecimenCollectionGroupSearch.do?operation=search&pageOf="+pageOf+"&id="+form.getId() ;
-		   		int checkedButton1 = form.getCheckedButton();
+		   		int radioButtonForParticipant1 = form.getRadioButtonForParticipant();
 		   	}
 			
 	   	}
@@ -486,6 +486,7 @@
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value=""/>
+						<html:hidden property="participantId" />
 					</td>
 				 </tr>
 				 
@@ -559,7 +560,7 @@
 				 <tr>
 					 <td class="formRequiredNoticeNoBottom">*</td>
 					 <td class="formRequiredNoticeWithoutBorder">
-				     	<html:radio styleClass=""  property="checkedButton" value="1" onclick="onRadioButtonClick(this)">
+				     	<html:radio styleClass=""  property="radioButtonForParticipant" value="1" onclick="onRadioButtonClick(this)">
   				     	    <label for="participantId">
 								<%--<bean:message key="specimenCollectionGroup.collectedByParticipant" />--%>
 							</label>
@@ -571,19 +572,13 @@
 						</label>
   					</td>
   					<td class="formField">
-  						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">
+  						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">
 <!-- Mandar : 434 : for tooltip --> 						
-				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent(this)"
-				     	      onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-                         	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
-  						     </html:select>
+				     	    <html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="participantName" property="participantName" />
   						</logic:equal>     
-						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">
+						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="2">
 <!-- Mandar : 434 : for tooltip -->						
-				     	     <html:select property="participantId" styleClass="formFieldSized" styleId="ParticipantId" size="1" onchange="onChangeEvent(this)" disabled="true"
-				     	      onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-                         	     <html:options collection="<%=Constants.PARTICIPANT_LIST%>" labelProperty="name" property="value"/>				     	
-  						     </html:select>
+				     	     <html:text styleClass="formFieldSized" maxlength="255" size="30" styleId="participantName" property="participantName" disabled="true"/>
   						</logic:equal>
 						
 						&nbsp;
@@ -607,7 +602,7 @@
 				 <tr>
 				    <td class="formRequiredNotice" align="right">&nbsp;</td>
 					<td class="formRequiredNoticeWithoutLeftBorder">
-					<html:radio styleClass="" property="checkedButton" value="2" onclick="onRadioButtonClick(this)">
+					<html:radio styleClass="" property="radioButtonForParticipant" value="2" onclick="onRadioButtonClick(this)">
   				       	    <label for="protocolParticipantIdentifier">
 								<%--<bean:message key="specimenCollectionGroup.collectedByProtocolParticipantNumber" />--%>
 							</label>
@@ -621,20 +616,16 @@
 					
   			        <td class="formField">
   					<%-- LOGIC TAG FOR PARTICPANT NUMBER --%> 												
-                        <logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">						
+                        <logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">						
 <!-- Mandar : 434 : for tooltip -->
-   						 	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" disabled="true"
-   						 	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-                         		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
-							</html:select>
+   						 	<html:text property="protocolParticipantIdentifier" maxlength="255" size="30"  styleClass="formFieldSized" styleId="protocolParticipantIdentifier" disabled="true">
+							</html:text>
  						</logic:equal>
  						
- 						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">						
+ 						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="2">						
 <!-- Mandar : 434 : for tooltip -->
-   						 	<html:select property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" size="1" 
-   						 	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-                         		<html:options collection="<%=Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST%>" labelProperty="name" property="value"/>				     					     	
-							</html:select>
+   						 	<html:text property="protocolParticipantIdentifier" styleClass="formFieldSized" styleId="protocolParticipantIdentifier" maxlength="255" size="30" >
+							</html:text>
  						</logic:equal>
 					
 						&nbsp;
@@ -742,14 +733,14 @@
 						</label>
 					</td>
                     <td class="formField">
-   						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="1">
+   						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="1">
 <!-- Mandar : 434 : for tooltip -->   						
 				     		<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="<%=readOnlyForAll%>"
 				     		 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
                          		<html:options collection="<%=Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST%>" labelProperty="name" property="value"/>
 							</html:select>
 						</logic:equal>
-						<logic:equal name="specimenCollectionGroupForm" property="checkedButton" value="2">
+						<logic:equal name="specimenCollectionGroupForm" property="radioButtonForParticipant" value="2">
 <!-- Mandar : 434 : for tooltip -->					     	
 					     	<html:select property="participantsMedicalIdentifierId" styleClass="formFieldSized" styleId="participantsMedicalIdentifierId" size="1" disabled="true"
 					     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">

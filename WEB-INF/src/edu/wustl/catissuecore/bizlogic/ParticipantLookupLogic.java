@@ -433,8 +433,7 @@ public class ParticipantLookupLogic implements LookupLogic
 			return pointsForLastNameExact;
 		}
 		// partial match --> Checks whether first 5 digits or metaphones of two last names are equal
-		else if (userLastName.regionMatches(true, 0, existingLastName, 0, matchCharactersForLastName)
-				|| (new Metaphone()).isMetaphoneEqual(userLastName, existingLastName))
+		else if (userLastName.regionMatches(true, 0, existingLastName, 0, matchCharactersForLastName))
 		{
 			return pointsForLastNamePartial;
 		}

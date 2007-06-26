@@ -88,12 +88,18 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 				if (specimen.getSpecimenCollectionGroup().getId() != null)
 				{
 					forwardToHashMap.put("specimenCollectionGroupId", specimen.getSpecimenCollectionGroup().getId().toString());
+					if (actionForm instanceof NewSpecimenForm) {
+						forwardToHashMap.put("specimenCollectionGroupName", ((NewSpecimenForm)actionForm).getSpecimenCollectionGroupName());
+					}	
+					
 				}
 			}
 			//Add Events
 			else if (actionForm.getForwardTo().equals("eventParameters"))
 			{
 				forwardToHashMap.put("specimenId", domainObject.getId().toString());
+				forwardToHashMap.put(Constants.SPECIMEN_LABEL, specimen.getLabel());
+				forwardToHashMap.put("specimenClass", specimen.getClassName());
 			}
 			else if (actionForm.getForwardTo().equals("distribution"))
 			{

@@ -23,7 +23,7 @@ import java.util.List;
 import edu.wustl.catissuecore.actionForm.UserForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.logger.Logger;
 
@@ -553,7 +553,7 @@ public class User extends AbstractDomainObject implements Serializable
      * This function Copies the data from an UserForm object to a User object.
      * @param user An UserForm object containing the information about the user.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {        	

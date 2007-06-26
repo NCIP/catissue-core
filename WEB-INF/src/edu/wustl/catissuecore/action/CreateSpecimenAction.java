@@ -32,9 +32,11 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CreateSpecimenBizLogic;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.util.global.AbstractSpecimenLabelGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
@@ -136,11 +138,24 @@ public class CreateSpecimenAction extends SecureAction
 						createForm.setLabel("");
 					}
 				}
+				NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+				if(createForm.getLabel()==null || createForm.getLabel().equals(""))
+				{
+					/**
+		        	 * Name : Virender Mehta
+		             * Reviewer: Sachin Lale
+		             * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and set.
+		        	 */
+					//int totalNoOfSpecimen = bizLogic.totalNoOfSpecimen(sessionData)+1;
+					AbstractSpecimenLabelGenerator abstractSpecimenGenerator  = AbstractSpecimenLabelGenerator.getSpecimenLabelGeneratorInstance();
+					String deriveSpecimenLabel= abstractSpecimenGenerator.getNextAvailableDeriveSpecimenlabel(null);
+					createForm.setLabel(deriveSpecimenLabel);
+				}
 				
-				if ((createForm.getCheckedButton().equals("1") && createForm
+				if (forwardToHashMap == null && ((createForm.getCheckedButton().equals("1") && createForm
 						.getParentSpecimenLabel() != null && !createForm.getParentSpecimenLabel().equals(""))
 						|| (createForm.getCheckedButton().equals("2") && createForm
-								.getParentSpecimenBarcode() != null && !createForm.getParentSpecimenBarcode().equals("")))
+								.getParentSpecimenBarcode() != null && !createForm.getParentSpecimenBarcode().equals(""))))
 				{
 					String errorString = null;
 					String []columnName = new String[1];
@@ -361,6 +376,7 @@ public class CreateSpecimenAction extends SecureAction
 			{
 				createForm.setParentSpecimenId(parentSpecimenId.toString());
 				createForm.setPositionInStorageContainer("");
+				createForm.setSelectedContainerName("");
 				createForm.setQuantity("");
 				createForm.setPositionDimensionOne("");
 				createForm.setPositionDimensionTwo("");
@@ -370,9 +386,10 @@ public class CreateSpecimenAction extends SecureAction
 				createForm.setExternalIdentifier(map);
 				createForm.setExIdCounter(1);
 				createForm.setVirtuallyLocated(false);
-				containerMap = getContainerMap(createForm.getParentSpecimenId(), createForm
-						.getClassName(), dao, scbizLogic,exceedingMaxLimit,request);
-				initialValues = checkForInitialValues(containerMap);
+				createForm.setStContSelection(1);
+//				containerMap = getContainerMap(createForm.getParentSpecimenId(), createForm
+//						.getClassName(), dao, scbizLogic,exceedingMaxLimit,request);
+//				initialValues = checkForInitialValues(containerMap);
 				/**
 				 * Name : Vijay_Pande
 				 * Reviewer Name : Sachin_Lale
@@ -382,14 +399,14 @@ public class CreateSpecimenAction extends SecureAction
 				 * Description: Proper Storage location of derived specimen was not populated while coming from newly created parent specimen page.
 				 * Initial value were generated but not set to form variables.
 				 */
-				if(initialValues!=null)
-				{
-					initialValues = checkForInitialValues(containerMap);
-					String[] startingPoints=(String[])initialValues.get(0);
-					createForm.setStorageContainer(startingPoints[0]);
-					createForm.setPos1(startingPoints[1]);
-					createForm.setPos2(startingPoints[2]);		
-				}
+//				if(initialValues!=null)
+//				{
+//					initialValues = checkForInitialValues(containerMap);
+//					String[] startingPoints=(String[])initialValues.get(0);
+//					createForm.setStorageContainer(startingPoints[0]);
+//					createForm.setPos1(startingPoints[1]);
+//					createForm.setPos2(startingPoints[2]);		
+//				}
 				/**  --patch ends here -- */
 			}
 		}

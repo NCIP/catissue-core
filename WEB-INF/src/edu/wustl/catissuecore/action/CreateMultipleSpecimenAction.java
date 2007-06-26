@@ -25,7 +25,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.actionForm.AliquotForm;
 import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CreateSpecimenBizLogic;
@@ -36,10 +35,12 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * CreateMultipleSpecimenAction initializes the fields in the Create Derived Specimen page of multiple specimen.
@@ -101,7 +102,7 @@ public class CreateMultipleSpecimenAction extends BaseAction
 		//Gets the value of the operation parameter.
 		String derivedOperation = request.getParameter(Constants.DERIVED_OPERATION);
 
-		CreateSpecimenBizLogic dao = (CreateSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
+		CreateSpecimenBizLogic bizLogic = (CreateSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.CREATE_SPECIMEN_FORM_ID);
 
 		StorageContainerBizLogic scbizLogic = (StorageContainerBizLogic) BizLogicFactory.getInstance().getBizLogic(
 				Constants.STORAGE_CONTAINER_FORM_ID);
@@ -117,22 +118,31 @@ public class CreateMultipleSpecimenAction extends BaseAction
 		long cpId = -1;
 		if (parentSpecimenLabel != null && !parentSpecimenLabel.equals("null") && !parentSpecimenLabel.equals(""))
 		{
-			List spList = dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, parentSpecimenLabel.trim());
+			List spList = bizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, parentSpecimenLabel.trim());
 			if (spList != null && !spList.isEmpty())
 			{
 				Specimen sp = (Specimen) spList.get(0);
-				cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
-
+				//cpId = sp.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
+				
+//				Ashish - 6/6/07 - Retriving CPId for performance Improvement
+				String selectCol = Constants.COLUMN_NAME_SCG_CPR_CP_ID;
+				String sourceName = Specimen.class.getName();
+				cpId = (getCollectionProtocolId(selectCol,sourceName,sp.getId(),bizLogic)).longValue();
 			}
 		}
 		else
 		{
-			List specimenCollectionGroupList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.SYSTEM_NAME,
+			List specimenCollectionGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), Constants.SYSTEM_NAME,
 					specimenCollectionGroupName);
 			if (specimenCollectionGroupList != null && !specimenCollectionGroupList.isEmpty())
 			{
 				SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup) specimenCollectionGroupList.get(0);
-				cpId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
+			//	cpId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
+				
+				//Ashish - 6/6/07 - Retriving CPId for performance Improvement
+				String selectCol = Constants.COLUMN_NAME_CPR_CP_ID;
+				String sourceName = SpecimenCollectionGroup.class.getName();
+				cpId = (getCollectionProtocolId(selectCol,sourceName,specimenCollectionGroup.getId(),bizLogic)).longValue();
 			}
 		}
 
@@ -252,8 +262,30 @@ public class CreateMultipleSpecimenAction extends BaseAction
 		request.setAttribute("createSpecimenForm", createForm);
 		request.setAttribute("multipleSpecimen", "true");
 		return mapping.findForward(Constants.SUCCESS);
+	}		
+	/**
+	 * @param selectColumn
+	 * @param sourceName
+	 * @param scgId
+	 * @param bizLogic
+	 * @return
+	 * @throws DAOException
+	 * This method retrieves the collection protocol id from scg or collection protocol registration
+	 */
+	private Long getCollectionProtocolId(String selectColumn,String sourceName,Long scgId, IBizLogic bizLogic) throws DAOException
+	{
+		String[] selectColumnName = {selectColumn};
+		String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+		String[] whereColumnCondition = {Constants.EQUALS};
+		Object[] whereColumnValue = {scgId};
+		String sourceObjectName = sourceName;
+		
+		List collectionProtCollection = bizLogic.retrieve(sourceObjectName,selectColumnName,
+	            whereColumnName, whereColumnCondition,
+	            whereColumnValue,Constants.AND_JOIN_CONDITION );
+		Long collectionProtocolId = (Long)collectionProtCollection.get(0);
+		return collectionProtocolId;
 	}
-
 	/**
 	 * This function returns the initial values
 	 * @param containerMap - map 

@@ -60,9 +60,12 @@ public class CollectionGroupItemHandler extends BaseItemHandler {
                  /**
                   * bug ID: 2989
                   * Patch id: 2989_3
-                  * Description :if specimen collection group radio button is selected, enabling the Events button  
+                  * Description :if specimen collection group radio button is selected, enabling the Events button, 
+                  * 			 BioHazard Button,Pathological List,Tissue Site,Tissue Site	 
                   */
-                 scm.setEventsButtonStatus(true);
+               
+                 
+                  scm.setStatus(true);
              }
              else
              {
@@ -71,9 +74,12 @@ public class CollectionGroupItemHandler extends BaseItemHandler {
                  /**
                   * bug ID: 2989
                   * Patch id: 2989_4
-                  * Description :if parent specimen radio button is selected, disabling the Events button  
+                  	Description :if specimen collection group radio button is selected, disable the Events button, 
+                  * 			 BioHazard Button,Pathological List,Tissue Site,Tissue Site
                   */
-                 scm.setEventsButtonStatus(false);
+                
+                 scm.setStatus(false);
+                 
              }                               
 		}
 	}

@@ -9,6 +9,7 @@
     <class
         name="edu.wustl.catissuecore.domain.DistributedItem"
         table="CATISSUE_DISTRIBUTED_ITEM"
+		lazy="true"
     >
 
         <id

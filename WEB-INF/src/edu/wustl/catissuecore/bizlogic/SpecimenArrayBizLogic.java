@@ -35,6 +35,7 @@ import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
@@ -43,6 +44,7 @@ import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 
@@ -538,6 +540,12 @@ catch (Exception e)
 			if (!list.isEmpty())
 			{
 				specimen = (Specimen) list.get(0);
+				/**
+				 * Name : Virender
+				 * Reviewer: Prafull
+				 * Calling Domain object from Proxy Object
+				 */
+				specimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
 				String activityStatus = specimen.getActivityStatus();
 				//Bug: 2872:-  User should not able to add close/disable specimen in Specimen Array.
 				if (!activityStatus.equals(Constants.ACTIVITY_STATUS_ACTIVE))

@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +26,11 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
+import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.cde.CDEManager;
@@ -77,7 +81,12 @@ public class ParticipantAction extends SecureAction
 
 		//Gets the map from ActionForm
 		Map map = participantForm.getValues();
-
+		/**
+		 * Name: Vijay Pande
+		 * Reviewer Name: Aarti Sharma
+		 * Following method call is added to set ParticipantMedicalNumber id in the map after add/edit operation
+		 */
+		setParticipantMedicalNumberId(participantForm.getId(),map);
 		//Calling DeleteRow of BaseAction class
 		MapDataParser.deleteRow(key, map, request.getParameter("status"));
 		//Gets the value of the operation parameter.
@@ -174,5 +183,40 @@ public class ParticipantAction extends SecureAction
 		Logger.out.debug("pageOf :---------- " + pageOf);
 
 		return mapping.findForward(pageOf);
+	}
+	
+	/**
+	 * THis method sets the ParticipantMedicalNumber id in the map
+	 * Bug_id: 4386
+	 * After adding new participant medical number CommonAddEdit was unable to set id in the value map for participant medical number
+	 * Therefore here expicitly id of the participant medical number are set
+	 * 
+	 * @param participantId id of the current participant
+	 * @param map map that holds ParticipantMedicalNumber(s)
+	 * @throws Exception generic exception
+	 */
+	private void setParticipantMedicalNumberId(Long participantId, Map  map)throws Exception
+	{
+		ParticipantBizLogic bizLogic = (ParticipantBizLogic) BizLogicFactory.getInstance().getBizLogic(Participant.class.getName());
+		Collection paticipantMedicalIdentifierCollection=(Collection)bizLogic.retrieveAttribute(Participant.class.getName(), participantId, "elements(participantMedicalIdentifierCollection)");
+		Iterator iter=paticipantMedicalIdentifierCollection.iterator();
+		while(iter.hasNext())
+		{
+			ParticipantMedicalIdentifier pmi=(ParticipantMedicalIdentifier)iter.next();
+			for(int i=1;i<=paticipantMedicalIdentifierCollection.size();i++)
+			{
+				//check for null medical record number since for participant having no PMI an empty PMI object is added
+				if(pmi.getMedicalRecordNumber()!=null && pmi.getSite().getId().toString()!=null)
+				{
+					// check for site id and medical number, if they both matches then set id to the respective participant medical number
+					if(((String)(map.get(Utility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_MEDICAL_NUMBER)))).equalsIgnoreCase(pmi.getMedicalRecordNumber()) 
+							&& ((String)(map.get(Utility.getParticipantMedicalIdentifierKeyFor(i,Constants.PARTICIPANT_MEDICAL_IDENTIFIER_SITE_ID)))).equalsIgnoreCase(pmi.getSite().getId().toString()))
+					{
+						map.put(Utility.getParticipantMedicalIdentifierKeyFor(i, Constants.PARTICIPANT_MEDICAL_IDENTIFIER_ID), pmi.getId().toString());
+						break;
+					}
+				}
+			}
+		}
 	}
 }

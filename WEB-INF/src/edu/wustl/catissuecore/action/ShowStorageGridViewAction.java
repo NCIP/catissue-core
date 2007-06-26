@@ -28,6 +28,7 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
@@ -39,6 +40,8 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
+import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.logger.Logger;
 /**
  * ShowStorageGridViewAction shows the grid view of the map according to the
@@ -112,15 +115,18 @@ public class ShowStorageGridViewAction  extends BaseAction
         	storageContainerGridObject = new StorageContainerGridObject();
             StorageContainer storageContainer = (StorageContainer) list.get(0);
 
-            setEnablePageAttributeIfRequired(request, storageContainer);
+            setEnablePageAttributeIfRequired(request, storageContainer, bizLogic);
             
-            request.setAttribute("siteName",storageContainer.getSite().getName());
-            request.setAttribute("storageTypeName",storageContainer.getStorageType().getName());
+            Site site = (Site)bizLogic.retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "site");//container.getSite();
+            request.setAttribute("siteName",site.getName());
+            
+            StorageType storageType = (StorageType) bizLogic.retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "storageType");//storageContainer.getStorageType();
+			request.setAttribute("storageTypeName",storageType.getName());
             
             
             //Mandar : Labels for Dimensions  
-            String oneDimLabel = storageContainer.getStorageType().getOneDimensionLabel();
-            String twoDimLabel = storageContainer.getStorageType().getTwoDimensionLabel();
+            String oneDimLabel = storageType.getOneDimensionLabel();
+            String twoDimLabel = storageType.getTwoDimensionLabel();
             
             if(oneDimLabel == null )oneDimLabel = " ";
             if(twoDimLabel == null )twoDimLabel = " ";
@@ -129,7 +135,7 @@ public class ShowStorageGridViewAction  extends BaseAction
             request.setAttribute(Constants.STORAGE_CONTAINER_DIM_TWO_LABEL ,twoDimLabel );
             
             storageContainerGridObject.setId(storageContainer.getId().longValue());
-            storageContainerGridObject.setType(storageContainer.getStorageType().getName());
+            storageContainerGridObject.setType(storageType.getName());
             storageContainerGridObject.setName(storageContainer.getName());
             
             Integer oneDimensionCapacity = storageContainer
@@ -145,13 +151,15 @@ public class ShowStorageGridViewAction  extends BaseAction
             fullStatus = new int[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
             childContainerType = new String[oneDimensionCapacity.intValue()+1][twoDimensionCapacity.intValue()+1];
             
-            //Showing Containers in the Container map.
-            if (storageContainer.getChildren() != null)
+			//Showing Containers in the Container map.
+            Collection children = (Collection)bizLogic.retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "elements(children)");//storageContainer.getChildren();
+            if (children != null)
             {
-                Iterator iterator = storageContainer.getChildren().iterator();
+                Iterator iterator = children.iterator();
                 while(iterator.hasNext())
                 {
-                    StorageContainer childStorageContainer = (StorageContainer)iterator.next();
+                    Object object = iterator.next();
+                    StorageContainer childStorageContainer = (StorageContainer)HibernateMetaData.getProxyObjectImpl(object);
                     Integer positionDimensionOne = childStorageContainer.getPositionDimensionOne();
                     Integer positionDimensionTwo = childStorageContainer.getPositionDimensionTwo();
                     fullStatus[positionDimensionOne.intValue()][positionDimensionTwo.intValue()] = 1;
@@ -259,9 +267,11 @@ public class ShowStorageGridViewAction  extends BaseAction
     /**
      * To enable or disable the Storage coctinaer links on the page depending on restriction criteria on Container.
 	 * @param request Teh HttpServletRequest object reference.
-	 * @param storageContainer The Storage container object reference.
+     * @param storageContainer The Storage container object reference.
+     * @param bizLogic reference to bizLogic class. 
+     * @throws DAOException 
 	 */
-	private void setEnablePageAttributeIfRequired(HttpServletRequest request, StorageContainer storageContainer)
+	private void setEnablePageAttributeIfRequired(HttpServletRequest request, StorageContainer storageContainer, StorageContainerBizLogic bizLogic) throws DAOException
 	{
 		boolean enablePage=true;
 		String activityStatus = request.getParameter(Constants.ACTIVITY_STATUS);
@@ -279,7 +289,7 @@ public class ShowStorageGridViewAction  extends BaseAction
 		if (enablePage && holdContainerType!=null && !holdContainerType.equals(""))
 		{
 			int typeId = Integer.parseInt(holdContainerType);
-			enablePage = canHoldContainerType(typeId, storageContainer);
+			enablePage = bizLogic.canHoldContainerType(typeId, storageContainer);
 		}
 		
 		//checking for collection Protocol. 
@@ -289,7 +299,7 @@ public class ShowStorageGridViewAction  extends BaseAction
 			if (!holdCollectionProtocol.equals(""))
 			{
 				int collectionProtocolId = Integer.parseInt(holdCollectionProtocol);
-				enablePage = canHoldCollectionProtocol(collectionProtocolId,storageContainer);
+				enablePage = bizLogic.canHoldCollectionProtocol(collectionProtocolId,storageContainer);
 			}
 			else
 				enablePage=false;
@@ -300,7 +310,7 @@ public class ShowStorageGridViewAction  extends BaseAction
 		if (enablePage && holdspecimenClass!=null)
 		{
 			if (!holdspecimenClass.equals(""))
-				enablePage = canHoldSpecimenClass(holdspecimenClass,storageContainer);
+				enablePage = bizLogic.canHoldSpecimenClass(holdspecimenClass,storageContainer);
 			else
 				enablePage = false;
 		}
@@ -312,7 +322,7 @@ public class ShowStorageGridViewAction  extends BaseAction
 			if (!holdspecimenArrayType.equals(""))
 			{
 				int specimenArrayTypeId = Integer.parseInt(holdspecimenArrayType);
-				enablePage = canHoldSpecimenArrayType(specimenArrayTypeId,storageContainer);
+				enablePage = bizLogic.canHoldSpecimenArrayType(specimenArrayTypeId,storageContainer);
 			}
 			else
 				enablePage = false;
@@ -322,105 +332,7 @@ public class ShowStorageGridViewAction  extends BaseAction
 			request.setAttribute(Constants.ENABLE_STORAGE_CONTAINER_GRID_PAGE,Constants.TRUE);
 	}
 
-	/**
-     * To check wether the Continer to display can holds the given type of container. 
-	 * @param typeId ContinerType id of container
-	 * @param storageContainer The StorageContainer reference to be displayed on the page.
-	 * @return true if the given continer can hold the typet.
-	 */
-	private boolean canHoldContainerType(int typeId, StorageContainer storageContainer)
-	{
-		boolean canHold = false;
-		Collection containerTypeCollection  = storageContainer.getHoldsStorageTypeCollection();
-		if (!containerTypeCollection.isEmpty())
-		{
-			Iterator itr = containerTypeCollection.iterator();
-			while (itr.hasNext())
-			{
-				StorageType type = (StorageType)itr.next();
-				long storagetypeId = type.getId().longValue();
-				if (storagetypeId == Constants.ALL_STORAGE_TYPE_ID ||  storagetypeId==typeId)
-				{
-					return true;
-				}
-			}
-		}
-		return canHold;
-	}
 
-    /**
-     * To check wether the Continer to display can holds the given CollectionProtocol. 
-	 * @param collectionProtocolId The collectionProtocol Id.
-	 * @param storageContainer The StorageContainer reference to be displayed on the page.
-	 * @return true if the given continer can hold the CollectionProtocol.
-	 */
-	private boolean canHoldCollectionProtocol(int collectionProtocolId, StorageContainer storageContainer)
-	{
-		boolean canHold = true;
-		Collection collectionProtocols = storageContainer.getCollectionProtocolCollection();
-		if (!collectionProtocols.isEmpty())
-		{
-			Iterator itr = collectionProtocols.iterator();
-			canHold=false;
-			while (itr.hasNext())
-			{
-				CollectionProtocol cp = (CollectionProtocol)itr.next();
-				if (cp.getId().longValue()==collectionProtocolId)
-				{
-					return true;
-				}
-			}
-		}
-		return canHold;
-	}
-	/**
-     * To check wether the Continer to display can holds the given specimenClass. 
-	 * @param specimenClass The specimenClass Name.
-	 * @param storageContainer The StorageContainer reference to be displayed on the page.
-	 * @return true if the given continer can hold the specimenClass.
-	 */
-	private boolean canHoldSpecimenClass(String specimenClass,StorageContainer storageContainer)
-	{
-		Collection specimenClasses = storageContainer.getHoldsSpecimenClassCollection();
-		Iterator itr = specimenClasses.iterator();
-		while (itr.hasNext())
-		{
-			String className = (String)itr.next();
-			if (className.equals(specimenClass))
-				return true;
-			
-		}
-		return false;
-	}
-	
-	
-	 /**
-     * To check wether the Continer to display can holds the given specimenArrayTypeId. 
-	 * @param specimenArrayTypeId The Specimen Array Type Id.
-	 * @param storageContainer The StorageContainer reference to be displayed on the page.
-	 * @return true if the given continer can hold the specimenArrayType.
-	 */
-	private boolean canHoldSpecimenArrayType(int specimenArrayTypeId, StorageContainer storageContainer)
-	{
-		boolean canHold = true;
-		Collection specimenArrayTypes = storageContainer.getHoldsSpArrayTypeCollection();
-//		if (!specimenArrayTypes.isEmpty())
-		{
-			Iterator itr = specimenArrayTypes.iterator();
-			canHold=false;
-			while (itr.hasNext())
-			{
-				SpecimenArrayType specimenarrayType = (SpecimenArrayType)itr.next();
-				long arraytypeId = specimenarrayType.getId().longValue();
-				
-				if (arraytypeId == Constants.ALL_SPECIMEN_ARRAY_TYPE_ID || arraytypeId==specimenArrayTypeId)
-				{
-					return true;
-				}
-			}
-		}
-		return canHold;
-	}
 	/**
 	 * @param fullStatus
 	 * @param childContainerIds

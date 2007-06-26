@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +19,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.SpecimenArray;
+import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.SpecimenArrayUtil;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -240,6 +242,15 @@ public class SpecimenArrayForm extends ContainerForm
     	this.specimenTypes = SpecimenArrayUtil.getSpecimenTypesFromCollection(specimenArray.getSpecimenArrayType().getSpecimenTypeCollection());
     	//this.specArrayContentCollection = SpecimenArrayUtil.getSpecimenGridContentCollection(specimenArray.getSpecimenArrayContentCollection());
     	this.specArrayContentCollection = specimenArray.getSpecimenArrayContentCollection();
+    	/**
+    	 * specArrayContentCollection is set in this form but when this collection get in action class from this form 
+    	 * it is lazy loded thus iterating this collection
+    	 */
+    	for (Iterator iter = this.specArrayContentCollection.iterator(); iter.hasNext();) 
+		{
+			iter.next();
+		}
+    	
     }
 
 	/**

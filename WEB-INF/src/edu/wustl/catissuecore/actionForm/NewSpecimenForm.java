@@ -40,7 +40,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class NewSpecimenForm extends SpecimenForm
 {
-    private String specimenCollectionGroupId;
+    private String specimenCollectionGroupId="0";
     
     /**
      * Identifier of the Parent Speciemen if present.
@@ -142,6 +142,8 @@ public class NewSpecimenForm extends SpecimenForm
 	// Patch ID: Bug#3184_5
 	// Also See: Bug#3184_6
 	private String specimenCollectionGroupName;
+	
+	private String parentSpecimenName;
 	
 	private String restrictSCGCheckbox;
 	
@@ -325,12 +327,17 @@ public class NewSpecimenForm extends SpecimenForm
     	this.parentPresent = false;
     	SpecimenCollectionGroup specimenCollectionGroup = specimen.getSpecimenCollectionGroup();
     	if(specimenCollectionGroup!=null)
+    	{
     		this.specimenCollectionGroupId = Utility.toString(specimenCollectionGroup.getId());
-    	
+    		/**For Migration Start**/
+    		this.specimenCollectionGroupName= Utility.toString(specimenCollectionGroup.getName());
+    		/**For Migration End**/
+    	}
     	if(specimen.getParentSpecimen() != null)
     	{
     		Logger.out.debug("ParentSpecimen : -- "+specimen.getParentSpecimen());
     		this.parentSpecimenId = String.valueOf(specimen.getParentSpecimen().getId());
+    		this.parentSpecimenName = Utility.toString(specimen.getParentSpecimen().getLabel());  
     		this.parentPresent = true;
     	}
     	
@@ -421,12 +428,17 @@ public class NewSpecimenForm extends SpecimenForm
          {
              if (operation.equals(Constants.ADD) || operation.equals(Constants.EDIT))
              {
-             	if (specimenCollectionGroupId.equals("-1"))
+            	 /**For Migration Start**/
+             	if (specimenCollectionGroupName!=null && specimenCollectionGroupName.trim().equals(""))
                 {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.specimenCollectionGroupId")));
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("specimen.specimenCollectionGroupName")));
                 }
-             	
-             	if(parentPresent && !validator.isValidOption(parentSpecimenId))
+//             	else if(specimenCollectionGroupName!=null && Utility.getSCGId(specimenCollectionGroupName.trim())==Utility.toString(null))
+//             	{
+//             		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.unknown", ApplicationProperties.getValue("specimen.specimenCollectionGroup")));
+//             	}
+               	/**For Migration End**/
+             	if(parentPresent && !validator.isValidOption(parentSpecimenName))
              	{
              		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("createSpecimen.parent")));
              	}
@@ -924,6 +936,14 @@ public class NewSpecimenForm extends SpecimenForm
 	 */
 	public void setNumberOfSpecimen(int numberOfSpecimen) {
 		this.numberOfSpecimen = numberOfSpecimen;
+	}
+
+	public String getParentSpecimenName() {
+		return parentSpecimenName;
+	}
+
+	public void setParentSpecimenName(String parentSpecimenName) {
+		this.parentSpecimenName = parentSpecimenName;
 	}
 	
 }

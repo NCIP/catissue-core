@@ -30,6 +30,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.beans.AddNewSessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.BizLogicException;
@@ -68,8 +69,14 @@ public class ParticipantSelectAction extends BaseAction
 		Participant participant=(Participant)abstractDomain;
 		
 		Logger.out.info("Last name in ParticipantSelectAction:"+participant.getLastName());
-		
-		participantForm.setAllValues(participant);
+	/**
+	 * Name: Vijay Pande
+	 * Reviewer Name: Aarti Sharma
+	 * Instead of setAllValues() method retrieveFroEditMode() method is called to bypass lazy loading error in domain object
+	 */	
+		//participantForm.setAllValues(participant);
+		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+		defaultBizLogic.populateUIBean(Participant.class.getName(),participant.getId(), abstractForm);
 		
 		//Setting the ParticipantForm in request for storing selected participant's data.
 		//ParticipantSelect attribute is used for deciding in next action weather that action is called after ParticipantSelectAction or not

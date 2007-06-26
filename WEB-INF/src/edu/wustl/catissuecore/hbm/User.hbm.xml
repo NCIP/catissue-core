@@ -9,6 +9,7 @@
     <class
         name="edu.wustl.catissuecore.domain.User"
         table="CATISSUE_USER"
+		lazy="true"
     >
 
         <id

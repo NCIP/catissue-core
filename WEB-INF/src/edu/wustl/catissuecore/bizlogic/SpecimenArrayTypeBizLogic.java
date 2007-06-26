@@ -9,6 +9,7 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
@@ -117,11 +118,14 @@ public class SpecimenArrayTypeBizLogic extends DefaultBizLogic
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 
 		}
+		 
 		//      validate specimen type in array type
-		if ((specimenArrayType.getSpecimenTypeCollection() != null)
-				&& (specimenArrayType.getSpecimenTypeCollection().size() > 0))
+		Collection specimenTypeCollection = specimenArrayType.getSpecimenTypeCollection();
+		
+		if ((specimenTypeCollection != null)
+				&& (specimenTypeCollection.size() > 0))
 		{
-			Iterator arrayTypeIterator = specimenArrayType.getSpecimenTypeCollection().iterator();
+			Iterator arrayTypeIterator = specimenTypeCollection.iterator();
 			while (arrayTypeIterator.hasNext())
 			{
 				String temp = (String) arrayTypeIterator.next();

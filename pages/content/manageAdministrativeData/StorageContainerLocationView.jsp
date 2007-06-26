@@ -57,9 +57,11 @@
 			</iframe>
 		</td>
 		<td width="70%">
-			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" scrolling="yes" frameborder="1" width="99%" height="<%=height%>">
+		<!--P.G. - Start 24May07:Bug 4291:Added source as initial action for blank screen-->
+			<iframe name="<%=Constants.DATA_VIEW_FRAME%>" src="<%=Constants.BLANK_SCREEN_ACTION%>" scrolling="yes" frameborder="1" width="99%" height="<%=height%>">
 				Your Browser doesn't support IFrames.
 			</iframe>
+		<!--P.G. - End -->
 		</td>
 	</tr>
 </table>

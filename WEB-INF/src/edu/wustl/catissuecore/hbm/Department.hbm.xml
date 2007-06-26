@@ -9,6 +9,7 @@
     <class
         name="edu.wustl.catissuecore.domain.Department"
         table="CATISSUE_DEPARTMENT"
+		lazy="true"
     >
 
         <id

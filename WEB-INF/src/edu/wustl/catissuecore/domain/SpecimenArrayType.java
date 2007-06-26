@@ -7,6 +7,7 @@ import java.util.HashSet;
 import edu.wustl.catissuecore.actionForm.SpecimenArrayTypeForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
 
 /**
@@ -32,7 +33,7 @@ public class SpecimenArrayType extends ContainerType
      * @throws AssignDataException 
      */
     public SpecimenArrayType(AbstractActionForm actionForm) throws AssignDataException {
-    	setAllValues(actionForm);
+    	setAllValues((IValueObject)actionForm);
     }
     
     
@@ -122,7 +123,7 @@ public class SpecimenArrayType extends ContainerType
      * @param actionForm action form to be used.  
      * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
      */
-    public void setAllValues(AbstractActionForm actionForm) throws AssignDataException {
+    public void setAllValues(IValueObject actionForm) throws AssignDataException {
     		SpecimenArrayTypeForm specimenArrayTypeForm = (SpecimenArrayTypeForm) actionForm;
     		
     		if (specimenTypeCollection == null)

@@ -31,12 +31,10 @@ import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
-import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.util.logger.Logger;
 
 
 /**
@@ -249,17 +247,30 @@ public class SpecimenArrayAliquotAction extends SecureAction
 		} 
 		else
 		{
-			SpecimenArray specimenArray = (SpecimenArray) specimenArrayList.get(0);			
-			SpecimenArrayType arrayType = specimenArray.getSpecimenArrayType() ;
+			SpecimenArray specimenArray = (SpecimenArray) specimenArrayList.get(0);
+			/**
+			 * Name : Virender
+			 * Reviewer: Prafull
+			 * Retriving specimenArrayTypeObject
+			 * replaced SpecimenArrayType arrayType = specimenArray.getSpecimenArrayType();
+			 */
+			SpecimenArrayType arrayType = (SpecimenArrayType)bizLogic.retrieveAttribute(SpecimenArray.class.getName(),specimenArray.getId(),"specimenArrayType");
 			form.setSpecimenArrayType(arrayType.getName());	
 			form.setSpecimenClass(arrayType.getSpecimenClass());
-					
-			String[] specimenTypeArr = new String[arrayType.getSpecimenTypeCollection().size()];
 			
-			List specimenTypeList = setSpecimenTypes(arrayType.getSpecimenTypeCollection(), form);
+			/**
+			 * Name: Virender Mehta
+			 * Reviewer: Prafull
+			 * Retrive Child Specimen Collection from parent Specimen
+			 * String[] specimenTypeArr = new String[arrayType.getSpecimenTypeCollection().size()]; 
+			 */
+			Collection specimenTypeCollection = (Collection)bizLogic.retrieveAttribute(SpecimenArrayType.class.getName(),arrayType.getId(),"elements(specimenTypeCollection)");
+			String[] specimenTypeArr = new String[specimenTypeCollection.size()];
+			
+			List specimenTypeList = setSpecimenTypes(specimenTypeCollection, form);
 			request.setAttribute(Constants.SPECIMEN_TYPE_LIST,specimenTypeList);
 			
-			request.setAttribute(Constants.STORAGE_TYPE_ID,specimenArray.getSpecimenArrayType().getId());
+			request.setAttribute(Constants.STORAGE_TYPE_ID, arrayType.getId());
 			
 			Map aliquotMap = form.getSpecimenArrayAliquotMap();
 			

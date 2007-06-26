@@ -10,6 +10,7 @@
         table="CATISSUE_CONTAINER_TYPE"
         dynamic-update="false"
         dynamic-insert="false"
+		lazy="true"
     >
 
         <id
@@ -90,6 +91,7 @@
             table="CATISSUE_SPECIMEN_ARRAY_TYPE"
             dynamic-update="false"
             dynamic-insert="false"
+			lazy="true"
         >
         <key
             column="IDENTIFIER"
@@ -106,7 +108,7 @@
         <set
             name="specimenTypeCollection"
             table="CATISSUE_SPECIMEN_TYPE"
-            lazy="false"
+            lazy="true"
             inverse="false"
             cascade="save-update"
             sort="unsorted"
@@ -125,6 +127,7 @@
             table="CATISSUE_STORAGE_TYPE"
             dynamic-update="false"
             dynamic-insert="false"
+			lazy="true"
         >
         <key
             column="IDENTIFIER"
@@ -159,7 +162,7 @@
         <set
             name="holdsStorageTypeCollection"
             table="CATISSUE_STOR_TYPE_HOLDS_TYPE"
-            lazy="false"
+            lazy="true"
             inverse="false"
             cascade="none"
             sort="unsorted"
@@ -178,7 +181,7 @@
         <set
             name="holdsSpArrayTypeCollection"
             table="CATISSUE_STORTY_HOLDS_SPARRTY"
-            lazy="false"
+            lazy="true"
             inverse="false"
             cascade="none"
             sort="unsorted"

@@ -1269,11 +1269,21 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
      */
     /**
      * @param condition
-     * This method disables Events button if parent specimen radio buttion is selected.
+     * This method disables Events button, Biohazard Button, Tissue Site, Tissue Site, Pathological List if parent specimen radio buttion is selected.
      */
-    public void setEventsButtonStatus(boolean condition)
+    public void setStatus(boolean condition)
     {    	
-    	this.eventsButton.setEnabled(condition);    	
+    	this.tissueSideList.setEnabled(condition);    	
+    	this.tissueSiteList.setEnabled(condition);
+    	this.pathologicalStatusList.setEnabled(condition);
+    	this.bioHazardButton.setEnabled(condition);
+    	this.eventsButton.setEnabled(condition);
+    	this.tissueSiteTreeButton.setEnabled(condition);
+    	
+    	this.tissueSideList.setFocusable(condition);    	
+    	this.tissueSiteList.setFocusable(condition);
+    	this.pathologicalStatusList.setFocusable(condition);
+    	
     }
     /**
      * 
@@ -1322,13 +1332,25 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
               */ 
             
             this.createdOn.setEnabled(false);
+            this.specimenCollectionGroup.setFocusable(true);
             
             //Enabling  Events Button
             this.eventsButton.setEnabled(true);
+            this.tissueSideList.setEnabled(true);    	
+        	this.tissueSiteList.setEnabled(true);
+        	this.pathologicalStatusList.setEnabled(true);
+        	this.bioHazardButton.setEnabled(true);
+        	this.tissueSiteTreeButton.setEnabled(true);
+        	
+        	this.tissueSideList.setFocusable(true);    	
+        	this.tissueSiteList.setFocusable(true);
+        	this.pathologicalStatusList.setFocusable(true);
 		}
 		else
 		{
 			setRbparentSpecimen(true);
+			this.specimenCollectionGroup.setEnabled(false);
+			this.specimenCollectionGroup.setFocusable(false);
             /**
               * Patch ID: 3835_1_40
               * See also: 1_1 to 1_5
@@ -1337,6 +1359,17 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
               this.createdOn.setEnabled(true);  
 //            Disabling  Events Button
               this.eventsButton.setEnabled(false);
+              //Disabling Tissue Side,Tissue Site,Pathology Status and Biohazard Button
+              this.tissueSideList.setEnabled(false);    	
+          	  this.tissueSiteList.setEnabled(false);
+              
+          	  this.pathologicalStatusList.setEnabled(false);
+              this.bioHazardButton.setEnabled(false);
+              this.tissueSiteTreeButton.setEnabled(false);
+              
+              this.tissueSideList.setFocusable(false);    	
+          	  this.tissueSiteList.setFocusable(false);
+          	  this.pathologicalStatusList.setFocusable(false);
 		}
 		//Parent Specimen 
 		value = (String) model.getValueAt(AppletConstants.SPECIMEN_PARENT_ROW_NO, columnIndex);

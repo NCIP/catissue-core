@@ -509,6 +509,22 @@
 			  </fileset>
 			</classpath> 
 		</sql>
+		<sql
+			driver="${oracle.driver.string}"
+		    url="jdbc:oracle:thin:@${database.host}:${database.port}:${database.name}"
+		    userid="${database.username}"
+		    password="${database.password}" 
+    		onerror="continue"
+    		rdbms="oracle" 
+			delimiter="/"
+		    delimitertype="row">
+		    <transaction  src="${oracle.sql.dir}/DBUtility.sql"/>
+		  	<classpath>
+	            <fileset dir="${lib.dir}">
+	                  <include name="*.jar"/>
+	            </fileset>
+            </classpath> 
+		</sql>
   	</target>
 	<!--Oracle Database Creation -->
 	<target name="db_initialize_oracle">
@@ -546,6 +562,7 @@
 			delimiter="/"
 		    delimitertype="row">
 		  <transaction  src="${oracle.sql.dir}/CSM_Trigger_Oracle.sql"/>
+		  <transaction  src="${oracle.sql.dir}/DBUtility.sql"/>
 		  <classpath>
             <fileset dir="${lib.dir}">
                   <include name="*.jar"/>

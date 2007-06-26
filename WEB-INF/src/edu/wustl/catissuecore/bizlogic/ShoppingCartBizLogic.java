@@ -51,8 +51,13 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 			{
 	        	String str = obj[i].toString();
 	        	int index = str.indexOf("_") + 1;
-	        	
-	        	cart.remove(str.substring(index).trim());
+	        	/**
+	        	 * Name: Vijay Pande
+	        	 * Key was not generated properly to remove object from map.
+	        	 * Objects re stored in the map on the basis of the objectId hence id is retrieved from from String and set it as key.
+	        	 */
+	        	String key=(str.substring(index, str.indexOf("|")).trim());
+	        	cart.remove(key);
 			}
 		}
 		

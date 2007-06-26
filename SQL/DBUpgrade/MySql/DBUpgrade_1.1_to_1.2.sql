@@ -97,3 +97,4 @@ update CATISSUE_SCG_EVENT_PARAM a,catissue_received_event_param b set a.RECEIVED
 insert into catissue_received_event_param (IDENTIFIER,RECEIVED_QUALITY) select SCG_EVENT_IDENTIFIER,RECEIVED_QUALITY from CATISSUE_SCG_EVENT_PARAM  where type='REC';
 drop table CATISSUE_SCG_EVENT_PARAM;
 /*associate new events to SCG start end*/
+

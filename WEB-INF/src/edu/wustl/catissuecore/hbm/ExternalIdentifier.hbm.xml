@@ -9,6 +9,7 @@
     <class
         name="edu.wustl.catissuecore.domain.ExternalIdentifier"
         table="CATISSUE_EXTERNAL_IDENTIFIER"
+		lazy="true"
     >
 
         <id

@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.CheckInCheckOutEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -62,14 +63,14 @@ public class CheckInCheckOutEventParameter extends SpecimenEventParameters
 	 */
 	public CheckInCheckOutEventParameter(AbstractActionForm abstractForm)
 	{
-		setAllValues(abstractForm);
+		setAllValues((IValueObject)abstractForm);
 	}
 	
 	/**
      * This function Copies the data from an CheckInCheckOutEventParameterForm object to a CheckInCheckOutEventParameter object.
      * @param checkInCheckOutEventParameterForm An CheckInCheckOutEventParameterForm object containing the information about the CheckInCheckOutEventParameter.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

@@ -231,7 +231,7 @@
 
 		function onCollOrClassChange()
 		{
-		   	var specimenCollGroupElement = document.getElementById("selectedSpecimenCollectionGroupId");
+		   	var specimenCollGroupElement = document.getElementById("specimenCollectionGroupName");
 			var classNameElement = document.getElementById("className").value;
 			classNameElement = trim(classNameElement);
 			var classSet = false;
@@ -308,7 +308,7 @@
 		var url,request;
 		function getEventsFromSCG()
 		{		
-			var scgId = document.getElementById("selectedSpecimenCollectionGroupId").value;			
+			var scgId = document.getElementById("specimenCollectionGroupName").value;			
 			url = "GetEventsFromScg.do?scgId="+scgId;
 			sendRequestForEvents();	
 		}
@@ -453,6 +453,8 @@
 			}
 			else{
 				var id = document.forms[0].id.value;			
+				var label = document.getElementById("label").value;
+				
 				<%
 				formNameAction = "ListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParameters";
 				if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY))
@@ -460,7 +462,7 @@
 					formNameAction = "CPQueryListSpecimenEventParameters.do?pageOf=pageOfListSpecimenEventParametersCPQuery";
 				}%>
 						
-				formName = "<%=formNameAction%>&specimenId="+id+"&menuSelected=15";				
+				formName = "<%=formNameAction%>&<%=Constants.SPECIMEN_LABEL%>="+label+"&specimenId="+id+"&menuSelected=15";			
 			}			
 
 			confirmDisable(formName,document.forms[0].activityStatus);
@@ -662,33 +664,9 @@
 									Description: The following change shows read-only textbox on specimen page, if specimen is being added
 									from specimen collection group page, otherwise combobox having names of specimen collection group is displayed.
 								-->
-								<%
-								String onSCGChange = "resetVirtualLocated()";
-								if(operation.equals(Constants.ADD))
-								{
-									onSCGChange = onSCGChange+";getEventsFromSCG()";
-								}								
-								%>
-								<html:select property="specimenCollectionGroupId" styleClass="formFieldSized15" styleId="selectedSpecimenCollectionGroupId" 
-									size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=onSCGChange %>">									
-								<%
-									if((specimenCollectionGroupId != null && !specimenCollectionGroupId.equals("")) &&
-										(specimenCollectionGroupName != null && !specimenCollectionGroupName.equals("")))
-									{
-								%>
-										<html:option value="<%=specimenCollectionGroupId%>"><%=specimenCollectionGroupName%></html:option>		
-								<%
-									}
-									else
-									{
-								%>
-										<html:options collection="<%=Constants.SPECIMEN_COLLECTION_GROUP_LIST%>" labelProperty="name" property="value"/>
-								<%
-									}
-								%>
-								</html:select>
-																
-								&nbsp;
+														
+								 <html:text styleClass="formFieldSized15" maxlength="255" size="30" styleId="specimenCollectionGroupName" property="specimenCollectionGroupName" readonly="<%=readOnlyForAll%>"/>
+						     		
 								<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">
 		   						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SPECIMEN_CP_QUERY%>">
 								<html:link href="#" styleId="newUser" onclick="addNewAction('NewSpecimenAddNew.do?addNewForwardTo=specimenCollectionGroup&forwardTo=createNewSpecimen&addNewFor=specimenCollectionGroupId')">
@@ -718,12 +696,11 @@
 							</td>
 							
 				        	<td class="formField" colspan="<%=specimenColSpan%>">
-				        		<html:hidden property="specimenCollectionGroupId"/>
+								<html:hidden property="specimenCollectionGroupId"/>
+								<html:hidden property="specimenCollectionGroupName"/>
 								<!-- Mandar : 434 : for tooltip -->
-								<html:select property="parentSpecimenId" styleClass="formFieldSized10" styleId="parentSpecimenId" size="1" disabled="<%=readOnlyForAll%>"
-								 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-									<html:options collection="<%=Constants.PARENT_SPECIMEN_ID_LIST%>" labelProperty="name" property="value"/>
-								</html:select>
+								<html:text styleClass="formFieldSized15" maxlength="255" size="30" styleId="parentSpecimenName" property="parentSpecimenName" readonly="<%=readOnlyForAll%>"/>
+								<html:hidden property="parentSpecimenId"/>
 				        	</td>
 							</logic:equal>	
 							
@@ -1008,7 +985,7 @@
 								</label>
 							</td>
 							<td class="formField">
-								<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="availableQuantity" property="availableQuantity" readonly="true" />
+								<html:text styleClass="formFieldSized15" maxlength="10"  size="30" styleId="availableQuantity" property="availableQuantity" />
 								<span id="unitSpan1"><%=unitSpecimen%></span>
 							</td>
 						</tr>

@@ -788,23 +788,16 @@ function insRow(subdivtag,iCounter,blockCounter)
 			        		String subTypeFunctionName ="onSubTypeChangeUnit('" + fName + "',this,'" + sName + "')"; 
 			        		
 			        	%>
+			        	<!-- Bug id : 4481
+			        		 Virender Mehta
+			        		 Reviewed By: Sachin Lale
+			        	-->
 			        	<html:select property="<%=fName%>" 
 										styleClass="formFieldSized10" 
 										styleId="<%=fName%>" size="1"
 										onchange="<%=onChangeFun%>"
 									 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-						<%
-							if(operation.equals(Constants.EDIT) && sysId > 0)
-							{
-						%>
-								<html:option value="<%=specimenClassValue%>"><%=specimenClassValue%></html:option>
-						<%
-							}else{
-						%>
-								<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
-						<%
-							}
-						%>
+							<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 			        </td>
 			        

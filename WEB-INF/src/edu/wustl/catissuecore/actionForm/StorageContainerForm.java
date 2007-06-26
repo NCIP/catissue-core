@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
@@ -30,6 +31,7 @@ import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -219,14 +221,16 @@ public class StorageContainerForm extends AbstractActionForm
 		this.typeName = container.getStorageType().getName();
 		
 
-		if (container.getParent() != null)
+		Container parent = container.getParent();
+		if (parent != null)
 		{
-			this.parentContainerId = container.getParent().getId().longValue();
+			this.parentContainerId = parent.getId().longValue();
 			this.checkedButton = 2;
-			StorageContainer parentContainer = (StorageContainer)container.getParent(); 
+			
+			StorageContainer parentContainer = (StorageContainer)HibernateMetaData.getProxyObjectImpl(parent); 
 			this.positionInParentContainer = parentContainer.getStorageType().getName()
 					+ " : "
-					+ container.getParent().getId()
+					+ parentContainer.getId()
 					+ " Pos("
 					+ container.getPositionDimensionOne()
 					+ ","
@@ -236,7 +240,7 @@ public class StorageContainerForm extends AbstractActionForm
 			this.positionDimensionOne = container.getPositionDimensionOne().intValue();
 			this.positionDimensionTwo = container.getPositionDimensionTwo().intValue();
 			
-			this.siteName = ((StorageContainer)container.getParent()).getSite().getName();
+			this.siteName = parentContainer.getSite().getName();
 		}
 
 		if (container.getSite() != null)

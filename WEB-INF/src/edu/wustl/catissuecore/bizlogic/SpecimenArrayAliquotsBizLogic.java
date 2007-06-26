@@ -15,6 +15,7 @@ import net.sf.ehcache.CacheException;
 
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Quantity;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -277,7 +278,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 		}
 		
 		//Populate aliquot map with parent specimenArray's data
-		populateParentSpecimenArrayData(aliquotMap, specimenArray, parentSpecimenArray);
+		populateParentSpecimenArrayData(aliquotMap, specimenArray, parentSpecimenArray,dao);
 		
 	}	 
 	
@@ -389,12 +390,20 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 	 * 
 	 * @param aliquotMap Map
 	 * @param specimenArray SpecimenArray
+	 * @throws DAOException 
 	 */
-	private void populateParentSpecimenArrayData(Map aliquotMap, SpecimenArray specimenArray, SpecimenArray parentSpecimenArray)
+	private void populateParentSpecimenArrayData(Map aliquotMap, SpecimenArray specimenArray, SpecimenArray parentSpecimenArray,DAO dao) throws DAOException
 	{
 		aliquotMap.put(Constants.ALIQUOT_SPECIMEN_ARRAY_TYPE, parentSpecimenArray.getSpecimenArrayType().getName());
 		aliquotMap.put(Constants.ALIQUOT_SPECIMEN_CLASS, parentSpecimenArray.getSpecimenArrayType().getSpecimenClass());
-		aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, parentSpecimenArray.getSpecimenArrayType().getSpecimenTypeCollection());	
+		/**
+		 * Name : Virender
+		 * Reviewer: Prafull
+		 * Retriving specimenObject
+		 * replaced aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, parentSpecimenArray.getSpecimenArrayType().getSpecimenTypeCollection());
+		 */
+		Collection specimenTypeCollection = (Collection)dao.retrieveAttribute(SpecimenArray.class.getName(),parentSpecimenArray.getId(),"elements(specimenArrayType.specimenTypeCollection)");
+		aliquotMap.put(Constants.ALIQUOT_SPECIMEN_TYPES, specimenTypeCollection);
 		aliquotMap.put(Constants.ALIQUOT_ALIQUOT_COUNTS, String.valueOf(specimenArray.getAliquotCount()));
 		
 		specimenArray.setAliqoutMap(aliquotMap);

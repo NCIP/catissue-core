@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.CellSpecimenReviewParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -84,14 +85,16 @@ public class CellSpecimenReviewParameters extends ReviewEventParameters	implemen
 //	Parameterized constructor
 	public CellSpecimenReviewParameters(AbstractActionForm abstractForm)
 	{
-		setAllValues(abstractForm);
+		
+		setAllValues((IValueObject)abstractForm);
+		
 	}
 	
 	/**
      * This function Copies the data from an CellSpecimenReviewParametersForm object to a CellSpecimenReviewParameters object.
      * @param cellSpecimenReviewParametersForm An CellSpecimenReviewParametersForm object containing the information about the cellSpecimenReviewParameters.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

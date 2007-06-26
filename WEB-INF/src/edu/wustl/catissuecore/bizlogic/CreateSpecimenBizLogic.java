@@ -148,8 +148,13 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 		specimen.setSpecimenCollectionGroup(null);
 
 		//Load & set the Parent Specimen of this specimen
-		Object specimenObj = dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen()
-				.getId());
+		Object specimenObj =null;
+		List specimenList = dao.retrieve(Specimen.class.getName(),"label", specimen.getParentSpecimen()
+				.getLabel());
+		if(specimenList!=null&&!specimenList.isEmpty())
+		{
+			specimenObj = (Specimen)specimenList.get(0);
+		}	
 		if (specimenObj != null)
 		{
 			//Setting the Biohazard Collection

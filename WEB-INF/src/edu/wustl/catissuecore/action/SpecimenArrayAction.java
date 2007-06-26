@@ -255,12 +255,19 @@ public class SpecimenArrayAction extends SecureAction
     	{
     		if (arrayType != null) {
     			specimenArrayForm.setSpecimenClass(arrayType.getSpecimenClass());
-    			String[] specimenTypeArr = new String[arrayType.getSpecimenTypeCollection().size()];
+    			/**
+    			 * Name: Virender Mehta
+    			 * Reviewer: Prafull
+    			 * Retrive Child Specimen Collection from parent Specimen
+    			 * String[] specimenTypeArr = new String[arrayType.getSpecimenTypeCollection().size()]; 
+    			 */
+    			Collection specimenTypeCollection = (Collection)specimenArrayBizLogic.retrieveAttribute(SpecimenArrayType.class.getName(),arrayType.getId(),"elements(specimenTypeCollection)");
+    			String[] specimenTypeArr = new String[specimenTypeCollection.size()];
     			specimenTypeList = new ArrayList();
     			int i = 0;
     			String specimenType = null;
     			NameValueBean nameValueBean = null;
-    			for (Iterator iter = arrayType.getSpecimenTypeCollection().iterator(); iter
+    			for (Iterator iter = specimenTypeCollection.iterator(); iter
 						.hasNext();i++) {
     				specimenType = (String) iter.next();
 					specimenTypeArr[i] = specimenType;

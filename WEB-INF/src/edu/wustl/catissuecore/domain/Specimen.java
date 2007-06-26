@@ -29,6 +29,7 @@ import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.MapDataParser;
@@ -575,9 +576,10 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	 * This function Copies the data from an NewSpecimenForm object to a Specimen object.
 	 * @param specimenForm A formbean object containing the information about the Specimen.  
 	 * */
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	public void setAllValues(IValueObject valueObject) throws AssignDataException
 	{
 		//Change for API Search   --- Ashwin 04/10/2006
+		AbstractActionForm abstractForm = (AbstractActionForm)valueObject;
 		if (SearchUtil.isNullobject(storageContainer))
 		{
 			storageContainer = new StorageContainer();
@@ -662,7 +664,13 @@ public class Specimen extends AbstractDomainObject implements Serializable
 				if (abstractForm instanceof NewSpecimenForm)
 				{
 					NewSpecimenForm form = (NewSpecimenForm) abstractForm;
-
+					/**For Migration Start**/
+//					This case is handled in Biz logic.
+//					if(form.getSpecimenCollectionGroupName()!=null&&!form.getSpecimenCollectionGroupName().trim().equals(""))
+//					{
+//						form.setSpecimenCollectionGroupId(Utility.getSCGId(form.getSpecimenCollectionGroupName().trim()));
+//					}
+					/**For Migration End**/		
 					this.activityStatus = form.getActivityStatus();
 
 					if (!validator.isEmpty(form.getBarcode()))
@@ -698,7 +706,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 						else
 						//specimen created from another specimen
 						{
-							if (parentSpecimen.getId().longValue() != Long.parseLong(form.getParentSpecimenId()))
+							if (!parentSpecimen.getLabel().equalsIgnoreCase(form.getParentSpecimenName()))
 							{
 								isParentChanged = true;
 							}
@@ -734,14 +742,16 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					if (form.isParentPresent())
 					{
 						parentSpecimen = new CellSpecimen();
-						parentSpecimen.setId(new Long(form.getParentSpecimenId()));
+						//parentSpecimen.setId(new Long(form.getParentSpecimenId()));
+						parentSpecimen.setLabel(form.getParentSpecimenName());
 						
 					}
 					else
 					{
 						parentSpecimen = null;
 						specimenCollectionGroup = new SpecimenCollectionGroup();
-						this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
+						//this.specimenCollectionGroup.setId(new Long(form.getSpecimenCollectionGroupId()));
+						this.specimenCollectionGroup.setName(form.getSpecimenCollectionGroupName());
 					}
 
 					//Setting the SpecimenCharacteristics
@@ -858,9 +868,6 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					}
 					else
 					{
-                        
-                        
-                        
 						if(!validator.isEmpty(form.getSelectedContainerName()))
 						{
 							this.storageContainer.setName(form.getSelectedContainerName());							
@@ -874,8 +881,6 @@ public class Specimen extends AbstractDomainObject implements Serializable
 							this.positionDimensionTwo = null;
 						}
 					}
-
-					
 				}
 				else if (abstractForm instanceof CreateSpecimenForm)
 				{
@@ -913,7 +918,8 @@ public class Specimen extends AbstractDomainObject implements Serializable
 					//this.storageContainer.setId(new Long(form.getStorageContainer()));
 					this.parentSpecimen = new CellSpecimen();
 
-					this.parentSpecimen.setId(new Long(form.getParentSpecimenId()));
+					//this.parentSpecimen.setId(new Long(form.getParentSpecimenId()));
+					this.parentSpecimen.setLabel(form.getParentSpecimenLabel());
 					//Getting the Map of External Identifiers
 					Map extMap = form.getExternalIdentifier();
 
@@ -997,7 +1003,7 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	public final String getClassName()
 	{
 		String className = null;
-
+		
 		if (this instanceof CellSpecimen)
 		{
 			className = Constants.CELL;
@@ -1014,7 +1020,6 @@ public class Specimen extends AbstractDomainObject implements Serializable
 		{
 			className = Constants.TISSUE;
 		}
-
 		return className;
 	}
 

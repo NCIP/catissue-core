@@ -20,6 +20,7 @@ import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -190,7 +191,7 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	{
 		this.distributedItemCollection = distributedItemCollection;
 	}
-	public void setAllValues(AbstractActionForm abstractForm)
+	public void setAllValues(IValueObject abstractForm)
 	{
 	    try
 	    {

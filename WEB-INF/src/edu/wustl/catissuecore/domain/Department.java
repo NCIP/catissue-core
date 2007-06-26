@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.DepartmentForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 /**
  * A department to which a User belongs to.
@@ -89,7 +90,7 @@ public class Department extends AbstractDomainObject implements java.io.Serializ
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
 	 */
-	public void setAllValues(AbstractActionForm abstractForm) 
+	public void setAllValues(IValueObject abstractForm) 
 	{
 		DepartmentForm departmentForm = (DepartmentForm)abstractForm;
 		

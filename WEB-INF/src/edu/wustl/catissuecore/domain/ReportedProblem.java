@@ -15,7 +15,7 @@ import java.util.Date;
 
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.util.SearchUtil;
-import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 
 
@@ -133,7 +133,7 @@ public class ReportedProblem extends AbstractDomainObject implements Serializabl
      * Sets all values from the reportedProblemForm object.
      * @param reportedProblemForm The reportedProblemForm object.
      */
-    public void setAllValues(AbstractActionForm abstractActionForm)
+    public void setAllValues(IValueObject abstractActionForm)
     {    	
     	//Change for API Search   --- Ashwin 04/10/2006
     	if (SearchUtil.isNullobject(reportedDate))

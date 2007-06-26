@@ -19,6 +19,7 @@ import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -92,7 +93,7 @@ public class StorageContainer extends Container
 
 	public StorageContainer(AbstractActionForm abstractActionForm) throws AssignDataException
 	{
-		setAllValues(abstractActionForm);
+		setAllValues((IValueObject)abstractActionForm);
 	}
 
 	/**
@@ -313,7 +314,7 @@ public class StorageContainer extends Container
 	 * This function Copies the data from a StorageTypeForm object to a StorageType object.
 	 * @param storageTypeForm A StorageTypeForm object containing the information about the StorageType.  
 	 * */
-	public void setAllValues(AbstractActionForm abstractForm)
+	public void setAllValues(IValueObject abstractForm)
 	{
 		try
 		{
@@ -446,7 +447,8 @@ public class StorageContainer extends Container
 				site.setId(new Long(form.getSiteId()));
 			}
 
-			collectionProtocolCollection.clear();
+//			collectionProtocolCollection.clear();
+			collectionProtocolCollection = new HashSet();
 			long[] collectionProtocolArr = form.getCollectionIds();
 			if (collectionProtocolArr != null)
 			{
@@ -461,7 +463,8 @@ public class StorageContainer extends Container
 					}
 				}
 			}
-			holdsStorageTypeCollection.clear();
+//			holdsStorageTypeCollection.clear();
+			holdsStorageTypeCollection =  new HashSet();
 			long[] storageTypeArr = form.getHoldsStorageTypeIds();
 			if (storageTypeArr != null)
 			{
@@ -477,7 +480,8 @@ public class StorageContainer extends Container
 				}
 			}
 
-			holdsSpecimenClassCollection.clear();
+//			holdsSpecimenClassCollection.clear();
+			holdsSpecimenClassCollection = new HashSet();
 			if (form.getSpecimenOrArrayType().equals("Specimen"))
 			{
 				String[] specimenClassArr = form.getHoldsSpecimenClassTypes();
@@ -498,7 +502,8 @@ public class StorageContainer extends Container
 					}
 				}
 			}
-			holdsSpArrayTypeCollection.clear();
+//			holdsSpArrayTypeCollection.clear();
+			holdsSpArrayTypeCollection = new HashSet();
 			if (form.getSpecimenOrArrayType().equals("SpecimenArray"))
 			{
 				long[] specimenArrayTypeArr = form.getHoldsSpecimenArrTypeIds();

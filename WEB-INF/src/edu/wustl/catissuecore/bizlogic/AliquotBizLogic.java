@@ -46,6 +46,7 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -142,8 +143,10 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			allocatePositionToSingleSpecimen(positionsToBeAllocatedList.get(i), aliquotMap, usedPositionsList);
 		}
 
-		//	Retrieving the parent specimen of the aliquot
-		Specimen parentSpecimen = (Specimen) dao.retrieve(Specimen.class.getName(), aliquot.getParentSpecimen().getId());
+		//Virender Mehta	
+		//Retrieving the parent specimen of the aliquot
+		Specimen proxyParentSpecimen = (Specimen) dao.retrieve(Specimen.class.getName(), aliquot.getParentSpecimen().getId());
+		Specimen parentSpecimen = (Specimen)HibernateMetaData.getProxyObjectImpl(proxyParentSpecimen);
 		double dQuantity = 0;
 		List aliquotList = new ArrayList();
 		for (int i = 1; i <= aliquot.getNoOfAliquots(); i++)

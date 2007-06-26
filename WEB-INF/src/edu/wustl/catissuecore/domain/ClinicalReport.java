@@ -10,7 +10,7 @@
 
 package edu.wustl.catissuecore.domain;
 
-import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -113,7 +113,7 @@ public class ClinicalReport extends AbstractDomainObject implements java.io.Seri
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
 	 */
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		
 	}

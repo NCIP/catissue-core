@@ -8,6 +8,7 @@
     <class
         name="edu.wustl.catissuecore.domain.CollectionProtocolRegistration"
         table="CATISSUE_COLL_PROT_REG"
+		lazy="true"
      >
 
 
@@ -77,7 +78,7 @@
         <set
             name="specimenCollectionGroupCollection"
             table="CATISSUE_SPECIMEN_COLL_GROUP"
-            lazy="false"
+            lazy="true"
             inverse="false"
             cascade="none"
             sort="unsorted"

@@ -27,12 +27,14 @@ import org.apache.struts.action.ActionErrors;
 import edu.wustl.catissuecore.actionForm.TransferEventParametersForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -79,13 +81,20 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				String positionTwo = null;
 				String storageContainerID = null;
 				String fromPositionData = "virtual Location";
-				if (specimen.getStorageContainer() != null)
+				
+				//Ashish - 7/6/06 - Retriving Storage container for performance improvement.
+				String sourceObjectName = Specimen.class.getName();
+				Long id = specimen.getId();
+				String attributeName = Constants.COLUMN_NAME_STORAGE_CONTAINER;
+				StorageContainer stContainer = (StorageContainer)bizLogic.retrieveAttribute(sourceObjectName, id, attributeName);
+				
+				if (stContainer != null)
 				{
 					positionOne = specimen.getPositionDimensionOne().toString();
 					positionTwo = specimen.getPositionDimensionTwo().toString();
-					StorageContainer container = specimen.getStorageContainer();
-					storageContainerID = container.getId().toString();
-					fromPositionData = container.getName()+":" + " Pos(" + positionOne + "," + positionTwo + ")";
+					//StorageContainer container = specimen.getStorageContainer();
+					storageContainerID = stContainer.getId().toString();
+					fromPositionData = stContainer.getName()+":" + " Pos(" + positionOne + "," + positionTwo + ")";
 				}
 				//The fromPositionData(storageContainer Info) of specimen of this event.
 				request.setAttribute(Constants.FROM_POSITION_DATA, fromPositionData);
@@ -99,8 +108,12 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 				//storagecontainer info
 				request.setAttribute(Constants.STORAGE_CONTAINER_ID, storageContainerID);
 				
-				long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
-				.getCollectionProtocol().getId().longValue();
+				//Ashish ---  5th June 07 --- retriving cp object when lazy = true.	for performance improvement			
+				Long collectionProtocolId = getCollectionProtocolId(specimen.getId(),bizLogic);				
+				long cpId = collectionProtocolId.longValue();				
+//				long cpId = specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration()
+//				.getCollectionProtocol().getId().longValue();
+				
 				String className = specimen.getClassName();
 				
 				Logger.out.info("COllection Protocol Id :"+ cpId);
@@ -224,5 +237,25 @@ public class TransferEventParametersAction extends SpecimenEventParametersAction
 
 		//request.setAttribute("initValues", initialValues);
 	}
-
+/**
+ * @param specimenId
+ * @param bizLogic
+ * @return
+ * @throws DAOException
+ * Retriving collection protocol id from specimen.
+ */
+	private Long getCollectionProtocolId(Long specimenId, IBizLogic bizLogic) throws DAOException
+	{
+		String[] selectColumnName = {"specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol.id"};
+		String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+		String[] whereColumnCondition = {"="};
+		Object[] whereColumnValue = {specimenId};
+		String sourceObjectName = Specimen.class.getName();
+		
+		List collectionProtCollection = bizLogic.retrieve(sourceObjectName,selectColumnName,
+	            whereColumnName, whereColumnCondition,
+	            whereColumnValue,Constants.AND_JOIN_CONDITION );
+		Long collectionProtocolId = (Long)collectionProtCollection.get(0);
+		return collectionProtocolId;
+	}
 }

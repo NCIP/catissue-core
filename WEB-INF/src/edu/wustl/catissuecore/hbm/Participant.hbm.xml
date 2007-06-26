@@ -10,6 +10,7 @@
         table="CATISSUE_PARTICIPANT"
         dynamic-update="false"
         dynamic-insert="false"
+		lazy="true"
     >
 
         <id
@@ -80,7 +81,7 @@
         <set
             name="raceCollection"
             table="CATISSUE_RACE"
-            lazy="false"
+            lazy="true"
             inverse="false"
             cascade="save-update"
             sort="unsorted"
@@ -141,9 +142,9 @@
         <set
             name="participantMedicalIdentifierCollection"
             table="CATISSUE_PART_MEDICAL_ID"
-            lazy="false"
+            lazy="true"
             inverse="true"
-            cascade="none"
+            cascade="all"
             sort="unsorted"
         >
 
@@ -159,7 +160,7 @@
         <set
             name="collectionProtocolRegistrationCollection"
             table="CATISSUE_COLL_PROT_REG"
-            lazy="false"
+            lazy="true"
             inverse="false"
             cascade="none"
             sort="unsorted"

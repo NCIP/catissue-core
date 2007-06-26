@@ -13,6 +13,7 @@ import java.io.Serializable;
 
 import edu.wustl.catissuecore.actionForm.CancerResearchGroupForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 
 /**
@@ -89,7 +90,7 @@ public class CancerResearchGroup extends AbstractDomainObject implements Seriali
     /* (non-Javadoc)
      * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
      */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
     	CancerResearchGroupForm cancerResearchGroupForm = (CancerResearchGroupForm)abstractForm;
 		this.name = cancerResearchGroupForm.getName().trim();

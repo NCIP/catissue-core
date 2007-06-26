@@ -104,6 +104,7 @@ public class BaseItemHandler implements ItemListener {
 					if (comp instanceof JComboBox )			// for collection group
 					{
 						comp.setEnabled(selectedRadio.isSelected());
+						comp.setFocusable(selectedRadio.isSelected());
 					}
 
 				}

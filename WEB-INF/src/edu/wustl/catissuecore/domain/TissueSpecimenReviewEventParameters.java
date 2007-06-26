@@ -11,6 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.actionForm.TissueSpecimenReviewEventParametersForm;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
@@ -169,14 +170,14 @@ public class TissueSpecimenReviewEventParameters extends ReviewEventParameters
 //	Parameterized constructor
 	public TissueSpecimenReviewEventParameters(AbstractActionForm abstractForm)
 	{
-		setAllValues(abstractForm);
+		setAllValues((IValueObject)abstractForm);
 	}
 	
 	/**
      * This function Copies the data from an TissueSpecimenReviewEventParametersForm object to a TissueSpecimenReviewEventParameters object.
      * @param tissueSpecimenReviewEventParametersForm An TissueSpecimenReviewEventParametersForm object containing the information about the TissueSpecimenReviewEventParameters.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

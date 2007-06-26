@@ -64,6 +64,7 @@ import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -173,12 +174,12 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
              * Reviewer: Santosh Chandak
              * Bug ID: 2989
              * Pathch ID:2989_1
-             * Description:If parent specimen is present, retriving its events and setting them to its child
+             * Description:If parent specimen is present, retriving its events 
              * */
             //Setting parent specimens events if derived 
             if(specimen.getParentSpecimen() != null && specimen.getParentSpecimen().getId() != null && specimen.getParentSpecimen().getId() > 0)
             {            	
-            	setParentSpecimenEvents(specimen,dao);
+            	setParentSpecimenData(specimen,dao);
             }            
 
 			try
@@ -249,25 +250,53 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @throws DAOException
 	 * This method retrieves the parent specimen events and sets them in the parent specimen
 	 */
-	private void setParentSpecimenEvents(Specimen specimen,DAO dao) throws DAOException
+	private void setParentSpecimenData(Specimen specimen,DAO dao) throws DAOException
 	{
-		Specimen parent =  specimen.getParentSpecimen();
-		if(parent.getSpecimenEventCollection() == null)
+		Specimen parent = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getParentSpecimen().getId());
+		
+//		retrieving the parent specimen events
+		String sourceObjectName = SpecimenEventParameters.class.getName();
+		String columnName = Constants.COLUMN_NAME_SPECIMEN;
+		long whereColumnValue = parent.getId().longValue();
+		List parentSpecimenEventColl = dao.retrieve(sourceObjectName, columnName, whereColumnValue);
+		
+		if(parentSpecimenEventColl == null || parent.getSpecimenEventCollection().isEmpty())
     	{
 			parent.setSpecimenEventCollection(new HashSet());
     	}
-    	if(parent.getSpecimenEventCollection().isEmpty())
-    	{
-    		//retrieving the parent specimen events
-    		String sourceObjectName = SpecimenEventParameters.class.getName();
-    		String columnName = "specimen";
-    		long whereColumnValue = parent.getId().longValue();
-    		List parentSpecimenEventColl = dao.retrieve(sourceObjectName, columnName, whereColumnValue);
-    		//Converting list to hashset
+		else
+    	{	//Converting list to hashset
     		Collection tempColl = new HashSet();    		
         	tempColl.addAll(parentSpecimenEventColl);        		
     		parent.setSpecimenEventCollection(tempColl);
     	}
+    	
+		//Added by Poornima
+	   	specimen.setParentSpecimen(parent);
+		specimen.setSpecimenCharacteristics(parent.getSpecimenCharacteristics());		
+		
+		//Ashish - 8/6/07 - retriving parent scg for performance improvement
+		SpecimenCollectionGroup parentSCG = (SpecimenCollectionGroup)dao.retrieveAttribute(Specimen.class.getName(),parent.getId() , Constants.COLUMN_NAME_SCG);
+		specimen.setSpecimenCollectionGroup(parentSCG);
+		// set event parameters from parent specimen - added by Ashwin for bug id# 2476
+		specimen.setSpecimenEventCollection(populateDeriveSpecimenEventCollection(parent,specimen));
+		specimen.setPathologicalStatus(parent.getPathologicalStatus());
+		if(parent != null)
+		{
+			Set set = new HashSet();
+			
+			Collection biohazardCollection = parent.getBiohazardCollection();
+			if(biohazardCollection != null)
+			{
+				Iterator it = biohazardCollection.iterator();
+				while(it.hasNext())
+				{
+					Biohazard hazard = (Biohazard)it.next();
+					set.add(hazard);
+				}
+			}
+			specimen.setBiohazardCollection(set);
+		}
 	}
 	//This method sets the created on date = collection date
 	private void setCreatedOnDate(Specimen specimen)
@@ -403,7 +432,21 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
 			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 			 */
+			
+			//Setting Name from Id
+			retriveSCGIdFromSCGName(specimen,dao);
 			ApiSearchUtil.setSpecimenDefault(specimen); 
+			if(specimen.getParentSpecimen()!=null)
+            {
+				List parentSpecimenList = dao.retrieve(Specimen.class.getName(),"label",specimen.getParentSpecimen().getLabel());
+				
+				if(parentSpecimenList!=null && !parentSpecimenList.isEmpty())
+				{
+					Specimen parentSpecimen =(Specimen) parentSpecimenList.get(0);
+					specimen.setParentSpecimen(parentSpecimen);
+					specimen.getSpecimenCollectionGroup().setId(parentSpecimen.getSpecimenCollectionGroup().getId());
+				}
+            }
 			//End:- Change for API Search
 
 			Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
@@ -682,7 +725,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			Logger.out.debug("In TissueSpecimen");
 			TissueSpecimen tissueSpecimenObj = (TissueSpecimen) obj;
-			TissueSpecimen tissueSpecimenOldObj = (TissueSpecimen) oldObj;
+			Specimen tissueSpecimenOldObj = (Specimen) oldObj;
 			// get new qunatity modifed by user
 			double newQty = Double.parseDouble(tissueSpecimenObj.getQuantity().toString());//tissueSpecimenObj.getQuantityInGram().doubleValue();
 			// get old qunatity from database
@@ -715,7 +758,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			Logger.out.debug("In MolecularSpecimen");
 			MolecularSpecimen molecularSpecimenObj = (MolecularSpecimen) obj;
-			MolecularSpecimen molecularSpecimenOldObj = (MolecularSpecimen) oldObj;
+			Specimen molecularSpecimenOldObj = (Specimen) oldObj;
 			// get new qunatity modifed by user
 			double newQty = Double.parseDouble(molecularSpecimenObj.getQuantity().toString());//molecularSpecimenObj.getQuantityInMicrogram().doubleValue();
 			// get old qunatity from database
@@ -747,7 +790,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			Logger.out.debug("In CellSpecimen");
 			CellSpecimen cellSpecimenObj = (CellSpecimen) obj;
-			CellSpecimen cellSpecimenOldObj = (CellSpecimen) oldObj;
+			Specimen cellSpecimenOldObj = (Specimen) oldObj;
 			// get new qunatity modifed by user
 			long newQty = (long) Double.parseDouble(cellSpecimenObj.getQuantity().toString());//cellSpecimenObj.getQuantityInCellCount().intValue();
 			// get old qunatity from database
@@ -779,7 +822,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			Logger.out.debug("In FluidSpecimen");
 			FluidSpecimen fluidSpecimenObj = (FluidSpecimen) obj;
-			FluidSpecimen fluidSpecimenOldObj = (FluidSpecimen) oldObj;
+			Specimen fluidSpecimenOldObj = (Specimen) oldObj;
 			// get new qunatity modifed by user
 			double newQty = Double.parseDouble(fluidSpecimenObj.getQuantity().toString());//fluidSpecimenObj.getQuantityInMilliliter().doubleValue();
 			// get old qunatity from database
@@ -819,7 +862,25 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	{
 		Specimen specimen = (Specimen) obj;
 		Specimen specimenOld = (Specimen) oldObj;
+		boolean isInitQtyChange=false;
+		boolean isInitAvlChange=false;
+		/**
+		 * Name:Virender Mehta
+		 * Reviewer: Sachin lale
+		 * This methos will retrive and set SCG Id from SCG name.
+		 */
+		if(specimen.getLineage().equals(Constants.NEW_SPECIMEN))
+		{
+			retriveSCGIdFromSCGName(specimen,dao);
+		}
+		//retrive and set parentSpecimenId
+		if(specimen.getParentSpecimen()!= null && specimen.getParentSpecimen().getId()==null)
+		{
+			Long parentSpecimenId =(Long)dao.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"parentSpecimen.id");
+			specimen.getParentSpecimen().setId(parentSpecimenId);
 
+		}
+		
 		/**
 		 * Start: Change for API Search   --- Jitendra 06/10/2006
 		 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -840,7 +901,13 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			throw new DAOException("Lineage should not be changed while updating the specimen");
 		}
-		if (!specimenOld.getClassName().equals(specimen.getClassName()))
+		/**
+		 * Name : Virender
+		 * Reviewer: Sachin lale
+		 * Calling Domain object from Proxy Object
+		 */
+		Specimen specimenImplObj = (Specimen)HibernateMetaData.getProxyObjectImpl(specimenOld);
+		if(!specimenImplObj.getClassName().equals(specimen.getClassName()))
 		{
 			throw new DAOException("Class should not be changed while updating the specimen");
 		}
@@ -851,7 +918,26 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 		//End:- Change for API Search
 
-		setAvailableQuantity(specimen, specimenOld);
+		// get old qunatity from database			
+		double oldAvailableQty = Double.parseDouble(specimenOld.getAvailableQuantity().toString());//tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
+		double oldQty = Double.parseDouble(specimenOld.getQuantity().toString());//tissueSpecimenOldObj.getQuantityInGram().doubleValue();
+		
+		//get new qunatity modifed by user
+		double newAvailableQty = Double.parseDouble(specimen.getAvailableQuantity().toString());//tissueSpecimenOldObj.getAvailableQuantityInGram().doubleValue();
+		double newQty = Double.parseDouble(specimen.getQuantity().toString());//tissueSpecimenObj.getQuantityInGram().doubleValue();
+
+		if((oldAvailableQty - newAvailableQty)!= 0)
+		{
+			isInitAvlChange =true;
+		}
+		else if((oldQty - newQty)!= 0)
+		{
+			isInitQtyChange=true;
+		}
+		if(isInitQtyChange && !isInitAvlChange)
+		{
+			setAvailableQuantity(specimen, specimenOld);
+		}
 
 		if (specimen.isParentChanged())
 		{
@@ -868,24 +954,21 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			SpecimenCollectionGroup scg = loadSpecimenCollectionGroup(specimen.getParentSpecimen().getId(), dao);
 
 			specimen.setSpecimenCollectionGroup(scg);
-			SpecimenCharacteristics sc = loadSpecimenCharacteristics(specimen.getParentSpecimen().getId(), dao);
-
-			if (!Constants.ALIQUOT.equals(specimen.getLineage()))//specimen instanceof OriginalSpecimen)
-			{
-				specimen.setSpecimenCharacteristics(sc);
-			}
 		}
 
 		//check for closed Specimen Collection Group
 		if (!specimen.getSpecimenCollectionGroup().getId().equals(specimenOld.getSpecimenCollectionGroup().getId()))
 			checkStatus(dao, specimen.getSpecimenCollectionGroup(), "Specimen Collection Group");
-
- 		setSpecimenGroupForSubSpecimen(specimen, specimen.getSpecimenCollectionGroup(), specimen.getSpecimenCharacteristics());
-
+		
+		/**
+		 * Name:Virender Mehta
+		 * Reviewer: Aarti Sharma
+		 * */
 		if (!Constants.ALIQUOT.equals(specimen.getLineage()))//specimen instanceof OriginalSpecimen)
 		{
 			dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
 		}
+		setSpecimenGroupForSubSpecimen(specimen, specimen.getSpecimenCollectionGroup() ,dao);
 
 		/**
 		 * Refer bug 3269 
@@ -912,9 +995,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 		//Audit of Specimen Characteristics.
 		dao.audit(specimen.getSpecimenCharacteristics(), specimenOld.getSpecimenCharacteristics(), sessionDataBean, true);
-
-		Collection oldExternalIdentifierCollection = specimenOld.getExternalIdentifierCollection();
-
+		Collection oldExternalIdentifierCollection = specimenOld.getExternalIdentifierCollection(); 
+		//dao.retrieve(ExternalIdentifier.class.getName(),"specimen",specimenOld.getId()); 
 		Collection externalIdentifierCollection = specimen.getExternalIdentifierCollection();
 		if (externalIdentifierCollection != null)
 		{
@@ -979,22 +1061,32 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		return false;
 	}
 
+	/**
+	 * Name: Virender Mehta
+	 * Reviewer: Aarti Sharma
+	 * Retrive Child Specimen from parent Specimen 
+	 * @param specimen
+	 * @param specimenCollectionGroup
+	 * @param specimenCharacteristics
+	 * @param dao
+	 * @throws DAOException
+	 */
 	private void setSpecimenGroupForSubSpecimen(Specimen specimen, SpecimenCollectionGroup specimenCollectionGroup,
-			SpecimenCharacteristics specimenCharacteristics)
+			DAO dao) throws DAOException
 	{
 		if (specimen != null)
 		{
 			Logger.out.debug("specimen() " + specimen.getId());
-			Logger.out.debug("specimen.getChildrenContainerCollection() " + specimen.getChildrenSpecimen().size());
-
-			Iterator iterator = specimen.getChildrenSpecimen().iterator();
+			Collection childrenSpecimen = (Collection)dao.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"elements(childrenSpecimen)");
+			Logger.out.debug("specimen.getChildrenContainerCollection() " + childrenSpecimen.size());
+			Iterator iterator = childrenSpecimen.iterator();
 			while (iterator.hasNext())
 			{
 				Specimen childSpecimen = (Specimen) iterator.next();
+				childSpecimen.getSpecimenCharacteristics();
 				childSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
-				//((OriginalSpecimen)childSpecimen).setSpecimenCharacteristics(specimenCharacteristics);
-
-				setSpecimenGroupForSubSpecimen(childSpecimen, specimenCollectionGroup, specimenCharacteristics);
+				setSpecimenGroupForSubSpecimen(childSpecimen, specimenCollectionGroup,dao);
+				
 			}
 		}
 	}
@@ -1044,7 +1136,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				 specimenCollectionGroupObj.setId((Long)list.get(0));*/
 				List spgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), Constants.NAME, specimen.getSpecimenCollectionGroup().getName());
 
-				specimenCollectionGroupObj = (SpecimenCollectionGroup) spgList.get(0);
+				SpecimenCollectionGroup scg = (SpecimenCollectionGroup) spgList.get(0);
+				specimenCollectionGroupObj = (SpecimenCollectionGroup)HibernateMetaData.getProxyObjectImpl(scg);
 			}
 			else
 			{
@@ -1298,18 +1391,23 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		{
 			throw new DAOException(ApplicationProperties.getValue("specimen.object.null.err.msg", "Specimen"));
 		}
-
+		
 		Validator validator = new Validator();
-
-		if (specimen.getSpecimenCollectionGroup() == null || specimen.getSpecimenCollectionGroup().getId() == null
-				|| specimen.getSpecimenCollectionGroup().getId().equals("-1"))
+		/**
+		 * Name: Virender Mehta
+		 * Reviewer name: Sachin Lale
+		 * Description: Resolved Performance Issue,retrive scg obj explicitly  
+		 * 
+		 */
+		if (specimen.getSpecimenCollectionGroup() == null && ((specimen.getSpecimenCollectionGroup().getId() == null ||
+				specimen.getSpecimenCollectionGroup().getId().equals("-1")) ||(specimen.getSpecimenCollectionGroup().getName()==null||
+				specimen.getSpecimenCollectionGroup().getName().equals(""))))
 		{
 			String message = ApplicationProperties.getValue("specimen.specimenCollectionGroup");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
-
 		if (specimen.getParentSpecimen() != null
-				&& (specimen.getParentSpecimen().getId() == null || validator.isEmpty(specimen.getParentSpecimen().getId().toString())))
+				&& (specimen.getParentSpecimen().getLabel() == null || validator.isEmpty(specimen.getParentSpecimen().getLabel())))
 		{
 			String message = ApplicationProperties.getValue("createSpecimen.parent");
 			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
@@ -1339,7 +1437,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			String message = ApplicationProperties.getValue("specimen.storageContainer");
 			throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
 		}
-
+		
 		if (specimen.getStorageContainer() != null && specimen.getStorageContainer().getName() != null)
 		{
 			StorageContainer storageContainerObj = specimen.getStorageContainer();
@@ -1363,10 +1461,28 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				throw new DAOException(ApplicationProperties.getValue("errors.invalid", message));
 			}
 		}
+		
 		//Events Validation
-		if (specimen.getSpecimenEventCollection() != null && !specimen.getSpecimenEventCollection().isEmpty())
+		/**
+		 * Name: Virender Mehta
+		 * Reviewer name: Aarti Sharma
+		 * Description: Resolved Performance Issue,retrive SpecimenEventCollection  
+		 * 				In the case if Add Operation receive and collection object are associated with specimen object
+		 * 				but in the case of Edit specimen event parameter is no longer associated with Specimen thus 
+		 * 				retriving explicetely specimenEeventcollection. 
+		 */
+		Collection specimenEventCollection = null;
+		if(specimen.getId()!= null)
 		{
-			Iterator specimenEventCollectionIterator = specimen.getSpecimenEventCollection().iterator();
+			specimenEventCollection = dao.retrieve(SpecimenEventParameters.class.getName(),"specimen.id", specimen.getId());
+		}
+		else
+		{
+			specimenEventCollection = specimen.getSpecimenEventCollection();
+		}
+		if (specimenEventCollection != null && !specimenEventCollection.isEmpty())
+		{
+			Iterator specimenEventCollectionIterator = specimenEventCollection.iterator();
 			while (specimenEventCollectionIterator.hasNext())
 			{				
 				Object eventObject = specimenEventCollectionIterator.next();
@@ -2079,5 +2195,62 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 		return deriveEventCollection;
 	}
-
+	/**
+	 * This method will retrive no of specimen in the catissue_specimen table.
+	 * @return Total No of Specimen
+	 * @throws ClassNotFoundException
+	 * @throws DAOException 
+	 */
+	public int totalNoOfSpecimen(SessionDataBean sessionData)  
+	{
+		String sql = "select MAX(IDENTIFIER) from CATISSUE_SPECIMEN";
+ 		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+        int noOfRecords = 0;
+        try
+		{
+        	jdbcDao.openSession(sessionData);
+        	List resultList = jdbcDao.executeQuery(sql,sessionData,false,null);
+        	String number = (String)((List)resultList.get(0)).get(0);
+        	if(number==null || number.equals(""))
+        	{
+        		number="0";
+        	}
+        	noOfRecords = Integer.parseInt(number);
+	        jdbcDao.closeSession();
+		}
+        catch(DAOException daoexception)
+		{
+        	daoexception.printStackTrace();
+		}
+        catch(ClassNotFoundException classnotfound)
+        {
+        	classnotfound.printStackTrace();
+        }
+        return noOfRecords;
+	}
+	
+	/**
+	 * Name: Virender Mehta
+	 * Reviewer: sachin lale
+	 * This function will retrive SCG Id from SCG Name
+	 * @param specimen
+	 * @param dao
+	 * @throws DAOException
+	 */
+	private void retriveSCGIdFromSCGName(Specimen specimen, DAO dao) throws DAOException
+	{
+		if(specimen.getSpecimenCollectionGroup().getName()!= null && !specimen.getSpecimenCollectionGroup().getName().equals(""))
+		{
+			String[] selectColumnName = {"id"};
+			String[] whereColumnName = {"name"};
+			String[] whereColumnCondition = {"="};
+			String[] whereColumnValue = {specimen.getSpecimenCollectionGroup().getName()};
+			List scgList = dao.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
+					whereColumnCondition, whereColumnValue ,null);
+			if(scgList!=null && !scgList.isEmpty())
+			{
+				specimen.getSpecimenCollectionGroup().setId(((Long)scgList.get(0)));
+			}
+		}
+	}
 }

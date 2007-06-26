@@ -41,6 +41,7 @@ import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 
@@ -74,8 +75,10 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 				specimenEventParametersObject.setUser(user);
 			}
-			Specimen specimen = (Specimen) dao.retrieve(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId());
-
+//			Ashish - 6/6/07 - performance improvement
+			List specimenList=dao.retrieve(Specimen.class.getName(), Constants.SYSTEM_IDENTIFIER, specimenEventParametersObject.getSpecimen().getId());
+			Specimen specimen = (Specimen)specimenList.get(0); //(Specimen) dao.retrieveAttribute(SpecimenEventParameters.class.getName(), specimenEventParametersObject.getSpecimen().getId(),"specimen");
+			//(Specimen.class.getName(), specimenEventParametersObject.getSpecimen().getId(),Constants.SYSTEM_IDENTIFIER);
 			// check for closed Specimen
 			checkStatus(dao, specimen, "Specimen");
 
@@ -125,7 +128,9 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 					specimen.setStorageContainer(storageContainerObj);
 					specimen.setPositionDimensionOne(transferEventParameters.getToPositionDimensionOne());
 					specimen.setPositionDimensionTwo(transferEventParameters.getToPositionDimensionTwo());
-					//				}
+					//				}					
+					
+//					Specimen proxySpecimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
 					dao.update(specimen, sessionDataBean, true, true, false);
 				}
 				if (specimenEventParametersObject instanceof DisposalEventParameters)
@@ -137,9 +142,20 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 					}
 					Map disabledCont = new TreeMap();
-					if (specimen.getStorageContainer() != null)
+					/**
+					 * Name: Virender Mehta
+					 * Reviewer: Sachin
+					 * Retrive Storage Container from specimen
+					 */
+					List storageContainerList =null;
+					if(specimen.getStorageContainer()!=null&&specimen.getStorageContainer().getId()!=null)
 					{
-						addEntriesInDisabledMap(specimen, specimen.getStorageContainer(), disabledCont);
+						storageContainerList = dao.retrieve(StorageContainer.class.getName(),Constants.ID, specimen.getStorageContainer().getId());
+					}
+					if(storageContainerList!=null && !storageContainerList.isEmpty())
+					{
+						StorageContainer storageContainer = (StorageContainer)storageContainerList.get(0);
+						addEntriesInDisabledMap(specimen, storageContainer, disabledCont);
 					}
 					specimen.setPositionDimensionOne(null);
 					specimen.setPositionDimensionTwo(null);
@@ -147,7 +163,13 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 
 					specimen.setAvailable(new Boolean(false));
 					specimen.setActivityStatus(disposalEventParameters.getActivityStatus());
-					dao.update(specimen, sessionDataBean, true, true, false);
+					/**
+					 * Name : Virender
+					 * Reviewer: Sachin lale
+					 * Calling Domain object from Proxy Object
+					 */
+					Specimen proxySpecimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
+					dao.update(proxySpecimen, sessionDataBean, true, true, false);
 
 					try
 					{
@@ -601,4 +623,4 @@ public class SpecimenEventParametersBizLogic extends DefaultBizLogic
 	}
 		
 
-}
+} 

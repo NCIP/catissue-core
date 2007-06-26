@@ -9,6 +9,7 @@
     <class
         name="edu.wustl.catissuecore.domain.Distribution"
         table="CATISSUE_DISTRIBUTION"
+		lazy="true"
     >
 
         <id
@@ -52,7 +53,7 @@
         <set
             name="distributedItemCollection"
             table="CATISSUE_DISTRIBUTED_ITEM"
-            lazy="false"
+            lazy="true"
             inverse="true"
             cascade="save-update"
             sort="unsorted"
@@ -81,7 +82,7 @@
         <set
             name="specimenArrayCollection"
             table="CATISSUE_SPECIMEN_ARRAY"
-            lazy="false"
+            lazy="true"
             inverse="false"
             cascade="none"
             sort="unsorted"

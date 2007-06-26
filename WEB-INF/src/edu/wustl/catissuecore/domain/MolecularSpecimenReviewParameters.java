@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 import edu.wustl.catissuecore.actionForm.MolecularSpecimenReviewParametersForm;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -234,14 +235,14 @@ public class MolecularSpecimenReviewParameters extends ReviewEventParameters
 	 */
 	public MolecularSpecimenReviewParameters(AbstractActionForm abstractForm)
 	{
-		setAllValues(abstractForm);
+		setAllValues((IValueObject)abstractForm);
 	}
 	
 	/**
      * This function Copies the data from an MolecularSpecimenReviewParametersForm object to a MolecularSpecimenReviewParameters object.
      * @param MolecularSpecimenReviewParametersForm An MolecularSpecimenReviewParametersForm object containing the information about the MolecularSpecimenReviewParameters.  
      * */
-    public void setAllValues(AbstractActionForm abstractForm)
+    public void setAllValues(IValueObject abstractForm)
     {
         try
         {

@@ -10,7 +10,7 @@
 package edu.wustl.catissuecore.domain;
 
 import edu.wustl.catissuecore.util.SearchUtil;
-import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -139,7 +139,7 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	/* (non-Javadoc)
 	 * @see edu.wustl.catissuecore.domain.AbstractDomainObject#setAllValues(edu.wustl.catissuecore.actionForm.AbstractActionForm)
 	 */
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
         // Change for API Search   --- Ashwin 04/10/2006
     	if (SearchUtil.isNullobject(specimen))

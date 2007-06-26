@@ -10,7 +10,6 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -31,7 +30,9 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.StorageContainerForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
+import edu.wustl.catissuecore.bizlogic.StorageTypeBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.Container;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -178,7 +179,7 @@ public class StorageContainerAction extends SecureAction
 					if(storageContainerForm.getCheckedButton() == 2 && storageContainerForm.getStContSelection() == 1)
 					{
 					StorageContainer container = (StorageContainer) containerList.get(0);
-					storageContainerForm.setCollectionIds(getDefaultHoldCPList(container));
+					storageContainerForm.setCollectionIds(bizLogic.getDefaultHoldCollectionProtocolList(container));
 					}     
 					else
 					{
@@ -207,13 +208,14 @@ public class StorageContainerAction extends SecureAction
 				{
 					StorageContainer cont = (StorageContainer) containerList.get(0);
 
-					if (cont.getParent() != null)
+					Container parent = (Container)bizLogic.retrieveAttribute(StorageContainer.class.getName(),cont.getId(),"parent");
+					if (parent != null)
 					{
-						Long id = cont.getParent().getId();
+						Long id = parent.getId();
 						Integer pos1 = cont.getPositionDimensionOne();
 						Integer pos2 = cont.getPositionDimensionTwo();
 
-						String parentContainerName = cont.getParent().getName();
+						String parentContainerName = parent.getName();
 
 						/*List containerList1 = bizLogic.retrieve(StorageContainer.class.getName(), valueField, cont.getParent().getId());
 						if (!containerList1.isEmpty())
@@ -365,7 +367,8 @@ public class StorageContainerAction extends SecureAction
 					{
 						storageContainerForm.setSpecimenOrArrayType("Specimen");
 					}
-					if (type.getHoldsSpArrayTypeCollection().size() > 0)
+					Collection holdsSpArrayTypeCollection = (Collection)bizLogic.retrieveAttribute(StorageType.class.getName(), type.getId(), "elements(holdsSpArrayTypeCollection)");
+					if (holdsSpArrayTypeCollection.size() > 0)
 					{
 						storageContainerForm.setSpecimenOrArrayType("SpecimenArray");
 					}
@@ -377,13 +380,14 @@ public class StorageContainerAction extends SecureAction
 					// If operation is add opeartion then set the holds list according to storage type selected.
 					if (operation != null && operation.equals(Constants.ADD))
 					{
-						long[] defHoldsStorageTypeList = getDefaultHoldStorageTypeList(type);
+						StorageTypeBizLogic storageTypebizLogic = (StorageTypeBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.STORAGE_TYPE_FORM_ID);
+						long[] defHoldsStorageTypeList = storageTypebizLogic.getDefaultHoldStorageTypeList(type);
 						if (defHoldsStorageTypeList != null)
 						{
 							storageContainerForm.setHoldsStorageTypeIds(defHoldsStorageTypeList);
 						}
 
-						String[] defHoldsSpecimenClassTypeList = getDefaultHoldsSpecimenClasstypeList(type);
+						String[] defHoldsSpecimenClassTypeList = storageTypebizLogic.getDefaultHoldsSpecimenClasstypeList(type);
 						if (defHoldsSpecimenClassTypeList != null)
 						{
 							storageContainerForm.setHoldsSpecimenClassTypes(defHoldsSpecimenClassTypeList);
@@ -392,7 +396,7 @@ public class StorageContainerAction extends SecureAction
 						{
 							Logger.out.info("Specimen class in form:" + storageContainerForm.getHoldsSpecimenClassTypes()[i]);
 						}
-						long[] defHoldsSpecimenArrayTypeList = getDefaultHoldSpecimenArrayTypeList(type);
+						long[] defHoldsSpecimenArrayTypeList = storageTypebizLogic.getDefaultHoldSpecimenArrayTypeList(type);
 						if (defHoldsSpecimenArrayTypeList != null)
 						{
 							storageContainerForm.setHoldsSpecimenArrTypeIds(defHoldsSpecimenArrayTypeList);
@@ -444,8 +448,10 @@ public class StorageContainerAction extends SecureAction
 					{
 						StorageContainer container = (StorageContainer) list.get(0);
 						//site_name=container.getSite().getName();
-						storageContainerForm.setSiteName(container.getSite().getName());
-						storageContainerForm.setCollectionIds(getDefaultHoldCPList(container));
+						
+						Site site = (Site)bizLogic.retrieveAttribute(StorageContainer.class.getName(), container.getId(), "site");//container.getSite();
+						storageContainerForm.setSiteName(site.getName());
+						storageContainerForm.setCollectionIds(bizLogic.getDefaultHoldCollectionProtocolList(container));
 						Logger.out.debug("Site Name :" + storageContainerForm.getSiteName());
 					}
 				}
@@ -471,130 +477,6 @@ public class StorageContainerAction extends SecureAction
 
 		Logger.out.info("storagecontainer cp:" + storageContainerForm.getCollectionIds().length);
 		return mapping.findForward((String) request.getParameter(Constants.PAGEOF));
-	}
-
-	/* this function finds out the storage type holds list for a storage type given 
-	 * and sets the container's storage type holds list
-	 * */
-	private long[] getDefaultHoldStorageTypeList(StorageType type)
-	{
-		//Populating the storage type-id array
-
-		Logger.out.info("Storage type size:" + type.getHoldsStorageTypeCollection().size());
-		Collection storageTypeCollection = type.getHoldsStorageTypeCollection();
-
-		if (storageTypeCollection != null)
-		{
-			long holdsStorageTypeList[] = new long[storageTypeCollection.size()];
-			int i = 0;
-			Iterator it = storageTypeCollection.iterator();
-			while (it.hasNext())
-			{
-				StorageType holdStorageType = (StorageType) it.next();
-				holdsStorageTypeList[i] = holdStorageType.getId().longValue();
-				i++;
-			}
-			return holdsStorageTypeList;
-		}
-		return null;
-	}
-
-	/* this function finds out the specimen class holds list for a storage type given 
-	 * and sets the container's specimen class holds list
-	 * */
-	private String[] getDefaultHoldsSpecimenClasstypeList(StorageType type)
-	{
-		String[] holdsSpecimenClassList = null;
-		//Populating the specimen class type-id array
-		Logger.out.info("Specimen class type size:" + type.getHoldsSpecimenClassCollection().size());
-		Collection specimenClassTypeCollection = type.getHoldsSpecimenClassCollection();
-
-		if (specimenClassTypeCollection != null)
-		{
-			if (specimenClassTypeCollection.size() == Utility.getSpecimenClassTypes().size())
-			{
-				holdsSpecimenClassList = new String[1];
-				holdsSpecimenClassList[0] = "-1";
-			}
-			else
-			{
-				holdsSpecimenClassList = new String[specimenClassTypeCollection.size()];
-				int i = 0;
-
-				Iterator it = specimenClassTypeCollection.iterator();
-				while (it.hasNext())
-				{
-					String specimenClassType = (String) it.next();
-					Logger.out.info("specimen class type:" + specimenClassType);
-					holdsSpecimenClassList[i] = specimenClassType;
-					i++;
-				}
-			}
-			return holdsSpecimenClassList;
-
-		}
-		return null;
-	}
-
-	/* this function finds out the specimen array type holds list for a storage type given 
-	 * and sets the container's storage type holds list
-	 * */
-	private long[] getDefaultHoldSpecimenArrayTypeList(StorageType type)
-	{
-		//Populating the storage type-id array
-
-		Logger.out.info("Storage type size:" + type.getHoldsSpArrayTypeCollection().size());
-		Collection spcimenArrayTypeCollection = type.getHoldsSpArrayTypeCollection();
-
-		if (spcimenArrayTypeCollection != null)
-		{
-			long holdsSpecimenArrayTypeList[] = new long[spcimenArrayTypeCollection.size()];
-			int i = 0;
-			Iterator it = spcimenArrayTypeCollection.iterator();
-			while (it.hasNext())
-			{
-				SpecimenArrayType holdSpArrayType = (SpecimenArrayType) it.next();
-				holdsSpecimenArrayTypeList[i] = holdSpArrayType.getId().longValue();
-				i++;
-			}
-			return holdsSpecimenArrayTypeList;
-		}
-		return null;
-	}
-
-	/* this function finds out the collection protocol holds list for a storage container given 
-	 * and sets the container's collection protocol holds list
-	 * */
-	private long[] getDefaultHoldCPList(StorageContainer container)
-	{
-		//Populating the storage type-id array
-		Logger.out.info("---------------- container Id :" + container.getId());
-		Collection cpCollection = container.getCollectionProtocolCollection();
-
-		if (cpCollection != null && cpCollection.size() > 0)
-		{
-			long holdsCPList[] = new long[cpCollection.size()];
-			int i = 0;
-			Iterator it = cpCollection.iterator();
-			while (it.hasNext())
-			{
-				CollectionProtocol cp = (CollectionProtocol) it.next();
-				holdsCPList[i] = cp.getId().longValue();
-				Logger.out.info("----------holdsCPList[" + i + "]=" + holdsCPList[i]);
-				i++;
-			}
-			Logger.out.info("holdsCPList:" + holdsCPList);
-			return holdsCPList;
-		}
-		else
-		{
-			long holdsCPList[] = new long[]{-1};
-
-			Logger.out.info("holdsCPList size:" + holdsCPList.length);
-
-			return holdsCPList;
-		}
-
 	}
 
 	Vector checkForInitialValues(TreeMap containerMap)

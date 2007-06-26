@@ -39,17 +39,18 @@ import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
-import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.catissuecore.util.global.AbstractSpecimenLabelGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
@@ -61,7 +62,7 @@ import edu.wustl.common.util.logger.Logger;
  * NewSpecimenAction initializes the fields in the New Specimen page.
  * @author aniruddha_phadnis
  */
-public class NewSpecimenAction extends SecureAction
+public class NewSpecimenAction extends SecureAction 
 {
 
 	/**
@@ -127,6 +128,12 @@ public class NewSpecimenAction extends SecureAction
 		if (forwardToHashMap != null)
 		{
 			String specimenCollectionGroupId = (String) forwardToHashMap.get("specimenCollectionGroupId");
+			/**For Migration Start**/
+			
+			String specimenCollectionGroupName = (String) forwardToHashMap.get("specimenCollectionGroupName");
+			Logger.out.debug("specimenCollectionGroupName found in forwardToHashMap========>>>>>>" + specimenCollectionGroupName);
+			specimenForm.setSpecimenCollectionGroupName(specimenCollectionGroupName);
+			/**For Migration End**/
 			Logger.out.debug("SpecimenCollectionGroupId found in forwardToHashMap========>>>>>>" + specimenCollectionGroupId);
 
 			if (specimenCollectionGroupId != null)
@@ -135,7 +142,8 @@ public class NewSpecimenAction extends SecureAction
 				 *  Retaining properties of specimen when more is clicked.
 				 *  Bug no -- 2623
 				 */
-				setFormValues(specimenForm, specimenCollectionGroupId);
+				//Populating the specimen collection group name in the specimen page
+				setFormValues(specimenForm, specimenCollectionGroupId,specimenCollectionGroupName);
 			}
 		}
 		
@@ -150,9 +158,9 @@ public class NewSpecimenAction extends SecureAction
 
 		if (specimenForm.isParentPresent())//If parent specimen is present then
 		{
-			String[] fields = {Constants.SYSTEM_LABEL};
-			List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true);
-			request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);
+//			String[] fields = {Constants.SYSTEM_LABEL};
+//			List parentSpecimenList = bizLogic.getList(Specimen.class.getName(), fields, Constants.SYSTEM_IDENTIFIER, true);
+//			request.setAttribute(Constants.PARENT_SPECIMEN_ID_LIST, parentSpecimenList);
 		}
 
 		String[] bhIdArray = {"-1"};
@@ -202,8 +210,9 @@ public class NewSpecimenAction extends SecureAction
 		 * of the list form the system.
 		 */
 		//Setting Secimen Collection Group
-		initializeAndSetSpecimenCollectionGroupIdList(bizLogic,request);
-		
+		/**For Migration Start**/
+//		initializeAndSetSpecimenCollectionGroupIdList(bizLogic,request);
+		/**For Migration Start**/
 		/**
 		 * Patch ID: Bug#4245_2
 		 * 
@@ -323,18 +332,32 @@ public class NewSpecimenAction extends SecureAction
 		Vector initialValues = null;
 		if (operation.equals(Constants.ADD))
 		{
-			if (specimenForm.getSpecimenCollectionGroupId() != null && !specimenForm.getSpecimenCollectionGroupId().equals("")
+			SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA); 
+			if(specimenForm.getLabel()==null || specimenForm.getLabel().equals(""))
+			{
+				//int totalNoOfSpecimen = bizLogic.totalNoOfSpecimen(sessionData)+1;
+				/**
+	        	 * Name : Virender Mehta
+	             * Reviewer: Sachin Lale
+	             * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and set.
+	        	 */
+				AbstractSpecimenLabelGenerator abstractSpecimenGenerator  = AbstractSpecimenLabelGenerator.getSpecimenLabelGeneratorInstance();
+				String specimenLabel= abstractSpecimenGenerator.getNextAvailableSpecimenlabel(null);
+				specimenForm.setLabel(specimenLabel);
+			}
+			
+			if (specimenForm.getSpecimenCollectionGroupName() != null && !specimenForm.getSpecimenCollectionGroupName().equals("")
 					&& specimenForm.getClassName() != null && !specimenForm.getClassName().equals("") && !specimenForm.getClassName().equals("-1"))
 			{
 				//Logger.out.debug("before retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
 				String[] selectColumnName = {"collectionProtocolRegistration.collectionProtocol.id"};
-				String[] whereColumnName = {Constants.SYSTEM_IDENTIFIER};
+				String[] whereColumnName = {"name"};
 				String[] whereColumnCondition = {"="};
-				String[] whereColumnValue = {specimenForm.getSpecimenCollectionGroupId()};
+				String[] whereColumnValue = {specimenForm.getSpecimenCollectionGroupName()};
 				List spCollGroupList = bizLogic.retrieve(SpecimenCollectionGroup.class.getName(), selectColumnName, whereColumnName,
 						whereColumnCondition, whereColumnValue, null);
 				//Logger.out.debug("after retrieval of spCollGroupList inside specimen action ^^^^^^^^^^^");
-				if (!spCollGroupList.isEmpty())
+				if (spCollGroupList!=null && !spCollGroupList.isEmpty())
 				{
 					//					Object []spCollGroup = (Object[]) spCollGroupList
 					//							.get(0);
@@ -350,7 +373,7 @@ public class NewSpecimenAction extends SecureAction
 					if(specimenForm.getStContSelection() == 2)
 					{
 					//Logger.out.debug("calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
-					SessionDataBean sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
+					 sessionData = (SessionDataBean) request.getSession().getAttribute(Constants.SESSION_DATA);
 					containerMap = scbizLogic.getAllocatedContaienrMapForSpecimen(cpId, spClass, 0, exceedingMaxLimit, sessionData, true);
 					//Logger.out.debug("exceedingMaxLimit in action for Boolean:"+exceedingMaxLimit);
 					Logger.out.debug("finish ---calling getAllocatedContaienrMapForSpecimen() function from NewSpecimenAction---");
@@ -665,9 +688,12 @@ public class NewSpecimenAction extends SecureAction
 		//request.setAttribute("initValues", initialValues);
 	}
 
-	private void setFormValues(NewSpecimenForm specimenForm, String specimenCollectionGroupId)
+	private void setFormValues(NewSpecimenForm specimenForm, String specimenCollectionGroupId,
+			                   String specimenCollectionGroupName)
 	{
 		specimenForm.setSpecimenCollectionGroupId(specimenCollectionGroupId);
+		specimenForm.setSpecimenCollectionGroupName(specimenCollectionGroupName);
+		specimenForm.setVirtuallyLocated(true);
 		specimenForm.setParentSpecimenId("");
 		specimenForm.setLabel("");
 		specimenForm.setBarcode("");
@@ -688,7 +714,8 @@ public class NewSpecimenAction extends SecureAction
 	 * @param request HttpServletRequest in which the list is set as an attribute
 	 * @throws DAOException on failure to initialize the list
 	 */
-	private void initializeAndSetSpecimenCollectionGroupIdList(NewSpecimenBizLogic bizLogic, HttpServletRequest request) throws DAOException 
+	 /**For Migration Start**/
+/*	private void initializeAndSetSpecimenCollectionGroupIdList(NewSpecimenBizLogic bizLogic, HttpServletRequest request) throws DAOException 
 	{
 		String sourceObjectName = SpecimenCollectionGroup.class.getName();
 		String[] displayNameFields = {"name"};
@@ -697,7 +724,7 @@ public class NewSpecimenAction extends SecureAction
 		List specimenCollectionGroupList = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		request.setAttribute(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenCollectionGroupList);
 	}
-
+*/
 	/**
 	 * This method generates Map of SpecimenClass and the List of the corresponding Types. 
 	 * @param tempMap a temporary Map for avoiding duplication of values.
@@ -821,7 +848,12 @@ public class NewSpecimenAction extends SecureAction
 		// Get SpecimenCollectionGroup given a SpecimenCollectionGroupId
 		SpecimenCollectionGroup scg = Utility.getSpecimenCollectionGroup(specimenCollectionGroupId);
 		request.setAttribute("SpecimenCollectionGroupId", specimenCollectionGroupId);
-		request.setAttribute("SpecimenCollectionGroupName", scg.getName());
+		/**For Migration Start**/
+		int numberOfSpecimen=0; 
+		if(scg!=null)
+		{
+			
+			request.setAttribute("SpecimenCollectionGroupName", scg.getName());
 		
 		String operation = (String) request.getParameter(Constants.OPERATION);
 		if (operation.equals(Constants.EDIT)) 
@@ -837,7 +869,14 @@ public class NewSpecimenAction extends SecureAction
 		
 		Map<String,String> tempMap = new HashMap<String,String>();
 		CollectionProtocolEvent collectionProtocolEvent = scg.getCollectionProtocolEvent();
-		Collection<SpecimenRequirement> specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+		
+		/**
+		 * Name: Vijay Pande
+		 * Reviewer Name: Aarti Sharma
+		 * specimenRequirementCollection is explicitly retrived from DB since its lazy load property is true
+		 */
+		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+		Collection<SpecimenRequirement> specimenRequirementCollection=(Collection)defaultBizLogic.retrieveAttribute(CollectionProtocolEvent.class.getName(), collectionProtocolEvent.getId(), Constants.COLUMN_NAME_SPECIEMEN_REQUIREMENT_COLLECTION);
 		for(SpecimenRequirement specimenRequirement : specimenRequirementCollection)
 		{
 			specimenClass = specimenRequirement.getSpecimenClass();
@@ -879,7 +918,7 @@ public class NewSpecimenAction extends SecureAction
 		tissueSideList.addAll(Utility.getListFromCDE(Constants.CDE_NAME_TISSUE_SIDE));
 		
 		//Set the values as selected only if one specimen requirement is present
-		int numberOfSpecimen = specimenRequirementCollection.size();
+		numberOfSpecimen = specimenRequirementCollection.size();
 		if(numberOfSpecimen == 1)
 		{
 			specimenForm.setClassName(specimenClass);
@@ -897,7 +936,11 @@ public class NewSpecimenAction extends SecureAction
 				specimenForm.setQuantity(Integer.toString(qty));
 			}
 		}
-		
+		}
+		else
+		{
+			populateAllLists(specimenForm, specimenClassList, specimenTypeList, tissueSiteList, tissueSideList, pathologicalStatusList, subTypeMap);
+		}
 		return numberOfSpecimen;
 	}
 	 /**

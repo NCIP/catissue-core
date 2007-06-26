@@ -57,6 +57,7 @@ import edu.wustl.common.util.NameValueBeanValueComparator;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -307,7 +308,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			if (container.getParent() != null)
 			{
 				//Check whether continer is moved to one of its sub container.
-				if (isUnderSubContainer(container, container.getParent().getId()))
+				if (isUnderSubContainer(container, container.getParent().getId(),dao))
 				{
 					throw new DAOException(ApplicationProperties.getValue("errors.container.under.subcontainer"));
 				}
@@ -479,7 +480,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				}
 			}
 		}
-		setSiteForSubContainers(container, container.getSite());
+		setSiteForSubContainers(container, container.getSite(),dao);
 
 		boolean restrictionsCanChange = isContainerEmpty(dao, container);
 		Logger.out.info("--------------container Available :" + restrictionsCanChange);
@@ -516,7 +517,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				List disabledConts = new ArrayList();
 				addEntriesInDisabledMap(container, disabledConts);
 				//disabledConts.add(new StorageContainer(container));
-				setDisableToSubContainer(container, disabledConts);
+				setDisableToSubContainer(container, disabledConts,dao);
 				Logger.out.debug("container.getActivityStatus() " + container.getActivityStatus());
 
 				disableSubStorageContainer(dao, sessionDataBean, containerIDArr);
@@ -932,19 +933,21 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	// container.
 	protected void loadSite(DAO dao, StorageContainer container) throws DAOException
 	{
+		Site site = container.getSite();
 		//Setting the site if applicable
-		if (container.getSite() != null)
+		if (site != null)
 		{
-			Object siteObj = dao.retrieve(Site.class.getName(), container.getSite().getId());
-			if (siteObj != null)
+// Commenting dao.retrive() call as retrived object is not realy required for further processing -Prafull			
+//			Object siteObj = dao.retrieve(Site.class.getName(), container.getSite().getId());
+//			if (siteObj != null)
 			{
-				Site site = (Site) siteObj;
+				
 
 				// check for closed site
 				checkStatus(dao, site, "Site");
 
 				container.setSite(site);
-				setSiteForSubContainers(container, site);
+				setSiteForSubContainers(container, site,dao);
 			}
 		}
 	}
@@ -960,28 +963,37 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 	}
 
-	private void setSiteForSubContainers(StorageContainer storageContainer, Site site)
+	private void setSiteForSubContainers(StorageContainer storageContainer, Site site, DAO dao) throws DAOException
 	{
-		if (storageContainer != null)
+//Added storageContainer.getId()!=null check as this method fails in case when it gets called from insert(). -PRafull
+ 		
+		if (storageContainer != null && storageContainer.getId()!=null)
 		{
 			Logger.out.debug("site() " + site.getId());
-			Logger.out.debug("storageContainer.getChildrenContainerCollection() " + storageContainer.getChildren().size());
+			
+			Collection children = (Collection) dao.retrieveAttribute(storageContainer.getClass().getName(), storageContainer.getId(), "elements(children)");
+			
+//			Collection children = storageContainer.getChildren();
+			Logger.out.debug("storageContainer.getChildrenContainerCollection() " + children.size());
 
-			Iterator iterator = storageContainer.getChildren().iterator();
+			Iterator iterator = children.iterator();
 			while (iterator.hasNext())
 			{
-				StorageContainer container = (StorageContainer) iterator.next();
+				StorageContainer container = (StorageContainer) HibernateMetaData.getProxyObjectImpl(iterator.next());
 				container.setSite(site);
-				setSiteForSubContainers(container, site);
+				setSiteForSubContainers(container, site, dao);
 			}
 		}
 	}
 
-	private boolean isUnderSubContainer(StorageContainer storageContainer, Long parentContainerID)
+	private boolean isUnderSubContainer(StorageContainer storageContainer, Long parentContainerID, DAO dao) throws DAOException
 	{
 		if (storageContainer != null)
 		{
-			Iterator iterator = storageContainer.getChildren().iterator();
+			//Ashish - 11/6/07 - Retriving children containers for performance improvement.
+			Collection childrenColl = (Collection)dao.retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(),Constants.COLUMN_NAME_CHILDREN );
+			Iterator iterator = childrenColl.iterator();
+			//storageContainer.getChildren()
 			while (iterator.hasNext())
 			{
 				StorageContainer container = (StorageContainer) iterator.next();
@@ -991,19 +1003,21 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				// "+(parentContainerID.longValue()==container.getId().longValue()));
 				if (parentContainerID.longValue() == container.getId().longValue())
 					return true;
-				if (isUnderSubContainer(container, parentContainerID))
+				if (isUnderSubContainer(container, parentContainerID, dao))
 					return true;
 			}
 		}
 		return false;
 	}
-
+	
 	//  TODO TO BE REMOVED
-	private void setDisableToSubContainer(StorageContainer storageContainer, List disabledConts)
+	private void setDisableToSubContainer(StorageContainer storageContainer, List disabledConts, DAO dao)throws DAOException
 	{
 		if (storageContainer != null)
 		{
-			Iterator iterator = storageContainer.getChildren().iterator();
+//			Ashish - 11/6/07 - Retriving children containers for performance improvement.
+			Collection childrenColl = (Collection)dao.retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(),Constants.COLUMN_NAME_CHILDREN );			
+			Iterator iterator = childrenColl.iterator();
 			while (iterator.hasNext())
 			{
 				StorageContainer container = (StorageContainer) iterator.next();
@@ -1015,7 +1029,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				container.setPositionDimensionOne(null);
 				container.setPositionDimensionTwo(null);
 
-				setDisableToSubContainer(container, disabledConts);
+				setDisableToSubContainer(container, disabledConts,dao);
 			}
 		}
 	}
@@ -1932,7 +1946,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				pc.setPositionDimensionOne((Integer) obj[1]);
 			if (obj[2] != null)
 				pc.setPositionDimensionTwo((Integer) obj[2]);
-
+/*
 			//check if user has privilege to use the container
 			boolean hasAccess = validateContainerAccess(pc, sessionDataBean);
 			Logger.out.debug("hasAccess..............." + hasAccess);
@@ -1940,7 +1954,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			{
 				throw new DAOException(ApplicationProperties.getValue("access.use.object.denied"));
 			}
-			// check for closed Container
+	*/		// check for closed Container
 			checkStatus(dao, pc, "Storage Container");
 
 			// check for valid position
@@ -2600,7 +2614,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 				{
 					StorageContainer sc = new StorageContainer();
 					sc.setId(new Long(Id));
-					boolean hasAccess = true;
+	/*				boolean hasAccess = true;
 					try
 					{
 						hasAccess = validateContainerAccess(sc, sessionData);
@@ -2612,7 +2626,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					}
 					if (!hasAccess)
 						continue;
-
+*/
 					if (i > containersMaxLimit)
 					{
 						Logger.out.debug("CONTAINERS_MAX_LIMIT reached");
@@ -2819,7 +2833,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					//NameValueBean nvb = new NameValueBean(Name, Id);
 					StorageContainer sc = new StorageContainer();
 					sc.setId(new Long(Id));
-					boolean hasAccess = true;
+					/*boolean hasAccess = true;
 					try
 					{
 						hasAccess = validateContainerAccess(sc, sessionData);
@@ -2831,6 +2845,7 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 					}
 					if (!hasAccess)
 						continue;
+					*/
 					if (i > containersMaxLimit)
 					{
 						exceedingMaxLimit = "true";
@@ -3088,4 +3103,132 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 		}
 		return null;
 	}
+	
+	/**
+	 * To get the ids of the CollectionProtocol that the given StorageContainer can hold. 
+	 * @param type The reference to StorageType object.
+	 * @return The array of ids of CollectionProtocol that the given StorageContainer can hold.
+	 * @throws DAOException
+	 */
+	public long[] getDefaultHoldCollectionProtocolList(StorageContainer container) throws DAOException
+	{
+		Collection spcimenArrayTypeCollection = (Collection) retrieveAttribute(StorageContainer.class.getName(), container.getId(), "elements(collectionProtocolCollection)");
+		if (spcimenArrayTypeCollection.isEmpty())
+		{
+			return new long[]{-1};
+		}
+		else
+		{
+			return Utility.getobjectIds(spcimenArrayTypeCollection);
+		}
+	}
+	
+	/**
+     * To check wether the Continer to display can holds the given type of container. 
+	 * @param typeId ContinerType id of container
+	 * @param storageContainer The StorageContainer reference to be displayed on the page.
+	 * @param StorageContainerBizLogic The reference to bizLogic class object.
+	 * @return true if the given continer can hold the typet.
+	 * @throws DAOException 
+	 */
+	public boolean canHoldContainerType(int typeId, StorageContainer storageContainer) throws DAOException
+	{
+		boolean canHold = false;
+		Collection containerTypeCollection  = (Collection)retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "elements(holdsStorageTypeCollection)");//storageContainer.getHoldsStorageTypeCollection();
+		if (!containerTypeCollection.isEmpty())
+		{
+			Iterator itr = containerTypeCollection.iterator();
+			while (itr.hasNext())
+			{
+				StorageType type = (StorageType)itr.next();
+				long storagetypeId = type.getId().longValue();
+				if (storagetypeId == Constants.ALL_STORAGE_TYPE_ID ||  storagetypeId==typeId)
+				{
+					return true;
+				}
+			}
+		}
+		return canHold;
+	}
+	
+    /**
+     * To check wether the Continer to display can holds the given CollectionProtocol. 
+	 * @param collectionProtocolId The collectionProtocol Id.
+	 * @param storageContainer The StorageContainer reference to be displayed on the page.
+	 * @return true if the given continer can hold the CollectionProtocol.
+     * @throws DAOException 
+	 */
+	public boolean canHoldCollectionProtocol(int collectionProtocolId, StorageContainer storageContainer) throws DAOException
+	{
+		boolean canHold = true;
+		Collection collectionProtocols = (Collection)retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "elements(collectionProtocolCollection)");//storageContainer.getCollectionProtocolCollection();
+		if (!collectionProtocols.isEmpty())
+		{
+			Iterator itr = collectionProtocols.iterator();
+			canHold=false;
+			while (itr.hasNext())
+			{
+				CollectionProtocol cp = (CollectionProtocol)itr.next();
+				if (cp.getId().longValue()==collectionProtocolId)
+				{
+					return true;
+				}
+			}
+		}
+		return canHold;
+	}
+	
+	/**
+     * To check wether the Continer to display can holds the given specimenClass. 
+	 * @param specimenClass The specimenClass Name.
+	 * @param storageContainer The StorageContainer reference to be displayed on the page.
+	 * @param bizLogic  The reference to bizLogic class object.
+	 * @return true if the given continer can hold the specimenClass.
+	 * @throws DAOException 
+	 */
+	public boolean canHoldSpecimenClass(String specimenClass,StorageContainer storageContainer) throws DAOException
+	{
+		Collection specimenClasses = (Collection)retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "elements(holdsSpecimenClassCollection)");//storageContainer.getHoldsSpecimenClassCollection();
+		Iterator itr = specimenClasses.iterator();
+		while (itr.hasNext())
+		{
+			String className = (String)itr.next();
+			if (className.equals(specimenClass))
+				return true;
+			
+		}
+		return false;
+	}
+	
+	
+	 /**
+     * To check wether the Continer to display can holds the given specimenArrayTypeId. 
+	 * @param specimenArrayTypeId The Specimen Array Type Id.
+	 * @param storageContainer The StorageContainer reference to be displayed on the page.
+	 * @param bizLogic  The reference to bizLogic class object.
+	 * @return true if the given continer can hold the specimenArrayType.
+	 */
+	public boolean canHoldSpecimenArrayType(int specimenArrayTypeId, StorageContainer storageContainer) throws DAOException
+	{
+		
+		boolean canHold = true;
+		Collection specimenArrayTypes = (Collection)retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "elements(holdsSpArrayTypeCollection)");//storageContainer.getHoldsSpArrayTypeCollection();
+//		if (!specimenArrayTypes.isEmpty())
+		{
+			Iterator itr = specimenArrayTypes.iterator();
+			canHold=false;
+			while (itr.hasNext())
+			{
+				SpecimenArrayType specimenarrayType = (SpecimenArrayType)itr.next();
+				long arraytypeId = specimenarrayType.getId().longValue();
+				
+				if (arraytypeId == Constants.ALL_SPECIMEN_ARRAY_TYPE_ID || arraytypeId==specimenArrayTypeId)
+				{
+					return true;
+				}
+			}
+		}
+		return canHold;
+	}
+
 }

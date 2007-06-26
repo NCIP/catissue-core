@@ -28,6 +28,7 @@ import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EmailHandler;
 import edu.wustl.catissuecore.util.Roles;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SecurityDataBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -37,6 +38,7 @@ import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.exceptionformatter.DefaultExceptionFormatter;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
@@ -1075,6 +1077,39 @@ public class UserBizLogic extends DefaultBizLogic
 		}
 		return isUnique;
 	}
+	
+	/**
+	 * Set Role to user object before populating actionForm out of it
+	 * @param domainObj object of AbstractDomainObject
+	 * @param uiForm object of the class which implements IValueObject
+	 * @throws BizLogicException 
+	 */
+	protected void prePopulateUIBean(AbstractDomainObject domainObj, IValueObject uiForm) throws BizLogicException
+	{	
+		Logger.out.info("Inside prePopulateUIBean method of UserBizLogic...");
+		 
+    	User user = (User)domainObj;
+    	Role role=null;
+    	if (user.getCsmUserId() != null)
+		{
+			try 
+			{
+				//Get the role of the user.
+				role = SecurityManager.getInstance(UserBizLogic.class).getUserRole(user.getCsmUserId().longValue());
+				if (role != null)
+				{
+					user.setRoleId(role.getId().toString());
+				}
+				//	Logger.out.debug("In USer biz logic.............role........id......." + role.getId().toString());
+			} 
+			catch (SMException e) 
+			{
+				Logger.out.error("SMException in prePopulateUIBean method of UserBizLogic..."+e);
+				//throw new BizLogicException(e.getMessage());
+			}
+		}  	     
+	}
+
 	//					     //method to return a comma seperated list of emails of administrators of a particular institute
 	//					     
 	//					     private String getInstitutionAdmins(Long instID) throws DAOException,SMException 
