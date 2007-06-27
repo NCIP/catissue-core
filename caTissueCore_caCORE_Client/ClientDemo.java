@@ -1674,7 +1674,7 @@ public class ClientDemo
         	 for (Iterator resultsIterator = resultList.iterator(); resultsIterator.hasNext();) {
         		 CollectionProtocolRegistration returnedcollectionprotocolregistration = (CollectionProtocolRegistration) resultsIterator.next();
         		 writeSuccessfullOperationToReport(returnedcollectionprotocolregistration,searchOperation);
-        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedcollectionprotocolregistration.getMessageLabel());
+        		 Logger.out.info(" Domain Object is successfully Found ---->  :: " + returnedcollectionprotocolregistration);
              }
           } 
           catch (Exception e) {
