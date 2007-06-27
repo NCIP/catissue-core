@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
+import net.sf.hibernate.Session;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.ClinicalReport;
@@ -33,6 +33,7 @@ import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.PasswordManager;
 import edu.wustl.common.util.logger.Logger;
@@ -136,7 +137,10 @@ public class CaCoreAppServicesDelegator
 				throw new Exception("No such domain object found for update !! Please enter valid domain object for edit");
 			}
 			AbstractDomainObject abstractDomainOld = (AbstractDomainObject) list.get(0);
+			Session sessionClean = DBUtil.getCleanSession();
+			abstractDomainOld = (AbstractDomainObject) sessionClean.load(Class.forName(objectName), new Long(abstractDomainObject.getId()));
 			bizLogic.update(abstractDomainObject, abstractDomainOld, Constants.HIBERNATE_DAO, getSessionDataBean(userName));
+			sessionClean.close();
 			Logger.out.info(" Domain Object has been successfully updated " + domainObject);
 		}
 		catch(Exception e)

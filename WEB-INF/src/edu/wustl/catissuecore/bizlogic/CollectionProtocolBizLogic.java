@@ -721,6 +721,12 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 						message = ApplicationProperties.getValue("collectionprotocol.studycalendartitle");
 						throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));
 					}
+					// Added by Vijay for API testAddCollectionProtocolWithWrongCollectionPointLabel
+					if(validator.isEmpty(event.getCollectionPointLabel()))
+					{
+						message = ApplicationProperties.getValue("collectionprotocol.collectionpointlabel");
+						throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));
+					}
 
 					Collection reqCollection = event.getSpecimenRequirementCollection();
 

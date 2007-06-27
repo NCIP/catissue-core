@@ -8,6 +8,7 @@ import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -31,6 +32,7 @@ import gov.nih.nci.system.comm.client.ClientSession;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -1243,8 +1245,17 @@ public class ClientDemo
 				collectionProtocolObj = (CollectionProtocol)api.initCollectionProtocol();
 				Collection collectioneventColl = collectionProtocolObj.getCollectionProtocolEventCollection();
 			
-				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)ClientDemo.dataModelObjectMap.get("CollectionProtocolEvent");
+				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)api.initCollectionProtocolEvent();
+				collectionProtocolEvent.setClinicalStatus("New Diagnosis");
 				collectionProtocolEvent.setCollectionPointLabel("User entered value");
+				collectionProtocolEvent.setStudyCalendarEventPoint(new Double(2));
+				collectionProtocolEvent.setId(new Long(5));
+				
+				Collection specimenRequirementCollection = new HashSet();
+				SpecimenRequirement specimenRequirement = (SpecimenRequirement)api.initSpecimenRequirement();
+				specimenRequirement.setId(new Long(5));
+				specimenRequirementCollection.add(specimenRequirement);
+				collectionProtocolEvent.setSpecimenRequirementCollection(specimenRequirementCollection);
 						
 				collectioneventColl.add(collectionProtocolEvent);
 				collectionProtocolObj.setCollectionProtocolEventCollection(collectioneventColl);
