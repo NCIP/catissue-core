@@ -212,10 +212,10 @@ public class ClientDemo
 			testAddParticipantWithWrongData();			
 			testAddCollectionProtocolRegistrationWithWrongData();			
 			testAddSpecimenCollectionGroupWithWrongData();			
-			//testAddStorageTypeForNullObject();
+			testAddStorageTypeForNullObject();
 			testAddStorageTypeForNoName();
 			testAddStorageTypeForNoOneDimensionLabel();				
-			//testAddStorageContainerForNullObject();
+			testAddStorageContainerForNullObject();
 			testAddStorageContainerWithNoName();
 			testAddSpecimenArrayTypeWithWrongData();
 			testAddSpecimenWithWrongData();		
@@ -784,30 +784,30 @@ public class ClientDemo
 		}
 	}
 
-//	private void testAddStorageTypeForNullObject()
-//	{
-//		StorageType storageTypeObj = null;
-//		try
-//		{
-//			storageTypeObj =(StorageType) api.initStorageType();
-//			setLogger(storageTypeObj);
-//			Logger.out.info("Inserting domain object**************------->"+storageTypeObj);
-//	    	storageTypeObj = null;
-//	    	//storageTypeObj.setName("");
-//	    	//storageTypeObj.setOneDimensionLabel("");
-//			storageTypeObj =  (StorageType) appService.createObject(storageTypeObj);
-//			writeFailureOperationsToReport("StorageType",insertValidateOperation);
-//			//dataModelObjectMap.put("StorageType",storageTypeObj);
-//			//Logger.out.info(" Domain Object should not get added when it is null");
-//		
-//		}
-//		catch(Exception e)
-//		{
-//			writeSuccessfullOperationToReport(storageTypeObj,insertValidateOperation);
-//			Logger.out.error(e);
-//			e.printStackTrace();
-//		}
-//	}
+	private void testAddStorageTypeForNullObject()
+	{
+		StorageType storageTypeObj = null;
+		try
+		{
+			storageTypeObj =(StorageType) api.initStorageType();
+			setLogger(storageTypeObj);
+			Logger.out.info("Inserting domain object**************------->"+storageTypeObj);
+	    	storageTypeObj = null;
+	    	//storageTypeObj.setName("");
+	    	//storageTypeObj.setOneDimensionLabel("");
+			storageTypeObj =  (StorageType) appService.createObject(storageTypeObj);
+			writeFailureOperationsToReport("StorageType",insertValidateOperation);
+			//dataModelObjectMap.put("StorageType",storageTypeObj);
+			//Logger.out.info(" Domain Object should not get added when it is null");
+		
+		}
+		catch(Exception e)
+		{
+			writeSuccessfullOperationToReport(new StorageType(),insertValidateOperation+"testAddStorageTypeForNullObject");
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
 
 	private void testAddStorageTypeForNoName()
 	{
@@ -876,26 +876,26 @@ public class ClientDemo
 		}
 	}
 	
-//	private void testAddStorageContainerForNullObject()
-//	{
-//		StorageContainer storageContainerObj = null;
-//		try
-//		{		
-//			storageContainerObj =  (StorageContainer) appService.createObject(storageContainerObj);
-//			setLogger(storageContainerObj);
-//			storageContainerObj = null;
-//			writeFailureOperationsToReport("StorageContainer",insertValidateOperation);
-//			//dataModelObjectMap.put("StorageContainer",storageContainerObj);
-//			//Logger.out.info(" Domain Object should not get added when it is null");
-//		//+ storageContainerObj.getId().longValue() + " ::  Name :: " + storageContainerObj.getName());
-//		}
-//		catch(Exception e)
-//		{
-//			writeSuccessfullOperationToReport(storageContainerObj,insertValidateOperation);
-//			Logger.out.error(e);
-//			e.printStackTrace();
-//		}
-//	}
+	private void testAddStorageContainerForNullObject()
+	{
+		StorageContainer storageContainerObj = null;
+		try
+		{
+			storageContainerObj =  (StorageContainer) appService.createObject(storageContainerObj);
+			setLogger(storageContainerObj);
+			storageContainerObj = null;
+			writeFailureOperationsToReport("StorageContainer",insertValidateOperation);
+			//dataModelObjectMap.put("StorageContainer",storageContainerObj);
+			//Logger.out.info(" Domain Object should not get added when it is null");
+		//+ storageContainerObj.getId().longValue() + " ::  Name :: " + storageContainerObj.getName());
+		}
+		catch(Exception e)
+		{
+			writeSuccessfullOperationToReport(new StorageContainer(),insertValidateOperation+"testAddStorageContainerForNullObject");
+			Logger.out.error(e);
+			e.printStackTrace();
+		}
+	}
 	
 	private void testAddStorageContainerWithNoName()
 	{
