@@ -40,7 +40,9 @@ public class ShoppingCartForm extends ActionForm
     
 	private Map values = new HashMap();
 	
-	//Default Constructor
+	/**
+	 * Default Constructor
+	 */
 	public ShoppingCartForm()
 	{
 	}
@@ -117,17 +119,19 @@ public class ShoppingCartForm extends ActionForm
 	}
 	
 	/**
-	 * @param values
-	 * The values to set.
+	 * @param values The values to set.
 	 */
 	public Map getValues()
 	{
 		return this.values;
 	}
 	
-	 /**
-     * Overrides the validate method of ActionForm.
-     * */
+	/**
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
          ActionErrors errors = new ActionErrors();
@@ -144,7 +148,7 @@ public class ShoppingCartForm extends ActionForm
      }
      
      /**
-      * Returns the id assigned to form bean
+      * @return SHOPPING_CART_FORM_ID Returns the id assigned to form bean
       */
      public int getFormId()
      {

@@ -109,7 +109,7 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 	{
 		CollectionProtocol collectionProtocol = (CollectionProtocol) obj;
 		ParticipantRegistrationCacheManager participantRegistrationCacheManager = new ParticipantRegistrationCacheManager();
-		participantRegistrationCacheManager.addNewCP(collectionProtocol.getId(),collectionProtocol.getTitle());
+		participantRegistrationCacheManager.addNewCP(collectionProtocol.getId(),collectionProtocol.getTitle(),collectionProtocol.getShortTitle());
 
 	}
 	/**
@@ -834,6 +834,11 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		if(!collectionProtocol.getTitle().equals(collectionProtocolOld.getTitle()))
 		{
 			participantRegistrationCacheManager.updateCPTitle(collectionProtocol.getId(),collectionProtocol.getTitle());
+		}
+		
+		if(!collectionProtocol.getShortTitle().equals(collectionProtocolOld.getShortTitle()))
+		{
+			participantRegistrationCacheManager.updateCPShortTitle(collectionProtocol.getId(),collectionProtocol.getShortTitle());
 		}
 
 		if(collectionProtocol.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))

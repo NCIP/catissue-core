@@ -30,6 +30,12 @@ public class DepartmentAction extends SecureAction
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in Department Add/Edit webpage.
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 * @return value for ActionForward object
      * */
     protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception

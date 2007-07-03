@@ -10,6 +10,8 @@
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
+<%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
+<%@ page import="java.util.*"%>
 
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Bug Id: 4159
@@ -19,7 +21,6 @@
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <script src="jss/calendarComponent.js" type="text/javascript"></script>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
-
 
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
@@ -156,22 +157,26 @@
 		
         function onChangeEvent(element)
 		{
-        	/*
-				Patch ID: Bug#3184_33
-			 	Description: Element Id is used in SpecimenCollectionGroupAction.java. This value
-					decides whether to set the value of checkbox and the number of specimens on the 
-					specimen collection group page to the default values or not. If of id is 
-					"collectionProtocolId" then values are set to default i.e. number of specimen to 1
-					and checkbox to false.
-			*/
-			var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=<%=pageOf%>&" +
-        			"isOnChange=true&changeOn=" + element.id;
-        	<%if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
-			{%>
-				action = "QuerySpecimenCollectionGroup.do?pageOf=<%=pageOf%>&operation=<%=operation%>&"+
-						"isOnChange=true";
-			<%}%>		
-        	changeAction(action);
+			// Added by Vijay Pande, added if condition to avoid server trip.
+			if(element.value!="-1")
+			{
+	        	/*
+					Patch ID: Bug#3184_33
+				 	Description: Element Id is used in SpecimenCollectionGroupAction.java. This value
+						decides whether to set the value of checkbox and the number of specimens on the 
+						specimen collection group page to the default values or not. If of id is 
+						"collectionProtocolId" then values are set to default i.e. number of specimen to 1
+						and checkbox to false.
+				*/
+				var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=<%=pageOf%>&" +
+	        			"isOnChange=true&changeOn=" + element.id;
+	        	<%if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
+				{%>
+					action = "QuerySpecimenCollectionGroup.do?pageOf=<%=pageOf%>&operation=<%=operation%>&"+
+							"isOnChange=true&changeOn=" + element.id;
+				<%}%>		
+	        	changeAction(action);
+	        }
 		}
         function changeAction(action)
         {
@@ -367,7 +372,8 @@
 		{
 			document.getElementById("buttonType").value = addButton.id;
 		}
-	</script>
+		
+ </script>
 </head>
 			<!-- 
  			* Name : Ashish Gupta
@@ -519,7 +525,7 @@
 					<td class="formField">
 <!-- Mandar : 434 : for tooltip -->
 				     	<html:select property="collectionProtocolId" styleClass="formFieldSized" styleId="collectionProtocolId" size="1" disabled="<%=readOnlyForAll%>" onchange="onChangeEvent(this)"
-				     	 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+				     	 onmouseover="showToolTip(this)" onmouseout="hideTip(this.id)">
 							<html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>
 						</html:select>
 						<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.PAGE_OF_SCG_CP_QUERY%>">

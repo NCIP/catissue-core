@@ -404,6 +404,9 @@ public class AliquotForm extends AbstractActionForm
     
     /**
      * Overrides the validate method of ActionForm.
+     * @return error
+     * @param mapping
+     * @param request
      */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
@@ -417,10 +420,10 @@ public class AliquotForm extends AbstractActionForm
                * See also: 1_1 to 1_5
                * Description : Validated createdOn date field from form bean 
                */ 
-             if (!validator.isEmpty(createdDate) )
+             if (!validator.isEmpty(createdDate))
              {
                  
-                 String errorKeyForCreatedDate = validator.validateDate(createdDate,true );
+                 String errorKeyForCreatedDate = validator.validateDate(createdDate,true);
                  if(errorKeyForCreatedDate.trim().length() > 0)
                  {
                      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForCreatedDate,ApplicationProperties.getValue("specimen.createdDate")));
@@ -613,14 +616,16 @@ public class AliquotForm extends AbstractActionForm
 	/**
 	 * @return Returns the disposeParentSpecimen.
 	 */
-	public boolean getDisposeParentSpecimen() {
+	public boolean getDisposeParentSpecimen() 
+	{
 		return disposeParentSpecimen;
 	}
 
 	/**
 	 * @param disposeParentSpecimen The disposeParentSpecimen to set.
 	 */
-	public void setDisposeParentSpecimen(boolean disposeParentSpecimen) {
+	public void setDisposeParentSpecimen(boolean disposeParentSpecimen) 
+	{
 		this.disposeParentSpecimen = disposeParentSpecimen;
 	}
     
@@ -628,13 +633,17 @@ public class AliquotForm extends AbstractActionForm
       * Patch ID: 3835_1_10
       * See also: 1_1 to 1_5
       * Description : Getter , setter methods for createdOn date
+      * @return createdDate
       */ 
      public String getCreatedDate()
      {
          return createdDate;
      }
 
-     
+     /**
+      * Set create Date
+      * @param createdDate
+      */
      public void setCreatedDate(String createdDate)
      {
          this.createdDate = createdDate;

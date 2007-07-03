@@ -39,6 +39,12 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in DistributionProtocol Add/Edit webpage.
+     * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 * @return value for ActionForward object
      * */
     protected ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
@@ -67,16 +73,16 @@ public class DistributionProtocolAction extends SpecimenProtocolAction
     	
     	// ----------For Add new
 		String reqPath = request.getParameter(Constants.REQ_PATH);
-		if (reqPath != null)
+		if(reqPath != null)
 			request.setAttribute(Constants.REQ_PATH, reqPath);
-		Logger.out.debug("DP Action reqPath : ---- " + reqPath );
+		Logger.out.debug("DP Action reqPath : ---- " + reqPath);
 		
 		// Mandar : code for Addnew Coordinator data 24-Jan-06
 		String coordinatorID = (String)request.getAttribute(Constants.ADD_NEW_USER_ID); 
-		if(coordinatorID != null && coordinatorID.trim().length() > 0 )
+		if(coordinatorID != null && coordinatorID.trim().length() > 0)
 		{
-			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in DP : "+ coordinatorID  );
-			distributionProtocolForm.setPrincipalInvestigatorId(Long.parseLong(coordinatorID ) ) ;
+			Logger.out.debug(">>>>>>>>>>><<<<<<<<<<<<<<<<>>>>>>>>>>>>> User ID in DP : "+ coordinatorID);
+			distributionProtocolForm.setPrincipalInvestigatorId(Long.parseLong(coordinatorID)) ;
 		}
 		// -- 24-Jan-06 end
 

@@ -36,6 +36,13 @@ import edu.wustl.common.util.dbManager.DAOException;
 
 public class ArrayDistributionReportAction extends BaseDistributionReportAction
 {
+	/**
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 */
 	protected ActionForward executeAction(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 															HttpServletResponse response) throws Exception
 	{
@@ -88,7 +95,7 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		String[] specimenColumns = Constants.SPECIMEN_IN_ARRAY_SELECTED_COLUMNS;
 		String []specimenColumnNames = getColumnNames(specimenColumns);
 		
-    	List listOfData = getListOfArrayData(dist,configForm,sessionData,selectedColumns,specimenColumns) ;
+    	List listOfData = getListOfArrayData(dist,configForm,sessionData,selectedColumns,specimenColumns);
 
     	
 		//Set the request attributes for the Distribution report data
@@ -101,7 +108,14 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		return (mapping.findForward("Success"));
 	}
 
-	protected List getListOfArrayData(Distribution dist, ConfigureResultViewForm configForm, SessionDataBean sessionData) {
+	/**
+	 * @param dist
+	 * @param configForm
+	 * @param sessionData
+	 * @return
+	 */
+	protected List getListOfArrayData(Distribution dist, ConfigureResultViewForm configForm, SessionDataBean sessionData) 
+	{
     	//Get the list of data for Distributed items data for the report.
     	List listOfData = new ArrayList();
     	Collection specimenArrayCollection = dist.getSpecimenArrayCollection();		

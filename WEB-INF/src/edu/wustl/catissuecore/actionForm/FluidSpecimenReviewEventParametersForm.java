@@ -58,16 +58,18 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 
 	
 //	 ----- SUPERCLASS METHODS
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 * @return FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID
 	 */
 	public int getFormId()
 	{
 		return Constants.FLUID_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+	 * @param abstractDomain An AbstractDomainObject obj
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -80,8 +82,11 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
 	}
 	
 	/**
-     * Overrides the validate method of ActionForm.
-     * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	ActionErrors errors = super.validate(mapping, request);
@@ -89,9 +94,8 @@ public class FluidSpecimenReviewEventParametersForm extends SpecimenEventParamet
          
          try
          {
- 
-//         	// checks the cellCount
-           	if (!validator.isEmpty(cellCount) && !validator.isDouble(cellCount,false) )
+ //         // checks the cellCount
+           	if (!validator.isEmpty(cellCount) && !validator.isDouble(cellCount,false))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("fluidspecimenrevieweventparameters.cellcount")));
             }

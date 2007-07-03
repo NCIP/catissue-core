@@ -26,10 +26,13 @@ import edu.wustl.common.action.BaseAction;
  */
 public class ChangePasswordAction extends BaseAction
 {
-    
-    /* (non-Javadoc)
-     * @see edu.wustl.catissuecore.action.SecureAction#executeSecureAction(org.apache.struts.action.ActionMapping, org.apache.struts.action.ActionForm, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
-     */
+	/**
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 */
     public ActionForward executeAction(ActionMapping mapping,
             ActionForm form, HttpServletRequest request,
             HttpServletResponse response) throws Exception

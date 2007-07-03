@@ -213,7 +213,9 @@ public class SpecimenForm extends AbstractActionForm
 	{
 		
 		if (isMutable())
+		{
 			externalIdentifier.put(key, value);
+		}
 	}
 
 	/**
@@ -463,6 +465,9 @@ public class SpecimenForm extends AbstractActionForm
 		this.className = className;
 	}
 
+	/**
+     * Resets the values of all the fields.
+     */
 	protected void reset()
 	{
 		this.className = null;
@@ -473,7 +478,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the id assigned to form bean.
+	 * @return Returns the id assigned to form bean.
 	 */
 	public int getFormId()
 	{
@@ -552,7 +557,7 @@ public class SpecimenForm extends AbstractActionForm
 
 	/**
 	 * This function Copies the data from an Specimen object to a SpecimenForm object.
-	 * @param site An object containing the information about site.  
+	 * @param abstractDomain An object containing the information about site.  
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -573,7 +578,9 @@ public class SpecimenForm extends AbstractActionForm
         
 
 		if (specimen.getAvailable() != null)
+		{
 			this.available = specimen.getAvailable().booleanValue();
+		}
 
 		StorageContainer container = specimen.getStorageContainer();
 		Logger.out.info("-----------Container while getting from domain--:"+container);
@@ -731,7 +738,10 @@ public class SpecimenForm extends AbstractActionForm
 
 	/**
 	 * Overrides the validate method of ActionForm.
-	 * */
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		ActionErrors errors = new ActionErrors();
@@ -746,10 +756,10 @@ public class SpecimenForm extends AbstractActionForm
                      * See also: 1_1 to 1_5
                      * Description : Validated the createdOn date field. 
                      */ 
-                if (!validator.isEmpty(createdDate) )
+                if (!validator.isEmpty(createdDate))
                 {
                    
-                    String errorKeyForCreatedDate = validator.validateDate(createdDate,true );
+                    String errorKeyForCreatedDate = validator.validateDate(createdDate,true);
                     if(errorKeyForCreatedDate.trim().length() > 0)
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForCreatedDate,ApplicationProperties.getValue("specimen.createdDate")));
@@ -1055,7 +1065,7 @@ public class SpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * Sets the label name of specimen.
+	 * @param label Sets the label name of specimen.
 	 * @see #getLabel()
 	 */
 	public void setLabel(String label)
@@ -1063,22 +1073,37 @@ public class SpecimenForm extends AbstractActionForm
 		this.label = label;
 	}
 
+	/**
+	 * @return virtuallyLocated
+	 */
 	public boolean isVirtuallyLocated()
 	{
 		return virtuallyLocated;
 	}
+
+	/**
+	 * @return true or false
+	 */
 	public String getVirtuallyLocated()
 	{
 		if(virtuallyLocated)
+		{
 			return "true";
+		}
 		else
+		{
 			return "false";
+		}
 	}
 
+	/**
+	 * @param virtuallyLocated Set virtuallyLocated
+	 */
 	public void setVirtuallyLocated(boolean virtuallyLocated)
 	{
 		this.virtuallyLocated = virtuallyLocated;
 	}
+	
 	/**
 	 * @return Returns the buttonClicked.
 	 */
@@ -1086,6 +1111,7 @@ public class SpecimenForm extends AbstractActionForm
 	{
 		return buttonClicked;
 	}
+	
 	/**
 	 * @param buttonClicked The buttonClicked to set.
 	 */
@@ -1113,6 +1139,7 @@ public class SpecimenForm extends AbstractActionForm
         /**
          * Patch ID: 3835_1_32
          * See also: 1_1 to 1_5
+         * @return createdDate
          * Description : getter setter methods  for createdOn date.
          */ 
         public String getCreatedDate()
@@ -1120,7 +1147,9 @@ public class SpecimenForm extends AbstractActionForm
             return createdDate;
         }
 
-        
+        /**
+         * @param createdDate Set Create Date
+         */
         public void setCreatedDate(String createdDate)
         {
             this.createdDate = createdDate;

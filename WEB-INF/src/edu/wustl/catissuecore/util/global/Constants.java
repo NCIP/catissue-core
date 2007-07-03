@@ -1,4 +1,5 @@
-/**
+
+ 	  /**
  * <p>Title: Constants Class>
  * <p>Description:  This class stores the constants used in the operations in the application.</p>
  * Copyright:    Copyright (c) year
@@ -1469,6 +1470,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String SHOW_CP_AND_PARTICIPANTS_ACTION="showCpAndParticipants.do";
 	public static final String PAGE_OF_CP_QUERY_RESULTS = "pageOfCpQueryResults";
 	public static final String CP_LIST = "cpList";
+	public static final String CP_ID_TITLE_MAP = "cpIDTitleMap";
 	public static final String REGISTERED_PARTICIPANT_LIST = "participantList";
 	public static final String PAGE_OF_PARTICIPANT_CP_QUERY = "pageOfParticipantCPQuery";
 	public static final String PAGE_OF_SCG_CP_QUERY = "pageOfSpecimenCollectionGroupCPQuery";
@@ -1617,4 +1619,6 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COLUMN_NAME_CHILDREN = "elements(children)";
 	public static final String COLUMN_NAME_SCG_ID="specimenCollectionGroup.id";
 	
+	//Bug 2833. Field for the length of CP Title
+	public static final int COLLECTION_PROTOCOL_TITLE_LENGTH=30; 
 }

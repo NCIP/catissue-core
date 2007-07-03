@@ -169,8 +169,8 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 		
 	//Mandar: 24-Apr-06 for tooltip
 		// -------
-		var timeInterval=100;
-	var interval = self.setInterval("setTip()",timeInterval);
+	var timeInterval=100;
+	var interval;
 	var objID="";
 
 		function showStatus(sMsg) 
@@ -182,6 +182,13 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 			objID = objId;
 			interval = self.setInterval("setTip()",timeInterval);
 		}
+
+		function showGivenTip(objId, toolTipTxt)
+		{
+			objID = objId;
+			setGivenTip(toolTipTxt);
+		}
+
 		function hideTip(objId)
 		{
 			var obj = document.getElementById(objId);
@@ -233,6 +240,23 @@ function  deleteChecked(subdivtag,action,countElement,checkName,isOuterTable,pag
 				}
 			}
 		}
+
+		function setGivenTip(tooltipValue)
+		{
+			var obj = document.getElementById(objID);
+			obj.title = ""+tooltipValue;
+			var browser=navigator.appName;
+			if(browser=="Microsoft Internet Explorer")
+			{
+				showStatus(""+tooltipValue);
+			}
+			else
+			{
+				obj.title = ""+tooltipValue;
+			}
+		}
+
+	
 	// -------
 	
 		function moveToNext(element,value,nextID )

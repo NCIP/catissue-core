@@ -106,8 +106,10 @@ public class SpecimenArrayForm extends ContainerForm
 
 	/** 
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
+	 * @return SPECIMEN_ARRAY_FORM_ID
 	 */
-	public int getFormId() {
+	public int getFormId()
+	{
 		return Constants.SPECIMEN_ARRAY_FORM_ID;
 	}
 	
@@ -115,15 +117,17 @@ public class SpecimenArrayForm extends ContainerForm
 	 * returns specimen array type
 	 * @return specimen array type
 	 */
-	public long getSpecimenArrayTypeId() {
+	public long getSpecimenArrayTypeId() 
+	{
 		return specimenArrayTypeId;
 	}
 
 	/**
 	 * sets the array type.
-	 * @param specimenArrayTypeId array type
+	 * @param specimenArrayType array type
 	 */
-	public void setSpecimenArrayTypeId(long specimenArrayType) {
+	public void setSpecimenArrayTypeId(long specimenArrayType)
+	{
 		this.specimenArrayTypeId = specimenArrayType;
 	}
 	
@@ -178,14 +182,16 @@ public class SpecimenArrayForm extends ContainerForm
 	/**
 	 * @return Returns the storageContainer.
 	 */
-	public String getStorageContainer() {
+	public String getStorageContainer() 
+	{
 		return storageContainer;
 	}
 
 	/**
-	 * @param storageContainerId The storageContainerId to set.
+	 * @param storageContainer The storageContainerId to set.
 	 */
-	public void setStorageContainer(String storageContainer) {
+	public void setStorageContainer(String storageContainer)
+	{
 		this.storageContainer = storageContainer;
 	}
 	
@@ -193,21 +199,25 @@ public class SpecimenArrayForm extends ContainerForm
 	/**
 	 * @return Returns the specArrayContentCollection.
 	 */
-	public Collection getSpecArrayContentCollection() {
+	public Collection getSpecArrayContentCollection() 
+	{
 		return specArrayContentCollection;
 	}
 
 	/**
-	 * @param specArrayContentCollection The specArrayContentCollection to set.
+	 * @param specimenArrayGridContentList The specArrayContentCollection to set.
 	 */
-	public void setSpecArrayContentCollection(Collection specimenArrayGridContentList) {
+	public void setSpecArrayContentCollection(Collection specimenArrayGridContentList)
+	{
 		this.specArrayContentCollection = specimenArrayGridContentList;
 	}
     
     /**
      * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
+     * @param abstractDomain An AbstractDomain Object
      */
-    public void setAllValues(AbstractDomainObject domainObject) {
+    public void setAllValues(AbstractDomainObject domainObject)
+    {
     	super.setAllValues(domainObject);
     	SpecimenArray specimenArray = (SpecimenArray) domainObject;
     	this.specimenArrayTypeId = specimenArray.getSpecimenArrayType().getId().longValue();
@@ -256,55 +266,63 @@ public class SpecimenArrayForm extends ContainerForm
 	/**
 	 * @return Returns the enterSpecimenBy.
 	 */
-	public String getEnterSpecimenBy() {
+	public String getEnterSpecimenBy()
+	{
 		return enterSpecimenBy;
 	}
 
 	/**
 	 * @param enterSpecimenBy The enterSpecimenBy to set.
 	 */
-	public void setEnterSpecimenBy(String enterSpecimenBy) {
+	public void setEnterSpecimenBy(String enterSpecimenBy) 
+	{
 		this.enterSpecimenBy = enterSpecimenBy;
 	}
 
 	/**
 	 * @return Returns the subOperation.
 	 */
-	public String getSubOperation() {
+	public String getSubOperation() 
+	{
 		return subOperation;
 	}
 
 	/**
 	 * @param subOperation The subOperation to set.
 	 */
-	public void setSubOperation(String subOperation) {
+	public void setSubOperation(String subOperation) 
+	{
 		this.subOperation = subOperation;
 	}
 
 	/**
 	 * @param createSpecimenArray The createSpecimenArray to set.
 	 */
-	public void setCreateSpecimenArray(String createSpecimenArray) {
+	public void setCreateSpecimenArray(String createSpecimenArray)
+	{
 		this.createSpecimenArray = createSpecimenArray;
 	}
 
 	/**
 	 * @return Returns the createSpecimenArray.
 	 */
-	public String getCreateSpecimenArray() {
+	public String getCreateSpecimenArray()
+	{
 		return createSpecimenArray;
 	}
 	
 	/**
-	 * validate specimen array form level fields & return appropriate message.
-	 * @see org.apache.struts.action.ActionForm#validate(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
 	 */
-	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
+	{
         ActionErrors errors = new ActionErrors();
         Validator validator = new Validator();
         try {
-            if (operation.equals(Constants.ADD)
-                    || operation.equals(Constants.EDIT))
+            if (operation.equals(Constants.ADD)|| operation.equals(Constants.EDIT))
             {
                 if (this.specimenArrayTypeId == -1 )
                 {
@@ -392,7 +410,9 @@ public class SpecimenArrayForm extends ContainerForm
                                     .getValue("array.user")));
                 }
             }
-		} catch (Exception e) {
+		}
+        catch (Exception e) 
+		{
 			Logger.out.error(e.getMessage());
 		}
 		return errors;
@@ -400,7 +420,7 @@ public class SpecimenArrayForm extends ContainerForm
 	
 	/**
      * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
-     * @param formBeanId - FormBean ID of the object inserted
+     * @param addNewFor - FormBean ID of the object inserted
      *  @param addObjectIdentifier - Identifier of the Object inserted 
      */
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)

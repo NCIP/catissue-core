@@ -3133,6 +3133,18 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 	 */
 	public boolean canHoldContainerType(int typeId, StorageContainer storageContainer) throws DAOException
 	{
+		/**
+		 * Name: Smita
+		 * Reviewer: Sachin
+		 * Bug iD: 4598
+		 * Patch ID: 4598_1
+		 * Description:  Check for valid container type
+		 */
+		if(!isValidContaierType(typeId))
+		{
+			return false;
+		}
+			
 		boolean canHold = false;
 		Collection containerTypeCollection  = (Collection)retrieveAttribute(StorageContainer.class.getName(), storageContainer.getId(), "elements(holdsStorageTypeCollection)");//storageContainer.getHoldsStorageTypeCollection();
 		if (!containerTypeCollection.isEmpty())
@@ -3149,6 +3161,19 @@ public class StorageContainerBizLogic extends DefaultBizLogic implements TreeDat
 			}
 		}
 		return canHold;
+	}
+	
+	/**
+	 * Patch ID: 4598_2
+	 * Is container type one from the container types present in the system
+	 * @param typeID Container type ID
+	 * @return true/ false
+	 * @throws DAOException
+	 */
+	public boolean isValidContaierType(int typeID) throws DAOException
+	{
+		Long longId = (Long)retrieveAttribute(StorageType.class.getName(), new Long(typeID), "id");
+		return !(longId == null);	
 	}
 	
     /**

@@ -1,9 +1,10 @@
-
 package edu.wustl.catissuecore.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import net.sf.ehcache.CacheException;
@@ -62,7 +63,7 @@ class ParticipantRegistrationCache
 	 * 	@param cpId collection protocol ID
 	 * 	@param cpTitle collection protocol title
 	 */
-	public void addNewCP(Long cpId, String cpTitle)
+	public void addNewCP(Long cpId, String cpTitle, String cpShortTitle)
 	{
 		//This method adds the cpID and cpTitle in the ParticipantRegistrationInfo object 
 		//and add this object to participantRegistrationInfoList;
@@ -71,9 +72,9 @@ class ParticipantRegistrationCache
 		ParticipantRegistrationInfo participantRegInfo = new ParticipantRegistrationInfo();
 		participantRegInfo.setCpId(cpId);
 		participantRegInfo.setCpTitle(cpTitle);
+		participantRegInfo.setCpShortTitle(cpShortTitle);
 		List participantInfoList = new ArrayList();
 		participantRegInfo.setParticipantInfoCollection(participantInfoList);
-			
 		participantRegistrationInfoList.add(participantRegInfo);
 	}
 
@@ -100,6 +101,34 @@ class ParticipantRegistrationCache
 			{
 				//Set the new CP title
 				participantRegInfo.setCpTitle(newTitle);
+				break;
+			}
+		}
+	}
+
+	/**
+	 *	This method updates the title of the collection protocol.
+	 *	first find out the participantRegistrationInfo object in participantRegistrationInfoList
+	 *	where cpID = cpId and the updates the cpTitle with newTitle.
+	 * 	@param cpId
+	 * 	@param newShortTitle
+	 */
+	public void updateCPShortTitle(Long cpId, String newShortTitle)
+	{
+		//This method updates the title of the collection protocol.
+		//first find out the participantRegistrationInfo object in participantRegistrationInfoList 
+		//where cpID = cpId and the updates the cpTitle with newTitle.
+
+		Iterator itr = participantRegistrationInfoList.iterator();
+		// Iterating thru whole participsantRegistrationInfoList and 
+		//get the object in which cpId = cpId
+		while (itr.hasNext())
+		{
+			ParticipantRegistrationInfo participantRegInfo = (ParticipantRegistrationInfo) itr.next();
+			if (participantRegInfo.getCpId().longValue() == cpId.longValue())
+			{
+				//Set the new CP title
+				participantRegInfo.setCpShortTitle(newShortTitle);
 				break;
 			}
 		}
@@ -233,7 +262,7 @@ class ParticipantRegistrationCache
 	}
 
 	/**
-	 * This method returns a list of CP ids and CP titles 
+	 * This method returns a list of CP ids and CP short titles 
 	 * from the participantRegistrationInfoList
 	 * @return
 	 */
@@ -245,10 +274,33 @@ class ParticipantRegistrationCache
 		while (itr.hasNext())
 		{
 			ParticipantRegistrationInfo participantRegInfo = (ParticipantRegistrationInfo) itr.next();
-			NameValueBean cpDetails = new NameValueBean(participantRegInfo.getCpTitle(), participantRegInfo.getCpId());
+			NameValueBean cpDetails = new NameValueBean(participantRegInfo.getCpShortTitle(), participantRegInfo.getCpId());
 			cpDetailsList.add(cpDetails);
 		}
 		return cpDetailsList;
 	}
 
+//	Smita changes start
+	/**
+	 * This method returns a list of CP ids and CP titles 
+	 * from the participantRegistrationInfoList
+	 * @return
+	 */
+	public Map<Long, String> getCPIDTitleMap()
+	{
+		//This method returns a list of CP ids and CP titles from the participantRegistrationInfoList
+		Map<Long, String> cpIDTitleMap = new HashMap<Long, String>();
+		Iterator itr = participantRegistrationInfoList.iterator();
+		
+		while (itr.hasNext())
+		{
+			ParticipantRegistrationInfo participantRegInfo = (ParticipantRegistrationInfo) itr.next();
+			//NameValueBean cpDetails = new NameValueBean(participantRegInfo.getCpShortTitle(), participantRegInfo.getCpId());
+			cpIDTitleMap.put(participantRegInfo.getCpId(), participantRegInfo.getCpTitle());
+		}
+		
+		return cpIDTitleMap;
+	}
+//	Smita changes end
 }
+

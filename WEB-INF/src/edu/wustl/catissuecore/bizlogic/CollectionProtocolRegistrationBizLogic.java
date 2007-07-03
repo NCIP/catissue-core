@@ -653,7 +653,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 				ParticipantRegistrationInfo prInfo = new ParticipantRegistrationInfo();
 				prInfo.setCpId(cpId);
 				prInfo.setCpTitle(cpTitle);
-//				prInfo.setCpShortTitle(cpShortTitle);
+				prInfo.setCpShortTitle(cpShortTitle);
 				prInfo.setParticipantInfoCollection(participantInfoList);
 				participantRegistrationInfoList.add(prInfo);			
 			}

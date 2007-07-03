@@ -26,6 +26,10 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
  */
 public class MolecularSpecimenReviewParametersAction extends SpecimenEventParametersAction
 {
+	/**
+	 * @param request object of HttpServletRequest
+	 * @throws Exception generic exception
+	 */
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 		/** 
@@ -44,17 +48,19 @@ public class MolecularSpecimenReviewParametersAction extends SpecimenEventParame
 	            String strClass = specimen.getClassName();
 	            String strType = specimen.getType();
 	            
-	            if(strClass.equals(Constants.MOLECULAR) && strType.equals(Constants.RNA ))
-	            	request.setAttribute(Constants.IS_RNA, Constants.TRUE );
+	            if(strClass.equals(Constants.MOLECULAR) && strType.equals(Constants.RNA))
+	            {
+	            	request.setAttribute(Constants.IS_RNA, Constants.TRUE);
+	            }
             }
             else
             {
-            	request.setAttribute(Constants.IS_RNA, Constants.FALSE  );
+            	request.setAttribute(Constants.IS_RNA, Constants.FALSE);
             }
         }
         else
         {
-        	request.setAttribute(Constants.IS_RNA, Constants.FALSE );
+        	request.setAttribute(Constants.IS_RNA, Constants.FALSE);
         }
 	}
 }

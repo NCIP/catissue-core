@@ -129,9 +129,9 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
     }
 
     /**
-     * @param specimenTypes The specimenTypes to set.
+     * @param specimenType The specimenTypes to set.
      */
-    public void setSpecimenTypes(String specimenType[])
+    public void setSpecimenTypes(String[] specimenType)
     {
         this.specimenTypes = specimenType;
     }
@@ -168,18 +168,22 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
         this.comment = comment;
     }
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
+	/**
+	 * @return SPECIMEN_ARRAY_TYPE_FORM_ID
 	 */
-	public int getFormId() {
+	public int getFormId()
+	{
 		return Constants.SPECIMEN_ARRAY_TYPE_FORM_ID;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
-	 */
-	public void setAllValues(AbstractDomainObject domainObject) {
-		if (domainObject instanceof SpecimenArrayType) {
+	/**
+     * Populates all the fields from the domain object to the form bean.
+     * @param abstractDomain An AbstractDomain Object  
+     */
+	public void setAllValues(AbstractDomainObject domainObject) 
+	{
+		if (domainObject instanceof SpecimenArrayType) 
+		{
 			SpecimenArrayType arrayType = (SpecimenArrayType) domainObject;
 	        this.id = arrayType.getId().longValue();
 	        this.name = arrayType.getName();
@@ -189,11 +193,13 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	        this.comment = arrayType.getComment();
 	        Collection specimenTypeCollection = arrayType.getSpecimenTypeCollection();
 	        
-	        if ((specimenTypeCollection != null) && (!specimenTypeCollection.isEmpty())) {
+	        if ((specimenTypeCollection != null) && (!specimenTypeCollection.isEmpty())) 
+	        {
 	        	this.specimenTypes = new String[specimenTypeCollection.size()];
 	        	String specimenTypeStr = null;
 	        	int i = 0;
-	        	for (Iterator iter = specimenTypeCollection.iterator(); iter.hasNext();i++) {
+	        	for (Iterator iter = specimenTypeCollection.iterator(); iter.hasNext();i++) 
+	        	{
 					specimenTypeStr = (String) iter.next();
 					specimenTypes[i] = specimenTypeStr;
 				}
@@ -202,17 +208,21 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
-	 */
-	protected void reset() {
+	/**
+     * Resets the values of all the fields.
+     */
+	protected void reset()
+	{
 	}
 	
 	/**
 	 * validate specimen array type form level fields & return appropriate message.
-	 * @see org.apache.struts.action.ActionForm#validate(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
 	 */
-	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
+	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+	{
         ActionErrors errors = new ActionErrors();
         Validator validator = new Validator();
         try {
@@ -234,9 +244,12 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
                                     .getValue("arrayType.specimenClass")));
                 }
 //              validate specimen type in array type
-    	        if ((specimenTypes != null) && (specimenTypes.length > 0)) {
-    	        	for (int i = 0; i < specimenTypes.length; i++) {
-    	        		if (specimenTypes[i] != null) {
+    	        if ((specimenTypes != null) && (specimenTypes.length > 0))
+    	        {
+    	        	for (int i = 0; i < specimenTypes.length; i++) 
+    	        	{
+    	        		if (specimenTypes[i] != null) 
+    	        		{
     	                    if (!validator.isValidOption(specimenTypes[i]))
     	                    {
     	                        errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -246,9 +259,10 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
     	                    }
     	        		}
     				}
-    	        } else {
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "errors.item.required", ApplicationProperties
+    	        }
+    	        else
+    	        {
+                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required", ApplicationProperties
                                     .getValue("arrayType.specimenType")));
     	        }
                 
@@ -260,17 +274,19 @@ public class SpecimenArrayTypeForm extends AbstractActionForm
 	                          .getValue("arrayType.oneDimensionCapacity")));
                 } else
 */                
-                if(!validator.isNumeric(String.valueOf(oneDimensionCapacity),1) || !validator.isNumeric(String.valueOf(twoDimensionCapacity),1)) {
+                if(!validator.isNumeric(String.valueOf(oneDimensionCapacity),1) || !validator.isNumeric(String.valueOf(twoDimensionCapacity),1)) 
+                {
 	                  errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 	                  "errors.item.format", ApplicationProperties
 	                          .getValue("arrayType.capacity")));
                 }
             }
-		} catch (Exception e) {
+		}
+        catch (Exception e) 
+        {
 			Logger.out.error(e.getMessage());
 		}
 		return errors;
 	}
-	
-	
+
 }

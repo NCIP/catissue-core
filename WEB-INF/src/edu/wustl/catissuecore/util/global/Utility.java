@@ -51,6 +51,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.bizlogic.CDEBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
@@ -952,5 +953,29 @@ public class Utility extends edu.wustl.common.util.Utility
 			i++;
 		}
 		return ids;
+	}
+	
+	/**
+	 * This method returns a list of CP ids and CP Long titles 
+	 * @return cpid and cpTitle Map
+	 * @throws DAOException 
+	 */
+	public static Map<Long, String> getCPIDTitleMap() throws DAOException
+	{
+		//This method returns a list of CP ids and CP titles from the participantRegistrationInfoList
+		Map<Long, String> cpIDTitleMap = new HashMap<Long, String>();
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+		List collectionProtocolList = bizLogic.retrieve(CollectionProtocol.class.getName());
+		Iterator itr = collectionProtocolList.iterator();
+		while (itr.hasNext())
+		{
+			CollectionProtocol collectionProtocol = (CollectionProtocol) itr.next();
+			//NameValueBean cpDetails = new NameValueBean(participantRegInfo.getCpShortTitle(), participantRegInfo.getCpId());
+			if(!collectionProtocol.getActivityStatus().equalsIgnoreCase(Constants.ACTIVITY_STATUS_DISABLED))
+			{
+				cpIDTitleMap.put(collectionProtocol.getId(), collectionProtocol.getTitle());
+			}
+		}
+		return cpIDTitleMap;
 	}
 }

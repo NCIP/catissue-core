@@ -23,6 +23,16 @@ import edu.wustl.common.beans.SessionDataBean;
 
 public class DistributionReportAction extends BaseDistributionReportAction
 {
+	 /**
+     * Overrides the execute method of Action class.
+     * Sets the various fields in DistributionProtocol Add/Edit webpage.
+     * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 * @return value for ActionForward object
+     * */
 	protected ActionForward executeAction(ActionMapping mapping,ActionForm form, HttpServletRequest request,
 															HttpServletResponse response) throws Exception
 	{
@@ -33,7 +43,9 @@ public class DistributionReportAction extends BaseDistributionReportAction
 		
 		//retrieve from configuration form if it is null
 		if(distributionId==null)
+		{
     		distributionId = configForm.getDistributionId();
+		}
 
 		/*Retrieve from request attribute if it null. 
 		 */ 
@@ -52,7 +64,9 @@ public class DistributionReportAction extends BaseDistributionReportAction
 		
 		//Set it in configuration form if it is not null 
 		if(distributionId!=null)
+		{
     		configForm.setDistributionId(distributionId);
+		}
 			
     	Distribution dist =  getDistribution(distributionId, getSessionData(request), Constants.CLASS_LEVEL_SECURE_RETRIEVE);
     	
@@ -63,8 +77,8 @@ public class DistributionReportAction extends BaseDistributionReportAction
     	
     	//Set the columns for Distribution report
 		String action = configForm.getNextAction();
-		String selectedColumns[] = getSelectedColumns(action,configForm,false);
-		String []columnNames = getColumnNames(selectedColumns);
+		String[] selectedColumns = getSelectedColumns(action,configForm,false);
+		String[] columnNames = getColumnNames(selectedColumns);
     	
 		//Set the request attributes for the Distribution report data
 		request.setAttribute(Constants.DISTRIBUTION_REPORT_FORM, distributionReportForm);

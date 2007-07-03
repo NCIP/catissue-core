@@ -31,14 +31,14 @@ public class ConfigureResultViewForm extends ActionForm
     private boolean reportAction=true;
     
 	/**
-	 * @return Returns the id.
+	 * @return distributionId Returns the distributionId.
 	 */
 	public Long getDistributionId() 
 	{
 		return distributionId;
 	}
 	/**
-	 * @param id The id to set.
+	 * @param distributionId The distributionId to set.
 	 */
 	public void setDistributionId(Long distributionId) 
 	{
@@ -48,62 +48,72 @@ public class ConfigureResultViewForm extends ActionForm
 	/**
 	 * @return Returns the columnNames.
 	 */
-	public String[] getColumnNames() {
+	public String[] getColumnNames()
+	{
 		return columnNames;
 	}
 	/**
 	 * @param columnNames The columnNames to set.
 	 */
-	public void setColumnNames(String[] columnNames) {
+	public void setColumnNames(String[] columnNames) 
+	{
 		this.columnNames = columnNames;
 	}
 	/**
 	 * @return Returns the selectedColumnNames.
 	 */
-	public String[] getSelectedColumnNames() {
+	public String[] getSelectedColumnNames() 
+	{
 		return selectedColumnNames;
 	}
 	/**
 	 * @param selectedColumnNames The selectedColumnNames to set.
 	 */
-	public void setSelectedColumnNames(String[] selectedColumnNames) {
+	public void setSelectedColumnNames(String[] selectedColumnNames) 
+	{
 		this.selectedColumnNames = selectedColumnNames;
 	}
 	/**
 	 * @return Returns the tableName.
 	 */
-	public String getTableName() {
+	public String getTableName() 
+	{
 		return tableName;
 	}
 	/**
 	 * @param tableName The tableName to set.
 	 */
-	public void setTableName(String tableName) {
+	public void setTableName(String tableName) 
+	{
 		this.tableName = tableName;
 	}
 	
 	/**
 	 * @return Returns the nextAction.
 	 */
-	public String getNextAction() {
+	public String getNextAction() 
+	{
 		return nextAction;
 	}
 	/**
 	 * @param nextAction The nextAction to set.
 	 */
-	public void setNextAction(String nextAction) {
+	public void setNextAction(String nextAction) 
+	{
 		this.nextAction = nextAction;
 	}
 	/**
 	 * @return Returns the reportAction.
 	 */
-	public boolean isReportAction() {
+	public boolean isReportAction() 
+	{
 		return reportAction;
 	}
 	/**
 	 * @param reportAction The reportAction to set.
 	 */
-	public void setReportAction(boolean reportAction) {
+	public void setReportAction(boolean reportAction) 
+	{
 		this.reportAction = reportAction;
 	}
 }

@@ -175,18 +175,18 @@ public class StorageContainerForm extends AbstractActionForm
 	/**
 	 * collectionIds contains Ids of collection Protocols that this container can hold
 	 */
-	protected long collectionIds[] = new long[]{-1};
+	protected long[] collectionIds = new long[]{-1};
 
 	/**
 	 * holdStorageTypeIds contains Ids of Storage Types that this container can hold
 	 */
-	protected long holdsStorageTypeIds[];
+	protected long[] holdsStorageTypeIds;
 
-	private long holdsSpecimenArrTypeIds[];
+	private long[] holdsSpecimenArrTypeIds;
 	/**
 	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold
 	 */
-	protected String holdsSpecimenClassTypes[];
+	protected String[] holdsSpecimenClassTypes;
 
 	/**
 	 * A map that contains distinguished fields (container name,barcode,parent location) per container.
@@ -204,7 +204,7 @@ public class StorageContainerForm extends AbstractActionForm
 
 	/**
 	 * This function Copies the data from an storage type object to a StorageTypeForm object.
-	 * @param storageType A StorageType object containing the information about storage type of the container.  
+	 * @param abstractDomain A StorageType object containing the information about storage type of the container.  
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -259,10 +259,14 @@ public class StorageContainerForm extends AbstractActionForm
 				.toString(container.getStorageType().getTwoDimensionLabel());
 
 		if (container.getNoOfContainers() != null)
+		{
 			this.noOfContainers = container.getNoOfContainers().intValue();
+		}
 
 		if (container.getStartNo() != null)
+		{
 			this.startNumber = String.valueOf(container.getStartNo().intValue());
+		}
 
 		this.barcode = Utility.toString(container.getBarcode());
 
@@ -638,14 +642,18 @@ public class StorageContainerForm extends AbstractActionForm
 
 
 	/**
-	 * Returns the id assigned to form bean
+	 * @return Returns the id assigned to form bean
 	 */
 	public int getFormId()
 	{
 		if(getNoOfContainers() > 1)
+		{
 			return Constants.SIMILAR_CONTAINERS_FORM_ID;
+		}
 		else
+		{
 			return Constants.STORAGE_CONTAINER_FORM_ID;
+		}
 	}
 
 	/**
@@ -801,8 +809,7 @@ public class StorageContainerForm extends AbstractActionForm
 	}
 
 	/**
-	 * @param values
-	 *            The values to set.
+	 * @param values The values to set.
 	 */
 	public void setValues(Map values)
 	{
@@ -810,8 +817,7 @@ public class StorageContainerForm extends AbstractActionForm
 	}
 
 	/**
-	 * @param values
-	 *            The values to set.
+	 * @return values The values to set.
 	 */
 	public Map getValues()
 	{
@@ -879,7 +885,7 @@ public class StorageContainerForm extends AbstractActionForm
 
 	/**
 	 * setitng the SpecimenClassType Id array
-	 * @param holdsSpecimenClassTypeIds - array of SpecimenClassType Id's to set
+	 * @param holdsSpecimenClassTypes - array of SpecimenClassType Id's to set
 	 */
 	public void setHoldsSpecimenClassTypes(String[] holdsSpecimenClassTypes)
 	{
@@ -937,7 +943,7 @@ public class StorageContainerForm extends AbstractActionForm
 
 	/**
 	 * Sets the map of distinguished fields of aliquots.
-	 * @param aliquotMap A map of distinguished fields of aliquots.
+	 * @param similarContainersMap A map of distinguished fields of aliquots.
 	 * @see #getAliquotMap()
 	 */
 	public void setSimilarContainersMap(Map similarContainersMap)
@@ -970,7 +976,7 @@ public class StorageContainerForm extends AbstractActionForm
 
 	/**
 	 * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
-	 * @param formBeanId - FormBean ID of the object inserted
+	 * @param addNewFor - FormBean ID of the object inserted
 	 *  @param addObjectIdentifier - Identifier of the Object inserted 
 	 */
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
@@ -987,7 +993,10 @@ public class StorageContainerForm extends AbstractActionForm
 
 	/**
 	 * Overrides the validate method of ActionForm.
-	 * */
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		ActionErrors errors = new ActionErrors();
@@ -1158,7 +1167,7 @@ public class StorageContainerForm extends AbstractActionForm
 							String positionDimensionOne = (String) getSimilarContainerMapValue(posDim1Key + "_fromMap");
 							String positionDimensionTwo = (String) getSimilarContainerMapValue(posDim2Key + "_fromMap");
 							
-							 if(positionDimensionOne!=null && !positionDimensionOne.trim().equals("") && !validator.isDouble(positionDimensionOne) || positionDimensionTwo!=null && !positionDimensionTwo.trim().equals("") && !validator.isDouble(positionDimensionTwo) )
+							 if(positionDimensionOne!=null && !positionDimensionOne.trim().equals("") && !validator.isDouble(positionDimensionOne) || positionDimensionTwo!=null && !positionDimensionTwo.trim().equals("") && !validator.isDouble(positionDimensionTwo))
 			     		        {
 			     		        	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.format",ApplicationProperties.getValue("specimen.positionInStorageContainer")));
 			     		        	break;
@@ -1184,16 +1193,13 @@ public class StorageContainerForm extends AbstractActionForm
 		}
 		catch (Exception excp)
 		{
-			System.out.println("\n\n*******Error*********\n\n");
 			Logger.out.error(excp.getMessage(), excp);
 		}
 		return errors;
 	}
 
 	/**
-	 * @param pos12
-	 * @param pos22
-	 * @param errors
+	 * @param errors ActionErrors
 	 */
 	private void checkPositionForParent(ActionErrors errors)
 	{
@@ -1241,7 +1247,12 @@ public class StorageContainerForm extends AbstractActionForm
 		
 	}
 
-	//This function if 'any' option is selected then no other option should be selected */
+	/**
+	 * This function if 'any' option is selected then no other option should be selected
+	 * @param errors Action Errors
+	 * @param Ids Array of long ids
+	 * @param message Message used in ApplicationProperties
+	 * */
 	void checkValidSelectionForAny(long[] Ids, String message, ActionErrors errors)
 	{
 		if (Ids != null && Ids.length > 1)
@@ -1258,25 +1269,33 @@ public class StorageContainerForm extends AbstractActionForm
 		}
 	}
 
-	
+	/**
+	 * @return siteForParentContainer
+	 */
 	public String getSiteForParentContainer()
 	{
 		return siteForParentContainer;
 	}
 
-	
+	/**
+	 * @param siteForParentContainer Setting siteForParentContainer
+	 */
 	public void setSiteForParentContainer(String siteForParentContainer)
 	{
 		this.siteForParentContainer = siteForParentContainer;
 	}
 
-	
+	/**
+	 * @return specimenOrArrayType
+	 */
 	public String getSpecimenOrArrayType()
 	{
 		return specimenOrArrayType;
 	}
 
-	
+	/**
+	 * @param specimenOrArrayType Setting specimenOrArrayType
+	 */
 	public void setSpecimenOrArrayType(String specimenOrArrayType)
 	{
 		this.specimenOrArrayType = specimenOrArrayType;

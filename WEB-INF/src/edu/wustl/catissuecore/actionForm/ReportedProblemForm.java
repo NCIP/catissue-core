@@ -202,7 +202,7 @@ public class ReportedProblemForm extends AbstractActionForm
 
   
     /**
-     * (non-Javadoc)
+     *@param abstractDomain An AbstractDomain Object  
      * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomain)
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
@@ -218,8 +218,11 @@ public class ReportedProblemForm extends AbstractActionForm
     }
 
     /**
-     * Overrides the validate method of Action class.
-     */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
     public ActionErrors validate(ActionMapping mapping,
             HttpServletRequest request)
     {
@@ -250,13 +253,13 @@ public class ReportedProblemForm extends AbstractActionForm
                  	// Mandar 10-apr-06 : bugid :353 
                 	// Error messages should be in the same sequence as the sequence of fields on the page.
 
-                    if (validator.isEmpty(nameOfReporter ))
+                    if (validator.isEmpty(nameOfReporter))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.item.required", ApplicationProperties
                                         .getValue("fields.nameofreporter")));
                     }
-                    if (validator.isEmpty(affiliation ))
+                    if (validator.isEmpty(affiliation))
                     {
                         errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                                 "errors.item.required", ApplicationProperties

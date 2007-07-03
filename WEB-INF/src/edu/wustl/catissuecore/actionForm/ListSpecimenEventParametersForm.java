@@ -12,7 +12,8 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 
-public class ListSpecimenEventParametersForm extends AbstractActionForm {
+public class ListSpecimenEventParametersForm extends AbstractActionForm
+{
     
 	private String specimenId;
 	
@@ -23,25 +24,29 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm {
 	/**
 	 * @return Returns the specimenEventParameter.
 	 */
-	public String getSpecimenEventParameter() {
+	public String getSpecimenEventParameter() 
+	{
 		return specimenEventParameter;
 	}
 	/**
 	 * @param specimenEventParameter The specimenEventParameter to set.
 	 */
-	public void setSpecimenEventParameter(String specimenEventParameter) {
+	public void setSpecimenEventParameter(String specimenEventParameter)
+	{
 		this.specimenEventParameter = specimenEventParameter;
 	}
 	/**
 	 * @return Returns the specimenId.
 	 */
-	public String getSpecimenId() {
+	public String getSpecimenId() 
+	{
 		return specimenId;
 	}
 	/**
 	 * @param specimenId The specimenId to set.
 	 */
-	public void setSpecimenId(String specimenId) {
+	public void setSpecimenId(String specimenId)
+	{
 		this.specimenId = specimenId;
 	}
     /**
@@ -52,6 +57,10 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm {
         reset();
     }
 
+    /**
+     * Populates all the fields from the domain object to the form bean.
+     * @param abstractDomain An AbstractDomain Object  
+     */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
     }
@@ -66,7 +75,7 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm {
     }
     
     /**
-     * Returns the id assigned to form bean
+     * @return LIST_SPECIMEN_EVENT_PARAMETERS_FORM_ID Returns the id assigned to form bean
      */
     public int getFormId()
     {
@@ -82,8 +91,11 @@ public class ListSpecimenEventParametersForm extends AbstractActionForm {
     }
 
     /**
-    * Overrides the validate method of ActionForm.
-    * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
         ActionErrors errors = new ActionErrors();

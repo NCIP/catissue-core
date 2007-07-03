@@ -34,7 +34,13 @@ public class QuickEventsAction extends BaseAction {
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in QuickEvents webpage.
-     * */
+     * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 * @return value for ActionForward object
+     */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
@@ -49,6 +55,6 @@ public class QuickEventsAction extends BaseAction {
   	 	
   	 	String pageOf = Constants.SUCCESS;
   	 	
-        return mapping.findForward(pageOf );
+        return mapping.findForward(pageOf);
     }
 }

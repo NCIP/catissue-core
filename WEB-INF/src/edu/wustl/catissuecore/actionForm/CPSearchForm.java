@@ -9,12 +9,18 @@ public class CPSearchForm extends AbstractActionForm
 	Long cpId = null;
 	Long participantId = null;
 	
+	/**
+	 * Getting Participant id
+	 * @return participantId
+	 */
 	public Long getParticipantId()
 	{
 		return participantId;
 	}
 
-
+	/**
+	 * @param participantId Setting Participant ID
+	 */
 	public void setParticipantId(Long participantId)
 	{
 		this.participantId = participantId;
@@ -46,13 +52,18 @@ public class CPSearchForm extends AbstractActionForm
     {
     }
 
-
+    /**
+     * getting CP Id
+     * @return cpId
+     */
 	public Long getCpId()
 	{
 		return cpId;
 	}
 
-
+	/**
+	 * @param cpId Setting CP Id
+	 */
 	public void setCpId(Long cpId)
 	{
 		this.cpId = cpId;

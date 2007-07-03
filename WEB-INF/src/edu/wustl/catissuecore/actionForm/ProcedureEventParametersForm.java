@@ -30,66 +30,78 @@ import edu.wustl.common.util.logger.Logger;
  *
  * Description:  This Class handles the Procedure event parameters..
  */
-public class ProcedureEventParametersForm extends SpecimenEventParametersForm {
+public class ProcedureEventParametersForm extends SpecimenEventParametersForm 
+{
 	
 	private String url;
 	private String name;
 
-	/**
-		 * @return
+		/**
+		 * @return name
 		 */
-		public String getName() {
+		public String getName() 
+		{
 			return name;
 		}
 
 		/**
-		 * @param name
+		 * @param name Setting name
 		 */
-		public void setName(String name) {
+		public void setName(String name) 
+		{
 			this.name = name;
 		}
 
 		/**
-		 * @return
+		 * @return url
 		 */
-		public String getUrl() {
+		public String getUrl() 
+		{
 			return url;
 		}
 
 		/**
-		 * @param url
+		 * @param url Setting url
 		 */
-		public void setUrl(String url) {
+		public void setUrl(String url)
+		{
 			this.url = url;
 		}
 		
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 * @return PROCEDURE_EVENT_PARAMETERS_FORM_ID
 	 */
-	public int getFormId() {
+	public int getFormId()
+	{
 		return Constants.PROCEDURE_EVENT_PARAMETERS_FORM_ID;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+	 * @param abstractDomain An AbstractDomain Object  
 	 */
-	public void setAllValues(AbstractDomainObject abstractDomain) {
-	super.setAllValues(abstractDomain);
-	ProcedureEventParameters procedureEventParametersObject = (ProcedureEventParameters) abstractDomain;
-	this.url = Utility.toString(procedureEventParametersObject.getUrl());
-	this.name = Utility.toString(procedureEventParametersObject.getName());
+	public void setAllValues(AbstractDomainObject abstractDomain)
+	{
+		super.setAllValues(abstractDomain);
+		ProcedureEventParameters procedureEventParametersObject = (ProcedureEventParameters) abstractDomain;
+		this.url = Utility.toString(procedureEventParametersObject.getUrl());
+		this.name = Utility.toString(procedureEventParametersObject.getName());
 	}
 	
 	/**
 	 * Overrides the validate method of ActionForm.
-	 * */
-	public ActionErrors validate(
-		ActionMapping mapping,
-		HttpServletRequest request) {
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
+	public ActionErrors validate(ActionMapping mapping,	HttpServletRequest request) 
+	{
 		ActionErrors errors = super.validate(mapping, request);
 		Validator validator = new Validator();
 
-		try {
+		try 
+		{
          	// Mandar 10-apr-06 : bugid :353 
         	// Error messages should be in the same sequence as the sequence of fields on the page.
 			if(validator.isEmpty(url))
@@ -97,16 +109,15 @@ public class ProcedureEventParametersForm extends SpecimenEventParametersForm {
 				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue("procedureeventparameters.url")));
 			}
 
-			if (validator.isEmpty(name)) {
-				errors.add(
-					ActionErrors.GLOBAL_ERROR,
-					new ActionError(
-						"errors.item.required",
-						ApplicationProperties.getValue(
+			if (validator.isEmpty(name))
+			{
+				errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.item.required",ApplicationProperties.getValue(
 							"procedureeventparameters.name")));
 			}
 			
-		} catch (Exception excp) {
+		} 
+		catch (Exception excp) 
+		{
 			Logger.out.error(excp.getMessage());
 		}
 		return errors;

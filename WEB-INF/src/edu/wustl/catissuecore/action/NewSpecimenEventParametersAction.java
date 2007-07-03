@@ -54,7 +54,14 @@ public class NewSpecimenEventParametersAction  extends SecureAction
     /**
      * Overrides the execute method of Action class.
      * Initializes the various fields in Biohazard.jsp Page.
-     * */
+     * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws IOException I/O exception
+	 * @throws ServletException servlet exception
+	 * @return value for ActionForward object
+     */
     public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException

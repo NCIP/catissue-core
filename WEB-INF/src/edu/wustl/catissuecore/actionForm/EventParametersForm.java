@@ -12,7 +12,6 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -107,11 +106,11 @@ public abstract class EventParametersForm extends AbstractActionForm
 	}
 	
 	/**
-	 * @param time_InMinutes The time_InMinutes to set.
+	 * @param timeInMinutes The time_InMinutes to set.
 	 */
-	public void setTimeInMinutes(String time_InMinutes)
+	public void setTimeInMinutes(String timeInMinutes)
 	{
-		this.timeInMinutes = time_InMinutes;
+		this.timeInMinutes = timeInMinutes;
 	}
 		
 	/**
@@ -148,6 +147,9 @@ public abstract class EventParametersForm extends AbstractActionForm
 	
 	
 //--------  Super class Methods
+	/**
+     * Resets the values of all the fields.
+     */
 	protected void reset()
 	{
 //		this.comments = null;
@@ -158,8 +160,11 @@ public abstract class EventParametersForm extends AbstractActionForm
 	}
 
 	/**
-     * Overrides the validate method of ActionForm.
-     * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	
@@ -169,27 +174,24 @@ public abstract class EventParametersForm extends AbstractActionForm
          try
          {
          	// checks the userid
-
            	if ((userId) == -1L)
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.user")));
             }
-           	if (!validator.checkDate( dateOfEvent ) )
+           	if (!validator.checkDate(dateOfEvent))
            	{
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("eventparameters.dateofevent")));
            	}
            	
-         	if (!validator.isNumeric( timeInMinutes,0 ) )
+         	if (!validator.isNumeric( timeInMinutes,0))
            	{
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",ApplicationProperties.getValue("eventparameters.timeinminutes")));
            	}
          	
-         	if (!validator.isNumeric( timeInHours,0 ) )
+         	if (!validator.isNumeric( timeInHours,0))
            	{
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.invalid",ApplicationProperties.getValue("eventparameters.timeinhours")));
            	}
-           	
-           	
          }
          catch(Exception excp)
          {
@@ -198,8 +200,9 @@ public abstract class EventParametersForm extends AbstractActionForm
          return errors;
       }
 	
-     /* (non-Javadoc)
+     /** 
  	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+ 	 * @param abstractDomain An AbstractDomainObject obj
  	 */
  	public void setAllValues(AbstractDomainObject abstractDomain)
  	{
@@ -211,12 +214,11 @@ public abstract class EventParametersForm extends AbstractActionForm
  	   if(eventParametersObject.getTimestamp()!=null)
  	   {
  		   calender.setTime(eventParametersObject.getTimestamp());
- 		   this.timeInHours = Utility.toString(Integer.toString( calender.get(Calendar.HOUR_OF_DAY)));
+ 		   this.timeInHours = Utility.toString(Integer.toString(calender.get(Calendar.HOUR_OF_DAY)));
  	 	   this.timeInMinutes = Utility.toString(Integer.toString(calender.get(Calendar.MINUTE)));
  	 	   this.dateOfEvent = Utility.parseDateToString(eventParametersObject.getTimestamp(),Constants.DATE_PATTERN_MM_DD_YYYY);
  	   }
  	   this.userId = eventParametersObject.getUser().getId().longValue() ;
- 	   
  	   //this.dateOfEvent = (calender.get(Calendar.MONTH)+1)+"-"+calender.get(Calendar.DAY_OF_MONTH)+"-"+calender.get(Calendar.YEAR) ;
  	   Logger.out.debug("id:"+id+" timeInHours:"+timeInHours+" timeInMinutes:"+timeInMinutes+" userId:"+userId+" dateOfEvent:"+dateOfEvent);
  	}

@@ -55,16 +55,19 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	
 // ---- super class methods
 	// ----- SUPERCLASS METHODS
-	/* (non-Javadoc)
+	/** 
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 * @return CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID
+	 * 
 	 */
 	public int getFormId()
 	{
 		return Constants.CHECKIN_CHECKOUT_EVENT_PARAMETERS_FORM_ID;
 	}
 
-	/* (non-Javadoc)
+	/** 
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+	 * @param abstractDomain An abstractDomain object. 
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -75,7 +78,10 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
 	
 	/**
 	 * Overrides the validate method of ActionForm.
-     * */
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	 
@@ -86,7 +92,7 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
          {
          	// checks the storageStatus
          	// changed from isEmpty to isValidOption as per bug 294 textbox to dropdown
-           	if ( !validator.isValidOption( storageStatus  ))
+           	if (!validator.isValidOption(storageStatus))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("checkincheckouteventparameter.storagestatus")));
             }
@@ -97,8 +103,10 @@ public class CheckInCheckOutEventParametersForm extends SpecimenEventParametersF
          }
          return errors;
       }
-	
-     protected void reset()
+	/**
+	 * Method to reset class Attributes
+	 */
+    protected void reset()
   	{
 //      	super.reset();
 //        this.storageStatus = null;

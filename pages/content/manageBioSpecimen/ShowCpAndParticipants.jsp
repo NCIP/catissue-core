@@ -4,6 +4,8 @@
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
+<%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
+<%@ page import="java.util.*"%>
 
 <%
 	String access = null;
@@ -14,6 +16,7 @@
 <link rel="stylesheet" type="text/css" href="css/styleSheet.css" />
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript">
+
 		function onCpChange(element)
 		{
 			var cpId = document.getElementById("cpId");
@@ -53,7 +56,6 @@
 				window.parent.frames[2].location = "CPQueryCollectionProtocolRegistration.do?<%=Constants.CP_SEARCH_CP_ID%>="+cpId.value+"&operation=add&pageOf=<%=Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY%>";
 			}
 		}	
-		
 
 </script>	
 	
@@ -68,7 +70,6 @@
 <html:form action="showCpAndParticipants.do">
 
 <table summary="" cellpadding="0" cellspacing="0" border="0">
-
 	<tr valign='top'>
 
 		<td class="formLabelAllBorder" colspan="2" width="170">
@@ -80,8 +81,8 @@
 
 		<td class="formField" nowrap valign='top' width="150">
 			<html:select property="cpId" styleClass="formFieldSized22" styleId="cpId" size="1" onchange="onCpChange(this)"
-			 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
-			<html:options collection="<%=Constants.CP_LIST%>" labelProperty="name" property="value"/>
+			  onmouseover="showToolTip(this)" onmouseout="hideTip(this.id)">
+			<html:options collection="<%=Constants.CP_LIST%>" labelProperty="name" property="value" />
 			</html:select>
 			
 			

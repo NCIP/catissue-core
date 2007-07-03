@@ -62,11 +62,16 @@ public class DistributionForm extends SpecimenEventParametersForm
 	 */
 	protected Map values = new HashMap();
 	
+	/**
+	 * @return DISTRIBUTION_FORM_ID return distribution form id
+	 */
 	public int getFormId()
 	{
 		return Constants.DISTRIBUTION_FORM_ID;
 	}
-	
+	/**
+	 * @param abstractDomain An AbstractDomainObject object
+	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
@@ -77,10 +82,13 @@ public class DistributionForm extends SpecimenEventParametersForm
 		this.activityStatus = Utility.toString(distributionObject.getActivityStatus());
 		Logger.out.debug("this.activityStatus "+this.activityStatus);
 		
-		if (distributionObject.getDistributedItemCollection().size() != 0) {
+		if (distributionObject.getDistributedItemCollection().size() != 0)
+		{
 			this.distributionType = new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE);
 			populateMapForSpecimen(distributionObject.getDistributedItemCollection());
-		} else {
+		} 
+		else
+		{
 			this.distributionType = new Integer(Constants.SPECIMEN_ARRAY_DISTRIBUTION_TYPE);
 			populateMapForArray(distributionObject.getSpecimenArrayCollection());
 		}
@@ -93,7 +101,12 @@ public class DistributionForm extends SpecimenEventParametersForm
 			counter = 1;
 */	}
 	
-	private void populateMapForArray(Collection specimenArrayCollection) {
+	/**
+	 * Populates map for Array
+	 * @param specimenArrayCollection Collection of Specimen Array 
+	 */
+	private void populateMapForArray(Collection specimenArrayCollection)
+	{
 		if(specimenArrayCollection != null) 
 		{
 			values = new HashMap();
@@ -118,8 +131,12 @@ public class DistributionForm extends SpecimenEventParametersForm
 			counter = specimenArrayCollection.size();
 		}
 	}
-
-	private void populateMapForSpecimen(Collection distributedItemCollection) {
+	/**
+	 * Populates Map for specimen
+	 * @param distributedItemCollection Collection of distributed items
+	 */
+	private void populateMapForSpecimen(Collection distributedItemCollection)
+	{
 		if(distributedItemCollection != null)
 		{
 			values = new HashMap();
@@ -157,6 +174,12 @@ public class DistributionForm extends SpecimenEventParametersForm
 		}
 	}
 
+	/**
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
 	{
 		//resolved bug# 4352
@@ -180,8 +203,8 @@ public class DistributionForm extends SpecimenEventParametersForm
 		
 		
 		//  date validation according to bug id  722 and 730
-		String errorKey = validator.validateDate(dateOfEvent,true );
-		if(errorKey.trim().length() >0  )
+		String errorKey = validator.validateDate(dateOfEvent,true);
+		if(errorKey.trim().length() >0)
 		{
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("eventparameters.dateofevent")));
 		}
@@ -217,9 +240,9 @@ public class DistributionForm extends SpecimenEventParametersForm
 			}
 			
 			
-			if(key.indexOf("_quantity")!=-1 )
+			if(key.indexOf("_quantity")!=-1)
 			{
-				if((validator.isEmpty(value) ))
+				if((validator.isEmpty(value)))
 				{
 					Logger.out.debug("Quantity empty**************");
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("itemrecord.quantity")));
@@ -265,7 +288,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 //	}
 	
 	/**
-	 * @return
+	 * @return counter
 	 */
 	public int getCounter()
 	{
@@ -279,14 +302,19 @@ public class DistributionForm extends SpecimenEventParametersForm
 	{
 		this.counter = counter;
 	}
-	public String getToSite() {
+	/**
+	 * @return toSite get To site
+	 */
+	public String getToSite() 
+	{
 		return toSite;
 	}
 	
 	/**
-	 * @param toSite
+	 * @param toSite Set site
 	 */
-	public void setToSite(String toSite) {
+	public void setToSite(String toSite) 
+	{
 		this.toSite = toSite;
 	}
 	
@@ -321,12 +349,17 @@ public class DistributionForm extends SpecimenEventParametersForm
 	}
 	
 	/**
-	 * @return
+	 * @return values
 	 */
-	public Map getValues() {
+	public Map getValues() 
+	{
 		return values;
 	}
 	
+	/**
+     * Resets the values of all the fields.
+     * This method defined in ActionForm is overridden in this class.
+     */
 	protected void reset()
 	{
 		//        super.reset();
@@ -339,25 +372,29 @@ public class DistributionForm extends SpecimenEventParametersForm
 	/**
 	 * @return Returns the idChange.
 	 */
-	public boolean isIdChange() {
+	public boolean isIdChange() 
+	{
 		return idChange;
 	}
 	/**
 	 * @param idChange The idChange to set.
 	 */
-	public void setIdChange(boolean idChange) {
+	public void setIdChange(boolean idChange)
+	{
 		this.idChange = idChange;
 	}
 	/**
-	 * @return Returns the rowNo.
+	 * @return rowNo Returns the rowNo.
 	 */
-	public int getRowNo() {
+	public int getRowNo() 
+	{
 		return rowNo;
 	}
 	/**
 	 * @param rowNo The rowNo to set.
 	 */
-	public void setRowNo(int rowNo) {
+	public void setRowNo(int rowNo)
+	{
 		this.rowNo = rowNo;
 	}
 	
@@ -418,6 +455,10 @@ public class DistributionForm extends SpecimenEventParametersForm
 		return null;
 	}
 	*/
+	/**
+	 *@param specimen Specimen class instance
+	 *@return availableQuantity Quantity remaining
+	 */
 	public Object getAvailableQty(Specimen specimen)
 	{
 		//Retrieve the Available quantity for the particular specimen
@@ -456,7 +497,8 @@ public class DistributionForm extends SpecimenEventParametersForm
 	
 	/**
 	 * This method returns AvailableQunatity for Specimen
-	 *    
+	 * @param specimen Base class specimen
+	 * @return specimen.getAvailableQuantity().getValue()
 	 */
 	public Object getDomainObjectAvailableQty(Specimen specimen)
 	{
@@ -466,6 +508,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 	
 	/**
 	 * This method returns ClassName for Specimen
+	 * @param specimen Base class specimen
 	 */
 	public final String getDomainObjectClassName(Specimen specimen)
 	{
@@ -493,7 +536,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 	
 	/**
      * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
-     * @param formBeanId - FormBean ID of the object inserted
+     * @param addNewFor - FormBean ID of the object inserted
      *  @param addObjectIdentifier - Identifier of the Object inserted 
      */
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
@@ -511,20 +554,33 @@ public class DistributionForm extends SpecimenEventParametersForm
             setToSite(addObjectIdentifier.toString());
         }
     }
-
-	public Integer getDistributionBasedOn() {
+	/**
+	 * @return distributionBasedOn Distribution Based On label or barcode
+	 */
+	public Integer getDistributionBasedOn() 
+	{
 		return distributionBasedOn;
 	}
-
-	public void setDistributionBasedOn(Integer distributionBasedOn) {
+	/**
+	 * @param distributionBasedOn Distribution Based On label or barcode
+	 */
+	public void setDistributionBasedOn(Integer distributionBasedOn) 
+	{
 		this.distributionBasedOn = distributionBasedOn;
 	}
-
-	public Integer getDistributionType() {
+	/**
+	 * @return distributionType Type of Distribution
+	 */
+	public Integer getDistributionType() 
+	{
 		return distributionType;
 	}
-
-	public void setDistributionType(Integer distributionType) {
+	/**
+	 * 
+	 * @param distributionType Type of Distribution
+	 */
+	public void setDistributionType(Integer distributionType) 
+	{
 		this.distributionType = distributionType;
 	}
 }

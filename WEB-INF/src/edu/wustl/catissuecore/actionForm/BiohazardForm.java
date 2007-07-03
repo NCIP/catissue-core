@@ -48,7 +48,9 @@ public class BiohazardForm extends AbstractActionForm
      */
     private String comments;
     
-    
+    /**
+     * Default Constructor
+     */
     public BiohazardForm()
     {
         reset();
@@ -99,7 +101,7 @@ public class BiohazardForm extends AbstractActionForm
 	
 	/**
 	 * Sets the type of the comments.
-	 * @param String the comments.
+	 * @param comments the comments.
 	 * @see #getComments(String)
 	 */
 	public void setComments(String comments)
@@ -119,7 +121,7 @@ public class BiohazardForm extends AbstractActionForm
 	
 	/**
 	 * Sets the name of the biohazard.
-	 * @param String the name of the biohazard.
+	 * @param name the name of the biohazard.
 	 * @see #getName(String)
 	 */
 	public void setName(String name)
@@ -127,8 +129,10 @@ public class BiohazardForm extends AbstractActionForm
 		this.name = name;
 	}
 	
-    /* (non-Javadoc)
+    /** 
+     * Getting Activity Status
      * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getActivityStatus()
+     * @return null
      */
     public String getActivityStatus()
     {
@@ -137,8 +141,10 @@ public class BiohazardForm extends AbstractActionForm
     }
     
     
-    /* (non-Javadoc)
+    /**
+     * Setting Activity Status 
      * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setActivityStatus(java.lang.String)
+     * @param activityStatus Setting Activity Status
      */
     public void setActivityStatus(String activityStatus)
     {
@@ -150,7 +156,6 @@ public class BiohazardForm extends AbstractActionForm
      * Checks the operation to be performed is add or not.
      * @return Returns true if operation is equal to "add", else it returns false
      * */
-    
     public boolean isAddOperation()
     {
         return(getOperation().equals(Constants.ADD));
@@ -158,6 +163,7 @@ public class BiohazardForm extends AbstractActionForm
     
     /**
      * Returns the id assigned to form bean
+     * @return BIOHAZARD_FORM_ID
      */
     public int getFormId()
     {
@@ -183,8 +189,11 @@ public class BiohazardForm extends AbstractActionForm
     }
 
     /**
-    * Overrides the validate method of ActionForm.
-    * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
         ActionErrors errors = new ActionErrors();

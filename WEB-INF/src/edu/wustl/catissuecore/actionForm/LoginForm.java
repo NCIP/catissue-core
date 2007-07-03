@@ -63,12 +63,19 @@ public class LoginForm extends AbstractActionForm
         {
             this.password = password;
         }
-        
+        /**
+    	 * Overrides the validate method of ActionForm.
+    	 * @return error ActionErrors instance
+    	 * @param mapping Actionmapping instance
+    	 * @param request HttpServletRequest instance
+    	 */
         public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
         {
         	HttpSession prevSession = request.getSession();
             if(prevSession!=null)
+            {
             	prevSession.invalidate();
+            }
             
             ActionErrors errors = new ActionErrors();
             Validator validator = new Validator();
@@ -95,14 +102,16 @@ public class LoginForm extends AbstractActionForm
         /**
          * Resets the values of all the fields.
          * This method defined in ActionForm is overridden in this class.
-         */
+         * @param mapping Actionmapping instance
+    	 * @param request HttpServletRequest instance
+    	 */
         public void reset(ActionMapping mapping, HttpServletRequest request)
         {
             this.loginName = null;
             this.password = null;
         }
         
-        /* (non-Javadoc)
+        /**
          * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
          */
         protected void reset()
@@ -111,8 +120,9 @@ public class LoginForm extends AbstractActionForm
 
         }
         
-        /* (non-Javadoc)
+        /**
          * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
+         * @return 0
          */
         public int getFormId()
         {
@@ -120,8 +130,9 @@ public class LoginForm extends AbstractActionForm
             return 0;
         }
         
-        /* (non-Javadoc)
+        /**
          * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
+         * @param abstractDomain An AbstractDomain Object 
          */
         public void setAllValues(AbstractDomainObject abstractDomain)
         {

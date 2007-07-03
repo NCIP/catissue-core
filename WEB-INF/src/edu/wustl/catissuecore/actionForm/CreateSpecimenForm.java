@@ -77,18 +77,20 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
         this.parentSpecimenId = parentSpecimenId;
     }
         
- 
+    /**
+     * This method is to reset Class attributes
+     */
     protected void reset()
     {
     	if (reset == true) 
 	    {
-        super.reset();
-     	this.parentSpecimenId=null;
+    		super.reset();
+    		this.parentSpecimenId=null;
 	    }
     }
     
     /**
-     * Returns the id assigned to form bean.
+     * @return CREATE_SPECIMEN_FORM_ID Returns the id assigned to form bean.
      */
     public int getFormId()
     {
@@ -97,7 +99,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
     
     /**
      * This function Copies the data from an site object to a SiteForm object.
-     * @param site An object containing the information about site.  
+     * @param abstractDomain An object containing the information about site.  
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
@@ -105,9 +107,12 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
         super.setAllValues(specimen);
     }
     
-	/**
-     * Overrides the validate method of ActionForm.
-     * */
+    /**
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
          ActionErrors errors = super.validate(mapping,request);
@@ -198,7 +203,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
 	{
 		this.reset = reset;
 	}
-	/* (non-Javadoc)
+	/**
 	 * @see java.lang.Object#clone()
 	 */
 	public Object clone()
@@ -209,7 +214,7 @@ public class CreateSpecimenForm extends SpecimenForm implements Cloneable
 		}
 		catch (CloneNotSupportedException e)
 		{
-				e.printStackTrace();
+			Logger.out.error("Error in Clone method of CreateSpecimenForm:"+e);	
 		}
 		return null;
 	}

@@ -21,6 +21,11 @@ import edu.wustl.catissuecore.util.global.Constants;
  */
 public class CheckInCheckOutEventParametersAction extends SpecimenEventParametersAction
 {
+	
+	/**
+	 * @param  request object of HttpServletRequest
+	 * @throws Exception generic exception
+	 */
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 		//set array of CheckInCheckOutEventParameters

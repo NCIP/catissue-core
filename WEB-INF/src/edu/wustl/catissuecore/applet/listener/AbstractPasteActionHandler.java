@@ -263,9 +263,19 @@ public abstract class AbstractPasteActionHandler implements ActionListener
 			selectedColumnIndex++;
 		}
 		/**
-		 * Update toolTip of pasted columns
+		 * Smita Kadam
+		 * Reviewer: Sachin
+		 * Bug ID: 4574
+		 * Patch ID: 4574_2 
+		 * Description: Tooltip related processing done only for Multiple specimen table
 		 */
-		doPasteTooltip(validatorModel,dataMap);
+		if (table.getModel() instanceof MultipleSpecimenTableModel)
+		{
+			/**
+			 * Update toolTip of pasted columns
+			 */
+			doPasteTooltip(validatorModel,dataMap);
+		}
 		/** -- patch ends here -- */
 		SwingUtilities.updateComponentTreeUI(table);
 	}

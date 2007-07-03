@@ -38,6 +38,13 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class ConfigureAdvanceSearchResultsAction extends BaseAction
 {
+	/**
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+     * */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{

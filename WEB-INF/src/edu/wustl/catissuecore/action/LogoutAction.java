@@ -24,10 +24,19 @@ import edu.wustl.common.dao.JDBCDAO;
  *@author Aarti Sharma
  *@version 1.0
  */
-public class LogoutAction  extends BaseAction  {
+public class LogoutAction  extends BaseAction  
+{
 
+	/**
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response) throws Exception{
+			HttpServletRequest request, HttpServletResponse response) throws Exception
+	{
 		
 		HttpSession session = request.getSession();
 		

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +44,14 @@ public class ShowCPAndParticipantsAction extends BaseAction
 		//Setting the list in request
 		request.setAttribute(Constants.CP_LIST, cpColl);
 
+		
+		//Smita changes start
+		//Gettiing the CP list 
+		Map<Long, String> cpIDTitleMap = participantRegCacheManager.getCPIDTitleMap();
+		Collections.sort(cpColl);
+		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpIDTitleMap);
+		//Smita changes end
+		
 		List participantColl = new ArrayList();
 
 		Long cpId = null;
@@ -96,3 +105,4 @@ public class ShowCPAndParticipantsAction extends BaseAction
 		return mapping.findForward("success");
 	}
 }
+

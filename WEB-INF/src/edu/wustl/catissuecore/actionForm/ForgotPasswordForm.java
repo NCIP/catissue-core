@@ -54,7 +54,7 @@ public class ForgotPasswordForm extends AbstractActionForm
     }
 
     /**
-     * The form id of ForgotPasswordForm.
+     * @return FORGOT_PASSWORD_FORM_ID The form id of ForgotPasswordForm.
      */
     public int getFormId()
     {
@@ -62,7 +62,8 @@ public class ForgotPasswordForm extends AbstractActionForm
     }
 
     /**
-     * Populates all the fields from the domain object to the form bean. 
+     * Populates all the fields from the domain object to the form bean.
+     * @param abstractDomain An AbstractDomain Object  
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
@@ -70,9 +71,11 @@ public class ForgotPasswordForm extends AbstractActionForm
     }
 
     /**
-     * Overrides the validate method from Action class.
-     * Validates the fields in the ForgotPasswordForm.
-     */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param arg0 Actionmapping instance
+	 * @param arg1 HttpServletRequest instance
+	 */
     public ActionErrors validate(ActionMapping arg0, HttpServletRequest arg1)
     {
         ActionErrors errors = new ActionErrors();

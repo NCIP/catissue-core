@@ -82,14 +82,18 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	
 	
 //	 ----- SUPERCLASS METHODS
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 * @return SPUN_EVENT_PARAMETERS_FORM_ID
 	 */
 	public int getFormId()
 	{
 		return Constants.SPUN_EVENT_PARAMETERS_FORM_ID ;
 	}
-
+	 /**
+     * Populates all the fields from the domain object to the form bean.
+     * @param abstractDomain An AbstractDomain Object  
+     */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 	    try
@@ -105,10 +109,12 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 	    }
 	}
 	
-	
 	/**
-    * Overrides the validate method of ActionForm.
-    * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
     	ActionErrors errors = super.validate(mapping, request);
@@ -123,7 +129,7 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
 //          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("spuneventparameters.gforce")));
 //           }
         	
-        	Logger.out.info("durationInMinutes: "+ durationInMinutes  );
+        	Logger.out.info("durationInMinutes: "+ durationInMinutes);
             //	 checks the durationInMinutes
 //         	if (!validator.isNumeric(String.valueOf(durationInMinutes),1) )
 //            {
@@ -139,7 +145,9 @@ public class SpunEventParametersForm extends SpecimenEventParametersForm
      }
 	
 
-   
+    /**
+     * Resets the values of all the fields.
+     */
 	 protected void reset()
 	 {
 //	 	super.reset();

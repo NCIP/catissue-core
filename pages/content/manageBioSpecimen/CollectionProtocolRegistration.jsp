@@ -5,7 +5,8 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
-
+<%@ page import="java.util.*"%>
+<%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes -->
@@ -58,6 +59,7 @@
 		            readOnlyValue = false;
 		        }
 %>
+
 <head>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <%if(pageOf.equals(Constants.PAGE_OF_COLLECTION_PROTOCOL_REGISTRATION_CP_QUERY))
@@ -116,8 +118,6 @@
 			changeSubmitTo(action );
 			document.forms[0].submit();
 		}
-		
-		
 </script>		
 </head>
 <%
@@ -184,7 +184,7 @@
 					<td class="formField">
 <!-- Mandar : 434 : for tooltip -->
 						<html:select property="collectionProtocolID" styleClass="formFieldSized" styleId="collectionProtocolID" size="1"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						 onmouseover="showToolTip(this)" onmouseout="hideTip(this.id)">
 						    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
 					    </html:select>
 						&nbsp;

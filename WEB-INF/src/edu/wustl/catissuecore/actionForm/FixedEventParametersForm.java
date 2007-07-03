@@ -88,14 +88,17 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	}
 	
 //	 ----- SUPERCLASS METHODS
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 * @return FIXED_EVENT_PARAMETERS_FORM_ID
 	 */
 	public int getFormId()
 	{
 		return Constants.FIXED_EVENT_PARAMETERS_FORM_ID;
 	}
-
+	/**
+	 * @param abstractDomain An AbstractDomainObject obj
+	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 	    try
@@ -112,8 +115,11 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
 	}
 	
 	/**
-     * Overrides the validate method of ActionForm.
-     * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	ActionErrors errors = super.validate(mapping, request);
@@ -123,7 +129,7 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
          {
 
          //	 checks the fixationType
-          	if (!validator.isValidOption(fixationType ))
+          	if (!validator.isValidOption(fixationType))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("fixedeventparameters.fixationtype")));
             }
@@ -152,7 +158,6 @@ public class FixedEventParametersForm extends SpecimenEventParametersForm
       * Resets the values of all the fields.
       * This method defined in ActionForm is overridden in this class.
       */
- 
      protected void reset()
      {
 //         super.reset();

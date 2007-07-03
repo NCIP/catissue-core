@@ -52,6 +52,9 @@ public class AssignPrivilegesForm extends ActionForm
      * */
     private String [] groups;
     
+    /**
+     * Default Constructor
+     */
     public AssignPrivilegesForm()
     {
     }
@@ -88,7 +91,7 @@ public class AssignPrivilegesForm extends ActionForm
 	
 	/**
      * Sets the list of groups/users.
-     * @param attributes String[] the list of groups/users.
+     * @param groups String[] the list of groups/users.
      * @see #getGroups()
      */
 	public void setGroups(String[] groups)
@@ -108,7 +111,7 @@ public class AssignPrivilegesForm extends ActionForm
 	
 	/**
      * Sets the object type.
-     * @param attributes String the object type.
+     * @param objectTypes String the object type.
      * @see #getObjectType()
      */
 	public void setObjectType(String objectTypes)
@@ -128,7 +131,7 @@ public class AssignPrivilegesForm extends ActionForm
 	
 	/**
      * Sets the privilege name.
-     * @param attributes String the privilege name.
+     * @param privileges String the privilege name.
      * @see #getPrivilege()
      */
 	public void setPrivilege(String privileges)
@@ -148,7 +151,7 @@ public class AssignPrivilegesForm extends ActionForm
 	
 	/**
      * Sets the list of record identifiers.
-     * @param attributes String[] the list of record identifiers.
+     * @param recordIds String[] the list of record identifiers.
      * @see #getRecordIds()
      */
 	public void setRecordIds(String[] recordIds)
@@ -158,6 +161,9 @@ public class AssignPrivilegesForm extends ActionForm
 	
 	/**
 	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
 	 */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {

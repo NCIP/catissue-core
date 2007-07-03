@@ -43,6 +43,12 @@ public class DefaultSpecimenViewAction extends BaseAction
 
 	/**
 	 * Overrides the execute method in Action class.
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 * @return value for ActionForward object
 	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -68,10 +74,8 @@ public class DefaultSpecimenViewAction extends BaseAction
 			Map columnIdsMap = (Map) session.getAttribute(Constants.COLUMN_ID_MAP);
 
 			String[] selectColumnNames = new String[columnNameValueBeans.size()];
-			;
 			List columnDisplayNames = new ArrayList();
 			String[] configuredColumns = new String[columnNameValueBeans.size()];
-			;
 
 			Iterator columnNameValueBeansItr = columnNameValueBeans.iterator();
 			int i = 0;

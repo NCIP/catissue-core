@@ -47,7 +47,7 @@ public class InstitutionForm extends AbstractActionForm
 
     /**
      * This function Copies the data from an institute object to a InstitutionForm object.
-     * @param institute An Institute object containing the information about the institute.  
+     * @param abstractDomain An Institute object containing the information about the institute.  
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
@@ -69,7 +69,7 @@ public class InstitutionForm extends AbstractActionForm
 
     /**
      * Sets the login name of this institute
-     * @param loginName login name of the institute.
+     * @param name login name of the institute.
      * @see #getLoginName()
      */
     public void setName(String name)
@@ -79,7 +79,7 @@ public class InstitutionForm extends AbstractActionForm
 
     
     /**
-     * Returns the id assigned to form bean
+     * @return INSTITUTION_FORM_ID Returns the id assigned to form bean
      */
     public int getFormId()
     {
@@ -97,8 +97,11 @@ public class InstitutionForm extends AbstractActionForm
     }
 
     /**
-    * Overrides the validate method of ActionForm.
-    * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
         ActionErrors errors = new ActionErrors();

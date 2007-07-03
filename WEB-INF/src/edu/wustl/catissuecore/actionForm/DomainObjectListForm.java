@@ -51,7 +51,8 @@ public class DomainObjectListForm extends AbstractActionForm
      */
     public void setValue(String key, Object value) 
     {
-        if (!value.equals("on")){
+        if (!value.equals("on"))
+        {
             values.put(key, value);
         }
             
@@ -113,24 +114,29 @@ public class DomainObjectListForm extends AbstractActionForm
         return values.values();
     }
     
-    /* (non-Javadoc)
+    /**
      * @see edu.wustl.catissuecore.actionForm.AbstractForm#getFormId()
+     * @return APPROVE_USER_FORM_ID
      */
     public int getFormId()
     {
         return Constants.APPROVE_USER_FORM_ID;
     }
 
-    /* (non-Javadoc)
+    /**
      * @see edu.wustl.catissuecore.actionForm.AbstractForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomain)
+     * @param abstractDomain An AbstractDomainObject obj
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {}
     
 
     /**
-     * Overrides the validate method of ActionForm.
-     * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
          ActionErrors errors = new ActionErrors();

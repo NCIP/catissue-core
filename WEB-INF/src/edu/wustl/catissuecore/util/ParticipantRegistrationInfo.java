@@ -1,4 +1,4 @@
-
+							  
 package edu.wustl.catissuecore.util;
 
 import java.util.List;
@@ -12,6 +12,7 @@ public class ParticipantRegistrationInfo
 	
 	private Long cpId;
 	private String cpTitle;
+	private String cpShortTitle;
 	private List participantInfoCollection;
 	
 
@@ -49,6 +50,24 @@ public class ParticipantRegistrationInfo
 	public void setCpTitle(String cpTitle)
 	{
 		this.cpTitle = cpTitle;
+	}
+
+	/**
+	 * This method returns CP Short title
+	 * @return CP Short title
+	 */
+	public String getCpShortTitle()
+	{
+		return cpShortTitle;
+	}
+
+	/**
+	 * This method sets the CP Short title
+	 * @param cpShortTitle
+	 */
+	public void setCpShortTitle(String cpShortTitle)
+	{
+		this.cpShortTitle = cpShortTitle;
 	}
 
 	/**

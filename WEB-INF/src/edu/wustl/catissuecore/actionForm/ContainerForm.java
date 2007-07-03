@@ -20,7 +20,8 @@ import edu.wustl.common.domain.AbstractDomainObject;
  * @author Ashwin Gupta
  * @version 1.1
  */
-public class ContainerForm extends AbstractActionForm {
+public class ContainerForm extends AbstractActionForm 
+{
 
 	/**
 	 * serial version id
@@ -77,18 +78,23 @@ public class ContainerForm extends AbstractActionForm {
 	 */
 	private String comment;
 	
-	/* (non-Javadoc)
+	/** 
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
+	 * @return 0
 	 */
-	public int getFormId() {
+	public int getFormId() 
+	{
 		return 0;
 	}
 
 	/** 
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
+	 * @param domainObject An object of Container
 	 */
-	public void setAllValues(AbstractDomainObject domainObject) {
-		if (domainObject instanceof Container) {
+	public void setAllValues(AbstractDomainObject domainObject) 
+	{
+		if (domainObject instanceof Container) 
+		{
 			Container container = (Container) domainObject;
 			this.id = container.getId().longValue();
 			this.barcode = container.getBarcode();
@@ -99,10 +105,12 @@ public class ContainerForm extends AbstractActionForm {
 			this.comment = container.getComment();
 			this.name = container.getName();
 			
-		  if (container.getCapacity().getOneDimensionCapacity() != null) {	
+		  if (container.getCapacity().getOneDimensionCapacity() != null) 
+		  {	
 	    	this.oneDimensionCapacity =  container.getCapacity().getOneDimensionCapacity().intValue();
 		  }
-		  if (container.getCapacity().getTwoDimensionCapacity() != null) {
+		  if (container.getCapacity().getTwoDimensionCapacity() != null) 
+		  {
 	    	this.twoDimensionCapacity =  container.getCapacity().getTwoDimensionCapacity().intValue();
 		  }	
 		  
@@ -112,104 +120,119 @@ public class ContainerForm extends AbstractActionForm {
 	/**
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
 	 */
-	protected void reset() {
+	protected void reset() 
+	{
 	}
 
 	/**
 	 * @return Returns the activityStatus.
 	 */
-	public String getActivityStatus() {
+	public String getActivityStatus() 
+	{
 		return activityStatus;
 	}
 
 	/**
 	 * @param activityStatus The activityStatus to set.
 	 */
-	public void setActivityStatus(String activityStatus) {
+	public void setActivityStatus(String activityStatus) 
+	{
 		this.activityStatus = activityStatus;
 	}
 
 	/**
 	 * @return Returns the barcode.
 	 */
-	public String getBarcode() {
+	public String getBarcode()
+	{
 		return barcode;
 	}
 
 	/**
 	 * @param barcode The barcode to set.
 	 */
-	public void setBarcode(String barcode) {
+	public void setBarcode(String barcode) 
+	{
 		this.barcode = barcode;
 	}
 
 	/**
 	 * @return Returns the comment.
 	 */
-	public String getComment() {
+	public String getComment()
+	{
 		return comment;
 	}
 
 	/**
 	 * @param comment The comment to set.
 	 */
-	public void setComment(String comment) {
+	public void setComment(String comment)
+	{
 		this.comment = comment;
 	}
 
 	/**
 	 * @return Returns the isFull.
 	 */
-	public String getIsFull() {
+	public String getIsFull() 
+	{
 		return isFull;
 	}
 
 	/**
 	 * @param isFull The isFull to set.
 	 */
-	public void setIsFull(String isFull) {
+	public void setIsFull(String isFull)
+	{
 		this.isFull = isFull;
 	}
 
 	/**
 	 * @return Returns the name.
 	 */
-	public String getName() {
+	public String getName() 
+	{
 		return name;
 	}
 
 	/**
 	 * @param name The name to set.
 	 */
-	public void setName(String name) {
+	public void setName(String name)
+	{
 		this.name = name;
 	}
 
 	/**
 	 * @return Returns the positionDimensionOne.
 	 */
-	public int getPositionDimensionOne() {
+	public int getPositionDimensionOne() 
+	{
 		return positionDimensionOne;
 	}
 
 	/**
 	 * @param positionDimensionOne The positionDimensionOne to set.
 	 */
-	public void setPositionDimensionOne(int positionDimensionOne) {
+	public void setPositionDimensionOne(int positionDimensionOne) 
+	{
 		this.positionDimensionOne = positionDimensionOne;
 	}
 
 	/**
 	 * @return Returns the positionDimensionTwo.
 	 */
-	public int getPositionDimensionTwo() {
+	public int getPositionDimensionTwo()
+	{
 		return positionDimensionTwo;
 	}
 
 	/**
 	 * @param positionDimensionTwo The positionDimensionTwo to set.
 	 */
-	public void setPositionDimensionTwo(int positionDimensionTwo) {
+	public void setPositionDimensionTwo(int positionDimensionTwo) 
+	{
 		this.positionDimensionTwo = positionDimensionTwo;
 	}
 	
@@ -248,14 +271,16 @@ public class ContainerForm extends AbstractActionForm {
 	/**
 	 * @return Returns the positionInStorageContainer.
 	 */
-	public String getPositionInStorageContainer() {
+	public String getPositionInStorageContainer() 
+	{
 		return positionInStorageContainer;
 	}
 
 	/**
 	 * @param positionInStorageContainer The positionInStorageContainer to set.
 	 */
-	public void setPositionInStorageContainer(String positionInStorageContainer) {
+	public void setPositionInStorageContainer(String positionInStorageContainer) 
+	{
 		this.positionInStorageContainer = positionInStorageContainer;
 	}
 

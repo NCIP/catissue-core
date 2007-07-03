@@ -41,13 +41,18 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	 * Activity Status of the Specimen
 	 */
 	private String activityStatus;
-	
+	/**
+	 * Getting Activity status
+	 * @return activityStatus 
+	 */
 	public String getActivityStatus()
 	{
 		return activityStatus;
 	}
 
-	
+	/**
+	 * @param activityStatus Setting Activity Status
+	 */
 	public void setActivityStatus(String activityStatus)
 	{
 		this.activityStatus = activityStatus;
@@ -69,16 +74,18 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 		this.reason = reason;
 	}
 
-	/* (non-Javadoc)
+	/** 
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 * @return DISPOSAL_EVENT_PARAMETERS_FORM_ID
 	 */
 	public int getFormId()
 	{
 		return Constants.DISPOSAL_EVENT_PARAMETERS_FORM_ID;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+	 * @param abstractDomain An AbstractDomainObject Obj
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -89,8 +96,11 @@ public class DisposalEventParametersForm extends SpecimenEventParametersForm
 	}
 	
 	/**
-     * Overrides the validate method of ActionForm.
-     * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	ActionErrors errors = super.validate(mapping, request);

@@ -224,7 +224,7 @@ public class UserForm extends AbstractActionForm
 
 	/**
 	 * Sets the institutionId name of the user.
-	 * @param institutionId String representing the institutionId of the user.
+	 * @param institution String representing the institutionId of the user.
 	 * @see #getinstitution()
 	 */
 	public void setInstitutionId(long institution)
@@ -311,7 +311,7 @@ public class UserForm extends AbstractActionForm
 
 	/**
 	 * Sets the Department Name of the user.
-	 * @param departmentId String representing departmentId of the user.
+	 * @param department String representing departmentId of the user.
 	 * @see #getDepartmentId()
 	 */
 	public void setDepartmentId(long department)
@@ -331,7 +331,7 @@ public class UserForm extends AbstractActionForm
 
 	/**
 	 * Sets the cancer research group the user belongs.
-	 * @param cancerResearchGroupId The cancerResearchGroupId to set.
+	 * @param cancerResearchGroup The cancerResearchGroupId to set.
 	 * @see #getCancerResearchGroupId()
 	 */
 	public void setCancerResearchGroupId(long cancerResearchGroup)
@@ -351,7 +351,7 @@ public class UserForm extends AbstractActionForm
 
 	/**
 	 * Sets the Street Address of the user.
-	 * @param address String representing mailing address of the user.
+	 * @param street String representing mailing address of the user.
 	 * @see #getStreet()
 	 */
 	public void setStreet(String street)
@@ -431,7 +431,7 @@ public class UserForm extends AbstractActionForm
 
 	/**
 	 * Sets the zip code of the user's city.
-	 * @param zip The zip code to set.
+	 * @param zipCode The zip code to set.
 	 * @see #getZip()
 	 */
 	public void setZipCode(String zipCode)
@@ -451,7 +451,7 @@ public class UserForm extends AbstractActionForm
 
 	/**
 	 * Sets the phone number of the user. 
-	 * @param phone The phone number to set.
+	 * @param phoneNumber The phone number to set.
 	 * @see #getphoneNumber()
 	 */
 	public void setPhoneNumber(String phoneNumber)
@@ -471,7 +471,7 @@ public class UserForm extends AbstractActionForm
 
 	/**
 	 * Sets the fax number of the user.
-	 * @param fax The fax to set.
+	 * @param faxNumber The fax to set.
 	 * @see #getFax()
 	 */
 	public void setFaxNumber(String faxNumber)
@@ -516,7 +516,7 @@ public class UserForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the id assigned to form bean.
+	 * @return Returns the id assigned to form bean.
 	 */
 	public int getFormId()
 	{
@@ -526,7 +526,6 @@ public class UserForm extends AbstractActionForm
 			formId = Constants.USER_FORM_ID;
 		}
 		Logger.out.debug("................formId...................." + formId);
-
 		return formId;
 	}
 
@@ -597,7 +596,7 @@ public class UserForm extends AbstractActionForm
 
 	/**
 	 * Copies the data from an AbstractDomain object to a UserForm object.
-	 * @param user An AbstractDomain object.  
+	 * @param abstractDomain An AbstractDomain object.  
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -611,7 +610,9 @@ public class UserForm extends AbstractActionForm
 
 			// Check for null entries (for admin)
 			if (!edu.wustl.common.util.Utility.isNull(user.getInstitution()))
+			{
 				this.institutionId = user.getInstitution().getId().longValue();
+			}
 
 			this.emailAddress = user.getEmailAddress();
 
@@ -619,10 +620,14 @@ public class UserForm extends AbstractActionForm
 			confirmEmailAddress = this.emailAddress;
 
 			if (!edu.wustl.common.util.Utility.isNull(user.getDepartment()))
+			{
 				this.departmentId = user.getDepartment().getId().longValue();
+			}
 
 			if (!edu.wustl.common.util.Utility.isNull(user.getCancerResearchGroup()))
+			{
 				this.cancerResearchGroupId = user.getCancerResearchGroup().getId().longValue();
+			}
 
 			if (!edu.wustl.common.util.Utility.isNull(user.getAddress()))
 			{
@@ -641,7 +646,9 @@ public class UserForm extends AbstractActionForm
 				this.activityStatus = user.getActivityStatus();
 
 				if (!edu.wustl.common.util.Utility.isNull(user.getComments()))
+				{
 					this.comments = user.getComments();
+				}
 
 				this.role = user.getRoleId();
 
@@ -710,7 +717,10 @@ public class UserForm extends AbstractActionForm
 
 	/**
 	 * Overrides the validate method of ActionForm.
-	 * */
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		ActionErrors errors = new ActionErrors();
@@ -972,7 +982,7 @@ public class UserForm extends AbstractActionForm
 
 	/**
 	 * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
-	 * @param formBeanId - FormBean ID of the object inserted
+	 * @param addNewFor - FormBean ID of the object inserted
 	 *  @param addObjectIdentifier - Identifier of the Object inserted 
 	 */
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)

@@ -39,6 +39,14 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ParticipantLookupAction extends BaseAction
 {
+	/**
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 * @return value for ActionForward object
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception 
@@ -108,6 +116,8 @@ public class ParticipantLookupAction extends BaseAction
 	}
 	/**
 	 * This Function creates the Column Headings for Data Grid
+	 * @param bizlogic instance of ParticipantBizLogic
+	 * @throws Exception generic exception
 	 * @return List Column List
 	 */
 	private List getColumnHeadingList(ParticipantBizLogic bizlogic) throws Exception
@@ -128,13 +138,13 @@ public class ParticipantLookupAction extends BaseAction
 	
 	/**
 	 * This functions creates Particpant List with each participant informaton  with the match probablity 
-	 * @param ParticipantList
+	 * @param participantList list of participant
 	 * @return List of Participant Information  List
 	 */
-	private List getParticipantDisplayList(List ParticipantList)
+	private List getParticipantDisplayList(List participantList)
 	{
 		List participantDisplayList=new ArrayList();
-		Iterator itr=ParticipantList.iterator();
+		Iterator itr=participantList.iterator();
 		while(itr.hasNext())
 		{
 			DefaultLookupResult result=(DefaultLookupResult)itr.next();

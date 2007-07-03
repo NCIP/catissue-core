@@ -47,7 +47,7 @@ public class DepartmentForm extends AbstractActionForm
 
     /**
      * Copies the data from an AbstractDomain object to a DepartmentForm object.
-     * @param Department An AbstractDomain object.  
+     * @param abstractDomain An AbstractDomain object.  
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
@@ -68,7 +68,7 @@ public class DepartmentForm extends AbstractActionForm
 
     /**
      * Sets the name of this Department
-     * @param Name name of the Department.
+     * @param name Name of the Department.
      */
     public void setName(String name)
     {
@@ -76,7 +76,7 @@ public class DepartmentForm extends AbstractActionForm
     }
 
     /**
-     * Returns the id assigned to form bean
+     * @return DEPARTMENT_FORM_ID Returns the id assigned to form bean
      */
     public int getFormId()
     {
@@ -93,8 +93,11 @@ public class DepartmentForm extends AbstractActionForm
     }
 
     /**
-    * Overrides the validate method of ActionForm.
-    * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
         ActionErrors errors = new ActionErrors();

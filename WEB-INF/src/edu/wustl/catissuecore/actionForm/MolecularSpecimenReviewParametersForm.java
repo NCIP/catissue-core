@@ -215,14 +215,18 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	}
 	
 //	 ----- SUPERCLASS METHODS
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 * @return MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID
 	 */
 	public int getFormId()
 	{
 		return Constants.MOLECULAR_SPECIMEN_REVIEW_PARAMETERS_FORM_ID;
 	}
-
+	/**
+     * Populates all the fields from the domain object to the form bean.
+     * @param abstractDomain An AbstractDomain Object  
+     */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
@@ -245,8 +249,11 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	}
 	
 	/**
-     * Overrides the validate method of ActionForm.
-     * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	ActionErrors errors = super.validate(mapping, request);
@@ -255,56 +262,54 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
          try
          {
 
-         	Logger.out.info("GelImageUrl: "+ gelImageURL );
+         	Logger.out.info("GelImageUrl: "+ gelImageURL);
 //         //	 checks the gelImageURL
 //          	if (validator.isEmpty(gelImageURL))
 //            {
 //           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelimageurl")));
 //            }
 
-          	Logger.out.info("qualityIndex: "+ qualityIndex );
+          	Logger.out.info("qualityIndex: "+ qualityIndex);
             //	 checks the qualityIndex
 //         	if (validator.isEmpty(qualityIndex ))
 //            {
 //           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.qualityindex")));
 //            }
 
-          	Logger.out.info("laneNumber: "+ laneNumber );
+          	Logger.out.info("laneNumber: "+ laneNumber);
 //            //	 checks the laneNumber
 //         	if (validator.isEmpty(laneNumber))
 //            {
 //           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.lanenumber")));
 //            }
 
-          	Logger.out.info("gelNumber: "+ gelNumber  );
+          	Logger.out.info("gelNumber: "+ gelNumber);
             //	 checks the gelNumber
-         	if (!validator.isEmpty(gelNumber) && !validator.isNumeric(gelNumber,0 )  )
+         	if (!validator.isEmpty(gelNumber) && !validator.isNumeric(gelNumber,0))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("molecularspecimenreviewparameters.gelnumber")));
             }
 
-          	Logger.out.info("absorbanceAt260: "+ absorbanceAt260  );
+          	Logger.out.info("absorbanceAt260: "+ absorbanceAt260);
             //	 checks the absorbanceAt260
          	if (!validator.isEmpty(absorbanceAt260) && !validator.isDouble(absorbanceAt260,false))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat260")));
             }
 
-          	Logger.out.info("absorbanceAt280: "+ absorbanceAt280  );
+          	Logger.out.info("absorbanceAt280: "+ absorbanceAt280);
             //	 checks the absorbanceAt280
          	if (!validator.isEmpty(absorbanceAt280) && !validator.isDouble(absorbanceAt280,false))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("molecularspecimenreviewparameters.absorbanceat280")));
             }
 
-         	Logger.out.info("ratio28STo18S : "+ ratio28STo18S   );
+         	Logger.out.info("ratio28STo18S : "+ ratio28STo18S);
 //            //	 checks the ratio28STo18S 
 //         	if (!validator.isDouble(""+ratio28STo18S ))
 //            {
 //           		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("molecularspecimenreviewparameters.ratio28STo18S")));
 //            }
-         	
-         	
          }
          catch(Exception excp)
          {
@@ -336,13 +341,15 @@ public class MolecularSpecimenReviewParametersForm extends SpecimenEventParamete
 	/**
 	 * @return Returns the isRNA.
 	 */
-	public String getIsRNA() {
+	public String getIsRNA()
+	{
 		return isRNA;
 	}
 	/**
 	 * @param isRNA The isRNA to set.
 	 */
-	public void setIsRNA(String isRNA) {
+	public void setIsRNA(String isRNA) 
+	{
 		this.isRNA = isRNA;
 	}
 }

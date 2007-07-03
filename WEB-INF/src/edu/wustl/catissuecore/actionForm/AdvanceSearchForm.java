@@ -42,37 +42,43 @@ public class AdvanceSearchForm extends ActionForm
 	/**
 	 * @return Returns the columnNames.
 	 */
-	public String[] getColumnNames() {
+	public String[] getColumnNames() 
+	{
 		return columnNames;
 	}
 	/**
 	 * @param columnNames The columnNames to set.
 	 */
-	public void setColumnNames(String[] columnNames) {
+	public void setColumnNames(String[] columnNames) 
+	{
 		this.columnNames = columnNames;
 	}
 	/**
 	 * @return Returns the selectedColumnNames.
 	 */
-	public String[] getSelectedColumnNames() {
+	public String[] getSelectedColumnNames() 
+	{
 		return selectedColumnNames;
 	}
 	/**
 	 * @param selectedColumnNames The selectedColumnNames to set.
 	 */
-	public void setSelectedColumnNames(String[] selectedColumnNames) {
+	public void setSelectedColumnNames(String[] selectedColumnNames) 
+	{
 		this.selectedColumnNames = selectedColumnNames;
 	}
 	/**
 	 * @return Returns the tableName.
 	 */
-	public String getTableName() {
+	public String getTableName() 
+	{
 		return tableName;
 	}
 	/**
 	 * @param tableName The tableName to set.
 	 */
-	public void setTableName(String tableName) {
+	public void setTableName(String tableName) 
+	{
 		this.tableName = tableName;
 	}
 	/**
@@ -237,6 +243,9 @@ public class AdvanceSearchForm extends ActionForm
 
     /**
      * Overrides the validate method of ActionForm.
+     * @return error
+     * @param mapping
+     * @param request
      */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
@@ -406,11 +415,13 @@ public class AdvanceSearchForm extends ActionForm
 	}
 	
 	
-	public String getItemNodeId() {
+	public String getItemNodeId() 
+	{
 		return itemNodeId;
 	}
 	
-	public void setItemNodeId(String itemId) {
+	public void setItemNodeId(String itemId)
+	{
 		this.itemNodeId = itemId;
 	}
     

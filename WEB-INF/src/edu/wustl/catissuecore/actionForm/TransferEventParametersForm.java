@@ -198,8 +198,7 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	/**
-	 * @param fromStorageContainer
-	 *            The from StorageContainer to set.
+	 * @param fromStorageContainer The from StorageContainer to set.
 	 */
 	public void setFromStorageContainerId(long fromStorageContainerId)
 	{
@@ -207,14 +206,18 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 	}
 
 	//	 ----- SUPERCLASS METHODS
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	/**
+	 * @return TRANSFER_EVENT_PARAMETERS_FORM_ID
 	 */
 	public int getFormId()
 	{
 		return Constants.TRANSFER_EVENT_PARAMETERS_FORM_ID;
 	}
-
+	
+	/**
+     * Populates all the fields from the domain object to the form bean.
+     * @param abstractDomain An AbstractDomain Object  
+     */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		try
@@ -279,7 +282,10 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 
 	/**
 	 * Overrides the validate method of ActionForm.
-	 * */
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		ActionErrors errors = super.validate(mapping, request);
@@ -384,7 +390,10 @@ public class TransferEventParametersForm extends SpecimenEventParametersForm
 		}
 		return errors;
 	}
-
+	
+	/**
+     * Resets the values of all the fields.
+     */
 	protected void reset()
 	{
 		//        super.reset();

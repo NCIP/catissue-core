@@ -35,6 +35,7 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 	 * @param aForm Common form form for all Search Pages
 	 * @param str represents id as string
 	 * @param request HttpServletRequest
+	 * @throws Exception genric exception
 	 */
 	protected void setMapValue(AdvanceSearchForm aForm,String str,HttpServletRequest request) throws Exception
     {
@@ -43,10 +44,10 @@ public abstract class AdvanceSearchUIAction extends BaseAction
     	HttpSession session = request.getSession();
     	
     	//ConditionNode repesents map of condition given by user in jsp page
-    	Map ConditionNode = (HashMap)session.getAttribute(Constants.ADVANCED_CONDITION_NODES_MAP);
+    	Map conditionNode = (HashMap)session.getAttribute(Constants.ADVANCED_CONDITION_NODES_MAP);
     	
     	//Represent conditions of according to id
-    	DefaultMutableTreeNode node = (DefaultMutableTreeNode)ConditionNode.get(nodeId);
+    	DefaultMutableTreeNode node = (DefaultMutableTreeNode)conditionNode.get(nodeId);
     	
     	AdvancedConditionsNode advConditionNode = (AdvancedConditionsNode)node.getUserObject();
     	
@@ -121,9 +122,13 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 			{
 //				Explicitly setting operator keys value as they are same
 				if(tempOperator.equals(Operator.GREATER_THAN_OR_EQUALS))
+				{
 					map.put(opKey,Operator.BETWEEN);
+				}
 				else
+				{
 					map.put(opKey,Operator.NOT_BETWEEN);
+				}
 				temp = "";
 			}
 			else
@@ -163,7 +168,7 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 			
 			//Enabling or disabling the field according condition whether map contains value or not
 			Object element = map.get(name);
-			if( (element == null) || (  element.equals("Any")  ) )
+			if((element == null) || (element.equals("Any")))
 			{
 				searchFieldData[i].getValueField().setDisabled(true) ;
 			}
@@ -174,6 +179,16 @@ public abstract class AdvanceSearchUIAction extends BaseAction
 		}
 	}
 	
+	/**
+	 * @param aForm object of AdvanceSearchForm
+	 * @param tableName String containing table name 
+	 * @param column String for column name
+	 * @param operatorVal String operator value
+	 * @param value String value
+	 * @param counter Integer count value
+	 * @param superTable String super table name
+	 * @throws Exception generic exception
+	 */
 	protected void setEventParameterMap(AdvanceSearchForm aForm,String tableName,String column,String operatorVal,String value,int counter,String superTable) throws Exception
 	{
 //		Map map = new HashMap();

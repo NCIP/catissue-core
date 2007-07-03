@@ -99,7 +99,7 @@ public class SiteForm extends AbstractActionForm
     
     /**
      * This function Copies the data from an site object to a SiteForm object.
-     * @param site An object containing the information about site.  
+     * @param abstractDomain An object containing the information about site.  
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
@@ -208,7 +208,7 @@ public class SiteForm extends AbstractActionForm
 
     /**
      * Sets the Street Address of the site.
-     * @param address String representing mailing address of the site.
+     * @param street String representing mailing address of the site.
      * @see #getStreet()
      */
     public void setStreet(String street)
@@ -288,7 +288,7 @@ public class SiteForm extends AbstractActionForm
 
     /**
      * Sets the zip code of the city where the site is.
-     * @param zip The zip code of the city where the site is.
+     * @param zipCode The zip code of the city where the site is.
      * @see #getZip()
      */
     public void setZipCode(String zipCode)
@@ -308,7 +308,7 @@ public class SiteForm extends AbstractActionForm
 
     /**
      * Sets the phone number of the site. 
-     * @param phone The phone number to site.
+     * @param phoneNumber The phone number to site.
      * @see #getphoneNumber()
      */
     public void setPhoneNumber(String phoneNumber)
@@ -328,7 +328,7 @@ public class SiteForm extends AbstractActionForm
 
     /**
      * Sets the fax number of the site.
-     * @param fax The fax number of the site.
+     * @param faxNumber The fax number of the site.
      * @see #getFax()
      */
     public void setFaxNumber(String faxNumber)
@@ -337,7 +337,7 @@ public class SiteForm extends AbstractActionForm
     }
 
     /**
-     * Returns the id assigned to form bean.
+     * @return Returns the id assigned to form bean.
      */
     public int getFormId()
     {
@@ -364,8 +364,11 @@ public class SiteForm extends AbstractActionForm
     }
     
     /**
-     * Overrides the validate method of ActionForm.
-     * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
          ActionErrors errors = new ActionErrors();
@@ -470,7 +473,7 @@ public class SiteForm extends AbstractActionForm
      
      /**
       * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
-      * @param formBeanId - FormBean ID of the object inserted
+      * @param addNewFor - FormBean ID of the object inserted
       *  @param addObjectIdentifier - Identifier of the Object inserted 
       */
      public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)

@@ -247,6 +247,12 @@ public class ActionFormFactory extends AbstractActionFormFactory
 		return form;
 	}
 	
+	/**
+	 * Checking value of Id.
+	 * @param domainObject Domain  onject
+	 * @return boolean value
+	 * @throws Exception
+	 */
 	private static boolean isIdNull(Object domainObject) throws Exception
 	{
 		Method getIdMethod=domainObject.getClass().getMethod("getId",new Class[]{});

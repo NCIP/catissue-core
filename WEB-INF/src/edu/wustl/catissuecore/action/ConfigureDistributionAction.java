@@ -20,7 +20,11 @@ public class ConfigureDistributionAction extends BaseAction
 	/**
 	 * This is the initialization action class for configuring Distribution report
 	 * @author Poornima Govindrao
-	 *  
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
 	 */
     protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)

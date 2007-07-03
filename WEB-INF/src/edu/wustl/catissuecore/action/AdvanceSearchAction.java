@@ -29,6 +29,14 @@ import edu.wustl.common.util.logger.Logger;
 public class AdvanceSearchAction extends BaseAction//DispatchAction 
 {
     
+	/**
+	 * Overrides the execute method of Action class.
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 */
     public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws Exception
     {

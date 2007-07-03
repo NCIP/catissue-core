@@ -13,9 +13,11 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,25 +63,30 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 {   
 	/**
 	 * Overrides the execute method of Action class.
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
 	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
-			{
+	{
 		SpecimenCollectionGroupForm  specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;
-		Logger.out.debug("SCGA : " + specimenCollectionGroupForm.getId() );
+		Logger.out.debug("SCGA : " + specimenCollectionGroupForm.getId());
 		String nodeId = null;
 		/**
 		 * Bug id : 4213
 		 * Patch id  : 4213_2
 		 * Description : getting parameters from request and keeping them in seesion to keep the node in tree selected.
 		 */
-		if( request.getParameter("clickedNodeId") != null)
+		if(request.getParameter("clickedNodeId") != null)
 		{
 			nodeId = request.getParameter("clickedNodeId");
 			request.getSession().setAttribute("nodeId",nodeId);
 		}
 		//	set the menu selection 
-		request.setAttribute(Constants.MENU_SELECTED, "14"  ); 
+		request.setAttribute(Constants.MENU_SELECTED, "14"); 
 
 		//pageOf and operation attributes required for Advance Query Object view.
 		String pageOf = request.getParameter(Constants.PAGEOF);
@@ -89,10 +96,10 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 
 		//Sets the operation attribute to be used in the Edit/View Specimen Collection Group Page in Advance Search Object View. 
 		request.setAttribute(Constants.OPERATION,operation);
-		if(operation.equalsIgnoreCase(Constants.ADD ) )
+		if(operation.equalsIgnoreCase(Constants.ADD ))
 		{
 			specimenCollectionGroupForm.setId(0);
-			Logger.out.debug("SCGA : set to 0 "+ specimenCollectionGroupForm.getId() );
+			Logger.out.debug("SCGA : set to 0 "+ specimenCollectionGroupForm.getId());
 		}
 
 		boolean isOnChange = false; 
@@ -100,21 +107,25 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		if(str!=null)
 		{
 			if(str.equals("true"))
-				isOnChange = true; 
+			{
+				isOnChange = true;
+			}
 		}
 
 		// get list of Protocol title.
 		SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 		//populating protocolist bean.
 		String sourceObjectName = CollectionProtocol.class.getName();
-		String [] displayNameFields = {"title"};
+		String [] displayNameFields = {"shortTitle"};
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 		List list = bizLogic.getList(sourceObjectName,displayNameFields,valueField, true);
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
+		Map<Long, String> cpIDTitleMap = Utility.getCPIDTitleMap();
+		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpIDTitleMap);
 
 		//Populating the Site Type bean
 		sourceObjectName = Site.class.getName();
-		String siteDisplaySiteFields[] = {"name"};
+		String[] siteDisplaySiteFields = {"name"};
 		list = bizLogic.getList(sourceObjectName,siteDisplaySiteFields,valueField, true);
 		request.setAttribute(Constants.SITELIST, list);
 
@@ -125,10 +136,6 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		//Populating the protocol participants id registered to a given protocol
 		loadPaticipantNumberList(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
 
-		//Populating the Collection Protocol Events
-		loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
-
-
 		String protocolParticipantId = specimenCollectionGroupForm.getProtocolParticipantIdentifier();
 		//Populating the participants Medical Identifier for a given participant
 		loadParticipantMedicalIdentifier(specimenCollectionGroupForm.getParticipantId(),bizLogic, request);
@@ -138,56 +145,22 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		List calendarEventPointList = null;
 		if(changeOn != null && changeOn.equals(Constants.COLLECTION_PROTOCOL_ID))
 		{
-			calendarEventPointList = new ArrayList(); 
+			calendarEventPointList = new ArrayList();
+			specimenCollectionGroupForm.setCollectionProtocolEventId(new Long(-1));
 		}
-		else
-		{
-			calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
+		
+		//Populating the Collection Protocol Events
+		loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request,specimenCollectionGroupForm);
+
+		calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
 				Constants.SYSTEM_IDENTIFIER,
 				new Long(specimenCollectionGroupForm.getCollectionProtocolEventId()));
-		}
+		
 		// The values of restrict checkbox and the number of specimen must alos populate in edit mode.
 		if((isOnChange || operation.equalsIgnoreCase(Constants.EDIT)))
 		{
-			//Patch ID: Bug#3184_27
-			int numberOfSpecimen = 1;
-			if(!calendarEventPointList.isEmpty())
-			{
-				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
-				specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
-
-				/**
-				 * Patch ID: Bug#3184_9
-				 */
-				Collection specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
-				if((specimenRequirementCollection != null) && (!specimenRequirementCollection.isEmpty()))
-				{
-					//Populate the number of Specimen Requirements.
-					numberOfSpecimen = specimenRequirementCollection.size();
-					//Set checkbox status depending upon the days of study calendar event point. If it is zero, then unset the restrict
-					//checkbox, otherwise set the restrict checkbox
-					Double studyCalendarEventPoint = collectionProtocolEvent.getStudyCalendarEventPoint();
-					if(studyCalendarEventPoint.doubleValue() == 0)
-					{
-						specimenCollectionGroupForm.setRestrictSCGCheckbox("false");
-					}
-					else
-					{
-						specimenCollectionGroupForm.setRestrictSCGCheckbox("true");
-					}
-				}
-			}
-			else if(calendarEventPointList.isEmpty())
-			{
-				//Set checkbox status
-				specimenCollectionGroupForm.setRestrictSCGCheckbox("false");
-			}
-			//Sets the value for number of specimen field on the specimen collection group page. 
-			specimenCollectionGroupForm.setNumberOfSpecimens(numberOfSpecimen);
-			request.setAttribute(Constants.NUMBER_OF_SPECIMEN, numberOfSpecimen);
-			//Set the number of actual specimen requirements for validation purpose.
-			//This value is used in validate method of SpecimenCollectionGroupForm.java.
-			request.setAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS, numberOfSpecimen + "");
+			// Added by Vijay Pande. Method is created since code was repeating for SUBMITTED_FOR= "AddNew" || "Default" value.
+			setCalendarEventPoint(calendarEventPointList, request, specimenCollectionGroupForm);
 		}
 
 		// populating clinical Diagnosis field 
@@ -276,7 +249,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 					}
 
 					//Populating the Collection Protocol Events
-					loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+					loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request, specimenCollectionGroupForm);
 
 					//Load Clinical status for a given study calander event point
 					calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
@@ -284,8 +257,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 							new Long(specimenCollectionGroupForm.getCollectionProtocolEventId()));
 					if(isOnChange && !calendarEventPointList.isEmpty())
 					{
-						CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
-						specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
+						setCalendarEventPoint(calendarEventPointList, request, specimenCollectionGroupForm);
 					}
 				}
 			}
@@ -407,7 +379,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			}
 			//Bug 1915:SpecimenCollectionGroup.Study Calendar Event Point not populated when page is loaded through proceedTo
 			//Populating the Collection Protocol Events
-			loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request);
+			loadCollectionProtocolEvent(specimenCollectionGroupForm.getCollectionProtocolId(),bizLogic,request, specimenCollectionGroupForm);
 
 			//Load Clinical status for a given study calander event point
 			calendarEventPointList = bizLogic.retrieve(CollectionProtocolEvent.class.getName(),
@@ -415,8 +387,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 					new Long(specimenCollectionGroupForm.getCollectionProtocolEventId()));
 			if(!calendarEventPointList.isEmpty())
 			{
-				CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
-				specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
+				setCalendarEventPoint(calendarEventPointList, request, specimenCollectionGroupForm);
 			}
 
 			Logger.out.debug("CollectionProtocolID found in forwardToHashMap========>>>>>>"+collectionProtocolId);
@@ -454,9 +425,9 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				//Max length of CP is 150 and Max length of SCG is 55, in Oracle the name does not truncate 
 				//and it is giving error. So the title is truncated in case it is longer than 30 .
 				String maxCollTitle = collectionProtocolTitle;
-				if(collectionProtocolTitle.length()>30)
+				if(collectionProtocolTitle.length()>Constants.COLLECTION_PROTOCOL_TITLE_LENGTH)
 				{
-					maxCollTitle = collectionProtocolTitle.substring(0,29);
+					maxCollTitle = collectionProtocolTitle.substring(0,Constants.COLLECTION_PROTOCOL_TITLE_LENGTH-1);
 				}
 				//During add operation the id to set in the default name is generated
 				if(operation.equals(Constants.ADD))
@@ -477,14 +448,11 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				{
 					if(groupParticipantId>0) 
 					{
-						specimenCollectionGroupForm.setName(maxCollTitle+"_"+groupParticipantId+"_"+
-								specimenCollectionGroupForm.getId());
-
+						specimenCollectionGroupForm.setName(maxCollTitle+"_"+groupParticipantId+"_"+specimenCollectionGroupForm.getId());
 					}
 					else
 					{
-						specimenCollectionGroupForm.setName(maxCollTitle+"_"+protocolParticipantId+"_"+
-								specimenCollectionGroupForm.getId()); 
+						specimenCollectionGroupForm.setName(maxCollTitle+"_"+protocolParticipantId+"_"+specimenCollectionGroupForm.getId()); 
 					}
 				}
 			}
@@ -781,6 +749,14 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		return listOfActiveParticipant;
 	}
 */
+	
+	/**
+	 * Method to load protocol participant identifier number list
+	 * @param protocolID
+	 * @param bizLogic
+	 * @param request
+	 * @throws Exception
+	 */
 	private void loadPaticipantNumberList(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
@@ -813,7 +789,15 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		request.setAttribute(Constants.PROTOCOL_PARTICIPANT_NUMBER_LIST, list);
 	}
 
-	private void loadCollectionProtocolEvent(long protocolID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
+	/**
+	 * Method to load list of collection protocol event point
+	 * @param protocolID
+	 * @param bizLogic
+	 * @param request
+	 * @param form
+	 * @throws Exception
+	 */
+	private void loadCollectionProtocolEvent(long protocolID, IBizLogic bizLogic, HttpServletRequest request, SpecimenCollectionGroupForm form) throws Exception
 	{
 		String sourceObjectName = CollectionProtocolEvent.class.getName();
 		String displayEventFields[] = {"studyCalendarEventPoint","collectionPointLabel"};
@@ -828,8 +812,19 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 				whereColumnCondition, whereColumnValue, joinCondition, separatorBetweenFields, false);
 
 		request.setAttribute(Constants.STUDY_CALENDAR_EVENT_POINT_LIST, list);
+		if(list.size()>1 && form.getCollectionProtocolEventId()<=0)
+		{
+			form.setCollectionProtocolEventId(new Long(((NameValueBean)list.get(1)).getValue()));
+		}
 	}
 
+	/**
+	 * Method to load list of participant medical identifier
+	 * @param participantID
+	 * @param bizLogic
+	 * @param request
+	 * @throws Exception
+	 */
 	private void loadParticipantMedicalIdentifier(long participantID, IBizLogic bizLogic, HttpServletRequest request) throws Exception
 	{
 		//get list of Participant's names
@@ -848,6 +843,13 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		request.setAttribute(Constants.PARTICIPANT_MEDICAL_IDNETIFIER_LIST, list);
 	}
 
+	/**
+	 * Method to retrieve participant id from the protocol participant id
+	 * @param participantProtocolId
+	 * @param bizLogic
+	 * @return
+	 * @throws Exception
+	 */
 	private String getParticipantIdForProtocolId(String participantProtocolId,IBizLogic bizLogic) throws Exception
 	{
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
@@ -866,7 +868,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		return null;
 	}
 	/**
-	 * 
+	 * Method to retrieve participant protocol identifier for given CP and participant id
 	 * @param participantId
 	 * @param cpId
 	 * @param bizLogic
@@ -894,5 +896,54 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Method to set default values related to calendar event point list
+	 * @param calendarEventPointList calendar event point list
+	 * @param request object of HttpServletRequest 
+	 * @param specimenCollectionGroupForm object of specimenCollectionGroup action form
+	 */
+	private void setCalendarEventPoint(List calendarEventPointList, HttpServletRequest request, SpecimenCollectionGroupForm specimenCollectionGroupForm)
+	{
+//		Patch ID: Bug#3184_27
+		int numberOfSpecimen = 1;
+		if(!calendarEventPointList.isEmpty())
+		{
+			CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)calendarEventPointList.get(0);
+			specimenCollectionGroupForm.setClinicalStatus(collectionProtocolEvent.getClinicalStatus());
+
+			/**
+			 * Patch ID: Bug#3184_9
+			 */
+			Collection specimenRequirementCollection = collectionProtocolEvent.getSpecimenRequirementCollection();
+			if((specimenRequirementCollection != null) && (!specimenRequirementCollection.isEmpty()))
+			{
+				//Populate the number of Specimen Requirements.
+				numberOfSpecimen = specimenRequirementCollection.size();
+				//Set checkbox status depending upon the days of study calendar event point. If it is zero, then unset the restrict
+				//checkbox, otherwise set the restrict checkbox
+				Double studyCalendarEventPoint = collectionProtocolEvent.getStudyCalendarEventPoint();
+				if(studyCalendarEventPoint.doubleValue() == 0)
+				{
+					specimenCollectionGroupForm.setRestrictSCGCheckbox("false");
+				}
+				else
+				{
+					specimenCollectionGroupForm.setRestrictSCGCheckbox("true");
+				}
+			}
+		}
+		else if(calendarEventPointList.isEmpty())
+		{
+			//Set checkbox status
+			specimenCollectionGroupForm.setRestrictSCGCheckbox("false");
+		}
+		//Sets the value for number of specimen field on the specimen collection group page. 
+		specimenCollectionGroupForm.setNumberOfSpecimens(numberOfSpecimen);
+		request.setAttribute(Constants.NUMBER_OF_SPECIMEN, numberOfSpecimen);
+		//Set the number of actual specimen requirements for validation purpose.
+		//This value is used in validate method of SpecimenCollectionGroupForm.java.
+		request.setAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS, numberOfSpecimen + "");
 	}
 }

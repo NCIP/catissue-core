@@ -45,6 +45,14 @@ import edu.wustl.common.util.logger.Logger;
 
 public class ParticipantSelectAction extends BaseAction
 {
+	/**
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 * @return value for ActionForward object
+     */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception 
@@ -85,12 +93,12 @@ public class ParticipantSelectAction extends BaseAction
 		
 		        
 		//Attributes to decide AddNew action
-        String submittedFor = (String) request.getParameter(Constants.SUBMITTED_FOR);
+        String submittedFor = (String)request.getParameter(Constants.SUBMITTED_FOR);
         
         Logger.out.info("submittedFor in ParticipantSelectAction:"+submittedFor);
         //------------------------------------------------ AddNewAction Starts----------------------------
         //if AddNew action is executing, load FormBean from Session and redirect to Action which initiated AddNew action
-        if( (submittedFor !=null)&& (submittedFor.equals("AddNew")) )
+        if((submittedFor !=null)&& (submittedFor.equals("AddNew")))
         {
             HttpSession session = request.getSession();
             Stack formBeanStack = (Stack)session.getAttribute(Constants.FORM_BEAN_STACK);
@@ -142,12 +150,11 @@ public class ParticipantSelectAction extends BaseAction
                     }
                     
     	            //Status message key.
-                    String statusMessageKey = String.valueOf(abstractForm.getFormId() +
-        					"."+String.valueOf(abstractForm.isAddOperation()));
+                    String statusMessageKey = String.valueOf(abstractForm.getFormId()+"."+String.valueOf(abstractForm.isAddOperation()));
                     request.setAttribute(Constants.STATUS_MESSAGE_KEY,statusMessageKey);
                     
     	            //Changing operation attribute in parth specified in ForwardTo mapping, If AddNew activity started from Edit page
-    	            if( (sessionFormBean.getOperation().equals("edit") ) )
+    	            if((sessionFormBean.getOperation().equals("edit")))
     	            {
     	                Logger.out.debug("Edit object Identifier while AddNew is from Edit operation==>"+sessionFormBean.getId());
     	                ActionForward editForward = new ActionForward();
@@ -179,7 +186,7 @@ public class ParticipantSelectAction extends BaseAction
         }
         //------------------------------------------------ AddNewAction Ends----------------------------                
        //----------ForwardTo Starts----------------
-        else if( (submittedFor !=null)&& (submittedFor.equals("ForwardTo")) )
+        else if((submittedFor !=null)&& (submittedFor.equals("ForwardTo")))
         {
             Logger.out.debug("SubmittedFor is ForwardTo in CommonAddEditAction...................");
             
@@ -192,7 +199,7 @@ public class ParticipantSelectAction extends BaseAction
         //----------ForwardTo Ends----------------
         
         //setting target to ForwardTo attribute of submitted Form 
-        if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0  )
+        if(abstractForm.getForwardTo()!= null && abstractForm.getForwardTo().trim().length()>0)
        {
        		String forwardTo = abstractForm.getForwardTo(); 
        		Logger.out.debug("ForwardTo in Add :-- : "+ forwardTo);

@@ -82,16 +82,18 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	}
 	
 //	 ----- SUPERCLASS METHODS
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 * @return CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID
 	 */
 	public int getFormId()
 	{
 		return Constants.CELL_SPECIMEN_REVIEW_PARAMETERS_FORM_ID;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+	 *  @param abstractDomain An object of Specimen class. 
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -102,8 +104,11 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
 	}
 	
 	/**
-     * Overrides the validate method of ActionForm.
-     * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	ActionErrors errors = super.validate(mapping, request);
@@ -112,19 +117,15 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
          try
          {
          	// checks the neoplasticCellularityPercentage
-           	if (!validator.isEmpty(neoplasticCellularityPercentage)  &&  !validator.isDouble(neoplasticCellularityPercentage,false) )
+           	if (!validator.isEmpty(neoplasticCellularityPercentage)  &&  !validator.isDouble(neoplasticCellularityPercentage,false))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("cellspecimenreviewparameters.neoplasticcellularitypercentage")));
             }
-
-
          	// checks the viableCellPercentage
-           	if (!validator.isEmpty(viableCellPercentage) && !validator.isDouble(viableCellPercentage,false) )
+           	if (!validator.isEmpty(viableCellPercentage) && !validator.isDouble(viableCellPercentage,false))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("cellspecimenreviewparameters.viablecellpercentage")));
             }
-
-         
          }
          catch(Exception excp)
          {
@@ -132,12 +133,12 @@ public class CellSpecimenReviewParametersForm extends SpecimenEventParametersFor
          }
          return errors;
       }
-	
      
- 
-     
+    /**
+     * Method for reset class attributes
+     */
      protected void reset()
- 	{
+     {
      	//super.reset();
 //     	this.neoplasticCellularityPercentage = null;
 //     	this.viableCellPercentage = null;

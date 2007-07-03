@@ -55,14 +55,23 @@ public class DistributionReportForm extends AbstractActionForm
 	
 	private Integer distributionType = new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE);
 	
-	public Integer getDistributionType() {
+	/**
+	 * @return distributionType Return type of Distribution
+	 */
+	public Integer getDistributionType() 
+	{
 		return distributionType;
 	}
-
-	public void setDistributionType(Integer distributionType) {
+	/**
+	 * @param distributionType Setting Distribution Type
+	 */
+	public void setDistributionType(Integer distributionType)
+	{
 		this.distributionType = distributionType;
 	}
-
+	/**
+	 * @param abstractDomainObject An AbstractDomainObject obj
+	 */
 	public void setAllValues(AbstractDomainObject abstractDomainObject)
 	{
 
@@ -82,7 +91,6 @@ public class DistributionReportForm extends AbstractActionForm
 		this.toSite = String.valueOf(distribution.getToSite().getName());
 		this.comments  = Utility.toString(distribution.getComments());
 		distributionId = distribution.getId();
-		
 	}
 	
 //	/**
@@ -99,25 +107,32 @@ public class DistributionReportForm extends AbstractActionForm
 //		this.fromSite = fromSite;
 //	}
 
-	public String getToSite() {
+	/**
+	 * @return toSite Return Site
+	 */
+	public String getToSite() 
+	{
 		return toSite;
 	}
 	/**
 	 * @return Returns the distributionProtocolTitle.
 	 */
-	public String getDistributionProtocolTitle() {
+	public String getDistributionProtocolTitle() 
+	{
 		return distributionProtocolTitle;
 	}
 	/**
 	 * @param distributionProtocolTitle The distributionProtocolTitle to set.
 	 */
-	public void setDistributionProtocolTitle(String distributionProtocolTitle) {
+	public void setDistributionProtocolTitle(String distributionProtocolTitle)
+	{
 		this.distributionProtocolTitle = distributionProtocolTitle;
 	}
 	/**
 	 * @param toSite The toSite to set.
 	 */
-	public void setToSite(String toSite) {
+	public void setToSite(String toSite)
+	{
 		this.toSite = toSite;
 	}
 
@@ -154,7 +169,7 @@ public class DistributionReportForm extends AbstractActionForm
 	}
 	
 	/**
-	 * @return Returns the time_InMinutes.
+	 * @return timeInMinutes Returns the time_InMinutes.
 	 */
 	public String getTimeInMinutes()
 	{
@@ -170,7 +185,7 @@ public class DistributionReportForm extends AbstractActionForm
 	}
 		
 	/**
-	 * @return Returns the timeStamp.
+	 * @return timeInHours Returns the timeStamp.
 	 */
 	public String getTimeInHours()
 	{
@@ -186,7 +201,7 @@ public class DistributionReportForm extends AbstractActionForm
 	}
 	
 	/**
-	 * @return Returns the userId.
+	 * @return userName Returns the userId.
 	 */
 	public String getUserName()
 	{
@@ -194,49 +209,56 @@ public class DistributionReportForm extends AbstractActionForm
 	}
 	
 	/**
-	 * @param userId The userId to set.
+	 * @param userName The userId to set.
 	 */
 	public void setUserName(String userName)
 	{
 		this.userName = userName;
 	}    
-	
+	/**
+	 *@return id
+	 */
 	public long getId()
 	{
 		return this.id ;
 	}
-
+	/**
+	 * @param id Setting id
+	 */
 	public void setId(long id)
 	{
 		this.id = id ; 
 	}
 	/**
-	 * @return Returns the distributionId.
+	 * @return distributionId Returns the distributionId.
 	 */
-	public Long getDistributionId() {
+	public Long getDistributionId() 
+	{
 		return distributionId;
 	}
 	/**
 	 * @param distributionId The distributionId to set.
 	 */
-	public void setDistributionId(Long distributionId) {
+	public void setDistributionId(Long distributionId)
+	{
 		this.distributionId = distributionId;
 	}
 
-	@Override
+	/**
+	 * @return 0
+	 */
 	public int getFormId()
 	{
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
-	
-	@Override
+	/**
+     * Resets the values of all the fields.
+     * This method defined in ActionForm is overridden in this class.
+     */
 	protected void reset()
 	{
 		// TODO Auto-generated method stub
 		
 	}
-
-	
 }

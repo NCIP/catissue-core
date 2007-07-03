@@ -683,7 +683,15 @@ function onEditChange()
 							//String onChange = "onCustomListBoxChange(this);onParentContainerChange()";
 							boolean buttonDisabled = true;
 							//String buttonOnClicked  = "javascript:NewWindow('ShowFramedPage.do?pageOf=pageOfSpecimen','name','810','320','yes');return false";							
-							String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&amp;selectedContainerName=selectedContainerName&amp;pos1=pos1&amp;pos2=pos2&amp;containerId=containerId&amp;storageContainer=true&amp;storageType=";							
+							
+							/**
+							* Smita_kadam
+							* Reviewer: Sachin
+							* Bug ID: 4596
+							* Patch ID: 4596_1
+							* Description: '&amp;' sequence in URL string is replaced with '&' to be supported by Mozilla
+							**/
+							String frameUrl = "ShowFramedPage.do?pageOf=pageOfSpecimen&selectedContainerName=selectedContainerName&pos1=pos1&pos2=pos2&containerId=containerId&storageContainer=true&storageType=";							
 							
 							String noOfEmptyCombos = "3";
 							

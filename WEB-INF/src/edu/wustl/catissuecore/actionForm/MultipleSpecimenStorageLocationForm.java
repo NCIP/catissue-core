@@ -19,17 +19,11 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.domain.Specimen;
-import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.domain.AbstractDomainObject;
-import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
-import edu.wustl.common.util.logger.Logger;
 
 /*
  * This class holds data for the Multiple Specimen Storage Location JSP.
@@ -49,16 +43,18 @@ public class MultipleSpecimenStorageLocationForm extends AbstractActionForm
 
 	private String submitForm = "";
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
+	 * @return MULTIPLE_SPECIMEN_STOGAGE_LOCATION_FORM_ID
 	 */
 	public int getFormId()
 	{
 		return Constants.MULTIPLE_SPECIMEN_STOGAGE_LOCATION_FORM_ID;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
+	 * @param abstractDomain An AbstractDomain Object  
 	 */
 	public void setAllValues(AbstractDomainObject arg0)
 	{
@@ -66,9 +62,10 @@ public class MultipleSpecimenStorageLocationForm extends AbstractActionForm
 
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
-	 */
+	 * Resets the values of all the fields.
+     */
 	protected void reset()
 	{
 		// TODO Auto-generated method stub
@@ -83,7 +80,9 @@ public class MultipleSpecimenStorageLocationForm extends AbstractActionForm
 	public void setValue(String key, Object value)
 	{
 		if (isMutable())
+		{
 			specimenOnUIMap.put(key, value);
+		}
 	}
 
 	/**
@@ -139,8 +138,11 @@ public class MultipleSpecimenStorageLocationForm extends AbstractActionForm
 
 	
 
-	/* (non-Javadoc)
-	 * @see org.apache.struts.action.ActionForm#validate(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
+	/**
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{

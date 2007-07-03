@@ -152,14 +152,16 @@ public class NewSpecimenForm extends SpecimenForm
 	/**
 	 * @return the restrictSCGCheckbox
 	 */
-	public String getRestrictSCGCheckbox() {
+	public String getRestrictSCGCheckbox() 
+	{
 		return restrictSCGCheckbox;
 	}
 
 	/**
 	 * @param restrictSCGCheckbox the restrictSCGCheckbox to set
 	 */
-	public void setRestrictSCGCheckbox(String restrictSCGCheckbox) {
+	public void setRestrictSCGCheckbox(String restrictSCGCheckbox) 
+	{
 		this.restrictSCGCheckbox = restrictSCGCheckbox;
 	}
 
@@ -191,7 +193,9 @@ public class NewSpecimenForm extends SpecimenForm
 	public void setBiohazardValue(String key, Object value)
 	{
 		if (isMutable())
+		{
 			biohazard.put(key, value);
+		}
 	}
 
 	/**
@@ -205,7 +209,7 @@ public class NewSpecimenForm extends SpecimenForm
 	}
 
 	/**
-	 * @return Returns the values.
+	 * @return biohazard Returns the values.
 	 */
 	public Collection getAllBiohazards()
 	{
@@ -213,8 +217,7 @@ public class NewSpecimenForm extends SpecimenForm
 	}
 
 	/**
-	 * @param values
-	 * The values to set.
+	 * @param biohazard Setting Biohazard
 	 */
 	public void setBiohazard(Map biohazard)
 	{
@@ -222,8 +225,7 @@ public class NewSpecimenForm extends SpecimenForm
 	}
 
 	/**
-	 * @param values
-	 * Returns the map.
+	 * @return biohazard 
 	 */
 	public Map getBiohazard()
 	{
@@ -231,7 +233,7 @@ public class NewSpecimenForm extends SpecimenForm
 	}	
     
     /**
-     * @return Returns the pathologicalStatus.
+     * @return pathologicalStatus Returns the pathologicalStatus.
      */
     public String getPathologicalStatus()
     {
@@ -263,7 +265,7 @@ public class NewSpecimenForm extends SpecimenForm
     }
 
     /**
-     * @return Returns the tissueSide.
+     * @return tissueSide Returns the tissueSide.
      */
     public String getTissueSide()
     {
@@ -279,7 +281,7 @@ public class NewSpecimenForm extends SpecimenForm
     }
 
     /**
-     * @return Returns the tissueSite.
+     * @return tissueSite Returns the tissueSite.
      */
     public String getTissueSite()
     {
@@ -293,7 +295,9 @@ public class NewSpecimenForm extends SpecimenForm
     {
         this.tissueSite = tissueSite;
     }
-
+    /**
+     * Resets the values of all the fields.
+     */
     protected void reset()
     {
 //        super.reset();
@@ -307,7 +311,7 @@ public class NewSpecimenForm extends SpecimenForm
   
     
     /**
-     * Returns the id assigned to form bean.
+     * @return NEW_SPECIMEN_FORM_ID Returns the id assigned to form bean.
      */
     public int getFormId()
     {
@@ -316,7 +320,7 @@ public class NewSpecimenForm extends SpecimenForm
     
     /**
      * This function Copies the data from an site object to a SiteForm object.
-     * @param site An object containing the information about site.  
+     * @param abstractDomain An object containing the information about site.  
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
@@ -387,7 +391,7 @@ public class NewSpecimenForm extends SpecimenForm
     }
     
 	/**
-	 * @return Returns the biohazardType.
+	 * @return biohazard Type Returns the biohazardType.
 	 */
 	public String getBiohazardType()
 	{
@@ -402,7 +406,7 @@ public class NewSpecimenForm extends SpecimenForm
 	}
 	
 	/**
-	 * @return Returns the biohazardName.
+	 * @return biohazardName Returns the biohazardName.
 	 */
 	public String getBiohazardName()
 	{
@@ -417,8 +421,11 @@ public class NewSpecimenForm extends SpecimenForm
 	}	
 	
 	/**
-     * Overrides the validate method of ActionForm.
-     * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
          ActionErrors errors = super.validate(mapping,request);
@@ -459,7 +466,7 @@ public class NewSpecimenForm extends SpecimenForm
                 }
              	
              	//Mandar 18-July-06: AutoEvents: 
-             	if(operation.equalsIgnoreCase(Constants.ADD  ) )
+             	if(operation.equalsIgnoreCase(Constants.ADD))
              	{
 //             		Time validation
         			String collectionTime = this.collectionEventTimeInHours+":"+this.collectionEventTimeInMinutes+":00";
@@ -467,7 +474,7 @@ public class NewSpecimenForm extends SpecimenForm
              		//CollectionEvent validation.
             		EventsUtil.validateCollectionEvent(errors,validator,collectionEventUserId,collectionEventdateOfEvent,collectionEventCollectionProcedure,collectionTime);
             		//ReceivedEvent validation
-            		EventsUtil.validateReceivedEvent(errors,validator,receivedEventUserId,receivedEventDateOfEvent,receivedEventReceivedQuality,receivedTime );
+            		EventsUtil.validateReceivedEvent(errors,validator,receivedEventUserId,receivedEventDateOfEvent,receivedEventReceivedQuality,receivedTime);
              	}
              	//Validation for aliquot quantity, resolved bug# 4040 (Virender)	
              	if(checkedButton)
@@ -540,7 +547,7 @@ public class NewSpecimenForm extends SpecimenForm
       }
      
 	/**
-	 * @return Returns the bhCounter.
+	 * @return bhCounter Returns the bhCounter.
 	 */
 	public int getBhCounter()
 	{
@@ -557,7 +564,7 @@ public class NewSpecimenForm extends SpecimenForm
 	
 	
 	/**
-	 * @return Returns the parentPresent.
+	 * @return parentPresent  parentPresent Returns the parentPresent.
 	 */
 	public boolean isParentPresent()
 	{
@@ -572,7 +579,7 @@ public class NewSpecimenForm extends SpecimenForm
 	}
 	
 	/**
-	 * @return Returns the specimenEventParameter.
+	 * @return specimenEventParameter Returns the specimenEventParameter.
 	 */
 	public String getSpecimenEventParameter()
 	{
@@ -589,8 +596,8 @@ public class NewSpecimenForm extends SpecimenForm
 	
 	/**
      * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
-     * @param formBeanId - FormBean ID of the object inserted
-     *  @param addObjectIdentifier - Identifier of the Object inserted 
+     * @param addNewFor - FormBean ID of the object inserted
+     * @param addObjectIdentifier - Identifier of the Object inserted 
      */
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
     {
@@ -604,7 +611,7 @@ public class NewSpecimenForm extends SpecimenForm
 	
 	/**
 	 * Returns the no. of aliquots to be created.
-	 * @return The no. of aliquots to be created.
+	 * @return noOfAliquots The no. of aliquots to be created.
 	 * @see #setNoOfAliquots(String)
 	 */
 	public String getNoOfAliquots()
@@ -624,7 +631,7 @@ public class NewSpecimenForm extends SpecimenForm
 	
 	/**
  	 * Returns the initial quantity per aliquot.
- 	 * @return The initial quantity per aliquot.
+ 	 * @return quantityPerAliquot The initial quantity per aliquot.
  	 * @see #setQuantityPerAliquot(String)
  	 */
 	public String getQuantityPerAliquot()
@@ -667,62 +674,71 @@ public class NewSpecimenForm extends SpecimenForm
 			/**
 			 * @return Returns the collectionEventCollectionProcedure.
 			 */
-			public String getCollectionEventCollectionProcedure() {
+			public String getCollectionEventCollectionProcedure() 
+			{
 				return collectionEventCollectionProcedure;
 			}
 			/**
 			 * @param collectionEventCollectionProcedure The collectionEventCollectionProcedure to set.
 			 */
-			public void setCollectionEventCollectionProcedure(
-					String collectionEventCollectionProcedure) {
+			public void setCollectionEventCollectionProcedure(String collectionEventCollectionProcedure) 
+			{
 				this.collectionEventCollectionProcedure = collectionEventCollectionProcedure;
 			}
 			/**
 			 * @return Returns the collectionEventComments.
 			 */
-			public String getCollectionEventComments() {
+			public String getCollectionEventComments() 
+			{
 				return collectionEventComments;
 			}
 			/**
 			 * @param collectionEventComments The collectionEventComments to set.
 			 */
-			public void setCollectionEventComments(String collectionEventComments) {
+			public void setCollectionEventComments(String collectionEventComments) 
+			{
 				this.collectionEventComments = collectionEventComments;
 			}
 			/**
 			 * @return Returns the collectionEventContainer.
 			 */
-			public String getCollectionEventContainer() {
+			public String getCollectionEventContainer() 
+			{
 				return collectionEventContainer;
 			}
 			/**
 			 * @param collectionEventContainer The collectionEventContainer to set.
 			 */
-			public void setCollectionEventContainer(String collectionEventContainer) {
+			public void setCollectionEventContainer(String collectionEventContainer) 
+			{
 				this.collectionEventContainer = collectionEventContainer;
 			}
 			/**
 			 * @return Returns the collectionEventdateOfEvent.
 			 */
-			public String getCollectionEventdateOfEvent() {
+			public String getCollectionEventdateOfEvent() 
+			{
 				return collectionEventdateOfEvent;
 			}
 			/**
 			 * @param collectionEventdateOfEvent The collectionEventdateOfEvent to set.
 			 */
-			public void setCollectionEventdateOfEvent(String collectionEventdateOfEvent) {
+			public void setCollectionEventdateOfEvent(String collectionEventdateOfEvent) 
+			{
 				this.collectionEventdateOfEvent = collectionEventdateOfEvent;
 			}
 			/**
 			 * @return Returns the collectionEventSpecimenId.
 			 */
-			public long getCollectionEventSpecimenId() {
+			public long getCollectionEventSpecimenId() 
+			{
 				return collectionEventSpecimenId;
 			}
 			/**
 			 * @param collectionEventSpecimenId The collectionEventSpecimenId to set.
 			 */
-			public void setCollectionEventSpecimenId(long collectionEventSpecimenId) {
+			public void setCollectionEventSpecimenId(long collectionEventSpecimenId) 
+			{
 				this.collectionEventSpecimenId = collectionEventSpecimenId;
 			}
 		/**
@@ -742,38 +758,43 @@ public class NewSpecimenForm extends SpecimenForm
 			/**
 			 * @return Returns the collectionEventTimeInHours.
 			 */
-			public String getCollectionEventTimeInHours() {
+			public String getCollectionEventTimeInHours() 
+			{
 				return collectionEventTimeInHours;
 			}
 			/**
 			 * @param collectionEventTimeInHours The collectionEventTimeInHours to set.
 			 */
-			public void setCollectionEventTimeInHours(String collectionEventTimeInHours) {
+			public void setCollectionEventTimeInHours(String collectionEventTimeInHours) 
+			{
 				this.collectionEventTimeInHours = collectionEventTimeInHours;
 			}
 			/**
 			 * @return Returns the collectionEventTimeInMinutes.
 			 */
-			public String getCollectionEventTimeInMinutes() {
+			public String getCollectionEventTimeInMinutes() 
+			{
 				return collectionEventTimeInMinutes;
 			}
 			/**
 			 * @param collectionEventTimeInMinutes The collectionEventTimeInMinutes to set.
 			 */
-			public void setCollectionEventTimeInMinutes(
-					String collectionEventTimeInMinutes) {
+			public void setCollectionEventTimeInMinutes(String collectionEventTimeInMinutes) 
+			{
 				this.collectionEventTimeInMinutes = collectionEventTimeInMinutes;
 			}
 			/**
 			 * @return Returns the collectionEventUserId.
 			 */
-			public long getCollectionEventUserId() {
+			public long getCollectionEventUserId() 
+			{
 				return collectionEventUserId;
 			}
 			/**
 			 * @param collectionEventUserId The collectionEventUserId to set.
 			 */
-			public void setCollectionEventUserId(long collectionEventUserId) {
+			public void setCollectionEventUserId(long collectionEventUserId) 
+			{
 				this.collectionEventUserId = collectionEventUserId;
 			}
 	// Mandar: 10-july-06 AutoEvents : Collection Event end
@@ -786,50 +807,57 @@ public class NewSpecimenForm extends SpecimenForm
 	/**
 	 * @return Returns the receivedEventComments.
 	 */
-	public String getReceivedEventComments() {
+	public String getReceivedEventComments() 
+	{
 		return receivedEventComments;
 	}
 	/**
 	 * @param receivedEventComments The receivedEventComments to set.
 	 */
-	public void setReceivedEventComments(String receivedEventComments) {
+	public void setReceivedEventComments(String receivedEventComments)
+	{
 		this.receivedEventComments = receivedEventComments;
 	}
 	/**
 	 * @return Returns the receivedEventDateOfEvent.
 	 */
-	public String getReceivedEventDateOfEvent() {
+	public String getReceivedEventDateOfEvent()
+	{
 		return receivedEventDateOfEvent;
 	}
 	/**
 	 * @param receivedEventDateOfEvent The receivedEventDateOfEvent to set.
 	 */
-	public void setReceivedEventDateOfEvent(String receivedEventDateOfEvent) {
+	public void setReceivedEventDateOfEvent(String receivedEventDateOfEvent) 
+	{
 		this.receivedEventDateOfEvent = receivedEventDateOfEvent;
 	}
 	/**
 	 * @return Returns the receivedEventReceivedQuality.
 	 */
-	public String getReceivedEventReceivedQuality() {
+	public String getReceivedEventReceivedQuality()
+	{
 		return receivedEventReceivedQuality;
 	}
 	/**
 	 * @param receivedEventReceivedQuality The receivedEventReceivedQuality to set.
 	 */
-	public void setReceivedEventReceivedQuality(
-			String receivedEventReceivedQuality) {
+	public void setReceivedEventReceivedQuality(String receivedEventReceivedQuality)
+	{
 		this.receivedEventReceivedQuality = receivedEventReceivedQuality;
 	}
 	/**
 	 * @return Returns the receivedEventSpecimenId.
 	 */
-	public long getReceivedEventSpecimenId() {
+	public long getReceivedEventSpecimenId()
+	{
 		return receivedEventSpecimenId;
 	}
 	/**
 	 * @param receivedEventSpecimenId The receivedEventSpecimenId to set.
 	 */
-	public void setReceivedEventSpecimenId(long receivedEventSpecimenId) {
+	public void setReceivedEventSpecimenId(long receivedEventSpecimenId)
+	{
 		this.receivedEventSpecimenId = receivedEventSpecimenId;
 	}
 	/**
@@ -849,37 +877,43 @@ public class NewSpecimenForm extends SpecimenForm
 	/**
 	 * @return Returns the receivedEventTimeInHours.
 	 */
-	public String getReceivedEventTimeInHours() {
+	public String getReceivedEventTimeInHours()
+	{
 		return receivedEventTimeInHours;
 	}
 	/**
 	 * @param receivedEventTimeInHours The receivedEventTimeInHours to set.
 	 */
-	public void setReceivedEventTimeInHours(String receivedEventTimeInHours) {
+	public void setReceivedEventTimeInHours(String receivedEventTimeInHours) 
+	{
 		this.receivedEventTimeInHours = receivedEventTimeInHours;
 	}
 	/**
 	 * @return Returns the receivedEventTimeInMinutes.
 	 */
-	public String getReceivedEventTimeInMinutes() {
+	public String getReceivedEventTimeInMinutes()
+	{
 		return receivedEventTimeInMinutes;
 	}
 	/**
 	 * @param receivedEventTimeInMinutes The receivedEventTimeInMinutes to set.
 	 */
-	public void setReceivedEventTimeInMinutes(String receivedEventTimeInMinutes) {
+	public void setReceivedEventTimeInMinutes(String receivedEventTimeInMinutes) 
+	{
 		this.receivedEventTimeInMinutes = receivedEventTimeInMinutes;
 	}
 	/**
 	 * @return Returns the receivedEventUserId.
 	 */
-	public long getReceivedEventUserId() {
+	public long getReceivedEventUserId()
+	{
 		return receivedEventUserId;
 	}
 	/**
 	 * @param receivedEventUserId The receivedEventUserId to set.
 	 */
-	public void setReceivedEventUserId(long receivedEventUserId) {
+	public void setReceivedEventUserId(long receivedEventUserId)
+	{
 		this.receivedEventUserId = receivedEventUserId;
 	}
 
@@ -889,7 +923,7 @@ public class NewSpecimenForm extends SpecimenForm
 	
 	/**
 	 * Returns the historical information about the specimen.
-	 * @return The historical information about the specimen.
+	 * @return lineage The historical information about the specimen.
 	 * @see #setLineage(String)
 	 */
 	public String getLineage()
@@ -899,7 +933,7 @@ public class NewSpecimenForm extends SpecimenForm
 	
 	/**
      * Sets the historical information about the specimen.
-     * @param label The historical information about the specimen.
+     * @param lineage The historical information about the specimen.
      * @see #getLineage()
      */
 	public void setLineage(String lineage)
@@ -910,9 +944,10 @@ public class NewSpecimenForm extends SpecimenForm
 	// Patch ID: Bug#3184_6
 	/**
 	 * This method returns the name of SpecimenCollectionGroup
-	 * @return the specimenCollectionGroupName
+	 * @return specimenCollectionGroupName the specimenCollectionGroupName
 	 */
-	public String getSpecimenCollectionGroupName() {
+	public String getSpecimenCollectionGroupName()
+	{
 		return specimenCollectionGroupName;
 	}
 
@@ -920,29 +955,41 @@ public class NewSpecimenForm extends SpecimenForm
 	 * This method sets the name of SpecimenCollectionGroup
 	 * @param specimenCollectionGroupName the specimenCollectionGroupName to set
 	 */
-	public void setSpecimenCollectionGroupName(String specimenCollectionGroupName) {
+	public void setSpecimenCollectionGroupName(String specimenCollectionGroupName)
+	{
 		this.specimenCollectionGroupName = specimenCollectionGroupName;
 	}
 
 	/**
-	 * @return the numberOfSpecimen
+	 * @return numberOfSpecimen the numberOfSpecimen
 	 */
-	public int getNumberOfSpecimen() {
+	public int getNumberOfSpecimen() 
+	{
 		return numberOfSpecimen;
 	}
 
 	/**
 	 * @param numberOfSpecimen the numberOfSpecimen to set
 	 */
-	public void setNumberOfSpecimen(int numberOfSpecimen) {
+	public void setNumberOfSpecimen(int numberOfSpecimen) 
+	{
 		this.numberOfSpecimen = numberOfSpecimen;
 	}
 
-	public String getParentSpecimenName() {
+	/**
+	 * Getting Parent Specimen Name
+	 * @return parentSpecimenName
+	 */
+	public String getParentSpecimenName() 
+	{
 		return parentSpecimenName;
 	}
-
-	public void setParentSpecimenName(String parentSpecimenName) {
+	
+	/**
+	 * @param parentSpecimenName setting Parent Specimen Name
+	 */
+	public void setParentSpecimenName(String parentSpecimenName)
+	{
 		this.parentSpecimenName = parentSpecimenName;
 	}
 	

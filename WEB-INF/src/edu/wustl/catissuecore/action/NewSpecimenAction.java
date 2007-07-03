@@ -67,6 +67,11 @@ public class NewSpecimenAction extends SecureAction
 
 	/**
 	 * Overrides the execute method of Action class.
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
 	 */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 			throws Exception
@@ -167,7 +172,7 @@ public class NewSpecimenAction extends SecureAction
 		String[] bhTypeArray = {Constants.SELECT_OPTION};
 		String[] bhNameArray = {Constants.SELECT_OPTION};
 
-		String selectColNames[] = {Constants.SYSTEM_IDENTIFIER, "name", "type"};
+		String[] selectColNames = {Constants.SYSTEM_IDENTIFIER, "name", "type"};
 		List biohazardList = bizLogic.retrieve(Biohazard.class.getName(), selectColNames);
 		Iterator iterator = biohazardList.iterator();
 
@@ -186,7 +191,7 @@ public class NewSpecimenAction extends SecureAction
 
 			while (iterator.hasNext())
 			{
-				Object hazard[] = (Object[]) iterator.next();
+				Object[] hazard = (Object[]) iterator.next();
 				bhIdArray[i] = String.valueOf(hazard[0]);
 				bhNameArray[i] = (String) hazard[1];
 				bhTypeArray[i] = (String) hazard[2];
@@ -473,8 +478,11 @@ public class NewSpecimenAction extends SecureAction
 		return mapping.findForward(pageOf);
 	}
 	
-	/* This method populates the list boxes for type, tissue site, tissue side
+	/**
+	 * This method populates the list boxes for type, tissue site, tissue side
 	 * and pathological status if this specimen is an aliquot.
+	 * @param specimenForm object of NewSpecimenForm
+	 * @param request object of HttpServletRequest
 	 */
 	private void populateListBoxes(NewSpecimenForm specimenForm, HttpServletRequest request)
 	{
@@ -507,6 +515,7 @@ public class NewSpecimenAction extends SecureAction
 	/**
 	 * This method sets all the collection event parameters for the SpecimenEventParameter pages
 	 * @param request HttpServletRequest instance in which the data will be set. 
+	 * @param specimenForm NewSpecimenForm instance
 	 * @throws Exception Throws Exception. Helps in handling exceptions at one common point.
 	 */
 	private void setCollectionEventRequestParameters(HttpServletRequest request, NewSpecimenForm specimenForm) throws Exception
@@ -583,7 +592,8 @@ public class NewSpecimenAction extends SecureAction
 	// Mandar Autoevents ReceivedEvent start
 	/**
 	 * This method sets all the received event parameters for the SpecimenEventParameter pages
-	 * @param request HttpServletRequest instance in which the data will be set. 
+	 * @param request HttpServletRequest instance in which the data will be set.
+	 * @param specimenForm NewSpecimenForm instance
 	 * @throws Exception Throws Exception. Helps in handling exceptions at one common point.
 	 */
 	private void setReceivedEventRequestParameters(HttpServletRequest request, NewSpecimenForm specimenForm) throws Exception
@@ -598,6 +608,9 @@ public class NewSpecimenAction extends SecureAction
 		}
 	}
 
+	/**
+	 * @param specimenForm instance of NewSpecimenForm
+	 */
 	private void setDateParameters(NewSpecimenForm specimenForm)
 	{
 		// set the current Date and Time for the event.
@@ -632,6 +645,9 @@ public class NewSpecimenAction extends SecureAction
 
 	}
 
+	/**
+	 * @param specimenForm instance of NewSpecimenForm
+	 */
 	private void clearCollectionEvent(NewSpecimenForm specimenForm)
 	{
 		specimenForm.setCollectionEventCollectionProcedure("");
@@ -643,6 +659,9 @@ public class NewSpecimenAction extends SecureAction
 		specimenForm.setCollectionEventUserId(-1);
 	}
 
+	/**
+	 * @param specimenForm instance of NewSpecimenForm
+	 */
 	private void clearReceivedEvent(NewSpecimenForm specimenForm)
 	{
 		specimenForm.setReceivedEventComments("");
@@ -688,6 +707,11 @@ public class NewSpecimenAction extends SecureAction
 		//request.setAttribute("initValues", initialValues);
 	}
 
+	/**
+	 * @param specimenForm instance of NewSpecimenForm
+	 * @param specimenCollectionGroupId String containing specimen collection group Id
+	 * @param specimenCollectionGroupName String containing specimen collection group name
+	 */
 	private void setFormValues(NewSpecimenForm specimenForm, String specimenCollectionGroupId,
 			                   String specimenCollectionGroupName)
 	{
@@ -951,8 +975,8 @@ public class NewSpecimenAction extends SecureAction
 		 * Description: Method to propagate Events to multiple specimens from scg
 		*/
 		/**
-		 * @param specimenCollectionGroupForm
-		 * @param specimenForm
+		 * @param specimenCollectionGroupForm instance of SpecimenCollectionGroupForm
+		 * @param specimenForm instance of NewSpecimenForm
 		 */
 		public static void populateEventsFromScg(SpecimenCollectionGroupForm specimenCollectionGroupForm,NewSpecimenForm specimenForm)
 		{

@@ -65,7 +65,9 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	public void setValue(String key, Object value)
 	{
 	    if (isMutable())
+	    {
 	        values.put(key, value);
+	    }
 	}
 
 	/**
@@ -182,7 +184,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	}
 
 	/**
-	 * @param principalinvestigator
+	 * @param principalInvestigatorId
 	 *            The principalinvestigator to set.
 	 */
 	public void setPrincipalInvestigatorId(long principalInvestigatorId)
@@ -303,6 +305,9 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	
 	/**
 	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
@@ -335,18 +340,18 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 // --- startdate
                 //  date validation according to bug id  722 and 730 and 939
         		String errorKey = validator.validateDate(startDate ,false);
-        		if(errorKey.trim().length() >0  )
+        		if(errorKey.trim().length() >0)
         		{
-        			Logger.out.debug("startdate errorKey : " +errorKey );
+        			Logger.out.debug("startdate errorKey : " +errorKey);
         			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocol.startdate")));
         		}
 
 //  --- end date        		
-             	if (!validator.isEmpty(endDate) )
+             	if (!validator.isEmpty(endDate))
     			{
     	         	//  date validation according to bug id  722 and 730 and 939
     	    		errorKey = validator.validateDate(endDate ,false);
-    	    		if(errorKey.trim().length() >0 && !errorKey.equals("" )   )
+    	    		if(errorKey.trim().length() >0 && !errorKey.equals(""))
     	    		{
             			Logger.out.debug("enddate errorKey: " + errorKey );
     	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocol.enddate")));
@@ -356,14 +361,14 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
       			// code added as per bug id 235 
     			// code to validate startdate less than end date
     			// check the start date less than end date
-    			if (validator.checkDate(startDate) && validator.checkDate(endDate )  )
+    			if (validator.checkDate(startDate) && validator.checkDate(endDate))
     			{
-    				if(!validator.compareDates(startDate,endDate   ) )
+    				if(!validator.compareDates(startDate,endDate))
     				{
     					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("specimenprotocol.invaliddate",ApplicationProperties.getValue("specimenprotocol.invaliddate")));
     				}
     			}
-    			if (!validator.isEmpty(enrollment ))
+    			if (!validator.isEmpty(enrollment))
                 {
 
     				try
@@ -386,6 +391,11 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		return errors;
 	}
 	
+	/**
+	 * 
+	 * @param key Atring Array of Key
+	 * @param requirement Specimen Requirement
+	 */
 	protected void setSpecimenRequirement(String [] key, SpecimenRequirement requirement)
 	{
 	    values.put(key[0] , requirement.getSpecimenClass());
@@ -431,10 +441,10 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		if(requirement.getSpecimenClass().equals(Constants.TISSUE) && requirement.getQuantity().getValue() != null)
 		{
 			String tissueType = requirement.getSpecimenType();
-			if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE) || 
-			        tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK) || 
-			        tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)  || 
-			        tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE))
+			if(tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_SLIDE)
+					|| tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_BLOCK) 
+					||tissueType.equalsIgnoreCase(Constants.FROZEN_TISSUE_BLOCK)  
+			        ||tissueType.equalsIgnoreCase(Constants.FIXED_TISSUE_SLIDE))
 			{
 				values.put(key[5] , Utility.toString(new Integer(requirement.getQuantity().getValue().intValue())));
 			}

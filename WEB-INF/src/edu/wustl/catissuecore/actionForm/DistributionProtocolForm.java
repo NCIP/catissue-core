@@ -65,7 +65,10 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	{
 		super();
 	}
-	
+	/**
+     * Resets the values of all the fields.
+     * This method defined in ActionForm is overridden in this class.
+     */
 	protected void reset()
 	{
 		//super.reset();
@@ -95,7 +98,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 			{
 				SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
 
-				String key[] = {
+				String[] key = {
 				        "SpecimenRequirement:" + i +"_specimenClass",
 				        "SpecimenRequirement:" + i +"_unitspan",
 				        "SpecimenRequirement:" + i +"_specimenType",
@@ -111,17 +114,22 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 			
 			//At least one row should be displayed in ADD MORE therefore
 			if(counter == 0)
+			{
 				counter = 1;
+			}
 		}
 	}
 	
 	 
 	/**
 	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		ActionErrors errors = super.validate(mapping, request );
+		ActionErrors errors = super.validate(mapping, request);
 		Validator validator = new Validator();
 		try
 		{
@@ -160,16 +168,16 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
     				
     				if(!bSpecimenClass)
     				{
-    					if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption( value))
+    					if(key.indexOf("specimenClass")!=-1 && !validator.isValidOption(value))
     					{
     						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenclass")));
     						bSpecimenClass = true;
     					}
     				}
     				
-    				if(!bSpecimenType )
+    				if(!bSpecimenType)
     				{
-    					if(key.indexOf("specimenType")!=-1 && !validator.isValidOption( value))
+    					if(key.indexOf("specimenType")!=-1 && !validator.isValidOption(value))
     					{
     						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimetype")));
     						bSpecimenType = true;
@@ -178,16 +186,16 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 
     				if(!bTissueSite)
     				{
-    					if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption( value))
+    					if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption(value))
     					{
     						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimensite")));
     						bTissueSite = true;
     					}
     				}
 
-    				if(!bPathologyStatus )
+    				if(!bPathologyStatus)
     				{
-    					if(key.indexOf("pathologyStatus")!=-1 && !validator.isValidOption( value))
+    					if(key.indexOf("pathologyStatus")!=-1 && !validator.isValidOption(value))
     					{
     						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimenstatus")));
     						bPathologyStatus = true; 
@@ -206,15 +214,15 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 //	    					}
 //	    					else
 //	    					{
-		    					String classKey = key.substring(0,key.indexOf("_") );
+		    					String classKey = key.substring(0,key.indexOf("_"));
 		    					classKey = classKey + "_specimenClass";
-		    					String classValue = (String)getValue(classKey );
+		    					String classValue = (String)getValue(classKey);
 		    					
 	    						// -------Mandar: 20-12-2005
-	    						String typeKey = key.substring(0,key.indexOf("_") );
+	    						String typeKey = key.substring(0,key.indexOf("_"));
 	    						typeKey = typeKey + "_specimenType";
-	    						String typeValue = (String)getValue(typeKey );
-	    						Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );
+	    						String typeValue = (String)getValue(typeKey);
+	    						Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue);
 	    						
 	    						try
 								{
@@ -223,10 +231,10 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		    						 *  if class is cell or type is slide,paraffinblock, 
 		    						 *  frozen block then qty is in integer
 		    						 */
-			    					if (classValue.trim().equals("Cell") || typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) ||
-			    							typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE))
+			    					if (classValue.trim().equals("Cell") || typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) 
+			    							||typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE))
 			    					{
-			            				if(!validator.isNumeric(value,0 ))
+			            				if(!validator.isNumeric(value,0))
 			            				{
 			            					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("distributionprotocol.quantity")));
 			            					bQuantity = true;
@@ -259,7 +267,7 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	}
 	
 	/**
-	 * Returns the id assigned to form bean
+	 * @return DISTRIBUTIONPROTOCOL_FORM_ID Returns the id assigned to form bean
 	 */
 	public int getFormId()
 	{
@@ -268,12 +276,12 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 	
 	/**
      * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
-     * @param formBeanId - FormBean ID of the object inserted
+     * @param addNewFor - FormBean ID of the object inserted
      *  @param addObjectIdentifier - Identifier of the Object inserted 
      */
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
     {
-        if(addNewFor.equals("principalInvestigator") )
+        if(addNewFor.equals("principalInvestigator"))
         {
             setPrincipalInvestigatorId(addObjectIdentifier.longValue());
         }

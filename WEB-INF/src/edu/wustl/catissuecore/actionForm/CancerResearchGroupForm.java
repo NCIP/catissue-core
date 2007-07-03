@@ -47,7 +47,7 @@ public class CancerResearchGroupForm extends AbstractActionForm
 
     /**
      * Copies the data from an AbstractDomain object to a CancerResearchGroupForm object.
-     * @param CancerResearchGroup An AbstractDomain object.  
+     * @param abstractDomain An AbstractDomain object.  
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
@@ -67,7 +67,7 @@ public class CancerResearchGroupForm extends AbstractActionForm
 
     /**
      * Sets the name of this CancerResearchGroup
-     * @param Name name of the CancerResearchGroup.
+     * @param name Name of the CancerResearchGroup.
      */
     public void setName(String name)
     {
@@ -85,6 +85,7 @@ public class CancerResearchGroupForm extends AbstractActionForm
     
     /**
      * Returns the id assigned to form bean
+     * @return CANCER_RESEARCH_GROUP_FORM_ID
      */
     public int getFormId()
     {
@@ -101,8 +102,11 @@ public class CancerResearchGroupForm extends AbstractActionForm
     }
 
     /**
-    * Overrides the validate method of ActionForm.
-    * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
         ActionErrors errors = new ActionErrors();

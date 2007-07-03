@@ -45,7 +45,7 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionProtocolForm extends SpecimenProtocolForm
 {
-	protected long protocolCoordinatorIds[];
+	protected long[] protocolCoordinatorIds;
 
 	/**
 	 * Counter that contains number of rows in the 'Add More' functionality. outer block
@@ -86,7 +86,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	public void setIvl(String key, Object value)///changes here
 	{
 	    if (isMutable())
-	        innerLoopValues.put(key, value);
+	    {
+	       innerLoopValues.put(key, value);
+	    }
 	}
 
 	/**
@@ -123,7 +125,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		super();
 	}
-	
+	/**
+	 * Method to set class attributes
+	 */
 	protected void reset()
 	{
 //		super.reset();
@@ -218,12 +222,17 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				i++;
 			}
 		}
-		if(cProtocol.getAliqoutInSameContainer()!= null) {
-		aliqoutInSameContainer = cProtocol.getAliqoutInSameContainer().booleanValue();
+		if(cProtocol.getAliqoutInSameContainer()!= null) 
+		{
+			aliqoutInSameContainer = cProtocol.getAliqoutInSameContainer().booleanValue();
 		}
 	}
 	
-	
+	/**
+	 * This method will populate Specimen requirement
+	 * @param specimenRequirementCollection Collection of Specimen requirement
+	 * @param counter No if specimen requirement
+	 */
 	private void populateSpecimenRequirement(Collection specimenRequirementCollection, int counter)
 	{
 		int innerCounter = 0;
@@ -235,7 +244,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			while(iterator.hasNext())
 			{
 			    SpecimenRequirement specimenRequirement = (SpecimenRequirement)iterator.next();
-				String key[] = {
+				String[] key = {
 					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_specimenClass",
 					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_unitspan",
 					        "CollectionProtocolEvent:" + counter + "_SpecimenRequirement:" + i +"_specimenType",
@@ -339,26 +348,29 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	
 	/**
 	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
 	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
-		Logger.out.debug("OPERATION : ----- : " + operation );
-		ActionErrors errors = super.validate(mapping, request );
+		Logger.out.debug("OPERATION : ----- : " + operation);
+		ActionErrors errors = super.validate(mapping, request);
 		Validator validator = new Validator();
 		try
 		{
 			setRedirectValue(validator);
 			// ---------START --------------------------------------			
-				if(values.isEmpty() )
+				if(values.isEmpty())
 				{
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",ApplicationProperties.getValue("collectionprotocol.eventtitle")));
 				}
 			// check for atleast 1 specimen requirement per CollectionProtocol Event
-				for(int i=1;i<=outerCounter;i++ )
+				for(int i=1;i<=outerCounter;i++)
 				{
 					String className = "CollectionProtocolEvent:"+i+"_SpecimenRequirement:1_specimenClass";
-					Object obj = getValue( className  );
-					if(obj == null )
+					Object obj = getValue(className);
+					if(obj == null)
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.one.item.required",ApplicationProperties.getValue("collectionprotocol.specimenreq")));
 					}
@@ -372,9 +384,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 			//Check for PI can not be coordinator of the protocol.
 			if(this.protocolCoordinatorIds != null && this.principalInvestigatorId!=-1)
 			{
-				for(int ind=0; ind < protocolCoordinatorIds.length ; ind++ )
+				for(int ind=0; ind < protocolCoordinatorIds.length;ind++)
 				{
-				 	if(protocolCoordinatorIds[ind] == this.principalInvestigatorId )
+				 	if(protocolCoordinatorIds[ind] == this.principalInvestigatorId)
 				 	{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.pi.coordinator.same"));
 						break;
@@ -382,7 +394,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				}
 			}
 				
-			Logger.out.debug("Protocol Coordinators : " + protocolCoordinatorIds ); 
+			Logger.out.debug("Protocol Coordinators : " + protocolCoordinatorIds); 
 			
 			boolean bClinicalStatus = false;
 			boolean bStudyPoint = false;
@@ -409,7 +421,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				// Deepti for FuruteSCG
 				if(!bCollectionPointlabel)
 				{
-					if(key.indexOf("collectionPointLabel")!=-1 )
+					if(key.indexOf("collectionPointLabel")!=-1)
 					{
 						if(validator.isEmpty(value))
 						{
@@ -420,7 +432,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				}
 				if(!bStudyPoint)
 				{
-					if(key.indexOf("studyCalendarEventPoint")!=-1 )
+					if(key.indexOf("studyCalendarEventPoint")!=-1)
 					{
 						//As study Calendar Event Point can be an empty value
 						if(validator.isEmpty(value))
@@ -449,7 +461,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 					}
 				}
 				
-				if(!bSpecimenType )
+				if(!bSpecimenType)
 				{
 					if(key.indexOf("specimenType")!=-1 && !validator.isValidOption( value))
 					{
@@ -460,14 +472,14 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 
 				if(!bTissueSite)
 				{
-					if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption( value))
+					if(key.indexOf("tissueSite")!=-1 && !validator.isValidOption(value))
 					{
 						errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.selected",ApplicationProperties.getValue("collectionprotocol.specimensite")));
 						bTissueSite = true;
 					}
 				}
 
-				if(!bPathologyStatus )
+				if(!bPathologyStatus)
 				{
 					if(key.indexOf("pathologyStatus")!=-1 && !validator.isValidOption( value))
 					{
@@ -481,9 +493,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				{
 					if(!validator.isEmpty(value))
 					{
-						String classKey = key.substring(0,key.lastIndexOf("_quantity_value") );
+						String classKey = key.substring(0,key.lastIndexOf("_quantity_value"));
 						classKey = classKey + "_specimenClass";
-						String classValue = (String)getValue(classKey );
+						String classValue = (String)getValue(classKey);
 						try
 						{
 							value = new BigDecimal(value).toPlainString();
@@ -493,7 +505,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 //								{
 //									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
 //								}else
-								if(!validator.isNumeric(value,0 ))
+								if(!validator.isNumeric(value,0))
 		        				{
 		        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
 		        				}
@@ -501,17 +513,17 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 							else
 							{
 								// -------Mandar: 19-12-2005
-								String typeKey = key.substring(0,key.lastIndexOf("_quantity_value") );
+								String typeKey = key.substring(0,key.lastIndexOf("_quantity_value"));
 								typeKey = typeKey + "_specimenType";
-								String typeValue = (String)getValue(typeKey );
-								Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue  );							
-								if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) || typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE) )
+								String typeValue = (String)getValue(typeKey);
+								Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue);							
+								if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) || typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE))
 								{
 //									if(validator.isEmpty(value))
 //									{
 //										errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
 //									}else 
-			        				if(!validator.isNumeric(value,0 ))
+			        				if(!validator.isNumeric(value,0))
 			        				{
 			        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
 			        				}
@@ -522,7 +534,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 //									{
 //										errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
 //									}else
-									if(!validator.isDouble(value,true ))
+									if(!validator.isDouble(value,true))
 			        				{
 			        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
 			        				}
@@ -551,12 +563,18 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	
 	/**
 	 * Returns the id assigned to form bean
+	 * @return COLLECTION_PROTOCOL_FORM_ID
 	 */
 	public int getFormId()
 	{
 		return Constants.COLLECTION_PROTOCOL_FORM_ID;
 	}
 	
+	/**
+	 * This is the main method, main( ) is the method called when a Java application begins
+	 * @param args array of instances of the class String.
+	 * args receives any command-line arguments present when the program is executed.
+	 */
 	public static void main(String[] args)
 	{
 		int maxCount=1;
@@ -589,18 +607,18 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	
 	/**
      * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
-     * @param formBeanId - FormBean ID of the object inserted
+     * @param addNewFor - FormBean ID of the object inserted
      *  @param addObjectIdentifier - Identifier of the Object inserted 
      */
     public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
     {
-        if(addNewFor.equals("principalInvestigator") )
+        if(addNewFor.equals("principalInvestigator"))
         {
             setPrincipalInvestigatorId(addObjectIdentifier.longValue());
         }
-        else if(addNewFor.equals("protocolCoordinator") )
+        else if(addNewFor.equals("protocolCoordinator"))
         {
-            long pcoordIDs[] = { Long.parseLong( addObjectIdentifier.toString() ) };
+            long[] pcoordIDs = { Long.parseLong(addObjectIdentifier.toString()) };
            
 			setProtocolCoordinatorIds(pcoordIDs); 
         } 

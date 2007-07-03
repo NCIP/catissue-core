@@ -12,8 +12,11 @@ package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,10 +30,10 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
@@ -38,6 +41,7 @@ import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.AddNewSessionDataBean;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -50,6 +54,11 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	/**
 	 * Overrides the execute method of Action class.
 	 * Sets the various fields in Participant Registration Add/Edit webpage.
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
 	 * */
 	public ActionForward executeSecureAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
@@ -59,7 +68,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 		//Sets the operation attribute to be used in the Add/Edit User Page. 
 		request.setAttribute(Constants.OPERATION, operation);
-        if(operation.equalsIgnoreCase(Constants.ADD ) ) 
+        if(operation.equalsIgnoreCase(Constants.ADD)) 
         {
         	CollectionProtocolRegistrationForm cpform = (CollectionProtocolRegistrationForm)form;
         	cpform.setId(0);
@@ -95,13 +104,19 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 
 		//get list of Protocol title.
 		String sourceObjectName = CollectionProtocol.class.getName();
-		String[] displayNameFields = {"title"};
+
+		//Smita changes start
+		String[] displayNameFields = {"shortTitle"};
+		//Smita changes end
+
 		String valueField = Constants.SYSTEM_IDENTIFIER;
 		List list = bizLogic.getList(sourceObjectName, displayNameFields, valueField, true);
 		request.setAttribute(Constants.PROTOCOL_LIST, list);
+		Map<Long, String> cpIDTitleMap = Utility.getCPIDTitleMap();
+		request.setAttribute(Constants.CP_ID_TITLE_MAP, cpIDTitleMap);
 		
 		Logger.out.debug("SubmittedFor on CPRAction====>"+request.getAttribute(Constants.SUBMITTED_FOR));
-		if( (request.getAttribute(Constants.SUBMITTED_FOR) != null) && (request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")))
+		if((request.getAttribute(Constants.SUBMITTED_FOR) != null) && (request.getAttribute(Constants.SUBMITTED_FOR).equals("AddNew")))
 		{
 		    HttpSession session = request.getSession();
             Stack formBeanStack = (Stack)session.getAttribute(Constants.FORM_BEAN_STACK);
@@ -191,7 +206,7 @@ public class CollectionProtocolRegistrationAction extends SecureAction
             Long participantId=(Long)forwardToHashMap.get("participantId");
             Logger.out.debug("ParticipantID found in forwardToHashMap========>>>>>>"+participantId);
         
-            if((request.getParameter("firstName").trim().length()>0) || (request.getParameter("lastName").trim().length()>0) || (request.getParameter("birthDate").trim().length()>0) ||( (request.getParameter("socialSecurityNumberPartA").trim().length()>0) && (request.getParameter("socialSecurityNumberPartB").trim().length()>0) && (request.getParameter("socialSecurityNumberPartC").trim().length()>0))) 
+            if((request.getParameter("firstName").trim().length()>0) || (request.getParameter("lastName").trim().length()>0) || (request.getParameter("birthDate").trim().length()>0) ||((request.getParameter("socialSecurityNumberPartA").trim().length()>0) && (request.getParameter("socialSecurityNumberPartB").trim().length()>0) && (request.getParameter("socialSecurityNumberPartC").trim().length()>0))) 
             {    
                 CollectionProtocolRegistrationForm cprForm=(CollectionProtocolRegistrationForm)form;
                 cprForm.setParticipantID(participantId.longValue());
@@ -272,6 +287,11 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 		return mapping.findForward(pageOf);
 	}
 	
+	/**
+	 * @param listOfParticipant list of participant
+	 * @param listOfDisabledParticipant list of disabled participant
+	 * @return list of participant those having activityStatus not as disabled
+	 */
 	private List removeDisabledParticipant(List listOfParticipant, List listOfDisabledParticipant)
 	{
 	   List listOfActiveParticipant=new ArrayList();
@@ -294,7 +314,9 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	       for(int j=0; j<listOfDisabledParticipant.size(); j++)
 	       {
 	           if(Long.parseLong(((NameValueBean)listOfDisabledParticipant.get(j)).getValue()) == -1)
+	           {
 	               continue;
+	           }
 	          
 	           NameValueBean disabledParticipant = (NameValueBean)listOfDisabledParticipant.get(j);
 	           if(participantBean.getValue().equals(disabledParticipant.getValue()))
@@ -304,19 +326,27 @@ public class CollectionProtocolRegistrationAction extends SecureAction
 	           }
 	       }
 	       if(isParticipantDisable==false)
+	       {
 	           listOfActiveParticipant.add(listOfParticipant.get(i));
+	       }
 	   }
 	   
 	   Logger.out.debug("No.Of Active Participants ~~~~~~~~~~~~~~~~~~~~~~~>"+listOfActiveParticipant.size());
 	   
 	   return listOfActiveParticipant;
 	}
+	/**
+	 * @param participantProtocolId String value for participant Protocol id
+	 * @param bizLogic object of class implementing IBizLogic
+	 * @return String for respective participant Id
+	 * @throws Exception generic exception
+	 */
 	private String getParticipantIdForProtocolId(String participantProtocolId,IBizLogic bizLogic) throws Exception
 	{
 		String sourceObjectName = CollectionProtocolRegistration.class.getName();
-		String selectColumnName[] = {"participant.id"};
-		String whereColumnName[] = {"protocolParticipantIdentifier"};
-		String whereColumnCondition[] = {"="};
+		String[] selectColumnName = {"participant.id"};
+		String[] whereColumnName = {"protocolParticipantIdentifier"};
+		String[] whereColumnCondition = {"="};
 		Object[] whereColumnValue = {participantProtocolId};
 		List participantList = bizLogic.retrieve(sourceObjectName,selectColumnName,whereColumnName,whereColumnCondition,whereColumnValue,Constants.AND_JOIN_CONDITION);
 		if(participantList != null && !participantList.isEmpty())

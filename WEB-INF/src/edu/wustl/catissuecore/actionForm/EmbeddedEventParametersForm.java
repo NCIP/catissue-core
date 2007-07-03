@@ -41,29 +41,35 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
      */
 	private String embeddingMedium = (String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_EMBEDDING_MEDIUM);
 
-	
+	/**
+	 * @return embeddingMedium Getting embeddingMedium
+	 */
 	public String getEmbeddingMedium()
 	{
 		return embeddingMedium;
 	}
 	
-	
+	/**
+	 * @param embeddingMedium Setting embeddingMedium
+	 */
 	public void setEmbeddingMedium(String embeddingMedium)
 	{
 		this.embeddingMedium = embeddingMedium;
 	}
 
 	// ----- SUPERCLASS METHODS
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 * @return EMBEDDED_EVENT_PARAMETERS_FORM_ID 
 	 */
 	public int getFormId()
 	{
 		return Constants.EMBEDDED_EVENT_PARAMETERS_FORM_ID;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+	 * @param abstractDomain  An AbstractDomainObject obj
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -75,7 +81,10 @@ public class EmbeddedEventParametersForm extends SpecimenEventParametersForm
 	
 	/**
 	 * Overrides the validate method of ActionForm.
-	 * */
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
 	 public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
 	 {
 		ActionErrors errors = super.validate(mapping, request);

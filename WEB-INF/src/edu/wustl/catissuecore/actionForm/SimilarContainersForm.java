@@ -28,7 +28,8 @@ import edu.wustl.common.util.logger.Logger;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class SimilarContainersForm extends AbstractActionForm {
+public class SimilarContainersForm extends AbstractActionForm 
+{
 
 	/* (non-Javadoc)
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#getFormId()
@@ -77,17 +78,17 @@ public class SimilarContainersForm extends AbstractActionForm {
 	/**
 	 * collectionIds contains Ids of collection Protocols that this container can hold
 	 */
-	protected long collectionIds[] = new long[] {-1};
+	protected long[] collectionIds = new long[] {-1};
 	
 	/**
 	 * holdStorageTypeIds contains Ids of Storage Types that this container can hold
 	 */
-	protected long holdsStorageTypeIds[];
+	protected long[] holdsStorageTypeIds;
 	
 	/**
 	 * holdSpecimenClassTypeIds contains Ids of Specimen Types that this container can hold
 	 */
-	protected long holdsSpecimenClassTypeIds[];
+	protected long[] holdsSpecimenClassTypeIds;
 	
 	/**
 	 * Tells whether this container is full or not.
@@ -138,7 +139,7 @@ public class SimilarContainersForm extends AbstractActionForm {
 	
 	/**
      * Sets the map of distinguished fields of aliquots.
-     * @param aliquotMap A map of distinguished fields of aliquots.
+     * @param similarContainersMap A map of distinguished fields of aliquots.
      * @see #getAliquotMap()
      */
 	public void setSimilarContainersMap(Map similarContainersMap)
@@ -173,34 +174,40 @@ public class SimilarContainersForm extends AbstractActionForm {
 	/**
 	 * @return Returns the storageContainerType.
 	 */
-	public String getStorageContainerType() {
+	public String getStorageContainerType() 
+	{
 		return storageContainerType;
 	}
 	/**
 	 * @param storageContainerType The storageContainerType to set.
 	 */
-	public void setStorageContainerType(String storageContainerType) {
+	public void setStorageContainerType(String storageContainerType)
+	{
 		this.storageContainerType = storageContainerType;
 	}
-	
-	public int getFormId() {
+	/**
+	 * @return SIMILAR_CONTAINERS_FORM_ID
+	 */
+	public int getFormId() 
+	{
 		// TODO Auto-generated method stub
 		return Constants.SIMILAR_CONTAINERS_FORM_ID;
 	}
 	
 	
 	
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
+	 * @param abstractDomain An AbstractDomain Object
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain) {
 		// TODO Auto-generated method stub
 
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.common.actionForm.AbstractActionForm#reset()
-	 */
+	/**
+     * Resets the values of all the fields.
+     */
 	protected void reset() {
 		// TODO Auto-generated method stub
 
@@ -209,13 +216,15 @@ public class SimilarContainersForm extends AbstractActionForm {
 	/**
 	 * @return Returns the noOfContainers.
 	 */
-	public String getNoOfContainers() {
+	public String getNoOfContainers()
+	{
 		return noOfContainers;
 	}
 	/**
 	 * @param noOfContainers The noOfContainers to set.
 	 */
-	public void setNoOfContainers(String noOfContainers) {
+	public void setNoOfContainers(String noOfContainers) 
+	{
 		this.noOfContainers = noOfContainers;
 		
 		//System.out.println("noOfContainers "+noOfContainers);
@@ -223,110 +232,128 @@ public class SimilarContainersForm extends AbstractActionForm {
 	/**
 	 * @return Returns the storageContainerId.
 	 */
-	public String getStorageContainerId() {
+	public String getStorageContainerId() 
+	{
 		return storageContainerId;
 	}
 	/**
 	 * @param storageContainerId The storageContainerId to set.
 	 */
-	public void setStorageContainerId(String storageContainerId) {
+	public void setStorageContainerId(String storageContainerId) 
+	{
 		this.storageContainerId = storageContainerId;
 	}
 	/**
 	 * @return Returns the defaultTemperature.
 	 */
-	public String getDefaultTemperature() {
+	public String getDefaultTemperature() 
+	{
 		return defaultTemperature;
 	}
 	/**
 	 * @param defaultTemperature The defaultTemperature to set.
 	 */
-	public void setDefaultTemperature(String defaultTemperature) {
+	public void setDefaultTemperature(String defaultTemperature)
+	{
 		this.defaultTemperature = defaultTemperature;
 	}
 	/**
 	 * @return Returns the oneDimensionCapacity.
 	 */
-	public int getOneDimensionCapacity() {
+	public int getOneDimensionCapacity()
+	{
 		return oneDimensionCapacity;
 	}
 	/**
 	 * @param oneDimensionCapacity The oneDimensionCapacity to set.
 	 */
-	public void setOneDimensionCapacity(int oneDimensionCapacity) {
+	public void setOneDimensionCapacity(int oneDimensionCapacity)
+	{
 		this.oneDimensionCapacity = oneDimensionCapacity;
 	}
 	/**
 	 * @return Returns the twoDimensionCapacity.
 	 */
-	public int getTwoDimensionCapacity() {
+	public int getTwoDimensionCapacity() 
+	{
 		return twoDimensionCapacity;
 	}
 	/**
 	 * @param twoDimensionCapacity The twoDimensionCapacity to set.
 	 */
-	public void setTwoDimensionCapacity(int twoDimensionCapacity) {
+	public void setTwoDimensionCapacity(int twoDimensionCapacity)
+	{
 		this.twoDimensionCapacity = twoDimensionCapacity;
 	}
 	/**
 	 * @return Returns the typeId.
 	 */
-	public long getTypeId() {
+	public long getTypeId()
+	{
 		return typeId;
 	}
 	/**
 	 * @param typeId The typeId to set.
 	 */
-	public void setTypeId(long typeId) {
+	public void setTypeId(long typeId) 
+	{
 		this.typeId = typeId;
 		
 	}
 	/**
 	 * @return Returns the siteId.
 	 */
-	public long getSiteId() {
+	public long getSiteId() 
+	{
 		return siteId;
 	}
 	/**
 	 * @param siteId The siteId to set.
 	 */
-	public void setSiteId(long siteId) {
+	public void setSiteId(long siteId) 
+	{
 		this.siteId = siteId;
 	}
 	/**
 	 * @return Returns the siteName.
 	 */
-	public String getSiteName() {
+	public String getSiteName()
+	{
 		return siteName;
 	}
 	/**
 	 * @param siteName The siteName to set.
 	 */
-	public void setSiteName(String siteName) {
+	public void setSiteName(String siteName) 
+	{
 		this.siteName = siteName;
 	}
 	/**
 	 * @return Returns the collectionProtocolTitle.
 	 */
-	public String getCollectionProtocolTitle() {
+	public String getCollectionProtocolTitle() 
+	{
 		return collectionProtocolTitle;
 	}
 	/**
 	 * @param collectionProtocolTitle The collectionProtocolTitle to set.
 	 */
-	public void setCollectionProtocolTitle(String collectionProtocolTitle) {
+	public void setCollectionProtocolTitle(String collectionProtocolTitle) 
+	{
 		this.collectionProtocolTitle = collectionProtocolTitle;
 	}
 	/**
 	 * @return Returns the holds.
 	 */
-	public String getHolds() {
+	public String getHolds() 
+	{
 		return holds;
 	}
 	/**
 	 * @param holds The holds to set.
 	 */
-	public void setHolds(String holds) {
+	public void setHolds(String holds) 
+	{
 		this.holds = holds;
 	}
 	
@@ -369,14 +396,16 @@ public class SimilarContainersForm extends AbstractActionForm {
 	/**
 	 * @return Returns the checkedButton.
 	 */
-	public int getCheckedButton() {
+	public int getCheckedButton()
+	{
 		return checkedButton;
 	}
 
 	/**
 	 * @param checkedButton The checkedButton to set.
 	 */
-	public void setCheckedButton(int checkedButton) {
+	public void setCheckedButton(int checkedButton) 
+	{
 		Logger.out.debug("setCheckedButton ** "+checkedButton);
 		this.checkedButton = checkedButton;
 	}
@@ -440,20 +469,25 @@ public class SimilarContainersForm extends AbstractActionForm {
 	/**
 	 * @return Returns the holdsSpecimenClassTypeIds.
 	 */
-	public long[] getHoldsSpecimenClassTypeIds() {
+	public long[] getHoldsSpecimenClassTypeIds()
+	{
 		return holdsSpecimenClassTypeIds;
 	}
 
 	/**
 	 * @param holdsSpecimenClassTypeIds The holdsSpecimenClassTypeIds to set.
 	 */
-	public void setHoldsSpecimenClassTypeIds(long[] holdsSpecimenClassTypeIds) {
+	public void setHoldsSpecimenClassTypeIds(long[] holdsSpecimenClassTypeIds)
+	{
 		this.holdsSpecimenClassTypeIds = holdsSpecimenClassTypeIds;
 	}
 	
 	/**
 	 * Overrides the validate method of ActionForm.
-	 * */
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		Logger.out.debug("SimilarContainersForm :: validate()");
@@ -534,7 +568,6 @@ public class SimilarContainersForm extends AbstractActionForm {
 		}
 		catch (Exception excp)
 		{
-			System.out.println("\n\n*******Error*********\n\n");
 			Logger.out.error(excp.getMessage(), excp);
 		}
 		return errors;
@@ -543,14 +576,16 @@ public class SimilarContainersForm extends AbstractActionForm {
 	/**
 	 * @return Returns the parentContainerId.
 	 */
-	public long getParentContainerId() {
+	public long getParentContainerId()
+	{
 		return parentContainerId;
 	}
 
 	/**
 	 * @param parentContainerId The parentContainerId to set.
 	 */
-	public void setParentContainerId(long parentContainerId) {
+	public void setParentContainerId(long parentContainerId)
+	{
 		Logger.out.debug("calling ... parentContainerId "+parentContainerId);
 		this.parentContainerId = parentContainerId;
 	}
@@ -558,14 +593,16 @@ public class SimilarContainersForm extends AbstractActionForm {
 	/**
 	 * @return Returns the positionDimensionOne.
 	 */
-	public int getPositionDimensionOne() {
+	public int getPositionDimensionOne() 
+	{
 		return positionDimensionOne;
 	}
 
 	/**
 	 * @param positionDimensionOne The positionDimensionOne to set.
 	 */
-	public void setPositionDimensionOne(int positionDimensionOne) {
+	public void setPositionDimensionOne(int positionDimensionOne)
+	{
 		Logger.out.debug("calling ... positionDimensionOne "+positionDimensionOne);
 		this.positionDimensionOne = positionDimensionOne;
 	}
@@ -573,14 +610,16 @@ public class SimilarContainersForm extends AbstractActionForm {
 	/**
 	 * @return Returns the positionDimensionTwo.
 	 */
-	public int getPositionDimensionTwo() {
+	public int getPositionDimensionTwo()
+	{
 		return positionDimensionTwo;
 	}
 
 	/**
 	 * @param positionDimensionTwo The positionDimensionTwo to set.
 	 */
-	public void setPositionDimensionTwo(int positionDimensionTwo) {
+	public void setPositionDimensionTwo(int positionDimensionTwo)
+	{
 		Logger.out.debug("calling ... positionDimensionTwo "+positionDimensionTwo);
 		this.positionDimensionTwo = positionDimensionTwo;
 	}
@@ -588,31 +627,32 @@ public class SimilarContainersForm extends AbstractActionForm {
 	/**
 	 * @return Returns the barcode.
 	 */
-	public String getBarcode() {
+	public String getBarcode() 
+	{
 		return barcode;
 	}
 
 	/**
 	 * @param barcode The barcode to set.
 	 */
-	public void setBarcode(String barcode) {
+	public void setBarcode(String barcode) 
+	{
 		this.barcode = barcode;
 	}
 
 	/**
 	 * @return Returns the containerName.
 	 */
-	public String getContainerName() {
+	public String getContainerName()
+	{
 		return containerName;
 	}
 
 	/**
 	 * @param containerName The containerName to set.
 	 */
-	public void setContainerName(String containerName) {
+	public void setContainerName(String containerName) 
+	{
 		this.containerName = containerName;
 	}
-	
-	
-	
 }

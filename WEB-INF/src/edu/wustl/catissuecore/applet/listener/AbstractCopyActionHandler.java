@@ -240,16 +240,28 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 				map.put(key, valueList);
 			}
 		}
+		
+				
+		/**
+		 * Smita Kadam
+		 * Reviewer: Sachin
+		 * Bug ID: 4574
+		 * Patch ID: 4574_1 
+		 * Description: Tooltip related processing done only for Multiple specimen table
+		 */
+		if (table.getModel() instanceof MultipleSpecimenTableModel)
+		{
 		/**
 		* Patch ID: Entered_Events_Need_To_Be_Visible_13
 		* See also: 1-5
 		* Description: get event tool tip for given column and put it into the map
-		*/ 
-		for (int columnIndex = 0; columnIndex < selectedColumns.length; columnIndex++)
-		{
-			String key = CommonAppletUtil.getDataKey(AppletConstants.SPECIMEN_EVENTS_ROW_NO, selectedColumns[columnIndex]);
-			String value = getEventTooltip(selectedColumns[columnIndex]);
-			map.put(key, value);
+		*/
+			for (int columnIndex = 0; columnIndex < selectedColumns.length; columnIndex++)
+			{
+				String key = CommonAppletUtil.getDataKey(AppletConstants.SPECIMEN_EVENTS_ROW_NO, selectedColumns[columnIndex]);
+				String value = getEventTooltip(selectedColumns[columnIndex]);
+				map.put(key, value);
+			}
 		}
 		return map;
 	}
@@ -265,7 +277,7 @@ public abstract class AbstractCopyActionHandler implements ActionListener
 		
 		TableColumn tm = columnModel.getColumn(columnIndex);
 		SpecimenColumnModel scm = (SpecimenColumnModel) tm.getCellEditor();
-		if (scm.getToolTipToEventButton()==null)
+		if (scm == null || scm.getToolTipToEventButton()==null)
 			return "";
 		else
 			return scm.getToolTipToEventButton();

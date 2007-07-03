@@ -31,7 +31,6 @@ import edu.wustl.catissuecore.bizlogic.AdvanceQueryBizlogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
-import edu.wustl.common.beans.QueryResultObjectData;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.bizlogic.SimpleQueryBizLogic;
@@ -56,6 +55,14 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class AdvanceSearchResultsAction extends BaseAction
 {
+	/**
+	 * Overrides the execute method of Action class.
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 */
 	public ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
@@ -117,8 +124,10 @@ public class AdvanceSearchResultsAction extends BaseAction
 			
 			//Set tables for Configuration.
 			if(query.getTableNamesSet().contains(Query.BIO_HAZARD))
+			{
 				tablesVector.add(Query.BIO_HAZARD);
-			Object selectedTables[] = tablesVector.toArray();
+			}
+			Object[] selectedTables = tablesVector.toArray();
 			session.setAttribute(Constants.TABLE_ALIAS_NAME,selectedTables);
 			
 			Logger.out.debug("tableSet from query before setting resultview :"+query.getTableNamesSet());
@@ -202,7 +211,11 @@ public class AdvanceSearchResultsAction extends BaseAction
 		return mapping.findForward(target);
 	}
 
-	//Parse the root and set the attribute type in the DataElement
+	/**
+	 * This method Parse the root and set the attribute type in the DataElement
+	 * @param tree object of DefaultMutableTreeNode
+	 * @throws Exception generic exception
+	 */
 	private void setAttributeType(DefaultMutableTreeNode tree) throws Exception
 	{
 		DefaultMutableTreeNode child;
@@ -233,37 +246,42 @@ public class AdvanceSearchResultsAction extends BaseAction
 			setAttributeType(child);
 		}
 	}
-	//Method to deep copy the DefaultMutableTreeNode object
+
+	/**
+	 * Method to deep copy the DefaultMutableTreeNode object
+	 * @param oldCopy old object of DefaultMutableTreeNode
+	 * @param newCopy updated object of DefaultMutableTreeNode
+	 */
 	private void copy(DefaultMutableTreeNode oldCopy,DefaultMutableTreeNode newCopy)
 	{
 		DefaultMutableTreeNode child = new DefaultMutableTreeNode();
 		if(oldCopy != null)
 		{
-		int childCount = oldCopy.getChildCount();
-		for(int i=0;i<childCount;i++)
-		{
-			child = (DefaultMutableTreeNode)oldCopy.getChildAt(i);
-			AdvancedConditionsNode advNode = (AdvancedConditionsNode)child.getUserObject();
-			AdvancedConditionsNode newAdvNode = new AdvancedConditionsNode(new String(advNode.getObjectName()));
-			Vector conditions = advNode.getObjectConditions();
-			Operator opWithChild = advNode.getOperationWithChildCondition();
-			Vector newConditions = new Vector();
-			Iterator itr1 = conditions.iterator();
-			while(itr1.hasNext())
+			int childCount = oldCopy.getChildCount();
+			for(int i=0;i<childCount;i++)
 			{
-				Condition con = (Condition)itr1.next();
-				DataElement data = con.getDataElement();
-				DataElement newData = new DataElement(new Table(new String(data.getTableAliasName())),
-						new String(data.getField()));
-				Condition newCon = new Condition(newData,new Operator(con.getOperator()),new String(con.getValue()));
-				newConditions.add(newCon);
+				child = (DefaultMutableTreeNode)oldCopy.getChildAt(i);
+				AdvancedConditionsNode advNode = (AdvancedConditionsNode)child.getUserObject();
+				AdvancedConditionsNode newAdvNode = new AdvancedConditionsNode(new String(advNode.getObjectName()));
+				Vector conditions = advNode.getObjectConditions();
+				Operator opWithChild = advNode.getOperationWithChildCondition();
+				Vector newConditions = new Vector();
+				Iterator itr1 = conditions.iterator();
+				while(itr1.hasNext())
+				{
+					Condition con = (Condition)itr1.next();
+					DataElement data = con.getDataElement();
+					DataElement newData = new DataElement(new Table(new String(data.getTableAliasName())),
+							new String(data.getField()));
+					Condition newCon = new Condition(newData,new Operator(con.getOperator()),new String(con.getValue()));
+					newConditions.add(newCon);
+				}
+				newAdvNode.setObjectConditions(newConditions);
+				newAdvNode.setOperationWithChildCondition(new Operator(opWithChild));
+				DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(newAdvNode);
+				newCopy.add(newChild);
+				copy(child,newChild);
 			}
-			newAdvNode.setObjectConditions(newConditions);
-			newAdvNode.setOperationWithChildCondition(new Operator(opWithChild));
-			DefaultMutableTreeNode newChild = new DefaultMutableTreeNode(newAdvNode);
-			newCopy.add(newChild);
-			copy(child,newChild);
-		}
 		}
 	}
 }

@@ -20,7 +20,8 @@ import org.apache.struts.action.ActionMapping;
  * MultipleSpecimenForm Class is used to encapsulate all the request parameters
  * passed from Multiple Specimen page.
  */
-public class MultipleSpecimenForm extends NewSpecimenForm {
+public class MultipleSpecimenForm extends NewSpecimenForm 
+{
 	
 	/**
 	 * Initial No of specimens that user wants to add.
@@ -35,17 +36,17 @@ public class MultipleSpecimenForm extends NewSpecimenForm {
 
 	/**
 	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
 	 */
-	public ActionErrors validate(ActionMapping mapping,
-			HttpServletRequest request) {
-
+	public ActionErrors validate(ActionMapping mapping,	HttpServletRequest request) 
+	{
 		ActionErrors errors = new ActionErrors();
-	
  		if(numberOfSpecimen < 1)
         {
         	errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("errors.multiplespecimen.minimumspecimen"));
         }
-
 		return errors;
 	}
 

@@ -34,6 +34,11 @@ public class CollectionProtocolSearchAction extends AdvanceSearchUIAction
     /**
      * Overrides the execute method of Action class.
      * Initializes the various fields in CollectionProtocolSearchAction.jsp Page.
+     * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
      * */
     public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
@@ -70,7 +75,7 @@ public class CollectionProtocolSearchAction extends AdvanceSearchUIAction
      	Logger.out.debug("map--"+map);
      	
         //Checking map contains value or not
-    	if( map != null)
+    	if(map != null)
     	{
     		setIsDisableValue(searchFieldData,map);
     	}

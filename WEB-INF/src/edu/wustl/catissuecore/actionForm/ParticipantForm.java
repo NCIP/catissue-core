@@ -131,7 +131,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     {
         
     }
-    
+	/**
+	 * @param ssnString Setting SSN number
+	 */
     private void setSSN(String ssnString)
     {
     	if(ssnString!=null && !ssnString.equals(""))
@@ -160,9 +162,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     {
     	Participant participant = (Participant) abstractDomain;
         this.id = participant.getId().longValue();
-        this.lastName = Utility.toString( participant.getLastName());
-        this.firstName =  Utility.toString( participant.getFirstName());
-        this.middleName = Utility.toString( participant.getMiddleName());
+        this.lastName = Utility.toString(participant.getLastName());
+        this.firstName =  Utility.toString(participant.getFirstName());
+        this.middleName = Utility.toString(participant.getMiddleName());
         this.birthDate = Utility.parseDateToString(participant.getBirthDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
         this.gender = participant.getGender();
         this.genotype = participant.getSexGenotype();
@@ -187,7 +189,6 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 //        this.race = participant.getRace();
         this.activityStatus = participant.getActivityStatus();
         this.ethnicity = participant.getEthnicity();
-        
         this.deathDate = Utility.parseDateToString(participant.getDeathDate(),Constants.DATE_PATTERN_MM_DD_YYYY);;
         this.vitalStatus = participant.getVitalStatus();
         
@@ -229,7 +230,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
         
         //At least one row should be displayed in ADD MORE therefore
 		if(valueCounter == 0)
+		{
 			valueCounter = 1;
+		}
    }
     
     /**
@@ -304,7 +307,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
     
     /**
      * Sets the date of birth of the Participant.
-     * @param birthDate String the date of birth of the Participant.
+     * @param dateOfBirth String the date of birth of the Participant.
      * @see #getBirthDate()
      */
     public void setBirthDate(String dateOfBirth)
@@ -364,7 +367,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 
     /**
      * Sets the race of the Participant.
-     * @param birthDate String the race of the Participant.
+     * @param raceTypes String the race of the Participant.
      * @see #getRace()
      */
     public void setRaceTypes(String[] raceTypes)
@@ -421,8 +424,11 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
   
     
     /**
-     * Overrides the validate method of ActionForm.
-     * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
          ActionErrors errors = new ActionErrors();
@@ -434,26 +440,26 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
          	String errorKeyForBirthDate = "";
          	String errorKeyForDeathDate = "";
          	
-         	if (!validator.isEmpty(birthDate) )
+         	if (!validator.isEmpty(birthDate))
 			{
 	         	// date validation according to bug id  722 and 730
-	    		errorKeyForBirthDate = validator.validateDate(birthDate,true );
+	    		errorKeyForBirthDate = validator.validateDate(birthDate,true);
 	    		if(errorKeyForBirthDate.trim().length() > 0)
 	    		{
 	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForBirthDate,ApplicationProperties.getValue("participant.birthDate")));
 	    		}
 			}
          	
-         	if (!validator.isEmpty(deathDate) )
+         	if (!validator.isEmpty(deathDate))
 			{
-	    		errorKeyForDeathDate = validator.validateDate(deathDate,true );
+	    		errorKeyForDeathDate = validator.validateDate(deathDate,true);
 	    		if(errorKeyForDeathDate.trim().length() > 0)
 	    		{
 	    			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKeyForDeathDate,ApplicationProperties.getValue("participant.deathDate")));
 	    		}	    		
 			}
          	
-         	if( (!validator.isEmpty(birthDate) &&  !validator.isEmpty(deathDate)) && (errorKeyForDeathDate.trim().length() == 0 && errorKeyForBirthDate.trim().length() == 0) )
+         	if( (!validator.isEmpty(birthDate) &&  !validator.isEmpty(deathDate)) && (errorKeyForDeathDate.trim().length() == 0 && errorKeyForBirthDate.trim().length() == 0))
          	{
          		boolean errorKey1 = validator.compareDates(birthDate,deathDate);
 	    		
@@ -464,7 +470,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
          	}
          	
          	String socialSecurityNumber = socialSecurityNumberPartA+"-"+socialSecurityNumberPartB+"-"+socialSecurityNumberPartC; 
-         	if(!validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC) && !validator.isValidSSN(socialSecurityNumber ) )
+         	if(!validator.isEmpty(socialSecurityNumberPartA+socialSecurityNumberPartB+socialSecurityNumberPartC) && !validator.isValidSSN(socialSecurityNumber))
          	{
          		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.invalid",ApplicationProperties.getValue("participant.socialSecurityNumber")));
          	}
@@ -524,7 +530,9 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
      public void setValue(String key, Object value) 
      {
     	 if (isMutable())
+    	 {
     		 values.put(key, value);
+    	 }
      }
 
      /**
@@ -547,8 +555,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
  	}
 
  	/**
- 	 * @param values
- 	 * The values to set.
+ 	 * @param values The values to set.
  	 */
  	public void setValues(Map values)
  	{
@@ -556,8 +563,7 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
  	}
  	
  	/**
- 	 * @param values
- 	 * The values to set.
+ 	 * @param values The values to set.
  	 */
  	public Map getValues()
  	{
@@ -648,7 +654,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	 * Returns the Death date of the Participant.
 	 * @return Returns the deathDate.
 	 */
-	public String getDeathDate() {
+	public String getDeathDate()
+	{
 		return deathDate;
 	}
 	
@@ -656,7 +663,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	 * Sets the Death date of the Participant.
 	 * @param deathDate The deathDate to set.
 	 */
-	public void setDeathDate(String deathDate) {
+	public void setDeathDate(String deathDate)
+	{
 		this.deathDate = deathDate;
 	}
 	
@@ -664,7 +672,8 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	 * Returns the Vital status of the Participant.
 	 * @return Returns the vitalStatus.
 	 */
-	public String getVitalStatus() {
+	public String getVitalStatus() 
+	{
 		return vitalStatus;
 	}
 	
@@ -672,15 +681,20 @@ public class ParticipantForm extends AbstractActionForm implements Serializable
 	 * Sets the Vital status of the Participant.
 	 * @param vitalStatus The vitalStatus to set.
 	 */
-	public void setVitalStatus(String vitalStatus) {
+	public void setVitalStatus(String vitalStatus)
+	{
 		this.vitalStatus = vitalStatus;
 	}
-
+	/**
+	 * @return cpId
+	 */
 	public long getCpId()
 	{
 		return cpId;
 	}
-
+	/**
+	 * @param cpId Set cpId
+	 */
 	public void setCpId(long cpId)
 	{
 		this.cpId = cpId;

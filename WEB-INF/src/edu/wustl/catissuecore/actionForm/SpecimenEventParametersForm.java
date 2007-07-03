@@ -50,13 +50,19 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	{
 		this.specimenId = specimenId;
 	}
-	
+	/**
+     * Resets the values of all the fields.
+     */
 	 protected void reset()
 	 {
 //	 	super.reset();
 //	 	this.specimenId = -1;
 	 }
-	 
+	
+	 /**
+	   * Populates all the fields from the domain object to the form bean.
+	   * @param abstractDomain An AbstractDomain Object  
+	   */
 	 public void setAllValues(AbstractDomainObject abstractDomain)
  	 {
 	     super.setAllValues(abstractDomain);
@@ -64,12 +70,17 @@ public abstract class SpecimenEventParametersForm extends EventParametersForm
 	     SpecimenEventParameters specimenEventParameters = (SpecimenEventParameters)abstractDomain;
 		 
 		 if(specimenEventParameters.getSpecimen()!=null)
+		 {
 		     specimenId = specimenEventParameters.getSpecimen().getId().longValue();
+		 }
  	 }
 	 
- 	/**
-     * Overrides the validate method of ActionForm.
-     */
+	 /**
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	ActionErrors errors = super.validate(mapping, request);

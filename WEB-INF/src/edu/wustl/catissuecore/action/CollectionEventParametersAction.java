@@ -24,6 +24,10 @@ import edu.wustl.common.cde.CDEManager;
  */
 public class CollectionEventParametersAction extends SpecimenEventParametersAction
 {
+	/**
+	 * @param  request object of HttpServletRequest
+	 * @throws Exception generic exception
+	 */
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 		// set the procedure lists

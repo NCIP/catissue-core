@@ -2,6 +2,7 @@
 package edu.wustl.catissuecore.util;
 
 import java.util.List;
+import java.util.Map;
 
 import edu.wustl.catissuecore.domain.Participant;
 
@@ -24,12 +25,13 @@ public class ParticipantRegistrationCacheManager
 
 	/**
 	 * This nmethod adds the Colletion Protocol ID and title in cache.
-	 * @param cpId
-	 * @param cpTitle
+	 * @param cpId cp id
+	 * @param cpTitle Title
+	 * @param cpShortTitle Short Title
 	 */
-	public synchronized void addNewCP(Long cpId, String cpTitle)
+	public synchronized void addNewCP(Long cpId, String cpTitle, String cpShortTitle)
 	{
-		participantRegCache.addNewCP(cpId, cpTitle);
+		participantRegCache.addNewCP(cpId, cpTitle, cpShortTitle);
 	}
 
 	/**
@@ -40,6 +42,16 @@ public class ParticipantRegistrationCacheManager
 	public synchronized void updateCPTitle(Long cpId, String newTitle)
 	{
 		participantRegCache.updateCPTitle(cpId, newTitle);
+	}
+	
+	/**
+	 * This method updates the cp Title
+	 * 
+	 * @param cpId
+	 * @param newShortTitle
+	 */
+	public synchronized void updateCPShortTitle(Long cpId, String newShortTitle) {
+		participantRegCache.updateCPShortTitle(cpId, newShortTitle);
 	}
 
 	/**
@@ -90,6 +102,18 @@ public class ParticipantRegistrationCacheManager
 		return participantRegCache.getCPDetailCollection();
 	}
 
+//	Smita changes start
+	/**
+	 * This method returns a list of CP ids and CP titles 
+	 * from the participantRegistrationInfoList
+	 * @return
+	 */
+	public Map<Long, String> getCPIDTitleMap()
+	{
+		return participantRegCache.getCPIDTitleMap();
+	}
+//	Smita changes end
+	
 	/**
 	 * This method reutns the Participant information for particular Participant Id
 	 * @param participantID

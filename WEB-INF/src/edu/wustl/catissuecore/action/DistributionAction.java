@@ -41,6 +41,10 @@ import edu.wustl.common.util.logger.Logger;
 public class DistributionAction extends SpecimenEventParametersAction
 {
 
+	/**
+	 * @param request object of HttpServletRequest
+	 * @throws Exception generic exception
+	 */
 	protected void setRequestParameters(HttpServletRequest request) throws Exception
 	{
 		DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
@@ -83,50 +87,62 @@ public class DistributionAction extends SpecimenEventParametersAction
 		request.setAttribute(Constants.DISTRIBUTION_BASED_ON, distributionBasedOn);
 	}
 
-protected ActionForward executeSecureAction(ActionMapping mapping,
+	/**
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 * @return value for ActionForward object
+	 */
+	protected ActionForward executeSecureAction(ActionMapping mapping,
         ActionForm form, HttpServletRequest request,
-        HttpServletResponse response) throws Exception {
+        HttpServletResponse response) throws Exception 
+    {
         super.executeSecureAction(mapping, form, request, response);
 
         DistributionForm dForm = (DistributionForm) form;
 
 
         //Populate Distributed Items data in the Distribution page if specimen ID is changed. 
-        if (dForm.isIdChange()) {
+        if (dForm.isIdChange()) 
+        {
             String test = null;
             test.getBytes();
             setSpecimenCharateristics(dForm, request);
         }
         
         String distributionBasedOn = request.getParameter("distributionBasedOnOption"); 
-        if(distributionBasedOn != null && !distributionBasedOn.equals("") && distributionBasedOn.equals("unknown")) {
+        if(distributionBasedOn != null && !distributionBasedOn.equals("") && distributionBasedOn.equals("unknown")) 
+        {
         		dForm.setDistributionBasedOn(new Integer(0));
         }
 
         /* If forwarded from speciman page**/
-        HashMap forwardToHashMap = (HashMap) request.getAttribute(
-                "forwardToHashMap");
+        HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
         if(forwardToHashMap==null)
         {
-        	   String specimenLabel = request.getParameter(Constants.SYSTEM_LABEL);
-        	   if(specimenLabel!=null)
-        	   {
-        	   	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
-        		List list = bizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, specimenLabel);
-        		if(list!=null&&!list.isEmpty()) {
-        			Specimen specimen = (Specimen) list.get(0);
-        			forwardToHashMap = new HashMap();
-        			forwardToHashMap.put("specimenObjectKey",specimen);
-        	   }
-        	   }
+    	   String specimenLabel = request.getParameter(Constants.SYSTEM_LABEL);
+    	   if(specimenLabel!=null)
+    	   {
+	    	   	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+	    		List list = bizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, specimenLabel);
+	    		if(list!=null&&!list.isEmpty()) 
+	    		{
+	    			Specimen specimen = (Specimen) list.get(0);
+	    			forwardToHashMap = new HashMap();
+	    			forwardToHashMap.put("specimenObjectKey",specimen);
+	    		}
+    	   }
         }
 
-        if (forwardToHashMap != null) {
-            Object specimenObjectOrList = forwardToHashMap.get(
-                    "specimenObjectKey");
+        if (forwardToHashMap != null) 
+        {
+            Object specimenObjectOrList = forwardToHashMap.get("specimenObjectKey");
             if(specimenObjectOrList != null)
             {
-	            if (specimenObjectOrList instanceof Specimen) {
+	            if (specimenObjectOrList instanceof Specimen) 
+	            {
 	            	/* this code is for setting specimenId  for showing specimen selected in tree */
 	            	Specimen sp = (Specimen) specimenObjectOrList;
 	            	String spId = sp.getId().toString();
@@ -134,14 +150,16 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 	            	
 	                addDistributionSample((DistributionForm) form, 1,
 	                    (Specimen) specimenObjectOrList);
-	            } else {
+	            }
+	            else 
+	            {
 	                List specimenIdList = (List) specimenObjectOrList;
 	                DistributionBizLogic dao = (DistributionBizLogic) BizLogicFactory.getInstance()
 	                                                                                 .getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 	
-	                for (int i = 0; i < specimenIdList.size(); i++) {
-	                    Long specimenId = Long.getLong((String) specimenIdList.get(
-	                                i));
+	                for (int i = 0; i < specimenIdList.size(); i++) 
+	                {
+	                    Long specimenId = Long.getLong((String) specimenIdList.get(i));
 	                    List list = dao.retrieve(Specimen.class.getName(),
 	                            Constants.SYSTEM_IDENTIFIER, specimenId);
 	                    Specimen specimen = (Specimen) list.get(0);
@@ -156,7 +174,8 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
             	String noOfAliquots = (String) forwardToHashMap.get("noOfAliquots");
             	String labelKey;
             	List specimenList;
-            	for (int i = 0; i < Integer.valueOf(noOfAliquots).intValue(); i++) {
+            	for (int i = 0; i < Integer.valueOf(noOfAliquots).intValue(); i++) 
+            	{
             		labelKey = "Specimen:" + (i+1) + "_label";
             		String label = (String) forwardToHashMap.get(labelKey);            		
             		specimenList = bizLogic.retrieve(Specimen.class.getName(), Constants.SYSTEM_LABEL, label);
@@ -178,7 +197,15 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 
         return mapping.findForward((String) request.getParameter(
                 Constants.PAGEOF));
-    }	private void addDistributionSample(DistributionForm dForm, int itemNo, Specimen specimen)
+    }	
+	
+	/**
+	 * 
+	 * @param dForm object of DistributionForm
+	 * @param itemNo value for item no in int
+	 * @param specimen object of Specimen
+	 */
+	private void addDistributionSample(DistributionForm dForm, int itemNo, Specimen specimen)
 	{
 		String keyPrefix = "DistributedItem:" + itemNo + "_";
 
@@ -191,6 +218,11 @@ protected ActionForward executeSecureAction(ActionMapping mapping,
 		dForm.setDistributionBasedOn(new Integer(0));
 	}
 
+	/**
+	 * @param dForm object of DistributionForm
+	 * @param request object of HttpServletRequest
+	 * @throws DAOException DAO exception
+	 */
 	private void setSpecimenCharateristics(DistributionForm dForm, HttpServletRequest request) throws DAOException
 	{
 		//Set specimen characteristics according to the specimen ID changed

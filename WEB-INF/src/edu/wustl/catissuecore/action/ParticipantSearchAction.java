@@ -33,7 +33,13 @@ public class ParticipantSearchAction extends AdvanceSearchUIAction
     /**
      * Overrides the execute method of Action class.
      * Initializes the various fields in ParticipantSearch.jsp Page.
-     * */
+     * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 * @return value for ActionForward object
+     */
     protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
@@ -79,7 +85,7 @@ public class ParticipantSearchAction extends AdvanceSearchUIAction
         Map map = aForm.getValues();
         
         //Checking map contains value or not
-    	if( map != null)
+    	if(map != null)
     	{
     		setIsDisableValue(searchFieldData,map);
     	}

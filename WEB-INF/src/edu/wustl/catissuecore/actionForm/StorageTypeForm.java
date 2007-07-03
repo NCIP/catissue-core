@@ -71,14 +71,14 @@ public class StorageTypeForm extends AbstractActionForm
 	/**
 	 * List of storage types Ids  that Storage Type can hold
 	 */
-	private long holdsStorageTypeIds[];
+	private long[] holdsStorageTypeIds;
 
 	/**
 	 * List of Specimen Types that Storage Type can hold
 	 */
-	private String holdsSpecimenClassTypes[];
+	private String[] holdsSpecimenClassTypes;
 
-	private long holdsSpecimenArrTypeIds[];
+	private long[] holdsSpecimenArrTypeIds;
 
 	private String specimenOrArrayType;
 
@@ -92,7 +92,7 @@ public class StorageTypeForm extends AbstractActionForm
 
 	/**
 	 * This function Copies the data from an storage type object to a StorageTypeForm object.
-	 * @param storageType A StorageType object containing the information about storage type of the container.  
+	 * @param abstractDomain A StorageType object containing the information about storage type of the container.  
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -301,7 +301,7 @@ public class StorageTypeForm extends AbstractActionForm
 
 	/**
 	 * Sets the Storage Type Holds List.
-	 * @param holdStorageTypeList the list of storage type Ids to be set.
+	 * @param holdsStorageTypeIds the list of storage type Ids to be set.
 	 * @see #getHoldsStorageTypeList()
 	 */
 	public void setHoldsStorageTypeIds(long[] holdsStorageTypeIds)
@@ -341,7 +341,7 @@ public class StorageTypeForm extends AbstractActionForm
 
 	/**
 	 * Sets the Specimen Class torage Type Holds List.
-	 * @param holdSpecimenClassTypeList the list of specimen class type Ids to be set.
+	 * @param holdsSpecimenClassTypes the list of specimen class type Ids to be set.
 	 * @see #getHoldsSpecimenClassList()
 	 */
 	public void setHoldsSpecimenClassTypes(String[] holdsSpecimenClassTypes)
@@ -350,7 +350,7 @@ public class StorageTypeForm extends AbstractActionForm
 	}
 
 	/**
-	 * Returns the id assigned to form bean
+	 * @return Returns the id assigned to form bean
 	 */
 	public int getFormId()
 	{
@@ -372,7 +372,10 @@ public class StorageTypeForm extends AbstractActionForm
 
 	/**
 	 * Overrides the validate method of ActionForm.
-	 * */
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
 	{
 		ActionErrors errors = new ActionErrors();
@@ -458,7 +461,12 @@ public class StorageTypeForm extends AbstractActionForm
 		}
 		return errors;
 	}
-
+	
+	/**
+	 * @param Ids Array of long ids
+	 * @param message message for  ApplicationProperties
+	 * @param errors Action Errors
+	 */
 	void checkValidSelectionForAny(long[] Ids, String message, ActionErrors errors)
 	{
 		if (Ids.length > 1)
@@ -474,12 +482,18 @@ public class StorageTypeForm extends AbstractActionForm
 			}
 		}
 	}
-
+	
+	/**
+	 * @return specimenOrArrayType
+	 */
 	public String getSpecimenOrArrayType()
 	{
 		return specimenOrArrayType;
 	}
-
+	
+	/**
+	 * @param specimenOrArrayType Setting specimenOrArrayType
+	 */
 	public void setSpecimenOrArrayType(String specimenOrArrayType)
 	{
 		this.specimenOrArrayType = specimenOrArrayType;

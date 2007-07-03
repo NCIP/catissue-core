@@ -100,16 +100,19 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	
 	/**
      * This method Copies the data from an SpecimenArrayAliquot object to a SpecimenArrayAliquotForm object.
-     * @param abstractDomain An object of Specimen class.  
+     * @param arg0 An object of Specimen class.  
      */
 	public void setAllValues(AbstractDomainObject arg0)
 	{		
 
 	}
 	
-	 /**
-     * Overrides the validate method of ActionForm.
-     */
+	/**
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
          ActionErrors errors = new ActionErrors();
@@ -302,7 +305,7 @@ public class SpecimenArrayAliquotForm extends AbstractActionForm
 	}
 	
 	/**
-	 * @param specimenType The specimenType to set.
+	 * @param specimenTypes The specimenType to set.
 	 */
 	public void setSpecimenTypes(String[] specimenTypes)
 	{

@@ -58,7 +58,9 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	 */    	
 	protected boolean checkedButton; 	
 	
-    
+	/**
+	 * Default Constructor
+	 */
 	public CollectionProtocolRegistrationForm()
 	{
 		//reset();
@@ -66,7 +68,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	
 	/**
 	 * It will set all values of member variables from Domain Object
-	 * @param CollectionProtocolRegistration domain object
+	 * @param abstractDomain domain object
 	 */	
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
@@ -78,7 +80,6 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 		String lastName = Utility.toString(registration.getParticipant().getLastName());
 		String birthDate = Utility.toString(registration.getParticipant().getBirthDate());
 		String ssn = Utility.toString(registration.getParticipant().getSocialSecurityNumber());
-			
 		if((registration.getParticipant() != null) && (firstName.trim().length()>0 || lastName.trim().length()>0 || birthDate.trim().length()>0 || ssn.trim().length()>0))
 	  	{
 	  		this.participantID = registration.getParticipant().getId().longValue();
@@ -92,7 +93,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
     }
     
 	/**
-	* @return Returns the id assigned to form bean
+	* @return COLLECTION_PROTOCOL_REGISTRATION_FORM_ID Returns the id assigned to form bean
 	*/
 	public int getFormId()
 	{
@@ -102,7 +103,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
     /**
      * Returns the date on which the Participant is 
      * registered to the Collection Protocol.
-     * @return the date on which the Participant is 
+     * @return registrationDate the date on which the Participant is 
      * registered to the Collection Protocol.
      * @see #setRegistrationDate(String)
      */
@@ -124,51 +125,60 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
     }
 
 	/**
-	 * @return
+	 * @return collectionProtocolID 
 	 */
-	public long getCollectionProtocolID() {
+	public long getCollectionProtocolID()
+	{
 		return collectionProtocolID;
 	}
 
 	/**
-	 * @param collectionProtocolID
+	 * @param collectionProtocolID Setting Collection protocol id
 	 */
-	public void setCollectionProtocolID(long collectionProtocolID) {
+	public void setCollectionProtocolID(long collectionProtocolID) 
+	{
 		this.collectionProtocolID = collectionProtocolID;
 	}
 
 	/**
 	 * @return Returns unique participant ID 
 	 */
-	public long getParticipantID() {
+	public long getParticipantID()
+	{
 		return participantID;
 	}
 
 	/**
 	 * @param participantID sets unique participant ID 
 	 */
-	public void setParticipantID(long participantID) {
+	public void setParticipantID(long participantID) 
+	{
 		this.participantID = participantID;
 	}
 
 	/**
  	* @return returns praticipant Protocol ID
  	*/
-	public String getParticipantProtocolID() {
+	public String getParticipantProtocolID()
+	{
 		return participantProtocolID;
 	}
 
 	/**
 	 * @param participantProtocolID sets participant protocol ID
  	*/
-	public void setParticipantProtocolID(String participantProtocolID) {
+	public void setParticipantProtocolID(String participantProtocolID)
+	{
 		this.participantProtocolID = participantProtocolID;
 	}
 	
 	
 	/**
-   * Overrides the validate method of ActionForm.
-   * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
    {
    	
@@ -198,13 +208,11 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 			}
 			
 			//  date validation according to bug id 707, 722 and 730
-			String errorKey = validator.validateDate(registrationDate,true ); 
-			if(errorKey.trim().length() >0  )
+			String errorKey = validator.validateDate(registrationDate,true); 
+			if(errorKey.trim().length() >0)
 			{
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(errorKey,ApplicationProperties.getValue("collectionprotocolregistration.date")));
 			}
-			
-
 			//
 			if (!validator.isValidOption(activityStatus))
 			{
@@ -249,7 +257,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 
 	/**
      * This method sets Identifier of Objects inserted by AddNew activity in Form-Bean which initialized AddNew action
-     * @param formBeanId - FormBean ID of the object inserted
+     * @param addNewFor - FormBean ID of the object inserted
      *  @param addObjectIdentifier - Identifier of the Object inserted 
      */
 	public void setAddNewObjectIdentifier(String addNewFor, Long addObjectIdentifier)
@@ -265,11 +273,17 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	     }
 	 }
 	
+	/**
+	 * @return participantName
+	 */
 	public String getParticipantName()
 	{
 		return participantName;
 	}
 	
+	/**
+	 * @param participantName Setting participant name
+	 */
 	public void setParticipantName(String participantName)
 	{
 		this.participantName = participantName;

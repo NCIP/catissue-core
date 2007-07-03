@@ -26,14 +26,29 @@ import edu.wustl.common.util.dbManager.DAOException;
  * @since v1.1
  *
  */
-public class DistributionSubmitAction extends CommonAddEditAction {
+public class DistributionSubmitAction extends CommonAddEditAction 
+{
 
+	/**
+     * Overrides the execute method of Action class.
+     * Sets the various fields in DistributionProtocol Add/Edit webpage.
+     * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 * @return value for ActionForward object
+     */
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		try {
+			throws IOException, ServletException 
+	{
+		try 
+		{
 			return executeAction(mapping, form, request, response);
-		} catch (DAOException e) {
+		} 
+		catch (DAOException e) 
+		{
 			ActionErrors errors = new ActionErrors();
 			ActionError error = new ActionError(e.getMessage());
 			errors.add(ActionErrors.GLOBAL_ERROR, error);
@@ -42,20 +57,31 @@ public class DistributionSubmitAction extends CommonAddEditAction {
 		}
 	}
 
+	/**
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+	 * @return value for ActionForward object
+     */
 	private ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException, DAOException {
+			throws IOException, ServletException, DAOException 
+	{
 
 		DistributionForm dform = (DistributionForm) form;
 		DistributionBizLogic bizLogic = (DistributionBizLogic) BizLogicFactory
 				.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 
 		boolean barcodeBased = true;
-		if (dform.getDistributionBasedOn().intValue() == Constants.LABEL_BASED_DISTRIBUTION) {
+		if (dform.getDistributionBasedOn().intValue() == Constants.LABEL_BASED_DISTRIBUTION) 
+		{
 			barcodeBased = false;
 		}
 
-		if (dform.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) {
+		if (dform.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) 
+		{
 
 			for (int i = 1; i <= dform.getCounter(); i++) {
 				String specimenkey = "DistributedItem:" + i + "_Specimen_id";
@@ -73,14 +99,18 @@ public class DistributionSubmitAction extends CommonAddEditAction {
 				dform.setValue(specimenkey, specimenId.toString());
 			}
 
-		} else {
+		} 
+		else 
+		{
 			Map tempMap = new HashMap();
 
-			for (int i = 1; i <= dform.getCounter(); i++) {
+			for (int i = 1; i <= dform.getCounter(); i++) 
+			{
 				String specimenArraykey = "SpecimenArray:" + i + "_id";
 
 				if (dform.getValue(specimenArraykey) != null
-						&& !dform.getValue(specimenArraykey).equals("")) {
+						&& !dform.getValue(specimenArraykey).equals("")) 
+				{
 					tempMap.put(specimenArraykey, dform
 							.getValue(specimenArraykey));
 					continue;
@@ -109,8 +139,10 @@ public class DistributionSubmitAction extends CommonAddEditAction {
 		}
 
 		ActionForward forward = super.execute(mapping, form, request, response);
-		if( forward.getName().equals(Constants.SUCCESS)) {
-			if (dform.getDistributionType().intValue() != Constants.SPECIMEN_DISTRIBUTION_TYPE) {
+		if( forward.getName().equals(Constants.SUCCESS)) 
+		{
+			if (dform.getDistributionType().intValue() != Constants.SPECIMEN_DISTRIBUTION_TYPE) 
+			{
 				forward = mapping.findForward("arraySuccess");
 			}
 		}

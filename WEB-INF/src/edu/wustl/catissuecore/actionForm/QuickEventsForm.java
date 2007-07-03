@@ -34,7 +34,8 @@ import edu.wustl.common.util.logger.Logger;
  * @version 1.00
  * Created on July 3, 2006
  */
-public class QuickEventsForm extends AbstractActionForm {
+public class QuickEventsForm extends AbstractActionForm 
+{
 	/**
 	 * Label of Specimen to search.
 	 */
@@ -65,6 +66,7 @@ public class QuickEventsForm extends AbstractActionForm {
 
     /**
      * Empty implementation of setAllValues() method.
+     * @param abstractDomain An AbstractDomain Object  
      */
     public void setAllValues(AbstractDomainObject abstractDomain)
     {
@@ -72,7 +74,7 @@ public class QuickEventsForm extends AbstractActionForm {
     
         
     /**
-     * Returns the id assigned to form bean
+     * @return QUICKEVENTS_FORM_ID Returns the id assigned to form bean
      */
     public int getFormId()
     {
@@ -86,63 +88,70 @@ public class QuickEventsForm extends AbstractActionForm {
     protected void reset()
     {
     }
-    
-    
-    
-
 	/**
 	 * @return Returns the barCode.
 	 */
-	public String getBarCode() {
+	public String getBarCode() 
+	{
 		return barCode;
 	}
 	/**
 	 * @param barCode The barCode to set.
 	 */
-	public void setBarCode(String barCode) {
+	public void setBarCode(String barCode) 
+	{
 		this.barCode = barCode;
 	}
 	/**
 	 * @return Returns the specimenEventParameter.
 	 */
-	public String getSpecimenEventParameter() {
+	public String getSpecimenEventParameter()
+	{
 		return specimenEventParameter;
 	}
 	/**
-	 * @param specimenEventParameter The specimenEventParameter to set.
+	 * @param eventName The specimenEventParameter to set.
 	 */
-	public void setSpecimenEventParameter(String eventName) {
+	public void setSpecimenEventParameter(String eventName)
+	{
 		this.specimenEventParameter = eventName;
 	}
 	/**
 	 * @return Returns the specimenLabel.
 	 */
-	public String getSpecimenLabel() {
+	public String getSpecimenLabel()
+	{
 		return specimenLabel;
 	}
 	/**
-	 * @param specimenLabel The specimenLabel to set.
+	 * @param specimenID The specimenLabel to set.
 	 */
-	public void setSpecimenLabel(String specimenID) {
+	public void setSpecimenLabel(String specimenID)
+	{
 		this.specimenLabel = specimenID;
 	}
 	
 	/**
 	 * @return Returns the checkedButton.
 	 */
-	public String getCheckedButton() {
+	public String getCheckedButton() 
+	{
 		return checkedButton;
 	}
 	/**
 	 * @param checkedButton The checkedButton to set.
 	 */
-	public void setCheckedButton(String checkedButton) {
+	public void setCheckedButton(String checkedButton)
+	{
 		this.checkedButton = checkedButton;
 	}
 	
-    /**
-    * Overrides the validate method of ActionForm.
-    * */
+	/**
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
     {
         ActionErrors errors = new ActionErrors();
@@ -153,11 +162,11 @@ public class QuickEventsForm extends AbstractActionForm {
             {
             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("quickEvents.eventparameters")));
             }
-            if(checkedButton.equals("1" ) && !validator.isValidOption(specimenLabel) )
+            if(checkedButton.equals("1") && !validator.isValidOption(specimenLabel))
             {
             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("quickEvents.specimenLabel")));
             }
-            if(checkedButton.equals("2" ) && validator.isEmpty(barCode) )
+            if(checkedButton.equals("2") && validator.isEmpty(barCode))
             {
             	errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("quickEvents.barcode")));
             }

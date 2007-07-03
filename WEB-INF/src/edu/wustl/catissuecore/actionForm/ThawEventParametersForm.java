@@ -21,22 +21,27 @@ import edu.wustl.common.domain.AbstractDomainObject;
  */
 public class ThawEventParametersForm extends SpecimenEventParametersForm
 {
-	
+	/**
+	 * @return THAW_EVENT_PARAMETERS_FORM_ID
+	 */
 	public int getFormId()
 	{
 		return Constants.THAW_EVENT_PARAMETERS_FORM_ID;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
-	 */
+	/**
+     * Populates all the fields from the domain object to the form bean.
+     * @param abstractDomain An AbstractDomain Object  
+     */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
 		ThawEventParameters ThawEventParametersObject = (ThawEventParameters)abstractDomain ;
 	}
 
-   
+	/**
+     * Resets the values of all the fields.
+     */
 	 protected void reset()
 	 {
 //	 	super.reset();

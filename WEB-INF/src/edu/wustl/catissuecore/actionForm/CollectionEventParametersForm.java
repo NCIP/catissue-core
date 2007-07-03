@@ -62,7 +62,7 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 
 	/**
 	 * Sets the procedure. 
-	 * @param procedure procedure of collection.
+	 * @param collectionProcedure procedure of collection.
 	 */
 	public void setCollectionProcedure(String collectionProcedure)
 	{
@@ -91,16 +91,18 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	
 //	 ---- super class methods
 	// ----- SUPERCLASS METHODS
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	 * @return COLLECTION_EVENT_PARAMETERS_FORM_ID
 	 */
 	public int getFormId()
 	{
 		return Constants.COLLECTION_EVENT_PARAMETERS_FORM_ID;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
+	 * @param abstractDomain An object of AbstractDomainObject
 	 */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
@@ -113,7 +115,10 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
 	
 	/**
 	 * Overrides the validate method of ActionForm.
-     * */
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	 
@@ -124,7 +129,7 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
          {
          	
          	// checks the collectionProcedure
-          	if (!validator.isValidOption( collectionProcedure ) )
+          	if (!validator.isValidOption(collectionProcedure))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectioneventparameters.collectionprocedure")));
             }
@@ -137,7 +142,9 @@ public class CollectionEventParametersForm extends SpecimenEventParametersForm
          return errors;
       }
 	
-  
+     /**
+      * Method to set class Attributes
+      */
      protected void reset()
      {
 //     	super.reset();

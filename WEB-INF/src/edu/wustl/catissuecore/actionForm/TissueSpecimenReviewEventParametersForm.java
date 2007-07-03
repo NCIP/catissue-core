@@ -168,37 +168,40 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 	
 	
 //	 ----- SUPERCLASS METHODS
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#getFormId()
+	/**
+	 * @return TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID
 	 */
 	public int getFormId()
 	{
 		return Constants.TISSUE_SPECIMEN_REVIEW_EVENT_PARAMETERS_FORM_ID;
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.wustl.catissuecore.actionForm.AbstractActionForm#setAllValues(edu.wustl.catissuecore.domain.AbstractDomainObject)
-	 */
+	/**
+     * Populates all the fields from the domain object to the form bean.
+     * @param abstractDomain An AbstractDomain Object  
+     */
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		super.setAllValues(abstractDomain);
 		TissueSpecimenReviewEventParameters tissueSpecimenReviewParametersObject = (TissueSpecimenReviewEventParameters)abstractDomain ;
 		
-		this.neoplasticCellularityPercentage = Utility.toString(tissueSpecimenReviewParametersObject.getNeoplasticCellularityPercentage() );
-		this.necrosisPercentage = Utility.toString( tissueSpecimenReviewParametersObject.getNecrosisPercentage() );
-		this.lymphocyticPercentage =Utility.toString( tissueSpecimenReviewParametersObject.getLymphocyticPercentage());
-		this.totalCellularityPercentage =Utility.toString( tissueSpecimenReviewParametersObject.getTotalCellularityPercentage());
+		this.neoplasticCellularityPercentage = Utility.toString(tissueSpecimenReviewParametersObject.getNeoplasticCellularityPercentage());
+		this.necrosisPercentage = Utility.toString(tissueSpecimenReviewParametersObject.getNecrosisPercentage());
+		this.lymphocyticPercentage =Utility.toString(tissueSpecimenReviewParametersObject.getLymphocyticPercentage());
+		this.totalCellularityPercentage =Utility.toString(tissueSpecimenReviewParametersObject.getTotalCellularityPercentage());
 		this.histologicalQuality = Utility.toString(tissueSpecimenReviewParametersObject.getHistologicalQuality());
-		Logger.out.debug("this.neoplasticCellularityPercentage : "+ this.neoplasticCellularityPercentage );
+		Logger.out.debug("this.neoplasticCellularityPercentage : "+ this.neoplasticCellularityPercentage);
 		Logger.out.debug("this.necrosisPercentage : " + this.necrosisPercentage);
 		Logger.out.debug("this.lymphocyticPercentage : " + this.lymphocyticPercentage);
 		Logger.out.debug("this.totalCellularityPercentage : " + this.totalCellularityPercentage);
-						
 	}
 	
 	/**
-     * Overrides the validate method of ActionForm.
-     * */
+	 * Overrides the validate method of ActionForm.
+	 * @return error ActionErrors instance
+	 * @param mapping Actionmapping instance
+	 * @param request HttpServletRequest instance
+	 */
      public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) 
      {
      	ActionErrors errors = super.validate(mapping, request);
@@ -208,21 +211,21 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
          {
  
 //         	// checks the neoplasticCellularityPercentage
-           	if (!validator.isEmpty( neoplasticCellularityPercentage) && !validator.isDouble( neoplasticCellularityPercentage,false ) )
+           	if (!validator.isEmpty( neoplasticCellularityPercentage) && !validator.isDouble(neoplasticCellularityPercentage,false))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.neoplasticcellularitypercentage")));
             }
 //
  
 //         	// checks the necrosisPercentage
-           	if (!validator.isEmpty(necrosisPercentage) && !validator.isDouble(necrosisPercentage,false) )
+           	if (!validator.isEmpty(necrosisPercentage) && !validator.isDouble(necrosisPercentage,false))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.necrosispercentage")));
             }
 //
  
 //         	// checks the lymphocyticPercentage
-           	if (!validator.isEmpty(lymphocyticPercentage) && !validator.isDouble(lymphocyticPercentage,false) )
+           	if (!validator.isEmpty(lymphocyticPercentage) && !validator.isDouble(lymphocyticPercentage,false))
 
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.lymphocyticpercentage")));
@@ -230,7 +233,7 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
 //
  
 //         	// checks the totalCellularityPercentage
-       		if (!validator.isEmpty(totalCellularityPercentage) && !validator.isDouble(totalCellularityPercentage,false) )
+       		if (!validator.isEmpty(totalCellularityPercentage) && !validator.isDouble(totalCellularityPercentage,false))
             {
            		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("tissuespecimenrevieweventparameters.totalcellularitypercentage")));
             }
@@ -250,8 +253,9 @@ public class TissueSpecimenReviewEventParametersForm extends SpecimenEventParame
          return errors;
       }
 
-
-   
+     /**
+      * Resets the values of all the fields.
+      */
 	 protected void reset()
 	 {
 //	 	super.reset();

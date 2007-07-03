@@ -28,17 +28,28 @@ import edu.wustl.common.util.logger.Logger;
  * @author Poornima Govindrao
  *  
  */
-public class ConfigureResultViewAction extends BaseAction  {
+public class ConfigureResultViewAction extends BaseAction  
+{
 
+	/**
+	 * @param mapping object of ActionMapping
+	 * @param form object of ActionForm
+	 * @param request object of HttpServletRequest
+	 * @param response object of HttpServletResponse
+	 * @throws Exception generic exception
+     * */
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
-			throws Exception {
+			throws Exception 
+	{
 			
 			//String target = new String();
 			IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.CONFIGURE_RESULT_VIEW_ID);
 			String pageOf = (String) request.getAttribute(Constants.PAGEOF);
 			if(pageOf == null)
+			{
 				pageOf = (String) request.getParameter(Constants.PAGEOF);
+			}
 			//String []tables = (String [])request.getAttribute(Constants.TABLE_ALIAS_NAME);
 			HttpSession session =request.getSession();
     		
