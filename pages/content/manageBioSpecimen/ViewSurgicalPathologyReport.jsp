@@ -85,7 +85,8 @@ function selectByOffset(checkbox,start,end,colour,conceptName)
 		
 		if(checkbox.checked==false)
 		{
-			colour='white';
+			//background color is set to default 'light-gray' color. Refer stylesheet.jss
+			colour='#F4F4F5';
 			//conceptName="";
 		}
 		var text = "<span title="+conceptNameArr[x]+" style='background-color:"+colour+"'>"+subStr+"</span>";
