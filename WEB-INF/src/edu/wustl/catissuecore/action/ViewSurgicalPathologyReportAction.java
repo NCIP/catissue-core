@@ -115,7 +115,7 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 					ConceptReferent conceptReferent = (ConceptReferent)iter.next();
 					ConceptReferentClassification conceptReferentClassification = conceptReferent.getConceptReferentClassification();
 					ConceptHighLightingBean conceptHighLightingBean = null;
-					if(tempMap.get(conceptReferentClassification.getId()) == null)
+					if(tempMap.get(conceptReferentClassification.getName().toUpperCase()) == null)
 					{	// if concept classification obj is not present in the list						
 						conceptHighLightingBean = new ConceptHighLightingBean();
 						conceptHighLightingBean.setClassificationName(conceptReferentClassification.getName());
@@ -123,17 +123,17 @@ public class ViewSurgicalPathologyReportAction extends BaseAction
 						conceptHighLightingBean.setStartOffsets(conceptReferent.getStartOffset().toString());
 						conceptHighLightingBean.setEndOffsets(conceptReferent.getEndOffset().toString());
 						
-						tempMap.put(conceptReferentClassification.getId(), conceptHighLightingBean);
+						tempMap.put(conceptReferentClassification.getName().toUpperCase(), conceptHighLightingBean);
 					}
 					else
 					{
-						conceptHighLightingBean =(ConceptHighLightingBean) tempMap.get(conceptReferentClassification.getId());
+						conceptHighLightingBean =(ConceptHighLightingBean) tempMap.get(conceptReferentClassification.getName().toUpperCase());
 						
 						conceptHighLightingBean.setConceptName(conceptHighLightingBean.getConceptName() + "," + conceptReferent.getConcept().getName());
 						conceptHighLightingBean.setStartOffsets(conceptHighLightingBean.getStartOffsets() + "," + conceptReferent.getStartOffset());
 						conceptHighLightingBean.setEndOffsets(conceptHighLightingBean.getEndOffsets() + "," + conceptReferent.getEndOffset());
 						
-						tempMap.put(conceptReferentClassification.getId(), conceptHighLightingBean);
+						tempMap.put(conceptReferentClassification.getName().toUpperCase(), conceptHighLightingBean);
 					}
 				}
 				
