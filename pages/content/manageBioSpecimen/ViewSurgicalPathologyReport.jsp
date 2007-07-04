@@ -55,11 +55,17 @@ function submitRejectComments()
 	}
 }
 
+function replaceNewLine(str)
+{
+	var tempStr=str = str.replace(/\r+/gim, "$");
+	return tempStr;
+}
 //Added by Ashish
 function selectByOffset(checkbox,start,end,colour,conceptName)
 {
 	var innerHtml = document.getElementById("deidentifiedReportText").innerHTML;
 	var i = ReplaceTags(innerHtml);
+	var tempStr = replaceNewLine(i);
 
 	var startArr = start.split(",");
 	var endArr = end.split(",");
@@ -68,7 +74,11 @@ function selectByOffset(checkbox,start,end,colour,conceptName)
 	var count = 0;
 	for(var x=0;x<startArr.length;x++)
 	{		
-		var subStr = i.substring(startArr[x],endArr[x]);
+		var startOff=startArr[x]-1;
+		startOff=startOff;
+		var endOff=endArr[x]-1;
+		endOff=endOff;
+		var subStr = tempStr.substring(startOff,endOff);
 		
 		var textBeforeString = i.substring(0,startArr[x]);
 		var textAfterString = i.substring(endArr[x]);
@@ -78,7 +88,7 @@ function selectByOffset(checkbox,start,end,colour,conceptName)
 			colour='white';
 			//conceptName="";
 		}
-		var text = "<span title="+conceptName[x]+" style='background-color:"+colour+"'>"+subStr+"</span>";
+		var text = "<span title="+conceptNameArr[x]+" style='background-color:"+colour+"'>"+subStr+"</span>";
 			
 		if(count == 0)
 		{
@@ -111,7 +121,7 @@ function ReplaceTags(xStr)
 <!-- Main table start -->
 <table id="reportTable" summary="" cellspacing="5" cellpadding="0" border="0"  style="table-layout:fixed" width="750" >
 	 <tr>
-		<td>
+		<td colspan="3">
 			<html:hidden property="id" />
 			<html:hidden property="identifiedReportId" />
 			<html:hidden property="deIdentifiedReportId" />
@@ -153,7 +163,7 @@ function ReplaceTags(xStr)
 		<!-- block to diaply default links -->
 			<table width="100%">
 				<tr>
-					<td class="formFieldNoBordersBold" width="60%">
+					<td class="formFieldNoBordersBold" width="60%" nowrap>
 						<a href="javascript:clickOnLinkReport()">
 							<bean:message key="viewSPR.report" />
 						</a>&nbsp;&nbsp;|&nbsp;&nbsp;
@@ -199,10 +209,10 @@ function ReplaceTags(xStr)
 		</td>
 	</tr>
 	<tr>
-		<td width="15%" rowspan="8" valign="top" >
-		<table border="0" cellpadding="5" cellspacing="0" width="100%" id="categoryHighlighter" >
+		<td rowspan="4" valign="top" >
+		<table border="0" cellpadding="5" width="100%" cellspacing="0" id="categoryHighlighter" >
 			<tr>
-				<td colspan="2" class="formTitle" height="20">
+				<td colspan="2" class="formTitle" width="240" height="20"  nowrap>
 					<bean:message key="viewSurgicalPathologyReport.categoryHighlighter.title"/>
 				</td>
 			</tr>
@@ -245,11 +255,10 @@ function ReplaceTags(xStr)
 			</logic:iterate>
 		<%} %>
 		</table>
-		</td>
-		<td colspan="2" width="85%" >
+		<td colspan="2" >
 		<table border="0" cellpadding="0" cellspacing="0"   width="100%" id="table2" >
 			<tr>
-				<td class="formTitle" height="20" >
+				<td class="formTitle" height="20">
 					<bean:message key="viewSurgicalPathologyReport.participantInformation.title"/>						
 				</td>
 				
@@ -262,7 +271,7 @@ function ReplaceTags(xStr)
 				<td colspan="2" >
 				<table border="0" cellpadding="5" cellspacing="0" width="100%" id="paricipantInformation" >
 					<tr>
-						<td class="formFieldWithNoTopBorder" width="50%" height="20" colspan="2">
+						<td class="formFieldWithNoTopBorder" width="250px" height="20" colspan="2">
 							<b>  
 								<bean:message key="user.lastName" /> : 
 							</b>
@@ -270,7 +279,7 @@ function ReplaceTags(xStr)
 				     			<%=formSPR.getLastName()%>
 							<%}%>
 					     </td>
-						<td class="formField" width="50%" height="20" colspan="2">
+						<td class="formField" width="250px" height="20" colspan="2">
 							<b>
 								<bean:message key="user.firstName" /> : 
 							</b>
@@ -452,9 +461,9 @@ if (formSPR.getRace() != null)
 				</td>
 			</tr>
 			<tr>
-				<td  class="formFieldWithNoTopBorder" colspan="3" >
+				<td  class="formFieldWithNoTopBorderFontSize1" colspan="3" >
 				
-				<div id="identifiedReportText" style="overflow:auto;height:200px;width:100%"><%if(formSPR.getIdentifiedReportTextContent()!=null){%><%=formSPR.getIdentifiedReportTextContent()%><%}%></div>
+				<div id="identifiedReportText" style="overflow:auto;height:200px;width:475px"><PRE><%if(formSPR.getIdentifiedReportTextContent()!=null){%><%=formSPR.getIdentifiedReportTextContent()%><%}%></PRE></div>
 				</td>
 			</tr>
 		</table>
@@ -494,9 +503,9 @@ if (formSPR.getRace() != null)
 				</td>
 			</tr>  -->
 			<tr>
-				<td  class="formFieldWithNoTopBorder" colspan="3" >
+				<td  class="formFieldWithNoTopBorderFontSize1" colspan="3" >
 				
-				<div id="deidentifiedReportText" style="overflow:auto;height:200px;width:100%"><%if(formSPR.getDeIdentifiedReportTextContent()!=null){%><%=formSPR.getDeIdentifiedReportTextContent()%><%}%></div>
+				<div id="deidentifiedReportText" style="overflow:auto;height:200px;width:475px"><PRE><%if(formSPR.getDeIdentifiedReportTextContent()!=null){%><%=formSPR.getDeIdentifiedReportTextContent()%><%}%></PRE></div>
 				</td>
 			</tr>
 		</table>
@@ -512,7 +521,7 @@ if (formSPR.getRace() != null)
 			</tr>
 			<tr>
 				<td colspan="2">
-					<html:textarea property="comments" rows="3" cols="58"/>
+					<html:textarea property="comments" rows="3" cols="57"/>
 				</td>
 			</tr>
 			
