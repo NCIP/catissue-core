@@ -37,7 +37,7 @@
         <many-to-one
             name="conceptReferentClassification"
             class="edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification"
-            cascade="none"
+            cascade="save-update"
             outer-join="auto"
             update="true"
             insert="true"
