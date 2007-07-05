@@ -3,6 +3,7 @@ Name        : Virender Mehta
 Reviewer    : Sachin lale
 Description : This is the common jsp which will show tooltip for collection protocol title on CPR,SCG and CP base view page.
 -->
+<script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <%
 	String tempIDTitleArray = ""; 
 	Map<Long, String> cpIDTitleMap = (Map<Long, String>)request.getAttribute(Constants.CP_ID_TITLE_MAP);
@@ -10,7 +11,8 @@ Description : This is the common jsp which will show tooltip for collection prot
 	{
 		tempIDTitleArray += "[" + "\"" + key + "\""  + "," + "\""  + cpIDTitleMap.get(key) + "\"" + "]," ; 
 	}
-	tempIDTitleArray = tempIDTitleArray.substring(0, tempIDTitleArray.length() -1);
+	if(tempIDTitleArray != null && tempIDTitleArray.length() != 0)
+		tempIDTitleArray = tempIDTitleArray.substring(0, tempIDTitleArray.length() -1);
 %>
 
 <script>
