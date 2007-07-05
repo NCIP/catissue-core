@@ -121,7 +121,7 @@ public class HL7Parser extends Parser
 		catch(Exception ex)
 		{
 			Logger.out.error("Error while parsing the report map",ex);
-			throw new Exception(ex.getMessage());
+			throw ex;
 		}
 	}	
 	
@@ -161,7 +161,7 @@ public class HL7Parser extends Parser
 		catch(Exception ex)
 		{
 			Logger.out.error("Error while creating report map ",ex);
-			throw new Exception(ex.getMessage());
+			throw ex;
 		}
 	}
 	
@@ -228,7 +228,7 @@ public class HL7Parser extends Parser
 //												check for matching scg here
 												String pidLine=this.getParticipantDataFromReportMap(reportMap, Parser.PID);
 												String obrLine=this.getReportDataFromReportMap(reportMap, Parser.OBR);
-												scg=ReportLoaderUtil.checkForSpecimenCollectionGroup(participant, parseSiteInformation(pidLine), ReportLoaderUtil.getSurgicalPathologyNumber(obrLine));
+												scg=ReportLoaderUtil.checkForSpecimenCollectionGroup(aParticipant, parseSiteInformation(pidLine), ReportLoaderUtil.getSurgicalPathologyNumber(obrLine));
 												if(scg!=null && scg.getSurgicalPathologyNumber().equalsIgnoreCase(null))
 												{
 													this.status=Parser.CONFLICT;
