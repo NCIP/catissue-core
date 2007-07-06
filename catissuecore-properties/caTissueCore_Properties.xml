@@ -86,6 +86,12 @@
 		<value>3040</value>
 	</property>
 	<!-- Constants for Deidentification of report  end -->
+	<!-- Constants for concept coding of report start -->
+	<property>
+		<name>concept.coder.port</name>
+		<value>3050</value>
+	</property>
+	<!-- Constants for concept coding of report start -->
 
 	<!-- property for DynamicUI xml file -->
 	<property>
