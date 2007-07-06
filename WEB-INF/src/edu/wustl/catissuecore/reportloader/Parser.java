@@ -47,6 +47,8 @@ public abstract class Parser
 	public static final String IDENTIFIED="IDENTIFIED";
 	public static final String DEIDENTIFIED="DEIDENTIFIED";
 	public static final String DEID_PROCESS_FAILED="DEID_PROCESS_FAILED";
+	public static final String CC_PROCESS_FAILED="CC_PROCESS_FAILED";
+	public static final String CONCEPT_CODED="CONCEPT_CODED";
 	
 	
 	//constans for report queue
@@ -96,4 +98,27 @@ public abstract class Parser
 	public static final String LOGGER_QUEUE_PROCESSOR="queueProcessor";
 	public static final String LOGGER_DEID_SERVER="deidServer";
 	public static final String LOGGER_CONCEPT_CODER="conceptCoder";
+	
+	//constants for concept coding
+	public static final String ERROR_GATE="ERROR_FAILED_GATE_PIPE";
+	
+	//Constants for tag names in Concept code process
+	public static final String TAG_GATEXML="GateXML";
+	public static final String TAG_GATEDOCUMENT="GateDocument";
+	public static final String TAG_ENVELOPE="Envelope";
+	public static final String TAG_CHIRPSXML="ChirpsXML";
+	public static final String TAG_REPORTCODES="ReportCodes";
+	public static final String TAG_INDEXED_CONCEPT="IndexedConcept";
+	public static final String TAG_CONCEPT_REFERENT="ConceptReferent";
+	public static final String TAG_CONCEPT="Concept";
+	public static final String TAG_CONCEPT_CLASSIFICATION="ConceptClassification";
+	public static final String TAG_ATTRIBUTE_NAME="name";
+	public static final String TAG_ATTRIBUTE_END_OFFSET="endOffset";
+	public static final String TAG_ATTRIBUTE_START_OFFSET="startOffset";
+	public static final String TAG_ATTRIBUTE_ISMODIFIER="isModifier";
+	public static final String TAG_ATTRIBUTE_ISNEGATED="isNegated";
+	public static final String TAG_ATTRIBUTE_CUI="cui";
+	public static final String TAG_ATTRIBUTE_SEMANTICTYPE="semanticType";
+	
+	public static final String COLUMN_NAME_REPORT_STATUS="reportStatus";
 }
