@@ -111,10 +111,93 @@ function ReplaceTags(xStr)
   xStr = xStr.replace(regExp,"");
   return xStr;
 }
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>> AJAX code start
+	var url,request;
+	function getReport()
+	{
+		var identifier=document.getElementById('reportId').value;
+		url="FetchReport.do?reportId="+identifier;
+		sendRequestForReportInfo();
+	}
+// function to send request to server	
+	function sendRequestForReportInfo()
+	{
+		request = newXMLHTTPReq();
+		if(request)
+		{  					
+			request.onreadystatechange = setReport; 	
+			try
+			{		
+				request.open("GET", url, true);
+				request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+				request.send();
+			}
+			catch(e)
+			{}			
+		}
+	}
+//To set the values of form that are fetched using AJAX call
+	function setReport()
+	{
+		if(request.readyState==4 && request.status == 200)
+		{
+			/* Response contains required output.
+			 * Get the response from server.
+			 */				
+			var responseString = request.responseText;
+			
+			if(responseString != null && responseString != "")
+			{	
+				var xmlDocument = getDocumentElementForXML(responseString); 
+				
+				var reportAccessionNumber = xmlDocument.getElementsByTagName('IdentifiedReportAccessionNumber')[0].firstChild.nodeValue;	
+				var reportSite = xmlDocument.getElementsByTagName('IdentifiedReportSite')[0].firstChild.nodeValue;			
+				var identifierReportText = xmlDocument.getElementsByTagName('IdentifiedReportTextContent')[0].firstChild.nodeValue;
+				var deIdentifierReportText = xmlDocument.getElementsByTagName('DeIdentifiedReportTextContent')[0].firstChild.nodeValue;
+				
+				if(reportAccessionNumber!=null)
+				{
+					document.getElementById("identifiedReportAccessionNumber").value = reportAccessionNumber;
+					document.getElementById("identifiedReportSite").value = reportSite;
+					document.getElementById("identifiedReportText").value = identifierReportText;
+					document.getElementById("deidentifiedReportText").value = deIdentifierReportText;
+				}
+				
+			}
+		}
+	}
+	
+	function getDocumentElementForXML(xmlString)
+	{
+	    var document = null;
+	    if (window.ActiveXObject) // code for IE
+	    {
+	                document = new ActiveXObject("Microsoft.XMLDOM");
+	                document.async="false";
+	                document.loadXML(xmlString);
+	    }
+	    else // code for Mozilla, Firefox, Opera, etc.
+	    {
+	                var parser = new DOMParser();
+	                document = parser.parseFromString(xmlString,"text/xml");
+	    }           
+		return document;
+	}	
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>AJAX code end
+
 </script>
 
 <head>
-
+<style>
+pre {
+ white-space: pre-wrap;       /* css-3 */
+ white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+ white-space: -pre-wrap;      /* Opera 4-6 */
+ white-space: -o-pre-wrap;    /* Opera 7 */
+ word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+</style>
 </head>
 
 
@@ -122,7 +205,7 @@ function ReplaceTags(xStr)
 <!-- Main table start -->
 <table id="reportTable" summary="" cellspacing="5" cellpadding="0" border="0"  style="table-layout:fixed" width="750" >
 	 <tr>
-		<td colspan="3">
+		<td>
 			<html:hidden property="id" />
 			<html:hidden property="identifiedReportId" />
 			<html:hidden property="deIdentifiedReportId" />
@@ -133,34 +216,28 @@ function ReplaceTags(xStr)
 		</td>
 	</tr>
 <!-- if pageOf is pageOfParticipant then display drop down list of report accession number -->
-<%if(pageOf.equalsIgnoreCase(Constants.PAGEOF_PARTICIPANT))
-{
-%>
+<logic:equal name="viewSurgicalPathologyReportForm" property="pageOf" value='<%=Constants.PAGEOF_PARTICIPANT%>'>
+
 	<tr>
-		<td class="formFieldNoBordersSimple" colspan="3">
+		<td class="formFieldNoBordersSimple">
 			<b>
 				<bean:message key="viewSPR.reportInfo.spn"/> : 
 			</b>
-			<% if(formSPR.getReportIdList()!=null)
-			{
-			%>
+			<logic:notEmpty name="viewSurgicalPathologyReportForm" property="reportIdList" >
+			
 						<c:set var="reportIdElt" value="${viewSurgicalPathologyReportForm.reportIdList}"/>
 						<jsp:useBean id="reportIdElt" type="java.util.List"/>
 				     	<html:select property="reportId" styleClass="formFieldSized" styleId="reportId" size="1"
-						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)">
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="getReport()">
 							<html:options collection="reportIdElt" labelProperty="name" property="value"/>
 						</html:select>
 
-			<%
-				}
-			%>
+			</logic:notEmpty>
 		</td>
 	</tr>
-<%
-}
-%>	
+</logic:equal>
 	<tr>
-		<td colspan="3">
+		<td>
 		<!-- block to diaply default links -->
 			<table width="100%">
 				<tr>
@@ -210,53 +287,65 @@ function ReplaceTags(xStr)
 		</td>
 	</tr>
 	<tr>
-		<td rowspan="4" valign="top" >
-		<table border="0" cellpadding="5" width="100%" cellspacing="0" id="categoryHighlighter" >
-			<tr>
-				<td colspan="2" class="formTitle" width="240" height="20"  nowrap>
-					<bean:message key="viewSurgicalPathologyReport.categoryHighlighter.title"/>
+		<td valign="top" >
+			<table border="0" cellpadding="0" width="100%" cellspacing="0" id="categoryHighlighter" >
+				<tr>
+					<td class="formTitle" height="20"  nowrap>
+						<bean:message key="viewSurgicalPathologyReport.categoryHighlighter.title"/>
+					</td>
+				</tr>
+				<!-- tr>
+					<td class="formLeftSubTableTitle" width="20%"><input type="checkbox" id="selectAll" selected="false"></td>
+					<td class="formRightSubTableTitle">
+						<bean:message key="app.selectAll" />
+					</td>
+				</tr-->		
+				
+				<%
+				  List conceptClassificationList = (List)request.getAttribute(Constants.CONCEPT_BEAN_LIST);
+				  int chkBoxNo = 0;			  
+				  if(conceptClassificationList != null && conceptClassificationList.size() > 0)
+				  {%>
+				  <tr>
+				  <td>
+				  <table border="0" cellpadding="5" width="100%" cellspacing="0">
+				  <tr>
+				<logic:iterate id="referentClassificationObj" collection="<%= conceptClassificationList %>" type="edu.wustl.catissuecore.bean.ConceptHighLightingBean">
+				
+				<%				
+					String conceptName = referentClassificationObj.getConceptName();
+					String startOff = referentClassificationObj.getStartOffsets();
+					String endOff = referentClassificationObj.getEndOffsets();				
+					String[] colours = Constants.CATEGORY_HIGHLIGHTING_COLOURS;
+				%>
+				
+					<td class="formFieldWithNoTopBorder">
+						<% String chkBoxId = "select"+chkBoxNo; 
+						   String onClickArgument = "selectByOffset(this,'"+startOff+"','"+endOff+"','"+colours[chkBoxNo]+"','"+conceptName+"')";	
+						%>
+						<input type="checkbox" id="<%=chkBoxId %>" onclick="<%=onClickArgument %>" />
+					</td>
+					<td class="formRequiredLabel">
+					<% String spanStyle = "background-color:"+colours[chkBoxNo];%>
+						<span id="classificationName" style="<%=spanStyle %>">
+							<%=referentClassificationObj.getClassificationName() %>	
+						</span>		
+					</td>
+				
+				<% chkBoxNo++;%>
+				</logic:iterate>
+				</tr>
+				</table>
 				</td>
 			</tr>
-			<!-- tr>
-				<td class="formLeftSubTableTitle" width="20%"><input type="checkbox" id="selectAll" selected="false"></td>
-				<td class="formRightSubTableTitle">
-					<bean:message key="app.selectAll" />
-				</td>
-			</tr-->		
+			<%} %>
 			
-			<%
-			  List conceptClassificationList = (List)request.getAttribute(Constants.CONCEPT_BEAN_LIST);
-			  int chkBoxNo = 0;			  
-			  if(conceptClassificationList != null && conceptClassificationList.size() > 0)
-			  {%>
-			<logic:iterate id="referentClassificationObj" collection="<%= conceptClassificationList %>" type="edu.wustl.catissuecore.bean.ConceptHighLightingBean">
-			
-			<%				
-				String conceptName = referentClassificationObj.getConceptName();
-				String startOff = referentClassificationObj.getStartOffsets();
-				String endOff = referentClassificationObj.getEndOffsets();				
-				String[] colours = Constants.CATEGORY_HIGHLIGHTING_COLOURS;
-			%>
-			
-			<tr>
-				<td class="formFieldWithNoTopBorder">
-					<% String chkBoxId = "select"+chkBoxNo; 
-					   String onClickArgument = "selectByOffset(this,'"+startOff+"','"+endOff+"','"+colours[chkBoxNo]+"','"+conceptName+"')";	
-					%>
-					<input type="checkbox" id="<%=chkBoxId %>" onclick="<%=onClickArgument %>" />
-				</td>
-				<td class="formRequiredLabel">
-				<% String spanStyle = "background-color:"+colours[chkBoxNo];%>
-					<span id="classificationName" style="<%=spanStyle %>">
-						<%=referentClassificationObj.getClassificationName() %>	
-					</span>		
-				</td>
-			</tr>
-			<% chkBoxNo++;%>
-			</logic:iterate>
-		<%} %>
-		</table>
-		<td colspan="2" >
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		
 		<table border="0" cellpadding="0" cellspacing="0"   width="100%" id="table2" >
 			<tr>
 				<td class="formTitle" height="20">
@@ -272,21 +361,21 @@ function ReplaceTags(xStr)
 				<td colspan="2" >
 				<table border="0" cellpadding="5" cellspacing="0" width="100%" id="paricipantInformation" >
 					<tr>
-						<td class="formFieldWithNoTopBorder" width="250px" height="20" colspan="2">
+						<td class="formFieldWithNoTopBorder" width="365"  height="20" colspan="2">
 							<b>  
 								<bean:message key="user.lastName" /> : 
 							</b>
-							<% if(formSPR.getLastName()!=null) {%>
-				     			<%=formSPR.getLastName()%>
-							<%}%>
+							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="lastName" >
+								<%=formSPR.getLastName()%>
+							</logic:notEmpty>
 					     </td>
-						<td class="formField" width="250px" height="20" colspan="2">
+						<td class="formField" width="365" height="20" colspan="2">
 							<b>
 								<bean:message key="user.firstName" /> : 
 							</b>
-							<% if(formSPR.getFirstName()!=null) {%>
+							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="firstName" >
 				     			<%=formSPR.getFirstName()%>
-							<%}%>
+							</logic:notEmpty>
 					     </td>
 					</tr>
 					<tr>
@@ -294,17 +383,17 @@ function ReplaceTags(xStr)
 							<b>
 								<bean:message key="participant.birthDate" /> : 
 							</b>
-							<% if(formSPR.getBirthDate()!=null) {%>
+							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="birthDate" >
 				     			<%=formSPR.getBirthDate()%>
-							<%}%>
+							</logic:notEmpty>
 					     </td>
 						<td class="formField" width="50%" height="20" colspan="2">
 							<b>
 								<bean:message key="participant.deathDate" /> : 
 							</b>
-							<% if(formSPR.getDeathDate()!=null) {%>
+							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="deathDate" >
 				     			<%=formSPR.getDeathDate()%>
-							<%}%>
+							</logic:notEmpty>
 					     </td>
 					</tr>
 					<tr>
@@ -312,9 +401,9 @@ function ReplaceTags(xStr)
 							<b>
 								<bean:message key="participant.ethnicity" /> : 
 							</b>
-							<% if(formSPR.getEthinicity()!=null) {%>
+							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="ethinicity" >
 				     			<%=formSPR.getEthinicity()%>
-							<%}%>
+							</logic:notEmpty>
 					     </td>
 						<td class="formField" width="50%" height="20" colspan="2">
 							<b>
@@ -351,17 +440,17 @@ if (formSPR.getRace() != null)
 							<b>
 								<bean:message key="participant.gender" /> : 
 							</b>
-							<% if(formSPR.getGender()!=null) {%>
+							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="gender" >
 				     			<%=formSPR.getGender()%>
-							<%}%>
+							</logic:notEmpty>
 					     </td>
 						<td class="formField" width="50%" height="20" colspan="2">
 							<b>
 								<bean:message key="participant.genotype" /> : 
 							</b>
-							<% if(formSPR.getSexGenotype()!=null) {%>
+							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="sexGenotype" >
 				     			<%=formSPR.getSexGenotype()%>
-							<%}%>
+							</logic:notEmpty>
 					     </td>
 					</tr>
 					<tr>
@@ -369,9 +458,9 @@ if (formSPR.getRace() != null)
 							<b>
 								<bean:message key="participant.socialSecurityNumber" /> : 
 							</b>
-							<% if(formSPR.getSocialSecurityNumber()!=null) {%>
+							<logic:notEmpty name="viewSurgicalPathologyReportForm" property="socialSecurityNumber" >
 				     			<%=formSPR.getSocialSecurityNumber()%>
-							<%}%>
+							</logic:notEmpty>
 					     </td>
 					</tr>
 
@@ -428,7 +517,8 @@ if (formSPR.getRace() != null)
 		</table>
 		</td></tr>
 		
-		<tr><td colspan="2" >
+		<tr>
+		<td>
 		<table border="0" cellpadding="5" cellspacing="0" width="100%" id="identifiedReportInfo" >
 			<tr>
 				<td colspan="3" class="formTitle" height="20">
@@ -448,29 +538,35 @@ if (formSPR.getRace() != null)
 					<b>
 						<bean:message key="viewSPR.reportInfo.spn" /> : 
 					</b>
-						<% if(formSPR.getIdentifiedReportAccessionNumber()!=null) {%>
+						<span id="identifiedReportAccessionNumber">
+						<logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportAccessionNumber" >
 				     		<%=formSPR.getIdentifiedReportAccessionNumber()%>
-						<%}%>
+						</logic:notEmpty>
+						</span>
 				</td>
 				<td class="formField"  height="20">
 					<b>
 						<bean:message key="specimenCollectionGroup.site"/> : 
 					</b>
-						<% if(formSPR.getIdentifiedReportSite()!=null) {%>
+						<span id="identifiedReportSite">
+						<logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportSite" >
 				     		<%=formSPR.getIdentifiedReportSite()%>
-						<%}%>
+						</logic:notEmpty>
+						</span>
 				</td>
 			</tr>
 			<tr>
 				<td  class="formFieldWithNoTopBorderFontSize1" colspan="3" >
 				
-				<div id="identifiedReportText" style="overflow:auto;height:200px;width:475px"><PRE><%if(formSPR.getIdentifiedReportTextContent()!=null){%><%=formSPR.getIdentifiedReportTextContent()%><%}%></PRE></div>
+				<div id="identifiedReportText" style="overflow:auto;height:200px;width:730"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="identifiedReportTextContent" ><%=formSPR.getIdentifiedReportTextContent()%></logic:notEmpty></PRE>
+				</div>
 				</td>
 			</tr>
 		</table>
 		</td>
 		</tr>
-		<tr><td colspan="2" >
+		<tr>
+		<td>
 		<table border="0" cellpadding="5" cellspacing="0" width="100%" id="deidReportInfo" style='display:none'>
 			<tr>
 				<td colspan="3" class="formTitle" height="20">
@@ -506,14 +602,15 @@ if (formSPR.getRace() != null)
 			<tr>
 				<td  class="formFieldWithNoTopBorderFontSize1" colspan="3" >
 				
-				<div id="deidentifiedReportText" style="overflow:auto;height:200px;width:475px"><PRE><%if(formSPR.getDeIdentifiedReportTextContent()!=null){%><%=formSPR.getDeIdentifiedReportTextContent()%><%}%></PRE></div>
+				<div id="deidentifiedReportText" style="overflow:auto;height:200px;width:730"><PRE><logic:notEmpty name="viewSurgicalPathologyReportForm" property="deIdentifiedReportTextContent" ><%=formSPR.getDeIdentifiedReportTextContent()%></logic:notEmpty></PRE>
+				</div>
 				</td>
 			</tr>
 		</table>
 		</td>
 	</tr>
 	<tr>	
-	<td colspan="2">
+	<td>
 		<table id="commentsTable" style="table-layout:fixed" width="100%">
 			<tr>
 				<td width="80%" colspan="2" class="formTitle" height="20">
@@ -522,7 +619,7 @@ if (formSPR.getRace() != null)
 			</tr>
 			<tr>
 				<td colspan="2">
-					<html:textarea property="comments" rows="3" cols="57"/>
+					<html:textarea property="comments" rows="3" cols="89"/>
 				</td>
 			</tr>
 			
