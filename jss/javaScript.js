@@ -1079,14 +1079,7 @@ function switchStyle(action)
 function show(obj)
 {
 	switchObj=document.getElementById(obj);
-	if(navigator.appName == "Microsoft Internet Explorer")
-	{					
-		switchObj.style.display = 'block';
-	}
-	else
-	{
-		switchObj.style.display = 'table-row';
-	}
+	switchObj.style.display = '';
 }
 //<!--function to hide object from UI -->
 function hide(obj)
@@ -1172,36 +1165,6 @@ function submitQuarantineComments(consentTierCounter)
 		document.forms[0].submit();
 	}
 }
-// AJAX code start
-	function getReport()
-	{
-		var identifier=document.getElementById('identifiedReportId').value;
-		var url="FetchReport.do?reportId="+identifier;
-		ajaxCall(url);
-	}
-// function to send request to server	
-	function ajaxCall(url)
-	{
-		var request = newXMLHTTPReq();
-		request.onreadystatechange=function(){setReport(request)};
-		alert(url);
-		//send data to ActionServlet
-		//Open connection to servlet
-		request.open("POST",url,true);
-		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-		request.send();
-	}
-//To set the values of form that are fetched using AJAX call
-	function setReport(request)
-	{
-		if(request.readyState==4 && request.status == 200)
-		{
-			var responseString = request.responseText;
-			alert(responseString);
-		}
-	}
-//AJAX code end
-
 //<!-- JavaScript for ViewSurigicalPathologyReport.jsp  end -->
 
 //Java Script for ParticipantTabPage.jsp
