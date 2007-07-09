@@ -552,6 +552,10 @@ PUBLIC
 			<forward name="pageOfParticipant" path=".catissuecore.participantDef" />
 			<forward name="failure" path=".catissuecore.homePageDef" />
 		</action>
+		<action path="/FetchReport" 
+			 type="edu.wustl.catissuecore.action.FetchReportAction"		 
+			 scope="request">	 
+		</action>
 		<!--Suite-->
 
 
