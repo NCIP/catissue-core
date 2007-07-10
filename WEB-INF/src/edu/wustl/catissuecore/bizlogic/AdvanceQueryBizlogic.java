@@ -7,6 +7,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -169,18 +170,28 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 				List specimenIdsHeirarchy = getSpecimenHeirarchy(specimenId);
 				specimenIdsHeirarchy.add(specimenId);
 				
+				 /** Name : Aarti Sharma
+				 * Reviewer: Sachin Lale
+				 * Bug ID: 4785
+				 * Desciption: Tree view of advanced query search results was showing incorrect labels for specimen 
+				 * since for parent specimen wrong labels of children were getting set. Now labels for all specimen in heirarchy
+				 * are being specifically obtained and set
+				 */
+				List specimenLabels = getSpecimenLabels(specimenIdsHeirarchy);
+				
 				Logger.out.debug("list of parent specimen ids:"+specimenIdsHeirarchy);
 				if(specimenIdsHeirarchy.size()>0)
 				{
-					setQueryTreeNode((String)specimenIdsHeirarchy.get(0), Constants.SPECIMEN,(String) rowList.get(specimenLableColumnId),
+					setQueryTreeNode((String)specimenIdsHeirarchy.get(0), Constants.SPECIMEN,(String)specimenLabels.get(0),
 							(String) rowList.get(specimenCollGrpColumnId),Constants.SPECIMEN_COLLECTION_GROUP,null,null,treeDataVector);
 					
 					Iterator specimenIdsHeirarchyItr= specimenIdsHeirarchy.iterator();
 					String parentSpecimenIdInHeirarchy = (String)specimenIdsHeirarchyItr.next();
+					int j=1;
 					while(specimenIdsHeirarchyItr.hasNext())
 					{
 						specimenId = (String)specimenIdsHeirarchyItr.next();
-						setQueryTreeNode(specimenId, Constants.SPECIMEN,(String) rowList.get(specimenLableColumnId), parentSpecimenIdInHeirarchy,Constants.SPECIMEN,null,null,treeDataVector);
+						setQueryTreeNode(specimenId, Constants.SPECIMEN,(String) specimenLabels.get(j++), parentSpecimenIdInHeirarchy,Constants.SPECIMEN,null,null,treeDataVector);
 						parentSpecimenIdInHeirarchy = specimenId;
 					}
 				}
@@ -204,8 +215,64 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
         Logger.out.debug("vector of tree nodes"+treeDataVector);
         
         return createHierarchy(treeDataVector);
-	}   
+	} 
 	
+	/**
+	 * This method returns the list of lables of all the specimens in specimenIdsHeirarchy.
+	 * Returned Labels are in the same order as specimens sent
+	 * @author aarti_sharma
+	 * @param specimenIdsHeirarchy
+	 * @return List of specimen labels
+	 * @throws DAOException
+	 * @throws ClassNotFoundException
+	 */
+	private List getSpecimenLabels(List specimenIdsHeirarchy) throws DAOException, ClassNotFoundException
+	{
+		List specimenLabels = new ArrayList();
+		String sql; 
+		StringBuffer specimenIds = new StringBuffer();
+		
+		/*
+		 * Form a string of all specimens in the list sent
+		 */
+		for(int i=0; i<specimenIdsHeirarchy.size()-1;i++)
+		{
+			specimenIds.append(specimenIdsHeirarchy.get(i)+",");
+		}
+		specimenIds.append(specimenIdsHeirarchy.get(specimenIdsHeirarchy.size()-1));
+		
+		/*
+		 * Fire a query to find labels of all specimens in the list sent
+		 */
+		JDBCDAO jdbcDao = (JDBCDAO)DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
+        jdbcDao.openSession(null);
+		sql = "Select IDENTIFIER,LABEL from CATISSUE_SPECIMEN where IDENTIFIER IN ("+specimenIds.toString()+")";
+		List dataList =  jdbcDao.executeQuery(sql,null,false,null);
+		jdbcDao.closeSession();
+		
+		/*
+		 * Put the labels in a map where key is specimen identifier and label is the value
+		 */
+		List rowList;
+		Map specimenLabelsMap = new HashMap();
+		for(int i=0; i<dataList.size();i++)
+		{
+			rowList = (List)dataList.get(i);
+			specimenLabelsMap.put((String)rowList.get(0), (String)rowList.get(1));
+		}
+		
+		/*
+		 * Extract specimen labels from  the map formed in previous step and insert them in a list
+		 * in the same order as of the specimens in specimenIdsHeirarchy
+		 */
+		for(int i=0; i< specimenIdsHeirarchy.size();i++)
+		{
+			specimenLabels.add(specimenLabelsMap.get(specimenIdsHeirarchy.get(i)));
+		}
+		
+		return specimenLabels;
+	}
+
 	/**
 	 * Creates and returns the vector of AdvanceQueryTreeNode nodes from the QueryTreeNodeData nodes passed. 
 	 * @param oldNodes Vector of QueryTreeNodeData nodes.
