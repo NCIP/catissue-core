@@ -7,7 +7,7 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +34,7 @@ import edu.wustl.common.tree.TreeNode;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
-
+import java.util.HashMap;
 /**
  * @author poornima_govindrao
  *
@@ -66,7 +66,7 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 	        while(dataListItr.hasNext())
 	        {
 	        	List rowList = (List)dataListItr.next();
-	        	Logger.out.debug("list size to be inserted"+rowList.size()+":"+rowList);
+//	        	Logger.out.debug("list size to be inserted"+rowList.size()+":"+rowList);
 	        	jdbcDao.insert(tempTableName,rowList);
 	        }
 	        jdbcDao.commit();
@@ -578,5 +578,76 @@ public class AdvanceQueryBizlogic extends DefaultBizLogic implements TreeDataInt
 		}
 		
 		return activityStatusConditions.toString();
+	}
+	
+	/**
+	 * To creaet SQL for the Advance Query navigation. This will create query on Temporary table.
+	 * @param whereColumnName The whereColumnNames
+	 * @param whereColumnValue The whereColumnValues
+	 * @param whereColumnCondition The whereColumnConditions
+	 * @param columnList The column list that will form SELECT clause of the query.
+	 * @param orderByAttributes The attributes that will apprear in the order by clause of SQL.
+	 * @param sessionDataBean The session databean object.
+	 * @return The SQL.
+	 */
+	public String createSQL(String[] whereColumnName, String[] whereColumnValue, String[] whereColumnCondition,String[] columnList, String[] orderByAttributes, SessionDataBean sessionDataBean)
+	{
+		String tmpResultsTableName = Constants.QUERY_RESULTS_TABLE+"_"+sessionDataBean.getUserId();
+		if (whereColumnName[0].equals(Constants.ROOT))
+        {
+        	whereColumnName = null;
+            whereColumnCondition = null;
+            whereColumnValue = null;
+        }
+		
+		StringBuffer sql=new StringBuffer("Select DISTINCT ");
+		
+		List<String> selectColumnNames = Arrays.asList(columnList);
+		// Forming SELECT clause
+		sql.append(columnList[0]);
+		for (int index = 1; index < columnList.length; index++)
+		{
+			sql.append(", ").append(columnList[index]);
+		}
+		
+		// Forming FROM clause
+		sql.append(" From ").append(tmpResultsTableName);
+		
+		// Forming WHERE clause
+		if (whereColumnName != null && whereColumnName.length != 0)
+		{
+			sql.append(" WHERE ");
+			for (int index = 0; index < whereColumnName.length; index++)
+			{
+				sql.append(whereColumnName[index]).append(whereColumnCondition[index]).append(whereColumnValue[index]);
+				if (index!= whereColumnName.length-1)
+					sql.append(" "+Constants.AND_JOIN_CONDITION+" ");
+			}
+		}
+		
+		// Adding ORDER BY clause to query.
+		if (orderByAttributes!=null && orderByAttributes.length != 0)
+		{
+			List<String> orderByAttributeList = new ArrayList<String>();
+			for (int index = 0; index < orderByAttributes.length; index++)
+			{
+				if(selectColumnNames.contains(orderByAttributes[index]))
+				{
+					orderByAttributeList.add(orderByAttributes[index]);
+				}
+			}
+			// adding only attributes in order by clause which are present in select clause. 
+			if (orderByAttributeList.size()!=0)
+			{
+				sql.append(" ORDER BY ").append(orderByAttributeList.get(0));
+				
+				for (int index = 1; index < orderByAttributeList.size(); index++)
+				{
+					sql.append(" , ").append(orderByAttributeList.get(index));
+				}
+			}
+		}
+		
+		return sql.toString();
 	}
 }

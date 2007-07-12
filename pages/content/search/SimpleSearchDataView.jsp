@@ -22,7 +22,7 @@ tr#hiddenCombo
 <%
 	
 	int pageNum = Integer.parseInt((String)request.getAttribute(Constants.PAGE_NUMBER));
-	int totalResults = Integer.parseInt((String)session.getAttribute(Constants.TOTAL_RESULTS));
+	int totalResults = (Integer)session.getAttribute(Constants.TOTAL_RESULTS);
 	int numResultsPerPage = Integer.parseInt((String)session.getAttribute(Constants.RESULTS_PER_PAGE));
 	String pageName = "SpreadsheetView.do";	
 	
@@ -32,7 +32,7 @@ tr#hiddenCombo
 		columnList = (List) request.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 
 	columnList.add(0," ");
-	List dataList = (List) session.getAttribute(Constants.PAGINATION_DATA_LIST);
+	List dataList = (List) request.getAttribute(Constants.PAGINATION_DATA_LIST);
 //	if(dataList==null)
 //		dataList = (List) request.getAttribute(Constants.PAGINATION_DATA_LIST);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
@@ -49,7 +49,7 @@ tr#hiddenCombo
 		function onAddToCart()
 		{
 			var isChecked = updateHiddenFields();
-			
+
 		    if(isChecked == "true")
 		    {
 			    var pageNum = "<%=pageNum%>";
@@ -65,10 +65,10 @@ tr#hiddenCombo
 		function onExport()
 		{
 			var isChecked = updateHiddenFields();
-
+			var pageNum = "<%=pageNum%>";
 		    if(isChecked == "true")
 		    {
-				var action = "SpreadsheetExport.do";
+				var action = "SpreadsheetExport.do?pageNum="+pageNum;
 				document.forms[0].operation.value="export";
 				document.forms[0].action = action;
 				//document.forms[0].target = "_blank";
@@ -164,10 +164,9 @@ tr#hiddenCombo
 	<%
 		if(dataList == null && pageOf.equals(Constants.PAGEOF_QUERY_RESULTS))
 		{
-	%>
+		%>
 			<bean:message key="advanceQuery.noRecordsFound"/>
-	<%
-		}
+		<%}
 		else if(dataList != null && dataList.size() != 0)
 		{
 	%>

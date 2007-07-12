@@ -110,6 +110,15 @@ public class LoginAction extends Action
 	                      request.setAttribute(Constants.PAGEOF,Constants.PAGEOF_CHANGE_PASSWORD);
 	                      return mapping.findForward(Constants.ACCESS_DENIED);
 	                }
+					String userRole = SecurityManager.getInstance(LoginAction.class).getUserGroup(validUser.getCsmUserId());
+					if(userRole.equals(Roles.ADMINISTRATOR) || userRole.equals(Roles.SUPERVISOR))
+		            {
+						sessionData.setSecurityRequired(false);
+		            }
+		            else
+		            {
+		            	sessionData.setSecurityRequired(true);
+		            }
 					//Determining Role Name- Start
 	                /**
 	                 * Name : Virender Mehta

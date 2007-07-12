@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.6 $
+ * $Name: 1.41.2.7 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -45,6 +45,7 @@ import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.CVSTagReader;
 import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.common.util.dbManager.DBUtil;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
@@ -143,11 +144,29 @@ public class CatissueCoreServletContextListener implements ServletContextListene
         
         Variables.applicationName = ApplicationProperties.getValue("app.name");
         Variables.applicationVersion = ApplicationProperties.getValue("app.version");
-		
-        QueryBizLogic.initializeQueryData();
+
+        /**
+		 * Name: Prafull
+		 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
+		 * object of class QuerySessionData will be saved session, which will contain the required information for query execution while navigating through query result pages.
+		 * 
+		 * Called dbtuil class's static block to set database name in HibernateMetaData -Prafull.
+		 */
+        try
+        {
+        	// for calling static block of DBUtil class, 
+        	// this is required to set database name in HibernateMetaData -Prafull. 
+			Class.forName(DBUtil.class.getName());
+		} 
+        catch (ClassNotFoundException ex) {
+        	Logger.out.error(ex.getMessage(), ex);
+        }
+
         
         // get database name and set variables used in query
         Variables.databaseName=HibernateMetaData.getDataBaseName();
+        
+        QueryBizLogic.initializeQueryData();
         
         String fileName = Variables.applicationHome + System.getProperty("file.separator")+ ApplicationProperties.getValue("application.version.file");
         CVSTagReader cvsTagReader = new CVSTagReader();

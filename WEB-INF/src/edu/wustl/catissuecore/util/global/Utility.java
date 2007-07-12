@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionForm;
 
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
@@ -50,11 +52,15 @@ import edu.wustl.catissuecore.domain.TransferEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.QueryResultObjectData;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.CDEBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
+import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.dao.QuerySessionData;
+import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
@@ -978,4 +984,24 @@ public class Utility extends edu.wustl.common.util.Utility
 		}
 		return cpIDTitleMap;
 	}
+	
+	/**
+	 * @param request
+	 * @param recordsPerPage
+	 * @param pageNum
+	 * @param querySessionData
+	 * @return
+	 * @throws DAOException
+	 */
+	public static List getPaginationDataList(HttpServletRequest request, SessionDataBean sessionData, int recordsPerPage, int pageNum, QuerySessionData querySessionData) throws DAOException
+	{
+		List paginationDataList;
+		querySessionData.setRecordsPerPage(recordsPerPage);
+		int startIndex = recordsPerPage * (pageNum - 1);          
+		QueryBizLogic qBizLogic = new QueryBizLogic(); 
+		PagenatedResultData pagenatedResultData = qBizLogic.execute( sessionData, querySessionData, startIndex);
+		paginationDataList = pagenatedResultData.getResult();
+		return paginationDataList;
+	}
+
 }

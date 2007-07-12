@@ -34,6 +34,7 @@ import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.bizlogic.SimpleQueryBizLogic;
+import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.query.AdvancedConditionsImpl;
 import edu.wustl.common.query.AdvancedConditionsNode;
@@ -44,6 +45,7 @@ import edu.wustl.common.query.Operator;
 import edu.wustl.common.query.Query;
 import edu.wustl.common.query.QueryFactory;
 import edu.wustl.common.query.Table;
+import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.logger.Logger;
 
@@ -168,7 +170,13 @@ public class AdvanceSearchResultsAction extends BaseAction
 //					"(Participant2.IDENTIFIER  > 0  ) ) )";
 			Logger.out.debug("no. of tables in tableSet after table created"+query.getTableNamesSet().size()+":"+query.getTableNamesSet());
 			Logger.out.debug("Advance Query Sql"+sql);
-			int noOfRecords  = advBizLogic.createTempTable(sql,tempTableName,sessionData,queryResultObjectDataMap, query.hasConditionOnIdentifiedField());
+			/**
+			 * Name: Prafull
+			 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
+			 * object of class QuerySessionData will be saved in session, which will contain the required information for query execution while navigating through query result pages.
+			 */
+			boolean hasConditionOnIdentifiedField = query.hasConditionOnIdentifiedField();
+			int noOfRecords  = advBizLogic.createTempTable(sql,tempTableName,sessionData,queryResultObjectDataMap, hasConditionOnIdentifiedField);
 			
 			if (noOfRecords!=0)
 			{
@@ -189,6 +197,28 @@ public class AdvanceSearchResultsAction extends BaseAction
 				//Remove select columnList from Session
 				session.setAttribute(Constants.SELECT_COLUMN_LIST,null);
 				
+				/**
+				 * Name: Prafull
+				 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
+				 * object of class QuerySessionData will be saved in session, which will contain the required information for query execution while navigating through query result pages.
+				 */
+				int recordsPerPage; 
+				String recordsPerPageSessionValue = (String)session.getAttribute(Constants.RESULTS_PER_PAGE);
+				if (recordsPerPageSessionValue==null)
+				{
+						recordsPerPage = Integer.parseInt(XMLPropertyHandler.getValue(Constants.RECORDS_PER_PAGE_PROPERTY_NAME));
+						session.setAttribute(Constants.RESULTS_PER_PAGE, recordsPerPage+"");
+				}
+				else
+					recordsPerPage = new Integer(recordsPerPageSessionValue).intValue();
+				// saving required query data in Session so that can be used later on while navigating through result pages using pagination.
+				QuerySessionData querySessionData = new QuerySessionData();
+				querySessionData.setQueryResultObjectDataMap(queryResultObjectDataMap);
+				querySessionData.setSecureExecute(false);
+				querySessionData.setHasConditionOnIdentifiedField(hasConditionOnIdentifiedField);
+				querySessionData.setRecordsPerPage(recordsPerPage);
+				
+				session.setAttribute(Constants.QUERY_SESSION_DATA, querySessionData);
 				/**
 				 * Name : Aarti Sharma
 				 * Bug ID: 4359

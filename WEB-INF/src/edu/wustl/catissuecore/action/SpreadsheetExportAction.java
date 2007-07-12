@@ -10,12 +10,10 @@
 
 package edu.wustl.catissuecore.action;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,8 +24,10 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.util.ExportReport;
 import edu.wustl.common.util.SendFile;
 import edu.wustl.common.util.logger.Logger;
@@ -42,7 +42,7 @@ public class SpreadsheetExportAction  extends BaseAction
      */
     public ActionForward executeAction(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException
+            throws Exception
     {
     	AdvanceSearchForm searchForm = (AdvanceSearchForm)form;
     	HttpSession session = request.getSession();
@@ -55,7 +55,27 @@ public class SpreadsheetExportAction  extends BaseAction
     	//Getting column data & grid data from session
     	List columnList = (List)session.getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
     	List dataList = (List)session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
-    	
+    	/**
+		 * Name: Deepti
+		 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
+		 * object of class QuerySessionData will be saved in session, which will contain the required information for query execution while navigating through query result pages.
+		 * 
+		 * Here, as results are not stored in session, the sql is fired again to form the shopping cart list.  
+		 */
+    	if(dataList == null)
+    	{
+    		String pageNo = (String)request.getParameter(Constants.PAGE_NUMBER);
+    	    String recordsPerPageStr = (String)session.getAttribute(Constants.RESULTS_PER_PAGE);//Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
+    	    if(pageNo != null)
+    	    {
+    	    	request.setAttribute(Constants.PAGE_NUMBER,pageNo);
+    	    }
+	    	int recordsPerPage = new Integer(recordsPerPageStr);
+			int pageNum = new Integer(pageNo);
+
+    		QuerySessionData querySessionData = (QuerySessionData)session.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
+            dataList = Utility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
+    	}
     	//Mandar 06-Apr-06 Bugid:1165 : Extra ID columns displayed.  start
     	
     	Logger.out.debug("---------------------------------------------------------------------------------");

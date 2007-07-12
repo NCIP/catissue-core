@@ -1435,8 +1435,13 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MULTIPLE_SPECIMEN_DELETELAST_SPECIMEN_ID = "SpecimenId";
 	public static final String MULTIPLE_SPECIMEN_PARENT_COLLECTION_GROUP = "ParentSpecimenCollectionGroup";
 	
-	public static final String NO_OF_RECORDS_PER_PAGE="resultView.noOfRecordsPerPage";
-	public static final int[] RESULT_PERPAGE_OPTIONS = {10,50,100,1000,5000};
+	/**
+	 * Name: Prafull
+	 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
+	 * object of class QuerySessionData will be saved session, which will contain the required information for query execution while navigating through query result pages.
+	 * Changes resultper page options, removed 5000 from the array & added 500 as another option. 
+	 */
+	public static final int[] RESULT_PERPAGE_OPTIONS = {10,50,100,500,1000};
 	
 	/**
 	 * Specify the SPECIMEN_MAP_KEY field ) used in multiple specimen applet action.  

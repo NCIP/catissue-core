@@ -9,7 +9,6 @@
  */
 package edu.wustl.catissuecore.action;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,13 +28,17 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.AdvanceSearchForm;
+import edu.wustl.catissuecore.bizlogic.AdvanceQueryBizlogic;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.QueryBizLogic;
+import edu.wustl.common.dao.QuerySessionData;
+import edu.wustl.common.dao.queryExecutor.PagenatedResultData;
+import edu.wustl.common.query.AdvancedQuery;
 import edu.wustl.common.query.Query;
-import edu.wustl.common.query.ResultData;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.util.Permissions;
 import edu.wustl.common.util.Utility;
@@ -117,45 +120,48 @@ public class DataViewAction extends BaseAction {
 				Logger.out.debug("name selected:" + name);
 			}
 			if (!name.equals(Constants.ROOT)) {
-				String key = name + "." + Constants.IDENTIFIER;
+// Commenting key variable to resolve "variable never read localy" 				
+//				String key = name + "." + Constants.IDENTIFIER;
 				int columnId = ((Integer) columnIdsMap.get(name + "."
 						+ Constants.IDENTIFIER)).intValue() - 1;
 				name = Constants.COLUMN + columnId;
 				if (!parentName.equals("")) {
-					key = parentName + "." + Constants.IDENTIFIER;
+//					key = parentName + "." + Constants.IDENTIFIER;
 					columnId = ((Integer) columnIdsMap.get(parentName + "."
 							+ Constants.IDENTIFIER)).intValue() - 1;
 					parentName = Constants.COLUMN + columnId;
 				}
 			}
-			// Add specimen identifier column if it is not there,required for
-			// shopping cart action
-			int specimenColumnId = ((Integer) columnIdsMap
-					.get(Constants.SPECIMEN + "." + Constants.IDENTIFIER))
-					.intValue() - 1;
-			String specimenColumn = Constants.COLUMN + specimenColumnId;
-			boolean exists = false;
-			if (columnList != null) {
-				for (int i = 0; i < columnList.length; i++) {
-					if (columnList[i].equals(specimenColumn)) {
-						exists = true;
-					}
-				}
-				// Bug#2003: For having unique records in result view
-				// if(!exists)
-				// {
-				// String columnListWithoutSpecimenId[] = columnList;
-				// columnList = new
-				// String[columnListWithoutSpecimenId.length+1];
-				// for(int i=0;i<columnListWithoutSpecimenId.length;i++)
-				// {
-				// columnList[i] = columnListWithoutSpecimenId[i];
-				// }
-				// columnList[columnListWithoutSpecimenId.length]=specimenColumn;
-				// //filteredColumnDisplayNames.add("Identifier");
-				// }
-				// end of Bug#2003: For having unique records in result view
-			}
+//Commenting this block as its not doing any required processing--Prafull			
+//			// Add specimen identifier column if it is not there,required for
+//			// shopping cart action
+//			int specimenColumnId = ((Integer) columnIdsMap
+//					.get(Constants.SPECIMEN + "." + Constants.IDENTIFIER))
+//					.intValue() - 1;
+//			String specimenColumn = Constants.COLUMN + specimenColumnId;
+//			boolean exists = false;
+//			if (columnList != null) {
+//				for (int i = 0; i < columnList.length; i++) {
+//					if (columnList[i].equals(specimenColumn)) {
+//						exists = true;
+//					}
+//				}
+//				// Bug#2003: For having unique records in result view
+//				// if(!exists)
+//				// {
+//				// String columnListWithoutSpecimenId[] = columnList;
+//				// columnList = new
+//				// String[columnListWithoutSpecimenId.length+1];
+//				// for(int i=0;i<columnListWithoutSpecimenId.length;i++)
+//				// {
+//				// columnList[i] = columnListWithoutSpecimenId[i];
+//				// }
+//				// columnList[columnListWithoutSpecimenId.length]=specimenColumn;
+//				// //filteredColumnDisplayNames.add("Identifier");
+//				// }
+//				// end of Bug#2003: For having unique records in result view
+//			}
+			
 			String[] whereColumnName = new String[1];
 
 			String[] whereColumnValue = new String[1];
@@ -175,12 +181,32 @@ public class DataViewAction extends BaseAction {
 			whereColumnValue[0] = id;
 			whereColumnCondition[0] = "=";
 
-			List list = null;
-			ResultData resultData = new ResultData();
-			list = resultData.getSpreadsheetViewData(whereColumnName,
-					whereColumnValue, whereColumnCondition, columnList,
-					getSessionData(request),
-					Constants.OBJECT_LEVEL_SECURE_RETRIEVE);
+			/**
+			 * Name: Prafull
+			 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
+			 * object of class QuerySessionData will be saved session, which will contain the required information for query execution while navigating through query result pages.
+			 * Order by clause is added to the SQL to ensure the order of the result list for proper functioning of pagenation results. 
+			 */
+			// creating order by attribute column names.
+			String[] orderByAttributes = new String[AdvancedQuery.QUERY_ORDERBY_SEQUENCE.length];
+			for (int index = 0; index < orderByAttributes.length; index++)
+			{
+				String idColumnName = AdvancedQuery.QUERY_ORDERBY_SEQUENCE[index] + "." + Constants.IDENTIFIER;
+				orderByAttributes[index] = Constants.COLUMN + ((Integer)columnIdsMap.get(idColumnName)-1); 
+			}
+			AdvanceQueryBizlogic bizLogic = new AdvanceQueryBizlogic();
+			SessionDataBean sessionDataBean = getSessionData(request);
+			String sql = bizLogic.createSQL(whereColumnName, whereColumnValue, whereColumnCondition, columnList, orderByAttributes, sessionDataBean);
+			String recordsPerPageStr = (String)session.getAttribute(Constants.RESULTS_PER_PAGE);
+			int recordsPerPage = new Integer(recordsPerPageStr).intValue();
+			QuerySessionData querySessionData = (QuerySessionData)session.getAttribute(Constants.QUERY_SESSION_DATA);
+			querySessionData.setSql(sql);
+			querySessionData.setRecordsPerPage(recordsPerPage);
+			PagenatedResultData pagenatedResultData = new QueryBizLogic().execute(sessionDataBean, querySessionData,0);
+			querySessionData.setTotalNumberOfRecords(pagenatedResultData.getTotalRecords());
+			
+			List list = pagenatedResultData.getResult();
+			
 			// If the result contains no data, show error message.
 			if (list.isEmpty()) {
 				ActionErrors errors = new ActionErrors();
@@ -306,16 +332,6 @@ public class DataViewAction extends BaseAction {
 		List columnDisplayNames = new ArrayList();
 		QueryBizLogic bizLogic = (QueryBizLogic) BizLogicFactory.getInstance()
 				.getBizLogic(Constants.SIMPLE_QUERY_INTERFACE_ID);
-		List participantColumns = bizLogic.getColumnNames(Query.PARTICIPANT,
-				true);
-		List collectionProtocolColumns = bizLogic.getColumnNames(
-				Query.COLLECTION_PROTOCOL, true);
-		List collProtRegColumns = bizLogic.getColumnNames(
-				Query.COLLECTION_PROTOCOL_REGISTRATION, true);
-		List specimenCollGrpColumns = bizLogic.getColumnNames(
-				Query.SPECIMEN_COLLECTION_GROUP, true);
-		List specimenColumns = bizLogic.getColumnNames(Query.SPECIMEN, true);
-
 		List columns = new ArrayList();
 		// Filter the data according to the node clicked. Show only the data
 		// lower in the heirarchy
@@ -324,32 +340,37 @@ public class DataViewAction extends BaseAction {
 		// Specimen
 		// Thus removing all columns except the ones corresponding to the type
 		// of object selected
+		
+		/**
+		 * Name: Prafull
+		 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
+		 * object of class QuerySessionData will be saved session, which will contain the required information for query execution while navigating through query result pages.
+		 * 
+		 *  Moved bizLogic.getColumnNames calls inside each if block to avoid unnecessary call to each method.
+		 */
 		if (aliasName.equals(Constants.ROOT)) {
+			List participantColumns = bizLogic.getColumnNames(Query.PARTICIPANT,
+					true);
 			columns.addAll(participantColumns);
-
-			// columns.addAll(collectionProtocolColumns);
-			// columns.addAll(collProtRegColumns);
-			// columns.addAll(specimenCollGrpColumns);
-			// columns.addAll(specimenColumns);
 		}
-		if (aliasName.equals(Query.PARTICIPANT)) {
-			// columns.addAll(participantColumns);
+		else if (aliasName.equals(Query.PARTICIPANT)) {
+			List collectionProtocolColumns = bizLogic.getColumnNames(
+					Query.COLLECTION_PROTOCOL, true);
 
 			columns.addAll(collectionProtocolColumns);
+
+			List collProtRegColumns = bizLogic.getColumnNames(
+					Query.COLLECTION_PROTOCOL_REGISTRATION, true);
 			columns.addAll(collProtRegColumns);
-			// columns.addAll(specimenCollGrpColumns);
-			// columns.addAll(specimenColumns);
 		} else if (aliasName.equals(Query.COLLECTION_PROTOCOL)) {
-			// columns.addAll(collectionProtocolColumns);
-			// columns.addAll(collProtRegColumns);
+			List specimenCollGrpColumns = bizLogic.getColumnNames(
+					Query.SPECIMEN_COLLECTION_GROUP, true);
 			columns.addAll(specimenCollGrpColumns);
-			// columns.addAll(specimenColumns);
-		} else if (aliasName.equals(Query.SPECIMEN_COLLECTION_GROUP)) {
-			// columns.addAll(specimenCollGrpColumns);
-			columns.addAll(specimenColumns);
-		} else if (aliasName.equals(Query.SPECIMEN)) {
+		} else if (aliasName.equals(Query.SPECIMEN_COLLECTION_GROUP) || aliasName.equals(Query.SPECIMEN)){
+			List specimenColumns = bizLogic.getColumnNames(Query.SPECIMEN, true);
 			columns.addAll(specimenColumns);
 		}
+		
 		String selectColumnList[] = new String[columns.size()];
 		selectedColumns = new String[columns.size()];
 		Iterator columnsItr = columns.iterator();

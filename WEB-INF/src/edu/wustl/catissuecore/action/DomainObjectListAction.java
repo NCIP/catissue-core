@@ -65,8 +65,15 @@ public class DomainObjectListAction extends SecureAction
         //The start index in the list of users to be approved/rejected.
         int startIndex = Constants.ZERO;
         
+        /**
+		 * Name: Prafull
+		 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
+		 * object of class QuerySessionData will be saved session, which will contain the required information for query execution while navigating through query result pages.
+		 * 
+		 * Changed Record per page constant. 
+		 */
         //The end index in the list of users to be approved/rejected.
-        int recordsPerPage = Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
+        int recordsPerPage = Integer.parseInt(XMLPropertyHandler.getValue(edu.wustl.common.util.global.Constants.RECORDS_PER_PAGE_PROPERTY_NAME));
         
         if(request.getParameter(Constants.RESULTS_PER_PAGE) != null) 
     	{

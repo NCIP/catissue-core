@@ -32,8 +32,10 @@ import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.ShoppingCartBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.catissuecore.util.global.Variables;
 import edu.wustl.common.action.BaseAction;
+import edu.wustl.common.dao.QuerySessionData;
 import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.query.ShoppingCart;
 import edu.wustl.common.util.ExportReport;
@@ -50,15 +52,18 @@ public class ShoppingCartAction  extends BaseAction
             HttpServletRequest request, HttpServletResponse response)
             throws Exception
     {
+    	 HttpSession session = request.getSession(true);
         //Gets the value of the operation parameter.
         String operation = (String)request.getParameter(Constants.OPERATION);
         String pageNo = (String)request.getParameter(Constants.PAGE_NUMBER);
+        String recordsPerPageStr = (String)session.getAttribute(Constants.RESULTS_PER_PAGE);//Integer.parseInt(XMLPropertyHandler.getValue(Constants.NO_OF_RECORDS_PER_PAGE));
+        List paginationDataList = null;
         if(pageNo != null)
         {
         	request.setAttribute(Constants.PAGE_NUMBER,pageNo);
         }
         String target = Constants.SUCCESS;
-        HttpSession session = request.getSession(true);
+       
         ShoppingCart cart = (ShoppingCart)session.getAttribute(Constants.SHOPPING_CART);
         ShoppingCartBizLogic bizLogic = (ShoppingCartBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SHOPPING_CART_FORM_ID);
         //ShoppingCartForm shopForm = (ShoppingCartForm)form;
@@ -99,8 +104,22 @@ public class ShoppingCartAction  extends BaseAction
         		//Get the select column List from session to get the specimen data
         		String[] selectedColumns = (String[])session.getAttribute(Constants.SELECT_COLUMN_LIST);
         		
+    			/**
+    			 * Name: Deepti
+    			 * Description: Query performance issue. Instead of saving complete query results in session, resultd will be fetched for each result page navigation.
+    			 * object of class QuerySessionData will be saved in session, which will contain the required information for query execution while navigating through query result pages.
+    			 * 
+    			 *  Here, as results are not stored in session, the sql is executed again to form the shopping cart list.  
+    			 */
+        		int recordsPerPage = new Integer(recordsPerPageStr);
+        		int pageNum = new Integer(pageNo);
+	        	
+        		QuerySessionData querySessionData = (QuerySessionData)session.getAttribute(edu.wustl.common.util.global.Constants.QUERY_SESSION_DATA);
+        		paginationDataList = Utility.getPaginationDataList(request, getSessionData(request), recordsPerPage, pageNum, querySessionData);
+	        
+	        	request.setAttribute(Constants.PAGINATION_DATA_LIST,paginationDataList);
         		//Get the current spreasheet data to retrieve the specimen id data
-        		List spreadsheetData = (List)session.getAttribute(Constants.SPREADSHEET_DATA_LIST);
+//        		List spreadsheetData = (List)request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
         		
         		Logger.out.debug("column ids map in shopping cart"+columnIdsMap);
         		
@@ -137,7 +156,7 @@ public class ShoppingCartAction  extends BaseAction
 		        	StringTokenizer strTokens = new StringTokenizer(str,"_");
 		        	strTokens.nextToken();
 		        	int index = Integer.parseInt(strTokens.nextToken());
-		        	List selectedRow = (List)spreadsheetData.get(index);
+		        	List selectedRow = (List)paginationDataList.get(index);
 		        	Logger.out.debug("index selected :"+index);
 		        	selectedSpecimenIds[j]=selectedRow.get(spreadsheetSpecimenIndex);
 		        	Logger.out.debug("specimen id to be added to cart :"+selectedSpecimenIds[j]);
@@ -216,7 +235,7 @@ public class ShoppingCartAction  extends BaseAction
         
         return mapping.findForward(target);
     }
-    
+
     //This function prepares the data in Grid Format
     private List makeGridData(ShoppingCart cart)
     {	
