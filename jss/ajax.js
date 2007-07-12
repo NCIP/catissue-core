@@ -95,3 +95,11 @@ var request;
 			{}			
 		}
 	}
+
+ 	function sendBlankRequest()
+ 	{
+ 		var request = newXMLHTTPReq();
+		request.open("POST","pages/MainHeader.jsp",true);	
+		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+		request.send("");
+ 	}

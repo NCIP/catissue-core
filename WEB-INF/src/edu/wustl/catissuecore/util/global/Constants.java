@@ -1625,5 +1625,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COLUMN_NAME_SCG_ID="specimenCollectionGroup.id";
 	
 	//Bug 2833. Field for the length of CP Title
-	public static final int COLLECTION_PROTOCOL_TITLE_LENGTH=30; 
+	public static final int COLLECTION_PROTOCOL_TITLE_LENGTH=30;
+	
+	
+	//Bug ID 4794: Field for advance time to warn a user about session expiry
+	public static final String SESSION_EXPIRY_WARNING_ADVANCE_TIME = "session.expiry.waring.advanceTime";
 }

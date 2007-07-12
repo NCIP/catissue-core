@@ -1,4 +1,3 @@
-
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/struts-tiles.tld" prefix="tiles"%>
@@ -6,8 +5,9 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.common.util.global.Variables"%>
 <%@ page import="edu.wustl.common.util.global.ApplicationProperties"%>
+<%@ page import="edu.wustl.common.util.XMLPropertyHandler"%>
 <%@ page import="javax.servlet.http.HttpSession"%>
-
+<%@ page import="java.text.MessageFormat"%>
 
 <tiles:importAttribute />
 
@@ -43,12 +43,51 @@
 <!--Jitendra -->
 <script language="JavaScript">
 	var timeOut;
+	var advanceTime;
 	<%
-		int timeOut = request.getSession().getMaxInactiveInterval() ;		
-		timeOut = timeOut*1000;
-		//System.out.println("Session timeout in milliseconds is " + new Integer(timeOut));	
+		int timeOut = -1;
+		int advanceTime = Integer.parseInt(XMLPropertyHandler.getValue(Constants.SESSION_EXPIRY_WARNING_ADVANCE_TIME));
+		String tempMsg = ApplicationProperties.getValue("app.session.advanceWarning");
+		Object[] args = new Object[] {"" + advanceTime};
+		String advanceTimeoutMesg = MessageFormat.format(tempMsg,args);
+		
+		timeOut = -1;
+			
+		if(request.getSession().getAttribute(Constants.SESSION_DATA) != null) //if user is logged in
+		{
+			timeOut = request.getSession().getMaxInactiveInterval();
+		}
 	%>
+
+
 	timeOut = "<%= timeOut%>";	
+	advanceTime = "<%= advanceTime%>";
+
+	setAdvanceSessionTimeout(timeOut);
+	
+	function warnBeforeSessionExpiry()
+	{			
+		var defTimeout = setTimeout('sendToHomePage()', advanceTime*60*1000);
+		var choice = confirm("<%= advanceTimeoutMesg %>");
+		
+		if(choice == 0) //cancel pressed, extend session
+		{
+			clearTimeout(defTimeout);
+			sendBlankRequest();
+			setAdvanceSessionTimeout();
+    	}
+	}
+	
+	function setAdvanceSessionTimeout() 
+	{
+		
+		if(timeOut > 0)
+		{
+			var time = (timeOut - (advanceTime*60)) * 1000;
+			setTimeout('warnBeforeSessionExpiry()', time); //if session timeout, then redirect to Home page
+		}
+	}
+	
 	function sendToHomePage()
 	{			
 			<% 
@@ -58,12 +97,13 @@
 			%>			
 			   var timeoutMessage = "<%= ApplicationProperties.getValue("app.session.timeout") %>";
 			   alert(timeoutMessage);			  
+		   
 			   window.location.href = "Logout.do";
 			<%
 			   }
 			%>		  
 	}	
-	setTimeout('sendToHomePage()', timeOut); //if session timeout, then redirect to Home page
+	
 </script>
 <!--Jitendra -->
 
