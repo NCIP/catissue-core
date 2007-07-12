@@ -20,6 +20,7 @@
 						<td colspan='4' class="formMessage">	
 							<bean:message key="requiredfield.message"/>
 						</td>
+					</tr>
 					<tr>
 						<td class="formTitle" height="20" colspan="3">
 							<bean:message key="orderingsystem.label.requestOrder"/>
