@@ -31,6 +31,7 @@ import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 
 
@@ -176,7 +177,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 				aliquotSpecimenArray.setSpecimenArrayType(parentSpecimenArray.getSpecimenArrayType());				
 				aliquotSpecimenArray.setCreatedBy(parentSpecimenArray.getCreatedBy());
 				aliquotSpecimenArray.setCapacity(parentSpecimenArray.getCapacity());
-				Collection specimenArrayContentCollection = PopulateSpecimenArrayContentCollectionForAliquot(parentSpecimenArray,aliquotSpecimenArray,specimenArray.getAliquotCount());
+				Collection specimenArrayContentCollection = PopulateSpecimenArrayContentCollectionForAliquot(parentSpecimenArray,aliquotSpecimenArray,specimenArray.getAliquotCount(),dao);
 				aliquotSpecimenArray.setSpecimenArrayContentCollection(specimenArrayContentCollection);
 			}
 			
@@ -414,9 +415,10 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 	 * @param parentSpecimenArray SpecimenArray
 	 * @param aliquotSpecimenArray SpecimenArray
 	 * @param aliquotCount int
+	 * @param dao DAO
 	 * @return Collection
 	 */
-	private Collection PopulateSpecimenArrayContentCollectionForAliquot(SpecimenArray parentSpecimenArray, SpecimenArray aliquotSpecimenArray, int aliquotCount)
+	private Collection PopulateSpecimenArrayContentCollectionForAliquot(SpecimenArray parentSpecimenArray, SpecimenArray aliquotSpecimenArray, int aliquotCount,DAO dao) throws DAOException
 	{
 		Collection parentSpecimenArrayContentCollection = parentSpecimenArray.getSpecimenArrayContentCollection();
 		Collection specimenArrayContentCollection =  new HashSet();		
@@ -443,9 +445,13 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 			specimenArrayContent.setSpecimen(parentSpecimenArrayContent.getSpecimen());
 			specimenArrayContent.setPositionDimensionOne(parentSpecimenArrayContent.getPositionDimensionOne());
 			specimenArrayContent.setPositionDimensionTwo(parentSpecimenArrayContent.getPositionDimensionTwo());
-			specimenArrayContent.setSpecimenArray(aliquotSpecimenArray);				
+			specimenArrayContent.setSpecimenArray(aliquotSpecimenArray);
+			// Due to Lazy loading instanceOf method was returning false everytime. Fix for bug id:4864
+			// Object is explicitly retrieved from DB
+			Specimen specimen=(Specimen)dao.retrieve(Specimen.class.getName(), parentSpecimenArrayContent.getSpecimen().getId());
+			specimen=(Specimen)HibernateMetaData.getProxyObjectImpl(specimen);
 			Quantity quantity = null;
-			if (parentSpecimenArrayContent.getSpecimen() instanceof MolecularSpecimen) 
+			if (specimen instanceof MolecularSpecimen) 
 			{
 				if(aliquotCount > 0)
 				{
