@@ -1629,5 +1629,5 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	
 	
 	//Bug ID 4794: Field for advance time to warn a user about session expiry
-	public static final String SESSION_EXPIRY_WARNING_ADVANCE_TIME = "session.expiry.waring.advanceTime";
+	public static final String SESSION_EXPIRY_WARNING_ADVANCE_TIME = "session.expiry.warning.advanceTime";
 }

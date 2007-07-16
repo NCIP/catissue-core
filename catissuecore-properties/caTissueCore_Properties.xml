@@ -32,7 +32,7 @@
 	</property>
 	
 	<property>
-		<name>session.expiry.waring.advanceTime</name>
+		<name>session.expiry.warning.advanceTime</name>
 		<value>2</value>
 	</property>	
 	
