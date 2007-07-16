@@ -105,7 +105,14 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 			{
 				forwardToHashMap.put("specimenObjectKey", domainObject);
 			}
-			else if (actionForm.getForwardTo().equals("pageOfAliquot"))
+			/*
+			 * smita_kadam
+			 * Bug ID: 4447
+			 * Patch ID: 1
+			 * Reviewer: Sachin Lale
+			 * "ParentSpecimenID" added to forwardMap when page is "pageOfCreateAliquot"
+			 */
+			else if (actionForm.getForwardTo().equals("pageOfAliquot") || actionForm.getForwardTo().equals("pageOfCreateAliquot"))
 			{
 				forwardToHashMap.put("parentSpecimenId", domainObject.getId().toString());
 			}
