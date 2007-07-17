@@ -48,7 +48,6 @@ public class ShowTreeAction extends BaseAction
 			if(!nodeId.equalsIgnoreCase("SpecimenCollectionGroup_0"))
 				request.getSession().setAttribute("nodeId",nodeId);
 		}
-		System.out.println();
 		Vector treeData = null;
 		if (cpId != null && participantId != null && !cpId.equals("") && !participantId.equals(""))
 		{
