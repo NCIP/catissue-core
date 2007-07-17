@@ -422,7 +422,8 @@ public class UserBizLogic extends DefaultBizLogic
 	public Vector getUsers(String operation) throws DAOException
 	{
 		String sourceObjectName = User.class.getName();
-		String[] selectColumnName = null;
+		//Get only the fields required 
+		String[] selectColumnName = {Constants.SYSTEM_IDENTIFIER,Constants.LASTNAME,Constants.FIRSTNAME};
 		String[] whereColumnName;
 		String[] whereColumnCondition;
 		Object[] whereColumnValue;
@@ -430,7 +431,7 @@ public class UserBizLogic extends DefaultBizLogic
 		if (operation != null && operation.equalsIgnoreCase(Constants.ADD))
 		{
 			String tmpArray1[] = {Constants.ACTIVITY_STATUS};
-			String tmpArray2[] = {"="};
+			String tmpArray2[] = {Constants.EQUALS};
 			String tmpArray3[] = {Constants.ACTIVITY_STATUS_ACTIVE};
 			whereColumnName = tmpArray1;
 			whereColumnCondition = tmpArray2;
@@ -440,20 +441,13 @@ public class UserBizLogic extends DefaultBizLogic
 		else
 		{
 			String tmpArray1[] = {Constants.ACTIVITY_STATUS, Constants.ACTIVITY_STATUS};
-			String tmpArray2[] = {"=", "="};
+			String tmpArray2[] = {Constants.EQUALS,Constants.EQUALS};
 			String tmpArray3[] = {Constants.ACTIVITY_STATUS_ACTIVE, Constants.ACTIVITY_STATUS_CLOSED};
 			whereColumnName = tmpArray1;
 			whereColumnCondition = tmpArray2;
 			whereColumnValue = tmpArray3;
 			joinCondition = Constants.OR_JOIN_CONDITION;
-
-			//					     		whereColumnName = {Constants.ACTIVITY_STATUS,Constants.ACTIVITY_STATUS};
-			//					     		whereColumnCondition = {"=","="};
-			//					     		whereColumnValue = {Constants.ACTIVITY_STATUS_ACTIVE,Constants.ACTIVITY_STATUS_CLOSED };
-			//					     		joinCondition = Constants.OR_JOIN_CONDITION ;
-
 		}
-
 		//Retrieve the users whose activity status is not disabled.
 		List users = retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
 
@@ -466,11 +460,11 @@ public class UserBizLogic extends DefaultBizLogic
 			// Creating name value beans.
 			for (int i = 0; i < users.size(); i++)
 			{
-				User user = (User) users.get(i);
+				//Changes made to optimize the query to get only required fields data
+				Object[] userData = (Object[])users.get(i);
 				NameValueBean nameValueBean = new NameValueBean();
-				nameValueBean.setName(user.getLastName() + ", " + user.getFirstName());
-				nameValueBean.setValue(String.valueOf(user.getId()));
-				Logger.out.debug(nameValueBean.toString() + " : " + user.getActivityStatus());
+				nameValueBean.setName(userData[1]+", "+userData[2]);
+				nameValueBean.setValue(userData[0]);
 				nameValuePairs.add(nameValueBean);
 			}
 		}
