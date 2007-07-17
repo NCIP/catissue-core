@@ -177,7 +177,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 				aliquotSpecimenArray.setSpecimenArrayType(parentSpecimenArray.getSpecimenArrayType());				
 				aliquotSpecimenArray.setCreatedBy(parentSpecimenArray.getCreatedBy());
 				aliquotSpecimenArray.setCapacity(parentSpecimenArray.getCapacity());
-				Collection specimenArrayContentCollection = PopulateSpecimenArrayContentCollectionForAliquot(parentSpecimenArray,aliquotSpecimenArray,specimenArray.getAliquotCount(),dao);
+				Collection specimenArrayContentCollection = populateSpecimenArrayContentCollectionForAliquot(parentSpecimenArray,aliquotSpecimenArray,specimenArray.getAliquotCount(),dao);
 				aliquotSpecimenArray.setSpecimenArrayContentCollection(specimenArrayContentCollection);
 			}
 			
@@ -418,7 +418,7 @@ public class SpecimenArrayAliquotsBizLogic extends DefaultBizLogic
 	 * @param dao DAO
 	 * @return Collection
 	 */
-	private Collection PopulateSpecimenArrayContentCollectionForAliquot(SpecimenArray parentSpecimenArray, SpecimenArray aliquotSpecimenArray, int aliquotCount,DAO dao) throws DAOException
+	private Collection populateSpecimenArrayContentCollectionForAliquot(SpecimenArray parentSpecimenArray, SpecimenArray aliquotSpecimenArray, int aliquotCount,DAO dao) throws DAOException
 	{
 		Collection parentSpecimenArrayContentCollection = parentSpecimenArray.getSpecimenArrayContentCollection();
 		Collection specimenArrayContentCollection =  new HashSet();		
