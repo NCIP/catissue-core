@@ -219,25 +219,25 @@ public class GenerateHtmlForAddLimitsBizLogic
 				if (permValue instanceof StringValueInterface)
 					permissibleValues.add(((StringValueInterface) permValue));
 
-				if (permValue instanceof ShortValueInterface)
+				else if (permValue instanceof ShortValueInterface)
 					permissibleValues.add(((ShortValueInterface) permValue));
 
-				if (permValue instanceof LongValueInterface)
+				else if (permValue instanceof LongValueInterface)
 					permissibleValues.add(((LongValueInterface) permValue));
 
-				if (permValue instanceof DateValueInterface)
+				else if (permValue instanceof DateValueInterface)
 					permissibleValues.add(((DateValueInterface) permValue));
 
-				if (permValue instanceof BooleanValueInterface)
+				else if (permValue instanceof BooleanValueInterface)
 					permissibleValues.add(((BooleanValueInterface) permValue));
 
-				if (permValue instanceof IntegerValueInterface)
+				else if (permValue instanceof IntegerValueInterface)
 					permissibleValues.add(((IntegerValueInterface) permValue));
 
-				if (permValue instanceof DoubleValueInterface)
+				else if (permValue instanceof DoubleValueInterface)
 					permissibleValues.add((DoubleValueInterface) permValue);
 
-				if (permValue instanceof FloatValueInterface)
+				else if (permValue instanceof FloatValueInterface)
 					permissibleValues.add(((FloatValueInterface) permValue));
 			}
 		}
