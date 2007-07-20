@@ -26,37 +26,37 @@
 	var addedNodes = "";
 	function treeNodeClicled(id)
 	{
-		var aa = id.split("::");
-		if(aa.length == 2 && aa[0] == 'NULL')
+		if(id.indexOf('_NULL') == -1)
 		{
-		addedNodes = addedNodes + ","+id;
-		}
-		var nodes = addedNodes.split(",");
-		var isNodeAdded = false;
-		if(nodes != "")
-		{
-		for(i=0; i<nodes.length; i++)
+			var aa = id.split("::");		
+			var nodes = addedNodes.split(",");
+			var isNodeAdded = false;
+			if(nodes != "")
 			{
-				if(nodes[i] == id)
+			for(i=0; i<nodes.length; i++)
 				{
-					isNodeAdded = true;
-					break;
+					if(nodes[i] == id)
+					{
+						isNodeAdded = true;
+						break;
+					}
 				}
 			}
-		}
-		if(!isNodeAdded)
-		{
-			addedNodes = addedNodes + ","+id;
-			var request = newXMLHTTPReq();			
-			var actionURL;
-			var handlerFunction = getReadyStateHandler(request,showChildNodes,true);	
-			request.onreadystatechange = handlerFunction;				
-			actionURL = "nodeId=" + id;				
-			var url = "BuildQueryOutputTree.do";
-			<!-- Open connection to servlet -->
-			request.open("POST",url,true);	
-			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-			request.send(actionURL);	
+			if(!isNodeAdded)
+			{
+				
+				var request = newXMLHTTPReq();			
+				var actionURL;
+				var handlerFunction = getReadyStateHandler(request,showChildNodes,true);	
+				request.onreadystatechange = handlerFunction;				
+				actionURL = "nodeId=" + id;				
+				var url = "BuildQueryOutputTree.do";
+				<!-- Open connection to servlet -->
+				request.open("POST",url,true);	
+				request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
+				request.send(actionURL);	
+				addedNodes = addedNodes + ","+id;
+			}
 		}
 		buildSpreadsheet(id);
 	};
@@ -67,7 +67,7 @@
 		var handlerFunction = getReadyStateHandler(request,showSpreadsheetData,true);	
 		request.onreadystatechange = handlerFunction;				
 		actionURL = "nodeId=" + id;				
-		var url = "BuildQueryOutputSpreadsheet.do";
+		var url = "ShowGrid.do";
 		<!-- Open connection to servlet -->
 		request.open("POST",url,true);	
 		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
@@ -76,6 +76,7 @@
 	function showChildNodes(outputTreeStr)
 	{
 		var nodes = outputTreeStr.split("|");
+		var flag = new Boolean(false);
 		for(i=0; i<nodes.length; i++)
 		{
 			var node = nodes[i];
@@ -83,23 +84,38 @@
 			{
 				var treeValues = node.split(",");
 				var nodeId = treeValues[0];
+				var treeNums = nodeId.split('_');
+				var i1= treeNums[0];
 				var displayName = treeValues[1];
 				var objectname = treeValues[2];
 				var parentIdToSet = treeValues[3];
+				/*if(parentIdToSet.indexOf('NULL')!=-1)
+				{
+				  if(flag == false)
+					{
+						clearTree(parentIdToSet,i1);
+						flag = true;
+					}
+				}*/
 				var parentObjectName = treeValues[4];
 				var img = "results.gif";
 				var totalLen= nodeId.length;
-				var labelLen = 'labelTreeNode'.length;
+				var labelLen = 'Label'.length;
 				var diff= totalLen - labelLen;
 				var lab = nodeId.substring(diff);
-				if(lab == 'labelTreeNode')
+				if(lab == 'Label')
 				{
 					 img = "folder.gif";
 				}
-				tree.insertNewChild(parentIdToSet,nodeId,displayName,0,img,img,img,"");
+				trees[i1].insertNewChild(parentIdToSet,nodeId,displayName,0,img,img,img,"");
 			}
 		}
 	}
+	function clearTree(id,treeNum)
+	{
+		tree[treeNum].deleteChildItems(id);
+		addedNodes = "";
+	}	
 	function showSpreadsheetData(columnDataStr)
 	{
 		var columnData = columnDataStr.split("&");
