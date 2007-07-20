@@ -10,6 +10,7 @@ import java.util.Set;
 import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
@@ -17,8 +18,7 @@ import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
- * This is a Utility class to provide methods which are called from multiple places.
- * Mostly database operations are done in this class.
+ * This is an utility class to provide methods required for query interface.
  * @author deepti_shelar
  */
 public abstract class QueryModuleUtil
@@ -90,7 +90,7 @@ public abstract class QueryModuleUtil
 	}
 
 	/**
-	 * Executes the query and returns the results back.
+	 * Executes the query and returns the results.
 	 * @param selectSql sql to be executed
 	 * @param sessionData sessiondata
 	 * @return list of results 
@@ -141,10 +141,6 @@ public abstract class QueryModuleUtil
 			jdbcDao.closeSession();
 		}
 	}
-	public static void main(String args[])
-	{
-		System.out.println(QueryModuleUtil.getAttributeLabel("FirstMiddleURL"));
-	}
 	/**
 	 * Takes data from the map and generates out put data accordingly so that spreadsheet will be updated.
 	 * @param spreadSheetDatamap map which holds data for columns and records.
@@ -154,14 +150,19 @@ public abstract class QueryModuleUtil
 	public static String prepareOutputSpreadsheetDataString(Map spreadSheetDatamap)
 	{
 		List<List<String>> dataList = (List<List<String>>) spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
+		
 		String outputSpreadsheetDataStr = "";
 		String dataStr = "";
 		for (List<String> row : dataList)
 		{
-			String rowStr = row.toString();
-			rowStr = rowStr.replace("[", "");
-			rowStr = rowStr.replace("]", "");
-			dataStr = dataStr + "|" + rowStr;
+			StringBuffer gridStrBuff  = new StringBuffer();
+			for(Object columnData : row)
+			{
+				Object gridObj = (Object)Utility.toNewGridFormat(columnData);
+				String gridStr = gridObj.toString();
+				gridStrBuff.append(gridStr+",");
+			}
+			dataStr = dataStr + "|" + gridStrBuff.toString();
 		}
 		List columnsList = (List) spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST);
 		String columns = columnsList.toString();
@@ -171,7 +172,7 @@ public abstract class QueryModuleUtil
 		return outputSpreadsheetDataStr;
 	}
 	/**
-	 * Returns SQL for root node.
+	 * Returns SQL for root node in tree.
 	 * @param root root node of the tree
 	 * @param tableName name of the temp table created
 	 * @param nodeAttributeColumnNameMap  map which strores all node ids  with their information like attributes and actual column names in database.
@@ -190,7 +191,12 @@ public abstract class QueryModuleUtil
 		{
 			columnNames = columnNames.substring(0, columnNames.lastIndexOf(";"));
 		}
-		String selectSql = "select distinct " + columnNames + " from " + tableName;
+		String idColumnName = columnNames;
+		if(columnNames.indexOf(",") != -1)
+		{
+			idColumnName = columnNames.substring(0,columnNames.indexOf(","));
+		}
+		String selectSql = "select distinct " + columnNames + " from " + tableName +" where "+idColumnName +" is not null";
 		selectSql = selectSql + Constants.NODE_SEPARATOR + index;
 		return selectSql;
 	}
@@ -282,4 +288,23 @@ public abstract class QueryModuleUtil
 		actionForm.setSelected("text_radioButton");
 		return actionForm;
 	}
+	
+	/**
+	 * When passes treeNumber , this method returns the root node of that tree. 
+	 * @param outputTreeMap tree deta
+	 * @param treeNo number of tree
+	 * @return root node of the tree
+	 */
+	public static OutputTreeDataNode getNodeForTree(Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap,String treeNo)
+	{
+		Iterator<OutputTreeDataNode> iterator = outputTreeMap.keySet().iterator();
+		while (iterator.hasNext())
+		{
+			OutputTreeDataNode next = iterator.next();
+			if (next.getTreeNo() == new Integer(treeNo).intValue())
+				return next;
+		}
+		return null;
+	}
+
 }

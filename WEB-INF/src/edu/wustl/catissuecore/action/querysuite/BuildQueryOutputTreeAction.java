@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -13,6 +14,7 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputTreeBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
@@ -37,26 +39,31 @@ public class BuildQueryOutputTreeAction extends BaseAction
 	protected ActionForward executeAction(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
 	throws Exception
 	{
-		Map<Long,OutputTreeDataNode> idNodesMap = (Map<Long,OutputTreeDataNode>)request.getSession().getAttribute(Constants.ID_NODES_MAP);
-		Map<Long, Map<AttributeInterface, String>>  columnMap = (Map<Long, Map<AttributeInterface, String>> )request.getSession().getAttribute(Constants.ID_COLUMNS_MAP);
+		HttpSession session = request.getSession();
+		Map<Long,OutputTreeDataNode> idNodesMap = (Map<Long,OutputTreeDataNode>)session.getAttribute(Constants.ID_NODES_MAP);
+		Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap = 
+			(Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>>)session.getAttribute(Constants.OUTPUT_TREE_MAP);
 		CategorySearchForm actionForm = (CategorySearchForm)form;
 		SessionDataBean sessionData = getSessionData(request);
 		String outputTreeStr = "";
-		String id = actionForm.getNodeId();		
+		String idOfClickedNode = actionForm.getNodeId();		
 		QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
-		String actualParentNodeId = id.substring(id.lastIndexOf(Constants.NODE_SEPARATOR)+2,id.length());
-		String[] nodeIds = id.split(Constants.NODE_SEPARATOR);
-		if(id.endsWith(Constants.LABEL_TREE_NODE))
+		String actualParentNodeId = idOfClickedNode.substring(idOfClickedNode.lastIndexOf(Constants.NODE_SEPARATOR)+2,idOfClickedNode.length());
+		String[] nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
+		String treeNo = nodeIds[0];
+		String treeNodeId = nodeIds[1]; 
+		String uniqueId = treeNo+"_"+treeNodeId;
+		OutputTreeDataNode parentNode = idNodesMap.get(uniqueId);
+		OutputTreeDataNode root = QueryModuleUtil.getNodeForTree(outputTreeMap, treeNo);
+		Map<Long, Map<AttributeInterface, String>>  columnMap = outputTreeMap.get(root);
+		if(idOfClickedNode.endsWith(Constants.LABEL_TREE_NODE))
 		{
-			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(id,idNodesMap,columnMap,sessionData);
+			outputTreeStr = outputTreeBizLogic.updateTreeForLabelNode(idOfClickedNode,idNodesMap,columnMap,sessionData);
 		}
 		else
 		{
-			nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
-			Long idLong = new Long(nodeIds[0]); 
-			String parentNodeId = nodeIds[1];
-			OutputTreeDataNode parentNode = idNodesMap.get(idLong);
-			outputTreeStr = outputTreeBizLogic.updateTree(id,parentNode, columnMap, parentNodeId, sessionData);	
+			String data = nodeIds[2];
+			outputTreeStr = outputTreeBizLogic.updateTree(idOfClickedNode,parentNode, columnMap, data, sessionData);	
 		}
 		response.setContentType("text/html");
 		response.getWriter().write(outputTreeStr);
