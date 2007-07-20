@@ -1,5 +1,6 @@
 <%@ page import="edu.wustl.catissuecore.actionForm.CategorySearchForm"%>
 <%@ page import="java.util.*"%>
+<%@ page import="java.lang.*"%>
 <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
@@ -17,37 +18,35 @@
 	<link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXTree.css">
 	<script  src="dhtml_comp/jss/dhtmlXCommon.js"></script>
 	<script  src="dhtml_comp/jss/dhtmlXGrid.js"></script>		
+	<script  src="dhtml_comp/jss/dhtmlXGrid.js"></script>		
 	<script  src="dhtml_comp/jss/dhtmlXGridCell.js"></script>	
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/jss/dhtmXTreeCommon.js"></script>
 	<script language="JavaScript" type="text/javascript" src="dhtml_comp/jss/dhtmlXTree.js"></script>
-<script type="text/javascript" src="jss/ajax.js"></script> 
+    <script type="text/javascript" src="jss/ajax.js"></script> 
 	<script src="jss/queryModule.js"></script>
 
-<script>
+ <script>
 var columns ;
 var colWidth;
 var colTypes 
 <%
 List columnList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_COLUMN_LIST);
 List dataList = (List) request.getSession().getAttribute(Constants.SPREADSHEET_DATA_LIST);
-Vector treeData = (Vector)request.getSession().getAttribute("treeData");
- %>
-
-
-// --------------------  FUNCTION SECTION
-			//checks or unchecks all the check boxes in the grid.
-					function checkAll(element)
-					{
-						var state=element.checked;
-						rowCount = mygrid.getRowsNum();
-						//alert("rowCount : "+ rowCount);
-						for(i=1;i<=rowCount;i++)
-						{
-							var cl = mygrid.cells(i,0);
-							if(cl.isCheckbox())
-							cl.setChecked(state);
-						}
-					}
+Long trees = (Long)request.getSession().getAttribute("noOfTrees");
+int noOfTrees = trees.intValue();
+%>
+	function checkAll(element)
+	{
+		var state=element.checked;
+		rowCount = mygrid.getRowsNum();
+		//alert("rowCount : "+ rowCount);
+		for(i=1;i<=rowCount;i++)
+		{
+			var cl = mygrid.cells(i,0);
+			if(cl.isCheckbox())
+			cl.setChecked(state);
+		}
+	}
 
 					//function to update hidden fields as per check box selections.
 		function updateHiddenFields()
@@ -114,11 +113,14 @@ colDataTypes=colDataTypes.replace(/str/,"ro");
 
 
 <script>
+var trees = new Array()
+var treeNo = 0;
 
 function initGridView()
-{<% if (columnList != null && columnList.size()!= 0 && dataList != null && dataList.size() != 0)
-{ %>
-	mygrid = new dhtmlXGridObject('gridbox');
+{
+	<% if (columnList != null && columnList.size()!= 0 && dataList != null && dataList.size() != 0)
+	{ %>
+		mygrid = new dhtmlXGridObject('gridbox');
 	mygrid.setImagePath("dhtml_comp/imgs/");
 	mygrid.setHeader(columns);
 	//mygrid.setEditable("FALSE");
@@ -149,47 +151,60 @@ function initGridView()
 	}
 	//fix for grid display on IE for first time.
 	mygrid.setSizes();
-
-//Tree component
-	tree=new dhtmlXTreeObject("treebox","100%","100%",0);
-	tree.setImagePath("dhtml_comp/imgs/");
-	tree.setOnClickHandler(treeNodeClicled);
-		<%
-			
-				if(treeData != null && treeData.size() != 0)
-				{
-					Iterator itr  = treeData.iterator();
-					String nodeColapseCode = "";
-					while(itr.hasNext())
-					{
-						QueryTreeNodeData data = (QueryTreeNodeData) itr.next();
-						String parentId = "0";	
-						if(!data.getParentIdentifier().equals("0"))
-						{
-							parentId = data.getParentIdentifier().toString();		
-						}
-						String nodeId = data.getIdentifier().toString();
-						String img = "results.gif";
-						if(nodeId.endsWith(Constants.LABEL_TREE_NODE))
-						{
-							 img = "folder.gif";
-						}
-						if (parentId.equals("0"))
-						{
-							nodeColapseCode += "tree.closeAllItems('" + nodeId + "');";
-						}
-			%>
-					tree.insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>",0,"<%=img%>","<%=img%>","<%=img%>","");
-					tree.setUserData("<%=nodeId%>","<%=nodeId%>","<%=data%>");	
-			<%	
-					}
 		
-				}
-}
-			%>	
-}
 
 
+		
+		
+		//////////
+		<%  
+		for(int i=0;i<noOfTrees;i++) 
+		{
+			String divId = "treebox"+i;
+			String treeDataId = "treeData_"+i;
+		%>
+	
+			trees[treeNo]=new dhtmlXTreeObject(<%=divId%>,"100%","100%",0);
+			trees[treeNo].setImagePath("dhtml_comp/imgs/");
+			trees[treeNo].setOnClickHandler(treeNodeClicled);
+			<%
+					Vector treeData = (Vector)request.getSession().getAttribute(treeDataId);
+						if(treeData != null && treeData.size() != 0)
+						{
+							Iterator itr  = treeData.iterator();
+							String nodeColapseCode = "";
+							while(itr.hasNext())
+							{
+								QueryTreeNodeData data = (QueryTreeNodeData) itr.next();
+								String parentId = "0";	
+								if(!data.getParentIdentifier().equals("0"))
+								{
+									parentId = data.getParentIdentifier().toString();		
+								}
+								String nodeId = data.getIdentifier().toString();
+								String img = "results.gif";
+								if(nodeId.endsWith(Constants.LABEL_TREE_NODE))
+								{
+									 img = "folder.gif";
+								}
+								if (parentId.equals("0"))
+								{
+									nodeColapseCode += "tree.closeAllItems('" + nodeId + "');";
+								}
+			%>
+			trees[treeNo].insertNewChild("<%=parentId%>","<%=nodeId%>","<%=data.getDisplayName()%>",0,"<%=img%>","<%=img%>","<%=img%>","");
+			trees[treeNo].setUserData("<%=nodeId%>","<%=nodeId%>","<%=data%>");	
+			
+			<%	
+							}
+		
+						}	%>
+treeNo = treeNo + 1;						
+		<%}
+	%>	
+		////////////
+<%} %>
+}
 </script>
 
 <% if (columnList != null && columnList.size()!= 0 && dataList != null && dataList.size() != 0)
@@ -237,12 +252,15 @@ function initGridView()
 						<td valign="top" width="20%" height="100%">
 							<table border="1" width="100%" cellspacing="0" cellpadding="0" bgcolor="#FFFFFF" height="100%" bordercolorlight="#000000" >
 								<tr>
-									<td valign="top"><div id="treebox"  style="background-color:white;overflow:auto;width:200; height:520;">
-								<%	if(treeData != null && treeData.size() == 0)
-										{ %>
-											<bean:message key="simpleQuery.noRecordsFound"/>
-									<% } %>
-									</div>
+									<td valign="top">
+										<%  for(int i=0;i<noOfTrees;i++) {
+										String divId = "treebox"+i;
+										int divHeight= 600/noOfTrees;
+										%>
+											<div id="<%=divId%>"  style="background-color:white;overflow:auto;width:200;height:400;">
+												
+											</div>
+										<% } %>
 									</td>
 								</tr>									
 							</table>
@@ -284,22 +302,20 @@ function initGridView()
 					<table border="0" width="100%" cellspacing="0" cellpadding="0" bgcolor="#EAEAEA" height="100%" bordercolorlight="#000000" >
 					<tr height="35" valign="center">
 					 <td width="2%" valign="center">&nbsp;</td>
-						<td valign="center" width="75%"><html:button property="Button"><bean:message key="query.saveButton"/></html:button></td>
-				
-						<td  align="right" valign="center"><html:button property="Button" onclick="defineSearchResultsView()"><bean:message key="query.previousButton" /></html:button></td>
-						<td align="right" valign="center"><html:button property="Button" onclick=""><bean:message key="query.nextButton"/></html:button>
-						</td>
-						<td width="2%">&nbsp;</td>
+					 <td valign="center" width="75%"><html:button property="Button"><bean:message key="query.saveButton"/></html:button></td>
+				   	 <td align="right" valign="center"><html:button property="Button" onclick="defineSearchResultsView()"><bean:message key="query.previousButton" /></html:button></td>
+					 <td align="right" valign="center"><html:button property="Button" onclick=""><bean:message key="query.nextButton"/></html:button>
+					 </td>
+					 <td width="2%">&nbsp;</td>
 					</tr>
-				</table>
-				
+				</table>				
 			</td>
-		</tr>
-			</table>
-			</td>
-			</tr>
-			</table>
-			</td></tr>
+		   </tr>
+		</table>
+	  </td>
+	</tr>
+  </table>
+</td></tr>
 </table>
 </html:form>
 </body>

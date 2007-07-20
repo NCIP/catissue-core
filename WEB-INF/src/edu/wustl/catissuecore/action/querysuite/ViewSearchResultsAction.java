@@ -3,6 +3,7 @@ package edu.wustl.catissuecore.action.querysuite;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -66,28 +67,41 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			IQuery query = (IQuery) inputDataMap.get(AppletConstants.QUERY_OBJECT);
 			HttpSession session = request.getSession();
 			session.setAttribute(AppletConstants.QUERY_OBJECT, query);
-			QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
 			SessionDataBean sessionData = getSessionData(request);
-			SqlGenerator sqlGenerator = (SqlGenerator)SqlGeneratorFactory.getInstance();
 			String selectSql = "";
 			Map<Long, Map<AttributeInterface, String>> columnMap = null;
-			Map<String,String> ruleDetailsMap = new HashMap<String,String>();
+			Map<String,String> validationMessagesMap = new HashMap<String,String>();
 			try
 			{
+				SqlGenerator sqlGenerator = (SqlGenerator)SqlGeneratorFactory.getInstance();
+				QueryOutputTreeBizLogic outputTreeBizLogic = new QueryOutputTreeBizLogic();
 				selectSql = sqlGenerator.generateSQL(query);
 				outputTreeBizLogic.createOutputTreeTable(selectSql, sessionData);
 				Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap = sqlGenerator.getOutputTreeMap();
 				Set<OutputTreeDataNode> keys = outputTreeMap.keySet();
-				OutputTreeDataNode root = keys.iterator().next();
-				columnMap = outputTreeMap.get(root);
-				session.setAttribute(Constants.ID_COLUMNS_MAP, columnMap);
-				Map<Long, OutputTreeDataNode> idNodesMap = QueryObjectProcessor.getAllChildrenNodes(root);
-				session.setAttribute(Constants.ID_NODES_MAP, idNodesMap);
-				Vector treeData = outputTreeBizLogic.createDefaultOutputTreeData(root, sessionData, columnMap);
-				session.setAttribute(Constants.TREE_DATA, treeData);
+				Long noOfTrees = new Long(keys.size());
+				session.setAttribute("noOfTrees", noOfTrees);
+				Map<String, OutputTreeDataNode> uniqueIdNodesMap = QueryObjectProcessor.getAllChildrenNodes(keys);
+				session.setAttribute(Constants.ID_NODES_MAP, uniqueIdNodesMap);
+				OutputTreeDataNode root = null;;
+				Iterator<OutputTreeDataNode> keysIter = keys.iterator();
+				int i =0;
+				while(keysIter.hasNext())
+				{
+					root = keysIter.next();
+					//TODO check the need , why it is kept in session
+					columnMap = outputTreeMap.get(root);
+					session.setAttribute(Constants.ID_COLUMNS_MAP, columnMap);
+					Vector treeData = outputTreeBizLogic.createDefaultOutputTreeData(i,root, sessionData, columnMap);
+					session.setAttribute(Constants.TREE_DATA+"_"+i, treeData);
+					i += 1;
+				}
+				session.setAttribute(Constants.OUTPUT_TREE_MAP,outputTreeMap);
 				QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 				String parentNodeId = null;
-				Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(null,root, columnMap, parentNodeId,sessionData);
+				root = keys.iterator().next();
+				String treeNo = "0";
+				Map spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,root, outputTreeMap, sessionData,parentNodeId);
 				session.setAttribute(Constants.SPREADSHEET_DATA_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST));
 				session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST, spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST));;
 			}
@@ -95,29 +109,29 @@ public class ViewSearchResultsAction extends BaseAppletAction
 			{
 				Logger.out.error(e);
 				String errorMessage = ApplicationProperties.getValue("errors.executeQuery.multipleRoots");
-				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
+				validationMessagesMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
 			}
 			catch (SqlException e)
 			{
 				Logger.out.error(e);
 				String errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
-				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
+				validationMessagesMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
 			} 
 			catch (ClassNotFoundException e)
 			{
 				Logger.out.error(e);
 				String errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
-				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
+				validationMessagesMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
 			}
 			catch (DAOException e)
 			{
 				Logger.out.error(e);
 				String errorMessage = ApplicationProperties.getValue("errors.executeQuery.genericmessage");
-				ruleDetailsMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
+				validationMessagesMap.put(AppletConstants.ERROR_MESSAGE, errorMessage);
 			}
 			finally
 			{
-				writeMapToResponse(response, ruleDetailsMap);
+				writeMapToResponse(response, validationMessagesMap);
 			}
 		}
 		return null;
