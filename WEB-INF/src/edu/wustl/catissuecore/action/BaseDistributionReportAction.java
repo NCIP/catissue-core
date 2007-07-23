@@ -109,8 +109,9 @@ public abstract class BaseDistributionReportAction extends BaseAction
        	//Specimen Ids which are getting distributed.
     	String []specimenIds = new String[distributedItemCollection.size()];
     	int i=0;
+    	// This string contain list of all comma separated specimen Ids (<Specimen Id 1>, <Specimen Id 2>)
+    	String listOfSpecimenId= new String(); 
     	Iterator itr = distributedItemCollection.iterator();
-    	
     	while(itr.hasNext())
     	{
     		DistributedItem item = (DistributedItem)itr.next();
@@ -118,24 +119,32 @@ public abstract class BaseDistributionReportAction extends BaseAction
     		//Logger.out.debug("Specimen "+specimen);
     		//Logger.out.debug("Specimen "+specimen.getId());
     		specimenIds[i] = specimen.getId().toString();
+    		if(listOfSpecimenId.equals(""))
+    		{
+    			listOfSpecimenId= "(" + specimenIds[i];
+    		}
+    		else
+    		{
+    			listOfSpecimenId= listOfSpecimenId+"," + specimenIds[i];
+    		}
     		i++;
     	}
+    	listOfSpecimenId = listOfSpecimenId + ")";
     	String action = configForm.getNextAction();
     	
     	Logger.out.debug("Configure/Default action "+action);
     	String selectedColumns[] = getSelectedColumns(action,configForm,false);
     	Logger.out.debug("Selected columns length"+selectedColumns.length);
-    	for(int j=0;j<specimenIds.length;j++)
-    	{
     		Collection simpleConditionNodeCollection = new ArrayList();
     		Query query = QueryFactory.getInstance().newQuery(Query.SIMPLE_QUERY, Query.PARTICIPANT);
-    		Logger.out.debug("Specimen ID" +specimenIds[j]);
+		
+		Logger.out.debug("Specimen IDs" +listOfSpecimenId);
     		SimpleConditionsNode simpleConditionsNode = new SimpleConditionsNode();
-    		simpleConditionsNode.getCondition().setValue(specimenIds[j]);
+		simpleConditionsNode.getCondition().setValue(listOfSpecimenId);
     		simpleConditionsNode.getCondition().getDataElement().setTableName(Query.SPECIMEN);
     		simpleConditionsNode.getCondition().getDataElement().setField("Identifier");
     		simpleConditionsNode.getCondition().getDataElement().setFieldType(Constants.FIELD_TYPE_BIGINT);
-    		simpleConditionsNode.getCondition().getOperator().setOperator(Operator.EQUAL);
+		simpleConditionsNode.getCondition().getOperator().setOperator(Operator.IN);
     		
     		
     		SimpleConditionsNode simpleConditionsNode1 = new SimpleConditionsNode();
@@ -210,10 +219,8 @@ public abstract class BaseDistributionReportAction extends BaseAction
 			identifierColumnNames = simpleQueryBizLogic
 						.addObjectIdentifierColumnsToQuery(queryResultObjectDataMap, query);
 			simpleQueryBizLogic.setDependentIdentifiedColumnIds(queryResultObjectDataMap, query);
-
 			List list = query.execute(sessionData, true,queryResultObjectDataMap, false);
     		listOfData.add(list);
-    	}
     	return listOfData;
     }
     

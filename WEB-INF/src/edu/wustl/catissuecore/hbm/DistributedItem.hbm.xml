@@ -41,10 +41,10 @@
         <many-to-one
             name="specimen"
             class="edu.wustl.catissuecore.domain.Specimen"
-            cascade="none"
+            cascade="all"
             outer-join="auto"
             update="true"
-            insert="true"
+		    insert="true"
             column="SPECIMEN_ID"
         />
 
