@@ -1,6 +1,9 @@
 /*
- * $Name:  (RC2)
+ * $Name: (Date: 18-Jul_2007)
  * $Log: ApplicationVersionInfo.txt,v $
+ * Revision 1.2.8.2  2007/07/24 07:28:01  sachin_lale
+ * version change
+ *
  * Revision 1.2.8.1  2007/05/21 05:58:32  sachin_lale
  * Change version info to RC2
  *
