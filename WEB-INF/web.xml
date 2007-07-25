@@ -206,4 +206,125 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     </servlet-mapping>
 <!--  End caCore like system entries -->
 
+<!-- FLEX Configuration START-->
+
+<context-param>
+        <param-name>flex.class.path</param-name>
+        <param-value>/WEB-INF/flex/hotfixes,/WEB-INF/flex/jars</param-value>
+    </context-param>
+
+    <!-- Http Flex Session attribute and binding listener support -->
+    <!--listener>
+        <listener-class>flex.messaging.HttpFlexSession</listener-class>
+    </listener-->
+
+    <!-- MessageBroker Servlet -->
+    <servlet>
+        <servlet-name>MessageBrokerServlet</servlet-name>
+        <display-name>MessageBrokerServlet</display-name>
+        <servlet-class>flex.messaging.MessageBrokerServlet</servlet-class>
+        <init-param>
+            <param-name>services.configuration.file</param-name>
+            <param-value>/WEB-INF/flex/services-config.xml</param-value>
+       </init-param>
+        <init-param>
+            <param-name>flex.write.path</param-name>
+            <param-value>/WEB-INF/flex</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>FlexMxmlServlet</servlet-name>
+        <display-name>MXML Processor</display-name>
+        <description>Servlet wrapper for the Mxml Compiler</description>
+        <servlet-class>flex.bootstrap.BootstrapServlet</servlet-class>
+        <init-param>
+            <param-name>servlet.class</param-name>
+            <param-value>flex.webtier.server.j2ee.MxmlServlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>webtier.configuration.file</param-name>
+            <param-value>/WEB-INF/flex/flex-webtier-config.xml</param-value>
+        </init-param>
+       <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>FlexSwfServlet</servlet-name>
+        <display-name>SWF Retriever</display-name>
+        <servlet-class>flex.bootstrap.BootstrapServlet</servlet-class>
+        <init-param>
+            <param-name>servlet.class</param-name>
+            <param-value>flex.webtier.server.j2ee.SwfServlet</param-value>
+        </init-param>
+        <!-- SwfServlet must be initialized after MxmlServlet -->
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>FlexForbiddenServlet</servlet-name>
+        <display-name>Prevents access to *.as/*.swc files</display-name>
+        <servlet-class>flex.bootstrap.BootstrapServlet</servlet-class>
+        <init-param>
+            <param-name>servlet.class</param-name>
+            <param-value>flex.webtier.server.j2ee.ForbiddenServlet</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <servlet-name>FlexInternalServlet</servlet-name>
+        <servlet-class>flex.bootstrap.BootstrapServlet</servlet-class>
+        <init-param>
+            <param-name>servlet.class</param-name>
+            <param-value>flex.webtier.server.j2ee.filemanager.FileManagerServlet</param-value>
+        </init-param>
+        <load-on-startup>10</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>MessageBrokerServlet</servlet-name>
+        <url-pattern>/messagebroker/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>FlexMxmlServlet</servlet-name>
+        <url-pattern>*.mxml</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>FlexSwfServlet</servlet-name>
+        <url-pattern>*.swf</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>FlexForbiddenServlet</servlet-name>
+        <url-pattern>*.as</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>FlexForbiddenServlet</servlet-name>
+        <url-pattern>*.swc</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>FlexInternalServlet</servlet-name>
+        <url-pattern>/flex-internal/*</url-pattern>
+    </servlet-mapping>
+    <taglib>
+        <taglib-uri>FlexTagLib</taglib-uri>
+        <taglib-location>/WEB-INF/lib/flex-bootstrap-jsp.jar</taglib-location>
+    </taglib>
+
+    <!-- for WebSphere deployment, please uncomment -->
+    <!--
+    <resource-ref>
+        <description>Flex Messaging WorkManager</description>
+        <res-ref-name>wm/MessagingWorkManager</res-ref-name>
+        <res-type>com.ibm.websphere.asynchbeans.WorkManager</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
+    -->
+
 </web-app>
