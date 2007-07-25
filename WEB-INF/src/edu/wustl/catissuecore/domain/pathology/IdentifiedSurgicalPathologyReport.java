@@ -1,4 +1,5 @@
 package edu.wustl.catissuecore.domain.pathology;
+
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 
 /**

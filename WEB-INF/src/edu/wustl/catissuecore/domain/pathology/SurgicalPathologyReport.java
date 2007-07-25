@@ -5,6 +5,7 @@ import java.util.Set;
 
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -290,6 +291,16 @@ public class SurgicalPathologyReport extends AbstractDomainObject
     {
     	
     }
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.IValueObject)
+	 */
+	@Override
+	public void setAllValues(IValueObject valueObject) throws AssignDataException
+	{
+		// TODO Auto-generated method stub
+		
+	}
     
 	
 }

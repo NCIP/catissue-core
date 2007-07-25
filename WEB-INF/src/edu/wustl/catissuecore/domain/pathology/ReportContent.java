@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.domain.pathology;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -69,6 +70,16 @@ public class ReportContent extends AbstractDomainObject
 
 
 	public void setAllValues(AbstractActionForm arg0) throws AssignDataException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.IValueObject)
+	 */
+	@Override
+	public void setAllValues(IValueObject valueObject) throws AssignDataException
 	{
 		// TODO Auto-generated method stub
 		
