@@ -556,6 +556,14 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int ASSIGN_PRIVILEGE_FORM_ID = 52;
 	public static final int CDE_FORM_ID = 53;
 	public static final int MULTIPLE_SPECIMEN_STOGAGE_LOCATION_FORM_ID = 54;
+	public static final int REQUEST_LIST_FILTERATION_FORM_ID = 55;
+	public static final int ORDER_FORM_ID = 56;
+	public static final int ORDER_ARRAY_FORM_ID = 57;
+	public static final int REQUEST_DETAILS_FORM_ID = 64;
+	public static final int ORDER_PATHOLOGY_FORM_ID = 58;
+	public static final int NEW_PATHOLOGY_FORM_ID=59;
+	public static final int PATHOLOGY_REPORT_REVIEW_FORM_ID=61;
+	public static final int QUARANTINE_EVENT_PARAMETER_FORM_ID=62;
 	//Misc
 	public static final String SEPARATOR = " : ";
 	
@@ -1625,9 +1633,79 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COLUMN_NAME_SCG_ID="specimenCollectionGroup.id";
 	
 	//Bug 2833. Field for the length of CP Title
-	public static final int COLLECTION_PROTOCOL_TITLE_LENGTH=30;
-	
-	
+	public static final int COLLECTION_PROTOCOL_TITLE_LENGTH=30; 
 	//Bug ID 4794: Field for advance time to warn a user about session expiry
 	public static final String SESSION_EXPIRY_WARNING_ADVANCE_TIME = "session.expiry.warning.advanceTime";
+  //	Constants required in RequestDetailsPage
+	public static final String SUBMIT_REQUEST_DETAILS_ACTION="SubmitRequestDetails.do";
+	public static final String REQUEST_HEADER_OBJECT = "requestHeaderObject";
+	public static final String SITE_LIST_OBJECT = "siteList";
+	public static final String REQUEST_DETAILS_PAGE = "RequestDetails.do";
+	public static final String ARRAYREQUEST_DETAILS_PAGE = "ArrayRequests.do";
+	public static final String ARRAY_REQUESTS_LIST = "arrayRequestsList";
+	public static final String EXISISTINGARRAY_REQUESTS_LIST = "existingArrayRequestDetailsList";
+	public static final String DEFINEDARRAY_REQUESTS_LIST = "DefinedRequestDetailsMapList";
+	public static final String ITEM_STATUS_LIST="itemsStatusList";
+	public static final String ITEM_STATUS_LIST_WO_DISTRIBUTE="itemsStatusListWithoutDistribute";
+	public static final String ITEM_STATUS_LIST_FOR_ITEMS_IN_ARRAY="itemsStatusListForItemsInArray";
+	public static final String REQUEST_FOR_LIST="requestForList";
+	
+//	Constants for Order Request Status.
+	public static final String ORDER_REQUEST_STATUS_NEW = "New";
+	public static final String ORDER_REQUEST_STATUS_PENDING_PROTOCOL_REVIEW = "Pending - Protocol Review";
+	public static final String ORDER_REQUEST_STATUS_PENDING_SPECIMEN_PREPARATION = "Pending - Specimen Preparation";
+	public static final String ORDER_REQUEST_STATUS_PENDING_FOR_DISTRIBUTION = "Pending - For Distribution";
+	public static final String ORDER_REQUEST_STATUS_REJECTED_INAPPROPRIATE_REQUEST = "Rejected - Inappropriate Request";	
+	public static final String ORDER_REQUEST_STATUS_REJECTED_SPECIMEN_UNAVAILABLE = "Rejected - Specimen Unavailable";
+	public static final String ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE = "Rejected - Unable to Create";
+	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED = "Distributed";
+	public static final String ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION = "Ready For Array Preparation";
+	//Constants for Order Status
+	public static final String ORDER_STATUS_NEW = "New";
+	public static final String ORDER_STATUS_PENDING = "Pending";
+	public static final String ORDER_STATUS_REJECTED = "Rejected";
+	public static final String ORDER_STATUS_COMPLETED = "Completed";
+	
+//	Ordering System Status
+	public static final String CDE_NAME_REQUEST_STATUS="Request Status";
+	public static final String CDE_NAME_REQUESTED_ITEMS_STATUS="Requested Items Status";
+
+	public static final String REQUEST_LIST="requestStatusList";
+	public static final String REQUESTED_ITEMS_STATUS_LIST="requestedItemsStatusList";
+	public static final String ARRAY_STATUS_LIST="arrayStatusList";
+	
+	public static final String REQUEST_OBJECT="requestObjectList";
+	public static final String REQUEST_DETAILS_LIST="requestDetailsList";
+	public static final String ARRAY_REQUESTS_BEAN_LIST="arrayRequestsBeanList";
+	
+    public static final String SPECIMEN_ORDER_FORM_TYPE = "specimen";
+    public static final String ARRAY_ORDER_FORM_TYPE = "specimenArray";
+    public static final String PATHOLOGYCASE_ORDER_FORM_TYPE="pathologyCase";
+    public static final String REQUESTED_BIOSPECIMENS="RequestedBioSpecimens";
+	
+    //Constants required in Ordering System.
+    public static final String ACTION_ORDER_LIST = "OrderExistingSpecimen.do";  
+    public static final String SPECIMEN_TREE_SPECIMEN_ID = "specimenId";
+    public static final String SPECIMEN_TREE_SPECCOLLGRP_ID = "specimenCollGrpId";
+    public static final String ACTION_REMOVE_ORDER_ITEM = "AddToOrderListSpecimen.do?remove=yes";
+    public static final String ACTION_REMOVE_ORDER_ITEM_ARRAY = "AddToOrderListArray.do?remove=yes";
+    public static final String ACTION_REMOVE_ORDER_ITEM_PATHOLOGYCASE = "AddToOrderListPathologyCase.do?remove=yes";
+    public static final String DEFINEARRAY_REQUESTMAP_LIST = "definedArrayRequestMapList";
+    public static final String CREATE_DEFINED_ARRAY = "CreateDefinedArray.do";
+    
+    public static final String ACTION_SAVE_ORDER_ITEM = "SaveOrderItems.do";
+
+    public static final String ORDERTO_LIST_ARRAY = "orderToListArrayList";
+    public static final String ACTION_SAVE_ORDER_ARRAY_ITEM = "SaveOrderArrayItems.do";
+    public static final String ACTION_SAVE_ORDER_PATHOLOGY_ITEM="SaveOrderPathologyItems.do";
+    
+    public static final String ACTION_ADD_ORDER_SPECIMEN_ITEM="AddToOrderListSpecimen.do";
+    public static final String ACTION_ADD_ORDER_ARRAY_ITEM="AddToOrderListArray.do";
+    public static final String ACTION_ADD_ORDER_PATHOLOGY_ITEM="AddToOrderListPathologyCase.do";
+    public static final String ACTION_DEFINE_ARRAY="DefineArraySubmit.do";
+    public static final String ACTION_ORDER_SPECIMEN="OrderExistingSpecimen.do";
+    public static final String ACTION_ORDER_BIOSPECIMENARRAY="OrderBiospecimenArray.do";
+    public static final String ACTION_ORDER_PATHOLOGYCASE="OrderPathologyCase.do";
+    
+	
 }

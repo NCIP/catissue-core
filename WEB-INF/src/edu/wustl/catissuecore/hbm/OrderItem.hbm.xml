@@ -10,6 +10,7 @@
         table="CATISSUE_ORDER_ITEM"
         dynamic-update="false"
         dynamic-insert="false"
+        lazy="true"
     >
 
         <id
@@ -85,6 +86,7 @@
             table="CATISSUE_SPECIMEN_ORDER_ITEM"
             dynamic-update="false"
             dynamic-insert="false"
+            lazy="true"
         >
         <key
             column="IDENTIFIER"
@@ -106,6 +108,7 @@
             table="CATISSUE_PATH_CASE_ORDER_ITEM"
             dynamic-update="false"
             dynamic-insert="false"
+            lazy="true"
         >
         <key
             column="IDENTIFIER"
@@ -162,6 +165,7 @@
             table="CATISSUE_DERIEVED_SP_ORD_ITEM"
             dynamic-update="false"
             dynamic-insert="false"
+            lazy="true"
         >
         <key
             column="IDENTIFIER"
@@ -200,6 +204,7 @@
             table="CATISSUE_EXISTING_SP_ORD_ITEM"
             dynamic-update="false"
             dynamic-insert="false"
+            lazy="true"
         >
         <key
             column="IDENTIFIER"
@@ -224,6 +229,7 @@
             table="CATISSUE_SP_ARRAY_ORDER_ITEM"
             dynamic-update="false"
             dynamic-insert="false"
+            lazy="true"
         >
         <key
             column="IDENTIFIER"
@@ -245,6 +251,7 @@
             table="CATISSUE_NEW_SP_AR_ORDER_ITEM"
             dynamic-update="false"
             dynamic-insert="false"
+            lazy="true"
         >
         <key
             column="IDENTIFIER"
@@ -281,7 +288,7 @@
         <set
             name="specimenOrderItemCollection"
             table="CATISSUE_SPECIMEN_ORDER_ITEM"
-            lazy="false"
+            lazy="true"
             cascade="save-update"
             sort="unsorted"
         >

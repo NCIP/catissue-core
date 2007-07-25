@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import edu.wustl.catissuecore.domain.DerivedSpecimenOrderItem;
+import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.ExistingSpecimenArrayOrderItem;
@@ -36,6 +37,7 @@ import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
+import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -111,13 +113,14 @@ public class OrderBizLogic extends DefaultBizLogic
 			throws DAOException, UserNotAuthorizedException
 	{
 		this.validate(obj, oldObj, dao, Constants.EDIT);
-		OrderDetails orderOld = updateOldObject(oldObj, obj, dao, sessionDataBean);
-				
-		dao.update(orderOld, sessionDataBean, true, true, false);
+		OrderDetails orderImplObj = (OrderDetails)HibernateMetaData.getProxyObjectImpl(oldObj);
+		OrderDetails orderNew = updateObject(orderImplObj, obj, dao, sessionDataBean);
+		
+		dao.update(orderNew, sessionDataBean, true, true, false);
 		//Sending Email only if atleast one order item is updated.
 		if(numberItemsUpdated > 0)
 		{
-			sendEmailOnOrderUpdate(orderOld,sessionDataBean);
+			sendEmailOnOrderUpdate(orderNew,sessionDataBean);
 		}
 	}
 
@@ -205,6 +208,7 @@ public class OrderBizLogic extends DefaultBizLogic
 							{
 								throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.notpossible.errmsg"));
 							}
+							
 //							List childrenSpecimenCollection = OrderingSystemUtil.getAllChildrenSpecimen(orderItem.getDistributedItem().getSpecimen(),orderItem.getDistributedItem().getSpecimen().getChildrenSpecimen());
 //							List finalChildrenSpecimenCollection = null;
 //							if(childrenSpecimenCollection != null)
@@ -290,6 +294,17 @@ public class OrderBizLogic extends DefaultBizLogic
 						    	}
 							}
 						}
+						
+						//Fix me
+						//Removing distributed item in case of status - Ready For Array Preparation
+						if(orderItem.getStatus().equalsIgnoreCase(Constants.ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION))
+						{
+							DistributedItem distributedItem = orderItem.getDistributedItem();
+							if(distributedItem != null)
+							{
+								orderItem.setDistributedItem(null);
+							}
+						}
 					}// END DISTRIBUTED					
 				}				
 			}
@@ -308,7 +323,7 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @throws DAOException object.
 	 * @throws UserNotAuthorizedException object.
 	 */
-	private OrderDetails updateOldObject(Object oldObj, Object obj , DAO dao, SessionDataBean sessionDataBean) throws DAOException,UserNotAuthorizedException
+	private OrderDetails updateObject(Object oldObj, Object obj , DAO dao, SessionDataBean sessionDataBean) throws DAOException,UserNotAuthorizedException
 	{
 		OrderDetails order = (OrderDetails) obj;
 		OrderDetails orderOld = (OrderDetails) oldObj;
@@ -316,44 +331,52 @@ public class OrderBizLogic extends DefaultBizLogic
 		Collection oldOrderItemSet = orderOld.getOrderItemCollection();
 		Collection newOrderItemSet = order.getOrderItemCollection();
 //		Adding items inside New Defined Array in oldOrderItemColl
-		Collection tempOldOrderItemSet = new HashSet();
-		Iterator tempOldItemIter = oldOrderItemSet.iterator();
-		while(tempOldItemIter.hasNext())
+		Collection tempNewOrderItemSet = new HashSet();
+		Iterator tempNewItemIter = newOrderItemSet.iterator();
+		while(tempNewItemIter.hasNext())
 		{
-			OrderItem tempOldOrderItem = (OrderItem) tempOldItemIter.next();
+			OrderItem tempNewOrderItem = (OrderItem) tempNewItemIter.next();
 			
-			if(tempOldOrderItem instanceof NewSpecimenArrayOrderItem)
+			if(tempNewOrderItem instanceof NewSpecimenArrayOrderItem)
 			{				
-				NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)tempOldOrderItem;
+				NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)tempNewOrderItem;
 				Collection specimenOrderItemColl = newSpecimenArrayOrderItem.getSpecimenOrderItemCollection();
 				if(specimenOrderItemColl != null)
 				{
 					Iterator tempIter = specimenOrderItemColl.iterator();
 					while(tempIter.hasNext())
 					{
-						tempOldOrderItemSet.add((OrderItem)tempIter.next());
+						tempNewOrderItemSet.add((OrderItem)tempIter.next());
 					}
 				}
 			}
 		}
-		if(tempOldOrderItemSet.size() > 0)
+		if(tempNewOrderItemSet.size() > 0)
 		{
-			oldOrderItemSet.addAll(tempOldOrderItemSet);
+			newOrderItemSet.addAll(tempNewOrderItemSet);
 		}
 		//Iterating over OrderItems collection.
-		Iterator oldSetIter = oldOrderItemSet.iterator();			
+		Iterator newSetIter = newOrderItemSet.iterator();			
 		numberItemsUpdated = 0;
 		//To insert distribution and distributed items only once.
 		boolean isDistributionInserted = false;
 		
-		while (oldSetIter.hasNext())
+		while (newSetIter.hasNext())
 		{
-			OrderItem oldOrderItem = (OrderItem) oldSetIter.next();
-			Iterator newSetIter = newOrderItemSet.iterator();
+			OrderItem newOrderItem = (OrderItem) newSetIter.next();
 			
-			while (newSetIter.hasNext())
+			Iterator oldSetIter = oldOrderItemSet.iterator();
+			
+			
+			while (oldSetIter.hasNext())
 			{
-				OrderItem newOrderItem = (OrderItem) newSetIter.next();
+				OrderItem oldOrderItem = (OrderItem) oldSetIter.next();
+				
+				// Setting quantity to previous quantity.....
+				if(oldOrderItem.getId().equals(newOrderItem.getId()))
+				{
+					newOrderItem.setRequestedQuantity(oldOrderItem.getRequestedQuantity());
+				}
 				//Update Old OrderItem only when its Id matches with NewOrderItem id and the order is not distributed and the oldorderitem status and neworderitem status are different or description has been updated.
 				if ((oldOrderItem.getId().compareTo(newOrderItem.getId()) == 0) && (oldOrderItem.getDistributedItem() == null) && (!oldOrderItem.getStatus().trim().equalsIgnoreCase(newOrderItem.getStatus().trim()) || (oldOrderItem.getDescription() != null && !oldOrderItem.getDescription().equalsIgnoreCase(newOrderItem.getDescription()))))
 				{					
@@ -385,38 +408,39 @@ public class OrderBizLogic extends DefaultBizLogic
 								}
 							}
 							//For assigned Quantity and RequestFor.
-							if(newOrderItem.getDistributedItem() != null)
+							/*if(newOrderItem.getDistributedItem() != null)
 							{
 								oldOrderItem.setDistributedItem(newOrderItem.getDistributedItem());
-							}
+							}*/
 						}
 						//Setting Description and Status.
 						if(newOrderItem.getDescription() != null)
 						{
-							if(oldOrderItem instanceof ExistingSpecimenArrayOrderItem)
+							if(newOrderItem instanceof ExistingSpecimenArrayOrderItem)
 							{
-								oldOrderItem.setDescription(oldOrderItem.getDescription()+" "+newOrderItem.getDescription());
+								newOrderItem.setDescription(oldOrderItem.getDescription()+" "+newOrderItem.getDescription());
 							}
-							else
+							/*else
 							{
 								oldOrderItem.setDescription(newOrderItem.getDescription());
-							}
+							}*/
 						}
-						oldOrderItem.setStatus(newOrderItem.getStatus());												
+						
+					//	oldOrderItem.setStatus(newOrderItem.getStatus());												
 						//The number of Order Items updated.
 						numberItemsUpdated ++;
 				}
 			}	
-			calculateOrderStatus(oldOrderItem);
+			calculateOrderStatus(newOrderItem);
 		}
 		//Updating comments.
 		if (order.getComment() != null && !order.getComment().trim().equalsIgnoreCase(""))
 		{
-			orderOld.setComment(orderOld.getComment()+" "+order.getComment());
+			order.setComment(orderOld.getComment()+" "+order.getComment());
 		}
 		//For order status.
-		orderOld = updateOrderStatus(orderOld,oldOrderItemSet);	
-		return orderOld;
+		order = updateOrderStatus(order,newOrderItemSet);	
+		return order;
 	}
 	/**
 	 * @param order object
@@ -520,26 +544,26 @@ public class OrderBizLogic extends DefaultBizLogic
 	 * @param oldOrderItemSet object
 	 * @return OrderDetails object.
 	 */
-	private OrderDetails updateOrderStatus(OrderDetails orderOld,Collection oldOrderItemSet)
+	private OrderDetails updateOrderStatus(OrderDetails orderNew,Collection oldOrderItemSet)
 	{
 		if (orderStatusNew == oldOrderItemSet.size())
 		{
-			orderOld.setStatus(Constants.ORDER_STATUS_NEW);
+			orderNew.setStatus(Constants.ORDER_STATUS_NEW);
 		}
 		else if (orderStatusRejected == oldOrderItemSet.size())
 		{
-			orderOld.setStatus(Constants.ORDER_STATUS_REJECTED);
+			orderNew.setStatus(Constants.ORDER_STATUS_REJECTED);
 		}
 		else if ((orderStatusCompleted == oldOrderItemSet.size()) || ((orderStatusCompleted + orderStatusRejected) == oldOrderItemSet.size()))
 		{
-			orderOld.setStatus(Constants.ORDER_STATUS_COMPLETED);
+			orderNew.setStatus(Constants.ORDER_STATUS_COMPLETED);
 		}
 		else
 		{
-			orderOld.setStatus(Constants.ORDER_STATUS_PENDING);
+			orderNew.setStatus(Constants.ORDER_STATUS_PENDING);
 		}
 		
-		return orderOld;
+		return orderNew;
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 
 package edu.wustl.catissuecore.action;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,6 +48,12 @@ public class DistributionReportAction extends BaseDistributionReportAction
     		distributionId = configForm.getDistributionId();
 		}
 
+		// this condition executes when user distributes the order 
+		if(request.getAttribute("forwardToHashMap") != null)
+		{
+			HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
+			distributionId = (Long) forwardToHashMap.get("distributionId");
+		}
 		/*Retrieve from request attribute if it null. 
 		 */ 
 		if(distributionId==null)

@@ -13,17 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.wustl.common.action.BaseAction;
-
-import edu.wustl.catissuecore.util.global.Constants;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm;
 import edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm;
 import edu.wustl.catissuecore.actionForm.OrderSpecimenForm;
-import edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm;
 import edu.wustl.catissuecore.bean.OrderSpecimenBean;
+import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
@@ -285,8 +284,8 @@ public class AddToOrderListAction  extends BaseAction
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_isDerived",orderSpecimenFormObject.getTypeOfSpecimen());
 			if(orderSpecimenFormObject.getTypeOfSpecimen().equalsIgnoreCase("true"))
 			{
-				specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenClass",orderSpecimenFormObject.getSpecimenClassName());
-				specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenType",orderSpecimenFormObject.getSpecimenType());
+				specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenClass",orderSpecimenFormObject.getClassName());
+				specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenType",orderSpecimenFormObject.getType());
 			}
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_checkedToRemove",tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_checkedToRemove"));
 			specimenMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_typeOfItem",tempOrderSpecimenFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_typeOfItem"));
@@ -359,7 +358,7 @@ public class AddToOrderListAction  extends BaseAction
     		
     		if(pathologyFormObject.getTypeOfCase().equals("false"))
     		{
-    			pathologyMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenClass",pathologyFormObject.getSpecimenClass());
+    			pathologyMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenClass",pathologyFormObject.getClassName());
     			pathologyMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_specimenType",pathologyFormObject.getType());
     			pathologyMap.put("OrderSpecimenBean:"+strSelectedItems[j]+"_unitRequestedQuantity", tempOrderPathologyFormObjectMap.get("OrderSpecimenBean:"+strSelectedItems[j]+"_unitRequestedQuantity"));
     		}

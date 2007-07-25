@@ -13,6 +13,7 @@ package edu.wustl.catissuecore.domain;
 import java.io.Serializable;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -184,6 +185,16 @@ public class OrderItem extends AbstractDomainObject implements Serializable
 	public void setDistributedItem(DistributedItem distributedItem)
 	{
 		this.distributedItem = distributedItem;
+	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.IValueObject)
+	 */
+	@Override
+	public void setAllValues(IValueObject valueObject) throws AssignDataException
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 	

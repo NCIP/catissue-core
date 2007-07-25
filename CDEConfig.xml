@@ -253,4 +253,27 @@
 		</XMLPermissibleValues>
 	</XMLCDE>
 	
+	<!-- Ordering System -->
+	<XMLCDE cache="true" lazyLoading="false">
+		<name>Request Status</name>
+		<publicId>4284</publicId>
+		<XMLPermissibleValues>
+			<evsTerminology>NCI-THESAURAUS</evsTerminology>
+			<conceptCode>PV</conceptCode> 
+			<parentConceptCode></parentConceptCode>
+			<depthOfHierarchyTree>6</depthOfHierarchyTree> 
+		</XMLPermissibleValues>
+	</XMLCDE>
+	
+	<XMLCDE cache="true" lazyLoading="false">
+		<name>Requested Items Status</name>
+		<publicId>4285</publicId>
+		<XMLPermissibleValues>
+			<evsTerminology>NCI-THESAURAUS</evsTerminology>
+			<conceptCode>PV</conceptCode> 
+			<parentConceptCode></parentConceptCode>
+			<depthOfHierarchyTree>6</depthOfHierarchyTree> 
+		</XMLPermissibleValues>
+	</XMLCDE>
+	
 </XMLCDE_CACHE>

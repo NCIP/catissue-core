@@ -24,6 +24,7 @@
 	//System.out.println("Start of specimen jsp");
 	List biohazardList = (List)request.getAttribute(Constants.BIOHAZARD_TYPE_LIST);
 	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
+	String frdTo = form.getForwardTo();
 	String nodeId="";
 	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
@@ -172,13 +173,21 @@
 			   checked = document.forms[0].checkedButton.checked;
 			}
 			var operation = document.forms[0].operation.value;
+            var temp = "<%=frdTo%>";
 			//Bug ID: 4040(Virender)
 			if(checked)
 			{
 			<% String actionToCall = null;%>
 				if(operation == "add")
 				{
-					setSubmittedFor('ForwardTo','pageOfCreateAliquot');
+				  if(temp == "orderDetails")
+					{
+						setSubmittedFor('ForwardTo','orderDetails');
+					}
+					else
+					{
+					    setSubmittedFor('ForwardTo','pageOfCreateAliquot');
+                    }
 					<%
 					actionToCall = "NewSpecimenAdd.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
@@ -189,8 +198,14 @@
 				}
 				else
 				{
-				
-					setSubmittedFor('ForwardTo','pageOfCreateAliquot');
+					if(temp == "orderDetails")
+					{
+						setSubmittedFor('ForwardTo','orderDetails');
+					}
+					else
+					{
+						setSubmittedFor('ForwardTo','pageOfCreateAliquot');
+					}
 					<%
 					actionToCall = "NewSpecimenEdit.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
@@ -204,7 +219,14 @@
 			{
 				if(operation == "add")
 				{
+					if(temp == "orderDetails")
+					{
+					   	setSubmittedFor('ForwardTo','orderDetails');
+					}
+					else
+					{
 					setSubmittedFor('null','success');
+					}
 					<%
 					actionToCall = "NewSpecimenAdd.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){
@@ -215,7 +237,14 @@
 				}
 				else
 				{
+					if(temp == "orderDetails")
+					{
+						setSubmittedFor('ForwardTo','orderDetails');
+					}
+					else
+					{
 					setSubmittedFor('null','success');
+					}
 					<%
 					actionToCall = "NewSpecimenEdit.do";
 					if(pageOf.equals(Constants.PAGE_OF_SPECIMEN_CP_QUERY)){

@@ -64,7 +64,30 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	 * Collection of specimen Array in this distribution.
 	 * @see SpecimenArray
 	 */
-	protected Collection specimenArrayCollection = new HashSet(); 
+//	protected Collection specimenArrayCollection = new HashSet(); 
+
+	/**
+	 * OrderDetails associated with the order_item.
+	 */
+	protected OrderDetails orderId;
+	
+	/**
+	 * @return the orderId
+	 * @hibernate.many-to-one column="ORDER_ID" class="edu.wustl.catissuecore.domain.OrderDetails" constrained="true"
+	 */
+	public OrderDetails getOrderId()
+	{
+		return orderId;
+	}
+
+	
+	/**
+	 * @param orderId the orderId to set
+	 */
+	public void setOrderId(OrderDetails orderId)
+	{
+		this.orderId = orderId;
+	}
 
 	//Default Constructor
 	public Distribution()
@@ -221,12 +244,29 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	        Logger.out.debug("fixedMap "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        Collection itemCollectionMap = parser.generateData(map);
-	        
-	        if (form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE ) {
-		        distributedItemCollection = itemCollectionMap;
-	        } else {
-	        	specimenArrayCollection = itemCollectionMap;
+	        Collection finalItemCollecitonMap = new HashSet();
+//	        if(form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE)
+//	        {  
+		        Iterator itr = itemCollectionMap.iterator();
+		        while(itr.hasNext())
+		        {
+		        	DistributedItem distributedItem = (DistributedItem) itr.next();
+		        	if(distributedItem.getSpecimen() != null)
+		        		finalItemCollecitonMap.add(distributedItem);
+		        	//Added by Ashish
+		        	if(distributedItem.getSpecimenArray() != null)
+		        		finalItemCollecitonMap.add(distributedItem);
 	        }
+//	        }
+	        
+//	        if (form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE ) 
+//	        {
+		        distributedItemCollection = finalItemCollecitonMap;
+//	        }
+//	        else
+//	        {
+//	        	specimenArrayCollection = finalItemCollecitonMap;
+//	        }
 	        Logger.out.debug("distributedItemCollection "+distributedItemCollection);
 	    }
 	    catch(Exception excp)
@@ -262,17 +302,17 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenArray"
 	 * @return specimenArrayCollection a collection of specimen array.
 	 */
-	public Collection getSpecimenArrayCollection() {
+	/*public Collection getSpecimenArrayCollection() {
 		return specimenArrayCollection;
-	}
+	}*/
 
 	/**
 	 * Sets the collection of specimen Array.
 	 * @param specimenArrayCollection set of specimen array
 	 */
-	public void setSpecimenArrayCollection(Collection specimenArrayCollection) {
+	/*public void setSpecimenArrayCollection(Collection specimenArrayCollection) {
 		this.specimenArrayCollection = specimenArrayCollection;
-	}
+	}*/
 	
 	/**
      * Returns message label to display on success add or edit

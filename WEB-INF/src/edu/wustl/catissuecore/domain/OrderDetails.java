@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +33,7 @@ import edu.wustl.catissuecore.bean.RequestDetailsBean;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.MapDataParser;
@@ -257,8 +257,9 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 	 * @param abstractActionForm object.
 	 * @throws AssignDataException object.
 	 */
-	public void setAllValues(AbstractActionForm abstractActionForm) throws AssignDataException
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
+		AbstractActionForm abstractActionForm = (AbstractActionForm) abstractForm;
 		if(abstractActionForm.isAddOperation()) //insert
 		{
 			operationAdd = true;
@@ -1038,4 +1039,14 @@ public class OrderDetails extends AbstractDomainObject implements Serializable
 		}
 		return beanObjSet;
 	}
+
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.IValueObject)
+	 */
+	//@Override
+	/*public void setAllValues(IValueObject arg0) throws AssignDataException
+	{
+		// TODO Auto-generated method stub
+		
+	}*/
 }

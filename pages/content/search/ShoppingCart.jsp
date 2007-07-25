@@ -76,6 +76,22 @@
 			}
 		}
 		
+		function addToOrderList()
+		{			
+		    var isChecked = updateHiddenFields();
+		    if(isChecked == "true")
+		    {
+				var action = "ShoppingCart.do?operation=addToOrderList";
+				document.forms[0].operation.value="addToOrderList";
+				document.forms[0].action = action;
+				document.forms[0].submit();
+			}
+			else
+			{
+				alert("Please select at least one checkbox");
+			}
+		}
+		
 		var selected;
 
 		function addCheckBoxValuesToArray(checkBoxName)
@@ -92,9 +108,15 @@
 		
 	</script>
 </head>
+<html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
+	<%=messageKey%>
+</html:messages>
+<html:errors/>    
+<html:form action="<%=Constants.SHOPPING_CART_OPERATION%>">
 
 <table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
-<html:form action="<%=Constants.SHOPPING_CART_OPERATION%>">
+
+
 <%
 		if(dataList.size() != 0)
 		{
@@ -126,6 +148,14 @@
 						<bean:message key="buttons.export"/>
 					</html:button>
 				</td> 
+
+				<td width="5%" nowrap align="right">
+					<html:button styleClass="actionButton"  property="orderButton" onclick="addToOrderList()">
+						<bean:message key="buttons.addtolist"/>	
+					</html:button>
+				</td>
+			
+
 			</tr>
 			</table>
 		</td>
@@ -174,6 +204,12 @@
 						<bean:message key="buttons.export"/>
 					</html:button>
 				</td> 
+				<td width="5%" nowrap align="right">
+					<html:button styleClass="actionButton"  property="orderButton" onclick="addToOrderList()" >
+					<bean:message key="buttons.addtolist"/>	
+					</html:button>
+				</td>
+				 
 			</tr>
 			</table>
 		</td>
@@ -187,5 +223,7 @@
 	<tr>
 		<td><html:hidden property="operation" value=""/></td>
 	</tr>
-</html:form>
+	
+
 </table>
+</html:form>

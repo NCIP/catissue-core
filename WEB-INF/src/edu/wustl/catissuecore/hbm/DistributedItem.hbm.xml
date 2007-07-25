@@ -47,11 +47,19 @@
 		    insert="true"
             column="SPECIMEN_ID"
         />
-
+		<many-to-one
+            name="specimenArray"
+            class="edu.wustl.catissuecore.domain.SpecimenArray"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="SPECIMEN_ARRAY_ID"
+        />
         <many-to-one
             name="distribution"
             class="edu.wustl.catissuecore.domain.Distribution"
-            cascade="none"
+            cascade="all"
             outer-join="auto"
             update="true"
             insert="true"

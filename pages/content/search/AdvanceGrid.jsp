@@ -200,7 +200,7 @@
 		if(useFunction == "shopingcart" )
 		{
 			var data = myData[row];
-			var specId = data.split(",");
+			var specId = data.split("<%=Constants.DHTMLXGRID_DELIMETER%>");
 			chkName = "value1(CHK_" + specId[0] + ")";
 		}
 		else 

@@ -11,6 +11,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,7 +27,9 @@ import edu.wustl.catissuecore.actionForm.RequestListFilterationForm;
 import edu.wustl.catissuecore.bean.RequestViewBean;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.OrderBizLogic;
+import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.OrderDetails;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.OrderingSystemUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.action.SecureAction;
@@ -132,12 +135,17 @@ public class RequestListAction extends SecureAction
 	{
 		
 		OrderBizLogic orderBizLogic = (OrderBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.REQUEST_LIST_FILTERATION_FORM_ID);
-		String colName = "status";
+		String[] colName = {"status"};
 		
 		List orderListFromDB = null;
+		List orderList = new ArrayList();
+		String[] selectColumnName = {"id","status","distributionProtocol","distributionProtocol.principalInvestigator","name","requestedDate"};
 		if(!requestStatusSelected.trim().equalsIgnoreCase("All"))
 		{		
-			orderListFromDB = orderBizLogic.retrieve(OrderDetails.class.getName(), colName, requestStatusSelected);
+			Object[] whereColumnValue = {requestStatusSelected};
+			String[] whereColumnCond = {"="};
+			orderListFromDB = orderBizLogic.retrieve(OrderDetails.class.getName(), selectColumnName,colName, whereColumnCond,whereColumnValue,Constants.AND_JOIN_CONDITION);
+			
 		}
 		else
 		{
@@ -145,9 +153,30 @@ public class RequestListAction extends SecureAction
 			String[] whereColumnCondition = {"=","="};
 			String[] whereColumnValue = {"Pending","New"};			
 			
-			orderListFromDB = orderBizLogic.retrieve(OrderDetails.class.getName(), whereColumnName, whereColumnCondition, whereColumnValue, Constants.OR_JOIN_CONDITION);
+			orderListFromDB = orderBizLogic.retrieve(OrderDetails.class.getName(), selectColumnName,whereColumnName, whereColumnCondition, whereColumnValue, Constants.OR_JOIN_CONDITION);
 		}
-		List requestList = populateRequestViewBeanList(orderListFromDB);
+		Iterator itr = orderListFromDB.iterator();
+		while(itr.hasNext())
+		{
+			Object[] obj = (Object[]) itr.next();
+			Long id = (Long) obj[0];
+			String status = (String) obj[1];
+			DistributionProtocol dp = (DistributionProtocol)obj[2];
+			User user = (User)obj[3];
+			String name = (String) obj[4];
+			Date requestedDate = (Date) obj[5];
+			
+			dp.setPrincipalInvestigator(user);
+			
+			OrderDetails orderDetails = new OrderDetails();
+			orderDetails.setId(id);
+			orderDetails.setStatus(status);
+			orderDetails.setDistributionProtocol(dp);
+			orderDetails.setName(name);
+			orderDetails.setRequestedDate(requestedDate);
+			orderList.add(orderDetails);
+		}
+		List requestList = populateRequestViewBeanList(orderList);
 		
 		return requestList;
 	}

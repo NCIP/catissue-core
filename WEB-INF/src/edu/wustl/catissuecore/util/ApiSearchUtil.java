@@ -225,9 +225,12 @@ public class ApiSearchUtil
 	
 	public static void setDistributedItemDefault(DistributedItem distributedItem)
 	{				 
+		if(distributedItem.getSpecimenArray() == null)
+		{
     	if (SearchUtil.isNullobject(distributedItem.getSpecimen()))
     	{
     		distributedItem.setSpecimen(new Specimen());
+	    	}   
     	}    	
       
     	if (SearchUtil.isNullobject(distributedItem.getDistribution()))

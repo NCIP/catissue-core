@@ -60,11 +60,14 @@
 		CreateSpecimenForm form = null;
 		String unitSpecimen = "";
 		Map map = null;
+		String frdTo = "";
 		if(obj != null && obj instanceof CreateSpecimenForm)
 		{
 			form = (CreateSpecimenForm)obj;
 			map = form.getExternalIdentifier();
 			exIdRows = form.getExIdCounter();
+			frdTo = form.getForwardTo();
+
 			if(form.getUnit() != null)
 				unitSpecimen = form.getUnit();
 		}
@@ -269,8 +272,16 @@
 			
 			}
 			else
-			{
-				setSubmittedFor('ForwardTo','eventParameters');
+			{	
+				var temp = "<%=frdTo%>";				
+				if(temp == "orderDetails")
+				{
+					setSubmittedFor('ForwardTo','orderDetails');
+			     }
+			     else
+			    {
+				   setSubmittedFor('ForwardTo','eventParameters');
+			     }  
 				confirmDisable('<%=actionToCall%>',document.forms[0].activityStatus);
 			
 			}

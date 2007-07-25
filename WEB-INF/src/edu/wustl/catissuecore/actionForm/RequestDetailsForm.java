@@ -357,7 +357,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			NewSpecimenArrayOrderItem newSpecimenArrayOrderItem = (NewSpecimenArrayOrderItem)iter.next();
 			makeKeysForNewSpecimenArrayOrderItem(arrayRequestBeanCounter,newSpecimenArrayOrderItem);			
 			List specimenOrderItemList = (List)definedArrayMap.get(newSpecimenArrayOrderItem);
-			
+			 
 			String noOfItems = "DefinedArrayRequestBean:"+arrayRequestBeanCounter+"_noOfItems";
 			values.put(noOfItems, ""+specimenOrderItemList.size());
 			
@@ -480,7 +480,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param specimenType
 	 */
 	private void populateValuesMap(OrderItem orderItem,String requestedItem,String availableQty,String specimenClass,String specimenType,String requestFor,String specimenId,String assignQty,String instanceOf,String specimenList,String specimenCollGrpId,List totalSpecimenListInRequestForDropDown,String actualSpecimenClass,String actualSpecimenType)
-	{
+	{ 
 		if(orderItem instanceof ExistingSpecimenOrderItem)
 		{
 			ExistingSpecimenOrderItem existingSpecimenOrderItem = (ExistingSpecimenOrderItem)orderItem;
@@ -490,7 +490,9 @@ public class RequestDetailsForm extends AbstractActionForm
 			values.put(specimenType, existingSpecimenOrderItem.getSpecimen().getType());			
 			values.put(specimenId,existingSpecimenOrderItem.getSpecimen().getId().toString());
 			values.put(instanceOf, "Existing");
-			if(existingSpecimenOrderItem.getDistributedItem() != null)
+			
+			//Fix me second condition added by vaishali
+			if(existingSpecimenOrderItem.getDistributedItem() != null &&existingSpecimenOrderItem.getDistributedItem().getQuantity() != null)
 		  	{		  	
 				values.put(assignQty, existingSpecimenOrderItem.getDistributedItem().getQuantity().toString());	
 		  	}
@@ -521,7 +523,10 @@ public class RequestDetailsForm extends AbstractActionForm
 			values.put(specimenType, derivedSpecimenOrderItem.getSpecimenType());			
 			values.put(specimenId,derivedSpecimenOrderItem.getParentSpecimen().getId().toString());
 			values.put(instanceOf, "Derived");
-			if(derivedSpecimenOrderItem.getDistributedItem() != null)
+			
+			
+			//fix me second condition added by vaishali
+			if(derivedSpecimenOrderItem.getDistributedItem() != null && derivedSpecimenOrderItem.getDistributedItem().getQuantity()!=null)
 		  	{		  	
 				values.put(assignQty, derivedSpecimenOrderItem.getDistributedItem().getQuantity().toString());
 				values.put(requestFor, derivedSpecimenOrderItem.getDistributedItem().getSpecimen().getId());				
@@ -745,11 +750,15 @@ public class RequestDetailsForm extends AbstractActionForm
 		this.specimenId = specimenId;
 	}
 
-	@Override
-	public void setAllValues(AbstractDomainObject abstractDomain)
+	/* (non-Javadoc)
+	 * @see edu.wustl.common.actionForm.IValueObject#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
+	 */
+	public void setAllValues(AbstractDomainObject arg0)
 	{
-		
+		// TODO Auto-generated method stub
 		
 	}
+
+	
 	
 }

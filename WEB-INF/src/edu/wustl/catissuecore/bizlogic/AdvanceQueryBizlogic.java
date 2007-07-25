@@ -8,6 +8,7 @@ package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,6 @@ import edu.wustl.common.tree.TreeNode;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
-import java.util.HashMap;
 /**
  * @author poornima_govindrao
  *

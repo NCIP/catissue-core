@@ -762,4 +762,103 @@ create sequence CATISSUE_CONTAINER_SEQ;
 create sequence CATISSUE_SPECI_ARRAY_CNTNT_SEQ;
 create sequence CATISSUE_DISTRIBUTION_SEQ;
 create sequence CATISSUE_AUDIT_EVENT_QUERY_SEQ;
+
+/* ordering */
+create sequence CATISSUE_ORDER_SEQ;
+create sequence CATISSUE_ORDER_ITEM_SEQ;
+
+drop table CATISSUE_EXISTING_SP_ORD_ITEM cascade constraints;
+drop table CATISSUE_PATH_CASE_ORDER_ITEM cascade constraints;
+drop table CATISSUE_ORDER_ITEM cascade constraints;
+drop table CATISSUE_DERIEVED_SP_ORD_ITEM cascade constraints;
+drop table CATISSUE_ORDER cascade constraints;
+drop table CATISSUE_SP_ARRAY_ORDER_ITEM cascade constraints;
+drop table CATISSUE_SPECIMEN_ORDER_ITEM cascade constraints;
+drop table CATISSUE_NEW_SP_AR_ORDER_ITEM cascade constraints;
+
+create table CATISSUE_EXISTING_SP_ORD_ITEM (
+   IDENTIFIER number(19,0) not null,
+   SPECIMEN_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_PATH_CASE_ORDER_ITEM (
+   IDENTIFIER number(19,0) not null,
+   PATHOLOGICAL_STATUS varchar(255),
+   TISSUE_SITE varchar(255),
+   SPECIMEN_CLASS varchar(255),
+   SPECIMEN_TYPE varchar(255),
+   SPECIMEN_COLL_GROUP_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_ORDER_ITEM (
+   IDENTIFIER number(19,0) not null,
+   DESCRIPTION varchar2(500),
+   DISTRIBUTED_ITEM_ID number(19,0),
+   STATUS varchar(50),
+   REQUESTED_QUANTITY double precision,
+   ORDER_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+
+create table CATISSUE_DERIEVED_SP_ORD_ITEM (
+   IDENTIFIER number(19,0) not null,
+   SPECIMEN_CLASS varchar(255),
+   SPECIMEN_TYPE varchar(255),
+   SPECIMEN_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_ORDER (
+   IDENTIFIER number(19,0) not null,
+   COMMENTS varchar2(500),
+   DISTRIBUTION_PROTOCOL_ID number(19,0),
+   NAME varchar2(500),
+   REQUESTED_DATE date,
+   STATUS varchar(50),
+   primary key (IDENTIFIER)
+);
+
+create table CATISSUE_SPECIMEN_ORDER_ITEM (
+   IDENTIFIER number(19,0) not null,
+   ARRAY_ORDER_ITEM_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+
+create table CATISSUE_SP_ARRAY_ORDER_ITEM (
+   IDENTIFIER number(19,0) not null,
+   SPECIMEN_ARRAY_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+
+create table CATISSUE_NEW_SP_AR_ORDER_ITEM (
+   IDENTIFIER number(19,0) not null,
+   ARRAY_TYPE_ID number(19,0),
+   NAME varchar(255),
+   SPECIMEN_ARRAY_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+
+/* extra for catissue_distribution */
+ alter table catissue_distribution add ORDER_ID number(19,0);
+ alter table catissue_distributed_item add  SPECIMEN_ARRAY_ID number(19,0);    
+/* extra finished */
+
+alter table CATISSUE_EXISTING_SP_ORD_ITEM add constraint FKF8B855EEBC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_EXISTING_SP_ORD_ITEM add constraint FKF8B855EE60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
+alter table CATISSUE_PATH_CASE_ORDER_ITEM add constraint FKBD5029D5F69249F7 foreign key (SPECIMEN_COLL_GROUP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
+alter table CATISSUE_PATH_CASE_ORDER_ITEM add constraint FKBD5029D5BC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_ORDER_ITEM add constraint FKB501E88060975C0B foreign key (DISTRIBUTED_ITEM_ID) references CATISSUE_DISTRIBUTED_ITEM (IDENTIFIER);
+alter table CATISSUE_ORDER_ITEM add constraint FKB501E880783867CC foreign key (ORDER_ID) references CATISSUE_ORDER (IDENTIFIER);
+alter table CATISSUE_DERIEVED_SP_ORD_ITEM add constraint FK3742152BBC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_DERIEVED_SP_ORD_ITEM add constraint FK3742152B60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
+alter table CATISSUE_ORDER add constraint FK543F22B26B1F36E7 foreign key (DISTRIBUTION_PROTOCOL_ID) references CATISSUE_DISTRIBUTION_PROTOCOL (IDENTIFIER);
+alter table CATISSUE_SP_ARRAY_ORDER_ITEM add constraint FKE3823170BC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_SP_ARRAY_ORDER_ITEM add constraint FKE3823170C4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY (IDENTIFIER);
+alter table CATISSUE_SPECIMEN_ORDER_ITEM add constraint FK48C3B39FBC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_SPECIMEN_ORDER_ITEM add constraint FK48C3B39F83505A30 foreign key (ARRAY_ORDER_ITEM_ID) references CATISSUE_NEW_SP_AR_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBCE5FBC3A foreign key (ARRAY_TYPE_ID) references CATISSUE_SPECIMEN_ARRAY_TYPE (IDENTIFIER);
+alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBBC7298A9 foreign key (IDENTIFIER) references CATISSUE_ORDER_ITEM (IDENTIFIER);
+alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY (IDENTIFIER);
+alter table CATISSUE_DISTRIBUTION add constraint FK54276680783867CC foreign key (ORDER_ID) references CATISSUE_ORDER (IDENTIFIER);
+alter table CATISSUE_DISTRIBUTED_ITEM add constraint FKA7C3ED4BC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY;
+
 commit;

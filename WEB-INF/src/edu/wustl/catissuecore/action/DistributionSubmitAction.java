@@ -82,7 +82,8 @@ public class DistributionSubmitAction extends CommonAddEditAction
 
 		if (dform.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE) 
 		{
-
+			System.out.println("Time for loop start:"+System.currentTimeMillis());
+			long startTime = System.currentTimeMillis();
 			for (int i = 1; i <= dform.getCounter(); i++) {
 				String specimenkey = "DistributedItem:" + i + "_Specimen_id";
 
@@ -98,19 +99,20 @@ public class DistributionSubmitAction extends CommonAddEditAction
 						.getDistributionBasedOn());
 				dform.setValue(specimenkey, specimenId.toString());
 			}
-
+			System.out.println("Time for loop end:"+System.currentTimeMillis());
+			long endTime = System.currentTimeMillis();
+			System.out.println("TIme to execute loop :"+(endTime-startTime));
+				
 		} 
 		else 
 		{
 			Map tempMap = new HashMap();
 
-			for (int i = 1; i <= dform.getCounter(); i++) 
-			{
-				String specimenArraykey = "SpecimenArray:" + i + "_id";
-
+			for (int i = 1; i <= dform.getCounter(); i++) {
+				//String specimenArraykey = "SpecimenArray:" + i + "_id";
+				String specimenArraykey = "DistributedItem:" + i + "_SpecimenArray_id";
 				if (dform.getValue(specimenArraykey) != null
-						&& !dform.getValue(specimenArraykey).equals("")) 
-				{
+						&& !dform.getValue(specimenArraykey).equals("")) {
 					tempMap.put(specimenArraykey, dform
 							.getValue(specimenArraykey));
 					continue;
@@ -125,7 +127,7 @@ public class DistributionSubmitAction extends CommonAddEditAction
 
 				String barcodeLabel = (String) dform.getValue(barcodeKey);
 				Long specimenArrayId = bizLogic.getSpecimenArrayId(
-						barcodeLabel, dform.getDistributionBasedOn());
+						barcodeLabel, dform.getDistributionBasedOn()); 
 				if (bizLogic.isSpecimenArrayDistributed(specimenArrayId)) {
 					throw new DAOException(
 							"errors.distribution.arrayAlreadyDistributed");

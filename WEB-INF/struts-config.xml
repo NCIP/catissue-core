@@ -7,7 +7,25 @@ PUBLIC
 <struts-config>
 	
 	<form-beans>
-		<form-bean name="userForm" type="edu.wustl.catissuecore.actionForm.UserForm"/>
+		<!--Suite-->		
+		<form-bean name="orderForm" type="edu.wustl.catissuecore.actionForm.OrderForm"/>
+		<form-bean name="OrderSpecimenForm" type="edu.wustl.catissuecore.actionForm.OrderSpecimenForm"/>
+		<form-bean name="defineArrayForm" type="edu.wustl.catissuecore.actionForm.DefineArrayForm"/>
+		<form-bean name="orderBiospecimenArrayForm" type="edu.wustl.catissuecore.actionForm.OrderBiospecimenArrayForm"/>
+		<form-bean name="orderPathologyCaseForm" type="edu.wustl.catissuecore.actionForm.OrderPathologyCaseForm"/>
+		<form-bean name="requestListForm" type="edu.wustl.catissuecore.actionForm.RequestListFilterationForm"/>
+		<form-bean name="requestDetailsForm" type="edu.wustl.catissuecore.actionForm.RequestDetailsForm"/>		
+		<form-bean name="categorySearchForm" type="edu.wustl.catissuecore.actionForm.CategorySearchForm"/>
+		<form-bean name="baseOrderItemForm" type="edu.wustl.catissuecore.actionForm.BaseOrderItemForm"/>
+		
+
+
+
+
+
+
+
+        <form-bean name="userForm" type="edu.wustl.catissuecore.actionForm.UserForm"/>
 		<form-bean name="reportedProblemForm" type="edu.wustl.catissuecore.actionForm.ReportedProblemForm"/>
 		<form-bean name="domainObjectListForm" type="edu.wustl.catissuecore.actionForm.DomainObjectListForm"/>		
 		<form-bean name="departmentForm" type="edu.wustl.catissuecore.actionForm.DepartmentForm"/>
@@ -178,6 +196,280 @@ PUBLIC
          <action path="/LoggedInHelp"
                     type="org.apache.struts.actions.ForwardAction"
                     parameter=".catissuecore.helpLoggedInDef" />
+
+		<!--Suite-->		
+			
+	<!-- Ordering System -->
+	<action path="/RequestListView"
+		type="edu.wustl.catissuecore.action.RequestListAction"
+		name="requestListForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path=".catissuecore.requestListDef" />
+		<forward name="access_denied" path="/ManageBioSpecimen.do" />
+		
+	</action>
+	<action path="/RequestDetails"
+		type="edu.wustl.catissuecore.action.RequestDetailsAction"
+		name="requestDetailsForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path=".catissuecore.requestDetailsDef" />
+	</action>
+	
+	<action path="/ArrayRequests"
+		type="edu.wustl.catissuecore.action.RequestDetailsAction"
+		name="requestDetailsForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path=".catissuecore.arrayRequestsDef" />
+	</action>
+
+	<action path="/createDerivedSpecimen"
+		type="edu.wustl.catissuecore.action.CreateDerivedSpecimenAction"
+		name="createSpecimenForm"
+		validate="false"
+		scope="request">
+		<forward name="derivedSpecimen" path="/OrderingSystemAddNew.do?addNewForwardTo=deriveSpecimen&amp;forwardTo=orderDetails&amp;addNewFor=specimenId" />		
+	</action>
+	
+	<action path="/createSpecimenFromOrder"
+		type="edu.wustl.catissuecore.action.CreateSpecimenFromOrderAction"
+		name="newSpecimenForm"
+		validate="false"
+		scope="request">		
+		<forward name="pathological" path="/OrderingSystemAddNew.do?addNewForwardTo=specimen&amp;forwardTo=orderDetails&amp;addNewFor=specimenId" />
+	</action>
+	
+	<action path="/SubmitRequestDetails"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="requestDetailsForm"
+		validate="true"
+		scope="request"
+		input="/RequestDetails.do">
+		<forward name="success" path="/RequestListView.do?pageNum=1&amp;menuSelected=17" />
+		<forward name="specimenDistributionReport" path="/DistributionReport.do" />
+		<forward name="specimenArrayDistributionReport" path="/ArrayDistributionReport.do" />
+	
+		<forward name="failure" path="/RequestDetails.do" />
+	</action>
+	
+	<action path="/UpdateQuantity" 
+			 type="edu.wustl.catissuecore.action.UpdateAvailableQuantity"		 
+			 scope="request">	 
+		</action>
+	
+	<!-- Ordering Action begins-->
+	
+		<!-- added by deepti request action begins-->		
+		<action path="/RequestToOrder"
+			type="edu.wustl.catissuecore.action.RequestToOrderAction"
+			name="orderForm"
+			validate="false"
+			scope="request">
+			<forward name="requestOrderPage" path=".catissuecore.orderDef" />
+		</action>
+
+	    <action path="/RequestToOrderSubmit"
+			type="edu.wustl.catissuecore.action.RequestToOrderSubmitAction"
+			name="orderForm"
+			validate="true"
+			input="/RequestToOrder.do"
+			scope="request">
+			<forward name="orderExistingAction" path="/OrderExistingSpecimen.do" />
+		</action>
+		<!-- added by deepti request action ends-->		
+		
+		
+		<action path="/OrderExistingSpecimen"
+			type="edu.wustl.catissuecore.action.OrderSpecimenInitAction"
+			name="OrderSpecimenForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.orderingsystem.orderMain" />
+			<forward name="failure" path="/ShoppingCart.do" />
+			<forward name="orderlist" path="/AddToOrderList.do" />
+		</action>
+
+		<!--  Added action to create specimen array from ArrayRequests.jsp -->
+		<action path="/CreateDefinedArray"
+			type="edu.wustl.catissuecore.action.CreateArrayInitAction"
+			name="specimenArrayForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.arrayDef" />
+		</action>
+
+<!-- added by deepti order to list action -->		
+
+		<action path="/AddToOrderListSpecimen"
+			type="edu.wustl.catissuecore.action.AddToOrderListAction"
+			name="OrderSpecimenForm"
+			validate="true"
+			scope="request"
+			input="/OrderExistingSpecimen.do">
+			<forward name="specimen" path="/OrderExistingSpecimen.do" redirect="true"/>
+			<forward name="specimenArray" path="/OrderBiospecimenArray.do" redirect="true"/>
+			<forward name="pathologyCase" path="/OrderPathologyCase.do" redirect="true"/>
+			<forward name="failure" path="/ShoppingCart.do" />
+		</action>	
+	
+
+		<action path="/AddToOrderListArray"
+			type="edu.wustl.catissuecore.action.AddToOrderListAction"
+			name="orderBiospecimenArrayForm"
+			validate="true"
+			scope="request"
+			input="/OrderBiospecimenArray.do">
+			<forward name="specimen" path="/OrderExistingSpecimen.do" redirect="true"/>
+			<forward name="specimenArray" path="/OrderBiospecimenArray.do" redirect="true"/>
+			<forward name="pathologyCase" path="/OrderPathologyCase.do" redirect="true"/>
+			<forward name="failure" path="/ShoppingCart.do" />
+		</action >		
+
+		
+		<action path="/AddToOrderListPathologyCase"
+			type="edu.wustl.catissuecore.action.AddToOrderListAction"
+			name="orderPathologyCaseForm"
+			validate="true"
+			scope="request"
+			input="/OrderPathologyCase.do">
+			<forward name="specimen" path="/OrderExistingSpecimen.do" redirect="true"/>
+			<forward name="specimenArray" path="/OrderBiospecimenArray.do" redirect="true"/>
+			<forward name="pathologyCase" path="/OrderPathologyCase.do" redirect="true"/>
+			<forward name="failure" path="/ShoppingCart.do" />
+		</action >
+		
+<!-- added by deepti order to list action ends-->		
+		<action path="/OrderSpecimen" forward="/pages/content/orderingsystem/OrderItem.jsp" />
+		
+		
+	<!--Save the requested orders -->
+	<action path="/SaveOrderItems"
+		type="edu.wustl.catissuecore.action.SaveOrderInitAction"
+		name="OrderSpecimenForm"
+		 validate="false"
+		scope="request">
+		<forward name="success" path="/InsertOrderItems.do"/>
+		<forward name="failure" path="/ShoppingCart.do" />
+		<!--forward name="failure" path="/MyListTab.do" /-->
+	</action>
+
+	
+	<action path="/SaveOrderArrayItems"
+		type="edu.wustl.catissuecore.action.SaveOrderInitAction"
+		name="orderBiospecimenArrayForm"
+		 validate="false"
+		scope="request">
+		<forward name="success" path="/InsertOrderArrayItems.do"/>
+		<forward name="failure" path="/ShoppingCart.do" />
+		<!--forward name="failure" path="/MyListTab.do" /-->
+	</action>
+	
+	<action path="/SaveOrderPathologyItems"
+		type="edu.wustl.catissuecore.action.SaveOrderInitAction"
+		name="orderPathologyCaseForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path="/InsertOrderPathologyItems.do"/>
+		<forward name="failure" path="/ShoppingCart.do" />
+		<!-- forward name="failure" path="/MyListTab.do" /-->
+	</action>
+	
+	
+	<action path="/InsertOrderItems"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="OrderSpecimenForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path="/ShoppingCart.do"/>
+		<!-- forward name="success" path="/MyListTab.do" /-->
+	</action>
+
+	<action path="/InsertOrderArrayItems"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="orderBiospecimenArrayForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path="/ShoppingCart.do"/>
+		<!-- forward name="success" path="/MyListTab.do" /-->
+	</action>
+
+	<action path="/InsertOrderPathologyItems"
+		type="edu.wustl.common.action.CommonAddEditAction"
+		name="orderPathologyCaseForm"
+		validate="false"
+		scope="request">
+		<forward name="success" path="/ShoppingCart.do"/>
+		<!-- forward name="success" path="/MyListTab.do" /-->
+	</action>
+			<!-- Ordering System Add New -->
+		<action path="/OrderingSystemAddNew"
+			type="edu.wustl.common.action.AddNewAction"
+			name="requestDetailsForm"
+			validate="false"
+			scope="request">
+			<forward name="deriveSpecimen" path="/CreateSpecimen.do?operation=add&amp;pageOf=&amp;menuSelected=15&amp;virtualLocated=true" />
+			<forward name="specimen" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15&amp;virtualLocated=true" />
+			
+		</action>
+
+	<!-- AddNew Actions Ends -->
+	
+	
+	<!-- Ordering Action ends-->
+					
+		<!--Ordering System:- Update Status in one Shot-->
+		<action path="/UpdateStatus" 
+			 type="edu.wustl.catissuecore.action.UpdateStatusAction"		 
+			 scope="request">	 
+		</action>
+		<!-- Ordering Action ends-->
+	
+		<!--Added by Deepti -define array  begin-->
+		<action path="/DefineArray"
+			type="edu.wustl.catissuecore.action.DefineArrayAction"
+			name="defineArrayForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.orderingsystem.definearray" />
+			<forward name="failure" path="/ShoppingCart.do" />
+		</action>
+
+		<action path="/DefineArraySubmit"
+			type="edu.wustl.catissuecore.action.DefineArraySubmitAction"
+			name="defineArrayForm"
+			validate="true"
+			scope="request"
+			input="/DefineArray.do">
+			<forward name="success" path="/OrderExistingSpecimen.do" />
+			<forward name="defineArrayPage" path="/DefineArray.do"/>
+		</action>
+		
+
+		<action path="/OrderBiospecimenArray"
+			type="edu.wustl.catissuecore.action.OrderBiospecimenArrayAction"
+			name="orderBiospecimenArrayForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.orderingsystem.orderMain" />
+			<forward name="failure" path="/ShoppingCart.do" />
+		</action>
+		
+		<action path="/OrderPathologyCase"
+			type="edu.wustl.catissuecore.action.OrderPathologyCaseAction"
+			name="orderPathologyCaseForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.orderingsystem.orderMain"/>
+			<forward name="failure" path="/ShoppingCart.do" />
+		</action>
+		
+		
+	<!--Added by Deepti -define array end-->
+	
+		<!--Suite-->
+
 
         <!-- Login Module Actions Begin -->
         
@@ -991,6 +1283,7 @@ PUBLIC
 			<forward name="pageOfAliquot" path="/Aliquots.do?pageOf=pageOfAliquot&amp;menuSelected=15" />
 			<forward name="pageOfCreateAliquot" path="/CreateAliquots.do?pageOf=pageOfCreateAliquot&amp;operation=add&amp;menuSelected=15&amp;buttonClicked=submit" />
 			<forward name="sameCollectionGroup" path="/NewSpecimen.do?operation=add&amp;pageOf=pageOfNewSpecimen&amp;menuSelected=15" />
+			<forward name="orderDetails" path="/RequestDetails.do" />
 		</action>
 		
 		<action path="/CreateSpecimenEdit"
@@ -2359,7 +2652,10 @@ PUBLIC
 			<forward name="shoppingCartAdd" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 			<forward name="success" path=".catissuecore.shoppingCartDef" />
 			<forward name="failure" path=".catissuecore.shoppingCartDef" />
+			<!-- forward name="success" path="/pages/content/search/ShoppingCart.jsp" />
+			<forward name="failure" path="/pages/content/search/ShoppingCart.jsp" /-->
 			<forward name="duplicateSpecimen" path=".catissuecore.queryResultsSpreadsheetViewDef" />
+			<forward name="requestToOrder" path="/RequestToOrder.do"/>
 		</action>
 		
 		<action path="/ShoppingCartOperation"

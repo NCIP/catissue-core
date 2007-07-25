@@ -42,12 +42,12 @@ public class OrderSpecimenForm extends AbstractActionForm
 	/**
 	 * String containing the class of specimen 
 	 */
-	private String specimenClassName;
+	private String className;
 
 	/**
 	 * String containing the type of specimen 
 	 */
-	private String specimenType;
+	private String type;
 
 	/**
 	 * String array containing the selected items
@@ -307,19 +307,19 @@ public class OrderSpecimenForm extends AbstractActionForm
 
 			if (typeOfSpecimen.equals("true"))
 			{
-				if (specimenClassName.equals("-1") || specimenClassName.equals("-- Select --"))
+				if (className.equals("-1") || className.equals("-- Select --"))
 				{
 					errors.add("className", new ActionError("errors.specimenClass.required"));
 					values.clear();
 				}
-				if (specimenType.equals("-1") || specimenType.equals("-- Select --"))
+				if (type.equals("-1") || type.equals("-- Select --"))
 				{
 					errors.add("type", new ActionError("errors.specimenType.required"));
 					values.clear();
 				}
 
 				if (!addToArray.equalsIgnoreCase("None") && defineArrayFormObj != null
-						&& !defineArrayFormObj.getArrayClass().equals(specimenClassName))
+						&& !defineArrayFormObj.getArrayClass().equals(className))
 				{
 					errors.add("addToArray", new ActionError("errors.order.properclass"));
 					values.clear();
@@ -508,35 +508,36 @@ public class OrderSpecimenForm extends AbstractActionForm
 	}
 
 	/**
-	 * @return specimenClassName
+	 * @return Returns the className.
 	 */
-	public String getSpecimenClassName()
+	public String getClassName()
 	{
-		return specimenClassName;
+		return className;
 	}
 
 	/**
-	 * @param specimenClassName String containing the class of specimen 
+	 * @param className The className to set.
 	 */
-	public void setSpecimenClassName(String specimenClassName)
+	public void setClassName(String className)
 	{
-		this.specimenClassName = specimenClassName;
+		this.className = className;
 	}
 
 	/**
-	 * @return specimenType
+	 * @return Returns the type.
 	 */
-	public String getSpecimenType()
+	public String getType()
 	{
-		return specimenType;
+		return type;
 	}
 
 	/**
-	 * @param specimenType String containing the type of specimen 
+	 * @param type The type to set.
 	 */
-	public void setSpecimenType(String specimenType)
+	public void setType(String type)
 	{
-		this.specimenType = specimenType;
+		this.type = type;
 	}
 
+	
 }

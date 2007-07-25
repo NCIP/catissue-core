@@ -91,6 +91,7 @@ public class ShoppingCartAction  extends BaseAction
         }
         else
         {
+        	session.setAttribute("OrderForm","true");
         	if(operation.equals(Constants.ADD)) //IF OPERATION IS "ADD"
 	        {
         		//Get the checkbox map values
@@ -223,6 +224,11 @@ public class ShoppingCartAction  extends BaseAction
 	        	return new ActionForward(path);
 	        }
 	        
+	        else if(operation.equals("addToOrderList"))
+	        {
+	        	addToOrderLiist(advForm,request,cart,session);
+				target = new String("requestToOrder");
+	        }
         	request.setAttribute(Constants.SPREADSHEET_DATA_LIST,makeGridData(cart));
         }
         //Sets the operation attribute to be used in the Add/Edit Shopping Cart Page. 
@@ -233,6 +239,27 @@ public class ShoppingCartAction  extends BaseAction
     	Logger.out.debug(Constants.MENU_SELECTED + " set in ShoppingCart Action : 18  -- "  ); 
 
         
+    	if(advForm.getValues().size()!=0)
+    	{
+	    	if(session.getAttribute("OrderForm")==null) 
+	    	{
+	    		ActionErrors errors = new ActionErrors();
+	        	ActionError error = new ActionError("errors.order.alreadygiven");
+	        	errors.add(ActionErrors.GLOBAL_ERROR,error);
+	        	saveErrors(request,errors);
+	    	}
+	    	else
+	    	{
+		       	if(session.getAttribute("RequestedBioSpecimens") != null)
+		    		session.removeAttribute("RequestedBioSpecimens");
+		    	
+		    	if(session.getAttribute("OrderForm") != null)
+		    		session.removeAttribute("OrderForm");
+		    	
+		    	if(session.getAttribute("DefineArrayFormObjects")!=null)
+		    		session.removeAttribute("DefineArrayFormObjects");
+	    	}
+    	}
         return mapping.findForward(target);
     }
 
@@ -282,4 +309,35 @@ public class ShoppingCartAction  extends BaseAction
 		
 		return gridData;
     }
+    
+    private void addToOrderLiist(AdvanceSearchForm advForm,HttpServletRequest request,ShoppingCart cart,HttpSession session)
+    {
+    	Map map = advForm.getValues();
+    	Object obj[] = map.keySet().toArray();
+		if(cart != null)
+		{
+			Hashtable table = cart.getCart();
+			if(table != null && table.size() != 0)
+			{
+				List specimenIdList=new ArrayList();
+				String strSpecimenId;
+				for(int i=0;i<obj.length;i++)
+				{
+					String str = obj[i].toString();
+					
+		        	int index = str.indexOf("_") + 1;
+		        	String key = str.substring(index);
+		        	key = key.trim();
+					Specimen specimen = (Specimen)table.get(key);
+					strSpecimenId=String.valueOf(specimen.getId());
+					specimenIdList.add(strSpecimenId);
+				}
+				//request.setAttribute("specimenId", specimenIdList);
+				session.setAttribute("specimenId", specimenIdList);
+			}
+		}
+
+    }
+    
+    
 }

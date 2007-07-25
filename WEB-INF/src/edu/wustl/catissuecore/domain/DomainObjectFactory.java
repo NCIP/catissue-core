@@ -169,6 +169,32 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
             case Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID:
             	className = SpecimenArray.class.getName();
         	 break;
+//Ordering System
+            case Constants.REQUEST_LIST_FILTERATION_FORM_ID:
+            	className = OrderDetails.class.getName();
+        	 break;
+        	 
+            case Constants.REQUEST_DETAILS_FORM_ID:
+            	className = OrderDetails.class.getName();
+        	 break;
+        	
+            case Constants.ORDER_FORM_ID:
+            	className = OrderDetails.class.getName();
+		 		break;
+		 		
+			case Constants.ORDER_ARRAY_FORM_ID:
+            	className = OrderDetails.class.getName();
+				break;
+			case Constants.ORDER_PATHOLOGY_FORM_ID:
+            	className = OrderDetails.class.getName();
+				break;
+			/*case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID:
+				className = PathologyReportReviewParameter.class.getName();
+				break;
+			case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID:
+				className = QuarantineEventParameter.class.getName();
+				break;*/
+
         	
         }
         return className;
@@ -356,6 +382,24 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 			case Constants.SPECIMEN_ARRAY_ALIQUOT_FORM_ID:
 		     	abstractDomain = new SpecimenArray(form);
 		 		break;		 	
+				 
+			case Constants.ORDER_FORM_ID:
+				abstractDomain = new OrderDetails(form);
+		 		break;
+		 		
+			case Constants.ORDER_ARRAY_FORM_ID:
+				abstractDomain = new OrderDetails(form);
+				break;
+			case Constants.ORDER_PATHOLOGY_FORM_ID:
+				abstractDomain = new OrderDetails(form);
+				break;
+			/*case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID:
+				abstractDomain = new PathologyReportReviewParameter(form);
+				break;
+			case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID:
+				abstractDomain = new QuarantineEventParameter(form);
+				break;*/
+				
 				 
 			//added as per bug 79
              default:

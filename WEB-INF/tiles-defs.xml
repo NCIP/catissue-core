@@ -953,6 +953,52 @@
 		<put name="content" value="/pages/blank.jsp" />
 	</definition>
 	<!--P.G. - End -->
+<!--Orderering System-->
+	<!--Added By Deepti request order page -->
+	<definition name=".catissuecore.orderDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/orderingsystem/RequestOrder.jsp" />
+	</definition>
+	
+	<!--Added By Deepti  ordering page -->
+	<definition name=".catissuecore.orderingsystem.orderItem" path="/pages/content/orderingsystem/OrderItem.jsp">
+	</definition>
+	
+	<definition name=".catissuecore.orderingsystem.orderList" path="/pages/content/orderingsystem/OrderList.jsp">
+	</definition>
+
+	<definition name=".catissuecore.orderingsystem.orderbiospecimenarray" path="/pages/content/orderingsystem/OrderBiospecimenArray.jsp">
+	</definition>
+	
+	<definition name=".catissuecore.orderingsystem.orderMain" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/orderingsystem/OrderingSystemMain.jsp" />		
+	</definition>
+	
+	<definition name=".catissuecore.orderingsystem.definearray" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/orderingsystem/DefineArray.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.orderingsystem.requestOrder" path="/pages/content/orderingsystem/OrderSpecimen.jsp">
+	</definition>
+	
+	<definition name=".catissuecore.orderingsystem.orderpathologycase" path="/pages/content/orderingsystem/OrderPathologyCase.jsp">
+	</definition>
+	
+
+	<definition name=".catissuecore.requestListDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/orderingsystem/RequestListView.jsp" />
+	</definition>
+	
+	<definition name=".catissuecore.requestDetailsDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/orderingsystem/RequestDetails.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.arrayRequestsDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/orderingsystem/ArrayRequests.jsp" />
+	</definition>
+
+	<definition name=".catissuecore.myListTabDef" extends=".catissuecore.searchHomeDef">
+		<put name="content" value="/pages/content/search/MyListTabPage.jsp" />
+	</definition>
 
 
 </tiles-definitions>

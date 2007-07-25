@@ -27,7 +27,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 	/**
 	 * String containing the class of specimen
 	 */
-	private String specimenClass;
+	private String className;
 
 	/**
 	 * String containing the type of specimen
@@ -201,20 +201,21 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 		this.pathologicalStatus = pathologicalStatus;
 	}
 
+	
 	/**
-	 * @return class of specimen
+	 * @return Returns the className.
 	 */
-	public String getSpecimenClass() 
+	public String getClassName()
 	{
-		return specimenClass;
+		return className;
 	}
 
 	/**
-	 * @param specimenClass String containing the class of specimen
+	 * @param className The className to set.
 	 */
-	public void setSpecimenClass(String specimenClass)
+	public void setClassName(String className)
 	{
-		this.specimenClass = specimenClass;
+		this.className = className;
 	}
 
 	/**
@@ -418,8 +419,8 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 			
 			if (typeOfCase.equals("false")) 
 			{
-				if (specimenClass.equals("-1")
-						|| specimenClass.equals("-- Select --")) 
+				if (className.equals("-1")
+						|| className.equals("-- Select --")) 
 				{
 					errors.add("specimenClass", new ActionError(
 							"errors.specimenClass.required"));
@@ -433,7 +434,7 @@ public class OrderPathologyCaseForm extends AbstractActionForm
 					values.clear();
 				}
 				if (!addToArray.equalsIgnoreCase("None") && defineArrayFormObj != null
-						&& !defineArrayFormObj.getArrayClass().equals(specimenClass))
+						&& !defineArrayFormObj.getArrayClass().equals(className))
 				{
 					errors.add("addToArray", new ActionError("errors.order.properclass"));
 					values.clear();

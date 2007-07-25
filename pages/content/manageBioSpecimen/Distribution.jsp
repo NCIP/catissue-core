@@ -135,7 +135,8 @@
 	
 			//spreqno.innerHTML="" + sname;
 			if (document.forms[0].distributionType[1].checked == true) {
-			      identifier = "value(SpecimenArray:" + rowno +"_id)";
+			     // identifier = "value(SpecimenArray:" + rowno +"_id)";
+			      identifier = "value(DistributedItem:" + rowno +"_SpecimenArray_id)";
 				  quantVal = "1";
 
 			}
@@ -552,8 +553,10 @@
 							dIdentifier = "value(DistributedItem:" + i + "_id)";
 							keyid = "DistributedItem:" + i + "_id";
 						} else {
-							dIdentifier = "value(SpecimenArray:" + i + "_id)";
-							keyid = "SpecimenArray:" + i + "_id";
+							//dIdentifier = "value(SpecimenArray:" + i + "_id)";
+							dIdentifier = "value(DistributedItem:" + i +"_SpecimenArray_id)";
+							
+							keyid = "DistributedItem:" + i +"_SpecimenArray_id";
 							readOnlyForAll = true;
 						}
 						

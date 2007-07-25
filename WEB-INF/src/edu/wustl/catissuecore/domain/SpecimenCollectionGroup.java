@@ -118,7 +118,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * Collection and Received events associated with this SCG
      */
     protected Collection specimenEventParametersCollection = new HashSet();
-
+	 protected String surgicalPathologyNumber;
     
 	/**
 	 * @return the specimenEventParametersCollection
@@ -611,4 +611,26 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	{
 		this.applyEventsToSpecimens = applyEventsToSpecimens;
 	}
+	  /**
+     * Returns the surgicalPathologyNumber of the report at the time of specimen collection. 
+     * @hibernate.property name="surgicalPathologyNumber" type="string" 
+     * column="SURGICAL_PATHOLOGY_NUMBER" length="50"
+     * @return surgical pathology number of the report at the time of specimen collection.
+     * @see #setSurgicalPathologyNumber(String)
+     */
+	public String getSurgicalPathologyNumber() 
+	{
+		return surgicalPathologyNumber;
+	}
+
+	/**
+     * Sets the surgical pathology number of the report at the time of specimen collection. 
+     * @param surgicalPathologyNumber the surgical pathology report of the report at the time of specimen collection.
+     * @see #getSurgicalPathologyNumber()
+     */
+	public void setSurgicalPathologyNumber(String surgicalPathologyNumber) 
+	{
+		this.surgicalPathologyNumber = surgicalPathologyNumber;
+	} 
+
 }

@@ -10,6 +10,7 @@
         table="CATISSUE_ORDER"
         dynamic-update="false"
         dynamic-insert="false"
+        lazy="true"
     >
 
         <id
@@ -57,7 +58,7 @@
       <set
             name="orderItemCollection"
             table="CATISSUE_ORDER_ITEM"
-            lazy="false"
+            lazy="true"
             cascade="save-update"
             sort="unsorted"
         >
@@ -74,7 +75,7 @@
         <set
             name="distributionCollection"
             table="CATISSUE_DISTRIBUTION"
-            lazy="false"            
+            lazy="true"            
             cascade="save-update"
             sort="unsorted"
         >

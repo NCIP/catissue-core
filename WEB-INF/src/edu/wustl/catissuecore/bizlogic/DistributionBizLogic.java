@@ -9,6 +9,7 @@
  */
 
 package edu.wustl.catissuecore.bizlogic;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -61,31 +62,28 @@ public class DistributionBizLogic extends DefaultBizLogic
 	 * @param session The session in which the object is saved.
 	 * @throws DAOException 
 	 */
-	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean)
-			throws DAOException, UserNotAuthorizedException
+	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
-		Distribution dist = (Distribution) obj; 
+		Distribution dist = (Distribution) obj;
+ 
+		validateAndSetAssociateObject(dist, dao);
 
-		validateAndSetAssociateObject(dist,dao);
-		
 		Object siteObj = dao.retrieve(Site.class.getName(), dist.getToSite().getId());
 		if (siteObj != null)
 		{
 			Site site = (Site) siteObj;
-			if(!site.getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+			if (!site.getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
 			{
 				throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSite"));
 			}
 			dist.setToSite(site);
 		}
 
-		dao.insert(dist, sessionDataBean, Constants.IS_AUDITABLE_TRUE,
-				Constants.IS_SECURE_UPDATE_TRUE);
+		dao.insert(dist, sessionDataBean, Constants.IS_AUDITABLE_TRUE, Constants.IS_SECURE_UPDATE_TRUE);
 
 		try
 		{
-			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null,
-					getProtectionObjects(dist), getDynamicGroups(dist));
+			SecurityManager.getInstance(this.getClass()).insertAuthorizationData(null, getProtectionObjects(dist), getDynamicGroups(dist));
 		}
 		catch (SMException e)
 		{
@@ -98,8 +96,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		boolean distributed = true;
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		List list = null;
-		String queryStr = "select array.distribution_id from catissue_specimen_array array where array.identifier ="
-				+ specimenArrayId;
+		String queryStr = "select array.distribution_id from catissue_specimen_array array where array.identifier =" + specimenArrayId;
 
 		try
 		{
@@ -119,8 +116,6 @@ public class DistributionBizLogic extends DefaultBizLogic
 		return distributed;
 	}
 
-
-
 	private Set getProtectionObjects(AbstractDomainObject obj)
 	{
 		Set protectionObjects = new HashSet();
@@ -132,7 +127,8 @@ public class DistributionBizLogic extends DefaultBizLogic
 		while (distributedItemIterator.hasNext())
 		{
 			DistributedItem distributedItem = (DistributedItem) distributedItemIterator.next();
-			protectionObjects.add(distributedItem.getSpecimen());
+			if (distributedItem.getSpecimen() != null)
+				protectionObjects.add(distributedItem.getSpecimen());
 		}
 
 		return protectionObjects;
@@ -142,8 +138,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 	{
 		Distribution distribution = (Distribution) obj;
 		String[] dynamicGroups = new String[1];
-		dynamicGroups[0] = Constants.getDistributionProtocolPGName(distribution
-				.getDistributionProtocol().getId());
+		dynamicGroups[0] = Constants.getDistributionProtocolPGName(distribution.getDistributionProtocol().getId());
 
 		return dynamicGroups;
 	}
@@ -155,12 +150,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 	 * @throws DAOException 
 	 * @throws HibernateException Exception thrown during hibernate operations.
 	 */
-	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean)
-			throws DAOException, UserNotAuthorizedException
+	protected void update(DAO dao, Object obj, Object oldObj, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Distribution distribution = (Distribution) obj;
-		dao.update(obj, sessionDataBean, Constants.IS_AUDITABLE_TRUE,
-				Constants.IS_SECURE_UPDATE_TRUE, Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
+		dao.update(obj, sessionDataBean, Constants.IS_AUDITABLE_TRUE, Constants.IS_SECURE_UPDATE_TRUE, Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
 
 		//Audit of Distribution.
 		dao.audit(obj, oldObj, sessionDataBean, Constants.IS_AUDITABLE_TRUE);
@@ -172,8 +165,8 @@ public class DistributionBizLogic extends DefaultBizLogic
 		Iterator it = distributedItemCollection.iterator();
 		while (it.hasNext())
 		{
-			DistributedItem item = (DistributedItem) it.next();	
-			
+			DistributedItem item = (DistributedItem) it.next();
+
 			/**
 			 * Start: Change for API Search   --- Jitendra 06/10/2006
 			 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -183,11 +176,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 			 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
 			 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 			 */
-	        ApiSearchUtil.setDistributedItemDefault(item);
-	        //End:-  Change for API Search 
+			ApiSearchUtil.setDistributedItemDefault(item);
+			//End:-  Change for API Search 
 
-			DistributedItem oldItem = (DistributedItem) getCorrespondingOldObject(
-					oldDistributedItemCollection, item.getId());
+			DistributedItem oldItem = (DistributedItem) getCorrespondingOldObject(oldDistributedItemCollection, item.getId());
 			//update the available quantity
 			Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getId());
 			Double previousQuantity = (Double) item.getPreviousQuantity();
@@ -200,44 +192,37 @@ public class DistributionBizLogic extends DefaultBizLogic
 
 			if (!availability)
 			{
-				throw new DAOException(ApplicationProperties
-						.getValue("errors.distribution.quantity"));
+				throw new DAOException(ApplicationProperties.getValue("errors.distribution.quantity"));
 			}
 			else
 			{
-				if(((Specimen)specimenObj).getAvailableQuantity().getValue().doubleValue() == 0)
+				if (((Specimen) specimenObj).getAvailableQuantity().getValue().doubleValue() == 0)
 				{
-					((Specimen)specimenObj).setAvailable(new Boolean(false));
+					((Specimen) specimenObj).setAvailable(new Boolean(false));
 				}
-				dao
-						.update(specimenObj, sessionDataBean, Constants.IS_AUDITABLE_TRUE,
-								Constants.IS_SECURE_UPDATE_TRUE,
-								Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
+				dao.update(specimenObj, sessionDataBean, Constants.IS_AUDITABLE_TRUE, Constants.IS_SECURE_UPDATE_TRUE,
+						Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
 				//Audit of Specimen.
 				//If a new specimen is distributed.
 				if (oldItem == null)
 				{
-					Object specimenObjPrev = dao.retrieve(Specimen.class.getName(), item
-							.getSpecimen().getId());
-					dao.audit(specimenObj, specimenObjPrev, sessionDataBean,
-							Constants.IS_AUDITABLE_TRUE);
+					Object specimenObjPrev = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getId());
+					dao.audit(specimenObj, specimenObjPrev, sessionDataBean, Constants.IS_AUDITABLE_TRUE);
 				}
 				//if a distributed specimen is updated  
 				else
-					dao.audit(specimenObj, oldItem.getSpecimen(), sessionDataBean,
-							Constants.IS_AUDITABLE_TRUE);
+					dao.audit(specimenObj, oldItem.getSpecimen(), sessionDataBean, Constants.IS_AUDITABLE_TRUE);
 			}
 			item.setDistribution(distribution);
 
-			dao.update(item, sessionDataBean, Constants.IS_AUDITABLE_TRUE,
-					Constants.IS_SECURE_UPDATE_TRUE, Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
+			dao.update(item, sessionDataBean, Constants.IS_AUDITABLE_TRUE, Constants.IS_SECURE_UPDATE_TRUE,
+					Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
 
 			//Audit of Distributed Item.
 			dao.audit(item, oldItem, sessionDataBean, Constants.IS_AUDITABLE_TRUE);
 		}
 		//Mandar : 04-Apr-06 for updating the removed specimens start
-		updateRemovedSpecimens(distributedItemCollection, oldDistributedItemCollection, dao,
-				sessionDataBean);
+		updateRemovedSpecimens(distributedItemCollection, oldDistributedItemCollection, dao, sessionDataBean);
 		Logger.out.debug("Update Successful ...04-Apr-06");
 		// Mandar : 04-Apr-06 end
 	}
@@ -249,12 +234,11 @@ public class DistributionBizLogic extends DefaultBizLogic
 		 * Reviewer: Sachin lale
 		 * Calling Domain object from Proxy Object
 		 */
-//		Specimen specimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimenObj);
+		//		Specimen specimen = (Specimen)HibernateMetaData.getProxyObjectImpl(specimenObj);
 		if (specimen instanceof TissueSpecimen)
 		{
 			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
-			double availabeQty = Double.parseDouble(tissueSpecimen.getAvailableQuantity()
-					.toString());//tissueSpecimen.getAvailableQuantityInGram().doubleValue();
+			double availabeQty = Double.parseDouble(tissueSpecimen.getAvailableQuantity().toString());//tissueSpecimen.getAvailableQuantityInGram().doubleValue();
 			Logger.out.debug("TissueAvailabeQty" + availabeQty);
 			if (quantity > availabeQty)
 				return false;
@@ -280,8 +264,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		else if (specimen instanceof MolecularSpecimen)
 		{
 			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
-			double availabeQty = Double.parseDouble(molecularSpecimen.getAvailableQuantity().getValue()
-					.toString());//molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
+			double availabeQty = Double.parseDouble(molecularSpecimen.getAvailableQuantity().getValue().toString());//molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
 			if (quantity > availabeQty)
 				return false;
 			else
@@ -293,8 +276,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		else if (specimen instanceof FluidSpecimen)
 		{
 			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
-			double availabeQty = Double
-					.parseDouble(fluidSpecimen.getAvailableQuantity().toString());//fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
+			double availabeQty = Double.parseDouble(fluidSpecimen.getAvailableQuantity().toString());//fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
 			if (quantity > availabeQty)
 				return false;
 			else
@@ -303,19 +285,17 @@ public class DistributionBizLogic extends DefaultBizLogic
 				fluidSpecimen.setAvailableQuantity(new QuantityInMilliliter(availabeQty));//fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
 			}
 		}
-		if(specimen.getAvailableQuantity().getValue().doubleValue() == 0)
+		if (specimen.getAvailableQuantity().getValue().doubleValue() == 0)
 		{
 			specimen.setAvailable(new Boolean(false));
 		}
 		return true;
 	}
 
-	public void disableRelatedObjects(DAO dao, Long distributionProtocolIDArr[])
-			throws DAOException
+	public void disableRelatedObjects(DAO dao, Long distributionProtocolIDArr[]) throws DAOException
 	{
-		List listOfSubElement = super.disableObjects(dao, Distribution.class,
-				"distributionProtocol", "CATISSUE_DISTRIBUTION", "DISTRIBUTION_PROTOCOL_ID",
-				distributionProtocolIDArr);
+		List listOfSubElement = super.disableObjects(dao, Distribution.class, "distributionProtocol", "CATISSUE_DISTRIBUTION",
+				"DISTRIBUTION_PROTOCOL_ID", distributionProtocolIDArr);
 	}
 
 	/**
@@ -329,41 +309,36 @@ public class DistributionBizLogic extends DefaultBizLogic
 	 * @throws SMException
 	 * @throws DAOException
 	 */
-	public void assignPrivilegeToRelatedObjectsForDP(DAO dao, String privilegeName,
-			Long[] objectIds, Long userId, String roleId, boolean assignToUser,
-			boolean assignOperation) throws SMException, DAOException
+	public void assignPrivilegeToRelatedObjectsForDP(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId,
+			boolean assignToUser, boolean assignOperation) throws SMException, DAOException
 	{
-		List listOfSubElement = super.getRelatedObjects(dao, Distribution.class,
-				"distributionProtocol", objectIds);
+		List listOfSubElement = super.getRelatedObjects(dao, Distribution.class, "distributionProtocol", objectIds);
 		Logger.out.debug("Distribution................" + listOfSubElement.size());
 		if (!listOfSubElement.isEmpty())
 		{
 			Logger.out.debug("Distribution Id : ................" + listOfSubElement.get(0));
-			super.setPrivilege(dao, privilegeName, Distribution.class, Utility
-					.toLongArray(listOfSubElement), userId, roleId, assignToUser, assignOperation);
+			super.setPrivilege(dao, privilegeName, Distribution.class, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
+					assignOperation);
 
-			assignPrivilegeToRelatedObjectsForDistribution(dao, privilegeName, Utility
-					.toLongArray(listOfSubElement), userId, roleId, assignToUser, assignOperation);
+			assignPrivilegeToRelatedObjectsForDistribution(dao, privilegeName, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
+					assignOperation);
 		}
 	}
 
-	public void assignPrivilegeToRelatedObjectsForDistribution(DAO dao, String privilegeName,
-			Long[] objectIds, Long userId, String roleId, boolean assignToUser,
-			boolean assignOperation) throws SMException, DAOException
+	public void assignPrivilegeToRelatedObjectsForDistribution(DAO dao, String privilegeName, Long[] objectIds, Long userId, String roleId,
+			boolean assignToUser, boolean assignOperation) throws SMException, DAOException
 	{
-		List listOfSubElement = super.getRelatedObjects(dao, DistributedItem.class, "distribution",
-				objectIds);
+		List listOfSubElement = super.getRelatedObjects(dao, DistributedItem.class, "distribution", objectIds);
 		Logger.out.debug("Distributed Item................" + listOfSubElement.size());
 		if (!listOfSubElement.isEmpty())
 		{
 			Logger.out.debug("Distribution Item Id : ................" + listOfSubElement.get(0));
-			super.setPrivilege(dao, privilegeName, DistributedItem.class, Utility
-					.toLongArray(listOfSubElement), userId, roleId, assignToUser, assignOperation);
+			super.setPrivilege(dao, privilegeName, DistributedItem.class, Utility.toLongArray(listOfSubElement), userId, roleId, assignToUser,
+					assignOperation);
 
-			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance()
-					.getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
-			bizLogic.assignPrivilegeToRelatedObjectsForDistributedItem(dao, privilegeName, Utility
-					.toLongArray(listOfSubElement), userId, roleId, assignToUser, assignOperation);
+			NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+			bizLogic.assignPrivilegeToRelatedObjectsForDistributedItem(dao, privilegeName, Utility.toLongArray(listOfSubElement), userId, roleId,
+					assignToUser, assignOperation);
 		}
 
 	}
@@ -384,101 +359,105 @@ public class DistributionBizLogic extends DefaultBizLogic
 		 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
 		 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 		 */
-        ApiSearchUtil.setDistributionDefault(distribution);
-        //End:-  Change for API Search 
-        
+		ApiSearchUtil.setDistributionDefault(distribution);
+		//End:-  Change for API Search 
+
 		//Added By Ashish
 		if (distribution == null)
 		{
-			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg","Distribution"));			
+			throw new DAOException(ApplicationProperties.getValue("domain.object.null.err.msg", "Distribution"));
 		}
 		Validator validator = new Validator();
-		String message="";
-		if (distribution.getDistributionProtocol()== null || distribution.getDistributionProtocol().getId()== null)
-		{			
+		String message = "";
+		if (distribution.getDistributionProtocol() == null || distribution.getDistributionProtocol().getId() == null)
+		{
 			message = ApplicationProperties.getValue("distribution.protocol");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
 		else
 		{
 			Object distributionProtocolObj = dao.retrieve(DistributionProtocol.class.getName(), distribution.getDistributionProtocol().getId());
-			if(!((DistributionProtocol)distributionProtocolObj).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+			if (!((DistributionProtocol) distributionProtocolObj).getActivityStatus().equals(
+					edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
 			{
 				throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableDP"));
 			}
 		}
-		
-		if (distribution.getUser() == null || distribution.getUser().getId() == null )
+
+		if (distribution.getUser() == null || distribution.getUser().getId() == null)
 		{
 			message = ApplicationProperties.getValue("distribution.distributedBy");
-			throw new DAOException(ApplicationProperties.getValue("errors.item.required",message));	
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
-		
+
 		//date validation 
-		String errorKey = validator.validateDate(Utility.parseDateToString(distribution
-				.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY), true);
+		String errorKey = validator.validateDate(Utility.parseDateToString(distribution.getTimestamp(), Constants.DATE_PATTERN_MM_DD_YYYY), true);
 		if (errorKey.trim().length() > 0)
 		{
 			message = ApplicationProperties.getValue("distribution.date");
-			throw new DAOException( ApplicationProperties.getValue(errorKey,message));
+			throw new DAOException(ApplicationProperties.getValue(errorKey, message));
 		}
 
-		if (distribution.getToSite()== null || distribution.getToSite().getId()== null)
-		{		
+		if (distribution.getToSite() == null || distribution.getToSite().getId() == null)
+		{
 			message = ApplicationProperties.getValue("distribution.toSite");
-			throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
+			throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
 		}
-		
-		Collection specimenArrayCollection = distribution.getSpecimenArrayCollection();
+
+		//		Collection specimenArrayCollection = distribution.getSpecimenArrayCollection();
 		Collection distributedItemCollection = distribution.getDistributedItemCollection();
-		
-		if( (specimenArrayCollection== null || specimenArrayCollection.isEmpty()) && (distributedItemCollection == null ||
-				distributedItemCollection.isEmpty()))
+
+		if ((distributedItemCollection == null || distributedItemCollection.isEmpty()))
 		{
 			message = ApplicationProperties.getValue("distribution.distributedItem");
-			throw new DAOException( ApplicationProperties.getValue("errors.one.item.required",message));
+			throw new DAOException(ApplicationProperties.getValue("errors.one.item.required", message));
 		}
 		else
 		{
-			if(specimenArrayCollection != null && !specimenArrayCollection.isEmpty())
+			if (distributedItemCollection != null && !distributedItemCollection.isEmpty())
 			{
-				Iterator itr = specimenArrayCollection.iterator();
-				while(itr.hasNext())
+				Iterator itr = distributedItemCollection.iterator();
+				while (itr.hasNext())
 				{
-					SpecimenArray specimenArray = (SpecimenArray) itr.next();
-					if(specimenArray==null || specimenArray.getId() == null)
+					DistributedItem distributedItem = (DistributedItem) itr.next();
+					SpecimenArray specimenArray = distributedItem.getSpecimenArray();
+					if (distributedItem.getSpecimen() == null)
 					{
-						message = ApplicationProperties.getValue("errors.distribution.item.specimenArray");
-						throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
-					}
-					Object object = dao.retrieve(SpecimenArray.class.getName(), specimenArray.getId());
-					if(object == null)
-					{						
-						throw new DAOException( ApplicationProperties.getValue("errors.distribution.specimenArrayNotFound"));
-					}
-					else if(!((SpecimenArray)object).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
-					{
-						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimenArray"));
+						if (specimenArray == null || specimenArray.getId() == null)
+						{
+							message = ApplicationProperties.getValue("errors.distribution.item.specimenArray");
+							throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+						}
+						if (specimenArray != null)
+						{
+							Object object = dao.retrieve(SpecimenArray.class.getName(), specimenArray.getId());
+							if (object == null)
+							{
+								throw new DAOException(ApplicationProperties.getValue("errors.distribution.specimenArrayNotFound"));
+							}
+							else if (!((SpecimenArray) object).getActivityStatus().equals(
+									edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+							{
+								throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimenArray"));
+							}
+						}
 					}
 				}
 			}
-			
 		}
-		
+
 		//END
 
 		if (operation.equals(Constants.ADD))
 		{
 			if (!Constants.ACTIVITY_STATUS_ACTIVE.equals(distribution.getActivityStatus()))
 			{
-				throw new DAOException(ApplicationProperties
-						.getValue("activityStatus.active.errMsg"));
+				throw new DAOException(ApplicationProperties.getValue("activityStatus.active.errMsg"));
 			}
 		}
 		else
 		{
-			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, distribution
-					.getActivityStatus()))
+			if (!Validator.isEnumeratedValue(Constants.ACTIVITY_STATUS_VALUES, distribution.getActivityStatus()))
 			{
 				throw new DAOException(ApplicationProperties.getValue("activityStatus.errMsg"));
 			}
@@ -487,45 +466,52 @@ public class DistributionBizLogic extends DefaultBizLogic
 		return true;
 	}
 
-	private void validateAndSetAssociateObject(Distribution dist,DAO dao) throws DAOException
+	private void validateAndSetAssociateObject(Distribution dist, DAO dao) throws DAOException
 	{
-		String message="";
-		Collection distributedItemCollection = dist.getDistributedItemCollection(); 
-		if(distributedItemCollection != null && !distributedItemCollection.isEmpty())
+		String message = "";
+		Collection distributedItemCollection = dist.getDistributedItemCollection();
+		if (distributedItemCollection != null && !distributedItemCollection.isEmpty())
 		{
 			Iterator itr = distributedItemCollection.iterator();
-			while(itr.hasNext())
+			while (itr.hasNext())
 			{
 				DistributedItem distributedItem = (DistributedItem) itr.next();
-				Specimen specimen = distributedItem.getSpecimen();
-				Double quantity = distributedItem.getQuantity();
-				if(specimen == null || specimen.getId() == null)
+				if (distributedItem.getSpecimenArray() == null)
 				{
-					message = ApplicationProperties.getValue("errors.distribution.item.specimen");
-					throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
-				}
-				if(quantity == null)
-				{
-					message = ApplicationProperties.getValue("errors.distribution.item.quantity");
-					throw new DAOException( ApplicationProperties.getValue("errors.item.required",message));
-				}					
-				Specimen specimenObj = (Specimen)dao.retrieve(Specimen.class.getName(), specimen.getId());
-				specimenObj = (Specimen)HibernateMetaData.getProxyObjectImpl(specimenObj);
+					Specimen specimen = distributedItem.getSpecimen();
+					Double quantity = distributedItem.getQuantity();
+					if (specimen == null || specimen.getId() == null)
+					{
+						message = ApplicationProperties.getValue("errors.distribution.item.specimen");
+						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					}
+					if (quantity == null)
+					{
+						message = ApplicationProperties.getValue("errors.distribution.item.quantity");
+						throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
+					}
+					Specimen specimenObj = (Specimen) dao.retrieve(Specimen.class.getName(), specimen.getId());
+					specimenObj = (Specimen) HibernateMetaData.getProxyObjectImpl(specimenObj);
 
-				if(specimenObj == null)
-				{					
-					throw new DAOException( ApplicationProperties.getValue("errors.distribution.specimenNotFound"));
+					if (specimenObj == null)
+					{
+						throw new DAOException(ApplicationProperties.getValue("errors.distribution.specimenNotFound"));
+					}
+					else if (!((Specimen) specimenObj).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+					{
+						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimen"));
+					}
+					if (!checkAndSetAvailableQty(specimenObj, quantity))
+					{
+						throw new DAOException(ApplicationProperties.getValue("errors.distribution.quantity"));
+					}
+
+					distributedItem.setSpecimen(specimenObj);
 				}
-				else if(!((Specimen)specimenObj).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+				else
 				{
-					throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimen"));
+					
 				}
-				if(!checkAndSetAvailableQty(specimenObj,quantity))
-				{
-					throw new DAOException(ApplicationProperties.getValue("errors.distribution.quantity"));
-				}
-				
-				distributedItem.setSpecimen(specimenObj);
 				/**
 				 * Start: Change for API Search   --- Jitendra 06/10/2006
 				 * In Case of Api Search, previoulsy it was failing since there was default class level initialization 
@@ -535,19 +521,18 @@ public class DistributionBizLogic extends DefaultBizLogic
 				 * since setAllValues() method of domainObject will not get called. To avoid null pointer exception,
 				 * we are setting the default values same as we were setting in setAllValues() method of domainObject.
 				 */
-		        ApiSearchUtil.setDistributedItemDefault(distributedItem);
-		        //End:-  Change for API Search 
+				ApiSearchUtil.setDistributedItemDefault(distributedItem);
+				//End:-  Change for API Search 
 
-		        distributedItem.setDistribution(dist);
-				
+				distributedItem.setDistribution(dist);
+
 			}
 		}
 	}
-	
+
 	//Mandar : 04-Apr-06 : bug id:1545 : - Check for removed specimens
-	private void updateRemovedSpecimens(Collection newDistributedItemCollection,
-			Collection oldDistributedItemCollection, DAO dao, SessionDataBean sessionDataBean)
-			throws DAOException, UserNotAuthorizedException
+	private void updateRemovedSpecimens(Collection newDistributedItemCollection, Collection oldDistributedItemCollection, DAO dao,
+			SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		// iterate through the old collection and find the specimens that are removed.
 		Iterator it = oldDistributedItemCollection.iterator();
@@ -558,14 +543,11 @@ public class DistributionBizLogic extends DefaultBizLogic
 			Logger.out.debug("Old Object in New Collection : " + isPresentInNew);
 			if (!isPresentInNew)
 			{
-				Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen()
-						.getId());
+				Object specimenObj = dao.retrieve(Specimen.class.getName(), item.getSpecimen().getId());
 				double quantity = item.getQuantity().doubleValue();
 				updateAvailableQty((Specimen) specimenObj, quantity);
-				dao
-						.update(specimenObj, sessionDataBean, Constants.IS_AUDITABLE_TRUE,
-								Constants.IS_SECURE_UPDATE_TRUE,
-								Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
+				dao.update(specimenObj, sessionDataBean, Constants.IS_AUDITABLE_TRUE, Constants.IS_SECURE_UPDATE_TRUE,
+						Constants.HAS_OBJECT_LEVEL_PRIVILEGE_FALSE);
 			}
 
 		}
@@ -578,8 +560,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		if (specimen instanceof TissueSpecimen)
 		{
 			TissueSpecimen tissueSpecimen = (TissueSpecimen) specimen;
-			double availabeQty = Double.parseDouble(tissueSpecimen.getAvailableQuantity()
-					.toString());//tissueSpecimen.getAvailableQuantityInGram().doubleValue();
+			double availabeQty = Double.parseDouble(tissueSpecimen.getAvailableQuantity().toString());//tissueSpecimen.getAvailableQuantityInGram().doubleValue();
 			Logger.out.debug("TissueAvailabeQty" + availabeQty);
 			availabeQty = availabeQty + quantity;
 			Logger.out.debug("TissueAvailabeQty after addition" + availabeQty);
@@ -595,16 +576,14 @@ public class DistributionBizLogic extends DefaultBizLogic
 		else if (specimen instanceof MolecularSpecimen)
 		{
 			MolecularSpecimen molecularSpecimen = (MolecularSpecimen) specimen;
-			double availabeQty = Double.parseDouble(molecularSpecimen.getAvailableQuantity()
-					.toString());//molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
+			double availabeQty = Double.parseDouble(molecularSpecimen.getAvailableQuantity().toString());//molecularSpecimen.getAvailableQuantityInMicrogram().doubleValue();
 			availabeQty = availabeQty + quantity;
 			molecularSpecimen.setAvailableQuantity(new QuantityInMicrogram(availabeQty));//molecularSpecimen.setAvailableQuantityInMicrogram(new Double(availabeQty));
 		}
 		else if (specimen instanceof FluidSpecimen)
 		{
 			FluidSpecimen fluidSpecimen = (FluidSpecimen) specimen;
-			double availabeQty = Double
-					.parseDouble(fluidSpecimen.getAvailableQuantity().toString());//fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
+			double availabeQty = Double.parseDouble(fluidSpecimen.getAvailableQuantity().toString());//fluidSpecimen.getAvailableQuantityInMilliliter().doubleValue();
 			availabeQty = availabeQty + quantity;
 			fluidSpecimen.setAvailableQuantity(new QuantityInMilliliter(availabeQty));//fluidSpecimen.setAvailableQuantityInMilliliter(new Double(availabeQty));
 		}
@@ -628,15 +607,14 @@ public class DistributionBizLogic extends DefaultBizLogic
 		}
 
 		Specimen specimen = null;
-		List specimenList = retrieve(className, selectColumnName, whereColumnName,
-				whereColumnCondition, value, null);
+		List specimenList = retrieve(className, selectColumnName, whereColumnName, whereColumnCondition, value, null);
 
 		if (specimenList == null || specimenList.isEmpty())
 		{
 			throw new DAOException("errors.distribution.specimenNotFound");
 		}
-		specimen = (Specimen) specimenList.get(0);		
-		if(specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_VALUES[2]))
+		specimen = (Specimen) specimenList.get(0);
+		if (specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_VALUES[2]))
 		{
 			throw new DAOException("errors.distribution.closedSpecimen");
 		}
@@ -644,8 +622,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 		return specimen.getId();
 	}
 
-	public Long getSpecimenArrayId(String barcodeLabel, Integer distributionBasedOn)
-			throws DAOException
+	public Long getSpecimenArrayId(String barcodeLabel, Integer distributionBasedOn) throws DAOException
 	{
 
 		String className = SpecimenArray.class.getName();
@@ -659,12 +636,9 @@ public class DistributionBizLogic extends DefaultBizLogic
 		{
 			whereColumnName = new String[]{Constants.SYSTEM_NAME};
 		}
-		
-		
 
 		SpecimenArray specimenArray = null;
-		List specimenList = retrieve(className, selectColumnName, whereColumnName,
-				whereColumnCondition, value, null);
+		List specimenList = retrieve(className, selectColumnName, whereColumnName, whereColumnCondition, value, null);
 
 		if (specimenList == null || specimenList.isEmpty())
 		{

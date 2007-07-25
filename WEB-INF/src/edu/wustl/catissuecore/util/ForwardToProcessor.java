@@ -10,14 +10,19 @@
 
 package edu.wustl.catissuecore.util;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+
+import org.springframework.richclient.forms.AbstractForm;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm;
-import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ParticipantForm;
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.OrderDetails;
+import edu.wustl.catissuecore.domain.OrderItem;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -35,22 +40,20 @@ import edu.wustl.common.util.AbstractForwardToProcessor;
 public class ForwardToProcessor extends AbstractForwardToProcessor
 {
 
-	public HashMap populateForwardToData(AbstractActionForm actionForm,
-			AbstractDomainObject domainObject)
+	public HashMap populateForwardToData(AbstractActionForm actionForm, AbstractDomainObject domainObject)
 	{
 		HashMap forwardToHashMap = new HashMap();
 
 		if (domainObject instanceof Participant)
 		{
 			ParticipantForm participantForm = (ParticipantForm) actionForm;
-			
+
 			forwardToHashMap.put("participantId", domainObject.getId());
-			if(participantForm.getCpId() != -1)
+			if (participantForm.getCpId() != -1)
 			{
 				forwardToHashMap.put("collectionProtocolId", new Long(participantForm.getCpId()));
 			}
-			
-			
+
 		}
 		else if (domainObject instanceof StorageType) //Added this if condition to resolve Bug: 1938
 		{
@@ -60,16 +63,13 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 		{
 			CollectionProtocolRegistrationForm collectionProtocolRegistrationForm = (CollectionProtocolRegistrationForm) actionForm;
 
-			forwardToHashMap.put("collectionProtocolId", new Long(
-					collectionProtocolRegistrationForm.getCollectionProtocolID()));
-			forwardToHashMap.put("participantId", new Long(collectionProtocolRegistrationForm
-					.getParticipantID()));
-			forwardToHashMap.put("participantProtocolId", collectionProtocolRegistrationForm
-					.getParticipantProtocolID());
+			forwardToHashMap.put("collectionProtocolId", new Long(collectionProtocolRegistrationForm.getCollectionProtocolID()));
+			forwardToHashMap.put("participantId", new Long(collectionProtocolRegistrationForm.getParticipantID()));
+			forwardToHashMap.put("participantProtocolId", collectionProtocolRegistrationForm.getParticipantProtocolID());
 		}
 		else if (domainObject instanceof SpecimenCollectionGroup)
 		{
-			SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm)actionForm;
+			SpecimenCollectionGroupForm specimenCollectionGroupForm = (SpecimenCollectionGroupForm) actionForm;
 			forwardToHashMap.put("specimenCollectionGroupId", domainObject.getId().toString());
 			forwardToHashMap.put("specimenCollectionGroupName", specimenCollectionGroupForm.getName());
 		}
@@ -88,10 +88,11 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 				if (specimen.getSpecimenCollectionGroup().getId() != null)
 				{
 					forwardToHashMap.put("specimenCollectionGroupId", specimen.getSpecimenCollectionGroup().getId().toString());
-					if (actionForm instanceof NewSpecimenForm) {
-						forwardToHashMap.put("specimenCollectionGroupName", ((NewSpecimenForm)actionForm).getSpecimenCollectionGroupName());
-					}	
-					
+					if (actionForm instanceof NewSpecimenForm)
+					{
+						forwardToHashMap.put("specimenCollectionGroupName", ((NewSpecimenForm) actionForm).getSpecimenCollectionGroupName());
+					}
+
 				}
 			}
 			//Add Events
@@ -127,9 +128,53 @@ public class ForwardToProcessor extends AbstractForwardToProcessor
 		}
 		//added for specimenArrayAliquot Summary page.
 		else if (domainObject instanceof SpecimenArray)
-        {
-        	forwardToHashMap= (HashMap)((SpecimenArray)domainObject).getAliqoutMap();        	
-        }        
+		{
+			forwardToHashMap = (HashMap) ((SpecimenArray) domainObject).getAliqoutMap();
+		}
+		//Checking weather any of order item is distributed. If order item distributed then forward to distribition report page
+		else if (domainObject instanceof OrderDetails)
+		{
+			boolean isItemDistributed = false;
+			int specimenDistributedCnt = 0;
+			int specimenArrayDistributedCnt = 0;
+			Long distributionId = null;
+			OrderDetails order = (OrderDetails) domainObject;
+			Collection orderItemCollection = order.getOrderItemCollection();
+			if (orderItemCollection != null)
+			{
+				Iterator itr = orderItemCollection.iterator();
+				while (itr.hasNext())
+				{
+					OrderItem orderItem = (OrderItem) itr.next();
+					if (orderItem.getDistributedItem() != null)
+					{
+						isItemDistributed = true;
+						if (orderItem.getDistributedItem().getSpecimen() != null)
+							specimenDistributedCnt++;
+						else if (orderItem.getDistributedItem().getSpecimenArray() != null)
+							specimenArrayDistributedCnt++;
+						//actionForm.setForwardTo("distributionReport");
+
+						forwardToHashMap.put("distributionId", orderItem.getDistributedItem().getDistribution().getId());
+						//break;
+					}
+				}
+				if (isItemDistributed && specimenDistributedCnt > 0 && specimenArrayDistributedCnt == 0)
+				{
+					actionForm.setForwardTo("specimenDistributionReport");
+
+				}
+				if (isItemDistributed && specimenArrayDistributedCnt > 0 && specimenDistributedCnt == 0)
+				{
+					actionForm.setForwardTo("specimenArrayDistributionReport");
+				}
+
+				if (!isItemDistributed)
+				{
+					actionForm.setForwardTo("success");
+				}
+			}
+		}
 
 		return forwardToHashMap;
 	}

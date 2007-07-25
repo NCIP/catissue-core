@@ -38,6 +38,7 @@ import edu.wustl.catissuecore.bizlogic.SpecimenArrayBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.StorageContainer;
@@ -306,10 +307,15 @@ public class CreateArrayInitAction extends BaseAction
      * @throws DAOException
      */
 	private List setClassAndtype(SpecimenArrayForm specimenArrayForm,SpecimenArrayType specimenArrayType) throws DAOException
-	{
+	{  
 		List specimenTypeList = new ArrayList();
 		String specimentype = new String();
 		NameValueBean specTypeNameValue = null; 
+		SpecimenArrayBizLogic specimenArrayBizLogic = (SpecimenArrayBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_ARRAY_FORM_ID);
+		Collection specimenArrayTypeCollection = (Collection) specimenArrayBizLogic.retrieveAttribute(SpecimenArrayType.class.getName(),
+				specimenArrayType.getId(), "elements(specimenTypeCollection)");
+		
+		specimenArrayType.setSpecimenTypeCollection(specimenArrayTypeCollection);
 		String[] specimenTypeArr = new String[specimenArrayType.getSpecimenTypeCollection().size()];
 		int i=0;
 		Iterator listItr=specimenArrayType.getSpecimenTypeCollection().iterator();

@@ -1368,10 +1368,187 @@ textarea.formFieldSized20{ /* Used by Mandar for the comments used in autoevents
 	text-align:left;
 }
 
+/*   *** Used in RequestDetails.jsp(Ordering System) *** */
+.rowExpansionTable{
+	background-color:#CCCCCC;
+	border-right:1px solid #5C5C5C;
+	border-bottom:1px solid #5C5C5C;
+	font-family:arial,helvetica,verdana,sans-serif;
+	font-size:0.9em;
+}
+
 .hidden
 {
  display:none;
 }
+
+.defineArrayBlock
+{
+	background-color:#FFFFFF;
+ 	font-weight:bold;
+ 	font-size:0.8em;
+ 	border-left:1px solid #5C5C5C; /* constant: dark gray */
+	border-right:1px solid #5C5C5C; /* constant: dark gray */
+ 	border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+	border-top:1px solid #5C5C5C; /* constant: dark gray */
+}
+
+.tableScroll
+{	
+	overflow:-moz-scrollbars-vertical;
+	overflow:-moz-scrollbars-horizontal;
+	overflow-y:scroll;
+	overflow-x:scroll;	
+}
+
+/* query Module css */
+.trStyle
+{
+  height:35;
+  }
+.row
+  {
+    border-left:5px solid #5C5C5C; /* constant: dark gray */
+	border-right:5px solid #5C5C5C; /* constant: dark gray */
+ 	border-bottom:5px solid #5C5C5C; /* constant: dark gray */
+	border-top:5px solid #5C5C5C; /* constant: dark gray */
+  }
+  
+td.queryModuleTabMenuItem{ /* for the off state of the tab menu (top) cells */
+  font-family:arial;
+  font-size:0.8em;
+  font-weight:bold;
+  background-color:#EAEAEA; /*#9FA2BA;  constant: light purple ;C4E2FF : for light purple*/
+  padding-left:1em;
+  padding-right:1em;
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  border-top:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+
+  color:#000000;  /* constant: white */
+  text-decoration:none;
+  white-space: nowrap;
+}
+.collapsableTable
+  {
+  border-left:solid 1px;
+  border-top:solid 0px;
+  border-bottom:solid 1px;
+  border-right:solid 1px;
+  bordercolorlight:#EAEAEA;
+  }
+  .defineResultsViewMessage
+  {
+  font-family:verdana;
+  font-size:0.8em;
+  padding-left:1em;
+  padding-top:1em;
+  padding-right:1em;
+  padding-bottom:0em;
+  }
+  .headerStyle
+  {
+ font-family:arial;
+  font-size:0.8em;
+  font-weight:bold;
+  }
+  td.queryModuleTab{ /* for the off state of the tab menu (top) cells */
+  font-family:arial;
+  font-size:0.8em;
+  font-weight:bold;
+  background-color:#EAEAEA; /*#9FA2BA;  constant: light purple ;C4E2FF : for light purple*/
+  padding-left:1em;
+  padding-right:1em;
+  color:#000000;  /* constant: white */
+  text-decoration:none;
+  white-space: nowrap;
+ border-right:1px solid #5C5C5C; /* constant: dark gray */
+   border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+}
+ td.queryModuleTabSelected{ /* for the off state of the tab menu (top) cells */
+  font-family:arial;
+  font-size:0.8em;
+  font-weight:bold;
+  background-color:#FFFFFF; /*#9FA2BA;  constant: light purple ;C4E2FF : for light purple*/
+  padding-left:1em;
+  padding-right:1em;
+  color:#000000;  /* constant: white */
+  text-decoration:none;
+  white-space: nowrap;
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+ }
+ .standardTextQuery{ /* for stand-alone text not affected by any cascading text styles */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.8em;
+  color:#000000; /* constant: black */
+}
+.dropdownQuery{ /* for stand-alone text not affected by any cascading text styles */
+   font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.9em;
+  color:#000000; /* constant: black */
+}
+.tbBordersAllbordersBlack{ /* for block table with border 1 */
+  border-bottom:1px solid #000000; /* constant: dark gray */
+  border-top:1px  solid #000000;/* constant: dark gray */
+  border-left:1px solid #000000; /* constant: dark gray */
+  border-right:1px solid #000000; /* constant: dark gray */
+
+}
+style for Participant.jsp 
+ <style>
+.active-column-0 {width:30px}
+tr#hiddenCombo
+{
+ display:none;
+}
+</style> 
+input.enumeratedListBox
+{
+  font-family:arial,helvetica,verdana,sans-serif;
+  border:1px solid #5C5C5C; /* constant: dark gray */
+  font-size:1em;
+  width:10em;
+}
+queryLink{ /* for the text links in the Search category page */
+ font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.2em;
+  color:#5C5C5C; /* constant: black */
+	text-decoration:underline;	
+    white-space: nowrap;
+}
+ .PermissibleValuesQuery{ /* for stand-alone text not affected by any cascading text styles */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.9em;
+  color:#000000; /* constant: black */
+}
+.formRequiredLabelWithoutBackgrnd{ /* for the required form labels without border*/
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  font-weight:bold;
+ /* background-color:#F4F4F5; /* constant: light gray */
+ /* color:#000000; /* constant: black	*/
+  /*border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
+
+.entityLink
+{
+    font-family:arial,helvetica,verdana,sans-serif;
+	font-size:0.8em;
+	color:#5C5C5C; /* constant: dark gray */
+	text-decoration:underline;	
+    white-space: nowrap;
+	width:20;
+	display:block;
+}
+.validationMessageCss
+{
+ font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.9em;
+  color:#000000; /* constant: black */
+}
+
 
 /* *********Added by Santosh for Autocomplete textboxes*************  */
 div.autocomplete {

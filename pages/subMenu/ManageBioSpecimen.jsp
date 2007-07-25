@@ -175,6 +175,23 @@
 </tr>
 
 
+<%
+	strMouseOut = Utility.setSelectedMenuItem(selectMenuID, 17, normalMenuClass , selectedMenuClass , hoverMenuClass);
+%>
+<tr>
+	<%=strMouseOut%>
+		<div>
+			<%--img src="images/subMenuArrow.gif" width="7" height="7" alt="" /--%> 
+				<b><bean:message key="app.order" /></b>
+		</div>
+		<div>
+			
+			<a class="subMenuPrimary" href="RequestListView.do?pageNum=1&menuSelected=17">
+				<bean:message key="app.order.view" />
+			</a>
+		</div>
+	</td>
+</tr>
 
 
 <!-- tr>
