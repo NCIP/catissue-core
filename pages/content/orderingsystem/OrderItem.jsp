@@ -17,6 +17,7 @@
 <%@ page import="edu.wustl.catissuecore.bean.OrderSpecimenBean"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.OrderSpecimenForm"%>
 <%@ include file="/pages/content/common/SpecimenCommonScripts.jsp" %>
+<%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
 <%
 	OrderSpecimenForm form = (OrderSpecimenForm)request.getAttribute("OrderSpecimenForm");
@@ -254,7 +255,7 @@ function onCheck()
 <script language="JavaScript" type="text/javascript" src="jss/Hashtable.js"></script>
 <%
 boolean readOnlyValue=false,readOnlyForAll=false;
-String onClassChangeFunctionName = "onTypeChange(this)";
+String onClassChangeFunctionName = "typeChangeGeneralized(this)";
 %>
 
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
@@ -349,9 +350,15 @@ String onClassChangeFunctionName = "onTypeChange(this)";
 								</td>
 								
 								 <td width="70%" class="formField" >
-									<html:select property="specimenClassName" styleClass="formFieldSized15" styleId="classList" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=onClassChangeFunctionName%>">
+									<%--<html:select property="specimenClassName" styleClass="formFieldSized15" styleId="classList" size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="<%=onClassChangeFunctionName%>">
 										<html:options collection="<%=Constants.SPECIMEN_CLASS_LIST%>" labelProperty="name" property="value" />
-									</html:select>
+									</html:select>--%>
+									  <autocomplete:AutoCompleteTag property="className"
+										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_CLASS_LIST)%>"
+										  initialValue="<%=form.getClassName()%>"
+										  onChange="onTypeChange(this);resetVirtualLocated()"
+										  readOnly="false"
+									    />
 								</td>
 		                    </tr>
 						
@@ -362,25 +369,36 @@ String onClassChangeFunctionName = "onTypeChange(this)";
 								<td width="29%" class="formRequiredLabel">
 										<bean:message key="orderingsystem.label.typeList" />
 								</td>
-									<%
-								String classValue = (String)form.getSpecimenClassName();
-								specimenTypeList = (List)specimenTypeMap.get(classValue);
-								boolean subListEnabled = false;
-								if(specimenTypeList == null)
-								{
-									specimenTypeList = new ArrayList();
-									specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
-								}
-								pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
-								String subTypeFunctionName ="onSubTypeChangeUnit('specimenClassName',this,'unitSpan'),onChangeUnit()";
+						    <!-- --------------------------------------- -->
+						    <%
+										String classValue = (String)form.getClassName();
+										specimenTypeList = (List)specimenTypeMap.get(classValue);
+										
+										boolean subListEnabled = false;
+								
+										if(specimenTypeList == null)
+										{
+											specimenTypeList = new ArrayList();
+											specimenTypeList.add(new NameValueBean(Constants.SELECT_OPTION,"-1"));
+										}
+										
+										
+										pageContext.setAttribute(Constants.SPECIMEN_TYPE_LIST, specimenTypeList);
+										
+										String subTypeFunctionName ="onSubTypeChangeUnit('className',this,'unitSpan')"; 
+										
+										String readOnlyForAliquot = "false";
+						
 							%>
-		
-		                        <td  width="70%" class="formField">
-									<html:select property="specimenType" styleClass="formFieldSized15" styleId="type"
-							 size="1" onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" disabled="<%=subListEnabled%>" onchange="<%=subTypeFunctionName%>">
-										<html:options collection="<%=Constants.SPECIMEN_TYPE_LIST%>" labelProperty="name" property="value"/>
-									</html:select>
-								</td>
+						  <td  class="formField">
+								   <autocomplete:AutoCompleteTag property="type"
+										  optionsList = "<%=request.getAttribute(Constants.SPECIMEN_TYPE_MAP)%>"
+										  initialValue="<%=form.getType()%>"
+										  onChange="<%=subTypeFunctionName%>"
+										  readOnly="<%=readOnlyForAliquot%>"
+										  dependsOn="<%=form.getClassName()%>"
+					        />
+						</td>
 		                    </tr>
 						</table>
 						
