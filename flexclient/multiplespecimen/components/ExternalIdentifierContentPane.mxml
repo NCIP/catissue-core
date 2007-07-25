@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" preinitialize="preInit()" creationComplete="creationComp()">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.binding.utils.BindingUtils;
+			import valueobjects.ExternalIdentifierBean;
+			[Bindable]
+			public var extIdBean:ExternalIdentifierBean;
+			private function preInit():void
+			{
+				//var event:Event = new Event("initEvent");
+				//dispatchEvent(event);
+				//Alert.show(parent+'');
+				//extIdBean = parent.parent.parent.extidTileList.currentState;
+				//extIdBean = new ExternalIdentifierBean(false,0,"A","B");
+			}
+			
+			private function bindData(uiObj:Object, uiProperty:String, dataObj:Object, dataProperty:String, biDirectional:Boolean=true):void
+			{
+				BindingUtils.bindProperty(uiObj, uiProperty, dataObj, dataProperty);
+				if(biDirectional)
+					BindingUtils.bindProperty(dataObj, dataProperty, uiObj, uiProperty);
+			}
+			
+			private function creationComp():void
+			{
+				bindData(isSelected, "selected", extIdBean, "isSelected");
+				bindData(idName, "text", extIdBean, "identifierName");
+				bindData(idValue, "text", extIdBean, "identifierValue");
+			}
+		]]>
+	</mx:Script>
+	
+	<mx:Metadata>
+		[ Event(name="initEvent", type="flash.events.Event") ]
+	</mx:Metadata>
+	
+	<mx:CheckBox id="isSelected"/>
+	<mx:TextInput id="idName" width="55" textAlign="left"/>
+	<mx:TextInput id="idValue" width="55" textAlign="left"/>
+</mx:HBox>

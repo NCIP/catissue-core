@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" horizontalAlign="left" xmlns:local="*" preinitialize="preInit()" creationComplete="creationComp()" xmlns:components="components.*" backgroundColor="white">
+<mx:Script>
+	<![CDATA[
+		import util.MetadataManager;
+		import mx.events.DragEvent;
+		import flash.utils.setInterval;
+		import components.ProgressBarPanel;
+		import mx.managers.PopUpManager;
+		import valueobjects.SpecimenData;
+		import valueobjects.NameValueBeanFlex;
+		
+		import mx.rpc.events.ResultEvent;
+		import flash.utils.getQualifiedClassName;
+		import mx.controls.Alert;
+		import mx.collections.ArrayCollection;
+		
+		import flash.utils.getQualifiedClassName;
+		import mx.controls.Alert;
+		import mx.rpc.events.ResultEvent;
+		
+		private var counter:int = 1;
+
+		[Bindable]
+		public var specimenColl:ArrayCollection = new ArrayCollection();
+		
+		private var copyFromIndex:int = -1;
+		
+		private function preInit():void
+		{
+			var metadataManager:MetadataManager = new MetadataManager();
+			metadataManager.init();
+			metadataManager.addEventListener("initCompleteEvent",addMoreSpecimen);
+			
+			//PopUpManager.createPopUp(this,ProgressBarPanel,true);
+			
+			specimenColl = new ArrayCollection();
+		}
+		
+		private function init(event:Event):void
+		{
+			Alert.show("Init of multipl sepcimen");
+		}
+		
+		private function creationComp():void
+		{
+			//Alert.show("creation complete of multipl sepcimen");
+			//addMoreSpecimen(null);
+		}
+
+		private function addMoreSpecimen(event:Event):void
+		{
+			var spData:SpecimenData = new SpecimenData("Label"+counter,"Barcode"+counter,"Left");
+			specimenColl.addItem(spData);
+			counter++;
+		}
+		
+		private function deleteLastSpecimen(event:Event):void
+		{
+			if(specimenColl.length>0)
+			{
+				specimenColl.removeItemAt(specimenColl.length-1);
+			}
+		}
+		 
+		private function copySPData(event:Event):void
+		{
+			//Alert.show("Here in Copy");
+			copyFromIndex = -1;
+			for(var i:int;i<specimenColl.length;i++)
+			{
+				var spData:SpecimenData = SpecimenData(specimenColl.getItemAt(i));
+				if(spData.isSelected)
+				{
+					copyFromIndex = i;
+					spData.isSelected = false;
+					break;
+				}
+			}
+		}
+		
+		private function pasteSPData(event:Event):void
+		{
+			if(copyFromIndex!=-1)
+			{
+				var spDataCopyFrom:SpecimenData = SpecimenData(specimenColl.getItemAt(copyFromIndex));
+				for(var i:int;i<specimenColl.length;i++)
+				{
+					var spData:SpecimenData = SpecimenData(specimenColl.getItemAt(i));
+					if(spData.isSelected)
+					{
+						spData.copy(spDataCopyFrom);
+						spData.isSelected = false;
+					}
+				}
+			}
+		}
+		
+		private function submitSpecimen(event:Event):void
+		{
+			myRemoteObject.writeSpecimen(specimenColl);
+		}
+		
+		private function handleReadSpecimen(event:ResultEvent):void
+   		{
+   			//var obj:SpecimenData = SpecimenData(event.result);
+   			//Alert.show('Result '+obj);
+   			//printSpDetails(obj);
+   		}
+   		
+   		private function handleWriteSpecimen(event:ResultEvent):void
+   		{
+   			var obj:Object = event.result;
+   			Alert.show('Result '+obj);
+   			//printSpDetails(obj);
+   		}
+   		
+   		private function getAlternateColor(index:int):uint 
+   		{
+   			if(index%2==0)
+   			{
+   				return 0xE0E0E0;
+   			}	
+   			else
+   			{
+   				return 0xEFEFEF;
+   			}
+   		}
+	]]>
+</mx:Script>
+
+	<mx:RemoteObject id="myRemoteObject" destination="cdeService" showBusyCursor="true">
+		<mx:method name="writeSpecimen" result="handleWriteSpecimen(event)"/>
+		<mx:method name="readSpecimen" result="handleReadSpecimen(event)"/>
+	</mx:RemoteObject>
+	
+	<mx:HBox>
+		<mx:Button label="copy" click="copySPData(event)" />
+		<mx:Button label="paste" click="pasteSPData(event)"/>
+		<mx:Button label="Add More" click="addMoreSpecimen(event)"/>
+		<mx:Button label="Delete Last" click="deleteLastSpecimen(event)"/>	
+		<mx:Button label="Submit" click="submitSpecimen(event)"/>
+	</mx:HBox>
+	
+	<mx:HBox>
+		<components:SpecimenLabelPane backgroundColor="#D1D1D1"/>
+		<mx:Repeater id="spRepeater" dataProvider="{specimenColl}">	
+			<components:SpecimenPane id="A" backgroundColor="{getAlternateColor(spRepeater.currentIndex)}"/>
+		</mx:Repeater>
+	</mx:HBox>
+	
+</mx:Application>

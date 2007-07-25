@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*" borderStyle="solid" paddingLeft="5" paddingRight="5" 
+	xmlns:adobe="http://www.adobe.com/2006/fc" preinitialize="preInit()" creationComplete="creationComp()" xmlns:components="components.*">
+
+<mx:Script>
+	<![CDATA[
+		import util.MetadataModel;
+		import util.Utility;
+		import util.Constants;
+		import valueobjects.SpecimenData;
+		import mx.binding.utils.BindingUtils;
+		import mx.controls.Alert;
+		import mx.collections.ArrayCollection;
+		
+		[Bindable]
+		public var spData:SpecimenData;
+		
+		private function preInit():void
+		{
+			spData = parentApplication.spRepeater.currentItem;
+			switchSpType(null);
+		}
+		
+		private function creationComp():void
+		{
+			//Check box
+			Utility.bindData(isCopy, "selected", spData, "isSelected");
+			
+			//Selection of parent
+			Utility.bindData(spParent, "selectedValue", spData, "specimenParent"); 
+			
+			//SCG Name
+			Utility.bindData(spSCGName, "selectedItem", spData, "scgName");
+			
+			//Parent Specimen
+			Utility.bindData(spParentName, "selectedItem", spData, "parentSpecimenName");
+			
+			//Label
+			Utility.bindData(spLabel, "text", spData,"specimenLabel");
+			
+			//Barcode
+			Utility.bindData(spBarCode, "text", spData, "specimenBarcode");
+		
+			//Specimen Class
+			Utility.bindData(spClass, "selectedItem", spData, "specimenClass");
+			
+			//Specimen Type
+			Utility.bindData(spType, "selectedItem", spData, "specimenType");
+
+			//Tissue Site
+			Utility.bindData(spTissueSite, "selectedItem", spData, "tissueSite");
+			
+			//Bind Tissue Side
+			Utility.bindData(spTissueSide,"selectedItem",spData,"tissueSide");
+			
+			//Pathological Status
+			Utility.bindData(spPathologicalStatus,"selectedItem",spData,"pathologicalStatus");
+
+			//Bind Creation date
+			Utility.bindData(spCreatedOn,"selectedDate",spData,"creationDate");
+			
+			//Bind Quantity
+			Utility.bindData(spQuantity,"text",spData,"quantity");
+			
+			//Bind Concentration
+			Utility.bindData(spConcentration,"text",spData,"concentration");
+			//bindData(spQuantity,"restrict",spConcentration,"text",false);
+			
+			//Bind Comments
+			Utility.bindData(spComment, "text", spData, "comment");
+		}
+		
+		private function switchSpType(event:Event):void
+		{
+			spData.specimenTypePVList = MetadataModel.getInstance().getSpecimenTypeCollection(spData.specimenClass);
+			spData.calcUnit();
+		}
+		
+		private function printSpDetails(spData:SpecimenData):void
+		{
+			Alert.show("SPECIMEN DETAILS: \n"+
+					   "scgName: "+spData.scgName+"\n"+
+					   "parentSpecimenName: "+spData.parentSpecimenName+"\n"+
+					   "specimenLabel: "+spData.specimenLabel+"\n"+
+					   "specimenBarcode: "+spData.specimenBarcode+"\n"+
+					   "specimenClass: "+spData.specimenClass+"\n"+
+					   "specimenType: "+spData.specimenType+"\n"+
+					   "tissueSite: "+spData.tissueSite+"\n"+
+					   "tissueSide: "+spData.tissueSide+"\n"+
+					   "pathologicalStatus: "+spData.pathologicalStatus+"\n"+
+					   "creationDate: "+spData.creationDate+"\n"+
+					   "quantity: "+spData.quantity+"\n"+
+					   "concentration: "+spData.concentration);
+		}
+		private function onClick(event:Event):void
+		{
+			//Alert.show(spParent.selectedValue+'')
+			//printSpDetails(spData);
+			if(isCopy.selected)
+			{
+				//myRemoteObject.writeSpecimen(spData);
+			}
+			else
+			{
+				//myRemoteObject.readSpecimen();
+			}
+			//spData.tissueSide = "Right";
+		}
+		
+		/*public function regularExpression(element:*, text:String):Boolean
+   		{
+      		var regExp:RegExp = new RegExp(text,"i");
+      		return(regExp.test(mySTI.itemToLabel(element)));
+   		}*/
+   		private function bindExData():void
+   		{
+   			Utility.bindData(exIDPane, "exIdColl", spData, "exIdColl");
+   		}
+	]]>
+</mx:Script>
+
+	<components:MyCanvas>
+		<mx:CheckBox id="isCopy" click="onClick(event)"/>
+	</components:MyCanvas>
+	
+	<components:MyCanvas>
+		<mx:HBox>
+			<mx:RadioButtonGroup id="spParent"/>
+			<mx:RadioButton id="isSpSCGName" label="SCG"  group="{spParent}"/>
+			<mx:RadioButton id="isSpParentName" label="Specimen" group="{spParent}"/>
+		</mx:HBox>
+	</components:MyCanvas>
+
+	<components:MyCanvas>
+		<adobe:AutoComplete id="spSCGName" enabled="{isSpSCGName.selected}" dataProvider="{MetadataModel.getInstance().scgNameArray}" lookAhead="true"/>
+	</components:MyCanvas>
+
+	<components:MyCanvas>
+		<adobe:AutoComplete id="spParentName" enabled="{isSpParentName.selected}" dataProvider="{MetadataModel.getInstance().spNameArray}"/>
+	</components:MyCanvas>
+	
+	<components:MyCanvas>
+		<mx:TextInput id="spLabel"/>
+	</components:MyCanvas>
+	
+	<components:MyCanvas>
+		<mx:TextInput id="spBarCode"/>
+	</components:MyCanvas>
+	
+	<components:MyCanvas>
+		<adobe:AutoComplete id="spClass" dataProvider="{MetadataModel.getInstance().specimenClassPVList}" change="switchSpType(event)"/>
+	</components:MyCanvas>
+	
+	<components:MyCanvas>
+		<adobe:AutoComplete id="spType" dataProvider="{spData.specimenTypePVList}" lookAhead="true"/>
+	</components:MyCanvas>
+		
+	<components:MyCanvas>	
+		<adobe:AutoComplete id="spTissueSite" dataProvider="{MetadataModel.getInstance().tissueSitePVList}" lookAhead="true"/>
+	</components:MyCanvas>
+	
+	<components:MyCanvas>
+		<adobe:AutoComplete id="spTissueSide" dataProvider="{MetadataModel.getInstance().tissueSidePVList}" lookAhead="true"/>
+	</components:MyCanvas>
+	
+	<components:MyCanvas>
+		<adobe:AutoComplete id="spPathologicalStatus" dataProvider="{MetadataModel.getInstance().pathologicalStatusPVList}" lookAhead="true"/>
+	</components:MyCanvas>
+	
+	<components:MyCanvas>
+		<mx:DateField id="spCreatedOn" formatString="{Constants.DATE_FORMAT}"/>
+	</components:MyCanvas>
+	
+	<components:MyCanvas>
+		<mx:HBox>
+			<mx:TextInput id="spQuantity" width="50"/>
+			<mx:Label text="{spData.unit}"/>
+		</mx:HBox>
+	</components:MyCanvas>
+	
+	<components:MyCanvas>
+		<mx:HBox>
+			<mx:TextInput id="spConcentration" width="50"/>
+			<mx:Label htmlText="{Constants.UNIT_CONCENTRATION}"/>
+		</mx:HBox>
+	</components:MyCanvas>
+	
+	<mx:Accordion id="specimenAccordion" resizeToContent="true">
+		<mx:VBox label="Comment">
+			<mx:TextArea id="spComment"/>
+		</mx:VBox>
+		<mx:VBox label="Events">
+			<mx:TextArea id="spComment1"/>
+		</mx:VBox >
+		
+		<mx:VBox label="External Identifier">
+			<components:ExternalIdentifierPane id="exIDPane" creationComplete="bindExData()" />
+		</mx:VBox>
+		
+		<mx:VBox label="Biohazards">
+			<mx:TextArea id="spComment3"/>
+		</mx:VBox>
+
+		<mx:VBox label="Derivative">
+			<mx:TextArea id="spComment4"/>
+		</mx:VBox>
+
+		<mx:VBox label="Aliquot">
+			<mx:TextArea id="spComment5"/>
+		</mx:VBox>
+	</mx:Accordion>
+
+</mx:VBox>

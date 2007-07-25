@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*" borderStyle="solid" xmlns:components="components.*">
+
+	<components:MyCanvas>
+		<mx:Label text=""/>	
+	</components:MyCanvas>
+	
+	<components:MyCanvas>
+		<mx:Label text="* Parent"/>	
+	</components:MyCanvas>
+	
+	<components:MyCanvas>
+		<mx:Label text="* Specimen Group Name"/>	
+	</components:MyCanvas>
+	
+	<components:MyCanvas>	
+		<mx:Label text="* Specimen"/>	
+	</components:MyCanvas>		
+	
+	<components:MyCanvas>	
+		<mx:Label text="* Label"/>	
+	</components:MyCanvas>		
+	
+	<components:MyCanvas>	
+		<mx:Label text="Barcode"/>	
+	</components:MyCanvas>		
+	
+	<components:MyCanvas>	
+		<mx:Label text="* Class"/>	
+	</components:MyCanvas>		
+	
+	<components:MyCanvas>	
+		<mx:Label text="* Type"/>	
+	</components:MyCanvas>		
+	
+	<components:MyCanvas>	
+		<mx:Label text="* Tissue Site"/>
+	</components:MyCanvas>		
+	
+	<components:MyCanvas>	
+		<mx:Label text="* Tissue Side"/>
+	</components:MyCanvas>		
+	
+	<components:MyCanvas>	
+		<mx:Label text="* Pathological Status"/>
+	</components:MyCanvas>		
+	
+	<components:MyCanvas>	
+		<mx:Label text="Created on [MM-DD-YYYY]"/>	
+	</components:MyCanvas>		
+	
+	<components:MyCanvas>	
+		<mx:Label text="Quantity"/>	
+	</components:MyCanvas>		
+	
+	<components:MyCanvas>	
+		<mx:Label text="Concentration"/>	
+	</components:MyCanvas>		
+
+	<components:MyCanvas>	
+		<mx:Label text="Comment"/>	
+	</components:MyCanvas>		
+</mx:VBox>
