@@ -70,6 +70,12 @@
 
 			if(form.getUnit() != null)
 				unitSpecimen = form.getUnit();
+			
+			if(frdTo.equals("") || frdTo==null)
+			{
+				frdTo= "eventParameters";
+			}	
+			
 		}
 	
 	String multipleSpecimen = "0";
@@ -82,6 +88,7 @@
 	
 	String onCheckboxChange = "setVirtuallyLocated(this,"+multipleSpecimen+")" ;
 	//String onClassChangeFunctionName = "onTypeChange(this);" + onChangeFunctionName;
+	
 	
 %>
 
@@ -464,7 +471,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="ForwardTo"/>
-						<html:hidden property="forwardTo" value="eventParameters"/>
+						<html:text property="forwardTo" value="<%=frdTo%>"/>
 						<html:hidden property="multipleSpecimen" value="<%=multipleSpecimen%>"/>
 						<html:hidden property="containerId" styleId="containerId"/>
 						<td></td>
