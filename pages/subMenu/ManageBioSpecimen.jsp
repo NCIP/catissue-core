@@ -117,6 +117,11 @@
 			<a class="subMenuPrimary" href="QuickEvents.do?operation=add&menuSelected=15">
 				<bean:message key="quickEvents.link" />
 			</a>
+		</div>	
+		<div>
+			<a class="subMenuPrimary" href="MultipleSpecimenFlexInitAction.do">
+				New <bean:message key="specimen.menu.multipleAdd" />
+			</a> 
 		</div>		
 	</td>
 </tr>
