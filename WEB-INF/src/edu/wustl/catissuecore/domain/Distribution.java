@@ -18,7 +18,6 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.util.SearchUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.MapDataParser;
@@ -64,7 +63,7 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	 * Collection of specimen Array in this distribution.
 	 * @see SpecimenArray
 	 */
-//	protected Collection specimenArrayCollection = new HashSet(); 
+	protected Collection specimenArrayCollection = new HashSet(); 
 
 	/**
 	 * OrderDetails associated with the order_item.
@@ -302,17 +301,17 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenArray"
 	 * @return specimenArrayCollection a collection of specimen array.
 	 */
-	/*public Collection getSpecimenArrayCollection() {
+	public Collection getSpecimenArrayCollection() {
 		return specimenArrayCollection;
-	}*/
+	}
 
 	/**
 	 * Sets the collection of specimen Array.
 	 * @param specimenArrayCollection set of specimen array
 	 */
-	/*public void setSpecimenArrayCollection(Collection specimenArrayCollection) {
+	public void setSpecimenArrayCollection(Collection specimenArrayCollection) {
 		this.specimenArrayCollection = specimenArrayCollection;
-	}*/
+	}
 	
 	/**
      * Returns message label to display on success add or edit

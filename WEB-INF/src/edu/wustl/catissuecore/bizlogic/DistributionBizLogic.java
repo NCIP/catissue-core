@@ -412,39 +412,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 			message = ApplicationProperties.getValue("distribution.distributedItem");
 			throw new DAOException(ApplicationProperties.getValue("errors.one.item.required", message));
 		}
-		else
-		{
-			if (distributedItemCollection != null && !distributedItemCollection.isEmpty())
-			{
-				Iterator itr = distributedItemCollection.iterator();
-				while (itr.hasNext())
-				{
-					DistributedItem distributedItem = (DistributedItem) itr.next();
-					SpecimenArray specimenArray = distributedItem.getSpecimenArray();
-					if (distributedItem.getSpecimen() == null)
-					{
-						if (specimenArray == null || specimenArray.getId() == null)
-						{
-							message = ApplicationProperties.getValue("errors.distribution.item.specimenArray");
-							throw new DAOException(ApplicationProperties.getValue("errors.item.required", message));
-						}
-						if (specimenArray != null)
-						{
-							Object object = dao.retrieve(SpecimenArray.class.getName(), specimenArray.getId());
-							if (object == null)
-							{
-								throw new DAOException(ApplicationProperties.getValue("errors.distribution.specimenArrayNotFound"));
-							}
-							else if (!((SpecimenArray) object).getActivityStatus().equals(
-									edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
-							{
-								throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimenArray"));
-							}
-						}
-					}
-				}
-			}
-		}
+		
 
 		//END
 
@@ -510,7 +478,19 @@ public class DistributionBizLogic extends DefaultBizLogic
 				}
 				else
 				{
-					
+					SpecimenArray specimenArrayObj = distributedItem.getSpecimenArray();
+					specimenArrayObj = (SpecimenArray) HibernateMetaData.getProxyObjectImpl(specimenArrayObj);
+					Object object = dao.retrieve(SpecimenArray.class.getName(), specimenArrayObj.getId());
+					if (object == null)
+					{
+						throw new DAOException(ApplicationProperties.getValue("errors.distribution.specimenArrayNotFound"));
+					}
+					else if (!((SpecimenArray) object).getActivityStatus().equals(
+							edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+					{
+						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimenArray"));
+					}
+					distributedItem.setSpecimenArray(specimenArrayObj);
 				}
 				/**
 				 * Start: Change for API Search   --- Jitendra 06/10/2006
