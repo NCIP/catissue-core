@@ -2925,7 +2925,11 @@ PUBLIC
 	</action>
 	<action path="/MultipleSpecimenCopyPasteAction" type="edu.wustl.catissuecore.action.MultipleSpecimenCopyPasteAction" parameter="method">
 	</action>
-
+	
+	<action path="/MultipleSpecimenFlexInitAction"
+                    type="org.apache.struts.actions.ForwardAction"
+                    parameter=".catissuecore.multipleSpecimenFlexDef"/>
+	
 	<action path="/MultipleSpecimenAppletAction" type="edu.wustl.catissuecore.action.MultipleSpecimenAppletAction" parameter="method">
 			<forward name="success" path=".catissuecore.multipleSpecimenAddSuccessDef" />
 	</action>

@@ -32,6 +32,9 @@
 	<property name="oracle.dialect.h3.string" value="org.hibernate.dialect.Oracle9Dialect"/>
 	<property name="mysql.dialect.h3.string" value="org.hibernate.dialect.MySQLDialect"/>
 	
+	 <property name="FLEX_HOME" value="C:/Program Files/Adobe/Flex Builder 2 Plug-in/Flex SDK 2"/>
+	 <property name="APP_ROOT" value="flexclient/multiplespecimen"/>
+	
 	<path id="app.classpath">
 		<fileset dir="${lib.dir}">
 			<include name="*.jar" />
@@ -100,7 +103,20 @@
 			</fileset>
 		</copy>
 	</target>
+	
+	<target name="compile_flex">
+		<taskdef resource="flexTasks.tasks" classpath="${extra_lib.dir}/flexTasks.jar" />
 
+	     <mxmlc file="${APP_ROOT}/MultipleSpecimen.mxml" keep-generated-actionscript="true">
+	         <load-config filename="${FLEX_HOME}/frameworks/flex-config.xml"/>
+	         <!--source-path path-element="${FLEX_HOME}/frameworks"/-->
+	     	<compiler.library-path dir="${FLEX_HOME}/frameworks" append="true">
+	     	                <include name="${base.dir}/WEB-INF/flex/lib/AutoComplete.swc" />
+	     	            </compiler.library-path>
+
+	     </mxmlc>
+	</target> 
+	
 	<!-- Create the Applet JAR Begins-->
 	<target name="build_applet_jar" depends="compile">
 		<delete>
@@ -178,6 +194,7 @@
 				<include name="jss/**" />
 				<include name="dhtml_comp/**" />
 				<include name="pages/**" />
+				<include name="flexclient/**" />				
 				<include name="runtime/**" />
 				<include name="WEB-INF/**" />
 				<include name="CDEConfig.xml" />
