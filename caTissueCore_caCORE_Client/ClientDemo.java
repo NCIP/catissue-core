@@ -7,6 +7,7 @@ import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.Institution;
+import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Site;
@@ -28,6 +29,10 @@ import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.system.comm.client.ClientSession;
+import edu.wustl.catissuecore.domain.OrderDetails;
+import edu.wustl.catissuecore.domain.SpecimenOrderItem;
+import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
+
 
 import java.util.Collection;
 import java.util.Date;
@@ -117,7 +122,7 @@ public class ClientDemo
 			ClientSession cs = ClientSession.getInstance();
 			try
 			{ 
-				cs.startSession("admin@admin.com", "Login123");
+				cs.startSession("admin@admin.com", "Test123");
 			} 
 			catch (Exception ex) 
 			{ 
@@ -199,7 +204,7 @@ public class ClientDemo
 			testAddCellSpecimen();
 			testAddSpecimenArray();
 			testAddDistribution();
-		
+			testAddOrderWithData();
 			
 			testAddInstitutionWithWrongData();
 			testAddDepartmentWithWrongData();
@@ -230,6 +235,9 @@ public class ClientDemo
 			testAddSCGWithWrongEvents();	
 			testAddCollectionProtocolWithWrongCollectionPointLabel();
 			testAddCollectionProtocolWithDuplicateCollectionPointLabel();
+			
+			//testAddOrderWithWrongData();		
+			
 		}
 		catch(Exception ex)
 		{
@@ -2962,6 +2970,68 @@ public class ClientDemo
 				}
 			}
 		}
+	 
+	 private void testAddOrderWithData()
+		{
+			OrderDetails orderObj = null;
+			try
+			{
+				orderObj = (OrderDetails)api.initOrder();
+				setLogger(orderObj);
+				orderObj = (OrderDetails) appService.createObject(orderObj);
+					
+				dataModelObjectMap.put("OrderDetails",orderObj);
+				Logger.out.info("Order Domain Object is successfully added ---> Name :: " + orderObj.getName());
+				writeSuccessfullOperationToReport(orderObj,insertOperation+" testAddOrder");
+				//writeFailureOperationsToReport("orderObj",insertValidateOperation+" testAddOrderWIthWrongData");
+			}
+			catch(Exception e)
+			{
+				writeFailureOperationsToReport("orderObj",insertOperation+" testAddOrder");
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+				/*if(orderObj != null)
+				{
+					writeSuccessfullOperationToReport(orderObj,insertOperation+" testAddOrder");
+				}
+				else
+				{
+					Logger.out.info("Could not able to test testAddOrderWithData due to fail to initiaze Order obj");
+				}*/
+			}
+		}
+	 
+		private void testAddOrderWithWrongData()
+		{
+			OrderDetails orderObj = null;
+			try
+			{
+				orderObj = (OrderDetails)api.initOrder();
+				orderObj.setName(null);
+				setLogger(orderObj);
+				orderObj = (OrderDetails) appService.createObject(orderObj);
+					
+				dataModelObjectMap.put("OrderDetails",orderObj);
+				Logger.out.info("Order Domain Object is successfully added ---> Name :: " + orderObj.getName());
+				writeFailureOperationsToReport("orderObj",insertValidateOperation+" testAddOrderWIthWrongData");
+			}
+			catch(Exception e)
+			{
+				writeSuccessfullOperationToReport(orderObj,insertValidateOperation+" testAddOrderWIthWrongData");
+				Logger.out.error(e.getMessage(),e);
+				e.printStackTrace();
+				/*if(orderObj != null)
+				{
+					writeSuccessfullOperationToReport(orderObj,insertValidateOperation+" testAddOrderWIthWrongData");	
+				}
+				
+				else
+				{
+					Logger.out.info("Could not able to test testAddOrderWithWrongData due to fail to initiaze Order obj");
+				}*/
+			}
+		}
+
 	 
 	
 

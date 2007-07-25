@@ -19,10 +19,13 @@ import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
+import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.FluidSpecimen;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
+import edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem;
+import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
@@ -33,6 +36,7 @@ import edu.wustl.catissuecore.domain.SpecimenArrayContent;
 import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenOrderItem;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
@@ -41,6 +45,11 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Constants;
+import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.domain.OrderDetails;
+import edu.wustl.catissuecore.domain.SpecimenOrderItem;
+import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
+
 
 /**
  * @author ashish_gupta
@@ -1818,7 +1827,107 @@ public class APIDemo
 	
 	
 	
+	/**
+	 * This funciton initializes data into Order domain object
+	 */
+	public OrderDetails initOrder()
+    {           
+          OrderDetails order = new OrderDetails();  
+          order.setComment("Comment");
+          
+          //Obtain Distribution Protocol
+          DistributionProtocol distributionProtocolObj = (DistributionProtocol)ClientDemo.dataModelObjectMap.get("DistributionProtocol");
+          
+          /*DistributionProtocol distributionProtocol = new DistributionProtocol();
+          distributionProtocol.setId(new Long(2));*/
+
+          order.setDistributionProtocol(distributionProtocolObj);
+          order.setName("Request1 ");
+          order.setStatus("New");
+          try
+          {
+                order.setRequestedDate(Utility.parseDate("04-02-1984", Constants.DATE_PATTERN_MM_DD_YYYY));
+          }
+
+          catch (ParseException e)
+          {
+                Logger.out.debug(""+e);
+          }
+          Collection orderItemCollection = new HashSet();       
+
+          SpecimenArrayType specimenArrayType = (SpecimenArrayType) ClientDemo.dataModelObjectMap.get("SpecimenArrayType");
+
+          NewSpecimenArrayOrderItem newSpOrderItem = new NewSpecimenArrayOrderItem();
+          newSpOrderItem.setDescription("OrderDetails Item 1 of Order_Id ");
+          newSpOrderItem.setStatus("Pending - For Protocol Review");           
+          
+          Quantity quantity = new Quantity();
+          quantity.setValue(new Double(10));
+          newSpOrderItem.setRequestedQuantity(quantity);
+          newSpOrderItem.setName("Array Order");
+          newSpOrderItem.setSpecimenArrayType(specimenArrayType);
+          
+         /* SpecimenArrayType specimenArrayType = new SpecimenArrayType();
+          specimenArrayType.setId(new Long(3));*/
+
+          Collection specimenOrderItemCollection = new HashSet();
+          SpecimenOrderItem specimenOrderItem = new SpecimenOrderItem();
+         // specimenOrderItem.setId(new Long(14));
+          specimenOrderItem.setNewSpecimenArrayOrderItem(newSpOrderItem);
+          specimenOrderItemCollection.add(specimenOrderItem);
+
+          newSpOrderItem.setSpecimenOrderItemCollection(specimenOrderItemCollection);         
+          orderItemCollection.add(newSpOrderItem);
+          order.setOrderItemCollection(orderItemCollection);
+          return order;
+
+    }
 	
+	/**
+	 * This function is to update the Order domain object.
+	 */
+		public OrderDetails updateOrderDetails(OrderDetails orderObj)
+		{
+			orderObj.setComment("UpdatedComment");
+			
+			//Obtain Distribution Protocol
+	        DistributionProtocol distributionProtocolObj = (DistributionProtocol)ClientDemo.dataModelObjectMap.get("DistributionProtocol");
+			
+			/*DistributionProtocol distributionProtocol = new DistributionProtocol();
+            distributionProtocol.setId(new Long(1));*/
+            
+            orderObj.setDistributionProtocol(distributionProtocolObj);
+            orderObj.setName("Updated Request Name");
+            orderObj.setStatus("Pending");
+            try
+            {
+            	orderObj.setRequestedDate(Utility.parseDate("05-02-1984", Constants.DATE_PATTERN_MM_DD_YYYY));
+            }
+            catch (ParseException e)
+            {
+                  Logger.out.debug(""+e);
+            }
+            Collection orderItemCollection = new HashSet(); 
+            ExistingSpecimenOrderItem existingOrderItem =(ExistingSpecimenOrderItem) orderObj.getOrderItemCollection().iterator().next();
+            existingOrderItem.setDescription("Updated OrderDetails Item 1 of Order_Id ");
+            existingOrderItem.setStatus("Pending - For Specimen Distribution");          
+
+            Quantity quantity = new Quantity();
+            quantity.setValue(new Double(10));
+            existingOrderItem.setRequestedQuantity(quantity);
+            
+            /*Specimen specimen = new Specimen();
+            specimen.setId(new Long(3));*/
+            
+            //Obtain Specimen Object
+            Specimen specimen = (Specimen) ClientDemo.dataModelObjectMap.get("Specimen");
+            existingOrderItem.setSpecimen(specimen);
+            orderItemCollection.add(existingOrderItem);
+            orderObj.setOrderItemCollection(orderItemCollection);
+            
+            return orderObj;
+		}
+
 	
 	
 	private int getUniqueId()
