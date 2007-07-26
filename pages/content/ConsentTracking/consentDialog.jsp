@@ -19,8 +19,8 @@
 <%
 	String withdrawAll = request.getParameter(Constants.WITHDRAW_ALL);
 	String getConsentResponse = request.getParameter(Constants.RESPONSE);
+	String pageOf = request.getParameter("pageOf");
 	Integer identifierFieldIndex = 4;
-	String pageOf="";
 %>
 <script language="JavaScript">
 
@@ -44,6 +44,23 @@ function getButtonStatus(element)
 			{
 				parent.opener.document.forms[0].activityStatus.value="<%=Constants.ACTIVITY_STATUS_DISABLED%>" ;
 				parent.opener.document.forms[0].onSubmit.value="<%=Constants.BIO_SPECIMEN%>";
+				parent.opener.document.forms[0].target = "_top";
+			}
+			else
+			{
+					<%	if(pageOf.equals(Constants.PAGE_OF_SPECIMEN))
+					{
+					%>	
+						parent.opener.document.forms[0].action="<%=Constants.SPECIMEN_EDIT_ACTION%>";	
+					<%
+					}
+					else
+				    {
+					%>
+						parent.opener.document.forms[0].action="<%=Constants.CP_QUERY_SPECIMEN_EDIT_ACTION%>";				
+					<%
+					}
+					%>
 			}
 		}
 		parent.opener.document.forms[0].submit();
@@ -54,10 +71,31 @@ function getButtonStatus(element)
 
 function getStatus(element)
 {
-	var answer= confirm("Are you sure you want to Perform no action on the Specimens");
+	var answer= confirm("Are you sure about your action on the Specimens");
 	if(answer)
 	{
 		parent.opener.document.forms[0].applyChangesTo.value=element.value;
+		if(parent.opener.document.forms[0].name == "<%=Constants.NEWSPECIMEN_FORM%>")
+		{
+			<%	
+			if(pageOf.equals(Constants.PAGE_OF_SPECIMEN))
+			{
+			%>	
+				parent.opener.document.forms[0].action="<%=Constants.SPECIMEN_EDIT_ACTION%>";
+			<%
+			}
+			else
+			{
+			%>
+				parent.opener.document.forms[0].action="<%=Constants.CP_QUERY_SPECIMEN_EDIT_ACTION%>";
+			<%
+			}
+			%>
+		}
+		else
+		{
+			parent.opener.document.forms[0].action="<%=Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION%>";
+		}
 		parent.opener.document.forms[0].submit();
 		self.close();
 	}
