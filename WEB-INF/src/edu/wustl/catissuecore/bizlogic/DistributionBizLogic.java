@@ -96,8 +96,8 @@ public class DistributionBizLogic extends DefaultBizLogic
 		boolean distributed = true;
 		JDBCDAO dao = (JDBCDAO) DAOFactory.getInstance().getDAO(Constants.JDBC_DAO);
 		List list = null;
-		String queryStr = "select array.distribution_id from catissue_specimen_array array where array.identifier =" + specimenArrayId;
-
+		//String queryStr = "select array.distribution_id from catissue_specimen_array array where array.identifier =" + specimenArrayId;
+		String queryStr = "select item.distribution_id from catissue_distributed_item item where item.specimen_array_id =" + specimenArrayId;
 		try
 		{
 			dao.openSession(null);
@@ -489,6 +489,10 @@ public class DistributionBizLogic extends DefaultBizLogic
 							edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimenArray"));
+					}
+					else if(isSpecimenArrayDistributed(((SpecimenArray)object).getId()))
+					{
+						throw new DAOException(ApplicationProperties.getValue("errors.distribution.arrayAlreadyDistributed"));
 					}
 					distributedItem.setSpecimenArray(specimenArrayObj);
 				}
