@@ -18,7 +18,6 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.util.SearchUtil;
-import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.MapDataParser;
@@ -32,8 +31,8 @@ import edu.wustl.common.util.logger.Logger;
 public class Distribution extends SpecimenEventParameters implements java.io.Serializable
 {
 	private static final long serialVersionUID = 1234567890L;
-	
-    // Change for API Search   --- Ashwin 04/10/2006
+
+	// Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * New location(site) of the item.
 	 */
@@ -43,34 +42,33 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	 * Original location(site) of the item. 
 	 */
 	//protected Site fromSite = new Site();
-	
-    // Change for API Search   --- Ashwin 04/10/2006
+	// Change for API Search   --- Ashwin 04/10/2006
 	/**
 	 * DistributionProtocol associated with this Distribution.
 	 */
 	protected DistributionProtocol distributionProtocol;
-	
+
 	/**
 	 * Collection of Items distributed in this distribution.
 	 */
 	protected Collection distributedItemCollection = new HashSet();
-	
+
 	/**
 	 * Defines whether this SpecimenProtocol record can be queried (Active) or not queried (Inactive) by any actor.
 	 */
 	protected String activityStatus;
-	
+
 	/**
 	 * Collection of specimen Array in this distribution.
 	 * @see SpecimenArray
 	 */
-	protected Collection specimenArrayCollection = new HashSet(); 
+	protected Collection specimenArrayCollection = new HashSet();
 
 	/**
 	 * OrderDetails associated with the order_item.
 	 */
 	protected OrderDetails orderId;
-	
+
 	/**
 	 * @return the orderId
 	 * @hibernate.many-to-one column="ORDER_ID" class="edu.wustl.catissuecore.domain.OrderDetails" constrained="true"
@@ -80,7 +78,6 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 		return orderId;
 	}
 
-	
 	/**
 	 * @param orderId the orderId to set
 	 */
@@ -93,24 +90,25 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	public Distribution()
 	{
 	}
-	
+
 	/**
-     * Returns System generated unique id.
-     * @return System generated unique id.
-     * @see #setId(Integer)
-     * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
-     * unsaved-value="null" generator-class="native"
-     * @hibernate.generator-param name="sequence" value="CATISSUE_DISTRIBUTION_SEQ" 
-     */
+	 * Returns System generated unique id.
+	 * @return System generated unique id.
+	 * @see #setId(Integer)
+	 * @hibernate.id name="id" column="IDENTIFIER" type="long" length="30"
+	 * unsaved-value="null" generator-class="native"
+	 * @hibernate.generator-param name="sequence" value="CATISSUE_DISTRIBUTION_SEQ" 
+	 */
 	public Long getId()
 	{
 		return id;
 	}
+
 	public Distribution(AbstractActionForm form)
 	{
 		setAllValues(form);
 	}
-	
+
 	// ---- Method Section
 
 	/**
@@ -133,25 +131,25 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 		this.toSite = toSite;
 	}
 
-//	/**
-//	 * Returns the original/source Site of the Distribution.
-//	 * @hibernate.many-to-one column="FROM_SITE_ID"
-//	 * class="edu.wustl.catissuecore.domain.Site" constrained="true"
-//	 * @return the original/source Site of the Distribution.
-//	 */
-//	public Site getFromSite()
-//	{
-//		return fromSite;
-//	}
-//
-//	/**
-//	 * @param fromSite
-//	 *  The fromSite to set.
-//	 */
-//	public void setFromSite(Site fromSite)
-//	{
-//		this.fromSite = fromSite;
-//	}
+	//	/**
+	//	 * Returns the original/source Site of the Distribution.
+	//	 * @hibernate.many-to-one column="FROM_SITE_ID"
+	//	 * class="edu.wustl.catissuecore.domain.Site" constrained="true"
+	//	 * @return the original/source Site of the Distribution.
+	//	 */
+	//	public Site getFromSite()
+	//	{
+	//		return fromSite;
+	//	}
+	//
+	//	/**
+	//	 * @param fromSite
+	//	 *  The fromSite to set.
+	//	 */
+	//	public void setFromSite(Site fromSite)
+	//	{
+	//		this.fromSite = fromSite;
+	//	}
 
 	/**
 	 * Returns the distributionProtocol of the distribution.
@@ -205,7 +203,7 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	{
 		this.activityStatus = activityStatus;
 	}
-	
+
 	/**
 	 * @param distributedItemCollection
 	 *  The distributedItemCollection to set.
@@ -214,69 +212,73 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	{
 		this.distributedItemCollection = distributedItemCollection;
 	}
+
 	public void setAllValues(IValueObject abstractForm)
 	{
-	    try
-	    {
-	    	super.setAllValues(abstractForm);
-	    	super.specimen = null;
-	        // Change for API Search   --- Ashwin 04/10/2006
-	    	if (SearchUtil.isNullobject(toSite))
-	    	{
-	    		toSite = new Site();
-	    	}
-	    	
-	        // Change for API Search   --- Ashwin 04/10/2006
-	    	if (SearchUtil.isNullobject(distributionProtocol))
-	    	{
-	    		distributionProtocol = new DistributionProtocol();
-	    	}
+		try
+		{
+			super.setAllValues(abstractForm);
+			super.specimen = null;
+			// Change for API Search   --- Ashwin 04/10/2006
+			if (SearchUtil.isNullobject(toSite))
+			{
+				toSite = new Site();
+			}
 
-	    	DistributionForm form = (DistributionForm) abstractForm;
-	        toSite.setId(new Long(form.getToSite()));
-	        //fromSite.setId(new Long(form.getFromSite()));
-	        distributionProtocol.setId(new Long(form.getDistributionProtocolId()));
-	        this.activityStatus = form.getActivityStatus();
-	        
-	        Map map = form.getValues();
-	        Logger.out.debug("map "+map);
-	        map = fixMap(map);
-	        Logger.out.debug("fixedMap "+map);
-	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-	        Collection itemCollectionMap = parser.generateData(map);
-	        if (form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE )
-	        {
-		        distributedItemCollection = itemCollectionMap;
-	        } 
-	        else
-	        {
-	        	specimenArrayCollection = itemCollectionMap;
-	        }
-	    
-	        Logger.out.debug("distributedItemCollection "+distributedItemCollection); 
-	    }
-	    catch(Exception excp)
-	    {
-	    	// use of logger as per bug 79
-	    	Logger.out.error(excp.getMessage(),excp); 
-	    }
+			// Change for API Search   --- Ashwin 04/10/2006
+			if (SearchUtil.isNullobject(distributionProtocol))
+			{
+				distributionProtocol = new DistributionProtocol();
+			}
+
+			DistributionForm form = (DistributionForm) abstractForm;
+			toSite.setId(new Long(form.getToSite()));
+			//fromSite.setId(new Long(form.getFromSite()));
+			distributionProtocol.setId(new Long(form.getDistributionProtocolId()));
+			this.activityStatus = form.getActivityStatus();
+
+			Map map = form.getValues();
+			Logger.out.debug("map " + map);
+			map = fixMap(map);
+			Logger.out.debug("fixedMap " + map);
+			MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
+			Collection itemCollectionMap = parser.generateData(map);
+			Collection finalItemCollecitonMap = new HashSet();
+			Iterator itr = itemCollectionMap.iterator();
+			while (itr.hasNext())
+			{
+				DistributedItem distributedItem = (DistributedItem) itr.next();
+				if (distributedItem.getSpecimen() != null)
+					finalItemCollecitonMap.add(distributedItem);
+				//Added by Ashish
+				if (distributedItem.getSpecimenArray() != null)
+					finalItemCollecitonMap.add(distributedItem);
+			}
+			distributedItemCollection = finalItemCollecitonMap;
+			Logger.out.debug("distributedItemCollection " + distributedItemCollection);
+		}
+		catch (Exception excp)
+		{
+			// use of logger as per bug 79
+			Logger.out.error(excp.getMessage(), excp);
+		}
 	}
-	
+
 	protected Map fixMap(Map orgMap)
 	{
 		Iterator it = orgMap.keySet().iterator();
 		Map newMap = new HashMap();
-		while(it.hasNext())
+		while (it.hasNext())
 		{
-			String key = (String)it.next();
-			String value = (String)orgMap.get(key);
-			if(key.endsWith("_id") || key.endsWith("uantity"))
+			String key = (String) it.next();
+			String value = (String) orgMap.get(key);
+			if (key.endsWith("_id") || key.endsWith("uantity"))
 			{
-				newMap.put(key,value);
+				newMap.put(key, value);
 			}
-		}	
+		}
 		return newMap;
-		
+
 	}
 
 	/**
@@ -288,7 +290,8 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.SpecimenArray"
 	 * @return specimenArrayCollection a collection of specimen array.
 	 */
-	public Collection getSpecimenArrayCollection() {
+	public Collection getSpecimenArrayCollection()
+	{
 		return specimenArrayCollection;
 	}
 
@@ -296,39 +299,42 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	 * Sets the collection of specimen Array.
 	 * @param specimenArrayCollection set of specimen array
 	 */
-	public void setSpecimenArrayCollection(Collection specimenArrayCollection) {
+	public void setSpecimenArrayCollection(Collection specimenArrayCollection)
+	{
 		this.specimenArrayCollection = specimenArrayCollection;
 	}
-	
+
 	/**
-     * Returns message label to display on success add or edit
-     * @return String
-     */
-	public String getMessageLabel() {
-        // Change for API Search   --- Ashwin 04/10/2006
-    	if (SearchUtil.isNullobject(distributionProtocol))
-    	{
-    		distributionProtocol = new DistributionProtocol();
-    	}
+	 * Returns message label to display on success add or edit
+	 * @return String
+	 */
+	public String getMessageLabel()
+	{
+		// Change for API Search   --- Ashwin 04/10/2006
+		if (SearchUtil.isNullobject(distributionProtocol))
+		{
+			distributionProtocol = new DistributionProtocol();
+		}
 		String message = this.distributionProtocol.title + " ";
-		if (this.user != null) {
-			if (this.user.lastName!= null && !this.user.lastName.equals("") && this.user.firstName != null && !this.user.firstName.equals("")) 
+		if (this.user != null)
+		{
+			if (this.user.lastName != null && !this.user.lastName.equals("") && this.user.firstName != null && !this.user.firstName.equals(""))
 			{
 				message = message + this.user.lastName + "," + this.user.firstName;
-			} 
-			else if(this.user.lastName!= null && !this.user.lastName.equals(""))
+			}
+			else if (this.user.lastName != null && !this.user.lastName.equals(""))
 			{
 				message = message + this.user.lastName;
 			}
-			else if(this.user.firstName!= null && !this.user.firstName.equals(""))
+			else if (this.user.firstName != null && !this.user.firstName.equals(""))
 			{
 				message = message + this.user.firstName;
-			}		
-		} 		
+			}
+		}
 		else if (this.user != null)
 		{
 			message = message + this.user;
-		}			
+		}
 		return message;
 	}
 }
