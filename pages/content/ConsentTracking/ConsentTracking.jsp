@@ -85,7 +85,7 @@ function popupWindow(nofConsentTiers)
 	{
 		var withdrawId = withdraw.replace(/`/,i);
 		var withdrawObject = document.getElementById(withdrawId);
-		if(withdrawObject.selectedIndex==3)
+		if(withdrawObject.value=="Withdrawn")
 		{
 			iCount--;
 		}
