@@ -12,6 +12,9 @@
 <html:errors/>
 
 <head>
+<%
+String form_action = Constants.SUBMIT_REQUEST_DETAILS_ACTION+"?submittedFor=ForwardTo";
+%>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/ajax.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/OrderingSystem.js"></script>
@@ -66,7 +69,7 @@ function tabToDisplay()
  </script>
 </head>  
 <body onload="tabToDisplay()">
-	<html:form action="<%=Constants.SUBMIT_REQUEST_DETAILS_ACTION%>" >
+	<html:form action="<%=form_action%>">
 		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="100%" id="table1_OrderRequestHeader">
 		<tr>
 			<td>
