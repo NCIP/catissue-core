@@ -510,6 +510,9 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		{
 			setDefaultValuesToColumn(model);
 		}
+		
+		setDefaultSpecimenLabelToColumn(model, actualColumnIndex);
+		
 		//Set the default Tissue Side as selected.
 		if(model.getTissueSide()!=null)
 		{
@@ -2160,6 +2163,14 @@ public class SpecimenColumnModel extends AbstractCellEditor implements TableCell
 		String quantity = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_QUANTITY_ROW_NO, column + 1);
 		//bug id: 4340
 		setQuantityField(quantity,model.getEventsToolTipMap());
+    }
+    
+    private void setDefaultSpecimenLabelToColumn(MultipleSpecimenTableModel model, int column)
+    {
+		//Label
+		String spLabel = getValueFromSpecimenMap(model, AppletConstants.SPECIMEN_LABEL_ROW_NO, column + 1);
+		setLabel(spLabel);
+
     }
 
 	// -------------------Mandar For Focus Handling 11-Dec-06 start

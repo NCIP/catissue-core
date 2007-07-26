@@ -36,9 +36,10 @@ import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
 import edu.wustl.catissuecore.bizlogic.StorageContainerBizLogic;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.util.global.AbstractSpecimenLabelGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGenerator;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGeneratorFactory;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -126,19 +127,20 @@ public class CreateSpecimenAction extends SecureAction
 			if (request.getParameter("button") == null)
 			{
 				String parentSpecimenLabel = createForm.getParentSpecimenLabel();
-				
+				Long parentSpecimenID = null;
 				//Bug-2784: If coming from NewSpecimen page, then only set parent specimen label.
 				Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
 				if(forwardToHashMap != null && forwardToHashMap.get("parentSpecimenId") != null)
 				{
-					request.setAttribute(Constants.PARENT_SPECIMEN_ID,forwardToHashMap.get("parentSpecimenId"));
+					parentSpecimenID = (Long)forwardToHashMap.get("parentSpecimenId");
+					request.setAttribute(Constants.PARENT_SPECIMEN_ID, parentSpecimenID);
 					if (parentSpecimenLabel == null || parentSpecimenLabel.trim().equals(""))
 					{
 						createForm.setParentSpecimenLabel(createForm.getLabel());
 						createForm.setLabel("");
 					}
 				}
-				NewSpecimenBizLogic bizLogic = (NewSpecimenBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+
 				if(createForm.getLabel()==null || createForm.getLabel().equals(""))
 				{
 					/**
@@ -147,9 +149,13 @@ public class CreateSpecimenAction extends SecureAction
 		             * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and set.
 		        	 */
 					//int totalNoOfSpecimen = bizLogic.totalNoOfSpecimen(sessionData)+1;
-					AbstractSpecimenLabelGenerator abstractSpecimenGenerator  = AbstractSpecimenLabelGenerator.getSpecimenLabelGeneratorInstance();
-					String deriveSpecimenLabel= abstractSpecimenGenerator.getNextAvailableDeriveSpecimenlabel(null);
-					createForm.setLabel(deriveSpecimenLabel);
+					
+					HashMap inputMap = new HashMap();
+					inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, createForm.getParentSpecimenLabel());
+					inputMap.put(Constants.PARENT_SPECIMEN_ID_KEY, String.valueOf(parentSpecimenID));
+
+					SpecimenLabelGenerator abstractSpecimenGenerator  = SpecimenLabelGeneratorFactory.getInstance();
+					createForm.setLabel(abstractSpecimenGenerator.getNextAvailableDeriveSpecimenlabel(inputMap));
 				}
 				
 				if (forwardToHashMap == null && ((createForm.getCheckedButton().equals("1") && createForm

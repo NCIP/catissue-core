@@ -52,10 +52,11 @@ import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
-import edu.wustl.catissuecore.util.global.AbstractSpecimenLabelGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGenerator;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGeneratorFactory;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -139,13 +140,13 @@ public class NewSpecimenAction extends SecureAction
 		
 //		*************  ForwardTo implementation *************
 		HashMap forwardToHashMap = (HashMap) request.getAttribute("forwardToHashMap");
-
+		String specimenCollectionGroupName = "";
 		if (forwardToHashMap != null)
 		{
 			String specimenCollectionGroupId = (String) forwardToHashMap.get("specimenCollectionGroupId");
 			/**For Migration Start**/
 			
-			String specimenCollectionGroupName = (String) forwardToHashMap.get("specimenCollectionGroupName");
+			specimenCollectionGroupName = (String) forwardToHashMap.get("specimenCollectionGroupName");
 			Logger.out.debug("specimenCollectionGroupName found in forwardToHashMap========>>>>>>" + specimenCollectionGroupName);
 			specimenForm.setSpecimenCollectionGroupName(specimenCollectionGroupName);
 			/**For Migration End**/
@@ -501,8 +502,10 @@ public class NewSpecimenAction extends SecureAction
 	             * Reviewer: Sachin Lale
 	             * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and set.
 	        	 */
-				AbstractSpecimenLabelGenerator abstractSpecimenGenerator  = AbstractSpecimenLabelGenerator.getSpecimenLabelGeneratorInstance();
-				String specimenLabel= abstractSpecimenGenerator.getNextAvailableSpecimenlabel(null);
+				SpecimenLabelGenerator spLblGenerator  = SpecimenLabelGeneratorFactory.getInstance();
+				Map inputMap = new HashMap();
+				inputMap.put(Constants.SCG_NAME_KEY, specimenCollectionGroupName);
+				String specimenLabel= spLblGenerator.getNextAvailableSpecimenlabel(inputMap);
 				specimenForm.setLabel(specimenLabel);
 			}
 			

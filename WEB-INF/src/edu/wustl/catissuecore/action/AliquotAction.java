@@ -40,9 +40,10 @@ import edu.wustl.catissuecore.domain.MolecularSpecimen;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.StorageContainer;
-import edu.wustl.catissuecore.util.global.AbstractSpecimenLabelGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGenerator;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGeneratorFactory;
 import edu.wustl.common.action.SecureAction;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
@@ -939,23 +940,26 @@ public class AliquotAction extends SecureAction
 		}
 
 		Map aliquotMap = form.getAliquotMap();
-		AliquotBizLogic bizLogic = (AliquotBizLogic) BizLogicFactory.getInstance().getBizLogic(Constants.ALIQUOT_FORM_ID);
-		//long nextAvailablenumber = bizLogic.getNextAvailableNumber("CATISSUE_SPECIMEN");
+		
 		/**
     	 * Name : Virender Mehta
          * Reviewer: Sachin Lale
          * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and set. 
     	 */
-		AbstractSpecimenLabelGenerator abstractSpecimenGenerator  = AbstractSpecimenLabelGenerator.getSpecimenLabelGeneratorInstance();
-		String aliquotStartLabel = abstractSpecimenGenerator.getNextAvailableAliquotSpecimenlabel(form.getSpecimenID());
-		long aliquotChildCount = Long.parseLong(aliquotStartLabel); 
+		SpecimenLabelGenerator abstractSpecimenGenerator  = SpecimenLabelGeneratorFactory.getInstance();
+		
+		HashMap inputMap = new HashMap();
+		inputMap.put(Constants.PARENT_SPECIMEN_LABEL_KEY, form.getSpecimenLabel());
+		inputMap.put(Constants.PARENT_SPECIMEN_ID_KEY, form.getSpecimenID());
+		
+		List<String> aliquotLabels = abstractSpecimenGenerator.getNextAvailableAliquotSpecimenlabel(inputMap, aliquotCount);
+
 		for (int i = 1; i <= aliquotCount; i++)
 		{
 			String qtyKey = "Specimen:" + i + "_quantity";
 			aliquotMap.put(qtyKey, distributedQuantity);
 			String labelKey = "Specimen:" + i + "_label";
-			String aliquotLabel = form.getSpecimenLabel() + "_" + (aliquotChildCount++);
-			aliquotMap.put(labelKey, aliquotLabel);
+			aliquotMap.put(labelKey, aliquotLabels.get(i-1));
 		}
 
 		form.setAliquotMap(aliquotMap);

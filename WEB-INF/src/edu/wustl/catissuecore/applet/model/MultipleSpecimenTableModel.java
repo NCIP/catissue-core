@@ -78,6 +78,8 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	Map buttonStatusMap;
 	
+	List<String> labels;
+	
 	int columnCount;
 
 	/** This is a map that holds options to be displayed for various attributes of the specimen
@@ -127,7 +129,6 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 	 */
 	public MultipleSpecimenTableModel(int initialColumnCount, Map specimenAttributeOptions)
 	{
-
 		specimenMap = new HashMap();
 		buttonStatusMap = new HashMap();
 		eventsToolTipMap= new HashMap();
@@ -167,7 +168,17 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 			eventsToolTipMap=(HashMap)specimenAttributeOptions.get(Constants.MULTIPLE_SPECIMEN_TOOLTIP_MAP_KEY);
         }
 		/** -- patch ends here */
-				
+
+		if(specimenAttributeOptions.get(Constants.MULTIPLE_SPECIMEN_LABEL_MAP_KEY) != null)
+        {
+			labels=(List<String>)specimenAttributeOptions.get(Constants.MULTIPLE_SPECIMEN_LABEL_MAP_KEY);
+			
+			for(int count = 1; count <= initialColumnCount; count++)
+			{
+				setSpecimenLabelsInModel(count, labels.get(count-1));
+			}
+        }
+
 		// Set the Specimen Collection Group name in to the Table Model.
 		String specimenCollectionGroupName = (String)specimenAttributeOptions.get(Constants.SPECIMEN_COLL_GP_NAME);
 		if (specimenCollectionGroupName != null)
@@ -705,6 +716,15 @@ public class MultipleSpecimenTableModel extends BaseTabelModel
 		}
 	}
 	
+	private void setSpecimenLabelsInModel(int column, String label)
+	{
+		if(label != null)
+		{
+			String specimenKey = AppletConstants.SPECIMEN_PREFIX + String.valueOf(column) + "_" + specimenAttribute[AppletConstants.SPECIMEN_LABEL_ROW_NO];
+			specimenMap.put(specimenKey, label);
+		}
+	}
+
 	private void removeCollectionGroupFromModel(int column)
 	{
 		if(specimenCollectionGroupName != null)

@@ -54,6 +54,7 @@ import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDE;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.cde.PermissibleValue;
+import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.factory.AbstractBizLogicFactory;
 import edu.wustl.common.factory.AbstractDomainObjectFactory;
 import edu.wustl.common.factory.MasterFactory;
@@ -64,6 +65,8 @@ import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGeneratorFactory;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGenerator;
 
 /**
  * This action contains methods that are called by MultipleSpecimenApplet
@@ -115,6 +118,8 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 		 * populateValuesForMultipleSpecimen(), which will store/populate the default values into the
 		 * dataListsMap 
 		 */
+		
+		
 		Map<String, Object> dataListsMap = new HashMap<String, Object>();
 
 		populateValuesForMultipleSpecimen(dataListsMap, request);
@@ -1475,7 +1480,17 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			dataListsMap.put(Constants.SPECIMEN_COLLECTION_GROUP_LIST, specimenGroupArrayList.toArray());
 			if (request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME) != null)
 			{
-				dataListsMap.put(Constants.SPECIMEN_COLL_GP_NAME, request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME));
+				String scgName = (String)request.getSession().getAttribute(Constants.SPECIMEN_COLL_GP_NAME);
+				dataListsMap.put(Constants.SPECIMEN_COLL_GP_NAME, scgName);
+				
+				// call here a labelgenerator passing scg name and get list of lables.
+				if(request.getParameter("specimenCount")!=null)
+				{
+					int count = Integer.parseInt(request.getParameter("specimenCount")); 
+					List<String> labels = generateLables(scgName, count);
+					dataListsMap.put(Constants.MULTIPLE_SPECIMEN_LABEL_MAP_KEY, labels);
+				}
+				
 				request.getSession().removeAttribute(Constants.SPECIMEN_COLL_GP_NAME);
 			}
 
@@ -1488,6 +1503,13 @@ public class MultipleSpecimenAppletAction extends BaseAppletAction
 			/** -- patch ends here -- */
 			// Set the default values.
 			setDefaultValuesInMap(dataListsMap);
+		}
+		
+		private List<String> generateLables(String specimenCollectionGroupName, int count) throws BizLogicException
+		{
+			Map inputMap = new HashMap();
+			inputMap.put(Constants.SCG_NAME_KEY, specimenCollectionGroupName);
+			return SpecimenLabelGeneratorFactory.getInstance().getNextAvailableSpecimenlabel(inputMap, count);
 		}
 		
 		/**

@@ -46,6 +46,7 @@ import edu.wustl.catissuecore.applet.model.BaseAppletModel;
 import edu.wustl.catissuecore.applet.model.MultipleSpecimenTableModel;
 import edu.wustl.catissuecore.applet.model.SpecimenColumnModel;
 import edu.wustl.catissuecore.applet.util.CommonAppletUtil;
+import edu.wustl.catissuecore.util.global.Constants;
 
 /**
  * This applet displays main UI for multiple specimen page.
@@ -68,7 +69,7 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	public void doInit()
     {		
 		int columnNumber = Integer.parseInt(this.getParameter("noOfSpecimen"));		
-		final MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap());
+		final MultipleSpecimenTableModel model = new MultipleSpecimenTableModel(columnNumber,getInitDataMap(columnNumber));
 		
 		table = new MultipleSpecimenTable(model);		
         table.getTableHeader().setReorderingAllowed(false);
@@ -390,13 +391,13 @@ public class MultipleSpecimenApplet extends BaseApplet {
 	/**
 	 * This method initialize data lists 
 	 */
-	private Map getInitDataMap()
+	private Map getInitDataMap(int noOfSpecimen)
 	{
 		BaseAppletModel appletModel = new BaseAppletModel();
 		appletModel.setData(new HashMap());
 		try
 		{
-			String url = getServerURL() + "/MultipleSpecimenAppletAction.do?method=initData";
+			String url = getServerURL() + "/MultipleSpecimenAppletAction.do?method=initData&specimenCount="+noOfSpecimen;
 
 			appletModel = (BaseAppletModel) AppletServerCommunicator.doAppletServerCommunication(
 					url, appletModel);
