@@ -359,5 +359,10 @@
 		<value>Unknown</value>
 	</property>
 	
-	
+
+	<property>
+		<name>specimenLabelGeneratorClass</name>
+		<value>edu.wustl.catissuecore.util.global.namegenerator.DefaultSpecimenLableGenerator</value>
+	</property>
+
 </properties>
