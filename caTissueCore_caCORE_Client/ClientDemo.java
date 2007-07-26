@@ -2100,7 +2100,7 @@ public class ClientDemo
 				testUpdateStorageContainer();
 				testUpdateSpecimenArrayType();
 				testUpdateSpecimenArray();
-				
+				testUpdateOrderDetails();
 				
 				testUpdateInstitutionWithWrongData();
 				testUpdateDepartmentWithWrongData();
@@ -2734,7 +2734,26 @@ public class ClientDemo
 	 		e.printStackTrace();
 	    }
 	}		
-	
+	private void testUpdateOrderDetails()
+	{
+		OrderDetails order = (OrderDetails)dataModelObjectMap.get("OrderDetails");
+    	setLogger(order);
+    	Logger.out.info("---------------------");
+    	Logger.out.info("updating domain object------->"+order);
+	    try 
+		{
+	    	APIDemo apiDemo = new APIDemo();
+	    	apiDemo.updateOrderDetails(order);
+	    	OrderDetails updatedOrder = (OrderDetails) appService.updateObject(order);
+	    	writeSuccessfullOperationToReport(updatedOrder,updateOperation+"testUpdateOrderDetails");
+	    	Logger.out.info("Domain object successfully updated ---->"+updatedOrder);
+	    } 
+	    catch (Exception e) {
+	    	writeFailureOperationsToReport("OrderDetails",updateOperation+"testUpdateOrderDetails");
+	    	Logger.out.error(e.getMessage(),e);
+	 		e.printStackTrace();
+	    }
+	}
 	
 	
 	 private static void setLogger(Object object)
