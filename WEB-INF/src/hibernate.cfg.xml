@@ -15,6 +15,12 @@
     	<property name="hibernate.cache.provider_class">net.sf.hibernate.cache.EhCacheProvider</property>
 		<property name="hibernate.jdbc.batch_size">0</property>
     	
+    	<!--Consent Tracking Suite-->
+		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTier.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierResponse.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierStatus.hbm.xml"/>
+		<!--Consent Tracking Suite-->
+		
         <!-- List of all Mapping files -->
         <mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEvent.hbm.xml"/>
