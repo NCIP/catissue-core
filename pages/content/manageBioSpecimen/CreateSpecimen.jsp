@@ -471,7 +471,7 @@ List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 					<td>
 						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
 						<html:hidden property="submittedFor" value="ForwardTo"/>
-						<html:text property="forwardTo" value="<%=frdTo%>"/>
+						<html:hidden property="forwardTo" value="<%=frdTo%>"/>
 						<html:hidden property="multipleSpecimen" value="<%=multipleSpecimen%>"/>
 						<html:hidden property="containerId" styleId="containerId"/>
 						<td></td>
