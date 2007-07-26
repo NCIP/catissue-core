@@ -1,8 +1,7 @@
-
+		 
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import edu.wustl.catissuecore.domain.Address;
@@ -15,6 +14,9 @@ import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Department;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
@@ -46,9 +48,6 @@ import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
-import edu.wustl.catissuecore.domain.OrderDetails;
-import edu.wustl.catissuecore.domain.SpecimenOrderItem;
-import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
 
 
 /**
@@ -549,16 +548,30 @@ public class APIDemo
 	public CollectionProtocol initCollectionProtocol()
 	{
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
-
-		collectionProtocol.setAliqoutInSameContainer(new Boolean(true));
+		//Setting consent tiers for this protocol.
+		Collection consentTierColl = new HashSet();
+		
+		ConsentTier c1 = new ConsentTier();
+		c1.setStatement("Consent for aids research");
+		consentTierColl.add(c1);
+		ConsentTier c2 = new ConsentTier();
+		c2.setStatement("Consent for cancer research");
+		consentTierColl.add(c2);		
+		ConsentTier c3 = new ConsentTier();
+		c3.setStatement("Consent for Tb research");
+		consentTierColl.add(c3);
+		
+		collectionProtocol.setConsentTierCollection(consentTierColl);
+		
+		collectionProtocol.setAliqoutInSameContainer(new Boolean(false));
 		collectionProtocol.setDescriptionURL("");
 		collectionProtocol.setActivityStatus("Active");
 		collectionProtocol.setEndDate(null);
 		collectionProtocol.setEnrollment(null);
-		collectionProtocol.setIrbIdentifier("77777");
-		collectionProtocol.setTitle("cp" + UniqueKeyGeneratorUtil.getUniqueKey());
-		collectionProtocol.setShortTitle("pc!");
-		
+		collectionProtocol.setIrbIdentifier("7777");
+		collectionProtocol.setTitle("Aids Study Collection Protocol For Consent tracking");
+		collectionProtocol.setShortTitle("Cp Consent");
+		collectionProtocol.setUnsignedConsentDocumentURL("C:\\consent.pdf");
 		try
 		{
 			collectionProtocol.setStartDate(Utility.parseDate("08/15/1975", Utility
@@ -573,6 +586,7 @@ public class APIDemo
 	 
 //		CollectionProtocolEvent collectionProtocolEvent = new CollectionProtocolEvent();
 		CollectionProtocolEvent collectionProtocolEvent = (CollectionProtocolEvent)ClientDemo.dataModelObjectMap.get("CollectionProtocolEvent"); 
+
 		collectionProtocolEvent.setClinicalStatus("New Diagnosis");
 		collectionProtocolEvent.setStudyCalendarEventPoint(new Double(1));
 	 
@@ -586,7 +600,6 @@ public class APIDemo
 //		Quantity quantity = new Quantity();
 //		quantity.setValue(new Double(10));
 //		specimenRequirement.setQuantity(quantity);
-		
 		SpecimenRequirement specimenRequirement  =(SpecimenRequirement)ClientDemo.dataModelObjectMap.get("SpecimenRequirement");
 		specimenRequirementCollection.add(specimenRequirement);
 		
@@ -616,10 +629,36 @@ public class APIDemo
 	/**
 	 * @return Specimen
 	 */
+	
+	public Collection addConsentInSpecimen()
+	{
+//		Setting Consent Tier Response
+		Collection consentTierStatusCollection = new HashSet();
+		ConsentTierStatus  consentTierStatus = new ConsentTierStatus();		
+		ConsentTier consentTier = new ConsentTier();
+		consentTier.setId(new Long(1));
+		consentTierStatus.setConsentTier(consentTier);
+		consentTierStatus.setStatus("No");
+		consentTierStatusCollection.add(consentTierStatus);
+		
+		ConsentTierStatus  consentTierStatus1 = new ConsentTierStatus();		
+		ConsentTier consentTier1 = new ConsentTier();
+		consentTier1.setId(new Long(2));
+		consentTierStatus1.setConsentTier(consentTier1);
+		consentTierStatus1.setStatus("No");
+		consentTierStatusCollection.add(consentTierStatus1);
+		
+		ConsentTierStatus  consentTierStatus2 = new ConsentTierStatus();		
+		ConsentTier consentTier2 = new ConsentTier();
+		consentTier2.setId(new Long(3));
+		consentTierStatus2.setConsentTier(consentTier2);
+		consentTierStatus2.setStatus("No");
+		consentTierStatusCollection.add(consentTierStatus2);
+		return consentTierStatusCollection;
+	}
 	public Specimen initMolecularSpecimen()
 	{
 		MolecularSpecimen molecularSpecimen = new MolecularSpecimen();
-
 		SpecimenCollectionGroup specimenCollectionGroup = (SpecimenCollectionGroup)ClientDemo.dataModelObjectMap.get("SpecimenCollectionGroup");
 		molecularSpecimen.setSpecimenCollectionGroup(specimenCollectionGroup);
 		
@@ -641,9 +680,6 @@ public class APIDemo
 		molecularSpecimen.setComments("");
 		molecularSpecimen.setLineage("Aliquot");
 		// Is virtually located
-		
-
-		
 		molecularSpecimen.setStorageContainer(null); 
 		molecularSpecimen.setPositionDimensionOne(null);
 		molecularSpecimen.setPositionDimensionTwo(null);
@@ -708,7 +744,9 @@ public class APIDemo
 
 //		Created on date is same as Collection Date
 		molecularSpecimen.setCreatedOn(collectionEventParameters.getTimestamp());
-		
+	
+		Collection consentTierStatusCollection = addConsentInSpecimen();
+		molecularSpecimen.setConsentTierStatusCollection(consentTierStatusCollection);
 		return molecularSpecimen;
 	}
 	
@@ -808,7 +846,8 @@ public class APIDemo
 		//Created on date is same as Collection Date
 		
 		tissueSpecimen.setCreatedOn(collectionEventParameters.getTimestamp());
-		
+		Collection consentTierStatusCollection = addConsentInSpecimen();
+		tissueSpecimen.setConsentTierStatusCollection(consentTierStatusCollection);
 
 		return tissueSpecimen;
 	}
@@ -908,7 +947,8 @@ public class APIDemo
 
 //		Created on date is same as Collection Date
 		fluidSpecimen.setCreatedOn(collectionEventParameters.getTimestamp());
-		
+		Collection consentTierStatusCollection = addConsentInSpecimen();
+		fluidSpecimen.setConsentTierStatusCollection(consentTierStatusCollection);
 		return fluidSpecimen;
 	}
 	
@@ -1003,10 +1043,10 @@ public class APIDemo
 		biohazardCollection.add(biohazard);
 		cellSpecimen.setBiohazardCollection(biohazardCollection);
 		System.out.println(" -------- end -----------");
-
-//		Created on date is same as Collection Date
+        //	Created on date is same as Collection Date
 		cellSpecimen.setCreatedOn(collectionEventParameters.getTimestamp());
-		
+		Collection consentTierStatusCollection = addConsentInSpecimen();
+		cellSpecimen.setConsentTierStatusCollection(consentTierStatusCollection);
 		return cellSpecimen;
 	}
 
@@ -1053,6 +1093,32 @@ public class APIDemo
 		specimenCollectionGroup.setCollectionProtocolRegistration(collectionProtocolRegistration);
 
 		specimenCollectionGroup.setName("scg" + UniqueKeyGeneratorUtil.getUniqueKey());
+		
+//		Setting Consent Tier Status.
+		Collection consentTierStatusCollection = new HashSet();
+		
+		ConsentTierStatus  consentTierStatus = new ConsentTierStatus();		
+		ConsentTier consentTier = new ConsentTier();
+		consentTier.setId(new Long(1));
+		consentTierStatus.setConsentTier(consentTier);
+		consentTierStatus.setStatus("Yes");
+		consentTierStatusCollection.add(consentTierStatus);
+		
+		ConsentTierStatus  consentTierStatus1 = new ConsentTierStatus();		
+		ConsentTier consentTier1 = new ConsentTier();
+		consentTier1.setId(new Long(2));
+		consentTierStatus1.setConsentTier(consentTier1);
+		consentTierStatus1.setStatus("Yes");
+		consentTierStatusCollection.add(consentTierStatus1);
+		
+		ConsentTierStatus  consentTierStatus2 = new ConsentTierStatus();		
+		ConsentTier consentTier2 = new ConsentTier();
+		consentTier2.setId(new Long(3));
+		consentTierStatus2.setConsentTier(consentTier2);
+		consentTierStatus2.setStatus("Yes");
+		consentTierStatusCollection.add(consentTierStatus2);
+		
+		specimenCollectionGroup.setConsentTierStatusCollection(consentTierStatusCollection);
 
 		ClinicalReport clinicalReport = new ClinicalReport();
 		clinicalReport.setSurgicalPathologyNumber("");
@@ -1239,7 +1305,6 @@ public class APIDemo
 	public CollectionProtocolRegistration initCollectionProtocolRegistration()
 	{
 		CollectionProtocolRegistration collectionProtocolRegistration = new CollectionProtocolRegistration();
-
 //		CollectionProtocol collectionProtocol = new CollectionProtocol();
 //		collectionProtocol.setId(new Long(1));
 		CollectionProtocol collectionProtocol = (CollectionProtocol)ClientDemo.dataModelObjectMap.get("CollectionProtocol");
@@ -1263,6 +1328,45 @@ public class APIDemo
 			e.printStackTrace();
 		}
 		*/
+		//Setting Consent Tier Responses.
+		try
+		{
+			collectionProtocolRegistration.setConsentSignatureDate(Utility.parseDate("11/23/2006",Utility.datePattern("11/23/2006")));
+		}
+		catch (ParseException e)
+		{			
+			e.printStackTrace();
+		}
+		collectionProtocolRegistration.setSignedConsentDocumentURL("F:/doc/consentDoc.doc");
+		
+		User user = new User();
+		user.setId(new Long(1));
+		collectionProtocolRegistration.setConsentWitness(user);
+		
+		Collection consentTierResponseCollection = new HashSet();
+		
+		ConsentTierResponse r1 = new ConsentTierResponse();
+		ConsentTier consentTier = new ConsentTier();
+		consentTier.setId(new Long(1));
+		r1.setConsentTier(consentTier);
+		r1.setResponse("Yes");
+		consentTierResponseCollection.add(r1);
+		
+		ConsentTierResponse r2 = new ConsentTierResponse();
+		ConsentTier consentTier2 = new ConsentTier();
+		consentTier2.setId(new Long(2));
+		r2.setConsentTier(consentTier2);
+		r2.setResponse("Yes");
+		consentTierResponseCollection.add(r2);
+		
+		ConsentTierResponse r3 = new ConsentTierResponse();
+		ConsentTier consentTier3 = new ConsentTier();
+		consentTier3.setId(new Long(3));
+		r3.setConsentTier(consentTier3);
+		r3.setResponse("No");
+		consentTierResponseCollection.add(r3);
+		
+		collectionProtocolRegistration.setConsentTierResponseCollection(consentTierResponseCollection);
 		return collectionProtocolRegistration;
 	}
 	
@@ -1566,8 +1670,8 @@ public class APIDemo
 		collectionProtocol.setEndDate(null);
 		collectionProtocol.setEnrollment(null);
 		collectionProtocol.setIrbIdentifier("11111");//77777
-		collectionProtocol.setTitle("cp" + UniqueKeyGeneratorUtil.getUniqueKey());
-		collectionProtocol.setShortTitle("cp"); //pc!
+		collectionProtocol.setTitle("cp consent" + UniqueKeyGeneratorUtil.getUniqueKey());
+		collectionProtocol.setShortTitle("cp concent"); //pc!
 		
 		try
 		{

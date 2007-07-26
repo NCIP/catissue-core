@@ -1,5 +1,6 @@
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CancerResearchGroup;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
@@ -9,7 +10,6 @@ import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.Institution;
 import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
@@ -17,22 +17,15 @@ import edu.wustl.catissuecore.domain.SpecimenArrayType;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.SpecimenEventParameters;
-import edu.wustl.catissuecore.domain.CollectionEventParameters;
-import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.StorageType;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.logger.Logger;
 import gov.nih.nci.common.util.HQLCriteria;
 import gov.nih.nci.system.applicationservice.ApplicationService;
 import gov.nih.nci.system.applicationservice.ApplicationServiceProvider;
 import gov.nih.nci.system.comm.client.ClientSession;
-import edu.wustl.catissuecore.domain.OrderDetails;
-import edu.wustl.catissuecore.domain.SpecimenOrderItem;
-import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
-
 
 import java.util.Collection;
 import java.util.Date;
@@ -44,6 +37,8 @@ import java.util.Map;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+
+
 /*
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.XMLPropertyHandler;
@@ -84,10 +79,10 @@ import org.apache.log4j.PropertyConfigurator;
 
 
 /**
-	* ClientDemo.java demonstartes various ways to execute searches with and without
-      * using Application Service Layer (convenience layer that abstracts building criteria
-      * Uncomment different scenarios below to demonstrate the various types of searches
-*/
+  * ClientDemo.java demonstartes various ways to execute searches with and without
+  * using Application Service Layer (convenience layer that abstracts building criteria
+  * Uncomment different scenarios below to demonstrate the various types of searches
+  */
 
 public class ClientDemo 
 {
@@ -168,8 +163,8 @@ public class ClientDemo
     //////////////////////// Start Add operation //////
 	private void createObjects()
 	{
-	try
-	{
+		try
+		{
 		   // Add sub domain objects	
 	 	   Object obj = api.initSpecimenCharacteristics();
 	 	   SpecimenCharacteristics specimenCharacteristics = (SpecimenCharacteristics) appService.createObject(obj);
@@ -256,7 +251,6 @@ public class ClientDemo
 	    	dataModelObjectMap.put("Department",departmentObj);
 	    	writeSuccessfullOperationToReport(departmentObj,insertOperation+"testAddDepartment");
 			Logger.out.info(" Domain Object is successfully added ----> Name:: " + departmentObj.getName());
-		//+ departmentObj.getId().longValue() + " ::  Name :: " + departmentObj.getName());
 		}
 		catch(Exception e)
 		{
@@ -692,7 +686,6 @@ public class ClientDemo
 			dataModelObjectMap.put("CollectionProtocol",collectionProtocolObj);
 			writeSuccessfullOperationToReport(collectionProtocolObj,insertOperation+"testAddCollectionProtocol");
 			Logger.out.info(" Domain Object is successfully added ---->  ID:: " + collectionProtocolObj.getId().toString());
-		//+ collectionProtocolObj.getId().longValue() + " ::  Name :: " + collectionProtocolObj.getName());
 		}
 		catch(Exception e)
 		{
@@ -713,9 +706,6 @@ public class ClientDemo
 			Logger.out.info("Inserting domain object------->"+collectionProtocolObj);
 			collectionProtocolObj =  (CollectionProtocol) appService.createObject(collectionProtocolObj);
 			writeFailureOperationsToReport("CollectionProtocol",insertValidateOperation + " testAddCollectionProtocolWithWrongData");
-			//dataModelObjectMap.put("CollectionProtocol",collectionProtocolObj);
-			//Logger.out.info(" Domain Object is successfully added ---->  ID:: " + collectionProtocolObj.getId().toString());
-		//+ collectionProtocolObj.getId().longValue() + " ::  Name :: " + collectionProtocolObj.getName());
 		}
 		catch(Exception e)
 		{
@@ -728,7 +718,6 @@ public class ClientDemo
 	{
 		try
 		{
-		//	System.out.println("ClientDemo....................");
 			CollectionProtocolRegistration collectionProtocolRegistrationObj =(CollectionProtocolRegistration) api.initCollectionProtocolRegistration();
 	    	setLogger(collectionProtocolRegistrationObj);
 	    	Logger.out.info("Inserting domain object------->"+collectionProtocolRegistrationObj);
@@ -736,7 +725,6 @@ public class ClientDemo
 			dataModelObjectMap.put("CollectionProtocolRegistration",collectionProtocolRegistrationObj);
 			writeSuccessfullOperationToReport(collectionProtocolRegistrationObj,insertOperation+"testAddCollectionProtocolRegistration");
 			Logger.out.info(" Domain Object is successfully added ---->   ID:: " + collectionProtocolRegistrationObj.getId().toString());
-		//+ collectionProtocolRegistrationObj.getId().longValue() + " ::  Name :: " + collectionProtocolRegistrationObj.getName());
 		}
 		catch(Exception e)
 		{
@@ -1158,7 +1146,6 @@ public class ClientDemo
 				dataModelObjectMap.put("SpecimenCollectionGroup",specimenCollectionGroupObj);
 				writeSuccessfullOperationToReport(specimenCollectionGroupObj,insertOperation+"testAddSpecimenCollectionGroup");
 				Logger.out.info(" Domain Object is successfully added ---->    ID:: " + specimenCollectionGroupObj.getId().toString());
-			//+ specimenCollectionGroupObj.getId().longValue() + " ::  Name :: " + specimenCollectionGroupObj.getName());
 			}
 			catch(Exception e)
 			{
