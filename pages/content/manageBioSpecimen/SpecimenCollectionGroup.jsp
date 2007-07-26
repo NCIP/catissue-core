@@ -1,5 +1,5 @@
-
-<jsp:directive.page import="edu.wustl.common.util.global.ApplicationProperties"/><%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
+<jsp:directive.page import="edu.wustl.common.util.global.ApplicationProperties"/>
+<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
 <%@ page import="edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm"%>
@@ -24,9 +24,10 @@
 
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
+		String tab = (String)request.getAttribute(Constants.TAB_SELECTED);
 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-
+		String signedConsentDate = "";
 		String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 		boolean isAddNew = false;	
 
@@ -56,9 +57,6 @@
 		   	}
 			
 	   	}
-			
-
-
 		if(operation.equals(Constants.EDIT))
 		{
 			editViewButton="buttons."+Constants.VIEW;
@@ -70,8 +68,6 @@
 			{
 				formName = Constants.CP_QUERY_SPECIMEN_COLLECTION_GROUP_EDIT_ACTION + "?pageOf="+pageOf;
 			}
-				
-
 		}
 		else
 		{
@@ -85,7 +81,7 @@
 		long idToTree = form.getId();
 		
 
-/**
+          /**
  			* Name : Ashish Gupta
  			* Reviewer Name : Sachin Lale 
  			* Bug ID: 2741
@@ -155,35 +151,47 @@
 			}
 		} 
 		
-        function onChangeEvent(element)
+		 //Consent Tracking Module (Virender Mehta)		
+		function onChangeEvent(element)
 		{
-			// Added by Vijay Pande, added if condition to avoid server trip.
-			if(element.value!="-1")
+			var getCPID=document.getElementById('collectionProtocolId');
+			var cpID=getCPID.value;
+        	var getID=document.getElementById(element);
+		    var index=getID.selectedIndex;			    
+			if(index<0)
 			{
-	        	/*
-					Patch ID: Bug#3184_33
-				 	Description: Element Id is used in SpecimenCollectionGroupAction.java. This value
-						decides whether to set the value of checkbox and the number of specimens on the 
-						specimen collection group page to the default values or not. If of id is 
-						"collectionProtocolId" then values are set to default i.e. number of specimen to 1
-						and checkbox to false.
-				*/
-				var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=<%=pageOf%>&" +
-	        			"isOnChange=true&changeOn=" + element.id;
-	        	<%if(pageOf.equals(Constants.PAGE_OF_SCG_CP_QUERY))
-				{%>
-					action = "QuerySpecimenCollectionGroup.do?pageOf=<%=pageOf%>&operation=<%=operation%>&"+
-							"isOnChange=true&changeOn=" + element.id;
-				<%}%>		
+				alert("Please Select Valid Value");
+			}
+	        else
+			{       	
+	        	if(element=='collectionProtocolEventId')
+				{
+					var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&protocolEventId=true&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&" +
+	        			"isOnChange=true&cpID="+cpID;        			
+				}
+				else
+				{
+					var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&protocolEventId=false&showConsents=yes&pageOf=pageOfSpecimenCollectionGroup&" +
+	        			"isOnChange=true&cpID="+cpID;        			
+
+				}
 	        	changeAction(action);
 	        }
+		}
+	    function onChange(element)
+		{
+        	var action = "SpecimenCollectionGroup.do?operation=<%=operation%>&pageOf=pageOfSpecimenCollectionGroup&" +
+        			"isOnChange=true";        			
+        	changeAction(action);
 		}
         function changeAction(action)
         {
 			document.forms[0].action = action;
 			document.forms[0].submit();
-        }
-/**
+        }		 
+      //Consent Tracking Module Virender mehta
+       
+          /**
  			* Name : Ashish Gupta
  			* Reviewer Name : Sachin Lale 
  			* Bug ID: 2741
@@ -372,6 +380,114 @@
 		{
 			document.getElementById("buttonType").value = addButton.id;
 		}
+
+	// Consent Tracking Module Virender mehta	
+	function switchToTab(selectedTab)
+	{
+		var operation = document.forms[0].operation.value;
+		var displayKey="block";
+		var showAlways="block";
+		if(!document.all)
+		{
+			displayKey="table";
+			showAlways="table";
+		}
+			
+		var displayTable=displayKey;
+		var tabSelected="none";
+		if(selectedTab=="specimenCollectionGroupTab")
+		{
+			tabSelected=displayKey;
+			displayTable="none";
+		}	
+	
+		var display=document.getElementById('collectionEvent');
+		display.style.display=tabSelected;
+
+		var display=document.getElementById('scgTable');
+		display.style.display=tabSelected;
+
+		var display=document.getElementById('multiplespecimenTable');
+		display.style.display=tabSelected;
+
+		var display=document.getElementById('scgPageButtons');
+		display.style.display=tabSelected;
+				
+		var displayConsentTable=document.getElementById('consentTable');
+		if(displayConsentTable!=null)
+		{
+			displayConsentTable.style.display=displayTable;	
+		}
+				
+		var collectionTab=document.getElementById('specimenCollectionGroupTab');
+		var consentTab=document.getElementById('consentTab');
+		
+		if(selectedTab=="specimenCollectionGroupTab")
+		{
+			updateTab(specimenCollectionGroupTab,consentTab);
+		}
+		else		
+		{
+			updateTab(consentTab,specimenCollectionGroupTab);
+		}
+		
+	}
+	
+	//This function is for changing the behaviour of TABs
+	function updateTab(tab1, tab2)
+	{
+		tab1.onmouseover=null;
+		tab1.onmouseout=null;
+		tab1.className="tabMenuItemSelected";
+	
+		tab2.className="tabMenuItem";
+		tab2.onmouseover=function() { changeMenuStyle(this,'tabMenuItemOver'),showCursor();};
+		tab2.onmouseout=function() {changeMenuStyle(this,'tabMenuItem'),hideCursor();};
+	}
+
+		//This function will Switch tab to specimenCollectionGroup page
+		function specimencollgroup()
+		{
+			switchToTab("specimenCollectionGroupTab");
+		}
+	
+		//This function will switch page to consentPage
+		function consentPage()
+		{	
+			checkForConsents();
+		}
+		
+		function checkForConsents()
+		{
+			<%
+				if(form.getConsentTierCounter()>0)			
+				{
+				%>
+					switchToTab("consentTab");
+				<%
+				}
+				else
+				{
+				%>
+					alert("No consents available for selected Specimen Collection Group");
+				<%
+				}
+				%>
+		}
+
+	  function showConsents()
+	  {
+		var showConsents = "<%=tab%>";
+		if(showConsents=="<%=Constants.NULL%>" || showConsents=="scgPage")
+		{
+			specimencollgroup();
+		}
+		else
+		{
+			consentPage();			
+		}
+	  }
+// Consent Tracking Module Virender mehta	
 		
  </script>
 </head>
@@ -388,20 +504,72 @@
 <!--
 	Patch ID: Bug#3184_12
 -->
-<body onload="disablebuttons();initializeSCGForm()">
+<body onload="disablebuttons();initializeSCGForm();showConsents();">
 <html:errors />
 <html:messages id="messageKey" message="true" header="messages.header" footer="messages.footer">
 	<%=messageKey%>
 </html:messages>
 
 <html:form action="<%=formName%>">
+<!-- Consent Tracking Module Virender mehta	 -->
+<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="500">
+	<tr>
+		<td>
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+				 <tr>
+					<td>
+						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
+						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
+						<html:hidden property="forwardTo" value=""/>
+						<html:hidden property="participantId" />
+						<html:hidden property="withdrawlButtonStatus"/>
+						<html:hidden property="withdrawlButtonStatus"/>
+						<html:hidden property="stringOfResponseKeys"/>
+						<html:hidden property="applyChangesTo"/>
+						<html:hidden property="consentTierCounter"/>
+					</td>
+				 </tr>
+				 <tr>
+					<td><html:hidden property="id"/></td>
+					<td><html:hidden property="onSubmit"/></td>
+					<td><html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
+				 </tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+	 <td>
+	<%
+	if(pageView.equals("add"))
+	{
+	%>
+	
+	  <table summary="" cellpadding="1" cellspacing="0" border="0" height="20" class="tabPage" width="70%">
+		<tr>
+			<td height="20" width="30%" nowrap class="tabMenuItemSelected" onclick="specimencollgroup()" id="specimenCollectionGroupTab">
+				<bean:message key="specimenCollectionGroupPage.add.title"/>
+			</td>
+
+	        <td height="20" width="20%" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">
+	          <bean:message key="consents.consents"/>      
+	        </td>								
+			<td width="*" class="tabMenuSeparator" colspan="3">&nbsp;</td>
+		</tr>
+		<tr>
+			<td class="tabField" colspan="5">
+	<%
+	}
+	%>
+
 	<%
 	if(pageView.equals("edit"))
 	{
 	%>
 		<table summary="" cellpadding="0" cellspacing="0" border="0" height="20" class="tabPage" width="650">
 			<tr>
-				<td height="20" class="tabMenuItemSelected" onclick="document.location.href='ManageAdministrativeData.do'">Edit</td>
+				<td height="20" class="tabMenuItemSelected" id="specimenCollectionGroupTab" onclick="specimencollgroup()"> 
+					<bean:message key="specimenCollectionGroupPage.edit.title"/>
+				</td>
 
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
 					<bean:message key="edit.tab.surgicalpathologyreport"/>
@@ -412,7 +580,10 @@
 					<bean:message key="edit.tab.clinicalannotation"/>
 				</td>
 
-				<td width="450" class="tabMenuSeparator" colspan="3">&nbsp;</td>
+				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="consentPage()" id="consentTab">
+					<bean:message key="consents.consents"/>            
+				</td>
+				<td width="300" class="tabMenuSeparator" colspan="1" >&nbsp;</td>
 			</tr>
 
 			<tr>
@@ -484,36 +655,21 @@
 		
 	<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="650">
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION BEGINS-->
-		
-	    <tr><td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+	    <tr>
+		  <td>
+			<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%" id="scgTable">
+				 <!--Collection Protocol -->
 				 <tr>
-					<td>
-						<html:hidden property="<%=Constants.OPERATION%>" value="<%=operation%>"/>
-						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
-						<html:hidden property="forwardTo" value=""/>
-						<html:hidden property="participantId" />
+					<td class="formMessage" colspan="6">
+						<bean:message key="requiredfield.message"/>  
 					</td>
-				 </tr>
-				 
+				</tr>	
 				 <tr>
-					<td><html:hidden property="id"/></td>
-					<td><html:hidden property="onSubmit"/></td>
-					<td><html:hidden property="redirectTo" value="<%=reqPath%>"/></td>
-				 </tr>
-				 <tr>
-				 	<td class="formMessage" colspan="5">* indicates a required field</td>
-				 </tr>
-				 
-				<tr>
 					<td class="formTitle" height="20" colspan="5">
 						<%String title = "specimenCollectionGroup."+pageView+".title";%>
 							<bean:message key="<%=title%>"/>						
 					</td>
 				</tr>
-
-				 
-				 <!--Collection Protocol -->
 				 <tr>
 			     	<td class="formRequiredNotice" colspan="2" width="5">*</td>
 				    <td class="formRequiredLabel">
@@ -826,6 +982,19 @@
 		</td></tr>
 		<!-- NEW SPECIMEN COLLECTION GROUP REGISTRATION ENDS-->
 	</table>
+
+			
+	<!--  Consent Tracking Module Virender mehta	 -->
+	<%
+		List requestParticipantResponse = (List)request.getAttribute("specimenCollectionGroupResponseList");					if(requestParticipantResponse!=null&&form.getConsentTierCounter()>0)
+		{
+	%>
+	    	<%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %> 
+	<%
+		}
+	%>
+	<!--  Consent Tracking Module Virender mehta -->	
+
 	<table summary="" cellpadding="0" cellspacing="0" border="0"
 		class="contentPage" width="650">
 		<tr>
@@ -844,30 +1013,26 @@
 	-->
 
 	<!-- For Multiple Specimen-----Ashish -->
-		<table summary="" cellpadding="0" cellspacing="0" border="0"
-		class="contentPage" width="650">
+		<table summary="" cellpadding="0" cellspacing="0" border="0" class="contentPage" width="650" id="multiplespecimenTable">
 		<tr>
 			<td>
-			<table summary="" cellpadding="3" cellspacing="0" border="0"
-				width="100%">
-				
-				<tr>
-					<td class="formTitle" " colspan="6" height="20">
-						<bean:message key="multipleSpecimen.mainTitle" />
-					</td>
-				</tr>
-				<tr>
-					
-					<td class="formLabel" colspan="2" style="border-left:1px solid #5C5C5C;">
-						<bean:message key="multipleSpecimen.numberOfSpecimen" />
-					</td>
-					<td class="formField" colspan="3">
-						<!-- html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimen"  /-->
-						<html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimens" onkeyup="disablebuttons()"/>
-					</td>
-				</tr>			
-			</table>
-			</td>
+				<table summary="" cellpadding="3" cellspacing="0" border="0" width="100%">
+					<tr>
+						<td class="formTitle" " colspan="6" height="20">
+							<bean:message key="multipleSpecimen.mainTitle" />
+						</td>
+					</tr>
+					<tr>
+						<td class="formLabel" colspan="2" style="border-left:1px solid #5C5C5C;">
+							<bean:message key="multipleSpecimen.numberOfSpecimen" />
+						</td>
+						<td class="formField" colspan="3">
+							<!-- html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimen"  /-->
+							<html:text styleClass="formFieldSized5" maxlength="50" size="30" styleId="numberOfSpecimen" property="numberOfSpecimens" onkeyup="disablebuttons()"/>
+						</td>
+					</tr>			
+			  </table>
+		   </td>
 			<!-- Hidden fields for events 
 			/**
  			* Name : Ashish Gupta
@@ -901,12 +1066,12 @@
 	<%@ include file="SpecimenCollectionGroupPageButtons.jsp" %>
 	
 	<%
-	if(pageView.equals("edit"))
+	if(pageView.equals("edit")||pageView.equals("add"))
 	{
 	%>
 			</td>
 		</tr>
-	</table>
+	<table>
 	<%
 	}
 	%>

@@ -30,6 +30,51 @@
         </id>
 
         <property
+            name="consentSignatureDate"
+            type="java.util.Date"
+            update="true"
+            insert="true"
+            column="CONSENT_SIGN_DATE"
+        />
+
+        <property
+            name="signedConsentDocumentURL"
+            type="string"
+            update="true"
+            insert="true"
+            column="CONSENT_DOC_URL"
+            length="1000"
+        />
+
+        <set
+            name="consentTierResponseCollection"
+            table="CATISSUE_CONSENT_TIER_RESPONSE"
+            lazy="true"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="COLL_PROT_REG_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.ConsentTierResponse"
+              />
+        </set>
+
+        <many-to-one
+            name="consentWitness"
+            class="edu.wustl.catissuecore.domain.User"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="CONSENT_WITNESS"
+        />
+
+        <property
             name="protocolParticipantIdentifier"
             type="string"
             update="true"
@@ -102,3 +147,4 @@
     </class>
 
 </hibernate-mapping>
+

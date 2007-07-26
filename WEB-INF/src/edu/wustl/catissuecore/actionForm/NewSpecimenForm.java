@@ -10,6 +10,7 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,9 +23,13 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.Biohazard;
+import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCharacteristics;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -38,9 +43,51 @@ import edu.wustl.common.util.logger.Logger;
  * from New Specimen webpage.
  * @author aniruddha_phadnis
  */
-public class NewSpecimenForm extends SpecimenForm
+public class NewSpecimenForm extends SpecimenForm implements ConsentTierData
 {
-    private String specimenCollectionGroupId="0";
+
+   //Consent Tracking Module (Virender Mehta)
+	/**
+	 * Map for Storing responses for Consent Tiers.
+	 */
+	protected Map consentResponseForSpecimenValues = new HashMap();
+	/**
+	 * No of Consent Tier
+	 */
+	private int consentTierCounter=0;
+	/**
+	 * Signed Consent URL
+	 */
+	protected String signedConsentUrl="";
+	/**
+	 * Witness name that may be PI
+	 */
+	protected String witnessName;
+	
+	/**
+	 * Consent Date, Date on which Consent is Signed
+	 */
+	protected String consentDate="";
+	
+	/**
+	 * This will be set in case of withdrawl popup
+	 */
+	protected String withdrawlButtonStatus = Constants.WITHDRAW_RESPONSE_NOACTION;
+	/**
+	 * This will be set in case if there is any change in response.
+	 */
+	protected String applyChangesTo= Constants.APPLY_NONE;
+	/**
+	 * If user changes the response after submiting response then this string will have 
+	 * responseKeys for which response is changed .
+	 */
+	protected String stringOfResponseKeys="";
+	//Consent Tracking Module (Virender Mehta)
+ 
+	 /**
+     * Specimen Collection Group ID
+     */
+     private String specimenCollectionGroupId="0";
     
     /**
      * Identifier of the Parent Speciemen if present.
@@ -388,11 +435,26 @@ public class NewSpecimenForm extends SpecimenForm
 //        	AliquotSpecimen aliquotSpecimen = (AliquotSpecimen)abstractDomain;
 //        	
 //        }
+ 
+        /**
+         * For Consent Tracking setting UI attributes (Virender Mehta)
+         */
+    	User witness= specimenCollectionGroup.getCollectionProtocolRegistration().getConsentWitness();
+		if(witness==null||witness.getFirstName()==null)
+		{
+			this.witnessName="";
+		}
+		else
+		{
+			this.witnessName=Utility.toString(witness.getFirstName());
+		}
+		this.signedConsentUrl=Utility.toString(specimenCollectionGroup.getCollectionProtocolRegistration().getSignedConsentDocumentURL());
+		this.consentDate=Utility.parseDateToString(specimenCollectionGroup.getCollectionProtocolRegistration().getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
     }
-    
-	/**
+	 /**
 	 * @return biohazard Type Returns the biohazardType.
-	 */
+	 */	 
+ /**
 	public String getBiohazardType()
 	{
 		return biohazardType;
@@ -993,4 +1055,194 @@ public class NewSpecimenForm extends SpecimenForm
 		this.parentSpecimenName = parentSpecimenName;
 	}
 	
+//Consent Tracking Module Virender mehta	
+	/**
+	 * @return consentResponseForSpecimenValues  The comments associated with Response at Specimen level.
+	 */	
+	public Map getConsentResponseForSpecimenValues()
+	{
+		return consentResponseForSpecimenValues;
+	}
+	
+	/**
+	 * @param consentResponseForSpecimenValues  The comments associated with Response at Specimen level
+	 */	
+	public void setConsentResponseForSpecimenValues(Map consentResponseForSpecimenValues) 
+	{
+		this.consentResponseForSpecimenValues = consentResponseForSpecimenValues;
+	}
+	
+	/**
+     *@param key Key prepared for saving data.
+     *@param value Values correspponding to key
+     */
+    public void setConsentResponseForSpecimenValue(String key, Object value) 
+    {
+   	 if (isMutable())
+   		consentResponseForSpecimenValues.put(key, value);
+    }
+
+    /**
+     * @param key Key prepared for saving data.
+     * @return consentResponseForSpecimenValues.get(key)
+     */
+    public Object getConsentResponseForSpecimenValue(String key) 
+    {
+        return consentResponseForSpecimenValues.get(key);
+    }
+    
+	/**
+	 * @return values in map consentResponseForSpecimenValues
+	 */
+	public Collection getAllConsentResponseForSpecimenValue() 
+	{
+		return consentResponseForSpecimenValues.values();
+	}
+
+	/**
+	 * @return consentDate The Date on Which Consent is Signed
+     */	
+	public String getConsentDate()
+	{
+		return consentDate;
+	}
+	
+	/**
+	 * @param consentDate The Date on Which Consent is Signed
+	 */
+	public void setConsentDate(String consentDate)
+	{
+		this.consentDate = consentDate;
+	}
+
+	/**
+	 *@return consentTierCounter  This will keep track of count of Consent Tier
+	 */
+	public int getConsentTierCounter()
+	{
+		return consentTierCounter;
+	}
+	
+	/**
+	 *@param consentTierCounter  This will keep track of count of Consent Tier
+	 */
+	public void setConsentTierCounter(int consentTierCounter)
+	{
+		this.consentTierCounter = consentTierCounter;
+	}
+
+	/**
+	 * @return signedConsentUrl The reference to the electric signed document(eg PDF file)
+	 */	
+	public String getSignedConsentUrl()
+	{
+		return signedConsentUrl;
+	}
+
+	/**
+	 * @param signedConsentUrl The reference to the electric signed document(eg PDF file)
+	 */	
+	public void setSignedConsentUrl(String signedConsentUrl)
+	{
+		this.signedConsentUrl = signedConsentUrl;
+	}
+
+	/**
+	 * @return witnessName The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
+	 */
+	public String getWitnessName()
+	{
+		return witnessName;
+	}
+	
+	/**
+	 * @param witnessName The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
+	 */	
+	public void setWitnessName(String witnessName)
+	{
+		this.witnessName = witnessName;
+	}
+	
+	/**
+	 * It returns status of button(return,discard,reset)
+	 * @return withdrawlButtonStatus
+	 */
+	public String getWithdrawlButtonStatus()
+	{
+		return withdrawlButtonStatus;
+	}
+
+	/**
+	 * It returns status of button(return,discard,reset)
+	 * @param withdrawlButtonStatus return,discard,reset
+	 */
+	public void setWithdrawlButtonStatus(String withdrawlButtonStatus)
+	{
+		this.withdrawlButtonStatus = withdrawlButtonStatus;
+	}
+	
+	/**
+	 * @param applyChangesTo 
+	 */
+	public String getApplyChangesTo()
+	{
+		return applyChangesTo;
+	}
+
+	/**
+	 * @param applyChangesTo 
+	 */
+	public void setApplyChangesTo(String applyChangesTo)
+	{
+		this.applyChangesTo = applyChangesTo;
+	}
+	
+	/**
+	 * @return stringOfResponseKeys
+	 */
+	public String getStringOfResponseKeys()
+	{
+		return stringOfResponseKeys;
+	}
+
+	/**
+	 * @param stringOfResponseKeys
+	 */
+	public void setStringOfResponseKeys(String stringOfResponseKeys)
+	{
+		this.stringOfResponseKeys = stringOfResponseKeys;
+	}
+	
+	/**
+	 * This function creates Array of String of keys and add them into the consentTiersList.
+	 * @return consentTiersList
+	 */
+	public Collection getConsentTiers()
+	{
+		Collection consentTiersList=new ArrayList();
+		String [] strArray = null;
+		int noOfConsents =this.getConsentTierCounter();
+		for(int counter=0;counter<noOfConsents;counter++)
+		{	
+			strArray = new String[6];
+			strArray[0]="consentResponseForSpecimenValues(ConsentBean:"+counter+"_consentTierID)";
+			strArray[1]="consentResponseForSpecimenValues(ConsentBean:"+counter+"_statement)";
+			strArray[2]="consentResponseForSpecimenValues(ConsentBean:"+counter+"_participantResponse)";
+			strArray[3]="consentResponseForSpecimenValues(ConsentBean:"+counter+"_participantResponseID)";
+			strArray[4]="consentResponseForSpecimenValues(ConsentBean:"+counter+"_specimenLevelResponse)";
+			strArray[5]="consentResponseForSpecimenValues(ConsentBean:"+counter+"_specimenLevelResponseID)";
+			consentTiersList.add(strArray);
+		}
+		return consentTiersList;
+	}	
+	
+	/**
+	 * This funtion returns the format of the response Key prepared. 
+	 * @return consentResponseForSpecimenValues(ConsentBean:`_participantResponse)
+	 */	
+	public String getConsentTierMap()
+	{
+		return "consentResponseForSpecimenValues(ConsentBean:`_specimenLevelResponse)";
+	}
+	//Consent Tracking Module Virender mehta
 }

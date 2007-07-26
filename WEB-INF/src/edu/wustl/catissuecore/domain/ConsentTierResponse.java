@@ -11,7 +11,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.io.Serializable;
 
-import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -65,7 +65,7 @@ public class ConsentTierResponse extends AbstractDomainObject implements Seriali
 	{		
 		return id;
 	}	
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		// TODO Auto-generated method stub
 		

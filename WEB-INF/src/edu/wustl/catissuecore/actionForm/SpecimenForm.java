@@ -562,7 +562,6 @@ public class SpecimenForm extends AbstractActionForm
 	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
 		Specimen specimen = (Specimen) abstractDomain;
-
 		this.id = specimen.getId().longValue();
 		this.type = specimen.getType();
 		this.concentration = "";

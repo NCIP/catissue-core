@@ -5,7 +5,7 @@
 	String crDispType1=request.getParameter("crDispType");
 %>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">					
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" id="collectionEvent">					
 					<!-- Mandar AutoEvents start -->		
 
 					<tr>

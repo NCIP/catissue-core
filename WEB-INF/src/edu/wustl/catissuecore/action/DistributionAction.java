@@ -1,4 +1,5 @@
-/**
+
+					 /**
  * <p>Title: Distribution Class>
  * <p>Description:        This class initializes the fields in the  Distribution Add/Edit webpage.</p>
  * Copyright:    Copyright (c) year
@@ -11,8 +12,12 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,11 +29,20 @@ import org.apache.struts.action.ActionMapping;
 import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.DistributionBizLogic;
+import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
+import edu.wustl.catissuecore.client.CaCoreAppServicesDelegator;
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
+import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.dbManager.DAOException;
@@ -41,7 +55,12 @@ import edu.wustl.common.util.logger.Logger;
 public class DistributionAction extends SpecimenEventParametersAction
 {
 
-	/**
+    //This counter will keep track of the no of consentTiers 
+	int consentTierCounter;
+	List listOfMap=null;
+	List listOfStringArray=null;	
+
+/**
 	 * @param request object of HttpServletRequest
 	 * @throws Exception generic exception
 	 */
@@ -190,7 +209,55 @@ public class DistributionAction extends SpecimenEventParametersAction
             	
             }
         }
-
+         //Consent Tracking (Virender Mehta)
+        //Show Consents for Specimen
+        String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS); //"specimenConsents"
+		if(specimenConsents!=null && specimenConsents.equalsIgnoreCase(Constants.YES))
+		{
+			String labelBarcodeDistributionValue = request.getParameter(Constants.DISTRIBUTION_ON);//"labelBarcode"
+			String barcodeLableValue = request.getParameter(Constants.BARCODE_LABLE);//barcodelabel
+			int distributionOn=Integer.parseInt(labelBarcodeDistributionValue);
+			StringTokenizer stringToken = new StringTokenizer(barcodeLableValue,"|");
+			listOfMap=new ArrayList();
+			listOfStringArray=new ArrayList();
+			while (stringToken.hasMoreTokens()) 
+			{
+				String barcodeLable=stringToken.nextToken();
+				//function that will check if the barcode/lable is present in the Database or not
+				Specimen specimen = getConsentListForSpecimen(barcodeLable, distributionOn);
+				//Set all the consents and attributes related to specimen in List.
+				showConsents(dForm,specimen,request,barcodeLable);
+			}
+			request.setAttribute("listOfStringArray",listOfStringArray);
+			request.setAttribute("listOfMap",listOfMap);
+			return mapping.findForward(Constants.VIEWAll);//ViewAll
+		}
+        //Show All Consents for Specimen(Consent tarcking)
+       
+		//Show Consents for Specimen(Consent Tracking)
+		String showConsents = request.getParameter(Constants.SHOW_CONSENTS); 
+		if(showConsents!=null && showConsents.equalsIgnoreCase(Constants.YES))
+		{
+			String barcodeLable=request.getParameter(Constants.BARCODE_LABLE);
+			int barcodeLabelBasedDistribution=1;
+			String labelBarcodeDistributionValue = request.getParameter(Constants.DISTRIBUTION_ON);//labelBarcode
+			if(labelBarcodeDistributionValue.equalsIgnoreCase(Constants.BARCODE_DISTRIBUTION))//"1"
+			{
+				barcodeLabelBasedDistribution=1;
+			}
+			else
+			{
+				barcodeLabelBasedDistribution=2;
+			}
+			//Getting SpecimenCollectionGroup object
+	        Specimen specimen = getConsentListForSpecimen(barcodeLable, barcodeLabelBasedDistribution);
+	        //SpecimenCollectionGroup specimenCollectionGroup = getConsentListForSpecimen(barcode);
+	        showConsents(dForm,specimen,request,barcodeLable); 
+	        
+	        request.setAttribute("barcodeStatus",Constants.VALID);//valid
+	       	return mapping.findForward(Constants.POPUP);
+		}
+        //Consent Tracking (Virender Mehta)
         Logger.out.debug("executeSecureAction");
         String pageOf = request.getParameter(Constants.PAGEOF);
 		request.setAttribute(Constants.PAGEOF, pageOf);
@@ -198,7 +265,147 @@ public class DistributionAction extends SpecimenEventParametersAction
         return mapping.findForward((String) request.getParameter(
                 Constants.PAGEOF));
     }	
-	
+	/**
+	 * This function will fetch witness name,url,consent date for a barcode/lable
+	 * @param dForm Instance of Distribution form
+	 * @param specimen Specimen object
+	 * @param request With request parameter we will fetch specimenconsent Variable present in request. 
+	 * @param barcodeLable This parameter have barcode or lable value
+	 * @throws DAOException 
+	 */
+	private void showConsents(DistributionForm dForm ,Specimen specimen, HttpServletRequest request, String barcodeLable) throws DAOException
+	{
+		
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		String initialURLValue="";
+		String initialWitnessValue="";
+		String initialSignedConsentDateValue="";
+		
+		//Getting CollectionProtocolRegistration object
+		//Lazy --- specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration();
+		String colName = "specimenCollectionGroup.collectionProtocolRegistration";	
+        CollectionProtocolRegistration collectionProtocolRegistration=(CollectionProtocolRegistration)bizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),colName);
+      
+        if(collectionProtocolRegistration.getSignedConsentDocumentURL()==null)
+		{
+			initialURLValue=Constants.NULL;
+		}
+        User consentWitness = null;
+		if(collectionProtocolRegistration.getId()!= null)
+		{
+			consentWitness = (User)bizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(),collectionProtocolRegistration.getId(), "consentWitness");
+		}
+		//Resolved Lazy ---- User consentWitness= collectionProtocolRegistration.getConsentWitness();
+		if(consentWitness==null)
+		{
+			initialWitnessValue=Constants.NULL;
+		}
+		if(collectionProtocolRegistration.getConsentSignatureDate()==null)
+		{
+			initialSignedConsentDateValue=Constants.NULL;
+		}
+		List cprObjectList=new ArrayList();
+		cprObjectList.add(collectionProtocolRegistration);
+		SessionDataBean sessionDataBean=(SessionDataBean)request.getSession().getAttribute(Constants.SESSION_DATA);
+		CaCoreAppServicesDelegator caCoreAppServicesDelegator = new CaCoreAppServicesDelegator();
+		String userName = Utility.toString(sessionDataBean.getUserName());	
+		List collProtObject=null;
+		try
+		{
+			collProtObject = caCoreAppServicesDelegator.delegateSearchFilter(userName,cprObjectList);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		CollectionProtocolRegistration cprObject = (CollectionProtocolRegistration)collProtObject.get(0);
+        //Getting WitnessName,Consent Date,Signed Url using collectionProtocolRegistration object
+		String witnessName="";
+		String getConsentDate="";
+		String getSignedConsentURL="";
+		User witness=cprObject.getConsentWitness();
+		if(witness==null)
+		{
+			if(initialWitnessValue.equals(Constants.NULL))
+			{
+				witnessName=initialWitnessValue;
+			}
+			else
+			{
+				witnessName=Constants.HASHED_OUT;
+			}
+			dForm.setWitnessName(witnessName);
+		}
+		else
+		{
+			witness = (User)bizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(),cprObject.getId(), "consentWitness");
+			String witnessFullName = witness.getLastName()+", "+witness.getFirstName();
+			dForm.setWitnessName(witnessFullName);
+		}
+		if(cprObject.getConsentSignatureDate()==null)
+		{
+			if(initialSignedConsentDateValue.equals(Constants.NULL))
+			{
+				getConsentDate="";
+			}
+			else
+			{
+				getConsentDate=Constants.HASHED_OUT;
+			}
+		}
+		else
+		{
+			getConsentDate=Utility.parseDateToString(cprObject.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+		}
+		
+		if(cprObject.getSignedConsentDocumentURL()==null)
+		{
+			if(initialURLValue.equals(Constants.NULL))
+			{
+				getSignedConsentURL="";
+			}
+			else
+			{
+				getSignedConsentURL=Constants.HASHED_OUT;
+			}
+		}
+		else
+		{
+			getSignedConsentURL=Utility.toString(cprObject.getSignedConsentDocumentURL());
+		}
+		//Setting WitnessName,ConsentDate and Signed Consent Url				
+		dForm.setConsentDate(getConsentDate);
+		dForm.setSignedConsentUrl(getSignedConsentURL);
+		
+		//Getting ConsentResponse collection for CPR level
+		//Resolved lazy ---  collectionProtocolRegistration.getConsentTierResponseCollection();
+		Collection participantResponseCollection = (Collection)bizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(), collectionProtocolRegistration.getId(),"elements(consentTierResponseCollection)");
+		//Getting ConsentResponse collection for Specimen level
+		//Resolved lazy --- specimen.getConsentTierStatusCollection();
+		Collection specimenLevelResponseCollection=(Collection)bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(),"elements(consentTierStatusCollection)");
+		//Prepare Map and iterate both Collections  
+		Map tempMap=prepareConsentMap(participantResponseCollection, specimenLevelResponseCollection);
+		//Setting map and counter in the form 
+		dForm.setConsentResponseForDistributionValues(tempMap);
+		dForm.setConsentTierCounter(consentTierCounter);
+		String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS);
+		if(specimenConsents!=null && specimenConsents.equalsIgnoreCase(Constants.YES))
+		{
+			//For no consents and Consent waived
+			if(consentTierCounter>0&&!(specimen.getActivityStatus().equalsIgnoreCase(Constants.DISABLED)))//disabled
+			{
+				String[] barcodeLabelAttribute=new String[5];
+				barcodeLabelAttribute[0]=witnessName;
+				barcodeLabelAttribute[1]=getConsentDate;
+				barcodeLabelAttribute[2]=getSignedConsentURL;
+				barcodeLabelAttribute[3]=Integer.toString(consentTierCounter);
+				barcodeLabelAttribute[4]=barcodeLable;
+				listOfMap.add(tempMap);
+				listOfStringArray.add(barcodeLabelAttribute);
+			}
+		}
+	}
+	//Consent tracking (Virender Mehta)
 	/**
 	 * 
 	 * @param dForm object of DistributionForm
@@ -215,7 +422,7 @@ public class DistributionAction extends SpecimenEventParametersAction
 		dForm.setValue(keyPrefix + "availableQty", specimen.getAvailableQuantity());
 
 		dForm.setCounter(dForm.getCounter() + 1);
-		dForm.setDistributionBasedOn(new Integer(0));
+		dForm.setDistributionBasedOn(new Integer(2));
 	}
 
 	/**
@@ -256,4 +463,83 @@ public class DistributionAction extends SpecimenEventParametersAction
 		//Set back the idChange boolean to false.
 		dForm.setIdChange(false);
 	}
+	
+//	Consent Tracking Virender Mehta
+	/**
+	 * Prepare Map for Consent tiers
+	 * @param participantResponseList   This list will be iterated and added to map to populate participant Response status.
+	 * @param specimenLevelResponseList This List will be iterated and added to map to populate Specimen Level response.
+	 * @return tempMap
+	 */
+    private Map prepareConsentMap(Collection participantResponseList, Collection specimenLevelResponseList)
+	{
+		Map tempMap = new HashMap();
+		Long consentTierID;
+		Long consentID;
+		if(participantResponseList!=null)
+		{
+			int i = 0;
+			Iterator consentResponseCollectionIter = participantResponseList.iterator();
+			while(consentResponseCollectionIter.hasNext())
+			{
+				ConsentTierResponse consentTierResponse = (ConsentTierResponse)consentResponseCollectionIter.next();
+				consentTierID=consentTierResponse.getConsentTier().getId();
+				Iterator specimenCollectionIter = specimenLevelResponseList.iterator();	
+				while(specimenCollectionIter.hasNext())
+				{
+					ConsentTierStatus specimenConsentResponse=(ConsentTierStatus)specimenCollectionIter.next();
+					consentID=specimenConsentResponse.getConsentTier().getId();
+					if(consentTierID.longValue()==consentID.longValue())						
+					{
+						ConsentTier consent = consentTierResponse.getConsentTier();
+						String idKey="ConsentBean:"+i+"_consentTierID";
+						String statementKey="ConsentBean:"+i+"_statement";
+						String responseKey="ConsentBean:"+i+"_participantResponse";
+						String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
+						String specimenResponsekey  = "ConsentBean:"+i+"_specimenLevelResponse";
+						String specimenResponseIDkey ="ConsentBean:"+i+"_specimenLevelResponseID";
+						//Adding Keys and its data into the Map
+						tempMap.put(idKey, consent.getId());
+						tempMap.put(statementKey,consent.getStatement());
+						tempMap.put(responseKey,consentTierResponse.getResponse());
+						tempMap.put(participantResponceIdKey, consentTierResponse.getId());
+						tempMap.put(specimenResponsekey, specimenConsentResponse.getStatus());
+						tempMap.put(specimenResponseIDkey, specimenConsentResponse.getId());
+						i++;
+						break;
+					}
+				}
+			}
+			consentTierCounter=i;
+			return tempMap;
+		}
+		else
+		{
+			return null;
+		}
+		
+	}
+    
+    /**
+	 * This function returns SpecimenCollectionGroup object by reading Barcode value
+	 * @param barcode  Barcode is the Unique number,using barcode this function return specimenCollectionGroup object
+	 * @return specimenCollectionGroup SpecimenCollectionGroup object
+	 */
+    private Specimen getConsentListForSpecimen(String barcode,int barcodeLabelBasedDistribution) throws DAOException
+	{
+		NewSpecimenBizLogic  newSpecimenBizLogic = (NewSpecimenBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.NEW_SPECIMEN_FORM_ID);
+		String colName=null;
+		if(barcodeLabelBasedDistribution==Constants.BARCODE_BASED_DISTRIBUTION)
+		{
+			colName=Constants.SYSTEM_BARCODE;//"barcode"	
+		}
+		else
+		{
+			colName=Constants.SYSTEM_LABEL;//"label"
+		}
+		List specimenList  = newSpecimenBizLogic.retrieve(Specimen.class.getName(), colName, barcode);
+		Specimen specimen = (Specimen)specimenList.get(0);
+		return specimen;
+	}
+    //Consent Tracking Virender Mehta
 }

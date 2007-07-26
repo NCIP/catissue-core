@@ -27,6 +27,7 @@ import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
@@ -38,6 +39,7 @@ import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
+import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -174,6 +176,18 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, oldspecimenCollectionGroup);
 
+		//Mandar 22-Jan-07 To disable consents accordingly in SCG and Specimen(s) start		
+		if(!specimenCollectionGroup.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION   ) )
+		{
+			verifyAndUpdateConsentWithdrawn(specimenCollectionGroup, oldspecimenCollectionGroup, dao,  sessionDataBean);
+		}
+		//Mandar 22-Jan-07 To disable consents accordingly in SCG and Specimen(s) end
+		//Mandar 24-Jan-07 To update consents accordingly in SCG and Specimen(s) start
+		else if(!specimenCollectionGroup.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE ) )
+		{
+			WithdrawConsentUtil.updateSpecimenStatusInSCG(specimenCollectionGroup, oldspecimenCollectionGroup,dao);
+		}
+		//Mandar 24-Jan-07 To update consents accordingly in SCG and Specimen(s) end
 		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
 		dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true, false);
 		/**
@@ -1091,6 +1105,26 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			toolTipText.append(receivedDate);
 		}
 		return toolTipText.toString();
+	}
+//Mandar : 15-Jan-07 For Consent Tracking Withdrawal -------- start
+	/*
+	 * This method verifies and updates SCG and child elements for withdrawn consents
+	 */
+	private void verifyAndUpdateConsentWithdrawn(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldspecimenCollectionGroup, DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	{
+		Collection newConsentTierStatusCollection =  specimenCollectionGroup.getConsentTierStatusCollection();
+		Iterator itr = newConsentTierStatusCollection.iterator() ;
+		while(itr.hasNext() )
+		{
+			ConsentTierStatus consentTierStatus = (ConsentTierStatus)itr.next();
+			if(consentTierStatus.getStatus().equalsIgnoreCase(Constants.WITHDRAWN ) )	
+			{
+				long consentTierID = consentTierStatus.getConsentTier().getId().longValue();
+				String cprWithdrawOption = specimenCollectionGroup.getConsentWithdrawalOption();
+				WithdrawConsentUtil.updateSCG(specimenCollectionGroup, oldspecimenCollectionGroup, consentTierID, cprWithdrawOption, dao, sessionDataBean);
+				//break;
+			}
+		}
 	}
 
 }

@@ -1,4 +1,5 @@
-/**
+
+						  /**
  * <p>Title: DistributionForm Class</p>
  * <p>Description:  This Class handles the Distribution..
  * <p> It extends the EventParametersForm class.    
@@ -11,6 +12,7 @@
 
 package edu.wustl.catissuecore.actionForm;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,8 +44,36 @@ import edu.wustl.common.util.logger.Logger;
  *
  * Description:  This Class handles the Distribution..
  */
-public class DistributionForm extends SpecimenEventParametersForm
+public class DistributionForm extends SpecimenEventParametersForm implements ConsentTierData
 {
+	//Consent Tracking Module---Virender Mehta
+	/**
+	 * Map for Storing responses for Consent Tiers.
+	 */
+	protected Map consentResponseForDistributionValues = new HashMap();
+	/**
+	 * No of Consent Tier
+	 */
+	private int consentTierCounter=0;
+	/**
+	 * Signed Consent URL
+	 */
+	protected String signedConsentUrl="";
+	/**
+	 * Witness name that may be PI
+	 */
+	protected String witnessName;
+	/**
+	 * Consent Date, Date on which Consent is Signed
+	 */
+	protected String consentDate="";
+	/**
+	 * Counter for sequence no
+	 */
+	private int outerCounter=0;
+	
+	
+	//Consent Tracking Module---(Virender Mehta)
 	
 	//private String fromSite;
 	private String toSite;
@@ -55,7 +85,7 @@ public class DistributionForm extends SpecimenEventParametersForm
 	
 	private Integer distributionType = new Integer(Constants.SPECIMEN_DISTRIBUTION_TYPE);
 
-	private Integer distributionBasedOn = new Integer(Constants.BARCODE_BASED_DISTRIBUTION);
+	private Integer distributionBasedOn = new Integer(Constants.LABEL_BASED_DISTRIBUTION);
 	
 	/**
 	 * Map to handle values of all Events
@@ -583,4 +613,163 @@ public class DistributionForm extends SpecimenEventParametersForm
 	{
 		this.distributionType = distributionType;
 	}
+
+	//Consent Tracking Module---(Virender Mehta)	
+	/**
+	 * For Sequence no
+	 * @return outerCounter
+	 */
+	public int getOuterCounter()
+	{
+		return outerCounter;
+	}
+	
+	/**
+	 * For Sequence no
+	 * @param outerCounter For Sequence no
+	 */
+		public void setOuterCounter(int outerCounter)
+	{
+		this.outerCounter = outerCounter;
+	}
+	/**
+	 * @return consentDate The Date on Which Consent is Signed
+	 */
+	public String getConsentDate()
+	{
+		return consentDate;
+	}
+
+	/**
+	 * @param consentDate The Date on Which Consent is Signed
+	 */
+	public void setConsentDate(String consentDate)
+	{
+		this.consentDate = consentDate;
+	}
+
+	/**
+	 *@return consentTierCounter  This will keep track of count of Consent Tier
+	 */
+	public int getConsentTierCounter()
+	{
+		return consentTierCounter;
+	}
+
+	/**
+	 *@param consentTierCounter  This will keep track of count of Consent Tier
+	 */
+	public void setConsentTierCounter(int consentTierCounter)
+	{
+		this.consentTierCounter = consentTierCounter;
+	}
+
+	/**
+	 * @return signedConsentUrl The reference to the electric signed document(eg PDF file)
+	 */	
+	public String getSignedConsentUrl()
+	{
+		return signedConsentUrl;
+	}
+
+	/**
+	 * @param signedConsentUrl The reference to the electric signed document(eg PDF file)
+	 */	
+	public void setSignedConsentUrl(String signedConsentUrl)
+	{
+		this.signedConsentUrl = signedConsentUrl;
+	}
+
+	/**
+	 * @return witnessName The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
+	 */	
+	public String getWitnessName()
+	{
+		return witnessName;
+	}
+
+	/**
+	 * @param witnessName The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
+	 */	
+	public void setWitnessName(String witnessName)
+	{
+		this.witnessName = witnessName;
+	}
+
+	/**
+	 * @return consentResponseForDistributionValues  The comments associated with Response at Distribution level
+	 */	
+	public Map getConsentResponseForDistributionValues()
+	{
+		return consentResponseForDistributionValues;
+	}
+	
+	/**
+	 * @param consentResponseForDistributionValues  The comments associated with Response at Distribution level
+	 */	
+	public void setConsentResponseForDistributionValues(Map consentResponseForDistributionValues)
+	{
+		this.consentResponseForDistributionValues = consentResponseForDistributionValues;
+	}
+	
+	/**
+     * @param key Key prepared for saving data.
+     * @return consentResponseForDistributionValues.get(key)
+     */
+    public void setConsentResponseForDistributionValue(String key, Object value) 
+    {
+   	 if (isMutable())
+   		consentResponseForDistributionValues.put(key, value);
+    }
+
+    /**
+     * @param key Key prepared for saving data.
+     * @return consentResponseForSpecimenValues.get(key)
+     */
+    public Object getConsentResponseForDistributionValue(String key) 
+    {
+        return consentResponseForDistributionValues.get(key);
+    }
+    
+	/**
+	 * @return values in map consentResponseForDistributionValues
+	 */
+	public Collection getAllConsentResponseForDistributionValue() 
+	{
+		return consentResponseForDistributionValues.values();
+	}
+
+	/**
+	 * This function creates Array of String of keys and add them into the consentTiersList.
+	 * @return consentTiersList
+	 */	
+	public Collection getConsentTiers()
+	{
+		Collection consentTiersList=new ArrayList();
+		String [] strArray = null;
+		int noOfConsents =this.getConsentTierCounter();
+		for(int counter=0;counter<noOfConsents;counter++)
+		{	
+			strArray = new String[6];
+			strArray[0]="consentResponseForDistributionValues(ConsentBean:"+counter+"_consentTierID)";
+			strArray[1]="consentResponseForDistributionValues(ConsentBean:"+counter+"_statement)";
+			strArray[2]="consentResponseForDistributionValues(ConsentBean:"+counter+"_participantResponse)";
+			strArray[3]="consentResponseForDistributionValues(ConsentBean:"+counter+"_participantResponseID)";
+			strArray[4]="consentResponseForDistributionValues(ConsentBean:"+counter+"_specimenLevelResponse)";
+			strArray[5]="consentResponseForDistributionValues(ConsentBean:"+counter+"_specimenLevelResponseID)";
+			consentTiersList.add(strArray);
+		}
+		return consentTiersList;
+	}	
+	/**
+	 * This function returns empty string,we don't need this method but its definition is compulsory because this 
+	 * function is declared in the implemented interface 
+	 * @return "" 
+	 */
+	public String getConsentTierMap()
+	{
+		return "";
+	}
+    //Consent Tracking Module---(Virender Mehta)	
+	
 }

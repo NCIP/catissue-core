@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
+import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.ReturnEventParameters;
@@ -20,6 +21,7 @@ import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAO;
+import edu.wustl.common.util.dbManager.DAOException;
 
 /**
  * This class is designed to contain common methods for the Consent Withdraw process.
@@ -34,44 +36,62 @@ public class WithdrawConsentUtil
 	/**
 	 * This method updates the SpecimenCollectionGroup instance by setting all the consent tierstatus to with 
 	 * @param scg Instance of SpecimenCollectionGroup to be updated.
+	 * @param oldScg Instance of OldSpecimenCollectionGroup to be updated.
 	 * @param consentTierID Identifier of ConsentTier to be withdrawn.
 	 * @param withdrawOption Action to be performed on the withdrawn collectiongroup.
 	 * @param dao DAO instance. Used for inserting disposal event. 
 	 * @param sessionDataBean SessionDataBean instance. Used for inserting disposal event.
+	 * @throws DAOException 
 	 */
-	public static void updateSCG(SpecimenCollectionGroup scg, long consentTierID, String withdrawOption,  DAO dao, SessionDataBean sessionDataBean)
+	public static void updateSCG(SpecimenCollectionGroup scg, SpecimenCollectionGroup oldscg, long consentTierID, String withdrawOption,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
 		Collection newScgStatusCollection = new HashSet();
-		Iterator itr = scg.getConsentTierStatusCollection().iterator() ;
+		Collection consentTierStatusCollection =scg.getConsentTierStatusCollection();
+		Iterator itr = consentTierStatusCollection.iterator() ;
 		while(itr.hasNext() )
 		{
 			ConsentTierStatus consentTierstatus = (ConsentTierStatus)itr.next();
 			//compare consent tier id of scg with cpr consent tier of response
 			if(consentTierstatus.getConsentTier().getId().longValue() == consentTierID)
 			{
-				consentTierstatus.setStatus( Constants.WITHDRAWN);
-				updateSpecimensInSCG(scg,consentTierID,withdrawOption , dao, sessionDataBean );
+				consentTierstatus.setStatus(Constants.WITHDRAWN);
+				updateSpecimensInSCG(scg,oldscg,consentTierID,withdrawOption , dao, sessionDataBean );
 			}
 			newScgStatusCollection.add(consentTierstatus );	// set updated consenttierstatus in scg
 		}
 		scg.setConsentTierStatusCollection( newScgStatusCollection);
 	}
 	
+	/**
+	 * This method updates the SpecimenCollectionGroup instance by setting all the consent tierstatus to with 
+	 * @param scg Instance of SpecimenCollectionGroup to be updated.
+	 * @param consentTierID Identifier of ConsentTier to be withdrawn.
+	 * @param withdrawOption Action to be performed on the withdrawn collectiongroup.
+	 * @param dao DAO instance. Used for inserting disposal event. 
+	 * @param sessionDataBean SessionDataBean instance. Used for inserting disposal event.
+	 *  
+	 */
+	public static void updateSCG(SpecimenCollectionGroup scg, long consentTierID, String withdrawOption,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	{
+		updateSCG(scg, scg, consentTierID,withdrawOption,dao, sessionDataBean);
+	}
+	
+	
 	/*
 	 * This method updates the specimens for the given SCG and sets the consent status to withdraw.
 	 */
-	private static void updateSpecimensInSCG(SpecimenCollectionGroup scg,long consentTierID, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean)
+	private static void updateSpecimensInSCG(SpecimenCollectionGroup scg, SpecimenCollectionGroup oldscg, long consentTierID, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
-		Collection specimenCollection = scg.getSpecimenCollection();
+		Collection specimenCollection = oldscg.getSpecimenCollection();
 		Collection updatedSpecimenCollection = new HashSet();
 		Iterator specimenItr = specimenCollection.iterator() ;
-		while(specimenItr.hasNext() )
+		while(specimenItr.hasNext())
 		{
 			Specimen specimen = (Specimen)specimenItr.next();
 			updateSpecimenStatus(specimen, consentWithdrawalOption, consentTierID, dao, sessionDataBean);
 			updatedSpecimenCollection.add(specimen );
 		}
-		scg.setSpecimenCollection(updatedSpecimenCollection );
+		scg.setSpecimenCollection(updatedSpecimenCollection);
 	}
 	
 	/**
@@ -81,8 +101,9 @@ public class WithdrawConsentUtil
 	 * @param consentTierID Identifier of ConsentTier to be withdrawn.
 	 * @param dao DAO instance. Used for inserting disposal event. 
 	 * @param sessionDataBean SessionDataBean instance. Used for inserting disposal event.
+	 * @throws DAOException 
 	 */
-	public static void updateSpecimenStatus(Specimen specimen, String consentWithdrawalOption, long consentTierID,  DAO dao, SessionDataBean sessionDataBean)
+	public static void updateSpecimenStatus(Specimen specimen, String consentWithdrawalOption, long consentTierID,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
 		Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
 		Collection updatedSpecimenStatusCollection = new HashSet();
@@ -136,11 +157,11 @@ public class WithdrawConsentUtil
 				}
 				StorageContainerUtil.insertSinglePositionInContainerMap(specimen.getStorageContainer(),containerMap,specimen.getPositionDimensionOne().intValue(), specimen.getPositionDimensionTwo().intValue()    );
 			}
-			specimen.setPositionDimensionOne(null );
-			specimen.setPositionDimensionTwo(null );
-			specimen.setStorageContainer(null );
-			specimen.setAvailableQuantity(null );
-			specimen.setInitialquantity(null );
+			specimen.setPositionDimensionOne(null);
+			specimen.setPositionDimensionTwo(null);
+			specimen.setStorageContainer(null);
+			specimen.setAvailableQuantity(null);
+			specimen.setQuantity(null);
 		}
 	}
 	
@@ -191,7 +212,7 @@ public class WithdrawConsentUtil
 		}
 	}
 	
-	private static void updateChildSpecimens(Specimen specimen, String consentWithdrawalOption, long consentTierID, DAO dao, SessionDataBean sessionDataBean)
+	private static void updateChildSpecimens(Specimen specimen, String consentWithdrawalOption, long consentTierID, DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
 		Collection childSpecimens = specimen.getChildrenSpecimen();
 		Iterator childItr = childSpecimens.iterator();  
@@ -202,7 +223,7 @@ public class WithdrawConsentUtil
 		}
 	}
 	
-	private static void consentWithdrawForchildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, String consentWithdrawalOption, long consentTierID)
+	private static void consentWithdrawForchildSpecimens(Specimen specimen, DAO dao, SessionDataBean sessionDataBean, String consentWithdrawalOption, long consentTierID) throws DAOException
 	{
 		if(specimen!=null)
 		{
@@ -222,11 +243,13 @@ public class WithdrawConsentUtil
 	 * 
 	 * @param specimen Instance of specimen. It is the child specimen to which the consents will be set.
 	 * @param parentSpecimen Instance of specimen. It is the parent specimen from which the consents will be copied.
+	 * @throws DAOException 
 	 */
-	public static void setConsentsFromParent(Specimen specimen, Specimen parentSpecimen)
+	public static void setConsentsFromParent(Specimen specimen, Specimen parentSpecimen, DAO dao) throws DAOException
 	{
 		Collection consentTierStatusCollection = new HashSet();
-		Collection parentStatusCollection = parentSpecimen.getConsentTierStatusCollection();
+		//Lazy Resolved ----  parentSpecimen.getConsentTierStatusCollection();
+		Collection parentStatusCollection = (Collection)dao.retrieveAttribute(Specimen.class.getName(), parentSpecimen.getId(),"elements(consentTierStatusCollection)"); 
 		Iterator parentStatusCollectionIterator = parentStatusCollection.iterator();
 		while(parentStatusCollectionIterator.hasNext() )
 		{
@@ -249,7 +272,7 @@ public class WithdrawConsentUtil
 		while(eventCollectionIterator.hasNext() )
 		{
 			Object event = eventCollectionIterator.next();
-			if(event.getClass().getSimpleName().equals(eventType)  )
+			if(event.getClass().getSimpleName().equals(eventType))
 			{
 				result= true;
 				break;
@@ -266,50 +289,48 @@ public class WithdrawConsentUtil
 	 * @param oldSpecimenCollectionGroup
 	 * @param dao
 	 * @param sessionDataBean
+	 * @throws DAOException 
 	 */
-	public static void updateSpecimenStatusInSCG(SpecimenCollectionGroup specimenCollectionGroup,SpecimenCollectionGroup oldSpecimenCollectionGroup)
+	public static void updateSpecimenStatusInSCG(SpecimenCollectionGroup specimenCollectionGroup,SpecimenCollectionGroup oldSpecimenCollectionGroup, DAO dao) throws DAOException
 	{
 		Collection newConsentTierStatusCollection = specimenCollectionGroup.getConsentTierStatusCollection();
-		Collection oldConsentTierStatusCollection = oldSpecimenCollectionGroup.getConsentTierStatusCollection();
-		
-		String applyChangesTo =  specimenCollectionGroup.getApplyChangesTo();
-		
+		Collection oldConsentTierStatusCollection =  oldSpecimenCollectionGroup.getConsentTierStatusCollection();
 		Iterator itr = newConsentTierStatusCollection.iterator() ;
 		while(itr.hasNext() )
 		{
 			ConsentTierStatus consentTierStatus = (ConsentTierStatus)itr.next();
 			String statusValue = consentTierStatus.getStatus();
 			long consentTierID = consentTierStatus.getConsentTier().getId().longValue();
-			updateSCGSpecimenCollection(specimenCollectionGroup, consentTierID, statusValue, newConsentTierStatusCollection, oldConsentTierStatusCollection);	
+			updateSCGSpecimenCollection(specimenCollectionGroup, oldSpecimenCollectionGroup, consentTierID, statusValue, newConsentTierStatusCollection, oldConsentTierStatusCollection,dao);	
 		}
 	}
 
 	/*
 	 * This method updates the specimen consent status. 
 	 */
-	private static void updateSCGSpecimenCollection(SpecimenCollectionGroup specimenCollectionGroup, long consentTierID, String  statusValue, Collection newSCGConsentCollection, Collection oldSCGConsentCollection)
+	private static void updateSCGSpecimenCollection(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldSpecimenCollectionGroup, long consentTierID, String  statusValue, Collection newSCGConsentCollection, Collection oldSCGConsentCollection,DAO dao) throws DAOException
 	{
-		Collection specimenCollection = specimenCollectionGroup.getSpecimenCollection();
+		Collection specimenCollection =  oldSpecimenCollectionGroup.getSpecimenCollection();
 		Collection updatedSpecimenCollection = new HashSet();
 		String applyChangesTo =  specimenCollectionGroup.getApplyChangesTo(); 
 		Iterator specimenItr = specimenCollection.iterator() ;
 		while(specimenItr.hasNext() )
 		{
 			Specimen specimen = (Specimen)specimenItr.next();
-			updateSpecimenConsentStatus(specimen, applyChangesTo, consentTierID, statusValue, newSCGConsentCollection, oldSCGConsentCollection );
+			updateSpecimenConsentStatus(specimen, applyChangesTo, consentTierID, statusValue, newSCGConsentCollection, oldSCGConsentCollection, dao );
 			updatedSpecimenCollection.add(specimen );
 		}
 		specimenCollectionGroup.setSpecimenCollection(updatedSpecimenCollection );
 	}
 	
-	public static void updateSpecimenConsentStatus(Specimen specimen, String applyChangesTo, long consentTierID, String  statusValue, Collection newConsentCollection, Collection oldConsentCollection )
+	public static void updateSpecimenConsentStatus(Specimen specimen, String applyChangesTo, long consentTierID, String  statusValue, Collection newConsentCollection, Collection oldConsentCollection,DAO dao) throws DAOException
 	{
 		if(applyChangesTo.equalsIgnoreCase(Constants.APPLY_ALL))
-			updateSpecimenConsentStatus(specimen, consentTierID, statusValue, applyChangesTo );
+			updateSpecimenConsentStatus(specimen, consentTierID, statusValue, applyChangesTo, dao);
 		else if(applyChangesTo.equalsIgnoreCase(Constants.APPLY))
 		{
 			//To pass both collections
-			checkConflictingConsents(newConsentCollection, oldConsentCollection, specimen );
+			checkConflictingConsents(newConsentCollection, oldConsentCollection, specimen, dao);
 		}
 	}
 	
@@ -318,8 +339,9 @@ public class WithdrawConsentUtil
 	 * @param specimen  Instance of Specimen to be updated. 
 	 * @param consentWithdrawalOption Action to be performed on the withdrawn specimen.
 	 * @param consentTierID Identifier of ConsentTier to be withdrawn.
+	 * @throws DAOException 
 	 */
-	private static void updateSpecimenConsentStatus(Specimen specimen, long consentTierID, String statusValue, String applyChangesTo )
+	private static void updateSpecimenConsentStatus(Specimen specimen, long consentTierID, String statusValue, String applyChangesTo, DAO dao) throws DAOException
 	{
 		Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
 		Collection updatedSpecimenStatusCollection = new HashSet();
@@ -331,9 +353,9 @@ public class WithdrawConsentUtil
 			{
 				consentTierstatus.setStatus(statusValue);
 			}
-			updatedSpecimenStatusCollection.add(consentTierstatus );
+			updatedSpecimenStatusCollection.add(consentTierstatus);
 		}
-		specimen.setConsentTierStatusCollection( updatedSpecimenStatusCollection);
+		specimen.setConsentTierStatusCollection(updatedSpecimenStatusCollection);
 		
 		//to update child specimens
 		Collection childSpecimens = specimen.getChildrenSpecimen();
@@ -341,21 +363,21 @@ public class WithdrawConsentUtil
 		while(childItr.hasNext() )
 		{
 			Specimen childSpecimen = (Specimen)childItr.next();
-			consentStatusUpdateForchildSpecimens(childSpecimen , consentTierID, statusValue ,applyChangesTo);
+			consentStatusUpdateForchildSpecimens(childSpecimen , consentTierID, statusValue ,applyChangesTo, dao);
 		}
 	}
 
-	private static void consentStatusUpdateForchildSpecimens(Specimen specimen, long consentTierID, String statusValue, String applyChangesTo)
+	private static void consentStatusUpdateForchildSpecimens(Specimen specimen, long consentTierID, String statusValue, String applyChangesTo, DAO dao) throws DAOException
 	{
 		if(specimen!=null)
 		{
-			updateSpecimenConsentStatus(specimen, consentTierID, statusValue, applyChangesTo );
+			updateSpecimenConsentStatus(specimen, consentTierID, statusValue, applyChangesTo, dao);
 			Collection childSpecimens = specimen.getChildrenSpecimen();
 			Iterator itr = childSpecimens.iterator();  
 			while(itr.hasNext() )
 			{
 				Specimen childSpecimen = (Specimen)itr.next();
-				consentStatusUpdateForchildSpecimens(childSpecimen, consentTierID, statusValue, applyChangesTo );
+				consentStatusUpdateForchildSpecimens(childSpecimen, consentTierID, statusValue, applyChangesTo, dao);
 			}
 		}
 	}
@@ -363,7 +385,7 @@ public class WithdrawConsentUtil
 	/*
 	 * This method verifies the consents of SCG and specimen for any conflicts.
 	 */
-	private static void checkConflictingConsents(Collection newConsentCollection, Collection oldConsentCollection, Specimen specimen )
+	private static void checkConflictingConsents(Collection newConsentCollection, Collection oldConsentCollection, Specimen specimen, DAO dao ) throws DAOException
 	{
 /*		 if oldSCG.c1 == S.c1 then update specimen with new SCG.c1
  * 			OR
@@ -373,7 +395,7 @@ public class WithdrawConsentUtil
 		while(oldConsentItr.hasNext() )
 		{
 			ConsentTierStatus oldConsentStatus = (ConsentTierStatus)oldConsentItr.next() ;
-			Collection specimenConsentStatusCollection =  specimen.getConsentTierStatusCollection();
+			Collection specimenConsentStatusCollection = specimen.getConsentTierStatusCollection();
 			Iterator specimenConsentStatusItr = specimenConsentStatusCollection.iterator() ;
 			Collection updatedSpecimenConsentStatusCollection = new HashSet();
 			while(specimenConsentStatusItr.hasNext() )
@@ -405,21 +427,21 @@ public class WithdrawConsentUtil
 		while(childItr.hasNext() )
 		{
 			Specimen childSpecimen = (Specimen)childItr.next();
-			consentStatusUpdateForchildSpecimens(childSpecimen , newConsentCollection, oldConsentCollection);
+			consentStatusUpdateForchildSpecimens(childSpecimen , newConsentCollection, oldConsentCollection, dao);
 		}
 	}
 	
-	private static void consentStatusUpdateForchildSpecimens(Specimen specimen, Collection newConsentCollection, Collection oldConsentCollection)
+	private static void consentStatusUpdateForchildSpecimens(Specimen specimen, Collection newConsentCollection, Collection oldConsentCollection, DAO dao) throws DAOException
 	{
 		if(specimen!=null)
 		{
-			checkConflictingConsents(newConsentCollection, oldConsentCollection, specimen );
+			checkConflictingConsents(newConsentCollection, oldConsentCollection, specimen, dao);
 			Collection childSpecimens = specimen.getChildrenSpecimen();
 			Iterator itr = childSpecimens.iterator();  
 			while(itr.hasNext() )
 			{
 				Specimen childSpecimen = (Specimen)itr.next();
-				consentStatusUpdateForchildSpecimens(childSpecimen, newConsentCollection, oldConsentCollection);
+				consentStatusUpdateForchildSpecimens(childSpecimen, newConsentCollection, oldConsentCollection, dao);
 			}
 		}
 	}

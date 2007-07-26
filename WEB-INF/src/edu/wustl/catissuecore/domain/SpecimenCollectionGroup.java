@@ -17,12 +17,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
+import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
+import edu.wustl.common.util.MapDataParser;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -107,6 +109,57 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * A registration of a Participant to a Collection Protocol.
      */
     protected CollectionProtocolRegistration collectionProtocolRegistration;
+	   //----For Consent Tracking. Ashish 22/11/06
+    /**
+     * The consent tier status by multiple participants for a particular specimen collection group.
+     */
+    protected Collection consentTierStatusCollection;
+    
+	//Mandar 15-jan-07 
+	/*
+	 * To perform operation based on withdraw button clicked.
+	 * Default No Action to allow normal behaviour. 
+	 */
+	protected String consentWithdrawalOption=Constants.WITHDRAW_RESPONSE_NOACTION;
+	
+	//Mandar 19-jan-07 
+	/*
+	 * To apply changes to specimen based on consent status changes.
+	 * Default Apply none to allow normal behaviour. 
+	 */
+	protected String applyChangesTo=Constants.APPLY_NONE;
+
+	//Mandar 22-jan-07 
+	/*
+	 * To apply changes to specimen based on consent status changes.
+	 * Default empty. 
+	 */
+	
+	protected String stringOfResponseKeys="";
+	
+	/**
+	 * Surgical Pathology Number of the associated pathology report, erlier was Present in Clinical Report
+	 */
+	protected String surgicalPathologyNumber;
+	/**
+	 * @return the consentTierStatusCollection
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierStatus" lazy="true" cascade="save-update"
+	 * @hibernate.set table="CATISSUE_CONSENT_TIER_STATUS" name="consentTierStatusCollection"
+	 * @hibernate.collection-key column="SPECIMEN_COLL_GROUP_ID"
+	 */
+	public Collection getConsentTierStatusCollection()
+	{
+		return consentTierStatusCollection;
+	}
+	
+	/**
+	 * @param consentTierStatusCollection the consentTierStatusCollection to set
+	 */
+	public void setConsentTierStatusCollection(Collection consentTierStatusCollection)
+	{
+		this.consentTierStatusCollection = consentTierStatusCollection;
+	}
+    //----Consent Tracking End
     /**
 	 * Name : Ashish Gupta
 	 * Reviewer Name : Sachin Lale 
@@ -118,8 +171,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
      * Collection and Received events associated with this SCG
      */
     protected Collection specimenEventParametersCollection = new HashSet();
-	 protected String surgicalPathologyNumber;
-    
+	    
 	/**
 	 * @return the specimenEventParametersCollection
 	 * @hibernate.set cascade="save-update" inverse="true" table="CATISSUE_SPECIMEN_EVENT_PARAM" lazy="false"
@@ -457,7 +509,20 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			CollectionProtocol collectionProtocol = new CollectionProtocol();
 			collectionProtocol.setId(new Long(form.getCollectionProtocolId()));
 			collectionProtocolRegistration.setCollectionProtocol(collectionProtocol);
+			
 			/**
+			 * Setting the consentTier responses for SCG Level. 
+			 * Virender Mehta
+			 */
+			this.consentTierStatusCollection = prepareParticipantResponseCollection(form);
+			
+			// ----------- Mandar --15-Jan-07
+			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();  
+			//Mandar: 19-Jan-07 :- For applying changes to specimen
+			this.applyChangesTo = form.getApplyChangesTo(); 
+			this.stringOfResponseKeys = form.getStringOfResponseKeys();
+			
+   /**
 	 * Name : Ashish Gupta
 	 * Reviewer Name : Sachin Lale 
 	 * Bug ID: 2741
@@ -477,7 +542,48 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			Logger.out.error(e.getMessage(),e);
 			throw new AssignDataException();
 		}
+	}   
+
+    /**
+	* For Consent Tracking
+	* Setting the Domain Object 
+	* @param  form CollectionProtocolRegistrationForm
+	* @return consentResponseColl
+	*/
+	private Collection prepareParticipantResponseCollection(SpecimenCollectionGroupForm form) 
+	{
+		MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
+        Collection beanObjColl=null;
+		try
+		{
+			beanObjColl = mapdataParser.generateData(form.getConsentResponseForScgValues());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+        Iterator iter = beanObjColl.iterator();
+        Collection consentResponseColl = new HashSet();
+        while(iter.hasNext())
+        {
+        	ConsentBean consentBean = (ConsentBean)iter.next();
+        	ConsentTierStatus consentTierstatus = new ConsentTierStatus();
+        	//Setting response
+        	consentTierstatus.setStatus(consentBean.getSpecimenCollectionGroupLevelResponse());
+        	if(consentBean.getSpecimenCollectionGroupLevelResponseID()!=null&&consentBean.getSpecimenCollectionGroupLevelResponseID().trim().length()>0)
+        	{
+        		consentTierstatus.setId(Long.parseLong(consentBean.getSpecimenCollectionGroupLevelResponseID()));
+        	}
+        	//Setting consent tier
+        	ConsentTier consentTier = new ConsentTier();
+        	consentTier.setId(Long.parseLong(consentBean.getConsentTierID()));
+        	consentTierstatus.setConsentTier(consentTier);	        	
+        	consentResponseColl.add(consentTierstatus);
+        }
+        return consentResponseColl;
 	}
+	
+
 	/**
 	 * Name : Ashish Gupta
 	 * Reviewer Name : Sachin Lale 
@@ -597,6 +703,32 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	public void setComment(String comment) {
 		this.comment = comment;
 	}	
+		//----------------------------Mandar 15-jan-07
+	public String getConsentWithdrawalOption() {
+		return consentWithdrawalOption;
+	}
+
+	public void setConsentWithdrawalOption(String consentWithdrawalOption) {
+		this.consentWithdrawalOption = consentWithdrawalOption;
+	}
+	
+	//------------------------- Mandar 19-Jan-07
+	public String getApplyChangesTo() {
+		return applyChangesTo;
+	}
+	public void setApplyChangesTo(String applyChangesTo) {
+		this.applyChangesTo = applyChangesTo;
+	}
+	// ------------------- Mandar : - 22-Jan-07
+
+	public String getStringOfResponseKeys() {
+		return stringOfResponseKeys;
+	}
+
+	public void setStringOfResponseKeys(String stringOfResponseKeys) {
+		this.stringOfResponseKeys = stringOfResponseKeys;
+	}
+
 	/**
 	 * @return the applyEventsToSpecimens
 	 */

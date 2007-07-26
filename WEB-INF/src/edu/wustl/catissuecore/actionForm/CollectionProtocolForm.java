@@ -1,9 +1,10 @@
-/**
+							   /**
  * <p>Title: CollectionProtocolForm Class>
  * <p>Description:  CollectionProtocolForm Class is used to encapsulate all the request parameters passed 
  * from User Add/Edit webpage. </p>
  * Copyright:    Copyright (c) year
  * Company: Washington University, School of Medicine, St. Louis.
+ 
  * @author Gautam Shetty
  * @version 1.00
  * Created on Mar 3, 2005
@@ -28,6 +29,7 @@ import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -39,8 +41,9 @@ import edu.wustl.common.util.logger.Logger;
 
 /**
  * CollectionProtocolForm Class is used to encapsulate all the request
- * parameters passed from User Add/Edit webpage.
+ * parameters passed from collection protocol Add/Edit webpage.
  * 
+ * @author Mandar Deshmukh
  * @author gautam_shetty
  */
 public class CollectionProtocolForm extends SpecimenProtocolForm
@@ -62,8 +65,80 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	 */
 	protected boolean aliqoutInSameContainer = false;
 	
+	//Consent tracking(Virender Mehta)
 	/**
-	 * @return Returns the innerLoopValues.
+	 * Unsigned Form Url for the Consents
+	 */
+	protected String unsignedConsentURLName;
+
+	/**
+	 * Map for Storing Values of Consent Tiers.
+	 */
+	protected Map consentValues = new HashMap();
+	
+	/**
+	 * No of Consent Tier
+	 */
+	private int consentTierCounter=1;
+	/**
+	 * CheckBox for consent is checked or not
+	 */
+	private boolean consentWaived = false;
+	//Consent tracking(Virender Mehta)
+	/**
+	 * No argument constructor for CollectionProtocolForm class.
+	 */
+	public CollectionProtocolForm()
+	{
+		super();
+	}
+
+	/**
+     * @param key  Value of Key 
+     * @param value Value corrosponding to the Key
+     */
+    public void setValue(String key, Object value) 
+    {
+    	if (isMutable())
+   	 	{
+    		values.put(key, value);
+   	 	}
+    }
+    
+    /**
+     * @return This is used to get corresponding Value from the Map
+     * @param key This is used to get corresponding Value from the Map   
+     */
+    public Object getValue(String key) 
+    {
+        return values.get(key);
+    }
+    
+	/**
+	 * @return values in map
+	 */
+	public Collection getAllValues() 
+	{
+		return values.values();
+	}
+	
+	/**
+	 * @return values
+	 */
+	public Map getValues() 
+	{
+		return values;
+	}
+	
+	/**
+	 * @param values Set the values
+	 */
+	public void setValues(Map values) 
+	{
+		this.values = values;
+	}	
+	/**
+	 * @return innerLoopValues
 	 */
 	public Map getInnerLoopValues()
 	{
@@ -94,8 +169,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	/**
 	 * Returns the object to which this map maps the specified key.
 	 * 
-	 * @param key
-	 *            the required key.
+	 * @param key the required key.
 	 * @return the object to which this map maps the specified key.
 	 */
 	public Object getIvl(String key)
@@ -117,14 +191,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		this.outerCounter = outerCounter;
 	}
-	
-	/**
-	 * No argument constructor for CollectionProtocolForm class.
-	 */
-	public CollectionProtocolForm()
-	{
-		super();
-	}
+		
 	/**
 	 * Method to set class attributes
 	 */
@@ -204,7 +271,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		
 		//At least one outer row should be displayed in ADD MORE therefore
 		if(outerCounter == 0)
+		{
 			outerCounter = 1;
+		}
 		
 		//Populating the user-id array
 		Collection userCollection = cProtocol.getUserCollection();
@@ -226,12 +295,45 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		{
 			aliqoutInSameContainer = cProtocol.getAliqoutInSameContainer().booleanValue();
 		}
+		
+		//For Consent Tracking 
+		this.unsignedConsentURLName = cProtocol.getUnsignedConsentDocumentURL();
+		this.consentWaived = cProtocol.getConsentsWaived().booleanValue();   
+		//this.consentValues = prepareConsentTierMap(cProtocol.getConsentTierCollection());
+	}
+	/**
+	 * For Consent Tracking
+	 * Setting the consentValuesMap 
+	 * @param consentTierColl This Containes the collection of ConsentTier
+	 * @return tempMap
+	 */
+	private Map prepareConsentTierMap(Collection consentTierColl)
+	{
+		Map tempMap = new HashMap();
+		if(consentTierColl!=null)
+		{
+			Iterator consentTierCollIter = consentTierColl.iterator();			
+			int i = 0;
+			while(consentTierCollIter.hasNext())
+			{
+				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
+				String statement = "ConsentBean:"+i+"_statement";
+				String preDefinedStatementkey = "ConsentBean:"+i+"_predefinedConsents";
+				String statementkey = "ConsentBean:"+i+"_consentTierID";
+				tempMap.put(statement, consent.getStatement());
+				tempMap.put(preDefinedStatementkey, consent.getStatement());
+				tempMap.put(statementkey, consent.getId());
+				i++;
+			}
+			consentTierCounter = consentTierColl.size();
+		}
+		return tempMap;
 	}
 	
 	/**
-	 * This method will populate Specimen requirement
-	 * @param specimenRequirementCollection Collection of Specimen requirement
-	 * @param counter No if specimen requirement
+	 * 
+	 * @param specimenRequirementCollection This contains the Collection of specimen Requirement
+	 * @param counter This is for tracking counts
 	 */
 	private void populateSpecimenRequirement(Collection specimenRequirementCollection, int counter)
 	{
@@ -261,7 +363,9 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		
 		//At least one inner row should be displayed in ADD MORE therefore
 		if(innerCounter == 0)
+		{
 			innerCounter = 1;
+		}
 		
 		String innerCounterKey = String.valueOf(counter);
 		innerLoopValues.put(innerCounterKey,String.valueOf(innerCounter));
@@ -501,10 +605,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 							value = new BigDecimal(value).toPlainString();
 							if (classValue.trim().equals("Cell"))
 							{
-//								if(validator.isEmpty(value))
-//								{
-//									errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-//								}else
 								if(!validator.isNumeric(value,0))
 		        				{
 		        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
@@ -519,10 +619,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 								Logger.out.debug("TypeKey : "+ typeKey  + " : Type Value : " + typeValue);							
 								if (typeValue.trim().equals(Constants.FROZEN_TISSUE_SLIDE) || typeValue.trim().equals(Constants.FIXED_TISSUE_BLOCK) || typeValue.trim().equals(Constants.FROZEN_TISSUE_BLOCK ) || typeValue.trim().equals(Constants.FIXED_TISSUE_SLIDE))
 								{
-//									if(validator.isEmpty(value))
-//									{
-//										errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-//									}else 
 			        				if(!validator.isNumeric(value,0))
 			        				{
 			        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
@@ -530,10 +626,6 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 								}
 								else
 								{
-//									if(validator.isEmpty(value))
-//									{
-//										errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.required",ApplicationProperties.getValue("collectionprotocol.quantity")));
-//									}else
 									if(!validator.isDouble(value,true))
 			        				{
 			        					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.item.format",ApplicationProperties.getValue("collectionprotocol.quantity")));
@@ -638,4 +730,97 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	{
 		this.aliqoutInSameContainer = aliqoutInSameContainer;
 	}
+	
+	
+	//	For Consent Tracking Start
+	
+	/**
+	 * @return unsignedConsentURLName  Get Unsigned Signed URL name  
+	 */
+	public String getUnsignedConsentURLName()
+	{
+		return unsignedConsentURLName;
+	}
+	
+	/**
+	 * @param unsignedConsentURLName  Set Unsigned Signed URL name
+	 */
+	public void setUnsignedConsentURLName(String unsignedConsentURLName)
+	{
+		this.unsignedConsentURLName = unsignedConsentURLName;
+	}	
+	
+	/**
+     * @param key Key
+     * @param value Value
+     */
+    public void setConsentValue(String key, Object value) 
+    {
+   	 	if (isMutable())
+   	 	{
+   	 		consentValues.put(key, value);
+   	 	}
+    }
+
+    /**
+     * @param key Key
+     * @return Statements
+     */
+    public Object getConsentValue(String key) 
+    {
+        return consentValues.get(key);
+    }
+
+    /**
+     * 
+     * @return consentValues   Set Consents into the Map
+     */
+    public Map getConsentValues() 
+	{
+		return consentValues;
+	}
+	
+    /**
+     * @param consentValues Set Consents into the Map
+     */
+	public void setConsentValues(Map consentValues) 
+	{
+		this.consentValues = consentValues;
+	}
+
+	/**
+	 *@return consentTierCounter  This will keep track of count of Consent Tier
+	 */
+	public int getConsentTierCounter()
+	{
+		return consentTierCounter;
+	}
+	
+	/**
+	 * 
+	 * @param consentTierCounter  This will keep track of count of Consent Tier
+	 */
+	public void setConsentTierCounter(int consentTierCounter)
+	{
+		this.consentTierCounter = consentTierCounter;
+	}
+	
+	/**
+	 * If consent waived is true then no need to check consents prior to distribution
+	 * @return consentWaived
+	 */
+	public boolean isConsentWaived()
+	{
+		return consentWaived;
+	}
+
+	/**
+	 * If consent waived is true then no need to check consents prior to distribution
+	 * @param consentWaived If consent waived is true then no need to check consents prior to distribution
+	 */
+	public void setConsentWaived(boolean consentWaived)
+	{
+		this.consentWaived = consentWaived;
+	}
+	//	For Consent Tracking End
 }

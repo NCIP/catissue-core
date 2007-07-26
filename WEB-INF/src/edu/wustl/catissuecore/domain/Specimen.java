@@ -25,6 +25,7 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReceivedEventParametersForm;
 import edu.wustl.catissuecore.actionForm.SpecimenForm;
+import edu.wustl.catissuecore.bean.ConsentBean;
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
@@ -171,7 +172,51 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 	private transient Map aliqoutMap = new HashMap();
 	
+
 	protected transient boolean disposeParentSpecimen = false;
+
+    //-----For Consent Tracking. Ashish 21/11/06
+	/**
+	 * The consent tier status for multiple participants for a particular specimen.
+	 */
+	protected Collection consentTierStatusCollection;
+	
+	//Mandar 15-jan-07 
+	/*
+	 * To perform operation based on withdraw button clicked.
+	 * Default No Action to allow normal behaviour. 
+	 */
+	protected String consentWithdrawalOption=Constants.WITHDRAW_RESPONSE_NOACTION;
+	
+	//Mandar 23-jan-07 
+	/*
+	 * To apply changes to child specimen based on consent status changes.
+	 * Default Apply none to allow normal behaviour. 
+	 */
+	protected String applyChangesTo=Constants.APPLY_NONE;
+
+
+	
+	
+	/**
+	 * @return the consentTierStatusCollection
+	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierStatus" lazy="true" cascade="save-update"
+	 * @hibernate.set name="consentTierStatusCollection" table="CATISSUE_CONSENT_TIER_STATUS"
+	 * @hibernate.collection-key column="SPECIMEN_ID"
+	 */
+	public Collection getConsentTierStatusCollection()
+	{
+		return consentTierStatusCollection;
+	}
+	
+	/**
+	 * @param consentTierStatusCollection the consentTierStatusCollection to set
+	 */
+	public void setConsentTierStatusCollection(Collection consentTierStatusCollection)
+	{
+		this.consentTierStatusCollection = consentTierStatusCollection;
+	}
+	//-----Consent Tracking end.
     
      /**
      * Name: Sachin Lale 
@@ -966,16 +1011,64 @@ public class Specimen extends AbstractDomainObject implements Serializable
 
 						}
 					}
-
 				}
-			}
+		}
         }
 	    catch (Exception excp)
 		{
 				Logger.out.error(excp.getMessage(), excp);
-                throw new AssignDataException();
-		}
+                throw new AssignDataException();  
 
+		}
+	    //Setting the consentTier responses. (Virender Mehta)
+		if (abstractForm instanceof NewSpecimenForm)
+		{
+			NewSpecimenForm form = (NewSpecimenForm) abstractForm;
+			this.consentTierStatusCollection = prepareParticipantResponseCollection(form);
+			// ----------- Mandar --16-Jan-07
+			this.consentWithdrawalOption = form.getWithdrawlButtonStatus();  
+			// ----- Mandar : ---23-jan-07 For bug 3464.
+			this.applyChangesTo = form.getApplyChangesTo(); 
+		}
+	}
+	
+	/**
+	* For Consent Tracking
+	* Setting the Domain Object 
+	* @param  form CollectionProtocolRegistrationForm
+	* @return consentResponseColl
+	*/
+	private Collection prepareParticipantResponseCollection(NewSpecimenForm form) 
+	{
+		MapDataParser mapdataParser = new MapDataParser("edu.wustl.catissuecore.bean");
+        Collection beanObjColl=null;
+		try
+		{
+			beanObjColl = mapdataParser.generateData(form.getConsentResponseForSpecimenValues());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+        Iterator iter = beanObjColl.iterator();
+        Collection consentResponseColl = new HashSet();
+        while(iter.hasNext())
+        {
+        	ConsentBean consentBean = (ConsentBean)iter.next();
+        	ConsentTierStatus consentTierstatus = new ConsentTierStatus();
+        	//Setting response
+        	consentTierstatus.setStatus(consentBean.getSpecimenLevelResponse());
+        	if(consentBean.getSpecimenLevelResponseID()!=null&&consentBean.getSpecimenLevelResponseID().trim().length()>0)
+        	{
+        		consentTierstatus.setId(Long.parseLong(consentBean.getSpecimenLevelResponseID()));
+        	}
+        	//Setting consent tier
+        	ConsentTier consentTier = new ConsentTier();
+        	consentTier.setId(new Long(consentBean.getConsentTierID()));
+        	consentTierstatus.setConsentTier(consentTier);	        	
+        	consentResponseColl.add(consentTierstatus);
+        }
+        return consentResponseColl;
 	}
 
 	protected Map fixMap(Map orgMap)
@@ -1208,6 +1301,26 @@ public class Specimen extends AbstractDomainObject implements Serializable
 	{
 		return this.label;
 	}
+	//----------------------------Mandar 16-jan-07
+	public String getConsentWithdrawalOption()
+	{
+		return consentWithdrawalOption;
+	}
+
+	public void setConsentWithdrawalOption(String consentWithdrawalOption) 
+	{
+		this.consentWithdrawalOption = consentWithdrawalOption;
+	}
+	
+	public String getApplyChangesTo() 
+	{
+		return applyChangesTo;
+	}
+	public void setApplyChangesTo(String applyChangesTo) 
+	{
+		this.applyChangesTo = applyChangesTo;
+	}	  
+
 
 	/**
 	 * @return Returns the disposeParentSpecimen.

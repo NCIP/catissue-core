@@ -8,6 +8,7 @@
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
 <%@ page import="java.util.*"%>
 <%@ page import="edu.wustl.common.beans.NameValueBean"%>
+<script src="jss/ajax.js"></script>	   
 <%@ include file="/pages/content/common/AutocompleterCommon.jsp" %> 
 
 <%!private String changeUnit(String specimenType, String subType) {
@@ -67,7 +68,10 @@
 				readOnlyValue = false;
 			}
 			
-//			formName = "DistributionSubmit.do";
+//	formName = "DistributionSubmit.do";
+	String signedConsentDate = "";
+	String selectProperty="";
+	
 %>
 <head>
 <script language="JavaScript" type="text/javascript"
@@ -92,16 +96,96 @@
 			setFormAction("<%=Constants.DISTRIBUTION_ACTION%>&operation="+"<%=operation%>&specimenIdKey="+element.name);
 			document.forms[0].submit();
 		}
+	
+
+		//Consent tracking 
+		var validateBarcodeLable="<%=Constants.VALID%>";
+		var noOfRows=0;
+		var iCount=0;
+		var barcodeLableObject="";
+		var distrinutionOn=2;
+		//This function will be called on clicking ViewAll
+		function showAllSpecimen()
+		{
+			if(barcodeLableObject.value==null||barcodeLableObject.value=="")
+			{
+				return;
+			}
+			else if(!(validateBarcodeLable=="<%=Constants.INVALID%>")&&noOfRows>0)
+			{
+				var barcodeLableValue="";
+				var verifiedRows="";
+				var iCount=0;
+				var addMore =document.getElementById("addMore");
+				var tableRows = addMore.rows;
+				noOfRows=tableRows.length;
+				for(i=0;i<noOfRows;i++)
+				{
+					var verificationStatusKey="value(DistributedItem:"+(i+1)+"_verificationKey)";
+					var status=document.getElementById(verificationStatusKey);
+					barcodeLableStatus=status.value;
+					if(barcodeLableStatus=="<%=Constants.VIEW_CONSENTS%>"||barcodeLableStatus=="<%=Constants.VERIFIED%>")
+					{
+						if(distrinutionOn==1)
+						{
+							var barcodeKey="value(DistributedItem:"+(i+1)+"_Specimen_barcode)";
+							var barcodelabel=document.getElementById(barcodeKey);
+							barcodeLableValue=barcodeLableValue+barcodelabel.value;
+							if(i!=noOfRows)
+							{
+								barcodeLableValue=barcodeLableValue+"|";
+							}
+						}
+						else
+						{
+							var LableKey="value(DistributedItem:"+(i+1)+"_Specimen_label)";
+							var barcodelabel=document.getElementById(LableKey);
+							barcodeLableValue=barcodeLableValue+barcodelabel.value;
+							if(i!=noOfRows)
+							{
+								barcodeLableValue=barcodeLableValue+"|";
+							}
+						}
+						if(barcodeLableStatus=="<%=Constants.VERIFIED%>")
+						{
+							verifiedRows=verifiedRows+(i-iCount)+",";
+						}
+					}
+					else
+					{
+						iCount=iCount+1;
+					}
+				}
+				if(noOfRows==iCount)
+				{
+					alert("No consents available");
+				}
+				else
+				{
+					var url ='Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&specimenConsents=yes&verifiedRows='+verifiedRows+'&noOfRows='+noOfRows+'&labelBarcode='+distrinutionOn+'&barcodelabel='
+					url+=barcodeLableValue;
+					window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
+				}
+			}
+		}
+		//Consent tracking
+		
 		//function to insert a row in the inner block
 		function insRow(subdivtag)
 		{
 			var val = parseInt(document.forms[0].counter.value);
 			val = val + 1;
 			document.forms[0].counter.value = val;
+			
+			var sequenceNo = parseInt(document.forms[0].outerCounter.value);	
+			sequenceNo = sequenceNo + 1;
+			document.forms[0].outerCounter.value=sequenceNo;
+			
 			var sname = "";
 		    var barcodeDisabled = "";
 			var labelDisabled = "";
 			var quantityDisabled = "";
+			var consentForSpecimen=""
 
            if (document.forms[0].distributionBasedOn[0].checked == true)  {
 		             labelDisabled = "disabled";
@@ -113,39 +197,31 @@
 		   if (document.forms[0].distributionType[1].checked == true) {
 				quantityDisabled="disabled";
 			}
-
-
 			
 			var r = new Array(); 
 			r = document.getElementById(subdivtag).rows;
 			var q = r.length;
-			var x=document.getElementById(subdivtag).insertRow(q);
-			var quantVal = "";
 			
 
-
-            
+			var x=document.getElementById(subdivtag).insertRow(q);
+			var quantVal = "";
+			    
 			
 			// First Cell
 			var spreqno=x.insertCell(0);
 			spreqno.className="formSerialNumberField";
 			var rowno=(q+1);
-		    var identifier = "value(DistributedItem:" + rowno +"_id)";
-
-	
+			noOfRows=rowno;
+		   	var identifier = "value(DistributedItem:" + rowno +"_id)";
+		   	
 			//spreqno.innerHTML="" + sname;
 			if (document.forms[0].distributionType[1].checked == true) {
 			     // identifier = "value(SpecimenArray:" + rowno +"_id)";
 			      identifier = "value(DistributedItem:" + rowno +"_SpecimenArray_id)";
 				  quantVal = "1";
-
 			}
-
     		var cell1 = "<input type='hidden' name='" + identifier + "' value='' id='" + identifier + "'>";
-
-
-			
-			spreqno.innerHTML="" + cell1+  rowno ;
+			spreqno.innerHTML="" + cell1+  sequenceNo ;
 
 
 			//Second Cell
@@ -155,6 +231,7 @@
 			sname="";
 
 			var name = "value(DistributedItem:" + rowno + "_Specimen_barcode)";
+			var keyValue=name;
 			sname="<input type='text'   " + barcodeDisabled  +  "  name='" + name + "'   class='formField' id='" + name + "'>";
 			spreqidentifier.innerHTML="" + sname;
 			
@@ -165,11 +242,12 @@
 			sname="";
 
 			var name = "value(DistributedItem:" + rowno + "_Specimen_label)";
+			var labelKeyValue=name;
 			sname="<input type='text' " + labelDisabled  +  "  name='" + name + "'   class='formField' id='" + name + "'>";
 			spreqidentifier.innerHTML="" + sname;
 
 			
-			//Ninth Cell
+			//3rd Cell
 			var spreqquantity=x.insertCell(3);
 			spreqquantity.className="formField";
 			//spreqquantity.colspan=2;
@@ -183,7 +261,7 @@
 			sname = sname + "<input type='hidden' name='" + previousQuantity + "' value='' id='" + previousQuantity + "'>";
 			spreqquantity.innerHTML="" + sname;
 			
-			//Tenth  Cell
+			//4th  Cell
 			var checkb=x.insertCell(4);
 			checkb.className="formField";
 
@@ -191,9 +269,132 @@
 			var name = "chk_"+ rowno;
 			sname="<input type='checkbox' name='" + name +"' id='" + name +"' value='C' onClick=\"document.forms[0].deleteValue.disabled = false\">";
 			checkb.innerHTML=""+sname;	
+
+			//Consent Tracking Module (Virender Mehta)
+			//5th  Cell
+			var consent=x.insertCell(5);
+			consent.className="formField";
+			consent.colSpan=2;
+			sname="";
+			var verificationStatusKey = "value(DistributedItem:"+rowno+"_verificationKey)";
+			var name = "chk_"+ rowno;
+			if (document.forms[0].distributionType[0].checked == true)  
+			{
+				var spanTag=document.createElement("span");
+				var barcodelabelStatus="barcodelabel"+rowno;
+				spanTag.setAttribute("id",barcodelabelStatus);
+				//Create anchor Tag
+				var anchorTag = document.createElement("a");
+				var barcodeStatus="barcodeStatus"+rowno;
+				if (document.forms[0].distributionBasedOn[0].checked == true)  
+				{
+					labelbarcodeKey=keyValue;
+					distrinutionBasedOn=1;
+				}
+				else
+				{
+					labelbarcodeKey=labelKeyValue;
+					distrinutionBasedOn=2;
+				}
+				
+
+				anchorTag.setAttribute("href", "javascript:getbarCode('"+labelbarcodeKey+"','"+barcodeStatus+"','"+verificationStatusKey+"','"+distrinutionBasedOn+"','"+false+"','"+barcodelabelStatus+"');");
+				anchorTag.innerHTML="View"+"<input type='hidden' name='" + verificationStatusKey + "' value='View' id='" + verificationStatusKey + "'>";
+				spanTag.appendChild(anchorTag);
+				consent.appendChild(spanTag);
+				document.getElementById(keyValue).onblur=function(){getbarCode(keyValue,barcodeStatus,verificationStatusKey,distrinutionBasedOn,true,barcodelabelStatus)};
+				document.getElementById(labelKeyValue).onblur=function(){getbarCode(labelKeyValue,barcodeStatus,verificationStatusKey,distrinutionBasedOn,true,barcodelabelStatus)};
+				anchorTag.setAttribute("id",barcodeStatus);
+			}
+			else
+			{
+				//Create spanTag
+				var spanTag=document.createElement("span");
+				spanTag.innerHTML="<%=Constants.NOT_APPLICABLE%>";
+				consent.appendChild(spanTag);
+
+			}
+			
 		}
-	
-		--></script>
+		//This function get the barcode value and prepare URL for Submit
+		function getbarCode(identifier,barcodeId,verificationKey,distrinutionBasedOn,onFocusChange,barcodelabelStatus)
+		{
+			var barcodelabel=document.getElementById(identifier);
+			barcodeLableObject=barcodelabel;
+
+			if(barcodelabel.value==null||barcodelabel.value=="")
+			{
+				alert("Please enter some value");
+				return;
+			}
+			distrinutionOn=distrinutionBasedOn;
+			var verificationkeyObj=document.getElementById(verificationKey);
+			var status=verificationkeyObj.value;
+			var url ='Distribution.do?operation=add&pageOf=pageOfDistribution&menuSelected=16&status='+status+'&showConsents=yes&labelBarcode='+distrinutionBasedOn+'&verificationKey='+verificationKey+'&barcodelableId='+barcodeId+'&barcodelabel=';
+			url+=barcodelabel.value;
+			var dataToSend='showConsents=yes&labelBarcode='+distrinutionBasedOn+'&barcodelabel='+barcodelabel.value;
+			ajaxCall(dataToSend, url, barcodeId, verificationKey,onFocusChange,barcodelabelStatus);
+		}
+		var flag=false;
+		//Ajax Code Start
+		function ajaxCall(dataToSend, url, barcodeId, verificationKey,onFocusChange,barcodelabelStatus)
+		{
+			if(flag==true)
+			{
+				return;
+			}
+			flag=true;
+			var request = newXMLHTTPReq();
+			request.onreadystatechange=function(){checkForConsents(request, url, barcodeId, verificationKey,onFocusChange,barcodelabelStatus)};
+			//send data to ActionServlet
+			//Open connection to servlet
+			request.open("POST","CheckConsents.do",true);
+			request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+			request.send(dataToSend);
+		}
+
+		function checkForConsents(request, url, barcodeId,verificationKey,onFocusChange,barcodelabelStatus)
+		{
+			
+			if(request.readyState == 4)
+			{  
+				//Response is ready
+				if(request.status == 200)
+				{
+					var responseString = request.responseText;
+					validateBarcodeLable=responseString;
+					if(responseString=="<%=Constants.DISABLED%>")//disabled
+					{
+						alert("Specimen has been disabled");
+					}
+					else if(responseString=="<%=Constants.SHOW_CONSENTS%>")//ShowConsents
+					{
+						if(onFocusChange=="<%=Constants.FALSE%>")//false
+						{
+							
+							window.open(url,'ConsentVerificationForm','height=300,width=800,scrollbars=1,resizable=1');
+						}
+					}
+					else if(responseString=="<%=Constants.INVALID%>")//Invalid
+					{
+						
+						alert("Please enter valid barcode/label");
+					}
+					else if(responseString=="<%=Constants.CONSENT_WAIVED%>")//Consent Waived
+					{
+						document.getElementById(barcodelabelStatus).innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='Consent Waived' id='" + verificationKey + "'/>";
+					}
+					else
+					{
+						document.getElementById(barcodelabelStatus).innerHTML=responseString+"<input type='hidden' name='" + verificationKey + "' value='No consents' id='" + verificationKey + "'/>";
+					}
+					flag=false;
+				}
+			}
+		}
+	//Consent Tracking Module Virender mehta	
+-->
+</script>
 </head>
 
 
@@ -203,8 +404,8 @@
 			int noOfRows = 1;
 			Map map = null;
 			DistributionForm form = null;
-
-			if (obj != null && obj instanceof DistributionForm) {
+			if (obj != null && obj instanceof DistributionForm) 
+			{
 				form = (DistributionForm) obj;
 				noOfRows = form.getCounter();
 				map = form.getValues();
@@ -252,6 +453,7 @@
 					<td><html:hidden property="operation" value="<%=operation%>" /> <html:hidden
 						property="submittedFor" value="<%=submittedFor%>" /></td>
 					<td><html:hidden property="counter" /></td>
+					<td><html:hidden property="outerCounter" /></td>
 					<td><html:hidden property="id" /></td>
 					<td><html:hidden property="idChange" /></td>
 					<td><html:hidden property="onSubmit" /></td>
@@ -403,7 +605,6 @@
 				</label>
 			</td>
 		</tr>
-
 				<!-- Commented By Mandar for date component -->
 
 				<%-- fromSite
@@ -486,49 +687,67 @@
 					<td >&nbsp;</td>
 				</tr>
 			</table>
-			<table  summary="" cellpadding="3" cellspacing="0" border="0"
-				width="433">
-						<tr>
+			<%
+				boolean flag=true;
+			%>
+			<table  summary="" cellpadding="3" cellspacing="0" border="0" width="95%">
+				<tr>
 			        <td class="formRequiredNotice" style="border-top:1px solid #5C5C5C"  width="5">*</td>
 					<td class="formRequiredLabel" style="border-top:1px solid #5C5C5C" ><label for="type"> <bean:message
 						key="distribution.distributionBasedOn" /> </label></td>
-					<td class="formField" style="border-top:1px solid #5C5C5C"  colspan="3"><logic:iterate id="nvb"
+					<td class="formField" style="border-top:1px solid #5C5C5C"  colspan="5"><logic:iterate id="nvb"
 						name="<%=Constants.DISTRIBUTION_BASED_ON%>" >
 						<%NameValueBean distributionBasedOn = (NameValueBean) nvb;%>
-						<html:radio property="distributionBasedOn"
+						<html:radio property="distributionBasedOn" disabled="<%=flag%>"
 							value="<%=distributionBasedOn.getValue()%>">
 							<%=distributionBasedOn.getName()%> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						</html:radio>
+						<%
+							flag=false;
+						%>
 					</logic:iterate></td>
 				</tr>
 
 				<!--  Distributed Item begin here -->
 				<tr>
-					<td class="formTitle" height="20" colspan="3"><bean:message
-						key="distribution.distributedItem" /></td>
+					<td class="formTitle" height="20" colspan="5">
+						<bean:message key="distribution.distributedItem"/>
+					</td>
 					<td class="formButtonField"><html:button property="addKeyValue"
 						styleClass="actionButton" onclick="if(checkDistributionBasedOn() ) { insRow('addMore');disableDistributeOptions()}">
 						<bean:message key="buttons.addMore" />
 					</html:button></td>
 					<td class="formButtonField" align="Right"><html:button
 						property="deleteValue" styleClass="actionButton"
-						onclick="rearrangeIdsForDistribution();deleteCheckedNoSubmit('addMore','Distribution.do?operation=<%=operation%>&pageOf=pageOfDistribution&status=true',document.forms[0].counter,'chk_',false);disableDistributeOptions()"
+						onclick="deleteCheckedNoSubmit('addMore','Distribution.do?operation=<%=operation%>&pageOf=pageOfDistribution&status=true',document.forms[0].counter,'chk_',false);disableDistributeOptions()"
 						disabled="true">
-						<bean:message key="buttons.delete" />
+						<bean:message key="buttons.delete"/>
 					</html:button></td>
-
 				</tr>
+
 				<tr>
 					<td class="formLeftSubTitle" width="5">#</td>
-
 					<td class="formLeftSubTitle"  >* <bean:message
 						key="distribution.distributionBasedOn.barcode" /></td>
 					<td class="formLeftSubTitle" >* <bean:message
 						key="distribution.distributionBasedOn.label" /></td>
-					<td class="formLeftSubTitle">* <bean:message
+					<td class="formLeftSubTitle" >* <bean:message
 						key="itemrecord.quantity" /></td>
 					<td class="formLeftSubTitle"><label for="delete" align="center"> <bean:message
 						key="addMore.delete" /> </label></td>
+					<td class="formLeftSubTitle" colspan="2">
+						<div style="float:right;">
+						  <html:link href="#" styleId="newUser" onclick="showAllSpecimen()">
+								<bean:message key="consent.viewall"/>
+						  </html:link>	
+						</div>
+						<div>
+						<label align="center">
+							<bean:message key="consent.consentforspecimen"/>
+						</label>
+						</div>
+					</td>
+					
 				</tr>
 
 				<tbody id="addMore">
@@ -543,8 +762,6 @@
 					if(formBean.getDistributionBasedOn().intValue() == Constants.LABEL_BASED_DISTRIBUTION) {
 						disableBarcode = true;
 					} 
-					
-					
 					for (int i = 1; i <= noOfRows; i++) {
 						String keyid = "";
 						String dIdentifier = "";
@@ -574,7 +791,12 @@
 					+ "_previousQuantity)";
 					String check = "chk_" + i;
 
+					//Change added for Consent Tracking
+					String barcodeStatus="barcodeStatus"+i;
+					String barcodelabelStatus="barcodelabel"+i;
+					String verificationStatusKey = "value(DistributedItem:" + i + "_verificationKey)";
 
+					//Change added for Consent Tracking
 					
 /*					String tissueSite = "value(DistributedItem:" + i
 							+ "_tissueSite)";
@@ -589,6 +811,7 @@
 					String type = "value(DistributedItem:" + i
 							+ "_Specimen_type)";
 					String key = "DistributedItem:" + i + "_Specimen_className";
+					
 					//String unitKey = "DistributedItem:" + i + "_unit";
 					//String unitProperty = "value(DistributedItem:"+i+"_unit)";
 					//String fName = "onSpecimenTypeChange(this,'" + unitSpan + "','" + itemName + "','" + unitProperty + "')";
@@ -599,10 +822,9 @@
 					key = "DistributedItem:" + i + "_Specimen_type";
 					String typeValue = (String) formBean.getValue(key);
 					String strUnitValue = changeUnit(classValue, typeValue);
-*/					
-
-					%>
-					<tr>
+*/					%>
+				
+				<tr>
 					     <td class="formSerialNumberField" width="5%"><html:hidden  property="<%=dIdentifier%>" /><%=i%></td>
 							<td class="formField" ><html:text styleClass="formField"
 							styleId="<%=barcodeKey%>" property="<%=barcodeKey%>" disabled="<%=disableBarcode%>"
@@ -619,19 +841,92 @@
 						<%
 					boolean bool = Utility.isPersistedValue(map, keyid);
 					String condition = "";
+					String labelbarcodeKey="";
+					String distributionBasedOn="1";
 					if (bool)
 						condition = "disabled='disabled'";
-
+					if(formBean.getDistributionBasedOn().intValue() == Constants.BARCODE_BASED_DISTRIBUTION)
+					{
+						labelbarcodeKey=barcodeKey;
+						distributionBasedOn=Constants.BARCODE_DISTRIBUTION;//"1"
+					} 
+					else
+					{
+						labelbarcodeKey=labelKey;
+						distributionBasedOn=Constants.LABLE_DISTRIBUTION;//"2"
+					}
 					%>
 						<td class="formField" width="5"><input type=checkbox
 							name="<%=check %>" id="<%=check %>" <%=condition%>
 							onClick="document.forms[0].deleteValue.disabled = false;">
 						</td>
+						<!-- Change Added for Consent Tracking -->
+						<%
+							if(formBean.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE)
+							{
+								String verificationStatus=(String)formBean.getValue("DistributedItem:" + i + "_verificationKey");
+								if(verificationStatus==null||verificationStatus.equals(Constants.VIEW_CONSENTS)||verificationStatus.equals(Constants.VERIFIED))
+								{
+						%>
+								<td class="formField" colspan="2">
+									<span id="<%=barcodelabelStatus%>">													
+										<a id="<%=barcodeStatus%>" href="javascript:getbarCode('<%=labelbarcodeKey%>','<%=barcodeStatus%>','<%=verificationStatusKey%>','<%=distributionBasedOn%>','false','<%=barcodelabelStatus%>')">
+										<logic:notEmpty name="distributionForm" property="<%=verificationStatusKey%>">
+											<bean:write name="distributionForm" property="<%=verificationStatusKey%>"/>
+										</logic:notEmpty>
+										<logic:empty name="distributionForm" property="<%=verificationStatusKey%>">
+											<%=Constants.VIEW_CONSENTS %>
+										</logic:empty>
+										</a>
+										<logic:notEmpty name="distributionForm" property="<%=verificationStatusKey%>">
+											<html:hidden property="<%=verificationStatusKey%>" styleId="<%=verificationStatusKey%>"  value="<%=verificationStatus%>"/>
+										</logic:notEmpty>
+										<logic:empty name="distributionForm" property="<%=verificationStatusKey%>">
+											<html:hidden property="<%=verificationStatusKey%>" styleId="<%=verificationStatusKey%>"  value="<%=Constants.VIEW_CONSENTS %>"/>
+										</logic:empty>
+									</span>
+								</td>
+							<%
+								}
+								else
+								{
+							%>
+								<td class="formField" colspan="2">
+								<html:hidden property="<%=verificationStatusKey%>" styleId="<%=verificationStatusKey%>"  value="<%=verificationStatus%>"/>
+									<span id="<%=barcodelabelStatus%>">													
+										<lable>	
+											<%=verificationStatus%>
+										</lable>
+									</span>
+								</td>	
+						<%
+								}
+							}
+							else
+							{
+						%>
+							<td class="formField" colspan="2">
+								<span id="<%=barcodelabelStatus%>">													
+										<lable>	
+											<%=Constants.NOT_APPLICABLE%>
+										</lable>
+								</span>
+							</td>	
+						<%
+							}
+						%>
 
+						<!-- Change Added for Consent Tracking -->
 					</tr>
-					<%}
-
-				%>
+					<script language="JavaScript">
+							barcodeLableObject=document.getElementById("<%=labelKey%>");
+							validateBarcodeLable="<%=Constants.VALID%>";
+							noOfRows=1;
+					</script>
+					
+					<%
+					}
+					%>
 				</tbody>
 				<!-- Distributed item End here -->
 				<!-- buttons -->

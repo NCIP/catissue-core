@@ -28,7 +28,24 @@
               --> 
             </generator>
         </id>
+		
+         <set
+            name="consentTierStatusCollection"
+            table="CATISSUE_CONSENT_TIER_STATUS"
+            lazy="true"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
 
+              <key
+                  column="SPECIMEN_COLL_GROUP_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.ConsentTierStatus"
+              />
+        </set>
         <set
             name="specimenEventParametersCollection"
             table="CATISSUE_SPECIMEN_EVENT_PARAM"
@@ -159,3 +176,4 @@
     </class>
 
 </hibernate-mapping>
+

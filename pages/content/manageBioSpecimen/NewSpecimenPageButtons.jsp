@@ -1,6 +1,6 @@
 
 <!-- action buttons begins -->
-<table cellpadding="4" cellspacing="0" border="0">
+<table cellpadding="4" cellspacing="0" border="0" id="specimenPageButton">
 	<logic:equal name="<%=Constants.SUBMITTED_FOR%>" value="AddNew">
 		<% isAddNew=true;%>
 	</logic:equal>
@@ -9,12 +9,37 @@
 	<tr>
 
 		<td nowrap class="formFieldNoBorders">
+		  <%
+			if(operation.equals(Constants.ADD))
+			{
+	   	 %>
 			<html:button
 				styleClass="actionButton" property="submitButton"
 				title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
 				value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>"
 				onclick="onNormalSubmit()">
 			</html:button>
+		 <%	
+			}
+		    else
+			{
+				ConsentTierData consentForm =(ConsentTierData)form;
+				List consentTier=(List)consentForm.getConsentTiers();
+				String str = "onNormalSubmit()";
+				if(consentTier.size()>0)
+				{
+					str = "popupWindow('"+ consentTier.size() +"')";
+				}
+		 %>	
+				<html:button
+					styleClass="actionButton" property="submitButton"
+					title="<%=Constants.SPECIMEN_BUTTON_TIPS[0]%>"
+					value="<%=Constants.SPECIMEN_FORWARD_TO_LIST[0][0]%>"
+					onclick="<%=str%>">
+				</html:button>
+		 <%
+			}
+		 %>     			
 		</td>
 		
 		<logic:notEqual name="<%=Constants.PAGEOF%>"

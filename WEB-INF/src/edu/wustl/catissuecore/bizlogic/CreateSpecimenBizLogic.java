@@ -24,6 +24,7 @@ import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -163,6 +164,9 @@ public class CreateSpecimenBizLogic extends DefaultBizLogic
 			// check for closed ParentSpecimen
 			checkStatus(dao, parentSpecimen, "Parent Specimen");
 
+			//Mandar:-18-Jan-07 Get parent consent status : start
+			WithdrawConsentUtil.setConsentsFromParent(specimen, parentSpecimen, dao);
+			//Mandar:-18-Jan-07 Get parent consent status : end
 			specimen.setParentSpecimen(parentSpecimen);
 			specimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 			specimen.setSpecimenCollectionGroup(parentSpecimen.getSpecimenCollectionGroup());

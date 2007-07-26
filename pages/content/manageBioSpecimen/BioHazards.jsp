@@ -119,7 +119,7 @@
 	</script>
 </head>
 
-<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%">
+<table summary="" cellpadding="0" cellspacing="0" border="0" width="100%" id="bioHazardsTable">
 				 <tr>
 				 <!--	/**
 						* Name : Vijay_Pande

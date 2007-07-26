@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.action;
 
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -81,7 +82,10 @@ public class CheckConsents extends BaseAction
 	        }
 		    //Getting SpecimenCollectionGroup object
 	        Specimen specimen = getConsentListForSpecimen(barcodeLable, barcodeLabelBasedDistribution);
-	        CollectionProtocol collectionProtocol=specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol();
+	        String colName = "specimenCollectionGroup.collectionProtocolRegistration.collectionProtocol";
+	        //Resolved lazy --- specimen.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getCollectionProtocol();
+	        CollectionProtocol collectionProtocol=(CollectionProtocol)bizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),colName);
+            Collection consentTierStatusCollection =(Collection)bizLogic.retrieveAttribute(Specimen.class.getName(), specimen.getId(),"elements(consentTierStatusCollection)");
 	        if(specimen.getActivityStatus().equalsIgnoreCase(Constants.DISABLED))//disabled
 	        {
 	        	out.print(Constants.DISABLED);//disabled
@@ -90,7 +94,7 @@ public class CheckConsents extends BaseAction
 	        {
 	        	out.print(Constants.CONSENT_WAIVED);//Consent Waived
 	        }
-	        else if(specimen.getConsentTierStatusCollection()==null||specimen.getConsentTierStatusCollection().isEmpty())
+	        else if(consentTierStatusCollection.isEmpty())
 	        {
 	        	//Writing to response
 	    		out.print(Constants.NO_CONSENTS);//No Consents

@@ -1,4 +1,4 @@
-/**
+			/**
  * <p>Title: NewSpecimenHDAO Class>
  * <p>Description:	AliquotBizLogic is used to add new aliquots into the database using Hibernate.</p>
  * Copyright:    Copyright (c) year
@@ -33,22 +33,20 @@ import edu.wustl.catissuecore.domain.StorageContainer;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.NameValueBean;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.dao.DAOFactory;
-import edu.wustl.common.exception.BizLogicException;
 import edu.wustl.common.security.SecurityManager;
 import edu.wustl.common.security.exceptions.SMException;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.dbManager.HibernateMetaData;
 import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 public class AliquotBizLogic extends NewSpecimenBizLogic
@@ -200,9 +198,13 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			{
 				//check for closed ParentSpecimen
 				checkStatus(dao, parentSpecimen, "Parent Specimen");
+//				Mandar:-18-Jan-07 Get parent consent status : start
+				WithdrawConsentUtil.setConsentsFromParent(aliquotSpecimen, parentSpecimen, dao);
+//				Mandar:-18-Jan-07 Get parent consent status : end
 				aliquotSpecimen.setParentSpecimen(parentSpecimen);
 				aliquotSpecimen.setSpecimenCharacteristics(parentSpecimen.getSpecimenCharacteristics());
 				aliquotSpecimen.setType(parentSpecimen.getType());
+				
 				aliquotSpecimen.setPathologicalStatus(parentSpecimen.getPathologicalStatus());
 
 				if (aliquotSpecimen instanceof MolecularSpecimen)
@@ -308,7 +310,8 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 			Collection externalIdentifierCollectionOfAliquot = new HashSet();
 			Collection externalIdentifierCollection = parentSpecimen.getExternalIdentifierCollection();
 			Iterator itr = externalIdentifierCollection.iterator();
-			while(itr.hasNext()) {
+			while(itr.hasNext()) 
+			{
 				ExternalIdentifier exId = new ExternalIdentifier();
 				ExternalIdentifier tempExId = (ExternalIdentifier) itr.next();
 				exId.setName(tempExId.getName());
@@ -317,8 +320,8 @@ public class AliquotBizLogic extends NewSpecimenBizLogic
 				externalIdentifierCollectionOfAliquot.add(exId);
 			}
 			aliquotSpecimen.setExternalIdentifierCollection(externalIdentifierCollectionOfAliquot);
-			
-//			Setting the Biohazard Collection
+
+			//Setting the Biohazard Collection
 			Set set = new HashSet();
 			Collection biohazardCollection = parentSpecimen.getBiohazardCollection();
 			if (biohazardCollection != null)

@@ -391,14 +391,20 @@ public class CaCoreAppServicesDelegator
 	/**
      * Removes the identified data from CollectionProtocolRegistration object.
      * @param object The CollectionProtocolRegistration object.
+	 * @throws DAOException 
      */
-	private void removeCollectionProtocolRegistrationIdentifiedData(Object object)
+	private void removeCollectionProtocolRegistrationIdentifiedData(Object object) throws DAOException
 	{
-	    CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) object;
+	    IBizLogic bizlogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration) object;
 	    collectionProtocolRegistration.setRegistrationDate(null);
-	    if (collectionProtocolRegistration.getParticipant() != null)
+	    collectionProtocolRegistration.setSignedConsentDocumentURL(null);
+	    collectionProtocolRegistration.setConsentSignatureDate(null);
+	    collectionProtocolRegistration.setConsentWitness(null);
+	    Participant participant = (Participant)bizlogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(),collectionProtocolRegistration.getId(),"participant");
+	    if (participant != null)
 	    {	
-	    	removeParticipantIdentifiedData(collectionProtocolRegistration.getParticipant());
+	    	removeParticipantIdentifiedData(participant);
 	    }	
 	}
 	
@@ -406,8 +412,9 @@ public class CaCoreAppServicesDelegator
 	 * Sets value of the identified data fields as null in the passed domain object. 
 	 * Checks the type of the object and calls the respective method which filters the identified data.
 	 * @param object The domain object whose identified data is to be removed.
+	 * @throws DAOException 
 	 */
-	private void removeIdentifiedDataFromObject(Object object)
+	private void removeIdentifiedDataFromObject(Object object) throws DAOException
 	{
 	    Class classObject = object.getClass();
 	    Logger.out.debug("Identified Class>>>>>>>>>>>>>>>>>>>>>>"+classObject.getName());

@@ -1,5 +1,5 @@
 <!-- action buttons begins -->
-							<table cellpadding="4" cellspacing="0" border="0">
+							<table cellpadding="4" cellspacing="0" border="0" id="scgPageButtons">
 								<tr>
 								
 									<td>
@@ -23,6 +23,10 @@
 											<tr><td>&nbsp;</td></tr>
 											<tr>
 												<td nowrap class="formFieldNoBorders">
+												<%
+												if(operation.equals(Constants.ADD))
+												{
+												%>
 													<html:button styleClass="actionButton" 
 															property="submitPage" 
 															title="Submit Only"
@@ -30,6 +34,28 @@
 															onclick="<%=normalSubmit%>"
 						  				     	    		styleId = "submitOnly">
 											     	</html:button>
+												<%	
+												}
+												else
+												{
+													ConsentTierData consentForm =(ConsentTierData)form;
+													List consentTier=(List)consentForm.getConsentTiers();
+													String str=normalSubmit;
+													if(consentTier.size()>0)
+													{
+														str = "popupWindow('"+ consentTier.size() +"')";
+													}
+												%>
+													<html:button styleClass="actionButton" 
+															property="submitPage" 
+															title="Submit Only"
+															value="<%=Constants.SPECIMEN_COLLECTION_GROUP_FORWARD_TO_LIST[0][0]%>" 
+															onclick="<%=str%>"
+															styleId = "submitOnly">
+											     	</html:button>
+												<%	
+												}
+												%>
 												</td>
 											
 												<logic:notEqual name="<%=Constants.PAGEOF%>" value="<%=Constants.QUERY%>">

@@ -183,7 +183,14 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 	
 	public String toString()
 	{
+		if(specimen != null)
+		{
 		return id+" "+quantity+" "+specimen.getId();		
+	}
+		else
+		{
+			return id+" "+quantity+" "+specimenArray.getId();
+		}
 	}
 	
 	/**
@@ -199,4 +206,20 @@ public class DistributedItem extends AbstractDomainObject implements java.io.Ser
 		this.previousQuantity = previousQuantity;
 	}
 	
+	//Consent Tracking (Virender Mehta)
+	/**
+	 * @return Returns the verificationKey Status view/complete
+	 */
+	public String getVerificationKey()
+	{
+		return verificationKey;
+	}
+	/**
+	 * @param verificationKey Returns the verificationKey Status view/complete
+	 */
+	public void setVerificationKey(String verificationKey)
+	{
+		this.verificationKey = verificationKey;
+	}
+	//Consent Tracking (Virender Mehta)
 }

@@ -11,6 +11,9 @@
 package edu.wustl.catissuecore.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +26,16 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.CollectionProtocolForm;
+import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
+import edu.wustl.catissuecore.domain.CollectionProtocol;
+import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.MapDataParser;
+import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -35,6 +44,8 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class CollectionProtocolAction extends SpecimenProtocolAction 
 {
+	//This will keep track of no of consents for a particular participant
+	int consentCounter=0;	
     /**
      * Overrides the execute method of Action class.
      * Sets the various fields in CollectionProtocol Add/Edit webpage.
@@ -53,7 +64,7 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
     	
     	//pageOf required for Advance Search Object View.
     	String pageOf = (String)request.getParameter(Constants.PAGEOF);
-    	
+    	IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
         //Gets the value of the operation attribute.
     	String operation = (String)request.getParameter(Constants.OPERATION);
         Logger.out.debug("operation in coll prot action"+operation);
@@ -62,8 +73,17 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 
     	
     	CollectionProtocolForm collectionProtocolForm = (CollectionProtocolForm)form; 
-    	
-    	
+    	String cp_id = String.valueOf(collectionProtocolForm.getId());
+    	if(!cp_id.equalsIgnoreCase("0"))
+    	{
+			CollectionProtocol collectionProtocol = getCPObj(cp_id);
+			//Resolved lazy --- collectionProtocol.getConsentTierCollection();
+			Collection consentTierCollection=(Collection)bizLogic.retrieveAttribute(CollectionProtocol.class.getName(), collectionProtocol.getId(), "elements(consentTierCollection)");
+			Map tempMap= prepareConsentMap(consentTierCollection);
+	    	collectionProtocolForm.setConsentValues(tempMap);
+	    	collectionProtocolForm.setConsentTierCounter(consentCounter);
+	    	
+    	}
     	if(collectionProtocolForm.getStartDate() == null)
     	{
     		collectionProtocolForm.setStartDate(Utility.parseDateToString(Calendar.getInstance().getTime(), Constants.DATE_PATTERN_MM_DD_YYYY));
@@ -138,5 +158,44 @@ public class CollectionProtocolAction extends SpecimenProtocolAction
 //		}
 //		// -- 24-Jan-06 end
         return mapping.findForward(pageOf);
+    }
+    /**
+	 * This function will return CollectionProtocolRegistration object 
+	 * @param cp_id Selected SpecimenCollectionGroup ID
+	 * @return collectionProtocolObject
+	 */
+	private CollectionProtocol getCPObj(String cp_id) throws DAOException
+	{
+		CollectionProtocolBizLogic collectionProtocolBizLogic = (CollectionProtocolBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_FORM_ID);
+		String colName = "id";			
+		List getCPFromDB = collectionProtocolBizLogic.retrieve(CollectionProtocol.class.getName(), colName, cp_id);		
+		CollectionProtocol collectionProtocolObject = (CollectionProtocol)getCPFromDB.get(0);
+		return collectionProtocolObject;
+	}
+
+	private Map prepareConsentMap(Collection consentTierColl)
+	{
+		Map tempMap = new HashMap();
+		if(consentTierColl!=null)
+		{
+			Iterator consentTierCollIter = consentTierColl.iterator();			
+			int i = 0;
+			while(consentTierCollIter.hasNext())
+			{
+				ConsentTier consent = (ConsentTier)consentTierCollIter.next();
+				String statement = "ConsentBean:"+i+"_statement";
+				String statementkey = "ConsentBean:"+i+"_consentTierID";
+				tempMap.put(statement, consent.getStatement());
+				tempMap.put(statementkey, consent.getId());
+				i++;
+			}
+			consentCounter=i;
+			return tempMap;
+		}
+		else
+		{
+			return null;
+		}
+		
     }
 }

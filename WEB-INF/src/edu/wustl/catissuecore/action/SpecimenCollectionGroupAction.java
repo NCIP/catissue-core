@@ -13,32 +13,42 @@ package edu.wustl.catissuecore.action;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.struts.Globals;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
+import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.StorageContainer;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
@@ -73,6 +83,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			HttpServletRequest request, HttpServletResponse response) throws Exception
 	{
 		SpecimenCollectionGroupForm  specimenCollectionGroupForm = (SpecimenCollectionGroupForm)form;
+		IBizLogic bizLogicObj = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
 		Logger.out.debug("SCGA : " + specimenCollectionGroupForm.getId());
 		String nodeId = null;
 		/**
@@ -110,9 +121,120 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			{
 				isOnChange = true;
 			}
+		}	
+		//For Consent Tracking (Virender Mehta)   -  Start
+		
+		//If radioButtonSelected = 1 then selected radio button is for Participant
+		//If radioButtonSelected = 2 then selected radio button is for Protocol Participant Identifier
+		int radioButtonSelected = 1;
+		//Id of Selected Participant or Protocol Participant Identifier
+		String selectedParticipantOrPPIdentifier_id=null;
+		// Radio button for Protocol Participant Identifier or Participant
+		String radioButtonSelectedForType=null;
+		String selectedCollectionProtocol_id=String.valueOf(specimenCollectionGroupForm.getCollectionProtocolId());
+		if(selectedCollectionProtocol_id.equalsIgnoreCase("0"))
+		{
+				Map forwardToHashMap = (Map)request.getAttribute("forwardToHashMap");
+				if(forwardToHashMap!=null)
+				{
+					selectedCollectionProtocol_id=forwardToHashMap.get("collectionProtocolId").toString();
+					selectedParticipantOrPPIdentifier_id=forwardToHashMap.get("participantId").toString();
+					radioButtonSelectedForType="participantId";
+					if(selectedParticipantOrPPIdentifier_id.equals("0"))
+					{
+						selectedParticipantOrPPIdentifier_id=forwardToHashMap.get("participantProtocolId").toString();
+						radioButtonSelectedForType="protocolParticipantIdentifier";
+					}
+				}
 		}
+		else
+		{
+			radioButtonSelected=(int)specimenCollectionGroupForm.getRadioButtonForParticipant();
+			if(radioButtonSelected==1)
+			{
+				selectedParticipantOrPPIdentifier_id=Long.toString(specimenCollectionGroupForm.getParticipantId());
+				radioButtonSelectedForType="participantId";
+			}
+			else
+			{
+				selectedParticipantOrPPIdentifier_id=specimenCollectionGroupForm.getProtocolParticipantIdentifier();
+				radioButtonSelectedForType="protocolParticipantIdentifier";
+			}
+		}
+		//Get CollectionprotocolRegistration Object
+		CollectionProtocolRegistration collectionProtocolRegistration=getcollectionProtocolRegistrationObj(selectedParticipantOrPPIdentifier_id,selectedCollectionProtocol_id,radioButtonSelectedForType);
+		User witness = null;
+		if(collectionProtocolRegistration.getId()!= null)
+		{
+			witness = (User)bizLogicObj.retrieveAttribute(CollectionProtocolRegistration.class.getName(),collectionProtocolRegistration.getId(), "consentWitness");
+		}
+		//User witness= userObj.getConsentWitness();
+		//Resolved Lazy 
+		if(witness==null||witness.getFirstName()==null)
+		{
+			String witnessName="";
+			specimenCollectionGroupForm.setWitnessName(witnessName);
+		}
+		else
+		{
+			String witnessFullName = witness.getLastName()+", "+witness.getFirstName();
+			specimenCollectionGroupForm.setWitnessName(witnessFullName);
+		}
+		String getConsentDate=Utility.parseDateToString(collectionProtocolRegistration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
+		specimenCollectionGroupForm.setConsentDate(getConsentDate);
+		String getSignedConsentURL=Utility.toString(collectionProtocolRegistration.getSignedConsentDocumentURL());
+		specimenCollectionGroupForm.setSignedConsentUrl(getSignedConsentURL);
+		//Set witnessName,ConsentDate and SignedConsentURL			
+		//Resolved Lazy ----collectionProtocolRegistration.getConsentTierResponseCollection()
+		Collection consentTierResponseCollection = (Collection)bizLogicObj.retrieveAttribute(CollectionProtocolRegistration.class.getName(),collectionProtocolRegistration.getId(), "elements(consentTierResponseCollection)");
+		Set participantResponseSet = (Set)consentTierResponseCollection;
+		List participantResponseList= new ArrayList(participantResponseSet);
+		if(operation.equalsIgnoreCase(Constants.ADD))
+		{
+			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+			if(errors == null)
+			{ 
+				String protocolEventID = request.getParameter("protocolEventId");
+				if(protocolEventID==null||protocolEventID.equalsIgnoreCase(Constants.FALSE))
+				{
+					Map tempMap=prepareConsentMap(participantResponseList);
+					specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
+				}
+			}
+			specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size());
+		}
+		else
+		{
+			String scgID = String.valueOf(specimenCollectionGroupForm.getId());
+			SpecimenCollectionGroup specimenCollectionGroup = getSCGObj(scgID);
+			//List added for grid
+			List specimenDetails= new ArrayList();
+			getSpecimenDetails(specimenCollectionGroup,specimenDetails);
+			List columnList=columnNames();
+			//Resolved Lazy
+			//Collection consentResponse = specimenCollectionGroup.getCollectionProtocolRegistration().getConsentTierResponseCollection();
+			//Collection consentResponseStatuslevel= specimenCollectionGroup.getConsentTierStatusCollection();
+			Collection consentResponse = (Collection)bizLogicObj.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroup.getId(), "elements(collectionProtocolRegistration.consentTierResponseCollection)");
+			Collection consentResponseStatuslevel = (Collection)bizLogicObj.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroup.getId(), "elements(consentTierStatusCollection)");
+			Map tempMap=prepareSCGResponseMap(consentResponseStatuslevel, consentResponse);
+			specimenCollectionGroupForm.setConsentResponseForScgValues(tempMap);
+			specimenCollectionGroupForm.setConsentTierCounter(participantResponseList.size());
+			HttpSession session =request.getSession();
+			session.setAttribute(Constants.SPECIMEN_LIST,specimenDetails);
+			session.setAttribute(Constants.COLUMNLIST,columnList);
+		}
+		List specimenCollectionGroupResponseList =Utility.responceList(operation);
+		request.setAttribute("specimenCollectionGroupResponseList", specimenCollectionGroupResponseList);
+		
+		String tabSelected = request.getParameter(Constants.SELECTED_TAB);
+		if(tabSelected!=null)
+		{
+			request.setAttribute(Constants.TAB_SELECTED,tabSelected);
+		}
+	
+		//	For Consent Tracking (Virender Mehta)	    -  End
 
-		// get list of Protocol title.
+	    // get list of Protocol title.
 		SpecimenCollectionGroupBizLogic bizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
 		//populating protocolist bean.
 		String sourceObjectName = CollectionProtocol.class.getName();
@@ -946,4 +1068,208 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		//This value is used in validate method of SpecimenCollectionGroupForm.java.
 		request.setAttribute(Constants.NUMBER_OF_SPECIMEN_REQUIREMENTS, numberOfSpecimen + "");
 	}
+
+	//Consent Tracking Virender Mehta	
+	/**
+	 * @param idOfSelectedRadioButton Id for selected radio button.
+	 * @param cp_id CollectionProtocolID CollectionProtocolID selected by dropdown 
+	 * @param indexType i.e Which Radio button is selected participantId or protocolParticipantIdentifier 
+	 * @return collectionProtocolRegistration CollectionProtocolRegistration object
+	 */
+	private CollectionProtocolRegistration getcollectionProtocolRegistrationObj(String idOfSelectedRadioButton,String cp_id,String indexType) throws DAOException
+	{
+		
+		CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
+		String[] colName= new String[2];
+		if(indexType.equalsIgnoreCase("participantId"))
+		{
+			colName[0] = "participant.id";
+			colName[1] = "collectionProtocol.id";	
+		}	
+		else
+		{
+			colName[0] = "protocolParticipantIdentifier";
+			colName[1] = "collectionProtocol.id";	
+		}
+		
+		String[] colCondition = {"=","="};
+		String[] val = new String[2];
+		val[0]= idOfSelectedRadioButton;
+		val[1]= cp_id;
+		List collProtRegObj=collectionProtocolRegistrationBizLogic.retrieve(CollectionProtocolRegistration.class.getName(), colName, colCondition,val,null); 
+		CollectionProtocolRegistration collectionProtocolRegistration = (CollectionProtocolRegistration)collProtRegObj.get(0);
+		return collectionProtocolRegistration;
+	}
+	
+	/**
+	* For ConsentTracking Preparing consentResponseForScgValues for populating Dynamic contents on the UI  
+	* @param partiResponseCollection This Containes the collection of ConsentTier Response at CPR level
+	* @param statusResponseCollection This Containes the collection of ConsentTier Response at Specimen level 
+	* @return tempMap
+	*/
+    private Map prepareSCGResponseMap(Collection statusResponseCollection, Collection partiResponseCollection)
+	   {
+	    	Map tempMap = new HashMap();
+	    	Long consentTierID;
+			Long consentID;
+			if(partiResponseCollection!=null ||statusResponseCollection!=null)
+			{
+				int i = 0;
+				Iterator statusResponsIter = statusResponseCollection.iterator();			
+				while(statusResponsIter.hasNext())
+				{
+					ConsentTierStatus consentTierstatus=(ConsentTierStatus)statusResponsIter.next();
+					consentTierID=consentTierstatus.getConsentTier().getId();				
+					Iterator participantResponseIter = partiResponseCollection.iterator();
+					
+					while(participantResponseIter.hasNext())
+					{
+						ConsentTierResponse consentTierResponse=(ConsentTierResponse)participantResponseIter.next();
+						consentID=consentTierResponse.getConsentTier().getId();
+						if(consentTierID.longValue()==consentID.longValue())						
+						{
+							ConsentTier consent = consentTierResponse.getConsentTier();
+							String idKey="ConsentBean:"+i+"_consentTierID";
+							String statementKey="ConsentBean:"+i+"_statement";
+							String participantResponsekey = "ConsentBean:"+i+"_participantResponse";
+							String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
+							String scgResponsekey  = "ConsentBean:"+i+"_specimenCollectionGroupLevelResponse";
+							String scgResponseIDkey ="ConsentBean:"+i+"_specimenCollectionGroupLevelResponseID";
+							
+							tempMap.put(idKey, consent.getId());
+							tempMap.put(statementKey,consent.getStatement());
+							tempMap.put(participantResponsekey, consentTierResponse.getResponse());
+							tempMap.put(participantResponceIdKey, consentTierResponse.getId());
+							tempMap.put(scgResponsekey, consentTierstatus.getStatus());
+							tempMap.put(scgResponseIDkey, consentTierstatus.getId());
+							i++;
+							break;
+						}
+					}
+				}
+				return tempMap;
+			}		
+			else
+			{
+				return null;
+			}
+	   }
+	
+	/**
+	 * Prepare Map for Consent tiers
+	 * @param participantResponseList This list will be iterated to map to populate participant Response status.
+	 * @return tempMap
+	 */
+	private Map prepareConsentMap(List participantResponseList)
+	{
+		Map tempMap = new HashMap();
+		if(participantResponseList!=null)
+		{
+			int i = 0;
+			Iterator consentResponseCollectionIter = participantResponseList.iterator();
+			while(consentResponseCollectionIter.hasNext())
+			{
+				ConsentTierResponse consentTierResponse = (ConsentTierResponse)consentResponseCollectionIter.next();
+				ConsentTier consent = consentTierResponse.getConsentTier();
+				String idKey="ConsentBean:"+i+"_consentTierID";
+				String statementKey="ConsentBean:"+i+"_statement";
+				String responseKey="ConsentBean:"+i+"_participantResponse";
+				String participantResponceIdKey="ConsentBean:"+i+"_participantResponseID";
+				String scgResponsekey  = "ConsentBean:"+i+"_specimenCollectionGroupLevelResponse";
+				String scgResponseIDkey ="ConsentBean:"+i+"_specimenCollectionGroupLevelResponseID";
+				
+				tempMap.put(idKey, consent.getId());
+				tempMap.put(statementKey,consent.getStatement());
+				tempMap.put(responseKey,consentTierResponse.getResponse());
+				tempMap.put(participantResponceIdKey, consentTierResponse.getId());
+				tempMap.put(scgResponsekey, consentTierResponse.getResponse());
+				tempMap.put(scgResponseIDkey,null);
+				i++;
+			}
+		}
+		return tempMap;
+	}	
+
+	/**
+	 * This function will return CollectionProtocolRegistration object 
+	 * @param scg_id Selected SpecimenCollectionGroup ID
+	 * @return collectionProtocolRegistration
+	 */
+	private SpecimenCollectionGroup getSCGObj(String scg_id) throws DAOException
+	{
+		SpecimenCollectionGroupBizLogic specimenCollectionBizLogic = (SpecimenCollectionGroupBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.SPECIMEN_COLLECTION_GROUP_FORM_ID);
+		String colName = "id";			
+		List getSCGIdFromDB = specimenCollectionBizLogic.retrieve(SpecimenCollectionGroup.class.getName(), colName, scg_id);		
+		SpecimenCollectionGroup specimenCollectionGroupObject = (SpecimenCollectionGroup)getSCGIdFromDB.get(0);
+		return specimenCollectionGroupObject;
+	}
+	//Consent Tracking Virender Mehta
+	
+	/**
+	 * This function is used for retriving specimen from Specimen collection group Object
+	 * @param specimenObj
+	 * @param finalDataList
+	 * @throws DAOException 
+	 */
+	private void getSpecimenDetails(SpecimenCollectionGroup specimenCollectionGroupObj, List finalDataList) throws DAOException
+	{
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		Collection specimen = null;
+		if(specimenCollectionGroupObj.getId()!= null)
+		{
+			specimen = (Collection)bizLogic.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroupObj.getId(), "elements(specimenCollection)");
+		}
+		//Collection specimen = specimenCollectionGroupObj.getSpecimenCollection();
+		Iterator specimenIterator = specimen.iterator();
+		while(specimenIterator.hasNext())
+		{
+			Specimen specimenObj =(Specimen)specimenIterator.next(); 
+			getDetailsOfSpecimen(specimenObj, finalDataList);
+		}		
+	}
+	/**
+	 * This function is used for retriving specimen and sub specimen's attributes.
+	 * @param specimenObj
+	 * @param finalDataList
+	 * @throws DAOException 
+	 */
+	private void getDetailsOfSpecimen(Specimen specimenObj, List finalDataList) throws DAOException
+	{
+		IBizLogic bizLogic = BizLogicFactory.getInstance().getBizLogic(Constants.DEFAULT_BIZ_LOGIC);
+		List specimenDetailList=new ArrayList();
+		
+		if(specimenObj.getActivityStatus().equals(Constants.ACTIVITY_STATUS_ACTIVE))
+		{
+			specimenDetailList.add(specimenObj.getLabel());
+			specimenDetailList.add(specimenObj.getType());
+			if(specimenObj.getStorageContainer()==null)
+			{
+				specimenDetailList.add(Constants.VIRTUALLY_LOCATED);
+			}
+			else
+			{
+				StorageContainer storageContainer = (StorageContainer) bizLogic.retrieveAttribute(Specimen.class.getName(), specimenObj.getId(), "storageContainer");
+				//specimenObj.getStorageContainer().getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
+				String storageLocation=storageContainer.getName()+": X-Axis-"+specimenObj.getPositionDimensionOne()+", Y-Axis-"+specimenObj.getPositionDimensionTwo();
+				specimenDetailList.add(storageLocation);
+			}
+			specimenDetailList.add(specimenObj.getClassName());
+			finalDataList.add(specimenDetailList);
+		}
+		
+	}
+	/**
+	 * This function adds the columns to the List
+	 * @return columnList 
+	 */
+	public List columnNames()
+	{
+		List columnList = new ArrayList();
+		columnList.add(Constants.LABLE);
+		columnList.add(Constants.TYPE);
+		columnList.add(Constants.STORAGE_CONTAINER_LOCATION);
+		columnList.add(Constants.CLASS_NAME);
+		return columnList; 
+	}
 }
+

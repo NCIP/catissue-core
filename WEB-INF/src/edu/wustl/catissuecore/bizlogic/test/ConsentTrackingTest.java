@@ -13,7 +13,6 @@ import com.mockobjects.dynamic.Mock;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.NewSpecimenBizLogic;
-
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
@@ -22,10 +21,8 @@ import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTier;
 import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
-import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
 import edu.wustl.catissuecore.domain.MolecularSpecimen;
-
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Quantity;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
@@ -107,15 +104,15 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When null sessiondataBean is passes, it throws NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" Exception occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" Exception occured");
 		}
 	}		
 	/**
@@ -132,16 +129,15 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When null collection protocol object is passed, it throws NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-		
-			e.printStackTrace();
+			fail(" Exception occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" Exception occured");
 		}
 	}
 	/**
@@ -158,15 +154,15 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When wrong DAOType is passed, it should throw NullPointerException", true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" Exception occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" Exception occured");
 		}	
 	}
 	/**
@@ -176,24 +172,25 @@ public class ConsentTrackingTest extends BaseTestCase
 	{
 		CollectionProtocolBizLogic collectionProtocolBizLogic = new CollectionProtocolBizLogic();		
 		SessionDataBean sessionDataBean = new SessionDataBean();
+		//CollectionProtocol collectionProtocol = initCollectionProtocol(true);
 		initJunitForInsert();			
 		try
 		{
 			collectionProtocolBizLogic.insert(new CollectionProtocol(),sessionDataBean,edu.wustl.common.util.global.Constants.HIBERNATE_DAO);
-			assertTrue("CollectionProtocol inserted successfully",true);			
+			//assertTrue(" When empty Consent Tier object is passed, it should Sucessfully inserted",true);
+			fail(" When empty Consent Tier object is passed, it should throw NullPointerException");						
 		}
 		catch (NullPointerException e)
 		{
-			e.printStackTrace();			
+			assertTrue(" When empty Consent Tier object is passed, it should throw NullPointerException",true);
+			//fail("NullPointerException");
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
 			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
 			fail(" UserNotAuthorizedException occured");
 		}
 	}	
@@ -242,15 +239,15 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When null sessiondataBean is passed, it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" UserNotAuthorizedException occured");
 		}
 	}		
 	/**
@@ -267,16 +264,16 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When null collection protocol registration object is passed , it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
 		
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" UserNotAuthorizedException occured");
 		}
 	}
 	/**
@@ -290,20 +287,18 @@ public class ConsentTrackingTest extends BaseTestCase
 		try
 		{
 			collectionProtocolRegistrationBizLogic.insert(new CollectionProtocolRegistration(),sessionDataBean,edu.wustl.common.util.global.Constants.HIBERNATE_DAO);
-			assertTrue("CollectionProtocolRegistration inserted successfully",true);			
+			fail("When empty ConsentTierResponse is passed, it should throw NullPointerException ");			
 		}
 		catch (NullPointerException e)
 		{
-			e.printStackTrace();			
+			assertTrue("When empty ConsentTierResponse is passed, it should throw NullPointerException ",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
 			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
 			fail(" UserNotAuthorizedException occured");
 		}
 	}
@@ -321,15 +316,15 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When wrong DAOType is passed, it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" UserNotAuthorizedException occured");
 		}	
 	}
 	/**
@@ -377,15 +372,15 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When null sessiondataBean is passed, it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" UserNotAuthorizedException occured");
 		}
 	}		
 	/**
@@ -402,16 +397,16 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When null collection protocol registration object is passed , it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
 		
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" UserNotAuthorizedException occured");
 		}
 	}
 	/**
@@ -425,20 +420,18 @@ public class ConsentTrackingTest extends BaseTestCase
 		try
 		{
 			specimenCollectionGroupBizLogic.insert(new SpecimenCollectionGroup(),sessionDataBean,edu.wustl.common.util.global.Constants.HIBERNATE_DAO);
-			assertTrue("CollectionProtocolRegistration inserted successfully",true);			
+			fail("When empty ConsentTierStatus is passed, it should throw NullPointerException"); 			
 		}
 		catch (NullPointerException e)
 		{
-			e.printStackTrace();			
+			assertTrue("When empty ConsentTierStatus is passed, it should throw NullPointerException",true);	
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
 			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
 			fail(" UserNotAuthorizedException occured");
 		}
 	}
@@ -456,15 +449,15 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When wrong DAOType is passed, it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" UserNotAuthorizedException occured");
 		}	
 	}
 	/**
@@ -512,15 +505,15 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When null sessiondataBean is passed, it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" UserNotAuthorizedException occured");
 		}
 	}		
 	/**
@@ -537,16 +530,15 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When null collection protocol registration object is passed , it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-		
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" UserNotAuthorizedException occured");
 		}
 	}
 	/**
@@ -560,20 +552,18 @@ public class ConsentTrackingTest extends BaseTestCase
 		try
 		{
 			newSpecimenBizLogic.insert(new Specimen(),sessionDataBean,edu.wustl.common.util.global.Constants.HIBERNATE_DAO);
-			assertTrue("CollectionProtocolRegistration inserted successfully",true);			
+			fail("When empty  ConsentTierStatusForSpecimen is passed, it should throw NullPointerException");			
 		}
 		catch (NullPointerException e)
 		{
-			e.printStackTrace();			
+			assertTrue("When empty  ConsentTierStatusForSpecimen is passed, it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
 			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
 			fail(" UserNotAuthorizedException occured");
 		}
 	}
@@ -591,15 +581,15 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When wrong DAOType is passed, it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" UserNotAuthorizedException occured");
 		}	
 	}
 	/**
@@ -647,15 +637,15 @@ public class ConsentTrackingTest extends BaseTestCase
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When null sessiondataBean is passed, it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}		
 	}
 	/**
@@ -668,19 +658,19 @@ public class ConsentTrackingTest extends BaseTestCase
 		try
 		{
 			collectionProtocolBizLogic.update(new CollectionProtocol(),null,Constants.HIBERNATE_DAO,new SessionDataBean());
-			fail("When null sessiondataBean is passed, it should throw NullPointerException");
+			fail("When null Old domain object is passed, it should throw NullPointerException");
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When null Old domain object is passed, it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}		
 	}
 	/**
@@ -693,19 +683,19 @@ public class ConsentTrackingTest extends BaseTestCase
 		try
 		{
 			collectionProtocolBizLogic.update(null,new CollectionProtocol(),Constants.HIBERNATE_DAO,new SessionDataBean());
-			fail("When null sessiondataBean is passed, it should throw NullPointerException");
+			fail("When null current domain object is passed, it should throw NullPointerException");
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When null current domain object is passed, it should throw NullPointerException", true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}		
 	}
 	/**
@@ -718,19 +708,19 @@ public class ConsentTrackingTest extends BaseTestCase
 		try
 		{
 			collectionProtocolBizLogic.update(new CollectionProtocol(),new CollectionProtocol(),0,new SessionDataBean());
-			fail("When null sessiondataBean is passed, it should throw NullPointerException");
+			fail("When wrong dao type is passed, it should throw NullPointerException");
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When wrong dao type is passed, it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}		
 	}
 	/**
@@ -739,24 +729,24 @@ public class ConsentTrackingTest extends BaseTestCase
 	public void testEmptyCurrentDomainObjectInUpdate()
 	{
 		CollectionProtocolBizLogic collectionProtocolBizLogic = new CollectionProtocolBizLogic();
-		CollectionProtocol collectionProtocol = initCollectionProtocol();
+		CollectionProtocol collectionProtocol = initCollectionProtocol(false);
 		initJunitForInsertArguments();
 		try
 		{
 			collectionProtocolBizLogic.update(new CollectionProtocol(),collectionProtocol,Constants.HIBERNATE_DAO,new SessionDataBean());
-			fail("When null sessiondataBean is passed, it should throw NullPointerException");
+			fail("When empty CollectionProtocol object is passed, it should throw NullPointerException");
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When empty current domain object is passed, it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}		
 	}
 	/**
@@ -765,24 +755,24 @@ public class ConsentTrackingTest extends BaseTestCase
 	public void testEmptyOldDomainObjectInUpdate()
 	{
 		CollectionProtocolBizLogic collectionProtocolBizLogic = new CollectionProtocolBizLogic();
-		CollectionProtocol collectionProtocol = initCollectionProtocol();
+		CollectionProtocol collectionProtocol = initCollectionProtocol(false);
 		initJunitForInsertArguments();
 		try
 		{
 			collectionProtocolBizLogic.update(collectionProtocol,new CollectionProtocol(),Constants.HIBERNATE_DAO,new SessionDataBean());
-			fail("When null sessiondataBean is passed, it should throw NullPointerException");
+			fail("When Empty old collectionProtocol object is passed, it should throw NullPointerException");
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			assertTrue("When Empty collectionProtocol object is passed, it should throw NullPointerException",true);
 		}
 		catch (BizLogicException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}
 		catch (UserNotAuthorizedException e)
 		{
-			e.printStackTrace();
+			fail(" BizLogicException occured");
 		}		
 	}
 	/**
@@ -841,35 +831,50 @@ public class ConsentTrackingTest extends BaseTestCase
 //	}
 
 	/*-------------------------------------------------Common-------------------------------------------*/
+	public Collection initConsentTier(boolean empty)
+	{
+//		Setting consent tiers for this protocol.
+		Collection consentTierColl = new HashSet();
+		if(!empty)
+		{
+			ConsentTier c1 = new ConsentTier();
+			c1.setStatement("Consent for aids research");
+			consentTierColl.add(c1);
+			ConsentTier c2 = new ConsentTier();
+			c2.setStatement("Consent for cancer research");
+			consentTierColl.add(c2);		
+			ConsentTier c3 = new ConsentTier();
+			c3.setStatement("Consent for Tb research");
+			consentTierColl.add(c3);	
+		}
+		return consentTierColl;
+		
+	}
 	/**
 	 * @return
 	 */
-	public CollectionProtocol initCollectionProtocol()
+	public CollectionProtocol initCollectionProtocol(boolean empty)
 	{
 		CollectionProtocol collectionProtocol = new CollectionProtocol();
-		
-		//Setting consent tiers for this protocol.
-		Collection consentTierColl = new HashSet();		
-		ConsentTier c1 = new ConsentTier();
-		c1.setStatement("Consent for aids research");
-		consentTierColl.add(c1);
-		ConsentTier c2 = new ConsentTier();
-		c2.setStatement("Consent for cancer research");
-		consentTierColl.add(c2);		
-		ConsentTier c3 = new ConsentTier();
-		c3.setStatement("Consent for Tb research");
-		consentTierColl.add(c3);		
+		Collection consentTierColl = initConsentTier(empty);	
 		collectionProtocol.setConsentTierCollection(consentTierColl);
 		
 		//Setting the unsigned doc url
 		collectionProtocol.setUnsignedConsentDocumentURL("http://abc");		
-		
 		collectionProtocol.setAliqoutInSameContainer(true);
 		collectionProtocol.setDescriptionURL("");
 		collectionProtocol.setActivityStatus("Active");
 		try
 		{
 			collectionProtocol.setEndDate(Utility.parseDate("08-15-1975", Constants.DATE_PATTERN_MM_DD_YYYY));
+		}
+		catch (ParseException e1)
+		{			
+			e1.printStackTrace();
+		}
+		try
+		{
+			collectionProtocol.setStartDate(Utility.parseDate("08-15-1975", Constants.DATE_PATTERN_MM_DD_YYYY));
 		}
 		catch (ParseException e1)
 		{			
@@ -890,7 +895,7 @@ public class ConsentTrackingTest extends BaseTestCase
 		User user = new User();
 		user.setId(new Long(1));
 		userCollection.add(user);
-		collectionProtocol.setCoordinatorCollection(userCollection);
+		collectionProtocol.setUserCollection(userCollection);
 				
 		try
 		{
@@ -1006,7 +1011,7 @@ public class ConsentTrackingTest extends BaseTestCase
 
 		Site site = new Site();
 		site.setId(new Long(1));
-		specimenCollectionGroup.setSpecimenCollectionSite(site);
+		specimenCollectionGroup.setSite(site);
 
 		specimenCollectionGroup.setClinicalDiagnosis("Abdominal fibromatosis");
 		specimenCollectionGroup.setClinicalStatus("Operative");
@@ -1085,10 +1090,10 @@ public class ConsentTrackingTest extends BaseTestCase
 
 		Quantity quantity = new Quantity();
 		quantity.setValue(new Double(10));
-		molecularSpecimen.setInitialquantity(quantity);
+		molecularSpecimen.setQuantity(quantity);
 
 		molecularSpecimen.setConcentrationInMicrogramPerMicroliter(new Double(10));
-		molecularSpecimen.setComment("");
+		molecularSpecimen.setComments("");
 		// Is virtually located
 		molecularSpecimen.setStorageContainer(null);
 		molecularSpecimen.setPositionDimensionOne(null);

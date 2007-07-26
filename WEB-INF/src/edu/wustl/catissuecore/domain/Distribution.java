@@ -18,6 +18,7 @@ import java.util.Map;
 
 import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.util.SearchUtil;
+import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.util.MapDataParser;
@@ -243,30 +244,16 @@ public class Distribution extends SpecimenEventParameters implements java.io.Ser
 	        Logger.out.debug("fixedMap "+map);
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        Collection itemCollectionMap = parser.generateData(map);
-	        Collection finalItemCollecitonMap = new HashSet();
-//	        if(form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE)
-//	        {  
-		        Iterator itr = itemCollectionMap.iterator();
-		        while(itr.hasNext())
-		        {
-		        	DistributedItem distributedItem = (DistributedItem) itr.next();
-		        	if(distributedItem.getSpecimen() != null)
-		        		finalItemCollecitonMap.add(distributedItem);
-		        	//Added by Ashish
-		        	if(distributedItem.getSpecimenArray() != null)
-		        		finalItemCollecitonMap.add(distributedItem);
+	        if (form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE )
+	        {
+		        distributedItemCollection = itemCollectionMap;
+	        } 
+	        else
+	        {
+	        	specimenArrayCollection = itemCollectionMap;
 	        }
-//	        }
-	        
-//	        if (form.getDistributionType().intValue() == Constants.SPECIMEN_DISTRIBUTION_TYPE ) 
-//	        {
-		        distributedItemCollection = finalItemCollecitonMap;
-//	        }
-//	        else
-//	        {
-//	        	specimenArrayCollection = finalItemCollecitonMap;
-//	        }
-	        Logger.out.debug("distributedItemCollection "+distributedItemCollection);
+	    
+	        Logger.out.debug("distributedItemCollection "+distributedItemCollection); 
 	    }
 	    catch(Exception excp)
 	    {

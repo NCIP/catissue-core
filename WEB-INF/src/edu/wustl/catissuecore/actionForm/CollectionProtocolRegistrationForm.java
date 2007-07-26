@@ -8,6 +8,12 @@
  */
 
 package edu.wustl.catissuecore.actionForm;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionError;
@@ -15,6 +21,9 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTier;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -24,9 +33,9 @@ import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
 
 
-public class CollectionProtocolRegistrationForm extends AbstractActionForm
+public class CollectionProtocolRegistrationForm extends AbstractActionForm implements ConsentTierData 
 {
-    	
+	protected Map values = new HashMap();
 	/**
 	 * System generated unique collection protocol Identifier
 	 */
@@ -54,10 +63,40 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 
 	/**
 	 * Represents the weather participant Name is selected or not.
-	 *
 	 */    	
 	protected boolean checkedButton; 	
+
+      //Consent Tracking Module Virender Mehta 25/11/2006  		
+	/**
+	 * Map for Storing responses for Consent Tiers.
+	 */
+	protected Map consentResponseValues = new HashMap();
+	/**
+	 * No of Consent Tier
+	 */
+	private int consentTierCounter=0;
+
+	/**
+	 * Signed Consent URL
+	 */
+	protected String signedConsentUrl="";
+	/**
+	 * Witness name that may be PI
+	 */
+	protected long witnessId;
 	
+	/**
+	 * Consent Date, Date on which Consent is Signed
+	 */
+	protected String consentDate="";
+	/**
+	 * This will be set in case of withdrawl popup
+	 */
+	protected String withdrawlButtonStatus= Constants.WITHDRAW_RESPONSE_NOACTION;
+	
+	
+	//Consent Tracking Module Virneder Mehta 25/11/2006	
+		    
 	/**
 	 * Default Constructor
 	 */
@@ -66,6 +105,53 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 		//reset();
 	}
 	
+	/**
+	 * @return Returns the values.
+	 */
+	public Collection getAllValues()
+	{
+		return values.values();
+	}
+
+	/** Associates the specified object with the specified key in the map.
+	 * @param key the key to which the object is mapped.
+	 * @param value the object which is mapped.
+	 */
+	
+	public void setValue(String key, Object value)
+	{
+		if (isMutable())
+		{
+			values.put(key, value);
+		}
+	}
+
+	/**
+	 * Returns the object to which this map maps the specified key.
+	 * @param key the required key.
+	 * @return the object to which this map maps the specified key.
+	 */
+	public Object getValue(String key)
+	{
+		return values.get(key);
+	}
+
+	/**
+	 * @return values
+	 */
+	public Map getValues()
+	{
+		return values;
+	}
+
+	/**
+	 * @param values Map
+	 */
+	public void setValues(Map values)
+	{
+		this.values = values;
+	}
+
 	/**
 	 * It will set all values of member variables from Domain Object
 	 * @param abstractDomain domain object
@@ -80,6 +166,7 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 		String lastName = Utility.toString(registration.getParticipant().getLastName());
 		String birthDate = Utility.toString(registration.getParticipant().getBirthDate());
 		String ssn = Utility.toString(registration.getParticipant().getSocialSecurityNumber());
+			
 		if((registration.getParticipant() != null) && (firstName.trim().length()>0 || lastName.trim().length()>0 || birthDate.trim().length()>0 || ssn.trim().length()>0))
 	  	{
 	  		this.participantID = registration.getParticipant().getId().longValue();
@@ -90,6 +177,16 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	  	}
 	  	this.participantProtocolID = Utility.toString(registration.getProtocolParticipantIdentifier());
 	  	this.registrationDate = Utility.parseDateToString(registration.getRegistrationDate(),Constants.DATE_PATTERN_MM_DD_YYYY);
+       /**
+	  	 * For Consent tracking setting UI attributes
+	  	 */
+	  	User witness= registration.getConsentWitness();
+	  	if(witness!=null)
+	  	{
+	  		this.witnessId=witness.getId();
+	  	}
+	  	this.signedConsentUrl=Utility.toString(registration.getSignedConsentDocumentURL());
+	  	this.consentDate=Utility.parseDateToString(registration.getConsentSignatureDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
     }
     
 	/**
@@ -288,4 +385,164 @@ public class CollectionProtocolRegistrationForm extends AbstractActionForm
 	{
 		this.participantName = participantName;
 	}
+	
+//	 Consent Tracking Virender Mehta 		
+	/**
+	 * @return consentDate The Date on Which Consent is Signed
+	 */	
+	public String getConsentDate() 
+	{
+		return consentDate;
+	}
+
+	/**
+	 * @param consentDate The Date on Which Consent is Signed
+	 */
+	public void setConsentDate(String consentDate) 
+	{
+		this.consentDate = consentDate;
+	}
+
+	/**
+	 * @return signedConsentUrl The reference to the electric signed document(eg PDF file)
+	 */	
+	public String getSignedConsentUrl() 
+	{
+		return signedConsentUrl;
+	}
+	/**
+	 * @param signedConsentUrl The reference to the electric signed document(eg PDF file)
+	 */	
+	public void setSignedConsentUrl(String signedConsentUrl) 
+	{
+		this.signedConsentUrl = signedConsentUrl;
+	}
+	
+	/**
+	 * @return witnessId The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
+	 */	
+	public long getWitnessId() 
+	{
+		return witnessId;
+	}
+	
+	/**
+	 * @param witnessId The name of the witness to the consent Signature(PI or coordinator of the Collection Protocol)
+	 */	
+	public void setWitnessId(long witnessId) 
+	{
+		this.witnessId = witnessId;
+	}
+	
+	/**
+     * @param key Key prepared for saving data.
+     * @param value Values correspponding to key
+     */
+    public void setConsentResponseValue(String key, Object value) 
+    {
+   	 if (isMutable())
+   		consentResponseValues.put(key, value);
+    }
+    
+    /**
+     * 
+     * @param key Key prepared for saving data.
+     * @return consentResponseValues
+     */
+    public Object getConsentResponseValue(String key) 
+    {
+        return consentResponseValues.get(key);
+    }
+    
+	/**
+	 * @return values in map consentResponseValues
+	 */
+	public Collection getAllConsentResponseValue() 
+	{
+		return consentResponseValues.values();
+	}
+
+	/**
+	 * @return consentResponseValues The reference to the participant Response at CollectionprotocolReg Level
+	 */	
+	public Map getConsentResponseValues() 
+	{
+		return consentResponseValues;
+	}
+	
+	/**
+	 * @param consentResponseValues The reference to the participant Response at CollectionprotocolReg Level
+	 */	
+	public void setConsentResponseValues(Map consentResponseValues) 
+	{
+		this.consentResponseValues = consentResponseValues;
+	}
+
+	/**
+	 *@return consentTierCounter  This will keep track of count of Consent Tier
+	 */
+	public int getConsentTierCounter()
+	{
+		return consentTierCounter;
+	}
+
+	/**
+	 *@param consentTierCounter  This will keep track of count of Consent Tier
+	 */
+	public void setConsentTierCounter(int consentTierCounter)
+	{
+		this.consentTierCounter = consentTierCounter;
+	}
+	
+	/**
+	 * It returns status of button(return,discard,reset)
+	 * @return withdrawlButtonStatus
+	 */
+	public String getWithdrawlButtonStatus()
+	{
+		return withdrawlButtonStatus;
+	}
+
+	/**
+	 * It returns status of button(return,discard,reset)
+	 * @param withdrawlButtonStatus return,discard,reset
+	 */
+	public void setWithdrawlButtonStatus(String withdrawlButtonStatus)
+	{
+		this.withdrawlButtonStatus = withdrawlButtonStatus;
+	}
+	
+	/**
+	 * This function creates Array of String of keys and add them into the consentTiersList.
+	 * @return consentTiersList
+	 */
+	public Collection getConsentTiers()
+	{
+		Collection consentTiersList=new ArrayList();
+		String [] strArray = null;
+		int noOfConsents =this.getConsentTierCounter();
+		for(int counter=0;counter<noOfConsents;counter++)
+		{	
+			strArray = new String[4];
+			strArray[0]="consentResponseValue(ConsentBean:"+counter+"_consentTierID)";
+			strArray[1]="consentResponseValue(ConsentBean:"+counter+"_statement)";
+			//strArray[1]=(String)this.consentResponseValues.get("ConsentBean:"+counter+"_statement");
+			strArray[2]="consentResponseValue(ConsentBean:"+counter+"_participantResponse)";
+			strArray[3]="consentResponseValue(ConsentBean:"+counter+"_participantResponseID)";
+			
+			consentTiersList.add(strArray);
+		}
+		return consentTiersList;
+	}
+	
+	/**
+	 * This funtion returns the format of the response Key prepared. 
+	 * @return consentResponseValue(ConsentBean:`_participantResponse)
+	 */
+	public String getConsentTierMap()
+	{
+		return "consentResponseValue(ConsentBean:`_participantResponse)";
+	}	
+//	Consent Tracking Virender Mehta 	
+
 }

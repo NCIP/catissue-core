@@ -1,3 +1,4 @@
+
 /**
  * <p>Title: NewSpecimenHDAO Class>
  * <p>Description:	NewSpecimenBizLogicHDAO is used to add new specimen information into the database using Hibernate.</p>
@@ -29,6 +30,7 @@ import edu.wustl.catissuecore.domain.Address;
 import edu.wustl.catissuecore.domain.Biohazard;
 import edu.wustl.catissuecore.domain.CellSpecimen;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
+import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.ExternalIdentifier;
@@ -51,6 +53,7 @@ import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.StorageContainerUtil;
+import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
@@ -969,6 +972,18 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			dao.update(specimen.getSpecimenCharacteristics(), sessionDataBean, true, true, false);
 		}
 		setSpecimenGroupForSubSpecimen(specimen, specimen.getSpecimenCollectionGroup() ,dao);
+		
+		//Consent Tracking
+		if(!specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION   ) )
+		{
+			updateConsentWithdrawStatus(specimen, specimenImplObj, dao, sessionDataBean);
+		}
+		else if(!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE ) )
+		{
+			updateConsentStatus(specimen,dao,specimenImplObj);
+		}
+        //Consent Tracking	
+		//Mandar: 16-Jan-07
 
 		/**
 		 * Refer bug 3269 
@@ -1014,6 +1029,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 		//Disable functionality
 		Logger.out.debug("specimen.getActivityStatus() " + specimen.getActivityStatus());
+		if(specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION ) )
+		{
 		if (specimen.getActivityStatus().equals(Constants.ACTIVITY_STATUS_DISABLED))
 		{
 			//			 check for disabling a specimen 
@@ -1042,6 +1059,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 			disableSubSpecimens(dao, specimenIDArr);
 		}
 	}
+   }
 
 	private boolean isUnderSubSpecimen(Specimen specimen, Long parentSpecimenID)
 	{
@@ -1138,6 +1156,19 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 
 				SpecimenCollectionGroup scg = (SpecimenCollectionGroup) spgList.get(0);
 				specimenCollectionGroupObj = (SpecimenCollectionGroup)HibernateMetaData.getProxyObjectImpl(scg);
+				//Resolved lazy ----  specimenCollectionGroupObj.getConsentTierStatusCollection();
+				Collection consentTierStatusCollection= (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(),specimenCollectionGroupObj.getId(), "elements(consentTierStatusCollection)" );
+				Collection consentTierStatusCollectionForSpecimen = new HashSet(); 
+				Iterator itr = consentTierStatusCollection.iterator();
+				while(itr.hasNext())
+				{
+					 ConsentTierStatus conentTierStatus = (ConsentTierStatus) itr.next();
+					 ConsentTierStatus consentTierStatusForSpecimen = new ConsentTierStatus();
+					 consentTierStatusForSpecimen.setStatus(conentTierStatus.getStatus());
+					 consentTierStatusForSpecimen.setConsentTier(conentTierStatus.getConsentTier());
+					 consentTierStatusCollectionForSpecimen.add(consentTierStatusForSpecimen);
+				}
+				specimen.setConsentTierStatusCollection(consentTierStatusCollectionForSpecimen);
 			}
 			else
 			{
@@ -2237,7 +2268,7 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 	 * @param dao
 	 * @throws DAOException
 	 */
-	private void retriveSCGIdFromSCGName(Specimen specimen, DAO dao) throws DAOException
+	public void retriveSCGIdFromSCGName(Specimen specimen, DAO dao) throws DAOException
 	{
 		if(specimen.getSpecimenCollectionGroup().getName()!= null && !specimen.getSpecimenCollectionGroup().getName().equals(""))
 		{
@@ -2252,5 +2283,69 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				specimen.getSpecimenCollectionGroup().setId(((Long)scgList.get(0)));
 			}
 		}
+	}
+	//Mandar: 16-Jan-07 ConsentWithdrawl
+	/*
+	 * This method updates the consents and specimen based on the the consent withdrawal option.
+	 */
+	private void updateConsentWithdrawStatus(Specimen specimen, Specimen oldSpecimen,DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	{
+		if(!specimen.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION ))
+		{
+			String consentWithdrawOption = specimen.getConsentWithdrawalOption();
+			//Resolved Lazy ----  specimen.getConsentTierStatusCollection()
+			Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
+			//Collection consentTierStatusCollection = (Collection)dao.retrieveAttribute(Specimen.class.getName(), specimen.getId(),"elements(consentTierStatusCollection)");
+			Iterator itr = consentTierStatusCollection.iterator();
+			while(itr.hasNext())
+			{
+				ConsentTierStatus status = (ConsentTierStatus)itr.next();
+				long consentTierID = status.getConsentTier().getId().longValue();
+				if(status.getStatus().equalsIgnoreCase(Constants.WITHDRAWN) )
+				{
+					//Resolved lazy - specimen.getChildrenSpecimen();
+					Collection childSpecimens = (Collection)dao.retrieveAttribute(Specimen.class.getName(),oldSpecimen.getId(),"elements(childrenSpecimen)");
+					//Collection childSpecimens = specimen.getChildrenSpecimen();
+					Iterator childItr = childSpecimens.iterator();  
+					while(childItr.hasNext())
+					{
+						Specimen childSpecimen = (Specimen)childItr.next();
+						WithdrawConsentUtil.updateSpecimenStatus(childSpecimen, consentWithdrawOption, consentTierID, dao, sessionDataBean  );
+					}
+				}
+			}
+		}
+	}
+	
+	/*
+	 * This method is used to update the consent staus of child specimens as per the option selected by the user.
+	 */
+	private void updateConsentStatus(Specimen specimen, DAO dao, Specimen oldSpecimen) throws DAOException
+	{
+		if(!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE ))
+		{
+			String applyChangesTo = specimen.getApplyChangesTo();
+			//Resolved Lazy---  specimen.getConsentTierStatusCollection();
+			//					oldSpecimen.getConsentTierStatusCollection();
+			Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
+			Collection oldConsentTierStatusCollection = oldSpecimen.getConsentTierStatusCollection();
+			Iterator itr = consentTierStatusCollection.iterator();
+			while(itr.hasNext())
+			{
+				ConsentTierStatus status = (ConsentTierStatus)itr.next();
+				long consentTierID = status.getConsentTier().getId().longValue();
+				String statusValue = status.getStatus();
+				Collection childSpecimens = oldSpecimen.getChildrenSpecimen();
+				//Collection childSpecimens =(Collection)dao.retrieveAttribute(Specimen.class.getName(),oldSpecimen.getId(),"elements(childrenSpecimen)"); 
+				Iterator childItr = childSpecimens.iterator();  
+				while(childItr.hasNext() )
+				{
+					Specimen childSpecimen = (Specimen)childItr.next();
+					WithdrawConsentUtil.updateSpecimenConsentStatus(childSpecimen, applyChangesTo, consentTierID, statusValue, consentTierStatusCollection, oldConsentTierStatusCollection, dao);
+				}
+			}
+		}
+		
+	
 	}
 }

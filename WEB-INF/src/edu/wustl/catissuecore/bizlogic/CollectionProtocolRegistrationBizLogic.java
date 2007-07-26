@@ -11,18 +11,23 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
+import edu.wustl.catissuecore.domain.ConsentTierResponse;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.ParticipantRegistrationCacheManager;
 import edu.wustl.catissuecore.util.ParticipantRegistrationInfo;
+import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.bizlogic.DefaultBizLogic;
@@ -165,6 +170,12 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 			}
 		}
 		checkUniqueConstraint(dao, collectionProtocolRegistration, oldCollectionProtocolRegistration);
+		//Mandar 22-Jan-07 To disable consents accordingly in SCG and Specimen(s) start
+		if(!collectionProtocolRegistration.getConsentWithdrawalOption().equalsIgnoreCase(Constants.WITHDRAW_RESPONSE_NOACTION) )
+		{
+			verifyAndUpdateConsentWithdrawn(collectionProtocolRegistration, oldCollectionProtocolRegistration, dao, sessionDataBean);
+		}
+		//Mandar 22-Jan-07 To disable consents accordingly in SCG and Specimen(s) end
 		//Update registration
 		dao.update(collectionProtocolRegistration, sessionDataBean, true, true, false);
 
@@ -591,7 +602,7 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 	 * Name: Vijay Pande
 	 * Reviewer Name: Sachin Lale
 	 * Bug id: 4477
-	 * Method updated sicene earlier implemetation was not including CP having no registerd participant. Also short tille is also fetched from DB.
+	 * Method updated since earlier implemetation was not including CP having no registerd participant. Also short title is also fetched from DB.
 	 */
 	/**
 	 * This function finds out all the registerd participants for a particular collection protocol.
@@ -661,4 +672,50 @@ public class CollectionProtocolRegistrationBizLogic extends DefaultBizLogic
 		dao.closeSession();
 		return participantRegistrationInfoList;
 	}
+
+	//Mandar : 11-Jan-07 For Consent Tracking Withdrawal -------- start
+	/*
+	 * verifyAndUpdateConsentWithdrawn(collectionProtocolRegistration)
+	 * updateSCG(collectionProtocolRegistration, consentTierResponse)
+	 * 
+	 */
+	
+	/*
+	 * This method verifies and updates SCG and child elements for withdrawn consents
+	 */
+	private void verifyAndUpdateConsentWithdrawn(CollectionProtocolRegistration collectionProtocolRegistration,CollectionProtocolRegistration oldCollectionProtocolRegistration, DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	{
+		Collection newConsentTierResponseCollection = collectionProtocolRegistration.getConsentTierResponseCollection();
+		Iterator itr = newConsentTierResponseCollection.iterator() ;
+		while(itr.hasNext() )
+		{
+			ConsentTierResponse consentTierResponse = (ConsentTierResponse)itr.next();
+			if(consentTierResponse.getResponse().equalsIgnoreCase(Constants.WITHDRAWN ) )	
+			{
+				long consentTierID = consentTierResponse.getConsentTier().getId().longValue();
+				updateSCG(collectionProtocolRegistration, oldCollectionProtocolRegistration, consentTierID, dao,  sessionDataBean);
+			}
+		}
+	}
+	
+	/*
+	 * This method updates all the scg's associated with the selected collectionprotocolregistration.
+	 */
+	private void updateSCG(CollectionProtocolRegistration collectionProtocolRegistration, CollectionProtocolRegistration oldCollectionProtocolRegistration, long consentTierID,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
+	{
+		Collection newScgCollection = new HashSet();
+		Collection scgCollection = oldCollectionProtocolRegistration.getSpecimenCollectionGroupCollection();
+		Iterator scgItr = scgCollection.iterator();
+		while(scgItr.hasNext())
+		{
+			SpecimenCollectionGroup scg = (SpecimenCollectionGroup)scgItr.next();
+			String cprWithdrawOption = collectionProtocolRegistration.getConsentWithdrawalOption();
+			WithdrawConsentUtil.updateSCG(scg,consentTierID, cprWithdrawOption, dao, sessionDataBean);
+			newScgCollection.add(scg);	// set updated scg in cpr
+		}
+		collectionProtocolRegistration.setSpecimenCollectionGroupCollection(newScgCollection);
+	}
+
+	//Mandar : 11-Jan-07 For Consent Tracking Withdrawal -------- end
+
 }

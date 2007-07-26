@@ -614,6 +614,7 @@
 		<put name="content" value="/pages/content/manageBioSpecimen/MultipleSpecimenFlex.jsp" />
 	</definition>
 
+
 	<definition name=".catissuecore.initMultipleSpecimenDef" extends=".catissuecore.manageBioSpecimenHomeDef">
 		<put name="content" value="/pages/content/manageBioSpecimen/InitMultipleSpecimen.jsp" />
 	</definition>
@@ -952,7 +953,7 @@
 	<definition name=".catissuecore.bioBlankDef" extends=".catissuecore.queryDataViewDef">
 		<put name="content" value="/pages/blank.jsp" />
 	</definition>
-	<!--P.G. - End -->
+	<!--P.G. - End -->	
 <!--Orderering System-->
 	<!--Added By Deepti request order page -->
 	<definition name=".catissuecore.orderDef" extends=".catissuecore.searchHomeDef">
@@ -999,6 +1000,16 @@
 	<definition name=".catissuecore.myListTabDef" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/MyListTabPage.jsp" />
 	</definition>
-
+	
+   
+   <!--Change By Virender for PopUp on Submit Button Click -->
+	
+	<definition name=".catissuecore.DistributingConsentsDef" path="/pages/content/ConsentTracking/DistributingSpecimen.jsp"> 
+	</definition>
+	
+	<definition name=".catissuecore.ViewAllConsentsDef" path="/pages/content/ConsentTracking/ViewAllConsents.jsp"> 
+	</definition>
+	<!--Change By Virender -->	
 
 </tiles-definitions>
+

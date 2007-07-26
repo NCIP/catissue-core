@@ -227,3 +227,92 @@ insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALI
  alter table catissue_distributed_item add column `SPECIMEN_ARRAY_ID` bigint   NULL;  
 /* extra finished */
 #-----------------------ordering changes finish
+
+/*--------Consent Tracking-------*/
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier','ConsentTier Object','edu.wustl.catissuecore.domain.ConsentTier',NULL,NULL,1,'2006-11-27' from CSM_PROTECTION_ELEMENT;
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier Response','Consent Tier Response Object','edu.wustl.catissuecore.domain.ConsentTierResponse',NULL,NULL,1,'2006-11-27' from CSM_PROTECTION_ELEMENT;
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'Consent Tier Status','Consent Tier Status Object','edu.wustl.catissuecore.domain.ConsentTierStatus',NULL,NULL,1,'2006-11-27' from CSM_PROTECTION_ELEMENT;
+
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Response'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Response'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Response'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,1,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Status'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,2,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Status'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Consent Tier Status'),'2006-11-27' from CSM_PG_PE;
+
+drop table if exists CATISSUE_CONSENT_TIER_RESPONSE;
+drop table if exists CATISSUE_CONSENT_TIER_STATUS;
+drop table if exists CATISSUE_CONSENT_TIER;
+
+create table CATISSUE_CONSENT_TIER_RESPONSE(
+   IDENTIFIER bigint not null auto_increment,
+   RESPONSE varchar(20),
+   CONSENT_TIER_ID bigint,
+   COLL_PROT_REG_ID bigint,
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_CONSENT_TIER_STATUS (
+   IDENTIFIER bigint not null auto_increment,
+   CONSENT_TIER_ID bigint,
+   STATUS varchar(255),
+   SPECIMEN_ID bigint,
+   SPECIMEN_COLL_GROUP_ID bigint,
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_CONSENT_TIER (
+   IDENTIFIER bigint not null auto_increment,
+   STATEMENT text,
+   COLL_PROTOCOL_ID bigint,
+   primary key (IDENTIFIER)
+);
+
+alter table CATISSUE_CONSENT_TIER_RESPONSE add index FKFB1995FD4AD77FCB (COLL_PROT_REG_ID), add constraint FKFB1995FD4AD77FCB foreign key (COLL_PROT_REG_ID) references CATISSUE_COLL_PROT_REG (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER_RESPONSE add index FKFB1995FD17B9953 (CONSENT_TIER_ID), add constraint FKFB1995FD17B9953 foreign key (CONSENT_TIER_ID) references CATISSUE_CONSENT_TIER (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER_STATUS add index FKF74E94AEF69249F7 (SPECIMEN_COLL_GROUP_ID), add constraint FKF74E94AEF69249F7 foreign key (SPECIMEN_COLL_GROUP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER_STATUS add index FKF74E94AE60773DB2 (SPECIMEN_ID), add constraint FKF74E94AE60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER_STATUS add index FKF74E94AE17B9953 (CONSENT_TIER_ID), add constraint FKF74E94AE17B9953 foreign key (CONSENT_TIER_ID) references CATISSUE_CONSENT_TIER (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER add index FK51725303E36A4B4F (COLL_PROTOCOL_ID), add constraint FK51725303E36A4B4F foreign key (COLL_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
+
+/*----caTissue tables changed for consent tracking----- */
+alter table CATISSUE_COLL_PROT_REG drop foreign key FK5EB25F13A0FF79D4;
+alter table CATISSUE_COLLECTION_PROTOCOL add column UNSIGNED_CONSENT_DOC_URL text;
+alter table CATISSUE_COLL_PROT_REG add column (CONSENT_SIGN_DATE datetime,CONSENT_DOC_URL text,CONSENT_WITNESS bigint);
+alter table CATISSUE_COLL_PROT_REG add index FK5EB25F13A0FF79D4 (CONSENT_WITNESS), add constraint FK5EB25F13A0FF79D4 foreign key (CONSENT_WITNESS) references CATISSUE_USER (IDENTIFIER);
+
+/*---bug 3003-----Ashish ---7/12/06-----*/
+alter table catissue_order_item modify DESCRIPTION text;
+
+/*-----Added association ---Ashish 7/12/06 -----*/
+alter table CATISSUE_NEW_SP_AR_ORDER_ITEM drop foreign key FKC5C92CCBC4A3C438;
+alter table catissue_new_sp_ar_order_item add column SPECIMEN_ARRAY_ID bigint;
+alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add index FKC5C92CCBC4A3C438 (SPECIMEN_ARRAY_ID), add constraint FKC5C92CCBC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY (IDENTIFIER);
+
+
+#------------------------New Table entry For ConsentWithdrawal ---------- Mandar : 18-Jan-07 -------------start
+insert into CATISSUE_QUERY_TABLE_DATA  ( TABLE_ID, TABLE_NAME, DISPLAY_NAME, ALIAS_NAME, PRIVILEGE_ID, FOR_SQI) values ( 79, 'CATISSUE_RETURN_EVENT_PARAM', 'Return Event Parameters', 'ReturnEventParameters',2,2);
+insert into CATISSUE_INTERFACE_COLUMN_DATA ( IDENTIFIER, TABLE_ID, COLUMN_NAME , ATTRIBUTE_TYPE ) values ( 328, 79, 'IDENTIFIER', 'bigint');
+
+create table CATISSUE_RETURN_EVENT_PARAM 
+(
+   IDENTIFIER bigint not null,
+   primary key (IDENTIFIER)
+);
+
+alter table CATISSUE_RETURN_EVENT_PARAM add index FKD8890A48BC7298A91 (IDENTIFIER), add constraint FKD8890A48BC7298A91 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_EVENT_PARAM (IDENTIFIER);
+
+INSERT into `CSM_PROTECTION_ELEMENT` select max(PROTECTION_ELEMENT_ID)+1,'ReturnEventParameters','ReturnEventParameters Class','edu.wustl.catissuecore.domain.ReturnEventParameters',NULL,NULL,1,'2007-01-17' from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='ReturnEventParameters'),'2006-11-27' from CSM_PG_PE;
+#------------------------New Table entry For ConsentWithdrawal ---------- Mandar : 18-Jan-07 -------------end
+
+
+#------------------------New Column Entry For ConsentWaived ---------- Mandar : 25-Jan-07 -------------start
+alter table CATISSUE_COLLECTION_PROTOCOL add column CONSENTS_WAIVED bit;
+update catissue_collection_protocol set  CONSENTS_WAIVED='0' where  CONSENTS_WAIVED is null;
+#------------------------New Column Entry For ConsentWaived ---------- Mandar : 25-Jan-07 -------------end
+
+#------------------------New Column Entry For Participant ---------- Sachin : 13-Mar-07 -------------start
+alter table CATISSUE_PARTICIPANT add column MARITAL_STATUS varchar(50);
+#------------------------New Column Entry For Participant ---------- Sachin : 13-Mar-07 -------------end

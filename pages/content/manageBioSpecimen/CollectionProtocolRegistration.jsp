@@ -1,36 +1,48 @@
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
+ <%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html"%>
 <%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic"%>
 <%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean"%>
 <%@ taglib uri="/WEB-INF/nlevelcombo.tld" prefix="ncombo" %>
 <%@ page import="edu.wustl.catissuecore.util.global.Constants"%>
 <%@ page import="edu.wustl.catissuecore.actionForm.CollectionProtocolRegistrationForm"%>
 <%@ page import="edu.wustl.catissuecore.util.global.Utility"%>
-<%@ page import="java.util.*"%>
+<%@ page import="java.util.*"%>	  
+<%@ page import="edu.wustl.catissuecore.bean.ConsentBean"%>
 <%@ include file="/pages/content/common/CollectionProtocolCommon.jsp" %>
 <%@ include file="/pages/content/common/BioSpecimenCommonCode.jsp" %>
 <script src="jss/script.js" type="text/javascript"></script>
 <!-- Mandar 11-Aug-06 : For calendar changes -->
 <script src="jss/calendarComponent.js"></script>
+
 <SCRIPT>var imgsrc="images/";</SCRIPT>
 <LINK href="css/calanderComponent.css" type=text/css rel=stylesheet>
 <!-- Mandar 11-Aug-06 : calendar changes end -->
 <%
+	
+			String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	   		Object obj = request.getAttribute("collectionProtocolRegistrationForm");
 			CollectionProtocolRegistrationForm form =null;
 			String currentRegistrationDate = "";
+			String signedConsentDate = "";
+			String selectProperty="";
 			if(obj != null && obj instanceof CollectionProtocolRegistrationForm)
 			{
 				form = (CollectionProtocolRegistrationForm)obj;
 				currentRegistrationDate = form.getRegistrationDate();  
+				signedConsentDate=form.getConsentDate();
 				
 				if(currentRegistrationDate == null)
+				{
 					currentRegistrationDate = "";
 			}
-
+				if(signedConsentDate == null)
+				{
+					signedConsentDate = "";
+				}
+					
+			}
 				String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 				boolean isAddNew = false;
-				String pageOf = (String)request.getAttribute(Constants.PAGEOF);
-
+				
 			    String operation = (String) request.getAttribute(Constants.OPERATION);
 		        String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 		        String appendingPath = "/CollectionProtocolRegistration.do?operation=add&pageOf=pageOfCollectionProtocolRegistration";
@@ -58,6 +70,7 @@
 					}
 		            readOnlyValue = false;
 		        }
+
 %>
 
 <head>
@@ -78,6 +91,16 @@
 	<%}%>
 
 <script language="JavaScript">
+
+//Consent Tracking Virender Mehta
+		function submitform()
+		{
+		  var action ="CollectionProtocolRegistration.do?showConsents=yes&pageOf=pageOfCollectionProtocolRegistration&operation=<%=operation%>";
+		  document.forms[0].action = action;
+		  document.forms[0].submit();
+		}
+//Consent Tracking Virender Mehta
+
 		function onCheckboxButtonClick(element,dropDownList)
 		{
 			// changes as per bug 287
@@ -118,6 +141,8 @@
 			changeSubmitTo(action );
 			document.forms[0].submit();
 		}
+		
+		
 </script>		
 </head>
 <%
@@ -151,6 +176,7 @@
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value=""/>
 						<html:hidden property="participantID" />
+						<html:hidden property="withdrawlButtonStatus"/>
 					</td>
 					<td><html:hidden property="id"/>
 					<td><html:hidden property="onSubmit"/></td>
@@ -184,7 +210,7 @@
 					<td class="formField">
 <!-- Mandar : 434 : for tooltip -->
 						<html:select property="collectionProtocolID" styleClass="formFieldSized" styleId="collectionProtocolID" size="1"
-						 onmouseover="showToolTip(this)" onmouseout="hideTip(this.id)">
+						 onmouseover="showTip(this.id)" onmouseout="hideTip(this.id)" onchange="submitform()">
 						    <html:options collection="<%=Constants.PROTOCOL_LIST%>" labelProperty="name" property="value"/>															
 					    </html:select>
 						&nbsp;
@@ -313,10 +339,28 @@
 			        %> 
 				</tr>
 			</table>
+	
+<%--  Consent Tracking Virender Mehta	 --%>
+	<%
+		List responseList =(List)request.getAttribute("responseList");
+    	if(form.getConsentTierCounter()>0)
+		{
+	%>
+   	 
+     <%@ include file="/pages/content/ConsentTracking/ConsentTracking.jsp" %>  
+
+	<%
+		}
+	%>			
+
+<!--  Consent Tracking Virender Mehta	 -->	
+
 		</td>
 		</tr>
 
 		<!-- NEW Collection Protocol Registration ENTRY ends-->
 	</table>
+				
 	<%@ include file="CollectionProtocolRegistrationPageButtons.jsp"%>
+
 </html:form>

@@ -33,6 +33,24 @@
             column="SPECIMEN_CLASS"
         />
 
+	 <set
+            name="consentTierStatusCollection"
+            table="CATISSUE_CONSENT_TIER_STATUS"
+            lazy="true"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.ConsentTierStatus"
+              />
+        </set>
+
         <property
             name="type"
             type="string"

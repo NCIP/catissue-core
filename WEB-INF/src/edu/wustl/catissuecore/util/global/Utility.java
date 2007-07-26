@@ -651,6 +651,35 @@ public class Utility extends edu.wustl.common.util.Utility
  
         return obj;
     }
+ 
+	 //Consent tracking(Virender Mehta)   
+    /**
+	 * Prepare Respopnse List
+	 * @param opr If Operation = Edit then "Withdraw" is added in the List
+	 * @return listOfResponces
+	 */
+   public static List responceList(String addeditOperation)
+	{
+		List listOfResponces=new ArrayList();
+		listOfResponces.add(new NameValueBean(Constants.NOT_SPECIFIED,Constants.NOT_SPECIFIED));
+		listOfResponces.add(new NameValueBean(Constants.BOOLEAN_YES,Constants.BOOLEAN_YES));
+		listOfResponces.add(new NameValueBean(Constants.BOOLEAN_NO,Constants.BOOLEAN_NO));
+		if(addeditOperation.equalsIgnoreCase(Constants.EDIT))
+		{
+			listOfResponces.add(new NameValueBean(Constants.WITHDRAWN,Constants.WITHDRAWN));
+		}
+		return listOfResponces;  	
+	}
+   
+   public static Long toLong(String string) throws NumberFormatException
+   {
+	   if((string!=null)&&(string.trim()!=""))
+	   {
+		   return new Long(string);
+	   }
+	   return null;
+   }
+   
     /**
      * Changes the format of the string compatible to New Grid Format. Also create hyperlink for the columns that are to be shown as hyperlink.
      * @param row The List representing row of that is to be shown in the Grid.

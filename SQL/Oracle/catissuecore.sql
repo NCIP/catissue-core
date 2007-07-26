@@ -161,8 +161,11 @@ create table CATISSUE_CANCER_RESEARCH_GROUP (
 create table CATISSUE_COLLECTION_PROTOCOL (
    IDENTIFIER number(19,0) not null,
    ALIQUOT_IN_SAME_CONTAINER number(1,0),
+   UNSIGNED_CONSENT_DOC_URL varchar2(500),
+   CONSENTS_WAIVED number(1,0),
    primary key (IDENTIFIER)
 );
+
 create table CATISSUE_EVENT_PARAM (
    IDENTIFIER number(19,0) not null,
    primary key (IDENTIFIER)
@@ -541,6 +544,10 @@ create table CATISSUE_COLL_PROT_REG (
    PARTICIPANT_ID number(19,0),
    COLLECTION_PROTOCOL_ID number(19,0),
    ACTIVITY_STATUS varchar(50),
+   CONSENT_SIGN_DATE date,
+   CONSENT_DOC_URL varchar2(500),
+   CONSENT_WITNESS number(19,0), 
+   
    primary key (IDENTIFIER)
 );
 create table CATISSUE_FROZEN_EVENT_PARAM (
@@ -725,6 +732,11 @@ alter table CATISSUE_PERMISSIBLE_VALUE  add constraint FK57DDCE1FC56C2B1 foreign
 alter table CATISSUE_AUDIT_EVENT  add constraint FKACAF697A2206F20F foreign key (USER_ID) references CATISSUE_USER  ;
 alter table CATISSUE_AUDIT_EVENT_LOG  add constraint FK8BB672DF77F0B904 foreign key (AUDIT_EVENT_ID) references CATISSUE_AUDIT_EVENT  ;
 alter table CATISSUE_AUDIT_EVENT_DETAILS  add constraint FK5C07745D34FFD77F foreign key (AUDIT_EVENT_LOG_ID) references CATISSUE_AUDIT_EVENT_LOG  ;
+alter table CATISSUE_RETURN_EVENT_PARAM  add constraint FKD8890A48BC7298A91 foreign key (IDENTIFIER) references CATISSUE_SPECIMEN_EVENT_PARAM  ;
+
+alter table CATISSUE_COLL_PROT_REG add constraint FK5EB25F13A0FF79D4 foreign key (CONSENT_WITNESS) references CATISSUE_USER;
+alter table CATISSUE_DISTRIBUTED_ITEM add constraint FKA7C3ED4BC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY;
+
 create sequence CATISSUE_CANCER_RES_GRP_SEQ;
 create sequence CATISSUE_USER_SEQ;
 create sequence CATISSUE_SPECIMEN_PROTOCOL_SEQ;
@@ -763,7 +775,44 @@ create sequence CATISSUE_SPECI_ARRAY_CNTNT_SEQ;
 create sequence CATISSUE_DISTRIBUTION_SEQ;
 create sequence CATISSUE_AUDIT_EVENT_QUERY_SEQ;
 
-/* ordering */
+#------ Consent Tracking related drop, create and add foreign key scripts.
+drop table CATISSUE_CONSENT_TIER_RESPONSE cascade constraints;
+drop table CATISSUE_CONSENT_TIER_STATUS cascade constraints;
+drop table CATISSUE_CONSENT_TIER cascade constraints;
+
+create table CATISSUE_CONSENT_TIER_RESPONSE (
+   IDENTIFIER number(19,0) not null,
+   RESPONSE varchar(255),
+   CONSENT_TIER_ID number(19,0),
+   COLL_PROT_REG_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_CONSENT_TIER_STATUS (
+   IDENTIFIER number(19,0) not null,
+   CONSENT_TIER_ID number(19,0),
+   STATUS varchar(255),
+   SPECIMEN_ID number(19,0),
+   SPECIMEN_COLL_GROUP_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+create table CATISSUE_CONSENT_TIER (
+   IDENTIFIER number(19,0) not null,
+   STATEMENT varchar2(500),
+   COLL_PROTOCOL_ID number(19,0),
+   primary key (IDENTIFIER)
+);
+
+alter table CATISSUE_CONSENT_TIER_RESPONSE  add constraint FKFB1995FD4AD77FCB foreign key (COLL_PROT_REG_ID) references CATISSUE_COLL_PROT_REG (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER_RESPONSE  add constraint FKFB1995FD17B9953 foreign key (CONSENT_TIER_ID) references CATISSUE_CONSENT_TIER (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER_STATUS  add constraint FKF74E94AEF69249F7 foreign key (SPECIMEN_COLL_GROUP_ID) references CATISSUE_SPECIMEN_COLL_GROUP (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER_STATUS  add constraint FKF74E94AE60773DB2 foreign key (SPECIMEN_ID) references CATISSUE_SPECIMEN (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER_STATUS  add constraint FKF74E94AE17B9953 foreign key (CONSENT_TIER_ID) references CATISSUE_CONSENT_TIER (IDENTIFIER);
+alter table CATISSUE_CONSENT_TIER  add constraint FK51725303E36A4B4F foreign key (COLL_PROTOCOL_ID) references CATISSUE_COLLECTION_PROTOCOL (IDENTIFIER);
+
+create sequence CATISSUE_CONSENT_TIER_RES_SEQ;
+create sequence CATISSUE_CONSENT_TIER_STAT_SEQ;
+create sequence CATISSUE_CONSENT_TIER_SEQ;
+ /* ordering */
 create sequence CATISSUE_ORDER_SEQ;
 create sequence CATISSUE_ORDER_ITEM_SEQ;
 
@@ -861,4 +910,6 @@ alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBC4A3C438 fore
 alter table CATISSUE_DISTRIBUTION add constraint FK54276680783867CC foreign key (ORDER_ID) references CATISSUE_ORDER (IDENTIFIER);
 alter table CATISSUE_DISTRIBUTED_ITEM add constraint FKA7C3ED4BC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY;
 
+
 commit;
+

@@ -23,7 +23,9 @@
 .active-column-1 {width:200px}
 </style>
 <%
-	String[] columnList1 = Constants.EVENT_PARAMETERS_COLUMNS;
+	//String consentTierCounter ="1";
+	//(String)request.getParameter("consentTierCounter");
+    String[] columnList1 = Constants.EVENT_PARAMETERS_COLUMNS;
 	List columnList = new ArrayList();
 	for(int i=0;i<columnList1.length;i++)
 	{
@@ -32,8 +34,6 @@
 	String title = null;
 	List dataList = (List) request.getAttribute(Constants.SPREADSHEET_DATA_LIST);
 	String label=(String)request.getAttribute(Constants.SPECIMEN_LABEL);
-
-	System.out.println("Sachiuhn:"+label);
 	String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 	Integer identifierFieldIndex = new Integer(0);
 	String specimenIdentifier = (String)request.getAttribute(Constants.SPECIMEN_ID);
@@ -48,9 +48,11 @@
 		//P.G. - End 
 		String formAction = Constants.SPECIMEN_ADD_ACTION;
 		String specimenPath ="'NewSpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
+		String consentTab="'NewSpecimenSearch.do?operation=search&tab=consent&pageOf=pageOfNewSpecimen&id="+specimenIdentifier+"'" ;
 		if(pageOf.equals(Constants.PAGE_OF_LIST_SPECIMEN_EVENT_PARAMETERS_CP_QUERY))
 		{
 			specimenPath ="'QuerySpecimenSearch.do?operation=search&pageOf=pageOfNewSpecimenCPQuery&id="+specimenIdentifier+"'" ;
+			consentTab="'QuerySpecimenSearch.do?operation=search&tab=consent&pageOf=pageOfNewSpecimenCPQuery&id="+specimenIdentifier+"'" ;
 		}
 		if(eventSelected != null)	
 		{
@@ -74,6 +76,10 @@
 
 <script language="JavaScript">
 
+	function showConsents()
+	{
+		addNewAction(<%= consentTab %>)			
+    }
 	function onParameterChange(element)
 	{
 		var action = "";
@@ -154,8 +160,12 @@
 				<td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="featureNotSupported()">
 					<%=Constants.CLINICAL_ANNOTATIONS %>
 				</td>
+				</td>
+				   <td height="20" class="tabMenuItem" onmouseover="changeMenuStyle(this,'tabMenuItemOver'),showCursor()" onmouseout="changeMenuStyle(this,'tabMenuItem'),hideCursor()" onClick="addNewAction(<%= consentTab %>)" id="consentTab">
+					<bean:message key="consents.consents"/>            
+				</td>
 
-				<td width="450" class="tabMenuSeparator" colspan="2">&nbsp;</td>
+				<td width="350" class="tabMenuSeparator" colspan="1">&nbsp;</td>
 			</tr>
 			<tr>
 				<td class="tabField" colspan="6">

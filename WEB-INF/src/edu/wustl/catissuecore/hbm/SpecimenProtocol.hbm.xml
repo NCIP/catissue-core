@@ -127,6 +127,32 @@
             <key
                 column="IDENTIFIER"
             />
+        <property
+            name="unsignedConsentDocumentURL"
+            type="string"
+            update="true"
+            insert="true"
+            column="UNSIGNED_CONSENT_DOC_URL"
+            length="1000"
+        />
+
+        <set
+            name="consentTierCollection"
+            table="CATISSUE_CONSENT_TIER"
+            lazy="true"
+            inverse="false"
+            cascade="save-update"
+            sort="unsorted"
+        >
+
+              <key
+                  column="COLL_PROTOCOL_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.ConsentTier"
+              />
+        </set>
 
         <set
             name="distributionProtocolCollection"
@@ -188,9 +214,9 @@
 
             <one-to-many
                   class="edu.wustl.catissuecore.domain.CollectionProtocolEvent"
-            />
+            />	 
+    </set>
 
-        </set>
 
 		<property
             name="aliqoutInSameContainer"
@@ -200,7 +226,16 @@
             column="ALIQUOT_IN_SAME_CONTAINER"
         />
 
+        <property
+            name="consentsWaived"
+            type="boolean"
+            update="true"
+            insert="true"
+            column="CONSENTS_WAIVED"
+        />
+
         </joined-subclass>
+        
         <joined-subclass
             name="edu.wustl.catissuecore.domain.DistributionProtocol"
             table="CATISSUE_DISTRIBUTION_PROTOCOL"

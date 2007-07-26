@@ -1,4 +1,4 @@
-/**
+ /**
  * <p>Title: CollectionProtocolBizLogic Class>
  * <p>Description:	CollectionProtocolBizLogic is used to add CollectionProtocol information into the database using Hibernate.</p>
  * Copyright:    Copyright (c) year
@@ -847,8 +847,19 @@ public class CollectionProtocolBizLogic extends SpecimenProtocolBizLogic impleme
 		}
 
 
-	}
-	/**
+	}	  
+
+//mandar : 31-Jan-07 ----------- consents tracking
+	private void verifyConsentsWaived(CollectionProtocol collectionProtocol)
+	{
+		//check for consentswaived
+		if(collectionProtocol.getConsentsWaived() == null )
+		{
+			collectionProtocol.setConsentsWaived(new Boolean(false) );
+        }
+     }
+	
+   /**
 	 * Patch Id : FutureSCG_7
 	 * Description : method to validate the CPE against uniqueness
 	 */

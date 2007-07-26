@@ -24,7 +24,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String PAGE_OF_SUPERVISOR = "pageOfSupervisor";
 	public static final String PAGE_OF_TECHNICIAN = "pageOfTechnician";
 	public static final String PAGE_OF_SCIENTIST = "pageOfScientist";
-	//Constants added for Validation
+	
+    //Constants added for Validation
 	public static final String DEFAULT_TISSUE_SITE ="defaultTissueSite";
 	public static final String DEFAULT_CLINICAL_STATUS ="defaultClinicalStatus"; 
 	public static final String DEFAULT_GENDER = "defaultGender";
@@ -49,6 +50,57 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String DEFAULT_HISTOLOGICAL_QUALITY="defaultHistologicalQuality";
 	public static final String DEFAULT_VITAL_STATUS ="defaultVitalStatus";
 	
+	  //Consent tracking
+	public static final String 	SHOW_CONSENTS="showConsents";
+	public static final String 	SPECIMEN_CONSENTS="specimenConsents";
+	public static final String 	YES="yes";
+	public static final String 	CP_ID="cpID";
+	public static final String 	BARCODE_LABLE="barcodelabel";
+	public static final String  DISTRIBUTION_ON="labelBarcode";
+	public static final String 	POPUP="popup";
+	public static final String 	ERROR="error";
+	public static final String 	ERROR_SHOWCONSENTS="errorShowConsent";
+	public static final String 	COMPLETE="Complete";
+	public static final String 	VIEW_CONSENTS="View";
+	public static final String 	APPLY="Apply";
+	public static final String 	APPLY_ALL="ApplyAll";
+	public static final String 	APPLY_NONE="ApplyNone";
+	public static final String 	PREDEFINED_CADSR_CONSENTS="predefinedConsentsList";
+	public static final String 	DISABLED="disabled";
+	public static final String 	VIEWAll="ViewAll";
+	public static final String 	BARCODE_DISTRIBUTION="1";
+	public static final String 	LABLE_DISTRIBUTION="2";
+	public static final String 	CONSENT_WAIVED="Consent Waived";
+	public static final String 	NO_CONSENTS="No Consents";
+	public static final String 	INVALID="Invalid";
+	public static final String 	VALID="valid";
+	public static final String 	FALSE="false";
+	public static final String 	TRUE="true";
+	public static final String 	NULL="null";
+	public static final String 	CONSENT_TABLE="tableId4";
+	public static final String 	DISABLE="disable";
+	public static final String 	SCG_ID="-1";
+	public static final String 	SELECTED_TAB="tab";
+	public static final String 	TAB_SELECTED="tabSelected";
+	public static final String 	NEWSPECIMEN_FORM="newSpecimenForm";
+	public static final String 	CONSENT_TABLE_SHOWHIDE="tableStatus";
+	public static final String 	SPECIMEN_RESPONSELIST="specimenResponseList";
+	public static final String 	PROTOCOL_EVENT_ID="protocolEventId";
+	public static final String 	SCG_DROPDOWN="value";
+	public static final String 	HASHED_OUT="####";
+	public static final String 	VERIFIED="Verified";
+	public static final String  STATUS="status";
+	public static final String 	NOT_APPLICABLE="Not Applicable";
+	public static final String 	WITHDRAW_ALL="withrawall";
+	public static final String 	RESPONSE="response";
+	public static final String 	WITHDRAW="withdraw";
+	public static final String 	VIRTUALLY_LOCATED="Virtually Located";
+	public static final String 	LABLE="Lable";
+	public static final String 	STORAGE_CONTAINER_LOCATION="Storage Container Location";
+	public static final String 	CLASS_NAME="Class Name";
+	public static final String 	SPECIMEN_LIST="specimenDetails";
+	public static final String 	COLUMNLIST="columnList";
+
 	public static final String [][] defaultValueKeys= {
 		{Constants.DEFAULT_TISSUE_SITE, Constants.CDE_NAME_TISSUE_SITE},
 		{Constants.DEFAULT_CLINICAL_STATUS, Constants.CDE_NAME_CLINICAL_STATUS},
@@ -901,6 +953,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String FROZEN_TISSUE_SLIDE = "Frozen Tissue Slide";	// SLIDE	 
 	public static final String FIXED_TISSUE_BLOCK = "Fixed Tissue Block";	// PARAFFIN BLOCK	 
 	public static final String NOT_SPECIFIED = "Not Specified";
+	public static final String WITHDRAWN = "Withdrawn";
 	// tissue types with unit= g
 	public static final String FRESH_TISSUE = "Fresh Tissue";			 
 	public static final String FROZEN_TISSUE = "Frozen Tissue";			 
@@ -1520,6 +1573,18 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String CP_QUERY_PARTICIPANT_LOOKUP_ACTION= "CPQueryParticipantLookup.do";
 	public static final String CP_QUERY_BIO_SPECIMEN = "/QueryManageBioSpecimen.do";
 	
+//Mandar : 15-Jan-07
+	public static final String WITHDRAW_RESPONSE_NOACTION= "No Action";
+	public static final String WITHDRAW_RESPONSE_DISCARD= "Discard";
+	public static final String WITHDRAW_RESPONSE_RETURN= "Return";
+	public static final String WITHDRAW_RESPONSE_RESET= "Reset";
+	public static final String WITHDRAW_RESPONSE_REASON= "Specimen consents withdrawn";
+
+	public static final String SEARCH_CATEGORY_LIST_SELECT_TAG_NAME="selectCategoryList";
+	public static final String SEARCH_CATEGORY_LIST_FUNCTION_NAME="getSelectedEntities";
+    
+    
+    public static final String EDIT_CONDN = "Edit";
 	public static final String SPLITTER_STATUS_REQ_PARAM = "SPLITTER_STATUS";
      
     //mulltiple specimen Applet constants
