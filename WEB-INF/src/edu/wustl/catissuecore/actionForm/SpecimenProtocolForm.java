@@ -8,6 +8,7 @@ package edu.wustl.catissuecore.actionForm;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,9 +54,13 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 	protected String enrollment;
 
 	/**
+	 * Patch Id : Collection_Event_Protocol_Order_8 (Changed from HashMap to LinkedHashMap)
+	 * Description : To get CollectionProtocol Events in order
+	 */
+	/**
 	 * Map to handle values of all the CollectionProtocol Events
 	 */
-	protected Map values = new HashMap();
+	protected Map values = new LinkedHashMap();
 	
 	/**
 	 * Associates the specified object with the specified key in the map.
@@ -300,7 +305,7 @@ public abstract class SpecimenProtocolForm extends AbstractActionForm
 		this.enrollment = null;
 		this.descriptionURL = null;
 		
-		values = new HashMap();
+		values = new LinkedHashMap();
 	}
 	
 	/**

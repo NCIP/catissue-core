@@ -1,4 +1,4 @@
-							   /**
+										  							   /**
  * <p>Title: CollectionProtocol Class</p>
  * <p>Description:  A set of written procedures that describe how a biospecimen is prospectively collected.</p>
  * Copyright:    Copyright (c) year
@@ -10,8 +10,13 @@
 
 package edu.wustl.catissuecore.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -33,19 +38,23 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	private static final long serialVersionUID = 1234567890L;
 	
 	/**
+	 * Patch Id : Collection_Event_Protocol_Order_3 (Changed From HashSet to LinkedHashSet)
+	 * Description : To get the specimen requirement in order
+	 */
+	/**
 	 * Collection of studies associated with the CollectionProtocol.
 	 */
-	protected Collection distributionProtocolCollection = new HashSet();
+	protected Collection distributionProtocolCollection = new LinkedHashSet();
 	
 	/**
 	 * Collection of users associated with the CollectionProtocol.
 	 */
-	protected Collection userCollection = new HashSet();
+	protected Collection userCollection = new LinkedHashSet();
 	
 	/**
 	 * Collection of CollectionProtocolEvents associated with the CollectionProtocol.
 	 */
-	protected Collection collectionProtocolEventCollection = new HashSet();
+	protected Collection collectionProtocolEventCollection = new LinkedHashSet();
 	
 	/**
 	 * whether Aliquote in same container
@@ -266,12 +275,25 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	}
         	aliqoutInSameContainer = new Boolean(cpForm.isAliqoutInSameContainer());
 	        Map map = cpForm.getValues();
+	        
+	        /**
+	         * Name : Abhishek Mehta
+	         * Reviewer Name : Poornima
+	         * Bug ID: Collection_Event_Protocol_Order
+	         * Patch ID: Collection_Event_Protocol_Order_1 
+	         * See also: 1-8
+	         * Description: To get the collection event protocols in their insertion order. 
+	         */
 	        Logger.out.debug("PRE FIX MAP "+map);
-	        //map = fixMap(map);
+	        Map sortedMap = sortMapOnKey(map);
 	        Logger.out.debug("POST FIX MAP "+map);
 	        
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
-	        this.collectionProtocolEventCollection = parser.generateData(map);
+	        
+	        ArrayList cpecList = (ArrayList)parser.generateData(sortedMap,true);
+	        for(int i = 0 ; i < cpecList.size() ; i++){
+	        	this.collectionProtocolEventCollection.add(cpecList.get(i));
+	        }
 	        Logger.out.debug("collectionProtocolEventCollection "+this.collectionProtocolEventCollection);
 	        
 	        //For Consent Tracking ----Ashish 1/12/06
@@ -289,7 +311,38 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	    	Logger.out.error(excp.getMessage(),excp); 
         }
     }
-    
+    				
+/**
+     * Patch ID: Collection_Event_Protocol_Order_2 
+     * Description: To get the collection event protocols in their insertion order. 
+     */
+
+	/**
+	 * This function will sort the map based on their keys.
+	 */
+    private LinkedHashMap sortMapOnKey(Map map)
+    {
+    	Object[] mapKeySet = map.keySet().toArray();
+    	int size = mapKeySet.length;
+    	ArrayList <String> mList = new ArrayList <String>();
+    	for(int i = 0 ; i < size ; i++)
+		{
+    		String key = (String)mapKeySet[i];
+    		mList.add(key);
+		}
+    	
+    	KeyComparator keyComparator = new KeyComparator();
+		Collections.sort(mList, keyComparator);
+		
+    	LinkedHashMap <String, String> sortedMap = new LinkedHashMap<String, String>();
+		for(int i = 0 ; i < size ; i++)
+		{
+			String key = (String)mList.get(i);
+			String value = (String)map.get(key);
+			sortedMap.put(key, value);
+		}
+		return sortedMap;
+    }
    
     /**
      * @param consentTierMap Consent Tier Map

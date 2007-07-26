@@ -12,6 +12,7 @@ package edu.wustl.catissuecore.domain;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import edu.wustl.catissuecore.util.SearchUtil;
 import edu.wustl.common.actionForm.IValueObject;
@@ -49,14 +50,18 @@ public class SpecimenRequirement  extends AbstractDomainObject implements java.i
 	protected String pathologyStatus;
 	
 	/**
+	 * Patch Id : Collection_Event_Protocol_Order_7 (Changed From HashSet to LinkedHashSet)
+	 * Description : To get the specimen requirement in order
+	 */
+	/**
 	 * Collection of studies associated with the CollectionProtocol.
 	 */
-	protected Collection distributionProtocolCollection = new HashSet();
+	protected Collection distributionProtocolCollection = new LinkedHashSet();
 	
 	/**
 	 * Collection of studies associated with the CollectionProtocol.
 	 */
-	protected Collection collectionProtocolEventCollection = new HashSet();
+	protected Collection collectionProtocolEventCollection = new LinkedHashSet();
 	
 	//Change for API Search   --- Ashwin 04/10/2006
 	protected Quantity quantity = new Quantity();

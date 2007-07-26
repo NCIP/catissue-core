@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,7 @@ import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.DomainBeanIdentifierComparator;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -56,9 +58,13 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	private int outerCounter=1;
 
 	/**
+	 * Patch Id : Collection_Event_Protocol_Order_4
+	 * Description : To get CollectionProtocol Events in order (Changed from HashMap to LinkedHashMap)
+	 */
+	/**
 	 * Counter that contains number of rows in the 'Add More' functionality. inner block
 	 */
-	protected Map innerLoopValues = new HashMap();
+	protected Map innerLoopValues = new LinkedHashMap();
 		
 	/**
 	 * whether Aliquote in same container
@@ -233,11 +239,16 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 		if(protocolEventCollection != null)
 		{
 			List eventList = new ArrayList(protocolEventCollection);
-			Collections.sort(eventList);
+			/**
+			 * Patch Id : Collection_Event_Protocol_Order_5
+			 * Description : To get the collection event protocols in order
+			 */
+			DomainBeanIdentifierComparator domainBeanIdentifierComparator = new DomainBeanIdentifierComparator();
+			Collections.sort(eventList, domainBeanIdentifierComparator);
 			protocolEventCollection = eventList;
 			
-			values = new HashMap();
-			innerLoopValues = new HashMap();
+			values = new LinkedHashMap();
+			innerLoopValues = new LinkedHashMap();
 			
 			int i = 1;
 			Iterator it = protocolEventCollection.iterator();
@@ -338,11 +349,19 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 	private void populateSpecimenRequirement(Collection specimenRequirementCollection, int counter)
 	{
 		int innerCounter = 0;
-		if(specimenRequirementCollection != null)
+		/**
+		 * Patch Id : Collection_Event_Protocol_Order_6
+		 * Description : To get the specimen requirement in order
+		 */
+		List specimenRequirementCollectionList = new ArrayList(specimenRequirementCollection);
+		DomainBeanIdentifierComparator domainBeanIdentifierComparator = new DomainBeanIdentifierComparator();
+		Collections.sort(specimenRequirementCollectionList, domainBeanIdentifierComparator);
+		
+		if(specimenRequirementCollectionList != null)
 		{
 			int i = 1;
 
-			Iterator iterator = specimenRequirementCollection.iterator();
+			Iterator iterator = specimenRequirementCollectionList.iterator();
 			while(iterator.hasNext())
 			{
 			    SpecimenRequirement specimenRequirement = (SpecimenRequirement)iterator.next();
@@ -358,7 +377,7 @@ public class CollectionProtocolForm extends SpecimenProtocolForm
 				setSpecimenRequirement(key,specimenRequirement);
 				i++;
 			}
-			innerCounter = specimenRequirementCollection.size();
+			innerCounter = specimenRequirementCollectionList.size();
 		}
 		
 		//At least one inner row should be displayed in ADD MORE therefore

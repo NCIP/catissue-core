@@ -12,9 +12,13 @@
 package edu.wustl.catissuecore.actionForm;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,6 +30,7 @@ import edu.wustl.catissuecore.domain.DistributionProtocol;
 import edu.wustl.catissuecore.domain.SpecimenRequirement;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.domain.AbstractDomainObject;
+import edu.wustl.common.util.DomainBeanIdentifierComparator;
 import edu.wustl.common.util.global.ApplicationProperties;
 import edu.wustl.common.util.global.Validator;
 import edu.wustl.common.util.logger.Logger;
@@ -87,13 +92,18 @@ public class DistributionProtocolForm extends SpecimenProtocolForm
 		
 		Collection spcimenProtocolCollection = dProtocol.getSpecimenRequirementCollection();
 		
-		if(spcimenProtocolCollection != null)
+		//Added by Abhishek
+		List spcimenProtocolCollectionList = new ArrayList(spcimenProtocolCollection);
+		DomainBeanIdentifierComparator domainBeanIdentifierComparator = new DomainBeanIdentifierComparator();
+		Collections.sort(spcimenProtocolCollectionList, domainBeanIdentifierComparator);
+		
+		if(spcimenProtocolCollectionList != null)
 		{
-			values = new HashMap();
+			values = new LinkedHashMap();
 			counter=0;
 			
 			int i=1;
-			Iterator it = spcimenProtocolCollection.iterator();
+			Iterator it = spcimenProtocolCollectionList.iterator();
 			while(it.hasNext())
 			{
 				SpecimenRequirement specimenRequirement = (SpecimenRequirement)it.next();
