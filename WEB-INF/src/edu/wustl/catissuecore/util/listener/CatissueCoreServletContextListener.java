@@ -1,5 +1,5 @@
 /*
- * $Name: 1.41.2.7 $
+ * $Name: 1.41.2.8 $
  * 
  * */
 package edu.wustl.catissuecore.util.listener;
@@ -37,10 +37,11 @@ import edu.wustl.catissuecore.domain.TissueSpecimen;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.ProtectionGroups;
-import edu.wustl.catissuecore.util.global.AbstractSpecimenLabelGenerator;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.catissuecore.util.global.Variables;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGenerator;
+import edu.wustl.catissuecore.util.global.namegenerator.SpecimenLabelGeneratorFactory;
 import edu.wustl.common.bizlogic.QueryBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.util.CVSTagReader;
@@ -244,7 +245,7 @@ public class CatissueCoreServletContextListener implements ServletContextListene
              * Description: By getting instance of AbstractSpecimenGenerator abstract class current label retrived and
              * 				set. 
         	 */
-        	AbstractSpecimenLabelGenerator specimenGeneratorInstance = AbstractSpecimenLabelGenerator.getSpecimenLabelGeneratorInstance();
+        	SpecimenLabelGenerator specimenGeneratorInstance = SpecimenLabelGeneratorFactory.getInstance();
         	File propetiesDirPath = new File(path);
         	Variables.propertiesDirPath = propetiesDirPath.getParent();
         	Logger.out.debug("propetiesDirPath "+Variables.propertiesDirPath);

@@ -1389,6 +1389,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String MULTIPLE_SPECIMEN_EVENT_MAP_KEY = "MULTIPLE_SPECIMEN_EVENT_MAP_KEY";
 	public static final String MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY = "MULTIPLE_SPECIMEN_FORM_BEAN_MAP_KEY";
 	public static final String MULTIPLE_SPECIMEN_BUTTONS_MAP_KEY = "MULTIPLE_SPECIMEN_BUTTONS_MAP_KEY";
+	public static final String MULTIPLE_SPECIMEN_LABEL_MAP_KEY = "MULTIPLE_SPECIMEN_LABEL_MAP_KEY";
+	
 	public static final String DERIVED_FORM = "DerivedForm";
 	
 	
@@ -1772,5 +1774,8 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String ACTION_ORDER_BIOSPECIMENARRAY="OrderBiospecimenArray.do";
     public static final String ACTION_ORDER_PATHOLOGYCASE="OrderPathologyCase.do";
     
-	
+    //Specimen Label generation realted constants 
+    public static final String PARENT_SPECIMEN_ID_KEY="parentSpecimenID";
+    public static final String PARENT_SPECIMEN_LABEL_KEY="parentSpecimenLabel";
+    public static final String SCG_NAME_KEY="SCGName";
 }

@@ -81,6 +81,14 @@ create table CATISSUE_SCG_EVENT_PARAM (
    primary key(SPECIMEN_EVENT_IDENTIFIER)
 );
 
+drop table if exists CATISSUE_SPECIMEN_LABEL_COUNT;
+
+create table CATISSUE_SPECIMEN_LABEL_COUNT (
+   LABEL_COUNT bigint not null,
+   primary key (LABEL_COUNT)
+);
+INSERT INTO CATISSUE_SPECIMEN_LABEL_COUNT (LABEL_COUNT) VALUES ('0');
+
 insert into CATISSUE_SCG_EVENT_PARAM (SPECIMEN_EVENT_IDENTIFIER,SPECIMEN_COLL_GRP_ID,USER_ID,EVENT_TIMESTAMP) select b.identifier, specimen_collection_group_id, user_id, min(event_timestamp) from catissue_specimen a join catissue_specimen_event_param b on (a.identifier = specimen_id) join catissue_coll_event_param c on (b.identifier = c.identifier) group by specimen_collection_group_id;
 update CATISSUE_SCG_EVENT_PARAM set type = 'COLL' where type is null;
 insert into catissue_specimen_event_param(specimen_coll_grp_id,user_id,event_timestamp) select specimen_collection_group_id, user_id, min(event_timestamp) from catissue_specimen a join catissue_specimen_event_param b on (a.identifier = specimen_id) join catissue_coll_event_param c on (b.identifier = c.identifier) group by specimen_collection_group_id;

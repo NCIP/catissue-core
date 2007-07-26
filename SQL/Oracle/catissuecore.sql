@@ -68,7 +68,7 @@ drop table  CATISSUE_AUDIT_EVENT_QUERY_LOG cascade constraints;
 drop table  CATISSUE_AUDIT_EVENT cascade constraints;
 drop table  CATISSUE_AUDIT_EVENT_LOG cascade constraints;
 drop table  CATISSUE_AUDIT_EVENT_DETAILS cascade constraints;
-
+drop table CATISSUE_SPECIMEN_LABEL_COUNT;
 drop sequence CATISSUE_CANCER_RES_GRP_SEQ;
 drop   sequence CATISSUE_USER_SEQ;
 drop   sequence CATISSUE_SPECIMEN_PROTOCOL_SEQ;
@@ -909,6 +909,12 @@ alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBBC7298A9 fore
 alter table CATISSUE_NEW_SP_AR_ORDER_ITEM add constraint FKC5C92CCBC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY (IDENTIFIER);
 alter table CATISSUE_DISTRIBUTION add constraint FK54276680783867CC foreign key (ORDER_ID) references CATISSUE_ORDER (IDENTIFIER);
 alter table CATISSUE_DISTRIBUTED_ITEM add constraint FKA7C3ED4BC4A3C438 foreign key (SPECIMEN_ARRAY_ID) references CATISSUE_SPECIMEN_ARRAY;
+
+create table CATISSUE_SPECIMEN_LABEL_COUNT (
+   LABEL_COUNT number(19,0) not null,
+   primary key (LABEL_COUNT)
+);
+INSERT INTO CATISSUE_SPECIMEN_LABEL_COUNT (LABEL_COUNT) VALUES ('0');
 
 
 commit;
