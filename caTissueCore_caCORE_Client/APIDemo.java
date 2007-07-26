@@ -48,6 +48,7 @@ import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.common.util.Utility;
 import edu.wustl.common.util.global.Constants;
 import edu.wustl.common.util.logger.Logger;
+import edu.wustl.catissuecore.domain.Specimen;
 
 
 /**
@@ -1959,35 +1960,23 @@ public class APIDemo
           }
           Collection orderItemCollection = new HashSet();       
 
-          SpecimenArrayType specimenArrayType = (SpecimenArrayType) ClientDemo.dataModelObjectMap.get("SpecimenArrayType");
+          Specimen specimen = (Specimen) ClientDemo.dataModelObjectMap.get("Specimen");
 
-          NewSpecimenArrayOrderItem newSpOrderItem = new NewSpecimenArrayOrderItem();
-          newSpOrderItem.setDescription("OrderDetails Item 1 of Order_Id ");
-          newSpOrderItem.setStatus("Pending - For Protocol Review");           
+          ExistingSpecimenOrderItem exSpOrderItem = new ExistingSpecimenOrderItem();
+          exSpOrderItem.setDescription("OrderDetails Item 1 of Order_Id ");
+          exSpOrderItem.setStatus("New");           
           
           Quantity quantity = new Quantity();
-          quantity.setValue(new Double(10));
-          newSpOrderItem.setRequestedQuantity(quantity);
-          newSpOrderItem.setName("Array Order");
-          newSpOrderItem.setSpecimenArrayType(specimenArrayType);
-          
-         /* SpecimenArrayType specimenArrayType = new SpecimenArrayType();
-          specimenArrayType.setId(new Long(3));*/
-
-          Collection specimenOrderItemCollection = new HashSet();
-          SpecimenOrderItem specimenOrderItem = new SpecimenOrderItem();
-         // specimenOrderItem.setId(new Long(14));
-          specimenOrderItem.setNewSpecimenArrayOrderItem(newSpOrderItem);
-          specimenOrderItemCollection.add(specimenOrderItem);
-
-          newSpOrderItem.setSpecimenOrderItemCollection(specimenOrderItemCollection);         
-          orderItemCollection.add(newSpOrderItem);
+          quantity.setValue(new Double(1));
+          exSpOrderItem.setRequestedQuantity(quantity);
+          exSpOrderItem.setSpecimen(specimen);
+               
+          orderItemCollection.add(exSpOrderItem);
           order.setOrderItemCollection(orderItemCollection);
           return order;
 
     }
-	
-	/**
+		/**
 	 * This function is to update the Order domain object.
 	 */
 		public OrderDetails updateOrderDetails(OrderDetails orderObj)
@@ -1997,10 +1986,7 @@ public class APIDemo
 			//Obtain Distribution Protocol
 	        DistributionProtocol distributionProtocolObj = (DistributionProtocol)ClientDemo.dataModelObjectMap.get("DistributionProtocol");
 			
-			/*DistributionProtocol distributionProtocol = new DistributionProtocol();
-            distributionProtocol.setId(new Long(1));*/
-            
-            orderObj.setDistributionProtocol(distributionProtocolObj);
+			orderObj.setDistributionProtocol(distributionProtocolObj);
             orderObj.setName("Updated Request Name");
             orderObj.setStatus("Pending");
             try
@@ -2014,26 +2000,15 @@ public class APIDemo
             Collection orderItemCollection = new HashSet(); 
             ExistingSpecimenOrderItem existingOrderItem =(ExistingSpecimenOrderItem) orderObj.getOrderItemCollection().iterator().next();
             existingOrderItem.setDescription("Updated OrderDetails Item 1 of Order_Id ");
-            existingOrderItem.setStatus("Pending - For Specimen Distribution");          
-
-            Quantity quantity = new Quantity();
-            quantity.setValue(new Double(10));
-            existingOrderItem.setRequestedQuantity(quantity);
-            
-            /*Specimen specimen = new Specimen();
-            specimen.setId(new Long(3));*/
-            
-            //Obtain Specimen Object
-            Specimen specimen = (Specimen) ClientDemo.dataModelObjectMap.get("Specimen");
-            existingOrderItem.setSpecimen(specimen);
-            orderItemCollection.add(existingOrderItem);
-            orderObj.setOrderItemCollection(orderItemCollection);
+            existingOrderItem.setStatus("Pending - Protocol Review");          
+            existingOrderItem.setOrder(orderObj);
+           
             
             return orderObj;
 		}
 
-	
-	
+
+			
 	private int getUniqueId()
 	{
 		return 1; 
