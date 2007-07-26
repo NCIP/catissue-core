@@ -34,6 +34,7 @@ import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.integration.IntegrationManager;
 import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
@@ -1009,7 +1010,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	 */
 	private void addSpecimenNodesToSCGTree( Vector treeData, Long scgId) throws DAOException, ClassNotFoundException
 	{
-		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus from "
+		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.type from "
 			+ Specimen.class.getName()
 			+ " as sp where sp.specimenCollectionGroup.id = "+scgId;
 		List specimenList = executeQuery(hql);
@@ -1017,20 +1018,44 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		{
 			Object[] obj = (Object[])specimenList.get(j);
 			Long spId1 = (Long) obj[0];
+			//String spLabel1 = (String) obj[1];
 			String spLabel1 = (String) obj[1];
 			Long parentSpecimenId = (Long) obj[2];
 			String spActivityStatus = (String) obj[3];
+			String type = (String)obj[4];
+			
+			
+			 /**
+	         * Name : Abhishek Mehta
+	         * Reviewer Name : Poornima
+	         * Bug ID: SpecimenCollection_Tooltip
+	         * Description: To get tool tip text with added information like label, type and container.
+	         */
+			
+			String toolTipText = "Label : " + spLabel1 + "\\n Type : " + type;
+			
+			String hqlCon = "select colEveParam.container from " + CollectionEventParameters.class.getName()
+				+" as colEveParam where colEveParam.specimen.id = "+spId1;
+			
+			List container = executeQuery(hqlCon);
+			for (int i = 0; i < container.size(); i++)
+			{
+				String con = (String)container.get(i);
+				toolTipText += "\\n Container : "+con;
+			}
+			
+			
 			if (spId1 != null)
 			{
 				if (parentSpecimenId != null)
 				{
 					setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, parentSpecimenId.toString(), Constants.SPECIMEN,
-							null, null, spActivityStatus,spLabel1, treeData);
+							null, null, spActivityStatus,toolTipText, treeData);
 				}
 				else
 				{
 					setQueryTreeNode(spId1.toString(), Constants.SPECIMEN, spLabel1, scgId.toString(),
-							Constants.SPECIMEN_COLLECTION_GROUP, null, null, spActivityStatus,spLabel1, treeData);
+							Constants.SPECIMEN_COLLECTION_GROUP, null, null, spActivityStatus,toolTipText, treeData);
 				}
 			}
 		}
