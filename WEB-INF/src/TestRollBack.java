@@ -28,7 +28,7 @@ public class TestRollBack
 		Logger.out = org.apache.log4j.Logger.getLogger("");
 		PropertyConfigurator.configure(Variables.applicationHome+"\\WEB-INF\\src\\"+"ApplicationResources.properties");
 		
-		Logger.out.debug("here");
+		Logger.out.debug("here1");
         
         Department dept = new Department();
         dept.setName("ABCD");
