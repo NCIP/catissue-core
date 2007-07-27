@@ -8,11 +8,14 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts.Globals;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.DistributionForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
@@ -84,9 +87,10 @@ public class DistributionSubmitAction extends CommonAddEditAction
 		{
 			System.out.println("Time for loop start:"+System.currentTimeMillis());
 			long startTime = System.currentTimeMillis();
-			for (int i = 1; i <= dform.getCounter(); i++) {
+			for (int i = 1; i <= dform.getCounter(); i++) 
+			{
 				String specimenkey = "DistributedItem:" + i + "_Specimen_id";
-
+				String verificationStatusKey = "DistributedItem:" + i + "_verificationKey";
 				String barcodeKey = "DistributedItem:" + i
 						+ "_Specimen_barcode";
 
@@ -97,7 +101,27 @@ public class DistributionSubmitAction extends CommonAddEditAction
 				String barcodeLabel = (String) dform.getValue(barcodeKey);
 				Long specimenId = bizLogic.getSpecimenId(barcodeLabel, dform
 						.getDistributionBasedOn());
-				dform.setValue(specimenkey, specimenId.toString());
+				String verificationStatus=(String)dform.getValue(verificationStatusKey);
+				if(verificationStatus==null||!verificationStatus.equalsIgnoreCase(Constants.VIEW_CONSENTS))
+				{
+					dform.setValue(specimenkey, specimenId.toString());
+				}
+				else
+				{
+					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+					if (errors == null || errors.size() == 0)
+					{
+						ActionMessages messages = null;
+						messages = new ActionMessages();
+						messages.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.verify.Consent"));
+						//errors.verify.Consent
+						if (messages != null)
+						{
+							saveMessages(request, messages);
+						}
+					}
+					return mapping.findForward(Constants.FAILURE);
+				}
 			}
 			System.out.println("Time for loop end:"+System.currentTimeMillis());
 			long endTime = System.currentTimeMillis();
