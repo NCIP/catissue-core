@@ -260,6 +260,7 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
         	CollectionProtocolForm cpForm = (CollectionProtocolForm) abstractForm;
         	
         	userCollection.clear();
+        	this.collectionProtocolEventCollection.clear();
         	long [] coordinatorsArr = cpForm.getProtocolCoordinatorIds();
         	if(coordinatorsArr!=null)
         	{
@@ -291,7 +292,8 @@ public class CollectionProtocol extends SpecimenProtocol implements java.io.Seri
 	        MapDataParser parser = new MapDataParser("edu.wustl.catissuecore.domain");
 	        
 	        ArrayList cpecList = (ArrayList)parser.generateData(sortedMap,true);
-	        for(int i = 0 ; i < cpecList.size() ; i++){
+	        for(int i = 0 ; i < cpecList.size() ; i++)
+	        {
 	        	this.collectionProtocolEventCollection.add(cpecList.get(i));
 	        }
 	        Logger.out.debug("collectionProtocolEventCollection "+this.collectionProtocolEventCollection);
