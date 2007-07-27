@@ -2325,8 +2325,6 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 		if(!specimen.getApplyChangesTo().equalsIgnoreCase(Constants.APPLY_NONE ))
 		{
 			String applyChangesTo = specimen.getApplyChangesTo();
-			//Resolved Lazy---  specimen.getConsentTierStatusCollection();
-			//					oldSpecimen.getConsentTierStatusCollection();
 			Collection consentTierStatusCollection = specimen.getConsentTierStatusCollection();
 			Collection oldConsentTierStatusCollection = oldSpecimen.getConsentTierStatusCollection();
 			Iterator itr = consentTierStatusCollection.iterator();
@@ -2335,8 +2333,8 @@ public class NewSpecimenBizLogic extends IntegrationBizLogic
 				ConsentTierStatus status = (ConsentTierStatus)itr.next();
 				long consentTierID = status.getConsentTier().getId().longValue();
 				String statusValue = status.getStatus();
-				Collection childSpecimens = oldSpecimen.getChildrenSpecimen();
-				//Collection childSpecimens =(Collection)dao.retrieveAttribute(Specimen.class.getName(),oldSpecimen.getId(),"elements(childrenSpecimen)"); 
+				//Collection childSpecimens = oldSpecimen.getChildrenSpecimen();
+				Collection childSpecimens =(Collection)dao.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"elements(childrenSpecimen)"); 
 				Iterator childItr = childSpecimens.iterator();  
 				while(childItr.hasNext() )
 				{

@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.DisposalEventParameters;
 import edu.wustl.catissuecore.domain.ReturnEventParameters;
@@ -310,7 +309,8 @@ public class WithdrawConsentUtil
 	 */
 	private static void updateSCGSpecimenCollection(SpecimenCollectionGroup specimenCollectionGroup, SpecimenCollectionGroup oldSpecimenCollectionGroup, long consentTierID, String  statusValue, Collection newSCGConsentCollection, Collection oldSCGConsentCollection,DAO dao) throws DAOException
 	{
-		Collection specimenCollection =  oldSpecimenCollectionGroup.getSpecimenCollection();
+		Collection specimenCollection = (Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(), specimenCollectionGroup.getId(),"elements(specimenCollection)");  
+		//oldSpecimenCollectionGroup.getSpecimenCollection();
 		Collection updatedSpecimenCollection = new HashSet();
 		String applyChangesTo =  specimenCollectionGroup.getApplyChangesTo(); 
 		Iterator specimenItr = specimenCollection.iterator() ;
