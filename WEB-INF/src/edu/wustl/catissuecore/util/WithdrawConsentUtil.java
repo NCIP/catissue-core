@@ -81,7 +81,7 @@ public class WithdrawConsentUtil
 	 */
 	private static void updateSpecimensInSCG(SpecimenCollectionGroup scg, SpecimenCollectionGroup oldscg, long consentTierID, String consentWithdrawalOption,  DAO dao, SessionDataBean sessionDataBean) throws DAOException
 	{
-		Collection specimenCollection = oldscg.getSpecimenCollection();
+		Collection specimenCollection =(Collection)dao.retrieveAttribute(SpecimenCollectionGroup.class.getName(),scg.getId(),"elements(specimenCollection)"); 
 		Collection updatedSpecimenCollection = new HashSet();
 		Iterator specimenItr = specimenCollection.iterator() ;
 		while(specimenItr.hasNext())

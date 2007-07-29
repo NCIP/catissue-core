@@ -522,8 +522,6 @@
 						<html:hidden property="submittedFor" value="<%=submittedFor%>"/>
 						<html:hidden property="forwardTo" value=""/>
 						<html:hidden property="participantId" />
-						<html:hidden property="withdrawlButtonStatus"/>
-						<html:hidden property="withdrawlButtonStatus"/>
 						<html:hidden property="stringOfResponseKeys"/>
 						<html:hidden property="applyChangesTo"/>
 						<html:hidden property="consentTierCounter"/>
@@ -661,6 +659,7 @@
 				 <!--Collection Protocol -->
 				 <tr>
 					<td class="formMessage" colspan="6">
+						<html:hidden property="withdrawlButtonStatus"/>
 						<bean:message key="requiredfield.message"/>  
 					</td>
 				</tr>	
