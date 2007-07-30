@@ -32,6 +32,7 @@ import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.querysuite.queryobject.ICondition;
 import edu.wustl.common.querysuite.queryobject.RelationalOperator;
 import edu.wustl.common.util.ParseXMLFile;
+import edu.wustl.common.util.Utility;
 
 /**
  * This class generates UI for 'Add Limits' and 'Edit Limits' section.
@@ -74,7 +75,7 @@ public class GenerateHtmlForAddLimitsBizLogic
 	{
 		StringBuffer generatedHTML = new StringBuffer();
 		String nameOfTheEntity = entity.getName();
-		String entityName = nameOfTheEntity.substring(nameOfTheEntity.lastIndexOf(".")+1,nameOfTheEntity.length());
+		String entityName = Utility.parseClassName(nameOfTheEntity);//nameOfTheEntity.substring(nameOfTheEntity.lastIndexOf(".")+1,nameOfTheEntity.length());
 		Collection attributeCollection = entity.getAttributeCollection();
 		boolean isEditLimits = false;
 		String header = Constants.DEFINE_SEARCH_RULES;

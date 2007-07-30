@@ -15,6 +15,7 @@ import edu.wustl.common.beans.SessionDataBean;
 import edu.wustl.common.dao.DAOFactory;
 import edu.wustl.common.dao.JDBCDAO;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
+import edu.wustl.common.querysuite.queryobject.impl.metadata.QueryOutputTreeAttributeMetadata;
 import edu.wustl.common.util.dbManager.DAOException;
 
 /**
@@ -175,12 +176,11 @@ public abstract class QueryModuleUtil
 	 * Returns SQL for root node in tree.
 	 * @param root root node of the tree
 	 * @param tableName name of the temp table created
-	 * @param nodeAttributeColumnNameMap  map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @return String sql for root node
 	 */
-	public static String getSQLForRootNode(OutputTreeDataNode root, String tableName, Map<Long, Map<AttributeInterface, String>> nodeAttributeColumnNameMap)
+	public static String getSQLForRootNode(OutputTreeDataNode root, String tableName)
 	{
-		String columnNames = getColumnNamesForSelectpart(root, nodeAttributeColumnNameMap);
+		String columnNames = getColumnNamesForSelectpart(root);
 		String indexStr = columnNames.substring(columnNames.lastIndexOf(";") + 1, columnNames.length());
 		int index = -1;
 		if (!indexStr.equalsIgnoreCase("null"))
@@ -206,33 +206,29 @@ public abstract class QueryModuleUtil
 	 * @param columnMap map which strores all node ids  with their information like attributes and actual column names in database.
 	 * @return String having all columnnames for select part.
 	 */
-	public static String getColumnNamesForSelectpart(OutputTreeDataNode node, Map<Long, Map<AttributeInterface, String>> columnMap)
+	public static String getColumnNamesForSelectpart(OutputTreeDataNode node)
 	{
 		String columnNames = "";
 		String idColumnName = null;
 		String displayNameColumnName = null;
 		String index = null;
-		Map<AttributeInterface, String> columns = columnMap.get(node.getId());
-		if (columns != null)
+		List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
+		for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
 		{
-			Set<AttributeInterface> setColumns = columns.keySet();
-			for (Iterator<AttributeInterface> iterator = setColumns.iterator(); iterator.hasNext();)
+			AttributeInterface attribute = attributeMetaData.getAttribute();
+			String columnName = attributeMetaData.getColumnName();
+			if (idColumnName != null && displayNameColumnName != null)
 			{
-				AttributeInterface attr = iterator.next();
-				String columnName = columns.get(attr);
-				if (idColumnName != null && displayNameColumnName != null)
-				{
-					break;
-				}
-				if (attr.getName().equalsIgnoreCase(Constants.ID))
-				{
-					idColumnName = columnName;
-				}
-				else if (ifAttributeIsDisplayName(attr.getName()))
-				{
-					index = columnName.substring(Constants.COLUMN_NAME.length(), columnName.length());
-					displayNameColumnName = columnName;
-				}
+				break;
+			}
+			if (attribute.getName().equalsIgnoreCase(Constants.ID))
+			{
+				idColumnName = columnName;
+			}
+			else if (ifAttributeIsDisplayName(attribute.getName()))
+			{
+				index = columnName.substring(Constants.COLUMN_NAME.length(), columnName.length());
+				displayNameColumnName = columnName;
 			}
 		}
 		if (displayNameColumnName != null)
@@ -291,20 +287,39 @@ public abstract class QueryModuleUtil
 	
 	/**
 	 * When passes treeNumber , this method returns the root node of that tree. 
-	 * @param outputTreeMap tree deta
+	 * @param rootOutputTreeNodeList tree deta
 	 * @param treeNo number of tree
 	 * @return root node of the tree
 	 */
-	public static OutputTreeDataNode getNodeForTree(Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap,String treeNo)
+	public static OutputTreeDataNode getRootNodeOfTree(List<OutputTreeDataNode> rootOutputTreeNodeList,String treeNo)
 	{
-		Iterator<OutputTreeDataNode> iterator = outputTreeMap.keySet().iterator();
-		while (iterator.hasNext())
+		for(OutputTreeDataNode node :rootOutputTreeNodeList)
 		{
-			OutputTreeDataNode next = iterator.next();
-			if (next.getTreeNo() == new Integer(treeNo).intValue())
-				return next;
+			if (node.getTreeNo() == new Integer(treeNo).intValue())
+				return node;
 		}
 		return null;
 	}
-
+	/**
+	 * Returns column name of nodes id when passed a node to it 
+	 * @param node {@link OutputTreeDataNode}
+	 * @return String id Columns name
+	 */
+	public static String getParentIdColumnName(OutputTreeDataNode node)
+	{
+		if(node != null)
+		{
+			List<QueryOutputTreeAttributeMetadata> attributes = node.getAttributes();
+			for(QueryOutputTreeAttributeMetadata attributeMetaData : attributes)
+			{
+				AttributeInterface attribute = attributeMetaData.getAttribute();
+				if(attribute.getName().equalsIgnoreCase(Constants.ID))
+				{
+					String sqlColumnName = attributeMetaData.getColumnName();
+					return sqlColumnName;
+				}
+			}
+		}
+		return null;
+	}
 }
