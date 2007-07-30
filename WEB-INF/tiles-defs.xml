@@ -1030,7 +1030,7 @@
 	</definition>
 	
 	<definition name=".catissuecore.viewSearchResults" extends=".catissuecore.searchHomeDef">
-		<put name="content" value="/pages/content/search/querysuite/ViewSearchResults.jsp" />
+		<put name="content" value="/pages/content/search/querysuite/ViewResults.jsp" />
 	</definition>
 	
 	<definition name=".catissuecore.defineSearchResultsView" extends=".catissuecore.searchHomeDef">
@@ -1044,7 +1044,9 @@
 	<definition name=".catissuecore.defineSearchResultsViewBNT" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/querysuite/DefineSearchResultsViewBuildNewTree.jsp" />
 	</definition>
-	
+	 <!-- Definition code : Deepti Shelar : For pagination : 20/07/2007 -->
+	<definition name=".catissuecore.queryTreeViewDef" path="/pages/content/search/querysuite/QueryTreeView.jsp">
+	</definition>
 <!--	<definition name=".catissuecore.defineSearchResultsView" extends=".catissuecore.searchHomeDef">
 		<put name="content" value="/pages/content/search/querysuite/DefineSearchResultsView.jsp" />
 	</definition> -->

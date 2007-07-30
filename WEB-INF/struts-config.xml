@@ -515,7 +515,7 @@ PUBLIC
 			name="categorySearchForm"
 			validate="false"
 			scope="request">
-			<forward name="success" path=".catissuecore.defineSearchResultsViewBNT"/>			
+			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef" />
 		</action>
 		<action path="/BuildQueryOutputSpreadsheet"
 			type="edu.wustl.catissuecore.action.querysuite.BuildQueryOutputSpreadsheetAction"
@@ -543,6 +543,18 @@ PUBLIC
 			parameter="method">
 		</action>
 		
+		<!-- Action code : Query Module changes for pagination starts : 20/07/2007 -->
+		
+		<action path="/QueryTreeView"
+			type="edu.wustl.catissuecore.action.querysuite.QueryTreeViewAction">
+			<forward name="success" path=".catissuecore.queryTreeViewDef" />
+		</action>
+		
+		<action path="/QueryGridView"
+			type="edu.wustl.catissuecore.action.querysuite.QueryGridViewAction">
+			<forward name="success" path=".catissuecore.queryResultsSpreadsheetViewDef" />
+		</action>
+		<!-- Action code : Query Module changes for pagination ends : 20/07/2007 -->		
 		
 		<!-- Action code : Query Module Ends : 06/11/06 -->
 		
@@ -2560,6 +2572,7 @@ PUBLIC
 			scope="request">
 			<forward name="pageOfSimpleQueryInterface" path=".catissuecore.simpleSearchResultsDef" />
 			<forward name="pageOfQueryResults" path=".catissuecore.queryResultsSpreadsheetViewDef" />	
+			<forward name="pageOfQueryModule" path=".catissuecore.queryResultsSpreadsheetViewDef" />	
 			<forward name="pageOfInstitution" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfDepartment" path=".catissuecore.editSearchResultsDef"/>
 			<forward name="pageOfCancerResearchGroup" path=".catissuecore.editSearchResultsDef"/>

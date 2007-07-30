@@ -24,7 +24,7 @@
 	}
 	
 	var addedNodes = "";
-	function treeNodeClicled(id)
+	function treeNodeClicked(id)
 	{
 		if(id.indexOf('_NULL') == -1)
 		{
@@ -59,19 +59,10 @@
 			}
 		}
 		buildSpreadsheet(id);
-	};
+	}
 	function buildSpreadsheet(id)
 	{
-		var request = newXMLHTTPReq();			
-		var actionURL;
-		var handlerFunction = getReadyStateHandler(request,showSpreadsheetData,true);	
-		request.onreadystatechange = handlerFunction;				
-		actionURL = "nodeId=" + id;				
-		var url = "ShowGrid.do";
-		<!-- Open connection to servlet -->
-		request.open("POST",url,true);	
-		request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");	
-		request.send(actionURL);	
+		window.parent.frames[1].location = "ShowGrid.do?pageOf=pageOfQueryModule&nodeId="+id;
 	}
 	function showChildNodes(outputTreeStr)
 	{
