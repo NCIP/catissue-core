@@ -1701,4 +1701,12 @@ public class Constants extends edu.wustl.common.util.global.Constants
     
     
     public static final String EDIT_CONDN = "Edit";
+//	 Frame names in Query Module Results page.
+	public static final String GRID_DATA_VIEW_FRAME = "gridFrame";
+	public static final String TREE_VIEW_FRAME = "treeViewFrame";
+    public static final String QUERY_TREE_VIEW_ACTION = "QueryTreeView.do";
+    public static final String QUERY_GRID_VIEW_ACTION = "QueryGridView.do";
+    public static final String NO_OF_TREES = "noOfTrees";
+    public static final String PAGEOF_QUERY_MODULE = "pageOfQueryModule";
+    public static final String TREE_ROOTS = "treeRoots";
 }
