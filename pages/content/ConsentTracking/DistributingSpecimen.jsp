@@ -50,17 +50,17 @@
 				function submitAllResponses()
 				{
 					var checkboxInstance = document.getElementById('verifyAllCheckBox');
+					var parentId=parent.opener.document.getElementById('<%=request.getParameter("barcodelableId")%>');
+					var theId = '<%=request.getParameter("verificationKey")%>';
 					if(checkboxInstance.checked)
 					{
-						var parentId=parent.opener.document.getElementById('<%=request.getParameter("barcodelableId")%>');
-						var theId = '<%=request.getParameter("verificationKey")%>';
 						parentId.innerHTML="<%=Constants.VERIFIED%>"+"<input type='hidden' name='" + theId + "' value='Verified' id='" + theId + "'/>";
-						window.close ();
 					}
 					else
 					{
-						window.close ();
+						parentId.innerHTML="View"+"<input type='hidden' name='" + theId + "' value='View' id='" + theId + "'/>";
 					}
+					window.close ();
 				}
 				
 				

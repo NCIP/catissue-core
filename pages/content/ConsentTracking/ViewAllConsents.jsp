@@ -46,23 +46,28 @@
 					%>
 						var checkboxKey="verifyAllCheckBox"+<%=i%>;
 						var checkboxInstance=document.getElementById(checkboxKey);
-						if(checkboxInstance.checked)
-						{						
-							for(j=1;j<=tableRows.length;j++)
-							{	
-								var lable = "value(DistributedItem:" + j + "_Specimen_label)";
-								var barcode = "value(DistributedItem:" + j + "_Specimen_barcode)";
-								var lableBarcodeObj=parent.opener.document.getElementById(lable);
-								if(lableBarcodeObj.value=="")
+						for(j=1;j<=tableRows.length;j++)
+						{	
+							var lable = "value(DistributedItem:" + j + "_Specimen_label)";
+							var barcode = "value(DistributedItem:" + j + "_Specimen_barcode)";
+							var lableBarcodeObj=parent.opener.document.getElementById(lable);
+							if(lableBarcodeObj.value=="")
+							{
+								lableBarcodeObj=parent.opener.document.getElementById(barcode);
+							}
+							if(lableBarcodeObj.value=="<%=labelBarcode%>")
+							{
+								var barcodelabelStatus="barcodeStatus"+j;
+								verificationStatusKey = "value(DistributedItem:"+j+"_verificationKey)";
+								var parentId=parent.opener.document.getElementById(barcodelabelStatus);
+								if(checkboxInstance.checked)
 								{
-									lableBarcodeObj=parent.opener.document.getElementById(barcode);
-								}
-								if(lableBarcodeObj.value=="<%=labelBarcode%>")
-								{
-									var barcodelabelStatus="barcodeStatus"+j;
-									verificationStatusKey = "value(DistributedItem:"+j+"_verificationKey)";
-									var parentId=parent.opener.document.getElementById(barcodelabelStatus);
 									parentId.innerHTML="Verified"+"<input type='hidden' name='" + verificationStatusKey + "' value='Verified' id='" + verificationStatusKey + "'/>";
+									break;
+								}
+								else
+								{
+									parentId.innerHTML="View"+"<input type='hidden' name='" + verificationStatusKey + "' value='View' id='" + verificationStatusKey + "'/>";
 									break;
 								}
 							}
@@ -295,7 +300,8 @@
 									}
 									%>
 									<td class="tabrightmostcell">
-											<input type="checkbox" name="verifyAllCheckBox" id="<%=checkboxID%>" <%=status%>/>
+											<input type="checkbox" name="verifyAllCheckBox" id="<%=checkboxID%>" <%=status%>
+											 />
 									</td>
 
 							<%
