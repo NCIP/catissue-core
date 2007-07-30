@@ -638,11 +638,9 @@ function popupWindow(nofConsentTiers)
 							<%
 								String verificationKeyValue = request.getParameter(Constants.STATUS);
 								String status="";
-								String buttonStatus="";
 								if(verificationKeyValue.equals(Constants.VERIFIED))
 								{
 									status="checked=checked";
-									buttonStatus="disabled=true";
 								}
 								else
 								{
@@ -650,7 +648,8 @@ function popupWindow(nofConsentTiers)
 								}
 							%>
 							<td class="tabrightmostcell">
-								<input type="checkbox" name="verifyAllCheckBox" id="verifyAllCheckBox" <%=status%>/>
+								<input type="checkbox" name="verifyAllCheckBox" id="verifyAllCheckBox"
+								<%=status%> />
 							</td>
 							<td class="formField" colspan="3">
 								<label><b><bean:message key="consent.verificationmessage" /><b></label>
@@ -659,7 +658,7 @@ function popupWindow(nofConsentTiers)
 						<%-- action button --%>																
 						<tr>
 							<td class="tabrightmostcell" align="right" colspan="4">
-								<input type="button" name="doneButton" style="actionButton" value="Done" onclick="submitAllResponses()" <%=buttonStatus%>/>
+								<input type="button" name="doneButton" style="actionButton" value="Done" onclick="submitAllResponses()"/>
 							</td>
 						</tr>
 						<% 
