@@ -1,11 +1,7 @@
 package edu.wustl.catissuecore.action.querysuite;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,17 +15,13 @@ import edu.common.dynamicextensions.domaininterface.AttributeInterface;
 import edu.wustl.catissuecore.actionForm.CategorySearchForm;
 import edu.wustl.catissuecore.bizlogic.querysuite.QueryOutputSpreadsheetBizLogic;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.catissuecore.util.querysuite.QueryModuleUtil;
 import edu.wustl.common.action.BaseAction;
 import edu.wustl.common.beans.SessionDataBean;
-import edu.wustl.common.querysuite.queryengine.impl.SqlGenerator;
 import edu.wustl.common.querysuite.queryobject.impl.OutputTreeDataNode;
-import edu.wustl.common.util.dbManager.DAOException;
 
 /**
- * This class is invoked when user clicks on a node from the tree. It loads the data required for tree formation.
+ * This class is invoked when user clicks on a node from the tree. It loads the data required for grid formation.
  * @author deepti_shelar
- *
  */
 public class ShowGridAction extends BaseAction
 {
@@ -50,146 +42,39 @@ public class ShowGridAction extends BaseAction
 		Map<String, OutputTreeDataNode> uniqueIdNodesMap = (Map<String, OutputTreeDataNode>) session.getAttribute(Constants.ID_NODES_MAP);
 		Map<Long, Map<AttributeInterface, String>> columnMap = (Map<Long, Map<AttributeInterface, String>>) session.getAttribute(
 				Constants.ID_COLUMNS_MAP);
-		Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap = 
-			(Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>>)session.getAttribute(Constants.OUTPUT_TREE_MAP);
+		List<OutputTreeDataNode> rootOutputTreeNodeList = (List<OutputTreeDataNode>)session.getAttribute(Constants.TREE_ROOTS);
 		SessionDataBean sessionData = getSessionData(request);
-		CategorySearchForm actionForm = (CategorySearchForm) form;
-		String idOfClickedNode = actionForm.getNodeId();
+		String idOfClickedNode = request.getParameter("nodeId");
 		Map spreadSheetDatamap = null;
+		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
 		String actualParentNodeId = idOfClickedNode.substring(idOfClickedNode.lastIndexOf(Constants.NODE_SEPARATOR) + 2, idOfClickedNode.length());
 		if (idOfClickedNode.endsWith(Constants.LABEL_TREE_NODE))
 		{
-			
-			spreadSheetDatamap = processSpreadsheetForLabelNode(uniqueIdNodesMap,outputTreeMap, columnMap, sessionData, idOfClickedNode);
+			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForLabelNode(uniqueIdNodesMap,rootOutputTreeNodeList, columnMap, sessionData, idOfClickedNode);
 		}
 		else
 		{
-			spreadSheetDatamap = processSpreadsheetForDataNode(uniqueIdNodesMap, outputTreeMap, sessionData, actualParentNodeId);
+			spreadSheetDatamap = outputSpreadsheetBizLogic.processSpreadsheetForDataNode(uniqueIdNodesMap, rootOutputTreeNodeList, sessionData, actualParentNodeId);
 		}
-		String outputSpreadsheetDataStr = QueryModuleUtil.prepareOutputSpreadsheetDataString(spreadSheetDatamap);
-		response.setContentType("text/html");
-		response.getWriter().write(outputSpreadsheetDataStr);
-		return null;
+		setGridData(request, session, spreadSheetDatamap);
+		return mapping.findForward(Constants.SUCCESS);
 	}
 	/**
-	 * Processes spreadsheet data for data node which user has clicked.
-	 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
-	 * @param columnMap map for column names for attributes for each node in query
-	 * @param sessionData session data bean
-	 * @param actualParentNodeId string id of parent
-	 * @return Map of spreadsheet data 
-	 * @throws DAOException DAOException
-	 * @throws ClassNotFoundException ClassNotFoundException
+	 * @param request HTTPRequest
+	 * @param session HTTPSession
+	 * @param spreadSheetDatamap Map to store spreadshet data
 	 */
-	private Map processSpreadsheetForDataNode(Map<String, OutputTreeDataNode> idNodesMap,
-			Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap, SessionDataBean sessionData, String actualParentNodeId)
-	throws DAOException, ClassNotFoundException
+	private void setGridData(HttpServletRequest request, HttpSession session, Map spreadSheetDatamap)
 	{
-		Map spreadSheetDatamap = null;
-		String[] nodeIds;
-		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
-		nodeIds = actualParentNodeId.split(Constants.UNDERSCORE);
-		String treeNo = nodeIds[0];
-		String parentId = nodeIds[1];
-		String parentData = nodeIds[2];
-		String uniqueNodeId = treeNo+"_"+parentId;
-		OutputTreeDataNode parentNode = idNodesMap.get(uniqueNodeId);
-		if (parentNode.getChildren().isEmpty())
-		{
-			spreadSheetDatamap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,parentNode, outputTreeMap, sessionData,parentData);
-		}
-		else
-		{
-			spreadSheetDatamap = outputSpreadsheetBizLogic.updateSpreadsheet(treeNo,parentNode, outputTreeMap, sessionData,parentData);
-		}
-		return spreadSheetDatamap;
-	}
-
-	/**
-	 * Processes spreadsheet data for label node which user has clicked.
-	 * @param idNodesMap Map<Long, OutputTreeDataNode> map of ids and nodes present in tree
-	 * @param columnMap map for column names for attributes for each node in query
-	 * @param sessionData session data bean
-	 * @param actualParentNodeId string id of parent
-	 * @param nodeIds string array of node ids
-	 * @return Map of spreadsheet data 
-	 * @throws DAOException DAOException
-	 * @throws ClassNotFoundException ClassNotFoundException
-	 */
-	private Map processSpreadsheetForLabelNode(Map<String, OutputTreeDataNode> idNodesMap,Map<OutputTreeDataNode,Map<Long, Map<AttributeInterface, String>>> outputTreeMap, Map<Long, Map<AttributeInterface, String>> columnMap, SessionDataBean sessionData, String idOfClickedNode) throws DAOException, ClassNotFoundException
-	{
-		Map spreadSheetDataMap = new HashMap();
-		QueryOutputSpreadsheetBizLogic outputSpreadsheetBizLogic = new QueryOutputSpreadsheetBizLogic();
-		String tableName = Constants.TEMP_OUPUT_TREE_TABLE_NAME + sessionData.getUserId();
-		String[] nodeIds = idOfClickedNode.split(Constants.NODE_SEPARATOR);
-		String parentNode = nodeIds[0];//data
-		String[] spiltParentNodeId = parentNode.split(Constants.UNDERSCORE);
-		String treeNo = spiltParentNodeId[0];
-		String parentNodeId = spiltParentNodeId[1];
-		if(parentNode.contains("NULL"))
-		{
-			OutputTreeDataNode root = QueryModuleUtil.getNodeForTree(outputTreeMap,treeNo);
-			spreadSheetDataMap = outputSpreadsheetBizLogic.createSpreadsheetData(treeNo,root, outputTreeMap, sessionData,null);
-		} else
-		{
-			String parentData = spiltParentNodeId[2];
-			String uniqueParentNodeId = treeNo+"_"+parentNodeId;
-			OutputTreeDataNode parentTreeNode = idNodesMap.get(uniqueParentNodeId);
-			OutputTreeDataNode root = QueryModuleUtil.getNodeForTree(outputTreeMap,treeNo);
-			Map<AttributeInterface, String> columnsMap = outputTreeMap.get(root).get(parentTreeNode.getId());
-			String parentIdColumnName = "";
-			Set<AttributeInterface> setForParent = columnsMap.keySet();
-			for (Iterator<AttributeInterface> iterator = setForParent.iterator(); iterator.hasNext();)
-			{
-				AttributeInterface attr = iterator.next();
-				if (attr.getName().equalsIgnoreCase(Constants.ID))
-				{
-					parentIdColumnName = columnsMap.get(attr);
-					break;
-				}
-			}
-			String currentNode = nodeIds[1];//label
-			String[] spiltCurrentNodeId = currentNode.split(Constants.UNDERSCORE);
-			String currentNodeId = spiltCurrentNodeId[1];
-			String uniqueCurrentNodeId = treeNo+"_"+currentNodeId;
-			OutputTreeDataNode currentTreeNode = idNodesMap.get(uniqueCurrentNodeId);
-			columnsMap = outputTreeMap.get(root).get(currentTreeNode.getId());
-			String selectSql = createSQL(spreadSheetDataMap, columnsMap);
-			selectSql = selectSql.substring(0, selectSql.lastIndexOf(","));
-			selectSql = selectSql + " from " + tableName;
-			if (parentData != null)
-			{
-				selectSql = selectSql + " where " + parentIdColumnName + " = '" + parentData + "'";
-			}
-			List spreadsheetDataList = QueryModuleUtil.executeQuery(selectSql, sessionData);
-			spreadSheetDataMap.put(Constants.SPREADSHEET_DATA_LIST, spreadsheetDataList);
-		}
-		return spreadSheetDataMap;
-	}
-
-	/**
-	 * @param spreadSheetDataMap
-	 * @param columnsMap
-	 * @return
-	 */
-	private String createSQL(Map spreadSheetDataMap, Map<AttributeInterface, String> columnsMap)
-	{
-		Set<AttributeInterface> set = columnsMap.keySet();
-		String selectSql = "select distinct ";
-		List<String> columnsList = new ArrayList<String>();
-		columnsList.add("");
-		for (Iterator<AttributeInterface> iterator = set.iterator(); iterator.hasNext();)
-		{
-			AttributeInterface attribute = iterator.next();
-			String className = attribute.getEntity().getName();
-			className = className.substring(className.lastIndexOf('.') + 1, className.length());
-			String sqlColumnName = columnsMap.get(attribute);
-			selectSql = selectSql + sqlColumnName + ",";
-			sqlColumnName = sqlColumnName.substring(SqlGenerator.COLUMN_NAME.length(), sqlColumnName.length());
-			String attrLabel = QueryModuleUtil.getAttributeLabel(attribute.getName());
-			columnsList.add(attrLabel + " : " + className);
-		}
-		spreadSheetDataMap.put(Constants.SPREADSHEET_COLUMN_LIST, columnsList);
-		return selectSql;
+		int pageNum = Constants.START_PAGE;
+		request.setAttribute(Constants.PAGE_NUMBER,Integer.toString(pageNum));
+		List<List<String>> dataList = (List<List<String>>) spreadSheetDatamap.get(Constants.SPREADSHEET_DATA_LIST);
+		session.setAttribute(Constants.SPREADSHEET_DATA_LIST,dataList);
+		session.setAttribute(Constants.PAGINATION_DATA_LIST,dataList);
+		List columnsList = (List) spreadSheetDatamap.get(Constants.SPREADSHEET_COLUMN_LIST);
+		session.setAttribute(Constants.SPREADSHEET_COLUMN_LIST,columnsList);
+		session.setAttribute(Constants.TOTAL_RESULTS,new Integer(dataList.size()).toString());	  
+		String pageOf = (String)request.getParameter(Constants.PAGEOF);
+		request.setAttribute(Constants.PAGEOF,pageOf);
 	}
 }
