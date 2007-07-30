@@ -14,7 +14,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import edu.wustl.catissuecore.actionForm.DistributionForm;
@@ -74,6 +73,7 @@ public class DistributionSubmitAction extends CommonAddEditAction
 	{
 
 		DistributionForm dform = (DistributionForm) form;
+		long verificationKeyCounter=0;
 		DistributionBizLogic bizLogic = (DistributionBizLogic) BizLogicFactory
 				.getInstance().getBizLogic(Constants.DISTRIBUTION_FORM_ID);
 
@@ -108,20 +108,24 @@ public class DistributionSubmitAction extends CommonAddEditAction
 				}
 				else
 				{
-					ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
-					if (errors == null || errors.size() == 0)
-					{
-						ActionMessages messages = null;
-						messages = new ActionMessages();
-						messages.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.verify.Consent"));
-						//errors.verify.Consent
-						if (messages != null)
-						{
-							saveMessages(request, messages);
-						}
-					}
-					return mapping.findForward(Constants.FAILURE);
+					verificationKeyCounter = verificationKeyCounter + 1;
 				}
+			}
+			if(dform.getCounter()== verificationKeyCounter)
+			{
+				ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
+				if (errors == null || errors.size() == 0)
+				{
+					ActionMessages messages = null;
+					messages = new ActionMessages();
+					messages.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.verify.Consent"));
+					//errors.verify.Consent
+					if (messages != null)
+					{
+						saveMessages(request, messages);
+					}
+				}
+				return mapping.findForward(Constants.FAILURE);
 			}
 			System.out.println("Time for loop end:"+System.currentTimeMillis());
 			long endTime = System.currentTimeMillis();
