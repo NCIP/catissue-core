@@ -398,13 +398,13 @@ public class SpecimenCollectionGroupForm extends AbstractActionForm implements C
          */  
         comment = Utility.toString(specimenCollectionGroup.getComment());
 			
-		ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
-		surgicalPathologyNumber = Utility.toString(clinicalReport.getSurgicalPathologyNumber());
-		
-		if(clinicalReport.getParticipantMedicalIdentifier()!=null)
-		{
-			participantsMedicalIdentifierId = clinicalReport.getParticipantMedicalIdentifier().getId().longValue();
-		}
+////		ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
+//		surgicalPathologyNumber = Utility.toString(clinicalReport.getSurgicalPathologyNumber());
+//		
+//		if(clinicalReport.getParticipantMedicalIdentifier()!=null)
+//		{
+//			participantsMedicalIdentifierId = clinicalReport.getParticipantMedicalIdentifier().getId().longValue();
+//		}
 			
 		collectionProtocolId = specimenCollectionGroup.getCollectionProtocolRegistration().getCollectionProtocol().getId().longValue();
 		collectionProtocolEventId = specimenCollectionGroup.getCollectionProtocolEvent().getId().longValue();
