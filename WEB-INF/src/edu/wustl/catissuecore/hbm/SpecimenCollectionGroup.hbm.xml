@@ -107,6 +107,14 @@
             column="COMMENTS"
             length="2000"
         />
+         <property
+            name="surgicalPathologyNumber"
+            type="string"
+            update="true"
+            insert="true"
+            column="SURGICAL_PATHOLOGY_NUMBER"
+            length="50"
+        />
         <many-to-one
             name="site"
             class="edu.wustl.catissuecore.domain.Site"
@@ -125,16 +133,6 @@
             update="true"
             insert="true"
             column="COLLECTION_PROTOCOL_EVENT_ID"
-        />
-
-        <many-to-one
-            name="clinicalReport"
-            class="edu.wustl.catissuecore.domain.ClinicalReport"
-            cascade="none"
-            outer-join="auto"
-            update="true"
-            insert="true"
-            column="CLINICAL_REPORT_ID"
         />
 
         <set
@@ -165,6 +163,24 @@
             update="true"
             insert="true"
             column="COLLECTION_PROTOCOL_REG_ID"
+        />
+        
+        <one-to-one
+            name="deIdentifiedSurgicalPathologyReport"
+            class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+            cascade="save-update"
+            outer-join="auto"
+            constrained="false"
+	     	property-ref="specimenCollectionGroup"
+        />
+
+        <one-to-one
+            name="identifiedSurgicalPathologyReport"
+            class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
+            cascade="save-update"
+            outer-join="auto"
+            constrained="false"
+	     	property-ref="specimenCollectionGroup"
         />
 
         <!--
