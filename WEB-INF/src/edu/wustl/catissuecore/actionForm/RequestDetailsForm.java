@@ -333,7 +333,7 @@ public class RequestDetailsForm extends AbstractActionForm
 					definedArrayMap.put(newSpecimenArrayOrderItem,defineArrayContentsList);
 				}	
 			}						
-			putCommonValuesInValuesMap(orderItem,assignStatus,description,requestedQty,orderItemId,distributedItemId);
+			putCommonValuesInValuesMap(orderItem,assignStatus,description,requestedQty,assignQty,orderItemId,distributedItemId);
 		}
 		// Putting defined array values in Values map
 		if(definedArrayMap.size() > 0)
@@ -412,7 +412,7 @@ public class RequestDetailsForm extends AbstractActionForm
 			condition = "true"; 
 		}
 		values.put(createArrayCondition, condition);
-		putCommonValuesInValuesMap(newSpecimenArrayOrderItem,assignStatus,"","",orderItemId,distributedItemId);
+		putCommonValuesInValuesMap(newSpecimenArrayOrderItem,assignStatus,"","","",orderItemId,distributedItemId);
 			
 	}
 	/**
@@ -444,7 +444,7 @@ public class RequestDetailsForm extends AbstractActionForm
 		String actualSpecimenType = "DefinedArrayDetailsBean:"+arrayDetailsBeanCounter+"_actualSpecimenType";
 		
 		populateValuesMap(specimenOrderItem,requestedItem,availableQty,specimenClass,specimenType,requestFor,specimenId,assignQty,instanceOf,specimenList,specimenCollGrpId,totalSpecimenListInRequestForDropDown,actualSpecimenClass,actualSpecimenType);
-		putCommonValuesInValuesMap(specimenOrderItem,assignStatus,description,requestedQty,orderItemId,"");
+		putCommonValuesInValuesMap(specimenOrderItem,assignStatus,description,requestedQty,assignQty,orderItemId,"");
 	}
 	/**
 	 * @param orderItem
@@ -454,7 +454,7 @@ public class RequestDetailsForm extends AbstractActionForm
 	 * @param orderItemId
 	 * @param distributedItemId
 	 */
-	private void putCommonValuesInValuesMap(OrderItem orderItem,String assignStatus,String description,String requestedQty,String orderItemId,String distributedItemId)
+	private void putCommonValuesInValuesMap(OrderItem orderItem,String assignStatus,String description,String requestedQty,String assignQty,String orderItemId,String distributedItemId)
 	{
 		values.put(assignStatus,orderItem.getStatus());
 		values.put(description, orderItem.getDescription());	
@@ -466,10 +466,15 @@ public class RequestDetailsForm extends AbstractActionForm
 		if(orderItem.getDistributedItem() != null)
 		{
 			values.put(distributedItemId, orderItem.getDistributedItem().getId().toString());
+			
 		}
 		else
 		{
 			values.put(distributedItemId, "");
+			if(orderItem.getRequestedQuantity() != null)
+			{
+				values.put(assignQty, orderItem.getRequestedQuantity().getValue().toString());	
+			}
 		}
 	}
 	/**
