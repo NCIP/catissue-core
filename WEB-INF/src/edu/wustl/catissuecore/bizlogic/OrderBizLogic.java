@@ -204,7 +204,7 @@ public class OrderBizLogic extends DefaultBizLogic
 						if(oldorderItem instanceof DerivedSpecimenOrderItem)
 						{
 							DerivedSpecimenOrderItem derivedSpecimenOrderItem = (DerivedSpecimenOrderItem)oldorderItem;
-							if(orderItem.getDistributedItem().getSpecimen().getId() == null)
+							if(oldorderItem.getDistributedItem()==null && orderItem.getDistributedItem().getSpecimen().getId() == null)
 							{
 								throw new DAOException(ApplicationProperties.getValue("orderdistribution.distribution.notpossible.errmsg"));
 							}
@@ -429,6 +429,16 @@ public class OrderBizLogic extends DefaultBizLogic
 					//	oldOrderItem.setStatus(newOrderItem.getStatus());												
 						//The number of Order Items updated.
 						numberItemsUpdated ++;
+				}
+				else if((oldOrderItem.getId().compareTo(newOrderItem.getId()) == 0) && oldOrderItem.getDistributedItem()!=null)
+				{
+					List list = dao.retrieve(DistributedItem.class.getName(),Constants.SYSTEM_IDENTIFIER,oldOrderItem.getDistributedItem().getId());
+					if(list != null&& list.size()>0)
+					{
+						DistributedItem distributedItem = (DistributedItem) list.get(0);
+						newOrderItem.setDistributedItem(distributedItem);
+					}
+					
 				}
 			}	
 			calculateOrderStatus(newOrderItem);
