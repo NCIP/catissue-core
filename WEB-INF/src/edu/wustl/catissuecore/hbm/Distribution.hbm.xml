@@ -79,6 +79,25 @@
             length="50"
         />
 
+        <set
+            name="specimenArrayCollection"
+            table="CATISSUE_SPECIMEN_ARRAY"
+            lazy="false"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+            <key
+                column="DISTRIBUTION_ID"
+            >
+            </key>
+
+            <one-to-many
+                  class="edu.wustl.catissuecore.domain.SpecimenArray"
+            />
+
+        </set>
 
         <many-to-one
             name="specimen"
@@ -115,6 +134,16 @@
             insert="true"
             column="COMMENTS"
             length="500"
+        />
+        
+        <many-to-one
+            name="orderId"
+            class="edu.wustl.catissuecore.domain.OrderDetails"
+            cascade="none"
+            outer-join="auto"
+            update="true"
+            insert="true"
+            column="ORDER_ID"
         />
 
         <!--
