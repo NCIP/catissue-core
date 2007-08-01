@@ -56,7 +56,7 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 	        	 * Key was not generated properly to remove object from map.
 	        	 * Objects re stored in the map on the basis of the objectId hence id is retrieved from from String and set it as key.
 	        	 */
-	        	String key=(str.substring(index, str.indexOf("|")).trim());
+	        	String key=(str.substring(index).trim());
 	        	cart.remove(key);
 			}
 		}
@@ -108,8 +108,8 @@ public class ShoppingCartBizLogic extends DefaultBizLogic
 					String str = obj[i].toString();
 					int index = str.indexOf("_") + 1;
 					//resolved bug# 4385
-					int index1 = str.indexOf(" |");
-					String key = str.substring(index,index1).trim();
+					//int index1 = str.indexOf(" |");
+					String key = str.substring(index).trim();
 					Specimen specimen = (Specimen)table.get(key);
 					
 					rowList.add(String.valueOf(specimen.getId()));
