@@ -11,24 +11,22 @@
 package edu.wustl.catissuecore.bizlogic;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.domain.ExistingSpecimenOrderItem;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
+import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.tree.SpecimenTreeNode;
 import edu.wustl.common.tree.TreeDataInterface;
 import edu.wustl.common.util.dbManager.DAOException;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.bizlogic.IBizLogic;
-import edu.wustl.common.dao.DAO;
 
 /**
  * SpecimenTreeBizLogic contains the bizlogic required to display Specimen hierarchy in tree form in the ordering system module.
@@ -84,6 +82,8 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 			
 			//The list consists of only one element that is:- specimen instance
 			Specimen specimenObj = (Specimen) specimen.get(0);
+			Collection childColl = (Collection) defaultBizLogic.retrieveAttribute(Specimen.class.getName(),id,"elements(childrenSpecimen)");
+			specimenObj.setChildrenSpecimen(childColl);
 			allNodes = formTreeNode(specimenObj);
 		}
 		else //If specimenCollectiongroupId is sent(Incase of pathological case)
@@ -110,7 +110,7 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 	 * @param specimenObj
 	 * @return rootNode SpecimentreeNode object
 	 */
-	private Vector formTreeNode(Specimen specimenObj)
+	private Vector formTreeNode(Specimen specimenObj) throws DAOException
 	{
 		Collection specimenSet = new HashSet();
 		Vector specimenTreeVector = new Vector();
@@ -143,8 +143,9 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 	 * @param childNodes Vector
 	 * @return Vector
 	 */
-	private Vector formSpecimenTree(Vector specimenTreeVector,SpecimenTreeNode parent,Collection childNodes)
+	private Vector formSpecimenTree(Vector specimenTreeVector,SpecimenTreeNode parent,Collection childNodes) throws DAOException
 	{
+		IBizLogic defaultBizLogic = BizLogicFactory.getInstance().getBizLogic(-1);
 		//If no childNodes present then tree will contain only the root node.
 		if(childNodes == null)
 		{
@@ -166,7 +167,8 @@ public class SpecimenTreeBizLogic extends DefaultBizLogic implements TreeDataInt
 			treeNode.setParentValue(parent.getValue());
 			
 			specimenTreeVector.add(treeNode);
-			
+			Collection childColl = (Collection) defaultBizLogic.retrieveAttribute(Specimen.class.getName(),specimen.getId(),"elements(childrenSpecimen)");
+			specimen.setChildrenSpecimen(childColl);
 			Vector subChildNodesVector = formSpecimenTree(specimenTreeVector,treeNode,specimen.getChildrenSpecimen());
 			
 			if(subChildNodesVector != null)

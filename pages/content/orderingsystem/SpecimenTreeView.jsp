@@ -4,7 +4,7 @@
 
 <link rel="STYLESHEET" type="text/css" href="dhtml_comp/css/dhtmlXTree.css">
 <script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmlXTree.js"></script>
-<script language="JavaScript" type="text/javascript" src="dhtml_comp/jss/dhtmXTreeCommon.js"></script>
+<script language="JavaScript" type="text/javascript" src="dhtml_comp/js/dhtmXTreeCommon.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/javaScript.js"></script>
 <script language="JavaScript" type="text/javascript" src="jss/OrderingSystem.js"></script>
 
