@@ -614,6 +614,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final int REQUEST_DETAILS_FORM_ID = 64;
 	public static final int ORDER_PATHOLOGY_FORM_ID = 58;
 	public static final int NEW_PATHOLOGY_FORM_ID=59;
+	public static final int DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID=60;
 	public static final int PATHOLOGY_REPORT_REVIEW_FORM_ID=61;
 	public static final int QUARANTINE_EVENT_PARAMETER_FORM_ID=62;
 	//Misc
@@ -1698,6 +1699,18 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String COLUMN_NAME_SCG = "specimenCollectionGroup";
 	public static final String COLUMN_NAME_CHILDREN = "elements(children)";
 	public static final String COLUMN_NAME_SCG_ID="specimenCollectionGroup.id";
+	public static final String COLUMN_NAME_PART_MEDICAL_ID_COLL="elements(participantMedicalIdentifierCollection)";
+	public static final String COLUMN_NAME_PART_RACE_COLL="elements(raceCollection)";
+	public static final String COLUMN_NAME_CPR_COLL="elements(collectionProtocolRegistrationCollection)";
+	public static final String COLUMN_NAME_SCG_COLL="elements(specimenCollectionGroupCollection)";
+	public static final String COLUMN_COLL_PROT_EVENT_COLL="elements(collectionProtocolEventCollection)";
+	public static final String COLUMN_NAME_CONCEPT_REF_COLL="elements(conceptReferentCollection)";
+	public static final String COLUMN_NAME_DEID_REPORT="deidentifiedSurgicalPathologyReport";
+	public static final String COLUMN_NAME_SOURCE="source";
+	public static final String COLUMN_NAME_TEXT_CONTENT="textContent";
+	public static final String COLUMN_NAME_TITLE="title";
+	public static final String COLUMN_NAME_PARTICIPANT_ID = "participant.id";
+	public static final String COLUMN_NAME_REPORT_SECTION_COLL="elements(reportSectionCollection)";
 	
 	//Bug 2833. Field for the length of CP Title
 	public static final int COLLECTION_PROTOCOL_TITLE_LENGTH=30; 
@@ -1789,4 +1802,54 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String SELECTED_COLLECTION_PROTOCOL_ID = "0";
     public static final String LIST_OF_SPECIMEN_COLLECTION_GROUP = "specimenCollectionGroupResponseList";
     public static final String PARTICIPANT_PROTOCOL_ID="participantProtocolId";
+    
+    // caTIES
+	public static final String REPORT_QUEUE_LIST = "ReportQueueList";
+	public static final String BUTTON_NAME = "button";
+	public static final String CREATE_PARTICIPANT_BUTTON = "createParticipant";
+	public static final String ASSOCIATE_PARTICIPANT_BUTTON = "associateParticipant";
+	public static final String REPORT_PARTICIPANT_OBJECT = "reportParticipantObject";
+	public static final String REPORT_ID = "reportQueueId";
+	public static final String PARTICIPANT_ID_TO_ASSOCIATE = "participantIdToAssociate";
+	public static final String SCG_ID_TO_ASSOCIATE = "scgIdToAssociate";
+	public static final String CONCEPT_REFERENT_CLASSIFICATION_LIST = "conceptRefernetClassificationList";
+	public static final String CONCEPT_LIST = "conceptList";
+	public static final String[] CATEGORY_HIGHLIGHTING_COLOURS = {"yellow","green","red","pink","blue"};
+	public static final String CONCEPT_BEAN_LIST = "conceptBeanList";
+ 
+    //Admin View
+	public static final String 	IDENTIFIER_NO="#";
+	public static final String 	REQUEST_DATE="Request Date";
+	public static final String 	USER_NAME_ADMIN_VIEW="User Name";
+	public static final String 	SCG_NAME="Specimen Collection Group";
+	public static final String 	ACCESSION_NO="Accession Number";
+	public static final String  REVIEW_SPR="reviewSPR";
+	public static final String  QUARANTINE_SPR="quarantineSPR";
+	public static final String  SITE="Site";
+	public static final String  REQUEST_FOR="requestFor";
+	public static final String  REPORT_ACTION="reportAction";
+	public static final String  REPORT_STATUS_LIST="reportStatusList";
+	public static final String  COLUMN_LIST="columnList";
+
+	//Surgical Pathology Report UI constants
+	public static final String VIEW_SPR_ACTION="ViewSurgicalPathologyReport.do";
+	public static final String SPR_EVENT_PARAM_ACTION="SurgicalPathologyReportEventParam.do";
+	public static final String VIEW_SURGICAL_PATHOLOGY_REPORT="viewSPR";
+	public static final String PAGEOF_SPECIMEN_COLLECTION_GROUP="pageOfSpecimenCollectionGroup";
+	public static final String PAGEOF_PARTICIPANT="pageOfParticipant";
+	public static final String PAGEOF_SPECIMEN="pageOfNewSpecimen";
+	public static final String REVIEW="REVIEW";
+	public static final String QUARANTINE="QUARANTINE";
+	public static final String COMMENT_STATUS_RENDING="PENDING";
+	public static final String COMMENT_STATUS_REVIEWED="REVIEWED";
+	public static final String COMMENT_STATUS_REPLIED="REPLIED";
+	public static final String COMMENT_STATUS_NOT_REVIEWED="NOT_REVIEWED";
+	public static final String COMMENT_STATUS_QUARANTINED="QUARANTINED";
+	public static final String COMMENT_STATUS_NOT_QUARANTINED="DEQUARANTINED";
+	public static final String ROLE_ADMINISTRATOR="Administrator";
+	public static final String REPORT_LIST="reportIdList";
+	public static final String QUARANTINE_REQUEST="QUARANTINEREQUEST";
+	public static final String IDENTIFIED_REPORT_NOT_FOUND_MSG="Indentified Report Not Found!";
+	public static final String DEID_REPORT_NOT_FOUND_MSG="De-Indentified Report Not Found!";
+
 }
