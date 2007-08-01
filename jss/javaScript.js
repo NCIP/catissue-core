@@ -1028,3 +1028,174 @@ function isNumeric(strString)
 	}
 	return blnResult;
 }
+
+   	//Added by Preeti for DE Integration
+
+function initializeGridForGroups(groupsXML)
+{
+	//alert('ho2:'+groupsXML);
+	gridForGroups= new dhtmlXGridObject('divForGroups');
+	gridForGroups.setImagePath("dhtml_comp/imgs/");
+	gridForGroups.enableAutoHeigth(true);
+	gridForGroups.setHeader("Group");
+	gridForGroups.setInitWidthsP("100");
+	gridForGroups.setColAlign("left");
+	gridForGroups.setColTypes("ro");
+	//gridForGroups.enableMultiselect(true);
+	gridForGroups.setOnRowSelectHandler(groupSelected);
+	gridForGroups.init();
+	//gridForGroups.setStyle(formTitleStyle);
+	gridForGroups.loadXMLString(groupsXML);
+	if(gridForGroups.getRowsNum()>0)
+	{
+		gridForGroups.selectRow(0,true,false);	
+	}
+}
+
+
+function initializeGridForSelectedEntities(groupsXML)
+{
+//	alert('ho1:'+groupsXML);
+	gridForEntities= new dhtmlXGridObject('gridForEnities');
+	gridForEntities.setImagePath("dhtml_comp/imgs/");
+	gridForEntities.enableAutoHeigth(true);
+	gridForEntities.setHeader("#,Form Title,Entity,Date,Created By,Conditions");
+	gridForEntities.setInitWidthsP("5,23,17,12,15,15,13");
+	gridForEntities.setColAlign("left,left,left,left,left,left,left")
+	gridForEntities.setColTypes("ch,link,ro,ro,ro,ro,link");
+	gridForEntities.setColSorting("str,str,str,date,str,str,str");
+
+   
+	gridForEntities.init();
+	
+	gridForEntities.loadXMLString(groupsXML);
+	if(gridForEntities.getRowsNum()>0)
+	{
+		gridForEntities.selectRow(0,true,false);	
+	}
+}
+
+
+
+function initializeGridForEntities()
+{
+	gridForEntities= new dhtmlXGridObject('gridForEnities');
+	gridForEntities.setImagePath("dhtml_comp/imgs/");
+	gridForEntities.enableAutoHeigth(true);
+	gridForEntities.setHeader("Form Title,Entity,Date,Created By,Conditions");
+	gridForEntities.setInitWidthsP("27,18,15,18,22");
+	gridForEntities.setColAlign("left,left,left,left,left")
+	gridForEntities.setColTypes("link,ro,ro,ro,link");
+	gridForEntities.setColSorting("str,str,date,str,str");
+	gridForEntities.init();
+}
+
+
+function groupSelected(groupid)
+{
+	var request = newXMLHTTPReq();
+	var handlerFunction = getReadyStateHandler(request,groupChangedResponse,true);
+
+	//no brackets after the function name and no parameters are passed because we are assigning a reference to the function and not actually calling it
+	request.onreadystatechange = handlerFunction;
+	//send data to ActionServlet
+	
+	//Open connection to servlet
+	request.open("POST","DefineAnnotations.do",true);
+	request.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	request.send("&operation=selectGroup&groupId="+groupid);
+}
+function groupChangedResponse(entitiesXML)
+{
+	gridForEntities.clearAll(false);
+	if(entitiesXML!=null)
+	{
+		gridForEntities.loadXMLString(entitiesXML);
+	}	
+}
+
+function onButtonClick(itemId,itemValue)
+{
+	var form =  document.getElementById('annotationForm');
+	if(form!=null)
+	{
+		var selectedStaticEntityId = document.getElementById("selectedStaticEntityId");
+		if(selectedStaticEntityId!=null)
+		{
+			selectedStaticEntityId.value = itemId;
+		}
+		form.action="/catissuecore/BuildDynamicEntity.do";
+		form.submit();
+	}
+}
+
+function initAnnotationGrid()
+{
+	annotationsGrid = new dhtmlXGridObject('definedAnnotationsGrid');
+	annotationsGrid.setImagePath("dhtml_comp/imgs/");
+	annotationsGrid.setHeader("#,Annotation,Last Updated,Updated By");
+	annotationsGrid.setInitWidthsP("5,32,31,32")
+	annotationsGrid.setColAlign("center,left,left,left,left")
+	annotationsGrid.setColTypes("ch,link,ro,ro");
+	annotationsGrid.init();
+	var annotationXMLFld = document.getElementById('definedAnnotationsDataXML');
+	annotationsGrid.loadXMLString(annotationXMLFld.value);
+}
+function displayAnnotationsPage()
+{
+	var form = document.forms[0];
+	if(form!=null)
+	{
+		var entityRecordID = document.getElementById('id');
+		form.action = "LoadAnnotationDataEntryPage.do?entityId=223&entityRecordId=" + entityRecordID.value;
+		form.submit();
+	}
+}
+
+function loadDynamicExtDataEntryPage()
+{	
+	    var selectBox = document.getElementById('selectedAnnotation');	
+		if(selectBox.selectedIndex != "-1")
+		{	 
+			document.forms[0].action  = "/catissuecore/LoadDynamicExtentionsDataEntryPage.do";
+			document.forms[0].submit();
+		}
+}
+
+function initializeTabs(tabIds, tabNames, tabPageRefs)
+{
+	if((tabIds!=null)&&(tabNames!=null)&&(tabPageRefs!=null))
+	{
+		var noOfTabs = tabIds.length;
+		for(var i=0;i<noOfTabs;i++)
+		{
+			tabbar.addTab(tabIds[i],tabNames[i],"");		
+			tabbar.setContentHref(tabIds[i],tabPageRefs[i]);			
+		}
+	}
+	tabbar.setTabActive(tabIds[0]);
+}
+
+function submitForm()
+{
+
+		var form =  document.getElementById('annotationForm');	
+	    var selectBox = document.getElementById('optionSelect');	
+	    var destination = selectBox.options[selectBox.selectedIndex].value;			
+		if(destination != "-1")
+		{
+			form.action="/catissuecore/BuildDynamicEntity.do";
+			form.submit();
+		}
+}
+
+function viewAnnotations(specimenEntityId,ID,consentTierCounter,staticEntityName,pageOf)
+	{
+		
+		var action="DisplayAnnotationDataEntryPage.do?entityId="+specimenEntityId+"&entityRecordId="+ID+"&pageOf="+pageOf+"&operation=viewAnnotations&consentTierCounter="+consentTierCounter+"&staticEntityName="+staticEntityName;
+		document.forms[0].action=action;
+		document.forms[0].submit();
+	}	   
+
+
+// DE script end
