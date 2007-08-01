@@ -1012,7 +1012,7 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 	{
 		String hql = "select sp.id,sp.label,sp.parentSpecimen.id,sp.activityStatus,sp.type from "
 			+ Specimen.class.getName()
-			+ " as sp where sp.specimenCollectionGroup.id = "+scgId;
+			+ " as sp where sp.specimenCollectionGroup.id = "+scgId +" order by sp.id";
 		List specimenList = executeQuery(hql);
 		for (int j = 0; j < specimenList.size(); j++)
 		{
