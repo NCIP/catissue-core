@@ -17,7 +17,7 @@ PUBLIC
 		<form-bean name="requestDetailsForm" type="edu.wustl.catissuecore.actionForm.RequestDetailsForm"/>		
 		<form-bean name="categorySearchForm" type="edu.wustl.catissuecore.actionForm.CategorySearchForm"/>
 		<form-bean name="baseOrderItemForm" type="edu.wustl.catissuecore.actionForm.BaseOrderItemForm"/>
-		
+		<form-bean name="viewSurgicalPathologyReportForm" type="edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm"/>
 
 
 
@@ -468,6 +468,78 @@ PUBLIC
 		
 	<!--Added by Deepti -define array end-->
 	
+		<!-- caTIES start-->
+		<action path="/ViewSurgicalPathologyReport"
+			type="edu.wustl.catissuecore.action.ViewSurgicalPathologyReportAction"
+			name="viewSurgicalPathologyReportForm"
+			validate="false"
+			scope="request">
+			<forward name="reviewSPR" path=".catissuecore.ViewSPR" />
+			<forward name="quarantineSPR" path=".catissuecore.ViewSPR" />
+			<forward name="pageOfSpecimenCollectionGroup" path=".catissuecore.specimenCollectionGroupDef" />
+			<forward name="pageOfSpecimenCollectionGroupCPQuery" path=".catissuecore.specimenCollectionGroupEditDef" />
+			<forward name="pageOfNewSpecimen" path=".catissuecore.newSpecimenViewSPRDef" />
+			<forward name="pageOfNewSpecimenCPQuery" path=".catissuecore.newSpecimenEditViewSPRDef" />
+			<forward name="pageOfParticipant" path=".catissuecore.participantDef" />
+			<forward name="pageOfParticipantCPQuery" path=".catissuecore.participantEditDef" />
+			<forward name="failure" path=".catissuecore.homePageDef" />
+		</action>
+		
+		<action path="/FetchReport" 
+			 type="edu.wustl.catissuecore.action.FetchReportAction"		 
+			 scope="request">	 
+		</action>
+		
+		<action path="/SurgicalPathologyReportEventParam"
+			type="edu.wustl.common.action.CommonAddEditAction"
+			name="viewSurgicalPathologyReportForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/ViewSurgicalPathologyReport.do?operation=viewSPR" />
+			<forward name="failure" path="/error.jsp" />
+		</action>
+		
+		<action path="/ConflictView"
+			type="edu.wustl.catissuecore.action.ConflictViewAction"
+			name="conflictViewForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.conflictViewDef" />			
+		</action>
+		
+		<action path="/ConflictDetails"
+			type="edu.wustl.catissuecore.action.ConflictDetailsAction"
+			name="conflictDetailsForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path=".catissuecore.conflictDetailsViewDef" />			
+		</action>
+		
+		<action path="/ConflictResolver"
+			type="edu.wustl.catissuecore.action.ConflictResolverAction"
+			name="conflictDetailsForm"
+			validate="false"
+			scope="request">
+			<forward name="success" path="/ConflictView.do" />			
+		</action>
+			
+		<action path="/ReviewRequests" 
+				 name="viewSurgicalPathologyReportForm"
+				 type="edu.wustl.catissuecore.action.ReportReviewQuarantineAction"		 
+				 validate="false"
+				 scope="request">	 
+				 <forward name="success" path=".catissuecore.ReviewQuarantineRequests"/>
+		</action>
+		
+		<action path="/QuarantineRequests" 
+				 name="viewSurgicalPathologyReportForm"
+				 type="edu.wustl.catissuecore.action.ReportReviewQuarantineAction"		 
+				 validate="false"
+				 scope="request">	 
+				 <forward name="success" path=".catissuecore.ReviewQuarantineRequests" />
+		</action>
+		<!-- caTIES end-->
+			
 		<!--Suite-->
 
 
