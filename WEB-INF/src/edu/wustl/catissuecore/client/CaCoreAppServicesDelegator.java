@@ -18,7 +18,6 @@ import java.util.List;
 import net.sf.hibernate.Session;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.UserBizLogic;
-import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
@@ -352,11 +351,11 @@ public class CaCoreAppServicesDelegator
 	    Logger.out.info("specimenCollGrp getClinicalDiagnosis : " + specimenCollGrp.getClinicalDiagnosis());
 	    Site site = specimenCollGrp.getSite();
 	    Logger.out.info("specimenCollGrp getClinicalDiagnosis : " + site.getName());
-	    ClinicalReport clinicalReport = specimenCollGrp.getClinicalReport();
-	    if (clinicalReport != null)
-	    {
-	    	clinicalReport.setSurgicalPathologyNumber(null);
-	    }
+//	    ClinicalReport clinicalReport = specimenCollGrp.getClinicalReport();
+//	    if (clinicalReport != null)
+//	    {
+//	    	clinicalReport.setSurgicalPathologyNumber(null);
+//	    }
 //	    ParticipantMedicalIdentifier participantMedicalIdentifier 
 //	    						= clinicalReport.getParticipantMedicalIdentifier();
 //	    if (participantMedicalIdentifier != null)
