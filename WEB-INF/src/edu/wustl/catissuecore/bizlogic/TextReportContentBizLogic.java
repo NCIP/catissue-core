@@ -1,6 +1,5 @@
 package edu.wustl.catissuecore.bizlogic;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +7,7 @@ import java.util.Map;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.dao.DAO;
 import edu.wustl.common.security.exceptions.UserNotAuthorizedException;
@@ -17,7 +17,7 @@ import edu.wustl.common.util.dbManager.DAOException;
  * This class is used add, update and retrieve text contents on the surgical pathology reports 
  * information using Hibernate.
  */
-public class TextReportContentBizLogic extends IntegrationBizLogic
+public class TextReportContentBizLogic extends DefaultBizLogic
 {
 
 
