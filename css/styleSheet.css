@@ -1616,3 +1616,31 @@ div.autocomplete {
   font-size:1em;
 	width:19em;
 }
+
+.formRequiredLabelWithoutBackgrnd{ /* for the required form labels without border*/
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:0.7em;
+  font-weight:bold;
+ /* background-color:#F4F4F5; /* constant: light gray */
+ /* color:#000000; /* constant: black	*/
+  /*border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  text-align:left;
+}
+
+.entityLink
+{
+    font-family:arial,helvetica,verdana,sans-serif;
+	font-size:0.8em;
+	color:#5C5C5C; /* constant: dark gray */
+	text-decoration:underline;	
+    white-space: nowrap;
+	width:20;
+	display:block;
+}
+.tbBordersAllbordersBlack{ /* for block table with border 1 */
+  border-bottom:1px solid #000000; /* constant: dark gray */
+  border-top:1px  solid #000000;/* constant: dark gray */
+  border-left:1px solid #000000; /* constant: dark gray */
+  border-right:1px solid #000000; /* constant: dark gray */
+
+}
