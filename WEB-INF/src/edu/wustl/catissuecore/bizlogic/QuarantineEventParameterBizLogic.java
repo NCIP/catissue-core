@@ -34,8 +34,8 @@ public class QuarantineEventParameterBizLogic extends IntegrationBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		QuarantineEventParameter quarantineParam = (QuarantineEventParameter) obj;
-		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport = quarantineParam.getDeidentifiedSurgicalPathologyReport(); 
-		deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.QUARANTINE_REQUEST);
+		DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport =(DeidentifiedSurgicalPathologyReport)dao.retrieve(DeidentifiedSurgicalPathologyReport.class.getName(), quarantineParam.getDeidentifiedSurgicalPathologyReport().getId()); 
+		deidentifiedSurgicalPathologyReport.setIsQuanrantined(Constants.QUARANTINE_REQUEST);	
 		dao.update(deidentifiedSurgicalPathologyReport, sessionDataBean, true, false, false);
 		String className;
 		String colName=new String(Constants.SYSTEM_IDENTIFIER);

@@ -10,10 +10,6 @@
 
 package edu.wustl.catissuecore.bizlogic;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -23,27 +19,23 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import edu.wustl.catissuecore.domain.ClinicalReport;
 import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.ConsentTierStatus;
 import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.SpecimenEventParameters;
 import edu.wustl.catissuecore.domain.User;
-import edu.wustl.catissuecore.integration.IntegrationManager;
-import edu.wustl.catissuecore.integration.IntegrationManagerFactory;
 import edu.wustl.catissuecore.util.ApiSearchUtil;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.WithdrawConsentUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.catissuecore.util.global.Utility;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.cde.CDEManager;
 import edu.wustl.common.dao.AbstractDAO;
 import edu.wustl.common.dao.DAO;
@@ -63,7 +55,7 @@ import edu.wustl.common.util.logger.Logger;
  * UserHDAO is used to add user information into the database using Hibernate.
  * @author kapil_kaveeshwar
  */
-public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
+public class SpecimenCollectionGroupBizLogic extends DefaultBizLogic
 {
 	/**
 	 * Saves the user object in the database.
@@ -96,12 +88,9 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 			specimenCollectionGroup.setCollectionProtocolEvent(cpe);
 		}
 
-		setClinicalReport(dao, specimenCollectionGroup);
 		setCollectionProtocolRegistration(dao, specimenCollectionGroup, null);
 
 		dao.insert(specimenCollectionGroup, sessionDataBean, true, true);
-		if (specimenCollectionGroup.getClinicalReport() != null)
-			dao.insert(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true);
 
 		try
 		{
@@ -190,7 +179,6 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		}
 		//Mandar 24-Jan-07 To update consents accordingly in SCG and Specimen(s) end
 		dao.update(specimenCollectionGroup, sessionDataBean, true, true, false);
-		dao.update(specimenCollectionGroup.getClinicalReport(), sessionDataBean, true, true, false);
 		/**
 		 * Name : Ashish Gupta
 		 * Reviewer Name : Sachin Lale 
@@ -206,7 +194,6 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		//Audit.
 		dao.audit(obj, oldObj, sessionDataBean, true);
 		SpecimenCollectionGroup oldSpecimenCollectionGroup = (SpecimenCollectionGroup) oldObj;
-		dao.audit(specimenCollectionGroup.getClinicalReport(), oldspecimenCollectionGroup.getClinicalReport(), sessionDataBean, true);
 
 		//Disable the related specimens to this specimen group
 		Logger.out.debug("specimenCollectionGroup.getActivityStatus() " + specimenCollectionGroup.getActivityStatus());
@@ -415,20 +402,6 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		}
 			}
 
-	private void setClinicalReport(DAO dao, SpecimenCollectionGroup specimenCollectionGroup) throws DAOException
-	{
-		ClinicalReport clinicalReport = specimenCollectionGroup.getClinicalReport();
-		ParticipantMedicalIdentifier participantMedicalIdentifier = clinicalReport.getParticipantMedicalIdentifier();
-		if (participantMedicalIdentifier != null)
-		{
-			List list = dao.retrieve(ParticipantMedicalIdentifier.class.getName(), Constants.SYSTEM_IDENTIFIER, participantMedicalIdentifier.getId());
-			if (!list.isEmpty())
-			{
-				specimenCollectionGroup.getClinicalReport().setParticipantMedicalIdentifier((ParticipantMedicalIdentifier) list.get(0));
-			}
-		}
-	}
-
 	public void disableRelatedObjects(DAO dao, Long collProtRegIDArr[]) throws DAOException
 	{
 		List listOfSubElement = super.disableObjects(dao, SpecimenCollectionGroup.class, "collectionProtocolRegistration",
@@ -493,11 +466,6 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 
 		Validator validator = new Validator();
 		String message = "";
-
-		if (group.getClinicalReport() == null)
-		{
-			group.setClinicalReport(new ClinicalReport());
-		}
 
 		if (group.getCollectionProtocolRegistration() == null)
 		{
@@ -622,79 +590,6 @@ public class SpecimenCollectionGroupBizLogic extends IntegrationBizLogic
 		}
 
 		return true;
-	}
-
-	/**
-	 * This method fetches linked data from integrated application i.e. CAE/caTies.
-	 */
-	public List getLinkedAppData(Long id, String applicationID)
-	{
-		Logger.out.debug("In getIntegrationData() of SCGBizLogic ");
-
-		Logger.out.debug("ApplicationName in getIntegrationData() of SCGBizLogic==>" + applicationID);
-
-		long identifiedPathologyReportId = 0;
-
-		try
-		{
-			//JDBC call to get matching identifier from database
-			Class.forName("org.gjt.mm.mysql.Driver");
-
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/catissuecore", "catissue_core", "catissue_core");
-
-			Statement stmt = connection.createStatement();
-
-			String clinicalReportQuery = "select CLINICAL_REPORT_ID from CATISSUE_SPECIMEN_COLL_GROUP where IDENTIFIER=" + id;
-
-			ResultSet clinicalReportResultSet = stmt.executeQuery(clinicalReportQuery);
-
-			long clinicalReportId = 0;
-			while (clinicalReportResultSet.next())
-			{
-				clinicalReportId = clinicalReportResultSet.getLong(1);
-				break;
-			}
-			Logger.out.debug("ClinicalReportId==>" + clinicalReportId);
-			clinicalReportResultSet.close();
-			if (clinicalReportId == 0)
-			{
-				List exception = new ArrayList();
-				exception.add("ClinicalReportId is not available for SpecimenCollectionGroup");
-				return exception;
-			}
-
-			String identifiedPathologyReportIdQuery = "select IDENTIFIER from CATISSUE_IDENTIFIED_PATHOLOGY_REPORT where CLINICAL_REPORT_ID="
-				+ clinicalReportId;
-
-			ResultSet identifiedPathologyReportResultSet = stmt.executeQuery(identifiedPathologyReportIdQuery);
-
-			while (identifiedPathologyReportResultSet.next())
-			{
-				identifiedPathologyReportId = identifiedPathologyReportResultSet.getLong(1);
-				break;
-			}
-			Logger.out.debug("IdentifiedPathologyReportId==>" + identifiedPathologyReportId);
-			identifiedPathologyReportResultSet.close();
-			if (identifiedPathologyReportId == 0)
-			{
-				List exception = new ArrayList();
-				exception.add("IdentifiedPathologyReportId is not available for linked ClinicalReportId");
-				return exception;
-			}
-
-			stmt.close();
-
-			connection.close();
-
-		}
-		catch (Exception e)
-		{
-			Logger.out.debug("JDBC Exception==>" + e.getMessage());
-		}
-
-		IntegrationManager integrationManager = IntegrationManagerFactory.getIntegrationManager(applicationID);
-
-		return integrationManager.getLinkedAppData(new SpecimenCollectionGroup(), new Long(identifiedPathologyReportId));
 	}
 
 	public String getPageToShow()
