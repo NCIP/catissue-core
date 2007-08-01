@@ -65,7 +65,7 @@ public class DistributionBizLogic extends DefaultBizLogic
 	protected void insert(Object obj, DAO dao, SessionDataBean sessionDataBean) throws DAOException, UserNotAuthorizedException
 	{
 		Distribution dist = (Distribution) obj;
- 
+
 		validateAndSetAssociateObject(dist, dao);
 
 		Object siteObj = dao.retrieve(Site.class.getName(), dist.getToSite().getId());
@@ -412,7 +412,6 @@ public class DistributionBizLogic extends DefaultBizLogic
 			message = ApplicationProperties.getValue("distribution.distributedItem");
 			throw new DAOException(ApplicationProperties.getValue("errors.one.item.required", message));
 		}
-		
 
 		//END
 
@@ -485,12 +484,11 @@ public class DistributionBizLogic extends DefaultBizLogic
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.distribution.specimenArrayNotFound"));
 					}
-					else if (!((SpecimenArray) object).getActivityStatus().equals(
-							edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
+					else if (!((SpecimenArray) object).getActivityStatus().equals(edu.wustl.common.util.global.Constants.ACTIVITY_STATUS_ACTIVE))
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.distribution.closedOrDisableSpecimenArray"));
 					}
-					else if(isSpecimenArrayDistributed(((SpecimenArray)object).getId()))
+					else if (chkForSpecimenArrayDistributed(((SpecimenArray) object).getId(), dao))
 					{
 						throw new DAOException(ApplicationProperties.getValue("errors.distribution.arrayAlreadyDistributed"));
 					}
@@ -630,5 +628,22 @@ public class DistributionBizLogic extends DefaultBizLogic
 		}
 		specimenArray = (SpecimenArray) specimenList.get(0);
 		return specimenArray.getId();
+	}
+
+	private boolean chkForSpecimenArrayDistributed(Long spArrayId, DAO dao) throws DAOException
+	{
+		String[] selectColumnName = {"id"};
+		String[] whereColumnName = {"specimenArray.id"};
+		Object[] whereColumnValue = {spArrayId};
+		String[] whereColumnCond = {"="};
+		List list = dao.retrieve(DistributedItem.class.getName(), selectColumnName, whereColumnName, whereColumnCond, whereColumnValue,
+				Constants.AND_JOIN_CONDITION);
+		if (list != null && list.size() > 0)
+		{
+			return true;
+
+		}
+
+		return false;
 	}
 }
