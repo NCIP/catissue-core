@@ -18,6 +18,8 @@ import edu.upmc.opi.caBIG.caTIES.common.CaTIES_JDomUtils;
 import edu.upmc.opi.caBIG.caTIES.server.CaTIES_ConceptAccumulator;
 import edu.upmc.opi.caBIG.caTIES.server.CaTIES_ExporterPR;
 import edu.upmc.opi.caBIG.caTIES.services.caTIES_TiesPipe.TiesPipe;
+import edu.wustl.catissuecore.caties.util.CSVLogger;
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
 import edu.wustl.catissuecore.domain.pathology.BinaryContent;
 import edu.wustl.catissuecore.domain.pathology.Concept;
 import edu.wustl.catissuecore.domain.pathology.ConceptReferent;
@@ -25,8 +27,6 @@ import edu.wustl.catissuecore.domain.pathology.ConceptReferentClassification;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.SemanticType;
 import edu.wustl.catissuecore.domain.pathology.XMLContent;
-import edu.wustl.catissuecore.reportloader.CSVLogger;
-import edu.wustl.catissuecore.reportloader.Parser;
 import edu.wustl.catissuecore.reportloader.ReportLoaderUtil;
 import edu.wustl.common.util.logger.Logger;
 
@@ -54,13 +54,14 @@ public class ConceptCoder
 		catch (Throwable ex) 
 		{
 			Logger.out.error("Concept coding process failed for report id:"+this.deidPathologyReport.getId()+" "+ex.getMessage());
-			this.deidPathologyReport.setReportStatus(Parser.CC_PROCESS_FAILED);
-			CSVLogger.info(Parser.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+Parser.CC_PROCESS_FAILED+","+ex.getMessage());
+			this.deidPathologyReport.setReportStatus(CaTIESConstants.CC_PROCESS_FAILED);
+			ReportLoaderUtil.updateObject(this.deidPathologyReport);
+			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CC_PROCESS_FAILED+","+ex.getMessage());
 		}
-		if(!this.deidPathologyReport.getReportStatus().equalsIgnoreCase(Parser.CC_PROCESS_FAILED))
+		if(!this.deidPathologyReport.getReportStatus().equalsIgnoreCase(CaTIESConstants.CC_PROCESS_FAILED))
 		{
 			Logger.out.info("Report is updated");
-			CSVLogger.info(Parser.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+Parser.CONCEPT_CODED+","+"Report Concept Coded successfully");
+			CSVLogger.info(CaTIESConstants.LOGGER_CONCEPT_CODER, new Date().toString()+","+this.deidPathologyReport.getId()+","+CaTIESConstants.CONCEPT_CODED+","+"Report Concept Coded successfully");
 		}
 		
 		Logger.out.info("Report is updated");
@@ -112,7 +113,7 @@ public class ConceptCoder
 			 xmlContent.setSurgicalPathologyReport(this.deidPathologyReport);
 			 this.deidPathologyReport.setXmlContent(xmlContent);
 			 
-			 this.deidPathologyReport.setReportStatus(Parser.CONCEPT_CODED);
+			 this.deidPathologyReport.setReportStatus(CaTIESConstants.CONCEPT_CODED);
 		 }
 		 catch (Exception ex) 
 		 {
@@ -134,7 +135,7 @@ public class ConceptCoder
 			Logger.out.info("Extracting GATE XML and chirps");
 			SAXBuilder builder = new SAXBuilder();
 			byte[] byteArray = this.tiesResponse.getBytes();
-			if(this.tiesResponse.equalsIgnoreCase(Parser.ERROR_GATE))
+			if(this.tiesResponse.equalsIgnoreCase(CaTIESConstants.ERROR_GATE))
 			{
 				throw new Exception("Error with GATE library! Unable to connect");
 			}
@@ -142,17 +143,17 @@ public class ConceptCoder
 			org.jdom.Document responseDocument = builder.build(byteArrayInputStream);
 			Element responseRootElement = responseDocument.getRootElement();
 
-			Element reportCodesElement = responseRootElement.getChild(Parser.TAG_REPORTCODES); //"ReportCodes");
+			Element reportCodesElement = responseRootElement.getChild(CaTIESConstants.TAG_REPORTCODES); //"ReportCodes");
 			this.reportCodesAccumulator = new CaTIES_ConceptAccumulator();
 			this.reportCodesAccumulator.xmlDeSerialize(reportCodesElement);
 
 			Collection<ConceptReferent> conceptReferentCollection=xmlDeSerializeLocal(reportCodesElement);
 			this.deidPathologyReport.setConceptReferentCollection(conceptReferentCollection);
 			
-			Element gateXMLElement = responseRootElement.getChild(Parser.TAG_GATEXML);  //"GateXML");
-			gateXMLElement = gateXMLElement.getChild(Parser.TAG_GATEDOCUMENT);  //"GateDocument");
-			Element chirpsXMLElement = (Element) responseRootElement.getChild(Parser.TAG_CHIRPSXML);  //"ChirpsXML");
-			chirpsXMLElement = chirpsXMLElement.getChild(Parser.TAG_ENVELOPE);  //"Envelope");
+			Element gateXMLElement = responseRootElement.getChild(CaTIESConstants.TAG_GATEXML);  //"GateXML");
+			gateXMLElement = gateXMLElement.getChild(CaTIESConstants.TAG_GATEDOCUMENT);  //"GateDocument");
+			Element chirpsXMLElement = (Element) responseRootElement.getChild(CaTIESConstants.TAG_CHIRPSXML);  //"ChirpsXML");
+			chirpsXMLElement = chirpsXMLElement.getChild(CaTIESConstants.TAG_ENVELOPE);  //"Envelope");
 			Document gateXMLDocument = new Document((Element) gateXMLElement.clone());
 			Document chirpsXMLDocument = new Document((Element) chirpsXMLElement.clone());
 			this.gateXML = CaTIES_JDomUtils.convertDocumentToString(gateXMLDocument, null);
@@ -192,7 +193,7 @@ public class ConceptCoder
 	
 	public Collection<ConceptReferent> xmlDeSerializeLocal(Element conceptSetElement) throws Exception
 	{
-		Collection indexedConceptElements = conceptSetElement.getChildren(Parser.TAG_INDEXED_CONCEPT);  //"IndexedConcept") ;
+		Collection indexedConceptElements = conceptSetElement.getChildren(CaTIESConstants.TAG_INDEXED_CONCEPT);  //"IndexedConcept") ;
 		Map<String, Concept> conceptCodeMap=new HashMap<String, Concept>();
 		Map<String, ConceptReferentClassification> conceptReferrentClassicificationMap=new HashMap<String, ConceptReferentClassification>();
 		Collection<ConceptReferent> conceptReferentSet=new HashSet<ConceptReferent>();
@@ -204,22 +205,22 @@ public class ConceptCoder
 				Element indexedConceptElement = (Element)indexedConceptIterator.next();
 				
 				// ConceptReferent
-				Element conceptReferentElement = indexedConceptElement.getChild(Parser.TAG_CONCEPT_REFERENT);  //"ConceptReferent") ;
+				Element conceptReferentElement = indexedConceptElement.getChild(CaTIESConstants.TAG_CONCEPT_REFERENT);  //"ConceptReferent") ;
 				ConceptReferent conceptReferentToAdd = new ConceptReferent() ;
-				conceptReferentToAdd.setEndOffset(new Long(conceptReferentElement.getAttributeValue(Parser.TAG_ATTRIBUTE_END_OFFSET)));  //"endOffset")));
-				conceptReferentToAdd.setStartOffset(new Long(conceptReferentElement.getAttributeValue(Parser.TAG_ATTRIBUTE_START_OFFSET))); //"startOffset")));
+				conceptReferentToAdd.setEndOffset(new Long(conceptReferentElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_END_OFFSET)));  //"endOffset")));
+				conceptReferentToAdd.setStartOffset(new Long(conceptReferentElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_START_OFFSET))); //"startOffset")));
 	//			conceptReferentToAdd.setDocumentFragment(conceptReferentElement.getAttributeValue("documentFragment"));
-			    conceptReferentToAdd.setIsModifier(new Boolean(conceptReferentElement.getAttributeValue(Parser.TAG_ATTRIBUTE_ISMODIFIER)));  //"isModifier")));
-			    conceptReferentToAdd.setIsNegated(new Boolean(conceptReferentElement.getAttributeValue(Parser.TAG_ATTRIBUTE_ISNEGATED)));  //"isNegated")));
+			    conceptReferentToAdd.setIsModifier(new Boolean(conceptReferentElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_ISMODIFIER)));  //"isModifier")));
+			    conceptReferentToAdd.setIsNegated(new Boolean(conceptReferentElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_ISNEGATED)));  //"isNegated")));
 			    conceptReferentToAdd.setDeidentifiedSurgicalPathologyReport(this.deidPathologyReport);
 			    
 			    // Concept
-			    Element conceptElement = (Element) indexedConceptElement.getChild(Parser.TAG_CONCEPT);  //"Concept");
+			    Element conceptElement = (Element) indexedConceptElement.getChild(CaTIESConstants.TAG_CONCEPT);  //"Concept");
 			    Concept conceptToAdd = new Concept();
-				conceptToAdd.setConceptUniqueIdentifier(conceptElement.getAttributeValue(Parser.TAG_ATTRIBUTE_CUI));  //"cui"));
-				conceptToAdd.setName(conceptElement.getAttributeValue(Parser.TAG_ATTRIBUTE_NAME));  //"name")) ;
+				conceptToAdd.setConceptUniqueIdentifier(conceptElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_CUI));  //"cui"));
+				conceptToAdd.setName(conceptElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_NAME));  //"name")) ;
 				SemanticType semanticType=new SemanticType();
-				semanticType.setLabel(conceptElement.getAttributeValue(Parser.TAG_ATTRIBUTE_SEMANTICTYPE));  //"semanticType"));
+				semanticType.setLabel(conceptElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_SEMANTICTYPE));  //"semanticType"));
 				conceptToAdd.setSemanticType(semanticType);
 				conceptToAdd.setConceptReferentCollection(new HashSet());
 				if(conceptCodeMap.get(conceptToAdd.getConceptUniqueIdentifier())!=null)
@@ -230,9 +231,9 @@ public class ConceptCoder
 				conceptCodeMap.put(conceptToAdd.getConceptUniqueIdentifier().toUpperCase(),conceptToAdd);
 				
 				// ConceptClassification
-				Element conceptClassificationElement = (Element) indexedConceptElement.getChild(Parser.TAG_CONCEPT_CLASSIFICATION);  //"ConceptClassification");
+				Element conceptClassificationElement = (Element) indexedConceptElement.getChild(CaTIESConstants.TAG_CONCEPT_CLASSIFICATION);  //"ConceptClassification");
 				ConceptReferentClassification conceptClassificationToAdd = new ConceptReferentClassification();
-			    conceptClassificationToAdd.setName(conceptClassificationElement.getAttributeValue(Parser.TAG_ATTRIBUTE_NAME));  //"name"));
+			    conceptClassificationToAdd.setName(conceptClassificationElement.getAttributeValue(CaTIESConstants.TAG_ATTRIBUTE_NAME));  //"name"));
 			    conceptClassificationToAdd.setConceptReferentCollection(new HashSet());
 			    if(conceptReferrentClassicificationMap.get(conceptClassificationToAdd.getName())!=null)
 				{
