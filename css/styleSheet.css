@@ -639,6 +639,15 @@ td.formFieldWithNoTopBorder{ /* for the cell that contains the form elements */
   border-left:1px solid #5C5C5C; /* constant: dark gray */
   background-color:#F4F4F5; /* constant: light gray */
 }
+td.formFieldWithNoTopBorderFontSize1{ /* for the cell that contains the form elements; ViewSPR page */
+  font-family:arial,helvetica,verdana,sans-serif;
+  font-size:1em;
+  color:#000000; /* constant: black */
+  border-right:1px solid #5C5C5C; /* constant: dark gray */
+  border-bottom:1px solid #5C5C5C; /* constant: dark gray */
+  border-left:1px solid #5C5C5C; /* constant: dark gray */
+  background-color:#F4F4F5; /* constant: light gray */
+}
 .formFieldSized10{ /* for the form elements themselves and with a constant width (on elements) */
   font-family:arial,helvetica,verdana,sans-serif;
   border:1px solid #5C5C5C; /* constant: dark gray */
