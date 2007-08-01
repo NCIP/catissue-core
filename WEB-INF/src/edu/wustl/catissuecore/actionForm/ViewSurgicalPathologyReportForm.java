@@ -11,6 +11,7 @@ import java.util.Map;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.ParticipantMedicalIdentifier;
 import edu.wustl.catissuecore.domain.Site;
+import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
 import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.global.Constants;
@@ -53,7 +54,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	/**
 	 * Collection for race of participant
 	 */
-	protected Collection race=new HashSet();
+	protected String race;
 	/**
 	 * String for gender of participant
 	 */
@@ -71,9 +72,9 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	protected Collection medicalIdentifierNumbers=new HashSet();
 	/**
-	 * String for accession number of Identified Report
+	 * String for surgical pathology number 
 	 */
-	protected String identifiedReportAccessionNumber;
+	protected String surgicalPathologyNumber;
 	/**
 	 * String for site of Identified Report
 	 */
@@ -94,10 +95,6 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * String for report text of Identified Report
 	 */
 	protected String identifiedReportTextContent;
-	/**
-	 * String for accession number of Deidentified Report
-	 */
-	protected String deIdentifiedReportAccessionNumber;
 	/**
 	 * String for site of Deidentified Report
 	 */
@@ -274,7 +271,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * This is the method to get collection of race of particicpant
 	 * @return race Race of participant
 	 */
-	public Collection getRace()
+	public String getRace()
 	{
 		return race;
 	}
@@ -283,7 +280,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * This is the method to set collection of race of particicpant
 	 * @param race Race of participant
 	 */
-	public void setRace(Collection race)
+	public void setRace(String race)
 	{
 		this.race = race;
 	}
@@ -325,21 +322,21 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	}
 	
 	/**
-	 * This is the method to get Accession Number of Identified Report
-	 * @return identifiedReportAccessionNumber Accession Number of identified report
+	 * This is the method to get surgical pathology Number 
+	 * @return surgicalPathologyNumber surgical pathology Number 
 	 */
-	public String getIdentifiedReportAccessionNumber()
+	public String getSurgicalPathologyNumber()
 	{
-		return identifiedReportAccessionNumber;
+		return surgicalPathologyNumber;
 	}
 	
 	/**
-	 * This is the method to set Accession Number of Identified Report
-	 * @param accessionNumber Accession Number of identified report
+	 * This is the method to set surgical pathology Number 
+	 * @param surgicalPathologyNumber surgical pathology Number 
 	 */
-	public void setIdentifiedReportAccessionNumber(String accessionNumber)
+	public void setSurgicalPathologyNumber(String surgicalPathologyNumber)
 	{
-		this.identifiedReportAccessionNumber = accessionNumber;
+		this.surgicalPathologyNumber = surgicalPathologyNumber;
 	}
 	
 	/**
@@ -401,18 +398,15 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * @see edu.wustl.common.actionForm.AbstractActionForm#setAllValues(edu.wustl.common.domain.AbstractDomainObject)
 	 * @param abstractDomain Object of AbstractDomainObject which is IdentifiedSurgicalPathologyReport object in this case
 	 */
-	public void setAllValues(AbstractDomainObject abstractDomain) 
+	public void setAllValues(AbstractDomainObject abstractDomain)
 	{
-		IdentifiedSurgicalPathologyReport ispr=(IdentifiedSurgicalPathologyReport)abstractDomain;
-		setIdentifiedReport(ispr);
-		if(ispr!=null && ispr.getSpecimenCollectionGroup()!=null)
+		SpecimenCollectionGroup specimenCollectionGroup=(SpecimenCollectionGroup)abstractDomain;
+		if(specimenCollectionGroup!=null)
 		{
-			setDeIdentifiedReport(ispr.getDeidentifiedSurgicalPathologyReport());
-			setParticipant(ispr.getSpecimenCollectionGroup().getCollectionProtocolRegistration().getParticipant());
-		}
-		else
-		{
-			setDeIdentifiedReport(null);
+			this.surgicalPathologyNumber=specimenCollectionGroup.getSurgicalPathologyNumber();
+			setIdentifiedReport(specimenCollectionGroup.getIdentifiedSurgicalPathologyReport());
+			setDeIdentifiedReport(specimenCollectionGroup.getDeIdentifiedSurgicalPathologyReport());
+			setParticipant(specimenCollectionGroup.getCollectionProtocolRegistration().getParticipant());
 		}
 		this.comments=null;
 	}
@@ -421,12 +415,11 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * set values of De-Identified report related variables
 	 * @param deidentifiedSurgicalPathologyReport DeidentifiedSurgicalPathologyReport Object
 	 */
-	public void setDeIdentifiedReport(DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
+	public void setDeIdentifiedReport(final DeidentifiedSurgicalPathologyReport deidentifiedSurgicalPathologyReport)
 	{
 		try
 		{
 			this.deIdentifiedReportId=deidentifiedSurgicalPathologyReport.getId();
-			this.deIdentifiedReportAccessionNumber=deidentifiedSurgicalPathologyReport.getSpecimenCollectionGroup().getSurgicalPathologyNumber();
 			this.deIdentifiedReportTextContent=deidentifiedSurgicalPathologyReport.getTextContent().getData();
 			this.deIdentifiedReportSite=deidentifiedSurgicalPathologyReport.getSource().getName();
 		}
@@ -435,7 +428,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			Logger.out.error("viewSPR:De-identified Report information is null");
 			if(this.deIdentifiedReportTextContent==null)
 			{
-				this.deIdentifiedReportTextContent="";//De-Identified Report Not Found !
+				this.deIdentifiedReportTextContent=Constants.DEID_REPORT_NOT_FOUND_MSG;//De-Identified Report Not Found !
 			}
 		}
 	}
@@ -445,14 +438,13 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 * @param ispr IdentifiedSurgicalPathologyReport Object
 	 *  
 	 */
-	public void setIdentifiedReport(IdentifiedSurgicalPathologyReport ispr)
+	public void setIdentifiedReport(final IdentifiedSurgicalPathologyReport ispr)
 	{
 //		if(ispr.getId() != null)
 //		{
-			try
+		try
 		{
 			this.identifiedReportId=ispr.getId().toString();
-			this.identifiedReportAccessionNumber=ispr.getSpecimenCollectionGroup().getSurgicalPathologyNumber();
 			this.identifiedReportTextContent=ispr.getTextContent().getData();	
 			this.identifiedReportSite=ispr.getSource().getName();
 		}
@@ -461,7 +453,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 			Logger.out.error("viewSPR:Identified Report information is null");
 			if(this.identifiedReportTextContent==null)
 			{
-				this.identifiedReportTextContent="Identified Report Not Found !";
+				this.identifiedReportTextContent=Constants.IDENTIFIED_REPORT_NOT_FOUND_MSG;
 			}
 		}
 //		}
@@ -480,8 +472,6 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	 */
 	public void setParticipant(final Participant participant)
 	{
-//		if(participant.getId() != null)
-//		{
 		try
 		{
 			this.firstName=participant.getFirstName();
@@ -495,7 +485,15 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 				this.deathDate=Utility.parseDateToString(participant.getDeathDate(), Constants.DATE_PATTERN_MM_DD_YYYY);
 			}
 			this.ethinicity=participant.getEthnicity();
-			this.race=participant.getRaceCollection();
+			Collection tempRaceColl=participant.getRaceCollection();
+			Iterator raceIter=tempRaceColl.iterator();
+			this.race="";
+			StringBuffer tempStr=new StringBuffer();
+			while(raceIter.hasNext())
+			{
+				tempStr.append((String)raceIter.next()+", ");
+			}
+			this.race=tempStr.toString();
 			this.gender=participant.getGender();
 			this.sexGenotype=participant.getSexGenotype();
 			this.socialSecurityNumber=participant.getSocialSecurityNumber();
@@ -515,8 +513,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 					String key2 = "ParticipantMedicalIdentifier:" + i +"_medicalRecordNumber";
 					String key3 = "ParticipantMedicalIdentifier:" + i  +"_id";
 	
-					Site site = participantMedicalIdentifier.getSite();
-					
+					Site site =participantMedicalIdentifier.getSite();
 					if(site!=null)
 					{
 						values.put(key1,Utility.toString(site.getName()));
@@ -524,7 +521,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 					else
 					{
 						values.put(key1,Utility.toString(Constants.SELECT_OPTION));
-					}
+					}					
 					
 					values.put(key2,Utility.toString(participantMedicalIdentifier.getMedicalRecordNumber()));
 					values.put(key3,Utility.toString(participantMedicalIdentifier.getId()));
@@ -534,7 +531,7 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	        	counter = medicalIdentifierNumbers.size();
 	        }
 		}
-		catch(NullPointerException ex)
+		catch(Exception ex)
 		{
 			Logger.out.error("viewSPR:Participant information is null");
 		}
@@ -762,25 +759,6 @@ public class ViewSurgicalPathologyReportForm extends AbstractActionForm
 	{
 		this.identifiedReportId = identifiedReportId;
 	}
-	
-	/**
-	 * This is the method to get accession number of Deidentified Report
-	 * @return deIdentifiedReportAccessionNumber accession number of deidentifiedReport
-	 */
-	public String getDeIdentifiedReportAccessionNumber()
-	{
-		return deIdentifiedReportAccessionNumber;
-	}
-	
-	/**
-	 * This is the method to set accession number of Deidentified Report
-	 * @param deIdentifiedReportAccessionNumber accession number of deidentifiedReport
-	 */
-	public void setDeIdentifiedReportAccessionNumber(String deIdentifiedReportAccessionNumber)
-	{
-		this.deIdentifiedReportAccessionNumber = deIdentifiedReportAccessionNumber;
-	}
-
 	/**
 	 * This is the method to get report id of Deidentified Report
 	 * @return deIdentifiedReportId id of deidentifiedReport
