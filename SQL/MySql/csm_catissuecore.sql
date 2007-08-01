@@ -1344,4 +1344,17 @@ INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,3,(select PROTECTION_ELEMENT_ID fro
 
 INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,3,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='ReturnEventParameters'),'2007-01-18' from CSM_PG_PE;
 
+/*---------caTIES start-------------*/
+INSERT INTO CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'IdentifiedSurgicalPathologyReport','IdentifiedSurgicalPathologyReport Object','edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport',NULL,NULL,1,'2006-11-27' from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'DeidentifiedSurgicalPathologyReport','DeidentifiedSurgicalPathologyReport Object','edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport',NULL,NULL,1,'2006-11-27' from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'ReportLoaderQueue','ReportLoaderQueue Object','edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue',NULL,NULL,1,'2006-11-27' from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Review Comments','PathologyReportReviewParameter Object','edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter',NULL,NULL,1,'2006-11-27' from CSM_PROTECTION_ELEMENT;
+INSERT INTO CSM_PROTECTION_ELEMENT select max(PROTECTION_ELEMENT_ID)+1,'Quarantine Comments','QuarantineEventParameter Object','edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter',NULL,NULL,1,'2006-11-27' from CSM_PROTECTION_ELEMENT;
+
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,20,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='IdentifiedSurgicalPathologyReport'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,20,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='DeidentifiedSurgicalPathologyReport'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,20,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='ReportLoaderQueue'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,20,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Review Comments'),'2006-11-27' from CSM_PG_PE;
+INSERT INTO CSM_PG_PE select max(PG_PE_ID)+1,20,(select PROTECTION_ELEMENT_ID from csm_protection_element where PROTECTION_ELEMENT_NAME='Quarantine Comments'),'2006-11-27' from CSM_PG_PE;
+/*---------caTIES end-------------*/
 
