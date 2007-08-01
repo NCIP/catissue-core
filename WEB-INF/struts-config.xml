@@ -3105,6 +3105,7 @@ PUBLIC
 		input="/SpecimenArray.do?operation=add&amp;menuSelected=20"
 		scope="request">
 		<forward name="success" path="/SpecimenArraySearch.do?operation=edit&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20" />
+		<forward name="orderDetails" path="/RequestDetails.do?tabIndexId=2" />
 		<forward name="failure" path="/SpecimenArray.do?operation=add&amp;pageOf=pageOfSpecimenArray&amp;menuSelected=20" />
 		<forward name="access_denied" path="/ManageBioSpecimen.do" />
 	</action>
