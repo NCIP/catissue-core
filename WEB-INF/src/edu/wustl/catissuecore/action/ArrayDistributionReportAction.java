@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +20,6 @@ import edu.wustl.catissuecore.actionForm.DistributionReportForm;
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.DistributedItem;
 import edu.wustl.catissuecore.domain.Distribution;
-import edu.wustl.catissuecore.domain.OrderDetails;
 import edu.wustl.catissuecore.domain.Specimen;
 import edu.wustl.catissuecore.domain.SpecimenArray;
 import edu.wustl.catissuecore.domain.SpecimenArrayContent;
@@ -59,6 +59,12 @@ public class ArrayDistributionReportAction extends BaseDistributionReportAction
 		if (distributionId == null)
 			distributionId = configForm.getDistributionId();
 
+		//retireve the distribution id from forward to hasmap
+		Map forwardToHashMap = (Map) request.getAttribute("forwardToHashMap");
+		if(forwardToHashMap != null && forwardToHashMap.get("distributionId") != null)
+		{
+			distributionId = (Long) forwardToHashMap.get("distributionId");
+		}
 		/*Retrieve from request attribute if it null. 
 		 */
 		if (distributionId == null)
