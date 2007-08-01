@@ -82,7 +82,7 @@ public class RequestDetailsAction extends BaseAction
 		RequestDetailsForm requestDetailsForm = (RequestDetailsForm) form;
 		// The request Id on which the user has clicked
 		String requestId = "";
-		if (request.getParameter("id") != null)
+		if (request.getParameter("id") != null && !request.getParameter("id").equals("0"))
 		{
 			requestId = request.getParameter("id"); //		
 			//Setting the order id in the form to retrieve the corresponding orderitems from the db in CommonAddEditAction.
@@ -97,6 +97,7 @@ public class RequestDetailsAction extends BaseAction
 				rDForm = (RequestDetailsForm) obj;
 			requestId = "" + rDForm.getId();
 			requestDetailsForm.setId((new Long(requestId)).longValue());
+			
 		}
 
 		// The request details  corresponding to the request Id
@@ -134,6 +135,11 @@ public class RequestDetailsAction extends BaseAction
 		//The order items list corresponding to the request Id
 		getRequestDetailsList(requestId, requestDetailsForm, request);
 
+		if(request.getParameter(Constants.TAB_INDEX_ID)!=null)
+		{
+			Integer tabIndexId = new Integer(request.getParameter(Constants.TAB_INDEX_ID));
+			requestDetailsForm.setTabIndex(tabIndexId.intValue());
+		}
 		return mapping.findForward("success");
 	}
 
