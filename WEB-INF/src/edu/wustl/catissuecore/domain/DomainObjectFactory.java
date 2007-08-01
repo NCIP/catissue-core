@@ -14,6 +14,8 @@ import edu.wustl.catissuecore.actionForm.CreateSpecimenForm;
 import edu.wustl.catissuecore.actionForm.NewSpecimenForm;
 import edu.wustl.catissuecore.actionForm.ReportedProblemForm;
 import edu.wustl.catissuecore.actionForm.UserForm;
+import edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter;
+import edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
 import edu.wustl.common.domain.AbstractDomainObject;
@@ -188,12 +190,12 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 			case Constants.ORDER_PATHOLOGY_FORM_ID:
             	className = OrderDetails.class.getName();
 				break;
-			/*case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID:
+			case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID:
 				className = PathologyReportReviewParameter.class.getName();
 				break;
 			case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID:
 				className = QuarantineEventParameter.class.getName();
-				break;*/
+				break;
 
         	
         }
@@ -393,12 +395,12 @@ public class DomainObjectFactory extends AbstractDomainObjectFactory
 			case Constants.ORDER_PATHOLOGY_FORM_ID:
 				abstractDomain = new OrderDetails(form);
 				break;
-			/*case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID:
+			case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID:
 				abstractDomain = new PathologyReportReviewParameter(form);
 				break;
 			case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID:
 				abstractDomain = new QuarantineEventParameter(form);
-				break;*/
+				break;
 				
 				 
 			//added as per bug 79
