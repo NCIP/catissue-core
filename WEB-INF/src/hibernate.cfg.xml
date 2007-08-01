@@ -21,6 +21,19 @@
 		<mapping resource="edu/wustl/catissuecore/hbm/ConsentTierStatus.hbm.xml"/>
 		<!--Consent Tracking Suite-->
 		
+		<!-- caTIES Suite-->
+    	<mapping resource="edu/wustl/catissuecore/hbm/Concept.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ConceptReferent.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ConceptReferentClassification.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/PathologyReportReviewParameter.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/QuarantineEventParameter.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ReportContent.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ReportLoaderQueue.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/ReportSection.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/SemanticType.hbm.xml"/>
+		<mapping resource="edu/wustl/catissuecore/hbm/SurgicalPathologyReport.hbm.xml"/>
+		<!-- caTIES Suite-->
+
         <!-- List of all Mapping files -->
         <mapping resource="edu/wustl/catissuecore/hbm/Address.hbm.xml"/>
 		<mapping resource="edu/wustl/common/hbm/AuditEvent.hbm.xml"/>
