@@ -1,63 +1,28 @@
 package edu.wustl.catissuecore.reportloader;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
 
-import org.apache.log4j.PropertyConfigurator;
-
-import edu.wustl.common.cde.CDEManager;
-import edu.wustl.common.util.XMLPropertyHandler;
-import edu.wustl.common.util.global.ApplicationProperties;
-import edu.wustl.common.util.global.Variables;
+import edu.wustl.catissuecore.caties.util.CSVLogger;
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.CaTIESProperties;
+import edu.wustl.catissuecore.caties.util.InitUtility;
+import edu.wustl.catissuecore.caties.util.StopServer;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * @author sandeep_ranade
  * Represents a poller which picks up the report files
- * and then pass them to the appropriate parser which parsers those files and import the data into datastore.  
+ * and then pass them to the appropriate parser which parsers those files and import the data into datastore. 
+ * @author sandeep_ranade
  */
 public class FilePoller implements Observable
 {
 	private Observer obr;
-
-	/**
-	 * @throws Exception
-	 * Initializes the report processor. It initilizes the logging and reference data.  
-	 */
-	public void init()throws Exception
-	{
-		//Initialization methods
-		Variables.applicationHome = System.getProperty("user.dir");
-		//Logger.out = org.apache.log4j.Logger.getLogger("");
-		//Configuring common logger
-		Logger.configure(Parser.LOGGER_GENERAL);
-		// Configuring CSV logger
-		CSVLogger.configure(Parser.LOGGER_FILE_POLLER);
-		//Configuring logger properties
-		PropertyConfigurator.configure(Variables.applicationHome + File.separator+"logger.properties");
-		// Setting properties for UseImplManager
-		System.setProperty("gov.nih.nci.security.configFile",
-				"./catissuecore-properties"+File.separator+"ApplicationSecurityConfig.xml");
-		// initializing cache manager
-		CDEManager.init();
-		//initializing XMLPropertyHandler to read properties from caTissueCore_Properties.xml file
-		XMLPropertyHandler.init("./catissuecore-properties"+File.separator+"caTissueCore_Properties.xml");
-		// initializing SiteInfoHandler to read site names from site configuration file
-		SiteInfoHandler.init(XMLPropertyHandler.getValue("site.info.filename"));
-		ApplicationProperties.initBundle("ApplicationResources");
-		// required for valdation in bizLogic
-		edu.wustl.catissuecore.util.global.Variables.isLoadFromCaties=true;
-	}
 	
 	/**
-	 * @param args
-	 * start up method
+	 * Main method for FilePoller
+	 * @param args commandline arguments
 	 */
 	public static void main(String[] args)
 	{
@@ -69,44 +34,25 @@ public class FilePoller implements Observable
 		{
 			poller = new FilePoller();
 			// Initializing file poller
-			poller.init();
-			CSVLogger.info(Parser.LOGGER_FILE_POLLER," Date/Time, FileName, Report Loder Queue ID, Status, Message");
-			CSVLogger.info(Parser.LOGGER_FILE_POLLER,"");
+			InitUtility.init();
+			// Configuring CSV logger
+			CSVLogger.configure(CaTIESConstants.LOGGER_FILE_POLLER);
+			// Initializing default value manager
+			DefaultValueManager.validateAndInitDefaultValueMap();
+			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_FILENAME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_REPORTQUEUE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE);
+			// for empty row after heading
+			CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,"");
 			
 			Observer obr=new ReportProcessor();
 			// registering poller to the object obr
 			poller.register(obr);
 			// Create new directories if does not exists
-			ReportLoaderUtil.createDir(XMLPropertyHandler.getValue(Parser.PROCESSED_FILE_DIR));
-			ReportLoaderUtil.createDir(XMLPropertyHandler.getValue(Parser.INPUT_DIR));
-			ReportLoaderUtil.createDir(XMLPropertyHandler.getValue(Parser.BAD_FILE_DIR));
+			ReportLoaderUtil.createDir(CaTIESProperties.getValue(CaTIESConstants.PROCESSED_FILE_DIR));
+			ReportLoaderUtil.createDir(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR));
+			ReportLoaderUtil.createDir(CaTIESProperties.getValue(CaTIESConstants.BAD_FILE_DIR));
 			// Thread for stopping file poller server
-			Thread th=new Thread()
-			{
-				public void	run()
-				{
-					try
-					{
-						int port=Integer.parseInt(XMLPropertyHandler.getValue("filepollerport"));
-						ServerSocket serv = new ServerSocket(port);
-					  	BufferedReader r;
-				    	Socket sock = serv.accept();
-				    	r =new BufferedReader (new InputStreamReader (sock.getInputStream()));
-				    	PrintWriter out = new PrintWriter(new OutputStreamWriter(sock.getOutputStream()),true);
-				    	String str=r.readLine();
-				    	Logger.out.info("Stopping server");
-				    	r.close();
-				    	sock.close(); 
-					    serv.close();
-					    System.exit(0);
-						}
-						catch(Exception e)
-						{
-							Logger.out.error("Error stopping server ",e);
-						}
-					}
-				};			
-				th.start();	     	      	
+			Thread stopThread=new StopServer(CaTIESConstants.FILE_POLLER_PORT);
+			stopThread.start();	     	      	
 		}
 		catch(IOException ex)
 		{
@@ -121,7 +67,7 @@ public class FilePoller implements Observable
 			// Loop to contineusly poll on directory for new incoming files
 			while(true)
 			{
-				inputDir = new File(XMLPropertyHandler.getValue(Parser.INPUT_DIR)); 
+				inputDir = new File(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)); 
 				files=	inputDir.list();
 				 if(files.length>0)
 				 {
@@ -129,8 +75,8 @@ public class FilePoller implements Observable
 					 // this invokes ReportProcessor thread
 					 poller.obr.notifyEvent(files);
 				 }
-				 Logger.out.info("Report Loader Server is going to sleep for "+XMLPropertyHandler.getValue(Parser.POLLER_SLEEP)+"ms");
-				 Thread.sleep(Long.parseLong(XMLPropertyHandler.getValue(Parser.POLLER_SLEEP)));
+				 Logger.out.info("Report Loader Server is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+"ms");
+				 Thread.sleep(Long.parseLong(CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
 			}
 		}
 		catch(Exception ex)

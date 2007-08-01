@@ -4,38 +4,27 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sf.ehcache.CacheException;
-
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
-import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
-import edu.wustl.catissuecore.domain.CollectionProtocol;
-import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.beans.SessionDataBean;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.lookup.DefaultLookupResult;
-import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -50,9 +39,9 @@ public class ReportLoaderUtil
 	 * @return number of matching participants
 	 * @throws Exception throws exception 
 	 */
-	public static Set checkForParticipant(Participant participant)throws Exception
+	public static Set<Participant> checkForParticipant(Participant participant)throws Exception
 	{
-		Set result=null;
+		Set<Participant> result=null;
 		List participantList=null;
 		BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
 		ParticipantBizLogic bizLogic =(ParticipantBizLogic) bizLogicFactory.getBizLogic(Participant.class.getName());
@@ -60,7 +49,7 @@ public class ReportLoaderUtil
 		// check for matching participant list
    		if(participantList!=null && participantList.size()>0)
 		{
-   			result=new HashSet();
+   			result=new HashSet<Participant>();
    			// prepare list of participant object out of DefaultLookupResult List
    			for(int i=0;i < participantList.size();i++)
    			{
@@ -81,7 +70,7 @@ public class ReportLoaderUtil
 		BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
 		IBizLogic bizLogic = bizLogicFactory.getBizLogic(obj.getClass().getName());
 		SessionDataBean sessionDataBean = new SessionDataBean();
-		sessionDataBean.setUserName(XMLPropertyHandler.getValue(Parser.SESSION_DATA));
+		sessionDataBean.setUserName(CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA));
 		if(obj instanceof Participant)
 		{
 			bizLogic.update(obj,obj,Constants.HIBERNATE_DAO,sessionDataBean);
@@ -102,7 +91,7 @@ public class ReportLoaderUtil
 		BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
 		IBizLogic bizLogic = bizLogicFactory.getBizLogic(obj.getClass().getName());
 		SessionDataBean sessionDataBean = new SessionDataBean();
-		sessionDataBean.setUserName(XMLPropertyHandler.getValue(Parser.SESSION_DATA));
+		sessionDataBean.setUserName(CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA));
 		bizLogic.insert(obj,sessionDataBean,Constants.HIBERNATE_DAO);
 	}
 
@@ -116,7 +105,7 @@ public class ReportLoaderUtil
 		BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
 		IBizLogic bizLogic = bizLogicFactory.getBizLogic(obj.getClass().getName());
 		SessionDataBean sessionDataBean = new SessionDataBean();
-		sessionDataBean.setUserName(XMLPropertyHandler.getValue(Parser.SESSION_DATA));
+		sessionDataBean.setUserName(CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA));
 		bizLogic.delete(obj,Constants.HIBERNATE_DAO);
 	}
 
@@ -136,7 +125,7 @@ public class ReportLoaderUtil
 			BizLogicFactory bizLogicFactory = BizLogicFactory.getInstance();
 			IBizLogic bizLogic = bizLogicFactory.getBizLogic(objName);
 			SessionDataBean sessionDataBean = new SessionDataBean();
-			sessionDataBean.setUserName(XMLPropertyHandler.getValue(Parser.SESSION_DATA));
+			sessionDataBean.setUserName(CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA));
 			l = bizLogic.retrieve(objName,property,val);
 		
 		return l;
@@ -207,19 +196,27 @@ public class ReportLoaderUtil
      * @param participant Participant object
      * @return scgList SpecimenCollectionGroup list
      */
-    public static List getSCGList(Participant participant)
+    public static List<SpecimenCollectionGroup> getSCGList(Participant participant)throws DAOException
     {
-    	List scgList=new ArrayList();
+    	// FIRE ONLY ONE QUERY
+    	
+    	List<SpecimenCollectionGroup> scgList=new ArrayList<SpecimenCollectionGroup>();
+    	DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
     	// get all CollectionProtocolRegistration for participant
-    	Collection cprCollection=participant.getCollectionProtocolRegistrationCollection();
-		
-		CollectionProtocolRegistration cpr;
+    	String sourceObjectName=CollectionProtocolRegistration.class.getName();
+		String[] selectColumnName=new String[]{Constants.SYSTEM_IDENTIFIER};
+		String[] whereColumnName=new String[]{Constants.COLUMN_NAME_PARTICIPANT_ID};
+		String[] whereColumnValue=new String[]{participant.getId().toString()};
+		String[] whereColumnCondition=new String[]{"="};
+		String joinCondition="";
+    	Collection cprCollection=(List)defaultBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);	
+		Long cprID;
 		Iterator cprIter=cprCollection.iterator();
 		// iterate on all colletionProtocolRegistration for participant
 		while(cprIter.hasNext())
 		{
-			cpr=(CollectionProtocolRegistration)cprIter.next();
-			Collection tempSCGCollection=cpr.getSpecimenCollectionGroupCollection();
+			cprID=(Long)cprIter.next();
+			Collection tempSCGCollection=(Collection)defaultBizLogic.retrieveAttribute(CollectionProtocolRegistration.class.getName(), cprID, Constants.COLUMN_NAME_SCG_COLL);
 			Iterator scgIter=tempSCGCollection.iterator();
 			// add all the scg associated with cpr to scgList
 			while(scgIter.hasNext())
@@ -277,7 +274,7 @@ public class ReportLoaderUtil
 	                field = field.replaceAll("~~", "");
 	            } 
 	            //	Accession number is now called as Surgical Pathology Number
-	            if (x == Parser.REPORT_ACCESSIONNUMBER_INDEX) 
+	            if (x == CaTIESConstants.REPORT_ACCESSIONNUMBER_INDEX) 
 	            {
 	                StringTokenizer st2 = new StringTokenizer(field, "^");
 	                String accNum = st2.nextToken();
@@ -299,10 +296,9 @@ public class ReportLoaderUtil
 	 */
 	public static SpecimenCollectionGroup checkForSpecimenCollectionGroup(Participant participant, Site site, String surgicalPathologyNumber)throws Exception
 	{
-		List scgSet=null;
+		List<SpecimenCollectionGroup> scgSet=null;
 		SpecimenCollectionGroup existingSCG=null;
-		Iterator scgIterator=null;
-		boolean isMatching=false;
+		Iterator<SpecimenCollectionGroup> scgIterator=null;
 		try
 		{
 			// het list of all the scg associated with participant
@@ -313,23 +309,10 @@ public class ReportLoaderUtil
 				while(scgIterator.hasNext())
 				{
 					// check for mathcing scg
-					existingSCG=(SpecimenCollectionGroup)scgIterator.next();
-					if((surgicalPathologyNumber).equals(existingSCG.getSurgicalPathologyNumber())&& (site.getName()).equals(existingSCG.getSpecimenCollectionSite().getName()))
-					{
-						return existingSCG;
-					}
-					
-				}
-			}
-			scgSet=ReportLoaderUtil.getSCGList(participant);
-			if(scgSet!=null && scgSet.size()>0)
-			{
-				scgIterator=scgSet.iterator();
-				while(scgIterator.hasNext())
-				{
-					// check for mathcing scg
-					existingSCG=(SpecimenCollectionGroup)scgIterator.next();
-					if((existingSCG.getSurgicalPathologyNumber().equalsIgnoreCase(null)) && ((existingSCG.getSpecimenCollectionSite().getName()).equalsIgnoreCase(site.getName())))
+					existingSCG=scgIterator.next();
+					if((surgicalPathologyNumber.equals(existingSCG.getSurgicalPathologyNumber()) 
+							|| existingSCG.getSurgicalPathologyNumber().equalsIgnoreCase(null))							
+							&& (site.getName()).equals(existingSCG.getSite().getName()))
 					{
 						return existingSCG;
 					}

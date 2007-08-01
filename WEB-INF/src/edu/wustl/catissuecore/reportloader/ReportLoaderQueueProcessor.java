@@ -4,9 +4,13 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import edu.wustl.catissuecore.caties.util.CSVLogger;
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.CaTIESProperties;
+import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
 import edu.wustl.catissuecore.domain.Participant;
 import edu.wustl.catissuecore.domain.pathology.ReportLoaderQueue;
-import edu.wustl.common.util.XMLPropertyHandler;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -22,64 +26,65 @@ public class ReportLoaderQueueProcessor extends Thread
 	 */
 	public void run()
 	{
-		CSVLogger.configure(Parser.LOGGER_QUEUE_PROCESSOR);
+		CSVLogger.configure(CaTIESConstants.LOGGER_QUEUE_PROCESSOR);
 		List queue=null;
 		Set participantSet=null;
 		ReportLoaderQueue reportLoaderQueue=null;
-		ParserManager pMgr=null;
 		HL7Parser parser=null;
 		while(true)
 		{	
 			try
 			{
 				// retrieve records from report queue for processing
-				queue=ReportLoaderUtil.getObject(ReportLoaderQueue.class.getName(),"status" ,Parser.NEW);
+				queue=ReportLoaderUtil.getObject(ReportLoaderQueue.class.getName(),"status" ,CaTIESConstants.NEW);
 				Logger.out.info("Processing report Queue: Total "+queue.size()+" Reports found in queue");
-				CSVLogger.info(Parser.LOGGER_QUEUE_PROCESSOR,"Processing report Queue: Total "+queue.size()+" Reports found in queue");
-				CSVLogger.info(Parser.LOGGER_QUEUE_PROCESSOR," Date/Time, Report Loder Queue ID, Status, Message");
+				//	CONSTANT
+				CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,"Processing report Queue: Total "+queue.size()+" Reports found in queue");
+				CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,CaTIESConstants.CSVLOGGER_DATETIME+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_REPORTQUEUE+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_STATUS+CaTIESConstants.CSVLOGGER_SEPARATOR+CaTIESConstants.CSVLOGGER_MESSAGE);
 				if(queue!=null && queue.size()>0)
 				{
 					//	Initializing SiteInfoHandler to avoid restart of server to get new site names added to file at run time
-					SiteInfoHandler.init(XMLPropertyHandler.getValue("site.info.filename"));
+					SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
 					for(int i=0;i<queue.size();i++)
 					{
 						try
 						{
 							reportLoaderQueue=(ReportLoaderQueue)queue.get(i);
-							Logger.out.info("Processing report from Queue with serial no="+reportLoaderQueue.getId());
+							Logger.out.debug("Processing report from Queue with serial no="+reportLoaderQueue.getId());
 							participantSet=(Set)reportLoaderQueue.getParticipantCollection();
 							Iterator it = participantSet.iterator();
 							if(it.hasNext())
 							{
 								// get instance  of parser
-								pMgr=ParserManager.getInstance();
-								parser=(HL7Parser)pMgr.getParser(Parser.HL7_PARSER);
+								parser= (HL7Parser)ParserManager.getInstance().getParser();
+								
 								try
 								{
 									// parse report text 
-									parser.parseString((Participant)it.next(),reportLoaderQueue.getReportText(), reportLoaderQueue.getSpecimenCollectionGroup());
+									Participant participant=(Participant)it.next();
+									parser.parseString(participant,reportLoaderQueue.getReportText(), reportLoaderQueue.getSpecimenCollectionGroup());
 									// delete record from queue
 									ReportLoaderUtil.deleteObject(reportLoaderQueue);
-									CSVLogger.info(Parser.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ");
+									CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+"SUCCESS"+",Report Loaded SuccessFully  ");
 									Logger.out.info("Processed report from Queue with serial no="+reportLoaderQueue.getId());
 								}
 								catch(Exception ex)
 								{
-									CSVLogger.info(Parser.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+","+"FAILED"+","+ex.getMessage());
-									reportLoaderQueue.setStatus(Parser.FAILURE);
+									CSVLogger.info(CaTIESConstants.LOGGER_QUEUE_PROCESSOR,new Date().toString()+","+reportLoaderQueue.getId()+","+","+"FAILED"+","+ex.getMessage());
+									reportLoaderQueue.setStatus(CaTIESConstants.FAILURE);
 									ReportLoaderUtil.updateObject(reportLoaderQueue);
 								}
 							}
 						}
 						catch(Exception ex)
 						{
-							reportLoaderQueue.setStatus(Parser.FAILURE);
+							reportLoaderQueue.setStatus(CaTIESConstants.FAILURE);
 							Logger.out.error("Error in parsing queue "+i);
 						}
 					}
 				}
-				Logger.out.info("Report Loader Queue is going to sleep for "+XMLPropertyHandler.getValue(Parser.POLLER_SLEEP)+"ms");
-				Thread.sleep(Long.parseLong(XMLPropertyHandler.getValue(Parser.POLLER_SLEEP)));
+				Logger.out.info("Report Loader Queue is going to sleep for "+CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)+"ms");
+				Thread.sleep(Long.parseLong(CaTIESProperties.getValue(CaTIESConstants.POLLER_SLEEPTIME)));
 			}
 			catch(Exception ex)
 			{

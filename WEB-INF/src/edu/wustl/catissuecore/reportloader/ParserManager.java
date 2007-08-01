@@ -1,18 +1,7 @@
 package edu.wustl.catissuecore.reportloader;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-
-import net.sf.ehcache.CacheException;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
-import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
-import edu.wustl.catissuecore.bizlogic.ParticipantBizLogic;
-import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
-import edu.wustl.catissuecore.domain.Participant;
-import edu.wustl.catissuecore.util.CatissueCoreCacheManager;
-import edu.wustl.catissuecore.util.global.Constants;
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.InitUtility;
 import edu.wustl.common.util.logger.Logger;
 
 /**
@@ -21,8 +10,7 @@ import edu.wustl.common.util.logger.Logger;
  * depending upon the parameter.   
  */
 public final class ParserManager
-
- {
+{
 
 	/**
 	 * ParserManager 
@@ -35,8 +23,7 @@ public final class ParserManager
 	private ParserManager()
 	{
 	}
-	
-	
+		
 	/**
 	 * @return instance of ParserManager.
 	 */
@@ -55,56 +42,32 @@ public final class ParserManager
 	 */
 	private void initialize()
 	{
-		// participant map for cache manager
-		Map participantMap = null;
-		ParticipantBizLogic bizlogic = (ParticipantBizLogic) BizLogicFactory.getInstance()
-				.getBizLogic(Participant.class.getName());
-		Map cpMap = null;
-		List cprList=null;
-		try
-		{
-			BizLogicFactory bizFactory=BizLogicFactory.getInstance();
-			CollectionProtocolRegistrationBizLogic cpbizlogic= (CollectionProtocolRegistrationBizLogic) bizFactory.getBizLogic(CollectionProtocolRegistration.class.getName());
-			cprList=cpbizlogic.getAllParticipantRegistrationInfo();
-			// get all participant list to set to chache manager
-			participantMap = bizlogic.getAllParticipants();
-		}
-		catch (Exception ex)
-		{
-			Logger.out.error("Exception occured getting List of Participants " ,ex);
-		}
-		// getting instance of catissueCoreCacheManager and adding participantMap to cache
-		try
-		{
-			// get instance of catissueCoreCacheManager
-			CatissueCoreCacheManager catissueCoreCacheManager = CatissueCoreCacheManager
-			.getInstance();
-			// add objects to cacheManager
-			catissueCoreCacheManager.addObjectToCache(Constants.MAP_OF_PARTICIPANTS, (HashMap) participantMap);
-			catissueCoreCacheManager.addObjectToCache(edu.wustl.catissuecore.util.global.Constants.LIST_OF_REGISTRATION_INFO, (Vector)cprList);
-		}
-		catch (CacheException e)
-		{
-			Logger.out
-					.error("Exception occured while creating instance of CatissueCoreCacheManager" , e);
-		}	
+		InitUtility.initializeParticipantCache();
 	}
 	
 	/**
 	 * @param type represents the parser type.
 	 * @return the parser depending upon the type specified as input.   
 	 */
-	public Parser getParser(String type)
+	public Parser getParser()
 	{
-		Parser parser=null; 
-		if(type.equals(Parser.HL7_PARSER))
-		{	
-			parser=new HL7Parser();
+		Parser parser=null;
+		try 
+		{
+			parser = (Parser)Class.forName(CaTIESConstants.PARSER_CLASS).newInstance();
+		} 
+		catch (InstantiationException e) 
+		{
+			Logger.out.error("InstantiationException while instantiating class "+CaTIESConstants.PARSER_CLASS,e);
+		} 
+		catch (IllegalAccessException e) 
+		{
+			Logger.out.error("IllegalAccessException while instantiating class "+CaTIESConstants.PARSER_CLASS,e);
+		} 
+		catch (ClassNotFoundException e) 
+		{
+			Logger.out.error("ClassNotFoundException while instantiating class "+CaTIESConstants.PARSER_CLASS,e);
 		}	
 		return parser;
 	}
-
-
-	
-	
 }

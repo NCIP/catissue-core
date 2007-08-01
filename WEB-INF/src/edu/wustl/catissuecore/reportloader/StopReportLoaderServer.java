@@ -9,7 +9,8 @@ import java.net.Socket;
 
 import org.apache.log4j.PropertyConfigurator;
 
-import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.common.util.global.Variables;
 import edu.wustl.common.util.logger.Logger;
 
@@ -20,8 +21,8 @@ import edu.wustl.common.util.logger.Logger;
  */
 public class StopReportLoaderServer
 {
-	 /**
-	  * Default entry point for the program
+	/**
+	 * Default entry point for the program
 	 * @param args command line arguments
 	 * @throws Exception Generic exception
 	 */
@@ -37,19 +38,18 @@ public class StopReportLoaderServer
 			PropertyConfigurator.configure(Variables.applicationHome + File.separator+"ApplicationResources.properties");
 			System.setProperty("gov.nih.nci.security.configFile",
 					"./catissuecore-properties"+File.separator+"ApplicationSecurityConfig.xml");
-	    	XMLPropertyHandler.init("./catissuecore-properties"+File.separator+"caTissueCore_Properties.xml");
+			CaTIESProperties.initBundle("caTIES");
 	    	// get port number of ReportLoaderServer
-	    	int port=Integer.parseInt(XMLPropertyHandler.getValue("filepollerport"));
+	    	int port=Integer.parseInt(CaTIESProperties.getValue(CaTIESConstants.FILE_POLLER_PORT));
 	    	// Create client socket to connect to server
 	        Socket s = new Socket("localhost",port);
-	        Logger.out.info(XMLPropertyHandler.getValue("deid.port"));
+	        Logger.out.info(CaTIESProperties.getValue(CaTIESConstants.FILE_POLLER_PORT));
 	        BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 	        PrintWriter out = new PrintWriter(new OutputStreamWriter(s.getOutputStream()),true);
 	        // send stop command to stop the server
 	        out.write("stop");
 	        s.close();
 	        Logger.out.info("Message sent to stop server");
-	        
 	    } 
 	    catch (Exception ex) 
 	    {

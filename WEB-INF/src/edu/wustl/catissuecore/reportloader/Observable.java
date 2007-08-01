@@ -1,14 +1,14 @@
 package edu.wustl.catissuecore.reportloader;
 /**
- * @author sandeep_ranade
  * This is observable interface 
+ * @author sandeep_ranade
  */
 
 public interface Observable
 {
 	/**
-	 * @param obr
 	 * Method to register the object with observer
+	 * @param obr object to register
 	 */
 	void register(Observer  obr);
 	

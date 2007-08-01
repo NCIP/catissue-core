@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.catissuecore.caties.util.CSVLogger;
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.CaTIESProperties;
+import edu.wustl.catissuecore.caties.util.SiteInfoHandler;
 import edu.wustl.common.util.logger.Logger;
 
 /**
- * @author sandeep_ranade
  * Represents a procesor which picks up the report files and then pass them to the 
  * appropriate parser which parsers those files and import the data into datastore.  
  */
@@ -36,13 +38,14 @@ public class ReportProcessor implements Observer
 	{
 		parserManager = ParserManager.getInstance();
 		// get instance of parser
-		parser = parserManager.getParser(Parser.HL7_PARSER);
+		parser = parserManager.getParser();
 		ReportLoaderQueueProcessor queueProcessor = new ReportLoaderQueueProcessor();
 		// Starts ReportLoaderQueueProcessor thread
 		queueProcessor.start();
 	}
 	
 	/**
+	 * Method to indicate notify 
 	 * @param obj object
 	 */
 	public void notifyEvent(Object obj)
@@ -58,35 +61,33 @@ public class ReportProcessor implements Observer
 	public void run(Object obj)
 	{
 		String[] files=null;
-		File inputDir=null;
-		List fileToDelete=null;
+		List<String> fileToDelete=null;
 		try
 		{	
 			files=	(String[])obj;
 			// variable to store list of files that has to be deleted from input directory after processing
-			fileToDelete = new ArrayList();
+			fileToDelete = new ArrayList<String>();
 			// Loop to process all incoming files
 			for(int i=0;i<files.length;i++)
 			{	
 				try
 				{		
-					if(isValidFile(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]))
+					if(isValidFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]))
 					{
 						Logger.out.info("parsing file "+files[i]);
 						// Initializing SiteInfoHandler to avoid restart of server to get new site names added to file at run time
-						SiteInfoHandler.init(XMLPropertyHandler.getValue("site.info.filename"));
+						SiteInfoHandler.init(CaTIESProperties.getValue(CaTIESConstants.SITE_INFO_FILENAME));
 						// calling parser to parse file
-						parser.parse(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
+						parser.parse(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
 						Logger.out.info("parsing of file "+files[i]+" finished");
 					}
 					else
 					{
-						Logger.out.info("Bad file found. Moving file to bad files directory. Filename:"+XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
-						CSVLogger.info(Parser.LOGGER_FILE_POLLER,"Bad file found "+XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
-						fileToDelete.add(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
-						copyFile(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i],XMLPropertyHandler.getValue(Parser.BAD_FILE_DIR)+"/"+files[i]);
-					}
-					
+						Logger.out.info("Bad file found. Moving file to bad files directory. Filename:"+CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
+						CSVLogger.info(CaTIESConstants.LOGGER_FILE_POLLER,"Bad file found "+CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
+						fileToDelete.add(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
+						copyFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i],CaTIESProperties.getValue(CaTIESConstants.BAD_FILE_DIR)+"/"+files[i]);
+					}					
 				}
 				catch(IOException ex)
 				{
@@ -94,12 +95,12 @@ public class ReportProcessor implements Observer
 				}
 				catch(Exception ex)
 				{     
-			  	    copyFile("./"+files[i],XMLPropertyHandler.getValue(Parser.BAD_FILE_DIR)+File.separator+files[i]);
-			  	    fileToDelete.add(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
+			  	    copyFile("./"+files[i],CaTIESProperties.getValue(CaTIESConstants.BAD_FILE_DIR)+File.separator+files[i]);
+			  	    fileToDelete.add(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
 					Logger.out.error("Bad File ",ex);
 				}
-				fileToDelete.add(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i]);
-				copyFile(XMLPropertyHandler.getValue(Parser.INPUT_DIR)+File.separator+files[i],XMLPropertyHandler.getValue(Parser.PROCESSED_FILE_DIR)+"/"+files[i]);
+				fileToDelete.add(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i]);
+				copyFile(CaTIESProperties.getValue(CaTIESConstants.INPUT_DIR)+File.separator+files[i],CaTIESProperties.getValue(CaTIESConstants.PROCESSED_FILE_DIR)+"/"+files[i]);
 			}
 			files=null;
 			deleteFiles(fileToDelete);
@@ -116,7 +117,6 @@ public class ReportProcessor implements Observer
 	 * @param sourceFile Source file name
 	 * @param destinationFile desinamtion file name
 	 * @throws Exception generic exception
-	 * 
 	 */
 	private static void copyFile(String sourceFile,String destinationFile)throws Exception
 	{
@@ -135,33 +135,32 @@ public class ReportProcessor implements Observer
 	}
 	
 	/**
-	 * Delete files
+	 * Function to delete files
 	 * @param list list of files to delete
 	 * @throws Exception generic exception
 	 */
-	private static void deleteFiles(List list)throws Exception
+	private static void deleteFiles(List<String> list)throws Exception
 	{
 		
 		File tempFile= null;
-		boolean del=false;
 		for(int i=0;i<list.size();i++)
 		{
-			tempFile=new File((String)list.get(i));
+			tempFile=new File(list.get(i));
 			if(tempFile.exists())
 			{
-				 del=tempFile.delete();
+				 tempFile.delete();
 			}
 		}
 	}	
 	
 	/**
-	 * This is the function to validate the input file 
+	 * Function to validate the input file 
 	 * @param fileName nae of the input file
 	 * @return boolean result of validation
 	 */
 	public boolean isValidFile(String fileName)
 	{
-		if(fileName.endsWith(Parser.INPUT_FILE_EXTENSION))
+		if(fileName.endsWith(CaTIESConstants.INPUT_FILE_EXTENSION))
 		{
 			return true;
 		}

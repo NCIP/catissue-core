@@ -1,24 +1,32 @@
 package edu.wustl.catissuecore.reportloader;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolBizLogic;
 import edu.wustl.catissuecore.bizlogic.CollectionProtocolRegistrationBizLogic;
 import edu.wustl.catissuecore.bizlogic.SpecimenCollectionGroupBizLogic;
+import edu.wustl.catissuecore.caties.util.CaTIESConstants;
+import edu.wustl.catissuecore.caties.util.CaTIESProperties;
+import edu.wustl.catissuecore.domain.CollectionEventParameters;
 import edu.wustl.catissuecore.domain.CollectionProtocol;
 import edu.wustl.catissuecore.domain.CollectionProtocolEvent;
 import edu.wustl.catissuecore.domain.CollectionProtocolRegistration;
 import edu.wustl.catissuecore.domain.Participant;
+import edu.wustl.catissuecore.domain.ReceivedEventParameters;
 import edu.wustl.catissuecore.domain.Site;
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
+import edu.wustl.catissuecore.domain.SpecimenEventParameters;
+import edu.wustl.catissuecore.domain.User;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.domain.pathology.TextContent;
 import edu.wustl.catissuecore.util.global.Constants;
-import edu.wustl.common.util.XMLPropertyHandler;
+import edu.wustl.catissuecore.util.global.DefaultValueManager;
+import edu.wustl.common.bizlogic.DefaultBizLogic;
 import edu.wustl.common.util.dbManager.DAOException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -75,11 +83,12 @@ public class ReportLoader
 	 * @param s site
 	 * @param scg specimenCollectionGroup
 	 * @param surgicalPathologyNumber surgicalPathologyNumber of report
+	 * @throws DAOException 
 	 * 
 	 */
-	public ReportLoader(Participant p,IdentifiedSurgicalPathologyReport report,Site s, SpecimenCollectionGroup scg, String surgicalPathologyNumber)
+	public ReportLoader(Participant participant,IdentifiedSurgicalPathologyReport report,Site s, SpecimenCollectionGroup scg, String surgicalPathologyNumber) throws DAOException
 	{
-		this.participant=p;
+		this.participant=participant;
 		this.identifiedReport=report;
 		this.site=s;
 		this.scg=scg;
@@ -94,8 +103,9 @@ public class ReportLoader
 	 */
 	public void process()throws Exception
 	{
-		Logger.out.info("Processing Report ");
-		identifiedReport.setReportStatus(Parser.PENDING_FOR_DEID);
+		
+		Logger.out.debug("Processing Report ");
+		identifiedReport.setReportStatus(CaTIESConstants.PENDING_FOR_DEID);
 		identifiedReport.setSource(this.site);
 		try
 		{	
@@ -103,17 +113,17 @@ public class ReportLoader
 			if(this.scg==null || this.scg.getId()==0)
 			{
 				// if scg is null create new scg
-				Logger.out.info("Null SCG found in ReportLoader, Creating New SCG");
-				this.scg=createNewSpecimenCollectionGroup(this.participant, this.identifiedReport,this.site, this.surgicalPathologyNumber);
-				ReportLoaderUtil.saveObject(scg);
+				Logger.out.debug("Null SCG found in ReportLoader, Creating New SCG");
+				this.scg=createNewSpecimenCollectionGroup();
+				ReportLoaderUtil.saveObject(this.scg);
 			}
 			else
 			{
 				// use existing scg
 				if(this.scg.getIdentifiedSurgicalPathologyReport()!=null)
 				{
-					boolean isExists = checkForTextContent(this.scg.getIdentifiedSurgicalPathologyReport());
-					if(!isExists)
+					boolean isReportExists = checkForTextContent(this.scg.getIdentifiedSurgicalPathologyReport());
+					if(!isReportExists)
 					{
 						// if report text is null then set report text
 						this.scg.getIdentifiedSurgicalPathologyReport().setTextContent(this.identifiedReport.getTextContent());
@@ -123,13 +133,17 @@ public class ReportLoader
 				{
 					this.scg.setIdentifiedSurgicalPathologyReport(this.identifiedReport); 
 				}
-				ReportLoaderUtil.updateObject(scg);
+				if(this.scg.getSurgicalPathologyNumber()==null)
+				{
+					this.scg.setSurgicalPathologyNumber(this.surgicalPathologyNumber);
+				}
+				ReportLoaderUtil.updateObject(identifiedReport);
 			}	
 			Logger.out.info("Processing finished for Report ");
 		}
 		catch(Exception ex)
 		{
-			Logger.out.error("Failed to process report ");
+			Logger.out.error("Failed to process report "+ex);
 			throw new Exception(ex.getMessage());
 		}
 	}
@@ -142,7 +156,7 @@ public class ReportLoader
 	 * @param surgicalPathologyNumber String containing surgicalPathologyNumber for scg
 	 * @throws Exception generic exception
 	 */
-	public static SpecimenCollectionGroup createNewSpecimenCollectionGroup(Participant participant, IdentifiedSurgicalPathologyReport identifiedReport, Site site, String surgicalPathologyNumber)throws Exception
+	private SpecimenCollectionGroup createNewSpecimenCollectionGroup()throws Exception
 	{
 		// set default values for scg
 		Logger.out.info("Creating New Specimen Collection Group");
@@ -152,22 +166,25 @@ public class ReportLoader
 //		scg.setParticipant(this.participant);
 		scg.setClinicalDiagnosis(Constants.NOT_SPECIFIED);
 		scg.setClinicalStatus(Constants.NOT_SPECIFIED);
-		scg.setSpecimenCollectionSite(site); 
+		scg.setSite(site); 
 		scg.setSurgicalPathologyNumber(surgicalPathologyNumber);
 		scg.setIdentifiedSurgicalPathologyReport(identifiedReport);
 		identifiedReport.setSpecimenCollectionGroup(scg);
 			 
 		// Retrieve collection generic protocol
-		String className=CollectionProtocol.class.getName();
-		String colName=new String("title");
-		String colValue=XMLPropertyHandler.getValue("collectionProtocolTitle");
+		String sourceObjectName=CollectionProtocol.class.getName();
+		String[] selectColumnName=new String[]{Constants.SYSTEM_IDENTIFIER};
+		String[] whereColumnName=new String[]{Constants.COLUMN_NAME_TITLE};
+		String[] whereColumnValue=new String[]{CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE)};
+		String[] whereColumnCondition=new String[]{"="};
+		String joinCondition="";
 		BizLogicFactory bizLogicFactory=BizLogicFactory.getInstance();
 		CollectionProtocolBizLogic cpBizLogic=(CollectionProtocolBizLogic)bizLogicFactory.getBizLogic(CollectionProtocol.class.getName());
-		List cpList=cpBizLogic.retrieve(className, colName, colValue);
-		CollectionProtocol collectionProtocol=null;
-		if(cpList!=null && cpList.size()>0)
+		List cpIDList=cpBizLogic.retrieve(sourceObjectName, selectColumnName, whereColumnName, whereColumnCondition, whereColumnValue, joinCondition);
+		Long cpID=null;
+		if(cpIDList!=null && cpIDList.size()>0)
 		{
-			collectionProtocol=(CollectionProtocol)cpList.get(0);
+			cpID=(Long)cpIDList.get(0);
 		}
 		else
 		{
@@ -179,7 +196,7 @@ public class ReportLoader
 		int groupId=0;
 		SpecimenCollectionGroupBizLogic scgBizLogic=(SpecimenCollectionGroupBizLogic)bizLogicFactory.getBizLogic(SpecimenCollectionGroup.class.getName());
 		groupId=scgBizLogic.getNextGroupNumber();
-		String collProtocolTitle=collectionProtocol.getTitle();
+		String collProtocolTitle=CaTIESProperties.getValue(CaTIESConstants.COLLECTION_PROTOCOL_TITLE);
 		if(collProtocolTitle.length()>30)
 		{
 			collProtocolTitle=collProtocolTitle.substring(0,29);
@@ -189,20 +206,17 @@ public class ReportLoader
 		Logger.out.info("SCG name is =====>"+scgName);
 		
 		// retrieve collection protocol event list
-		Set collProtocolEventList=(Set)collectionProtocol.getCollectionProtocolEventCollection();
+		DefaultBizLogic defaultBizLogic = new DefaultBizLogic();
+		Collection collProtocolEventList=(Collection)defaultBizLogic.retrieveAttribute(CollectionProtocol.class.getName(), cpID, Constants.COLUMN_COLL_PROT_EVENT_COLL);
 		Iterator cpEventIterator=collProtocolEventList.iterator();
 		
-		if(!cpEventIterator.hasNext())
-		{
-			Logger.out.info("Associated Collection Protocol Event not found for "+ collectionProtocol.getTitle());
-		}
-		else
-		{
+		if(cpEventIterator.hasNext())
+		{		
 			CollectionProtocolEvent collProtocolEvent=(CollectionProtocolEvent)cpEventIterator.next();
 			scg.setCollectionProtocolEvent(collProtocolEvent);
 			
 			// check for existing CollectionProtocolRegistration, if exists then use existing
-			CollectionProtocolRegistration collProtocolReg=isCPRExists(participant, collectionProtocol);
+			CollectionProtocolRegistration collProtocolReg=isCPRExists(participant.getId(), cpID);
 			if(collProtocolReg==null)
 			{	
 				// otherwise create new CollectionProtocolRegistration
@@ -212,7 +226,9 @@ public class ReportLoader
 				collProtocolReg.setRegistrationDate(new Date());
 				collProtocolReg.setParticipant(participant);	
 				collProtocolReg.setCollectionProtocol(collProtocolEvent.getCollectionProtocol());
-				((Set)participant.getCollectionProtocolRegistrationCollection()).add(collProtocolReg);
+				Collection<CollectionProtocolRegistration> collProtocolRegList=(Collection<CollectionProtocolRegistration>)defaultBizLogic.retrieveAttribute(Participant.class.getName(), participant.getId(), Constants.COLUMN_NAME_CPR_COLL);
+				collProtocolRegList.add(collProtocolReg);
+//				participant.setCollectionProtocolRegistrationCollection(collProtocolRegList);
 				try
 				{
 					ReportLoaderUtil.saveObject(collProtocolReg);
@@ -223,9 +239,13 @@ public class ReportLoader
 					throw new Exception("Could not save object of CollectionProtocolRegistration :"+ex.getMessage());
 				}		
 			}
-//			((Set)collProtocolReg.getSpecimenCollectionGroupCollection()).add(scg);
-			// set CollectionProtocolRegistration to scg
 			scg.setCollectionProtocolRegistration(collProtocolReg);
+			scg.setSpecimenEventParametersCollection(getDefaultEvents(scg));
+		}
+		else
+		{
+			Logger.out.error("Associated Collection Protocol Event not found for "+ collProtocolTitle);
+			throw new Exception("Associated Collection Protocol Event not found for "+ collProtocolTitle);
 		}
 			
 		return scg;
@@ -238,7 +258,7 @@ public class ReportLoader
 	 * @return object of CollectionProtocolRegistration
 	 * @throws Exception generic exception
 	 */
-	public static CollectionProtocolRegistration isCPRExists(Participant participant, CollectionProtocol collectionProtocol) throws Exception
+	private CollectionProtocolRegistration isCPRExists(Long participantID, Long cpID) throws Exception
 	{
 		try
 		{
@@ -246,7 +266,7 @@ public class ReportLoader
 			String sourceObjectName=new String(CollectionProtocolRegistration.class.getName());
 			String[] selectColumnName=new String[]{"participant", "collectionProtocol"};
 			String[] whereColumnCondition=new String[]{"=","="};
-			String[] whereColumnValue=new String[]{participant.getId().toString(), collectionProtocol.getId().toString()};
+			String[] whereColumnValue=new String[]{participantID.toString(),cpID.toString()};
 			String joinCondition=Constants.AND_JOIN_CONDITION;
 			
 			BizLogicFactory bizLogicFactory=BizLogicFactory.getInstance();
@@ -257,7 +277,7 @@ public class ReportLoader
 			if(cprList!=null && cprList.size()>0)
 			{
 				// cpr exist then return existing cpr
-				Logger.out.info("Existing CPR found for participant id="+participant.getId()+" collectionProtocol id="+collectionProtocol.getId());
+				Logger.out.info("Existing CPR found for participant id="+participantID+" collectionProtocol id="+cpID);
 				return (CollectionProtocolRegistration)cprList.get(0);
 			}
 		}
@@ -274,7 +294,7 @@ public class ReportLoader
 	 * @param report identified surgical pathology report
 	 * @return boolean value which indicates text content is present or not
 	 */
-	public boolean checkForTextContent(IdentifiedSurgicalPathologyReport report)
+	private boolean checkForTextContent(IdentifiedSurgicalPathologyReport report)
 	{
 		Logger.out.info("Inside checkForTextContent function");
 		TextContent content=report.getTextContent();
@@ -285,4 +305,29 @@ public class ReportLoader
 		}
 		return false;
 	}	
+	
+	private Collection<SpecimenEventParameters> getDefaultEvents(SpecimenCollectionGroup specimenCollectionGroup) throws DAOException
+	{
+		Collection<SpecimenEventParameters> defaultEventCollection=new HashSet<SpecimenEventParameters>();
+		DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
+		String loginName=CaTIESProperties.getValue(CaTIESConstants.SESSION_DATA);
+		List userList=defaultBizLogic.retrieve(User.class.getName(), Constants.LOGINNAME, loginName);
+		User user=(User)userList.get(0);
+		CollectionEventParameters collectionEvent=new CollectionEventParameters();
+		collectionEvent.setCollectionProcedure((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_COLLECTION_PROCEDURE));
+		collectionEvent.setContainer((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_CONTAINER));
+		collectionEvent.setSpecimenCollectionGroup(specimenCollectionGroup);
+		collectionEvent.setTimestamp(new Date());
+		collectionEvent.setUser(user);
+		
+		ReceivedEventParameters recievedEvent=new ReceivedEventParameters();
+		recievedEvent.setReceivedQuality((String)DefaultValueManager.getDefaultValue(Constants.DEFAULT_RECEIVED_QUALITY));
+		recievedEvent.setSpecimenCollectionGroup(specimenCollectionGroup);
+		recievedEvent.setTimestamp(new Date());
+		recievedEvent.setUser(user);
+		
+		defaultEventCollection.add(collectionEvent);
+		defaultEventCollection.add(recievedEvent);
+		return defaultEventCollection;
+	}
 }
