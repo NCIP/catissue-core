@@ -203,7 +203,16 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     		case Constants.REQUEST_LIST_FILTERATION_FORM_ID:
     			bizLogic = new OrderBizLogic();
     			break;
-
+    			//	View Surgical Pathology Report
+    		case Constants.DEIDENTIFIED_SURGICAL_PATHOLOGY_REPORT_FORM_ID:
+    			bizLogic=new DeidentifiedSurgicalPathologyReportBizLogic();
+    			break;	
+    		case Constants.PATHOLOGY_REPORT_REVIEW_FORM_ID:
+    			bizLogic=new PathologyReportReviewParameterBizLogic();
+    			break;	
+    		case Constants.QUARANTINE_EVENT_PARAMETER_FORM_ID:
+    			bizLogic=new QuarantineEventParameterBizLogic();
+    			break;	
     		//END
     		case Constants.DEFAULT_BIZ_LOGIC:
             default:
@@ -323,6 +332,28 @@ public class BizLogicFactory //extends AbstractBizLogicFactory
     		bizLogic = new CollectionProtocolRegistrationBizLogic();
     	} 
     	//END
+    	// For caTIES
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"))
+    	{
+    		bizLogic = new IdentifiedSurgicalPathologyReportBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.TextContent"))
+    	{
+    		bizLogic = new TextReportContentBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"))
+    	{
+    		bizLogic = new DeidentifiedSurgicalPathologyReportBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.PathologyReportReviewParameter"))
+    	{
+    		bizLogic = new PathologyReportReviewParameterBizLogic();
+    	}
+    	else if(className.equals("edu.wustl.catissuecore.domain.pathology.QuarantineEventParameter"))
+    	{
+    		bizLogic = new QuarantineEventParameterBizLogic();
+    	}
+    	// caTIES END
     	else
     	{
     		bizLogic = new DefaultBizLogic();
