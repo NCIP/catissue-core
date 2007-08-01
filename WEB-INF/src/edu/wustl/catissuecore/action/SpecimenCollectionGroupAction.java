@@ -132,18 +132,18 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		// Radio button for Protocol Participant Identifier or Participant
 		String radioButtonSelectedForType=null;
 		String selectedCollectionProtocol_id=String.valueOf(specimenCollectionGroupForm.getCollectionProtocolId());
-		if(selectedCollectionProtocol_id.equalsIgnoreCase("0"))
+		if(selectedCollectionProtocol_id.equalsIgnoreCase(Constants.SELECTED_COLLECTION_PROTOCOL_ID))
 		{
-				Map forwardToHashMap = (Map)request.getAttribute("forwardToHashMap");
+				Map forwardToHashMap = (Map)request.getAttribute(Constants.FORWARD_TO_HASHMAP);
 				if(forwardToHashMap!=null)
 				{
-					selectedCollectionProtocol_id=forwardToHashMap.get("collectionProtocolId").toString();
-					selectedParticipantOrPPIdentifier_id=forwardToHashMap.get("participantId").toString();
-					radioButtonSelectedForType="participantId";
+					selectedCollectionProtocol_id=forwardToHashMap.get(Constants.COLLECTION_PROTOCOL_ID).toString();
+					selectedParticipantOrPPIdentifier_id=forwardToHashMap.get(Constants.PARTICIPANT_ID).toString();
+					radioButtonSelectedForType=Constants.PARTICIPANT_ID;
 					if(selectedParticipantOrPPIdentifier_id.equals("0"))
 					{
-						selectedParticipantOrPPIdentifier_id=forwardToHashMap.get("participantProtocolId").toString();
-						radioButtonSelectedForType="protocolParticipantIdentifier";
+						selectedParticipantOrPPIdentifier_id=forwardToHashMap.get(Constants.PARTICIPANT_PROTOCOL_ID).toString();
+						radioButtonSelectedForType=Constants.PARTICIPANT_PROTOCOL_ID;
 					}
 				}
 		}
@@ -153,12 +153,12 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			if(radioButtonSelected==1)
 			{
 				selectedParticipantOrPPIdentifier_id=Long.toString(specimenCollectionGroupForm.getParticipantId());
-				radioButtonSelectedForType="participantId";
+				radioButtonSelectedForType=Constants.PARTICIPANT_ID;
 			}
 			else
 			{
 				selectedParticipantOrPPIdentifier_id=specimenCollectionGroupForm.getProtocolParticipantIdentifier();
-				radioButtonSelectedForType="protocolParticipantIdentifier";
+				radioButtonSelectedForType=Constants.PARTICIPANT_PROTOCOL_ID;
 			}
 		}
 		//Get CollectionprotocolRegistration Object
@@ -194,7 +194,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			ActionErrors errors = (ActionErrors) request.getAttribute(Globals.ERROR_KEY);
 			if(errors == null)
 			{ 
-				String protocolEventID = request.getParameter("protocolEventId");
+				String protocolEventID = request.getParameter(Constants.PROTOCOL_EVENT_ID);
 				if(protocolEventID==null||protocolEventID.equalsIgnoreCase(Constants.FALSE))
 				{
 					Map tempMap=prepareConsentMap(participantResponseList);
@@ -224,12 +224,12 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 			session.setAttribute(Constants.COLUMNLIST,columnList);
 		}
 		List specimenCollectionGroupResponseList =Utility.responceList(operation);
-		request.setAttribute("specimenCollectionGroupResponseList", specimenCollectionGroupResponseList);
+		request.setAttribute(Constants.LIST_OF_SPECIMEN_COLLECTION_GROUP, specimenCollectionGroupResponseList);
 		
 		String tabSelected = request.getParameter(Constants.SELECTED_TAB);
 		if(tabSelected!=null)
 		{
-			request.setAttribute(Constants.TAB_SELECTED,tabSelected);
+			request.setAttribute(Constants.SELECTED_TAB,tabSelected);
 		}
 	
 		//	For Consent Tracking (Virender Mehta)	    -  End
@@ -1081,7 +1081,7 @@ public class SpecimenCollectionGroupAction  extends SecureAction
 		
 		CollectionProtocolRegistrationBizLogic collectionProtocolRegistrationBizLogic = (CollectionProtocolRegistrationBizLogic)BizLogicFactory.getInstance().getBizLogic(Constants.COLLECTION_PROTOCOL_REGISTRATION_FORM_ID);
 		String[] colName= new String[2];
-		if(indexType.equalsIgnoreCase("participantId"))
+		if(indexType.equalsIgnoreCase(Constants.PARTICIPANT_ID))
 		{
 			colName[0] = "participant.id";
 			colName[1] = "collectionProtocol.id";	

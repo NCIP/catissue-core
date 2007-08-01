@@ -24,7 +24,7 @@
 
 <% 
 		String operation = (String)request.getAttribute(Constants.OPERATION);
-		String tab = (String)request.getAttribute(Constants.TAB_SELECTED);
+		String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
 		String reqPath = (String)request.getAttribute(Constants.REQ_PATH);
 		String pageOf = (String)request.getAttribute(Constants.PAGEOF);
 		String signedConsentDate = "";

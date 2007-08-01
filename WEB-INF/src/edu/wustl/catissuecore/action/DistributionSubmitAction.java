@@ -119,7 +119,6 @@ public class DistributionSubmitAction extends CommonAddEditAction
 					ActionMessages messages = null;
 					messages = new ActionMessages();
 					messages.add(ActionErrors.GLOBAL_ERROR, new ActionError("errors.verify.Consent"));
-					//errors.verify.Consent
 					if (messages != null)
 					{
 						saveMessages(request, messages);

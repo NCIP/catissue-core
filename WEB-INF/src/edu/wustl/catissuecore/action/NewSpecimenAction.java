@@ -170,7 +170,7 @@ public class NewSpecimenAction extends SecureAction
 			String tabSelected = request.getParameter(Constants.SELECTED_TAB);
 			if(tabSelected!=null)
 			{
-				request.setAttribute(Constants.TAB_SELECTED,tabSelected);
+				request.setAttribute(Constants.SELECTED_TAB,tabSelected);
 			}
 			String scg_id=String.valueOf(specimenForm.getSpecimenCollectionGroupId());
 			SpecimenCollectionGroup specimenCollectionGroup= getSCGObj(scg_id);

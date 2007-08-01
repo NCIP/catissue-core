@@ -1784,4 +1784,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
     
     //ordering system
     public static final String TAB_INDEX_ID="tabIndexId";
+    
+    public static final String FORWARD_TO_HASHMAP="forwardToHashMap";
+    public static final String SELECTED_COLLECTION_PROTOCOL_ID = "0";
+    public static final String LIST_OF_SPECIMEN_COLLECTION_GROUP = "specimenCollectionGroupResponseList";
+    public static final String PARTICIPANT_PROTOCOL_ID="participantProtocolId";
 }

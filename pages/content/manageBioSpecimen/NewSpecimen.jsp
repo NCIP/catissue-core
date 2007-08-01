@@ -24,7 +24,7 @@
 	NewSpecimenForm form = (NewSpecimenForm)request.getAttribute("newSpecimenForm");
 	String frdTo = form.getForwardTo();
 	String nodeId="";
-	String tab = (String)request.getAttribute(Constants.TAB_SELECTED);
+	String tab = (String)request.getAttribute(Constants.SELECTED_TAB);
 	String exceedsMaxLimit = (String)request.getAttribute(Constants.EXCEEDS_MAX_LIMIT);
 	String submittedFor=(String)request.getAttribute(Constants.SUBMITTED_FOR);
 	boolean isAddNew = false;

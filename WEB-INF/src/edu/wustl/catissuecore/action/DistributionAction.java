@@ -214,9 +214,9 @@ public class DistributionAction extends SpecimenEventParametersAction
         String specimenConsents = request.getParameter(Constants.SPECIMEN_CONSENTS); //"specimenConsents"
 		if(specimenConsents!=null && specimenConsents.equalsIgnoreCase(Constants.YES))
 		{
-			String labelBarcodeDistributionValue = request.getParameter(Constants.DISTRIBUTION_ON);//"labelBarcode"
+			String labelBarcodeDistributionBasedOnValue = request.getParameter(Constants.DISTRIBUTION_ON);//"labelBarcode"
 			String barcodeLableValue = request.getParameter(Constants.BARCODE_LABLE);//barcodelabel
-			int distributionOn=Integer.parseInt(labelBarcodeDistributionValue);
+			int distributionOn=Integer.parseInt(labelBarcodeDistributionBasedOnValue);
 			StringTokenizer stringToken = new StringTokenizer(barcodeLableValue,"|");
 			listOfMap=new ArrayList();
 			listOfStringArray=new ArrayList();
@@ -262,8 +262,7 @@ public class DistributionAction extends SpecimenEventParametersAction
         String pageOf = request.getParameter(Constants.PAGEOF);
 		request.setAttribute(Constants.PAGEOF, pageOf);
 
-        return mapping.findForward((String) request.getParameter(
-                Constants.PAGEOF));
+        return mapping.findForward((String) request.getParameter(Constants.PAGEOF));
     }	
 	/**
 	 * This function will fetch witness name,url,consent date for a barcode/lable
