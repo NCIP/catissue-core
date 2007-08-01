@@ -142,6 +142,24 @@
             column="IDENTIFIER"
         />
 
+        <set
+            name="newSpecimenArrayOrderItemCollection"
+            table="CATISSUE_NEW_SP_AR_ORDER_ITEM"
+            lazy="true"
+            inverse="false"
+            cascade="none"
+            sort="unsorted"
+        >
+
+              <key
+                  column="SPECIMEN_ARRAY_ID"
+              />
+
+              <one-to-many
+                  class="edu.wustl.catissuecore.domain.NewSpecimenArrayOrderItem"
+              />
+        </set>
+
         <many-to-one
             name="createdBy"
             class="edu.wustl.catissuecore.domain.User"
