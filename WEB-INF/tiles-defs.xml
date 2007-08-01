@@ -1014,5 +1014,14 @@
 	<!-- definition name=".catissuecore.requestDetailsTreeViewDef" path="/pages/content/search/TreeView.jsp" -->
 	<definition name=".catissuecore.requestDetailsTreeViewDef" path="/pages/content/orderingsystem/SpecimenTreeView.jsp">
 	</definition>
+	
+	<!-- For ViewSpr on Specimen Page -->
+	<definition name=".catissuecore.newSpecimenViewSPRDef" extends=".catissuecore.manageBioSpecimenHomeDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenViewSPR.jsp" />
+	</definition>	
+	<definition name=".catissuecore.newSpecimenEditViewSPRDef" extends=".catissuecore.queryDataViewDef">
+		<put name="content" value="/pages/content/manageBioSpecimen/NewSpecimenViewSPR.jsp" />
+	</definition>
+	
 </tiles-definitions>
 
