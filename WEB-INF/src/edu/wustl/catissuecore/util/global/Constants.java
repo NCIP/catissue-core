@@ -1727,6 +1727,9 @@ public class Constants extends edu.wustl.common.util.global.Constants
 	public static final String ORDER_REQUEST_STATUS_REJECTED_UNABLE_TO_CREATE = "Rejected - Unable to Create";
 	public static final String ORDER_REQUEST_STATUS_DISTRIBUTED = "Distributed";
 	public static final String ORDER_REQUEST_STATUS_READY_FOR_ARRAY_PREPARATION = "Ready For Array Preparation";
+//	Used for tree display in RequestDetails page
+	public static final String TREE_DATA_LIST = "treeDataList";
+	
 	//Constants for Order Status
 	public static final String ORDER_STATUS_NEW = "New";
 	public static final String ORDER_STATUS_PENDING = "Pending";
@@ -1778,4 +1781,7 @@ public class Constants extends edu.wustl.common.util.global.Constants
     public static final String PARENT_SPECIMEN_ID_KEY="parentSpecimenID";
     public static final String PARENT_SPECIMEN_LABEL_KEY="parentSpecimenLabel";
     public static final String SCG_NAME_KEY="SCGName";
+    
+    //ordering system
+    public static final String TAB_INDEX_ID="tabIndexId";
 }
