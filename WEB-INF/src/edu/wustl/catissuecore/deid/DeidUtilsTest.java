@@ -1,12 +1,10 @@
 package edu.wustl.catissuecore.deid;
 
-import java.io.File;
-
 import org.jdom.output.Format;
 
+import edu.wustl.catissuecore.caties.util.CaTIESProperties;
 import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.common.test.BaseTestCase;
-import edu.wustl.common.util.XMLPropertyHandler;
 
 /**
  * @author vijay_pande
@@ -15,7 +13,7 @@ import edu.wustl.common.util.XMLPropertyHandler;
 public class DeidUtilsTest extends BaseTestCase 
 {
 	IdentifiedSurgicalPathologyReport ispr;
-	DeidReport deidReport;
+	DeidReportThread deidReport;
 	/**
 	 * Default constructor
 	 */
@@ -46,8 +44,8 @@ public class DeidUtilsTest extends BaseTestCase
 	{
 		try
 		{
-			XMLPropertyHandler.init("./catissuecore-properties"+File.separator+"caTissueCore_Properties.xml");
-			deidReport=new DeidReport(ispr);
+			CaTIESProperties.initBundle("caTIES");
+			deidReport=new DeidReportThread(ispr);
 		}
 		catch(Exception ex)
 		{
@@ -143,11 +141,15 @@ public class DeidUtilsTest extends BaseTestCase
 		try
 		{
 			DeidUtils.extractDate(null);
-			fail("When input string is null, it should throw Null pointer exception");
+			assertTrue("extractDate should not throw null pointer exception",true);
+		}
+		catch(NullPointerException ex)
+		{
+			fail("When input string is null, it should not throw Null pointer exception");
 		}
 		catch(Exception ex)
 		{
-			assertTrue("extractDate throws null pointer exception successfully",true);
+			fail("Though input string is null, it should not throw exception");
 		}
 	}	
 	
