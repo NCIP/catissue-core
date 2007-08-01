@@ -18,6 +18,8 @@ import java.util.Iterator;
 
 import edu.wustl.catissuecore.actionForm.SpecimenCollectionGroupForm;
 import edu.wustl.catissuecore.bean.ConsentBean;
+import edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport;
+import edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport;
 import edu.wustl.catissuecore.util.EventsUtil;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
@@ -86,12 +88,6 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
     protected CollectionProtocolEvent collectionProtocolEvent;
 
     /**
-     * A clinical report associated with the participant at the 
-     * time of the SpecimenCollection Group receipt.
-     */
-    protected ClinicalReport clinicalReport;
-
-    /**
      * The Specimens in this SpecimenCollectionGroup.
      */
     protected Collection specimenCollection = new HashSet();
@@ -141,6 +137,17 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 	 * Surgical Pathology Number of the associated pathology report, erlier was Present in Clinical Report
 	 */
 	protected String surgicalPathologyNumber;
+	/**
+    * An identified surgical pathology report associated with 
+    * current specimen collection group  
+    */
+	protected IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport;
+   /**
+    * A deidentified surgical pathology report associated with 
+    * current specimen collection group  
+    */
+   
+	protected DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport;
 	/**
 	 * @return the consentTierStatusCollection
 	 * @hibernate.collection-one-to-many class="edu.wustl.catissuecore.domain.ConsentTierStatus" lazy="true" cascade="save-update"
@@ -367,32 +374,6 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
     }
 
     /**
-     * Returns the clinical report associated with the participant at the 
-     * time of the SpecimenCollection Group receipt.
-     * @hibernate.many-to-one column="CLINICAL_REPORT_ID" 
-	 * class="edu.wustl.catissuecore.domain.ClinicalReport" constrained="true"
-     * @return the clinical report associated with the participant at the 
-     * time of the SpecimenCollection Group receipt.
-     * @see #setClinicalReport(ClinicalReport)
-     */
-    public ClinicalReport getClinicalReport()
-    {
-        return clinicalReport;
-    }
-
-    /**
-     * Sets the clinical report associated with the participant at the 
-     * time of the SpecimenCollection Group receipt.
-     * @param clinicalReport the clinical report associated with the participant at the 
-     * time of the SpecimenCollection Group receipt.
-     * @see #getClinicalReport()
-     */
-    public void setClinicalReport(ClinicalReport clinicalReport)
-    {
-        this.clinicalReport = clinicalReport;
-    }
-
-    /**
      * Returns the collection Specimens in this SpecimenCollectionGroup.
      * @hibernate.set name="specimenCollection" table="CATISSUE_SPECIMEN"
 	 * cascade="none" inverse="true" lazy="false"
@@ -470,10 +451,7 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 			
 			Logger.out.debug("form.getParticipantsMedicalIdentifierId() "+form.getParticipantsMedicalIdentifierId());
 			
-			if(abstractForm.isAddOperation())
-				clinicalReport = new ClinicalReport();
-			
-			clinicalReport.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
+			this.setSurgicalPathologyNumber(form.getSurgicalPathologyNumber());
 
 			collectionProtocolRegistration = new CollectionProtocolRegistration();
 			/**
@@ -494,11 +472,6 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 				
 				ParticipantMedicalIdentifier participantMedicalIdentifier = new ParticipantMedicalIdentifier();
 				participantMedicalIdentifier.setId(new Long(form.getParticipantsMedicalIdentifierId()));
-				
-				if(form.getParticipantsMedicalIdentifierId()!=-1)
-					clinicalReport.setParticipantMedicalIdentifier(participantMedicalIdentifier);
-				else
-					clinicalReport.setParticipantMedicalIdentifier(null);
 			}
 			else
 			{
@@ -765,4 +738,42 @@ public class SpecimenCollectionGroup extends AbstractDomainObject implements Ser
 		this.surgicalPathologyNumber = surgicalPathologyNumber;
 	} 
 
+	/**
+	 * Returns deidentified surgical pathology report of the current specimen collection group
+	 * @hibernate.one-to-one  name="deIdentifiedSurgicalPathologyReport"
+	 * class="edu.wustl.catissuecore.domain.pathology.DeidentifiedSurgicalPathologyReport"
+	 * property-ref="specimenCollectionGroup" not-null="false" cascade="save-update"
+	 */
+    public DeidentifiedSurgicalPathologyReport getDeIdentifiedSurgicalPathologyReport() 
+    {
+		return deIdentifiedSurgicalPathologyReport;
+	}
+
+    /**
+     * Sets the deidentified surgical pathology report associated with the specimen collection group
+     * @param deIdentifiedSurgicalPathologyReport deidentified report object
+     */
+	public void setDeIdentifiedSurgicalPathologyReport(DeidentifiedSurgicalPathologyReport deIdentifiedSurgicalPathologyReport) 
+	{
+		this.deIdentifiedSurgicalPathologyReport = deIdentifiedSurgicalPathologyReport;
+	}	
+	/**
+	 * Returns deidentified surgical pathology report of the current specimen collection group
+	 * @hibernate.one-to-one  name="identifiedSurgicalPathologyReport"
+	 * class="edu.wustl.catissuecore.domain.pathology.IdentifiedSurgicalPathologyReport"
+	 * propertyref="specimenCollectionGroup" not-null="false" cascade="save-update"
+	 */
+	public IdentifiedSurgicalPathologyReport getIdentifiedSurgicalPathologyReport() 
+	{
+		return identifiedSurgicalPathologyReport;
+	}
+	
+	/**
+	 *  Sets the identified surgical pathology report associated with the specimen collection group
+	 * @param identifiedSurgicalPathologyReport identified report object
+	 */
+	public void setIdentifiedSurgicalPathologyReport(IdentifiedSurgicalPathologyReport identifiedSurgicalPathologyReport) 
+	{
+		this.identifiedSurgicalPathologyReport = identifiedSurgicalPathologyReport;
+	}
 }
