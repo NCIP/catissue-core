@@ -222,6 +222,9 @@ public class CreateArrayInitAction extends BaseAction
 				break;
 			}//End if(definedArrayRequestBean.getArrayName().equals(arrayName))
 		}//End Outer While
+	SpecimenArrayForm specimenArrayForm = (SpecimenArrayForm)form;
+	specimenArrayForm.setForwardTo("orderDetails");
+	
 		return mapping.findForward("success");
 	}
 	
