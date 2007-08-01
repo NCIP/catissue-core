@@ -10,6 +10,7 @@
 package edu.wustl.catissuecore.domain.pathology;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -84,7 +85,7 @@ public class SemanticType extends AbstractDomainObject
 	 * @see edu.wustl.common.domain.AbstractDomainObject#setAllValues(edu.wustl.common.actionForm.AbstractActionForm)
 	 * @param abstractForm abstract form
 	 */
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{		
 		
 	}

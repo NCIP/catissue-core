@@ -4,7 +4,7 @@ package edu.wustl.catissuecore.domain.pathology;
 import java.util.Collection;
 
 import edu.wustl.catissuecore.domain.SpecimenCollectionGroup;
-import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -125,7 +125,7 @@ public class ReportLoaderQueue extends AbstractDomainObject
 		this.reportText = reportText;
 	}
 
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{		
 		
 	}

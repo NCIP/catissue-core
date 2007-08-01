@@ -1,15 +1,11 @@
 package edu.wustl.catissuecore.domain.pathology;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -115,33 +111,22 @@ public class PathologyReportReviewParameter extends EventParameters
     	
 		try
 		{
-			BizLogicFactory bizLogicFactory=BizLogicFactory.getInstance();
-			IBizLogic bizLogic=bizLogicFactory.getBizLogic(-1);
-			String className;
-			String colName=new String(Constants.SYSTEM_IDENTIFIER);
 			this.setComments(form.getComments());
 			this.setTimestamp(new Date());
 			this.setStatus(Constants.COMMENT_STATUS_RENDING);
 			
 			if(!form.getIdentifiedReportId().equals(""))
 			{
-				className=IdentifiedSurgicalPathologyReport.class.getName();
-				List isprList=bizLogic.retrieve(className, colName, form.getIdentifiedReportId());
-				IdentifiedSurgicalPathologyReport isprObj=(IdentifiedSurgicalPathologyReport)isprList.get(0);
-				Set pathologyReportReviewParameterSetCollection=isprObj.getPathologyReportReviewParameterSetCollection();
-				pathologyReportReviewParameterSetCollection.add(this);
-				isprObj.setPathologyReportReviewParameterSetCollection(pathologyReportReviewParameterSetCollection);
-				this.setSurgicalPathologyReport(isprObj);
+				IdentifiedSurgicalPathologyReport report = new IdentifiedSurgicalPathologyReport();
+				report.setId(new Long(form.getIdentifiedReportId()));
+				this.setSurgicalPathologyReport(report);
+				
 			}
 			else if(form.getDeIdentifiedReportId()!=0)
 			{
-				className=DeidentifiedSurgicalPathologyReport.class.getName();
-				List deisprList=bizLogic.retrieve(className, colName, form.getDeIdentifiedReportId());
-				DeidentifiedSurgicalPathologyReport deidReportObj=(DeidentifiedSurgicalPathologyReport)deisprList.get(0);
-				Set pathologyReportReviewParameterSetCollection=deidReportObj.getPathologyReportReviewParameterSetCollection();
-				pathologyReportReviewParameterSetCollection.add(this);
-				deidReportObj.setPathologyReportReviewParameterSetCollection(pathologyReportReviewParameterSetCollection);
-				this.setSurgicalPathologyReport(deidReportObj);
+				DeidentifiedSurgicalPathologyReport deidReport = new DeidentifiedSurgicalPathologyReport();
+				deidReport.setId(new Long(form.getDeIdentifiedReportId()));
+				this.setSurgicalPathologyReport(deidReport);
 			}
 		}
 		catch(Exception ex)
@@ -167,8 +152,7 @@ public class PathologyReportReviewParameter extends EventParameters
      */
 	public String getMessageLabel()
 	{
-		return (" Pathology Report.");
-		
+		return (" Pathology Report.");		
 	}
 
 

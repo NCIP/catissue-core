@@ -1,6 +1,7 @@
 package edu.wustl.catissuecore.domain.pathology;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -165,7 +166,7 @@ public class ReportSection extends AbstractDomainObject
 	}
 
 	
-	public void setAllValues(AbstractActionForm arg0) throws AssignDataException
+	public void setAllValues(IValueObject arg0) throws AssignDataException
 	{
 		// TODO Auto-generated method stub
 		

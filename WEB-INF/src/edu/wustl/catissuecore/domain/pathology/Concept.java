@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import edu.wustl.common.actionForm.AbstractActionForm;
+import edu.wustl.common.actionForm.IValueObject;
 import edu.wustl.common.domain.AbstractDomainObject;
 import edu.wustl.common.exception.AssignDataException;
 
@@ -147,7 +148,7 @@ public class Concept extends AbstractDomainObject
 	}
 
 	@Override
-	public void setAllValues(AbstractActionForm abstractForm) throws AssignDataException
+	public void setAllValues(IValueObject abstractForm) throws AssignDataException
 	{
 		// TODO Auto-generated method stub
 		

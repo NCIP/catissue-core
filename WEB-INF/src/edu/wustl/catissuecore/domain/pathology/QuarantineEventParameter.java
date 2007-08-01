@@ -1,15 +1,10 @@
 package edu.wustl.catissuecore.domain.pathology;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import edu.wustl.catissuecore.actionForm.ViewSurgicalPathologyReportForm;
-import edu.wustl.catissuecore.bizlogic.BizLogicFactory;
 import edu.wustl.catissuecore.domain.EventParameters;
 import edu.wustl.catissuecore.util.global.Constants;
 import edu.wustl.common.actionForm.AbstractActionForm;
-import edu.wustl.common.bizlogic.DefaultBizLogic;
-import edu.wustl.common.bizlogic.IBizLogic;
 import edu.wustl.common.exception.AssignDataException;
 import edu.wustl.common.util.logger.Logger;
 
@@ -114,9 +109,6 @@ public class QuarantineEventParameter extends EventParameters
     	
 		try
 		{
-			DefaultBizLogic defaultBizLogic=new DefaultBizLogic();
-			String className;
-			String colName=new String(Constants.SYSTEM_IDENTIFIER);
 			this.setComments(form.getComments());
 			this.setTimestamp(new Date());
 			this.setStatus(Constants.COMMENT_STATUS_RENDING);
@@ -131,13 +123,9 @@ public class QuarantineEventParameter extends EventParameters
 			}
 			if(form.getDeIdentifiedReportId()!=0)
 			{
-				className=DeidentifiedSurgicalPathologyReport.class.getName();
-				List deReportList=defaultBizLogic.retrieve(className, colName, form.getDeIdentifiedReportId());
-				DeidentifiedSurgicalPathologyReport deReport=(DeidentifiedSurgicalPathologyReport)deReportList.get(0);
-				Set quarantineEventParameterSetCollection=deReport.getQuarantinEventParameterSetCollection();
-				quarantineEventParameterSetCollection.add(this);
-				deReport.setQuarantinEventParameterSetCollection(quarantineEventParameterSetCollection);
-				this.setDeidentifiedSurgicalPathologyReport(deReport);
+				DeidentifiedSurgicalPathologyReport deidReport = new DeidentifiedSurgicalPathologyReport();
+				deidReport.setId(new Long(form.getDeIdentifiedReportId()));
+				this.setDeidentifiedSurgicalPathologyReport(deidReport);
 				this.setQuarantineStatus(false);
 			}
 		}
