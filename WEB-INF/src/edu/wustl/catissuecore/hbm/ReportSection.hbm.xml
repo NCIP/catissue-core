@@ -10,6 +10,7 @@
         table="CATISSUE_REPORT_SECTION"
         dynamic-update="false"
         dynamic-insert="false"
+        lazy="true"
     >
 
         <id
