@@ -345,7 +345,13 @@
 		<copy todir="${zip.dir}/caTissueCore_caCORE_Client" overwrite="true">
 			<fileset dir="${base.dir}/caTissueCore_caCORE_Client" />
 		</copy>
-
+		<!--- caTIES related files  start-->
+		<copy todir="${zip.dir}/caTIES_conf" overwrite="true">
+			<fileset dir="${base.dir}/caTIES_conf" />
+		</copy>
+		<copy file="Dataset.dtd" todir="${zip.dir}" overwrite="true" />
+		<copy file="JniDeID.dll" todir="${zip.dir}" overwrite="true" />
+		<!--- caTIES related files  end-->
 		<zip destfile="${zip.file}" basedir="${zip.dir}" />
 		<delete dir="${zip.dir}" />
 	</target>
